@@ -303,10 +303,8 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
 
         pItemSet->Set( pFormat->GetAttrSet() );
 
-        bool bSetDefaults = true, bClearSame = true;
         if( pReferenceFormat )
-            SwHTMLWriter::SubtractItemSet( *pItemSet, pReferenceFormat->GetAttrSet(),
-                                           bSetDefaults, bClearSame );
+            SwHTMLWriter::SubtractItemSet( *pItemSet, pReferenceFormat->GetAttrSet(), true, true );
 
         // delete ItemSet that is empty straight away. This will save work
         // later on
