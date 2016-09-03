@@ -22,6 +22,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/help.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/layout.hxx>
 
@@ -880,6 +881,19 @@ void TemplateLocalView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     GrabFocus();
     ThumbnailView::MouseButtonDown(rMEvt);
+}
+
+void TemplateLocalView::RequestHelp( const HelpEvent& rHEvt )
+{
+    if ( rHEvt.GetMode() & HelpEventMode::QUICK )
+    {
+        Rectangle aRect( OutputToScreenPixel( GetPosPixel() ), GetSizePixel() );
+        Help::ShowQuickHelp( this, aRect, GetQuickHelpText(),
+                             QuickHelpFlags::CtrlText | QuickHelpFlags::TipStyleBalloon );
+        return;
+    }
+
+    ThumbnailView::RequestHelp( rHEvt );
 }
 
 void TemplateLocalView::Command( const CommandEvent& rCEvt )

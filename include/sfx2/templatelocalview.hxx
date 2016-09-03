@@ -139,6 +139,8 @@ public:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
+    virtual void RequestHelp( const HelpEvent& rHEvt ) override;
+
     virtual void Command( const CommandEvent& rCEvt ) override;
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
