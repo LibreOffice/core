@@ -53,7 +53,7 @@ FontTable::~FontTable()
 
 void FontTable::lcl_attribute(Id Name, Value & val)
 {
-    OSL_ENSURE( m_pImpl->pCurrentEntry, "current entry has to be set here");
+    SAL_WARN_IF( !m_pImpl->pCurrentEntry, "writerfilter.dmapper.FontTable.lcl_attribute", "current entry has to be set here" );
     if(!m_pImpl->pCurrentEntry)
         return ;
     int nIntValue = val.getInt();
@@ -104,7 +104,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
 
 void FontTable::lcl_sprm(Sprm& rSprm)
 {
-    OSL_ENSURE( m_pImpl->pCurrentEntry, "current entry has to be set here");
+    SAL_WARN_IF( !m_pImpl->pCurrentEntry, "writerfilter.dmapper.FontTable.lcl_sprm", "current entry has to be set here" );
     if(!m_pImpl->pCurrentEntry)
         return ;
     sal_uInt32 nSprmId = rSprm.getId();
@@ -158,7 +158,9 @@ void FontTable::resolveSprm(Sprm & r_Sprm)
 void FontTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
     //create a new font entry
-    OSL_ENSURE( !m_pImpl->pCurrentEntry, "current entry has to be NULL here");
+    SAL_WARN_IF( !m_pImpl->pCurrentEntry, "writerfilter.dmapper.FontTable.lcl_entry", "current entry has to be set here" );
+    if(!m_pImpl->pCurrentEntry)
+        return ;
     m_pImpl->pCurrentEntry.reset(new FontEntry);
     ref->resolve(*this);
     //append it to the table
