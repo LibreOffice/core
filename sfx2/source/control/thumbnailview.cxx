@@ -109,19 +109,6 @@ void ThumbnailView::MouseMove(const MouseEvent& rMEvt)
         SetQuickHelpText(aHelp);
 }
 
-void ThumbnailView::RequestHelp( const HelpEvent& rHEvt )
-{
-    if ( rHEvt.GetMode() & HelpEventMode::QUICK )
-    {
-        // Force balloon mode, to be able to use line break.
-        HelpEvent aNewEvent( rHEvt.GetMousePosPixel(), HelpEventMode::BALLOON );
-        Control::RequestHelp( aNewEvent );
-        return;
-    }
-
-    Control::RequestHelp( rHEvt );
-}
-
 void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)
 {
     if (maFilterFunc(pItem))
