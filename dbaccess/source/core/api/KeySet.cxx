@@ -1184,7 +1184,7 @@ bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
     return previous_checked(true);
 }
 
-bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)
+bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException, std::exception)
 {
     ensureStatement( );
     // we just reassign the base members
