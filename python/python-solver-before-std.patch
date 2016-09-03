@@ -1,12 +1,13 @@
---- misc/Python-2.7.9/setup.py	2013-07-01 17:51:46.237674580 +0200
-+++ misc/build/Python-2.7.9/setup.py	2013-07-01 17:51:24.230453108 +0200
-@@ -80,61 +80,62 @@
+diff -ur misc/Python-2.7.12/setup.py misc/build/Python-2.7.12/setup.py
+--- misc/Python-2.7.12/setup.py	2016-06-25 16:49:32.000000000 -0500
++++ misc/build/Python-2.7.12/setup.py	2016-09-02 17:09:20.687419000 -0500
+@@ -80,39 +80,41 @@
          # system, but with only header files and libraries.
          sysroot = macosx_sdk_root()
  
 -    # Check the standard locations
 -    for dir in std_dirs:
-+    # Check the additional directories
++    # Check the standard directories
 +    for dir in paths:
          f = os.path.join(dir, filename)
  
@@ -15,7 +16,7 @@
  
 -        if os.path.exists(f): return []
 +        if os.path.exists(f):
-+            return [dir]
++	    return [dir]
  
 -    # Check the additional directories
 -    for dir in paths:
@@ -51,14 +52,16 @@
          # Ensure path doesn't end with path separator
          p = p.rstrip(os.sep)
  
-         if host_platform == 'darwin' and is_macosx_sdk_path(p):
+@@ -134,23 +136,22 @@
+             # vs
+             #   /usr/lib/libedit.dylib
              if os.path.join(sysroot, p[1:]) == dirname:
 -                return [ ]
 +                return [ p ]
  
          if p == dirname:
 -            return [ ]
-+            return [p]
++            return [ p ]
  
 -    # Otherwise, it must have been in one of the additional directories,
 -    # so we have to figure out which one.
@@ -79,7 +82,7 @@
      else:
          assert False, "Internal error: Path not found in std_dirs or paths"
  
-@@ -810,6 +811,7 @@
+@@ -830,6 +831,7 @@
              exts.append( Extension('_ssl', ['_ssl.c'],
                                     include_dirs = ssl_incs,
                                     library_dirs = ssl_libs,
@@ -87,7 +90,7 @@
                                     libraries = ['ssl', 'crypto'],
                                     depends = ['socketmodule.h']), )
          else:
-@@ -849,6 +851,7 @@
+@@ -869,6 +871,7 @@
                  exts.append( Extension('_hashlib', ['_hashopenssl.c'],
                                         include_dirs = ssl_incs,
                                         library_dirs = ssl_libs,

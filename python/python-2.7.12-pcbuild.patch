@@ -1,6 +1,6 @@
-diff -u misc/Python-2.7.9/PCbuild/_bsddb.vcproj misc/build/Python-2.7.9/PCbuild/_bsddb.vcproj
---- misc/Python-2.7.9/PCbuild/_bsddb.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/_bsddb.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/_bsddb.vcproj misc/build/Python-2.7.12/PC/VS9.0/_bsddb.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_bsddb.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/_bsddb.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -56,6 +56,7 @@
  			/>
  			<Tool
@@ -65,9 +65,9 @@ diff -u misc/Python-2.7.9/PCbuild/_bsddb.vcproj misc/build/Python-2.7.9/PCbuild/
  				AdditionalDependencies="$(bsddbDepLibs)"
  				BaseAddress="0x1e180000"
  				TargetMachine="17"
-diff -u misc/Python-2.7.9/PCbuild/_ctypes.vcproj misc/build/Python-2.7.9/PCbuild/_ctypes.vcproj
---- misc/Python-2.7.9/PCbuild/_ctypes.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/_ctypes.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/_ctypes.vcproj misc/build/Python-2.7.12/PC/VS9.0/_ctypes.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_ctypes.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/_ctypes.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -177,7 +177,7 @@
  			/>
  			<Tool
@@ -122,9 +122,9 @@ diff -u misc/Python-2.7.9/PCbuild/_ctypes.vcproj misc/build/Python-2.7.9/PCbuild
  				SubSystem="0"
  				BaseAddress="0x1D1A0000"
  				TargetMachine="17"
-diff -u misc/Python-2.7.9/PCbuild/_ctypes_test.vcproj misc/build/Python-2.7.9/PCbuild/_ctypes_test.vcproj
---- misc/Python-2.7.9/PCbuild/_ctypes_test.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/_ctypes_test.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/_ctypes_test.vcproj misc/build/Python-2.7.12/PC/VS9.0/_ctypes_test.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_ctypes_test.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/_ctypes_test.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -54,6 +54,7 @@
  			/>
  			<Tool
@@ -189,9 +189,9 @@ diff -u misc/Python-2.7.9/PCbuild/_ctypes_test.vcproj misc/build/Python-2.7.9/PC
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/_elementtree.vcproj misc/build/Python-2.7.9/PCbuild/_elementtree.vcproj
---- misc/Python-2.7.9/PCbuild/_elementtree.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/_elementtree.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/_elementtree.vcproj misc/build/Python-2.7.12/PC/VS9.0/_elementtree.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_elementtree.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/_elementtree.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -57,6 +57,7 @@
  			<Tool
  				Name="VCLinkerTool"
@@ -256,9 +256,9 @@ diff -u misc/Python-2.7.9/PCbuild/_elementtree.vcproj misc/build/Python-2.7.9/PC
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/_hashlib.vcproj misc/build/Python-2.7.9/PCbuild/_hashlib.vcproj
---- misc/Python-2.7.9/PCbuild/_hashlib.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/_hashlib.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/_hashlib.vcproj misc/build/Python-2.7.12/PC/VS9.0/_hashlib.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_hashlib.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/_hashlib.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -58,6 +58,7 @@
  			<Tool
  				Name="VCLinkerTool"
@@ -323,9 +323,9 @@ diff -u misc/Python-2.7.9/PCbuild/_hashlib.vcproj misc/build/Python-2.7.9/PCbuil
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/_msi.vcproj misc/build/Python-2.7.9/PCbuild/_msi.vcproj
---- misc/Python-2.7.9/PCbuild/_msi.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/_msi.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/_msi.vcproj misc/build/Python-2.7.12/PC/VS9.0/_msi.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_msi.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/_msi.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -56,6 +56,7 @@
  				Name="VCLinkerTool"
  				AdditionalDependencies="fci.lib msi.lib rpcrt4.lib"
@@ -390,9 +390,9 @@ diff -u misc/Python-2.7.9/PCbuild/_msi.vcproj misc/build/Python-2.7.9/PCbuild/_m
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/_multiprocessing.vcproj misc/build/Python-2.7.9/PCbuild/_multiprocessing.vcproj
---- misc/Python-2.7.9/PCbuild/_multiprocessing.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/_multiprocessing.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/_multiprocessing.vcproj misc/build/Python-2.7.12/PC/VS9.0/_multiprocessing.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_multiprocessing.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/_multiprocessing.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -56,6 +56,7 @@
  				Name="VCLinkerTool"
  				AdditionalDependencies="ws2_32.lib"
@@ -457,9 +457,9 @@ diff -u misc/Python-2.7.9/PCbuild/_multiprocessing.vcproj misc/build/Python-2.7.
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/_socket.vcproj misc/build/Python-2.7.9/PCbuild/_socket.vcproj
---- misc/Python-2.7.9/PCbuild/_socket.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/_socket.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/_socket.vcproj misc/build/Python-2.7.12/PC/VS9.0/_socket.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_socket.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/_socket.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -56,6 +56,7 @@
  				Name="VCLinkerTool"
  				AdditionalDependencies="ws2_32.lib"
@@ -524,9 +524,9 @@ diff -u misc/Python-2.7.9/PCbuild/_socket.vcproj misc/build/Python-2.7.9/PCbuild
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/_sqlite3.vcproj misc/build/Python-2.7.9/PCbuild/_sqlite3.vcproj
---- misc/Python-2.7.9/PCbuild/_sqlite3.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/_sqlite3.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/_sqlite3.vcproj misc/build/Python-2.7.12/PC/VS9.0/_sqlite3.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_sqlite3.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/_sqlite3.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -57,6 +57,7 @@
  			<Tool
  				Name="VCLinkerTool"
@@ -591,9 +591,9 @@ diff -u misc/Python-2.7.9/PCbuild/_sqlite3.vcproj misc/build/Python-2.7.9/PCbuil
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/_ssl.vcproj misc/build/Python-2.7.9/PCbuild/_ssl.vcproj
---- misc/Python-2.7.9/PCbuild/_ssl.vcproj	2014-12-10 07:59:58.000000000 -0800
-+++ misc/build/Python-2.7.9/PCbuild/_ssl.vcproj	2016-09-02 03:56:17.659101000 -0700
+diff -u misc/Python-2.7.12/PC/VS9.0/_ssl.vcproj misc/build/Python-2.7.12/PC/VS9.0/_ssl.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_ssl.vcproj	2014-12-10 07:59:58.000000000 -0800
++++ misc/build/Python-2.7.12/PC/VS9.0/_ssl.vcproj	2016-09-02 03:56:17.659101000 -0700
 @@ -43,7 +43,7 @@
  			/>
  			<Tool
@@ -689,9 +689,9 @@ diff -u misc/Python-2.7.9/PCbuild/_ssl.vcproj misc/build/Python-2.7.9/PCbuild/_s
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/_testcapi.vcproj misc/build/Python-2.7.9/PCbuild/_testcapi.vcproj
---- misc/Python-2.7.9/PCbuild/_testcapi.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/_testcapi.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/_testcapi.vcproj misc/build/Python-2.7.12/PC/VS9.0/_testcapi.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_testcapi.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/_testcapi.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -55,6 +55,7 @@
  			<Tool
  				Name="VCLinkerTool"
@@ -756,9 +756,9 @@ diff -u misc/Python-2.7.9/PCbuild/_testcapi.vcproj misc/build/Python-2.7.9/PCbui
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/_tkinter.vcproj misc/build/Python-2.7.9/PCbuild/_tkinter.vcproj
---- misc/Python-2.7.9/PCbuild/_tkinter.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/_tkinter.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/_tkinter.vcproj misc/build/Python-2.7.12/PC/VS9.0/_tkinter.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/_tkinter.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/_tkinter.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -57,6 +57,7 @@
  			<Tool
  				Name="VCLinkerTool"
@@ -823,9 +823,9 @@ diff -u misc/Python-2.7.9/PCbuild/_tkinter.vcproj misc/build/Python-2.7.9/PCbuil
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/bdist_wininst.vcproj misc/build/Python-2.7.9/PCbuild/bdist_wininst.vcproj
---- misc/Python-2.7.9/PCbuild/bdist_wininst.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/bdist_wininst.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/bdist_wininst.vcproj misc/build/Python-2.7.12/PC/VS9.0/bdist_wininst.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/bdist_wininst.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/bdist_wininst.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -81,8 +81,7 @@
  				IgnoreDefaultLibraryNames="LIBC"
  				ProgramDatabaseFile="..\lib\distutils\command\wininst-9.0.pdb"
@@ -846,9 +846,9 @@ diff -u misc/Python-2.7.9/PCbuild/bdist_wininst.vcproj misc/build/Python-2.7.9/P
  				TargetMachine="17"
  			/>
  			<Tool
-diff -u misc/Python-2.7.9/PCbuild/bz2.vcproj misc/build/Python-2.7.9/PCbuild/bz2.vcproj
---- misc/Python-2.7.9/PCbuild/bz2.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/bz2.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/bz2.vcproj misc/build/Python-2.7.12/PC/VS9.0/bz2.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/bz2.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/bz2.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -57,6 +57,7 @@
  			<Tool
  				Name="VCLinkerTool"
@@ -913,9 +913,9 @@ diff -u misc/Python-2.7.9/PCbuild/bz2.vcproj misc/build/Python-2.7.9/PCbuild/bz2
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/kill_python.vcproj misc/build/Python-2.7.9/PCbuild/kill_python.vcproj
---- misc/Python-2.7.9/PCbuild/kill_python.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/kill_python.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/kill_python.vcproj misc/build/Python-2.7.12/PC/VS9.0/kill_python.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/kill_python.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/kill_python.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -56,6 +56,7 @@
  				Name="VCLinkerTool"
  				OutputFile="$(OutDir)\$(ProjectName)_d.exe"
@@ -948,9 +948,9 @@ diff -u misc/Python-2.7.9/PCbuild/kill_python.vcproj misc/build/Python-2.7.9/PCb
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/make_buildinfo.vcproj misc/build/Python-2.7.9/PCbuild/make_buildinfo.vcproj
---- misc/Python-2.7.9/PCbuild/make_buildinfo.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/make_buildinfo.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/make_buildinfo.vcproj misc/build/Python-2.7.12/PC/VS9.0/make_buildinfo.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/make_buildinfo.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/make_buildinfo.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -61,6 +61,7 @@
  				OutputFile="$(OutDir)/make_buildinfo.exe"
  				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
@@ -967,9 +967,9 @@ diff -u misc/Python-2.7.9/PCbuild/make_buildinfo.vcproj misc/build/Python-2.7.9/
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/make_versioninfo.vcproj misc/build/Python-2.7.9/PCbuild/make_versioninfo.vcproj
---- misc/Python-2.7.9/PCbuild/make_versioninfo.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/make_versioninfo.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/make_versioninfo.vcproj misc/build/Python-2.7.12/PC/VS9.0/make_versioninfo.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/make_versioninfo.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/make_versioninfo.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -71,6 +71,7 @@
  				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
  				SubSystem="1"
@@ -1002,9 +1002,9 @@ diff -u misc/Python-2.7.9/PCbuild/make_versioninfo.vcproj misc/build/Python-2.7.
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/pcbuild.sln misc/build/Python-2.7.9/PCbuild/pcbuild.sln
---- misc/Python-2.7.9/PCbuild/pcbuild.sln	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/pcbuild.sln	2012-07-30 21:04:33.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/pcbuild.sln misc/build/Python-2.7.12/PC/VS9.0/pcbuild.sln
+--- misc/Python-2.7.12/PC/VS9.0/pcbuild.sln	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/pcbuild.sln	2012-07-30 21:04:33.000000000 -0500
 @@ -38,12 +38,12 @@
  		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
  	EndProjectSection
@@ -1099,9 +1099,9 @@ diff -u misc/Python-2.7.9/PCbuild/pcbuild.sln misc/build/Python-2.7.9/PCbuild/pc
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_multiprocessing", "_multiprocessing.vcproj", "{9E48B300-37D1-11DD-8C41-005056C00008}"
  	ProjectSection(ProjectDependencies) = postProject
  		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
-diff -u misc/Python-2.7.9/PCbuild/pyexpat.vcproj misc/build/Python-2.7.9/PCbuild/pyexpat.vcproj
---- misc/Python-2.7.9/PCbuild/pyexpat.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/pyexpat.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/pyexpat.vcproj misc/build/Python-2.7.12/PC/VS9.0/pyexpat.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/pyexpat.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/pyexpat.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -56,6 +56,7 @@
  			/>
  			<Tool
@@ -1166,9 +1166,9 @@ diff -u misc/Python-2.7.9/PCbuild/pyexpat.vcproj misc/build/Python-2.7.9/PCbuild
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/python.vcproj misc/build/Python-2.7.9/PCbuild/python.vcproj
---- misc/Python-2.7.9/PCbuild/python.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/python.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/python.vcproj misc/build/Python-2.7.12/PC/VS9.0/python.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/python.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/python.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -66,6 +66,7 @@
  				SubSystem="1"
  				StackReserveSize="2000000"
@@ -1233,9 +1233,9 @@ diff -u misc/Python-2.7.9/PCbuild/python.vcproj misc/build/Python-2.7.9/PCbuild/
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/pythoncore.vcproj misc/build/Python-2.7.9/PCbuild/pythoncore.vcproj
---- misc/Python-2.7.9/PCbuild/pythoncore.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/pythoncore.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/pythoncore.vcproj misc/build/Python-2.7.12/PC/VS9.0/pythoncore.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/pythoncore.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/pythoncore.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -69,6 +69,7 @@
  				ProgramDatabaseFile="$(OutDir)$(PyDllName).pdb"
  				BaseAddress="0x1e000000"
@@ -1306,9 +1306,9 @@ diff -u misc/Python-2.7.9/PCbuild/pythoncore.vcproj misc/build/Python-2.7.9/PCbu
  	</Globals>
 -</VisualStudioProject>
 +</VisualStudioProject>
-diff -u misc/Python-2.7.9/PCbuild/pythonw.vcproj misc/build/Python-2.7.9/PCbuild/pythonw.vcproj
---- misc/Python-2.7.9/PCbuild/pythonw.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/pythonw.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/pythonw.vcproj misc/build/Python-2.7.12/PC/VS9.0/pythonw.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/pythonw.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/pythonw.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -66,6 +66,7 @@
  				StackReserveSize="2000000"
  				BaseAddress="0x1d000000"
@@ -1373,9 +1373,9 @@ diff -u misc/Python-2.7.9/PCbuild/pythonw.vcproj misc/build/Python-2.7.9/PCbuild
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/select.vcproj misc/build/Python-2.7.9/PCbuild/select.vcproj
---- misc/Python-2.7.9/PCbuild/select.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/select.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/select.vcproj misc/build/Python-2.7.12/PC/VS9.0/select.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/select.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/select.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -57,6 +57,7 @@
  				AdditionalDependencies="ws2_32.lib"
  				IgnoreDefaultLibraryNames="libc"
@@ -1440,9 +1440,9 @@ diff -u misc/Python-2.7.9/PCbuild/select.vcproj misc/build/Python-2.7.9/PCbuild/
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/sqlite3.vcproj misc/build/Python-2.7.9/PCbuild/sqlite3.vcproj
---- misc/Python-2.7.9/PCbuild/sqlite3.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/sqlite3.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/sqlite3.vcproj misc/build/Python-2.7.12/PC/VS9.0/sqlite3.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/sqlite3.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/sqlite3.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -56,6 +56,7 @@
  			<Tool
  				Name="VCLinkerTool"
@@ -1507,9 +1507,9 @@ diff -u misc/Python-2.7.9/PCbuild/sqlite3.vcproj misc/build/Python-2.7.9/PCbuild
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/unicodedata.vcproj misc/build/Python-2.7.9/PCbuild/unicodedata.vcproj
---- misc/Python-2.7.9/PCbuild/unicodedata.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/unicodedata.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/unicodedata.vcproj misc/build/Python-2.7.12/PC/VS9.0/unicodedata.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/unicodedata.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/unicodedata.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -55,6 +55,7 @@
  			<Tool
  				Name="VCLinkerTool"
@@ -1574,9 +1574,9 @@ diff -u misc/Python-2.7.9/PCbuild/unicodedata.vcproj misc/build/Python-2.7.9/PCb
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/w9xpopen.vcproj misc/build/Python-2.7.9/PCbuild/w9xpopen.vcproj
---- misc/Python-2.7.9/PCbuild/w9xpopen.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/w9xpopen.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/w9xpopen.vcproj misc/build/Python-2.7.12/PC/VS9.0/w9xpopen.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/w9xpopen.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/w9xpopen.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -59,6 +59,7 @@
  			<Tool
  				Name="VCLinkerTool"
@@ -1641,9 +1641,9 @@ diff -u misc/Python-2.7.9/PCbuild/w9xpopen.vcproj misc/build/Python-2.7.9/PCbuil
  			/>
  			<Tool
  				Name="VCALinkTool"
-diff -u misc/Python-2.7.9/PCbuild/winsound.vcproj misc/build/Python-2.7.9/PCbuild/winsound.vcproj
---- misc/Python-2.7.9/PCbuild/winsound.vcproj	2012-04-09 18:07:35.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/winsound.vcproj	2012-07-30 20:59:37.000000000 -0500
+diff -u misc/Python-2.7.12/PC/VS9.0/winsound.vcproj misc/build/Python-2.7.12/PC/VS9.0/winsound.vcproj
+--- misc/Python-2.7.12/PC/VS9.0/winsound.vcproj	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/winsound.vcproj	2012-07-30 20:59:37.000000000 -0500
 @@ -55,6 +55,7 @@
  			<Tool
  				Name="VCLinkerTool"

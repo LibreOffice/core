@@ -1,16 +1,16 @@
-diff -ruN misc/Python-2.7.9/PCbuild/build_ssl.py misc/build/Python-2.7.9/PCbuild/build_ssl.py
---- misc/Python-2.7.9/PCbuild/build_ssl.py	2014-06-29 21:05:46.000000000 -0500
-+++ misc/build/Python-2.7.9/PCbuild/build_ssl.py	2016-01-01 15:15:32.256357072 -0500
-@@ -240,4 +240,4 @@
+diff -ruN misc/Python-2.7.12/PC/VS9.0/build_ssl.py misc/build/Python-2.7.12/PC/VS9.0/build_ssl.py
+--- misc/Python-2.7.12/PC/VS9.0/build_ssl.py	2014-06-29 21:05:46.000000000 -0500
++++ misc/build/Python-2.7.12/PC/VS9.0/build_ssl.py	2016-01-01 15:15:32.256357072 -0500
+@@ -242,4 +242,4 @@
      sys.exit(rc)
  
  if __name__=='__main__':
 -    main()
 +    sys.exit(0)
-diff -ruN misc/Python-2.7.9/setup.py misc/build/Python-2.7.9/setup.py
---- misc/Python-2.7.9/setup.py	2014-06-29 21:05:48.000000000 -0500
-+++ misc/build/Python-2.7.9/setup.py	2016-01-01 15:15:32.258356209 -0500
-@@ -788,7 +788,15 @@
+diff -ruN misc/Python-2.7.12/setup.py misc/build/Python-2.7.12/setup.py
+--- misc/Python-2.7.12/setup.py	2014-06-29 21:05:48.000000000 -0500
++++ misc/build/Python-2.7.12/setup.py	2016-01-01 15:15:32.258356209 -0500
+@@ -808,7 +808,15 @@
                                 depends=['socketmodule.h'],
                                 libraries=math_libs) )
          # Detect SSL support for the socket module (via _ssl)
@@ -26,7 +26,7 @@ diff -ruN misc/Python-2.7.9/setup.py misc/build/Python-2.7.9/setup.py
                                '/usr/local/ssl/include',
                                '/usr/contrib/ssl/include/'
                               ]
-@@ -800,8 +808,15 @@
+@@ -820,8 +828,15 @@
                                 ['/usr/kerberos/include'])
              if krb5_h:
                  ssl_incs += krb5_h

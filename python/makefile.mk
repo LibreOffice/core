@@ -42,7 +42,7 @@ all:
 
 
 TARFILE_NAME=Python-$(PYVERSION)
-TARFILE_MD5=5eebcaa0030dc4061156d3429657fb83
+TARFILE_MD5=88d61f82e3616a4be952828b3694109d
 PATCH_FILES=\
     python-solaris.patch \
     python-freebsd.patch \
@@ -109,7 +109,9 @@ BUILD_ACTION=$(ENV_BUILD) make && make install
 #.ENDIF #"$(WINDOWS_VISTA_PSDK)"!=""
 #.ENDIF
 
-BUILD_DIR=PCbuild
+# Requires adapting for according to the MSVC compiler version.
+# Normally PCBuild will carry the latest supported build files.
+BUILD_DIR=PC/VS9.0
 
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
