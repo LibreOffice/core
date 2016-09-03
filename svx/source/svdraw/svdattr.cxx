@@ -352,23 +352,6 @@ SfxItemPool* SdrItemPool::Clone() const
 
 SdrItemPool::~SdrItemPool()
 {
-    // dtor of SfxItemPool
-    Delete();
-
-    // clear own static Defaults
-    if(mppLocalPoolDefaults)
-    {
-        const sal_uInt16 nBeg(SDRATTR_SHADOW_FIRST - SDRATTR_START);
-        const sal_uInt16 nEnd2(SDRATTR_END - SDRATTR_START);
-
-        for(sal_uInt16 i(nBeg); i <= nEnd2; i++)
-        {
-            SetRefCount(*mppLocalPoolDefaults[i],0);
-            delete mppLocalPoolDefaults[i];
-            mppLocalPoolDefaults[i] = nullptr;
-        }
-    }
-
     // split pools before destroying
     SetSecondaryPool(nullptr);
 }

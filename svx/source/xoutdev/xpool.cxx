@@ -180,22 +180,8 @@ SfxItemPool* XOutdevItemPool::Clone() const
 XOutdevItemPool::~XOutdevItemPool()
 {
     Delete();
-
-    // remove own static defaults
-    if(mppLocalPoolDefaults)
-    {
-        SfxPoolItem** ppDefaultItem = mppLocalPoolDefaults;
-        for(sal_uInt16 i(GetLastWhich() - GetFirstWhich() + 1); i; --i, ++ppDefaultItem)
-        {
-            if ( *ppDefaultItem ) // these parts might be already cleaned up from a derived class
-            {
-                SetRefCount( **ppDefaultItem, 0 );
-                delete *ppDefaultItem;
-            }
-        }
-
-        delete[] mppLocalPoolDefaults;
-    }
+    // release and delete static pool default items
+    ReleaseDefaults(true);
 
     if(mpLocalItemInfos)
     {
