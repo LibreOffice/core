@@ -588,11 +588,10 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
             bool bCertainTextNodeSelected( false );
             for ( size_t nOutlIdx = 0; nOutlIdx < maOutlineNodes.size(); ++nOutlIdx )
             {
-                SvTreeListEntry* pEntry = nullptr;
                 bool isSubstring = MatchSubstring(pIDoc->getOutlineText( nOutlIdx, true, true, false ), filterString);
                 if(isSubstring)
                 {
-                    pEntry = m_pSelectionToolTipLB->InsertEntry(
+                    SvTreeListEntry* pEntry = m_pSelectionToolTipLB->InsertEntry(
                     pIDoc->getOutlineText( nOutlIdx, true, true, false ) );
                     pEntry->SetUserData( reinterpret_cast<void*>(nOutlIdx) );
                     if ( ( IsFieldEdit() &&
@@ -620,11 +619,10 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
             bool bCertainTextNodeSelected( false );
             for ( size_t nNumItemIdx = 0; nNumItemIdx < maNumItems.size(); ++nNumItemIdx )
             {
-                SvTreeListEntry* pEntry = nullptr;
                 bool isSubstring = MatchSubstring(pIDoc->getListItemText( *maNumItems[nNumItemIdx] ), filterString);
                 if(isSubstring)
                 {
-                    pEntry = m_pSelectionToolTipLB->InsertEntry(
+                    SvTreeListEntry* pEntry = m_pSelectionToolTipLB->InsertEntry(
                     pIDoc->getListItemText( *maNumItems[nNumItemIdx] ) );
                     pEntry->SetUserData( reinterpret_cast<void*>(nNumItemIdx) );
                     if ( ( IsFieldEdit() &&
