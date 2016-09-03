@@ -235,12 +235,18 @@ typedef void *                   sal_Handle;
 #   define SAL_MAX_ENUM 0x7fff
 #endif
 
-#if defined(__GNUC__) || defined(__clang__)
-#define SAL_UNUSED(__x__)   __x__ __attribute((__unused__))
+#if defined(__clang__)
+#define SAL_UNUSED      __attribute__((__unused__))
+#define SAL_UNUSED_MEMBER   __attribute__((__unused__))
+#elif defined(__GNUC__)
+#define SAL_UNUSED      __attribute__((__unused__))
+#define SAL_UNUSED_MEMBER
 #elif defined(_MSC_VER)
-#define SAL_UNUSED(__x__)   __pragma(warning(suppress:4100;suppress:4101)) __x__
+#define SAL_UNUSED      __pragma(warning(suppress:4100;suppress:4101))
+#define SAL_UNUSED_MEMBER   __pragma(warning(suppress:4100;suppress:4101))
 #else
-#define SAL_UNUSED(__x__)   __x__
+#define SAL_UNUSED
+#define SAL_UNUSED_MEMBER
 #endif
 
 #if defined(_MSC_VER) || defined(__MINGW32__)

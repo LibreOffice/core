@@ -117,10 +117,10 @@ struct ScDoubleRawToken
 {
 private:
     // SC_TOKEN_FIX_MEMBERS
-    OpCode   SAL_UNUSED(eOp);
-    formula::StackVar SAL_UNUSED(eType);
-    sal_uInt16   SAL_UNUSED(nRefCnt);
-    sal_Bool     SAL_UNUSED(bRaw);
+    OpCode  SAL_UNUSED_MEMBER       eOp;
+    formula::StackVar SAL_UNUSED_MEMBER eType;
+    sal_uInt16 SAL_UNUSED_MEMBER    nRefCnt;
+    sal_Bool SAL_UNUSED_MEMBER      bRaw;
 public:
     union
     {   // union only to assure alignment identical to ScRawToken
