@@ -101,6 +101,7 @@
                     <menu:menuitem menu:id=".uno:SelectData"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:SetInputMode"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
@@ -119,7 +120,6 @@
             <menu:menuitem menu:id=".uno:CompareDocuments"/>
             <menu:menuitem menu:id=".uno:MergeDocuments"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SetInputMode"/>
             <menu:menuitem menu:id=".uno:EditLinks"/>
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
             <menu:menuitem menu:id=".uno:ObjectMenue"/>
@@ -412,6 +412,9 @@
                     <menu:menuitem menu:id=".uno:FormProperties"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:NameGroup"/>
+            <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AnchorMenu"/>
             <menu:menu menu:id=".uno:ArrangeMenu">

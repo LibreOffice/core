@@ -578,7 +578,7 @@
       </node>
       <node oor:name=".uno:SetInputMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Toggle Edit Mode</value>
+          <value xml:lang="en-US">Cell Edit Mode</value>
         </prop>
       </node>
       <node oor:name=".uno:ClearContents" oor:op="replace">
