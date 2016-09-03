@@ -1479,7 +1479,8 @@ void Test::testSharedFormulaMoveBlock()
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,4,0)));
 
     // Move A1:A2 to D2:D3.
-    rFunc.MoveBlock(ScRange(0,0,0,0,1,0), ScAddress(3,1,0), true, true, false, true);
+    bool bMoved = rFunc.MoveBlock(ScRange(0,0,0,0,1,0), ScAddress(3,1,0), true, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
 
     // Check the formula values again.  They should not change.
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
