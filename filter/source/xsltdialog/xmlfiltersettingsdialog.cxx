@@ -466,7 +466,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
     }
 
     // check if we need to copy the template
-    if( !pFilterEntry->maImportTemplate.isEmpty() )
+    if( bOk && !pFilterEntry->maImportTemplate.isEmpty() )
     {
         if( !pFilterEntry->maImportTemplate.matchIgnoreAsciiCase( m_sTemplatePath ) )
         {
