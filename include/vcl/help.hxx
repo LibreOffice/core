@@ -43,7 +43,7 @@ enum class QuickHelpFlags
     CtrlText          = 0x0040,
 /// no delay when opening the quick help. Applies to ShowBallon and ShowQuickHelp
     NoDelay           = 0x0080,
-/// force balloon-style in ShowPopover
+/// force balloon-style in ShowPopover and ShowQuickHelp
     TipStyleBalloon   = 0x0100,
     NoEvadePointer    = 0x0200,
     BiDiRtl           = 0x0400,
