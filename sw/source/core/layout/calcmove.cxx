@@ -1248,14 +1248,13 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     SWRECTFN( this )
 
-    bool bMoveable;
-
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
         // - loop prevention
         SwRect aOldFrame_StopFormat( Frame() );
         SwRect aOldPrt_StopFormat( Prt() );
-        if ( (bMoveable = IsMoveable()) )
+        bool bMoveable = IsMoveable();
+        if (bMoveable)
         {
             SwFrame *pPre = GetIndPrev();
             if ( CheckMoveFwd( bMakePage, bKeep, bMovedBwd ) )
