@@ -251,7 +251,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
     }
 }
 
-void Index::init(const lang::Locale &rLocale, const OUString& algorithm) throw (RuntimeException)
+void Index::init(const lang::Locale &rLocale, const OUString& algorithm) throw (RuntimeException, std::exception)
 {
     makeIndexKeys(rLocale, algorithm);
 
