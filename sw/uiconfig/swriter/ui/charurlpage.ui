@@ -33,6 +33,8 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
                     <property name="label" translatable="yes">URL:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">urled</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -45,6 +47,8 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
                     <property name="label" translatable="yes">Name:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">nameed</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -57,6 +61,8 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
                     <property name="label" translatable="yes">Text:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">texted</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -69,6 +75,8 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
                     <property name="label" translatable="yes">Target frame:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">targetfrmlb</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -214,6 +222,8 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
                     <property name="label" translatable="yes">Visited links:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">visitedlb</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -226,6 +236,8 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">1</property>
                     <property name="label" translatable="yes">Unvisited links:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">unvisitedlb</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
