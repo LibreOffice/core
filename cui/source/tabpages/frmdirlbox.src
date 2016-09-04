@@ -23,12 +23,12 @@
 
 String RID_SVXSTR_FRAMEDIR_LTR
 {
-    Text [ en-US ] = "Left-to-right";
+    Text [ en-US ] = "Left-to-right (LTR)";
 };
 
 String RID_SVXSTR_FRAMEDIR_RTL
 {
-    Text [ en-US ] = "Right-to-left";
+    Text [ en-US ] = "Right-to-left (RTL)";
 };
 
 String RID_SVXSTR_FRAMEDIR_SUPER
