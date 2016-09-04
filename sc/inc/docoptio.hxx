@@ -82,7 +82,6 @@ public:
 
     void        ResetDocOptions();
 
-    inline const ScDocOptions&  operator=( const ScDocOptions& rOpt );
     inline bool                 operator==( const ScDocOptions& rOpt ) const;
     inline bool                 operator!=( const ScDocOptions& rOpt ) const;
 
@@ -111,30 +110,6 @@ public:
     void    SetWriteCalcConfig( bool bVal ) { bWriteCalcConfig = bVal; }
     bool    IsWriteCalcConfig() const       { return bWriteCalcConfig; }
 };
-
-inline const ScDocOptions& ScDocOptions::operator=( const ScDocOptions& rCpy )
-{
-    bIsIgnoreCase       = rCpy.bIsIgnoreCase;
-    bIsIter             = rCpy.bIsIter;
-    nIterCount          = rCpy.nIterCount;
-    fIterEps            = rCpy.fIterEps;
-    nPrecStandardFormat = rCpy.nPrecStandardFormat;
-    nDay                = rCpy.nDay;
-    nMonth              = rCpy.nMonth;
-    nYear               = rCpy.nYear;
-    nYear2000           = rCpy.nYear2000;
-    nTabDistance        = rCpy.nTabDistance;
-    bCalcAsShown        = rCpy.bCalcAsShown;
-    bMatchWholeCell     = rCpy.bMatchWholeCell;
-    bDoAutoSpell        = rCpy.bDoAutoSpell;
-    bLookUpColRowNames  = rCpy.bLookUpColRowNames;
-    bFormulaRegexEnabled= rCpy.bFormulaRegexEnabled;
-    bFormulaWildcardsEnabled = rCpy.bFormulaWildcardsEnabled;
-    eFormulaSearchType  = rCpy.eFormulaSearchType;
-    bWriteCalcConfig    = rCpy.bWriteCalcConfig;
-
-    return *this;
-}
 
 inline bool ScDocOptions::operator==( const ScDocOptions& rOpt ) const
 {

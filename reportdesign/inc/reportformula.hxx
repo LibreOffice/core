@@ -56,8 +56,6 @@ namespace rptui
         ReportFormula( const BindType _eType, const OUString& _rFieldOrExpression );
         ~ReportFormula();
 
-        ReportFormula& operator=(class ReportFormula const &);
-
         /// returns whether the object denotes a valid formula
         bool        isValid() const;
 

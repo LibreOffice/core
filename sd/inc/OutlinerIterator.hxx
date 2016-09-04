@@ -303,16 +303,6 @@ public:
     */
     IteratorPosition (const IteratorPosition& aPosition);
 
-    /// The destructor is a no-op at the moment.
-    ~IteratorPosition();
-    /** Assign the content of the given position to this one.
-        @param aPosition
-            This is the position object from which to take the values of all
-            data members.
-        @return
-            Returns a reference to this object.
-    */
-    IteratorPosition& operator= (const IteratorPosition& aPosition);
     /** Compare two positions for equality.
         @return
             <TRUE/> is returned only when all data members have the same

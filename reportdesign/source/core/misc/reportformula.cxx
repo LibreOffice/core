@@ -124,15 +124,6 @@ namespace rptui
     }
 
     bool                    ReportFormula::isValid() const { return getType() != Invalid; }
-    ReportFormula& ReportFormula::operator=(class ReportFormula const & _rHd)
-    {
-        if ( this == &_rHd )
-            return *this;
-        m_eType                 = _rHd.m_eType;
-        m_sCompleteFormula      = _rHd.m_sCompleteFormula;
-        m_sUndecoratedContent   = _rHd.m_sUndecoratedContent;
-        return *this;
-    }
 
     OUString ReportFormula::getEqualUndecoratedContent() const
     {
