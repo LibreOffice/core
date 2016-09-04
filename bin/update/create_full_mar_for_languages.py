@@ -13,18 +13,19 @@ def make_complete_mar_name(target_dir, filename_prefix, language):
     filename = filename_prefix + "_" + language + "_complete_langpack.mar"
     return os.path.join(target_dir, filename)
 
-def create_lang_infos(mar_file_name, language):
+def create_lang_infos(mar_file_name, language, url):
     data = {'lang' : language,
-            'complete' : get_file_info(mar_file_name)
+            'complete' : get_file_info(mar_file_name, url)
             }
     return data
 
 def main():
     print(sys.argv)
-    if len(sys.argv) < 8:
-        print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $TARGETDIR $TEMPDIR $FILENAMEPREFIX")
+    if len(sys.argv) < 9:
+        print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $TARGETDIR $TEMPDIR $FILENAMEPREFIX $BASE_URL")
         sys.exit(1)
 
+    url = sys.argv[8]
     certificate_path = sys.argv[7]
     certificate_name = sys.argv[6]
     filename_prefix = sys.argv[5]
@@ -55,7 +56,7 @@ def main():
         subprocess.call([mar_executable, '-C', target_dir, '-d', certificate_path, '-n', certificate_name, '-s', mar_file_name, signed_mar_file])
         os.rename(signed_mar_file, mar_file_name)
 
-        lang_infos.append(create_lang_infos(mar_file_name, language))
+        lang_infos.append(create_lang_infos(mar_file_name, language, url))
 
     with open(os.path.join(target_dir, "complete_lang_info.json"), "w") as language_info_file:
         json.dump({'languages' : lang_infos}, language_info_file, indent=4)
