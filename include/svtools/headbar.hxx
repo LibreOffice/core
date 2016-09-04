@@ -296,8 +296,8 @@ public:
     void                MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos );
     void                Clear();
 
-    void                SetOffset( long nNewOffset = 0 );
-    inline void         SetDragSize( long nNewSize = 0 ) { mnDragSize = nNewSize; }
+    void                SetOffset( long nNewOffset );
+    inline void         SetDragSize( long nNewSize ) { mnDragSize = nNewSize; }
 
     sal_uInt16          GetItemCount() const;
     sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;

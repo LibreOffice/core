@@ -348,7 +348,7 @@ public:
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
-                                const GraphicAttr* pAttr = nullptr,
+                                const GraphicAttr* pAttr,
                                 GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD
                             ) const;
 
@@ -578,7 +578,7 @@ private:
     void SVT_DLLPRIVATE ImplRegisterObj(
                             const GraphicObject& rObj,
                             Graphic& rSubstitute,
-                            const OString* pID = nullptr,
+                            const OString* pID,
                             const GraphicObject* pCopyObj = nullptr
                         );
     void SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );

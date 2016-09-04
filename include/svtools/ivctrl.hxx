@@ -283,7 +283,7 @@ public:
     SvxIconChoiceCtrlEntry* GetSelectedEntry() const;
 
 #ifdef DBG_UTIL
-    void                    SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = nullptr );
+    void                    SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry );
 #endif
 
     Point               GetPixelPos( const Point& rPosLogic ) const;

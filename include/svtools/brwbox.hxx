@@ -531,7 +531,7 @@ public:
     Rectangle       GetControlArea() const;
     bool            ProcessKey( const KeyEvent& rEvt );
     void            Dispatch( sal_uInt16 nId );
-    void            SetMode( BrowserMode nMode = BrowserMode::NONE );
+    void            SetMode( BrowserMode nMode );
     BrowserMode     GetMode( ) const { return m_nCurrentMode; }
 
     void            SetCursorColor(const Color& _rCol);

@@ -316,7 +316,7 @@ public:
     /// Insert an User Drawn item.
     void            InsertItem(sal_uInt16 nItemId, size_t nPos = VALUESET_APPEND);
     /// Insert an User Drawn item with @rStr tooltip.
-    void            InsertItem(sal_uInt16 nItemId, const OUString& rStr, size_t nPos = VALUESET_APPEND);
+    void            InsertItem(sal_uInt16 nItemId, const OUString& rStr, size_t nPos);
     void            RemoveItem(sal_uInt16 nItemId);
 
     void            Clear();
@@ -326,7 +326,7 @@ public:
     sal_uInt16      GetItemId( size_t nPos ) const;
     sal_uInt16      GetItemId( const Point& rPos ) const;
     Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
-    void            EnableFullItemMode( bool bFullMode = true );
+    void            EnableFullItemMode( bool bFullMode );
 
     void            SetColCount( sal_uInt16 nNewCols = 1 );
     sal_uInt16      GetColCount() const
@@ -338,8 +338,8 @@ public:
     {
         return mnUserVisLines;
     }
-    void           SetItemWidth( long nItemWidth = 0 );
-    void           SetItemHeight( long nLineHeight = 0 );
+    void           SetItemWidth( long nItemWidth );
+    void           SetItemHeight( long nLineHeight );
     Size           GetLargestItemSize();
     void           RecalculateItemSizes();
 

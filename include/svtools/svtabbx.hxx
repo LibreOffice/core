@@ -98,7 +98,7 @@ public:
     static OUString  GetEntryText( SvTreeListEntry*, sal_uInt16 nCol );
     OUString         GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
-    void             SetEntryText(const OUString&, sal_uLong, sal_uInt16 nCol=0xffff);
+    void             SetEntryText(const OUString&, sal_uLong, sal_uInt16 nCol);
     void             SetEntryText(const OUString&, SvTreeListEntry*, sal_uInt16 nCol=0xffff);
     OUString         GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const;
     sal_uLong        GetEntryPos( const OUString&, sal_uInt16 nCol = 0xffff );

@@ -323,10 +323,10 @@ public:
                         ColorDistFunc pColorDistFn = &sameDistColor);
 
     using ListBox::GetEntryPos;
-    sal_Int32       GetEntryPos( sal_uInt16 nStyle = css::table::BorderLineStyle::SOLID ) const;
+    sal_Int32       GetEntryPos( sal_uInt16 nStyle ) const;
     sal_uInt16      GetEntryStyle( sal_Int32  nPos ) const;
 
-    void            SelectEntry( sal_uInt16 nStyle = css::table::BorderLineStyle::SOLID, bool bSelect = true );
+    void            SelectEntry( sal_uInt16 nStyle, bool bSelect = true );
     sal_uInt16      GetSelectEntryStyle() const;
 
     inline void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
@@ -339,9 +339,9 @@ public:
 protected:
 
     inline const Color&    GetPaintColor() const;
-    Color   GetColorLine1( sal_Int32  nPos = 0 );
-    Color   GetColorLine2( sal_Int32  nPos = 0 );
-    Color   GetColorDist( sal_Int32  nPos = 0 );
+    Color   GetColorLine1( sal_Int32  nPos );
+    Color   GetColorLine2( sal_Int32  nPos );
+    Color   GetColorDist( sal_Int32  nPos );
 
 private:
                     LineListBox( const LineListBox& ) = delete;
@@ -395,7 +395,7 @@ public:
 
     void            Fill( const FontList* pList );
 
-    void            EnableWYSIWYG( bool bEnable = true );
+    void            EnableWYSIWYG( bool bEnable );
 
 private:
     void            InitFontMRUEntriesFile();
@@ -463,14 +463,14 @@ public:
 
     void            Fill( const FontMetric* pFontMetric, const FontList* pList );
 
-    void            EnableRelativeMode( sal_uInt16 nMin = 50, sal_uInt16 nMax = 150,
+    void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax = 150,
                                         sal_uInt16 nStep = 5 );
-    void            EnablePtRelativeMode( short nMin = -200, short nMax = 200,
+    void            EnablePtRelativeMode( short nMin, short nMax = 200,
                                           short nStep = 10 );
     bool            IsRelativeMode() const { return bRelativeMode; }
     void            SetRelative( bool bRelative );
     bool            IsRelative() const { return bRelative; }
-    void            SetPtRelative( bool bPtRel = true )
+    void            SetPtRelative( bool bPtRel )
                         { bPtRelative = bPtRel; SetRelative( true ); }
     bool            IsPtRelative() const { return bPtRelative; }
 

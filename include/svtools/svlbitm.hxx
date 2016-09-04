@@ -68,7 +68,7 @@ private:
     std::vector<Image>      aBmps;  // indices s. constants BMP_ ....
 
     SVT_DLLPRIVATE void     SetWidthAndHeight();
-    SVT_DLLPRIVATE void     InitData( bool _bRadioBtn, const Control* pControlForSettings = nullptr );
+    SVT_DLLPRIVATE void     InitData( bool _bRadioBtn, const Control* pControlForSettings );
 public:
                             // include creating default images (CheckBox or RadioButton)
                             SvLBoxButtonData( const Control* pControlForSettings );
@@ -92,7 +92,7 @@ public:
     void                    SetImage(SvBmp nIndex, const Image& aImage) { aBmps[(int)nIndex] = aImage; }
     Image&                  GetImage(SvBmp nIndex) { return aBmps[(int)nIndex]; }
 
-    void                    SetDefaultImages( const Control* pControlForSettings = nullptr );
+    void                    SetDefaultImages( const Control* pControlForSettings );
                                 // set images according to the color scheme of the Control
                                 // pControlForSettings == NULL: settings are taken from Application
     bool                    HasDefaultImages() const;

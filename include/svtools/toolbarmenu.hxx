@@ -72,9 +72,9 @@ public:
     /** creates an empty ValueSet that is initialized and can be inserted with appendEntry. */
     VclPtr<ValueSet> createEmptyValueSetControl();
 
-    void            checkEntry( int nEntryId, bool bCheck = true );
+    void            checkEntry( int nEntryId, bool bCheck );
 
-    void            enableEntry( int nEntryId, bool bEnable = true );
+    void            enableEntry( int nEntryId, bool bEnable );
 
     void            setEntryText( int nEntryId, const OUString& rStr );
 

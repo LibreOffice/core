@@ -111,7 +111,7 @@ public:
     void                SetName( const OUString& rName ) { aName = rName; }
 
     bool                IsActive() const { return bActive; }
-    void                SetActive( bool bSetActive = true ) { bActive = bSetActive; }
+    void                SetActive( bool bSetActive ) { bActive = bSetActive; }
 
     bool                IsEqual( const IMapObject& rEqObj );
 
