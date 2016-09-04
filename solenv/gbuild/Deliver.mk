@@ -19,16 +19,6 @@
 
 gb_Deliver_GNUCOPY := $(GNUCOPY)
 
-# if ($true) then old files will get removed from the target location before
-# they are copied there. In multi-user environments, if this is needed you need
-# to be the owner of the target file to be able to modify timestamps
-ifeq ($(strip gb_Deliver_HARDLINK),)
-gb_Deliver_CLEARONDELIVER := $(false)
-else
-gb_Deliver_CLEARONDELIVER := $(true)
-endif
-
-
 define gb_Deliver_init
 gb_Deliver_DELIVERABLES :=
 gb_Deliver_DELIVERABLES_INDEX := 
@@ -51,15 +41,13 @@ endif
 endef
 
 define gb_Deliver__deliver
-$(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) $(if $(gb_Deliver_HARDLINK),ln,cp -P -f) $(1) $(2) && $(TOUCH) -hr $(1) $(2)
+$(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) cp -P -f $(1) $(2) && $(TOUCH) -hr $(1) $(2)
 endef
 
 ifneq ($(strip $(gb_Deliver_GNUCOPY)),)
-ifeq ($(strip $(gb_Deliver_HARDLINK)),)
 define gb_Deliver__deliver
 $(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) --no-dereference --force --preserve=timestamps $(1) $(2)
 endef
-endif
 endif
 
 define gb_Deliver_deliver
