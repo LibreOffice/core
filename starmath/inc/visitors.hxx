@@ -390,7 +390,7 @@ class SmSelectionDrawingVisitor : public SmDefaultingVisitor
 {
 public:
     /** Draws a selection on rDevice for the selection on pTree */
-    SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, Point Offset );
+    SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, const Point& rOffset );
     virtual ~SmSelectionDrawingVisitor() {}
     void Visit( SmTextNode* pNode ) override;
     using SmDefaultingVisitor::Visit;
