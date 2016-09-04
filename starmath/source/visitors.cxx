@@ -1901,7 +1901,7 @@ void SmCloningVisitor::Visit( SmVerticalBraceNode* pNode )
 
 // SmSelectionDrawingVisitor
 
-SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, Point Offset )
+SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, const Point& rOffset )
     : rDev( rDevice ) {
     bHasSelectionArea = false;
 
@@ -1912,7 +1912,7 @@ SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmN
 
     //Draw selection if there's any
     if( bHasSelectionArea ){
-        aSelectionArea.Move( Offset.X( ), Offset.Y( ) );
+        aSelectionArea.Move( rOffset.X( ), rOffset.Y( ) );
 
         //Save device state
         rDev.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
