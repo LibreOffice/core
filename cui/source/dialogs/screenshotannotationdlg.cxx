@@ -533,11 +533,7 @@ IMPL_LINK_TYPED(ScreenshotAnnotationDlg_Impl, pictureFrameListener, VclWindowEve
             {
                 if (mpPicture->IsMouseOver() && mpHilighted)
                 {
-                    if (maSelected.find(mpHilighted) != maSelected.end())
-                    {
-                        maSelected.erase(mpHilighted);
-                    }
-                    else
+                    if (maSelected.erase(mpHilighted) == 0)
                     {
                         maSelected.insert(mpHilighted);
                     }
