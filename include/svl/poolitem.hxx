@@ -198,8 +198,8 @@ inline void SfxPoolItem::AddRef( sal_uLong n ) const
 
 inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
 {
-    DBG_ASSERT(m_nRefCount <= SFX_ITEMS_MAXREF, "AddRef with non-Pool-Item");
-    DBG_ASSERT(m_nRefCount >= n, "AddRef: refcount underflow");
+    DBG_ASSERT(m_nRefCount <= SFX_ITEMS_MAXREF, "ReleaseRef with non-Pool-Item");
+    DBG_ASSERT(m_nRefCount >= n, "ReleaseRef: refcount underflow");
     m_nRefCount -= n;
     return m_nRefCount;
 }
