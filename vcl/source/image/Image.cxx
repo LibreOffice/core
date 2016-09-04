@@ -201,6 +201,12 @@ Image& Image::operator=( const Image& rImage )
     return *this;
 }
 
+Image& Image::operator=( Image&& rImage )
+{
+    std::swap(mpImplData, rImage.mpImplData);
+    return *this;
+}
+
 bool Image::operator==(const Image& rImage) const
 {
     bool bRet = false;

@@ -62,6 +62,7 @@ public:
 
     bool            operator!() const { return !mpImplData; }
     Image&          operator=( const Image& rImage );
+    Image&          operator=( Image&& rImage );
     bool            operator==( const Image& rImage ) const;
     bool            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
 
