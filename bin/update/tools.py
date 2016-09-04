@@ -34,10 +34,11 @@ def get_hash(file_path):
             sha512.update(data)
         return sha512.hexdigest()
 
-def get_file_info(mar_file):
+def get_file_info(mar_file, url):
     filesize = os.path.getsize(mar_file)
     data = { 'hash' : get_hash(mar_file),
             'hashFunction' : 'sha512',
-            'size' : filesize }
+            'size' : filesize,
+            'url' : url + os.path.basename(mar_file)}
 
     return data

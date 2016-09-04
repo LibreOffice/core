@@ -33,10 +33,10 @@ create-update-info:
 	rm -rf $(MAR_DIR) || true
 	rm -rf $(UPDATE_DIR) || true
 	mkdir -p $(UPDATE_DIR)
-	$(SRCDIR)/bin/update/create_build_config.py "$(PRODUCTNAME)" "$(VERSION)" "$(BUILDID)" "$(UPDATE_CHANNEL)" "$(PLATFORM)" "$(UPDATE_DIR)"
 	mkdir -p $(MAR_DIR)/current-build
 	mkdir -p $(MAR_DIR)/language
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(UPDATE_DIR)" "$(MAR_DIR)/current-build/" "$(MAR_NAME_PREFIX)" "$(UPDATE_CERTIFICATE_NAME)" "$(UPDATE_CERTIFICATE_PATH)"
-	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar_for_languages.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(UPDATE_DIR)" "$(MAR_DIR)/language" "$(MAR_NAME_PREFIX)" "$(UPDATE_CERTIFICATE_NAME)" "$(UPDATE_CERTIFICATE_PATH)"
+	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(UPDATE_DIR)" "$(MAR_DIR)/current-build/" "$(MAR_NAME_PREFIX)" "$(UPDATE_CERTIFICATE_NAME)" "$(UPDATE_CERTIFICATE_PATH)" "$(UPDATE_BASE_URL)"
+	MAR=$(INSTDIR)/program/mar $(SRCDIR)/bin/update/create_full_mar_for_languages.py "$(PRODUCTNAME)" "$(WORKDIR)" "$(UPDATE_DIR)" "$(MAR_DIR)/language" "$(MAR_NAME_PREFIX)" "$(UPDATE_CERTIFICATE_NAME)" "$(UPDATE_CERTIFICATE_PATH)" "$(UPDATE_BASE_URL)"
+	$(SRCDIR)/bin/update/create_build_config.py "$(PRODUCTNAME)" "$(VERSION)" "$(BUILDID)" "$(UPDATE_CHANNEL)" "$(PLATFORM)" "$(UPDATE_DIR)"
 
 # vim: set noet sw=4 ts=4:
