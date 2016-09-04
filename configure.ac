@@ -1398,6 +1398,12 @@ AC_ARG_WITH(update-certificate-path,
                    [Defines the path to the nss certificate store used for the updater
                     This makes only sense if the onlineupdate is used and the mar files should be uploaded.]))
 
+AC_ARG_WITH(update-base-url,
+    AS_HELP_STRING([--with-update-base-url=http://dev-builds.libreoffice.org/update/$(channel)/$(buildid)],
+                    [Defines the base url for the mar file url. THe following variables are going to be replaced
+                     with the corresponding content: channel, buildid, version, platform, productname.
+                    This makes only sense if the onlineupdate is used and the mar files should be uploaded.]))
+
 libo_FUZZ_ARG_ENABLE(extension-update,
     AS_HELP_STRING([--disable-extension-update],
         [Disable possibility to update installed extensions.]),
@@ -11321,6 +11327,7 @@ ENABLE_ONLINE_UPDATE_MAR=
 UPDATE_CHANNEL=
 UPDATE_CERTIFICATE_NAME=
 UPDATE_CERTIFICATE_PATH=
+UPDATE_BASE_URL=
 if test "$enable_online_update" = ""; then
     if test "$_os" = "WINNT" -o "$_os" = "Darwin"; then
         AC_MSG_RESULT([yes])
@@ -11336,6 +11343,7 @@ else
         UPDATE_CHANNEL="$with_update_channel"
         UPDATE_CERTIFICATE_NAME="$with_update_certificate_name"
         UPDATE_CERTIFICATE_PATH="$with_update_certificate_path"
+        UPDATE_BASE_URL="$with_update_base_url"
     elif test "$enable_online_update" = "yes"; then
         AC_MSG_RESULT([yes])
         ENABLE_ONLINE_UPDATE="TRUE"
@@ -11348,6 +11356,7 @@ AC_SUBST(ENABLE_ONLINE_UPDATE_MAR)
 AC_SUBST(UPDATE_CHANNEL)
 AC_SUBST(UPDATE_CERTIFICATE_NAME)
 AC_SUBST(UPDATE_CERTIFICATE_PATH)
+AC_SUBST(UPDATE_BASE_URL)
 
 dnl ===================================================================
 dnl Test whether we need bzip2

@@ -15,10 +15,11 @@ def make_mar_name(target_dir, filename_prefix):
 
 def main():
     print(sys.argv)
-    if len(sys.argv) < 8:
-        print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $TARGETDIR $TEMPDIR $FILENAMEPREFIX")
+    if len(sys.argv) < 9:
+        print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $TARGETDIR $TEMPDIR $FILENAMEPREFIX $BASE_URL")
         sys.exit(1)
 
+    url = sys.argv[8]
     certificate_path = sys.argv[7]
     certificate_name = sys.argv[6]
     filename_prefix = sys.argv[5]
@@ -45,7 +46,7 @@ def main():
 
     os.rename(signed_mar_file, mar_file)
 
-    file_info = { 'complete' : get_file_info(mar_file) }
+    file_info = { 'complete' : get_file_info(mar_file, url) }
 
     with open(os.path.join(target_dir, 'complete_info.json'), "w") as complete_info_file:
         json.dump(file_info, complete_info_file, indent = 4)
