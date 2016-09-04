@@ -39,7 +39,7 @@
             <info>
                 <desc>The URL that is used for the update check</desc>
             </info>
-            <value>https://update.libreoffice.org/</value>
+            <value>http://updater.libreofficecrash.org/</value>
         </prop>
         <prop oor:name="UpdateChannel" oor:type="xs:string" oor:nillable="false">
             <info>

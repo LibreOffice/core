@@ -485,15 +485,17 @@ void update_checker()
     rtl::Bootstrap::expandMacros(aBuildTarget);
     OUString aLocale = "en-US";
     OUString aChannel = officecfg::Office::Update::Update::UpdateChannel::get();
-    OUString aOSVersion = "0";
 
-    OUString aDownloadCheckURL = aDownloadCheckBaseURL + "update/3/" + aProductName +
+    OUString aDownloadCheckURL = aDownloadCheckBaseURL + "update/1/" + aProductName +
         "/" + aVersion + "/" + aBuildID + "/" + aBuildTarget + "/" + aLocale +
-        "/" + aChannel + "/" + aOSVersion + "/default/default/update.xml?force=1";
+        "/" + aChannel;
+    SAL_DEBUG(aDownloadCheckURL);
     OString aURL = OUStringToOString(aDownloadCheckURL, RTL_TEXTENCODING_UTF8);
 
-#if 0
+#if 1
     std::string response_body = download_content(aURL, false);
+    SAL_DEBUG(response_body);
+    exit(1);
 #else
     std::string response_body;
     if(std::ifstream is{"/lo/users/moggi/update.json", std::ios::binary | std::ios::ate})
