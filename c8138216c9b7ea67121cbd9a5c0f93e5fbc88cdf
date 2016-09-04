@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6895a0_5cfc913e",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-09-04T17:31:21Z",
+      "side": 1,
+      "message": "1159 (SID_EDIT_POSTIT is already 1158)",
+      "range": {
+        "startLine": 992,
+        "startChar": 74,
+        "endLine": 992,
+        "endChar": 78
+      },
+      "revId": "c8138216c9b7ea67121cbd9a5c0f93e5fbc88cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_7cf9554d",
+        "filename": "sw/source/uibase/ribbar/conrect.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-09-04T17:31:21Z",
+      "side": 1,
+      "message": "I believe this isn\u0027t needed, as it should already be called in SwDrawBase::MouseButtonDown.",
+      "revId": "c8138216c9b7ea67121cbd9a5c0f93e5fbc88cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_9c9469e9",
+        "filename": "sw/source/uibase/ribbar/conrect.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-09-04T17:31:21Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "c8138216c9b7ea67121cbd9a5c0f93e5fbc88cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_bc992d22",
+        "filename": "sw/source/uibase/uiview/viewstat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-09-04T17:31:21Z",
+      "side": 1,
+      "message": "The \"else\" part here that puts SfxBoolItem is problematic, as SID_DRAWTBX_ARROWS is not supposed to get bool. Can you move it somewhere where there is no such \"else\"?",
+      "revId": "c8138216c9b7ea67121cbd9a5c0f93e5fbc88cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
