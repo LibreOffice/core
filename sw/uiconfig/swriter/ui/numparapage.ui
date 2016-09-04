@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustmentNF_RESTART_PARA">
     <property name="lower">1</property>
     <property name="upper">65000</property>
@@ -42,14 +43,15 @@
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="labelFT_OUTLINE_LEVEL">
+                    <property name="width_request">250</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="hexpand">True</property>
-                    <property name="xalign">0</property>
+                    <property name="margin_left">4</property>
                     <property name="label" translatable="yes">Outline level:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboLB_OUTLINE_LEVEL</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -61,9 +63,6 @@
                   <object class="GtkComboBoxText" id="comboLB_OUTLINE_LEVEL">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="entry_text_column">0</property>
-                    <property name="id_column">1</property>
                     <items>
                       <item translatable="yes">Body text</item>
                       <item translatable="yes">Level 1</item>
@@ -137,10 +136,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="hexpand">True</property>
-                        <property name="xalign">0</property>
+                        <property name="margin_left">5</property>
                         <property name="label" translatable="yes">_Numbering style:</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">comboLB_NUMBER_STYLE</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -152,9 +152,6 @@
                       <object class="GtkComboBoxText" id="comboLB_NUMBER_STYLE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
                         <items>
                           <item translatable="yes">None</item>
                         </items>
@@ -170,6 +167,7 @@
                         <property name="label" translatable="yes">Edit Style</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="receives_default">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -211,9 +209,9 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkBox" id="box4">
+                        <property name="width_request">250</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkCheckButton" id="checkCB_NUMBER_NEW_START">
@@ -221,7 +219,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="margin_left">12</property>
+                            <property name="halign">start</property>
+                            <property name="margin_left">22</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="inconsistent">True</property>
@@ -248,9 +247,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="hexpand">True</property>
+                        <property name="margin_left">5</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustmentSTART_WITH</property>
                       </object>
                       <packing>
@@ -353,20 +351,20 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkBox" id="box3">
+                        <property name="width_request">250</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkLabel" id="labelFT_RESTART_NO">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="margin_left">12</property>
-                            <property name="xalign">0</property>
+                            <property name="margin_left">26</property>
                             <property name="label" translatable="yes">_Start with:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinNF_RESTART_PARA</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -386,9 +384,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="hexpand">True</property>
+                        <property name="margin_left">5</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustmentNF_RESTART_PARA</property>
                       </object>
                       <packing>
