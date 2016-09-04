@@ -3053,16 +3053,16 @@ void SvxCurrencyToolBoxControl::Select( sal_uInt16 nSelectModifier )
             nFormatKey = m_nFormatKey;
     }
 
-    Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "NumberFormatCurrency";
     if( nFormatKey != NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = "NumberFormatCurrency";
         aArgs[0].Value = makeAny( nFormatKey );
+        Dispatch( m_aCommandURL, aArgs );
         m_nFormatKey = nFormatKey;
     }
-    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
-                                 ".uno:NumberFormatCurrency",
-                                 aArgs );
+    else
+        SfxToolBoxControl::Select( nSelectModifier );
 }
 
 static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
