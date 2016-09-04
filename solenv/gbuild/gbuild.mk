@@ -114,10 +114,6 @@ ENABLE_DEBUGINFO_FOR := all
 endif
 endif
 
-ifeq ($(HARDLINKDELIVER),TRUE)
-gb_Deliver_HARDLINK := $(true)
-endif
-
 # note: ENABLE_CRASHDUMP turns on gb_SYMBOL
 ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)$(ENABLE_CRASHDUMP)),)
 gb_SYMBOL := $(true)
