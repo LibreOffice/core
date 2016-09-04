@@ -630,10 +630,9 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     }
 
     // SID ?
-    sal_uInt16 nIndex = bSID ? USHRT_MAX : GetIndex_Impl(nWhich);
-    if ( USHRT_MAX == nIndex )
+    if (bSID)
     {
-        assert((USHRT_MAX != nIndex || rItem.Which() != nWhich ||
+        assert((rItem.Which() != nWhich ||
             !IsDefaultItem(&rItem) || rItem.GetKind() == SFX_ITEMS_DELETEONIDLE)
                 && "a non Pool Item is Default?!");
         SfxPoolItem *pPoolItem = rItem.Clone(pImpl->mpMaster);
@@ -645,6 +644,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     assert(!pImpl->ppStaticDefaults ||
             typeid(rItem) == typeid(GetDefaultItem(nWhich)));
 
+    const sal_uInt16 nIndex = GetIndex_Impl(nWhich);
     SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[nIndex];
     if (!pItemArr)
     {
@@ -779,11 +779,9 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     }
 
     // SID ?
-    sal_uInt16 nIndex = bSID ? USHRT_MAX : GetIndex_Impl(nWhich);
     if ( bSID )
     {
-        assert((USHRT_MAX != nIndex || !IsDefaultItem(&rItem)) &&
-                    "a non Pool Item is Default?!");
+        assert(!IsDefaultItem(&rItem) && "a non Pool Item is Default?!");
         if ( 0 == ReleaseRef(rItem) )
         {
             SfxPoolItem *pItem = &(SfxPoolItem &)rItem;
@@ -794,9 +792,10 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
 
     assert(rItem.GetRefCount() && "RefCount == 0, Remove impossible");
 
+    const sal_uInt16 nIndex = GetIndex_Impl(nWhich);
     // Static Defaults are just there
     if ( IsStaticDefaultItem(&rItem) &&
-         &rItem == *( pImpl->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
+         &rItem == pImpl->ppStaticDefaults[nIndex])
         return;
 
     // Find Item in own Pool
