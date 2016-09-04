@@ -654,7 +654,7 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     // setup sizes for N-Up
     Size aNupSize( maPController->getPrinter()->PixelToLogic(
                          maPController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
-    if( maPController->getPrinter()->GetOrientation() == ORIENTATION_LANDSCAPE )
+    if( maPController->getPrinter()->GetOrientation() == Orientation::Landscape )
     {
         maNupLandscapeSize = aNupSize;
         maNupPortraitSize = Size( aNupSize.Height(), aNupSize.Width() );

@@ -28,7 +28,7 @@
 enum DuplexMode { DUPLEX_UNKNOWN, DUPLEX_OFF, DUPLEX_LONGEDGE, DUPLEX_SHORTEDGE };
 
 
-enum Orientation { ORIENTATION_PORTRAIT, ORIENTATION_LANDSCAPE };
+enum class Orientation { Portrait, Landscape };
 
 
 enum class PrintQueueFlags

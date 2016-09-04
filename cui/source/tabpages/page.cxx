@@ -467,7 +467,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 
     // general page data
     SvxNumType eNumType = SVX_ARABIC;
-    bLandscape = ( mpDefPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
+    bLandscape = ( mpDefPrinter->GetOrientation() == Orientation::Landscape );
     sal_uInt16 nUse = (sal_uInt16)SVX_PAGE_ALL;
     pItem = GetItem( *rSet, SID_ATTR_PAGE );
 
@@ -1059,10 +1059,10 @@ IMPL_LINK_TYPED( SvxPageDescPage, SwapOrientation_Impl, Button *, pBtn, void )
 void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 {
     MapMode aOldMode = mpDefPrinter->GetMapMode();
-    Orientation eOri = ORIENTATION_PORTRAIT;
+    Orientation eOri = Orientation::Portrait;
 
     if ( bLandscape )
-        eOri = ORIENTATION_LANDSCAPE;
+        eOri = Orientation::Landscape;
     Orientation eOldOri = mpDefPrinter->GetOrientation();
     mpDefPrinter->SetOrientation( eOri );
     mpDefPrinter->SetMapMode( MAP_TWIP );

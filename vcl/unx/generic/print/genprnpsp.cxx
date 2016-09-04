@@ -156,7 +156,7 @@ inline int TenMuToPt( int nUnits ) { return (int)((((double)nUnits)/35.27777778)
 static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {
     pJobSetup->SetOrientation( (Orientation)(rData.m_eOrientation == orientation::Landscape ?
-        ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT));
+        Orientation::Landscape : Orientation::Portrait));
 
     // copy page size
     OUString aPaper;
@@ -668,7 +668,7 @@ bool PspSalInfoPrinter::SetData(
 
         // merge orientation if necessary
         if( nSetDataFlags & JobSetFlags::ORIENTATION )
-            aData.m_eOrientation = pJobSetup->GetOrientation() == ORIENTATION_LANDSCAPE ? orientation::Landscape : orientation::Portrait;
+            aData.m_eOrientation = pJobSetup->GetOrientation() == Orientation::Landscape ? orientation::Landscape : orientation::Portrait;
 
         // merge duplex if necessary
         if( nSetDataFlags & JobSetFlags::DUPLEXMODE )

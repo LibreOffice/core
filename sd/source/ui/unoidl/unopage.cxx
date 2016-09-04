@@ -694,7 +694,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             if(!::cppu::enum2int( nEnum, aValue ))
                 throw lang::IllegalArgumentException();
 
-            Orientation eOri = (((view::PaperOrientation)nEnum) == view::PaperOrientation_PORTRAIT)?ORIENTATION_PORTRAIT:ORIENTATION_LANDSCAPE;
+            Orientation eOri = (((view::PaperOrientation)nEnum) == view::PaperOrientation_PORTRAIT)?Orientation::Portrait:Orientation::Landscape;
 
             if( eOri != GetPage()->GetOrientation() )
             {
@@ -1054,7 +1054,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         break;
     case WID_PAGE_ORIENT:
         aAny <<= view::PaperOrientation(
-            GetPage()->GetOrientation() == ORIENTATION_PORTRAIT
+            GetPage()->GetOrientation() == Orientation::Portrait
             ? view::PaperOrientation_PORTRAIT
             : view::PaperOrientation_LANDSCAPE);
         break;

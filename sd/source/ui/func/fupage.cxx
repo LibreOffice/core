@@ -239,7 +239,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     SvxPageItem aPageItem( SID_ATTR_PAGE );
     aPageItem.SetDescName( mpPage->GetName() );
     aPageItem.SetPageUsage( (SvxPageUsage) SVX_PAGE_ALL );
-    aPageItem.SetLandscape( mpPage->GetOrientation() == ORIENTATION_LANDSCAPE );
+    aPageItem.SetLandscape( mpPage->GetOrientation() == Orientation::Landscape );
     aPageItem.SetNumType( mpDoc->GetPageNumType() );
     aNewAttr.Put( aPageItem );
 
@@ -524,7 +524,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         mpDoc->SetPageNumType(static_cast<const SvxPageItem*>(pPoolItem)->GetNumType());
 
         eOrientation = static_cast<const SvxPageItem*>(pPoolItem)->IsLandscape() ?
-            ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
+            Orientation::Landscape : Orientation::Portrait;
 
         if( mpPage->GetOrientation() != eOrientation )
             bSetPageSizeAndBorder = true;

@@ -1322,7 +1322,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
             rData.SetPaperFormat(
                 ImplGetPaperFormat( rPaperInfo.getWidth(),
                     rPaperInfo.getHeight() ));
-            rData.SetOrientation( ORIENTATION_PORTRAIT );
+            rData.SetOrientation( Orientation::Portrait );
             bFound = true;
             break;
         }
@@ -1348,7 +1348,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
                 rData.SetPaperFormat(
                     ImplGetPaperFormat( rPaperInfo.getWidth(),
                         rPaperInfo.getHeight() ));
-                rData.SetOrientation( ORIENTATION_LANDSCAPE );
+                rData.SetOrientation( Orientation::Landscape );
                 bFound = true;
                 break;
             }
@@ -1359,7 +1359,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
     {
          sal_Int64 nBestMatch = SAL_MAX_INT64;
          int nBestIndex = 0;
-         Orientation eBestOrientation = ORIENTATION_PORTRAIT;
+         Orientation eBestOrientation = Orientation::Portrait;
          for( int i = 0; i < nPaperCount; i++ )
          {
              const PaperInfo& rPaperInfo = GetPaperInfo( i );
@@ -1372,7 +1372,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
              {
                  nBestMatch = nMatch;
                  nBestIndex = i;
-                 eBestOrientation = ORIENTATION_PORTRAIT;
+                 eBestOrientation = Orientation::Portrait;
              }
 
              // check landscape match
@@ -1383,7 +1383,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
              {
                  nBestMatch = nMatch;
                  nBestIndex = i;
-                 eBestOrientation = ORIENTATION_LANDSCAPE;
+                 eBestOrientation = Orientation::Landscape;
              }
          }
          const PaperInfo& rBestInfo = GetPaperInfo( nBestIndex );

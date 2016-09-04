@@ -1650,7 +1650,7 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
     if (pPage != nullptr && GetDoc() != nullptr)
     {
         SvxPageItem aPageItem(SID_ATTR_PAGE);
-        aPageItem.SetLandscape( pPage->GetOrientation() == ORIENTATION_LANDSCAPE );
+        aPageItem.SetLandscape( pPage->GetOrientation() == Orientation::Landscape );
 
         rSet.Put(SvxSizeItem( SID_ATTR_PAGE_SIZE, pPage->GetSize() ));
         rSet.Put(aPageItem);

@@ -2587,7 +2587,7 @@ void ScPrintFunc::ApplyPrintSettings()
 
         Size aEnumSize = aPageSize;
 
-        pPrinter->SetOrientation( bLandscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT );
+        pPrinter->SetOrientation( bLandscape ? Orientation::Landscape : Orientation::Portrait );
         if ( bLandscape )
         {
                 // landscape is always interpreted as a rotation by 90 degrees !

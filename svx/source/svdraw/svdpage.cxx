@@ -1353,7 +1353,7 @@ void SdrPage::SetOrientation(Orientation eOri)
     // square: handle like portrait format
     Size aSiz(GetSize());
     if (aSiz.Width()!=aSiz.Height()) {
-        if ((eOri==ORIENTATION_PORTRAIT) == (aSiz.Width()>aSiz.Height())) {
+        if ((eOri==Orientation::Portrait) == (aSiz.Width()>aSiz.Height())) {
             SetSize(Size(aSiz.Height(),aSiz.Width()));
         }
     }
@@ -1362,9 +1362,9 @@ void SdrPage::SetOrientation(Orientation eOri)
 Orientation SdrPage::GetOrientation() const
 {
     // square: handle like portrait format
-    Orientation eRet=ORIENTATION_PORTRAIT;
+    Orientation eRet=Orientation::Portrait;
     Size aSiz(GetSize());
-    if (aSiz.Width()>aSiz.Height()) eRet=ORIENTATION_LANDSCAPE;
+    if (aSiz.Width()>aSiz.Height()) eRet=Orientation::Landscape;
     return eRet;
 }
 

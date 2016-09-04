@@ -77,7 +77,7 @@ Size SvxPaperInfo::GetPaperSize( const Printer* pPrinter )
     const Orientation eOrient = pPrinter->GetOrientation();
     Size aSize( GetPaperSize( ePaper ) );
         // for Landscape exchange the pages, has already been done by SV
-    if ( eOrient == ORIENTATION_LANDSCAPE )
+    if ( eOrient == Orientation::Landscape )
         Swap( aSize );
     return aSize;
 }

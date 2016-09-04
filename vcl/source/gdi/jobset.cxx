@@ -52,7 +52,7 @@ struct Impl364JobSetupData
 ImplJobSetup::ImplJobSetup()
 {
     mnSystem            = 0;
-    meOrientation       = ORIENTATION_PORTRAIT;
+    meOrientation       = Orientation::Portrait;
     meDuplexMode        = DUPLEX_UNKNOWN;
     mnPaperBin          = 0;
     mePaperFormat       = PAPER_USER;

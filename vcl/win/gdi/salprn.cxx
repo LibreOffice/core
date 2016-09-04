@@ -466,9 +466,9 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     if ( nFlags & JobSetFlags::ORIENTATION )
     {
         if ( CHOOSE_DEVMODE(dmOrientation) == DMORIENT_PORTRAIT )
-            pSetupData->SetOrientation( ORIENTATION_PORTRAIT );
+            pSetupData->SetOrientation( Orientation::Portrait );
         else if ( CHOOSE_DEVMODE(dmOrientation) == DMORIENT_LANDSCAPE )
-            pSetupData->SetOrientation( ORIENTATION_LANDSCAPE );
+            pSetupData->SetOrientation( Orientation::Landscape );
     }
 
     // PaperBin
@@ -732,7 +732,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, const ImplJobSet
     if ( nFlags & JobSetFlags::ORIENTATION )
     {
         CHOOSE_DEVMODE(dmFields) |= DM_ORIENTATION;
-        if ( pSetupData->GetOrientation() == ORIENTATION_PORTRAIT )
+        if ( pSetupData->GetOrientation() == Orientation::Portrait )
             CHOOSE_DEVMODE(dmOrientation) = DMORIENT_PORTRAIT;
         else
             CHOOSE_DEVMODE(dmOrientation) = DMORIENT_LANDSCAPE;

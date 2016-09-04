@@ -126,11 +126,11 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
 
     if (aPageSize.Width() > aPageSize.Height())
     {
-        meOrientation = ORIENTATION_LANDSCAPE;
+        meOrientation = Orientation::Landscape;
     }
     else
     {
-        meOrientation = ORIENTATION_PORTRAIT;
+        meOrientation = Orientation::Portrait;
     }
 }
 
@@ -1732,11 +1732,11 @@ void SdPage::SetSize(const Size& aSize)
             // we initialize the orientation.
             if (aSize.Width() > aSize.Height())
             {
-                meOrientation = ORIENTATION_LANDSCAPE;
+                meOrientation = Orientation::Landscape;
             }
             else
             {
-                meOrientation = ORIENTATION_PORTRAIT;
+                meOrientation = Orientation::Portrait;
             }
         }
     }

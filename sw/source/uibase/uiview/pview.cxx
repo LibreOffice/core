@@ -925,9 +925,9 @@ MOVEPAGE:
             if(pPPVPD)
             {
                 SfxPrinter* pPrinter = GetPrinter( true );
-                if((pPrinter->GetOrientation() == ORIENTATION_LANDSCAPE)
+                if((pPrinter->GetOrientation() == Orientation::Landscape)
                         != pPPVPD->GetLandscape())
-                    pPrinter->SetOrientation(pPPVPD->GetLandscape() ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);
+                    pPrinter->SetOrientation(pPPVPD->GetLandscape() ? Orientation::Landscape : Orientation::Portrait);
             }
             ::SetAppPrintOptions( m_pViewWin->GetViewShell(), false );
             m_bNormalPrint = false;

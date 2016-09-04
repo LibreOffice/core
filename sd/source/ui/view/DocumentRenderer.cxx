@@ -266,7 +266,7 @@ namespace {
               msPageString(),
               maPrintSize(0,0),
               maPageSize(0,0),
-              meOrientation(ORIENTATION_PORTRAIT),
+              meOrientation(Orientation::Portrait),
               maMap(),
               mbPrintMarkedOnly(bPrintMarkedOnly)
         {}
@@ -1374,14 +1374,14 @@ private:
         PrintInfo& rInfo)
     {
         SdDrawDocument* pDocument = mrBase.GetMainViewShell()->GetDoc();
-        rInfo.meOrientation = ORIENTATION_PORTRAIT;
+        rInfo.meOrientation = Orientation::Portrait;
 
         if( ! mpOptions->IsBooklet())
         {
             rInfo.meOrientation = pDocument->GetSdPage(0, ePageKind)->GetOrientation();
         }
         else if (rInfo.maPageSize.Width() < rInfo.maPageSize.Height())
-            rInfo.meOrientation = ORIENTATION_LANDSCAPE;
+            rInfo.meOrientation = Orientation::Landscape;
 
         // Draw and Notes should usually abide by their specified paper size
         Size aPaperSize;
@@ -1400,10 +1400,10 @@ private:
 
         if (mpOptions->IsPrinterPreferred(pDocument->GetDocumentType()))
         {
-            if( (rInfo.meOrientation == ORIENTATION_LANDSCAPE &&
+            if( (rInfo.meOrientation == Orientation::Landscape &&
                   (aPaperSize.Width() < aPaperSize.Height()))
                ||
-                (rInfo.meOrientation == ORIENTATION_PORTRAIT &&
+                (rInfo.meOrientation == Orientation::Portrait &&
                   (aPaperSize.Width() > aPaperSize.Height()))
               )
             {
@@ -1788,10 +1788,10 @@ private:
         rInfo.meOrientation = rMaster.GetOrientation();
 
         const Size aPaperSize (rInfo.mpPrinter->GetPaperSize());
-        if( (rInfo.meOrientation == ORIENTATION_LANDSCAPE &&
+        if( (rInfo.meOrientation == Orientation::Landscape &&
               (aPaperSize.Width() < aPaperSize.Height()))
            ||
-            (rInfo.meOrientation == ORIENTATION_PORTRAIT &&
+            (rInfo.meOrientation == Orientation::Portrait &&
               (aPaperSize.Width() > aPaperSize.Height()))
           )
         {
@@ -2003,7 +2003,7 @@ private:
         Size aPrintSize_2 (rInfo.maPrintSize);
         Size aPageSize_2 (rInfo.maPageSize);
 
-        if (rInfo.meOrientation == ORIENTATION_LANDSCAPE)
+        if (rInfo.meOrientation == Orientation::Landscape)
             aPrintSize_2.Width() >>= 1;
         else
             aPrintSize_2.Height() >>= 1;
@@ -2032,7 +2032,7 @@ private:
             aStdMap,
             aMap));
 
-        if (rInfo.meOrientation == ORIENTATION_LANDSCAPE)
+        if (rInfo.meOrientation == Orientation::Landscape)
         {
             aOffset.X() = ( ( aAdjustedPrintSize.Width() >> 1 ) - rInfo.maPageSize.Width() ) >> 1;
             aOffset.Y() = ( aAdjustedPrintSize.Height() - rInfo.maPageSize.Height() ) >> 1;
@@ -2093,7 +2093,7 @@ private:
             {
                 const std::pair<sal_uInt16, sal_uInt16> aPair (aPairVector[nIndex]);
                 Point aSecondOffset (aOffset);
-                if (rInfo.meOrientation == ORIENTATION_LANDSCAPE)
+                if (rInfo.meOrientation == Orientation::Landscape)
                     aSecondOffset.X() += aAdjustedPrintSize.Width() / 2;
                 else
                     aSecondOffset.Y() += aAdjustedPrintSize.Height() / 2;

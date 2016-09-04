@@ -538,7 +538,7 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlag
             {
                 const SvxPageItem& rOldItem = static_cast<const SvxPageItem&>(rSet.Get(ATTR_PAGE));
                 bool bWasLand = rOldItem.IsLandscape();
-                bool bNewLand = ( pNewPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
+                bool bNewLand = ( pNewPrinter->GetOrientation() == Orientation::Landscape );
                 if (bNewLand != bWasLand)
                 {
                     SvxPageItem aNewItem( rOldItem );
