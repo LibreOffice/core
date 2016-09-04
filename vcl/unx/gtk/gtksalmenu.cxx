@@ -1085,6 +1085,7 @@ void GtkSalMenu::EnableUnity(bool bEnable)
         else
             DestroyMenuBarWidget();
         bUnityMode = bEnable;
+        static_cast<MenuBar*>(mpVCLMenu)->SetDisplayable(!bEnable);
     }
 }
 
