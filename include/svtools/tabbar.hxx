@@ -403,7 +403,7 @@ public:
 
     bool            IsPageEnabled( sal_uInt16 nPageId ) const;
 
-    void            SetPageBits( sal_uInt16 nPageId, TabBarPageBits nBits = 0 );
+    void            SetPageBits( sal_uInt16 nPageId, TabBarPageBits nBits );
     TabBarPageBits  GetPageBits( sal_uInt16 nPageId ) const;
 
     sal_uInt16      GetPageCount() const;
@@ -420,7 +420,7 @@ public:
     void            SetFirstPageId( sal_uInt16 nPageId );
     void            MakeVisible( sal_uInt16 nPageId );
 
-    void            SelectPage( sal_uInt16 nPageId, bool bSelect = true );
+    void            SelectPage( sal_uInt16 nPageId, bool bSelect );
     sal_uInt16      GetSelectPageCount() const;
     bool            IsPageSelected( sal_uInt16 nPageId ) const;
 
@@ -440,7 +440,7 @@ public:
         @param bMirrored  sal_True = the control will draw itself RTL in LTR GUI,
             and vice versa; sal_False = the control behaves according to the
             current direction of the GUI. */
-    void            SetMirrored(bool bMirrored = true);
+    void            SetMirrored(bool bMirrored);
     /** Returns true, if the control is set to mirrored mode (see SetMirrored()). */
     bool            IsMirrored() const { return mbMirrored; }
 

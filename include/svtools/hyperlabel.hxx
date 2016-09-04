@@ -68,7 +68,7 @@ namespace svt
 
         void                SetClickHdl( const Link<HyperLabel*,void>& rLink ) { maClickHdl = rLink; }
 
-        Size                CalcMinimumSize( long nMaxWidth = 0 ) const;
+        Size                CalcMinimumSize( long nMaxWidth ) const;
 
     private:
         using FixedText::CalcMinimumSize;

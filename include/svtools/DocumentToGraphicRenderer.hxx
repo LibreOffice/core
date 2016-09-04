@@ -50,7 +50,7 @@ public:
     Size getDocumentSizeIn100mm( sal_Int32 aCurrentPage );
 
     Graphic renderToGraphic(sal_Int32 aCurrentPage, Size aDocumentSizePixel,
-                            Size aTargetSizePixel, Color aPageColor = COL_TRANSPARENT);
+                            Size aTargetSizePixel, Color aPageColor);
 };
 
 #endif

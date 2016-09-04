@@ -66,8 +66,8 @@ public:
     const OUString&                 GetBaseURL() const { return aBaseURL; }
     void                            SetOpenHdl( const Link<SvtURLBox*,void>& rLink ) { aOpenHdl = rLink; }
     const Link<SvtURLBox*,void>&    GetOpenHdl() const { return aOpenHdl; }
-    void                            SetOnlyDirectories( bool bDir = true );
-    void                            SetNoURLSelection( bool bSet = true );
+    void                            SetOnlyDirectories( bool bDir );
+    void                            SetNoURLSelection( bool bSet );
     INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
     void                            SetSmartProtocol( INetProtocol eProt );
     bool                            IsCtrlOpen()
@@ -81,7 +81,7 @@ public:
 
     void                            SetFilter(const OUString& _sFilter);
 
-    inline void                     EnableAutocompletion( bool _bEnable = true )
+    inline void                     EnableAutocompletion( bool _bEnable )
                                         { bIsAutoCompleteEnabled = _bEnable; }
     void                            SetPlaceHolder( const OUString& sPlaceHolder )
                                         { aPlaceHolder = sPlaceHolder; }
