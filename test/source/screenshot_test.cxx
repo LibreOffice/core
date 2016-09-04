@@ -201,7 +201,7 @@ void ScreenshotTest::dumpDialogToPath(const OString& rUIXMLDescription)
 
 void ScreenshotTest::processAllKnownDialogs()
 {
-    for (mapType::const_iterator i = getKnownDialogs().begin(); i != getKnownDialogs().end(); i++)
+    for (mapType::const_iterator i = getKnownDialogs().begin(); i != getKnownDialogs().end(); ++i)
     {
         std::unique_ptr<VclAbstractDialog> pDlg(createDialogByID((*i).second));
 
