@@ -4633,21 +4633,20 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
     }
 }
 
-void lcl_insertLCID( OUStringBuffer& aFormatStr, const OUString& rLCIDString, sal_Int32 nPosInsertLCID )
+void lcl_insertLCID( OUStringBuffer& aFormatStr, sal_Int32 nLCID, sal_Int32 nPosInsertLCID )
 {
-    OUStringBuffer aLCIDString;
-    if ( !rLCIDString.isEmpty() )
-    {
-        aLCIDString = "[$-" + rLCIDString + "]";
-    }
+    if ( nLCID <= 0 )
+        return;
+    OUStringBuffer aLCIDString = OUString::number( nLCID , 16 ).toAsciiUpperCase();
     // Search for only last DBNum which is the last element before insertion position
     if ( nPosInsertLCID >= 8
-        && rLCIDString.getLength() > 4
+        && aLCIDString.getLength() > 4
         && aFormatStr.indexOf( "[DBNum", nPosInsertLCID-8) == nPosInsertLCID-8 )
     {   // remove DBNumX code if long LCID
         nPosInsertLCID -= 8;
         aFormatStr.remove( nPosInsertLCID, 8 );
     }
+    aLCIDString = "[$-" + aLCIDString + "]";
     aFormatStr.insert( nPosInsertLCID, aLCIDString.toString() );
 }
 
@@ -4709,7 +4708,6 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             nSem++;
         }
         OUString aPrefix;
-        bool bLCIDInserted = false;
 
         if ( !bDefaults )
         {
@@ -4773,6 +4771,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             aStr.append( aPrefix );
         }
         sal_Int32 nPosInsertLCID = aStr.getLength();
+        sal_Int32 nCalendarID = 0x0000000; // Excel ID of calendar used in sub-format see tdf#36038
         if ( nAnz )
         {
             const short* pType = NumFor[n].Info().nTypeArray;
@@ -4827,21 +4826,25 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                         }
                         break;
                     case NF_SYMBOLTYPE_CALDEL :
-                        if ( pStr[j+1] == "buddhist" )
+                        if ( pStr[j+1] == "gengou" )
                         {
-                            if ( aNatNum.IsSet() && aNatNum.GetNatNum() == 1 &&
-                                 MsLangId::getRealLanguage( aNatNum.GetLang() ) ==
-                                 LANGUAGE_THAI )
-                            {
-                                lcl_insertLCID( aStr, "D07041E", nPosInsertLCID ); // date in Thai digit, Buddhist era
-                            }
-                            else
-                            {
-                                lcl_insertLCID( aStr, "107041E", nPosInsertLCID ); // date in Arabic digit, Buddhist era
-                            }
-                            j = j+2;
-                            bLCIDInserted = true;
+                            nCalendarID = 0x0030000;
                         }
+                        else if ( pStr[j+1] == "hijri" )
+                        {
+                            nCalendarID = 0x0060000;
+                        }
+                        else if ( pStr[j+1] == "buddhist" )
+                        {
+                            nCalendarID = 0x0070000;
+                        }
+                        else if ( pStr[j+1] == "hebrew" )
+                        {
+                            nCalendarID = 0x0080000;
+                        }
+                        // other calendars (see tdf#36038) not corresponding between LibO and XL
+                        if ( nCalendarID > 0 )
+                            j = j+2;
                         break;
                     default:
                         aStr.append( pStr[j] );
@@ -4849,22 +4852,82 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                 }
             }
         }
-        if (aNatNum.IsSet() && !bLCIDInserted)
+        sal_Int32 nAlphabetID = 0x0000000; // Excel ID of alphabet used for numerals see tdf#36038
+        sal_Int32 nLanguageID = 0x0000000;
+        if ( aNatNum.IsComplete() )
         {
-            // The Thai T NatNum modifier during Xcl export.
-            if (aNatNum.GetNatNum() == 1 &&
-                rKeywords[NF_KEY_THAI_T] == "T" &&
-                MsLangId::getRealLanguage( aNatNum.GetLang()) == LANGUAGE_THAI )
-            {
-                lcl_insertLCID( aStr, "D00041E", nPosInsertLCID ); // number in Thai digit
+            if ( aNatNum.GetNatNum() > 0 && ( aNatNum.GetDBNum() == 0 || nCalendarID > 0 ) )
+            {   // if no DBNum code then use long LCID
+                // if calendar, then DBNum will be removed
+                nLanguageID = MsLangId::getRealLanguage( aNatNum.GetLang());
+                if ( (nLanguageID & 0x00FF) == 0x0001 )
+                    nAlphabetID = 0x2000000;  // Arabic-indi numerals
+                else switch ( nLanguageID )
+                {
+                    case LANGUAGE_FARSI:
+                        nAlphabetID = 0x3000000;  // Farsi numerals
+                        break;
+                    case LANGUAGE_HINDI:
+                    case LANGUAGE_MARATHI:
+                    case LANGUAGE_NEPALI:
+                    case LANGUAGE_NEPALI_INDIA:
+                        nAlphabetID = 0x4000000;  // Devanagari numerals
+                        break;
+                    case LANGUAGE_BENGALI:
+                    case LANGUAGE_BENGALI_BANGLADESH:
+                        nAlphabetID = 0x5000000;  // Bengali numerals
+                        break;
+                    case LANGUAGE_PUNJABI:
+                        nAlphabetID = 0x6000000;  // Punjabi numerals
+                        break;
+                    case LANGUAGE_GUJARATI:
+                        nAlphabetID = 0x7000000;  // Gujarati numerals
+                        break;
+                    case LANGUAGE_ODIA:
+                        nAlphabetID = 0x8000000;  // Odia (Oriya) numerals
+                        break;
+                    case LANGUAGE_TAMIL:
+                    case LANGUAGE_TAMIL_SRI_LANKA:
+                        nAlphabetID = 0x9000000;  // Tamil numerals
+                        break;
+                    case LANGUAGE_TELUGU:
+                        nAlphabetID = 0xA000000;  // Telugu numerals
+                        break;
+                    case LANGUAGE_KANNADA:
+                        nAlphabetID = 0xB000000;  // Kannada numerals
+                        break;
+                    case LANGUAGE_MALAYALAM:
+                        nAlphabetID = 0xC000000;  // Malayalam numerals
+                        break;
+                    case LANGUAGE_THAI:
+                        nAlphabetID = 0xD000000;  // Thai numerals
+                        break;
+                    case LANGUAGE_LAO:
+                        nAlphabetID = 0xE000000;  // Lao numerals
+                        break;
+                    case LANGUAGE_TIBETAN:
+                    case LANGUAGE_TIBETAN_BHUTAN:
+                        nAlphabetID = 0xF000000;  // Tibetan numerals
+                        break;
+                    default:
+                        // other alphabets (Japanese, Hebrew...) have no corresponding long LCID
+                        // they use DBNum instead
+                        nAlphabetID = 0x1000000;  // Arabic (European) numerals
+                        break;
+                }
             }
-            else if ( aNatNum.IsComplete() && aNatNum.GetDBNum() > 0 )
-            {
-                lcl_insertLCID( aStr, OUString::number( sal::static_int_cast<sal_Int32>(
-                                MsLangId::getRealLanguage( aNatNum.GetLang())), 16).toAsciiUpperCase(),
-                                nPosInsertLCID);
-            }
+            // Add LCID to DBNum
+            if ( aNatNum.GetDBNum() > 0 && nLanguageID == 0 )
+                nLanguageID = MsLangId::getRealLanguage( aNatNum.GetLang());
         }
+        if ( nCalendarID > 0 )
+        {   // Add alphabet and language to calendar
+            if ( nAlphabetID == 0 )
+                nAlphabetID = 0x1000000;
+            if ( nLanguageID == 0 && nOriginalLang != LANGUAGE_DONTKNOW )
+                nLanguageID = nOriginalLang;
+        }
+        lcl_insertLCID( aStr, nAlphabetID + nCalendarID + nLanguageID, nPosInsertLCID );
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )
     {   // append empty subformats
