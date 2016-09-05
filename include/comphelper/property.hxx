@@ -125,9 +125,9 @@ tryPropertyValueEnum(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*ou
 inline bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*out*/_rOldValue, const css::uno::Any& _rValueToSet, bool _bCurrentValue)
 {
     bool bModified(false);
-    sal_Bool bNewValue(false);
+    bool bNewValue(false);
     ::cppu::convertPropertyValue(bNewValue, _rValueToSet);
-    if (bool(bNewValue) != _bCurrentValue)
+    if (bNewValue != _bCurrentValue)
     {
         _rConvertedValue <<= bNewValue;
         _rOldValue <<= _bCurrentValue;
