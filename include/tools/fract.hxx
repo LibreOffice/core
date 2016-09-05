@@ -39,7 +39,7 @@ public:
                     Fraction();
                     Fraction( const Fraction & rFrac );
                     Fraction( Fraction && rFrac );
-                    Fraction( long nNum, long nDen=1 );
+                    Fraction( long nNum, long nDen );
                     Fraction( double dVal );
                     ~Fraction();
 
