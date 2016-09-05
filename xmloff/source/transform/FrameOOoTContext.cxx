@@ -95,7 +95,7 @@ void XMLFrameOOoTransformerContext::StartElement(
         }
     }
 
-    GetTransformer().GetDocHandler()->startElement( m_aElemQName,
+    GetTransformer().startFastElement( m_aElemQName,
                                                     xFrameAttrList );
     XMLTransformerContext::StartElement( xAttrList );
 }
@@ -144,7 +144,7 @@ void XMLFrameOOoTransformerContext::EndElement()
 {
     XMLTransformerContext::EndElement();
     ExportContent();
-    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+    GetTransformer().endFastElement( m_aElemQName );
 }
 
 void XMLFrameOOoTransformerContext::Characters( const OUString& rChars )

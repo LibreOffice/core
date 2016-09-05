@@ -27,13 +27,17 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastNamespaceHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <rtl/ref.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <sax/fastattribs.hxx>
 
 #include "Transformer.hxx"
+#include <xmloff/fasttokenhandler.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace i18n { class XCharacterClassification; }
@@ -56,8 +60,11 @@ class XMLTransformerBase : public XMLTransformer
     css::uno::Reference< css::xml::sax::XLocator >                    m_xLocator;
     css::uno::Reference< css::xml::sax::XDocumentHandler >            m_xHandler;     // the handlers
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >    m_xExtHandler;
+    css::uno::Reference< css::xml::sax::XFastDocumentHandler >        m_xFastHandler;
     css::uno::Reference< css::beans::XPropertySet >                   m_xPropSet;
     css::uno::Reference< css::i18n::XCharacterClassification >        xCharClass;
+    rtl::Reference< xmloff::token::FastTokenHandler >                 m_xTokenHandler;
+    css::uno::Reference< css::xml::sax::XFastNamespaceHandler >       m_xNamespaceHandler;
 
     OUString m_aExtPathPrefix;
     OUString m_aClass;
@@ -67,6 +74,10 @@ class XMLTransformerBase : public XMLTransformer
     std::vector<rtl::Reference<XMLTransformerContext>> m_pContexts;
     XMLTransformerActions       *m_pElemActions;
     XMLTransformerTokenMap      *m_pTokenMap;
+
+    //for feeding FastDocumentHandler
+    sal_Int32 nElement;
+    rtl::Reference< sax_fastparser::FastAttributeList > m_xFastAttributes;
 
 protected:
     css::uno::Reference< css::frame::XModel >     mxModel;
@@ -186,6 +197,10 @@ public:
     inline const OUString& GetClass() const { return m_aClass; }
 
     bool isWriter() const;
+
+    void startFastElement( const OUString& rName,
+                                         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
+    void endFastElement( const OUString& rName );
 
 };
 

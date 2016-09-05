@@ -954,6 +954,10 @@ protected:
     virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
     virtual XMLShapeImportHelper* CreateShapeImport() override;
 
 public:
@@ -979,9 +983,10 @@ public:
     SvXMLImportContext *CreateStylesContext(const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                      bool bAutoStyles );
+
     SvXMLImportContext *CreateBodyContext(
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList );
+                                    const sal_Int32 nElement,
+                                    const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
 
     virtual void SetStatistics( const css::uno::Sequence< css::beans::NamedValue> & i_rStats) override;
 

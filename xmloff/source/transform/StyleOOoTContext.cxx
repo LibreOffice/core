@@ -197,9 +197,9 @@ void XMLTypedPropertiesOOoTContext_Impl::Export()
 {
     if( m_xAttrList->getLength() || HasElementContent() )
     {
-        GetTransformer().GetDocHandler()->startElement( GetQName(), m_xAttrList );
+        GetTransformer().startFastElement( GetQName(), m_xAttrList );
         ExportContent();
-        GetTransformer().GetDocHandler()->endElement( GetQName() );
+        GetTransformer().endFastElement( GetQName() );
     }
 }
 
@@ -1254,8 +1254,7 @@ void XMLStyleOOoTContext::StartElement(
     if( m_bPersistent )
         XMLPersElemContentTContext::StartElement( xAttrList );
     else
-        GetTransformer().GetDocHandler()->startElement( GetExportQName(),
-                                                        xAttrList );
+        GetTransformer().startFastElement( GetExportQName(), xAttrList );
 }
 
 void XMLStyleOOoTContext::EndElement()
@@ -1263,7 +1262,7 @@ void XMLStyleOOoTContext::EndElement()
     if( m_bPersistent )
         XMLPersElemContentTContext::EndElement();
     else
-        GetTransformer().GetDocHandler()->endElement( GetExportQName() );
+        GetTransformer().endFastElement( GetExportQName() );
 }
 
 void XMLStyleOOoTContext::Characters( const OUString& )
