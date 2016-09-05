@@ -61,7 +61,7 @@ struct PrinterInfo : JobData
 class VCL_DLLPUBLIC PrinterInfoManager
 {
 public:
-    enum Type { Default = 0, CUPS = 1 };
+    enum class Type { Default = 0, CUPS = 1 };
 
     struct SystemPrintQueue
     {
@@ -114,7 +114,7 @@ protected:
     bool                              m_bUseJobPatch;
     OUString                     m_aSystemDefaultPaper;
 
-    PrinterInfoManager( Type eType = Default );
+    PrinterInfoManager( Type eType = Type::Default );
 
     virtual void initialize();
 

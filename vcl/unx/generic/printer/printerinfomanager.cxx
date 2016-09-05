@@ -111,7 +111,7 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_bUseJobPatch( true ),
     m_aSystemDefaultPaper( "A4" )
 {
-    if( eType == Default )
+    if( eType == Type::Default )
         m_pQueueInfo = new SystemQueueInfo();
     initSystemDefaultPaper();
 }
@@ -483,7 +483,7 @@ void PrinterInfoManager::initialize()
         aDefaultPrinter.clear();
     m_aDefaultPrinter = aDefaultPrinter;
 
-    if( m_eType != Default )
+    if( m_eType != Type::Default )
         return;
 
     // add a default printer for every available print queue
