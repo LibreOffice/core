@@ -18,10 +18,10 @@
 
 void UITest::executeCommand(const OUString& rCommand)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aProps(1);
-    aProps[0].Name = "SynchronMode";
-    aProps[0].Value = css::uno::toAny(false);
-    comphelper::dispatchCommand(rCommand, aProps);
+    comphelper::dispatchCommand(
+        rCommand,
+        {{"SynchronMode", -1, css::uno::Any(false),
+          css::beans::PropertyState_DIRECT_VALUE}});
 }
 
 std::unique_ptr<UIObject> UITest::getFocusTopWindow()
