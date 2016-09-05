@@ -88,11 +88,6 @@ Menu MODIFY_TOOLBAR_CONTENT
         };
         MenuItem
         {
-            Identifier = ID_BEGIN_GROUP ;
-            Text [ en-US ] = "Add Separator" ;
-        };
-        MenuItem
-        {
             Separator = TRUE ;
         };
         MenuItem
