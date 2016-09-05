@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6895a0_bc1ccd78",
+        "filename": "writerfilter/source/dmapper/FontTable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-09-05T07:35:30Z",
+      "side": 1,
+      "message": "This is wrong:  The original code apparently assumes that m_pImpl-\u003epCurrentEntry is not set (and \"warns\" if that is not the case; it is unclear without further investigation whether that OSL_ENSURE should translate to an assert, a SAL_WARN_IF, or a SAL_INFO_IF).  Adding code to return early if the expected condition (that m_pImpl-\u003epCurrentEntry is not set) is true changes the behavior of the function.",
+      "revId": "504f7ea1b15fabd3e97dc58295c446eb13669ef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
