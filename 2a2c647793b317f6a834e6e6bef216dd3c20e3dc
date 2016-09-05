@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6895a0_9fa0dba7",
+        "filename": "sw/source/uibase/ribbar/conrect.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-09-05T20:26:09Z",
+      "side": 1,
+      "message": "Doesn\u0027t work because of this. Make it an additional \"if\" inside and surround the old OBJ_CAPTION related code, \"else\" - your new code.",
+      "range": {
+        "startLine": 53,
+        "startChar": 36,
+        "endLine": 53,
+        "endChar": 78
+      },
+      "revId": "2a2c647793b317f6a834e6e6bef216dd3c20e3dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
