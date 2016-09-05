@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6895a0_7f69478b",
+        "filename": "sw/source/uibase/ribbar/conrect.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-09-05T15:22:29Z",
+      "side": 1,
+      "message": "I would make this block also depend on bReturn, and on m_pWin-\u003eGetSdrDrawMode() !\u003d OBJ_CAPTION (so that the original code path for OBJ_CAPTION remains unchanged).",
+      "revId": "83726e950d886de7d7d06db05dfdb93ab067623b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
