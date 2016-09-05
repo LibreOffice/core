@@ -90,6 +90,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <svtools/miscopt.hxx>
 #include <sax/tools/converter.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -301,6 +302,195 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 ;
         }
     }
+    if (maFormula)
+    {
+        if (nCellType == util::NumberFormat::TEXT)
+            bFormulaTextResult = true;
+        if(nCellType == util::NumberFormat::DATETIME)
+            nCellType = util::NumberFormat::UNDEFINED;
+        //if bIsEmpty is true at this point, then there is no office value.
+        //we must get the text:p (even if it is empty) in case this a special
+        //case in HasSpecialCaseFormulaText().
+        if(bIsEmpty)
+            bFormulaTextResult = true;
+    }
+    rXMLImport.GetStylesImportHelper()->SetAttributes(xStyleName.release(), xCurrencySymbol.release(), nCellType);
+}
+
+ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                      const bool bTempIsCovered,
+                                      const sal_Int32 nTempRepeatedRows ) :
+    ScXMLImportContext( rImport ),
+    mpEditEngine(GetScImport().GetEditEngine()),
+    mnCurParagraph(0),
+    pDetectiveObjVec(nullptr),
+    pCellRangeSource(nullptr),
+    fValue(0.0),
+    nMergedRows(1),
+    nMatrixRows(0),
+    nRepeatedRows(nTempRepeatedRows),
+    nMergedCols(1),
+    nMatrixCols(0),
+    nColsRepeated(1),
+    rXMLImport((ScXMLImport&)rImport),
+    eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
+    nCellType(util::NumberFormat::TEXT),
+    bIsMerged(false),
+    bIsMatrix(false),
+    bIsCovered(bTempIsCovered),
+    bIsEmpty(true),
+    mbNewValueType(false),
+    mbErrorValue(false),
+    bSolarMutexLocked(false),
+    bFormulaTextResult(false),
+    mbPossibleErrorCell(false),
+    mbCheckWithCompilerForError(false),
+    mbEditEngineHasText(false),
+    mbHasFormatRuns(false),
+    mbHasStyle(false)
+{
+    rtl::math::setNan(&fValue); // NaN by default
+
+    rXMLImport.SetRemoveLastChar(false);
+    rXMLImport.GetTables().AddColumn(bTempIsCovered);
+
+    std::unique_ptr<OUString> xStyleName;
+    std::unique_ptr<OUString> xCurrencySymbol;
+    const SvXMLTokenMap& rTokenMap = rImport.GetTableRowCellAttrTokenMap();
+    if( xAttrList.is() )
+    {
+        sax_fastparser::FastAttributeList *pAttribList;
+        assert( dynamic_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() ) != nullptr );
+        pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+
+        const std::vector< sal_Int32 >& rAttrList = pAttribList->getFastAttributeTokens();
+        for ( size_t i = 0; i < rAttrList.size(); i++ )
+        {
+            sal_uInt16 nToken = rTokenMap.Get( rAttrList[ i ] );
+            const OUString sValue = OUString(pAttribList->getFastAttributeValue(i),
+                                    pAttribList->AttributeValueLength(i), RTL_TEXTENCODING_UTF8);
+            switch ( nToken )
+            {
+                case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
+                    xStyleName.reset(new OUString(sValue));
+                    mbHasStyle = true;
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME:
+                    OSL_ENSURE(!maContentValidationName, "here should be only one Validation Name");
+                    if (!sValue.isEmpty())
+                        maContentValidationName.reset(sValue);
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS:
+                    bIsMerged = true;
+                    nMergedRows = static_cast<SCROW>(sValue.toInt32());
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS:
+                    bIsMerged = true;
+                    nMergedCols = static_cast<SCCOL>(sValue.toInt32());
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS:
+                    bIsMatrix = true;
+                    nMatrixCols = static_cast<SCCOL>(sValue.toInt32());
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS:
+                    bIsMatrix = true;
+                    nMatrixRows = static_cast<SCROW>(sValue.toInt32());
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
+                    nColsRepeated = static_cast<SCCOL>(std::min<sal_Int32>( MAXCOLCOUNT,
+                                std::max( sValue.toInt32(), static_cast<sal_Int32>(1) ) ));
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
+                    nCellType = GetScImport().GetCellType(sValue);
+                    bIsEmpty = false;
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_NEW_VALUE_TYPE:
+                    if(sValue == "error")
+                        mbErrorValue = true;
+                    else
+                        nCellType = GetScImport().GetCellType(sValue);
+                    bIsEmpty = false;
+                    mbNewValueType = true;
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
+                {
+                    if (!sValue.isEmpty())
+                    {
+                        ::sax::Converter::convertDouble(fValue, sValue);
+                        bIsEmpty = false;
+
+                        //if office:value="0", let's get the text:p in case this is
+                        //a special case in HasSpecialCaseFormulaText(). If it
+                        //turns out not to be a special case, we'll use the 0 value.
+                        if(fValue == 0.0)
+                            bFormulaTextResult = true;
+                    }
+                }
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE:
+                {
+                    if (!sValue.isEmpty() && rXMLImport.SetNullDateOnUnitConverter())
+                    {
+                        rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sValue);
+                        bIsEmpty = false;
+                    }
+                }
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE:
+                {
+                    if (!sValue.isEmpty())
+                    {
+                        ::sax::Converter::convertDuration(fValue, sValue);
+                        bIsEmpty = false;
+                    }
+                }
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE:
+                {
+                    if (!sValue.isEmpty())
+                    {
+                        OSL_ENSURE(!maStringValue, "here should be only one string value");
+                        maStringValue.reset(sValue);
+                        bIsEmpty = false;
+                    }
+                }
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE:
+                {
+                    if (!sValue.isEmpty())
+                    {
+                        if ( IsXMLToken(sValue, XML_TRUE) )
+                            fValue = 1.0;
+                        else if ( IsXMLToken(sValue, XML_FALSE) )
+                            fValue = 0.0;
+                        else
+                            ::sax::Converter::convertDouble(fValue, sValue);
+                        bIsEmpty = false;
+                    }
+                }
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA:
+                {
+                    if (!sValue.isEmpty())
+                    {
+                        OSL_ENSURE(!maFormula, "here should be only one formula");
+                        OUString aFormula, aFormulaNmsp;
+                        rXMLImport.ExtractFormulaNamespaceGrammar( aFormula, aFormulaNmsp, eGrammar, sValue );
+                        maFormula.reset( FormulaWithNamespace(aFormula, aFormulaNmsp) );
+                    }
+                }
+                break;
+                case XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY:
+                    xCurrencySymbol.reset(new OUString(sValue));
+                break;
+                default:
+                    ;
+            }
+        }
+    }
+
     if (maFormula)
     {
         if (nCellType == util::NumberFormat::TEXT)
@@ -748,6 +938,14 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+        ScXMLTableRowCellContext::createFastChildContext( sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return new SvXMLImportContext( GetImport() );
 }
 
 void ScXMLTableRowCellContext::DoMerge( const ScAddress& rScAddress, const SCCOL nCols, const SCROW nRows )
@@ -1506,6 +1704,34 @@ bool ScXMLTableRowCellContext::IsPossibleErrorString() const
 }
 
 void ScXMLTableRowCellContext::EndElement()
+{
+    HasSpecialCaseFormulaText();
+    if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )
+    {
+        maStringValue.reset(GetFirstParagraph());
+    }
+
+    ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
+    if( aCellPos.Col() > 0 && nRepeatedRows > 1 )
+        aCellPos.SetRow( aCellPos.Row() - (nRepeatedRows - 1) );
+    if( bIsMerged )
+        DoMerge( aCellPos, nMergedCols - 1, nMergedRows - 1 );
+
+    if (maFormula)
+        AddFormulaCell(aCellPos);
+    else
+        AddNonFormulaCell(aCellPos);
+
+    UnlockSolarMutex(); //if LockSolarMutex got used, we presumably need to ensure an UnlockSolarMutex
+
+    bIsMerged = false;
+    nMergedCols = 1;
+    nMergedRows = 1;
+    nColsRepeated = 1;
+}
+
+void SAL_CALL ScXMLTableRowCellContext::endFastElement(sal_Int32 /*nElement*/)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     HasSpecialCaseFormulaText();
     if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )

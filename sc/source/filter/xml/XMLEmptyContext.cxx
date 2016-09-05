@@ -23,7 +23,13 @@
 ScXMLEmptyContext::ScXMLEmptyContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    ScXMLImportContext( rImport, nPrfx, rLName )
+{
+}
+
+ScXMLEmptyContext::ScXMLEmptyContext( ScXMLImport& rImport,
+                                      sal_Int32 /*nElement*/ ) :
+    ScXMLImportContext( rImport )
 {
 }
 
@@ -40,7 +46,22 @@ SvXMLImportContext *ScXMLEmptyContext::CreateChildContext( sal_uInt16 nPrefix,
     return pContext;
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    ScXMLEmptyContext::createFastChildContext( sal_Int32 nElement,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
+    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
+{
+    SvXMLImportContext *pContext = new ScXMLEmptyContext( GetScImport(), nElement );
+
+    return pContext;
+}
+
 void ScXMLEmptyContext::EndElement()
+{
+}
+
+void SAL_CALL ScXMLEmptyContext::endFastElement(sal_Int32 /*nElement*/)
+    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
 }
 
