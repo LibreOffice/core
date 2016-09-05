@@ -31,7 +31,7 @@
 #include <unx/i18n_ic.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salframe.h>
-#include <unx/saldata.hxx>
+#include <unx/salinst.h>
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/fixed.hxx>

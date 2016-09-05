@@ -19,7 +19,6 @@
 
 #include <rtl/ustring.hxx>
 #include <unx/salunx.h>
-#include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
 
 #include <xrender_peer.hxx>

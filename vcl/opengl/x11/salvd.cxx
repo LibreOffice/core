@@ -10,7 +10,6 @@
 #include <vcl/sysdata.hxx>
 
 #include <unx/salunx.h>
-#include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 #include <unx/salvd.h>

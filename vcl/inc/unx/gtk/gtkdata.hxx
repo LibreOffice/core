@@ -29,7 +29,6 @@
 
 #include <unx/gendata.hxx>
 #include <unx/saldisp.hxx>
-#include <unx/saldata.hxx>
 #include <unx/gtk/gtksys.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <osl/conditn.h>

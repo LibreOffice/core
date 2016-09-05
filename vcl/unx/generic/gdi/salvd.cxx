@@ -23,10 +23,10 @@
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
 
-#include <unx/salunx.h>
-#include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
+#include <unx/salinst.h>
 #include <unx/salgdi.h>
+#include <unx/salunx.h>
 #include <unx/salvd.h>
 #include <unx/x11/xlimits.hxx>
 

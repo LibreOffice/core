@@ -21,18 +21,18 @@
 #include "salgdiimpl.hxx"
 
 #include <vcl/salbtype.hxx>
+#include <vcl/sysdata.hxx>
 
 #include "unx/pixmap.hxx"
 #include "unx/salunx.h"
-#include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
 #include "unx/salbmp.h"
 #include "unx/salgdi.h"
-#include "unx/salframe.h"
 #include "unx/salvd.h"
 #include "unx/x11/x11gdiimpl.h"
 #include <unx/x11/xlimits.hxx>
 #include "xrender_peer.hxx"
+#include "salframe.hxx"
 
 #include "unx/printergfx.hxx"
 

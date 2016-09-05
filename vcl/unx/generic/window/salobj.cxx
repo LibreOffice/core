@@ -31,7 +31,6 @@
 #include <vcl/event.hxx>
 
 #include <unx/salunx.h>
-#include <unx/saldata.hxx>
 #include <unx/salinst.h>
 #include <unx/saldisp.hxx>
 #include <unx/salframe.h>

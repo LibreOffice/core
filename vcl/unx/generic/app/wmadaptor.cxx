@@ -31,7 +31,7 @@
 
 #include "unx/wmadaptor.hxx"
 #include "unx/saldisp.hxx"
-#include "unx/saldata.hxx"
+#include "unx/salinst.h"
 #include "unx/salframe.h"
 
 #include "salgdi.hxx"

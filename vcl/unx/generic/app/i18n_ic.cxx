@@ -32,7 +32,6 @@
 #include <unx/i18n_status.hxx>
 
 #include <unx/salframe.h>
-#include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
 
 using namespace vcl;

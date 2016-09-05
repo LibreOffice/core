@@ -44,7 +44,7 @@
 #include <X11/extensions/shape.h>
 
 #include "unx/salunx.h"
-#include "unx/saldata.hxx"
+#include "saldatabasic.hxx"
 #include "unx/saldisp.hxx"
 #include "unx/salgdi.h"
 #include "unx/salframe.h"

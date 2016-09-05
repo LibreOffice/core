@@ -22,7 +22,6 @@
 #include "osl/thread.h"
 
 #include "unx/saldisp.hxx"
-#include "unx/saldata.hxx"
 #include "unx/salgdi.h"
 
 #include "gcach_xpeer.hxx"

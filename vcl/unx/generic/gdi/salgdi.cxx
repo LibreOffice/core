@@ -43,13 +43,12 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 
 #include <vcl/jobdata.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 
 #include "unx/salunx.h"
-#include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
 #include "unx/salgdi.h"
-#include "unx/salframe.h"
 #include "unx/salvd.h"
 #include "unx/x11/x11gdiimpl.h"
 #include <unx/x11/xlimits.hxx>

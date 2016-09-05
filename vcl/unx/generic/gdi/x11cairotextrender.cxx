@@ -18,7 +18,6 @@
  */
 
 #include "x11cairotextrender.hxx"
-#include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
 #include "unx/salvd.h"
 

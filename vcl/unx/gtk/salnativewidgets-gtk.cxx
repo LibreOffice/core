@@ -27,7 +27,7 @@
 #include "unx/gtk/gtkgdi.hxx"
 
 #include "unx/pixmap.hxx"
-#include "unx/saldata.hxx"
+#include "saldatabasic.hxx"
 #include "unx/saldisp.hxx"
 
 #include <cstdio>

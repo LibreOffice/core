@@ -105,7 +105,6 @@ void RandRWrapper::releaseWrapper()
 #endif
 
 #include "unx/saldisp.hxx"
-#include "unx/salframe.h"
 #if OSL_DEBUG_LEVEL > 1
 #include <cstdio>
 #endif

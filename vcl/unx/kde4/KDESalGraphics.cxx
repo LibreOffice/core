@@ -34,7 +34,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/decoview.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <unx/saldata.hxx>
 
 /**
   Conversion function between VCL ControlState together with

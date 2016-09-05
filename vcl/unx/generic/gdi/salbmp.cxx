@@ -35,7 +35,6 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
 #include <unx/salunx.h>
-#include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 #include <unx/salbmp.h>

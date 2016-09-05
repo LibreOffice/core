@@ -37,7 +37,6 @@
 #include <X11/Xatom.h>
 
 #include <unx/sm.hxx>
-#include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>
 #include <unx/salframe.h>
 #include <unx/salinst.h>

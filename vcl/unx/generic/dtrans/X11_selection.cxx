@@ -22,7 +22,6 @@
 #include <cstdlib>
 
 #include "unx/saldisp.hxx"
-#include "unx/saldata.hxx"
 
 #include <unistd.h>
 #include <stdio.h>

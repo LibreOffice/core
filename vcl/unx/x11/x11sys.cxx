@@ -18,7 +18,6 @@
  */
 
 #include <unx/salunx.h>
-#include <unx/saldata.hxx>
 #include <unx/salinst.h>
 #include <unx/saldisp.hxx>
 #include <unx/x11/x11sys.hxx>

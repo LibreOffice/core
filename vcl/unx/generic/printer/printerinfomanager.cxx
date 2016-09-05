@@ -24,7 +24,7 @@
 #include "unx/cupsmgr.hxx"
 #include <vcl/strhelper.hxx>
 
-#include "unx/saldata.hxx"
+#include "saldatabasic.hxx"
 
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"

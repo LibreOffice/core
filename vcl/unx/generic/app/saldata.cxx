@@ -44,7 +44,6 @@
 
 #include "unx/saldisp.hxx"
 #include "unx/saldata.hxx"
-#include "unx/salframe.h"
 #include "unx/sm.hxx"
 #include "unx/i18n_im.hxx"
 #include "unx/i18n_xkb.hxx"
