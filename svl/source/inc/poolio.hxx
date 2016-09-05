@@ -146,9 +146,8 @@ struct SfxItemPool_Impl
 
     void DeleteItems()
     {
-        std::vector<SfxPoolItemArray_Impl*>::iterator itr = maPoolItems.begin(), itrEnd = maPoolItems.end();
-        for (; itr != itrEnd; ++itr)
-            delete *itr;
+        for (auto pPoolItemArray : maPoolItems)
+            delete pPoolItemArray;
         maPoolItems.clear();
         maPoolDefaults.clear();
 
