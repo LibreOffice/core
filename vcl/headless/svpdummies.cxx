@@ -42,11 +42,6 @@ void SvpSalObject::SetPosSize( long, long, long, long ) {}
 void SvpSalObject::Show( bool ) {}
 const SystemEnvData* SvpSalObject::GetSystemData() const { return &m_aSystemChildData; }
 
-// SalI18NImeStatus
-SvpImeStatus::~SvpImeStatus() {}
-bool SvpImeStatus::canToggle() { return false; }
-void SvpImeStatus::toggle() {}
-
 // SalSystem
 SvpSalSystem::~SvpSalSystem() {}
 

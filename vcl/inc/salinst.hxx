@@ -114,7 +114,7 @@ public:
     virtual SalTimer*       CreateSalTimer() = 0;
     // SalI18NImeStatus
     virtual SalI18NImeStatus*
-                            CreateI18NImeStatus() = 0;
+                            CreateI18NImeStatus();
     // SalSystem
     virtual SalSystem*      CreateSalSystem() = 0;
     // SalBitmap

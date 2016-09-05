@@ -93,6 +93,11 @@ bool SalInstance::CallEventCallback( void* pEvent, int nBytes )
     return m_pEventInst.is() && m_pEventInst->dispatchEvent( pEvent, nBytes );
 }
 
+SalI18NImeStatus* SalInstance::CreateI18NImeStatus()
+{
+    return new SalI18NImeStatus;
+}
+
 SalTimer::~SalTimer()
 {
 }

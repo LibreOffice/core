@@ -293,11 +293,6 @@ SalTimer* SvpSalInstance::CreateSalTimer()
     return new SvpSalTimer( this );
 }
 
-SalI18NImeStatus* SvpSalInstance::CreateI18NImeStatus()
-{
-    return new SvpImeStatus();
-}
-
 SalSystem* SvpSalInstance::CreateSalSystem()
 {
     return new SvpSalSystem();

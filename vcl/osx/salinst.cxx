@@ -991,23 +991,6 @@ OUString AquaSalInstance::getOSVersion()
     return aVersion;
 }
 
-class MacImeStatus : public SalI18NImeStatus
-{
-public:
-    MacImeStatus() {}
-    virtual ~MacImeStatus() {}
-
-    // asks whether there is a status window available
-    // to toggle into menubar
-    virtual bool canToggle() override { return false; }
-    virtual void toggle() override {}
-};
-
-SalI18NImeStatus* AquaSalInstance::CreateI18NImeStatus()
-{
-    return new MacImeStatus();
-}
-
 // YieldMutexReleaser
 YieldMutexReleaser::YieldMutexReleaser() : mnCount( 0 )
 {

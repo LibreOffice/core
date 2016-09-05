@@ -147,8 +147,6 @@ public:
 
     // SalTimer
     virtual SalTimer*       CreateSalTimer() override;
-    // SalI18NImeStatus
-    virtual SalI18NImeStatus*   CreateI18NImeStatus() override;
     // SalSystem
     virtual SalSystem*      CreateSalSystem() override;
     // SalBitmap
