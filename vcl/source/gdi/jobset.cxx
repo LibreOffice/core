@@ -53,7 +53,7 @@ ImplJobSetup::ImplJobSetup()
 {
     mnSystem            = 0;
     meOrientation       = Orientation::Portrait;
-    meDuplexMode        = DUPLEX_UNKNOWN;
+    meDuplexMode        = DuplexMode::Unknown;
     mnPaperBin          = 0;
     mePaperFormat       = PAPER_USER;
     mnPaperWidth        = 0;
@@ -271,7 +271,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                 rJobData.SetSystem( SVBT16ToShort( pOldJobData->nSystem ) );
                 rJobData.SetDriverDataLen( SVBT32ToUInt32( pOldJobData->nDriverDataLen ) );
                 rJobData.SetOrientation( (Orientation)SVBT16ToShort( pOldJobData->nOrientation ) );
-                rJobData.SetDuplexMode( DUPLEX_UNKNOWN );
+                rJobData.SetDuplexMode( DuplexMode::Unknown );
                 rJobData.SetPaperBin( SVBT16ToShort( pOldJobData->nPaperBin ) );
                 rJobData.SetPaperFormat( (Paper)SVBT16ToShort( pOldJobData->nPaperFormat ) );
                 rJobData.SetPaperWidth( (long)SVBT32ToUInt32( pOldJobData->nPaperWidth ) );
@@ -294,14 +294,14 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                         OUString aValue = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
                         if( aKey == "COMPAT_DUPLEX_MODE" )
                         {
-                            if( aValue == "DUPLEX_UNKNOWN" )
-                                rJobData.SetDuplexMode( DUPLEX_UNKNOWN );
-                            else if( aValue == "DUPLEX_OFF" )
-                                rJobData.SetDuplexMode( DUPLEX_OFF );
-                            else if( aValue == "DUPLEX_SHORTEDGE" )
-                                rJobData.SetDuplexMode( DUPLEX_SHORTEDGE );
-                            else if( aValue == "DUPLEX_LONGEDGE" )
-                                rJobData.SetDuplexMode( DUPLEX_LONGEDGE );
+                            if( aValue == "DuplexMode::Unknown" )
+                                rJobData.SetDuplexMode( DuplexMode::Unknown );
+                            else if( aValue == "DuplexMode::Off" )
+                                rJobData.SetDuplexMode( DuplexMode::Off );
+                            else if( aValue == "DuplexMode::ShortEdge" )
+                                rJobData.SetDuplexMode( DuplexMode::ShortEdge );
+                            else if( aValue == "DuplexMode::LongEdge" )
+                                rJobData.SetDuplexMode( DuplexMode::LongEdge );
                         }
                         else
                             rJobData.SetValueMap(aKey, aValue);
@@ -364,17 +364,17 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "COMPAT_DUPLEX_MODE");
             switch( rJobData.GetDuplexMode() )
             {
-                case DUPLEX_UNKNOWN:
-                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_UNKNOWN");
+                case DuplexMode::Unknown:
+                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DuplexMode::Unknown");
                     break;
-                case DUPLEX_OFF:
-                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_OFF");
+                case DuplexMode::Off:
+                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DuplexMode::Off");
                     break;
-                case DUPLEX_SHORTEDGE:
-                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_SHORTEDGE");
+                case DuplexMode::ShortEdge:
+                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DuplexMode::ShortEdge");
                     break;
-                case DUPLEX_LONGEDGE:
-                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DUPLEX_LONGEDGE");
+                case DuplexMode::LongEdge:
+                    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStream, "DuplexMode::LongEdge");
                     break;
             }
             nLen = sal::static_int_cast<sal_uInt16>(rOStream.Tell() - nPos);

@@ -1717,9 +1717,9 @@ void PrinterController::pushPropertiesToPrinter()
         pVal->Value >>= nDuplex;
         switch( nDuplex )
         {
-            case css::view::DuplexMode::OFF: mpImplData->mxPrinter->SetDuplexMode( DUPLEX_OFF ); break;
-            case css::view::DuplexMode::LONGEDGE: mpImplData->mxPrinter->SetDuplexMode( DUPLEX_LONGEDGE ); break;
-            case css::view::DuplexMode::SHORTEDGE: mpImplData->mxPrinter->SetDuplexMode( DUPLEX_SHORTEDGE ); break;
+            case css::view::DuplexMode::OFF: mpImplData->mxPrinter->SetDuplexMode( DuplexMode::Off ); break;
+            case css::view::DuplexMode::LONGEDGE: mpImplData->mxPrinter->SetDuplexMode( DuplexMode::LongEdge ); break;
+            case css::view::DuplexMode::SHORTEDGE: mpImplData->mxPrinter->SetDuplexMode( DuplexMode::ShortEdge ); break;
         }
     }
 }

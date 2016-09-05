@@ -25,7 +25,8 @@
 #include <o3tl/typed_flags_set.hxx>
 
 
-enum DuplexMode { DUPLEX_UNKNOWN, DUPLEX_OFF, DUPLEX_LONGEDGE, DUPLEX_SHORTEDGE };
+// aapears to be a copy of css::view::DuplexMode
+enum class DuplexMode { Unknown, Off, LongEdge, ShortEdge };
 
 
 enum class Orientation { Portrait, Landscape };

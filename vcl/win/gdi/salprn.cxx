@@ -707,15 +707,15 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
 
     if( nFlags & JobSetFlags::DUPLEXMODE )
     {
-        DuplexMode eDuplex = DUPLEX_UNKNOWN;
+        DuplexMode eDuplex = DuplexMode::Unknown;
         if( (CHOOSE_DEVMODE(dmFields) & DM_DUPLEX) )
         {
             if( CHOOSE_DEVMODE(dmDuplex) == DMDUP_SIMPLEX )
-                eDuplex = DUPLEX_OFF;
+                eDuplex = DuplexMode::Off;
             else if( CHOOSE_DEVMODE(dmDuplex) == DMDUP_VERTICAL )
-                eDuplex = DUPLEX_LONGEDGE;
+                eDuplex = DuplexMode::LongEdge;
             else if( CHOOSE_DEVMODE(dmDuplex) == DMDUP_HORIZONTAL )
-                eDuplex = DUPLEX_SHORTEDGE;
+                eDuplex = DuplexMode::ShortEdge;
         }
         pSetupData->SetDuplexMode( eDuplex );
     }
@@ -988,19 +988,19 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, const ImplJobSet
     {
         switch( pSetupData->GetDuplexMode() )
         {
-        case DUPLEX_OFF:
+        case DuplexMode::Off:
             CHOOSE_DEVMODE(dmFields) |= DM_DUPLEX;
             CHOOSE_DEVMODE(dmDuplex) = DMDUP_SIMPLEX;
             break;
-        case DUPLEX_SHORTEDGE:
+        case DuplexMode::ShortEdge:
             CHOOSE_DEVMODE(dmFields) |= DM_DUPLEX;
             CHOOSE_DEVMODE(dmDuplex) = DMDUP_HORIZONTAL;
             break;
-        case DUPLEX_LONGEDGE:
+        case DuplexMode::LongEdge:
             CHOOSE_DEVMODE(dmFields) |= DM_DUPLEX;
             CHOOSE_DEVMODE(dmDuplex) = DMDUP_VERTICAL;
             break;
-        case DUPLEX_UNKNOWN:
+        case DuplexMode::Unknown:
             break;
         }
     }

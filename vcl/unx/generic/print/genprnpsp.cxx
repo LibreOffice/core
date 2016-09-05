@@ -211,7 +211,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     pKey = nullptr;
     pValue = nullptr;
 
-    pJobSetup->SetDuplexMode( DUPLEX_UNKNOWN );
+    pJobSetup->SetDuplexMode( DuplexMode::Unknown );
     if( rData.m_pParser )
         pKey = rData.m_pParser->getKey( OUString("Duplex") );
     if( pKey )
@@ -222,15 +222,15 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
             pValue->m_aOption.startsWithIgnoreAsciiCase( "Simplex" )
            )
         {
-            pJobSetup->SetDuplexMode( DUPLEX_OFF);
+            pJobSetup->SetDuplexMode( DuplexMode::Off);
         }
         else if( pValue->m_aOption.equalsIgnoreAsciiCase( "DuplexNoTumble" ) )
         {
-            pJobSetup->SetDuplexMode( DUPLEX_LONGEDGE );
+            pJobSetup->SetDuplexMode( DuplexMode::LongEdge );
         }
         else if( pValue->m_aOption.equalsIgnoreAsciiCase( "DuplexTumble" ) )
         {
-            pJobSetup->SetDuplexMode( DUPLEX_SHORTEDGE );
+            pJobSetup->SetDuplexMode( DuplexMode::ShortEdge );
         }
     }
 
@@ -679,18 +679,18 @@ bool PspSalInfoPrinter::SetData(
                 pValue = nullptr;
                 switch( pJobSetup->GetDuplexMode() )
                 {
-                case DUPLEX_OFF:
+                case DuplexMode::Off:
                     pValue = pKey->getValue( OUString("None") );
                     if( pValue == nullptr )
                         pValue = pKey->getValue( OUString("SimplexNoTumble") );
                     break;
-                case DUPLEX_SHORTEDGE:
+                case DuplexMode::ShortEdge:
                     pValue = pKey->getValue( OUString("DuplexTumble") );
                     break;
-                case DUPLEX_LONGEDGE:
+                case DuplexMode::LongEdge:
                     pValue = pKey->getValue( OUString("DuplexNoTumble") );
                     break;
-                case DUPLEX_UNKNOWN:
+                case DuplexMode::Unknown:
                 default:
                     pValue = nullptr;
                     break;

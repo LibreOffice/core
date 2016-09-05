@@ -113,7 +113,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     pKey = nullptr;
     pValue = nullptr;
 
-    pJobSetup->SetDuplexMode( DUPLEX_UNKNOWN );
+    pJobSetup->SetDuplexMode( DuplexMode::Unknown );
     if( rData.m_pParser )
         pKey = rData.m_pParser->getKey( OUString( "Duplex"  ) );
     if( pKey )
@@ -124,15 +124,15 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
             pValue->m_aOption.startsWithIgnoreAsciiCase( "Simplex" )
            )
         {
-            pJobSetup->SetDuplexMode( DUPLEX_OFF );
+            pJobSetup->SetDuplexMode( DuplexMode::Off );
         }
         else if( pValue->m_aOption.equalsIgnoreAsciiCase( "DuplexNoTumble" ) )
         {
-            pJobSetup->SetDuplexMode( DUPLEX_LONGEDGE );
+            pJobSetup->SetDuplexMode( DuplexMode::LongEdge );
         }
         else if( pValue->m_aOption.equalsIgnoreAsciiCase( "DuplexTumble" ) )
         {
-            pJobSetup->SetDuplexMode( DUPLEX_SHORTEDGE );
+            pJobSetup->SetDuplexMode( DuplexMode::ShortEdge );
         }
     }
 
