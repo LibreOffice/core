@@ -1589,13 +1589,14 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             lcl_PreparePrinterOptions( rMergeDescriptor.aPrintOptions, true, aOptions );
             pTargetView->ExecPrint( aOptions, bIsMergeSilent, false/*bPrintAsync*/ );
         }
-
-        if( IsMergeOk() && bMT_SHELL )
-            // leave docshell available for caller (e.g. MM wizard)
-            rMergeDescriptor.pMailMergeConfigItem->SetTargetView( pTargetView );
-        else
-            xTargetDocShell->DoClose();
     }
+
+    // we also show canceled documents, as long as there was no error
+    if( !IsMergeError() && bMT_SHELL )
+        // leave docshell available for caller (e.g. MM wizard)
+        rMergeDescriptor.pMailMergeConfigItem->SetTargetView( pTargetView );
+    else if( xTargetDocShell )
+        xTargetDocShell->DoClose();
 
     rescheduleGui();
 
