@@ -23,34 +23,33 @@
 #include <xmloff/xmlimp.hxx>
 #include "address.hxx"
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 
 
-class ScXMLTableRowContext : public SvXMLImportContext
+class ScXMLTableRowContext : public ScXMLImportContext
 {
     OUString sStyleName;
     OUString sVisibility;
     sal_Int32 nRepeatedRows;
     bool bHasCell;
 
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
 
-    ScXMLTableRowContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList );
+    ScXMLTableRowContext( ScXMLImport& rImport, sal_Int32 nElement,
+                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
 
     virtual ~ScXMLTableRowContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
 };
 
-class ScXMLTableRowsContext : public SvXMLImportContext
+class ScXMLTableRowsContext : public ScXMLImportContext
 {
     SCROW nHeaderStartRow;
     SCROW nGroupStartRow;
@@ -58,23 +57,22 @@ class ScXMLTableRowsContext : public SvXMLImportContext
     bool bGroup;
     bool bGroupDisplay;
 
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
 
-    ScXMLTableRowsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLTableRowsContext( ScXMLImport& rImport, sal_Int32 nElement,
+                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                        const bool bHeader, const bool bGroup);
 
     virtual ~ScXMLTableRowsContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+                        createFastChildContext( sal_Int32 nElement,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
+                        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement)
+                        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+
 };
 
 #endif
