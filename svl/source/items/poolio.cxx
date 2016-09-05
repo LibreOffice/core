@@ -309,23 +309,22 @@ void SfxItemPool::LoadCompleted()
     if ( pImpl->nInitRefCount > 1 )
     {
         // Iterate over all Which values
-        std::vector<SfxPoolItemArray_Impl*>::const_iterator itrItemArr = pImpl->maPoolItems.begin();
-        for( sal_uInt16 nArrCnt = GetSize_Impl(); nArrCnt; --nArrCnt, ++itrItemArr )
+        for (auto& rPoolItemArrayPtr : pImpl->maPoolItems)
         {
             // Is there an item with the Which value present at all?
-            if ( *itrItemArr )
+            if (rPoolItemArrayPtr)
             {
                 // Iterate over all items with this WhichId
-                SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*itrItemArr)->begin();
-                for( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
+                for (auto& rItemPtr : *rPoolItemArrayPtr)
                 {
-                    if (*ppHtArr)
+                    if (rItemPtr)
                     {
-                        if ( !ReleaseRef( **ppHtArr ) )
-                            DELETEZ( *ppHtArr );
+                        if (!ReleaseRef(*rItemPtr))
+                            DELETEZ(rItemPtr);
                     }
                 }
-                (*itrItemArr)->ReHash();
+                // don't clear array, fill free list and clear pointer map
+                rPoolItemArrayPtr->ReHash();
             }
         }
 
@@ -467,19 +466,16 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
     {
 
         // Iterate over all Which values
-        std::vector<SfxPoolItemArray_Impl*>::const_iterator itrItemArr = pImpl->maPoolItems.begin();
-        for( size_t nArrCnt = GetSize_Impl(); nArrCnt; --nArrCnt, ++itrItemArr )
+        for(auto const& rArrayPtr : pImpl->maPoolItems)
         {
             // Is there an Item with that Which value present at all?
-            if ( *itrItemArr )
+            if (rArrayPtr)
             {
-                SfxPoolItemArrayBase_Impl::const_iterator ppHtArr = (*itrItemArr)->begin();
-                for( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
-                    if (*ppHtArr)
+                for (auto const& rItemPtr : *rArrayPtr)
+                    if (rItemPtr)
                     {
                         SAL_INFO( "svl", "loading non-empty ItemPool" );
-
-                        AddRef( **ppHtArr );
+                        AddRef(*rItemPtr);
                     }
             }
         }
