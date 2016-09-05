@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da6895a0_bf03df0c",
+        "filename": "animations/source/animcore/animcore.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-05T07:56:26Z",
+      "side": 1,
+      "message": "Fixed this, removed message.",
+      "parentUuid": "da6895a0_39f52f83",
+      "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6895a0_f902d76e",
         "filename": "animations/source/animcore/animcore.cxx",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2016-09-02T15:34:44Z",
       "side": 1,
       "message": "the \"animations\" log area does not exist in log-areas.dox... actually the animations module is very small so no need for \".animcore\", a single \"animations\" is enough",
+      "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_df08932b",
+        "filename": "animations/source/animcore/animcore.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-05T07:56:26Z",
+      "side": 1,
+      "message": "Fixed, removed .animcore.",
+      "parentUuid": "da6895a0_f902d76e",
       "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -65,6 +101,24 @@
       "side": 1,
       "message": "i meant only \"basegfx\" of course, not \"polygon\"",
       "parentUuid": "da6895a0_19f86b7c",
+      "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_9ffe1b04",
+        "filename": "basegfx/source/polygon/b2dsvgpolypolygon.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-05T07:56:26Z",
+      "side": 1,
+      "message": "Should I add basegfx as a section and add polygon under it in include/sal/log-areas.dox or should I just omit .polygon from the code here?",
+      "parentUuid": "da6895a0_f939f742",
       "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
