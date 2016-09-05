@@ -232,6 +232,14 @@ SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWind
     return new GtkSalObject( static_cast<GtkSalFrame*>(pParent), bShow );
 }
 
+SalI18NImeStatus* GtkInstance::CreateI18NImeStatus()
+{
+    //we want the default SalInstance::CreateI18NImeStatus returns the no-op
+    //stub here, not the X11Instance::CreateI18NImeStatus which the gtk2
+    //one would use otherwise
+    return SalInstance::CreateI18NImeStatus();
+}
+
 extern "C"
 {
     typedef void*(* getDefaultFnc)();
