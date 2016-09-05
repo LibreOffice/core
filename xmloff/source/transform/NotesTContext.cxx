@@ -137,7 +137,7 @@ void XMLNotesTransformerContext::StartElement(
     if( m_bPersistent )
         XMLPersElemContentTContext::StartElement( xAttrList );
     else
-        GetTransformer().GetDocHandler()->startElement( GetExportQName(),
+        GetTransformer().startFastElement( GetExportQName(),
                                                         xAttrList );
 }
 
@@ -149,7 +149,7 @@ void XMLNotesTransformerContext::EndElement()
     }
     else
     {
-        GetTransformer().GetDocHandler()->endElement( GetExportQName() );
+        GetTransformer().endFastElement( GetExportQName() );
     }
 }
 

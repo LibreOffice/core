@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -172,11 +173,16 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
         pImporterImpl->SetPostProcessData(&maPostProcessData);
 
     // connect parser and filter
+    uno::Reference< xml::sax::XFastParser > xFastParser = dynamic_cast<
+                            xml::sax::XFastParser* >( xDocHandler.get() );
     xParser->setDocumentHandler( xDocHandler );
 
     try
     {
-        xParser->parseStream( aParserInput );
+        if( xFastParser.is() )
+            xFastParser->parseStream( aParserInput );
+        else
+            xParser->parseStream( aParserInput );
     }
     catch( const xml::sax::SAXParseException& r )
     {

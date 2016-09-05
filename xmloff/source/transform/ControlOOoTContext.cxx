@@ -67,7 +67,7 @@ rtl::Reference<XMLTransformerContext> XMLControlOOoTransformerContext::CreateChi
         GetTransformer().ProcessAttrList( m_xAttrList,
                                           OOO_FORM_CONTROL_ACTIONS,
                                           false );
-        GetTransformer().GetDocHandler()->startElement( m_aElemQName,
+        GetTransformer().startFastElement( m_aElemQName,
                                                         m_xAttrList );
     }
     else
@@ -81,7 +81,7 @@ rtl::Reference<XMLTransformerContext> XMLControlOOoTransformerContext::CreateChi
 
 void XMLControlOOoTransformerContext::EndElement()
 {
-    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
+    GetTransformer().endFastElement( m_aElemQName );
 }
 
 void XMLControlOOoTransformerContext::Characters( const OUString& rChars )
