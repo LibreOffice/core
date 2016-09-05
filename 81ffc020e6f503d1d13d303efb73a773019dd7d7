@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6895a0_7fe4e73a",
+        "filename": "svl/source/items/itempool.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-05T12:25:11Z",
+      "side": 1,
+      "message": "to match the original logic, this check must be at the beginning of the loop",
+      "revId": "81ffc020e6f503d1d13d303efb73a773019dd7d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
