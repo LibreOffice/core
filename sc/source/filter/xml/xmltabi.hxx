@@ -21,6 +21,7 @@
 
 #include "externalrefmgr.hxx"
 #include "xmlimprt.hxx"
+#include "importcontext.hxx"
 
 #include <xmloff/xmlictxt.hxx>
 #include <memory>
@@ -37,7 +38,7 @@ struct ScXMLExternalTabData
     ScXMLExternalTabData();
 };
 
-class ScXMLTableContext : public SvXMLImportContext
+class ScXMLTableContext : public ScXMLImportContext
 {
     OUString   sPrintRanges;
     ::std::unique_ptr<ScXMLExternalTabData> pExternalRefInfo;
@@ -45,14 +46,10 @@ class ScXMLTableContext : public SvXMLImportContext
     bool            bStartFormPage;
     bool            bPrintEntireSheet;
 
-    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
 
-    ScXMLTableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList );
+    ScXMLTableContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
 
     virtual ~ScXMLTableContext() override;
 
@@ -60,7 +57,13 @@ public:
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
+
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 };
 
 class ScXMLTableProtectionContext : public SvXMLImportContext

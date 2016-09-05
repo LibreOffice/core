@@ -147,7 +147,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::cre
     (sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return mrImport.CreateFastContext( Element, Attribs );
+    // Call CreateFastContext only if it's the first element of the document
+    if ( !mrImport.maFastContexts.size() )
+        return mrImport.CreateFastContext( Element, Attribs );
+    else
+        return new SvXMLImportContext( GetImport() );
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createUnknownChildContext
