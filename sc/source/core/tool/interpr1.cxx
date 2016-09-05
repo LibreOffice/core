@@ -3618,7 +3618,6 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount, bool bTextA
     std::vector<double> values;
     double fSum    = 0.0;
     double vSum    = 0.0;
-    double vMean    = 0.0;
     double fVal = 0.0;
     rValCount = 0.0;
     ScAddress aAdr;
@@ -3730,7 +3729,7 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount, bool bTextA
         SetError( errDivisionByZero);
     if (!nGlobalError)
     {
-        vMean = fSum / n;
+        const double vMean = fSum / n;
         for (::std::vector<double>::size_type i = 0; i < n; i++)
             vSum += ::rtl::math::approxSub( values[i], vMean) * ::rtl::math::approxSub( values[i], vMean);
     }
