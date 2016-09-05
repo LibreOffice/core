@@ -140,6 +140,24 @@
       "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6895a0_9f4c5b78",
+        "filename": "basegfx/source/polygon/b2dsvgpolypolygon.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-05T09:07:02Z",
+      "side": 1,
+      "message": "I think I will just strip .polygon from here. If I encounter other instances in other files, I will add it to the odx file. This seems plausible.",
+      "parentUuid": "da6895a0_5f3483dd",
+      "revId": "b12dcd34d912087f939d1e489575210f3c67e53e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
