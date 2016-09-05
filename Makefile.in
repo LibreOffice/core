@@ -186,6 +186,8 @@ distclean : clean compilerplugins-clean
         $(BUILDDIR)/aclocal.m4 \
         $(BUILDDIR)/autom4te.cache \
         $(BUILDDIR)/bin/bffvalidator.sh \
+        $(BUILDDIR)/bin/odfvalidator.sh \
+        $(BUILDDIR)/bin/officeotron.sh \
         $(BUILDDIR)/config.log \
         $(BUILDDIR)/config.Build.log \
         $(BUILDDIR)/config.status \
