@@ -74,7 +74,7 @@ class VCL_DLLPUBLIC PPDKey
 
 public:
     enum UIType { PickOne, PickMany, Boolean };
-    enum SetupType { ExitServer, Prolog, DocumentSetup, PageSetup, JCLSetup, AnySetup };
+    enum class SetupType { ExitServer, Prolog, DocumentSetup, PageSetup, JCLSetup, AnySetup };
 private:
 
     bool                m_bUIOption;

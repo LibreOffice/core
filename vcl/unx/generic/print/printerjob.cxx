@@ -731,11 +731,11 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
             bool bEmit = false;
             if( bDocumentSetup )
             {
-                if( pKey->getSetupType()    == PPDKey::DocumentSetup )
+                if( pKey->getSetupType()    == PPDKey::SetupType::DocumentSetup )
                     bEmit = true;
             }
-            if( pKey->getSetupType()    == PPDKey::PageSetup        ||
-                pKey->getSetupType()    == PPDKey::AnySetup )
+            if( pKey->getSetupType()    == PPDKey::SetupType::PageSetup        ||
+                pKey->getSetupType()    == PPDKey::SetupType::AnySetup )
                 bEmit = true;
             if( bEmit )
             {

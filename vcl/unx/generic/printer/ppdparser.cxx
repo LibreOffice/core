@@ -1261,17 +1261,17 @@ void PPDParser::parseOrderDependency(const OString& rLine)
 
     pKey->m_nOrderDependency = nOrder;
     if( aSetup == "ExitServer" )
-        pKey->m_eSetupType = PPDKey::ExitServer;
+        pKey->m_eSetupType = PPDKey::SetupType::ExitServer;
     else if( aSetup == "Prolog" )
-        pKey->m_eSetupType = PPDKey::Prolog;
+        pKey->m_eSetupType = PPDKey::SetupType::Prolog;
     else if( aSetup == "DocumentSetup" )
-        pKey->m_eSetupType = PPDKey::DocumentSetup;
+        pKey->m_eSetupType = PPDKey::SetupType::DocumentSetup;
     else if( aSetup == "PageSetup" )
-        pKey->m_eSetupType = PPDKey::PageSetup;
+        pKey->m_eSetupType = PPDKey::SetupType::PageSetup;
     else if( aSetup == "JCLSetup" )
-        pKey->m_eSetupType = PPDKey::JCLSetup;
+        pKey->m_eSetupType = PPDKey::SetupType::JCLSetup;
     else
-        pKey->m_eSetupType = PPDKey::AnySetup;
+        pKey->m_eSetupType = PPDKey::SetupType::AnySetup;
 }
 
 void PPDParser::parseConstraint( const OString& rLine )
@@ -1504,7 +1504,7 @@ PPDKey::PPDKey( const OUString& rKey ) :
         m_bUIOption( false ),
         m_eUIType( PickOne ),
         m_nOrderDependency( 100 ),
-        m_eSetupType( AnySetup )
+        m_eSetupType( SetupType::AnySetup )
 {
 }
 
