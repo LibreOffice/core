@@ -30,8 +30,8 @@ public:
 
     // asks whether there is a status window available
     // to toggle into menubar
-    virtual bool canToggle() = 0;
-    virtual void toggle() = 0;
+    virtual bool canToggle() { return false; }
+    virtual void toggle() {}
 };
 
 #endif

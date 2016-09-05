@@ -1019,23 +1019,6 @@ SalBitmap* WinSalInstance::CreateSalBitmap()
         return new WinSalBitmap();
 }
 
-class WinImeStatus : public SalI18NImeStatus
-{
-  public:
-    WinImeStatus() {}
-    virtual ~WinImeStatus() {}
-
-    // asks whether there is a status window available
-    // to toggle into menubar
-    virtual bool canToggle() { return false; }
-    virtual void toggle() {}
-};
-
-SalI18NImeStatus* WinSalInstance::CreateI18NImeStatus()
-{
-    return new WinImeStatus();
-}
-
 const OUString& SalGetDesktopEnvironment()
 {
     static OUString aDesktopEnvironment( "Windows" );

@@ -48,16 +48,6 @@ public:
     virtual const SystemEnvData*    GetSystemData() const override;
 };
 
-class VCL_DLLPUBLIC SvpImeStatus : public SalI18NImeStatus
-{
-  public:
-        SvpImeStatus() {}
-        virtual ~SvpImeStatus();
-
-        virtual bool canToggle() override;
-        virtual void toggle() override;
-};
-
 class VCL_DLLPUBLIC SvpSalSystem : public SalGenericSystem
 {
 public:

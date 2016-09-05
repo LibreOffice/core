@@ -101,7 +101,6 @@ public:
     virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) override;
     virtual OUString        GetDefaultPrinter() override;
     virtual SalTimer*       CreateSalTimer() override;
-    virtual SalI18NImeStatus* CreateI18NImeStatus() override;
     virtual SalSystem*      CreateSalSystem() override;
     virtual SalBitmap*      CreateSalBitmap() override;
     virtual comphelper::SolarMutex* GetYieldMutex() override;
