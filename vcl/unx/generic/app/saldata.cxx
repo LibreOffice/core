@@ -53,6 +53,7 @@
 #include <X11/Xproto.h>
 
 #include "salinst.hxx"
+#include "saltimer.hxx"
 
 #include <osl/signal.h>
 #include <osl/thread.h>
@@ -562,6 +563,13 @@ void X11SalData::XError( Display *pDisplay, XErrorEvent *pEvent )
     }
 
     m_aXErrorHandlerStack.back().m_bWas = true;
+}
+
+void X11SalData::Timeout( bool idle )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData->mpSalTimer )
+        pSVData->mpSalTimer->CallCallback( idle );
 }
 
 struct YieldEntry
