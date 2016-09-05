@@ -71,6 +71,7 @@
 #include "editattributemap.hxx"
 #include "documentimport.hxx"
 #include "pivotsource.hxx"
+#include "importcontext.hxx"
 #include <unonames.hxx>
 #include <numformat.hxx>
 
@@ -236,17 +237,44 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList );
+
+    ScXMLDocContext_Impl( ScXMLImport& rImport,
+        sal_Int32 nElement,
+        const uno::Reference<xml::sax::XFastAttributeList>& xAttrList );
+
     virtual ~ScXMLDocContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
+
+    virtual void SAL_CALL startFastElement (sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+
+    virtual void SAL_CALL characters(const OUString & aChars)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 };
 
 ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport, sal_uInt16 nPrfx,
                                            const OUString& rLName,
                                            const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */ ) :
 SvXMLImportContext( rImport, nPrfx, rLName )
+{
+
+}
+
+ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport, sal_Int32 /*nElement*/,
+                                           const uno::Reference<xml::sax::XFastAttributeList>& /*xAttrList*/ ) :
+SvXMLImportContext( rImport )
 {
 
 }
@@ -300,26 +328,39 @@ SvXMLImportContext *ScXMLFlatDocContext_Impl::CreateChildContext(
     }
 }
 
-class ScXMLBodyContext_Impl : public SvXMLImportContext
+class ScXMLBodyContext_Impl : public ScXMLImportContext
 {
-    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
-
 public:
 
     ScXMLBodyContext_Impl( ScXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+
+    ScXMLBodyContext_Impl( ScXMLImport& rImport, sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList );
+
     virtual ~ScXMLBodyContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
 };
 
 ScXMLBodyContext_Impl::ScXMLBodyContext_Impl( ScXMLImport& rImport,
                                              sal_uInt16 nPrfx, const OUString& rLName,
                                              const uno::Reference< xml::sax::XAttributeList > & /* xAttrList */ ) :
-SvXMLImportContext( rImport, nPrfx, rLName )
+ScXMLImportContext( rImport, nPrfx, rLName )
+{
+}
+
+ScXMLBodyContext_Impl::ScXMLBodyContext_Impl( ScXMLImport& rImport, sal_Int32 /*nElement*/,
+                                             const uno::Reference< xml::sax::XFastAttributeList > & /* xAttrList */ ) :
+ScXMLImportContext( rImport )
 {
 }
 
@@ -333,6 +374,14 @@ SvXMLImportContext *ScXMLBodyContext_Impl::CreateChildContext(
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     return GetScImport().CreateBodyContext( rLocalName, xAttrList );
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    ScXMLBodyContext_Impl::createFastChildContext( sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return GetScImport().CreateBodyContext( nElement, xAttrList );
 }
 
 SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
@@ -383,6 +432,49 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    ScXMLDocContext_Impl::createFastChildContext( sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SvXMLImportContext *pContext(nullptr);
+
+    const SvXMLTokenMap& rTokenMap(GetScImport().GetDocElemTokenMap());
+    switch( rTokenMap.Get( nElement ) )
+    {
+        case XML_TOK_DOC_BODY:
+        if (GetScImport().getImportFlags() & SvXMLImportFlags::CONTENT)
+            pContext = new ScXMLBodyContext_Impl( GetScImport(),
+                                                nElement, xAttrList );
+        break;
+
+        //TODO: handle all other cases
+        default:
+           pContext = new SvXMLImportContext( GetImport() );
+    }
+
+    if(!pContext)
+        pContext = new SvXMLImportContext( GetImport() );
+
+    return pContext;
+}
+
+void SAL_CALL ScXMLDocContext_Impl::startFastElement(sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+}
+
+void SAL_CALL ScXMLDocContext_Impl::endFastElement(sal_Int32 /*nElement*/)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+}
+
+void SAL_CALL ScXMLDocContext_Impl::characters(const OUString &)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
 }
 
 const SvXMLTokenMap& ScXMLImport::GetDocElemTokenMap()
@@ -1971,6 +2063,26 @@ SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
     return pContext;
 }
 
+SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    switch( nElement )
+    {
+    case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_DOCUMENT_STYLES ):
+    case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_DOCUMENT_CONTENT ):
+    case ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_DOCUMENT_SETTINGS ):
+        pContext = new ScXMLDocContext_Impl( *this, nElement, xAttrList );
+        break;
+
+    default:
+        pContext = new SvXMLImportContext( *this );
+    }
+
+    return pContext;
+}
+
 ScXMLImport::ScXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlag)
@@ -2265,6 +2377,12 @@ SvXMLImportContext *ScXMLImport::CreateBodyContext(const OUString& rLocalName,
                                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
     return new ScXMLBodyContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList);
+}
+
+SvXMLImportContext *ScXMLImport::CreateBodyContext(const sal_Int32 nElement,
+                                                   const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
+{
+    return new ScXMLBodyContext(*this, nElement, xAttrList);
 }
 
 SvXMLImportContext *ScXMLImport::CreateMetaContext(
