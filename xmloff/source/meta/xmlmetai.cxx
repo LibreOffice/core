@@ -162,6 +162,19 @@ SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
 //    OSL_ENSURE(xDocProps.is(), "SvXMLMetaDocumentContext: no document props");
 }
 
+SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
+            sal_Int32 /*nElement*/,
+            const uno::Reference<document::XDocumentProperties>& xDocProps) :
+    SvXMLImportContext( rImport ),
+    mxDocProps(xDocProps),
+    mxDocBuilder(
+        xml::dom::SAXDocumentBuilder::create(
+            comphelper::getProcessComponentContext()))
+{
+// #i103539#: must always read meta.xml for generator, xDocProps unwanted then
+//    OSL_ENSURE(xDocProps.is(), "SvXMLMetaDocumentContext: no document props");
+}
+
 SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()
 {
 }

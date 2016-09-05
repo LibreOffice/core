@@ -29,6 +29,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -142,6 +143,8 @@ OdfFlatXml::importer(
     inputSource.sSystemId = url;
     inputSource.sPublicId = url;
     inputSource.aInputStream = inputStream;
+    css::uno::Reference< css::xml::sax::XFastParser > xFastParser = dynamic_cast<
+                            css::xml::sax::XFastParser* >( docHandler.get() );
     saxParser->setDocumentHandler(docHandler);
     try
     {
@@ -149,7 +152,10 @@ OdfFlatXml::importer(
         if ( xSeekable.is() )
             xSeekable->seek( 0 );
 
-        saxParser->parseStream(inputSource);
+        if( xFastParser.is() )
+            xFastParser->parseStream( inputSource );
+        else
+            saxParser->parseStream(inputSource);
     }
     catch (const Exception &exc)
     {
