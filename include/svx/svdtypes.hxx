@@ -108,7 +108,6 @@ enum class SdrRepeatFunc {
     MoveToBottom,
     ReverseOrder,
     ImportMtf,
-    LAST
 };
 
 #endif // INCLUDED_SVX_SVDTYPES_HXX

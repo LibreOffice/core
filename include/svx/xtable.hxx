@@ -153,7 +153,7 @@ enum class XPropertyListType {
     Gradient,
     Bitmap,
     Pattern,
-    LAST
+    LAST = Pattern
 };
 
 typedef rtl::Reference< class XPropertyList > XPropertyListRef;
