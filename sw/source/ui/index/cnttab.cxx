@@ -144,28 +144,28 @@ typedef ::svt::EditBrowseBox SwEntryBrowseBox_Base;
 
 class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 {
-    VclPtr<Edit>                    aCellEdit;
-    VclPtr< ::svt::CheckBoxControl>  aCellCheckBox;
+    VclPtr<Edit>                    m_aCellEdit;
+    VclPtr< ::svt::CheckBoxControl>  m_aCellCheckBox;
 
-    OUString  sSearch;
-    OUString  sAlternative;
-    OUString  sPrimKey;
-    OUString  sSecKey;
-    OUString  sComment;
-    OUString  sCaseSensitive;
-    OUString  sWordOnly;
-    OUString  sYes;
-    OUString  sNo;
+    OUString  m_sSearch;
+    OUString  m_sAlternative;
+    OUString  m_sPrimKey;
+    OUString  m_sSecKey;
+    OUString  m_sComment;
+    OUString  m_sCaseSensitive;
+    OUString  m_sWordOnly;
+    OUString  m_sYes;
+    OUString  m_sNo;
 
     std::vector<std::unique_ptr<AutoMarkEntry>> m_Entries;
 
-    ::svt::CellControllerRef    xController;
-    ::svt::CellControllerRef    xCheckController;
+    ::svt::CellControllerRef    m_xController;
+    ::svt::CellControllerRef    m_xCheckController;
 
-    long    nCurrentRow;
-    bool    bModified;
+    long    m_nCurrentRow;
+    bool    m_bModified;
 
-    void                            SetModified() {bModified = true;}
+    void                            SetModified() {m_bModified = true;}
 
 protected:
     virtual bool                    SeekRow( long nRow ) override;
@@ -3832,24 +3832,24 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
                            BrowserMode::VLINES |
                            BrowserMode::AUTO_VSCROLL|
                            BrowserMode::HIDECURSOR   )
-    , aCellEdit(VclPtr<Edit>::Create(&GetDataWindow(), 0))
-    , aCellCheckBox(VclPtr< ::svt::CheckBoxControl>::Create(&GetDataWindow()))
-    , nCurrentRow(0)
-    , bModified(false)
+    , m_aCellEdit(VclPtr<Edit>::Create(&GetDataWindow(), 0))
+    , m_aCellCheckBox(VclPtr< ::svt::CheckBoxControl>::Create(&GetDataWindow()))
+    , m_nCurrentRow(0)
+    , m_bModified(false)
 {
-    sSearch = pBuilder->get<vcl::Window>("searchterm")->GetText();
-    sAlternative = pBuilder->get<vcl::Window>("alternative")->GetText();
-    sPrimKey = pBuilder->get<vcl::Window>("key1")->GetText();
-    sSecKey = pBuilder->get<vcl::Window>("key2")->GetText();
-    sComment = pBuilder->get<vcl::Window>("comment")->GetText();
-    sCaseSensitive = pBuilder->get<vcl::Window>("casesensitive")->GetText();
-    sWordOnly = pBuilder->get<vcl::Window>("wordonly")->GetText();
-    sYes = pBuilder->get<vcl::Window>("yes")->GetText();
-    sNo = pBuilder->get<vcl::Window>("no")->GetText();
+    m_sSearch = pBuilder->get<vcl::Window>("searchterm")->GetText();
+    m_sAlternative = pBuilder->get<vcl::Window>("alternative")->GetText();
+    m_sPrimKey = pBuilder->get<vcl::Window>("key1")->GetText();
+    m_sSecKey = pBuilder->get<vcl::Window>("key2")->GetText();
+    m_sComment = pBuilder->get<vcl::Window>("comment")->GetText();
+    m_sCaseSensitive = pBuilder->get<vcl::Window>("casesensitive")->GetText();
+    m_sWordOnly = pBuilder->get<vcl::Window>("wordonly")->GetText();
+    m_sYes = pBuilder->get<vcl::Window>("yes")->GetText();
+    m_sNo = pBuilder->get<vcl::Window>("no")->GetText();
 
-    aCellCheckBox->GetBox().EnableTriState(false);
-    xController = new ::svt::EditCellController(aCellEdit.get());
-    xCheckController = new ::svt::CheckBoxCellController(aCellCheckBox.get());
+    m_aCellCheckBox->GetBox().EnableTriState(false);
+    m_xController = new ::svt::EditCellController(m_aCellEdit.get());
+    m_xCheckController = new ::svt::CheckBoxCellController(m_aCellCheckBox.get());
 
     // HACK: BrowseBox doesn't invalidate its children, how it should be.
     // That's why WB_CLIPCHILDREN is reset in order to enforce the
@@ -3863,13 +3863,13 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
 
     const OUString* aTitles[7] =
     {
-        &sSearch,
-        &sAlternative,
-        &sPrimKey,
-        &sSecKey,
-        &sComment,
-        &sCaseSensitive,
-        &sWordOnly
+        &m_sSearch,
+        &m_sAlternative,
+        &m_sPrimKey,
+        &m_sSecKey,
+        &m_sComment,
+        &m_sCaseSensitive,
+        &m_sWordOnly
     };
 
     long nWidth = GetSizePixel().Width();
@@ -3886,8 +3886,8 @@ SwEntryBrowseBox::~SwEntryBrowseBox()
 
 void SwEntryBrowseBox::dispose()
 {
-    aCellEdit.disposeAndClear();
-    aCellCheckBox.disposeAndClear();
+    m_aCellEdit.disposeAndClear();
+    m_aCellCheckBox.disposeAndClear();
     SwEntryBrowseBox_Base::dispose();
 }
 
@@ -3914,8 +3914,8 @@ std::vector<long> SwEntryBrowseBox::GetOptimalColWidths() const
 
     long nStandardColMinWidth = approximate_char_width() * 16;
     long nYesNoWidth = approximate_char_width() * 5;
-    nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(sYes));
-    nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(sNo));
+    nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(m_sYes));
+    nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(m_sNo));
     for (sal_uInt16 i = 1; i < 6; i++)
     {
         long nColWidth = std::max(nStandardColMinWidth,
@@ -3950,7 +3950,7 @@ Size SwEntryBrowseBox::GetOptimalSize() const
 
 bool SwEntryBrowseBox::SeekRow( long nRow )
 {
-    nCurrentRow = nRow;
+    m_nCurrentRow = nRow;
     return true;
 }
 
@@ -3967,8 +3967,8 @@ OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
             case  ITEM_PRIM_KEY     :pRet = &pEntry->sPrimKey   ; break;
             case  ITEM_SEC_KEY      :pRet = &pEntry->sSecKey    ; break;
             case  ITEM_COMMENT      :pRet = &pEntry->sComment   ; break;
-            case  ITEM_CASE         :pRet = pEntry->bCase ? &sYes : &sNo; break;
-            case  ITEM_WORDONLY     :pRet = pEntry->bWord ? &sYes : &sNo; break;
+            case  ITEM_CASE         :pRet = pEntry->bCase ? &m_sYes : &m_sNo; break;
+            case  ITEM_WORDONLY     :pRet = pEntry->bWord ? &m_sYes : &m_sNo; break;
         }
     }
     return *pRet;
@@ -3978,12 +3978,12 @@ void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
                                 const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
     const DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::Center;
-    rDev.DrawText( rRect, GetCellText( nCurrentRow, nColumnId ), nStyle );
+    rDev.DrawText( rRect, GetCellText( m_nCurrentRow, nColumnId ), nStyle );
 }
 
 ::svt::CellController* SwEntryBrowseBox::GetController(long /*nRow*/, sal_uInt16 nCol)
 {
-    return nCol < ITEM_CASE ? xController : xCheckController;
+    return nCol < ITEM_CASE ? m_xController : m_xCheckController;
 }
 
 bool SwEntryBrowseBox::SaveModified()
@@ -3997,12 +3997,12 @@ bool SwEntryBrowseBox::SaveModified()
     ::svt::CellController* pController = nullptr;
     if(nCol < ITEM_CASE)
     {
-        pController = xController;
+        pController = m_xController;
         sNew = static_cast< ::svt::EditCellController*>(pController)->GetEditImplementation()->GetText( LINEEND_LF );
     }
     else
     {
-        pController = xCheckController;
+        pController = m_xCheckController;
         bVal = static_cast< ::svt::CheckBoxCellController*>(pController)->GetCheckBox().IsChecked();
     }
     AutoMarkEntry* pEntry = (nRow >= m_Entries.size()) ? new AutoMarkEntry
@@ -4036,16 +4036,16 @@ void SwEntryBrowseBox::InitController(
     const OUString rText = GetCellText( nRow, nCol );
     if(nCol < ITEM_CASE)
     {
-        rController = xController;
-        ::svt::CellController* pController = xController;
+        rController = m_xController;
+        ::svt::CellController* pController = m_xController;
         static_cast< ::svt::EditCellController*>(pController)->GetEditImplementation()->SetText( rText );
     }
     else
     {
-        rController = xCheckController;
-        ::svt::CellController* pController = xCheckController;
+        rController = m_xCheckController;
+        ::svt::CellController* pController = m_xCheckController;
         static_cast< ::svt::CheckBoxCellController*>(pController)->GetCheckBox().Check(
-                                                            rText == sYes );
+                                                            rText == m_sYes );
      }
 }
 
@@ -4106,9 +4106,9 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
     const sal_uInt16 nCol = GetCurColumnId();
     ::svt::CellController* pController;
     if(nCol < ITEM_CASE)
-        pController = xController;
+        pController = m_xController;
     else
-        pController = xCheckController;
+        pController = m_xCheckController;
     if(pController ->IsModified())
         GoToColumnId(nCol + (nCol < ITEM_CASE ? 1 : -1 ));
 
@@ -4135,16 +4135,16 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
 
 bool SwEntryBrowseBox::IsModified()const
 {
-    if(bModified)
+    if(m_bModified)
         return true;
 
     //check if the current controller is modified
     const sal_uInt16 nCol = GetCurColumnId();
     ::svt::CellController* pController;
     if(nCol < ITEM_CASE)
-        pController = xController;
+        pController = m_xController;
     else
-        pController = xCheckController;
+        pController = m_xCheckController;
     return pController->IsModified();
 }
 
