@@ -119,7 +119,6 @@ extern "C"
     }
 }
 
-#if GTK_CHECK_VERSION(3,0,0)
 static VclInputFlags categorizeEvent(const GdkEvent *pEvent)
 {
     VclInputFlags nType = VclInputFlags::NONE;
@@ -148,7 +147,6 @@ static VclInputFlags categorizeEvent(const GdkEvent *pEvent)
     }
     return nType;
 }
-#endif
 
 GtkInstance::GtkInstance( SalYieldMutex* pMutex )
 #if GTK_CHECK_VERSION(3,0,0)
@@ -437,9 +435,6 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
     EnsureInit();
     if( (nType & VclInputFlags::TIMER) && IsTimerExpired() )
         return true;
-#if !GTK_CHECK_VERSION(3,0,0)
-    bool bRet = X11SalInstance::AnyInput(nType);
-#else
     if (!gdk_events_pending())
         return false;
 
@@ -467,7 +462,6 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
         gdk_event_free(pEvent);
         aEvents.pop();
     }
-#endif
     return bRet;
 }
 
