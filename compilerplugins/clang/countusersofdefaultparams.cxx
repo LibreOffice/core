@@ -81,8 +81,9 @@ public:
 
     bool shouldVisitTemplateInstantiations () const { return true; }
 
-    bool VisitCallExpr(CallExpr * callExpr);
-    bool VisitFunctionDecl( const FunctionDecl* functionDecl );
+    bool VisitCallExpr( const CallExpr * );
+    bool VisitFunctionDecl( const FunctionDecl* );
+    bool VisitCXXConstructExpr( const CXXConstructExpr * );
 private:
     void niceName(const FunctionDecl* functionDecl, MyFuncInfo&);
     std::string locationToString(const SourceLocation&);
@@ -131,7 +132,7 @@ void CountUsersOfDefaultParams::niceName(const FunctionDecl* functionDecl, MyFun
     aInfo.sourceLocation = locationToString(functionDecl->getLocation());
 }
 
-bool CountUsersOfDefaultParams::VisitCallExpr(CallExpr * callExpr) {
+bool CountUsersOfDefaultParams::VisitCallExpr(const CallExpr * callExpr) {
     if (ignoreLocation(callExpr)) {
         return true;
     }
@@ -180,6 +181,38 @@ bool CountUsersOfDefaultParams::VisitCallExpr(CallExpr * callExpr) {
     return true;
 }
 
+bool CountUsersOfDefaultParams::VisitCXXConstructExpr(const CXXConstructExpr * constructExpr) {
+    if (ignoreLocation(constructExpr)) {
+        return true;
+    }
+    const CXXConstructorDecl* constructorDecl = constructExpr->getConstructor()->getCanonicalDecl();
+    // work our way back to the root definition for template methods
+    if (constructorDecl->getInstantiatedFromMemberFunction())
+        constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getInstantiatedFromMemberFunction());
+    else if (constructorDecl->getClassScopeSpecializationPattern())
+        constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getClassScopeSpecializationPattern());
+// workaround clang-3.5 issue
+#if CLANG_VERSION >= 30600
+    else if (constructorDecl->getTemplateInstantiationPattern())
+        constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getTemplateInstantiationPattern());
+#endif
+    int n = constructorDecl->getNumParams() - 1;
+    if (n < 0 || !constructorDecl->getParamDecl(n)->hasDefaultArg()) {
+        return true;
+    }
+    while (n > 0 && constructorDecl->getParamDecl(n-1)->hasDefaultArg()) {
+        --n;
+    }
+    // look for callsites that are actually using the defaulted values
+    if ( n < (int)constructExpr->getNumArgs() && constructExpr->getArg(n)->isDefaultArgument()) {
+        MyCallInfo callInfo;
+        niceName(constructorDecl, callInfo);
+        callInfo.sourceLocationOfCall = locationToString(constructExpr->getLocStart());
+        callSet.insert(callInfo);
+    }
+    return true;
+}
+
 std::string CountUsersOfDefaultParams::locationToString(const SourceLocation& sourceLoc)
 {
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( sourceLoc );
@@ -205,9 +238,6 @@ bool CountUsersOfDefaultParams::VisitFunctionDecl( const FunctionDecl* functionD
         return true;
     }
     if (isa<CXXDestructorDecl>(functionDecl)) {
-        return true;
-    }
-    if (isa<CXXConstructorDecl>(functionDecl)) {
         return true;
     }
     if (functionDecl->isDeleted()) {
