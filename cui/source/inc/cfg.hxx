@@ -375,6 +375,7 @@ protected:
     VclPtr<SvTreeListBox>                      m_pContentsListBox;
 
     VclPtr<PushButton>                         m_pAddCommandsButton;
+    VclPtr<PushButton>                         m_pAddSeparatorButton;
     VclPtr<MenuButton>                         m_pModifyCommandButton;
     VclPtr<PushButton>                         m_pDeleteCommandButton;
     // Resets the top level toolbar to default settings
@@ -477,6 +478,7 @@ private:
     DECL_LINK_TYPED( MenuSelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
+    DECL_LINK_TYPED( AddSeparatorHdl, Button *, void );
     DECL_LINK_TYPED( DeleteCommandHdl, Button *, void );
     DECL_LINK_TYPED( AddFunctionHdl, SvxScriptSelectorDialog&, void );
 
@@ -570,6 +572,7 @@ private:
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( NewToolbarHdl, Button *, void );
     DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
+    DECL_LINK_TYPED( AddSeparatorHdl, Button *, void );
     DECL_LINK_TYPED( DeleteCommandHdl, Button *, void );
     DECL_LINK_TYPED( ResetTopLevelHdl, Button *, void );
     DECL_LINK_TYPED( AddFunctionHdl, SvxScriptSelectorDialog&, void );

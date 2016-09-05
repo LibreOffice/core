@@ -23,7 +23,6 @@
 #define ID_MOVE (43 + CFG_OFFSET)
 #define ID_DELETE (44 + CFG_OFFSET)
 
-#define ID_BEGIN_GROUP (46 + CFG_OFFSET)
 // There is a gap here
 #define ID_ICONS_ONLY (48 + CFG_OFFSET)
 #define ID_ICONS_AND_TEXT (49 + CFG_OFFSET)
