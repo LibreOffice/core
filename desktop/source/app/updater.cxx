@@ -277,8 +277,7 @@ update_file parse_update_file(const orcus::json::detail::node& rNode)
         throw invalid_update_info();
 
     aUpdateFile.aHash = toOUString(aHashNode.string_value().str());
-    aUpdateFile.nSize = toOUString(aSizeNode.string_value().str()).toUInt32();
-
+    aUpdateFile.nSize = static_cast<sal_uInt32>(aSizeNode.numeric_value());
     return aUpdateFile;
 }
 
