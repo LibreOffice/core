@@ -160,13 +160,12 @@ OUString getLODefaultLanguage()
 WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 {
     rtl_TextEncoding eCharSet;
-    if ((rFont.lfCharSet == DEFAULT_CHARSET) || (rFont.lfCharSet == OEM_CHARSET))
-        if (rFont.alfFaceName == "Symbol")
-            // Workaround for incorrect charset for the Symbol nonstandard font
-            eCharSet = RTL_TEXTENCODING_SYMBOL;
-        else
-            eCharSet = utl_getWinTextEncodingFromLangStr(getLODefaultLanguage().toUtf8().getStr(),
-                                                         rFont.lfCharSet == OEM_CHARSET);
+    if ((rFont.alfFaceName == "Symbol")
+     || (rFont.alfFaceName == "MT Extra"))
+        eCharSet = RTL_TEXTENCODING_SYMBOL;
+    else if ((rFont.lfCharSet == DEFAULT_CHARSET) || (rFont.lfCharSet == OEM_CHARSET))
+        eCharSet = utl_getWinTextEncodingFromLangStr(getLODefaultLanguage().toUtf8().getStr(),
+                                                     rFont.lfCharSet == OEM_CHARSET);
     else
         eCharSet = rtl_getTextEncodingFromWindowsCharset( rFont.lfCharSet );
     if ( eCharSet == RTL_TEXTENCODING_DONTKNOW )
