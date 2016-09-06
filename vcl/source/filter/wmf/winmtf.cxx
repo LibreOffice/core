@@ -248,10 +248,7 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
     if( rFont.lfStrikeOut )
         aFont.SetStrikeout( STRIKEOUT_SINGLE );
 
-    if ( rFont.lfOrientation )
-        aFont.SetOrientation( (short)rFont.lfOrientation );
-    else
-        aFont.SetOrientation( (short)rFont.lfEscapement );
+    aFont.SetOrientation( (short)rFont.lfEscapement );
 
     Size aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
     if ( rFont.lfHeight > 0 )
