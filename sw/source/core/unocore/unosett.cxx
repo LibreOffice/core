@@ -1675,7 +1675,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             {
                 case 0: //"Adjust"
                 {
-                    sal_Int16 nValue = 0;
+                    sal_Int16 nValue = text::HoriOrientation::NONE;
                     pProp->Value >>= nValue;
                     if(nValue > 0 &&
                         nValue <= text::HoriOrientation::LEFT &&
