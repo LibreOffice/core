@@ -480,7 +480,7 @@ void update_checker()
     OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
     rtl::Bootstrap::expandMacros(aBuildID);
     OUString aVersion = "5.3.0.0.alpha0+";
-    OUString aBuildTarget = "${_OS}-${_ARCH}";
+    OUString aBuildTarget = "${_OS}_${_ARCH}";
     rtl::Bootstrap::expandMacros(aBuildTarget);
     OUString aLocale = "en-US";
     OUString aChannel = officecfg::Office::Update::Update::UpdateChannel::get();
