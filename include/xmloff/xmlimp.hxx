@@ -176,13 +176,13 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper8<
     std::unique_ptr<SvXMLImport_Impl>  mpImpl;            // dummy
 
     SvXMLNamespaceMap           *mpNamespaceMap;
-    SvXMLUnitConverter          *mpUnitConv;
+    std::unique_ptr<SvXMLUnitConverter> mpUnitConv;
     SvXMLImportContexts_Impl    maContexts;
     FastSvXMLImportContexts_Impl    maFastContexts;
-    SvXMLNumFmtHelper           *mpNumImport;
-    ProgressBarHelper           *mpProgressBarHelper;
-    XMLEventImportHelper        *mpEventImportHelper;
-    XMLErrors                   *mpXMLErrors;
+    std::unique_ptr<SvXMLNumFmtHelper> mpNumImport;
+    std::unique_ptr<ProgressBarHelper> mpProgressBarHelper;
+    std::unique_ptr<XMLEventImportHelper> mpEventImportHelper;
+    std::unique_ptr<XMLErrors>  mpXMLErrors;
     rtl::Reference<StyleMap>    mpStyleMap;
     OUString                    msPackageProtocol;
 
@@ -629,10 +629,10 @@ inline css::uno::Reference< css::util::XNumberFormatsSupplier > & SvXMLImport::G
 
 inline SvXMLNumFmtHelper* SvXMLImport::GetDataStylesImport()
 {
-    if ( mpNumImport == nullptr)
+    if ( !mpNumImport )
         CreateDataStylesImport_();
 
-    return mpNumImport;
+    return mpNumImport.get();
 }
 
 

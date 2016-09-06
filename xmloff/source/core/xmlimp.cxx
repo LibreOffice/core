@@ -409,7 +409,7 @@ void SvXMLImport::InitCtor_()
     msPackageProtocol = "vnd.sun.star.Package:";
 
     if (mxNumberFormatsSupplier.is())
-        mpNumImport = new SvXMLNumFmtHelper(mxNumberFormatsSupplier, GetComponentContext());
+        mpNumImport = o3tl::make_unique<SvXMLNumFmtHelper>(mxNumberFormatsSupplier, GetComponentContext());
 
     if (mxModel.is() && !mxEventListener.is())
     {
@@ -427,10 +427,6 @@ SvXMLImport::SvXMLImport(
     mpUnitConv( new SvXMLUnitConverter( xContext,
                 util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH) ),
 
-    mpNumImport( nullptr ),
-    mpProgressBarHelper( nullptr ),
-    mpEventImportHelper( nullptr ),
-    mpXMLErrors( nullptr ),
     mnImportFlags( nImportFlags ),
     mnErrorFlags(SvXMLErrorFlags::NO),
     isFastContext( false ),
@@ -451,23 +447,12 @@ SvXMLImport::SvXMLImport(
 
 SvXMLImport::~SvXMLImport() throw ()
 {
-    delete mpXMLErrors;
     delete mpNamespaceMap;
-    delete mpUnitConv;
-    delete mpEventImportHelper;
     for ( SvXMLImportContext *pContext : maContexts )
     {
         if( pContext )
             pContext->ReleaseRef();
     }
-
-    //  #i9518# the import component might not be deleted until after the document has been closed,
-    //  so the stuff that accesses the document has been moved to endDocument.
-
-    //  pNumImport is allocated in the ctor, so it must also be deleted here in case the component
-    //  is created and deleted without actually importing.
-    delete mpNumImport;
-    delete mpProgressBarHelper;
 
     if (mxEventListener.is() && mxModel.is())
         mxModel->removeEventListener(mxEventListener);
@@ -611,17 +596,13 @@ void SAL_CALL SvXMLImport::endDocument()
         }
     }
 
-    if (mpNumImport)
-    {
-        delete mpNumImport;
-        mpNumImport = nullptr;
-    }
+    mpNumImport.reset();
     if (mxImportInfo.is())
     {
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxImportInfo->getPropertySetInfo();
         if (xPropertySetInfo.is())
         {
-            if (mpProgressBarHelper)
+            if (bool(mpProgressBarHelper))
             {
                 OUString sProgressMax(XML_PROGRESSMAX);
                 OUString sProgressCurrent(XML_PROGRESSCURRENT);
@@ -677,7 +658,7 @@ void SAL_CALL SvXMLImport::endDocument()
     }
     mpStyleMap.clear();
 
-    if ( mpXMLErrors != nullptr )
+    if ( bool( mpXMLErrors ) )
     {
         mpXMLErrors->ThrowErrorAsSAXException( XMLERROR_FLAG_SEVERE );
     }
@@ -1044,12 +1025,8 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
         mxModel->addEventListener(mxEventListener);
     }
 
-    SAL_WARN_IF( mpNumImport, "xmloff.core", "number format import already exists." );
-    if( mpNumImport )
-    {
-        delete mpNumImport;
-        mpNumImport = nullptr;
-    }
+    SAL_WARN_IF( bool(mpNumImport), "xmloff.core", "number format import already exists." );
+    mpNumImport.reset();
 }
 
 // XFilter
@@ -1571,7 +1548,7 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
 {
     if (!mpProgressBarHelper)
     {
-        mpProgressBarHelper = new ProgressBarHelper(mxStatusIndicator, false);
+        mpProgressBarHelper = o3tl::make_unique<ProgressBarHelper>(mxStatusIndicator, false);
 
         if (mxImportInfo.is())
         {
@@ -1612,7 +1589,7 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
             }
         }
     }
-    return mpProgressBarHelper;
+    return mpProgressBarHelper.get();
 }
 
 void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
@@ -1643,7 +1620,7 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
     {
         // construct event helper and register StarBasic handler and standard
         // event tables
-        mpEventImportHelper = new XMLEventImportHelper();
+        mpEventImportHelper = o3tl::make_unique<XMLEventImportHelper>();
         const OUString& sStarBasic(GetXMLToken(XML_STARBASIC));
         mpEventImportHelper->RegisterFactory(sStarBasic,
                                             new XMLStarBasicContextFactory());
@@ -1823,11 +1800,11 @@ void SvXMLImport::CreateNumberFormatsSupplier_()
 
 void SvXMLImport::CreateDataStylesImport_()
 {
-    SAL_WARN_IF( mpNumImport != nullptr, "xmloff.core", "data styles import already exists!" );
+    SAL_WARN_IF( bool(mpNumImport), "xmloff.core", "data styles import already exists!" );
     uno::Reference<util::XNumberFormatsSupplier> xNum =
         GetNumberFormatsSupplier();
     if ( xNum.is() )
-        mpNumImport = new SvXMLNumFmtHelper(xNum, GetComponentContext() );
+        mpNumImport = o3tl::make_unique<SvXMLNumFmtHelper>(xNum, GetComponentContext() );
 }
 
 sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
@@ -1881,8 +1858,8 @@ void SvXMLImport::SetError(
         mnErrorFlags |= SvXMLErrorFlags::DO_NOTHING;
 
     // create error list on demand
-    if ( mpXMLErrors == nullptr )
-        mpXMLErrors = new XMLErrors();
+    if ( !mpXMLErrors )
+        mpXMLErrors = o3tl::make_unique<XMLErrors>();
 
     // save error information
     // use document locator (if none supplied)
