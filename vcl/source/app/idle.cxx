@@ -63,10 +63,10 @@ void Idle::Start()
     Scheduler::ImplStartTimer(nPeriod);
 }
 
-bool Idle::ReadyForSchedule( const sal_uInt64 /* nTime */, const bool bTimer ) const
+bool Idle::ReadyForSchedule( const sal_uInt64 /* nTime */, const bool bIdle ) const
 {
     // always ready if not only looking for timers.
-    return !bTimer;
+    return bIdle;
 }
 
 bool Idle::IsIdle() const
