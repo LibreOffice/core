@@ -16,6 +16,7 @@
 #include <sfx2/docfac.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/help.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/layout.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -188,6 +189,19 @@ void TemplateAbstractView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     GrabFocus();
     ThumbnailView::MouseButtonDown(rMEvt);
+}
+
+void TemplateAbstractView::RequestHelp( const HelpEvent& rHEvt )
+{
+    if ( rHEvt.GetMode() & HelpEventMode::QUICK )
+    {
+        Rectangle aRect( OutputToScreenPixel( GetPosPixel() ), GetSizePixel() );
+        Help::ShowQuickHelp( this, aRect, GetQuickHelpText(),
+                             QuickHelpFlags::CtrlText | QuickHelpFlags::TipStyleBalloon );
+        return;
+    }
+
+    ThumbnailView::RequestHelp( rHEvt );
 }
 
 void TemplateAbstractView::Command( const CommandEvent& rCEvt )
