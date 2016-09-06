@@ -240,7 +240,7 @@ static SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
 // Numbering
 const unsigned short aSvxToUnoAdjust[] =
 {
-    text::HoriOrientation::LEFT,    //3
+    text::HoriOrientation::LEFT,   //3
     text::HoriOrientation::RIGHT,  //1
     USHRT_MAX,
     text::HoriOrientation::CENTER, //2
@@ -1677,9 +1677,9 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                 {
                     sal_Int16 nValue = text::HoriOrientation::NONE;
                     pProp->Value >>= nValue;
-                    if(nValue > 0 &&
+                    if (nValue > text::HoriOrientation::NONE &&
                         nValue <= text::HoriOrientation::LEFT &&
-                            USHRT_MAX != aUnoToSvxAdjust[nValue])
+                        USHRT_MAX != aUnoToSvxAdjust[nValue])
                     {
                         aFormat.SetNumAdjust((SvxAdjust)aUnoToSvxAdjust[nValue]);
                     }
