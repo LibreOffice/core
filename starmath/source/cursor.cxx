@@ -1661,7 +1661,7 @@ SmNode* SmNodeListParser::Postfix(){
 }
 
 SmNode* SmNodeListParser::Error(){
-    return new SmErrorNode(PE_UNEXPECTED_TOKEN, SmToken());
+    return new SmErrorNode(SmToken());
 }
 
 bool SmNodeListParser::IsOperator(const SmToken &token) {

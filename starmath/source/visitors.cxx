@@ -1830,8 +1830,7 @@ void SmCloningVisitor::Visit( SmBlankNode* pNode )
 
 void SmCloningVisitor::Visit( SmErrorNode* pNode )
 {
-    //PE_NONE is used the information have been discarded and isn't used
-    pResult = new SmErrorNode( PE_NONE, pNode->GetToken( ) );
+    pResult = new SmErrorNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pResult );
 }
 
