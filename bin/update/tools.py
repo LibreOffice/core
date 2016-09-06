@@ -42,3 +42,10 @@ def get_file_info(mar_file, url):
             'url' : url + os.path.basename(mar_file)}
 
     return data
+
+def replace_variables_in_string(string, **kwargs):
+    new_string = string
+    for key, val in kwargs.items():
+        new_string = new_string.replace('$(%s)'%key, val)
+
+    return new_string
