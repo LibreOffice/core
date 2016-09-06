@@ -41,30 +41,16 @@ bool Timer::IsIdle() const
     return false;
 }
 
-sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const
+sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const
 {
-    sal_uInt64 nDeltaTime;
-    //determine smallest time slot
-    if( mpSchedulerData->mnUpdateTime == nTime )
-    {
-       nDeltaTime = mnTimeout;
-       if( nDeltaTime < nMinPeriod )
-           nMinPeriod = nDeltaTime;
-    }
+    sal_uInt64 nWakeupTime = mpSchedulerData->mnUpdateTime + mnTimeout;
+    if( nWakeupTime <= nTimeNow )
+        return ImmediateTimeoutMs;
     else
     {
-        nDeltaTime = mpSchedulerData->mnUpdateTime + mnTimeout;
-        if( nDeltaTime < nTime )
-            nMinPeriod = ImmediateTimeoutMs;
-        else
-        {
-            nDeltaTime -= nTime;
-            if( nDeltaTime < nMinPeriod )
-                nMinPeriod = nDeltaTime;
-        }
+        sal_uInt64 nSleepTime = nWakeupTime - nTimeNow;
+        return ( nSleepTime < nMinPeriod ) ? nSleepTime : nMinPeriod;
     }
-
-    return nMinPeriod;
 }
 
 Timer::Timer(const sal_Char *pDebugName) :

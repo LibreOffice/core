@@ -46,12 +46,11 @@ void ImplSchedulerData::Invoke()
     mbInScheduler = false;
 }
 
-ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimerOnly )
+ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimerOnly, sal_uInt64 nTimeNow )
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplSchedulerData *pMostUrgent = nullptr;
 
-    sal_uInt64 nTimeNow = tools::Time::GetSystemTicks();
     for ( ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData; pSchedulerData; pSchedulerData = pSchedulerData->mpNext )
     {
         if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete ||
@@ -168,12 +167,15 @@ void Scheduler::CallbackTaskScheduling(bool)
 bool Scheduler::ProcessTaskScheduling( bool bTimerOnly )
 {
     ImplSchedulerData* pSchedulerData;
+    sal_uInt64         nTime = tools::Time::GetSystemTicks();
 
-    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimerOnly)))
+    DBG_TESTSOLARMUTEX();
+
+    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimerOnly, nTime)))
     {
         SAL_INFO("vcl.schedule", "Invoke task " << pSchedulerData->GetDebugName());
 
-        pSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
+        pSchedulerData->mnUpdateTime = nTime;
         pSchedulerData->Invoke();
         return true;
     }
@@ -235,6 +237,13 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
                              pSchedulerData->GetDebugName() <<
                              "update min period from " << nOldMinPeriod <<
                              " to " << nMinPeriod);
+                    assert( nMinPeriod <= nOldMinPeriod );
+                    if ( nMinPeriod > nOldMinPeriod )
+                    {
+                        nMinPeriod = nOldMinPeriod;
+                        SAL_WARN("vcl.schedule",
+                             "New update min period > old period - using old");
+                    }
                 }
                 else
                 {

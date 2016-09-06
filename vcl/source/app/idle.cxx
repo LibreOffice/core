@@ -74,7 +74,7 @@ bool Idle::IsIdle() const
     return true;
 }
 
-sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 /* nMinPeriod */, sal_uInt64 /* nTime */ ) const
+sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 /* nMinPeriod */, sal_uInt64 /* nTimeNow */ ) const
 {
     assert(false); // idles currently don't hit this.
     return ImmediateTimeoutMs;
