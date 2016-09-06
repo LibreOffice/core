@@ -519,7 +519,7 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     if (nReleased == 0) // tdf#99383 don't run stuff from ReAcquireSolarMutex
     {
         // Process all Tasks
-        Scheduler::ProcessTaskScheduling(eResult == SalYieldResult::EVENT);
+        Scheduler::ProcessTaskScheduling(eResult != SalYieldResult::EVENT);
     }
 
     // flush lazy deleted objects
@@ -539,7 +539,7 @@ void Application::Reschedule( bool i_bAllEvents )
 void Scheduler::ProcessEventsToIdle()
 {
     int nSanity = 1000;
-    while(Scheduler::ProcessTaskScheduling(false) ||
+    while(Scheduler::ProcessTaskScheduling( true ) ||
           ImplYield(false, false, 0))
     {
         if (nSanity-- < 0)
