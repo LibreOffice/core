@@ -488,24 +488,9 @@ void update_checker()
     OUString aDownloadCheckURL = aDownloadCheckBaseURL + "update/1/" + aProductName +
         "/" + aVersion + "/" + aBuildID + "/" + aBuildTarget + "/" + aLocale +
         "/" + aChannel;
-    SAL_DEBUG(aDownloadCheckURL);
     OString aURL = OUStringToOString(aDownloadCheckURL, RTL_TEXTENCODING_UTF8);
 
-#if 1
     std::string response_body = download_content(aURL, false);
-    SAL_DEBUG(response_body);
-    exit(1);
-#else
-    std::string response_body;
-    if(std::ifstream is{"/lo/users/moggi/update.json", std::ios::binary | std::ios::ate})
-    {
-        auto size = is.tellg();
-        std::string str(size, '\0'); // construct string to stream size
-        is.seekg(0);
-        is.read(&str[0], size);
-        response_body = str;
-    }
-#endif
 
     try
     {
