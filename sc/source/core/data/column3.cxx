@@ -541,21 +541,48 @@ class DeleteAreaHandler
     bool mbNumeric:1;
     bool mbString:1;
     bool mbFormula:1;
+    bool mbDateTime:1;
+    ScColumn& mrCol;
 
 public:
-    DeleteAreaHandler(ScDocument& rDoc, InsertDeleteFlags nDelFlag) :
+    DeleteAreaHandler(ScDocument& rDoc, InsertDeleteFlags nDelFlag, ScColumn& rCol) :
         mrDoc(rDoc),
         mbNumeric(nDelFlag & InsertDeleteFlags::VALUE),
         mbString(nDelFlag & InsertDeleteFlags::STRING),
-        mbFormula(nDelFlag & InsertDeleteFlags::FORMULA) {}
+        mbFormula(nDelFlag & InsertDeleteFlags::FORMULA),
+        mbDateTime(nDelFlag & InsertDeleteFlags::DATETIME),
+        mrCol(rCol) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
         switch (node.type)
         {
             case sc::element_type_numeric:
-                if (!mbNumeric)
-                    return;
+                if (!(mbNumeric && mbDateTime))
+                {
+                    if (mbNumeric)
+                    {
+                        // If the cell data is date/time do nothing.
+                        short nType = mrDoc.GetFormatTable()->GetType(
+                                static_cast<const SfxUInt32Item&>(
+                                    mrCol.GetAttr( (node.position + nOffset), ATTR_VALUE_FORMAT)).GetValue());
+                        if ((nType == css::util::NumberFormat::DATE) || (nType == css::util::NumberFormat::TIME) ||
+                                (nType == css::util::NumberFormat::DATETIME))
+                            return;
+                    }
+                    else if (mbDateTime)
+                    {
+                        // If the cell data is not date/time do nothing.
+                        short nType = mrDoc.GetFormatTable()->GetType(
+                                static_cast<const SfxUInt32Item&>(
+                                    mrCol.GetAttr((node.position + nOffset), ATTR_VALUE_FORMAT)).GetValue());
+                        if (!((nType == css::util::NumberFormat::DATE) || (nType == css::util::NumberFormat::TIME) ||
+                                    (nType == css::util::NumberFormat::DATETIME)))
+                            return;
+                    }
+                    else
+                        return;
+                }
             break;
             case sc::element_type_string:
             case sc::element_type_edittext:
@@ -639,7 +666,7 @@ void ScColumn::DeleteCells(
     sc::SingleColumnSpanSet& rDeleted )
 {
     // Determine which cells to delete based on the deletion flags.
-    DeleteAreaHandler aFunc(*pDocument, nDelFlag);
+    DeleteAreaHandler aFunc(*pDocument, nDelFlag, *this);
     sc::CellStoreType::iterator itPos = maCells.position(rBlockPos.miCellPos, nRow1).first;
     sc::ProcessBlock(itPos, maCells, aFunc, nRow1, nRow2);
     aFunc.endFormulas(); // Have the formula cells stop listening.
