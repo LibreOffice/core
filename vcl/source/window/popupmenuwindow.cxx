@@ -38,8 +38,8 @@ PopupMenuFloatingWindow::ImplData::~ImplData()
 {
 }
 
-PopupMenuFloatingWindow::PopupMenuFloatingWindow( vcl::Window* pParent, WinBits nStyle ) :
-    FloatingWindow(pParent, nStyle),
+PopupMenuFloatingWindow::PopupMenuFloatingWindow( vcl::Window* pParent ) :
+    FloatingWindow(pParent, WB_SYSTEMFLOATWIN | WB_SYSTEMWINDOW | WB_NOBORDER ),
     mpImplData(new ImplData)
 {
 }

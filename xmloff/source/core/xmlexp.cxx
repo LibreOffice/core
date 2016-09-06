@@ -2026,7 +2026,7 @@ XMLEventExport& SvXMLExport::GetEventExport()
     if( nullptr == mpEventExport)
     {
         // create EventExport on demand
-        mpEventExport = new XMLEventExport(*this, nullptr);
+        mpEventExport = new XMLEventExport(*this);
 
         // and register standard handlers + names
         OUString sStarBasic("StarBasic");

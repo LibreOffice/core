@@ -144,9 +144,9 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
 
     BasicLibrariesElement::BasicLibrariesElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
-            BasicElementBase* pParent, BasicImport* pImport,
+            BasicImport* pImport,
             const Reference< script::XLibraryContainer2 >& rxLibContainer )
-        :BasicElementBase( rLocalName, xAttributes, pParent, pImport )
+        :BasicElementBase( rLocalName, xAttributes, nullptr, pImport )
         ,m_xLibContainer( rxLibContainer )
     {
     }
@@ -478,7 +478,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
             if ( xLibContainer.is() )
             {
-                xElement.set( new BasicLibrariesElement( rLocalName, xAttributes, nullptr, this, xLibContainer ) );
+                xElement.set( new BasicLibrariesElement( rLocalName, xAttributes, this, xLibContainer ) );
             }
         }
         else

@@ -529,8 +529,8 @@ public:
     inline WindowElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
-        ElementBase * pParent, DialogImport * pImport )
-        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        DialogImport * pImport )
+        : ControlElement( rLocalName, xAttributes, nullptr, pImport )
         {}
 };
 

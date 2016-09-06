@@ -138,7 +138,7 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
     }
     else if ( mpLibArray && rLocalName == "libraries" )
     {
-        return new LibrariesElement( rLocalName, xAttributes, nullptr, this );
+        return new LibrariesElement( rLocalName, xAttributes, this );
     }
     else if ( mpLibDesc && rLocalName == "library" )
     {

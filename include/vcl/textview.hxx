@@ -69,7 +69,7 @@ protected:
     TextPaM             ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode );
     bool                IsInSelection( const TextPaM& rPaM );
 
-    void                ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange, TextSelection const* pSelection = nullptr);
+    void                ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pSelection);
     void                ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
     void                ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bEndKey );
     void                ImpHighlight( const TextSelection& rSel );

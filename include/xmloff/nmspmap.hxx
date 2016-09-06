@@ -147,11 +147,9 @@ public:
 /* deprecated */ sal_uInt16 GetKeyByAttrName( const OUString& rAttrName,
                              OUString *pPrefix,
                              OUString *pLocalName,
-                             OUString *pNamespace,
-                             sal_uInt16 nIdxGuess = USHRT_MAX ) const;
+                             OUString *pNamespace ) const;
 /* deprecated */ sal_uInt16 GetKeyByAttrName( const OUString& rAttrName,
-                             OUString *pLocalName = nullptr,
-                             sal_uInt16 nIdxGuess = USHRT_MAX ) const;
+                             OUString *pLocalName = nullptr ) const;
 };
 
 #endif // INCLUDED_XMLOFF_NMSPMAP_HXX

@@ -68,8 +68,7 @@ class XMLOFF_DLLPUBLIC XMLEventExport
     bool bExtNamespace;
 
 public:
-    XMLEventExport(SvXMLExport& rExport,
-                   const XMLEventNameTranslation* pTranslationTable = nullptr);
+    XMLEventExport(SvXMLExport& rExport);
     ~XMLEventExport();
 
     /// register an EventExportHandler for a particular script type

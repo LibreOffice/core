@@ -1747,7 +1747,7 @@ Reference< xml::input::XElement > DialogImport::startRootElement(
     // window
     else if ( rLocalName == "window" )
     {
-        return new WindowElement( rLocalName, xAttributes, nullptr, this );
+        return new WindowElement( rLocalName, xAttributes, this );
     }
     else
     {

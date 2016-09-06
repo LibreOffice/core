@@ -102,7 +102,7 @@ public:
     ImplEntryType*          GetMutableEntryPtr( sal_Int32  nPos ) const { return GetEntry( nPos ); }
     void                    Clear();
 
-    sal_Int32           FindMatchingEntry( const OUString& rStr, sal_Int32  nStart = 0, bool bForward = true, bool bLazy = true ) const;
+    sal_Int32           FindMatchingEntry( const OUString& rStr, sal_Int32  nStart, bool bLazy ) const;
     sal_Int32           FindEntry( const OUString& rStr, bool bSearchMRUArea = false ) const;
     sal_Int32           FindEntry( const void* pData ) const;
 

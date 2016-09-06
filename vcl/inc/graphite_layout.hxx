@@ -103,8 +103,7 @@ private:
     const grutils::GrFeatureParser * mpFeatures;
 
 public:
-    GraphiteLayout(const gr_face * pFace, gr_font * pFont = nullptr,
-        const grutils::GrFeatureParser * features = nullptr) throw();
+    GraphiteLayout(const gr_face * pFace) throw();
 
     // used by upper layers
     virtual bool  LayoutText( ImplLayoutArgs& ) override;    // first step of layout

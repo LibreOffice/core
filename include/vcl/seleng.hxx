@@ -93,8 +93,7 @@ private:
 public:
 
                         SelectionEngine( vcl::Window* pWindow,
-                                         FunctionSet* pFunctions = nullptr,
-                                         sal_uLong nAutoRepeatInterval = SELENG_AUTOREPEAT_INTERVAL );
+                                         FunctionSet* pFunctions = nullptr );
                         ~SelectionEngine();
 
     // true: Event was processed by Selection Engine

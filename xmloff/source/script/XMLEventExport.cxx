@@ -41,13 +41,11 @@ using ::com::sun::star::container::XNameAccess;
 using ::xmloff::token::XML_EVENT_LISTENERS;
 
 
-XMLEventExport::XMLEventExport(SvXMLExport& rExp,
-                         const XMLEventNameTranslation* pTranslationTable) :
+XMLEventExport::XMLEventExport(SvXMLExport& rExp) :
     sEventType("EventType"),
     rExport(rExp),
     bExtNamespace(false)
 {
-    AddTranslationTable(pTranslationTable);
 }
 
 XMLEventExport::~XMLEventExport()

@@ -742,7 +742,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 }
 
 /*
- * HitTestNativeControl()
+ * HitTestNativeScrollbar()
  *
  *  bIsInside is set to true if aPos is contained within the
  *  given part of the control, whose bounding region is

@@ -94,7 +94,7 @@ namespace xmlscript
     public:
         BasicLibrariesElement( const OUString& rLocalName,
             const css::uno::Reference< css::xml::input::XAttributes >& xAttributes,
-            BasicElementBase* pParent, BasicImport* pImport,
+            BasicImport* pImport,
             const css::uno::Reference< css::script::XLibraryContainer2 >& rxLibContainer );
 
         // XElement

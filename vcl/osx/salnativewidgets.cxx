@@ -293,7 +293,7 @@ bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
 }
 
 /*
- * HitTestNativeControl()
+ * HitTestNativeScrollbar()
  *
  *  If the return value is true, bIsInside contains information whether
  *  aPos was or was not inside the native widget specified by the

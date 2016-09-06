@@ -33,10 +33,9 @@ inline bool SelectionEngine::ShouldDeselect( bool bModifierKey1 ) const
 
 // TODO: throw out FunctionSet::SelectAtPoint
 
-SelectionEngine::SelectionEngine( vcl::Window* pWindow, FunctionSet* pFuncSet,
-                                  sal_uLong nAutoRepeatInterval ) :
+SelectionEngine::SelectionEngine( vcl::Window* pWindow, FunctionSet* pFuncSet ) :
     pWin( pWindow ),
-    nUpdateInterval( nAutoRepeatInterval )
+    nUpdateInterval( SELENG_AUTOREPEAT_INTERVAL )
 {
     eSelMode = SelectionMode::Single;
     pFunctionSet = pFuncSet;

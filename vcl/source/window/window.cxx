@@ -3293,17 +3293,10 @@ void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle&
     mpOutDevData->mpRecordLayout = nullptr;
 }
 
-void Window::DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder )
-{
-    DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, nullptr, nullptr );
-}
-
 void Window::DrawSelectionBackground( const Rectangle& rRect,
                                       sal_uInt16 highlight,
                                       bool bChecked,
-                                      bool bDrawBorder,
-                                      Color* pSelectionTextColor,
-                                      Color* pPaintColor
+                                      bool bDrawBorder
                                       )
 {
     if( rRect.IsEmpty() )
@@ -3312,7 +3305,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
     const StyleSettings& rStyles = GetSettings().GetStyleSettings();
 
     // colors used for item highlighting
-    Color aSelectionBorderCol( pPaintColor ? *pPaintColor : rStyles.GetHighlightColor() );
+    Color aSelectionBorderCol( rStyles.GetHighlightColor() );
     Color aSelectionFillCol( aSelectionBorderCol );
 
     bool bDark = rStyles.GetFaceColor().IsDark();
@@ -3321,7 +3314,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
     int c1 = aSelectionBorderCol.GetLuminance();
     int c2 = GetDisplayBackground().GetColor().GetLuminance();
 
-    if( !bDark && !bBright && abs( c2-c1 ) < (pPaintColor ? 40 : 75) )
+    if( !bDark && !bBright && abs( c2-c1 ) < 75 )
     {
         // constrast too low
         sal_uInt16 h,s,b;
@@ -3396,14 +3389,6 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
     }
 
     SetFillColor( aSelectionFillCol );
-    if( pSelectionTextColor )
-    {
-        Color aTextColor = IsControlBackground() ? GetControlForeground() : rStyles.GetButtonTextColor();
-        Color aHLTextColor = rStyles.GetHighlightTextColor();
-        int nTextDiff = abs(aSelectionFillCol.GetLuminance() - aTextColor.GetLuminance());
-        int nHLDiff = abs(aSelectionFillCol.GetLuminance() - aHLTextColor.GetLuminance());
-        *pSelectionTextColor = (nHLDiff >= nTextDiff) ? aHLTextColor : aTextColor;
-    }
 
     if( bDark )
     {

@@ -292,7 +292,7 @@ void TextView::DeleteSelected()
     ShowCursor();
 }
 
-void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange, TextSelection const* pSelection)
+void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pSelection)
 {
     if (!mpImpl->mbPaintSelection)
     {
@@ -314,7 +314,7 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartP
         }
     }
 
-    mpImpl->mpTextEngine->ImpPaint(&rRenderContext, rStartPos, pPaintArea, pPaintRange, pSelection);
+    mpImpl->mpTextEngine->ImpPaint(&rRenderContext, rStartPos, pPaintArea, nullptr, pSelection);
 }
 
 void TextView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
@@ -332,7 +332,7 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRe
         pDrawSelection = &mpImpl->maSelection;
 
     Point aStartPos = ImpGetOutputStartPos(mpImpl->maStartDocPos);
-    ImpPaint(rRenderContext, aStartPos, &rRect, nullptr, pDrawSelection);
+    ImpPaint(rRenderContext, aStartPos, &rRect, pDrawSelection);
     if (mpImpl->mbHighlightSelection)
         ImpHighlight(mpImpl->maSelection);
 }

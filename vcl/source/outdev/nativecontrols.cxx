@@ -168,7 +168,7 @@ bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPar
     return( mpGraphics->IsNativeControlSupported(nType, nPart) );
 }
 
-bool OutputDevice::HitTestNativeControl( ControlType nType,
+bool OutputDevice::HitTestNativeScrollbar(
                               ControlPart nPart,
                               const Rectangle& rControlRegion,
                               const Point& aPos,
@@ -185,8 +185,8 @@ bool OutputDevice::HitTestNativeControl( ControlType nType,
     Rectangle screenRegion( rControlRegion );
     screenRegion.Move( aWinOffs.X(), aWinOffs.Y());
 
-    return( mpGraphics->HitTestNativeControl(nType, nPart, screenRegion, Point( aPos.X() + mnOutOffX, aPos.Y() + mnOutOffY ),
-        rIsInside, this ) );
+    return mpGraphics->HitTestNativeScrollbar( nPart, screenRegion, Point( aPos.X() + mnOutOffX, aPos.Y() + mnOutOffY ),
+        rIsInside, this );
 }
 
 static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )

@@ -612,7 +612,7 @@ bool SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
     return drawEPS( nX, nY, nWidth, nHeight,  pPtr, nSize );
 }
 
-bool SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+bool SalGraphics::HitTestNativeScrollbar( ControlPart nPart, const Rectangle& rControlRegion,
                                                 const Point& aPos, bool& rIsInside, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
@@ -621,10 +621,10 @@ bool SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart, co
         Rectangle rgn( rControlRegion );
         mirror( pt.X(), pOutDev );
         mirror( rgn, pOutDev );
-        return hitTestNativeControl( nType, nPart, rgn, pt, rIsInside );
+        return hitTestNativeControl( ControlType::Scrollbar, nPart, rgn, pt, rIsInside );
     }
     else
-        return hitTestNativeControl( nType, nPart, rControlRegion, aPos, rIsInside );
+        return hitTestNativeControl( ControlType::Scrollbar, nPart, rControlRegion, aPos, rIsInside );
 }
 
 void SalGraphics::mirror( ImplControlValue& rVal, const OutputDevice* pOutDev ) const

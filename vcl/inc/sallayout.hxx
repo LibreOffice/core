@@ -243,8 +243,7 @@ public:
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const override;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
-    explicit        MultiSalLayout( SalLayout& rBaseLayout,
-                                    const PhysicalFontFace* pBaseFont = nullptr );
+    explicit        MultiSalLayout( SalLayout& rBaseLayout );
     void            AddFallback( SalLayout& rFallbackLayout,
                                  ImplLayoutRuns&, const PhysicalFontFace* pFallbackFont );
     virtual bool    LayoutText( ImplLayoutArgs& ) override;
