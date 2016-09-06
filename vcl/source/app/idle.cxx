@@ -69,11 +69,6 @@ bool Idle::ReadyForSchedule( const sal_uInt64 /* nTime */, const bool bIdle ) co
     return bIdle;
 }
 
-bool Idle::IsIdle() const
-{
-    return true;
-}
-
 void Idle::UpdateMinPeriod( const sal_uInt64 /* nTime */, sal_uInt64 &nMinPeriod ) const
 {
     nMinPeriod = ImmediateTimeoutMs;

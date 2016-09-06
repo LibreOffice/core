@@ -33,11 +33,6 @@ bool Timer::ReadyForSchedule( const sal_uInt64 nTime, bool /* bIdle */ ) const
     return (mpSchedulerData->mnUpdateTime + mnTimeout) <= nTime;
 }
 
-bool Timer::IsIdle() const
-{
-    return false;
-}
-
 void Timer::UpdateMinPeriod( const sal_uInt64 nTime, sal_uInt64 &nMinPeriod ) const
 {
     sal_uInt64 nWakeupTime = mpSchedulerData->mnUpdateTime + mnTimeout;
