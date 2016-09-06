@@ -597,7 +597,7 @@ public:
 class SmErrorNode : public SmMathSymbolNode
 {
 public:
-    SmErrorNode(SmParseError /*eError*/, const SmToken &rNodeToken)
+    explicit SmErrorNode(const SmToken &rNodeToken)
     :   SmMathSymbolNode(NERROR, rNodeToken)
     {
         SetText(OUString(MS_ERROR));

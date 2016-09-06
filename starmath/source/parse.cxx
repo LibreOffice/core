@@ -2287,7 +2287,7 @@ void SmParser::DoGlyphSpecial()
 void SmParser::Error(SmParseError eError)
 {
     SmStructureNode *pSNode = new SmExpressionNode(m_aCurToken);
-    SmErrorNode     *pErr   = new SmErrorNode(eError, m_aCurToken);
+    SmErrorNode     *pErr   = new SmErrorNode(m_aCurToken);
     pSNode->SetSubNodes(pErr, nullptr);
 
     //! put a structure node on the stack (instead of the error node itself)
