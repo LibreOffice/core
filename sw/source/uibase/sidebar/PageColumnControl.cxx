@@ -28,52 +28,54 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/settings.hxx>
+#include <svx/svxids.hrc>
 
 namespace sw { namespace sidebar {
 
-PageColumnControl::PageColumnControl(
-    vcl::Window* pParent,
-    PagePropertyPanel& rPanel,
-    const sal_uInt16 nColumnType,
-    const bool bLandscape )
-    : svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_COLUMN) )
-    , mpColumnValueSet( VclPtr<svx::sidebar::ValueSetWithTextControl>::Create( svx::sidebar::ValueSetWithTextControl::ControlType::ImageText, this, SW_RES(VS_COLUMN) ) )
-    , maMoreButton( VclPtr<PushButton>::Create( this, SW_RES(CB_COLUMN_MORE) ) )
-    , mnColumnType( nColumnType )
-    , mrPagePropPanel(rPanel)
+PageColumnControl::PageColumnControl( sal_uInt16 nId )
+    : SfxPopupWindow( nId, "PageColumnControl", "modules/swriter/ui/pagecolumncontrol.ui" )
 {
-    mpColumnValueSet->SetStyle( mpColumnValueSet->GetStyle() | WB_3DLOOK | WB_NO_DIRECTSELECT );
-    mpColumnValueSet->SetColor(GetSettings().GetStyleSettings().GetMenuColor());
+    get( m_pMoreButton, "moreoptions" );
+
+    bool bLandscape = false;
+    const SfxPoolItem *pItem;
+    if ( SfxViewFrame::Current() )
+    {
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
+        bLandscape = static_cast<const SvxPageItem*>(pItem)->IsLandscape();
+    }
 
     if ( bLandscape )
     {
-        mpColumnValueSet->AddItem(Image(SW_RES(IMG_ONE_L)), nullptr, SW_RES(STR_ONE), nullptr );
-        mpColumnValueSet->AddItem(Image(SW_RES(IMG_TWO_L)), nullptr, SW_RES(STR_TWO), nullptr );
-        mpColumnValueSet->AddItem(Image(SW_RES(IMG_THREE_L)), nullptr, SW_RES(STR_THREE), nullptr );
-        mpColumnValueSet->AddItem(Image(SW_RES(IMG_LEFT_L)), nullptr, SW_RES(STR_LEFT), nullptr );
-        mpColumnValueSet->AddItem(Image(SW_RES(IMG_RIGHT_L)), nullptr, SW_RES(STR_RIGHT), nullptr );
+        get(m_pOneColumn, "column1L");
+        get(m_pTwoColumns, "column2L");
+        get(m_pThreeColumns, "column3L");
+        get(m_pLeft, "columnleftL");
+        get(m_pRight, "columnrightL");
     }
     else
     {
-        mpColumnValueSet->AddItem(Image(SW_RES(IMG_ONE)), nullptr, SW_RES(STR_ONE), nullptr );
-        mpColumnValueSet->AddItem(Image(SW_RES(IMG_TWO)), nullptr, SW_RES(STR_TWO), nullptr );
-        mpColumnValueSet->AddItem(Image(SW_RES(IMG_THREE)), nullptr, SW_RES(STR_THREE), nullptr );
-        mpColumnValueSet->AddItem(Image(SW_RES(IMG_LEFT)), nullptr, SW_RES(STR_LEFT), nullptr );
-        mpColumnValueSet->AddItem(Image(SW_RES(IMG_RIGHT)), nullptr, SW_RES(STR_RIGHT), nullptr );
+        get(m_pOneColumn, "column1");
+        get(m_pTwoColumns, "column2");
+        get(m_pThreeColumns, "column3");
+        get(m_pLeft, "columnleft");
+        get(m_pRight, "columnright");
     }
 
-    mpColumnValueSet->SetNoSelection();
-    mpColumnValueSet->SetSelectHdl( LINK(this, PageColumnControl,ImplColumnHdl ) );
-    mpColumnValueSet->Show();
-    mpColumnValueSet->SelectItem( mnColumnType );
-    mpColumnValueSet->SetFormat();
-    mpColumnValueSet->Invalidate();
-    mpColumnValueSet->StartSelection();
+    m_pOneColumn->Show();
+    m_pTwoColumns->Show();
+    m_pThreeColumns->Show();
+    m_pLeft->Show();
+    m_pRight->Show();
 
-    maMoreButton->SetClickHdl( LINK( this, PageColumnControl, MoreButtonClickHdl_Impl ) );
-    maMoreButton->GrabFocus();
+    m_pOneColumn->SetClickHdl( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
+    m_pTwoColumns->SetClickHdl( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
+    m_pThreeColumns->SetClickHdl( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
+    m_pLeft->SetClickHdl( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
+    m_pRight->SetClickHdl( LINK( this, PageColumnControl, ColumnButtonClickHdl_Impl ) );
 
-    FreeResource();
+    m_pMoreButton->SetClickHdl( LINK( this, PageColumnControl, MoreButtonClickHdl_Impl ) );
+    m_pMoreButton->GrabFocus();
 }
 
 PageColumnControl::~PageColumnControl()
@@ -83,32 +85,45 @@ PageColumnControl::~PageColumnControl()
 
 void PageColumnControl::dispose()
 {
-    mpColumnValueSet.disposeAndClear();
-    maMoreButton.disposeAndClear();
-    svx::sidebar::PopupControl::dispose();
+    m_pOneColumn.disposeAndClear();
+    m_pTwoColumns.disposeAndClear();
+    m_pThreeColumns.disposeAndClear();
+    m_pLeft.disposeAndClear();
+    m_pRight.disposeAndClear();
+    m_pMoreButton.disposeAndClear();
+    SfxPopupWindow::dispose();
 }
 
-IMPL_LINK_TYPED(PageColumnControl, ImplColumnHdl, ValueSet*, pControl, void)
+void PageColumnControl::ExecuteColumnChange( const sal_uInt16 nColumnType )
 {
-    mpColumnValueSet->SetNoSelection();
-    if ( pControl == mpColumnValueSet )
-    {
-        const sal_uInt32 nColumnType = mpColumnValueSet->GetSelectItemId();
-        if ( nColumnType != mnColumnType )
-        {
-            mnColumnType = nColumnType;
-            mrPagePropPanel.ExecuteColumnChange( mnColumnType );
-        }
-    }
-
-    mrPagePropPanel.ClosePageColumnPopup();
+    std::unique_ptr<SfxInt16Item> mpPageColumnTypeItem( new SfxInt16Item(SID_ATTR_PAGE_COLUMN) );
+    mpPageColumnTypeItem->SetValue( nColumnType );
+    if ( SfxViewFrame::Current() )
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLUMN,
+            SfxCallMode::RECORD, { mpPageColumnTypeItem.get() });
 }
 
-IMPL_LINK_NOARG_TYPED(PageColumnControl, MoreButtonClickHdl_Impl, Button*, void)
+IMPL_LINK_TYPED( PageColumnControl, ColumnButtonClickHdl_Impl, Button*, pButton, void )
 {
-    mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SfxCallMode::ASYNCHRON );
+    if ( pButton == m_pOneColumn.get() )
+        ExecuteColumnChange( 1 );
+    else if ( pButton == m_pTwoColumns.get() )
+        ExecuteColumnChange( 2 );
+    else if ( pButton == m_pThreeColumns.get() )
+        ExecuteColumnChange( 3 );
+    else if ( pButton == m_pLeft.get() )
+        ExecuteColumnChange( 4 );
+    else if ( pButton == m_pRight.get() )
+        ExecuteColumnChange( 5 );
 
-    mrPagePropPanel.ClosePageColumnPopup();
+    EndPopupMode();
+}
+
+IMPL_LINK_NOARG_TYPED( PageColumnControl, MoreButtonClickHdl_Impl, Button*, void )
+{
+    if ( SfxViewFrame::Current() )
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SfxCallMode::ASYNCHRON );
+    EndPopupMode();
 }
 
 } } // end of namespace sw::sidebar

@@ -16,40 +16,26 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGECOLUMNCONTROL_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGECOLUMNCONTROL_HXX
+#ifndef INCLUDED_SW_INC_PAGECOLUMNPOPUP_HXX
+#define INCLUDED_SW_INC_PAGECOLUMNPOPUP_HXX
 
-#include <svx/tbxctl.hxx>
-#include <vcl/button.hxx>
+#include <sfx2/tbxctrl.hxx>
+#include <swdllapi.h>
+#include <vcl/vclenum.hxx>
+#include <functional>
 
-namespace sw { namespace sidebar {
-
-class PagePropertyPanel;
-
-class PageColumnControl : public SfxPopupWindow
+class SW_DLLPUBLIC PageColumnPopup : public SfxToolBoxControl
 {
 public:
-    PageColumnControl( sal_uInt16 nId );
+    SFX_DECL_TOOLBOX_CONTROL();
 
-    virtual ~PageColumnControl();
-    virtual void dispose() override;
+    PageColumnPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    virtual ~PageColumnPopup();
 
-private:
-    VclPtr<PushButton> m_pOneColumn;
-    VclPtr<PushButton> m_pTwoColumns;
-    VclPtr<PushButton> m_pThreeColumns;
-    VclPtr<PushButton> m_pLeft;
-    VclPtr<PushButton> m_pRight;
-    VclPtr<PushButton> m_pMoreButton;
-
-    static void ExecuteColumnChange( const sal_uInt16 nColumnType );
-
-    DECL_LINK_TYPED( ColumnButtonClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( MoreButtonClickHdl_Impl, Button*, void );
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };
 
-} } // end of namespace sw::sidebar
-
 #endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

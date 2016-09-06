@@ -154,10 +154,6 @@ Image IMG_PAGE_COLUMN_RIGHT
 {
     ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_right_24x24.png";};
 };
-Image IMG_PAGE_COLUMN_NONE
-{
-    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_copy_24x24.png";};
-};
 Image IMG_PAGE_COLUMN_1_L
 {
     ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column1_24x24.png";};
@@ -436,93 +432,6 @@ Control RID_POPUP_SWPAGE_SIZE
         Unit = FUNIT_CM;
         Last = 9999;
         SpinSize = 10;
-    };
-};
-
-// popup for page style's column attribute
-Control RID_POPUP_SWPAGE_COLUMN
-{
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-    Size = MAP_APPFONT( POPUPPANEL_MARGIN_SMALL * 2 + POPUP_BORDER_WIDTH + VS_WIDTH - 15, ITEM_HEIGHT*5 + POPUPPANEL_MARGIN_SMALL*2 + CONTROL_SPACING_VERTICAL + 15 );
-
-    Control VS_COLUMN
-    {
-        Pos = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL + OFFSET_X, POPUPPANEL_MARGIN_SMALL + OFFSET_Y);
-        Size = MAP_APPFONT ( VS_WIDTH -15 , ITEM_HEIGHT*5);
-        HelpID = HID_SWPAGE_VS_COLUMN;
-        TabStop = TRUE ;
-        Text = "Column";
-    };
-    PushButton CB_COLUMN_MORE
-    {
-        Pos = MAP_APPFONT ( POPUPPANEL_MARGIN_SMALL + 2*OFFSET_X, POPUPPANEL_MARGIN_SMALL + 2*OFFSET_Y + ITEM_HEIGHT*5 ) ;
-        Size = MAP_APPFONT ( VS_WIDTH - 2 - 15, 15 ) ;
-        HelpID = HID_SWPAGE_COLUMN_MORE;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~More Options";
-        QuickHelpText [ en-US ] = "More Options" ;
-    };
-    Image  IMG_ONE
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_1_24x24.png";};
-    };
-    Image  IMG_TWO
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_2_24x24.png";};
-    };
-    Image  IMG_THREE
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_3_24x24.png";};
-    };
-    Image  IMG_LEFT
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_left_24x24.png";};
-    };
-    Image  IMG_RIGHT
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_right_24x24.png";};
-    };
-    Image  IMG_ONE_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column1_24x24.png";};
-    };
-    Image  IMG_TWO_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column2_24x24.png";};
-    };
-    Image  IMG_THREE_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column3_24x24.png";};
-    };
-    Image  IMG_LEFT_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/columnleft_24x24.png";};
-    };
-    Image  IMG_RIGHT_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/columnright_24x24.png";};
-    };
-    String STR_ONE
-    {
-        Text [ en-US ] = "1 Column";
-    };
-    String STR_TWO
-    {
-        Text [ en-US ] = "2 Columns";
-    };
-    String STR_THREE
-    {
-        Text [ en-US ] = "3 Columns";
-    };
-    String STR_LEFT
-    {
-        Text [ en-US ] = "Left";
-    };
-    String STR_RIGHT
-    {
-        Text [ en-US ] = "Right";
     };
 };
 
