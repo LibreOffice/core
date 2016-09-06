@@ -178,7 +178,8 @@ bool Help::ShowQuickHelp( vcl::Window* pParent,
                           const OUString& rLongHelpText,
                           QuickHelpFlags nStyle )
 {
-    ImplShowHelpWindow( pParent, HELPWINSTYLE_QUICK, nStyle,
+    sal_uInt16 nHelpWinStyle = ( nStyle & QuickHelpFlags::TipStyleBalloon ) ? HELPWINSTYLE_BALLOON : HELPWINSTYLE_QUICK;
+    ImplShowHelpWindow( pParent, nHelpWinStyle, nStyle,
                         rHelpText, rLongHelpText,
                         pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), rScreenRect );
     return true;
