@@ -28,9 +28,9 @@ void Timer::SetDeletionFlags()
         Scheduler::SetDeletionFlags();
 }
 
-bool Timer::ReadyForSchedule( bool /* bTimerOnly */, sal_uInt64 nTimeNow ) const
+bool Timer::ReadyForSchedule( const sal_uInt64 nTime, bool /* bTimer */ ) const
 {
-    return (mpSchedulerData->mnUpdateTime + mnTimeout) <= nTimeNow;
+    return (mpSchedulerData->mnUpdateTime + mnTimeout) <= nTime;
 }
 
 bool Timer::IsIdle() const
@@ -38,30 +38,17 @@ bool Timer::IsIdle() const
     return false;
 }
 
-sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const
+void Timer::UpdateMinPeriod( const sal_uInt64 nTime, sal_uInt64 &nMinPeriod ) const
 {
-    sal_uInt64 nDeltaTime;
-    //determine smallest time slot
-    if( mpSchedulerData->mnUpdateTime == nTime )
-    {
-       nDeltaTime = mnTimeout;
-       if( nDeltaTime < nMinPeriod )
-           nMinPeriod = nDeltaTime;
-    }
+    sal_uInt64 nWakeupTime = mpSchedulerData->mnUpdateTime + mnTimeout;
+    if( nWakeupTime <= nTime )
+        nMinPeriod = ImmediateTimeoutMs;
     else
     {
-        nDeltaTime = mpSchedulerData->mnUpdateTime + mnTimeout;
-        if( nDeltaTime < nTime )
-            nMinPeriod = ImmediateTimeoutMs;
-        else
-        {
-            nDeltaTime -= nTime;
-            if( nDeltaTime < nMinPeriod )
-                nMinPeriod = nDeltaTime;
-        }
+        sal_uInt64 nSleepTime = nWakeupTime - nTime;
+        if( nSleepTime < nMinPeriod )
+            nMinPeriod = nSleepTime;
     }
-
-    return nMinPeriod;
 }
 
 Timer::Timer(const sal_Char *pDebugName) :
