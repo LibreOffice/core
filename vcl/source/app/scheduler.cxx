@@ -51,15 +51,14 @@ void ImplSchedulerData::Invoke()
     mbInScheduler = false;
 }
 
-ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimerOnly )
+ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( const sal_uInt64 nTime, const bool bTimerOnly )
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplSchedulerData *pMostUrgent = nullptr;
 
-    sal_uInt64 nTimeNow = tools::Time::GetSystemTicks();
     for ( ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData; pSchedulerData; pSchedulerData = pSchedulerData->mpNext )
     {
-        if ( !pSchedulerData->mpScheduler || !pSchedulerData->mpScheduler->ReadyForSchedule( bTimerOnly, nTimeNow ) )
+        if ( !pSchedulerData->mpScheduler || !pSchedulerData->mpScheduler->ReadyForSchedule( nTime, bTimerOnly ) )
             continue;
         if (!pMostUrgent)
             pMostUrgent = pSchedulerData;
@@ -168,14 +167,15 @@ void Scheduler::CallbackTaskScheduling(bool)
 bool Scheduler::ProcessTaskScheduling( bool bTimerOnly )
 {
     ImplSchedulerData* pSchedulerData;
+    sal_uInt64         nTime = tools::Time::GetSystemTicks();
 
     DBG_TESTSOLARMUTEX();
 
-    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimerOnly)))
+    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(nTime, bTimerOnly)))
     {
         SAL_INFO("vcl.schedule", "Invoke task " << pSchedulerData->GetDebugName());
 
-        pSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
+        pSchedulerData->mnUpdateTime = nTime;
         pSchedulerData->Invoke();
         return true;
     }
@@ -233,8 +233,7 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
                 if ( !pSchedulerData->mpScheduler->IsIdle() )
                 {
                     sal_uInt64 nOldMinPeriod = nMinPeriod;
-                    nMinPeriod = pSchedulerData->mpScheduler->UpdateMinPeriod(
-                                                                nOldMinPeriod, nTime );
+                    pSchedulerData->mpScheduler->UpdateMinPeriod( nTime, nMinPeriod );
                     SAL_INFO("vcl.schedule", "Have active timer " <<
                              pSchedulerData->GetDebugName() <<
                              "update min period from " << nOldMinPeriod <<
@@ -279,14 +278,8 @@ void Scheduler::Start()
         return;
     }
 
-<<<<<<< HEAD
     DBG_TESTSOLARMUTEX();
 
-    // Mark timer active
-    mbActive = true;
-
-=======
->>>>>>> Use mpSchedulerData for delete and active handling
     if ( !mpSchedulerData )
     {
         // insert Scheduler
