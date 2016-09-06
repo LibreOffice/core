@@ -96,11 +96,11 @@ public:
     bool VisitDeclRefExpr( const DeclRefExpr* );
     bool VisitCXXConstructExpr( const CXXConstructExpr* );
 private:
-    MyCallSiteInfo niceName(const FunctionDecl* functionDecl, int paramIndex, const ParmVarDecl* parmVarDecl, const std::string& callValue);
+    MyCallSiteInfo niceName(const FunctionDecl* functionDecl, int paramIndex, llvm::StringRef paramName, const std::string& callValue);
     std::string getCallValue(const Expr* arg);
 };
 
-MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, int paramIndex, const ParmVarDecl* parmVarDecl, const std::string& callValue)
+MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, int paramIndex, llvm::StringRef paramName, const std::string& callValue)
 {
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
@@ -133,7 +133,7 @@ MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, int par
     if (isa<CXXMethodDecl>(functionDecl) && dyn_cast<CXXMethodDecl>(functionDecl)->isConst()) {
         aInfo.nameAndParams += " const";
     }
-    aInfo.paramName = parmVarDecl->getName();
+    aInfo.paramName = paramName;
     aInfo.paramIndex = paramIndex;
     aInfo.callValue = callValue;
 
@@ -147,16 +147,23 @@ MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, int par
 std::string ConstantParam::getCallValue(const Expr* arg)
 {
     arg = arg->IgnoreParenCasts();
+    if (isa<CXXDefaultArgExpr>(arg)) {
+        arg = dyn_cast<CXXDefaultArgExpr>(arg)->getExpr();
+    }
+    arg = arg->IgnoreParenCasts();
     // ignore this, it seems to trigger an infinite recursion
     if (isa<UnaryExprOrTypeTraitExpr>(arg)) {
-        return "unknown";
+        return "unknown1";
     }
     APSInt x1;
     if (arg->EvaluateAsInt(x1, compiler.getASTContext()))
     {
         return x1.toString(10);
     }
-    return "unknown";
+    if (isa<CXXNullPtrLiteralExpr>(arg)) {
+        return "0";
+    }
+    return "unknown2";
 }
 
 bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
@@ -193,22 +200,30 @@ bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
         functionDecl = functionDecl->getTemplateInstantiationPattern();
 #endif
 
+    if (!functionDecl->getNameInfo().getLoc().isValid() || ignoreLocation(functionDecl)) {
+        return true;
+    }
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
                               functionDecl->getNameInfo().getLoc()))) {
         return true;
     }
-    if (functionDecl->getNameInfo().getLoc().isValid() && ignoreLocation(functionDecl)) {
-        return true;
-    }
 
-    for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
-        if (i >= functionDecl->getNumParams()) // can happen in template code
-            break;
-        const Expr* arg = callExpr->getArg(i);
-        std::string callValue = getCallValue(arg);
-        const ParmVarDecl* parmVarDecl = functionDecl->getParamDecl(i);
-        MyCallSiteInfo funcInfo = niceName(functionDecl, i, parmVarDecl, callValue);
+    unsigned len = std::max(callExpr->getNumArgs(), functionDecl->getNumParams());
+    for (unsigned i = 0; i < len; ++i) {
+        const Expr* valExpr;
+        if (i < callExpr->getNumArgs())
+            valExpr = callExpr->getArg(i);
+        else if (i < functionDecl->getNumParams() && functionDecl->getParamDecl(i)->hasDefaultArg())
+            valExpr = functionDecl->getParamDecl(i)->getDefaultArg();
+        else
+            // can happen in template code
+            continue;
+        std::string callValue = getCallValue(valExpr);
+        std::string paramName = i < functionDecl->getNumParams()
+                                ? functionDecl->getParamDecl(i)->getName()
+                                : llvm::StringRef("###" + std::to_string(i));
+        MyCallSiteInfo funcInfo = niceName(functionDecl, i, paramName, callValue);
         callSet.insert(funcInfo);
     }
     return true;
@@ -224,7 +239,7 @@ bool ConstantParam::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     const FunctionDecl* functionDecl = dyn_cast<FunctionDecl>(decl);
     for (unsigned i = 0; i < functionDecl->getNumParams(); ++i)
     {
-        MyCallSiteInfo funcInfo = niceName(functionDecl, i, functionDecl->getParamDecl(i), "unknown");
+        MyCallSiteInfo funcInfo = niceName(functionDecl, i, functionDecl->getParamDecl(i)->getName(), "unknown3");
         callSet.insert(funcInfo);
     }
     return true;
@@ -240,18 +255,25 @@ bool ConstantParam::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr
                               constructorDecl->getNameInfo().getLoc()))) {
         return true;
     }
-    if (constructorDecl->getNameInfo().getLoc().isValid() && ignoreLocation(constructorDecl)) {
+    if (!constructorDecl->getNameInfo().getLoc().isValid() || ignoreLocation(constructorDecl)) {
         return true;
     }
 
-    for (unsigned i = 0; i < constructExpr->getNumArgs(); ++i)
-    {
-        if (i >= constructorDecl->getNumParams()) // can happen in template code
-            break;
-        const Expr* arg = constructExpr->getArg(i);
-        std::string callValue = getCallValue(arg);
-        const ParmVarDecl* parmVarDecl = constructorDecl->getParamDecl(i);
-        MyCallSiteInfo funcInfo = niceName(constructorDecl, i, parmVarDecl, callValue);
+    unsigned len = std::max(constructExpr->getNumArgs(), constructorDecl->getNumParams());
+    for (unsigned i = 0; i < len; ++i) {
+        const Expr* valExpr;
+        if (i < constructExpr->getNumArgs())
+            valExpr = constructExpr->getArg(i);
+        else if (i < constructorDecl->getNumParams() && constructorDecl->getParamDecl(i)->hasDefaultArg())
+            valExpr = constructorDecl->getParamDecl(i)->getDefaultArg();
+        else
+            // can happen in template code
+            continue;
+        std::string callValue = getCallValue(valExpr);
+        std::string paramName = i < constructorDecl->getNumParams()
+                                ? constructorDecl->getParamDecl(i)->getName()
+                                : llvm::StringRef("###" + std::to_string(i));
+        MyCallSiteInfo funcInfo = niceName(constructorDecl, i, paramName, callValue);
         callSet.insert(funcInfo);
     }
     return true;

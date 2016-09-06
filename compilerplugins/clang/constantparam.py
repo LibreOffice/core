@@ -37,16 +37,14 @@ for callInfo, callValues in callParamSet.iteritems():
     nameAndParams = callInfo[1]
     if len(callValues) != 1:
         continue
-    if "unknown" in callValues:
+    callValue = next(iter(callValues))
+    if "unknown" in callValue:
         continue
-    # ignore anything with only one parameter, normally just setter methods
-    if nameAndParams.find(",") == -1:
-        continue
-    # if it contains anything other than this set, ignore it
-    if len(callValues - set(["0", "1", "-1", "nullptr"])) > 0:
+    # try and ignore setter methods
+    if ("," not in nameAndParams) and (("::set" in nameAndParams) or ("::Set" in nameAndParams)):
         continue
     v0 = callInfo[0] + " " + callInfo[1]
-    v1 = callInfo[2] + " " + (",".join(callValues))
+    v1 = callInfo[2] + " " + callValue
     v2 = definitionToSourceLocationMap[callInfo]
     tmp1list.append((v0,v1,v2))
 
