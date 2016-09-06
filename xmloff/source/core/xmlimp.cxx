@@ -455,10 +455,8 @@ SvXMLImport::~SvXMLImport() throw ()
     delete mpNamespaceMap;
     delete mpUnitConv;
     delete mpEventImportHelper;
-    while( !maContexts.empty() )
+    for ( SvXMLImportContext *pContext : maContexts )
     {
-        SvXMLImportContext *pContext = maContexts.back();
-        maContexts.pop_back();
         if( pContext )
             pContext->ReleaseRef();
     }
