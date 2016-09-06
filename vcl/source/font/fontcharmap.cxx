@@ -23,11 +23,10 @@
 #include <set>
 
 CmapResult::CmapResult( bool bSymbolic,
-    const sal_UCS4* pRangeCodes, int nRangeCount,
-    const int* pStartGlyphs, const sal_uInt16* pExtraGlyphIds )
+    const sal_UCS4* pRangeCodes, int nRangeCount )
 :   mpRangeCodes( pRangeCodes)
-,   mpStartGlyphs( pStartGlyphs)
-,   mpGlyphIds( pExtraGlyphIds)
+,   mpStartGlyphs( nullptr)
+,   mpGlyphIds( nullptr)
 ,   mnRangeCount( nRangeCount)
 ,   mbSymbolic( bSymbolic)
 ,   mbRecoded( false)

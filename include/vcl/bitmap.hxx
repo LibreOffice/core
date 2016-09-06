@@ -609,15 +609,10 @@ public:
         @param rPolyPoly
         The resulting PolyPolygon
 
-        @param nFlags
-        Whether the inline or the outline of the color areas should be
-        represented by the polygon
-
         @return true, if the operation was completed successfully.
      */
     bool                    Vectorize(
-                                tools::PolyPolygon& rPolyPoly,
-                                BmpVectorizeFlags nFlags );
+                                tools::PolyPolygon& rPolyPoly );
 
     /** Convert the bitmap to a meta file
 
@@ -631,10 +626,6 @@ public:
         @param cReduce
         If non-null, minimal size of bound rects for individual polygons. Smaller ones are ignored.
 
-        @param nFlags
-        Whether the inline or the outline of the color areas should be
-        represented by the polygon
-
         @param pProgress
         A callback for showing the progress of the vectorization
 
@@ -643,7 +634,6 @@ public:
     bool                    Vectorize(
                                 GDIMetaFile& rMtf,
                                 sal_uInt8 cReduce,
-                                BmpVectorizeFlags nFlags = BmpVectorizeFlags::Inner,
                                 const Link<long,void>* pProgress = nullptr );
 
     /** Change various global color characteristics

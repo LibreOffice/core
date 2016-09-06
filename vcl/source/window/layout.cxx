@@ -1805,8 +1805,8 @@ IMPL_LINK_TYPED( VclExpander, ClickHdl, CheckBox&, rBtn, void )
     maExpandedHdl.Call(*this);
 }
 
-VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent, WinBits nStyle)
-    : VclBin(pParent, nStyle)
+VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
+    : VclBin(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL | WB_TABSTOP)
     , m_bUserManagedScrolling(false)
     , m_pVScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_VERT))
     , m_pHScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_HORZ))
@@ -2179,9 +2179,8 @@ MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
 MessageDialog::MessageDialog(vcl::Window* pParent,
     const OUString &rMessage,
     VclMessageType eMessageType,
-    VclButtonsType eButtonsType,
-    WinBits nStyle)
-    : Dialog(pParent, nStyle)
+    VclButtonsType eButtonsType)
+    : Dialog(pParent, WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE)
     , m_eButtonsType(eButtonsType)
     , m_eMessageType(eMessageType)
     , m_pGrid(nullptr)

@@ -152,8 +152,7 @@ class VCL_PLUGIN_PUBLIC CmapResult
 {
 public:
     explicit            CmapResult( bool bSymbolic = false,
-                            const sal_uInt32* pRangeCodes = nullptr, int nRangeCount = 0,
-                            const int* pStartGlyphs = nullptr, const sal_uInt16* pGlyphIds = nullptr );
+                            const sal_uInt32* pRangeCodes = nullptr, int nRangeCount = 0 );
 
     const sal_uInt32*   mpRangeCodes;
     const int*          mpStartGlyphs;

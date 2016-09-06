@@ -27,9 +27,8 @@ namespace tools { class PolyPolygon; }
 namespace ImplVectorizer
 {
     bool     ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                            sal_uInt8 cReduce, BmpVectorizeFlags nFlags, const Link<long,void>* pProgress );
-    bool     ImplVectorize( const Bitmap& rMonoBmp, tools::PolyPolygon& rPolyPoly,
-                            BmpVectorizeFlags nFlags );
+                            sal_uInt8 cReduce, const Link<long,void>* pProgress );
+    bool     ImplVectorize( const Bitmap& rMonoBmp, tools::PolyPolygon& rPolyPoly );
 };
 
 #endif

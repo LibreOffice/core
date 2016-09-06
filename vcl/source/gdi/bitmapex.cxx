@@ -476,13 +476,13 @@ bool BitmapEx::ReduceColors( sal_uInt16 nNewColorCount )
     return !!aBitmap && aBitmap.ReduceColors( nNewColorCount, BMP_REDUCE_POPULAR );
 }
 
-bool BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, const Color* pInitColor, bool bExpandTransparent )
+bool BitmapEx::Expand( sal_uLong nDX, sal_uLong nDY, bool bExpandTransparent )
 {
     bool bRet = false;
 
     if( !!aBitmap )
     {
-        bRet = aBitmap.Expand( nDX, nDY, pInitColor );
+        bRet = aBitmap.Expand( nDX, nDY );
 
         if( bRet && ( eTransparent == TransparentType::Bitmap ) && !!aMask )
         {

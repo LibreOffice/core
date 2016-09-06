@@ -2782,7 +2782,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
             Bitmap aBmp( aVDev->GetBitmap(Point(0, 0), aSize));
 
             tools::PolyPolygon aPolyPoly;
-            bool bVectorized = aBmp.Vectorize(aPolyPoly, BmpVectorizeFlags::Outer | BmpVectorizeFlags::ReduceEdges);
+            bool bVectorized = aBmp.Vectorize(aPolyPoly);
             if( !bVectorized )
                 bSuccess = false;
             else

@@ -51,7 +51,7 @@ class ImplChain;
 namespace ImplVectorizer
 {
     ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
-    void     ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce, BmpVectorizeFlags nFlags );
+    void     ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce );
     bool     ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
     bool     ImplIsUp( ImplVectMap* pMap, long nY, long nX );
     void     ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly );
@@ -632,7 +632,7 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
 namespace ImplVectorizer {
 
 bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                                    sal_uInt8 cReduce, BmpVectorizeFlags nFlags, const Link<long,void>* pProgress )
+                    sal_uInt8 cReduce, const Link<long,void>* pProgress )
 {
     bool bRet = false;
 
@@ -688,15 +688,14 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             if( xMap )
             {
                 aPolyPoly.Clear();
-                ImplCalculate( xMap.get(), aPolyPoly, cReduce, nFlags );
+                ImplCalculate( xMap.get(), aPolyPoly, cReduce );
                 xMap.reset();
 
                 if( aPolyPoly.Count() )
                 {
                     ImplLimitPolyPoly( aPolyPoly );
 
-                    if( nFlags & BmpVectorizeFlags::ReduceEdges )
-                        aPolyPoly.Optimize( PolyOptimizeFlags::EDGES );
+                    aPolyPoly.Optimize( PolyOptimizeFlags::EDGES );
 
                     if( aPolyPoly.Count() )
                     {
@@ -734,8 +733,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 }
 
 bool ImplVectorize( const Bitmap& rMonoBmp,
-                                    tools::PolyPolygon& rPolyPoly,
-                                    BmpVectorizeFlags nFlags )
+                                    tools::PolyPolygon& rPolyPoly )
 {
     std::unique_ptr<Bitmap> xBmp(new Bitmap( rMonoBmp ));
     BitmapReadAccess*   pRAcc;
@@ -752,12 +750,11 @@ bool ImplVectorize( const Bitmap& rMonoBmp,
     if( xMap )
     {
         rPolyPoly.Clear();
-        ImplCalculate( xMap.get(), rPolyPoly, 0, nFlags );
+        ImplCalculate( xMap.get(), rPolyPoly, 0 );
         xMap.reset();
         ImplLimitPolyPoly( rPolyPoly );
 
-        if( nFlags & BmpVectorizeFlags::ReduceEdges )
-            rPolyPoly.Optimize( PolyOptimizeFlags::EDGES );
+        rPolyPoly.Optimize( PolyOptimizeFlags::EDGES );
 
         // #i14895#:setting the correct direction for polygons
         // that represent holes and non-holes; non-hole polygons
@@ -938,7 +935,7 @@ ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor )
     return pMap;
 }
 
-void ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce, BmpVectorizeFlags nFlags )
+void ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce )
 {
     const long nWidth = pMap->Width(), nHeight= pMap->Height();
 
@@ -966,10 +963,7 @@ void ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 
                 aChain.ImplBeginAdd( aStartPt );
                 ImplGetChain( pMap, aStartPt, aChain );
 
-                if( nFlags & BmpVectorizeFlags::Inner )
-                    aChain.ImplEndAdd( bInner ? VECT_POLY_INLINE_INNER : VECT_POLY_INLINE_OUTER );
-                else
-                    aChain.ImplEndAdd( bInner ? VECT_POLY_OUTLINE_INNER : VECT_POLY_OUTLINE_OUTER );
+                aChain.ImplEndAdd( bInner ? VECT_POLY_OUTLINE_INNER : VECT_POLY_OUTLINE_OUTER );
 
                 const tools::Polygon& rPoly = aChain.ImplGetPoly();
 

@@ -342,7 +342,7 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
         const Rectangle aRectSrc( Point( 0, 0 ), aSize );
 
         aRet = *(getButtonImage((nHighlight == 0) ? 4 : 0, bLarge));
-        aRet.Expand( aSize.Width(), aSize.Height(), nullptr, true );
+        aRet.Expand( aSize.Width(), aSize.Height(), true );
 
         aRet.CopyPixel( Rectangle( Point( aSize.Width(), 0              ), aSize ), aRectSrc, getButtonImage((nHighlight == 1) ? 5 : 1, bLarge) );
         aRet.CopyPixel( Rectangle( Point( 0,             aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 2) ? 6 : 2, bLarge) );
