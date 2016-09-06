@@ -177,8 +177,8 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper8<
 
     SvXMLNamespaceMap           *mpNamespaceMap;
     SvXMLUnitConverter          *mpUnitConv;
-    SvXMLImportContexts_Impl    *mpContexts;
-    FastSvXMLImportContexts_Impl    *mpFastContexts;
+    SvXMLImportContexts_Impl    maContexts;
+    FastSvXMLImportContexts_Impl    maFastContexts;
     SvXMLNumFmtHelper           *mpNumImport;
     ProgressBarHelper           *mpProgressBarHelper;
     XMLEventImportHelper        *mpEventImportHelper;
