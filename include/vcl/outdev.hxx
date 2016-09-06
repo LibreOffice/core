@@ -1951,8 +1951,7 @@ public:
 
     /** Query the native control to determine if it was acted upon
      */
-    bool                        HitTestNativeControl(
-                                    ControlType nType,
+    bool                        HitTestNativeScrollbar(
                                     ControlPart nPart,
                                     const Rectangle& rControlRegion,
                                     const Point& aPos,

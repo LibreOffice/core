@@ -1433,13 +1433,13 @@ void GenericSalLayout::SortGlyphItems()
     }
 }
 
-MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout, const PhysicalFontFace* pBaseFont )
+MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout )
 :   SalLayout()
 ,   mnLevel( 1 )
 ,   mbIncomplete( false )
 {
     //maFallbackRuns[0].Clear();
-    mpFallbackFonts[ 0 ] = pBaseFont;
+    mpFallbackFonts[ 0 ] = nullptr;
     mpLayouts[ 0 ]  = &rBaseLayout;
     mnUnitsPerPixel = rBaseLayout.GetUnitsPerPixel();
 }

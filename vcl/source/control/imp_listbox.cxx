@@ -241,19 +241,14 @@ sal_Int32 ImplEntryList::FindEntry( const OUString& rString, bool bSearchMRUArea
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-sal_Int32 ImplEntryList::FindMatchingEntry( const OUString& rStr, sal_Int32 nStart, bool bForward, bool bLazy ) const
+sal_Int32 ImplEntryList::FindMatchingEntry( const OUString& rStr, sal_Int32 nStart, bool bLazy ) const
 {
     sal_Int32  nPos = LISTBOX_ENTRY_NOTFOUND;
     sal_Int32  nEntryCount = GetEntryCount();
-    if ( !bForward )
-        nStart++;   // decrements right away
 
     const vcl::I18nHelper& rI18nHelper = mpWindow->GetSettings().GetLocaleI18nHelper();
-    for ( sal_Int32 n = nStart; bForward ? n < nEntryCount : n != 0; )
+    for ( sal_Int32 n = nStart; n < nEntryCount; )
     {
-        if ( !bForward )
-            n--;
-
         ImplEntryType* pImplEntry = GetEntry( n );
         bool bMatch;
         if ( bLazy  )
@@ -270,8 +265,7 @@ sal_Int32 ImplEntryList::FindMatchingEntry( const OUString& rStr, sal_Int32 nSta
             break;
         }
 
-        if ( bForward )
-            n++;
+        n++;
     }
 
     return nPos;

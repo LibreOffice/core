@@ -253,7 +253,7 @@ class VCL_DLLPUBLIC PPDContext
     bool checkConstraints( const PPDKey*, const PPDValue*, bool bDoReset );
     bool resetValue( const PPDKey*, bool bDefaultable = false );
 public:
-    PPDContext( const PPDParser* pParser = nullptr );
+    PPDContext();
     PPDContext( const PPDContext& rContext ) { operator=( rContext ); }
     PPDContext& operator=( const PPDContext& rContext );
     PPDContext& operator=( PPDContext&& rContext );

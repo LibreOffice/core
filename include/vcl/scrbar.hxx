@@ -75,7 +75,7 @@ private:
     SAL_DLLPRIVATE long         ImplCalcThumbPos( long nPixPos );
     SAL_DLLPRIVATE long         ImplCalcThumbPosPix( long nPos );
     SAL_DLLPRIVATE void         ImplCalc( bool bUpdate = true );
-    SAL_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags);
+    SAL_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     using Window::ImplScroll;
     SAL_DLLPRIVATE long         ImplScroll( long nNewPos, bool bCallEndScroll );
     SAL_DLLPRIVATE long         ImplDoAction( bool bCallEndScroll );

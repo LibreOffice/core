@@ -28,7 +28,7 @@ private:
     struct ImplData;
     ImplData* mpImplData;
 public:
-    PopupMenuFloatingWindow( vcl::Window* pParent, WinBits nStyle = (WB_SYSTEMFLOATWIN|WB_SYSTEMWINDOW|WB_NOBORDER) );
+    PopupMenuFloatingWindow( vcl::Window* pParent );
     virtual ~PopupMenuFloatingWindow();
     virtual void dispose() override;
 

@@ -87,7 +87,6 @@ class ModuleElement
 {
 protected:
     rtl::Reference<ModuleImport> mxImport;
-    rtl::Reference<ModuleElement> mxParent;
 
     OUString _aLocalName;
     css::uno::Reference< css::xml::input::XAttributes > _xAttributes;
@@ -97,7 +96,7 @@ public:
     ModuleElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
-        ModuleElement * pParent, ModuleImport * pImport );
+        ModuleImport * pImport );
     virtual ~ModuleElement();
 
     // XElement

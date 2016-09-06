@@ -1572,8 +1572,8 @@ PPDValue* PPDKey::insertValue(const OUString& rOption, PPDValueType eType, bool 
  * PPDContext
  */
 
-PPDContext::PPDContext( const PPDParser* pParser ) :
-        m_pParser( pParser )
+PPDContext::PPDContext() :
+        m_pParser( nullptr )
 {
 }
 

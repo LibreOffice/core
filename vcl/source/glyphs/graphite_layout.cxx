@@ -362,14 +362,13 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
 
 // An implementation of the SalLayout interface to enable Graphite enabled fonts to be used.
 
-GraphiteLayout::GraphiteLayout(const gr_face * face, gr_font * font,
-                               const grutils::GrFeatureParser * pFeatures) throw()
+GraphiteLayout::GraphiteLayout(const gr_face * face) throw()
     : mpFace(face)
-    , mpFont(font)
+    , mpFont(nullptr)
     , mnSegCharOffset(0)
     , mnWidth(0)
     , mfScaling(1.0)
-    , mpFeatures(pFeatures)
+    , mpFeatures(nullptr)
 {
 
 }

@@ -150,16 +150,16 @@ enum class ControlPart
 
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we
-    abuse the HitTestNativeControl interface. All theming engines but aqua
+    abuse the HitTestNativeScrollbar interface. All theming engines but aqua
     are actually able to draw the thumb according to our internal representation.
     However aqua draws a little outside. The canonical way would be to enhance the
-    HitTestNativeControl passing a ScrollbarValue additionally so all necessary
+    HitTestNativeScrollbar passing a ScrollbarValue additionally so all necessary
     information is available in the call.
     .
     However since there is only this one small exception we will deviate a little and
     instead pass the respective rect as control region to allow for a small correction.
 
-    So all places using HitTestNativeControl on ControlPart::ThumbHorz, ControlPart::ThumbVert,
+    So all places using HitTestNativeScrollbar on ControlPart::ThumbHorz, ControlPart::ThumbVert,
     ControlPart::TrackHorzLeft, ControlPart::TrackHorzRight, ControlPart::TrackVertUpper, ControlPart::TrackVertLower
     do not use the control rectangle as region but the actuall part rectangle, making
     only small deviations feasible.

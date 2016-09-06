@@ -355,18 +355,18 @@ IMPL_LINK_TYPED(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
         if (!m_isMatchCase)
         {
             // Try match case insensitive from current position
-            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, nStart);
+            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, nStart, true);
             if ( nPos == LISTBOX_ENTRY_NOTFOUND )
                 // Try match case insensitive, but from start
-                nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText);
+                nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, 0, true);
         }
 
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
             // Try match full from current position
-            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, nStart, true, false);
+            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, nStart, false);
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
             //  Match full, but from start
-            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, 0, true, false);
+            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, 0, false);
 
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
@@ -870,7 +870,7 @@ void ComboBox::Impl::ImplUpdateFloatSelection()
             nSelect = m_pImplLB->GetEntryList()->FindEntry( aSearchStr );
         if ( nSelect == LISTBOX_ENTRY_NOTFOUND )
         {
-            nSelect = m_pImplLB->GetEntryList()->FindMatchingEntry( aSearchStr );
+            nSelect = m_pImplLB->GetEntryList()->FindMatchingEntry( aSearchStr, 0, true );
             bSelect = false;
         }
 

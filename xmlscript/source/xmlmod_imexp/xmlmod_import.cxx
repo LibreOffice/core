@@ -33,7 +33,7 @@ namespace xmlscript
 Reference< xml::input::XElement > ModuleElement::getParent()
     throw (RuntimeException, std::exception)
 {
-    return mxParent.get();
+    return nullptr;
 }
 OUString ModuleElement::getLocalName()
     throw (RuntimeException, std::exception)
@@ -87,9 +87,8 @@ Reference< xml::input::XElement > ModuleElement::startChildElement(
 ModuleElement::ModuleElement(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
-    ModuleElement * pParent, ModuleImport * pImport )
+    ModuleImport * pImport )
     : mxImport( pImport )
-    , mxParent( pParent )
     , _aLocalName( rLocalName )
     , _xAttributes( xAttributes )
 {
@@ -145,7 +144,7 @@ Reference< xml::input::XElement > ModuleImport::startRootElement(
         mrModuleDesc.aLanguage = xAttributes->getValueByUidName( XMLNS_SCRIPT_UID, "language" );
         mrModuleDesc.aModuleType = xAttributes->getValueByUidName( XMLNS_SCRIPT_UID, "moduleType" );
 
-        return new ModuleElement( rLocalName, xAttributes, nullptr, this );
+        return new ModuleElement( rLocalName, xAttributes, this );
     }
     else
     {

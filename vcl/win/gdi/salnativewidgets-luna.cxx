@@ -341,7 +341,7 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 }
 
 /*
- * HitTestNativeControl()
+ * HitTestNativeScrollbar()
  *
  *  If the return value is TRUE, bIsInside contains information whether
  *  aPos was or was not inside the native widget specified by the

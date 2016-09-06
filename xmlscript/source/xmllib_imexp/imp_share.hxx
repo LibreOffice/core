@@ -212,8 +212,8 @@ public:
     LibrariesElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
-        LibElementBase * pParent, LibraryImport * pImport )
-        : LibElementBase( rLocalName, xAttributes, pParent, pImport )
+        LibraryImport * pImport )
+        : LibElementBase( rLocalName, xAttributes, nullptr, pImport )
         {}
 };
 
