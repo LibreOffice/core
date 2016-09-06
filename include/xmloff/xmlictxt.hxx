@@ -34,8 +34,7 @@
 class SvXMLNamespaceMap;
 class SvXMLImport;
 
-class XMLOFF_DLLPUBLIC SvXMLImportContext : public SvRefBase,
-        public ::cppu::WeakImplHelper1< ::css::xml::sax::XFastContextHandler >
+class XMLOFF_DLLPUBLIC SvXMLImportContext : public ::cppu::WeakImplHelper1< ::css::xml::sax::XFastContextHandler >
 {
     friend class SvXMLImport;
 
@@ -125,9 +124,13 @@ public:
     // support multiple images and to rescue evtl. GluePoints imported with one of the
     // to be deprecated contents
     virtual void onDemandRescueUsefulDataFromTemporary( const SvXMLImportContext& rCandidate );
+
+    void AddFirstRef();
+    void AddNextRef();
+    void ReleaseRef();
 };
 
-typedef tools::SvRef<SvXMLImportContext> SvXMLImportContextRef;
+typedef css::uno::Reference<SvXMLImportContext> SvXMLImportContextRef;
 
 #endif // INCLUDED_XMLOFF_XMLICTXT_HXX
 

@@ -167,4 +167,19 @@ void SvXMLImportContext::onDemandRescueUsefulDataFromTemporary( const SvXMLImpor
 {
 }
 
+void SvXMLImportContext::AddFirstRef()
+{
+    acquire();
+}
+
+void SvXMLImportContext::AddNextRef()
+{
+    acquire();
+}
+
+void SvXMLImportContext::ReleaseRef()
+{
+    release();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

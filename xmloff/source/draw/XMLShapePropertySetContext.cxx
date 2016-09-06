@@ -49,9 +49,9 @@ XMLShapePropertySetContext::~XMLShapePropertySetContext()
 void XMLShapePropertySetContext::EndElement()
 {
     Reference< container::XIndexReplace > xNumRule;
-    if( mxBulletStyle.Is() )
+    if( mxBulletStyle.is() )
     {
-        SvxXMLListStyleContext* pBulletStyle = static_cast<SvxXMLListStyleContext*>(&mxBulletStyle);
+        SvxXMLListStyleContext* pBulletStyle = static_cast<SvxXMLListStyleContext*>(mxBulletStyle.get());
         xNumRule = SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() );
         if( xNumRule.is() )
             pBulletStyle->FillUnoNumRule(xNumRule);

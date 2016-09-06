@@ -185,7 +185,7 @@ public:
 
 inline SwXMLTableContext *SwXMLTableContext::GetParentTable() const
 {
-    return static_cast<SwXMLTableContext *>(&m_xParentTable);
+    return static_cast<SwXMLTableContext *>(m_xParentTable.get());
 }
 
 inline sal_uInt32 SwXMLTableContext::GetColumnCount() const

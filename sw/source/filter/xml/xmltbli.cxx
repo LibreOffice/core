@@ -210,7 +210,7 @@ public:
                      OUString const& i_rXmlId);
 
     bool IsUsed() const { return pStartNode!=nullptr ||
-                                     xSubTable.Is() || bProtected;}
+                                     xSubTable.is() || bProtected;}
 
     sal_uInt32 GetRowSpan() const { return nRowSpan; }
     void SetRowSpan( sal_uInt32 nSet ) { nRowSpan = nSet; }
@@ -281,12 +281,12 @@ inline void SwXMLTableCell_Impl::SetStartNode( const SwStartNode *pSttNd )
 
 inline SwXMLTableContext *SwXMLTableCell_Impl::GetSubTable() const
 {
-    return static_cast<SwXMLTableContext *>(&xSubTable);
+    return static_cast<SwXMLTableContext *>(xSubTable.get());
 }
 
 inline void SwXMLTableCell_Impl::Dispose()
 {
-    if( xSubTable.Is() )
+    if( xSubTable.is() )
         xSubTable = nullptr;
 }
 
@@ -412,7 +412,7 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
     bool                    bHasTextContent : 1;
     bool                    bHasTableContent : 1;
 
-    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(&xMyTable); }
+    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
 
     bool HasContent() const { return bHasTextContent || bHasTableContent; }
     inline void InsertContent_();
@@ -738,7 +738,7 @@ class SwXMLTableColContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef   xMyTable;
 
-    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(&xMyTable); }
+    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
 
 public:
 
@@ -823,7 +823,7 @@ class SwXMLTableColsContext_Impl : public SvXMLImportContext
 {
     SvXMLImportContextRef   xMyTable;
 
-    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(&xMyTable); }
+    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
 
 public:
 
@@ -881,7 +881,7 @@ class SwXMLTableRowContext_Impl : public SvXMLImportContext
 
     sal_uInt32                  nRowRepeat;
 
-    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(&xMyTable); }
+    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
 
 public:
 
@@ -1001,7 +1001,7 @@ class SwXMLTableRowsContext_Impl : public SvXMLImportContext
 
     bool bHeader;
 
-    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(&xMyTable); }
+    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
 
 public:
 
@@ -1831,8 +1831,8 @@ SwTableBox *SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
 {
     // The topmost table is the only table that maintains the two members
     // pBox1 and bFirstSection.
-    if( m_xParentTable.Is() )
-        return static_cast<SwXMLTableContext *>(&m_xParentTable)->NewTableBox( pStNd,
+    if( m_xParentTable.is() )
+        return static_cast<SwXMLTableContext *>(m_xParentTable.get())->NewTableBox( pStNd,
                                                                   pUpper );
 
     SwTableBox *pBox;
@@ -2839,8 +2839,8 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
 {
     // The topmost table is the only table that maintains the two members
     // pBox1 and bFirstSection.
-    if( m_xParentTable.Is() )
-        return static_cast<SwXMLTableContext *>(&m_xParentTable)
+    if( m_xParentTable.is() )
+        return static_cast<SwXMLTableContext *>(m_xParentTable.get())
                     ->InsertTableSection(pPrevSttNd, pStringValueStyleName);
 
     const SwStartNode *pStNd;
@@ -2907,7 +2907,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
 
 void SwXMLTableContext::EndElement()
 {
-    if( IsValid() && !m_xParentTable.Is() )
+    if( IsValid() && !m_xParentTable.is() )
     {
         MakeTable();
         GetImport().GetTextImport()->SetCursor( m_xOldCursor );

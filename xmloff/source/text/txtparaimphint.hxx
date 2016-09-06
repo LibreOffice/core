@@ -197,7 +197,7 @@ public:
     css::uno::Reference < css::text::XTextContent > GetTextContent() const
     {
         css::uno::Reference < css::text::XTextContent > xTxt;
-        SvXMLImportContext *pContext = &xContext;
+        SvXMLImportContext *pContext = xContext.get();
         if (XMLTextFrameContext *pFrameContext =  dynamic_cast<XMLTextFrameContext*>(pContext))
             xTxt = pFrameContext->GetTextContent();
         else if (XMLTextFrameHyperlinkContext *pLinkContext = dynamic_cast<XMLTextFrameHyperlinkContext*>(pContext))
@@ -210,7 +210,7 @@ public:
     css::uno::Reference < css::drawing::XShape > GetShape() const
     {
         css::uno::Reference < css::drawing::XShape > xShape;
-        SvXMLImportContext *pContext = &xContext;
+        SvXMLImportContext *pContext = xContext.get();
         if (XMLTextFrameContext *pFrameContext = dynamic_cast<XMLTextFrameContext*>(pContext))
             xShape = pFrameContext->GetShape();
         else if(XMLTextFrameHyperlinkContext *pLinkContext =  dynamic_cast<XMLTextFrameHyperlinkContext*>(pContext))
@@ -222,7 +222,7 @@ public:
     bool IsBoundAtChar() const
     {
         bool bRet = false;
-        SvXMLImportContext *pContext = &xContext;
+        SvXMLImportContext *pContext = xContext.get();
         if (XMLTextFrameContext *pFrameContext = dynamic_cast<XMLTextFrameContext*>(pContext))
             bRet = css::text::TextContentAnchorType_AT_CHARACTER ==
                 pFrameContext->GetAnchorType();
@@ -254,7 +254,7 @@ public:
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
     css::uno::Reference < css::drawing::XShape > GetShape() const
     {
-        return static_cast<SvXMLShapeContext*>(&xContext)->getShape();
+        return static_cast<SvXMLShapeContext*>(xContext.get())->getShape();
     }
 };
 #endif

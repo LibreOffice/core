@@ -134,9 +134,9 @@ SvXMLImportContext *XMLTextFrameHyperlinkContext::CreateChildContext(
 
 TextContentAnchorType XMLTextFrameHyperlinkContext::GetAnchorType() const
 {
-    if( xFrameContext.Is() )
+    if( xFrameContext.is() )
     {
-        SvXMLImportContext *pContext = &xFrameContext;
+        SvXMLImportContext *pContext = xFrameContext.get();
         return dynamic_cast<XMLTextFrameContext&>(*pContext).GetAnchorType();
     }
     else
@@ -147,9 +147,9 @@ TextContentAnchorType XMLTextFrameHyperlinkContext::GetAnchorType() const
 Reference < XTextContent > XMLTextFrameHyperlinkContext::GetTextContent() const
 {
     Reference <XTextContent > xTxt;
-    if( xFrameContext.Is() )
+    if( xFrameContext.is() )
     {
-        SvXMLImportContext *pContext = &xFrameContext;
+        SvXMLImportContext *pContext = xFrameContext.get();
         xTxt = dynamic_cast<XMLTextFrameContext&>(*pContext).GetTextContent();
     }
 
@@ -160,9 +160,9 @@ Reference < XTextContent > XMLTextFrameHyperlinkContext::GetTextContent() const
 Reference < drawing::XShape > XMLTextFrameHyperlinkContext::GetShape() const
 {
     Reference < drawing::XShape > xShape;
-    if( xFrameContext.Is() )
+    if( xFrameContext.is() )
     {
-        SvXMLImportContext *pContext = &xFrameContext;
+        SvXMLImportContext *pContext = xFrameContext.get();
         xShape = dynamic_cast<XMLTextFrameContext&>(*pContext).GetShape();
     }
 

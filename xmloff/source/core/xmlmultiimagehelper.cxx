@@ -94,7 +94,7 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
 
         for(a = 0; a < maImplContextVector.size(); a++)
         {
-            const OUString aStreamURL(getGraphicURLFromImportContext(*maImplContextVector[a]));
+            const OUString aStreamURL(getGraphicURLFromImportContext(*maImplContextVector[a].get()));
             const sal_uInt32 nNewQuality(getQualityIndex(aStreamURL));
 
             if(nNewQuality > nBestQuality)
@@ -118,9 +118,9 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
         // remove the rest from parent
         for(a = 0; a < maImplContextVector.size(); a++)
         {
-            SvXMLImportContext& rCandidate = *maImplContextVector[a];
+            SvXMLImportContext& rCandidate = *maImplContextVector[a].get();
 
-            if(pContext)
+            if(pContext.is())
             {
                 // #i124143# evtl. copy imported GluePoints before deprecating
                 // this graphic and context
