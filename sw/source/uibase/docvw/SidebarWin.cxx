@@ -677,17 +677,8 @@ void SwSidebarWin::CheckMetaText()
         mpMetadataAuthor->SetText(sMeta);
     }
 
-    Date aSysDate( Date::SYSTEM );
     Date aDate = GetDate();
-    if (aDate==aSysDate)
-    {
-        sMeta = SW_RESSTR(STR_POSTIT_TODAY);
-    }
-    else if (aDate == Date(aSysDate-1))
-    {
-        sMeta = SW_RESSTR(STR_POSTIT_YESTERDAY);
-    }
-    else if (aDate.IsValidAndGregorian() )
+    if (aDate.IsValidAndGregorian() )
     {
         sMeta = rLocalData.getDate(aDate);
     }
