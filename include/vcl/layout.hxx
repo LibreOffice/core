@@ -203,8 +203,8 @@ enum VclButtonBoxStyle
 class VCL_DLLPUBLIC VclButtonBox : public VclBox
 {
 public:
-    VclButtonBox(vcl::Window *pParent, int nSpacing)
-        : VclBox(pParent, false, nSpacing)
+    VclButtonBox(vcl::Window *pParent)
+        : VclBox(pParent, false, 0/*nSpacing*/)
         , m_eLayoutStyle(VCL_BUTTONBOX_DEFAULT_STYLE)
     {
     }
@@ -235,7 +235,7 @@ class VCL_DLLPUBLIC VclVButtonBox : public VclButtonBox
 {
 public:
     VclVButtonBox(vcl::Window *pParent)
-        : VclButtonBox(pParent, 0)
+        : VclButtonBox(pParent)
     {
         m_bVerticalContainer = true;
     }
@@ -274,7 +274,7 @@ class VCL_DLLPUBLIC VclHButtonBox : public VclButtonBox
 {
 public:
     VclHButtonBox(vcl::Window *pParent)
-        : VclButtonBox(pParent, 0)
+        : VclButtonBox(pParent)
     {
         m_bVerticalContainer = false;
     }
@@ -485,7 +485,7 @@ private:
 class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
 {
 public:
-    VclScrolledWindow(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL | WB_TABSTOP );
+    VclScrolledWindow(vcl::Window *pParent );
     virtual ~VclScrolledWindow() { disposeOnce(); }
     virtual void dispose() override;
     virtual vcl::Window *get_child() override;
@@ -513,8 +513,8 @@ private:
 class VCL_DLLPUBLIC VclViewport : public VclBin
 {
 public:
-    VclViewport(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN)
-        : VclBin(pParent, nStyle)
+    VclViewport(vcl::Window *pParent)
+        : VclBin(pParent, WB_HIDE | WB_CLIPCHILDREN)
     {
     }
 protected:
@@ -664,8 +664,7 @@ public:
     MessageDialog(vcl::Window* pParent,
         const OUString &rMessage,
         VclMessageType eMessageType = VclMessageType::Error,
-        VclButtonsType eButtonsType = VCL_BUTTONS_OK,
-        WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
+        VclButtonsType eButtonsType = VCL_BUTTONS_OK);
     MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString &rKey, const OString &rValue) override;
     virtual short Execute() override;

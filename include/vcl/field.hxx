@@ -56,7 +56,7 @@ protected:
     bool                    IsDefaultLocale() const { return mbDefaultLocale; }
 
 public:
-    explicit                FormatterBase( Edit* pField = nullptr );
+    explicit                FormatterBase();
     virtual                 ~FormatterBase();
 
     const LocaleDataWrapper& GetLocaleDataWrapper() const;

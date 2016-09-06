@@ -366,9 +366,9 @@ void ImplUpdateSeparators( const OUString& rOldDecSep, const OUString& rNewDecSe
 
 } // namespace
 
-FormatterBase::FormatterBase( Edit* pField )
+FormatterBase::FormatterBase()
 {
-    mpField                     = pField;
+    mpField                     = nullptr;
     mpLocaleDataWrapper         = nullptr;
     mbReformat                  = false;
     mbStrictFormat              = false;

@@ -2291,13 +2291,11 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
     return nRes;
 }
 
-sal_uInt16 GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream, sal_uInt32 nCompression)
+sal_uInt16 GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream)
 {
-    nCompression = MinMax(nCompression, 0, 100);
-
     css::uno::Sequence< css::beans::PropertyValue > aFilterData(1);
     aFilterData[0].Name = "Compression";
-    aFilterData[0].Value <<= nCompression;
+    aFilterData[0].Value <<= (sal_uInt32) 9;
 
     sal_uInt16 nFilterFormat = GetExportFormatNumberForShortName("PNG");
     return ExportGraphic(rGraphic, OUString(), rOutputStream, nFilterFormat, &aFilterData);

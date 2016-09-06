@@ -144,9 +144,6 @@ public:
         @param nDY
         Number of scanlines to pad at the bottom border of the bitmap
 
-        @param pInitColor
-        Color to use for padded pixel
-
         @param bExpandTransparent
         Whether to expand the transparency color or not.
 
@@ -156,7 +153,6 @@ public:
      */
     bool                Expand(
                             sal_uLong nDX, sal_uLong nDY,
-                            const Color* pInitColor = nullptr,
                             bool bExpandTransparent = false );
 
     /** Copy a rectangular area from another bitmap

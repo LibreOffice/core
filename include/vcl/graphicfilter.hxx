@@ -315,7 +315,7 @@ public:
                      GraphicFilter* pFilter = nullptr,
                      sal_uInt16* pDeterminedFormat = nullptr );
 
-    sal_uInt16 compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream, sal_uInt32 nCompression);
+    sal_uInt16 compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream);
 };
 
 #endif // INCLUDED_VCL_GRAPHICFILTER_HXX

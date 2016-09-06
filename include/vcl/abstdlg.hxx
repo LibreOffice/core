@@ -85,7 +85,7 @@ public:
     virtual VclAbstractDialog* CreateVclDialog( vcl::Window* pParent, sal_uInt32 nResId ) = 0;
 
     // creates instance of PasswordToOpenModifyDialog from cui
-    virtual AbstractPasswordToOpenModifyDialog* CreatePasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) = 0;
+    virtual AbstractPasswordToOpenModifyDialog* CreatePasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) = 0;
 
     // creates instance of ScreenshotAnnotationDlg from cui
     virtual AbstractScreenshotAnnotationDlg* CreateScreenshotAnnotationDlg(
