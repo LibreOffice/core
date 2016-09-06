@@ -85,10 +85,6 @@ namespace sw { namespace sidebar {
         void ExecuteSizeChange( const Paper ePaper );
         void ClosePageSizePopup();
 
-        VclPtr< svx::sidebar::PopupControl> CreatePageColumnControl( svx::sidebar::PopupContainer* pParent );
-        void ExecuteColumnChange( const sal_uInt16 nColumnType );
-        void ClosePageColumnPopup();
-
         void StartUndo();
         void EndUndo();
 
@@ -105,7 +101,6 @@ namespace sw { namespace sidebar {
         // toolboxes - on click open corresponding popup
         VclPtr<ToolBox>                mpToolBoxMargin;
         VclPtr<ToolBox>                mpToolBoxSize;
-        VclPtr<ToolBox>                mpToolBoxColumn;
 
         Image*                  maImgSize;
         Image*                  maImgSize_L;
@@ -137,18 +132,6 @@ namespace sw { namespace sidebar {
         Image                   mImgLetter_L;
         Image                   mImgLegal_L;
         Image                   mImgSizeNone_L;
-        Image                   mImgColumn1;
-        Image                   mImgColumn2;
-        Image                   mImgColumn3;
-        Image                   mImgLeft;
-        Image                   mImgRight;
-        Image                   mImgColumnNone;
-        Image                   mImgColumn1_L;
-        Image                   mImgColumn2_L;
-        Image                   mImgColumn3_L;
-        Image                   mImgLeft_L;
-        Image                   mImgRight_L;
-        Image                   mImgColumnNone_L;
 
         // item keeping the following page style attributes:
         // - page orientation
@@ -167,9 +150,6 @@ namespace sw { namespace sidebar {
         // Paper corresponding to the page style's page size
         Paper mePaper;
 
-        // item keeping the page column type
-        std::unique_ptr<SfxInt16Item> mpPageColumnTypeItem;
-
         FieldUnit           meFUnit;
         MapUnit             meUnit;
 
@@ -178,13 +158,11 @@ namespace sw { namespace sidebar {
         ::sfx2::sidebar::ControllerItem m_aSwPagePgLRControl;
         ::sfx2::sidebar::ControllerItem m_aSwPagePgSizeControl;
         ::sfx2::sidebar::ControllerItem m_aSwPagePgControl;
-        ::sfx2::sidebar::ControllerItem m_aSwPageColControl;
         ::sfx2::sidebar::ControllerItem m_aSwPagePgMetricControl;
 
         // popups
         svx::sidebar::Popup maMarginPopup;
         svx::sidebar::Popup maSizePopup;
-        svx::sidebar::Popup maColumnPopup;
 
         const css::uno::Reference< css::document::XUndoManager > mxUndoManager;
 
@@ -193,7 +171,6 @@ namespace sw { namespace sidebar {
         // handler for popup toolboxes to show the popups
         DECL_LINK_TYPED(ClickMarginHdl, ToolBox*, void);
         DECL_LINK_TYPED(ClickSizeHdl, ToolBox*, void);
-        DECL_LINK_TYPED(ClickColumnHdl, ToolBox*, void);
 
         void Initialize();
 
@@ -202,7 +179,6 @@ namespace sw { namespace sidebar {
         // helper to adjust popup toolbox' images
         void ChangeMarginImage();
         void ChangeSizeImage();
-        void ChangeColumnImage( const sal_uInt16 nColumnType );
 
     };
 
