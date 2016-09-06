@@ -16,40 +16,31 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGECOLUMNCONTROL_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGECOLUMNCONTROL_HXX
+#include <PageColumnPopup.hxx>
+#include "PageColumnControl.hxx"
+#include <svl/intitem.hxx>
+#include <vcl/toolbox.hxx>
 
-#include <svx/tbxctl.hxx>
-#include <vcl/button.hxx>
+SFX_IMPL_TOOLBOX_CONTROL(PageColumnPopup, SfxInt16Item);
 
-namespace sw { namespace sidebar {
-
-class PagePropertyPanel;
-
-class PageColumnControl : public SfxPopupWindow
+PageColumnPopup::PageColumnPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+    : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
-public:
-    PageColumnControl( sal_uInt16 nId );
+    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits(nId));
+}
 
-    virtual ~PageColumnControl();
-    virtual void dispose() override;
+PageColumnPopup::~PageColumnPopup()
+{
+}
 
-private:
-    VclPtr<PushButton> m_pOneColumn;
-    VclPtr<PushButton> m_pTwoColumns;
-    VclPtr<PushButton> m_pThreeColumns;
-    VclPtr<PushButton> m_pLeft;
-    VclPtr<PushButton> m_pRight;
-    VclPtr<PushButton> m_pMoreButton;
+VclPtr<SfxPopupWindow> PageColumnPopup::CreatePopupWindow()
+{
+    VclPtr<sw::sidebar::PageColumnControl> pControl = VclPtr<sw::sidebar::PageColumnControl>::Create(GetSlotId());
+    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoAppFocusClose);
+    SetPopupWindow(pControl);
 
-    static void ExecuteColumnChange( const sal_uInt16 nColumnType );
+    return pControl;
+}
 
-    DECL_LINK_TYPED( ColumnButtonClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( MoreButtonClickHdl_Impl, Button*, void );
-};
-
-} } // end of namespace sw::sidebar
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

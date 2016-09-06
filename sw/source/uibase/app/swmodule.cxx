@@ -111,6 +111,7 @@
 #include <svx/rubydialog.hxx>
 #include <svtools/colorcfg.hxx>
 #include <PageOrientationPopup.hxx>
+#include <PageColumnPopup.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -293,6 +294,7 @@ void SwDLL::RegisterControls()
     svx::ParaULSpacingControl::RegisterControl(SID_ATTR_PARA_ULSPACE, pMod);
     svx::ParaLRSpacingControl::RegisterControl(SID_ATTR_PARA_LRSPACE, pMod);
     PageOrientationPopup::RegisterControl(SID_ATTR_PAGE_ORIENTATION, pMod);
+    PageColumnPopup::RegisterControl(SID_ATTR_PAGE_COLUMN, pMod);
 
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
 
