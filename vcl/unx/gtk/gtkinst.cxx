@@ -230,6 +230,7 @@ SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWind
     return new GtkSalObject( static_cast<GtkSalFrame*>(pParent), bShow );
 }
 
+#if !GTK_CHECK_VERSION(3,0,0)
 SalI18NImeStatus* GtkInstance::CreateI18NImeStatus()
 {
     //we want the default SalInstance::CreateI18NImeStatus returns the no-op
@@ -237,6 +238,7 @@ SalI18NImeStatus* GtkInstance::CreateI18NImeStatus()
     //one would use otherwise
     return SalInstance::CreateI18NImeStatus();
 }
+#endif
 
 extern "C"
 {
