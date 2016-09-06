@@ -243,7 +243,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         if ((m_nCellxMax - m_nTopLevelCurrentCellX) >= MINLAY)
         {
             auto pXValueLast = m_aStates.top().aTableRowSprms.find(NS_ooxml::LN_CT_TblGridBase_gridCol, false);
-            auto pXValue = std::make_shared<RTFValue>(pXValueLast->getInt() + m_nCellxMax - m_nTopLevelCurrentCellX);
+            const int nXValueLast = pXValueLast ? pXValueLast->getInt() : 0;
+            auto pXValue = std::make_shared<RTFValue>(nXValueLast + m_nCellxMax - m_nTopLevelCurrentCellX);
             m_aStates.top().aTableRowSprms.eraseLast(NS_ooxml::LN_CT_TblGridBase_gridCol);
             m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue, RTFOverwrite::NO_APPEND);
             m_nTopLevelCurrentCellX = m_nCellxMax;
