@@ -39,21 +39,23 @@ enum class SchedulerPriority {
 
 class VCL_DLLPUBLIC Scheduler
 {
+    friend struct ImplSchedulerData;
+
+private:
+    static inline void UpdateMinPeriod( ImplSchedulerData *pSchedulerData,
+                                        const sal_uInt64 nTime, sal_uInt64 &nMinPeriod );
+
 protected:
     ImplSchedulerData*  mpSchedulerData;    /// Pointer to element in scheduler list
     const sal_Char     *mpDebugName;        /// Useful for debugging
     SchedulerPriority   mePriority;         /// Scheduler priority
 
-    // These should be constexpr static, when supported.
-    static const sal_uInt64 ImmediateTimeoutMs = 1;
-    static const sal_uInt64 InfiniteTimeoutMs = 1000 * 60 * 60 * 24; // 1 day
+    static const SAL_CONSTEXPR sal_uInt64 ImmediateTimeoutMs = 1;
+    static const SAL_CONSTEXPR sal_uInt64 InfiniteTimeoutMs  = SAL_MAX_UINT64;
 
     static void ImplStartTimer(sal_uInt64 nMS, bool bForce = false);
 
-    friend struct ImplSchedulerData;
     virtual void SetDeletionFlags();
-    /// Schedule only when other timers and events are processed
-    virtual bool IsIdle() const = 0;
 
     virtual bool ReadyForSchedule( const sal_uInt64 nTime, const bool bIdle ) const = 0;
     virtual void UpdateMinPeriod( const sal_uInt64 nTime, sal_uInt64 &nMinPeriod ) const = 0;
@@ -81,9 +83,7 @@ public:
     static void ImplDeInitScheduler();
 
     /// Process one pending Timer with highhest priority
-    static void CallbackTaskScheduling( bool ignore );
-    /// Calculate minimum timeout - and return its value.
-    static sal_uInt64 CalculateMinimumTimeout( bool &bHasActiveIdles );
+    static void CallbackTaskScheduling( bool bIdle );
     /// Process one pending task ahead of time with highest priority.
     static bool       ProcessTaskScheduling( bool bIdle );
     /// Process all events until we are idle
