@@ -63,10 +63,10 @@ void Idle::Start()
     Scheduler::ImplStartTimer(nPeriod);
 }
 
-bool Idle::ReadyForSchedule( bool bTimerOnly, sal_uInt64 /* nTimeNow */ ) const
+bool Idle::ReadyForSchedule( const sal_uInt64 /* nTime */, const bool bTimer ) const
 {
     // always ready if not only looking for timers.
-    return !bTimerOnly;
+    return !bTimer;
 }
 
 bool Idle::IsIdle() const
@@ -74,10 +74,9 @@ bool Idle::IsIdle() const
     return true;
 }
 
-sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 /* nMinPeriod */, sal_uInt64 /* nTime */ ) const
+void Idle::UpdateMinPeriod( const sal_uInt64 /* nTime */, sal_uInt64 &nMinPeriod ) const
 {
-    assert(false); // idles currently don't hit this.
-    return ImmediateTimeoutMs;
+    nMinPeriod = ImmediateTimeoutMs;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

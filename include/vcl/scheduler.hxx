@@ -52,15 +52,11 @@ protected:
 
     friend struct ImplSchedulerData;
     virtual void SetDeletionFlags();
-    /// Is this item ready to be dispatched at nTimeNow
-    virtual bool ReadyForSchedule( bool bTimerOnly, sal_uInt64 nTimeNow ) const = 0;
     /// Schedule only when other timers and events are processed
     virtual bool IsIdle() const = 0;
-    /**
-     * Adjust nMinPeriod downwards if we want to be notified before
-     * then, nTimeNow is the current time.
-     */
-    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const = 0;
+
+    virtual bool ReadyForSchedule( const sal_uInt64 nTime, const bool bTimer ) const = 0;
+    virtual void UpdateMinPeriod( const sal_uInt64 nTime, sal_uInt64 &nMinPeriod ) const = 0;
 
 public:
     Scheduler( const sal_Char *pDebugName );
