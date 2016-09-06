@@ -1403,6 +1403,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     case RTF_DIBITMAP:
         m_aStates.top().aPicture.eStyle = RTFBmpStyle::DIBITMAP;
         break;
+    case RTF_TRWWIDTHA:
+        m_aStates.top().nTableRowWidthAfter = nParam;
+        break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle value '" << keywordToString(nKeyword) << "'");
