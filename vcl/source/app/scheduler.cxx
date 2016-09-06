@@ -46,15 +46,15 @@ void ImplSchedulerData::Invoke()
     mbInScheduler = false;
 }
 
-ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimerOnly, sal_uInt64 nTimeNow )
+ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bIdle, sal_uInt64 nTimeNow )
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplSchedulerData *pMostUrgent = nullptr;
 
     for ( ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData; pSchedulerData; pSchedulerData = pSchedulerData->mpNext )
     {
-        if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete ||
-             !pSchedulerData->mpScheduler->ReadyForSchedule( bTimerOnly, nTimeNow ) ||
+        if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete || pSchedulerData->mbInScheduler ||
+             !pSchedulerData->mpScheduler->ReadyForSchedule( bIdle, nTimeNow ) ||
              !pSchedulerData->mpScheduler->IsActive())
             continue;
         if (!pMostUrgent)
@@ -158,20 +158,20 @@ void InitSystemTimer(ImplSVData* pSVData)
 
 }
 
-void Scheduler::CallbackTaskScheduling(bool)
+void Scheduler::CallbackTaskScheduling( bool bIdle )
 {
     // this function is for the saltimer callback
-    Scheduler::ProcessTaskScheduling( false );
+    Scheduler::ProcessTaskScheduling( bIdle );
 }
 
-bool Scheduler::ProcessTaskScheduling( bool bTimerOnly )
+bool Scheduler::ProcessTaskScheduling( bool bIdle )
 {
     ImplSchedulerData* pSchedulerData;
     sal_uInt64         nTime = tools::Time::GetSystemTicks();
 
     DBG_TESTSOLARMUTEX();
 
-    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimerOnly, nTime)))
+    if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bIdle, nTime)))
     {
         SAL_INFO("vcl.schedule", "Invoke task " << pSchedulerData->GetDebugName());
 
@@ -197,8 +197,6 @@ bool Scheduler::GetDeterministicMode()
 
 sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
 {
-    // process all pending Tasks
-    // if bTimer True, only handle timer
     ImplSchedulerData* pSchedulerData = nullptr;
     ImplSchedulerData* pPrevSchedulerData = nullptr;
     ImplSVData*        pSVData = ImplGetSVData();

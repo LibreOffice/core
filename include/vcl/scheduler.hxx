@@ -54,7 +54,7 @@ protected:
     friend struct ImplSchedulerData;
     virtual void SetDeletionFlags();
     /// Is this item ready to be dispatched at nTimeNow
-    virtual bool ReadyForSchedule( bool bTimerOnly, sal_uInt64 nTimeNow ) const = 0;
+    virtual bool ReadyForSchedule( bool bIdle, sal_uInt64 nTimeNow ) const = 0;
     /// Schedule only when other timers and events are processed
     virtual bool IsIdle() const = 0;
     /**
@@ -90,7 +90,7 @@ public:
     /// Calculate minimum timeout - and return its value.
     static sal_uInt64 CalculateMinimumTimeout( bool &bHasActiveIdles );
     /// Process one pending task ahead of time with highest priority.
-    static bool       ProcessTaskScheduling( bool bTimerOnly );
+    static bool       ProcessTaskScheduling( bool bIdle );
     /// Process all events until we are idle
     static void       ProcessEventsToIdle();
 
