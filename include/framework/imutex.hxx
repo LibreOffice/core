@@ -24,29 +24,19 @@
 
 namespace framework{
 
-/*-************************************************************************************************************
-    @descr          We need this interface to support using of different mutex implementations in a generic way.
-*//*-*************************************************************************************************************/
+/// Interface to support different mutex implementations in a generic way.
 class SAL_NO_VTABLE IMutex
 {
-
-    //  public methods
-
     public:
-
-        /*-****************************************************************************************************
-            @descr      These functions must be supported by a derived class!
-                            acquire()     -try to register thread
-                            release()     -unregister thread
-        *//*-*****************************************************************************************************/
+        /// try to register thread
         virtual void acquire() = 0;
+        /// unregister thread
         virtual void release() = 0;
 
     protected:
         ~IMutex() {}
-};      //  class IMutex
-
-}       //  namespace framework
+};
+}
 
 #endif // INCLUDED_FRAMEWORK_IMUTEX_HXX
 
