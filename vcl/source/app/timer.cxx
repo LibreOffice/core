@@ -28,7 +28,7 @@ void Timer::SetDeletionFlags()
         Scheduler::SetDeletionFlags();
 }
 
-bool Timer::ReadyForSchedule( const sal_uInt64 nTime, bool /* bTimer */ ) const
+bool Timer::ReadyForSchedule( const sal_uInt64 nTime, bool /* bIdle */ ) const
 {
     return (mpSchedulerData->mnUpdateTime + mnTimeout) <= nTime;
 }
