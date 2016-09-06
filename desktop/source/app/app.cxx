@@ -1931,9 +1931,21 @@ class ExitTimer : public Timer
 IMPL_LINK_NOARG_TYPED(Desktop, OpenClients_Impl, void*, void)
 {
     try {
-        OpenClients();
-
+        // #114963#
+        // Enable IPC thread before OpenClients
+        //
+        // This is because it is possible for another client to connect during the OpenClients() call.
+        // This can happen on Windows when document is printed (not opened) and another client wants to print (when printing multiple documents).
+        // If the IPC thread is enabled after OpenClients, then the client will not be processed because the application will exit after printing. i.e RequestHandler::AreRequestsPending() will always return false
+        //
+        // ALSO:
+        //
+        // Multiple clients may request simultaneous connections.
+        // When this server closes down it attempts to recreate the pipe (in RequestHander::Disable()).
+        // It's possible that the client has a pending connection request.
+        // When the IPC thread is not running, this connection locks (because maPipe.accept()) is never called
         RequestHandler::SetReady();
+        OpenClients();
 
         CloseSplashScreen();
         CheckFirstRun( );
