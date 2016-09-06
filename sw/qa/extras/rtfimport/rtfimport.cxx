@@ -2684,6 +2684,16 @@ DECLARE_RTFIMPORT_TEST(testTdf100507, "tdf100507.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6618), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf44986, "tdf44986.rtf")
+{
+    // Check that the table at the second paragraph.
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    // Check the first row of the table, it should have two cells (one separator).
+    // This was 0: the first row had no separators, so it had only one cell, which was too wide.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

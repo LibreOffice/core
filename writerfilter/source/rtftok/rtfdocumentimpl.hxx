@@ -314,6 +314,9 @@ public:
     OUString aPropName;
     /// User-defined property: value type.
     css::uno::Type aPropType;
+
+    /// Width of invisible cell at the end of the row.
+    int nTableRowWidthAfter;
 };
 
 /// An RTF stack is similar to std::stack, except that it has an operator[].
