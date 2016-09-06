@@ -2287,12 +2287,12 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                           pBuffer->pRowProperties,
                           m_nNestedCells, m_nNestedCurrentCellX);
 
-        assert(m_aStates.top().pCurrentBuffer == &m_aTableBufferStack.back());
-        if (m_aTableBufferStack.size() == 1)
+        if (m_aTableBufferStack.size() == 1 || !m_aStates.top().pCurrentBuffer)
         {
             throw io::WrongFormatException(
                 "mismatch between \\itap and number of \\nestrow", nullptr);
         }
+        assert(m_aStates.top().pCurrentBuffer == &m_aTableBufferStack.back());
         // note: there may be several states pointing to table buffer!
         for (size_t i = 0; i < m_aStates.size(); ++i)
         {
