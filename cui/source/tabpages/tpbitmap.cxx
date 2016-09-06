@@ -829,7 +829,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickImportHdl, Button*, void)
         }
         else
             // graphic couldn't be loaded
-            ScopedVclPtrInstance<MessageDialog>::Create( GetParentDialog()
+            ScopedVclPtrInstance<MessageDialog>( GetParentDialog()
                           ,"NoLoadedFileDialog"
                           ,"cui/ui/querynoloadedfiledialog.ui")->Execute();
     }
