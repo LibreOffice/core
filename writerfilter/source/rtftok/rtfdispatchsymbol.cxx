@@ -229,6 +229,16 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     break;
     case RTF_ROW:
     {
+        if (m_aStates.top().nTableRowWidthAfter > 0)
+        {
+            // Add fake cellx / cell, RTF equivalent of
+            // OOXMLFastContextHandlerTextTableRow::handleGridAfter().
+            auto pXValue = std::make_shared<RTFValue>(m_aStates.top().nTableRowWidthAfter);
+            m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue, RTFOverwrite::NO_APPEND);
+            dispatchSymbol(RTF_CELL);
+            m_aStates.top().nTableRowWidthAfter = 0;
+        }
+
         bool bRestored = false;
         // Ending a row, but no cells defined?
         // See if there was an invalid table row reset, so we can restore cell infos to help invalid documents.
