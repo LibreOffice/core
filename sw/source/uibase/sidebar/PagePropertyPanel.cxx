@@ -29,7 +29,6 @@
 #include <svx/sidebar/PopupContainer.hxx>
 #include "PageMarginControl.hxx"
 #include "PageSizeControl.hxx"
-#include "PageColumnControl.hxx"
 
 #include <swtypes.hxx>
 #include <cmdid.h>
@@ -53,7 +52,6 @@
 
 const char UNO_MARGIN[]      = ".uno:Margin";
 const char UNO_SIZE[]        = ".uno:Size";
-const char UNO_COLUMN[]      = ".uno:Column";
 
 namespace {
     const css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::uno::Reference< css::frame::XFrame >& rxFrame )
@@ -134,25 +132,12 @@ PagePropertyPanel::PagePropertyPanel(
     , mImgLetter_L              (SW_RES(IMG_PAGE_LETTER_L))
     , mImgLegal_L                   (SW_RES(IMG_PAGE_LEGAL_L))
     , mImgSizeNone_L                (SW_RES(IMG_PAGE_SIZE_NONE_L))
-    , mImgColumn1                   (SW_RES(IMG_PAGE_COLUMN_1))
-    , mImgColumn2                   (SW_RES(IMG_PAGE_COLUMN_2))
-    , mImgColumn3                   (SW_RES(IMG_PAGE_COLUMN_3))
-    , mImgLeft                  (SW_RES(IMG_PAGE_COLUMN_LEFT))
-    , mImgRight                 (SW_RES(IMG_PAGE_COLUMN_RIGHT))
-    , mImgColumnNone                (SW_RES(IMG_PAGE_COLUMN_NONE))
-    , mImgColumn1_L             (SW_RES(IMG_PAGE_COLUMN_1_L))
-    , mImgColumn2_L             (SW_RES(IMG_PAGE_COLUMN_2_L))
-    , mImgColumn3_L             (SW_RES(IMG_PAGE_COLUMN_3_L))
-    , mImgLeft_L                    (SW_RES(IMG_PAGE_COLUMN_LEFT_L))
-    , mImgRight_L                   (SW_RES(IMG_PAGE_COLUMN_RIGHT_L))
-    , mImgColumnNone_L          (SW_RES(IMG_PAGE_COLUMN_NONE_L))
 
     , mpPageItem( new SvxPageItem(SID_ATTR_PAGE) )
     , mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) )
     , mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) )
     , mpPageSizeItem( new SvxSizeItem(SID_ATTR_PAGE_SIZE) )
     , mePaper( PAPER_USER )
-    , mpPageColumnTypeItem( new SfxInt16Item(SID_ATTR_PAGE_COLUMN) )
 
     , meFUnit()
     , meUnit()
@@ -161,7 +146,6 @@ PagePropertyPanel::PagePropertyPanel(
     , m_aSwPagePgLRControl(SID_ATTR_PAGE_LRSPACE, *pBindings, *this)
     , m_aSwPagePgSizeControl(SID_ATTR_PAGE_SIZE, *pBindings, *this)
     , m_aSwPagePgControl(SID_ATTR_PAGE, *pBindings, *this)
-    , m_aSwPageColControl(SID_ATTR_PAGE_COLUMN, *pBindings, *this)
     , m_aSwPagePgMetricControl(SID_ATTR_METRIC, *pBindings, *this)
 
     , maMarginPopup( this,
@@ -170,9 +154,6 @@ PagePropertyPanel::PagePropertyPanel(
     , maSizePopup( this,
             [this] (svx::sidebar::PopupContainer *parent) { return this->CreatePageSizeControl(parent); },
                    OUString("Page size") )
-    , maColumnPopup( this,
-            [this] (svx::sidebar::PopupContainer *parent) { return this->CreatePageColumnControl(parent); },
-                     OUString("Page columns") )
 
     , mxUndoManager( getUndoManager( rxFrame ) )
 
@@ -181,7 +162,6 @@ PagePropertyPanel::PagePropertyPanel(
     // visible controls
     get(mpToolBoxMargin, "selectmargin");
     get(mpToolBoxSize, "selectsize");
-    get(mpToolBoxColumn, "selectcolumn");
 
     Initialize();
     mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify = true;
@@ -206,16 +186,13 @@ void PagePropertyPanel::dispose()
 
     mpToolBoxMargin.clear();
     mpToolBoxSize.clear();
-    mpToolBoxColumn.clear();
 
     m_aSwPagePgULControl.dispose();
     m_aSwPagePgLRControl.dispose();
     m_aSwPagePgSizeControl.dispose();
     m_aSwPagePgControl.dispose();
-    m_aSwPageColControl.dispose();
     m_aSwPagePgMetricControl.dispose();
 
-    maColumnPopup.dispose();
     maSizePopup.dispose();
     maMarginPopup.dispose();
 
@@ -257,14 +234,6 @@ void PagePropertyPanel::Initialize()
     maImgSize_L[5] = mImgC5_L;
     maImgSize_L[6] = mImgLetter_L;
     maImgSize_L[7] = mImgLegal_L;
-
-    // popup for page column property
-    const sal_uInt16 nIdColumn = mpToolBoxColumn->GetItemId(UNO_COLUMN);
-    aLink = LINK( this, PagePropertyPanel, ClickColumnHdl );
-    mpToolBoxColumn->SetDropdownClickHdl( aLink );
-    mpToolBoxColumn->SetSelectHdl( aLink );
-    mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn1);
-    mpToolBoxColumn->SetItemBits( nIdColumn, mpToolBoxColumn->GetItemBits( nIdColumn ) | ToolBoxItemBits::DROPDOWNONLY );
 
     meFUnit = GetModuleFieldUnit();
     meUnit  = m_aSwPagePgSizeControl.GetCoreMetric();
@@ -362,33 +331,6 @@ void PagePropertyPanel::ClosePageSizePopup()
     maSizePopup.Hide();
 }
 
-VclPtr< svx::sidebar::PopupControl> PagePropertyPanel::CreatePageColumnControl( svx::sidebar::PopupContainer* pParent )
-{
-    return VclPtr<PageColumnControl>::Create(
-
-        pParent,
-        *this,
-        mpPageColumnTypeItem->GetValue(),
-        mpPageItem->IsLandscape() );
-}
-
-void PagePropertyPanel::ExecuteColumnChange( const sal_uInt16 nColumnType )
-{
-    mpPageColumnTypeItem->SetValue( nColumnType );
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLUMN,
-            SfxCallMode::RECORD, { mpPageColumnTypeItem.get() });
-}
-
-IMPL_LINK_TYPED( PagePropertyPanel, ClickColumnHdl, ToolBox*, pToolBox, void )
-{
-    maColumnPopup.Show( *pToolBox );
-}
-
-void PagePropertyPanel::ClosePageColumnPopup()
-{
-    maColumnPopup.Hide();
-}
-
 void PagePropertyPanel::NotifyItemUpdate(
     const sal_uInt16 nSId,
     const SfxItemState eState,
@@ -402,16 +344,6 @@ void PagePropertyPanel::NotifyItemUpdate(
 
     switch( nSId )
     {
-    case SID_ATTR_PAGE_COLUMN:
-        {
-            if ( eState >= SfxItemState::DEFAULT &&
-                 pState && dynamic_cast< const SfxInt16Item *>( pState ) !=  nullptr )
-            {
-                mpPageColumnTypeItem.reset( static_cast<SfxInt16Item*>(pState->Clone()) );
-                ChangeColumnImage( mpPageColumnTypeItem->GetValue() );
-            }
-        }
-        break;
     case SID_ATTR_PAGE_LRSPACE:
         if ( eState >= SfxItemState::DEFAULT &&
              pState && dynamic_cast< const SvxLongLRSpaceItem *>( pState ) !=  nullptr )
@@ -582,62 +514,6 @@ void PagePropertyPanel::ChangeSizeImage()
     {
         mpToolBoxSize->SetItemImage( nIdSize,
                                      ( mpPageItem->IsLandscape() ? maImgSize_L[nImageIdx-1] : maImgSize[nImageIdx-1] ) );
-    }
-}
-
-void PagePropertyPanel::ChangeColumnImage( const sal_uInt16 nColumnType )
-{
-    if ( mpPageItem.get() == nullptr )
-    {
-        return;
-    }
-
-    const sal_uInt16 nIdColumn = mpToolBoxColumn->GetItemId(UNO_COLUMN);
-    if ( !mpPageItem->IsLandscape() )
-    {
-        switch( nColumnType )
-        {
-        case 1:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn1);
-            break;
-        case 2:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn2);
-            break;
-        case 3:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn3);
-            break;
-        case 4:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgLeft);
-            break;
-        case 5:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgRight);
-            break;
-        default:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumnNone);
-        }
-    }
-    else
-    {
-        switch( nColumnType )
-        {
-        case 1:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn1_L);
-            break;
-        case 2:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn2_L);
-            break;
-        case 3:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn3_L);
-            break;
-        case 4:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgLeft_L);
-            break;
-        case 5:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgRight_L);
-            break;
-        default:
-            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumnNone_L);
-        }
     }
 }
 
