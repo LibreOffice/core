@@ -958,16 +958,32 @@ void ScNavigatorDlg::SetCurrentTableStr( const OUString& rName )
     if (!GetViewData()) return;
 
     ScDocument* pDoc = pViewData->GetDocument();
-    SCTAB nCount     = pDoc->GetTableCount();
+    SCTAB nCount = pDoc->GetTableCount();
     OUString aTabName;
+    SCTAB nLastSheet = 0;
 
-    for ( SCTAB i=0; i<nCount; i++ )
+    for (SCTAB i = 0; i<nCount; i++)
     {
-        pDoc->GetName( i, aTabName );
-        if ( aTabName.equals(rName) )
+        pDoc->GetName(i, aTabName);
+        if (aTabName.equals(rName))
         {
-            SetCurrentTable( i );
-            return;
+            // Check if this is a Scenario sheet and if so select the sheet
+            // where it belongs to, which is the previous non-Scenario sheet.
+            if (pDoc->IsScenario(i))
+            {
+                SetCurrentTable(nLastSheet);
+                return;
+            }
+            else
+            {
+                SetCurrentTable(i);
+                return;
+            }
+        }
+        else
+        {
+            if (!pDoc->IsScenario(i))
+                nLastSheet = i;
         }
     }
 }
