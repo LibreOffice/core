@@ -954,21 +954,36 @@ void ScNavigatorDlg::SetCurrentTable( SCTAB nTabNo )
     }
 }
 
-void ScNavigatorDlg::SetCurrentTableStr( const OUString& rName )
+void ScNavigatorDlg::SetCurrentTableStr(const OUString& rName)
 {
     if (!GetViewData()) return;
 
     ScDocument* pDoc = pViewData->GetDocument();
-    SCTAB nCount     = pDoc->GetTableCount();
+    SCTAB nCount = pDoc->GetTableCount();
     OUString aTabName;
+    SCTAB aLastSheet;
 
-    for ( SCTAB i=0; i<nCount; i++ )
+    for (SCTAB i = 0; i<nCount; i++)
     {
-        pDoc->GetName( i, aTabName );
-        if ( aTabName.equals(rName) )
+        pDoc->GetName(i, aTabName);
+        if (aTabName.equals(rName))
         {
-            SetCurrentTable( i );
-            return;
+            /*check if this is a scenario*/
+            if (pDoc->IsScenario(i))
+            {
+                SetCurrentTable(aLastSheet);
+                return;
+            }
+            else
+            {
+                SetCurrentTable(i);
+                return;
+            }
+        }
+        else
+        {
+            if (!pDoc->IsScenario(i))
+                aLastSheet = i;
         }
     }
 }
