@@ -2563,11 +2563,11 @@ void XMLMacroFieldImportContext::PrepareField(
     OUString sLibraryName;
     OUString sScriptURL;
 
-    if ( xEventContext.Is() )
+    if ( xEventContext.is() )
     {
         // get event sequence
         XMLEventsImportContext* pEvents =
-            static_cast<XMLEventsImportContext*>(&xEventContext);
+            static_cast<XMLEventsImportContext*>(xEventContext.get());
         Sequence<PropertyValue> aValues;
         pEvents->GetEventSequence( sOnClick, aValues );
 

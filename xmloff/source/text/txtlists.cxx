@@ -103,11 +103,11 @@ void XMLTextListsHelper::ListContextTop(
 {
     if ( !mListStack.empty() ) {
         o_pListBlockContext =
-            static_cast<XMLTextListBlockContext*>(&std::get<0>(mListStack.top()));
+            static_cast<XMLTextListBlockContext*>(std::get<0>(mListStack.top()).get());
         o_pListItemContext  =
-            static_cast<XMLTextListItemContext *>(&std::get<1>(mListStack.top()));
+            static_cast<XMLTextListItemContext *>(std::get<1>(mListStack.top()).get());
         o_pNumberedParagraphContext =
-            static_cast<XMLNumberedParaContext *>(&std::get<2>(mListStack.top()));
+            static_cast<XMLNumberedParaContext *>(std::get<2>(mListStack.top()).get());
     }
 }
 
@@ -116,9 +116,9 @@ void XMLTextListsHelper::SetListItem( XMLTextListItemContext *i_pListItem )
     // may be cleared by ListBlockContext for upper list...
     if (i_pListItem) {
         assert(mListStack.size());
-        assert(std::get<0>(mListStack.top()) &&
+        assert(std::get<0>(mListStack.top()).is() &&
             "internal error: SetListItem: mListStack has no ListBlock");
-        assert(!std::get<1>(mListStack.top()) &&
+        assert(!std::get<1>(mListStack.top()).is() &&
             "error: SetListItem: list item already exists");
     }
     if ( !mListStack.empty() ) {

@@ -178,7 +178,7 @@ XMLProxyContext::XMLProxyContext( SvXMLImport& rImport, const SvXMLImportContext
 
 SvXMLImportContext * XMLProxyContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
-    if( mxParent.Is() )
+    if( mxParent.is() )
         return mxParent->CreateChildContext( nPrefix, rLocalName, xAttrList );
     else
         return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );

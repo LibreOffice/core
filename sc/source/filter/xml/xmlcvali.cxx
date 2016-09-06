@@ -403,11 +403,11 @@ void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidat
 void ScXMLContentValidationContext::EndElement()
 {
     // #i36650# event-listeners element moved up one level
-    if (xEventContext.Is())
+    if (xEventContext.is())
     {
         OUString sOnError("OnError");
         XMLEventsImportContext* pEvents =
-            static_cast<XMLEventsImportContext*>(&xEventContext);
+            static_cast<XMLEventsImportContext*>(xEventContext.get());
         uno::Sequence<beans::PropertyValue> aValues;
         pEvents->GetEventSequence( sOnError, aValues );
 
