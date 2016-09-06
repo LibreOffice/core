@@ -541,21 +541,48 @@ class DeleteAreaHandler
     bool mbNumeric:1;
     bool mbString:1;
     bool mbFormula:1;
+    bool mbDateTime:1;
+    ScColumn& rCol;
 
 public:
     DeleteAreaHandler(ScDocument& rDoc, InsertDeleteFlags nDelFlag) :
         mrDoc(rDoc),
         mbNumeric(nDelFlag & IDF_VALUE),
         mbString(nDelFlag & IDF_STRING),
-        mbFormula(nDelFlag & IDF_FORMULA) {}
+        mbFormula(nDelFlag & IDF_FORMULA),
+        rCol(ScColumn()) {}
+
+    DeleteAreaHandler(ScDocument& rDoc, InsertDeleteFlags nDelFlag, ScColumn& nrCol) :
+        mrDoc(rDoc),
+        mbNumeric(nDelFlag & IDF_VALUE),
+        mbString(nDelFlag & IDF_STRING),
+        mbDateTime(nDelFlag & IDF_DATETIME),
+        mbFormula(nDelFlag & IDF_FORMULA),
+        rCol(nrCol) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
         switch (node.type)
         {
             case sc::element_type_numeric:
-                if (!mbNumeric)
-                    return;
+                if (mbNumeric)
+                {
+                    //Determine if the cell data is a date
+                    InsertDeleteFlags InsDelFlagDate = IDF_DATETIME;
+                    sc::CopyFromClipContext ClipDate(mrDoc, &mrDoc, &mrDoc, InsDelFlagDate, false, true);
+
+                    if (ClipDate.isDateCell(rCol, node.position + nOffset) && !mbDateTime)
+                        return;
+                }
+                else
+                {
+                    //Determine if the cell data is a date
+                    InsertDeleteFlags InsDelFlagDate = IDF_DATETIME;
+                    sc::CopyFromClipContext ClipDate(mrDoc, &mrDoc, &mrDoc, InsDelFlagDate, false, true);
+
+                    if (!(ClipDate.isDateCell(rCol, node.position + nOffset) && mbDateTime))
+                        return;
+                }
             break;
             case sc::element_type_string:
             case sc::element_type_edittext:
@@ -639,7 +666,7 @@ void ScColumn::DeleteCells(
     sc::SingleColumnSpanSet& rDeleted )
 {
     // Determine which cells to delete based on the deletion flags.
-    DeleteAreaHandler aFunc(*pDocument, nDelFlag);
+    DeleteAreaHandler aFunc(*pDocument, nDelFlag, *this);
     sc::CellStoreType::iterator itPos = maCells.position(rBlockPos.miCellPos, nRow1).first;
     sc::ProcessBlock(itPos, maCells, aFunc, nRow1, nRow2);
     aFunc.endFormulas(); // Have the formula cells stop listening.
