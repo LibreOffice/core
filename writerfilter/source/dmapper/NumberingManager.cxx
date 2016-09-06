@@ -987,7 +987,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             break;
             case NS_ooxml::LN_CT_Lvl_lvlJc:
             {
-                sal_Int16 nValue = 0;
+                sal_Int16 nValue = text::HoriOrientation::NONE;
                 switch (nIntValue)
                 {
                 case NS_ooxml::LN_Value_ST_Jc_left:
@@ -1002,9 +1002,12 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     nValue = text::HoriOrientation::RIGHT;
                     break;
                 }
-                m_pCurrentDefinition->GetCurrentLevel( )->Insert(
-                    PROP_ADJUST, uno::makeAny( nValue ) );
-                    writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if (nValue != text::HoriOrientation::NONE)
+                {
+                    m_pCurrentDefinition->GetCurrentLevel( )->Insert(
+                        PROP_ADJUST, uno::makeAny( nValue ) );
+                        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                }
             }
             break;
             case NS_ooxml::LN_CT_Lvl_pPr:
