@@ -42,7 +42,6 @@ public:
     void            SetIdleHdl( const Link<Idle *, void>& rLink ) { maIdleHdl = rLink; }
     const Link<Idle *, void>& GetIdleHdl() const { return maIdleHdl; }
     virtual void Invoke() override;
-    virtual bool IsIdle() const override;
     Idle&           operator=( const Idle& rIdle );
 };
 
