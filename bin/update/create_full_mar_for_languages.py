@@ -7,6 +7,8 @@ import json
 
 from tools import uncompress_file_to_dir, get_file_info
 
+from config import parse_config
+
 current_dir_path = os.path.dirname(os.path.realpath(__file__))
 
 def make_complete_mar_name(target_dir, filename_prefix, language):
@@ -21,18 +23,18 @@ def create_lang_infos(mar_file_name, language, url):
 
 def main():
     print(sys.argv)
-    if len(sys.argv) < 9:
-        print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $TARGETDIR $TEMPDIR $FILENAMEPREFIX $BASE_URL")
+    if len(sys.argv) < 7:
+        print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $TARGETDIR $TEMPDIR $FILENAMEPREFIX $UPDATE_CONFIG")
         sys.exit(1)
 
-    url = sys.argv[8]
-    certificate_path = sys.argv[7]
-    certificate_name = sys.argv[6]
+    update_config = sys.argv[6]
     filename_prefix = sys.argv[5]
     temp_dir = sys.argv[4]
     target_dir = sys.argv[3]
     workdir = sys.argv[2]
     product_name = sys.argv[1]
+
+    config = parse_config(update_config)
 
     mar_executable = os.environ.get('MAR', 'mar')
 
@@ -53,10 +55,10 @@ def main():
         subprocess.call([os.path.join(current_dir_path, 'make_full_update.sh'), mar_file_name, directory])
 
         signed_mar_file = make_complete_mar_name(target_dir, filename_prefix + '_signed', language)
-        subprocess.call([mar_executable, '-C', target_dir, '-d', certificate_path, '-n', certificate_name, '-s', mar_file_name, signed_mar_file])
+        subprocess.call([mar_executable, '-C', target_dir, '-d', config.certificate_path, '-n', config.certificate_name, '-s', mar_file_name, signed_mar_file])
         os.rename(signed_mar_file, mar_file_name)
 
-        lang_infos.append(create_lang_infos(mar_file_name, language, url))
+        lang_infos.append(create_lang_infos(mar_file_name, language, config.base_url))
 
     with open(os.path.join(target_dir, "complete_lang_info.json"), "w") as language_info_file:
         json.dump({'languages' : lang_infos}, language_info_file, indent=4)
