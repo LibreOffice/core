@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
 #define INCLUDED_VCL_INC_UNX_GTK_GTKFRAME_HXX
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
 #include <cairo.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>

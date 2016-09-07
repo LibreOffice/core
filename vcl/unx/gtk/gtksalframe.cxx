@@ -50,11 +50,8 @@
 #endif
 
 #include <gtk/gtk.h>
-
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xatom.h>
 #include <gdk/gdkx.h>
+#include <X11/Xatom.h>
 
 #include <dlfcn.h>
 #include <vcl/salbtype.hxx>
