@@ -216,6 +216,7 @@ public:
     void testBnc762542();
 
     void testTdf100458();
+    void testTdf100709XLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -321,6 +322,7 @@ public:
     CPPUNIT_TEST(testHiddenSheetsXLSX);
 
     CPPUNIT_TEST(testTdf100458);
+    CPPUNIT_TEST(testTdf100709XLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3340,6 +3342,18 @@ void ScFiltersTest::testTdf100458()
     CPPUNIT_ASSERT(rDoc.HasValueData(0, 0, 0));
     CPPUNIT_ASSERT_EQUAL(double(0.0), rDoc.GetValue(0,0,0));
     CPPUNIT_ASSERT(!rDoc.HasStringData(0, 0, 0));
+}
+
+void ScFiltersTest::testTdf100709XLSX()
+{
+    ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc("tdf100709.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf100709.xlsx", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell B52 should not be formatted with a $", OUString("218"), rDoc.GetString(1, 51, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell A75 should not be formatted as a date", OUString("218"), rDoc.GetString(0, 74, 0));
+
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
