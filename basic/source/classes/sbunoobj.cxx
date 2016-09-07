@@ -153,7 +153,9 @@ void SetSbUnoObjectDfltPropName( SbxObject* pObj )
 
         if ( SbUnoObject::getDefaultPropName( pUnoObj, sDfltPropName ) )
         {
-            OSL_TRACE("SetSbUnoObjectDfltPropName setting default prop for %s", OUStringToOString( pObj->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_INFO("basic",
+                     "SetSbUnoObjectDfltPropName setting default prop for "
+                     << pObj->GetName());
             pUnoObj->SetDfltProperty( sDfltPropName );
         }
     }
@@ -198,7 +200,7 @@ Reference< XHierarchicalNameAccess > const & getTypeProvider_Impl()
             xContext->getValueByName(
                 "/singletons/com.sun.star.reflection.theTypeDescriptionManager" )
                     >>= xAccess;
-            OSL_ENSURE( xAccess.is(), "### TypeDescriptionManager singleton not accessible!?" );
+            assert( xAccess.is() && "### TypeDescriptionManager singleton not accessible!?" );
         }
         if( !xAccess.is() )
         {
@@ -316,7 +318,7 @@ OUString implGetExceptionMsg( const Exception& e, const OUString& aExceptionType
 OUString implGetExceptionMsg( const Any& _rCaughtException )
 {
     auto e = o3tl::tryAccess<Exception>(_rCaughtException);
-    OSL_PRECOND( e, "implGetExceptionMsg: illegal argument!" );
+    assert( e && "implGetExceptionMsg: illegal argument!" );
     if ( !e )
     {
         return OUString();
@@ -755,7 +757,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
 
             typelib_TypeDescription * pTD = nullptr;
             aType.getDescription( &pTD );
-            OSL_ASSERT( pTD && pTD->eTypeClass == typelib_TypeClass_SEQUENCE );
+            assert( pTD && pTD->eTypeClass == typelib_TypeClass_SEQUENCE );
             Type aElementType( reinterpret_cast<typelib_IndirectTypeDescription *>(pTD)->pType );
             ::typelib_typedescription_release( pTD );
 
@@ -1370,7 +1372,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                     {
                         OUString aTypeName = aCurType.getTypeName();
                         typelib_typedescription_getByName( &pSeqTD, aTypeName.pData );
-                        OSL_ASSERT( pSeqTD );
+                        assert( pSeqTD );
                         if( pSeqTD->eTypeClass == typelib_TypeClass_SEQUENCE )
                         {
                             aCurType = Type( reinterpret_cast<typelib_IndirectTypeDescription *>(pSeqTD)->pType );
@@ -1694,7 +1696,7 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
             Reference<XIdlClass> xClass = TypeToIdlClass( rType );
             if( !xClass.is() )
             {
-                OSL_FAIL("failed to get XIdlClass for type");
+                SAL_WARN("basic", "failed to get XIdlClass for type");
                 break;
             }
             OUString aInterfaceName = xClass->getName();
@@ -1721,7 +1723,8 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
             }
 
             // match interface name with passed class name
-            OSL_TRACE("Checking if object implements %s", OUStringToOString( aClassName, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_INFO("basic", "Checking if object implements "
+                     << aClassName);
             if ( (aClassName.getLength() <= aInterfaceName.getLength()) &&
                     aInterfaceName.endsWithIgnoreAsciiCase( aClassName ) )
             {
@@ -4653,7 +4656,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
                     }
                     while( pParentBasic == nullptr && pCurObject != nullptr );
 
-                    OSL_ASSERT( pParentBasic != nullptr );
+                    assert( pParentBasic != nullptr );
                     registerComponentToBeDisposedForBasic( xComponent, pParentBasic );
                 }
 
@@ -4716,8 +4719,7 @@ void StructRefInfo::setValue( const Any& rValue )
        reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
        reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
        reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
-    OSL_ENSURE(bSuccess,
-        "StructRefInfo::setValue: ooops .... the value could not be assigned!");
+    assert(bSuccess && "StructRefInfo::setValue: ooops .... the value could not be assigned!");
 }
 
 OUString StructRefInfo::getTypeName() const
