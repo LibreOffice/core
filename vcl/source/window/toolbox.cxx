@@ -5258,6 +5258,11 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                 bForwardKey = !ImplActivateItem( aKeyCode );
         }
         break;
+        case KEY_SPACE:
+        {
+            ImplOpenItem( aKeyCode );
+        }
+        break;
         default:
             {
             sal_uInt16 aKeyGroup = aKeyCode.GetGroup();
