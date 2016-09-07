@@ -338,7 +338,7 @@ uno::Sequence< beans::Property > Content::getProperties(
                     xResAccess->PROPFIND( DAVZERO, props, xEnv );
                     aPropsNames.setPropertiesNames( props );
 
-                    aStaticPropertyNamesCache.addCachePropertyNames( aPropsNames, 10 );
+                    aStaticPropertyNamesCache.addCachePropertyNames( aPropsNames );
                 }
                 else
                 {

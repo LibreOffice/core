@@ -60,9 +60,8 @@ private:
                      bool bCanSetUserName,
                      bool bCanSetPassword,
                      bool bCanSetAccount,
-                     bool bAllowPersistentStoring,
                      bool bAllowUseSystemCredentials,
-                     bool bAllowSessionStoring = true );
+                     bool bAllowSessionStoring );
 
 public:
     /** Specification whether some entity (realm, username, password, account)

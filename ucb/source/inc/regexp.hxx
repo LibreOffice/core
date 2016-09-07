@@ -42,8 +42,7 @@ public:
 
     inline Kind getKind() const { return m_eKind; }
 
-    bool matches(OUString const & rString, OUString * pTranslation,
-                 bool * pTranslated) const;
+    bool matches(OUString const & rString) const;
 
     OUString getRegexp() const;
 

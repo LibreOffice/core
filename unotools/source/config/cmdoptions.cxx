@@ -115,7 +115,7 @@ class SvtCommandOptions_Impl : public ConfigItem
 
         bool                HasEntries  (   SvtCommandOptions::CmdOption    eOption     ) const;
         bool                Lookup      (   SvtCommandOptions::CmdOption    eCmdOption, const OUString& ) const;
-        void EstablisFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame);
+        void EstablishFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame);
 
     private:
 
@@ -260,7 +260,7 @@ bool SvtCommandOptions_Impl::Lookup( SvtCommandOptions::CmdOption eCmdOption, co
 
 //  public method
 
-void SvtCommandOptions_Impl::EstablisFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame)
+void SvtCommandOptions_Impl::EstablishFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     // check if frame already exists inside list
     // ignore double registrations
@@ -335,10 +335,10 @@ bool SvtCommandOptions::Lookup( CmdOption eCmdOption, const OUString& aCommandUR
 
 //  public method
 
-void SvtCommandOptions::EstablisFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame)
+void SvtCommandOptions::EstablishFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pImpl->EstablisFrameCallback(xFrame);
+    m_pImpl->EstablishFrameCallback(xFrame);
 }
 
 namespace

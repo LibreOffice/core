@@ -543,11 +543,11 @@ Val const * RegexpMap< Val >::map(rtl::OUString const & rString) const
         typename List< Val >::const_iterator aEnd(rTheList.end());
         for (typename List< Val >::const_iterator aIt(rTheList.begin()); aIt != aEnd;
              ++aIt)
-            if (aIt->m_aRegexp.matches(rString, nullptr, nullptr))
+            if (aIt->m_aRegexp.matches(rString))
                 return &aIt->m_aValue;
     }
     if (m_pImpl->m_pDefault
-        && m_pImpl->m_pDefault->m_aRegexp.matches(rString, nullptr, nullptr))
+        && m_pImpl->m_pDefault->m_aRegexp.matches(rString))
         return &m_pImpl->m_pDefault->m_aValue;
     return 0;
 }

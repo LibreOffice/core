@@ -68,18 +68,14 @@ OUString TransliterationWrapper::transliterate(const OUString& rStr, sal_uInt16 
 }
 
 OUString TransliterationWrapper::transliterate( const OUString& rStr,
-                                                sal_Int32 nStart, sal_Int32 nLen,
-                                                Sequence <sal_Int32>* pOffset ) const
+                                                sal_Int32 nStart, sal_Int32 nLen ) const
 {
     OUString sRet( rStr );
     if( xTrans.is() )
     {
         try
         {
-            if ( pOffset )
-                sRet = xTrans->transliterate( rStr, nStart, nLen, *pOffset );
-            else
-                sRet = xTrans->transliterateString2String( rStr, nStart, nLen);
+            sRet = xTrans->transliterateString2String( rStr, nStart, nLen);
         }
         catch( Exception&  )
         {

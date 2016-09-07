@@ -503,7 +503,7 @@ void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier 
             *this
         );
 
-    impl_removeControl( _nIdentifier, xControl, nullptr );
+    impl_removeControl( _nIdentifier, xControl );
 }
 
 void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier, const uno::Any& _rElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
@@ -663,7 +663,7 @@ void UnoControlContainer::removingControl( const uno::Reference< awt::XControl >
     }
 }
 
-void UnoControlContainer::impl_removeControl( sal_Int32 _nId, const uno::Reference< awt::XControl >& _rxControl, const OUString* _pNameAccessor )
+void UnoControlContainer::impl_removeControl( sal_Int32 _nId, const uno::Reference< awt::XControl >& _rxControl )
 {
 #ifdef DBG_UTIL
     {
@@ -680,7 +680,7 @@ void UnoControlContainer::impl_removeControl( sal_Int32 _nId, const uno::Referen
     {
         container::ContainerEvent aEvent;
         aEvent.Source = *this;
-        _pNameAccessor ? ( aEvent.Accessor <<= *_pNameAccessor ) : ( aEvent.Accessor <<= _nId );
+        aEvent.Accessor <<= _nId;
         aEvent.Element <<= _rxControl;
         maCListeners.elementRemoved( aEvent );
     }
@@ -694,7 +694,7 @@ void UnoControlContainer::removeControl( const uno::Reference< awt::XControl >& 
 
         UnoControlHolderList::ControlIdentifier id = mpControls->getControlIdentifier( _rxControl );
         if ( id != -1 )
-            impl_removeControl( id, _rxControl, nullptr );
+            impl_removeControl( id, _rxControl );
     }
 }
 

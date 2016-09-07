@@ -80,8 +80,7 @@ public:
         If for any reason the string can't be transliterated the original
         string is returned.  */
     OUString transliterate( const OUString& rStr,
-                        sal_Int32 nStart, sal_Int32 nLen,
-                        css::uno::Sequence <sal_Int32>* pOffset ) const;
+                        sal_Int32 nStart, sal_Int32 nLen ) const;
 
     // Wrapper implementations of class Transliteration
     OUString transliterate( const OUString& rStr, sal_uInt16 nLanguage,

@@ -122,7 +122,7 @@ ScVbaCommandBars::createCollectionObject( const uno::Any& aSource )
             else if( sBarName.equalsIgnoreAsciiCase( "Cell" ) )
             {
                 // EVIL HACK (tm): spreadsheet cell context menu as dummy object without functionality
-                aRet <<= uno::Reference< XCommandBar >( new VbaDummyCommandBar( this, mxContext, sBarName, office::MsoBarType::msoBarTypePopup ) );
+                aRet <<= uno::Reference< XCommandBar >( new VbaDummyCommandBar( this, mxContext, sBarName ) );
             }
         }
         else if( m_pCBarHelper->getModuleId() == "com.sun.star.text.TextDocument" )

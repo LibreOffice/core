@@ -73,7 +73,7 @@ namespace webdav_ucp
 
         bool getCachedPropertyNames( const OUString& URL, PropertyNames& rCacheElement );
         void removeCachedPropertyNames( const OUString& URL );
-        void addCachePropertyNames( PropertyNames& rCacheElement, const sal_uInt32 nLifeTime );
+        void addCachePropertyNames( PropertyNames& rCacheElement );
     };
 
 }

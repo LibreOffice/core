@@ -141,16 +141,13 @@ namespace utl
 
             <p>Note that calling <method>write</method>(<sal_True/) is the same as calling <method>commit</method>(<TRUE/>).</p>
 
+            The current values in the exchange locations are written to the configuration nodes
+            before the changes are committed.<br/>
+
             @precond
                 The access must have been created for update access
-
-            @param _bWrite
-                If <TRUE/>, the current values in the exchange locations are written to the configuration nodes
-                before the changes are committed.<br/>
-                If <FALSE/>, only the current values in the config nodes (as present since the last call to
-                <method>write</method>) are committed.
         */
-        void    commit( bool _bWrite = true );
+        void    commit();
 
     private:
         /// implements the ctors

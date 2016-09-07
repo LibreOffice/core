@@ -145,14 +145,10 @@ private:
         @param  _rxControl
             the control itself. Must be the one which is stored under the given ID. This parameter could also be
             obtained inside the method, but callers usually have obtained it, anyway.
-        @param  _pNameAccessor
-            the name which the control was registered for. Might be <NULL/>, in this case
-            container event broadcasts use the ID as accessor.
     */
     void      impl_removeControl(
         sal_Int32 _nId,
-        const css::uno::Reference< css::awt::XControl >& _rxControl,
-        const OUString* _pNameAccessor
+        const css::uno::Reference< css::awt::XControl >& _rxControl
     );
 
 };

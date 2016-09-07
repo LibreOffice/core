@@ -82,8 +82,8 @@ class HostnameCache
     sal_uInt32                     m_nCapacity;
 
 public:
-    explicit HostnameCache( sal_uInt32 nCapacity )
-        : m_nCapacity( nCapacity ) {}
+    explicit HostnameCache()
+        : m_nCapacity( 256 ) {}
 
     bool get( const OUString & rKey, OUString & rValue ) const
     {
@@ -288,7 +288,7 @@ bool getConfigInt32Value(
 InternetProxyDecider_Impl::InternetProxyDecider_Impl(
     const uno::Reference< uno::XComponentContext >& rxContext )
     : m_nProxyType( 0 ),
-      m_aHostnames( 256 ) // cache size
+      m_aHostnames()
 {
     try
     {

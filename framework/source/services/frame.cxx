@@ -523,7 +523,7 @@ void Frame::initListeners()
     SAL_WARN_IF( !m_xDropTargetListener.is(), "fwk", "Frame::Frame(): DropTarget helper is not valid. Drag and drop without functionality!" );
 
     // establish notifies for changing of "disabled commands" configuration during runtime
-    m_aCommandOptions.EstablisFrameCallback(this);
+    m_aCommandOptions.EstablishFrameCallback(this);
 
     // Create an initial layout manager
     // Create layout manager and connect it to the newly created frame

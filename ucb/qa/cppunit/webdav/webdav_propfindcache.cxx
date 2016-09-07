@@ -114,7 +114,7 @@ namespace
 
         // add the cache an element
         aPropsNames.setPropertiesNames( aProps );
-        PropCache.addCachePropertyNames( aPropsNames, 10 );
+        PropCache.addCachePropertyNames( aPropsNames );
 
         PropertyNames aRetPropsNames;
         //test existence

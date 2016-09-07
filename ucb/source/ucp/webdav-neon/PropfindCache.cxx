@@ -86,13 +86,13 @@ namespace webdav_ucp
         }
     }
 
-    void PropertyNamesCache::addCachePropertyNames( PropertyNames& rCacheElement, const sal_uInt32 nLifeTime )
+    void PropertyNamesCache::addCachePropertyNames( PropertyNames& rCacheElement )
     {
         osl::MutexGuard aGuard( m_aMutex );
         OUString aURL( rCacheElement.getURL() );
         TimeValue t1;
         osl_getSystemTime( &t1 );
-        rCacheElement.setStaleTime( t1.Seconds + nLifeTime );
+        rCacheElement.setStaleTime( t1.Seconds + 10 );
 
         m_aTheCache[ aURL ] = rCacheElement;
     }

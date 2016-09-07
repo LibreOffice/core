@@ -3346,7 +3346,7 @@ static OUString lcl_convertIntoHalfWidth( const OUString & rStr )
         bFirstASCCall = false;
     }
 
-    return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ), nullptr );
+    return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ) );
 }
 
 static OUString lcl_convertIntoFullWidth( const OUString & rStr )
@@ -3360,7 +3360,7 @@ static OUString lcl_convertIntoFullWidth( const OUString & rStr )
         bFirstJISCall = false;
     }
 
-    return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ), nullptr );
+    return aTrans.transliterate( rStr, 0, sal_uInt16( rStr.getLength() ) );
 }
 
 /* ODFF:

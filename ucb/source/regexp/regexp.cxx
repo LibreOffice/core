@@ -77,8 +77,7 @@ bool matchStringIgnoreCase(sal_Unicode const ** pBegin,
 
 }
 
-bool Regexp::matches(OUString const & rString,
-                     OUString * pTranslation, bool * pTranslated) const
+bool Regexp::matches(OUString const & rString) const
 {
     sal_Unicode const * pBegin = rString.getStr();
     sal_Unicode const * pEnd = pBegin + rString.getLength();
@@ -88,7 +87,6 @@ bool Regexp::matches(OUString const & rString,
     sal_Unicode const * p = pBegin;
     if (matchStringIgnoreCase(&p, pEnd, m_aPrefix))
     {
-        sal_Unicode const * pBlock1Begin = p;
         sal_Unicode const * pBlock1End = pEnd;
 
         sal_Unicode const * pBlock2Begin = nullptr;
@@ -132,30 +130,6 @@ bool Regexp::matches(OUString const & rString,
                         break;
                 }
                 break;
-        }
-
-        if (bMatches)
-        {
-            if (m_bTranslation)
-            {
-                if (pTranslation)
-                {
-                    OUStringBuffer aBuffer(m_aReversePrefix);
-                    aBuffer.append(pBlock1Begin, pBlock1End - pBlock1Begin);
-                    aBuffer.append(m_aInfix);
-                    aBuffer.append(pBlock2Begin, pBlock2End - pBlock2Begin);
-                    *pTranslation = aBuffer.makeStringAndClear();
-                }
-                if (pTranslated)
-                    *pTranslated = true;
-            }
-            else
-            {
-                if (pTranslation)
-                    *pTranslation = rString;
-                if (pTranslated)
-                    *pTranslated = false;
-            }
         }
     }
 

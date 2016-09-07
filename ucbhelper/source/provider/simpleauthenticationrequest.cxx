@@ -60,7 +60,6 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        true,
        true,
        aRequest.HasAccount,
-       true/*bAllowPersistentStoring*/,
        bAllowUseSystemCredentials,
        bAllowSessionStoring );
 }
@@ -100,8 +99,8 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        eUserNameType == ENTITY_MODIFY,
        ePasswordType == ENTITY_MODIFY,
        false,
-       true,
-       false );
+       false,
+       true );
 }
 
 
@@ -111,7 +110,6 @@ void SimpleAuthenticationRequest::initialize(
       bool bCanSetUserName,
       bool bCanSetPassword,
       bool bCanSetAccount,
-      bool bAllowPersistentStoring,
       bool bAllowUseSystemCredentials,
       bool bAllowSessionStoring )
 {
@@ -124,8 +122,7 @@ void SimpleAuthenticationRequest::initialize(
     if( bAllowSessionStoring )
         nSize++;
 
-    if( bAllowPersistentStoring )
-        nSize++;
+    nSize++;
 
     uno::Sequence< ucb::RememberAuthentication > aRememberModes( nSize );
     aRememberModes[ nPos++ ] = ucb::RememberAuthentication_NO;
@@ -133,8 +130,7 @@ void SimpleAuthenticationRequest::initialize(
     if( bAllowSessionStoring )
         aRememberModes[ nPos++ ] = ucb::RememberAuthentication_SESSION;
 
-    if ( bAllowPersistentStoring )
-        aRememberModes[ nPos++ ] = ucb::RememberAuthentication_PERSISTENT;
+    aRememberModes[ nPos++ ] = ucb::RememberAuthentication_PERSISTENT;
 
     m_xAuthSupplier
         = new InteractionSupplyAuthentication(

@@ -96,7 +96,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtCommandOptions : public utl::detail:
                                             notified, if configuration was changed.
         *//*-*****************************************************************************************************/
 
-        void EstablisFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame);
+        void EstablishFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame);
 
     private:
 

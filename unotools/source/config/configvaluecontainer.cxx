@@ -281,11 +281,10 @@ namespace utl
         );
     }
 
-    void OConfigurationValueContainer::commit( bool _bWrite )
+    void OConfigurationValueContainer::commit()
     {
-        // write the current values in the exchange locations (if requested)
-        if ( _bWrite )
-            write();
+        // write the current values in the exchange locations
+        write();
 
         // commit the changes done
         m_pImpl->aConfigRoot.commit( );
