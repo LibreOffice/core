@@ -204,6 +204,7 @@ public:
     void testTableStyleUndo();
     void testRedlineParam();
     void testRedlineViewAuthor();
+    void testTdf78727();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -309,6 +310,7 @@ public:
     CPPUNIT_TEST(testTableStyleUndo);
     CPPUNIT_TEST(testRedlineParam);
     CPPUNIT_TEST(testRedlineViewAuthor);
+    CPPUNIT_TEST(testTdf78727);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3897,6 +3899,15 @@ void SwUiWriterTest::testRedlineViewAuthor()
     uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
     // This was 'Unknown Author' instead of 'A U. Thor'.
     CPPUNIT_ASSERT_EQUAL(aAuthor, xField->getPropertyValue("Author").get<OUString>());
+}
+
+void SwUiWriterTest::testTdf78727()
+{
+    SwDoc* pDoc = createDoc("tdf78727.docx");
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    // This was 1: make sure we don't loose the TextBox anchored inside the
+    // table that is moved inside a text frame.
+    CPPUNIT_ASSERT(SwTextBoxHelper::getCount(pPage) > 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
