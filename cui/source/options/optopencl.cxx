@@ -51,8 +51,10 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(mpOclNotUsed,"openclnotused");
 
     mpUseSwInterpreter->Check(officecfg::Office::Common::Misc::UseSwInterpreter::get());
+    mpUseSwInterpreter->Enable(!officecfg::Office::Common::Misc::UseSwInterpreter::isReadOnly());
 
     mpUseOpenCL->Check(maConfig.mbUseOpenCL);
+    mpUseOpenCL->Enable(!officecfg::Office::Common::Misc::UseOpenCL::isReadOnly());
     mpUseOpenCL->SetClickHdl(LINK(this, SvxOpenCLTabPage, EnableOpenCLHdl));
 
     bool bCLUsed = opencl::GPUEnv::isOpenCLEnabled();
