@@ -99,8 +99,8 @@ public:
     void       GetFontMetric( ImplFontMetricDataRef& ) const;
     bool       GetGlyphBoundRect( sal_GlyphId, Rectangle& ) const;
     bool       GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) const;
-    hb_face_t* GetHbFace() const { return mpHbFace; }
-    void       SetHbFace(hb_face_t* pHbFace) const { mpHbFace = pHbFace; }
+    hb_font_t* GetHbFont() const { return mpHbFont; }
+    void       SetHbFont(hb_font_t* pHbFont) const { mpHbFont = pHbFont; }
 
     const CoreTextFontFace*  mpFontData;
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
@@ -112,7 +112,7 @@ public:
 private:
     /// CoreText text style object
     CFMutableDictionaryRef  mpStyleDict;
-    mutable hb_face_t*      mpHbFace;
+    mutable hb_font_t*      mpHbFont;
 
     friend class CTLayout;
     friend class AquaSalGraphics;
