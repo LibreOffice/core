@@ -5244,6 +5244,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         break;
         case KEY_RETURN:
         {
+            ImplOpenItem( aKeyCode );
             // #107712#, disabled entries are selectable now
             //  leave toolbox and move focus to document
             if( mnHighItemId )
@@ -5254,8 +5255,14 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                     bGrabFocusToDocument = true;
                 }
             }
+
             if( !bGrabFocusToDocument )
                 bForwardKey = !ImplActivateItem( aKeyCode );
+        }
+        break;
+        case KEY_SPACE:
+        {
+            ImplOpenItem( aKeyCode );
         }
         break;
         default:
