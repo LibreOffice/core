@@ -212,7 +212,8 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
             {
                 // If the Fly is deleted, all Flys in its content have to be deleted too.
                 const SwFormatContent &rContent = pFormat->GetContent();
-                if( rContent.GetContentIdx() )
+                // But only fly formats own their content, not draw formats.
+                if (rContent.GetContentIdx() && pFormat->Which() == RES_FLYFRMFMT)
                 {
                     DelFlyInRange( *rContent.GetContentIdx(),
                                     SwNodeIndex( *rContent.GetContentIdx()->

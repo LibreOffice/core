@@ -199,6 +199,7 @@ public:
     void testTdf99004();
     void testTdf84695();
     void testTdf84695NormalChar();
+    void testTdf78727();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -300,6 +301,7 @@ public:
     CPPUNIT_TEST(testTdf99004);
     CPPUNIT_TEST(testTdf84695);
     CPPUNIT_TEST(testTdf84695NormalChar);
+    CPPUNIT_TEST(testTdf78727);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3702,6 +3704,16 @@ void SwUiWriterTest::testTdf84695NormalChar()
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, pressing a normal character did not start the fly frame edit mode.
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+}
+
+void SwUiWriterTest::testTdf78727()
+{
+    SwDoc* pDoc = createDoc("tdf78727.docx");
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    // This was 1: make sure we don't loose the TextBox anchored inside the
+    // table that is moved inside a text frame.
+    std::set<const SwFrameFormat*> aSet;
+    CPPUNIT_ASSERT(SwTextBoxHelper::getCount(pPage, aSet) > 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
