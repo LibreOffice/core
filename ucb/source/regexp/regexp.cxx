@@ -87,11 +87,6 @@ bool Regexp::matches(OUString const & rString) const
     sal_Unicode const * p = pBegin;
     if (matchStringIgnoreCase(&p, pEnd, m_aPrefix))
     {
-        sal_Unicode const * pBlock1End = pEnd;
-
-        sal_Unicode const * pBlock2Begin = nullptr;
-        sal_Unicode const * pBlock2End = nullptr;
-
         switch (m_eKind)
         {
             case KIND_PREFIX:
@@ -116,9 +111,6 @@ bool Regexp::matches(OUString const & rString) const
                         && (q == pEnd || *q == '/' || *q == '?' || *q == '#'))
                     {
                         bMatches = true;
-                        pBlock1End = p;
-                        pBlock2Begin = q;
-                        pBlock2End = pEnd;
                         break;
                     }
 
