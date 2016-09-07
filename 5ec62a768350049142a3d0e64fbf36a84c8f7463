@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_3810c94e",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-07T13:20:02Z",
+      "side": 1,
+      "message": "Is this message sufficient?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_581d7d65",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-07T13:20:02Z",
+      "side": 1,
+      "message": "Is this message sufficient?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_781a4170",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-07T13:20:02Z",
+      "side": 1,
+      "message": "Is this message sufficient?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_b803f90c",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-07T13:20:02Z",
+      "side": 1,
+      "message": "Should we add a message to this assert?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_d808ad2b",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-07T13:20:02Z",
+      "side": 1,
+      "message": "Should we add a message to this assert?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_f80d7138",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4659,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-07T13:20:02Z",
+      "side": 1,
+      "message": "Should we add a message to this assert?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_982555b0",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-07T13:20:02Z",
+      "side": 1,
+      "message": "Should we keep the \u0027\\n\u0027?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_b82a197d",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-07T13:20:02Z",
+      "side": 1,
+      "message": "Should we keep the \u0027\\n\u0027?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_d81fcd59",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-07T13:20:02Z",
+      "side": 1,
+      "message": "Should we keep the \u0027\\n\u0027?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_f82491b0",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-07T13:20:02Z",
+      "side": 1,
+      "message": "Should we keep the \u0027\\n\u0027?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
