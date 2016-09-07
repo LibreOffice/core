@@ -860,12 +860,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     }
 
                     // Show/Hide the Notebookbar
-                    for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
-                        pObjSh;
-                        pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
+                    SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
+                    if ( pCurrentShell )
                     {
                         const SfxPoolItem *pItem;
-                        pObjSh->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, pItem);
+                        pCurrentShell->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, pItem);
                     }
 
                     // Save settings
