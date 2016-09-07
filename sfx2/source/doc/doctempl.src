@@ -36,6 +36,7 @@ StringArray TEMPLATE_SHORT_NAMES_ARY
         < "presnt" ; > ;
         < "misc" ; > ;
         < "labels" ; > ;
+        < "styles" ; > ;
     };
 };
 
@@ -54,6 +55,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Presentations" ; > ;
         < "Miscellaneous" ; > ;
         < "Labels" ; > ;
+        < "Styles" ; > ;
     };
 
     };
