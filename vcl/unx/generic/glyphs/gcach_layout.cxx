@@ -326,7 +326,6 @@ private:
     hb_script_t             maHbScript;
     hb_face_t*              mpHbFace;
     int                     mnUnitsPerEM;
-    css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 
 public:
     explicit                HbLayoutEngine(ServerFont&);
@@ -513,12 +512,6 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
             hb_glyph_position_t *pHbPositions = hb_buffer_get_glyph_positions(pHbBuffer, nullptr);
 
-            sal_Int32 nGraphemeStartPos = std::numeric_limits<sal_Int32>::max();
-            sal_Int32 nGraphemeEndPos = std::numeric_limits<sal_Int32>::min();
-            if (!mxBreak.is())
-                mxBreak = vcl::unohelper::CreateBreakIterator();
-            com::sun::star::lang::Locale aLocale(rArgs.maLanguageTag.getLocale());
-
             for (int i = 0; i < nRunGlyphCount; ++i) {
                 int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
                 int32_t nCharPos = pHbGlyphInfos[i].cluster;
@@ -539,22 +532,8 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 nGlyphIndex = rFont.FixupGlyphIndex(nGlyphIndex, aChar);
 
                 bool bInCluster = false;
-                if(bRightToLeft && (nCharPos < nGraphemeStartPos))
-                {
-                    sal_Int32 nDone;
-                    nGraphemeStartPos = mxBreak->previousCharacters(rArgs.mrStr, nCharPos+1, aLocale,
-                                                  com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-                }
-                else if(!bRightToLeft && (nCharPos >= nGraphemeEndPos))
-                {
-                    sal_Int32 nDone;
-                    nGraphemeEndPos = mxBreak->nextCharacters(rArgs.mrStr, nCharPos, aLocale,
-                                                  com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-                }
-                else
-                {
+                if (i > 0 && pHbGlyphInfos[i].cluster == pHbGlyphInfos[i - 1].cluster)
                     bInCluster = true;
-                }
 
                 long nGlyphFlags = 0;
                 if (bRightToLeft)
