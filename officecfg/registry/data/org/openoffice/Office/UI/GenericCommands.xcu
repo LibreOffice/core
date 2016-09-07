@@ -6210,6 +6210,16 @@
           <value xml:lang="en-US">Menubar</value>
         </prop>
       </node>
+      <node oor:name=".uno:NameGroup" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Name...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ObjectTitleDescription" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Description...</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>
