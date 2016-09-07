@@ -38,7 +38,7 @@
 
 class CommonSalLayout : public GenericSalLayout
 {
-    hb_face_t*              mpHbFace;
+    hb_font_t*              mpHbFont;
     FontSelectPattern       maFontSelData;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 #ifdef _WIN32
@@ -51,7 +51,6 @@ class CommonSalLayout : public GenericSalLayout
     ServerFont&             mrServerFont;
 #endif
 
-    hb_font_t*              GetHbFont();
 public:
 #if defined(_WIN32)
     explicit                CommonSalLayout(WinSalGraphics*, WinFontInstance&, const WinFontFace&);
