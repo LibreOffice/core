@@ -175,7 +175,7 @@ SbxErrObject::SbxErrObject( const OUString& rName, const uno::Any& rUnoObj )
     : SbUnoObject( rName, rUnoObj )
     , m_pErrObject( nullptr )
 {
-    OSL_TRACE("SbxErrObject::SbxErrObject ctor");
+    SAL_INFO("basic", "SbxErrObject::SbxErrObject ctor");
     rUnoObj >>= m_xErr;
     if ( m_xErr.is() )
     {
@@ -186,7 +186,7 @@ SbxErrObject::SbxErrObject( const OUString& rName, const uno::Any& rUnoObj )
 
 SbxErrObject::~SbxErrObject()
 {
-    OSL_TRACE("SbxErrObject::~SbxErrObject dtor");
+    SAL_INFO("basic", "SbxErrObject::~SbxErrObject dtor");
 }
 
 uno::Reference< vba::XErrObject > const &

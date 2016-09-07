@@ -574,7 +574,7 @@ eoln:
             // object _
             //    .Method
             // ^^^  <- spaces is legal in MSO VBA
-            OSL_TRACE("*** resetting bSpaces***");
+            SAL_INFO("basic", "*** resetting bSpaces***");
             bSpaces = false;
         }
         return bRes;

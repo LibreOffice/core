@@ -143,7 +143,7 @@ void SbiCodeGen::Save()
     int nIfaceCount = 0;
     if( rMod.mnType == css::script::ModuleType::CLASS )
     {
-                OSL_TRACE("COdeGen::save() classmodule processing");
+        SAL_INFO("basic", "COdeGen::save() classmodule processing");
         rMod.bIsProxyModule = true;
         p->SetFlag( SbiImageFlags::CLASSMODULE );
         GetSbData()->pClassFac->AddClassModule( &rMod );
@@ -254,7 +254,7 @@ void SbiCodeGen::Save()
                         ePropType = SbxOBJECT;
                         break;
                     default:
-                        OSL_FAIL("Illegal PropertyMode");
+                        SAL_WARN("basic", "Illegal PropertyMode");
                         break;
                     }
                     OUString aPropName = pProc->GetPropName();
@@ -262,8 +262,7 @@ void SbiCodeGen::Save()
                     {
                         aPropName = aPropName.copy( aIfaceName.getLength() + 1 );
                     }
-                    OSL_TRACE("*** getProcedureProperty for thing %s",
-                              OUStringToOString( aPropName,RTL_TEXTENCODING_UTF8 ).getStr() );
+                    SAL_INFO("basic", "*** getProcedureProperty for thing " << aPropName);
                     rMod.GetProcedureProperty( aPropName, ePropType );
                 }
                 if( nPass == 1 )
