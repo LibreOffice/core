@@ -28,7 +28,6 @@
 
 #include <svx/sidebar/PopupContainer.hxx>
 #include "PageMarginControl.hxx"
-#include "PageSizeControl.hxx"
 
 #include <swtypes.hxx>
 #include <cmdid.h>
@@ -51,7 +50,6 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 const char UNO_MARGIN[]      = ".uno:Margin";
-const char UNO_SIZE[]        = ".uno:Size";
 
 namespace {
     const css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::uno::Reference< css::frame::XFrame >& rxFrame )
@@ -114,30 +112,11 @@ PagePropertyPanel::PagePropertyPanel(
     , mImgWide_L                    (SW_RES(IMG_PAGE_WIDE_L))
     , mImgMirrored_L                (SW_RES(IMG_PAGE_MIRRORED_L))
     , mImgMarginCustom_L            (SW_RES(IMG_PAGE_MARGIN_CUSTOM_L))
-    , mImgA3                        (SW_RES(IMG_PAGE_A3))
-    , mImgA4                        (SW_RES(IMG_PAGE_A4))
-    , mImgA5                        (SW_RES(IMG_PAGE_A5))
-    , mImgB4                        (SW_RES(IMG_PAGE_B4))
-    , mImgB5                        (SW_RES(IMG_PAGE_B5))
-    , mImgC5                        (SW_RES(IMG_PAGE_C5))
-    , mImgLetter                    (SW_RES(IMG_PAGE_LETTER))
-    , mImgLegal                 (SW_RES(IMG_PAGE_LEGAL))
-    , mImgSizeNone              (SW_RES(IMG_PAGE_SIZE_NONE))
-    , mImgA3_L                  (SW_RES(IMG_PAGE_A3_L))
-    , mImgA4_L                  (SW_RES(IMG_PAGE_A4_L))
-    , mImgA5_L                  (SW_RES(IMG_PAGE_A5_L))
-    , mImgB4_L                  (SW_RES(IMG_PAGE_B4_L))
-    , mImgB5_L                  (SW_RES(IMG_PAGE_B5_L))
-    , mImgC5_L                  (SW_RES(IMG_PAGE_C5_L))
-    , mImgLetter_L              (SW_RES(IMG_PAGE_LETTER_L))
-    , mImgLegal_L                   (SW_RES(IMG_PAGE_LEGAL_L))
-    , mImgSizeNone_L                (SW_RES(IMG_PAGE_SIZE_NONE_L))
 
     , mpPageItem( new SvxPageItem(SID_ATTR_PAGE) )
     , mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) )
     , mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) )
     , mpPageSizeItem( new SvxSizeItem(SID_ATTR_PAGE_SIZE) )
-    , mePaper( PAPER_USER )
 
     , meFUnit()
     , meUnit()
@@ -145,15 +124,11 @@ PagePropertyPanel::PagePropertyPanel(
     , m_aSwPagePgULControl(SID_ATTR_PAGE_ULSPACE, *pBindings, *this)
     , m_aSwPagePgLRControl(SID_ATTR_PAGE_LRSPACE, *pBindings, *this)
     , m_aSwPagePgSizeControl(SID_ATTR_PAGE_SIZE, *pBindings, *this)
-    , m_aSwPagePgControl(SID_ATTR_PAGE, *pBindings, *this)
     , m_aSwPagePgMetricControl(SID_ATTR_METRIC, *pBindings, *this)
 
     , maMarginPopup( this,
             [this] (svx::sidebar::PopupContainer *parent) { return this->CreatePageMarginControl(parent); },
                      OUString("Page margins") )
-    , maSizePopup( this,
-            [this] (svx::sidebar::PopupContainer *parent) { return this->CreatePageSizeControl(parent); },
-                   OUString("Page size") )
 
     , mxUndoManager( getUndoManager( rxFrame ) )
 
@@ -161,7 +136,6 @@ PagePropertyPanel::PagePropertyPanel(
 {
     // visible controls
     get(mpToolBoxMargin, "selectmargin");
-    get(mpToolBoxSize, "selectsize");
 
     Initialize();
     mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify = true;
@@ -185,15 +159,12 @@ void PagePropertyPanel::dispose()
     mpPageSizeItem.reset();
 
     mpToolBoxMargin.clear();
-    mpToolBoxSize.clear();
 
     m_aSwPagePgULControl.dispose();
     m_aSwPagePgLRControl.dispose();
     m_aSwPagePgSizeControl.dispose();
-    m_aSwPagePgControl.dispose();
     m_aSwPagePgMetricControl.dispose();
 
-    maSizePopup.dispose();
     maMarginPopup.dispose();
 
     PanelLayout::dispose();
@@ -208,32 +179,6 @@ void PagePropertyPanel::Initialize()
     mpToolBoxMargin->SetSelectHdl( aLink );
     mpToolBoxMargin->SetItemImage(nIdMargin, mImgNormal);
     mpToolBoxMargin->SetItemBits( nIdMargin, mpToolBoxMargin->GetItemBits( nIdMargin ) | ToolBoxItemBits::DROPDOWNONLY );
-
-    // popup for page size
-    const sal_uInt16 nIdSize = mpToolBoxSize->GetItemId(UNO_SIZE);
-    aLink = LINK( this, PagePropertyPanel, ClickSizeHdl );
-    mpToolBoxSize->SetDropdownClickHdl( aLink );
-    mpToolBoxSize->SetSelectHdl( aLink );
-    mpToolBoxSize->SetItemImage(nIdSize, mImgLetter);
-    mpToolBoxSize->SetItemBits( nIdSize, mpToolBoxSize->GetItemBits( nIdSize ) | ToolBoxItemBits::DROPDOWNONLY );
-    maImgSize = new Image[8];
-    maImgSize[0] = mImgA3;
-    maImgSize[1] = mImgA4;
-    maImgSize[2] = mImgA5;
-    maImgSize[3] = mImgB4;
-    maImgSize[4] = mImgB5;
-    maImgSize[5] = mImgC5;
-    maImgSize[6] = mImgLetter;
-    maImgSize[7] = mImgLegal;
-    maImgSize_L = new Image[8];
-    maImgSize_L[0] = mImgA3_L;
-    maImgSize_L[1] = mImgA4_L;
-    maImgSize_L[2] = mImgA5_L;
-    maImgSize_L[3] = mImgB4_L;
-    maImgSize_L[4] = mImgB5_L;
-    maImgSize_L[5] = mImgC5_L;
-    maImgSize_L[6] = mImgLetter_L;
-    maImgSize_L[7] = mImgLegal_L;
 
     meFUnit = GetModuleFieldUnit();
     meUnit  = m_aSwPagePgSizeControl.GetCoreMetric();
@@ -297,40 +242,6 @@ void PagePropertyPanel::ClosePageMarginPopup()
     maMarginPopup.Hide();
 }
 
-VclPtr< svx::sidebar::PopupControl> PagePropertyPanel::CreatePageSizeControl( svx::sidebar::PopupContainer* pParent )
-{
-    return VclPtr<PageSizeControl>::Create(
-
-        pParent,
-        *this,
-        mePaper,
-        mpPageItem->IsLandscape(),
-        meFUnit );
-}
-
-void PagePropertyPanel::ExecuteSizeChange( const Paper ePaper )
-{
-    Size aPageSize = SvxPaperInfo::GetPaperSize( ePaper, (MapUnit)(meUnit) );
-    if ( mpPageItem->IsLandscape() )
-    {
-        Swap( aPageSize );
-    }
-    mpPageSizeItem->SetSize( aPageSize );
-
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
-            SfxCallMode::RECORD, { mpPageSizeItem.get() });
-}
-
-IMPL_LINK_TYPED( PagePropertyPanel, ClickSizeHdl, ToolBox*, pToolBox, void )
-{
-    maSizePopup.Show( *pToolBox );
-}
-
-void PagePropertyPanel::ClosePageSizePopup()
-{
-    maSizePopup.Hide();
-}
-
 void PagePropertyPanel::NotifyItemUpdate(
     const sal_uInt16 nSId,
     const SfxItemState eState,
@@ -371,7 +282,6 @@ void PagePropertyPanel::NotifyItemUpdate(
              pState && dynamic_cast< const SvxSizeItem *>( pState ) !=  nullptr )
         {
             mpPageSizeItem.reset( static_cast<SvxSizeItem*>(pState->Clone()) );
-            ChangeSizeImage();
         }
         break;
     case SID_ATTR_METRIC:
@@ -452,69 +362,6 @@ void PagePropertyPanel::ChangeMarginImage()
 
     else
         mpToolBoxMargin->SetItemImage( nIdMargin, mpPageItem->IsLandscape() ? mImgMarginCustom_L : mImgMarginCustom );
-}
-
-void PagePropertyPanel::ChangeSizeImage()
-{
-    if ( mpPageSizeItem.get() == nullptr ||
-         mpPageItem.get() == nullptr )
-    {
-        return;
-    }
-
-    Size aTmpPaperSize = mpPageSizeItem->GetSize();
-    if ( mpPageItem->IsLandscape() )
-    {
-        Swap( aTmpPaperSize ); // Swap(..) defined in editeng/paperinf.hxx
-    }
-
-    mePaper = SvxPaperInfo::GetSvxPaper( aTmpPaperSize, static_cast<MapUnit>(meUnit), true );
-
-    sal_uInt16 nImageIdx = 0;
-    switch ( mePaper )
-    {
-    case PAPER_A3:
-        nImageIdx = 1;
-        break;
-    case PAPER_A4:
-        nImageIdx = 2;
-        break;
-    case PAPER_A5:
-        nImageIdx = 3;
-        break;
-    case PAPER_B4_ISO:
-        nImageIdx = 4;
-        break;
-    case PAPER_B5_ISO:
-        nImageIdx = 5;
-        break;
-    case PAPER_ENV_C5:
-        nImageIdx = 6;
-        break;
-    case PAPER_LETTER:
-        nImageIdx = 7;
-        break;
-    case PAPER_LEGAL:
-        nImageIdx = 8;
-        break;
-    default:
-        nImageIdx = 0;
-        mePaper = PAPER_USER;
-        break;
-    }
-
-    const sal_uInt16 nIdSize = mpToolBoxSize->GetItemId(UNO_SIZE);
-
-    if ( nImageIdx == 0 )
-    {
-        mpToolBoxSize->SetItemImage( nIdSize,
-                                     ( mpPageItem->IsLandscape() ? mImgSizeNone_L : mImgSizeNone  ) );
-    }
-    else
-    {
-        mpToolBoxSize->SetItemImage( nIdSize,
-                                     ( mpPageItem->IsLandscape() ? maImgSize_L[nImageIdx-1] : maImgSize[nImageIdx-1] ) );
-    }
 }
 
 void PagePropertyPanel::StartUndo()
