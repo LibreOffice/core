@@ -2258,24 +2258,20 @@ void ScInterpreter::ScBetaInv()
     fBeta  = GetDouble();
     fAlpha = GetDouble();
     fP     = GetDouble();
-    if (fP < 0.0 || fP >= 1.0 || fA == fB || fAlpha <= 0.0 || fBeta <= 0.0)
+    if (fP < 0.0 || fP > 1.0 || fA >= fB || fAlpha <= 0.0 || fBeta <= 0.0)
     {
         PushIllegalArgument();
         return;
     }
-    if (fP == 0.0)
-        PushInt(0);
+
+    bool bConvError;
+    ScBetaDistFunction aFunc( *this, fP, fAlpha, fBeta );
+    // 0..1 as range for iteration so it isn't extended beyond the valid range
+    double fVal = lcl_IterateInverse( aFunc, 0.0, 1.0, bConvError );
+    if (bConvError)
+        PushError( errNoConvergence);
     else
-    {
-        bool bConvError;
-        ScBetaDistFunction aFunc( *this, fP, fAlpha, fBeta );
-        // 0..1 as range for iteration so it isn't extended beyond the valid range
-        double fVal = lcl_IterateInverse( aFunc, 0.0, 1.0, bConvError );
-        if (bConvError)
-            PushError( errNoConvergence);
-        else
-            PushDouble(fA + fVal*(fB-fA));                  // scale to (A,B)
-    }
+        PushDouble(fA + fVal*(fB-fA));                  // scale to (A,B)
 }
 
                                                             // Achtung: T, F und Chi
