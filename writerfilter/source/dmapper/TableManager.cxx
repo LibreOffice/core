@@ -214,7 +214,7 @@ void TableManager::ensureOpenCell(const TablePropertyMapPtr& pProps)
     {
         TableData::Pointer_t pTableData = mTableDataStack.top();
 
-        if (pTableData.get() != nullptr)
+        if (pTableData != nullptr)
         {
             if (!pTableData->isCellOpen())
                 openCell(getHandle(), pProps);
@@ -286,7 +286,7 @@ void TableManager::resolveCurrentTable()
     TagLogger::getInstance().startElement("tablemanager.resolveCurrentTable");
 #endif
 
-    if (mpTableDataHandler.get() != nullptr)
+    if (mpTableDataHandler != nullptr)
     {
         try
         {
@@ -331,7 +331,7 @@ void TableManager::resolveCurrentTable()
 
 void TableManager::endLevel()
 {
-    if (mpTableDataHandler.get() != nullptr)
+    if (mpTableDataHandler != nullptr)
         resolveCurrentTable();
 
     // Store the unfinished row as it will be used for the next table
@@ -349,7 +349,7 @@ void TableManager::endLevel()
     TagLogger::getInstance().startElement("tablemanager.endLevel");
     TagLogger::getInstance().attribute("level", mTableDataStack.size());
 
-    if (pTableData.get() != nullptr)
+    if (pTableData != nullptr)
         TagLogger::getInstance().attribute("openCell", pTableData->isCellOpen() ? "yes" : "no");
 
     TagLogger::getInstance().endElement();
@@ -367,7 +367,7 @@ void TableManager::startLevel()
     TagLogger::getInstance().startElement("tablemanager.startLevel");
     TagLogger::getInstance().attribute("level", mTableDataStack.size());
 
-    if (pTableData.get() != nullptr)
+    if (pTableData != nullptr)
         TagLogger::getInstance().attribute("openCell", pTableData->isCellOpen() ? "yes" : "no");
 
     TagLogger::getInstance().endElement();
