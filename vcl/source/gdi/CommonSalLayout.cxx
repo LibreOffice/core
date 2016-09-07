@@ -90,6 +90,32 @@ static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     return pBlob;
 }
 
+static hb_font_t* createHbFont(hb_face_t* pHbFace)
+{
+    hb_font_t* pHbFont = hb_font_create(pHbFace);
+    hb_ot_font_set_funcs(pHbFont);
+
+    return pHbFont;
+}
+
+static void scaleHbFont(hb_font_t* pHbFont, FontSelectPattern aFontSelData)
+{
+    uint64_t nXScale = aFontSelData.mnWidth << 6;
+    uint64_t nYScale = aFontSelData.mnHeight << 6;
+
+#if defined(_WIN32)
+    // HACK to get stretched/shrunken text. TODO: Get rid of HACK
+    if (nXScale)
+        nXScale = double(nXScale) * 1.812;
+#endif
+
+    if (!nXScale)
+      nXScale = nYScale;
+
+    hb_font_set_ppem(pHbFont, nXScale, nYScale);
+    hb_font_set_scale(pHbFont, nXScale, nYScale);
+}
+
 static hb_unicode_funcs_t* getUnicodeFuncs()
 {
     static hb_unicode_funcs_t* ufuncs = hb_unicode_funcs_create(hb_icu_get_unicode_funcs());
@@ -103,16 +129,15 @@ static hb_unicode_funcs_t* getUnicodeFuncs()
 CommonSalLayout::CommonSalLayout(WinSalGraphics* WSL, WinFontInstance& rWinFontInstance, const WinFontFace& rWinFontFace)
 :   mhFont((HFONT)GetCurrentObject(WSL->getHDC(), OBJ_FONT)),
     mhDC(WSL->getHDC()),
-    mpHbFace(nullptr),
     maFontSelData(rWinFontInstance.maFontSelData),
     mpD2DRenderer(nullptr)
 {
-    mpHbFace = rWinFontFace.GetHbFace();
-    if(!mpHbFace)
+    mpHbFont = rWinFontFace.GetHbFont();
+    if (!mpHbFont)
     {
         mpD2DRenderer = dynamic_cast<D2DWriteTextOutRenderer*>(&TextOutRenderer::get());
         WinSalGraphicsWithIDFace* pWSLWithIDFace = new WinSalGraphicsWithIDFace(WSL, mpD2DRenderer->GetDWriteFontFace(mhDC));
-        mpHbFace= hb_face_create_for_tables( getFontTable, pWSLWithIDFace,
+        hb_face_t* pHbFace= hb_face_create_for_tables( getFontTable, pWSLWithIDFace,
                   [](void* pUserData)
                   {
                       WinSalGraphicsWithIDFace* pUData = static_cast<WinSalGraphicsWithIDFace*>( pUserData );
@@ -121,8 +146,14 @@ CommonSalLayout::CommonSalLayout(WinSalGraphics* WSL, WinFontInstance& rWinFontI
                       delete pUData;
                   }
                  );
-        rWinFontFace.SetHbFace(mpHbFace);
+
+        mpHbFont = createHbFont(pHbFace);
+        rWinFontFace.SetHbFont(mpHbFont);
+
+        hb_face_destroy(pHbFace);
     }
+
+    scaleHbFont(mpHbFont, maFontSelData);
 }
 
 void CommonSalLayout::InitFont() const
@@ -132,54 +163,49 @@ void CommonSalLayout::InitFont() const
 
 #elif defined(MACOSX) || defined(IOS)
 CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
-:   mpHbFace(nullptr),
-    maFontSelData(rCoreTextStyle.maFontSelData),
+:   maFontSelData(rCoreTextStyle.maFontSelData),
     mrCoreTextStyle(rCoreTextStyle)
 {
-    mpHbFace = rCoreTextStyle.GetHbFace();
-    if(!mpHbFace)
+    mpHbFont = rCoreTextStyle.GetHbFont();
+    if (!mpHbFont)
     {
+        hb_face_t* pHbFace;
         CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue(rCoreTextStyle.GetStyleDict(), kCTFontAttributeName));
         CGFontRef pCGFont = CTFontCopyGraphicsFont(pCTFont, NULL);
         if (pCGFont)
-            mpHbFace = hb_coretext_face_create(pCGFont);
+            pHbFace = hb_coretext_face_create(pCGFont);
         else
-            mpHbFace = hb_face_create_for_tables(getFontTable, const_cast<CoreTextFontFace*>(rCoreTextStyle.mpFontData), nullptr);
+            pHbFace = hb_face_create_for_tables(getFontTable, const_cast<CoreTextFontFace*>(rCoreTextStyle.mpFontData), nullptr);
         CGFontRelease(pCGFont);
-        rCoreTextStyle.SetHbFace(mpHbFace);
+
+        mpHbFont = createHbFont(pHbFace);
+        rCoreTextStyle.SetHbFont(mpHbFont);
+
+        hb_face_destroy(pHbFace);
     }
+
+    scaleHbFont(mpHbFont, maFontSelData);
 }
 
 #else
 CommonSalLayout::CommonSalLayout(ServerFont& rServerFont)
-:   mpHbFace(nullptr),
-    maFontSelData(rServerFont.GetFontSelData()),
+:   maFontSelData(rServerFont.GetFontSelData()),
     mrServerFont(rServerFont)
 {
-    mpHbFace = rServerFont.GetHbFace();
-    if(!mpHbFace)
+    mpHbFont = rServerFont.GetHbFont();
+    if (!mpHbFont)
     {
-        mpHbFace = hb_face_create_for_tables(getFontTable, &rServerFont, nullptr);
-        mrServerFont.SetHbFace(mpHbFace);
+        hb_face_t* pHbFace = hb_face_create_for_tables(getFontTable, &rServerFont, nullptr);
+
+        mpHbFont = createHbFont(pHbFace);
+        mrServerFont.SetHbFont(mpHbFont);
+
+        hb_face_destroy(pHbFace);
     }
+
+    scaleHbFont(mpHbFont, maFontSelData);
 }
 #endif
-
-hb_font_t* CommonSalLayout::GetHbFont()
-{
-    // HACK. TODO: Get rid of HACK
-#if defined(_WIN32)
-    if(maFontSelData.mnWidth)
-        maFontSelData.mnWidth = (double)maFontSelData.mnWidth*1.812;
-#endif
-
-    hb_font_t* pHbFont = hb_font_create(mpHbFace);
-    hb_font_set_ppem(pHbFont, maFontSelData.mnWidth? maFontSelData.mnWidth:maFontSelData.mnHeight , maFontSelData.mnHeight);
-    hb_font_set_scale(pHbFont, (uint64_t)(maFontSelData.mnWidth? maFontSelData.mnWidth:maFontSelData.mnHeight) << 6
-                             , (uint64_t)maFontSelData.mnHeight << 6);
-    hb_ot_font_set_funcs(pHbFont);
-    return pHbFont;
-}
 
 struct HbScriptRun
 {
@@ -267,18 +293,16 @@ void CommonSalLayout::AdjustLayout(ImplLayoutArgs& rArgs)
 
     if((rArgs.mnFlags & SalLayoutFlags::KashidaJustification) && rArgs.mpDXArray)
     {
-        hb_font_t* pHbFont = GetHbFont();
         hb_codepoint_t nKashidaCodePoint = 0x0640;
         hb_codepoint_t nKashidaGlyphIndex;
 
-        if(hb_font_get_glyph(pHbFont, nKashidaCodePoint, 0, &nKashidaGlyphIndex))
+        if(hb_font_get_glyph(mpHbFont, nKashidaCodePoint, 0, &nKashidaGlyphIndex))
         {
             if(nKashidaGlyphIndex)
             {
-                KashidaJustify(nKashidaGlyphIndex, hb_font_get_glyph_h_advance(pHbFont, nKashidaGlyphIndex) >> 6);
+                KashidaJustify(nKashidaGlyphIndex, hb_font_get_glyph_h_advance(mpHbFont, nKashidaGlyphIndex) >> 6);
             }
         }
-        hb_font_destroy(pHbFont);
     }
 }
 
@@ -290,7 +314,6 @@ void CommonSalLayout::DrawText( SalGraphics& rSalGraphics ) const
 
 bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 {
-    hb_font_t* pHbFont = GetHbFont();
     hb_script_t aHbScript = HB_SCRIPT_INVALID;
 
     int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos);
@@ -379,7 +402,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 #if HB_VERSION_ATLEAST(0, 9, 42)
             hb_buffer_set_cluster_level(pHbBuffer, HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS);
 #endif
-            hb_shape(pHbFont, pHbBuffer, nullptr, 0);
+            hb_shape(mpHbFont, pHbBuffer, nullptr, 0);
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
@@ -412,10 +435,11 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                     nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
 
                 bool bDiacritic = false;
-                if (hb_ot_layout_has_glyph_classes(mpHbFace))
+                hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
+                if (hb_ot_layout_has_glyph_classes(pHbFace))
                 {
                     // the font has GDEF table
-                    bool bMark = hb_ot_layout_get_glyph_class(mpHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK;
+                    bool bMark = hb_ot_layout_get_glyph_class(pHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK;
                     if (bMark && pHbPositions[i].x_advance == 0)
                         bDiacritic = true;
                 }
@@ -450,8 +474,6 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             hb_buffer_destroy(pHbBuffer);
         }
     }
-
-    hb_font_destroy(pHbFont);
 
     // sort glyphs in visual order
     // and then in logical order (e.g. diacritics after cluster start)
