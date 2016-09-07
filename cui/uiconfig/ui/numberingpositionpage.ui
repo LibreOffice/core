@@ -214,7 +214,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">at:</property>
+                        <property name="label" translatable="yes">Tab stop at:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">atmf:0.00cm</property>
                       </object>
