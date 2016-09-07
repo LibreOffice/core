@@ -19,8 +19,10 @@
 #include <errno.h>
 #endif
 
-#define MOZ_APP_VERSION "5" /* Dummy value; replace or remove in the
-                               future */
+#ifndef APP_VERSION
+#error "Missing APP_VERSION"
+#endif
+
 #define MAR_CHANNEL_ID "LOOnlineUpdater" /* Dummy value; replace or
                                             remove in the future */
 
@@ -37,7 +39,7 @@ int mar_repackage_and_sign(const char *NSSConfigDir,
                            const char * dest);
 
 static void print_version(void) {
-  printf("Version: %s\n", MOZ_APP_VERSION);
+  printf("Version: %s\n", APP_VERSION);
   printf("Default Channel ID: %s\n", MAR_CHANNEL_ID);
 }
 
@@ -126,7 +128,7 @@ int main(int argc, char **argv) {
   char *NSSConfigDir = NULL;
   const char *certNames[MAX_SIGNATURES];
   char *MARChannelID = MAR_CHANNEL_ID;
-  char *productVersion = MOZ_APP_VERSION;
+  char *productVersion = APP_VERSION;
 #ifndef NO_SIGN_VERIFY
   uint32_t k;
 #endif

@@ -24,6 +24,7 @@ $(eval $(call gb_Executable_use_externals,mar,\
 	nss3 \
 ))
 
+
 ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_libs,mar,\
     ws2_32.lib \
@@ -33,8 +34,15 @@ endif
 
 ifeq ($(filter WNT MACOSX,$(OS)),)
 $(eval $(call gb_Executable_use_externals,mar,nss3))
-$(eval $(call gb_Executable_add_defs,mar,-DMAR_NSS))
+
+$(eval $(call gb_Executable_add_defs,mar,\
+	-DMAR_NSS \
+))
 endif
+
+$(eval $(call gb_Executable_add_defs,mar,\
+	-DAPP_VERSION=\"$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)\" \
+))
 
 $(eval $(call gb_Executable_add_cobjects,mar,\
 	onlineupdate/source/libmar/sign/nss_secutil \
