@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/NoMasterException.hpp>
 #include <com/sun/star/task/PasswordContainer.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
@@ -31,6 +28,7 @@
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
 
+#include <rtl/ref.hxx>
 #include "passwordcontainer.hxx"
 
 using namespace com::sun::star;
@@ -293,7 +291,7 @@ OUString SAL_CALL
 PasswordContainerInteractionHandler::getImplementationName()
     throw ( uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
+    return OUString("com.sun.star.comp.uui.PasswordContainerInteractionHandler");
 }
 
 
@@ -312,24 +310,7 @@ uno::Sequence< OUString > SAL_CALL
 PasswordContainerInteractionHandler::getSupportedServiceNames()
     throw ( uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
-}
-
-
-// static
-OUString
-PasswordContainerInteractionHandler::getImplementationName_Static()
-{
-    return OUString( "com.sun.star.comp.uui.PasswordContainerInteractionHandler" );
-}
-
-
-// static
-uno::Sequence< OUString >
-PasswordContainerInteractionHandler::getSupportedServiceNames_Static()
-{
-    uno::Sequence< OUString > aSNS { "com.sun.star.task.PasswordContainerInteractionHandler" };
-    return aSNS;
+    return { "com.sun.star.task.PasswordContainerInteractionHandler" };
 }
 
 
@@ -399,34 +380,32 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
     return false;
 }
 
-
-// Service factory implementation.
-
-
-static uno::Reference< uno::XInterface > SAL_CALL
-PasswordContainerInteractionHandler_CreateInstance(
-        const uno::Reference< lang::XMultiServiceFactory> & rSMgr )
-    throw( uno::Exception )
-{
-    lang::XServiceInfo * pX = static_cast< lang::XServiceInfo * >(
-        new PasswordContainerInteractionHandler( comphelper::getComponentContext(rSMgr) ) );
-    return uno::Reference< uno::XInterface >::query( pX );
-}
-
-
-// static
-uno::Reference< lang::XSingleServiceFactory >
-PasswordContainerInteractionHandler::createServiceFactory(
-    const uno::Reference< lang::XMultiServiceFactory >& rxServiceMgr )
-{
-    return uno::Reference< lang::XSingleServiceFactory >(
-        cppu::createOneInstanceFactory(
-            rxServiceMgr,
-            PasswordContainerInteractionHandler::getImplementationName_Static(),
-            PasswordContainerInteractionHandler_CreateInstance,
-            PasswordContainerInteractionHandler::getSupportedServiceNames_Static() ) );
-}
-
 } // namespace uui
+
+namespace {
+
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(new uui::PasswordContainerInteractionHandler(context))
+    {}
+
+    rtl::Reference<cppu::OWeakObject> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_uui_PasswordContainerInteractionHandler_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(Singleton::get(context).instance.get());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
