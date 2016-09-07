@@ -281,6 +281,13 @@ public:
         : VclPtr<reference_type>( new reference_type(std::forward<Arg>(arg)...), SAL_NO_ACQUIRE )
     {
     }
+
+    /**
+     * Override and disallow this, to prevent people accidentally calling it and actually
+     * getting VclPtr::Create and getting a naked VclPtr<> instance
+     */
+    template<typename... Arg> static VclPtrInstance< reference_type > Create(Arg &&... ) = delete;
+     // static_assert(false, "do not call VclPtrInstance::Create, just call VclPtrInstance aInstance(...)");
 };
 
 template <class reference_type>
@@ -339,6 +346,13 @@ public:
     {
     }
 
+    /**
+     * Override and disallow this, to prevent people accidentally calling it and actually
+     * getting VclPtr::Create and getting a naked VclPtr<> instance
+     */
+    template<typename... Arg> static ScopedVclPtr< reference_type > Create(Arg &&... ) = delete;
+    // static_assert(false, "do not call ScopedVclPtr::Create");
+
     ~ScopedVclPtr()
     {
         VclPtr<reference_type>::disposeAndClear();
@@ -381,6 +395,13 @@ public:
         : ScopedVclPtr<reference_type>( new reference_type(std::forward<Arg>(arg)...), SAL_NO_ACQUIRE )
     {
     }
+
+    /**
+     * Override and disallow this, to prevent people accidentally calling it and actually
+     * getting VclPtr::Create and getting a naked VclPtr<> instance
+     */
+    template<typename... Arg> static ScopedVclPtrInstance< reference_type > Create(Arg &&...) = delete;
+    // static_assert(false, "do not call ScopedVclPtrInstance::Create, just call ScopedVclPtrInstance aInstance(...)");
 
 private:
     // Prevent the above perfect forwarding ctor from hijacking (accidental)
