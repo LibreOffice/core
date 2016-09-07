@@ -1048,33 +1048,10 @@ void GtkSalFrame::InitCommon()
                                 None );
 }
 
-/*  Sadly gtk_window_set_accept_focus exists only since gtk 2.4
- *  for achieving the same effect we will remove the WM_TAKE_FOCUS
- *  protocol from the window and set the input hint to false.
- *  But gtk_window_set_accept_focus needs to be called before
- *  window realization whereas the removal obviously can only happen
- *  after realization.
- */
-
-extern "C" {
-    typedef void(*setAcceptFn)( GtkWindow*, gboolean );
-    static setAcceptFn p_gtk_window_set_accept_focus = nullptr;
-    static bool bGetAcceptFocusFn = true;
-
-    typedef void(*setUserTimeFn)( GdkWindow*, guint32 );
-    static setUserTimeFn p_gdk_x11_window_set_user_time = nullptr;
-    static bool bGetSetUserTimeFn = true;
-}
-
 static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBeforeRealize )
 {
-    if( bGetAcceptFocusFn )
-    {
-        bGetAcceptFocusFn = false;
-        p_gtk_window_set_accept_focus = reinterpret_cast<setAcceptFn>(osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_window_set_accept_focus" ));
-    }
-    if( p_gtk_window_set_accept_focus && bBeforeRealize )
-        p_gtk_window_set_accept_focus( pWindow, bAccept );
+    if (bBeforeRealize)
+        gtk_window_set_accept_focus( pWindow, bAccept );
     else if( ! bBeforeRealize )
     {
         Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
@@ -1130,22 +1107,10 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
 
 static void lcl_set_user_time( GtkWindow* i_pWindow, guint32 i_nTime )
 {
-    if( bGetSetUserTimeFn )
-    {
-        bGetSetUserTimeFn = false;
-        p_gdk_x11_window_set_user_time = reinterpret_cast<setUserTimeFn>(osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_x11_window_set_user_time" ));
-    }
-    bool bSet = false;
-    if( p_gdk_x11_window_set_user_time )
-    {
-        GdkWindow* pWin = widget_get_window(GTK_WIDGET(i_pWindow));
-        if( pWin ) // only if the window is realized.
-        {
-            p_gdk_x11_window_set_user_time( pWin, i_nTime );
-            bSet = true;
-        }
-    }
-    if( !bSet )
+    GdkWindow* pWin = widget_get_window(GTK_WIDGET(i_pWindow));
+    if (pWin) // only if the window is realized.
+        gdk_x11_window_set_user_time( pWin, i_nTime );
+    else
     {
         Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
         Atom nUserTime = XInternAtom( pDisplay, "_NET_WM_USER_TIME", True );
