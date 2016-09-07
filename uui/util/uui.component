@@ -29,8 +29,8 @@
     <service name="com.sun.star.task.InteractionHandler"/>
     <service name="com.sun.star.uui.InteractionHandler"/>
   </implementation>
-  <implementation
-      name="com.sun.star.comp.uui.UUIInteractionRequestStringResolver">
+  <implementation name="com.sun.star.comp.uui.UUIInteractionRequestStringResolver"
+      constructor="com_sun_star_comp_uui_UUIInteractionRequestStringResolver_get_implementation">
     <service name="com.sun.star.task.InteractionRequestStringResolver"/>
   </implementation>
 </component>
