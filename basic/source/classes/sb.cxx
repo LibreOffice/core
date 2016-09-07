@@ -1958,7 +1958,7 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
     }
     if ( !pThisComponent )
     {
-        OSL_TRACE("Failed to get ThisComponent");
+        SAL_INFO("basic", "Failed to get ThisComponent");
             // the application Basic, at the latest, should have this variable
         return nullptr;
     }
@@ -1979,9 +1979,9 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
         return nullptr;
     }
 #if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE("Have model ThisComponent points to url %s",
-              OUStringToOString( xModel->getURL(),
-                                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    SAL_INFO("basic",
+             "Have model ThisComponent points to url "
+             << xModel->getURL());
 #endif
 
     return xModel;
