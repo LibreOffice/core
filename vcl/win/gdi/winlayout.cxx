@@ -4065,8 +4065,8 @@ PhysicalFontFace* WinFontFace::Clone() const
     if ( mpGraphiteData )
         mpGraphiteData->AddReference();
 #endif
-    if( mpHbFace )
-        hb_face_reference( mpHbFace );
+    if( mpHbFont )
+        hb_font_reference( mpHbFont );
 
     PhysicalFontFace* pClone = new WinFontFace( *this );
     return pClone;

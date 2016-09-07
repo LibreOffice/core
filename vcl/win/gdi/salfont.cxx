@@ -1009,7 +1009,7 @@ WinFontFace::WinFontFace( const FontAttributes& rDFS,
     mbAliasSymbolsHigh( false ),
     mbAliasSymbolsLow( false ),
     mbGsubRead( false ),
-    mpHbFace( nullptr )
+    mpHbFont( nullptr )
 {
     SetBitmapSize( 0, nHeight );
 
@@ -1051,8 +1051,8 @@ WinFontFace::~WinFontFace()
 #endif // ENABLE_GRAPHITE
     delete mpEncodingVector;
 
-    if( mpHbFace )
-        hb_face_destroy( mpHbFace );
+    if( mpHbFont )
+        hb_font_destroy( mpHbFont );
 }
 
 sal_IntPtr WinFontFace::GetFontId() const
