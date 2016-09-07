@@ -959,6 +959,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf96750_landscapeFollow, "tdf96750_landscapeFollow
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original,"tdf81345.docx")
+{
+    //Header wasn't replaced  and columns were missing because no new style was created.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+
+    xCursor->jumpToPage(2);
+    OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    CPPUNIT_ASSERT(pageStyleName != "Standard");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
