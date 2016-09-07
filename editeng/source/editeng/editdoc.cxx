@@ -1276,8 +1276,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
 #endif
 
     // Since features are treated differently than normal character attributes,
-    // can also the order of the start list be change!
-    // In every if ...,  in the next (n) opportunities due to bFeature or
+    // but can also affect the order of the start list.    // In every if ...,  in the next (n) opportunities due to bFeature or
     // an existing special case, must (n-1) opportunities be provided with
     // bResort. The most likely possibility receives no bResort, so that is
     // not sorted anew when all attributes are the same.
@@ -1417,7 +1416,7 @@ void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemP
 #endif
 
     // Since features are treated differently than normal character attributes,
-    // can also the order of the start list be change!
+    // but can also affect the order of the start list
     bool bResort = false;
     sal_Int32 nEndChanges = nIndex+nDeleted;
 
@@ -1474,8 +1473,8 @@ void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemP
         }
         DBG_ASSERT( !pAttrib->IsFeature() || ( pAttrib->GetLen() == 1 ), "Expand: FeaturesLen != 1" );
 
-        DBG_ASSERT( pAttrib->GetStart() <= pAttrib->GetEnd(), "Collaps: Attribut distorted!" );
-        DBG_ASSERT( ( pAttrib->GetEnd() <= Len()) || bDelAttr, "Collaps: Attribute larger than paragraph!" );
+        DBG_ASSERT( pAttrib->GetStart() <= pAttrib->GetEnd(), "Collapse: Attribute distorted!" );
+        DBG_ASSERT( ( pAttrib->GetEnd() <= Len()) || bDelAttr, "Collapse: Attribute larger than paragraph!" );
         if ( bDelAttr )
         {
             bResort = true;
