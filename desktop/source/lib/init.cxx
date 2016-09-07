@@ -525,7 +525,7 @@ void CallbackFlushHandler::callback(const int type, const char* payload, void* d
 
 void CallbackFlushHandler::queue(const int type, const char* data)
 {
-    const std::string payload(data ? data : "(nil)");
+    std::string payload(data ? data : "(nil)");
     if (m_bPartTilePainting)
     {
         // We drop notifications when this is set, except for important ones.
@@ -585,80 +585,125 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         m_states[LOK_CALLBACK_TEXT_SELECTION_END] = "";
     }
 
-    m_queue.emplace_back(type, payload);
-
-    // These are safe to use the latest state and ignore previous
-    // ones (if any) since the last overrides previous ones.
-    switch (type)
+    // When payload is empty discards any previous state.
+    if (payload.empty())
     {
-        case LOK_CALLBACK_TEXT_SELECTION_START:
-        case LOK_CALLBACK_TEXT_SELECTION_END:
-        case LOK_CALLBACK_TEXT_SELECTION:
-        case LOK_CALLBACK_GRAPHIC_SELECTION:
-        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
-        case LOK_CALLBACK_MOUSE_POINTER:
-        case LOK_CALLBACK_CELL_CURSOR:
-        case LOK_CALLBACK_CELL_VIEW_CURSOR:
-        case LOK_CALLBACK_CELL_FORMULA:
-        case LOK_CALLBACK_CURSOR_VISIBLE:
-        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
-        case LOK_CALLBACK_SET_PART:
-        case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
-        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
-            removeAllButLast(type, false);
-        break;
+        switch (type)
+        {
+            case LOK_CALLBACK_TEXT_SELECTION_START:
+            case LOK_CALLBACK_TEXT_SELECTION_END:
+            case LOK_CALLBACK_TEXT_SELECTION:
+            case LOK_CALLBACK_GRAPHIC_SELECTION:
+            case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+            case LOK_CALLBACK_INVALIDATE_TILES:
+                removeAll([type] (const queue_type::value_type& elem) { return (elem.first == type); });
+            break;
+        }
+    }
+    else
+    {
+        switch (type)
+        {
+            // These are safe to use the latest state and ignore previous
+            // ones (if any) since the last overrides previous ones.
+            case LOK_CALLBACK_TEXT_SELECTION_START:
+            case LOK_CALLBACK_TEXT_SELECTION_END:
+            case LOK_CALLBACK_TEXT_SELECTION:
+            case LOK_CALLBACK_GRAPHIC_SELECTION:
+            case LOK_CALLBACK_MOUSE_POINTER:
+            case LOK_CALLBACK_CELL_CURSOR:
+            case LOK_CALLBACK_CELL_FORMULA:
+            case LOK_CALLBACK_CURSOR_VISIBLE:
+            case LOK_CALLBACK_SET_PART:
+            case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+            {
+                removeAll([type] (const queue_type::value_type& elem) { return (elem.first == type); });
+            }
+            break;
 
-        // These come with rects, so drop earlier
-        // only when the latter includes former ones.
-        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
-        case LOK_CALLBACK_INVALIDATE_TILES:
-            if (payload.empty())
+            // These are safe to use the latest state and ignore previous
+            // ones (if any) since the last overrides previous ones,
+            // but only if the view is the same.
+            case LOK_CALLBACK_CELL_VIEW_CURSOR:
+            case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+            case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+            case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+            case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
             {
-                // Invalidating everything means previously
-                // invalidated tiles can be dropped.
-                removeAllButLast(type, false);
+                boost::property_tree::ptree aTree;
+                std::stringstream aStream(payload);
+                boost::property_tree::read_json(aStream, aTree);
+                const int nViewId = aTree.get<int>("viewId");
+
+                removeAll(
+                    [type, nViewId] (const queue_type::value_type& elem) {
+                        if (elem.first == type)
+                        {
+                            boost::property_tree::ptree aElemTree;
+                            std::stringstream aElemStream(elem.second);
+                            boost::property_tree::read_json(aElemStream, aElemTree);
+                            int nElemViewId = aElemTree.get<int>("viewId");
+                            return (nViewId == nElemViewId);
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                );
             }
-            else if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR)
+            break;
+
+            case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
             {
-                removeAllButLast(type, true);
+                removeAll(
+                    [type, &payload] (const queue_type::value_type& elem) {
+                        return (elem.first == type && elem.second == payload);
+                    }
+                );
             }
-            else if (type == LOK_CALLBACK_INVALIDATE_TILES)
+            break;
+
+            case LOK_CALLBACK_INVALIDATE_TILES:
             {
                 Rectangle rcNew = lcl_ParseRect(payload);
                 //SAL_WARN("lok", "New: " << rcNew.toString());
                 const auto rcOrig = rcNew;
-                int i = m_queue.size();
-                i -= 2;
-                for (; i >= 0; --i)
-                {
-                    if (m_queue[i].first == type)
-                    {
-                        const Rectangle rcOld = lcl_ParseRect(m_queue[i].second);
-                        //SAL_WARN("lok", "#" << i << " Old: " << rcOld.toString());
-                        const Rectangle rcOverlap = rcNew.GetIntersection(rcOld);
-                        //SAL_WARN("lok", "#" << i << " Overlap: " << rcOverlap.toString());
-                        if (rcOverlap.GetWidth() > 0 && rcOverlap.GetHeight() > 0)
+
+                removeAll(
+                    [type, &rcNew] (const queue_type::value_type& elem) {
+                        if (elem.first == type)
                         {
-                            //SAL_WARN("lok", rcOld.toString() << " U " << rcNew.toString());
-                            rcNew.Union(rcOld);
-                            //SAL_WARN("lok", "#" << i << " Union: " << rcNew.toString());
-                            m_queue.erase(m_queue.begin() + i);
+                            const Rectangle rcOld = lcl_ParseRect(elem.second);
+                            //SAL_WARN("lok", "#" << i << " Old: " << rcOld.toString());
+                            const Rectangle rcOverlap = rcNew.GetIntersection(rcOld);
+                            //SAL_WARN("lok", "#" << i << " Overlap: " << rcOverlap.toString());
+                            bool bOverlap = (rcOverlap.GetWidth() > 0 && rcOverlap.GetHeight() > 0);
+                            if (bOverlap)
+                            {
+                                //SAL_WARN("lok", rcOld.toString() << " U " << rcNew.toString());
+                                rcNew.Union(rcOld);
+                            }
+                            return bOverlap;
+                        }
+                        else
+                        {
+                            return false;
                         }
                     }
-                }
+                );
 
-                assert(!m_queue.empty());
                 if (rcNew != rcOrig)
                 {
                     SAL_WARN("lok", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
-                    m_queue.erase(m_queue.begin() + m_queue.size() - 1);
-                    m_queue.emplace_back(type, rcNew.toString().getStr());
+                    payload = rcNew.toString().getStr();
                 }
             }
-
-        break;
+            break;
+        }
     }
+
+    m_queue.emplace_back(type, payload);
 
     lock.unlock();
     if (!IsActive())
@@ -681,30 +726,12 @@ void CallbackFlushHandler::flush()
     }
 }
 
-void CallbackFlushHandler::removeAllButLast(const int type, const bool identical)
+void CallbackFlushHandler::removeAll(const std::function<bool (const CallbackFlushHandler::queue_type::value_type&)>& rTestFunc)
 {
-    int i = m_queue.size() - 1;
-    std::string payload;
-    for (; i >= 0; --i)
-    {
-        if (m_queue[i].first == type)
-        {
-            payload = m_queue[i].second;
-            //SAL_WARN("lok", "Found [" + std::to_string(type) + "] at " + std::to_string(i) + ": [" + payload + "].");
-            break;
-        }
-    }
-
-    for (--i; i >= 0; --i)
-    {
-        if (m_queue[i].first == type &&
-            (!identical || m_queue[i].second == payload))
-        {
-            //SAL_WARN("lok", "Removing [" + std::to_string(type) + "] at " + std::to_string(i) + ": " + m_queue[i].second + "].");
-            m_queue.erase(m_queue.begin() + i);
-        }
-    }
+    auto newEnd = std::remove_if(m_queue.begin(), m_queue.end(), rTestFunc);
+    m_queue.erase(newEnd, m_queue.end());
 }
+
 
 static void doc_destroy(LibreOfficeKitDocument *pThis)
 {
