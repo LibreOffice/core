@@ -159,7 +159,7 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement( const Reference < 
     Reference< XWriter > xWriter = xml::sax::Writer::create(mxContext);
 
     Reference< XTruncate > xTruncate( xOutput, UNO_QUERY );
-    OSL_ENSURE( xTruncate.is(), "Currently only the streams that can be truncated are expected!" );
+    assert( xTruncate.is() && "Currently only the streams that can be truncated are expected!" );
     if ( xTruncate.is() )
     {
         xTruncate->truncate();
@@ -312,7 +312,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_TRACE("Failed to get document object for %s", OUStringToOString( aElementName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    SAL_INFO("basic", "Failed to get document object for " << aElementName);
                 }
             }
         }
@@ -576,7 +576,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
     bool bExport = !aTargetURL.isEmpty();
 
     BasicManager* pBasicMgr = getBasicManager();
-    OSL_ENSURE( pBasicMgr, "SfxScriptLibraryContainer::implStorePasswordLibrary: cannot do this without a BasicManager!" );
+    assert( pBasicMgr && "SfxScriptLibraryContainer::implStorePasswordLibrary: cannot do this without a BasicManager!" );
     if ( !pBasicMgr )
     {
         return false;
@@ -661,7 +661,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     OString aMessage = "invalid library element '" +
                                         OUStringToOString( aElementName, osl_getThreadTextEncoding() ) +
                                         "'.";
-                    OSL_FAIL( aMessage.getStr());
+                    SAL_WARN( "basic", aMessage.getStr());
                     #endif
                     continue;
                 }
@@ -689,7 +689,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                 }
                 catch(const uno::Exception& )
                 {
-                    OSL_FAIL( "Problem on storing of password library!\n" );
+                    SAL_WARN( "basic", "Problem on storing of password library!\n" );
                     // TODO: error handling
                 }
             }
@@ -747,7 +747,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     OString aMessage = "invalid library element '" +
                                        OUStringToOString( aElementName, osl_getThreadTextEncoding() ) +
                                        "'.";
-                    OSL_FAIL( aMessage.getStr());
+                    SAL_WARN( "basic", aMessage.getStr());
                     #endif
                     continue;
                 }
@@ -800,7 +800,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
 
                         // #87671 Allow encryption
                         uno::Reference< embed::XEncryptionProtectedSource > xEncr( xSourceStream, uno::UNO_QUERY );
-                        OSL_ENSURE( xEncr.is(),
+                        assert( xEncr.is() &&
                                     "StorageStream opened for writing must implement XEncryptionProtectedSource!\n" );
                         if ( !xEncr.is() )
                         {
@@ -831,7 +831,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     // xOut->closeOutput();
 
                     uno::Reference< embed::XTransactedObject > xTransact( xElementRootStorage, uno::UNO_QUERY );
-                    OSL_ENSURE( xTransact.is(), "The storage must implement XTransactedObject!\n" );
+                    assert( xTransact.is() && "The storage must implement XTransactedObject!\n" );
                     if ( !xTransact.is() )
                     {
                         throw uno::RuntimeException();
@@ -878,7 +878,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
     if( !pScriptLib->mbLoadedBinary && !bVerifyPasswordOnly && !pLib->mbPasswordVerified )
     {
         BasicManager* pBasicMgr = getBasicManager();
-        OSL_ENSURE( pBasicMgr, "SfxScriptLibraryContainer::implLoadPasswordLibrary: cannot do this without a BasicManager!" );
+        assert( pBasicMgr && "SfxScriptLibraryContainer::implLoadPasswordLibrary: cannot do this without a BasicManager!" );
         bool bLoaded = pScriptLib->mbLoaded;
         pScriptLib->mbLoaded = true;        // Necessary to get lib
         pBasicLib = pBasicMgr ? pBasicMgr->GetLib( Name ) : nullptr;
@@ -922,7 +922,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             }
             catch(const uno::Exception& )
             {
-                OSL_FAIL( "### couldn't open sub storage for library\n" );
+                SAL_WARN( "basic", "### couldn't open sub storage for library\n" );
                 return false;
             }
         }
@@ -1152,7 +1152,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer:: HasExecutableCode( const OUString&
     throw (uno::RuntimeException, std::exception)
 {
     BasicManager* pBasicMgr = getBasicManager();
-    OSL_ENSURE( pBasicMgr, "we need a basicmanager, really we do" );
+    assert( pBasicMgr && "we need a basicmanager, we really do" );
     if ( pBasicMgr )
     {
         return pBasicMgr->HasExeCode( Library ); // need to change this to take name
