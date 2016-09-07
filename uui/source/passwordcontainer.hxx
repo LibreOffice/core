@@ -20,19 +20,17 @@
 #ifndef INCLUDED_UUI_SOURCE_PASSWORDCONTAINER_HXX
 #define INCLUDED_UUI_SOURCE_PASSWORDCONTAINER_HXX
 
+#include <sal/config.h>
+
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 
 namespace com {
     namespace sun {
         namespace star {
-            namespace lang {
-                class XMultiServiceFactory;
-            }
             namespace ucb {
                 class AuthenticationRequest;
                 class XInteractionSupplyAuthentication;
@@ -153,16 +151,6 @@ public:
     virtual sal_Bool SAL_CALL
     handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request )
         throw (css::uno::RuntimeException, std::exception) override;
-
-    // Non-UNO interfaces
-    static OUString
-    getImplementationName_Static();
-
-    static css::uno::Sequence< OUString >
-    getSupportedServiceNames_Static();
-
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
-    createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory > & rxServiceMgr );
 
 private:
     PasswordContainerHelper m_aPwContainerHelper;
