@@ -79,6 +79,7 @@
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
           <value xml:lang="es">.uno:SelectAll</value>
+          <value xml:lang="en-US">.uno:CommonAlignHorizontalCenter</value>
         </prop>
       </node>
       <node oor:name="F11_MOD2" oor:op="replace">
@@ -130,6 +131,18 @@
           <value xml:lang="es">.uno:Save</value>
         </prop>
       </node>
+      <node oor:name="J_MOD1" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:CommonAlignJustified</value>
+        </prop>
+      </node>
+      <node oor:name="L_MOD1" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:CommonAlignLeft</value>
+        </prop>
+      </node>
       <node oor:name="N_MOD1" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -152,6 +165,12 @@
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
           <value xml:lang="en-US">.uno:Print</value>
+        </prop>
+      </node>
+      <node oor:name="R_MOD1" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:CommonAlignRight</value>
         </prop>
       </node>
       <node oor:name="E_MOD1_MOD2" oor:op="replace">
