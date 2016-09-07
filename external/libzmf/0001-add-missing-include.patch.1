@@ -5,16 +5,16 @@ Subject: [PATCH] add missing include
 
 Change-Id: Ia21873123179902b2c3cad95b39db7d15c5b388a
 ---
- src/lib/ZMFCollector.cpp | 2 ++
+ src/lib/ZMFTypes.cpp | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/src/lib/ZMFCollector.cpp b/src/lib/ZMFCollector.cpp
+diff --git a/src/lib/ZMFTypes.cpp b/src/lib/ZMFTypes.cpp
 index ded93c7..7e024b3 100644
---- a/src/lib/ZMFCollector.cpp
-+++ b/src/lib/ZMFCollector.cpp
+--- a/src/lib/ZMFTypes.cpp
++++ b/src/lib/ZMFTypes.cpp
 @@ -9,6 +9,19 @@
  
- #include "ZMFCollector.h"
+ #include "ZMFTypes.h"
  
 +#include <cmath>
 +
@@ -30,8 +30,8 @@ index ded93c7..7e024b3 100644
 +#endif
 +
  #include <boost/math/constants/constants.hpp>
- #include <boost/variant.hpp>
  
+ namespace libzmf
 -- 
 2.7.4
 
