@@ -19,7 +19,6 @@
 
 #include "requeststringresolver.hxx"
 #include "iahndl.hxx"
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
@@ -39,7 +38,7 @@ OUString SAL_CALL
 UUIInteractionRequestStringResolver::getImplementationName()
     throw (uno::RuntimeException, std::exception)
 {
-    return OUString::createFromAscii(m_aImplementationName);
+    return OUString("com.sun.star.comp.uui.UUIInteractionRequestStringResolver");
 }
 
 sal_Bool SAL_CALL
@@ -50,11 +49,12 @@ UUIInteractionRequestStringResolver::supportsService(
     return cppu::supportsService(this, rServiceName);
 }
 
+
 uno::Sequence< OUString > SAL_CALL
 UUIInteractionRequestStringResolver::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
-    return getSupportedServiceNames_static();
+    return { "com.sun.star.task.InteractionRequestStringResolver" };
 }
 
 beans::Optional< OUString > SAL_CALL
@@ -73,29 +73,12 @@ UUIInteractionRequestStringResolver::getStringFromInformationalRequest(
     }
 }
 
-char const UUIInteractionRequestStringResolver::m_aImplementationName[]
-    = "com.sun.star.comp.uui.UUIInteractionRequestStringResolver";
-
-uno::Sequence< OUString >
-UUIInteractionRequestStringResolver::getSupportedServiceNames_static()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_uui_UUIInteractionRequestStringResolver_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
 {
-    uno::Sequence< OUString > aNames { "com.sun.star.task.InteractionRequestStringResolver" };
-    return aNames;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL
-UUIInteractionRequestStringResolver::createInstance(
-    uno::Reference< lang::XMultiServiceFactory > const &
-        rServiceFactory)
-{
-    try
-    {
-        return *new UUIInteractionRequestStringResolver(comphelper::getComponentContext(rServiceFactory));
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw uno::RuntimeException("out of memory", nullptr);
-    }
+    return cppu::acquire(new UUIInteractionRequestStringResolver(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
