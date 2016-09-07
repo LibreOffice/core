@@ -908,6 +908,8 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             break;
 
         #if !defined (SunXK_Undo)
+            // we don't intend to use SunXK_Undo, but if it has not been
+            // defined already, then we _do_ need the following:
             #define SunXK_Props     0x1005FF70
             #define SunXK_Front     0x1005FF71
             #define SunXK_Copy      0x1005FF72
@@ -915,6 +917,12 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             #define SunXK_Paste     0x1005FF74
             #define SunXK_Cut       0x1005FF75
         #endif
+            // the following are for XF86 systems
+            #define XF86XK_Copy     0x1008FF57
+            #define XF86XK_Cut      0x1008FF58
+            #define XF86XK_Open     0x1008FF6B
+            #define XF86XK_Paste    0x1008FF6D
+            // which leaves Apollo and OSF systems in the lurch
 
         case KEY_REPEAT:
             nKeySym = XK_Redo;
@@ -929,19 +937,25 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             nKeySym = SunXK_Front;
             break;
         case KEY_COPY:
-            nKeySym = SunXK_Copy;
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Copy : XF86XK_Copy;
             break;
         case KEY_OPEN:
-            nKeySym = SunXK_Open;
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Open : XF86XK_Open;
             break;
         case KEY_PASTE:
-            nKeySym = SunXK_Paste;
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Paste : XF86XK_Paste;
             break;
         case KEY_FIND:
             nKeySym = XK_Find;
             break;
         case KEY_CUT:
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Cut : XF86XK_Cut;
+            /* The original code here had:
             nKeySym = GetServerVendor() == vendor_sun ? SunXK_Cut   : XK_L10;
+            if anyone can remember which non-vendor_sun system used this
+            XK_L10 keysym, and why this hack only applied to KEY_CUT,
+            then please re-hack this code to put it back
+            */
             break;
         case KEY_ADD:
             aCustomKeyName = "+";
@@ -1163,7 +1177,7 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             // - - - - - Sun X-Server keyboard ??? - - - - - - - - - - - -
             case XK_L1: // XK_F11:
                 nKey = KEY_F11; // on a sun keyboard this actually is usually SunXK_Stop = 0x0000FF69 (XK_Cancel),
-                // but VCL doesn't have a key definition for that
+                                // but VCL doesn't have a key definition for that
                 break;
             case XK_L2: // XK_F12:
                 if ( GetServerVendor() == vendor_sun )

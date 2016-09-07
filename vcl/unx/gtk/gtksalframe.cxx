@@ -136,6 +136,7 @@ static sal_uInt16 GetKeyCode( guint keyval )
     else if( keyval >= GDK_KEY_a && keyval <= GDK_KEY_z )
         nCode = KEY_A + (keyval-GDK_KEY_a );
     else if( keyval >= GDK_KEY_F1 && keyval <= GDK_KEY_F26 )
+    // KEY_F26 is the last function key known to keycodes.hxx
     {
         if( GetGtkSalData()->GetGtkDisplay()->IsNumLockFromXS() )
         {
@@ -146,6 +147,10 @@ static sal_uInt16 GetKeyCode( guint keyval )
             switch( keyval )
             {
                 // - - - - - Sun keyboard, see vcl/unx/source/app/saldisp.cxx
+                // althopugh GDK_KEY_F1 ... GDK_KEY_L10 are known to
+                // gdk/gdkkeysyms.h, they are unlikely to be generated
+                // except possibly by Solaris systems
+                // this whole section needs review
                 case GDK_KEY_L2:
                     if( GetGtkSalData()->GetGtkDisplay()->GetServerVendor() == vendor_sun )
                         nCode = KEY_REPEAT;
@@ -217,6 +222,9 @@ static sal_uInt16 GetKeyCode( guint keyval )
             case GDK_KEY_Help:          nCode = KEY_HELP;       break;
             case GDK_KEY_Undo:          nCode = KEY_UNDO;       break;
             case GDK_KEY_Redo:          nCode = KEY_REPEAT;     break;
+            // on a sun keyboard this actually is usually SunXK_Stop = 0x0000FF69 (XK_Cancel),
+            // but VCL doesn't have a key definition for that
+            case GDK_KEY_Cancel:        nCode = KEY_F11;        break;
             case GDK_KEY_KP_Decimal:
             case GDK_KEY_KP_Separator:  nCode = KEY_DECIMAL;    break;
             case GDK_KEY_asciitilde:    nCode = KEY_TILDE;      break;
@@ -228,6 +236,7 @@ static sal_uInt16 GetKeyCode( guint keyval )
             case GDK_KEY_quoteright:   nCode = KEY_QUOTERIGHT;   break;
             // some special cases, also see saldisp.cxx
             // - - - - - - - - - - - - -  Apollo - - - - - - - - - - - - - 0x1000
+            // These can be found in ap_keysym.h
             case 0x1000FF02: // apXK_Copy
                 nCode = KEY_COPY;
                 break;
@@ -242,10 +251,12 @@ static sal_uInt16 GetKeyCode( guint keyval )
                 break;
             // Exit, Save
             // - - - - - - - - - - - - - - D E C - - - - - - - - - - - - - 0x1000
+            // These can be found in DECkeysym.h
             case 0x1000FF00:
                 nCode = KEY_DELETE;
                 break;
             // - - - - - - - - - - - - - -  H P  - - - - - - - - - - - - - 0x1000
+            // These can be found in HPkeysym.h
             case 0x1000FF73: // hpXK_DeleteChar
                 nCode = KEY_DELETE;
                 break;
@@ -255,6 +266,7 @@ static sal_uInt16 GetKeyCode( guint keyval )
                 break;
             // - - - - - - - - - - - - - - I B M - - - - - - - - - - - - -
             // - - - - - - - - - - - - - - O S F - - - - - - - - - - - - - 0x1004
+            // These also can be found in HPkeysym.h
             case 0x1004FF02: // osfXK_Copy
                 nCode = KEY_COPY;
                 break;
@@ -278,6 +290,7 @@ static sal_uInt16 GetKeyCode( guint keyval )
             // - - - - - - - - - - - - - - S G I - - - - - - - - - - - - - 0x1007
             // - - - - - - - - - - - - - - S N I - - - - - - - - - - - - -
             // - - - - - - - - - - - - - - S U N - - - - - - - - - - - - - 0x1005
+            // These can be found in Sunkeysym.h
             case 0x1005FF10: // SunXK_F36
                 nCode = KEY_F11;
                 break;
@@ -302,6 +315,15 @@ static sal_uInt16 GetKeyCode( guint keyval )
             case 0x1005FF75: // SunXK_Cut
                 nCode = KEY_CUT;
                 break;
+            // - - - - - - - - - - - - - X F 8 6 - - - - - - - - - - - - - 0x1008
+            // These can be found in XF86keysym.h
+            // but more importantly they are also available GTK/Gdk version 3
+            // and hence are already provided in gdk/gdkkeysyms.h, and hence
+            // in gdk/gdk.h
+            case GDK_KEY_Copy:          nCode = KEY_COPY;  break; // 0x1008ff57
+            case GDK_KEY_Cut:           nCode = KEY_CUT;   break; // 0x1008ff58
+            case GDK_KEY_Open:          nCode = KEY_OPEN;  break; // 0x1008ff6b
+            case GDK_KEY_Paste:         nCode = KEY_PASTE; break; // 0x1008ff6d
         }
     }
 
