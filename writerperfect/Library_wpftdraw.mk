@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 	mspub \
 	mwaw \
 	odfgen \
+	png \
 	pagemaker \
 	revenge \
 	staroffice \
