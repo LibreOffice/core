@@ -46,11 +46,13 @@ namespace desktop {
         void setPartTilePainting(const bool bPartPainting) { m_bPartTilePainting = bPartPainting; }
         bool isPartTilePainting() const { return m_bPartTilePainting; }
 
+        typedef std::vector<std::pair<int, std::string>> queue_type;
+
     private:
         void flush();
-        void removeAllButLast(const int type, const bool identical);
+        void removeAll(const std::function<bool (const queue_type::value_type&)>& rTestFunc);
 
-        std::vector<std::pair<int, std::string>> m_queue;
+        queue_type m_queue;
         std::map<int, std::string> m_states;
         LibreOfficeKitDocument* m_pDocument;
         LibreOfficeKitCallback m_pCallback;
