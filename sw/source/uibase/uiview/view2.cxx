@@ -710,8 +710,6 @@ void SwView::Execute(SfxRequest &rReq)
                         m_pWrtShell->RejectRedline(nRedline);
                 }
             }
-            // Go to next change after accepting or rejecting one (fdo#83953)
-            GetViewFrame()->GetDispatcher()->Execute(FN_REDLINE_NEXT_CHANGE, SfxCallMode::ASYNCHRON);
         }
         break;
 
