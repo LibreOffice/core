@@ -61,34 +61,6 @@ Module gid_Module_Optional_Extensions_NumberText
 End
 #endif
 
-/* ** Hungarian Cross-reference Toolbar ** */
-
-#ifdef WITH_EXTENSION_HUNART
-Module gid_Module_Optional_Extensions_HunArt
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_HUNART);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_HunArt );
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
-/* ** Typography Toolbar ** */
-
-#ifdef WITH_EXTENSION_TYPO
-Module gid_Module_Optional_Extensions_Typo
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_TYPO);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_Typo );
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
 /* ** ConvertTextToNumber ** */
 
 #ifdef WITH_EXTENSION_CT2N
@@ -100,62 +72,6 @@ Module gid_Module_Optional_Extensions_CT2N
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_CT2N);
     ParentID = gid_Module_Optional_Extensions;
     Files = (auto_extensions_ct2n_ALL);
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
-/* ** Watch Window ** */
-
-#ifdef WITH_EXTENSION_WATCH_WINDOW
-Module gid_Module_Optional_Extensions_Watch_Window
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_WATCH_WINDOW);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_Watch_Window );
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
-/* ** Diagram ** */
-
-#ifdef WITH_EXTENSION_DIAGRAM
-Module gid_Module_Optional_Extensions_Diagram
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_DIAGRAM);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_Diagram );
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
-/* ** Validator ** */
-
-#ifdef WITH_EXTENSION_VALIDATOR
-Module gid_Module_Optional_Extensions_Validator
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_VALIDATOR);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_Validator );
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
-/* ** Barcode ** */
-
-#ifdef WITH_EXTENSION_BARCODE
-Module gid_Module_Optional_Extensions_Barcode
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_BARCODE);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_Barcode );
     Default = YES;
     Styles = ( );
 End
@@ -214,17 +130,6 @@ Module gid_Module_Optional_Extensions_MySQLConnector
  gid_File_Oxt_MySQLConnector );
  Default = YES;
  Styles = ( );
-End
-#endif
-
-/* ** Sun Template Pack ** */
-
-#ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
-Module gid_Module_Optional_Extensions_Sun_Template_Pack
-    ParentID = gid_Module_Optional_Extensions;
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SUN_TEMPLATE_PACK);
-    Default = YES;
-    Styles = ( );
 End
 #endif
 

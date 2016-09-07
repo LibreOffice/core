@@ -18,7 +18,6 @@ $(eval $(call gb_Module_add_moduledir,external,msc-externals))
 endif
 
 $(eval $(call gb_Module_add_moduledirs,external,\
-	accessories \
 	$(if $(filter-out IOS,$(OS)),libxmlsec) \
 	$(call gb_Helper_optional,ABW,libabw) \
 	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \

@@ -12,7 +12,6 @@ $(eval $(call gb_Module_Module,scp2))
 $(eval $(call gb_Module_add_targets,scp2,\
 	AutoInstall \
 	CustomTarget_langmacros \
-	InstallModule_accessories \
 	InstallModule_base \
 	InstallModule_calc \
 	InstallModule_draw \
