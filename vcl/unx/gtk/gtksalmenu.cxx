@@ -21,10 +21,6 @@
 #include <vcl/pngwrite.hxx>
 #include <unx/gtk/gtkinst.hxx>
 
-#if GTK_CHECK_VERSION(3,0,0)
-#  include <gdk/gdkkeysyms-compat.h>
-#endif
-
 #include <sal/log.hxx>
 #include <window.h>
 #include <svids.hrc>
@@ -612,7 +608,7 @@ void GtkSalMenu::ReturnFocus()
 
 gboolean GtkSalMenu::SignalKey(GdkEventKey* pEvent)
 {
-    if (pEvent->keyval == GDK_F6)
+    if (pEvent->keyval == GDK_KEY_F6)
     {
         mbReturnFocusToDocument = false;
         gtk_menu_shell_cancel(GTK_MENU_SHELL(mpMenuBarWidget));
