@@ -11524,70 +11524,13 @@ dnl There are standalone tests for each of these below.
 WITH_EXTRA_EXTENSIONS=
 AC_SUBST([WITH_EXTRA_EXTENSIONS])
 
-libo_CHECK_EXTENSION([Watch Window],[WATCH_WINDOW],[watch_window],[watch-window],[23bd75552206dfcd8fd4e29137dcac84-WatchWindow_1.2.0.0.oxt])
-libo_CHECK_EXTENSION([SmART Gallery (Diagram)],[DIAGRAM],[diagram],[diagram],[8d74685d41f8bffe8c3e71fe8deac09d-SmART_0.9.5.oxt])
-libo_CHECK_EXTENSION([Validator],[VALIDATOR],[validator],[validator],[bbdd5639ada63e3130761daaecae1a10-Validator_1.1.0.0.oxt])
-libo_CHECK_EXTENSION([Barcode],[BARCODE],[barcode],[barcode],[3ed18025a766f1e955707b969c8113a5-Barcode_1.3.5.0.oxt])
 libo_CHECK_EXTENSION([ConvertTextToNumber],[CT2N],[ct2n],[ct2n],[])
 libo_CHECK_EXTENSION([Numbertext],[NUMBERTEXT],[numbertext],[numbertext],[b7cae45ad2c23551fd6ccb8ae2c1f59e-numbertext_0.9.5.oxt])
-libo_CHECK_EXTENSION([Hungarian Cross-reference Toolbar],[HUNART],[hunart],[hunart],[b632bdd25649cc4067bcb410bae23d2b-hunart_0.3.oxt])
-libo_CHECK_EXTENSION([Typography Toolbar],[TYPO],[typo],[typo],[9d60b6cfa3ef1926848710bbcd11115b-typo_0.4.2.oxt])
 libo_CHECK_EXTENSION([Google Docs],[GOOGLE_DOCS],[google_docs],[google-docs],[27211596cf0ad97cab7321239406fde0-gdocs_3.0.1_modified.oxt])
 if test "x$with_java" != "xno"; then
     libo_CHECK_EXTENSION([NLPSolver],[NLPSOLVER],[nlpsolver],[nlpsolver],[])
     libo_CHECK_EXTENSION([LanguageTool],[LANGUAGETOOL],[languagetool],[languagetool],[])
 fi
-
-dnl ===================================================================
-dnl Test whether to include Sun Professional Template Pack
-dnl ===================================================================
-AC_MSG_CHECKING([for Sun Professional Template Pack integration (only supported languages displayed)])
-if test "$with_sun_templates" = "" -o "$with_sun_templates" = "no"; then
-    AC_MSG_RESULT([no integration])
-else
-    SCPDEFS="$SCPDEFS -DWITH_EXTENSION_SUN_TEMPLATE_PACK"
-    sun_supported_langs="en-US de it fr es hu"
-    if test "$with_sun_templates" = "yes"; then
-        wanted_sun_templates="$sun_supported_langs"
-    else
-        # check whether the langs are supported by Sun
-        wanted_sun_templates=
-        for lang in $with_sun_templates; do
-            if test -n "`echo $sun_supported_langs | grep "$lang"`"; then
-                wanted_sun_templates="$wanted_sun_templates $lang"
-            fi
-        done
-    fi
-    SUNTEMPLATES_LANG=
-    SUNTEMPLATES_DE_PACK=
-    SUNTEMPLATES_EN_US_PACK=
-    SUNTEMPLATES_ES_PACK=
-    SUNTEMPLATES_FR_PACK=
-    SUNTEMPLATES_HU_PACK=
-    SUNTEMPLATES_IT_PACK=
-    # check whether the langs are requested at all
-    for lang in $wanted_sun_templates; do
-    if test "$with_lang" = "ALL" -o -n "`echo $with_lang | grep "$lang"`"; then
-        SUNTEMPLATES_LANG="$SUNTEMPLATES_LANG $lang"
-        case $lang in
-        "de") SUNTEMPLATES_DE_PACK="53ca5e56ccd4cab3693ad32c6bd13343-Sun-ODF-Template-Pack-de_1.0.0.oxt";;
-        "en-US") SUNTEMPLATES_EN_US_PACK="472ffb92d82cf502be039203c606643d-Sun-ODF-Template-Pack-en-US_1.0.0.oxt";;
-        "es") SUNTEMPLATES_ES_PACK="4ad003e7bbda5715f5f38fde1f707af2-Sun-ODF-Template-Pack-es_1.0.0.oxt";;
-        "fr") SUNTEMPLATES_FR_PACK="a53080dc876edcddb26eb4c3c7537469-Sun-ODF-Template-Pack-fr_1.0.0.oxt";;
-        "hu") SUNTEMPLATES_HU_PACK="09ec2dac030e1dcd5ef7fa1692691dc0-Sun-ODF-Template-Pack-hu_1.0.0.oxt";;
-        "it") SUNTEMPLATES_IT_PACK="b33775feda3bcf823cad7ac361fd49a6-Sun-ODF-Template-Pack-it_1.0.0.oxt";;
-        esac
-    fi
-    done
-    WITH_EXTRA_EXTENSIONS=TRUE
-    AC_MSG_RESULT([$SUNTEMPLATES_LANG])
-fi
-AC_SUBST(SUNTEMPLATES_DE_PACK)
-AC_SUBST(SUNTEMPLATES_EN_US_PACK)
-AC_SUBST(SUNTEMPLATES_ES_PACK)
-AC_SUBST(SUNTEMPLATES_FR_PACK)
-AC_SUBST(SUNTEMPLATES_HU_PACK)
-AC_SUBST(SUNTEMPLATES_IT_PACK)
 
 TEST_FONTS_MISSING=0
 
@@ -11645,77 +11588,6 @@ fi
 AC_SUBST(WITH_FONTS)
 AC_DEFINE_UNQUOTED([TEST_FONTS_MISSING], $TEST_FONTS_MISSING)
 
-dnl ===================================================================
-dnl Test whether to include extra galleries
-dnl ===================================================================
-AC_MSG_CHECKING([whether to include extra galleries])
-if test "$enable_extra_gallery" = "" -o "$enable_extra_gallery" = "no"; then
-    AC_MSG_RESULT([no])
-    WITH_EXTRA_GALLERY=
-    OOOP_GALLERY_PACK=""
-else
-    AC_MSG_RESULT([yes])
-    WITH_EXTRA_GALLERY=TRUE
-    BUILD_TYPE="$BUILD_TYPE EXTRA_GALLERY"
-    SCPDEFS="$SCPDEFS -DWITH_EXTRA_GALLERY"
-    OOOP_GALLERY_PACK="af9314c5972d95a5d6da23ffad818f68-OOOP-gallery-pack-2.8.0.0.zip"
-fi
-AC_SUBST(WITH_EXTRA_GALLERY)
-AC_SUBST(OOOP_GALLERY_PACK)
-
-dnl ===================================================================
-dnl Test whether to include extra templates
-dnl ===================================================================
-AC_MSG_CHECKING([whether to include extra templates])
-if test "$enable_extra_template" = "" -o "$enable_extra_template" = "no"; then
-    AC_MSG_RESULT([no])
-    WITH_EXTRA_TEMPLATE=
-    OOOP_TEMPLATES_PACK=""
-else
-    AC_MSG_RESULT([yes])
-    WITH_EXTRA_TEMPLATE=TRUE
-    BUILD_TYPE="$BUILD_TYPE EXTRA_TEMPLATE"
-    SCPDEFS="$SCPDEFS -DWITH_EXTRA_TEMPLATE"
-    OOOP_TEMPLATES_PACK="1be202fbbbc13f10592a98f70a4a87fb-OOOP-templates-pack-2.9.0.0.zip"
-fi
-AC_SUBST(WITH_EXTRA_TEMPLATE)
-AC_SUBST(OOOP_TEMPLATES_PACK)
-
-dnl ===================================================================
-dnl Test whether to include extra samples
-dnl ===================================================================
-AC_MSG_CHECKING([whether to include extra samples])
-if test "$enable_extra_sample" = "" -o "$enable_extra_sample" = "no"; then
-    AC_MSG_RESULT([no])
-    WITH_EXTRA_SAMPLE=
-    OOOP_SAMPLES_PACK=""
-else
-    AC_MSG_RESULT([yes])
-    WITH_EXTRA_SAMPLE=TRUE
-    BUILD_TYPE="$BUILD_TYPE EXTRA_SAMPLE"
-    SCPDEFS="$SCPDEFS -DWITH_EXTRA_SAMPLE"
-    OOOP_SAMPLES_PACK="a6bccacf44914969e6e7b2f8faf4132c-OOOP-samples-pack-2.7.0.0.zip"
-fi
-AC_SUBST(WITH_EXTRA_SAMPLE)
-AC_SUBST(OOOP_SAMPLES_PACK)
-
-dnl ===================================================================
-dnl Test whether to include extra fonts
-dnl ===================================================================
-AC_MSG_CHECKING([whether to include extra fonts])
-if test "$enable_extra_font" = "" -o "$enable_extra_font" = "no"; then
-    AC_MSG_RESULT([no])
-    WITH_EXTRA_FONT=
-    OOOP_FONTS_PACK=""
-else
-    AC_MSG_RESULT([yes])
-    WITH_EXTRA_FONT=TRUE
-    BUILD_TYPE="$BUILD_TYPE EXTRA_FONT"
-    SCPDEFS="$SCPDEFS -DWITH_EXTRA_FONT"
-    OOOP_FONTS_PACK="a10aa597411643326e27d7fc128af12d-OOOP-fonts-pack-2.9.0.0.zip"
-fi
-AC_SUBST(WITH_EXTRA_FONT)
-AC_SUBST(OOOP_FONTS_PACK)
 
 dnl ===================================================================
 dnl Test whether to enable online update service

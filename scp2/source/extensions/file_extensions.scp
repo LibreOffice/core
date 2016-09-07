@@ -35,84 +35,6 @@ End
 
 #endif
 
-/* ** Hungarian Cross-reference Toolbar** */
-
-#ifdef WITH_EXTENSION_HUNART
-
-File gid_File_Oxt_HunArt
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "hunart.filelist";
-End
-
-#endif
-
-/* ** Typography Toolbar** */
-
-#ifdef WITH_EXTENSION_TYPO
-
-File gid_File_Oxt_Typo
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "typo.filelist";
-End
-
-#endif
-
-/* ** Watch Window ** */
-
-#ifdef WITH_EXTENSION_WATCH_WINDOW
-
-File gid_File_Oxt_Watch_Window
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "WatchWindow.filelist";
-End
-
-#endif
-
-/* ** Diagram ** */
-
-#ifdef WITH_EXTENSION_DIAGRAM
-
-File gid_File_Oxt_Diagram
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "SmART.filelist";
-End
-
-#endif
-
-/* ** Validator ** */
-
-#ifdef WITH_EXTENSION_VALIDATOR
-
-File gid_File_Oxt_Validator
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "Validator.filelist";
-End
-
-#endif
-
-/* ** Barcode ** */
-
-#ifdef WITH_EXTENSION_BARCODE
-
-File gid_File_Oxt_Barcode
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "Barcode.filelist";
-End
-
-#endif
-
 /* ** Google Docs ** */
 
 #ifdef WITH_EXTENSION_GOOGLE_DOCS
@@ -161,24 +83,6 @@ File gid_File_Oxt_MySQLConnector
     Styles = (PACKED, FILELIST);
     Dir = FILELIST_DIR;
     Name = "Extension/mysql-connector-ooo.filelist";
-End
-
-#endif
-
-/* ** Sun Template Pack ** */
-
-#ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
-
-File gid_File_Optional_Extensions_Sun_Template_Pack
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name (en-US) = "Sun_ODF_Template_Pack_en-US.filelist";
-    Name (de) = "Sun_ODF_Template_Pack_de.filelist";
-    Name (it) = "Sun_ODF_Template_Pack_it.filelist";
-    Name (fr) = "Sun_ODF_Template_Pack_fr.filelist";
-    Name (es) = "Sun_ODF_Template_Pack_es.filelist";
-    Name (hu) = "Sun_ODF_Template_Pack_hu.filelist";
 End
 
 #endif
