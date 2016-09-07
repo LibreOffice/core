@@ -16,13 +16,31 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PROPERTYPANEL_HRC
-#define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PROPERTYPANEL_HRC
+#include <PageSizePopup.hxx>
+#include "PageSizeControl.hxx"
+#include <editeng/sizeitem.hxx>
+#include <vcl/toolbox.hxx>
 
-#include "rcid.hrc"
+SFX_IMPL_TOOLBOX_CONTROL(PageSizePopup, SvxSizeItem);
 
-#define RID_POPUP_SWPAGE_MARGIN             (RC_PROPERTYPANEL_BEGIN + 3)
+PageSizePopup::PageSizePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+    : SfxToolBoxControl(nSlotId, nId, rTbx)
+{
+    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
+}
 
-#endif
+PageSizePopup::~PageSizePopup()
+{
+}
+
+VclPtr<SfxPopupWindow> PageSizePopup::CreatePopupWindow()
+{
+    VclPtr<sw::sidebar::PageSizeControl> pControl = VclPtr<sw::sidebar::PageSizeControl>::Create(GetSlotId());
+    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoAppFocusClose);
+    SetPopupWindow(pControl);
+
+    return pControl;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

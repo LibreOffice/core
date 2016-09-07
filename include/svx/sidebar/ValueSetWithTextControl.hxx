@@ -52,6 +52,8 @@ public:
         vcl::Window* pParent,
         const ResId& rResId);
 
+    ValueSetWithTextControl(Window* pParent, WinBits nBits);
+
     // add item for control type IMAGE_TEXT
     // if control type does not match IMAGE_TEXT no item is added.
     // @param pSelectedItemImage

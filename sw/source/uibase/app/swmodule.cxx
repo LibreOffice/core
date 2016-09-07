@@ -110,6 +110,7 @@
 #include <barcfg.hxx>
 #include <svx/rubydialog.hxx>
 #include <svtools/colorcfg.hxx>
+#include <PageSizePopup.hxx>
 #include <PageOrientationPopup.hxx>
 #include <PageColumnPopup.hxx>
 
@@ -295,7 +296,7 @@ void SwDLL::RegisterControls()
     svx::ParaLRSpacingControl::RegisterControl(SID_ATTR_PARA_LRSPACE, pMod);
     PageOrientationPopup::RegisterControl(SID_ATTR_PAGE_ORIENTATION, pMod);
     PageColumnPopup::RegisterControl(SID_ATTR_PAGE_COLUMN, pMod);
-
+    PageSizePopup::RegisterControl(SID_ATTR_PAGE_SIZE, pMod);
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
 
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );

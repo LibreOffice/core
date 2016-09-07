@@ -41,6 +41,15 @@ ValueSetWithTextControl::ValueSetWithTextControl(
     SetColCount();
 }
 
+ValueSetWithTextControl::ValueSetWithTextControl(
+    Window* pParent,
+    WinBits nBits)
+    : ValueSet( pParent, nBits )
+    , meControlType( svx::sidebar::ValueSetWithTextControl::ControlType::TextText )
+    {
+        SetColCount();
+    }
+
 void ValueSetWithTextControl::AddItem(
     const Image& rItemImage,
     const Image* pSelectedItemImage,

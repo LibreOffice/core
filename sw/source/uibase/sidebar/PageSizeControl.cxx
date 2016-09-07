@@ -23,6 +23,7 @@
 
 #include <cmdid.h>
 #include <swtypes.hxx>
+#include <svx/svxids.hrc>
 
 #include <svx/sidebar/ValueSetWithTextControl.hxx>
 
@@ -32,25 +33,52 @@
 #include <sfx2/dispatch.hxx>
 
 #include <vcl/settings.hxx>
+#include <svl/itempool.hxx>
+
+namespace
+{
+    FieldUnit lcl_GetFieldUnit()
+    {
+        FieldUnit eUnit = FUNIT_INCH;
+        const SfxPoolItem* pItem = nullptr;
+        SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_METRIC, pItem );
+        if ( pItem && eState >= SfxItemState::DEFAULT )
+        {
+            eUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        }
+        else
+        {
+            return SfxModule::GetCurrentFieldUnit();
+        }
+
+        return eUnit;
+    }
+
+    MapUnit lcl_GetUnit()
+    {
+        SfxItemPool &rPool = SfxGetpApp()->GetPool();
+        sal_uInt16 nWhich = rPool.GetWhich( SID_ATTR_PAGE_SIZE );
+        return rPool.GetMetric( nWhich );
+    }
+}
 
 namespace sw { namespace sidebar {
 
-PageSizeControl::PageSizeControl(
-    vcl::Window* pParent,
-    PagePropertyPanel& rPanel,
-    const Paper ePaper,
-    const bool bLandscape,
-    const FieldUnit eFUnit )
-    : svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_SIZE) )
-    , mpSizeValueSet( VclPtr<svx::sidebar::ValueSetWithTextControl>::Create( svx::sidebar::ValueSetWithTextControl::ControlType::TextText, this, SW_RES(VS_SIZE) ) )
-    , maMoreButton( VclPtr<PushButton>::Create( this, SW_RES(CB_SIZE_MORE) ) )
-    , maWidthHeightField( VclPtr<MetricField>::Create( this, SW_RES(FLD_WIDTH_HEIGHT) ) )
-    , mePaper( ePaper )
+PageSizeControl::PageSizeControl( sal_uInt16 nId )
+    : SfxPopupWindow( nId, "PageSizeControl", "modules/swriter/ui/pagesizecontrol.ui" )
     , maPaperList()
-    , mrPagePropPanel(rPanel)
 {
+    get(maMoreButton, "moreoptions");
+    get(maContainer, "container");
+    mpSizeValueSet = VclPtr<svx::sidebar::ValueSetWithTextControl>::Create( maContainer.get(), WB_BORDER );
+    maWidthHeightField = VclPtr<MetricField>::Create( maContainer.get(), 0 );
     maWidthHeightField->Hide();
-    SetFieldUnit( *maWidthHeightField.get(), eFUnit );
+    maWidthHeightField->SetUnit(FUNIT_CM);
+    maWidthHeightField->SetMax(9999);
+    maWidthHeightField->SetDecimalDigits(2);
+    maWidthHeightField->SetSpinSize(10);
+    maWidthHeightField->SetLast(9999);
+    SetFieldUnit( *maWidthHeightField.get(), lcl_GetFieldUnit() );
 
     maPaperList.push_back( PAPER_A3 );
     maPaperList.push_back( PAPER_A4 );
@@ -86,6 +114,17 @@ PageSizeControl::PageSizeControl(
             }
         }
 
+        bool bLandscape = false;
+        const SfxPoolItem* pItem;
+        const SvxSizeItem* pSize = nullptr;
+        if ( SfxViewFrame::Current() )
+        {
+            SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
+            bLandscape = static_cast<const SvxPageItem*>(pItem)->IsLandscape();
+            SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pItem );
+            pSize = static_cast<const SvxSizeItem*>(pItem);
+        }
+
         const LocaleDataWrapper& localeDataWrapper = maWidthHeightField->GetLocaleDataWrapper();
         OUString aWidthStr;
         OUString aHeightStr;
@@ -99,7 +138,8 @@ PageSizeControl::PageSizeControl(
             {
                 Swap( aPaperSize );
             }
-            maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Width() ), FUNIT_TWIP );
+
+                maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Width() ), FUNIT_TWIP );
             aWidthStr = localeDataWrapper.getNum(
                 maWidthHeightField->GetValue(),
                 maWidthHeightField->GetDecimalDigits(),
@@ -120,16 +160,16 @@ PageSizeControl::PageSizeControl(
                 aItemText2,
                 nullptr );
 
-            if ( maPaperList[ nPaperIdx ] == mePaper )
+            if ( pSize && aPaperSize == pSize->GetSize() )
             {
                 nSelectedItem = nPaperIdx + 1;
             }
         }
     }
-
     mpSizeValueSet->SetNoSelection();
-    mpSizeValueSet->SetSelectHdl( LINK(this, PageSizeControl,ImplSizeHdl ) );
+    mpSizeValueSet->SetSelectHdl( LINK(this, PageSizeControl, ImplSizeHdl ) );
     mpSizeValueSet->Show();
+    mpSizeValueSet->Resize();
 
     mpSizeValueSet->SelectItem( nSelectedItem );
     mpSizeValueSet->SetFormat();
@@ -138,8 +178,6 @@ PageSizeControl::PageSizeControl(
 
     maMoreButton->SetClickHdl( LINK( this, PageSizeControl, MoreButtonClickHdl_Impl ) );
     maMoreButton->GrabFocus();
-
-    FreeResource();
 }
 
 PageSizeControl::~PageSizeControl()
@@ -152,8 +190,33 @@ void PageSizeControl::dispose()
     mpSizeValueSet.disposeAndClear();
     maMoreButton.disposeAndClear();
     maWidthHeightField.disposeAndClear();
-    svx::sidebar::PopupControl::dispose();
+    maContainer.disposeAndClear();
+    SfxPopupWindow::dispose();
 }
+
+void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
+{
+    bool bLandscape = false;
+    const SfxPoolItem *pItem;
+    MapUnit eUnit = lcl_GetUnit();
+    if ( SfxViewFrame::Current() )
+    {
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
+        bLandscape = static_cast<const SvxPageItem*>(pItem)->IsLandscape();
+
+        std::unique_ptr<SvxSizeItem> pPageSizeItem( new SvxSizeItem(SID_ATTR_PAGE_SIZE) );
+        Size aPageSize = SvxPaperInfo::GetPaperSize( ePaper, (MapUnit)(eUnit) );
+        if ( bLandscape )
+        {
+            Swap( aPageSize );
+        }
+        pPageSizeItem->SetSize( aPageSize );
+
+        SfxViewFrame::Current()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
+            SfxCallMode::RECORD, { pPageSizeItem.get() });
+    }
+}
+
 
 IMPL_LINK_TYPED(PageSizeControl, ImplSizeHdl, ValueSet*, pControl, void)
 {
@@ -162,21 +225,17 @@ IMPL_LINK_TYPED(PageSizeControl, ImplSizeHdl, ValueSet*, pControl, void)
     {
         const sal_uInt16 nSelectedPaper = mpSizeValueSet->GetSelectItemId();
         const Paper ePaper = maPaperList[nSelectedPaper - 1];
-        if ( ePaper != mePaper )
-        {
-            mePaper = ePaper;
-            mrPagePropPanel.ExecuteSizeChange( mePaper );
-        }
+        ExecuteSizeChange( ePaper );
     }
 
-    mrPagePropPanel.ClosePageSizePopup();
+    EndPopupMode();
 }
 
 IMPL_LINK_NOARG_TYPED(PageSizeControl, MoreButtonClickHdl_Impl, Button*, void)
 {
-    mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SfxCallMode::ASYNCHRON );
-
-    mrPagePropPanel.ClosePageSizePopup();
+    if ( SfxViewFrame::Current() )
+        SfxViewFrame::Current()->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SfxCallMode::ASYNCHRON );
+    EndPopupMode();
 }
 
 } } // end of namespace sw::sidebar

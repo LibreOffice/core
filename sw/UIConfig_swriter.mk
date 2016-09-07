@@ -209,6 +209,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/notebookbar_single \
 	sw/uiconfig/swriter/ui/pagecolumncontrol \
 	sw/uiconfig/swriter/ui/pageorientationcontrol \
+	sw/uiconfig/swriter/ui/pagesizecontrol \
 	sw/uiconfig/swriter/ui/paradialog \
 	sw/uiconfig/swriter/ui/picturedialog \
 	sw/uiconfig/swriter/ui/picturepage \

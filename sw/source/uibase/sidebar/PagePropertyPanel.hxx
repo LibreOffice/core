@@ -81,10 +81,6 @@ namespace sw { namespace sidebar {
         void ExecutePageLayoutChange( const bool bMirrored );
         void ClosePageMarginPopup();
 
-        VclPtr< svx::sidebar::PopupControl> CreatePageSizeControl( svx::sidebar::PopupContainer* pParent );
-        void ExecuteSizeChange( const Paper ePaper );
-        void ClosePageSizePopup();
-
         void StartUndo();
         void EndUndo();
 
@@ -100,7 +96,6 @@ namespace sw { namespace sidebar {
 
         // toolboxes - on click open corresponding popup
         VclPtr<ToolBox>                mpToolBoxMargin;
-        VclPtr<ToolBox>                mpToolBoxSize;
 
         Image*                  maImgSize;
         Image*                  maImgSize_L;
@@ -114,24 +109,6 @@ namespace sw { namespace sidebar {
         Image                   mImgWide_L;
         Image                   mImgMirrored_L;
         Image                   mImgMarginCustom_L;
-        Image                   mImgA3;
-        Image                   mImgA4;
-        Image                   mImgA5;
-        Image                   mImgB4;
-        Image                   mImgB5;
-        Image                   mImgC5;
-        Image                   mImgLetter;
-        Image                   mImgLegal;
-        Image                   mImgSizeNone;
-        Image                   mImgA3_L;
-        Image                   mImgA4_L;
-        Image                   mImgA5_L;
-        Image                   mImgB4_L;
-        Image                   mImgB5_L;
-        Image                   mImgC5_L;
-        Image                   mImgLetter_L;
-        Image                   mImgLegal_L;
-        Image                   mImgSizeNone_L;
 
         // item keeping the following page style attributes:
         // - page orientation
@@ -147,8 +124,6 @@ namespace sw { namespace sidebar {
 
         // item keeping the page style's page size
         std::unique_ptr<SvxSizeItem> mpPageSizeItem;
-        // Paper corresponding to the page style's page size
-        Paper mePaper;
 
         FieldUnit           meFUnit;
         MapUnit             meUnit;
@@ -157,12 +132,10 @@ namespace sw { namespace sidebar {
         ::sfx2::sidebar::ControllerItem m_aSwPagePgULControl;
         ::sfx2::sidebar::ControllerItem m_aSwPagePgLRControl;
         ::sfx2::sidebar::ControllerItem m_aSwPagePgSizeControl;
-        ::sfx2::sidebar::ControllerItem m_aSwPagePgControl;
         ::sfx2::sidebar::ControllerItem m_aSwPagePgMetricControl;
 
         // popups
         svx::sidebar::Popup maMarginPopup;
-        svx::sidebar::Popup maSizePopup;
 
         const css::uno::Reference< css::document::XUndoManager > mxUndoManager;
 
@@ -170,7 +143,6 @@ namespace sw { namespace sidebar {
 
         // handler for popup toolboxes to show the popups
         DECL_LINK_TYPED(ClickMarginHdl, ToolBox*, void);
-        DECL_LINK_TYPED(ClickSizeHdl, ToolBox*, void);
 
         void Initialize();
 
@@ -178,7 +150,6 @@ namespace sw { namespace sidebar {
 
         // helper to adjust popup toolbox' images
         void ChangeMarginImage();
-        void ChangeSizeImage();
 
     };
 
