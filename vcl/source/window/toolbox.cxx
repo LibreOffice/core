@@ -5082,7 +5082,8 @@ bool ImplCloseLastPopup( vcl::Window *pParent )
 // returns true if item was opened
 bool ToolBox::ImplOpenItem( vcl::KeyCode aKeyCode )
 {
-    sal_uInt16 nCode = aKeyCode.GetCode();
+    sal_uInt16 
+      = aKeyCode.GetCode();
     bool bRet = true;
 
     // arrow keys should work only in the opposite direction of alignment (to not break cursor travelling)
@@ -5256,6 +5257,11 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             }
             if( !bGrabFocusToDocument )
                 bForwardKey = !ImplActivateItem( aKeyCode );
+        }
+        break;
+        case KEY_SPACE:
+        {
+            ImplOpenItem( aKeyCode );
         }
         break;
         default:
