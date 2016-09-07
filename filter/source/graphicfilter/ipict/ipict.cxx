@@ -136,9 +136,9 @@ namespace PictReaderInternal {
 
 //============================ PictReader ==================================
 
-enum PictDrawingMethod {
-    PDM_FRAME, PDM_PAINT, PDM_ERASE, PDM_INVERT, PDM_FILL,
-    PDM_TEXT, PDM_UNDEFINED
+enum class PictDrawingMethod {
+    FRAME, PAINT, ERASE, INVERT, FILL,
+    TEXT, UNDEFINED
 };
 
 class PictReader {
@@ -213,12 +213,13 @@ private:
     sal_uLong ReadAndDrawRgn(PictDrawingMethod eMethod);
     sal_uLong ReadAndDrawSameRgn(PictDrawingMethod eMethod);
 
-        // returns true, if we do not need to print the shape/text/frame
-        bool IsInvisible(PictDrawingMethod eMethod) const {
-      if (eActROP == RasterOp::N1) return true;
-      if (eMethod==PDM_FRAME && (nActPenSize.Width() == 0 || nActPenSize.Height() == 0)) return true;
+    // returns true if there's no need to print the shape/text/frame
+    bool IsInvisible( PictDrawingMethod eMethod ) const {
+      if ( eActROP == RasterOp::N1 ) return true;
+      if ( eMethod == PictDrawingMethod::FRAME && ( nActPenSize.Width() == 0 || nActPenSize.Height() == 0 ) ) return true;
       return false;
     }
+
     void DrawingMethod(PictDrawingMethod eMethod);
 
     sal_uLong ReadAndDrawText();
@@ -248,7 +249,7 @@ public:
         , nOrigPos(0)
         , IsVersion2(false)
         , eActROP(RasterOp::OverPaint)
-        , eActMethod(PDM_UNDEFINED)
+        , eActMethod(PictDrawingMethod::UNDEFINED)
     {
         aActFont.SetCharSet(GetTextEncoding());
     }
@@ -514,7 +515,7 @@ sal_uLong PictReader::ReadAndDrawSameRect(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
-    PictReaderShape::drawRectangle(pVirDev, eMethod==PDM_FRAME, aLastRect, nActPenSize);
+    PictReaderShape::drawRectangle( pVirDev, eMethod == PictDrawingMethod::FRAME, aLastRect, nActPenSize );
     return 0;
 }
 
@@ -529,7 +530,7 @@ sal_uLong PictReader::ReadAndDrawSameRoundRect(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
-    PictReaderShape::drawRoundRectangle(pVirDev, eMethod==PDM_FRAME, aLastRoundRect, aActOvalSize, nActPenSize);
+    PictReaderShape::drawRoundRectangle( pVirDev, eMethod == PictDrawingMethod::FRAME, aLastRoundRect, aActOvalSize, nActPenSize );
     return 0;
 }
 
@@ -544,7 +545,7 @@ sal_uLong PictReader::ReadAndDrawSameOval(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
-    PictReaderShape::drawEllipse(pVirDev, eMethod==PDM_FRAME, aLastOval, nActPenSize);
+    PictReaderShape::drawEllipse( pVirDev, eMethod == PictDrawingMethod::FRAME, aLastOval, nActPenSize );
     return 0;
 }
 
@@ -560,7 +561,7 @@ sal_uLong PictReader::ReadAndDrawSamePolygon(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
-    PictReaderShape::drawPolygon(pVirDev, eMethod==PDM_FRAME, aLastPolygon, nActPenSize);
+    PictReaderShape::drawPolygon( pVirDev, eMethod == PictDrawingMethod::FRAME, aLastPolygon, nActPenSize );
     return 0;
 }
 
@@ -585,9 +586,10 @@ sal_uLong PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
         nstartAngle = nstartAngle + narcAngle;
         narcAngle=-narcAngle;
     }
-    fAng1=((double)nstartAngle)/180.0*3.14159265359;
-    fAng2=((double)(nstartAngle+narcAngle))/180.0*3.14159265359;
-    PictReaderShape::drawArc(pVirDev, eMethod==PDM_FRAME, aLastArcRect,fAng1,fAng2, nActPenSize);
+    const double pi = 2 * acos(0.0);
+    fAng1 = ( (double)nstartAngle ) * pi / 180.0;
+    fAng2 = ( (double)(nstartAngle + narcAngle) ) * pi / 180.0;
+    PictReaderShape::drawArc( pVirDev, eMethod == PictDrawingMethod::FRAME, aLastArcRect, fAng1, fAng2, nActPenSize );
     return 4;
 }
 
@@ -626,15 +628,15 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
 {
     if( eActMethod==eMethod ) return;
     switch (eMethod) {
-        case PDM_FRAME:
-                if (eActPenPattern.isDefault())
+        case PictDrawingMethod::FRAME:
+            if (eActPenPattern.isDefault())
               SetLineColor( aActForeColor );
             else
               SetLineColor(eActPenPattern.getColor(aActBackColor, aActForeColor));
             SetFillColor( Color(COL_TRANSPARENT) );
             pVirDev->SetRasterOp(eActROP);
             break;
-        case PDM_PAINT:
+        case PictDrawingMethod::PAINT:
             SetLineColor( Color(COL_TRANSPARENT) );
             if (eActPenPattern.isDefault())
               SetFillColor( aActForeColor );
@@ -642,7 +644,7 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
               SetFillColor(eActPenPattern.getColor(aActBackColor, aActForeColor));
             pVirDev->SetRasterOp(eActROP);
             break;
-        case PDM_ERASE:
+        case PictDrawingMethod::ERASE:
             SetLineColor( Color(COL_TRANSPARENT) );
             if (eActBackPattern.isDefault())
               SetFillColor( aActBackColor );// Osnola: previously aActForeColor
@@ -650,12 +652,12 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
               SetFillColor(eActBackPattern.getColor(COL_BLACK, aActBackColor));
             pVirDev->SetRasterOp(RasterOp::OverPaint);
             break;
-            case PDM_INVERT: // checkme
+        case PictDrawingMethod::INVERT: // checkme
             SetLineColor( Color(COL_TRANSPARENT));
             SetFillColor( Color( COL_BLACK ) );
             pVirDev->SetRasterOp(RasterOp::Invert);
             break;
-        case PDM_FILL:
+        case PictDrawingMethod::FILL:
             SetLineColor( Color(COL_TRANSPARENT) );
             if (eActFillPattern.isDefault())
               SetFillColor( aActForeColor );
@@ -663,7 +665,7 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
               SetFillColor(eActFillPattern.getColor(aActBackColor, aActForeColor));
             pVirDev->SetRasterOp(RasterOp::OverPaint);
             break;
-        case PDM_TEXT:
+        case PictDrawingMethod::TEXT:
             aActFont.SetColor(aActForeColor);
             aActFont.SetFillColor(aActBackColor);
             aActFont.SetTransparent(true);
@@ -686,8 +688,8 @@ sal_uLong PictReader::ReadAndDrawText()
     nDataLen = nLen + 1;
     pPict->ReadBytes(&sText, nLen);
 
-    if (IsInvisible(PDM_TEXT)) return nDataLen;
-    DrawingMethod(PDM_TEXT);
+    if (IsInvisible( PictDrawingMethod::TEXT )) return nDataLen;
+    DrawingMethod( PictDrawingMethod::TEXT );
 
     // remove annoying control characters:
     while ( nLen > 0 && ( (unsigned char)sText[ nLen - 1 ] ) < 32 )
@@ -733,7 +735,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         sal_uInt32 nPackSize;
         sal_uInt16 nPixelType;
         sal_uInt32 nPlaneBytes;
-        pPict->ReadUInt16( nVersion ).ReadUInt16( nPackType ).ReadUInt32( nPackSize ).ReadUInt32( nHRes ).ReadUInt32( nVRes ).ReadUInt16( nPixelType ).                    ReadUInt16( nPixelSize ).ReadUInt16( nCmpCount ).ReadUInt16( nCmpSize ).ReadUInt32( nPlaneBytes );
+        pPict->ReadUInt16( nVersion ).ReadUInt16( nPackType ).ReadUInt32( nPackSize ).ReadUInt32( nHRes ).ReadUInt32( nVRes ).ReadUInt16( nPixelType ).ReadUInt16( nPixelSize ).ReadUInt16( nCmpCount ).ReadUInt16( nCmpSize ).ReadUInt32( nPlaneBytes );
 
         pPict->SeekRel( 8 );
         nDataSize += 46;
@@ -1010,12 +1012,11 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             }
         }
     }
-    else if (nPixelSize==32)
+    else if ( nPixelSize == 32 )
     {
-        sal_uInt8               nByteCountAsByte, nFlagCounterByte;
-        sal_uInt16              nByteCount;
-        size_t                  nCount;
-        sal_uLong               nSrcBitsPos;
+        sal_uInt16          nByteCount;
+        size_t              nCount;
+        sal_uLong           nSrcBitsPos;
         BitmapColor         aBitmapColor;
         if ( ( pReadAcc = aBitmap.AcquireReadAccess() ) == nullptr )
             BITMAPERROR;
@@ -1064,6 +1065,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         }
         else
         {
+            sal_uInt8 nByteCountAsByte;
+            sal_uInt8 nFlagCounterByte;
             if ( ( nCmpCount == 3 ) || ( nCmpCount == 4 ) )
             {
                 std::unique_ptr<sal_uInt8[]> pScanline(new sal_uInt8[static_cast<size_t>(nWidth) * nCmpCount]);
@@ -1287,7 +1290,7 @@ static const char* operationName(sal_uInt16 nOpcode)
         case 0x0070: return "framePoly";
         case 0x0071: return "paintPoly";
         case 0x00a1: return "LongComment";
-        default:     return "";
+        default:     return "?";
     }
 }
 #endif
@@ -1297,13 +1300,13 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     sal_uInt16 nUSHORT;
     Point aPoint;
     sal_uLong nDataSize=0;
-    PictDrawingMethod shapeDMethod = PDM_UNDEFINED;
+    PictDrawingMethod shapeDMethod = PictDrawingMethod::UNDEFINED;
     switch (nOpcode & 7) {
-    case 0: shapeDMethod = PDM_FRAME; break;
-    case 1: shapeDMethod = PDM_PAINT; break;
-    case 2: shapeDMethod = PDM_ERASE; break;
-    case 3: shapeDMethod = PDM_INVERT; break;
-    case 4: shapeDMethod = PDM_FILL; break;
+    case 0: shapeDMethod = PictDrawingMethod::FRAME; break;
+    case 1: shapeDMethod = PictDrawingMethod::PAINT; break;
+    case 2: shapeDMethod = PictDrawingMethod::ERASE; break;
+    case 3: shapeDMethod = PictDrawingMethod::INVERT; break;
+    case 4: shapeDMethod = PictDrawingMethod::FILL; break;
     default: break;
     }
 
@@ -1334,7 +1337,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     }
     case 0x0002:   // BkPat
         nDataSize = eActBackPattern.read(*pPict);
-        eActMethod = PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         break;
 
     case 0x0003:   // TxFont
@@ -1347,7 +1350,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         else if (nUSHORT <= 1023) aActFont.SetFamily(FAMILY_SWISS);
         else                      aActFont.SetFamily(FAMILY_ROMAN);
         aActFont.SetCharSet(GetTextEncoding(nUSHORT));
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         nDataSize=2;
         break;
 
@@ -1364,7 +1367,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         else                     aActFont.SetOutline(false);
         if ( (nFace & 0x10)!=0 ) aActFont.SetShadow(true);
         else                     aActFont.SetShadow(false);
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         nDataSize=1;
         break;
     }
@@ -1378,7 +1381,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
 
     case 0x0007: { // PnSize
         nActPenSize=ReadSize();
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         nDataSize=4;
         break;
     }
@@ -1398,18 +1401,18 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
             case 7: eActROP=RasterOp::OverPaint; break; // notBic
           }
         }
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         nDataSize=2;
         break;
 
     case 0x0009:   // PnPat
         nDataSize=eActPenPattern.read(*pPict);
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         break;
 
     case 0x000a:   // FillPat
         nDataSize=eActFillPattern.read(*pPict);
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         break;
 
     case 0x000b:   // OvSize
@@ -1425,14 +1428,14 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     {
         pPict->ReadUInt16( nUSHORT );
         aActFont.SetFontSize( Size( 0, (long)nUSHORT ) );
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         nDataSize=2;
     }
     break;
 
     case 0x000e:   // FgColor
         aActForeColor=ReadColor();
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         nDataSize=4;
         break;
 
@@ -1451,17 +1454,17 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
 
     case 0x0012:   // BkPixPat
         nDataSize=ReadPixPattern(eActBackPattern);
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         break;
 
     case 0x0013:   // PnPixPat
         nDataSize=ReadPixPattern(eActPenPattern);
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         break;
 
     case 0x0014:   // FillPixPat
         nDataSize=ReadPixPattern(eActFillPattern);
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         break;
 
     case 0x0015:   // PnLocHFrac
@@ -1480,13 +1483,13 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
 
     case 0x001a:   // RGBFgCol
         aActForeColor=ReadRGBColor();
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         nDataSize=6;
         break;
 
     case 0x001b:   // RGBBkCol
         aActBackColor=ReadRGBColor();
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         nDataSize=6;
         break;
 
@@ -1510,8 +1513,8 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         aPoint=ReadPoint(); aPenPosition=ReadPoint();
         nDataSize=8;
 
-        if (IsInvisible(PDM_FRAME)) break;
-        DrawingMethod(PDM_FRAME);
+        if (IsInvisible( PictDrawingMethod::FRAME )) break;
+        DrawingMethod( PictDrawingMethod::FRAME );
         PictReaderShape::drawLine(pVirDev, aPoint,aPenPosition, nActPenSize);
         break;
 
@@ -1519,8 +1522,8 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         aPoint=aPenPosition; aPenPosition=ReadPoint();
         nDataSize=4;
 
-        if (IsInvisible(PDM_FRAME)) break;
-        DrawingMethod(PDM_FRAME);
+        if (IsInvisible( PictDrawingMethod::FRAME )) break;
+        DrawingMethod( PictDrawingMethod::FRAME );
         PictReaderShape::drawLine(pVirDev, aPoint,aPenPosition, nActPenSize);
         break;
 
@@ -1530,8 +1533,8 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         aPenPosition=ReadDeltaV(aPenPosition);
         nDataSize=6;
 
-        if (IsInvisible(PDM_FRAME)) break;
-        DrawingMethod(PDM_FRAME);
+        if ( IsInvisible(PictDrawingMethod::FRAME) ) break;
+        DrawingMethod( PictDrawingMethod::FRAME );
         PictReaderShape::drawLine(pVirDev, aPoint,aPenPosition, nActPenSize);
         break;
 
@@ -1541,8 +1544,8 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         aPenPosition=ReadDeltaV(aPenPosition);
         nDataSize=2;
 
-        if (IsInvisible(PDM_FRAME)) break;
-        DrawingMethod(PDM_FRAME);
+        if (IsInvisible( PictDrawingMethod::FRAME )) break;
+        DrawingMethod( PictDrawingMethod::FRAME );
         PictReaderShape::drawLine(pVirDev, aPoint,aPenPosition, nActPenSize);
         break;
 
@@ -1593,7 +1596,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         sFName[ nLen ] = 0;
         OUString aString( sFName, strlen(sFName), osl_getThreadTextEncoding() );
         aActFont.SetFamilyName( aString );
-        eActMethod=PDM_UNDEFINED;
+        eActMethod = PictDrawingMethod::UNDEFINED;
         break;
     }
     case 0x002d:   // lineJustify
@@ -1782,7 +1785,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
-        DrawingMethod(PDM_PAINT);
+        DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
@@ -1790,7 +1793,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
-        DrawingMethod(PDM_PAINT);
+        DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
@@ -1807,7 +1810,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, false);
-        DrawingMethod(PDM_PAINT);
+        DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
@@ -1815,7 +1818,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, false, true, &aSrcRect, &aDestRect, true, true);
-        DrawingMethod(PDM_PAINT);
+        DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
@@ -1823,7 +1826,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, false);
-        DrawingMethod(PDM_PAINT);
+        DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
@@ -1831,7 +1834,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
         nDataSize=ReadPixMapEtc(aBmp, true, false, &aSrcRect, &aDestRect, true, true);
-        DrawingMethod(PDM_PAINT);
+        DrawingMethod( PictDrawingMethod::PAINT );
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
     }
@@ -1889,7 +1892,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     aActBackColor       = Color(COL_WHITE);
     nActPenSize         = Size(1,1);
     eActROP             = RasterOp::OverPaint;
-    eActMethod          = PDM_UNDEFINED;
+    eActMethod          = PictDrawingMethod::UNDEFINED;
     aActOvalSize        = Size(1,1);
 
     aActFont.SetCharSet( GetTextEncoding());
@@ -1905,7 +1908,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
     pPict->SetEndian(SvStreamEndian::BIG);
 
-    sal_uInt64 const nStartPos=pPict->Tell();
+    sal_uInt64 const nStartPos = pPict->Tell();
     sal_uInt64 const nRemaining = pPict->remainingSize();
     nLastPercent=0;
 
