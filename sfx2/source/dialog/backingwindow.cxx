@@ -774,14 +774,6 @@ IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
             dispatchURL( ".uno:NewDoc", OUString(), xFrame, aArgs );
 
         }
-
-        mpAllRecentThumbnails->Hide();
-        mpLocalView->Show();
-        mpLocalView->reload();
-        mpLocalView->GrabFocus();
-        mpRecentButton->SetActive(false);
-        mpTemplateButton->SetActive(true);
-        mpRecentButton->Invalidate();
     }
 }
 
