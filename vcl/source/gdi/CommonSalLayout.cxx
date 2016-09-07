@@ -439,9 +439,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 if (hb_ot_layout_has_glyph_classes(pHbFace))
                 {
                     // the font has GDEF table
-                    bool bMark = hb_ot_layout_get_glyph_class(pHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK;
-                    if (bMark && pHbPositions[i].x_advance == 0)
-                        bDiacritic = true;
+                    if (pHbPositions[i].x_advance == 0)
+                        bDiacritic = hb_ot_layout_get_glyph_class(pHbFace, nGlyphIndex) == HB_OT_LAYOUT_GLYPH_CLASS_MARK;
                 }
                 else
                 {
