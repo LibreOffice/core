@@ -97,7 +97,7 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
 }
 
 SwCSS1Parser::SwCSS1Parser( SwDoc *pD, sal_uInt32 aFHeights[7], const OUString& rBaseURL, bool bNewDoc ) :
-    SvxCSS1Parser( pD->GetAttrPool(), rBaseURL, MM50/2,
+    SvxCSS1Parser( pD->GetAttrPool(), rBaseURL,
                    reinterpret_cast<sal_uInt16*>(&aItemIds), sizeof(aItemIds) / sizeof(sal_uInt16) ),
     pDoc( pD ),
     nDropCapCnt( 0 ),
@@ -2275,7 +2275,7 @@ void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
             if( RES_PARATR_BEGIN > nWhich )
                 (*ppAttr)->SetLikePara();
             m_aParaAttrs.push_back( *ppAttr );
-            bool bSuccess = EndAttr( *ppAttr, nullptr, false );
+            bool bSuccess = EndAttr( *ppAttr, false );
             if (!bSuccess)
                 m_aParaAttrs.pop_back();
         }

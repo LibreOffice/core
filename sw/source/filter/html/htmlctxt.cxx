@@ -589,7 +589,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 aLRItem.SetTextLeft( nLeft );
                 aLRItem.SetRight( nRight );
                 NewAttr( &m_aAttrTab.pLRSpace, aLRItem );
-                EndAttr( m_aAttrTab.pLRSpace, nullptr, false );
+                EndAttr( m_aAttrTab.pLRSpace, false );
             }
             break;
 

@@ -1441,7 +1441,7 @@ void SwHTMLParser::NextToken( int nToken )
         if( !m_pTable && !m_pDoc->IsInHeaderFooter( m_pPam->GetPoint()->nNode ) )
         {
             NewAttr( &m_aAttrTab.pBreak, SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK) );
-            EndAttr( m_aAttrTab.pBreak, nullptr, false );
+            EndAttr( m_aAttrTab.pBreak, false );
         }
         break;
 
@@ -2994,12 +2994,10 @@ void SwHTMLParser::NewAttr( HTMLAttr **ppAttr, const SfxPoolItem& rItem )
         (*ppAttr) = new HTMLAttr( *m_pPam->GetPoint(), rItem, ppAttr );
 }
 
-bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, HTMLAttr **ppDepAttr,
-                            bool bChkEmpty )
+bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
 {
     bool bRet = true;
 
-    OSL_ENSURE( !ppDepAttr, "SwHTMLParser::EndAttr: ppDepAttr-Feature ungetestet?" );
     // Der Listenkopf ist im Attribut gespeichert
     HTMLAttr **ppHead = pAttr->ppHead;
 
@@ -3108,15 +3106,10 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, HTMLAttr **ppDepAttr,
             // dann koennen alle gesetzt werden, es sei denn
             // sie haengen noch von einem anderen Attribut ab,
             // dann werden sie dort angehaengt
-            if( ppDepAttr && *ppDepAttr )
-                (*ppDepAttr)->InsertPrev( pAttr );
+            if (pAttr->bInsAtStart)
+                m_aSetAttrTab.push_front( pAttr );
             else
-            {
-                if (pAttr->bInsAtStart)
-                    m_aSetAttrTab.push_front( pAttr );
-                else
-                    m_aSetAttrTab.push_back( pAttr );
-            }
+                m_aSetAttrTab.push_back( pAttr );
         }
         else
         {
@@ -4730,7 +4723,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
             NewAttr( &m_aAttrTab.pLRSpace, aLRItem );
             m_aAttrTab.pLRSpace->SetLikePara();
             m_aParaAttrs.push_back( m_aAttrTab.pLRSpace );
-            EndAttr( m_aAttrTab.pLRSpace, nullptr, false );
+            EndAttr( m_aAttrTab.pLRSpace, false );
         }
     }
 
@@ -4931,7 +4924,7 @@ void SwHTMLParser::InsertSpacer()
             else
             {
                 NewAttr( &m_aAttrTab.pULSpace, SvxULSpaceItem( 0, (sal_uInt16)nSize, RES_UL_SPACE ) );
-                EndAttr( m_aAttrTab.pULSpace, nullptr, false );
+                EndAttr( m_aAttrTab.pULSpace, false );
 
                 AppendTextNode();    // nicht am Abstand drehen!
             }
@@ -4964,7 +4957,7 @@ void SwHTMLParser::InsertSpacer()
                 aLRItem.SetTextFirstLineOfst( nIndent );
 
                 NewAttr( &m_aAttrTab.pLRSpace, aLRItem );
-                EndAttr( m_aAttrTab.pLRSpace, nullptr, false );
+                EndAttr( m_aAttrTab.pLRSpace, false );
             }
             else
             {
@@ -5161,7 +5154,7 @@ void SwHTMLParser::InsertLineBreak()
     if( bBreakItem && SvxBreak::PageAfter==aBreakItem.GetBreak() )
     {
         NewAttr( &m_aAttrTab.pBreak, aBreakItem );
-        EndAttr( m_aAttrTab.pBreak, nullptr, false );
+        EndAttr( m_aAttrTab.pBreak, false );
     }
 
     if( !bCleared && !bBreakItem )
@@ -5183,7 +5176,7 @@ void SwHTMLParser::InsertLineBreak()
     if( bBreakItem && SvxBreak::PageBefore==aBreakItem.GetBreak() )
     {
         NewAttr( &m_aAttrTab.pBreak, aBreakItem );
-        EndAttr( m_aAttrTab.pBreak, nullptr, false );
+        EndAttr( m_aAttrTab.pBreak, false );
     }
 }
 

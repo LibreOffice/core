@@ -422,8 +422,7 @@ protected:
     css::uno::Sequence< css::uno::Any > GetPropertyValues_Impl( const css::uno::Sequence< OUString >& aPropertyNames );
 
 public:
-    SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, SfxStyleFamily eFam,
-                                const OUString& rStyleName);
+    SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, const OUString& rStyleName);
     explicit SwXPageStyle(SwDocShell* pDocSh);
     virtual ~SwXPageStyle();
 
@@ -750,7 +749,7 @@ uno::Reference< css::style::XStyle> lcl_CreateStyle<SfxStyleFamily::Frame>(SfxSt
 
 template<>
 uno::Reference< css::style::XStyle> lcl_CreateStyle<SfxStyleFamily::Page>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
-    { return pBasePool ? new SwXPageStyle(*pBasePool, pDocShell, SfxStyleFamily::Page, sStyleName) : new SwXPageStyle(pDocShell); };
+    { return pBasePool ? new SwXPageStyle(*pBasePool, pDocShell, sStyleName) : new SwXPageStyle(pDocShell); };
 
 template<>
 uno::Reference< css::style::XStyle> lcl_CreateStyle<SfxStyleFamily::Table>(SfxStyleSheetBasePool* /*pBasePool*/, SwDocShell* pDocShell, const OUString& sStyleName)
@@ -2806,8 +2805,8 @@ void SwXStyle::Invalidate()
     m_xStyleFamily.clear();
 }
 
-SwXPageStyle::SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, SfxStyleFamily eFam, const OUString& rStyleName)
-    : SwXStyle(&rPool, eFam, pDocSh->GetDoc(), rStyleName)
+SwXPageStyle::SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, const OUString& rStyleName)
+    : SwXStyle(&rPool, SfxStyleFamily::Page, pDocSh->GetDoc(), rStyleName)
 { }
 
 SwXPageStyle::SwXPageStyle(SwDocShell* pDocSh)

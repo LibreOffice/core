@@ -46,6 +46,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/orphitem.hxx>
 #include <svtools/svparser.hxx>
+#include <swtypes.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <o3tl/make_unique.hxx>
@@ -685,7 +686,7 @@ bool SvxCSS1Parser::DeclarationParsed( const OUString& rProperty,
     return true;    // die Deklaration brauchen wir nicht mehr. Loeschen!
 }
 
-SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL, sal_uInt16 nMinFixLineSp,
+SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
                               sal_uInt16 *pWhichIds, sal_uInt16 nWhichIds ) :
     CSS1Parser(),
     sBaseURL( rBaseURL ),
@@ -693,7 +694,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL, sal_
     pItemSet(nullptr),
     pSearchEntry( nullptr ),
     pPropInfo( nullptr ),
-    nMinFixLineSpace( nMinFixLineSp ),
+    nMinFixLineSpace(  MM50/2 ),
     eDfltEnc( RTL_TEXTENCODING_DONTKNOW ),
     nScriptFlags( CSS1_SCRIPT_ALL ),
     bIgnoreFontFamily( false )
