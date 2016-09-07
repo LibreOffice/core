@@ -746,16 +746,6 @@
           <value xml:lang="en-US">Comb~ine</value>
         </prop>
       </node>
-      <node oor:name=".uno:ObjectTitleDescription" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Description...</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:NameGroup" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Name...</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ConnectorToolbox" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Connector</value>

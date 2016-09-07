@@ -200,11 +200,6 @@
           <value>9</value>
         </prop>
       </node>
-      <node oor:name=".uno:ObjectTitleDescription" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Description...</value>
-        </prop>
-      </node>
       <node oor:name=".uno:RenameObject" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Name...</value>
