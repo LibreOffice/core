@@ -4860,7 +4860,8 @@ sal_Bool SAL_CALL SwXTextCellStyle::isInUse() throw (css::uno::RuntimeException,
 
 OUString SAL_CALL SwXTextCellStyle::getParentStyle() throw (css::uno::RuntimeException, std::exception)
 {
-    return m_sParentStyle;
+    // Do not return name of the parent (which is a table style) because the parent should be a cell style.
+    return OUString();
 }
 
 void SAL_CALL SwXTextCellStyle::setParentStyle(const OUString& /*sParentStyle*/) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
