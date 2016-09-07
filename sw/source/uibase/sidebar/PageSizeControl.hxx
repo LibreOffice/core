@@ -26,8 +26,12 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <svtools/unitconv.hxx>
+#include <svx/tbxctl.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
 
 #include <vector>
+#include <svtools/valueset.hxx>
 
 namespace svx { namespace sidebar {
     class ValueSetWithTextControl;
@@ -38,29 +42,23 @@ namespace sw { namespace sidebar {
 
 class PagePropertyPanel;
 
-class PageSizeControl
-    : public svx::sidebar::PopupControl
+class PageSizeControl : public SfxPopupWindow
 {
 public:
-    PageSizeControl(
-        vcl::Window* pParent,
-        PagePropertyPanel& rPanel,
-        const Paper ePaper,
-        const bool bLandscape,
-        const FieldUnit eFUnit );
+    PageSizeControl(sal_uInt16 nId);
     virtual ~PageSizeControl();
     virtual void dispose() override;
 
 private:
-    VclPtr< svx::sidebar::ValueSetWithTextControl> mpSizeValueSet;
+    VclPtr<VclVBox> maContainer;
+    VclPtr<svx::sidebar::ValueSetWithTextControl> mpSizeValueSet;
     VclPtr<PushButton> maMoreButton;
     // hidden metric field
     VclPtr<MetricField> maWidthHeightField;
 
-    Paper mePaper;
     std::vector< Paper > maPaperList;
 
-    PagePropertyPanel& mrPagePropPanel;
+    static void ExecuteSizeChange( const Paper ePaper );
 
     DECL_LINK_TYPED(ImplSizeHdl, ::ValueSet*, void);
     DECL_LINK_TYPED(MoreButtonClickHdl_Impl, Button*, void);
