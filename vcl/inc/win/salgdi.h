@@ -142,12 +142,12 @@ private:
 
     mutable std::unordered_set<sal_UCS4>      maGsubTable;
     mutable bool            mbGsubRead;
-    mutable hb_face_t*      mpHbFace;
+    mutable hb_font_t*      mpHbFont;
 public:
     bool                    HasGSUBstitutions( HDC ) const;
     bool                    IsGSUBstituted( sal_UCS4 ) const;
-    hb_face_t*              GetHbFace() const { return mpHbFace; }
-    void                    SetHbFace( hb_face_t* pHbFace ) const { mpHbFace = pHbFace; }
+    hb_font_t*              GetHbFont() const { return mpHbFont; }
+    void                    SetHbFont( hb_font_t* pHbFont ) const { mpHbFont = pHbFont; }
 };
 
 /** Class that creates (and destroys) a compatible Device Context.
