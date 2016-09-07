@@ -68,7 +68,7 @@ private:
 
 protected:
     void                ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNewChars );
-    void                CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDelChars );
+    void                CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDelChars );
 
 public:
                         TextNode( const OUString& rText );

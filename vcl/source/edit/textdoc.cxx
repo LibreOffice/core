@@ -229,7 +229,7 @@ void TextNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew )
         maCharAttribs.ResortAttribs();
 }
 
-void TextNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted )
+void TextNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted )
 {
     if ( !nDeleted )
         return;
@@ -306,7 +306,7 @@ void TextNode::InsertText( sal_Int32 nPos, sal_Unicode c )
 void TextNode::RemoveText( sal_Int32 nPos, sal_Int32 nChars )
 {
     maText = maText.replaceAt( nPos, nChars, "" );
-    CollapsAttribs( nPos, nChars );
+    CollapseAttribs( nPos, nChars );
 }
 
 TextNode* TextNode::Split( sal_Int32 nPos )

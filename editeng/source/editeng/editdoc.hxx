@@ -254,7 +254,7 @@ public:
     const CharAttribList& GetCharAttribs() const { return aCharAttribList; }
 
     void            ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNewChars, SfxItemPool& rItemPool );
-    void            CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDelChars, SfxItemPool& rItemPool );
+    void            CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDelChars, SfxItemPool& rItemPool );
     void            AppendAttribs( ContentNode* pNextNode );
     void            CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool, bool bKeepEndingAttribs );
 

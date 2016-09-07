@@ -1406,7 +1406,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
 #endif
 }
 
-void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemPool& rItemPool )
+void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemPool& rItemPool )
 {
     if ( !nDeleted )
         return;
@@ -2392,7 +2392,7 @@ void EditDoc::RemoveChars( EditPaM aPaM, sal_Int32 nChars )
 {
     // Maybe remove Features!
     aPaM.GetNode()->Erase( aPaM.GetIndex(), nChars );
-    aPaM.GetNode()->CollapsAttribs( aPaM.GetIndex(), nChars, GetItemPool() );
+    aPaM.GetNode()->CollapseAttribs( aPaM.GetIndex(), nChars, GetItemPool() );
 
     SetModified( true );
 }
