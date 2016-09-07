@@ -1219,7 +1219,7 @@ void SvXMLNumFmtElementContext::EndElement()
             // other second known calendar for a locale.
             /* TODO: here only for zh-TW, handle for other locales as well. */
             if ( rParent.HasEra() ||
-                    (sCalendar.equalsIgnoreAsciiCaseAscii("ROC") &&
+                    (sCalendar.equalsIgnoreAsciiCase("ROC") &&
                      rParent.GetLocaleData().getLoadedLanguageTag().getBcp47() == "zh-TW"))
             {
                 rParent.AddNfKeyword(
