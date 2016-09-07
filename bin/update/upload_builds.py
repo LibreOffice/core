@@ -20,7 +20,9 @@ def main():
 
     target_url, target_dir = upload_url.split(':')
 
-    subprocess.call(['ssh', target_url, "'mkdir -p %s'"%(target_dir)])
+    command = "ssh %s 'mkdir -p %s'"%(target_url, target_dir)
+    print(command)
+    subprocess.call(command, shell=True)
     for file in os.listdir(update_dir):
         if file.endswith('.mar'):
             subprocess.call(['scp', os.path.join(update_dir, file), upload_url])
