@@ -14,17 +14,12 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/extensions,extensions_
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/extensions,extensions_rhino))
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/extensions,extensions_numbertext))
 
-$(eval $(call gb_InstallModule_add_templates,scp2/extensions,\
-    scp2/source/templates/module_langpack_extensions_templates \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/extensions,\
     scp2/source/extensions/file_extensions \
 ))
 
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/extensions,\
     scp2/source/extensions/module_extensions \
-    scp2/source/extensions/module_extensions_sun_templates \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

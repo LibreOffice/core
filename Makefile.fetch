@@ -220,24 +220,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,ODFVALIDATOR,ODFVALIDATOR_JAR) \
 		$(call fetch_Optional,OFFICEOTRON,OFFICEOTRON_JAR) \
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/extern,$(item)))
-	$(foreach item, \
-		$(call fetch_Optional_pack,BARCODE_EXTENSION_PACK) \
-		$(call fetch_Optional_pack,DIAGRAM_EXTENSION_PACK) \
-		$(call fetch_Optional_pack,HUNART_EXTENSION_PACK) \
-		$(call fetch_Optional_pack,OOOP_FONTS_PACK) \
-		$(call fetch_Optional_pack,OOOP_GALLERY_PACK) \
-		$(call fetch_Optional_pack,OOOP_SAMPLES_PACK) \
-		$(call fetch_Optional_pack,OOOP_TEMPLATES_PACK) \
-		$(call fetch_Optional_pack,SUNTEMPLATES_DE_PACK) \
-		$(call fetch_Optional_pack,SUNTEMPLATES_EN_US_PACK) \
-		$(call fetch_Optional_pack,SUNTEMPLATES_ES_PACK) \
-		$(call fetch_Optional_pack,SUNTEMPLATES_FR_PACK) \
-		$(call fetch_Optional_pack,SUNTEMPLATES_HU_PACK) \
-		$(call fetch_Optional_pack,SUNTEMPLATES_IT_PACK) \
-		$(call fetch_Optional_pack,TYPO_EXTENSION_PACK) \
-		$(call fetch_Optional_pack,VALIDATOR_EXTENSION_PACK) \
-		$(call fetch_Optional_pack,WATCH_WINDOW_EXTENSION_PACK) \
-	,$(call fetch_Download_item,http://ooo.itc.hu/oxygenoffice/download/libreoffice,$(item)))
 	$(if $(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL) \
 	, $(call fetch_Download_item,http://dev-www.libreoffice.org/src/libgltf,$(call fetch_Optional,LIBGLTF,LIBGLTF_TARBALL)))
 	@mkdir -p $(dir $@) && touch $@
