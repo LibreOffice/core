@@ -26,7 +26,7 @@ SFX_IMPL_TOOLBOX_CONTROL(PageOrientationPopup, SvxPageItem);
 PageOrientationPopup::PageOrientationPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
     : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
-    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits(nId));
+    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
 PageOrientationPopup::~PageOrientationPopup()
