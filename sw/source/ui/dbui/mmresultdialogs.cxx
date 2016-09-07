@@ -218,8 +218,8 @@ public:
     void SetBCC(const OUString& rSet) {m_pBCCED->SetText(rSet);}
 };
 
-SwMMResultSaveDialog::SwMMResultSaveDialog(vcl::Window* pParent)
-    : SfxModalDialog(pParent, "MMResultSaveDialog", "modules/swriter/ui/mmresultsavedialog.ui"),
+SwMMResultSaveDialog::SwMMResultSaveDialog()
+    : SfxModalDialog(nullptr, "MMResultSaveDialog", "modules/swriter/ui/mmresultsavedialog.ui"),
     m_bCancelSaving(false)
 {
     get(m_pSaveAsOneRB, "singlerb");
@@ -264,8 +264,8 @@ void SwMMResultSaveDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-SwMMResultPrintDialog::SwMMResultPrintDialog(vcl::Window* pParent)
-    : SfxModalDialog(pParent, "MMResultPrintDialog", "modules/swriter/ui/mmresultprintdialog.ui")
+SwMMResultPrintDialog::SwMMResultPrintDialog()
+    : SfxModalDialog(nullptr, "MMResultPrintDialog", "modules/swriter/ui/mmresultprintdialog.ui")
     , m_pTempPrinter(nullptr)
 {
     get(m_pPrinterFT, "printerft");
@@ -314,8 +314,8 @@ void SwMMResultPrintDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-SwMMResultEmailDialog::SwMMResultEmailDialog(vcl::Window* pParent)
-    : SfxModalDialog(pParent, "MMResultEmailDialog", "modules/swriter/ui/mmresultemaildialog.ui"),
+SwMMResultEmailDialog::SwMMResultEmailDialog()
+    : SfxModalDialog(nullptr, "MMResultEmailDialog", "modules/swriter/ui/mmresultemaildialog.ui"),
      m_sConfigureMail(SW_RES(ST_CONFIGUREMAIL))
 {
     get(m_pMailToFT, "mailtoft");

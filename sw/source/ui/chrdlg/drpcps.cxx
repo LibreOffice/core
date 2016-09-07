@@ -82,8 +82,8 @@ class SwDropCapsPict : public Control
         sal_uLong  textWidth;   ///< Physical width of this segment.
         sal_uInt16 scriptType;  ///< Script type (e.g. Latin, Asian, Complex)
         sal_Int32 changePos;   ///< Character position where the script changes.
-        ScriptInfo(sal_uLong txtWidth, sal_uInt16 scrptType, sal_Int32 position)
-            : textWidth(txtWidth), scriptType(scrptType), changePos(position) {}
+        ScriptInfo(sal_uInt16 scrptType, sal_Int32 position)
+            : textWidth(0), scriptType(scrptType), changePos(position) {}
     };
     std::vector<ScriptInfo> maScriptChanges;
     SvxFont         maFont;
@@ -446,7 +446,7 @@ void SwDropCapsPict::CheckScript()
     for(;;)
     {
         nChg = xBreak->endOfScript( maText, nChg, nScript );
-        maScriptChanges.push_back( ScriptInfo(0, nScript, nChg) );
+        maScriptChanges.push_back( ScriptInfo(nScript, nChg) );
         if( nChg >= maText.getLength() || nChg < 0 )
             break;
         nScript = xBreak->getScriptType( maText, nChg );

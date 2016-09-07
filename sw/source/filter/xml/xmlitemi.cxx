@@ -94,7 +94,7 @@ private:
 
 SwXMLImportTableItemMapper_Impl::SwXMLImportTableItemMapper_Impl(
                                         SvXMLItemMapEntriesRef rMapEntries ) :
-    SvXMLImportItemMapper( rMapEntries, RES_UNKNOWNATR_CONTAINER)
+    SvXMLImportItemMapper( rMapEntries )
 {
     Reset();
 }

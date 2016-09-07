@@ -28,7 +28,7 @@ class SW_DLLPUBLIC SwColMgr
 {
 public:
         // lActWidth is passed directly from the page dialogs edits
-    SwColMgr(const SfxItemSet &rSet, sal_uInt16 nActWidth = USHRT_MAX);
+    SwColMgr(const SfxItemSet &rSet);
     ~SwColMgr();
 
     inline sal_uInt16   GetCount() const;

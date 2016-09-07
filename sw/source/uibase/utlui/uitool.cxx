@@ -560,7 +560,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 
     // Integrate footnotes
     SwPageFootnoteInfo& rInfo = (SwPageFootnoteInfo&)rPageDesc.GetFootnoteInfo();
-    SwPageFootnoteInfoItem aFootnoteItem(FN_PARAM_FTN_INFO, rInfo);
+    SwPageFootnoteInfoItem aFootnoteItem(rInfo);
     rSet.Put(aFootnoteItem);
 
     // Register compliant

@@ -46,7 +46,7 @@ class SwAddressTable : public SvSimpleTable
 {
 public:
     explicit SwAddressTable(SvSimpleTableContainer& rParent);
-    void InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText, HeaderBarItemBits nBits);
+    void InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText);
     virtual void Resize() override;
     void setColSizes();
 };
@@ -60,9 +60,9 @@ SwAddressTable::SwAddressTable(SvSimpleTableContainer& rParent)
     EnableAsyncDrag(false);
 }
 
-void SwAddressTable::InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText, HeaderBarItemBits nBits)
+void SwAddressTable::InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText)
 {
-    GetTheHeaderBar().InsertItem( nColumn, rText, 0, nBits );
+    GetTheHeaderBar().InsertItem( nColumn, rText, 0, HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 }
 
 void SwAddressTable::Resize()
@@ -107,8 +107,8 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
     m_pTable = VclPtr<SwAddressTable>::Create(*pHeaderTreeContainer);
     long aStaticTabs[]= { 2, 0, 0 };
     m_pTable->SetTabs( aStaticTabs );
-    m_pTable->InsertHeaderItem(1, m_sName, HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER);
-    m_pTable->InsertHeaderItem(2, m_sType, HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER);
+    m_pTable->InsertHeaderItem(1, m_sName );
+    m_pTable->InsertHeaderItem(2, m_sType );
 
     m_pPreviewPB->SetClickHdl(LINK(this, SwSelectDBTableDialog, PreviewHdl));
 

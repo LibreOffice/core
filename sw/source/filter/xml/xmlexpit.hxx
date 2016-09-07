@@ -72,8 +72,7 @@ public:
     void exportXML( SvXMLExport& rExport,
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
-                    ::xmloff::token::XMLTokenEnum ePropToken,
-                    SvXmlExportFlags nFlags ) const;
+                    ::xmloff::token::XMLTokenEnum ePropToken ) const;
 
     /** this method is called for every item that has the
         MID_SW_FLAG_SPECIAL_ITEM_EXPORT flag set */

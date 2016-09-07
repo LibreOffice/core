@@ -160,9 +160,9 @@ void SwWrtShell::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pA
 }
 
 sal_uInt16 SwWrtShell::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
-                                bool bChkPtr, SbxArray* pArgs)
+                                bool bChkPtr)
 {
-    return GetDoc()->CallEvent( nEvent, rCallEvent, bChkPtr, pArgs );
+    return GetDoc()->CallEvent( nEvent, rCallEvent, bChkPtr );
 }
 
     // If a util::URL-Button is selected, return its util::URL

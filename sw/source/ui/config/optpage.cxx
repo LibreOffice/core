@@ -408,7 +408,7 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     if ( bAttrModified )
     {
-        SwAddPrinterItem aAddPrinterAttr (FN_PARAM_ADDPRINTER);
+        SwAddPrinterItem aAddPrinterAttr;
         aAddPrinterAttr.m_bPrintGraphic   = m_pGrfCB->IsChecked();
         aAddPrinterAttr.m_bPrintTable     = true; // always enabled since CWS printerpullgpages /*aTabCB.IsChecked();*/
         aAddPrinterAttr.m_bPrintDraw      = m_pGrfCB->IsChecked(); // UI merged with m_pGrfCB in CWS printerpullgpages
@@ -2482,7 +2482,7 @@ bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
     if ( bAttrModified )
     {
-        SwTestItem aTestItem(FN_PARAM_SWTEST);
+        SwTestItem aTestItem;
         aTestItem.bTest1=m_pTest1CBox->IsChecked();
         aTestItem.bTest2=m_pTest2CBox->IsChecked();
         aTestItem.bTest3=m_pTest3CBox->IsChecked();

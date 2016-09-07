@@ -62,7 +62,7 @@ class SwMMResultSaveDialog : public SfxModalDialog
     DECL_LINK_TYPED(DocumentSelectionHdl_Impl, Button*, void);
 
 public:
-    SwMMResultSaveDialog(vcl::Window* pParent = nullptr);
+    SwMMResultSaveDialog();
     virtual ~SwMMResultSaveDialog();
 
     virtual void dispose() override;
@@ -94,7 +94,7 @@ class SwMMResultPrintDialog : public SfxModalDialog
     void FillInPrinterSettings();
 
 public:
-    SwMMResultPrintDialog(vcl::Window* pParent = nullptr);
+    SwMMResultPrintDialog();
     virtual ~SwMMResultPrintDialog();
 
     virtual void dispose() override;
@@ -144,7 +144,7 @@ class SwMMResultEmailDialog : public SfxModalDialog
     void FillInEmailSettings();
 
 public:
-    SwMMResultEmailDialog(vcl::Window* pParent = nullptr);
+    SwMMResultEmailDialog();
     virtual ~SwMMResultEmailDialog();
 
     virtual void dispose() override;

@@ -154,8 +154,7 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
             GetTableItemMapper().exportXML( *this,
                                            rFormat.GetAttrSet(),
                                            GetTwipUnitConverter(),
-                                           ePropToken,
-                                           SvXmlExportFlags::IGN_WS );
+                                           ePropToken );
         }
     }
 }

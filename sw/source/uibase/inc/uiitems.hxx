@@ -35,7 +35,7 @@ class SW_DLLPUBLIC SwPageFootnoteInfoItem : public SfxPoolItem
 
 public:
 
-    SwPageFootnoteInfoItem(const sal_uInt16 nId, SwPageFootnoteInfo& rInfo);
+    SwPageFootnoteInfoItem(SwPageFootnoteInfo& rInfo);
     SwPageFootnoteInfoItem(const SwPageFootnoteInfoItem& rItem );
     virtual ~SwPageFootnoteInfoItem();
 
@@ -73,7 +73,7 @@ class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
     SwNumRule* pRule;
 
 public:
-    SwUINumRuleItem( const SwNumRule& rRule, const sal_uInt16 = FN_PARAM_ACT_NUMBER);
+    SwUINumRuleItem( const SwNumRule& rRule );
     SwUINumRuleItem( const SwUINumRuleItem& rItem );
     virtual ~SwUINumRuleItem();
 

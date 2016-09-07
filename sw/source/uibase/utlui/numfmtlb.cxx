@@ -64,7 +64,7 @@ NumFormatListBox::NumFormatListBox(vcl::Window* pWin, WinBits nStyle) :
     bShowLanguageControl(false),
     bUseAutomaticLanguage(true)
 {
-    Init(css::util::NumberFormat::NUMBER);
+    Init();
 }
 
 VCL_BUILDER_DECL_FACTORY(NumFormatListBox)
@@ -86,7 +86,7 @@ VCL_BUILDER_DECL_FACTORY(NumFormatListBox)
     rRet = pListBox;
 }
 
-void NumFormatListBox::Init(short nFormatType)
+void NumFormatListBox::Init()
 {
     SwView *pView = GetView();
 
@@ -95,7 +95,7 @@ void NumFormatListBox::Init(short nFormatType)
     else
         eCurLanguage = SvtSysLocale().GetLanguageTag().getLanguageType();
 
-    SetFormatType(nFormatType);
+    SetFormatType(css::util::NumberFormat::NUMBER);
     SetDefFormat(nDefFormat);
 
     SetSelectHdl(LINK(this, NumFormatListBox, SelectHdl));

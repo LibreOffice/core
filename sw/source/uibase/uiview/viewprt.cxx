@@ -320,7 +320,7 @@ void SetAppPrintOptions( SwViewShell* pSh, bool bWeb )
     if( rIDDA.getPrinter( false ) )
     {
         // Close application own printing options in SfxPrinter.
-        SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
+        SwAddPrinterItem aAddPrinterItem(aPrtData);
         SfxItemSet aSet( pSh->GetAttrPool(),
                     FN_PARAM_ADDPRINTER,        FN_PARAM_ADDPRINTER,
                     SID_HTML_MODE,              SID_HTML_MODE,

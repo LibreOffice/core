@@ -290,10 +290,10 @@ SvXMLExportItemMapper::~SvXMLExportItemMapper()
 void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
-                    XMLTokenEnum ePropToken,
-                    SvXmlExportFlags nFlags ) const
+                    XMLTokenEnum ePropToken ) const
 {
     std::vector<sal_uInt16> aIndexArray;
+    const SvXmlExportFlags nFlags = SvXmlExportFlags::IGN_WS;
 
     exportXML( rExport, rExport.GetAttrList(), rSet, rUnitConverter,
                rExport.GetNamespaceMap(), nFlags, &aIndexArray );

@@ -1052,8 +1052,7 @@ void SwXMLImport::UpdateTextCollConditions( SwDoc *pDoc )
 bool SwXMLImport::FindAutomaticStyle(
         sal_uInt16 nFamily,
         const OUString& rName,
-        const SfxItemSet **ppItemSet,
-        OUString *pParent ) const
+        const SfxItemSet **ppItemSet ) const
 {
     SwXMLItemSetStyleContext_Impl *pStyle = nullptr;
     if( GetAutoStyles() )
@@ -1080,9 +1079,6 @@ bool SwXMLImport::FindAutomaticStyle(
                 }
 
             }
-
-            if( pParent )
-                *pParent = pStyle->GetParentName();
         }
     }
 

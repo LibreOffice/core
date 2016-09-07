@@ -32,8 +32,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( const sal_uInt16 nId, SwPageFootnoteInfo& rInfo) :
-    SfxPoolItem( nId ),
+SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( SwPageFootnoteInfo& rInfo) :
+    SfxPoolItem( FN_PARAM_FTN_INFO ),
     aFootnoteInfo(rInfo)
 {
 }
@@ -221,8 +221,8 @@ bool SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 
 // SwUINumRuleItem for the NumTabPages of the FormatNumRule/Styleists
 
-SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul, const sal_uInt16 nId )
-    : SfxPoolItem( nId ), pRule( new SwNumRule( rRul ) )
+SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul )
+    : SfxPoolItem( FN_PARAM_ACT_NUMBER ), pRule( new SwNumRule( rRul ) )
 {
 }
 

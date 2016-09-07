@@ -67,8 +67,8 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper < XContainerListener >
     SwWrtShell* m_pWrtShell;
 
     public:
-        explicit SwDBTreeList_Impl(SwWrtShell* pShell)
-            : m_pWrtShell(pShell)
+        explicit SwDBTreeList_Impl()
+            : m_pWrtShell(nullptr)
         {
         }
         virtual ~SwDBTreeList_Impl();
@@ -147,7 +147,7 @@ SwDBTreeList::SwDBTreeList(vcl::Window *pParent, WinBits nStyle)
     , aImageList(SW_RES(ILIST_DB_DLG))
     , bInitialized(false)
     , bShowColumns(false)
-    , pImpl(new SwDBTreeList_Impl(nullptr))
+    , pImpl(new SwDBTreeList_Impl)
 {
     if (IsVisible())
         InitTreeList();

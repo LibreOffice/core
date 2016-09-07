@@ -109,19 +109,15 @@ void SwColMgr::SetActualWidth(sal_uInt16 nW)
 }
 
 // ctor
-SwColMgr::SwColMgr(const SfxItemSet& rSet, sal_uInt16 nActWidth) :
-    aFormatCol(static_cast<const SwFormatCol&>(rSet.Get(RES_COL))),
-    nWidth(nActWidth)
+SwColMgr::SwColMgr(const SfxItemSet& rSet) :
+    aFormatCol(static_cast<const SwFormatCol&>(rSet.Get(RES_COL)))
 {
-    if(nWidth == USHRT_MAX)
-    {
-        nWidth = (sal_uInt16)static_cast<const SwFormatFrameSize&>(rSet.Get(RES_FRM_SIZE)).GetWidth();
-        if (nWidth < MINLAY)
-            nWidth = USHRT_MAX;
-        const SvxLRSpaceItem &rLR = static_cast<const SvxLRSpaceItem&>(rSet.Get(RES_LR_SPACE));
-        nWidth = nWidth - (sal_uInt16)rLR.GetLeft();
-        nWidth = nWidth - (sal_uInt16)rLR.GetRight();
-    }
+    nWidth = (sal_uInt16)static_cast<const SwFormatFrameSize&>(rSet.Get(RES_FRM_SIZE)).GetWidth();
+    if (nWidth < MINLAY)
+        nWidth = USHRT_MAX;
+    const SvxLRSpaceItem &rLR = static_cast<const SvxLRSpaceItem&>(rSet.Get(RES_LR_SPACE));
+    nWidth = nWidth - (sal_uInt16)rLR.GetLeft();
+    nWidth = nWidth - (sal_uInt16)rLR.GetRight();
     ::FitToActualSize(aFormatCol, nWidth);
 }
 

@@ -190,11 +190,10 @@ class SwTrnsfrActionAndUndo
     SwUndoId eUndoId;
 public:
     SwTrnsfrActionAndUndo( SwWrtShell *pS, SwUndoId nId,
-                           const SwRewriter * pRewriter = nullptr,
                            bool bDelSel = false)
         : pSh( pS ), eUndoId( nId )
     {
-        pSh->StartUndo( eUndoId, pRewriter );
+        pSh->StartUndo( eUndoId );
         if( bDelSel )
             pSh->DelRight();
         pSh->StartAllAction();
@@ -1243,8 +1242,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
 
         if( bDelSel )
             // #i34830#
-            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD, nullptr,
-                                                     true ));
+            pAction.reset(new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD, true ));
     }
 
     SwTransferable *pTrans=nullptr, *pTunneledTrans=GetSwTransferable( rData );

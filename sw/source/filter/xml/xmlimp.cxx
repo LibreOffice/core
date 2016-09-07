@@ -977,7 +977,7 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {
     return new SwXMLTextImportHelper( GetModel(), *this, getImportInfo(),
                                       IsInsertMode(),
-                                      IsStylesOnlyMode(), true/*bShowProgress*/,
+                                      IsStylesOnlyMode(),
                                       IsBlockMode(), IsOrganizerMode(),
                                       m_bPreserveRedlineMode );
 }

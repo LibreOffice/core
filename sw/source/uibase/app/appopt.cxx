@@ -118,11 +118,11 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 #endif
                                     0);
 
-    pRet->Put( SwDocDisplayItem( aViewOpt, FN_PARAM_DOCDISP) );
-    pRet->Put( SwElemItem( aViewOpt, FN_PARAM_ELEM) );
+    pRet->Put( SwDocDisplayItem( aViewOpt ) );
+    pRet->Put( SwElemItem( aViewOpt ) );
     if( bTextDialog )
     {
-        pRet->Put( SwShadowCursorItem( aViewOpt, FN_PARAM_SHADOWCURSOR ));
+        pRet->Put( SwShadowCursorItem( aViewOpt ));
         pRet->Put( SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, aViewOpt.IsCursorInProtectedArea()));
         pRet->Put(SfxBoolItem(FN_PARAM_IGNORE_PROTECTED, aViewOpt.IsIgnoreProtectedArea()));
     }
@@ -227,7 +227,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     if(!pOpt)
         pOpt = GetPrtOptions(!bTextDialog);
 
-    SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, *pOpt );
+    SwAddPrinterItem aAddPrinterItem(*pOpt );
     pRet->Put(aAddPrinterItem);
 
     // Options for Web background
@@ -477,7 +477,7 @@ VclPtr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
                 if( (bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE == nId) ||
                     (!bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE != nId) )
                 {
-                    aSet.Put (SwWrtShellItem(SID_WRT_SHELL,pCurrView->GetWrtShellPtr()));
+                    aSet.Put (SwWrtShellItem(pCurrView->GetWrtShellPtr()));
                     pRet->PageCreated(aSet);
                 }
             }
@@ -499,7 +499,7 @@ VclPtr<SfxTabPage> SwModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
                 SwView* pCurrView = GetView();
                 if(pCurrView)
                 {
-                    aSet.Put( SwWrtShellItem( SID_WRT_SHELL, pCurrView->GetWrtShellPtr() ) );
+                    aSet.Put( SwWrtShellItem( pCurrView->GetWrtShellPtr() ) );
                     pRet->PageCreated(aSet);
                 }
             }

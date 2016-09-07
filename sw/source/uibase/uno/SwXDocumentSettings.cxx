@@ -889,7 +889,7 @@ void SwXDocumentSettings::_postSetValues ()
         // when setting a printer it should have decent default options
         SfxItemSet aOptions( mpPrinter->GetOptions() );
         SwPrintData aPrtData( mpDoc->getIDocumentDeviceAccess().getPrintData() );
-        SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
+        SwAddPrinterItem aAddPrinterItem (aPrtData);
         aOptions.Put(aAddPrinterItem);
         mpPrinter->SetOptions( aOptions );
 
