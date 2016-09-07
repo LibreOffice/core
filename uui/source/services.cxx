@@ -24,7 +24,6 @@
 #include <sal/types.h>
 #include <uno/environment.h>
 
-#include "requeststringresolver.hxx"
 #include "passwordcontainer.hxx"
 
 using namespace com::sun::star::uno;
@@ -45,28 +44,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL uui_component_getFactory(sal_Cha
         static_cast< XMultiServiceFactory * >( pServiceManager ) );
     Reference< XSingleServiceFactory > xFactory;
 
-
-    // UUI Interaction Request String Resolver.
-
-
-    if ( rtl_str_compare(pImplName,
-                  UUIInteractionRequestStringResolver::m_aImplementationName)
-          == 0)
-    {
-        xFactory =
-            cppu::createSingleFactory(
-                static_cast< XMultiServiceFactory * >(pServiceManager),
-                OUString::createFromAscii(
-                    UUIInteractionRequestStringResolver::m_aImplementationName),
-                &UUIInteractionRequestStringResolver::createInstance,
-                UUIInteractionRequestStringResolver::getSupportedServiceNames_static());
-    }
-
-
     // UUI Password Container Interaction Handler.
 
-
-    else if ( uui::PasswordContainerInteractionHandler::getImplementationName_Static().
+    if ( uui::PasswordContainerInteractionHandler::getImplementationName_Static().
                 equalsAscii( pImplName ) )
     {
         xFactory =
