@@ -63,8 +63,10 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(mpDrvVersion,"driverversion");
 
     mpUseSwInterpreter->Check(officecfg::Office::Common::Misc::UseSwInterpreter::get());
+    mpUseSwInterpreter->Enable(!officecfg::Office::Common::Misc::UseSwInterpreter::isReadOnly());
 
     mpUseOpenCL->Check(maConfig.mbUseOpenCL);
+    mpUseOpenCL->Enable(!officecfg::Office::Common::Misc::UseOpenCL::isReadOnly());
     mpUseOpenCL->SetClickHdl(LINK(this, SvxOpenCLTabPage, EnableOpenCLHdl));
 
     mpBlackListEdit->SetClickHdl(LINK(this, SvxOpenCLTabPage, BlackListEditHdl));
@@ -103,6 +105,9 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     aTabs[5] = rBlBar.GetTextWidth(rBlBar.GetItemText(5)) + aTabs[4] + 12;
     mpBlackList->SetTabs(aTabs, MAP_PIXEL);
     mpWhiteList->SetTabs(aTabs, MAP_PIXEL);
+
+    mpBlackListFrame->Enable(maConfig.mbUseOpenCL);
+    mpWhiteListFrame->Enable(maConfig.mbUseOpenCL);
 
 }
 
