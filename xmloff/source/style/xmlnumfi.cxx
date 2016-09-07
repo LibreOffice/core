@@ -1215,11 +1215,17 @@ void SvXMLNumFmtElementContext::EndElement()
         case XML_TOK_STYLE_YEAR:
             rParent.UpdateCalendar( sCalendar );
 //! I18N doesn't provide SYSTEM or extended date information yet
-            // Y after G (era) is replaced by E
-            if ( rParent.HasEra() )
+            // Y after G (era) is replaced by E, also if we're switching to the
+            // other second known calendar for a locale.
+            /* TODO: here only for zh-TW, handle for other locales as well. */
+            if ( rParent.HasEra() ||
+                    (sCalendar.equalsIgnoreAsciiCaseAscii("ROC") &&
+                     rParent.GetLocaleData().getLoadedLanguageTag().getBcp47() == "zh-TW"))
+            {
                 rParent.AddNfKeyword(
                     sal::static_int_cast< sal_uInt16 >(
                         bEffLong ? NF_KEY_EEC : NF_KEY_EC ) );
+            }
             else
                 rParent.AddNfKeyword(
                     sal::static_int_cast< sal_uInt16 >(
