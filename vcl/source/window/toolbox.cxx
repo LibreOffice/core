@@ -3047,14 +3047,17 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
     if( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate )
     {
         // separate button not for dropdown only where the whole button is painted
-        if ( pItem->mnBits & ToolBoxItemBits::DROPDOWN &&
+        // exception: when text position is set to bottom then we want to calculate rect for dropdown only button
+        if ( ( pItem->mnBits & ToolBoxItemBits::DROPDOWN &&
             ((pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY) )
+            || ( ( pItem->mnBits & ToolBoxItemBits::DROPDOWN) && ( meTextPosition == ToolBoxTextPosition::Bottom ) ) )
         {
             Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz && ( meTextPosition == ToolBoxTextPosition::Right ) );
             if( aArrowRect.Top() == pItem->maRect.Top() ) // dropdown arrow on right side
                 aBtnSize.Width() -= aArrowRect.GetWidth();
-            else // dropdown arrow on bottom side
-                aBtnSize.Height() -= aArrowRect.GetHeight();
+            else if ( !( (meTextPosition == ToolBoxTextPosition::Bottom)
+                        && ((pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) == ToolBoxItemBits::DROPDOWNONLY) ) )
+                aBtnSize.Height() -= aArrowRect.GetHeight(); // dropdown arrow on bottom side
         }
     }
 
@@ -3266,7 +3269,10 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
                 long nArrowHeight = ( pItem->mnBits & ToolBoxItemBits::DROPDOWN )
                                         ? TB_DROPDOWNARROWWIDTH : 0;
 
-                if ( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate )
+                // only if buton is a "dropdown only" type then is painted as a single button
+                // and we need to move text above the arrow
+                if ( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate
+                    && (pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY )
                     nArrowHeight = 0;
 
                 nTextOffY += nBtnHeight - aTxtSize.Height() - nArrowHeight;
