@@ -224,14 +224,14 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
 }
 
 void SwHTMLParser::SaveDocContext( HTMLAttrContext *pCntxt,
-                                   sal_uInt16 nFlags,
+                                   HtmlContextFlags nFlags,
                                    const SwPosition *pNewPos )
 {
     HTMLAttrContext_SaveDoc *pSave = pCntxt->GetSaveDocContext( true );
-    pSave->SetStripTrailingPara( (HTML_CNTXT_STRIP_PARA & nFlags) != 0 );
-    pSave->SetKeepNumRules( (HTML_CNTXT_KEEP_NUMRULE & nFlags) != 0 );
-    pSave->SetFixHeaderDist( (HTML_CNTXT_HEADER_DIST & nFlags) != 0 );
-    pSave->SetFixFooterDist( (HTML_CNTXT_FOOTER_DIST & nFlags) != 0 );
+    pSave->SetStripTrailingPara( bool(HtmlContextFlags::StripPara & nFlags) );
+    pSave->SetKeepNumRules( bool(HtmlContextFlags::KeepNumrule & nFlags) );
+    pSave->SetFixHeaderDist( bool(HtmlContextFlags::HeaderDist & nFlags) );
+    pSave->SetFixFooterDist( bool(HtmlContextFlags::FooterDist & nFlags) );
 
     if( pNewPos )
     {
@@ -246,7 +246,7 @@ void SwHTMLParser::SaveDocContext( HTMLAttrContext *pCntxt,
             GetNumInfo().Clear();
         }
 
-        if( (HTML_CNTXT_KEEP_ATTRS & nFlags) != 0 )
+        if( HtmlContextFlags::KeepAttrs & nFlags )
         {
             // Attribute an aktueller Position beenden und an neuer neu anfangen
             SplitAttrTab( *pNewPos );
@@ -263,12 +263,12 @@ void SwHTMLParser::SaveDocContext( HTMLAttrContext *pCntxt,
 
     // Mit dem Setzen von nContextStMin koennen automatisch auch
     // keine gerade offenen Listen (DL/OL/UL) mehr beendet werden.
-    if( (HTML_CNTXT_PROTECT_STACK & nFlags) != 0  )
+    if( HtmlContextFlags::ProtectStack & nFlags  )
     {
         pSave->SetContextStMin( m_nContextStMin );
         m_nContextStMin = m_aContexts.size();
 
-        if( (HTML_CNTXT_KEEP_ATTRS & nFlags) == 0 )
+        if( HtmlContextFlags::KeepAttrs & nFlags )
         {
             pSave->SetContextStAttrMin( m_nContextStAttrMin );
             m_nContextStAttrMin = m_aContexts.size();

@@ -52,9 +52,9 @@
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 
-#define CONTEXT_FLAGS_MULTICOL (HTML_CNTXT_STRIP_PARA |  \
-                                HTML_CNTXT_KEEP_NUMRULE | \
-                                HTML_CNTXT_KEEP_ATTRS)
+#define CONTEXT_FLAGS_MULTICOL (HtmlContextFlags::StripPara |  \
+                                HtmlContextFlags::KeepNumrule | \
+                                HtmlContextFlags::KeepAttrs)
 #define CONTEXT_FLAGS_HDRFTR (CONTEXT_FLAGS_MULTICOL)
 #define CONTEXT_FLAGS_FTN (CONTEXT_FLAGS_MULTICOL)
 
@@ -149,7 +149,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
         SwFrameFormat *pHdFtFormat;
         bool bNew = false;
-        sal_uInt16 nFlags = CONTEXT_FLAGS_HDRFTR;
+        HtmlContextFlags nFlags = CONTEXT_FLAGS_HDRFTR;
         if( bHeader )
         {
             pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetHeader().GetHeaderFormat());
@@ -160,7 +160,7 @@ void SwHTMLParser::NewDivision( int nToken )
                 pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetHeader().GetHeaderFormat());
                 bNew = true;
             }
-            nFlags |= HTML_CNTXT_HEADER_DIST;
+            nFlags |= HtmlContextFlags::HeaderDist;
         }
         else
         {
@@ -172,7 +172,7 @@ void SwHTMLParser::NewDivision( int nToken )
                 pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetFooter().GetFooterFormat());
                 bNew = true;
             }
-            nFlags |= HTML_CNTXT_FOOTER_DIST;
+            nFlags |= HtmlContextFlags::FooterDist;
         }
 
         const SwFormatContent& rFlyContent = pHdFtFormat->GetContent();
@@ -765,7 +765,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
                                    HTMLAttrContext *pCntxt,
                                    const OUString& rName,
-                                   sal_uInt16 nFlags )
+                                   HtmlContextFlags nFlags )
 {
     RndStdIds eAnchorId =
         static_cast<const SwFormatAnchor&>(rItemSet.Get( RES_ANCHOR )).GetAnchorId();

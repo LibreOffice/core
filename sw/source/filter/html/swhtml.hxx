@@ -333,16 +333,22 @@ class SwHTMLNumRuleInfo;
 
 typedef std::vector<std::unique_ptr<ImageMap>> ImageMaps;
 
-#define HTML_CNTXT_PROTECT_STACK    0x0001
-#define HTML_CNTXT_STRIP_PARA       0x0002
-#define HTML_CNTXT_KEEP_NUMRULE     0x0004
-#define HTML_CNTXT_HEADER_DIST      0x0008
-#define HTML_CNTXT_FOOTER_DIST      0x0010
-#define HTML_CNTXT_KEEP_ATTRS       0x0020
+enum class HtmlContextFlags {
+    ProtectStack    = 0x0001,
+    StripPara       = 0x0002,
+    KeepNumrule     = 0x0004,
+    HeaderDist      = 0x0008,
+    FooterDist      = 0x0010,
+    KeepAttrs       = 0x0020,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<HtmlContextFlags> : is_typed_flags<HtmlContextFlags, 0x03f> {};
+}
 
 #define CONTEXT_FLAGS_ABSPOS    \
-    (HTML_CNTXT_PROTECT_STACK | \
-     HTML_CNTXT_STRIP_PARA)
+    (HtmlContextFlags::ProtectStack | \
+     HtmlContextFlags::StripPara)
 
 enum class HtmlFrameFormatFlags {
     Box                 = 0x0001,
@@ -590,9 +596,9 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     // Fly-Frames einfuegen/verlassen
     void InsertFlyFrame( const SfxItemSet& rItemSet, HTMLAttrContext *pCntxt,
-                         const OUString& rId, sal_uInt16 nFlags );
+                         const OUString& rId, HtmlContextFlags nFlags );
 
-    void SaveDocContext( HTMLAttrContext *pCntxt, sal_uInt16 nFlags,
+    void SaveDocContext( HTMLAttrContext *pCntxt, HtmlContextFlags nFlags,
                        const SwPosition *pNewPos );
     void RestoreDocContext( HTMLAttrContext *pCntxt );
 
