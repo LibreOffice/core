@@ -2708,6 +2708,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
             }
             ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
             OSL_ENSURE( pPortion, "Blind Portion in InsertText" );
+            pPortion->SetMustRepaint(true);
 
             if ( GetStatus().DoOnlineSpelling() )
             {
