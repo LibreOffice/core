@@ -4113,11 +4113,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 #endif
 
     sal_Int32 nDispDPIY = GetDisplay()->GetResolution().B();
-    int nPointHeight = 0;
-    static gboolean(*pAbso)(const PangoFontDescription*) =
-        reinterpret_cast<gboolean(*)(const PangoFontDescription*)>(osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "pango_font_description_get_size_is_absolute" ));
-
-    if( pAbso && pAbso( pStyle->font_desc ) )
+    int nPointHeight;
+    if (pango_font_description_get_size_is_absolute(pStyle->font_desc))
         nPointHeight = (nPangoHeight * 72 + nDispDPIY*PANGO_SCALE/2) / (nDispDPIY * PANGO_SCALE);
     else
         nPointHeight = nPangoHeight/PANGO_SCALE;
