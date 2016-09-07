@@ -47,9 +47,9 @@ ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
 
 bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    bool bReturn;
+    bool bReturn = SwDrawBase::MouseButtonDown(rMEvt);
 
-    if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)))
+    if (bReturn)
     {
         if (m_pWin->GetSdrDrawMode() == OBJ_CAPTION)
         {
@@ -60,14 +60,15 @@ bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
                 m_pSh->GetDrawView()->SetFrameDragSingles(m_pView->IsDrawSelMode());
             }
         }
-
-        SdrObject* pObj = m_pView->GetDrawView()->GetCreateObj();
-
-        if (pObj)
+        else
         {
-            SfxItemSet aAttr(pObj->GetModel()->GetItemPool());
-            m_pSh->SetLineEnds(aAttr, pObj, m_nSlotId);
-            pObj->SetMergedItemSet(aAttr);
+            SdrObject* pObj = m_pView->GetDrawView()->GetCreateObj();
+            if (pObj)
+            {
+                SfxItemSet aAttr(pObj->GetModel()->GetItemPool());
+                SwFEShell::SetLineEnds(aAttr, pObj, m_nSlotId);
+                pObj->SetMergedItemSet(aAttr);
+            }
         }
     }
 
