@@ -131,7 +131,9 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     bCodeCompleting =
     bExplicit = false;
     bClassModule = ( pm->GetModuleType() == css::script::ModuleType::CLASS );
-    OSL_TRACE("Parser - %s, bClassModule %d", OUStringToOString( pm->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), bClassModule );
+    SAL_INFO("basic",
+             "Parser - " << pm->GetName()
+             << ", bClassModule " << bClassModule );
     pPool    = &aPublics;
     for(SbxDataType & eDefType : eDefTypes)
         eDefType = SbxVARIANT;    // no explicit default type
