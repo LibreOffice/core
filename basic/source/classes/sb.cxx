@@ -1951,7 +1951,7 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
     if ( !pThisComponent )
     {
         SAL_WARN("basic", "Failed to get ThisComponent");
-            // the application Basic, at the latest, should have this variable
+        // the application Basic, at the latest, should have this variable
         return nullptr;
     }
 

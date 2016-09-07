@@ -253,7 +253,7 @@ void SbiCodeGen::Save()
                         ePropType = SbxOBJECT;
                         break;
                     default:
-                        OSL_FAIL("Illegal PropertyMode");
+                        SAL_WARN("basic", "Illegal PropertyMode");
                         break;
                     }
                     OUString aPropName = pProc->GetPropName();

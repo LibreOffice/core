@@ -165,9 +165,8 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
 
     if( !pMgr->GetLib( aLibName ) )
     {
-        StarBASIC* pLib =
-            pMgr->CreateLibForLibContainer( aLibName, xScriptCont );
-        DBG_ASSERT( pLib, "XML Import: Basic library could not be created");
+        assert( pMgr->CreateLibForLibContainer( aLibName, xScriptCont ) &&
+                "XML Import: Basic library could not be created" );
     }
 
     uno::Reference< container::XContainer> xLibContainer( xLibNameAccess, uno::UNO_QUERY );
@@ -193,7 +192,7 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
     sal_Int32 nModuleCount = aModuleNames.getLength();
 
     StarBASIC* pLib = pMgr->GetLib( aLibName );
-    DBG_ASSERT( pLib, "BasMgrContainerListenerImpl::addLibraryModulesImpl: Unknown lib!");
+    assert( pLib && "BasMgrContainerListenerImpl::addLibraryModulesImpl: Unknown lib!" );
     if( pLib )
     {
         const OUString* pNames = aModuleNames.getConstArray();
@@ -254,7 +253,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
     {
 
         StarBASIC* pLib = mpMgr->GetLib( maLibName );
-        DBG_ASSERT( pLib, "BasMgrContainerListenerImpl::elementInserted: Unknown lib!");
+        assert( pLib && "BasMgrContainerListenerImpl::elementInserted: Unknown lib!" );
         if( pLib )
         {
             SbModule* pMod = pLib->FindModule( aName );
@@ -284,7 +283,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
     Event.Accessor >>= aName;
 
     // Replace not possible for library container
-    DBG_ASSERT( !maLibName.isEmpty(), "library container fired elementReplaced()");
+    assert( !maLibName.isEmpty() && "library container fired elementReplaced()" );
 
     StarBASIC* pLib = mpMgr->GetLib( maLibName );
     if( pLib )
@@ -426,7 +425,7 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
     rSStream.ReadUInt16( nId );
     rSStream.ReadUInt16( nVer );
 
-    DBG_ASSERT( nId == LIBINFO_ID, "No BasicLibInfo?!" );
+    assert( nId == LIBINFO_ID && "No BasicLibInfo?!" );
     if( nId == LIBINFO_ID )
     {
         // Reload?
@@ -476,7 +475,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
         LoadBasicManager( rStorage, rBaseURL );
         // StdLib contains Parent:
         StarBASIC* pStdLib = GetStdLib();
-        DBG_ASSERT( pStdLib, "Standard-Lib not loaded?" );
+        assert( pStdLib && "Standard-Lib not loaded?" );
         if ( !pStdLib )
         {
             // Should never happen, but if it happens we won't crash...
@@ -629,7 +628,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
 BasicManager::BasicManager( StarBASIC* pSLib, OUString* pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )
 {
     Init();
-    DBG_ASSERT( pSLib, "BasicManager cannot be created with a NULL-Pointer!" );
+    assert( pSLib && "BasicManager cannot be created with a NULL-Pointer!" );
 
     if( pLibPath )
     {
@@ -771,7 +770,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szOldManagerStream, eStreamReadMode );
 
     OUString aStorName( rStorage.GetName() );
-    DBG_ASSERT( aStorName.getLength(), "No Storage Name!" );
+    assert( aStorName.getLength() && "No Storage Name!" );
 
     if ( !xManagerStream.Is() || xManagerStream->GetError() || ( xManagerStream->Seek( STREAM_SEEK_TO_END ) == 0 ) )
     {
@@ -785,7 +784,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     xManagerStream->ReadUInt32( nBasicStartOff );
     xManagerStream->ReadUInt32( nBasicEndOff );
 
-    DBG_ASSERT( !xManagerStream->GetError(), "Invalid Manager-Stream!" );
+    assert( !xManagerStream->GetError() && "Invalid Manager-Stream!" );
 
     xManagerStream->Seek( nBasicStartOff );
     if (!ImplLoadBasic( *xManagerStream, mpImpl->aLibs.front()->GetLibRef() ))
@@ -807,7 +806,9 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
         {
             OUString aLibInfo(aLibs.getToken(nLib, LIB_SEP));
             // TODO: Remove == 2
-            DBG_ASSERT( ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 2 ) || ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 3 ), "Invalid Lib-Info!" );
+            assert( (( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 2 ) ||
+                    ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 3 )) &&
+                    "Invalid Lib-Info!" );
             OUString aLibName( aLibInfo.getToken( 0, LIBINFO_SEP ) );
             OUString aLibAbsStorageName( aLibInfo.getToken( 1, LIBINFO_SEP ) );
             OUString aLibRelStorageName( aLibInfo.getToken( 2, LIBINFO_SEP ) );
@@ -817,7 +818,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
             aLibRelStorage.removeSegment();
             bool bWasAbsolute = false;
             aLibRelStorage = aLibRelStorage.smartRel2Abs( aLibRelStorageName, bWasAbsolute);
-            DBG_ASSERT(!bWasAbsolute, "RelStorageName was absolute!" );
+            assert(!bWasAbsolute && "RelStorageName was absolute!" );
 
             tools::SvRef<SotStorage> xStorageRef;
             if ( aLibAbsStorage == aCurStorage || aLibRelStorageName == szImbedded )
@@ -887,7 +888,7 @@ BasicLibInfo* BasicManager::CreateLibInfo()
 bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage )
 {
     try {
-    DBG_ASSERT( pLibInfo, "LibInfo!?" );
+    assert( pLibInfo && "LibInfo!?" );
 
     OUString aStorageName( pLibInfo->GetStorageName() );
     if ( aStorageName.isEmpty() || aStorageName == szImbedded )
@@ -1046,7 +1047,7 @@ void BasicManager::CheckModules( StarBASIC* pLib, bool bReference )
 
     for ( const auto& pModule: pLib->GetModules() )
     {
-        DBG_ASSERT( pModule.get(), "Module not received!" );
+        assert( pModule.get() && "Module not received!" );
         if ( !pModule->IsCompiled() && !StarBASIC::GetErrorCode() )
         {
             pModule->Compile();
@@ -1057,7 +1058,7 @@ void BasicManager::CheckModules( StarBASIC* pLib, bool bReference )
     // cause modified
     if( !bModified && bReference )
     {
-        OSL_FAIL( "Referenced basic library is not compiled!" );
+        SAL_WARN( "basic", "Referenced basic library is not compiled!" );
         pLib->SetModified( false );
     }
 }
@@ -1065,10 +1066,10 @@ void BasicManager::CheckModules( StarBASIC* pLib, bool bReference )
 StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName, bool bReference )
 {
     OUString aStorName( rStorage.GetName() );
-    DBG_ASSERT( !aStorName.isEmpty(), "No Storage Name!" );
+    assert( !aStorName.isEmpty() && "No Storage Name!" );
 
     OUString aStorageName = INetURLObject(aStorName, INetProtocol::File).GetMainURL( INetURLObject::DecodeMechanism::NONE );
-    DBG_ASSERT(!aStorageName.isEmpty(), "Bad storage name");
+    assert(!aStorageName.isEmpty() && "Bad storage name");
 
     OUString aNewLibName( rLibName );
     while ( HasLib( aNewLibName ) )
@@ -1115,7 +1116,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
 
 bool BasicManager::IsReference( sal_uInt16 nLib )
 {
-    DBG_ASSERT( nLib < mpImpl->aLibs.size(), "Lib does not exist!" );
+    assert( nLib < mpImpl->aLibs.size() && "Lib does not exist!" );
     if ( nLib < mpImpl->aLibs.size() )
     {
         return mpImpl->aLibs[nLib]->IsReference();
@@ -1131,9 +1132,9 @@ void BasicManager::RemoveLib( sal_uInt16 nLib )
 
 bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
 {
-    DBG_ASSERT( nLib, "Standard-Lib cannot be removed!" );
+    assert( nLib && "Standard-Lib cannot be removed!" );
 
-    DBG_ASSERT( !nLib || nLib  < mpImpl->aLibs.size(), "Lib not found!" );
+    assert( (!nLib || nLib  < mpImpl->aLibs.size()) && "Lib not found!" );
 
     if( !nLib || nLib  < mpImpl->aLibs.size() )
     {
@@ -1221,7 +1222,7 @@ sal_uInt16 BasicManager::GetLibCount() const
 
 StarBASIC* BasicManager::GetLib( sal_uInt16 nLib ) const
 {
-    DBG_ASSERT( nLib < mpImpl->aLibs.size(), "Lib does not exist!" );
+    assert( nLib < mpImpl->aLibs.size() && "Lib does not exist!" );
     if ( nLib < mpImpl->aLibs.size() )
     {
         return mpImpl->aLibs[nLib]->GetLib().get();
@@ -1273,7 +1274,7 @@ bool BasicManager::HasLib( const OUString& rName ) const
 
 OUString BasicManager::GetLibName( sal_uInt16 nLib )
 {
-    DBG_ASSERT(  nLib < mpImpl->aLibs.size(), "Lib?!" );
+    assert(  nLib < mpImpl->aLibs.size() && "Lib?!" );
     if ( nLib < mpImpl->aLibs.size() )
     {
         return mpImpl->aLibs[nLib]->GetLibName();
@@ -1284,7 +1285,7 @@ OUString BasicManager::GetLibName( sal_uInt16 nLib )
 bool BasicManager::LoadLib( sal_uInt16 nLib )
 {
     bool bDone = false;
-    DBG_ASSERT( nLib < mpImpl->aLibs.size() , "Lib?!" );
+    assert( nLib < mpImpl->aLibs.size() && "Lib?!" );
     if ( nLib < mpImpl->aLibs.size() )
     {
         BasicLibInfo& rLibInfo = *mpImpl->aLibs[nLib];
@@ -1352,7 +1353,7 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName, const OUString& Pa
             {
                 SAL_WARN("basic", "BasicManager::RemoveLib: Caught exception: " << e.Message);
             }
-            DBG_ASSERT( pLib, "XML Import: Linked basic library could not be loaded");
+            assert( pLib && "XML Import: Linked basic library could not be loaded");
         }
         else
         {
@@ -1417,7 +1418,7 @@ bool BasicManager::GetGlobalUNOConstant( const OUString& rName, uno::Any& aOut )
 {
     bool bRes = false;
     StarBASIC* pStandardLib = GetStdLib();
-    OSL_PRECOND( pStandardLib, "BasicManager::GetGlobalUNOConstant: no lib to read from!" );
+    assert( pStandardLib && "BasicManager::GetGlobalUNOConstant: no lib to read from!" );
     if ( pStandardLib )
         bRes = pStandardLib->GetUNOConstant( rName, aOut );
     return bRes;
@@ -1428,7 +1429,7 @@ uno::Any BasicManager::SetGlobalUNOConstant( const OUString& rName, const uno::A
     uno::Any aOldValue;
 
     StarBASIC* pStandardLib = GetStdLib();
-    OSL_PRECOND( pStandardLib, "BasicManager::SetGlobalUNOConstant: no lib to insert into!" );
+    assert( pStandardLib && "BasicManager::SetGlobalUNOConstant: no lib to insert into!" );
     if ( !pStandardLib )
         return aOldValue;
 
@@ -2194,8 +2195,8 @@ void SAL_CALL StarBasicAccess_Impl::createLibrary
     throw(container::ElementExistException, uno::RuntimeException, std::exception)
 {
     (void)ExternalSourceURL;
-    StarBASIC* pLib = mpMgr->CreateLib( LibName, Password, LinkTargetURL );
-    DBG_ASSERT( pLib, "XML Import: Basic library could not be created");
+    assert( mpMgr->CreateLib( LibName, Password, LinkTargetURL ) &&
+            "XML Import: Basic library could not be created" );
 }
 
 void SAL_CALL StarBasicAccess_Impl::addModule
@@ -2209,7 +2210,7 @@ void SAL_CALL StarBasicAccess_Impl::addModule
 {
     (void)Language;
     StarBASIC* pLib = mpMgr->GetLib( LibraryName );
-    DBG_ASSERT( pLib, "XML Import: Lib for module unknown");
+    assert( pLib && "XML Import: Lib for module unknown");
     if( pLib )
     {
         pLib->MakeModule( ModuleName, Source );
