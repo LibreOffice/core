@@ -344,10 +344,16 @@ typedef std::vector<std::unique_ptr<ImageMap>> ImageMaps;
     (HTML_CNTXT_PROTECT_STACK | \
      HTML_CNTXT_STRIP_PARA)
 
-#define HTML_FF_BOX                 0x0001
-#define HTML_FF_BACKGROUND          0x0002
-#define HTML_FF_PADDING             0x0004
-#define HTML_FF_DIRECTION           0x0008
+enum class HtmlFrameFormatFlags {
+    Box                 = 0x0001,
+    Background          = 0x0002,
+    Padding             = 0x0004,
+    Direction           = 0x0008,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<HtmlFrameFormatFlags> : is_typed_flags<HtmlFrameFormatFlags, 0x0f> {};
+}
 
 class SwHTMLParser : public SfxHTMLParser, public SwClient
 {
@@ -669,7 +675,7 @@ private:
                                  SfxItemSet &rFrameItemSet );
 
     static void SetFrameFormatAttrs( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
-                         sal_uInt16 nFlags, SfxItemSet &rFrameItemSet );
+                         HtmlFrameFormatFlags nFlags, SfxItemSet &rFrameItemSet );
 
     // Frames anlegen und Auto-gebundene Rahmen registrieren
     void RegisterFlyFrame( SwFrameFormat *pFlyFrame );

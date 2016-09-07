@@ -440,7 +440,7 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
 
         // Sonstige CSS1-Attribute Setzen
         SetFrameFormatAttrs( rItemSet, rPropInfo,
-                        HTML_FF_BOX|HTML_FF_PADDING|HTML_FF_BACKGROUND|HTML_FF_DIRECTION,
+                        HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Padding|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Direction,
                         aFrameItemSet );
 
         InsertFlyFrame( aFrameItemSet, pContext, rPropInfo.aId,
@@ -473,7 +473,7 @@ bool SwHTMLParser::CreateContainer( const OUString& rClass,
         SetFixSize( aDummy, aDummy, false, false, rItemSet, rPropInfo,
                     *pFrameItemSet );
         SetSpace( aDummy, rItemSet, rPropInfo, *pFrameItemSet );
-        SetFrameFormatAttrs( rItemSet, rPropInfo, HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_DIRECTION,
+        SetFrameFormatAttrs( rItemSet, rPropInfo, HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Direction,
                         *pFrameItemSet );
 
         bRet = true;

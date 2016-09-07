@@ -636,7 +636,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         // it will be cleared here. That for, it won't be set at the section,
         // too.
         SetFrameFormatAttrs( aItemSet, aPropInfo,
-                        HTML_FF_BOX|HTML_FF_BACKGROUND|HTML_FF_PADDING|HTML_FF_DIRECTION,
+                        HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Padding|HtmlFrameFormatFlags::Direction,
                         aFrameItemSet );
 
         // Insert fly frame. If the are columns, the fly frame's name is not

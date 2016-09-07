@@ -2085,14 +2085,14 @@ void SwHTMLParser::SetVarSize( SfxItemSet & /*rItemSet*/,
 
 void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
                                    SvxCSS1PropertyInfo & /*rPropInfo*/,
-                                   sal_uInt16 nFlags,
+                                   HtmlFrameFormatFlags nFlags,
                                    SfxItemSet &rFrameItemSet )
 {
     const SfxPoolItem *pItem;
-    if( (nFlags & HTML_FF_BOX) != 0 &&
+    if( (nFlags & HtmlFrameFormatFlags::Box) &&
         SfxItemState::SET==rItemSet.GetItemState( RES_BOX, true, &pItem ) )
     {
-        if( (nFlags & HTML_FF_PADDING) == 0 )
+        if( nFlags & HtmlFrameFormatFlags::Padding )
         {
             SvxBoxItem aBoxItem( *static_cast<const SvxBoxItem *>(pItem) );
             // reset all 4 sides to 0
@@ -2106,14 +2106,14 @@ void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
         rItemSet.ClearItem( RES_BOX );
     }
 
-    if( (nFlags & HTML_FF_BACKGROUND) != 0 &&
+    if( (nFlags & HtmlFrameFormatFlags::Background) &&
         SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, true, &pItem ) )
     {
         rFrameItemSet.Put( *pItem );
         rItemSet.ClearItem( RES_BACKGROUND );
     }
 
-    if( (nFlags & HTML_FF_DIRECTION) != 0 &&
+    if( (nFlags & HtmlFrameFormatFlags::Direction) &&
         SfxItemState::SET==rItemSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
         rFrameItemSet.Put( *pItem );
