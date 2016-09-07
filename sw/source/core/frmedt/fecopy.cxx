@@ -128,7 +128,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
     }
 
     pClpDoc->getIDocumentFieldsAccess().LockExpFields();
-    pClpDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
+    pClpDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::DeleteRedlines );
     bool bRet;
 
     // do we want to copy a FlyFrame?
@@ -227,7 +227,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
     else
         bRet = CopySelToDoc( pClpDoc );     // copy the selections
 
-    pClpDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)0 );
+    pClpDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::NONE );
     pClpDoc->getIDocumentFieldsAccess().UnlockExpFields();
     if( !pClpDoc->getIDocumentFieldsAccess().IsExpFieldsLocked() )
         pClpDoc->getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
@@ -466,8 +466,8 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         // set a flag in Doc, handled in TextNodes
         mpDoc->SetCopyIsMove( true );
 
-    RedlineMode_t eOldRedlMode = pDestShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
-    pDestShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(eOldRedlMode | nsRedlineMode_t::REDLINE_DELETE_REDLINES));
+    RedlineFlags eOldRedlMode = pDestShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
+    pDestShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOldRedlMode | RedlineFlags::DeleteRedlines );
 
     // If there are table formulas in the area, then display the table first
     // so that the table formula can calculate a new value first
@@ -648,7 +648,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             bRet = SwEditShell::Copy( pDestShell );
     }
 
-    pDestShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode_intern( eOldRedlMode );
+    pDestShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOldRedlMode );
     mpDoc->SetCopyIsMove( bCopyIsMove );
 
     // have new table formulas been inserted?

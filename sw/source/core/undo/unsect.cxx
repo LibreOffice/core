@@ -84,7 +84,7 @@ SwUndoInsSection::SwUndoInsSection(
     {
         m_pRedlData.reset(new SwRedlineData( nsRedlineType_t::REDLINE_INSERT,
                                         rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ));
-        SetRedlineMode( rDoc.getIDocumentRedlineAccess().GetRedlineMode() );
+        SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     }
         m_pRedlineSaveData.reset( new SwRedlineSaveDatas );
         if( !FillSaveData( rPam, *m_pRedlineSaveData, false ))
@@ -122,7 +122,7 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
         rDoc.GetNodes()[ m_nSectionNodePos ]->GetSectionNode();
     OSL_ENSURE( pNd, "wo ist mein SectionNode?" );
 
-    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
+    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         rDoc.getIDocumentRedlineAccess().DeleteRedline( *pNd, true, USHRT_MAX );
 
     // no selection?
@@ -187,16 +187,16 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
     SwSectionNode *const pSectNd =
         rDoc.GetNodes()[ m_nSectionNodePos ]->GetSectionNode();
     if (m_pRedlData.get() &&
-        IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode()))
+        IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags()))
     {
-        RedlineMode_t eOld = rDoc.getIDocumentRedlineAccess().GetRedlineMode();
-        rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
+        RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags::Ignore);
 
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
         rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlData, aPam ), true);
-        rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
-    else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
+    else if( !( RedlineFlags::Ignore & GetRedlineFlags() ) &&
             !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );

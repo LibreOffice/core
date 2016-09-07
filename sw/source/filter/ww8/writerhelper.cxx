@@ -126,7 +126,7 @@ namespace
 
             if (const SwPosition* pAnchor = rEntry.GetAnchor().GetContentAnchor())
             {
-                // the anchor position will be invalidated by SetRedlineMode
+                // the anchor position will be invalidated by SetRedlineFlags
                 // so set a dummy position and fix it in UpdateFramePositions
                 SwPosition const dummy(SwNodeIndex(
                             const_cast<SwNodes&>(pAnchor->nNode.GetNodes())));
@@ -760,8 +760,8 @@ namespace sw
                 (*aRegion.GetPoint() != *aRegion.GetMark())
             )
             {
-                mrDoc.getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT |
-                                         nsRedlineMode_t::REDLINE_SHOW_DELETE));
+                mrDoc.getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert |
+                                         RedlineFlags::ShowDelete);
                 const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
                     (pEntry->pAttr);
 
@@ -783,8 +783,8 @@ namespace sw
                 aRegion.DeleteMark();
                 *aRegion.GetPoint() = SwPosition(SwNodeIndex(mrDoc.GetNodes()));
                 mrDoc.getIDocumentRedlineAccess().AppendRedline(pNewRedline, true);
-                mrDoc.getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_NONE | nsRedlineMode_t::REDLINE_SHOW_INSERT |
-                     nsRedlineMode_t::REDLINE_SHOW_DELETE ));
+                mrDoc.getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::NONE | RedlineFlags::ShowInsert |
+                     RedlineFlags::ShowDelete );
             }
             delete pEntry;
         }

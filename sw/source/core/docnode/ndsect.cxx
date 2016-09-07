@@ -198,8 +198,8 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 
     SwSectionNode* pNewSectNode = nullptr;
 
-    RedlineMode_t eOld = getIDocumentRedlineAccess().GetRedlineMode();
-    getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)((eOld & ~nsRedlineMode_t::REDLINE_SHOW_MASK) | nsRedlineMode_t::REDLINE_IGNORE));
+    RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
+    getIDocumentRedlineAccess().SetRedlineFlags_intern( (eOld & ~RedlineFlags::ShowMask) | RedlineFlags::Ignore );
 
     if( rRange.HasMark() )
     {
@@ -320,7 +320,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     pNewSectNode->CheckSectionCondColl();
 //FEATURE::CONDCOLL
 
-    getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
     // To-Do - add 'SwExtraRedlineTable' also ?
     if( getIDocumentRedlineAccess().IsRedlineOn() || (!getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTable().empty() ))

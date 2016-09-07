@@ -1959,13 +1959,13 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             ++rOrigPam.GetPoint()->nNode;
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetContentNode(), 0 );
 
-            RedlineMode_t eOld = getIDocumentRedlineAccess().GetRedlineMode();
+            RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
             GetDocumentRedlineManager().checkRedlining(eOld);
             if (GetIDocumentUndoRedo().DoesUndo())
             {
                 // Still NEEDS to be optimized (even after 14 years)
-                getIDocumentRedlineAccess().SetRedlineMode(
-                   (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
+                getIDocumentRedlineAccess().SetRedlineFlags(
+                   RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
                 SwUndo *const pUndo(new SwUndoRedlineDelete(aPam, UNDO_DELETE));
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
@@ -1981,7 +1981,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             getIDocumentRedlineAccess().AppendRedline( pNewRedline, true );
 
             // Still NEEDS to be optimized!
-            getIDocumentRedlineAccess().SetRedlineMode( eOld );
+            getIDocumentRedlineAccess().SetRedlineFlags( eOld );
             GetIDocumentUndoRedo().EndUndo( UNDO_END, nullptr );
             getIDocumentState().SetModified();
 

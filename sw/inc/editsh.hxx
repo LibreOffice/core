@@ -101,6 +101,8 @@ class SwView;
 struct SwConversionArgs;
 enum class SvtScriptType;
 enum class SfxClassificationPolicyType;
+enum class RedlineFlags;
+
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
 }}}}
@@ -885,8 +887,8 @@ public:
     bool GotoGlobalDocContent( const SwGlblDocContent& rPos );
 
     /// For Redlining.
-    sal_uInt16 GetRedlineMode() const;
-    void SetRedlineMode( sal_uInt16 eMode );
+    RedlineFlags GetRedlineFlags() const;
+    void SetRedlineFlags( RedlineFlags eMode );
     bool IsRedlineOn() const;
     sal_uInt16 GetRedlineCount() const;
     const SwRangeRedline& GetRedline( sal_uInt16 nPos ) const;

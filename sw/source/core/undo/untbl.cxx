@@ -246,7 +246,7 @@ SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt
     if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() );
-        SetRedlineMode( rDoc.getIDocumentRedlineAccess().GetRedlineMode() );
+        SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
     sTableNm = rName;
@@ -269,7 +269,7 @@ void SwUndoInsTable::UndoImpl(::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pTableNd, "no TableNode" );
     pTableNd->DelFrames();
 
-    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
+    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         rDoc.getIDocumentRedlineAccess().DeleteRedline( *pTableNd, true, USHRT_MAX );
     RemoveIdxFromSection( rDoc, nSttNode );
 
@@ -324,8 +324,8 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
         pDDEFieldType = nullptr;
     }
 
-    if( (pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() )) ||
-        ( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
+    if( (pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() )) ||
+        ( !( RedlineFlags::Ignore & GetRedlineFlags() ) &&
             !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() ))
     {
         SwPaM aPam( *pTableNode->EndOfSectionNode(), *pTableNode, 1 );
@@ -333,13 +333,13 @@ void SwUndoInsTable::RedoImpl(::sw::UndoRedoContext & rContext)
         if( pCNd )
             aPam.GetMark()->nContent.Assign( pCNd, 0 );
 
-        if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) )
+        if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) )
         {
-            RedlineMode_t eOld = rDoc.getIDocumentRedlineAccess().GetRedlineMode();
-            rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
+            RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+            rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags::Ignore);
 
             rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *pRedlData, aPam ), true);
-            rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+            rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
         }
         else
             rDoc.getIDocumentRedlineAccess().SplitRedline( aPam );
@@ -2296,39 +2296,39 @@ void SwUndoTableNumFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     pPam->GetPoint()->nContent.Assign( pTextNd, 0 );
 }
 
-/** switch the RedlineMode on the given document, using
- * SetRedlineMode_intern. This class set the mode in the constructor,
+/** switch the RedlineFlags on the given document, using
+ * SetRedlineFlags_intern. This class set the mode in the constructor,
  * and changes it back in the destructor, i.e. it uses the
  * initialization-is-resource-acquisition idiom.
  */
-class RedlineModeInternGuard
+class RedlineFlagsInternGuard
 {
     SwDoc& mrDoc;
-    RedlineMode_t meOldRedlineMode;
+    RedlineFlags meOldRedlineFlags;
 
 public:
-    RedlineModeInternGuard(
+    RedlineFlagsInternGuard(
         SwDoc& rDoc,                      // change mode of this document
-        RedlineMode_t eNewRedlineMode,    // new redline mode
-        RedlineMode_t eRedlineModeMask  = (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE /*change only bits set in this mask*/));
+        RedlineFlags eNewRedlineFlags,    // new redline mode
+        RedlineFlags eRedlineFlagsMask = RedlineFlags::On | RedlineFlags::Ignore /*change only bits set in this mask*/);
 
-    ~RedlineModeInternGuard();
+    ~RedlineFlagsInternGuard();
 };
 
-RedlineModeInternGuard::RedlineModeInternGuard(
+RedlineFlagsInternGuard::RedlineFlagsInternGuard(
     SwDoc& rDoc,
-    RedlineMode_t eNewRedlineMode,
-    RedlineMode_t eRedlineModeMask )
+    RedlineFlags eNewRedlineFlags,
+    RedlineFlags eRedlineFlagsMask )
     : mrDoc( rDoc ),
-      meOldRedlineMode( rDoc.getIDocumentRedlineAccess().GetRedlineMode() )
+      meOldRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() )
 {
-    mrDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)( ( meOldRedlineMode & ~eRedlineModeMask ) |
-                                     ( eNewRedlineMode & eRedlineModeMask ) ));
+    mrDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( ( meOldRedlineFlags & ~eRedlineFlagsMask ) |
+                                     ( eNewRedlineFlags & eRedlineFlagsMask ) );
 }
 
-RedlineModeInternGuard::~RedlineModeInternGuard()
+RedlineFlagsInternGuard::~RedlineFlagsInternGuard()
 {
-    mrDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( meOldRedlineMode );
+    mrDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( meOldRedlineFlags );
 }
 
 void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -2376,8 +2376,8 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 
         // dvo: When redlining is (was) enabled, setting the attribute
         // will also change the cell content. To allow this, the
-        // REDLINE_IGNORE flag must be removed during Redo. #108450#
-        RedlineModeInternGuard aGuard( rDoc, nsRedlineMode_t::REDLINE_NONE, nsRedlineMode_t::REDLINE_IGNORE );
+        // RedlineFlags::Ignore flag must be removed during Redo. #108450#
+        RedlineFlagsInternGuard aGuard( rDoc, RedlineFlags::NONE, RedlineFlags::Ignore );
         pBoxFormat->SetFormatAttr( aBoxSet );
     }
     else if( css::util::NumberFormat::TEXT != static_cast<sal_Int16>(nFormatIdx) )
@@ -2396,8 +2396,8 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 
         // dvo: When redlining is (was) enabled, setting the attribute
         // will also change the cell content. To allow this, the
-        // REDLINE_IGNORE flag must be removed during Redo. #108450#
-        RedlineModeInternGuard aGuard( rDoc, nsRedlineMode_t::REDLINE_NONE, nsRedlineMode_t::REDLINE_IGNORE );
+        // RedlineFlags::Ignore flag must be removed during Redo. #108450#
+        RedlineFlagsInternGuard aGuard( rDoc, RedlineFlags::NONE, RedlineFlags::Ignore );
         pBoxFormat->SetFormatAttr( aBoxSet );
     }
     else
@@ -2477,7 +2477,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
         SwPaM aPam( aInsIdx.GetNode(), *pEndNode );
         SwUndoDelete* pUndo = nullptr;
 
-        if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) )
+        if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) )
         {
             bool bDeleteCompleteParagraph = false;
             bool bShiftPam = false;
@@ -2626,11 +2626,11 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
         // b62341295: Redline for copying tables - Start.
         rDoc.GetNodes().MakeTextNode( aInsIdx, rDoc.GetDfltTextFormatColl() );
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode());
-        SwUndo* pUndo = IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) ? nullptr : new SwUndoDelete( aPam, true );
+        SwUndo* pUndo = IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) ? nullptr : new SwUndoDelete( aPam, true );
         if( pEntry->pUndo )
         {
             pEntry->pUndo->UndoImpl(rContext);
-            if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) )
+            if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) )
             {
                 // PrepareRedline has to be called with the beginning of the old content
                 // When new and old content has been joined, the rIter.pAktPam has been set
@@ -2757,9 +2757,8 @@ SwUndo* SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox
     // Mark the cell content before rIdx as insertion,
     // mark the cell content behind rIdx as deletion
     // merge text nodes at rIdx if possible
-    RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)( ( eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES ) &
-                                     ~nsRedlineMode_t::REDLINE_IGNORE ));
+    RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld | RedlineFlags::DontCombineRedlines ) & ~RedlineFlags::Ignore );
     SwPosition aInsertEnd( rPos );
     SwTextNode* pText;
     if( !rJoin )
@@ -2816,7 +2815,7 @@ SwUndo* SwUndoTableCpyTable::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox
         pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, aTmpPam ), true );
     }
 
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     return pUndo;
 }
 

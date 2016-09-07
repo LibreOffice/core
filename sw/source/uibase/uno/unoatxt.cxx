@@ -393,9 +393,9 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
             pGlosGroup->ClearDoc();
             if( pGlosGroup->BeginPutDoc( sShortName, sLongName ) )
             {
-                pGDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
+                pGDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::DeleteRedlines );
                 lcl_CopySelToDoc( pGDoc, pxCursor, pxRange );
-                pGDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)( 0 ));
+                pGDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(RedlineFlags::NONE);
                 nRet = pGlosGroup->PutDoc();
             }
         }

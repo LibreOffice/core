@@ -707,7 +707,7 @@ void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, bool bIsContent )
         m_pRedlineSaveData.reset(nullptr);
     }
 
-    SetRedlineMode( pDoc->getIDocumentRedlineAccess().GetRedlineMode() );
+    SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     if ( bIsContent ) {
         m_nNodeIndex = rPam.GetPoint()->nNode.GetIndex();
     }
@@ -719,7 +719,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 
     RemoveIdx( *pDoc );
 
-    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) ) {
+    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) ) {
         SwPaM aPam(pDoc->GetNodes().GetEndOfContent());
         if ( ULONG_MAX != m_nNodeIndex ) {
             aPam.DeleteMark();
@@ -770,10 +770,9 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
     SwPaM & rPam = AddUndoRedoPaM(rContext);
 
     if ( m_pRedlineData.get() &&
-         IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) ) {
-        RedlineMode_t eOld = rDoc.getIDocumentRedlineAccess().GetRedlineMode();
-        rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern(static_cast<RedlineMode_t>(
-                    eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
+         IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ) ) {
+        RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld & ~RedlineFlags::Ignore );
         rDoc.getIDocumentContentOperations().InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
 
         if ( ULONG_MAX != m_nNodeIndex ) {
@@ -787,7 +786,7 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
             rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlineData, rPam ), true);
         }
 
-        rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     } else {
         rDoc.getIDocumentContentOperations().InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
     }

@@ -1283,7 +1283,7 @@ bool SwDocShell::IsChangeRecording() const
 {
     if (!m_pWrtShell)
         return false;
-    return (m_pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0;
+    return bool(m_pWrtShell->GetRedlineFlags() & RedlineFlags::On);
 }
 
 bool SwDocShell::HasChangeRecordProtection() const
@@ -1295,9 +1295,9 @@ bool SwDocShell::HasChangeRecordProtection() const
 
 void SwDocShell::SetChangeRecording( bool bActivate )
 {
-    sal_uInt16 nOn = bActivate ? nsRedlineMode_t::REDLINE_ON : 0;
-    sal_uInt16 nMode = m_pWrtShell->GetRedlineMode();
-    m_pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+    RedlineFlags nOn = bActivate ? RedlineFlags::On : RedlineFlags::NONE;
+    RedlineFlags nMode = m_pWrtShell->GetRedlineFlags();
+    m_pWrtShell->SetRedlineFlagsAndCheckInsMode( (nMode & ~RedlineFlags::On) | nOn );
 }
 
 void SwDocShell::SetProtectionPassword( const OUString &rNewPassword )

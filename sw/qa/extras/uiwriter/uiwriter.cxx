@@ -373,16 +373,16 @@ void SwUiWriterTest::testRedlineFrame()
     // there is exactly one frame
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 
-    sal_uInt16 nMode = pWrtShell->GetRedlineMode();
-    CPPUNIT_ASSERT(nMode & nsRedlineMode_t::REDLINE_SHOW_DELETE);
+    RedlineFlags nMode = pWrtShell->GetRedlineFlags();
+    CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
 
     // hide delete redlines
-    pWrtShell->SetRedlineMode(nMode & ~nsRedlineMode_t::REDLINE_SHOW_DELETE);
+    pWrtShell->SetRedlineFlags(nMode & ~RedlineFlags::ShowDelete);
 
     // there is still exactly one frame
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 
-    pWrtShell->SetRedlineMode(nMode); // show again
+    pWrtShell->SetRedlineFlags(nMode); // show again
 
     // there is still exactly one frame
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());

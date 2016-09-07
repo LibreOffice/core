@@ -3116,16 +3116,16 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     // #i81405# - Collect anchored objects before changing the redline mode.
     m_aFrames = GetFrames( *m_pDoc, bWriteAll? nullptr : m_pOrigPam );
 
-    m_nOrigRedlineMode = m_pDoc->getIDocumentRedlineAccess().GetRedlineMode();
+    m_nOrigRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     if ( !m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
         //restored to original state by SwWriter::Write
-        m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(m_nOrigRedlineMode |
-                                                         nsRedlineMode_t::REDLINE_SHOW_DELETE |
-                                                         nsRedlineMode_t::REDLINE_SHOW_INSERT);
+        m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(m_nOrigRedlineFlags |
+                                                         RedlineFlags::ShowDelete |
+                                                         RedlineFlags::ShowInsert);
     }
 
-    // fix the SwPositions in m_aFrames after SetRedlineMode
+    // fix the SwPositions in m_aFrames after SetRedlineFlags
     UpdateFramePositions(m_aFrames);
 
     m_aFontHelper.InitFontTable(*m_pDoc);
@@ -3149,7 +3149,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     *m_pOrigPam->GetPoint() = SwPosition(m_pDoc->GetNodes().GetEndOfContent());
     *m_pCurPam = *m_pOrigPam;
 
-    m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(m_nOrigRedlineMode);
+    m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(m_nOrigRedlineFlags);
 }
 
 bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec )
@@ -3288,8 +3288,8 @@ void WW8Export::ExportDocument_Impl()
     m_pPiece = new WW8_WrPct( pFib->fcMin );
     pDop = new WW8Dop;
 
-    pDop->fRevMarking = 0 != ( nsRedlineMode_t::REDLINE_ON & m_nOrigRedlineMode );
-    pDop->fRMView = 0 != ( nsRedlineMode_t::REDLINE_SHOW_DELETE & m_nOrigRedlineMode );
+    pDop->fRevMarking = bool( RedlineFlags::On & m_nOrigRedlineFlags );
+    pDop->fRMView = bool( RedlineFlags::ShowDelete & m_nOrigRedlineFlags );
     pDop->fRMPrint = pDop->fRMView;
 
     // set AutoHyphenation flag if found in default para style
@@ -3505,7 +3505,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_nLastFormatId(0)
     , m_nUniqueList(0)
     , m_nHdFtIndex(0)
-    , m_nOrigRedlineMode(0)
+    , m_nOrigRedlineFlags(RedlineFlags::NONE)
     , m_pAktPageDesc(nullptr)
     , m_bPrevTextNodeIsEmpty(false)
     , m_pPapPlc(nullptr)

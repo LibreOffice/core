@@ -131,7 +131,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
 
     const SwExtTextInput* pExtInp = pDoc->GetExtTextInput( rTextNode );
-    const bool bShow = IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() );
+    const bool bShow = IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() );
     if( pExtInp || bShow )
     {
         const sal_uInt16 nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );

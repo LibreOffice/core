@@ -1841,9 +1841,9 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
     bool bSrcModified = rSrcDoc.getIDocumentState().IsModified();
 
-    RedlineMode_t eSrcRedlMode = rSrcDoc.getIDocumentRedlineAccess().GetRedlineMode();
-    rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_INSERT );
-    getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT));
+    RedlineFlags eSrcRedlMode = rSrcDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+    rSrcDoc.getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::ShowInsert );
+    getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert);
 
     Comparators aComparisons(buildComparators(rSrcDoc, *this));
 
@@ -1857,8 +1857,8 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
     if( nRet )
     {
-        getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_ON |
-                       nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
+        getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On |
+                       RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
 
         for (auto& a : aComparisons)
         {
@@ -1868,8 +1868,8 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
         getIDocumentState().SetModified();
     }
 
-    rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode( eSrcRedlMode );
-    getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
+    rSrcDoc.getIDocumentRedlineAccess().SetRedlineFlags( eSrcRedlMode );
+    getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
 
     if( !bSrcModified )
         rSrcDoc.getIDocumentState().ResetModified();
@@ -1929,14 +1929,14 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         SwNodeIndex aSaveNd( pDestRedl->GetPoint()->nNode, -1 );
         const sal_Int32 nSaveCnt = pDestRedl->GetPoint()->nContent.GetIndex();
 
-        RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
+        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
 
         pSrcRedl->GetDoc()->getIDocumentContentOperations().CopyRange(
                 *const_cast<SwPaM*>(static_cast<const SwPaM*>(pSrcRedl)),
                 *pDestRedl->GetPoint(), /*bCopyAll=*/false, /*bCheckPos=*/true );
 
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
         pDestRedl->SetMark();
         ++aSaveNd;
@@ -2064,9 +2064,9 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
     bool bSrcModified = rSrcDoc.getIDocumentState().IsModified();
 
-    RedlineMode_t eSrcRedlMode = rSrcDoc.getIDocumentRedlineAccess().GetRedlineMode();
-    rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_DELETE );
-    getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_DELETE );
+    RedlineFlags eSrcRedlMode = rSrcDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+    rSrcDoc.getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::ShowDelete );
+    getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::ShowDelete );
 
     CompareMainText aD0(rSrcDoc, false);
     CompareMainText aD1(*this, false);
@@ -2099,12 +2099,12 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
         if( !vRedlines.empty() )
         {
             // Carry over all into DestDoc
-            rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
+            rSrcDoc.getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
 
-            getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(
-                                      nsRedlineMode_t::REDLINE_ON |
-                                      nsRedlineMode_t::REDLINE_SHOW_INSERT |
-                                      nsRedlineMode_t::REDLINE_SHOW_DELETE));
+            getIDocumentRedlineAccess().SetRedlineFlags(
+                                      RedlineFlags::On |
+                                      RedlineFlags::ShowInsert |
+                                      RedlineFlags::ShowDelete);
 
             SwPaM* pLastDestRedline(nullptr);
             for(SaveMergeRedline& rRedline: vRedlines)
@@ -2115,11 +2115,11 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
         }
     }
 
-    rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode( eSrcRedlMode );
+    rSrcDoc.getIDocumentRedlineAccess().SetRedlineFlags( eSrcRedlMode );
     if( !bSrcModified )
         rSrcDoc.getIDocumentState().ResetModified();
 
-    getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
+    getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
 
     GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
 

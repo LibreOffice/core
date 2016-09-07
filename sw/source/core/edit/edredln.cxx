@@ -26,18 +26,18 @@
 #include "edimp.hxx"
 #include "frmtool.hxx"
 
-sal_uInt16 SwEditShell::GetRedlineMode() const
+RedlineFlags SwEditShell::GetRedlineFlags() const
 {
-    return GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
+    return GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
 }
 
-void SwEditShell::SetRedlineMode( sal_uInt16 eMode )
+void SwEditShell::SetRedlineFlags( RedlineFlags eMode )
 {
-    if( eMode != GetDoc()->getIDocumentRedlineAccess().GetRedlineMode() )
+    if( eMode != GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() )
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        GetDoc()->getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)eMode );
+        GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode );
         EndAllAction();
     }
 }
@@ -125,8 +125,8 @@ const SwRangeRedline* SwEditShell::GetCurrRedline() const
 
 void SwEditShell::UpdateRedlineAttr()
 {
-    if( ( nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ) ==
-        ( nsRedlineMode_t::REDLINE_SHOW_MASK & GetDoc()->getIDocumentRedlineAccess().GetRedlineMode() ))
+    if( ( RedlineFlags::ShowInsert | RedlineFlags::ShowDelete ) ==
+        ( RedlineFlags::ShowMask & GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() ))
     {
         SET_CURR_SHELL( this );
         StartAllAction();

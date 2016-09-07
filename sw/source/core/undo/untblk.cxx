@@ -72,7 +72,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
     {
         pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() );
-        SetRedlineMode( pDoc->getIDocumentRedlineAccess().GetRedlineMode() );
+        SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 }
 
@@ -150,7 +150,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc& rDoc = rContext.GetDoc();
     SwPaM& rPam = AddUndoRedoPaM(rContext);
 
-    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
+    if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, USHRT_MAX);
 
     // if Point and Mark are different text nodes so a JoinNext has to be done
@@ -292,14 +292,14 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 
     pHistory->Rollback( pDoc, nSetPos );
 
-    if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
+    if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
     {
-        RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)( eOld & ~nsRedlineMode_t::REDLINE_IGNORE ));
+        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld & ~RedlineFlags::Ignore );
         pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *pRedlData, rPam ), true);
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
-    else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
+    else if( !( RedlineFlags::Ignore & GetRedlineFlags() ) &&
             !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
         pDoc->getIDocumentRedlineAccess().SplitRedline(rPam);
 }

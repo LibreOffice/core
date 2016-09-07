@@ -633,9 +633,9 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 mpDoc->getIDocumentRedlineAccess().SetRedlinePassword(aNew);
                 if(aNew.getLength())
                 {
-                    sal_uInt16 eMode = mpDoc->getIDocumentRedlineAccess().GetRedlineMode();
-                    eMode = eMode|nsRedlineMode_t::REDLINE_ON;
-                    mpDoc->getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)( eMode ));
+                    RedlineFlags eMode = mpDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+                    eMode |= RedlineFlags::On;
+                    mpDoc->getIDocumentRedlineAccess().SetRedlineFlags( eMode );
                 }
             }
         }

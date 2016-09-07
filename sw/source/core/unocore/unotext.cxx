@@ -2211,7 +2211,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
 
     IDocumentRedlineAccess & rIDRA(m_pImpl->m_pDoc->getIDocumentRedlineAccess());
-    if (!IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineMode()))
+    if (!IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags()))
     {
         throw uno::RuntimeException(
             "cannot convertToTable if tracked changes are hidden!");

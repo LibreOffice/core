@@ -565,7 +565,7 @@ namespace sw
         */
         ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM);
 
-        /** fix up frame positions, must be called after SetRedlineMode */
+        /** fix up frame positions, must be called after SetRedlineFlags */
         void UpdateFramePositions(ww8::Frames & rFrames);
 
         /** Get the Frames anchored to a given node

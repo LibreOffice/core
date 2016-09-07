@@ -4981,7 +4981,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     SwNodeIndex aSttNdIdx( m_rDoc.GetNodes() );
     SwRelNumRuleSpaces aRelNumRule(m_rDoc, m_bNewDoc);
 
-    sal_uInt16 eMode = nsRedlineMode_t::REDLINE_SHOW_INSERT;
+    RedlineFlags eMode = RedlineFlags::ShowInsert;
 
     m_pSprmParser = new wwSprmParser(m_pWwFib->GetFIBVersion());
 
@@ -5280,9 +5280,9 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     if (m_bNewDoc)
     {
         if( m_pWDop->fRevMarking )
-            eMode |= nsRedlineMode_t::REDLINE_ON;
+            eMode |= RedlineFlags::On;
         if( m_pWDop->fRMView )
-            eMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
+            eMode |= RedlineFlags::ShowDelete;
     }
 
     m_aInsertedTables.DelAndMakeTableFrames();
@@ -5410,7 +5410,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     // delete the pam before the call for hide all redlines (Bug 73683)
     if (m_bNewDoc)
-      m_rDoc.getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)( eMode ));
+      m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(eMode);
 
     UpdatePageDescs(m_rDoc, nPageDescOffset);
 

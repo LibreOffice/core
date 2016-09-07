@@ -123,7 +123,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
         ClearTableBoxContent();
 
-        const RedlineMode_t eOld = GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
+        const RedlineFlags eOld = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
 
         try {
             for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -142,7 +142,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         }
         Pop( !bRestoreCursor );
 
-        GetDoc()->getIDocumentRedlineAccess().SetRedlineMode( eOld );
+        GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOld );
         GetDoc()->getIDocumentRedlineAccess().CompressRedlines();
 
         // automatic detection of the new "Box"
@@ -179,7 +179,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
         ClearTableBoxContent();
 
-        RedlineMode_t eOld = GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
+        RedlineFlags eOld = GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
 
         try {
             for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -194,7 +194,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
 
         Pop( !bRestoreCursor );
 
-        GetDoc()->getIDocumentRedlineAccess().SetRedlineMode( eOld );
+        GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOld );
         GetDoc()->getIDocumentRedlineAccess().CompressRedlines();
 
         // automatic detection of the new "Box"

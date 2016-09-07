@@ -216,7 +216,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
     // Deactivate Undo/Redline in any case
     GetIDocumentUndoRedo().DoUndo(false);
-    getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(getIDocumentRedlineAccess().GetRedlineMode() & ~nsRedlineMode_t::REDLINE_ON));
+    getIDocumentRedlineAccess().SetRedlineFlags_intern( getIDocumentRedlineAccess().GetRedlineFlags() & ~RedlineFlags::On );
 
     OUString sExt = pFilter->GetSuffixes().getToken(0, ',');
     if( sExt.isEmpty() )

@@ -79,7 +79,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                 o_rInfo.mRedlineAuthor = 0;
 
                 const IDocumentRedlineAccess& rIDRA = pTextNode->getIDocumentRedlineAccess();
-                if( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
+                if( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
                 {
                     const SwRangeRedline* pRedline = rIDRA.GetRedline( rAnchorPos, nullptr );
                     if( pRedline )

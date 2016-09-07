@@ -158,7 +158,7 @@ void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
 }
 
 SwUndo::SwUndo(SwUndoId const nId, const SwDoc* pDoc)
-    : m_nId(nId), nOrigRedlineMode(nsRedlineMode_t::REDLINE_NONE),
+    : m_nId(nId), nOrigRedlineFlags(RedlineFlags::NONE),
       m_nViewShellId(CreateViewShellId(pDoc)),
       bCacheComment(true), pComment(nullptr)
 {
@@ -193,25 +193,22 @@ class UndoRedoRedlineGuard
 public:
     UndoRedoRedlineGuard(::sw::UndoRedoContext & rContext, SwUndo & rUndo)
         : m_rRedlineAccess(rContext.GetDoc().getIDocumentRedlineAccess())
-        , m_eMode(m_rRedlineAccess.GetRedlineMode())
+        , m_eMode(m_rRedlineAccess.GetRedlineFlags())
     {
-        RedlineMode_t const eTmpMode =
-            static_cast<RedlineMode_t>(rUndo.GetRedlineMode());
-        if ((nsRedlineMode_t::REDLINE_SHOW_MASK & eTmpMode) !=
-            (nsRedlineMode_t::REDLINE_SHOW_MASK & m_eMode))
+        RedlineFlags const eTmpMode = rUndo.GetRedlineFlags();
+        if ((RedlineFlags::ShowMask & eTmpMode) != (RedlineFlags::ShowMask & m_eMode))
         {
-            m_rRedlineAccess.SetRedlineMode( eTmpMode );
+            m_rRedlineAccess.SetRedlineFlags( eTmpMode );
         }
-        m_rRedlineAccess.SetRedlineMode_intern( static_cast<RedlineMode_t>(
-                eTmpMode | nsRedlineMode_t::REDLINE_IGNORE) );
+        m_rRedlineAccess.SetRedlineFlags_intern( eTmpMode | RedlineFlags::Ignore );
     }
     ~UndoRedoRedlineGuard()
     {
-        m_rRedlineAccess.SetRedlineMode(m_eMode);
+        m_rRedlineAccess.SetRedlineFlags(m_eMode);
     }
 private:
     IDocumentRedlineAccess & m_rRedlineAccess;
-    RedlineMode_t const m_eMode;
+    RedlineFlags const m_eMode;
 };
 
 void SwUndo::Undo()
@@ -987,8 +984,8 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     // content will be deleted and not the one you originally wanted.
     rDoc.getIDocumentRedlineAccess().DeleteRedline( *pRedl, false, USHRT_MAX );
 
-    RedlineMode_t eOld = rDoc.getIDocumentRedlineAccess().GetRedlineMode();
-    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES));
+    RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+    rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld | RedlineFlags::DontCombineRedlines );
     //#i92154# let UI know about a new redline with comment
     if (rDoc.GetDocShell() && (!pRedl->GetComment().isEmpty()) )
         rDoc.GetDocShell()->Broadcast(SwRedlineHint());
@@ -996,7 +993,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     bool const bSuccess = rDoc.getIDocumentRedlineAccess().AppendRedline( pRedl, true );
     assert(bSuccess); // SwRedlineSaveData::RedlineToDoc: insert redline failed
     (void) bSuccess; // unused in non-debug
-    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
 bool SwUndo::FillSaveData(
@@ -1066,8 +1063,8 @@ bool SwUndo::FillSaveDataForFormat(
 
 void SwUndo::SetSaveData( SwDoc& rDoc, SwRedlineSaveDatas& rSData )
 {
-    RedlineMode_t eOld = rDoc.getIDocumentRedlineAccess().GetRedlineMode();
-    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
+    RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+    rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
     SwPaM aPam( rDoc.GetNodes().GetEndOfContent() );
 
     for( size_t n = rSData.size(); n; )
@@ -1080,7 +1077,7 @@ void SwUndo::SetSaveData( SwDoc& rDoc, SwRedlineSaveDatas& rSData )
             // "redline count not restored properly"
 #endif
 
-    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
 bool SwUndo::HasHiddenRedlines( const SwRedlineSaveDatas& rSData )

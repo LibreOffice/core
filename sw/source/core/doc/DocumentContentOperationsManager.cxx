@@ -373,8 +373,8 @@ namespace
 
             if( pDelPam )
             {
-                RedlineMode_t eOld = pDestDoc->getIDocumentRedlineAccess().GetRedlineMode();
-                pDestDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
+                RedlineFlags eOld = pDestDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+                pDestDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld | RedlineFlags::Ignore );
 
                 ::sw::UndoGuard const undoGuard(pDestDoc->GetIDocumentUndoRedo());
 
@@ -385,7 +385,7 @@ namespace
                     delete pDelPam->GetNext();
                 } while( true );
 
-                pDestDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+                pDestDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
             }
         }
     }
@@ -657,9 +657,9 @@ namespace
         if( nCurrentRedline > 0)
             nCurrentRedline--;
 
-        // redline mode REDLINE_IGNORE|REDLINE_ON; save old mode
-        RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
+        // redline mode RedlineFlags::Ignore|RedlineFlags::On; save old mode
+        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( (( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On ));
 
         // iterate over relevant redlines and decide for each whether it should
         // be saved, or split + saved
@@ -707,13 +707,13 @@ namespace
         }
 
         // restore old redline mode
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
     void lcl_RestoreRedlines(SwDoc* pDoc, const SwPosition& rPos, SaveRedlines_t& rArr)
     {
-        RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
+        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
 
         for(SaveRedline & rSvRedLine : rArr)
         {
@@ -721,7 +721,7 @@ namespace
             pDoc->getIDocumentRedlineAccess().AppendRedline( rSvRedLine.pRedl, true );
         }
 
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
     void lcl_SaveRedlines(const SwNodeRange& rRg, SaveRedlines_t& rArr)
@@ -735,8 +735,8 @@ namespace
         else if( nRedlPos >= pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() )
             return ;
 
-        RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
+        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
         SwRedlineTable& rRedlTable = (SwRedlineTable&)pDoc->getIDocumentRedlineAccess().GetRedlineTable();
 
         do {
@@ -804,13 +804,13 @@ namespace
                 break;
 
         } while( ++nRedlPos < pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() );
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
     void lcl_RestoreRedlines(SwDoc *const pDoc, sal_uInt32 const nInsPos, SaveRedlines_t& rArr)
     {
-        RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
+        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
 
         for(SaveRedline & rSvRedLine : rArr)
         {
@@ -818,7 +818,7 @@ namespace
             pDoc->getIDocumentRedlineAccess().AppendRedline( rSvRedLine.pRedl, true );
         }
 
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
     bool lcl_SaveFootnote( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
@@ -1638,7 +1638,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
         (!pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() ) )
         pRedlineRange = new SwPaM( rPos );
 
-    RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
+    RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
 
     bool bRet = false;
 
@@ -1662,7 +1662,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
         OSL_ENSURE( &m_rDoc == pDoc, " invalid copy branch!" );
         OSL_FAIL("mst: i thought this could be dead code;"
                 "please tell me what you did to get here!");
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
 
         // Then copy the area to the underlying document area
         // (with start/end nodes clamped) and move them to
@@ -1721,7 +1721,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
         bRet = true;
     }
 
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     if( pRedlineRange )
     {
         if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
@@ -3228,7 +3228,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
         lcl_CopyBookmarks((pCopiedPaM) ? pCopiedPaM->first : aRgTmp, aCpyPaM);
     }
 
-    if( bDelRedlines && ( nsRedlineMode_t::REDLINE_DELETE_REDLINES & pDest->getIDocumentRedlineAccess().GetRedlineMode() ))
+    if( bDelRedlines && ( RedlineFlags::DeleteRedlines & pDest->getIDocumentRedlineAccess().GetRedlineFlags() ))
         lcl_DeleteRedlines( rRg, aCpyRange );
 
     pDest->GetNodes().DelDummyNodes( aCpyRange );
@@ -3543,7 +3543,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
 
     {
         SwUndoRedlineDelete* pUndo = nullptr;
-        RedlineMode_t eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineMode();
+        RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
         m_rDoc.GetDocumentRedlineManager().checkRedlining( eOld );
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
@@ -3551,8 +3551,8 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
             /* please don't translate -- for cultural reasons this comment is protected
                until the redline implementation is finally fixed some day */
             //JP 06.01.98: MUSS noch optimiert werden!!!
-            m_rDoc.getIDocumentRedlineAccess().SetRedlineMode(
-                (RedlineMode_t) ( nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ) );
+            m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
+                RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
 
             m_rDoc.GetIDocumentUndoRedo().StartUndo( UNDO_DELETE, nullptr );
             pUndo = new SwUndoRedlineDelete( rPam, UNDO_DELETE );
@@ -3587,7 +3587,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
                 }
             }
             //JP 06.01.98: MUSS noch optimiert werden!!!
-            m_rDoc.getIDocumentRedlineAccess().SetRedlineMode( eOld );
+            m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
         }
         return true;
     }
@@ -3850,7 +3850,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
 
         if( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
         {
-            RedlineMode_t eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineMode();
+            RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
             m_rDoc.GetDocumentRedlineManager().checkRedlining(eOld);
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
@@ -3860,8 +3860,8 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
 
                 //JP 06.01.98: MUSS noch optimiert werden!!!
-                m_rDoc.getIDocumentRedlineAccess().SetRedlineMode(
-                    (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
+                m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
+                    RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
 
                 *aDelPam.GetPoint() = pBkmk->GetMarkPos();
                 if(pBkmk->IsExpanded())
@@ -3958,7 +3958,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 rPam.GetPoint()->nContent = rIdx;
                 *rPam.GetMark() = *rPam.GetPoint();
                 //JP 06.01.98: MUSS noch optimiert werden!!!
-                m_rDoc.getIDocumentRedlineAccess().SetRedlineMode( eOld );
+                m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
 
                 *rPam.GetPoint() = pBkmk->GetMarkPos();
                 if(pBkmk->IsExpanded())
@@ -4169,8 +4169,8 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
     }
 
-    RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
+    RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
 
     // Move the PaM one node back from the insert position, so that
     // the position doesn't get moved
@@ -4514,7 +4514,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     if( bCopyBookmarks && m_rDoc.getIDocumentMarkAccess()->getAllMarksCount() )
         lcl_CopyBookmarks( rPam, *pCopyPam );
 
-    if( nsRedlineMode_t::REDLINE_DELETE_REDLINES & eOld )
+    if( RedlineFlags::DeleteRedlines & eOld )
     {
         assert(*pCopyPam->GetPoint() == rPos);
         // the Node rPos points to may be deleted so unregister ...
@@ -4543,7 +4543,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                           aListIdToPropagate, true, true );
     }
 
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     pDoc->getIDocumentState().SetModified();
 
     return true;

@@ -129,7 +129,7 @@ bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
 
 bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTable, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
 {
-    if( nsRedlineMode_t::REDLINE_IGNOREDELETE_REDLINES & pDoc->getIDocumentRedlineAccess().GetRedlineMode() )
+    if( RedlineFlags::IgnoreDeleteRedlines & pDoc->getIDocumentRedlineAccess().GetRedlineFlags() )
         return false;
 
     bool bChg = false;
@@ -208,7 +208,7 @@ bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rT
 
 bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine& rTableLine, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
 {
-    if( nsRedlineMode_t::REDLINE_IGNOREDELETE_REDLINES & pDoc->getIDocumentRedlineAccess().GetRedlineMode() )
+    if( RedlineFlags::IgnoreDeleteRedlines & pDoc->getIDocumentRedlineAccess().GetRedlineFlags() )
         return false;
 
     bool bChg = false;
@@ -255,7 +255,7 @@ bool SwExtraRedlineTable::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine&
 
 bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& rTableBox, bool bSaveInUndo, sal_uInt16 nRedlineTypeToDelete )
 {
-    if( nsRedlineMode_t::REDLINE_IGNOREDELETE_REDLINES & pDoc->getIDocumentRedlineAccess().GetRedlineMode() )
+    if( RedlineFlags::IgnoreDeleteRedlines & pDoc->getIDocumentRedlineAccess().GetRedlineFlags() )
         return false;
 
     bool bChg = false;
@@ -753,8 +753,8 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
 {
     SwDoc* pDoc = rPam.GetDoc();
 
-    RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld & ~(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE)));
+    RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore));
 
     // Actually we need to reset the Attribute here!
     std::vector<sal_uInt16>::const_iterator it;
@@ -764,7 +764,7 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
             SetAttrMode::DONTEXPAND );
     }
 
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
 bool SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) const
@@ -994,17 +994,18 @@ bool SwRangeRedline::HasValidRange() const
 
 void SwRangeRedline::CallDisplayFunc(size_t nMyPos)
 {
-    switch( nsRedlineMode_t::REDLINE_SHOW_MASK & GetDoc()->getIDocumentRedlineAccess().GetRedlineMode() )
+    switch( RedlineFlags::ShowMask & GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() )
     {
-    case nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE:
+    case RedlineFlags::ShowInsert | RedlineFlags::ShowDelete:
         Show(0, nMyPos);
         break;
-    case nsRedlineMode_t::REDLINE_SHOW_INSERT:
+    case RedlineFlags::ShowInsert:
         Hide(0, nMyPos);
         break;
-    case nsRedlineMode_t::REDLINE_SHOW_DELETE:
+    case RedlineFlags::ShowDelete:
         ShowOriginal(0, nMyPos);
         break;
+    default: break;
     }
 }
 
@@ -1013,8 +1014,8 @@ void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
     if( 1 <= nLoop )
     {
         SwDoc* pDoc = GetDoc();
-        RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
+        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         switch( GetType() )
@@ -1036,15 +1037,15 @@ void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
         default:
             break;
         }
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 }
 
 void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
 {
     SwDoc* pDoc = GetDoc();
-    RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
+    RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     switch( GetType() )
@@ -1073,16 +1074,16 @@ void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
     default:
         break;
     }
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
 void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
 {
     SwDoc* pDoc = GetDoc();
-    RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
+    RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     SwRedlineData* pCur;
 
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     // Determine the Type, it's the first on Stack
@@ -1115,7 +1116,7 @@ void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
     default:
         break;
     }
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
 void SwRangeRedline::InvalidateRange()       // trigger the Layout

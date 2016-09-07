@@ -2255,8 +2255,8 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
     // #i33394#
     GetIDocumentUndoRedo().StartUndo( UNDO_TABLE_MERGE, nullptr );
 
-    RedlineMode_t eOld = getIDocumentRedlineAccess().GetRedlineMode();
-    getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
+    RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
+    getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
 
     SwUndoTableMerge *const pUndo( (GetIDocumentUndoRedo().DoesUndo())
         ?   new SwUndoTableMerge( rPam )
@@ -2269,7 +2269,7 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
 
     if( !rTable.PrepareMerge( rPam, aBoxes, aMerged, &pMergeBox, pUndo ) )
     {   // No cells found to merge
-        getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
         if( pUndo )
         {
             delete pUndo;
@@ -2334,7 +2334,7 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
         rPam.Move();
 
         ::ClearFEShellTabCols();
-        getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
     GetIDocumentUndoRedo().EndUndo( UNDO_TABLE_MERGE, nullptr );
     return nRet;
@@ -4333,11 +4333,11 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
     }
     else
     {
-        RedlineMode_t eOld = getIDocumentRedlineAccess().GetRedlineMode();
+        RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
         if( getIDocumentRedlineAccess().IsRedlineOn() )
-            getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON |
-                                  nsRedlineMode_t::REDLINE_SHOW_INSERT |
-                                  nsRedlineMode_t::REDLINE_SHOW_DELETE));
+            getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::On |
+                                  RedlineFlags::ShowInsert |
+                                  RedlineFlags::ShowDelete );
 
         SwUndoTableCpyTable* pUndo = nullptr;
         if (bUndo)
@@ -4431,7 +4431,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             rInsPos.nNode = *pSttNd;
             rInsPos.nContent.Assign( GetNodes().GoNext( &rInsPos.nNode ), 0 );
         }
-        getIDocumentRedlineAccess().SetRedlineMode( eOld );
+        getIDocumentRedlineAccess().SetRedlineFlags( eOld );
     }
 
     if( bRet )

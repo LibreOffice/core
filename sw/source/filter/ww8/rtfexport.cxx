@@ -610,7 +610,7 @@ void RtfExport::ExportDocument_Impl()
         OutULong(pViewShell->GetViewOptions()->GetZoom());
     }
     // Record changes?
-    if (nsRedlineMode_t::REDLINE_ON & m_nOrigRedlineMode)
+    if (RedlineFlags::On & m_nOrigRedlineFlags)
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_REVISIONS);
     // Mirror margins?
     if ((nsUseOnPage::PD_MIRROR & m_pDoc->GetPageDesc(0).ReadUseOn()) == nsUseOnPage::PD_MIRROR)

@@ -1789,7 +1789,7 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
     SwTextNode* pTNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
     assert(pTNd);
 
-    RedlineMode_t eOld = getIDocumentRedlineAccess().GetRedlineMode();
+    RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
 
     if (mbIsAutoFormatRedline)
     {
@@ -1807,7 +1807,7 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
         //TODO: Undo is still missing!
         getIDocumentRedlineAccess().AppendRedline( pRedl, true );
 
-        getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
+        getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld | RedlineFlags::Ignore );
     }
 
     const sal_Int32 nEnd(rPam.End()->nContent.GetIndex());
@@ -1835,7 +1835,7 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
     endPam.SetMark();
     getIDocumentContentOperations().InsertItemSet(endPam, currentSet);
 
-    getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
 void SwDoc::ChgFormat(SwFormat & rFormat, const SfxItemSet & rSet)

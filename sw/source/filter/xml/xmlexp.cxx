@@ -284,14 +284,14 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                                                                 "ShowChanges" );
         }
     }
-    sal_uInt16 nRedlineMode = 0;
-    bSavedShowChanges = IDocumentRedlineAccess::IsShowChanges( pDoc->getIDocumentRedlineAccess().GetRedlineMode() );
+    RedlineFlags nRedlineFlags = RedlineFlags::NONE;
+    bSavedShowChanges = IDocumentRedlineAccess::IsShowChanges( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     if( bSaveRedline )
     {
         // now save and switch redline mode
-        nRedlineMode = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode(
-                 (RedlineMode_t)(( nRedlineMode & nsRedlineMode_t::REDLINE_SHOW_MASK ) | nsRedlineType_t::REDLINE_INSERT ));
+        nRedlineFlags = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags(
+                 ( nRedlineFlags & RedlineFlags::ShowMask ) | RedlineFlags::ShowInsert );
     }
 
     sal_uInt32 nRet = SvXMLExport::exportDoc( eClass );
@@ -299,7 +299,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     // now we can restore the redline mode (if we changed it previously)
     if( bSaveRedline )
     {
-      pDoc->getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(nRedlineMode ));
+      pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
     }
 
     if( pGraphicResolver )

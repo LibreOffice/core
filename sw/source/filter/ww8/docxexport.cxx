@@ -430,7 +430,7 @@ void DocxExport::OutputDML(uno::Reference<drawing::XShape>& xShape)
 void DocxExport::ExportDocument_Impl()
 {
     // Set the 'Track Revisions' flag in the settings structure
-    m_aSettings.trackRevisions = 0 != ( nsRedlineMode_t::REDLINE_ON & m_nOrigRedlineMode );
+    m_aSettings.trackRevisions = bool( RedlineFlags::On & m_nOrigRedlineFlags );
 
     InitStyles();
 

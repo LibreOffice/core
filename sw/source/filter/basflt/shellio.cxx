@@ -134,8 +134,8 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
     SwNodeIndex aSplitIdx( pDoc->GetNodes() );
 
-    RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-    RedlineMode_t ePostReadRedlineMode( nsRedlineMode_t::REDLINE_IGNORE );
+    RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    RedlineFlags ePostReadRedlineFlags( RedlineFlags::Ignore );
 
     // Array of FlyFormats
     SwFrameFormatsV aFlyFrameArr;
@@ -147,7 +147,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         if( bSaveUndo )
             pUndo = new SwUndoInsDoc( *pPam );
 
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
 
         SwPaM* pUndoPam = nullptr;
         if( bDocUndo || pCursor )
@@ -171,14 +171,14 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         sal_Int32 nEndContent = pCNd ? pCNd->Len() - nSttContent : 0;
         SwNodeIndex aEndPos( pPam->GetPoint()->nNode, 1 );
 
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
         nError = po->Read( *pDoc, GetBaseURL(), *pPam, aFileName );
 
         // an ODF document may contain redline mode in settings.xml; save it!
-        ePostReadRedlineMode = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
+        ePostReadRedlineFlags = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
 
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
 
         if( !IsError( nError ))     // set the End position already
         {
@@ -263,13 +263,13 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                         {
                             if( bSaveUndo )
                             {
-                                pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+                                pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
                                 // UGLY: temp. enable undo
                                 pDoc->GetIDocumentUndoRedo().DoUndo(true);
                                 pDoc->GetIDocumentUndoRedo().AppendUndo(
                                     new SwUndoInsLayFormat( pFrameFormat,0,0 ) );
                                 pDoc->GetIDocumentUndoRedo().DoUndo(false);
-                                pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
+                                pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
                             }
                             if( pFrameFormat->HasWriterListeners() )
                             {
@@ -297,22 +297,22 @@ sal_uLong SwReader::Read( const Reader& rOptions )
             if( !aFlyFrameArr.empty() )
                 aFlyFrameArr.clear();
 
-            pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
             if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
                 pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, *pUndoPam ), true);
             else
                 pDoc->getIDocumentRedlineAccess().SplitRedline( *pUndoPam );
-            pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
         }
         if( bSaveUndo )
         {
-            pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
             pUndo->SetInsertRange( *pUndoPam, false );
             // UGLY: temp. enable undo
             pDoc->GetIDocumentUndoRedo().DoUndo(true);
             pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
             pDoc->GetIDocumentUndoRedo().DoUndo(false);
-            pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
         }
 
         delete pUndoPam;
@@ -353,9 +353,9 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     {
         if( bSaveUndo )
         {
-            pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
             pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSDOKUMENT, nullptr );
-            pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
         }
     }
 
@@ -370,13 +370,12 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         pDoc->getIDocumentLinksAdministration().UpdateLinks();
 
         // not insert: set the redline mode read from settings.xml
-        eOld = static_cast<RedlineMode_t>(
-                ePostReadRedlineMode & ~nsRedlineMode_t::REDLINE_IGNORE);
+        eOld = ePostReadRedlineFlags & ~RedlineFlags::Ignore;
 
         pDoc->getIDocumentFieldsAccess().SetFieldsDirty(false, nullptr, 0);
     }
 
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     pDoc->SetOle2Link( aOLELink );
 
     if( pCursor )                 // das Doc ist jetzt modifiziert

@@ -151,7 +151,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
     sal_Int32 nHiddenCharsMasked = 0;
 
     const SwDoc& rDoc = *rNode.GetDoc();
-    const bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.getIDocumentRedlineAccess().GetRedlineMode() );
+    const bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
 
     // If called from word count or from spell checking, deleted redlines
     // should be masked:

@@ -676,9 +676,9 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         }
 
         // set redline mode (without doing the associated book-keeping)
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(RedlineFlags::On);
         pDoc->getIDocumentRedlineAccess().AppendRedline(pRedline, false);
-        pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern(nsRedlineMode_t::REDLINE_NONE);
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(RedlineFlags::NONE);
     }
 }
 

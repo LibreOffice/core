@@ -1265,12 +1265,12 @@ void makeRedline( SwPaM& rPaM,
     }
 
     SwRangeRedline* pRedline = new SwRangeRedline( aRedlineData, rPaM );
-    RedlineMode_t nPrevMode = pRedlineAccess->GetRedlineMode( );
+    RedlineFlags nPrevMode = pRedlineAccess->GetRedlineFlags( );
     pRedline->SetExtraData( pRedlineExtraData );
 
-    pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
+    pRedlineAccess->SetRedlineFlags_intern(RedlineFlags::On);
     bool bRet = pRedlineAccess->AppendRedline( pRedline, false );
-    pRedlineAccess->SetRedlineMode_intern( nPrevMode );
+    pRedlineAccess->SetRedlineFlags_intern( nPrevMode );
     if( !bRet )
         throw lang::IllegalArgumentException();
 }
@@ -1322,12 +1322,12 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     }
 
     SwTableRowRedline* pRedline = new SwTableRowRedline( aRedlineData, rTableLine );
-    RedlineMode_t nPrevMode = pRedlineAccess->GetRedlineMode( );
+    RedlineFlags nPrevMode = pRedlineAccess->GetRedlineFlags( );
     pRedline->SetExtraData( nullptr );
 
-    pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
+    pRedlineAccess->SetRedlineFlags_intern(RedlineFlags::On);
     bool bRet = pRedlineAccess->AppendTableRowRedline( pRedline, false );
-    pRedlineAccess->SetRedlineMode_intern( nPrevMode );
+    pRedlineAccess->SetRedlineFlags_intern( nPrevMode );
     if( !bRet )
         throw lang::IllegalArgumentException();
 }
@@ -1379,12 +1379,12 @@ void makeTableCellRedline( SwTableBox& rTableBox,
     }
 
     SwTableCellRedline* pRedline = new SwTableCellRedline( aRedlineData, rTableBox );
-    RedlineMode_t nPrevMode = pRedlineAccess->GetRedlineMode( );
+    RedlineFlags nPrevMode = pRedlineAccess->GetRedlineFlags( );
     pRedline->SetExtraData( nullptr );
 
-    pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
+    pRedlineAccess->SetRedlineFlags_intern(RedlineFlags::On);
     bool bRet = pRedlineAccess->AppendTableCellRedline( pRedline, false );
-    pRedlineAccess->SetRedlineMode_intern( nPrevMode );
+    pRedlineAccess->SetRedlineFlags_intern( nPrevMode );
     if( !bRet )
         throw lang::IllegalArgumentException();
 }

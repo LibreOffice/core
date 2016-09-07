@@ -310,9 +310,9 @@ SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
     aPaM.DeleteMark();
 
     //turn on red-lining and show changes
-    pDoc->getIDocumentRedlineAccess().SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete|RedlineFlags::ShowInsert);
     CPPUNIT_ASSERT_MESSAGE("redlining should be on", pDoc->getIDocumentRedlineAccess().IsRedlineOn());
-    CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineMode()));
+    CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     //set start of selection to last A
     aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 4);
@@ -743,9 +743,9 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(2));
 
         //turn on red-lining and show changes
-        m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
+        m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete|RedlineFlags::ShowInsert);
         CPPUNIT_ASSERT_MESSAGE("redlining should be on", m_pDoc->getIDocumentRedlineAccess().IsRedlineOn());
-        CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->getIDocumentRedlineAccess().GetRedlineMode()));
+        CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
         //delete everything except the first word
         aPaM.SetMark(); //set start of selection to current pos
@@ -762,9 +762,9 @@ void SwDocTest::testSwScanner()
         pTextNode->SetWordCountDirty(true);
 
         //keep red-lining on but hide changes
-        m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(nsRedlineMode_t::REDLINE_ON);
+        m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On);
         CPPUNIT_ASSERT_MESSAGE("redlining should be still on", m_pDoc->getIDocumentRedlineAccess().IsRedlineOn());
-        CPPUNIT_ASSERT_MESSAGE("redlines should be invisible", !IDocumentRedlineAccess::IsShowChanges(m_pDoc->getIDocumentRedlineAccess().GetRedlineMode()));
+        CPPUNIT_ASSERT_MESSAGE("redlines should be invisible", !IDocumentRedlineAccess::IsShowChanges(m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
         aDocStat.Reset();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len()); //but word-counting the text should only count the non-deleted text
@@ -794,7 +794,7 @@ void SwDocTest::testSwScanner()
 
         // https://bugs.libreoffice.org/show_bug.cgi?id=68347 we do want to count
         // redline *added* text though
-        m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
+        m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete|RedlineFlags::ShowInsert);
         aPaM.DeleteMark();
         aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 0);
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "redline-new-text ");
@@ -1044,15 +1044,15 @@ getRandomPosition(SwDoc *pDoc, int /* nOffset */)
 void SwDocTest::randomTest()
 {
     CPPUNIT_ASSERT_MESSAGE("SwDoc::IsRedlineOn()", !m_pDoc->getIDocumentRedlineAccess().IsRedlineOn());
-    RedlineMode_t modes[] = {
-        nsRedlineMode_t::REDLINE_ON,
-        nsRedlineMode_t::REDLINE_SHOW_MASK,
-        nsRedlineMode_t::REDLINE_NONE,
-        nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_MASK,
-        nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE,
-        nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE | nsRedlineMode_t::REDLINE_SHOW_MASK,
-        nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT,
-        nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE
+    RedlineFlags modes[] = {
+        RedlineFlags::On,
+        RedlineFlags::ShowMask,
+        RedlineFlags::NONE,
+        RedlineFlags::On | RedlineFlags::ShowMask,
+        RedlineFlags::On | RedlineFlags::Ignore,
+        RedlineFlags::On | RedlineFlags::Ignore | RedlineFlags::ShowMask,
+        RedlineFlags::On | RedlineFlags::ShowInsert,
+        RedlineFlags::On | RedlineFlags::ShowDelete
     };
     static const char *authors[] = {
         "Jim", "Bob", "JimBobina", "Helga", "Gertrude", "Spagna", "Hurtleweed"
@@ -1063,7 +1063,7 @@ void SwDocTest::randomTest()
         m_pDoc->ClearDoc();
 
         // setup redlining
-        m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(modes[rlm]);
+        m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(modes[rlm]);
         SW_MOD()->SetRedlineAuthor(OUString::createFromAscii(authors[0]));
 
         for( int i = 0; i < 2000; i++ )

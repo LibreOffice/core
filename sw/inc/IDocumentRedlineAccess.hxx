@@ -26,6 +26,7 @@
 #include <limits.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SwRangeRedline;
 class SwTableRowRedline;
@@ -37,25 +38,28 @@ struct SwPosition;
 class SwStartNode;
 class SwNode;
 
-typedef sal_uInt16 RedlineMode_t;
-namespace nsRedlineMode_t
+enum class RedlineFlags
 {
-    const RedlineMode_t REDLINE_NONE = 0; ///< no RedlineMode
-    const RedlineMode_t REDLINE_ON = 0x01;///< RedlineMode on
-    const RedlineMode_t REDLINE_IGNORE = 0x02;///< ignore Redlines
-    const RedlineMode_t REDLINE_SHOW_INSERT = 0x10;///< show all inserts
-    const RedlineMode_t REDLINE_SHOW_DELETE = 0x20;///< show all deletes
-    const RedlineMode_t REDLINE_SHOW_MASK = REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE;
+    NONE                 = 0x000, ///< no RedlineFlags
+    On                   = 0x001, ///< RedlineFlags on
+    Ignore               = 0x002, ///< ignore Redlines
+    ShowInsert           = 0x010, ///< show all inserts
+    ShowDelete           = 0x020, ///< show all deletes
+    ShowMask             = ShowInsert | ShowDelete,
 
     // For internal management:
     // remove the original Redlines together with their content
     // (Clipboard/text modules).
-    const RedlineMode_t REDLINE_DELETE_REDLINES = 0x100;
+    DeleteRedlines       = 0x100,
     // When deleting within a RedlineObject
     // ignore the DeleteRedline during Append.
-    const RedlineMode_t REDLINE_IGNOREDELETE_REDLINES = 0x200;
+    IgnoreDeleteRedlines = 0x200,
     // don't combine any redlines. This flag may be only used in Undo.
-    const RedlineMode_t REDLINE_DONTCOMBINE_REDLINES = 0x400;
+    DontCombineRedlines  = 0x400,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<RedlineFlags> : is_typed_flags<RedlineFlags, 0x733> {};
 }
 
 typedef sal_uInt16 RedlineType_t;
@@ -82,17 +86,17 @@ class IDocumentRedlineAccess
 {
      // Static helper functions
 public:
-    static bool IsShowChanges(const sal_uInt16 eM)
-    { return (nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE) == (eM & nsRedlineMode_t::REDLINE_SHOW_MASK); }
+    static bool IsShowChanges(const RedlineFlags eM)
+    { return (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete) == (eM & RedlineFlags::ShowMask); }
 
-    static bool IsHideChanges(const sal_uInt16 eM)
-    { return nsRedlineMode_t::REDLINE_SHOW_INSERT == (eM & nsRedlineMode_t::REDLINE_SHOW_MASK); }
+    static bool IsHideChanges(const RedlineFlags eM)
+    { return RedlineFlags::ShowInsert == (eM & RedlineFlags::ShowMask); }
 
-    static bool IsShowOriginal(const sal_uInt16 eM)
-    { return nsRedlineMode_t::REDLINE_SHOW_DELETE == (eM & nsRedlineMode_t::REDLINE_SHOW_MASK); }
+    static bool IsShowOriginal(const RedlineFlags eM)
+    { return RedlineFlags::ShowDelete == (eM & RedlineFlags::ShowMask); }
 
-    static bool IsRedlineOn(const sal_uInt16 eM)
-    { return nsRedlineMode_t::REDLINE_ON == (eM & (nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE )); }
+    static bool IsRedlineOn(const RedlineFlags eM)
+    { return RedlineFlags::On == (eM & (RedlineFlags::On | RedlineFlags::Ignore )); }
 
 public:
 
@@ -101,21 +105,21 @@ public:
         @returns
         the currently set redline mode
     */
-     virtual RedlineMode_t GetRedlineMode() const = 0;
+     virtual RedlineFlags GetRedlineFlags() const = 0;
 
     /** Set a new redline mode.
 
         @param eMode
         [in] the new redline mode.
     */
-    virtual void SetRedlineMode_intern(/*[in]*/RedlineMode_t eMode) = 0;
+    virtual void SetRedlineFlags_intern(/*[in]*/RedlineFlags eMode) = 0;
 
     /** Set a new redline mode.
 
         @param eMode
         [in] the new redline mode.
     */
-    virtual void SetRedlineMode(/*[in]*/RedlineMode_t eMode) = 0;
+    virtual void SetRedlineFlags(/*[in]*/RedlineFlags eMode) = 0;
 
     /** Query if redlining is on.
 

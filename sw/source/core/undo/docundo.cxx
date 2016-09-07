@@ -507,9 +507,9 @@ void UndoManager::AddUndoAction(SfxUndoAction *pAction, bool bTryMerge)
     SwUndo *const pUndo( dynamic_cast<SwUndo *>(pAction) );
     if (pUndo)
     {
-        if (nsRedlineMode_t::REDLINE_NONE == pUndo->GetRedlineMode())
+        if (RedlineFlags::NONE == pUndo->GetRedlineFlags())
         {
-            pUndo->SetRedlineMode( m_rRedlineAccess.GetRedlineMode() );
+            pUndo->SetRedlineFlags( m_rRedlineAccess.GetRedlineFlags() );
         }
     }
     SdrUndoManager::AddUndoAction(pAction, bTryMerge);

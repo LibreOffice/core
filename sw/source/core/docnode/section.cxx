@@ -1260,7 +1260,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
             sfx2::LinkManager::GetDisplayNames( this, nullptr, &sFileName,
                                                     &sRange, &sFilter );
 
-            RedlineMode_t eOldRedlineMode = nsRedlineMode_t::REDLINE_NONE;
+            RedlineFlags eOldRedlineFlags = RedlineFlags::NONE;
             SfxObjectShellRef xDocSh;
             SfxObjectShellLock xLockRef;
             int nRet;
@@ -1277,8 +1277,8 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 if( nRet )
                 {
                     SwDoc* pSrcDoc = static_cast<SwDocShell*>(&xDocSh)->GetDoc();
-                    eOldRedlineMode = pSrcDoc->getIDocumentRedlineAccess().GetRedlineMode();
-                    pSrcDoc->getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_INSERT );
+                    eOldRedlineFlags = pSrcDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+                    pSrcDoc->getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::ShowInsert );
                 }
             }
 
@@ -1390,8 +1390,8 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 if( 2 == nRet )
                     xDocSh->DoClose();
                 else if( static_cast<SwDocShell*>(&xDocSh)->GetDoc() )
-                    static_cast<SwDocShell*>(&xDocSh)->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode(
-                                eOldRedlineMode );
+                    static_cast<SwDocShell*>(&xDocSh)->GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags(
+                                eOldRedlineFlags );
             }
         }
         break;

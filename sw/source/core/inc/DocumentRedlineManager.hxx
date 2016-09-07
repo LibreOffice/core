@@ -32,11 +32,11 @@ class DocumentRedlineManager : public IDocumentRedlineAccess
 public:
     DocumentRedlineManager( SwDoc& i_rSwdoc );
 
-    virtual RedlineMode_t GetRedlineMode() const override;
+    virtual RedlineFlags GetRedlineFlags() const override;
 
-    virtual void SetRedlineMode_intern(/*[in]*/RedlineMode_t eMode) override;
+    virtual void SetRedlineFlags_intern(/*[in]*/RedlineFlags eMode) override;
 
-    virtual void SetRedlineMode(/*[in]*/RedlineMode_t eMode) override;
+    virtual void SetRedlineFlags(/*[in]*/RedlineFlags eMode) override;
 
     virtual bool IsRedlineOn() const override;
 
@@ -116,7 +116,7 @@ public:
      Sequence number is for conjoining of Redlines by the UI. */
     void SetAutoFormatRedlineComment( const OUString* pText, sal_uInt16 nSeqNo = 0 );
 
-    void checkRedlining(RedlineMode_t& _rReadlineMode);
+    void checkRedlining(RedlineFlags& _rReadlineMode);
 
 
     virtual ~DocumentRedlineManager();
@@ -128,7 +128,7 @@ private:
 
     SwDoc& m_rDoc;
 
-    RedlineMode_t meRedlineMode;     //< Current Redline Mode.
+    RedlineFlags meRedlineFlags;     //< Current Redline Mode.
     SwRedlineTable        *mpRedlineTable;           //< List of all Ranged Redlines.
     SwExtraRedlineTable   *mpExtraRedlineTable;      //< List of all Extra Redlines.
     OUString            *mpAutoFormatRedlnComment;  //< Comment for Redlines inserted via AutoFormat.

@@ -784,14 +784,14 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     const OUString sRecordChanges("RecordChanges");
     const OUString sRedlineProtectionKey("RedlineProtectionKey");
     xInfoSet->setPropertyValue( sShowChanges,
-        makeAny(IDocumentRedlineAccess::IsShowChanges(rDoc.getIDocumentRedlineAccess().GetRedlineMode())) );
+        makeAny(IDocumentRedlineAccess::IsShowChanges(rDoc.getIDocumentRedlineAccess().GetRedlineFlags())) );
     xInfoSet->setPropertyValue( sRecordChanges,
-        makeAny(IDocumentRedlineAccess::IsRedlineOn(rDoc.getIDocumentRedlineAccess().GetRedlineMode())) );
+        makeAny(IDocumentRedlineAccess::IsRedlineOn(rDoc.getIDocumentRedlineAccess().GetRedlineFlags())) );
     xInfoSet->setPropertyValue( sRedlineProtectionKey,
         makeAny(rDoc.getIDocumentRedlineAccess().GetRedlinePassword()) );
 
     // force redline mode to "none"
-    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_NONE );
+    rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::NONE );
 
     const bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
     // #i28749# - set property <ShapePositionInHoriL2R>
@@ -909,21 +909,19 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     rDoc.getIDocumentRedlineAccess().SetRedlinePassword( aKey );
 
     // restore redline mode from import info property set
-    sal_Int16 nRedlineMode = nsRedlineMode_t::REDLINE_SHOW_INSERT;
+    RedlineFlags nRedlineFlags = RedlineFlags::ShowInsert;
     aAny = xInfoSet->getPropertyValue( sShowChanges );
     if ( *o3tl::doAccess<bool>(aAny) )
-        nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
+        nRedlineFlags |= RedlineFlags::ShowDelete;
     aAny = xInfoSet->getPropertyValue( sRecordChanges );
     if ( *o3tl::doAccess<bool>(aAny) || (aKey.getLength() > 0) )
-        nRedlineMode |= nsRedlineMode_t::REDLINE_ON;
-    else
-        nRedlineMode |= nsRedlineMode_t::REDLINE_NONE;
+        nRedlineFlags |= RedlineFlags::On;
 
     // ... restore redline mode
-    // (First set bogus mode to make sure the mode in getIDocumentRedlineAccess().SetRedlineMode()
+    // (First set bogus mode to make sure the mode in getIDocumentRedlineAccess().SetRedlineFlags()
     //  is different from its previous mode.)
-    rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)( ~nRedlineMode ));
-    rDoc.getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)( nRedlineMode ));
+    rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( ~nRedlineFlags );
+    rDoc.getIDocumentRedlineAccess().SetRedlineFlags(  nRedlineFlags );
 
     lcl_EnsureValidPam( rPaM ); // move Pam into valid content
 

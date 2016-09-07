@@ -596,10 +596,10 @@ void SwView::Execute(SfxRequest &rReq)
                     }
                 }
 
-                const sal_uInt16 nOn = static_cast<const SfxBoolItem*>(pItem)->GetValue()
-                    ? nsRedlineMode_t::REDLINE_ON : 0;
-                const sal_uInt16 nMode = m_pWrtShell->GetRedlineMode();
-                m_pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+                const RedlineFlags nOn = static_cast<const SfxBoolItem*>(pItem)->GetValue()
+                    ? RedlineFlags::On : RedlineFlags::NONE;
+                const RedlineFlags nMode = m_pWrtShell->GetRedlineFlags();
+                m_pWrtShell->SetRedlineFlagsAndCheckInsMode( (nMode & ~RedlineFlags::On) | nOn);
 
                 // Notify all view shells of this document, as the track changes mode is document-global.
                 SwDocShell* pDocShell = GetDocShell();
@@ -628,7 +628,7 @@ void SwView::Execute(SfxRequest &rReq)
                 aPasswdDlg->ShowExtras(SfxShowExtras::CONFIRM);
             if (aPasswdDlg->Execute())
             {
-                sal_uInt16 nOn = nsRedlineMode_t::REDLINE_ON;
+                RedlineFlags nOn = RedlineFlags::On;
                 OUString sNewPasswd( aPasswdDlg->GetPassword() );
                 Sequence <sal_Int8> aNewPasswd =
                         rIDRA.GetRedlinePassword();
@@ -640,11 +640,11 @@ void SwView::Execute(SfxRequest &rReq)
                 else if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
                 {
                     rIDRA.SetRedlinePassword(Sequence <sal_Int8> ());
-                    nOn = 0;
+                    nOn = RedlineFlags::NONE;
                 }
-                const sal_uInt16 nMode = rIDRA.GetRedlineMode();
-                m_pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
-                rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&nsRedlineMode_t::REDLINE_ON)==0) ) );
+                const RedlineFlags nMode = rIDRA.GetRedlineFlags();
+                m_pWrtShell->SetRedlineFlagsAndCheckInsMode( (nMode & ~RedlineFlags::On) | nOn);
+                rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, !(nMode&RedlineFlags::On) ) );
             }
             else
                 bIgnore = true;
@@ -655,12 +655,12 @@ void SwView::Execute(SfxRequest &rReq)
             if( pArgs &&
                 SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem))
             {
-                sal_uInt16 nMode = ( ~(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)
-                        & m_pWrtShell->GetRedlineMode() ) | nsRedlineMode_t::REDLINE_SHOW_INSERT;
+                RedlineFlags nMode = ( ~RedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete)
+                        & m_pWrtShell->GetRedlineFlags() ) | RedlineFlags::ShowInsert;
                 if( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
-                    nMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
+                    nMode |= RedlineFlags::ShowDelete;
 
-                m_pWrtShell->SetRedlineModeAndCheckInsMode( nMode );
+                m_pWrtShell->SetRedlineFlagsAndCheckInsMode( nMode );
             }
             break;
         case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:

@@ -49,7 +49,7 @@ namespace {
 
         const IDocumentRedlineAccess& rIDocChangeTrack( rTextNode.getIDocumentRedlineAccess() );
 
-        if ( !IDocumentRedlineAccess::IsShowChanges( rIDocChangeTrack.GetRedlineMode() ) ||
+        if ( !IDocumentRedlineAccess::IsShowChanges( rIDocChangeTrack.GetRedlineFlags() ) ||
              rIDocChangeTrack.GetRedlineTable().empty() )
         {
             // nothing to do --> empty change track text markup lists.

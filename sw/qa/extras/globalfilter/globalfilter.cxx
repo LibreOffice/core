@@ -39,7 +39,7 @@ public:
 #if !defined(_WIN32)
     void testSkipImages();
 #endif
-    void testRedlineMode();
+    void testRedlineFlags();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSwappedOutImageExport);
@@ -53,7 +53,7 @@ public:
 #if !defined(_WIN32)
     CPPUNIT_TEST(testSkipImages);
 #endif
-    CPPUNIT_TEST(testRedlineMode);
+    CPPUNIT_TEST(testRedlineFlags);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -821,7 +821,7 @@ void Test::testSkipImages()
 }
 #endif
 
-void Test::testRedlineMode()
+void Test::testRedlineFlags()
 {
     const char* aFilterNames[] = {
         "writer8",
@@ -840,8 +840,8 @@ void Test::testRedlineMode()
 
     IDocumentRedlineAccess & rIDRA(pDoc->getIDocumentRedlineAccess());
     // enable change tracking
-    rIDRA.SetRedlineMode(rIDRA.GetRedlineMode()
-        | nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE);
+    rIDRA.SetRedlineFlags(rIDRA.GetRedlineFlags()
+        | RedlineFlags::On | RedlineFlags::ShowDelete);
 
     // need a delete redline to trigger mode switching
     pam.Move(fnMoveForward, GoInDoc);
@@ -850,9 +850,9 @@ void Test::testRedlineMode()
     pDoc->getIDocumentContentOperations().DeleteAndJoin(pam);
 
     // hide delete redlines
-    RedlineMode_t const nRedlineMode =
-        rIDRA.GetRedlineMode() & ~nsRedlineMode_t::REDLINE_SHOW_DELETE;
-    rIDRA.SetRedlineMode(nRedlineMode);
+    RedlineFlags const nRedlineFlags =
+        rIDRA.GetRedlineFlags() & ~RedlineFlags::ShowDelete;
+    rIDRA.SetRedlineFlags(nRedlineFlags);
 
     for (size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter)
     {
@@ -869,7 +869,7 @@ void Test::testRedlineMode()
         // tdf#97103 check that redline mode is properly restored
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             OString(OString("redline mode not restored in ") + aFilterNames[nFilter]).getStr(),
-            nRedlineMode, rIDRA.GetRedlineMode());
+            (int)nRedlineFlags, (int)rIDRA.GetRedlineFlags());
     }
 }
 

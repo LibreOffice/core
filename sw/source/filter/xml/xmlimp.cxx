@@ -411,7 +411,7 @@ SwXMLImport::SwXMLImport(
     m_bBlock( false ),
     m_bOrganizerMode( false ),
     m_bInititedXForms( false ),
-    m_bPreserveRedlineMode( true ),
+    m_bPreserveRedlineFlags( true ),
     m_pDoc( nullptr )
 {
     InitItemImport();
@@ -979,7 +979,7 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
                                       IsInsertMode(),
                                       IsStylesOnlyMode(),
                                       IsBlockMode(), IsOrganizerMode(),
-                                      m_bPreserveRedlineMode );
+                                      m_bPreserveRedlineFlags );
 }
 
 XMLShapeImportHelper* SwXMLImport::CreateShapeImport()
@@ -1479,16 +1479,16 @@ void SwXMLImport::initialize(
     // delegate to super class
     SvXMLImport::initialize(aArguments);
 
-    // we are only looking for a PropertyValue "PreserveRedlineMode"
+    // we are only looking for a PropertyValue "PreserveRedlineFlags"
     sal_Int32 nLength = aArguments.getLength();
     for(sal_Int32 i = 0; i < nLength; i++)
     {
         beans::PropertyValue aValue;
         if ( aArguments[i] >>= aValue )
         {
-            if (aValue.Name == "PreserveRedlineMode")
+            if (aValue.Name == "PreserveRedlineFlags")
             {
-                OSL_VERIFY( aValue.Value >>= m_bPreserveRedlineMode );
+                OSL_VERIFY( aValue.Value >>= m_bPreserveRedlineFlags );
             }
             continue;
         }

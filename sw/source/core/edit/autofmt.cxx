@@ -1976,8 +1976,8 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                                 m_aDelPam.DeleteMark();
                                 aFInfo.SetFrame( nullptr );
                             }
-                            //#125102# in case of the mode REDLINE_SHOW_DELETE the ** are still contained in pText
-                            if(0 == (m_pDoc->getIDocumentRedlineAccess().GetRedlineMode() & nsRedlineMode_t::REDLINE_SHOW_DELETE))
+                            //#125102# in case of the mode RedlineFlags::ShowDelete the ** are still contained in pText
+                            if(!(m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags() & RedlineFlags::ShowDelete))
                                 nPos = m_aDelPam.GetPoint()->nContent.GetIndex() - 1;
                             // Was a character deleted before starting?
                             if (cBlank && cBlank != (*pText)[nSttPos - 1])
@@ -2148,15 +2148,15 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
                          m_nEndNdIdx = m_aEndNdIdx.GetIndex(),
                          m_pDoc->GetDocShell() );
 
-    RedlineMode_t eRedlMode = m_pDoc->getIDocumentRedlineAccess().GetRedlineMode(), eOldMode = eRedlMode;
+    RedlineFlags eRedlMode = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags(), eOldMode = eRedlMode;
     if( m_aFlags.bWithRedlining )
     {
         m_pDoc->SetAutoFormatRedline( true );
-        eRedlMode = (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT);
+        eRedlMode = RedlineFlags::On | RedlineFlags::ShowInsert;
     }
     else
-      eRedlMode = (RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_IGNORE);
-    m_pDoc->getIDocumentRedlineAccess().SetRedlineMode( eRedlMode );
+      eRedlMode = RedlineFlags::ShowInsert | RedlineFlags::Ignore;
+    m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( eRedlMode );
 
     // save undo state (might be turned off)
     bool const bUndoState = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
@@ -2530,7 +2530,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
 
     if( m_aFlags.bWithRedlining )
         m_pDoc->SetAutoFormatRedline( false );
-    m_pDoc->getIDocumentRedlineAccess().SetRedlineMode( eOldMode );
+    m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( eOldMode );
 
     // restore undo (in case it has been changed)
     m_pDoc->GetIDocumentUndoRedo().DoUndo(bUndoState);

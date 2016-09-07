@@ -38,6 +38,7 @@ class SwNodeIndex;
 class SwNodeRange;
 class SwRedlineData;
 class SwRedlineSaveDatas;
+enum class RedlineFlags;
 
 namespace sw {
     class UndoRedoContext;
@@ -48,7 +49,7 @@ class SwUndo
     : public SfxUndoAction
 {
     SwUndoId const m_nId;
-    sal_uInt16 nOrigRedlineMode;
+    RedlineFlags nOrigRedlineFlags;
     sal_Int32 m_nViewShellId;
 
 protected:
@@ -112,8 +113,8 @@ public:
 
     // UndoObject remembers which mode was turned on.
     // In Undo/Redo/Repeat this remembered mode is switched on.
-    sal_uInt16 GetRedlineMode() const { return nOrigRedlineMode; }
-    void SetRedlineMode( sal_uInt16 eMode ) { nOrigRedlineMode = eMode; }
+    RedlineFlags GetRedlineFlags() const { return nOrigRedlineFlags; }
+    void SetRedlineFlags( RedlineFlags eMode ) { nOrigRedlineFlags = eMode; }
 
     bool IsDelBox() const;
 

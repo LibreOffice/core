@@ -256,7 +256,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     }
 }
 
-static short lcl_AskRedlineMode(vcl::Window *pWin)
+static short lcl_AskRedlineFlags(vcl::Window *pWin)
 {
     ScopedVclPtrInstance<MessBox> aQBox( pWin, 0,
                     OUString( SW_RES( STR_REDLINE_TITLE ) ),
@@ -661,7 +661,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             std::unique_ptr<AbstractSwModalRedlineAcceptDlg> pDlg(pFact->CreateSwModalRedlineAcceptDlg(&GetView().GetEditWin()));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
 
-            switch (lcl_AskRedlineMode(&GetView().GetEditWin()))
+            switch (lcl_AskRedlineFlags(&GetView().GetEditWin()))
             {
                 case RET_OK:
                 {

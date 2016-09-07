@@ -1843,19 +1843,19 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         case WID_DOC_CHANGES_SHOW:
         {
             bool bSet = *o3tl::doAccess<bool>(aValue);
-            sal_uInt16 eMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
+            RedlineFlags eMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
             if(WID_DOC_CHANGES_SHOW == pEntry->nWID)
             {
-                eMode &= ~(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE);
-                eMode |= nsRedlineMode_t::REDLINE_SHOW_INSERT;
+                eMode &= ~RedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
+                eMode |= RedlineFlags::ShowInsert;
                 if( bSet )
-                    eMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
+                    eMode |= RedlineFlags::ShowDelete;
             }
             else if(WID_DOC_CHANGES_RECORD == pEntry->nWID)
             {
-                eMode = bSet ? eMode|nsRedlineMode_t::REDLINE_ON : eMode&~nsRedlineMode_t::REDLINE_ON;
+                eMode = bSet ? eMode|RedlineFlags::On : eMode&~RedlineFlags::On;
             }
-            pDocShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(eMode ));
+            pDocShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eMode );
         }
         break;
         case  WID_DOC_CHANGES_PASSWORD:
@@ -1867,9 +1867,9 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
                 pDoc->getIDocumentRedlineAccess().SetRedlinePassword(aNew);
                 if(aNew.getLength())
                 {
-                    sal_uInt16 eMode = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-                    eMode = eMode|nsRedlineMode_t::REDLINE_ON;
-                    pDoc->getIDocumentRedlineAccess().SetRedlineMode( (RedlineMode_t)(eMode ));
+                    RedlineFlags eMode = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+                    eMode |= RedlineFlags::On;
+                    pDoc->getIDocumentRedlineAccess().SetRedlineFlags( eMode );
                 }
             }
         }
@@ -1886,21 +1886,21 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         break;
         case WID_DOC_REDLINE_DISPLAY:
         {
-            sal_Int16 eRedMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
-            eRedMode = eRedMode & (~nsRedlineMode_t::REDLINE_SHOW_MASK);
+            RedlineFlags eRedMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
+            eRedMode = eRedMode & (~RedlineFlags::ShowMask);
             sal_Int16 nSet = 0;
             aValue >>= nSet;
             switch(nSet)
             {
                 case RedlineDisplayType::NONE: break;
-                case RedlineDisplayType::INSERTED: eRedMode |= nsRedlineMode_t::REDLINE_SHOW_INSERT; break;
-                case RedlineDisplayType::REMOVED: eRedMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;  break;
+                case RedlineDisplayType::INSERTED: eRedMode |= RedlineFlags::ShowInsert; break;
+                case RedlineDisplayType::REMOVED: eRedMode |= RedlineFlags::ShowDelete;  break;
                 case RedlineDisplayType::
-                        INSERTED_AND_REMOVED: eRedMode |= nsRedlineMode_t::REDLINE_SHOW_INSERT|nsRedlineMode_t::REDLINE_SHOW_DELETE;
+                        INSERTED_AND_REMOVED: eRedMode |= RedlineFlags::ShowInsert|RedlineFlags::ShowDelete;
                 break;
                 default: throw IllegalArgumentException();
             }
-            pDocShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode(eRedMode);
+            pDocShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags(eRedMode);
         }
         break;
         case WID_DOC_TWO_DIGIT_YEAR:
@@ -2027,17 +2027,16 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_CHANGES_RECORD:
         case WID_DOC_CHANGES_SHOW:
         {
-            const sal_uInt16 eMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
+            const RedlineFlags eMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
             bool bSet = false;
             if(WID_DOC_CHANGES_SHOW == pEntry->nWID)
             {
-                const sal_uInt16 nMask = nsRedlineMode_t::REDLINE_SHOW_INSERT |
-                                         nsRedlineMode_t::REDLINE_SHOW_DELETE;
-                bSet = (eMode & nMask) == nMask;
+                const RedlineFlags nMask = RedlineFlags::ShowInsert | RedlineFlags::ShowDelete;
+                bSet = bool(eMode & nMask);
             }
             else if(WID_DOC_CHANGES_RECORD == pEntry->nWID)
             {
-                bSet = (eMode& nsRedlineMode_t::REDLINE_ON)  != 0;
+                bSet = bool(eMode & RedlineFlags::On);
             }
             aAny <<= bSet;
         }
@@ -2056,14 +2055,14 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_REDLINE_DISPLAY:
         {
-            sal_Int16 eRedMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
-            eRedMode = eRedMode & nsRedlineMode_t::REDLINE_SHOW_MASK;
+            RedlineFlags eRedMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
+            eRedMode = eRedMode & RedlineFlags::ShowMask;
             sal_Int16 nRet = RedlineDisplayType::NONE;
-            if(nsRedlineMode_t::REDLINE_SHOW_INSERT == eRedMode)
+            if(RedlineFlags::ShowInsert == eRedMode)
                 nRet = RedlineDisplayType::INSERTED;
-            else if(nsRedlineMode_t::REDLINE_SHOW_DELETE == eRedMode)
+            else if(RedlineFlags::ShowDelete == eRedMode)
                 nRet = RedlineDisplayType::REMOVED;
-            else if(nsRedlineMode_t::REDLINE_SHOW_MASK == eRedMode)
+            else if(RedlineFlags::ShowMask == eRedMode)
                 nRet = RedlineDisplayType::INSERTED_AND_REMOVED;
             aAny <<= nRet;
         }

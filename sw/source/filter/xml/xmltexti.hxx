@@ -41,7 +41,7 @@ public:
             const css::uno::Reference<css::beans::XPropertySet>& rInfoSet,
             bool bInsertM, bool bStylesOnlyM,
             bool bBlockM, bool bOrganizerM,
-            bool bPreserveRedlineMode );
+            bool bPreserveRedlineFlags );
     virtual ~SwXMLTextImportHelper();
 
     virtual css::uno::Reference<css::beans::XPropertySet>
