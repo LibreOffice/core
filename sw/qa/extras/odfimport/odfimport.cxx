@@ -658,5 +658,14 @@ DECLARE_ODFIMPORT_TEST(testFdo47267, "fdo47267-3.odt")
     // This was a Style Families getByName() crash
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf75221, "tdf75221.odt")
+{
+    // When "Don't add space between paragraphs of the same style" setting set,
+    // spacing between same-style paragraphs must be equal to their line spacing.
+    // It used to be 0.
+    OUString top = parseDump("/root/page/body/txt[2]/infos/prtBounds", "top");
+    CPPUNIT_ASSERT(top.toInt32() > 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
