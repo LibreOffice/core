@@ -105,14 +105,14 @@ sal_uInt32 SbxArray::Count32() const
 sal_uInt16 SbxArray::Count() const
 {
     sal_uInt32 nCount = mVarEntries.size();
-    DBG_ASSERT( nCount <= SBX_MAXINDEX, "SBX: Array-Index > SBX_MAXINDEX" );
+    assert( nCount <= SBX_MAXINDEX && "SBX: Array-Index > SBX_MAXINDEX" );
     return (sal_uInt16)nCount;
 }
 
 SbxVariableRef& SbxArray::GetRef32( sal_uInt32 nIdx )
 {
     // If necessary extend the array
-    DBG_ASSERT( nIdx <= SBX_MAXINDEX32, "SBX: Array-Index > SBX_MAXINDEX32" );
+    assert( nIdx <= SBX_MAXINDEX32 && "SBX: Array-Index > SBX_MAXINDEX32" );
     // Very Hot Fix
     if( nIdx > SBX_MAXINDEX32 )
     {
@@ -128,7 +128,7 @@ SbxVariableRef& SbxArray::GetRef32( sal_uInt32 nIdx )
 SbxVariableRef& SbxArray::GetRef( sal_uInt16 nIdx )
 {
     // If necessary extend the array
-    DBG_ASSERT( nIdx <= SBX_MAXINDEX, "SBX: Array-Index > SBX_MAXINDEX" );
+    assert( nIdx <= SBX_MAXINDEX && "SBX: Array-Index > SBX_MAXINDEX" );
     // Very Hot Fix
     if( nIdx > SBX_MAXINDEX )
     {
@@ -241,7 +241,7 @@ void SbxArray::PutAlias( const OUString& rAlias, sal_uInt16 nIdx )
 
 void SbxArray::Insert32( SbxVariable* pVar, sal_uInt32 nIdx )
 {
-    DBG_ASSERT( mVarEntries.size() <= SBX_MAXINDEX32, "SBX: Array gets too big" );
+    assert( mVarEntries.size() <= SBX_MAXINDEX32 && "SBX: Array gets too big" );
     if( mVarEntries.size() > SBX_MAXINDEX32 )
     {
             return;
@@ -270,7 +270,7 @@ void SbxArray::Insert32( SbxVariable* pVar, sal_uInt32 nIdx )
 
 void SbxArray::Insert( SbxVariable* pVar, sal_uInt16 nIdx )
 {
-    DBG_ASSERT( mVarEntries.size() <= 0x3FF0, "SBX: Array gets too big" );
+    assert( mVarEntries.size() <= 0x3FF0 && "SBX: Array gets too big" );
     if( mVarEntries.size() > 0x3FF0 )
     {
         return;

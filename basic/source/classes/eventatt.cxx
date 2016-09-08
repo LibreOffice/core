@@ -82,7 +82,7 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
             if ( xModel.is() )
             {
                 Reference< provider::XScriptProviderSupplier > xSupplier( xModel, UNO_QUERY );
-                OSL_ENSURE( xSupplier.is(), "SFURL_firing_impl: failed to get script provider supplier" );
+                assert( xSupplier.is() && "SFURL_firing_impl: failed to get script provider supplier" );
                 if ( xSupplier.is() )
                     xScriptProvider.set( xSupplier->getScriptProvider() );
             }
@@ -339,7 +339,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
         Any aDlgLibContAny = pDlgLibContUnoObj->getUnoAny();
 
         Reference< XLibraryContainer > xDlgLibContNameAccess( aDlgLibContAny, UNO_QUERY );
-        OSL_ENSURE( xDlgLibContNameAccess.is(), "implFindDialogLibForDialog: no lib container for the given dialog!" );
+        assert( xDlgLibContNameAccess.is() && "implFindDialogLibForDialog: no lib container for the given dialog!" );
         if( xDlgLibContNameAccess.is() )
         {
             Sequence< OUString > aLibNames = xDlgLibContNameAccess->getElementNames();
@@ -355,7 +355,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
                 Any aDlgLibAny = xDlgLibContNameAccess->getByName( pLibNames[ iLib ] );
 
                 Reference< XNameContainer > xDlgLibNameCont( aDlgLibAny, UNO_QUERY );
-                OSL_ENSURE( xDlgLibNameCont.is(), "implFindDialogLibForDialog: invalid dialog lib!" );
+                assert( xDlgLibNameCont.is() && "implFindDialogLibForDialog: invalid dialog lib!" );
                 if( xDlgLibNameCont.is() )
                 {
                     Sequence< OUString > aDlgNames = xDlgLibNameCont->getElementNames();
