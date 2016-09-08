@@ -469,8 +469,7 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     SAL_INFO("vcl.schedule", "Enter ImplYield: " << (i_bWait ? "wait" : "no wait") <<
              ": " << (i_bAllEvents ? "all events" : "one event") << ": " << nReleased);
 
-    // If we have idles, don't wait for the timeout; check for events
-    // and come back as quick as possible.
+    // we handle pending task outside the system event loop, so don't wait
     if (i_bWait && Scheduler::HasPendingTasks())
         i_bWait = false;
 
@@ -482,15 +481,12 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
 
     // do not wait for events if application was already quit; in that
     // case only dispatch events already available
-    // do not wait for events either if the app decided that it is too busy for timers
-    // (feature added for the slideshow)
-    SalYieldResult eResult =
+    bool bProcessedEvent =
         pSVData->mpDefInst->DoYield(
             i_bWait && !pSVData->maAppData.mbAppQuit,
             i_bAllEvents, nReleased);
 
-    SAL_INFO("vcl.schedule", "DoYield returns: "
-             << (eResult == SalYieldResult::EVENT ? "processed event" : "timeout"));
+    SAL_INFO("vcl.schedule", "DoYield returns: " << bProcessedEvent );
 
     pSVData->maAppData.mnDispatchLevel--;
 
@@ -499,16 +495,15 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     if (nReleased == 0) // tdf#99383 don't run stuff from ReAcquireSolarMutex
     {
         // Process all Tasks
-        Scheduler::ProcessTaskScheduling(eResult != SalYieldResult::EVENT);
+        bProcessedEvent = Scheduler::ProcessTaskScheduling() || bProcessedEvent;
     }
 
     // flush lazy deleted objects
     if( pSVData->maAppData.mnDispatchLevel == 0 )
         vcl::LazyDelete::flush();
 
-    SAL_INFO("vcl.schedule", "Leave ImplYield");
-
-    return Scheduler::HasPendingTasks() || eResult == SalYieldResult::EVENT;
+    SAL_INFO("vcl.schedule", "Leave ImplYield with return " << bProcessedEvent );
+    return bProcessedEvent || Scheduler::HasPendingTasks();
 }
 
 bool Application::Reschedule( bool i_bAllEvents )
@@ -518,7 +513,7 @@ bool Application::Reschedule( bool i_bAllEvents )
 
 void Scheduler::ProcessEventsToSignal(bool& bSignal)
 {
-    while(!bSignal && (Scheduler::ProcessTaskScheduling( true ) ||
+    while(!bSignal && (Scheduler::ProcessTaskScheduling() ||
           ImplYield(false, false, 0)))
     {
     }
@@ -527,8 +522,8 @@ void Scheduler::ProcessEventsToSignal(bool& bSignal)
 void Scheduler::ProcessEventsToIdle()
 {
     int nSanity = 1000;
-    while(Scheduler::ProcessTaskScheduling( true ) ||
-          ImplYield(false, false, 0))
+    while( Scheduler::ProcessTaskScheduling() ||
+           ImplYield(false, true, 0) )
     {
         if (nSanity-- < 0)
         {
