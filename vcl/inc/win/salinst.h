@@ -64,7 +64,7 @@ public:
     virtual bool                CheckYieldMutex() override;
     virtual bool                IsMainThread() const override;
 
-    virtual SalYieldResult      DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) override;
+    virtual bool                DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) override;
     virtual bool                AnyInput( VclInputFlags nType ) override;
     virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* ) override;
     virtual void                DestroyMenu( SalMenu* ) override;
