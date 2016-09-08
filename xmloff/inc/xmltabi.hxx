@@ -25,7 +25,7 @@
 class SvXMLImport;
 class SvxXMLTabStopContext_Impl;
 
-typedef std::vector<SvxXMLTabStopContext_Impl *> SvxXMLTabStopArray_Impl;
+typedef std::vector<css::uno::Reference<SvxXMLTabStopContext_Impl>> SvxXMLTabStopArray_Impl;
 
 class SvxXMLTabStopImportContext : public XMLElementPropertyContext
 {
