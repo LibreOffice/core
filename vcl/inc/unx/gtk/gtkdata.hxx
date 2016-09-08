@@ -98,7 +98,6 @@ class GtkData : public SalGenericData
     osl::Mutex      m_aDispatchMutex;
     osl::Condition  m_aDispatchCondition;
     css::uno::Any   m_aException;
-    bool            blockIdleTimeout;
 
 public:
     GtkData( SalInstance *pInstance );
@@ -113,14 +112,13 @@ public:
     static gboolean userEventFn( gpointer data );
 
     void PostUserEvent();
-    SalYieldResult Yield( bool bWait, bool bHandleAllCurrentEvents );
+    bool Yield( bool bWait, bool bHandleAllCurrentEvents );
     inline GdkDisplay *GetGdkDisplay();
 
     virtual void ErrorTrapPush() override;
     virtual bool ErrorTrapPop( bool bIgnoreError = true ) override;
 
     inline GtkSalDisplay *GetGtkDisplay() const;
-    bool BlockIdleTimeout() const { return blockIdleTimeout; }
     void setException(const css::uno::Any& rException) { m_aException = rException; }
 };
 

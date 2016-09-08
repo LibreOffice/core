@@ -105,7 +105,7 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
     for (int i = 0; i < 1000; i++)
     {
         // Process all Tasks - slide sorter is created here
-        while (Scheduler::ProcessTaskScheduling(true));
+        while (Scheduler::ProcessTaskScheduling());
         if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase())) != nullptr)
             break;
         osl::Thread::wait(std::chrono::milliseconds(100));
@@ -149,7 +149,7 @@ void SdMiscTest::testTdf96708()
 
     // Now wait for timers to trigger creation of auto-layout
     osl::Thread::wait(std::chrono::milliseconds(100));
-    Scheduler::ProcessTaskScheduling(true);
+    Scheduler::ProcessTaskScheduling();
 
     rSSController.GetClipboard().DoPaste();
     const sal_uInt16 nMasterPageCnt2 = xDocSh->GetDoc()->GetMasterSdPageCount(PageKind::Standard);
