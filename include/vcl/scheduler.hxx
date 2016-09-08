@@ -47,16 +47,17 @@ public:
     static void       ImplDeInitScheduler();
 
     /// Process one pending Timer with highhest priority
-    static void       CallbackTaskScheduling( bool ignore );
+    static void       CallbackTaskScheduling();
     /// Are there any pending tasks to process?
     static bool       HasPendingTasks();
     /// Process one pending task ahead of time with highest priority.
-    static bool       ProcessTaskScheduling( bool bIdle );
+    static bool       ProcessTaskScheduling();
+    /// Process all events until we are idle
+    static void       ProcessEventsToIdle();
     /**
      * Process events until the parameter turns true,
      * allows processing until a specific event has been processed
      */
-    static void       ProcessEventsToIdle();
     static void       ProcessEventsToSignal(bool& bSignal);
 
     /// Control the deterministic mode.  In this mode, two subsequent runs of
