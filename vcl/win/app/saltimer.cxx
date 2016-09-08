@@ -150,8 +150,8 @@ void EmitTimerCallback()
     // try this a short time later again.
     if (pSVData->maSchedCtx.mpSalTimer && ImplSalYieldMutexTryToAcquire())
     {
-        bool const idle = true; // TODO
-        pSVData->maSchedCtx.mpSalTimer->CallCallback( idle );
+        pSVData->maSchedCtx.mpSalTimer->CallCallback();
+
         ImplSalYieldMutexRelease();
 
         // Run the timer again if it was started before, and also

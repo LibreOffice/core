@@ -388,7 +388,6 @@ GtkData::GtkData( SalInstance *pInstance )
     : SalGenericData( SAL_DATA_GTK3, pInstance )
     , m_aDispatchMutex()
     , m_aDispatchCondition()
-    , blockIdleTimeout( false )
 {
     m_pUserEvent = nullptr;
 }
@@ -437,10 +436,8 @@ void GtkData::Dispose()
 }
 
 /// Allows events to be processed, returns true if we processed an event.
-SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
+bool GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
-    blockIdleTimeout = !bWait;
-
     /* #i33212# only enter g_main_context_iteration in one thread at any one
      * time, else one of them potentially will never end as long as there is
      * another thread in there. Having only one yielding thread actually dispatch
@@ -455,8 +452,7 @@ SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
             bDispatchThread = true;
         else if( ! bWait )
         {
-            blockIdleTimeout = false;
-            return SalYieldResult::TIMEOUT; // someone else is waiting already, return
+            return false; // someone else is waiting already, return
         }
 
         if( bDispatchThread )
@@ -490,10 +486,8 @@ SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if( bWasEvent )
             m_aDispatchCondition.set(); // trigger non dispatch thread yields
     }
-    blockIdleTimeout = false;
 
-    return bWasEvent ? SalYieldResult::EVENT
-                     : SalYieldResult::TIMEOUT;
+    return bWasEvent;
 }
 
 void GtkData::Init()
@@ -698,11 +692,7 @@ extern "C" {
 
         ImplSVData* pSVData = ImplGetSVData();
         if( pSVData->maSchedCtx.mpSalTimer )
-        {
-            // TODO: context_pending should be probably checked too, but it causes locking assertion failures
-            bool idle = !pSalData->BlockIdleTimeout() && /*!g_main_context_pending( NULL ) &&*/ !gdk_events_pending();
-            pSVData->maSchedCtx.mpSalTimer->CallCallback( idle );
-        }
+            pSVData->maSchedCtx.mpSalTimer->CallCallback();
 
         return TRUE;
     }
