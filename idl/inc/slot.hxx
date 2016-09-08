@@ -48,8 +48,6 @@ public:
     SvBOOL           aAccelConfig;
     SvBOOL           aFastCall;
     SvBOOL           aContainer;
-    SvBOOL           aImageRotation;
-    SvBOOL           aImageReflection;
     SvIdentifier     aPseudoPrefix;
     OString          aDisableFlags;
     SvMetaSlot*      pLinkedSlot;
@@ -123,8 +121,6 @@ public:
     bool                GetAccelConfig() const;
     bool                GetFastCall() const;
     bool                GetContainer() const;
-    bool                GetImageRotation() const;
-    bool                GetImageReflection() const;
     bool                GetReadOnlyDoc() const;
     bool                GetExport() const;
     bool                GetHidden() const;

@@ -221,18 +221,6 @@ bool SvMetaSlot::GetContainer() const
     return static_cast<SvMetaSlot *>(GetRef())->GetContainer();
 }
 
-bool SvMetaSlot::GetImageRotation() const
-{
-    if( aImageRotation.IsSet() || !GetRef() ) return aImageRotation;
-    return static_cast<SvMetaSlot *>(GetRef())->GetImageRotation();
-}
-
-bool SvMetaSlot::GetImageReflection() const
-{
-    if( aImageReflection.IsSet() || !GetRef() ) return aImageReflection;
-    return static_cast<SvMetaSlot *>(GetRef())->GetImageReflection();
-}
-
 void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
@@ -292,8 +280,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 
     bOk |= aFastCall.ReadSvIdl( SvHash_FastCall(), rInStm );
     bOk |= aContainer.ReadSvIdl( SvHash_Container(), rInStm );
-    bOk |= aImageRotation.ReadSvIdl( SvHash_ImageRotation(), rInStm );
-    bOk |= aImageReflection.ReadSvIdl( SvHash_ImageReflection(), rInStm );
 
     if( !bOk )
     {
@@ -774,10 +760,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         rOutStm.WriteOString( MakeSlotName( SvHash_Container() ) ).WriteChar( '|' );
     if ( GetReadOnlyDoc() )
         rOutStm.WriteOString( MakeSlotName( SvHash_ReadOnlyDoc() ) ).WriteChar( '|' );
-    if( GetImageRotation() )
-        rOutStm.WriteOString( MakeSlotName( SvHash_ImageRotation() ) ).WriteChar( '|' );
-    if( GetImageReflection() )
-        rOutStm.WriteOString( MakeSlotName( SvHash_ImageReflection() ) ).WriteChar( '|' );
     rOutStm.WriteCharPtr( "SfxSlotMode::NONE" );
 
     rOutStm.WriteChar( ',' ) << endl;

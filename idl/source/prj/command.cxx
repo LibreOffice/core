@@ -83,8 +83,6 @@ char const * SyntaxStrings[] = {
 "\t\tFastCall",
 "\t\tGet, Set",
 "\t\tGroupId        = Identifier",
-"\t\tImageRotation",
-"\t\tImageReflection",
 "\t\tPseudoPrefix   = Identifier",
 "\t\tPseudoSlots",
 "\t\tReadOnlyDoc*",

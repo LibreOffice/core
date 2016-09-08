@@ -1010,8 +1010,6 @@ SfxBoolItem CenterPara SID_ATTR_PARA_ADJUST_CENTER
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2324,8 +2322,6 @@ SfxVoidItem DefaultBullet FN_NUM_BULLET_ON
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
@@ -4813,8 +4809,6 @@ SfxVoidItem DefaultNumbering FN_NUM_NUMBERING_ON
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     SlotType = SfxBoolItem
 
     AccelConfig = TRUE,
@@ -5111,9 +5105,6 @@ SfxBoolItem JustifyPara SID_ATTR_PARA_ADJUST_BLOCK
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -5263,8 +5254,6 @@ SfxBoolItem LeftPara SID_ATTR_PARA_ADJUST_LEFT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    ImageRotation = TRUE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5920,8 +5909,6 @@ SfxVoidItem OutlineBullet SID_OUTLINE_BULLET
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = TRUE,
@@ -7109,8 +7096,6 @@ SfxBoolItem RightPara SID_ATTR_PARA_ADJUST_RIGHT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -7949,9 +7934,6 @@ SfxBoolItem SpacePara1 SID_ATTR_PARA_LINESPACE_10
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -7970,9 +7952,6 @@ SfxBoolItem SpacePara15 SID_ATTR_PARA_LINESPACE_15
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -7990,9 +7969,6 @@ SfxBoolItem SpacePara2 SID_ATTR_PARA_LINESPACE_20
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -9397,8 +9373,6 @@ SfxBoolItem ParaLeftToRight SID_ATTR_PARA_LEFT_TO_RIGHT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -9416,8 +9390,6 @@ SfxBoolItem ParaRightToLeft SID_ATTR_PARA_RIGHT_TO_LEFT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    ImageRotation = TRUE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -10161,9 +10133,6 @@ SfxVoidItem IncrementIndent SID_INC_INDENT
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-        ImageReflection = TRUE;
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -10181,9 +10150,6 @@ SfxVoidItem DecrementIndent SID_DEC_INDENT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    ImageRotation = TRUE;
-        ImageReflection = TRUE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,

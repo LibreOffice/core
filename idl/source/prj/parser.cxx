@@ -424,8 +424,6 @@ void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
 
     bOk |= ReadIfBoolAttribute(rSlot.aFastCall, SvHash_FastCall() );
     bOk |= ReadIfBoolAttribute(rSlot.aContainer, SvHash_Container() );
-    bOk |= ReadIfBoolAttribute(rSlot.aImageRotation, SvHash_ImageRotation() );
-    bOk |= ReadIfBoolAttribute(rSlot.aImageReflection, SvHash_ImageReflection() );
 
     if( bOk )
         return;
