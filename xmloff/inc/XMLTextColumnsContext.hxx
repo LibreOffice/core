@@ -20,6 +20,8 @@
 #ifndef INCLUDED_XMLOFF_INC_XMLTEXTCOLUMNSCONTEXT_HXX
 #define INCLUDED_XMLOFF_INC_XMLTEXTCOLUMNSCONTEXT_HXX
 
+#include <memory>
+
 #include "XMLElementPropertyContext.hxx"
 
 class XMLTextColumnContext_Impl;
@@ -39,10 +41,10 @@ class XMLTextColumnsContext :public XMLElementPropertyContext
     const OUString sSeparatorLineStyle;
 
 
-    XMLTextColumnsArray_Impl *pColumns;
+    std::unique_ptr<XMLTextColumnsArray_Impl> pColumns;
     css::uno::Reference<XMLTextColumnSepContext_Impl> mxColumnSep;
-    SvXMLTokenMap            *pColumnAttrTokenMap;
-    SvXMLTokenMap            *pColumnSepAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pColumnAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap> pColumnSepAttrTokenMap;
     sal_Int16                nCount;
     bool                 bAutomatic;
     sal_Int32                nAutomaticDistance;
@@ -55,8 +57,6 @@ public:
         const css::uno::Reference<css::xml::sax::XAttributeList > & xAttrList,
         const XMLPropertyState& rProp,
         ::std::vector< XMLPropertyState > &rProps );
-
-    virtual ~XMLTextColumnsContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,

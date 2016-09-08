@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <o3tl/make_unique.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -275,7 +276,6 @@ XMLTextColumnsContext::XMLTextColumnsContext(
 ,   sSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment")
 ,   sAutomaticDistance("AutomaticDistance")
 ,   sSeparatorLineStyle("SeparatorLineStyle")
-,   pColumns( nullptr )
 ,   pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) )
 ,   pColumnSepAttrTokenMap( new SvXMLTokenMap(aColSepAttrTokenMap) )
 ,   nCount( 0 )
@@ -308,13 +308,6 @@ XMLTextColumnsContext::XMLTextColumnsContext(
     }
 }
 
-XMLTextColumnsContext::~XMLTextColumnsContext()
-{
-    delete pColumns;
-    delete pColumnAttrTokenMap;
-    delete pColumnSepAttrTokenMap;
-}
-
 SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -331,7 +324,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
 
         // add new tabstop to array of tabstops
         if( !pColumns )
-            pColumns = new XMLTextColumnsArray_Impl;
+            pColumns = o3tl::make_unique<XMLTextColumnsArray_Impl>();
 
         pColumns->push_back( xColumn );
 
