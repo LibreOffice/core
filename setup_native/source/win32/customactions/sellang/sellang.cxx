@@ -185,7 +185,10 @@ static BOOL
 present_in_ui_langs(const char *lang)
 {
     for (int i = 0; i < num_ui_langs; i++)
-        if (memcmp (ui_langs[i], lang, std::min(strlen(ui_langs[i]), strlen(lang))) == 0)
+        if (strchr (lang, '_') != NULL)
+            if (memcmp (ui_langs[i], lang, std::min(strlen(ui_langs[i]), strlen(lang))) == 0)
+                return TRUE;
+        if (strcmp (ui_langs[i], lang) == 0)
             return TRUE;
     return FALSE;
 }
