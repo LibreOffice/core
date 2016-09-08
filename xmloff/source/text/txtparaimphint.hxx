@@ -106,20 +106,13 @@ class XMLHyperlinkHint_Impl : public XMLHint_Impl
     OUString                 sTargetFrameName;
     OUString                 sStyleName;
     OUString                 sVisitedStyleName;
-    XMLEventsImportContext*  pEvents;
+    css::uno::Reference<XMLEventsImportContext> mxEvents;
 
 public:
 
     XMLHyperlinkHint_Impl( const css::uno::Reference < css::text::XTextRange > & rPos ) :
-        XMLHint_Impl( XML_HINT_HYPERLINK, rPos, rPos ),
-        pEvents( nullptr )
+        XMLHint_Impl( XML_HINT_HYPERLINK, rPos, rPos )
     {
-    }
-
-    virtual ~XMLHyperlinkHint_Impl()
-    {
-        if (nullptr != pEvents)
-            pEvents->ReleaseRef();
     }
 
     void SetHRef( const OUString& s ) { sHRef = s; }
@@ -134,13 +127,11 @@ public:
     const OUString& GetVisitedStyleName() const { return sVisitedStyleName; }
     XMLEventsImportContext* GetEventsContext() const
     {
-        return pEvents;
+        return mxEvents.get();
     }
     void SetEventsContext( XMLEventsImportContext* pCtxt )
     {
-        pEvents = pCtxt;
-        if (pEvents != nullptr)
-            pEvents->AddFirstRef();
+        mxEvents.set(pCtxt);
     }
 };
 
