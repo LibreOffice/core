@@ -28,10 +28,6 @@ String STR_SAVEDOC
 {
     Text [ en-US ] = "~Save" ;
 };
-String STR_UPDATEDOC
-{
-    Text [ en-US ] = "~Update" ;
-};
 String STR_SAVEASDOC
 {
     Text [ en-US ] = "Save ~As..." ;
@@ -43,10 +39,6 @@ String STR_SAVEACOPY
 String STR_CLOSEDOC
 {
     Text [ en-US ] = "~Close" ;
-};
-String STR_CLOSEDOC_ANDRETURN
-{
-    Text [ en-US ] = "~Close & Return to " ;
 };
 String STR_OPEN
 {
