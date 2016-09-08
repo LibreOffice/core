@@ -489,15 +489,12 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
 
     // do not wait for events if application was already quit; in that
     // case only dispatch events already available
-    // do not wait for events either if the app decided that it is too busy for timers
-    // (feature added for the slideshow)
-    SalYieldResult eResult =
+    bool bProcessedEvent =
         pSVData->mpDefInst->DoYield(
             i_bWait && !pSVData->maAppData.mbAppQuit,
             i_bAllEvents, nReleased);
 
-    SAL_INFO("vcl.schedule", "DoYield" <<
-             " returns: " << (eResult == SalYieldResult::EVENT ? "processed event" : "timeout"));
+    SAL_INFO("vcl.schedule", "DoYield returns: " << bProcessedEvent );
 
     pSVData->maAppData.mnDispatchLevel--;
 
@@ -506,7 +503,7 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     if (nReleased == 0) // tdf#99383 don't run stuff from ReAcquireSolarMutex
     {
         // Process all Tasks
-        Scheduler::ProcessTaskScheduling(eResult != SalYieldResult::EVENT);
+        bProcessedEvent = Scheduler::ProcessTaskScheduling( i_bWait ) || bProcessedEvent;
     }
 
     // flush lazy deleted objects
@@ -515,7 +512,7 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
 
     SAL_INFO("vcl.schedule", "Leave ImplYield");
 
-    return eResult == SalYieldResult::EVENT;
+    return bProcessedEvent;
 }
 
 void Application::Reschedule( bool i_bAllEvents )
@@ -526,8 +523,8 @@ void Application::Reschedule( bool i_bAllEvents )
 void Scheduler::ProcessEventsToIdle()
 {
     int nSanity = 1000;
-    while(Scheduler::ProcessTaskScheduling( true ) ||
-          ImplYield(false, false, 0))
+    while( Scheduler::ProcessTaskScheduling( true ) ||
+           ImplYield(false, true, 0) )
     {
         if (nSanity-- < 0)
         {
