@@ -341,7 +341,7 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
     }
     if (!matches) {
         for (int i = 0; i < nlangs; i++) {
-            if (strcmp(langs[nlangs].lang, "en_US") == 0) {
+            if (strcmp(langs[i].lang, "en_US") == 0) {
                 langs[i].install = true;
                 matches = true;
                 break;
