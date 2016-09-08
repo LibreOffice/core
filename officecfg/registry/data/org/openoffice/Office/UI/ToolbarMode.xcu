@@ -257,6 +257,32 @@
             <value>Opened</value>
           </prop>
         </node>
+        <node oor:name="Single" oor:op="replace">
+          <prop oor:name="Label">
+            <value>Single toolbar</value>
+          </prop>
+          <prop oor:name="CommandArg">
+            <value>Single</value>
+          </prop>
+          <prop oor:name="MenuPosition">
+            <value>1</value>
+          </prop>
+          <prop oor:name="HasNotebookbar">
+            <value>false</value>
+          </prop>
+          <prop oor:name="Toolbars">
+            <value>
+              <it>private:resource/toolbar/singlemode</it>
+            </value>
+          </prop>
+          <prop oor:name="UserToolbars">
+            <value>
+            </value>
+          </prop>
+          <prop oor:name="Sidebar">
+            <value>Arrow</value>
+          </prop>
+        </node>
         <node oor:name="Notebookbar" oor:op="replace">
           <prop oor:name="Label">
             <value>Notebookbar</value>
