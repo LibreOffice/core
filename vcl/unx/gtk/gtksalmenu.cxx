@@ -421,6 +421,7 @@ GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
     mbNeedsUpdate( false ),
     mbReturnFocusToDocument( false ),
+    mbAddedGrab( false ),
     mpMenuBarContainerWidget( nullptr ),
     mpMenuBarWidget( nullptr ),
     mpCloseButton( nullptr ),
@@ -599,6 +600,11 @@ void GtkSalMenu::ShowCloseButton(bool bShow)
 //focus to the next pane by itself.
 void GtkSalMenu::ReturnFocus()
 {
+    if (mbAddedGrab)
+    {
+        gtk_grab_remove(mpMenuBarWidget);
+        mbAddedGrab = false;
+    }
     if (!mbReturnFocusToDocument)
         gtk_widget_grab_focus(GTK_WIDGET(mpFrame->getEventBox()));
     else
@@ -658,6 +664,8 @@ bool GtkSalMenu::TakeFocus()
 
     //this pairing results in a menubar with keyboard focus with no menus
     //auto-popped down
+    gtk_grab_add(mpMenuBarWidget);
+    mbAddedGrab = true;
     gtk_menu_shell_select_first(GTK_MENU_SHELL(mpMenuBarWidget), false);
     gtk_menu_shell_deselect(GTK_MENU_SHELL(mpMenuBarWidget));
     mbReturnFocusToDocument = true;
