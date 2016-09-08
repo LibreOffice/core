@@ -226,7 +226,7 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
     // tell the style about it's events (if applicable)
     if (mxEventContext.is())
     {
-        // set event suppplier and release reference to context
+        // pass events into event suppplier
         Reference<document::XEventsSupplier> xEventsSupplier(xStyle,UNO_QUERY);
         mxEventContext->SetEvents(xEventsSupplier);
         mxEventContext.clear();
