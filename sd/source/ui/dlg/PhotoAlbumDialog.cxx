@@ -70,6 +70,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pAc
     pRemoveBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, RemoveHdl));
     pRemoveBtn->Disable();
     pImagesLst->SetSelectHdl(LINK(this, SdPhotoAlbumDialog, SelectHdl));
+    pInsTypeCombo->SetSelectHdl(LINK(this, SdPhotoAlbumDialog, TypeSelectHdl));
 
     mpGraphicFilter = new GraphicFilter;
     sDirUrl.clear();
@@ -664,6 +665,16 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
         pImg->SetImage(Image());
     }
     EnableDisableButtons();
+}
+
+IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, TypeSelectHdl, ListBox&, void)
+{
+    // Enable "Fill Slide" only for one image
+    // If we want to have it for other images too, we need to implement the actual cropping.
+    bool const bEnable = pInsTypeCombo->GetSelectEntryPos() == ONE_IMAGE;
+    pASRCheckCrop->Enable(bEnable);
+    if (!bEnable)
+        pASRCheckCrop->Check(false);
 }
 
 Reference< drawing::XDrawPage > SdPhotoAlbumDialog::appendNewSlide(AutoLayout aLayout,
