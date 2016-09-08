@@ -1391,6 +1391,10 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         const bool bUseFormerLineSpacing = rIDSA.get(DocumentSettingId::OLD_LINE_SPACING);
         if( pPrevFrame )
         {
+            const bool bContextualSpacing = pAttrs->GetULSpace().GetContext()
+                                         && lcl_getContextualSpacing(pPrevFrame)
+                                         && lcl_IdenticalStyles(pPrevFrame, &m_rThis);
+
             // OD 2004-03-10 #i11860# - use new method to determine needed spacing
             // values of found previous frame and use these values.
             SwTwips nPrevLowerSpace = 0;
@@ -1402,7 +1406,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                    bPrevLineSpacingPorportional );
             if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) )
             {
-                nUpper = nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
+                nUpper = (bContextualSpacing) ? 0 : nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
                 SwTwips nAdd = nPrevLineSpacing;
                 // OD 07.01.2004 #i11859# - consideration of the line spacing
                 //      for the upper spacing of a text frame
@@ -1445,8 +1449,8 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             }
             else
             {
-                nUpper = std::max( static_cast<long>(nPrevLowerSpace),
-                              static_cast<long>(pAttrs->GetULSpace().GetUpper()) );
+                nUpper = bContextualSpacing ? 0 : std::max(static_cast<long>(nPrevLowerSpace),
+                                                           static_cast<long>(pAttrs->GetULSpace().GetUpper()) );
                 // OD 07.01.2004 #i11859# - consideration of the line spacing
                 //      for the upper spacing of a text frame
                 if ( bUseFormerLineSpacing )
@@ -1510,16 +1514,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     {
         nUpper += GetUpperSpaceAmountConsideredForPageGrid_( nUpper );
     }
-
-    const bool bContextualSpacing = pAttrs->GetULSpace().GetContext();
-
-    if (bContextualSpacing && pPrevFrame && lcl_getContextualSpacing(pPrevFrame)
-            && lcl_IdenticalStyles(pPrevFrame, &m_rThis))
-    {
-        return 0;
-    }
-    else
-        return nUpper;
+    return nUpper;
 }
 
 /** method to detemine the upper space amount, which is considered for
