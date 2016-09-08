@@ -1031,6 +1031,10 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
                 nDelta += nDiff;
             }
 
+            // Hack to make Arabic subtending marks work e.g. in Amiri.
+            if (nNewClusterWidth != nOldClusterWidth && nNewClusterWidth == 0)
+                m_GlyphItems[i].maLinearPos.X() += m_GlyphItems[i].mnXOffset;
+
             nNewPos += nNewClusterWidth;
         }
 
