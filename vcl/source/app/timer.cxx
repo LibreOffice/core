@@ -30,7 +30,7 @@ void Timer::SetDeletionFlags()
         Task::SetDeletionFlags();
 }
 
-bool Timer::ReadyForSchedule( bool /* bIdle */, sal_uInt64 nTimeNow ) const
+bool Timer::ReadyForSchedule( sal_uInt64 nTimeNow ) const
 {
     return (GetSchedulerData()->mnUpdateTime + mnTimeout) <= nTimeNow;
 }

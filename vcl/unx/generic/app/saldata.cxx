@@ -322,7 +322,6 @@ void X11SalData::PopXErrorLevel()
 }
 
 SalXLib::SalXLib()
-    : blockIdleTimeout( false )
 {
     m_aTimeout.tv_sec       = 0;
     m_aTimeout.tv_usec      = 0;
@@ -561,11 +560,11 @@ void X11SalData::XError( Display *pDisplay, XErrorEvent *pEvent )
     m_aXErrorHandlerStack.back().m_bWas = true;
 }
 
-void X11SalData::Timeout( bool idle )
+void X11SalData::Timeout()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maSchedCtx.mpSalTimer )
-        pSVData->maSchedCtx.mpSalTimer->CallCallback( idle );
+        pSVData->maSchedCtx.mpSalTimer->CallCallback();
 }
 
 struct YieldEntry
@@ -644,30 +643,17 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
                 *  timers are being dispatched.
                 */
                 m_aTimeout += m_nTimeoutMS;
-                // Determine if the app is idle (for idle timers). If there's user input pending,
-                // if there's IO pending or if we're called inside a temporary yield (=blockIdleTimeout),
-                // then the app is not idle.
-                bool idle = true;
-                if( blockIdleTimeout || XPending( vcl_sal::getSalDisplay(GetGenericData())->GetDisplay()))
-                    idle = false;
-                for ( int nFD = 0; idle && nFD < nFDs_; nFD++ )
-                {
-                    YieldEntry* pEntry = &(yieldTable[nFD]);
-                    if ( pEntry->fd && pEntry->HasPendingEvent())
-                        idle = false;
-                }
                 // notify
-                X11SalData::Timeout( idle );
+                X11SalData::Timeout();
             }
         }
     }
     return bRet;
 }
 
-SalYieldResult
+bool
 SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
-    blockIdleTimeout = !bWait;
     // check for timeouts here if you want to make screenshots
     static char* p_prioritize_timer = getenv ("SAL_HIGHPRIORITY_REPAINT");
     if (p_prioritize_timer != nullptr)
@@ -687,8 +673,7 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 pEntry->HandleNextEvent();
                 if( ! bHandleAllCurrentEvents )
                 {
-                    blockIdleTimeout = false;
-                    return SalYieldResult::EVENT;
+                    return true;
                 }
             }
         }
@@ -764,8 +749,7 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         // someone-else has done the job for us
         if (nFound == 0)
         {
-            blockIdleTimeout = false;
-            return SalYieldResult::TIMEOUT;
+            return false;
         }
 
         for ( int nFD = 0; nFD < nFDs_; nFD++ )
@@ -793,10 +777,8 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
             }
         }
     }
-    blockIdleTimeout = false;
 
-    return bHandledEvent ? SalYieldResult::EVENT
-                         : SalYieldResult::TIMEOUT;
+    return bHandledEvent;
 }
 
 void SalXLib::Wakeup()

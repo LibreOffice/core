@@ -55,12 +55,11 @@ void Idle::Start()
     Task::StartTimer(nPeriod);
 }
 
-bool Idle::ReadyForSchedule( bool bIdle, sal_uInt64 /* nTimeNow */ ) const
+bool Idle::ReadyForSchedule( sal_uInt64 /* nTimeNow */ ) const
 {
-    // always ready if not only looking for timers.
     ImplSVData *pSVData = ImplGetSVData();
     pSVData->maSchedCtx.mbNeedsReschedule = true;
-    return bIdle;
+    return true;
 }
 
 sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 /* nMinPeriod */, sal_uInt64 /* nTimeNow */ ) const
