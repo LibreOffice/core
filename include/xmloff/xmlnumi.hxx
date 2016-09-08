@@ -33,7 +33,7 @@
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 class SvxXMLListLevelStyleContext_Impl;
-typedef std::vector<SvxXMLListLevelStyleContext_Impl *> SvxXMLListStyle_Impl;
+typedef std::vector<css::uno::Reference<SvxXMLListLevelStyleContext_Impl>> SvxXMLListStyle_Impl;
 
 class XMLOFF_DLLPUBLIC SvxXMLListStyleContext
     : public SvXMLStyleContext
@@ -65,8 +65,6 @@ public:
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
             bool bOutl = false );
-
-    virtual ~SvxXMLListStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,

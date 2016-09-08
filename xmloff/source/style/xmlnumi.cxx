@@ -1033,20 +1033,6 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 {
 }
 
-SvxXMLListStyleContext::~SvxXMLListStyleContext()
-{
-    if( pLevelStyles )
-    {
-        while( !pLevelStyles->empty() )
-        {
-            SvxXMLListLevelStyleContext_Impl *pStyle = pLevelStyles->back();
-            pLevelStyles->pop_back();
-            pStyle->ReleaseRef();
-        }
-    }
-}
-
-
 SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -1061,15 +1047,14 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
                 IsXMLToken( rLocalName, XML_LIST_LEVEL_STYLE_BULLET ) ||
                  IsXMLToken( rLocalName, XML_LIST_LEVEL_STYLE_IMAGE )    ) ) )
     {
-        SvxXMLListLevelStyleContext_Impl *pLevelStyle =
+        uno::Reference<SvxXMLListLevelStyleContext_Impl> xLevelStyle{
             new SvxXMLListLevelStyleContext_Impl( GetImport(), nPrefix,
-                                                  rLocalName, xAttrList );
+                                                  rLocalName, xAttrList )};
         if( !pLevelStyles )
             pLevelStyles = o3tl::make_unique<SvxXMLListStyle_Impl>();
-        pLevelStyles->push_back( pLevelStyle );
-        pLevelStyle->AddFirstRef();
+        pLevelStyles->push_back( xLevelStyle );
 
-        pContext = pLevelStyle;
+        pContext = xLevelStyle.get();
     }
     else
     {
@@ -1091,7 +1076,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
             for( sal_uInt16 i=0; i < nCount; i++ )
             {
                 SvxXMLListLevelStyleContext_Impl *pLevelStyle =
-                    (*pLevelStyles)[i];
+                    (*pLevelStyles)[i].get();
                 sal_Int32 nLevel = pLevelStyle->GetLevel();
                 if( nLevel >= 0 && nLevel < l_nLevels )
                 {
