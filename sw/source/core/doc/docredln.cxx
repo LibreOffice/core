@@ -994,19 +994,13 @@ bool SwRangeRedline::HasValidRange() const
 
 void SwRangeRedline::CallDisplayFunc(size_t nMyPos)
 {
-    switch( RedlineFlags::ShowMask & GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags() )
-    {
-    case RedlineFlags::ShowInsert | RedlineFlags::ShowDelete:
+    RedlineFlags eShow = RedlineFlags::ShowMask & GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
+    if (eShow == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
         Show(0, nMyPos);
-        break;
-    case RedlineFlags::ShowInsert:
+    else if (eShow == RedlineFlags::ShowInsert)
         Hide(0, nMyPos);
-        break;
-    case RedlineFlags::ShowDelete:
+    else if (eShow == RedlineFlags::ShowDelete)
         ShowOriginal(0, nMyPos);
-        break;
-    default: break;
-    }
 }
 
 void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
