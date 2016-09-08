@@ -574,7 +574,7 @@ static void ImplSalDispatchMessage( MSG* pMsg )
         ImplSalPostDispatchMsg( pMsg, lResult );
 }
 
-SalYieldResult
+bool
 ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     MSG aMsg;
@@ -602,13 +602,12 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
             ImplSalDispatchMessage( &aMsg );
         }
     }
-    return bWasMsg ? SalYieldResult::EVENT :
-                     SalYieldResult::TIMEOUT;
+    return bWasMsg;
 }
 
-SalYieldResult WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
-    SalYieldResult eDidWork = SalYieldResult::TIMEOUT;
+    bool bDidWork = false;
     // NOTE: if nReleased != 0 this will be called without SolarMutex
     //       so don't do anything dangerous before releasing it here
     SalYieldMutex*  pYieldMutex = mpSalYieldMutex;
@@ -651,7 +650,7 @@ SalYieldResult WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
     {
         if (nReleased == 0) // tdf#99383 ReAcquireSolarMutex shouldn't Yield
         {
-            eDidWork = ImplSalYield( bWait, bHandleAllCurrentEvents );
+            bDidWork = ImplSalYield( bWait, bHandleAllCurrentEvents );
         }
 
         n = nCount;
@@ -661,7 +660,7 @@ SalYieldResult WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
             n--;
         }
     }
-    return eDidWork;
+    return bDidWork;
 }
 
 LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )

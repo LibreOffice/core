@@ -112,7 +112,7 @@ public:
     static gboolean userEventFn( gpointer data );
 
     void PostUserEvent();
-    SalYieldResult Yield( bool bWait, bool bHandleAllCurrentEvents );
+    bool Yield( bool bWait, bool bHandleAllCurrentEvents );
     inline GdkDisplay *GetGdkDisplay();
 
     virtual void ErrorTrapPush() override;
