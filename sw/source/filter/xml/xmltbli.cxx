@@ -1286,7 +1286,6 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     m_pBoxFormat( nullptr ),
     m_pLineFormat( nullptr ),
     m_pSharedBoxFormats(nullptr),
-    m_pDDESource(nullptr),
     m_bFirstSection( true ),
     m_bRelWidth( true ),
     m_bHasSubTables( false ),
@@ -1429,7 +1428,6 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     m_pLineFormat( nullptr ),
     m_pSharedBoxFormats(nullptr),
     m_xParentTable( pTable ),
-    m_pDDESource(nullptr),
     m_bFirstSection( false ),
     m_bRelWidth( true ),
     m_bHasSubTables( false ),
@@ -1491,14 +1489,9 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
         // save context for later processing (discard old context, if approp.)
         if( IsValid() )
         {
-            if (m_pDDESource != nullptr)
-            {
-                m_pDDESource->ReleaseRef();
-            }
-            m_pDDESource = new SwXMLDDETableContext_Impl( GetSwImport(), nPrefix,
-                                                        rLocalName );
-            m_pDDESource->AddFirstRef();
-            pContext = m_pDDESource;
+            m_xDDESource.set(new SwXMLDDETableContext_Impl( GetSwImport(), nPrefix,
+                                                        rLocalName ));
+            pContext = m_xDDESource.get();
         }
         break;
     }
@@ -2789,15 +2782,15 @@ void SwXMLTableContext::MakeTable()
         rRow->Dispose();
 
     // now that table is complete, change into DDE table (if appropriate)
-    if (nullptr != m_pDDESource)
+    if (m_xDDESource.is())
     {
         // change existing table into DDE table:
         // 1) Get DDE field type (get data from dde-source context),
-        SwDDEFieldType* pFieldType = lcl_GetDDEFieldType( m_pDDESource,
+        SwDDEFieldType* pFieldType = lcl_GetDDEFieldType( m_xDDESource.get(),
                                                         m_pTableNode );
 
         // 2) release the DDE source context,
-        m_pDDESource->ReleaseRef();
+        m_xDDESource.set(nullptr);
 
         // 3) create new DDE table, and
         SwDDETable* pDDETable = new SwDDETable( m_pTableNode->GetTable(),
