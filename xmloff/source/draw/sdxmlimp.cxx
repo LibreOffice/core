@@ -416,7 +416,7 @@ const SvXMLTokenMap& SdXMLImport::GetDocElemTokenMap()
 };
 
         mpDocElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aDocElemTokenMap);
-    } // if(!mpDocElemTokenMap)
+    }
 
     return *mpDocElemTokenMap;
 }
@@ -437,7 +437,7 @@ const SvXMLTokenMap& SdXMLImport::GetBodyElemTokenMap()
 };
 
         mpBodyElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aBodyElemTokenMap);
-    } // if(!mpBodyElemTokenMap)
+    }
 
     return *mpBodyElemTokenMap;
 }
@@ -455,7 +455,7 @@ const SvXMLTokenMap& SdXMLImport::GetStylesElemTokenMap()
 };
 
         mpStylesElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aStylesElemTokenMap);
-    } // if(!mpStylesElemTokenMap)
+    }
 
     return *mpStylesElemTokenMap;
 }
@@ -472,7 +472,7 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageElemTokenMap()
 };
 
         mpMasterPageElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aMasterPageElemTokenMap);
-    } // if(!mpMasterPageElemTokenMap)
+    }
 
     return *mpMasterPageElemTokenMap;
 }
@@ -495,7 +495,7 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageAttrTokenMap()
 };
 
         mpMasterPageAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(aMasterPageAttrTokenMap);
-    } // if(!mpMasterPageAttrTokenMap)
+    }
 
     return *mpMasterPageAttrTokenMap;
 }
@@ -511,7 +511,7 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterAttrTokenMap()
 };
 
         mpPageMasterAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(aPageMasterAttrTokenMap);
-    } // if(!mpPageMasterAttrTokenMap)
+    }
 
     return *mpPageMasterAttrTokenMap;
 }
@@ -533,7 +533,7 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterStyleAttrTokenMap()
 };
 
         mpPageMasterStyleAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(aPageMasterStyleAttrTokenMap);
-    } // if(!mpPageMasterStyleAttrTokenMap)
+    }
 
     return *mpPageMasterStyleAttrTokenMap;
 }
@@ -559,7 +559,7 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageAttrTokenMap()
 };
 
         mpDrawPageAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(aDrawPageAttrTokenMap);
-    } // if(!mpDrawPageAttrTokenMap)
+    }
 
     return *mpDrawPageAttrTokenMap;
 }
@@ -577,7 +577,7 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageElemTokenMap()
 };
 
         mpDrawPageElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aDrawPageElemTokenMap);
-    } // if(!mpDrawPageElemTokenMap)
+    }
 
     return *mpDrawPageElemTokenMap;
 }
@@ -597,7 +597,7 @@ const SvXMLTokenMap& SdXMLImport::GetPresentationPlaceholderAttrTokenMap()
 };
 
         mpPresentationPlaceholderAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(aPresentationPlaceholderAttrTokenMap);
-    } // if(!mpPresentationPlaceholderAttrTokenMap)
+    }
 
     return *mpPresentationPlaceholderAttrTokenMap;
 }
