@@ -258,6 +258,36 @@
             <menu:menuitem menu:id=".uno:InsertCurrentDate"/>
             <menu:menuitem menu:id=".uno:InsertCurrentTime"/>
             <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:InsertFormMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:Edit"/>
+                    <menu:menuitem menu:id=".uno:CheckBox"/>
+                    <menu:menuitem menu:id=".uno:RadioButton"/>
+                    <menu:menuitem menu:id=".uno:ListBox"/>
+                    <menu:menuitem menu:id=".uno:ComboBox"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:Pushbutton"/>
+                    <menu:menuitem menu:id=".uno:Imagebutton"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:Label"/>
+                    <menu:menuitem menu:id=".uno:SpinButton"/>
+                    <menu:menuitem menu:id=".uno:ImageControl"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:FormattedField"/>
+                    <menu:menuitem menu:id=".uno:DateField"/>
+                    <menu:menuitem menu:id=".uno:TimeField"/>
+                    <menu:menuitem menu:id=".uno:NumericField"/>
+                    <menu:menuitem menu:id=".uno:CurrencyField"/>
+                    <menu:menuitem menu:id=".uno:PatternField"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:FileControl"/>
+                    <menu:menuitem menu:id=".uno:GroupBox"/>
+                    <menu:menuitem menu:id=".uno:Grid"/>
+                    <menu:menuitem menu:id=".uno:NavigationBar"/>
+                    <menu:menuitem menu:id=".uno:ScrollBar"/>
+                </menu:menupopup>
+            </menu:menu>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:FormatMenu">
@@ -494,6 +524,7 @@
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:AddName"/>
                     <menu:menuitem menu:id=".uno:DefineName"/>
+                    <menu:menuitem menu:id=".uno:SheetInsertName"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:CreateNames"/>
                     <menu:menuitem menu:id=".uno:DefineLabelRange"/>
