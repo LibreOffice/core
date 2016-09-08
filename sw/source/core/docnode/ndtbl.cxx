@@ -2709,7 +2709,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
 }
 
 void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
-                        const SwCursor* pCursor, const SwCellFrame* pBoxFrame )
+                        const SwCellFrame* pBoxFrame )
 {
     const SwTableBox* pBox = nullptr;
     SwTabFrame *pTab = nullptr;
@@ -2719,29 +2719,9 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
         pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
         pBox = pBoxFrame->GetTabBox();
     }
-    else if( pCursor )
+    else
     {
-        const SwContentNode* pCNd = pCursor->GetContentNode();
-        if( !pCNd )
-            return ;
-
-        Point aPt;
-        const SwShellCursor *pShCursor = dynamic_cast<const SwShellCursor*>(pCursor);
-        if( pShCursor )
-            aPt = pShCursor->GetPtPos();
-
-        const SwFrame* pTmpFrame = pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
-        do {
-            pTmpFrame = pTmpFrame->GetUpper();
-        } while ( !pTmpFrame->IsCellFrame() );
-
-        pBoxFrame = static_cast<const SwCellFrame*>(pTmpFrame);
-        pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
-        pBox = pBoxFrame->GetTabBox();
-    }
-    else if( !pCursor && !pBoxFrame )
-    {
-        OSL_ENSURE( false, "One of them needs to be specified!" );
+        OSL_ENSURE( false, "must specify pBoxFrame" );
         return ;
     }
 
@@ -2784,7 +2764,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     SetTabCols(rTab, rNew, aOld, pBox, bCurRowOnly );
 }
 
-void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor*,
+void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
                         const SwCellFrame* pBoxFrame )
 {
     SwTabFrame *pTab;
@@ -4635,7 +4615,7 @@ SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName, bool bBroadcast)
     return pTableFormat;
 }
 
-std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, bool bBroadcast, std::vector<SwTable*>* pAffectedTables)
+std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, bool bBroadcast)
 {
     if (bBroadcast)
         BroadcastStyleOperation(rName, SfxStyleFamily::Table, SfxStyleSheetHintId::ERASED);
@@ -4667,8 +4647,6 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, b
         }
     }
 
-    if (pAffectedTables)
-        *pAffectedTables = vAffectedTables;
     return pReleasedFormat;
 }
 

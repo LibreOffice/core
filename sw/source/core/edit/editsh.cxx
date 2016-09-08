@@ -283,10 +283,10 @@ bool SwEditShell::GetGrfSize(Size& rSz) const
 
 /// Read again if graphic is not OK and replace old one
 void SwEditShell::ReRead( const OUString& rGrfName, const OUString& rFltName,
-                    const Graphic* pGraphic, const GraphicObject* pGrfObj )
+                    const Graphic* pGraphic )
 {
     StartAllAction();
-    mpDoc->getIDocumentContentOperations().ReRead( *GetCursor(), rGrfName, rFltName, pGraphic, pGrfObj );
+    mpDoc->getIDocumentContentOperations().ReRead( *GetCursor(), rGrfName, rFltName, pGraphic, nullptr );
     EndAllAction();
 }
 

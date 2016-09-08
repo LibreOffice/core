@@ -550,7 +550,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
         case DBMGR_MERGE_FILE:
         case DBMGR_MERGE_SHELL:
             // save files and send them as e-Mail if required
-            bRet = MergeMailFiles(pWorkShell, rMergeDesc, nullptr);
+            bRet = MergeMailFiles(pWorkShell, rMergeDesc);
             break;
 
         default:
@@ -1085,8 +1085,7 @@ uno::Reference< mail::XMailMessage > lcl_CreateMailFromDoc(
  * larger changes in this function!
  */
 bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
-                                 const SwMergeDescriptor& rMergeDescriptor,
-                                 vcl::Window* pParent)
+                                 const SwMergeDescriptor& rMergeDescriptor)
 {
     // deconstruct mail merge type for better readability.
     // uppercase naming is intentional!
@@ -1213,8 +1212,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     {
         // construct the process dialog
         pSourceWindow = &pSourceShell->GetView().GetEditWin();
-        if( !pParent )
-            pParent = pSourceWindow;
+        vcl::Window* pParent = pSourceWindow;
         if( !bMT_PRINTER )
             pProgressDlg = VclPtr<CreateMonitor>::Create(
                 pParent, pParent != pSourceWindow );

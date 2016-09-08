@@ -48,7 +48,7 @@ class SW_DLLPUBLIC SwCondCollItem : public SfxPoolItem
     OUString                    m_sStyles[COND_COMMAND_COUNT];
 
 public:
-    SwCondCollItem(sal_uInt16 nWhich = FN_COND_COLL);
+    SwCondCollItem();
     virtual ~SwCondCollItem();
 
 

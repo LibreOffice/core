@@ -1027,41 +1027,16 @@ void SwCursorShell::KillPams()
     UpdateCursor( SwCursorShell::SCROLLWIN );
 }
 
-int SwCursorShell::CompareCursor( CursorCompareType eType ) const
+int SwCursorShell::CompareCursorStackMkCurrPt() const
 {
     int nRet = 0;
     const SwPosition *pFirst = nullptr, *pSecond = nullptr;
     const SwPaM *pCur = GetCursor(), *pStack = m_pCursorStack;
     // cursor on stack is needed if we compare against stack
-    if( pStack || ( eType == CurrPtCurrMk ) )
+    if( pStack  )
     {
-        switch ( eType)
-        {
-        case StackPtStackMk:
-            pFirst = pStack->GetPoint();
-            pSecond = pStack->GetMark();
-            break;
-        case StackPtCurrPt:
-            pFirst = pStack->GetPoint();
-            pSecond = pCur->GetPoint();
-            break;
-        case StackPtCurrMk:
-            pFirst = pStack->GetPoint();
-            pSecond = pCur->GetMark();
-            break;
-        case StackMkCurrPt:
-            pFirst = pStack->GetMark();
-            pSecond = pCur->GetPoint();
-            break;
-        case StackMkCurrMk:
-            pFirst = pStack->GetMark();
-            pSecond = pStack->GetMark();
-            break;
-        case CurrPtCurrMk:
-            pFirst = pCur->GetPoint();
-            pSecond = pCur->GetMark();
-            break;
-        }
+        pFirst = pStack->GetMark();
+        pSecond = pCur->GetPoint();
     }
     if( !pFirst || !pSecond )
         nRet = INT_MAX;

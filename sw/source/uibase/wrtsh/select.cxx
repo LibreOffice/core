@@ -438,7 +438,7 @@ long SwWrtShell::ExtSelWrd(const Point *pPt, bool )
     SwCursorShell::Push();                    // save the cursor
     SwCursorShell::SetCursor( *pPt );           // and check the direction
 
-    switch( SwCursorShell::CompareCursor( StackMkCurrPt ))
+    switch( SwCursorShell::CompareCursorStackMkCurrPt())
     {
     case -1:    bToTop = false;     break;
     case 1:     bToTop = true;      break;

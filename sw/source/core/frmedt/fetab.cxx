@@ -650,7 +650,7 @@ void SwFEShell::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly )
         pBox = pBox->GetUpper();
     } while ( !pBox->IsCellFrame() );
 
-    GetDoc()->SetTabCols( rNew, bCurRowOnly, nullptr, static_cast<SwCellFrame*>(pBox) );
+    GetDoc()->SetTabCols( rNew, bCurRowOnly, static_cast<SwCellFrame*>(pBox) );
     EndAllActionAndCall();
 }
 
@@ -691,7 +691,7 @@ void SwFEShell::SetTabRows( const SwTabCols &rNew, bool bCurColOnly )
         pBox = pBox->GetUpper();
     } while ( !pBox->IsCellFrame() );
 
-    GetDoc()->SetTabRows( rNew, bCurColOnly, nullptr, static_cast<SwCellFrame*>(pBox) );
+    GetDoc()->SetTabRows( rNew, bCurColOnly, static_cast<SwCellFrame*>(pBox) );
     EndAllActionAndCall();
 }
 
@@ -709,7 +709,7 @@ void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, bool bCurColOnly, const 
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        GetDoc()->SetTabRows( rNew, bCurColOnly, nullptr, static_cast<const SwCellFrame*>(pBox) );
+        GetDoc()->SetTabRows( rNew, bCurColOnly, static_cast<const SwCellFrame*>(pBox) );
         EndAllActionAndCall();
     }
 }
@@ -2048,7 +2048,7 @@ void SwFEShell::SetMouseTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        GetDoc()->SetTabCols( rNew, bCurRowOnly, nullptr, static_cast<const SwCellFrame*>(pBox) );
+        GetDoc()->SetTabCols( rNew, bCurRowOnly, static_cast<const SwCellFrame*>(pBox) );
         EndAllActionAndCall();
     }
 }

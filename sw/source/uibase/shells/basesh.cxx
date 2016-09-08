@@ -893,7 +893,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.TableToText( cDelim );
                 else
                 {
-                    bInserted = rSh.TextToTable( aInsTableOpts, cDelim, text::HoriOrientation::FULL, pTAFormat );
+                    bInserted = rSh.TextToTable( aInsTableOpts, cDelim, pTAFormat );
                 }
                 rSh.EnterStdMode();
 
@@ -2684,7 +2684,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 if( rSh.HasSelection() )
                     rSh.DelRight();
 
-                rSh.InsertTable( aInsTableOpts, nRows, nCols, text::HoriOrientation::FULL, pTAFormat );
+                rSh.InsertTable( aInsTableOpts, nRows, nCols, pTAFormat );
                 rSh.MoveTable( GotoPrevTable, fnTableStart );
 
                 if( !aTableName.isEmpty() && !rSh.GetTableStyle( aTableName ) )

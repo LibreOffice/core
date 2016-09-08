@@ -1035,7 +1035,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         bool bHTML = 0 != (::GetHtmlMode( pView->GetDocShell() ) & HTMLMODE_ON);
         rSh.InsertTable(
             pModOpt->GetInsTableFlags(bHTML),
-            nRows, nCols, text::HoriOrientation::FULL, (pSelection ? pTAutoFormat : nullptr) );
+            nRows, nCols, (pSelection ? pTAutoFormat : nullptr) );
         rSh.MoveTable( GotoPrevTable, fnTableStart );
 
         if( pSelection && pTableSet )

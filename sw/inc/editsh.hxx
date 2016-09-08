@@ -626,8 +626,7 @@ public:
 
     /// Re-read if graphic is not ok. Current graphic is replaced by the new one.
     void ReRead( const OUString& rGrfName, const OUString& rFltName,
-                  const Graphic* pGraphic = nullptr,
-                  const GraphicObject* pGrafObj = nullptr );
+                  const Graphic* pGraphic = nullptr );
 
     /// Unique identification of object (for ImageMapDlg).
     void    *GetIMapInventor() const;
@@ -685,7 +684,6 @@ public:
 
     const SwTable& InsertTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
                                 sal_uInt16 nRows, sal_uInt16 nCols,
-                                sal_Int16 eAdj = css::text::HoriOrientation::FULL,
                                 const SwTableAutoFormat* pTAFormat = nullptr );
 
     void InsertDDETable( const SwInsertTableOptions& rInsTableOpts,  ///< HEADLINE_NO_BORDER
@@ -698,7 +696,6 @@ public:
     SwFrameFormat *GetTableFormat();
     bool TextToTable( const SwInsertTableOptions& rInsTableOpts,  ///< ALL_TBL_INS_ATTR
                       sal_Unicode cCh,
-                      sal_Int16 eAdj = css::text::HoriOrientation::FULL,
                       const SwTableAutoFormat* pTAFormat = nullptr );
     bool TableToText( sal_Unicode cCh );
     bool IsTextToTableAvailable() const;

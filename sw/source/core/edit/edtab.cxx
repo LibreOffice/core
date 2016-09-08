@@ -92,7 +92,6 @@ bool ConvertTableToText( const SwTableNode *pConstTableNode, sal_Unicode cCh )
 
 const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTableOpts,
                                          sal_uInt16 nRows, sal_uInt16 nCols,
-                                         sal_Int16 eAdj,
                                          const SwTableAutoFormat* pTAFormat )
 {
     StartAllAction();
@@ -109,7 +108,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTableOp
     // from pPos to the new content nodes in the table.
     const SwTable *pTable = GetDoc()->InsertTable( rInsTableOpts, *pPos,
                                                    nRows, nCols,
-                                                   eAdj, pTAFormat,
+                                                   css::text::HoriOrientation::FULL, pTAFormat,
                                                    nullptr, true );
     if( bEndUndo )
         EndUndo( UNDO_END );
@@ -120,7 +119,6 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTableOp
 
 bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                                sal_Unicode cCh,
-                               sal_Int16 eAdj,
                                const SwTableAutoFormat* pTAFormat )
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );
@@ -130,7 +128,7 @@ bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     {
         if( rPaM.HasMark() )
             bRet |= nullptr != GetDoc()->TextToTable( rInsTableOpts, rPaM, cCh,
-                                                eAdj, pTAFormat );
+                                                css::text::HoriOrientation::FULL, pTAFormat );
     }
     EndAllAction();
     return bRet;

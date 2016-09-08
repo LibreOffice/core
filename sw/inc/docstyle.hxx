@@ -77,8 +77,7 @@ protected:
 public:
     SwDocStyleSheet( SwDoc&                 rDoc,
                      const OUString&        rName,
-                     SwDocStyleSheetPool*   pPool,
-                     SfxStyleFamily         eFam);
+                     SwDocStyleSheetPool*   pPool);
 
     SwDocStyleSheet( const SwDocStyleSheet& );
 

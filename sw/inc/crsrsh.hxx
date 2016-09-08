@@ -271,18 +271,9 @@ protected:
 
     /*
      * Compare-Methode for the StackCursor and the current Cursor.
-     * The Methods return -1, 0, 1 for lower, equal, greater. The enum
-     * CursorCompareType says which position is compared.
+     * The Methods return -1, 0, 1 for lower, equal, greater.
      */
-    enum CursorCompareType {
-        StackPtStackMk,
-        StackPtCurrPt,
-        StackPtCurrMk,
-        StackMkCurrPt,
-        StackMkCurrMk,
-        CurrPtCurrMk
-    };
-    int CompareCursor( CursorCompareType eType ) const;
+    int CompareCursorStackMkCurrPt() const;
 
     bool SelTableRowOrCol( bool bRow, bool bRowSimple = false );
 

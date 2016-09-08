@@ -1574,7 +1574,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, bool bBalance )
     const sal_Int16 nOriHori = pFormat->GetHoriOrient().GetHoriOrient();
 
     // We can leave the "real" work to the SwTable now
-    SetTabCols( aTabCols, false, nullptr, static_cast<SwCellFrame*>(pBoxFrame) );
+    SetTabCols( aTabCols, false, static_cast<SwCellFrame*>(pBoxFrame) );
 
     // Alignment might have been changed in SetTabCols; restore old value
     const SwFormatHoriOrient &rHori = pFormat->GetHoriOrient();

@@ -1223,11 +1223,11 @@ public:
     static void GetTabCols( SwTabCols &rFill, const SwCursor* pCursor,
                     const SwCellFrame* pBoxFrame );
     void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
-                    const SwCursor* pCursor, const SwCellFrame* pBoxFrame );
+                    const SwCellFrame* pBoxFrame );
     static void GetTabRows( SwTabCols &rFill, const SwCursor* pCursor,
                     const SwCellFrame* pBoxFrame );
-    void SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor* pCursor,
-                     const SwCellFrame* pBoxFrame );
+    void SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
+                    const SwCellFrame* pBoxFrame );
 
     // Direct access for UNO.
     void SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rOld,
@@ -1247,8 +1247,8 @@ public:
     const SwTableAutoFormatTable& GetTableStyles() const { return *mpTableStyles.get(); }
     // Create a new table style. Tracked by Undo.
     SwTableAutoFormat* MakeTableStyle(const OUString& rName, bool bBroadcast = false);
-    // Delete table style named rName. If pAffectedTables is not null, it contains pointers to affected tables. Tracked by undo.
-    std::unique_ptr<SwTableAutoFormat> DelTableStyle(const OUString& rName, bool bBroadcast = false, std::vector<SwTable*>* pAffectedTables = nullptr);
+    // Delete table style named rName. Tracked by undo.
+    std::unique_ptr<SwTableAutoFormat> DelTableStyle(const OUString& rName, bool bBroadcast = false);
     // Change (replace) a table style named rName. Tracked by undo.
     void ChgTableStyle(const OUString& rName, const SwTableAutoFormat& rNewFormat);
 

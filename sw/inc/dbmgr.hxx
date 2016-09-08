@@ -256,8 +256,7 @@ friend class SwConnectionDisposedListener_Impl;
 
     /// Run the mail merge for defined modes, except DBMGR_MERGE
     SAL_DLLPRIVATE bool MergeMailFiles( SwWrtShell* pSh,
-                                        const SwMergeDescriptor& rMergeDescriptor,
-                                        vcl::Window* pParent );
+                                        const SwMergeDescriptor& rMergeDescriptor );
 
     SAL_DLLPRIVATE bool ToNextMergeRecord();
     SAL_DLLPRIVATE bool IsValidMergeRecord() const;
