@@ -40,31 +40,6 @@ Menu MODIFY_TOOLBAR
             Identifier = ID_DELETE ;
             TEXT_DELETE_NODOTS
         };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = ID_ICONS_ONLY ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-            Text [ en-US ] = "Icons Only" ;
-        };
-        MenuItem
-        {
-            Identifier = ID_TEXT_ONLY ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-            Text [ en-US ] = "Text only" ;
-        };
-        MenuItem
-        {
-            Identifier = ID_ICONS_AND_TEXT ;
-            RadioCheck = TRUE ;
-            AutoCheck = TRUE ;
-            Text [ en-US ] = "Icons & Text" ;
-        };
     };
 };
 
@@ -81,10 +56,6 @@ Menu MODIFY_TOOLBAR_CONTENT
         {
             Identifier = ID_DEFAULT_COMMAND ;
             Text [ en-US ] = "Restore Default Command" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
         };
         MenuItem
         {
