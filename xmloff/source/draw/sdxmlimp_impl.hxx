@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <map>
+#include <memory>
 #include <vector>
 #include <xmloff/xmlimp.hxx>
 
@@ -170,16 +171,16 @@ class SdXMLImport: public SvXMLImport
     css::uno::Reference<SdXMLMasterStylesContext> mxMasterStylesContext;
 
     // token map lists
-    SvXMLTokenMap*              mpDocElemTokenMap;
-    SvXMLTokenMap*              mpBodyElemTokenMap;
-    SvXMLTokenMap*              mpStylesElemTokenMap;
-    SvXMLTokenMap*              mpMasterPageElemTokenMap;
-    SvXMLTokenMap*              mpMasterPageAttrTokenMap;
-    SvXMLTokenMap*              mpPageMasterAttrTokenMap;
-    SvXMLTokenMap*              mpPageMasterStyleAttrTokenMap;
-    SvXMLTokenMap*              mpDrawPageAttrTokenMap;
-    SvXMLTokenMap*              mpDrawPageElemTokenMap;
-    SvXMLTokenMap*              mpPresentationPlaceholderAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpDocElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpBodyElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpStylesElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpMasterPageElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpMasterPageAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpPageMasterAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpPageMasterStyleAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpDrawPageAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpDrawPageElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpPresentationPlaceholderAttrTokenMap;
 
     sal_Int32                   mnNewPageCount;
     sal_Int32                   mnNewMasterPageCount;
@@ -207,7 +208,6 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         bool bIsDraw, SvXMLImportFlags nImportFlags );
-    virtual ~SdXMLImport() throw ();
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;

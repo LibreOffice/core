@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/make_unique.hxx>
 #include <osl/thread.h>
 #include <comphelper/processfactory.hxx>
 
@@ -283,16 +284,6 @@ SdXMLImport::SdXMLImport(
     OUString const & implementationName,
     bool bIsDraw, SvXMLImportFlags nImportFlags )
 :   SvXMLImport( xContext, implementationName, nImportFlags ),
-    mpDocElemTokenMap(nullptr),
-    mpBodyElemTokenMap(nullptr),
-    mpStylesElemTokenMap(nullptr),
-    mpMasterPageElemTokenMap(nullptr),
-    mpMasterPageAttrTokenMap(nullptr),
-    mpPageMasterAttrTokenMap(nullptr),
-    mpPageMasterStyleAttrTokenMap(nullptr),
-    mpDrawPageAttrTokenMap(nullptr),
-    mpDrawPageElemTokenMap(nullptr),
-    mpPresentationPlaceholderAttrTokenMap(nullptr),
     mnNewPageCount(0L),
     mnNewMasterPageCount(0L),
     mbIsDraw(bIsDraw),
@@ -407,21 +398,6 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     }
 }
 
-SdXMLImport::~SdXMLImport() throw ()
-{
-    // delete all token maps
-    delete mpDocElemTokenMap;
-    delete mpBodyElemTokenMap;
-    delete mpStylesElemTokenMap;
-    delete mpMasterPageElemTokenMap;
-    delete mpMasterPageAttrTokenMap;
-    delete mpPageMasterAttrTokenMap;
-    delete mpPageMasterStyleAttrTokenMap;
-    delete mpDrawPageAttrTokenMap;
-    delete mpDrawPageElemTokenMap;
-    delete mpPresentationPlaceholderAttrTokenMap;
-}
-
 const SvXMLTokenMap& SdXMLImport::GetDocElemTokenMap()
 {
     if(!mpDocElemTokenMap)
@@ -439,7 +415,7 @@ const SvXMLTokenMap& SdXMLImport::GetDocElemTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpDocElemTokenMap = new SvXMLTokenMap(aDocElemTokenMap);
+        mpDocElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aDocElemTokenMap);
     } // if(!mpDocElemTokenMap)
 
     return *mpDocElemTokenMap;
@@ -460,7 +436,7 @@ const SvXMLTokenMap& SdXMLImport::GetBodyElemTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpBodyElemTokenMap = new SvXMLTokenMap(aBodyElemTokenMap);
+        mpBodyElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aBodyElemTokenMap);
     } // if(!mpBodyElemTokenMap)
 
     return *mpBodyElemTokenMap;
@@ -478,7 +454,7 @@ const SvXMLTokenMap& SdXMLImport::GetStylesElemTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpStylesElemTokenMap = new SvXMLTokenMap(aStylesElemTokenMap);
+        mpStylesElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aStylesElemTokenMap);
     } // if(!mpStylesElemTokenMap)
 
     return *mpStylesElemTokenMap;
@@ -495,7 +471,7 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageElemTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpMasterPageElemTokenMap = new SvXMLTokenMap(aMasterPageElemTokenMap);
+        mpMasterPageElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aMasterPageElemTokenMap);
     } // if(!mpMasterPageElemTokenMap)
 
     return *mpMasterPageElemTokenMap;
@@ -518,7 +494,7 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageAttrTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpMasterPageAttrTokenMap = new SvXMLTokenMap(aMasterPageAttrTokenMap);
+        mpMasterPageAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(aMasterPageAttrTokenMap);
     } // if(!mpMasterPageAttrTokenMap)
 
     return *mpMasterPageAttrTokenMap;
@@ -534,7 +510,7 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterAttrTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpPageMasterAttrTokenMap = new SvXMLTokenMap(aPageMasterAttrTokenMap);
+        mpPageMasterAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(aPageMasterAttrTokenMap);
     } // if(!mpPageMasterAttrTokenMap)
 
     return *mpPageMasterAttrTokenMap;
@@ -556,7 +532,7 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterStyleAttrTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpPageMasterStyleAttrTokenMap = new SvXMLTokenMap(aPageMasterStyleAttrTokenMap);
+        mpPageMasterStyleAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(aPageMasterStyleAttrTokenMap);
     } // if(!mpPageMasterStyleAttrTokenMap)
 
     return *mpPageMasterStyleAttrTokenMap;
@@ -582,7 +558,7 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageAttrTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpDrawPageAttrTokenMap = new SvXMLTokenMap(aDrawPageAttrTokenMap);
+        mpDrawPageAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(aDrawPageAttrTokenMap);
     } // if(!mpDrawPageAttrTokenMap)
 
     return *mpDrawPageAttrTokenMap;
@@ -600,7 +576,7 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageElemTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpDrawPageElemTokenMap = new SvXMLTokenMap(aDrawPageElemTokenMap);
+        mpDrawPageElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aDrawPageElemTokenMap);
     } // if(!mpDrawPageElemTokenMap)
 
     return *mpDrawPageElemTokenMap;
@@ -620,7 +596,7 @@ const SvXMLTokenMap& SdXMLImport::GetPresentationPlaceholderAttrTokenMap()
     XML_TOKEN_MAP_END
 };
 
-        mpPresentationPlaceholderAttrTokenMap = new SvXMLTokenMap(aPresentationPlaceholderAttrTokenMap);
+        mpPresentationPlaceholderAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(aPresentationPlaceholderAttrTokenMap);
     } // if(!mpPresentationPlaceholderAttrTokenMap)
 
     return *mpPresentationPlaceholderAttrTokenMap;
