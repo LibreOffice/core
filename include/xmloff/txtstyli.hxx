@@ -53,7 +53,7 @@ private:
     // Introduce import of empty list style (#i69523#)
     bool        mbListStyleSet : 1;
 
-    XMLEventsImportContext* pEventContext;
+    css::uno::Reference<XMLEventsImportContext> mxEventContext;
 
 protected:
 
@@ -69,7 +69,6 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
             bool bDefaultStyle = false );
-    virtual ~XMLTextStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,

@@ -146,11 +146,6 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 ,   bHasCombinedCharactersLetter( false )
 // Inherited paragraph style lost information about unset numbering (#i69523#)
 ,   mbListStyleSet( false )
-,   pEventContext( nullptr )
-{
-}
-
-XMLTextStyleContext::~XMLTextStyleContext()
 {
 }
 
@@ -192,10 +187,9 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
     {
         // create and remember events import context
         // (for delayed processing of events)
-        pEventContext = new XMLEventsImportContext( GetImport(), nPrefix,
-                                                   rLocalName);
-        pEventContext->AddFirstRef();
-        pContext = pEventContext;
+        mxEventContext.set(new XMLEventsImportContext( GetImport(), nPrefix,
+                                                   rLocalName));
+        pContext = mxEventContext.get();
     }
 
     if( !pContext )
@@ -230,12 +224,12 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
     }
 
     // tell the style about it's events (if applicable)
-    if (nullptr != pEventContext)
+    if (mxEventContext.is())
     {
         // set event suppplier and release reference to context
         Reference<document::XEventsSupplier> xEventsSupplier(xStyle,UNO_QUERY);
-        pEventContext->SetEvents(xEventsSupplier);
-        pEventContext->ReleaseRef();
+        mxEventContext->SetEvents(xEventsSupplier);
+        mxEventContext.clear();
     }
 
     // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
