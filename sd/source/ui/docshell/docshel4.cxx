@@ -993,7 +993,7 @@ bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
             aLayoutName = aURL.getName();
         }
 
-        if (!aLayoutName.isEmpty())
+        if (aLayoutName.isEmpty())
         {
             sal_uInt32 nCount = mpDoc->GetMasterSdPageCount(PK_STANDARD);
             for (sal_uInt32 i = 0; i < nCount; ++i)
