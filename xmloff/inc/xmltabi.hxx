@@ -20,6 +20,8 @@
 #ifndef INCLUDED_XMLOFF_INC_XMLTABI_HXX
 #define INCLUDED_XMLOFF_INC_XMLTABI_HXX
 
+#include <memory>
+
 #include "XMLElementPropertyContext.hxx"
 
 class SvXMLImport;
@@ -30,7 +32,7 @@ typedef std::vector<css::uno::Reference<SvxXMLTabStopContext_Impl>> SvxXMLTabSto
 class SvxXMLTabStopImportContext : public XMLElementPropertyContext
 {
 private:
-    SvxXMLTabStopArray_Impl*    mpTabStops;
+    std::unique_ptr<SvxXMLTabStopArray_Impl> mpTabStops;
 
 public:
 
@@ -38,8 +40,6 @@ public:
                                 const OUString& rLName,
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps );
-
-    virtual ~SvxXMLTabStopImportContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
