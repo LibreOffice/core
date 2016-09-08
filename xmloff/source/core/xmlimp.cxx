@@ -448,11 +448,6 @@ SvXMLImport::SvXMLImport(
 SvXMLImport::~SvXMLImport() throw ()
 {
     delete mpNamespaceMap;
-    for ( SvXMLImportContext *pContext : maContexts )
-    {
-        if( pContext )
-            pContext->ReleaseRef();
-    }
 
     if (mxEventListener.is() && mxModel.is())
         mxModel->removeEventListener(mxEventListener);
@@ -733,21 +728,21 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 
     // If there are contexts already, call a CreateChildContext at the topmost
     // context. Otherwise, create a default context.
-    SvXMLImportContext *pContext;
+    SvXMLImportContextRef xContext;
     sal_uInt16 nCount = maContexts.size();
     if( nCount > 0 )
     {
-        pContext = maContexts[nCount - 1]->CreateChildContext( nPrefix,
+        xContext.set(maContexts[nCount - 1]->CreateChildContext( nPrefix,
                                                                  aLocalName,
-                                                                 xAttrList );
-        SAL_WARN_IF( !pContext || (pContext->GetPrefix() != nPrefix), "xmloff.core",
+                                                                 xAttrList ));
+        SAL_WARN_IF( !xContext.is() || (xContext->GetPrefix() != nPrefix), "xmloff.core",
                 "SvXMLImport::startElement: created context has wrong prefix" );
     }
     else
     {
-        pContext = CreateContext( nPrefix, aLocalName, xAttrList );
+        xContext.set(CreateContext( nPrefix, aLocalName, xAttrList ));
         if( (nPrefix & XML_NAMESPACE_UNKNOWN_FLAG) != 0 &&
-            dynamic_cast< const SvXMLImportContext*>(pContext ) !=  nullptr )
+            dynamic_cast< const SvXMLImportContext*>(xContext.get()) !=  nullptr )
         {
             OUString aMsg( "Root element unknown" );
             Reference<xml::sax::XLocator> xDummyLocator;
@@ -758,21 +753,19 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         }
     }
 
-    SAL_WARN_IF( !pContext, "xmloff.core", "SvXMLImport::startElement: missing context" );
-    if( !pContext )
-        pContext = new SvXMLImportContext( *this, nPrefix, aLocalName );
-
-    pContext->AddFirstRef();
+    SAL_WARN_IF( !xContext.is(), "xmloff.core", "SvXMLImport::startElement: missing context" );
+    if( !xContext.is() )
+        xContext.set(new SvXMLImportContext( *this, nPrefix, aLocalName ));
 
     // Remember old namespace map.
     if( pRewindMap )
-        pContext->PutRewindMap( pRewindMap );
+        xContext->PutRewindMap( pRewindMap );
 
     // Call a startElement at the new context.
-    pContext->StartElement( xAttrList );
+    xContext->StartElement( xAttrList );
 
     // Push context on stack.
-    maContexts.push_back( pContext );
+    maContexts.push_back( xContext );
 }
 
 void SAL_CALL SvXMLImport::endElement( const OUString&
@@ -787,7 +780,7 @@ rName
     if( nCount > 0 )
     {
         // Get topmost context and remove it from the stack.
-        SvXMLImportContext *pContext = maContexts.back();
+        SvXMLImportContextRef xContext = maContexts.back();
         maContexts.pop_back();
 
 #ifdef DBG_UTIL
@@ -795,19 +788,15 @@ rName
         OUString aLocalName;
         sal_uInt16 nPrefix =
             mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
-        SAL_WARN_IF( pContext->GetPrefix() != nPrefix,  "xmloff.core", "SvXMLImport::endElement: popped context has wrong prefix" );
-        SAL_WARN_IF( pContext->GetLocalName() != aLocalName, "xmloff.core", "SvXMLImport::endElement: popped context has wrong lname" );
+        SAL_WARN_IF( xContext->GetPrefix() != nPrefix,  "xmloff.core", "SvXMLImport::endElement: popped context has wrong prefix" );
+        SAL_WARN_IF( xContext->GetLocalName() != aLocalName, "xmloff.core", "SvXMLImport::endElement: popped context has wrong lname" );
 #endif
 
         // Call a EndElement at the current context.
-        pContext->EndElement();
+        xContext->EndElement();
 
         // Get a namespace map to rewind.
-        SvXMLNamespaceMap *pRewindMap = pContext->TakeRewindMap();
-
-        // Delete the current context.
-        pContext->ReleaseRef();
-        pContext = nullptr;
+        SvXMLNamespaceMap *pRewindMap = xContext->TakeRewindMap();
 
         // Rewind a namespace map.
         if( pRewindMap )

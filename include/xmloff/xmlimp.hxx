@@ -85,7 +85,7 @@ class XMLErrors;
 class StyleMap;
 enum class SvXMLErrorFlags;
 
-typedef std::vector<SvXMLImportContext *> SvXMLImportContexts_Impl;
+typedef std::vector<SvXMLImportContextRef> SvXMLImportContexts_Impl;
 typedef std::vector< ::css::uno::Reference< ::css::xml::sax::XFastContextHandler>>
             FastSvXMLImportContexts_Impl;
 
