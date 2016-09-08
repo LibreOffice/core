@@ -478,8 +478,6 @@ SfxVoidItem BulletsAndNumberingDialog FN_NUMBER_BULLETS
     RecordPerSet;
     Asynchron;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -763,8 +761,6 @@ SfxVoidItem DecrementLevel FN_NUM_BULLET_DOWN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -782,8 +778,6 @@ SfxVoidItem DecrementSubLevels FN_NUM_BULLET_OUTLINE_DOWN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2400,8 +2394,6 @@ SfxVoidItem IncrementLevel FN_NUM_BULLET_UP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2419,8 +2411,6 @@ SfxVoidItem IncrementSubLevels FN_NUM_BULLET_OUTLINE_UP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2760,9 +2750,6 @@ SfxBoolItem InsertField FN_INSERT_FIELD
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
-
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -2977,8 +2964,6 @@ SfxVoidItem InsertNeutralParagraph FN_NUM_BULLET_NONUM
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4094,8 +4079,6 @@ SfxVoidItem MoveDown FN_NUM_BULLET_MOVEDOWN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4113,8 +4096,6 @@ SfxVoidItem MoveDownSubItems FN_NUM_BULLET_OUTLINE_MOVEDOWN
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4132,8 +4113,6 @@ SfxVoidItem MoveUp FN_NUM_BULLET_MOVEUP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4151,8 +4130,6 @@ SfxVoidItem MoveUpSubItems FN_NUM_BULLET_OUTLINE_MOVEUP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -4381,9 +4358,6 @@ SfxBoolItem NumberingStart FN_NUMBER_NEWSTART
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    ImageRotation = TRUE;
-        ImageReflection = TRUE;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4793,8 +4767,6 @@ SfxVoidItem RemoveBullets FN_NUM_BULLET_OFF
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -6326,8 +6298,6 @@ SfxBoolItem WrapContour FN_FRAME_WRAP_CONTOUR
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -6379,8 +6349,6 @@ SfxBoolItem WrapOff FN_FRAME_NOWRAP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -6398,8 +6366,6 @@ SfxBoolItem WrapOn FN_FRAME_WRAP
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -6434,8 +6400,6 @@ SfxBoolItem WrapThrough FN_FRAME_WRAPTHRU
     RecordAbsolute = FALSE,
     RecordPerSet;
 
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
@@ -6799,9 +6763,6 @@ SfxBoolItem InsertFieldDataOnly FN_INSERT_FIELD_DATA_ONLY()
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,

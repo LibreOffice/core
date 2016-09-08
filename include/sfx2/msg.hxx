@@ -48,14 +48,12 @@ enum class SfxSlotMode {
     ACCELCONFIG     =   0x80000L, // configurable keys
 
     CONTAINER       =  0x100000L, // Operated by the container at InPlace
-    READONLYDOC     =  0x200000L, // also available for read-only Documents
-    IMAGEROTATION   =  0x400000L, // Rotate image on Vertical/Bi-directional writing
-    IMAGEREFLECTION =  0x800000L  // Mirror image on Vertical/Bi-directional writing
+    READONLYDOC     =  0x200000L  // also available for read-only Documents
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1fec72cL> {};
+    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x13ec72cL> {};
 }
 
 
