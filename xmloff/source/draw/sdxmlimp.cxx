@@ -283,7 +283,6 @@ SdXMLImport::SdXMLImport(
     OUString const & implementationName,
     bool bIsDraw, SvXMLImportFlags nImportFlags )
 :   SvXMLImport( xContext, implementationName, nImportFlags ),
-    mpMasterStylesContext(nullptr),
     mpDocElemTokenMap(nullptr),
     mpBodyElemTokenMap(nullptr),
     mpStylesElemTokenMap(nullptr),
@@ -410,10 +409,6 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
 SdXMLImport::~SdXMLImport() throw ()
 {
-    // Styles or AutoStyles context?
-    if(mpMasterStylesContext)
-        mpMasterStylesContext->ReleaseRef();
-
     // delete all token maps
     delete mpDocElemTokenMap;
     delete mpBodyElemTokenMap;
@@ -719,14 +714,9 @@ SvXMLStylesContext *SdXMLImport::CreateAutoStylesContext(const OUString& rLocalN
 SvXMLImportContext* SdXMLImport::CreateMasterStylesContext(const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>&)
 {
-    if(mpMasterStylesContext)
-        return mpMasterStylesContext;
-
-    mpMasterStylesContext = new SdXMLMasterStylesContext(
-        *this, rLocalName);
-    mpMasterStylesContext->AddFirstRef();
-
-    return mpMasterStylesContext;
+    if (!mxMasterStylesContext.is())
+        mxMasterStylesContext.set(new SdXMLMasterStylesContext(*this, rLocalName));
+    return mxMasterStylesContext.get();
 }
 
 SvXMLImportContext *SdXMLImport::CreateFontDeclsContext(const OUString& rLocalName,
