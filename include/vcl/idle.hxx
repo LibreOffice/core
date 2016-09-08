@@ -35,7 +35,7 @@ private:
     sal_uInt64    GetTimeout() const = delete;
 
 protected:
-    virtual bool ReadyForSchedule( bool bIdle, sal_uInt64 nTimeNow ) const override;
+    virtual bool ReadyForSchedule( sal_uInt64 nTimeNow ) const override;
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const override;
 
     Idle( bool bAuto, const sal_Char *pDebugName = nullptr );
