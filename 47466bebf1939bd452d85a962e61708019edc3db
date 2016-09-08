@@ -16,6 +16,24 @@
       "revId": "47466bebf1939bd452d85a962e61708019edc3db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_38c7e946",
+        "filename": "include/xmloff/xmlictxt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2016-09-08T12:33:39Z",
+      "side": 1,
+      "message": "Yes, we do. The objective of this change is only to unify the refcounting. There\u0027s still quite lot of places that either use SvRef\u003cSvXMLImportContext\u003e or even use SvXMLImportContext* and call these functions manually (I\u0027m working on removal of the latter currently).",
+      "parentUuid": "ba5da102_b89f79b3",
+      "revId": "47466bebf1939bd452d85a962e61708019edc3db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
