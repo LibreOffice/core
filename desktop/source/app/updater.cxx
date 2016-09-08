@@ -91,7 +91,7 @@ char** createCommandLine()
     OUString aLibExecDirURL( "$BRAND_BASE_DIR/" );
     rtl::Bootstrap::expandMacros(aLibExecDirURL);
 
-    size_t nArgs = 7;
+    size_t nArgs = 8;
     char** pArgs = new char*[nArgs];
     {
         createStr(pUpdaterName, pArgs, 0);
@@ -115,9 +115,16 @@ char** createCommandLine()
         createStr(pPID, pArgs, 4);
     }
     {
-        OUString aSofficePathURL = aLibExecDirURL + OUString::fromUtf8(pSofficeExeName);
-        OUString aSofficePath = getPathFromURL(aSofficePathURL);
+        OUString aExeDir( "$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/" );
+        OUString aSofficePath = getPathFromURL(aExeDir);
         createStr(aSofficePath, pArgs, 5);
+    }
+    {
+        OUString aSofficeDir( "$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/" );
+        rtl::Bootstrap::expandMacros(aSofficeDir);
+        OUString aSofficePathURL = aSofficeDir + OUString::fromUtf8(pSofficeExeName);
+        OUString aSofficePath = getPathFromURL(aSofficePathURL);
+        createStr(aSofficePath, pArgs, 6);
     }
     pArgs[nArgs - 1] = nullptr;
 
@@ -167,7 +174,7 @@ void Update()
     {
         printf("execv failed with error %d %s\n",errno,strerror(errno));
     }
-    for (size_t i = 0; i < 6; ++i)
+    for (size_t i = 0; i < 8; ++i)
     {
         delete[] pArgs[i];
     }
