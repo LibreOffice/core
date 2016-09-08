@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <vector>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -43,7 +44,7 @@ class XMLOFF_DLLPUBLIC SvxXMLListStyleContext
 
     css::uno::Reference< css::container::XIndexReplace > xNumRules;
 
-    SvxXMLListStyle_Impl        *pLevelStyles;
+    std::unique_ptr<SvxXMLListStyle_Impl> pLevelStyles;
 
     sal_Int32                   nLevels;
     bool                        bConsecutive : 1;

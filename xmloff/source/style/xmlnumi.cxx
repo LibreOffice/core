@@ -31,6 +31,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
@@ -1026,7 +1027,6 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 ,   sIsPhysical( "IsPhysical"  )
 ,   sNumberingRules( "NumberingRules"  )
 ,   sIsContinuousNumbering( "IsContinuousNumbering"  )
-,   pLevelStyles( nullptr )
 ,   nLevels( 0 )
 ,   bConsecutive( false )
 ,   bOutline( bOutl )
@@ -1044,8 +1044,6 @@ SvxXMLListStyleContext::~SvxXMLListStyleContext()
             pStyle->ReleaseRef();
         }
     }
-
-    delete pLevelStyles;
 }
 
 
@@ -1067,7 +1065,7 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
             new SvxXMLListLevelStyleContext_Impl( GetImport(), nPrefix,
                                                   rLocalName, xAttrList );
         if( !pLevelStyles )
-            pLevelStyles = new SvxXMLListStyle_Impl;
+            pLevelStyles = o3tl::make_unique<SvxXMLListStyle_Impl>();
         pLevelStyles->push_back( pLevelStyle );
         pLevelStyle->AddFirstRef();
 
