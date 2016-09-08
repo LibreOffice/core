@@ -149,7 +149,7 @@ void XMLRedlineExport::ExportUndoChangedRegion(
         OUString sType;
         aAny >>= sType;
 
-        sal_uInt32 nCharStart, nCharEnd;
+        sal_uInt32 nCharStart=0, nCharEnd=0;
         sal_uInt32 nTextDelCount = rExport.GetTextParagraphExport()->getTextDelCount();
         rPropSet->getPropertyValue(sRedlineUndoStart) >>= nCharStart;
         rPropSet->getPropertyValue(sRedlineUndoEnd) >>= nCharEnd;

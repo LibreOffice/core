@@ -503,8 +503,8 @@ bool XMLRedlineImportHelper::Check(
     return false;
 }
 
-void XMLRedlineImportHelper::InsertWithinParagraph(const OUString& rParaPos, bool bStart,
-    Reference<XTextRange> & rRange, bool bIsOutsideOfParagraph)
+void XMLRedlineImportHelper::InsertWithinParagraph(const OUString& rParaPos, bool /*bStart*/,
+                                                   Reference<XTextRange> & rRange, bool /*bIsOutsideOfParagraph*/)
 {
     ::std::map<OUString, RedlineInfo*>::iterator aFind = aRedlineMap[rParaPos].begin();
     for( ; aRedlineMap[rParaPos].end() != aFind; ++aFind )
