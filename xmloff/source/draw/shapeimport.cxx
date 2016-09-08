@@ -113,8 +113,6 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
     mpPropertySetMapper(nullptr),
     mpPresPagePropsMapper(nullptr),
-    mpStylesContext(nullptr),
-    mpAutoStylesContext(nullptr),
     mpGroupShapeElemTokenMap(nullptr),
     mpFrameShapeElemTokenMap(nullptr),
     mp3DSceneShapeElemTokenMap(nullptr),
@@ -184,17 +182,11 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
     delete mp3DLightAttrTokenMap;
 
     // Styles or AutoStyles context?
-    if(mpStylesContext)
-    {
-        mpStylesContext->Clear();
-        mpStylesContext->ReleaseRef();
-    }
+    if(mxStylesContext.is())
+        mxStylesContext->Clear();
 
-    if(mpAutoStylesContext)
-    {
-        mpAutoStylesContext->Clear();
-        mpAutoStylesContext->ReleaseRef();
-    }
+    if(mxAutoStylesContext.is())
+        mxAutoStylesContext->Clear();
 }
 
 const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()
@@ -434,16 +426,12 @@ SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
 
 void XMLShapeImportHelper::SetStylesContext(SvXMLStylesContext* pNew)
 {
-    mpStylesContext = pNew;
-    if (mpStylesContext)
-        mpStylesContext->AddFirstRef();
+    mxStylesContext.set(pNew);
 }
 
 void XMLShapeImportHelper::SetAutoStylesContext(SvXMLStylesContext* pNew)
 {
-    mpAutoStylesContext = pNew;
-    if (mpAutoStylesContext)
-        mpAutoStylesContext->AddFirstRef();
+    mxAutoStylesContext.set(pNew);
 }
 
 SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(

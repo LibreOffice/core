@@ -275,8 +275,8 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceO
     rtl::Reference<SvXMLImportPropertyMapper> mpPresPagePropsMapper;
 
     // contexts for Style and AutoStyle import
-    SvXMLStylesContext*         mpStylesContext;
-    SvXMLStylesContext*         mpAutoStylesContext;
+    css::uno::Reference<SvXMLStylesContext> mxStylesContext;
+    css::uno::Reference<SvXMLStylesContext> mxAutoStylesContext;
 
     // contexts for xShape contents TokenMaps
     SvXMLTokenMap*              mpGroupShapeElemTokenMap;
@@ -335,9 +335,9 @@ public:
     const SvXMLTokenMap& Get3DLightAttrTokenMap();
 
     // Styles and AutoStyles contexts
-    SvXMLStylesContext* GetStylesContext() const { return mpStylesContext; }
+    SvXMLStylesContext* GetStylesContext() const { return mxStylesContext.get(); }
     void SetStylesContext(SvXMLStylesContext* pNew);
-    SvXMLStylesContext* GetAutoStylesContext() const { return mpAutoStylesContext; }
+    SvXMLStylesContext* GetAutoStylesContext() const { return mxAutoStylesContext.get(); }
     void SetAutoStylesContext(SvXMLStylesContext* pNew);
 
     // get factories and mappers
