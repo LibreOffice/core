@@ -58,8 +58,6 @@ class Menu;
 enum class VclInputFlags;
 enum class SalFrameStyleFlags;
 
-enum SalYieldResult { EVENT, TIMEOUT };
-
 typedef struct _cairo_font_options cairo_font_options_t;
 
 class VCL_PLUGIN_PUBLIC SalInstance
@@ -132,10 +130,10 @@ public:
      * Wait for the next event (if bWait) and dispatch it,
      * includes posted events, and timers.
      * If bHandleAllCurrentEvents - dispatch multiple posted
-     * user events. Returns true if events needed processing.
+     * user events. Returns true if events were processed.
      */
-    virtual SalYieldResult  DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) = 0;
-    virtual bool            AnyInput( VclInputFlags nType ) = 0;
+    virtual bool           DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) = 0;
+    virtual bool           AnyInput( VclInputFlags nType ) = 0;
 
     // menus
     virtual SalMenu*        CreateMenu( bool bMenuBar, Menu* pMenu );
