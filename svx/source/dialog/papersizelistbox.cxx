@@ -24,8 +24,8 @@
 #include <vcl/builderfactory.hxx>
 
 
-PaperSizeListBox::PaperSizeListBox(vcl::Window* pParent, WinBits nStyle)
-    : ListBox( pParent, nStyle)
+PaperSizeListBox::PaperSizeListBox(vcl::Window* pParent)
+    : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
     SetDropDownLineCount(6);
 }

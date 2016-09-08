@@ -296,7 +296,7 @@ void TableBorderHdl::CreateB2dIAObject()
                     sdr::overlay::OverlayObject* pOverlayObject =
                         new sdr::overlay::OverlayRectangle(aRange.getMinimum(), aRange.getMaximum(),
                                                            aHilightColor, fTransparence,
-                                                           fWidth, 0.0, 0.0, 500, bAnimate);
+                                                           fWidth, 0.0, 0.0, bAnimate);
                     xManager->add(*pOverlayObject);
                     maOverlayGroup.append(*pOverlayObject);
                 }

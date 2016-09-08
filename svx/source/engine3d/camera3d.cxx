@@ -21,12 +21,12 @@
 #include <tools/stream.hxx>
 
 Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
-                   double fFocalLen, double fBankAng) :
+                   double fFocalLen) :
     aResetPos(rPos),
     aResetLookAt(rLookAt),
     fResetFocalLength(fFocalLen),
-    fResetBankAngle(fBankAng),
-    fBankAngle(fBankAng),
+    fResetBankAngle(0),
+    fBankAngle(0),
     bAutoAdjustProjection(true)
 {
     SetVPD(0);
@@ -48,12 +48,12 @@ Camera3D::Camera3D()
 // Set default values for reset
 
 void Camera3D::SetDefaults(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
-                            double fFocalLen, double fBankAng)
+                            double fFocalLen)
 {
     aResetPos           = rPos;
     aResetLookAt        = rLookAt;
     fResetFocalLength   = fFocalLen;
-    fResetBankAngle     = fBankAng;
+    fResetBankAngle     = 0;
 }
 
 // Set ViewWindow and adjust PRP

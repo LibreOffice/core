@@ -537,7 +537,7 @@ SdrObjClosedKind SdrPolyEditView::GetMarkedObjectsClosedState() const
     }
 }
 
-void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
+void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* p1, const void* p2, const void* p3, const void* p4)
 {
     const bool bUndo = IsUndoEnabled();
 
@@ -588,7 +588,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
                         bC2 = true;
                     }
 
-                    (*pTrFunc)(aPos,&aC1,&aC2,p1,p2,p3,p4,p5);
+                    (*pTrFunc)(aPos,&aC1,&aC2,p1,p2,p3,p4);
                     aNewXP.setB2DPoint(nPointNum, basegfx::B2DPoint(aPos.X(), aPos.Y()));
 
                     if (bC1)
@@ -611,7 +611,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
 }
 
 
-static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/, const void* /*p5*/)
+static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/)
 {
     MovePoint(rPt,*static_cast<const Size*>(p1));
     if (pC1!=nullptr) MovePoint(*pC1,*static_cast<const Size*>(p1));
@@ -628,7 +628,7 @@ void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz)
     AdjustMarkHdl();
 }
 
-static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* /*p4*/, const void* /*p5*/)
+static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* /*p4*/)
 {
     ResizePoint(rPt,*static_cast<const Point*>(p1),*static_cast<const Fraction*>(p2),*static_cast<const Fraction*>(p3));
     if (pC1!=nullptr) ResizePoint(*pC1,*static_cast<const Point*>(p1),*static_cast<const Fraction*>(p2),*static_cast<const Fraction*>(p3));
@@ -645,7 +645,7 @@ void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFac
     AdjustMarkHdl();
 }
 
-static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* p3, const void* p4, const void* /*p5*/)
+static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* p3, const void* p4)
 {
     RotatePoint(rPt,*static_cast<const Point*>(p1),*static_cast<const double*>(p3),*static_cast<const double*>(p4));
     if (pC1!=nullptr) RotatePoint(*pC1,*static_cast<const Point*>(p1),*static_cast<const double*>(p3),*static_cast<const double*>(p4));

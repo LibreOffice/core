@@ -74,9 +74,7 @@ public:
     // internal
     SvxRectCtlAccessibleContext(
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
-        SvxRectCtl&             rRepresentation,
-        const OUString*  pName = nullptr,
-        const OUString*  pDescription = nullptr );
+        SvxRectCtl&      rRepresentation );
 protected:
     virtual ~SvxRectCtlAccessibleContext();
 public:

@@ -416,10 +416,10 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     return bRet;
 }
 
-void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const
+void SdrSnapView::CheckSnap(const Point& rPt, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const
 {
     Point aPt(rPt);
-    SdrSnap nRet=SnapPos(aPt,pPV);
+    SdrSnap nRet=SnapPos(aPt,nullptr);
     aPt-=rPt;
     if (nRet & SdrSnap::XSNAPPED) {
         if (bXSnapped) {

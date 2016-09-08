@@ -47,8 +47,7 @@ class SvxLineBox : public LineLB
 
 public:
     SvxLineBox( vcl::Window* pParent,
-                const css::uno::Reference< css::frame::XFrame >& rFrame,
-                WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
+                const css::uno::Reference< css::frame::XFrame >& rFrame );
 
     void FillControl();
 
@@ -95,7 +94,7 @@ public:
 class SVX_DLLPUBLIC SvxFillTypeBox : public FillTypeLB
 {
 public:
-    SvxFillTypeBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
+    SvxFillTypeBox( vcl::Window* pParent );
 
     void            Selected() { bSelect = true; }
 
@@ -116,7 +115,7 @@ private:
 class SVX_DLLPUBLIC SvxFillAttrBox : public FillAttrLB
 {
 public:
-    SvxFillAttrBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
+    SvxFillAttrBox( vcl::Window* pParent );
 
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;

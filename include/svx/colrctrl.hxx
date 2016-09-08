@@ -59,7 +59,7 @@ protected:
                     DECL_LINK_TYPED(ExecDragHdl, void*, void);
 
 public:
-    SvxColorValueSet_docking( vcl::Window* pParent, WinBits nWinStyle = WB_ITEMBORDER );
+    SvxColorValueSet_docking( vcl::Window* pParent );
 
     bool IsLeftButton() const { return mbLeftButton; }
 };

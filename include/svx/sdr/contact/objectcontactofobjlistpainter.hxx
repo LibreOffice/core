@@ -99,9 +99,7 @@ protected:
 
 public:
     // basic constructor
-    ObjectContactOfPagePainter(
-        const SdrPage* pPage,
-        ObjectContact& rOriginalObjectContact);
+    ObjectContactOfPagePainter(ObjectContact& rOriginalObjectContact);
     virtual ~ObjectContactOfPagePainter();
 
     // set another page

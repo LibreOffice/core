@@ -202,8 +202,8 @@ void ImpXPolygon::CheckPointDelete() const
     }
 }
 
-XPolygon::XPolygon( sal_uInt16 nSize, sal_uInt16 nResize )
-    : pImpXPolygon( ImpXPolygon( nSize, nResize ) )
+XPolygon::XPolygon( sal_uInt16 nSize )
+    : pImpXPolygon( ImpXPolygon( nSize, 16 ) )
 {
 }
 

@@ -106,7 +106,7 @@ using namespace ::com::sun::star;
 SdrItemPool::SdrItemPool(
     SfxItemPool* _pMaster,
     bool bLoadRefCounts)
-:   XOutdevItemPool(_pMaster, SDRATTR_START, SDRATTR_END, bLoadRefCounts)
+:   XOutdevItemPool(_pMaster, bLoadRefCounts)
 {
     // prepare some constants
     const Color aNullCol(RGB_Color(COL_BLACK));

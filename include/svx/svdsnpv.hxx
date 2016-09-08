@@ -155,7 +155,7 @@ public:
     // SdrSnap::YSNAPPED or SdrSnap::XYSNAPPED
     SdrSnap SnapPos(Point& rPnt, const SdrPageView* pPV) const;
     Point GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const;
-    void CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const;
+    void CheckSnap(const Point& rPt, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const;
 
     // All attitudes to snap are persistent.
     bool IsSnapEnabled() const { return bSnapEnab; }

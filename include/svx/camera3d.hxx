@@ -46,11 +46,11 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC Camera3D : public Viewport3D
 
  public:
     Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
-             double fFocalLen = 35.0, double fBankAng = 0);
+             double fFocalLen = 35.0);
     Camera3D();
 
     void SetDefaults(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
-                     double fFocalLen, double fBankAng = 0);
+                     double fFocalLen);
 
     void SetViewWindow(double fX, double fY, double fW, double fH);
 

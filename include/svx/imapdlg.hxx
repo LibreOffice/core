@@ -71,7 +71,7 @@ protected:
 
 public:
 
-    SvxIMapDlgItem( sal_uInt16 nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings );
+    SvxIMapDlgItem( SvxIMapDlg& rIMapDlg, SfxBindings& rBindings );
 };
 
 class IMapOwnData;

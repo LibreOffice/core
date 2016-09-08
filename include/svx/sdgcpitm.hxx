@@ -33,9 +33,8 @@ public:
 
 
                             SdrGrafCropItem( sal_Int32 nLeftCrop = 0, sal_Int32 nTopCrop = 0,
-                                             sal_Int32 nRightCrop = 0, sal_Int32 nBottomCrop = 0,
-                                             sal_uInt16 nWhichId = SDRATTR_GRAFCROP ) :
-                                SvxGrfCrop( nLeftCrop, nRightCrop, nTopCrop, nBottomCrop, nWhichId ) {}
+                                             sal_Int32 nRightCrop = 0, sal_Int32 nBottomCrop = 0 ) :
+                                SvxGrfCrop( nLeftCrop, nRightCrop, nTopCrop, nBottomCrop, SDRATTR_GRAFCROP ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;

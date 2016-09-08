@@ -69,7 +69,7 @@ protected:
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 public:
-    SdrItemBrowserControl(vcl::Window* pParent, WinBits nBits=WB_3DLOOK|WB_BORDER|WB_TABSTOP);
+    SdrItemBrowserControl(vcl::Window* pParent);
     virtual ~SdrItemBrowserControl();
     virtual void dispose() override;
     void Clear();

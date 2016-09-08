@@ -1010,8 +1010,8 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                 bool bXSnapped=false;
                 bool bYSnapped=false;
                 Point aDif(aPnt-DragStat().GetStart());
-                getSdrDragView().CheckSnap(Ref1()+aDif,nullptr,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
-                getSdrDragView().CheckSnap(Ref2()+aDif,nullptr,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
+                getSdrDragView().CheckSnap(Ref1()+aDif,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
+                getSdrDragView().CheckSnap(Ref2()+aDif,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
                 aPnt.X()+=nBestXSnap;
                 aPnt.Y()+=nBestYSnap;
             }

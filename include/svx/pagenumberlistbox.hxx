@@ -26,7 +26,7 @@
 class SVX_DLLPUBLIC PageNumberListBox : public ListBox
 {
 public:
-    PageNumberListBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN );
+    PageNumberListBox( vcl::Window* pParent );
 
     void SetSelection( sal_uInt16 );
     sal_uInt16 GetSelection() const;

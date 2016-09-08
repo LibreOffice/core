@@ -22,8 +22,8 @@
 #include <tools/resary.hxx>
 #include <vcl/builderfactory.hxx>
 
-SpacingListBox::SpacingListBox(vcl::Window* pParent, WinBits nStyle)
-    : ListBox( pParent, nStyle)
+SpacingListBox::SpacingListBox(vcl::Window* pParent)
+    : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
     ResStringArray aSpacingAry( SVX_RES( RID_SVXSTRARY_SPACING ) );
     sal_uInt32 nCnt = aSpacingAry.Count();

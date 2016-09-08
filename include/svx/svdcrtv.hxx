@@ -105,7 +105,7 @@ public:
     sal_uInt16 GetCurrentObjIdentifier() const { return nAktIdent; }
 
     // Beginning the regular Create
-    bool BegCreateObj(const Point& rPnt, OutputDevice* pOut=nullptr, short nMinMov=-3, SdrPageView* pPV=nullptr);
+    bool BegCreateObj(const Point& rPnt, OutputDevice* pOut=nullptr, short nMinMov=-3);
     bool BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov, SdrObject* pPreparedFactoryObject);
     void MovCreateObj(const Point& rPnt);
     bool EndCreateObj(SdrCreateCmd eCmd);
@@ -117,7 +117,7 @@ public:
     // BegCreateCaptionObj() creates a SdrCaptionObj (legend item).
     // rObjSiz is the initial size of the legend text frame.
     // Only the length of the tip is dragged
-    bool BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz, OutputDevice* pOut=nullptr, short nMinMov=-3, SdrPageView* pPV=nullptr);
+    bool BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz, OutputDevice* pOut=nullptr, short nMinMov=-3);
 
     // Create a circle/rectangle/text frame with the first Point being
     // the center of the object instead of the upper-left corner.

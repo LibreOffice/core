@@ -204,7 +204,7 @@ void PageMarginControl::FillValueSet(
     aHelpText += aBottom;
     aHelpText += aNarrowValText;
     mpMarginValueSet->AddItem(
-        Image((bLandscape) ? SW_RES(IMG_NARROW_L) : SW_RES(IMG_NARROW)), nullptr,
+        Image((bLandscape) ? SW_RES(IMG_NARROW_L) : SW_RES(IMG_NARROW)),
         SW_RESSTR(STR_NARROW), &aHelpText );
 
     SetMetricValue( *maWidthHeightField.get(), SWPAGE_NORMAL_VALUE, meUnit );
@@ -218,7 +218,7 @@ void PageMarginControl::FillValueSet(
     aHelpText += aBottom;
     aHelpText += aNormalValText;
     mpMarginValueSet->AddItem(
-        Image((bLandscape) ? SW_RES(IMG_NORMAL_L) : SW_RES(IMG_NORMAL)), nullptr,
+        Image((bLandscape) ? SW_RES(IMG_NORMAL_L) : SW_RES(IMG_NORMAL)),
         SW_RESSTR(STR_NORMAL), &aHelpText );
 
     SetMetricValue( *maWidthHeightField.get(), SWPAGE_WIDE_VALUE1, meUnit );
@@ -234,7 +234,7 @@ void PageMarginControl::FillValueSet(
     aHelpText += aBottom;
     aHelpText += aWide1ValText;
     mpMarginValueSet->AddItem(
-        Image((bLandscape) ? SW_RES(IMG_WIDE_L) : SW_RES(IMG_WIDE)), nullptr,
+        Image((bLandscape) ? SW_RES(IMG_WIDE_L) : SW_RES(IMG_WIDE)),
         SW_RESSTR(STR_WIDE), &aHelpText );
 
     const OUString aInner = SW_RESSTR(STR_MARGIN_TOOLTIP_INNER);
@@ -251,7 +251,7 @@ void PageMarginControl::FillValueSet(
     aHelpText += aBottom;
     aHelpText += aWide1ValText;
     mpMarginValueSet->AddItem(
-        Image((bLandscape) ? SW_RES(IMG_MIRRORED_L) : SW_RES(IMG_MIRRORED)), nullptr,
+        Image((bLandscape) ? SW_RES(IMG_MIRRORED_L) : SW_RES(IMG_MIRRORED)),
         SW_RESSTR(STR_MIRRORED), &aHelpText );
 
     if ( bUserCustomValuesAvailable )
@@ -274,7 +274,7 @@ void PageMarginControl::FillValueSet(
         aHelpText.clear();
     }
     mpMarginValueSet->AddItem(
-        Image((bUserCustomValuesAvailable) ? SW_RES(IMG_CUSTOM) : SW_RES(IMG_CUSTOM_DIS)), nullptr,
+        Image((bUserCustomValuesAvailable) ? SW_RES(IMG_CUSTOM) : SW_RES(IMG_CUSTOM_DIS)),
         SW_RESSTR(STR_LCVALUE), &aHelpText );
 }
 

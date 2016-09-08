@@ -52,8 +52,8 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
-    LineLB( pParent, nBits ),
+SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame ) :
+    LineLB( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL ),
     nCurPos     ( 0 ),
     aLogicalSize(40,140),
     bRelease    ( true ),
@@ -382,8 +382,8 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
     MetricField::DataChanged( rDCEvt );
 }
 
-SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent, WinBits nBits ) :
-    FillTypeLB( pParent, nBits | WB_TABSTOP ),
+SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent ) :
+    FillTypeLB( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_TABSTOP ),
     nCurPos ( 0 ),
     bSelect ( false ),
     bRelease( true )
@@ -463,8 +463,8 @@ void SvxFillTypeBox::ReleaseFocus_Impl()
     }
 }
 
-SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent, WinBits nBits ) :
-    FillAttrLB( pParent, nBits | WB_TABSTOP ),
+SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent ) :
+    FillAttrLB( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_TABSTOP ),
     nCurPos( 0 ),
     bRelease( true )
 

@@ -27,7 +27,7 @@
 class SVX_DLLPUBLIC SpacingListBox : public ListBox
 {
 public:
-    SpacingListBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN );
+    SpacingListBox( vcl::Window* pParent );
     Size GetOptimalSize() const override;
 };
 

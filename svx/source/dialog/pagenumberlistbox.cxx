@@ -22,8 +22,8 @@
 #include <tools/resary.hxx>
 #include <vcl/builderfactory.hxx>
 
-PageNumberListBox::PageNumberListBox(vcl::Window* pParent, WinBits nStyle)
-    : ListBox( pParent, nStyle)
+PageNumberListBox::PageNumberListBox(vcl::Window* pParent)
+    : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
     ResStringArray aPaperAry( SVX_RES( RID_SVXSTRARY_PAGE_NUMBERING ) );
     sal_uInt32 nCnt = aPaperAry.Count();

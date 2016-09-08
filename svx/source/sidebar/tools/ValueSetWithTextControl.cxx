@@ -43,7 +43,6 @@ ValueSetWithTextControl::ValueSetWithTextControl(
 
 void ValueSetWithTextControl::AddItem(
     const Image& rItemImage,
-    const Image* pSelectedItemImage,
     const OUString& rItemText,
     const OUString* pItemHelpText )
 {
@@ -54,22 +53,13 @@ void ValueSetWithTextControl::AddItem(
 
     ValueSetWithTextItem aItem;
     aItem.maItemImage = rItemImage;
-    aItem.maSelectedItemImage = (pSelectedItemImage != nullptr)
-                                ? *pSelectedItemImage
-                                : rItemImage;
+    aItem.maSelectedItemImage = rItemImage;
 
     if ( GetDPIScaleFactor() > 1 )
     {
         BitmapEx b = aItem.maItemImage.GetBitmapEx();
         b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
         aItem.maItemImage = Image(b);
-
-        if ( pSelectedItemImage != nullptr )
-        {
-            b = aItem.maSelectedItemImage.GetBitmapEx();
-            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
-            aItem.maSelectedItemImage = Image(b);
-        }
     }
 
     aItem.maItemText = rItemText;
@@ -84,8 +74,7 @@ void ValueSetWithTextControl::AddItem(
 
 void ValueSetWithTextControl::AddItem(
     const OUString& rItemText,
-    const OUString& rItemText2,
-    const OUString* pItemHelpText )
+    const OUString& rItemText2 )
 {
     if ( meControlType != ControlType::TextText )
     {
@@ -99,8 +88,7 @@ void ValueSetWithTextControl::AddItem(
     maItems.push_back( aItem );
 
     InsertItem( maItems.size() );
-    SetItemText( maItems.size(),
-                    (pItemHelpText != nullptr) ? *pItemHelpText : rItemText );
+    SetItemText( maItems.size(), rItemText );
 }
 
 

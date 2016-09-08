@@ -87,9 +87,7 @@ public:
     // internal
     SvxGraphCtrlAccessibleContext(
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
-        GraphCtrl&              rRepresentation,
-        const OUString*  pName = nullptr,
-        const OUString*  pDescription = nullptr );
+        GraphCtrl&              rRepresentation );
 
     void Notify( SfxBroadcaster& aBC, const SfxHint& aHint ) override;
 

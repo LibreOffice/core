@@ -70,8 +70,8 @@ SFX_IMPL_MODELESSDIALOG_WITHID( SvxIMapDlgChildWindow, SID_IMAP );
 
 // ControllerItem
 
-SvxIMapDlgItem::SvxIMapDlgItem( sal_uInt16 _nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings ) :
-            SfxControllerItem   ( _nId, rBindings ),
+SvxIMapDlgItem::SvxIMapDlgItem( SvxIMapDlg& rIMapDlg, SfxBindings& rBindings ) :
+            SfxControllerItem   ( SID_IMAP_EXEC, rBindings ),
             rIMap               ( rIMapDlg )
 {
 }
@@ -118,7 +118,7 @@ VCL_BUILDER_FACTORY(StatusBar)
 SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window* _pParent)
     : SfxModelessDialog(_pBindings, pCW, _pParent, "ImapDialog", "svx/ui/imapdialog.ui")
     , pCheckObj(nullptr)
-    , aIMapItem(SID_IMAP_EXEC, *this, *_pBindings)
+    , aIMapItem(*this, *_pBindings)
 {
     get(m_pTbxIMapDlg1, "toolbar");
     m_pTbxIMapDlg1->InsertSeparator(3, 5);
