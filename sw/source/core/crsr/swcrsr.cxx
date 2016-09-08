@@ -2108,8 +2108,8 @@ void SwCursor::RestoreSavePos()
     }
 }
 
-SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
-    : SwCursor( rPos, pRing )
+SwTableCursor::SwTableCursor( const SwPosition &rPos )
+    : SwCursor( rPos, nullptr )
 {
     m_bParked = false;
     m_bChanged = false;

@@ -194,12 +194,8 @@ protected:
 public:
     SwTextSizeInfo( const SwTextSizeInfo &rInf );
     SwTextSizeInfo( const SwTextSizeInfo &rInf, const OUString* pText,
-                   const sal_Int32 nIdx = 0,
-                   const sal_Int32 nLen = COMPLETE_STRING );
-
-    SwTextSizeInfo( SwTextFrame *pTextFrame, SwFont *pTextFnt = nullptr,
-                   const sal_Int32 nIndex = 0,
-                   const sal_Int32 nLength = COMPLETE_STRING );
+                   const sal_Int32 nIdx = 0 );
+    SwTextSizeInfo( SwTextFrame *pTextFrame, const sal_Int32 nIndex = 0 );
 
     // GetMultiAttr returns the text attribute of the multiportion,
     // if rPos is inside any multi-line part.

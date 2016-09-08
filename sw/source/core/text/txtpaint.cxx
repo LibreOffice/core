@@ -98,7 +98,7 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
         static bool bDbg = false;
         if( bDbg )
         {
-            DbgBackColor aDbg( pOut, bDbg, COL_RED );
+            DbgBackColor aDbg( pOut, bDbg );
             pOut->DrawRect( aRect );
         }
 #endif

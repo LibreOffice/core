@@ -24,14 +24,6 @@
 
 class SwAttrHint : public SfxHint
 {
-    sal_Int32   nId;
-
-public:
-    SwAttrHint( sal_Int32 n )
-        : nId(n)
-    {}
-
-    sal_Int32 GetId() const { return nId; }
 };
 
 #endif

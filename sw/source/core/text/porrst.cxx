@@ -257,7 +257,7 @@ SwTwips SwTextFrame::EmptyHeight() const
         {
             SwAttrHandler aAttrHandler;
             aAttrHandler.Init(  GetTextNode()->GetSwAttrSet(),
-                               *GetTextNode()->getIDocumentSettingAccess(), nullptr );
+                               *GetTextNode()->getIDocumentSettingAccess() );
             SwRedlineItr aRedln( rTextNode, *pFnt, aAttrHandler,
                                  nRedlPos, true );
         }

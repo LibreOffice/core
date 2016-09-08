@@ -347,7 +347,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         // TODO/LATER: Actually it should be set here
         if( pTextCursor )
         {
-            pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( *pTextCursor->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, nullptr, nullptr );
+            pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( *pTextCursor->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, nullptr );
             pOLENd = lcl_GetOLENode( pFrameFormat );
         }
         aObjName = aName;

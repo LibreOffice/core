@@ -490,7 +490,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 {
                     SwAttrHandler aAttrHandler;
                     aAttrHandler.Init(  rTextNode.GetSwAttrSet(),
-                                       *rTextNode.getIDocumentSettingAccess(), nullptr );
+                                       *rTextNode.getIDocumentSettingAccess() );
                     SwRedlineItr aRedln( rTextNode, *pFnt, aAttrHandler, nRedlPos, true );
                 }
             }

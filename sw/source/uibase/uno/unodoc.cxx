@@ -60,7 +60,7 @@ com_sun_star_comp_Writer_WebDocument_get_implementation(css::uno::XComponentCont
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
-    SfxObjectShell* pShell = new SwWebDocShell( SfxObjectCreateMode::STANDARD );
+    SfxObjectShell* pShell = new SwWebDocShell;
     uno::Reference< uno::XInterface > model( pShell->GetModel() );
     model->acquire();
     return model.get();

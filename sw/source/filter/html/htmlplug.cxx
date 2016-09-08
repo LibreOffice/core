@@ -500,8 +500,7 @@ void SwHTMLParser::NewObject()
              bDeclare = false;
     // Eine neue Command-List anlegen
     delete m_pAppletImpl;
-    m_pAppletImpl = new SwApplet_Impl( m_pDoc->GetAttrPool(),
-                                     RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
+    m_pAppletImpl = new SwApplet_Impl( m_pDoc->GetAttrPool() );
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -671,7 +670,7 @@ void SwHTMLParser::InsertApplet()
 
     // Eine neue Command-List anlegen
     delete m_pAppletImpl;
-    m_pAppletImpl = new SwApplet_Impl( m_pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
+    m_pAppletImpl = new SwApplet_Impl( m_pDoc->GetAttrPool() );
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )

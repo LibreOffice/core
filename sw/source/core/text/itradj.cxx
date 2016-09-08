@@ -558,7 +558,7 @@ SwMarginPortion *SwTextAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
         delete pFly;
     }
 
-    SwMarginPortion *pRight = new SwMarginPortion( 0 );
+    SwMarginPortion *pRight = new SwMarginPortion;
     pLast->Append( pRight );
 
     if( long( nPrtWidth )< nRealWidth )

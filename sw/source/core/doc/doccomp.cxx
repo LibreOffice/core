@@ -1666,7 +1666,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
     if( pTmp )
     {
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_DELETE, nAuthor, aTimeStamp,
-                                    OUString(), nullptr, nullptr );
+                                    OUString(), nullptr );
         do {
             // #i65201#: Expand again, see comment above.
             if( pTmp->GetPoint()->nContent == 0 )
@@ -1718,7 +1718,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             }
         } while( pInsRing != ( pTmp = pTmp->GetNext()) );
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_INSERT, nAuthor, aTimeStamp,
-                                    OUString(), nullptr, nullptr );
+                                    OUString(), nullptr );
 
         // combine consecutive
         if( pTmp->GetNext() != pInsRing )

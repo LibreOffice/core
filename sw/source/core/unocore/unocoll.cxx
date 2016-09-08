@@ -798,7 +798,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
             xRet = static_cast<cppu::OWeakObject*>(new SwXNumberingRules(rDoc));
         break;
         case SwServiceType::TextColumns :
-            xRet = static_cast<cppu::OWeakObject*>(new SwXTextColumns(0));
+            xRet = static_cast<cppu::OWeakObject*>(new SwXTextColumns);
         break;
         case SwServiceType::Defaults:
             xRet = static_cast<cppu::OWeakObject*>(new SwXTextDefaults(&rDoc));

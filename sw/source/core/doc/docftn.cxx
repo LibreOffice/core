@@ -239,8 +239,8 @@ SwFootnoteInfo::SwFootnoteInfo(const SwFootnoteInfo& rInfo) :
     m_bEndNote = false;
 }
 
-SwFootnoteInfo::SwFootnoteInfo(SwTextFormatColl *pFormat) :
-    SwEndNoteInfo( pFormat ),
+SwFootnoteInfo::SwFootnoteInfo() :
+    SwEndNoteInfo( nullptr ),
     ePos( FTNPOS_PAGE ),
     eNum( FTNNUM_DOC )
 {
@@ -314,7 +314,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
         // #i81002# no update during loading
         if ( !IsInReading() )
         {
-            getIDocumentFieldsAccess().UpdateRefFields(nullptr);
+            getIDocumentFieldsAccess().UpdateRefFields();
         }
         getIDocumentState().SetModified();
     }
@@ -382,7 +382,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         // #i81002# no update during loading
         if ( !IsInReading() )
         {
-            getIDocumentFieldsAccess().UpdateRefFields(nullptr);
+            getIDocumentFieldsAccess().UpdateRefFields();
         }
         getIDocumentState().SetModified();
     }

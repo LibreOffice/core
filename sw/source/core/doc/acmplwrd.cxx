@@ -84,7 +84,7 @@ class SwAutoCompleteString
 #endif
     SwDocPtrVector aSourceDocs;
     public:
-        SwAutoCompleteString(const OUString& rStr, sal_Int32 nPos, sal_Int32 nLen);
+        SwAutoCompleteString(const OUString& rStr, sal_Int32 nLen);
 
         virtual ~SwAutoCompleteString();
         void        AddDocument(const SwDoc& rDoc);
@@ -176,8 +176,8 @@ void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
 }
 
 SwAutoCompleteString::SwAutoCompleteString(
-            const OUString& rStr, sal_Int32 const nPos, sal_Int32 const nLen)
-    : editeng::IAutoCompleteString(rStr.copy(nPos, nLen))
+            const OUString& rStr, sal_Int32 const nLen)
+    : editeng::IAutoCompleteString(rStr.copy(0, nLen))
 {
 #if OSL_DEBUG_LEVEL > 0
     ++nSwAutoCompleteStringCount;
@@ -255,7 +255,7 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
 
     if( !bLockWordLst && nWrdLen >= nMinWrdLen )
     {
-        SwAutoCompleteString* pNew = new SwAutoCompleteString( aNewWord, 0, nWrdLen );
+        SwAutoCompleteString* pNew = new SwAutoCompleteString( aNewWord, nWrdLen );
         pNew->AddDocument(rDoc);
         std::pair<editeng::SortedAutoCompleteStrings::const_iterator, bool>
             aInsPair = m_WordList.insert(pNew);

@@ -187,7 +187,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
          SetPortion(SwTextPortion::CopyLinePortion(*this));
     if( !pLeft )
     {
-        pLeft = new SwMarginPortion( 0 );
+        pLeft = new SwMarginPortion;
         pLeft->SetPortion( GetPortion() );
         SetPortion( pLeft );
     }

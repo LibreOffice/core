@@ -674,23 +674,10 @@ AbstractSwAsciiFilterDlg* SwAbstractDialogFactory_Impl::CreateSwAsciiFilterDlg( 
 
 VclAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDlg( vcl::Window *pParent,
                                                                            SwWrtShell &rSh,
-                                                                           SfxRequest& rReq,
-                                                                           int nResId )
+                                                                           SfxRequest& rReq )
 {
-    Dialog* pDlg=nullptr;
-    switch ( nResId )
-    {
-        case DLG_INSERT_BOOKMARK :
-            pDlg = VclPtr<SwInsertBookmarkDlg>::Create( pParent, rSh, rReq );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
-    return nullptr;
+    VclPtr<SwInsertBookmarkDlg> pDlg = VclPtr<SwInsertBookmarkDlg>::Create( pParent, rSh, rReq );
+    return new VclAbstractDialog_Impl( pDlg );
 }
 
 AbstractSwBreakDlg * SwAbstractDialogFactory_Impl::CreateSwBreakDlg(vcl::Window *pParent,
@@ -719,22 +706,10 @@ AbstractSwConvertTableDlg* SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg
     return new AbstractSwConvertTableDlg_Impl(pDlg);
 }
 
-VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV,int nResId)
+VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV)
 {
-    VclPtr<Dialog> pDlg;
-    switch ( nResId )
-    {
-        case DLG_CAPTION :
-            pDlg = VclPtr<SwCaptionDialog>::Create( pParent, rV );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg.get() )
-        return new VclAbstractDialog_Impl( pDlg );
-    return nullptr;
+    VclPtr<Dialog> pDlg = VclPtr<SwCaptionDialog>::Create( pParent, rV );
+    return new VclAbstractDialog_Impl( pDlg );
 }
 
 AbstractSwInsertDBColAutoPilot* SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView,
@@ -781,11 +756,10 @@ SwLabDlgMethod SwAbstractDialogFactory_Impl::GetSwLabDlgStaticMethod ()
 
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwParaDlg ( vcl::Window *pParent, SwView& rVw,
                                                     const SfxItemSet& rCoreSet  ,
-                                                    const OUString *pCollName,
                                                     bool bDraw ,
                                                     const OString& sDefPage)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwParaDlg>::Create( pParent, rVw, rCoreSet, DLG_STD, pCollName, bDraw, sDefPage );
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwParaDlg>::Create( pParent, rVw, rCoreSet, DLG_STD, nullptr, bDraw, sDefPage );
     return new AbstractTabDialog_Impl( pDlg );
 }
 
@@ -833,38 +807,16 @@ AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(vc
     return new AbstractSwAutoFormatDlg_Impl(pDlg);
 }
 
-SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType, int nResId )
+SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType )
 {
-    VclPtr<SfxModalDialog> pDlg;
-    switch ( nResId )
-    {
-        case RC_DLG_SWBORDERDLG :
-            pDlg = VclPtr<SwBorderDlg>::Create( pParent, rSet, nType );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg.get() )
-        return new SwAbstractSfxDialog_Impl( pDlg );
-    return nullptr;
+    VclPtr<SfxModalDialog> pDlg = VclPtr<SwBorderDlg>::Create( pParent, rSet, nType );
+    return new SwAbstractSfxDialog_Impl( pDlg );
 }
 
-SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, int nResId )
+SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh )
 {
-    VclPtr<SfxModalDialog> pDlg;
-    switch ( nResId )
-    {
-        case RC_DLG_SWWRAPDLG :
-            pDlg = VclPtr<SwWrapDlg>::Create( pParent, rSet, pSh, true/*bDrawMode*/ );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg.get() )
-        return new SwAbstractSfxDialog_Impl( pDlg );
-    return nullptr;
+    VclPtr<SfxModalDialog> pDlg = VclPtr<SwWrapDlg>::Create( pParent, rSet, pSh, true/*bDrawMode*/ );
+    return new SwAbstractSfxDialog_Impl( pDlg );
 }
 
 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc)
@@ -886,21 +838,10 @@ AbstractSwFieldDlg * SwAbstractDialogFactory_Impl::CreateSwFieldDlg(SfxBindings*
     return new AbstractSwFieldDlg_Impl(pDlg);
 }
 
-SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFieldEditDlg ( SwView& rVw, int nResId )
+SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFieldEditDlg ( SwView& rVw )
 {
-    VclPtr<SfxModalDialog> pDlg;
-    switch ( nResId )
-    {
-        case RC_DLG_SWFLDEDITDLG :
-            pDlg = VclPtr<SwFieldEditDlg>::Create( rVw );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg.get() )
-        return new SwAbstractSfxDialog_Impl( pDlg );
-    return nullptr;
+    VclPtr<SfxModalDialog> pDlg = VclPtr<SwFieldEditDlg>::Create( rVw );
+    return new SwAbstractSfxDialog_Impl( pDlg );
 }
 
 AbstractSwRenameXNamedDlg * SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg(vcl::Window* pParent,
@@ -927,10 +868,9 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrameTabDialog(const O
                                                 SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool        bNewFrame,
-                                                const OString&  sDefPage,
-                                                const OUString* pFormatStr )
+                                                const OString&  sDefPage )
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwFrameDlg>::Create(pFrame, pParent, rCoreSet, bNewFrame, rDialogType, false/*bFormat*/, sDefPage, pFormatStr);
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwFrameDlg>::Create(pFrame, pParent, rCoreSet, bNewFrame, rDialogType, false/*bFormat*/, sDefPage, nullptr);
     return new AbstractTabDialog_Impl(pDlg);
 }
 
@@ -993,25 +933,15 @@ AbstractJavaEditDialog * SwAbstractDialogFactory_Impl::CreateJavaEditDialog(
     return new AbstractJavaEditDialog_Impl( pDlg );
 }
 
-AbstractMailMergeDlg * SwAbstractDialogFactory_Impl::CreateMailMergeDlg( int nResId,
+AbstractMailMergeDlg * SwAbstractDialogFactory_Impl::CreateMailMergeDlg(
                                                 vcl::Window* pParent, SwWrtShell& rSh,
                                                 const OUString& rSourceName,
                                                 const OUString& rTableName,
                                                 sal_Int32 nCommandType,
                                                 const uno::Reference< sdbc::XConnection>& xConnection )
 {
-    VclPtr<SwMailMergeDlg> pDlg;
-    switch ( nResId )
-    {
-        case DLG_MAILMERGE :
-            pDlg = VclPtr<SwMailMergeDlg>::Create( pParent, rSh, rSourceName, rTableName, nCommandType, xConnection, nullptr );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg.get() )
-        return new AbstractMailMergeDlg_Impl( pDlg );
-    return nullptr;
+    VclPtr<SwMailMergeDlg> pDlg = VclPtr<SwMailMergeDlg>::Create( pParent, rSh, rSourceName, rTableName, nCommandType, xConnection, nullptr );
+    return new AbstractMailMergeDlg_Impl( pDlg );
 }
 
 AbstractMailMergeCreateFromDlg * SwAbstractDialogFactory_Impl::CreateMailMergeCreateFromDlg(vcl::Window* pParent)
@@ -1058,10 +988,10 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateSwTabDialog( int nResI
 AbstractMultiTOXTabDialog * SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog(
                                                 vcl::Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
-                                                SwTOXBase* pCurTOX, sal_uInt16 nToxType,
+                                                SwTOXBase* pCurTOX,
                                                 bool bGlobal)
 {
-    VclPtr<SwMultiTOXTabDialog> pDlg = VclPtr<SwMultiTOXTabDialog>::Create( pParent, rSet, rShell, pCurTOX, nToxType, bGlobal );
+    VclPtr<SwMultiTOXTabDialog> pDlg = VclPtr<SwMultiTOXTabDialog>::Create( pParent, rSet, rShell, pCurTOX, USHRT_MAX, bGlobal );
     return new AbstractMultiTOXTabDialog_Impl( pDlg );
 }
 

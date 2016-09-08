@@ -216,23 +216,17 @@ OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUStr
 }
 
 int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
-                                bool bLink, GraphicFilter *pFilter,
-                                Graphic* pPreviewGrf )
+                                bool bLink, GraphicFilter *pFilter )
 {
     SwWait aWait( *GetDocShell(), true );
 
     Graphic aGraphic;
     int aResult = GRFILTER_OK;
-    if ( pPreviewGrf )
-        aGraphic = *pPreviewGrf;
-    else
+    if( !pFilter )
     {
-        if( !pFilter )
-        {
-            pFilter = &GraphicFilter::GetGraphicFilter();
-        }
-        aResult = GraphicFilter::LoadGraphic( rPath, rFilter, aGraphic, pFilter );
+        pFilter = &GraphicFilter::GetGraphicFilter();
     }
+    aResult = GraphicFilter::LoadGraphic( rPath, rFilter, aGraphic, pFilter );
 
     if( GRFILTER_OK == aResult )
     {

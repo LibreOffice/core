@@ -152,7 +152,7 @@ IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Idle*, pIdle, void )
             m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( RES_CHAPTERFLD )->ModifyNotification( nullptr, nullptr );    // ChapterField
             m_rDoc.getIDocumentFieldsAccess().UpdateExpFields( nullptr, false );      // Updates ExpressionFields
             m_rDoc.getIDocumentFieldsAccess().UpdateTableFields(nullptr);                // Tables
-            m_rDoc.getIDocumentFieldsAccess().UpdateRefFields(nullptr);                // References
+            m_rDoc.getIDocumentFieldsAccess().UpdateRefFields();                // References
 
             pTmpRoot->EndAllAction();
 

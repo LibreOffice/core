@@ -85,15 +85,12 @@ SetGetExpField::SetGetExpField(
 }
 
 SetGetExpField::SetGetExpField( const SwNodeIndex& rNdIdx,
-                            const SwTextINetFormat& rINet, const SwIndex* pIdx )
+                            const SwTextINetFormat& rINet )
 {
     eSetGetExpFieldType = TEXTINET;
     CNTNT.pTextINet = &rINet;
     nNode = rNdIdx.GetIndex();
-    if( pIdx )
-        nContent = pIdx->GetIndex();
-    else
-        nContent = rINet.GetStart();
+    nContent = rINet.GetStart();
 }
 
 // Extension for Sections:
@@ -117,41 +114,29 @@ SetGetExpField::SetGetExpField( const SwSectionNode& rSectNd,
     }
 }
 
-SetGetExpField::SetGetExpField( const SwTableBox& rTBox, const SwPosition* pPos )
+SetGetExpField::SetGetExpField( const SwTableBox& rTBox )
 {
     eSetGetExpFieldType = TABLEBOX;
     CNTNT.pTBox = &rTBox;
 
-    if( pPos )
+    nNode = 0;
+    nContent = 0;
+    if( rTBox.GetSttNd() )
     {
-        nNode = pPos->nNode.GetIndex();
-        nContent = pPos->nContent.GetIndex();
-    }
-    else
-    {
-        nNode = 0;
-        nContent = 0;
-        if( rTBox.GetSttNd() )
-        {
-            SwNodeIndex aIdx( *rTBox.GetSttNd() );
-            const SwContentNode* pNd = aIdx.GetNode().GetNodes().GoNext( &aIdx );
-            if( pNd )
-                nNode = pNd->GetIndex();
-        }
+        SwNodeIndex aIdx( *rTBox.GetSttNd() );
+        const SwContentNode* pNd = aIdx.GetNode().GetNodes().GoNext( &aIdx );
+        if( pNd )
+            nNode = pNd->GetIndex();
     }
 }
 
 SetGetExpField::SetGetExpField( const SwNodeIndex& rNdIdx,
-                                const SwTextTOXMark& rTOX,
-                                const SwIndex* pIdx )
+                                const SwTextTOXMark& rTOX )
 {
     eSetGetExpFieldType = TEXTTOXMARK;
     CNTNT.pTextTOX = &rTOX;
     nNode = rNdIdx.GetIndex();
-    if( pIdx )
-        nContent = pIdx->GetIndex();
-    else
-        nContent = rTOX.GetStart();
+    nContent = rTOX.GetStart();
 }
 
 SetGetExpField::SetGetExpField( const SwPosition& rPos )

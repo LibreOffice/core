@@ -357,11 +357,10 @@ SwAttrHandler::~SwAttrHandler()
 }
 
 void SwAttrHandler::Init( const SwAttrSet& rAttrSet,
-                          const IDocumentSettingAccess& rIDocumentSettingAcces,
-                          const SwViewShell* pSh )
+                          const IDocumentSettingAccess& rIDocumentSettingAcces )
 {
     mpIDocumentSettingAccess = &rIDocumentSettingAcces;
-    mpShell = pSh;
+    mpShell = nullptr;
 
     for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++ )
         pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i );

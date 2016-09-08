@@ -94,8 +94,8 @@ class SwRotationGrf : public SfxUInt16Item
 {
     Size aUnrotatedSize;
 public:
-    SwRotationGrf( sal_Int16 nVal = 0 )
-        : SfxUInt16Item( RES_GRFATR_ROTATION, nVal )
+    SwRotationGrf()
+        : SfxUInt16Item( RES_GRFATR_ROTATION, 0 )
     {}
     SwRotationGrf( sal_Int16 nVal, const Size& rSz )
         : SfxUInt16Item( RES_GRFATR_ROTATION, nVal ), aUnrotatedSize( rSz )

@@ -167,7 +167,7 @@ bool SwGlosDocShell::Save()
 }
 
 SwWebGlosDocShell::SwWebGlosDocShell()
-    : SwWebDocShell( SfxObjectCreateMode::STANDARD )
+    : SwWebDocShell()
 {
     SetHelpId(SW_WEBGLOSDOCSHELL);
 }

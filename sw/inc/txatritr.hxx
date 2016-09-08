@@ -74,9 +74,8 @@ public:
 class SwLanguageIterator : public SwTextAttrIterator
 {
 public:
-    SwLanguageIterator( const SwTextNode& rTextNode, sal_Int32 nStart = 0,
-                        sal_uInt16 nWhich = RES_CHRATR_LANGUAGE )
-        : SwTextAttrIterator( rTextNode, nWhich, nStart )
+    SwLanguageIterator( const SwTextNode& rTextNode, sal_Int32 nStart = 0 )
+        : SwTextAttrIterator( rTextNode, RES_CHRATR_LANGUAGE, nStart )
     {}
 
     sal_uInt16 GetLanguage() const

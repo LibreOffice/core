@@ -944,7 +944,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
 
                     pGrfNd->StartGraphicAnimation(pOut, aAlignedGrfArea.Pos(),
                                         aAlignedGrfArea.SSize(), sal_IntPtr(this),
-                                        nullptr, GraphicManagerDrawFlags::STANDARD, pVout );
+                                        pVout );
                 }
                 else
                 {

@@ -152,7 +152,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                         assert(pFact && "SwAbstractDialogFactory fail!");
 
-                        std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSwFieldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG ));
+                        std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSwFieldEditDlg( GetView() ));
                         assert(pDlg && "Dialog creation failed!");
                         pDlg->Execute();
                     }

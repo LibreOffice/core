@@ -502,8 +502,8 @@ void SwDoc::ChgDBData(const SwDBData& rNewData)
 
 struct PostItField_ : public SetGetExpField
 {
-    PostItField_( const SwNodeIndex& rNdIdx, const SwTextField* pField,  const SwIndex* pIdx = nullptr )
-        : SetGetExpField( rNdIdx, pField, pIdx ) {}
+    PostItField_( const SwNodeIndex& rNdIdx, const SwTextField* pField )
+        : SetGetExpField( rNdIdx, pField, nullptr ) {}
 
     sal_uInt16 GetPageNo( const StringRangeEnumerator &rRangeEnum,
             const std::set< sal_Int32 > &rPossiblePages,
@@ -1740,7 +1740,7 @@ void SwDoc::ChkCondColls()
      {
         SwTextFormatColl *pColl = (*mpTextFormatCollTable)[n];
         if (RES_CONDTXTFMTCOLL == pColl->Which())
-            pColl->CallSwClientNotify( SwAttrHint(RES_CONDTXTFMTCOLL) );
+            pColl->CallSwClientNotify( SwAttrHint() );
      }
 }
 

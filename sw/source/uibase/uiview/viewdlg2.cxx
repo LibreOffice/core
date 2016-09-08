@@ -54,7 +54,7 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "SwAbstractDialogFactory fail!");
 
-            std::unique_ptr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( pMDI, *this, DLG_CAPTION ));
+            std::unique_ptr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( pMDI, *this ));
             assert(pDialog && "Dialog creation failed!");
             if ( pDialog )
             {

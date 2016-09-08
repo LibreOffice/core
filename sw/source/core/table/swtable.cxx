@@ -204,8 +204,8 @@ void InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
     }
 }
 
-SwTable::SwTable( SwTableFormat* pFormat )
-    : SwClient( pFormat ),
+SwTable::SwTable()
+    : SwClient( nullptr ),
     m_pHTMLLayout( nullptr ),
     m_pTableNode( nullptr ),
     m_nGraphicsThatResize( 0 ),

@@ -2318,7 +2318,7 @@ Sequence< OUString > SwXTextColumns::getSupportedServiceNames() throw( RuntimeEx
     return aRet;
 }
 
-SwXTextColumns::SwXTextColumns(sal_uInt16 nColCount) :
+SwXTextColumns::SwXTextColumns() :
     nReference(0),
     bIsAutomaticWidth(true),
     nAutoDistance(0),
@@ -2330,8 +2330,6 @@ SwXTextColumns::SwXTextColumns(sal_uInt16 nColCount) :
     bSepLineIsOn(false),
     nSepLineStyle(API_COL_LINE_NONE) // None
 {
-    if(nColCount)
-        setColumnCount(nColCount);
 }
 
 SwXTextColumns::SwXTextColumns(const SwFormatCol& rFormatCol) :

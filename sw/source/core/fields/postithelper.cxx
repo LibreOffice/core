@@ -145,10 +145,9 @@ bool SwAnnotationItem::UseElement()
 
 VclPtr<sw::sidebarwindows::SwSidebarWin> SwAnnotationItem::GetSidebarWindow(
                                                             SwEditWin& rEditWin,
-                                                            WinBits nBits,
                                                             SwPostItMgr& aMgr)
 {
-    return VclPtr<sw::annotation::SwAnnotationWin>::Create( rEditWin, nBits,
+    return VclPtr<sw::annotation::SwAnnotationWin>::Create( rEditWin, WB_DIALOGCONTROL,
                                                 aMgr, 0,
                                                 *this,
                                                 &mrFormatField );

@@ -128,8 +128,7 @@ public:
     };
 
 
-    // single argument ctors shall be explicit.
-    explicit SwTable( SwTableFormat* );
+    explicit SwTable();
     virtual ~SwTable();
 
     // @@@ public copy ctor, but no copy assignment?

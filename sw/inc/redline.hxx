@@ -119,8 +119,7 @@ public:
 
     // For sw3io: pNext/pExtraData are taken over.
     SwRedlineData( RedlineType_t eT, sal_uInt16 nAut, const DateTime& rDT,
-                   const OUString& rCmnt, SwRedlineData* pNxt,
-                    SwRedlineExtraData* pExtraData = nullptr );
+                   const OUString& rCmnt, SwRedlineData* pNxt );
 
     ~SwRedlineData();
 
@@ -166,7 +165,7 @@ public:
         }
 
     // ExtraData gets copied, the pointer is therefore not taken over by
-    // the RedlilneObject
+    // the RedlineObject
     void SetExtraData( const SwRedlineExtraData* pData );
     const SwRedlineExtraData* GetExtraData() const { return pExtraData; }
 

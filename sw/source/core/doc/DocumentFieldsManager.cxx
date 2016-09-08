@@ -375,7 +375,7 @@ void DocumentFieldsManager::UpdateFields( bool bCloseDB )
     UpdateTableFields(nullptr);
 
     // References
-    UpdateRefFields(nullptr);
+    UpdateRefFields();
     if( bCloseDB )
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
@@ -561,11 +561,11 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
 }
 
 /// Update reference and table fields
-void DocumentFieldsManager::UpdateRefFields( SfxPoolItem* pHt )
+void DocumentFieldsManager::UpdateRefFields()
 {
     for( auto pFieldType : *mpFieldTypes )
         if( RES_GETREFFLD == pFieldType->Which() )
-            pFieldType->ModifyNotification( nullptr, pHt );
+            pFieldType->ModifyNotification( nullptr, nullptr );
 }
 
 void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
@@ -835,7 +835,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
     if( mpUpdateFields->GetSortLst()->empty() )
     {
         if( bUpdRefFields )
-            UpdateRefFields(nullptr);
+            UpdateRefFields();
 
         mpUpdateFields->SetInUpdateFields( bOldInUpdateFields );
         mpUpdateFields->SetFieldsDirty( false );
@@ -1156,7 +1156,7 @@ void DocumentFieldsManager::UpdateExpFields( SwTextField* pUpdateField, bool bUp
 
     // update reference fields
     if( bUpdRefFields )
-        UpdateRefFields(nullptr);
+        UpdateRefFields();
 
     mpUpdateFields->SetInUpdateFields( bOldInUpdateFields );
     mpUpdateFields->SetFieldsDirty( false );

@@ -625,7 +625,6 @@ public:
 
     SwFlyFrameFormat* InsertObject( const svt::EmbeddedObjectRef&,
                 const SfxItemSet* pFlyAttrSet,
-                const SfxItemSet* pGrfAttrSet = nullptr,
                 SwFrameFormat* = nullptr );
     bool    FinishOLEObj(); ///< Shutdown server.
 

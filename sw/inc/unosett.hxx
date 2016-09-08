@@ -263,7 +263,7 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
 protected:
     virtual ~SwXTextColumns();
 public:
-    SwXTextColumns(sal_uInt16 nColCount);
+    SwXTextColumns();
     SwXTextColumns(const SwFormatCol& rFormatCol);
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();

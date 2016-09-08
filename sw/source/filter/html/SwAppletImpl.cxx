@@ -27,6 +27,7 @@
 #include <comphelper/classids.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <svtools/embedhlp.hxx>
+#include <hintids.hxx>
 
 using namespace com::sun::star;
 
@@ -105,8 +106,8 @@ SwHtmlOptType SwApplet_Impl::GetOptionType( const OUString& rName, bool bApplet 
 
     return nType;
 }
-SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich2 ) :
-        aItemSet( rPool, nWhich1, nWhich2 )
+SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool ) :
+        aItemSet( rPool, RES_FRMATR_BEGIN, RES_FRMATR_END-1 )
 {
 }
 

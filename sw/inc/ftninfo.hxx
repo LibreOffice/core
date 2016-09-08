@@ -100,7 +100,7 @@ public:
 
     bool operator==( const SwFootnoteInfo &rInf ) const;
 
-    SwFootnoteInfo(SwTextFormatColl* pTextColl = nullptr);
+    SwFootnoteInfo();
     SwFootnoteInfo(const SwFootnoteInfo&);
 };
 

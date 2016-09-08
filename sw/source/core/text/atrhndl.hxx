@@ -107,8 +107,7 @@ public:
 
     // set default attributes to values in rAttrSet or from cache
     void Init( const SwAttrSet& rAttrSet,
-               const IDocumentSettingAccess& rIDocumentSettingAccess,
-               const SwViewShell* pShell );
+               const IDocumentSettingAccess& rIDocumentSettingAccess );
     void Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAttrSet,
                const IDocumentSettingAccess& rIDocumentSettingAccess,
                const SwViewShell* pShell, SwFont& rFnt,

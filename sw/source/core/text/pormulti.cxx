@@ -683,14 +683,14 @@ void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
             pCurr->SetPortion(SwTextPortion::CopyLinePortion(*pCurr));
         if( nLeft )
         {
-            SwMarginPortion *pMarg = new SwMarginPortion( 0 );
+            SwMarginPortion *pMarg = new SwMarginPortion;
             pMarg->AddPrtWidth( nLeft );
             pMarg->SetPortion( pCurr->GetPortion() );
             pCurr->SetPortion( pMarg );
         }
         if( nRight )
         {
-            SwMarginPortion *pMarg = new SwMarginPortion( 0 );
+            SwMarginPortion *pMarg = new SwMarginPortion;
             pMarg->AddPrtWidth( nRight );
             pCurr->FindLastPortion()->Append( pMarg );
         }

@@ -63,17 +63,14 @@ public:
     SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextField* pField = nullptr,
                     const SwIndex* pIdx = nullptr );
 
-    SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextINetFormat& rINet,
-                    const SwIndex* pIdx = nullptr );
+    SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextINetFormat& rINet );
 
     SetGetExpField( const SwSectionNode& rSectNode,
                     const SwPosition* pPos = nullptr  );
 
-    SetGetExpField( const SwTableBox& rTableBox,
-                    const SwPosition* pPos = nullptr  );
+    SetGetExpField( const SwTableBox& rTableBox  );
 
-    SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextTOXMark& rTOX,
-                    const SwIndex* pIdx );
+    SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextTOXMark& rTOX );
 
     SetGetExpField( const SwPosition& rPos );
 

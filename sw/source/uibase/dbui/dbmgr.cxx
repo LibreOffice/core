@@ -2825,12 +2825,11 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     assert( pFact && "Factory creation failed!" );
-    pImpl->pMergeDialog = pFact->CreateMailMergeDlg( DLG_MAILMERGE,
-                                                        &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
-                                                        sDataSource,
-                                                        sDataTableOrQuery,
-                                                        nCmdType,
-                                                        xConnection);
+    pImpl->pMergeDialog = pFact->CreateMailMergeDlg( &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
+                                                     sDataSource,
+                                                     sDataTableOrQuery,
+                                                     nCmdType,
+                                                     xConnection);
     assert( pImpl->pMergeDialog && "Dialog creation failed!" );
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {

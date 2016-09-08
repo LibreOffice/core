@@ -88,7 +88,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     */
     virtual bool UpdateField(SwTextField * rDstFormatField, SwField & rSrcField, SwMsgPoolItem * pMsgHint, bool bUpdateTableFields) = 0;
 
-    virtual void UpdateRefFields(SfxPoolItem* pHt) = 0;
+    virtual void UpdateRefFields() = 0;
 
     virtual void UpdateTableFields(SfxPoolItem* pHt) = 0;
 

@@ -2343,7 +2343,7 @@ sal_uInt16 SwDoc::MergeTable( SwPaM& rPam )
 SwTableNode::SwTableNode( const SwNodeIndex& rIdx )
     : SwStartNode( rIdx, ND_TABLENODE )
 {
-    m_pTable = new SwTable( nullptr );
+    m_pTable = new SwTable;
 }
 
 SwTableNode::~SwTableNode()

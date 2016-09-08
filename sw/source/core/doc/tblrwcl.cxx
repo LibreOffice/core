@@ -1371,8 +1371,8 @@ struct InsULPara
 
     InsULPara( SwTableNode* pTNd,
                 SwTableBox* pLeft,
-                SwTableLine* pLine=nullptr, SwTableBox* pBox=nullptr )
-        : pTableNd( pTNd ), pInsLine( pLine ), pInsBox( pBox ),
+                SwTableLine* pLine=nullptr )
+        : pTableNd( pTNd ), pInsLine( pLine ), pInsBox( nullptr ),
         pLeftBox( pLeft )
         {   bUL_LR = true; bUL = true; }
 

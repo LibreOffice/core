@@ -860,8 +860,8 @@ SwRedlineData::SwRedlineData(
 
 // For sw3io: We now own pNext!
 SwRedlineData::SwRedlineData(RedlineType_t eT, sal_uInt16 nAut, const DateTime& rDT,
-    const OUString& rCmnt, SwRedlineData *pNxt, SwRedlineExtraData* pData)
-    : pNext(pNxt), pExtraData(pData), sComment(rCmnt), aStamp(rDT),
+    const OUString& rCmnt, SwRedlineData *pNxt)
+    : pNext(pNxt), pExtraData(nullptr), sComment(rCmnt), aStamp(rDT),
     eType(eT), nAuthor(nAut), nSeqNo(0)
 {
 }

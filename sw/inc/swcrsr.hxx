@@ -271,7 +271,7 @@ protected:
     virtual bool IsSelOvrCheck(int eFlags) override;
 
 public:
-    SwTableCursor( const SwPosition &rPos, SwPaM* pRing = nullptr );
+    SwTableCursor( const SwPosition &rPos );
     SwTableCursor( SwTableCursor& );
     virtual ~SwTableCursor();
 

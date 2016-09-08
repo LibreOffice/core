@@ -52,8 +52,7 @@ class SwUndoFieldFromDoc : public SwUndoField
 public:
     SwUndoFieldFromDoc(const SwPosition & rPos, const SwField & aOldField,
                        const SwField & aNewField,
-                       SwMsgPoolItem * pHint, bool bUpdate,
-                       SwUndoId nId = UNDO_FIELD );
+                       SwMsgPoolItem * pHint, bool bUpdate);
 
     virtual ~SwUndoFieldFromDoc();
 

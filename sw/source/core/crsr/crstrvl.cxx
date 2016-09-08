@@ -528,7 +528,7 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
                 ( IsReadOnlyAvailable() || !pCFrame->IsProtected() ))
             {
                 SwNodeIndex aNdIndex( *pTextNd ); // UNIX needs this object
-                SetGetExpField aCmp( aNdIndex, *pTextTOX, nullptr );
+                SetGetExpField aCmp( aNdIndex, *pTextTOX );
                 aCmp.SetBodyPos( *pCFrame );
 
                 if( bNext ? ( aCurGEF < aCmp && aCmp < aFndGEF )

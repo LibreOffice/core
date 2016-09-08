@@ -145,8 +145,8 @@ SwFixPortion::SwFixPortion()
     SetWhichPor( POR_FIX );
 }
 
-SwMarginPortion::SwMarginPortion( const sal_uInt16 nFixedWidth )
-    :SwGluePortion( nFixedWidth )
+SwMarginPortion::SwMarginPortion()
+    :SwGluePortion( 0 )
 {
     SetWhichPor( POR_MARGIN );
 }

@@ -2673,11 +2673,9 @@ SwFlyFrameFormat* DocumentContentOperationsManager::Insert(const SwPaM &rRg, con
 SwFlyFrameFormat* DocumentContentOperationsManager::InsertOLE(const SwPaM &rRg, const OUString& rObjName,
                         sal_Int64 nAspect,
                         const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet,
-                        SwFrameFormat* pFrameFormat )
+                        const SfxItemSet* pGrfAttrSet)
 {
-    if( !pFrameFormat )
-        pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_OLE );
+    SwFrameFormat* pFrameFormat = m_rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_OLE );
 
     return InsNoTextNode( *rRg.GetPoint(),
                             m_rDoc.GetNodes().MakeOLENode(

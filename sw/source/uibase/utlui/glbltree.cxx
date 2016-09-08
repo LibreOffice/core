@@ -894,7 +894,6 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
                                                         this, aSet,
                                                         *pActiveShell,
                                                         nullptr,
-                                                        USHRT_MAX,
                                                         true));
                 assert(pDlg && "Dialog creation failed!");
                 if(RET_OK == pDlg->Execute())

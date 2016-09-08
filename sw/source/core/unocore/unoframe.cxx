@@ -2995,7 +2995,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, nullptr);
 
                 SwFlyFrameFormat* pFrameFormat = nullptr;
-                pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrameSet, nullptr, nullptr );
+                pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrameSet, nullptr );
                 pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, nullptr);
                 pFrameFormat->Add(this);
                 if(!m_sName.isEmpty())
