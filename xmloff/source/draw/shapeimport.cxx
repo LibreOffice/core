@@ -208,7 +208,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()
         };
 
         mpGroupShapeElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aGroupShapeElemTokenMap);
-    } // if(!mpGroupShapeElemTokenMap)
+    }
 
     return *mpGroupShapeElemTokenMap;
 }
@@ -231,7 +231,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetFrameShapeElemTokenMap()
         };
 
         mpFrameShapeElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(aFrameShapeElemTokenMap);
-    } // if(!mpFrameShapeElemTokenMap)
+    }
 
     return *mpFrameShapeElemTokenMap;
 }
@@ -251,7 +251,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeElemTokenMap()
         };
 
         mp3DSceneShapeElemTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DSceneShapeElemTokenMap);
-    } // if(!mp3DSceneShapeElemTokenMap)
+    }
 
     return *mp3DSceneShapeElemTokenMap;
 }
@@ -268,7 +268,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DObjectAttrTokenMap()
         };
 
         mp3DObjectAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DObjectAttrTokenMap);
-    } // if(!mp3DObjectAttrTokenMap)
+    }
 
     return *mp3DObjectAttrTokenMap;
 }
@@ -285,7 +285,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DPolygonBasedAttrTokenMap()
         };
 
         mp3DPolygonBasedAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DPolygonBasedAttrTokenMap);
-    } // if(!mp3DPolygonBasedAttrTokenMap)
+    }
 
     return *mp3DPolygonBasedAttrTokenMap;
 }
@@ -302,7 +302,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DCubeObjectAttrTokenMap()
         };
 
         mp3DCubeObjectAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DCubeObjectAttrTokenMap);
-    } // if(!mp3DCubeObjectAttrTokenMap)
+    }
 
     return *mp3DCubeObjectAttrTokenMap;
 }
@@ -319,7 +319,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
         };
 
         mp3DSphereObjectAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DSphereObjectAttrTokenMap);
-    } // if(!mp3DSphereObjectAttrTokenMap)
+    }
 
     return *mp3DSphereObjectAttrTokenMap;
 }
@@ -338,7 +338,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
         };
 
         mp3DLightAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>(a3DLightAttrTokenMap);
-    } // if(!mp3DLightAttrTokenMap)
+    }
 
     return *mp3DLightAttrTokenMap;
 }
