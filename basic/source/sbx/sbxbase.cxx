@@ -216,7 +216,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
         {
             sal_Size nNewPos = rStrm.Tell();
             nOldPos += nSize;
-            DBG_ASSERT( nOldPos >= nNewPos, "SBX: Too much data loaded" );
+            assert( nOldPos >= nNewPos && "SBX: Too much data loaded" );
             if( nOldPos != nNewPos )
                 rStrm.Seek( nOldPos );
             if( !p->LoadCompleted() )

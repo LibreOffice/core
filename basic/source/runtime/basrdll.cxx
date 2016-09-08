@@ -71,7 +71,7 @@ ResMgr* BasicDLL::GetBasResMgr() const { return m_xImpl->xBasResMgr.get(); }
 void BasicDLL::EnableBreak( bool bEnable )
 {
     BasicDLL* pThis = BASIC_DLL;
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
+    assert( pThis && "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
         pThis->m_xImpl->bBreakEnabled = bEnable;
@@ -81,7 +81,7 @@ void BasicDLL::EnableBreak( bool bEnable )
 void BasicDLL::SetDebugMode( bool bDebugMode )
 {
     BasicDLL* pThis = BASIC_DLL;
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
+    assert( pThis && "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
         pThis->m_xImpl->bDebugMode = bDebugMode;
@@ -92,7 +92,7 @@ void BasicDLL::SetDebugMode( bool bDebugMode )
 void BasicDLL::BasicBreak()
 {
     BasicDLL* pThis = BASIC_DLL;
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
+    assert( pThis && "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
         // bJustStopping: if there's someone pressing STOP like crazy umpteen times,

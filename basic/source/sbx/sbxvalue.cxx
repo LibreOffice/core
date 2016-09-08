@@ -765,7 +765,7 @@ SbxDataType SbxValue::GetType() const
 
 bool SbxValue::SetType( SbxDataType t )
 {
-    DBG_ASSERT( !( t & 0xF000 ), "SetType of BYREF|ARRAY is forbidden!" );
+    assert( !( t & 0xF000 ) && "SetType of BYREF|ARRAY is forbidden!" );
     if( ( t == SbxEMPTY && aData.eType == SbxVOID )
      || ( aData.eType == SbxEMPTY && t == SbxVOID ) )
         return true;
@@ -803,7 +803,7 @@ bool SbxValue::SetType( SbxDataType t )
                         sal_uInt16 nSlotId = pThisVar
                                     ? static_cast<sal_uInt16>(pThisVar->GetUserData())
                                     : 0;
-                        DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName() == "Parent",
+                        assert( (nSlotId != 5345 || pThisVar->GetName() == "Parent") &&
                                     "SID_PARENTOBJECT is not named 'Parent'" );
                         bool bParentProp = 5345 == nSlotId;
                         if ( !bParentProp )

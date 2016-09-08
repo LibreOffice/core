@@ -91,7 +91,7 @@ static void CheckParentsOnDelete( SbxObject* pObj, SbxArray* p )
         if( rRef->GetRefCount() > 1 )
         {
             rRef->SetParent( nullptr );
-            DBG_ASSERT( !rRef->IsBroadcaster() || rRef->GetBroadcaster().GetListenerCount(), "Object element with dangling parent" );
+            assert( (!rRef->IsBroadcaster() || rRef->GetBroadcaster().GetListenerCount()) && "Object element with dangling parent" );
         }
     }
 }
@@ -607,7 +607,7 @@ bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     rStrm.ReadUInt32( nSize );
     sal_Size nNewPos = rStrm.Tell();
     nPos += nSize;
-    DBG_ASSERT( nPos >= nNewPos, "SBX: Loaded too much data" );
+    assert( nPos >= nNewPos && "SBX: Loaded too much data" );
     if( nPos != nNewPos )
     {
         rStrm.Seek( nPos );

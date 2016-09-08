@@ -265,7 +265,8 @@ namespace basic
     {
         SolarMutexGuard g;
 
-        OSL_PRECOND( getApplicationBasicManager( false ) == nullptr, "ImplRepository::impl_createApplicationBasicManager: there already is one!" );
+        assert( getApplicationBasicManager( false ) == nullptr &&
+                "ImplRepository::impl_createApplicationBasicManager: there already is one!" );
 
         // Determine Directory
         SvtPathOptions aPathCFG;
@@ -286,10 +287,13 @@ namespace basic
         // The first dir in the path as destination:
         OUString aFileName( aAppBasic.getName() );
         aAppBasic = INetURLObject( aAppBasicDir.getToken(1, ';') );
-        DBG_ASSERT(aAppBasic.GetProtocol() != INetProtocol::NotValid,
+        assert(aAppBasic.GetProtocol() != INetProtocol::NotValid &&
             OString("Invalid URL: \"" +
                     OUStringToOString(aAppBasicDir, osl_getThreadTextEncoding()) +
                     "\"").getStr());
+//        assert((aAppBasic.GetProtocol() != INetProtocol::NotValid) &&
+//                ("Invalid URL: \"" + aAppBasicDir + "\""));
+
         aAppBasic.insertName( aFileName );
         pBasicManager->SetStorageName( aAppBasic.PathToFileName() );
 
@@ -337,7 +341,7 @@ namespace basic
         if ( pos != m_aCreationListeners.end() )
             m_aCreationListeners.erase( pos );
         else {
-            OSL_FAIL( "ImplRepository::revokeCreationListener: listener is not registered!" );
+            SAL_WARN( "basic", "ImplRepository::revokeCreationListener: listener is not registered!" );
         }
     }
 
@@ -359,14 +363,14 @@ namespace basic
         BasicManager* pAppManager = getApplicationBasicManager( true );
 
         StarBASIC* pAppBasic = pAppManager ? pAppManager->GetLib(0) : nullptr;
-        DBG_ASSERT( pAppBasic != nullptr, "impl_getApplicationBasic: unable to determine the default application's Basic library!" );
+        assert( pAppBasic != nullptr && "impl_getApplicationBasic: unable to determine the default application's Basic library!" );
         return pAppBasic;
     }
 
     BasicManager*& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
     {
         Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
-        DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
+        assert( _rxDocumentModel.is() && "ImplRepository::impl_getLocationForModel: invalid model!" );
 
         BasicManager*& location = m_aStore[ xNormalized ];
         return location;
@@ -375,14 +379,14 @@ namespace basic
     bool ImplRepository::impl_hasLocationForModel( const Reference< XModel >& _rxDocumentModel ) const
     {
         Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
-        DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
+        assert( _rxDocumentModel.is() && "ImplRepository::impl_getLocationForModel: invalid model!" );
 
         return m_aStore.find(xNormalized) != m_aStore.end();
     }
 
     void ImplRepository::impl_initDocLibraryContainers_nothrow( const Reference< XPersistentLibraryContainer >& _rxBasicLibraries, const Reference< XPersistentLibraryContainer >& _rxDialogLibraries )
     {
-        OSL_PRECOND( _rxBasicLibraries.is() && _rxDialogLibraries.is(),
+        assert( _rxBasicLibraries.is() && _rxDialogLibraries.is() &&
             "ImplRepository::impl_initDocLibraryContainers_nothrow: illegal library containers, this will crash!" );
 
         try
@@ -464,7 +468,7 @@ namespace basic
 
         // knit the containers with the BasicManager
         LibraryContainerInfo aInfo( xBasicLibs, xDialogLibs, dynamic_cast< OldBasicPassword* >( xBasicLibs.get() ) );
-        OSL_ENSURE( aInfo.mpOldBasicPassword, "ImplRepository::impl_createManagerForModel: wrong BasicLibraries implementation!" );
+        assert( aInfo.mpOldBasicPassword && "ImplRepository::impl_createManagerForModel: wrong BasicLibraries implementation!" );
         _out_rpBasicManager->SetLibraryContainerInfo( aInfo );
 
         // initialize the containers
@@ -480,7 +484,7 @@ namespace basic
         impl_notifyCreationListeners( _rxDocumentModel, *_out_rpBasicManager );
 
         // register as listener for this model being disposed/closed
-        OSL_ENSURE( _rxDocumentModel.is(), "ImplRepository::impl_createManagerForModel: the document must be an XComponent!" );
+        assert( _rxDocumentModel.is() && "ImplRepository::impl_createManagerForModel: the document must be an XComponent!" );
         assert(impl_hasLocationForModel(_rxDocumentModel));
         startComponentListening( _rxDocumentModel );
 
@@ -540,7 +544,7 @@ namespace basic
 
     void ImplRepository::impl_removeFromRepository( const BasicManagerStore::iterator& _pos )
     {
-        OSL_PRECOND( _pos != m_aStore.end(), "ImplRepository::impl_removeFromRepository: invalid position!" );
+        assert( _pos != m_aStore.end() && "ImplRepository::impl_removeFromRepository: invalid position!" );
 
         BasicManager* pManager = _pos->second;
 
@@ -571,7 +575,7 @@ namespace basic
             }
         }
 
-        OSL_FAIL( "ImplRepository::_disposing: where does this come from?" );
+        SAL_WARN( "basic", "ImplRepository::_disposing: where does this come from?" );
     }
 
 
@@ -583,7 +587,7 @@ namespace basic
             return;
 
         BasicManager* pManager = dynamic_cast< BasicManager* >( &_rBC );
-        OSL_ENSURE( pManager, "ImplRepository::Notify: where does this come from?" );
+        assert( pManager && "ImplRepository::Notify: where does this come from?" );
 
         for (   BasicManagerStore::iterator loop = m_aStore.begin();
                 loop != m_aStore.end();
@@ -595,7 +599,7 @@ namespace basic
                 // a BasicManager which is still in our repository is being deleted.
                 // That's bad, since by definition, we *own* all instances in our
                 // repository.
-                OSL_FAIL( "ImplRepository::Notify: nobody should tamper with the managers, except ourself!" );
+                SAL_WARN( "basic", "ImplRepository::Notify: nobody should tamper with the managers, except ourself!" );
                 m_aStore.erase( loop );
                 break;
             }
