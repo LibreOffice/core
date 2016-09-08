@@ -151,7 +151,6 @@ protected:
     timeval         m_aTimeout;
     sal_uLong       m_nTimeoutMS;
     int             m_pTimeoutFDS[2];
-    bool            blockIdleTimeout;
 
     int             nFDs_;
     fd_set          aReadFDS_;
@@ -162,7 +161,7 @@ public:
     virtual         ~SalXLib();
     virtual void    Init();
 
-    virtual SalYieldResult Yield( bool bWait, bool bHandleAllCurrentEvents );
+    virtual bool    Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual void    Wakeup();
     virtual void    PostUserEvent();
 

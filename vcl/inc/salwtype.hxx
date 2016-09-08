@@ -264,7 +264,7 @@ struct SalLongPressEvent
     long mnY;
 };
 
-typedef void (*SALTIMERPROC)( bool idle );
+typedef void (*SALTIMERPROC)();
 
 #endif // INCLUDED_VCL_INC_SALWTYPE_HXX
 

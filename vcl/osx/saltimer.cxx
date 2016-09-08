@@ -98,11 +98,7 @@ void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
         {
             SolarMutexGuard aGuard;
             if( pSVData->maSchedCtx.mpSalTimer )
-            {
-                // timer already elapsed since event posted
-                bool idle = true; // TODO
-                pSVData->maSchedCtx.mpSalTimer->CallCallback( idle );
-            }
+                pSVData->maSchedCtx.mpSalTimer->CallCallback();
         }
         ImplSalStartTimer( sal_uLong( [pEvent data1] ) );
     }

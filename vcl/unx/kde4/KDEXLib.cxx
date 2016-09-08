@@ -49,8 +49,9 @@
 KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false),
     m_pFreeCmdLineArgs(nullptr), m_pAppCmdLineArgs(nullptr), m_nFakeCmdLineArgs( 0 ),
-    m_frameWidth( -1 ), m_isGlibEventLoopType(false),
-    m_allowKdeDialogs(false), blockIdleTimeout(false)
+    m_frameWidth( -1 ),
+    m_isGlibEventLoopType(false),
+    m_allowKdeDialogs(false)
 {
     // the timers created here means they belong to the main thread.
     // As the timeoutTimer runs the LO event queue, which may block on a dialog,
@@ -274,7 +275,7 @@ void KDEXLib::socketNotifierActivated( int fd )
     sdata.handle( fd, sdata.data );
 }
 
-SalYieldResult KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
+bool KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     if( !m_isGlibEventLoopType )
     {
@@ -285,9 +286,7 @@ SalYieldResult KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
             // otherwise they can remain unhandled for quite a long while
             wasEvent = processYield( false, bHandleAllCurrentEvents );
         }
-        SalYieldResult aResult = SalXLib::Yield(bWait, bHandleAllCurrentEvents);
-        return (aResult == SalYieldResult::EVENT || wasEvent) ?
-            SalYieldResult::EVENT : SalYieldResult::TIMEOUT;
+        return SalXLib::Yield(bWait, bHandleAllCurrentEvents) || wasEvent;
     }
     // if we are the main thread (which is where the event processing is done),
     // good, just do it
@@ -303,7 +302,7 @@ SalYieldResult KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         // temporarily do it while checking for new events)
         SalYieldMutexReleaser aReleaser;
         Q_EMIT processYieldSignal( bWait, bHandleAllCurrentEvents );
-        return SalYieldResult::TIMEOUT;
+        return false;
     }
 }
 
@@ -311,18 +310,15 @@ SalYieldResult KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
  * Quoting the Qt docs: [QAbstractEventDispatcher::processEvents] processes
  * pending events that match flags until there are no more events to process.
  */
-SalYieldResult KDEXLib::processYield( bool bWait, bool )
+bool KDEXLib::processYield( bool bWait, bool )
 {
-    blockIdleTimeout = !bWait;
     QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
     bool wasEvent = false;
     if ( bWait )
         wasEvent = dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
     else
         wasEvent = dispatcher->processEvents( QEventLoop::AllEvents );
-    blockIdleTimeout = false;
-    return wasEvent ? SalYieldResult::EVENT
-                    : SalYieldResult::TIMEOUT;
+    return wasEvent;
 }
 
 void KDEXLib::StartTimer( sal_uLong nMS )
@@ -360,11 +356,7 @@ void KDEXLib::timeoutActivated()
     // some sense (timeouts should be more ok to wait and be triggered somewhen).
     while( SalKDEDisplay::self()->HasUserEvents() )
         SalKDEDisplay::self()->DispatchInternalEvent();
-
-    // QGuiEventDispatcherGlib makes glib watch also X11 fd, but its hasPendingEvents()
-    // doesn't check X11, so explicitly check XPending() here.
-    bool idle = QApplication::hasPendingEvents() && !blockIdleTimeout && !XPending( QX11Info::display());
-    X11SalData::Timeout( idle );
+    X11SalData::Timeout();
     // QTimer is not single shot, so will be restarted immediately
 }
 
