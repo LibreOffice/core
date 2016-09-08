@@ -29,6 +29,7 @@
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include "PageMasterPropMapper.hxx"
+#include <o3tl/make_unique.hxx>
 #include <tools/debug.hxx>
 #include <svl/itemset.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -53,6 +54,7 @@
 #include "PageMasterImportContext.hxx"
 #include "PageMasterImportPropMapper.hxx"
 
+#include <memory>
 #include <set>
 #include <vector>
 
@@ -251,14 +253,14 @@ class SvXMLStylesContext_Impl
     typedef std::set<SvXMLStyleIndex_Impl, SvXMLStyleIndexCmp_Impl> IndicesType;
 
     StylesType aStyles;
-    mutable IndicesType* pIndices;
+    mutable std::unique_ptr<IndicesType> pIndices;
     bool bAutomaticStyle;
 
 #if OSL_DEBUG_LEVEL > 0
     mutable sal_uInt32 m_nIndexCreated;
 #endif
 
-    void FlushIndex() { delete pIndices; pIndices = nullptr; }
+    void FlushIndex() { pIndices.reset(); }
 
 public:
     explicit SvXMLStylesContext_Impl( bool bAuto );
@@ -281,7 +283,6 @@ public:
 };
 
 SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( bool bAuto ) :
-    pIndices( nullptr ),
     bAutomaticStyle( bAuto )
 #if OSL_DEBUG_LEVEL > 0
     , m_nIndexCreated( 0 )
@@ -290,8 +291,6 @@ SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( bool bAuto ) :
 
 SvXMLStylesContext_Impl::~SvXMLStylesContext_Impl()
 {
-    delete pIndices;
-
     for (SvXMLStyleContext* pStyle : aStyles)
     {
         pStyle->ReleaseRef();
@@ -326,7 +325,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
 
     if( !pIndices && bCreateIndex && !aStyles.empty() )
     {
-        pIndices = new IndicesType(aStyles.begin(), aStyles.end());
+        pIndices = o3tl::make_unique<IndicesType>(aStyles.begin(), aStyles.end());
         SAL_WARN_IF(pIndices->size() != aStyles.size(), "xmloff", "Here is a duplicate Style");
 #if OSL_DEBUG_LEVEL > 0
         SAL_WARN_IF(0 != m_nIndexCreated, "xmloff.style",
@@ -341,7 +340,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
         IndicesType::iterator aFind = pIndices->find(aIndex);
         if( aFind != pIndices->end() )
             pStyle = aFind->GetStyle();
-    }
+   }
     else
     {
         for( size_t i = 0; !pStyle && i < aStyles.size(); i++ )
