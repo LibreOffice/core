@@ -603,22 +603,17 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
             // and then hide/display everything
             void (SwRangeRedline::*pFnc)(sal_uInt16, size_t) = nullptr;
 
-            switch( RedlineFlags::ShowMask & eMode )
-            {
-            case RedlineFlags::ShowInsert | RedlineFlags::ShowDelete :
+            RedlineFlags eShowMode = RedlineFlags::ShowMask & eMode;
+            if (eShowMode == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
                 pFnc = &SwRangeRedline::Show;
-                break;
-            case RedlineFlags::ShowInsert:
+            else if (eShowMode == RedlineFlags::ShowInsert)
                 pFnc = &SwRangeRedline::Hide;
-                break;
-            case RedlineFlags::ShowDelete:
+            else if (eShowMode == RedlineFlags::ShowDelete)
                 pFnc = &SwRangeRedline::ShowOriginal;
-                break;
-
-            default:
+            else
+            {
                 pFnc = &SwRangeRedline::Hide;
                 eMode |= RedlineFlags::ShowInsert;
-                break;
             }
 
             CheckAnchoredFlyConsistency(m_rDoc);
@@ -1781,16 +1776,11 @@ void DocumentRedlineManager::CompressRedlines()
     CHECK_REDLINE( *this )
 
     void (SwRangeRedline::*pFnc)(sal_uInt16, size_t) = nullptr;
-    switch( RedlineFlags::ShowMask & meRedlineFlags )
-    {
-    case RedlineFlags::ShowInsert | RedlineFlags::ShowDelete:
+    RedlineFlags eShow = RedlineFlags::ShowMask & meRedlineFlags;
+    if( eShow == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
         pFnc = &SwRangeRedline::Show;
-        break;
-    case RedlineFlags::ShowInsert:
+    else if (eShow == RedlineFlags::ShowInsert)
         pFnc = &SwRangeRedline::Hide;
-        break;
-    default: break;
-    }
 
     // Try to merge identical ones
     for( size_t n = 1; n < mpRedlineTable->size(); ++n )
