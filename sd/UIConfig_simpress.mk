@@ -91,6 +91,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/simpress,\
 	sd/uiconfig/simpress/toolbar/rectanglesbar \
 	sd/uiconfig/simpress/toolbar/slideviewobjectbar \
 	sd/uiconfig/simpress/toolbar/slideviewtoolbar \
+	sd/uiconfig/simpress/toolbar/singlemode \
 	sd/uiconfig/simpress/toolbar/standardbar \
 	sd/uiconfig/simpress/toolbar/starshapes \
 	sd/uiconfig/simpress/toolbar/symbolshapes \
