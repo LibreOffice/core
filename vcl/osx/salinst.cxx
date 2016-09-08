@@ -561,7 +561,7 @@ class ReleasePoolHolder
     ~ReleasePoolHolder() { [mpPool release]; }
 };
 
-SalYieldResult AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
     (void) nReleased;
     assert(nReleased == 0); // not implemented
@@ -602,7 +602,7 @@ SalYieldResult AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents
             maWaitingYieldCond.set();
             // return if only one event is asked for
             if( ! bHandleAllCurrentEvents )
-                return SalYieldResult::EVENT;
+                return true;
         }
     }
 
@@ -663,10 +663,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                 // this cause crashes on MacOSX 10.4
                 // [AquaSalTimer::pRunningTimer fire];
                 if (ImplGetSVData()->maSchedCtx.mpSalTimer != nullptr)
-                {
-                    bool idle = true; // TODO
-                    ImplGetSVData()->maSchedCtx.mpSalTimer->CallCallback( idle );
-                }
+                    ImplGetSVData()->maSchedCtx.mpSalTimer->CallCallback();
             }
         }
 
@@ -719,7 +716,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         }
     }
 
-    return bHadEvent ? SalYieldResult::EVENT : SalYieldResult::TIMEOUT;
+    return bHadEvent;
 }
 
 bool AquaSalInstance::AnyInput( VclInputFlags nType )
