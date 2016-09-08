@@ -367,6 +367,11 @@ protected:
     VclPtr<PushButton>                         m_pNewTopLevelButton;
     VclPtr<MenuButton>                         m_pModifyTopLevelButton;
 
+    VclPtr<FixedText>                          m_pToolbarStyleLabel;
+    VclPtr<RadioButton>                        m_pIconsOnlyRB;
+    VclPtr<RadioButton>                        m_pTextOnlyRB;
+    VclPtr<RadioButton>                        m_pIconsAndTextRB;
+
     // the contents section where the contents of the selected
     // menu or toolbar are displayed
     VclPtr<VclFrame>                           m_pContents;
@@ -570,6 +575,7 @@ private:
     DECL_LINK_TYPED( SelectToolbarEntry, SvTreeListBox*, void );
     DECL_LINK_TYPED( ToolbarSelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
+    DECL_LINK_TYPED( StyleChangeHdl, Button *, void );
     DECL_LINK_TYPED( NewToolbarHdl, Button *, void );
     DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
     DECL_LINK_TYPED( AddSeparatorHdl, Button *, void );

@@ -1746,6 +1746,10 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pTopLevelListBox, "toplevellist");
     get(m_pNewTopLevelButton, "toplevelbutton");
     get(m_pModifyTopLevelButton, "menuedit");
+    get(m_pToolbarStyleLabel, "toolbarstyleft");
+    get(m_pIconsOnlyRB, "iconsrb");
+    get(m_pTextOnlyRB, "textrb");
+    get(m_pIconsAndTextRB, "iconsandtextrb");
     get(m_pContents, "contents");
     get(m_pContentsLabel, "contentslabel");
     get(m_pAddCommandsButton, "add");
@@ -1769,6 +1773,14 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     // This button is applicable only for the toolbar config tab
     m_pResetTopLevelButton->Enable( false );
     m_pResetTopLevelButton->Hide();
+    //These radio buttons are applicable only for the toolbar config tab
+    m_pIconsOnlyRB->Enable( false );
+    m_pTextOnlyRB->Enable( false );
+    m_pIconsAndTextRB->Enable( false );
+    m_pIconsOnlyRB->Hide();
+    m_pTextOnlyRB->Hide();
+    m_pIconsAndTextRB->Hide();
+    m_pToolbarStyleLabel->Hide();
 }
 
 SvxConfigPage::~SvxConfigPage()
@@ -1783,6 +1795,10 @@ void SvxConfigPage::dispose()
     m_pTopLevelListBox.clear();
     m_pNewTopLevelButton.clear();
     m_pModifyTopLevelButton.clear();
+    m_pToolbarStyleLabel.clear();
+    m_pIconsOnlyRB.clear();
+    m_pTextOnlyRB.clear();
+    m_pIconsAndTextRB.clear();
     m_pContents.clear();
     m_pContentsLabel.clear();
     m_pEntries.clear();
@@ -3121,11 +3137,26 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
     // The reset button will be used in the toolbar config tab
     m_pResetTopLevelButton->Show();
+    // These radio buttons will be used in the toolbar config tab
+    m_pIconsOnlyRB->Enable();
+    m_pTextOnlyRB->Enable();
+    m_pIconsAndTextRB->Enable();
+    m_pIconsOnlyRB->Show();
+    m_pTextOnlyRB->Show();
+    m_pIconsAndTextRB->Show();
+    m_pToolbarStyleLabel->Show();
 
     m_pTopLevelListBox->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, SelectToolbar ) );
     m_pContentsListBox->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, SelectToolbarEntry ) );
+
+    m_pIconsOnlyRB->SetClickHdl  (
+        LINK( this, SvxToolbarConfigPage, StyleChangeHdl ) );
+    m_pTextOnlyRB->SetClickHdl  (
+        LINK( this, SvxToolbarConfigPage, StyleChangeHdl ) );
+    m_pIconsAndTextRB->SetClickHdl  (
+        LINK( this, SvxToolbarConfigPage, StyleChangeHdl ) );
 
     m_pNewTopLevelButton->SetClickHdl  (
         LINK( this, SvxToolbarConfigPage, NewToolbarHdl ) );
@@ -3336,33 +3367,6 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, 
             }
             break;
         }
-        case ID_ICONS_ONLY:
-        {
-            pToolbar->SetStyle( 0 );
-            pSaveInData->SetSystemStyle( m_xFrame, pToolbar->GetCommand(), 0 );
-
-            m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
-
-            break;
-        }
-        case ID_TEXT_ONLY:
-        {
-            pToolbar->SetStyle( 1 );
-            pSaveInData->SetSystemStyle( m_xFrame, pToolbar->GetCommand(), 1 );
-
-            m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
-
-            break;
-        }
-        case ID_ICONS_AND_TEXT:
-        {
-            pToolbar->SetStyle( 2 );
-            pSaveInData->SetSystemStyle( m_xFrame, pToolbar->GetCommand(), 2 );
-
-            m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
-
-            break;
-        }
     }
 }
 
@@ -3465,18 +3469,6 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
             {
                 OSL_TRACE("Error restoring image");
             }
-            break;
-        }
-        case ID_ICON_ONLY:
-        {
-            break;
-        }
-        case ID_TEXT_ONLY:
-        {
-            break;
-        }
-        case ID_ICON_AND_TEXT:
-        {
             break;
         }
         case ID_CHANGE_SYMBOL:
@@ -4471,9 +4463,6 @@ void SvxToolbarConfigPage::UpdateButtonStates()
     PopupMenu* pPopup = m_pModifyCommandButton->GetPopupMenu();
     pPopup->EnableItem( ID_RENAME, false );
     pPopup->EnableItem( ID_DEFAULT_COMMAND, false );
-    pPopup->EnableItem( ID_ICON_ONLY, false );
-    pPopup->EnableItem( ID_ICON_AND_TEXT, false );
-    pPopup->EnableItem( ID_TEXT_ONLY, false );
     pPopup->EnableItem( ID_CHANGE_SYMBOL, false );
     pPopup->EnableItem( ID_RESET_SYMBOL, false );
 
@@ -4496,9 +4485,6 @@ void SvxToolbarConfigPage::UpdateButtonStates()
     else
     {
         pPopup->EnableItem( ID_RENAME );
-        pPopup->EnableItem( ID_ICON_ONLY );
-        pPopup->EnableItem( ID_ICON_AND_TEXT );
-        pPopup->EnableItem( ID_TEXT_ONLY );
         pPopup->EnableItem( ID_CHANGE_SYMBOL );
 
         m_pDeleteCommandButton->Enable();
@@ -4541,6 +4527,9 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
         m_pAddSeparatorButton->Enable( false );
         m_pDeleteCommandButton->Enable( false );
         m_pResetTopLevelButton->Enable( false );
+        m_pIconsOnlyRB->Enable( false );
+        m_pTextOnlyRB->Enable( false );
+        m_pIconsAndTextRB->Enable( false );
 
         return;
     }
@@ -4549,6 +4538,10 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     m_pModifyCommandButton->Enable();
     m_pAddCommandsButton->Enable();
     m_pResetTopLevelButton->Enable( !pToolbar->IsRenamable() );
+
+    m_pIconsOnlyRB->Enable();
+    m_pTextOnlyRB->Enable();
+    m_pIconsAndTextRB->Enable();
 
     PopupMenu* pPopup = m_pModifyTopLevelButton->GetPopupMenu();
 
@@ -4559,17 +4552,17 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     {
         case 0:
         {
-            pPopup->CheckItem( ID_ICONS_ONLY );
+            m_pIconsOnlyRB->Check();
             break;
         }
         case 1:
         {
-            pPopup->CheckItem( ID_TEXT_ONLY );
+            m_pTextOnlyRB->Check();
             break;
         }
         case 2:
         {
-            pPopup->CheckItem( ID_ICONS_AND_TEXT );
+            m_pIconsAndTextRB->Check();
             break;
         }
     }
@@ -4599,6 +4592,42 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     }
 
     UpdateButtonStates();
+}
+
+IMPL_LINK_TYPED( SvxToolbarConfigPage, StyleChangeHdl, Button*, pButton, void )
+{
+    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
+
+    SvxConfigEntry* pToolbar =
+        static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
+
+    ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>( GetSaveInData() );
+
+    if (pButton == m_pIconsOnlyRB)
+    {
+        pToolbar->SetStyle( 0 );
+        pSaveInData->SetSystemStyle( m_xFrame, pToolbar->GetCommand(), 0 );
+
+        m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
+    }
+    else if (pButton == m_pTextOnlyRB)
+    {
+        pToolbar->SetStyle( 1 );
+        pSaveInData->SetSystemStyle( m_xFrame, pToolbar->GetCommand(), 1 );
+
+        m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
+    }
+    else if (pButton == m_pIconsAndTextRB)
+    {
+        pToolbar->SetStyle( 2 );
+        pSaveInData->SetSystemStyle( m_xFrame, pToolbar->GetCommand(), 2 );
+
+        m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
+    }
+    else
+    {
+        //TODO:Unknown selection!
+    }
 }
 
 IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, NewToolbarHdl, Button *, void )
