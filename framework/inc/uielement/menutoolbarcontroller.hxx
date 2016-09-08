@@ -17,55 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
-#define INCLUDED_FRAMEWORK_INC_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
+#ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_MENUTOOLBARCONTROLLER_HXX
+#define INCLUDED_FRAMEWORK_INC_UIELEMENT_MENUTOOLBARCONTROLLER_HXX
 
-#include <svtools/toolboxcontroller.hxx>
-
-#include <tools/link.hxx>
-#include <vcl/vclptr.hxx>
+#include <framework/generictoolbarcontroller.hxx>
 
 class PopupMenu;
-class ToolBox;
 
 namespace framework
 {
-
-class GenericToolbarController : public svt::ToolboxController
-{
-    public:
-        GenericToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                  const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                  ToolBox* pToolBar,
-                                  sal_uInt16 nID,
-                                  const OUString& aCommand );
-        virtual ~GenericToolbarController();
-
-        // XComponent
-        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
-
-        // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException, std::exception) override;
-
-        // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
-
-        DECL_STATIC_LINK_TYPED( GenericToolbarController, ExecuteHdl_Impl, void*, void );
-
-        struct ExecuteInfo
-        {
-            css::uno::Reference< css::frame::XDispatch >     xDispatch;
-            css::util::URL                                   aTargetURL;
-            css::uno::Sequence< css::beans::PropertyValue >  aArgs;
-        };
-
-    protected:
-        VclPtr<ToolBox>     m_pToolbar;
-        sal_uInt16          m_nID;
-        bool                m_bEnumCommand : 1,
-                            m_bMadeInvisible : 1;
-        OUString            m_aEnumCommand;
-};
 
 class MenuToolbarController : public GenericToolbarController
 {
@@ -91,6 +51,6 @@ class MenuToolbarController : public GenericToolbarController
 
 }
 
-#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
+#endif // INCLUDED_FRAMEWORK_INC_UIELEMENT_MENUTOOLBARCONTROLLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

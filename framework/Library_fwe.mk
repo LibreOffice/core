@@ -80,6 +80,7 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/xml/toolboxdocumenthandler \
     framework/source/fwe/xml/xmlnamespaces \
     framework/source/services/dispatchhelper \
+    framework/source/uielement/generictoolbarcontroller \
 ))
 
 # Runtime dependency for unit-tests

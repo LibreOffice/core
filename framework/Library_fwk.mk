@@ -130,12 +130,12 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/dropdownboxtoolbarcontroller \
     framework/source/uielement/edittoolbarcontroller \
     framework/source/uielement/genericstatusbarcontroller \
-    framework/source/uielement/generictoolbarcontroller \
     framework/source/uielement/imagebuttontoolbarcontroller \
     framework/source/uielement/langselectionstatusbarcontroller \
     framework/source/uielement/menubarmanager \
     framework/source/uielement/menubarmerger \
     framework/source/uielement/menubarwrapper \
+    framework/source/uielement/menutoolbarcontroller \
     framework/source/uielement/objectmenucontroller \
     framework/source/uielement/popuptoolbarcontroller \
     framework/source/uielement/progressbarwrapper \

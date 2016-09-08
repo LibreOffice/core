@@ -18,7 +18,7 @@
 
 #include <uielement/toolbarmanager.hxx>
 
-#include <uielement/generictoolbarcontroller.hxx>
+#include <uielement/menutoolbarcontroller.hxx>
 #include "services.h"
 #include "general.h"
 #include "properties.h"

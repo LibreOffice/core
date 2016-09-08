@@ -25,9 +25,9 @@
 #include <com/sun/star/frame/theToolbarControllerFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <framework/generictoolbarcontroller.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <svtools/generictoolboxcontroller.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -67,7 +67,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     if ( ! xController.is())
     {
         xController.set(
-            static_cast<XWeak*>(new svt::GenericToolboxController(
+            static_cast<XWeak*>(new framework::GenericToolbarController(
                     ::comphelper::getProcessComponentContext(),
                     rxFrame,
                     pToolBox,

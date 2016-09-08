@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "uielement/generictoolbarcontroller.hxx"
-
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -29,15 +27,13 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <svtools/toolboxcontroller.hxx>
+#include <framework/generictoolbarcontroller.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
+#include <vcl/toolbox.hxx>
 #include <tools/urlobj.hxx>
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-#include <framework/menuconfiguration.hxx>
-#include <uielement/menubarmanager.hxx>
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -46,7 +42,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::container;
 
 namespace framework
 {
@@ -281,89 +276,6 @@ IMPL_STATIC_LINK_TYPED( GenericToolbarController, ExecuteHdl_Impl, void*, p, voi
    delete pExecuteInfo;
 }
 
-MenuToolbarController::MenuToolbarController( const Reference< XComponentContext >& rxContext,
-                                              const Reference< XFrame >& rFrame,
-                                              ToolBox* pToolBar,
-                                              sal_uInt16   nID,
-                                              const OUString& aCommand,
-                                              const OUString& aModuleIdentifier,
-                                              const Reference< XIndexAccess >& xMenuDesc )
-    : GenericToolbarController( rxContext, rFrame, pToolBar, nID, aCommand ),
-      m_xMenuDesc( xMenuDesc ),
-      pMenu( nullptr ),
-      m_aModuleIdentifier( aModuleIdentifier )
-{
-}
-
-MenuToolbarController::~MenuToolbarController()
-{
-    try
-    {
-        if ( m_xMenuManager.is() )
-            m_xMenuManager->dispose();
-    }
-    catch( const Exception& ) {}
-    if ( pMenu )
-    {
-        pMenu.disposeAndClear();
-    }
-}
-
-class Toolbarmenu : public ::PopupMenu
-{
-    public:
-    Toolbarmenu();
-    virtual ~Toolbarmenu();
-    virtual void dispose() override;
-};
-
-Toolbarmenu::Toolbarmenu()
-{
-    SAL_INFO("fwk.uielement", "constructing Toolbarmenu " << this);
-}
-
-Toolbarmenu::~Toolbarmenu()
-{
-    disposeOnce();
-}
-
-void Toolbarmenu::dispose()
-{
-    SAL_INFO("fwk.uielement", "destructing Toolbarmenu " << this);
-    ::PopupMenu::dispose();
-}
-
-void SAL_CALL MenuToolbarController::click() throw (RuntimeException, std::exception)
-{
-    createPopupWindow();
-}
-
-Reference< XWindow > SAL_CALL
-MenuToolbarController::createPopupWindow() throw (css::uno::RuntimeException, std::exception)
-{
-    if ( !pMenu )
-    {
-        Reference< XDispatchProvider > xDispatch;
-        Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
-        pMenu = VclPtr<Toolbarmenu>::Create();
-        m_xMenuManager.set( new MenuBarManager( m_xContext, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, true, true, false ) );
-        if (m_xMenuManager.is())
-        {
-            MenuBarManager& rMgr = dynamic_cast<MenuBarManager&>(*m_xMenuManager.get());
-            rMgr.SetItemContainer(m_xMenuDesc);
-        }
-    }
-
-    if ( !pMenu || !m_pToolbar )
-        return nullptr;
-
-    OSL_ENSURE ( pMenu->GetItemCount(), "Empty PopupMenu!" );
-
-    ::Rectangle aRect( m_pToolbar->GetItemRect( m_nID ) );
-    pMenu->Execute( m_pToolbar, aRect, PopupMenuFlags::ExecuteDown );
-
-    return nullptr;
-}
 } // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
