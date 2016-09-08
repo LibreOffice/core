@@ -448,7 +448,7 @@ void GtkData::Dispose()
 }
 
 /// Allows events to be processed, returns true if we processed an event.
-SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
+bool GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     blockIdleTimeout = !bWait;
 
@@ -467,7 +467,7 @@ SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
         else if( ! bWait )
         {
             blockIdleTimeout = false;
-            return SalYieldResult::TIMEOUT; // someone else is waiting already, return
+            return false; // someone else is waiting already, return
         }
 
         if( bDispatchThread )
@@ -504,8 +504,7 @@ SalYieldResult GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
     blockIdleTimeout = false;
 
-    return bWasEvent ? SalYieldResult::EVENT
-                     : SalYieldResult::TIMEOUT;
+    return bWasEvent;
 }
 
 void GtkData::Init()
