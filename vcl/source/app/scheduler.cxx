@@ -149,10 +149,10 @@ void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce)
     }
 }
 
-void Scheduler::CallbackTaskScheduling( bool bIdle )
+void Scheduler::CallbackTaskScheduling()
 {
     // this function is for the saltimer callback
-    Scheduler::ProcessTaskScheduling( bIdle );
+    Scheduler::ProcessTaskScheduling();
 }
 
 static bool g_bDeterministicMode = false;
@@ -193,7 +193,7 @@ inline void Scheduler::UpdateMinPeriod( ImplSchedulerData *pSchedulerData,
     }
 }
 
-bool Scheduler::ProcessTaskScheduling( bool bIdle )
+bool Scheduler::ProcessTaskScheduling()
 {
     ImplSVData *pSVData = ImplGetSVData();
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
@@ -252,7 +252,7 @@ bool Scheduler::ProcessTaskScheduling( bool bIdle )
         UpdateMinPeriod( pSchedulerData, nTime, nMinPeriod );
 
         // skip ready tasks with lower priority than the most urgent (numerical lower is higher)
-        if ( pSchedulerData->mpTask->ReadyForSchedule( bIdle, nTime ) &&
+        if ( pSchedulerData->mpTask->ReadyForSchedule( nTime ) &&
              (!pMostUrgent || (pSchedulerData->mpTask->GetPriority() < pMostUrgent->mpTask->GetPriority())) )
         {
             pMostUrgent = pSchedulerData;
@@ -299,10 +299,7 @@ next_entry:
         pMostUrgent->mbInScheduler = false;
 
         if ( pMostUrgent->mpTask && !pMostUrgent->mbDelete )
-        {
             pMostUrgent->mnUpdateTime = tools::Time::GetSystemTicks();
-            UpdateMinPeriod( pMostUrgent, nTime, nMinPeriod );
-        }
     }
 
     return !!pMostUrgent;

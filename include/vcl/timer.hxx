@@ -31,7 +31,7 @@ class VCL_DLLPUBLIC Timer : public Task
 
 protected:
     virtual void SetDeletionFlags() override;
-    virtual bool ReadyForSchedule( bool bIdle, sal_uInt64 nTimeNow ) const override;
+    virtual bool ReadyForSchedule( sal_uInt64 nTimeNow ) const override;
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const override;
 
     Timer( bool bAuto, const sal_Char *pDebugName = nullptr );
