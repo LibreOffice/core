@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <xmloff/nmspmap.hxx>
@@ -50,6 +51,8 @@
 #include <xmloff/attrlist.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -253,11 +256,11 @@ SwXMLConditionContext_Impl::~SwXMLConditionContext_Impl()
 }
 
 
-typedef std::vector<SwXMLConditionContext_Impl*> SwXMLConditions_Impl;
+typedef std::vector<uno::Reference<SwXMLConditionContext_Impl>> SwXMLConditions_Impl;
 
 class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 {
-    SwXMLConditions_Impl    *pConditions;
+    std::unique_ptr<SwXMLConditions_Impl> pConditions;
 
 protected:
 
@@ -271,7 +274,6 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nFamily,
             SvXMLStylesContext& rStyles );
-    virtual ~SwXMLTextStyleContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
@@ -316,20 +318,6 @@ SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
 {
 }
 
-SwXMLTextStyleContext_Impl::~SwXMLTextStyleContext_Impl()
-{
-    if( pConditions )
-    {
-        while( !pConditions->empty() )
-        {
-            SwXMLConditionContext_Impl *pCond = &*pConditions->back();
-            pConditions->pop_back();
-            pCond->ReleaseRef();
-        }
-        delete pConditions;
-    }
-}
-
 SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -339,17 +327,16 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
 
     if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_MAP ) )
     {
-        SwXMLConditionContext_Impl *pCond =
+        uno::Reference<SwXMLConditionContext_Impl> xCond{
             new SwXMLConditionContext_Impl( GetImport(), nPrefix,
-                                            rLocalName, xAttrList );
-        if( pCond->IsValid() )
+                                            rLocalName, xAttrList )};
+        if( xCond->IsValid() )
         {
             if( !pConditions )
-               pConditions = new SwXMLConditions_Impl;
-            pConditions->push_back( pCond );
-            pCond->AddFirstRef();
+               pConditions = o3tl::make_unique<SwXMLConditions_Impl>();
+            pConditions->push_back( xCond );
         }
-        pContext = pCond;
+        pContext = xCond.get();
     }
 
     if( !pContext )
@@ -383,7 +370,7 @@ void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
     OUString sName;
     for( size_t i = 0; i < nCount; i++ )
     {
-        const SwXMLConditionContext_Impl *pCond = (*pConditions)[i];
+        const SwXMLConditionContext_Impl *pCond = (*pConditions)[i].get();
         const OUString aDisplayName(
             GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
                 pCond->GetApplyStyle() ) );
