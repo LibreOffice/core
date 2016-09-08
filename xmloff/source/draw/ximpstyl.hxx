@@ -68,7 +68,7 @@ public:
 class SdXMLPageMasterContext: public SvXMLStyleContext
 {
     OUString               msName;
-    SdXMLPageMasterStyleContext*mpPageMasterStyle;
+    css::uno::Reference<SdXMLPageMasterStyleContext> mxPageMasterStyle;
 
     const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
@@ -80,13 +80,12 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
-    virtual ~SdXMLPageMasterContext();
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
-    const SdXMLPageMasterStyleContext* GetPageMasterStyle() const { return mpPageMasterStyle; }
+    const SdXMLPageMasterStyleContext* GetPageMasterStyle() const { return mxPageMasterStyle.get(); }
 };
 
 // style:masterpage context
@@ -148,7 +147,7 @@ public:
 class SdXMLPresentationPageLayoutContext: public SvXMLStyleContext
 {
     OUString               msName;
-    std::vector< SdXMLPresentationPlaceholderContext* >
+    std::vector< css::uno::Reference< SdXMLPresentationPlaceholderContext > >
                            maList;
     sal_uInt16             mnTypeId;
 
@@ -162,7 +161,6 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
-    virtual ~SdXMLPresentationPageLayoutContext();
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -228,7 +226,7 @@ public:
 
 class SdXMLMasterStylesContext : public SvXMLImportContext
 {
-    std::vector< SdXMLMasterPageContext* > maMasterPageList;
+    std::vector< css::uno::Reference< SdXMLMasterPageContext > > maMasterPageList;
 
     const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
@@ -238,7 +236,6 @@ public:
     SdXMLMasterStylesContext(
         SdXMLImport& rImport,
         const OUString& rLName);
-    virtual ~SdXMLMasterStylesContext();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
