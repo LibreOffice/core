@@ -207,27 +207,26 @@ class SvXMLStyleIndex_Impl
 {
     OUString              sName;
     sal_uInt16            nFamily;
-    const SvXMLStyleContext *pStyle;
+    const uno::Reference<SvXMLStyleContext> mxStyle;
 
 public:
 
     SvXMLStyleIndex_Impl( sal_uInt16 nFam, const OUString& rName ) :
         sName( rName ),
-        nFamily( nFam ),
-        pStyle ( nullptr )
+        nFamily( nFam )
     {
     }
 
-    SvXMLStyleIndex_Impl( const SvXMLStyleContext *pStl ) :
-        sName( pStl->GetName() ),
-        nFamily( pStl->GetFamily() ),
-        pStyle ( pStl )
+    SvXMLStyleIndex_Impl( const uno::Reference<SvXMLStyleContext> &rStl ) :
+        sName( rStl->GetName() ),
+        nFamily( rStl->GetFamily() ),
+        mxStyle ( rStl )
     {
     }
 
     const OUString& GetName() const { return sName; }
     sal_uInt16 GetFamily() const { return nFamily; }
-    const SvXMLStyleContext *GetStyle() const { return pStyle; }
+    const SvXMLStyleContext *GetStyle() const { return mxStyle.get(); }
 };
 
 struct SvXMLStyleIndexCmp_Impl
@@ -249,7 +248,7 @@ struct SvXMLStyleIndexCmp_Impl
 
 class SvXMLStylesContext_Impl
 {
-    typedef std::vector<SvXMLStyleContext*> StylesType;
+    typedef std::vector<uno::Reference<SvXMLStyleContext>> StylesType;
     typedef std::set<SvXMLStyleIndex_Impl, SvXMLStyleIndexCmp_Impl> IndicesType;
 
     StylesType aStyles;
@@ -264,13 +263,12 @@ class SvXMLStylesContext_Impl
 
 public:
     explicit SvXMLStylesContext_Impl( bool bAuto );
-    ~SvXMLStylesContext_Impl();
 
     size_t GetStyleCount() const { return aStyles.size(); }
 
     SvXMLStyleContext *GetStyle( size_t i )
     {
-        return i < aStyles.size() ? aStyles[ i ] : nullptr;
+        return i < aStyles.size() ? aStyles[ i ].get() : nullptr;
     }
 
     inline void AddStyle( SvXMLStyleContext *pStyle );
@@ -289,19 +287,9 @@ SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( bool bAuto ) :
 #endif
 {}
 
-SvXMLStylesContext_Impl::~SvXMLStylesContext_Impl()
-{
-    for (SvXMLStyleContext* pStyle : aStyles)
-    {
-        pStyle->ReleaseRef();
-    }
-    aStyles.clear();
-}
-
 inline void SvXMLStylesContext_Impl::AddStyle( SvXMLStyleContext *pStyle )
 {
     aStyles.push_back( pStyle );
-    pStyle->AddFirstRef();
 
     FlushIndex();
 }
@@ -309,11 +297,6 @@ inline void SvXMLStylesContext_Impl::AddStyle( SvXMLStyleContext *pStyle )
 void SvXMLStylesContext_Impl::Clear()
 {
     FlushIndex();
-
-    for (SvXMLStyleContext* pStyle : aStyles)
-    {
-        pStyle->ReleaseRef();
-    }
     aStyles.clear();
 }
 
@@ -345,7 +328,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( sal_uIn
     {
         for( size_t i = 0; !pStyle && i < aStyles.size(); i++ )
         {
-            const SvXMLStyleContext *pS = aStyles[ i ];
+            const SvXMLStyleContext *pS = aStyles[ i ].get();
             if( pS->GetFamily() == nFamily &&
                 pS->GetName() == rName )
                 pStyle = pS;
