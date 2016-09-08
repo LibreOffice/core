@@ -48,6 +48,7 @@ private:
     bool                            mbMenuBar;
     bool                            mbNeedsUpdate;
     bool                            mbReturnFocusToDocument;
+    bool                            mbAddedGrab;
     GtkWidget*                      mpMenuBarContainerWidget;
     GtkWidget*                      mpMenuBarWidget;
     GtkWidget*                      mpCloseButton;
