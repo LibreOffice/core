@@ -26,7 +26,7 @@ class XMLTextColumnContext_Impl;
 class XMLTextColumnSepContext_Impl;
 class SvXMLTokenMap;
 
-typedef std::vector<XMLTextColumnContext_Impl *> XMLTextColumnsArray_Impl;
+typedef std::vector<css::uno::Reference<XMLTextColumnContext_Impl>> XMLTextColumnsArray_Impl;
 
 class XMLTextColumnsContext :public XMLElementPropertyContext
 {
@@ -40,7 +40,7 @@ class XMLTextColumnsContext :public XMLElementPropertyContext
 
 
     XMLTextColumnsArray_Impl *pColumns;
-    XMLTextColumnSepContext_Impl     *pColumnSep;
+    css::uno::Reference<XMLTextColumnSepContext_Impl> mxColumnSep;
     SvXMLTokenMap            *pColumnAttrTokenMap;
     SvXMLTokenMap            *pColumnSepAttrTokenMap;
     sal_Int16                nCount;
