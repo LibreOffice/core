@@ -204,7 +204,7 @@ protected:
     SvXMLImport& mrImport;
 
     // list for local light contexts
-    ::std::vector< SdXML3DLightContext* >
+    ::std::vector< css::uno::Reference< SdXML3DLightContext > >
                                 maList;
 
     // local parameters which need to be read
@@ -228,7 +228,6 @@ protected:
 
 public:
     SdXML3DSceneAttributesHelper( SvXMLImport& rImporter );
-    ~SdXML3DSceneAttributesHelper();
 
     /** creates a 3d light context and adds it to the internal list for later processing */
     SvXMLImportContext * create3DLightContext( sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
