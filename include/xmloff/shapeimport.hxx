@@ -279,14 +279,14 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceO
     css::uno::Reference<SvXMLStylesContext> mxAutoStylesContext;
 
     // contexts for xShape contents TokenMaps
-    SvXMLTokenMap*              mpGroupShapeElemTokenMap;
-    SvXMLTokenMap*              mpFrameShapeElemTokenMap;
-    SvXMLTokenMap*              mp3DSceneShapeElemTokenMap;
-    SvXMLTokenMap*              mp3DObjectAttrTokenMap;
-    SvXMLTokenMap*              mp3DPolygonBasedAttrTokenMap;
-    SvXMLTokenMap*              mp3DCubeObjectAttrTokenMap;
-    SvXMLTokenMap*              mp3DSphereObjectAttrTokenMap;
-    SvXMLTokenMap*              mp3DLightAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpGroupShapeElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mpFrameShapeElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mp3DSceneShapeElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mp3DObjectAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mp3DPolygonBasedAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mp3DCubeObjectAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mp3DSphereObjectAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>              mp3DLightAttrTokenMap;
 
     const OUString       msStartShape;
     const OUString       msEndShape;
