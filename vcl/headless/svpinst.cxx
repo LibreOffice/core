@@ -239,10 +239,7 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
                 // notify
                 ImplSVData* pSVData = ImplGetSVData();
                 if( pSVData->maSchedCtx.mpSalTimer )
-                {
-                    bool idle = true; // TODO
-                    pSVData->maSchedCtx.mpSalTimer->CallCallback( idle );
-                }
+                    pSVData->maSchedCtx.mpSalTimer->CallCallback();
             }
         }
     }
@@ -307,7 +304,7 @@ SalBitmap* SvpSalInstance::CreateSalBitmap()
 #endif
 }
 
-SalYieldResult SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
+bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
     (void) nReleased;
     assert(nReleased == 0); // not implemented
@@ -374,8 +371,7 @@ SalYieldResult SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
         DoReleaseYield(nTimeoutMS);
     }
 
-    return bEvent ? SalYieldResult::EVENT :
-                    SalYieldResult::TIMEOUT;
+    return bEvent;
 }
 
 void SvpSalInstance::DoReleaseYield( int nTimeoutMS )
