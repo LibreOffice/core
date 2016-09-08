@@ -71,41 +71,32 @@ ResMgr* BasicDLL::GetBasResMgr() const { return m_xImpl->xBasResMgr.get(); }
 void BasicDLL::EnableBreak( bool bEnable )
 {
     BasicDLL* pThis = BASIC_DLL;
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
-    if ( pThis )
-    {
-        pThis->m_xImpl->bBreakEnabled = bEnable;
-    }
+    assert( pThis && "BasicDLL::EnableBreak: No instance yet!" );
+    pThis->m_xImpl->bBreakEnabled = bEnable;
 }
 
 void BasicDLL::SetDebugMode( bool bDebugMode )
 {
     BasicDLL* pThis = BASIC_DLL;
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
-    if ( pThis )
-    {
-        pThis->m_xImpl->bDebugMode = bDebugMode;
-    }
+    assert( pThis && "BasicDLL::EnableBreak: No instance yet!" );
+    pThis->m_xImpl->bDebugMode = bDebugMode;
 }
 
 
 void BasicDLL::BasicBreak()
 {
     BasicDLL* pThis = BASIC_DLL;
-    DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
-    if ( pThis )
+    assert( pThis && "BasicDLL::EnableBreak: No instance yet!" );
+    // bJustStopping: if there's someone pressing STOP like crazy umpteen times,
+    // but the Basic doesn't stop early enough, the box might appear more often...
+    static bool bJustStopping = false;
+    if (StarBASIC::IsRunning() && !bJustStopping
+        && (pThis->m_xImpl->bBreakEnabled || pThis->m_xImpl->bDebugMode))
     {
-        // bJustStopping: if there's someone pressing STOP like crazy umpteen times,
-        // but the Basic doesn't stop early enough, the box might appear more often...
-        static bool bJustStopping = false;
-        if (StarBASIC::IsRunning() && !bJustStopping
-            && (pThis->m_xImpl->bBreakEnabled || pThis->m_xImpl->bDebugMode))
-        {
-            bJustStopping = true;
-            StarBASIC::Stop();
-            ScopedVclPtrInstance<InfoBox>(nullptr, BasResId(IDS_SBERR_TERMINATED).toString())->Execute();
-            bJustStopping = false;
-        }
+        bJustStopping = true;
+        StarBASIC::Stop();
+        ScopedVclPtrInstance<InfoBox>(nullptr, BasResId(IDS_SBERR_TERMINATED).toString())->Execute();
+        bJustStopping = false;
     }
 }
 

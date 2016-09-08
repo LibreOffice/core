@@ -207,7 +207,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
         {
             // if we cannot get the version then the
             // Oasis2OOoTransformer will not be used
-            OSL_ASSERT(false);
+            assert(false);
         }
     }
 
@@ -283,7 +283,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
         UNO_QUERY );
     if( !xDialogModel.is() )
     {
-        OSL_FAIL( "### couldn't create com.sun.star.awt.UnoControlDialogModel component\n" );
+        SAL_WARN( "basic", "### couldn't create com.sun.star.awt.UnoControlDialogModel component" );
         return aRetAny;
     }
 
@@ -322,7 +322,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     }
     catch(const Exception& )
     {
-        OSL_FAIL( "Parsing error\n" );
+        SAL_WARN( "basic", "Parsing error" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFile );
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
         return aRetAny;
