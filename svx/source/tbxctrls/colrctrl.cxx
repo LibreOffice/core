@@ -85,8 +85,8 @@ bool SvxColorValueSetData::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, 
     return( rxOStm->GetError() == ERRCODE_NONE );
 }
 
-SvxColorValueSet_docking::SvxColorValueSet_docking( vcl::Window* _pParent, WinBits nWinStyle ) :
-    SvxColorValueSet( _pParent, nWinStyle ),
+SvxColorValueSet_docking::SvxColorValueSet_docking( vcl::Window* _pParent ) :
+    SvxColorValueSet( _pParent, WB_ITEMBORDER ),
     DragSourceHelper( this ),
     mbLeftButton(true)
 {

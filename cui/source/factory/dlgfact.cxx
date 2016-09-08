@@ -1106,33 +1106,13 @@ AbstractSvxTransformTabDialog* AbstractDialogFactory_Impl::CreateSvxTransformTab
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSchTransformTabDialog( vcl::Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pSdrView,
-                                                                sal_uInt32 nResId,
                                                                 bool bSizeTabPage
                                                                 )
 {
-    VclPtr<SfxTabDialog> pDlg;
-    switch ( nResId )
-    {
-        case RID_SCH_TransformTabDLG_SVXPAGE_ANGLE :
-            {
-            pDlg.reset( VclPtr<SvxTransformTabDialog>::Create( pParent, pAttr,pSdrView, bSizeTabPage ? SvxAnchorIds::NoProtect :  SvxAnchorIds::NoProtect|SvxAnchorIds::NoResize) );
-            pDlg->RemoveTabPage( "RID_SVXPAGE_ANGLE" );
-            pDlg->RemoveTabPage( "RID_SVXPAGE_SLANT" );
-            }
-            break;
-        case RID_SCH_TransformTabDLG_SVXPAGE_SLANT:
-            {
-            pDlg.reset(VclPtr<SvxTransformTabDialog>::Create ( pParent, pAttr,pSdrView, bSizeTabPage ? SvxAnchorIds::NoProtect :  SvxAnchorIds::NoProtect|SvxAnchorIds::NoResize ) );
-            pDlg->RemoveTabPage( "RID_SVXPAGE_SLANT" );
-            }
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new CuiAbstractTabDialog_Impl( pDlg );
-    return nullptr;
+    VclPtrInstance<SvxTransformTabDialog> pDlg( pParent, pAttr,pSdrView, bSizeTabPage ? SvxAnchorIds::NoProtect :  SvxAnchorIds::NoProtect|SvxAnchorIds::NoResize);
+    pDlg->RemoveTabPage( "RID_SVXPAGE_ANGLE" );
+    pDlg->RemoveTabPage( "RID_SVXPAGE_SLANT" );
+    return new CuiAbstractTabDialog_Impl( pDlg );
 }
 
 AbstractSvxJSearchOptionsDialog * AbstractDialogFactory_Impl::CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
@@ -1156,22 +1136,10 @@ AbstractSvxNewDictionaryDialog * AbstractDialogFactory_Impl::CreateSvxNewDiction
 }
 
 VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog( vcl::Window* pParent,
-                                            const OUString& rName,
-                                            sal_uInt32 nResId )
+                                            const OUString& rName )
 {
-    Dialog* pDlg=nullptr;
-    switch ( nResId )
-    {
-        case RID_SFXDLG_EDITDICT :
-            pDlg = VclPtr<SvxEditDictionaryDialog>::Create( pParent, rName );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new CuiVclAbstractDialog_Impl( pDlg );
-    return nullptr;
+    VclPtrInstance<SvxEditDictionaryDialog> pDlg( pParent, rName );
+    return new CuiVclAbstractDialog_Impl( pDlg );
 }
 
 AbstractSvxNameDialog * AbstractDialogFactory_Impl::CreateSvxNameDialog( vcl::Window* pParent,
@@ -1222,26 +1190,23 @@ AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(vcl::W
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmboss (vcl::Window* pParent,
-                                            const Graphic& rGraphic,
-                                            RectPoint eLightSource)
+                                            const Graphic& rGraphic)
 {
-    VclPtrInstance<GraphicFilterEmboss> pDlg( pParent, rGraphic, eLightSource );
+    VclPtrInstance<GraphicFilterEmboss> pDlg( pParent, rGraphic, RectPoint::MM );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterPoster(vcl::Window* pParent,
-                                            const Graphic& rGraphic,
-                                            sal_uInt16 nCount)
+                                            const Graphic& rGraphic)
 {
-    VclPtrInstance<GraphicFilterPoster> pDlg( pParent, rGraphic, nCount );
+    VclPtrInstance<GraphicFilterPoster> pDlg( pParent, rGraphic, 16 );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSepia (vcl::Window* pParent,
-                                            const Graphic& rGraphic,
-                                            sal_uInt16 nCount)
+                                            const Graphic& rGraphic)
 {
-    VclPtrInstance<GraphicFilterSepia> pDlg( pParent, rGraphic, nCount );
+    VclPtrInstance<GraphicFilterSepia> pDlg( pParent, rGraphic, 10 );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
@@ -1253,16 +1218,16 @@ AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSmo
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterSolarize (vcl::Window* pParent,
-                                            const Graphic& rGraphic, sal_uInt8 nGreyThreshold)
+                                            const Graphic& rGraphic)
 {
-    VclPtrInstance<GraphicFilterSolarize> pDlg( pParent, rGraphic, nGreyThreshold, false/*bInvert*/ );
+    VclPtrInstance<GraphicFilterSolarize> pDlg( pParent, rGraphic, 128, false/*bInvert*/ );
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterMosaic (vcl::Window* pParent,
-                                            const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight)
+                                            const Graphic& rGraphic)
 {
-    VclPtrInstance<GraphicFilterMosaic> pDlg(pParent, rGraphic, nTileWidth, nTileHeight, false/*bEnhanceEdges*/);
+    VclPtrInstance<GraphicFilterMosaic> pDlg(pParent, rGraphic, 4, 4, false/*bEnhanceEdges*/);
     return new AbstractGraphicFilterDialog_Impl( pDlg );
 }
 
@@ -1567,9 +1532,9 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog( co
     return new CuiAbstractTabDialog_Impl( VclPtr<SvxFormatCellsDialog>::Create( nullptr, pAttr, pModel ) );
 }
 
-SvxAbstractSplittTableDialog* AbstractDialogFactory_Impl::CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )
+SvxAbstractSplittTableDialog* AbstractDialogFactory_Impl::CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical )
 {
-    return new SvxSplitTableDlg( pParent, bIsTableVertical, nMaxVertical, nMaxHorizontal );
+    return new SvxSplitTableDlg( pParent, bIsTableVertical, nMaxVertical, 99 );
 }
 
 SvxAbstractNewTableDialog* AbstractDialogFactory_Impl::CreateSvxNewTableDialog()

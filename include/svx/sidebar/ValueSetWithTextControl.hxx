@@ -54,24 +54,18 @@ public:
 
     // add item for control type IMAGE_TEXT
     // if control type does not match IMAGE_TEXT no item is added.
-    // @param pSelectedItemImage
-    // selection item image is optional. if not provided, it is the same as the image item
     // @param pItemHelpText
     // help text is optional. if not provided, it is the same as the item text
     void AddItem(
         const Image& rItemImage,
-        const Image* pSelectedItemImage,
         const OUString& rItemText,
         const OUString* pItemHelpText );
 
     // add item for control type TEXT_TEXT
     // if control type does not match TEXT_TEXT no item is added.
-    // @param pItemHelpText
-    // help text is optional. if not provided, it is the same as the item text
     void AddItem(
         const OUString& rItemText,
-        const OUString& rItemText2,
-        const OUString* pItemHelpText );
+        const OUString& rItemText2 );
 
     virtual void UserDraw( const UserDrawEvent& rUDEvt ) override;
 

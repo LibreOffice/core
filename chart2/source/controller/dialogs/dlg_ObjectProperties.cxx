@@ -512,7 +512,7 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
                 if( m_pSymbolShapeProperties )
                     aSet.Put(SfxTabDialogItem(SID_ATTR_SET,*m_pSymbolShapeProperties));
                 if( m_pAutoSymbolGraphic )
-                    aSet.Put(SvxGraphicItem(SID_GRAPHIC,*m_pAutoSymbolGraphic));
+                    aSet.Put(SvxGraphicItem(*m_pAutoSymbolGraphic));
             }
             rPage.PageCreated(aSet);
             break;

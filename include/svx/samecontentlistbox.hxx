@@ -27,7 +27,7 @@
 class SVX_DLLPUBLIC SameContentListBox : public ListBox
 {
 public:
-    SameContentListBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN );
+    SameContentListBox( vcl::Window* pParent );
     Size GetOptimalSize() const override;
 };
 

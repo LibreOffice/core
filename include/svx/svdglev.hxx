@@ -33,10 +33,10 @@ class SVX_DLLPUBLIC SdrGlueEditView: public SdrPolyEditView
 {
     // copy marked GluePoints and mark instead of the old ones
     void ImpCopyMarkedGluePoints();
-    typedef void (*PGlueDoFunc)(SdrGluePoint&, const SdrObject* pObj, const void*, const void*, const void*, const void*, const void*);
-    typedef void (*PGlueTrFunc)(Point&, const void*, const void*, const void*, const void*, const void*);
-    void ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1, const void* p2=nullptr, const void* p3=nullptr, const void* p4=nullptr, const void* p5=nullptr);
-    void ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const void* p1, const void* p2=nullptr, const void* p3=nullptr, const void* p4=nullptr, const void* p5=nullptr);
+    typedef void (*PGlueDoFunc)(SdrGluePoint&, const SdrObject* pObj, const void*, const void*, const void*, const void*);
+    typedef void (*PGlueTrFunc)(Point&, const void*, const void*, const void*, const void*);
+    void ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1, const void* p2=nullptr, const void* p3=nullptr, const void* p4=nullptr);
+    void ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const void* p1, const void* p2=nullptr, const void* p3=nullptr, const void* p4=nullptr);
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView

@@ -40,7 +40,7 @@ SdrGlueEditView::~SdrGlueEditView()
 }
 
 
-void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
+void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, const void* p1, const void* p2, const void* p3, const void* p4)
 {
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm) {
@@ -68,7 +68,7 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, co
                     if (nGlueIdx!=SDRGLUEPOINT_NOTFOUND)
                     {
                         SdrGluePoint& rGP=(*pGPL)[nGlueIdx];
-                        (*pDoFunc)(rGP,pObj,p1,p2,p3,p4,p5);
+                        (*pDoFunc)(rGP,pObj,p1,p2,p3,p4);
                     }
                 }
                 if (!bConst)
@@ -83,7 +83,7 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, co
 }
 
 
-static void ImpGetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnThisEsc, const void* pnRet, const void*, const void*)
+static void ImpGetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnThisEsc, const void* pnRet, const void*)
 {
     sal_uInt16& nRet=*const_cast<sal_uInt16 *>(static_cast<sal_uInt16 const *>(pnRet));
     if (nRet!=FUZZY) {
@@ -107,7 +107,7 @@ SDR_TRISTATE SdrGlueEditView::IsMarkedGluePointsEscDir(SdrEscapeDirection nThisE
     return (SDR_TRISTATE)nRet;
 }
 
-static void ImpSetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pnThisEsc, const void* pbOn, const void*, const void*, const void*)
+static void ImpSetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pnThisEsc, const void* pbOn, const void*, const void*)
 {
     SdrEscapeDirection nEsc=rGP.GetEscDir();
     if (*static_cast<bool const *>(pbOn))
@@ -126,7 +126,7 @@ void SdrGlueEditView::SetMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc, boo
 }
 
 
-static void ImpGetPercent(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnRet, const void*, const void*, const void*)
+static void ImpGetPercent(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnRet, const void*, const void*)
 {
     sal_uInt16& nRet=*const_cast<sal_uInt16 *>(static_cast<sal_uInt16 const *>(pnRet));
     if (nRet!=FUZZY) {
@@ -146,7 +146,7 @@ SDR_TRISTATE SdrGlueEditView::IsMarkedGluePointsPercent() const
     return (SDR_TRISTATE)nRet;
 }
 
-static void ImpSetPercent(SdrGluePoint& rGP, const SdrObject* pObj, const void* pbOn, const void*, const void*, const void*, const void*)
+static void ImpSetPercent(SdrGluePoint& rGP, const SdrObject* pObj, const void* pbOn, const void*, const void*, const void*)
 {
     Point aPos(rGP.GetAbsolutePos(*pObj));
     rGP.SetPercent(*static_cast<bool const *>(pbOn));
@@ -162,7 +162,7 @@ void SdrGlueEditView::SetMarkedGluePointsPercent(bool bOn)
 }
 
 
-static void ImpGetAlign(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pbDontCare, const void* pbVert, const void* pnRet, const void*)
+static void ImpGetAlign(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pbDontCare, const void* pbVert, const void* pnRet)
 {
     SdrAlign& nRet=*const_cast<SdrAlign *>(static_cast<SdrAlign const *>(pnRet));
     bool& bDontCare=*const_cast<bool *>(static_cast<bool const *>(pbDontCare));
@@ -197,7 +197,7 @@ SdrAlign SdrGlueEditView::GetMarkedGluePointsAlign(bool bVert) const
     return nRet;
 }
 
-static void ImpSetAlign(SdrGluePoint& rGP, const SdrObject* pObj, const void* pbVert, const void* pnAlign, const void*, const void*, const void*)
+static void ImpSetAlign(SdrGluePoint& rGP, const SdrObject* pObj, const void* pbVert, const void* pnAlign, const void*, const void*)
 {
     Point aPos(rGP.GetAbsolutePos(*pObj));
     if (*static_cast<bool const *>(pbVert)) { // bVert?
@@ -310,7 +310,7 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
 }
 
 
-void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
+void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const void* p1, const void* p2, const void* p3, const void* p4)
 {
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount; ++nm) {
@@ -332,7 +332,7 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
                     if (nGlueIdx!=SDRGLUEPOINT_NOTFOUND) {
                         SdrGluePoint& rGP=(*pGPL)[nGlueIdx];
                         Point aPos(rGP.GetAbsolutePos(*pObj));
-                        (*pTrFunc)(aPos,p1,p2,p3,p4,p5);
+                        (*pTrFunc)(aPos,p1,p2,p3,p4);
                         rGP.SetAbsolutePos(aPos,*pObj);
                     }
                 }
@@ -345,7 +345,7 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
 }
 
 
-static void ImpMove(Point& rPt, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/, const void* /*p5*/)
+static void ImpMove(Point& rPt, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/)
 {
     rPt.X()+=static_cast<const Size*>(p1)->Width();
     rPt.Y()+=static_cast<const Size*>(p1)->Height();
@@ -364,7 +364,7 @@ void SdrGlueEditView::MoveMarkedGluePoints(const Size& rSiz, bool bCopy)
 }
 
 
-static void ImpResize(Point& rPt, const void* p1, const void* p2, const void* p3, const void* /*p4*/, const void* /*p5*/)
+static void ImpResize(Point& rPt, const void* p1, const void* p2, const void* p3, const void* /*p4*/)
 {
     ResizePoint(rPt,*static_cast<const Point*>(p1),*static_cast<const Fraction*>(p2),*static_cast<const Fraction*>(p3));
 }
@@ -382,7 +382,7 @@ void SdrGlueEditView::ResizeMarkedGluePoints(const Point& rRef, const Fraction& 
 }
 
 
-static void ImpRotate(Point& rPt, const void* p1, const void* /*p2*/, const void* p3, const void* p4, const void* /*p5*/)
+static void ImpRotate(Point& rPt, const void* p1, const void* /*p2*/, const void* p3, const void* p4)
 {
     RotatePoint(rPt,*static_cast<const Point*>(p1),*static_cast<const double*>(p3),*static_cast<const double*>(p4));
 }

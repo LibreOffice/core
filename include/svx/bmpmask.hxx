@@ -46,7 +46,7 @@ protected:
                                const SfxPoolItem* pState ) override;
 
 public:
-    SvxBmpMaskSelectItem( sal_uInt16 nId, SvxBmpMask& rMask,
+    SvxBmpMaskSelectItem( SvxBmpMask& rMask,
                           SfxBindings& rBindings );
 };
 

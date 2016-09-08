@@ -318,9 +318,9 @@ void ColorWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& /*
     rRenderContext.Pop();
 }
 
-SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( sal_uInt16 nId_, SvxBmpMask& rMask,
+SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( SvxBmpMask& rMask,
                                             SfxBindings& rBindings ) :
-            SfxControllerItem   ( nId_, rBindings ),
+            SfxControllerItem   ( SID_BMPMASK_EXEC, rBindings ),
             rBmpMask            ( rMask)
 {
 }
@@ -354,7 +354,7 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
                        "svx/ui/dockingcolorreplace.ui" )
     , pData(new MaskData(this, *pBindinx))
     , aPipetteColor(COL_WHITE)
-    , aSelItem(SID_BMPMASK_EXEC, *this, *pBindinx)
+    , aSelItem(*this, *pBindinx)
 {
     get(m_pTbxPipette, "toolbar");
     m_pTbxPipette->SetItemBits(m_pTbxPipette->GetItemId(0),

@@ -22,8 +22,8 @@
 #include <tools/resary.hxx>
 #include <vcl/builderfactory.hxx>
 
-SameContentListBox::SameContentListBox(vcl::Window* pParent, WinBits nStyle)
-    : ListBox( pParent, nStyle)
+SameContentListBox::SameContentListBox(vcl::Window* pParent)
+    : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
     ResStringArray aSameContentAry( SVX_RES( RID_SVXSTRARY_SAMECONTENT ) );
     sal_uInt32 nCnt = aSameContentAry.Count();

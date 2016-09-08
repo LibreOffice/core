@@ -63,9 +63,7 @@ using namespace ::com::sun::star::accessibility;
 /** initialize this component and set default values */
 SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     const Reference< XAccessible >& rxParent,
-    GraphCtrl&                              rRepr,
-    const OUString*                         pName,
-    const OUString*                         pDesc ) :
+    GraphCtrl&                      rRepr ) :
 
     SvxGraphCtrlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
@@ -94,23 +92,9 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
         }
     }
 
-    if( pName )
-    {
-        msName = *pName;
-    }
-    else
     {
         ::SolarMutexGuard aSolarGuard;
         msName = SVX_RESSTR( RID_SVXSTR_GRAPHCTRL_ACC_NAME );
-    }
-
-    if( pDesc )
-    {
-        msDescription = *pDesc;
-    }
-    else
-    {
-        ::SolarMutexGuard aSolarGuard;
         msDescription = SVX_RESSTR( RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION );
     }
 

@@ -133,9 +133,7 @@ static long PointToIndex( RectPoint ePoint, bool bAngleControl )
 
 SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     const Reference< XAccessible >&     rxParent,
-    SvxRectCtl&                         rRepr,
-    const OUString*                      pName,
-    const OUString*                      pDesc ) :
+    SvxRectCtl&                         rRepr ) :
 
     SvxRectCtlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
@@ -145,20 +143,9 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     mnSelectedChild( NOCHILDSELECTED ),
     mbAngleMode( rRepr.GetNumOfChildren() == 8 )
 {
-
-    if( pName )
-        msName = *pName;
-    else
     {
         ::SolarMutexGuard aSolarGuard;
         msName = SVX_RESSTR( mbAngleMode? RID_SVXSTR_RECTCTL_ACC_ANGL_NAME : RID_SVXSTR_RECTCTL_ACC_CORN_NAME );
-    }
-
-    if( pDesc )
-        msDescription = *pDesc;
-    else
-    {
-        ::SolarMutexGuard aSolarGuard;
         msDescription = SVX_RESSTR( mbAngleMode? RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR : RID_SVXSTR_RECTCTL_ACC_CORN_DESCR );
     }
 

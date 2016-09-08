@@ -1246,7 +1246,7 @@ void SvxTableController::SplitMarkedCells()
         getSelectedCells( aStart, aEnd );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr< SvxAbstractSplittTableDialog > xDlg( pFact ? pFact->CreateSvxSplittTableDialog( nullptr, false, 99, 99 ) : nullptr );
+        std::unique_ptr< SvxAbstractSplittTableDialog > xDlg( pFact ? pFact->CreateSvxSplittTableDialog( nullptr, false, 99 ) : nullptr );
         if( xDlg.get() && xDlg->Execute() )
         {
             const sal_Int32 nCount = xDlg->GetCount() - 1;
@@ -1709,7 +1709,7 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::W
     }
 
     case ACTION_EDIT_CELL:
-        EditCell( getSelectionStart(), pWindow, nullptr, nAction );
+        EditCell( getSelectionStart(), pWindow, nAction );
         break;
 
     case ACTION_STOP_TEXT_EDIT:
@@ -1770,7 +1770,7 @@ void SvxTableController::gotoCell( const CellPos& rPos, bool bSelect, vcl::Windo
     else
     {
         RemoveSelection();
-        EditCell( rPos, pWindow, nullptr, nAction );
+        EditCell( rPos, pWindow, nAction );
     }
 }
 
@@ -1856,7 +1856,7 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
 }
 
 
-void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, const awt::MouseEvent* pMouseEvent /*= 0*/, sal_uInt16 nAction /*= ACTION_NONE */ )
+void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, sal_uInt16 nAction /*= ACTION_NONE */ )
 {
     SdrPageView* pPV = mpView->GetSdrPageView();
 
@@ -1902,46 +1902,19 @@ void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, co
 
                 OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
-                bool bNoSel = true;
+                // Move cursor to end of text
+                ESelection aNewSelection;
 
-                if( pMouseEvent )
+                const WritingMode eMode = pTableObj->GetWritingMode();
+                if( ((nAction == ACTION_GOTO_LEFT_CELL) || (nAction == ACTION_GOTO_RIGHT_CELL)) && (eMode != WritingMode_TB_RL) )
                 {
-                    ::MouseEvent aMEvt( *pMouseEvent );
+                    const bool bLast = ((nAction == ACTION_GOTO_LEFT_CELL) && (eMode == WritingMode_LR_TB)) ||
+                                         ((nAction == ACTION_GOTO_RIGHT_CELL) && (eMode == WritingMode_RL_TB));
 
-                    SdrViewEvent aVEvt;
-                    SdrHitKind eHit = mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-
-                    if (eHit == SdrHitKind::TextEdit)
-                    {
-                        // Text getroffen
-                        pOLV->MouseButtonDown(aMEvt);
-                        pOLV->MouseMove(aMEvt);
-                        pOLV->MouseButtonUp(aMEvt);
-//                      pOLV->MouseButtonDown(aMEvt);
-                        bNoSel = false;
-                    }
-                    else
-                    {
-                        nAction = ACTION_GOTO_LEFT_CELL;
-                    }
+                    if( bLast )
+                        aNewSelection = ESelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
                 }
-
-                if( bNoSel )
-                {
-                    // Move cursor to end of text
-                    ESelection aNewSelection;
-
-                    const WritingMode eMode = pTableObj->GetWritingMode();
-                    if( ((nAction == ACTION_GOTO_LEFT_CELL) || (nAction == ACTION_GOTO_RIGHT_CELL)) && (eMode != WritingMode_TB_RL) )
-                    {
-                        const bool bLast = ((nAction == ACTION_GOTO_LEFT_CELL) && (eMode == WritingMode_LR_TB)) ||
-                                             ((nAction == ACTION_GOTO_RIGHT_CELL) && (eMode == WritingMode_RL_TB));
-
-                        if( bLast )
-                            aNewSelection = ESelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
-                    }
-                    pOLV->SetSelection(aNewSelection);
-                }
+                pOLV->SetSelection(aNewSelection);
             }
         }
     }

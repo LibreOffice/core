@@ -61,7 +61,7 @@ protected:
     static bool CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2);
 
 public:
-    XPolygon( sal_uInt16 nSize=16, sal_uInt16 nResize=16 );
+    XPolygon( sal_uInt16 nSize=16 );
     XPolygon( const XPolygon& rXPoly );
     XPolygon( XPolygon&& rXPoly );
     XPolygon( const tools::Polygon& rPoly );

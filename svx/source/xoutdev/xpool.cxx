@@ -26,10 +26,8 @@
 
 XOutdevItemPool::XOutdevItemPool(
     SfxItemPool* _pMaster,
-    sal_uInt16 nAttrStart,
-    sal_uInt16 nAttrEnd,
     bool bLoadRefCounts)
-:   SfxItemPool("XOutdevItemPool", nAttrStart, nAttrEnd, nullptr, nullptr, bLoadRefCounts)
+:   SfxItemPool("XOutdevItemPool", SDRATTR_START, SDRATTR_END, nullptr, nullptr, bLoadRefCounts)
 {
     // prepare some defaults
     const OUString aNullStr;

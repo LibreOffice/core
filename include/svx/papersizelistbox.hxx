@@ -33,7 +33,7 @@ enum class PaperSizeApp
 class SVX_DLLPUBLIC PaperSizeListBox : public ListBox
 {
 public:
-    PaperSizeListBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN );
+    PaperSizeListBox( vcl::Window* pParent );
 
     void FillPaperSizeEntries( PaperSizeApp eApp );
     void SetSelection(  Paper eSize  );

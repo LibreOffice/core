@@ -164,11 +164,10 @@ ViewContact& ObjectContactOfPagePainter::GetPaintObjectViewContact(sal_uInt32 /*
 }
 
 ObjectContactOfPagePainter::ObjectContactOfPagePainter(
-    const SdrPage* pPage,
     ObjectContact& rOriginalObjectContact)
 :   ObjectContactPainter(),
     mrOriginalObjectContact(rOriginalObjectContact),
-    mxStartPage(const_cast< SdrPage* >(pPage)) // no SdrPageWeakRef available to hold a const SdrPage*
+    mxStartPage()
 {
 }
 

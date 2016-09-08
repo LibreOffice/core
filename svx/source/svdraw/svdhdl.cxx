@@ -88,7 +88,7 @@ class SdrHdlBitmapSet
     BitmapEx& impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const Rectangle& rRectangle);
 
 public:
-    explicit SdrHdlBitmapSet(sal_uInt16 nResId);
+    explicit SdrHdlBitmapSet();
     ~SdrHdlBitmapSet();
 
     const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd);
@@ -99,8 +99,8 @@ public:
 #define INDEX_COUNT         (6)
 #define INDIVIDUAL_COUNT    (5)
 
-SdrHdlBitmapSet::SdrHdlBitmapSet(sal_uInt16 nResId)
-    :   maMarkersBitmap(ResId(nResId, *ImpGetResMgr())),
+SdrHdlBitmapSet::SdrHdlBitmapSet()
+    :   maMarkersBitmap(ResId(SIP_SA_MARKERS, *ImpGetResMgr())),
         // 15 kinds (BitmapMarkerKind) use index [0..5] + 5 extra
         maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
 {
@@ -675,7 +675,7 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd)
 
 BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd)
 {
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet);
     return aModernSet.get()->GetBitmapEx(eKindOfMarker, nInd);
 }
 
@@ -1706,7 +1706,6 @@ void ImpTextframeHdl::CreateB2dIAObject()
                                 3.0,
                                 3.0,
                                 nRotationAngle * -F_PI18000,
-                                500,
                                 true); // allow animation; the Handle is not shown at text edit time
 
                             // OVERLAYMANAGER

@@ -205,8 +205,8 @@ void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
 
 #define MYBROWSEMODE (BrowserMode::THUMBDRAGGING|BrowserMode::KEEPHIGHLIGHT|BrowserMode::NO_HSCROLL|BrowserMode::HIDECURSOR)
 
-SdrItemBrowserControl::SdrItemBrowserControl(vcl::Window* pParent, WinBits nBits):
-    BrowseBox(pParent,nBits,MYBROWSEMODE),
+SdrItemBrowserControl::SdrItemBrowserControl(vcl::Window* pParent):
+    BrowseBox(pParent, WB_3DLOOK | WB_BORDER | WB_TABSTOP, MYBROWSEMODE),
     aList()
 {
     ImpCtor();

@@ -519,7 +519,6 @@ public:
     virtual SfxAbstractTabDialog* CreateSchTransformTabDialog( vcl::Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pSdrView,
-                                                                sal_uInt32 nResId,
                                                                 bool bSizeTabPage
                                                                  ) override;
     virtual AbstractSpellDialog *  CreateSvxSpellDialog(
@@ -554,8 +553,7 @@ public:
     virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog() override;
     virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( vcl::Window* pParent ) override;
     virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( vcl::Window* pParent,
-                                            const OUString& rName,
-                                            sal_uInt32 nResId) override;
+                                            const OUString& rName) override;
     virtual AbstractSvxNameDialog *     CreateSvxNameDialog( vcl::Window* pParent,
                                             const OUString& rName, const OUString& rDesc ) override;
     // #i68101#
@@ -571,17 +569,17 @@ public:
                                                         sal_Int16 nInitialContext,
                                                         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(vcl::Window* pParent,
-                                                const Graphic& rGraphic, RectPoint eLightSource) override;
+                                                const Graphic& rGraphic) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPoster(vcl::Window* pParent,
-                                                const Graphic& rGraphic, sal_uInt16 nCount) override;
+                                                const Graphic& rGraphic) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSepia (vcl::Window* pParent,
-                                                const Graphic& rGraphic, sal_uInt16 nCount) override;
+                                                const Graphic& rGraphic) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSmooth (vcl::Window* pParent,
                                                 const Graphic& rGraphic, double nRadius) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (vcl::Window* pParent,
-                                                const Graphic& rGraphic, sal_uInt8 nGreyThreshold) override;
+                                                const Graphic& rGraphic) override;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterMosaic (vcl::Window* pParent,
-                                                const Graphic& rGraphic, sal_uInt16 nTileWidth, sal_uInt16 nTileHeight) override;
+                                                const Graphic& rGraphic) override;
     virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( vcl::Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,
@@ -619,7 +617,7 @@ public:
 
     virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj ) override;
 
-    virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal ) override;
+    virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical ) override;
 
     virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog() override ;
 

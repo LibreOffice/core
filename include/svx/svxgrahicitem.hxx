@@ -30,7 +30,7 @@ class SVX_DLLPUBLIC SvxGraphicItem: public SfxPoolItem
     Graphic         aGraphic;
 
 public:
-                            SvxGraphicItem( sal_uInt16 nWhich ,const Graphic& rGraphic);
+                            SvxGraphicItem( const Graphic& rGraphic);
                             SvxGraphicItem( const SvxGraphicItem& );
 
 

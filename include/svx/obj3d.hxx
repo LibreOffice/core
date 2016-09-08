@@ -81,7 +81,7 @@ class E3dObjList : public SdrObjList
     E3dObjList &operator=(const E3dObjList& rSrcList) = delete;
 
 public:
-    E3dObjList(SdrModel* pNewModel = nullptr, SdrPage* pNewPage = nullptr, E3dObjList* pNewUpList = nullptr);
+    E3dObjList();
     SVX_DLLPUBLIC virtual ~E3dObjList();
 
     virtual E3dObjList* Clone() const override;

@@ -84,8 +84,8 @@ using namespace com::sun::star;
 // List for 3D-Objects
 
 
-E3dObjList::E3dObjList(SdrModel* pNewModel, SdrPage* pNewPage, E3dObjList* pNewUpList)
-:   SdrObjList(pNewModel, pNewPage, pNewUpList)
+E3dObjList::E3dObjList()
+:   SdrObjList(nullptr, nullptr, nullptr)
 {
 }
 

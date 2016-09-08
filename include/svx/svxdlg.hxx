@@ -334,7 +334,6 @@ public:
     virtual SfxAbstractTabDialog* CreateSchTransformTabDialog( vcl::Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pSdrView,
-                                                                sal_uInt32 nResId,
                                                                 bool bSizeTabPage
                                                                  )=0;
     virtual AbstractSvxJSearchOptionsDialog * CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
@@ -343,8 +342,7 @@ public:
     virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog() = 0;
     virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( vcl::Window* pParent ) = 0;
     virtual VclAbstractDialog *     CreateSvxEditDictionaryDialog( vcl::Window* pParent,
-                                            const OUString& rName,
-                                            sal_uInt32 nResId) = 0;
+                                            const OUString& rName) = 0;
     virtual AbstractSvxNameDialog *     CreateSvxNameDialog( vcl::Window* pParent,
                                             const OUString& rName, const OUString& rDesc ) = 0;
 
@@ -361,23 +359,18 @@ public:
                                                         sal_Int16 nInitialContext,
                                                         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(vcl::Window* pParent,
-                                                const Graphic& rGraphic,
-                                                RectPoint eLightSource)=0;
+                                                const Graphic& rGraphic)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPoster(vcl::Window* pParent,
-                                                const Graphic& rGraphic,
-                                                sal_uInt16 nCount)=0;
+                                                const Graphic& rGraphic)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSepia (vcl::Window* pParent,
-                                                const Graphic& rGraphic,
-                                                sal_uInt16 nCount)=0;
+                                                const Graphic& rGraphic)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSmooth (vcl::Window* pParent,
                                                 const Graphic& rGraphic,
                                                 double nRadius)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterSolarize (vcl::Window* pParent,
-                                                const Graphic& rGraphic,
-                                                sal_uInt8 nGreyThreshold)=0;
+                                                const Graphic& rGraphic)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterMosaic (vcl::Window* pParent,
-                                                const Graphic& rGraphic,
-                                                sal_uInt16 nTileWidth, sal_uInt16 nTileHeight)=0;
+                                                const Graphic& rGraphic)=0;
     virtual AbstractSvxAreaTabDialog*       CreateSvxAreaTabDialog( vcl::Window* pParent,
                                                             const SfxItemSet* pAttr,
                                                             SdrModel* pModel,
@@ -421,7 +414,7 @@ public:
 
     virtual SfxAbstractTabDialog* CreateSvxFormatCellsDialog( const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* pObj )=0;
 
-    virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )=0;
+    virtual SvxAbstractSplittTableDialog* CreateSvxSplittTableDialog( vcl::Window* pParent, bool bIsTableVertical, long nMaxVertical )=0;
 
     virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog() = 0;
 
