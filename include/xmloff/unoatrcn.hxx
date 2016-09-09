@@ -31,11 +31,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
+#include <xmloff/xmlcnimp.hxx>
+
 #include <cppuhelper/implbase3.hxx>
 
 extern css::uno::Reference< css::uno::XInterface >  SvUnoAttributeContainer_CreateInstance();
-
-class SvXMLAttrContainerData;
 
 class XMLOFF_DLLPUBLIC SvUnoAttributeContainer:
     public ::cppu::WeakAggImplHelper3<
