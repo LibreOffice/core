@@ -10,6 +10,7 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_dejavu,font_dejavu))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_dejavu,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
+	ttf/DejaVuMathTeXGyre.ttf \
 	ttf/DejaVuSans-Bold.ttf \
 	ttf/DejaVuSans-BoldOblique.ttf \
 	ttf/DejaVuSans-ExtraLight.ttf \
