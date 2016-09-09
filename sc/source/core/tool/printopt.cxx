@@ -100,22 +100,12 @@ SfxPoolItem* ScTpPrintItem::Clone( SfxItemPool * ) const
 #define SCPRINTOPT_EMPTYPAGES       0
 #define SCPRINTOPT_ALLSHEETS        1
 #define SCPRINTOPT_FORCEBREAKS      2
-#define SCPRINTOPT_COUNT            3
 
 Sequence<OUString> ScPrintCfg::GetPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "Page/EmptyPages",          // SCPRINTOPT_EMPTYPAGES
-        "Other/AllSheets",          // SCPRINTOPT_ALLSHEETS
-        "Page/ForceBreaks"          // SCPRINTOPT_FORCEBREAKS
-    };
-    Sequence<OUString> aNames(SCPRINTOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < SCPRINTOPT_COUNT; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
+    return {"Page/EmptyPages",          // SCPRINTOPT_EMPTYPAGES
+            "Other/AllSheets",          // SCPRINTOPT_ALLSHEETS
+            "Page/ForceBreaks"};        // SCPRINTOPT_FORCEBREAKS;
 }
 
 ScPrintCfg::ScPrintCfg() :

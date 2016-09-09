@@ -2173,11 +2173,8 @@ sal_Bool SAL_CALL ScDatabaseRangeObj::supportsService( const OUString& rServiceN
 uno::Sequence<OUString> SAL_CALL ScDatabaseRangeObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.sheet.DatabaseRange";
-    pArray[1] = SCLINKTARGET_SERVICE;
-    return aRet;
+    return {"com.sun.star.sheet.DatabaseRange",
+            SCLINKTARGET_SERVICE};
 }
 
 ScDatabaseRangesObj::ScDatabaseRangesObj(ScDocShell* pDocSh) :

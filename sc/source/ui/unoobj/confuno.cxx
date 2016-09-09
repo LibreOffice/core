@@ -542,11 +542,8 @@ sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const OUString& rSer
 uno::Sequence<OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.comp.SpreadsheetSettings";
-    pArray[1] = "com.sun.star.document.Settings";
-    return aRet;
+    return {"com.sun.star.comp.SpreadsheetSettings",
+            "com.sun.star.document.Settings"};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

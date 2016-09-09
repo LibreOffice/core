@@ -506,12 +506,7 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const OUString& aName )
 uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
                                                 throw(uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence<OUString> aNames(SC_STYLE_FAMILY_COUNT);
-    OUString* pNames = aNames.getArray();
-    pNames[0] = SC_FAMILYNAME_CELL;
-    pNames[1] = SC_FAMILYNAME_PAGE;
-    return aNames;
+    return {SC_FAMILYNAME_CELL, SC_FAMILYNAME_PAGE};
 }
 
 sal_Bool SAL_CALL ScStyleFamiliesObj::hasByName( const OUString& aName )
@@ -2016,13 +2011,9 @@ sal_Bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )
 uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    bool bPage = ( eFamily == SfxStyleFamily::Page );
-    uno::Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCSTYLE_SERVICE;
-    pArray[1] = bPage ? OUString(SCPAGESTYLE_SERVICE)
-                      : OUString(SCCELLSTYLE_SERVICE);
-    return aRet;
+    const bool bPage = ( eFamily == SfxStyleFamily::Page );
+
+    return {SCSTYLE_SERVICE, (bPage ? SCPAGESTYLE_SERVICE : SCCELLSTYLE_SERVICE)};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
