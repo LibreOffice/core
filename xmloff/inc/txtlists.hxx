@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <map>
+#include <memory>
 #include <stack>
 #include <tuple>
 #include <vector>
@@ -37,7 +38,6 @@ class XMLTextListsHelper
 {
     public:
         XMLTextListsHelper();
-        ~XMLTextListsHelper();
         XMLTextListsHelper(const XMLTextListsHelper&) = delete;
         XMLTextListsHelper& operator=(const XMLTextListsHelper&) = delete;
 
@@ -136,7 +136,7 @@ class XMLTextListsHelper
         // as value
         typedef ::std::map< OUString,
                             ::std::pair< OUString, OUString > > tMapForLists;
-        tMapForLists* mpProcessedLists;
+        std::unique_ptr<tMapForLists> mpProcessedLists;
         OUString msLastProcessedListId;
         OUString msListStyleOfLastProcessedList;
 
@@ -144,19 +144,19 @@ class XMLTextListsHelper
            map with <ListStyleName> as key and pair( <ListId, ListStyleDefaultListId> )
            as value. (#i92811#)
         */
-        tMapForLists* mpMapListIdToListStyleDefaultListId;
+        std::unique_ptr<tMapForLists> mpMapListIdToListStyleDefaultListId;
 
         // container type to build up continue list chain:
         // map with <ListId> of master list as key and <ListId> of last list
         // continuing the master list as value
         typedef ::std::map< OUString, OUString > tMapForContinuingLists;
-        tMapForContinuingLists* mpContinuingLists;
+        std::unique_ptr<tMapForContinuingLists> mpContinuingLists;
 
         // stack type for opened list elements and its list style:
         // vector with pair( <ListId>, <ListStyleName> ) as value
         typedef ::std::vector< ::std::pair< OUString, OUString > >
                                                                 tStackForLists;
-        tStackForLists* mpListStack;
+        std::unique_ptr<tStackForLists> mpListStack;
 
         /// to connect numbered-paragraphs that have no list-id attribute:
         /// vector of pair of style-name and list-id (indexed by level)
