@@ -913,7 +913,7 @@ static gboolean postDocumentLoad(gpointer pData)
     std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
     priv->m_nViewId = priv->m_pDocument->pClass->getView(priv->m_pDocument);
-    priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
+    priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView, /*callback latch*/ false);
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     priv->m_nParts = priv->m_pDocument->pClass->getParts(priv->m_pDocument);
     aGuard.unlock();
@@ -2510,7 +2510,7 @@ static void lok_doc_view_finalize (GObject* object)
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
     priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
-    priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, nullptr, nullptr);
+    priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, nullptr, nullptr, /*callback latch*/ false);
     aGuard.unlock();
 
     if (priv->m_pDocument && priv->m_pDocument->pClass->getViews(priv->m_pDocument) > 1)
