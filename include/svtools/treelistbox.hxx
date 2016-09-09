@@ -561,8 +561,7 @@ protected:
     // Recalculate all tabs depending on TreeListStyle and Bitmap sizes
     // Is called automatically when inserting/changing Bitmaps, changing the Model etc.
     virtual void    SetTabs();
-    void            AddTab( long nPos, SvLBoxTabFlags nFlags=SvLBoxTabFlags::ADJUST_LEFT,
-                            void* pUserData = nullptr );
+    void            AddTab( long nPos, SvLBoxTabFlags nFlags=SvLBoxTabFlags::ADJUST_LEFT );
     sal_uInt16      TabCount() const { return aTabs.size(); }
     SvLBoxTab*      GetFirstDynamicTab() const;
     SvLBoxTab*      GetFirstDynamicTab( sal_uInt16& rTabPos ) const;

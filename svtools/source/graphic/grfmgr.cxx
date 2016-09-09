@@ -71,23 +71,23 @@ void GraphicObject::ImplAfterDataChange()
         mpMgr->ImplCheckSizeOfSwappedInGraphics(this);
 }
 
-GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject() :
     maLink      (),
     maUserData  ()
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr );
+    ImplSetGraphicManager( nullptr );
 }
 
-GraphicObject::GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject( const Graphic& rGraphic ) :
     maGraphic   ( rGraphic ),
     maLink      (),
     maUserData  ()
 {
     ImplConstruct();
     ImplAssignGraphicData();
-    ImplSetGraphicManager( pMgr );
+    ImplSetGraphicManager( nullptr );
 }
 
 GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicManager* pMgr ) :
@@ -104,7 +104,7 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
         SetSwapState();
 }
 
-GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject( const OString& rUniqueID ) :
     maLink      (),
     maUserData  ()
 {
@@ -113,7 +113,7 @@ GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pM
     // assign default properties
     ImplAssignGraphicData();
 
-    ImplSetGraphicManager( pMgr, &rUniqueID );
+    ImplSetGraphicManager( nullptr, &rUniqueID );
 
     // update properties
     ImplAssignGraphicData();
@@ -588,7 +588,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 }
 
 void GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
-                               const Size& rOffset, const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags, int nTileCacheSize1D )
+                               const Size& rOffset, GraphicManagerDrawFlags nFlags, int nTileCacheSize1D )
 {
     if( pOut == nullptr || rSize.Width() == 0 || rSize.Height() == 0 )
         return;
@@ -606,7 +606,7 @@ void GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const
     while (((sal_Int64)rSize.Height() * nTileCacheSize1D) > SAL_MAX_UINT16)
         nTileCacheSize1D /= 2;
 
-    ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, pAttr, nFlags, nTileCacheSize1D );
+    ImplDrawTiled( pOut, rArea, aOutTileSize, rOffset, nullptr, nFlags, nTileCacheSize1D );
 }
 
 bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,

@@ -55,8 +55,7 @@ namespace abp
     using namespace ::com::sun::star::lang;
 
     OAddressBookSourcePilot::OAddressBookSourcePilot(vcl::Window* _pParent, const Reference< XComponentContext >& _rxORB)
-        :OAddressBookSourcePilot_Base( _pParent,
-            WizardButtonFlags::HELP | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS )
+        :OAddressBookSourcePilot_Base( _pParent )
         ,m_xORB(_rxORB)
         ,m_aNewDataSource(_rxORB)
         ,m_eNewDataSourceType( AST_INVALID )

@@ -95,7 +95,7 @@ protected:
     bool                m_bUseInputStringForFormatting;
 
 public:
-    FormattedField(vcl::Window* pParent, WinBits nStyle = 0, SvNumberFormatter* pInitialFormatter = nullptr);
+    FormattedField(vcl::Window* pParent, WinBits nStyle = 0);
 
     // Min-/Max-management
     bool    HasMinValue() const         { return m_bHasMin; }

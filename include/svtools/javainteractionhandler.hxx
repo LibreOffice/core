@@ -39,7 +39,7 @@ class SVT_DLLPUBLIC JavaInteractionHandler:
         public css::task::XInteractionHandler
 {
 public:
-    JavaInteractionHandler(bool bReportErrorOnce = true);
+    JavaInteractionHandler();
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface(

@@ -47,9 +47,7 @@ using namespace ::com::sun::star;
 
 CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< frame::XModel >& xChartModel
                                , const uno::Reference< uno::XComponentContext >& xContext )
-                : svt::RoadmapWizard( pParent,
-                        WizardButtonFlags::HELP | WizardButtonFlags::CANCEL | WizardButtonFlags::PREVIOUS | WizardButtonFlags::NEXT | WizardButtonFlags::FINISH
-                  )
+                : svt::RoadmapWizard( pParent )
                 , m_xChartModel(xChartModel,uno::UNO_QUERY)
                 , m_xCC( xContext )
                 , m_pTemplateProvider(nullptr)

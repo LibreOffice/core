@@ -3319,11 +3319,11 @@ SvLBoxItem* SvTreeListBox::GetItem(SvTreeListEntry* pEntry,long nX )
     return GetItem_Impl( pEntry, nX, &pDummyTab );
 }
 
-void SvTreeListBox::AddTab(long nTabPos, SvLBoxTabFlags nFlags, void* pUserData )
+void SvTreeListBox::AddTab(long nTabPos, SvLBoxTabFlags nFlags )
 {
     nFocusWidth = -1;
     SvLBoxTab* pTab = new SvLBoxTab( nTabPos, nFlags );
-    pTab->SetUserData( pUserData );
+    pTab->SetUserData( nullptr );
     aTabs.push_back( pTab );
     if( nTreeFlags & SvTreeFlags::USESEL )
     {
