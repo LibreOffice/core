@@ -596,41 +596,33 @@ void ScInterpreter::ScWorkday_MS()
                 if ( nDays > 0 )
                 {
                     size_t nRef = 0;
-                    //skip holidays before/on start date
-                    while ( nRef < nMax && nSortArray.at( nRef ) <= nDate )
-                        nRef++;
-
                     while ( nDays )
                     {
+                        do
+                            ++nDate;
+                        while ( bWeekendMask[ GetDayOfWeek( nDate ) ] ); //jump over weekend day(s)
+
                         while ( nRef < nMax && nSortArray.at( nRef ) < nDate )
                             nRef++;
 
                         if ( !( nRef < nMax && nSortArray.at( nRef ) == nDate ) || nRef >= nMax )
-                             nDays--;
-
-                        do
-                            ++nDate;
-                        while ( bWeekendMask[ GetDayOfWeek( nDate ) ] ); //jump over weekend day(s)
+                            nDays--;
                     }
                 }
                 else
                 {
                     sal_Int16 nRef = nMax - 1;
-                    //skip holidays after/on start date
-                    while ( nRef >= 0 && nSortArray.at( nRef ) >= nDate )
-                        nRef--;
-
                     while ( nDays )
                     {
+                        do
+                          --nDate;
+                        while ( bWeekendMask[ GetDayOfWeek( nDate ) ] ); //jump over weekend day(s)
+
                         while ( nRef >= 0 && nSortArray.at( nRef ) > nDate )
                             nRef--;
 
                         if ( !( nRef >= 0 && nSortArray.at( nRef ) == nDate ) || nRef < 0 )
                              nDays++;
-
-                        do
-                          --nDate;
-                        while ( bWeekendMask[ GetDayOfWeek( nDate ) ] ); //jump over weekend day(s)
                     }
                 }
                 PushDouble( ( double ) ( nDate - nNullDate ) );
