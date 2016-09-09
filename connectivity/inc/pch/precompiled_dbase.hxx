@@ -204,7 +204,6 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
-#include <unotools/numberformatcodewrapper.hxx>
 #include <unotools/readwritemutexguard.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <unotools/syslocale.hxx>
