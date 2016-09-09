@@ -51,6 +51,7 @@ private:
 
 public:
     SvUnoAttributeContainer( std::unique_ptr<SvXMLAttrContainerData> pContainer = nullptr );
+    virtual ~SvUnoAttributeContainer();
     SvXMLAttrContainerData* GetContainerImpl() const { return mpContainer.get(); }
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
