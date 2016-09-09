@@ -1453,12 +1453,12 @@ void SectionPropertyMap::ApplyProperties_(
         try
         {
             xMultiSet->setPropertyValues(comphelper::containerToSequence(vNames), comphelper::containerToSequence(vValues));
+            return;
         }
         catch( const uno::Exception& )
         {
             OSL_FAIL( "Exception in SectionPropertyMap::ApplyProperties_");
         }
-        return;
     }
     for (size_t i = 0; i < vNames.size(); ++i)
     {
