@@ -3501,51 +3501,51 @@ en-US = "button"
 
 [CLOCK_FACE_ONE_OCLOCK]
 x-comment = "🕐 (U+1F550), see http://wiki.documentfoundation.org/Emoji"
-en-US = "1"
+en-US = "1 h"
 
 [CLOCK_FACE_TWO_OCLOCK]
 x-comment = "🕑 (U+1F551), see http://wiki.documentfoundation.org/Emoji"
-en-US = "2"
+en-US = "2 h"
 
 [CLOCK_FACE_THREE_OCLOCK]
 x-comment = "🕒 (U+1F552), see http://wiki.documentfoundation.org/Emoji"
-en-US = "3"
+en-US = "3 h"
 
 [CLOCK_FACE_FOUR_OCLOCK]
 x-comment = "🕓 (U+1F553), see http://wiki.documentfoundation.org/Emoji"
-en-US = "4"
+en-US = "4 h"
 
 [CLOCK_FACE_FIVE_OCLOCK]
 x-comment = "🕔 (U+1F554), see http://wiki.documentfoundation.org/Emoji"
-en-US = "5"
+en-US = "5 h"
 
 [CLOCK_FACE_SIX_OCLOCK]
 x-comment = "🕕 (U+1F555), see http://wiki.documentfoundation.org/Emoji"
-en-US = "6"
+en-US = "6 h"
 
 [CLOCK_FACE_SEVEN_OCLOCK]
 x-comment = "🕖 (U+1F556), see http://wiki.documentfoundation.org/Emoji"
-en-US = "7"
+en-US = "7 h"
 
 [CLOCK_FACE_EIGHT_OCLOCK]
 x-comment = "🕗 (U+1F557), see http://wiki.documentfoundation.org/Emoji"
-en-US = "8"
+en-US = "8 h"
 
 [CLOCK_FACE_NINE_OCLOCK]
 x-comment = "🕘 (U+1F558), see http://wiki.documentfoundation.org/Emoji"
-en-US = "9"
+en-US = "9 h"
 
 [CLOCK_FACE_TEN_OCLOCK]
 x-comment = "🕙 (U+1F559), see http://wiki.documentfoundation.org/Emoji"
-en-US = "10"
+en-US = "10 h"
 
 [CLOCK_FACE_ELEVEN_OCLOCK]
 x-comment = "🕚 (U+1F55A), see http://wiki.documentfoundation.org/Emoji"
-en-US = "11"
+en-US = "11 h"
 
 [CLOCK_FACE_TWELVE_OCLOCK]
 x-comment = "🕛 (U+1F55B), see http://wiki.documentfoundation.org/Emoji"
-en-US = "12"
+en-US = "12 h"
 
 [CLOCK_FACE_ONE-THIRTY]
 x-comment = "🕜 (U+1F55C), see http://wiki.documentfoundation.org/Emoji"
