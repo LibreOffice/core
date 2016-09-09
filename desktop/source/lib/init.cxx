@@ -324,6 +324,8 @@ static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
     return aTree;
 }
 
+namespace {
+
 Rectangle lcl_ParseRect(const std::string& payload)
 {
     std::istringstream iss(payload);
@@ -333,6 +335,32 @@ Rectangle lcl_ParseRect(const std::string& payload)
     Rectangle rc(left, top, left + right, top + bottom);
     return rc;
 }
+
+bool lcl_isViewCallbackType(const int type)
+{
+    switch (type)
+    {
+        case LOK_CALLBACK_CELL_VIEW_CURSOR:
+        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+            return true;
+
+        default:
+            return false;
+    }
+}
+
+int lcl_getViewId(const std::string& payload)
+{
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(payload);
+    boost::property_tree::read_json(aStream, aTree);
+    return aTree.get<int>("viewId");
+}
+
+}  // end anonymous namespace
 
 extern "C"
 {
@@ -487,18 +515,13 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
     m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_END, "NIL");
     m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL");
     m_states.emplace(LOK_CALLBACK_GRAPHIC_SELECTION, "NIL");
-    m_states.emplace(LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "NIL");
     m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL");
-    m_states.emplace(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR , "NIL");
     m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "NIL");
     m_states.emplace(LOK_CALLBACK_MOUSE_POINTER, "NIL");
     m_states.emplace(LOK_CALLBACK_CELL_CURSOR, "NIL");
-    m_states.emplace(LOK_CALLBACK_CELL_VIEW_CURSOR, "NIL");
     m_states.emplace(LOK_CALLBACK_CELL_FORMULA, "NIL");
     m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL");
-    m_states.emplace(LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "NIL");
     m_states.emplace(LOK_CALLBACK_SET_PART, "NIL");
-    m_states.emplace(LOK_CALLBACK_TEXT_VIEW_SELECTION, "NIL");
 
     Start();
 }
@@ -564,24 +587,49 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
     std::unique_lock<std::mutex> lock(m_mutex);
 
-    const auto stateIt = m_states.find(type);
-    if (stateIt != m_states.end())
+    // drop duplicate callbacks for the listed types
+    switch (type)
     {
-        // If the state didn't change, it's safe to ignore.
-        if (stateIt->second == payload)
+        case LOK_CALLBACK_TEXT_SELECTION_START:
+        case LOK_CALLBACK_TEXT_SELECTION_END:
+        case LOK_CALLBACK_TEXT_SELECTION:
+        case LOK_CALLBACK_GRAPHIC_SELECTION:
+        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR :
+        case LOK_CALLBACK_STATE_CHANGED:
+        case LOK_CALLBACK_MOUSE_POINTER:
+        case LOK_CALLBACK_CELL_CURSOR:
+        case LOK_CALLBACK_CELL_VIEW_CURSOR:
+        case LOK_CALLBACK_CELL_FORMULA:
+        case LOK_CALLBACK_CURSOR_VISIBLE:
+        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+        case LOK_CALLBACK_SET_PART:
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
         {
-            //SAL_WARN("lok", "Skipping duplicate [" + std::to_string(type) + "]: [" + payload + "].");
-            return;
-        }
+            const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
+                    [type] (const queue_type::value_type& elem) { return (elem.first == type); });
 
-        stateIt->second = payload;
+            if (pos != m_queue.rend() && pos->second == payload)
+            {
+                //SAL_WARN("lok", "Skipping queue duplicate [" + std::to_string(type) + "]: [" + payload + "].");
+                return;
+            }
+        }
+        break;
     }
 
     if (type == LOK_CALLBACK_TEXT_SELECTION && payload.empty())
     {
-        // Removing text selection invalidates the start and end as well.
-        m_states[LOK_CALLBACK_TEXT_SELECTION_START] = "";
-        m_states[LOK_CALLBACK_TEXT_SELECTION_END] = "";
+        const auto& posStart = std::find_if(m_queue.rbegin(), m_queue.rend(),
+                [] (const queue_type::value_type& elem) { return (elem.first == LOK_CALLBACK_TEXT_SELECTION_START); });
+        if (posStart != m_queue.rend())
+            posStart->second = "";
+
+        const auto& posEnd = std::find_if(m_queue.rbegin(), m_queue.rend(),
+                [] (const queue_type::value_type& elem) { return (elem.first == LOK_CALLBACK_TEXT_SELECTION_END); });
+        if (posEnd != m_queue.rend())
+            posEnd->second = "";
     }
 
     // When payload is empty discards any previous state.
@@ -629,25 +677,10 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_TEXT_VIEW_SELECTION:
             case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
             {
-                boost::property_tree::ptree aTree;
-                std::stringstream aStream(payload);
-                boost::property_tree::read_json(aStream, aTree);
-                const int nViewId = aTree.get<int>("viewId");
-
+                const int nViewId = lcl_getViewId(payload);
                 removeAll(
                     [type, nViewId] (const queue_type::value_type& elem) {
-                        if (elem.first == type)
-                        {
-                            boost::property_tree::ptree aElemTree;
-                            std::stringstream aElemStream(elem.second);
-                            boost::property_tree::read_json(aElemStream, aElemTree);
-                            int nElemViewId = aElemTree.get<int>("viewId");
-                            return (nViewId == nElemViewId);
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        return (elem.first == type && nViewId == lcl_getViewId(elem.second));
                     }
                 );
             }
@@ -716,9 +749,56 @@ void CallbackFlushHandler::flush()
     if (m_pCallback && !m_bEventLatch)
     {
         std::unique_lock<std::mutex> lock(m_mutex);
+
         for (auto& pair : m_queue)
         {
-            m_pCallback(pair.first, pair.second.c_str(), m_pData);
+            const int type = pair.first;
+            const auto& payload = pair.second;
+            const int viewId = lcl_isViewCallbackType(type) ? lcl_getViewId(payload) : -1;
+
+            if (viewId == -1)
+            {
+                const auto stateIt = m_states.find(type);
+                if (stateIt != m_states.end())
+                {
+                    // If the state didn't change, it's safe to ignore.
+                    if (stateIt->second == payload)
+                    {
+                        //SAL_WARN("lok", "Skipping duplicate [" + std::to_string(type) + "]: [" + payload + "].");
+                        continue;
+                    }
+
+                    stateIt->second = payload;
+                }
+            }
+            else
+            {
+                const auto statesIt = m_viewStates.find(viewId);
+                if (statesIt != m_viewStates.end())
+                {
+                    auto& states = statesIt->second;
+                    const auto stateIt = states.find(type);
+                    if (stateIt != states.end())
+                    {
+                        // If the state didn't change, it's safe to ignore.
+                        if (stateIt->second == payload)
+                        {
+                            //SAL_WARN("lok", "Skipping view duplicate [" + std::to_string(type) + "," + std::to_string(viewId) + "]: [" + payload + "].");
+                            continue;
+                        }
+
+                        stateIt->second = payload;
+                        //SAL_WARN("lok", "Replacing an element in view states [" + std::to_string(type) + "," + std::to_string(viewId) + "]: [" + payload + "].");
+                    }
+                    else
+                    {
+                        states.emplace(type, payload);
+                        //SAL_WARN("lok", "Inserted a new element in view states: [" + std::to_string(type) + "," + std::to_string(viewId) + "]: [" + payload + "]");
+                    }
+                }
+            }
+
+            m_pCallback(type, payload.c_str(), m_pData);
         }
 
         m_queue.clear();
@@ -729,6 +809,20 @@ void CallbackFlushHandler::removeAll(const std::function<bool (const CallbackFlu
 {
     auto newEnd = std::remove_if(m_queue.begin(), m_queue.end(), rTestFunc);
     m_queue.erase(newEnd, m_queue.end());
+}
+
+void CallbackFlushHandler::addViewStates(int viewId)
+{
+    const auto& result = m_viewStates.emplace(viewId, decltype(m_viewStates)::mapped_type());
+    if (!result.second && result.first != m_viewStates.end())
+    {
+        result.first->second.clear();
+    }
+}
+
+void CallbackFlushHandler::removeViewStates(int viewId)
+{
+    m_viewStates.erase(viewId);
 }
 
 
@@ -1472,7 +1566,42 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     if (nView < 0)
         return;
 
+    if (pCallback != nullptr)
+    {
+        size_t nId = nView;
+        for (auto& pair : pDocument->mpCallbackFlushHandlers)
+        {
+            if (pair.first == nId)
+                continue;
+
+            pair.second->addViewStates(nView);
+        }
+    }
+    else
+    {
+        size_t nId = nView;
+        for (auto& pair : pDocument->mpCallbackFlushHandlers)
+        {
+            if (pair.first == nId)
+                continue;
+
+            pair.second->removeViewStates(nView);
+        }
+    }
+
     pDocument->mpCallbackFlushHandlers[nView].reset(new CallbackFlushHandler(pThis, pCallback, pData));
+
+    if (pCallback != nullptr)
+    {
+        size_t nId = nView;
+        for (const auto& pair : pDocument->mpCallbackFlushHandlers)
+        {
+            if (pair.first == nId)
+                continue;
+
+            pDocument->mpCallbackFlushHandlers[nView]->addViewStates(pair.first);
+        }
+    }
 
     if (SfxViewShell* pViewShell = SfxViewFrame::Current()->GetViewShell())
         pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
