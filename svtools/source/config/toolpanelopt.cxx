@@ -89,7 +89,7 @@ class SvtToolPanelOptions_Impl : public ConfigItem
 
         virtual void ImplCommit() override;
 
-        /** return list of key names of our configuration management which represent oue module tree
+        /** return list of key names of our configuration management which represent our module tree
 
             These methods return a static const list of key names. We need it to get needed values from our
             configuration management.

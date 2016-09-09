@@ -234,7 +234,7 @@ class AddonsOptions_Impl : public ConfigItem
         typedef std::unordered_map< OUString, MergeToolbarInstructionContainer, OUStringHash > ToolbarMergingInstructions;
 
         /*-****************************************************************************************************
-            @short      return list of key names of our configuration management which represent oue module tree
+            @short      return list of key names of our configuration management which represent our module tree
             @descr      These methods return the current list of key names! We need it to get needed values from our
                         configuration management!
             @param      "nCount"     ,   returns count of menu entries for "new"
