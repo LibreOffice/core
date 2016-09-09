@@ -343,7 +343,7 @@ VclPtr<PopupMenu> SfxActionListBox::CreateContextMenu()
 }
 
 SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Window* pParentWindow)
-    : Window(pParentWindow)
+    : Window(pParentWindow, WB_DIALOGCONTROL)
     , pImpl(new SfxTemplateDialog_Impl(pBindings, this))
     , mpBindings(pBindings)
 {
