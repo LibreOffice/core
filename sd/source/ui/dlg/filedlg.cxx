@@ -62,7 +62,7 @@ private:
     DECL_LINK_TYPED( IsMusicStoppedHdl, Idle *, void );
 
 public:
-    explicit SdFileDialog_Imp( const short nDialogType );
+    explicit SdFileDialog_Imp();
     virtual ~SdFileDialog_Imp();
 
     ErrCode Execute();
@@ -207,8 +207,8 @@ void SdFileDialog_Imp::CheckSelectionState()
     }
 }
 
-SdFileDialog_Imp::SdFileDialog_Imp( const short nDialogType ) :
-    FileDialogHelper( nDialogType ),
+SdFileDialog_Imp::SdFileDialog_Imp() :
+    FileDialogHelper( css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PLAY ),
     mnPlaySoundEvent( nullptr ),
     mbUsableSelection( false ),
     mbLabelPlaying(false)
@@ -222,32 +222,16 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short nDialogType ) :
 
     if( mxControlAccess.is() )
     {
-        if( nDialogType == css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PLAY )
+        try
         {
-            try
-            {
-                mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                           SD_RESSTR( STR_PLAY ) );
-            }
-            catch (const css::lang::IllegalArgumentException&)
-            {
-#ifdef DBG_UTIL
-                OSL_FAIL( "Cannot set play button label" );
-#endif
-            }
+            mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
+                                       SD_RESSTR( STR_PLAY ) );
         }
-        else if( !mbUsableSelection )
+        catch (const css::lang::IllegalArgumentException&)
         {
-            try
-            {
-                mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, false );
-            }
-            catch (const css::lang::IllegalArgumentException&)
-            {
 #ifdef DBG_UTIL
-                OSL_FAIL( "Cannot disable selection checkbox" );
+            OSL_FAIL( "Cannot set play button label" );
 #endif
-            }
         }
     }
 }
@@ -269,7 +253,7 @@ ErrCode SdFileDialog_Imp::Execute()
 
 // these are simple forwarders
 SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
-    mpImpl( new SdFileDialog_Imp( css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PLAY ) )
+    mpImpl( new SdFileDialog_Imp() )
 {
     OUString aDescr;
     aDescr = SD_RESSTR(STR_ALL_FILES);

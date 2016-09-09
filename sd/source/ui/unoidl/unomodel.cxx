@@ -1911,7 +1911,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 if ( !( (mpDoc->GetSdPage((sal_Int16) nPageNumber-1, PK_STANDARD))->IsExcluded() ) ||
                     (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides()) )
                 {
-                    ::sd::ClientView* pView = new ::sd::ClientView( mpDocShell, pOut, nullptr );
+                    ::sd::ClientView* pView = new ::sd::ClientView( mpDocShell, pOut );
                     Rectangle               aVisArea = Rectangle( Point(), mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind )->GetSize() );
                     vcl::Region                  aRegion( aVisArea );
 

@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 
 uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )
 {
-    return static_cast<cppu::OWeakObject*>(new SdXCustomPresentation( pShow, nullptr ));
+    return static_cast<cppu::OWeakObject*>(new SdXCustomPresentation( pShow ));
 }
 
 SdXCustomPresentation::SdXCustomPresentation() throw()
@@ -48,8 +48,8 @@ SdXCustomPresentation::SdXCustomPresentation() throw()
 {
 }
 
-SdXCustomPresentation::SdXCustomPresentation( SdCustomShow* pShow, SdXImpressDocument* pMyModel) throw()
-:   mpSdCustomShow(pShow), mpModel(pMyModel),
+SdXCustomPresentation::SdXCustomPresentation( SdCustomShow* pShow) throw()
+:   mpSdCustomShow(pShow), mpModel(nullptr),
     aDisposeListeners( aDisposeContainerMutex ),
     bDisposing( false )
 {

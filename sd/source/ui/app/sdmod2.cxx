@@ -456,7 +456,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
                         0 );
 
     // TP_OPTIONS_LAYOUT:
-    pRet->Put( SdOptionsLayoutItem( ATTR_OPTIONS_LAYOUT, pOptions, pFrameView ) );
+    pRet->Put( SdOptionsLayoutItem( pOptions, pFrameView ) );
 
     sal_uInt16 nDefTab = 0;
     if( pFrameView)
@@ -477,10 +477,10 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nMetric ) );
 
     // TP_OPTIONS_CONTENTS:
-    pRet->Put( SdOptionsContentsItem( ATTR_OPTIONS_CONTENTS, pOptions, pFrameView ) );
+    pRet->Put( SdOptionsContentsItem( pOptions, pFrameView ) );
 
     // TP_OPTIONS_MISC:
-    SdOptionsMiscItem aSdOptionsMiscItem( ATTR_OPTIONS_MISC, pOptions, pFrameView );
+    SdOptionsMiscItem aSdOptionsMiscItem( pOptions, pFrameView );
     if ( pFrameView )
     {
         aSdOptionsMiscItem.GetOptionsMisc().SetSummationOfParagraphs( pDoc->IsSummationOfParagraphs() );
@@ -490,7 +490,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     pRet->Put( aSdOptionsMiscItem );
 
     // TP_OPTIONS_SNAP:
-    pRet->Put( SdOptionsSnapItem( ATTR_OPTIONS_SNAP, pOptions, pFrameView ) );
+    pRet->Put( SdOptionsSnapItem( pOptions, pFrameView ) );
 
     // TP_SCALE:
     sal_uInt32 nW = 10L;
@@ -523,10 +523,10 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     pRet->Put( SfxUInt32Item( ATTR_OPTIONS_SCALE_HEIGHT, nH ) );
 
     // TP_OPTIONS_PRINT:
-    pRet->Put( SdOptionsPrintItem( ATTR_OPTIONS_PRINT, pOptions ) );
+    pRet->Put( SdOptionsPrintItem( pOptions ) );
 
     // RID_SVXPAGE_GRID:
-    pRet->Put( SdOptionsGridItem( SID_ATTR_GRID_OPTIONS, pOptions ) );
+    pRet->Put( SdOptionsGridItem( pOptions ) );
 
     return pRet;
 }
@@ -638,7 +638,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         pPrintItem->SetOptions( pOptions );
 
         // set PrintOptionsSet
-        SdOptionsPrintItem aPrintItem( ATTR_OPTIONS_PRINT, pOptions );
+        SdOptionsPrintItem aPrintItem( pOptions );
         SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );
         SfxPrinterChangeFlags nFlags =
                 (aPrintItem.GetOptionsPrint().IsWarningSize() ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE) |

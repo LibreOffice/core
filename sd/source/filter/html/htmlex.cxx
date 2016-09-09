@@ -349,7 +349,7 @@ HtmlExport::HtmlExport(
     :   maPath( aPath ),
         mpDoc(pExpDoc),
         mpDocSh( pDocShell ),
-        meEC(nullptr),
+        meEC(),
         meMode( PUBLISH_SINGLE_DOCUMENT ),
         mbContentsPage(false),
         mnButtonThema(-1),
@@ -3238,8 +3238,8 @@ sal_uLong EasyFile::close()
 }
 
 // This class helps reporting errors during file i/o
-HtmlErrorContext::HtmlErrorContext(vcl::Window *_pWin)
-: ErrorContext(_pWin)
+HtmlErrorContext::HtmlErrorContext()
+: ErrorContext(nullptr)
 {
     mnResId = 0;
 }

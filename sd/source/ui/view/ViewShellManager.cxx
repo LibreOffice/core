@@ -55,7 +55,7 @@ public:
     bool mbIsListenerAddedToWindow;
 
     ShellDescriptor ();
-    ShellDescriptor (SfxShell* pShell, ShellId nId);
+    ShellDescriptor (ShellId nId);
     ShellDescriptor (const ShellDescriptor& rDescriptor);
     ShellDescriptor& operator= (const ShellDescriptor& rDescriptor);
     bool IsMainViewShell() const;
@@ -220,9 +220,7 @@ private:
 
     ShellDescriptor CreateSubShell (
         SfxShell* pShell,
-        ShellId nShellId,
-        vcl::Window* pParentWindow,
-        FrameView* pFrameView);
+        ShellId nShellId);
     void DestroyViewShell (ShellDescriptor& rDescriptor);
     static void DestroySubShell (
         const SfxShell& rViewShell,
@@ -571,7 +569,7 @@ void ViewShellManager::Implementation::ActivateSubShell (
     // Add just the id of the sub shell. The actual shell is created
     // later in CreateShells().
     UpdateLock aLock (*this);
-    rList.push_back(ShellDescriptor(nullptr, nId));
+    rList.push_back(ShellDescriptor(nId));
 }
 
 void ViewShellManager::Implementation::DeactivateSubShell (
@@ -936,7 +934,7 @@ void ViewShellManager::Implementation::CreateShells()
             {
                 if (iSubShell->mpShell == nullptr)
                 {
-                    *iSubShell = CreateSubShell(iShell->mpShell,iSubShell->mnId,nullptr,nullptr);
+                    *iSubShell = CreateSubShell(iShell->mpShell,iSubShell->mnId);
                 }
             }
         }
@@ -1029,9 +1027,7 @@ IMPL_LINK_TYPED(ViewShellManager::Implementation, WindowEventHandler, VclWindowE
 
 ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
     SfxShell* pParentShell,
-    ShellId nShellId,
-    vcl::Window* pParentWindow,
-    FrameView* pFrameView)
+    ShellId nShellId)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ShellDescriptor aResult;
@@ -1045,7 +1041,7 @@ ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
     {
         SharedShellFactory pFactory = iFactory->second;
         if (pFactory != nullptr)
-            aResult.mpShell = pFactory->CreateShell(nShellId, pParentWindow, pFrameView);
+            aResult.mpShell = pFactory->CreateShell(nShellId, nullptr, nullptr);
 
         // Exit the loop when the shell has been successfully created.
         if (aResult.mpShell != nullptr)
@@ -1216,9 +1212,8 @@ ShellDescriptor::ShellDescriptor()
 }
 
 ShellDescriptor::ShellDescriptor (
-    SfxShell* pShell,
     ShellId nId)
-    : mpShell(pShell),
+    : mpShell(nullptr),
       mnId(nId),
       mpFactory(),
       mbIsListenerAddedToWindow(false)

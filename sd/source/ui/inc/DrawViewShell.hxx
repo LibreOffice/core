@@ -124,8 +124,7 @@ public:
     virtual void    SetZoom( long nZoom ) override;
     virtual void    SetZoomRect( const Rectangle& rZoomRect ) override;
 
-    void            InsertURLField(const OUString& rURL, const OUString& rText, const OUString& rTarget,
-                                   const Point* pPos);
+    void            InsertURLField(const OUString& rURL, const OUString& rText, const OUString& rTarget);
     void            InsertURLButton(const OUString& rURL, const OUString& rText, const OUString& rTarget,
                                     const Point* pPos);
 

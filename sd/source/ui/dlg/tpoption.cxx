@@ -58,7 +58,7 @@ SdTpOptionsSnap::~SdTpOptionsSnap()
 bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
 {
     SvxGridTabPage::FillItemSet(rAttrs);
-    SdOptionsSnapItem aOptsItem( ATTR_OPTIONS_SNAP );
+    SdOptionsSnapItem aOptsItem;
 
     aOptsItem.GetOptionsSnap().SetSnapHelplines( pCbxSnapHelplines->IsChecked() );
     aOptsItem.GetOptionsSnap().SetSnapBorder( pCbxSnapBorder->IsChecked() );
@@ -143,7 +143,7 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
         m_pCbxDragStripes->IsValueChangedFromSaved() ||
         m_pCbxHandlesBezier->IsValueChangedFromSaved() )
     {
-        SdOptionsLayoutItem aOptsItem( ATTR_OPTIONS_LAYOUT );
+        SdOptionsLayoutItem aOptsItem;
 
         aOptsItem.GetOptionsLayout().SetRulerVisible( m_pCbxRuler->IsChecked() );
         aOptsItem.GetOptionsLayout().SetMoveOutline( m_pCbxMoveOutline->IsChecked() );
@@ -399,7 +399,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         m_pCbxCompatibility->IsValueChangedFromSaved()         ||
         m_pCbxUsePrinterMetrics->IsValueChangedFromSaved() )
     {
-        SdOptionsMiscItem aOptsItem( ATTR_OPTIONS_MISC );
+        SdOptionsMiscItem aOptsItem;
 
         aOptsItem.GetOptionsMisc().SetStartWithTemplate( m_pCbxStartWithTemplate->IsChecked() );
         aOptsItem.GetOptionsMisc().SetMarkedHitMovesAlways( m_pCbxMarkedHitMovesAlways->IsChecked() );

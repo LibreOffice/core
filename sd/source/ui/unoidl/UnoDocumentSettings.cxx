@@ -412,7 +412,7 @@ throw (UnknownPropertyException, PropertyVetoException,
     bool bValue = false;
     bool bOk, bChanged = false, bOptionsChanged = false;
 
-    SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
+    SdOptionsPrintItem aOptionsPrintItem;
 
     SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
@@ -992,7 +992,7 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::
                 static_cast<OWeakObject *>(this));
     }
 
-    SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
+    SdOptionsPrintItem aOptionsPrintItem;
 
     SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )

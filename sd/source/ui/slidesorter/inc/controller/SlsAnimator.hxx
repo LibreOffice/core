@@ -69,12 +69,9 @@ public:
         the specified duration.
         @param rAnimation
             The animation operation.
-        @param nDuration
-            The duration in milli seconds.
     */
     AnimationId AddAnimation (
         const AnimationFunctor& rAnimation,
-        const sal_Int32 nDuration,
         const FinishFunctor& rFinishFunctor);
 
     /** Abort and remove an animation.  In order to reduce the bookkeeping

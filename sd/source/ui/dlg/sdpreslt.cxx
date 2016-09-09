@@ -157,7 +157,7 @@ void SdPresLayoutDlg::FillValueSet()
             aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
             maLayoutNames.push_back(aLayoutName);
 
-            Image aBitmap(Bitmap(mpDocSh->GetPagePreviewBitmap(pMaster, 90)));
+            Image aBitmap(Bitmap(mpDocSh->GetPagePreviewBitmap(pMaster)));
             m_pVS->InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
         }
     }
@@ -255,7 +255,7 @@ IMPL_LINK_NOARG_TYPED(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
                             aLayoutName = aLayoutName.copy(0, aLayoutName.indexOf(SD_LT_SEPARATOR));
                             maLayoutNames.push_back(aLayoutName);
 
-                            Image aBitmap(Bitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster, 90)));
+                            Image aBitmap(Bitmap(pTemplDocSh->GetPagePreviewBitmap(pMaster)));
                             m_pVS->InsertItem((sal_uInt16)maLayoutNames.size(), aBitmap, aLayoutName);
                         }
                     }

@@ -384,7 +384,7 @@ bool IteratorImplBase::operator== (const IteratorImplBase& rIterator) const
     return maPosition == rIterator.maPosition;
 }
 
-bool IteratorImplBase::IsEqual (const IteratorImplBase& rIterator, IteratorType ) const
+bool IteratorImplBase::IsEqualSelection(const IteratorImplBase& rIterator) const
 {
     // When this method is executed instead of the ones from derived classes
     // then the argument is of another type then the object itself.  In this
@@ -497,22 +497,15 @@ const IteratorPosition& SelectionIteratorImpl::GetPosition()
 
 bool SelectionIteratorImpl::operator== (const IteratorImplBase& rIterator) const
 {
-    return rIterator.IsEqual (*this, SELECTION);
+    return rIterator.IsEqualSelection(*this);
 }
 
-bool SelectionIteratorImpl::IsEqual (
-    const IteratorImplBase& rIterator,
-    IteratorType aType) const
+bool SelectionIteratorImpl::IsEqualSelection(const IteratorImplBase& rIterator) const
 {
-    if (aType == SELECTION)
-    {
-        const SelectionIteratorImpl* pSelectionIterator =
-            static_cast<const SelectionIteratorImpl*>(&rIterator);
-        return mpDocument == pSelectionIterator->mpDocument
-            && mnObjectIndex == pSelectionIterator->mnObjectIndex;
-    }
-    else
-        return false;
+    const SelectionIteratorImpl* pSelectionIterator =
+        static_cast<const SelectionIteratorImpl*>(&rIterator);
+    return mpDocument == pSelectionIterator->mpDocument
+        && mnObjectIndex == pSelectionIterator->mnObjectIndex;
 }
 
 //===== ViewIteratorImpl ================================================

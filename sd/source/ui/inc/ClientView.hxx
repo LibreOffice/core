@@ -35,8 +35,7 @@ class ClientView
 public:
     ClientView (
         DrawDocShell* pDocSh,
-        OutputDevice* pOutDev,
-        DrawViewShell* pShell);
+        OutputDevice* pOutDev);
     virtual ~ClientView();
 
     virtual void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;

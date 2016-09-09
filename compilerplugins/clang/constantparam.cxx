@@ -22,6 +22,8 @@
   $ make check
   $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='constantparam' check
   $ ./compilerplugins/clang/constantparam.py
+
+  TODO look for OUString and OString params and check for call-params that are always either "" or default constructed
 */
 
 namespace {

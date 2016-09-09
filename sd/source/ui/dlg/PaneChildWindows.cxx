@@ -43,8 +43,7 @@ PaneChildWindow::PaneChildWindow (
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo,
-    const sal_uInt16 nTitleBarResId,
-    SfxChildAlignment eAlignment)
+    const sal_uInt16 nTitleBarResId)
     : SfxChildWindow (pParentWindow, nId)
 {
     SetWindow( VclPtr<PaneDockingWindow>::Create(
@@ -52,7 +51,7 @@ PaneChildWindow::PaneChildWindow (
         this,
         pParentWindow,
         SD_RESSTR(nTitleBarResId)));
-    SetAlignment(eAlignment);
+    SetAlignment(SfxChildAlignment::LEFT);
     static_cast<SfxDockingWindow*>(GetWindow())->Initialize(pInfo);
     SetHideNotDelete(true);
 
@@ -85,8 +84,7 @@ LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
         nId,
         pBindings,
         pInfo,
-        STR_LEFT_PANE_IMPRESS_TITLE,
-        SfxChildAlignment::LEFT)
+        STR_LEFT_PANE_IMPRESS_TITLE)
 {
 }
 
@@ -101,8 +99,7 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
         nId,
         pBindings,
         pInfo,
-        STR_LEFT_PANE_DRAW_TITLE,
-        SfxChildAlignment::LEFT)
+        STR_LEFT_PANE_DRAW_TITLE)
 {
 }
 

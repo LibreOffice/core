@@ -21,6 +21,7 @@
 
 #include <o3tl/any.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
 #include <tools/helpers.hxx>
@@ -30,6 +31,7 @@
 #include "optsitem.hxx"
 #include "cfgids.hxx"
 #include "FrameView.hxx"
+#include <sdattr.hrc>
 
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
@@ -266,14 +268,14 @@ bool SdOptionsLayout::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsLayoutItem::SdOptionsLayoutItem( sal_uInt16 _nWhich )
-:   SfxPoolItem     ( _nWhich )
+SdOptionsLayoutItem::SdOptionsLayoutItem()
+:   SfxPoolItem     ( ATTR_OPTIONS_LAYOUT )
 ,   maOptionsLayout ( 0, false )
 {
 }
 
-SdOptionsLayoutItem::SdOptionsLayoutItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd::FrameView* pView )
-:   SfxPoolItem     ( _nWhich )
+SdOptionsLayoutItem::SdOptionsLayoutItem( SdOptions* pOpts, ::sd::FrameView* pView )
+:   SfxPoolItem     ( ATTR_OPTIONS_LAYOUT )
 ,   maOptionsLayout ( 0, false )
 {
     if( pOpts )
@@ -383,8 +385,8 @@ bool SdOptionsContents::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsContentsItem::SdOptionsContentsItem(sal_uInt16 _nWhich, SdOptions*, ::sd::FrameView*)
-:   SfxPoolItem         ( _nWhich )
+SdOptionsContentsItem::SdOptionsContentsItem( SdOptions*, ::sd::FrameView*)
+:   SfxPoolItem         ( ATTR_OPTIONS_CONTENTS )
 ,   maOptionsContents   ( 0, false )
 {
 }
@@ -635,14 +637,14 @@ bool SdOptionsMisc::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsMiscItem::SdOptionsMiscItem( sal_uInt16 _nWhich )
-:   SfxPoolItem     ( _nWhich )
+SdOptionsMiscItem::SdOptionsMiscItem()
+:   SfxPoolItem     ( ATTR_OPTIONS_MISC )
 ,   maOptionsMisc   ( 0, false )
 {
 }
 
-SdOptionsMiscItem::SdOptionsMiscItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd::FrameView* pView )
-:   SfxPoolItem     ( _nWhich )
+SdOptionsMiscItem::SdOptionsMiscItem( SdOptions* pOpts, ::sd::FrameView* pView )
+:   SfxPoolItem     ( ATTR_OPTIONS_MISC )
 ,   maOptionsMisc   ( 0, false )
 {
     if( pOpts )
@@ -847,14 +849,14 @@ bool SdOptionsSnap::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsSnapItem::SdOptionsSnapItem( sal_uInt16 _nWhich )
-:   SfxPoolItem     ( _nWhich )
+SdOptionsSnapItem::SdOptionsSnapItem()
+:   SfxPoolItem     ( ATTR_OPTIONS_SNAP )
 ,   maOptionsSnap   ( 0, false )
 {
 }
 
-SdOptionsSnapItem::SdOptionsSnapItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd::FrameView* pView )
-:   SfxPoolItem     ( _nWhich )
+SdOptionsSnapItem::SdOptionsSnapItem( SdOptions* pOpts, ::sd::FrameView* pView )
+:   SfxPoolItem     ( ATTR_OPTIONS_SNAP )
 ,   maOptionsSnap   ( 0, false )
 {
     if( pView )
@@ -1094,34 +1096,20 @@ bool SdOptionsGrid::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsGridItem::SdOptionsGridItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
-    SvxGridItem( _nWhich )
+SdOptionsGridItem::SdOptionsGridItem( SdOptions* pOpts ) :
+    SvxGridItem( SID_ATTR_GRID_OPTIONS )
 {
     SetSynchronize( pOpts->IsSynchronize() );
     SetEqualGrid( pOpts->IsEqualGrid() );
 
-    if( pView )
-    {
-        SetFieldDrawX( pView->GetGridCoarse().Width() );
-        SetFieldDrawY( pView->GetGridCoarse().Height() );
-        SetFieldDivisionX( pView->GetGridFine().Width() ? ( GetFieldDrawX() / pView->GetGridFine().Width() - 1 ) : 0 );
-        SetFieldDivisionY( pView->GetGridFine().Height() ? ( GetFieldDrawY() / pView->GetGridFine().Height() - 1 ) : 0 );
-        SetFieldSnapX( long(pView->GetSnapGridWidthX()) );
-        SetFieldSnapY( long(pView->GetSnapGridWidthY()) );
-        SetUseGridSnap( pView->IsGridSnap() );
-        SetGridVisible( pView->IsGridVisible() );
-    }
-    else
-    {
-        SetFieldDrawX( pOpts->GetFieldDrawX() );
-        SetFieldDrawY( pOpts->GetFieldDrawY() );
-        SetFieldDivisionX( pOpts->GetFieldDivisionX() ? ( pOpts->GetFieldDrawX() / pOpts->GetFieldDivisionX() - 1 ) : 0 );
-        SetFieldDivisionY( pOpts->GetFieldDivisionY() ? ( pOpts->GetFieldDrawY() / pOpts->GetFieldDivisionY() - 1 ) : 0 );
-        SetFieldSnapX( pOpts->GetFieldSnapX() );
-        SetFieldSnapY( pOpts->GetFieldSnapY() );
-        SetUseGridSnap( pOpts->IsUseGridSnap() );
-        SetGridVisible( pOpts->IsGridVisible() );
-    }
+    SetFieldDrawX( pOpts->GetFieldDrawX() );
+    SetFieldDrawY( pOpts->GetFieldDrawY() );
+    SetFieldDivisionX( pOpts->GetFieldDivisionX() ? ( pOpts->GetFieldDrawX() / pOpts->GetFieldDivisionX() - 1 ) : 0 );
+    SetFieldDivisionY( pOpts->GetFieldDivisionY() ? ( pOpts->GetFieldDrawY() / pOpts->GetFieldDivisionY() - 1 ) : 0 );
+    SetFieldSnapX( pOpts->GetFieldSnapX() );
+    SetFieldSnapY( pOpts->GetFieldSnapY() );
+    SetUseGridSnap( pOpts->IsUseGridSnap() );
+    SetGridVisible( pOpts->IsGridVisible() );
 }
 
 void SdOptionsGridItem::SetOptions( SdOptions* pOpts ) const
@@ -1319,14 +1307,14 @@ bool SdOptionsPrint::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsPrintItem::SdOptionsPrintItem( sal_uInt16 _nWhich )
-:   SfxPoolItem     ( _nWhich )
+SdOptionsPrintItem::SdOptionsPrintItem()
+:   SfxPoolItem     ( ATTR_OPTIONS_PRINT )
 ,   maOptionsPrint  ( 0, false )
 {
 }
 
-SdOptionsPrintItem::SdOptionsPrintItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd::FrameView* )
-:   SfxPoolItem     ( _nWhich )
+SdOptionsPrintItem::SdOptionsPrintItem( SdOptions* pOpts )
+:   SfxPoolItem     ( ATTR_OPTIONS_PRINT )
 ,   maOptionsPrint  ( 0, false )
 {
     if( pOpts )

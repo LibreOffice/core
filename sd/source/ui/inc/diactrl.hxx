@@ -41,8 +41,7 @@ protected:
 
 public:
                     SdPagesField( vcl::Window* pParent,
-                                  const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                  WinBits nBits = WB_BORDER | WB_SPIN | WB_REPEAT );
+                                  const css::uno::Reference< css::frame::XFrame >& rFrame );
                     virtual ~SdPagesField();
 
     void            UpdatePagesField( const SfxUInt16Item* pItem );
