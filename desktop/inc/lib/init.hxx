@@ -11,6 +11,7 @@
 #define INCLUDED_DESKTOP_INC_LIB_INIT_HXX
 
 #include <map>
+#include <unordered_map>
 #include <memory>
 #include <mutex>
 
@@ -46,6 +47,9 @@ namespace desktop {
         void setPartTilePainting(const bool bPartPainting) { m_bPartTilePainting = bPartPainting; }
         bool isPartTilePainting() const { return m_bPartTilePainting; }
 
+        void addViewStates(int viewId);
+        void removeViewStates(int viewId);
+
         typedef std::vector<std::pair<int, std::string>> queue_type;
 
     private:
@@ -54,6 +58,7 @@ namespace desktop {
 
         queue_type m_queue;
         std::map<int, std::string> m_states;
+        std::unordered_map<int, std::unordered_map<int, std::string>> m_viewStates;
         LibreOfficeKitDocument* m_pDocument;
         LibreOfficeKitCallback m_pCallback;
         void *m_pData;
