@@ -28,6 +28,7 @@
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <tools/mapunit.hxx>
 
+#include <memory>
 #include <vector>
 
 struct ImpSdXMLExpTransObj2DBase;
@@ -45,14 +46,15 @@ namespace basegfx
 
 class SdXMLImExTransform2D
 {
-    std::vector< ImpSdXMLExpTransObj2DBase* > maList;
+    // NOTE: This uses shared_ptr, because with unique_ptr the code
+    // fails to compile because of incomplete type.
+    std::vector< std::shared_ptr< ImpSdXMLExpTransObj2DBase > > maList;
     OUString                                  msString;
 
     void EmptyList();
 
 public:
     SdXMLImExTransform2D() {}
-    ~SdXMLImExTransform2D() { EmptyList(); }
 
     void AddRotate(double fNew);
     void AddTranslate(const ::basegfx::B2DTuple& rNew);
@@ -66,7 +68,9 @@ public:
 
 class SdXMLImExTransform3D
 {
-    std::vector< ImpSdXMLExpTransObj3DBase* > maList;
+    // NOTE: This uses shared_ptr, because with unique_ptr the code
+    // fails to compile because of incomplete type.
+    std::vector< std::shared_ptr< ImpSdXMLExpTransObj3DBase > > maList;
     OUString                                  msString;
 
     void EmptyList();
@@ -74,7 +78,6 @@ class SdXMLImExTransform3D
 public:
     SdXMLImExTransform3D() {}
     SdXMLImExTransform3D(const OUString& rNew, const SvXMLUnitConverter& rConv);
-    ~SdXMLImExTransform3D() { EmptyList(); }
 
     void AddMatrix(const ::basegfx::B3DHomMatrix& rNew);
 
