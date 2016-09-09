@@ -18,6 +18,11 @@
  */
 
 #include "propertyexport.hxx"
+
+#include <memory>
+
+#include <o3tl/make_unique.hxx>
+
 #include <xmloff/xmlexp.hxx>
 #include "strings.hxx"
 #include <xmloff/xmlnmspe.hxx>
@@ -99,131 +104,122 @@ namespace xmloff
     void OPropertyExport::exportRemainingProperties()
     {
         // the properties tag (will be created if we have at least one no-default property)
-        SvXMLElementExport* pPropertiesTag = nullptr;
+        std::unique_ptr<SvXMLElementExport> pPropertiesTag;
 
-        try
+        Any aValue;
+        OUString sValue;
+
+        // loop through all the properties which are yet to be exported
+        for (   StringSet::const_iterator aProperty = m_aRemainingProps.begin();
+                aProperty != m_aRemainingProps.end();
+                ++aProperty
+            )
         {
-            Any aValue;
-            OUString sValue;
+            DBG_CHECK_PROPERTY_NO_TYPE(*aProperty);
 
-            // loop through all the properties which are yet to be exported
-            for (   StringSet::const_iterator aProperty = m_aRemainingProps.begin();
-                    aProperty != m_aRemainingProps.end();
-                    ++aProperty
-                )
+#if OSL_DEBUG_LEVEL > 0
+            const OUString sPropertyName = *aProperty; (void)sPropertyName;
+#endif
+            if ( !shouldExportProperty( *aProperty ) )
+                continue;
+
+            // now that we have the first sub-tag we need the form:properties element
+            if (!pPropertiesTag)
+                pPropertiesTag = o3tl::make_unique<SvXMLElementExport>(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, token::XML_PROPERTIES, true, true);
+
+            // add the name attribute
+            AddAttribute(XML_NAMESPACE_FORM, token::XML_PROPERTY_NAME, *aProperty);
+
+            // get the value
+            aValue = m_xProps->getPropertyValue(*aProperty);
+
+            // the type to export
+            Type aExportType;
+
+            // is it a sequence
+            bool bIsSequence = TypeClass_SEQUENCE == aValue.getValueTypeClass();
+            // the type of the property, maybe reduced to the element type of a sequence
+            if (bIsSequence)
+                aExportType = getSequenceElementType( aValue.getValueType() );
+            else
+                aExportType = aValue.getValueType();
+
+            // the type attribute
+
+            bool bIsEmptyValue = TypeClass_VOID == aValue.getValueType().getTypeClass();
+            if ( bIsEmptyValue )
             {
-                DBG_CHECK_PROPERTY_NO_TYPE(*aProperty);
+                css::beans::Property aPropDesc;
+                aPropDesc = m_xPropertyInfo->getPropertyByName( *aProperty );
+                aExportType = aPropDesc.Type;
+            }
+            token::XMLTokenEnum eValueType = implGetPropertyXMLType( aExportType );
 
-    #if OSL_DEBUG_LEVEL > 0
-                const OUString sPropertyName = *aProperty; (void)sPropertyName;
-    #endif
-                if ( !shouldExportProperty( *aProperty ) )
-                    continue;
+            if ( bIsEmptyValue )
+                AddAttribute( XML_NAMESPACE_OFFICE, token::XML_VALUE_TYPE, token::XML_VOID );
+            else
+                AddAttribute( XML_NAMESPACE_OFFICE, token::XML_VALUE_TYPE, eValueType );
 
-                // now that we have the first sub-tag we need the form:properties element
-                if (!pPropertiesTag)
-                    pPropertiesTag = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, token::XML_PROPERTIES, true, true);
+            token::XMLTokenEnum eValueAttName( token::XML_VALUE );
+            switch ( eValueType )
+            {
+            case token::XML_BOOLEAN:    eValueAttName = token::XML_BOOLEAN_VALUE; break;
+            case token::XML_STRING:     eValueAttName = token::XML_STRING_VALUE;  break;
+            default:    break;
+            }
 
-                // add the name attribute
-                AddAttribute(XML_NAMESPACE_FORM, token::XML_PROPERTY_NAME, *aProperty);
+            if( !bIsSequence && !bIsEmptyValue )
+            {   // the simple case
 
-                // get the value
-                aValue = m_xProps->getPropertyValue(*aProperty);
+                sValue = implConvertAny(aValue);
+                AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
+            }
 
-                // the type to export
-                Type aExportType;
+            // start the property tag
+            SvXMLElementExport aValueTag1(m_rContext.getGlobalContext(),
+                    XML_NAMESPACE_FORM,
+                    bIsSequence ? token::XML_LIST_PROPERTY
+                                : token::XML_PROPERTY, true, true);
 
-                // is it a sequence
-                bool bIsSequence = TypeClass_SEQUENCE == aValue.getValueTypeClass();
-                // the type of the property, maybe reduced to the element type of a sequence
-                if (bIsSequence)
-                    aExportType = getSequenceElementType( aValue.getValueType() );
-                else
-                    aExportType = aValue.getValueType();
+            if (!bIsSequence)
+                continue;
 
-                // the type attribute
-
-                bool bIsEmptyValue = TypeClass_VOID == aValue.getValueType().getTypeClass();
-                if ( bIsEmptyValue )
-                {
-                    css::beans::Property aPropDesc;
-                    aPropDesc = m_xPropertyInfo->getPropertyByName( *aProperty );
-                    aExportType = aPropDesc.Type;
-                }
-                token::XMLTokenEnum eValueType = implGetPropertyXMLType( aExportType );
-
-                if ( bIsEmptyValue )
-                    AddAttribute( XML_NAMESPACE_OFFICE, token::XML_VALUE_TYPE, token::XML_VOID );
-                else
-                    AddAttribute( XML_NAMESPACE_OFFICE, token::XML_VALUE_TYPE, eValueType );
-
-                token::XMLTokenEnum eValueAttName( token::XML_VALUE );
-                switch ( eValueType )
-                {
-                case token::XML_BOOLEAN:    eValueAttName = token::XML_BOOLEAN_VALUE; break;
-                case token::XML_STRING:     eValueAttName = token::XML_STRING_VALUE;  break;
-                default:    break;
-                }
-
-                if( !bIsSequence && !bIsEmptyValue )
-                {   // the simple case
-
-                    sValue = implConvertAny(aValue);
-                    AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
-                }
-
-                // start the property tag
-                SvXMLElementExport aValueTag1(m_rContext.getGlobalContext(),
-                        XML_NAMESPACE_FORM,
-                        bIsSequence ? token::XML_LIST_PROPERTY
-                                    : token::XML_PROPERTY, true, true);
-
-                if (!bIsSequence)
-                    continue;
-
-                // the not-that-simple case, we need to iterate through the sequence elements
-                switch ( aExportType.getTypeClass() )
-                {
-                    case TypeClass_STRING:
-                        exportRemainingPropertiesSequence< OUString >(
-                            aValue, eValueAttName);
-                        break;
-                    case TypeClass_DOUBLE:
-                        exportRemainingPropertiesSequence< double >(
-                            aValue, eValueAttName);
-                        break;
-                    case TypeClass_BOOLEAN:
-                        exportRemainingPropertiesSequence< sal_Bool >(
-                            aValue, eValueAttName);
-                        break;
-                    case TypeClass_BYTE:
-                        exportRemainingPropertiesSequence< sal_Int8 >(
-                            aValue, eValueAttName);
-                        break;
-                    case TypeClass_SHORT:
-                        exportRemainingPropertiesSequence< sal_Int16 >(
-                            aValue, eValueAttName);
-                        break;
-                    case TypeClass_LONG:
-                        exportRemainingPropertiesSequence< sal_Int32 >(
-                            aValue, eValueAttName);
-                        break;
-                    case TypeClass_HYPER:
-                        exportRemainingPropertiesSequence< sal_Int64 >(
-                            aValue, eValueAttName);
-                        break;
-                    default:
-                        OSL_FAIL("OPropertyExport::exportRemainingProperties: unsupported sequence tyoe !");
-                        break;
-                }
+            // the not-that-simple case, we need to iterate through the sequence elements
+            switch ( aExportType.getTypeClass() )
+            {
+                case TypeClass_STRING:
+                    exportRemainingPropertiesSequence< OUString >(
+                        aValue, eValueAttName);
+                    break;
+                case TypeClass_DOUBLE:
+                    exportRemainingPropertiesSequence< double >(
+                        aValue, eValueAttName);
+                    break;
+                case TypeClass_BOOLEAN:
+                    exportRemainingPropertiesSequence< sal_Bool >(
+                        aValue, eValueAttName);
+                    break;
+                case TypeClass_BYTE:
+                    exportRemainingPropertiesSequence< sal_Int8 >(
+                        aValue, eValueAttName);
+                    break;
+                case TypeClass_SHORT:
+                    exportRemainingPropertiesSequence< sal_Int16 >(
+                        aValue, eValueAttName);
+                    break;
+                case TypeClass_LONG:
+                    exportRemainingPropertiesSequence< sal_Int32 >(
+                        aValue, eValueAttName);
+                    break;
+                case TypeClass_HYPER:
+                    exportRemainingPropertiesSequence< sal_Int64 >(
+                        aValue, eValueAttName);
+                    break;
+                default:
+                    OSL_FAIL("OPropertyExport::exportRemainingProperties: unsupported sequence tyoe !");
+                    break;
             }
         }
-        catch(...)
-        {
-            delete pPropertiesTag;
-            throw;
-        }
-        delete pPropertiesTag;
     }
 
     void OPropertyExport::examinePersistence()
