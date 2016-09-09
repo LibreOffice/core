@@ -44,13 +44,13 @@ class XMLOFF_DLLPUBLIC SvUnoAttributeContainer:
         css::container::XNameContainer >
 {
 private:
-    std::unique_ptr<SvXMLAttrContainerData> mpContainer;
+    std::shared_ptr<SvXMLAttrContainerData> mpContainer;
 
     SAL_DLLPRIVATE sal_uInt16 getIndexByName(const OUString& aName )
         const;
 
 public:
-    SvUnoAttributeContainer( std::unique_ptr<SvXMLAttrContainerData> pContainer = nullptr );
+    SvUnoAttributeContainer( std::shared_ptr<SvXMLAttrContainerData> pContainer = nullptr );
     SvXMLAttrContainerData* GetContainerImpl() const { return mpContainer.get(); }
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();

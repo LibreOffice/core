@@ -36,10 +36,10 @@ class XMLFontEncodingPropHdl;
 
 class XMLOFF_DLLPUBLIC XMLFontStylesContext : public SvXMLStylesContext
 {
-    std::unique_ptr<XMLFontFamilyNamePropHdl>    pFamilyNameHdl;
-    std::unique_ptr<XMLFontFamilyPropHdl>        pFamilyHdl;
-    std::unique_ptr<XMLFontPitchPropHdl>         pPitchHdl;
-    std::unique_ptr<XMLFontEncodingPropHdl>      pEncHdl;
+    std::shared_ptr<XMLFontFamilyNamePropHdl>    pFamilyNameHdl;
+    std::shared_ptr<XMLFontFamilyPropHdl>        pFamilyHdl;
+    std::shared_ptr<XMLFontPitchPropHdl>         pPitchHdl;
+    std::shared_ptr<XMLFontEncodingPropHdl>      pEncHdl;
 
     std::unique_ptr<SvXMLTokenMap>           pFontStyleAttrTokenMap;
 
