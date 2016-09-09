@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/make_unique.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -1341,7 +1342,6 @@ XMLTextFrameContext::XMLTextFrameContext(
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   MultiImageImportHelper()
 ,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
-,   m_pHyperlink( nullptr )
     // Implement Title/Description Elements UI (#i73249#)
 ,   m_sTitle()
 ,   m_sDesc()
@@ -1391,11 +1391,6 @@ XMLTextFrameContext::XMLTextFrameContext(
     }
 }
 
-XMLTextFrameContext::~XMLTextFrameContext()
-{
-    delete m_pHyperlink;
-}
-
 void XMLTextFrameContext::EndElement()
 {
     /// solve if multiple image child contexts were imported
@@ -1429,8 +1424,7 @@ void XMLTextFrameContext::EndElement()
         {
             pImpl->SetHyperlink( m_pHyperlink->GetHRef(), m_pHyperlink->GetName(),
                           m_pHyperlink->GetTargetFrameName(), m_pHyperlink->GetMap() );
-            delete m_pHyperlink;
-            m_pHyperlink = nullptr;
+            m_pHyperlink.reset();
         }
 
     }
@@ -1651,8 +1645,7 @@ void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,
                        bool bMap )
 {
     OSL_ENSURE( !m_pHyperlink, "recursive SetHyperlink call" );
-    delete m_pHyperlink;
-    m_pHyperlink = new XMLTextFrameContextHyperlink_Impl(
+    m_pHyperlink = o3tl::make_unique<XMLTextFrameContextHyperlink_Impl>(
                 rHRef, rName, rTargetFrameName, bMap );
 }
 
