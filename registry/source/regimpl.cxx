@@ -475,7 +475,7 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
     }
     else
     {
-        errCode = rRegFile.create(regName, sAccessMode, REG_PAGESIZE);
+        errCode = rRegFile.create(regName, sAccessMode);
     }
 
     if (errCode)

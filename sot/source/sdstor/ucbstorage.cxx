@@ -2615,7 +2615,7 @@ bool UCBStorage::Revert()
     return pImp->Revert();
 }
 
-BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode nMode, bool bDirect, const OString* pKey )
+BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode nMode, bool bDirect )
 {
     if( rEleName.isEmpty() )
         return nullptr;
@@ -2631,7 +2631,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
             OUString aName( pImp->m_aURL );
             aName += "/";
             aName += rEleName;
-            UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect, pKey, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
+            UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect, nullptr, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
             pStream->SetError( GetError() );
             pStream->pImp->m_aName = rEleName;
             return pStream;
@@ -2662,8 +2662,6 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
                 // check if stream is opened with the same keyword as before
                 // if not, generate a new stream because it could be encrypted vs. decrypted!
                 OString aKey;
-                if ( pKey )
-                    aKey = *pKey;
                 if ( pElement->m_xStream->m_aKey == aKey )
                 {
                     pElement->m_xStream->PrepareCachedForReopen( nMode );
@@ -2674,7 +2672,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
         }
 
         // stream is opened the first time
-        pImp->OpenStream( pElement, nMode, bDirect, pKey );
+        pImp->OpenStream( pElement, nMode, bDirect, nullptr );
 
         // if name has been changed before creating the stream: set name!
         pElement->m_xStream->m_aName = rEleName;

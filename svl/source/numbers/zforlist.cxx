@@ -302,8 +302,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     pCharClass = new CharClass( m_xContext, maLanguageTag );
     xLocaleData.init( m_xContext, maLanguageTag );
     xCalendar.init( m_xContext, maLanguageTag.getLocale() );
-    xTransliteration.init( m_xContext, eLang,
-                           css::i18n::TransliterationModules_IGNORE_CASE );
+    xTransliteration.init( m_xContext, eLang );
     xNatNum.init( m_xContext );
 
     // cached locale data items

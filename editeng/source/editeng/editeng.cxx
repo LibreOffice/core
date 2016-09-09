@@ -1293,7 +1293,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                                     pImpEditEngine->xLocaleDataWrapper.changeLocale( aLanguageTag);
 
                                 if (!pImpEditEngine->xTransliterationWrapper.isInitialized())
-                                    pImpEditEngine->xTransliterationWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), eLang, i18n::TransliterationModules_IGNORE_CASE);
+                                    pImpEditEngine->xTransliterationWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), eLang);
                                 else
                                     pImpEditEngine->xTransliterationWrapper.changeLocale( eLang);
 

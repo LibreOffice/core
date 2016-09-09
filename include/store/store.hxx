@@ -299,17 +299,16 @@ public:
     /** Open the file.
         @see store_openFile()
      */
-    inline storeError create (
+    inline storeError create(
         rtl::OUString const & rFilename,
-        storeAccessMode       eAccessMode,
-        sal_uInt16            nPageSize = STORE_DEFAULT_PAGESIZE)
+        storeAccessMode       eAccessMode )
     {
         if (m_hImpl)
         {
             (void) store_releaseHandle (m_hImpl);
             m_hImpl = nullptr;
         }
-        return store_openFile (rFilename.pData, eAccessMode, nPageSize, &m_hImpl);
+        return store_openFile (rFilename.pData, eAccessMode, STORE_DEFAULT_PAGESIZE, &m_hImpl);
     }
 
     /** Open the temporary file in memory.

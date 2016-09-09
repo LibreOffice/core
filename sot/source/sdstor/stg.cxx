@@ -601,11 +601,8 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
 
 // Open a stream
 
-BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, bool,
-                                        const OString* pB )
+BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, bool )
 {
-    DBG_ASSERT(!pB, "Encryption not supported");
-
     if( !Validate() || !ValidateMode( m ) )
         return new StorageStream( pIo, nullptr, m );
     StgDirEntry* p = pIo->m_pTOC->Find( *pEntry, rName );

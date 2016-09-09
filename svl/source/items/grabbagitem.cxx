@@ -21,11 +21,9 @@ SfxGrabBagItem::SfxGrabBagItem()
 {
 }
 
-SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich, const std::map<OUString, uno::Any>* pMap) :
+SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich) :
     SfxPoolItem(nWhich)
 {
-    if (pMap)
-        m_aMap = *pMap;
 }
 
 SfxGrabBagItem::SfxGrabBagItem(const SfxGrabBagItem& rItem) :
