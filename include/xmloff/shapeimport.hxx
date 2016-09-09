@@ -266,7 +266,7 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceO
 {
     std::unique_ptr<XMLShapeImportHelperImpl> mpImpl;
 
-    XMLShapeImportPageContextImpl*  mpPageContext;
+    std::shared_ptr<XMLShapeImportPageContextImpl> mpPageContext;
 
     // PropertySetMappers and factory
     rtl::Reference<XMLSdPropHdlFactory>       mpSdPropHdlFactory;

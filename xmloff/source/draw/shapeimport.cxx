@@ -88,7 +88,7 @@ struct XMLShapeImportPageContextImpl
 
     uno::Reference < drawing::XShapes > mxShapes;
 
-    struct XMLShapeImportPageContextImpl* mpNext;
+    std::shared_ptr<XMLShapeImportPageContextImpl> mpNext;
 };
 
 /** this class is to enable adding members to the XMLShapeImportHelper without getting incompatible */
@@ -111,7 +111,6 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         const uno::Reference< frame::XModel>& rModel,
         SvXMLImportPropertyMapper *pExtMapper )
 :   mpImpl( new XMLShapeImportHelperImpl() ),
-    mpPageContext(nullptr),
 
     mpPropertySetMapper(nullptr),
     mpPresPagePropsMapper(nullptr),
@@ -1021,8 +1020,8 @@ sal_Int32 XMLShapeImportHelper::getGluePointId( const css::uno::Reference< css::
 /** this method must be calling before the first shape is imported for the given page */
 void XMLShapeImportHelper::startPage( css::uno::Reference< css::drawing::XShapes >& rShapes )
 {
-    XMLShapeImportPageContextImpl* pOldContext = mpPageContext;
-    mpPageContext = new XMLShapeImportPageContextImpl();
+    const std::shared_ptr<XMLShapeImportPageContextImpl> pOldContext = mpPageContext;
+    mpPageContext = std::make_shared<XMLShapeImportPageContextImpl>();
     mpPageContext->mpNext = pOldContext;
     mpPageContext->mxShapes = rShapes;
 }
@@ -1036,9 +1035,7 @@ void XMLShapeImportHelper::endPage( css::uno::Reference< css::drawing::XShapes >
 
     restoreConnections();
 
-    XMLShapeImportPageContextImpl* pNextContext = mpPageContext->mpNext;
-    delete mpPageContext;
-    mpPageContext = pNextContext;
+    mpPageContext = mpPageContext->mpNext;
 }
 
 /** defines if the import should increment the progress bar or not */
