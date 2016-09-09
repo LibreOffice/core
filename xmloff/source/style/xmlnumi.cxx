@@ -1033,6 +1033,8 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 {
 }
 
+SvxXMLListStyleContext::~SvxXMLListStyleContext() {}
+
 SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
