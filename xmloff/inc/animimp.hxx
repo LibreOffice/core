@@ -20,6 +20,8 @@
 #ifndef INCLUDED_XMLOFF_INC_ANIMIMP_HXX
 #define INCLUDED_XMLOFF_INC_ANIMIMP_HXX
 
+#include <memory>
+
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 
@@ -29,7 +31,7 @@ class AnimImpImpl;
 
 class XMLAnimationsContext : public SvXMLImportContext
 {
-    AnimImpImpl*    mpImpl;
+    std::shared_ptr<AnimImpImpl> mpImpl;
 
 public:
 
@@ -37,7 +39,6 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList);
-    virtual ~XMLAnimationsContext();
 
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;

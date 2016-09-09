@@ -361,7 +361,7 @@ enum XMLActionKind
 class XMLAnimationsEffectContext : public SvXMLImportContext
 {
 public:
-    AnimImpImpl*    mpImpl;
+    std::shared_ptr<AnimImpImpl> mpImpl;
 
     XMLActionKind   meKind;
     bool        mbTextEffect;
@@ -383,7 +383,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const Reference< XAttributeList >& xAttrList,
-        AnimImpImpl* pImpl);
+        const std::shared_ptr<AnimImpImpl>& pImpl);
     virtual ~XMLAnimationsEffectContext();
 
     virtual void EndElement() override;
@@ -439,7 +439,7 @@ XMLAnimationsSoundContext::~XMLAnimationsSoundContext()
 }
 
 
-XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, AnimImpImpl* pImpl )
+XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const std::shared_ptr<AnimImpImpl>& pImpl )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpImpl( pImpl ),
     meKind( XMLE_SHOW ), mbTextEffect( false ),
@@ -638,13 +638,8 @@ void XMLAnimationsEffectContext::EndElement()
 XMLAnimationsContext::XMLAnimationsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& )
 : SvXMLImportContext(rImport, nPrfx, rLocalName)
+, mpImpl(std::make_shared<AnimImpImpl>())
 {
-    mpImpl = new AnimImpImpl();
-}
-
-XMLAnimationsContext::~XMLAnimationsContext()
-{
-    delete mpImpl;
 }
 
 SvXMLImportContext * XMLAnimationsContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
