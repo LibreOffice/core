@@ -144,10 +144,8 @@ namespace calc
 
     Sequence< OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        Sequence< OUString > aServices( 2 );
-        aServices[ 0 ] = "com.sun.star.table.CellRangeListSource";
-        aServices[ 1 ] = "com.sun.star.form.binding.ListEntrySource";
-        return aServices;
+        return {"com.sun.star.table.CellRangeListSource",
+                "com.sun.star.form.binding.ListEntrySource"};
     }
 
     CellRangeAddress OCellListSource::getRangeAddress( ) const

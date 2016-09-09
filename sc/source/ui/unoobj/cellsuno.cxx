@@ -4770,13 +4770,10 @@ sal_Bool SAL_CALL ScCellRangesObj::supportsService( const OUString& rServiceName
 uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(4);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCSHEETCELLRANGES_SERVICE;
-    pArray[1] = SCCELLPROPERTIES_SERVICE;
-    pArray[2] = SCCHARPROPERTIES_SERVICE;
-    pArray[3] = SCPARAPROPERTIES_SERVICE;
-    return aRet;
+    return {SCSHEETCELLRANGES_SERVICE,
+            SCCELLPROPERTIES_SERVICE,
+            SCCHARPROPERTIES_SERVICE,
+            SCPARAPROPERTIES_SERVICE};
 }
 
 uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( ScDocument* pDoc, const ScRange& rR )
@@ -6037,14 +6034,11 @@ sal_Bool SAL_CALL ScCellRangeObj::supportsService( const OUString& rServiceName 
 uno::Sequence<OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(5);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCSHEETCELLRANGE_SERVICE;
-    pArray[1] = SCCELLRANGE_SERVICE;
-    pArray[2] = SCCELLPROPERTIES_SERVICE;
-    pArray[3] = SCCHARPROPERTIES_SERVICE;
-    pArray[4] = SCPARAPROPERTIES_SERVICE;
-    return aRet;
+    return {SCSHEETCELLRANGE_SERVICE,
+            SCCELLRANGE_SERVICE,
+            SCCELLPROPERTIES_SERVICE,
+            SCCHARPROPERTIES_SERVICE,
+            SCPARAPROPERTIES_SERVICE};
 }
 
 const SvxItemPropertySet* ScCellObj::GetEditPropertySet()
@@ -6724,16 +6718,13 @@ sal_Bool SAL_CALL ScCellObj::supportsService( const OUString& rServiceName )
 uno::Sequence<OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(7);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCSHEETCELL_SERVICE;
-    pArray[1] = SCCELL_SERVICE;
-    pArray[2] = SCCELLPROPERTIES_SERVICE;
-    pArray[3] = SCCHARPROPERTIES_SERVICE;
-    pArray[4] = SCPARAPROPERTIES_SERVICE;
-    pArray[5] = SCSHEETCELLRANGE_SERVICE;
-    pArray[6] = SCCELLRANGE_SERVICE;
-    return aRet;
+    return {SCSHEETCELL_SERVICE,
+            SCCELL_SERVICE,
+            SCCELLPROPERTIES_SERVICE,
+            SCCHARPROPERTIES_SERVICE,
+            SCPARAPROPERTIES_SERVICE,
+            SCSHEETCELLRANGE_SERVICE,
+            SCCELLRANGE_SERVICE};
 }
 
 // XActionLockable
@@ -8612,16 +8603,13 @@ sal_Bool SAL_CALL ScTableSheetObj::supportsService( const OUString& rServiceName
 uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(7);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCSPREADSHEET_SERVICE;
-    pArray[1] = SCSHEETCELLRANGE_SERVICE;
-    pArray[2] = SCCELLRANGE_SERVICE;
-    pArray[3] = SCCELLPROPERTIES_SERVICE;
-    pArray[4] = SCCHARPROPERTIES_SERVICE;
-    pArray[5] = SCPARAPROPERTIES_SERVICE;
-    pArray[6] = SCLINKTARGET_SERVICE;
-    return aRet;
+    return {SCSPREADSHEET_SERVICE,
+            SCSHEETCELLRANGE_SERVICE,
+            SCCELLRANGE_SERVICE,
+            SCCELLPROPERTIES_SERVICE,
+            SCCHARPROPERTIES_SERVICE,
+            SCPARAPROPERTIES_SERVICE,
+            SCLINKTARGET_SERVICE};
 }
 
 // XUnoTunnel
