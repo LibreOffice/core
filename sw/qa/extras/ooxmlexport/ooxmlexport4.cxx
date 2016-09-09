@@ -1015,6 +1015,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original,"tdf81345.docx")
     xCursor->jumpToPage(2);
     OUString pageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
     CPPUNIT_ASSERT(pageStyleName != "Standard");
+
+    // tdf89297 Styles were being added before their base/parent/inherited-from style existed, and so were using default settings.
+    uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
+    uno::Reference<beans::XPropertySet> xStyle(xParaStyles->getByName("Pull quote"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6736947), getProperty<sal_Int32>(xStyle, "CharColor"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
