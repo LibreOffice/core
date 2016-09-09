@@ -916,6 +916,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
         xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
         if(xCharStyles.is() && xParaStyles.is())
         {
+            std::vector< ::std::pair<OUString, uno::Reference<style::XStyle>> > aMissingParent;
             std::vector<beans::PropertyValue> aTableStylesVec;
             std::vector< StyleSheetEntryPtr >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
             while( aIt != m_pImpl->m_aStyleSheetEntries.end() )
@@ -928,7 +929,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     bool bInsert = false;
                     uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : (bListStyle ? xNumberingStyles : xCharStyles);
                     uno::Reference< style::XStyle > xStyle;
-                    OUString sConvertedStyleName = ConvertStyleName( pEntry->sStyleName );
+                    const OUString sConvertedStyleName = ConvertStyleName( pEntry->sStyleName );
 
                     if(xStyles->hasByName( sConvertedStyleName ))
                     {
@@ -1148,6 +1149,10 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     // Numbering style got inserted earlier.
                     if(bInsert && !bListStyle)
                     {
+                        const OUString sParentStyle = xStyle->getParentStyle();
+                        if( !sParentStyle.isEmpty() && !xStyles->hasByName( sParentStyle ) )
+                            aMissingParent.emplace_back( sParentStyle, xStyle );
+
                         xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
                     }
 
@@ -1169,6 +1174,12 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     aTableStylesVec.push_back(pTableEntry->GetInteropGrabBag());
                 }
                 ++aIt;
+            }
+
+            // Update the styles that were created before their parents
+            for( auto const & iter : aMissingParent )
+            {
+                iter.second->setParentStyle( iter.first );
             }
 
             if (!aTableStylesVec.empty())
