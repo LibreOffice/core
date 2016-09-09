@@ -111,7 +111,7 @@
 #include <sfx2/brokenpackageint.hxx>
 #include "graphhelp.hxx"
 #include "docundomanager.hxx"
-#include <stringhint.hxx>
+#include <openurlhint.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include "printhelper.hxx"
@@ -1074,7 +1074,7 @@ void SAL_CALL SfxBaseModel::connectController( const Reference< frame::XControll
         pViewFrame->UpdateDocument_Impl();
         const OUString sDocumentURL = GetObjectShell()->GetMedium()->GetName();
         if ( !sDocumentURL.isEmpty() )
-            SfxGetpApp()->Broadcast( SfxStringHint( SID_OPENURL, sDocumentURL ) );
+            SfxGetpApp()->Broadcast( SfxOpenUrlHint( sDocumentURL ) );
     }
 }
 

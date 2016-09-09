@@ -57,7 +57,7 @@ protected:
 class EmojiView : public ThumbnailView
 {
 public:
-    EmojiView ( vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP | WB_VSCROLL);
+    EmojiView ( vcl::Window* pParent);
 
     virtual ~EmojiView ();
 

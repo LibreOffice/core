@@ -34,7 +34,7 @@ namespace sfx2
     public:
         TitledDockingWindow(
             SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow,
-            vcl::Window* i_pParent, WinBits i_nStyle = 0
+            vcl::Window* i_pParent
         );
 
         virtual ~TitledDockingWindow();

@@ -861,54 +861,21 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog( const Referenc
 }
 
 // TabDialog outside the drawing layer
-SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nResId,
-                                                vcl::Window* pParent,
-                                                const SfxItemSet* pAttrSet,
-                                                SfxViewFrame* )
+SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateAutoCorrTabDialog( const SfxItemSet* pAttrSet )
 {
-    SfxTabDialog* pDlg=nullptr;
-    switch ( nResId )
-    {
-        case RID_OFA_AUTOCORR_DLG :
-            pDlg = VclPtr<OfaAutoCorrDlg>::Create( pParent, pAttrSet );
-            break;
-        case RID_SVXDLG_CUSTOMIZE :
-            pDlg = VclPtr<SvxConfigDialog>::Create( pParent, pAttrSet );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new CuiAbstractTabDialog_Impl( pDlg );
-    return nullptr;
+    VclPtrInstance<OfaAutoCorrDlg> pDlg( nullptr, pAttrSet );
+    return new CuiAbstractTabDialog_Impl( pDlg );
 }
 
-SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nResId,
-                                                vcl::Window* pParent,
+SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateCustomizeTabDialog(
                                                 const SfxItemSet* pAttrSet,
                                                 const Reference< frame::XFrame >& xViewFrame )
 {
     VclPtr<SfxTabDialog> pDlg;
-    switch ( nResId )
-    {
-        case RID_OFA_AUTOCORR_DLG :
-            pDlg = VclPtr<OfaAutoCorrDlg>::Create( pParent, pAttrSet );
-            break;
-        case RID_SVXDLG_CUSTOMIZE :
-            {
-                VclPtrInstance<SvxConfigDialog> pDlg1( pParent, pAttrSet );
-                pDlg1->SetFrame(xViewFrame);
-                pDlg.reset(pDlg1);
-            }
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new CuiAbstractTabDialog_Impl( pDlg );
-    return nullptr;
+    VclPtrInstance<SvxConfigDialog> pDlg1( nullptr, pAttrSet );
+    pDlg1->SetFrame(xViewFrame);
+    pDlg.reset(pDlg1);
+    return new CuiAbstractTabDialog_Impl( pDlg );
 }
 
 // TabDialog that use functionality of the drawing layer

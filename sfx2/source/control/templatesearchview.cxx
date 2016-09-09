@@ -23,8 +23,8 @@
 #define MNI_DEFAULT_TEMPLATE   3
 #define MNI_DELETE             4
 
-TemplateSearchView::TemplateSearchView (vcl::Window *pParent, WinBits nWinStyle)
-    : ThumbnailView(pParent,nWinStyle),
+TemplateSearchView::TemplateSearchView (vcl::Window *pParent)
+    : ThumbnailView(pParent,WB_TABSTOP | WB_VSCROLL),
     maSelectedItem(nullptr),
     maPosition(0,0)
 {

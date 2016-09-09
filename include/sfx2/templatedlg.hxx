@@ -183,7 +183,7 @@ public:
 
 public:
 
-    explicit SfxTemplateCategoryDialog(vcl::Window *parent = nullptr);
+    explicit SfxTemplateCategoryDialog();
 
     virtual ~SfxTemplateCategoryDialog();
     virtual void dispose() override;

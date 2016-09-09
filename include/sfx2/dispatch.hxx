@@ -110,8 +110,8 @@ protected:
     void FlushImpl();
 
 public:
-                        SfxDispatcher( SfxDispatcher* pParent );
-                        SfxDispatcher( SfxViewFrame *pFrame = nullptr );
+                        SfxDispatcher();
+                        SfxDispatcher( SfxViewFrame *pFrame );
 
     SAL_DLLPRIVATE void Construct_Impl( SfxDispatcher* pParent );
 
@@ -183,7 +183,7 @@ public:
     SAL_DLLPRIVATE void RemoveShell_Impl( SfxShell& rShell );
     SAL_DLLPRIVATE void DoParentActivate_Impl();
     SAL_DLLPRIVATE void DoParentDeactivate_Impl();
-    SAL_DLLPRIVATE void DoActivate_Impl( bool bMDI, SfxViewFrame* pOld );
+    SAL_DLLPRIVATE void DoActivate_Impl( bool bMDI );
     SAL_DLLPRIVATE void DoDeactivate_Impl( bool bMDI, SfxViewFrame* pNew );
     SAL_DLLPRIVATE void InvalidateBindings_Impl(bool);
 };

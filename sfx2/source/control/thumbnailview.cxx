@@ -57,12 +57,12 @@ enum
     SCROLL_OFFSET = 4
 };
 
-ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
+ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle)
     : Control( pParent, nWinStyle )
     , mpItemAttrs(new ThumbnailItemAttributes)
 {
     ImplInit();
-    mbIsTransientChildrenDisabled = bDisableTransientChildren;
+    mbIsTransientChildrenDisabled = false;
 }
 
 ThumbnailView::~ThumbnailView()

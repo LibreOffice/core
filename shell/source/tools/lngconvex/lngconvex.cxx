@@ -130,12 +130,11 @@ class StreamExceptionsEnabler
 {
 public:
     explicit StreamExceptionsEnabler(
-        std::ios& iostrm,
-        std::ios::iostate NewIos = std::ios::failbit | std::ios::badbit) :
+        std::ios& iostrm ) :
         m_IoStrm(iostrm),
         m_OldIos(m_IoStrm.exceptions())
     {
-        m_IoStrm.exceptions(NewIos);
+        m_IoStrm.exceptions(std::ios::failbit | std::ios::badbit);
     }
 
     ~StreamExceptionsEnabler()

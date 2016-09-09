@@ -40,7 +40,7 @@ namespace sd {
 PaneDockingWindow::PaneDockingWindow(
         SfxBindings *_pBindings, SfxChildWindow *pChildWindow, vcl::Window* pParent,
         const OUString& rsTitle )
-        : TitledDockingWindow(_pBindings, pChildWindow, pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_DOCKABLE|WB_HIDE|WB_3DLOOK)
+        : TitledDockingWindow(_pBindings, pChildWindow, pParent)
 {
     SetTitle(rsTitle);
     SetSizePixel(LogicToPixel(Size(80,200), MAP_APPFONT));
