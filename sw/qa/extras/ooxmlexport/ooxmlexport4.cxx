@@ -972,6 +972,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99090_pgbrkAfterTable, "tdf99090_pgbrkAfterTable
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf89297_CVTemplate, "tdf89297_CVTemplate.odt")
+{
+    // Styles were being added before their base/parent/inherited-from style existed, and so were using default settings.
+    uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
+    uno::Reference<beans::XPropertySet> xStyle(xParaStyles->getByName("_ECV_Comments"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xStyle, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(8.f, getProperty<float>(xStyle, "CharHeight"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf96750_landscapeFollow, "tdf96750_landscapeFollow.docx")
 {
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);

@@ -51,6 +51,7 @@ namespace dmapper
 {
 
 typedef ::std::map< OUString, OUString> StringPairMap_t;
+typedef ::std::map< OUString, uno::Any > ParentOfStyleMap_t;
 
 
 StyleSheetEntry::StyleSheetEntry() :
@@ -910,6 +911,8 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
         uno::Reference<container::XNameContainer> xCharStyles;
         uno::Reference<container::XNameContainer> xParaStyles;
         uno::Reference<container::XNameContainer> xNumberingStyles;
+        ParentOfStyleMap_t aWaitingForBaseCharStyle;
+        ParentOfStyleMap_t aWaitingForBaseParaStyle;
 
         xStyleFamilies->getByName(getPropertyName( PROP_CHARACTER_STYLES )) >>= xCharStyles;
         xStyleFamilies->getByName(getPropertyName( PROP_PARAGRAPH_STYLES )) >>= xParaStyles;
@@ -927,8 +930,9 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     bool bListStyle = pEntry->nStyleTypeCode == STYLE_TYPE_LIST;
                     bool bInsert = false;
                     uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : (bListStyle ? xNumberingStyles : xCharStyles);
+                    ParentOfStyleMap_t& rWaitingForBaseStyle = bParaStyle ? aWaitingForBaseParaStyle : aWaitingForBaseCharStyle;
                     uno::Reference< style::XStyle > xStyle;
-                    OUString sConvertedStyleName = ConvertStyleName( pEntry->sStyleName );
+                    const OUString sConvertedStyleName = ConvertStyleName( pEntry->sStyleName );
 
                     if(xStyles->hasByName( sConvertedStyleName ))
                     {
@@ -1148,7 +1152,35 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     // Numbering style got inserted earlier.
                     if(bInsert && !bListStyle)
                     {
-                        xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
+                        // Verify that the style this one inherits from already exists, otherwise delay until it does
+                        const OUString sParentStyle = xStyle->getParentStyle();
+                        if( sParentStyle.isEmpty() || xStyles->hasByName( sParentStyle ) )
+                        {
+                            xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
+
+                            // Check if these newly added styles are parents that other styles are waiting for
+                            ParentOfStyleMap_t::iterator iter = rWaitingForBaseStyle.find( sConvertedStyleName );
+                            while( iter != rWaitingForBaseStyle.end() )
+                            {
+                                uno::Reference< style::XStyle > xAddStyle;
+                                iter->second >>= xAddStyle;
+                                if( xAddStyle.is() )
+                                {
+                                    const OUString sAddedStyle = xAddStyle->getName();
+                                    xStyles->insertByName( sAddedStyle, iter->second );
+
+                                    rWaitingForBaseStyle.erase( iter );
+                                    iter = rWaitingForBaseStyle.find( sAddedStyle );
+                                }
+                                else
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            xStyle->setName( sConvertedStyleName );
+                            rWaitingForBaseStyle[ sParentStyle ] = uno::makeAny( xStyle );
+                        }
                     }
 
                     beans::PropertyValues aGrabBag = pEntry->GetInteropGrabBagSeq();
@@ -1169,6 +1201,50 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     aTableStylesVec.push_back(pTableEntry->GetInteropGrabBag());
                 }
                 ++aIt;
+            }
+
+            // Add any styles that never found their parent style
+            if( !aWaitingForBaseParaStyle.empty() )
+            {
+                ParentOfStyleMap_t::iterator iter = aWaitingForBaseParaStyle.begin();
+                while( iter != aWaitingForBaseParaStyle.end() )
+                {
+                    uno::Reference< style::XStyle > xAddStyle;
+                    iter->second >>= xAddStyle;
+                    if( xAddStyle.is() )
+                    {
+                        try
+                        {
+                            xParaStyles->insertByName( xAddStyle->getName(), iter->second );
+                        }
+                        catch( const uno::Exception& )
+                        {
+                            OSL_FAIL( "Paragraph style could not be created");
+                        }
+                    }
+                    iter++;
+                }
+            }
+            if( !aWaitingForBaseCharStyle.empty() )
+            {
+                ParentOfStyleMap_t::iterator iter = aWaitingForBaseCharStyle.begin();
+                while( iter != aWaitingForBaseCharStyle.end() )
+                {
+                    uno::Reference< style::XStyle > xAddStyle;
+                    iter->second >>= xAddStyle;
+                    if( xAddStyle.is() )
+                    {
+                        try
+                        {
+                            xCharStyles->insertByName( xAddStyle->getName(), iter->second );
+                        }
+                        catch( const uno::Exception& )
+                        {
+                            OSL_FAIL( "Character style could not be created");
+                        }
+                    }
+                    iter++;
+                }
             }
 
             if (!aTableStylesVec.empty())
