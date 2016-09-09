@@ -76,8 +76,7 @@ protected:
 
 public:
                         SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
-                            SfxWorkWindow *pW, bool bWithButtons,
-                            WinBits nBits = WB_BORDER | WB_SIZEABLE | WB_3DLOOK );
+                            SfxWorkWindow *pW, bool bWithButtons );
 
                         virtual ~SfxSplitWindow();
     virtual void        dispose() override;

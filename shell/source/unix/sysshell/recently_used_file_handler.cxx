@@ -305,11 +305,9 @@ namespace /* private */ {
     class recent_item_writer
     {
     public:
-        recent_item_writer(
-            recently_used_file& file,
-            int max_items_to_write = MAX_RECENTLY_USED_ITEMS) :
+        recent_item_writer( recently_used_file& file ) :
             file_(file),
-            max_items_to_write_(max_items_to_write),
+            max_items_to_write_(MAX_RECENTLY_USED_ITEMS),
             items_written_(0)
         {}
 

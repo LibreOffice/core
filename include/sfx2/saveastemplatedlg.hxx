@@ -59,7 +59,7 @@ public:
 
 public:
 
-    explicit SfxSaveAsTemplateDialog(vcl::Window *parent = nullptr);
+    explicit SfxSaveAsTemplateDialog();
 
     virtual ~SfxSaveAsTemplateDialog();
     virtual void dispose() override;

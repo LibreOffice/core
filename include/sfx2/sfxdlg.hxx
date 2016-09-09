@@ -117,12 +117,8 @@ public:
                                         virtual ~SfxAbstractDialogFactory();    // needed for export of vtable
     static SfxAbstractDialogFactory*    Create();
     virtual VclAbstractDialog*          CreateFrameDialog( const css::uno::Reference< css::frame::XFrame >& rFrame, sal_uInt32 nResId, const rtl::OUString& rParameter ) = 0;
-    virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
-                                            vcl::Window* pParent,
-                                            const SfxItemSet* pAttrSet,
-                                            SfxViewFrame* pViewFrame ) = 0;
-    virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
-                                            vcl::Window* pParent,
+    virtual SfxAbstractTabDialog*       CreateAutoCorrTabDialog( const SfxItemSet* pAttrSet ) = 0;
+    virtual SfxAbstractTabDialog*       CreateCustomizeTabDialog(
                                             const SfxItemSet* pAttrSet,
                                             const css::uno::Reference< css::frame::XFrame >& xViewFrame ) = 0;
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;

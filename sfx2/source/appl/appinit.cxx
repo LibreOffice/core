@@ -237,7 +237,7 @@ void SfxApplication::Initialize_Impl()
     }
 
     DBG_ASSERT( !pImpl->pAppDispat, "AppDispatcher already exists" );
-    pImpl->pAppDispat = new SfxDispatcher(static_cast<SfxDispatcher*>(nullptr));
+    pImpl->pAppDispat = new SfxDispatcher;
     pImpl->pSlotPool = new SfxSlotPool;
     pImpl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
     pImpl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
@@ -263,7 +263,7 @@ void SfxApplication::Initialize_Impl()
     // App-Dispatcher aufbauen
     pImpl->pAppDispat->Push(*this);
     pImpl->pAppDispat->Flush();
-    pImpl->pAppDispat->DoActivate_Impl( true, nullptr );
+    pImpl->pAppDispat->DoActivate_Impl( true );
 
     {
         SolarMutexGuard aGuard;

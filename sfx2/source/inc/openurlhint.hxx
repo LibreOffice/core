@@ -17,17 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stringhint.hxx>
+#ifndef INCLUDED_SFX2_STRINGHINT_HXX
+#define INCLUDED_SFX2_STRINGHINT_HXX
 
-SfxStringHint::SfxStringHint( sal_uInt16 nId, const OUString& rObject ) :
-    SfxSimpleHint( nId ),
-    aObj(rObject) { }
+#include <svl/smplhint.hxx>
+#include <rtl/ustring.hxx>
 
-const OUString& SfxStringHint::GetObject() const
+class SfxOpenUrlHint: public SfxSimpleHint
 {
-    return aObj;
-}
+    OUString  msDocumentURL;
 
-SfxStringHint::~SfxStringHint() {}
+public:
+    SfxOpenUrlHint(const OUString& sDocumentURL);
+    const OUString& GetDocumentURL() const;
+    virtual ~SfxOpenUrlHint();
+};
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

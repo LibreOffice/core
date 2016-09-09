@@ -372,9 +372,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 aSet.Put( *static_cast<const SfxBoolItem*>(pOpenSmartTagOptionsItem) );
 
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-              SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, nullptr, &aSet, nullptr );
-              pDlg->Execute();
-              delete pDlg;
+            SfxAbstractTabDialog* pDlg = pFact->CreateAutoCorrTabDialog( &aSet );
+            pDlg->Execute();
+            delete pDlg;
 
             rACW.SetLockWordLstLocked( bOldLocked );
 

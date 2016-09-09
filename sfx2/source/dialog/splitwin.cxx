@@ -179,7 +179,7 @@ void SfxSplitWindow::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
-        SfxWorkWindow *pW, bool bWithButtons, WinBits nBits )
+        SfxWorkWindow *pW, bool bWithButtons )
 
 /*  [Description]
 
@@ -189,7 +189,7 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
     the arrangement of the SfxDockingWindows.
 */
 
-:   SplitWindow ( pParent, nBits | WB_HIDE ),
+:   SplitWindow ( pParent, WB_BORDER | WB_SIZEABLE | WB_3DLOOK | WB_HIDE ),
     eAlign(eAl),
     pWorkWin(pW),
     pDockArr( new SfxDockArr_Impl ),

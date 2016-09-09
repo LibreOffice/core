@@ -951,26 +951,24 @@ void SfxBindings::Release( SfxControllerItem& rItem )
 }
 
 
-const SfxPoolItem* SfxBindings::ExecuteSynchron( sal_uInt16 nId, const SfxPoolItem** ppItems,
-            const SfxPoolItem **ppInternalArgs )
+const SfxPoolItem* SfxBindings::ExecuteSynchron( sal_uInt16 nId, const SfxPoolItem** ppItems )
 {
     DBG_ASSERT( pImpl->pCaches != nullptr, "SfxBindings not initialized" );
 
     if( !nId || !pDispatcher )
         return nullptr;
 
-    return Execute_Impl( nId, ppItems, 0, SfxCallMode::SYNCHRON, ppInternalArgs );
+    return Execute_Impl( nId, ppItems, 0, SfxCallMode::SYNCHRON, nullptr );
 }
 
-bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, SfxCallMode nCallMode,
-                        const SfxPoolItem **ppInternalArgs )
+bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, SfxCallMode nCallMode )
 {
     DBG_ASSERT( pImpl->pCaches != nullptr, "SfxBindings not initialized" );
 
     if( !nId || !pDispatcher )
         return false;
 
-    const SfxPoolItem* pRet = Execute_Impl( nId, ppItems, 0, nCallMode, ppInternalArgs );
+    const SfxPoolItem* pRet = Execute_Impl( nId, ppItems, 0, nCallMode, nullptr );
     return ( pRet != nullptr );
 }
 
@@ -1595,11 +1593,9 @@ sal_uInt16 SfxBindings::EnterRegistrations(const char *pFile, int nLine)
 }
 
 
-void SfxBindings::LeaveRegistrations( sal_uInt16 nLevel, const char *pFile, int nLine )
+void SfxBindings::LeaveRegistrations( const char *pFile, int nLine )
 {
-    (void)nLevel; // unused variable
     DBG_ASSERT( nRegLevel, "Leave without Enter" );
-    DBG_ASSERT( nLevel == USHRT_MAX || nLevel == nRegLevel, "wrong Leave" );
 
     // Only when the SubBindings are still locked by the Superbindings,
     // remove this lock (i.e. if there are more locks than "real" ones)

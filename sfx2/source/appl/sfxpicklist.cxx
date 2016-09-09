@@ -49,7 +49,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include "objshimp.hxx"
-#include <stringhint.hxx>
+#include <openurlhint.hxx>
 #include <sfx2/docfilt.hxx>
 
 #include <rtl/instance.hxx>
@@ -188,11 +188,10 @@ SfxPickList::~SfxPickList()
 
 void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxStringHint* pStringHint = dynamic_cast<const SfxStringHint*>(&rHint);
-    if ( pStringHint )
+    const SfxOpenUrlHint* pOpenUrlHint = dynamic_cast<const SfxOpenUrlHint*>(&rHint);
+    if ( pOpenUrlHint )
     {
-        if ( pStringHint->GetId() == SID_OPENURL )
-            INetURLHistory::GetOrCreate()->PutUrl( INetURLObject( pStringHint->GetObject() ));
+        INetURLHistory::GetOrCreate()->PutUrl( INetURLObject( pOpenUrlHint->GetDocumentURL() ));
     }
 
     const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);

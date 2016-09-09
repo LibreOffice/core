@@ -1289,8 +1289,8 @@ static std::vector<OUString> lcl_getAllFactoryURLs ()
 
 //   Class SfxTemplateCategoryDialog --------------------------------------------------
 
-SfxTemplateCategoryDialog::SfxTemplateCategoryDialog( vcl::Window* pParent):
-        ModalDialog(pParent, "TemplatesCategoryDialog", "sfx/ui/templatecategorydlg.ui"),
+SfxTemplateCategoryDialog::SfxTemplateCategoryDialog():
+        ModalDialog(nullptr, "TemplatesCategoryDialog", "sfx/ui/templatecategorydlg.ui"),
         msSelectedCategory(OUString()),
         mbIsNewCategory(false)
 {
