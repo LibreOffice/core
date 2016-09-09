@@ -2070,10 +2070,10 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
             /*Basically theres an implicit mrow around certain bare
              *elements, use a RowContext to see if this is one of
              *those ones*/
-            SmXMLRowContext_Impl aTempContext(GetSmImport(),nPrefix,
-                GetXMLToken(XML_MROW));
+            rtl::Reference<SmXMLRowContext_Impl> aTempContext(new SmXMLRowContext_Impl(GetSmImport(),nPrefix,
+                GetXMLToken(XML_MROW)));
 
-            pContext = aTempContext.StrictCreateChildContext(nPrefix,
+            pContext = aTempContext->StrictCreateChildContext(nPrefix,
                 rLocalName, xAttrList);
             break;
     }
