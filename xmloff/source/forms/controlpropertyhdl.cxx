@@ -19,6 +19,8 @@
 
 #include <xmloff/controlpropertyhdl.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
@@ -47,25 +49,7 @@ namespace xmloff
 
     //= OControlPropertyHandlerFactory
     OControlPropertyHandlerFactory::OControlPropertyHandlerFactory()
-        :m_pTextAlignHandler(nullptr)
-        ,m_pControlBorderStyleHandler(nullptr)
-        ,m_pControlBorderColorHandler(nullptr)
-        ,m_pRotationAngleHandler(nullptr)
-        ,m_pFontWidthHandler(nullptr)
-        ,m_pFontEmphasisHandler(nullptr)
-        ,m_pFontReliefHandler(nullptr)
     {
-    }
-
-    OControlPropertyHandlerFactory::~OControlPropertyHandlerFactory()
-    {
-        delete m_pTextAlignHandler;
-        delete m_pControlBorderStyleHandler;
-        delete m_pControlBorderColorHandler;
-        delete m_pRotationAngleHandler;
-        delete m_pFontWidthHandler;
-        delete m_pFontEmphasisHandler;
-        delete m_pFontReliefHandler;
     }
 
     const XMLPropertyHandler* OControlPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
@@ -76,44 +60,44 @@ namespace xmloff
         {
             case XML_TYPE_TEXT_ALIGN:
                 if (!m_pTextAlignHandler)
-                    m_pTextAlignHandler = new XMLConstantsPropertyHandler(OEnumMapper::getEnumMap(OEnumMapper::epTextAlign), XML_TOKEN_INVALID );
-                pHandler = m_pTextAlignHandler;
+                    m_pTextAlignHandler = o3tl::make_unique<XMLConstantsPropertyHandler>(OEnumMapper::getEnumMap(OEnumMapper::epTextAlign), XML_TOKEN_INVALID );
+                pHandler = m_pTextAlignHandler.get();
                 break;
 
             case XML_TYPE_CONTROL_BORDER:
                 if (!m_pControlBorderStyleHandler)
-                    m_pControlBorderStyleHandler = new OControlBorderHandler( OControlBorderHandler::STYLE );
-                pHandler = m_pControlBorderStyleHandler;
+                    m_pControlBorderStyleHandler = o3tl::make_unique<OControlBorderHandler>( OControlBorderHandler::STYLE );
+                pHandler = m_pControlBorderStyleHandler.get();
                 break;
 
             case XML_TYPE_CONTROL_BORDER_COLOR:
                 if ( !m_pControlBorderColorHandler )
-                    m_pControlBorderColorHandler = new OControlBorderHandler( OControlBorderHandler::COLOR );
-                pHandler = m_pControlBorderColorHandler;
+                    m_pControlBorderColorHandler = o3tl::make_unique<OControlBorderHandler>( OControlBorderHandler::COLOR );
+                pHandler = m_pControlBorderColorHandler.get();
                 break;
 
             case XML_TYPE_ROTATION_ANGLE:
                 if (!m_pRotationAngleHandler)
-                    m_pRotationAngleHandler = new ORotationAngleHandler;
-                pHandler = m_pRotationAngleHandler;
+                    m_pRotationAngleHandler = o3tl::make_unique<ORotationAngleHandler>();
+                pHandler = m_pRotationAngleHandler.get();
                 break;
 
             case XML_TYPE_FONT_WIDTH:
                 if (!m_pFontWidthHandler)
-                    m_pFontWidthHandler = new OFontWidthHandler;
-                pHandler = m_pFontWidthHandler;
+                    m_pFontWidthHandler = o3tl::make_unique<OFontWidthHandler>();
+                pHandler = m_pFontWidthHandler.get();
                 break;
 
             case XML_TYPE_CONTROL_TEXT_EMPHASIZE:
                 if (!m_pFontEmphasisHandler)
-                    m_pFontEmphasisHandler = new XMLConstantsPropertyHandler( OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE );
-                pHandler = m_pFontEmphasisHandler;
+                    m_pFontEmphasisHandler = o3tl::make_unique<XMLConstantsPropertyHandler>( OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), XML_NONE );
+                pHandler = m_pFontEmphasisHandler.get();
                 break;
 
             case XML_TYPE_TEXT_FONT_RELIEF:
                 if (!m_pFontReliefHandler)
-                    m_pFontReliefHandler = new XMLConstantsPropertyHandler( OEnumMapper::getEnumMap(OEnumMapper::epFontRelief), XML_NONE );
-                pHandler = m_pFontReliefHandler;
+                    m_pFontReliefHandler = o3tl::make_unique<XMLConstantsPropertyHandler>( OEnumMapper::getEnumMap(OEnumMapper::epFontRelief), XML_NONE );
+                pHandler = m_pFontReliefHandler.get();
                 break;
             case XML_TYPE_TEXT_LINE_MODE:
                 pHandler = new XMLNamedBoolPropertyHdl(
