@@ -20,6 +20,7 @@
 #include "ximpcustomshape.hxx"
 #include "ximpshap.hxx"
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -47,6 +48,7 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <sax/tools/converter.hxx>
 #include <comphelper/sequence.hxx>
+#include <memory>
 #include <unordered_map>
 
 using namespace ::com::sun::star;
@@ -1168,7 +1170,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
     if ( !maEquations.empty() )
     {
         // creating hash map containing the name and index of each equation
-        EquationHashMap* pH = new EquationHashMap;
+        std::unique_ptr<EquationHashMap> pH = o3tl::make_unique<EquationHashMap>();
         std::vector< OUString >::iterator aEquationNameIter = maEquationNames.begin();
         std::vector< OUString >::iterator aEquationNameEnd  = maEquationNames.end();
         while( aEquationNameIter != aEquationNameEnd )
@@ -1224,8 +1226,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
                             aPathIter->Value);
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].First), pH );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].Second), pH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].First), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].Second), pH.get() );
                     }
                 }
                 break;
@@ -1236,10 +1238,10 @@ void XMLEnhancedCustomShapeContext::EndElement()
                             aPathIter->Value);
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].TopLeft.First), pH );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].TopLeft.Second), pH );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].BottomRight.First), pH );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].BottomRight.Second), pH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].TopLeft.First), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].TopLeft.Second), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].BottomRight.First), pH.get() );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].BottomRight.Second), pH.get() );
                     }
                 }
                 break;
@@ -1265,7 +1267,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     case EAS_RadiusRangeMaximum :
                     {
                         CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameter>(
-                            pValues->Value)), pH );
+                            pValues->Value)), pH.get() );
                     }
                     break;
 
@@ -1273,9 +1275,9 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     case EAS_Polar :
                     {
                         CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameterPair>(
-                            pValues->Value)).First), pH );
+                            pValues->Value)).First), pH.get() );
                         CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameterPair>(
-                            pValues->Value)).Second), pH );
+                            pValues->Value)).Second), pH.get() );
                     }
                     break;
                     default:
@@ -1285,7 +1287,6 @@ void XMLEnhancedCustomShapeContext::EndElement()
             }
             ++aHandleIter;
         }
-        delete pH;
     }
 
     SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maExtrusion, EASGet( EAS_Extrusion ) );
