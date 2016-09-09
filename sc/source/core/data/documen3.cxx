@@ -1401,7 +1401,7 @@ void ScDocument::Sort(
     }
 }
 
-void ScDocument::Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress )
+void ScDocument::Reorder( const sc::ReorderParam& rParam )
 {
     ScTable* pTab = FetchTable(rParam.maSortRange.aStart.Tab());
     if (!pTab)
@@ -1409,7 +1409,7 @@ void ScDocument::Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress 
 
     bool bOldEnableIdle = IsIdleEnabled();
     EnableIdle(false);
-    pTab->Reorder(rParam, pProgress);
+    pTab->Reorder(rParam, nullptr);
     EnableIdle(bOldEnableIdle);
 }
 

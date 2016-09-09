@@ -367,15 +367,15 @@ public:
 
 struct ScFieldIdentifier
 {
-    OUString     maFieldName;    /// Source field name.
+    OUString            maFieldName;    /// Source field name.
     sal_Int32           mnFieldIdx;     /// Field index (if several fields with same name exist).
     bool                mbDataLayout;   /// True = data layout field collecting all data fields as items.
 
     inline explicit     ScFieldIdentifier() :
                             mnFieldIdx( 0 ), mbDataLayout( false ) {}
 
-    inline explicit     ScFieldIdentifier( const OUString& rFieldName, sal_Int32 nFieldIdx, bool bDataLayout ) :
-                            maFieldName( rFieldName ), mnFieldIdx( nFieldIdx ), mbDataLayout( bDataLayout ) {}
+    inline explicit     ScFieldIdentifier( const OUString& rFieldName, bool bDataLayout ) :
+                            maFieldName( rFieldName ), mnFieldIdx( 0 ), mbDataLayout( bDataLayout ) {}
 };
 
 /** Base class of all implementation objects based on a DataPilot descriptor

@@ -40,9 +40,8 @@
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
-XMLTableShapeImportHelper::XMLTableShapeImportHelper(
-        ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper ) :
-    XMLShapeImportHelper(rImp, rImp.GetModel(), pImpMapper ),
+XMLTableShapeImportHelper::XMLTableShapeImportHelper( ScXMLImport& rImp ) :
+    XMLShapeImportHelper(rImp, rImp.GetModel(), nullptr ),
     pAnnotationContext(nullptr),
     bOnTable(false)
 {

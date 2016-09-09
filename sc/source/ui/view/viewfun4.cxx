@@ -286,7 +286,7 @@ void ScViewFunc::DoRefConversion()
 
         pDocSh->GetUndoManager()->AddUndoAction(
             new ScUndoRefConversion( pDocSh,
-                                    aMarkRange, rMark, pUndoDoc, pRedoDoc, bMulti, InsertDeleteFlags::ALL) );
+                                    aMarkRange, rMark, pUndoDoc, pRedoDoc, bMulti) );
     }
 
     pDocSh->PostPaint( aMarkRange, PAINT_GRID );

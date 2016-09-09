@@ -147,10 +147,10 @@ double Snum32ToDouble( sal_uInt32 nValue )
     return fValue;
 }
 
-FormCache::FormCache( ScDocument* pDoc1, sal_uInt8 nNewDefaultFormat )
+FormCache::FormCache( ScDocument* pDoc1 )
     : nIndex(0)
 {   // Default format is 'Default'
-    nDefaultFormat = nNewDefaultFormat;
+    nDefaultFormat = 0xff;
     pFormTable = pDoc1->GetFormatTable();
     for(bool & rb : bValid)
         rb = false;

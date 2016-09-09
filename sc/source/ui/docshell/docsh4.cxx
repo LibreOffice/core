@@ -586,7 +586,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         if (pChangeTrack)
                         {
                             if ( pChangeTrack->IsProtected() )
-                                bDo = ExecuteChangeProtectionDialog( nullptr );
+                                bDo = ExecuteChangeProtectionDialog();
                         }
                         if ( bDo )
                         {
@@ -621,7 +621,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
         case SID_CHG_PROTECT :
             {
-                if ( ExecuteChangeProtectionDialog( nullptr ) )
+                if ( ExecuteChangeProtectionDialog() )
                 {
                     rReq.Done();
                     SetDocumentModified();
@@ -644,12 +644,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             WinBits(WB_YES_NO | WB_DEF_NO),
                             ScGlobal::GetRscString( STR_END_REDLINING ) );
                         if( aBox->Execute() == RET_YES )
-                            bDo = ExecuteChangeProtectionDialog( nullptr, true );
+                            bDo = ExecuteChangeProtectionDialog( true );
                         else
                             bDo = false;
                     }
                     else    // merge might reject some actions
-                        bDo = ExecuteChangeProtectionDialog( nullptr, true );
+                        bDo = ExecuteChangeProtectionDialog( true );
                 }
                 if ( !bDo )
                 {
@@ -1132,7 +1132,7 @@ void UpdateAcceptChangesDialog()
     }
 }
 
-bool ScDocShell::ExecuteChangeProtectionDialog( vcl::Window* _pParent, bool bJustQueryIfProtected )
+bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )
 {
     bool bDone = false;
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
@@ -1147,7 +1147,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( vcl::Window* _pParent, bool bJus
         OUString aPassword;
 
         ScopedVclPtrInstance<SfxPasswordDialog> pDlg(
-            _pParent ? _pParent : GetActiveDialogParent(), &aText );
+            GetActiveDialogParent(), &aText );
         pDlg->SetText( aTitle );
         pDlg->SetMinLen( 1 );
         pDlg->SetHelpId( GetStaticInterface()->GetSlot(SID_CHG_PROTECT)->GetCommand() );

@@ -5860,7 +5860,7 @@ void SAL_CALL ScCellRangeObj::applySubTotals(
         pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );   // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.DoSubTotals( nTab, aParam, nullptr, true, true );    // Bereich muss angelegt sein
+        aFunc.DoSubTotals( nTab, aParam, true, true );    // Bereich muss angelegt sein
     }
 }
 
@@ -5887,7 +5887,7 @@ void SAL_CALL ScCellRangeObj::removeSubTotals() throw(uno::RuntimeException, std
         pDocSh->GetDBData( aRange, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );   // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.DoSubTotals( nTab, aParam, nullptr, true, true );    // Bereich muss angelegt sein
+        aFunc.DoSubTotals( nTab, aParam, true, true );    // Bereich muss angelegt sein
     }
 }
 

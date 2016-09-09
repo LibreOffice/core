@@ -127,10 +127,9 @@ class ScDBFuncUndo: public ScSimpleUndo
 protected:
     ScDBData*       pAutoDBRange;
     ScRange         aOriginalRange;
-    SdrUndoAction*  mpDrawUndo;
 
 public:
-                    ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal, SdrUndoAction* pDrawUndo = nullptr );
+                    ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal );
     virtual         ~ScDBFuncUndo();
 
     void            BeginUndo();

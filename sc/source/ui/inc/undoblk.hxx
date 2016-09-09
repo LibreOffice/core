@@ -214,7 +214,7 @@ class ScUndoDragDrop: public ScMoveUndo
 public:
                     ScUndoDragDrop( ScDocShell* pNewDocShell,
                                     const ScRange& rRange, ScAddress aNewDestPos, bool bNewCut,
-                                    ScDocument* pUndoDocument, ScRefUndoData* pRefData,
+                                    ScDocument* pUndoDocument,
                                     bool bScenario );
     virtual         ~ScUndoDragDrop();
 
@@ -561,7 +561,7 @@ class ScUndoRefConversion: public ScSimpleUndo
 public:
                     ScUndoRefConversion( ScDocShell* pNewDocShell,
                                          const ScRange& aMarkRange, const ScMarkData& rMark,
-                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, bool bNewMulti, InsertDeleteFlags nNewFlag);
+                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, bool bNewMulti);
     virtual         ~ScUndoRefConversion();
 
     virtual void    Undo() override;
@@ -577,7 +577,6 @@ private:
     ScDocument*         pRedoDoc;
     ScRange             aRange;
     bool                bMulti;
-    InsertDeleteFlags   nFlags;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
 

@@ -75,7 +75,6 @@ public:
                             const ScRange* pAdvSource, bool bRecord, bool bApi );
 
     void            DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
-                                    const ScSortParam* pForceNewSort,
                                     bool bRecord, bool bApi );
 
     bool AddDBRange( const OUString& rName, const ScRange& rRange, bool bApi );

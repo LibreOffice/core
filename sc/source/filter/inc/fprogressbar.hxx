@@ -205,7 +205,7 @@ private:
 class ScfStreamProgressBar
 {
 public:
-    explicit            ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, sal_uInt16 nResId = STR_LOAD_DOC );
+    explicit            ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell );
 
     /** Sets the progress bar to the current stream position. */
     void                Progress();

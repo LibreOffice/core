@@ -82,9 +82,9 @@ const sal_uInt16 ScTPValidationValue::pValueRanges[] =
 };
 
 ScValidationDlg::ScValidationDlg(vcl::Window* pParent, const SfxItemSet* pArgSet,
-    ScTabViewShell *pTabViewSh, SfxBindings *pB /*= NULL*/)
+    ScTabViewShell *pTabViewSh)
     : ScValidationDlgBase(pParent ? pParent : SfxGetpApp()->GetTopWindow(),
-        "ValidationDialog", "modules/scalc/ui/validationdialog.ui", pArgSet, pB)
+        "ValidationDialog", "modules/scalc/ui/validationdialog.ui", pArgSet, nullptr)
     , m_pTabVwSh(pTabViewSh)
     , m_nValuePageId(0)
     , m_bOwnRefHdlr(false)

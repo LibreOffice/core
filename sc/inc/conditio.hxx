@@ -278,7 +278,7 @@ public:
     bool NeedsRepaint() const;
 
 protected:
-    virtual void    DataChanged( const ScRange* pModified ) const;
+    virtual void    DataChanged() const;
     ScDocument*     GetDocument() const     { return mpDoc; }
     ScConditionalFormat*    pCondFormat;
 
@@ -344,7 +344,7 @@ public:
     virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
 
 protected:
-    virtual void    DataChanged( const ScRange* pModified ) const override;
+    virtual void    DataChanged() const override;
 };
 
 namespace condformat {

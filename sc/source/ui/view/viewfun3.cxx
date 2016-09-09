@@ -1973,7 +1973,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
                                                                 nStartCol, nCurrentRow, nStartTab,
                                                                 nUndoEndCol, nUndoEndRow, nEndTab, rMark,
                                                                 pUndoDoc, pRedoDoc, nUndoFlags,
-                                                                pUndoData, nullptr, nullptr, nullptr );
+                                                                pUndoData );
         pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), true );
 
         sal_uInt16 nPaint = PAINT_GRID;

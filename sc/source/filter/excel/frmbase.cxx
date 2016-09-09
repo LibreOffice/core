@@ -169,8 +169,8 @@ void ConverterBase::Reset()
     aStack.Reset();
 }
 
-ExcelConverterBase::ExcelConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer ) :
-    ConverterBase(rSPool, nNewBuffer)
+ExcelConverterBase::ExcelConverterBase( svl::SharedStringPool& rSPool ) :
+    ConverterBase(rSPool, 512)
 {
 }
 
@@ -190,8 +190,8 @@ void ExcelConverterBase::Reset()
     aEingPos.Set( 0, 0, 0 );
 }
 
-LotusConverterBase::LotusConverterBase( SvStream &rStr, svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffers ) :
-    ConverterBase(rSPool, nNewBuffers),
+LotusConverterBase::LotusConverterBase( SvStream &rStr, svl::SharedStringPool& rSPool  ) :
+    ConverterBase(rSPool, 128),
     aIn( rStr ),
     nBytesLeft( 0 )
 {

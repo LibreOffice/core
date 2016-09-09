@@ -186,12 +186,11 @@ static SfxItemInfo const  aItemInfos[] =
 static_assert(
     SAL_N_ELEMENTS(aItemInfos) == ATTR_ENDINDEX - ATTR_STARTINDEX + 1, "these must match");
 
-ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
+ScDocumentPool::ScDocumentPool()
 
     :   SfxItemPool ( OUString("ScDocumentPool"),
                         ATTR_STARTINDEX, ATTR_ENDINDEX,
-                        aItemInfos, nullptr, false/*bLoadRefCounts*/ ),
-        pSecondary  ( pSecPool )
+                        aItemInfos, nullptr, false/*bLoadRefCounts*/ )
 {
     //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
     vcl::Font aStdFont = OutputDevice::GetDefaultFont( DefaultFontType::LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US,
@@ -334,9 +333,6 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
 
     SetDefaults( ppPoolDefaults );
 
-    if ( pSecondary )
-        SetSecondaryPool( pSecondary );
-
     // ATTR_LANGUAGE_FORMAT from sv329 inserted, VersionMap in _ScGlobal__Init
     SetVersionMap( 1, 100, 157, pVersionMap1 );
 
@@ -387,7 +383,6 @@ ScDocumentPool::~ScDocumentPool()
     }
 
     delete[] ppPoolDefaults;
-    SfxItemPool::Free(pSecondary);
 }
 
 void ScDocumentPool::InitVersionMaps()

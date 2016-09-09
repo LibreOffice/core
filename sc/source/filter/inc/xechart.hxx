@@ -201,7 +201,7 @@ public:
 class XclExpChFramePos : public XclExpRecord
 {
 public:
-    explicit            XclExpChFramePos( sal_uInt16 nTLMode, sal_uInt16 nBRMode );
+    explicit            XclExpChFramePos( sal_uInt16 nTLMode );
 
     /** Returns read/write access to the frame position data. */
     inline XclChFramePos& GetFramePosData() { return maData; }

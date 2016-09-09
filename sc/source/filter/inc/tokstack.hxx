@@ -222,10 +222,10 @@ class TokenStack
 {
     private:
         TokenId*                    pStack;     // Stack as Array
-        sal_uInt16                      nPos;       // Write-mark
-        sal_uInt16                      nSize;      // first Index outside of stack
+        sal_uInt16                  nPos;       // Write-mark
+        sal_uInt16                  nSize;      // first Index outside of stack
     public:
-                                    TokenStack( sal_uInt16 nNewSize = 1024 );
+                                    TokenStack();
                                     ~TokenStack();
         inline TokenStack&          operator <<( const TokenId& rNewId );
         inline void                 operator >>( TokenId &rId );

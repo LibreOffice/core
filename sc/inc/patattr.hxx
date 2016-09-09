@@ -54,7 +54,7 @@ class SC_DLLPUBLIC ScPatternAttr: public SfxSetItem
     ScStyleSheet*   pStyle;
 public:
                             ScPatternAttr(SfxItemSet* pItemSet, const OUString& rStyleName);
-                            ScPatternAttr(SfxItemSet* pItemSet, ScStyleSheet* pStyleSheet = nullptr);
+                            ScPatternAttr(SfxItemSet* pItemSet);
                             ScPatternAttr(SfxItemPool* pItemPool);
                             ScPatternAttr(const ScPatternAttr& rPatternAttr);
 

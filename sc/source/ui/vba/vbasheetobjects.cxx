@@ -340,8 +340,7 @@ public:
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const uno::Type& rVbaType,
-        const OUString& rModelServiceName,
-        sal_Int16 nComponentType ) throw (uno::RuntimeException);
+        const OUString& rModelServiceName ) throw (uno::RuntimeException);
 
 protected:
     uno::Reference< container::XIndexContainer > const & createForm() throw (uno::RuntimeException);
@@ -364,11 +363,10 @@ ScVbaControlContainer::ScVbaControlContainer(
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const uno::Type& rVbaType,
-        const OUString& rModelServiceName,
-        sal_Int16 nComponentType ) throw (uno::RuntimeException) :
+        const OUString& rModelServiceName ) throw (uno::RuntimeException) :
     ScVbaObjectContainer( rxParent, rxContext, rxModel, rxSheet, rVbaType ),
     maModelServiceName( rModelServiceName ),
-    mnComponentType( nComponentType )
+    mnComponentType( form::FormComponentType::COMMANDBUTTON )
 {
 }
 
@@ -464,8 +462,7 @@ ScVbaButtonContainer::ScVbaButtonContainer(
     ScVbaControlContainer(
         rxParent, rxContext, rxModel, rxSheet,
         cppu::UnoType<excel::XButton>::get(),
-        "com.sun.star.form.component.CommandButton",
-        form::FormComponentType::COMMANDBUTTON )
+        "com.sun.star.form.component.CommandButton" )
 {
 }
 

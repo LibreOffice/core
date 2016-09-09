@@ -157,7 +157,7 @@ ScRangeList::~ScRangeList()
     RemoveAll();
 }
 
-ScRefFlags ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, ScRefFlags nMask,
+ScRefFlags ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc,
                            formula::FormulaGrammar::AddressConvention eConv,
                            SCTAB nDefaultTab, sal_Unicode cDelimiter )
 {
@@ -166,7 +166,6 @@ ScRefFlags ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, ScRefFlag
         if (!cDelimiter)
             cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
 
-        nMask |= ScRefFlags::VALID;             // falls das jemand vergessen sollte
         ScRefFlags nResult = ~ScRefFlags::ZERO;    // alle Bits setzen
         ScRange aRange;
         const SCTAB nTab = pDoc ? nDefaultTab : 0;
@@ -186,7 +185,7 @@ ScRefFlags ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, ScRefFlag
             if ( (nRes & ScRefFlags::VALID ) && (nTmp1 != ScRefFlags::ZERO) && ( nTmp2 != nEndRangeBits ) )
                 applyStartToEndFlags(nRes, nTmp1);
 
-            if ( (nRes & nMask) == nMask )
+            if ( nRes & ScRefFlags::VALID )
                 Append( aRange );
             nResult &= nRes;        // alle gemeinsamen Bits bleiben erhalten
         }

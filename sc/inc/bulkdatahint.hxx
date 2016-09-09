@@ -28,7 +28,7 @@ class BulkDataHint : public SfxSimpleHint
     BulkDataHint& operator= ( const BulkDataHint& ) = delete;
 
 public:
-    BulkDataHint( ScDocument& rDoc, const ColumnSpanSet* pSpans );
+    BulkDataHint( ScDocument& rDoc );
     virtual ~BulkDataHint();
 
     void setSpans( const ColumnSpanSet* pSpans );

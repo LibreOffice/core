@@ -210,10 +210,10 @@ void ScfSimpleProgressBar::Init( sal_Size nSize )
         maProgress.ActivateSegment( nSegment );
 }
 
-ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, sal_uInt16 nResId ) :
+ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell ) :
     mrStrm( rStrm )
 {
-    Init( pDocShell, ScGlobal::GetRscString( nResId ) );
+    Init( pDocShell, ScGlobal::GetRscString( STR_LOAD_DOC ) );
 }
 
 void ScfStreamProgressBar::Progress()

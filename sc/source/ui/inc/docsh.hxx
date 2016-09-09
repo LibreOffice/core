@@ -255,7 +255,7 @@ public:
                     /// If bJustQueryIfProtected==sal_True protection is not
                     /// changed and <TRUE/> is returned if not protected or
                     /// password was entered correctly.
-    bool            ExecuteChangeProtectionDialog( vcl::Window* _pParent, bool bJustQueryIfProtected = false );
+    bool            ExecuteChangeProtectionDialog( bool bJustQueryIfProtected = false );
 
     void            SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages );
     bool            AdjustPrintZoom( const ScRange& rRange );

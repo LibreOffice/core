@@ -264,7 +264,7 @@ void ScDocument::GetChartRanges( const OUString& rChartName, ::std::vector< ScRa
         for(const OUString & aRangeString : aRangeStrings)
         {
             ScRangeList aRanges;
-            aRanges.Parse( aRangeString, pSheetNameDoc, ScRefFlags::VALID, pSheetNameDoc->GetAddressConvention() );
+            aRanges.Parse( aRangeString, pSheetNameDoc, pSheetNameDoc->GetAddressConvention() );
             rRangesVector.push_back(aRanges);
         }
     }
