@@ -70,8 +70,8 @@ namespace cppu_ifcontainer
 
             pContainer = new cppu::OInterfaceContainerHelper(m_aGuard);
 
-            CPPUNIT_ASSERT_MESSAGE("Empty container not empty",
-                                   pContainer->getLength() == 0);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Empty container not empty",
+                                   static_cast<sal_Int32>(0), pContainer->getLength());
 
             int i;
             for (i = 0; i < nTests; i++)
@@ -79,21 +79,21 @@ namespace cppu_ifcontainer
                 Reference<XEventListener> xRef = new ContainerListener(&aStats);
                 int nNewLen = pContainer->addInterface(xRef);
 
-                CPPUNIT_ASSERT_MESSAGE("addition length mismatch",
-                                       nNewLen == i + 1);
-                CPPUNIT_ASSERT_MESSAGE("addition length mismatch",
-                                       pContainer->getLength() == i + 1);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("addition length mismatch",
+                                       i + 1, nNewLen);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("addition length mismatch",
+                                       static_cast<sal_Int32>(i + 1), pContainer->getLength());
             }
             CPPUNIT_ASSERT_MESSAGE("alive count mismatch",
-                                   aStats.m_nAlive == nTests);
+                                   bool(aStats.m_nAlive == nTests));
 
             EventObject aObj;
             pContainer->disposeAndClear(aObj);
 
             CPPUNIT_ASSERT_MESSAGE("dispose count mismatch",
-                                   aStats.m_nDisposed == nTests);
-            CPPUNIT_ASSERT_MESSAGE("leaked container left alive",
-                                   aStats.m_nAlive == 0);
+                                   bool(aStats.m_nDisposed == nTests));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("leaked container left alive",
+                                   0, aStats.m_nAlive);
 
             delete pContainer;
         }
@@ -116,19 +116,19 @@ namespace cppu_ifcontainer
             aElements = pContainer->getElements();
 
             CPPUNIT_ASSERT_MESSAGE("query contents",
-                                   (int)aElements.getLength() == nTests);
+                                   bool((int)aElements.getLength() == nTests));
             if ((int)aElements.getLength() == nTests)
             {
                 for (i = 0; i < nTests; i++)
                 {
                     CPPUNIT_ASSERT_MESSAGE("mismatching elements",
-                                           aElements[i] == aListeners[i]);
+                                           bool(aElements[i] == aListeners[i]));
                 }
             }
             pContainer->clear();
 
-            CPPUNIT_ASSERT_MESSAGE("non-empty container post clear",
-                                   pContainer->getLength() == 0);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("non-empty container post clear",
+                                   static_cast<sal_Int32>(0), pContainer->getLength());
             delete pContainer;
         }
 
@@ -158,9 +158,9 @@ namespace cppu_ifcontainer
 
                 CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != nullptr);
                 Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 2);
-                CPPUNIT_ASSERT_MESSAGE("match", aSeq[0] == xRefs[i*2]);
-                CPPUNIT_ASSERT_MESSAGE("match", aSeq[1] == xRefs[i*2+1]);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong num elements", static_cast<sal_Int32>(2), aSeq.getLength());
+                CPPUNIT_ASSERT_MESSAGE("match", bool(aSeq[0] == xRefs[i*2]));
+                CPPUNIT_ASSERT_MESSAGE("match", bool(aSeq[1] == xRefs[i*2+1]));
             }
 
             // remove every other interface
@@ -176,8 +176,8 @@ namespace cppu_ifcontainer
 
                 CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != nullptr);
                 Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 1);
-                CPPUNIT_ASSERT_MESSAGE("match", aSeq[0] == xRefs[i*2]);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong num elements", static_cast<sal_Int32>(1), aSeq.getLength());
+                CPPUNIT_ASSERT_MESSAGE("match", bool(aSeq[0] == xRefs[i*2]));
             }
 
             // remove the 1st half of the rest
@@ -192,7 +192,7 @@ namespace cppu_ifcontainer
                 pHelper = pContainer->getContainer(pTypes[i]);
                 CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != nullptr);
                 Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong num elements", static_cast<sal_Int32>(0), aSeq.getLength());
             }
 
             delete pContainer;
