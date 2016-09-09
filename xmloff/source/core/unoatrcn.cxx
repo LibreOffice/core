@@ -46,6 +46,8 @@ SvUnoAttributeContainer::SvUnoAttributeContainer( std::unique_ptr<SvXMLAttrConta
         mpContainer = o3tl::make_unique<SvXMLAttrContainerData>();
 }
 
+SvUnoAttributeContainer::~SvUnoAttributeContainer() = default;
+
 // container::XElementAccess
 uno::Type SAL_CALL SvUnoAttributeContainer::getElementType()
     throw( uno::RuntimeException, std::exception )
