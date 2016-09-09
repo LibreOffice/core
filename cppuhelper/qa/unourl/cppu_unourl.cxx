@@ -227,8 +227,8 @@ namespace cppu_unourl
                 {}
 
                 CPPUNIT_ASSERT_MESSAGE("Failed to parse URI", bValid);
-                CPPUNIT_ASSERT_MESSAGE("Failed to detect parameter correctly",
-                                       bPresent == aTests[i].bPresent);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to detect parameter correctly",
+                                       aTests[i].bPresent, bPresent);
             }
         }
 
