@@ -1047,7 +1047,7 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
                 IsXMLToken( rLocalName, XML_LIST_LEVEL_STYLE_BULLET ) ||
                  IsXMLToken( rLocalName, XML_LIST_LEVEL_STYLE_IMAGE )    ) ) )
     {
-        uno::Reference<SvxXMLListLevelStyleContext_Impl> xLevelStyle{
+        rtl::Reference<SvxXMLListLevelStyleContext_Impl> xLevelStyle{
             new SvxXMLListLevelStyleContext_Impl( GetImport(), nPrefix,
                                                   rLocalName, xAttrList )};
         if( !pLevelStyles )

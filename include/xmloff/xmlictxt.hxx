@@ -130,7 +130,7 @@ public:
     void ReleaseRef();
 };
 
-typedef css::uno::Reference<SvXMLImportContext> SvXMLImportContextRef;
+typedef rtl::Reference<SvXMLImportContext> SvXMLImportContextRef;
 
 #endif // INCLUDED_XMLOFF_XMLICTXT_HXX
 

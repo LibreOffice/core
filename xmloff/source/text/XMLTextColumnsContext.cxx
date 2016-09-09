@@ -318,7 +318,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken( rLocalName, XML_COLUMN ) )
     {
-        const uno::Reference<XMLTextColumnContext_Impl> xColumn{
+        const rtl::Reference<XMLTextColumnContext_Impl> xColumn{
             new XMLTextColumnContext_Impl( GetImport(), nPrefix, rLocalName,
                                            xAttrList, *pColumnAttrTokenMap )};
 

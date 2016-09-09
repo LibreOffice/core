@@ -225,6 +225,9 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aCurrentPageIds = m_aControlIds.end();
 }
 
+OFormLayerXMLImport_Impl::~OFormLayerXMLImport_Impl()
+{}
+
 void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pNewContext)
 {
     OSL_ENSURE(!m_xAutoStyles.is(), "OFormLayerXMLImport_Impl::setAutoStyleContext: not to be called twice!");

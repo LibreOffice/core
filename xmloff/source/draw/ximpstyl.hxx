@@ -68,7 +68,7 @@ public:
 class SdXMLPageMasterContext: public SvXMLStyleContext
 {
     OUString               msName;
-    css::uno::Reference<SdXMLPageMasterStyleContext> mxPageMasterStyle;
+    rtl::Reference<SdXMLPageMasterStyleContext> mxPageMasterStyle;
 
     const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
@@ -147,7 +147,7 @@ public:
 class SdXMLPresentationPageLayoutContext: public SvXMLStyleContext
 {
     OUString               msName;
-    std::vector< css::uno::Reference< SdXMLPresentationPlaceholderContext > >
+    std::vector< rtl::Reference< SdXMLPresentationPlaceholderContext > >
                            maList;
     sal_uInt16             mnTypeId;
 
@@ -226,7 +226,7 @@ public:
 
 class SdXMLMasterStylesContext : public SvXMLImportContext
 {
-    std::vector< css::uno::Reference< SdXMLMasterPageContext > > maMasterPageList;
+    std::vector< rtl::Reference< SdXMLMasterPageContext > > maMasterPageList;
 
     const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }

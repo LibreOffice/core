@@ -80,7 +80,7 @@ class SwXMLTableContext : public XMLTextTableContext
 
     SvXMLImportContextRef   m_xParentTable;   // if table is a sub table
 
-    uno::Reference<SwXMLDDETableContext_Impl> m_xDDESource;
+    rtl::Reference<SwXMLDDETableContext_Impl> m_xDDESource;
 
     bool            m_bFirstSection : 1;
     bool            m_bRelWidth : 1;

@@ -460,7 +460,7 @@ SvXMLImportContext *SdXMLPresentationPageLayoutContext::CreateChildContext(
 
     if(nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_PLACEHOLDER ) )
     {
-        const uno::Reference< SdXMLPresentationPlaceholderContext > xContext{
+        const rtl::Reference< SdXMLPresentationPlaceholderContext > xContext{
             new SdXMLPresentationPlaceholderContext(GetSdImport(), nPrefix, rLocalName, xAttrList)};
         // presentation:placeholder inside style:presentation-page-layout context
         pContext = xContext.get();
@@ -1474,7 +1474,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
                 uno::Reference< drawing::XShapes > xNewShapes(xNewMasterPage, uno::UNO_QUERY);
                 if(xNewShapes.is() && GetSdImport().GetShapeImport()->GetStylesContext())
                 {
-                    const uno::Reference<SdXMLMasterPageContext> xContext{
+                    const rtl::Reference<SdXMLMasterPageContext> xContext{
                         new SdXMLMasterPageContext(GetSdImport(),
                             nPrefix, rLocalName, xAttrList, xNewShapes)};
                     pContext = xContext.get();

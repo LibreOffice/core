@@ -106,7 +106,7 @@ class XMLHyperlinkHint_Impl : public XMLHint_Impl
     OUString                 sTargetFrameName;
     OUString                 sStyleName;
     OUString                 sVisitedStyleName;
-    css::uno::Reference<XMLEventsImportContext> mxEvents;
+    rtl::Reference<XMLEventsImportContext> mxEvents;
 
 public:
 

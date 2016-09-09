@@ -204,7 +204,7 @@ protected:
     SvXMLImport& mrImport;
 
     // list for local light contexts
-    ::std::vector< css::uno::Reference< SdXML3DLightContext > >
+    ::std::vector< rtl::Reference< SdXML3DLightContext > >
                                 maList;
 
     // local parameters which need to be read
@@ -274,8 +274,8 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceO
     rtl::Reference<SvXMLImportPropertyMapper> mpPresPagePropsMapper;
 
     // contexts for Style and AutoStyle import
-    css::uno::Reference<SvXMLStylesContext> mxStylesContext;
-    css::uno::Reference<SvXMLStylesContext> mxAutoStylesContext;
+    rtl::Reference<SvXMLStylesContext> mxStylesContext;
+    rtl::Reference<SvXMLStylesContext> mxAutoStylesContext;
 
     // contexts for xShape contents TokenMaps
     std::unique_ptr<SvXMLTokenMap>              mpGroupShapeElemTokenMap;

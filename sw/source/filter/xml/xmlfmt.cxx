@@ -256,7 +256,7 @@ SwXMLConditionContext_Impl::~SwXMLConditionContext_Impl()
 }
 
 
-typedef std::vector<uno::Reference<SwXMLConditionContext_Impl>> SwXMLConditions_Impl;
+typedef std::vector<rtl::Reference<SwXMLConditionContext_Impl>> SwXMLConditions_Impl;
 
 class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 {
@@ -327,7 +327,7 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
 
     if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_MAP ) )
     {
-        uno::Reference<SwXMLConditionContext_Impl> xCond{
+        rtl::Reference<SwXMLConditionContext_Impl> xCond{
             new SwXMLConditionContext_Impl( GetImport(), nPrefix,
                                             rLocalName, xAttrList )};
         if( xCond->IsValid() )

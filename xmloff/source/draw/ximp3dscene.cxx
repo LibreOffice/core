@@ -229,7 +229,7 @@ SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImport
 /** creates a 3d light context and adds it to the internal list for later processing */
 SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList)
 {
-    const uno::Reference<SdXML3DLightContext> xContext{new SdXML3DLightContext(mrImport, nPrfx, rLName, xAttrList)};
+    const rtl::Reference<SdXML3DLightContext> xContext{new SdXML3DLightContext(mrImport, nPrfx, rLName, xAttrList)};
 
     // remember SdXML3DLightContext for later evaluation
     maList.push_back(xContext);

@@ -168,7 +168,7 @@ class SdXMLImport: public SvXMLImport
     css::uno::Reference< css::container::XNameAccess > mxPageLayouts;
 
     // contexts for Style and AutoStyle import
-    css::uno::Reference<SdXMLMasterStylesContext> mxMasterStylesContext;
+    rtl::Reference<SdXMLMasterStylesContext> mxMasterStylesContext;
 
     // token map lists
     std::unique_ptr<SvXMLTokenMap>              mpDocElemTokenMap;

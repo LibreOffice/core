@@ -33,7 +33,7 @@
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 class SvxXMLListLevelStyleContext_Impl;
-typedef std::vector<css::uno::Reference<SvxXMLListLevelStyleContext_Impl>> SvxXMLListStyle_Impl;
+typedef std::vector<rtl::Reference<SvxXMLListLevelStyleContext_Impl>> SvxXMLListStyle_Impl;
 
 class XMLOFF_DLLPUBLIC SvxXMLListStyleContext
     : public SvXMLStyleContext

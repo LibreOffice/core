@@ -207,7 +207,7 @@ class SvXMLStyleIndex_Impl
 {
     OUString              sName;
     sal_uInt16            nFamily;
-    const uno::Reference<SvXMLStyleContext> mxStyle;
+    const rtl::Reference<SvXMLStyleContext> mxStyle;
 
 public:
 
@@ -217,7 +217,7 @@ public:
     {
     }
 
-    SvXMLStyleIndex_Impl( const uno::Reference<SvXMLStyleContext> &rStl ) :
+    SvXMLStyleIndex_Impl( const rtl::Reference<SvXMLStyleContext> &rStl ) :
         sName( rStl->GetName() ),
         nFamily( rStl->GetFamily() ),
         mxStyle ( rStl )
@@ -248,7 +248,7 @@ struct SvXMLStyleIndexCmp_Impl
 
 class SvXMLStylesContext_Impl
 {
-    typedef std::vector<uno::Reference<SvXMLStyleContext>> StylesType;
+    typedef std::vector<rtl::Reference<SvXMLStyleContext>> StylesType;
     typedef std::set<SvXMLStyleIndex_Impl, SvXMLStyleIndexCmp_Impl> IndicesType;
 
     StylesType aStyles;

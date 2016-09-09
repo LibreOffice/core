@@ -187,7 +187,7 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
     if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_TAB_STOP ) )
     {
         // create new tabstop import context
-        const uno::Reference<SvxXMLTabStopContext_Impl> xTabStopContext{
+        const rtl::Reference<SvxXMLTabStopContext_Impl> xTabStopContext{
             new SvxXMLTabStopContext_Impl( GetImport(), nPrefix, rLocalName,
                                            xAttrList )};
 
