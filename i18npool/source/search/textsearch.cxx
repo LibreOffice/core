@@ -71,9 +71,9 @@ sal_Int32 maskComplexTrans( sal_Int32 n )
     // IGNORE_KANA and FULLWIDTH_HALFWIDTH are simple but need to take effect
     // in complex transliteration.
     return
-        (n & COMPLEX_TRANS_MASK) |                      // all set ignore bits
+        n & (COMPLEX_TRANS_MASK |                       // all set ignore bits
         TransliterationModules_IGNORE_KANA |            // plus IGNORE_KANA bit
-        TransliterationModules_FULLWIDTH_HALFWIDTH;     // and the FULLWIDTH_HALFWIDTH value
+        TransliterationModules_FULLWIDTH_HALFWIDTH);    // and the FULLWIDTH_HALFWIDTH value
 }
 
 bool isComplexTrans( sal_Int32 n )
