@@ -388,7 +388,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
                 //  Sortieren ohne SubTotals
 
                 aSubTotalParam.bRemoveOnly = true;      // wird unten wieder zurueckgesetzt
-                DoSubTotals( nTab, aSubTotalParam, nullptr, false, bApi );
+                DoSubTotals( nTab, aSubTotalParam, false, bApi );
             }
 
             if (bSort)
@@ -413,7 +413,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
             {
                 pDBData->GetSubTotalParam( aSubTotalParam );    // Bereich kann sich geaendert haben
                 aSubTotalParam.bRemoveOnly = false;
-                DoSubTotals( nTab, aSubTotalParam, nullptr, false, bApi );
+                DoSubTotals( nTab, aSubTotalParam, false, bApi );
             }
 
             if (bRecord)
@@ -950,7 +950,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 }
 
 void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
-                                const ScSortParam* pForceNewSort, bool bRecord, bool bApi )
+                               bool bRecord, bool bApi )
 {
     //! auch fuer ScDBFunc::DoSubTotals benutzen!
     //  dann bleibt aussen:
@@ -1060,7 +1060,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         if (bDo)
         {
             // Sortieren
-            if ( rParam.bDoSort || pForceNewSort )
+            if ( rParam.bDoSort )
             {
                 pDBData->SetArea( nTab, aNewParam.nCol1,aNewParam.nRow1, aNewParam.nCol2,aNewParam.nRow2 );
 
@@ -1069,7 +1069,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
                 ScSortParam aOldSort;
                 pDBData->GetSortParam( aOldSort );
-                ScSortParam aSortParam( aNewParam, pForceNewSort ? *pForceNewSort : aOldSort );
+                ScSortParam aSortParam( aNewParam, aOldSort );
                 Sort( nTab, aSortParam, false, false, bApi );
             }
 

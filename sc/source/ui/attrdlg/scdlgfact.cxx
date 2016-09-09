@@ -628,22 +628,10 @@ AbstractScSortWarningDlg* ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( 
     return new AbstractScSortWarningDlg_Impl( pDlg );
 }
 
-AbstractScCondFormatManagerDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
-                                                                int nId )
+AbstractScCondFormatManagerDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList )
 {
-    VclPtr<ScCondFormatManagerDlg> pDlg;
-    switch( nId )
-    {
-        case RID_SCDLG_COND_FORMAT_MANAGER:
-            pDlg = VclPtr<ScCondFormatManagerDlg>::Create( pParent, pDoc, pFormatList );
-            break;
-        default:
-            break;
-    }
-    if(pDlg)
-        return new AbstractScCondFormatManagerDlg_Impl( pDlg );
-
-    return nullptr;
+    VclPtr<ScCondFormatManagerDlg> pDlg = VclPtr<ScCondFormatManagerDlg>::Create( pParent, pDoc, pFormatList );
+    return new AbstractScCondFormatManagerDlg_Impl( pDlg );
 }
 
 AbstractScDataPilotDatabaseDlg *  ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg(vcl::Window* pParent)
@@ -660,22 +648,10 @@ AbstractScDataPilotSourceTypeDlg* ScAbstractDialogFactory_Impl::CreateScDataPilo
 }
 
 AbstractScDataPilotServiceDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const std::vector<OUString>& rServices,
-                                                            int nId )
+                                                                        const std::vector<OUString>& rServices )
 {
-    VclPtr<ScDataPilotServiceDlg> pDlg;
-    switch ( nId )
-    {
-        case RID_SCDLG_DAPISERVICE :
-            pDlg = VclPtr<ScDataPilotServiceDlg>::Create( pParent, rServices );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScDataPilotServiceDlg_Impl( pDlg );
-    return nullptr;
+    VclPtr<ScDataPilotServiceDlg> pDlg = VclPtr<ScDataPilotServiceDlg>::Create( pParent, rServices );
+    return new AbstractScDataPilotServiceDlg_Impl( pDlg );
 }
 
 AbstractScDeleteCellDlg* ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg(vcl::Window* pParent,
@@ -720,22 +696,10 @@ AbstractScGroupDlg* ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( vcl:
 }
 
 AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( vcl::Window* pParent,
-                                                                int nId,
                                                                 bool bDisallowCellMove )
 {
-    VclPtr<ScInsertCellDlg> pDlg;
-    switch ( nId )
-    {
-        case RID_SCDLG_INSCELL :
-            pDlg = VclPtr<ScInsertCellDlg>::Create( pParent, bDisallowCellMove);
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScInsertCellDlg_Impl( pDlg );
-    return nullptr;
+    VclPtr<ScInsertCellDlg> pDlg = VclPtr<ScInsertCellDlg>::Create( pParent, bDisallowCellMove);
+    return new AbstractScInsertCellDlg_Impl( pDlg );
 }
 
 AbstractScInsertContentsDlg * ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg( vcl::Window*      pParent,
@@ -772,12 +736,10 @@ AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg 
                                                                 FieldUnit       eFUnit,
                                                                 sal_uInt16      nDecimals,
                                                                 long            nMaximum ,
-                                                                long            nMinimum,
-                                                                long            nFirst,
-                                                                long            nLast )
+                                                                long            nMinimum )
 {
     VclPtr<ScMetricInputDlg> pDlg = VclPtr<ScMetricInputDlg>::Create(pParent, sDialogName, nCurrent ,nDefault, eFUnit,
-        nDecimals, nMaximum , nMinimum , nFirst, nLast);
+        nDecimals, nMaximum , nMinimum , 1, 100);
     return new AbstractScMetricInputDlg_Impl( pDlg );
 }
 
@@ -827,28 +789,22 @@ AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( 
 }
 
 AbstractScDPNumGroupDlg * ScAbstractDialogFactory_Impl::CreateScDPNumGroupDlg(
-        vcl::Window* pParent, int nId, const ScDPNumGroupInfo& rInfo )
+        vcl::Window* pParent, const ScDPNumGroupInfo& rInfo )
 {
-    if( nId == RID_SCDLG_DPNUMGROUP )
-        return new AbstractScDPNumGroupDlg_Impl( VclPtr<ScDPNumGroupDlg>::Create( pParent, rInfo ) );
-    return nullptr;
+    return new AbstractScDPNumGroupDlg_Impl( VclPtr<ScDPNumGroupDlg>::Create( pParent, rInfo ) );
 }
 
 AbstractScDPDateGroupDlg * ScAbstractDialogFactory_Impl::CreateScDPDateGroupDlg(
-        vcl::Window* pParent, int nId,
+        vcl::Window* pParent,
         const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart, const Date& rNullDate )
 {
-    if( nId == RID_SCDLG_DPDATEGROUP )
-        return new AbstractScDPDateGroupDlg_Impl( VclPtr<ScDPDateGroupDlg>::Create( pParent, rInfo, nDatePart, rNullDate ) );
-    return nullptr;
+    return new AbstractScDPDateGroupDlg_Impl( VclPtr<ScDPDateGroupDlg>::Create( pParent, rInfo, nDatePart, rNullDate ) );
 }
 
 AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDlg (
-        vcl::Window* pParent, int nId, ScDPObject& rDPObj, sal_uInt16 nOrient )
+        vcl::Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient )
 {
-    if( nId == RID_SCDLG_DPSHOWDETAIL )
-        return new AbstractScDPShowDetailDlg_Impl( VclPtr<ScDPShowDetailDlg>::Create( pParent, rDPObj, nOrient ) );
-    return nullptr;
+    return new AbstractScDPShowDetailDlg_Impl( VclPtr<ScDPShowDetailDlg>::Create( pParent, rDPObj, nOrient ) );
 }
 
 AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg(vcl::Window* pParent, const OUString& rName,

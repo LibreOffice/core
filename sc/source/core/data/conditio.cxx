@@ -782,7 +782,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     if (bDirty && !bFirstRun)
     {
         // Repaint everything for dependent formats
-        DataChanged( nullptr );
+        DataChanged();
     }
 
     bFirstRun = false;
@@ -1466,7 +1466,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
     return aValidPos;
 }
 
-void ScConditionEntry::DataChanged( const ScRange* /* pModified */ ) const
+void ScConditionEntry::DataChanged() const
 {
     //FIXME: Nothing so far
 }
@@ -1590,10 +1590,10 @@ ScCondFormatEntry::~ScCondFormatEntry()
 {
 }
 
-void ScCondFormatEntry::DataChanged( const ScRange* pModified ) const
+void ScCondFormatEntry::DataChanged() const
 {
     if ( pCondFormat )
-        pCondFormat->DoRepaint( pModified );
+        pCondFormat->DoRepaint( nullptr );
 }
 
 ScFormatEntry* ScCondFormatEntry::Clone( ScDocument* pDoc ) const

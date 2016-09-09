@@ -507,24 +507,23 @@ void ScMoveUndo::EndUndo()
     ScSimpleUndo::EndUndo();
 }
 
-ScDBFuncUndo::ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal, SdrUndoAction* pDrawUndo ) :
+ScDBFuncUndo::ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal ) :
     ScSimpleUndo( pDocSh ),
-    aOriginalRange( rOriginal ),
-    mpDrawUndo( pDrawUndo )
+    aOriginalRange( rOriginal )
 {
     pAutoDBRange = pDocSh->GetOldAutoDBRange();
 }
 
 ScDBFuncUndo::~ScDBFuncUndo()
 {
-    DeleteSdrUndoAction( mpDrawUndo );
+    DeleteSdrUndoAction( nullptr );
     delete pAutoDBRange;
 }
 
 void ScDBFuncUndo::BeginUndo()
 {
     ScSimpleUndo::BeginUndo();
-    DoSdrUndoAction( mpDrawUndo, &pDocShell->GetDocument() );
+    DoSdrUndoAction( nullptr, &pDocShell->GetDocument() );
 }
 
 void ScDBFuncUndo::EndUndo()
@@ -561,7 +560,7 @@ void ScDBFuncUndo::EndUndo()
 
 void ScDBFuncUndo::BeginRedo()
 {
-    RedoSdrUndoAction( mpDrawUndo );
+    RedoSdrUndoAction( nullptr );
     if ( pAutoDBRange )
     {
         // move the database range to this function's position again (see ScDocShell::GetDBData)

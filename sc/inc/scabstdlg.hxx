@@ -341,8 +341,7 @@ public:
 
     virtual AbstractScSortWarningDlg * CreateScSortWarningDlg(vcl::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) = 0;
 
-    virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
-                                                                int nId ) = 0;
+    virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList ) = 0;
 
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg(vcl::Window* pParent) = 0;
 
@@ -350,8 +349,7 @@ public:
         bool bEnableExternal) = 0;
 
     virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const std::vector<OUString>& rServices,
-                                                                        int nId ) = 0;
+                                                                        const std::vector<OUString>& rServices ) = 0;
 
     virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove) = 0 ;
 
@@ -374,7 +372,6 @@ public:
                                                             bool bUnGroup = false ) = 0;
 
     virtual AbstractScInsertCellDlg * CreateScInsertCellDlg( vcl::Window* pParent,
-                                                             int nId,
                                                              bool bDisallowCellMove ) = 0;
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( vcl::Window*        pParent,
@@ -394,9 +391,7 @@ public:
                                                                 FieldUnit       eFUnit,
                                                                 sal_uInt16      nDecimals = 2,
                                                                 long            nMaximum  = 1000,
-                                                                long            nMinimum  = 0,
-                                                                long            nFirst    = 1,
-                                                                long            nLast     = 100 ) = 0;
+                                                                long            nMinimum  = 0 ) = 0;
 
     virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(vcl::Window * pParent,
         const OUString& rDefault) = 0;
@@ -421,16 +416,14 @@ public:
                                                                 const ScDPNameVec& rDataFields ) = 0;
 
     virtual AbstractScDPNumGroupDlg * CreateScDPNumGroupDlg( vcl::Window* pParent,
-                                                                int nId,
                                                                 const ScDPNumGroupInfo& rInfo ) = 0;
 
     virtual AbstractScDPDateGroupDlg * CreateScDPDateGroupDlg( vcl::Window* pParent,
-                                                                int nId,
                                                                 const ScDPNumGroupInfo& rInfo,
                                                                 sal_Int32 nDatePart,
                                                                 const Date& rNullDate ) = 0;
 
-    virtual AbstractScDPShowDetailDlg * CreateScDPShowDetailDlg( vcl::Window* pParent, int nId,
+    virtual AbstractScDPShowDetailDlg * CreateScDPShowDetailDlg( vcl::Window* pParent,
                                                                 ScDPObject& rDPObj,
                                                                 sal_uInt16 nOrient ) = 0;
 

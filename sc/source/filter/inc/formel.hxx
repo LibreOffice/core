@@ -97,7 +97,7 @@ protected:
 class ExcelConverterBase : public ConverterBase
 {
 protected:
-    ExcelConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer );
+    ExcelConverterBase( svl::SharedStringPool& rSPool );
     virtual             ~ExcelConverterBase();
 
 public:
@@ -123,7 +123,7 @@ protected:
     inline void         Read( double& fDouble );
     inline void         Read( sal_uInt32& nUINT32 );
 
-    LotusConverterBase( SvStream& rStr, svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer );
+    LotusConverterBase( SvStream& rStr, svl::SharedStringPool& rSPool );
     virtual             ~LotusConverterBase();
 
 public:

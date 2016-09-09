@@ -557,7 +557,7 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
 
     ScRangeList aRange;
     ScRefFlags nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
-        ScRefFlags::VALID, mpViewData->GetDocument()->GetAddressConvention(), maPos.Tab());
+        mpViewData->GetDocument()->GetAddressConvention(), maPos.Tab());
     ScConditionalFormat* pFormat = mpCondFormList->GetConditionalFormat();
 
     if((nFlags & ScRefFlags::VALID) && !aRange.empty() && pFormat)
@@ -761,7 +761,7 @@ IMPL_LINK_TYPED( ScCondFormatDlg, EdRangeModifyHdl, Edit&, rEdit, void )
     OUString aRangeStr = rEdit.GetText();
     ScRangeList aRange;
     ScRefFlags nFlags = aRange.Parse(aRangeStr, mpViewData->GetDocument(),
-        ScRefFlags::VALID, mpViewData->GetDocument()->GetAddressConvention());
+        mpViewData->GetDocument()->GetAddressConvention());
     if(nFlags & ScRefFlags::VALID)
         rEdit.SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
     else

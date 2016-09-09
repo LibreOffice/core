@@ -2824,7 +2824,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                     nStartCol, nStartRow, nStartTab,
                                     nOldEndCol, nOldEndRow, nEndTab ),
                                 ScAddress( nDestCol, nDestRow, nDestTab ),
-                                bCut, pUndoDoc, nullptr, bScenariosAdded ) );
+                                bCut, pUndoDoc, bScenariosAdded ) );
     }
 
     SCCOL nDestPaintEndCol = nDestEndCol;

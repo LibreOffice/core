@@ -481,11 +481,11 @@ void XclExpChFutureRecordBase::Save( XclExpStream& rStrm )
 
 // Frame formatting ===========================================================
 
-XclExpChFramePos::XclExpChFramePos( sal_uInt16 nTLMode, sal_uInt16 nBRMode ) :
+XclExpChFramePos::XclExpChFramePos( sal_uInt16 nTLMode ) :
     XclExpRecord( EXC_ID_CHFRAMEPOS, 20 )
 {
     maData.mnTLMode = nTLMode;
-    maData.mnBRMode = nBRMode;
+    maData.mnBRMode = EXC_CHFRAMEPOS_PARENT;
 }
 
 void XclExpChFramePos::WriteBody( XclExpStream& rStrm )
@@ -1212,7 +1212,7 @@ void XclExpChText::ConvertTitle( Reference< XTitle > const & xTitle, sal_uInt16 
         ConvertRotationBase( aTitleProp, true );
 
         // manual text position - only for main title
-        mxFramePos.reset( new XclExpChFramePos( EXC_CHFRAMEPOS_PARENT, EXC_CHFRAMEPOS_PARENT ) );
+        mxFramePos.reset( new XclExpChFramePos( EXC_CHFRAMEPOS_PARENT ) );
         if( nTarget == EXC_CHOBJLINK_TITLE )
         {
             Any aRelPos;
@@ -2307,7 +2307,7 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
             Reference< cssc::XChartDocument > xChart1Doc( GetChartDocument(), UNO_QUERY_THROW );
             Reference< XShape > xChart1Legend( xChart1Doc->getLegend(), UNO_SET_THROW );
             // coordinates in CHLEGEND record written but not used by Excel
-            mxFramePos.reset( new XclExpChFramePos( EXC_CHFRAMEPOS_CHARTSIZE, EXC_CHFRAMEPOS_PARENT ) );
+            mxFramePos.reset( new XclExpChFramePos( EXC_CHFRAMEPOS_CHARTSIZE ) );
             XclChFramePos& rFramePos = mxFramePos->GetFramePosData();
             rFramePos.mnTLMode = EXC_CHFRAMEPOS_CHARTSIZE;
             css::awt::Point aLegendPos = xChart1Legend->getPosition();
@@ -3215,7 +3215,7 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > const & xDiagram, sal
         // the CHAXESSET record contains the inner plot area
         maData.maRect = CalcChartRectFromHmm( xPositioning->calculateDiagramPositionExcludingAxes() );
         // the embedded CHFRAMEPOS record contains the outer plot area
-        mxFramePos.reset( new XclExpChFramePos( EXC_CHFRAMEPOS_PARENT, EXC_CHFRAMEPOS_PARENT ) );
+        mxFramePos.reset( new XclExpChFramePos( EXC_CHFRAMEPOS_PARENT ) );
         // for pie charts, always use inner plot area size to exclude the data labels as Excel does
         const XclExpChTypeGroup* pFirstTypeGroup = GetFirstTypeGroup().get();
         bool bPieChart = pFirstTypeGroup && (pFirstTypeGroup->GetTypeInfo().meTypeCateg == EXC_CHTYPECATEG_PIE);

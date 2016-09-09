@@ -39,7 +39,6 @@ public:
     void Append( const ScRange& rRange );
 
     ScRefFlags Parse( const OUString&, ScDocument*,
-                      ScRefFlags nMask = ScRefFlags::VALID,
                       formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                       SCTAB nDefaultTab = 0, sal_Unicode cDelimiter = 0 );
 

@@ -216,7 +216,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
                 std::vector<sc::RowSpan> aRanges;
                 aRanges.reserve(1);
                 aRanges.push_back(sc::RowSpan(nRow1, nRow2));
-                CloneFormulaCell(*rSrcCell.mpFormula, rSrcAttr, aRanges, nullptr);
+                CloneFormulaCell(*rSrcCell.mpFormula, rSrcAttr, aRanges);
             }
             break;
             default:
@@ -478,7 +478,7 @@ void ScColumn::DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDele
 
 void ScColumn::CloneFormulaCell(
     const ScFormulaCell& rSrc, const sc::CellTextAttr& rAttr,
-    const std::vector<sc::RowSpan>& rRanges, sc::StartListeningContext* pCxt )
+    const std::vector<sc::RowSpan>& rRanges )
 {
     sc::CellStoreType::iterator itPos = maCells.begin();
     sc::CellTextAttrStoreType::iterator itAttrPos = maCellTextAttrs.begin();
@@ -509,11 +509,6 @@ void ScColumn::CloneFormulaCell(
         {
             // Single, ungrouped formula cell.
             ScFormulaCell* pCell = new ScFormulaCell(rSrc, *pDocument, aPos);
-            if (pCxt)
-            {
-                pCell->StartListeningTo(*pCxt);
-                pCell->SetDirty();
-            }
             aFormulas.push_back(pCell);
         }
         else
@@ -531,11 +526,6 @@ void ScColumn::CloneFormulaCell(
                 {
                     xGroup->mpTopCell = pCell;
                     xGroup->mnLength = nLen;
-                }
-                if (pCxt)
-                {
-                    pCell->StartListeningTo(*pCxt);
-                    pCell->SetDirty();
                 }
                 aFormulas.push_back(pCell);
             }

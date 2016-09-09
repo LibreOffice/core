@@ -423,8 +423,7 @@ public:
 
     virtual AbstractScSortWarningDlg * CreateScSortWarningDlg(vcl::Window* pParent, const OUString& rExtendText, const OUString& rCurrentText ) override;
 
-    virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
-                                                                int nId ) override;
+    virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList ) override;
 
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg(vcl::Window* pParent) override;
 
@@ -432,8 +431,7 @@ public:
         bool bEnableExternal) override;
 
     virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( vcl::Window* pParent,
-                                                                        const std::vector<OUString>& rServices,
-                                                                        int nId ) override;
+                                                                        const std::vector<OUString>& rServices ) override;
     virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove ) override;
 
     //for dataform
@@ -455,7 +453,6 @@ public:
                                                             bool bUnGroup = false) override;
 
     virtual AbstractScInsertCellDlg * CreateScInsertCellDlg( vcl::Window* pParent,
-                                                             int nId,
                                                              bool bDisallowCellMove ) override;
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( vcl::Window*        pParent,
@@ -476,9 +473,7 @@ public:
                                                                 FieldUnit       eFUnit,
                                                                 sal_uInt16      nDecimals = 2,
                                                                 long            nMaximum  = 1000,
-                                                                long            nMinimum  = 0,
-                                                                long            nFirst    = 1,
-                                                                long            nLast     = 100 ) override;
+                                                                long            nMinimum  = 0 ) override;
 
     virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(vcl::Window * pParent,
         const OUString& rDefault) override;
@@ -503,16 +498,14 @@ public:
                                                                 const ScDPNameVec& rDataFields ) override;
 
     virtual AbstractScDPNumGroupDlg * CreateScDPNumGroupDlg( vcl::Window* pParent,
-                                                                int nId,
                                                                 const ScDPNumGroupInfo& rInfo ) override;
 
     virtual AbstractScDPDateGroupDlg * CreateScDPDateGroupDlg( vcl::Window* pParent,
-                                                                int nId,
                                                                 const ScDPNumGroupInfo& rInfo,
                                                                 sal_Int32 nDatePart,
                                                                 const Date& rNullDate ) override;
 
-    virtual AbstractScDPShowDetailDlg * CreateScDPShowDetailDlg( vcl::Window* pParent, int nId,
+    virtual AbstractScDPShowDetailDlg * CreateScDPShowDetailDlg( vcl::Window* pParent,
                                                                 ScDPObject& rDPObj,
                                                                 sal_uInt16 nOrient ) override;
 

@@ -72,13 +72,11 @@ ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet, const OUString& rStyleName )
 {
 }
 
-ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet, ScStyleSheet* pStyleSheet )
+ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet )
     :   SfxSetItem  ( ATTR_PATTERN, pItemSet ),
         pName       ( nullptr ),
-        pStyle      ( pStyleSheet )
+        pStyle      ( nullptr )
 {
-    if ( pStyleSheet )
-        GetItemSet().SetParent( &pStyleSheet->GetItemSet() );
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )

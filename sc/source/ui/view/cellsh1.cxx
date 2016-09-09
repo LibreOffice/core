@@ -220,7 +220,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_INSCELL, bTheFlag));
+                        std::unique_ptr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg( pTabViewShell->GetDialogParent(), bTheFlag));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if (pDlg->Execute() == RET_OK)
                             eCmd = pDlg->GetInsCellCmd();
@@ -1079,7 +1079,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                         AbstractScDPShowDetailDlg* pDlg = pFact->CreateScDPShowDetailDlg(
-                            pTabViewShell->GetDialogParent(), RID_SCDLG_DPSHOWDETAIL, *pDPObj, nOrientation );
+                            pTabViewShell->GetDialogParent(), *pDPObj, nOrientation );
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -1120,7 +1120,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         OSL_ENSURE( pFact, "ScAbstractFactory create fail!" );
                         Date aNullDate( *GetViewData()->GetDocument()->GetFormatTable()->GetNullDate() );
                         AbstractScDPDateGroupDlg* pDlg = pFact->CreateScDPDateGroupDlg(
-                            pTabViewShell->GetDialogParent(), RID_SCDLG_DPDATEGROUP,
+                            pTabViewShell->GetDialogParent(),
                             aNumInfo, nParts, aNullDate );
                         OSL_ENSURE( pDlg, "Dialog create fail!" );
                         if( pDlg->Execute() == RET_OK )
@@ -1134,7 +1134,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE( pFact, "ScAbstractFactory create fail!" );
                         AbstractScDPNumGroupDlg* pDlg = pFact->CreateScDPNumGroupDlg(
-                            pTabViewShell->GetDialogParent(), RID_SCDLG_DPNUMGROUP, aNumInfo );
+                            pTabViewShell->GetDialogParent(), aNumInfo );
                         OSL_ENSURE( pDlg, "Dialog create fail!" );
                         if( pDlg->Execute() == RET_OK )
                             pTabViewShell->NumGroupDataPilot( pDlg->GetGroupInfo() );
@@ -2440,7 +2440,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 ScConditionalFormatList* pList = pDoc->GetCondFormList( aPos.Tab() );
                 std::unique_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
-                    pTabViewShell->GetDialogParent(), pDoc, pList, RID_SCDLG_COND_FORMAT_MANAGER));
+                    pTabViewShell->GetDialogParent(), pDoc, pList));
                 short nRet = pDlg->Execute();
                 if(nRet == RET_OK && pDlg->CondFormatsChanged())
                 {
@@ -2658,7 +2658,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                 std::vector<OUString> aSources = ScDPObject::GetRegisteredSources();
                 std::unique_ptr<AbstractScDataPilotServiceDlg> pServDlg(
                     pFact->CreateScDataPilotServiceDlg(
-                        pTabViewShell->GetDialogParent(), aSources, RID_SCDLG_DAPISERVICE));
+                        pTabViewShell->GetDialogParent(), aSources));
 
                 OSL_ENSURE(pServDlg, "Dialog create fail!");
                 if ( pServDlg->Execute() == RET_OK )

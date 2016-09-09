@@ -1790,8 +1790,7 @@ ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
                                 const ScMarkData& rMark,
                                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                                 InsertDeleteFlags nNewFlags,
-                                ScRefUndoData* pRefData,
-                                void* /*pFill1*/, void* /*pFill2*/, void* /*pFill3*/ ) :
+                                ScRefUndoData* pRefData ) :
         ScBlockUndo( pNewDocShell, ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ), SC_UNDO_SIMPLE ),
         mpMarkData(new ScMarkData(rMark)),
         pUndoDoc( pNewUndoDoc ),

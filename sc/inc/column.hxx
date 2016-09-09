@@ -350,7 +350,7 @@ public:
 
     void CloneFormulaCell(
         const ScFormulaCell& rSrc, const sc::CellTextAttr& rAttr,
-        const std::vector<sc::RowSpan>& rRanges, sc::StartListeningContext* pCxt );
+        const std::vector<sc::RowSpan>& rRanges );
 
     svl::SharedString GetSharedString( SCROW nRow ) const;
 

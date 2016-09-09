@@ -1127,7 +1127,7 @@ void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
     if (m_BulkGroupAreas.empty())
         return;
 
-    sc::BulkDataHint aHint(*pDoc, nullptr);
+    sc::BulkDataHint aHint(*pDoc);
 
     bool bBroadcasted = false;
     BulkGroupAreasType::iterator it = m_BulkGroupAreas.begin(), itEnd = m_BulkGroupAreas.end();

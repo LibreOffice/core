@@ -30,7 +30,6 @@ class ScDocument;
 class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 {
     SfxPoolItem**   ppPoolDefaults;
-    SfxItemPool*    pSecondary;
     static sal_uInt16*  pVersionMap1;
     static sal_uInt16*  pVersionMap2;
     static sal_uInt16*  pVersionMap3;
@@ -45,7 +44,7 @@ class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
     static sal_uInt16*  pVersionMap12;
 
 public:
-            ScDocumentPool( SfxItemPool* pSecPool = nullptr );
+            ScDocumentPool();
 protected:
             virtual ~ScDocumentPool();
 public:

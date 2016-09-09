@@ -1857,7 +1857,7 @@ public:
         SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
         ScProgress* pProgress, sc::ReorderParam* pUndo );
 
-    void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );
+    void Reorder( const sc::ReorderParam& rParam );
 
     SCSIZE          Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );
     SC_DLLPUBLIC bool           CreateQueryParam( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,

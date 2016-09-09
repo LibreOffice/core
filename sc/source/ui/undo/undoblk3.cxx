@@ -1273,14 +1273,13 @@ bool ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoRefConversion::ScUndoRefConversion( ScDocShell* pNewDocShell,
                                          const ScRange& aMarkRange, const ScMarkData& rMark,
-                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, bool bNewMulti, InsertDeleteFlags nNewFlag) :
+                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, bool bNewMulti) :
 ScSimpleUndo( pNewDocShell ),
 aMarkData   ( rMark ),
 pUndoDoc    ( pNewUndoDoc ),
 pRedoDoc    ( pNewRedoDoc ),
 aRange      ( aMarkRange ),
-bMulti      ( bNewMulti ),
-nFlags      ( nNewFlag )
+bMulti      ( bNewMulti )
 {
     SetChangeTrack();
 }
@@ -1299,7 +1298,7 @@ OUString ScUndoRefConversion::GetComment() const
 void ScUndoRefConversion::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
-    if ( pChangeTrack && (nFlags & InsertDeleteFlags::FORMULA) )
+    if ( pChangeTrack )
         pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc,
             nStartChangeAction, nEndChangeAction );
     else
@@ -1318,7 +1317,7 @@ void ScUndoRefConversion::DoChange( ScDocument* pRefDoc)
     SCTAB nTabCount = rDoc.GetTableCount();
     aCopyRange.aStart.SetTab(0);
     aCopyRange.aEnd.SetTab(nTabCount-1);
-    pRefDoc->CopyToDocument( aCopyRange, nFlags, bMulti, rDoc, &aMarkData );
+    pRefDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ALL, bMulti, rDoc, &aMarkData );
     pDocShell->PostPaint( aRange, PAINT_GRID);
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

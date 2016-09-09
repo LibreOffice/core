@@ -29,8 +29,9 @@
 
 const sal_uInt16    TokenPool::nScTokenOff = 8192;
 
-TokenStack::TokenStack( sal_uInt16 nNewSize )
+TokenStack::TokenStack(  )
 {
+    const sal_uInt16 nNewSize = 1024;
     pStack = new TokenId[ nNewSize ];
 
     Reset();
