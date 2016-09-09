@@ -39,8 +39,7 @@ using namespace svt;
 using namespace ::com::sun::star;
 
 SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rItem) :
-        RoadmapWizard(&rView.GetViewFrame()->GetWindow(),
-                        WizardButtonFlags::NEXT|WizardButtonFlags::PREVIOUS|WizardButtonFlags::FINISH|WizardButtonFlags::CANCEL|WizardButtonFlags::HELP),
+        RoadmapWizard(&rView.GetViewFrame()->GetWindow()),
         m_pSwView(&rView),
         m_bDocumentLoad( false ),
         m_xConfigItem(rItem),

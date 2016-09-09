@@ -109,15 +109,15 @@ namespace svt
     }
 
     //= RoadmapWizard
-    RoadmapWizard::RoadmapWizard( vcl::Window* _pParent, const WinBits i_nStyle, WizardButtonFlags _nButtonFlags )
-        :OWizardMachine( _pParent, i_nStyle, _nButtonFlags )
+    RoadmapWizard::RoadmapWizard( vcl::Window* _pParent, const WinBits i_nStyle )
+        :OWizardMachine( _pParent, i_nStyle, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP )
         ,m_pImpl( new RoadmapWizardImpl )
     {
         impl_construct();
     }
 
-    RoadmapWizard::RoadmapWizard( vcl::Window* _pParent, WizardButtonFlags _nButtonFlags )
-        :OWizardMachine( _pParent, _nButtonFlags )
+    RoadmapWizard::RoadmapWizard( vcl::Window* _pParent )
+        :OWizardMachine( _pParent, WizardButtonFlags::NEXT | WizardButtonFlags::PREVIOUS | WizardButtonFlags::FINISH | WizardButtonFlags::CANCEL | WizardButtonFlags::HELP )
         ,m_pImpl( new RoadmapWizardImpl )
     {
         impl_construct();

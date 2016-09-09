@@ -146,8 +146,8 @@ class SvxIconChoiceCtrlColumnInfo
     sal_uInt16              nSubItem;
 
 public:
-                            SvxIconChoiceCtrlColumnInfo( long nWd ) :
-                                nWidth( nWd ), nSubItem( 0 ) {}
+                            SvxIconChoiceCtrlColumnInfo() :
+                                nWidth( 100 ), nSubItem( 0 ) {}
                             SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& );
 
     void                    SetWidth( long nWd ) { nWidth = nWd; }

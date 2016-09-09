@@ -235,9 +235,6 @@ private:
         @param rVDev
         Virtual device to render everything into
 
-        @param nExponent
-        Number of repetitions per subdivision step, _must_ be greater than 1
-
         @param nNumTilesX
         Number of original tiles to generate in x direction
 
@@ -260,7 +257,6 @@ private:
     */
     bool SVT_DLLPRIVATE     ImplRenderTempTile(
                                 VirtualDevice& rVDev,
-                                int nExponent,
                                 int nNumTilesX,
                                 int nNumTilesY,
                                 const Size& rTileSizePixel,
@@ -328,10 +324,10 @@ protected:
     void                    SetSwapState();
 
 public:
-                            GraphicObject( const GraphicManager* pMgr = nullptr );
-                            GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = nullptr );
+                            GraphicObject();
+                            GraphicObject( const Graphic& rGraphic );
                             GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = nullptr );
-                            explicit GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr = nullptr );
+                            explicit GraphicObject( const OString& rUniqueID );
                             virtual ~GraphicObject();
 
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
@@ -448,9 +444,6 @@ public:
         virtually start at this position. Concretely, only that many
         tiles are drawn to completely fill the given output area.
 
-        @param pAttr
-        Optional GraphicAttr
-
         @param nFlags
         Optional rendering flags
 
@@ -467,7 +460,6 @@ public:
                                 const Rectangle& rArea,
                                 const Size& rSize,
                                 const Size& rOffset,
-                                const GraphicAttr* pAttr = nullptr,
                                 GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD,
                                 int nTileCacheSize1D=128
                             );

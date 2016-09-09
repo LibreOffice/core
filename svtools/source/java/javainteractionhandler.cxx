@@ -45,9 +45,9 @@ using namespace com::sun::star::task;
 namespace svt
 {
 
-JavaInteractionHandler::JavaInteractionHandler(bool bReportErrorOnce) :
+JavaInteractionHandler::JavaInteractionHandler() :
     m_aRefCount(0),
-    m_bShowErrorsOnce(bReportErrorOnce),
+    m_bShowErrorsOnce(true),
     m_bJavaDisabled_Handled(false),
     m_bInvalidSettings_Handled(false),
     m_bJavaNotFound_Handled(false),

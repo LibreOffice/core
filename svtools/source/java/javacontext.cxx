@@ -68,7 +68,7 @@ Any SAL_CALL JavaContext::getValueByName( const OUString& Name) throw (RuntimeEx
         {
             osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
             if (!m_xHandler.is())
-                m_xHandler.set( new JavaInteractionHandler(true/*bShowErrorsOnce*/));
+                m_xHandler.set( new JavaInteractionHandler );
         }
         retVal = makeAny(m_xHandler);
 

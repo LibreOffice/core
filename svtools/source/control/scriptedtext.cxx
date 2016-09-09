@@ -65,10 +65,7 @@ private:
 public:
                                 /** This constructor sets an output device and fonts for all script types. */
                                 SvtScriptedTextHelper_Impl(
-                                    OutputDevice& _rOutDevice,
-                                    vcl::Font* _pLatinFont,
-                                    vcl::Font* _pAsianFont,
-                                    vcl::Font* _pCmplxFont );
+                                    OutputDevice& _rOutDevice );
                                 /** Copy constructor. */
                                 SvtScriptedTextHelper_Impl(
                                     const SvtScriptedTextHelper_Impl& _rCopy );
@@ -91,12 +88,11 @@ public:
 
 
 SvtScriptedTextHelper_Impl::SvtScriptedTextHelper_Impl(
-        OutputDevice& _rOutDevice,
-        vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont ) :
+        OutputDevice& _rOutDevice ) :
     mrOutDevice( _rOutDevice ),
-    maLatinFont( _pLatinFont ? *_pLatinFont : _rOutDevice.GetFont() ),
-    maAsianFont( _pAsianFont ? *_pAsianFont : _rOutDevice.GetFont() ),
-    maCmplxFont( _pCmplxFont ? *_pCmplxFont : _rOutDevice.GetFont() ),
+    maLatinFont( _rOutDevice.GetFont() ),
+    maAsianFont( _rOutDevice.GetFont() ),
+    maCmplxFont( _rOutDevice.GetFont() ),
     maDefltFont( _rOutDevice.GetFont() )
 {
 }
@@ -301,7 +297,7 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
 
 
 SvtScriptedTextHelper::SvtScriptedTextHelper( OutputDevice& _rOutDevice ) :
-    mpImpl( new SvtScriptedTextHelper_Impl( _rOutDevice, nullptr, nullptr, nullptr ) )
+    mpImpl( new SvtScriptedTextHelper_Impl( _rOutDevice ) )
 {
 }
 

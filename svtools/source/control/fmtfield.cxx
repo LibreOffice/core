@@ -296,7 +296,7 @@ FormattedField::StaticFormatter::~StaticFormatter()
 }
 
 
-FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle, SvNumberFormatter* pInitialFormatter)
+FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle)
     :SpinField(pParent, nStyle)
     ,m_aLastSelection(0,0)
     ,m_dMinValue(0)
@@ -319,12 +319,6 @@ FormattedField::FormattedField(vcl::Window* pParent, WinBits nStyle, SvNumberFor
     ,m_pLastOutputColor(nullptr)
     ,m_bUseInputStringForFormatting(false)
 {
-
-    if (pInitialFormatter)
-    {
-        m_pFormatter = pInitialFormatter;
-        m_nFormatKey = 0;
-    }
 }
 
 VCL_BUILDER_FACTORY_ARGS(FormattedField, WB_BORDER | WB_SPIN)

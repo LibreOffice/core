@@ -1658,13 +1658,13 @@ struct ImplTileInfo
 };
 
 
-bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
+bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev,
                                         int nNumTilesX, int nNumTilesY,
                                         const Size& rTileSizePixel,
                                         const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags )
 {
-    if( nExponent <= 1 )
-        return false;
+    // how many tiles to generate per recursion step
+    const int nExponent = 2;
 
     // determine MSB factor
     int nMSBFactor( 1 );
@@ -1878,9 +1878,6 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
 bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSizePixel,
                                    const Size& rOffset, const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags, int nTileCacheSize1D )
 {
-    // how many tiles to generate per recursion step
-    enum{ SubdivisionExponent=2 };
-
     const MapMode   aOutMapMode( pOut->GetMapMode() );
     const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
     bool            bRet( false );
@@ -1903,7 +1900,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
         aVDev->SetMapMode( aMapMode );
 
         // draw bitmap content
-        if( ImplRenderTempTile( *aVDev.get(), SubdivisionExponent, nNumTilesInCacheX,
+        if( ImplRenderTempTile( *aVDev.get(), nNumTilesInCacheX,
                                 nNumTilesInCacheY, rSizePixel, pAttr, nFlags ) )
         {
             BitmapEx aTileBitmap( aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ) );
@@ -1918,7 +1915,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
                 else
                     aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
 
-                if( aAlphaGraphic.ImplRenderTempTile( *aVDev.get(), SubdivisionExponent, nNumTilesInCacheX,
+                if( aAlphaGraphic.ImplRenderTempTile( *aVDev.get(), nNumTilesInCacheX,
                                                       nNumTilesInCacheY, rSizePixel, pAttr, nFlags ) )
                 {
                     // Combine bitmap and alpha/mask

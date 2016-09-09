@@ -178,7 +178,7 @@ ExtensionRemovedListener::~ExtensionRemovedListener()
 
 // ExtensionBox_Impl
 ExtensionBox_Impl::ExtensionBox_Impl(vcl::Window* pParent) :
-    IExtensionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_CHILDDLGCTRL ),
+    IExtensionListBox( pParent ),
     m_bHasScrollBar( false ),
     m_bHasActive( false ),
     m_bNeedsRecalc( true ),

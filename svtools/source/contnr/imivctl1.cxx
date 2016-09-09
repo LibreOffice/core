@@ -236,7 +236,7 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
     if( (nWinStyle & WB_DETAILS))
     {
         if (!m_pColumns)
-            SetColumn( 0, SvxIconChoiceCtrlColumnInfo( 100 ));
+            SetColumn( 0, SvxIconChoiceCtrlColumnInfo() );
     }
 }
 
@@ -685,7 +685,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const Rec
     rRenderContext.Pop();
 }
 
-void SvxIconChoiceCtrl_Impl::RepaintEntries(SvxIconViewFlags nEntryFlagsMask)
+void SvxIconChoiceCtrl_Impl::RepaintSelectedEntries()
 {
     const size_t nCount = pZOrderList->size();
     if (!nCount)
@@ -695,7 +695,7 @@ void SvxIconChoiceCtrl_Impl::RepaintEntries(SvxIconViewFlags nEntryFlagsMask)
     for (size_t nCur = 0; nCur < nCount; nCur++)
     {
         SvxIconChoiceCtrlEntry* pEntry = (*pZOrderList)[nCur];
-        if (pEntry->GetFlags() & nEntryFlagsMask)
+        if (pEntry->GetFlags() & SvxIconViewFlags::SELECTED)
         {
             const Rectangle& rBoundRect = GetEntryBoundRect(pEntry);
             if (aOutRect.IsOver(rBoundRect))
@@ -1463,7 +1463,7 @@ void SvxIconChoiceCtrl_Impl::CheckScrollBars()
 
 void SvxIconChoiceCtrl_Impl::GetFocus()
 {
-    RepaintEntries( SvxIconViewFlags::SELECTED );
+    RepaintSelectedEntries();
     if( pCursor )
     {
         pCursor->SetFlags( SvxIconViewFlags::FOCUSED );
@@ -1481,7 +1481,7 @@ void SvxIconChoiceCtrl_Impl::LoseFocus()
 //  HideFocus ();
 //  pView->Invalidate ( aFocus.aRect );
 
-    RepaintEntries( SvxIconViewFlags::SELECTED );
+    RepaintSelectedEntries();
 }
 
 void SvxIconChoiceCtrl_Impl::SetUpdateMode( bool bUpdate )
