@@ -185,8 +185,8 @@ protected:
     DeletionWatcher* m_pDeletionWatcher;
 
     VclPtr<SfxActionListBox> aFmtLb;
-    VclPtr<ListBox> aFilterLb;
     VclPtr<CheckBox> aPreviewCheckbox;
+    VclPtr<ListBox> aFilterLb;
 
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16 nActFilter; // FilterIdx
