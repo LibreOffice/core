@@ -79,7 +79,7 @@ class SvtFontOptions_Impl : public ConfigItem
         virtual void ImplCommit() override;
 
         /*-****************************************************************************************************
-            @short      return list of key names of our configuration management which represent oue module tree
+            @short      return list of key names of our configuration management which represent our module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
             @return     A list of needed configuration keys is returned.
