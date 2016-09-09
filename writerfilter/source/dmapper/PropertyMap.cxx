@@ -1264,7 +1264,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             nGridLinePitch = 1;
         }
 
-        Insert(PROP_GRID_LINES, uno::makeAny( static_cast<sal_Int16>(nTextAreaHeight/nGridLinePitch)));
+        const sal_Int16 nGridLines = nTextAreaHeight/nGridLinePitch;
+        if( nGridLines >= 0 )
+            Insert(PROP_GRID_LINES, uno::makeAny( nGridLines ));
 
         // PROP_GRID_MODE
         Insert( PROP_GRID_MODE, uno::makeAny( static_cast<sal_Int16> (m_nGridType) ));
