@@ -95,7 +95,7 @@ struct XMLShapeImportPageContextImpl
 struct XMLShapeImportHelperImpl
 {
     // context for sorting shapes
-    ShapeSortContext*           mpSortContext;
+    std::shared_ptr<ShapeSortContext> mpSortContext;
 
     std::vector<ConnectionHint> maConnections;
 
@@ -720,16 +720,16 @@ public:
     vector<ZOrderHint>              maUnsortedList;
 
     sal_Int32                       mnCurrentZ;
-    ShapeSortContext*               mpParentContext;
+    std::shared_ptr<ShapeSortContext> mpParentContext;
 
-    ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext = nullptr );
+    ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, std::shared_ptr<ShapeSortContext> pParentContext = nullptr );
 
     void popGroupAndSort();
 private:
     void moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos );
 };
 
-ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext )
+ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, std::shared_ptr<ShapeSortContext> pParentContext )
 :   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext )
 {
 }
@@ -829,13 +829,13 @@ void ShapeSortContext::popGroupAndSort()
 
 void XMLShapeImportHelper::pushGroupForSorting( uno::Reference< drawing::XShapes >& rShapes )
 {
-    mpImpl->mpSortContext = new ShapeSortContext( rShapes, mpImpl->mpSortContext );
+    mpImpl->mpSortContext = std::make_shared<ShapeSortContext>( rShapes, mpImpl->mpSortContext );
 }
 
 void XMLShapeImportHelper::popGroupAndSort()
 {
     SAL_WARN_IF( !mpImpl->mpSortContext, "xmloff", "No context to sort!" );
-    if( mpImpl->mpSortContext == nullptr )
+    if( !mpImpl->mpSortContext )
         return;
 
     try
@@ -847,10 +847,8 @@ void XMLShapeImportHelper::popGroupAndSort()
         OSL_FAIL("exception while sorting shapes, sorting failed!");
     }
 
-    // put parent on top and delete current context, we are done
-    ShapeSortContext* pContext = mpImpl->mpSortContext;
-    mpImpl->mpSortContext = pContext->mpParentContext;
-    delete pContext;
+    // put parent on top and drop current context, we are done
+    mpImpl->mpSortContext = mpImpl->mpSortContext->mpParentContext;
 }
 
 void XMLShapeImportHelper::shapeWithZIndexAdded( css::uno::Reference< css::drawing::XShape >&, sal_Int32 nZIndex )
