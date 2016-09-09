@@ -13,6 +13,8 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 #include <ucbhelper/content.hxx>
 
 #include <test/bootstrapfixture.hxx>
@@ -62,14 +64,14 @@ static const char g_aDirPath[] = "/writerperfect/qa/unit/data/stream/test.dir";
 static const char g_aNondirPath[] = "/writerperfect/qa/unit/data/stream/test.dir/mimetype";
 static const char g_aNonexistentPath[] = "/writerperfect/qa/unit/data/stream/foo/bar";
 
-DirectoryStream *createForParent(const css::uno::Reference<css::ucb::XContent> &xContent)
+std::unique_ptr<DirectoryStream> createForParent(const css::uno::Reference<css::ucb::XContent> &xContent)
 {
     try
     {
         if (!xContent.is())
             return nullptr;
 
-        DirectoryStream *pDir(nullptr);
+        unique_ptr<DirectoryStream> pDir;
 
         const uno::Reference<css::container::XChild> xChild(xContent, uno::UNO_QUERY);
         if (xChild.is())
@@ -77,12 +79,9 @@ DirectoryStream *createForParent(const css::uno::Reference<css::ucb::XContent> &
             const uno::Reference<ucb::XContent> xDirContent(xChild->getParent(), uno::UNO_QUERY);
             if (xDirContent.is())
             {
-                pDir = new writerperfect::DirectoryStream(xDirContent);
+                pDir = o3tl::make_unique<DirectoryStream>(xDirContent);
                 if (!pDir->isStructured())
-                {
-                    delete pDir;
-                    pDir = nullptr;
-                }
+                    pDir.reset();
             }
         }
 
