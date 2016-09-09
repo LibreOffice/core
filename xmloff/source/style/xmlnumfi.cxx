@@ -65,11 +65,11 @@ struct SvXMLNumFmtEntry
 class SvXMLNumImpData
 {
     SvNumberFormatter*  pFormatter;
-    SvXMLTokenMap*      pStylesElemTokenMap;
-    SvXMLTokenMap*      pStyleElemTokenMap;
-    SvXMLTokenMap*      pStyleAttrTokenMap;
-    SvXMLTokenMap*      pStyleElemAttrTokenMap;
-    LocaleDataWrapper*  pLocaleData;
+    std::unique_ptr<SvXMLTokenMap>      pStylesElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>      pStyleElemTokenMap;
+    std::unique_ptr<SvXMLTokenMap>      pStyleAttrTokenMap;
+    std::unique_ptr<SvXMLTokenMap>      pStyleElemAttrTokenMap;
+    std::unique_ptr<LocaleDataWrapper>  pLocaleData;
     std::vector<SvXMLNumFmtEntry> m_NameEntries;
 
     uno::Reference< uno::XComponentContext > m_xContext;
@@ -78,7 +78,6 @@ public:
     SvXMLNumImpData(
         SvNumberFormatter* pFmt,
         const uno::Reference<uno::XComponentContext>& rxContext );
-    ~SvXMLNumImpData();
 
     SvNumberFormatter*      GetNumberFormatter() const  { return pFormatter; }
     const SvXMLTokenMap&    GetStylesElemTokenMap();
@@ -365,23 +364,9 @@ SvXMLNumImpData::SvXMLNumImpData(
     SvNumberFormatter* pFmt,
     const uno::Reference<uno::XComponentContext>& rxContext )
 :   pFormatter(pFmt),
-    pStylesElemTokenMap(nullptr),
-    pStyleElemTokenMap(nullptr),
-    pStyleAttrTokenMap(nullptr),
-    pStyleElemAttrTokenMap(nullptr),
-    pLocaleData(nullptr),
     m_xContext(rxContext)
 {
     SAL_WARN_IF( !rxContext.is(), "xmloff", "got no service manager" );
-}
-
-SvXMLNumImpData::~SvXMLNumImpData()
-{
-    delete pStylesElemTokenMap;
-    delete pStyleElemTokenMap;
-    delete pStyleAttrTokenMap;
-    delete pStyleElemAttrTokenMap;
-    delete pLocaleData;
 }
 
 sal_uInt32 SvXMLNumImpData::GetKeyForName( const OUString& rName )
@@ -479,7 +464,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStylesElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pStylesElemTokenMap = new SvXMLTokenMap( aStylesElemMap );
+        pStylesElemTokenMap = o3tl::make_unique<SvXMLTokenMap>( aStylesElemMap );
     }
     return *pStylesElemTokenMap;
 }
@@ -517,7 +502,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pStyleElemTokenMap = new SvXMLTokenMap( aStyleElemMap );
+        pStyleElemTokenMap = o3tl::make_unique<SvXMLTokenMap>( aStyleElemMap );
     }
     return *pStyleElemTokenMap;
 }
@@ -548,7 +533,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleAttrTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pStyleAttrTokenMap = new SvXMLTokenMap( aStyleAttrMap );
+        pStyleAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>( aStyleAttrMap );
     }
     return *pStyleAttrTokenMap;
 }
@@ -594,7 +579,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        pStyleElemAttrTokenMap = new SvXMLTokenMap( aStyleElemAttrMap );
+        pStyleElemAttrTokenMap = o3tl::make_unique<SvXMLTokenMap>( aStyleElemAttrMap );
     }
     return *pStyleElemAttrTokenMap;
 }
@@ -602,7 +587,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
 const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
 {
     if ( !pLocaleData )
-        pLocaleData = new LocaleDataWrapper(
+        pLocaleData = o3tl::make_unique<LocaleDataWrapper>(
                pFormatter ? pFormatter->GetComponentContext() : m_xContext,
             LanguageTag( nLang ) );
     else
