@@ -689,8 +689,8 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     , m_pDeletionWatcher(nullptr)
 
     , aFmtLb( VclPtr<SfxActionListBox>::Create(this, WB_BORDER | WB_TABSTOP | WB_SORT | WB_QUICK_SEARCH) )
-    , aFilterLb( VclPtr<ListBox>::Create(pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP) )
     , aPreviewCheckbox( VclPtr<CheckBox>::Create( pW, WB_VCENTER ))
+    , aFilterLb( VclPtr<ListBox>::Create(pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP) )
 
     , nActFamily(0xffff)
     , nActFilter(0)
@@ -917,8 +917,8 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
     if ( m_pDeletionWatcher )
         m_pDeletionWatcher->signal();
     aFmtLb.disposeAndClear();
-    aFilterLb.disposeAndClear();
     aPreviewCheckbox.disposeAndClear();
+    aFilterLb.disposeAndClear();
 }
 
 // Helper function: Access to the current family item
