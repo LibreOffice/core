@@ -157,7 +157,6 @@ XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
 {
     // The XMLTextListAutoStylePoolEntry_Impl object in the pool need delete explicitly in dtor.
     pPool->DeleteAndDestroyAll();
-    delete pPool;
 }
 
 void XMLTextListAutoStylePool::RegisterName( const OUString& rName )

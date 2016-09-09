@@ -25,6 +25,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/ucb/XAnyCompare.hpp>
+#include <memory>
 #include <set>
 
 namespace com { namespace sun { namespace star { namespace container {
@@ -42,7 +43,7 @@ class XMLOFF_DLLPUBLIC XMLTextListAutoStylePool
 
     OUString sPrefix;
 
-    XMLTextListAutoStylePool_Impl *pPool;
+    std::unique_ptr<XMLTextListAutoStylePool_Impl> pPool;
     XMLTextListAutoStylePoolNames_Impl m_aNames;
     sal_uInt32 nName;
 
