@@ -40,9 +40,11 @@ bool StarOfficeWriterImportFilter::doImportDocument(librevenge::RVNGInputStream 
     STOFFDocument::Kind docKind = STOFFDocument::STOFF_K_UNKNOWN;
     const STOFFDocument::Confidence confidence = STOFFDocument::isFileFormatSupported(&rInput, docKind);
     OString aUtf8Passwd;
-    if (confidence==STOFFDocument::STOFF_C_SUPPORTED_ENCRYPTION) {
+    if (confidence==STOFFDocument::STOFF_C_SUPPORTED_ENCRYPTION)
+    {
         // try to ask for a password
-        try {
+        try
+        {
             ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg(nullptr);
             aPasswdDlg->SetMinLen(0);
             if (!aPasswdDlg->Execute())
@@ -50,7 +52,8 @@ bool StarOfficeWriterImportFilter::doImportDocument(librevenge::RVNGInputStream 
             OUString aPasswd = aPasswdDlg->GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
         }
-        catch (...) {
+        catch (...)
+        {
             // ok, we will probably guess it
         }
     }
@@ -101,7 +104,7 @@ throw (RuntimeException, std::exception)
 Sequence< OUString > SAL_CALL StarOfficeWriterImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
-    return Sequence< OUString >{"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
+    return Sequence< OUString > {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
 }
 
 extern "C"

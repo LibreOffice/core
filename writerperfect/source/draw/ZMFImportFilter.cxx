@@ -54,7 +54,7 @@ throw (RuntimeException, std::exception)
 Sequence< OUString > SAL_CALL ZMFImportFilter::getSupportedServiceNames()
 throw (RuntimeException, std::exception)
 {
-    return Sequence< OUString >{"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
+    return Sequence< OUString > {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
 }
 
 extern "C"
