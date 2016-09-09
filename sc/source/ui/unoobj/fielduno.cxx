@@ -1392,11 +1392,8 @@ sal_Bool SAL_CALL ScEditFieldObj::supportsService( const OUString& rServiceName 
 uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextField";
-    pArray[1] = "com.sun.star.text.TextContent";
-    return aRet;
+    return {"com.sun.star.text.TextField",
+            "com.sun.star.text.TextContent"};
 }
 
 uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes() throw(uno::RuntimeException, std::exception)

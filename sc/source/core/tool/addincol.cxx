@@ -436,14 +436,10 @@ void ScUnoAddInCollection::ReadConfiguration()
                 aFuncPropPath += pFuncNameArray[nFuncPos];
                 aFuncPropPath += sSlash;
 
-                uno::Sequence<OUString> aFuncPropNames(CFG_FUNCPROP_COUNT);
-                OUString* pNameArray = aFuncPropNames.getArray();
-                pNameArray[CFG_FUNCPROP_DISPLAYNAME] = aFuncPropPath
-                    + CFGSTR_DISPLAYNAME;
-                pNameArray[CFG_FUNCPROP_DESCRIPTION] = aFuncPropPath
-                    + CFGSTR_DESCRIPTION;
-                pNameArray[CFG_FUNCPROP_CATEGORY] = aFuncPropPath
-                    + CFGSTR_CATEGORY;
+                uno::Sequence<OUString> aFuncPropNames{
+                    (aFuncPropPath + CFGSTR_DISPLAYNAME), // CFG_FUNCPROP_DISPLAYNAME
+                    (aFuncPropPath + CFGSTR_DESCRIPTION), // CFG_FUNCPROP_DESCRIPTION
+                    (aFuncPropPath + CFGSTR_CATEGORY)};   // CFG_FUNCPROP_CATEGORY
 
                 uno::Sequence<uno::Any> aFuncProperties = rAddInConfig.GetProperties( aFuncPropNames );
                 if ( aFuncProperties.getLength() == CFG_FUNCPROP_COUNT )

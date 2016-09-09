@@ -300,11 +300,10 @@ sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const OUString& rServ
 uno::Sequence<OUString> SAL_CALL ScAddressConversionObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = bIsRange ? OUString(SC_SERVICENAME_RANGEADDRESS)
-                         : OUString(SC_SERVICENAME_CELLADDRESS);
-    return aRet;
+    if (bIsRange)
+        return {SC_SERVICENAME_RANGEADDRESS};
+    else
+        return {SC_SERVICENAME_CELLADDRESS};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

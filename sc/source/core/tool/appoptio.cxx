@@ -216,14 +216,12 @@ static void lcl_GetSortList( Any& rDest )
 #define SCLAYOUTOPT_ZOOMTYPE        3
 #define SCLAYOUTOPT_SYNCZOOM        4
 #define SCLAYOUTOPT_STATUSBARMULTI  5
-#define SCLAYOUTOPT_COUNT           6
 
 #define CFGPATH_INPUT       "Office.Calc/Input"
 
 #define SCINPUTOPT_LASTFUNCS        0
 #define SCINPUTOPT_AUTOINPUT        1
 #define SCINPUTOPT_DET_AUTO         2
-#define SCINPUTOPT_COUNT            3
 
 #define CFGPATH_REVISION    "Office.Calc/Revision/Color"
 
@@ -231,29 +229,24 @@ static void lcl_GetSortList( Any& rDest )
 #define SCREVISOPT_INSERTION        1
 #define SCREVISOPT_DELETION         2
 #define SCREVISOPT_MOVEDENTRY       3
-#define SCREVISOPT_COUNT            4
 
 #define CFGPATH_CONTENT     "Office.Calc/Content/Update"
 
 #define SCCONTENTOPT_LINK           0
-#define SCCONTENTOPT_COUNT          1
 
 #define CFGPATH_SORTLIST    "Office.Calc/SortList"
 
 #define SCSORTLISTOPT_LIST          0
-#define SCSORTLISTOPT_COUNT         1
 
 #define CFGPATH_MISC        "Office.Calc/Misc"
 
 #define SCMISCOPT_DEFOBJWIDTH       0
 #define SCMISCOPT_DEFOBJHEIGHT      1
 #define SCMISCOPT_SHOWSHAREDDOCWARN 2
-#define SCMISCOPT_COUNT             3
 
 #define CFGPATH_COMPAT      "Office.Calc/Compatibility"
 
 #define SCCOMPATOPT_KEY_BINDING     0
-#define SCCOMPATOPT_COUNT           1
 
 // Default value of Layout/Other/StatusbarMultiFunction
 #define SCLAYOUTOPT_STATUSBARMULTI_DEFAULTVAL         514
@@ -275,116 +268,50 @@ static sal_uInt32 lcl_ConvertStatusBarFuncSetToSingle( sal_uInt32 nFuncSet )
 
 Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "Other/MeasureUnit/NonMetric",  // SCLAYOUTOPT_MEASURE
-        "Other/StatusbarFunction",      // SCLAYOUTOPT_STATUSBAR
-        "Zoom/Value",                   // SCLAYOUTOPT_ZOOMVAL
-        "Zoom/Type",                    // SCLAYOUTOPT_ZOOMTYPE
-        "Zoom/Synchronize",             // SCLAYOUTOPT_SYNCZOOM
-        "Other/StatusbarMultiFunction"  // SCLAYOUTOPT_STATUSBARMULTI
-    };
-    Sequence<OUString> aNames(SCLAYOUTOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < SCLAYOUTOPT_COUNT; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    const bool bIsMetric = ScOptionsUtil::IsMetricSystem();
 
-    //  adjust for metric system
-    if (ScOptionsUtil::IsMetricSystem())
-        pNames[SCLAYOUTOPT_MEASURE] = "Other/MeasureUnit/Metric";
-
-    return aNames;
+    return {(bIsMetric ? OUString("Other/MeasureUnit/Metric")
+                       : OUString("Other/MeasureUnit/NonMetric")),        // SCLAYOUTOPT_ZOOMVAL
+             "Zoom/Type",                                                 // SCLAYOUTOPT_ZOOMTYPE
+             "Zoom/Synchronize",                                          // SCLAYOUTOPT_SYNCZOOM
+             "Other/StatusbarMultiFunction"};                             // SCLAYOUTOPT_STATUSBARMULTI
 }
 
 Sequence<OUString> ScAppCfg::GetInputPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "LastFunctions",            // SCINPUTOPT_LASTFUNCS
-        "AutoInput",                // SCINPUTOPT_AUTOINPUT
-        "DetectiveAuto"             // SCINPUTOPT_DET_AUTO
-    };
-    Sequence<OUString> aNames(SCINPUTOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < SCINPUTOPT_COUNT; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
+    return {"LastFunctions",            // SCINPUTOPT_LASTFUNCS
+            "AutoInput",                // SCINPUTOPT_AUTOINPUT
+            "DetectiveAuto"};           // SCINPUTOPT_DET_AUTO
 }
 
 Sequence<OUString> ScAppCfg::GetRevisionPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "Change",                   // SCREVISOPT_CHANGE
-        "Insertion",                // SCREVISOPT_INSERTION
-        "Deletion",                 // SCREVISOPT_DELETION
-        "MovedEntry"                // SCREVISOPT_MOVEDENTRY
-    };
-    Sequence<OUString> aNames(SCREVISOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < SCREVISOPT_COUNT; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
+    return {"Change",                   // SCREVISOPT_CHANGE
+            "Insertion",                // SCREVISOPT_INSERTION
+            "Deletion",                 // SCREVISOPT_DELETION
+            "MovedEntry"};              // SCREVISOPT_MOVEDENTRY
 }
 
 Sequence<OUString> ScAppCfg::GetContentPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "Link"                      // SCCONTENTOPT_LINK
-    };
-    Sequence<OUString> aNames(SCCONTENTOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < SCCONTENTOPT_COUNT; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
+    return {"Link"};                    // SCCONTENTOPT_LINK
 }
 
 Sequence<OUString> ScAppCfg::GetSortListPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "List"                      // SCSORTLISTOPT_LIST
-    };
-    Sequence<OUString> aNames(SCSORTLISTOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < SCSORTLISTOPT_COUNT; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
+    return {"List"};                    // SCSORTLISTOPT_LIST
 }
 
 Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "DefaultObjectSize/Width",      // SCMISCOPT_DEFOBJWIDTH
-        "DefaultObjectSize/Height",     // SCMISCOPT_DEFOBJHEIGHT
-        "SharedDocument/ShowWarning"    // SCMISCOPT_SHOWSHAREDDOCWARN
-    };
-    Sequence<OUString> aNames(SCMISCOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < SCMISCOPT_COUNT; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
+    return {"DefaultObjectSize/Width",      // SCMISCOPT_DEFOBJWIDTH
+            "DefaultObjectSize/Height",     // SCMISCOPT_DEFOBJHEIGHT
+            "SharedDocument/ShowWarning"};  // SCMISCOPT_SHOWSHAREDDOCWARN
 }
 
 Sequence<OUString> ScAppCfg::GetCompatPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "KeyBindings/BaseGroup"         // SCCOMPATOPT_KEY_BINDING
-    };
-    Sequence<OUString> aNames(SCCOMPATOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for (int i = 0; i < SCCOMPATOPT_COUNT; ++i)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
+    return {"KeyBindings/BaseGroup"};   // SCCOMPATOPT_KEY_BINDING
 }
 
 ScAppCfg::ScAppCfg() :

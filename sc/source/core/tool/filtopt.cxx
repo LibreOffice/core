@@ -32,22 +32,12 @@ using namespace css::uno;
 #define SCFILTOPT_COLSCALE      0
 #define SCFILTOPT_ROWSCALE      1
 #define SCFILTOPT_WK3           2
-#define SCFILTOPT_COUNT         3
 
 Sequence<OUString> ScFilterOptions::GetPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "MS_Excel/ColScale",            // SCFILTOPT_COLSCALE
-        "MS_Excel/RowScale",            // SCFILTOPT_ROWSCALE
-        "Lotus123/WK3"                  // SCFILTOPT_WK3
-    };
-    Sequence<OUString> aNames(SCFILTOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < SCFILTOPT_COUNT; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
+    return {"MS_Excel/ColScale",            // SCFILTOPT_COLSCALE
+            "MS_Excel/RowScale",            // SCFILTOPT_ROWSCALE
+            "Lotus123/WK3"};                // SCFILTOPT_WK3
 }
 
 ScFilterOptions::ScFilterOptions() :

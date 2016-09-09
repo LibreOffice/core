@@ -273,16 +273,18 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                       aPrintRangeOpt);
 
     // create a choice for the content to create
-    uno::Sequence< OUString > aChoices( 3 ), aHelpIds( 3 ), aWidgetIds( 3 );
-    aChoices[0] = SC_RESSTR( SCSTR_PRINTOPT_ALLSHEETS );
-    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0";
-    aWidgetIds[0] = "printallsheets";
-    aChoices[1] = SC_RESSTR( SCSTR_PRINTOPT_SELECTEDSHEETS );
-    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1";
-    aWidgetIds[1] = "printselectedsheets";
-    aChoices[2] = SC_RESSTR( SCSTR_PRINTOPT_SELECTEDCELLS );
-    aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2";
-    aWidgetIds[2] = "printselectedcells";
+    uno::Sequence< OUString > aChoices{
+        SC_RESSTR( SCSTR_PRINTOPT_ALLSHEETS ),
+        SC_RESSTR( SCSTR_PRINTOPT_SELECTEDSHEETS ),
+        SC_RESSTR( SCSTR_PRINTOPT_SELECTEDCELLS )};
+    uno::Sequence< OUString > aHelpIds{
+        ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0",
+        ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1",
+        ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2"};
+    uno::Sequence< OUString > aWidgetIds{
+        "printallsheets",
+        "printselectedsheets",
+        "printselectedcells"};
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                     aHelpIds, "PrintContent",
                                                     aChoices, nContent );
@@ -2578,11 +2580,7 @@ sal_Bool SAL_CALL ScModelObj::supportsService( const OUString& rServiceName )
 uno::Sequence<OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(3);
-    aRet[0] = SCMODELOBJ_SERVICE;
-    aRet[1] = SCDOCSETTINGS_SERVICE;
-    aRet[2] = SCDOC_SERVICE;
-    return aRet;
+    return {SCMODELOBJ_SERVICE, SCDOCSETTINGS_SERVICE, SCDOC_SERVICE};
 }
 
 // XUnoTunnel

@@ -87,21 +87,11 @@ SfxPoolItem* ScTpDefaultsItem::Clone( SfxItemPool * ) const
 
 #define SCDEFAULTSOPT_TAB_COUNT  0
 #define SCDEFAULTSOPT_TAB_PREFIX 1
-#define SCDEFAULTSOPT_COUNT      2
 
 Sequence<OUString> ScDefaultsCfg::GetPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "Sheet/SheetCount", // SCDEFAULTSOPT_TAB_COUNT
-        "Sheet/SheetPrefix" // SCDEFAULTSOPT_TAB_PREFIX
-    };
-    Sequence<OUString> aNames(SCDEFAULTSOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for (int i = 0; i < SCDEFAULTSOPT_COUNT; ++i)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
+    return {"Sheet/SheetCount",   // SCDEFAULTSOPT_TAB_COUNT
+            "Sheet/SheetPrefix"}; // SCDEFAULTSOPT_TAB_PREFIX
 }
 
 ScDefaultsCfg::ScDefaultsCfg() :

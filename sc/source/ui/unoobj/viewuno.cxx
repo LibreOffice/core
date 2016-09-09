@@ -2170,11 +2170,7 @@ sal_Bool SAL_CALL ScTabViewObj::supportsService( const OUString& rServiceName )
 uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCTABVIEWOBJ_SERVICE;
-    pArray[1] = SCVIEWSETTINGS_SERVICE;
-    return aRet;
+    return {SCTABVIEWOBJ_SERVICE, SCVIEWSETTINGS_SERVICE};
 }
 
 // XUnoTunnel
