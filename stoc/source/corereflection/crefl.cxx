@@ -43,8 +43,6 @@ using namespace osl;
 namespace stoc_corefl
 {
 
-static const sal_Int32 CACHE_SIZE = 256;
-
 #define IMPLNAME    "com.sun.star.comp.stoc.CoreReflection"
 
 static Sequence< OUString > core_getSupportedServiceNames()
@@ -61,7 +59,7 @@ static OUString core_getImplementationName()
 IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     const Reference< XComponentContext > & xContext )
     : OComponentHelper( _aComponentMutex )
-    , _aElements( CACHE_SIZE )
+    , _aElements()
 {
     xContext->getValueByName(
         "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) >>= _xTDMgr;

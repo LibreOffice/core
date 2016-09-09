@@ -70,10 +70,7 @@ private:
     void remove(Page * pPage);
 
 public:
-    inline SvDataPipe_Impl(sal_uInt32 nThePageSize = 1000,
-                           sal_uInt32 nTheMinPages = 100,
-                           sal_uInt32 nTheMaxPages
-                               = std::numeric_limits< sal_uInt32 >::max());
+    inline SvDataPipe_Impl();
 
     ~SvDataPipe_Impl();
 
@@ -92,9 +89,7 @@ public:
     SeekResult setReadPosition(sal_uInt32 nPosition);
 };
 
-SvDataPipe_Impl::SvDataPipe_Impl(sal_uInt32 nThePageSize,
-                                 sal_uInt32 nTheMinPages,
-                                 sal_uInt32 nTheMaxPages)
+SvDataPipe_Impl::SvDataPipe_Impl()
     : m_pFirstPage( nullptr )
     , m_pReadPage( nullptr )
     , m_pWritePage( nullptr )
@@ -102,11 +97,11 @@ SvDataPipe_Impl::SvDataPipe_Impl(sal_uInt32 nThePageSize,
     , m_nReadBufferSize( 0 )
     , m_nReadBufferFilled( 0 )
     , m_nPageSize(std::min< sal_uInt32 >(
-                          std::max< sal_uInt32 >(nThePageSize, sal_uInt32(1)),
+                          1000,
                           sal_uInt32(std::numeric_limits< sal_uInt32 >::max()
                                      - sizeof (Page) + 1)))
-    , m_nMinPages(std::max< sal_uInt32 >(nTheMinPages, sal_uInt32(1)))
-    , m_nMaxPages(std::max< sal_uInt32 >(nTheMaxPages, sal_uInt32(1)))
+    , m_nMinPages(100)
+    , m_nMaxPages(std::numeric_limits< sal_uInt32 >::max())
     , m_nPages( 0 )
     , m_bEOF( false )
 {}

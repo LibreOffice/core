@@ -219,12 +219,11 @@ public:
 
             void                init(
                                     const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                    LanguageType eLang,
-                                    css::i18n::TransliterationModules nTypeP
+                                    LanguageType eLang
                                     )
                                     {
                                         m_xContext = rxContext;
-                                        nType = nTypeP;
+                                        nType = css::i18n::TransliterationModules_IGNORE_CASE;
                                         changeLocale( eLang );
                                         if ( pPtr )
                                         {

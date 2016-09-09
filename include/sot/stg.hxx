@@ -101,7 +101,7 @@ public:
     virtual bool                Revert() = 0;
     virtual BaseStorageStream*  OpenStream( const OUString & rEleName,
                                             StreamMode = StreamMode::STD_READWRITE,
-                                            bool bDirect = true, const OString* pKey=nullptr ) = 0;
+                                            bool bDirect = true ) = 0;
     virtual BaseStorage*        OpenStorage( const OUString & rEleName,
                                              StreamMode = StreamMode::STD_READWRITE,
                                              bool bDirect = false ) = 0;
@@ -189,7 +189,7 @@ public:
     virtual bool                Revert() override;
     virtual BaseStorageStream*  OpenStream( const OUString & rEleName,
                                             StreamMode = StreamMode::STD_READWRITE,
-                                            bool bDirect = true, const OString* pKey=nullptr ) override;
+                                            bool bDirect = true ) override;
     virtual BaseStorage*        OpenStorage( const OUString & rEleName,
                                              StreamMode = StreamMode::STD_READWRITE,
                                              bool bDirect = false ) override;
@@ -292,7 +292,7 @@ public:
     virtual bool                Revert() override;
     virtual BaseStorageStream*  OpenStream( const OUString & rEleName,
                                             StreamMode = StreamMode::STD_READWRITE,
-                                            bool bDirect = true, const OString* pKey=nullptr ) override;
+                                            bool bDirect = true ) override;
     virtual BaseStorage*        OpenStorage( const OUString & rEleName,
                                              StreamMode = StreamMode::STD_READWRITE,
                                              bool bDirect = false ) override;

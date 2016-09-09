@@ -28,8 +28,6 @@
 #include <osl/mutex.hxx>
 #include <store/store.hxx>
 
-#define REG_PAGESIZE 512
-
 // 5 bytes = 1 (byte for the type) + 4 (bytes for the size of the data)
 #define VALUE_HEADERSIZE    5
 #define VALUE_TYPEOFFSET    1

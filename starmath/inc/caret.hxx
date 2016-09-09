@@ -130,11 +130,10 @@ public:
     ~SmCaretPosGraph();
 
     /** Add a caret position
-     *  @remarks If left and/or right are set NULL, they will point back to the entry.
+     *  @remarks If left is NULL, they will point back to the entry.
      */
     SmCaretPosGraphEntry* Add(SmCaretPos pos,
-                            SmCaretPosGraphEntry* left = nullptr,
-                            SmCaretPosGraphEntry* right = nullptr);
+                            SmCaretPosGraphEntry* left = nullptr);
 
     std::vector<std::unique_ptr<SmCaretPosGraphEntry>>::iterator begin()
     {

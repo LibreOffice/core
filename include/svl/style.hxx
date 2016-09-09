@@ -306,7 +306,7 @@ enum SfxStyleSheetHintId
 class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
 {
 public:
-                         SfxStyleSheetPoolHint(SfxStyleSheetHintId ) {}
+                         SfxStyleSheetPoolHint() {}
 };
 
 
