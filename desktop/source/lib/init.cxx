@@ -392,10 +392,12 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
                                 long* pHeight);
 static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
                                        const char* pArguments);
-
+static void doc_setCallbackLatch(LibreOfficeKitDocument* pThis,
+                                 bool bCallbackLatch);
 static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                                 LibreOfficeKitCallback pCallback,
-                                void* pData);
+                                void* pData,
+                                bool bCallbackLatch = false);
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nType,
                              int nCharCode,
@@ -468,6 +470,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getTileMode = doc_getTileMode;
         m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
         m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
+        m_pDocumentClass->setCallbackLatch = doc_setCallbackLatch;
         m_pDocumentClass->registerCallback = doc_registerCallback;
         m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
         m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
@@ -1558,9 +1561,22 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
     }
 }
 
+static void doc_setCallbackLatch(LibreOfficeKitDocument* pThis, bool bCallbackLatch)
+{
+    SolarMutexGuard aGuard;
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    int nView = SfxLokHelper::getView();
+    if (nView < 0)
+        return;
+
+    if (pDocument->mpCallbackFlushHandlers[nView])
+        pDocument->mpCallbackFlushHandlers[nView]->setEventLatch(bCallbackLatch);
+}
+
 static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                                  LibreOfficeKitCallback pCallback,
-                                 void* pData)
+                                 void* pData, bool bCallbackLatch)
 {
     SolarMutexGuard aGuard;
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
@@ -1596,6 +1612,8 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 
     if (pCallback != nullptr)
     {
+        pDocument->mpCallbackFlushHandlers[nView]->setEventLatch(bCallbackLatch);
+
         size_t nId = nView;
         for (const auto& pair : pDocument->mpCallbackFlushHandlers)
         {

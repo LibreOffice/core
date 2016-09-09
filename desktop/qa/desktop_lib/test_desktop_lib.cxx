@@ -365,7 +365,7 @@ void DesktopLOKTest::testSearchCalc()
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this, /*callback latch*/ false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
@@ -400,7 +400,7 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("search.ods");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this, /*callback latch*/ false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
@@ -684,7 +684,7 @@ void DesktopLOKTest::testCommandResult()
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
 
     // but we get some real values when the callback is set up
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this, /*callback latch*/ false);
 
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
@@ -703,7 +703,7 @@ void DesktopLOKTest::testWriterComments()
 {
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this, /*callback latch*/ false);
     uno::Reference<awt::XReschedule> xToolkit(com::sun::star::awt::Toolkit::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY);
 
     // Insert a comment at the beginning of the document and wait till the main
@@ -747,7 +747,7 @@ void DesktopLOKTest::testModifiedStatus()
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this, /*callback latch*/ false);
 
     // Type "t" and check that the document was set as modified
     m_bModified = false;
@@ -811,10 +811,10 @@ void DesktopLOKTest::testTrackChanges()
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this, /*callback latch*/ false);
     pDocument->pClass->createView(pDocument);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this, /*callback latch*/ false);
     Scheduler::ProcessEventsToIdle();
 
     // Enable trak changes and assert that both views get notified.
@@ -864,7 +864,7 @@ void DesktopLOKTest::testSheetSelections()
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods", LOK_DOCTYPE_SPREADSHEET);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this, /*callback latch*/ false);
 
     /*
      * Check if selection data is correct
@@ -1025,7 +1025,7 @@ void DesktopLOKTest::testContextMenuCalc()
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods", LOK_DOCTYPE_SPREADSHEET);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this, /*callback latch*/ false);
 
     // Values in twips
     int row5 = 1150;
@@ -1053,7 +1053,7 @@ void DesktopLOKTest::testContextMenuWriter()
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt", LOK_DOCTYPE_TEXT);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this, /*callback latch*/ false);
 
     Point aRandomPoint(1150, 1100);
     pDocument->pClass->postMouseEvent(pDocument,
@@ -1078,7 +1078,7 @@ void DesktopLOKTest::testContextMenuImpress()
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp", LOK_DOCTYPE_PRESENTATION);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
-    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
+    pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this, /*callback latch*/ false);
 
     Point aRandomPoint(1150, 1100);
     pDocument->pClass->postMouseEvent(pDocument,
