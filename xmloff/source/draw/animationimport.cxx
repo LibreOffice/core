@@ -625,16 +625,16 @@ AnimationNodeContext::AnimationNodeContext(
         const Reference< XAnimationNode >& xParentNode,
         SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        AnimationsImportHelperImpl* pHelper /* = NULL */ )
+        std::shared_ptr<AnimationsImportHelperImpl> pHelper )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpHelper( pHelper ),
-    mbRootContext( pHelper == nullptr )
+    mbRootContext( !pHelper )
 {
     try
     {
         if( mbRootContext )
         {
-            mpHelper = new AnimationsImportHelperImpl( rImport );
+            mpHelper = std::make_shared<AnimationsImportHelperImpl>( rImport );
             mxNode = xParentNode;
         }
         else
@@ -718,12 +718,6 @@ AnimationNodeContext::AnimationNodeContext(
     {
         OSL_FAIL( "xmloff::AnimationsImportImpl::AnimationsImportImpl(), RuntimeException caught!" );
     }
-}
-
-AnimationNodeContext::~AnimationNodeContext()
-{
-    if( mbRootContext )
-        delete mpHelper;
 }
 
 void AnimationNodeContext::StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& )

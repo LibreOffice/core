@@ -20,6 +20,8 @@
 #ifndef INCLUDED_XMLOFF_INC_ANIMATIONIMPORT_HXX
 #define INCLUDED_XMLOFF_INC_ANIMATIONIMPORT_HXX
 
+#include <memory>
+
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 
@@ -31,7 +33,7 @@ class AnimationsImportHelperImpl;
 
 class AnimationNodeContext : public SvXMLImportContext
 {
-    AnimationsImportHelperImpl* mpHelper;
+    std::shared_ptr<AnimationsImportHelperImpl> mpHelper;
     bool mbRootContext;
     css::uno::Reference< css::animations::XAnimationNode > mxNode;
 
@@ -45,8 +47,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        AnimationsImportHelperImpl* mpImpl = nullptr );
-    virtual ~AnimationNodeContext();
+        std::shared_ptr<AnimationsImportHelperImpl> pImpl = nullptr );
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
