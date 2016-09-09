@@ -45,6 +45,7 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     , nCurrPos(-1)
 {
     pFormatter = pFormatterP;
+    xNFC = css::i18n::NumberFormatMapper::create( pFormatter->GetComponentContext() );
     bConvertMode = false;
     bConvertSystemToSystem = false;
     //! All keywords MUST be UPPERCASE!
@@ -202,7 +203,6 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     const LanguageTag& rLoadedLocale = pLocaleData->getLoadedLanguageTag();
     LanguageType eLang = rLoadedLocale.getLanguageType( false);
 
-    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( pFormatter->GetComponentContext() );
     i18n::NumberFormatCode aFormat = xNFC->getFormatCode( NF_NUMBER_STANDARD, rLoadedLocale.getLocale() );
     sNameStandardFormat = lcl_extractStandardGeneralName( aFormat.Code );
     sKeyword[NF_KEY_GENERAL] = pCharClass->uppercase( sNameStandardFormat );
@@ -624,10 +624,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                                           sal_Int32& nPos,
                                           OUString& sSymbol )
 {
-    if ( bKeywordsNeedInit )
-    {
-        InitKeywords();
-    }
+    InitKeywords();
     const CharClass* pChrCls = pFormatter->GetCharClass();
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
     short eType = 0;
