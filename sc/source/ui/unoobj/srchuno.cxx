@@ -204,11 +204,7 @@ sal_Bool SAL_CALL ScCellSearchObj::supportsService( const OUString& rServiceName
 uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCSEARCHDESCRIPTOR_SERVICE;
-    pArray[1] = SCREPLACEDESCRIPTOR_SERVICE;
-    return aRet;
+    return {SCSEARCHDESCRIPTOR_SERVICE, SCREPLACEDESCRIPTOR_SERVICE};
 }
 
 // XUnoTunnel

@@ -435,10 +435,7 @@ sal_Bool SAL_CALL ScNamedRangeObj::supportsService( const OUString& rServiceName
 uno::Sequence<OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(2);
-    aRet[0] = SCNAMEDRANGEOBJ_SERVICE;
-    aRet[1] = SCLINKTARGET_SERVICE;
-    return aRet;
+    return {SCNAMEDRANGEOBJ_SERVICE, SCLINKTARGET_SERVICE};
 }
 
 // XUnoTunnel

@@ -226,11 +226,7 @@ sal_Bool SAL_CALL ScFunctionAccess::supportsService( const OUString& rServiceNam
 uno::Sequence<OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()
                                                     throw(uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCFUNCTIONACCESS_SERVICE;
-    pArray[1] = SCDOCSETTINGS_SERVICE;
-    return aRet;
+    return {SCFUNCTIONACCESS_SERVICE, SCDOCSETTINGS_SERVICE};
 }
 
 // XPropertySet (document settings)

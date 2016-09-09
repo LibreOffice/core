@@ -185,55 +185,34 @@ SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 #define SCCALCOPT_FINDLABEL         10
 #define SCCALCOPT_REGEX             11
 #define SCCALCOPT_WILDCARDS         12
-#define SCCALCOPT_COUNT             13
 
 #define CFGPATH_DOCLAYOUT   "Office.Calc/Layout/Other"
 
 #define SCDOCLAYOUTOPT_TABSTOP      0
-#define SCDOCLAYOUTOPT_COUNT        1
 
 Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "IterativeReference/Iteration",     // SCCALCOPT_ITER_ITER
-        "IterativeReference/Steps",         // SCCALCOPT_ITER_STEPS
-        "IterativeReference/MinimumChange", // SCCALCOPT_ITER_MINCHG
-        "Other/Date/DD",                    // SCCALCOPT_DATE_DAY
-        "Other/Date/MM",                    // SCCALCOPT_DATE_MONTH
-        "Other/Date/YY",                    // SCCALCOPT_DATE_YEAR
-        "Other/DecimalPlaces",              // SCCALCOPT_DECIMALS
-        "Other/CaseSensitive",              // SCCALCOPT_CASESENSITIVE
-        "Other/Precision",                  // SCCALCOPT_PRECISION
-        "Other/SearchCriteria",             // SCCALCOPT_SEARCHCRIT
-        "Other/FindLabel",                  // SCCALCOPT_FINDLABEL
-        "Other/RegularExpressions",         // SCCALCOPT_REGEX
-        "Other/Wildcards",                  // SCCALCOPT_WILDCARDS
-    };
-    Sequence<OUString> aNames(SCCALCOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < SCCALCOPT_COUNT; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    return aNames;
+    return {"IterativeReference/Iteration",     // SCCALCOPT_ITER_ITER
+            "IterativeReference/Steps",         // SCCALCOPT_ITER_STEPS
+            "IterativeReference/MinimumChange", // SCCALCOPT_ITER_MINCHG
+            "Other/Date/DD",                    // SCCALCOPT_DATE_DAY
+            "Other/Date/MM",                    // SCCALCOPT_DATE_MONTH
+            "Other/Date/YY",                    // SCCALCOPT_DATE_YEAR
+            "Other/DecimalPlaces",              // SCCALCOPT_DECIMALS
+            "Other/CaseSensitive",              // SCCALCOPT_CASESENSITIVE
+            "Other/Precision",                  // SCCALCOPT_PRECISION
+            "Other/SearchCriteria",             // SCCALCOPT_SEARCHCRIT
+            "Other/FindLabel",                  // SCCALCOPT_FINDLABEL
+            "Other/RegularExpressions",         // SCCALCOPT_REGEX
+            "Other/Wildcards"};                 // SCCALCOPT_WILDCARDS
 }
 
 Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "TabStop/NonMetric"         // SCDOCLAYOUTOPT_TABSTOP
-    };
-    Sequence<OUString> aNames(SCDOCLAYOUTOPT_COUNT);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < SCDOCLAYOUTOPT_COUNT; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-
-    //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
-        pNames[SCDOCLAYOUTOPT_TABSTOP] = "TabStop/Metric";
-
-    return aNames;
+        return {"TabStop/Metric"};    // SCDOCLAYOUTOPT_TABSTOP
+    else
+        return {"TabStop/NonMetric"}; // SCDOCLAYOUTOPT_TABSTOP
 }
 
 ScDocCfg::ScDocCfg() :

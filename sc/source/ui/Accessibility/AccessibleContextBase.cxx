@@ -470,15 +470,8 @@ uno::Sequence< OUString> SAL_CALL
        ScAccessibleContextBase::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence<OUString> aServiceNames(2);
-    OUString* pServiceNames = aServiceNames.getArray();
-    if (pServiceNames)
-    {
-        pServiceNames[0] = "com.sun.star.accessibility.Accessible";
-        pServiceNames[1] = "com.sun.star.accessibility.AccessibleContext";
-    }
-
-    return aServiceNames;
+    return {"com.sun.star.accessibility.Accessible",
+            "com.sun.star.accessibility.AccessibleContext"};
 }
 
 //=====  XTypeProvider  =======================================================
