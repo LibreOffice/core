@@ -1455,7 +1455,7 @@
           <value>subtle</value>
         </prop>
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Random Bars</value>
+          <value xml:lang="en-US">Bars</value>
         </prop>
       </node>
       <node oor:name="shape" oor:op="replace">
