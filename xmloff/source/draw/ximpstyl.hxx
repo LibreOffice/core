@@ -25,6 +25,7 @@
 #include "ximppage.hxx"
 #include <xmloff/xmlstyle.hxx>
 #include <com/sun/star/view/PaperOrientation.hpp>
+#include <memory>
 #include <vector>
 
 class SvNumberFormatter;
@@ -176,8 +177,8 @@ class SdXMLStylesContext : public SvXMLStylesContext
 {
     rtl::Reference< SvXMLImportPropertyMapper > xPresImpPropMapper;
     bool                    mbIsAutoStyle;
-    SvXMLNumFmtHelper*          mpNumFmtHelper;
-    SvNumberFormatter*          mpNumFormatter;
+    std::unique_ptr<SvXMLNumFmtHelper> mpNumFmtHelper;
+    std::unique_ptr<SvNumberFormatter> mpNumFormatter;
 
     const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
@@ -211,7 +212,6 @@ public:
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         bool bIsAutoStyle);
-    virtual ~SdXMLStylesContext();
 
     virtual sal_uInt16 GetFamily( const OUString& rFamily ) const override;
     virtual void EndElement() override;

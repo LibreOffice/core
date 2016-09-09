@@ -24,6 +24,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "ximpnote.hxx"
 #include <tools/debug.hxx>
+#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -923,14 +924,8 @@ SdXMLStylesContext::SdXMLStylesContext(
     mbIsAutoStyle(bIsAutoStyle)
 {
     Reference< uno::XComponentContext > xContext = rImport.GetComponentContext();
-    mpNumFormatter = new SvNumberFormatter( xContext, LANGUAGE_SYSTEM );
-    mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter, xContext );
-}
-
-SdXMLStylesContext::~SdXMLStylesContext()
-{
-    delete mpNumFmtHelper;
-    delete mpNumFormatter;
+    mpNumFormatter = o3tl::make_unique<SvNumberFormatter>( xContext, LANGUAGE_SYSTEM );
+    mpNumFmtHelper = o3tl::make_unique<SvXMLNumFmtHelper>( mpNumFormatter.get(), xContext );
 }
 
 SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
