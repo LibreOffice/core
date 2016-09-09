@@ -154,6 +154,7 @@ private: // Private section
     OUString sNameStandardFormat;               // "Standard"
     sal_uInt16 nStandardPrec;                   // Default Precision for Standardformat
     SvNumberFormatter* pFormatter;              // Pointer to the FormatList
+    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC;
 
     OUString sStrArray[NF_MAX_FORMAT_SYMBOLS];  // Array of symbols
     short nTypeArray[NF_MAX_FORMAT_SYMBOLS];    // Array of infos
