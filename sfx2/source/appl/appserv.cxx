@@ -277,11 +277,11 @@ namespace
     private:
         DECL_LINK_TYPED(ShowHdl, Button*, void);
     public:
-        explicit LicenseDialog(vcl::Window *pParent=nullptr);
+        explicit LicenseDialog();
     };
 
-    LicenseDialog::LicenseDialog(vcl::Window *pParent)
-        : ModalDialog(pParent, "LicenseDialog", "sfx/ui/licensedialog.ui")
+    LicenseDialog::LicenseDialog()
+        : ModalDialog(nullptr, "LicenseDialog", "sfx/ui/licensedialog.ui")
     {
         get<PushButton>("show")->SetClickHdl(LINK(this, LicenseDialog, ShowHdl));
     }
@@ -396,9 +396,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 if ( pFrameItem )
                     xFrame = pFrameItem->GetFrame();
 
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabDialog(
-                    RID_SVXDLG_CUSTOMIZE,
-                    nullptr, &aSet, xFrame ));
+                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateCustomizeTabDialog(
+                    &aSet, xFrame ));
 
                 if ( pDlg )
                 {
@@ -1548,7 +1547,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), false, &pItem ) == SfxItemState::SET )
                     aSet.Put( *pItem );
 
-                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, nullptr, &aSet, nullptr ));
+                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog( &aSet ));
                 pDlg->Execute();
             }
 

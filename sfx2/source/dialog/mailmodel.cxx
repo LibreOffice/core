@@ -656,43 +656,17 @@ SfxMailModel::~SfxMailModel()
 {
 }
 
-void SfxMailModel::AddAddress( const OUString& rAddress, AddressRole eRole )
+void SfxMailModel::AddToAddress( const OUString& rAddress )
 {
     // don't add a empty address
     if ( !rAddress.isEmpty() )
     {
-        AddressList_Impl* pList = nullptr;
-        if ( ROLE_TO == eRole )
-        {
-            if ( !mpToList )
-                // create the list
-                mpToList.reset(new AddressList_Impl);
-            pList = mpToList.get();
-        }
-        else if ( ROLE_CC == eRole )
-        {
-            if ( !mpCcList )
-                // create the list
-                mpCcList.reset(new AddressList_Impl);
-            pList = mpCcList.get();
-        }
-        else if ( ROLE_BCC == eRole )
-        {
-            if ( !mpBccList )
-                // create the list
-                mpBccList.reset(new AddressList_Impl);
-            pList = mpBccList.get();
-        }
-        else
-        {
-            SAL_WARN( "sfx.dialog", "invalid address role" );
-        }
+        if ( !mpToList )
+            // create the list
+            mpToList.reset(new AddressList_Impl);
 
-        if ( pList )
-        {
-            // add address to list
-            pList->push_back( rAddress );
-        }
+        // add address to list
+        mpToList->push_back( rAddress );
     }
 }
 

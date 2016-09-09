@@ -180,7 +180,7 @@ class SFX2_DLLPUBLIC ThumbnailView : public Control
 {
 public:
 
-    ThumbnailView(vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP, bool bDisableTransientChildren = false);
+    ThumbnailView(vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP);
 
     virtual ~ThumbnailView();
     virtual void dispose() override;

@@ -176,14 +176,12 @@ public:
     virtual             ~SfxSingleTabDialog();
     virtual void        dispose() override;
 
-    void                SetTabPage(SfxTabPage* pTabPage, GetTabPageRanges pRangesFunc = nullptr, sal_uInt32 nSettingsId = 0);
+    void                SetTabPage(SfxTabPage* pTabPage, sal_uInt32 nSettingsId = 0);
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
 
     OKButton*           GetOKButton() const { return pOKBtn; }
 
 protected:
-    GetTabPageRanges    fnGetRanges;
-
     VclPtr<OKButton>      pOKBtn;
     VclPtr<CancelButton>  pCancelBtn;
     VclPtr<HelpButton>    pHelpBtn;

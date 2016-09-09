@@ -665,7 +665,6 @@ IMPL_LINK_NOARG_TYPED(SfxSingleTabDialog, OKHdl_Impl, Button*, void)
 SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet& rSet,
     const OUString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
-    , fnGetRanges(nullptr)
     , pImpl(new SingleTabDlgImpl)
 {
     get(pOKBtn, "ok");
@@ -678,7 +677,6 @@ SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet& r
 SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window* pParent, const SfxItemSet* pInSet,
     const OUString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
-    , fnGetRanges(nullptr)
     , pImpl(new SingleTabDlgImpl)
 {
     get(pOKBtn, "ok");
@@ -705,7 +703,7 @@ void SfxSingleTabDialog::dispose()
 }
 
 void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,
-    GetTabPageRanges pRangesFunc, sal_uInt32 nSettingsId)
+    sal_uInt32 nSettingsId)
 /*  [Description]
 
     Insert a (new) TabPage; an existing page is deleted.
@@ -717,7 +715,6 @@ void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,
     SetUniqId(nSettingsId);
     pImpl->m_pSfxPage.disposeAndClear();
     pImpl->m_pSfxPage = pTabPage;
-    fnGetRanges = pRangesFunc;
 
     if ( pImpl->m_pSfxPage )
     {

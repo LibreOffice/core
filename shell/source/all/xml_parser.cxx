@@ -69,9 +69,9 @@ namespace /* private */
     }
 }
 
-xml_parser::xml_parser(const XML_Char* EncodingName) :
+xml_parser::xml_parser() :
     document_handler_(nullptr),
-    xml_parser_(XML_ParserCreate(EncodingName))
+    xml_parser_(XML_ParserCreate(nullptr))
 {
     init();
 }

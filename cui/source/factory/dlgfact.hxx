@@ -467,12 +467,8 @@ public:
     virtual VclAbstractDialog*          CreateFrameDialog( const css::uno::Reference< css::frame::XFrame >& rxFrame,
                                                            sal_uInt32 nResId,
                                                            const OUString& rParameter ) override;
-    virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
-                                            vcl::Window* pParent,
-                                            const SfxItemSet* pAttrSet,
-                                            SfxViewFrame* pViewFrame ) override;
-    virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
-                                            vcl::Window* pParent,
+    virtual SfxAbstractTabDialog*       CreateAutoCorrTabDialog( const SfxItemSet* pAttrSet ) override;
+    virtual SfxAbstractTabDialog*       CreateCustomizeTabDialog(
                                             const SfxItemSet* pAttrSet,
                                             const css::uno::Reference< css::frame::XFrame >& xViewFrame ) override;
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( vcl::Window* pParent,

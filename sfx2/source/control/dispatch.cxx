@@ -457,9 +457,9 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     xImp->aIdle.SetIdleHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
 }
 
-SfxDispatcher::SfxDispatcher( SfxDispatcher* pParent )
+SfxDispatcher::SfxDispatcher()
 {
-    Construct_Impl( pParent );
+    Construct_Impl( nullptr );
     xImp->pFrame = nullptr;
 }
 
@@ -742,7 +742,7 @@ SfxViewFrame* SfxDispatcher::GetFrame() const
     are called with the handler <SfxShell::Activate(bool)>, starting with
     the lowest.
 */
-void SfxDispatcher::DoActivate_Impl(bool bMDI, SfxViewFrame* /* pOld */)
+void SfxDispatcher::DoActivate_Impl(bool bMDI)
 {
     SFX_STACK(SfxDispatcher::DoActivate);
     if ( bMDI )

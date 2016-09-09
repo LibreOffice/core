@@ -19,7 +19,7 @@ class TemplateSearchView : public ThumbnailView
 {
 public:
 
-    TemplateSearchView ( vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP | WB_VSCROLL);
+    TemplateSearchView ( vcl::Window* pParent);
 
     void setOpenTemplateHdl (const Link<ThumbnailViewItem*, void> &rLink);
 

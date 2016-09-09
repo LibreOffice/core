@@ -33,8 +33,8 @@ using namespace ::com::sun::star::frame;
 
 // Class SfxSaveAsTemplateDialog --------------------------------------------------
 
-SfxSaveAsTemplateDialog::SfxSaveAsTemplateDialog( vcl::Window* pParent):
-        ModalDialog(pParent, "SaveAsTemplateDialog", "sfx/ui/saveastemplatedlg.ui"),
+SfxSaveAsTemplateDialog::SfxSaveAsTemplateDialog():
+        ModalDialog(nullptr, "SaveAsTemplateDialog", "sfx/ui/saveastemplatedlg.ui"),
         msSelectedCategory(OUString()),
         msTemplateName(OUString()),
         mnRegionPos(0),

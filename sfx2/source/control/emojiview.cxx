@@ -65,8 +65,8 @@ bool ViewFilter_Category::operator () (const ThumbnailViewItem *pItem)
     return true;
 }
 
-EmojiView::EmojiView (vcl::Window *pParent, WinBits nWinStyle)
-    : ThumbnailView(pParent,nWinStyle)
+EmojiView::EmojiView (vcl::Window *pParent)
+    : ThumbnailView(pParent, WB_TABSTOP | WB_VSCROLL)
 {
     //locate json data file
     OUString sPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/emojiconfig/emoji.json");

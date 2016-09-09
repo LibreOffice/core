@@ -82,7 +82,7 @@ public:
     SfxMailModel();
     ~SfxMailModel();
 
-    void                AddAddress( const OUString& rAddress, AddressRole eRole );
+    void                AddToAddress( const OUString& rAddress );
     void                SetSubject( const OUString& rSubject )        { maSubject = rSubject; }
 
     /** attaches a document to the current attachment list, can be called more than once.

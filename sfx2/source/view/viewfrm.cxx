@@ -1077,7 +1077,7 @@ void SfxViewFrame::DoActivate( bool bUI )
 {
     SfxGetpApp();
 
-    m_pDispatcher->DoActivate_Impl( bUI, nullptr );
+    m_pDispatcher->DoActivate_Impl( bUI );
 
     // If this ViewFrame has got a parent and this is not a parent of the
     // old ViewFrames, it gets a ParentActivate.
