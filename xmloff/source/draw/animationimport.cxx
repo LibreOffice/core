@@ -53,6 +53,9 @@
 #include <sax/tools/converter.hxx>
 
 #include <list>
+
+#include <o3tl/make_unique.hxx>
+
 #include <xmloff/xmltypes.hxx>
 #include "sdpropls.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -106,12 +109,11 @@ class AnimationsImportHelperImpl
 private:
     SvXMLImport& mrImport;
 
-    SvXMLTokenMap* mpAnimationNodeTokenMap;
-    SvXMLTokenMap* mpAnimationNodeAttributeTokenMap;
+    std::unique_ptr<SvXMLTokenMap> mpAnimationNodeTokenMap;
+    std::unique_ptr<SvXMLTokenMap> mpAnimationNodeAttributeTokenMap;
 
 public:
     explicit AnimationsImportHelperImpl( SvXMLImport& rImport );
-    ~AnimationsImportHelperImpl();
 
     const SvXMLTokenMap& getAnimationNodeTokenMap();
     const SvXMLTokenMap& getAnimationNodeAttributeTokenMap();
@@ -127,16 +129,8 @@ public:
 };
 
 AnimationsImportHelperImpl::AnimationsImportHelperImpl( SvXMLImport& rImport )
-:   mrImport( rImport ),
-    mpAnimationNodeTokenMap( nullptr ),
-    mpAnimationNodeAttributeTokenMap( nullptr )
+:   mrImport( rImport )
 {
-}
-
-AnimationsImportHelperImpl::~AnimationsImportHelperImpl()
-{
-    delete mpAnimationNodeTokenMap;
-    delete mpAnimationNodeAttributeTokenMap;
 }
 
 const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeTokenMap()
@@ -159,7 +153,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeTokenMap()
             XML_TOKEN_MAP_END
         };
 
-        mpAnimationNodeTokenMap = new SvXMLTokenMap( aAnimationNodeTokenMap );
+        mpAnimationNodeTokenMap = o3tl::make_unique<SvXMLTokenMap>( aAnimationNodeTokenMap );
     }
 
     return *mpAnimationNodeTokenMap;
@@ -278,7 +272,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenM
             XML_TOKEN_MAP_END
         };
 
-        mpAnimationNodeAttributeTokenMap = new SvXMLTokenMap( aAnimationNodeAttributeTokenMap );
+        mpAnimationNodeAttributeTokenMap = o3tl::make_unique<SvXMLTokenMap>( aAnimationNodeAttributeTokenMap );
     }
 
     return *mpAnimationNodeAttributeTokenMap;
