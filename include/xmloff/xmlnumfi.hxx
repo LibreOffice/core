@@ -72,7 +72,7 @@ namespace com { namespace sun { namespace star { namespace lang {
 
 class SvXMLNumFmtHelper
 {
-    SvXMLNumImpData* pData;
+    std::unique_ptr<SvXMLNumImpData> pData;
 
 public:
     SvXMLNumFmtHelper(
@@ -91,7 +91,7 @@ public:
                 const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
                 SvXMLStylesContext& rStyles);
 
-    SvXMLNumImpData* getData() { return pData; }
+    SvXMLNumImpData* getData() { return pData.get(); }
 
     const SvXMLTokenMap&    GetStylesElemTokenMap();
 

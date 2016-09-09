@@ -18,6 +18,9 @@
  */
 
 #include <comphelper/string.hxx>
+
+#include <o3tl/make_unique.hxx>
+
 #include <unotools/syslocale.hxx>
 
 #include <svl/zforlist.hxx>
@@ -2307,7 +2310,7 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     if (pObj)
         pFormatter = pObj->GetNumberFormatter();
 
-    pData = new SvXMLNumImpData( pFormatter, rxContext );
+    pData = o3tl::make_unique<SvXMLNumImpData>( pFormatter, rxContext );
 }
 
 SvXMLNumFmtHelper::SvXMLNumFmtHelper(
@@ -2316,15 +2319,13 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
 {
     SAL_WARN_IF( !rxContext.is(), "xmloff", "got no service manager" );
 
-    pData = new SvXMLNumImpData( pNumberFormatter, rxContext );
+    pData = o3tl::make_unique<SvXMLNumImpData>( pNumberFormatter, rxContext );
 }
 
 SvXMLNumFmtHelper::~SvXMLNumFmtHelper()
 {
     //  remove temporary (volatile) formats from NumberFormatter
     pData->RemoveVolatileFormats();
-
-    delete pData;
 }
 
 SvXMLStyleContext*  SvXMLNumFmtHelper::CreateChildContext( SvXMLImport& rImport,
@@ -2346,7 +2347,7 @@ SvXMLStyleContext*  SvXMLNumFmtHelper::CreateChildContext( SvXMLImport& rImport,
         case XML_TOK_STYLES_BOOLEAN_STYLE:
         case XML_TOK_STYLES_TEXT_STYLE:
             pContext = new SvXMLNumFormatContext( rImport, nPrefix, rLocalName,
-                                                    pData, nToken, xAttrList, rStyles );
+                                                    pData.get(), nToken, xAttrList, rStyles );
             break;
     }
 
