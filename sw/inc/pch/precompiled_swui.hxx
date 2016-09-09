@@ -610,7 +610,6 @@
 #include <unotools/intlwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
-#include <unotools/numberformatcodewrapper.hxx>
 #include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/syslocale.hxx>

@@ -23,7 +23,6 @@
 
 #include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/numberformatcodewrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/digitgroupingiterator.hxx>
 #include <tools/debug.hxx>
@@ -35,6 +34,7 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
+#include <com/sun/star/i18n/NumberFormatMapper.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/instance.hxx>
@@ -750,9 +750,8 @@ void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
 
 void LocaleDataWrapper::getCurrFormatsImpl()
 {
-    NumberFormatCodeWrapper aNumberFormatCode( m_xContext, getMyLocale() );
-    uno::Sequence< NumberFormatCode > aFormatSeq
-        = aNumberFormatCode.getAllFormatCode( KNumberFormatUsage::CURRENCY );
+    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
+    uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::CURRENCY, getMyLocale() );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
     {   // bad luck
@@ -998,9 +997,8 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const OUString& rCode )
 
 void LocaleDataWrapper::getDateFormatsImpl()
 {
-    NumberFormatCodeWrapper aNumberFormatCode( m_xContext, getMyLocale() );
-    uno::Sequence< NumberFormatCode > aFormatSeq
-        = aNumberFormatCode.getAllFormatCode( KNumberFormatUsage::DATE );
+    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
+    uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::DATE, getMyLocale() );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
     {   // bad luck

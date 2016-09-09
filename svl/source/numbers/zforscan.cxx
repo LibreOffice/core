@@ -25,7 +25,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/numberformatcodewrapper.hxx>
+#include <com/sun/star/i18n/NumberFormatCode.hpp>
 
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -201,11 +201,10 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     // requested Locale, otherwise number format codes might not match
     const LanguageTag& rLoadedLocale = pLocaleData->getLoadedLanguageTag();
     LanguageType eLang = rLoadedLocale.getLanguageType( false);
-    NumberFormatCodeWrapper aNumberFormatCode( pFormatter->GetComponentContext(),
-            rLoadedLocale.getLocale() );
 
-    i18n::NumberFormatCode aFormat = aNumberFormatCode.getFormatCode( NF_NUMBER_STANDARD );
-    sNameStandardFormat = lcl_extractStandardGeneralName( aFormat.Code);
+    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( pFormatter->GetComponentContext() );
+    i18n::NumberFormatCode aFormat = xNFC->getFormatCode( NF_NUMBER_STANDARD, rLoadedLocale.getLocale() );
+    sNameStandardFormat = lcl_extractStandardGeneralName( aFormat.Code );
     sKeyword[NF_KEY_GENERAL] = pCharClass->uppercase( sNameStandardFormat );
 
     // preset new calendar keywords
