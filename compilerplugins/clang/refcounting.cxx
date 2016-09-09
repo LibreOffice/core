@@ -35,7 +35,6 @@ this is a bug =) since aFooMember assumes heap allocated lifecycle and
 not delete on last 'release'.
 
 TODO check that things that extend SvRefBase are managed by SvRef
-TODO fix the SvXMLImportContext class (mentioned below)
 TODO fix the slideshow::internal::SlideView class (mentioned below)
 */
 
@@ -136,11 +135,6 @@ bool containsXInterfaceSubclass(const Type* pType0) {
             return false;
         }
         if (isDerivedFrom(pRecordDecl, "dbaui::OSbaWeakSubObject")) { // module dbaccess
-            return false;
-        }
-        // FIXME this class extends 2 different ref-counting bases, SvRefBase and XInterface (via. cppu::WeakImplHelper)
-        // I have no idea how to fix it
-        if (isDerivedFrom(pRecordDecl, "SvXMLImportContext")) { // module xmloff
             return false;
         }
         // The actual problem child is SlideView, of which this is the parent.
