@@ -401,6 +401,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     }
 
     m_pCollectUsageInfo->Check(officecfg::Office::Common::Misc::CollectUsageInformation::get());
+    m_pCollectUsageInfo->Enable(!officecfg::Office::Common::Misc::CollectUsageInformation::isReadOnly());
     m_pCollectUsageInfo->SaveValue();
 }
 
