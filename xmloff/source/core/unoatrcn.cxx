@@ -20,6 +20,7 @@
 #include <string.h>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -38,16 +39,11 @@ uno::Reference< uno::XInterface >  SvUnoAttributeContainer_CreateInstance()
     return *(new SvUnoAttributeContainer);
 }
 
-SvUnoAttributeContainer::SvUnoAttributeContainer( SvXMLAttrContainerData* pContainer)
-: mpContainer( pContainer )
+SvUnoAttributeContainer::SvUnoAttributeContainer( std::unique_ptr<SvXMLAttrContainerData> pContainer)
+: mpContainer( std::move( pContainer ) )
 {
-    if( mpContainer == nullptr )
-        mpContainer = new SvXMLAttrContainerData;
-}
-
-SvUnoAttributeContainer::~SvUnoAttributeContainer()
-{
-    delete mpContainer;
+    if( !mpContainer )
+        mpContainer = o3tl::make_unique<SvXMLAttrContainerData>();
 }
 
 // container::XElementAccess

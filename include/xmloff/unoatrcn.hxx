@@ -21,6 +21,9 @@
 #define INCLUDED_XMLOFF_UNOATRCN_HXX
 
 #include <sal/config.h>
+
+#include <memory>
+
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -41,16 +44,14 @@ class XMLOFF_DLLPUBLIC SvUnoAttributeContainer:
         css::container::XNameContainer >
 {
 private:
-    SvXMLAttrContainerData* mpContainer;
+    std::unique_ptr<SvXMLAttrContainerData> mpContainer;
 
     SAL_DLLPRIVATE sal_uInt16 getIndexByName(const OUString& aName )
         const;
 
 public:
-    SvUnoAttributeContainer( SvXMLAttrContainerData* pContainer = nullptr );
-    virtual ~SvUnoAttributeContainer();
-
-    SvXMLAttrContainerData* GetContainerImpl() const { return mpContainer; }
+    SvUnoAttributeContainer( std::unique_ptr<SvXMLAttrContainerData> pContainer = nullptr );
+    SvXMLAttrContainerData* GetContainerImpl() const { return mpContainer.get(); }
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
