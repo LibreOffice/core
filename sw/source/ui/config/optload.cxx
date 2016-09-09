@@ -345,10 +345,13 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     m_pUseCharUnit->SaveValue();
 
     m_pWordCountED->SetText(officecfg::Office::Writer::WordCount::AdditionalSeparators::get());
+    m_pWordCountED->Enable(!officecfg::Office::Writer::WordCount::AdditionalSeparators::isReadOnly());
     m_pWordCountED->SaveValue();
     m_pShowStandardizedPageCount->Check(officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::get());
+    m_pShowStandardizedPageCount->Enable(!officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::isReadOnly());
     m_pShowStandardizedPageCount->SaveValue();
     m_pStandardizedPageSizeNF->SetValue(officecfg::Office::Writer::WordCount::StandardizedPageSize::get());
+    m_pStandardizedPageSizeNF->Enable(!officecfg::Office::Writer::WordCount::StandardizedPageSize::isReadOnly());
     m_pStandardizedPageSizeNF->SaveValue();
     m_pStandardizedPageSizeNF->Enable(m_pShowStandardizedPageCount->IsChecked());
 }
