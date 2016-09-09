@@ -781,7 +781,6 @@ namespace {
         TiledPrinterPage (
             const sal_uInt16 nPageIndex,
             const PageKind ePageKind,
-            const sal_Int32 nGap,
             const bool bPrintMarkedOnly,
             const OUString& rsPageString,
             const Point& rPageStringOffset,
@@ -791,7 +790,7 @@ namespace {
             : PrinterPage(ePageKind, MapMode(), bPrintMarkedOnly, rsPageString,
                 rPageStringOffset, nDrawMode, eOrientation, nPaperTray),
               mnPageIndex(nPageIndex),
-              mnGap(nGap)
+              mnGap(500)
         {
         }
 
@@ -2135,7 +2134,6 @@ private:
                 new TiledPrinterPage(
                     sal::static_int_cast<sal_uInt16>(nPageIndex),
                     ePageKind,
-                    500,
                     rInfo.mbPrintMarkedOnly,
                     rInfo.msPageString,
                     rInfo.mpPrinter->GetPageOffset(),

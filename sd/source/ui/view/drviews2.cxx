@@ -1744,7 +1744,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if (pHLItem->GetInsertMode() == HLINK_FIELD)
                 {
                     InsertURLField(pHLItem->GetURL(), pHLItem->GetName(),
-                                   pHLItem->GetTargetFrame(), nullptr);
+                                   pHLItem->GetTargetFrame());
                 }
                 else if (pHLItem->GetInsertMode() == HLINK_BUTTON)
                 {
@@ -1758,7 +1758,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     if (pOlView)
                     {
                         InsertURLField(pHLItem->GetURL(), pHLItem->GetName(),
-                                       pHLItem->GetTargetFrame(), nullptr);
+                                       pHLItem->GetTargetFrame());
                     }
                     else
                     {

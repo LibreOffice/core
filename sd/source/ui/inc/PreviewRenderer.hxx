@@ -41,15 +41,11 @@ class PreviewRenderer
 public:
     /** Create a new preview renderer that takes some of its initial values
         from the given output device.
-        @param pTemplate
-            May be NULL.
         @param bPaintFrame
             When <TRUE/> (the default) then a frame is painted around the
             preview.  This makes the actual preview smaller.
     */
-    PreviewRenderer (
-        OutputDevice* pTemplate = nullptr,
-        const bool bPaintFrame = true);
+    PreviewRenderer(const bool bPaintFrame = true);
 
     virtual ~PreviewRenderer();
 

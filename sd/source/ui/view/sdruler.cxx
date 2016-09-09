@@ -44,11 +44,11 @@ class RulerCtrlItem : public SfxControllerItem
                                 const SfxPoolItem* pItem ) override;
 
  public:
-    RulerCtrlItem(sal_uInt16 nId, Ruler& rRlr, SfxBindings& rBind);
+    RulerCtrlItem(Ruler& rRlr, SfxBindings& rBind);
 };
 
-RulerCtrlItem::RulerCtrlItem(sal_uInt16 _nId, Ruler& rRlr, SfxBindings& rBind)
-: SfxControllerItem(_nId, rBind)
+RulerCtrlItem::RulerCtrlItem(Ruler& rRlr, SfxBindings& rBind)
+: SfxControllerItem(SID_RULER_NULL_OFFSET, rBind)
 , rRuler(rRlr)
 {
 }
@@ -74,7 +74,7 @@ Ruler::Ruler( DrawViewShell& rViewSh, vcl::Window* pParent, ::sd::Window* pWin, 
     , pDrViewShell(&rViewSh)
 {
     rBindings.EnterRegistrations();
-    pCtrlItem = new RulerCtrlItem(SID_RULER_NULL_OFFSET, *this, rBindings);
+    pCtrlItem = new RulerCtrlItem(*this, rBindings);
     rBindings.LeaveRegistrations();
 
     if ( nWinStyle & WB_HSCROLL )

@@ -312,7 +312,6 @@ class PresenterAccessible::AccessibleParagraph
 public:
     AccessibleParagraph (
         const css::lang::Locale& rLocale,
-        const sal_Int16 nRole,
         const OUString& rsName,
         const SharedPresenterTextParagraph& rpParagraph,
         const sal_Int32 nParagraphIndex);
@@ -474,7 +473,6 @@ class AccessibleNotes : public PresenterAccessible::AccessibleObject
 public:
     AccessibleNotes (
         const css::lang::Locale& rLocale,
-        const sal_Int16 nRole,
         const OUString& rsName);
 
     static rtl::Reference<PresenterAccessible::AccessibleObject> Create (
@@ -1478,11 +1476,10 @@ AccessibleRelation SAL_CALL AccessibleRelationSet::getRelationByType (sal_Int16 
 
 PresenterAccessible::AccessibleParagraph::AccessibleParagraph (
     const lang::Locale& rLocale,
-    const sal_Int16 nRole,
     const OUString& rsName,
     const SharedPresenterTextParagraph& rpParagraph,
     const sal_Int32 nParagraphIndex)
-    : PresenterAccessibleParagraphInterfaceBase(rLocale, nRole, rsName),
+    : PresenterAccessibleParagraphInterfaceBase(rLocale, AccessibleRole::PARAGRAPH, rsName),
       mpParagraph(rpParagraph),
       mnParagraphIndex(nParagraphIndex)
 {
@@ -1822,9 +1819,8 @@ bool PresenterAccessible::AccessibleParagraph::GetWindowState (const sal_Int16 n
 
 AccessibleNotes::AccessibleNotes (
     const css::lang::Locale& rLocale,
-    const sal_Int16 nRole,
     const OUString& rsName)
-    : AccessibleObject(rLocale,nRole,rsName),
+    : AccessibleObject(rLocale,AccessibleRole::PANEL,rsName),
       mpTextView()
 {
 }
@@ -1849,7 +1845,6 @@ rtl::Reference<PresenterAccessible::AccessibleObject> AccessibleNotes::Create (
     rtl::Reference<AccessibleNotes> pObject (
         new AccessibleNotes(
             rLocale,
-            AccessibleRole::PANEL,
             sName));
     pObject->LateInitialization();
     pObject->SetTextView(rpTextView);
@@ -1884,7 +1879,6 @@ void AccessibleNotes::SetTextView (
             rtl::Reference<PresenterAccessible::AccessibleParagraph> pParagraph (
                 new PresenterAccessible::AccessibleParagraph(
                     css::lang::Locale(),
-                    AccessibleRole::PARAGRAPH,
                     "Paragraph"+OUString::number(nIndex),
                     rpTextView->GetParagraph(nIndex),
                     nIndex));

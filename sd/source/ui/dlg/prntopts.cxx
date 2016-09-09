@@ -117,7 +117,7 @@ bool SdPrintOptions::FillItemSet( SfxItemSet* rAttrs )
         m_pRbtGrayscale->IsValueChangedFromSaved()||
         m_pRbtBlackWhite->IsValueChangedFromSaved())
     {
-        SdOptionsPrintItem aOptions( ATTR_OPTIONS_PRINT );
+        SdOptionsPrintItem aOptions;
 
         aOptions.GetOptionsPrint().SetDraw( m_pCbxDraw->IsChecked() );
         aOptions.GetOptionsPrint().SetNotes( m_pCbxNotes->IsChecked() );

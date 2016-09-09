@@ -80,8 +80,7 @@ class ConfigurationAccess
 {
     public:
 
-        ConfigurationAccess( const css::uno::Reference< css::uno::XComponentContext >& rXFactory,
-                                OptimizerSettings* pDefaultSettings = nullptr );
+        ConfigurationAccess( const css::uno::Reference< css::uno::XComponentContext >& rXFactory );
         ~ConfigurationAccess();
         void SaveConfiguration();
 

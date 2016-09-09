@@ -66,7 +66,7 @@ private:
     OUString  maURL2;
 
 public:
-                    explicit HtmlErrorContext(vcl::Window *pWin=nullptr);
+                    explicit HtmlErrorContext();
                     virtual ~HtmlErrorContext() {};
 
     virtual bool    GetString( sal_uLong nErrId, OUString& rCtxStr ) override;

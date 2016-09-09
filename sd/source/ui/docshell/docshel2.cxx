@@ -52,7 +52,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
       // THUMBNAIL: here we may can set the draft mode
     }
 
-    ClientView* pView = new ClientView(this, pOut, nullptr);
+    ClientView* pView = new ClientView(this, pOut);
 
     pView->SetHlplVisible(false);
     pView->SetGridVisible(false);
@@ -187,8 +187,9 @@ Size DrawDocShell::GetFirstPageSize()
 /**
  * Creates a bitmap of an arbitrary page
  */
-Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel)
+Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
 {
+    const sal_uInt16 nMaxEdgePixel = 90;
     MapMode         aMapMode( MAP_100TH_MM );
     const Size      aSize( pPage->GetSize() );
     const Point     aNullPt;
@@ -211,7 +212,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
     aMapMode.SetScaleY( aFrac );
     pVDev->SetMapMode( aMapMode );
 
-    ClientView* pView = new ClientView( this, pVDev, nullptr );
+    ClientView* pView = new ClientView( this, pVDev );
     FrameView*      pFrameView = GetFrameView();
     pView->ShowSdrPage( pPage );
 

@@ -23,8 +23,8 @@
 
 using namespace sd;
 
-UndoManager::UndoManager( sal_uInt16 nMaxUndoActionCount /* = 20 */ )
-  : SdrUndoManager( nMaxUndoActionCount )
+UndoManager::UndoManager()
+  : SdrUndoManager( 20/*nMaxUndoActionCount*/ )
   , mpLinkedUndoManager(nullptr)
   , mpViewShell(nullptr)
 {

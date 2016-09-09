@@ -135,7 +135,7 @@ void VisibleAreaManager::MakeVisible()
     {
         mnScrollAnimationId = mrSlideSorter.GetController().GetAnimator()->AddAnimation(
             aAnimation,
-            300, Animator::FinishFunctor());
+            Animator::FinishFunctor());
     }
     else
     {

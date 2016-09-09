@@ -933,7 +933,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                         ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
                           aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                     {
-                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "", nullptr );
+                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "" );
                     }
                 }
             }
@@ -1418,7 +1418,7 @@ void DrawViewShell::FuSupportRotate(SfxRequest &rReq)
 }
 
 void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
-                                   const OUString& rTarget, const Point* pPos)
+                                   const OUString& rTarget)
 {
     OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
 
@@ -1453,19 +1453,11 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         pOutl->SetUpdateMode( false );
 
         Point aPos;
-
-        if (pPos)
-        {
-            aPos = *pPos;
-        }
-        else
-        {
-            Rectangle aRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
-            aPos = aRect.Center();
-            aPos = GetActiveWindow()->PixelToLogic(aPos);
-            aPos.X() -= aSize.Width() / 2;
-            aPos.Y() -= aSize.Height() / 2;
-        }
+        Rectangle aRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
+        aPos = aRect.Center();
+        aPos = GetActiveWindow()->PixelToLogic(aPos);
+        aPos.X() -= aSize.Width() / 2;
+        aPos.Y() -= aSize.Height() / 2;
 
         Rectangle aLogicRect(aPos, aSize);
         pRectObj->SetLogicRect(aLogicRect);

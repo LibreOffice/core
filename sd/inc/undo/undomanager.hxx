@@ -32,7 +32,7 @@ namespace sd
 class SD_DLLPUBLIC UndoManager : public SdrUndoManager
 {
 public:
-    UndoManager( sal_uInt16 nMaxUndoActionCount = 20 );
+    UndoManager();
 
     virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, sal_Int32 nViewShellId) override;
 

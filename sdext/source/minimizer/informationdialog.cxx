@@ -306,7 +306,7 @@ void InformationDialog::InitDialog()
 
 InformationDialog::InformationDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, const OUString& rSaveAsURL, bool& rbOpenNewDocument, sal_Int64 rSourceSize, sal_Int64 rDestSize, sal_Int64 rApproxSize ) :
     UnoDialog( rxContext, rxFrame ),
-    ConfigurationAccess( rxContext, nullptr ),
+    ConfigurationAccess( rxContext ),
     mxActionListener( new OKActionListener( *this ) ),
     mnSourceSize( rSourceSize ),
     mnDestSize( rDestSize ),

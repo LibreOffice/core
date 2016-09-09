@@ -51,16 +51,6 @@ class IteratorPosition;
 */
 enum IteratorLocation {BEGIN,END,CURRENT};
 
-/** Use this enum to specify the type of iterator when creating a new
-    iterator:
-    <ul><li>SELECTION for iteration over all objects that belong to the
-    current mark list.</li>
-    <li>SINGLE_VIEW for iteration over all objects in the current view.</li>
-    <li>DOCUMENT for iteration over all object in all relevant
-    views.</li></ul>
-*/
-enum IteratorType {SELECTION,SINGLE_VIEW,DOCUMENT};
-
 /** This iterator can be used to iterate over all <type>SdrObject</type>
     objects of one of three set denoted by the <type>IteratorType</type>:
     <ul><li>All objects of the current mark list (selection)

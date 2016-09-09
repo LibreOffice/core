@@ -146,12 +146,11 @@ bool OptimizerSettings::operator==( const OptimizerSettings& rOptimizerSettings 
 }
 
 
-ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContext >& rxContext, OptimizerSettings* pDefaultSettings ) :
+ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContext >& rxContext ) :
     mxContext( rxContext )
 {
     LoadStrings();
-    maSettings.push_back( pDefaultSettings ?
-        *pDefaultSettings : OptimizerSettings() );
+    maSettings.push_back( OptimizerSettings() );
     maSettings.back().maName = "LastUsedSettings";
     LoadConfiguration();
     maInitialSettings = maSettings;

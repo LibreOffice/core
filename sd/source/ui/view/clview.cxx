@@ -34,9 +34,8 @@ class DrawViewShell;
 
 ClientView::ClientView(
     DrawDocShell* pDocSh,
-    OutputDevice* pOutDev,
-    DrawViewShell* pShell)
-    : DrawView (pDocSh, pOutDev, pShell)
+    OutputDevice* pOutDev)
+    : DrawView (pDocSh, pOutDev, nullptr)
 {
 }
 

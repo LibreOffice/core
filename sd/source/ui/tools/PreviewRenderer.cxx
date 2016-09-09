@@ -64,23 +64,14 @@ namespace {
 //===== PreviewRenderer =======================================================
 
 PreviewRenderer::PreviewRenderer (
-    OutputDevice* pTemplate,
     const bool bHasFrame)
     : mpPreviewDevice (VclPtr<VirtualDevice>::Create()),
       mpDocShellOfView(nullptr),
       maFrameColor (svtools::ColorConfig().GetColorValue(svtools::DOCBOUNDARIES).nColor),
       mbHasFrame(bHasFrame)
 {
-    if (pTemplate != nullptr)
-    {
-        mpPreviewDevice->SetDigitLanguage (pTemplate->GetDigitLanguage());
-        mpPreviewDevice->SetBackground(pTemplate->GetBackground());
-    }
-    else
-    {
-        mpPreviewDevice->SetBackground(Wallpaper(
-            Application::GetSettings().GetStyleSettings().GetWindowColor()));
-    }
+    mpPreviewDevice->SetBackground(Wallpaper(
+        Application::GetSettings().GetStyleSettings().GetWindowColor()));
 }
 
 PreviewRenderer::~PreviewRenderer()

@@ -143,8 +143,8 @@ class SD_DLLPUBLIC SdOptionsLayoutItem : public SfxPoolItem
 {
 public:
 
-                            explicit SdOptionsLayoutItem( sal_uInt16 nWhich);
-                            SdOptionsLayoutItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = nullptr );
+                            explicit SdOptionsLayoutItem();
+                            SdOptionsLayoutItem( SdOptions* pOpts, ::sd::FrameView* pView = nullptr );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -177,7 +177,7 @@ class SD_DLLPUBLIC SdOptionsContentsItem : public SfxPoolItem
 {
 public:
 
-                            SdOptionsContentsItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = nullptr );
+                            SdOptionsContentsItem( SdOptions* pOpts, ::sd::FrameView* pView = nullptr );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -323,8 +323,8 @@ class SD_DLLPUBLIC SdOptionsMiscItem : public SfxPoolItem
 {
 public:
 
-                            explicit SdOptionsMiscItem( sal_uInt16 nWhich);
-                            SdOptionsMiscItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = nullptr );
+                            explicit SdOptionsMiscItem();
+                            SdOptionsMiscItem( SdOptions* pOpts, ::sd::FrameView* pView = nullptr );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -392,8 +392,8 @@ class SD_DLLPUBLIC SdOptionsSnapItem : public SfxPoolItem
 {
 public:
 
-                            explicit SdOptionsSnapItem( sal_uInt16 nWhich);
-                            SdOptionsSnapItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = nullptr );
+                            explicit SdOptionsSnapItem();
+                            SdOptionsSnapItem( SdOptions* pOpts, ::sd::FrameView* pView = nullptr );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -469,7 +469,7 @@ class SdOptionsGridItem : public SvxGridItem
 {
 
 public:
-                            SdOptionsGridItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = nullptr );
+                            SdOptionsGridItem( SdOptions* pOpts );
 
     void                    SetOptions( SdOptions* pOpts ) const;
 };
@@ -562,8 +562,8 @@ class SD_DLLPUBLIC SdOptionsPrintItem : public SfxPoolItem
 {
 public:
 
-                            explicit SdOptionsPrintItem( sal_uInt16 nWhich);
-                            SdOptionsPrintItem( sal_uInt16 nWhich, SdOptions* pOpts, ::sd::FrameView* pView = nullptr );
+                            explicit SdOptionsPrintItem();
+                            SdOptionsPrintItem( SdOptions* pOpts );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
