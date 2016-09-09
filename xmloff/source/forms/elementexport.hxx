@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <set>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -43,7 +44,7 @@ namespace xmloff
         css::uno::Sequence< css::script::ScriptEventDescriptor >
                                 m_aEvents;
 
-        SvXMLElementExport*     m_pXMLElement;          // XML element doing the concrete startElement etc.
+        std::unique_ptr<SvXMLElementExport> m_pXMLElement;          // XML element doing the concrete startElement etc.
 
     public:
         OElementExport(IFormsExportContext& _rContext,
@@ -100,7 +101,7 @@ namespace xmloff
         EAFlags                 m_nIncludeEvents;       // events to include
         BAFlags                 m_nIncludeBindings;     // binding attributes to include
 
-        SvXMLElementExport*     m_pOuterElement;        // XML element doing the concrete startElement etc. for the outer element
+        std::unique_ptr<SvXMLElementExport> m_pOuterElement;        // XML element doing the concrete startElement etc. for the outer element
 
     public:
         /** constructs an object capable of exporting controls
@@ -119,7 +120,6 @@ namespace xmloff
             const OUString& _rControlId,
             const OUString& _rReferringControls,
             const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
-        virtual ~OControlExport();
 
     protected:
         /// start the XML element

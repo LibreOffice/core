@@ -18,6 +18,9 @@
  */
 
 #include "elementexport.hxx"
+
+#include <o3tl/make_unique.hxx>
+
 #include "strings.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include "eventexport.hxx"
@@ -92,13 +95,11 @@ namespace xmloff
         const Sequence< ScriptEventDescriptor >& _rEvents)
         :OPropertyExport(_rContext, _rxProps)
         ,m_aEvents(_rEvents)
-        ,m_pXMLElement(nullptr)
     {
     }
 
     OElementExport::~OElementExport()
     {
-        delete m_pXMLElement;
     }
 
     void OElementExport::doExport()
@@ -142,13 +143,12 @@ namespace xmloff
 
     void OElementExport::implStartElement(const sal_Char* _pName)
     {
-        m_pXMLElement = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, _pName, true, true);
+        m_pXMLElement = o3tl::make_unique<SvXMLElementExport>(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, _pName, true, true);
     }
 
     void OElementExport::implEndElement()
     {
-        delete m_pXMLElement;
-        m_pXMLElement = nullptr;
+        m_pXMLElement.reset();
     }
 
     void OElementExport::exportServiceNameAttribute()
@@ -239,15 +239,8 @@ namespace xmloff
         ,m_nIncludeSpecial(SCAFlags::NONE)
         ,m_nIncludeEvents(EAFlags::NONE)
         ,m_nIncludeBindings(BAFlags::NONE)
-        ,m_pOuterElement(nullptr)
     {
         OSL_ENSURE(m_xProps.is(), "OControlExport::OControlExport: invalid arguments!");
-    }
-
-    OControlExport::~OControlExport()
-    {
-        // end the outer element if it exists
-        delete m_pOuterElement;
     }
 
     void OControlExport::exportOuterAttributes()
@@ -1407,13 +1400,12 @@ namespace xmloff
     {
         // before we let the base class start it's outer element, we add a wrapper element
         const sal_Char *pOuterElementName = getOuterXMLElementName();
-        m_pOuterElement = pOuterElementName
-                               ? new SvXMLElementExport(
+        if (pOuterElementName)
+            m_pOuterElement = o3tl::make_unique<SvXMLElementExport>(
                                         m_rContext.getGlobalContext(),
                                         XML_NAMESPACE_FORM,
                                         pOuterElementName, true,
-                                        true)
-                            : nullptr;
+                                        true);
 
         // add the attributes for the inner element
         exportInnerAttributes();
@@ -1428,8 +1420,7 @@ namespace xmloff
         OElementExport::implEndElement();
 
         // end the outer element if it exists
-        delete m_pOuterElement;
-        m_pOuterElement = nullptr;
+        m_pOuterElement.reset();
     }
 
     const sal_Char* OControlExport::getOuterXMLElementName() const
