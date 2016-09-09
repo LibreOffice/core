@@ -30,7 +30,6 @@
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/numberformatcodewrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
@@ -518,9 +517,8 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     pStdFormat->SetLastInsertKey( sal_uInt16(nLastKey - nCLOffset) );
 
     // append new system additional formats
-    NumberFormatCodeWrapper aNumberFormatCode( m_xContext,
-                                               GetLanguageTag().getLocale() );
-    ImpGenerateAdditionalFormats( nCLOffset, aNumberFormatCode, true );
+    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
+    ImpGenerateAdditionalFormats( nCLOffset, xNFC, true );
 }
 
 const css::uno::Reference<css::uno::XComponentContext>& SvNumberFormatter::GetComponentContext() const
@@ -2232,15 +2230,14 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         pFormatScanner->SetConvertMode(false);      // switch off for this function
     }
 
-    NumberFormatCodeWrapper aNumberFormatCode( m_xContext,
-            GetLanguageTag().getLocale() );
+    css::lang::Locale aLocale = GetLanguageTag().getLocale();
+    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
     SvNumberformat* pNewFormat = nullptr;
     sal_Int32 nIdx;
     bool bDefault;
 
     // Number
-    uno::Sequence< i18n::NumberFormatCode > aFormatSeq =
-        aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::FIXED_NUMBER );
+    uno::Sequence< i18n::NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( i18n::KNumberFormatUsage::FIXED_NUMBER, aLocale );
     ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // General
@@ -2326,7 +2323,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
 
     // Percent number
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::PERCENT_NUMBER );
+    aFormatSeq = xNFC->getAllFormatCode( i18n::KNumberFormatUsage::PERCENT_NUMBER, aLocale );
     ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // 0%
@@ -2342,7 +2339,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
     // Currency. NO default standard option! Default is determined of locale
     // data default currency and format is generated if needed.
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY );
+    aFormatSeq = xNFC->getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY, aLocale );
     if (LocaleDataWrapper::areChecksEnabled())
     {
         // though no default desired here, test for correctness of locale data
@@ -2399,7 +2396,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
 
     // Date
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::DATE );
+    aFormatSeq = xNFC->getAllFormatCode( i18n::KNumberFormatUsage::DATE, aLocale );
     ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // DD.MM.YY   System
@@ -2509,7 +2506,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
 
     // Time
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::TIME );
+    aFormatSeq = xNFC->getAllFormatCode( i18n::KNumberFormatUsage::TIME, aLocale );
     ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // HH:MM
@@ -2549,7 +2546,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
 
     // DateTime
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::DATE_TIME );
+    aFormatSeq = xNFC->getAllFormatCode( i18n::KNumberFormatUsage::DATE_TIME, aLocale );
     ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // DD.MM.YY HH:MM   System
@@ -2580,7 +2577,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
 
     // Scientific number
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER );
+    aFormatSeq = xNFC->getAllFormatCode( i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER, aLocale );
     ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // 0.00E+000
@@ -2654,7 +2651,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     // changing SystemCL, then they are appended last after user defined.
     if ( !bNoAdditionalFormats )
     {
-        ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode, false );
+        ImpGenerateAdditionalFormats( CLOffset, xNFC, false );
     }
     if (bOldConvertMode)
     {
@@ -2664,7 +2661,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
 
 void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
-            NumberFormatCodeWrapper& rNumberFormatCode, bool bAfterChangingSystemCL )
+            css::uno::Reference< css::i18n::XNumberFormatCode >& rNumberFormatCode,
+            bool bAfterChangingSystemCL )
 {
     using namespace ::com::sun::star;
 
@@ -2675,13 +2673,12 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
         return ;
     }
     sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
-    rNumberFormatCode.setLocale( GetLanguageTag().getLocale() );
+    css::lang::Locale aLocale = GetLanguageTag().getLocale();
     sal_Int32 j;
 
     // All currencies, this time with [$...] which was stripped in
     // ImpGenerateFormats for old "automatic" currency formats.
-    uno::Sequence< i18n::NumberFormatCode > aFormatSeq =
-        rNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY );
+    uno::Sequence< i18n::NumberFormatCode > aFormatSeq = rNumberFormatCode->getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY, aLocale );
     i18n::NumberFormatCode * pFormatArr = aFormatSeq.getArray();
     sal_Int32 nCodes = aFormatSeq.getLength();
     ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), nCodes );
@@ -2719,7 +2716,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
     // like it is done for usage groups with ImpAdjustFormatCodeDefault().
     // There is no harm though, on first invocation ImpGetDefaultFormat() will
     // use the first default encountered.
-    aFormatSeq = rNumberFormatCode.getAllFormatCodes();
+    aFormatSeq = rNumberFormatCode->getAllFormatCodes( aLocale );
     nCodes = aFormatSeq.getLength();
     if ( nCodes )
     {

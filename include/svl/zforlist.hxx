@@ -27,8 +27,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/NumberFormatCode.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/i18n/NumberFormatMapper.hpp>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/numberformatcodewrapper.hxx>
 #include <tools/link.hxx>
 #include <svl/ondemand.hxx>
 #include <svl/nfkeytab.hxx>
@@ -829,7 +829,7 @@ private:
 
     // Generate additional formats provided by i18n
     SVL_DLLPRIVATE void ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
-                                                      NumberFormatCodeWrapper& rNumberFormatCode,
+                                                      css::uno::Reference< css::i18n::XNumberFormatCode >& rNumberFormatCode,
                                                       bool bAfterChangingSystemCL );
 
     SVL_DLLPRIVATE SvNumberformat* ImpInsertFormat( const css::i18n::NumberFormatCode& rCode,
