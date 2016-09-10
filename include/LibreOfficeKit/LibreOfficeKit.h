@@ -147,15 +147,10 @@ struct _LibreOfficeKitDocumentClass
     void (*initializeForRendering) (LibreOfficeKitDocument* pThis,
                                     const char* pArguments);
 
-    /// @see lok::Document::setCallbackLatch().
-    void (*setCallbackLatch) (LibreOfficeKitDocument* pThis,
-                              bool bCallbackLatch);
-
     /// @see lok::Document::registerCallback().
     void (*registerCallback) (LibreOfficeKitDocument* pThis,
                               LibreOfficeKitCallback pCallback,
-                              void* pData,
-                              bool bCallbackLatch);
+                              void* pData);
 
     /// @see lok::Document::postKeyEvent
     void (*postKeyEvent) (LibreOfficeKitDocument* pThis,
