@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_3e3ef1b8",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-09-10T04:44:44Z",
+      "side": 1,
+      "message": "This is unnecessary really, but why not be completely safe.",
+      "range": {
+        "startLine": 1167,
+        "startChar": 32,
+        "endLine": 1168,
+        "endChar": 32
+      },
+      "revId": "2df9b96aa439f809f682baa21ff3eb62ce90488d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_5e4ba559",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-09-10T04:44:44Z",
+      "side": 1,
+      "message": "Adding an Any to the map instead of a uno::Reference XStyle might be strange. I did it because I don\u0027t understand reference life-spans, and at least I know the uno::Any object will be valid when I access it later.  But it would simplify programming slightly if the xStyle could be reference directly without pulling it out of the Any box.",
+      "range": {
+        "startLine": 1182,
+        "startChar": 67,
+        "endLine": 1182,
+        "endChar": 89
+      },
+      "revId": "2df9b96aa439f809f682baa21ff3eb62ce90488d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_7e48695c",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2016-09-10T04:44:44Z",
+      "side": 1,
+      "message": "I probably should have created lcl_flushWaitingForBaseStyle instead.",
+      "range": {
+        "startLine": 1206,
+        "startChar": 12,
+        "endLine": 1206,
+        "endChar": 65
+      },
+      "revId": "2df9b96aa439f809f682baa21ff3eb62ce90488d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
