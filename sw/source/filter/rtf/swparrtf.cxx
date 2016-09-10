@@ -173,17 +173,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(const OUString& rURL
     xDocSh->DoInitNew();
     SwDoc* pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
 
-    SwNodeIndex aIdx(
-        *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
-    if (!aIdx.GetNode().IsTextNode())
-    {
-        pD->GetNodes().GoNext(&aIdx);
-    }
-    SwPaM aPaM(aIdx);
-    aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
     bool bRet = false;
     try
     {
+        SwPaM aPaM(pD->GetNodes().GetEndOfContent());
         bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
     }
     catch (std::exception const&)
