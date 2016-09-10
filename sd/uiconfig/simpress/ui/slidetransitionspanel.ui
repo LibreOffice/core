@@ -16,6 +16,10 @@
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
+        <property name="margin_right">6</property>
+        <property name="margin_top">6</property>
+        <property name="margin_bottom">3</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
@@ -24,8 +28,10 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="vexpand">True</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="GtkAlignment" id="transitions_icons">
+                <property name="width_request">260</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
@@ -36,6 +42,19 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="transition_icons_label">
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Transition List</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">transitions_icons</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -55,14 +74,14 @@
               <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="top_padding">3</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">20</property>
                 <child>
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
-                    <property name="column_spacing">12</property>
+                    <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="duration_label">
                         <property name="visible">True</property>
@@ -70,6 +89,8 @@
                         <property name="halign">end</property>
                         <property name="label" translatable="yes">Duration:</property>
                         <property name="xalign">0</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">transition_duration:0.00sec</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -78,13 +99,13 @@
                     </child>
                     <child>
                       <object class="VclComboBoxNumeric" id="transition_duration:0.00sec">
+                        <property name="width_request">150</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_markup" translatable="yes">Select the speed of Slide Transition.</property>
                         <property name="tooltip_text" translatable="yes">Select the speed of Slide Transition.</property>
-                        <property name="hexpand">True</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="halign">start</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -97,6 +118,8 @@
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes">Sound:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">sound_list</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -105,9 +128,10 @@
                     </child>
                     <child>
                       <object class="GtkComboBoxText" id="sound_list">
+                        <property name="width_request">150</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
+                        <property name="halign">start</property>
                         <items>
                           <item translatable="yes">No sound</item>
                           <item translatable="yes">Stop previous sound</item>
@@ -137,7 +161,10 @@
                       <object class="GtkLabel" id="variant_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">1</property>
                         <property name="label" translatable="yes">Variant:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">variant_list</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -146,8 +173,10 @@
                     </child>
                     <child>
                       <object class="GtkComboBox" id="variant_list">
+                        <property name="width_request">150</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -351,6 +380,19 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="box1_label">
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Slide Transition Deck</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">box1</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>
