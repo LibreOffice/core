@@ -1221,7 +1221,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
     if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty() && (GetTopContextType() == CONTEXT_CHARACTER) )
         processDeferredCharacterProperties();
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    if(xTextAppend.is() && ! getTableManager( ).isIgnore())
+    if (xTextAppend.is() && hasTableManager() && !getTableManager().isIgnore())
     {
         try
         {
