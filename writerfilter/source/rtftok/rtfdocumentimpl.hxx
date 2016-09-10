@@ -182,12 +182,13 @@ public:
 };
 
 class RTFParserState;
+class RTFDocumentImpl;
 
 /// Stores the properties of a frame
 class RTFFrame
 {
 private:
-    RTFParserState* m_pParserState;
+    RTFDocumentImpl* m_pDocumentImpl;
     sal_Int32 nX, nY, nW, nH;
     sal_Int32 nHoriPadding, nVertPadding;
     sal_Int32 nHoriAlign, nHoriAnchor, nVertAlign, nVertAnchor;
