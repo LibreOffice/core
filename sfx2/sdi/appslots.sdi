@@ -155,6 +155,10 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
     ]
+    SID_DOCUMENTATION
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
     SID_SHOW_LICENSE
     [
         ExecMethod = MiscExec_Impl ;

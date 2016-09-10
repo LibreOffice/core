@@ -507,6 +507,21 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
             break;
         }
+        case SID_DOCUMENTATION:
+        {
+            // Open documentation page based on locales
+            OUString sURL("http://hub.libreoffice.org/documentation/?&LOlocale=" + utl::ConfigManager::getLocale());
+            try
+            {
+                uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                    css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
+                xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+            break;
+        }
         case SID_SHOW_LICENSE:
         {
             ScopedVclPtrInstance< LicenseDialog > aDialog;
