@@ -60,6 +60,9 @@
       </node>
       <node oor:name=".uno:ShowAnnotations" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Show Comments</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Comments</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -210,7 +213,10 @@
       </node>
       <node oor:name=".uno:ProtectTraceChangeMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Protect Changes...</value>
+          <value xml:lang="en-US">~Protect...</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Protect Track Changes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -218,6 +224,12 @@
       </node>
       <node oor:name=".uno:RejectTrackedChange" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Reject</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Reject Track Change</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Reject Change</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -226,6 +238,12 @@
       </node>
       <node oor:name=".uno:AcceptTrackedChange" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Accept</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Accept Track Change</value>
+        </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
           <value xml:lang="en-US">Accept Change</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -234,7 +252,10 @@
       </node>
       <node oor:name=".uno:NextTrackedChange" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Next Change</value>
+          <value xml:lang="en-US">Next</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Next Track Change</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -242,7 +263,10 @@
       </node>
       <node oor:name=".uno:PreviousTrackedChange" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Pr~evious Change</value>
+          <value xml:lang="en-US">Pr~evious</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Previous Track Change</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -255,7 +279,10 @@
       </node>
       <node oor:name=".uno:TrackChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Record Changes</value>
+          <value xml:lang="en-US">~Record</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Record Track Changes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -263,7 +290,10 @@
       </node>
       <node oor:name=".uno:TrackChangesBar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Show Track Changes Bar</value>
+          <value xml:lang="en-US">Track Changes Functions</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Show Track Changes Functions</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -271,7 +301,10 @@
       </node>
       <node oor:name=".uno:ShowTrackedChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Show Changes</value>
+          <value xml:lang="en-US">~Show</value>
+        </prop>
+        <prop oor:name="TooltipsLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Show Track Changes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -292,7 +325,10 @@
       </node>
       <node oor:name=".uno:CommentChangeTracking" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Comment on Change...</value>
+          <value xml:lang="en-US">~Comment...</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Track Change Comment</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -310,7 +346,10 @@
       </node>
       <node oor:name=".uno:AcceptTrackedChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Manage Changes...</value>
+          <value xml:lang="en-US">~Manage...</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Manage Track Changes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -456,14 +495,6 @@
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Insert Page Break</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:InsertAnnotation" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Comme~nt</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -707,10 +738,10 @@
       </node>
       <node oor:name=".uno:InsertFieldCtrl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Field</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Fiel~d</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Field</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -1129,7 +1160,13 @@
       </node>
       <node oor:name=".uno:ResetAttributes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Clear</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Clear ~Direct Formatting</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Clear Direct Formatting</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2449,7 +2486,13 @@
       </node>
       <node oor:name=".uno:ControlCodes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Non-printing Characters</value>
+          <value xml:lang="en-US">Formatting Marks</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">For~matting Marks</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Toggle Formatting Marks</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -2811,7 +2854,10 @@
       </node>
       <node oor:name=".uno:StyleApply" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Apply Paragraph Style</value>
+          <value xml:lang="en-US">Paragraph Style</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Set Paragraph Style</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
