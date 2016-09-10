@@ -538,43 +538,353 @@ static bool lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
     return false;
 }
 
-
-OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer & rString, sal_Int32 & nPos,
-                                                       LanguageType & nLang, const LocaleType & aTmpLocale )
+/** Import extended LCID from Excel
+ */
+OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, sal_Int32& nPos,
+                                                       LanguageType& nLang, const LocaleType& aTmpLocale )
 {
     OUString sCalendar;
-    /* TODO: this could be enhanced to allow other possible locale dependent
+    sal_uInt16 nNatNum = 0;
+    /* NOTE: enhancement to allow other possible locale dependent
      * calendars and numerals. BUT only if our locale data allows it! For LCID
      * numerals and calendars see
-     * http://office.microsoft.com/en-us/excel/HA010346351033.aspx */
-    if (MsLangId::getRealLanguage( aTmpLocale.meLanguage) == LANGUAGE_THAI)
+     * http://office.microsoft.com/en-us/excel/HA010346351033.aspx
+     * Calendar is inserted after
+     * all prefixes have been consumed as it is actually a format modifier
+     * and not a prefix.
+     * Currently calendars are tied to the locale of the entire number
+     * format, e.g. [~buddhist] in en_US doesn't work.
+     * => Having different locales in sub formats does not work!
+     * */
+    /* TODO: calendars could be tied to a sub format's NatNum info
+     * instead, or even better be available for any locale. Needs a
+     * different implementation of GetCal() and locale data calendars.
+     * */
+    switch ( aTmpLocale.mnCalendarType & 0x7F )
     {
-        // Numeral shape code "D" = Thai digits.
-        if (aTmpLocale.mnNumeralShape == 0xD)
-        {
-            rString.insert( nPos, "[NatNum1]");
-        }
-        // Calendar type code "07" = Thai Buddhist calendar, insert this after
-        // all prefixes have been consumed as it is actually a format modifier
-        // and not a prefix.
-        if (aTmpLocale.mnCalendarType == 0x07)
-        {
-            // Currently calendars are tied to the locale of the entire number
-            // format, e.g. [~buddhist] in en_US doesn't work.
-            // => Having different locales in sub formats does not work!
-            /* TODO: calendars could be tied to a sub format's NatNum info
-             * instead, or even better be available for any locale. Needs a
-             * different implementation of GetCal() and locale data calendars.
-             * */
-            // If this is not Thai yet, make it so.
-            if (MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_THAI)
+        case 0x03 : // Gengou calendar
+            sCalendar = "[~gengou]";
+            // Only Japaense language support Gengou calendar
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_JAPANESE )
             {
-                maLocale = aTmpLocale;
+                nLang = maLocale.meLanguage = LANGUAGE_JAPANESE;
+            }
+            break;
+        case 0x05 : // unknown calendar
+            break;
+        case 0x06 : // Hijri calendar
+        case 0x17 : // same?
+            sCalendar = "[~hijri]";
+            // Only Arabic or Farsi languages support Hijri calendar
+            if ( ( ( MsLangId::getRealLanguage( maLocale.meLanguage ) & 0x00FF ) != LANGUAGE_ARABIC_PRIMARY_ONLY )
+                && (MsLangId::getRealLanguage( maLocale.meLanguage ) != LANGUAGE_FARSI) )
+            {
+                if ( ( ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) & 0x00FF ) == LANGUAGE_ARABIC_PRIMARY_ONLY )
+                    || (MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_FARSI) )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_ARABIC_SAUDI_ARABIA;
+                }
+            }
+            break;
+        case 0x07 : // Buddhist calendar
+            sCalendar="[~buddhist]";
+            // Only Thai or Lao languages support Buddhist calendar
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_THAI
+                && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_LAO )
+            {
+                if ( ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_THAI )
+                    || (MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_LAO) )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_THAI;
+                }
+            }
+            break;
+        case 0x08 : // Hebrew calendar
+            sCalendar = "[~jewish]";
+            // Only Hebrew language support Jewish calendar
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_HEBREW )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_HEBREW;
+            }
+            break;
+        case 0x0E : // unknown calendar
+        case 0x0F : // unknown calendar
+        case 0x10 : // Indian calendar (unsupported)
+        case 0x11 : // unknown calendar
+        case 0x12 : // unknown calendar
+        case 0x13 : // unknown calendar
+        default : // other calendars (see tdf#36038) are not handle by LibO
+            break;
+    }
+
+    switch ( aTmpLocale.mnNumeralShape & 0x7F )
+    {
+        case 0x02 : // Arabic-Indi numerals
+            if ( ( MsLangId::getRealLanguage( maLocale.meLanguage ) & 0x00FF ) != LANGUAGE_ARABIC_PRIMARY_ONLY )
+            {
+                if ( ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) & 0x00FF ) == LANGUAGE_ARABIC_PRIMARY_ONLY )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_ARABIC_SAUDI_ARABIA;
+                }
+            }
+            break;
+        case 0x03 : // Arabic-Farsi numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_FARSI )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_FARSI;
+            }
+            break;
+        case 0x04 : // Devanagari (Hindi) numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_HINDI
+              && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_MARATHI
+              && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_NEPALI
+              && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_NEPALI_INDIA )
+            {
+                if ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_HINDI
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_MARATHI
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_NEPALI
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_NEPALI_INDIA )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_HINDI;
+                }
+            }
+            break;
+        case 0x05 : // Bengali numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_BENGALI
+              && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_BENGALI_BANGLADESH )
+            {
+                if ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_BENGALI
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_BENGALI_BANGLADESH )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_BENGALI;
+                }
+            }
+            break;
+        case 0x06 : // Punjabi numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_PUNJABI )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_PUNJABI;
+            }
+            break;
+        case 0x07 : // Gujarati numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_GUJARATI )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_GUJARATI;
+            }
+            break;
+        case 0x08 : // Odia (Orya) numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_ODIA )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_ODIA;
+            }
+            break;
+        case 0x09 : // Tamil numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_TAMIL
+              && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_TAMIL_SRI_LANKA )
+            {
+                if ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_TAMIL
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_TAMIL_SRI_LANKA )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_TAMIL;
+                }
+            }
+            break;
+        case 0x0A : // Telugu numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_TELUGU )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_TELUGU;
+            }
+            break;
+        case 0x0B : // Kannada numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_KANNADA )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_KANNADA;
+            }
+            break;
+        case 0x0C : // Malayalam numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_MALAYALAM )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_MALAYALAM;
+            }
+            break;
+        case 0x0D : // Thai numerals
+            // If this is not Thai yet, make it so.
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_THAI )
+            {
                 nLang = maLocale.meLanguage = LANGUAGE_THAI;
             }
-            sCalendar="[~buddhist]";
-        }
+            break;
+        case 0x0E : // Lao numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_LAO )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_LAO;
+            }
+            break;
+        case 0x0F : // Tibetan numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_TIBETAN
+              && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_TIBETAN_BHUTAN )
+            {
+                if ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_TIBETAN
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_TIBETAN_BHUTAN )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_TIBETAN;
+                }
+            }
+            break;
+        case 0x10 : // Burmese (Myanmar) numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_BURMESE )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_BURMESE;
+            }
+            break;
+        case 0x11 : // Tigrigna (Ethiopia) numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_TIGRIGNA_ETHIOPIA
+              && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_TIGRIGNA_ERITREA )
+            {
+                if ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_TIGRIGNA_ETHIOPIA
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_TIGRIGNA_ERITREA )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_TIGRIGNA_ETHIOPIA;
+                }
+            }
+            break;
+        case 0x12 : // Khmer numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_KHMER )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_KHMER;
+            }
+            break;
+        case 0x13 : // Mongolian numerals
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA
+                && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA
+                && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_MONGOLIAN_MONGOLIAN_LSO )
+            {
+                if ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_MONGOLIAN_MONGOLIAN_LSO )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA;
+                }
+            }
+            break;
+        case 0x1B : // simplified Asian numerals, Japanese
+        case 0x1C : // financial Asian numerals, Japanese
+        case 0x1D : // Arabic fullwidth numerals, Japanese
+        case 0x1E : // simplified Asian numerals, Chinese-PRC
+        case 0x1F : // financial Asian numerals, Chinese-PRC
+        case 0x20 : // Arabic fullwidth numerals, Chinese-PRC
+        case 0x21 : // simplified Asian numerals, Chinese-Taiwan
+        case 0x22 : // financial Asian numerals, Chinese-Taiwan
+        case 0x23 : // Arabic fullwidth numerals, Chinese-Taiwan
+        case 0x24 : // simplified Asian numerals, Korean
+        case 0x25 : // financial Asian numerals, Korean
+        case 0x26 : // Arabic fullwidth numerals, Korean
+            nNatNum = ( ( ( aTmpLocale.mnNumeralShape & 0x7F ) - 0x1B ) % 3 ) + 1;
+            // [NatNum1] simplified numerals
+            // [natNum2] financial numerals
+            // [NatNum3] Arabic fullwidth numerals
+            // Japanese
+            if ( ( aTmpLocale.mnNumeralShape & 0x7F ) <= 0x1D
+                && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_JAPANESE )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_JAPANESE;
+            }
+            // Chinese-PRC
+            else if ( ( aTmpLocale.mnNumeralShape & 0x7F ) <= 0x20
+                    && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_CHINESE_SIMPLIFIED
+                    && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_CHINESE_SINGAPORE
+                    && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_CHINESE_LSO )
+            {
+                if ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_CHINESE_SIMPLIFIED
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_CHINESE_SINGAPORE
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_CHINESE_LSO )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_CHINESE_SIMPLIFIED;
+                }
+            }
+            // Chinese-Taiwan
+            else if ( ( aTmpLocale.mnNumeralShape & 0x7F ) <= 0x23
+                     && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_CHINESE_TRADITIONAL
+                     && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_CHINESE_HONGKONG
+                     && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_CHINESE_MACAU )
+            {
+                if ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_CHINESE_TRADITIONAL
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_CHINESE_HONGKONG
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_CHINESE_MACAU )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_CHINESE_TRADITIONAL;
+                }
+            }
+            // Korean
+            else if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_KOREAN
+                   && MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_KOREAN_JOHAB )
+            {
+                if ( MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_KOREAN
+                  || MsLangId::getRealLanguage( aTmpLocale.meLanguage ) == LANGUAGE_KOREAN_JOHAB )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_KOREAN;
+                }
+            }
+            break;
+        case 0x27 : // Korean Hangul numerals
+            nNatNum = 9;
+            if ( MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_KOREAN )
+            {
+                nLang = maLocale.meLanguage = LANGUAGE_KOREAN;
+            }
+            break;
     }
+    if ( ( aTmpLocale.mnNumeralShape & 0x7F ) >= 0x02 && ( aTmpLocale.mnNumeralShape & 0x7F ) <= 0x13 )
+        nNatNum = 1;
+    rString.insert( nPos, "[NatNum"+OUString::number(nNatNum)+"]");
     return sCalendar;
 }
 
