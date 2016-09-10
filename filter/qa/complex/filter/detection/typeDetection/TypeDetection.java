@@ -237,7 +237,7 @@ public class TypeDetection extends ComplexTestCase {
 
     /**
      * The <code>MediaDescriptor</code> was filled with the URL of a file. The
-     * <code>type</code> of the file is kown and must be returned by
+     * <code>type</code> of the file is known and must be returned by
      * <code>MediaDescriptor</code>
      *
      * Syntax of files.csv:
@@ -338,7 +338,7 @@ public class TypeDetection extends ComplexTestCase {
 
     /**
      * The <code>MediaDescriptor</code> was filled with the URL of a file. The
-     * <code>type</code> of the file is kown and must be returned by
+     * <code>type</code> of the file is known and must be returned by
      * <code>MediaDescriptor</code>
      *
      * Syntax of files.csv:

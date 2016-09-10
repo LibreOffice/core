@@ -106,7 +106,7 @@ public:
         request data with a new one that reflects recent changes in the
         content of the page object.
         @return
-            When the key is kown then return <TRUE/>.
+            When the key is known then return <TRUE/>.
     */
     bool InvalidatePreviewBitmap (const CacheKey aKey);
 
