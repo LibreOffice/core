@@ -136,6 +136,8 @@
 #include <officecfg/Setup.hxx>
 #include <memory>
 
+#include "openuriexternally.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -497,15 +499,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             OUString module = SfxHelp::GetCurrentModuleIdentifier();
             OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
                 "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=" + module.copy(module.lastIndexOf('.') + 1 )  );
-            try
-            {
-                uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
-                    css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
-                xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
-            }
-            catch ( uno::Exception& )
-            {
-            }
+            sfx2::openUriExternally(sURL, false);
             break;
         }
 
@@ -520,16 +514,15 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             else
                 aLang = utl::ConfigManager::getLocale().copy(0,ix);
 
-            OUString sURL("http://hub.libreoffice.org/forum/?&LOlang=" + aLang);
-            try
-            {
-                uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
-                    css::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
-                xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
-            }
-            catch ( uno::Exception& )
-            {
-            }
+            OUString sURL("http://hub.libreoffice.org/forum/?LOlang=" + aLang);
+            sfx2::openUriExternally(sURL, false);
+            break;
+        }
+        case SID_DOCUMENTATION:
+        {
+            // Open documentation page based on locales
+            OUString sURL("http://hub.libreoffice.org/documentation/?LOlocale=" + utl::ConfigManager::getLocale());
+            sfx2::openUriExternally(sURL, false);
             break;
         }
         case SID_SHOW_LICENSE:
@@ -1015,7 +1008,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
     if ( bDone )
         rReq.Done();
 }
-
 
 void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 {
