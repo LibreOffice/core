@@ -3291,7 +3291,7 @@ RTFDrawingObject::RTFDrawingObject()
 }
 
 RTFFrame::RTFFrame(RTFParserState* pParserState)
-    : m_pParserState(pParserState),
+    : m_pDocumentImpl(pParserState->m_pDocumentImpl),
       m_nX(0),
       m_nY(0),
       m_nW(0),
@@ -3309,10 +3309,10 @@ RTFFrame::RTFFrame(RTFParserState* pParserState)
 
 void RTFFrame::setSprm(Id nId, Id nValue)
 {
-    if (m_pParserState->m_pDocumentImpl->getFirstRun() && !m_pParserState->m_pDocumentImpl->isStyleSheetImport())
+    if (m_pDocumentImpl->getFirstRun() && !m_pDocumentImpl->isStyleSheetImport())
     {
-        m_pParserState->m_pDocumentImpl->checkFirstRun();
-        m_pParserState->m_pDocumentImpl->setNeedPar(false);
+        m_pDocumentImpl->checkFirstRun();
+        m_pDocumentImpl->setNeedPar(false);
     }
     switch (nId)
     {
