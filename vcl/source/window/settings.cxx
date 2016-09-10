@@ -166,7 +166,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
         defFontheight = maxFontheight;
 
     // if the UI is korean, chinese or another locale
-    // where the system font size is kown to be often too small to
+    // where the system font size is known to be often too small to
     // generate readable fonts enforce a minimum font size of 9 points
     bool bBrokenLangFontHeight = MsLangId::isCJK(Application::GetSettings().GetUILanguageTag().getLanguageType());
     if (bBrokenLangFontHeight)

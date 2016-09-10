@@ -343,7 +343,7 @@ void WindowUIObject::execute(const OUString& rAction,
 
     if (!bHandled)
     {
-        SAL_WARN("vcl.uitest", "unkown action or parameter for " << get_name() << ". Action: " << rAction);
+        SAL_WARN("vcl.uitest", "unknown action or parameter for " << get_name() << ". Action: " << rAction);
     }
 }
 
