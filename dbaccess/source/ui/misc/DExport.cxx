@@ -540,7 +540,7 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
                     }
                     break;
                 default:
-                    SAL_WARN("dbaccess.ui", "ODatabaseExport: Unkown NumberFormat");
+                    SAL_WARN("dbaccess.ui", "ODatabaseExport: Unknown NumberFormat");
             }
         }
     }
