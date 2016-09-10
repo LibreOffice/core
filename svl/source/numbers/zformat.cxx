@@ -538,43 +538,290 @@ static bool lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
     return false;
 }
 
-
-OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer & rString, sal_Int32 & nPos,
-                                                       LanguageType & nLang, const LocaleType & aTmpLocale )
+/** Import extended LCID from Excel
+ */
+OUString SvNumberformat::ImpObtainCalendarAndNumerals( OUStringBuffer& rString, sal_Int32& nPos,
+                                                       LanguageType& nLang, const LocaleType& aTmpLocale )
 {
     OUString sCalendar;
-    /* TODO: this could be enhanced to allow other possible locale dependent
+    sal_uInt16 nNatNum = 0;
+    LanguageType nLocaleLang = MsLangId::getRealLanguage( maLocale.meLanguage );
+    LanguageType nTmpLocaleLang = MsLangId::getRealLanguage( aTmpLocale.meLanguage );
+    /* NOTE: enhancement to allow other possible locale dependent
      * calendars and numerals. BUT only if our locale data allows it! For LCID
      * numerals and calendars see
-     * http://office.microsoft.com/en-us/excel/HA010346351033.aspx */
-    if (MsLangId::getRealLanguage( aTmpLocale.meLanguage) == LANGUAGE_THAI)
+     * http://office.microsoft.com/en-us/excel/HA010346351033.aspx
+     * Calendar is inserted after
+     * all prefixes have been consumed as it is actually a format modifier
+     * and not a prefix.
+     * Currently calendars are tied to the locale of the entire number
+     * format, e.g. [~buddhist] in en_US doesn't work.
+     * => Having different locales in sub formats does not work!
+     * */
+    /* TODO: calendars could be tied to a sub format's NatNum info
+     * instead, or even better be available for any locale. Needs a
+     * different implementation of GetCal() and locale data calendars.
+     * */
+    switch ( aTmpLocale.mnCalendarType & 0x7F )
     {
-        // Numeral shape code "D" = Thai digits.
-        if (aTmpLocale.mnNumeralShape == 0xD)
-        {
-            rString.insert( nPos, "[NatNum1]");
-        }
-        // Calendar type code "07" = Thai Buddhist calendar, insert this after
-        // all prefixes have been consumed as it is actually a format modifier
-        // and not a prefix.
-        if (aTmpLocale.mnCalendarType == 0x07)
-        {
-            // Currently calendars are tied to the locale of the entire number
-            // format, e.g. [~buddhist] in en_US doesn't work.
-            // => Having different locales in sub formats does not work!
-            /* TODO: calendars could be tied to a sub format's NatNum info
-             * instead, or even better be available for any locale. Needs a
-             * different implementation of GetCal() and locale data calendars.
-             * */
-            // If this is not Thai yet, make it so.
-            if (MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_THAI)
+        case 0x03 : // Gengou calendar
+            sCalendar = "[~gengou]";
+            // Only Japanese language support Gengou calendar
+            if ( nLocaleLang != LANGUAGE_JAPANESE )
             {
-                maLocale = aTmpLocale;
-                nLang = maLocale.meLanguage = LANGUAGE_THAI;
+                nLang = maLocale.meLanguage = LANGUAGE_JAPANESE;
             }
+            break;
+        case 0x05 : // unknown calendar
+            break;
+        case 0x06 : // Hijri calendar
+        case 0x17 : // same?
+            sCalendar = "[~hijri]";
+            // Only Arabic or Farsi languages support Hijri calendar
+            if ( ( ( nLocaleLang & LANGUAGE_MASK_PRIMARY ) != LANGUAGE_ARABIC_PRIMARY_ONLY )
+                  && nLocaleLang != LANGUAGE_FARSI )
+            {
+                if ( ( ( nTmpLocaleLang & LANGUAGE_MASK_PRIMARY ) == LANGUAGE_ARABIC_PRIMARY_ONLY )
+                      || nTmpLocaleLang == LANGUAGE_FARSI )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_ARABIC_SAUDI_ARABIA;
+                }
+            }
+            break;
+        case 0x07 : // Buddhist calendar
             sCalendar="[~buddhist]";
-        }
+            // Only Thai or Lao languages support Buddhist calendar
+            if ( nLocaleLang != LANGUAGE_THAI && nLocaleLang != LANGUAGE_LAO )
+            {
+                if ( nTmpLocaleLang == LANGUAGE_THAI || nTmpLocaleLang == LANGUAGE_LAO )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_THAI;
+                }
+            }
+            break;
+        case 0x08 : // Hebrew calendar
+            sCalendar = "[~jewish]";
+            // Many languages (but not all) support Jewish calendar
+            // Unable to find any logic => keep same language
+            break;
+        case 0x0E : // unknown calendar
+        case 0x0F : // unknown calendar
+        case 0x10 : // Indian calendar (unsupported)
+        case 0x11 : // unknown calendar
+        case 0x12 : // unknown calendar
+        case 0x13 : // unknown calendar
+        default : // other calendars (see tdf#36038) are not handle by LibO
+            break;
     }
+    /** Reference language for each numeral ID */
+    const LanguageType aNumeralIDtoLanguage []=
+    {
+        LANGUAGE_DONTKNOW,              // 0x00
+        LANGUAGE_ENGLISH_US,            // 0x01
+        LANGUAGE_ARABIC_SAUDI_ARABIA,   // 0x02 + all Arabic
+        LANGUAGE_FARSI,                 // 0x03
+        LANGUAGE_HINDI,                 // 0x04 + Devanagari
+        LANGUAGE_BENGALI,               // 0x05
+        LANGUAGE_PUNJABI,               // 0x06
+        LANGUAGE_GUJARATI,              // 0x07
+        LANGUAGE_ODIA,                  // 0x08
+        LANGUAGE_TAMIL,                 // 0x09
+        LANGUAGE_TELUGU,                // 0x0A
+        LANGUAGE_KANNADA,               // 0x0B
+        LANGUAGE_MALAYALAM,             // 0x0C
+        LANGUAGE_THAI,                  // 0x0D
+        LANGUAGE_LAO,                   // 0x0E
+        LANGUAGE_TIBETAN,               // 0x0F
+        LANGUAGE_BURMESE,               // 0x10
+        LANGUAGE_TIGRIGNA_ETHIOPIA,     // 0x11
+        LANGUAGE_KHMER,                 // 0x12
+        LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA, // 0x13
+        LANGUAGE_DONTKNOW,              // 0x14
+        LANGUAGE_DONTKNOW,              // 0x15
+        LANGUAGE_DONTKNOW,              // 0x16
+        LANGUAGE_DONTKNOW,              // 0x17
+        LANGUAGE_DONTKNOW,              // 0x18
+        LANGUAGE_DONTKNOW,              // 0x19
+        LANGUAGE_DONTKNOW,              // 0x1A
+        LANGUAGE_JAPANESE,              // 0x1B
+        LANGUAGE_JAPANESE,              // 0x1C
+        LANGUAGE_JAPANESE,              // 0x1D
+        LANGUAGE_CHINESE_SIMPLIFIED,    // 0x1E
+        LANGUAGE_CHINESE_SIMPLIFIED,    // 0x1F
+        LANGUAGE_CHINESE_SIMPLIFIED,    // 0x20
+        LANGUAGE_CHINESE_TRADITIONAL,   // 0x21
+        LANGUAGE_CHINESE_TRADITIONAL,   // 0x22
+        LANGUAGE_CHINESE_TRADITIONAL,   // 0x23
+        LANGUAGE_KOREAN,                // 0x24
+        LANGUAGE_KOREAN,                // 0x25
+        LANGUAGE_KOREAN,                // 0x26
+        LANGUAGE_KOREAN                 // 0x27
+    };
+
+    sal_uInt16 nNumeralID = aTmpLocale.mnNumeralShape & 0x7F;
+    LanguageType nReferenceLanguage = nNumeralID <= 0x27 ? aNumeralIDtoLanguage[nNumeralID] : LANGUAGE_DONTKNOW;
+
+    switch ( nNumeralID )
+    {
+        // Regular cases: all languages with same primary mask use same numerals
+        case 0x03 : // Perso-Arabic (Farsi) numerals
+        case 0x05 : // Bengali numerals
+        case 0x06 : // Punjabi numerals
+        case 0x07 : // Gujarati numerals
+        case 0x08 : // Odia (Orya) numerals
+        case 0x09 : // Tamil numerals
+        case 0x0A : // Telugu numerals
+        case 0x0B : // Kannada numerals
+        case 0x0C : // Malayalam numerals
+        case 0x0D : // Thai numerals
+        case 0x0E : // Lao numerals
+        case 0x0F : // Tibetan numerals
+        case 0x10 : // Burmese (Myanmar) numerals
+        case 0x11 : // Tigrigna (Ethiopia) numerals
+        case 0x12 : // Khmer numerals
+            if ( ( nLocaleLang & LANGUAGE_MASK_PRIMARY ) != ( nReferenceLanguage & LANGUAGE_MASK_PRIMARY ) )
+            {
+                if ( ( nTmpLocaleLang & LANGUAGE_MASK_PRIMARY ) == ( nReferenceLanguage & LANGUAGE_MASK_PRIMARY ) )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = nReferenceLanguage;
+                }
+            }
+            break;
+        // Special cases
+        case 0x04 : // Devanagari (Hindi) numerals
+            // same numerals (Devanagari) for languages with different primary masks
+            if ( nLocaleLang != LANGUAGE_HINDI    && nLocaleLang != LANGUAGE_MARATHI
+            && ( nLocaleLang & LANGUAGE_MASK_PRIMARY ) != ( LANGUAGE_NEPALI & LANGUAGE_MASK_PRIMARY ) )
+            {
+                if ( nTmpLocaleLang == LANGUAGE_HINDI || nTmpLocaleLang == LANGUAGE_MARATHI
+                || ( nTmpLocaleLang & LANGUAGE_MASK_PRIMARY ) == ( LANGUAGE_NEPALI & LANGUAGE_MASK_PRIMARY ) )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_HINDI;
+                }
+            }
+            break;
+        case 0x13 : // Mongolian numerals
+            // not all Mongolian languages use Mongolian numerals
+            if ( nLocaleLang != LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA
+              && nLocaleLang != LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA
+              && nLocaleLang != LANGUAGE_MONGOLIAN_MONGOLIAN_LSO )
+            {
+                if ( nTmpLocaleLang == LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA
+                  || nTmpLocaleLang == LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA
+                  || nTmpLocaleLang == LANGUAGE_MONGOLIAN_MONGOLIAN_LSO )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA;
+                }
+            }
+            break;
+        case 0x02 : // Eastern-Arabic numerals
+            // all arabic primary mask + LANGUAGE_PUNJABI_ARABIC_LSO
+            if ( ( nLocaleLang & LANGUAGE_MASK_PRIMARY ) != LANGUAGE_ARABIC_PRIMARY_ONLY
+                && nLocaleLang != LANGUAGE_PUNJABI_ARABIC_LSO )
+            {
+                if ( ( nTmpLocaleLang & LANGUAGE_MASK_PRIMARY ) == LANGUAGE_ARABIC_PRIMARY_ONLY
+                    || nTmpLocaleLang != LANGUAGE_PUNJABI_ARABIC_LSO )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = nReferenceLanguage;
+                }
+            }
+            break;
+        // CJK numerals
+        case 0x1B : // simple Asian numerals, Japanese
+        case 0x1C : // financial Asian numerals, Japanese
+        case 0x1D : // Arabic fullwidth numerals, Japanese
+        case 0x24 : // simple Asian numerals, Korean
+        case 0x25 : // financial Asian numerals, Korean
+        case 0x26 : // Arabic fullwidth numerals, Korean
+        case 0x27 : // Korean Hangul numerals
+            // Japanese and Korean are regular
+            if ( ( nLocaleLang & LANGUAGE_MASK_PRIMARY ) != ( nReferenceLanguage & LANGUAGE_MASK_PRIMARY ) )
+            {
+                if ( ( nTmpLocaleLang & LANGUAGE_MASK_PRIMARY ) == ( nReferenceLanguage & LANGUAGE_MASK_PRIMARY ) )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = nReferenceLanguage;
+                }
+            }
+            SAL_FALLTHROUGH;
+        case 0x1E : // simple Asian numerals, Chinese-PRC
+        case 0x1F : // financial Asian numerals, Chinese-PRC
+        case 0x20 : // Arabic fullwidth numerals, Chinese-PRC
+        case 0x21 : // simple Asian numerals, Chinese-Taiwan
+        case 0x22 : // financial Asian numerals, Chinese-Taiwan
+        case 0x23 : // Arabic fullwidth numerals, Chinese-Taiwan
+            nNatNum = nNumeralID == 0x27 ? 9 : ( ( nNumeralID - 0x1B ) % 3 ) + 1;
+            // [NatNum1] simple numerals
+            // [natNum2] financial numerals
+            // [NatNum3] Arabic fullwidth numerals
+            // Chine simplified and Chinese traditional have same primary mask
+            // Chinese-PRC
+            if ( nReferenceLanguage == LANGUAGE_CHINESE_SIMPLIFIED
+              && nLocaleLang != LANGUAGE_CHINESE_SIMPLIFIED
+              && nLocaleLang != LANGUAGE_CHINESE_SINGAPORE
+              && nLocaleLang != LANGUAGE_CHINESE_LSO )
+            {
+                if ( nTmpLocaleLang == LANGUAGE_CHINESE_SIMPLIFIED
+                  || nTmpLocaleLang == LANGUAGE_CHINESE_SINGAPORE
+                  || nTmpLocaleLang == LANGUAGE_CHINESE_LSO )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_CHINESE_SIMPLIFIED;
+                }
+            }
+            // Chinese-Taiwan
+            else if ( nReferenceLanguage == LANGUAGE_CHINESE_TRADITIONAL
+                   && nLocaleLang != LANGUAGE_CHINESE_TRADITIONAL
+                   && nLocaleLang != LANGUAGE_CHINESE_HONGKONG
+                   && nLocaleLang != LANGUAGE_CHINESE_MACAU )
+            {
+                if ( nTmpLocaleLang == LANGUAGE_CHINESE_TRADITIONAL
+                  || nTmpLocaleLang == LANGUAGE_CHINESE_HONGKONG
+                  || nTmpLocaleLang == LANGUAGE_CHINESE_MACAU )
+                {
+                    nLang = maLocale.meLanguage = aTmpLocale.meLanguage;
+                }
+                else
+                {
+                    nLang = maLocale.meLanguage = LANGUAGE_CHINESE_TRADITIONAL;
+                }
+            }
+            break;
+    }
+    if ( nNumeralID >= 0x02 && nNumeralID <= 0x13 )
+        nNatNum = 1;
+    if ( nNatNum )
+        rString.insert( nPos, "[NatNum"+OUString::number(nNatNum)+"]");
     return sCalendar;
 }
 
