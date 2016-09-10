@@ -216,82 +216,82 @@ String STR_CUSTOMANIMATION_REPEAT_UNTIL_END_OF_SLIDE
 
 String STR_CUSTOMANIMATION_DIRECTION_PROPERTY
 {
-    Text [ en-US ] = "Direction";
+    Text [ en-US ] = "Direction:";
 };
 
 String STR_CUSTOMANIMATION_ZOOM_PROPERTY
 {
-    Text [ en-US ] = "Zoom";
+    Text [ en-US ] = "Zoom:";
 };
 
 String STR_CUSTOMANIMATION_SPOKES_PROPERTY
 {
-    Text [ en-US ] = "Spokes";
+    Text [ en-US ] = "Spokes:";
 };
 
 String STR_CUSTOMANIMATION_FIRST_COLOR_PROPERTY
 {
-    Text [ en-US ] = "First color";
+    Text [ en-US ] = "First color:";
 };
 
 String STR_CUSTOMANIMATION_SECOND_COLOR_PROPERTY
 {
-    Text [ en-US ] = "Second color";
+    Text [ en-US ] = "Second color:";
 };
 
 String STR_CUSTOMANIMATION_FILL_COLOR_PROPERTY
 {
-    Text [ en-US ] = "Fill color";
+    Text [ en-US ] = "Fill color:";
 };
 
 String STR_CUSTOMANIMATION_STYLE_PROPERTY
 {
-    Text [ en-US ] = "Style";
+    Text [ en-US ] = "Style:";
 };
 
 String STR_CUSTOMANIMATION_FONT_PROPERTY
 {
-    Text [ en-US ] = "Font";
+    Text [ en-US ] = "Font:";
 };
 
 String STR_CUSTOMANIMATION_FONT_COLOR_PROPERTY
 {
-    Text [ en-US ] = "Font color";
+    Text [ en-US ] = "Font color:";
 };
 
 String STR_CUSTOMANIMATION_FONT_SIZE_STYLE_PROPERTY
 {
-    Text [ en-US ] = "Style";
+    Text [ en-US ] = "Style:";
 };
 
 String STR_CUSTOMANIMATION_FONT_STYLE_PROPERTY
 {
-    Text [ en-US ] = "Typeface";
+    Text [ en-US ] = "Typeface:";
 };
 
 String STR_CUSTOMANIMATION_LINE_COLOR_PROPERTY
 {
-    Text [ en-US ] = "Line color";
+    Text [ en-US ] = "Line color:";
 };
 
 String STR_CUSTOMANIMATION_SIZE_PROPERTY
 {
-    Text [ en-US ] = "Font size";
+    Text [ en-US ] = "Font size:";
 };
 
 String STR_CUSTOMANIMATION_SCALE_PROPERTY
 {
-    Text [ en-US ] = "Size";
+    Text [ en-US ] = "Size:";
 };
 
 String STR_CUSTOMANIMATION_AMOUNT_PROPERTY
 {
-    Text [ en-US ] = "Amount";
+    Text [ en-US ] = "Amount:";
 };
 
 String STR_CUSTOMANIMATION_COLOR_PROPERTY
 {
-    Text [ en-US ] = "Color";
+    Text [ en-US ] = "Color:";
 };
 
 String STR_CUSTOMANIMATION_NO_SOUND
