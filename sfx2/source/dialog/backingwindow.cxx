@@ -619,11 +619,6 @@ IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
         dispatchURL( ".uno:NewDoc", OUString(), xFrame, aArgs );
 
     }
-
-    mpAllRecentThumbnails->Hide();
-    mpLocalView->Show();
-    mpLocalView->reload();
-    mpLocalView->GrabFocus();
 }
 
 IMPL_LINK_TYPED(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
