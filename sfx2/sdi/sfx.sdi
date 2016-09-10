@@ -5096,7 +5096,21 @@ SfxVoidItem QuestionAnswers SID_Q_AND_A
     MenuConfig = TRUE,
     GroupId = GID_APPLICATION;
 ]
+SfxVoidItem Documentation SID_DOCUMENTATION
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
 
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
 
 SfxVoidItem ShowLicense SID_SHOW_LICENSE
 ()
