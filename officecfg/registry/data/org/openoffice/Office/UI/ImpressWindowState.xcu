@@ -909,7 +909,7 @@
           <value xml:lang="en-US">Media Playback</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="ContextSensitive" oor:type="xs:boolean">
           <value>true</value>
