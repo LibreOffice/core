@@ -65,4 +65,7 @@ public:
     virtual bool            LayoutText(ImplLayoutArgs&) override;
     virtual void            DrawText( SalGraphics& ) const override;
     std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&) const override;
+
+    virtual bool            GetCharWidths(DeviceCoordinate* pCharWidths) const override;
+    virtual void            ApplyDXArray(ImplLayoutArgs&) override;
 };
