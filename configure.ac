@@ -2985,7 +2985,7 @@ if test $_os = iOS; then
     xcode_developer=`xcode-select -print-path`
 
     current_sdk_ver=9.3
-    for sdkver in 9.3 9.2; do
+    for sdkver in 10.0 9.3 9.2; do
         t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$sdkver.sdk
         if test -d $t; then
             ios_sdk=$sdkver
