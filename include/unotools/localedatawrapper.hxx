@@ -63,17 +63,17 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     css::uno::Sequence< OUString >                     aDateAcceptancePatterns;
     css::uno::Sequence< sal_Int32 >                    aGrouping;
     // cached items
-    OUString               aLocaleItem[css::i18n::LocaleItem::COUNT];
-    OUString               aReservedWord[css::i18n::reservedWords::COUNT];
-    OUString               aCurrSymbol;
-    OUString               aCurrBankSymbol;
-    int                         nDateFormat;
-    int                         nLongDateFormat;
-    sal_uInt16                      nCurrPositiveFormat;
-    sal_uInt16                      nCurrNegativeFormat;
-    sal_uInt16                      nCurrDigits;
-    bool                        bLocaleDataItemValid;
-    bool                        bReservedWordValid;
+    OUString                aLocaleItem[css::i18n::LocaleItem::COUNT];
+    OUString                aReservedWord[css::i18n::reservedWords::COUNT];
+    OUString                aCurrSymbol;
+    OUString                aCurrBankSymbol;
+    int                     nDateFormat;
+    int                     nLongDateFormat;
+    sal_uInt16              nCurrPositiveFormat;
+    sal_uInt16              nCurrNegativeFormat;
+    sal_uInt16              nCurrDigits;
+    bool                    bLocaleDataItemValid;
+    bool                    bReservedWordValid;
     mutable ::utl::ReadWriteMutex   aMutex;
     struct Locale_Compare
     {
