@@ -100,24 +100,18 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
     aOUSource += aSubStr;
 
     // update module in library
-    ScriptDocument aDocument( ScriptDocument::NoDocument );
     StarBASIC* pBasic = dynamic_cast<StarBASIC*>(pModule->GetParent());
-    DBG_ASSERT(pBasic, "basctl::CreateMacro: No Basic found!");
-    if ( pBasic )
+    BasicManager* pBasMgr = pBasic ? FindBasicManager(pBasic) : nullptr;
+    SAL_WARN_IF(!pBasMgr, "basctl.basicide", "No BasicManager found!");
+    ScriptDocument aDocument = pBasMgr
+        ? ScriptDocument::getDocumentForBasicManager(pBasMgr)
+        : ScriptDocument(ScriptDocument::NoDocument);
+
+    if (aDocument.isValid())
     {
-        BasicManager* pBasMgr = FindBasicManager( pBasic );
-        DBG_ASSERT(pBasMgr, "basctl::CreateMacro: No BasicManager found!");
-        if ( pBasMgr )
-        {
-            aDocument = ScriptDocument::getDocumentForBasicManager( pBasMgr );
-            OSL_ENSURE( aDocument.isValid(), "basctl::CreateMacro: no document for the given BasicManager!" );
-            if ( aDocument.isValid() )
-            {
-                OUString aLibName = pBasic->GetName();
-                OUString aModName = pModule->GetName();
-                OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aOUSource ) );
-            }
-        }
+        OUString aLibName = pBasic->GetName();
+        OUString aModName = pModule->GetName();
+        OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aOUSource ) );
     }
 
     SbMethod* pMethod = pModule->FindMethod( aMacroName, SbxClassType::Method );
@@ -127,8 +121,8 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
         pDispatcher->Execute( SID_BASICIDE_UPDATEALLMODULESOURCES );
     }
 
-    if ( aDocument.isAlive() )
-        MarkDocumentModified( aDocument );
+    if (aDocument.isAlive())
+        MarkDocumentModified(aDocument);
 
     return pMethod;
 }
