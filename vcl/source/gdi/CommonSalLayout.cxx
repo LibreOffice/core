@@ -486,3 +486,53 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
     return true;
 }
+
+bool CommonSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
+{
+    int nCharCount = mnEndCharPos - mnMinCharPos;
+
+    for (int i = 0; i < nCharCount; ++i)
+        pCharWidths[i] = 0;
+
+    for (auto const& aGlyphItem : m_GlyphItems)
+        pCharWidths[aGlyphItem.mnCharPos - mnMinCharPos] += aGlyphItem.mnNewWidth;
+
+    return true;
+}
+
+void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
+{
+    int nCharCount = mnEndCharPos - mnMinCharPos;
+    DeviceCoordinate pOldCharWidths[nCharCount];
+    DeviceCoordinate pNewCharWidths[nCharCount];
+
+    GetCharWidths(pOldCharWidths);
+
+    for (int i = 0; i < nCharCount; ++i)
+    {
+        if (i == 0)
+          pNewCharWidths[i] = rArgs.mpDXArray[i];
+        else
+          pNewCharWidths[i] = rArgs.mpDXArray[i] - rArgs.mpDXArray[i - 1];
+    }
+
+    DeviceCoordinate nDelta = 0;
+    size_t i = 0;
+    while (i < m_GlyphItems.size())
+    {
+        int nCharPos = m_GlyphItems[i].mnCharPos - mnMinCharPos;
+        DeviceCoordinate nDiff = pNewCharWidths[nCharPos] - pOldCharWidths[nCharPos];
+
+        m_GlyphItems[i].maLinearPos.X() += nDelta;
+        size_t j = i;
+        while (++j < m_GlyphItems.size())
+        {
+            if (m_GlyphItems[j].mnCharPos != m_GlyphItems[i].mnCharPos)
+              break;
+            m_GlyphItems[j].maLinearPos.X() += nDelta;
+        }
+
+        nDelta += nDiff;
+        i = j;
+    }
+}
