@@ -113,9 +113,11 @@ namespace abp
         /// dtor
         ~ODataSource( );
 
-        /// assignment
+        /// copy assignment
         ODataSource& operator=( const ODataSource& _rSource );
 
+        /// move assignment
+        ODataSource& operator=( ODataSource&& _rSource );
 
         /// checks whether or not the object represents a valid data source
         bool    isValid() const;

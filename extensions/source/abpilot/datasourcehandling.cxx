@@ -328,7 +328,6 @@ namespace abp
         *this = _rSource;
     }
 
-
     ODataSource& ODataSource::operator=( const ODataSource& _rSource )
     {
         if( this != &_rSource )
@@ -338,12 +337,16 @@ namespace abp
         return *this;
     }
 
+    ODataSource& ODataSource::operator=( ODataSource&& _rSource )
+    {
+        m_pImpl = std::move(_rSource.m_pImpl);
+        return *this;
+    }
 
     ODataSource::ODataSource( const Reference< XComponentContext >& _rxORB )
         :m_pImpl(new ODataSourceImpl(_rxORB))
     {
     }
-
 
     ODataSource::~ODataSource( )
     {
