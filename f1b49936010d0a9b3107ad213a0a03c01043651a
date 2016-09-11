@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_ded095cc",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-11T07:13:28Z",
+      "side": 1,
+      "message": "japanese",
+      "revId": "f1b49936010d0a9b3107ad213a0a03c01043651a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
