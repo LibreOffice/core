@@ -1950,13 +1950,17 @@ void SwUiWriterTest::testSearchWithTransliterate()
 {
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
-    SwPaM aPaM(aIdx);
-    pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is paragraph one");
-    pWrtShell->SplitNode();
-    aIdx = SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
-    aPaM = SwPaM(aIdx);
-    pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is Other PARAGRAPH");
+    {
+        SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+        SwPaM aPaM(aIdx);
+        pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is paragraph one");
+        pWrtShell->SplitNode();
+    }
+    {
+        SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+        SwPaM aPaM(aIdx);
+        pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is Other PARAGRAPH");
+    }
     css::util::SearchOptions2 SearchOpt;
     SearchOpt.algorithmType = css::util::SearchAlgorithms_ABSOLUTE;
     SearchOpt.searchFlag = css::util::SearchFlags::ALL_IGNORE_CASE;
