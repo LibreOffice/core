@@ -47,11 +47,16 @@
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">6</property>
+        <property name="margin_right">6</property>
+        <property name="margin_top">6</property>
+        <property name="margin_bottom">3</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">3</property>
         <child>
           <object class="sdlo-CustomAnimationList" id="custom_animation_list">
+            <property name="width_request">260</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="vexpand">True</property>
@@ -70,6 +75,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
+            <property name="margin_top">3</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkButton" id="add_effect">
                 <property name="visible">True</property>
@@ -141,6 +148,7 @@
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_bottom">3</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">6</property>
             <child>
@@ -149,6 +157,8 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">Category:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">categorylb</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -161,6 +171,8 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">Effect:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">effect_list</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -224,6 +236,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes">_Start:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">start_effect_list</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -237,6 +250,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes">_Direction:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">placeholder</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -250,6 +264,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes">D_uration:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">anim_duration:0.00sec</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -301,6 +316,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Options</property>
                     <property name="image">image1</property>
                     <property name="always_show_image">True</property>
                   </object>
@@ -314,10 +330,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the speed of Custom Animation.</property>
-                    <property name="tooltip_text" translatable="yes">Select the speed of Custom Animation.</property>
                     <property name="hexpand">True</property>
-                    <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -357,8 +370,11 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkSeparator" id="separator1">
+                <property name="height_request">2</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_top">3</property>
+                <property name="margin_bottom">3</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -372,6 +388,7 @@
                 <property name="can_focus">False</property>
                 <property name="margin_left">6</property>
                 <property name="margin_right">6</property>
+                <property name="margin_top">3</property>
                 <property name="spacing">18</property>
                 <child>
                   <object class="GtkCheckButton" id="auto_preview">
@@ -420,6 +437,32 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="box1_label">
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Custom Animation Deck</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">box1</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="custom_animation_list_label">
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Custom Animation List</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">custom_animation_list</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">6</property>
           </packing>
         </child>
       </object>
