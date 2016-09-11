@@ -489,3 +489,66 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
     return true;
 }
+
+bool CommonSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
+{
+    int nCharCount = mnEndCharPos - mnMinCharPos;
+
+    for (int i = 0; i < nCharCount; ++i)
+        pCharWidths[i] = 0;
+
+    for (auto const& aGlyphItem : m_GlyphItems)
+        pCharWidths[aGlyphItem.mnCharPos - mnMinCharPos] += aGlyphItem.mnNewWidth;
+
+    return true;
+}
+
+void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
+{
+    if (rArgs.mpDXArray == nullptr)
+        return;
+
+    int nCharCount = mnEndCharPos - mnMinCharPos;
+    std::unique_ptr<DeviceCoordinate[]> const pOldCharWidths(new DeviceCoordinate[nCharCount]);
+    std::unique_ptr<DeviceCoordinate[]> const pNewCharWidths(new DeviceCoordinate[nCharCount]);
+
+    // Get the natural character widths (i.e. before applying DX adjustments).
+    GetCharWidths(pOldCharWidths.get());
+
+    // Calculate the character widths after DX adjustments.
+    for (int i = 0; i < nCharCount; ++i)
+    {
+        if (i == 0)
+            pNewCharWidths[i] = rArgs.mpDXArray[i];
+        else
+            pNewCharWidths[i] = rArgs.mpDXArray[i] - rArgs.mpDXArray[i - 1];
+    }
+
+    // The accumulated difference in X position.
+    DeviceCoordinate nDelta = 0;
+
+    // Apply the DX adjustments to glyph positions and widths.
+    size_t i = 0;
+    while (i < m_GlyphItems.size())
+    {
+        int nCharPos = m_GlyphItems[i].mnCharPos - mnMinCharPos;
+        DeviceCoordinate nDiff = pNewCharWidths[nCharPos] - pOldCharWidths[nCharPos];
+
+        m_GlyphItems[i].maLinearPos.X() += nDelta;
+        size_t j = i;
+        // Apply the delta to other glyphs belonging to the same character.
+        while (++j < m_GlyphItems.size())
+        {
+            if (m_GlyphItems[j].mnCharPos != m_GlyphItems[i].mnCharPos)
+                break;
+            m_GlyphItems[j].maLinearPos.X() += nDelta;
+        }
+
+        // Increment the delta, the loop above makes sure we do so only once
+        // for every character not for every glyph (otherwise we would apply it
+        // multiple times for each glyphs belonging to the same character which
+        // is wrong since DX adjustments are character based).
+        nDelta += nDiff;
+        i = j;
+    }
+}
