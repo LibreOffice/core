@@ -3005,10 +3005,10 @@ if test $_os = iOS; then
     if test "$enable_ios_simulator" = yes; then
         if test "$BITNESS_OVERRIDE" = 64; then
             XCODE_ARCHS=x86_64
-            versionmin=-mios-simulator-version-min=7.0
+            versionmin=-mios-simulator-version-min=9.0
         else
             XCODE_ARCHS=i386
-            versionmin=-mios-simulator-version-min=7.0
+            versionmin=-mios-simulator-version-min=9.0
         fi
     else
         platform=iPhoneOS
@@ -3017,7 +3017,7 @@ if test $_os = iOS; then
         else
             XCODE_ARCHS=armv7
         fi
-        versionmin=-miphoneos-version-min=7.0
+        versionmin=-miphoneos-version-min=9.0
     fi
 
     # LTO is not really recommended for iOS builds,
