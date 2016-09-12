@@ -1239,7 +1239,17 @@ void restartOnMac(bool passArguments) {
 #if HAVE_FEATURE_UPDATE_MAR
 bool isTimeForUpdateCheck()
 {
-    return true;
+    sal_uInt64 nLastUpdate = officecfg::Office::Update::Update::LastUpdateTime::get();
+    if (nLastUpdate == 0)
+        return true;
+
+    sal_uInt64 nNow = tools::Time::GetSystemTicks();
+
+    sal_uInt64 n7DayInMS = 1000 * 60 * 60 * 24 * 7; // 7 days in ms
+    if (nNow - n7DayInMS >= nLastUpdate)
+        return true;
+
+    return false;
 }
 #endif
 
@@ -1485,7 +1495,11 @@ int Desktop::Main()
             }
 
             if (isTimeForUpdateCheck())
+            {
+                sal_uInt64 nNow = tools::Time::GetSystemTicks();
+                officecfg::Office::Update::Update::LastUpdateTime::set(nNow);
                 m_aUpdateThread = std::thread(update_checker);
+            }
         }
 #endif
 
