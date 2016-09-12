@@ -69,7 +69,9 @@ public:
     ~cow_wrapper_client2();
 
     cow_wrapper_client2( const cow_wrapper_client2& );
+    cow_wrapper_client2( cow_wrapper_client2&& );
     cow_wrapper_client2& operator=( const cow_wrapper_client2& );
+    cow_wrapper_client2& operator=( cow_wrapper_client2&& );
 
     void modify( int nVal );
     int  queryUnmodified() const;
@@ -98,7 +100,9 @@ public:
     ~cow_wrapper_client3();
 
     cow_wrapper_client3( const cow_wrapper_client3& );
+    cow_wrapper_client3( cow_wrapper_client3&& );
     cow_wrapper_client3& operator=( const cow_wrapper_client3& );
+    cow_wrapper_client3& operator=( cow_wrapper_client3&& );
 
     void modify( int nVal );
     int  queryUnmodified() const;

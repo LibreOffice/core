@@ -56,9 +56,21 @@ cow_wrapper_client2::cow_wrapper_client2( const cow_wrapper_client2& rSrc ) :
 {
 }
 
+cow_wrapper_client2::cow_wrapper_client2( cow_wrapper_client2&& rSrc ) :
+    maImpl( std::move( rSrc.maImpl ) )
+{
+}
+
 cow_wrapper_client2& cow_wrapper_client2::operator=( const cow_wrapper_client2& rSrc )
 {
     maImpl = rSrc.maImpl;
+
+    return *this;
+}
+
+cow_wrapper_client2& cow_wrapper_client2::operator=( cow_wrapper_client2&& rSrc )
+{
+    maImpl = std::move(rSrc.maImpl);
 
     return *this;
 }
@@ -122,9 +134,21 @@ cow_wrapper_client3::cow_wrapper_client3( const cow_wrapper_client3& rSrc ) :
 {
 }
 
+cow_wrapper_client3::cow_wrapper_client3( cow_wrapper_client3&& rSrc ) :
+    maImpl( std::move( rSrc.maImpl ) )
+{
+}
+
 cow_wrapper_client3& cow_wrapper_client3::operator=( const cow_wrapper_client3& rSrc )
 {
     maImpl = rSrc.maImpl;
+
+    return *this;
+}
+
+cow_wrapper_client3& cow_wrapper_client3::operator=( cow_wrapper_client3&& rSrc )
+{
+    maImpl = std::move(rSrc.maImpl);
 
     return *this;
 }
