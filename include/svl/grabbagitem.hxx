@@ -24,7 +24,7 @@ private:
 public:
 
     SfxGrabBagItem();
-    SfxGrabBagItem(sal_uInt16 nWhich );
+    SfxGrabBagItem(sal_uInt16 nWhich);
     SfxGrabBagItem(const SfxGrabBagItem& rItem);
     virtual ~SfxGrabBagItem();
 

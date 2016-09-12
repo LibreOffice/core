@@ -40,7 +40,7 @@ public:
     /// @@@ public copy ctor, but no copy assignment?
     SwFormatCharFormat( const SwFormatCharFormat& rAttr );
 protected:
-   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 private:
     /// @@@ public copy ctor, but no copy assignment?
