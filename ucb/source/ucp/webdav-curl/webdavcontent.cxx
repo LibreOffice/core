@@ -1462,8 +1462,13 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         // PROPPATCH can change them
                         removeCachedPropertyNames( aTargetURL );
                         // test if HEAD allowed, if not, throw, will be catched immediately
-                        if ( !aDAVOptions.isHeadAllowed() )
+                        // SC_GONE used internally by us, see comment below
+                        // in the catch scope
+                        if ( aDAVOptions.getHttpResponseStatusCode() != SC_GONE &&
+                             !aDAVOptions.isHeadAllowed() )
+                        {
                             throw DAVException( DAVException::DAV_HTTP_ERROR, "405 Not Implemented", 405 );
+                        }
                         // if HEAD is enabled on this site
                         // check if there is a relevant HTTP response status code cached
                         if ( aDAVOptions.getHttpResponseStatusCode() != SC_NONE )
@@ -1517,6 +1522,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                  aLastException.getStatus() == SC_NOT_FOUND )
                             {
                                 SAL_WARN( "ucb.ucp.webdav", "HEAD probably not implemented: fall back to a partial GET" );
+                                aStaticDAVOptionsCache.setHeadAllowed( aTargetURL, false );
                                 lcl_sendPartialGETRequest( bError,
                                                            aLastException,
                                                            aMissingProps,
@@ -1530,10 +1536,27 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
                         if ( bError )
                         {
+                            DAVOptions aDAVOptionsException;
+
+                            aDAVOptionsException.setURL( aTargetURL );
+                            // check if the error was SC_NOT_FOUND, meaning that the
+                            // GET fall back didn't succeeded and the element is really missing
+                            // we will consider the resource SC_GONE (410) for some time
+                            // we use SC_GONE because has the same meaning of SC_NOT_FOUND (404)
+                            // see:
+                            // <https://tools.ietf.org/html/rfc7231#section-6.5.9> (retrieved 2016-10-09)
+                            // apparently it's not used to mark the missing HEAD method (so far...)
+                            sal_uInt16 ResponseStatusCode =
+                                ( aLastException.getStatus() == SC_NOT_FOUND ) ?
+                                SC_GONE :
+                                aLastException.getStatus();
+                            aDAVOptionsException.setHttpResponseStatusCode( ResponseStatusCode );
+                            aDAVOptionsException.setHttpResponseStatusText( aLastException.getData() );
+                            aStaticDAVOptionsCache.updateCachedOption( aDAVOptionsException,
+                                                                       m_nOptsCacheLifeNotFound );
+
                             if ( !shouldAccessNetworkAfterException( aLastException ) )
                             {
-                                // remove the cached OPTIONS and errors
-                                aStaticDAVOptionsCache.removeDAVOptions( aTargetURL );
                                 cancelCommandExecution( aLastException, xEnv );
                                 // unreachable
                             }
@@ -2219,6 +2242,7 @@ uno::Any Content::open(
                 }
                 catch ( DAVException const & e )
                 {
+                    //TODO cache the http error if not yet cached
                     cancelCommandExecution( e, xEnv );
                     // Unreachable
                 }
@@ -3604,6 +3628,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
 bool Content::shouldAccessNetworkAfterException( const DAVException & e )
 {
     if ( ( e.getStatus() == SC_NOT_FOUND ) ||
+         ( e.getStatus() == SC_GONE ) ||
          ( e.getError() == DAVException::DAV_HTTP_TIMEOUT ) ||
          ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) ||
          ( e.getError() == DAVException::DAV_HTTP_CONNECT ) ||
@@ -3788,7 +3813,8 @@ Content::ResourceType Content::getResourceType(
         {
             rResAccess->resetUri();
 
-            if ( aDAVOptions.getHttpResponseStatusCode() != SC_NOT_FOUND )
+            if ( aDAVOptions.getHttpResponseStatusCode() != SC_NOT_FOUND &&
+                 aDAVOptions.getHttpResponseStatusCode() != SC_GONE ) // the cached OPTIONS can have SC_GONE
             {
                 eResourceType = NON_DAV;
             }
@@ -3796,8 +3822,7 @@ Content::ResourceType Content::getResourceType(
             {
                 //resource doesn't exist
                 if ( networkAccessAllowed != nullptr )
-                    *networkAccessAllowed = false;
-          }
+                    *networkAccessAllowed = false;            }
         }
     }
 
@@ -3867,22 +3892,23 @@ void Content::getResourceOptions(
 {
     OUString aRedirURL;
     OUString aTargetURL = rResAccess->getURL();
+    DAVOptions aDAVOptions;
     // first check if in cache, if not, then send method to server
-    if ( !aStaticDAVOptionsCache.getDAVOptions( aTargetURL, rDAVOptions ) )
+    if ( !aStaticDAVOptionsCache.getDAVOptions( aTargetURL, aDAVOptions ) )
     {
         try
         {
-            rResAccess->OPTIONS( rDAVOptions, xEnv );
+            rResAccess->OPTIONS( aDAVOptions, xEnv );
             // IMPORTANT:the correctly implemented server will answer without errors, even if the resource is not present
-            sal_uInt32 nLifeTime = ( rDAVOptions.isClass1() ||
-                                     rDAVOptions.isClass2() ||
-                                     rDAVOptions.isClass3() ) ?
+            sal_uInt32 nLifeTime = ( aDAVOptions.isClass1() ||
+                                     aDAVOptions.isClass2() ||
+                                     aDAVOptions.isClass3() ) ?
                 m_nOptsCacheLifeDAV : // a WebDAV site
                 m_nOptsCacheLifeImplWeb;  // a site implementing OPTIONS but
                                           // it's not DAV
             // if resource is locked, will use a
             // different lifetime
-            if( rDAVOptions.isLocked() )
+            if( aDAVOptions.isLocked() )
                 nLifeTime = m_nOptsCacheLifeDAVLocked;
 
             // check if redirected
@@ -3892,9 +3918,9 @@ void Content::getResourceOptions(
                 aRedirURL.clear();
             }
             // cache this URL's option
-            rDAVOptions.setURL( aTargetURL );
-            rDAVOptions.setRedirectedURL( aRedirURL );
-            aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
+            aDAVOptions.setURL( aTargetURL );
+            aDAVOptions.setRedirectedURL( aRedirURL );
+            aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                   nLifeTime );
         }
         catch ( DAVException const & e )
@@ -3903,8 +3929,8 @@ void Content::getResourceOptions(
             aStaticDAVOptionsCache.removeDAVOptions( aTargetURL );
             rResAccess->resetUri();
 
-            rDAVOptions.setURL( aTargetURL );
-            rDAVOptions.setRedirectedURL( aRedirURL );
+            aDAVOptions.setURL( aTargetURL );
+            aDAVOptions.setRedirectedURL( aRedirURL );
             switch( e.getError() )
             {
                 case DAVException::DAV_HTTP_TIMEOUT:
@@ -3937,16 +3963,20 @@ void Content::getResourceOptions(
                         {
                             SAL_WARN( "ucb.ucp.webdav","OPTIONS - SC_FORBIDDEN for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                             // cache it, so OPTIONS won't be called again, this URL does not support it
-                            aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
+                            aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                                   m_nOptsCacheLifeNotImpl );
                         }
                         break;
                         case SC_BAD_REQUEST:
+                        case SC_INTERNAL_SERVER_ERROR:
                         {
-                            SAL_WARN( "ucb.ucp.webdav","OPTIONS - SC_BAD_REQUEST for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
-                            // cache it, so OPTIONS won't be called again, this URL does not support it
-                            aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
-                                                                  m_nOptsCacheLifeNotImpl );
+                            SAL_WARN( "ucb.ucp.webdav","OPTIONS - SC_BAD_REQUEST or SC_INTERNAL_SERVER_ERROR for URL <" << m_xIdentifier->getContentIdentifier() << ">, HTTP error: "<< e.getStatus()
+                                      << ", '" << e.getData() << "'" );
+                            // cache it, so OPTIONS won't be called again, this URL detect some problem while answering the method
+                            aDAVOptions.setHttpResponseStatusCode( e.getStatus() );
+                            aDAVOptions.setHttpResponseStatusText( e.getData() );
+                            aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
+                                                                  m_nOptsCacheLifeNotFound );
                         }
                         break;
                         case SC_NOT_IMPLEMENTED:
@@ -3954,9 +3984,10 @@ void Content::getResourceOptions(
                         {
                             // OPTIONS method must be implemented in DAV
                             // resource is NON_DAV, or not advertising it
-                            SAL_WARN( "ucb.ucp.webdav","OPTIONS - SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                            SAL_WARN( "ucb.ucp.webdav","OPTIONS - SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED for URL <" << m_xIdentifier->getContentIdentifier() << ">, HTTP error: "<< e.getStatus()
+                                      << ", '" << e.getData() << "'" );
                             // cache it, so OPTIONS won't be called again, this URL does not support it
-                            aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
+                            aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                                   m_nOptsCacheLifeNotImpl );
                         }
                         break;
@@ -3966,22 +3997,26 @@ void Content::getResourceOptions(
                             // instead of SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED.
                             // So check if this is an available resource, or a real 'Not Found' event.
                             sal_uInt32 nLifeTime = m_nOptsCacheLifeNotFound;
-                            if( isResourceAvailable( xEnv, rResAccess, rDAVOptions ) )
+                            if( isResourceAvailable( xEnv, rResAccess, aDAVOptions ) )
                             {
+                                SAL_WARN( "ucb.ucp.webdav", "OPTIONS - Got an SC_NOT_FOUND, but the URL <" << m_xIdentifier->getContentIdentifier() << "> resource exists" );
                                 nLifeTime = m_nOptsCacheLifeNotImpl;
                             }
-                            aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
+                            else
+                                SAL_WARN( "ucb.ucp.webdav", "OPTIONS - SC_NOT_FOUND for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+
+                            aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                                   nLifeTime );
-                            SAL_WARN( "ucb.ucp.webdav", "OPTIONS - SC_NOT_FOUND for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                         }
                         break;
                         default:
                         {
-                            SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAV_HTTP_ERROR, for URL <" << m_xIdentifier->getContentIdentifier() << ">, HTTP error: "<< e.getStatus() );
-                            rDAVOptions.setHttpResponseStatusCode( e.getStatus() );
-                            rDAVOptions.setHttpResponseStatusText( e.getData() );
+                            SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAV_HTTP_ERROR, for URL <" << m_xIdentifier->getContentIdentifier() << ">, HTTP error: "<< e.getStatus()
+                                      << ", '" << e.getData() << "'" );
+                            aDAVOptions.setHttpResponseStatusCode( e.getStatus() );
+                            aDAVOptions.setHttpResponseStatusText( e.getData() );
                             // cache it, so OPTIONS won't be called again, this URL does not support it
-                            aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
+                            aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                                   m_nOptsCacheLifeNotImpl );
                         }
                         break;
@@ -3996,13 +4031,14 @@ void Content::getResourceOptions(
                 {
                     SAL_WARN( "ucb.ucp.webdav","OPTIONS - General DAVException (or max DAV_HTTP_REDIRECT reached) for URL <" << m_xIdentifier->getContentIdentifier() << ">, DAV ExceptionCode: "
                               << e.getError() << ", HTTP error: "<< e.getStatus() );
-                    aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
+                    aStaticDAVOptionsCache.addDAVOptions( aDAVOptions,
                                                           m_nOptsCacheLifeNotImpl );
                 }
                 break;
             }
         }
     }
+    rDAVOptions = aDAVOptions;
 }
 
 //static
