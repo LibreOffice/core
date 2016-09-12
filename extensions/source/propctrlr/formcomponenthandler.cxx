@@ -1048,7 +1048,7 @@ namespace pcr
         case PROPERTY_ID_TARGET_URL:
         case PROPERTY_ID_IMAGE_URL:
         {
-            aDescriptor.Control = new OFileUrlControl( impl_getDefaultDialogParent_nothrow(), WB_TABSTOP | WB_BORDER );
+            aDescriptor.Control = new OFileUrlControl( impl_getDefaultDialogParent_nothrow() );
 
             aDescriptor.PrimaryButtonId = PROPERTY_ID_TARGET_URL == nPropId
                 ? OUString(UID_PROP_DLG_ATTR_TARGET_URL)
@@ -1125,7 +1125,7 @@ namespace pcr
 
                     if ( bIsFormatKey )
                     {
-                        OFormatSampleControl* pControl = new OFormatSampleControl( impl_getDefaultDialogParent_nothrow(), WB_READONLY | WB_TABSTOP | WB_BORDER );
+                        OFormatSampleControl* pControl = new OFormatSampleControl( impl_getDefaultDialogParent_nothrow() );
                         aDescriptor.Control = pControl;
                         pControl->SetFormatSupplier( pSupplier );
 
@@ -1309,7 +1309,7 @@ namespace pcr
         {
             case PROPERTY_ID_REPEAT_DELAY:
             {
-                OTimeDurationControl* pControl = new OTimeDurationControl( impl_getDefaultDialogParent_nothrow(), WB_BORDER | WB_TABSTOP );
+                OTimeDurationControl* pControl = new OTimeDurationControl( impl_getDefaultDialogParent_nothrow() );
                 aDescriptor.Control = pControl;
 
                 pControl->setMinValue( Optional< double >( true, 0 ) );

@@ -41,7 +41,7 @@ class BibWindowContainer : public BibWindow     //Window
         virtual void            Resize() override;
 
     public:
-        BibWindowContainer( vcl::Window* pParent, BibShortCutHandler* pChild, WinBits nStyle = WB_3DLOOK);
+        BibWindowContainer( vcl::Window* pParent, BibShortCutHandler* pChild);
         virtual ~BibWindowContainer();
         virtual void            dispose() override;
 
@@ -82,7 +82,7 @@ class BibBookContainer: public BibSplitWindow
 
     public:
 
-        BibBookContainer(vcl::Window* pParent, WinBits nStyle = WB_3DLOOK );
+        BibBookContainer(vcl::Window* pParent );
         virtual ~BibBookContainer();
         virtual void dispose() override;
 

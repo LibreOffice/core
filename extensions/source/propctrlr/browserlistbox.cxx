@@ -331,8 +331,8 @@ namespace pcr
         }
     }
 
-    OBrowserListBox::OBrowserListBox( vcl::Window* pParent, WinBits nWinStyle)
-            :Control(pParent, nWinStyle| WB_CLIPCHILDREN)
+    OBrowserListBox::OBrowserListBox( vcl::Window* pParent)
+            :Control(pParent, WB_DIALOGCONTROL | WB_CLIPCHILDREN)
             ,m_aLinesPlayground(VclPtr<vcl::Window>::Create(this,WB_DIALOGCONTROL | WB_CLIPCHILDREN))
             ,m_aVScroll(VclPtr<ScrollBar>::Create(this,WB_VSCROLL|WB_REPEAT|WB_DRAG))
             ,m_pHelpWindow( VclPtr<InspectorHelpWindow>::Create( this ) )

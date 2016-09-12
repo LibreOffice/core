@@ -59,7 +59,7 @@ namespace pcr
     class OFormatSampleControl : public OFormatSampleControl_Base
     {
     public:
-        OFormatSampleControl( vcl::Window* pParent, WinBits nWinStyle );
+        OFormatSampleControl( vcl::Window* pParent );
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
@@ -128,7 +128,7 @@ namespace pcr
     class OFileUrlControl : public OFileUrlControl_Base
     {
     public:
-        OFileUrlControl( vcl::Window* pParent, WinBits nWinStyle );
+        OFileUrlControl( vcl::Window* pParent );
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
@@ -145,7 +145,7 @@ namespace pcr
     class OTimeDurationControl : public ONumericControl
     {
     public:
-        OTimeDurationControl( vcl::Window* pParent, WinBits nWinStyle );
+        OTimeDurationControl( vcl::Window* pParent );
         virtual ~OTimeDurationControl();
 
         // XPropertyControl

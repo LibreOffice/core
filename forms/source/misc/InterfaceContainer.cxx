@@ -319,7 +319,7 @@ void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStre
     if ( m_xEventAttacher.is() )
         lcl_saveEvents( aSave, m_xEventAttacher, m_aItems.size() );
 
-    transformEvents( efVersionSO5x );
+    transformEvents();
 
     try
     {
@@ -377,23 +377,7 @@ struct TransformEventTo52Format : public ::std::unary_function< ScriptEventDescr
 };
 
 
-struct TransformEventTo60Format : public ::std::unary_function< ScriptEventDescriptor, void >
-{
-    void operator()( ScriptEventDescriptor& _rDescriptor )
-    {
-        if ( _rDescriptor.ScriptType == "StarBasic" )
-        {   // it's a starbasic macro
-            if ( _rDescriptor.ScriptCode.indexOf( ':' ) < 0 )
-            {   // the macro name does not already contain a :
-                // -> default the type to "document"
-                _rDescriptor.ScriptCode = "document:" + _rDescriptor.ScriptCode;
-            }
-        }
-    }
-};
-
-
-void OInterfaceContainer::transformEvents( const EventFormat _eTargetFormat )
+void OInterfaceContainer::transformEvents()
 {
     OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::transformEvents: no event attacher manager!" );
     if ( !m_xEventAttacher.is() )
@@ -417,10 +401,7 @@ void OInterfaceContainer::transformEvents( const EventFormat _eTargetFormat )
                 ScriptEventDescriptor* pChildEventsEnd  =   pChildEvents    +   aChildEvents.getLength();
 
                 // do the transformation
-                if ( efVersionSO6x == _eTargetFormat )
-                    ::std::for_each( pChildEvents, pChildEventsEnd, TransformEventTo60Format() );
-                else
-                    ::std::for_each( pChildEvents, pChildEventsEnd, TransformEventTo52Format() );
+                ::std::for_each( pChildEvents, pChildEventsEnd, TransformEventTo52Format() );
 
                 // revoke the script events
                 m_xEventAttacher->revokeScriptEvents( i );

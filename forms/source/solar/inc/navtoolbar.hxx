@@ -137,8 +137,8 @@ namespace frm
         void updateFeatureStates( );
 
         // iterating through item windows
-        typedef void (NavigationToolBar::*ItemWindowHandler) (sal_uInt16, vcl::Window*, const void*) const;
-        void    forEachItemWindow( ItemWindowHandler _handler, const void* _pParam );
+        typedef void (NavigationToolBar::*ItemWindowHandler) (sal_uInt16, vcl::Window*) const;
+        void    forEachItemWindow( ItemWindowHandler _handler );
         typedef void (*ItemWindowHandler2) (sal_uInt16, vcl::Window*, const void*);
         void    forEachItemWindow( ItemWindowHandler2 _handler, const void* _pParam );
 
@@ -147,9 +147,9 @@ namespace frm
 #if 0
         void setItemWindowZoom( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
 #endif
-        void setItemControlFont( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
-        void setItemControlForeground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
-        void adjustItemWindowWidth( sal_uInt16 _nItemId, vcl::Window* _pItemWindow, const void* /* _pParam */ ) const;
+        void setItemControlFont( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow ) const;
+        void setItemControlForeground( sal_uInt16 /* _nItemId */, vcl::Window* _pItemWindow ) const;
+        void adjustItemWindowWidth( sal_uInt16 _nItemId, vcl::Window* _pItemWindow ) const;
         static void enableItemRTL( sal_uInt16 /*_nItemId*/, vcl::Window* _pItemWindow, const void* _pIsRTLEnabled );
     };
 
