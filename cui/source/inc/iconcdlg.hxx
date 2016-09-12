@@ -39,22 +39,19 @@ class IconChoicePage;
 
 // Create-Function
 typedef VclPtr<IconChoicePage> (*CreatePage)(vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet &rAttrSet);
-typedef const sal_uInt16*      (*GetPageRanges)(); // gives international Which-value
 
 /// Data-structure for pages in dialog
 struct IconChoicePageData
 {
     sal_uInt16 nId;
     CreatePage fnCreatePage;    ///< pointer to the factory
-    GetPageRanges fnGetRanges;  ///< pointer to the ranges-function
     VclPtr<IconChoicePage> pPage;      ///< the TabPage itself
     bool bRefresh;          ///< Flag: page has to be newly initialized
 
     // constructor
-    IconChoicePageData( sal_uInt16 Id, CreatePage fnPage, GetPageRanges fnRanges )
+    IconChoicePageData( sal_uInt16 Id, CreatePage fnPage )
         : nId           ( Id ),
           fnCreatePage  ( fnPage ),
-          fnGetRanges   ( fnRanges ),
           pPage         ( nullptr ),
           bRefresh      ( false )
     {}
@@ -154,8 +151,7 @@ protected:
 public:
 
     // the IconChoiceCtrl's could also be set in the Ctor
-    IconChoiceDialog ( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
-                       const SfxItemSet * pItemSet = nullptr );
+    IconChoiceDialog ( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
     virtual ~IconChoiceDialog ();
     virtual void dispose() override;
 

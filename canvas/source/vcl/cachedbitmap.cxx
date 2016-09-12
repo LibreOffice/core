@@ -40,7 +40,7 @@ namespace vclcanvas
                                 const rendering::ViewState&                 rUsedViewState,
                                 const rendering::RenderState&               rUsedRenderState,
                                 const uno::Reference< rendering::XCanvas >& rTarget ) :
-        CachedPrimitiveBase( rUsedViewState, rTarget, true ),
+        CachedPrimitiveBase( rUsedViewState, rTarget ),
         mpGraphicObject( rGraphicObject ),
         maRenderState(rUsedRenderState),
         maPoint( rPoint ),

@@ -77,8 +77,8 @@ const sal_uInt16 SvxNumberFormatTabPage::pRanges[] =
 #*
 #************************************************************************/
 
-SvxNumberPreview::SvxNumberPreview(vcl::Window* pParent, WinBits nStyle)
-    : Window(pParent, nStyle)
+SvxNumberPreview::SvxNumberPreview(vcl::Window* pParent)
+    : Window(pParent, WB_BORDER)
     , mnPos(-1)
     , mnChar(0x0)
 {

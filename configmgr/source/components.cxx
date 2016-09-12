@@ -224,10 +224,9 @@ rtl::Reference< Node > Components::resolvePathRepresentation(
         pathRepresentation, canonicRepresentation, path, finalizedLayer);
 }
 
-rtl::Reference< Node > Components::getTemplate(
-    int layer, OUString const & fullName) const
+rtl::Reference< Node > Components::getTemplate(OUString const & fullName) const
 {
-    return data_.getTemplate(layer, fullName);
+    return data_.getTemplate(Data::NO_LAYER, fullName);
 }
 
 void Components::addRootAccess(rtl::Reference< RootAccess > const & access) {
