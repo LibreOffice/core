@@ -48,6 +48,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_017390b2",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-09-12T06:45:39Z",
+      "side": 1,
+      "message": "Putting it into an Any will not change anything. All subclasses of OWeakObject are reference counted, so putting xStyle directly into a container or putting it first into Any makes no difference; except that putting it into an Any without a reason makes the code more complicated. :-)",
+      "parentUuid": "ba5da102_5e4ba559",
+      "revId": "2df9b96aa439f809f682baa21ff3eb62ce90488d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_7e48695c",
         "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
         "patchSetId": 1
@@ -65,6 +83,24 @@
         "endLine": 1206,
         "endChar": 65
       },
+      "revId": "2df9b96aa439f809f682baa21ff3eb62ce90488d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_216894ba",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-09-12T06:45:39Z",
+      "side": 1,
+      "message": "Yes, that would be nice.",
+      "parentUuid": "ba5da102_7e48695c",
       "revId": "2df9b96aa439f809f682baa21ff3eb62ce90488d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
