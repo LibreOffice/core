@@ -1697,7 +1697,7 @@ SwAccessibleMap::~SwAccessibleMap()
     {
         osl::MutexGuard aGuard( maMutex );
 #if OSL_DEBUG_LEVEL > 0
-        assert((!mpFrameMap || mpFrameMap->empty()) &&
+        SAL_WARN_IF(!(!mpFrameMap || mpFrameMap->empty()), "sw.a11y",
                 "Frame map should be empty after disposing the root frame");
         if( mpFrameMap )
         {
@@ -1714,7 +1714,7 @@ SwAccessibleMap::~SwAccessibleMap()
                 ++aIter;
             }
         }
-        assert((!mpShapeMap || mpShapeMap->empty()) &&
+        SAL_WARN_IF(!(!mpShapeMap || mpShapeMap->empty()), "sw.a11y",
                 "Object map should be empty after disposing the root frame");
         if( mpShapeMap )
         {
