@@ -37,14 +37,13 @@ IMPLEMENT_SERVICE_INFO(OView,"com.sun.star.sdbcx.VView","com.sun.star.sdbcx.View
 OView::OView(bool _bCase,
             const OUString& Name,
             const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData,
-            sal_Int32 CheckOption,
             const OUString& Command,
             const OUString& SchemaName,
             const OUString& CatalogName) : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper,_bCase)
             ,m_CatalogName(CatalogName)
             ,m_SchemaName(SchemaName)
             ,m_Command(Command)
-            ,m_CheckOption(CheckOption)
+            ,m_CheckOption(0)
             ,m_xMetaData(_xMetaData)
 
 {
