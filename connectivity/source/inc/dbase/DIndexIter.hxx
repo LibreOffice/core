@@ -52,11 +52,9 @@ namespace connectivity
             ONDXKey* GetNextKey();
 
         public:
-            OIndexIterator(ODbaseIndex* pInd,
-                            file::OBoolOperator* pOp,
-                            const file::OOperand* pOper)
-                :m_pOperator(pOp)
-                ,m_pOperand(pOper)
+            OIndexIterator(ODbaseIndex* pInd)
+                :m_pOperator(nullptr)
+                ,m_pOperand(nullptr)
                 ,m_xIndex(pInd)
                 ,m_nCurNode(NODE_NOTFOUND)
             {

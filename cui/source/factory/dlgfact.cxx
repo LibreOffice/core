@@ -956,7 +956,7 @@ VclAbstractRefreshableDialog * AbstractDialogFactory_Impl::CreateActualizeProgre
 VclAbstractDialog*
 AbstractDialogFactory_Impl::CreateScriptErrorDialog(const css::uno::Any& rException)
 {
-    return new SvxScriptErrorDialog(nullptr, rException);
+    return new SvxScriptErrorDialog(rException);
 }
 
 AbstractScriptSelectorDialog*
@@ -1506,7 +1506,7 @@ SvxAbstractSplittTableDialog* AbstractDialogFactory_Impl::CreateSvxSplittTableDi
 
 SvxAbstractNewTableDialog* AbstractDialogFactory_Impl::CreateSvxNewTableDialog()
 {
-    return new SvxNewTableDialog( nullptr );
+    return new SvxNewTableDialog;
 }
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(

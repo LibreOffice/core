@@ -68,7 +68,7 @@ OKey::OKey(bool _bCase) :   ODescriptor_BASE(m_aMutex)
 
 OKey::OKey(const OUString& Name,const std::shared_ptr<KeyProperties>& _rProps, bool _bCase)
 : ODescriptor_BASE(m_aMutex)
- ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
+ ,ODescriptor(ODescriptor_BASE::rBHelper, _bCase)
  ,m_aProps(_rProps)
  ,m_pColumns(nullptr)
 {

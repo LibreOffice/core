@@ -51,7 +51,7 @@ const char *MorkMagicHeader = "// <!-- <mdb:mork:z v=\"1.4\"/> -->";
 const char *MorkDictColumnMeta = "<(a=c)>";
 
 
-MorkParser::MorkParser( int DefaultScope ) :
+MorkParser::MorkParser() :
     columns_(),
     values_(),
     mork_(),
@@ -60,7 +60,7 @@ MorkParser::MorkParser( int DefaultScope ) :
     morkData_(),
     morkPos_(0),
     nextAddValueId_(0x7fffffff),
-    defaultScope_(DefaultScope),
+    defaultScope_(0x80),
     defaultListScope_(0x81),
     defaultTableId_(1),
     nowParsing_(NPValues)

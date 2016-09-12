@@ -21,8 +21,8 @@
 #include "dialmgr.hxx"
 #include "newtabledlg.hxx"
 
-SvxNewTableDialog::SvxNewTableDialog( vcl::Window* pParent )
-    : m_pDialog( VclPtr<ModalDialog>::Create( pParent, "NewTableDialog", "cui/ui/newtabledialog.ui" ) )
+SvxNewTableDialog::SvxNewTableDialog()
+    : m_pDialog( VclPtr<ModalDialog>::Create( nullptr, "NewTableDialog", "cui/ui/newtabledialog.ui" ) )
 {
     m_pDialog->get(mpNumRows, "rows");
     m_pDialog->get(mpNumColumns, "columns");

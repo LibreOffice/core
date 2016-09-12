@@ -61,7 +61,7 @@ sal_Bool SAL_CALL OIndex::supportsService( const OUString& _rServiceName ) throw
     return cppu::supportsService(this, _rServiceName);
 }
 
-OIndex::OIndex(bool _bCase) :   ODescriptor_BASE(m_aMutex)
+OIndex::OIndex(bool _bCase) : ODescriptor_BASE(m_aMutex)
                 ,   ODescriptor(ODescriptor_BASE::rBHelper,_bCase,true)
                 ,m_IsUnique(false)
                 ,m_IsPrimaryKeyIndex(false)
@@ -76,7 +76,7 @@ OIndex::OIndex( const OUString& Name,
                 bool _isPrimaryKeyIndex,
                 bool _isClustered,
                 bool _bCase) :  ODescriptor_BASE(m_aMutex)
-                        ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
+                        ,ODescriptor(ODescriptor_BASE::rBHelper, _bCase)
                         ,m_Catalog(Catalog)
                         ,m_IsUnique(_isUnique)
                         ,m_IsPrimaryKeyIndex(_isPrimaryKeyIndex)

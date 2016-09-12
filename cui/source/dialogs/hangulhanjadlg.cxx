@@ -100,8 +100,7 @@ namespace svx
 
     public:
         void Paint( OutputDevice& _rDevice, const Rectangle& _rRect, DrawTextFlags _nTextStyle,
-            Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation,
-            vcl::ControlLayoutData* _pLayoutData = nullptr );
+            Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation );
     };
 
     PseudoRubyText::PseudoRubyText()
@@ -118,13 +117,8 @@ namespace svx
 
 
     void PseudoRubyText::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect, DrawTextFlags _nTextStyle,
-                               Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation,
-                               vcl::ControlLayoutData* _pLayoutData )
+                               Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation )
     {
-        bool bLayoutOnly  = (nullptr != _pLayoutData);
-        MetricVector* pTextMetrics = bLayoutOnly ? &_pLayoutData->m_aUnicodeBoundRects : nullptr;
-        OUString* pDisplayText = bLayoutOnly ? &_pLayoutData->m_aDisplayText       : nullptr;
-
         Size aPlaygroundSize(_rRect.GetSize());
 
         // the font for the secondary text:
@@ -194,10 +188,10 @@ namespace svx
         nDrawTextStyle &= ~DrawTextFlags( DrawTextFlags::Right | DrawTextFlags::Left | DrawTextFlags::Bottom | DrawTextFlags::Top );
         nDrawTextStyle |= DrawTextFlags::Center | DrawTextFlags::VCenter;
 
-        rRenderContext.DrawText( aPrimaryRect, m_sPrimaryText, nDrawTextStyle, pTextMetrics, pDisplayText );
+        rRenderContext.DrawText( aPrimaryRect, m_sPrimaryText, nDrawTextStyle );
         {
             FontSwitch aFontRestore(rRenderContext, aSmallerFont);
-            rRenderContext.DrawText( aSecondaryRect, m_sSecondaryText, nDrawTextStyle, pTextMetrics, pDisplayText );
+            rRenderContext.DrawText( aSecondaryRect, m_sSecondaryText, nDrawTextStyle );
         }
 
         // outta here

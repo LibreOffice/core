@@ -27,7 +27,7 @@
 namespace chart
 {
 
-TextDirectionListBox::TextDirectionListBox( vcl::Window* pParent, vcl::Window* pWindow1, vcl::Window* pWindow2 ) :
+TextDirectionListBox::TextDirectionListBox( vcl::Window* pParent ) :
     svx::FrameDirectionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_DROPDOWN)
 {
     InsertEntryValue( SCH_RESSTR( STR_TEXT_DIRECTION_LTR ), FRMDIR_HORI_LEFT_TOP );
@@ -37,8 +37,6 @@ TextDirectionListBox::TextDirectionListBox( vcl::Window* pParent, vcl::Window* p
     if( !SvtLanguageOptions().IsCTLFontEnabled() )
     {
         Hide();
-        if( pWindow1 ) pWindow1->Hide();
-        if( pWindow2 ) pWindow2->Hide();
     }
 }
 

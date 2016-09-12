@@ -190,7 +190,7 @@ private:
 
 public:
 
-    SvxScriptErrorDialog( vcl::Window* parent, css::uno::Any aException );
+    SvxScriptErrorDialog( css::uno::Any aException );
 
     virtual ~SvxScriptErrorDialog() override;
 

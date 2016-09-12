@@ -53,7 +53,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 public:
-    SvxNumberPreview(vcl::Window* pParent, WinBits nStyle = WB_BORDER);
+    SvxNumberPreview(vcl::Window* pParent);
 
     void            NotifyChange( const OUString& rPrevStr, const Color* pColor = nullptr );
 };
