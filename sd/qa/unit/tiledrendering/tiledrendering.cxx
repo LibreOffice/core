@@ -449,7 +449,7 @@ void SdTiledRenderingTest::testUndoShells()
         {"AttributePageSize.Height", uno::makeAny(static_cast<sal_Int32>(10000))},
     }));
     comphelper::dispatchCommand(".uno:AttributePageSize", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // Assert that view shell ID tracking works for SdUndoAction subclasses.
     SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
@@ -726,7 +726,7 @@ void SdTiledRenderingTest::testInsertTable()
     ));
 
     comphelper::dispatchCommand(".uno:InsertTable", aArgs);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // get the table
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -974,7 +974,7 @@ void SdTiledRenderingTest::testViewCursors()
     SdrObject* pObject = pActualPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pObject, pView->GetSdrPageView());
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // First view notices that there was a selection change in the other view.
     CPPUNIT_ASSERT(aView1.m_bGraphicViewSelectionInvalidated);
@@ -1005,7 +1005,7 @@ void SdTiledRenderingTest::testViewCursorParts()
     SdrObject* pObject = pActualPage->GetObj(0);
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pObject, pView->GetSdrPageView());
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // First view notices that there was a selection change in the other view.
     CPPUNIT_ASSERT(aView1.m_bGraphicViewSelectionInvalidated);
     pView->UnmarkAllObj(pView->GetSdrPageView());
@@ -1017,7 +1017,7 @@ void SdTiledRenderingTest::testViewCursorParts()
     pActualPage = pViewShell->GetActualPage();
     pObject = pActualPage->GetObj(0);
     pView->MarkObj(pObject, pView->GetSdrPageView());
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // First view ignores view selection, as it would be for part 1, and it's in part 0.
     // This failed when the "part" was always 0 in the callback.
     CPPUNIT_ASSERT(!aView1.m_bGraphicViewSelectionInvalidated);
@@ -1044,14 +1044,14 @@ void SdTiledRenderingTest::testCursorViews()
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(pView->IsTextEdit());
 
     // Make sure that cursor state is not changed just because we create a second view.
     aView1.m_bCursorVisibleChanged = false;
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(!aView1.m_bCursorVisibleChanged);
 
     // Make sure that typing in the first view causes an invalidation in the
@@ -1067,7 +1067,7 @@ void SdTiledRenderingTest::testCursorViews()
     aView2.m_bTilesInvalidated = false;
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // This failed: the second view was not invalidated when pressing a key in
     // the first view.
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
@@ -1126,7 +1126,7 @@ void SdTiledRenderingTest::testUndoLimiting()
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(pView->IsTextEdit());
 
     // Now check what views see the undo action.
@@ -1199,7 +1199,7 @@ void SdTiledRenderingTest::testCreateViewTextCursor()
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdrView* pSdrView = pViewShell->GetView();
     CPPUNIT_ASSERT(pSdrView->IsTextEdit());

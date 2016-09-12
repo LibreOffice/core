@@ -656,8 +656,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
                 // [AquaSalTimer::pRunningTimer fire];
                 if (ImplGetSVData()->mpSalTimer != nullptr)
                 {
-                    bool idle = true; // TODO
-                    ImplGetSVData()->mpSalTimer->CallCallback( idle );
+                    ImplGetSVData()->mpSalTimer->CallCallback();
                 }
             }
         }

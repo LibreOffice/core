@@ -35,8 +35,7 @@
         ImplSVData* pSVData = ImplGetSVData();
         if( pSVData->mpSalTimer )
         {
-            bool idle = true; // TODO
-            pSVData->mpSalTimer->CallCallback( idle );
+            pSVData->mpSalTimer->CallCallback();
 
             // NSTimer does not end nextEventMatchingMask of NSApplication
             // so we need to wakeup a waiting Yield to inform it something happened
