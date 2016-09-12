@@ -77,8 +77,8 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
         public:
-            OKey(bool _bCase);
-            OKey(const OUString& Name,const std::shared_ptr<KeyProperties>& _rProps,bool _bCase);
+            OKey();
+            OKey(const OUString& Name,const std::shared_ptr<KeyProperties>& _rProps);
 
             virtual ~OKey( );
 

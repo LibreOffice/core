@@ -36,7 +36,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OMySQLUser::OMySQLUser( const css::uno::Reference< css::sdbc::XConnection >& _xConnection) : connectivity::sdbcx::OUser(true)
+OMySQLUser::OMySQLUser( const css::uno::Reference< css::sdbc::XConnection >& _xConnection) : connectivity::sdbcx::OUser()
                 ,m_xConnection(_xConnection)
 {
     construct();
@@ -44,7 +44,7 @@ OMySQLUser::OMySQLUser( const css::uno::Reference< css::sdbc::XConnection >& _xC
 
 OMySQLUser::OMySQLUser(   const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                 const OUString& Name
-            ) : connectivity::sdbcx::OUser(Name, true)
+            ) : connectivity::sdbcx::OUser(Name)
                 ,m_xConnection(_xConnection)
 {
     construct();

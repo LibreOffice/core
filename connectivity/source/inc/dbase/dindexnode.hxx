@@ -48,7 +48,7 @@ namespace connectivity
             ORowSetValue    xValue;                 /* Key values     */
 
         public:
-            ONDXKey(sal_uInt32 nRec=0);
+            ONDXKey();
             ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec);
             ONDXKey(const OUString& aStr, sal_uInt32 nRec = 0);
             ONDXKey(double aVal, sal_uInt32 nRec = 0);
@@ -90,7 +90,7 @@ namespace connectivity
             sal_uInt32  nPagePos;       // Position in the index file
 
         public:
-            ONDXPagePtr(sal_uInt32 nPos = 0) : mpPage(nullptr), nPagePos(nPos) {}
+            ONDXPagePtr() : mpPage(nullptr), nPagePos(0) {}
             ONDXPagePtr(const ONDXPagePtr& rRef);
             ONDXPagePtr(ONDXPage* pRefPage);
             inline ~ONDXPagePtr();

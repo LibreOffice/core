@@ -52,17 +52,9 @@ namespace canvas
 
             @param rTarget
             The target canvas the repaint should happen on.
-
-            @param bFailForChangedViewTransform
-            When true, derived classes will never receive doRedraw()
-            calls with dissimilar view transformations and
-            bSameViewTransform set to false. This is useful for cached
-            objects where re-transforming the generated output is not
-            desirable, e.g. for hinted font output.
          */
         CachedPrimitiveBase( const css::rendering::ViewState&  rUsedViewState,
-                             const css::uno::Reference< css::rendering::XCanvas >& rTarget,
-                             bool                              bFailForChangedViewTransform );
+                             const css::uno::Reference< css::rendering::XCanvas >& rTarget );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing() override;
@@ -106,7 +98,6 @@ namespace canvas
 
         css::rendering::ViewState                         maUsedViewState;
         css::uno::Reference< css::rendering::XCanvas >    mxTarget;
-        const bool                                        mbFailForChangedViewTransform;
     };
 }
 

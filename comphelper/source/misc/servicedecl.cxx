@@ -33,6 +33,8 @@ using namespace com::sun::star;
 namespace comphelper {
 namespace service_decl {
 
+const char cDelim = ';';
+
 class ServiceDecl::Factory :
         public cppu::WeakImplHelper<lang::XSingleComponentFactory,
                                      lang::XServiceInfo>
@@ -126,7 +128,7 @@ uno::Sequence<OUString> ServiceDecl::getSupportedServiceNames() const
     OString const str(m_pServiceNames);
     sal_Int32 nIndex = 0;
     do {
-        OString const token( str.getToken( 0, m_cDelim, nIndex ) );
+        OString const token( str.getToken( 0, cDelim, nIndex ) );
         vec.push_back( OUString( token.getStr(), token.getLength(),
                                       RTL_TEXTENCODING_ASCII_US ) );
     }
@@ -140,7 +142,7 @@ bool ServiceDecl::supportsService( OUString const& name ) const
     OString const str(m_pServiceNames);
     sal_Int32 nIndex = 0;
     do {
-        OString const token( str.getToken( 0, m_cDelim, nIndex ) );
+        OString const token( str.getToken( 0, cDelim, nIndex ) );
         if (name.equalsAsciiL( token.getStr(), token.getLength() ))
             return true;
     }
