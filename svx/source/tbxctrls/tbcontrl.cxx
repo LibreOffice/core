@@ -2677,7 +2677,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
 
         case SID_ATTR_LINE_COLOR:
             addStatusListener( ".uno:XLineColor");
-            mPaletteManager.SetLastColor( COL_BLACK );
+            mPaletteManager.SetLastColor( COL_DEFAULT_SHAPE_STROKE );
             break;
 
         case SID_ATTR_FILL_COLOR:

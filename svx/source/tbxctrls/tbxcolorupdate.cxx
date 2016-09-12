@@ -63,7 +63,7 @@ namespace svx
                 Update(COL_YELLOW);
                 break;
             case SID_ATTR_LINE_COLOR:
-                Update(COL_BLACK);
+                Update(COL_DEFAULT_SHAPE_STROKE);
                 break;
             case SID_ATTR_FILL_COLOR:
                 Update(COL_DEFAULT_SHAPE_FILLING);
