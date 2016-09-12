@@ -506,7 +506,14 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     if (nReleased == 0) // tdf#99383 don't run stuff from ReAcquireSolarMutex
     {
         // Process all Tasks
-        bProcessedEvent = Scheduler::ProcessTaskScheduling() || bProcessedEvent;
+        do
+        {
+            bool bScheduledEevent = Scheduler::ProcessTaskScheduling();
+            bProcessedEvent |= bScheduledEevent;
+            if (!bScheduledEevent)
+                break;
+        }
+        while ( i_bAllEvents );
     }
 
     // flush lazy deleted objects
