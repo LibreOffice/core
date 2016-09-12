@@ -283,6 +283,13 @@ PoEntry& PoEntry::operator=(const PoEntry& rPo)
     return *this;
 }
 
+PoEntry& PoEntry::operator=(PoEntry&& rPo)
+{
+    m_pGenPo = std::move(rPo.m_pGenPo);
+    m_bIsInitialized = std::move(rPo.m_bIsInitialized);
+    return *this;
+}
+
 OString const & PoEntry::getSourceFile() const
 {
     assert( m_bIsInitialized );
