@@ -454,7 +454,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                     bAllowBefore = rCC.isLetterNumeric( rInf.GetText(), rInf.GetIdx() - 1 );
                     // Note: ScriptType returns values in [1,4]
                     if ( bAllowBefore )
-                        nLstActual = SwFontScript(pScriptInfo->ScriptType( rInf.GetIdx() - 1 ) - 1);
+                        nLstActual = SwFontScript(m_pScriptInfo->ScriptType( rInf.GetIdx() - 1 ) - 1);
                 }
 
                 nLstHeight /= 5;
@@ -532,7 +532,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
         // if we are underlined, we store the beginning of this underlined
         // segment for repaint optimization
-        if ( LINESTYLE_NONE != pFnt->GetUnderline() && ! nUnderLineStart )
+        if ( LINESTYLE_NONE != m_pFont->GetUnderline() && ! nUnderLineStart )
             nUnderLineStart = GetLeftMargin() + rInf.X();
 
         if ( pPor->IsFlyPortion() )
@@ -551,12 +551,12 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                      // reformat is at end of an underlined portion and next portion
                      // is not underlined
                   ( ( rInf.GetReformatStart() == rInf.GetIdx() &&
-                      LINESTYLE_NONE == pFnt->GetUnderline()
+                      LINESTYLE_NONE == m_pFont->GetUnderline()
                     ) ||
                      // reformat is inside portion and portion is underlined
                     ( rInf.GetReformatStart() >= rInf.GetIdx() &&
                       rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() &&
-                      LINESTYLE_NONE != pFnt->GetUnderline() ) ) )
+                      LINESTYLE_NONE != m_pFont->GetUnderline() ) ) )
             rInf.SetPaintOfst( nUnderLineStart );
         else if (  ! rInf.GetPaintOfst() &&
                    // 2. Right Tab
@@ -568,7 +568,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                        rInf.GetReformatStart() >= rInf.GetIdx() &&
                        rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() )
                    // 6. Grid Mode
-                     || ( bHasGrid && SwFontScript::CJK != pFnt->GetActual() )
+                     || ( bHasGrid && SwFontScript::CJK != m_pFont->GetActual() )
                    )
                 )
             // we store the beginning of the critical portion as our
@@ -577,7 +577,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
 
         // under one of these conditions we are allowed to delete the
         // start of the underline portion
-        if ( IsUnderlineBreak( *pPor, *pFnt ) )
+        if ( IsUnderlineBreak( *pPor, *m_pFont ) )
             nUnderLineStart = 0;
 
         if( pPor->IsFlyCntPortion() || ( pPor->IsMultiPortion() &&
@@ -593,7 +593,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 // The distance between two different scripts is set
                 // to 20% of the fontheight.
                 sal_Int32 nTmp = rInf.GetIdx() + pPor->GetLen();
-                if( nTmp == pScriptInfo->NextScriptChg( nTmp - 1 ) &&
+                if( nTmp == m_pScriptInfo->NextScriptChg( nTmp - 1 ) &&
                     nTmp != rInf.GetText().getLength() )
                 {
                     const sal_uInt16 nDist = (sal_uInt16)(rInf.GetFont()->GetHeight()/5);
@@ -622,10 +622,10 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             sal_Int32 nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
 
-            const SwFontScript nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
+            const SwFontScript nCurrScript = m_pFont->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
             const SwFontScript nNextScript = nTmp >= rInf.GetText().getLength() ?
                                      SwFontScript::CJK :
-                                     SwScriptInfo::WhichFont( nTmp, nullptr, pScriptInfo );
+                                     SwScriptInfo::WhichFont( nTmp, nullptr, m_pScriptInfo );
 
             // snap non-asian text to grid if next portion is ASIAN or
             // there are no more portions in this line
@@ -945,11 +945,11 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
     sal_Int32 nNextChg = std::min( nNextAttr, rInf.GetText().getLength() );
 
     // end of script type:
-    const sal_Int32 nNextScript = pScriptInfo->NextScriptChg( rInf.GetIdx() );
+    const sal_Int32 nNextScript = m_pScriptInfo->NextScriptChg( rInf.GetIdx() );
     nNextChg = std::min( nNextChg, nNextScript );
 
     // end of direction:
-    const sal_Int32 nNextDir = pScriptInfo->NextDirChg( rInf.GetIdx() );
+    const sal_Int32 nNextDir = m_pScriptInfo->NextDirChg( rInf.GetIdx() );
     nNextChg = std::min( nNextChg, nNextDir );
 
     // Turbo boost:

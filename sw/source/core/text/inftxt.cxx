@@ -1795,7 +1795,7 @@ SwFontSave::~SwFontSave()
         if( pIter )
         {
             pIter->SetFnt( pFnt );
-            pIter->nPos = COMPLETE_STRING;
+            pIter->m_nPosition = COMPLETE_STRING;
         }
     }
 }
