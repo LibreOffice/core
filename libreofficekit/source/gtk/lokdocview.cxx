@@ -1054,6 +1054,9 @@ payloadToRectangles(LOKDocView* pDocView, const char* pPayload)
 {
     std::vector<GdkRectangle> aRet;
 
+    if (g_strcmp0(pPayload, "EMPTY") == 0)
+       return aRet;
+
     gchar** ppRectangles = g_strsplit(pPayload, "; ", 0);
     for (gchar** ppRectangle = ppRectangles; *ppRectangle; ++ppRectangle)
         aRet.push_back(payloadToRectangle(pDocView, *ppRectangle));
