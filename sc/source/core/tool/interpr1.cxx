@@ -8538,7 +8538,7 @@ void ScInterpreter::ScErrorType()
     if ( nErr )
     {
         nGlobalError = 0;
-        PushDouble( nErr );
+        PushDouble( CreateDoubleError(nErr) );
     }
     else
     {
@@ -8596,7 +8596,7 @@ void ScInterpreter::ScErrorType_ODF()
     if ( nErrType )
     {
         nGlobalError = 0;
-        PushDouble( nErrType );
+        PushDouble( CreateDoubleError(nErr) );
     }
     else
         PushNA();
