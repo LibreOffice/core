@@ -99,7 +99,7 @@ static sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
     return nVal;
 }
 
-void DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
+static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
 {
     //If the client is the last one who uses this format, then we have to delete
     //it - before this is done, we may need to delete the content-section.
@@ -461,7 +461,7 @@ SwFormatHeader::SwFormatHeader( bool bOn )
  SwFormatHeader::~SwFormatHeader()
 {
     if ( GetHeaderFormat() )
-        DelHFFormat( this, GetHeaderFormat() );
+        lcl_DelHFFormat( this, GetHeaderFormat() );
 }
 
 bool SwFormatHeader::operator==( const SfxPoolItem& rAttr ) const
@@ -506,7 +506,7 @@ SwFormatFooter::SwFormatFooter( bool bOn )
  SwFormatFooter::~SwFormatFooter()
 {
     if ( GetFooterFormat() )
-        DelHFFormat( this, GetFooterFormat() );
+        lcl_DelHFFormat( this, GetFooterFormat() );
 }
 
 void SwFormatFooter::RegisterToFormat( SwFormat& rFormat )
