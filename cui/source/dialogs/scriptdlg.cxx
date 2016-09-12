@@ -71,7 +71,7 @@ using namespace css::document;
 
 void ShowErrorDialog( const Any& aException )
 {
-    std::unique_ptr<SvxScriptErrorDialog> pDlg(new SvxScriptErrorDialog( nullptr, aException ));
+    std::unique_ptr<SvxScriptErrorDialog> pDlg(new SvxScriptErrorDialog( aException ));
     pDlg->Execute();
 }
 
@@ -1434,8 +1434,7 @@ OUString GetErrorMessage( const css::uno::Any& aException )
 
 }
 
-SvxScriptErrorDialog::SvxScriptErrorDialog(
-    vcl::Window* , css::uno::Any aException )
+SvxScriptErrorDialog::SvxScriptErrorDialog( css::uno::Any aException )
     : m_sMessage()
 {
     SolarMutexGuard aGuard;

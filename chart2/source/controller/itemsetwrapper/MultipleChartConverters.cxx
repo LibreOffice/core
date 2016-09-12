@@ -101,8 +101,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-    const awt::Size* pRefSize )
+    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
         : MultipleItemConverter( rItemPool )
 {
     ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
@@ -122,7 +121,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
             new ::chart::wrapper::DataPointItemConverter(
                 xChartModel, xContext, xObjectProperties, *aIt, rItemPool, rDrawModel,
                 xNamedPropertyContainerFactory, GraphicPropertyItemConverter::FILLED_DATA_POINT,
-                pRefSize, true, false, 0, true, nNumberFormat, nPercentNumberFormat));
+                nullptr, true, false, 0, true, nNumberFormat, nPercentNumberFormat));
     }
 }
 
@@ -140,8 +139,7 @@ AllTitleItemConverter::AllTitleItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-    const awt::Size* pRefSize )
+    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
         : MultipleItemConverter( rItemPool )
 {
     for(sal_Int32 nTitle = TitleHelper::TITLE_BEGIN; nTitle < TitleHelper::NORMAL_TITLE_END; nTitle++ )
@@ -152,7 +150,7 @@ AllTitleItemConverter::AllTitleItemConverter(
         uno::Reference< beans::XPropertySet > xObjectProperties( xTitle, uno::UNO_QUERY);
         m_aConverters.push_back(
             new ::chart::wrapper::TitleItemConverter(
-                xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory, pRefSize));
+                xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory, nullptr));
     }
 }
 

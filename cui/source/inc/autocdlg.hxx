@@ -73,8 +73,8 @@ class OfaACorrCheckListBox : public SvSimpleTable
         virtual void    KeyInput( const KeyEvent& rKEvt ) override;
 
     public:
-        OfaACorrCheckListBox(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER)
-            : SvSimpleTable(rParent, nBits)
+        OfaACorrCheckListBox(SvSimpleTableContainer& rParent)
+            : SvSimpleTable(rParent, WB_BORDER)
         {
         }
 

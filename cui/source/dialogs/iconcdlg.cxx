@@ -155,12 +155,11 @@ VCL_BUILDER_FACTORY_ARGS(SvtIconChoiceCtrl,
                          WB_NODRAGSELECTION | WB_TABSTOP);
 
 IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
-                                     const OUString& rUIXMLDescription,
-                                     const SfxItemSet *pItemSet )
+                                     const OUString& rUIXMLDescription )
 :   ModalDialog         ( pParent, rID, rUIXMLDescription ),
     mnCurrentPageId ( USHRT_MAX ),
 
-    pSet            ( pItemSet ),
+    pSet            ( nullptr ),
     pOutSet         ( nullptr ),
     pExampleSet     ( nullptr ),
     pRanges         ( nullptr ),
@@ -273,11 +272,8 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
     CreatePage      pCreateFunc /* != 0 */
 )
 {
-    IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
-                                                         nullptr );
+    IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc );
     maPageList.push_back( pData );
-
-    pData->fnGetRanges = nullptr;
 
     sal_uInt16 *pId = new sal_uInt16 ( nId );
     SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->InsertEntry( rIconText, rChoiceIcon );
@@ -531,20 +527,6 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
     std::vector<sal_uInt16> aUS;
 
     size_t nCount = maPageList.size();
-    for ( size_t i = 0; i < nCount; ++i )
-    {
-        IconChoicePageData* pData = maPageList[ i ];
-        if ( pData->fnGetRanges )
-        {
-            const sal_uInt16* pTmpRanges = (pData->fnGetRanges)();
-            const sal_uInt16* pIter = pTmpRanges;
-
-            sal_uInt16 nLen;
-            for( nLen = 0; *pIter; ++nLen, ++pIter )
-                ;
-            aUS.insert( aUS.end(), pTmpRanges, pTmpRanges + nLen );
-        }
-    }
 
     // remove double Id's
     {

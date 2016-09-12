@@ -33,8 +33,8 @@ using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace com::sun::star::sdbc;
 
-ONDXKey::ONDXKey(sal_uInt32 nRec)
-    :nRecord(nRec)
+ONDXKey::ONDXKey()
+    :nRecord(0)
 {
 }
 

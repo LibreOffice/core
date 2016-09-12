@@ -44,7 +44,7 @@ OHSQLUser::OHSQLUser(   const css::uno::Reference< css::sdbc::XConnection >& _xC
 
 OHSQLUser::OHSQLUser(   const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                 const OUString& Name
-            ) : connectivity::sdbcx::OUser(Name, true)
+            ) : connectivity::sdbcx::OUser(Name,true)
                 ,m_xConnection(_xConnection)
 {
     construct();
