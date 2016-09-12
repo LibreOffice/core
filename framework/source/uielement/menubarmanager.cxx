@@ -746,6 +746,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
         bool bDontHide           = SvtMenuOptions().IsEntryHidingEnabled();
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
+        bool bShowShortcuts      = m_bHasMenuBar || rSettings.GetContextMenuShortcuts();
         bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
 
         SolarMutexGuard g;
@@ -794,7 +795,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
         }
 
         // Try to set accelerator keys
-        if ( m_bHasMenuBar )
+        if ( bShowShortcuts )
         {
             RetrieveShortcuts( m_aMenuItemHandlerVector );
             std::vector< MenuItemHandler* >::iterator p;

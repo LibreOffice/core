@@ -2815,7 +2815,7 @@ VclPtr<PopupMenu> Edit::CreatePopupMenu()
         pPopup->SetMenuFlags( MenuFlags::HideDisabledEntries );
     else
         pPopup->SetMenuFlags ( MenuFlags::AlwaysShowDisabledEntries );
-    if ( rStyleSettings.GetAcceleratorsInContextMenus() )
+    if ( rStyleSettings.GetContextMenuShortcuts() )
     {
         pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, vcl::KeyCode( KeyFuncType::UNDO ) );
         pPopup->SetAccelKey( SV_MENU_EDIT_CUT, vcl::KeyCode( KeyFuncType::CUT ) );

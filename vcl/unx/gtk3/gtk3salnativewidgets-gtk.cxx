@@ -1979,7 +1979,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // menu disabled entries handling
     aStyleSet.SetSkipDisabledInMenus( true );
-    aStyleSet.SetAcceleratorsInContextMenus( false );
+    aStyleSet.SetPreferredContextMenuShortcuts( false );
 
     // menu colors
     gtk_style_context_set_state(mpMenuStyle, GTK_STATE_FLAG_NORMAL);

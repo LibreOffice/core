@@ -4004,7 +4004,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     // menu disabled entries handling
     aStyleSet.SetSkipDisabledInMenus( true );
-    aStyleSet.SetAcceleratorsInContextMenus( false );
+    aStyleSet.SetPreferredContextMenuShortcuts( false );
     // menu colors
     GtkStyle* pMenuStyle = gtk_widget_get_style( gWidgetData[m_nXScreen].gMenuWidget );
     GtkStyle* pMenuItemStyle = gtk_rc_get_style( gWidgetData[m_nXScreen].gMenuItemMenuWidget );
