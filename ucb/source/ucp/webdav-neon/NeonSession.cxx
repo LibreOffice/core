@@ -1841,33 +1841,106 @@ void NeonSession::HandleError( int nError,
             sal_uInt16 code = makeStatusCode( aText );
 
             SAL_WARN( "ucb.ucp.webdav", "Neon returned NE_ERROR, http response status code was: " << code << " '" << aText << "'" );
-            if ( code == SC_LOCKED )
+            if ( SC_BAD_REQUEST <= code && code < SC_INTERNAL_SERVER_ERROR )
             {
-                if ( m_aNeonLockStore.findByUri(
-                         makeAbsoluteURL( inPath ) ) == nullptr )
+                // error codes in the range 4xx
+                switch ( code )
                 {
-                    // locked by 3rd party
-                    throw DAVException( DAVException::DAV_LOCKED );
-                }
-                else
-                {
-                    // locked by ourself
-                    throw DAVException( DAVException::DAV_LOCKED_SELF );
+                    case SC_LOCKED:
+                    {
+                        if ( m_aNeonLockStore.findByUri(
+                                 makeAbsoluteURL( inPath ) ) == nullptr )
+                        {
+                            // locked by 3rd party
+                            throw DAVException( DAVException::DAV_LOCKED );
+                        }
+                        else
+                        {
+                            // locked by ourself
+                            throw DAVException( DAVException::DAV_LOCKED_SELF );
+                        }
+                    }
+                    break;
+                    case SC_PRECONDITION_FAILED:
+                    case SC_BAD_REQUEST:
+                    {
+                        // Special handling for 400 and 412 status codes, which may indicate
+                        // that a lock previously obtained by us has been released meanwhile
+                        // by the server. Unfortunately, RFC is not clear at this point,
+                        // thus server implementations behave different...
+                        if ( removeExpiredLocktoken( makeAbsoluteURL( inPath ), rEnv ) )
+                            throw DAVException( DAVException::DAV_LOCK_EXPIRED );
+                    }
+                    break;
+                    case SC_REQUEST_TIMEOUT:
+                    {
+                        throw DAVException( DAVException::DAV_HTTP_TIMEOUT,
+                                            NeonUri::makeConnectionEndPointString(
+                                                m_aHostName, m_nPort ) );
+                    }
+                    break;
+                    case SC_UNAUTHORIZED: // User authentication failed on server
+                    {
+                        throw DAVException( DAVException::DAV_HTTP_AUTH,
+                                            NeonUri::makeConnectionEndPointString(
+                                                m_aHostName, m_nPort ) );
+                    }
+                    break;
+                    case SC_GONE:
+                    case SC_LENGTH_REQUIRED:
+                    case SC_REQUEST_ENTITY_TOO_LARGE:
+                    case SC_REQUEST_URI_TOO_LONG:
+                    case SC_UNSUPPORTED_MEDIA_TYPE:
+                    case SC_REQUESTED_RANGE_NOT_SATISFIABLE:
+                    case SC_EXPECTATION_FAILED:
+                    case SC_UNPROCESSABLE_ENTITY:
+                    case SC_FAILED_DEPENDENCY:
+                    case SC_CONFLICT:
+                    case SC_NOT_ACCEPTABLE:
+                    case SC_PAYMENT_REQUIRED:
+                    case SC_PROXY_AUTHENTICATION_REQUIRED:
+                    default:
+                        // set 400 error, if not one of others
+                        code = SC_BAD_REQUEST;
+                        SAL_FALLTHROUGH;
+                    case SC_FORBIDDEN:
+                    case SC_NOT_FOUND:
+                    case SC_METHOD_NOT_ALLOWED:
+                        throw DAVException( DAVException::DAV_HTTP_ERROR, aText, code );
+                        break;
                 }
             }
-
-            // Special handling for 400 and 412 status codes, which may indicate
-            // that a lock previously obtained by us has been released meanwhile
-            // by the server. Unfortunately, RFC is not clear at this point,
-            // thus server implementations behave different...
-            else if ( code == SC_BAD_REQUEST || code == SC_PRECONDITION_FAILED )
+            else if ( SC_INTERNAL_SERVER_ERROR <= code )
             {
-                if ( removeExpiredLocktoken( makeAbsoluteURL( inPath ), rEnv ) )
-                    throw DAVException( DAVException::DAV_LOCK_EXPIRED );
+                // deal with HTTP response status codes higher then 500
+                // error codes in the range 5xx, server errors
+                // but there exists unofficial code in the range 1000 and up
+                // for example see:
+                // <https://support.cloudflare.com/hc/en-us/sections/200820298-Error-Pages> (retrieved 2016-10-05)
+                switch ( code )
+                {
+                    // the error codes case before the default case are not actively
+                    // managed by LO
+                    case SC_BAD_GATEWAY:
+                    case SC_SERVICE_UNAVAILABLE:
+                    case SC_GATEWAY_TIMEOUT:
+                    case SC_HTTP_VERSION_NOT_SUPPORTED:
+                    case SC_INSUFFICIENT_STORAGE:
+                    default:
+                        // set 500 error, if not one of others
+                        // expand the error code
+                        code = SC_INTERNAL_SERVER_ERROR;
+                        SAL_FALLTHROUGH;
+                    case SC_INTERNAL_SERVER_ERROR:
+                    case SC_NOT_IMPLEMENTED:
+                        throw DAVException( DAVException::DAV_HTTP_ERROR, aText, code );
+                        break;
+                }
             }
-
-            throw DAVException( DAVException::DAV_HTTP_ERROR, aText, code );
+            else
+                throw DAVException( DAVException::DAV_HTTP_ERROR, aText, code );
         }
+        break;
         case NE_LOOKUP:       // Name lookup failed.
             SAL_WARN( "ucb.ucp.webdav", "Name lookup failed" );
             throw DAVException( DAVException::DAV_HTTP_LOOKUP,
