@@ -319,8 +319,8 @@ XclImpExtName::MOper::MOper(svl::SharedStringPool& rPool, XclImpStream& rStrm) :
                 case 0x10:
                 {
                     sal_uInt8 nErr = rStrm.ReaduInt8();
-                    // TODO: Map the error code from xls to calc.
-                    mxCached->PutError(nErr, nCol, nRow);
+                    // Map the error code from xls to calc.
+                    mxCached->PutError(XclTools::GetScErrorCode(nErr), nCol, nRow);
                     rStrm.Ignore(7);
                 }
                 break;
