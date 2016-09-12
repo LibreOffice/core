@@ -665,8 +665,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                 // [AquaSalTimer::pRunningTimer fire];
                 if (ImplGetSVData()->mpSalTimer != nullptr)
                 {
-                    bool idle = true; // TODO
-                    ImplGetSVData()->mpSalTimer->CallCallback( idle );
+                    ImplGetSVData()->mpSalTimer->CallCallback();
                 }
             }
         }

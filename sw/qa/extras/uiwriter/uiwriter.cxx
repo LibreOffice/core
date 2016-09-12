@@ -2819,7 +2819,7 @@ void SwUiWriterTest::testTdf97601()
     CPPUNIT_ASSERT_EQUAL(true, bool(xModifiable->isModified()));
     calcLayout();
     // This never returned.
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 }
 
 void SwUiWriterTest::testTdf75137()
@@ -3890,7 +3890,7 @@ void SwUiWriterTest::testRedlineParam()
         {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(0))}
     }));
     lcl_dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // This failed: the parameter wasn't handled so the next change (zzz) was
     // selected, not the first one (aaa).
@@ -3903,7 +3903,7 @@ void SwUiWriterTest::testRedlineParam()
         {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(1))}
     });
     lcl_dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     pShellCursor = pWrtShell->getShellCursor(false);
     CPPUNIT_ASSERT_EQUAL(OUString("zzz"), pShellCursor->GetText());
 
@@ -3914,7 +3914,7 @@ void SwUiWriterTest::testRedlineParam()
         {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(1))}
     });
     lcl_dispatchCommand(mxComponent, ".uno:RejectTrackedChange", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     pShellCursor = pWrtShell->getShellCursor(false);
 
     // This was 'middlezzz', the uno command rejected the redline under the
