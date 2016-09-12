@@ -38,8 +38,6 @@
 #pragma warning(pop)
 #endif
 
-// namespace directives
-
 using namespace osl;
 using namespace std;
 using namespace cppu;
@@ -75,8 +73,6 @@ CWinClipbImpl::~CWinClipbImpl( )
     unregisterClipboardViewer( );
 }
 
-// getContent
-
 Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( RuntimeException )
 {
     // use the shortcut or create a transferable from
@@ -110,8 +106,6 @@ Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( Runtime
 
     return rClipContent;
 }
-
-// setContent
 
 void SAL_CALL CWinClipbImpl::setContents(
     const Reference< XTransferable >& xTransferable,

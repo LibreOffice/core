@@ -23,20 +23,13 @@
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include "mcnttfactory.hxx"
 
-// some defines
-
-// the implementation names
 #define MIMECONTENTTYPEFACTORY_IMPL_NAME  "com.sun.star.datatransfer.MimeCntTypeFactory"
 
-// namespace directives
-
-using namespace ::cppu                      ;
-using namespace ::com::sun::star::uno       ;
-using namespace ::com::sun::star::registry  ;
+using namespace ::cppu;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer;
-
-// create a static object to initialize the shell9x library
 
 namespace
 {

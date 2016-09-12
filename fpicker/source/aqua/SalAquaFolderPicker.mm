@@ -42,17 +42,10 @@
 
 #pragma mark DEFINES
 
-// namespace directives
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-
-
-// helper functions
-
 
 namespace
 {
@@ -66,18 +59,13 @@ namespace
     }
 }
 
-
-// constructor
-
 SalAquaFolderPicker::SalAquaFolderPicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
     m_xServiceMgr( xServiceMgr )
 {
     m_nDialogType = NAVIGATIONSERVICES_DIRECTORY;
 }
 
-
-// XExecutableDialog functions
-
+// XExecutableDialog
 
 void SAL_CALL SalAquaFolderPicker::setTitle( const rtl::OUString& aTitle ) throw( uno::RuntimeException )
 {
@@ -120,9 +108,7 @@ sal_Int16 SAL_CALL SalAquaFolderPicker::execute() throw( uno::RuntimeException )
     return retVal;
 }
 
-
-// XFolderPicker functions
-
+// XFolderPicker
 
 void SAL_CALL SalAquaFolderPicker::setDisplayDirectory( const rtl::OUString& aDirectory )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
@@ -174,9 +160,7 @@ void SAL_CALL SalAquaFolderPicker::setDescription( const rtl::OUString& rDescrip
     [m_pDialog setMessage:[NSString stringWithOUString:rDescription]];
 }
 
-
 // XServiceInfo
-
 
 rtl::OUString SAL_CALL SalAquaFolderPicker::getImplementationName()
     throw( uno::RuntimeException )
@@ -198,9 +182,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFolderPicker::getSupportedServiceNa
     return FolderPicker_getSupportedServiceNames();
 }
 
-
 // XCancellable
-
 
 void SAL_CALL SalAquaFolderPicker::cancel() throw( uno::RuntimeException )
 {
@@ -209,9 +191,7 @@ void SAL_CALL SalAquaFolderPicker::cancel() throw( uno::RuntimeException )
     [m_pDialog cancel:nil];
 }
 
-
 // XEventListener
-
 
 void SAL_CALL SalAquaFolderPicker::disposing( const lang::EventObject& )
     throw( uno::RuntimeException )

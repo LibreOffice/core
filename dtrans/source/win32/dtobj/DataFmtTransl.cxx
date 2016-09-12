@@ -39,8 +39,6 @@
 #pragma warning(pop)
 #endif
 
-// namespace directives
-
 using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;

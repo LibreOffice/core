@@ -24,18 +24,12 @@
 #include <windows.h>
 #include <ole2.h>
 
-// namespace directives
-
 // OTWrapperDataObject
-
-// ctor
 
 CXTDataObject::CXTDataObject( LONG nRefCntInitVal ) :
     m_nRefCnt( nRefCntInitVal )
 {
 }
-
-// dtor
 
 CXTDataObject::~CXTDataObject( )
 {
@@ -241,8 +235,6 @@ CXTDataObject::operator IDataObject*( )
 
 // CEnumFormatEtc
 
-// ctor
-
 CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN pUnkDataObj ) :
     m_nRefCnt( 0 ),
     m_pUnkDataObj( pUnkDataObj ),
@@ -251,8 +243,6 @@ CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN pUnkDataObj ) :
     m_cfFormats[0] = CF_UNICODETEXT;
     m_cfFormats[1] = CF_TEXT;
 }
-
-// dtor
 
 CEnumFormatEtc::~CEnumFormatEtc( )
 {

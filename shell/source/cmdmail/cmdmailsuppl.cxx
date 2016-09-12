@@ -40,10 +40,6 @@
 #include <errno.h>
 #include <unistd.h>
 
-
-// namespace directives
-
-
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::system::XSimpleMailClientSupplier;
 using com::sun::star::system::XSimpleMailClient;
@@ -58,7 +54,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::configuration;
 
-namespace // private
+namespace
 {
     Sequence< OUString > SAL_CALL Component_getSupportedServiceNames()
     {
@@ -66,8 +62,7 @@ namespace // private
         return aRet;
     }
 
-} // end private namespace
-
+}
 
 CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     WeakImplHelper< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
@@ -75,9 +70,7 @@ CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     m_xConfigurationProvider = theDefaultProvider::get(xContext);
 }
 
-
 // XSimpleMailClientSupplier
-
 
 Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
     throw (RuntimeException, std::exception)
@@ -85,19 +78,13 @@ Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
     return static_cast < XSimpleMailClient * > (this);
 }
 
-
 // XSimpleMailClient
-
 
 Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage(  )
         throw (css::uno::RuntimeException, std::exception)
 {
     return Reference< XSimpleMailMessage >( new CmdMailMsg(  ) );
 }
-
-
-// XSimpleMailClient
-
 
 namespace {
 
@@ -300,20 +287,19 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 }
 
 // XServiceInfo
+
 OUString SAL_CALL CmdMailSuppl::getImplementationName(  )
     throw( RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.system.SimpleCommandMail");
 }
 
-//  XServiceInfo
 sal_Bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
     throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-//  XServiceInfo
 Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
     throw( RuntimeException, std::exception )
 {

@@ -57,10 +57,7 @@ typedef struct
 } ProxyEntry;
 
 
-// helper functions
-
-
-namespace // private
+namespace
 {
     ProxyEntry ReadProxyEntry(const OUString& aProxy, sal_Int32& i)
     {
@@ -98,8 +95,7 @@ namespace // private
         return ProxyEntry();
     }
 
-} // end private namespace
-
+} // unnamed namespace
 
 WinInetBackend::WinInetBackend()
 {
@@ -295,17 +291,14 @@ WinInetBackend::WinInetBackend()
     }
 }
 
-
 WinInetBackend::~WinInetBackend()
 {
 }
-
 
 WinInetBackend* WinInetBackend::createInstance()
 {
     return new WinInetBackend;
 }
-
 
 void WinInetBackend::setPropertyValue(
     OUString const &, css::uno::Any const &)
@@ -356,11 +349,9 @@ css::uno::Any WinInetBackend::getPropertyValue(
     }
 }
 
-
 OUString SAL_CALL WinInetBackend::getBackendName() {
     return OUString("com.sun.star.comp.configuration.backend.WinInetBackend") ;
 }
-
 
 OUString SAL_CALL WinInetBackend::getImplementationName()
     throw (uno::RuntimeException)

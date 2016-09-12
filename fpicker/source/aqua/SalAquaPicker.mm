@@ -40,15 +40,10 @@
 #pragma mark DEFINES
 #define kSetHideExtensionStateKey @"NSNavLastUserSetHideExtensionButtonState"
 
-
-// namespace directives
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-// constructor
 SalAquaPicker::SalAquaPicker()
 : m_pDialog(nullptr)
 , m_pControlHelper(new ControlHelper())

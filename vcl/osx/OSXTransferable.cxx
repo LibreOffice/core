@@ -33,7 +33,7 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 
-namespace // private
+namespace
 {
     bool isValidFlavor( const DataFlavor& aFlavor )
     {
@@ -76,7 +76,7 @@ bool cmpAllContentTypeParameter(const Reference<XMimeContentType> & xLhs,
   return true;
 }
 
-} // namespace private
+} // unnamed namespace
 
 OSXTransferable::OSXTransferable(const Reference<XMimeContentTypeFactory> & rXMimeCntFactory,
                                  DataFlavorMapperPtr_t pDataFlavorMapper,

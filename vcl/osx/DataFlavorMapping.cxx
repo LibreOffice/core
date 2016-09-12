@@ -44,7 +44,7 @@ using namespace com::sun::star::lang;
 using namespace cppu;
 using namespace std;
 
-namespace // private
+namespace
 {
   /* Determine whether or not a DataFlavor is valid.
    */
@@ -139,7 +139,7 @@ namespace // private
     return (theType == cppu::UnoType<OUString>::get() );
   }
 
-} // namespace private
+} // unnamed namespace
 
 /* A base class for other data provider.
  */

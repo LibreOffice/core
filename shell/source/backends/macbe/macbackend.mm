@@ -50,10 +50,7 @@ typedef enum {
 } ServiceType;
 
 
-// helper functions
-
-
-namespace // private
+namespace
 {
 
 /*
@@ -149,28 +146,20 @@ bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *por
     return result;
 }
 
-} // end private namespace
-
-
+} // unnamed namespace
 
 MacOSXBackend::MacOSXBackend()
 {
 }
 
-
-
 MacOSXBackend::~MacOSXBackend(void)
 {
 }
-
-
 
 MacOSXBackend* MacOSXBackend::createInstance()
 {
     return new MacOSXBackend;
 }
-
-
 
 rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
     CFRetain(sOrig);
@@ -435,14 +424,10 @@ css::uno::Any MacOSXBackend::getPropertyValue(
     }
 }
 
-
-
 rtl::OUString SAL_CALL MacOSXBackend::getBackendName(void)
 {
     return rtl::OUString("com.sun.star.comp.configuration.backend.MacOSXBackend");
 }
-
-
 
 rtl::OUString SAL_CALL MacOSXBackend::getImplementationName(void)
     throw (uno::RuntimeException, std::exception)

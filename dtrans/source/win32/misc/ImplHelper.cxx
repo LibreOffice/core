@@ -41,8 +41,6 @@
 #define FORMATETC_PARTIAL_MATCH -1
 #define FORMATETC_NO_MATCH       0
 
-// namespace directives
-
 // returns a windows codepage appropriate to the
 // given mime charset parameter value
 

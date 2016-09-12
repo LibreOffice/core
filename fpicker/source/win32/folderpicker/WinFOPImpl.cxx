@@ -25,22 +25,13 @@
 #include <osl/file.hxx>
 #include "FolderPicker.hxx"
 
-
-// namespace directives
-
-
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::lang::IllegalArgumentException;
 
 using namespace com::sun::star::ui::dialogs;
 using osl::FileBase;
 
-
 const OUString BACKSLASH( "\\" );
-
-
-// ctor
-
 
 CWinFolderPickerImpl::CWinFolderPickerImpl( CFolderPicker* aFolderPicker ) :
    CMtaFolderPicker( BIF_RETURNONLYFSDIRS | BIF_RETURNFSANCESTORS | BIF_EDITBOX | BIF_VALIDATE ),
@@ -49,14 +40,12 @@ CWinFolderPickerImpl::CWinFolderPickerImpl( CFolderPicker* aFolderPicker ) :
 {
 }
 
-
 // get directory in URL format, convert it to system format and set the
 // member variable
 // If the given URL for the directory is invalid the function throws an
 // IllegalArgumentException
 // If the specified path is well formed but invalid for the underlying
 // OS the FolderPicker starts in the root of the file system hierarchy
-
 
 void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirectory )
     throw( IllegalArgumentException, RuntimeException )
@@ -90,9 +79,7 @@ void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirect
     CMtaFolderPicker::setDisplayDirectory( sysDir );
 }
 
-
 // we return the directory in URL format
-
 
 OUString CWinFolderPickerImpl::getDisplayDirectory( )
     throw( RuntimeException )
@@ -107,7 +94,6 @@ OUString CWinFolderPickerImpl::getDisplayDirectory( )
     return displayDirectoryURL;
 }
 
-
 OUString SAL_CALL CWinFolderPickerImpl::getDirectory( ) throw( RuntimeException )
 {
     OUString sysDir = CMtaFolderPicker::getDirectory( );
@@ -119,14 +105,12 @@ OUString SAL_CALL CWinFolderPickerImpl::getDirectory( ) throw( RuntimeException 
     return dirURL;
 }
 
-
 sal_Int16 SAL_CALL CWinFolderPickerImpl::execute( ) throw( RuntimeException )
 {
     return m_nLastDlgResult = CMtaFolderPicker::browseForFolder( ) ?
         css::ui::dialogs::ExecutableDialogResults::OK :
         css::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
-
 
 void CWinFolderPickerImpl::onSelChanged( const OUString& aNewPath )
 {

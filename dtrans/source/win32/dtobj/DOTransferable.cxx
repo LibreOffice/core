@@ -32,8 +32,6 @@
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
-// namespace directives
-
 using namespace std;
 using namespace osl;
 using namespace cppu;
@@ -160,7 +158,6 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
     return sal_False;
 }
 
-// helper function
 // the list of dataflavors currently on the clipboard will be initialized
 // only once; if the client of this Transferable will hold a reference
 // to it und the underlying clipboard content changes, the client does
@@ -230,9 +227,6 @@ void SAL_CALL CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
     }
 }
 
-// helper function
-
-//inline
 DataFlavor SAL_CALL CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFormatEtc )
 {
     LCID lcid = 0;

@@ -50,8 +50,6 @@
 
 #include "gtk/fpicker/SalGtkFilePicker.hxx"
 
-// namespace directives
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;

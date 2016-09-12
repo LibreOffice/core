@@ -33,7 +33,7 @@ using namespace cppu;
 
 #define COMP_IMPL_NAME  "com.sun.star.sys.shell.SimpleSystemMail"
 
-namespace // private
+namespace
 {
     Sequence< OUString > SAL_CALL Component_getSupportedServiceNames()
     {
@@ -41,7 +41,7 @@ namespace // private
         return aRet;
     }
 
-} // end private namespace
+}
 
 CSmplMailSuppl::CSmplMailSuppl() :
     WeakComponentImplHelper<XSimpleMailClientSupplier, XServiceInfo>(m_aMutex)

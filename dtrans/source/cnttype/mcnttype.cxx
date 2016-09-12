@@ -19,22 +19,16 @@
 
 #include "mcnttype.hxx"
 
-// namespace directives
-
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace std;
 using namespace osl;
 
-// constants
-
 const char TSPECIALS[] =  "()<>@,;:\\\"/[]?=";
 const char TOKEN[] = "!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~.";
 const char SPACE[] = " ";
 const char SEMICOLON[] = ";";
-
-// ctor
 
 CMimeContentType::CMimeContentType( const OUString& aCntType )
 {

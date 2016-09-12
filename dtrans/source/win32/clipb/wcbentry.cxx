@@ -23,23 +23,15 @@
 #include <osl/diagnose.h>
 #include "WinClipboard.hxx"
 
-// some defines
-
-// the service names
 #define WINCLIPBOARD_SERVICE_NAME  "com.sun.star.datatransfer.clipboard.SystemClipboard"
 
-// the implementation names
 #define WINCLIPBOARD_IMPL_NAME  "com.sun.star.datatransfer.clipboard.ClipboardW32"
 
-// namespace directives
-
-using namespace ::com::sun::star::uno       ;
-using namespace ::com::sun::star::registry  ;
-using namespace ::cppu                      ;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::registry;
+using namespace ::cppu;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
-
-// create a static object to initialize the shell9x library
 
 namespace
 {

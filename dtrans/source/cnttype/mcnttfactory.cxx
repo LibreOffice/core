@@ -24,15 +24,11 @@
 
 #define MIMECONTENTTYPEFACTORY_IMPL_NAME  "com.sun.star.datatransfer.MimeCntTypeFactory"
 
-// namespace directives
-
 using namespace ::osl;
 using namespace ::cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer;
-
-// helper functions
 
 namespace
 {
@@ -43,13 +39,9 @@ namespace
     }
 }
 
-// ctor
-
 CMimeContentTypeFactory::CMimeContentTypeFactory()
 {
 }
-
-// createMimeContentType
 
 Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( const OUString& aContentType )
     throw( IllegalArgumentException, RuntimeException, std::exception )
@@ -66,14 +58,11 @@ OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
     return OUString( MIMECONTENTTYPEFACTORY_IMPL_NAME );
 }
 
-//  XServiceInfo
 sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& ServiceName )
     throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
-
-//  XServiceInfo
 
 Sequence< OUString > SAL_CALL CMimeContentTypeFactory::getSupportedServiceNames( )
     throw( RuntimeException, std::exception )

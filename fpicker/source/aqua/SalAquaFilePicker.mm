@@ -51,9 +51,6 @@
 
 #pragma mark DEFINES
 
-// namespace directives
-
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
@@ -62,10 +59,6 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-
-
-// helper functions
-
 
 namespace
 {
@@ -80,9 +73,6 @@ namespace
 }
 
 #pragma mark Constructor
-
-// constructor
-
 
 SalAquaFilePicker::SalAquaFilePicker()
   : SalAquaFilePicker_Base( m_rbHelperMtx )
@@ -103,9 +93,6 @@ SalAquaFilePicker::~SalAquaFilePicker()
 
 #pragma mark XFilePickerNotifier
 
-// XFilePickerNotifier
-
-
 void SAL_CALL SalAquaFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
     throw( uno::RuntimeException )
 {
@@ -121,8 +108,6 @@ void SAL_CALL SalAquaFilePicker::removeFilePickerListener( const uno::Reference<
 }
 
 #pragma mark XAsynchronousExecutableDialog
-
-// XExecutableDialog functions
 
 void SAL_CALL SalAquaFilePicker::setTitle( const rtl::OUString& aTitle ) throw( uno::RuntimeException )
 {
@@ -214,9 +199,6 @@ sal_Int16 SAL_CALL SalAquaFilePicker::execute() throw( uno::RuntimeException )
 
 
 #pragma mark XFilePicker
-
-// XFilePicker functions
-
 
 void SAL_CALL SalAquaFilePicker::setMultiSelectionMode( sal_Bool /* bMode */ ) throw( uno::RuntimeException )
 {
@@ -327,9 +309,6 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles() thro
 
 #pragma mark XFilterManager
 
-// XFilterManager functions
-
-
 void SAL_CALL SalAquaFilePicker::appendFilter( const rtl::OUString& aTitle, const rtl::OUString& aFilter )
 throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
@@ -363,9 +342,6 @@ rtl::OUString SAL_CALL SalAquaFilePicker::getCurrentFilter() throw( uno::Runtime
 
 #pragma mark XFilterGroupManager
 
-// XFilterGroupManager functions
-
-
 void SAL_CALL SalAquaFilePicker::appendFilterGroup( const rtl::OUString& sGroupTitle, const uno::Sequence<beans::StringPair>& aFilters )
 throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
@@ -377,9 +353,6 @@ throw( lang::IllegalArgumentException, uno::RuntimeException )
 }
 
 #pragma mark XFilePickerControlAccess
-
-// XFilePickerControlAccess functions
-
 
 void SAL_CALL SalAquaFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const uno::Any& rValue )
 throw( uno::RuntimeException )
@@ -423,9 +396,6 @@ throw( uno::RuntimeException )
 }
 
 #pragma mark XInitialization
-
-// XInitialization
-
 
 void SAL_CALL SalAquaFilePicker::initialize( const uno::Sequence<uno::Any>& aArguments )
 throw( uno::Exception, uno::RuntimeException )
@@ -502,9 +472,6 @@ throw( uno::Exception, uno::RuntimeException )
 
 #pragma mark XCancellable
 
-// XCancellable
-
-
 void SAL_CALL SalAquaFilePicker::cancel() throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -515,9 +482,6 @@ void SAL_CALL SalAquaFilePicker::cancel() throw( uno::RuntimeException )
 }
 
 #pragma mark XEventListener
-
-// XEventListener
-
 
 void SAL_CALL SalAquaFilePicker::disposing( const lang::EventObject& aEvent ) throw( uno::RuntimeException )
 {
@@ -530,9 +494,6 @@ void SAL_CALL SalAquaFilePicker::disposing( const lang::EventObject& aEvent ) th
 }
 
 #pragma mark XServiceInfo
-
-// XServiceInfo
-
 
 rtl::OUString SAL_CALL SalAquaFilePicker::getImplementationName()
 throw( uno::RuntimeException )
@@ -555,9 +516,6 @@ throw( uno::RuntimeException )
 }
 
 #pragma mark Misc/Private
-
-// FilePicker Event functions
-
 
 void SAL_CALL SalAquaFilePicker::fileSelectionChanged( FilePickerEvent aEvent )
 {

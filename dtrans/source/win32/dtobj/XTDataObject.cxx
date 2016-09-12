@@ -45,8 +45,6 @@
 #define __uuidof(I) IID_##I
 #endif
 
-// namespace directives
-
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::uno;
@@ -60,8 +58,6 @@ public:
     HRESULT m_hr;
     explicit CInvalidFormatEtcException( HRESULT hr ) : m_hr( hr ) {};
 };
-
-// ctor
 
 CXTDataObject::CXTDataObject( const Reference< XComponentContext >& rxContext,
                               const Reference< XTransferable >& aXTransferable )
@@ -202,7 +198,6 @@ void SAL_CALL CXTDataObject::renderLocaleAndSetupStgMedium(
         throw CInvalidFormatEtcException( DV_E_FORMATETC );
 }
 
-//inline
 void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
     FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
@@ -235,7 +230,6 @@ void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
         stgmedium );
 }
 
-//inline
 void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
     FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
@@ -577,7 +571,6 @@ void CXTDataObject::validateFormatEtc( LPFORMATETC lpFormatEtc ) const
         throw CInvalidFormatEtcException( DV_E_TYMED );
 }
 
-//inline
 void SAL_CALL CXTDataObject::setupStgMedium( const FORMATETC& fetc,
                                              CStgTransferHelper& stgTransHlp,
                                              STGMEDIUM& stgmedium )
@@ -641,10 +634,6 @@ inline void SAL_CALL CXTDataObject::InitializeFormatEtcContainer( )
         m_bFormatEtcContainerInitialized = sal_True;
     }
 }
-
-// CEnumFormatEtc
-
-// ctor
 
 CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN lpUnkOuter, const CFormatEtcContainer& aFormatEtcContainer ) :
     m_nRefCnt( 0 ),

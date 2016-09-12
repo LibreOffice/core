@@ -39,10 +39,6 @@
 #pragma warning(pop)
 #endif
 
-
-// namespace directives
-
-
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;
@@ -56,11 +52,7 @@ using namespace cppu;
 
 #define SYSSHEXEC_IMPL_NAME  "com.sun.star.sys.shell.SystemShellExecute"
 
-
-// helper functions
-
-
-namespace // private
+namespace
 {
     Sequence< OUString > SAL_CALL SysShExec_getSupportedServiceNames()
     {
@@ -234,8 +226,7 @@ namespace // private
         }
     }
 
-} // end namespace
-
+}
 
 CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext ) :
     WeakComponentImplHelper< XSystemShellExecute, XServiceInfo >( m_aMutex ),
@@ -251,7 +242,6 @@ CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext
     CoUninitialize();
     CoInitialize( NULL );
 }
-
 
 void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
         throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
@@ -336,20 +326,19 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 }
 
 // XServiceInfo
+
 OUString SAL_CALL CSysShExec::getImplementationName(  )
     throw( RuntimeException )
 {
     return OUString(SYSSHEXEC_IMPL_NAME );
 }
 
-//  XServiceInfo
 sal_Bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-//  XServiceInfo
 Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
     throw( RuntimeException )
 {

@@ -47,8 +47,6 @@ const OUString Windows_FormatName ("windows_formatname");
 const css::uno::Type CppuType_ByteSequence = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
 const css::uno::Type CppuType_String       = ::cppu::UnoType<OUString>::get();
 
-// namespace directives
-
 using namespace osl;
 using namespace cppu;
 using namespace std;
@@ -56,8 +54,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::container;
-
-// helper functions
 
 namespace
 {
@@ -100,8 +96,6 @@ FormatEntry::FormatEntry(
 
     aStandardFormatId = std_clipboard_format_id;
 }
-
-// ctor
 
 CDataFormatTranslatorUNO::CDataFormatTranslatorUNO( const Reference< XComponentContext >& rxContext ) :
     m_xContext( rxContext )
@@ -198,14 +192,11 @@ OUString SAL_CALL CDataFormatTranslatorUNO::getImplementationName(  )
     return OUString( IMPL_NAME );
 }
 
-//  XServiceInfo
 sal_Bool SAL_CALL CDataFormatTranslatorUNO::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
-
-//  XServiceInfo
 
 Sequence< OUString > SAL_CALL CDataFormatTranslatorUNO::getSupportedServiceNames( )
     throw( RuntimeException )
