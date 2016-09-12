@@ -72,7 +72,7 @@ public:
 
     inline  SalXLib*        GetLib() const { return pXLib_; }
 
-    static void             Timeout( bool idle );
+    static void             Timeout();
 
     // X errors
     virtual void            ErrorTrapPush() override;

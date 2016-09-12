@@ -152,7 +152,6 @@ protected:
     timeval         m_aTimeout;
     sal_uLong       m_nTimeoutMS;
     int             m_pTimeoutFDS[2];
-    bool            blockIdleTimeout;
 
     int             nFDs_;
     fd_set          aReadFDS_;

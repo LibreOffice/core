@@ -581,7 +581,7 @@ void SwTiledRenderingTest::testSearchAllNotifications()
         {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // This was 5, make sure that we get no notifications about selection changes during search.
     CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
@@ -785,7 +785,7 @@ void SwTiledRenderingTest::testMissingInvalidation()
     aView2.m_bTilesInvalidated = false;
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
     mxComponent->dispose();
@@ -901,7 +901,7 @@ void SwTiledRenderingTest::testViewCursorVisibility()
     Point aCenter = pObject->GetSnapRect().Center();
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // Make sure the "view/text" cursor of the first view gets a notification.
     CPPUNIT_ASSERT(!aView1.m_bViewCursorVisible);
     mxComponent->dispose();
@@ -931,13 +931,13 @@ void SwTiledRenderingTest::testViewCursorCleanup()
     aView1.m_bGraphicViewSelection = false;
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aCenter.getX(), aCenter.getY(), 1, MOUSE_LEFT, 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // Make sure there is a graphic view selection on the first view.
     CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);
 
     // Now destroy the second view.
     SfxLokHelper::destroyView(nView2);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), SfxLokHelper::getViewsCount());
     // Make sure that the graphic view selection on the first view is cleaned up.
     CPPUNIT_ASSERT(!aView1.m_bGraphicViewSelection);
@@ -1040,7 +1040,7 @@ void SwTiledRenderingTest::testUndoInvalidations()
     aView1.m_bTilesInvalidated = false;
     aView2.m_bTilesInvalidated = false;
     comphelper::dispatchCommand(".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     // Undo was dispatched on the first view, this second view was not invalidated.
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
@@ -1162,7 +1162,7 @@ void SwTiledRenderingTest::testUndoRepairDispatch()
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
     comphelper::dispatchCommand(".uno:Undo", {});
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
 
     // But the same is allowed in repair mode.
@@ -1173,7 +1173,7 @@ void SwTiledRenderingTest::testUndoRepairDispatch()
         {"Repair", uno::makeAny(true)}
     }));
     comphelper::dispatchCommand(".uno:Undo", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // This was 1: repair mode couldn't undo the action, either.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
 
@@ -1287,7 +1287,7 @@ void SwTiledRenderingTest::testTrackChanges()
         {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(0))}
     }));
     comphelper::dispatchCommand(".uno:RejectTrackedChange", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // Assert that the reject was performed.
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
@@ -1492,7 +1492,7 @@ void SwTiledRenderingTest::testCommentEndTextEdit()
     const int nCtrlAltC = KEY_MOD1 + KEY_MOD2 + 512 + 'c' - 'a';
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', nCtrlAltC);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', nCtrlAltC);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
 

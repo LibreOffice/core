@@ -389,7 +389,7 @@ void DesktopLOKTest::testSearchCalc()
         {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     std::vector<OString> aSelections;
     sal_Int32 nIndex = 0;
@@ -423,7 +423,7 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
         {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // This was 1, make sure that we get no notifications about selection changes during search.
     CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
@@ -693,7 +693,7 @@ void DesktopLOKTest::testCommandResult()
     // the condition var.
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     m_aCommandResultCondition.wait(aTimeValue);
 
     CPPUNIT_ASSERT(m_aCommandResult.isEmpty());
@@ -703,7 +703,7 @@ void DesktopLOKTest::testCommandResult()
 
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Bold", nullptr, true);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     m_aCommandResultCondition.wait(aTimeValue);
 
     boost::property_tree::ptree aTree;
@@ -726,7 +726,7 @@ void DesktopLOKTest::testWriterComments()
     TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     m_aCommandResultCondition.wait(aTimeValue);
     CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
     xToolkit->reschedule();
@@ -767,10 +767,10 @@ void DesktopLOKTest::testModifiedStatus()
     m_bModified = false;
     m_aStateChangedCondition.reset();
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
     m_aStateChangedCondition.wait(aTimeValue);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // This was false, there was no callback about the modified status change.
     CPPUNIT_ASSERT(m_bModified);
@@ -781,9 +781,9 @@ void DesktopLOKTest::testModifiedStatus()
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", "TakeOwnership"));
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     m_aStateChangedCondition.wait(aTimeValue);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // There was no callback about the modified status change.
     CPPUNIT_ASSERT(!m_bModified);
@@ -791,9 +791,9 @@ void DesktopLOKTest::testModifiedStatus()
     // Modify the document again
     m_aStateChangedCondition.reset();
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     m_aStateChangedCondition.wait(aTimeValue);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // There was no callback about the modified status change.
     CPPUNIT_ASSERT(m_bModified);
@@ -806,7 +806,7 @@ void DesktopLOKTest::testModifiedStatus()
     m_aStateChangedCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:Save", nullptr, false);
     m_aStateChangedCondition.wait(aTimeValue);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // There was no callback about the modified status change.
     CPPUNIT_ASSERT(!m_bModified);
@@ -826,12 +826,12 @@ void DesktopLOKTest::testTrackChanges()
     pDocument->pClass->createView(pDocument);
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // Enable trak changes and assert that both views get notified.
     m_nTrackChanges = 0;
     pDocument->pClass->postUnoCommand(pDocument, ".uno:TrackChanges", nullptr, false);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // This was 1, only the active view was notified.
     CPPUNIT_ASSERT_EQUAL(2, m_nTrackChanges);
 
@@ -1063,7 +1063,7 @@ void DesktopLOKTest::testContextMenuCalc()
                                       LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       aPointOnImage.X(), aPointOnImage.Y(),
                                       1, 4, 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aContextMenuCondition.wait(aTimeValue);
@@ -1173,7 +1173,7 @@ void DesktopLOKTest::testContextMenuWriter()
                                       LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       aRandomPoint.X(), aRandomPoint.Y(),
                                       1, 4, 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aContextMenuCondition.wait(aTimeValue);
@@ -1229,7 +1229,7 @@ void DesktopLOKTest::testContextMenuImpress()
                                       LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       aRandomPoint.X(), aRandomPoint.Y(),
                                       1, 4, 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     TimeValue aTimeValue = {2 , 0}; // 2 seconds max
     m_aContextMenuCondition.wait(aTimeValue);
@@ -1385,7 +1385,7 @@ void DesktopLOKTest::testNotificationCompression()
     handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // Should be dropped.
     handler->queue(LOK_CALLBACK_SET_PART, "1"); // Should be dropped.
 
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(13), notifs.size());
 
@@ -1441,7 +1441,7 @@ void DesktopLOKTest::testPartInInvalidation()
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10");
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10");
 
-        Scheduler::ProcessEventsToIdle();
+        Scheduler::ProcessAllPendingEvents();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
 
@@ -1456,7 +1456,7 @@ void DesktopLOKTest::testPartInInvalidation()
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10");
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "40, 10, 20, 10");
 
-        Scheduler::ProcessEventsToIdle();
+        Scheduler::ProcessAllPendingEvents();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
     }
@@ -1475,7 +1475,7 @@ void DesktopLOKTest::testPartInInvalidation()
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0");
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 0");
 
-        Scheduler::ProcessEventsToIdle();
+        Scheduler::ProcessAllPendingEvents();
 
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
     }
@@ -1493,7 +1493,7 @@ void DesktopLOKTest::testPartInInvalidation()
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0");
         handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 1");
 
-        Scheduler::ProcessEventsToIdle();
+        Scheduler::ProcessAllPendingEvents();
 
         // This failed as RectangleAndPart::Create() always assumed no part in
         // payload, so this was merged -> it was 1.
@@ -1630,11 +1630,11 @@ void DesktopLOKTest::testPaintPartTile()
     pDocument->m_pDocumentClass->paintPartTile(pDocument, pPixels, 1, 256, 256, 0, 0, 256, 256);
 
     // Type again.
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     aView1.m_bTilesInvalidated = false;
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // This failed: paintPartTile() (as a side-effect) ended the text edit of
     // the first view, so there were no invalidations.
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
@@ -1658,7 +1658,7 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     Rectangle aBodyCursor = aView2.m_aOwnCursor;
 
     // Now insert a comment and make sure that the comment's cursor is shown,
@@ -1667,11 +1667,11 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     const int nCtrlAltC = KEY_MOD1 + KEY_MOD2 + 512 + 'c' - 'a';
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'c', nCtrlAltC);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'c', nCtrlAltC);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // Wait for SfxBindings to actually update the state, which updated the
     // cursor as well.
     osl::Thread::wait(std::chrono::seconds(1));
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // This failed: the body cursor was shown right after inserting a comment.
     CPPUNIT_ASSERT(aView2.m_aOwnCursor.getX() > aBodyCursor.getX());
     // This failed, the first view's cursor also jumped when the second view

@@ -1951,7 +1951,7 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
     throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 }
 
 sal_Int64 SAL_CALL VCLXToolkit::getOpenGLBufferSwapCounter()

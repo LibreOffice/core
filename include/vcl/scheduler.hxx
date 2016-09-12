@@ -57,7 +57,7 @@ protected:
 
     virtual void SetDeletionFlags();
 
-    virtual bool ReadyForSchedule( const sal_uInt64 nTime, const bool bIdle ) const = 0;
+    virtual bool ReadyForSchedule( const sal_uInt64 nTime ) const = 0;
     virtual void UpdateMinPeriod( const sal_uInt64 nTime, sal_uInt64 &nMinPeriod ) const = 0;
 
 public:
@@ -83,11 +83,11 @@ public:
     static void ImplDeInitScheduler();
 
     /// Process one pending Timer with highhest priority
-    static void CallbackTaskScheduling( bool bIdle );
+    static void       CallbackTaskScheduling();
     /// Process one pending task ahead of time with highest priority.
-    static bool       ProcessTaskScheduling( bool bIdle );
+    static bool       ProcessTaskScheduling();
     /// Process all events until we are idle
-    static void       ProcessEventsToIdle();
+    static void       ProcessAllPendingEvents();
 
     /// Control the deterministic mode.  In this mode, two subsequent runs of
     /// LibreOffice fire about the same amount idles.
