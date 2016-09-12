@@ -109,8 +109,6 @@ class OFieldExpressionControl : public ::svt::EditBrowseBox
     bool                            m_bIgnoreEvent;
     rtl::Reference<OFieldExpressionControlContainerListener> aContainerListener;
 
-    bool SaveModified(bool _bAppend);
-
 public:
     OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent);
     virtual ~OFieldExpressionControl();
@@ -428,11 +426,6 @@ bool OFieldExpressionControl::IsTabAllowed(bool /*bForward*/) const
 
 bool OFieldExpressionControl::SaveModified()
 {
-    return SaveModified(true);
-}
-
-bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
-{
     sal_Int32 nRow = GetCurRow();
     if ( nRow != BROWSER_ENDOFSELECTION )
     {
@@ -493,7 +486,7 @@ bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
 
             if ( Controller() )
                 Controller()->ClearModified();
-            if ( _bAppendRow && GetRowCount() == m_pParent->getGroups()->getCount() )
+            if ( GetRowCount() == m_pParent->getGroups()->getCount() )
             {
                 RowInserted( GetRowCount()-1);
                 m_aGroupPositions.push_back(NO_GROUP);

@@ -153,7 +153,6 @@ public:
                         If keyName is an empty string the registry information under the key specified
                         by rKey is merged with the information from the specified file.
         @param  regFileName specifies the file containing the registry information.
-        @param  bWarnings if TRUE the function returns an error if a key already exists.
         @param  bReport if TRUE the function reports warnings on stdout if a key already exists.
         @return RegError::NO_ERROR if succeeds else an error code. If it returns an error the registry will
                 restore the state before merging.
@@ -161,8 +160,7 @@ public:
     inline RegError mergeKey(RegistryKey& rKey,
                                 const rtl::OUString& keyName,
                                 const rtl::OUString& regFileName,
-                                bool bWarnings = false,
-                                bool bReport = false);
+                                bool bReport);
 
     friend class RegistryKey;
     friend class RegistryKeyArray;
@@ -1041,9 +1039,8 @@ inline RegError Registry::destroy(const rtl::OUString& registryName)
 inline RegError Registry::mergeKey(RegistryKey& rKey,
                                          const rtl::OUString& keyName,
                                          const rtl::OUString& regFileName,
-                                         bool bWarnings,
                                          bool bReport)
-    {  return m_pApi->mergeKey(m_hImpl, rKey.m_hImpl, keyName.pData, regFileName.pData, bWarnings, bReport); }
+    {  return m_pApi->mergeKey(m_hImpl, rKey.m_hImpl, keyName.pData, regFileName.pData, false/*bWarnings*/, bReport); }
 
 
 #endif

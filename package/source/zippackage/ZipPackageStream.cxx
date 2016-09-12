@@ -845,7 +845,7 @@ bool ZipPackageStream::saveChild(
                     // 2nd parameter is the time to wait between cleanups in 10th of a second.
                     // Both values may be added to the configuration settings if needed.
                     static sal_Int32 nAllowedThreads(comphelper::ThreadPool::getPreferredConcurrency() * 4);
-                    rZipOut.reduceScheduledThreadsToGivenNumberOrLess(nAllowedThreads, 1);
+                    rZipOut.reduceScheduledThreadsToGivenNumberOrLess(nAllowedThreads);
 
                     // Start a new thread deflating this zip entry
                     ZipOutputEntry *pZipEntry = new ZipOutputEntry(

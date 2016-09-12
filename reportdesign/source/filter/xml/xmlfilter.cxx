@@ -636,7 +636,7 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
                         pAutoStyle->FillPropertySet(getReportDefinition().get());
                     }
                 }
-                pContext = new OXMLReport( *this, nPrefix, rLocalName,xAttrList,getReportDefinition(),nullptr );
+                pContext = new OXMLReport( *this, nPrefix, rLocalName,xAttrList,getReportDefinition() );
             }
             break;
         case XML_TOK_DOC_STYLES:

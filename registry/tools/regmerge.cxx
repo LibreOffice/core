@@ -133,7 +133,7 @@ int __cdecl main( int argc, char * argv[] )
         for (size_t i = 2; i < args.size(); i++)
         {
             OUString targetRegName( convertToFileUrl(args[i].c_str(), args[i].size()) );
-            RegError _ret = reg.mergeKey(rootKey, mergeKeyName, targetRegName, false, options.isVerbose());
+            RegError _ret = reg.mergeKey(rootKey, mergeKeyName, targetRegName, options.isVerbose());
             if (_ret != RegError::NO_ERROR)
             {
                 if (_ret == RegError::MERGE_CONFLICT)

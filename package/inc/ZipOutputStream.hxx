@@ -78,8 +78,7 @@ private:
 
 public:
     void reduceScheduledThreadsToGivenNumberOrLess(
-        sal_Int32 nThreads,
-        sal_Int32 nWaitTimeInTenthSeconds);
+        sal_Int32 nThreads);
 
     const std::shared_ptr<comphelper::ThreadTaskTag>& getThreadTaskTag() { return mpThreadTaskTag; }
 };

@@ -1009,7 +1009,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     // Write the manifest
     uno::Reference < XManifestWriter > xWriter = ManifestWriter::create( m_xContext );
     ZipEntry * pEntry = new ZipEntry;
-    ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
+    ZipPackageBuffer *pBuffer = new ZipPackageBuffer;
     uno::Reference < XOutputStream > xManOutStream( *pBuffer, UNO_QUERY );
 
     pEntry->sPath = "META-INF/manifest.xml";
@@ -1035,7 +1035,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
 void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
 {
     ZipEntry* pEntry = new ZipEntry;
-    ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
+    ZipPackageBuffer *pBuffer = new ZipPackageBuffer;
     uno::Reference< io::XOutputStream > xConTypeOutStream( *pBuffer, UNO_QUERY );
 
     pEntry->sPath = "[Content_Types].xml";

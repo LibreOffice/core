@@ -41,9 +41,8 @@ namespace rptxml
 OXMLReport::OXMLReport( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
-                ,const uno::Reference< report::XReportDefinition >& _xComponent
-                ,OXMLTable* _pContainer) :
-    OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),_pContainer)
+                ,const uno::Reference< report::XReportDefinition >& _xComponent) :
+    OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),nullptr)
     ,m_xComponent(_xComponent)
 {
     OSL_ENSURE(m_xComponent.is(),"No Report definition!");

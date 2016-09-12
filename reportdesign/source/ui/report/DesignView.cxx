@@ -422,7 +422,7 @@ void ODesignView::SelectAll(const sal_uInt16 _nObjectType)
 
 void ODesignView::unmarkAllObjects()
 {
-    m_aScrollWindow->unmarkAllObjects(nullptr);
+    m_aScrollWindow->unmarkAllObjects();
 }
 
 void ODesignView::togglePropertyBrowser(bool _bToogleOn)

@@ -140,11 +140,9 @@ namespace rptui
         */
         void                    toggleGrid(bool _bVisible);
 
-        /** unmark all objects on the views without the given one.
-        *
-        * @param _pSectionView The view where the objects should not be unmarked.
+        /** unmark all objects on the views.
         */
-        void                    unmarkAllObjects(OSectionView* _pSectionView);
+        void                    unmarkAllObjects();
 
         /** shows or hides the ruler.
         */
