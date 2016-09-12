@@ -100,8 +100,7 @@ void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
             if( pSVData->mpSalTimer )
             {
                 // timer already elapsed since event posted
-                bool idle = true; // TODO
-                pSVData->mpSalTimer->CallCallback( idle );
+                pSVData->mpSalTimer->CallCallback();
             }
         }
         ImplSalStartTimer( sal_uLong( [pEvent data1] ) );

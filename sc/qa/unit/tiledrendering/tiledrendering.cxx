@@ -442,7 +442,7 @@ void ScTiledRenderingTest::testViewCursors()
     CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     SfxLokHelper::destroyView(SfxLokHelper::getView());
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
     mxComponent->dispose();
@@ -481,7 +481,7 @@ void ScTiledRenderingTest::testTextViewSelection()
     // Create a selection on two cells in the second view, that's a text selection in LOK terms.
     aView1.m_bTextViewSelectionInvalidated = false;
     lcl_dispatchCommand(mxComponent, ".uno:GoRightSel", {});
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // Make sure the first view got its notification.
     CPPUNIT_ASSERT(aView1.m_bTextViewSelectionInvalidated);
 
@@ -504,7 +504,7 @@ void ScTiledRenderingTest::testDocumentSizeChanged()
         comphelper::makePropertyValue("ToPoint", OUString("$A$30")),
     };
     lcl_dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // Assert that the size in the payload is not 0.
     CPPUNIT_ASSERT(m_aDocumentSize.getWidth() > 0);
     CPPUNIT_ASSERT(m_aDocumentSize.getHeight() > 0);
