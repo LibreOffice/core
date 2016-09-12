@@ -89,6 +89,7 @@ private:
     VclPtr<MetricField>    m_pAAPointLimit;
 
     VclPtr<ListBox>        m_pMenuIconsLB;
+    VclPtr<ListBox>        m_pContextMenuShortcutsLB;
 
     VclPtr<CheckBox>       m_pFontShowCB;
 

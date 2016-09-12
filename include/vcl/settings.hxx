@@ -425,8 +425,11 @@ public:
     void                            SetHideDisabledMenuItems( bool bHideDisabledMenuItems );
     bool                            GetHideDisabledMenuItems() const;
 
-    void                            SetAcceleratorsInContextMenus( bool bAcceleratorsInContextMenus );
-    bool                            GetAcceleratorsInContextMenus() const;
+    void                            SetContextMenuShortcuts( TriState eContextMenuShortcuts );
+    bool                            GetContextMenuShortcuts() const;
+
+    void                            SetPreferredContextMenuShortcuts( bool bContextMenuShortcuts );
+    bool                            GetPreferredContextMenuShortcuts() const;
 
     void                            SetPrimaryButtonWarpsSlider( bool bPrimaryButtonWarpsSlider );
     bool                            GetPrimaryButtonWarpsSlider() const;

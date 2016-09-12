@@ -630,6 +630,7 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pAAPointLimitLabel, "aafrom");
     get(m_pAAPointLimit, "aanf");
     get(m_pMenuIconsLB, "menuicons");
+    get(m_pContextMenuShortcutsLB, "contextmenushortcuts");
     get(m_pFontShowCB, "showfontpreview");
     get(m_pUseHardwareAccell, "useaccel");
     get(m_pUseAntiAliase, "useaa");
@@ -711,6 +712,7 @@ void OfaViewTabPage::dispose()
     m_pAAPointLimitLabel.clear();
     m_pAAPointLimit.clear();
     m_pMenuIconsLB.clear();
+    m_pContextMenuShortcutsLB.clear();
     m_pFontShowCB.clear();
     m_pUseHardwareAccell.clear();
     m_pUseAntiAliase.clear();
@@ -867,6 +869,16 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         bAppearanceChanged = true;
     }
 
+    if(m_pContextMenuShortcutsLB->IsValueChangedFromSaved())
+    {
+        aMenuOpt.SetContextMenuShortcuts(m_pContextMenuShortcutsLB->GetSelectEntryPos() == 0 ?
+            TRISTATE_INDET :
+            static_cast<TriState>(m_pContextMenuShortcutsLB->GetSelectEntryPos() - 1));
+        bModified = true;
+        bMenuOptModified = true;
+        bAppearanceChanged = true;
+    }
+
     // #i95644#  if disabled, do not use value, see in ::Reset()
     if(m_pUseHardwareAccell->IsEnabled())
     {
@@ -993,6 +1005,8 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     SvtMenuOptions aMenuOpt;
     m_pMenuIconsLB->SelectEntryPos(aMenuOpt.GetMenuIconsState() == 2 ? 0 : aMenuOpt.GetMenuIconsState() + 1);
     m_pMenuIconsLB->SaveValue();
+    m_pContextMenuShortcutsLB->SelectEntryPos(aMenuOpt.GetContextMenuShortcuts() == 2 ? 0 : aMenuOpt.GetContextMenuShortcuts() + 1);
+    m_pContextMenuShortcutsLB->SaveValue();
 
     { // #i95644# HW accel (unified to disable mechanism)
         if(pCanvasSettings->IsHardwareAccelerationAvailable())
