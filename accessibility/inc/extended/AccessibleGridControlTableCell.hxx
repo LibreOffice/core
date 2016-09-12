@@ -76,8 +76,7 @@ namespace accessibility
         AccessibleGridControlTableCell( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
                                     ::svt::table::IAccessibleTable& _rTable,
                                     sal_Int32 _nRowId,
-                                    sal_uInt16 _nColId,
-                                    svt::table::AccessibleTableControlObjType  eObjType);
+                                    sal_uInt16 _nColId);
 
         // XInterface -------------------------------------------------------------
 
