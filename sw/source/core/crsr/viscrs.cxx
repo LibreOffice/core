@@ -204,7 +204,10 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell* pViewShell)
             if (pViewShell == m_pCursorShell->GetSfxViewShell())
                 pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
             else
+            {
                 SfxLokHelper::notifyOtherView(m_pCursorShell->GetSfxViewShell(), pViewShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+                SfxLokHelper::notifyOtherView(m_pCursorShell->GetSfxViewShell(), pViewShell, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", OString::boolean(m_bIsVisible));
+            }
         }
         else
         {
