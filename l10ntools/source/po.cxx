@@ -37,9 +37,7 @@ private:
     bool       m_bNull;
 
 public:
-                        GenPoEntry();
-    virtual             ~GenPoEntry();
-                        // Default copy constructor and copy operator work well
+    GenPoEntry();
 
     const OString& getReference() const    { return m_sReference; }
     const OString& getMsgCtxt() const      { return m_sMsgCtxt; }
@@ -121,10 +119,6 @@ GenPoEntry::GenPoEntry()
     , m_sMsgStr( OString() )
     , m_bFuzzy( false )
     , m_bNull( false )
-{
-}
-
-GenPoEntry::~GenPoEntry()
 {
 }
 
