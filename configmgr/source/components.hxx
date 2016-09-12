@@ -61,8 +61,7 @@ public:
         OUString * canonicRepresenation, std::vector<OUString> * path, int * finalizedLayer)
         const;
 
-    rtl::Reference< Node > getTemplate(
-        int layer, OUString const & fullName) const;
+    rtl::Reference< Node > getTemplate( OUString const & fullName) const;
 
     void addRootAccess(rtl::Reference< RootAccess > const & access);
 

@@ -37,7 +37,7 @@ namespace offapp
         bool                bEnabled;
         sal_Int32           nTimeoutSeconds;
 
-        DriverPooling( const OUString& _rName, const sal_Int32 _nTimeout );
+        DriverPooling( const OUString& _rName );
 
         bool operator == (const DriverPooling& _rR) const;
         bool operator != (const DriverPooling& _rR) const { return !operator ==(_rR); }

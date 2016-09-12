@@ -109,11 +109,10 @@ public:
     template <typename ImplClassT>
     ServiceDecl( ImplClassT const& implClass,
                  char const* pImplName,
-                 char const* pSupportedServiceNames, char cDelim = ';' )
+                 char const* pSupportedServiceNames )
         : m_createFunc(implClass.m_createFunc),
           m_pImplName(pImplName),
-          m_pServiceNames(pSupportedServiceNames),
-          m_cDelim(cDelim) {}
+          m_pServiceNames(pSupportedServiceNames) {}
 
     /// @internal gets called by component_getFactoryHelper()
     void * getFactory( sal_Char const* pImplName ) const;
@@ -134,7 +133,6 @@ private:
     detail::CreateFuncF const m_createFunc;
     char const* const m_pImplName;
     char const* const m_pServiceNames;
-    char const m_cDelim;
 };
 
 /** To specify whether the implementation class expects arguments

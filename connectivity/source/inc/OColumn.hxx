@@ -76,25 +76,12 @@ namespace connectivity
                 sal_Int32       _aColumnDisplaySize=0,
                 sal_Int32       _aPrecision=0,
                 sal_Int32       _aScale=0,
-                sal_Int32       _aColumnType=0,
-
-                bool        _aAutoIncrement=false,
-                bool        _aCaseSensitive=false,
-                bool        _aSearchable=true,
-                bool        _aCurrency=false,
-                bool        _aSigned=false,
-                bool        _aReadOnly=true,
-                bool        _aWritable=false,
-                bool        _aDefinitelyWritable=false,
-
-                const OUString &_aColumnLabel = OUString(),
-                const OUString &_aColumnTypeName = OUString(),
-                const OUString &_aColumnServiceName = OUString())
+                sal_Int32       _aColumnType=0)
         :   m_TableName(_aTableName),
             m_ColumnName(_aColumnName),
-            m_ColumnLabel(_aColumnLabel),
-            m_ColumnTypeName(_aColumnTypeName),
-            m_ColumnServiceName(_aColumnServiceName),
+            m_ColumnLabel(),
+            m_ColumnTypeName(),
+            m_ColumnServiceName(),
 
             m_Nullable(_aNullable),
             m_ColumnDisplaySize(_aColumnDisplaySize),
@@ -102,14 +89,14 @@ namespace connectivity
             m_Scale(_aScale),
             m_ColumnType(_aColumnType),
 
-            m_AutoIncrement(_aAutoIncrement),
-            m_CaseSensitive(_aCaseSensitive),
-            m_Searchable(_aSearchable),
-            m_Currency(_aCurrency),
-            m_Signed(_aSigned),
-            m_ReadOnly(_aReadOnly),
-            m_Writable(_aWritable),
-            m_DefinitelyWritable(_aDefinitelyWritable)
+            m_AutoIncrement(false),
+            m_CaseSensitive(false),
+            m_Searchable(true),
+            m_Currency(false),
+            m_Signed(false),
+            m_ReadOnly(true),
+            m_Writable(false),
+            m_DefinitelyWritable(false)
         {
             if(m_ColumnLabel.isEmpty())
                 m_ColumnLabel = _aColumnName;

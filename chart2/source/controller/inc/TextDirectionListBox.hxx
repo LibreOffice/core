@@ -30,8 +30,7 @@ namespace chart
 class TextDirectionListBox : public svx::FrameDirectionListBox
 {
 public:
-    explicit            TextDirectionListBox( vcl::Window* pParent,
-                            vcl::Window* pWindow1 = nullptr, vcl::Window* pWindow2 = nullptr );
+    explicit            TextDirectionListBox( vcl::Window* pParent );
 };
 
 } //namespace chart

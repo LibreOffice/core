@@ -94,7 +94,7 @@ sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
                                                       nSize,
                                                       nDec,
                                                       nDataType,
-                                                      false,false,false,true,
+                                                      true,
                                                       aCatalog, aSchema, aTable);
                 xRet = pRet;
                 break;
