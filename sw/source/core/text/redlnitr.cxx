@@ -47,19 +47,19 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
 {
     // during HTML-Import it can happen, that no layout exists
     SwRootFrame* pRootFrame = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
-    pShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
+    m_pViewShell = pRootFrame ? pRootFrame->GetCurrShell() : nullptr;
 
-    pScriptInfo = &rScrInf;
+    m_pScriptInfo = &rScrInf;
 
     // attributes set at the whole paragraph
-    pAttrSet = rTextNode.GetpSwAttrSet();
+    m_pAttrSet = rTextNode.GetpSwAttrSet();
     // attribute array
-    pHints = rTextNode.GetpSwpHints();
+    m_pHints = rTextNode.GetpSwpHints();
 
     // Build a font matching the default paragraph style:
-    SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), pShell );
-    delete pFnt;
-    pFnt = new SwFont( aFontAccess.Get()->GetFont() );
+    SwFontAccess aFontAccess( &rTextNode.GetAnyFormatColl(), m_pViewShell );
+    delete m_pFont;
+    m_pFont = new SwFont( aFontAccess.Get()->GetFont() );
 
     // set font to vertical if frame layout is vertical
     bool bVertLayout = false;
@@ -69,7 +69,7 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
         if ( pFrame->IsVertical() )
         {
             bVertLayout = true;
-            pFnt->SetVertical( pFnt->GetOrientation(), true );
+            m_pFont->SetVertical( m_pFont->GetOrientation(), true );
         }
         bRTL = pFrame->IsRightToLeft();
     }
@@ -79,54 +79,54 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     // If any further attributes for the paragraph are given in pAttrSet
     // consider them during construction of the default array, and apply
     // them to the font
-    aAttrHandler.Init( aFontAccess.Get()->GetDefault(), pAttrSet,
-                       *rTextNode.getIDocumentSettingAccess(), pShell, *pFnt, bVertLayout );
+    m_aAttrHandler.Init( aFontAccess.Get()->GetDefault(), m_pAttrSet,
+                       *rTextNode.getIDocumentSettingAccess(), m_pViewShell, *m_pFont, bVertLayout );
 
-    aMagicNo[SwFontScript::Latin] = aMagicNo[SwFontScript::CJK] = aMagicNo[SwFontScript::CTL] = nullptr;
+    m_aMagicNo[SwFontScript::Latin] = m_aMagicNo[SwFontScript::CJK] = m_aMagicNo[SwFontScript::CTL] = nullptr;
 
     // determine script changes if not already done for current paragraph
-    OSL_ENSURE( pScriptInfo, "No script info available");
-    if ( pScriptInfo->GetInvalidityA() != COMPLETE_STRING )
-         pScriptInfo->InitScriptInfo( rTextNode, bRTL );
+    OSL_ENSURE( m_pScriptInfo, "No script info available");
+    if ( m_pScriptInfo->GetInvalidityA() != COMPLETE_STRING )
+         m_pScriptInfo->InitScriptInfo( rTextNode, bRTL );
 
     if ( g_pBreakIt->GetBreakIter().is() )
     {
-        pFnt->SetActual( SwScriptInfo::WhichFont( 0, nullptr, pScriptInfo ) );
+        m_pFont->SetActual( SwScriptInfo::WhichFont( 0, nullptr, m_pScriptInfo ) );
 
         sal_Int32 nChg = 0;
         size_t nCnt = 0;
 
         do
         {
-            if ( nCnt >= pScriptInfo->CountScriptChg() )
+            if ( nCnt >= m_pScriptInfo->CountScriptChg() )
                 break;
-            nChg = pScriptInfo->GetScriptChg( nCnt );
+            nChg = m_pScriptInfo->GetScriptChg( nCnt );
             SwFontScript nTmp = SW_SCRIPTS;
-            switch ( pScriptInfo->GetScriptType( nCnt++ ) ) {
+            switch ( m_pScriptInfo->GetScriptType( nCnt++ ) ) {
                 case i18n::ScriptType::ASIAN :
-                    if( !aMagicNo[SwFontScript::CJK] ) nTmp = SwFontScript::CJK;
+                    if( !m_aMagicNo[SwFontScript::CJK] ) nTmp = SwFontScript::CJK;
                     break;
                 case i18n::ScriptType::COMPLEX :
-                    if( !aMagicNo[SwFontScript::CTL] ) nTmp = SwFontScript::CTL;
+                    if( !m_aMagicNo[SwFontScript::CTL] ) nTmp = SwFontScript::CTL;
                     break;
                 default:
-                    if( !aMagicNo[SwFontScript::Latin ] ) nTmp = SwFontScript::Latin;
+                    if( !m_aMagicNo[SwFontScript::Latin ] ) nTmp = SwFontScript::Latin;
             }
             if( nTmp < SW_SCRIPTS )
             {
-                pFnt->ChkMagic( pShell, nTmp );
-                pFnt->GetMagic( aMagicNo[ nTmp ], aFntIdx[ nTmp ], nTmp );
+                m_pFont->ChkMagic( m_pViewShell, nTmp );
+                m_pFont->GetMagic( m_aMagicNo[ nTmp ], m_aFontIdx[ nTmp ], nTmp );
             }
         } while (nChg < rTextNode.GetText().getLength());
     }
     else
     {
-        pFnt->ChkMagic( pShell, SwFontScript::Latin );
-        pFnt->GetMagic( aMagicNo[ SwFontScript::Latin ], aFntIdx[ SwFontScript::Latin ], SwFontScript::Latin );
+        m_pFont->ChkMagic( m_pViewShell, SwFontScript::Latin );
+        m_pFont->GetMagic( m_aMagicNo[ SwFontScript::Latin ], m_aFontIdx[ SwFontScript::Latin ], SwFontScript::Latin );
     }
 
-    nStartIndex = nEndIndex = nPos = nChgCnt = 0;
-    nPropFont = 0;
+    m_nStartIndex = m_nEndIndex = m_nPosition = m_nChgCnt = 0;
+    m_nPropFont = 0;
     SwDoc* pDoc = rTextNode.GetDoc();
     const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
 
@@ -146,11 +146,11 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
                 Seek( 0 );
             }
 
-            pRedln = new SwRedlineItr( rTextNode, *pFnt, aAttrHandler, nRedlPos,
+            m_pRedline = new SwRedlineItr( rTextNode, *m_pFont, m_aAttrHandler, nRedlPos,
                                         bShow, pArr, nInputStt );
 
-            if( pRedln->IsOn() )
-                ++nChgCnt;
+            if( m_pRedline->IsOn() )
+                ++m_nChgCnt;
         }
     }
 }

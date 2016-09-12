@@ -278,7 +278,7 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         SwFont *pTmpFnt = nullptr;
         if( !bName )
         {
-            pTmpFnt = new SwFont( *pFnt );
+            pTmpFnt = new SwFont( *m_pFont );
             pTmpFnt->SetDiffFnt( &pChFormat->GetAttrSet(), m_pFrame->GetTextNode()->getIDocumentSettingAccess() );
         }
         {
@@ -316,12 +316,12 @@ static SwFieldPortion * lcl_NewMetaPortion(SwTextAttr & rHint, const bool bPrefi
  */
 SwExpandPortion * SwTextFormatter::TryNewNoLengthPortion(SwTextFormatInfo & rInfo)
 {
-    if (pHints)
+    if (m_pHints)
     {
         const sal_Int32 nIdx(rInfo.GetIdx());
-        while (m_nHintEndIndex < pHints->Count())
+        while (m_nHintEndIndex < m_pHints->Count())
         {
-            SwTextAttr & rHint( *pHints->GetSortedByEnd(m_nHintEndIndex) );
+            SwTextAttr & rHint( *m_pHints->GetSortedByEnd(m_nHintEndIndex) );
             sal_Int32 const nEnd( *rHint.GetAnyEnd() );
             if (nEnd > nIdx)
             {

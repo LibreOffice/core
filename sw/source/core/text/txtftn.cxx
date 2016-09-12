@@ -1054,7 +1054,7 @@ sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
     FeedInf( rInf );
     SeekStartAndChg( rInf, true );
     if( GetRedln() && m_pCurr->HasRedline() )
-        GetRedln()->Seek( *pFnt, nOffset, 0 );
+        GetRedln()->Seek( *m_pFont, nOffset, 0 );
 
     // A tricky special case: Flyfrms extend into the Line and are at the
     // position we want to insert the Quovadis text

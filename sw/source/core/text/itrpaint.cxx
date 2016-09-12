@@ -321,7 +321,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             sal_Int32 nOffset = GetInfo().GetIdx();
             SeekStartAndChg( GetInfo(), true );
             if( GetRedln() && m_pCurr->HasRedline() )
-                GetRedln()->Seek( *pFnt, nOffset, 0 );
+                GetRedln()->Seek( *m_pFont, nOffset, 0 );
         }
         else if( pPor->InTextGrp() || pPor->InFieldGrp() || pPor->InTabGrp() )
             SeekAndChg( GetInfo() );
@@ -485,7 +485,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                                           long nAdjustBaseLine )
 {
     // Check if common underline should not be continued
-    if ( IsUnderlineBreak( *pPor, *pFnt ) )
+    if ( IsUnderlineBreak( *pPor, *m_pFont ) )
     {
         // delete underline font
         delete GetInfo().GetUnderFnt();
@@ -511,9 +511,9 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
     if( HasHints() )
     {
-        for ( size_t nTmp = 0; nTmp < pHints->Count(); ++nTmp )
+        for ( size_t nTmp = 0; nTmp < m_pHints->Count(); ++nTmp )
         {
-            SwTextAttr* const pTextAttr = pHints->Get( nTmp );
+            SwTextAttr* const pTextAttr = m_pHints->Get( nTmp );
 
             const SvxUnderlineItem* pItem =
                     static_cast<const SvxUnderlineItem*>(CharFormat::GetItem( *pTextAttr, RES_CHRATR_UNDERLINE ));
@@ -524,7 +524,7 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                 const sal_Int32 nEnd = *pTextAttr->GetEnd();
                 if( nEnd > nSt )
                 {
-                    const bool bUnderSelect = pFnt->GetUnderline() == pItem->GetLineStyle();
+                    const bool bUnderSelect = m_pFont->GetUnderline() == pItem->GetLineStyle();
                     aUnderMulti.Select( Range( nSt, nEnd - 1 ), bUnderSelect );
                 }
             }
@@ -581,8 +581,8 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
             aIter.Seek( nTmpIdx );
 
-            if ( aIter.GetFnt()->GetEscapement() < 0 || pFnt->IsWordLineMode() ||
-                 SVX_CASEMAP_KAPITAELCHEN == pFnt->GetCaseMap() )
+            if ( aIter.GetFnt()->GetEscapement() < 0 || m_pFont->IsWordLineMode() ||
+                 SVX_CASEMAP_KAPITAELCHEN == m_pFont->GetCaseMap() )
                 break;
 
             if ( !aIter.GetFnt()->GetEscapement() )
@@ -641,9 +641,9 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     }
 
     // an escaped redlined portion should also have a special underlining
-    if( ! pUnderlineFnt && pFnt->GetEscapement() > 0 && GetRedln() &&
+    if( ! pUnderlineFnt && m_pFont->GetEscapement() > 0 && GetRedln() &&
         GetRedln()->ChkSpecialUnderline() )
-        pUnderlineFnt = new SwFont( *pFnt );
+        pUnderlineFnt = new SwFont( *m_pFont );
 
     delete GetInfo().GetUnderFnt();
 
