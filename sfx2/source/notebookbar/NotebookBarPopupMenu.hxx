@@ -17,7 +17,7 @@ class NotebookBarPopupMenu : public PopupMenu
 public:
     explicit NotebookBarPopupMenu();
     void Execute(NotebookBar* pNotebookbar,
-                css::uno::Reference<css::frame::XFrame>& xFrame);
+                const css::uno::Reference<css::frame::XFrame>& xFrame);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
