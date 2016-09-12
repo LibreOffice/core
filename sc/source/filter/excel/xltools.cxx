@@ -239,14 +239,7 @@ sal_uInt16 XclTools::GetScErrorCode( sal_uInt8 nXclError )
 
 double XclTools::ErrorToDouble( sal_uInt8 nXclError )
 {
-    union
-    {
-        double fVal;
-        sal_math_Double smD;
-    };
-    ::rtl::math::setNan( &fVal );
-    smD.nan_parts.fraction_lo = GetScErrorCode( nXclError );
-    return fVal;
+    return formula::CreateDoubleError(GetScErrorCode( nXclError ));
 }
 
 XclBoolError XclTools::ErrorToEnum( double& rfDblValue, bool bErrOrBool, sal_uInt8 nValue )

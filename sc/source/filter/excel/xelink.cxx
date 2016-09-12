@@ -20,6 +20,7 @@
 #include "xelink.hxx"
 
 #include <algorithm>
+#include <formula/errorcodes.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/zforlist.hxx>
 #include "document.hxx"
@@ -1184,7 +1185,7 @@ void XclExpCrn::WriteDouble( XclExpStream& rStrm, double fValue )
 {
     if( ::rtl::math::isNan( fValue ) )
     {
-        sal_uInt16 nScError = static_cast< sal_uInt16 >( reinterpret_cast< const sal_math_Double* >( &fValue )->nan_parts.fraction_lo );
+        sal_uInt16 nScError = formula::GetDoubleErrorValue(fValue);
         WriteError( rStrm, XclTools::GetXclErrorCode( nScError ) );
     }
     else
