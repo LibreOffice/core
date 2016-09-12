@@ -3915,13 +3915,14 @@ void Content::getResourceOptions(
                     // not same as not found, this instead happens when the server doesn't exist or doesn't aswer at all
                     // probably a new bit stating 'timed out' should be added to opts var?
                     // in any case abort the command
+                    SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_TIMEOUT or DAV_HTTP_CONNECT for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                     cancelCommandExecution( e, xEnv );
                     // unreachable
                 }
                 break;
                 case DAVException::DAV_HTTP_AUTH:
                 {
-                    SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException Authentication error for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                    SAL_WARN( "ucb.ucp.webdav", "OPTIONS - DAVException: DAV_HTTP_AUTH for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                     // - the remote site is a WebDAV with special configuration: read/only for read operations
                     //   and read/write for write operations, the user is not allowed to lock/write and
                     //   she cancelled the credentials request.
@@ -3935,7 +3936,7 @@ void Content::getResourceOptions(
                     {
                         case SC_FORBIDDEN:
                         {
-                            SAL_WARN( "ucb.ucp.webdav","OPTIONS - Forbidden for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                            SAL_WARN( "ucb.ucp.webdav","OPTIONS - SC_FORBIDDEN for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                             rDAVOptions.setResourceFound(); // it may exists, will be checked by HEAD or GET method, surely it's not DAV
                             // cache it, so OPTIONS won't be called again, this URL does not support it
                             aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
@@ -3944,7 +3945,7 @@ void Content::getResourceOptions(
                         break;
                         case SC_BAD_REQUEST:
                         {
-                            SAL_WARN( "ucb.ucp.webdav","OPTIONS - Bad request for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                            SAL_WARN( "ucb.ucp.webdav","OPTIONS - SC_BAD_REQUEST for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                             rDAVOptions.setResourceFound(); // it may exists, will be checked by HEAD or GET method, surely it's not DAV
                             // cache it, so OPTIONS won't be called again, this URL does not support it
                             aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
@@ -3956,7 +3957,7 @@ void Content::getResourceOptions(
                         {
                             // OPTIONS method must be implemented in DAV
                             // resource is NON_DAV, or not advertising it
-                            SAL_WARN( "ucb.ucp.webdav","OPTIONS - Method not implemented or not allowed for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                            SAL_WARN( "ucb.ucp.webdav","OPTIONS - SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                             rDAVOptions.setResourceFound(); // means it exists, but it's not DAV
                             // cache it, so OPTIONS won't be called again, this URL does not support it
                             aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
@@ -3976,7 +3977,7 @@ void Content::getResourceOptions(
                             }
                             aStaticDAVOptionsCache.addDAVOptions( rDAVOptions,
                                                                   nLifeTime );
-                            SAL_WARN( "ucb.ucp.webdav", "OPTIONS - Resource not found for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
+                            SAL_WARN( "ucb.ucp.webdav", "OPTIONS - SC_NOT_FOUND for URL <" << m_xIdentifier->getContentIdentifier() << ">" );
                         }
                         break;
                         default:
@@ -3995,7 +3996,7 @@ void Content::getResourceOptions(
                 case DAVException::DAV_HTTP_REDIRECT:
                 default: // leave the resource type as UNKNOWN, for now
                     // it means this will be managed as a standard http site
-                    SAL_WARN( "ucb.ucp.webdav","OPTIONS - DAVException for URL <" << m_xIdentifier->getContentIdentifier() << ">, DAV ExceptionCode: "
+                    SAL_WARN( "ucb.ucp.webdav","OPTIONS - General DAVException (or max DAV_HTTP_REDIRECT reached) for URL <" << m_xIdentifier->getContentIdentifier() << ">, DAV ExceptionCode: "
                               << e.getError() << ", HTTP error: "<<e.getStatus() );
                     rDAVOptions.setResourceFound(); // it may exists, will be checked by HEAD or GET method, surely it's not DAV
                     // cache it, so OPTIONS won't be called again, this URL does not support it
