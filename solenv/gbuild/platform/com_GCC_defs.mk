@@ -88,12 +88,10 @@ ifeq ($(shell expr '$(GCC_VERSION)' '>=' 600),1)
 gb_CFLAGS_COMMON += \
     -Wduplicated-cond \
     -Wlogical-op \
-    -Wnull-dereference \
     -Wshift-overflow=2
 gb_CXXFLAGS_COMMON += \
     -Wduplicated-cond \
     -Wlogical-op \
-    -Wnull-dereference \
     -Wshift-overflow=2 \
     -Wunused-const-variable=1
 endif
