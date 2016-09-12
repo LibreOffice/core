@@ -96,7 +96,7 @@ void TaskPaneList::AddWindow( vcl::Window *pWindow )
 {
     if( pWindow )
     {
-        auto insertionPos = mTaskPanes.end();
+        auto insertionPos = dynamic_cast<MenuBarWindow*>(pWindow) ? mTaskPanes.begin() : mTaskPanes.end();
         for ( auto p = mTaskPanes.begin(); p != mTaskPanes.end(); ++p )
         {
             if ( *p == pWindow )
