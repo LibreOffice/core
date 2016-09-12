@@ -52,7 +52,7 @@ NotebookBarPopupMenu::NotebookBarPopupMenu()
 }
 
 void NotebookBarPopupMenu::Execute(NotebookBar* pNotebookbar,
-                            css::uno::Reference<css::frame::XFrame>& xFrame)
+                            const Reference<css::frame::XFrame>& xFrame)
 {
     if (pNotebookbar)
     {
