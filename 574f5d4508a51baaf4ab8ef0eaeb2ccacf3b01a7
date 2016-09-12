@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_41aca8ed",
+        "filename": "basic/source/basmgr/basicmanagerrepository.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-09-12T07:19:53Z",
+      "side": 1,
+      "message": "the assert(p\u0026\u0026\"message\") hack only works for messages that are string literals; and I personally wouldn\u0027t use it at all, just plain assert(p)  (when such an assert hits, you likely need to look up details about the failed code anyway, so you\u0027ll then see what the reason for the failure was; if it\u0027s non-obvious, you can add a comment at that place; but you cannot insert values of variables in an assert\u0027s message, like you can do with SAL_WARN et al)",
+      "revId": "574f5d4508a51baaf4ab8ef0eaeb2ccacf3b01a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_21afb4e4",
+        "filename": "basic/source/runtime/basrdll.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-09-12T07:19:53Z",
+      "side": 1,
+      "message": "either the invariant is that pThis must be non-null here (so an assert is warranted), but then then following if(pThis) is redundant; or the invariant is that pThis may be null here, but then an assert is not warranted",
+      "revId": "574f5d4508a51baaf4ab8ef0eaeb2ccacf3b01a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
