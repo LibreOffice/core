@@ -194,6 +194,8 @@ public:
 
     SVX_DLLPRIVATE void notifyModified();
 
+    void dumpAsXml(struct _xmlTextWriter * pWriter, sal_Int32 nRow, sal_Int32 nCol) const;
+
 protected:
     SVX_DLLPRIVATE virtual const SfxItemSet& GetObjectItemSet() override;
     SVX_DLLPRIVATE virtual void SetObjectItem(const SfxPoolItem& rItem) override;
@@ -213,14 +215,14 @@ private:
 
     css::table::CellContentType mnCellContentType;
 
-    OUString msFormula;
+    OUString        msFormula;
     double          mfValue;
     ::sal_Int32     mnError;
-    bool      mbMerged;
+    bool            mbMerged;
     ::sal_Int32     mnRowSpan;
     ::sal_Int32     mnColSpan;
 
-    Rectangle maCellRect;
+    Rectangle       maCellRect;
 
     css::uno::Reference< css::table::XTable > mxTable;
 };

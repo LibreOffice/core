@@ -28,6 +28,7 @@
 #include <svx/svddef.hxx>
 #include <svx/svdpool.hxx>
 #include <editeng/eeitem.hxx>
+#include <libxml/xmlwriter.h>
 
 
 namespace sdr
@@ -217,6 +218,13 @@ namespace sdr
             {
                 ScaleItemSet(*mpItemSet, rScale);
             }
+        }
+
+        void DefaultProperties::dumpAsXml(struct _xmlTextWriter * pWriter) const
+        {
+            xmlTextWriterStartElement(pWriter, BAD_CAST("defaultProperties"));
+            mpItemSet->dumpAsXml(pWriter);
+            xmlTextWriterEndElement(pWriter);
         }
     } // end of namespace properties
 } // end of namespace sdr

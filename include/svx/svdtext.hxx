@@ -65,6 +65,8 @@ public:
     /** returns the current OutlinerParaObject and removes it from this instance */
     OutlinerParaObject* RemoveOutlinerParaObject();
 
+    void dumpAsXml(struct _xmlTextWriter * pWriter) const;
+
 protected:
     virtual const SfxItemSet& GetObjectItemSet();
     virtual void SetObjectItem(const SfxPoolItem& rItem);

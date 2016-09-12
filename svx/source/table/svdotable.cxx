@@ -635,6 +635,7 @@ void SdrTableObjImpl::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST("sdrTableObjImpl"));
     if (mpLayouter)
         mpLayouter->dumpAsXml(pWriter);
+    mxTable->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
 

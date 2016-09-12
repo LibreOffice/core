@@ -34,6 +34,7 @@
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <libxml/xmlwriter.h>
 
 #include "sdr/properties/textproperties.hxx"
 #include "editeng/outlobj.hxx"
@@ -1669,6 +1670,18 @@ void SAL_CALL Cell::disposing( const EventObject& /*Source*/ ) throw (RuntimeExc
 {
     mxTable.clear();
     dispose();
+}
+
+void Cell::dumpAsXml(struct _xmlTextWriter * pWriter, sal_Int32 nRow, sal_Int32 nCol) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("cell"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("row"), "%" SAL_PRIdINT32, nRow);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("col"), "%" SAL_PRIdINT32, nCol);
+    SdrText::dumpAsXml(pWriter);
+    //SvxUnoTextBase::dumpAsXml(pWriter);
+    //mpPropSet->dumpAsXml(pWriter);
+    mpProperties->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 } }

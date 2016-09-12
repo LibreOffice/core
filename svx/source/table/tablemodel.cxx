@@ -24,6 +24,7 @@
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <libxml/xmlwriter.h>
 
 #include "cell.hxx"
 #include "cellcursor.hxx"
@@ -1121,6 +1122,17 @@ void TableModel::updateColumns()
     {
         (*iter++)->mnColumn = nColumn++;
     }
+}
+
+void TableModel::dumpAsXml(struct _xmlTextWriter * pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("tableModel"));
+    for (sal_Int32 nRow = 0; nRow < getRowCountImpl(); ++nRow)
+        for (sal_Int32 nCol = 0; nCol < getColumnCountImpl(); ++nCol)
+        {
+            maRows[nRow]->maCells[nCol]->dumpAsXml(pWriter, nRow, nCol);
+        }
+    xmlTextWriterEndElement(pWriter);
 }
 
 } }

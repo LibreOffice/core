@@ -25,6 +25,7 @@
 #include "editeng/fhgtitem.hxx"
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
+#include <libxml/xmlwriter.h>
 #include <memory>
 
 SdrText::SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject /* = 0 */ )
@@ -199,6 +200,13 @@ void SdrText::SetObjectItem(const SfxPoolItem& rItem)
 SfxStyleSheet* SdrText::GetStyleSheet() const
 {
     return mrObject.GetStyleSheet();
+}
+
+void SdrText::dumpAsXml(struct _xmlTextWriter * pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrText"));
+    mpOutlinerParaObject->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
