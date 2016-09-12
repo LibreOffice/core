@@ -1192,7 +1192,7 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
         Window::Command(rEvt);
 }
 
-OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin,const OTableConnection* _rpFirstAfter) const
+OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin) const
 {
     OTableConnection* pConn = nullptr;
     OSL_ENSURE(pRhs || pLhs, "OJoinTableView::GetTabConn : invalid args !");
@@ -1200,8 +1200,6 @@ OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTab
 
     if ((!pLhs || pLhs->ExistsAConn()) && (!pRhs || pRhs->ExistsAConn()))
     {
-        bool bFoundStart = _rpFirstAfter == nullptr;
-
         auto aIter = m_vTableConnection.begin();
         auto aEnd = m_vTableConnection.end();
         for(;aIter != aEnd;++aIter)
@@ -1225,19 +1223,8 @@ OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTab
                     if ( supressCrossNaturalJoin(pData->GetData()) )
                         continue;
                 }
-                if (bFoundStart)
-                {
-                    pConn = pData;
-                    break;
-                }
-
-                if (!pConn)
-                    // used as fallback : if there is no conn after _rpFirstAfter the first conn between the two tables
-                    // will be used
-                    pConn = pData;
-
-                if (pData == _rpFirstAfter)
-                    bFoundStart = true;
+                pConn = pData;
+                break;
             }
         }
     }

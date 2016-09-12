@@ -84,7 +84,7 @@ namespace dbaui
 
         void    initialize() override                                                { m_pViewSwitch->initialize(); }
         void    SaveUIConfig()                                              { m_pViewSwitch->SaveUIConfig(); }
-        void    reset( ::dbtools::SQLExceptionInfo* _pErrorInfo )           { m_pViewSwitch->reset( _pErrorInfo ); }
+        void    reset()                                                     { m_pViewSwitch->reset( nullptr ); }
 
         bool    switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo );
         void    forceInitialView();

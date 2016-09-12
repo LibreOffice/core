@@ -51,7 +51,7 @@ namespace dbaui
         virtual OUString            getAutoIncrementValue() const override;
 
     public:
-        OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar=nullptr);
+        OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage);
         virtual ~OWizTypeSelectControl();
         virtual void dispose() override;
 
@@ -72,8 +72,8 @@ namespace dbaui
         virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
         VclPtr<vcl::Window>     m_pParentTabPage;
     public:
-        OWizTypeSelectList( vcl::Window* pParent, WinBits nStyle = WB_BORDER | WB_SIMPLEMODE )
-            : MultiListBox(pParent,nStyle)
+        OWizTypeSelectList( vcl::Window* pParent )
+            : MultiListBox(pParent, WB_BORDER | WB_SIMPLEMODE)
             , m_bPKey(false)
             , m_pParentTabPage(nullptr)
             {}

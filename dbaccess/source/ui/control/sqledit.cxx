@@ -66,8 +66,8 @@ private:
     OSqlEdit & editor_;
 };
 
-OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
-    MultiLineEditSyntaxHighlight( pParent, nWinStyle )
+OSqlEdit::OSqlEdit( OQueryTextView* pParent ) :
+    MultiLineEditSyntaxHighlight( pParent, WB_LEFT | WB_VSCROLL | WB_BORDER )
     ,m_pView(pParent)
     ,m_bAccelAction( false )
     ,m_bStopTimer(false )

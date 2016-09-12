@@ -91,7 +91,6 @@ namespace drawinglayer
                 double fBackScale,
                 double fRotation,
                 bool bSmoothNormals,
-                bool bSmoothHorizontalNormals,
                 bool bSmoothLids,
                 bool bCharacterMode,
                 bool bCloseFront,

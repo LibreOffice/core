@@ -33,7 +33,7 @@ namespace dbaui
     class CharSetListBox : public ListBox
     {
     public:
-        CharSetListBox( vcl::Window* _pParent, WinBits _nBits );
+        CharSetListBox( vcl::Window* _pParent );
 
         void    SelectEntryByIanaName( const OUString& _rIanaName );
         bool    StoreSelectedCharSet( SfxItemSet& _rSet, const sal_uInt16 _nItemId );

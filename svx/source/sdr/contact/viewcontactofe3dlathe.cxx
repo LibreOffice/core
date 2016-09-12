@@ -90,7 +90,7 @@ namespace sdr
                     aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute,
                     aPolyPolygon, nHorizontalSegments, nVerticalSegments,
                     fDiagonal, fBackScale, fRotation,
-                    bSmoothNormals, true, bSmoothLids, bCharacterMode, bCloseFront, bCloseBack));
+                    bSmoothNormals, bSmoothLids, bCharacterMode, bCloseFront, bCloseBack));
             xRetval = { xReference };
 
             return xRetval;

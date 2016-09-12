@@ -948,13 +948,12 @@ void OGenericUnoController::stopConnectionListening(const Reference< XConnection
         xComponent->removeEventListener(static_cast<XFrameActionListener*>(this));
 }
 
-Reference< XConnection > OGenericUnoController::connect( const Reference< XDataSource>& _xDataSource,
-    ::dbtools::SQLExceptionInfo* _pErrorInfo )
+Reference< XConnection > OGenericUnoController::connect( const Reference< XDataSource>& _xDataSource )
 {
     WaitObject aWaitCursor( getView() );
 
     ODatasourceConnector aConnector( getORB(), getView(), OUString() );
-    Reference< XConnection > xConnection = aConnector.connect( _xDataSource, _pErrorInfo );
+    Reference< XConnection > xConnection = aConnector.connect( _xDataSource, nullptr );
     startConnectionListening( xConnection );
 
     return xConnection;

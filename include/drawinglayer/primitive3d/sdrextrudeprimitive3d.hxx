@@ -87,7 +87,6 @@ namespace drawinglayer
                 double fDiagonal,
                 double fBackScale,
                 bool bSmoothNormals,
-                bool bSmoothHorizontalNormals,
                 bool bSmoothLids,
                 bool bCharacterMode,
                 bool bCloseFront,
