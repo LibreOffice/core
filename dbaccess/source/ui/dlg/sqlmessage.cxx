@@ -699,9 +699,8 @@ OSQLWarningBox::OSQLWarningBox( vcl::Window* _pParent, const OUString& _rMessage
 }
 
 // OSQLErrorBox
-OSQLErrorBox::OSQLErrorBox( vcl::Window* _pParent, const OUString& _rMessage, WinBits _nStyle,
-    const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
-    :OSQLMessageBox( _pParent, ModuleRes( STR_EXCEPTION_ERROR ), _rMessage, _nStyle, OSQLMessageBox::Error, _pAdditionalErrorInfo )
+OSQLErrorBox::OSQLErrorBox( vcl::Window* _pParent, const OUString& _rMessage )
+    :OSQLMessageBox( _pParent, ModuleRes( STR_EXCEPTION_ERROR ), _rMessage, WB_OK | WB_DEF_OK, OSQLMessageBox::Error, nullptr )
 {
 }
 

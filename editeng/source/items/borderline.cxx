@@ -91,8 +91,7 @@ Color SvxBorderLine::threeDMediumColor( Color aMain )
 
 SvxBorderLine::SvxBorderLine( const Color *pCol, long nWidth,
        SvxBorderStyle nStyle,
-       Color (*pColorOutFn)( Color ), Color (*pColorInFn)( Color ),
-       Color (*pColorGapFn)( Color ) )
+       Color (*pColorOutFn)( Color ), Color (*pColorInFn)( Color ) )
 : m_nWidth( nWidth )
 , m_bMirrorWidths( false )
 , m_aWidthImpl( SvxBorderLine::getWidthImpl( nStyle ) )
@@ -102,7 +101,6 @@ SvxBorderLine::SvxBorderLine( const Color *pCol, long nWidth,
 , m_bUseLeftTop( false )
 , m_pColorOutFn( pColorOutFn )
 , m_pColorInFn( pColorInFn )
-, m_pColorGapFn( pColorGapFn )
 {
     if ( pCol )
         aColor = *pCol;

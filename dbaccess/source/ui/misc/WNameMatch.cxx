@@ -354,13 +354,13 @@ void OColumnString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::Rende
     rRenderContext.Pop();
 }
 
-OColumnTreeBox::OColumnTreeBox( vcl::Window* pParent, WinBits nBits )
-    : OMarkableTreeListBox(pParent, nBits)
+OColumnTreeBox::OColumnTreeBox( vcl::Window* pParent )
+    : OMarkableTreeListBox(pParent, WB_BORDER)
     , m_bReadOnly(false)
 {
     SetDragDropMode( DragDropMode::NONE );
     EnableInplaceEditing( false );
-    SetStyle(GetStyle() | WB_BORDER | WB_HASBUTTONS | WB_HSCROLL | nBits);
+    SetStyle(GetStyle() | WB_BORDER | WB_HASBUTTONS | WB_HSCROLL );
     SetSelectionMode( SelectionMode::Single );
 }
 

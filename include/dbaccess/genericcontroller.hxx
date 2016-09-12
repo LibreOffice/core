@@ -374,8 +374,7 @@ namespace dbaui
 
         // connect to a datasource
         css::uno::Reference< css::sdbc::XConnection > connect(
-            const css::uno::Reference< css::sdbc::XDataSource>& _xDataSource,
-            ::dbtools::SQLExceptionInfo* _pErrorInfo
+            const css::uno::Reference< css::sdbc::XDataSource>& _xDataSource
         );
 
         // connect to a datasource

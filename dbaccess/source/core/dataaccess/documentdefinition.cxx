@@ -241,7 +241,7 @@ namespace dbaccess
         virtual void SAL_CALL visibilityChanged( sal_Bool /*bVisible*/ ) throw (WrongStateException, RuntimeException, std::exception) override
         {
         }
-        inline void resetClient(ODocumentDefinition* _pClient) { m_pClient = _pClient; }
+        inline void resetClient() { m_pClient = nullptr; }
     };
 
     // LockModifiable
@@ -457,7 +457,7 @@ void ODocumentDefinition::closeObject()
         m_xEmbeddedObject = nullptr;
         if ( m_pClientHelper.is() )
         {
-            m_pClientHelper->resetClient(nullptr);
+            m_pClientHelper->resetClient();
             m_pClientHelper.clear();
         }
     }

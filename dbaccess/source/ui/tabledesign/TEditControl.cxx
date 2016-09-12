@@ -73,11 +73,11 @@ using namespace ::com::sun::star::sdb;
 // Maximum length in description field
 #define MAX_DESCR_LEN       256
 
-OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(sal_uLong nTimeout,OTableEditorCtrl* _pOwner)
+OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(OTableEditorCtrl* _pOwner)
 : m_pOwner(_pOwner)
 {
 
-    m_aInvalidateTimer.SetTimeout(nTimeout);
+    m_aInvalidateTimer.SetTimeout(500);
     m_aInvalidateTimer.SetTimeoutHdl(LINK(this, OTableEditorCtrl::ClipboardInvalidator, OnInvalidate));
     m_aInvalidateTimer.Start();
 }
@@ -144,7 +144,7 @@ OTableEditorCtrl::OTableEditorCtrl(vcl::Window* pWindow)
     ,nOldDataPos(-1)
     ,bSaveOnMove(true)
     ,bReadOnly(true)
-    ,m_aInvalidate(500,this)
+    ,m_aInvalidate(this)
 {
 
     SetHelpId(HID_TABDESIGN_BACKGROUND);

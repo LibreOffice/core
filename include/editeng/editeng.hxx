@@ -590,7 +590,7 @@ public:
 
     void InsertFeature(const EditSelection& rEditSelection, const SfxPoolItem& rItem);
 
-    EditSelection MoveParagraphs(const Range& rParagraphs, sal_Int32 nNewPos, EditView* pCurView);
+    EditSelection MoveParagraphs(const Range& rParagraphs, sal_Int32 nNewPos);
 
     void RemoveCharAttribs(sal_Int32 nPara, sal_uInt16 nWhich = 0, bool bRemoveFeatures = false);
     void RemoveCharAttribs(const EditSelection& rSel, bool bRemoveParaAttribs, sal_uInt16 nWhich);

@@ -49,14 +49,11 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace dbaui;
 // class OQueryTableWindow
-OQueryTableWindow::OQueryTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias)
+OQueryTableWindow::OQueryTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData)
     :OTableWindow( pParent, pTabWinData )
     ,m_nAliasNum(0)
 {
-    if (pszInitialAlias != nullptr)
-        m_strInitialAlias = OUString(pszInitialAlias);
-    else
-        m_strInitialAlias = GetAliasName();
+    m_strInitialAlias = GetAliasName();
 
     // if table name matches alias, do not pass to InitialAlias,
     // as the appending of a possible token could not succeed...

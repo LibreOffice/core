@@ -72,8 +72,7 @@ namespace editeng {
                 long nWidth = 0,
                 SvxBorderStyle nStyle = css::table::BorderLineStyle::SOLID,
                 Color (*pColorOutFn)( Color ) = &darkColor,
-                Color (*pColorInFn)( Color ) = &darkColor,
-                Color (*pColorGapFn)( Color ) = nullptr );
+                Color (*pColorInFn)( Color ) = &darkColor );
         SvxBorderLine( const SvxBorderLine& r );
 
         SvxBorderLine& operator=( const SvxBorderLine& r );

@@ -314,7 +314,7 @@ namespace dbaui
         // now really reconnect ...
         if ( bReConnect )
         {
-            m_pImpl->m_xConnection.reset( connect( m_pImpl->m_aDataSource.getDataSource(), nullptr ), SharedConnection::TakeOwnership );
+            m_pImpl->m_xConnection.reset( connect( m_pImpl->m_aDataSource.getDataSource() ), SharedConnection::TakeOwnership );
             m_pImpl->m_aSdbMetaData.reset( m_pImpl->m_xConnection );
         }
 

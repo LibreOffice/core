@@ -556,8 +556,8 @@ VclPtr<FmGridControl> SbaXGridPeer::imp_CreateControl(vcl::Window* pParent, WinB
 
 // SbaGridHeader
 
-SbaGridHeader::SbaGridHeader(BrowseBox* pParent, WinBits nWinBits)
-    :FmGridHeader(pParent, nWinBits)
+SbaGridHeader::SbaGridHeader(BrowseBox* pParent)
+    :FmGridHeader(pParent, WB_STDHEADERBAR | WB_DRAG)
     ,DragSourceHelper(this)
 {
 }

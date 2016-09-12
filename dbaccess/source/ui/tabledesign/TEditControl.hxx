@@ -73,7 +73,7 @@ namespace dbaui
             VclPtr<OTableEditorCtrl> m_pOwner;
 
         public:
-            ClipboardInvalidator(sal_uLong nTimeout,OTableEditorCtrl*);
+            ClipboardInvalidator(OTableEditorCtrl*);
             ~ClipboardInvalidator();
             void Stop();
 

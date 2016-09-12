@@ -55,8 +55,7 @@ public:
 class SvxEditSourceHintEndPara :public SvxEditSourceHint
 {
 public:
-    SvxEditSourceHintEndPara( sal_uInt32 nId )
-        :SvxEditSourceHint(nId) {}
+    SvxEditSourceHintEndPara() : SvxEditSourceHint(EDITSOURCE_HINT_SELECTIONCHANGED) {}
 };
 /** Helper class for common functionality in edit sources
  */

@@ -169,7 +169,7 @@ namespace dbaui
                 ,public DragSourceHelper
     {
     public:
-        SbaGridHeader(BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG);
+        SbaGridHeader(BrowseBox* pParent);
         virtual void dispose() override;
         virtual ~SbaGridHeader();
     protected:

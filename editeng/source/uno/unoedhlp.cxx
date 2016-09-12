@@ -85,7 +85,7 @@ sal_uLong SvxEditSourceHint::GetValue() const
             case EE_NOTIFY_INPUT_END:
                 return ::std::unique_ptr<SfxHint>( new TextHint( TEXT_HINT_INPUT_END, 0 ) );
             case EE_NOTIFY_TEXTVIEWSELECTIONCHANGED_ENDD_PARA:
-                return ::std::unique_ptr<SfxHint>( new SvxEditSourceHintEndPara( EDITSOURCE_HINT_SELECTIONCHANGED ) );
+                return ::std::unique_ptr<SfxHint>( new SvxEditSourceHintEndPara );
             default:
                 OSL_FAIL( "SvxEditSourceHelper::EENotification2Hint unknown notification" );
                 break;
