@@ -115,7 +115,7 @@ void TimerTest::testIdle()
 {
     bool bTriggered = false;
     IdleBool aTest( bTriggered );
-    Scheduler::ProcessTaskScheduling( true );
+    Scheduler::ProcessTaskScheduling();
     CPPUNIT_ASSERT_MESSAGE("idle triggered", bTriggered);
 }
 

@@ -130,10 +130,10 @@ void Scheduler::ImplStartTimer( sal_uInt64 nMS, bool bForce )
     }
 }
 
-void Scheduler::CallbackTaskScheduling( bool bIdle )
+void Scheduler::CallbackTaskScheduling()
 {
     // this function is for the saltimer callback
-    Scheduler::ProcessTaskScheduling( bIdle );
+    Scheduler::ProcessTaskScheduling();
 }
 
 static bool g_bDeterministicMode = false;
@@ -156,9 +156,8 @@ inline void Scheduler::UpdateMinPeriod( ImplSchedulerData *pSchedulerData,
     assert( nMinPeriod >= ImmediateTimeoutMs );
 }
 
-bool Scheduler::ProcessTaskScheduling( bool bIdle )
+bool Scheduler::ProcessTaskScheduling()
 {
-    // if bIdle is false, only handle timer
     ImplSVData*        pSVData = ImplGetSVData();
     ImplSchedulerData* pSchedulerData = pSVData->mpFirstSchedulerData;
     ImplSchedulerData* pPrevSchedulerData = nullptr;
@@ -190,7 +189,7 @@ bool Scheduler::ProcessTaskScheduling( bool bIdle )
         }
 
         assert( pSchedulerData->mpScheduler );
-        if ( !pSchedulerData->mpScheduler->ReadyForSchedule( nTime, bIdle )
+        if ( !pSchedulerData->mpScheduler->ReadyForSchedule( nTime )
             // skip ready tasks with lower priority than the most urgent (numerical lower is higher)
             || (pMostUrgent && (pSchedulerData->mpScheduler->GetPriority() >= pMostUrgent->mpScheduler->GetPriority())) )
         {
