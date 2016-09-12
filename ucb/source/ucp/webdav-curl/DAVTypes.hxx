@@ -142,7 +142,7 @@ namespace http_dav_ucp
             m_sHttpResponseStatusText.clear();
         };
 
-        DAVOptions & operator=( const DAVOptions& rOpts ) = default; //TODO -Werror=deprecated-copy
+        DAVOptions & operator=( const DAVOptions& rOpts );
         bool operator==( const DAVOptions& rOpts ) const;
 
     };
@@ -165,6 +165,8 @@ namespace http_dav_ucp
         void removeDAVOptions( const OUString & rURL );
         void addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime );
 
+        void updateCachedOption( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime );
+
         /** return the cached value of HTTP response status code
             If the cached value is found stale, it is removed.
 
@@ -180,6 +182,8 @@ namespace http_dav_ucp
         sal_uInt16 getHttpResponseStatusCode( const OUString & rURL, OUString & rHttpResponseStatusText );
 
         bool isHeadAllowed( const OUString & rURL );
+
+        void setHeadAllowed( const OUString & rURL, bool HeadAllowed = true );
 
     private:
 
