@@ -36,7 +36,7 @@ protected:
     sal_Int64 m_nBufferSize, m_nEnd, m_nCurrent;
     bool m_bMustInitBuffer;
 public:
-    ZipPackageBuffer(sal_Int64 nNewBufferSize);
+    ZipPackageBuffer();
     virtual ~ZipPackageBuffer();
 
     inline void realloc ( sal_Int32 nSize ) { m_aBuffer.realloc ( nSize ); }

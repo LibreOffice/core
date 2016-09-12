@@ -37,8 +37,7 @@ namespace rptxml
         OXMLReport( ORptFilter& rImport, sal_uInt16 nPrfx,
                     const OUString& rLName,
                     const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
-                    ,const css::uno::Reference< css::report::XReportDefinition >& _xComponent
-                    ,OXMLTable* _pContainer);
+                    ,const css::uno::Reference< css::report::XReportDefinition >& _xComponent);
         virtual ~OXMLReport();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,

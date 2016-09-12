@@ -158,7 +158,7 @@ void ZipOutputStream::consumeAllScheduledThreadEntries()
     }
 }
 
-void ZipOutputStream::reduceScheduledThreadsToGivenNumberOrLess(sal_Int32 nThreads, sal_Int32 nWaitTimeInTenthSeconds)
+void ZipOutputStream::reduceScheduledThreadsToGivenNumberOrLess(sal_Int32 nThreads)
 {
     while(static_cast< sal_Int32 >(m_aEntries.size()) > nThreads)
     {
@@ -166,7 +166,7 @@ void ZipOutputStream::reduceScheduledThreadsToGivenNumberOrLess(sal_Int32 nThrea
 
         if(static_cast< sal_Int32 >(m_aEntries.size()) > nThreads)
         {
-            const TimeValue aTimeValue(0, 100000 * nWaitTimeInTenthSeconds);
+            const TimeValue aTimeValue(0, 100000);
             osl_waitThread(&aTimeValue);
         }
     }

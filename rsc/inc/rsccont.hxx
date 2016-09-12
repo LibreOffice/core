@@ -115,8 +115,7 @@ public:
 class RscCont : public RscContWriteSrc
 {
 public:
-                    RscCont( Atom nId, sal_uInt32 nTypId,
-                             RscTop * pSuper = nullptr );
+                    RscCont( Atom nId, sal_uInt32 nTypId );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
 };
@@ -124,8 +123,7 @@ public:
 class RscContExtraData : public RscContWriteSrc
 {
 public:
-                    RscContExtraData( Atom nId, sal_uInt32 nTypId,
-                                      RscTop * pSuper = nullptr );
+                    RscContExtraData( Atom nId, sal_uInt32 nTypId );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
 };

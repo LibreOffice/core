@@ -18,6 +18,7 @@
  */
 
 #include <ZipPackageBuffer.hxx>
+#include <PackageConstants.hxx>
 #include <string.h>
 
 using namespace ::com::sun::star;
@@ -31,8 +32,8 @@ using com::sun::star::lang::IllegalArgumentException;
 #define THROW_WHERE ""
 #endif
 
-ZipPackageBuffer::ZipPackageBuffer(sal_Int64 nNewBufferSize )
-: m_nBufferSize (nNewBufferSize)
+ZipPackageBuffer::ZipPackageBuffer()
+: m_nBufferSize (n_ConstBufferSize)
 , m_nEnd(0)
 , m_nCurrent(0)
 , m_bMustInitBuffer ( true )

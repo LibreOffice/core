@@ -967,18 +967,15 @@ namespace
     {
     private:
         SectionViewAction   m_eAction;
-        bool                m_bCopy;
 
     public:
-        explicit ApplySectionViewAction(bool _bCopy)
+        explicit ApplySectionViewAction()
             : m_eAction(eEndDragObj)
-            , m_bCopy(_bCopy)
         {
         }
 
-        explicit ApplySectionViewAction(SectionViewAction _eAction = eEndAction)
+        explicit ApplySectionViewAction(SectionViewAction _eAction)
             : m_eAction(_eAction)
-            , m_bCopy(false)
         {
         }
 
@@ -988,7 +985,7 @@ namespace
             switch ( m_eAction )
             {
             case eEndDragObj:
-                rView.EndDragObj( m_bCopy  );
+                rView.EndDragObj();
                 break;
             case eEndAction:
                 if ( rView.IsAction() )
@@ -1352,7 +1349,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
     }
     else
     {
-        ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction( false ) );
+        ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction() );
         EndDragObj_removeInvisibleObjects();
     }
     m_aDragDelta = Point(SAL_MAX_INT32, SAL_MAX_INT32);
@@ -1360,7 +1357,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
 
 void OViewsWindow::EndAction()
 {
-    ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction() );
+    ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction(eEndAction) );
 }
 
 void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bool _bMove, bool _bControlKeySet)
