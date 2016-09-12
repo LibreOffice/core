@@ -436,7 +436,7 @@ SCCOL ScDBExternalRange::findFieldColumn(SCCOL nIndex) const
 SCCOL ScDBExternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr) const
 {
     if (pErr)
-        pErr = nullptr;
+        *pErr = 0;
 
     OUString aUpper = rStr;
     lcl_uppercase(aUpper);
