@@ -2236,7 +2236,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             break;
         }
 
-        for (sal_Int32 nCell = 0; nCell < nCells; ++nCell)
+        for (sal_Int32 nCell = 0; !bExcept && nCell < nCells; ++nCell)
         {
             SwNodeRange *const pLastCell(
                 (nCell == 0)
