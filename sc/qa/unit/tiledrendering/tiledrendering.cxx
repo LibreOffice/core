@@ -488,7 +488,7 @@ void ScTiledRenderingTest::testViewCursors()
     CPPUNIT_ASSERT(aView2.m_bOwnCursorInvalidated);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     SfxLokHelper::destroyView(SfxLokHelper::getView());
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
     mxComponent->dispose();
@@ -527,7 +527,7 @@ void ScTiledRenderingTest::testTextViewSelection()
     // Create a selection on two cells in the second view, that's a text selection in LOK terms.
     aView1.m_bTextViewSelectionInvalidated = false;
     lcl_dispatchCommand(mxComponent, ".uno:GoRightSel", {});
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // Make sure the first view got its notification.
     CPPUNIT_ASSERT(aView1.m_bTextViewSelectionInvalidated);
 
@@ -550,7 +550,7 @@ void ScTiledRenderingTest::testDocumentSizeChanged()
         comphelper::makePropertyValue("ToPoint", OUString("$A$30")),
     };
     lcl_dispatchCommand(mxComponent, ".uno:GoToCell", aPropertyValues);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     // Assert that the size in the payload is not 0.
     CPPUNIT_ASSERT(m_aDocumentSize.getWidth() > 0);
     CPPUNIT_ASSERT(m_aDocumentSize.getHeight() > 0);
@@ -685,7 +685,7 @@ void ScTiledRenderingTest::testTextEditViews()
     // text edit a cell in view #1
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
 
     // view #2
@@ -697,7 +697,7 @@ void ScTiledRenderingTest::testTextEditViews()
     // move cell cursor i view #2
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // check that text edit view in view #1 has not be killed
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
@@ -734,7 +734,7 @@ void ScTiledRenderingTest::testTextEditViewInvalidations()
     aView2.m_bInvalidateTiles = false;
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
     CPPUNIT_ASSERT(aView2.m_bInvalidateTiles);
 
@@ -745,14 +745,14 @@ void ScTiledRenderingTest::testTextEditViewInvalidations()
         pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
         pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
     }
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
 
     // text edit a cell in view #1 inside the new tile and
     // check that view #2 receive a tile invalidate message
     aView2.m_bInvalidateTiles = false;
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(aView2.m_bInvalidateTiles);
 
     // view #3
@@ -766,7 +766,7 @@ void ScTiledRenderingTest::testTextEditViewInvalidations()
     aView3.m_bInvalidateTiles = false;
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(aView3.m_bInvalidateTiles);
 
     mxComponent->dispose();
@@ -833,11 +833,11 @@ void ScTiledRenderingTest::testGraphicInvalidate()
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, /*x=*/ 1,/*y=*/ 10,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 10, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(!aView.m_bFullInvalidateTiles);
 
     // Check again
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(!aView.m_bFullInvalidateTiles);
 
     mxComponent->dispose();
@@ -856,7 +856,7 @@ void ScTiledRenderingTest::testAutoSum()
 
     uno::Sequence<beans::PropertyValue> aArgs;
     comphelper::dispatchCommand(".uno:AutoSum", aArgs);
-    Scheduler::ProcessEventsToIdle();
+    Scheduler::ProcessAllPendingEvents();
     CPPUNIT_ASSERT(aView.m_sCellFormula.startsWith("=SUM("));
 
     mxComponent->dispose();
