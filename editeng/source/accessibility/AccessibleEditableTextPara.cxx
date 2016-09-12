@@ -831,43 +831,31 @@ namespace accessibility
 
     static uno::Sequence< OUString > const & getAttributeNames()
     {
-        static uno::Sequence< OUString >* pNames = nullptr;
+        static const uno::Sequence<OUString> aNames{
+            "CharColor",
+            "CharContoured",
+            "CharEmphasis",
+            "CharEscapement",
+            "CharFontName",
+            "CharHeight",
+            "CharPosture",
+            "CharShadowed",
+            "CharStrikeout",
+            "CharCaseMap",
+            "CharUnderline",
+            "CharUnderlineColor",
+            "CharWeight",
+            "NumberingLevel",
+            "NumberingRules",
+            "ParaAdjust",
+            "ParaBottomMargin",
+            "ParaFirstLineIndent",
+            "ParaLeftMargin",
+            "ParaLineSpacing",
+            "ParaRightMargin",
+            "ParaTabStops"};
 
-        if( pNames == nullptr )
-        {
-            uno::Sequence< OUString >* pSeq = new uno::Sequence< OUString >( 21 );
-            OUString* pStrings = pSeq->getArray();
-            sal_Int32 i = 0;
-            #define STR(x) pStrings[i++] = x
-            STR("CharColor");
-            STR("CharContoured");
-            STR("CharEmphasis");
-            STR("CharEscapement");
-            STR("CharFontName");
-            STR("CharHeight");
-            STR("CharPosture");
-            STR("CharShadowed");
-            STR("CharStrikeout");
-            STR("CharCaseMap");
-            STR("CharUnderline");
-            STR("CharUnderlineColor");
-            STR("CharWeight");
-            STR("NumberingLevel");
-            STR("NumberingRules");
-            STR("ParaAdjust");
-            STR("ParaBottomMargin");
-            STR("ParaFirstLineIndent");
-            STR("ParaLeftMargin");
-            STR("ParaLineSpacing");
-            STR("ParaRightMargin");
-            STR("ParaTabStops");
-            #undef STR
-            DBG_ASSERT( i == pSeq->getLength(), "Please adjust length" );
-            if( i != pSeq->getLength() )
-                pSeq->realloc( i );
-            pNames = pSeq;
-        }
-        return *pNames;
+        return aNames;
     }
 
     struct IndexCompare
