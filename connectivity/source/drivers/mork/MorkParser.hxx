@@ -69,7 +69,7 @@ class LO_DLLPUBLIC_MORK MorkParser
 {
 public:
 
-    explicit MorkParser( int defaultScope = 0x80 );
+    explicit MorkParser();
 
     /// Open and parse mork file
 
