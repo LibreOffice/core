@@ -35,8 +35,25 @@ using namespace css;
 #define MENUBAR_STR "private:resource/menubar/menubar"
 
 bool SfxNotebookBar::m_bLock = false;
-Reference<css::frame::XLayoutManager> SfxNotebookBar::m_xLayoutManager;
 css::uno::Reference<css::frame::XFrame> SfxNotebookBar::m_xFrame;
+
+static Reference<frame::XLayoutManager> lcl_getLayoutManager( const Reference<frame::XFrame>& xFrame )
+{
+    css::uno::Reference<css::frame::XLayoutManager> xLayoutManager;
+
+    if (xFrame.is())
+    {
+        Reference<css::beans::XPropertySet> xPropSet(xFrame, UNO_QUERY);
+
+        if (xPropSet.is())
+        {
+            Any aValue = xPropSet->getPropertyValue("LayoutManager");
+            aValue >>= xLayoutManager;
+        }
+    }
+
+    return xLayoutManager;
+}
 
 static OUString lcl_getAppName( vcl::EnumContext::Application eApp )
 {
@@ -150,7 +167,6 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
     }
     SfxNotebookBar::ShowMenubar(true);
 
-    m_xLayoutManager.clear();
     m_xFrame.clear();
 }
 
@@ -219,17 +235,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     assert(pSysWindow);
 
     m_xFrame = xFrame;
-
-    if (!m_xLayoutManager.is())
-    {
-        Reference<css::beans::XPropertySet> xPropSet(xFrame, UNO_QUERY);
-
-        if (xPropSet.is())
-        {
-            Any aValue = xPropSet->getPropertyValue("LayoutManager");
-            aValue >>= m_xLayoutManager;
-        }
-    }
 
     if (IsActive())
     {
@@ -319,29 +324,39 @@ IMPL_STATIC_LINK_TYPED(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, p
 
 void SfxNotebookBar::ShowMenubar(bool bShow)
 {
-    if (!m_bLock && m_xLayoutManager.is())
+    if (!m_bLock)
     {
         m_bLock = true;
-        m_xLayoutManager->lock();
 
-        if (m_xLayoutManager->getElement(MENUBAR_STR).is())
+        const Reference<frame::XLayoutManager>& xLayoutManager =
+                                                lcl_getLayoutManager(m_xFrame);
+
+        if (xLayoutManager.is())
         {
-            if (m_xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
-                m_xLayoutManager->hideElement(MENUBAR_STR);
-            else if(!m_xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
-                m_xLayoutManager->showElement(MENUBAR_STR);
-        }
+            xLayoutManager->lock();
 
-        m_xLayoutManager->unlock();
+            if (xLayoutManager->getElement(MENUBAR_STR).is())
+            {
+                if (xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
+                    xLayoutManager->hideElement(MENUBAR_STR);
+                else if(!xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
+                    xLayoutManager->showElement(MENUBAR_STR);
+            }
+
+            xLayoutManager->unlock();
+        }
         m_bLock = false;
     }
 }
 
 void SfxNotebookBar::ToggleMenubar()
 {
-    if (m_xLayoutManager.is() && m_xLayoutManager->getElement(MENUBAR_STR).is())
+    const Reference<frame::XLayoutManager>& xLayoutManager =
+                                            lcl_getLayoutManager(m_xFrame);
+
+    if (xLayoutManager.is() && xLayoutManager->getElement(MENUBAR_STR).is())
     {
-        if (m_xLayoutManager->isElementVisible(MENUBAR_STR))
+        if (xLayoutManager->isElementVisible(MENUBAR_STR))
             SfxNotebookBar::ShowMenubar(false);
         else
             SfxNotebookBar::ShowMenubar(true);
