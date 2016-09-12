@@ -1348,6 +1348,12 @@ void SfxDispatcher::Update_Impl( bool bForce )
     if ( xLayoutManager.is() )
         xLayoutManager->unlock();
 
+    if ( SfxViewShell::Current() && SfxViewShell::Current()->GetDispatcher() )
+    {
+        const SfxPoolItem *pItem;
+        SfxViewShell::Current()->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, pItem);
+    }
+
     return;
 }
 
