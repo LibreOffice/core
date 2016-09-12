@@ -71,6 +71,7 @@ public:
     void testTrackChangesCallback();
     void testRedlineUpdateCallback();
     void testSetViewGraphicSelection();
+    void testCreateViewGraphicSelection();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -107,6 +108,7 @@ public:
     CPPUNIT_TEST(testTrackChangesCallback);
     CPPUNIT_TEST(testRedlineUpdateCallback);
     CPPUNIT_TEST(testSetViewGraphicSelection);
+    CPPUNIT_TEST(testCreateViewGraphicSelection);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1265,6 +1267,34 @@ void SwTiledRenderingTest::testSetViewGraphicSelection()
     pWrtShell->ShellLoseFocus();
     // This failed, mark handles were hidden in the first view.
     CPPUNIT_ASSERT(!pView->areMarkHandlesHidden());
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testCreateViewGraphicSelection()
+{
+    // Load a document.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("frame.odt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // Mark the textframe in the first view.
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    SdrView* pView = pWrtShell->GetDrawView();
+    aView1.m_bGraphicSelection = true;
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    CPPUNIT_ASSERT(aView1.m_bGraphicSelection);
+
+    // Create a second view.
+    SfxLokHelper::createView();
+    // This was false, creating a second view cleared the selection of the
+    // first one.
+    CPPUNIT_ASSERT(aView1.m_bGraphicSelection);
 
     mxComponent->dispose();
     mxComponent.clear();

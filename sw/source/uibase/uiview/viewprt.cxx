@@ -250,7 +250,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
 
 int SwView::getPart() const
 {
-    if (!m_pWrtShell)
+    if (m_bInDtor || !m_pWrtShell)
         return 0;
 
     sal_uInt16 nPage, nLogPage;
