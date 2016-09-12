@@ -73,6 +73,7 @@ public:
     void testRedlineUpdateCallback();
     void testSetViewGraphicSelection();
     void testCreateViewGraphicSelection();
+    void testCreateViewTextSelection();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testRedlineUpdateCallback);
     CPPUNIT_TEST(testSetViewGraphicSelection);
     CPPUNIT_TEST(testCreateViewGraphicSelection);
+    CPPUNIT_TEST(testCreateViewTextSelection);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -604,6 +606,7 @@ public:
     bool m_bViewCursorInvalidated;
     bool m_bOwnSelectionSet;
     bool m_bViewSelectionSet;
+    OString m_aViewSelection;
     bool m_bTilesInvalidated;
     bool m_bViewCursorVisible;
     bool m_bGraphicViewSelection;
@@ -656,6 +659,7 @@ public:
         case LOK_CALLBACK_TEXT_VIEW_SELECTION:
         {
             m_bViewSelectionSet = true;
+            m_aViewSelection = aPayload;
         }
         break;
         case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
@@ -1304,6 +1308,39 @@ void SwTiledRenderingTest::testCreateViewGraphicSelection()
     // This was true, the second view didn't get the visibility of the text
     // cursor of the first view.
     CPPUNIT_ASSERT(!aView2.m_bViewCursorVisible);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testCreateViewTextSelection()
+{
+    // Load a document.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // Create a text selection:
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    // Move the cursor into the second word.
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    // Create a selection on the word.
+    pWrtShell->SelWrd();
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    // Did we indeed manage to select the second word?
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), pShellCursor->GetText());
+
+    // Create a second view.
+    SfxLokHelper::createView();
+
+    // Make sure that the text selection is visible in the second view.
+    ViewCallback aView2;
+    aView2.m_bViewSelectionSet = true;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    // This failed, the second view didn't get the text selection of the first view.
+    CPPUNIT_ASSERT(!aView2.m_aViewSelection.isEmpty());
 
     mxComponent->dispose();
     mxComponent.clear();

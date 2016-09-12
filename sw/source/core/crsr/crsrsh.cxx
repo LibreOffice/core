@@ -1226,7 +1226,10 @@ OUString SwCursorShell::getPageRectangles()
 
 void SwCursorShell::NotifyCursor(SfxViewShell* pViewShell) const
 {
+    // Cursor position and visibility.
     m_pVisibleCursor->_SetPosAndShow(pViewShell);
+    // Text selection.
+    m_pCurrentCursor->Show(pViewShell);
 }
 
 /// go to the next SSelection
@@ -1243,7 +1246,7 @@ bool SwCursorShell::GoNextCursor()
     if( !ActionPend() )
     {
         UpdateCursor();
-        m_pCurrentCursor->Show();
+        m_pCurrentCursor->Show(nullptr);
     }
     return true;
 }
@@ -1262,7 +1265,7 @@ bool SwCursorShell::GoPrevCursor()
     if( !ActionPend() )
     {
         UpdateCursor();
-        m_pCurrentCursor->Show();
+        m_pCurrentCursor->Show(nullptr);
     }
     return true;
 }
@@ -1294,7 +1297,7 @@ void SwCursorShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &r
         {
             // so that right/bottom borders will not be cropped
             pAktCursor->Invalidate( VisArea() );
-            pAktCursor->Show();
+            pAktCursor->Show(nullptr);
         }
         else
             pAktCursor->Invalidate( aRect );
@@ -1586,7 +1589,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             if( m_pTableCursor->IsCursorMovedUpdate() )
                 GetLayout()->MakeTableCursors( *m_pTableCursor );
             if( m_bHasFocus && !m_bBasicHideCursor )
-                m_pTableCursor->Show();
+                m_pTableCursor->Show(nullptr);
 
             // set Cursor-Points to the new Positions
             m_pTableCursor->GetPtPos().setX(m_aCharRect.Left());
@@ -2137,7 +2140,7 @@ void SwCursorShell::ShowCursors( bool bCursorVis )
 
     SET_CURR_SHELL( this );
     SwShellCursor* pAktCursor = m_pTableCursor ? m_pTableCursor : m_pCurrentCursor;
-    pAktCursor->Show();
+    pAktCursor->Show(nullptr);
 
     if( m_bSVCursorVis && bCursorVis ) // also show SV cursor again
         m_pVisibleCursor->Show();
@@ -2414,7 +2417,7 @@ bool SwCursorShell::SetVisibleCursor( const Point &rPt )
     if( IsScrollMDI( this, m_aCharRect ))
     {
         MakeVisible( m_aCharRect );
-        m_pCurrentCursor->Show();
+        m_pCurrentCursor->Show(nullptr);
     }
 
     {

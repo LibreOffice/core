@@ -600,7 +600,7 @@ void SwShellCursor::FillRects()
         GetShell()->GetLayout()->CalcFrameRects( *this );
 }
 
-void SwShellCursor::Show()
+void SwShellCursor::Show(SfxViewShell* pViewShell)
 {
     std::vector<OString> aSelectionRectangles;
     for(SwPaM& rPaM : GetRingContainer())
@@ -621,8 +621,17 @@ void SwShellCursor::Show()
             aRect.push_back(rSelectionRectangle);
         }
         OString sRect = comphelper::string::join("; ", aRect);
-        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
-        SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+        if (pViewShell)
+        {
+            // Just notify pViewShell about our existing selection.
+            if (pViewShell != GetShell()->GetSfxViewShell())
+                SfxLokHelper::notifyOtherView(GetShell()->GetSfxViewShell(), pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+        }
+        else
+        {
+            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+            SfxLokHelper::notifyOtherViews(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
+        }
     }
 }
 

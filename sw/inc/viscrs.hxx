@@ -137,7 +137,7 @@ public:
     /// @see SwSelPaintRects::FillStartEnd(), override for text selections.
     virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const override;
 
-    void Show();            // Update and display all selections.
+    void Show(SfxViewShell* pViewShell); // Update and display all selections.
     void Hide();            // Hide all selections.
     void Invalidate( const SwRect& rRect );
 
