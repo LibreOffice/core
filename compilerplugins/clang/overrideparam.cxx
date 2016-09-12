@@ -37,6 +37,7 @@ public:
 
 private:
     bool hasSameDefaultParams(const ParmVarDecl * parmVarDecl, const ParmVarDecl * superParmVarDecl);
+    bool evaluate(const Expr* expr, APSInt& x);
 };
 
 void OverrideParam::run()
@@ -155,8 +156,7 @@ bool OverrideParam::hasSameDefaultParams(const ParmVarDecl * parmVarDecl, const 
         return true;
     }
     APSInt x1, x2;
-    if (defaultArgExpr->EvaluateAsInt(x1, compiler.getASTContext())
-        && superDefaultArgExpr->EvaluateAsInt(x2, compiler.getASTContext()))
+    if (evaluate(defaultArgExpr, x1) && evaluate(superDefaultArgExpr, x2))
     {
         return x1 == x2;
     }
@@ -186,6 +186,18 @@ bool OverrideParam::hasSameDefaultParams(const ParmVarDecl * parmVarDecl, const 
 #endif
 }
 
+bool OverrideParam::evaluate(const Expr* expr, APSInt& x)
+{
+    if (expr->EvaluateAsInt(x, compiler.getASTContext()))
+    {
+        return true;
+    }
+    if (isa<CXXNullPtrLiteralExpr>(expr)) {
+        x = 0;
+        return true;
+    }
+    return false;
+}
 
 loplugin::Plugin::Registration< OverrideParam > X("overrideparam");
 

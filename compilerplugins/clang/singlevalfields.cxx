@@ -474,6 +474,9 @@ std::string SingleValFields::getExprValue(const Expr* arg)
     {
         return x1.toString(10);
     }
+    if (isa<CXXNullPtrLiteralExpr>(arg)) {
+        return "0";
+    }
     return "?";
 }
 

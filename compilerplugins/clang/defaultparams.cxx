@@ -26,6 +26,8 @@ public:
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitCallExpr(CallExpr * callExpr);
+private:
+    bool evaluate(const Expr* expr, APSInt& x);
 };
 
 bool DefaultParams::VisitCallExpr(CallExpr * callExpr) {
@@ -69,9 +71,7 @@ bool DefaultParams::VisitCallExpr(CallExpr * callExpr) {
         if (!found)
         {
             APSInt x1, x2;
-            if (defaultArgExpr->EvaluateAsInt(x1, compiler.getASTContext())
-                && arg->EvaluateAsInt(x2, compiler.getASTContext())
-                && x1 == x2)
+            if (evaluate(defaultArgExpr, x1) && evaluate(arg, x2) && x1 == x2)
             {
                 found = true;
             }
@@ -106,6 +106,19 @@ bool DefaultParams::VisitCallExpr(CallExpr * callExpr) {
             << parmVarDecl->getSourceRange();
     }
     return true;
+}
+
+bool DefaultParams::evaluate(const Expr* expr, APSInt& x)
+{
+    if (isa<CXXNullPtrLiteralExpr>(expr)) {
+        x = 0;
+        return true;
+    }
+    if (expr->EvaluateAsInt(x, compiler.getASTContext()))
+    {
+        return true;
+    }
+    return false;
 }
 
 loplugin::Plugin::Registration< DefaultParams > X("defaultparams");
