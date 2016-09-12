@@ -199,7 +199,23 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         RemoveListeners(pSysWindow);
 
         OUString sFile = officecfg::Office::UI::Notebookbar::Active::get();
-        if ( !sFile.isEmpty() )
+        OUString sNewFile = rUIFile + sFile;
+        OUString sCurrentFile;
+        if ( pSysWindow->GetNotebookBar() )
+            sCurrentFile = OStringToOUString( pSysWindow->GetNotebookBar()->getUIFile(), RTL_TEXTENCODING_ASCII_US );
+
+        bool bChangedFile = true;
+        if ( sCurrentFile.getLength() && sNewFile.getLength() )
+        {
+            // delete "/"
+            sCurrentFile = sCurrentFile.copy( 0, sCurrentFile.getLength() - 1 );
+            // delete ".ui"
+            sNewFile = sNewFile.copy( 0, sNewFile.getLength() - 3 );
+
+            bChangedFile = ( sNewFile.compareTo( sCurrentFile ) != 0 );
+        }
+
+        if ( !sFile.isEmpty() && bChangedFile )
         {
             OUStringBuffer aBuf(rUIFile);
             aBuf.append( sFile );
