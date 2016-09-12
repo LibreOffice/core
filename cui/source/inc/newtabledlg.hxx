@@ -34,7 +34,7 @@ private:
     VclPtr<NumericField> mpNumRows;
 
 public:
-    SvxNewTableDialog( vcl::Window* pWindow );
+    SvxNewTableDialog();
     virtual ~SvxNewTableDialog() override;
 
     virtual short Execute() override;

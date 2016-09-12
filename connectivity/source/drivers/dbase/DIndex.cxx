@@ -175,7 +175,7 @@ bool ODbaseIndex::openIndexFile()
 OIndexIterator* ODbaseIndex::createIterator()
 {
     openIndexFile();
-    return new OIndexIterator(this, nullptr, nullptr);
+    return new OIndexIterator(this);
 }
 
 bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValue& rValue)

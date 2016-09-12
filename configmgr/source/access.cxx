@@ -1276,7 +1276,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     OUString tmplName(
         static_cast< SetNode * >(getNode().get())->getDefaultTemplateName());
     rtl::Reference< Node > tmpl(
-        components_.getTemplate(Data::NO_LAYER, tmplName));
+        components_.getTemplate(tmplName));
     if (!tmpl.is()) {
         throw css::uno::Exception(
             "unknown template " + tmplName,
