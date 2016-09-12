@@ -65,7 +65,7 @@ namespace bib
             css::uno::Reference< css::frame::XDispatchProviderInterception >
                     getDispatchProviderInterception();
 
-            BibBeamer(vcl::Window* pParent,BibDataManager* pDatMan, WinBits nStyle = WB_3DLOOK );
+            BibBeamer(vcl::Window* pParent,BibDataManager* pDatMan );
             virtual ~BibBeamer();
             virtual void dispose() override;
 

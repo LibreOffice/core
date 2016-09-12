@@ -451,11 +451,11 @@ void Decompression::fillArray()
     }
 }
 
-HuffmanTreeNode::HuffmanTreeNode(sal_uInt32 nValue , HuffmanTreeNode * pLeft , HuffmanTreeNode * pRight )
+HuffmanTreeNode::HuffmanTreeNode(sal_uInt32 nValue )
 {
     value = nValue;
-    left = pLeft;
-    right = pRight;
+    left = nullptr;
+    right = nullptr;
 }
 HuffmanTreeNode::~HuffmanTreeNode()
 {

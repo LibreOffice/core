@@ -219,10 +219,9 @@ BenError LtcBenContainer::SeekFromEnd(long Offset)
 /**
 *   Find the next value stream with property name
 *   @param  string of property name
-*   @param  current value stream pointer with the property name
 *   @return next value stream pointer with the property names
 */
-LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream)
+LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const char * sPropertyName)
 {
     CBenPropertyName * pPropertyName(nullptr);
     RegisterPropertyName(sPropertyName, &pPropertyName);        // Get property name object
@@ -232,10 +231,6 @@ LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const
 
     // Get current object
     CBenObject * pObj = nullptr;
-    if (pCurrentValueStream != nullptr)
-    {
-        pObj = pCurrentValueStream->GetValue()->GetProperty()->GetBenObject();
-    }
 
     pObj =FindNextObjectWithProperty(pObj, pPropertyName->GetID()); // Get next object with same property name
     if (nullptr == pObj)
@@ -258,7 +253,7 @@ LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const
 */
 LtcUtBenValueStream * LtcBenContainer::FindValueStreamWithPropertyName(const char * sPropertyName)
 {
-    return FindNextValueStreamWithPropertyName(sPropertyName, nullptr);
+    return FindNextValueStreamWithPropertyName(sPropertyName);
 }
 /**
 *   <description>

@@ -184,8 +184,8 @@ namespace bib
             m_xGridWin->setFocus();
     }
 
-    BibBeamer::BibBeamer( vcl::Window* _pParent, BibDataManager* _pDM, WinBits _nStyle )
-        :BibSplitWindow( _pParent, _nStyle | WB_NOSPLITDRAW )
+    BibBeamer::BibBeamer( vcl::Window* _pParent, BibDataManager* _pDM )
+        :BibSplitWindow( _pParent, WB_3DLOOK | WB_NOSPLITDRAW )
         ,pDatMan( _pDM )
         ,pToolBar( nullptr )
         ,pGridWin( nullptr )

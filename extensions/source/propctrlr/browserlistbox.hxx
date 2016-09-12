@@ -102,7 +102,7 @@ namespace pcr
         void    Resize() override;
 
     public:
-                                    OBrowserListBox( vcl::Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL );
+                                    OBrowserListBox( vcl::Window* pParent );
 
                                     virtual ~OBrowserListBox();
         virtual void                dispose() override;

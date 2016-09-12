@@ -2749,7 +2749,7 @@ IMPL_LINK_NOARG_TYPED( SvtFileDialog, Split_Hdl, Splitter*, void )
 }
 
 QueryFolderNameDialog::QueryFolderNameDialog(vcl::Window* _pParent,
-    const OUString& rTitle, const OUString& rDefaultText, OUString* pGroupName)
+    const OUString& rTitle, const OUString& rDefaultText)
     : ModalDialog(_pParent, "FolderNameDialog", "fps/ui/foldernamedialog.ui")
 {
     get(m_pNameEdit, "entry");
@@ -2761,9 +2761,6 @@ QueryFolderNameDialog::QueryFolderNameDialog(vcl::Window* _pParent,
     m_pNameEdit->SetSelection( Selection( 0, rDefaultText.getLength() ) );
     m_pOKBtn->SetClickHdl( LINK( this, QueryFolderNameDialog, OKHdl ) );
     m_pNameEdit->SetModifyHdl( LINK( this, QueryFolderNameDialog, NameHdl ) );
-
-    if (pGroupName)
-        m_pNameLine->set_label( *pGroupName );
 };
 
 QueryFolderNameDialog::~QueryFolderNameDialog()

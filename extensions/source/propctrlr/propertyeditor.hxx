@@ -69,7 +69,7 @@ namespace pcr
         void                        GetFocus() override;
 
     public:
-                                    OPropertyEditor (vcl::Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
+                                    OPropertyEditor (vcl::Window* pParent);
 
                                     virtual ~OPropertyEditor();
         virtual void                dispose() override;

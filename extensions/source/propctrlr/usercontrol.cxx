@@ -87,8 +87,8 @@ namespace pcr
     // OFormatSampleControl
 
 
-    OFormatSampleControl::OFormatSampleControl( vcl::Window* pParent, WinBits nWinStyle )
-        :OFormatSampleControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
+    OFormatSampleControl::OFormatSampleControl( vcl::Window* pParent )
+        :OFormatSampleControl_Base( PropertyControlType::Unknown, pParent, WB_READONLY | WB_TABSTOP | WB_BORDER )
     {
         getTypedControlWindow()->setControlHelper(*this);
     }
@@ -262,8 +262,8 @@ namespace pcr
     //= OFileUrlControl
 
 
-    OFileUrlControl::OFileUrlControl( vcl::Window* pParent, WinBits nWinStyle )
-        :OFileUrlControl_Base( PropertyControlType::Unknown, pParent, nWinStyle | WB_DROPDOWN )
+    OFileUrlControl::OFileUrlControl( vcl::Window* pParent )
+        :OFileUrlControl_Base( PropertyControlType::Unknown, pParent, WB_TABSTOP | WB_BORDER | WB_DROPDOWN )
     {
         getTypedControlWindow()->SetDropDownLineCount( 10 );
         getTypedControlWindow()->SetPlaceHolder( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ).toString() ) ;
@@ -308,8 +308,8 @@ namespace pcr
     //= OTimeDurationControl
 
 
-    OTimeDurationControl::OTimeDurationControl( vcl::Window* pParent, WinBits nWinStyle )
-        :ONumericControl( pParent, nWinStyle )
+    OTimeDurationControl::OTimeDurationControl( vcl::Window* pParent )
+        :ONumericControl( pParent, WB_BORDER | WB_TABSTOP )
     {
         getTypedControlWindow()->SetUnit( FUNIT_CUSTOM );
         getTypedControlWindow()->SetCustomUnitText(" ms");

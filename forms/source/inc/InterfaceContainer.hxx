@@ -267,13 +267,7 @@ private:
     // hack for Vba Events
     void impl_addVbEvents_nolck_nothrow( const sal_Int32 i_nIndex );
 
-    // the runtime event format has changed from version SO5.2 to OOo
-    enum EventFormat
-    {
-        efVersionSO5x,
-        efVersionSO6x
-    };
-    void    transformEvents( const EventFormat _eTargetFormat );
+    void    transformEvents();
 
     void    impl_createEventAttacher_nothrow();
 };

@@ -221,7 +221,7 @@ public: // Internal methods
     CUtList& GetObjects() { return cObjects; }
     CUtList& GetNamedObjects() { return cNamedObjects; }
 
-    LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream);
+    LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName);
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
     void CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
 
