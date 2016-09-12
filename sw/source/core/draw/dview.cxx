@@ -919,6 +919,11 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
     }
 }
 
+SfxViewShell* SwDrawView::GetSfxViewShell() const
+{
+    return rImp.GetShell()->GetSfxViewShell();
+}
+
 void SwDrawView::DeleteMarked()
 {
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
