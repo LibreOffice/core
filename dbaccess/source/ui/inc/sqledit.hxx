@@ -64,7 +64,7 @@ namespace dbaui
         DECL_LINK_TYPED(ModifyHdl, Edit&, void);
 
     public:
-        OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle = WB_LEFT | WB_VSCROLL |WB_BORDER);
+        OSqlEdit( OQueryTextView* pParent);
         virtual ~OSqlEdit();
         virtual void dispose() override;
 

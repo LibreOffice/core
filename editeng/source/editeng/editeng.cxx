@@ -710,9 +710,9 @@ void EditEngine::InsertFeature(const EditSelection& rEditSelection, const SfxPoo
     pImpEditEngine->ImpInsertFeature(rEditSelection, rItem);
 }
 
-EditSelection EditEngine::MoveParagraphs(const Range& rParagraphs, sal_Int32 nNewPos, EditView* pCurView)
+EditSelection EditEngine::MoveParagraphs(const Range& rParagraphs, sal_Int32 nNewPos)
 {
-    return pImpEditEngine->MoveParagraphs(rParagraphs, nNewPos, pCurView);
+    return pImpEditEngine->MoveParagraphs(rParagraphs, nNewPos, nullptr);
 }
 
 void EditEngine::RemoveCharAttribs(sal_Int32 nPara, sal_uInt16 nWhich, bool bRemoveFeatures)

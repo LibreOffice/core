@@ -429,14 +429,14 @@ void EditUndoMoveParagraphs::Undo()
     else
         nTmpDest += aTmpRange.Len();
 
-    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(aTmpRange, nTmpDest, nullptr);
+    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(aTmpRange, nTmpDest);
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
 void EditUndoMoveParagraphs::Redo()
 {
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
-    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(nParagraphs, nDest, nullptr);
+    EditSelection aNewSel = GetEditEngine()->MoveParagraphs(nParagraphs, nDest);
     GetEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 

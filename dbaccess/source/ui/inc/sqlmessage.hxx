@@ -119,9 +119,7 @@ class OSQLErrorBox : public OSQLMessageBox
 {
 public:
     OSQLErrorBox( vcl::Window* _pParent,
-                  const OUString& _rMessage,
-                  WinBits _nStyle = WB_OK | WB_DEF_OK,
-                  const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
+                  const OUString& _rMessage );
 };
 
 }   // namespace dbaui

@@ -199,7 +199,7 @@ namespace dbaui
         */
         sal_Int32 getConnectionCount(const OTableWindow* _pFromWin) const;
 
-        OTableConnection* GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin = false,const OTableConnection* _rpFirstAfter = nullptr) const;
+        OTableConnection* GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin = false) const;
 
         /** clear the window map and connection vector without destroying it
 

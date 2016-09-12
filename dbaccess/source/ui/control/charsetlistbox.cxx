@@ -26,8 +26,8 @@
 
 namespace dbaui
 {
-    CharSetListBox::CharSetListBox( vcl::Window* _pParent, WinBits _nBits = WB_DROPDOWN )
-        : ListBox( _pParent, _nBits )
+    CharSetListBox::CharSetListBox( vcl::Window* _pParent )
+        : ListBox( _pParent, WB_DROPDOWN )
     {
         SetDropDownLineCount( 20 );
 

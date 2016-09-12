@@ -1911,7 +1911,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
 void OQueryController::reset()
 {
     impl_reset();
-    getContainer()->reset( nullptr );
+    getContainer()->reset();
     ClearUndoManager();
 }
 

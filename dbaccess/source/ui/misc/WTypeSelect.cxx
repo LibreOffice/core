@@ -43,8 +43,8 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 
 // OWizTypeSelectControl
-OWizTypeSelectControl::OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar)
-    : OFieldDescControl(pParent, pHelpBar)
+OWizTypeSelectControl::OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage)
+    : OFieldDescControl(pParent, nullptr)
 {
     m_pParentTabPage = pParentTabPage;
 }

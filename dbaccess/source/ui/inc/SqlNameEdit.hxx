@@ -65,9 +65,9 @@ namespace dbaui
                             ,public OSQLNameChecker
     {
     public:
-        OSQLNameComboBox(vcl::Window* _pParent,WinBits nStyle = WB_BORDER, const OUString& _rAllowedChars = OUString())
-            : ComboBox(_pParent,nStyle)
-            , OSQLNameChecker(_rAllowedChars)
+        OSQLNameComboBox(vcl::Window* _pParent)
+            : ComboBox(_pParent, WB_BORDER)
+            , OSQLNameChecker(OUString())
         {
         }
 
