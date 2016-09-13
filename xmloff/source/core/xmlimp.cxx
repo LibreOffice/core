@@ -659,9 +659,9 @@ void SAL_CALL SvXMLImport::endDocument()
     }
 }
 
-void SvXMLImport::processNSAttributes( const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-                                        SvXMLNamespaceMap *pRewindMap )
+SvXMLNamespaceMap* SvXMLImport::processNSAttributes(const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 {
+    SvXMLNamespaceMap *pRewindMap = nullptr;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -709,17 +709,17 @@ void SvXMLImport::processNSAttributes( const uno::Reference< xml::sax::XAttribut
 
         }
     }
+    return pRewindMap;
 }
 
 void SAL_CALL SvXMLImport::startElement( const OUString& rName,
                                          const uno::Reference< xml::sax::XAttributeList >& xAttrList )
     throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
-    SvXMLNamespaceMap *pRewindMap = nullptr;
     //    SAL_INFO("svg", "startElement " << rName);
     // Process namespace attributes. This must happen before creating the
     // context, because namespace decaration apply to the element name itself.
-    processNSAttributes( xAttrList, pRewindMap );
+    SvXMLNamespaceMap *pRewindMap = processNSAttributes(xAttrList);
 
     // Get element's namespace and local name.
     OUString aLocalName;
@@ -873,8 +873,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     {
         rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
         maNamespaceHandler->addNSDeclAttributes( rAttrList );
-        SvXMLNamespaceMap *pRewindMap = nullptr;
-        processNSAttributes( rAttrList.get(), pRewindMap );
+        SvXMLNamespaceMap *pRewindMap = processNSAttributes(rAttrList.get());
         SvXMLImportContext *pContext = dynamic_cast<SvXMLImportContext*>( xContext.get() );
         if( pContext && pRewindMap )
             pContext->PutRewindMap( pRewindMap );

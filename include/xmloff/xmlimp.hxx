@@ -200,8 +200,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper8<
     const OUString getNamespacePrefixFromToken( sal_Int32 nToken );
     void registerNamespaces();
     void registerNSHelper(sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace );
-    void processNSAttributes( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-                            SvXMLNamespaceMap *pRewindMap );
+    SvXMLNamespaceMap* processNSAttributes(const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
     void Characters(const OUString& aChars);
 
 protected:
