@@ -145,8 +145,6 @@ bool SwEditShell::HasOtherCnt() const
     return false;
 }
 
-// access control functions for file name handling
-
 SwActContext::SwActContext(SwEditShell *pShell)
     : m_rShell(*pShell)
 {
