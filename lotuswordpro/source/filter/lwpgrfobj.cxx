@@ -680,17 +680,23 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
         //                                18,12,0,0,0,0,0.
         //                                 .TCIformat{2}
         //total head length = 45
+        bool bOk = true;
         sal_uInt32 nBegin = 45;
-        sal_uInt32 nEnd = nDataLen -1;
+        sal_uInt32 nEnd = 0;
+        if (nDataLen >= 1)
+            nEnd = nDataLen - 1;
+        else
+            bOk = false;
 
-        if(pGrafData[nEnd] == '$' && pGrafData[nEnd-1]!= '\\')
+        if (bOk && pGrafData[nEnd] == '$' && nEnd > 0 && pGrafData[nEnd-1] != '\\')
         {
             //equation body is contained by '$';
             nBegin++;
             nEnd--;
         }
 
-        if(nEnd >= nBegin)
+        bOk &= nEnd >= nBegin;
+        if (bOk)
         {
             sal_uInt8* pEquData = new sal_uInt8[nEnd - nBegin + 1];
             for(sal_uInt32 nIndex = 0; nIndex < nEnd - nBegin +1 ; nIndex++)
