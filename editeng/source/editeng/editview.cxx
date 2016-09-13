@@ -598,6 +598,11 @@ void EditView::RegisterViewShell(OutlinerViewShell* pViewShell)
     pImpEditView->RegisterViewShell(pViewShell);
 }
 
+void EditView::RegisterOtherShell(OutlinerViewShell* pOtherShell)
+{
+    pImpEditView->RegisterOtherShell(pOtherShell);
+}
+
 void EditView::SetControlWord( EVControlBits nWord )
 {
     pImpEditView->nControl = nWord;

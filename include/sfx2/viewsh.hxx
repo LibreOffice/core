@@ -342,6 +342,8 @@ public:
     sal_uInt32 GetViewShellId() const override;
     /// See OutlinerViewShell::NotifyOtherViews().
     void NotifyOtherViews(int nType, const OString& rKey, const OString& rPayload) override;
+    /// See OutlinerViewShell::NotifyOtherView().
+    void NotifyOtherView(OutlinerViewShell* pOtherShell, int nType, const OString& rKey, const OString& rPayload) override;
     /// Ask this view to send its cursor position to pViewShell.
     virtual void NotifyCursor(SfxViewShell* /*pViewShell*/) const;
 };

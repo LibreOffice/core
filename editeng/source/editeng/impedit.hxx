@@ -224,6 +224,8 @@ private:
     Color*              pBackgroundColor;
     /// Containing view shell, if any.
     OutlinerViewShell* mpViewShell;
+    /// An other shell, just listening to our state, if any.
+    OutlinerViewShell* mpOtherShell;
     EditEngine*         pEditEngine;
     VclPtr<vcl::Window> pOutWin;
     Pointer*            pPointer;
@@ -371,6 +373,8 @@ public:
     /// Informs this edit view about which view shell contains it.
     void RegisterViewShell(OutlinerViewShell* pViewShell);
     const OutlinerViewShell* GetViewShell() const;
+    /// Informs this edit view about which other shell listens to it.
+    void RegisterOtherShell(OutlinerViewShell* pViewShell);
 
     bool            IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong );
     OUString        SpellIgnoreWord();

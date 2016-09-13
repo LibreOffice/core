@@ -66,6 +66,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/string.hxx>
+#include <editeng/editview.hxx>
 #include <PostItMgr.hxx>
 
 using namespace com::sun::star;
@@ -1226,13 +1227,23 @@ OUString SwCursorShell::getPageRectangles()
 
 void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const
 {
-    // Cursor position and visibility.
-    m_pVisibleCursor->_SetPosAndShow(pOtherShell);
-    // Text selection.
-    m_pCurrentCursor->Show(pOtherShell);
-    // Graphic selection.
     auto pView = const_cast<SdrView*>(GetDrawView());
-    pView->AdjustMarkHdl(pOtherShell);
+    if (pView->GetTextEditObject())
+    {
+        EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+        rEditView.RegisterOtherShell(pOtherShell);
+        rEditView.ShowCursor();
+        rEditView.RegisterOtherShell(nullptr);
+    }
+    else
+    {
+        // Cursor position and visibility.
+        m_pVisibleCursor->_SetPosAndShow(pOtherShell);
+        // Text selection.
+        m_pCurrentCursor->Show(pOtherShell);
+        // Graphic selection.
+        pView->AdjustMarkHdl(pOtherShell);
+    }
 }
 
 /// go to the next SSelection
