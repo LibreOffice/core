@@ -2266,7 +2266,7 @@ void SvXMLNumFormatContext::UpdateCalendar( const OUString& rNewCalendar )
         {
             aFormatCode.append( "[~" );            // intro for calendar code
             aFormatCode.append( sCalendar );
-            aFormatCode.append( ']' );    // end of "new" currency symbolcalendar code
+            aFormatCode.append( ']' );    // end of calendar code
         }
     }
 }
