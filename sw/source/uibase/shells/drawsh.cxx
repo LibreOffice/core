@@ -422,6 +422,16 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem( nWhich );
                 break;
 
+            case SID_OBJECT_ROTATE:
+            {
+                const bool bIsRotate = GetView().IsDrawRotate();
+                if ( (!bIsRotate && !pSdrView->IsRotateAllowed()) || bProtected )
+                    rSet.DisableItem( nWhich );
+                else
+                    rSet.Put( SfxBoolItem( nWhich, bIsRotate ) );
+            }
+            break;
+
             case SID_BEZIER_EDIT:
                 if (!Disable(rSet, nWhich))
                     rSet.Put( SfxBoolItem( nWhich, !GetView().IsDrawSelMode()));
