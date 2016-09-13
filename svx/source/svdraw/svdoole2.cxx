@@ -58,7 +58,6 @@
 #include <comphelper/classids.hxx>
 
 #include <sot/formats.hxx>
-#include <sfx2/linkmgr.hxx>
 #include <svtools/transfer.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -587,25 +586,6 @@ void SdrLightEmbeddedClient_Impl::setWindow(const uno::Reference< awt::XWindow >
 {
     m_xWindow = _xWindow;
 }
-
-
-
-class SdrEmbedObjectLink : public sfx2::SvBaseLink
-{
-    SdrOle2Obj*         pObj;
-
-public:
-    explicit            SdrEmbedObjectLink(SdrOle2Obj* pObj);
-    virtual             ~SdrEmbedObjectLink();
-
-    virtual void        Closed() override;
-    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
-        const OUString& rMimeType, const css::uno::Any & rValue ) override;
-
-    bool                Connect() { return GetRealObject() != nullptr; }
-};
-
-
 
 SdrEmbedObjectLink::SdrEmbedObjectLink(SdrOle2Obj* pObject):
     ::sfx2::SvBaseLink( ::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB ),
