@@ -856,5 +856,8 @@
     <glade-widget-class title="Vertical box hiding childs depending on context" name="sfxlo-ContextVBox"
                         generic-name="ContextVBox" parent="GtkBox"
                         icon-name="widget-gtk-box"/>
+    <glade-widget-class title="Horizontal sliding window" name="sfxlo-SlidingHBox"
+                        generic-name="SlidingHBox" parent="GtkBox"
+                        icon-name="widget-gtk-box"/>
   </glade-widget-classes>
 </glade-catalog>

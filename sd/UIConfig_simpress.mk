@@ -123,6 +123,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/notebookbar \
 	sd/uiconfig/simpress/ui/notebookbar_groups \
 	sd/uiconfig/simpress/ui/notebookbar_single \
+	sd/uiconfig/simpress/ui/notebookbar_sliding \
 	sd/uiconfig/simpress/ui/optimpressgeneralpage \
 	sd/uiconfig/simpress/ui/photoalbum \
 	sd/uiconfig/simpress/ui/presentationdialog \

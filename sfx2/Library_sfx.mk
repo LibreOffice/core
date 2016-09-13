@@ -246,6 +246,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/notebookbar/NotebookBarPopupMenu \
     sfx2/source/notebookbar/NotebookbarToolBox \
     sfx2/source/notebookbar/PriorityHBox \
+    sfx2/source/notebookbar/SlidingHBox \
     sfx2/source/notebookbar/SfxNotebookBar \
     sfx2/source/notify/eventsupplier \
     sfx2/source/notify/globalevents \
