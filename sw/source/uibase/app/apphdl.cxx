@@ -597,7 +597,7 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
     default: // finish
         {
             std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->GetMailMergeConfigItem();
-            SwView* pSourceView = xMMConfig->GetSourceView();
+            SwView* pSourceView = xMMConfig.get() ? xMMConfig->GetSourceView() : nullptr;
             if(pSourceView)
             {
                 xMMConfig->GetSourceView()->GetViewFrame()->GetFrame().Appear();
