@@ -553,6 +553,9 @@ bool ScDocShell::Load( SfxMedium& rMedium )
     LoadMediumGuard aLoadGuard(&aDocument);
     ScRefreshTimerProtector aProt( aDocument.GetRefreshTimerControlAddress() );
 
+    comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+    rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+
     //  only the latin script language is loaded
     //  -> initialize the others from options (before loading)
     InitOptions(true);

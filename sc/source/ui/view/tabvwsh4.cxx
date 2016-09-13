@@ -1566,7 +1566,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             if (!bLink)
             {
                 const sc::DocumentLinkManager& rMgr = rDoc.GetDocLinkManager();
-                if (rMgr.hasDdeLinks() || rDoc.HasAreaLinks())
+                if (rMgr.hasDdeOrOleLinks() || rDoc.HasAreaLinks())
                     bLink = true;
             }
             if (bLink)
@@ -1576,8 +1576,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
 
                 if(SC_MOD()->GetCurRefDlgId()==0)
                 {
-                        pFirst->GetDispatcher()->Execute( SID_UPDATETABLINKS,
-                                            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+                    pFirst->GetDispatcher()->Execute(SID_UPDATETABLINKS, SfxCallMode::RECORD);
                 }
             }
 
