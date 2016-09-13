@@ -30,6 +30,7 @@ using namespace ::com::sun::star;
 #include "scitems.hxx"
 #include <editeng/flstitem.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/ehdl.hxx>
@@ -43,6 +44,7 @@ using namespace ::com::sun::star;
 #include <svx/drawitem.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/xwindowitem.hxx>
+#include <svx/svdoole2.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/dispatch.hxx>
@@ -400,6 +402,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
             break;
         case SID_UPDATETABLINKS:
             {
+                comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+                rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+
                 ScDocument& rDoc = GetDocument();
 
                 ScLkUpdMode nSet = rDoc.GetLinkMode();
@@ -443,9 +448,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     ReloadTabLinks();
                     aDocument.UpdateExternalRefLinks(GetActiveDialogParent());
 
-                    bool bAny = aDocument.GetDocLinkManager().updateDdeLinks(GetActiveDialogParent());
+                    bool bAnyDde = aDocument.GetDocLinkManager().updateDdeOrOleLinks(GetActiveDialogParent());
 
-                    if (bAny)
+                    if (bAnyDde)
                     {
                         //  Formeln berechnen und painten wie im TrackTimeHdl
                         aDocument.TrackFormulas();
@@ -461,7 +466,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     rReq.Done();
                 }
                 else
+                {
+                    rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
                     rReq.Ignore();
+                }
             }
             break;
 

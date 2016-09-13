@@ -23,7 +23,7 @@
 #include <sc.hrc>
 #include <scresid.hxx>
 
-#include <sfx2/linkmgr.hxx>
+#include <svx/svdoole2.hxx>
 #include <vcl/layout.hxx>
 
 #include <memory>
@@ -115,6 +115,16 @@ bool DocumentLinkManager::idleCheckLinks()
 
 bool DocumentLinkManager::hasDdeLinks() const
 {
+    return hasDdeOrOleLinks(true, false);
+}
+
+bool DocumentLinkManager::hasDdeOrOleLinks() const
+{
+    return hasDdeOrOleLinks(true, true);
+}
+
+bool DocumentLinkManager::hasDdeOrOleLinks(bool bDde, bool bOle) const
+{
     if (!mpImpl->mpLinkManager)
         return false;
 
@@ -122,14 +132,16 @@ bool DocumentLinkManager::hasDdeLinks() const
     for (const auto & rLink : rLinks)
     {
         sfx2::SvBaseLink* pBase = rLink.get();
-        if (dynamic_cast<ScDdeLink*>(pBase))
+        if (bDde && dynamic_cast<ScDdeLink*>(pBase))
+            return true;
+        if (bOle && dynamic_cast<SdrEmbedObjectLink*>(pBase))
             return true;
     }
 
     return false;
 }
 
-bool DocumentLinkManager::updateDdeLinks( vcl::Window* pWin )
+bool DocumentLinkManager::updateDdeOrOleLinks( vcl::Window* pWin )
 {
     if (!mpImpl->mpLinkManager)
         return false;
@@ -143,6 +155,14 @@ bool DocumentLinkManager::updateDdeLinks( vcl::Window* pWin )
     for (const auto & rLink : rLinks)
     {
         sfx2::SvBaseLink* pBase = rLink.get();
+
+        SdrEmbedObjectLink* pOleLink = dynamic_cast<SdrEmbedObjectLink*>(pBase);
+        if (pOleLink)
+        {
+            pOleLink->Update();
+            continue;
+        }
+
         ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
         if (!pDdeLink)
             continue;
