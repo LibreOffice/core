@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 
 struct ImplSchedulerData;
+struct ImplSVData;
 
 enum class SchedulerPriority {
     HIGHEST      = 0,
@@ -44,6 +45,8 @@ class VCL_DLLPUBLIC Scheduler
 private:
     static inline void UpdateMinPeriod( ImplSchedulerData *pSchedulerData,
                                         const sal_uInt64 nTime, sal_uInt64 &nMinPeriod );
+
+    static inline bool HasPendingEvents( const ImplSVData* pSVData, const sal_uInt64 nTime );
 
 protected:
     ImplSchedulerData*  mpSchedulerData;    /// Pointer to element in scheduler list
@@ -88,6 +91,8 @@ public:
     static bool       ProcessTaskScheduling();
     /// Process all events until we are idle
     static void       ProcessAllPendingEvents();
+    /// Are there any pending tasks in the LO task queue?
+    static bool       HasPendingEvents();
 
     /// Control the deterministic mode.  In this mode, two subsequent runs of
     /// LibreOffice fire about the same amount idles.
