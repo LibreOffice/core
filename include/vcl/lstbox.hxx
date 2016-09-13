@@ -85,7 +85,6 @@ private:
     Link<ListBox&,void>         maDoubleClickHdl;
     sal_uInt16                  mnLineCount;
 
-    /// bitfield
     bool            mbDDAutoSize : 1;
     bool            mbEdgeBlending : 1;
 

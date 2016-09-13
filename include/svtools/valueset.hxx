@@ -225,7 +225,6 @@ private:
     Link<ValueSet*,void>  maSelectHdl;
     Link<ValueSet*,void>  maHighlightHdl;
 
-    // bitfield
     bool            mbFormat : 1;
     bool            mbHighlight : 1;
     bool            mbSelection : 1;

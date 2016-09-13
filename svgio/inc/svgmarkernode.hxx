@@ -53,7 +53,6 @@ namespace svgio
             SvgNumber               maMarkerHeight;
             double                  mfAngle;
 
-            /// bitfield
             bool                    mbOrientAuto : 1; // true == on, false == fAngle valid
 
         public:

@@ -50,7 +50,6 @@ namespace drawinglayer
              */
             basegfx::B3DHomMatrix                   maCombinedTransform;
 
-            /// bitfield
             bool                                    mbAnyHit : 1;
 
             /*  as tooling, the process() implementation takes over API handling and calls this

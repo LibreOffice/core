@@ -39,7 +39,6 @@ namespace drawinglayer
             Primitive2DContainer                         maSubPrimitives;
             basegfx::B2DHomMatrix                       maTextBox;
 
-            // bitfield
             // defines if SdrTextWordWrapItem was set at SdrObjCustomShape which means
             // that the text needs to be block formatted
             bool                                        mbWordWrap : 1;

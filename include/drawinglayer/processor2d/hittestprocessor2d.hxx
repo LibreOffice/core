@@ -46,7 +46,6 @@ namespace drawinglayer
             /// discrete HitTolerance
             double                      mfDiscreteHitTolerance;
 
-            /// bitfield
             bool                        mbHit : 1;
             bool                        mbHitToleranceUsed : 1;
 

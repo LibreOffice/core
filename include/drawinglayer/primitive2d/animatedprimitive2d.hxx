@@ -60,7 +60,6 @@ namespace drawinglayer
              */
             animation::AnimationEntry*                      mpAnimationEntry;
 
-            /// bitfield
             /** flag if this is a text or graphic animation. Necessary since SdrViews need to differentiate
                 between both types if they are on/off
              */

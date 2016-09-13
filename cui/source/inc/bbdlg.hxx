@@ -36,7 +36,6 @@ protected:
     virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) override;
 
 private:
-    /// bitfield
     bool        mbEnableBackgroundSelector : 1;         ///< for Border/Background
     bool        mbEnableDrawingLayerFillStyles : 1;     ///< for full DrawingLayer FillStyles
     sal_uInt16  m_nBackgroundPageId;

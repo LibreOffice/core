@@ -45,7 +45,6 @@ namespace drawinglayer
             /// texture geometry definition
             basegfx::B2DVector                          maTextureSize;
 
-            /// bitfield
             /// flag if texture shall be modulated with white interpolated color
             bool                                        mbModulate : 1;
 

@@ -194,7 +194,6 @@ private:
 
     sal_uInt16      mnSelectModifier;   ///< Modifiers
 
-    /// bitfield
     bool mbHasFocusRect : 1;
     bool mbSort : 1;             ///< ListBox sorted
     bool mbTrack : 1;            ///< Tracking
@@ -362,7 +361,6 @@ private:
     VclPtr<ScrollBar>    mpVScrollBar;
     VclPtr<ScrollBarBox> mpScrollBarBox;
 
-    /// bitfield
     bool mbVScroll : 1;     // VScroll an oder aus
     bool mbHScroll : 1;     // HScroll an oder aus
     bool mbAutoHScroll : 1; // AutoHScroll an oder aus
@@ -523,7 +521,6 @@ private:
     Link<void*,void> maMBDownHdl;
     Link<UserDrawEvent*, void> maUserDrawHdl;
 
-    /// bitfield
     bool            mbUserDrawEnabled : 1;
     bool            mbInUserDraw : 1;
     bool            mbEdgeBlending : 1;

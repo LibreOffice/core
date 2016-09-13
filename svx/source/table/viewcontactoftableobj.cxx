@@ -169,7 +169,6 @@ namespace drawinglayer
             SvxBorderLine                               maBottomFromLLine;
             SvxBorderLine                               maBottomFromRLine;
 
-            // bitfield
             bool                                        mbLeftIsOutside : 1;
             bool                                        mbBottomIsOutside : 1;
             bool                                        mbRightIsOutside : 1;

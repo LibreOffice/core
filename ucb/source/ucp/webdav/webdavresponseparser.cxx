@@ -307,7 +307,6 @@ namespace
         ucb::Lock                                   maLock;
         WebDAVResponseParserMode                    meWebDAVResponseParserMode;
 
-        // bitfield
         bool                                        mbResourceTypeCollection : 1;
         bool                                        mbLockScopeSet : 1;
         bool                                        mbLockTypeSet : 1;

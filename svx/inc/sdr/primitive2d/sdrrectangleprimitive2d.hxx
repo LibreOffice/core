@@ -40,7 +40,6 @@ namespace drawinglayer
             double                                      mfCornerRadiusX;    // [0.0..1.0] relative to 1/2 width
             double                                      mfCornerRadiusY;    // [0.0..1.0] relative to 1/2 height
 
-            // bitfield
             // flag which decides if the HitArea should be the filled geometry
             bool                                        mbForceFillForHitTest : 1;
 

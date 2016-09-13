@@ -138,7 +138,6 @@ private:
     vcl::EnumContext                        maContext;
     SfxBindings*                            mpBindings;
 
-    /// bitfield
     bool                                    mbSizeProtected : 1;
     bool                                    mbPositionProtected : 1;
     bool                                    mbAutoWidth : 1;

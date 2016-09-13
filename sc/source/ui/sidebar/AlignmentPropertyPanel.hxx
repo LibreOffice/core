@@ -90,7 +90,6 @@ private:
     ::sfx2::sidebar::ControllerItem             maVrtStackControl;
     ::sfx2::sidebar::ControllerItem             maRefEdgeControl;
 
-    /// bitfield
     bool                                        mbMultiDisable : 1;
 
     vcl::EnumContext                            maContext;

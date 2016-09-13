@@ -34,7 +34,6 @@ namespace drawinglayer
             css::drawing::ProjectionMode   maProjectionMode;
             css::drawing::ShadeMode        maShadeMode;
 
-            // bitfield
             bool                           mbTwoSidedLighting : 1;
 
         public:

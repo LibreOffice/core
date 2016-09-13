@@ -33,7 +33,6 @@ namespace svgio
             /// use styles
             std::vector< SvgStyleAttributes* >      maSvgStyleAttributes;
 
-            /// bitfield
             bool                                    mbTextCss : 1; // true == type is 'text/css'
 
         public:

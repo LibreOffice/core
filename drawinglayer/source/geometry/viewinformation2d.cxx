@@ -66,7 +66,6 @@ namespace drawinglayer
             // the point in time
             double                                      mfViewTime;
 
-            // bitfield
             bool                                        mbReducedDisplayQuality : 1;
 
             // the complete PropertyValue representation (if already created)

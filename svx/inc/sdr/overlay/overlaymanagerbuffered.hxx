@@ -47,7 +47,6 @@ namespace sdr
             // Range for buffering (in pixel to be independent from mapMode)
             basegfx::B2IRange                       maBufferRememberedRangePixel;
 
-            // bitfield
             // Flag to decide if PreRendering shall be used for overlay refreshes.
             // Default is false.
             bool                                    mbRefreshWithPreRendering : 1;

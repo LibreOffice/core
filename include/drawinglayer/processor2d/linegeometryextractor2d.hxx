@@ -42,7 +42,6 @@ namespace drawinglayer
             basegfx::B2DPolygonVector               maExtractedHairlines;
             basegfx::B2DPolyPolygonVector           maExtractedLineFills;
 
-            /// bitfield
             bool                                    mbInLineGeometry : 1;
 
             /// tooling methods

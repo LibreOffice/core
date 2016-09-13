@@ -88,7 +88,6 @@ protected:
 
     sal_uInt16       nId;
     SfxItemSet*      pBBSet;
-    /// bitfield
     bool            mbDisableQueryBox : 1;
     bool            mbEnableDrawingLayerFillStyles : 1;
 

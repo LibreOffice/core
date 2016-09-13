@@ -56,7 +56,6 @@ private:
     std::shared_ptr< RegionBand >
                                 mpRegionBand;
 
-    /// bitfield
     bool                        mbIsNull : 1;
 
     // helpers

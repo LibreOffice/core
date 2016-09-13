@@ -68,7 +68,6 @@ class ImplMarkingOverlay
     // The remembered second position in logical coordinates
     basegfx::B2DPoint                               maSecondPosition;
 
-    // bitfield
     // A flag to remember if the action is for unmarking.
     bool                                            mbUnmarking : 1;
 

@@ -57,7 +57,6 @@ private:
     // the PrimitiveAnimation if Primitive2DContainer contains animations
     sdr::animation::PrimitiveAnimation*             mpPrimitiveAnimation;
 
-    // bitfield
     // This bool gets set when the object gets invalidated by ActionChanged() and
     // can be used from the OC to late-invalidates
     bool                                            mbLazyInvalidate : 1;

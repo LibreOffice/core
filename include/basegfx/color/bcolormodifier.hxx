@@ -290,7 +290,6 @@ namespace basegfx
         double                      mfValue;
         double                      mfInvValue;
 
-        /// bitfield
         bool                        mbUseIt : 1;
 
     protected:
@@ -335,7 +334,6 @@ namespace basegfx
         double                      mfGreenOff;
         double                      mfBlueOff;
 
-        /// bitfield
         bool                        mbUseIt : 1;
 
     protected:

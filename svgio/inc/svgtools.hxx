@@ -93,7 +93,6 @@ namespace svgio
             double      mfNumber;
             SvgUnit     meUnit;
 
-            /// bitfield
             bool        mbSet : 1;
 
         public:
@@ -157,7 +156,6 @@ namespace svgio
         private:
             SvgAlign    maSvgAlign;
 
-            /// bitfield
             bool        mbMeetOrSlice : 1; // true = meet (default), false = slice
             bool        mbSet : 1;
 

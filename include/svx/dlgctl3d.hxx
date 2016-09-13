@@ -90,7 +90,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewContr
     double                      mfSaveActionStartVer;
     double                      mfSaveActionStartRotZ;
 
-    // bitfield
     bool                        mbMouseMoved : 1;
     bool                        mbGeometrySelected : 1;
 

@@ -163,7 +163,6 @@ namespace drawinglayer
             SdrFormTextOutlineAttribute             maOutline;
             SdrFormTextOutlineAttribute             maShadowOutline;
 
-            // bitfield
             bool                                    mbFormTextMirror : 1;   // change orientation
             bool                                    mbFormTextOutline : 1;  // show contour of objects
 

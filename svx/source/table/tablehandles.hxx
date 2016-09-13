@@ -83,7 +83,6 @@ protected:
 private:
     Rectangle maRectangle;
 
-    /// bitfield
     bool            mbAnimate : 1;
 };
 

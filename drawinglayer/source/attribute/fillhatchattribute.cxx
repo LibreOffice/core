@@ -36,7 +36,6 @@ namespace drawinglayer
             basegfx::BColor                         maColor;
             sal_uInt32                              mnMinimalDiscreteDistance;
 
-            // bitfield
             bool                                    mbFillBackground : 1;
 
             ImpFillHatchAttribute(

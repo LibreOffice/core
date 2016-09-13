@@ -89,7 +89,6 @@ namespace sdr
             // base color of this OverlayObject
             Color                                           maBaseColor;
 
-            // bitfield
             // Flag for visibility
             bool                                            mbIsVisible : 1;
 

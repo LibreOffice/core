@@ -132,7 +132,6 @@ public:
 class ViewContactOfGrid : public ViewContactOfPageSubObject
 {
 protected:
-    // bitfield
     bool                                        mbFront : 1;
 
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
@@ -148,7 +147,6 @@ public:
 class ViewContactOfHelplines : public ViewContactOfPageSubObject
 {
 protected:
-    // bitfield
     bool                                        mbFront : 1;
 
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;

@@ -412,7 +412,6 @@ public:
     bool                mbFilled;
     long                mnWidthToFill;
 
-    // bitfield
     bool                mbEndOfLine : 1;
     bool                mbEndOfParagraph : 1;
     bool                mbEndOfBullet : 1;

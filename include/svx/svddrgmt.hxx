@@ -30,7 +30,6 @@ class SdrDragStat;
 class SVX_DLLPUBLIC SdrDragEntry
 {
 private:
-    // bitfield
     bool                        mbAddToTransparent : 1;
 
 protected:
@@ -118,7 +117,6 @@ private:
     sdr::overlay::OverlayObjectList         maOverlayObjectList;
     SdrDragView&                            mrSdrDragView;
 
-    // bitfield
     bool                                    mbMoveOnly : 1;
     bool                                    mbSolidDraggingActive : 1;
     bool                                    mbShiftPressed : 1;

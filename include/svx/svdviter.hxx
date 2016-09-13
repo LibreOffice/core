@@ -70,7 +70,6 @@ class SVX_DLLPUBLIC SdrViewIter
 
     size_t                                              mnListenerNum;
 
-    // bitfield
     bool                                                mbNoMasterPage : 1;
 
 private:

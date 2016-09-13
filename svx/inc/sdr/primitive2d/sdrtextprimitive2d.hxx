@@ -69,7 +69,6 @@ namespace drawinglayer
             // needed because of background color change
             Color                                   maLastTextBackgroundColor;
 
-            // bitfield
             // is there a PageNumber, Header, Footer or DateTimeField used? Evaluated at construction
             bool                                    mbContainsPageField : 1;
             bool                                    mbContainsPageCountField : 1;
@@ -198,7 +197,6 @@ namespace drawinglayer
             SdrTextHorzAdjust                       maSdrTextHorzAdjust;
             SdrTextVertAdjust                       maSdrTextVertAdjust;
 
-            // bitfield
             bool                                    mbFixedCellHeight : 1;
             bool                                    mbUnlimitedPage : 1;    // force layout with no text break
             bool                                    mbCellText : 1;         // this is a cell text as block text
@@ -255,7 +253,6 @@ namespace drawinglayer
             // text range transformation from unit range ([0.0 .. 1.0]) to text range
             basegfx::B2DHomMatrix                   maTextRangeTransform;
 
-            // bitfield
             bool                                    mbFixedCellHeight : 1;
 
         protected:
@@ -295,7 +292,6 @@ namespace drawinglayer
         private:
             ::basegfx::B2DHomMatrix                 maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
 
-            // bitfield
             bool                                    mbWordWrap : 1;         // for CustomShapes text layout
 
         protected:

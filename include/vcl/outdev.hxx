@@ -388,7 +388,6 @@ private:
     AntialiasingFlags               mnAntialiasing;
     LanguageType                    meTextLanguage;
 
-    /// bitfield
     mutable bool                    mbMap : 1;
     mutable bool                    mbClipRegion : 1;
     mutable bool                    mbBackground : 1;

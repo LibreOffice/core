@@ -35,7 +35,6 @@ private:
     VclPtr<CellLineStyleValueSet>      maCellLineStyleValueSet;
     OUString                           maStr[CELL_LINE_STYLE_ENTRIES];
 
-    /// bitfield
     bool                               mbVSfocus : 1;
 
     void Initialize();

@@ -253,7 +253,6 @@ namespace sdr
         SdrMarkList                 maMarkedEdgesOfMarkedNodes;
         std::vector<SdrObject*>     maAllMarkedObjects;
 
-        // bitfield
         bool                        mbEdgesOfMarkedNodesDirty : 1;
 
         SVX_DLLPRIVATE void ImpForceEdgesOfMarkedNodes();

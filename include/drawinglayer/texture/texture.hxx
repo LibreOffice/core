@@ -282,7 +282,6 @@ namespace drawinglayer
             double                              mfAngle;
             sal_uInt32                          mnSteps;
 
-            /// bitfield
             bool                                mbDefinitionRangeEqualsOutputRange : 1;
 
         public:

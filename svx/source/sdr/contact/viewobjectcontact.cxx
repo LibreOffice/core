@@ -58,7 +58,6 @@ protected:
     // the found animated primitives
     drawinglayer::primitive2d::Primitive2DContainer  maPrimitive2DSequence;
 
-    // bitfield
     // text animation allowed?
     bool                                            mbTextAnimationAllowed : 1;
 

@@ -49,7 +49,6 @@ namespace drawinglayer
             basegfx::BColor                         maShadowColor;
             double                                  mfShadowTransparence;
 
-            /// bitfield
             bool                                    mbShadow3D : 1;
 
         public:

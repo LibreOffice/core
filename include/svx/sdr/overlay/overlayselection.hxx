@@ -51,7 +51,6 @@ namespace sdr
             OverlayType                         maLastOverlayType;
             sal_uInt16                          mnLastTransparence;
 
-            // bitfield
             bool                                mbBorder : 1;
 
             // geometry creation for OverlayObject, can use local *Last* values

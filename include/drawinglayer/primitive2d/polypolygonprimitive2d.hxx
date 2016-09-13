@@ -429,7 +429,6 @@ namespace drawinglayer
             /// the discrete grow size ('pixels'), only positive values allowed
             double                                  mfDiscreteGrow;
 
-            /// bitfield
             /// draw polygons filled when fill is set
             bool                                    mbFill : 1;
 

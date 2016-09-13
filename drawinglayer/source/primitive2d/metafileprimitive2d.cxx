@@ -92,7 +92,6 @@ namespace
         LanguageType            maLanguageType;
         PushFlags               mnPushFlags;
 
-        /// bitfield
         /// contains all active markers
         bool                    mbLineColor : 1;
         bool                    mbFillColor : 1;

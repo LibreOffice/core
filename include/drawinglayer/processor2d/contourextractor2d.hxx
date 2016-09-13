@@ -42,7 +42,6 @@ namespace drawinglayer
             /// the extracted contour
             basegfx::B2DPolyPolygonVector       maExtractedContour;
 
-            /// bitfield
             bool                                mbExtractFillOnly : 1;
 
             /// tooling methods

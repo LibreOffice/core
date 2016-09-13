@@ -115,7 +115,6 @@ private:
     sal_uInt16                              mnBLTROut;
     sal_uInt16                              mnBLTRDis;
 
-    /// bitfield
     bool                                    mbBorderStyleAvailable : 1;
 
     // CellBorder defines

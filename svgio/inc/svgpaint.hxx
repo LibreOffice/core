@@ -31,7 +31,6 @@ namespace svgio
         private:
             basegfx::BColor     maColor;
 
-            /// bitfield
             bool                mbSet : 1;
             bool                mbOn : 1;
             bool                mbCurrent : 1;

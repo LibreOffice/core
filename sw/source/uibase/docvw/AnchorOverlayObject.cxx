@@ -47,7 +47,6 @@ private:
     // discrete line width
     double                          mfDiscreteLineWidth;
 
-    // bitfield
     bool                            mbLineSolid : 1;
 
 protected:

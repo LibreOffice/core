@@ -48,7 +48,6 @@ namespace sdr
             double                                  mfShearX;
             double                                  mfRotation;
 
-            /// bitfield
             // Flag to remember which state to draw. Inited with false (0)
             bool                                    mbOverlayState : 1;
 

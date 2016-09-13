@@ -83,7 +83,6 @@ private:
     // The RedrawRegion used for rendering
     vcl::Region                                              maRedrawRegion;
 
-    // bitfield
     // #i72889# flag if this is only a temporary target for repaint, default is false
     bool                                                mbTemporaryTarget : 1;
 

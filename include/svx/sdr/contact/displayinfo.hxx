@@ -38,7 +38,6 @@ namespace sdr
             // is empty, everything needs to be redrawn
             vcl::Region                                          maRedrawArea;
 
-            // bitfield
 
             // Internal flag to know when the control layer is painted. Default is
             // false. If set to true, painting of the page, page borders and

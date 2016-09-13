@@ -33,7 +33,6 @@ namespace sdr
             // second position in pixel
             basegfx::B2DPoint                       maSecondPosition;
 
-            // bitfield
             // Flag to switch on/off long lines to the OutputDevice bounds
             bool                                    mbExtendedLines : 1;
 

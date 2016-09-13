@@ -147,7 +147,6 @@ SvxHFPage::SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 n
     SfxTabPage(pParent, "HFFormatPage", "svx/ui/headfootformatpage.ui", &rSet),
     nId(nSetId),
     pBBSet(nullptr),
-    // bitfield
     mbDisableQueryBox(false),
     mbEnableDrawingLayerFillStyles(false)
 {

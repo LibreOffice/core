@@ -113,7 +113,6 @@ namespace svgio
             /// possible local CssStyle, e.g. style="fill:red; stroke:red;"
             SvgStyleAttributes*         mpLocalCssStyle;
 
-            /// bitfield
             // flag if maCssStyleVector is already computed (done only once)
             bool                        mbCssStyleVectorBuilt : 1;
 

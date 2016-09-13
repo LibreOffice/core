@@ -64,7 +64,6 @@ public:
     long                        mnYTop;             // actual boundary of the band
     long                        mnYBottom;
 
-    // bitfield
     bool                        mbTouched : 1;
 
                                 // create y-band with boundaries

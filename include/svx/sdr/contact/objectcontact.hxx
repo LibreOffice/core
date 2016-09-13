@@ -76,7 +76,6 @@ private:
     // the Primitive2DParameters containing view information
     drawinglayer::geometry::ViewInformation2D       maViewInformation2D;
 
-    // bitfield
     // flag for preview renderer
     bool                                            mbIsPreviewRenderer : 1;
 

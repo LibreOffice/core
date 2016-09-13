@@ -41,7 +41,6 @@ namespace svgio
             /// variable scan values, dependent of given XAttributeList
             SvgNumber               maStartOffset;
 
-            /// bitfield
             bool                    mbMethod : 1; // true = align, false = stretch
             bool                    mbSpacing : 1; // true = auto, false = exact
 

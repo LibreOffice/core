@@ -67,7 +67,6 @@ namespace drawinglayer
              */
             basegfx::BColor                                 maPrimitiveColor;
 
-            /// bitfield
             /// flag if shadow plane projection preparation leaded to valid results
             bool                                            mbShadowProjectionIsValid : 1;
 

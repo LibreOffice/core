@@ -38,7 +38,6 @@ namespace svgio
             basegfx::B2DPolygon*        mpPolygon;
             basegfx::B2DHomMatrix*      mpaTransform;
 
-            /// bitfield
             bool                        mbIsPolyline : 1; // true = polyline, false = polygon
 
         public:

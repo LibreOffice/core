@@ -758,7 +758,6 @@ class ImplB3DPolygon
     // The calculated plane normal. mbPlaneNormalValid says if it's valid.
     ::basegfx::B3DVector                            maPlaneNormal;
 
-    // bitfield
     // flag which decides if this polygon is opened or closed
     bool                                            mbIsClosed : 1;
 

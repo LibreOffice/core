@@ -38,7 +38,6 @@ namespace drawinglayer
             basegfx::B2DVector                      maOffsetPosition;
             basegfx::B2DVector                      maRectPoint;
 
-            // bitfield
             bool                                    mbTiling : 1;
             bool                                    mbStretch : 1;
             bool                                    mbLogSize : 1;

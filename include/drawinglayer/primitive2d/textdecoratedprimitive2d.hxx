@@ -56,7 +56,6 @@ namespace drawinglayer
             TextEmphasisMark                            meTextEmphasisMark;
             TextRelief                                  meTextRelief;
 
-            /// bitfield
             bool                                        mbUnderlineAbove : 1;
             bool                                        mbWordLineMode : 1;
             bool                                        mbEmphasisMarkAbove : 1;

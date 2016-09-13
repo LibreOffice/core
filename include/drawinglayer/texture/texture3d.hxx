@@ -68,7 +68,6 @@ namespace drawinglayer
             double                                      mfMulX;
             double                                      mfMulY;
 
-            /// bitfield
             bool                                        mbIsAlpha : 1;
             bool                                        mbIsTransparent : 1;
 
@@ -98,7 +97,6 @@ namespace drawinglayer
             double                                      mfOffsetX;
             double                                      mfOffsetY;
 
-            /// bitfield
             bool                                        mbUseOffsetX : 1;
             bool                                        mbUseOffsetY : 1;
 
@@ -131,7 +129,6 @@ namespace drawinglayer
             GeoTexSvxHatch*                 mp1;
             GeoTexSvxHatch*                 mp2;
 
-            // bitfield
             bool                            mbFillBackground : 1;
 
             // helpers

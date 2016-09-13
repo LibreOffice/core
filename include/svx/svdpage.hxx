@@ -426,7 +426,6 @@ protected:
     SetOfByte           aPrefVisiLayers;
     sal_uInt16          nPageNum;
 
-    // bitfield
     bool                mbMaster : 1;               // flag if this is a MasterPage
     bool                mbInserted : 1;
     bool                mbObjectsNotPersistent : 1;

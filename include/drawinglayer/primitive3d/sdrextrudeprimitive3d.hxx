@@ -57,7 +57,6 @@ namespace drawinglayer
             /// decomposition data when ReducedLineGeometry is used, see get3DDecomposition
             geometry::ViewInformation3D*                mpLastRLGViewInformation;
 
-            /// bitfield
             bool                                        mbSmoothNormals : 1; // Plane self
             bool                                        mbSmoothHorizontalNormals : 1; // always
             bool                                        mbSmoothLids : 1; // Front/back

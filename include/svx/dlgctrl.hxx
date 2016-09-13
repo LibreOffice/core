@@ -300,7 +300,6 @@ public:
 class SAL_WARN_UNUSED SVX_DLLPUBLIC LineLB : public ListBox
 {
 private:
-    /// bitfield
     /// defines if standard fields (none, solid) are added, default is true
     bool        mbAddStandardFields : 1;
 

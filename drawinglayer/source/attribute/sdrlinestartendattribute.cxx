@@ -35,7 +35,6 @@ namespace drawinglayer
             double                                  mfStartWidth;           // 1/100th mm
             double                                  mfEndWidth;             // 1/100th mm
 
-            // bitfield
             bool                                    mbStartActive : 1;     // start of Line is active
             bool                                    mbEndActive : 1;       // end of Line is active
             bool                                    mbStartCentered : 1;   // Line is centered on line start point

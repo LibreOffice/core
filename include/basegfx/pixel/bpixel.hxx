@@ -34,7 +34,6 @@ namespace basegfx
         {
             struct
             {
-                // bitfield
                 unsigned                                mnR : 8;        // red intensity
                 unsigned                                mnG : 8;        // green intensity
                 unsigned                                mnB : 8;        // blue intensity
@@ -43,7 +42,6 @@ namespace basegfx
 
             struct
             {
-                // bitfield
                 unsigned                                mnValue : 32;   // all values
             } maCombinedRGBO;
         } maPixelUnion;

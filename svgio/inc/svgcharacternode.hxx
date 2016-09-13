@@ -38,7 +38,6 @@ namespace svgio
             SvgNumberVector         maRotate;
             SvgNumber               maTextLength;
 
-            /// bitfield
             bool                    mbLengthAdjust : 1; // true = spacing, false = spacingAndGlyphs
 
         public:
@@ -97,7 +96,6 @@ namespace svgio
             // advancing rotation index
             sal_uInt32                  mnRotationIndex;
 
-            /// bitfield
             bool                        mbLengthAdjust : 1; // true = spacing, false = spacingAndGlyphs
             bool                        mbAbsoluteX : 1;
 

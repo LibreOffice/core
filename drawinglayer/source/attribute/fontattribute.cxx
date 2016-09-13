@@ -34,7 +34,6 @@ namespace drawinglayer
             OUString                                    maStyleName;        // Font Style Name
             sal_uInt16                                  mnWeight;           // Font weight
 
-            /// bitfield
             bool                                        mbSymbol : 1;       // Symbol Font Flag
             bool                                        mbVertical : 1;     // Vertical Text Flag
             bool                                        mbItalic : 1;       // Italic Flag

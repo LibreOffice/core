@@ -78,7 +78,6 @@ namespace
         ::std::vector< double >                     maDblDXArray;   // double DXArray, font size independent -> unit coordinate system
         css::lang::Locale                           maLocale;
 
-        // bitfield
         bool                                        mbRTL : 1;
 
     public:

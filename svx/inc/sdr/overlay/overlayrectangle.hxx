@@ -40,7 +40,6 @@ namespace sdr
             // #i53216# added CursorBlinkTime (in ms)
             sal_uInt32                      mnBlinkTime;
 
-            /// bitfield
             // Flag to remember which state to draw. Inited with false (0)
             bool                            mbOverlayState : 1;
 

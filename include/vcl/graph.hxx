@@ -78,7 +78,6 @@ class VCL_DLLPUBLIC GraphicConversionParameters
 private:
     Size            maSizePixel;            // default is (0,0)
 
-    // bitfield
     bool            mbUnlimitedSize : 1;    // default is false
     bool            mbAntiAliase : 1;       // default is false
     bool            mbSnapHorVerLines : 1;  // default is false

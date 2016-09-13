@@ -56,7 +56,6 @@ namespace drawinglayer
             SdrTextHorzAdjust                   maSdrTextHorzAdjust;
             SdrTextVertAdjust                   maSdrTextVertAdjust;
 
-            // bitfield
             bool                                mbContour : 1;
             bool                                mbFitToSize : 1;
             bool                                mbAutoFit : 1;

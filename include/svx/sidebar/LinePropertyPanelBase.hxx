@@ -155,7 +155,6 @@ private:
     // multi-images
     std::unique_ptr<Image[]> mpIMGWidthIcon;
 
-    /// bitfield
     bool                mbWidthValuable : 1;
     bool mbArrowSupported;
 

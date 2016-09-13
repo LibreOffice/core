@@ -50,7 +50,6 @@ protected:
     SdrObject*                  pObj;          // Referenziertes Objekt
     sal_uInt16                  nConId;        // Konnektornummer
 
-    // bitfield
     bool                        bBestConn : 1;   // sal_True= es wird der guenstigste Konnektor gesucht
     bool                        bBestVertex : 1; // sal_True= es wird der guenstigste Scheitelpunkt zum konnekten gesucht
     bool                        bAutoVertex : 1; // AutoConnector am Scheitelpunkt nCon
@@ -161,7 +160,6 @@ protected:
     sal_uInt16                  nNotifyingCount; // Verrieglung
     SdrEdgeInfoRec              aEdgeInfo;
 
-    // bitfield
     bool                        bEdgeTrackDirty : 1; // sal_True=Verbindungsverlauf muss neu berechnet werden.
     bool                        bEdgeTrackUserDefined : 1;
 

@@ -50,7 +50,6 @@ private:
     // current material to use for ratsreconversion
     const drawinglayer::attribute::MaterialAttribute3D*     mpCurrentMaterial;
 
-    // bitfield
     // some boolean flags for line span interpolator usages
     bool                                                    mbModifyColor : 1;
     bool                                                    mbUseTex : 1;
@@ -377,7 +376,6 @@ private:
     basegfx::B3DPolyPolygon                                   maPolyPolygon;
     double                                                    mfCenterZ;
 
-    // bitfield
     bool                                                      mbModulate : 1;
     bool                                                      mbFilter : 1;
     bool                                                      mbSimpleTextureActive : 1;

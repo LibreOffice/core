@@ -108,7 +108,6 @@ namespace drawinglayer
             /// how to spread
             SpreadMethod                maSpreadMethod;
 
-            /// bitfield
             bool                        mbPreconditionsChecked : 1;
             bool                        mbCreatesContent : 1;
             bool                        mbSingleEntry : 1;
@@ -248,7 +247,6 @@ namespace drawinglayer
             // internal helper for case SpreadMethod::Reflect
             SvgGradientEntryVector                  maMirroredGradientEntries;
 
-            /// bitfield
             bool                                    mbFocalSet : 1;
 
             /// local helpers

@@ -66,7 +66,6 @@ struct EmbedImpl
     //EmbeddedObjectContainerNameMap maTempObjectContainer;
     //uno::Reference < embed::XStorage > mxTempStorage;
 
-    /// bitfield
     bool mbOwnsStorage : 1;
     bool mbUserAllowsLinkUpdate : 1;
 

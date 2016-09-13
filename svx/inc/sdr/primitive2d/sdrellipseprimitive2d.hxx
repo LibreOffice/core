@@ -71,7 +71,6 @@ namespace drawinglayer
             double                                      mfStartAngle;
             double                                      mfEndAngle;
 
-            // bitfield
             bool                                        mbCloseSegment : 1;
             bool                                        mbCloseUsingCenter : 1;
 

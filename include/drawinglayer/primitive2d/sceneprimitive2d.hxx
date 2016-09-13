@@ -73,7 +73,6 @@ namespace drawinglayer
             /// the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
             Primitive2DContainer                                   maShadowPrimitives;
 
-            /// bitfield
             /** flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
                 are created in maShadowPrimitives
              */

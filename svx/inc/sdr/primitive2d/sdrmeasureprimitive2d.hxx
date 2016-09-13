@@ -59,7 +59,6 @@ namespace drawinglayer
             double                                      mfLeftDelta;
             double                                      mfRightDelta;
 
-            // bitfield
             bool                                        mbBelow : 1;
             bool                                        mbTextRotation : 1;
             bool                                        mbTextAutoAngle : 1;

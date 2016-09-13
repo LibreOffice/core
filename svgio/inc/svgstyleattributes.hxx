@@ -239,7 +239,6 @@ namespace svgio
             BaselineShift               maBaselineShift;
             SvgNumber                   maBaselineShiftNumber;
 
-            /// bitfield
 
             // defines if this attributes are part of a ClipPath. If yes,
             // rough geometry will be created on decomposition by patching
