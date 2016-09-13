@@ -16,6 +16,17 @@
         <value>false</value>
       </prop>
     </node>
+    <node oor:name="TabbedSlidingWindow" oor:op="replace">
+      <prop oor:name="Label">
+        <value xml:lang="en-US">Tabbed (sliding window)</value>
+      </prop>
+      <prop oor:name="File">
+        <value>notebookbar_sliding.ui</value>
+      </prop>
+      <prop oor:name="HasMenubar">
+        <value>false</value>
+      </prop>
+    </node>
     <node oor:name="Groups" oor:op="replace">
       <prop oor:name="Label">
         <value xml:lang="en-US">Contextual groups</value>
