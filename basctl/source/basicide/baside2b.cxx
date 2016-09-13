@@ -239,10 +239,8 @@ EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
         osl::MutexGuard g(mutex_);
         notifier_ = n;
     }
-    Sequence< OUString > s(2);
-    s[0] = "FontHeight";
-    s[1] = "FontName";
-    n->addPropertiesChangeListener(s, listener_.get());
+    const Sequence<OUString> aPropertyNames{"FontHeight", "FontName"};
+    n->addPropertiesChangeListener(aPropertyNames, listener_.get());
 }
 
 

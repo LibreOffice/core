@@ -40,12 +40,9 @@ namespace canvas
 {
     uno::Sequence<OUString> ParametricPolyPolygon::getAvailableServiceNames()
     {
-        uno::Sequence<OUString> aRet(3);
-        aRet[0] = "LinearGradient";
-        aRet[1] = "EllipticalGradient";
-        aRet[2] = "RectangularGradient";
-
-        return aRet;
+        return {"LinearGradient",
+                "EllipticalGradient",
+                "RectangularGradient"};
     }
 
     ParametricPolyPolygon* ParametricPolyPolygon::create(

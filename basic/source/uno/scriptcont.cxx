@@ -1172,11 +1172,8 @@ OUString SAL_CALL SfxScriptLibraryContainer::getImplementationName( )
 Sequence< OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServiceNames( )
     throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[0] = "com.sun.star.script.DocumentScriptLibraryContainer";
-    // plus, for compatibility:
-    aServiceNames[1] = "com.sun.star.script.ScriptLibraryContainer";
-    return aServiceNames;
+    return {"com.sun.star.script.DocumentScriptLibraryContainer",
+            "com.sun.star.script.ScriptLibraryContainer"}; // for compatibility
 }
 
 // Implementation class SfxScriptLibrary

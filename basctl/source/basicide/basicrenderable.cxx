@@ -48,15 +48,12 @@ Renderable::Renderable (BaseWindow* pWin)
 
     // create a choice for the range to print
     OUString aPrintContentName( "PrintContent" );
-    Sequence< OUString > aChoices( 2 );
-    Sequence< OUString > aHelpIds( 2 );
-    Sequence< OUString > aWidgetIds( 2 );
-    aChoices[0] = IDE_RESSTR( RID_STR_PRINTDLG_ALLPAGES );
-    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ;
-    aChoices[1] = IDE_RESSTR( RID_STR_PRINTDLG_PAGES );
-    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ;
-    aWidgetIds[0] = "printallpages" ;
-    aWidgetIds[1] = "printpages" ;
+    const Sequence<OUString> aChoices{IDE_RESSTR(RID_STR_PRINTDLG_ALLPAGES),
+                                      IDE_RESSTR(RID_STR_PRINTDLG_PAGES)};
+    const Sequence<OUString> aHelpIds{".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0",
+                                      ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1"};
+    const Sequence<OUString> aWidgetIds{"printallpages",
+                                        "printpages"};
     m_aUIProperties[1].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                    aHelpIds, aPrintContentName,
                                                    aChoices, 0);
