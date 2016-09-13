@@ -1205,10 +1205,7 @@ void SvXMLNumFmtElementContext::EndElement()
 //! I18N doesn't provide SYSTEM or extended date information yet
             // Y after G (era) is replaced by E, also if we're switching to the
             // other second known calendar for a locale.
-            /* TODO: here only for zh-TW, handle for other locales as well. */
-            if ( rParent.HasEra() ||
-                    (sCalendar.equalsIgnoreAsciiCase("ROC") &&
-                     rParent.GetLocaleData().getLoadedLanguageTag().getBcp47() == "zh-TW"))
+            if ( rParent.HasEra() || rParent.GetLocaleData().doesSecondaryCalendarUseEC( sCalendar))
             {
                 rParent.AddNfKeyword(
                     sal::static_int_cast< sal_uInt16 >(
