@@ -26,6 +26,7 @@ uniform float line_width;
 uniform float feather; // width where we fade the line
 
 uniform mat4 mvp;
+uniform mat4 transform;
 
 #define TYPE_NORMAL 0
 #define TYPE_LINE   1
@@ -34,17 +35,20 @@ uniform int type;
 
 void main()
 {
-   vec2 extrusion_vector = extrusion_vectors.xy;
+   vec4 extrusion_vector = vec4(extrusion_vectors.xy, 0.0, 0.0);
 
    float render_thickness = 0.0;
 
    if (type == TYPE_LINE)
    {
+      extrusion_vector = normalize(transform * extrusion_vector);
+
       // miter factor to additionaly lenghten the distance of vertex (needed for miter)
       // if 1.0 - miter_factor has no effect
       float miter_factor = 1.0 / abs(extrusion_vectors.z);
       // fade factor is always -1.0 or 1.0 -> we transport that info together with length
       fade_factor = sign(extrusion_vectors.z);
+
 #ifdef USE_VERTEX_COLORS
       float the_feather = (1.0 + sign(extrusion_vectors.w)) / 4.0;
       float the_line_width = abs(extrusion_vectors.w);
@@ -64,7 +68,9 @@ void main()
    }
 
    // lengthen the vertex in directon of the extrusion vector by line width.
-   vec4 final_position = vec4(position + (extrusion_vector * (render_thickness / 2.0) ), 0.0, 1.0);
+   vec4 final_position = transform * vec4(position, 0.0, 1.0);
+
+   final_position += extrusion_vector * (render_thickness / 2.0);
 
    gl_Position = mvp * final_position;
 

@@ -302,6 +302,13 @@ void OpenGLProgram::SetTexture( const OString& rName, OpenGLTexture& rTexture )
     maTextures.push_back(rTexture);
 }
 
+void OpenGLProgram::SetTransform(const OString& rName, glm::mat4 aMatrix)
+{
+    GLuint nUniform = GetUniformLocation(rName);
+    glUniformMatrix4fv(nUniform, 1, GL_FALSE, glm::value_ptr(aMatrix));
+    CHECK_GL_ERROR();
+}
+
 void OpenGLProgram::SetTransform(
     const OString& rName,
     const OpenGLTexture& rTexture,
@@ -331,7 +338,7 @@ void OpenGLProgram::SetIdentityTransform(const OString& rName)
 {
     GLuint nUniform = GetUniformLocation(rName);
     glm::mat4 aMatrix = glm::mat4();
-    glUniformMatrix4fv(nUniform, 1, GL_FALSE, glm::value_ptr( aMatrix ) );
+    glUniformMatrix4fv(nUniform, 1, GL_FALSE, glm::value_ptr(aMatrix));
     CHECK_GL_ERROR();
 }
 

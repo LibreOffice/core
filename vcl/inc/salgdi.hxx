@@ -26,6 +26,8 @@
 #include "salgdiimpl.hxx"
 #include "sallayout.hxx"
 
+#include <vcl/SceneGraph.hxx>
+
 #include <config_cairo_canvas.h>
 
 #include <map>
@@ -423,6 +425,11 @@ public:
                                     sal_uInt8 nTransparency,
                                     const OutputDevice *pOutDev );
 
+    bool RenderSceneGraph(vcl::sg::RootNode& rRootNode)
+    {
+        return renderSceneGraph(rRootNode);
+    }
+
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
 
 #if ENABLE_CAIRO_CANVAS
@@ -608,6 +615,11 @@ protected:
                                     long nX, long nY,
                                     long nWidth, long nHeight,
                                     sal_uInt8 nTransparency ) = 0;
+
+    virtual bool                renderSceneGraph(vcl::sg::RootNode& /*rRootNode*/)
+    {
+        return false;
+    }
 
 private:
     SalLayoutFlags              m_nLayout; //< 0: mirroring off, 1: mirror x-axis

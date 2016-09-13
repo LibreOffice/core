@@ -45,6 +45,9 @@
 
 #include <stdlib.h>
 
+#include "SceneGraphNodes.hxx"
+#include "opengl/SceneGraphRenderer.hxx"
+
 class OpenGLFlushIdle : public Idle
 {
     OpenGLSalGraphicsImpl *m_pImpl;
@@ -1309,12 +1312,13 @@ void OpenGLSalGraphicsImpl::DeferredTextDraw(OpenGLTexture& rTexture, SalColor a
     PostBatchDraw();
 }
 
-bool OpenGLSalGraphicsImpl::FlushLinesOrTriangles(DrawShaderType eType, RenderParameters& rParameters)
+bool OpenGLSalGraphicsImpl::FlushLinesOrTriangles(DrawShaderType eType, glm::mat4 aMatrix, RenderParameters& rParameters)
 {
     if (!UseProgram("combinedVertexShader", "combinedFragmentShader", "#define USE_VERTEX_COLORS"))
         return false;
 
     mpProgram->SetShaderType(eType);
+    mpProgram->SetTransform("transform", aMatrix);
     mpProgram->SetBlendMode(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     ApplyProgramMatrices(0.5f);
 
@@ -1361,13 +1365,13 @@ void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
         {
             RenderParameters& rParameters = rRenderEntry.maTriangleParameters;
             VCL_GL_INFO("Flush Triangles: " << rParameters.maVertices.size());
-            FlushLinesOrTriangles(DrawShaderType::Normal, rParameters);
+            FlushLinesOrTriangles(DrawShaderType::Normal, rRenderEntry.maMatrix, rParameters);
         }
         if (rRenderEntry.hasLines())
         {
             RenderParameters& rParameters = rRenderEntry.maLineParameters;
             VCL_GL_INFO("Flush Lines: " << rParameters.maVertices.size());
-            FlushLinesOrTriangles(DrawShaderType::Line, rParameters);
+            FlushLinesOrTriangles(DrawShaderType::Line, rRenderEntry.maMatrix, rParameters);
         }
         if (rRenderEntry.hasTextures() && UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader", "#define USE_VERTEX_COLORS"))
         {
@@ -1385,6 +1389,51 @@ void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
                 mpProgram->SetAlphaCoord(rParameters.maTextureCoords.data());
                 mpProgram->SetVertexColors(rParameters.maColors);
                 mpProgram->DrawArrays(GL_TRIANGLES, rParameters.maVertices);
+                CHECK_GL_ERROR();
+            }
+            mpProgram->Clean();
+        }
+        if (rRenderEntry.hasNewTextures() && UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader", "#define USE_VERTEX_COLORS"))
+        {
+            mpProgram->SetShaderType(TextureShaderType::Normal);
+            mpProgram->SetTransform("transform", rRenderEntry.maMatrix);
+            mpProgram->SetBlendMode(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+            for (auto& rPair : rRenderEntry.maTextureMap)
+            {
+                TextureParameters& rParameters = rPair.second;
+                mpProgram->SetTexture("texture", rParameters.maTexture);
+                ApplyProgramMatrices();
+
+                vcl::VertexBufferObject<TextureVertex> vbo;
+                vbo.upload(rParameters.maVertices);
+
+                GLuint positionAttrib   = SAL_MAX_UINT32;
+                GLuint texCoordAttrib   = SAL_MAX_UINT32;
+                GLuint maskCoordAttrib  = SAL_MAX_UINT32;
+                GLuint alphaCoordAttrib = SAL_MAX_UINT32;
+                GLuint colorAttrib      = SAL_MAX_UINT32;
+
+                mpProgram->SetVertexAttrib(positionAttrib, "position", 2, GL_FLOAT, GL_FALSE,
+                                           sizeof(TextureVertex), reinterpret_cast<void*>(offsetof(TextureVertex, position)));
+
+                mpProgram->SetVertexAttrib(texCoordAttrib, "tex_coord_in", 2, GL_FLOAT, GL_FALSE,
+                                           sizeof(TextureVertex), reinterpret_cast<void*>(offsetof(TextureVertex, texCoords)));
+
+                mpProgram->SetVertexAttrib(maskCoordAttrib, "mask_coord_in", 2, GL_FLOAT, GL_FALSE,
+                                           sizeof(TextureVertex), reinterpret_cast<void*>(offsetof(TextureVertex, maskCoords)));
+
+                mpProgram->SetVertexAttrib(alphaCoordAttrib, "alpha_coord_in", 2, GL_FLOAT, GL_FALSE,
+                                           sizeof(TextureVertex), reinterpret_cast<void*>(offsetof(TextureVertex, alphaCoords)));
+
+                mpProgram->SetVertexAttrib(colorAttrib, "vertex_color_in", 4, GL_FLOAT, GL_FALSE,
+                                           sizeof(TextureVertex), reinterpret_cast<void*>(offsetof(TextureVertex, color)));
+
+                vcl::IndexBufferObject ibo;
+                ibo.upload(rParameters.maIndices);
+                ibo.bind();
+
+                mpProgram->DrawElements(GL_TRIANGLES, rParameters.maIndices.size());
                 CHECK_GL_ERROR();
             }
             mpProgram->Clean();
@@ -2157,6 +2206,15 @@ void OpenGLSalGraphicsImpl::doFlush()
     }
 
     VCL_GL_INFO( "doFlush - end." );
+}
+
+bool OpenGLSalGraphicsImpl::renderSceneGraph(vcl::sg::RootNode& rRootNode)
+{
+    SceneGraphRenderer aSceneGraphRenderer(rRootNode, *mpRenderList);
+    aSceneGraphRenderer.render(GetWidth(), GetHeight());
+
+    FlushDeferredDrawing();
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

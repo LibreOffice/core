@@ -143,7 +143,7 @@ public:
     void DeferredTextDraw(OpenGLTexture& rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
 
     void FlushDeferredDrawing();
-    bool FlushLinesOrTriangles(DrawShaderType eType, RenderParameters& rParameters);
+    bool FlushLinesOrTriangles(DrawShaderType eType, glm::mat4 aMatrix, RenderParameters& rParameters);
 
 public:
     // get the width of the device
@@ -370,6 +370,8 @@ public:
                     sal_uInt8 nTransparency ) override;
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
+
+    virtual bool renderSceneGraph(vcl::sg::RootNode& rRootNode);
 
     /// queue an idle flush of contents of the back-buffer to the screen
     void flush();

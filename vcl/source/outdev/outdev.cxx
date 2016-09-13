@@ -46,7 +46,8 @@ OutputDevice::OutputDevice() :
     maRegion(true),
     maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT ),
-    mxSettings( new AllSettings(Application::GetSettings()) )
+    mxSettings( new AllSettings(Application::GetSettings()) ),
+    maSceneGraphRootNode("OutputRoot")
 {
     mpGraphics                      = nullptr;
     mpUnoGraphicsList               = nullptr;
@@ -266,6 +267,22 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
     }
 
     return mpGraphics->GetGraphicsData();
+}
+
+vcl::sg::RootNode& OutputDevice::getSceneGraphRoot()
+{
+    return maSceneGraphRootNode;
+}
+
+bool OutputDevice::renderSceneGraph()
+{
+    if (!mpGraphics)
+    {
+        if (!AcquireGraphics())
+            return false;
+    }
+
+    mpGraphics->RenderSceneGraph(maSceneGraphRootNode);
 }
 
 #if ENABLE_CAIRO_CANVAS

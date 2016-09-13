@@ -46,6 +46,8 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
+#include <vcl/SceneGraph.hxx>
+
 #include <unotools/fontdefs.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
@@ -413,12 +415,20 @@ private:
      */
     ///@{
 
+public:
+    vcl::sg::RootNode maSceneGraphRootNode;
+
 protected:
                                 OutputDevice();
     virtual                     ~OutputDevice() override;
     virtual void                dispose() override;
 
 public:
+
+    vcl::sg::RootNode& getSceneGraphRoot();
+
+    bool renderSceneGraph();
+
 
     /** Get the graphic context that the output device uses to draw on.
 

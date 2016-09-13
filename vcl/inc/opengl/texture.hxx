@@ -83,8 +83,6 @@ private:
     ImplOpenGLTexture* mpImpl;
     int mnSlotNumber;
 
-    inline bool GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const;
-
     inline bool IsValid() const
     {
         return (mpImpl && mpImpl->mnTexture != 0);
@@ -130,6 +128,9 @@ public:
 
     template<GLenum type>
     void FillCoords(std::vector<GLfloat>& aCoordVector, const SalTwoRect& rPosAry, bool bInverted) const;
+
+    bool GetTextureRect(const SalTwoRect& rPosAry, bool bInverted,
+                        GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const;
 };
 
 template<> void OpenGLTexture::FillCoords<GL_TRIANGLES>(

@@ -39,6 +39,8 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/help.hxx>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcldemo-debug.hxx>
@@ -49,6 +51,10 @@
 #include <iostream>
 
 #include "test/outputdevice.hxx"
+
+#include <o3tl/make_unique.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include "SceneGraphNodes.hxx"
 
 using namespace css;
 
@@ -98,6 +104,216 @@ void assertAndSetBackground(vcl::test::TestResult eResult, Rectangle& rRect, vcl
         drawBackgroundRect(rRect, COL_YELLOW, rRenderContext);
     else if (eResult == vcl::test::TestResult::Failed)
         drawBackgroundRect(rRect, COL_RED, rRenderContext);
+}
+
+class Factory
+{
+public:
+    static vcl::sg::Node* addRectangle(vcl::sg::Node& rRoot, const basegfx::B2DRange& rRange, SalColor nLineColor, SalColor nFillColor)
+    {
+        rRoot.mChildren.push_back(o3tl::make_unique<vcl::sg::RectangleNode>(rRange, nLineColor, nFillColor));
+        auto* pRectangleNode = static_cast<vcl::sg::RectangleNode*>(rRoot.mChildren.back().get());
+        return pRectangleNode;
+    }
+
+    static vcl::sg::Node* addNormalizedRectangle(vcl::sg::Node& rRoot, const basegfx::B2DRange& rRange, SalColor nLineColor, SalColor nFillColor)
+    {
+        auto* pRectangleNode = static_cast<vcl::sg::RectangleNode*>(addRectangle(rRoot, rRange, nLineColor, nFillColor));
+        pRectangleNode->mbNormalized = true;
+        return pRectangleNode;
+    }
+
+    static vcl::sg::Node* addTransform(vcl::sg::Node& rRoot, glm::mat4 aMatrix)
+    {
+        rRoot.mChildren.push_back(o3tl::make_unique<vcl::sg::TransformNode>(aMatrix));
+        auto* pTransformNode = static_cast<vcl::sg::TransformNode*>(rRoot.mChildren.back().get());
+        return pTransformNode;
+    }
+
+    static vcl::sg::Node* addBitmap(vcl::sg::Node& rRoot, Bitmap& rBitmap, const basegfx::B2DRange& rRange)
+    {
+        rRoot.mChildren.push_back(o3tl::make_unique<vcl::sg::BitmapNode>(rBitmap, rRange));
+        auto* pBitmapNode = static_cast<vcl::sg::BitmapNode*>(rRoot.mChildren.back().get());
+        return pBitmapNode;
+    }
+
+    static vcl::sg::Node* addPolyPolygon(vcl::sg::Node& rRoot, const basegfx::B2DPolyPolygon& rPolyPolygon, SalColor nLineColor, SalColor nFillColor)
+    {
+        rRoot.mChildren.push_back(o3tl::make_unique<vcl::sg::PolyPolygonNode>(rPolyPolygon, nLineColor, nFillColor));
+        auto* pPolyPolygonNode = static_cast<vcl::sg::PolyPolygonNode*>(rRoot.mChildren.back().get());
+        return pPolyPolygonNode;
+    }
+};
+
+class VisualBackendSceneGraphWindow : public WorkWindow
+{
+private:
+    Timer maUpdateTimer;
+    std::vector<std::chrono::high_resolution_clock::time_point> mTimePoints;
+    vcl::sg::TransformNode* mpTransform;
+    std::chrono::high_resolution_clock::time_point maStartTime;
+    bool mnStop;
+
+public:
+    VisualBackendSceneGraphWindow()
+        : WorkWindow(nullptr, WB_APP | WB_STDWORK)
+        , maStartTime(std::chrono::high_resolution_clock::now())
+        , mnStop(false)
+    {
+        maUpdateTimer.SetTimeoutHdl(LINK(this, VisualBackendSceneGraphWindow, updateHdl));
+        maUpdateTimer.SetPriority(SchedulerPriority::REPAINT);
+
+        maUpdateTimer.SetTimeout(1000.0);
+        maUpdateTimer.Start();
+
+        setUseSceneGraph(true);
+    }
+
+    void setupScenegraph()
+    {
+        if (!maSceneGraphRootNode.mChildren.empty())
+            return;
+
+        Factory::addNormalizedRectangle(maSceneGraphRootNode, basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
+                                        SALCOLOR_NONE, MAKE_SALCOLOR(0x00, 0x00, 0x00));
+
+        vcl::sg::Node* pTransformNode = Factory::addTransform(maSceneGraphRootNode, glm::mat4(1.0f));
+
+        mpTransform = static_cast<vcl::sg::TransformNode*>(pTransformNode);
+
+        Factory::addRectangle(*pTransformNode, basegfx::B2DRange(5.0, 5.0, 50.0, 50.0),
+                                        SALCOLOR_NONE, MAKE_SALCOLOR(0xff, 0xff, 0x00));
+
+        Factory::addRectangle(*pTransformNode, basegfx::B2DRange(50.0, 50.0, 100.0, 100.0),
+                                        SALCOLOR_NONE, MAKE_SALCOLOR(0xff, 0x00, 0x00));
+
+        Factory::addRectangle(*pTransformNode, basegfx::B2DRange(100.0, 100.0, 150.0, 150.0),
+                                        SALCOLOR_NONE, MAKE_SALCOLOR(0xff, 0x00, 0xff));
+
+        {
+            Size aBitmapSize(2048, 2048);
+            Bitmap aBitmap(aBitmapSize, 24);
+            {
+                Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
+                aWriteAccess->Erase(COL_WHITE);
+            }
+            Factory::addBitmap(*pTransformNode, aBitmap, basegfx::B2DRange(150.0, 150.0, 200.0, 200.0));
+        }
+
+        {
+            Size aBitmapSize(2048, 2048);
+            Bitmap aBitmap(aBitmapSize, 24);
+            {
+                Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
+                aWriteAccess->Erase(COL_RED);
+            }
+            Factory::addBitmap(*pTransformNode, aBitmap, basegfx::B2DRange(150.0, 200.0, 200.0, 250.0));
+        }
+
+        {
+            Size aBitmapSize(2048, 2048);
+            Bitmap aBitmap(aBitmapSize, 24);
+            {
+                Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
+                aWriteAccess->Erase(COL_GREEN);
+            }
+            Factory::addBitmap(*pTransformNode, aBitmap, basegfx::B2DRange(200.0, 150.0, 250.0, 200.0));
+        }
+
+        {
+            Size aBitmapSize(2048, 2048);
+            Bitmap aBitmap(aBitmapSize, 24);
+            {
+                Bitmap::ScopedWriteAccess aWriteAccess(aBitmap);
+                aWriteAccess->Erase(COL_BLUE);
+            }
+            Factory::addBitmap(*pTransformNode, aBitmap, basegfx::B2DRange(200.0, 200.0, 250.0, 250.0));
+        }
+
+        glm::mat4 aPolyMatrix(1.0f);
+        aPolyMatrix = glm::scale(aPolyMatrix, glm::vec3(0.5f, 0.5f, 1.0f));
+
+        {
+            vcl::sg::Node* pPolyTransformNode = Factory::addTransform(*pTransformNode, aPolyMatrix);
+
+            OUString aPath = "M300,200 h-150 a150,150 0 1,0 150,-150 z";
+
+            basegfx::B2DPolyPolygon aPoly;
+            basegfx::tools::importFromSvgD(aPoly, aPath, false, nullptr);
+            Factory::addPolyPolygon(*pPolyTransformNode, aPoly, SALCOLOR_NONE, MAKE_SALCOLOR(0xff, 0x00, 0x00));
+        }
+
+        {
+            vcl::sg::Node* pPolyTransformNode = Factory::addTransform(*pTransformNode, aPolyMatrix);
+
+            OUString aPath = "M275,175 v-150 a150,150 0 0,0 -150,150 z";
+
+            basegfx::B2DPolyPolygon aPoly;
+            basegfx::tools::importFromSvgD(aPoly, aPath, false, nullptr);
+            Factory::addPolyPolygon(*pPolyTransformNode, aPoly, SALCOLOR_NONE, MAKE_SALCOLOR(0xff, 0xff, 0x00));
+        }
+
+
+        updateHdl(nullptr);
+    }
+
+    virtual void KeyInput(const KeyEvent& rKEvt) override
+    {
+        sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+
+        if (nCode == KEY_SPACE)
+        {
+            mnStop = !mnStop;
+        }
+    }
+
+    virtual ~VisualBackendSceneGraphWindow() override
+    {
+        disposeOnce();
+    }
+
+    DECL_LINK_TYPED(updateHdl, Timer*, void);
+
+    virtual void dispose() override
+    {
+        WorkWindow::dispose();
+    }
+
+    virtual void Resize() override
+    {
+        setupScenegraph();
+    }
+};
+
+IMPL_LINK_NOARG_TYPED(VisualBackendSceneGraphWindow, updateHdl, Timer *, void)
+{
+    if (!mnStop)
+    {
+        auto aEndTime = std::chrono::high_resolution_clock::now();
+        int nDuration = std::chrono::duration_cast<std::chrono::milliseconds>(aEndTime - maStartTime).count();
+        int nTImeSlice = 4000;
+        float fTime = (nDuration % nTImeSlice) / float(nTImeSlice);
+
+        float angle = F_2PI * fTime;
+
+        Size aSize = GetSizePixel();
+
+        glm::mat4 aMatrix;
+        aMatrix = glm::translate(aMatrix, glm::vec3(aSize.Width() / 2.0f, aSize.Height() / 2.0f, 0.0f));
+
+        float factor = std::cos(fTime * F_2PI) * 0.25 + 0.75;
+
+        aMatrix = glm::scale(aMatrix, glm::vec3(factor, factor, 1.0f));
+
+        aMatrix = glm::translate(aMatrix, glm::vec3(50.0f, 50.0f, 0.0f));
+        aMatrix = glm::rotate(aMatrix, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+        aMatrix = glm::translate(aMatrix, glm::vec3(-50.0f, -50.0f, 0.0f));
+
+        mpTransform->maMatrix = aMatrix;
+    }
+    maUpdateTimer.SetTimeout(1000.0 / 60.0);
+    maUpdateTimer.Start();
+    Invalidate();
 }
 
 class VisualBackendTestWindow : public WorkWindow
@@ -525,7 +741,7 @@ public:
     {
         try
         {
-            ScopedVclPtrInstance<VisualBackendTestWindow> aMainWindow;
+            ScopedVclPtrInstance<VisualBackendSceneGraphWindow> aMainWindow;
 
             aMainWindow->SetText("VCL Test");
             aMainWindow->Show();

@@ -17,6 +17,8 @@
 #include <GL/glew.h>
 #include <vcl/dllapi.h>
 
+#include <glm/glm.hpp>
+
 #include <basegfx/point/b2dpoint.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
@@ -95,6 +97,7 @@ public:
     void SetTransform( const OString& rName, const OpenGLTexture& rTexture,
                        const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,
                        const basegfx::B2DPoint& rY );
+    void SetTransform(const OString& rName, glm::mat4 aMatrix);
     void SetIdentityTransform(const OString& rName);
     void SetShaderType(TextureShaderType eTextureShaderType);
     void SetShaderType(DrawShaderType eDrawShaderType);

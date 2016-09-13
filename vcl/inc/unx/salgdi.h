@@ -259,6 +259,9 @@ public:
                                         long nX, long nY, long nWidth,
                                         long nHeight, sal_uInt8 nTransparency ) override;
 
+    virtual bool renderSceneGraph(vcl::sg::RootNode& rRootNode) override;
+
+
     virtual SystemGraphicsData      GetGraphicsData() const override;
     virtual bool                    SupportsCairo() const override;
     virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;

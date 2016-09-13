@@ -349,7 +349,9 @@ public:
                         mbFill:1,
                         mbSecondary:1,
                         mbNonHomogeneous:1,
-                        mbDoubleBufferingRequested:1;
+                        mbDoubleBufferingRequested:1,
+                        mbUseSceneGraph:1;
+
 
     css::uno::Reference< css::uno::XInterface > mxDNDListenerContainer;
 };

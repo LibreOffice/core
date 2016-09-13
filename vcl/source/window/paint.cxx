@@ -301,10 +301,17 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         }
         else
         {
-            // direct painting
-            m_pWindow->ApplySettings(*m_pWindow);
-            m_pWindow->PushPaintHelper(this, *m_pWindow);
-            m_pWindow->Paint(*m_pWindow, m_aPaintRect);
+            if (m_pWindow->useSceneGraph())
+            {
+                m_pWindow->renderSceneGraph();
+            }
+            else
+            {
+                // direct painting
+                m_pWindow->ApplySettings(*m_pWindow);
+                m_pWindow->PushPaintHelper(this, *m_pWindow);
+                m_pWindow->Paint(*m_pWindow, m_aPaintRect);
+            }
         }
 #if HAVE_FEATURE_OPENGL
         VCL_GL_INFO("PaintHelper::DoPaint end on " <<
@@ -1688,7 +1695,16 @@ void Window::ImplScroll( const Rectangle& rRect,
         mpWindowImpl->mpCursor->ImplResume();
 }
 
-} /* namespace vcl */
+bool Window::useSceneGraph()
+{
+    return mpWindowImpl->mbUseSceneGraph;
+}
 
+void Window::setUseSceneGraph(bool bUseSceneGraph)
+{
+    mpWindowImpl->mbUseSceneGraph = bUseSceneGraph;
+}
+
+} /* namespace vcl */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

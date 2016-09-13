@@ -32,6 +32,16 @@ struct Vertex
 
 static_assert(sizeof(Vertex) == (2*4 + 4*4 + 4*4), "Vertex struct has wrong size/alignment");
 
+struct TextureVertex
+{
+    glm::vec2 position;
+    glm::vec2 texCoords;
+    glm::vec2 maskCoords;
+    glm::vec2 alphaCoords;
+    glm::vec4 color;
+};
+
+static_assert(sizeof(TextureVertex) == (2*4 + 2*4 + 2*4 + 2*4 + 4*4), "TextureVertex struct has wrong size/alignment");
 
 struct RenderParameters
 {
@@ -47,14 +57,26 @@ struct RenderTextureParameters
     OpenGLTexture          maTexture;
 };
 
+struct TextureParameters
+{
+    std::vector<TextureVertex> maVertices;
+    std::vector<GLuint>        maIndices;
+    OpenGLTexture              maTexture;
+};
+
 struct RenderEntry
 {
     basegfx::B2DRange maOverlapTrackingRectangle;
+
+    glm::mat4 maMatrix;
 
     RenderParameters maTriangleParameters;
     RenderParameters maLineParameters;
 
     std::unordered_map<GLuint, RenderTextureParameters> maTextureParametersMap;
+    std::unordered_map<GLuint, TextureParameters> maTextureMap;
+
+    RenderEntry() = default;
 
     bool hasTriangles()
     {
@@ -69,6 +91,11 @@ struct RenderEntry
     bool hasTextures()
     {
         return !maTextureParametersMap.empty();
+    }
+
+    bool hasNewTextures()
+    {
+        return !maTextureMap.empty();
     }
 };
 

@@ -1568,6 +1568,9 @@ public:
     virtual Selection GetSurroundingTextSelection() const;
 
     virtual FactoryFunction GetUITestFactory() const;
+
+    bool useSceneGraph();
+    void setUseSceneGraph(bool bUseSceneGraph);
 };
 
 }

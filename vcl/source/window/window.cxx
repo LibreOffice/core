@@ -736,6 +736,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbNonHomogeneous                    = false;
     static bool bDoubleBuffer = getenv("VCL_DOUBLEBUFFERING_FORCE_ENABLE");
     mbDoubleBufferingRequested = bDoubleBuffer; // when we are not sure, assume it cannot do double-buffering via RenderContext
+    mbUseSceneGraph = false;
 }
 
 WindowImpl::~WindowImpl()

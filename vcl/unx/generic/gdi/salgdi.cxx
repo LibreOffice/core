@@ -877,6 +877,11 @@ SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
         return static_cast< SalGeometryProvider * >(m_pVDev);
 }
 
+bool X11SalGraphics::renderSceneGraph(vcl::sg::RootNode& rRootNode)
+{
+    return m_bOpenGL ? mxImpl->renderSceneGraph(rRootNode) : false;
+}
+
 cairo_t* X11SalGraphics::getCairoContext()
 {
     cairo_surface_t* surface = cairo_xlib_surface_create(GetXDisplay(), hDrawable_,
