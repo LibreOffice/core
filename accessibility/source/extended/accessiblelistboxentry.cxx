@@ -274,11 +274,9 @@ namespace accessibility
 
     Sequence< OUString > AccessibleListBoxEntry::getSupportedServiceNames_Static() throw( RuntimeException )
     {
-        Sequence< OUString > aSupported(3);
-        aSupported[0] = "com.sun.star.accessibility.AccessibleContext";
-        aSupported[1] = "com.sun.star.accessibility.AccessibleComponent";
-        aSupported[2] = "com.sun.star.awt.AccessibleTreeListBoxEntry";
-        return aSupported;
+        return {"com.sun.star.accessibility.AccessibleContext",
+                "com.sun.star.accessibility.AccessibleComponent",
+                "com.sun.star.awt.AccessibleTreeListBoxEntry"};
     }
 
     OUString AccessibleListBoxEntry::getImplementationName_Static() throw( RuntimeException )

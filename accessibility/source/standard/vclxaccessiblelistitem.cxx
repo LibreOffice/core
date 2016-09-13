@@ -198,11 +198,9 @@ sal_Bool VCLXAccessibleListItem::supportsService( const OUString& rServiceName )
 
 Sequence< OUString > VCLXAccessibleListItem::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(3);
-    aNames[0] = "com.sun.star.accessibility.AccessibleContext";
-    aNames[1] = "com.sun.star.accessibility.AccessibleComponent";
-    aNames[2] = "com.sun.star.accessibility.AccessibleListItem";
-    return aNames;
+    return {"com.sun.star.accessibility.AccessibleContext",
+            "com.sun.star.accessibility.AccessibleComponent",
+            "com.sun.star.accessibility.AccessibleListItem"};
 }
 
 // XAccessible

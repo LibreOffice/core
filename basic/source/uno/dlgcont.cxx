@@ -454,11 +454,8 @@ OUString SAL_CALL SfxDialogLibraryContainer::getImplementationName( ) throw (Run
 
 Sequence< OUString > SAL_CALL SfxDialogLibraryContainer::getSupportedServiceNames( ) throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[0] = "com.sun.star.script.DocumentDialogLibraryContainer";
-    // plus, for compatibility:
-    aServiceNames[1] = "com.sun.star.script.DialogLibraryContainer";
-    return aServiceNames;
+    return {"com.sun.star.script.DocumentDialogLibraryContainer",
+            "com.sun.star.script.DialogLibraryContainer"}; // for compatibility
 }
 
 // Implementation class SfxDialogLibrary

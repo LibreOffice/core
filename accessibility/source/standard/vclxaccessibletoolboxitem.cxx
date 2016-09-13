@@ -305,12 +305,10 @@ sal_Bool VCLXAccessibleToolBoxItem::supportsService( const OUString& rServiceNam
 
 Sequence< OUString > VCLXAccessibleToolBoxItem::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(4);
-    aNames[0] = "com.sun.star.accessibility.AccessibleContext";
-    aNames[1] = "com.sun.star.accessibility.AccessibleComponent";
-    aNames[2] = "com.sun.star.accessibility.AccessibleExtendedComponent";
-    aNames[3] = "com.sun.star.accessibility.AccessibleToolBoxItem";
-    return aNames;
+    return {"com.sun.star.accessibility.AccessibleContext",
+            "com.sun.star.accessibility.AccessibleComponent",
+            "com.sun.star.accessibility.AccessibleExtendedComponent",
+            "com.sun.star.accessibility.AccessibleToolBoxItem"};
 }
 
 // XAccessible
