@@ -1361,4 +1361,11 @@ void EditView::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool 
     ShowCursor(/*bGotoCursor=*/false);
 }
 
+void EditView::DrawSelection(OutlinerViewShell* pOtherShell)
+{
+    pImpEditView->RegisterOtherShell(pOtherShell);
+    pImpEditView->DrawSelection();
+    pImpEditView->RegisterOtherShell(nullptr);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

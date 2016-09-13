@@ -1230,10 +1230,13 @@ void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const
     auto pView = const_cast<SdrView*>(GetDrawView());
     if (pView->GetTextEditObject())
     {
+        // Blinking cursor.
         EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
         rEditView.RegisterOtherShell(pOtherShell);
         rEditView.ShowCursor();
         rEditView.RegisterOtherShell(nullptr);
+        // Text selection, if any.
+        rEditView.DrawSelection(pOtherShell);
     }
     else
     {

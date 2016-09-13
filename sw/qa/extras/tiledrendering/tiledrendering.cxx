@@ -1195,16 +1195,28 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     // This was -1: the view shell id for the (top) undo list action wasn't known.
     CPPUNIT_ASSERT_EQUAL(nView1, rUndoManager.GetUndoAction()->GetViewShellId());
 
+    // Create an editeng text selection in the first view.
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    // 0th para, 0th char -> 0th para, 1st char.
+    ESelection aWordSelection(0, 0, 0, 1);
+    rEditView.SetSelection(aWordSelection);
+
     // Create a second view, and make sure that the new view sees the same
     // cursor position as the old one.
     SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering({});
     ViewCallback aView2;
     aView2.m_aViewCursor = Rectangle();
+    aView2.m_bViewSelectionSet = false;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     // Difference was 935 twips, the new view didn't see the editeng cursor of
     // the old one. The new difference should be <1px, but here we deal with twips.
     CPPUNIT_ASSERT(std::abs(aView1.m_aOwnCursor.Top() - aView2.m_aViewCursor.Top()) < 10);
+    // This was false, editeng text selection of the first view wasn't noticed
+    // by the second view.
+    CPPUNIT_ASSERT(aView2.m_bViewSelectionSet);
 
     mxComponent->dispose();
     mxComponent.clear();
