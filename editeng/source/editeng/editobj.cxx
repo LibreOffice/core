@@ -164,6 +164,25 @@ void ContentInfo::SetText( const OUString& rStr )
     maText = svl::SharedString(rStr.pData, nullptr);
 }
 
+void ContentInfo::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("contentInfo"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("style"), BAD_CAST(aStyle.toUtf8().getStr()));
+    xmlTextWriterStartElement(pWriter, BAD_CAST("text"));
+    xmlTextWriterWriteString(pWriter, BAD_CAST(GetText().toUtf8().getStr()));
+    xmlTextWriterEndElement(pWriter);
+    aParaAttribs.dumpAsXml(pWriter);
+    for (size_t i=0; i<aAttribs.size(); ++i)
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("attribs"));
+        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("start"), "%d", aAttribs[i]->GetStart());
+        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("end"), "%d", aAttribs[i]->GetEnd());
+        aAttribs[i]->GetItem()->dumpAsXml(pWriter);
+        xmlTextWriterEndElement(pWriter);
+    }
+    xmlTextWriterEndElement(pWriter);
+}
+
 const WrongList* ContentInfo::GetWrongList() const
 {
     return mpWrongs.get();
@@ -444,7 +463,7 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         xmlTextWriterStartElement(pWriter, BAD_CAST("paragraph"));
-        xmlTextWriterWriteString(pWriter, BAD_CAST(GetText(i).toUtf8().getStr()));
+        mpImpl->aContents[i]->dumpAsXml(pWriter);
         xmlTextWriterEndElement(pWriter);
     }
     xmlTextWriterEndElement(pWriter);

@@ -114,13 +114,14 @@ public:
     typedef std::vector<std::unique_ptr<XEditAttribute> > XEditAttributesType;
 
 private:
-    svl::SharedString maText;
+    svl::SharedString   maText;
     OUString            aStyle;
 
     XEditAttributesType aAttribs;
     SfxStyleFamily      eFamily;
     SfxItemSet          aParaAttribs;
-    std::unique_ptr<WrongList> mpWrongs;
+    std::unique_ptr<WrongList>
+                        mpWrongs;
 
                         ContentInfo( SfxItemPool& rPool );
                         ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse  );
@@ -134,6 +135,8 @@ public:
     const svl::SharedString& GetSharedString() const { return maText;}
     OUString GetText() const;
     void SetText( const OUString& rStr );
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
     const XEditAttributesType& GetAttribs() const { return aAttribs; }
     XEditAttributesType& GetAttribs() { return aAttribs; }
@@ -159,6 +162,7 @@ public:
 
 class EditTextObjectImpl
 {
+friend class EditTextObject;
 public:
     typedef std::vector<std::unique_ptr<ContentInfo> > ContentInfosType;
 
