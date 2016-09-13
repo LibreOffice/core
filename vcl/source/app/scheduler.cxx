@@ -146,6 +146,19 @@ bool Scheduler::GetDeterministicMode()
     return g_bDeterministicMode;
 }
 
+inline bool Scheduler::HasPendingEvents( const ImplSVData* pSVData, const sal_uInt64 nTime )
+{
+   return ( pSVData->mbNeedsReschedule || ((pSVData->mnTimerPeriod != InfiniteTimeoutMs)
+       && (nTime >= pSVData->mnLastUpdate + pSVData->mnTimerPeriod)) );
+}
+
+bool Scheduler::HasPendingEvents()
+{
+    ImplSVData*  pSVData = ImplGetSVData();
+    sal_uInt64   nTime = tools::Time::GetSystemTicks();
+    return HasPendingEvents( pSVData, nTime );
+}
+
 inline void Scheduler::UpdateMinPeriod( ImplSchedulerData *pSchedulerData,
                                         const sal_uInt64 nTime, sal_uInt64 &nMinPeriod )
 {
@@ -158,8 +171,7 @@ bool Scheduler::ProcessTaskScheduling()
 {
     ImplSVData*        pSVData = ImplGetSVData();
     sal_uInt64         nTime = tools::Time::GetSystemTicks();
-    if (!pSVData->mbNeedsReschedule &&
-            (nTime < pSVData->mnLastUpdate + pSVData->mnTimerPeriod) )
+    if ( !HasPendingEvents( pSVData, nTime ) )
         return false;
     pSVData->mbNeedsReschedule = false;
 
