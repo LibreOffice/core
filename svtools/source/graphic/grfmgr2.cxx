@@ -1675,8 +1675,10 @@ bool GraphicObject::ImplRenderTempTile( VirtualDevice& rVDev,
     }
 
     // one less
-    nMSBFactor /= nExponent;
-
+    if(nMSBFactor > 1)
+    {
+        nMSBFactor /= nExponent;
+    }
     ImplTileInfo aTileInfo;
 
     // #105229# Switch off mapping (converting to logic and back to
