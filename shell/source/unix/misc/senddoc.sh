@@ -384,7 +384,9 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         # Try to be smart, and send the mail anyway, if we have the
         # possibility to do so.
 
-        if [ -n "$DESKTOP_LAUNCH" ]; then
+        if [ -x /usr/bin/xdg-email ] ; then
+            MAILER=/usr/bin/xdg-email
+        elif [ -n "$DESKTOP_LAUNCH" ]; then
             # http://lists.freedesktop.org/pipermail/xdg/2004-August/002873.html
             MAILER=${DESKTOP_LAUNCH}
         elif [ -n "$KDE_FULL_SESSION" -a -x /usr/bin/kde-open ] ; then
@@ -425,7 +427,11 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "file://$2" | "${URI_ENCODE}"`
+                    if [ "$MAILER" = "/usr/bin/xdg-email" ]; then
+                        MAILTO="${MAILTO:-}${MAILTO:+&}attach="`echo "file://$2" | "${URI_ENCODE}"`
+                    else
+                        MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "file://$2" | "${URI_ENCODE}"`
+                    fi
                     shift
                     ;;
                 *)
