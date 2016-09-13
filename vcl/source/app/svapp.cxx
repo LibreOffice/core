@@ -479,7 +479,7 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     ImplSVData* pSVData = ImplGetSVData();
 
     SAL_INFO("vcl.schedule", "Enter ImplYield: " << (i_bWait ? "wait" : "no wait") <<
-             ": " << (i_bAllEvents ? "all events" : "one event") << ": " << nReleased);
+             " / " << (i_bAllEvents ? "all events" : "one event") << " / " << nReleased);
 
     if ( i_bWait && Scheduler::HasPendingEvents() )
         i_bWait = false;

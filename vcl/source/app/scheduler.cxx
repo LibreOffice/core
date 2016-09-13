@@ -30,9 +30,6 @@ void ImplSchedulerData::Invoke()
     if ( !mpScheduler || mbInScheduler )
         return;
 
-    // tdf#92036 Reset the period to avoid re-firing immediately.
-    mpScheduler->mpSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
-
     Scheduler *sched = mpScheduler;
 
     // prepare Scheduler Object for deletion after handling
@@ -173,6 +170,7 @@ bool Scheduler::ProcessTaskScheduling( IdleRunPolicy eIdleRunPolicy )
 
     ImplSchedulerData* pSchedulerData = pSVData->mpFirstSchedulerData;
     ImplSchedulerData* pPrevSchedulerData = nullptr;
+    ImplSchedulerData *pPrevMostUrgent = nullptr;
     ImplSchedulerData *pMostUrgent = nullptr;
     sal_uInt64         nMinPeriod = InfiniteTimeoutMs;
 
@@ -203,12 +201,15 @@ bool Scheduler::ProcessTaskScheduling( IdleRunPolicy eIdleRunPolicy )
         // if the priority of the current task is higher (numerical value is lower) than
         // the priority of the most urgent, the current task becomes the new most urgent
         if ( !pMostUrgent )
+        {
+            pPrevMostUrgent = pPrevSchedulerData;
             pMostUrgent = pSchedulerData;
             goto next_entry;
         }
         else if ( pSchedulerData->mpScheduler->GetPriority() < pMostUrgent->mpScheduler->GetPriority() )
         {
             UpdateMinPeriod( pMostUrgent, nTime, nMinPeriod );
+            pPrevMostUrgent = pPrevSchedulerData;
             pMostUrgent = pSchedulerData;
             goto next_entry;
         }
@@ -225,6 +226,9 @@ next_entry:
 
     if ( pMostUrgent )
     {
+        assert( pPrevMostUrgent != pMostUrgent );
+        assert( !pPrevMostUrgent || (pPrevMostUrgent->mpNext == pMostUrgent) );
+
         pMostUrgent->mnUpdateTime = nTime;
         UpdateMinPeriod( pMostUrgent, nTime, nMinPeriod );
 
@@ -234,6 +238,21 @@ next_entry:
         pMostUrgent->Invoke();
         SAL_INFO_IF( !pMostUrgent->mpScheduler, "vcl.schedule", tools::Time::GetSystemTicks()
                      << " " << pMostUrgent <<  "  tag-rm     " );
+
+        // do some simple round-robin scheduling
+        // nothing to do, if we're already the last element
+        if ( pMostUrgent->mpScheduler && pMostUrgent->mpNext )
+        {
+            if ( pPrevMostUrgent )
+                pPrevMostUrgent->mpNext = pMostUrgent->mpNext;
+            else
+                pSVData->mpFirstSchedulerData = pMostUrgent->mpNext;
+            // Invoke might have added tasks to the end of the list
+            while ( pPrevSchedulerData->mpNext )
+                pPrevSchedulerData = pPrevSchedulerData->mpNext;
+            pPrevSchedulerData->mpNext = pMostUrgent;
+            pMostUrgent->mpNext = nullptr;
+        }
     }
 
     if ( nMinPeriod != InfiniteTimeoutMs
@@ -272,26 +291,40 @@ void Scheduler::Start()
             mpSchedulerData = new ImplSchedulerData;
         mpSchedulerData->mpScheduler   = this;
         mpSchedulerData->mbInScheduler = false;
+        mpSchedulerData->mpNext = nullptr;
 
         // insert last due to SFX!
-        ImplSchedulerData* pPrev = nullptr;
         ImplSchedulerData* pData = pSVData->mpFirstSchedulerData;
-        while ( pData )
+        if ( pData )
         {
-            pPrev = pData;
-            pData = pData->mpNext;
+            while ( pData->mpNext )
+                pData = pData->mpNext;
+            pData->mpNext = mpSchedulerData;
         }
-        mpSchedulerData->mpNext = nullptr;
-        if ( pPrev )
-            pPrev->mpNext = mpSchedulerData;
         else
             pSVData->mpFirstSchedulerData = mpSchedulerData;
         SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " " << mpSchedulerData
              <<  "  added      " << (int) mePriority << " " << mpDebugName );
     }
     else
-        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " " << mpSchedulerData
-             <<  "  restarted  " << (int) mePriority << " " << mpDebugName );
+    {
+        if ( mpSchedulerData->mpNext )
+        {
+            ImplSchedulerData* pData = pSVData->mpFirstSchedulerData;
+            while ( pData->mpNext != mpSchedulerData )
+                pData = pData->mpNext;
+            pData->mpNext = mpSchedulerData->mpNext;
+            mpSchedulerData->mpNext = nullptr;
+            while ( pData->mpNext )
+                pData = pData->mpNext;
+            pData->mpNext = mpSchedulerData;
+            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " " << mpSchedulerData
+                 <<  "  restarted  " << (int) mePriority << " " << mpDebugName );
+        }
+        else
+            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " " << mpSchedulerData
+                 <<  "  kept       " << (int) mePriority << " " << mpDebugName );
+    }
 
     assert( mpSchedulerData->mpScheduler == this );
     mpSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
