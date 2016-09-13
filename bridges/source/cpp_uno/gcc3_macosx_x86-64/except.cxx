@@ -52,11 +52,11 @@ struct Fake_type_info {
 };
 
 struct Fake_class_type_info: Fake_type_info {
-    virtual ~Fake_class_type_info() = delete;
+    virtual ~Fake_class_type_info() override = delete;
 };
 
 struct Fake_si_class_type_info: Fake_class_type_info {
-    virtual ~Fake_si_class_type_info() = delete;
+    virtual ~Fake_si_class_type_info() override = delete;
     void const * base;
 };
 
