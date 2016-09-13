@@ -190,6 +190,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         OUString        aNumCharFmtName;
         void            StoreBulCharFmtName_impl();
         void            StoreMapUnit_impl();
+        NBOTypeMgrBase(const NBOTypeMgrBase&) = delete;
 
     public:
         NBOTypeMgrBase(const NBOType aType)
@@ -199,14 +200,6 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
             , aNumCharFmtName(OUString())
             , bIsLoading(false)
         {}
-        NBOTypeMgrBase(const NBOTypeMgrBase& aTypeMgr)
-        {
-            eType = aTypeMgr.eType;
-            pSet = aTypeMgr.pSet;
-            eCoreUnit = aTypeMgr.eCoreUnit;
-            aNumCharFmtName = aTypeMgr.aNumCharFmtName;
-            bIsLoading = false;
-        }
         virtual ~NBOTypeMgrBase() {}
         virtual void Init()=0;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) = 0;
@@ -232,13 +225,14 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
 {
     friend class OutlineTypeMgr;
     friend class NumberingTypeMgr;
+    private:
+        BulletsTypeMgr(const BulletsTypeMgr&) = delete;
     public:
         static sal_Unicode aDynamicBulletTypes[DEFAULT_BULLET_TYPES];
         static sal_Unicode aDynamicRTLBulletTypes[DEFAULT_BULLET_TYPES];
         static BulletsSettings_Impl* pActualBullets[DEFAULT_BULLET_TYPES];
     public:
         BulletsTypeMgr();
-        BulletsTypeMgr(const BulletsTypeMgr& aTypeMgr);
         virtual ~BulletsTypeMgr() {}
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
@@ -255,12 +249,13 @@ class SVX_DLLPUBLIC GraphyicBulletsTypeMgr: public NBOTypeMgrBase
 {
     friend class OutlineTypeMgr;
     friend class NumberingTypeMgr;
+    private:
+        GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr&) = delete;
     public:
         typedef std::vector<GrfBulDataRelation*> ListType;
         ListType aGrfDataLst;
     public:
         GraphyicBulletsTypeMgr();
-        GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTypeMgr);
         virtual ~GraphyicBulletsTypeMgr();
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
@@ -276,12 +271,13 @@ class SVX_DLLPUBLIC MixBulletsTypeMgr: public NBOTypeMgrBase
 {
     friend class OutlineTypeMgr;
     friend class NumberingTypeMgr;
+    private:
+        MixBulletsTypeMgr(const MixBulletsTypeMgr&) = delete;
     public:
         static MixBulletsSettings_Impl* pActualBullets[DEFAULT_BULLET_TYPES];
         static MixBulletsSettings_Impl* pDefaultActualBullets[DEFAULT_BULLET_TYPES];
     public:
         MixBulletsTypeMgr();
-        MixBulletsTypeMgr(const MixBulletsTypeMgr& aTypeMgr);
         virtual ~MixBulletsTypeMgr() {}
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
@@ -294,12 +290,13 @@ class SVX_DLLPUBLIC MixBulletsTypeMgr: public NBOTypeMgrBase
 
 class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
 {
+    private:
+        NumberingTypeMgr(const NumberingTypeMgr&) = delete;
     public:
         NumberSettingsArr_Impl*     pNumberSettingsArr;
         NumberSettingsArr_Impl*     pDefaultNumberSettingsArr;
     public:
         NumberingTypeMgr();
-        NumberingTypeMgr(const NumberingTypeMgr& aTypeMgr);
         virtual ~NumberingTypeMgr();
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
@@ -312,12 +309,13 @@ class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
 
 class SVX_DLLPUBLIC OutlineTypeMgr: public NBOTypeMgrBase
 {
+    private:
+        OutlineTypeMgr(const OutlineTypeMgr&) = delete;
     public:
         OutlineSettings_Impl*       pOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
         OutlineSettings_Impl*       pDefaultOutlineSettingsArrs[DEFAULT_NUM_VALUSET_COUNT];
     public:
         OutlineTypeMgr();
-        OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr);
         virtual ~OutlineTypeMgr() {}
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;

@@ -250,21 +250,6 @@ BulletsTypeMgr::BulletsTypeMgr()
     Init();
 }
 
-BulletsTypeMgr::BulletsTypeMgr(const BulletsTypeMgr& aTypeMgr):
-    NBOTypeMgrBase(aTypeMgr)
-{
-    for (sal_uInt16 i=0; i < DEFAULT_BULLET_TYPES; ++i)
-    {
-        const BulletsSettings_Impl* pSrcBullet = BulletsTypeMgr::pActualBullets[i];
-        BulletsSettings_Impl* pTargetBullet = pActualBullets[i];
-        pTargetBullet->bIsCustomized = pSrcBullet->bIsCustomized;
-        pTargetBullet->cBulletChar = pSrcBullet->cBulletChar;
-        pTargetBullet->aFont = pSrcBullet->aFont;
-        pTargetBullet->sDescription = pSrcBullet->sDescription;
-        pTargetBullet->eType = pSrcBullet->eType;
-    }
-}
-
 class theBulletsTypeMgr : public rtl::Static<BulletsTypeMgr, theBulletsTypeMgr> {};
 
 BulletsTypeMgr& BulletsTypeMgr::GetInstance()
@@ -515,26 +500,6 @@ GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr()
     Init();
 }
 
-GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTypeMgr):
-    NBOTypeMgrBase(aTypeMgr)
-{
-    for (const GrfBulDataRelation* pSrcEntry : aTypeMgr.aGrfDataLst)
-    {
-        GrfBulDataRelation* pEntry = new GrfBulDataRelation(eNBType::GRAPHICBULLETS);
-        if (pSrcEntry)
-        {
-            pEntry->bIsCustomized = pSrcEntry->bIsCustomized;
-            pEntry->nTabIndex = pSrcEntry->nTabIndex;
-            pEntry->nGallaryIndex = pSrcEntry->nGallaryIndex;
-            pEntry->sGrfName = pSrcEntry->sGrfName;
-            pEntry->sDescription = pSrcEntry->sDescription;
-            aGrfDataLst.push_back(pEntry);
-        }
-        else
-            delete pEntry;
-    }
-}
-
 GraphyicBulletsTypeMgr::~GraphyicBulletsTypeMgr()
 {
     for (const GrfBulDataRelation* p : aGrfDataLst)
@@ -771,41 +736,6 @@ MixBulletsTypeMgr& MixBulletsTypeMgr::GetInstance()
     return theMixBulletsTypeMgr::get();
 }
 
-MixBulletsTypeMgr::MixBulletsTypeMgr(const MixBulletsTypeMgr& aTypeMgr):
-    NBOTypeMgrBase(aTypeMgr)
-{
-    for (sal_uInt16 i=0;i<DEFAULT_BULLET_TYPES;i++)
-    {
-        if ( MixBulletsTypeMgr::pActualBullets[i]->eType == eNBType::BULLETS )
-        {
-            pActualBullets[i]->eType = MixBulletsTypeMgr::pActualBullets[i]->eType;
-            pActualBullets[i]->nIndex = MixBulletsTypeMgr::pActualBullets[i]->nIndex; //index in the tab page display
-            pActualBullets[i]->nIndexDefault = MixBulletsTypeMgr::pActualBullets[i]->nIndexDefault;
-            pActualBullets[i]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
-            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->cBulletChar = static_cast<BulletsSettings_Impl*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->cBulletChar;
-            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->aFont = static_cast<BulletsSettings_Impl*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->aFont;
-            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->sDescription = static_cast<BulletsSettings_Impl*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->sDescription;
-            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->bIsCustomized = static_cast<BulletsSettings_Impl*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->bIsCustomized;
-            static_cast<BulletsSettings_Impl*>(pActualBullets[i]->pBullets)->eType = static_cast<BulletsSettings_Impl*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->eType;
-        }
-        else if ( MixBulletsTypeMgr::pActualBullets[i]->eType == eNBType::GRAPHICBULLETS )
-        {
-            pActualBullets[i]->eType = MixBulletsTypeMgr::pActualBullets[i]->eType;
-            pActualBullets[i]->nIndex = MixBulletsTypeMgr::pActualBullets[i]->nIndex; //index in the tab page display
-            pActualBullets[i]->nIndexDefault = MixBulletsTypeMgr::pActualBullets[i]->nIndexDefault;
-            pActualBullets[i]->pBullets = new GrfBulDataRelation(eNBType::GRAPHICBULLETS) ;
-            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->sGrfName = static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->sGrfName;
-            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->sDescription = static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->sDescription;
-            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->bIsCustomized = static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->bIsCustomized;
-            static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->eType = static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->eType;
-            if ( static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->bIsCustomized && static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->pGrfObj != nullptr)
-            {
-                static_cast<GrfBulDataRelation*>(pActualBullets[i]->pBullets)->pGrfObj = static_cast<GrfBulDataRelation*>(MixBulletsTypeMgr::pActualBullets[i]->pBullets)->pGrfObj;
-            }
-        }
-    }
-    ImplLoad("standard.sya");
-}
 void MixBulletsTypeMgr::Init()
 {
     BulletsTypeMgr &rBTMgr = BulletsTypeMgr::GetInstance();
@@ -1251,14 +1181,6 @@ NumberingTypeMgr::NumberingTypeMgr()
     ImplLoad("standard.syb");
 }
 
-NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& rTypeMgr)
-    : NBOTypeMgrBase(rTypeMgr)
-    , pNumberSettingsArr (new NumberSettingsArr_Impl)
-    , pDefaultNumberSettingsArr(nullptr)
-{
-    ImplLoad("standard.syb");
-}
-
 NumberingTypeMgr::~NumberingTypeMgr()
 {
     delete pNumberSettingsArr;
@@ -1436,19 +1358,6 @@ bool NumberingTypeMgr::IsCustomized(sal_uInt16 nIndex)
 // Multi-level /Outline Type lib
 OutlineTypeMgr::OutlineTypeMgr()
     : NBOTypeMgrBase(eNBOType::OUTLINE)
-{
-    Init();
-    for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ )
-    {
-        pDefaultOutlineSettingsArrs[nItem] = pOutlineSettingsArrs[nItem];
-    }
-    //Initial the first time to store the default value. Then do it again for customized value
-    Init();
-    ImplLoad("standard.syc");
-}
-
-OutlineTypeMgr::OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr)
-    : NBOTypeMgrBase(aTypeMgr)
 {
     Init();
     for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ )
