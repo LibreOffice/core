@@ -186,7 +186,8 @@ struct ImplStyleData
     rtl::OUString                   mIconTheme;
     bool                            mbSkipDisabledInMenus;
     bool                            mbHideDisabledMenuItems;
-    bool                            mbAcceleratorsInContextMenus;
+    bool                            mbPreferredContextMenuShortcuts;
+    TriState                        meContextMenuShortcuts;
     //mbPrimaryButtonWarpsSlider == true for "jump to here" behavior for primary button, otherwise
     //primary means scroll by single page. Secondary button takes the alternative behaviour
     bool                            mbPrimaryButtonWarpsSlider;
@@ -544,6 +545,7 @@ ImplStyleData::ImplStyleData() :
     mbAutoMnemonic              = true;
     mnToolbarIconSize           = ToolbarIconSize::Unknown;
     meUseImagesInMenus          = TRISTATE_INDET;
+    meContextMenuShortcuts      = TRISTATE_INDET;
     mnEdgeBlending = 35;
     maEdgeBlendingTopLeftColor = RGB_COLORDATA(0xC0, 0xC0, 0xC0);
     maEdgeBlendingBottomRightColor = RGB_COLORDATA(0x40, 0x40, 0x40);
@@ -657,7 +659,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
     mbSkipDisabledInMenus       = rData.mbSkipDisabledInMenus;
     mbHideDisabledMenuItems     = rData.mbHideDisabledMenuItems;
-    mbAcceleratorsInContextMenus = rData.mbAcceleratorsInContextMenus;
+    mbPreferredContextMenuShortcuts = rData.mbPreferredContextMenuShortcuts;
+    meContextMenuShortcuts      = rData.meContextMenuShortcuts;
     mbPrimaryButtonWarpsSlider  = rData.mbPrimaryButtonWarpsSlider;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mIconThemeScanner.reset(new vcl::IconThemeScanner(*rData.mIconThemeScanner));
@@ -763,7 +766,7 @@ void ImplStyleData::SetStandardStyles()
     mbPreferredUseImagesInMenus = true;
     mbSkipDisabledInMenus       = false;
     mbHideDisabledMenuItems     = false;
-    mbAcceleratorsInContextMenus = true;
+    mbPreferredContextMenuShortcuts = true;
     mbPrimaryButtonWarpsSlider = false;
 }
 
@@ -1511,16 +1514,37 @@ StyleSettings::GetHideDisabledMenuItems() const
 }
 
 void
-StyleSettings::SetAcceleratorsInContextMenus( bool bAcceleratorsInContextMenus )
+StyleSettings::SetContextMenuShortcuts( TriState eContextMenuShortcuts )
 {
     CopyData();
-    mxData->mbAcceleratorsInContextMenus = bAcceleratorsInContextMenus;
+    mxData->meContextMenuShortcuts = eContextMenuShortcuts;
 }
 
 bool
-StyleSettings::GetAcceleratorsInContextMenus() const
+StyleSettings::GetContextMenuShortcuts() const
 {
-    return mxData->mbAcceleratorsInContextMenus;
+    switch (mxData->meContextMenuShortcuts)
+    {
+    case TRISTATE_FALSE:
+        return false;
+    case TRISTATE_TRUE:
+        return true;
+    default: // TRISTATE_INDET:
+        return GetPreferredUseImagesInMenus();
+    }
+}
+
+void
+StyleSettings::SetPreferredContextMenuShortcuts( bool bContextMenuShortcuts )
+{
+    CopyData();
+    mxData->mbPreferredContextMenuShortcuts = bContextMenuShortcuts;
+}
+
+bool
+StyleSettings::GetPreferredContextMenuShortcuts() const
+{
+    return mxData->mbPreferredContextMenuShortcuts;
 }
 
 void
@@ -2349,7 +2373,8 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->mbPreferredUseImagesInMenus == rSet.mxData->mbPreferredUseImagesInMenus) &&
          (mxData->mbSkipDisabledInMenus     == rSet.mxData->mbSkipDisabledInMenus)      &&
          (mxData->mbHideDisabledMenuItems   == rSet.mxData->mbHideDisabledMenuItems)    &&
-         (mxData->mbAcceleratorsInContextMenus  == rSet.mxData->mbAcceleratorsInContextMenus)&&
+         (mxData->mbPreferredContextMenuShortcuts  == rSet.mxData->mbPreferredContextMenuShortcuts)&&
+         (mxData->meContextMenuShortcuts    == rSet.mxData->meContextMenuShortcuts)     &&
          (mxData->mbPrimaryButtonWarpsSlider == rSet.mxData->mbPrimaryButtonWarpsSlider) &&
          (mxData->maFontColor               == rSet.mxData->maFontColor)                &&
          (mxData->mnEdgeBlending                    == rSet.mxData->mnEdgeBlending)                     &&
