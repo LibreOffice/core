@@ -602,7 +602,9 @@ class ViewCallback
 {
 public:
     bool m_bOwnCursorInvalidated;
+    Rectangle m_aOwnCursor;
     bool m_bViewCursorInvalidated;
+    Rectangle m_aViewCursor;
     bool m_bOwnSelectionSet;
     bool m_bViewSelectionSet;
     OString m_aViewSelection;
@@ -643,11 +645,33 @@ public:
         case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         {
             m_bOwnCursorInvalidated = true;
+
+            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aPayload));
+            if (OString("EMPTY") == pPayload)
+                return;
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+            m_aOwnCursor.setX(aSeq[0].toInt32());
+            m_aOwnCursor.setY(aSeq[1].toInt32());
+            m_aOwnCursor.setWidth(aSeq[2].toInt32());
+            m_aOwnCursor.setHeight(aSeq[3].toInt32());
         }
         break;
         case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
         {
             m_bViewCursorInvalidated = true;
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            OString aRect = aTree.get_child("rectangle").get_value<std::string>().c_str();
+
+            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRect));
+            if (OString("EMPTY") == pPayload)
+                return;
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+            m_aViewCursor.setX(aSeq[0].toInt32());
+            m_aViewCursor.setY(aSeq[1].toInt32());
+            m_aViewCursor.setWidth(aSeq[2].toInt32());
+            m_aViewCursor.setHeight(aSeq[3].toInt32());
         }
         break;
         case LOK_CALLBACK_TEXT_SELECTION:
@@ -1148,6 +1172,8 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     // Load a document and create a view.
     comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
     sal_Int32 nView1 = SfxLokHelper::getView();
 
     // Begin text edit.
@@ -1167,6 +1193,17 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rUndoManager.GetUndoActionCount());
     // This was -1: the view shell id for the (top) undo list action wasn't known.
     CPPUNIT_ASSERT_EQUAL(nView1, rUndoManager.GetUndoAction()->GetViewShellId());
+
+    // Create a second view, and make sure that the new view sees the same
+    // cursor position as the old one.
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering({});
+    ViewCallback aView2;
+    aView2.m_aViewCursor = Rectangle();
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    // Difference was 935 twips, the new view didn't see the editeng cursor of
+    // the old one. The new difference should be <1px, but here we deal with twips.
+    CPPUNIT_ASSERT(abs(aView1.m_aOwnCursor.Top() - aView2.m_aViewCursor.Top()) < 10);
 
     mxComponent->dispose();
     mxComponent.clear();
