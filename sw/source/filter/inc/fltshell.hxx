@@ -235,15 +235,12 @@ public:
                  sal_uInt16          nAutorNo_,
                  const DateTime& rStamp_,
                  RedlineType_t   eTypePrev_    = nsRedlineType_t::REDLINE_INSERT,
-                 sal_uInt16          nAutorNoPrev_ = USHRT_MAX,
-                 const DateTime* pStampPrev_   = nullptr)
+                 sal_uInt16          nAutorNoPrev_ = USHRT_MAX)
         : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_),
         aStampPrev( DateTime::EMPTY ),
         eType(eType_),
         eTypePrev(eTypePrev_), nAutorNo(nAutorNo_), nAutorNoPrev(nAutorNoPrev_)
     {
-            if( pStampPrev_ )
-                aStampPrev = *pStampPrev_;
     }
 
     SwFltRedline(const SwFltRedline& rCpy):

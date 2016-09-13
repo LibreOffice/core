@@ -242,7 +242,7 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_VARIABLE,2);
     SbxVariable();
-    SbxVariable( SbxDataType, void* = nullptr );
+    SbxVariable( SbxDataType );
     SbxVariable( const SbxVariable& );
     SbxVariable& operator=( const SbxVariable& );
 

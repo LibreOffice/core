@@ -102,10 +102,7 @@ class ViewShellObjectBarFactory
 public:
     explicit ViewShellObjectBarFactory (::sd::ViewShell& rViewShell);
     virtual ~ViewShellObjectBarFactory();
-    virtual SfxShell* CreateShell (
-        ::sd::ShellId nId,
-        vcl::Window* pParentWindow,
-        ::sd::FrameView* pFrameView) override;
+    virtual SfxShell* CreateShell( ::sd::ShellId nId ) override;
     virtual void ReleaseShell (SfxShell* pShell) override;
 private:
     ::sd::ViewShell& mrViewShell;
@@ -1630,10 +1627,7 @@ ViewShellObjectBarFactory::~ViewShellObjectBarFactory()
     }
 }
 
-SfxShell* ViewShellObjectBarFactory::CreateShell (
-    ::sd::ShellId nId,
-    vcl::Window*,
-    ::sd::FrameView* )
+SfxShell* ViewShellObjectBarFactory::CreateShell( ::sd::ShellId nId )
 {
     SfxShell* pShell = nullptr;
 

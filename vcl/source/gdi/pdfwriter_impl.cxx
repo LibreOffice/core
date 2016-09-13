@@ -1495,9 +1495,9 @@ void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OS
         basegfx::B2DPoint aBL( aRange.getMinX(), aRange.getMaxY() );
         appendPixelPoint( aBL, rBuffer );
         rBuffer.append( ' ' );
-        appendMappedLength( aRange.getWidth(), rBuffer, false, nullptr, nLog10Divisor );
+        appendMappedLength( aRange.getWidth(), rBuffer, false, nLog10Divisor );
         rBuffer.append( ' ' );
-        appendMappedLength( aRange.getHeight(), rBuffer, true, nullptr, nLog10Divisor );
+        appendMappedLength( aRange.getHeight(), rBuffer, true, nLog10Divisor );
         rBuffer.append( " re\n" );
         return;
     }
@@ -1590,14 +1590,12 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
     appendFixedInt( nValue, rBuffer );
 }
 
-void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength, sal_Int32 nPrecision ) const
+void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32 nPrecision ) const
 {
     Size aSize( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                              m_pWriter->m_aMapMode,
                              m_pWriter->getReferenceDevice(),
                              Size( 1000, 1000 ) ) );
-    if( pOutLength )
-        *pOutLength = (sal_Int32)(fLength*(double)(bVertical ? aSize.Height() : aSize.Width())/1000.0);
     fLength *= pixelToPoint((double)(bVertical ? aSize.Height() : aSize.Width()) / 1000.0);
     appendDouble( fLength, rBuffer, nPrecision );
 }

@@ -158,7 +158,7 @@ public:
         // (in PDF map mode, that is 10th of point)
         void appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = nullptr ) const;
         // the same for double values
-        void appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32* pOutLength = nullptr, sal_Int32 nPrecision = 5 ) const;
+        void appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical = true, sal_Int32 nPrecision = 5 ) const;
         // appends LineInfo
         // returns false if too many dash array entry were created for
         // the implementation limits of some PDF readers

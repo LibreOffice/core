@@ -142,17 +142,15 @@ public:
     static void GlobalExit();           // called by ScGlobal::Clear()
 
     /// Could string be a regular expression?
-    /// If pDoc!=NULL the document options are taken into account and if
-    /// RegularExpressions are disabled the function returns false regardless
+    /// if regularExpressions are disabled the function returns false regardless
     /// of the string content.
-    static bool MayBeRegExp( const OUString& rStr, const ScDocument* pDoc, bool bIgnoreWildcards = false );
+    static bool MayBeRegExp( const OUString& rStr, bool bIgnoreWildcards = false );
 
     /** Could string be a wildcard (*,?,~) expression?
-        If pDoc!=NULL the document options are taken into account and if
-        Wildcards are disabled the function returns false regardless of the
+        If wildcards are disabled the function returns false regardless of the
         string content.
      */
-    static bool MayBeWildcard( const OUString& rStr, const ScDocument* pDoc );
+    static bool MayBeWildcard( const OUString& rStr );
 
     /** Detect if string should be used as regular expression or wildcard
         expression or literal string.

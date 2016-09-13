@@ -85,7 +85,7 @@ using namespace com::sun::star;
 
 
 E3dObjList::E3dObjList()
-:   SdrObjList(nullptr, nullptr, nullptr)
+:   SdrObjList(nullptr, nullptr)
 {
 }
 

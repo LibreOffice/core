@@ -47,10 +47,7 @@ public:
             Return the new view shell or NULL when a creation is not
             possible.
         */
-    virtual ShellType* CreateShell (
-        ShellId nId,
-        vcl::Window* pParentWindow,
-        FrameView* pFrameView) = 0;
+    virtual ShellType* CreateShell(ShellId nId) = 0;
 
     /** Tell the factory that a shell is no longer in use.  It may destroy
         it or put it for future use in a cache.

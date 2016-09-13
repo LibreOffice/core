@@ -16,13 +16,13 @@ struct BulkDataHint::Impl
     ScDocument& mrDoc;
     const ColumnSpanSet* mpSpans;
 
-    Impl( ScDocument& rDoc, const ColumnSpanSet* pSpans ) :
+    Impl( ScDocument& rDoc ) :
         mrDoc(rDoc),
-        mpSpans(pSpans) {}
+        mpSpans(nullptr) {}
 };
 
 BulkDataHint::BulkDataHint( ScDocument& rDoc ) :
-    SfxSimpleHint(SC_HINT_BULK_DATACHANGED), mpImpl(new Impl(rDoc, nullptr)) {}
+    SfxSimpleHint(SC_HINT_BULK_DATACHANGED), mpImpl(new Impl(rDoc)) {}
 
 BulkDataHint::~BulkDataHint()
 {

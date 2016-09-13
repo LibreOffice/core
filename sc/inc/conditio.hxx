@@ -453,7 +453,7 @@ public:
 
     bool            EqualEntries( const ScConditionalFormat& r ) const;
 
-    void            DoRepaint( const ScRange* pModified );
+    void            DoRepaint();
 
     sal_uInt32      GetKey() const          { return nKey; }
     void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
