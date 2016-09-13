@@ -1201,20 +1201,33 @@ void SvXMLNumFmtElementContext::EndElement()
                     : ( bEffLong ? NF_KEY_MM : NF_KEY_M ) ) );
             break;
         case XML_TOK_STYLE_YEAR:
-            rParent.UpdateCalendar( sCalendar );
 //! I18N doesn't provide SYSTEM or extended date information yet
-            // Y after G (era) is replaced by E, also if we're switching to the
-            // other second known calendar for a locale.
-            if ( rParent.HasEra() || rParent.GetLocaleData().doesSecondaryCalendarUseEC( sCalendar))
             {
-                rParent.AddNfKeyword(
-                    sal::static_int_cast< sal_uInt16 >(
-                        bEffLong ? NF_KEY_EEC : NF_KEY_EC ) );
+                // Y after G (era) is replaced by E, also if we're switching to the
+                // other second known calendar for a locale.
+                bool bImplicitEC = (!sCalendar.isEmpty() &&
+                        rParent.GetLocaleData().doesSecondaryCalendarUseEC( sCalendar));
+                if (rParent.HasEra() || bImplicitEC)
+                {
+                    // If E or EE is the first format keyword, passing
+                    // bImplicitEC=true suppresses the superfluous calendar
+                    // modifier for this format. This does not help for
+                    // something like [~cal]DD/MM/EE but so far only YMD order
+                    // is used with such calendars. Live with the modifier if
+                    // other keywords precede this.
+                    rParent.UpdateCalendar( sCalendar, bImplicitEC);
+                    rParent.AddNfKeyword(
+                            sal::static_int_cast< sal_uInt16 >(
+                                bEffLong ? NF_KEY_EEC : NF_KEY_EC ) );
+                }
+                else
+                {
+                    rParent.UpdateCalendar( sCalendar );
+                    rParent.AddNfKeyword(
+                            sal::static_int_cast< sal_uInt16 >(
+                                bEffLong ? NF_KEY_YYYY : NF_KEY_YY ) );
+                }
             }
-            else
-                rParent.AddNfKeyword(
-                    sal::static_int_cast< sal_uInt16 >(
-                        bEffLong ? NF_KEY_YYYY : NF_KEY_YY ) );
             break;
         case XML_TOK_STYLE_ERA:
             rParent.UpdateCalendar( sCalendar );
@@ -2257,12 +2270,12 @@ void SvXMLNumFormatContext::AddColor( sal_uInt32 const nColor )
     }
 }
 
-void SvXMLNumFormatContext::UpdateCalendar( const OUString& rNewCalendar )
+void SvXMLNumFormatContext::UpdateCalendar( const OUString& rNewCalendar, bool bImplicitSecondaryCalendarEC )
 {
     if ( rNewCalendar != sCalendar )
     {
         sCalendar = rNewCalendar;
-        if ( !sCalendar.isEmpty() )
+        if ( !sCalendar.isEmpty() && !bImplicitSecondaryCalendarEC )
         {
             aFormatCode.append( "[~" );            // intro for calendar code
             aFormatCode.append( sCalendar );

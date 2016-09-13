@@ -186,7 +186,7 @@ public:
     void SetHasLongDoW(bool bSet)               { bHasLongDoW = bSet; }
     bool HasEra() const                         { return bHasEra; }
 
-    void UpdateCalendar( const OUString& rNewCalendar );
+    void UpdateCalendar( const OUString& rNewCalendar, bool bImplicitSecondaryCalendarEC = false );
 
     const LocaleDataWrapper& GetLocaleData() const;
 
