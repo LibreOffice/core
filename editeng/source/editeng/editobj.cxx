@@ -127,12 +127,12 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
     // this should ensure that the Items end up in the correct Pool!
     aParaAttribs.Set( rCopyFrom.GetParaAttribs() );
 
-    for (const auto & aAttrib : rCopyFrom.aAttribs)
+    for (const auto & aAttrib : rCopyFrom.maCharAttribs)
     {
         const XEditAttribute& rAttr = *aAttrib.get();
         XEditAttribute* pMyAttr = MakeXEditAttribute(
             rPoolToUse, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());
-        aAttribs.push_back(std::unique_ptr<XEditAttribute>(pMyAttr));
+        maCharAttribs.push_back(std::unique_ptr<XEditAttribute>(pMyAttr));
     }
 
     if ( rCopyFrom.GetWrongList() )
@@ -141,10 +141,10 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
 
 ContentInfo::~ContentInfo()
 {
-    XEditAttributesType::iterator it = aAttribs.begin(), itEnd = aAttribs.end();
+    XEditAttributesType::iterator it = maCharAttribs.begin(), itEnd = maCharAttribs.end();
     for (; it != itEnd; ++it)
         aParaAttribs.GetPool()->Remove(*(*it)->GetItem());
-    aAttribs.clear();
+    maCharAttribs.clear();
 }
 
 void ContentInfo::NormalizeString( svl::SharedStringPool& rPool )
@@ -172,12 +172,12 @@ void ContentInfo::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteString(pWriter, BAD_CAST(GetText().toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
     aParaAttribs.dumpAsXml(pWriter);
-    for (size_t i=0; i<aAttribs.size(); ++i)
+    for (size_t i=0; i<maCharAttribs.size(); ++i)
     {
         xmlTextWriterStartElement(pWriter, BAD_CAST("attribs"));
-        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("start"), "%d", aAttribs[i]->GetStart());
-        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("end"), "%d", aAttribs[i]->GetEnd());
-        aAttribs[i]->GetItem()->dumpAsXml(pWriter);
+        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("start"), "%d", maCharAttribs[i]->GetStart());
+        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("end"), "%d", maCharAttribs[i]->GetEnd());
+        maCharAttribs[i]->GetItem()->dumpAsXml(pWriter);
         xmlTextWriterEndElement(pWriter);
     }
     xmlTextWriterEndElement(pWriter);
@@ -731,7 +731,7 @@ void EditTextObjectImpl::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttr
 
     rLst.clear();
     const ContentInfo& rC = *aContents[nPara].get();
-    for (const auto & aAttrib : rC.aAttribs)
+    for (const auto & aAttrib : rC.maCharAttribs)
     {
         const XEditAttribute& rAttr = *aAttrib.get();
         EECharAttrib aEEAttr;
@@ -755,10 +755,10 @@ const SvxFieldItem* EditTextObjectImpl::GetField() const
         const ContentInfo& rC = *aContents[0].get();
         if (rC.GetText().getLength() == 1)
         {
-            size_t nAttribs = rC.aAttribs.size();
+            size_t nAttribs = rC.maCharAttribs.size();
             for (size_t nAttr = nAttribs; nAttr; )
             {
-                const XEditAttribute& rX = *rC.aAttribs[--nAttr].get();
+                const XEditAttribute& rX = *rC.maCharAttribs[--nAttr].get();
                 if (rX.GetItem()->Which() == EE_FEATURE_FIELD)
                     return static_cast<const SvxFieldItem*>(rX.GetItem());
             }
@@ -773,11 +773,11 @@ const SvxFieldData* EditTextObjectImpl::GetFieldData(sal_Int32 nPara, size_t nPo
         return nullptr;
 
     const ContentInfo& rC = *aContents[nPara].get();
-    if (nPos >= rC.aAttribs.size())
+    if (nPos >= rC.maCharAttribs.size())
         // URL position is out-of-bound.
         return nullptr;
 
-    ContentInfo::XEditAttributesType::const_iterator it = rC.aAttribs.begin(), itEnd = rC.aAttribs.end();
+    ContentInfo::XEditAttributesType::const_iterator it = rC.maCharAttribs.begin(), itEnd = rC.maCharAttribs.end();
     size_t nCurPos = 0;
     for (; it != itEnd; ++it)
     {
@@ -808,10 +808,10 @@ bool EditTextObjectImpl::HasField( sal_Int32 nType ) const
     for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
     {
         const ContentInfo& rC = *aContents[nPara].get();
-        size_t nAttrs = rC.aAttribs.size();
+        size_t nAttrs = rC.maCharAttribs.size();
         for (size_t nAttr = 0; nAttr < nAttrs; ++nAttr)
         {
-            const XEditAttribute& rAttr = *rC.aAttribs[nAttr].get();
+            const XEditAttribute& rAttr = *rC.maCharAttribs[nAttr].get();
             if (rAttr.GetItem()->Which() != EE_FEATURE_FIELD)
                 continue;
 
@@ -841,13 +841,13 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
     {
         ContentInfo& rC = *aContents[--nPara].get();
 
-        for (size_t nAttr = rC.aAttribs.size(); nAttr; )
+        for (size_t nAttr = rC.maCharAttribs.size(); nAttr; )
         {
-            XEditAttribute& rAttr = *rC.aAttribs[--nAttr].get();
+            XEditAttribute& rAttr = *rC.maCharAttribs[--nAttr].get();
             if ( !_nWhich || (rAttr.GetItem()->Which() == _nWhich) )
             {
                 pPool->Remove(*rAttr.GetItem());
-                rC.aAttribs.erase(rC.aAttribs.begin()+nAttr);
+                rC.maCharAttribs.erase(rC.maCharAttribs.begin()+nAttr);
                 bChanged = true;
             }
         }
@@ -899,7 +899,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
         SectionBordersType& rBorders = aParaBorders[nPara];
         rBorders.push_back(0);
         rBorders.push_back(rC.GetText().getLength());
-        for (const auto & aAttrib : rC.aAttribs)
+        for (const auto & aAttrib : rC.maCharAttribs)
         {
             const XEditAttribute& rAttr = *aAttrib.get();
             const SfxPoolItem* pItem = rAttr.GetItem();
@@ -965,7 +965,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
             return;
         }
 
-        for (const auto & aAttrib : rC.aAttribs)
+        for (const auto & aAttrib : rC.maCharAttribs)
         {
             const XEditAttribute& rXAttr = *aAttrib.get();
             const SfxPoolItem* pItem = rXAttr.GetItem();
@@ -1131,9 +1131,9 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
                 bSymbolPara = true;
             }
         }
-        for (size_t nA = 0; nA < rC.aAttribs.size(); ++nA)
+        for (size_t nA = 0; nA < rC.maCharAttribs.size(); ++nA)
         {
-            const XEditAttribute& rAttr = *rC.aAttribs[nA].get();
+            const XEditAttribute& rAttr = *rC.maCharAttribs[nA].get();
 
             if (rAttr.GetItem()->Which() == EE_CHAR_FONTINFO)
             {
@@ -1179,7 +1179,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         {
             for ( sal_uInt16 nChar = 0; nChar < rC.GetText().getLength(); nChar++ )
             {
-                const ContentInfo::XEditAttributesType& rAttribs = rC.aAttribs;
+                const ContentInfo::XEditAttributesType& rAttribs = rC.maCharAttribs;
                 if ( std::none_of(rAttribs.begin(), rAttribs.end(),
                                   FindAttribByChar(EE_CHAR_FONTINFO, nChar)) )
                 {
@@ -1207,7 +1207,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         rC.GetParaAttribs().Store( rOStream );
 
         // The number of attributes ...
-        size_t nAttribs = rC.aAttribs.size();
+        size_t nAttribs = rC.maCharAttribs.size();
         rOStream.WriteUInt16( nAttribs );
 
         // And the individual attributes
@@ -1215,7 +1215,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         // Which = 2; Surregat = 2; Start = 2; End = 2;
         for (size_t nAttr = 0; nAttr < nAttribs; ++nAttr)
         {
-            const XEditAttribute& rX = *rC.aAttribs[nAttr].get();
+            const XEditAttribute& rX = *rC.maCharAttribs[nAttr].get();
 
             rOStream.WriteUInt16( rX.GetItem()->Which() );
             GetPool()->StoreSurrogate(rOStream, rX.GetItem());
@@ -1355,7 +1355,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 else
                 {
                     XEditAttribute* pAttr = new XEditAttribute( *pItem, nStart, nEnd );
-                    pC->aAttribs.push_back(std::unique_ptr<XEditAttribute>(pAttr));
+                    pC->maCharAttribs.push_back(std::unique_ptr<XEditAttribute>(pAttr));
 
                     if ( ( _nWhich >= EE_FEATURE_START ) && ( _nWhich <= EE_FEATURE_END ) )
                     {
@@ -1382,9 +1382,9 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
             }
         }
 
-        for (size_t nAttr = pC->aAttribs.size(); nAttr; )
+        for (size_t nAttr = pC->maCharAttribs.size(); nAttr; )
         {
-            const XEditAttribute& rAttr = *pC->aAttribs[--nAttr].get();
+            const XEditAttribute& rAttr = *pC->maCharAttribs[--nAttr].get();
             if ( rAttr.GetItem()->Which() == EE_CHAR_FONTINFO )
             {
                 const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(*rAttr.GetItem());
@@ -1408,8 +1408,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                     XEditAttribute* pNewAttr = CreateAttrib(aNewFontItem, rAttr.GetStart(), rAttr.GetEnd());
 
                     pPool->Remove(*rAttr.GetItem());
-                    pC->aAttribs.erase(pC->aAttribs.begin()+nAttr);
-                    pC->aAttribs.insert(pC->aAttribs.begin()+nAttr, std::unique_ptr<XEditAttribute>(pNewAttr));
+                    pC->maCharAttribs[nAttr] = std::unique_ptr<XEditAttribute>(pNewAttr);
 
                     for ( sal_uInt16 nChar = pNewAttr->GetStart(); nChar < pNewAttr->GetEnd(); nChar++ )
                     {
@@ -1440,7 +1439,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
                 for ( sal_uInt16 nChar = 0; nChar < pC->GetText().getLength(); nChar++ )
                 {
-                    const ContentInfo::XEditAttributesType& rAttribs = pC->aAttribs;
+                    const ContentInfo::XEditAttributesType& rAttribs = pC->maCharAttribs;
                     if ( std::none_of(rAttribs.begin(), rAttribs.end(),
                                       FindAttribByChar(EE_CHAR_FONTINFO, nChar)) )
                     {

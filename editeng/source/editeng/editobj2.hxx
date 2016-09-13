@@ -48,8 +48,8 @@ class XEditAttribute
 {
 private:
     const SfxPoolItem*  pItem;
-    sal_uInt16              nStart;
-    sal_uInt16              nEnd;
+    sal_uInt16          nStart;
+    sal_uInt16          nEnd;
 
                         XEditAttribute( const XEditAttribute& rCopyFrom ) = delete;
 
@@ -57,7 +57,7 @@ public:
     XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
     ~XEditAttribute();
 
-    const SfxPoolItem*  GetItem() const             { return pItem; }
+    const SfxPoolItem*      GetItem() const             { return pItem; }
 
     sal_uInt16&             GetStart()                  { return nStart; }
     sal_uInt16&             GetEnd()                    { return nEnd; }
@@ -74,7 +74,7 @@ public:
 struct XParaPortion
 {
     long                nHeight;
-    sal_uInt16              nFirstLineOffset;
+    sal_uInt16          nFirstLineOffset;
 
     EditLineList        aLines;
     TextPortionList     aTextPortions;
@@ -117,7 +117,7 @@ private:
     svl::SharedString   maText;
     OUString            aStyle;
 
-    XEditAttributesType aAttribs;
+    XEditAttributesType maCharAttribs;
     SfxStyleFamily      eFamily;
     SfxItemSet          aParaAttribs;
     std::unique_ptr<WrongList>
@@ -138,8 +138,8 @@ public:
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
-    const XEditAttributesType& GetAttribs() const { return aAttribs; }
-    XEditAttributesType& GetAttribs() { return aAttribs; }
+    const XEditAttributesType& GetCharAttribs() const { return maCharAttribs; }
+    XEditAttributesType& GetCharAttribs() { return maCharAttribs; }
 
     const OUString&     GetStyle()          const   { return aStyle; }
     const SfxItemSet&   GetParaAttribs()    const   { return aParaAttribs; }
