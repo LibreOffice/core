@@ -481,6 +481,9 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     SAL_INFO("vcl.schedule", "Enter ImplYield: " << (i_bWait ? "wait" : "no wait") <<
              ": " << (i_bAllEvents ? "all events" : "one event") << ": " << nReleased);
 
+    if ( i_bWait && Scheduler::HasPendingEvents() )
+        i_bWait = false;
+
     // TODO: there's a data race here on WNT only because ImplYield may be
     // called without SolarMutex; if we can get rid of LazyDelete (with VclPtr)
     // then the only remaining use of mnDispatchLevel is in OSX specific code
