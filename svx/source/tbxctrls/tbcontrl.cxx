@@ -146,7 +146,7 @@ public:
 
 protected:
     /// Calculate the optimal width of the dropdown.  Very expensive operation, triggers lots of font measurement.
-    DECL_DLLPRIVATE_LINK_TYPED(CalcOptimalExtraUserWidth, VclWindowEvent&, void);
+    DECL_LINK_TYPED(CalcOptimalExtraUserWidth, VclWindowEvent&, void);
 
     virtual void    Select() override;
 
@@ -201,7 +201,7 @@ private:
                                          ".uno:CharEndPreviewFontName",
                                          aArgs );
     }
-    DECL_DLLPRIVATE_LINK_TYPED( CheckAndMarkUnknownFont, VclWindowEvent&, void );
+    DECL_LINK_TYPED( CheckAndMarkUnknownFont, VclWindowEvent&, void );
 
     void            SetOptimalSize();
 

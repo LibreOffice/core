@@ -46,7 +46,7 @@ class SdrObject;
 // eingefuegt worden sind und wann diese entfernt wurden
 
 
-class SVX_DLLPRIVATE FmFormPageImpl
+class FmFormPageImpl
 {
     css::uno::Reference< css::form::XForm >               xCurrentForm;
     css::uno::Reference< css::form::XForms >              m_xForms;

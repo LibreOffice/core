@@ -22,17 +22,16 @@
 
 #include <basic/sbxprop.hxx>
 #include <basic/sbdef.hxx>
-#include <basic/basicdllapi.h>
 
 class SbModule;
 
-class BASIC_DLLPUBLIC SbProperty : public SbxProperty
+class SbProperty : public SbxProperty
 {
     friend class SbiFactory;
     friend class SbModule;
     friend class SbProcedureProperty;
     SbModule* pMod;
-    BASIC_DLLPRIVATE SbProperty( const OUString&, SbxDataType, SbModule* );
+    SbProperty( const OUString&, SbxDataType, SbModule* );
     virtual ~SbProperty() override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_BASICPROP,1);
@@ -41,7 +40,7 @@ public:
 
 typedef tools::SvRef<SbProperty> SbPropertyRef;
 
-class BASIC_DLLPUBLIC SbProcedureProperty : public SbxProperty
+class SbProcedureProperty : public SbxProperty
 {
     bool mbSet;     // Flag for set command
 

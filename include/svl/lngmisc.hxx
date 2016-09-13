@@ -43,7 +43,7 @@ namespace linguistic
         return cChar < static_cast<sal_Unicode>(' ');
     }
 
-    SVL_DLLPRIVATE sal_Int32 GetNumControlChars( const OUString &rTxt );
+    sal_Int32 GetNumControlChars( const OUString &rTxt );
 
     SVL_DLLPUBLIC bool RemoveHyphens(OUString &rTxt);
     SVL_DLLPUBLIC bool RemoveControlChars(OUString &rTxt);

@@ -36,14 +36,14 @@ class SfxMacroTabPage_Impl;
 class SfxMacroTabPage : public SfxTabPage
 {
     SvxMacroTableDtor           aTbl;
-    DECL_DLLPRIVATE_LINK_TYPED( SelectEvent_Impl, SvTreeListBox*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( SelectGroup_Impl, SvTreeListBox*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( SelectMacro_Impl, SvTreeListBox*, void );
+    DECL_LINK_TYPED( SelectEvent_Impl, SvTreeListBox*, void );
+    DECL_LINK_TYPED( SelectGroup_Impl, SvTreeListBox*, void );
+    DECL_LINK_TYPED( SelectMacro_Impl, SvTreeListBox*, void );
 
-    DECL_DLLPRIVATE_LINK_TYPED( AssignDeleteHdl_Impl, SvTreeListBox*, bool );
-    DECL_DLLPRIVATE_LINK_TYPED( AssignDeleteClickHdl_Impl, Button *, void );
+    DECL_LINK_TYPED( AssignDeleteHdl_Impl, SvTreeListBox*, bool );
+    DECL_LINK_TYPED( AssignDeleteClickHdl_Impl, Button *, void );
     bool                        AssignDeleteHdl(Control *);
-    DECL_DLLPRIVATE_LINK_TYPED( TimeOut_Impl, Idle*, void );
+    DECL_LINK_TYPED( TimeOut_Impl, Idle*, void );
 
 protected:
     std::unique_ptr<SfxMacroTabPage_Impl>       mpImpl;

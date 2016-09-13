@@ -42,7 +42,7 @@ namespace sdr { namespace contact {
 
     //= ViewContactOfUnoControl
 
-    class SVX_DLLPRIVATE ViewContactOfUnoControl : public ViewContactOfSdrObj
+    class ViewContactOfUnoControl : public ViewContactOfSdrObj
     {
     public:
         // access to SdrObject

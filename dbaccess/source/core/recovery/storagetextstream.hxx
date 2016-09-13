@@ -29,7 +29,7 @@ namespace dbaccess
 
     // StorageTextStream
     struct StorageTextOutputStream_Data;
-    class DBACCESS_DLLPRIVATE StorageTextOutputStream : public StorageOutputStream
+    class StorageTextOutputStream : public StorageOutputStream
     {
     public:
         StorageTextOutputStream(

@@ -46,7 +46,7 @@ class ConfigColorScheme :
 {
 public:
     explicit ConfigColorScheme( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    SAL_DLLPRIVATE virtual ~ConfigColorScheme() override;
+    virtual ~ConfigColorScheme() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
@@ -60,15 +60,15 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // ____ ConfigItemListener ____
-    SAL_DLLPRIVATE void notify( const OUString & rPropertyName );
+    void notify( const OUString & rPropertyName );
 
 protected:
     // ____ XColorScheme ____
-    SAL_DLLPRIVATE virtual ::sal_Int32 SAL_CALL getColorByIndex( ::sal_Int32 nIndex )
+    virtual ::sal_Int32 SAL_CALL getColorByIndex( ::sal_Int32 nIndex )
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    SAL_DLLPRIVATE void retrieveConfigColors();
+    void retrieveConfigColors();
 
     // member variables
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;

@@ -132,15 +132,15 @@ class ExtMgrDialog : public ModelessDialog,
 
     bool removeExtensionWarn( const OUString &rExtensionTitle ) const;
 
-    DECL_DLLPRIVATE_LINK_TYPED( HandleAddBtn, Button*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( HandleUpdateBtn, Button*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( HandleCancelBtn, Button*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( HandleCloseBtn, Button*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( HandleExtTypeCbx, Button*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( HandleHyperlink, FixedHyperlink&, void );
-    DECL_DLLPRIVATE_LINK_TYPED(TimeOutHdl, Idle *, void);
-    DECL_DLLPRIVATE_LINK_TYPED( startProgress, void *, void );
-    DECL_DLLPRIVATE_LINK_TYPED( Restart, void *, void );
+    DECL_LINK_TYPED( HandleAddBtn, Button*, void );
+    DECL_LINK_TYPED( HandleUpdateBtn, Button*, void );
+    DECL_LINK_TYPED( HandleCancelBtn, Button*, void );
+    DECL_LINK_TYPED( HandleCloseBtn, Button*, void );
+    DECL_LINK_TYPED( HandleExtTypeCbx, Button*, void );
+    DECL_LINK_TYPED( HandleHyperlink, FixedHyperlink&, void );
+    DECL_LINK_TYPED(TimeOutHdl, Idle *, void);
+    DECL_LINK_TYPED( startProgress, void *, void );
+    DECL_STATIC_LINK_TYPED( ExtMgrDialog, Restart, void *, void );
 
 public:
                     ExtMgrDialog( vcl::Window * pParent, TheExtensionManager *pManager, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
@@ -199,12 +199,12 @@ class UpdateRequiredDialog : public ModalDialog,
 
     css::uno::Reference< css::task::XAbortChannel > m_xAbortChannel;
 
-    DECL_DLLPRIVATE_LINK_TYPED( HandleUpdateBtn, Button*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( HandleCloseBtn, Button*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( HandleCancelBtn, Button*, void );
-    DECL_DLLPRIVATE_LINK_TYPED(TimeOutHdl, Idle *, void);
-    DECL_DLLPRIVATE_LINK_TYPED( startProgress, void *, void );
-    DECL_DLLPRIVATE_LINK_TYPED( HandleHyperlink, FixedHyperlink&, void );
+    DECL_LINK_TYPED( HandleUpdateBtn, Button*, void );
+    DECL_LINK_TYPED( HandleCloseBtn, Button*, void );
+    DECL_LINK_TYPED( HandleCancelBtn, Button*, void );
+    DECL_LINK_TYPED(TimeOutHdl, Idle *, void);
+    DECL_LINK_TYPED( startProgress, void *, void );
+    DECL_LINK_TYPED( HandleHyperlink, FixedHyperlink&, void );
 
     static bool     isEnabled( const css::uno::Reference< css::deployment::XPackage > &xPackage );
     static bool     checkDependencies( const css::uno::Reference< css::deployment::XPackage > &xPackage );

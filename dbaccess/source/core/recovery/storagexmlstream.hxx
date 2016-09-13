@@ -32,7 +32,7 @@ namespace dbaccess
 
     // StorageXMLOutputStream
     struct StorageXMLOutputStream_Data;
-    class DBACCESS_DLLPRIVATE StorageXMLOutputStream : public StorageOutputStream
+    class StorageXMLOutputStream : public StorageOutputStream
     {
     public:
         StorageXMLOutputStream(
@@ -63,7 +63,7 @@ namespace dbaccess
 
     // StorageXMLInputStream
     struct StorageXMLInputStream_Data;
-    class DBACCESS_DLLPRIVATE StorageXMLInputStream : public StorageInputStream
+    class StorageXMLInputStream : public StorageInputStream
     {
     public:
         StorageXMLInputStream(

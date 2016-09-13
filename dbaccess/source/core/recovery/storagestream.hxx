@@ -31,7 +31,7 @@ namespace dbaccess
     // StorageOutputStream
     /** convenience wrapper around a stream living in a storage
     */
-    class DBACCESS_DLLPRIVATE StorageOutputStream
+    class StorageOutputStream
     {
     public:
         StorageOutputStream(
@@ -56,7 +56,7 @@ namespace dbaccess
     // StorageInputStream
     /** convenience wrapper around a stream living in a storage
     */
-    class DBACCESS_DLLPRIVATE StorageInputStream
+    class StorageInputStream
     {
     public:
         StorageInputStream(

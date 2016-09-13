@@ -165,7 +165,7 @@ namespace dbaccess
     }
 
     // SettingsExportContext
-    class DBACCESS_DLLPRIVATE SettingsExportContext : public ::xmloff::XMLSettingsExportContext
+    class SettingsExportContext : public ::xmloff::XMLSettingsExportContext
     {
     public:
         SettingsExportContext( const Reference<XComponentContext>& i_rContext, const StorageXMLOutputStream& i_rDelegator )
@@ -238,7 +238,7 @@ namespace dbaccess
     // SettingsDocumentHandler
     typedef ::cppu::WeakImplHelper<   XDocumentHandler
                                   >   SettingsDocumentHandler_Base;
-    class DBACCESS_DLLPRIVATE SettingsDocumentHandler : public SettingsDocumentHandler_Base
+    class SettingsDocumentHandler : public SettingsDocumentHandler_Base
     {
     public:
         SettingsDocumentHandler()

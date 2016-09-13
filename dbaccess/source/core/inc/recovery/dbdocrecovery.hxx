@@ -34,7 +34,7 @@ namespace dbaccess
 
     // DatabaseDocumentRecovery
     struct DatabaseDocumentRecovery_Data;
-    class DBACCESS_DLLPRIVATE DatabaseDocumentRecovery
+    class DatabaseDocumentRecovery
     {
     public:
         DatabaseDocumentRecovery(

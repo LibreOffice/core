@@ -493,7 +493,7 @@ namespace sdr { namespace contact {
                                         ,   XModeChangeListener
                                         >   ViewObjectContactOfUnoControl_Impl_Base;
 
-    class SVX_DLLPRIVATE ViewObjectContactOfUnoControl_Impl:
+    class ViewObjectContactOfUnoControl_Impl:
         public ViewObjectContactOfUnoControl_Impl_Base
     {
     private:

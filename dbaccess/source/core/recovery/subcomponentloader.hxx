@@ -39,7 +39,7 @@ namespace dbaccess
     /** is a helper class which loads/opens a given sub component as soon as the main application
         window becomes visible.
     */
-    class DBACCESS_DLLPRIVATE SubComponentLoader : public SubComponentLoader_Base
+    class SubComponentLoader : public SubComponentLoader_Base
     {
     public:
         SubComponentLoader(

@@ -43,7 +43,7 @@ namespace ooo
     namespace vba
     {
 
-        VBAHELPER_DLLPRIVATE inline css::uno::Reference< css::lang::XMultiServiceFactory > getVBAServiceFactory( SfxObjectShell* pShell )
+        inline css::uno::Reference< css::lang::XMultiServiceFactory > getVBAServiceFactory( SfxObjectShell* pShell )
         {
             css::uno::Any aUnoVar;
             if ( !pShell || ! pShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aUnoVar ) )
@@ -52,7 +52,7 @@ namespace ooo
             return xVBAFactory;
         }
 
-        VBAHELPER_DLLPRIVATE inline css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell* pShell,  const sal_Char* _pAsciiName, const css::uno::Sequence< css::uno::Any >& aArgs ) throw (css::uno::Exception)
+        inline css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell* pShell,  const sal_Char* _pAsciiName, const css::uno::Sequence< css::uno::Any >& aArgs ) throw (css::uno::Exception)
         {
             OSL_PRECOND( pShell, "createVBAUnoAPIService: no shell!" );
             OUString sVarName( OUString::createFromAscii( _pAsciiName ) );
@@ -61,7 +61,7 @@ namespace ooo
         }
 
 
-        VBAHELPER_DLLPRIVATE inline bool isAlienDoc( SfxObjectShell& rDocShell, const char* pMimeType )
+        inline bool isAlienDoc( SfxObjectShell& rDocShell, const char* pMimeType )
         {
             bool bRes( false );
             const SfxMedium *pMedium = rDocShell.GetMedium();
@@ -70,10 +70,10 @@ namespace ooo
                 bRes = pFilt->GetMimeType().equalsAscii( pMimeType );
             return bRes;
         }
-        VBAHELPER_DLLPRIVATE inline bool isAlienExcelDoc( SfxObjectShell& rDocShell ) { return isAlienDoc( rDocShell, "application/vnd.ms-excel" ); }
+        inline bool isAlienExcelDoc( SfxObjectShell& rDocShell ) { return isAlienDoc( rDocShell, "application/vnd.ms-excel" ); }
         //VBAHELPER_DLLPRIVATE inline bool isAlienWordDoc( SfxObjectShell& rDocShell ) { return isAlienDoc( rDocShell, "application/vnd.ms-word" ); }
         // word seems to return an erroneous mime type :-/ "application/msword"  not consistent with the excel one
-        VBAHELPER_DLLPRIVATE inline bool isAlienWordDoc( SfxObjectShell& rDocShell ) { return isAlienDoc( rDocShell, "application/msword" ); }
+        inline bool isAlienWordDoc( SfxObjectShell& rDocShell ) { return isAlienDoc( rDocShell, "application/msword" ); }
 
     } // openoffice
 } // org

@@ -201,7 +201,7 @@ namespace dbaccess
     }
 
     // DatabaseDocumentRecovery_Data
-    struct DBACCESS_DLLPRIVATE DatabaseDocumentRecovery_Data
+    struct DatabaseDocumentRecovery_Data
     {
         const Reference<XComponentContext> aContext;
 

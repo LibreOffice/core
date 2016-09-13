@@ -43,7 +43,7 @@ namespace dbaccess
     using ::com::sun::star::lang::XComponent;
 
     // SubComponentLoader
-    struct DBACCESS_DLLPRIVATE SubComponentLoader_Data
+    struct SubComponentLoader_Data
     {
         const Reference< XCommandProcessor >    xDocDefCommands;
         const Reference< XComponent >           xNonDocComponent;

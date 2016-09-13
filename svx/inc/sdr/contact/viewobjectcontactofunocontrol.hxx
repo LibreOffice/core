@@ -46,7 +46,7 @@ namespace sdr { namespace contact {
     //= ViewObjectContactOfUnoControl
 
     class ViewObjectContactOfUnoControl_Impl;
-    class SVX_DLLPRIVATE ViewObjectContactOfUnoControl : public ViewObjectContactOfSdrObj
+    class ViewObjectContactOfUnoControl : public ViewObjectContactOfSdrObj
     {
     protected:
         ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >    m_pImpl;
@@ -104,7 +104,7 @@ namespace sdr { namespace contact {
         ViewObjectContactOfUnoControl& operator=( const ViewObjectContactOfUnoControl& ) = delete;
     };
 
-    class SVX_DLLPRIVATE UnoControlPrintOrPreviewContact : public ViewObjectContactOfUnoControl
+    class UnoControlPrintOrPreviewContact : public ViewObjectContactOfUnoControl
     {
     public:
         UnoControlPrintOrPreviewContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact );

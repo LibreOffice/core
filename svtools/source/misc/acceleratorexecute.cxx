@@ -42,7 +42,7 @@
 namespace svt
 {
 
-class SVT_DLLPRIVATE AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEventListener>
+class AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEventListener>
 {
     private:
         css::uno::Reference<css::lang::XComponent> m_xFrame;
@@ -74,11 +74,11 @@ class SVT_DLLPRIVATE AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEv
         /** @short  allow creation of instances of this class
                     by using our factory only!
          */
-        SVT_DLLPRIVATE AsyncAccelExec(const css::uno::Reference<css::lang::XComponent>& xFrame,
+        AsyncAccelExec(const css::uno::Reference<css::lang::XComponent>& xFrame,
                                       const css::uno::Reference< css::frame::XDispatch >& xDispatch,
                                       const css::util::URL& rURL);
 
-        DECL_DLLPRIVATE_LINK_TYPED(impl_ts_asyncCallback, LinkParamNone*, void);
+        DECL_LINK_TYPED(impl_ts_asyncCallback, LinkParamNone*, void);
 };
 
 

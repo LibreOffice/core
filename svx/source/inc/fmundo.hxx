@@ -120,7 +120,7 @@ public:
 };
 
 
-class SVX_DLLPRIVATE FmXUndoEnvironment
+class FmXUndoEnvironment
     : public ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
                                     ,   css::container::XContainerListener
                                     ,   css::util::XModifyListener

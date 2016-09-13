@@ -30,7 +30,7 @@
 
 namespace testtools { namespace bridgetest {
 
-class SAL_DLLPRIVATE CurrentContextChecker :
+class CurrentContextChecker :
     public ::osl::DebugBase< CurrentContextChecker >,
     public ::cppu::WeakImplHelper<
         ::test::testtools::bridgetest::XCurrentContextChecker >

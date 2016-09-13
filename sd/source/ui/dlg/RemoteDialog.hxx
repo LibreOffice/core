@@ -28,7 +28,7 @@ private:
     VclPtr<CloseButton>    m_pButtonClose;
     VclPtr<ClientBox>      m_pClientBox;
 
-    DECL_DLLPRIVATE_LINK_TYPED( HandleConnectButton, Button*, void );
+    DECL_LINK_TYPED( HandleConnectButton, Button*, void );
     DECL_LINK_TYPED( CloseHdl, SystemWindow&, void );
     DECL_LINK_TYPED( CloseClickHdl, Button*, void );
 public:

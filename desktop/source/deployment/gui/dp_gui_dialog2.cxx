@@ -128,11 +128,11 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     MENU_COMMAND    ShowPopupMenu( const Point &rPos, const long nPos );
 
 
-    DECL_DLLPRIVATE_LINK_TYPED( ScrollHdl, ScrollBar*, void );
+    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
 
-    DECL_DLLPRIVATE_LINK_TYPED( HandleOptionsBtn, Button*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( HandleEnableBtn, Button*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( HandleRemoveBtn, Button*, void );
+    DECL_LINK_TYPED( HandleOptionsBtn, Button*, void );
+    DECL_LINK_TYPED( HandleEnableBtn, Button*, void );
+    DECL_LINK_TYPED( HandleRemoveBtn, Button*, void );
 
 public:
     explicit ExtBoxWithBtns_Impl(vcl::Window* pParent);
@@ -1140,7 +1140,7 @@ bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
         return true;
 }
 
-IMPL_LINK_NOARG_TYPED(ExtMgrDialog, Restart, void*, void)
+IMPL_STATIC_LINK_NOARG_TYPED(ExtMgrDialog, Restart, void*, void)
 {
     SolarMutexGuard aGuard;
     ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),

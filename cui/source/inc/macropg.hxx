@@ -118,7 +118,7 @@ public:
     SvxMacroAssignSingleTabDialog(vcl::Window* pParent, const SfxItemSet& rOptionsSet);
 
 private:
-    DECL_DLLPRIVATE_LINK_TYPED( OKHdl_Impl, Button *, void );
+    DECL_LINK_TYPED( OKHdl_Impl, Button *, void );
 };
 
 

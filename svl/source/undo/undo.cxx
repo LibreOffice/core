@@ -220,7 +220,7 @@ void SfxUndoActions::Insert( SfxUndoAction* i_action, size_t i_pos )
 
 typedef ::std::vector< SfxUndoListener* >   UndoListeners;
 
-struct SVL_DLLPRIVATE SfxUndoManager_Data
+struct SfxUndoManager_Data
 {
     ::osl::Mutex    aMutex;
     SfxUndoArray*   pUndoArray;
@@ -260,7 +260,7 @@ struct SVL_DLLPRIVATE SfxUndoManager_Data
 
 namespace svl { namespace undo { namespace impl
 {
-    class SVL_DLLPRIVATE LockGuard
+    class LockGuard
     {
     public:
         explicit LockGuard( SfxUndoManager& i_manager )
@@ -281,7 +281,7 @@ namespace svl { namespace undo { namespace impl
     typedef void ( SfxUndoListener::*UndoListenerVoidMethod )();
     typedef void ( SfxUndoListener::*UndoListenerStringMethod )( const OUString& );
 
-    struct SVL_DLLPRIVATE NotifyUndoListener : public ::std::unary_function< SfxUndoListener*, void >
+    struct NotifyUndoListener : public ::std::unary_function< SfxUndoListener*, void >
     {
         explicit NotifyUndoListener( UndoListenerVoidMethod i_notificationMethod )
             :m_notificationMethod( i_notificationMethod )
@@ -321,7 +321,7 @@ namespace svl { namespace undo { namespace impl
         OUString                    m_sActionComment;
     };
 
-    class SVL_DLLPRIVATE UndoManagerGuard
+    class UndoManagerGuard
     {
     public:
         explicit UndoManagerGuard( SfxUndoManager_Data& i_managerData )

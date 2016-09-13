@@ -57,7 +57,7 @@ class SwDrawModel;
 
 // initialize DrawModel (in form of a SwDrawModel) and DocShell (in form of a SwDocShell)
 // as needed, one or both parameters may be zero
-void SAL_DLLPRIVATE InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawModel);
+void InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawModel);
 
 class SW_DLLPUBLIC SwDocShell
     : public SfxObjectShell

@@ -125,8 +125,8 @@ class ClientBox : public Control
     bool HandleCursorKey( sal_uInt16 nKeyCode );
     void DeleteRemoved();
 
-    DECL_DLLPRIVATE_LINK_TYPED( ScrollHdl, ScrollBar*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( DeauthoriseHdl, Button*, void );
+    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
+    DECL_LINK_TYPED( DeauthoriseHdl, Button*, void );
 
 public:
     ClientBox( vcl::Window* pParent, WinBits nStyle );

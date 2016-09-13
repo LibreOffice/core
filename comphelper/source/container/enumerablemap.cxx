@@ -148,8 +148,7 @@ namespace comphelper
                                                 ,   XServiceInfo
                                                 > Map_IFace;
 
-    class COMPHELPER_DLLPRIVATE EnumerableMap :public Map_IFace
-                                    ,public ComponentBase
+    class EnumerableMap: public Map_IFace, public ComponentBase
     {
     protected:
         EnumerableMap();
