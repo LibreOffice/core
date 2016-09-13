@@ -167,14 +167,14 @@ SwPrintUIOptions::SwPrintUIOptions(
         return;
     }
 
-    // check if CTL is enabled
+    // check if either CJK or CTL is enabled
     SvtLanguageOptions aLangOpt;
-    bool bCTL = aLangOpt.IsCTLFontEnabled();
+    bool bRTL = aLangOpt.IsCJKFontEnabled() || aLangOpt.IsCTLFontEnabled();
 
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
-    const int nCTLOpts = bCTL ? 1 : 0;
-    const int nNumProps = nCTLOpts + (bWeb ? 15 : 21);
+    const int nRTLOpts = bRTL ? 1 : 0;
+    const int nNumProps = nRTLOpts + (bWeb ? 15 : 21);
     m_aUIProperties.resize( nNumProps );
     int nIdx = 0;
 
@@ -368,7 +368,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                         bDefaultVal,
                                                         aPageSetOpt);
 
-    if (bCTL)
+    if (bRTL)
     {
         // create a bool option for brochure RTL dependent on brochure
         uno::Sequence< OUString > aBRTLChoices( 2 );
