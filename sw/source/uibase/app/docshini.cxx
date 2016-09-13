@@ -492,6 +492,9 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
 {
     bool bRet = false;
 
+    comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+    rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+
     // If this is an ODF file being loaded, then by default, use legacy processing
     // for tdf#99729 (if required, it will be overriden in *::ReadUserDataSequence())
     if (IsOwnStorageFormat(rMedium))
