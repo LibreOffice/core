@@ -221,7 +221,6 @@ public:
     virtual Pointer GetPointer() const;
     bool IsHdlHit(const Point& rPnt) const;
 
-    // #97016# II
     virtual bool IsFocusHdl() const;
 
     void SetMoveOutside( bool bMoveOutside );
@@ -438,7 +437,6 @@ public:
     ~SdrHdlList();
     void Clear();
 
-    // #97016# II
     void TravelFocusHdl(bool bForward);
     SdrHdl* GetFocusHdl() const;
     void SetFocusHdl(SdrHdl* pNew);
