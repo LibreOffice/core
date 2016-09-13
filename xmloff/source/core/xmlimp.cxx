@@ -775,9 +775,15 @@ rName
 )
     throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
-    sal_uInt16 nCount = maContexts.size();
-    SAL_WARN_IF( nCount == 0, "xmloff.core", "SvXMLImport::endElement: no context left" );
-    if( nCount > 0 )
+    auto const nCount = maContexts.size();
+    if (nCount == 0)
+    {
+        SAL_WARN("xmloff.core", "SvXMLImport::endElement: no context left");
+        return;
+    }
+
+    SvXMLNamespaceMap * pRewindMap(nullptr);
+
     {
         // Get topmost context and remove it from the stack.
         SvXMLImportContextRef xContext = maContexts.back();
@@ -794,16 +800,16 @@ rName
 
         // Call a EndElement at the current context.
         xContext->EndElement();
-
         // Get a namespace map to rewind.
-        SvXMLNamespaceMap *pRewindMap = xContext->TakeRewindMap();
+        pRewindMap = xContext->TakeRewindMap();
+        // note: delete xContext *before* rewinding namespace map!
+    }
 
-        // Rewind a namespace map.
-        if( pRewindMap )
-        {
-            delete mpNamespaceMap;
-            mpNamespaceMap = pRewindMap;
-        }
+    // Rewind a namespace map.
+    if (pRewindMap)
+    {
+        delete mpNamespaceMap;
+        mpNamespaceMap = pRewindMap;
     }
 }
 
