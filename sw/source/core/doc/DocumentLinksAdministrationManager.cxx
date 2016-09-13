@@ -201,12 +201,6 @@ void DocumentLinksAdministrationManager::UpdateLinks()
 {
     if (!m_rDoc.GetDocShell())
         return;
-    sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode(true);
-    sal_uInt16 nUpdateDocMode = m_rDoc.GetDocShell()->GetUpdateDocMode();
-    if (nLinkMode == NEVER && nUpdateDocMode != document::UpdateDocMode::FULL_UPDATE)
-        return;
-    if (GetLinkManager().GetLinks().empty())
-        return;
     SfxObjectCreateMode eMode = m_rDoc.GetDocShell()->GetCreateMode();
     if (eMode == SfxObjectCreateMode::INTERNAL)
         return;
@@ -215,6 +209,12 @@ void DocumentLinksAdministrationManager::UpdateLinks()
     if (eMode == SfxObjectCreateMode::PREVIEW)
         return;
     if (m_rDoc.GetDocShell()->IsPreview())
+        return;
+    if (GetLinkManager().GetLinks().empty())
+        return;
+    sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode(true);
+    sal_uInt16 nUpdateDocMode = m_rDoc.GetDocShell()->GetUpdateDocMode();
+    if (nLinkMode == NEVER && nUpdateDocMode != document::UpdateDocMode::FULL_UPDATE)
         return;
 
     bool bAskUpdate = nLinkMode == MANUAL;
@@ -234,14 +234,31 @@ void DocumentLinksAdministrationManager::UpdateLinks()
             bAskUpdate = true;
         }
     }
-    if( bUpdate )
+    SfxObjectShell* pShell = GetLinkManager().GetPersist();
+    if (bUpdate)
     {
+        if (pShell)
+        {
+            comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pShell->getEmbeddedObjectContainer();
+            rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+        }
+
         SfxMedium* pMedium = m_rDoc.GetDocShell()->GetMedium();
         SfxFrame* pFrame = pMedium ? pMedium->GetLoadTargetFrame() : nullptr;
         vcl::Window* pDlgParent = pFrame ? &pFrame->GetWindow() : nullptr;
 
         GetLinkManager().UpdateAllLinks( bAskUpdate, true, false, pDlgParent );
     }
+    else
+    {
+        if (pShell)
+        {
+            comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pShell->getEmbeddedObjectContainer();
+            rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+        }
+        return;
+    }
+
 }
 
 bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const OUString& rMimeType,
