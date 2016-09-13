@@ -76,7 +76,7 @@ void Timer::SetTimeout( sal_uInt64 nNewTimeout )
     // If timer is active, then renew clock.
     if ( IsActive() )
     {
-        Scheduler::ImplStartTimer(mnTimeout);
+        Start();
     }
 }
 
