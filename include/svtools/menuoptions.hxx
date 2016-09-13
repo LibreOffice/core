@@ -66,6 +66,8 @@ class SAL_WARN_UNUSED SVT_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
         bool IsEntryHidingEnabled() const;
         TriState GetMenuIconsState() const;
         void SetMenuIconsState(TriState eState);
+        TriState GetContextMenuShortcuts() const;
+        void SetContextMenuShortcuts(TriState eState);
 
     private:
 

@@ -1902,6 +1902,7 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
 
     SvtMenuOptions aMenuOpt;
     hStyleSettings.SetUseImagesInMenus(aMenuOpt.GetMenuIconsState());
+    hStyleSettings.SetContextMenuShortcuts(aMenuOpt.GetContextMenuShortcuts());
     hStyleSettings.SetDragFullOptions( nDragFullOptions );
     rSettings.SetStyleSettings ( hStyleSettings );
 }

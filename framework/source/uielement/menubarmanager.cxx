@@ -746,6 +746,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
         bool bDontHide           = SvtMenuOptions().IsEntryHidingEnabled();
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
+        bool bShowShortcuts      = m_bHasMenuBar || rSettings.GetContextMenuShortcuts();
         bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
 
         SolarMutexGuard g;
@@ -794,18 +795,23 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
         }
 
         // Try to set accelerator keys
-        if ( m_bHasMenuBar )
         {
-            RetrieveShortcuts( m_aMenuItemHandlerVector );
+            if ( bShowShortcuts )
+                RetrieveShortcuts( m_aMenuItemHandlerVector );
+
             std::vector< MenuItemHandler* >::iterator p;
             for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
             {
                 MenuItemHandler* pMenuItemHandler = *p;
 
-                // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
-                // Only non-popup menu items can have a short-cut
-                if ( pMenuItemHandler->aMenuItemURL == aCmdHelpIndex )
+                if ( !bShowShortcuts )
                 {
+                    pMenu->SetAccelKey( pMenuItemHandler->nItemId, vcl::KeyCode() );
+                }
+                else if ( pMenuItemHandler->aMenuItemURL == aCmdHelpIndex )
+                {
+                    // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
+                    // Only non-popup menu items can have a short-cut
                     vcl::KeyCode aKeyCode( KEY_F1 );
                     pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
                 }
