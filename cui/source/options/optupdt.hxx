@@ -23,6 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/configuration/XReadWriteAccess.hpp>
 
 // class SvxPathTabPage --------------------------------------------------
 
@@ -50,6 +51,7 @@ private:
     DECL_LINK_TYPED(ExtrasCheckHdl_Impl, Button*, void);
 
     css::uno::Reference< css::container::XNameReplace > m_xUpdateAccess;
+    css::uno::Reference<css::configuration::XReadWriteAccess> m_xReadWriteAccess;
 
     void                    UpdateLastCheckedText();
     void                    UpdateUserAgent();
