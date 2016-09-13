@@ -201,44 +201,55 @@ const sfx2::LinkManager& DocumentLinksAdministrationManager::GetLinkManager() co
 // to new SwDoc::UpdateLinks():
 void DocumentLinksAdministrationManager::UpdateLinks( bool bUI )
 {
-    SfxObjectCreateMode eMode;
-    sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode( true );
-    if ( m_rDoc.GetDocShell()) {
-        sal_uInt16 nUpdateDocMode = m_rDoc.GetDocShell()->GetUpdateDocMode();
-        if( (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
-            !GetLinkManager().GetLinks().empty() &&
-            SfxObjectCreateMode::INTERNAL !=
-                        ( eMode = m_rDoc.GetDocShell()->GetCreateMode()) &&
-            SfxObjectCreateMode::ORGANIZER != eMode &&
-            SfxObjectCreateMode::PREVIEW != eMode &&
-            !m_rDoc.GetDocShell()->IsPreview() )
-        {
-            bool bAskUpdate = nLinkMode == MANUAL;
-            bool bUpdate = true;
-            switch(nUpdateDocMode)
-            {
-                case document::UpdateDocMode::NO_UPDATE:   bUpdate = false;break;
-                case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = false; break;
-                case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = true; break;
-            }
-            if (nLinkMode == AUTOMATIC && !bAskUpdate)
-            {
-                SfxMedium * medium = m_rDoc.GetDocShell()->GetMedium();
-                if (!SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
-                        medium == nullptr ? OUString() : medium->GetName()))
-                {
-                    bAskUpdate = true;
-                }
-            }
-            if( bUpdate && (bUI || !bAskUpdate) )
-            {
-                SfxMedium* pMedium = m_rDoc.GetDocShell()->GetMedium();
-                SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
-                vcl::Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
+    if (!m_rDoc.GetDocShell())
+        return;
+    SfxObjectCreateMode eMode = m_rDoc.GetDocShell()->GetCreateMode();
+    if (eMode == SfxObjectCreateMode::INTERNAL)
+        return;
+    if (eMode == SfxObjectCreateMode::ORGANIZER)
+        return;
+    if (eMode == SfxObjectCreateMode::PREVIEW)
+        return;
+    if (m_rDoc.GetDocShell()->IsPreview())
+        return;
+    if (GetLinkManager().GetLinks().empty())
+        return;
+    sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode(true);
+    sal_uInt16 nUpdateDocMode = m_rDoc.GetDocShell()->GetUpdateDocMode();
+    if (nLinkMode == NEVER && nUpdateDocMode != document::UpdateDocMode::FULL_UPDATE)
+        return;
 
-                GetLinkManager().UpdateAllLinks( bAskUpdate, true, false, pDlgParent );
-            }
+    bool bAskUpdate = nLinkMode == MANUAL;
+    bool bUpdate = true;
+    switch(nUpdateDocMode)
+    {
+        case document::UpdateDocMode::NO_UPDATE:   bUpdate = false;break;
+        case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = false; break;
+        case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = true; break;
+    }
+    if (nLinkMode == AUTOMATIC && !bAskUpdate)
+    {
+        SfxMedium * medium = m_rDoc.GetDocShell()->GetMedium();
+        if (!SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
+                medium == nullptr ? OUString() : medium->GetName()))
+        {
+            bAskUpdate = true;
         }
+    }
+    comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = m_rDoc.GetDocShell()->getEmbeddedObjectContainer();
+    if (bUpdate)
+    {
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+
+        SfxMedium* pMedium = m_rDoc.GetDocShell()->GetMedium();
+        SfxFrame* pFrame = pMedium ? pMedium->GetLoadTargetFrame() : nullptr;
+        vcl::Window* pDlgParent = pFrame ? &pFrame->GetWindow() : nullptr;
+
+        GetLinkManager().UpdateAllLinks( bAskUpdate, true, false, pDlgParent );
+    }
+    else
+    {
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
     }
 }
 

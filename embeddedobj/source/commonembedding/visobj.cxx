@@ -174,7 +174,13 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
     bool bBackToLoaded = false;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
-        changeState( embed::EmbedStates::RUNNING );
+        awt::Size aOrigSize = getVisualAreaSize(nAspect);
+        changeState(embed::EmbedStates::RUNNING);
+        if (aOrigSize.Width != getVisualAreaSize(nAspect).Width ||
+            aOrigSize.Height != getVisualAreaSize(nAspect).Height)
+        {
+            setVisualAreaSize(nAspect, aOrigSize);
+        }
 
         // the links should be switched back to loaded state for now to avoid locking problems
         bBackToLoaded = m_bIsLink;

@@ -22,6 +22,7 @@
 
 #include <svx/svdorect.hxx>
 #include <svx/svxdllapi.h>
+#include <sfx2/linkmgr.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 
@@ -177,6 +178,21 @@ public:
 
     // #i118485# missing converter added
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
+};
+
+class SVX_DLLPUBLIC SdrEmbedObjectLink : public sfx2::SvBaseLink
+{
+    SdrOle2Obj*         pObj;
+
+public:
+                        SdrEmbedObjectLink(SdrOle2Obj* pObj);
+    virtual             ~SdrEmbedObjectLink();
+
+    virtual void        Closed() SAL_OVERRIDE;
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const OUString& rMimeType, const css::uno::Any & rValue ) SAL_OVERRIDE;
+
+    bool                Connect() { return GetRealObject() != NULL; }
 };
 
 #endif // INCLUDED_SVX_SVDOOLE2_HXX
