@@ -55,14 +55,17 @@ public:
     bool idleCheckLinks();
 
     bool hasDdeLinks() const;
+    bool hasDdeOrOleLinks() const;
 
-    bool updateDdeLinks( vcl::Window* pWin );
+    bool updateDdeOrOleLinks(vcl::Window* pWin);
 
     void updateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem );
 
     size_t getDdeLinkCount() const;
 
     void disconnectDdeLinks();
+private:
+    bool hasDdeOrOleLinks(bool bDde, bool bOle) const;
 };
 
 }

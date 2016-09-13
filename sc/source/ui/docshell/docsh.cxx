@@ -567,9 +567,12 @@ bool ScDocShell::Load( SfxMedium& rMedium )
 
     GetUndoManager()->Clear();
 
-    bool bRet = SfxObjectShell::Load( rMedium );
-    if( bRet )
+    bool bRet = SfxObjectShell::Load(rMedium);
+    if (bRet)
     {
+        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+
         if (GetMedium())
         {
             const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(rMedium.GetItemSet(), SID_UPDATEDOCMODE, false);

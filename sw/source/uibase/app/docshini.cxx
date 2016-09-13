@@ -500,8 +500,11 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
             m_pDoc->getIDocumentDrawModelAccess().GetDrawModel()->SetAnchoredTextOverflowLegacy(true);
     }
 
-    if( SfxObjectShell::Load( rMedium ))
+    if (SfxObjectShell::Load(rMedium))
     {
+        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+
         SAL_INFO( "sw.ui", "after SfxInPlaceObject::Load" );
         if (m_pDoc)              // for last version!!
             RemoveLink();       // release the existing
