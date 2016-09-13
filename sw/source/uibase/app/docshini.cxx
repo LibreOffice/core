@@ -486,6 +486,9 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
     bool bRet = false;
     if( SfxObjectShell::Load( rMedium ))
     {
+        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
+        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
+
         SAL_INFO( "sw.ui", "after SfxInPlaceObject::Load" );
         if (m_pDoc)              // for last version!!
             RemoveLink();       // release the existing

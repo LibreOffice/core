@@ -47,7 +47,7 @@ public:
 
     const sfx2::LinkManager& GetLinkManager() const SAL_OVERRIDE;
 
-    void UpdateLinks(bool bUI) SAL_OVERRIDE;
+    void UpdateLinks() SAL_OVERRIDE;
 
     bool GetData(const OUString& rItem, const OUString& rMimeType, ::com::sun::star::uno::Any& rValue) const SAL_OVERRIDE;
 
