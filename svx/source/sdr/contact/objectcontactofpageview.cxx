@@ -259,6 +259,11 @@ namespace sdr
             // and may use the MapMode from the Target OutDev in the DisplayInfo
             xPrimitiveSequence = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo);
 #else
+            // Hmm, !HAVE_FEATURE_DESKTOP && !ANDROID means iOS,
+            // right? But does it make sense to use a different code
+            // path for iOS than for Android; both use tiled rendering
+            // etc now.
+
             // HACK: this only works when we are drawing sdr shapes via
             // drawinglayer; but it can happen that the hierarchy contains
             // more than just the shapes, and then it fails.
