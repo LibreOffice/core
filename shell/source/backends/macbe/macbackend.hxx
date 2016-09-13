@@ -123,7 +123,7 @@ protected:
     MacOSXBackend();
 
     /** Destructor */
-    virtual ~MacOSXBackend();
+    virtual ~MacOSXBackend() override;
 };
 
 #endif // INCLUDED_SHELL_SOURCE_BACKENDS_MACBE_MACBACKEND_HXX
