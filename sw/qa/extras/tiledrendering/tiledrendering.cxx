@@ -1304,10 +1304,14 @@ void SwTiledRenderingTest::testCreateViewGraphicSelection()
     // Make sure that the hidden text cursor isn't visible in the second view, either.
     ViewCallback aView2;
     aView2.m_bViewCursorVisible = true;
+    aView2.m_bGraphicViewSelection = false;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     // This was true, the second view didn't get the visibility of the text
     // cursor of the first view.
     CPPUNIT_ASSERT(!aView2.m_bViewCursorVisible);
+    // This was false, the second view didn't get the graphic selection of the
+    // first view.
+    CPPUNIT_ASSERT(aView2.m_bGraphicViewSelection);
 
     mxComponent->dispose();
     mxComponent.clear();
