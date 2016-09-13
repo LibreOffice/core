@@ -1178,7 +1178,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
             }
 
             // Update the styles that were created before their parents
-            for( auto iter : aMissingParent )
+            for( auto const & iter : aMissingParent )
             {
                 iter.second->setParentStyle( iter.first );
             }
