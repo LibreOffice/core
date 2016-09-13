@@ -494,26 +494,26 @@ vcl::Font BulletsTypeMgr::GetBulCharFont(sal_uInt16 nIndex)
     return aRet;
 }
 // Graphic Bullet Type lib
-GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr()
+GraphicBulletsTypeMgr::GraphicBulletsTypeMgr()
     : NBOTypeMgrBase(eNBOType::BULLETS)
 {
     Init();
 }
 
-GraphyicBulletsTypeMgr::~GraphyicBulletsTypeMgr()
+GraphicBulletsTypeMgr::~GraphicBulletsTypeMgr()
 {
     for (const GrfBulDataRelation* p : aGrfDataLst)
         delete p;
 }
 
-class theGraphyicBulletsTypeMgr : public rtl::Static<GraphyicBulletsTypeMgr, theGraphyicBulletsTypeMgr> {};
+class theGraphicBulletsTypeMgr : public rtl::Static<GraphicBulletsTypeMgr, theGraphicBulletsTypeMgr> {};
 
-GraphyicBulletsTypeMgr& GraphyicBulletsTypeMgr::GetInstance()
+GraphicBulletsTypeMgr& GraphicBulletsTypeMgr::GetInstance()
 {
-    return theGraphyicBulletsTypeMgr::get();
+    return theGraphicBulletsTypeMgr::get();
 }
 
-void GraphyicBulletsTypeMgr::Init()
+void GraphicBulletsTypeMgr::Init()
 {
     std::vector<OUString> aGrfNames;
     GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
@@ -540,7 +540,7 @@ void GraphyicBulletsTypeMgr::Init()
         aGrfDataLst.push_back(pEntry);
     }
 }
-sal_uInt16 GraphyicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 /*nFromIndex*/)
+sal_uInt16 GraphicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 /*nFromIndex*/)
 {
     if ( mLevel == (sal_uInt16)0xFFFF || mLevel == 0)
         return (sal_uInt16)0xFFFF;
@@ -576,7 +576,7 @@ sal_uInt16 GraphyicBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uI
     return (sal_uInt16)0xFFFF;
 }
 
-void GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
+void GraphicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel)
 {
     if ( mLevel == (sal_uInt16)0xFFFF || mLevel > aNum.GetLevelCount() || mLevel == 0)
         return;
@@ -616,7 +616,7 @@ void GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex
     }
 }
 
-void GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool /*isDefault*/, bool /*isResetSize*/)
+void GraphicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool /*isDefault*/, bool /*isResetSize*/)
 {
     //if ( mLevel == (sal_uInt16)0xFFFF )
     //  return sal_False;
@@ -659,7 +659,7 @@ void GraphyicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, s
     }
 }
 
-OUString GraphyicBulletsTypeMgr::GetDescription(sal_uInt16 nIndex, bool /*isDefault*/)
+OUString GraphicBulletsTypeMgr::GetDescription(sal_uInt16 nIndex, bool /*isDefault*/)
 {
     OUString sRet;
     sal_uInt16 nLength = 0;
@@ -678,7 +678,7 @@ OUString GraphyicBulletsTypeMgr::GetDescription(sal_uInt16 nIndex, bool /*isDefa
     return sRet;
 }
 
-bool GraphyicBulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
+bool GraphicBulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
 {
     bool bRet = false;
 
@@ -698,7 +698,7 @@ bool GraphyicBulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
 
     return bRet;
 }
-OUString GraphyicBulletsTypeMgr::GetGrfName(sal_uInt16 nIndex)
+OUString GraphicBulletsTypeMgr::GetGrfName(sal_uInt16 nIndex)
 {
     OUString sRet;
     if ( nIndex < aGrfDataLst.size() )
@@ -813,7 +813,7 @@ void MixBulletsTypeMgr::Init()
         static_cast<BulletsSettings_Impl*>(pActualBullets[5]->pBullets)->eType = eNBType::BULLETS;
     }
 
-    GraphyicBulletsTypeMgr& rGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();
+    GraphicBulletsTypeMgr& rGrfTMgr = GraphicBulletsTypeMgr::GetInstance();
     {
         //Index 7
         pActualBullets[6] = new MixBulletsSettings_Impl(eNBType::GRAPHICBULLETS);
@@ -952,7 +952,7 @@ void MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
             GrfBulDataRelation* pEntry = static_cast<GrfBulDataRelation*>(pActualBullets[nIndex]->pBullets);
             if ( !aGrfName.isEmpty() )
                 pEntry->sGrfName = aGrfName;
-            GraphyicBulletsTypeMgr& rGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();
+            GraphicBulletsTypeMgr& rGrfTMgr = GraphicBulletsTypeMgr::GetInstance();
             {
                 pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
                 sEmpty = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
@@ -1012,7 +1012,7 @@ void MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
                     static_cast<GrfBulDataRelation*>(pActualBullets[nIndex]->pBullets)->sGrfName = aGrfName;
                 static_cast<GrfBulDataRelation*>(pActualBullets[nIndex]->pBullets)->bIsCustomized = true;
                 static_cast<GrfBulDataRelation*>(pActualBullets[nIndex]->pBullets)->eType = eNBType::GRAPHICBULLETS;
-                GraphyicBulletsTypeMgr& rGrfTMgr = GraphyicBulletsTypeMgr::GetInstance();
+                GraphicBulletsTypeMgr& rGrfTMgr = GraphicBulletsTypeMgr::GetInstance();
                 {
                     pActualBullets[nIndex]->nIndexDefault  = (sal_uInt16)0xFFFF;
                     OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);

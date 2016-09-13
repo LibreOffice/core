@@ -245,18 +245,18 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
         static BulletsTypeMgr& GetInstance();
 };
 
-class SVX_DLLPUBLIC GraphyicBulletsTypeMgr: public NBOTypeMgrBase
+class SVX_DLLPUBLIC GraphicBulletsTypeMgr: public NBOTypeMgrBase
 {
     friend class OutlineTypeMgr;
     friend class NumberingTypeMgr;
     private:
-        GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr&) = delete;
+        GraphicBulletsTypeMgr(const GraphicBulletsTypeMgr&) = delete;
     public:
         typedef std::vector<GrfBulDataRelation*> ListType;
         ListType aGrfDataLst;
     public:
-        GraphyicBulletsTypeMgr();
-        virtual ~GraphyicBulletsTypeMgr();
+        GraphicBulletsTypeMgr();
+        virtual ~GraphicBulletsTypeMgr();
         virtual void Init() override;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
         virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
@@ -264,7 +264,7 @@ class SVX_DLLPUBLIC GraphyicBulletsTypeMgr: public NBOTypeMgrBase
         virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false) override;
         virtual bool IsCustomized(sal_uInt16 nIndex) override;
         OUString GetGrfName(sal_uInt16 nIndex);
-        static GraphyicBulletsTypeMgr& GetInstance();
+        static GraphicBulletsTypeMgr& GetInstance();
 };
 
 class SVX_DLLPUBLIC MixBulletsTypeMgr: public NBOTypeMgrBase

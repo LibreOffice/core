@@ -30,7 +30,7 @@ NBOTypeMgrBase* CreateInstance(const NBOType aType)
     }
     else if ( aType == eNBOType::GRAPHICBULLETS )
     {
-        return &GraphyicBulletsTypeMgr::GetInstance();
+        return &GraphicBulletsTypeMgr::GetInstance();
     }
     else if ( aType == eNBOType::MIXBULLETS )
     {
