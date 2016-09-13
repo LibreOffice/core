@@ -692,6 +692,12 @@ void SdDrawDocument::UpdateAllLinks()
     {
         pDocLockedInsertingLinks = this; // lock inserting links. only links in this document should by resolved
 
+        if (mpDocSh)
+        {
+            comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = mpDocSh->getEmbeddedObjectContainer();
+            rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
+        }
+
         pLinkManager->UpdateAllLinks();  // query box: update all links?
 
         if( pDocLockedInsertingLinks == this )
