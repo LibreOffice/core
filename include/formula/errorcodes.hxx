@@ -103,11 +103,14 @@ inline sal_uInt16 GetDoubleErrorValue( double fVal )
         return 0;
     if ( ::rtl::math::isInf( fVal ) )
         return errIllegalFPOperation;       // normal INF
-    sal_uInt32 nErr = reinterpret_cast< sal_math_Double * >(
-            &fVal)->nan_parts.fraction_lo;
+    sal_uInt32 nErr = reinterpret_cast< sal_math_Double * >( &fVal)->nan_parts.fraction_lo;
     if ( nErr & 0xffff0000 )
         return errNoValue;                  // just a normal NAN
-    return (sal_uInt16)(nErr & 0x0000ffff);     // any other error
+    if (!nErr)
+        // Another NAN, e.g. -nan(0x8000000000000) from calculating with -inf
+        return errIllegalFPOperation;
+    // Any other error known to us as error code.
+    return (sal_uInt16)(nErr & 0x0000ffff);
 }
 
 } // namespace formula
