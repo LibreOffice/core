@@ -51,7 +51,6 @@ namespace dmapper
 {
 
 typedef ::std::map< OUString, OUString> StringPairMap_t;
-typedef ::std::pair<OUString, uno::Reference< style::XStyle>> ParentOfStylePair_t;
 
 
 StyleSheetEntry::StyleSheetEntry() :
@@ -917,7 +916,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
         xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
         if(xCharStyles.is() && xParaStyles.is())
         {
-            std::vector< ParentOfStylePair_t > aMissingParent;
+            std::vector< ::std::pair<OUString, uno::Reference<style::XStyle>> > aMissingParent;
             std::vector<beans::PropertyValue> aTableStylesVec;
             std::vector< StyleSheetEntryPtr >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
             while( aIt != m_pImpl->m_aStyleSheetEntries.end() )
@@ -1152,7 +1151,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     {
                         const OUString sParentStyle = xStyle->getParentStyle();
                         if( !sParentStyle.isEmpty() && !xStyles->hasByName( sParentStyle ) )
-                            aMissingParent.push_back( ParentOfStylePair_t(sParentStyle, xStyle) );
+                            aMissingParent.emplace_back( sParentStyle, xStyle );
 
                         xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
                     }
