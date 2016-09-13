@@ -58,6 +58,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     css::uno::Reference< css::i18n::XLocaleData4 >     xLD;
     LanguageTag                                        maLanguageTag;
     std::shared_ptr< css::i18n::Calendar2 >            xDefaultCalendar;
+    std::shared_ptr< css::i18n::Calendar2 >            xSecondaryCalendar;
     css::i18n::LocaleDataItem                          aLocaleDataItem;
     css::uno::Sequence< OUString >                     aReservedWordSeq;
     css::uno::Sequence< OUString >                     aDateAcceptancePatterns;
@@ -74,6 +75,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     sal_uInt16              nCurrDigits;
     bool                    bLocaleDataItemValid;
     bool                    bReservedWordValid;
+    bool                    bSecondaryCalendarValid;
     mutable ::utl::ReadWriteMutex   aMutex;
     struct Locale_Compare
     {
@@ -105,6 +107,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     DateFormat          scanDateFormatImpl( const OUString& rCode );
 
     void                getDefaultCalendarImpl();
+    void                getSecondaryCalendarImpl();
 
     sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
                             sal_Int64 nNumber, sal_uInt16 nDecimals,
@@ -182,6 +185,10 @@ public:
 
     /// Convenience method to obtain the month names of the default calendar.
     const css::uno::Sequence< css::i18n::CalendarItem2 > getDefaultCalendarMonths() const;
+
+    /** If the secondary calendar, if any, is of the name passed AND number
+        formats using it usually use the E or EE keyword (EC|EEC). */
+    bool doesSecondaryCalendarUseEC( const OUString& rName ) const;
 
     /** Obtain digit grouping. The usually known grouping by thousands (#,###)
         is actually only one of possible groupings. Another one, for example,

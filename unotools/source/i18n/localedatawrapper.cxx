@@ -89,7 +89,8 @@ LocaleDataWrapper::LocaleDataWrapper(
         xLD( LocaleData::create(rxContext) ),
         maLanguageTag( rLanguageTag ),
         bLocaleDataItemValid( false ),
-        bReservedWordValid( false )
+        bReservedWordValid( false ),
+        bSecondaryCalendarValid( false )
 {
     invalidateData();
 }
@@ -102,7 +103,8 @@ LocaleDataWrapper::LocaleDataWrapper(
         xLD( LocaleData::create(m_xContext) ),
         maLanguageTag( rLanguageTag ),
         bLocaleDataItemValid( false ),
-        bReservedWordValid( false )
+        bReservedWordValid( false ),
+        bSecondaryCalendarValid( false )
 {
     invalidateData();
 }
@@ -149,6 +151,8 @@ void LocaleDataWrapper::invalidateData()
         bReservedWordValid = false;
     }
     xDefaultCalendar.reset();
+    xSecondaryCalendar.reset();
+    bSecondaryCalendarValid = false;
     if (aGrouping.getLength())
         aGrouping[0] = 0;
     if (aDateAcceptancePatterns.getLength())
@@ -473,6 +477,59 @@ MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const OUString&
         return MEASURE_METRIC;
 //! TODO: other measurement systems? => extend enum MeasurementSystem
     return MEASURE_US;
+}
+
+void LocaleDataWrapper::getSecondaryCalendarImpl()
+{
+    if (!xSecondaryCalendar && !bSecondaryCalendarValid)
+    {
+        Sequence< Calendar2 > xCals = getAllCalendars();
+        sal_Int32 nCount = xCals.getLength();
+        if (nCount > 1)
+        {
+            sal_Int32 nNonDef = -1;
+            const Calendar2* pArr = xCals.getArray();
+            for (sal_Int32 i=0; i<nCount; ++i)
+            {
+                if (!pArr[i].Default)
+                {
+                    nNonDef = i;
+                    break;
+                }
+            }
+            if (nNonDef >= 0)
+                xSecondaryCalendar.reset( new Calendar2( xCals[nNonDef]));
+        }
+        bSecondaryCalendarValid = true;
+    }
+}
+
+bool LocaleDataWrapper::doesSecondaryCalendarUseEC( const OUString& rName ) const
+{
+    if (rName.isEmpty())
+        return false;
+
+    ::utl::ReadWriteGuard aGuard( aMutex );
+
+    if (!bSecondaryCalendarValid)
+    {   // no cached content
+        aGuard.changeReadToWrite();
+        const_cast<LocaleDataWrapper*>(this)->getSecondaryCalendarImpl();
+    }
+    if (!xSecondaryCalendar)
+        return false;
+    if (!xSecondaryCalendar->Name.equalsIgnoreAsciiCase( rName))
+        return false;
+
+    LanguageTag aLoaded( getLoadedLanguageTag());
+    OUString aBcp47( aLoaded.getBcp47());
+    // So far determine only by locale, we know for a few.
+    /* TODO: check date format codes? or add to locale data? */
+    return
+        aBcp47 == "ja-JP" ||
+        aBcp47 == "lo-LA" ||
+        aBcp47 == "zh-TW"
+        ;
 }
 
 void LocaleDataWrapper::getDefaultCalendarImpl()
