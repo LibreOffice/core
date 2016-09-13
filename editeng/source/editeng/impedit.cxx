@@ -377,8 +377,8 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                 aOrigin = pOutWin->GetMapMode().GetOrigin();
 
             OString sRectangle;
-            // If we are not in selection mode, then the exported selection should be empty.
-            if (pEditEngine->pImpEditEngine->IsInSelectionMode())
+            // If we are not in selection mode, then the exported own selection should be empty.
+            if (pEditEngine->pImpEditEngine->IsInSelectionMode() || mpOtherShell)
             {
                 std::vector<Rectangle> aRectangles;
                 pRegion->GetRegionRectangles(aRectangles);
@@ -413,8 +413,17 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                 sRectangle = comphelper::string::join("; ", v);
             }
 
-            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
-            mpViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRectangle);
+            if (mpOtherShell)
+            {
+                // An other shell wants to know about our existing selection.
+                if (mpViewShell != mpOtherShell)
+                    mpViewShell->NotifyOtherView(mpOtherShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRectangle);
+            }
+            else
+            {
+                mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
+                mpViewShell->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRectangle);
+            }
 
             pOutWin->Pop();
         }
