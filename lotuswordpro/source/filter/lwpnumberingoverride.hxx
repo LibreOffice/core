@@ -67,7 +67,7 @@ class LwpNumberingOverride : public LwpOverride
 {
 public:
     LwpNumberingOverride();
-    virtual ~LwpNumberingOverride(){}
+    virtual ~LwpNumberingOverride() override {}
 
     virtual LwpNumberingOverride* clone() const override;
 

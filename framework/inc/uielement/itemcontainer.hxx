@@ -45,7 +45,7 @@ class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper< css::contai
         ItemContainer( const ShareableMutex& );
         ItemContainer( const ConstItemContainer& rConstItemContainer, const ShareableMutex& rMutex );
         ItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemAccessContainer, const ShareableMutex& rMutex );
-        virtual ~ItemContainer();
+        virtual ~ItemContainer() override;
 
         //  XInterface, XTypeProvider
 

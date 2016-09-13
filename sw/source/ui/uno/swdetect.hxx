@@ -54,7 +54,7 @@ class SwFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFi
 {
 public:
                             SwFilterDetect();
-    virtual                 ~SwFilterDetect();
+    virtual                 ~SwFilterDetect() override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;

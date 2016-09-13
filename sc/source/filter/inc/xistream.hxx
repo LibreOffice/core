@@ -44,7 +44,7 @@ class XclImpDecrypter : public ::comphelper::IDocPasswordVerifier
 {
 public:
     explicit            XclImpDecrypter();
-    virtual             ~XclImpDecrypter();
+    virtual             ~XclImpDecrypter() override;
 
     /** Returns the current error code of the decrypter. */
     inline ErrCode      GetError() const { return mnError; }

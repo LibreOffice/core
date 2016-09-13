@@ -61,7 +61,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmDesignModeChangedHint : public SfxHint
 
 public:
     FmDesignModeChangedHint( bool bDesMode );
-    virtual ~FmDesignModeChangedHint();
+    virtual ~FmDesignModeChangedHint() override;
 
     bool GetDesignMode() const { return m_bDesignMode; }
 };
@@ -96,7 +96,7 @@ private:
 
 public:
     FmFormShell(SfxViewShell* pParent, FmFormView* pView = nullptr);
-    virtual ~FmFormShell();
+    virtual ~FmFormShell() override;
 
     void Execute( SfxRequest& );
     void GetState( SfxItemSet& );

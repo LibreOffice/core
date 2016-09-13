@@ -76,7 +76,7 @@ class EnhancedCustomShapeEngine : public cppu::WeakImplHelper
 
 public:
                             EnhancedCustomShapeEngine();
-    virtual                 ~EnhancedCustomShapeEngine();
+    virtual                 ~EnhancedCustomShapeEngine() override;
 
     // XInterface
     virtual void SAL_CALL   acquire() throw() override;

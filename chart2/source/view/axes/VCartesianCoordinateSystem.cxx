@@ -41,7 +41,7 @@ public:
         : m_aTextSequence( rTextSequence )
     {
     }
-    virtual ~TextualDataProvider()
+    virtual ~TextualDataProvider() override
     {
     }
 

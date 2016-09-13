@@ -292,7 +292,7 @@ class XclExpXmlStream : public oox::core::XmlFilterBase
 {
 public:
     XclExpXmlStream( const css::uno::Reference< css::uno::XComponentContext >& rCC, bool bExportVBA );
-    virtual ~XclExpXmlStream();
+    virtual ~XclExpXmlStream() override;
 
     /** Returns the filter root data. */
     inline const XclExpRoot& GetRoot() const { return *mpRoot; }

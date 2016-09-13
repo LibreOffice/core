@@ -57,7 +57,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 {
     public:
          SvtExtendedSecurityOptions_Impl();
-        virtual ~SvtExtendedSecurityOptions_Impl();
+        virtual ~SvtExtendedSecurityOptions_Impl() override;
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

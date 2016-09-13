@@ -62,7 +62,7 @@ class Diagram :
 {
 public:
     Diagram( css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~Diagram();
+    virtual ~Diagram() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

@@ -27,7 +27,7 @@ class XMLDlgOASISTransformerContext : public XMLTransformerContext
 public:
     XMLDlgOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
-    virtual ~XMLDlgOASISTransformerContext();
+    virtual ~XMLDlgOASISTransformerContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };

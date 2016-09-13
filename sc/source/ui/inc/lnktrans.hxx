@@ -31,7 +31,7 @@ private:
 
 public:
             ScLinkTransferObj();
-    virtual ~ScLinkTransferObj();
+    virtual ~ScLinkTransferObj() override;
 
     void                SetLinkURL( const OUString& rURL, const OUString& rText );
 

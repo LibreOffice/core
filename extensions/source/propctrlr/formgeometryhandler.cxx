@@ -173,7 +173,7 @@ namespace pcr
         virtual void SAL_CALL disposing( const EventObject& _event ) throw (RuntimeException, std::exception) override;
 
     protected:
-        virtual ~ShapeGeometryChangeNotifier()
+        virtual ~ShapeGeometryChangeNotifier() override
         {
             if ( !getBroadcastHelper().bDisposed )
             {
@@ -213,7 +213,7 @@ namespace pcr
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (RuntimeException);
 
     protected:
-        virtual ~FormGeometryHandler();
+        virtual ~FormGeometryHandler() override;
 
     protected:
         // XPropertyHandler overriables

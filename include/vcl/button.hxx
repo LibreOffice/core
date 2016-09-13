@@ -66,7 +66,7 @@ protected:
     explicit            Button( WindowType nType );
 
 public:
-    virtual            ~Button();
+    virtual            ~Button() override;
     virtual void        dispose() override;
 
     virtual void        Click();
@@ -325,7 +325,7 @@ protected:
 public:
     explicit        RadioButton( vcl::Window* pParent, WinBits nWinStyle = 0 );
     explicit        RadioButton( vcl::Window* pParent, const ResId& );
-    virtual         ~RadioButton();
+    virtual         ~RadioButton() override;
     virtual void    dispose() override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;

@@ -270,7 +270,7 @@ public:
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
                             bool bAutoClose );
 
-    virtual             ~BinaryXInputStream();
+    virtual             ~BinaryXInputStream() override;
 
     /** Closes the input stream. Does also close the wrapped UNO input stream
         if bAutoClose has been set to true in the constructor. */

@@ -17,7 +17,7 @@ class EmojiViewItem : public ThumbnailViewItem
 public:
     EmojiViewItem (ThumbnailView &rView, sal_uInt16 nId);
 
-    virtual ~EmojiViewItem ();
+    virtual ~EmojiViewItem () override;
 
     void setCategory (const OUString &rCategory) { msCategory = rCategory; }
 

@@ -32,7 +32,7 @@ class ThemeBuffer : public ::oox::drawingml::Theme, public WorkbookHelper
 {
 public:
     explicit            ThemeBuffer( const WorkbookHelper& rHelper );
-    virtual             ~ThemeBuffer();
+    virtual             ~ThemeBuffer() override;
 
     /** Returns the theme color with the specified token identifier. */
     sal_Int32           getColorByToken( sal_Int32 nToken ) const;

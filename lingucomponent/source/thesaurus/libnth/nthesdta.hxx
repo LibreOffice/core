@@ -42,7 +42,7 @@ class Meaning :
 
 public:
     explicit Meaning(const OUString &rTerm);
-    virtual ~Meaning();
+    virtual ~Meaning() override;
 
     // XMeaning
     virtual OUString SAL_CALL getMeaning() throw(css::uno::RuntimeException, std::exception) override;

@@ -41,7 +41,7 @@ class XMLStarBasicExportHandler : public XMLEventExportHandler
 
 public:
     XMLStarBasicExportHandler();
-    virtual ~XMLStarBasicExportHandler();
+    virtual ~XMLStarBasicExportHandler() override;
 
     virtual void Export(
         SvXMLExport& rExport,

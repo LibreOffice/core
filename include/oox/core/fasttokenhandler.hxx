@@ -49,7 +49,7 @@ class OOX_DLLPUBLIC FastTokenHandler :
 {
 public:
     explicit            FastTokenHandler();
-    virtual             ~FastTokenHandler();
+    virtual             ~FastTokenHandler() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;

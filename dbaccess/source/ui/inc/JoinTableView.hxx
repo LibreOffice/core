@@ -61,7 +61,7 @@ namespace dbaui
 
     public:
         OScrollWindowHelper( vcl::Window* pParent);
-        virtual ~OScrollWindowHelper();
+        virtual ~OScrollWindowHelper() override;
         virtual void dispose() override;
 
         void setTableView(OJoinTableView* _pTableView);
@@ -112,7 +112,7 @@ namespace dbaui
 
     public:
         OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView );
-        virtual ~OJoinTableView();
+        virtual ~OJoinTableView() override;
         virtual void dispose() override;
 
         // window override

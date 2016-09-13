@@ -67,7 +67,7 @@ public:
         utl::ConfigItem(rRoot),
         bLoadVBA(false),
         bSaveVBA(false)  {}
-    virtual ~SvtAppFilterOptions_Impl();
+    virtual ~SvtAppFilterOptions_Impl() override;
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
     void                    Load();
 

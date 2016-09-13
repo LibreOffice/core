@@ -243,7 +243,7 @@ class WW8_WrPlcSepx : public MSWordSections
 
 public:
     explicit WW8_WrPlcSepx( MSWordExportBase& rExport );
-    virtual ~WW8_WrPlcSepx();
+    virtual ~WW8_WrPlcSepx() override;
 
     virtual bool HeaderFooterWritten() override; // override
 
@@ -893,7 +893,7 @@ friend void WW8_WrtRedlineAuthor::Write(Writer &rWrt);
 
 public:
     SwWW8Writer(const OUString& rFltName, const OUString& rBaseURL);
-    virtual ~SwWW8Writer();
+    virtual ~SwWW8Writer() override;
 
     virtual sal_uLong WriteStorage() override;
     virtual sal_uLong WriteMedium( SfxMedium& ) override;
@@ -1108,7 +1108,7 @@ public:
     WW8Export( SwWW8Writer *pWriter,
             SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam,
             bool bDot );
-    virtual ~WW8Export();
+    virtual ~WW8Export() override;
 
     virtual void DoComboBox(const OUString &rName,
                     const OUString &rHelp,
@@ -1217,7 +1217,7 @@ private:
     std::map<const OUString, WW8_CP> m_aRangeStartPositions;
 public:
     WW8_WrPlcAnnotations() {}
-    virtual ~WW8_WrPlcAnnotations();
+    virtual ~WW8_WrPlcAnnotations() override;
 
     void AddRangeStartPosition(const OUString& rName, WW8_CP nStartCp);
     void Append( WW8_CP nCp, const SwPostItField* pPostIt );

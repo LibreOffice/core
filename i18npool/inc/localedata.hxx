@@ -67,7 +67,7 @@ class LocaleDataImpl : public cppu::WeakImplHelper
 {
 public:
     LocaleDataImpl();
-    virtual ~LocaleDataImpl();
+    virtual ~LocaleDataImpl() override;
 
     static rtl::Reference<LocaleDataImpl> get() { return new LocaleDataImpl; }
 

@@ -82,7 +82,7 @@ namespace x11 {
                             m_aListeners;
 
         DropTarget();
-        virtual ~DropTarget();
+        virtual ~DropTarget() override;
 
         // convenience functions that loop over listeners
         void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde ) throw();
@@ -120,7 +120,7 @@ namespace x11 {
             m_xRealDragSource;
     public:
         SelectionManagerHolder();
-        virtual ~SelectionManagerHolder();
+        virtual ~SelectionManagerHolder() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(std::exception) override;
@@ -371,7 +371,7 @@ namespace x11 {
         bool                        m_bShutDown;
 
         SelectionManager();
-        virtual ~SelectionManager();
+        virtual ~SelectionManager() override;
 
         SelectionAdaptor* getAdaptor( Atom selection );
         PixmapHolder* getPixmapHolder( Atom selection );

@@ -1086,7 +1086,7 @@ namespace numfunc
             }
 
             SwDefBulletConfig();
-            virtual ~SwDefBulletConfig();
+            virtual ~SwDefBulletConfig() override;
 
         private:
             /** sets internal default bullet configuration data to default values */

@@ -165,7 +165,7 @@ namespace dbaui
 
     public:
         OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode);
-        virtual ~OAppDetailPageHelper();
+        virtual ~OAppDetailPageHelper() override;
         virtual void dispose() override;
 
         // Window overrides

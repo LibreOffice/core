@@ -55,7 +55,7 @@ namespace dbaui
                                    ,const OUString& _rComposedName
                                    ,const OUString& strTableName
                                    ,const OUString& rWinName = OUString() );
-        virtual ~OTableWindowData();
+        virtual ~OTableWindowData() override;
 
         /** late constructor
         *

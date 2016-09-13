@@ -51,7 +51,7 @@ public:
                                     const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
                                     ScMyImpCellRangeSource* pCellRangeSource
                                     );
-    virtual                     ~ScXMLCellRangeSourceContext();
+    virtual                     ~ScXMLCellRangeSourceContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
                                     sal_uInt16 nPrefix,

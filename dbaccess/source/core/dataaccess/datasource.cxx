@@ -117,7 +117,7 @@ public:
 
 protected:
     FlushNotificationAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener );
-    virtual ~FlushNotificationAdapter();
+    virtual ~FlushNotificationAdapter() override;
 
     void SAL_CALL impl_dispose();
 
@@ -295,7 +295,7 @@ class OSharedConnectionManager : public ::cppu::WeakImplHelper< XEventListener >
     Reference< XProxyFactory >  m_xProxyFactory;
 
 protected:
-    virtual ~OSharedConnectionManager();
+    virtual ~OSharedConnectionManager() override;
 
 public:
     explicit OSharedConnectionManager(const Reference< XComponentContext >& _rxContext);

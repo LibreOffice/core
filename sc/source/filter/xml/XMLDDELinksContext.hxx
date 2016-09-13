@@ -33,7 +33,7 @@ public:
                         const OUString& rLName,
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
 
-    virtual ~ScXMLDDELinksContext();
+    virtual ~ScXMLDDELinksContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -71,7 +71,7 @@ public:
                         const OUString& rLName,
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
 
-    virtual ~ScXMLDDELinkContext();
+    virtual ~ScXMLDDELinkContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -102,7 +102,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDDELinkContext* pDDELink);
 
-    virtual ~ScXMLDDESourceContext();
+    virtual ~ScXMLDDESourceContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -123,7 +123,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDDELinkContext* pDDELink);
 
-    virtual ~ScXMLDDETableContext();
+    virtual ~ScXMLDDETableContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -144,7 +144,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDDELinkContext* pDDELink);
 
-    virtual ~ScXMLDDEColumnContext();
+    virtual ~ScXMLDDEColumnContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -166,7 +166,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDDELinkContext* pDDELink);
 
-    virtual ~ScXMLDDERowContext();
+    virtual ~ScXMLDDERowContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -194,7 +194,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDDELinkContext* pDDELink);
 
-    virtual ~ScXMLDDECellContext();
+    virtual ~ScXMLDDECellContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

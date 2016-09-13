@@ -40,7 +40,7 @@ namespace chelp {
     public:
         explicit XInputStream_impl( const OUString& aUncPath );
 
-        virtual ~XInputStream_impl();
+        virtual ~XInputStream_impl() override;
 
         /**
          *  Returns an error code as given by filerror.hxx

@@ -70,7 +70,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    virtual ~SwXParagraph();
+    virtual ~SwXParagraph() override;
 
     SwXParagraph(css::uno::Reference< css::text::XText > const & xParent,
             SwTextNode & rTextNode,

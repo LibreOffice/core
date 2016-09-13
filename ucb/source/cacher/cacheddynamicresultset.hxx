@@ -47,7 +47,7 @@ public:
         , const css::uno::Reference< css::ucb::XContentIdentifierMapping > & xContentMapping
         , const css::uno::Reference< css::uno::XComponentContext > & xContext );
 
-    virtual ~CachedDynamicResultSet();
+    virtual ~CachedDynamicResultSet() override;
 
 
     // XInterface
@@ -99,7 +99,7 @@ public:
     CachedDynamicResultSetFactory(
         const css::uno::Reference< css::uno::XComponentContext > & xContext);
 
-    virtual ~CachedDynamicResultSetFactory();
+    virtual ~CachedDynamicResultSetFactory() override;
 
 
     // XInterface

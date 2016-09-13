@@ -119,7 +119,7 @@ namespace dbaui
 
     public:
         explicit OTableEditorCtrl(vcl::Window* pParentWin);
-        virtual ~OTableEditorCtrl();
+        virtual ~OTableEditorCtrl() override;
         virtual void dispose() override;
         virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) override;
         SfxUndoManager& GetUndoManager() const;

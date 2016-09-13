@@ -200,7 +200,7 @@ namespace
                              const OUString& _rTemporaryFile );
 
     protected:
-        virtual ~DelayedFileDeletion( );
+        virtual ~DelayedFileDeletion( ) override;
 
         // XCloseListener
         virtual void SAL_CALL queryClosing( const EventObject& _rSource, sal_Bool _bGetsOwnership ) throw (util::CloseVetoException, RuntimeException, std::exception) override;

@@ -84,7 +84,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     virtual bool        commitPage(::svt::WizardTypes::CommitPageReason _eReason) override;
 public:
         SwMailMergeLayoutPage( SwMailMergeWizard* _pParent);
-        virtual ~SwMailMergeLayoutPage();
+        virtual ~SwMailMergeLayoutPage() override;
     virtual void            dispose() override;
 
     static SwFrameFormat*        InsertAddressAndGreeting(SwView* pView,

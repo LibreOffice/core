@@ -60,7 +60,7 @@ protected:
 
 public:
     OAccessibleMenuItemComponent( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu );
-    virtual ~OAccessibleMenuItemComponent();
+    virtual ~OAccessibleMenuItemComponent() override;
 
     // XAccessibleContext
     virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception) override;

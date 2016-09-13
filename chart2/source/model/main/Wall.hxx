@@ -49,7 +49,7 @@ class Wall :
 {
 public:
     Wall();
-    virtual ~Wall();
+    virtual ~Wall() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

@@ -50,7 +50,7 @@ class ShowWindow
 
 public:
     ShowWindow ( const ::rtl::Reference< ::sd::SlideshowImpl >& xController, vcl::Window* pParent );
-    virtual ~ShowWindow();
+    virtual ~ShowWindow() override;
     virtual void dispose() override;
 
     void            SetEndMode();

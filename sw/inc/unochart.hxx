@@ -159,7 +159,7 @@ protected:
 
 public:
     SwChartDataProvider( const SwDoc* pDoc );
-    virtual ~SwChartDataProvider();
+    virtual ~SwChartDataProvider() override;
 
     // XDataProvider
     virtual sal_Bool SAL_CALL createDataSourcePossible( const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) throw (css::uno::RuntimeException, std::exception) override;
@@ -221,7 +221,7 @@ class SwChartDataSource :
 
 public:
     SwChartDataSource( const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > &rLDS );
-    virtual ~SwChartDataSource();
+    virtual ~SwChartDataSource() override;
 
     // XDataSource
     virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences(  ) throw (css::uno::RuntimeException, std::exception) override;
@@ -280,7 +280,7 @@ public:
     SwChartDataSequence( SwChartDataProvider &rProvider,
                          SwFrameFormat   &rTableFormat,
                          std::shared_ptr<SwUnoCursor> pTableCursor );
-    virtual ~SwChartDataSequence();
+    virtual ~SwChartDataSequence() override;
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -377,7 +377,7 @@ class SwChartLabeledDataSequence :
 
 public:
     SwChartLabeledDataSequence();
-    virtual ~SwChartLabeledDataSequence();
+    virtual ~SwChartLabeledDataSequence() override;
 
     // XLabeledDataSequence
     virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL getValues(  ) throw (css::uno::RuntimeException, std::exception) override;

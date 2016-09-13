@@ -38,7 +38,7 @@ public:
     void SearchAndReplace( const SvxSearchItem* pSearchItem );
 
 protected:
-    virtual ~FuSearch();
+    virtual ~FuSearch() override;
 
     ::sd::Outliner* pSdOutliner;
     bool bOwnOutliner;

@@ -67,7 +67,7 @@ protected:
 
 public:
     DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate );
-    virtual ~DataBrowser();
+    virtual ~DataBrowser() override;
     virtual void dispose() override;
 
     /** GetCellText returns the text at the given position

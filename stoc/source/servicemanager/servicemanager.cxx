@@ -161,7 +161,7 @@ public:
         : aFactories( rFactories )
         , nIt( 0 )
         {}
-    virtual ~ServiceEnumeration_Impl() {}
+    virtual ~ServiceEnumeration_Impl() override {}
 
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements()
@@ -253,7 +253,7 @@ public:
         : aImplementationMap( rImplementationMap )
         , aIt( aImplementationMap.begin() )
         {}
-    virtual ~ImplementationEnumeration_Impl();
+    virtual ~ImplementationEnumeration_Impl() override;
 
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements()
@@ -372,7 +372,7 @@ class OServiceManager
 {
 public:
     explicit OServiceManager( Reference< XComponentContext > const & xContext );
-    virtual ~OServiceManager();
+    virtual ~OServiceManager() override;
 
     // XInitialization
     void SAL_CALL initialize( Sequence< Any > const & args )
@@ -512,7 +512,7 @@ protected:
 public:
     explicit OServiceManagerWrapper(
         Reference< XComponentContext > const & xContext );
-    virtual ~OServiceManagerWrapper();
+    virtual ~OServiceManagerWrapper() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override
@@ -1270,7 +1270,7 @@ class ORegistryServiceManager : public OServiceManager
 {
 public:
     explicit ORegistryServiceManager( Reference< XComponentContext > const & xContext );
-    virtual ~ORegistryServiceManager();
+    virtual ~ORegistryServiceManager() override;
 
     // XInitialization
     void SAL_CALL initialize(const Sequence< Any >& Arguments)

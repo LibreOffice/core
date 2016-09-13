@@ -65,7 +65,7 @@ class OTextOutputStream : public WeakImplHelper< XTextOutputStream2, XServiceInf
 
 public:
     OTextOutputStream();
-    virtual ~OTextOutputStream();
+    virtual ~OTextOutputStream() override;
 
     // Methods XTextOutputStream
     virtual void SAL_CALL writeString( const OUString& aString )

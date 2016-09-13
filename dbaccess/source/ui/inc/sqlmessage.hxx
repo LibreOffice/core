@@ -89,7 +89,7 @@ public:
                 MessageType _eType = Info,
                 const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = nullptr );
 
-    virtual ~OSQLMessageBox();
+    virtual ~OSQLMessageBox() override;
     virtual void dispose() override;
 
 private:

@@ -42,7 +42,7 @@ public:
         bool bHeader,
         SvxAdjust eAdjust);
 protected:
-    virtual ~ScAccessiblePageHeaderArea();
+    virtual ~ScAccessiblePageHeaderArea() override;
 public:
     const EditTextObject* GetEditTextObject() const { return mpEditObj; }
 

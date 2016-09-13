@@ -41,7 +41,7 @@ namespace cairo {
 
         virtual void flush() const override;
 
-        virtual ~Gtk3Surface();
+        virtual ~Gtk3Surface() override;
     };
 
 }

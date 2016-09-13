@@ -34,7 +34,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTextLine)
 
     SwTextLine( SwTextFrame *pFrame, SwParaPortion *pNew = nullptr );
-    virtual ~SwTextLine();
+    virtual ~SwTextLine() override;
 
     inline       SwParaPortion *GetPara()       { return pLine; }
     inline const SwParaPortion *GetPara() const { return pLine; }

@@ -125,7 +125,7 @@ protected:
 
 public:
 
-    virtual ~OGetThread()
+    virtual ~OGetThread() override
         {
             if (isRunning())
             {

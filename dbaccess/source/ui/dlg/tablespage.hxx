@@ -57,7 +57,7 @@ namespace dbaui
         virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
         OTableSubscriptionPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
-        virtual ~OTableSubscriptionPage();
+        virtual ~OTableSubscriptionPage() override;
         virtual void dispose() override;
 
     protected:

@@ -79,7 +79,7 @@ friend class SfxStyleDialog;
     void    UpdateName_Impl(ListBox *, const OUString &rNew);
     void    SetDescriptionText_Impl();
 
-    virtual ~SfxManageStyleSheetPage();
+    virtual ~SfxManageStyleSheetPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );

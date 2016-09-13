@@ -61,7 +61,7 @@ class OOX_DLLPUBLIC ContextHandler : public ContextHandler_BASE
 {
 public:
     explicit            ContextHandler( const ContextHandler& rParent );
-    virtual             ~ContextHandler();
+    virtual             ~ContextHandler() override;
 
     /** Returns the filter instance. */
     XmlFilterBase&      getFilter() const;

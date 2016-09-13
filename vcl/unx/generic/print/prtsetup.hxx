@@ -65,7 +65,7 @@ class RTSDialog : public TabDialog
     void insertAllPPDValues( ListBox&, const psp::PPDParser*, const psp::PPDKey* );
 public:
     RTSDialog(const ::psp::PrinterInfo& rJobData, vcl::Window* pParent = nullptr);
-    virtual ~RTSDialog();
+    virtual ~RTSDialog() override;
     virtual void dispose() override;
 
     const ::psp::PrinterInfo& getSetup() const { return m_aJobData; }
@@ -92,7 +92,7 @@ class RTSPaperPage : public TabPage
     DECL_LINK_TYPED( SelectHdl, ListBox&, void );
 public:
     explicit RTSPaperPage( RTSDialog* );
-    virtual ~RTSPaperPage();
+    virtual ~RTSPaperPage() override;
     virtual void dispose() override;
 
     void update();
@@ -119,7 +119,7 @@ class RTSDevicePage : public TabPage
     DECL_LINK_TYPED( ModifyHdl, Edit&, void );
 public:
     explicit RTSDevicePage( RTSDialog* );
-    virtual ~RTSDevicePage();
+    virtual ~RTSDevicePage() override;
     virtual void dispose() override;
 
     sal_uLong getLevel();

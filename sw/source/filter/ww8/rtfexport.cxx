@@ -1326,7 +1326,7 @@ private:
 
 public:
     SwRTFWriter(const OUString& rFilterName, const OUString& rBaseURL);
-    virtual ~SwRTFWriter();
+    virtual ~SwRTFWriter() override;
     virtual sal_uLong WriteStream() override;
 };
 

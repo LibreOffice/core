@@ -162,7 +162,7 @@ private:
 public:
     SwAttrPool( SwDoc* pDoc );
 protected:
-    virtual ~SwAttrPool();
+    virtual ~SwAttrPool() override;
 public:
 
           SwDoc* GetDoc()           { return m_pDoc; }

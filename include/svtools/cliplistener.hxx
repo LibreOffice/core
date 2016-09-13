@@ -38,7 +38,7 @@ class SVT_DLLPUBLIC TransferableClipboardListener : public ::cppu::WeakImplHelpe
 public:
             // Link is called with a TransferableDataHelper pointer
             TransferableClipboardListener( const Link<TransferableDataHelper*,void>& rCallback );
-            virtual ~TransferableClipboardListener();
+            virtual ~TransferableClipboardListener() override;
 
     void    AddListener( vcl::Window* pWin ) { AddRemoveListener(pWin, true); }
     void    RemoveListener( vcl::Window* pWin ) { AddRemoveListener(pWin, false); }

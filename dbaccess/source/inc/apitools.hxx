@@ -38,7 +38,7 @@ class OSubComponent : public ::cppu::OComponentHelper
 protected:
     // the parent must support the tunnel implementation
     css::uno::Reference< css::uno::XInterface > m_xParent;
-    virtual ~OSubComponent();
+    virtual ~OSubComponent() override;
 
 public:
     OSubComponent(::osl::Mutex& _rMutex,

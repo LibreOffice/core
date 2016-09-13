@@ -49,7 +49,7 @@ namespace dbaui
         DECL_LINK_TYPED( SplitHdl, Splitter*, void );
     public:
         OQueryContainerWindow(vcl::Window* pParent, OQueryController& _rController,const css::uno::Reference< css::uno::XComponentContext >&);
-        virtual ~OQueryContainerWindow();
+        virtual ~OQueryContainerWindow() override;
         virtual void dispose() override;
 
         virtual void Construct() override;

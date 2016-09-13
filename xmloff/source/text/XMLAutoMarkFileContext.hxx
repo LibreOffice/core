@@ -42,7 +42,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName);
 
-    virtual ~XMLAutoMarkFileContext();
+    virtual ~XMLAutoMarkFileContext() override;
 
 protected:
 

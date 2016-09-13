@@ -138,7 +138,7 @@ public:
     LwpTab* Lookup(sal_uInt16 nIndex);
     LwpTabRack* GetNext();
 private:
-    virtual ~LwpTabRack(){}
+    virtual ~LwpTabRack() override {}
 
     enum{
         MaxTabs = 15

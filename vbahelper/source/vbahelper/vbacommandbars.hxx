@@ -35,7 +35,7 @@ private:
 
 public:
     ScVbaCommandBars( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
-    virtual ~ScVbaCommandBars();
+    virtual ~ScVbaCommandBars() override;
 
     // XCommandBars
     virtual css::uno::Reference< ov::XCommandBar > SAL_CALL Add( const css::uno::Any& Name, const css::uno::Any& Position, const css::uno::Any& MenuBar, const css::uno::Any& Temporary ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;

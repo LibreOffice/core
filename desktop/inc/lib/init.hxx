@@ -32,7 +32,7 @@ namespace desktop {
     {
     public:
         explicit CallbackFlushHandler(LibreOfficeKitDocument* pDocument, LibreOfficeKitCallback pCallback, void* pData);
-        virtual ~CallbackFlushHandler();
+        virtual ~CallbackFlushHandler() override;
         virtual void Invoke() override;
         static void callback(const int type, const char* payload, void* data);
         void queue(const int type, const char* data);

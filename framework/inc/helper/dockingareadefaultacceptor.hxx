@@ -52,7 +52,7 @@ class DockingAreaDefaultAcceptor    :   public ::cppu::WeakImplHelper< css::ui::
         *//*-*****************************************************************************************************/
 
          DockingAreaDefaultAcceptor(    const css::uno::Reference< css::frame::XFrame >& xOwner );
-        virtual ~DockingAreaDefaultAcceptor();
+        virtual ~DockingAreaDefaultAcceptor() override;
 
         //  XDockingAreaAcceptor
 

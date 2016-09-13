@@ -64,7 +64,7 @@ namespace XSLT
         int SAL_CALL closeOutput();
 
     private:
-        virtual ~Reader();
+        virtual ~Reader() override;
 
         static const sal_Int32 OUTPUT_BUFFER_SIZE;
         static const sal_Int32 INPUT_BUFFER_SIZE;
@@ -118,7 +118,7 @@ namespace XSLT
         rtl::Reference<Reader> m_Reader;
 
     protected:
-        virtual ~LibXSLTTransformer() {
+        virtual ~LibXSLTTransformer() override {
             if (m_Reader.is()) {
                 m_Reader->terminate();
                 m_Reader->forceStateStopped();

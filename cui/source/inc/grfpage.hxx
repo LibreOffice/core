@@ -92,7 +92,7 @@ class SvxGrfCropPage : public SfxTabPage
 
 
     SvxGrfCropPage( vcl::Window *pParent, const SfxItemSet &rSet );
-    virtual ~SvxGrfCropPage();
+    virtual ~SvxGrfCropPage() override;
     virtual void dispose() override;
 
     DECL_LINK_TYPED( ZoomHdl, Edit&, void );

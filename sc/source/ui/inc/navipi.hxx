@@ -57,7 +57,7 @@ class ScScenarioListBox : public ListBox
 {
 public:
     explicit            ScScenarioListBox( ScScenarioWindow& rParent );
-    virtual             ~ScScenarioListBox();
+    virtual             ~ScScenarioListBox() override;
 
     void                UpdateEntries( const std::vector<OUString> &aNewEntryList );
 
@@ -96,7 +96,7 @@ class ScScenarioWindow : public vcl::Window
 {
 public:
             ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_List, const OUString& aQH_Comment);
-            virtual ~ScScenarioWindow();
+            virtual ~ScScenarioWindow() override;
     virtual void dispose() override;
 
     void    NotifyState( const SfxPoolItem* pState );
@@ -120,7 +120,7 @@ class ColumnEdit : public SpinField
 {
 public:
             ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId );
-            virtual ~ColumnEdit();
+            virtual ~ColumnEdit() override;
 
     SCCOL   GetCol() { return nCol; }
     void    SetCol( SCCOL nColNo );
@@ -151,7 +151,7 @@ class RowEdit : public NumericField
 {
 public:
             RowEdit( ScNavigatorDlg* pParent, const ResId& rResId );
-            virtual ~RowEdit();
+            virtual ~RowEdit() override;
 
     SCROW   GetRow()                { return (SCROW)GetValue(); }
     void    SetRow( SCROW nRow ){ SetValue( nRow ); }
@@ -172,7 +172,7 @@ class ScDocListBox : public ListBox
 {
 public:
             ScDocListBox( ScNavigatorDlg* pParent, const ResId& rResId );
-            virtual ~ScDocListBox();
+            virtual ~ScDocListBox() override;
 
 protected:
     virtual void    Select() override;
@@ -187,7 +187,7 @@ class CommandToolBox : public ToolBox
 {
 public:
             CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId );
-            virtual ~CommandToolBox();
+            virtual ~CommandToolBox() override;
 
     void Select( sal_uInt16 nId );
     void UpdateButtons();
@@ -306,7 +306,7 @@ protected:
 public:
                 ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl::Window* pParent,
                     const bool bUseStyleSettingsBackground);
-                virtual ~ScNavigatorDlg();
+                virtual ~ScNavigatorDlg() override;
     virtual void dispose() override;
 
     using Window::Notify;

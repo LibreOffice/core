@@ -34,7 +34,7 @@ class SwExtTextInput : public SwPaM
     LanguageType eInputLanguage;
 public:
     SwExtTextInput( const SwPaM& rPam, Ring* pRing = nullptr );
-    virtual ~SwExtTextInput();
+    virtual ~SwExtTextInput() override;
 
     void SetInputData( const CommandExtTextInputData& rData );
     const std::vector<ExtTextInputAttr>& GetAttrs() const { return aAttrs; }

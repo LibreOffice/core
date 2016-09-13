@@ -26,7 +26,7 @@ public:
         SfxBindings* pB, SfxChildWindow* pCW,
         vcl::Window* pParent, ScViewData* pViewData );
 
-    virtual ~ScSamplingDialog();
+    virtual ~ScSamplingDialog() override;
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;

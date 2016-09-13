@@ -87,7 +87,7 @@ private:
         { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
 public:
                             ScSpreadsheetSettings();
-    virtual                 ~ScSpreadsheetSettings();
+    virtual                 ~ScSpreadsheetSettings() override;
 
     static OUString  getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
@@ -225,7 +225,7 @@ class ScRecentFunctionsObj : public cppu::WeakImplHelper<
 {
 public:
                             ScRecentFunctionsObj();
-    virtual                 ~ScRecentFunctionsObj();
+    virtual                 ~ScRecentFunctionsObj() override;
 
                             // XRecentFunctions
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL getRecentFunctionIds()
@@ -252,7 +252,7 @@ class ScFunctionListObj : public cppu::WeakImplHelper<
 {
 public:
                             ScFunctionListObj();
-    virtual                 ~ScFunctionListObj();
+    virtual                 ~ScFunctionListObj() override;
 
                             // XFunctionDescriptions
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL

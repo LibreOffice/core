@@ -58,7 +58,7 @@ class WrapPolygonHandler : public LoggedProperties
 {
 public:
     WrapPolygonHandler();
-    virtual ~WrapPolygonHandler();
+    virtual ~WrapPolygonHandler() override;
 
     const WrapPolygon::Pointer_t& getPolygon() { return mpPolygon;}
 

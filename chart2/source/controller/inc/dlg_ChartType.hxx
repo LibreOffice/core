@@ -34,7 +34,7 @@ class ChartTypeDialog : public ModalDialog
 public:
     ChartTypeDialog( vcl::Window* pWindow
         , const css::uno::Reference< css::frame::XModel >& xChartModel );
-    virtual ~ChartTypeDialog();
+    virtual ~ChartTypeDialog() override;
     virtual void dispose() override;
 
 private:

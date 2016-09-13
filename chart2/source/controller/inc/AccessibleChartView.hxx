@@ -58,7 +58,7 @@ class AccessibleChartView :
 {
 public:
     AccessibleChartView(SdrView* pView );
-    virtual ~AccessibleChartView();
+    virtual ~AccessibleChartView() override;
 
     AccessibleChartView() = delete;
 

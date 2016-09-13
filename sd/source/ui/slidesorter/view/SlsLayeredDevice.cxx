@@ -45,7 +45,7 @@ public:
     {
     }
 
-    virtual ~LayerInvalidator ( )
+    virtual ~LayerInvalidator ( ) override
     {
     }
 

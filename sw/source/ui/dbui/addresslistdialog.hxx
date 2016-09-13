@@ -86,7 +86,7 @@ class SwAddressListDialog : public SfxModalDialog
 
 public:
     SwAddressListDialog(SwMailMergeAddressBlockPage* pParent);
-    virtual ~SwAddressListDialog();
+    virtual ~SwAddressListDialog() override;
     virtual void dispose() override;
 
     css::uno::Reference< css::sdbc::XDataSource>

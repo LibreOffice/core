@@ -32,7 +32,7 @@ class OChildDispListener_Impl : public ::cppu::WeakImplHelper < css::lang::XEven
 
 public:
     explicit OChildDispListener_Impl( OStorage& aStorage );
-    virtual ~OChildDispListener_Impl();
+    virtual ~OChildDispListener_Impl() override;
 
     void OwnerIsDisposed();
 

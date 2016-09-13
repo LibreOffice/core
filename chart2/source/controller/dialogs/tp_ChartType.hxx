@@ -51,7 +51,7 @@ public:
     ChartTypeTabPage( vcl::Window* pParent
                 , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
                 , bool bDoLiveUpdate, bool bShowDescription = true );
-    virtual ~ChartTypeTabPage();
+    virtual ~ChartTypeTabPage() override;
     virtual void        dispose() override;
 
     virtual void        initializePage() override;

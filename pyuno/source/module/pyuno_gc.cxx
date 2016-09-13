@@ -49,7 +49,7 @@ public:
     GCThread( PyInterpreterState *interpreter, PyObject * object );
 
 private:
-    virtual ~GCThread() {}
+    virtual ~GCThread() override {}
 
     virtual void execute() override;
 

@@ -53,7 +53,7 @@ class GraphicExportDialog : public cppu::WeakImplHelper
 public:
 
     explicit GraphicExportDialog( const Reference<XComponentContext>& rxContext );
-    virtual ~GraphicExportDialog();
+    virtual ~GraphicExportDialog() override;
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence<Any>& aArguments ) throw (Exception, RuntimeException, std::exception ) override;

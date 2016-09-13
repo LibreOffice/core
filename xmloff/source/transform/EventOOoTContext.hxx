@@ -32,7 +32,7 @@ public:
     XMLEventOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               bool bPersistent = false  );
-    virtual ~XMLEventOOoTransformerContext();
+    virtual ~XMLEventOOoTransformerContext() override;
 
     static XMLTransformerOOoEventMap_Impl *CreateEventMap();
     static void FlushEventMap( XMLTransformerOOoEventMap_Impl *p );

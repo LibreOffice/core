@@ -36,7 +36,7 @@ class PageOrientationControl : public SfxPopupWindow
 {
 public:
     PageOrientationControl(sal_uInt16 nId);
-    virtual ~PageOrientationControl();
+    virtual ~PageOrientationControl() override;
     virtual void dispose() override;
 
 private:

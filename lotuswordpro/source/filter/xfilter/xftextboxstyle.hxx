@@ -71,7 +71,7 @@ class XFTextBoxStyle : public XFStyle
 public:
     XFTextBoxStyle();
 
-    virtual ~XFTextBoxStyle();
+    virtual ~XFTextBoxStyle() override;
 
 public:
 

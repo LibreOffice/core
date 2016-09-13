@@ -40,7 +40,7 @@ public:
                        const OUString& rLName,
                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList );
 
-    virtual ~ScXMLTableColContext();
+    virtual ~ScXMLTableColContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -69,7 +69,7 @@ public:
                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         const bool bHeader, const bool bGroup);
 
-    virtual ~ScXMLTableColsContext();
+    virtual ~ScXMLTableColsContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

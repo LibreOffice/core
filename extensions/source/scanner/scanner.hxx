@@ -52,7 +52,7 @@ protected:
 public:
 
                                             ScannerManager();
-    virtual                                 ~ScannerManager();
+    virtual                                 ~ScannerManager() override;
 
     // XScannerManager
     virtual Sequence< ScannerContext > SAL_CALL  getAvailableScanners() throw(std::exception) override;

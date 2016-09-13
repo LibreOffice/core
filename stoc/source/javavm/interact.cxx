@@ -43,7 +43,7 @@ public:
     virtual void SAL_CALL select() throw (css::uno::RuntimeException, std::exception) override {}
 
 private:
-    virtual inline ~AbortContinuation() {}
+    virtual inline ~AbortContinuation() override {}
 };
 
 }
@@ -61,7 +61,7 @@ public:
     bool isSelected() const;
 
 private:
-    virtual inline ~RetryContinuation() {}
+    virtual inline ~RetryContinuation() override {}
 
     mutable osl::Mutex m_aMutex;
     bool m_bSelected;

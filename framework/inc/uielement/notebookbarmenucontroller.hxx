@@ -47,7 +47,7 @@ namespace framework
 
         public:
             NotebookbarMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~NotebookbarMenuController();
+            virtual ~NotebookbarMenuController() override;
 
             // XServiceInfo
             DECLARE_XSERVICEINFO

@@ -66,7 +66,7 @@ class SystemExec :     public  ::cppu::WeakImplHelper<
 
         // ctor/dtor
                  SystemExec( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-        virtual ~SystemExec(                                                                     );
+        virtual ~SystemExec(                                                                     ) override;
 
         // XInterface, XTypeProvider, XServiceInfo
         DECLARE_XSERVICEINFO

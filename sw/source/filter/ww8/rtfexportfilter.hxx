@@ -48,7 +48,7 @@ protected:
     css::uno::Reference<css::lang::XComponent> m_xSrcDoc;
 public:
     explicit RtfExportFilter(const css::uno::Reference<css::uno::XComponentContext>& xCtx);
-    virtual ~RtfExportFilter();
+    virtual ~RtfExportFilter() override;
 
     // XFilter
     virtual sal_Bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) throw(css::uno::RuntimeException, std::exception) override;

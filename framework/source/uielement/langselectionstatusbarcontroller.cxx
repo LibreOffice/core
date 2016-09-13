@@ -95,7 +95,7 @@ public:
     virtual void SAL_CALL click( const css::awt::Point& aPos ) throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    virtual ~LangSelectionStatusbarController() {}
+    virtual ~LangSelectionStatusbarController() override {}
 
     bool            m_bShowMenu;        // if the menu is to be displayed or not (depending on the selected object/text)
     SvtScriptType   m_nScriptType;      // the flags for the different script types available in the selection, LATIN = 0x0001, ASIAN = 0x0002, COMPLEX = 0x0004

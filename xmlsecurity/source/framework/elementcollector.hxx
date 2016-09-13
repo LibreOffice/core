@@ -68,7 +68,7 @@ public:
         css::xml::crypto::sax::ElementMarkPriority nPriority,
         bool bToModify,
         const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& xReferenceResolvedListener);
-    virtual ~ElementCollector() {};
+    virtual ~ElementCollector() override {};
 
     css::xml::crypto::sax::ElementMarkPriority getPriority() const { return m_nPriority;}
     bool getModify() const { return m_bToModify;}

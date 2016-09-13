@@ -486,7 +486,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
         }
     }
 
-    virtual ~SwXParagraphEnumerationImpl()
+    virtual ~SwXParagraphEnumerationImpl() override
         { m_pCursor.reset(nullptr); }
     virtual void SAL_CALL release() throw () override
     {
@@ -701,7 +701,7 @@ public:
     {
     }
 
-    virtual ~Impl()
+    virtual ~Impl() override
     {
         // Impl owns the bookmark; delete it here: SolarMutex is locked
         Invalidate();

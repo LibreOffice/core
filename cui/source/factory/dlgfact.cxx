@@ -1289,7 +1289,7 @@ public:
     }
 
     virtual short Execute() override;
-    virtual ~SvxMacroAssignDialog();
+    virtual ~SvxMacroAssignDialog() override;
 
 private:
     SfxItemSet                              m_aItems;

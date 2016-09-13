@@ -135,7 +135,7 @@ public:
     ScannerThread( const std::shared_ptr<SaneHolder>& pHolder,
                    const Reference< css::lang::XEventListener >& listener,
                    ScannerManager* pManager );
-    virtual ~ScannerThread();
+    virtual ~ScannerThread() override;
 };
 
 

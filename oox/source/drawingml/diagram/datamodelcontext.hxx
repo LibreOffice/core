@@ -32,7 +32,7 @@ class DataModelContext : public ::oox::core::ContextHandler2
 {
 public:
     DataModelContext( ::oox::core::ContextHandler2Helper& rParent, const DiagramDataPtr & pDataModelPtr );
-    virtual ~DataModelContext();
+    virtual ~DataModelContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

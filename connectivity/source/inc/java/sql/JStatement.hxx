@@ -115,7 +115,7 @@ namespace connectivity
 
         virtual void createStatement(JNIEnv* _pEnv) = 0;
 
-        virtual ~java_sql_Statement_Base();
+        virtual ~java_sql_Statement_Base() override;
 
         sal_Int32 impl_getProperty(const char* _pMethodName, jmethodID& _inout_MethodID);
         sal_Int32 impl_getProperty(const char* _pMethodName, jmethodID& _inout_MethodID,sal_Int32 _nDefault);
@@ -187,7 +187,7 @@ namespace connectivity
 
         virtual void createStatement(JNIEnv* _pEnv) override;
 
-        virtual ~java_sql_Statement();
+        virtual ~java_sql_Statement() override;
     public:
         DECLARE_SERVICE_INFO();
         virtual jclass getMyClass() const override;

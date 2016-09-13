@@ -29,7 +29,7 @@ public:
                         XMLPageMasterPropSetMapper(
                             const XMLPropertyMapEntry* pEntries,
                             const rtl::Reference< XMLPropertyHandlerFactory >& rFactory );
-    virtual             ~XMLPageMasterPropSetMapper();
+    virtual             ~XMLPageMasterPropSetMapper() override;
 };
 
 #endif

@@ -33,7 +33,7 @@ private:
 
 public:
              SwWebTextShell(SwView &rView);
-    virtual ~SwWebTextShell();
+    virtual ~SwWebTextShell() override;
 };
 
 #endif

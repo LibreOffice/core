@@ -78,7 +78,7 @@ class OTextInputStream : public WeakImplHelper< XTextInputStream2, XServiceInfo 
 
 public:
     OTextInputStream();
-    virtual ~OTextInputStream();
+    virtual ~OTextInputStream() override;
 
     // Methods XTextInputStream
     virtual OUString SAL_CALL readLine(  )

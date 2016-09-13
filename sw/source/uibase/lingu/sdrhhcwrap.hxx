@@ -45,7 +45,7 @@ public:
                    const vcl::Font* pTargetFnt,
                    sal_Int32 nConvOptions, bool bInteractive );
 
-    virtual ~SdrHHCWrapper();
+    virtual ~SdrHHCWrapper() override;
 
     virtual bool ConvertNextDocument() override;
     void    StartTextConversion();

@@ -78,7 +78,7 @@ namespace accessibility
         AccessibleEditableTextPara ( const css::uno::Reference< css::accessibility::XAccessible >& rParent,
                                      const AccessibleParaManager* _pParaManager = nullptr );
 
-        virtual ~AccessibleEditableTextPara ();
+        virtual ~AccessibleEditableTextPara () override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface (const css::uno::Type & rType) throw (css::uno::RuntimeException, std::exception) override;

@@ -72,7 +72,7 @@ private:
 public:
     ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
                       DockingWindow* pDockingWin );
-    virtual ~ImplDockFloatWin();
+    virtual ~ImplDockFloatWin() override;
     virtual void dispose() override;
 
     virtual void    Move() override;

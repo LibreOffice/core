@@ -34,7 +34,7 @@ public:
     SvxGrfCrop( sal_Int32 nLeft,    sal_Int32 nRight,
                 sal_Int32 nTop,     sal_Int32 nBottom,
                 sal_uInt16  );
-    virtual ~SvxGrfCrop();
+    virtual ~SvxGrfCrop() override;
 
     // "pure virtual methods" from SfxPoolItem
     virtual bool                operator==( const SfxPoolItem& ) const override;

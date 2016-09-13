@@ -68,7 +68,7 @@ private:
                                             const ::std::vector< OUString >& rFormats,
                                             bool bRecursive );
 
-    virtual                     ~SearchThread();
+    virtual                     ~SearchThread() override;
     virtual void                execute() override;
 
 public:
@@ -93,7 +93,7 @@ private:
 
 public:
                         SearchProgress( vcl::Window* pParent, const INetURLObject& rStartURL );
-    virtual             ~SearchProgress();
+    virtual             ~SearchProgress() override;
     virtual void        dispose() override;
 
                         DECL_LINK_TYPED( CleanUpHdl, void*, void );
@@ -112,7 +112,7 @@ private:
     VclPtr<TPGalleryThemeProperties>   mpBrowser;
     TokenList_impl&             mrTakenList;
 
-    virtual                     ~TakeThread();
+    virtual                     ~TakeThread() override;
     virtual void                execute() override;
 
 public:
@@ -139,7 +139,7 @@ private:
 public:
 
     TakeProgress( vcl::Window* pWindow );
-    virtual ~TakeProgress();
+    virtual ~TakeProgress() override;
     virtual void dispose() override;
 
     DECL_LINK_TYPED( CleanUpHdl, void*, void );
@@ -164,7 +164,7 @@ private:
 
 public:
                         ActualizeProgress( vcl::Window* pWindow, GalleryTheme* pThm );
-    virtual             ~ActualizeProgress();
+    virtual             ~ActualizeProgress() override;
     virtual void        dispose() override;
 
     virtual short       Execute() override;
@@ -176,7 +176,7 @@ private:
     VclPtr<Edit> m_pEdit;
 public:
     TitleDialog(vcl::Window* pParent, const OUString& rOldText);
-    virtual ~TitleDialog();
+    virtual ~TitleDialog() override;
     virtual void dispose() override;
     OUString GetTitle() const { return m_pEdit->GetText(); }
 };
@@ -191,7 +191,7 @@ private:
     DECL_LINK_TYPED( ClickOkHdl, Button*, void );
 public:
     GalleryIdDialog( vcl::Window* pParent, GalleryTheme* pThm );
-    virtual ~GalleryIdDialog();
+    virtual ~GalleryIdDialog() override;
     virtual void dispose() override;
     sal_uLong GetId() const { return m_pLbResName->GetSelectEntryPos(); }
 };
@@ -228,7 +228,7 @@ private:
 public:
 
                         TPGalleryThemeGeneral( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual             ~TPGalleryThemeGeneral();
+    virtual             ~TPGalleryThemeGeneral() override;
     virtual void        dispose() override;
 
     void                SetXChgData( ExchangeData* pData );
@@ -291,7 +291,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 
 public:
                         TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet );
-                        virtual ~TPGalleryThemeProperties();
+                        virtual ~TPGalleryThemeProperties() override;
     virtual void        dispose() override;
 
     void                SetXChgData( ExchangeData* pData );

@@ -383,7 +383,7 @@ public:
         set_vexpand( true );
         SetExtraSpacing( 2 );
     }
-    virtual ~TransitionPane() { disposeOnce(); }
+    virtual ~TransitionPane() override { disposeOnce(); }
 
     virtual Size GetOptimalSize() const override
     {

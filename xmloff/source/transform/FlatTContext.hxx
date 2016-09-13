@@ -45,7 +45,7 @@ public:
     // ends. By default, nothing is done.
     // Note that virtual methods cannot be used inside destructors. Use
     // EndElement instead if this is required.
-    virtual ~XMLPersTextContentTContext();
+    virtual ~XMLPersTextContentTContext() override;
 
     // This method is called for all characters that are contained in the
     // current element.

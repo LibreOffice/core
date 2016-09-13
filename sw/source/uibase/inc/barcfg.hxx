@@ -30,7 +30,7 @@ class SwToolbarConfigItem : public utl::ConfigItem
 
 public:
     SwToolbarConfigItem( bool bWeb );
-    virtual ~SwToolbarConfigItem();
+    virtual ~SwToolbarConfigItem() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 

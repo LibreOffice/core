@@ -57,7 +57,7 @@ class ObjectMenuController :  public svt::PopupMenuControllerBase
 
 public:
     explicit ObjectMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~ObjectMenuController();
+    virtual ~ObjectMenuController() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

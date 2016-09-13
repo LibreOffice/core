@@ -79,7 +79,7 @@ public:
                     css::linguistic2::DictionaryType eType,
                     const OUString &rMainURL,
                     bool bWriteable );
-    virtual ~DictionaryNeo();
+    virtual ~DictionaryNeo() override;
 
     // XNamed
     virtual OUString SAL_CALL
@@ -184,7 +184,7 @@ public:
     DicEntry(const OUString &rDicFileWord, bool bIsNegativ);
     DicEntry(const OUString &rDicWord, bool bIsNegativ,
              const OUString &rRplcText);
-    virtual ~DicEntry();
+    virtual ~DicEntry() override;
 
     // XDictionaryEntry
     virtual OUString SAL_CALL

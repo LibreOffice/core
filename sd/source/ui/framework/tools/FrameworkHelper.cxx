@@ -92,7 +92,7 @@ public:
         const OUString& rsEventType,
         const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
         const ::sd::framework::FrameworkHelper::Callback& rCallback);
-    virtual ~CallbackCaller();
+    virtual ~CallbackCaller() override;
 
     virtual void SAL_CALL disposing() override;
     // XEventListener
@@ -127,7 +127,7 @@ class LifetimeController
 {
 public:
     explicit LifetimeController (::sd::ViewShellBase& rBase);
-    virtual ~LifetimeController();
+    virtual ~LifetimeController() override;
 
     virtual void SAL_CALL disposing() override;
 
@@ -297,7 +297,7 @@ class FrameworkHelper::DisposeListener
 {
 public:
     explicit DisposeListener (const ::std::shared_ptr<FrameworkHelper>& rpHelper);
-    virtual ~DisposeListener();
+    virtual ~DisposeListener() override;
 
     virtual void SAL_CALL disposing() override;
 

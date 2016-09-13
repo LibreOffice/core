@@ -43,7 +43,7 @@ namespace comphelper
         ChainableHelperNoState ( ChainablePropertySetInfo *pInfo, SolarMutex* pMutex = nullptr)
         : ChainablePropertySet ( pInfo, pMutex )
         {}
-        virtual ~ChainableHelperNoState () throw( ) {}
+        virtual ~ChainableHelperNoState () throw( ) override {}
         css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override
         { return HelperBaseNoState::queryInterface( aType ); }
         void SAL_CALL acquire(  ) throw () override

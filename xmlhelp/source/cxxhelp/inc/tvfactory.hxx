@@ -41,7 +41,7 @@ class TVFactory: public cppu::WeakImplHelper <
 
         TVFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-        virtual ~TVFactory();
+        virtual ~TVFactory() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL

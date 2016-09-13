@@ -27,7 +27,7 @@
 class XMLDurationPropertyHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLDurationPropertyHdl();
+    virtual ~XMLDurationPropertyHdl() override;
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
@@ -39,7 +39,7 @@ private:
     SvXMLImport*    mpImport;
 public:
     explicit XMLOpacityPropertyHdl( SvXMLImport* pImport );
-    virtual ~XMLOpacityPropertyHdl();
+    virtual ~XMLOpacityPropertyHdl() override;
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
@@ -47,7 +47,7 @@ public:
 class XMLTextAnimationStepPropertyHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLTextAnimationStepPropertyHdl();
+    virtual ~XMLTextAnimationStepPropertyHdl() override;
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };
@@ -60,7 +60,7 @@ private:
 
 public:
     explicit XMLDateTimeFormatHdl( SvXMLExport* pExport );
-    virtual ~XMLDateTimeFormatHdl();
+    virtual ~XMLDateTimeFormatHdl() override;
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };

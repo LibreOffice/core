@@ -44,7 +44,7 @@ public:
     DataEditor( vcl::Window* pParent,
                 const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
                 const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~DataEditor();
+    virtual ~DataEditor() override;
     virtual void dispose() override;
 
     // Dialog

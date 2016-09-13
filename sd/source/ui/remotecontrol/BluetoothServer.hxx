@@ -43,7 +43,7 @@ namespace sd
 #endif
     private:
         explicit BluetoothServer( std::vector<Communicator*>* pCommunicators );
-        virtual ~BluetoothServer();
+        virtual ~BluetoothServer() override;
 
         enum { UNKNOWN, DISCOVERABLE, NOT_DISCOVERABLE } meWasDiscoverable;
         static BluetoothServer *spServer;

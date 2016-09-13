@@ -39,7 +39,7 @@ private:
     OUString msDesc;
 
 protected:
-    virtual ~SwAccessibleTextFrame();
+    virtual ~SwAccessibleTextFrame() override;
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:

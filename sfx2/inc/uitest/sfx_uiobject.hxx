@@ -22,7 +22,7 @@ public:
 
     SfxTabDialogUIObject(VclPtr<SfxTabDialog> xTabDialog);
 
-    virtual ~SfxTabDialogUIObject();
+    virtual ~SfxTabDialogUIObject() override;
 
     virtual StringMap get_state() override;
 

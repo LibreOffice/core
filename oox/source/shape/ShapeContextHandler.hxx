@@ -54,7 +54,7 @@ public:
     explicit ShapeContextHandler
     (css::uno::Reference< css::uno::XComponentContext > const & context);
 
-    virtual ~ShapeContextHandler();
+    virtual ~ShapeContextHandler() override;
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName()

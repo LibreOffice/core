@@ -93,7 +93,7 @@ public:
         const css::uno::Sequence< css::document::CmisProperty> & i_cmisProps,
         bool bUseUserData, bool bUseThumbnailSave );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
-    virtual ~SfxDocumentInfoItem();
+    virtual ~SfxDocumentInfoItem() override;
 
     /// update i_xDocProps with the data in this object
     void UpdateDocumentInfo(
@@ -216,7 +216,7 @@ private:
     void                ImplCheckPasswordState();
 
 protected:
-    virtual ~SfxDocumentPage();
+    virtual ~SfxDocumentPage() override;
     virtual void dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
@@ -241,7 +241,7 @@ private:
     SfxDocumentInfoItem*      m_pInfoItem;
 
 protected:
-    virtual ~SfxDocumentDescPage();
+    virtual ~SfxDocumentDescPage() override;
     virtual void dispose() override;
 
     virtual bool            FillItemSet( SfxItemSet* ) override;
@@ -366,7 +366,7 @@ private:
 
 public:
     CustomPropertiesYesNoButton( vcl::Window* pParent, const ResId& rResId );
-    virtual ~CustomPropertiesYesNoButton();
+    virtual ~CustomPropertiesYesNoButton() override;
     virtual void dispose() override;
 
     virtual void    Resize() override;
@@ -444,7 +444,7 @@ public:
         FixedText *pHeaderAccName,
         FixedText *pHeaderAccType,
         FixedText *pHeaderAccValue);
-    virtual ~CustomPropertiesWindow();
+    virtual ~CustomPropertiesWindow() override;
     virtual void dispose() override;
 
     bool                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
@@ -480,7 +480,7 @@ private:
 
 public:
     CustomPropertiesControl(vcl::Window* pParent);
-    virtual ~CustomPropertiesControl();
+    virtual ~CustomPropertiesControl() override;
     virtual void dispose() override;
 
     void            AddLine( const OUString& sName, css::uno::Any& rAny, bool bInteractive );
@@ -506,7 +506,7 @@ private:
     using TabPage::DeactivatePage;
 
 protected:
-    virtual ~SfxCustomPropertiesPage();
+    virtual ~SfxCustomPropertiesPage() override;
     virtual void dispose() override;
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
@@ -559,7 +559,7 @@ struct CmisPropertyLine : public VclBuilderContainer
     std::vector< CmisYesNo* >     m_aYesNos;
     long getItemHeight() const;
     CmisPropertyLine( vcl::Window* pParent );
-    virtual ~CmisPropertyLine();
+    virtual ~CmisPropertyLine() override;
 };
 
 // class CmisPropertiesWindow ------------------------------------------
@@ -634,7 +634,7 @@ protected:
 
 public:
     SfxCmisPropertiesPage( vcl::Window* pParent, const SfxItemSet& );
-    virtual ~SfxCmisPropertiesPage();
+    virtual ~SfxCmisPropertiesPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* );

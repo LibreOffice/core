@@ -35,7 +35,7 @@ class GraphicTransformer : public GraphicTransformer_UnoImplHelper1
     public:
 
     GraphicTransformer();
-    virtual ~GraphicTransformer();
+    virtual ~GraphicTransformer() override;
 
     // XGraphicTransformer
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL colorChange(

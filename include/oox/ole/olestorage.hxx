@@ -54,7 +54,7 @@ public:
                             const css::uno::Reference< css::io::XStream >& rxOutStream,
                             bool bBaseStreamAccess );
 
-    virtual             ~OleStorage();
+    virtual             ~OleStorage() override;
 
 private:
     explicit            OleStorage(

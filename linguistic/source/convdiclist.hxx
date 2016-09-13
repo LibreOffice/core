@@ -71,7 +71,7 @@ class ConvDicList :
 
 public:
     ConvDicList();
-    virtual ~ConvDicList();
+    virtual ~ConvDicList() override;
 
     // XConversionDictionaryList
     virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getDictionaryContainer(  ) throw (css::uno::RuntimeException, std::exception) override;

@@ -73,7 +73,7 @@ public:
     virtual void SAL_CALL initialize( const uno::Sequence< css::uno::Any > & aArguments ) throw ( uno::RuntimeException, uno::Exception, std::exception ) override;
 
 private:
-    virtual ~SequenceInputStreamService() {}
+    virtual ~SequenceInputStreamService() override {}
 
 
     ::osl::Mutex m_aMutex;

@@ -78,7 +78,7 @@ public:
                         SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
                             SfxWorkWindow *pW, bool bWithButtons );
 
-                        virtual ~SfxSplitWindow();
+                        virtual ~SfxSplitWindow() override;
     virtual void        dispose() override;
 
     void                ReleaseWindow_Impl(SfxDockingWindow *pWin, bool bSaveConfig=true);

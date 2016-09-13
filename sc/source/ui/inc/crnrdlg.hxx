@@ -35,7 +35,7 @@ class ScColRowNameRangesDlg : public ScAnyRefDlg
 public:
                     ScColRowNameRangesDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScViewData*    ptrViewData );
-                    virtual ~ScColRowNameRangesDlg();
+                    virtual ~ScColRowNameRangesDlg() override;
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;

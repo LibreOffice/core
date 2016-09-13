@@ -37,7 +37,7 @@ class SW_DLLPUBLIC SwTextFootnote : public SwTextAttr
 
 public:
     SwTextFootnote( SwFormatFootnote& rAttr, sal_Int32 nStart );
-    virtual ~SwTextFootnote();
+    virtual ~SwTextFootnote() override;
 
     inline SwNodeIndex *GetStartNode() const { return m_pStartNode; }
     void SetStartNode( const SwNodeIndex *pNode, bool bDelNodes = true );

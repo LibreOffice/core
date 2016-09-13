@@ -57,7 +57,7 @@ class FlushListener :
 
 public:
     FlushListener( SpellCache& rFO ) : mrSpellCache(rFO) {}
-    virtual ~FlushListener() {}
+    virtual ~FlushListener() override {}
 
     void        SetDicList( css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &rDL );
     void        SetPropSet( css::uno::Reference< css::linguistic2::XLinguProperties > &rPS );

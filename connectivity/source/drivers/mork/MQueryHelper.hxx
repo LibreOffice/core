@@ -127,7 +127,7 @@ namespace connectivity
                                  m_aExprCondType( OR )
                             {}
 
-            virtual ~MQueryExpression() {
+            virtual ~MQueryExpression() override {
                 for (ExprVector::iterator i(m_aExprVector.begin());
                      i != m_aExprVector.end(); ++i)
                 {

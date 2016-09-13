@@ -186,7 +186,7 @@ namespace pcr
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
     protected:
-        virtual ~OPropertyBrowserController();
+        virtual ~OPropertyBrowserController() override;
 
     public:
         // XServiceInfo - static versions

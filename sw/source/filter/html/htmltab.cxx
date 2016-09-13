@@ -2953,7 +2953,7 @@ public:
     HTMLTable *m_pTable;
 
     explicit SectionSaveStruct( SwHTMLParser& rParser );
-    virtual ~SectionSaveStruct();
+    virtual ~SectionSaveStruct() override;
 
 #if OSL_DEBUG_LEVEL > 0
     size_t GetContextStAttrMin() const { return m_nContextStAttrMinSave; }
@@ -3055,7 +3055,7 @@ public:
     CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable, bool bHd,
                      bool bReadOpt );
 
-    virtual ~CellSaveStruct();
+    virtual ~CellSaveStruct() override;
 
     void AddContents( HTMLTableCnts *pNewCnts );
     HTMLTableCnts *GetFirstContents() { return pCnts; }
@@ -4727,7 +4727,7 @@ public:
         rParser.GetNumInfo().Set( aNumRuleInfo );
     }
 
-    virtual ~CaptionSaveStruct();
+    virtual ~CaptionSaveStruct() override;
 };
 
 CaptionSaveStruct::~CaptionSaveStruct()
@@ -4932,7 +4932,7 @@ public:
         m_pCurrentTable( pCurTable )
     {}
 
-    virtual ~TableSaveStruct();
+    virtual ~TableSaveStruct() override;
 
     // Aufbau der Tabelle anstossen und die Tabelle ggf. in einen
     // Rahmen packen. Wenn true zurueckgegeben wird muss noch ein

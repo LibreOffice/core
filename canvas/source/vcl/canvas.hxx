@@ -87,7 +87,7 @@ namespace vclcanvas
         void initialize();
 
         /// For resource tracking
-        virtual ~Canvas();
+        virtual ~Canvas() override;
 
         /// Dispose all internal references
         virtual void disposeThis() override;

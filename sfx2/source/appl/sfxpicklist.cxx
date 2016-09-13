@@ -66,7 +66,7 @@ class StringLength : public ::cppu::WeakImplHelper< XStringWidth >
 {
     public:
         StringLength() {}
-        virtual ~StringLength() {}
+        virtual ~StringLength() override {}
 
         // XStringWidth
         sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )

@@ -62,7 +62,7 @@ public:
     //Non-Interface method
     bool SelectServerObj( const OUString& rStr, SwPaM*& rpPam, SwNodeRange*& rpRange ) const;
 
-    virtual ~DocumentLinksAdministrationManager();
+    virtual ~DocumentLinksAdministrationManager() override;
 
 private:
 

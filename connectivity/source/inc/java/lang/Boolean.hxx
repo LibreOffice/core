@@ -32,7 +32,7 @@ namespace connectivity
         static jclass theClass;
     public:
         virtual jclass getMyClass() const override;
-        virtual ~java_lang_Boolean();
+        virtual ~java_lang_Boolean() override;
         // a Constructor, that is needed for when Returning the Object is needed:
         java_lang_Boolean( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 

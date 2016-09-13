@@ -91,7 +91,7 @@ class LwpSilverBullet : public LwpDLNFVList
 public:
     LwpSilverBullet(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
 
-    virtual ~LwpSilverBullet();
+    virtual ~LwpSilverBullet() override;
 
     virtual void RegisterStyle() override;
 

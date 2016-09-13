@@ -72,7 +72,7 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
 
 public:
                                 SvtSysLocaleOptions_Impl();
-    virtual                     ~SvtSysLocaleOptions_Impl();
+    virtual                     ~SvtSysLocaleOptions_Impl() override;
 
     virtual void                Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 

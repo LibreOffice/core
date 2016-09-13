@@ -186,7 +186,7 @@ public:
 
     XFListStyle& operator=(const XFListStyle& other);
 
-    virtual ~XFListStyle();
+    virtual ~XFListStyle() override;
 
 public:
     void    SetDisplayLevel(sal_Int32 level, sal_Int16 nShowLevel);

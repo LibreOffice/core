@@ -247,7 +247,7 @@ class VCL_DLLPUBLIC ServerFontInstance : public LogicalFontInstance
 {
 public:
                             ServerFontInstance( FontSelectPattern& );
-    virtual                 ~ServerFontInstance();
+    virtual                 ~ServerFontInstance() override;
 
     void                    SetServerFont(ServerFont* p);
     void                    HandleFontOptions();

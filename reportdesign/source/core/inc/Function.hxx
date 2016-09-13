@@ -75,7 +75,7 @@ namespace reportdesign
             l.notify();
         }
     protected:
-        virtual ~OFunction();
+        virtual ~OFunction() override;
     public:
         explicit OFunction(css::uno::Reference< css::uno::XComponentContext > const & _xContext);
 

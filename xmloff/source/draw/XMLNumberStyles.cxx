@@ -495,7 +495,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         SdXMLNumberFormatImportContext* pParent,
         SvXMLImportContext* pSlaveContext );
-    virtual ~SdXMLNumberFormatMemberImportContext();
+    virtual ~SdXMLNumberFormatMemberImportContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,

@@ -49,7 +49,7 @@ protected:
                                        ScEEParseEntry* );
 public:
     ScEEImport( ScDocument* pDoc, const ScRange& rRange );
-    virtual ~ScEEImport();
+    virtual ~ScEEImport() override;
 
     virtual sal_uLong    Read( SvStream& rStream, const OUString& rBaseURL ) override;
     virtual ScRange  GetRange() override { return maRange; }

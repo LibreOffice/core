@@ -154,7 +154,7 @@ public:
     void flush() { delay_.set(); }
 
 private:
-    virtual ~WriteThread() {}
+    virtual ~WriteThread() override {}
 
     virtual void execute() override;
 

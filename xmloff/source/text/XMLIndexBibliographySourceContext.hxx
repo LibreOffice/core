@@ -45,7 +45,7 @@ public:
         const OUString& rLocalName,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
-    virtual ~XMLIndexBibliographySourceContext();
+    virtual ~XMLIndexBibliographySourceContext() override;
 
 protected:
 

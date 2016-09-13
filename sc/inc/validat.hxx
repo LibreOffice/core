@@ -92,7 +92,7 @@ public:
                                 ScDocument* pDocument, const ScAddress& rPos );
             ScValidationData( const ScValidationData& r );
             ScValidationData( ScDocument* pDocument, const ScValidationData& r );
-    virtual ~ScValidationData();
+    virtual ~ScValidationData() override;
 
     ScValidationData* Clone() const     // real copy
                     { return new ScValidationData( GetDocument(), *this ); }

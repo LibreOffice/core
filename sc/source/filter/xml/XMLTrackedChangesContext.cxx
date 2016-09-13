@@ -53,7 +53,7 @@ public:
     ScXMLChangeInfoContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLChangeInfoContext();
+    virtual ~ScXMLChangeInfoContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -72,7 +72,7 @@ public:
     ScXMLBigRangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScBigRange& rBigRange);
-    virtual ~ScXMLBigRangeContext();
+    virtual ~ScXMLBigRangeContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -106,7 +106,7 @@ public:
     ScXMLCellContentDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLCellContentDeletionContext();
+    virtual ~ScXMLCellContentDeletionContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -125,7 +125,7 @@ public:
     ScXMLDependenceContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLDependenceContext();
+    virtual ~ScXMLDependenceContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -144,7 +144,7 @@ public:
     ScXMLDependingsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLDependingsContext();
+    virtual ~ScXMLDependingsContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -163,7 +163,7 @@ public:
     ScXMLChangeDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLChangeDeletionContext();
+    virtual ~ScXMLChangeDeletionContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -182,7 +182,7 @@ public:
     ScXMLDeletionsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLDeletionsContext();
+    virtual ~ScXMLDeletionsContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -211,7 +211,7 @@ public:
                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLChangeCellContext* pChangeCellContext);
 
-    virtual ~ScXMLChangeTextPContext();
+    virtual ~ScXMLChangeTextPContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -247,7 +247,7 @@ public:
                                       formula::FormulaGrammar::Grammar& rGrammar,
                                       OUString& rInputString, double& fValue, sal_uInt16& nType,
                                       sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows);
-    virtual ~ScXMLChangeCellContext();
+    virtual ~ScXMLChangeCellContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -282,7 +282,7 @@ public:
     ScXMLPreviousContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLPreviousContext();
+    virtual ~ScXMLPreviousContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -302,7 +302,7 @@ public:
     ScXMLContentChangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLContentChangeContext();
+    virtual ~ScXMLContentChangeContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -320,7 +320,7 @@ public:
     ScXMLInsertionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLInsertionContext();
+    virtual ~ScXMLInsertionContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -338,7 +338,7 @@ public:
     ScXMLInsertionCutOffContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLInsertionCutOffContext();
+    virtual ~ScXMLInsertionCutOffContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -356,7 +356,7 @@ public:
     ScXMLMovementCutOffContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLMovementCutOffContext();
+    virtual ~ScXMLMovementCutOffContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -374,7 +374,7 @@ public:
     ScXMLCutOffsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLCutOffsContext();
+    virtual ~ScXMLCutOffsContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -392,7 +392,7 @@ public:
     ScXMLDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLDeletionContext();
+    virtual ~ScXMLDeletionContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -412,7 +412,7 @@ public:
     ScXMLMovementContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLMovementContext();
+    virtual ~ScXMLMovementContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
@@ -430,7 +430,7 @@ public:
     ScXMLRejectionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
-    virtual ~ScXMLRejectionContext();
+    virtual ~ScXMLRejectionContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,

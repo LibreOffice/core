@@ -53,7 +53,7 @@ class UIElementWrapperBase : private cppu::BaseMutex,
 
     public:
          UIElementWrapperBase( sal_Int16 nType );
-        virtual  ~UIElementWrapperBase();
+        virtual  ~UIElementWrapperBase() override;
 
         // XInterface
         virtual void SAL_CALL acquire() throw () override

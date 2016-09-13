@@ -33,7 +33,7 @@ class ScPaintHint : public SfxHint
 public:
                     ScPaintHint() = delete;
                     ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint = PAINT_ALL );
-                    virtual ~ScPaintHint();
+                    virtual ~ScPaintHint() override;
 
     void            SetPrintFlag(bool bSet) { bPrint = bSet; }
     SCCOL           GetStartCol() const     { return aRange.aStart.Col(); }
@@ -57,7 +57,7 @@ class ScUpdateRefHint : public SfxHint
 public:
                     ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
                                         SCsCOL nX, SCsROW nY, SCsTAB nZ );
-                    virtual ~ScUpdateRefHint();
+                    virtual ~ScUpdateRefHint() override;
 
     UpdateRefMode   GetMode() const         { return eUpdateRefMode; }
     const ScRange&  GetRange() const        { return aRange; }
@@ -84,7 +84,7 @@ class ScLinkRefreshedHint : public SfxHint
 
 public:
                     ScLinkRefreshedHint();
-                    virtual ~ScLinkRefreshedHint();
+                    virtual ~ScLinkRefreshedHint() override;
 
     void            SetSheetLink( const OUString& rSourceUrl );
     void            SetDdeLink( const OUString& rA, const OUString& rT, const OUString& rI, sal_uInt8 nM );
@@ -110,7 +110,7 @@ class ScAutoStyleHint : public SfxHint
 public:
                     ScAutoStyleHint( const ScRange& rR, const OUString& rSt1,
                                         sal_uLong nT, const OUString& rSt2 );
-                    virtual ~ScAutoStyleHint();
+                    virtual ~ScAutoStyleHint() override;
 
     const ScRange&  GetRange() const    { return aRange; }
     const OUString& GetStyle1() const   { return aStyle1; }
@@ -124,7 +124,7 @@ class ScDBRangeRefreshedHint : public SfxHint
 
 public:
                     ScDBRangeRefreshedHint( const ScImportParam& rP );
-                    virtual ~ScDBRangeRefreshedHint();
+                    virtual ~ScDBRangeRefreshedHint() override;
 
     const ScImportParam&  GetImportParam() const    { return aParam; }
 };
@@ -135,7 +135,7 @@ class ScDataPilotModifiedHint : public SfxHint
 
 public:
                     ScDataPilotModifiedHint( const OUString& rName );
-                    virtual ~ScDataPilotModifiedHint();
+                    virtual ~ScDataPilotModifiedHint() override;
 
     const OUString&   GetName() const { return maName; }
 };

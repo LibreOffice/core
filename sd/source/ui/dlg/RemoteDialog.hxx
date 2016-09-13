@@ -33,7 +33,7 @@ private:
     DECL_LINK_TYPED( CloseClickHdl, Button*, void );
 public:
     explicit RemoteDialog( vcl::Window* pWindow );
-    virtual ~RemoteDialog();
+    virtual ~RemoteDialog() override;
     virtual void dispose() override;
 };
 

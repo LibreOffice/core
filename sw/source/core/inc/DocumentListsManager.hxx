@@ -48,7 +48,7 @@ class DocumentListsManager : public IDocumentListsAccess
         // #i91400#
         void trackChangeOfListStyleName( const OUString& rListStyleName,
                                                  const OUString& rNewListStyleName ) override;
-        virtual ~DocumentListsManager();
+        virtual ~DocumentListsManager() override;
 
     private:
 

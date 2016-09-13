@@ -48,7 +48,7 @@ private:
 
 public:
     SwUnoInternalPaM(SwDoc& rDoc);
-    virtual ~SwUnoInternalPaM();
+    virtual ~SwUnoInternalPaM() override;
 
     SwUnoInternalPaM& operator=(const SwPaM& rPaM);
 };
@@ -104,7 +104,7 @@ private:
         throw (css::uno::RuntimeException);
     void    Invalidate();
 
-    virtual ~SwXTextRange();
+    virtual ~SwXTextRange() override;
 
 public:
 

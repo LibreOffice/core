@@ -52,7 +52,7 @@ public:
         DrawDocShell* pShell,
         sal_uLong nSumActionCount,
         sal_uLong nObjCount);
-    virtual ~BreakDlg();
+    virtual ~BreakDlg() override;
     virtual void dispose() override;
 
     short Execute() override;

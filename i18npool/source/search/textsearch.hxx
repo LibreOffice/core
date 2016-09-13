@@ -130,7 +130,7 @@ public:
     explicit TextSearch(
         const css::uno::Reference < css::uno::XComponentContext >& rxContext );
 
-    virtual ~TextSearch();
+    virtual ~TextSearch() override;
 
     // XTextSearch
     virtual void SAL_CALL

@@ -244,7 +244,7 @@ class OStyle :   public ::comphelper::OMutexAndBroadcastHelper
 
 protected:
     void getPropertyDefaultByHandle( sal_Int32 _nHandle, uno::Any& _rDefault ) const override;
-    virtual ~OStyle(){}
+    virtual ~OStyle() override {}
 public:
     OStyle();
 
@@ -2291,7 +2291,7 @@ class OStylesHelper:
     uno::Type                                       m_aType;
 
 protected:
-    virtual ~OStylesHelper(){}
+    virtual ~OStylesHelper() override {}
 public:
     explicit OStylesHelper(const uno::Type& rType = cppu::UnoType<container::XElementAccess>::get());
     OStylesHelper(const OStylesHelper&) = delete;

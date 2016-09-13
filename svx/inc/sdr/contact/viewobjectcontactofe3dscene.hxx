@@ -37,7 +37,7 @@ namespace sdr
         public:
             // basic constructor.
             ViewObjectContactOfE3dScene(ObjectContact& rObjectContact, ViewContact& rViewContact);
-            virtual ~ViewObjectContactOfE3dScene();
+            virtual ~ViewObjectContactOfE3dScene() override;
 
             // process this primitive: Eventually also recursively travel an existing hierarchy,
             // e.g. for group objects, scenes or pages. This method will test geometrical visibility.

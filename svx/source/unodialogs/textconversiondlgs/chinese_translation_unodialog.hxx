@@ -69,7 +69,7 @@ class ChineseTranslation_UnoDialog : public ::cppu::WeakImplHelper <
 {
 public:
     ChineseTranslation_UnoDialog();
-    virtual ~ChineseTranslation_UnoDialog();
+    virtual ~ChineseTranslation_UnoDialog() override;
 
     // lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;

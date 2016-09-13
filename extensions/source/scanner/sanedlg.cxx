@@ -92,7 +92,7 @@ public:
     {
     }
 
-    virtual ~ScanPreview()
+    virtual ~ScanPreview() override
     {
         disposeOnce();
     }

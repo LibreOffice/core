@@ -98,7 +98,7 @@ public:
 
                         SgaObjectSound();
                         SgaObjectSound( const INetURLObject& rURL );
-    virtual            ~SgaObjectSound();
+    virtual            ~SgaObjectSound() override;
 
     virtual SgaObjKind  GetObjKind() const override { return SgaObjKind::Sound; }
     virtual BitmapEx    GetThumbBmp() const override;
@@ -124,7 +124,7 @@ public:
                         SgaObjectSvDraw();
                         SgaObjectSvDraw( const FmFormModel& rModel, const INetURLObject& rURL );
                         SgaObjectSvDraw( SvStream& rIStm, const INetURLObject& rURL );
-    virtual            ~SgaObjectSvDraw() {};
+    virtual            ~SgaObjectSvDraw() override {};
 
     virtual SgaObjKind  GetObjKind() const override { return SgaObjKind::SvDraw; }
 };
@@ -145,7 +145,7 @@ public:
                         SgaObjectBmp();
                         SgaObjectBmp( const INetURLObject& rURL );
                         SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& rFormat );
-    virtual             ~SgaObjectBmp() {};
+    virtual             ~SgaObjectBmp() override {};
 
     virtual SgaObjKind  GetObjKind() const override { return SgaObjKind::Bitmap; }
 };
@@ -157,7 +157,7 @@ public:
                         SgaObjectAnim();
                         SgaObjectAnim( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& rFormatName );
 
-    virtual            ~SgaObjectAnim() {};
+    virtual            ~SgaObjectAnim() override {};
 
     virtual SgaObjKind  GetObjKind() const override { return SgaObjKind::Animation; }
 };
@@ -169,7 +169,7 @@ public:
                         SgaObjectINet();
                         SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& rFormatName );
 
-    virtual            ~SgaObjectINet() {};
+    virtual            ~SgaObjectINet() override {};
 
     virtual SgaObjKind  GetObjKind() const override { return SgaObjKind::Inet; }
 };

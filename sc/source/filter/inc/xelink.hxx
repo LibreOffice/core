@@ -135,7 +135,7 @@ class XclExpLinkManager : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit            XclExpLinkManager( const XclExpRoot& rRoot );
-    virtual             ~XclExpLinkManager();
+    virtual             ~XclExpLinkManager() override;
 
     /** Searches for an EXTERNSHEET index for the given Calc sheet.
         @descr  See above for the meaning of EXTERNSHEET indexes.

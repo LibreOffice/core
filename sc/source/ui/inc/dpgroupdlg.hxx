@@ -92,7 +92,7 @@ class ScDPNumGroupDlg : public ModalDialog
 {
 public:
     explicit            ScDPNumGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& rInfo );
-    virtual             ~ScDPNumGroupDlg();
+    virtual             ~ScDPNumGroupDlg() override;
     virtual void        dispose() override;
     ScDPNumGroupInfo    GetGroupInfo() const;
 
@@ -113,7 +113,7 @@ class ScDPDateGroupDlg : public ModalDialog
 public:
     explicit            ScDPDateGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& rInfo,
                             sal_Int32 nDatePart, const Date& rNullDate );
-    virtual             ~ScDPDateGroupDlg();
+    virtual             ~ScDPDateGroupDlg() override;
     virtual void        dispose() override;
     ScDPNumGroupInfo    GetGroupInfo() const;
     sal_Int32           GetDatePart() const;

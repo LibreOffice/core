@@ -35,7 +35,7 @@ class SdMoveStyleSheetsUndoAction : public SdUndoAction
 public:
     SdMoveStyleSheetsUndoAction(SdDrawDocument* pTheDoc, SdStyleSheetVector& rTheStyles, bool bInserted);
 
-    virtual ~SdMoveStyleSheetsUndoAction();
+    virtual ~SdMoveStyleSheetsUndoAction() override;
     virtual void Undo() override;
     virtual void Redo() override;
 

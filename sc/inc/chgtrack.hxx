@@ -403,7 +403,7 @@ class ScChangeActionIns : public ScChangeAction
     bool mbEndOfList; /// whether or not a row was auto-inserted at the bottom.
 
     ScChangeActionIns( const ScRange& rRange, bool bEndOfList = false );
-    virtual                     ~ScChangeActionIns();
+    virtual                     ~ScChangeActionIns() override;
 
     virtual void                AddContent( ScChangeActionContent* ) override {}
     virtual void                DeleteCellEntries() override {}
@@ -473,7 +473,7 @@ class ScChangeActionDel : public ScChangeAction
     SCsROW              nDy;
 
     ScChangeActionDel( const ScRange& rRange, SCsCOL nDx, SCsROW nDy, ScChangeTrack* );
-    virtual ~ScChangeActionDel();
+    virtual ~ScChangeActionDel() override;
 
     virtual void                AddContent( ScChangeActionContent* ) override;
     virtual void                DeleteCellEntries() override;
@@ -553,7 +553,7 @@ class ScChangeActionMove : public ScChangeAction
             nStartLastCut(0),
             nEndLastCut(0)
         {}
-    virtual ~ScChangeActionMove();
+    virtual ~ScChangeActionMove() override;
 
     virtual void                AddContent( ScChangeActionContent* ) override;
     virtual void                DeleteCellEntries() override;
@@ -734,7 +734,7 @@ public:
         const ScBigRange& aBigRange, ScDocument* pDoc,
         const OUString& sNewValue ); // to use for XML Import of Generated Actions
 
-    virtual ~ScChangeActionContent();
+    virtual ~ScChangeActionContent() override;
 
     ScChangeActionContent*  GetNextContent() const { return pNextContent; }
     ScChangeActionContent*  GetPrevContent() const { return pPrevContent; }
@@ -994,7 +994,7 @@ public:
 
     SC_DLLPUBLIC ScChangeTrack( ScDocument* );
     ScChangeTrack(ScDocument* pDocP, const std::set<OUString>& aTempUserCollection); // only to use in the XML import
-    SC_DLLPUBLIC virtual ~ScChangeTrack();
+    SC_DLLPUBLIC virtual ~ScChangeTrack() override;
     void Clear();
 
     ScChangeActionContent*  GetFirstGenerated() const { return pFirstGeneratedDelContent; }

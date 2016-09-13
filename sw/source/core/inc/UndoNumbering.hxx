@@ -41,7 +41,7 @@ public:
     SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
                             const OUString& rReplaceRule );
 
-    virtual ~SwUndoInsNum();
+    virtual ~SwUndoInsNum() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -70,7 +70,7 @@ class SwUndoDelNum : public SwUndo, private SwUndRng
 public:
     SwUndoDelNum( const SwPaM& rPam );
 
-    virtual ~SwUndoDelNum();
+    virtual ~SwUndoDelNum() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

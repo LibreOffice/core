@@ -33,7 +33,7 @@ public:                                                 \
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
     virtual Bitmap createScreenshot() const override;   \
     virtual OString GetScreenshotId() const override;   \
-    virtual         ~Class();                           \
+    virtual         ~Class() override;                           \
     virtual short   Execute() override ;
 
 #define IMPL_ABSTDLG_BASE(Class)                    \

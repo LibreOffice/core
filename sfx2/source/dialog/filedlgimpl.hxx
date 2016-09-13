@@ -179,7 +179,7 @@ namespace sfx2
                                     const OUString& sStandardDir = OUString(),
                                     const css::uno::Sequence< OUString >&   rBlackList = css::uno::Sequence< OUString >()
                                 );
-        virtual                 ~FileDialogHelper_Impl();
+        virtual                 ~FileDialogHelper_Impl() override;
 
         ErrCode                 execute( std::vector<OUString>& rpURLList,
                                          SfxItemSet *&   rpSet,

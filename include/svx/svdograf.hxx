@@ -119,7 +119,7 @@ public:
                             SdrGrafObj();
                             SdrGrafObj(const Graphic& rGrf);
                             SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect);
-    virtual                 ~SdrGrafObj();
+    virtual                 ~SdrGrafObj() override;
 
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
     const GraphicObject&    GetGraphicObject(bool bForceSwapIn = false) const;

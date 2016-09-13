@@ -70,7 +70,7 @@ public:
         vcl::Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
         SfxBindings* pBindings);
-    virtual ~PageFormatPanel();
+    virtual ~PageFormatPanel() override;
     virtual void dispose() override;
 
     static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );

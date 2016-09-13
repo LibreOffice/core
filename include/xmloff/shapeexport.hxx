@@ -244,7 +244,7 @@ private:
     SAL_DLLPRIVATE void ImpExportTableShape(const css::uno::Reference< css::drawing::XShape >& xShape, XmlShapeType eShapeType, XMLShapeExportFlags nFeatures = SEF_DEFAULT,    css::awt::Point* pRefPoint = nullptr );
 public:
     XMLShapeExport(SvXMLExport& rExp, SvXMLExportPropertyMapper *pExtMapper=nullptr );
-    virtual ~XMLShapeExport();
+    virtual ~XMLShapeExport() override;
 
     // This method collects all automatic styles for the given XShape
     void collectShapeAutoStyles(

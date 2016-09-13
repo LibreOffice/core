@@ -52,7 +52,7 @@ namespace connectivity
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
                                                                    const css::uno::Any& rValue)
                                                                         throw (css::uno::Exception, std::exception) override;
-            virtual ~OPreparedStatement();
+            virtual ~OPreparedStatement() override;
 
             virtual void SAL_CALL disposing() override;
 

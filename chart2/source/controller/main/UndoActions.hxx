@@ -74,7 +74,7 @@ public:
     virtual void SAL_CALL disposing() override;
 
 protected:
-    virtual ~UndoElement();
+    virtual ~UndoElement() override;
 
 private:
     void    impl_toggleModelState();
@@ -102,7 +102,7 @@ public:
     virtual void SAL_CALL disposing() override;
 
 protected:
-    virtual ~ShapeUndoElement();
+    virtual ~ShapeUndoElement() override;
 
 private:
     SdrUndoAction*  m_pAction;

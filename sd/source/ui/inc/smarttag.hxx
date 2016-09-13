@@ -48,7 +48,7 @@ class SmartTag : public SimpleReferenceComponent
 
 public:
     explicit SmartTag( ::sd::View& rView );
-    virtual ~SmartTag();
+    virtual ~SmartTag() override;
 
     /** returns true if the SmartTag consumes this event. */
     virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& );

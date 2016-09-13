@@ -35,7 +35,7 @@ private:
 
 public:
     SvtAccessibilityOptions();
-    virtual ~SvtAccessibilityOptions();
+    virtual ~SvtAccessibilityOptions() override;
 
     // get & set config entries
     bool        GetIsForPagePreviews() const;

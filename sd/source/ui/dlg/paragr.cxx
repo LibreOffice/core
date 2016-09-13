@@ -38,7 +38,7 @@ class SdParagraphNumTabPage : public SfxTabPage
 {
 public:
     SdParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SdParagraphNumTabPage();
+    virtual ~SdParagraphNumTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );

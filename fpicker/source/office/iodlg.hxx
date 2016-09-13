@@ -160,7 +160,7 @@ protected:
 
 public:
                                 SvtFileDialog( vcl::Window* _pParent, PickerFlags nBits );
-                                virtual ~SvtFileDialog();
+                                virtual ~SvtFileDialog() override;
     virtual void                dispose() override;
 
     virtual short               Execute() override;

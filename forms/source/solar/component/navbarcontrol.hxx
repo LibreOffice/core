@@ -49,7 +49,7 @@ namespace frm
         );
 
     protected:
-        virtual ~ONavigationBarControl();
+        virtual ~ONavigationBarControl() override;
 
     public:
         // XServiceInfo - static version
@@ -98,7 +98,7 @@ namespace frm
         explicit ONavigationBarPeer(
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
-        virtual ~ONavigationBarPeer();
+        virtual ~ONavigationBarPeer() override;
 
     public:
         // XInterface

@@ -83,7 +83,7 @@ namespace dbmm
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_static() throw(RuntimeException);
 
     protected:
-        virtual ~MacroMigrationDialogService();
+        virtual ~MacroMigrationDialogService() override;
 
     protected:
         virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) override;

@@ -38,7 +38,7 @@ class SwXTextFieldMasters
     , public SwUnoCollection
 {
 protected:
-    virtual ~SwXTextFieldMasters();
+    virtual ~SwXTextFieldMasters() override;
 
 public:
     SwXTextFieldMasters(SwDoc* pDoc);
@@ -89,7 +89,7 @@ private:
     std::unique_ptr<Impl> m_pImpl; // currently does not need UnoImplPtr
 
 protected:
-    virtual ~SwXTextFieldTypes();
+    virtual ~SwXTextFieldTypes() override;
 
 public:
     SwXTextFieldTypes(SwDoc* pDoc);

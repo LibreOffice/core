@@ -55,7 +55,7 @@ protected:
 public:
     OInputStreamWrapper(SvStream& _rStream);
     OInputStreamWrapper(SvStream* pStream, bool bOwner=false);
-    virtual ~OInputStreamWrapper();
+    virtual ~OInputStreamWrapper() override;
 
 // css::io::XInputStream
     virtual sal_Int32   SAL_CALL    readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) override;
@@ -102,7 +102,7 @@ public:
     UNOTOOLS_DLLPUBLIC OOutputStreamWrapper(SvStream& _rStream);
 
 protected:
-    virtual ~OOutputStreamWrapper();
+    virtual ~OOutputStreamWrapper() override;
 
 // css::io::XOutputStream
     virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) override;
@@ -131,7 +131,7 @@ public:
     OSeekableOutputStreamWrapper(SvStream& _rStream);
 
 private:
-    virtual ~OSeekableOutputStreamWrapper();
+    virtual ~OSeekableOutputStreamWrapper() override;
 
     // disambiguate XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) override;

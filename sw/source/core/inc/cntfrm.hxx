@@ -64,7 +64,7 @@ protected:
     SwContentFrame( SwContentNode * const, SwFrame* );
 
     virtual void DestroyImpl() override;
-    virtual ~SwContentFrame();
+    virtual ~SwContentFrame() override;
 
 public:
 

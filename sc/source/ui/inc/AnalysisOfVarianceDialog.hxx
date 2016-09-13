@@ -55,7 +55,7 @@ public:
         SfxBindings* pB, SfxChildWindow* pCW,
         vcl::Window* pParent, ScViewData* pViewData );
 
-    virtual ~ScAnalysisOfVarianceDialog();
+    virtual ~ScAnalysisOfVarianceDialog() override;
     virtual void dispose() override;
 
     virtual bool Close() override;

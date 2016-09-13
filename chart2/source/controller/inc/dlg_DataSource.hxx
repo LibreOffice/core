@@ -47,7 +47,7 @@ public:
         vcl::Window * pParent,
         const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~DataSourceDialog();
+    virtual ~DataSourceDialog() override;
     virtual void dispose() override;
 
     // from Dialog (base of TabDialog)

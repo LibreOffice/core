@@ -124,7 +124,7 @@ public:
                       const css::uno::Reference < css::uno::XComponentContext >& xContext,
                       sal_Int32 nFormat,
                       bool bAllowRemoveOnInsert );
-    virtual ~ZipPackageStream();
+    virtual ~ZipPackageStream() override;
 
     css::uno::Reference< css::io::XInputStream > GetRawEncrStreamNoHeaderCopy();
     css::uno::Reference< css::io::XInputStream > TryToGetRawFromDataStream(bool bAddHeaderForEncr );

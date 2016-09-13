@@ -53,7 +53,7 @@ class ButtonToolbarController : public css::frame::XStatusListener,
         ButtonToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                  ToolBox* pToolBar,
                                  const OUString& aCommand );
-        virtual ~ButtonToolbarController();
+        virtual ~ButtonToolbarController() override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;

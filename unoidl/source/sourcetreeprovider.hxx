@@ -31,7 +31,7 @@ public:
     virtual rtl::Reference<Entity> findEntity(OUString const & name) const override;
 
 private:
-    virtual ~SourceTreeProvider() throw ();
+    virtual ~SourceTreeProvider() throw () override;
 
     Manager & manager_;
     OUString uri_;

@@ -123,7 +123,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
     public:
 
         SwAnchoredDrawObject();
-        virtual ~SwAnchoredDrawObject();
+        virtual ~SwAnchoredDrawObject() override;
 
         // declaration of pure virtual methods of base class <SwAnchoredObject>
         virtual void MakeObjPos() override;

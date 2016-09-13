@@ -25,7 +25,7 @@ class FileChangedQueryBox : public MessBox
 {
 public:
     FileChangedQueryBox( vcl::Window* pParent, ResMgr* pResMgr );
-    virtual ~FileChangedQueryBox();
+    virtual ~FileChangedQueryBox() override;
 };
 
 #endif

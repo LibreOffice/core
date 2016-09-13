@@ -66,7 +66,7 @@ private:
 
 public:
                             ScFunctionAccess();
-    virtual                 ~ScFunctionAccess();
+    virtual                 ~ScFunctionAccess() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

@@ -57,7 +57,7 @@ public:
 
     SwFontObj( const void* pOwner, SwViewShell *pSh );
 
-    virtual ~SwFontObj();
+    virtual ~SwFontObj() override;
 
     inline       SwFont& GetFont()        { return aSwFont; }
     inline const SwFont& GetFont() const  { return aSwFont; }

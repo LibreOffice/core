@@ -98,7 +98,7 @@ private:
 
 public:
                     SvxCharacterMap( vcl::Window* pParent, bool bOne=true, const SfxItemSet* pSet=nullptr );
-    virtual         ~SvxCharacterMap();
+    virtual         ~SvxCharacterMap() override;
     virtual void    dispose() override;
 
     void            DisableFontSelection();

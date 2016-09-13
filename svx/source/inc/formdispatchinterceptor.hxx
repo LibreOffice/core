@@ -68,7 +68,7 @@ namespace svxform
         css::uno::Reference< css::frame::XDispatchProvider>           m_xSlaveDispatcher;
         css::uno::Reference< css::frame::XDispatchProvider>           m_xMasterDispatcher;
 
-        virtual ~DispatchInterceptionMultiplexer();
+        virtual ~DispatchInterceptionMultiplexer() override;
 
     public:
         css::uno::Reference< css::frame::XDispatchProviderInterception> getIntercepted() const { return m_xIntercepted; }

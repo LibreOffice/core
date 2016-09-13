@@ -70,7 +70,7 @@ class LwpStory: public LwpContent
 {
 public:
     LwpStory(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpStory();
+    virtual ~LwpStory() override;
 private:
     //File format members:
     LwpDLVListHeadTail m_ParaList;

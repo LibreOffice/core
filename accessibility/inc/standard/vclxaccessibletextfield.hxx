@@ -73,7 +73,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
-    virtual ~VCLXAccessibleTextField();
+    virtual ~VCLXAccessibleTextField() override;
 
     /** With this method the text of the currently selected item is made
         available to the VCLXAccessibleTextComponent base class.

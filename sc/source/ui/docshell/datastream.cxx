@@ -153,7 +153,7 @@ public:
 #endif
     }
 
-    virtual ~ReaderThread()
+    virtual ~ReaderThread() override
     {
         delete mpStream;
         emptyLineQueue(maPendingLines);

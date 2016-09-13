@@ -52,7 +52,7 @@ namespace connectivity
             virtual bool        impl_storesMixedCaseQuotedIdentifiers_throw(  ) override;
         protected:
             OConnection* m_pConnection; // I need the native class not only the interface
-            virtual ~ODatabaseMetaData();
+            virtual ~ODatabaseMetaData() override;
         public:
 
             ODatabaseMetaData(OConnection* _pCon);

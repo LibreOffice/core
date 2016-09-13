@@ -45,7 +45,7 @@ public:
     XcsParser(int layer, Data & data);
 
 private:
-    virtual ~XcsParser();
+    virtual ~XcsParser() override;
 
     virtual xmlreader::XmlReader::Text getTextMode() override;
 

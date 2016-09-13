@@ -174,7 +174,7 @@ namespace svx
         void    dispose();
 
     protected:
-        virtual ~FmFocusListenerAdapter();
+        virtual ~FmFocusListenerAdapter() override;
 
     protected:
         virtual void SAL_CALL focusGained( const css::awt::FocusEvent& e ) throw (RuntimeException, std::exception) override;
@@ -259,7 +259,7 @@ namespace svx
         void    dispose();
 
     protected:
-        virtual ~FmMouseListenerAdapter();
+        virtual ~FmMouseListenerAdapter() override;
 
     protected:
         virtual void SAL_CALL mousePressed( const css::awt::MouseEvent& e ) throw (RuntimeException, std::exception) override;

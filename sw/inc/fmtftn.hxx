@@ -52,7 +52,7 @@ class SW_DLLPUBLIC SwFormatFootnote
 
 public:
     SwFormatFootnote( bool bEndNote = false );
-    virtual ~SwFormatFootnote();
+    virtual ~SwFormatFootnote() override;
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;

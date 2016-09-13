@@ -39,7 +39,7 @@ public:
         , sal_Int32 nDimensionCount
         , const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
         , AbstractShapeFactory* pShapeFactory );
-    virtual ~PolarLabelPositionHelper();
+    virtual ~PolarLabelPositionHelper() override;
 
     css::awt::Point getLabelScreenPositionAndAlignmentForLogicValues(
                         LabelAlignment& rAlignment

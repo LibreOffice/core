@@ -28,7 +28,7 @@ class ColumnChartType : public ChartType
 {
 public:
     explicit ColumnChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~ColumnChartType();
+    virtual ~ColumnChartType() override;
 
     virtual OUString SAL_CALL
         getImplementationName()

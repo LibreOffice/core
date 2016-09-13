@@ -23,7 +23,7 @@ class WpgContext : public oox::core::ContextHandler2
 {
 public:
     explicit WpgContext(oox::core::ContextHandler2Helper& rParent);
-    virtual ~WpgContext();
+    virtual ~WpgContext() override;
 
     virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs) override;
 

@@ -47,7 +47,7 @@ public:
                 const OUString *pCollName = nullptr,
                 bool bDraw = false,
                 const OString& sDefPage = OString());
-    virtual ~SwParaDlg();
+    virtual ~SwParaDlg() override;
 };
 
 #endif

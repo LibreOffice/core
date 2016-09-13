@@ -37,7 +37,7 @@ public:
     {}
 
 private:
-    virtual ~AggregatingModule() throw () {}
+    virtual ~AggregatingModule() throw () override {}
 
     virtual std::vector< OUString > getMemberNames() const override;
 
@@ -69,7 +69,7 @@ public:
     { findCursor(); }
 
 private:
-    virtual ~AggregatingCursor() throw () {}
+    virtual ~AggregatingCursor() throw () override {}
 
     virtual rtl::Reference< Entity > getNext(OUString * name) override;
 

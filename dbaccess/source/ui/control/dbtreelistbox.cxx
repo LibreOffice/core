@@ -516,7 +516,7 @@ namespace
         virtual void SAL_CALL removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener ) throw (RuntimeException, std::exception) override;
 
     protected:
-        virtual ~SelectionSupplier()
+        virtual ~SelectionSupplier() override
         {
         }
 

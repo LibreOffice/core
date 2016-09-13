@@ -110,7 +110,7 @@ public:
     FmSearchDialog(vcl::Window* pParent, const OUString& strInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier);
 
-    virtual ~FmSearchDialog();
+    virtual ~FmSearchDialog() override;
     virtual void dispose() override;
 
     /** The found-handler gets in the 'found'-case a pointer on a FmFoundRecordInformation-structure

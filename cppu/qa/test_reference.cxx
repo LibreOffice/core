@@ -94,11 +94,11 @@ struct Base1: public css::uno::XInterface {
     { return ::cppu::UnoType<Base1>::get(); }
 };
 struct Base2: public Base1 {
-    virtual ~Base2() = delete;
+    virtual ~Base2() override = delete;
 };
-struct Base3: public Base1 { virtual ~Base3() = delete; };
+struct Base3: public Base1 { virtual ~Base3() override = delete; };
 struct Derived: public Base2, public Base3 {
-    virtual ~Derived() = delete;
+    virtual ~Derived() override = delete;
 };
 
 // The special case using the conversion operator instead:

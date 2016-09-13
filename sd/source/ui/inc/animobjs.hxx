@@ -66,7 +66,7 @@ private:
 
 public:
     SdDisplay(vcl::Window* pWin);
-    virtual ~SdDisplay();
+    virtual ~SdDisplay() override;
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
@@ -84,7 +84,7 @@ class AnimationWindow : public SfxDockingWindow
 
 public:
     AnimationWindow(SfxBindings* pBindings, SfxChildWindow *pCW, vcl::Window* pParent);
-    virtual ~AnimationWindow();
+    virtual ~AnimationWindow() override;
     virtual void dispose() override;
 
     void    AddObj( ::sd::View& rView );

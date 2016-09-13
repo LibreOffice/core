@@ -28,7 +28,7 @@ class XYDataInterpreter : public DataInterpreter
 {
 public:
     explicit XYDataInterpreter( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~XYDataInterpreter();
+    virtual ~XYDataInterpreter() override;
 
 protected:
     // ____ XDataInterpreter ____

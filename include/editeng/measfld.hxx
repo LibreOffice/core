@@ -43,7 +43,7 @@ public:
     SV_DECL_PERSIST1(SdrMeasureField,SvxFieldData,css::text::textfield::Type::MEASURE)
     SdrMeasureField(): eMeasureFieldKind(SDRMEASUREFIELD_VALUE) {}
     SdrMeasureField(SdrMeasureFieldKind eNewKind): eMeasureFieldKind(eNewKind) {}
-    virtual ~SdrMeasureField();
+    virtual ~SdrMeasureField() override;
     virtual SvxFieldData* Clone() const override;
     virtual bool operator==(const SvxFieldData&) const override;
     SdrMeasureFieldKind GetMeasureFieldKind() const { return eMeasureFieldKind; }

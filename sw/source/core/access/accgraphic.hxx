@@ -25,7 +25,7 @@
 class SwAccessibleGraphic : public  SwAccessibleNoTextFrame
 {
 protected:
-    virtual ~SwAccessibleGraphic();
+    virtual ~SwAccessibleGraphic() override;
 
 public:
     SwAccessibleGraphic( SwAccessibleMap* pInitMap,

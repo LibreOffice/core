@@ -47,7 +47,7 @@ protected:
 
 public:
     SdrObjGroup();
-    virtual ~SdrObjGroup();
+    virtual ~SdrObjGroup() override;
 
     virtual void SetBoundRectDirty() override;
     virtual sal_uInt16 GetObjIdentifier() const override;

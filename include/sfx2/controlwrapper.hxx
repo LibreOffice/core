@@ -251,7 +251,7 @@ class SFX2_DLLPUBLIC ColorListBoxWrapper:
 public:
     explicit ColorListBoxWrapper(ColorListBox & rListBox);
 
-    virtual ~ColorListBoxWrapper();
+    virtual ~ColorListBoxWrapper() override;
 
     virtual bool        IsControlDontKnow() const override;
     virtual void        SetControlDontKnow( bool bSet ) override;
@@ -368,7 +368,7 @@ class SFX2_DLLPUBLIC MultiControlWrapperHelper : public ControlWrapperBase
 {
 public:
     explicit            MultiControlWrapperHelper();
-    virtual             ~MultiControlWrapperHelper();
+    virtual             ~MultiControlWrapperHelper() override;
 
     /** Registers a control wrapper (should be a member of a derived class). */
     void                RegisterControlWrapper( ControlWrapperBase& rWrapper );

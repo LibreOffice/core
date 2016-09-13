@@ -80,7 +80,7 @@ protected:
 
 public:
     VCLXAccessibleStatusBarItem( StatusBar* pStatusBar, sal_uInt16 nItemId );
-    virtual ~VCLXAccessibleStatusBarItem();
+    virtual ~VCLXAccessibleStatusBarItem() override;
 
     // XInterface
     DECLARE_XINTERFACE()

@@ -57,7 +57,7 @@ namespace dbaui
         ORelationTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,
                                       const TTableWindowData::value_type& _pReferencedTable,
                                       const OUString& rConnName = OUString() );
-        virtual ~ORelationTableConnectionData();
+        virtual ~ORelationTableConnectionData() override;
 
         virtual void CopyFrom(const OTableConnectionData& rSource) override;
         virtual OTableConnectionData* NewInstance() const override { return new ORelationTableConnectionData(); }

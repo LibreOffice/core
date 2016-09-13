@@ -101,7 +101,7 @@ namespace drawinglayer
         public:
             // constructor/destructor
             BasePrimitive3D();
-            virtual ~BasePrimitive3D();
+            virtual ~BasePrimitive3D() override;
 
             /** the ==operator is mainly needed to allow testing newly-created high level primitives against their last
                 incarnation which buffers/holds the decompositions. The default implementation

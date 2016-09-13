@@ -43,7 +43,7 @@ public:
     typedef std::map<SCTAB, std::unique_ptr<sc::ColumnSpanSet>> DataSpansType;
 
                     ScSimpleUndo( ScDocShell* pDocSh );
-    virtual         ~ScSimpleUndo();
+    virtual         ~ScSimpleUndo() override;
 
     virtual bool    Merge( SfxUndoAction *pNextAction ) override;
     /// See SfxUndoAction::GetViewShellId().
@@ -84,7 +84,7 @@ class ScBlockUndo: public ScSimpleUndo
 public:
                     ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
                                  ScBlockUndoMode eBlockMode );
-    virtual         ~ScBlockUndo();
+    virtual         ~ScBlockUndo() override;
 
 protected:
     ScRange         aBlockRange;
@@ -104,7 +104,7 @@ class ScMultiBlockUndo: public ScSimpleUndo
 {
 public:
     ScMultiBlockUndo(ScDocShell* pDocSh, const ScRangeList& rRanges);
-    virtual ~ScMultiBlockUndo();
+    virtual ~ScMultiBlockUndo() override;
 
 protected:
     ScRangeList     maBlockRanges;
@@ -130,7 +130,7 @@ protected:
 
 public:
                     ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal );
-    virtual         ~ScDBFuncUndo();
+    virtual         ~ScDBFuncUndo() override;
 
     void            BeginUndo();
     void            EndUndo();
@@ -146,7 +146,7 @@ public:
                     ScMoveUndo( ScDocShell* pDocSh,
                                 ScDocument* pRefDoc, ScRefUndoData* pRefData,
                                 ScMoveUndoMode eRefMode );
-    virtual         ~ScMoveUndo();
+    virtual         ~ScMoveUndo() override;
 
 protected:
     SdrUndoAction*  pDrawUndo;
@@ -170,7 +170,7 @@ class ScUndoWrapper: public SfxUndoAction           // for manual merging of act
 
 public:
                             ScUndoWrapper( SfxUndoAction* pUndo );
-    virtual                 ~ScUndoWrapper();
+    virtual                 ~ScUndoWrapper() override;
 
     SfxUndoAction*          GetWrappedUndo()        { return pWrappedUndo; }
     void                    ForgetWrappedUndo();

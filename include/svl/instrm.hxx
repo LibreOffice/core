@@ -54,7 +54,7 @@ class SVL_DLLPUBLIC SvInputStream: public SvStream
 public:
     SvInputStream( css::uno::Reference< css::io::XInputStream > const & rTheStream );
 
-    virtual ~SvInputStream();
+    virtual ~SvInputStream() override;
 };
 
 #endif // INCLUDED_SVL_INSTRM_HXX

@@ -39,7 +39,7 @@ class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase :
 {
     public:
         ReadMenuDocumentHandlerBase();
-        virtual ~ReadMenuDocumentHandlerBase();
+        virtual ~ReadMenuDocumentHandlerBase() override;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
@@ -100,7 +100,7 @@ class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBas
     public:
         OReadMenuDocumentHandler(
             const css::uno::Reference< css::container::XIndexContainer >& rItemContainer );
-        virtual ~OReadMenuDocumentHandler();
+        virtual ~OReadMenuDocumentHandler() override;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
@@ -139,7 +139,7 @@ class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
         OReadMenuBarHandler(
             const css::uno::Reference< css::container::XIndexContainer >& rMenuBarContainer,
             const css::uno::Reference< css::lang::XSingleComponentFactory >& rContainerFactory );
-        virtual ~OReadMenuBarHandler();
+        virtual ~OReadMenuBarHandler() override;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
@@ -176,7 +176,7 @@ class FWE_DLLPUBLIC OReadMenuHandler : public ReadMenuDocumentHandlerBase
     public:
         OReadMenuHandler( const css::uno::Reference< css::container::XIndexContainer >& rMenuContainer,
                           const css::uno::Reference< css::lang::XSingleComponentFactory >& rContainerFactory );
-        virtual ~OReadMenuHandler();
+        virtual ~OReadMenuHandler() override;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
@@ -213,7 +213,7 @@ class FWE_DLLPUBLIC OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
     public:
         OReadMenuPopupHandler( const css::uno::Reference< css::container::XIndexContainer >& rMenuContainer,
                                const css::uno::Reference< css::lang::XSingleComponentFactory >& rContainerFactory );
-        virtual ~OReadMenuPopupHandler();
+        virtual ~OReadMenuPopupHandler() override;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()

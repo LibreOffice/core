@@ -86,7 +86,7 @@ public:
     SvInsertOleDlg( vcl::Window* pParent,
         const css::uno::Reference < css::embed::XStorage >& xStorage,
         const SvObjectServerList* pServers = nullptr );
-    virtual ~SvInsertOleDlg();
+    virtual ~SvInsertOleDlg() override;
     virtual void dispose() override;
     virtual short Execute() override;
 
@@ -125,7 +125,7 @@ public:
         const css::uno::Reference < css::embed::XStorage >& xStorage );
     SfxInsertFloatingFrameDialog( vcl::Window* pParent,
         const css::uno::Reference < css::embed::XEmbeddedObject >& xObj );
-    virtual ~SfxInsertFloatingFrameDialog();
+    virtual ~SfxInsertFloatingFrameDialog() override;
     virtual void dispose() override;
     virtual short Execute() override;
 };

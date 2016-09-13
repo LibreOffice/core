@@ -114,7 +114,7 @@ class SwObjectFormatterTextFrame : public SwObjectFormatter
         virtual SwFrame& GetAnchorFrame() override;
 
     public:
-        virtual ~SwObjectFormatterTextFrame();
+        virtual ~SwObjectFormatterTextFrame() override;
 
         // #i40147# - add parameter <_bCheckForMovedFwd>.
         virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,

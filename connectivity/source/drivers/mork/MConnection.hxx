@@ -50,7 +50,7 @@ namespace connectivity
         public:
             void construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info) throw(css::sdbc::SQLException);
             explicit OConnection(MorkDriver* const driver);
-            virtual ~OConnection();
+            virtual ~OConnection() override;
 
             const rtl::Reference<MorkDriver>& getDriver() {return m_xDriver;};
             MorkParser* getMorkParser(const OString& t) {return t == "CollectedAddressBook" ? m_pHistory : m_pBook;};

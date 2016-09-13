@@ -38,7 +38,7 @@ namespace dbaui
 
     public:
         OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID);
-        virtual ~OQueryDesignFieldUndoAct();
+        virtual ~OQueryDesignFieldUndoAct() override;
 
         inline void SetColumnPosition(sal_uInt16 _nColumnPostion)
         {

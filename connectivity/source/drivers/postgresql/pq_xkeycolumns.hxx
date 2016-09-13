@@ -69,7 +69,7 @@ protected:
         const css::uno::Sequence< OUString > &keyColumns,
         const css::uno::Sequence< OUString > &foreignColumnNames);
 
-    virtual ~KeyColumns();
+    virtual ~KeyColumns() override;
 
 public: // XAppend
     virtual void SAL_CALL appendByDescriptor(

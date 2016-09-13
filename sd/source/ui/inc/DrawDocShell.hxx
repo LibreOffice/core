@@ -72,7 +72,7 @@ public:
         SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED,
         bool bSdDataObj=false,
         DocumentType=DOCUMENT_TYPE_IMPRESS);
-    virtual ~DrawDocShell();
+    virtual ~DrawDocShell() override;
 
     void                    UpdateRefDevice();
     virtual void            Activate( bool bMDI ) override;

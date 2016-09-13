@@ -61,7 +61,7 @@ namespace dbaui
         UnoDataBrowserView( vcl::Window* pParent,
                             IController& _rController,
                             const css::uno::Reference< css::uno::XComponentContext >& );
-        virtual ~UnoDataBrowserView();
+        virtual ~UnoDataBrowserView() override;
         virtual void dispose() override;
 
         /// late construction

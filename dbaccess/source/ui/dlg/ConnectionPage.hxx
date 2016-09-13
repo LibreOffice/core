@@ -56,7 +56,7 @@ namespace dbaui
         DECL_LINK_TYPED(OnEditModified, Edit&, void);
 
     public:
-        virtual ~OConnectionTabPage();
+        virtual ~OConnectionTabPage() override;
         virtual void dispose() override;
         static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;

@@ -37,7 +37,7 @@ class ScDbNameDlg : public ScAnyRefDlg
 public:
                     ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScViewData*    ptrViewData );
-                    virtual ~ScDbNameDlg();
+                    virtual ~ScDbNameDlg() override;
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;

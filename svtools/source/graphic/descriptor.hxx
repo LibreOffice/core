@@ -68,7 +68,7 @@ class GraphicDescriptor : public ::cppu::OWeakAggObject,
 public:
 
     GraphicDescriptor();
-    virtual ~GraphicDescriptor() throw();
+    virtual ~GraphicDescriptor() throw() override;
 
     void init( const ::Graphic& rGraphic );
     void init( const OUString& rURL );

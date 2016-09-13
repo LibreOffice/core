@@ -41,7 +41,7 @@ namespace rptxml
         void operator =(const OPropertyHandlerFactory&) = delete;
     public:
         OPropertyHandlerFactory();
-        virtual ~OPropertyHandlerFactory();
+        virtual ~OPropertyHandlerFactory() override;
 
         virtual const XMLPropertyHandler* GetPropertyHandler(sal_Int32 _nType) const override;
     };

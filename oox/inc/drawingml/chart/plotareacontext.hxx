@@ -35,7 +35,7 @@ class View3DContext : public ContextBase< View3DModel >
 {
 public:
     explicit            View3DContext( ::oox::core::ContextHandler2Helper& rParent, View3DModel& rModel );
-    virtual             ~View3DContext();
+    virtual             ~View3DContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -50,7 +50,7 @@ class WallFloorContext : public ContextBase< WallFloorModel >
 {
 public:
     explicit            WallFloorContext( ::oox::core::ContextHandler2Helper& rParent, WallFloorModel& rModel );
-    virtual             ~WallFloorContext();
+    virtual             ~WallFloorContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -64,7 +64,7 @@ class DataTableContext : public ContextBase< DataTableModel >
 {
 public:
     explicit            DataTableContext( ::oox::core::ContextHandler2Helper& rParent, DataTableModel& rModel );
-    virtual             ~DataTableContext();
+    virtual             ~DataTableContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -78,7 +78,7 @@ class PlotAreaContext : public ContextBase< PlotAreaModel >
 {
 public:
     explicit            PlotAreaContext( ::oox::core::ContextHandler2Helper& rParent, PlotAreaModel& rModel );
-    virtual             ~PlotAreaContext();
+    virtual             ~PlotAreaContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };

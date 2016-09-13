@@ -1402,7 +1402,7 @@ class ScIconSetFrmtDataEntry : public Control
     public:
         ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetType eType, ScDocument* pDoc,
                 sal_Int32 i, const ScColorScaleEntry* pEntry = nullptr );
-        virtual ~ScIconSetFrmtDataEntry();
+        virtual ~ScIconSetFrmtDataEntry() override;
         virtual void dispose() override;
 
         ScColorScaleEntry* CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const;

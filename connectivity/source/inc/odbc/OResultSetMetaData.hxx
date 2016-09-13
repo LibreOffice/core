@@ -65,7 +65,7 @@ namespace connectivity
                     ,m_nColCount(_vMapping.size()-1)
                     ,m_bUseODBC2Types(false)
             {}
-            virtual ~OResultSetMetaData();
+            virtual ~OResultSetMetaData() override;
 
 
             static SQLLEN getNumColAttrib(OConnection* _pConnection

@@ -34,7 +34,7 @@ class SwUndoTOXChange : public SwUndo
 
 public:
     SwUndoTOXChange(const SwDoc* pDoc, SwTOXBase * pTOX, const SwTOXBase & rNew);
-    virtual ~SwUndoTOXChange();
+    virtual ~SwUndoTOXChange() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

@@ -137,7 +137,7 @@ private:
 
 public:
                      SfxBindings();
-                     virtual ~SfxBindings();
+                     virtual ~SfxBindings() override;
 
     void             HidePopups( bool bHide = true );
     SAL_DLLPRIVATE void HidePopupCtrls_Impl( bool bHide = true );

@@ -71,7 +71,7 @@ namespace bib
 
     public:
                             BibView( vcl::Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle = WB_3DLOOK );
-                            virtual ~BibView();
+                            virtual ~BibView() override;
         virtual void        dispose() override;
 
         void                UpdatePages();

@@ -28,7 +28,7 @@
 class XMLShadowPropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLShadowPropHdl();
+    virtual ~XMLShadowPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

@@ -44,7 +44,7 @@ public:
 
     /** deprecated */
     SvxUnoDrawPool(SdrModel* pModel);
-    virtual ~SvxUnoDrawPool() throw();
+    virtual ~SvxUnoDrawPool() throw() override;
 
     /** This returns the item pool from the given model, or the default pool if there is no model and bReadOnly is true.
         If bReadOnly is false and there is no model the default implementation returns NULL.

@@ -57,7 +57,7 @@ public:
                                      sal_uInt16 nMask = SFXSTYLEBIT_ALL) override;
 
 protected:
-    virtual             ~ScStyleSheetPool();
+    virtual             ~ScStyleSheetPool() override;
 
     using SfxStyleSheetPool::Create;    // calcwarnings: Create(const SfxStyleSheet&) - ever used?
 

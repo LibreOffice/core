@@ -79,7 +79,7 @@ protected:
     virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyShapesContainer();
-    virtual                     ~ScMyShapesContainer();
+    virtual                     ~ScMyShapesContainer() override;
 
                                 using ScMyIteratorBase::UpdateAddress;
     void                        AddNewShape(const ScMyShape& aShape);
@@ -108,7 +108,7 @@ protected:
     virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyNoteShapesContainer();
-    virtual                     ~ScMyNoteShapesContainer();
+    virtual                     ~ScMyNoteShapesContainer() override;
 
     using ScMyIteratorBase::UpdateAddress;
     void                        AddNewNote(const ScMyNoteShape& aNote);
@@ -136,7 +136,7 @@ protected:
     virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyMergedRangesContainer();
-    virtual                     ~ScMyMergedRangesContainer();
+    virtual                     ~ScMyMergedRangesContainer() override;
     void                        AddRange(const css::table::CellRangeAddress& rMergedRange);
 
                                 using ScMyIteratorBase::UpdateAddress;
@@ -173,7 +173,7 @@ protected:
     virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyAreaLinksContainer();
-    virtual                     ~ScMyAreaLinksContainer();
+    virtual                     ~ScMyAreaLinksContainer() override;
 
     inline void                 AddNewAreaLink( const ScMyAreaLink& rAreaLink )
                                     { aAreaLinkList.push_back( rAreaLink ); }
@@ -200,7 +200,7 @@ protected:
     virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyEmptyDatabaseRangesContainer();
-    virtual                     ~ScMyEmptyDatabaseRangesContainer();
+    virtual                     ~ScMyEmptyDatabaseRangesContainer() override;
     void                        AddNewEmptyDatabaseRange(const css::table::CellRangeAddress& aCellRangeAddress);
 
                                 using ScMyIteratorBase::UpdateAddress;
@@ -229,7 +229,7 @@ protected:
     virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyDetectiveObjContainer();
-    virtual                     ~ScMyDetectiveObjContainer();
+    virtual                     ~ScMyDetectiveObjContainer() override;
 
     void                        AddObject(
                                     ScDetectiveObjType eObjType,
@@ -263,7 +263,7 @@ protected:
     virtual bool                GetFirstAddress( css::table::CellAddress& rCellAddress ) override;
 public:
                                 ScMyDetectiveOpContainer();
-    virtual                     ~ScMyDetectiveOpContainer();
+    virtual                     ~ScMyDetectiveOpContainer() override;
 
     void                        AddOperation( ScDetOpType eOpType, const ScAddress& rPosition, sal_uInt32 nIndex );
 

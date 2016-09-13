@@ -103,7 +103,7 @@ public:
     SvxColorDockingWindow(SfxBindings* pBindings,
                           SfxChildWindow *pCW,
                           vcl::Window* pParent);
-    virtual ~SvxColorDockingWindow();
+    virtual ~SvxColorDockingWindow() override;
     virtual void    dispose() override;
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

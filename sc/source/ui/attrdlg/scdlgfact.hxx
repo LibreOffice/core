@@ -63,7 +63,7 @@ public:                                             \
     explicit        Class( DialogClass* p)          \
                      : pDlg(p)                      \
                      {}                             \
-    virtual         ~Class();                       \
+    virtual         ~Class() override;                       \
     virtual short   Execute() override ;            \
     std::vector<OString> getAllPageUIXMLDescriptions() const override; \
     bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override; \
@@ -76,7 +76,7 @@ public:                                             \
     explicit        Class( DialogClass* p)          \
                      : pDlg(p)                      \
                      {}                             \
-    virtual         ~Class();                       \
+    virtual         ~Class() override;                       \
     virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override; \
     long            GetResult() override;
 

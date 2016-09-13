@@ -59,7 +59,7 @@ public:
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
 
-    virtual ~AccessiblePageShape();
+    virtual ~AccessiblePageShape() override;
 
     //=====  XAccessibleContext  ==============================================
 

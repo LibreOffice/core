@@ -305,7 +305,7 @@ namespace
         virtual void SAL_CALL run() override;
         virtual void SAL_CALL onTerminated() override;
     protected:
-        virtual ~RelationLoader(){}
+        virtual ~RelationLoader() override {}
 
         void loadTableData(const Any& _aTable);
     };

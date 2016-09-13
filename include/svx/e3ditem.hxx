@@ -33,7 +33,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxB3DVectorItem : public SfxPoolItem
 public:
                             SvxB3DVectorItem( sal_uInt16 nWhich, const basegfx::B3DVector& rVal );
                             SvxB3DVectorItem( const SvxB3DVectorItem& );
-                            virtual ~SvxB3DVectorItem();
+                            virtual ~SvxB3DVectorItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

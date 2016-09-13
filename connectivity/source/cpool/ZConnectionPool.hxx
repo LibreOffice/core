@@ -129,7 +129,7 @@ namespace connectivity
 
     protected:
         // the dtor will be called from the last instance  (last release call)
-        virtual ~OConnectionPool();
+        virtual ~OConnectionPool() override;
     public:
         OConnectionPool(const css::uno::Reference< css::sdbc::XDriver >& _xDriver,
                         const css::uno::Reference< css::uno::XInterface >& _xDriverNode,

@@ -76,7 +76,7 @@ public:
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
         SvxRectCtl&      rRepresentation );
 protected:
-    virtual ~SvxRectCtlAccessibleContext();
+    virtual ~SvxRectCtlAccessibleContext() override;
 public:
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
@@ -308,7 +308,7 @@ public:
         const Rectangle& rBoundingBox,
         long nIndexInParent );
 protected:
-    virtual ~SvxRectCtlChildAccessibleContext();
+    virtual ~SvxRectCtlChildAccessibleContext() override;
 public:
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL

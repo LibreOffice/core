@@ -43,7 +43,7 @@ class FWE_DLLPUBLIC RootActionTriggerContainer :  public PropertySetContainer,
 {
     public:
         RootActionTriggerContainer( const Menu* pMenu, const OUString* pMenuIdentifier);
-        virtual ~RootActionTriggerContainer();
+        virtual ~RootActionTriggerContainer() override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )

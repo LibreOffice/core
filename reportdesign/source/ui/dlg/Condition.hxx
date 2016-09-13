@@ -106,7 +106,7 @@ namespace rptui
 
     public:
         Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController );
-        virtual ~Condition();
+        virtual ~Condition() override;
         virtual void dispose() override;
 
         /** will be called when the id of the image list needs to change.

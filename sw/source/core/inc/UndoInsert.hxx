@@ -63,7 +63,7 @@ public:
                   const SwInsertFlags nInsertFlags,
                   bool bWDelim = true );
     SwUndoInsert( const SwNodeIndex& rNode );
-    virtual ~SwUndoInsert();
+    virtual ~SwUndoInsert() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -98,7 +98,7 @@ public:
     SwUndoReplace(SwPaM const& rPam,
             OUString const& rInsert, bool const bRegExp);
 
-    virtual ~SwUndoReplace();
+    virtual ~SwUndoReplace() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -145,7 +145,7 @@ class SwUndoReRead : public SwUndo
 public:
     SwUndoReRead( const SwPaM& rPam, const SwGrfNode& pGrfNd );
 
-    virtual ~SwUndoReRead();
+    virtual ~SwUndoReRead() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -188,7 +188,7 @@ public:
                         const OUString& rCharacterStyle,
                         const bool bCpyBrd,
                         const SwDoc* pDoc );
-    virtual ~SwUndoInsertLabel();
+    virtual ~SwUndoInsertLabel() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

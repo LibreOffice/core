@@ -355,7 +355,7 @@ public:
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~ScXMLMapContext();
+    virtual ~ScXMLMapContext() override;
 
     ScCondFormatEntry* CreateConditionEntry();
 };

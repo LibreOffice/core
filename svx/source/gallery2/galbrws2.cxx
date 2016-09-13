@@ -129,7 +129,7 @@ public:
                        sal_uIntPtr nObjectPos,
                        bool bPreview,
                        GalleryBrowser2* pBrowser );
-    virtual ~GalleryThemePopup();
+    virtual ~GalleryThemePopup() override;
 
     void ExecutePopup( vcl::Window *pParent, const ::Point &aPos );
 

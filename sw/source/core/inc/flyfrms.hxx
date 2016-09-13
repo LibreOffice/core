@@ -63,7 +63,7 @@ protected:
     SwFlyFreeFrame( SwFlyFrameFormat*, SwFrame*, SwFrame *pAnchor );
 
     virtual void DestroyImpl() override;
-    virtual ~SwFlyFreeFrame();
+    virtual ~SwFlyFreeFrame() override;
 
 public:
     // #i28701#
@@ -173,7 +173,7 @@ class SwFlyInContentFrame : public SwFlyFrame
     Point aRef;  // relative to this point AbsPos is being calculated
 
     virtual void DestroyImpl() override;
-    virtual ~SwFlyInContentFrame();
+    virtual ~SwFlyInContentFrame() override;
 
 protected:
     virtual void NotifyBackground( SwPageFrame *pPage,

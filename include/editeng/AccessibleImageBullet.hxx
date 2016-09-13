@@ -51,7 +51,7 @@ namespace accessibility
         /// Create accessible object for given parent
         AccessibleImageBullet ( const css::uno::Reference< css::accessibility::XAccessible >& rParent );
 
-        virtual ~AccessibleImageBullet  ();
+        virtual ~AccessibleImageBullet  () override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface (const css::uno::Type & rType) throw (css::uno::RuntimeException, std::exception) override;

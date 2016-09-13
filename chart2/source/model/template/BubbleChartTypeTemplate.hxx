@@ -36,7 +36,7 @@ public:
     explicit BubbleChartTypeTemplate(
         css::uno::Reference< css::uno::XComponentContext > const & xContext,
         const OUString & rServiceName );
-    virtual ~BubbleChartTypeTemplate();
+    virtual ~BubbleChartTypeTemplate() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

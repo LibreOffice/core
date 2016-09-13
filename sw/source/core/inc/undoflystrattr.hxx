@@ -31,7 +31,7 @@ class SwUndoFlyStrAttr : public SwUndo
                           const SwUndoId eUndoId,
                           const OUString& sOldStr,
                           const OUString& sNewStr );
-        virtual ~SwUndoFlyStrAttr();
+        virtual ~SwUndoFlyStrAttr() override;
 
         virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
         virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

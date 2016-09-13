@@ -61,7 +61,7 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
     osl::Mutex aMutex;
     public:
                                   ConfigurationAccess_UICategory( const OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
-        virtual                   ~ConfigurationAccess_UICategory();
+        virtual                   ~ConfigurationAccess_UICategory() override;
 
         // XNameAccess
         virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
@@ -373,7 +373,7 @@ class UICategoryDescription :  public UICommandDescription
 {
 public:
     explicit UICategoryDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~UICategoryDescription();
+    virtual ~UICategoryDescription() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

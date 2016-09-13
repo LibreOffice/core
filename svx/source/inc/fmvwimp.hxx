@@ -96,7 +96,7 @@ class FormViewPageWindowAdapter : public FormViewPageWindowAdapter_Base
     VclPtr<vcl::Window>         m_pWindow;
 
 protected:
-    virtual ~FormViewPageWindowAdapter();
+    virtual ~FormViewPageWindowAdapter() override;
 
 public:
     FormViewPageWindowAdapter(  const css::uno::Reference<css::uno::XComponentContext>& _rContext,
@@ -181,7 +181,7 @@ class FmXFormView : public ::cppu::WeakImplHelper<
 
 protected:
     FmXFormView( FmFormView* _pView );
-    virtual ~FmXFormView();
+    virtual ~FmXFormView() override;
 
     void    saveMarkList();
     void    restoreMarkList( SdrMarkList& _rRestoredMarkList );

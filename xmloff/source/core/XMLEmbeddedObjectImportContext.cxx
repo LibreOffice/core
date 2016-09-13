@@ -78,7 +78,7 @@ public:
                                     const OUString& rLName,
     const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHandler );
 
-    virtual ~XMLEmbeddedObjectImportContext_Impl();
+    virtual ~XMLEmbeddedObjectImportContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,

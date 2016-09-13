@@ -961,7 +961,7 @@ namespace pcr
 
     public:
         explicit        OMultilineFloatingEdit(vcl::Window* _pParen);
-        virtual         ~OMultilineFloatingEdit();
+        virtual         ~OMultilineFloatingEdit() override;
         virtual void    dispose() override;
         MultiLineEdit&  getEdit() { return *m_aImplEdit.get(); }
 

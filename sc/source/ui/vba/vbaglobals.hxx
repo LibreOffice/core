@@ -43,7 +43,7 @@ public:
 
     ScVbaGlobals( css::uno::Sequence< css::uno::Any > const& aArgs,
                  css::uno::Reference< css::uno::XComponentContext >const& rxContext );
-    virtual ~ScVbaGlobals();
+    virtual ~ScVbaGlobals() override;
 
     // XGlobals
     virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getActiveWorkbook() throw (css::uno::RuntimeException, std::exception) override;

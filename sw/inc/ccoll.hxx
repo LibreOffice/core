@@ -49,7 +49,7 @@ class SW_DLLPUBLIC SwCondCollItem : public SfxPoolItem
 
 public:
     SwCondCollItem();
-    virtual ~SwCondCollItem();
+    virtual ~SwCondCollItem() override;
 
 
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;

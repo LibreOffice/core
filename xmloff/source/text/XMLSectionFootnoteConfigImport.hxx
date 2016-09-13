@@ -53,7 +53,7 @@ public:
         ::std::vector<XMLPropertyState> & rProperties,
         const rtl::Reference<XMLPropertySetMapper> & rMapperRef);
 
-    virtual ~XMLSectionFootnoteConfigImport();
+    virtual ~XMLSectionFootnoteConfigImport() override;
 
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;

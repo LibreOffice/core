@@ -39,7 +39,7 @@ class SvxUnoBitmapTable : public SvxUnoNameItemTable
 {
 public:
     explicit SvxUnoBitmapTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoBitmapTable() throw();
+    virtual ~SvxUnoBitmapTable() throw() override;
 
     virtual NameOrIndex* createItem() const throw() override;
     virtual bool isValid( const NameOrIndex* pItem ) const override;

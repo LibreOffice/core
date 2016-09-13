@@ -160,7 +160,7 @@ class SwRootFrame: public SwLayoutFrame
     void RemoveFromList_( SwSectionFrame* pSct ); // Removes SectionFrames from the Delete List
 
     virtual void DestroyImpl() override;
-    virtual ~SwRootFrame();
+    virtual ~SwRootFrame() override;
 
 protected:
 

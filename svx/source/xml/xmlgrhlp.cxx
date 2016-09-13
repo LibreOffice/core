@@ -89,7 +89,7 @@ private:
 public:
 
     explicit                        SvXMLGraphicInputStream( const OUString& rGraphicId );
-    virtual                         ~SvXMLGraphicInputStream();
+    virtual                         ~SvXMLGraphicInputStream() override;
                                     SvXMLGraphicInputStream(const SvXMLGraphicInputStream&) = delete;
     SvXMLGraphicInputStream&        operator=(const SvXMLGraphicInputStream&) = delete;
 
@@ -219,7 +219,7 @@ private:
 public:
 
                                     SvXMLGraphicOutputStream();
-    virtual                         ~SvXMLGraphicOutputStream();
+    virtual                         ~SvXMLGraphicOutputStream() override;
                                     SvXMLGraphicOutputStream(const SvXMLGraphicOutputStream&) = delete;
     SvXMLGraphicOutputStream&       operator=(const SvXMLGraphicOutputStream&) = delete;
 

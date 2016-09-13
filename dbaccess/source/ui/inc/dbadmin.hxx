@@ -65,7 +65,7 @@ public:
         SfxItemSet* _pItems,
         const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
-    virtual ~ODbAdminDialog();
+    virtual ~ODbAdminDialog() override;
     virtual void dispose() override;
 
     /** create and return an item set for use with the dialog.

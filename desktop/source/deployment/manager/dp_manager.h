@@ -97,7 +97,7 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
         m_xUserInteractionHandler;
 
     public:
-        virtual ~CmdEnvWrapperImpl();
+        virtual ~CmdEnvWrapperImpl() override;
         CmdEnvWrapperImpl(
             css::uno::Reference<css::ucb::XCommandEnvironment>
             const & xUserCmdEnv,
@@ -121,7 +121,7 @@ protected:
     inline void check();
     virtual void SAL_CALL disposing() override;
 
-    virtual ~PackageManagerImpl();
+    virtual ~PackageManagerImpl() override;
     inline PackageManagerImpl(
         css::uno::Reference<css::uno::XComponentContext>
         const & xComponentContext, OUString const & context )

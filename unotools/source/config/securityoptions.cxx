@@ -110,7 +110,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
         //  constructor / destructor
 
          SvtSecurityOptions_Impl();
-        virtual ~SvtSecurityOptions_Impl();
+        virtual ~SvtSecurityOptions_Impl() override;
 
         //  override methods of baseclass
 

@@ -29,7 +29,7 @@ class PieChartType : public ChartType
 public:
     explicit PieChartType(
         css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~PieChartType();
+    virtual ~PieChartType() override;
 
     virtual OUString SAL_CALL
         getImplementationName()

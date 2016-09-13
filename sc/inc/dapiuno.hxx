@@ -95,7 +95,7 @@ private:
 
 public:
                             ScDataPilotTablesObj(ScDocShell* pDocSh, SCTAB nT);
-    virtual                 ~ScDataPilotTablesObj();
+    virtual                 ~ScDataPilotTablesObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -161,7 +161,7 @@ private:
 
 public:
                             ScDataPilotDescriptorBase(ScDocShell* pDocSh);
-    virtual                 ~ScDataPilotDescriptorBase();
+    virtual                 ~ScDataPilotDescriptorBase() override;
 
     virtual css::uno::Any SAL_CALL queryInterface(
                                 const css::uno::Type & rType )
@@ -267,7 +267,7 @@ private:
 
 public:
                             ScDataPilotDescriptor(ScDocShell* pDocSh);
-    virtual                 ~ScDataPilotDescriptor();
+    virtual                 ~ScDataPilotDescriptor() override;
 
     virtual ScDPObject* GetDPObject() const override;
     virtual void SetDPObject(ScDPObject* pDPObj) override;
@@ -302,7 +302,7 @@ private:
 
 public:
                             ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN);
-    virtual                 ~ScDataPilotTableObj();
+    virtual                 ~ScDataPilotTableObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
                                     throw(css::uno::RuntimeException, std::exception) override;
@@ -429,7 +429,7 @@ public:
                             ScDataPilotDescriptorBase& rParent,
                             css::sheet::DataPilotFieldOrientation eOrient );
 
-    virtual             ~ScDataPilotFieldsObj();
+    virtual             ~ScDataPilotFieldsObj() override;
 
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
@@ -496,7 +496,7 @@ public:
                             const ScFieldIdentifier& rIdent,
                             const css::uno::Any& rOrient );
 
-    virtual             ~ScDataPilotFieldObj();
+    virtual             ~ScDataPilotFieldObj() override;
 
                             // XNamed
     virtual OUString SAL_CALL getName()
@@ -632,7 +632,7 @@ class ScDataPilotFieldGroupsObj : public ScDataPilotFieldGroupsObjImpl
 {
 public:
     explicit            ScDataPilotFieldGroupsObj( const ScFieldGroups& rGroups );
-    virtual             ~ScDataPilotFieldGroupsObj();
+    virtual             ~ScDataPilotFieldGroupsObj() override;
 
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
@@ -713,7 +713,7 @@ class ScDataPilotFieldGroupObj : public ScDataPilotFieldGroupObjImpl
 {
 public:
     explicit            ScDataPilotFieldGroupObj( ScDataPilotFieldGroupsObj& rParent, const OUString& rGroupName );
-    virtual             ~ScDataPilotFieldGroupObj();
+    virtual             ~ScDataPilotFieldGroupObj() override;
 
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
@@ -790,7 +790,7 @@ class ScDataPilotFieldGroupItemObj : public ScDataPilotFieldGroupItemObjImpl
 {
 public:
     explicit            ScDataPilotFieldGroupItemObj( ScDataPilotFieldGroupObj& rParent, const OUString& rName );
-    virtual             ~ScDataPilotFieldGroupItemObj();
+    virtual             ~ScDataPilotFieldGroupItemObj() override;
 
                             // XNamed
     virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;
@@ -823,7 +823,7 @@ class ScDataPilotItemsObj : public ScDataPilotChildObjBase, public ScDataPilotIt
 {
 public:
     explicit            ScDataPilotItemsObj( ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId );
-    virtual             ~ScDataPilotItemsObj();
+    virtual             ~ScDataPilotItemsObj() override;
 
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
@@ -879,7 +879,7 @@ public:
                             const ScFieldIdentifier& rFieldId,
                             sal_Int32 nIndex );
 
-    virtual             ~ScDataPilotItemObj();
+    virtual             ~ScDataPilotItemObj() override;
 
                             // XNamed
     virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;

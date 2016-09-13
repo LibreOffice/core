@@ -119,7 +119,7 @@ protected:
 
 public:
                             ScModelObj(ScDocShell* pDocSh);
-    virtual                 ~ScModelObj();
+    virtual                 ~ScModelObj() override;
 
     /// create ScModelObj and set at pDocSh (SetBaseModel)
     static void             CreateAndSet(ScDocShell* pDocSh);
@@ -436,7 +436,7 @@ css::uno::Reference< css::drawing::XDrawPage >
 
 public:
                             ScDrawPagesObj(ScDocShell* pDocSh);
-    virtual                 ~ScDrawPagesObj();
+    virtual                 ~ScDrawPagesObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -484,7 +484,7 @@ private:
 
 public:
                             ScTableSheetsObj(ScDocShell* pDocSh);
-    virtual                 ~ScTableSheetsObj();
+    virtual                 ~ScTableSheetsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -597,7 +597,7 @@ private:
 public:
                             ScTableColumnsObj(ScDocShell* pDocSh, SCTAB nT,
                                                 SCCOL nSC, SCCOL nEC);
-    virtual                 ~ScTableColumnsObj();
+    virtual                 ~ScTableColumnsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -698,7 +698,7 @@ private:
 public:
                             ScTableRowsObj(ScDocShell* pDocSh, SCTAB nT,
                                                 SCROW nSR, SCROW nER);
-    virtual                 ~ScTableRowsObj();
+    virtual                 ~ScTableRowsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -779,7 +779,7 @@ private:
     ScDocShell*             pDocShell;
 
 public:
-    virtual                 ~ScSpreadsheetSettingsObj();
+    virtual                 ~ScSpreadsheetSettingsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -843,7 +843,7 @@ private:
 
 public:
                             ScAnnotationsObj(ScDocShell* pDocSh, SCTAB nT);
-    virtual                 ~ScAnnotationsObj();
+    virtual                 ~ScAnnotationsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -898,7 +898,7 @@ private:
 
 public:
                             ScScenariosObj(ScDocShell* pDocSh, SCTAB nT);
-    virtual                 ~ScScenariosObj();
+    virtual                 ~ScScenariosObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

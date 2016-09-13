@@ -31,7 +31,7 @@ namespace connectivity
         static jclass theClass;
     public:
         virtual jclass getMyClass() const override;
-        virtual ~java_math_BigDecimal();
+        virtual ~java_math_BigDecimal() override;
 
         java_math_BigDecimal( const OUString& _par0 );
         java_math_BigDecimal( const double& _par0 );

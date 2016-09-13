@@ -45,7 +45,7 @@ private:
     SVX_DLLPRIVATE void AdaptSize();
 public:
     SvxXConnectionPreview( vcl::Window* pParent, WinBits nStyle);
-    virtual ~SvxXConnectionPreview();
+    virtual ~SvxXConnectionPreview() override;
     virtual void dispose() override;
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;

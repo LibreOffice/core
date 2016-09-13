@@ -239,7 +239,7 @@ public:
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
 
 protected:
-    virtual ~FormControllerImpl();
+    virtual ~FormControllerImpl() override;
 };
 
 SbaXDataBrowserController::FormControllerImpl::FormControllerImpl(SbaXDataBrowserController* _pOwner)

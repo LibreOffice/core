@@ -38,7 +38,7 @@ public:
         DrawDocShell* pDocSh,
         OutputDevice* pOutDev,
         DrawViewShell* pShell);
-    virtual ~DrawView();
+    virtual ~DrawView() override;
 
     virtual void MarkListHasChanged() override;
     void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;

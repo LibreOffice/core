@@ -55,7 +55,7 @@ namespace sdr
             TextProperties(const TextProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~TextProperties();
+            virtual ~TextProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;

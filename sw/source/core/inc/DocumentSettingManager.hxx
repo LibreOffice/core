@@ -159,7 +159,7 @@ class DocumentSettingManager :
 public:
 
     DocumentSettingManager(SwDoc &rDoc);
-    virtual ~DocumentSettingManager();
+    virtual ~DocumentSettingManager() override;
 
     // IDocumentSettingAccess
     virtual bool get(/*[in]*/ DocumentSettingId id) const override;

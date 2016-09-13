@@ -402,7 +402,7 @@ class GroupShape : public ShapeBase
 {
 public:
     explicit            GroupShape( Drawing& rDrawing );
-    virtual             ~GroupShape();
+    virtual             ~GroupShape() override;
 
     /** Returns read/write access to the container of child shapes and templates. */
     ShapeContainer& getChildren() { return *mxChildren; }

@@ -135,7 +135,7 @@ public:
                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                        const bool bIsCovered, const sal_Int32 nRepeatedRows );
 
-    virtual ~ScXMLTableRowCellContext();
+    virtual ~ScXMLTableRowCellContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

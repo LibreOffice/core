@@ -71,7 +71,7 @@ class TableModel : public ::cppu::BaseMutex,
 public:
     explicit TableModel( SdrTableObj* pTableObj );
     TableModel( SdrTableObj* pTableObj, const TableModelRef& xSourceTable );
-    virtual ~TableModel();
+    virtual ~TableModel() override;
 
     void init( sal_Int32 nColumns, sal_Int32 nRows );
 

@@ -186,7 +186,7 @@ namespace dbaui
 
     protected:
         explicit CopyTableWizard( const Reference< XComponentContext >& _rxORB );
-        virtual ~CopyTableWizard();
+        virtual ~CopyTableWizard() override;
 
         // OGenericUnoDialog overridables
         virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) override;

@@ -108,7 +108,7 @@ class SvtMatchContext_Impl: public salhelper::Thread
 
     DECL_LINK_TYPED(                Select_Impl, void*, void );
 
-    virtual                         ~SvtMatchContext_Impl();
+    virtual                         ~SvtMatchContext_Impl() override;
     virtual void                    execute() override;
     void                            doExecute();
     void                            Insert( const OUString& rCompletion, const OUString& rURL, bool bForce = false);

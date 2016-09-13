@@ -94,7 +94,7 @@ private:
 
 public:
                             BibliographyLoader();
-                            virtual ~BibliographyLoader();
+                            virtual ~BibliographyLoader() override;
 
     // XServiceInfo
     OUString               SAL_CALL getImplementationName() throw(std::exception  ) override;

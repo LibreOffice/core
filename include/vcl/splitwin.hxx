@@ -123,7 +123,7 @@ private:
                         SplitWindow & operator= (const SplitWindow &) = delete;
 public:
                         SplitWindow( vcl::Window* pParent, WinBits nStyle = 0 );
-    virtual             ~SplitWindow();
+    virtual             ~SplitWindow() override;
     virtual void        dispose() override;
 
     virtual void        StartSplit();

@@ -46,7 +46,7 @@ class PageSizeControl : public SfxPopupWindow
 {
 public:
     PageSizeControl(sal_uInt16 nId);
-    virtual ~PageSizeControl();
+    virtual ~PageSizeControl() override;
     virtual void dispose() override;
 
 private:

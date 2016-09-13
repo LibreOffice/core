@@ -32,7 +32,7 @@ class TableRows : public ::cppu::WeakAggImplHelper1< css::table::XTableRows >
 {
 public:
     explicit TableRows( const TableModelRef& xTableModel );
-    virtual ~TableRows();
+    virtual ~TableRows() override;
 
     void dispose();
     void throwIfDisposed() const throw (css::uno::RuntimeException);

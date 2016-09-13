@@ -59,7 +59,7 @@ public:
     ImplXMLSignatureListener(const Link<XMLSignatureCreationResult&,void>& rCreationResultListenerListener,
                              const Link<XMLSignatureVerifyResult&,void>& rVerifyResultListenerListener,
                              const Link<LinkParamNone*, void>& rStartVerifySignatureElement);
-    virtual ~ImplXMLSignatureListener();
+    virtual ~ImplXMLSignatureListener() override;
 
     void setNextHandler(const css::uno::Reference< css::xml::sax::XDocumentHandler >& xNextHandler);
 

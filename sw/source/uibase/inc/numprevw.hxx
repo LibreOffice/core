@@ -45,7 +45,7 @@ class NumberingPreview : public vcl::Window
         {
         }
 
-        virtual ~NumberingPreview();
+        virtual ~NumberingPreview() override;
 
         void    SetNumRule(const SwNumRule* pNum)
                     {pActNum = pNum; Invalidate();};

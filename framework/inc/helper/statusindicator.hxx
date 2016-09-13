@@ -83,7 +83,7 @@ class StatusIndicator : public  ::cppu::WeakImplHelper< css::task::XStatusIndica
 
         /** @short  does nothing real ....
          */
-        virtual ~StatusIndicator();
+        virtual ~StatusIndicator() override;
 
     // uno interface
     public:

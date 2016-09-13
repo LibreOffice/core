@@ -43,7 +43,7 @@ private:
     SvxNumRule maRule;
 public:
     SvxUnoNumberingRules( const SvxNumRule& rRule ) throw();
-    virtual ~SvxUnoNumberingRules() throw();
+    virtual ~SvxUnoNumberingRules() throw() override;
 
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoNumberingRules )
 

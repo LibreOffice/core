@@ -310,7 +310,7 @@ class SplinePropertiesDialog : public ModalDialog
 {
 public:
     explicit SplinePropertiesDialog( vcl::Window* pParent );
-    virtual ~SplinePropertiesDialog() { disposeOnce(); }
+    virtual ~SplinePropertiesDialog() override { disposeOnce(); }
     virtual void dispose() override;
 
     void fillControls( const ChartTypeParameter& rParameter );
@@ -402,7 +402,7 @@ class SteppedPropertiesDialog : public ModalDialog
 {
 public:
     explicit SteppedPropertiesDialog( vcl::Window* pParent );
-    virtual ~SteppedPropertiesDialog() { disposeOnce(); }
+    virtual ~SteppedPropertiesDialog() override { disposeOnce(); }
     virtual void dispose() override;
 
     void fillControls( const ChartTypeParameter& rParameter );

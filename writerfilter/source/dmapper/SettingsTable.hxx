@@ -46,7 +46,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
  public:
     SettingsTable();
-    virtual ~SettingsTable();
+    virtual ~SettingsTable() override;
 
     //returns default TabStop in 1/100th mm
     int GetDefaultTabStop() const;

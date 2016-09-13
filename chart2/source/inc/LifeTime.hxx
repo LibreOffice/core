@@ -86,7 +86,7 @@ protected:
 public:
 OOO_DLLPUBLIC_CHARTTOOLS    CloseableLifeTimeManager( css::util::XCloseable* pCloseable
         , css::lang::XComponent* pComponent );
-OOO_DLLPUBLIC_CHARTTOOLS    virtual ~CloseableLifeTimeManager();
+OOO_DLLPUBLIC_CHARTTOOLS    virtual ~CloseableLifeTimeManager() override;
 
 OOO_DLLPUBLIC_CHARTTOOLS    bool        impl_isDisposedOrClosed( bool bAssert=true );
 OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_startTryClose(bool bDeliverOwnership)

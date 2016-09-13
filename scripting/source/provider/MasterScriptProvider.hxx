@@ -52,7 +52,7 @@ public:
     explicit MasterScriptProvider(
         const css::uno::Reference< css::uno::XComponentContext >
         & xContext ) throw( css::uno::RuntimeException );
-    virtual ~MasterScriptProvider();
+    virtual ~MasterScriptProvider() override;
 
     // XServiceInfo implementation
     virtual OUString SAL_CALL getImplementationName( )

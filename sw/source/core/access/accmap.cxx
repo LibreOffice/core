@@ -124,7 +124,7 @@ class SwDrawModellListener_Impl : public SfxListener,
     ::comphelper::OInterfaceContainerHelper2 maEventListeners;
     SdrModel *mpDrawModel;
 protected:
-    virtual ~SwDrawModellListener_Impl();
+    virtual ~SwDrawModellListener_Impl() override;
 
 public:
     explicit SwDrawModellListener_Impl( SdrModel *pDrawModel );

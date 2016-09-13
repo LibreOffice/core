@@ -101,7 +101,7 @@ public:
                        struct ConnectionSettings *pSettings,
                        const OString &stmt );
 
-     virtual ~PreparedStatement();
+     virtual ~PreparedStatement() override;
 public: // XInterface
     virtual void SAL_CALL acquire() throw() override { PreparedStatement_BASE::acquire(); }
     virtual void SAL_CALL release() throw() override { PreparedStatement_BASE::release(); }

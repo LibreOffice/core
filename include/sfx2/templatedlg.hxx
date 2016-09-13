@@ -46,7 +46,7 @@ public:
 
     SfxTemplateManagerDlg(vcl::Window *parent = nullptr);
 
-    virtual ~SfxTemplateManagerDlg();
+    virtual ~SfxTemplateManagerDlg() override;
     virtual void dispose() override;
     virtual short Execute() override;
 
@@ -185,7 +185,7 @@ public:
 
     explicit SfxTemplateCategoryDialog();
 
-    virtual ~SfxTemplateCategoryDialog();
+    virtual ~SfxTemplateCategoryDialog() override;
     virtual void dispose() override;
 };
 
@@ -197,7 +197,7 @@ class SFX2_DLLPUBLIC SfxTemplateSelectionDlg : public SfxTemplateManagerDlg
 public:
     SfxTemplateSelectionDlg(vcl::Window *parent = nullptr);
 
-    virtual ~SfxTemplateSelectionDlg();
+    virtual ~SfxTemplateSelectionDlg() override;
     virtual void dispose() override;
     virtual short Execute() override;
 

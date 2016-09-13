@@ -219,7 +219,7 @@ public:
         std::shared_ptr< Data::Implementation > & implementation);
 
 private:
-    virtual ~ServiceManager();
+    virtual ~ServiceManager() override;
 
     virtual void SAL_CALL disposing() override;
 

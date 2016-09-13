@@ -52,7 +52,7 @@ protected:
     VbaPageSetupBase( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
 public:
-    virtual ~VbaPageSetupBase(){}
+    virtual ~VbaPageSetupBase() override {}
 
     // Attribute
     virtual double SAL_CALL getTopMargin() throw (css::uno::RuntimeException, std::exception) override;

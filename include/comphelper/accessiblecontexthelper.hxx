@@ -90,7 +90,7 @@ namespace comphelper
         std::unique_ptr<OContextHelper_Impl>    m_pImpl;
 
     protected:
-        virtual ~OAccessibleContextHelper( );
+        virtual ~OAccessibleContextHelper( ) override;
 
         /** ctor
 

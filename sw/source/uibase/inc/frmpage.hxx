@@ -185,7 +185,7 @@ class SwFramePage: public SfxTabPage
 
 public:
     SwFramePage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwFramePage();
+    virtual ~SwFramePage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
@@ -227,7 +227,7 @@ class SwGrfExtPage: public SfxTabPage
     DECL_LINK_TYPED(BrowseHdl, Button*, void);
 
     virtual void    ActivatePage(const SfxItemSet& rSet) override;
-    virtual ~SwGrfExtPage();
+    virtual ~SwGrfExtPage() override;
     virtual void dispose() override;
 
     using SfxTabPage::ActivatePage;
@@ -262,7 +262,7 @@ class SwFrameURLPage : public SfxTabPage
 
 public:
     SwFrameURLPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwFrameURLPage();
+    virtual ~SwFrameURLPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
@@ -311,7 +311,7 @@ class SwFrameAddPage : public SfxTabPage
 
 public:
     SwFrameAddPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwFrameAddPage();
+    virtual ~SwFrameAddPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);

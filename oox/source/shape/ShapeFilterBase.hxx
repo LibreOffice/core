@@ -39,7 +39,7 @@ public:
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext )
                             throw( css::uno::RuntimeException );
 
-    virtual             ~ShapeFilterBase();
+    virtual             ~ShapeFilterBase() override;
 
     /** Has to be implemented by each filter, returns the current theme. */
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const override;

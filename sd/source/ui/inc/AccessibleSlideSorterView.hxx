@@ -69,7 +69,7 @@ public:
 
     void Init();
 
-    virtual ~AccessibleSlideSorterView();
+    virtual ~AccessibleSlideSorterView() override;
 
     /** This method acts like a dispose call.  It sends a disposing to all
         of its listeners.  It may be called twice.

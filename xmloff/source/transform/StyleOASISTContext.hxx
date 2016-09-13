@@ -44,7 +44,7 @@ public:
                               ::xmloff::token::XMLTokenEnum eToken,
                               bool bPersistent=false );
 
-    virtual ~XMLStyleOASISTContext();
+    virtual ~XMLStyleOASISTContext() override;
 
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,

@@ -34,7 +34,7 @@ public:
     SdrItemPool(SfxItemPool* pMaster = nullptr, bool bLoadRefCounts = true);
     SdrItemPool(const SdrItemPool& rPool);
 protected:
-    virtual ~SdrItemPool();
+    virtual ~SdrItemPool() override;
 public:
 
     virtual SfxItemPool* Clone() const override;

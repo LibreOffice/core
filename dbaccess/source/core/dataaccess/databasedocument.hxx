@@ -281,7 +281,7 @@ private:
 protected:
     virtual void SAL_CALL disposing() override;
 
-    virtual ~ODatabaseDocument();
+    virtual ~ODatabaseDocument() override;
 
 public:
     struct FactoryAccess { friend class ODatabaseModelImpl; private: FactoryAccess() { } };

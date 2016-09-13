@@ -67,7 +67,7 @@ class ScTpContentOptions : public SfxTabPage
 
             ScTpContentOptions( vcl::Window*         pParent,
                              const SfxItemSet&  rArgSet );
-            virtual ~ScTpContentOptions();
+            virtual ~ScTpContentOptions() override;
     virtual void dispose() override;
 
 public:
@@ -114,7 +114,7 @@ class ScTpLayoutOptions : public SfxTabPage
             ScTpLayoutOptions( vcl::Window*          pParent,
                              const SfxItemSet&  rArgSet );
 public:
-    virtual ~ScTpLayoutOptions();
+    virtual ~ScTpLayoutOptions() override;
     virtual void        dispose() override;
     static  VclPtr<SfxTabPage> Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rCoreSet );

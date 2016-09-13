@@ -428,7 +428,7 @@ public:
             SvXMLExport& rExp,
                SvXMLAutoStylePoolP & rASP
                           );
-    virtual ~XMLTextParagraphExport();
+    virtual ~XMLTextParagraphExport() override;
 
     /// add autostyle for specified family
     void Add(

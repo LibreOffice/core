@@ -197,7 +197,7 @@ class FieldDeletionModify : public SwModify
                 mpFormatField->Add(this);
         }
 
-        virtual ~FieldDeletionModify()
+        virtual ~FieldDeletionModify() override
         {
             if (mpFormatField)
             {

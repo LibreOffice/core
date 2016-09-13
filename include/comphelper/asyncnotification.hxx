@@ -41,7 +41,7 @@ namespace comphelper
         AnyEvent();
 
     protected:
-        virtual ~AnyEvent();
+        virtual ~AnyEvent() override;
 
     private:
         AnyEvent( AnyEvent& ) = delete;
@@ -147,7 +147,7 @@ namespace comphelper
     {
 
     private:
-        SAL_DLLPRIVATE virtual ~AsyncEventNotifier();
+        SAL_DLLPRIVATE virtual ~AsyncEventNotifier() override;
 
         SAL_DLLPRIVATE virtual void execute() override;
 
@@ -178,7 +178,7 @@ namespace comphelper
 
     public:
         // only public so shared_ptr finds it
-        SAL_DLLPRIVATE virtual ~AsyncEventNotifierAutoJoin();
+        SAL_DLLPRIVATE virtual ~AsyncEventNotifierAutoJoin() override;
 
         static std::shared_ptr<AsyncEventNotifierAutoJoin>
             newAsyncEventNotifierAutoJoin(char const* name);

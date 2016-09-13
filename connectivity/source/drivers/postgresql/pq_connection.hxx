@@ -175,7 +175,7 @@ public:
         const rtl::Reference< RefCountedMutex > &refMutex,
         const css::uno::Reference< css::uno::XComponentContext > & ctx );
 
-    virtual ~Connection( );
+    virtual ~Connection( ) override;
 
 public: // XCloseable
     virtual void SAL_CALL close()

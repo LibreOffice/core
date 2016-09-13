@@ -272,7 +272,7 @@ protected:
 
 public:
 
-    virtual ~OWriteStream();
+    virtual ~OWriteStream() override;
 
     void CheckInitOnDemand();
     void DeInit();

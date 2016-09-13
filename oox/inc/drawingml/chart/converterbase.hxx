@@ -109,7 +109,7 @@ public:
 protected:
     explicit            ConverterBase( const ConverterRoot& rParent, ModelType& rModel ) :
                             ConverterRoot( rParent ), mrModel( rModel ) {}
-    virtual             ~ConverterBase() {}
+    virtual             ~ConverterBase() override {}
 
 protected:
     ModelType&          mrModel;
@@ -122,7 +122,7 @@ class LayoutConverter : public ConverterBase< LayoutModel >
 {
 public:
     explicit            LayoutConverter( const ConverterRoot& rParent, LayoutModel& rModel );
-    virtual             ~LayoutConverter();
+    virtual             ~LayoutConverter() override;
 
     /** Tries to calculate the absolute position and size from the contained
         OOXML layout model. Returns true, if returned rectangle is valid. */

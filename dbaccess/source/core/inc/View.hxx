@@ -54,7 +54,7 @@ namespace dbaccess
         virtual void SAL_CALL alterCommand( const OUString& NewCommand ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~View();
+        virtual ~View() override;
 
     protected:
         // OPropertyContainer

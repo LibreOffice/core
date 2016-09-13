@@ -31,7 +31,7 @@ class WrappedAddInProperty : public WrappedProperty
 {
 public:
     explicit WrappedAddInProperty( ChartDocumentWrapper& rChartDocumentWrapper );
-    virtual ~WrappedAddInProperty();
+    virtual ~WrappedAddInProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -47,7 +47,7 @@ class WrappedBaseDiagramProperty : public WrappedProperty
 {
 public:
     explicit WrappedBaseDiagramProperty( ChartDocumentWrapper& rChartDocumentWrapper );
-    virtual ~WrappedBaseDiagramProperty();
+    virtual ~WrappedBaseDiagramProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -63,7 +63,7 @@ class WrappedAdditionalShapesProperty : public WrappedProperty
 {
 public:
     explicit WrappedAdditionalShapesProperty( ChartDocumentWrapper& rChartDocumentWrapper );
-    virtual ~WrappedAdditionalShapesProperty();
+    virtual ~WrappedAdditionalShapesProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -79,7 +79,7 @@ class WrappedRefreshAddInAllowedProperty : public WrappedProperty
 {
 public:
     explicit WrappedRefreshAddInAllowedProperty( ChartDocumentWrapper& rChartDocumentWrapper );
-    virtual ~WrappedRefreshAddInAllowedProperty();
+    virtual ~WrappedRefreshAddInAllowedProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;

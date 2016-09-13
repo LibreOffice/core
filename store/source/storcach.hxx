@@ -99,7 +99,7 @@ public:
 
 protected:
     // Destruction
-    virtual ~PageCache();
+    virtual ~PageCache() override;
 };
 
 /*========================================================================

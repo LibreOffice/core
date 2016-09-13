@@ -35,7 +35,7 @@ private:
 
 public:
     SwDBConfig();
-    virtual ~SwDBConfig();
+    virtual ~SwDBConfig() override;
 
     void                    Load();
     const SwDBData&         GetAddressSource();

@@ -50,7 +50,7 @@ class WindowContentFactoryManager : private cppu::BaseMutex,
 {
 public:
     explicit WindowContentFactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext );
-    virtual ~WindowContentFactoryManager();
+    virtual ~WindowContentFactoryManager() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

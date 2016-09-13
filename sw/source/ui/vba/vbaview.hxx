@@ -40,7 +40,7 @@ private:
 public:
     SwVbaView( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const css::uno::Reference< css::frame::XModel >& rModel ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaView();
+    virtual ~SwVbaView() override;
 
    // XView
     virtual ::sal_Int32 SAL_CALL getSeekView() throw (css::uno::RuntimeException, std::exception) override;

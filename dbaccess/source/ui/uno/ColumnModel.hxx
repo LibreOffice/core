@@ -64,7 +64,7 @@ class OColumnControlModel :  public ::comphelper::OMutexAndBroadcastHelper
     void registerProperties();
 protected:
 
-    virtual ~OColumnControlModel();
+    virtual ~OColumnControlModel() override;
     OColumnControlModel(const OColumnControlModel* _pSource
                         ,const css::uno::Reference< css::lang::XMultiServiceFactory>& _rxFactory);
 public:

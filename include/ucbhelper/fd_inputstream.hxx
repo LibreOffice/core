@@ -51,7 +51,7 @@ namespace ucbhelper
 
         FdInputStream(oslFileHandle tmpfl = nullptr);
 
-        virtual ~FdInputStream();
+        virtual ~FdInputStream() override;
 
         virtual sal_Int32 SAL_CALL
         readBytes(css::uno::Sequence< sal_Int8 >& aData,

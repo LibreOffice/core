@@ -53,7 +53,7 @@ class OZipFileAccess : public ::cppu::WeakImplHelper<
 public:
     OZipFileAccess( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual ~OZipFileAccess();
+    virtual ~OZipFileAccess() override;
 
     static css::uno::Sequence< OUString > GetPatternsFromString_Impl( const OUString& aString );
 

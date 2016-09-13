@@ -76,7 +76,7 @@ class BASIC_DLLPUBLIC SbxInfo : public SvRefBase
 protected:
     void LoadData( SvStream&, sal_uInt16 );
     void StoreData( SvStream& ) const;
-    virtual ~SbxInfo();
+    virtual ~SbxInfo() override;
 public:
     SbxInfo();
     SbxInfo( const OUString&, sal_uInt32 );
@@ -102,7 +102,7 @@ public:
 class BASIC_DLLPUBLIC SbxAlias : public SbxVariable, public SfxListener
 {
     SbxVariableRef xAlias;
-    virtual ~SbxAlias();
+    virtual ~SbxAlias() override;
     virtual void Broadcast( sal_uInt32 ) override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 public:
@@ -128,7 +128,7 @@ class BASIC_DLLPUBLIC SbxArray : public SbxBase
 
 protected:
     SbxDataType eType;            // Data type of the array
-    virtual ~SbxArray();
+    virtual ~SbxArray() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
 
@@ -178,7 +178,7 @@ protected:
     sal_uInt32  Offset32( SbxArray* );
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
-    virtual ~SbxDimArray();
+    virtual ~SbxDimArray() override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_DIMARRAY,1);
     SbxDimArray( SbxDataType=SbxVARIANT );
@@ -213,7 +213,7 @@ class BASIC_DLLPUBLIC SbxCollection : public SbxObject
 {
     BASIC_DLLPRIVATE void Initialize();
 protected:
-    virtual ~SbxCollection();
+    virtual ~SbxCollection() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     // Overridable methods (why not pure virtual?):
@@ -236,7 +236,7 @@ class BASIC_DLLPUBLIC SbxStdCollection : public SbxCollection
 protected:
     OUString aElemClass;
     bool bAddRemoveOk;
-    virtual ~SbxStdCollection();
+    virtual ~SbxStdCollection() override;
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
     virtual bool StoreData( SvStream& ) const override;
     virtual void CollAdd( SbxArray* pPar ) override;

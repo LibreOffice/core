@@ -32,7 +32,7 @@ public:
         AstMember(NT_parameter, type, name, scope), m_direction(direction),
         m_rest(rest) {}
 
-    virtual ~AstParameter() {}
+    virtual ~AstParameter() override {}
 
     Direction getDirection() const { return m_direction; }
 

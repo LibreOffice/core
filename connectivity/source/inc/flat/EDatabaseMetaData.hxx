@@ -34,7 +34,7 @@ namespace connectivity
         {
             virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
         protected:
-            virtual ~OFlatDatabaseMetaData();
+            virtual ~OFlatDatabaseMetaData() override;
         public:
             OFlatDatabaseMetaData(file::OConnection* _pCon);
 

@@ -119,7 +119,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlags);
 
-    virtual ~SwXMLImport() throw();
+    virtual ~SwXMLImport() throw() override;
 
     // css::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument()

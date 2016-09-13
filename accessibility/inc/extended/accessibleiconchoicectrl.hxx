@@ -44,7 +44,7 @@ namespace accessibility
         css::uno::Reference< css::accessibility::XAccessible > m_xParent;
 
     protected:
-        virtual ~AccessibleIconChoiceCtrl();
+        virtual ~AccessibleIconChoiceCtrl() override;
 
         /** this function is called upon disposing the component */
         virtual void SAL_CALL   disposing() override;

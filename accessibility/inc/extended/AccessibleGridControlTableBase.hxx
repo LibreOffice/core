@@ -50,7 +50,7 @@ public:
         ::svt::table::AccessibleTableControlObjType  eObjType );
 
 protected:
-    virtual ~AccessibleGridControlTableBase();
+    virtual ~AccessibleGridControlTableBase() override;
 
 public:
     // XAccessibleContext

@@ -820,7 +820,7 @@ class SwAssignFieldsControl : public Control
     void                MakeVisible( sal_Int32 nIndex );
 public:
     SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits);
-    virtual ~SwAssignFieldsControl();
+    virtual ~SwAssignFieldsControl() override;
     virtual void dispose() override;
 
     void        Init(SwMailMergeConfigItem& rConfigItem);

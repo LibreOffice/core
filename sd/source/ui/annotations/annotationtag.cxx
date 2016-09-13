@@ -155,7 +155,7 @@ class AnnotationHdl : public SmartHdl
 {
 public:
     AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt );
-    virtual ~AnnotationHdl();
+    virtual ~AnnotationHdl() override;
     virtual void CreateB2dIAObject() override;
     virtual bool IsFocusHdl() const override;
     virtual bool isMarkable() const override;

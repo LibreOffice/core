@@ -357,7 +357,7 @@ class DummyChart : public DummyXShapes
 {
 public:
     DummyChart();
-    virtual ~DummyChart();
+    virtual ~DummyChart() override;
     virtual DummyChart* getRootShape() override;
 
     virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) throw(css::uno::RuntimeException, std::exception) override;

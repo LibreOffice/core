@@ -369,7 +369,7 @@ class EditCharAttribField: public EditCharAttrib
 public:
     EditCharAttribField( const SvxFieldItem& rAttr, sal_uInt16 nPos );
     EditCharAttribField( const EditCharAttribField& rAttr );
-    virtual ~EditCharAttribField();
+    virtual ~EditCharAttribField() override;
 
     bool operator == ( const EditCharAttribField& rAttr ) const;
     bool operator != ( const EditCharAttribField& rAttr ) const

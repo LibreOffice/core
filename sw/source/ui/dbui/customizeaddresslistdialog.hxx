@@ -48,7 +48,7 @@ class SwCustomizeAddressListDialog : public SfxModalDialog
     void UpdateButtons();
 public:
     SwCustomizeAddressListDialog(vcl::Window* pParent, const SwCSVData& rOldData);
-    virtual ~SwCustomizeAddressListDialog();
+    virtual ~SwCustomizeAddressListDialog() override;
     virtual void dispose() override;
 
     SwCSVData*    GetNewData() { return m_pNewData;}
@@ -64,7 +64,7 @@ class SwAddRenameEntryDialog : public SfxModalDialog
 protected:
     SwAddRenameEntryDialog(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription, const std::vector< OUString >& rCSVHeader);
-    virtual ~SwAddRenameEntryDialog();
+    virtual ~SwAddRenameEntryDialog() override;
     virtual void dispose() override;
 
 public:

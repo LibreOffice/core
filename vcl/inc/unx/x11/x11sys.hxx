@@ -29,7 +29,7 @@ class VCLPLUG_GEN_PUBLIC X11SalSystem : public SalGenericSystem
 {
 public:
     X11SalSystem() {}
-    virtual ~X11SalSystem();
+    virtual ~X11SalSystem() override;
 
     // override pure virtual methods
     virtual unsigned int GetDisplayScreenCount() override;

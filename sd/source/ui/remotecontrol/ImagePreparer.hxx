@@ -25,7 +25,7 @@ public:
     ImagePreparer( const
         css::uno::Reference<css::presentation::XSlideShowController>&
         rxController, sd::Transmitter *aTransmitter );
-    virtual ~ImagePreparer();
+    virtual ~ImagePreparer() override;
 
 private:
     css::uno::Reference<css::presentation::XSlideShowController> xController;

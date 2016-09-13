@@ -29,7 +29,7 @@ class SwFootnoteFrame;
 class SwAccessibleFootnote : public SwAccessibleContext
 {
 protected:
-    virtual ~SwAccessibleFootnote();
+    virtual ~SwAccessibleFootnote() override;
 
 public:
     SwAccessibleFootnote( SwAccessibleMap* pInitMap,

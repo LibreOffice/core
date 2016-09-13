@@ -102,7 +102,7 @@ namespace dbaccess
 
                                          throw (css::uno::Exception, std::exception) override;
 
-        virtual ~ODBTableDecorator();
+        virtual ~ODBTableDecorator() override;
     public:
         /** constructs a wrapper supporting the com.sun.star.sdb.Table service.
 

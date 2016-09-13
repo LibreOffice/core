@@ -63,7 +63,7 @@ namespace migration
 
     public:
         WordbookMigration();
-        virtual ~WordbookMigration();
+        virtual ~WordbookMigration() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()

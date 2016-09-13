@@ -35,7 +35,7 @@ class BiffDecoderBase : public ::comphelper::IDocPasswordVerifier
 {
 public:
     explicit            BiffDecoderBase();
-    virtual             ~BiffDecoderBase();
+    virtual             ~BiffDecoderBase() override;
 
     /** Derived classes return a clone of the decoder for usage in new streams. */
     inline BiffDecoderBase* clone() { return implClone(); }

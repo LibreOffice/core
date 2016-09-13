@@ -54,7 +54,7 @@ class RegressionEquation :
 {
 public:
     explicit RegressionEquation();
-    virtual ~RegressionEquation();
+    virtual ~RegressionEquation() override;
 
     virtual OUString SAL_CALL
         getImplementationName()

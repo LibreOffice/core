@@ -41,7 +41,7 @@ namespace svgio
             SvgClipPathNode(
                 SvgDocument& rDocument,
                 SvgNode* pParent);
-            virtual ~SvgClipPathNode();
+            virtual ~SvgClipPathNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;

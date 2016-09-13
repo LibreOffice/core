@@ -49,7 +49,7 @@ namespace offapp
 
     public:
         ConnectionPoolOptionsPage(vcl::Window* _pParent, const SfxItemSet& _rAttrSet);
-        virtual ~ConnectionPoolOptionsPage();
+        virtual ~ConnectionPoolOptionsPage() override;
         virtual void dispose() override;
         static VclPtr<SfxTabPage>  Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet);
 

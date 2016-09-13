@@ -22,7 +22,7 @@ public:
     SfxInt64Item( sal_uInt16 nWhich, SvStream & rStream );
     SfxInt64Item( const SfxInt64Item& rItem );
 
-    virtual ~SfxInt64Item();
+    virtual ~SfxInt64Item() override;
 
     virtual bool operator== ( const SfxPoolItem& rItem ) const override;
 

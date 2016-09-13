@@ -73,7 +73,7 @@ class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper<XOutputStream>
 
 public:
     OutputStorageWrapper_Impl();
-    virtual ~OutputStorageWrapper_Impl();
+    virtual ~OutputStorageWrapper_Impl() override;
 
 // css::io::XOutputStream
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData) throw(NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception) override;

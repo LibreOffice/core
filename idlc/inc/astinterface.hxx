@@ -49,7 +49,7 @@ public:
     AstInterface(
         const OString& name, AstInterface const * pInherits,
         AstScope* pScope);
-    virtual ~AstInterface();
+    virtual ~AstInterface() override;
 
     InheritedInterfaces const & getAllInheritedInterfaces() const
     { return m_inheritedInterfaces; }

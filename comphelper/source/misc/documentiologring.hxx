@@ -46,7 +46,7 @@ class OSimpleLogRing : public ::cppu::WeakImplHelper< css::logging::XSimpleLogRi
 
 public:
     OSimpleLogRing();
-    virtual ~OSimpleLogRing();
+    virtual ~OSimpleLogRing() override;
 
 // XSimpleLogRing
     virtual void SAL_CALL logString( const OUString& aMessage ) throw (css::uno::RuntimeException, std::exception) override;

@@ -151,7 +151,7 @@ private:
 
 public:
     Shell( SfxViewFrame *pFrame, SfxViewShell *pOldSh );
-    virtual ~Shell();
+    virtual ~Shell() override;
 
     BaseWindow*      GetCurWindow() const    { return pCurWin; }
     ScriptDocument const& GetCurDocument() const { return m_aCurDocument; }

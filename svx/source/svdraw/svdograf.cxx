@@ -112,7 +112,7 @@ class SdrGraphicLink : public sfx2::SvBaseLink
 
 public:
     explicit            SdrGraphicLink(SdrGrafObj& rObj);
-    virtual             ~SdrGraphicLink();
+    virtual             ~SdrGraphicLink() override;
 
     virtual void        Closed() override;
 
@@ -131,7 +131,7 @@ class SdrGraphicUpdater : public ::osl::Thread
 {
 public:
     SdrGraphicUpdater( const OUString& rFileName, const OUString& rFilterName, SdrGraphicLink& );
-    virtual ~SdrGraphicUpdater();
+    virtual ~SdrGraphicUpdater() override;
 
     void SAL_CALL Terminate();
 

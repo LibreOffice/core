@@ -154,7 +154,7 @@ public:
         Start();
     }
 
-    virtual ~Pause()
+    virtual ~Pause() override
     {
     }
 
@@ -219,7 +219,7 @@ protected:
 public:
 
     VCLXToolkit();
-    virtual ~VCLXToolkit();
+    virtual ~VCLXToolkit() override;
 
     // css::awt::XToolkitExperimental
     virtual void SAL_CALL processEventsToIdle()

@@ -108,7 +108,7 @@ class LwpFribSection: public LwpFrib
 {
 public:
     explicit LwpFribSection(LwpPara* pPara );
-    virtual ~LwpFribSection();
+    virtual ~LwpFribSection() override;
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpSection * GetSection();
     void RegisterSectionStyle();

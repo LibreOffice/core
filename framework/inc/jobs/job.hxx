@@ -171,7 +171,7 @@ class Job : public  ::cppu::WeakImplHelper<
                       const css::uno::Reference< css::frame::XFrame >&              xFrame );
                  Job( const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
                       const css::uno::Reference< css::frame::XModel >&              xModel );
-        virtual ~Job(                                                                      );
+        virtual ~Job(                                                                      ) override;
 
         void     setDispatchResultFake( const css::uno::Reference< css::frame::XDispatchResultListener >& xListener    ,
                                         const css::uno::Reference< css::uno::XInterface >&                xSourceFake  );

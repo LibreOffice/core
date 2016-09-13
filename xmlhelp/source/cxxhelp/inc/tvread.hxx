@@ -71,7 +71,7 @@ namespace treeview {
 
     public:
 
-        virtual ~TVBase() { }
+        virtual ~TVBase() override { }
 
         // XNameAccess
 
@@ -168,7 +168,7 @@ namespace treeview {
     public:
         TVRead( const ConfigData& configData,TVDom* tvDom = nullptr );
 
-        virtual ~TVRead();
+        virtual ~TVRead() override;
 
         // XNameAccess
 
@@ -214,7 +214,7 @@ namespace treeview {
 
         TVChildTarget( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-        virtual ~TVChildTarget();
+        virtual ~TVChildTarget() override;
 
         virtual css::uno::Any SAL_CALL
         getByName( const OUString& aName )

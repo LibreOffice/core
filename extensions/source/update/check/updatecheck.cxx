@@ -234,7 +234,7 @@ public:
     virtual void cancel() override;
 
 protected:
-    virtual ~UpdateCheckThread();
+    virtual ~UpdateCheckThread() override;
 
     virtual void SAL_CALL run() override;
     virtual void SAL_CALL onTerminated() override;
@@ -319,7 +319,7 @@ public:
     virtual void SAL_CALL onTerminated() override;
 
 protected:
-    virtual ~DownloadThread();
+    virtual ~DownloadThread() override;
 
 private:
     osl::Condition& m_aCondition;
@@ -338,7 +338,7 @@ public:
     virtual void SAL_CALL onTerminated() override;
 
 protected:
-    virtual ~ShutdownThread();
+    virtual ~ShutdownThread() override;
 
 private:
     osl::Condition m_aCondition;

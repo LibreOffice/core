@@ -81,7 +81,7 @@ class XclExpChRoot : public XclExpRoot
 {
 public:
     explicit            XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart& rChartData );
-    virtual             ~XclExpChRoot();
+    virtual             ~XclExpChRoot() override;
 
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclExpChRoot& GetChRoot() const { return *this; }
@@ -165,7 +165,7 @@ public:
     explicit            XclExpChGroupBase(
                             const XclExpChRoot& rRoot, sal_uInt16 nFrType,
                             sal_uInt16 nRecId, sal_Size nRecSize = 0 );
-    virtual             ~XclExpChGroupBase();
+    virtual             ~XclExpChGroupBase() override;
 
     /** Saves the header record. Calls WriteSubRecords() to let derived classes write sub records. */
     virtual void        Save( XclExpStream& rStrm ) override;
@@ -1168,7 +1168,7 @@ public:
                             const XclExpRoot& rRoot,
                             const css::uno::Reference< css::frame::XModel >& rxModel,
                             const Size& rChartSize );
-    virtual             ~XclExpChartDrawing();
+    virtual             ~XclExpChartDrawing() override;
 
     virtual void        Save( XclExpStream& rStrm ) override;
 

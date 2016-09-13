@@ -50,7 +50,7 @@ namespace accessibility
         css::uno::Reference< css::accessibility::XAccessible > m_xParent;
 
     protected:
-        virtual ~AccessibleListBox();
+        virtual ~AccessibleListBox() override;
 
         // OComponentHelper overridables
         /** this function is called upon disposing the component */

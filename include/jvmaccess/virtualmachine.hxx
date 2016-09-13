@@ -131,7 +131,7 @@ private:
     VirtualMachine(VirtualMachine &) = delete;
     void operator =(VirtualMachine) = delete;
 
-    virtual ~VirtualMachine();
+    virtual ~VirtualMachine() override;
 
     JNIEnv * attachThread(bool * pAttached) const;
 

@@ -44,7 +44,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xComponentContext;
 
 protected:
-    virtual ~BrowseNodeFactoryImpl();
+    virtual ~BrowseNodeFactoryImpl() override;
 
 public:
     explicit BrowseNodeFactoryImpl(

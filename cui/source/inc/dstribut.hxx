@@ -44,7 +44,7 @@ public:
     SvxDistributePage(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
         SvxDistributeHorizontal eHor = SvxDistributeHorizontal::NONE,
         SvxDistributeVertical eVer = SvxDistributeVertical::NONE);
-    virtual ~SvxDistributePage();
+    virtual ~SvxDistributePage() override;
     virtual void dispose() override;
 
     virtual bool FillItemSet(SfxItemSet*) override;
@@ -63,7 +63,7 @@ public:
     SvxDistributeDialog(vcl::Window* pParent, const SfxItemSet& rAttr,
         SvxDistributeHorizontal eHor = SvxDistributeHorizontal::NONE,
         SvxDistributeVertical eVer = SvxDistributeVertical::NONE);
-    virtual ~SvxDistributeDialog();
+    virtual ~SvxDistributeDialog() override;
     virtual void dispose() override;
 
     SvxDistributeHorizontal GetDistributeHor() const { return mpPage->GetDistributeHor(); }

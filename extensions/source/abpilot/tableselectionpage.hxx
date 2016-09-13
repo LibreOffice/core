@@ -35,7 +35,7 @@ namespace abp
 
     public:
         explicit TableSelectionPage( OAddressBookSourcePilot* _pParent );
-        virtual ~TableSelectionPage();
+        virtual ~TableSelectionPage() override;
         virtual void dispose() override;
     protected:
         // OWizardPage overridables

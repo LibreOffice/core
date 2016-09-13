@@ -61,7 +61,7 @@ public:
     void * address;
 
 private:
-    virtual ~MappedFile();
+    virtual ~MappedFile() override;
 
     sal_uInt8 get8(sal_uInt32 offset) const;
 
@@ -657,7 +657,7 @@ public:
     {}
 
 private:
-    virtual ~UnoidlCursor() throw () {}
+    virtual ~UnoidlCursor() throw () override {}
 
     virtual rtl::Reference< Entity > getNext(OUString * name) override;
 
@@ -699,7 +699,7 @@ public:
     }
 
 private:
-    virtual ~UnoidlModuleEntity() throw () {}
+    virtual ~UnoidlModuleEntity() throw () override {}
 
     virtual std::vector< OUString > getMemberNames() const override;
 

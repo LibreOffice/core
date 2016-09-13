@@ -112,7 +112,7 @@ namespace dbaui
                         const css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
                         const css::uno::Reference< css::container::XNameAccess>& _rxCols
                     );
-        virtual ~DlgFilterCrit();
+        virtual ~DlgFilterCrit() override;
         virtual void dispose() override;
 
         void            BuildWherePart();

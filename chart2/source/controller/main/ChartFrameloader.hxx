@@ -45,7 +45,7 @@ public:
     ChartFrameLoader() = delete;
 
     explicit ChartFrameLoader(css::uno::Reference< css::uno::XComponentContext > const & xContext);
-    virtual ~ChartFrameLoader();
+    virtual ~ChartFrameLoader() override;
 
     // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

@@ -53,7 +53,7 @@ class ListBoxControl : public ListBox
 {
     public:
         ListBoxControl( vcl::Window* pParent, WinBits nStyle, DropdownToolbarController* pListBoxListener );
-        virtual ~ListBoxControl();
+        virtual ~ListBoxControl() override;
         virtual void dispose() override;
 
         virtual void Select() override;

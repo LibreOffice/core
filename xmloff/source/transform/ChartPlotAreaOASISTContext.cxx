@@ -38,7 +38,7 @@ public:
     XMLAxisOASISContext( XMLTransformerBase& rTransformer,
                          const OUString& rQName,
                          ::rtl::Reference< XMLPersAttrListTContext > & rOutCategoriesContext );
-    virtual ~XMLAxisOASISContext();
+    virtual ~XMLAxisOASISContext() override;
 
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext(
         sal_uInt16 nPrefix,

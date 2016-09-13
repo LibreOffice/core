@@ -35,7 +35,7 @@ class StatusBarWrapper : public UIConfigElementWrapperBase
     public:
         StatusBarWrapper(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-        virtual ~StatusBarWrapper();
+        virtual ~StatusBarWrapper() override;
 
         // XComponent
         virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;

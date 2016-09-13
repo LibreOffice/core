@@ -253,7 +253,7 @@ private:
 
 public:
     MailMergeCfg_Impl();
-    virtual ~MailMergeCfg_Impl();
+    virtual ~MailMergeCfg_Impl() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
 

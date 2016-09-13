@@ -86,7 +86,7 @@ protected:
 
 protected:
     explicit SignatureEngine( const css::uno::Reference< css::uno::XComponentContext > & xContext);
-    virtual ~SignatureEngine() {};
+    virtual ~SignatureEngine() override {};
 
     virtual void tryToPerform( )
         throw (css::uno::Exception, css::uno::RuntimeException) override;

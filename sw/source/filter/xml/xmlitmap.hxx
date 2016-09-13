@@ -63,7 +63,7 @@ protected:
 
 public:
     explicit SvXMLItemMapEntries(SvXMLItemMapEntry* pEntrys);
-    virtual ~SvXMLItemMapEntries();
+    virtual ~SvXMLItemMapEntries() override;
 
     SvXMLItemMapEntry* getByName( sal_uInt16 nNameSpace,
                                   const OUString& rString ) const;

@@ -89,7 +89,7 @@ class UcbLockBytes : public virtual SvLockBytes
 
                             UcbLockBytes();
 protected:
-    virtual                 ~UcbLockBytes();
+    virtual                 ~UcbLockBytes() override;
 
 public:
                             // properties: Referer, PostMimeType

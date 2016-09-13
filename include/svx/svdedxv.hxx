@@ -141,7 +141,7 @@ protected:
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
     SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut = nullptr);
-    virtual ~SdrObjEditView();
+    virtual ~SdrObjEditView() override;
 
 public:
 

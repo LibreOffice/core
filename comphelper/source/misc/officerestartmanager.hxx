@@ -48,7 +48,7 @@ public:
     , m_bRestartRequested( false )
     {}
 
-    virtual ~OOfficeRestartManager()
+    virtual ~OOfficeRestartManager() override
     {}
 
 // XRestartManager

@@ -53,7 +53,7 @@ namespace accessibility
         AccessibleProxyEditSource_Impl( SdrObject&      rObj,
                                         SdrView&        rView,
                                         const vcl::Window&   rViewWindow );
-        virtual ~AccessibleProxyEditSource_Impl();
+        virtual ~AccessibleProxyEditSource_Impl() override;
 
         // from the SvxEditSource interface
         SvxTextForwarder*       GetTextForwarder() override;
@@ -78,7 +78,7 @@ namespace accessibility
     public:
 
         AccessibleEmptyEditSource_Impl() {}
-        virtual ~AccessibleEmptyEditSource_Impl() {}
+        virtual ~AccessibleEmptyEditSource_Impl() override {}
 
         // SvxEditSource
         SvxTextForwarder*       GetTextForwarder() override { return this; }

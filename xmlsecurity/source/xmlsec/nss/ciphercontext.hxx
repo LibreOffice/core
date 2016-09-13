@@ -65,7 +65,7 @@ private:
 
 public:
 
-    virtual ~OCipherContext()
+    virtual ~OCipherContext() override
     {
         Dispose();
     }

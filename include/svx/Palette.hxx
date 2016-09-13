@@ -53,7 +53,7 @@ class SVX_DLLPUBLIC PaletteASE : public Palette
     void        LoadPalette();
 public:
     PaletteASE( const OUString &rFPath, const OUString &rFName );
-    virtual ~PaletteASE();
+    virtual ~PaletteASE() override;
 
     virtual const OUString&     GetName() override;
     virtual const OUString&     GetPath() override;
@@ -78,7 +78,7 @@ class SVX_DLLPUBLIC PaletteGPL : public Palette
     void        LoadPalette();
 public:
     PaletteGPL( const OUString &rFPath, const OUString &rFName );
-    virtual ~PaletteGPL();
+    virtual ~PaletteGPL() override;
 
     virtual const OUString&     GetName() override;
     virtual const OUString&     GetPath() override;
@@ -97,7 +97,7 @@ class SVX_DLLPUBLIC PaletteSOC : public Palette
     XColorListRef   mpColorList;
 public:
     PaletteSOC( const OUString &rFPath, const OUString &rFName );
-    virtual ~PaletteSOC();
+    virtual ~PaletteSOC() override;
 
     virtual const OUString&     GetName() override;
     virtual const OUString&     GetPath() override;

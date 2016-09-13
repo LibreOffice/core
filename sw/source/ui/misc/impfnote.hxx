@@ -69,7 +69,7 @@ class SwEndNoteOptionPage : public SfxTabPage
 public:
     SwEndNoteOptionPage( vcl::Window *pParent, bool bEndNote,
                          const SfxItemSet &rSet );
-    virtual ~SwEndNoteOptionPage();
+    virtual ~SwEndNoteOptionPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
@@ -83,7 +83,7 @@ class SwFootNoteOptionPage : public SwEndNoteOptionPage
 {
     friend class VclPtr<SwFootNoteOptionPage>;
     SwFootNoteOptionPage( vcl::Window *pParent, const SfxItemSet &rSet );
-    virtual ~SwFootNoteOptionPage();
+    virtual ~SwFootNoteOptionPage() override;
 
 public:
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);

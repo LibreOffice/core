@@ -109,7 +109,7 @@ public:
 public:
 
                                 X11SalBitmap();
-    virtual                     ~X11SalBitmap();
+    virtual                     ~X11SalBitmap() override;
 
     // override pure virtual methods
     virtual bool                Create(

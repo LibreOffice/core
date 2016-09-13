@@ -33,7 +33,7 @@ private:
 
 public:
     MiscCfg( );
-    virtual ~MiscCfg( );
+    virtual ~MiscCfg( ) override;
 
     bool        IsNotFoundWarning()     const;
     void        SetNotFoundWarning( bool bSet);

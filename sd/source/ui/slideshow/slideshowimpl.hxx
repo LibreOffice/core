@@ -121,7 +121,7 @@ class SlideShowListenerProxy : private ::cppu::BaseMutex,
 {
 public:
     SlideShowListenerProxy( const rtl::Reference< SlideshowImpl >& xController, const css::uno::Reference< css::presentation::XSlideShow >& xSlideShow );
-    virtual ~SlideShowListenerProxy();
+    virtual ~SlideShowListenerProxy() override;
 
     void addAsSlideShowListener();
     void removeAsSlideShowListener();
@@ -235,7 +235,7 @@ private:
     SlideshowImpl(SlideshowImpl &) = delete;
     void operator =(SlideshowImpl &) = delete;
 
-    virtual ~SlideshowImpl();
+    virtual ~SlideshowImpl() override;
 
     // override WeakComponentImplHelperBase::disposing()
     // This function is called upon disposing the component,

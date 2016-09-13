@@ -296,7 +296,7 @@ public:
     explicit SvxNumBulletItem(SvxNumRule& rRule);
     SvxNumBulletItem(SvxNumRule& rRule, sal_uInt16 nWhich );
     SvxNumBulletItem(const SvxNumBulletItem& rCopy);
-    virtual ~SvxNumBulletItem();
+    virtual ~SvxNumBulletItem() override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*     Create(SvStream &rStream, sal_uInt16 nItemVersion) const override;

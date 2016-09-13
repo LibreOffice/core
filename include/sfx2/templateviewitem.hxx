@@ -18,7 +18,7 @@ public:
 
     TemplateViewItem (ThumbnailView &rView, sal_uInt16 nId);
 
-    virtual ~TemplateViewItem ();
+    virtual ~TemplateViewItem () override;
 
     void setPath (const OUString &rPath) { maPath = rPath; }
 

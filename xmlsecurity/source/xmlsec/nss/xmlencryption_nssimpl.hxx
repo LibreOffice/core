@@ -40,7 +40,7 @@ class XMLEncryption_NssImpl : public ::cppu::WeakImplHelper<
 {
     public:
         explicit XMLEncryption_NssImpl();
-        virtual ~XMLEncryption_NssImpl() ;
+        virtual ~XMLEncryption_NssImpl() override ;
 
         //Methods from XXMLEncryption
         virtual css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate > SAL_CALL encrypt(

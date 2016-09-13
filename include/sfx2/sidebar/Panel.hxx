@@ -43,7 +43,7 @@ public:
           const std::function<Context()>& rContextAccess,
           const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    virtual ~Panel();
+    virtual ~Panel() override;
     virtual void dispose() override;
 
     PanelTitleBar* GetTitleBar() const;

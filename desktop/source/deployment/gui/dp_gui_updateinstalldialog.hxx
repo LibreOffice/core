@@ -59,7 +59,7 @@ public:
     UpdateInstallDialog(vcl::Window * parent, std::vector<UpdateData> & aVecUpdateData,
         css::uno::Reference< css::uno::XComponentContext > const & xCtx);
 
-    virtual ~UpdateInstallDialog();
+    virtual ~UpdateInstallDialog() override;
     virtual void dispose() override;
 
     bool Close() override;

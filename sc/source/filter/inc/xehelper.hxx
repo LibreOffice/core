@@ -41,7 +41,7 @@ class XclExpProgressBar : protected XclExpRoot
 {
 public:
     explicit            XclExpProgressBar( const XclExpRoot& rRoot );
-    virtual             ~XclExpProgressBar();
+    virtual             ~XclExpProgressBar() override;
 
     /** Initializes all segments and sub progress bars. */
     void                Initialize();
@@ -177,7 +177,7 @@ public:
     typedef std::shared_ptr< XclExpHyperlink > XclExpHyperlinkRef;
 
     explicit            XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos );
-                        virtual ~XclExpHyperlinkHelper();
+                        virtual ~XclExpHyperlinkHelper() override;
 
     /** Processes the passed URL field (tries to create a HLINK record).
         @return  The representation string of the URL field. */

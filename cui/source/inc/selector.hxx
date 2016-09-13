@@ -97,7 +97,7 @@ friend class SvxConfigGroupListBox;
 
 public:
     SvxConfigFunctionListBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~SvxConfigFunctionListBox();
+    virtual ~SvxConfigFunctionListBox() override;
     virtual void                    dispose() override;
     void                            ClearAll();
     OUString                        GetHelpText( SvTreeListEntry *pEntry );
@@ -159,7 +159,7 @@ protected:
 
 public:
     SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~SvxConfigGroupListBox();
+    virtual ~SvxConfigGroupListBox() override;
     virtual void dispose() override;
 
     void    Init(bool bShowSlots, const css::uno::Reference
@@ -200,7 +200,7 @@ public:
         bool bShowSlots = false,
         const css::uno::Reference< css::frame::XFrame >& xFrame = nullptr
     );
-    virtual ~SvxScriptSelectorDialog();
+    virtual ~SvxScriptSelectorDialog() override;
     virtual void dispose() override;
 
     void        SetAddHdl( const Link<SvxScriptSelectorDialog&,void>& rLink ) { m_aAddHdl = rLink; }

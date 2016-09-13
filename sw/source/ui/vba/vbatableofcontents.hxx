@@ -35,7 +35,7 @@ private:
 
 public:
     SwVbaTableOfContents( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& xDoc, const css::uno::Reference< css::text::XDocumentIndex >& xDocumentIndex ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaTableOfContents();
+    virtual ~SwVbaTableOfContents() override;
 
     // Attributes
     virtual ::sal_Int32 SAL_CALL getLowerHeadingLevel() throw (css::uno::RuntimeException, std::exception) override;

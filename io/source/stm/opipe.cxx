@@ -55,7 +55,7 @@ class OPipeImpl :
 {
 public:
     OPipeImpl( );
-    virtual ~OPipeImpl();
+    virtual ~OPipeImpl() override;
 
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)

@@ -55,7 +55,7 @@ class DictionaryList : public SvSimpleTable
 {
 public:
     DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits);
-    virtual ~DictionaryList();
+    virtual ~DictionaryList() override;
     virtual void dispose() override;
 
     void init(const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary,
@@ -108,7 +108,7 @@ class ChineseDictionaryDialog : public ModalDialog
 {
 public:
     explicit ChineseDictionaryDialog( vcl::Window* pParent );
-    virtual ~ChineseDictionaryDialog();
+    virtual ~ChineseDictionaryDialog() override;
     virtual void dispose() override;
 
     //this method should be called once before calling execute

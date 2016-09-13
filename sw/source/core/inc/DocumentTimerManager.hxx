@@ -50,7 +50,7 @@ public:
     // Our own 'IdleTimer' calls the following method
     DECL_LINK_TYPED( DoIdleJobs, Idle *, void );
 
-    virtual ~DocumentTimerManager();
+    virtual ~DocumentTimerManager() override;
 
 private:
 

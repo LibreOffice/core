@@ -40,7 +40,7 @@ public:
         bool bSymbols,
         bool bHasLines = true,
         sal_Int32 nDim = 2 );
-    virtual ~ScatterChartTypeTemplate();
+    virtual ~ScatterChartTypeTemplate() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

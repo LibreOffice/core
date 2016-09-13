@@ -51,7 +51,7 @@ public:
     PresenterSpritePane (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterSpritePane();
+    virtual ~PresenterSpritePane() override;
 
     virtual void SAL_CALL disposing() override;
 

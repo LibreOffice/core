@@ -102,7 +102,7 @@ protected:
 
     SidebarPanelBase(const OUString& rsResourceURL, const css::uno::Reference<css::frame::XFrame>& rxFrame,
                      vcl::Window* pWindow, const css::ui::LayoutSize& rLayoutSize);
-    virtual ~SidebarPanelBase();
+    virtual ~SidebarPanelBase() override;
     SidebarPanelBase(const SidebarPanelBase&) = delete;
     SidebarPanelBase& operator=( const SidebarPanelBase& ) = delete;
 

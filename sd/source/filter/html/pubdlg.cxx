@@ -344,7 +344,7 @@ private:
 
 public:
     SdDesignNameDlg(vcl::Window* pWindow, const OUString& aName );
-    virtual ~SdDesignNameDlg();
+    virtual ~SdDesignNameDlg() override;
     virtual void dispose() override;
     OUString GetDesignName();
     DECL_LINK_TYPED(ModifyHdl, Edit&, void);

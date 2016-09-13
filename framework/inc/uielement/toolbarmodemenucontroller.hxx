@@ -47,7 +47,7 @@ namespace framework
 
         public:
             ToolbarModeMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~ToolbarModeMenuController();
+            virtual ~ToolbarModeMenuController() override;
 
             // XServiceInfo
             DECLARE_XSERVICEINFO

@@ -77,7 +77,7 @@ private:
 
 public:
     SwEnvCfgItem();
-    virtual ~SwEnvCfgItem();
+    virtual ~SwEnvCfgItem() override;
 
     SwEnvItem& GetItem() {return aEnvItem;}
 

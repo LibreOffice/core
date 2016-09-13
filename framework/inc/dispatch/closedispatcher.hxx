@@ -127,7 +127,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
                         const OUString&                                           sTarget);
 
         /** @short  does nothing real. */
-        virtual ~CloseDispatcher();
+        virtual ~CloseDispatcher() override;
 
     // uno interface
 

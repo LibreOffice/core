@@ -95,7 +95,7 @@ public:
         return m_pOverride;
     }
 protected:
-    virtual ~LwpVirtualPiece()
+    virtual ~LwpVirtualPiece() override
     {
         if( m_pOverride )
             delete m_pOverride;
@@ -113,7 +113,7 @@ public:
     }
 
 private:
-    virtual ~LwpParaBorderPiece() {}
+    virtual ~LwpParaBorderPiece() override {}
 };
 
 class LwpBreaksPiece : public LwpVirtualPiece
@@ -125,7 +125,7 @@ public:
     }
 
 private:
-    virtual ~LwpBreaksPiece() {}
+    virtual ~LwpBreaksPiece() override {}
 };
 
 class LwpNumberingPiece : public LwpVirtualPiece
@@ -137,7 +137,7 @@ public:
     }
 
 private:
-    virtual ~LwpNumberingPiece() {}
+    virtual ~LwpNumberingPiece() override {}
 };
 
 class LwpTabPiece : public LwpVirtualPiece
@@ -149,7 +149,7 @@ public:
     }
 
 private:
-    virtual ~LwpTabPiece() {}
+    virtual ~LwpTabPiece() override {}
 };
 
 class LwpBackgroundPiece : public LwpVirtualPiece
@@ -161,7 +161,7 @@ public:
     }
 
 private:
-    virtual ~LwpBackgroundPiece() {}
+    virtual ~LwpBackgroundPiece() override {}
 };
 
 class LwpAlignmentPiece : public LwpVirtualPiece
@@ -173,7 +173,7 @@ public:
     }
 
 private:
-    virtual ~LwpAlignmentPiece() {}
+    virtual ~LwpAlignmentPiece() override {}
 };
 
 class LwpIndentPiece : public LwpVirtualPiece
@@ -185,7 +185,7 @@ public:
     }
 
 private:
-    virtual ~LwpIndentPiece() {}
+    virtual ~LwpIndentPiece() override {}
 };
 
 class LwpSpacingPiece : public LwpVirtualPiece
@@ -197,7 +197,7 @@ public:
     }
 
 private:
-    virtual ~LwpSpacingPiece() {}
+    virtual ~LwpSpacingPiece() override {}
 };
 
 class LwpAmikakePiece : public LwpVirtualPiece
@@ -209,7 +209,7 @@ public:
     }
 
 private:
-    virtual ~LwpAmikakePiece() {}
+    virtual ~LwpAmikakePiece() override {}
 };
 
 class LwpCharacterBorderPiece : public LwpVirtualPiece
@@ -221,7 +221,7 @@ public:
     }
 
 private:
-    virtual ~LwpCharacterBorderPiece() {}
+    virtual ~LwpCharacterBorderPiece() override {}
 };
 
 #endif

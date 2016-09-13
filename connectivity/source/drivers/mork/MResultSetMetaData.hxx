@@ -44,7 +44,7 @@ namespace connectivity
             bool                                  m_bReadOnly;
 
         protected:
-            virtual ~OResultSetMetaData();
+            virtual ~OResultSetMetaData() override;
         public:
             // a constructor that is needed to return the object:
             // OResultSetMetaData(OConnection*  _pConnection) : m_pConnection(_pConnection){}

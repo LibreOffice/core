@@ -123,7 +123,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
         VclPtr<NavigatorTree>                                       m_pTree;
     public:
         UserData(NavigatorTree* _pTree,const uno::Reference<uno::XInterface>& _xContent);
-        virtual ~UserData();
+        virtual ~UserData() override;
 
         const uno::Reference< uno::XInterface >& getContent() const { return m_xContent; }
         inline void setContent(const uno::Reference< uno::XInterface >& _xContent) { m_xContent = _xContent; }
@@ -179,7 +179,7 @@ protected:
 
 public:
     NavigatorTree(vcl::Window* pParent,OReportController& _rController );
-    virtual ~NavigatorTree();
+    virtual ~NavigatorTree() override;
     virtual void dispose() override;
 
     DECL_LINK_TYPED(OnEntrySelDesel, SvTreeListBox*, void);

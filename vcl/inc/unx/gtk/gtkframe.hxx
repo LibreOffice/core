@@ -424,7 +424,7 @@ public:
     static void closePopup();
 
 #endif
-    virtual ~GtkSalFrame();
+    virtual ~GtkSalFrame() override;
 
     // SalGraphics or NULL, but two Graphics for all SalFrames
     // must be returned

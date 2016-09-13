@@ -67,7 +67,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    virtual ~Translator() {}
+    virtual ~Translator() override {}
 };
 
 OUString Translator::getImplementationName()

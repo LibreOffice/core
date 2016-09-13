@@ -61,7 +61,7 @@ namespace toolkit
     protected:
         /// ctor. @see Init
         OAccessibleControlContext();
-        virtual ~OAccessibleControlContext();
+        virtual ~OAccessibleControlContext() override;
 
         /** late ctor
         */

@@ -575,7 +575,7 @@ class SdrEmbedObjectLink : public sfx2::SvBaseLink
 
 public:
     explicit            SdrEmbedObjectLink(SdrOle2Obj* pObj);
-    virtual             ~SdrEmbedObjectLink();
+    virtual             ~SdrEmbedObjectLink() override;
 
     virtual void        Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(

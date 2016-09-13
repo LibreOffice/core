@@ -60,7 +60,7 @@ public:
     ViewTabBar (
         const css::uno::Reference< css::drawing::framework::XResourceId>& rxViewTabBarId,
         const css::uno::Reference< css::frame::XController>& rxController);
-    virtual ~ViewTabBar();
+    virtual ~ViewTabBar() override;
 
     virtual void SAL_CALL disposing() override;
 

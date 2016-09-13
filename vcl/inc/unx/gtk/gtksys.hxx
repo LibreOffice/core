@@ -23,7 +23,7 @@ class GtkSalSystem : public SalGenericSystem
     ScreenMonitors_t maScreenMonitors;
 public:
              GtkSalSystem();
-    virtual ~GtkSalSystem();
+    virtual ~GtkSalSystem() override;
     static   GtkSalSystem *GetSingleton();
 
     virtual bool          IsUnifiedDisplay() override;

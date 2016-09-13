@@ -93,7 +93,7 @@ private:
 
 public:
     explicit                    ScCsvGrid( ScCsvControl& rParent );
-    virtual                     ~ScCsvGrid();
+    virtual                     ~ScCsvGrid() override;
     virtual void                dispose() override;
 
     /** Finishes initialization. Must be called after constructing a new object. */

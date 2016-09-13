@@ -21,7 +21,7 @@ class NotebookBarContextChangeEventListener : public ::cppu::WeakImplHelper<css:
     VclPtr<NotebookBar> mpParent;
 public:
     explicit NotebookBarContextChangeEventListener(NotebookBar *p) : mpParent(p) {}
-    virtual ~NotebookBarContextChangeEventListener() {}
+    virtual ~NotebookBarContextChangeEventListener() override {}
 
     // XContextChangeEventListener
     virtual void SAL_CALL notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)

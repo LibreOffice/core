@@ -227,7 +227,7 @@ class OOX_DLLPUBLIC ContextHandler2 : public ContextHandler, public ContextHandl
 {
 public:
     explicit            ContextHandler2( ContextHandler2Helper& rParent );
-    virtual             ~ContextHandler2();
+    virtual             ~ContextHandler2() override;
 
     // resolve ambiguity from base classes
     virtual void SAL_CALL acquire() throw() override { ContextHandler::acquire(); }

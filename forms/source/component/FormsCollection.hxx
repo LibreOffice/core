@@ -51,7 +51,7 @@ class OFormsCollection
 public:
     explicit OFormsCollection(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
     OFormsCollection( const OFormsCollection& _cloneSource );
-    virtual ~OFormsCollection();
+    virtual ~OFormsCollection() override;
 
 public:
     DECLARE_UNO3_AGG_DEFAULTS(OFormsCollection, FormsCollectionComponentBase)

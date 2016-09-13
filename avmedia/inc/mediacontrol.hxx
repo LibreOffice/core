@@ -45,7 +45,7 @@ class MediaControl : public Control, public MediaControlBase
 public:
 
                         MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle );
-    virtual             ~MediaControl();
+    virtual             ~MediaControl() override;
     virtual void        dispose() override;
 
     const Size&         getMinSizePixel() const;

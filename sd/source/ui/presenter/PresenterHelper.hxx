@@ -44,7 +44,7 @@ class PresenterHelper
 {
 public:
     explicit PresenterHelper (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterHelper();
+    virtual ~PresenterHelper() override;
     PresenterHelper(const PresenterHelper&) = delete;
     PresenterHelper& operator=(const PresenterHelper&) = delete;
 

@@ -49,7 +49,7 @@ class SwLayoutFrame: public SwFrame
 protected:
 
     virtual void DestroyImpl() override;
-    virtual ~SwLayoutFrame();
+    virtual ~SwLayoutFrame() override;
 
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;

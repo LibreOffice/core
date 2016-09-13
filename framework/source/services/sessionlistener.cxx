@@ -108,7 +108,7 @@ private:
 public:
     explicit SessionListener(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-    virtual ~SessionListener();
+    virtual ~SessionListener() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

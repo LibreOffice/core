@@ -68,7 +68,7 @@ public:
     explicit                MediaItem( sal_uInt16 i_nWhich = 0,
                                        AVMediaSetMask nMaskSet = AVMediaSetMask::NONE );
                             MediaItem( const MediaItem& rMediaItem );
-    virtual                 ~MediaItem();
+    virtual                 ~MediaItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;

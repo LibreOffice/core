@@ -46,7 +46,7 @@ private:
 
 public:
     ScreenshotTest();
-    virtual ~ScreenshotTest();
+    virtual ~ScreenshotTest() override;
 
     virtual void setUp() override;
     virtual void tearDown() override;

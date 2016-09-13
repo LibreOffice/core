@@ -71,7 +71,7 @@ namespace dbaui
         DirectSQLDialog(
             vcl::Window* _pParent,
             const css::uno::Reference< css::sdbc::XConnection >& _rxConn);
-        virtual ~DirectSQLDialog();
+        virtual ~DirectSQLDialog() override;
         virtual void dispose() override;
 
         /// number of history entries

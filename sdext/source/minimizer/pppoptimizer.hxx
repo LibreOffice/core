@@ -40,7 +40,7 @@ public:
     PPPOptimizer(
         css::uno::Reference<css::uno::XComponentContext> const & xContext,
         css::uno::Reference< css::frame::XFrame > const & xFrame);
-    virtual     ~PPPOptimizer();
+    virtual     ~PPPOptimizer() override;
 
     // XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(

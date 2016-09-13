@@ -65,7 +65,7 @@ namespace dbaui
 
     public:
         OSqlEdit( OQueryTextView* pParent);
-        virtual ~OSqlEdit();
+        virtual ~OSqlEdit() override;
         virtual void dispose() override;
 
         // Edit overridables

@@ -115,7 +115,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
 
 public:
     explicit BackingWindow(vcl::Window* pParent);
-    virtual ~BackingWindow();
+    virtual ~BackingWindow() override;
     virtual void dispose() override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;

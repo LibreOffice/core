@@ -42,7 +42,7 @@ public:
         const css::uno::Any& rAddress, const css::uno::Any& rSubAddress,
         const css::uno::Any& rScreenTip, const css::uno::Any& rTextToDisplay ) throw (css::uno::RuntimeException);
 
-    virtual ~ScVbaHyperlink();
+    virtual ~ScVbaHyperlink() override;
 
     // Attributes
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;

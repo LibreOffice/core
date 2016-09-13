@@ -51,7 +51,7 @@ public:
     virtual bool    FillItemSet( SfxItemSet* rOutSet ) override;
     virtual void    Reset( const SfxItemSet* rSet ) override;
 
-    virtual         ~SvxHFPage();
+    virtual         ~SvxHFPage() override;
     virtual void    dispose() override;
 
     void DisableDeleteQueryBox() { mbDisableQueryBox = true; }

@@ -159,7 +159,7 @@ private:
 
 public:
                         ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList );
-                        virtual ~ScConflictsDlg();
+                        virtual ~ScConflictsDlg() override;
     virtual void        dispose() override;
 
     void                UpdateView();

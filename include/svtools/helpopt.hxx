@@ -34,7 +34,7 @@ class SVT_DLLPUBLIC SvtHelpOptions: public utl::detail::Options
 
 public:
                     SvtHelpOptions();
-                    virtual ~SvtHelpOptions();
+                    virtual ~SvtHelpOptions() override;
 
     void            SetExtendedHelp( bool b );
     bool            IsExtendedHelp() const;

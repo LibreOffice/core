@@ -100,7 +100,7 @@ private:
 public:
                         MetaPixelAction();
 protected:
-    virtual             ~MetaPixelAction();
+    virtual             ~MetaPixelAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -124,7 +124,7 @@ private:
 public:
                         MetaPointAction();
 protected:
-    virtual             ~MetaPointAction();
+    virtual             ~MetaPointAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -150,7 +150,7 @@ private:
 public:
                         MetaLineAction();
 protected:
-    virtual             ~MetaLineAction();
+    virtual             ~MetaLineAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -178,7 +178,7 @@ private:
 public:
                         MetaRectAction();
 protected:
-    virtual             ~MetaRectAction();
+    virtual             ~MetaRectAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -204,7 +204,7 @@ private:
 public:
                         MetaRoundRectAction();
 protected:
-    virtual             ~MetaRoundRectAction();
+    virtual             ~MetaRoundRectAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -231,7 +231,7 @@ private:
 public:
                         MetaEllipseAction();
 protected:
-    virtual             ~MetaEllipseAction();
+    virtual             ~MetaEllipseAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -257,7 +257,7 @@ private:
 public:
                         MetaArcAction();
 protected:
-    virtual             ~MetaArcAction();
+    virtual             ~MetaArcAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -286,7 +286,7 @@ private:
 public:
                         MetaPieAction();
 protected:
-    virtual             ~MetaPieAction();
+    virtual             ~MetaPieAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -315,7 +315,7 @@ private:
 public:
                         MetaChordAction();
 protected:
-    virtual             ~MetaChordAction();
+    virtual             ~MetaChordAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -343,7 +343,7 @@ private:
 public:
                         MetaPolyLineAction();
 protected:
-    virtual             ~MetaPolyLineAction();
+    virtual             ~MetaPolyLineAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -369,7 +369,7 @@ private:
 public:
                         MetaPolygonAction();
 protected:
-    virtual             ~MetaPolygonAction();
+    virtual             ~MetaPolygonAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -393,7 +393,7 @@ private:
 public:
                         MetaPolyPolygonAction();
 protected:
-    virtual             ~MetaPolyPolygonAction();
+    virtual             ~MetaPolyPolygonAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -420,7 +420,7 @@ private:
 public:
                         MetaTextAction();
 protected:
-    virtual             ~MetaTextAction();
+    virtual             ~MetaTextAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -450,7 +450,7 @@ private:
     sal_Int32   mnLen;
 
 protected:
-    virtual             ~MetaTextArrayAction();
+    virtual             ~MetaTextArrayAction() override;
 
 public:
                         MetaTextArrayAction();
@@ -489,7 +489,7 @@ private:
 public:
                         MetaStretchTextAction();
 protected:
-    virtual             ~MetaStretchTextAction();
+    virtual             ~MetaStretchTextAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -521,7 +521,7 @@ private:
 public:
                         MetaTextRectAction();
 protected:
-    virtual             ~MetaTextRectAction();
+    virtual             ~MetaTextRectAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -552,7 +552,7 @@ private:
 public:
                         MetaTextLineAction();
 protected:
-    virtual             ~MetaTextLineAction();
+    virtual             ~MetaTextLineAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -583,7 +583,7 @@ private:
 public:
                         MetaBmpAction();
 protected:
-    virtual             ~MetaBmpAction();
+    virtual             ~MetaBmpAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -610,7 +610,7 @@ private:
 public:
                         MetaBmpScaleAction();
 protected:
-    virtual             ~MetaBmpScaleAction();
+    virtual             ~MetaBmpScaleAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -641,7 +641,7 @@ private:
 public:
                         MetaBmpScalePartAction();
 protected:
-    virtual             ~MetaBmpScalePartAction();
+    virtual             ~MetaBmpScalePartAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -672,7 +672,7 @@ private:
 public:
                         MetaBmpExAction();
 protected:
-    virtual             ~MetaBmpExAction();
+    virtual             ~MetaBmpExAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -699,7 +699,7 @@ private:
 public:
                         MetaBmpExScaleAction();
 protected:
-    virtual             ~MetaBmpExScaleAction();
+    virtual             ~MetaBmpExScaleAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -730,7 +730,7 @@ private:
 public:
                         MetaBmpExScalePartAction();
 protected:
-    virtual             ~MetaBmpExScalePartAction();
+    virtual             ~MetaBmpExScalePartAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -762,7 +762,7 @@ private:
 public:
                         MetaMaskAction();
 protected:
-    virtual             ~MetaMaskAction();
+    virtual             ~MetaMaskAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -793,7 +793,7 @@ private:
 public:
                         MetaMaskScaleAction();
 protected:
-    virtual             ~MetaMaskScaleAction();
+    virtual             ~MetaMaskScaleAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -827,7 +827,7 @@ private:
 public:
                         MetaMaskScalePartAction();
 protected:
-    virtual             ~MetaMaskScalePartAction();
+    virtual             ~MetaMaskScalePartAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -860,7 +860,7 @@ private:
 public:
                         MetaGradientAction();
 protected:
-    virtual             ~MetaGradientAction();
+    virtual             ~MetaGradientAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -886,7 +886,7 @@ private:
 public:
                         MetaGradientExAction();
 protected:
-    virtual             ~MetaGradientExAction();
+    virtual             ~MetaGradientExAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -912,7 +912,7 @@ private:
 public:
                         MetaHatchAction();
 protected:
-    virtual             ~MetaHatchAction();
+    virtual             ~MetaHatchAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -938,7 +938,7 @@ private:
 public:
                         MetaWallpaperAction();
 protected:
-    virtual             ~MetaWallpaperAction();
+    virtual             ~MetaWallpaperAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -965,7 +965,7 @@ private:
 public:
                         MetaClipRegionAction();
 protected:
-    virtual             ~MetaClipRegionAction();
+    virtual             ~MetaClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -990,7 +990,7 @@ private:
 public:
                         MetaISectRectClipRegionAction();
 protected:
-    virtual             ~MetaISectRectClipRegionAction();
+    virtual             ~MetaISectRectClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1014,7 +1014,7 @@ private:
 public:
                         MetaISectRegionClipRegionAction();
 protected:
-    virtual             ~MetaISectRegionClipRegionAction();
+    virtual             ~MetaISectRegionClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1039,7 +1039,7 @@ private:
 public:
                         MetaMoveClipRegionAction();
 protected:
-    virtual             ~MetaMoveClipRegionAction();
+    virtual             ~MetaMoveClipRegionAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1064,7 +1064,7 @@ private:
 public:
                         MetaLineColorAction();
 protected:
-    virtual             ~MetaLineColorAction();
+    virtual             ~MetaLineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1087,7 +1087,7 @@ private:
 public:
                         MetaFillColorAction();
 protected:
-    virtual             ~MetaFillColorAction();
+    virtual             ~MetaFillColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1109,7 +1109,7 @@ private:
 public:
                         MetaTextColorAction();
 protected:
-    virtual             ~MetaTextColorAction();
+    virtual             ~MetaTextColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1131,7 +1131,7 @@ private:
 public:
                         MetaTextFillColorAction();
 protected:
-    virtual             ~MetaTextFillColorAction();
+    virtual             ~MetaTextFillColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1154,7 +1154,7 @@ private:
 public:
                         MetaTextLineColorAction();
 protected:
-    virtual             ~MetaTextLineColorAction();
+    virtual             ~MetaTextLineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1177,7 +1177,7 @@ private:
 public:
                         MetaOverlineColorAction();
 protected:
-    virtual             ~MetaOverlineColorAction();
+    virtual             ~MetaOverlineColorAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1199,7 +1199,7 @@ private:
 public:
                         MetaTextAlignAction();
 protected:
-    virtual             ~MetaTextAlignAction();
+    virtual             ~MetaTextAlignAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1220,7 +1220,7 @@ private:
 public:
                         MetaMapModeAction();
 protected:
-    virtual             ~MetaMapModeAction();
+    virtual             ~MetaMapModeAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1243,7 +1243,7 @@ private:
 public:
                         MetaFontAction();
 protected:
-    virtual             ~MetaFontAction();
+    virtual             ~MetaFontAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1266,7 +1266,7 @@ private:
 public:
                         MetaPushAction();
 protected:
-    virtual             ~MetaPushAction();
+    virtual             ~MetaPushAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1284,7 +1284,7 @@ public:
 
                         MetaPopAction();
 protected:
-    virtual             ~MetaPopAction();
+    virtual             ~MetaPopAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1301,7 +1301,7 @@ private:
 public:
                         MetaRasterOpAction();
 protected:
-    virtual             ~MetaRasterOpAction();
+    virtual             ~MetaRasterOpAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1323,7 +1323,7 @@ private:
 public:
                         MetaTransparentAction();
 protected:
-    virtual             ~MetaTransparentAction();
+    virtual             ~MetaTransparentAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1351,7 +1351,7 @@ private:
 public:
                         MetaFloatTransparentAction();
 protected:
-    virtual             ~MetaFloatTransparentAction();
+    virtual             ~MetaFloatTransparentAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1382,7 +1382,7 @@ private:
 public:
                         MetaEPSAction();
 protected:
-    virtual             ~MetaEPSAction();
+    virtual             ~MetaEPSAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1411,7 +1411,7 @@ private:
 public:
                         MetaRefPointAction();
 protected:
-    virtual             ~MetaRefPointAction();
+    virtual             ~MetaRefPointAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1436,7 +1436,7 @@ private:
     SAL_DLLPRIVATE void ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize );
 
 protected:
-    virtual             ~MetaCommentAction();
+    virtual             ~MetaCommentAction() override;
 
 public:
     explicit            MetaCommentAction();
@@ -1466,7 +1466,7 @@ private:
 public:
                         MetaLayoutModeAction();
 protected:
-    virtual             ~MetaLayoutModeAction();
+    virtual             ~MetaLayoutModeAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;
@@ -1487,7 +1487,7 @@ private:
 public:
                         MetaTextLanguageAction();
 protected:
-    virtual             ~MetaTextLanguageAction();
+    virtual             ~MetaTextLanguageAction() override;
 public:
     virtual void        Execute( OutputDevice* pOut ) override;
     virtual MetaAction* Clone() override;

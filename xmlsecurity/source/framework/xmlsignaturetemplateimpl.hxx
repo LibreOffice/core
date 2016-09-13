@@ -47,7 +47,7 @@ class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper<
 
     public:
         explicit XMLSignatureTemplateImpl();
-        virtual ~XMLSignatureTemplateImpl();
+        virtual ~XMLSignatureTemplateImpl() override;
 
         //Methods from XXMLSignatureTemplate
         virtual void SAL_CALL setTemplate(

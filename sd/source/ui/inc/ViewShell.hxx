@@ -113,7 +113,7 @@ public:
         SfxViewFrame *pFrame,
         vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase);
-    virtual ~ViewShell();
+    virtual ~ViewShell() override;
 
     /** The Init method has to be called from the outside directly
         after a new object of this class has been created.  It can be

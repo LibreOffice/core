@@ -50,7 +50,7 @@ protected:
     SbxBase();
     SbxBase( const SbxBase& );
     SbxBase& operator=( const SbxBase& );
-    virtual ~SbxBase();
+    virtual ~SbxBase() override;
 
     virtual sal_uInt16 GetVersion() const = 0;
     virtual sal_uInt16 GetSbxId() const = 0;

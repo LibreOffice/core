@@ -61,7 +61,7 @@ private:
 
     SwXTextSection(SwSectionFormat *const pFormat, const bool bIndexHeader = false);
 
-    virtual ~SwXTextSection();
+    virtual ~SwXTextSection() override;
 
 public:
 

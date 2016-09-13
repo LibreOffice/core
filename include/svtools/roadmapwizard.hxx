@@ -72,7 +72,7 @@ namespace svt
         RoadmapWizard(
             vcl::Window* _pParent
         );
-        virtual ~RoadmapWizard( );
+        virtual ~RoadmapWizard( ) override;
         virtual void dispose() override;
 
         void            SetRoadmapHelpId( const OString& _rId );

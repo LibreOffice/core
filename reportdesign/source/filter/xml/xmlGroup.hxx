@@ -43,7 +43,7 @@ namespace rptxml
                     ,const OUString& rLName
                     ,const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
                     );
-        virtual ~OXMLGroup();
+        virtual ~OXMLGroup() override;
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,

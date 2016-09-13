@@ -75,7 +75,7 @@ class SwCreateAddressListDialog : public SfxModalDialog
 public:
     SwCreateAddressListDialog(
             vcl::Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig);
-    virtual ~SwCreateAddressListDialog();
+    virtual ~SwCreateAddressListDialog() override;
     virtual void dispose() override;
 
     const OUString&         GetURL() const {    return m_sURL;    }
@@ -99,7 +99,7 @@ class SwFindEntryDialog : public ModelessDialog
 
 public:
     SwFindEntryDialog(SwCreateAddressListDialog* pParent);
-    virtual ~SwFindEntryDialog();
+    virtual ~SwFindEntryDialog() override;
     virtual void dispose() override;
 
     ListBox& GetFieldsListBox()

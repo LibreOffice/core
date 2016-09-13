@@ -41,7 +41,7 @@ public:
 
                 SvxRotateModeItem( SvxRotateMode eMode=SVX_ROTATE_MODE_STANDARD, sal_uInt16 nWhich=0);
                 SvxRotateModeItem( const SvxRotateModeItem& rItem );
-                virtual ~SvxRotateModeItem();
+                virtual ~SvxRotateModeItem() override;
 
     virtual sal_uInt16          GetValueCount() const override;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;

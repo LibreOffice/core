@@ -45,7 +45,7 @@ namespace /* private */
         {
         }
 
-        virtual ~BigPtrEntryMock()
+        virtual ~BigPtrEntryMock() override
         {
         }
 

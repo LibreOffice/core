@@ -35,7 +35,7 @@ class PlainTextFilterDetect : public cppu::WeakImplHelper<
 public:
 
     PlainTextFilterDetect();
-    virtual ~PlainTextFilterDetect();
+    virtual ~PlainTextFilterDetect() override;
 
     // XExtendedFilterDetection
 

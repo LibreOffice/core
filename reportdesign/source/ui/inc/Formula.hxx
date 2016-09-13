@@ -67,7 +67,7 @@ public:
         , const css::uno::Reference < css::beans::XPropertySet >& _xRowSet
         , svl::SharedStringPool& rStrPool );
 
-    virtual ~FormulaDialog();
+    virtual ~FormulaDialog() override;
     virtual void dispose() override;
 
     // IFormulaEditorHelper

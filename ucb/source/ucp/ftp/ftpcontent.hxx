@@ -60,7 +60,7 @@ public:
                 const css::ucb::ContentInfo& aInfo);
 
 
-    virtual ~FTPContent();
+    virtual ~FTPContent() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

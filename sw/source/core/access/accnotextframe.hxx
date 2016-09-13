@@ -44,7 +44,7 @@ class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
     OUString msDesc;
 
 protected:
-    virtual ~SwAccessibleNoTextFrame();
+    virtual ~SwAccessibleNoTextFrame() override;
 
     const SwNoTextNode *GetNoTextNode() const;
 

@@ -162,7 +162,7 @@ class SVL_DLLPUBLIC SfxItemPropertySetInfo : public cppu::WeakImplHelper1<css::b
 public:
     SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap );
     SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pEntries );
-    virtual ~SfxItemPropertySetInfo();
+    virtual ~SfxItemPropertySetInfo() override;
 
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL
         getProperties(  )
@@ -186,7 +186,7 @@ public:
                             SfxExtItemPropertySetInfo(
                                 const SfxItemPropertyMapEntry *pMap,
                                 const css::uno::Sequence<css::beans::Property>& rPropSeq );
-                            virtual ~SfxExtItemPropertySetInfo();
+                            virtual ~SfxExtItemPropertySetInfo() override;
 
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL
         getProperties(  )

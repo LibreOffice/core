@@ -67,7 +67,7 @@ public:
 
     PowerPointExport( const css::uno::Reference< css::uno::XComponentContext > & rxCtxt  );
 
-    virtual ~PowerPointExport();
+    virtual ~PowerPointExport() override;
 
     // from FilterBase
     virtual bool importDocument() throw() override;

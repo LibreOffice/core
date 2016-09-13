@@ -66,7 +66,7 @@ class LwpPageLayout: public LwpLayout
 {
 public:
     LwpPageLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpPageLayout();
+    virtual ~LwpPageLayout() override;
     virtual void RegisterStyle() override;
     OUString RegisterEndnoteStyle();
     virtual void Parse(IXFStream* pOutputStream) override;
@@ -112,7 +112,7 @@ class LwpHeaderLayout: public LwpPlacableLayout
 {
 public:
     LwpHeaderLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpHeaderLayout();
+    virtual ~LwpHeaderLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_HEADER_LAYOUT;}
     using LwpPlacableLayout::RegisterStyle;
     void RegisterStyle( XFPageMaster* pm1 );
@@ -135,7 +135,7 @@ class LwpFooterLayout: public LwpPlacableLayout
 {
 public:
     LwpFooterLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpFooterLayout();
+    virtual ~LwpFooterLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_FOOTER_LAYOUT;}
     using LwpPlacableLayout::RegisterStyle;
     void RegisterStyle(XFPageMaster* pm1);

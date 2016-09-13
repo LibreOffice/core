@@ -49,7 +49,7 @@ class SdLayer : public ::cppu::WeakImplHelper< css::drawing::XLayer,
 {
 public:
     SdLayer( SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_ ) throw();
-    virtual ~SdLayer() throw();
+    virtual ~SdLayer() throw() override;
 
     // intern
     SdrLayer* GetSdrLayer() const throw() { return pLayer; }
@@ -116,7 +116,7 @@ class SdLayerManager : public ::cppu::WeakImplHelper< css::drawing::XLayerManage
 
 public:
     explicit SdLayerManager( SdXImpressDocument& rMyModel ) throw();
-    virtual ~SdLayerManager() throw();
+    virtual ~SdLayerManager() throw() override;
 
     // uno helper
     UNO3_GETIMPLEMENTATION_DECL( SdLayerManager )

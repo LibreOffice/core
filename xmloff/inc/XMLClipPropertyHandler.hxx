@@ -30,7 +30,7 @@ class XMLClipPropertyHandler : public XMLPropertyHandler
     bool m_bODF11;
 public:
     XMLClipPropertyHandler( bool bODF11 );
-    virtual ~XMLClipPropertyHandler();
+    virtual ~XMLClipPropertyHandler() override;
 
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

@@ -83,7 +83,7 @@ protected:
 
 public:
                        SvtFilePicker();
-    virtual           ~SvtFilePicker();
+    virtual           ~SvtFilePicker() override;
 
 
     // disambiguate XInterface

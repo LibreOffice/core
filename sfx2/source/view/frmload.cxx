@@ -119,7 +119,7 @@ public:
     virtual void SAL_CALL cancel() throw( css::uno::RuntimeException, std::exception ) override;
 
 protected:
-    virtual                 ~SfxFrameLoader_Impl();
+    virtual                 ~SfxFrameLoader_Impl() override;
 
 private:
     std::shared_ptr<const SfxFilter>    impl_getFilterFromServiceName_nothrow(

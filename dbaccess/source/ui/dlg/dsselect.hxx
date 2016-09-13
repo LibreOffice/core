@@ -52,7 +52,7 @@ protected:
 
 public:
     ODatasourceSelectDialog( vcl::Window* _pParent, const StringBag& _rDatasources );
-    virtual ~ODatasourceSelectDialog();
+    virtual ~ODatasourceSelectDialog() override;
     virtual void dispose() override;
     OUString GetSelected() const {
         return m_pDatasource->GetSelectEntry();

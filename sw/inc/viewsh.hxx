@@ -549,7 +549,7 @@ public:
     SwViewShell( SwDoc& rDoc, vcl::Window *pWin,
                const SwViewOption *pOpt = nullptr, OutputDevice *pOut = nullptr,
                long nFlags = 0 );
-    virtual ~SwViewShell();
+    virtual ~SwViewShell() override;
 
     sal_Int32 GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const;
 

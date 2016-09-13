@@ -30,7 +30,7 @@ class VCL_DLLPUBLIC SvpSalBitmap : public SalBitmap
     BitmapBuffer*   mpDIB;
 public:
     SvpSalBitmap() : mpDIB(nullptr) {}
-    virtual ~SvpSalBitmap();
+    virtual ~SvpSalBitmap() override;
 
     // SalBitmap
     virtual bool            Create( const Size& rSize,

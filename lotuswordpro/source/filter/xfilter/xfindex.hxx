@@ -135,7 +135,7 @@ class XFIndex : public XFContentContainer
 public:
     XFIndex();
 
-    virtual ~XFIndex();
+    virtual ~XFIndex() override;
 
 public:
     /**

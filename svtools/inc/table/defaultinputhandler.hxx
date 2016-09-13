@@ -42,7 +42,7 @@ namespace svt { namespace table
 
     public:
         DefaultInputHandler();
-        virtual ~DefaultInputHandler();
+        virtual ~DefaultInputHandler() override;
 
         virtual bool    MouseMove       ( ITableControl& _rControl, const MouseEvent& rMEvt ) override;
         virtual bool    MouseButtonDown ( ITableControl& _rControl, const MouseEvent& rMEvt ) override;

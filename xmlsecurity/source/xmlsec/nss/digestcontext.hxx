@@ -48,7 +48,7 @@ public:
     , m_bBroken( false )
     {}
 
-    virtual ~ODigestContext();
+    virtual ~ODigestContext() override;
 
 
     // XDigestContext

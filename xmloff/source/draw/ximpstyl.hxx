@@ -53,7 +53,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
-    virtual ~SdXMLPageMasterStyleContext();
+    virtual ~SdXMLPageMasterStyleContext() override;
 
     sal_Int32 GetBorderBottom() const { return mnBorderBottom; }
     sal_Int32 GetBorderLeft() const { return mnBorderLeft; }
@@ -106,7 +106,7 @@ public:
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
-    virtual ~SdXMLMasterPageContext();
+    virtual ~SdXMLMasterPageContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -137,7 +137,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
-    virtual ~SdXMLPresentationPlaceholderContext();
+    virtual ~SdXMLPresentationPlaceholderContext() override;
 
     const OUString& GetName() const { return msName; }
     sal_Int32 GetX() const { return mnX; }

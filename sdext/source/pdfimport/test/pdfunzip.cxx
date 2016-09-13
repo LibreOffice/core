@@ -62,7 +62,7 @@ class FileEmitContext : public EmitContext
 
     public:
     FileEmitContext( const char* pFileName, const char* pOrigName, const PDFContainer* pTop );
-    virtual ~FileEmitContext();
+    virtual ~FileEmitContext() override;
 
     virtual bool write( const void* pBuf, unsigned int nLen ) throw() override;
     virtual unsigned int getCurPos() throw() override;

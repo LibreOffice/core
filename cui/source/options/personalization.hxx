@@ -43,7 +43,7 @@ private:
 
 public:
     SvxPersonalizationTabPage( vcl::Window *pParent, const SfxItemSet &rSet );
-    virtual ~SvxPersonalizationTabPage();
+    virtual ~SvxPersonalizationTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window *pParent, const SfxItemSet *rSet );
@@ -93,7 +93,7 @@ private:
 
 public:
     explicit SelectPersonaDialog( vcl::Window *pParent );
-    virtual ~SelectPersonaDialog();
+    virtual ~SelectPersonaDialog() override;
     virtual void dispose() override;
     ::rtl::Reference< SearchAndParseThread > m_pSearchThread;
 
@@ -121,7 +121,7 @@ private:
     OUString m_aURL;
     bool m_bExecute, m_bDirectURL;
 
-    virtual ~SearchAndParseThread();
+    virtual ~SearchAndParseThread() override;
     virtual void execute() override;
 
 public:

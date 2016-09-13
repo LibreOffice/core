@@ -46,7 +46,7 @@ class SVL_DLLPUBLIC SvOutputStream: public SvStream
 public:
     SvOutputStream(css::uno::Reference< css::io::XOutputStream > const & rTheStream);
 
-    virtual ~SvOutputStream();
+    virtual ~SvOutputStream() override;
 };
 
 #endif // INCLUDED_SVL_OUTSTRM_HXX

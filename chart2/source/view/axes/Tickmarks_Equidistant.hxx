@@ -33,7 +33,7 @@ public:
     EquidistantTickIter( TickInfoArraysType& rTickInfos
             , const ExplicitIncrementData& rIncrement
             , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
-    virtual ~EquidistantTickIter();
+    virtual ~EquidistantTickIter() override;
 
     double*     firstValue();
     double*     nextValue();

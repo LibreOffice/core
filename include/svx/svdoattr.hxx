@@ -60,7 +60,7 @@ protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     SdrAttrObj();
-    virtual ~SdrAttrObj();
+    virtual ~SdrAttrObj() override;
 
 public:
 

@@ -34,7 +34,7 @@ public:
                   Color& rFillColor,
                   float fTransparency = 0.0f);
 
-    virtual ~OverlayHandle();
+    virtual ~OverlayHandle() override;
 };
 
 }} // end of namespace sdr::overlay

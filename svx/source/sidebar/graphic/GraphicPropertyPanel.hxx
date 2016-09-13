@@ -38,7 +38,7 @@ class GraphicPropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    virtual ~GraphicPropertyPanel();
+    virtual ~GraphicPropertyPanel() override;
     virtual void dispose() override;
 
     static VclPtr<vcl::Window> Create(

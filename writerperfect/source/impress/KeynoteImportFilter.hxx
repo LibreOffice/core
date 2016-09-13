@@ -22,7 +22,7 @@ class KeynoteImportFilter : public writerperfect::ImportFilter<OdpGenerator>
 public:
     explicit KeynoteImportFilter(const css::uno::Reference< css::uno::XComponentContext > &rxContext)
         : writerperfect::ImportFilter<OdpGenerator>(rxContext) {}
-    virtual ~KeynoteImportFilter() {}
+    virtual ~KeynoteImportFilter() override {}
 
     //XExtendedFilterDetection
     virtual OUString SAL_CALL detect(css::uno::Sequence< css::beans::PropertyValue > &Descriptor)

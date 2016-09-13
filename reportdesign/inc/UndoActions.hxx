@@ -157,7 +157,7 @@ namespace rptui
     public:
         OCommentUndoAction( SdrModel& rMod
                             ,sal_uInt16 nCommentID);
-        virtual ~OCommentUndoAction();
+        virtual ~OCommentUndoAction() override;
 
         virtual OUString GetComment() const override { return m_strComment; }
         virtual void        Undo() override;
@@ -185,7 +185,7 @@ namespace rptui
                             ,const css::uno::Reference< css::container::XIndexContainer >& rContainer
                             ,const css::uno::Reference< css::uno::XInterface>& xElem
                             ,sal_uInt16 _nCommentId);
-        virtual ~OUndoContainerAction();
+        virtual ~OUndoContainerAction() override;
 
         virtual void Undo() override;
         virtual void Redo() override;

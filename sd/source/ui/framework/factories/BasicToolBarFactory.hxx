@@ -58,7 +58,7 @@ class BasicToolBarFactory
 public:
     explicit BasicToolBarFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~BasicToolBarFactory();
+    virtual ~BasicToolBarFactory() override;
 
     virtual void SAL_CALL disposing() override;
 

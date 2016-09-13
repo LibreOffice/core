@@ -129,7 +129,7 @@ class UITEST_DLLPUBLIC ButtonUIObject : public WindowUIObject
 public:
 
     ButtonUIObject(VclPtr<Button> xButton);
-    virtual ~ButtonUIObject();
+    virtual ~ButtonUIObject() override;
 
     virtual StringMap get_state() override;
 
@@ -150,7 +150,7 @@ class UITEST_DLLPUBLIC DialogUIObject : public WindowUIObject
 public:
 
     DialogUIObject(VclPtr<Dialog> xDialog);
-    virtual ~DialogUIObject();
+    virtual ~DialogUIObject() override;
 
     virtual StringMap get_state() override;
 
@@ -168,7 +168,7 @@ class UITEST_DLLPUBLIC EditUIObject : public WindowUIObject
 public:
 
     EditUIObject(VclPtr<Edit> xEdit);
-    virtual ~EditUIObject();
+    virtual ~EditUIObject() override;
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
@@ -190,7 +190,7 @@ private:
 
 public:
     CheckBoxUIObject(VclPtr<CheckBox> xCheckbox);
-    virtual ~CheckBoxUIObject();
+    virtual ~CheckBoxUIObject() override;
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
@@ -211,7 +211,7 @@ private:
 
 public:
     RadioButtonUIObject(VclPtr<RadioButton> xCheckbox);
-    virtual ~RadioButtonUIObject();
+    virtual ~RadioButtonUIObject() override;
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
@@ -231,7 +231,7 @@ private:
     VclPtr<TabPage> mxTabPage;
 public:
     TabPageUIObject(VclPtr<TabPage> xTabPage);
-    virtual ~TabPageUIObject();
+    virtual ~TabPageUIObject() override;
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
@@ -253,7 +253,7 @@ private:
 public:
 
     ListBoxUIObject(VclPtr<ListBox> xListBox);
-    virtual ~ListBoxUIObject();
+    virtual ~ListBoxUIObject() override;
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
@@ -276,7 +276,7 @@ private:
 public:
 
     ComboBoxUIObject(VclPtr<ComboBox> xListBox);
-    virtual ~ComboBoxUIObject();
+    virtual ~ComboBoxUIObject() override;
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
@@ -298,7 +298,7 @@ private:
 public:
 
     SpinUIObject(VclPtr<SpinButton> xSpinButton);
-    virtual ~SpinUIObject();
+    virtual ~SpinUIObject() override;
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
@@ -319,7 +319,7 @@ class UITEST_DLLPUBLIC SpinFieldUIObject : public EditUIObject
 public:
 
     SpinFieldUIObject(VclPtr<SpinField> xEdit);
-    virtual ~SpinFieldUIObject();
+    virtual ~SpinFieldUIObject() override;
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
@@ -341,7 +341,7 @@ private:
 public:
 
     TabControlUIObject(VclPtr<TabControl> mxTabControl);
-    virtual ~TabControlUIObject();
+    virtual ~TabControlUIObject() override;
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;

@@ -42,7 +42,7 @@ protected:
 public:
                     SdPagesField( vcl::Window* pParent,
                                   const css::uno::Reference< css::frame::XFrame >& rFrame );
-                    virtual ~SdPagesField();
+                    virtual ~SdPagesField() override;
 
     void            UpdatePagesField( const SfxUInt16Item* pItem );
 };
@@ -59,7 +59,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SdTbxCtlDiaPages();
+    virtual ~SdTbxCtlDiaPages() override;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX

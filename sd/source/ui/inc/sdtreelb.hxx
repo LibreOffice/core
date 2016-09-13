@@ -94,7 +94,7 @@ public:
         INetBookmark        maBookmark;
         ::sd::DrawDocShell&     mrDocShell;
         NavigatorDragType   meDragType;
-        SAL_DLLPRIVATE virtual               ~SdPageObjsTransferable();
+        SAL_DLLPRIVATE virtual               ~SdPageObjsTransferable() override;
 
         SAL_DLLPRIVATE virtual void      AddSupportedFormats() override;
         SAL_DLLPRIVATE virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
@@ -183,7 +183,7 @@ public:
 
     SdPageObjsTLB( vcl::Window* pParent, const SdResId& rSdResId );
     SdPageObjsTLB( vcl::Window* pParent, WinBits nStyle );
-                            virtual ~SdPageObjsTLB();
+                            virtual ~SdPageObjsTLB() override;
     virtual void            dispose() override;
 
    // helper function for   GetEntryAltText and GetEntryLongDescription

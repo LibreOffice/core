@@ -35,7 +35,7 @@ namespace abp
 
     public:
         explicit FieldMappingPage(OAddressBookSourcePilot* _pParent);
-        virtual ~FieldMappingPage();
+        virtual ~FieldMappingPage() override;
         virtual void dispose() override;
     protected:
         // OWizardPage overridables

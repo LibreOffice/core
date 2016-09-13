@@ -62,7 +62,7 @@ private:
 public:
     PropertySetInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
                      ContentImplHelper* pContent );
-    virtual ~PropertySetInfo();
+    virtual ~PropertySetInfo() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
@@ -127,7 +127,7 @@ private:
 public:
     CommandProcessorInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv,
                          ContentImplHelper* pContent );
-    virtual ~CommandProcessorInfo();
+    virtual ~CommandProcessorInfo() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

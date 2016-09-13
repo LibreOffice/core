@@ -43,7 +43,7 @@ namespace ftp {
             const css::ucb::OpenCommandArgument2& rCommand,
             ResultSetFactory* pFactory );
 
-        virtual ~DynamicResultSet();
+        virtual ~DynamicResultSet() override;
     };
 
 }

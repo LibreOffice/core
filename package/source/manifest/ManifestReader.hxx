@@ -40,7 +40,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 public:
     ManifestReader( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~ManifestReader();
+    virtual ~ManifestReader() override;
 
     // XManifestReader
     virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL readManifestSequence( const css::uno::Reference< css::io::XInputStream >& rStream )

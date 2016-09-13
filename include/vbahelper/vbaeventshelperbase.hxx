@@ -63,7 +63,7 @@ public:
     VbaEventsHelperBase(
         const css::uno::Sequence< css::uno::Any >& rArgs,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~VbaEventsHelperBase();
+    virtual ~VbaEventsHelperBase() override;
 
     // script::vba::XVBAEventProcessor
     virtual sal_Bool SAL_CALL hasVbaEventHandler( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;

@@ -825,7 +825,7 @@ class EditEngineItemPool : public SfxItemPool
 public:
                         EditEngineItemPool( bool bPersistenRefCounts );
 protected:
-                        virtual ~EditEngineItemPool();
+                        virtual ~EditEngineItemPool() override;
 public:
 
     virtual SvStream&   Store( SvStream& rStream ) const override;

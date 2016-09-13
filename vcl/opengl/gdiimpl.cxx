@@ -56,7 +56,7 @@ public:
         // We don't want to be swapping before we've painted.
         SetPriority( SchedulerPriority::POST_PAINT );
     }
-    virtual ~OpenGLFlushIdle()
+    virtual ~OpenGLFlushIdle() override
     {
     }
     virtual void Invoke() override

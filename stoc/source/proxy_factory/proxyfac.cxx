@@ -75,7 +75,7 @@ struct FactoryImpl : public ::cppu::WeakImplHelper< lang::XServiceInfo,
         typelib_InterfaceTypeDescription * pTypeDescr );
 
     FactoryImpl();
-    virtual ~FactoryImpl();
+    virtual ~FactoryImpl() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -169,7 +169,7 @@ struct ProxyRoot : public ::cppu::OWeakAggObject
     virtual Any SAL_CALL queryAggregation( Type const & rType )
         throw (RuntimeException, std::exception) override;
 
-    virtual ~ProxyRoot();
+    virtual ~ProxyRoot() override;
     inline ProxyRoot( ::rtl::Reference< FactoryImpl > const & factory,
                       Reference< XInterface > const & xTarget );
 

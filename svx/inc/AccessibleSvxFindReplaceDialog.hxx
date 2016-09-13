@@ -28,7 +28,7 @@ class VCLXAccessibleSvxFindReplaceDialog : public VCLXAccessibleComponent
 {
 public:
     VCLXAccessibleSvxFindReplaceDialog(VCLXWindow* pVCLXindow);
-    virtual ~VCLXAccessibleSvxFindReplaceDialog();
+    virtual ~VCLXAccessibleSvxFindReplaceDialog() override;
     virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet ) override;
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
@@ -44,7 +44,7 @@ public:
     {
         SetWindow(pSplDlg);
     }
-    virtual ~VCLXSvxFindReplaceDialog()
+    virtual ~VCLXSvxFindReplaceDialog() override
     {};
 private:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >  CreateAccessibleContext() override

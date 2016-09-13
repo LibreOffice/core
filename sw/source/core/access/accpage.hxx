@@ -46,7 +46,7 @@ protected:
     virtual void InvalidateCursorPos_() override;
     virtual void InvalidateFocus_() override;
 
-    virtual ~SwAccessiblePage();
+    virtual ~SwAccessiblePage() override;
 
 public:
     // convenience constructor to avoid typecast;

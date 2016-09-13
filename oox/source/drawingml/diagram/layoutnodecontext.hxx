@@ -30,7 +30,7 @@ class LayoutNodeContext : public ::oox::core::ContextHandler2
 {
 public:
     LayoutNodeContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttributes, const LayoutAtomPtr &pNode );
-    virtual ~LayoutNodeContext();
+    virtual ~LayoutNodeContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

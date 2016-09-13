@@ -58,7 +58,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
         sal_Int32 SAL_CALL CtorSuccess() { return m_nErrorCode;}
         sal_Int32 SAL_CALL getMinorError() { return m_nMinorErrorCode;}
 
-        virtual ~XStream_impl();
+        virtual ~XStream_impl() override;
 
         // XStream
 

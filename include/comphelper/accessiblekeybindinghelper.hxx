@@ -51,7 +51,7 @@ namespace comphelper
     protected:
         ::osl::Mutex    m_aMutex;
 
-        virtual ~OAccessibleKeyBindingHelper();
+        virtual ~OAccessibleKeyBindingHelper() override;
 
     public:
         OAccessibleKeyBindingHelper();

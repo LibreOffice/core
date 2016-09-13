@@ -45,7 +45,7 @@ private:
 public:
 
     TableObjectBar( ::sd::ViewShell* pSdViewShell, ::sd::View* pSdView);
-    virtual ~TableObjectBar();
+    virtual ~TableObjectBar() override;
 
     void            GetState( SfxItemSet& rSet );
     void            GetAttrState( SfxItemSet& rSet );

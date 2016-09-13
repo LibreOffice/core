@@ -39,7 +39,7 @@ class Graphic : public css::graphic::XGraphic,
 public:
 
     Graphic();
-    virtual ~Graphic() throw();
+    virtual ~Graphic() throw() override;
 
     using ::unographic::GraphicDescriptor::init;
     void init( const ::Graphic& rGraphic ) throw();

@@ -253,7 +253,7 @@ public:
             m_aFlag.release();
         }
 
-    virtual ~myThread()
+    virtual ~myThread() override
         {
             if (isRunning())
             {
@@ -317,7 +317,7 @@ protected:
         }
 public:
 
-    virtual ~OCountThread()
+    virtual ~OCountThread() override
         {
             if (isRunning())
             {
@@ -359,7 +359,7 @@ public:
         {
                 t_print("new thread id %u!\n", (unsigned) getIdentifier());
         }
-    virtual ~ONoScheduleThread()
+    virtual ~ONoScheduleThread() override
         {
             if (isRunning())
             {
@@ -400,7 +400,7 @@ protected:
         }
 public:
 
-    virtual ~OAddThread()
+    virtual ~OAddThread() override
         {
             if (isRunning())
             {
@@ -1677,7 +1677,7 @@ private:
             ThreadHelper::thread_sleep_tenth_sec(3);
         }
 public:
-    virtual ~myKeyThread()
+    virtual ~myKeyThread() override
         {
             if (isRunning())
             {
@@ -1705,7 +1705,7 @@ private:
         }
 
 public:
-    virtual ~idThread()
+    virtual ~idThread() override
         {
             if (isRunning())
             {

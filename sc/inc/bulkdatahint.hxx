@@ -29,7 +29,7 @@ class BulkDataHint : public SfxSimpleHint
 
 public:
     BulkDataHint( ScDocument& rDoc );
-    virtual ~BulkDataHint();
+    virtual ~BulkDataHint() override;
 
     void setSpans( const ColumnSpanSet* pSpans );
     const ColumnSpanSet* getSpans() const;

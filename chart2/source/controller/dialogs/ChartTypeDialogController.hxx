@@ -91,7 +91,7 @@ class ChartTypeDialogController : public ChangingResource
 {
 public:
     ChartTypeDialogController();
-    virtual ~ChartTypeDialogController();
+    virtual ~ChartTypeDialogController() override;
 
     virtual OUString  getName()=0;
     virtual Image   getImage();
@@ -135,7 +135,7 @@ class ColumnOrBarChartDialogController_Base : public ChartTypeDialogController
 {
 public:
     ColumnOrBarChartDialogController_Base();
-    virtual ~ColumnOrBarChartDialogController_Base();
+    virtual ~ColumnOrBarChartDialogController_Base() override;
 
     virtual bool    shouldShow_3DLookControl() const override;
     virtual bool    shouldShow_GeometryControl() const override;
@@ -147,7 +147,7 @@ class ColumnChartDialogController : public ColumnOrBarChartDialogController_Base
 {
 public:
     ColumnChartDialogController();
-    virtual ~ColumnChartDialogController();
+    virtual ~ColumnChartDialogController() override;
 
     virtual OUString  getName() override;
     virtual Image   getImage() override;
@@ -159,7 +159,7 @@ class BarChartDialogController : public ColumnOrBarChartDialogController_Base
 {
 public:
     BarChartDialogController();
-    virtual ~BarChartDialogController();
+    virtual ~BarChartDialogController() override;
 
     virtual OUString  getName() override;
     virtual Image   getImage() override;
@@ -171,7 +171,7 @@ class PieChartDialogController : public ChartTypeDialogController
 {
 public:
     PieChartDialogController();
-    virtual ~PieChartDialogController();
+    virtual ~PieChartDialogController() override;
 
     virtual OUString  getName() override;
     virtual Image   getImage() override;
@@ -186,7 +186,7 @@ class LineChartDialogController : public ChartTypeDialogController
 {
 public:
     LineChartDialogController();
-    virtual ~LineChartDialogController();
+    virtual ~LineChartDialogController() override;
 
     virtual OUString  getName() override;
     virtual Image   getImage() override;
@@ -204,7 +204,7 @@ class XYChartDialogController : public ChartTypeDialogController
 {
 public:
     XYChartDialogController();
-    virtual ~XYChartDialogController();
+    virtual ~XYChartDialogController() override;
 
     virtual OUString  getName() override;
     virtual Image   getImage() override;
@@ -220,7 +220,7 @@ class AreaChartDialogController : public ChartTypeDialogController
 {
 public:
     AreaChartDialogController();
-    virtual ~AreaChartDialogController();
+    virtual ~AreaChartDialogController() override;
 
     virtual OUString  getName() override;
     virtual Image   getImage() override;
@@ -236,7 +236,7 @@ class NetChartDialogController : public ChartTypeDialogController
 {
 public:
     NetChartDialogController();
-    virtual ~NetChartDialogController();
+    virtual ~NetChartDialogController() override;
 
     virtual OUString  getName() override;
     virtual Image   getImage() override;
@@ -251,7 +251,7 @@ class StockChartDialogController : public ChartTypeDialogController
 {
 public:
     StockChartDialogController();
-    virtual ~StockChartDialogController();
+    virtual ~StockChartDialogController() override;
 
     virtual OUString  getName() override;
     virtual Image   getImage() override;
@@ -291,7 +291,7 @@ class BubbleChartDialogController : public ChartTypeDialogController
 {
 public:
     BubbleChartDialogController();
-    virtual ~BubbleChartDialogController();
+    virtual ~BubbleChartDialogController() override;
 
     virtual OUString  getName() override;
     virtual Image   getImage() override;

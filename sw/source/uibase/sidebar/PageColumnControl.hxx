@@ -31,7 +31,7 @@ class PageColumnControl : public SfxPopupWindow
 public:
     PageColumnControl( sal_uInt16 nId );
 
-    virtual ~PageColumnControl();
+    virtual ~PageColumnControl() override;
     virtual void dispose() override;
 
 private:

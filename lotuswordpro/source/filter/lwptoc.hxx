@@ -71,7 +71,7 @@ class LwpTocSuperLayout : public LwpSuperTableLayout
 {
 public:
     LwpTocSuperLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpTocSuperLayout();
+    virtual ~LwpTocSuperLayout() override;
     void RegisterStyle() override;
     virtual void XFConvert(XFContentContainer* pCont) override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_TOC_SUPERTABLE_LAYOUT;}
@@ -152,7 +152,7 @@ public:
     inline OUString GetSearchStyle(){return m_SearchName.str();}
     inline bool GetUseLeadingText(){    return (m_nFlags & USENUMBER) != 0;}
 private:
-    virtual ~LwpTocLevelData();
+    virtual ~LwpTocLevelData() override;
 
     sal_uInt16 m_nFlags;
     sal_uInt16 m_nLevel;

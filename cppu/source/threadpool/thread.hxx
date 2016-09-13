@@ -41,7 +41,7 @@ namespace cppu_threadpool {
                         JobQueue * ,
                         const ::rtl::ByteSequence &aThreadId,
                         bool bAsynchron );
-        virtual ~ORequestThread();
+        virtual ~ORequestThread() override;
 
         void setTask( JobQueue * , const ::rtl::ByteSequence & aThreadId , bool bAsynchron );
 

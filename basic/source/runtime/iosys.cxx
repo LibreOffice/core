@@ -70,7 +70,7 @@ class SbiInputDialog : public ModalDialog {
     DECL_LINK_TYPED( Cancel, Button *, void );
 public:
     SbiInputDialog( vcl::Window*, const OUString& );
-    virtual ~SbiInputDialog() { disposeOnce(); }
+    virtual ~SbiInputDialog() override { disposeOnce(); }
     virtual void dispose() override;
     const OUString& GetInput() { return aText; }
 };
@@ -212,7 +212,7 @@ class OslStream : public SvStream
 
 public:
                         OslStream( const OUString& rName, StreamMode nStrmMode );
-                       virtual ~OslStream();
+                       virtual ~OslStream() override;
     virtual sal_Size GetData( void* pData, sal_Size nSize ) override;
     virtual sal_Size PutData( const void* pData, sal_Size nSize ) override;
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override;
@@ -308,7 +308,7 @@ class UCBStream : public SvStream
 public:
     explicit UCBStream( Reference< XInputStream > & xIS );
     explicit UCBStream( Reference< XStream > & xS );
-                       virtual ~UCBStream();
+                       virtual ~UCBStream() override;
     virtual sal_Size GetData( void* pData, sal_Size nSize ) override;
     virtual sal_Size PutData( const void* pData, sal_Size nSize ) override;
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override;

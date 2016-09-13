@@ -76,7 +76,7 @@ class HwpReader : public WeakImplHelper<XFilter>
 
 public:
     HwpReader();
-    virtual ~HwpReader();
+    virtual ~HwpReader() override;
 
 public:
     /**
@@ -153,7 +153,7 @@ class HwpImportFilter : public WeakImplHelper< XFilter, XImporter, XServiceInfo,
 {
 public:
     explicit HwpImportFilter(const Reference< XMultiServiceFactory >& rFact);
-    virtual ~HwpImportFilter();
+    virtual ~HwpImportFilter() override;
 
 public:
     static Sequence< OUString > getSupportedServiceNames_Static() throw();

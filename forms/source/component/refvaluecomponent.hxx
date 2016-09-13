@@ -54,7 +54,7 @@ namespace frm
             const OUString& _rDefault
         );
         DECLARE_DEFAULT_CLONE_CTOR( OReferenceValueComponent )
-        virtual ~OReferenceValueComponent();
+        virtual ~OReferenceValueComponent() override;
 
         // OPropertySet and friends
         virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;

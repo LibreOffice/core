@@ -39,7 +39,7 @@ class GenericToolbarController : public svt::ToolboxController
                                   ToolBox* pToolBar,
                                   sal_uInt16 nID,
                                   const OUString& aCommand );
-        virtual ~GenericToolbarController();
+        virtual ~GenericToolbarController() override;
 
         // XComponent
         virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
@@ -82,7 +82,7 @@ class MenuToolbarController : public GenericToolbarController
                                   const OUString& aModuleIdentifier,
                                   const css::uno::Reference< css::container::XIndexAccess >& xMenuDesc );
 
-    virtual ~MenuToolbarController();
+    virtual ~MenuToolbarController() override;
     // XToolbarController
     virtual void SAL_CALL click() throw ( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() throw (css::uno::RuntimeException, std::exception) override;

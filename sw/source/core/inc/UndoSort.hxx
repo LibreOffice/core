@@ -71,7 +71,7 @@ public:
     SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode&,
                 const SwSortOptions&, bool bSaveTable );
 
-    virtual ~SwUndoSort();
+    virtual ~SwUndoSort() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

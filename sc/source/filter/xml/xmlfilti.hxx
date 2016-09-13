@@ -67,7 +67,7 @@ public:
                         ScQueryParam& rParam,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
-    virtual ~ScXMLFilterContext();
+    virtual ~ScXMLFilterContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -96,7 +96,7 @@ public:
                      ScQueryParam& rParam,
                      ScXMLFilterContext* pTempFilterContext);
 
-    virtual ~ScXMLAndContext();
+    virtual ~ScXMLAndContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -121,7 +121,7 @@ public:
                     ScQueryParam& rParam,
                     ScXMLFilterContext* pTempFilterContext);
 
-    virtual ~ScXMLOrContext();
+    virtual ~ScXMLOrContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -153,7 +153,7 @@ public:
                            ScQueryParam& rParam,
                            ScXMLFilterContext* pTempFilterContext);
 
-    virtual ~ScXMLConditionContext();
+    virtual ~ScXMLConditionContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -175,7 +175,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLConditionContext& rParent);
 
-    virtual ~ScXMLSetItemContext();
+    virtual ~ScXMLSetItemContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
@@ -214,7 +214,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pTempDataPilotTableContext);
 
-    virtual ~ScXMLDPFilterContext();
+    virtual ~ScXMLDPFilterContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -269,7 +269,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDPFilterContext* pTempFilterContext);
 
-    virtual ~ScXMLDPAndContext();
+    virtual ~ScXMLDPAndContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -292,7 +292,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDPFilterContext* pTempFilterContext);
 
-    virtual ~ScXMLDPOrContext();
+    virtual ~ScXMLDPOrContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -321,7 +321,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDPFilterContext* pTempFilterContext);
 
-    virtual ~ScXMLDPConditionContext();
+    virtual ~ScXMLDPConditionContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

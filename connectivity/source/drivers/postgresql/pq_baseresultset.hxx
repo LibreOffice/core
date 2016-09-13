@@ -98,7 +98,7 @@ protected:
         sal_Int32 rowCount,
         sal_Int32 columnCount,
         const css::uno::Reference< css::script::XTypeConverter > &tc );
-    virtual ~BaseResultSet();
+    virtual ~BaseResultSet() override;
 
 public: // XInterface
     virtual void SAL_CALL acquire() throw() override { BaseResultSet_BASE::acquire(); }

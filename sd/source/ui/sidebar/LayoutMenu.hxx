@@ -72,7 +72,7 @@ public:
         vcl::Window* pParent,
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~LayoutMenu();
+    virtual ~LayoutMenu() override;
     virtual void dispose() override;
 
     void Dispose();

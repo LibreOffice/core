@@ -41,7 +41,7 @@ class DecoToolBox : public ToolBox
 
 public:
     explicit DecoToolBox(vcl::Window* pParent);
-    virtual ~DecoToolBox() {}
+    virtual ~DecoToolBox() override {}
 
     void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
@@ -110,7 +110,7 @@ private:
 
 public:
     explicit        MenuBarWindow( vcl::Window* pParent );
-    virtual         ~MenuBarWindow();
+    virtual         ~MenuBarWindow() override;
     virtual void    dispose() override;
 
     void    ShowButtons(bool bClose, bool bFloat, bool bHide);

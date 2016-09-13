@@ -52,7 +52,7 @@ class PosSizePropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    virtual ~PosSizePropertyPanel();
+    virtual ~PosSizePropertyPanel() override;
     virtual void dispose() override;
 
     static VclPtr<vcl::Window> Create(

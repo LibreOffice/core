@@ -65,7 +65,7 @@ protected:
 public:
                     ScTabControl( vcl::Window* pParent, ScViewData* pData );
     virtual void    dispose() override;
-                    virtual ~ScTabControl();
+                    virtual ~ScTabControl() override;
 
     using TabBar::StartDrag;
 

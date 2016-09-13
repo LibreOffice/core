@@ -97,7 +97,7 @@ private:
 
 public:
                 SRSPropertySetInfo();
-    virtual     ~SRSPropertySetInfo();
+    virtual     ~SRSPropertySetInfo() override;
 
     // XPropertySetInfo
     virtual Sequence< Property > SAL_CALL getProperties()

@@ -35,7 +35,7 @@ public:
     NumberingPopup( NumberingToolBoxControl& rController,
                     const css::uno::Reference< css::frame::XFrame >& rFrame,
                     vcl::Window* pParent, NumberingPageType ePageType );
-    virtual ~NumberingPopup();
+    virtual ~NumberingPopup() override;
     virtual void dispose() override;
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent )

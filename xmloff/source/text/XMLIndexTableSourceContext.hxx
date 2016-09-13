@@ -55,7 +55,7 @@ public:
         const OUString& rLocalName,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
-    virtual ~XMLIndexTableSourceContext();
+    virtual ~XMLIndexTableSourceContext() override;
 
 protected:
 

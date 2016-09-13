@@ -328,7 +328,7 @@ public:
         salhelper::Thread("xlsx-import-formula-buffer-worker-thread"),
         mrDoc(rDoc), mrItem(rItem), mpFormatter(pFormatter), mrExternalLinks(rExternalLinks) {}
 
-    virtual ~WorkerThread() {}
+    virtual ~WorkerThread() override {}
 
 protected:
     virtual void execute() override

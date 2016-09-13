@@ -44,7 +44,7 @@ namespace
         {
         }
 
-        virtual ~WeakEventListener()
+        virtual ~WeakEventListener() override
         {
         }
 

@@ -79,7 +79,7 @@ private:
         const OUString& rsEventName,
         const Predicate& rPredicate,
         const Action& rAction);
-    virtual ~PresenterFrameworkObserver();
+    virtual ~PresenterFrameworkObserver() override;
 
     void Shutdown();
 

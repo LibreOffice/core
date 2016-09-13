@@ -61,7 +61,7 @@ class StatusIndicator   : public css::awt::XLayoutConstrains
 
         StatusIndicator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-        virtual ~StatusIndicator();
+        virtual ~StatusIndicator() override;
 
         //  XInterface
 

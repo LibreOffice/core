@@ -99,7 +99,7 @@ public:
 protected:
     /** Destruction (OReference).
      */
-    virtual ~OStoreLockBytes();
+    virtual ~OStoreLockBytes() override;
 
 private:
     /** IStoreHandle TypeId.

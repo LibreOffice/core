@@ -255,7 +255,7 @@ public:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw ( css::uno::Exception, std::exception ) override;
 
 protected:
-    virtual ~OPropertySetAggregationHelper();
+    virtual ~OPropertySetAggregationHelper() override;
 
     virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
     void disposing();

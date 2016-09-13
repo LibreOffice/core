@@ -71,7 +71,7 @@ class   XFColStyle : public XFStyle
 public:
     XFColStyle();
 
-    virtual ~XFColStyle();
+    virtual ~XFColStyle() override;
 
 public:
     /**

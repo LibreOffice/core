@@ -36,7 +36,7 @@ class SwAsyncRetrieveInputStreamThread : public ObservableThread
                     const SwRetrievedInputStreamDataManager::tDataKey nDataKey,
                     const OUString& rLinkedURL, const OUString& rReferer );
 
-        virtual ~SwAsyncRetrieveInputStreamThread();
+        virtual ~SwAsyncRetrieveInputStreamThread() override;
 
     protected:
 

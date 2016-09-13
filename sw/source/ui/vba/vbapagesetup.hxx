@@ -38,7 +38,7 @@ public:
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::frame::XModel >& xModel,
                     const css::uno::Reference< css::beans::XPropertySet >& xProps ) throw (css::uno::RuntimeException);
-    virtual ~SwVbaPageSetup(){}
+    virtual ~SwVbaPageSetup() override {}
 
     // Attributes
     virtual double SAL_CALL getGutter() throw (css::uno::RuntimeException, std::exception) override;

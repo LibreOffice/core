@@ -30,7 +30,7 @@ class ExcelChartConverter : public ::oox::drawingml::chart::ChartConverter, publ
 {
 public:
     explicit            ExcelChartConverter( const WorkbookHelper& rHelper );
-    virtual             ~ExcelChartConverter();
+    virtual             ~ExcelChartConverter() override;
 
     /** Creates an external data provider that is able to use spreadsheet data. */
     virtual void        createDataProvider(

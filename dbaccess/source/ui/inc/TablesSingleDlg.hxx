@@ -53,7 +53,7 @@ class ODbDataSourceAdministrationHelper;
             ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
             ,const css::uno::Any& _aDataSourceName
         );
-        virtual ~OTableSubscriptionDialog();
+        virtual ~OTableSubscriptionDialog() override;
         virtual void dispose() override;
 
         // forwards from ODbDataSourceAdministrationHelper

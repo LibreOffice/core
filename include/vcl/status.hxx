@@ -104,7 +104,7 @@ protected:
 public:
                         StatusBar( vcl::Window* pParent,
                                    WinBits nWinStyle = WB_BORDER | WB_RIGHT );
-    virtual             ~StatusBar();
+    virtual             ~StatusBar() override;
     virtual void        dispose() override;
 
     void                AdjustItemWidthsForHiDPI();

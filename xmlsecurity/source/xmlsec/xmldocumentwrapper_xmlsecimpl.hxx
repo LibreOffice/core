@@ -123,7 +123,7 @@ private:
 
 public:
     XMLDocumentWrapper_XmlSecImpl();
-    virtual ~XMLDocumentWrapper_XmlSecImpl();
+    virtual ~XMLDocumentWrapper_XmlSecImpl() override;
 
     /* css::xml::wrapper::XXMLDocumentWrapper */
     virtual css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL getCurrentElement(  )

@@ -136,7 +136,7 @@ public:
         const std::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
     SelectionIteratorImpl (const SelectionIteratorImpl& rObject);
-    virtual ~SelectionIteratorImpl();
+    virtual ~SelectionIteratorImpl() override;
 
     virtual void GotoNextText() override;
     virtual const IteratorPosition& GetPosition() override;
@@ -182,7 +182,7 @@ public:
         bool bDirectionIsForward,
         PageKind ePageKind,
         EditMode eEditMode);
-    virtual ~ViewIteratorImpl();
+    virtual ~ViewIteratorImpl() override;
 
     virtual void GotoNextText() override;
     virtual IteratorImplBase* Clone (IteratorImplBase* pObject = nullptr) const override;
@@ -225,7 +225,7 @@ public:
         SdDrawDocument* pDocument,
         const std::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
-    virtual ~DocumentIteratorImpl();
+    virtual ~DocumentIteratorImpl() override;
 
     virtual void GotoNextText() override;
     virtual IteratorImplBase* Clone (IteratorImplBase* pObject = nullptr) const override;

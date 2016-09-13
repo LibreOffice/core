@@ -49,7 +49,7 @@ public:
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::io::XStream >& rxStream );
 
-    virtual             ~ZipStorage();
+    virtual             ~ZipStorage() override;
 
 private:
     explicit            ZipStorage(

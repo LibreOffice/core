@@ -84,7 +84,7 @@ class XclImpChRoot : public XclImpRoot
 {
 public:
     explicit            XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData );
-    virtual             ~XclImpChRoot();
+    virtual             ~XclImpChRoot() override;
 
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclImpChRoot& GetChRoot() const { return *this; }
@@ -377,7 +377,7 @@ class XclImpChSourceLink : protected XclImpChRoot
 {
 public:
     explicit            XclImpChSourceLink( const XclImpChRoot& rRoot );
-    virtual             ~XclImpChSourceLink();
+    virtual             ~XclImpChSourceLink() override;
 
     /** Reads the CHSOURCELINK record (link to source data). */
     void                ReadChSourceLink( XclImpStream& rStrm );
@@ -1280,7 +1280,7 @@ class XclImpChChart : public XclImpChGroupBase, protected XclImpChRoot
 {
 public:
     explicit            XclImpChChart( const XclImpRoot& rRoot );
-    virtual             ~XclImpChChart();
+    virtual             ~XclImpChChart() override;
 
     /** Reads the CHCHART record (called by base class). */
     virtual void        ReadHeaderRecord( XclImpStream& rStrm ) override;
@@ -1382,7 +1382,7 @@ public:
     /** Constructs a new chart object.
         @param bOwnTab  True = chart is on an own sheet; false = chart is an embedded object. */
     explicit            XclImpChart( const XclImpRoot& rRoot, bool bOwnTab );
-    virtual             ~XclImpChart();
+    virtual             ~XclImpChart() override;
 
     /** Reads the complete chart substream (BOF/EOF block).
         @descr  The passed stream must be located in the BOF record of the chart substream. */

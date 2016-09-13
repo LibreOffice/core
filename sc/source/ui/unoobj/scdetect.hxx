@@ -40,7 +40,7 @@ class ScFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFi
 {
 public:
     explicit ScFilterDetect( const css::uno::Reference<css::uno::XComponentContext>& xContext );
-    virtual ~ScFilterDetect();
+    virtual ~ScFilterDetect() override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;

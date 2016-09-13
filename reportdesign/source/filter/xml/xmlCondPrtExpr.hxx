@@ -37,7 +37,7 @@ namespace rptxml
                     ,const OUString& rLName
                     ,const css::uno::Reference< css::xml::sax::XAttributeList > & _xAttrList
                     ,const css::uno::Reference< css::beans::XPropertySet >& _xComponent);
-        virtual ~OXMLCondPrtExpr();
+        virtual ~OXMLCondPrtExpr() override;
 
         // This method is called for all characters that are contained in the
         // current element. The default is to ignore them.

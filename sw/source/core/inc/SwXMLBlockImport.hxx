@@ -53,7 +53,7 @@ public:
         return rBlockList;
     }
     virtual ~SwXMLBlockListImport()
-        throw();
+        throw() override;
 };
 
 class SwXMLTextBlockImport : public SvXMLImport
@@ -72,7 +72,7 @@ public:
         OUString &rNewText, bool bNewTextOnly );
 
     virtual ~SwXMLTextBlockImport()
-        throw();
+        throw() override;
     virtual void SAL_CALL endDocument()
         throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
 };
@@ -92,7 +92,7 @@ class SwXMLTextBlockTokenHandler : public
 {
 public:
     SwXMLTextBlockTokenHandler();
-    virtual ~SwXMLTextBlockTokenHandler();
+    virtual ~SwXMLTextBlockTokenHandler() override;
 
     //XFastTokenHandler
     sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )
@@ -121,7 +121,7 @@ class SwXMLBlockListTokenHandler : public
 {
 public:
     SwXMLBlockListTokenHandler();
-    virtual ~SwXMLBlockListTokenHandler();
+    virtual ~SwXMLBlockListTokenHandler() override;
 
     //XFastTokenHandler
     sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )

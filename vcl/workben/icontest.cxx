@@ -74,7 +74,7 @@ public:
     VclPtr<FixedBitmap> mpFixedBitmap;
 
     MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
-    virtual ~MyWorkWindow() { disposeOnce(); }
+    virtual ~MyWorkWindow() override { disposeOnce(); }
     virtual void dispose() override { mpFixedBitmap.clear(); WorkWindow::dispose(); }
     void LoadGraphic( const OUString& sImageFile );
 

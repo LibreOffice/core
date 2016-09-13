@@ -51,7 +51,7 @@ namespace rptui
         OPropertyMediator(OPropertyMediator&) = delete;
         void operator =(OPropertyMediator&) = delete;
     protected:
-        virtual ~OPropertyMediator();
+        virtual ~OPropertyMediator() override;
 
         /** this function is called upon disposing the component
         */

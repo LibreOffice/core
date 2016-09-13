@@ -31,7 +31,7 @@ class ScAttrDlg : public SfxTabDialog
 public:
                 ScAttrDlg( vcl::Window*           pParent,
                            const SfxItemSet* pCellAttrs );
-                virtual ~ScAttrDlg();
+                virtual ~ScAttrDlg() override;
 
 protected:
     virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) override;

@@ -130,7 +130,7 @@ public:
     }
 
 protected:
-    virtual ~DocumentStorageAccess()
+    virtual ~DocumentStorageAccess() override
     {
     }
 

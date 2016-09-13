@@ -71,7 +71,7 @@ protected:
         ScAccessibleSpreadsheet& rParent,
         const ScRange& rRange );
 
-    virtual ~ScAccessibleSpreadsheet();
+    virtual ~ScAccessibleSpreadsheet() override;
 
     void ConstructScAccessibleSpreadsheet(
         ScAccessibleDocument* pAccDoc,

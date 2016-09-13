@@ -33,7 +33,7 @@ namespace connectivity
         static jclass theClass;
     public:
         virtual jclass getMyClass() const override;
-        virtual ~java_lang_Throwable();
+        virtual ~java_lang_Throwable() override;
         // a Constructor, that is needed for when Returning the Object is needed:
         java_lang_Throwable( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
         OUString getMessage() const;

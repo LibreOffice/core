@@ -67,7 +67,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxFillToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
-    virtual ~SvxFillToolBoxControl();
+    virtual ~SvxFillToolBoxControl() override;
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
     void Update();
@@ -89,7 +89,7 @@ private:
 
 public:
     FillControl(vcl::Window* pParent);
-    virtual ~FillControl();
+    virtual ~FillControl() override;
     virtual void dispose() override;
 
     virtual void Resize() override;

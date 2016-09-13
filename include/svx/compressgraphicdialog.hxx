@@ -90,7 +90,7 @@ private:
 public:
     CompressGraphicsDialog( vcl::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings );
     CompressGraphicsDialog( vcl::Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings );
-    virtual ~CompressGraphicsDialog();
+    virtual ~CompressGraphicsDialog() override;
     virtual void dispose() override;
 
     SdrGrafObj* GetCompressedSdrGrafObj();

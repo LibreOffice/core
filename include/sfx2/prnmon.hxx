@@ -43,7 +43,7 @@ public:
                             SfxPrintOptionsDialog( vcl::Window *pParent,
                                                    SfxViewShell *pViewShell,
                                                    const SfxItemSet *rOptions );
-    virtual                 ~SfxPrintOptionsDialog();
+    virtual                 ~SfxPrintOptionsDialog() override;
     virtual void            dispose() override;
 
     virtual short           Execute() override;

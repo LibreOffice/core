@@ -56,7 +56,7 @@ protected:
                               const SfxItemSet& rCoreSet,
                               sal_uInt16        nWhich,
                               bool              bHeader );
-    virtual     ~ScHFEditPage();
+    virtual     ~ScHFEditPage() override;
     virtual void dispose() override;
 
 private:

@@ -58,7 +58,7 @@ protected:
         const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings);
 
-    virtual ~Views();
+    virtual ~Views() override;
 
 public: // XAppend
     virtual void SAL_CALL appendByDescriptor(

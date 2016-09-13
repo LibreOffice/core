@@ -58,7 +58,7 @@ namespace sdr
             DefaultProperties(const DefaultProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~DefaultProperties();
+            virtual ~DefaultProperties() override;
 
             void dumpAsXml(struct _xmlTextWriter * pWriter) const;
 

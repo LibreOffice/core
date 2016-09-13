@@ -38,7 +38,7 @@ public:
     ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow,
                                   const css::uno::Reference< css::beans::XPropertySet > & xSceneProperties,
                                   ControllerLockHelper & rControllerLockHelper );
-    virtual ~ThreeD_SceneGeometry_TabPage();
+    virtual ~ThreeD_SceneGeometry_TabPage() override;
     virtual void dispose() override;
 
     // has to be called in case the dialog was closed with OK

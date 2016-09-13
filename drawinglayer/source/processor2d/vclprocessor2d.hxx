@@ -117,7 +117,7 @@ namespace drawinglayer
             VclProcessor2D(
                 const geometry::ViewInformation2D& rViewInformation,
                 OutputDevice& rOutDev);
-            virtual ~VclProcessor2D();
+            virtual ~VclProcessor2D() override;
 
             // access to Drawinglayer configuration options
             const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }

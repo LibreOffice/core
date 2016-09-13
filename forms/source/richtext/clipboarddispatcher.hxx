@@ -73,7 +73,7 @@ namespace frm
         explicit OPasteClipboardDispatcher( EditView& _rView );
 
     protected:
-        virtual ~OPasteClipboardDispatcher();
+        virtual ~OPasteClipboardDispatcher() override;
 
         // OClipboardDispatcher
         virtual bool    implIsEnabled( ) const override;

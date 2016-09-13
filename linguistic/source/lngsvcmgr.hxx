@@ -142,7 +142,7 @@ class LngSvcMgr :
 
 public:
     LngSvcMgr();
-    virtual ~LngSvcMgr();
+    virtual ~LngSvcMgr() override;
 
     // XLinguServiceManager
     virtual css::uno::Reference< css::linguistic2::XSpellChecker > SAL_CALL getSpellChecker(  ) throw (css::uno::RuntimeException, std::exception) override;

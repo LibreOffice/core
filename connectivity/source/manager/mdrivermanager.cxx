@@ -64,7 +64,7 @@ class ODriverEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
     // order matters!
 
 protected:
-    virtual ~ODriverEnumeration();
+    virtual ~ODriverEnumeration() override;
 public:
     explicit ODriverEnumeration(const DriverArray& _rDriverSequence);
 

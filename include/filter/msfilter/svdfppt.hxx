@@ -465,7 +465,7 @@ public:
     PowerPointImportParam& rImportParam;
 
                         SdrEscherImport( PowerPointImportParam&, const OUString& rBaseURL );
-    virtual             ~SdrEscherImport();
+    virtual             ~SdrEscherImport() override;
     virtual bool        GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) const override;
     virtual bool        SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const override;
     PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
@@ -601,7 +601,7 @@ protected:
 
 public:
                             SdrPowerPointImport( PowerPointImportParam&, const OUString& rBaseURL );
-    virtual                 ~SdrPowerPointImport();
+    virtual                 ~SdrPowerPointImport() override;
     sal_uInt16              GetPageCount( PptPageKind eKind = PPT_SLIDEPAGE ) const;
     void                    SetPageNum( sal_uInt16 nPageNum, PptPageKind = PPT_SLIDEPAGE );
     Size                    GetPageSize() const;

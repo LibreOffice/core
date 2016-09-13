@@ -62,7 +62,7 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController,
         const css::uno::Reference<css::drawing::framework::XPane>& rxMainPane);
-    virtual ~PresenterAccessible();
+    virtual ~PresenterAccessible() override;
 
     void UpdateAccessibilityHierarchy();
 

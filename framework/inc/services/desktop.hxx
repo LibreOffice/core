@@ -115,7 +115,7 @@ class Desktop : private cppu::BaseMutex,
 
         //  constructor / destructor
                  Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-        virtual ~Desktop(                                                                    );
+        virtual ~Desktop(                                                                    ) override;
 
         void constructorInit();
 

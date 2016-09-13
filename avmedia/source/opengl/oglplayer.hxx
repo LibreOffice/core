@@ -34,7 +34,7 @@ class OGLPlayer : public cppu::BaseMutex,
 public:
 
     OGLPlayer();
-    virtual ~OGLPlayer();
+    virtual ~OGLPlayer() override;
 
     bool create( const OUString& rURL );
     void releaseInputFiles();

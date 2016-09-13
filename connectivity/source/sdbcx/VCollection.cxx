@@ -59,7 +59,7 @@ namespace
             : m_aNameMap(_bCase)
         {
         }
-        virtual ~OHardRefMap()
+        virtual ~OHardRefMap() override
         {
         }
 

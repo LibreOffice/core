@@ -46,7 +46,7 @@ namespace logging
         virtual OUString SAL_CALL formatMultiColumn(const Sequence< OUString>& column_data) throw (RuntimeException, std::exception) override;
 
         CsvFormatter();
-        virtual ~CsvFormatter();
+        virtual ~CsvFormatter() override;
 
     private:
         // XCsvLogFormatter

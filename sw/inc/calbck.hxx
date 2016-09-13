@@ -66,7 +66,7 @@ namespace sw
     struct SW_DLLPUBLIC LegacyModifyHint final: SfxHint
     {
         LegacyModifyHint(const SfxPoolItem* pOld, const SfxPoolItem* pNew) : m_pOld(pOld), m_pNew(pNew) {};
-        virtual ~LegacyModifyHint();
+        virtual ~LegacyModifyHint() override;
         const SfxPoolItem* m_pOld;
         const SfxPoolItem* m_pNew;
     };
@@ -178,7 +178,7 @@ public:
     // a more universal broadcasting mechanism
     inline void CallSwClientNotify( const SfxHint& rHint ) const;
 
-    virtual ~SwModify();
+    virtual ~SwModify() override;
 
     void Add(SwClient *pDepend);
     SwClient* Remove(SwClient *pDepend);

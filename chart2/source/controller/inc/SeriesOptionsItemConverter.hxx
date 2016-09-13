@@ -38,7 +38,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool );
-    virtual ~SeriesOptionsItemConverter();
+    virtual ~SeriesOptionsItemConverter() override;
 
 protected:
     virtual const sal_uInt16 * GetWhichPairs() const override;

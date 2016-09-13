@@ -59,7 +59,7 @@ namespace frm
         {
             impl_init_nothrow( _rContext, _rxDocument );
         }
-        virtual ~DocumentCommandImageProvider()
+        virtual ~DocumentCommandImageProvider() override
         {
         }
 

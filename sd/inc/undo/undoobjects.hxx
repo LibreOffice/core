@@ -86,7 +86,7 @@ class UndoObjectSetText : public SdrUndoObjSetText
 {
 public:
     UndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
-    virtual ~UndoObjectSetText();
+    virtual ~UndoObjectSetText() override;
 
     virtual void Undo() override;
     virtual void Redo() override;

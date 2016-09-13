@@ -65,7 +65,7 @@ class ScExternalRefLink : public ::sfx2::SvBaseLink
 {
 public:
     ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId, const OUString& rFilter);
-    virtual ~ScExternalRefLink();
+    virtual ~ScExternalRefLink() override;
 
     virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
@@ -448,7 +448,7 @@ public:
 
 public:
     explicit ScExternalRefManager(ScDocument* pDoc);
-    virtual ~ScExternalRefManager();
+    virtual ~ScExternalRefManager() override;
 
     virtual OUString getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const override;
 

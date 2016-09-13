@@ -36,7 +36,7 @@ class Window : public ::cppu::WeakImplHelper< css::media::XPlayerWindow,
 public:
 
     explicit Window();
-    virtual ~Window();
+    virtual ~Window() override;
 
     // XPlayerWindow
     virtual void SAL_CALL update(  ) throw (css::uno::RuntimeException, std::exception) override;

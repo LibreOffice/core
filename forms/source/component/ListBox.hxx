@@ -270,7 +270,7 @@ protected:
 
 public:
     explicit OListBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
-    virtual ~OListBoxControl();
+    virtual ~OListBoxControl() override;
 
     // UNO Anbindung
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxControl, OBoundControl)

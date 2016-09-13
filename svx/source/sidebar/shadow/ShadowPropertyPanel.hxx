@@ -33,7 +33,7 @@ class ShadowPropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    virtual ~ShadowPropertyPanel();
+    virtual ~ShadowPropertyPanel() override;
     virtual void dispose() override;
 
     static VclPtr<vcl::Window> Create(

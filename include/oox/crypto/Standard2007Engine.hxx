@@ -94,7 +94,7 @@ class Standard2007Engine : public CryptoEngine
 
 public:
     Standard2007Engine();
-    virtual ~Standard2007Engine();
+    virtual ~Standard2007Engine() override;
 
     StandardEncryptionInfo& getInfo() { return mInfo;}
 

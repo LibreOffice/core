@@ -75,7 +75,7 @@ public:
     ItemConverter(
             const css::uno::Reference< css::beans::XPropertySet > & rPropertySet ,
             SfxItemPool& rItemPool );
-    virtual ~ItemConverter();
+    virtual ~ItemConverter() override;
 
     typedef sal_uInt16          tWhichIdType;
     typedef OUString tPropertyNameType;

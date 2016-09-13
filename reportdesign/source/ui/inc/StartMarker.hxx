@@ -52,7 +52,7 @@ namespace rptui
         void operator =(OStartMarker&) = delete;
     public:
         OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry);
-        virtual ~OStartMarker();
+        virtual ~OStartMarker() override;
         virtual void dispose() override;
 
         // SfxListener

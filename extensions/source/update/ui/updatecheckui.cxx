@@ -103,7 +103,7 @@ private:
 public:
                     BubbleWindow( vcl::Window* pParent, const OUString& rTitle,
                                   const OUString& rText, const Image& rImage );
-                   virtual ~BubbleWindow();
+                   virtual ~BubbleWindow() override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
@@ -155,7 +155,7 @@ private:
 
 public:
     explicit        UpdateCheckUI(const uno::Reference<uno::XComponentContext>&);
-    virtual        ~UpdateCheckUI();
+    virtual        ~UpdateCheckUI() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

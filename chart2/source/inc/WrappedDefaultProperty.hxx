@@ -31,7 +31,7 @@ public:
     explicit WrappedDefaultProperty(
         const OUString& rOuterName, const OUString& rInnerName,
         const css::uno::Any& rNewOuterDefault );
-    virtual ~WrappedDefaultProperty();
+    virtual ~WrappedDefaultProperty() override;
 
     virtual void setPropertyToDefault(
         const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const

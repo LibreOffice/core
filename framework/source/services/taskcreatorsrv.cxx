@@ -64,7 +64,7 @@ private:
 public:
 
     explicit TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-    virtual ~TaskCreatorService(                                                                   );
+    virtual ~TaskCreatorService(                                                                   ) override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

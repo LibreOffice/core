@@ -287,7 +287,7 @@ public:
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
 protected:
-    virtual ~SfxDocumentMetaData() {}
+    virtual ~SfxDocumentMetaData() override {}
     virtual SfxDocumentMetaData* createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) { return new SfxDocumentMetaData( context ); };
     const css::uno::Reference< css::uno::XComponentContext > m_xContext;
 

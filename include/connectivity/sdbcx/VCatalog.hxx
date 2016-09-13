@@ -90,7 +90,7 @@ namespace connectivity
 
         public:
             OCatalog(const css::uno::Reference< css::sdbc::XConnection> &_xConnection);
-            virtual ~OCatalog();
+            virtual ~OCatalog() override;
 
             DECLARE_SERVICE_INFO();
 

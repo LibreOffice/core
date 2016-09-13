@@ -42,7 +42,7 @@ public:
                              sal_uInt16 nPrefix,
                              const OUString& rLocalName,
                              const css::uno::Reference<css::xforms::XModel2>& xModel );
-    virtual ~XFormsSubmissionContext();
+    virtual ~XFormsSubmissionContext() override;
 
     // implement TokenContext methods:
 

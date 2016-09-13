@@ -39,7 +39,7 @@ class UcbCommandEnvironment :
 
 public:
     explicit UcbCommandEnvironment( const css::uno::Reference< css::lang::XMultiServiceFactory >& rXSMgr );
-    virtual ~UcbCommandEnvironment();
+    virtual ~UcbCommandEnvironment() override;
 
     // XInitialization
     virtual void SAL_CALL

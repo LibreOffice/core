@@ -59,7 +59,7 @@ class SvtToolPanelOptions_Impl : public ConfigItem
     public:
 
          SvtToolPanelOptions_Impl();
-        virtual ~SvtToolPanelOptions_Impl();
+        virtual ~SvtToolPanelOptions_Impl() override;
 
         /** called for notify of configmanager
 

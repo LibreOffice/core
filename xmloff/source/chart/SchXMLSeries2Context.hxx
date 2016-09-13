@@ -83,7 +83,7 @@ public:
                           tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
                           bool& rGlobalChartTypeUsedBySeries,
                           const css::awt::Size & rChartSize );
-    virtual ~SchXMLSeries2Context();
+    virtual ~SchXMLSeries2Context() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual SvXMLImportContext* CreateChildContext(

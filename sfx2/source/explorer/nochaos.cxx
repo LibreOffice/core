@@ -60,7 +60,7 @@ class CntItemPool: public SfxItemPool
 
 protected:
              CntItemPool();
-    virtual ~CntItemPool();
+    virtual ~CntItemPool() override;
 
 public:
     static CntItemPool* Acquire();

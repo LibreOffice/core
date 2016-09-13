@@ -53,7 +53,7 @@ class SdFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFi
 {
 public:
                             SdFilterDetect();
-    virtual                 ~SdFilterDetect();
+    virtual                 ~SdFilterDetect() override;
 
     // XServiceInfo
 

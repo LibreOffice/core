@@ -40,7 +40,7 @@ protected:
 public:
     ScCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4);
     ScCollection(const ScCollection& rCollection);
-    virtual                 ~ScCollection();
+    virtual                 ~ScCollection() override;
 
     virtual ScDataObject*   Clone() const override;
 

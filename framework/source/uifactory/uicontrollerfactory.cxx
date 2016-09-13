@@ -47,7 +47,7 @@ class UIControllerFactory : private cppu::BaseMutex,
                             public UIControllerFactory_BASE
 {
 public:
-    virtual ~UIControllerFactory();
+    virtual ~UIControllerFactory() override;
 
     // XMultiComponentFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const OUString& aServiceSpecifier, const css::uno::Reference< css::uno::XComponentContext >& Context ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;

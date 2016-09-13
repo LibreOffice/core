@@ -364,7 +364,7 @@ namespace pcr
 
     public:
         DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle );
-        virtual ~DropDownEditControl();
+        virtual ~DropDownEditControl() override;
         virtual void dispose() override;
 
         void           setControlHelper( CommonBehaviourControlHelper& _rControlHelper );

@@ -51,7 +51,7 @@ namespace abp
 
     public:
         explicit FinalPage(OAddressBookSourcePilot* _pParent);
-        virtual ~FinalPage();
+        virtual ~FinalPage() override;
         virtual void dispose() override;
 
     protected:

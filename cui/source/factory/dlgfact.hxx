@@ -81,7 +81,7 @@ class VclAbstractDialog2_Impl : public VclAbstractDialog2
     Link<Dialog&,void>   m_aEndDlgHdl;
 public:
     explicit        VclAbstractDialog2_Impl( Dialog* p ) : m_pDlg( p ) {}
-    virtual         ~VclAbstractDialog2_Impl();
+    virtual         ~VclAbstractDialog2_Impl() override;
     virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
     virtual long    GetResult() override;
 private:

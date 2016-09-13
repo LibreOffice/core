@@ -34,7 +34,7 @@ public:
                        bool bAdaptWrongPercentScaleValues,
                        bool bAdaptXAxisOrientationForOld2DBarCharts,
                        bool& rbAxisPositionAttributeImported );
-    virtual ~SchXMLAxisContext();
+    virtual ~SchXMLAxisContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;

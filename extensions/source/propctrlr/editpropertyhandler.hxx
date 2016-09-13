@@ -44,7 +44,7 @@ namespace pcr
         static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
 
     protected:
-        virtual ~EditPropertyHandler();
+        virtual ~EditPropertyHandler() override;
 
     protected:
         // XPropertyHandler overriables

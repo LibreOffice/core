@@ -28,7 +28,7 @@
 class XMLLineHeightHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLLineHeightHdl();
+    virtual ~XMLLineHeightHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -37,7 +37,7 @@ public:
 class XMLLineHeightAtLeastHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLLineHeightAtLeastHdl();
+    virtual ~XMLLineHeightAtLeastHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -46,7 +46,7 @@ public:
 class XMLLineSpacingHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLLineSpacingHdl();
+    virtual ~XMLLineSpacingHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

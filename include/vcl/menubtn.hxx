@@ -54,7 +54,7 @@ protected:
 
 public:
     explicit        MenuButton( vcl::Window* pParent, WinBits nStyle = 0 );
-    virtual         ~MenuButton();
+    virtual         ~MenuButton() override;
     virtual void    dispose() override;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -82,7 +82,7 @@ class VCL_DLLPUBLIC MenuToggleButton : public MenuButton
 {
 public:
     explicit        MenuToggleButton( vcl::Window* pParent, WinBits nStyle = 0 );
-    virtual         ~MenuToggleButton();
+    virtual         ~MenuToggleButton() override;
 
     void            SetActive( bool bSel );
 };

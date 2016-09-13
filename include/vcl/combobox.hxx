@@ -55,7 +55,7 @@ protected:
 public:
     explicit        ComboBox( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        ComboBox( vcl::Window* pParent, const ResId& );
-    virtual         ~ComboBox();
+    virtual         ~ComboBox() override;
     virtual void    dispose() override;
 
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;

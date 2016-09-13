@@ -46,7 +46,7 @@ private:
 
 public:
     explicit        TextWindow( vcl::Window* pParent );
-    virtual         ~TextWindow();
+    virtual         ~TextWindow() override;
     virtual void    dispose() override;
 
     ExtTextEngine*  GetTextEngine() const { return mpExtTextEngine; }
@@ -96,7 +96,7 @@ protected:
 
 public:
                 ImpVclMEdit( VclMultiLineEdit* pVclMultiLineEdit, WinBits nWinStyle );
-                virtual ~ImpVclMEdit();
+                virtual ~ImpVclMEdit() override;
 
     void        SetModified( bool bMod );
     bool        IsModified() const;

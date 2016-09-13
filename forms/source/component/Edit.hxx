@@ -132,7 +132,7 @@ class OEditControl : public OBoundControl
 
 public:
     explicit OEditControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
-    virtual ~OEditControl();
+    virtual ~OEditControl() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl)
     virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) throw(css::uno::RuntimeException, std::exception) override;

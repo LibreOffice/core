@@ -53,7 +53,7 @@ class SwScannerEventListener : public ::cppu::WeakImplHelper<
 public:
 
     SwScannerEventListener( SwView& rView ) : pView( &rView )  {}
-    virtual ~SwScannerEventListener();
+    virtual ~SwScannerEventListener() override;
 
     // XEventListener
     virtual void SAL_CALL disposing(
@@ -79,7 +79,7 @@ class SwClipboardChangeListener : public ::cppu::WeakImplHelper<
 
 public:
     SwClipboardChangeListener( SwView& rView ) : pView( &rView ) {}
-    virtual ~SwClipboardChangeListener();
+    virtual ~SwClipboardChangeListener() override;
 
     void ViewDestroyed() { pView = nullptr; }
 

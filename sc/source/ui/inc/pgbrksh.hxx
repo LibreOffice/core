@@ -38,7 +38,7 @@ private:
 
 public:
     ScPageBreakShell(ScTabViewShell* pView);
-    virtual ~ScPageBreakShell();
+    virtual ~ScPageBreakShell() override;
 
 };
 

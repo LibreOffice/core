@@ -53,7 +53,7 @@ class TreeControlPeer : public ::cppu::ImplInheritanceHelper< VCLXWindow, css::a
     friend class UnoTreeListEntry;
 public:
     TreeControlPeer();
-    virtual ~TreeControlPeer();
+    virtual ~TreeControlPeer() override;
 
     vcl::Window* createVclControl( vcl::Window* pParent, sal_Int64 nWinStyle );
 

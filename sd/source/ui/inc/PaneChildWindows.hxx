@@ -34,7 +34,7 @@ public:
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo,
         const sal_uInt16 nTitleBarResId);
-    virtual ~PaneChildWindow();
+    virtual ~PaneChildWindow() override;
 };
 
 class LeftPaneImpressChildWindow

@@ -40,7 +40,7 @@ private:
 
 public:
     ScDataPilotDatabaseDlg(vcl::Window* pParent);
-    virtual ~ScDataPilotDatabaseDlg();
+    virtual ~ScDataPilotDatabaseDlg() override;
     virtual void dispose() override;
 
     void    GetValues( ScImportSourceDesc& rDesc );

@@ -261,7 +261,7 @@ public:
 
     SvxRuler(vcl::Window* pParent, vcl::Window *pEditWin, SvxRulerSupportFlags nRulerFlags,
              SfxBindings &rBindings, WinBits nWinStyle = WB_STDRULER);
-    virtual ~SvxRuler();
+    virtual ~SvxRuler() override;
     virtual void dispose() override;
 
     void SetDefTabDist(long);

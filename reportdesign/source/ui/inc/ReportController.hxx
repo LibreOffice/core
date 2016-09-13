@@ -328,7 +328,7 @@ namespace rptui
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) throw (css::uno::Exception, std::exception) override;
 
     private:
-        virtual ~OReportController();
+        virtual ~OReportController() override;
 
     public:
         explicit OReportController(css::uno::Reference< css::uno::XComponentContext > const & the_context);

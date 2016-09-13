@@ -30,7 +30,7 @@ class VCL_PLUGIN_PUBLIC SalVirtualDevice
 {
 public:
     SalVirtualDevice() {}
-    virtual ~SalVirtualDevice();
+    virtual ~SalVirtualDevice() override;
 
     // SalGeometryProvider
     virtual bool IsOffScreen() const override { return true; }

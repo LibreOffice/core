@@ -100,7 +100,7 @@ private:
 public:
 
     explicit BackingComp(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-    virtual ~BackingComp(                                                                    );
+    virtual ~BackingComp(                                                                    ) override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;

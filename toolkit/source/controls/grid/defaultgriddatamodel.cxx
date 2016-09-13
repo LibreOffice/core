@@ -53,7 +53,7 @@ class DefaultGridDataModel  :public ::cppu::BaseMutex
 public:
     DefaultGridDataModel();
     DefaultGridDataModel( DefaultGridDataModel const & i_copySource );
-    virtual ~DefaultGridDataModel();
+    virtual ~DefaultGridDataModel() override;
 
     // XMutableGridDataModel
     virtual void SAL_CALL addRow( const Any& i_heading, const css::uno::Sequence< css::uno::Any >& Data ) throw (css::uno::RuntimeException, std::exception) override;

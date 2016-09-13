@@ -37,7 +37,7 @@ class ChartToolbarController : private cppu::BaseMutex,
 {
 public:
     ChartToolbarController(const css::uno::Sequence<css::uno::Any>& rProperties);
-    virtual ~ChartToolbarController();
+    virtual ~ChartToolbarController() override;
 
     ChartToolbarController(const ChartToolbarController&) = delete;
     const ChartToolbarController& operator=(const ChartToolbarController&) = delete;

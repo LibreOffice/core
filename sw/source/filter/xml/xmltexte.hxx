@@ -60,7 +60,7 @@ public:
     SwXMLTextParagraphExport(
         SwXMLExport& rExp,
          SvXMLAutoStylePoolP& rAutoStylePool );
-    virtual ~SwXMLTextParagraphExport();
+    virtual ~SwXMLTextParagraphExport() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLTEXTE_HXX

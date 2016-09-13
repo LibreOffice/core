@@ -76,7 +76,7 @@ namespace dbaui
 
     public:
         OTableWindowListBox(OTableWindow* pParent);
-        virtual ~OTableWindowListBox();
+        virtual ~OTableWindowListBox() override;
         virtual void dispose() override;
 
         // DnD stuff

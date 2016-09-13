@@ -99,7 +99,7 @@ class GtkDropTarget : public cppu::WeakComponentImplHelper<css::datatransfer::dn
     std::list<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
 public:
     GtkDropTarget();
-    virtual ~GtkDropTarget();
+    virtual ~GtkDropTarget() override;
 
     // XInitialization
     virtual void        SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArgs)
@@ -147,7 +147,7 @@ public:
     {
     }
 
-    virtual ~GtkDragSource();
+    virtual ~GtkDragSource() override;
 
     // XDragSource
     virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception) override;
@@ -198,7 +198,7 @@ class GtkInstance : public X11SalInstance
 #endif
 public:
             GtkInstance( SalYieldMutex* pMutex );
-    virtual ~GtkInstance();
+    virtual ~GtkInstance() override;
     void    EnsureInit();
     virtual void AfterAppInit() override;
 

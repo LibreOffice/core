@@ -34,7 +34,7 @@ class SVX_DLLPUBLIC PopupContainer
 {
 public:
     PopupContainer (vcl::Window* pParent);
-    virtual ~PopupContainer();
+    virtual ~PopupContainer() override;
 
     virtual bool Notify (NotifyEvent& rNEvt) override;
 };

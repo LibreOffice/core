@@ -35,7 +35,7 @@ private:
 
 public:
     SwVbaTabStops( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaTabStops() {}
+    virtual ~SwVbaTabStops() override {}
 
     // Methods
     virtual css::uno::Reference< ::ooo::vba::word::XTabStop > SAL_CALL Add( float Position, const css::uno::Any& Alignment, const css::uno::Any& Leader )

@@ -51,7 +51,7 @@ namespace pcr
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~PropertyControlExtender();
+        virtual ~PropertyControlExtender() override;
 
     private:
         ::std::unique_ptr< PropertyControlExtender_Data > m_pData;

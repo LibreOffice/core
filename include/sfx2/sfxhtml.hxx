@@ -47,7 +47,7 @@ protected:
 
     SfxHTMLParser( SvStream& rStream, bool bNewDoc=true, SfxMedium *pMedium=nullptr );
 
-    virtual ~SfxHTMLParser();
+    virtual ~SfxHTMLParser() override;
 
 public:
     // Read the options of an image map

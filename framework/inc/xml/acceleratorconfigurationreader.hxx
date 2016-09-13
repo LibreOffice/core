@@ -98,7 +98,7 @@ class AcceleratorConfigurationReader : public ::cppu::WeakImplHelper< css::xml::
         AcceleratorConfigurationReader(AcceleratorCache& rContainer);
 
         /** @short  does nothing real ... */
-        virtual ~AcceleratorConfigurationReader();
+        virtual ~AcceleratorConfigurationReader() override;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()

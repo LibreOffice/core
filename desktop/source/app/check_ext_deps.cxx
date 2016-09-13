@@ -81,7 +81,7 @@ public:
     SilentCommandEnv(
         uno::Reference<uno::XComponentContext> const & xContext,
         Desktop* pDesktop );
-    virtual ~SilentCommandEnv();
+    virtual ~SilentCommandEnv() override;
 
     // XCommandEnvironment
     virtual uno::Reference<task::XInteractionHandler > SAL_CALL

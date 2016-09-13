@@ -67,7 +67,7 @@ public:
     SvtRulerAccessible(
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent, Ruler& rRepresentation, const ::rtl::OUString& rName );
 protected:
-    virtual ~SvtRulerAccessible();
+    virtual ~SvtRulerAccessible() override;
 public:
 
     bool SAL_CALL

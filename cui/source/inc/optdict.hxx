@@ -62,7 +62,7 @@ private:
 
 public:
     SvxNewDictionaryDialog( vcl::Window* pParent );
-    virtual ~SvxNewDictionaryDialog();
+    virtual ~SvxNewDictionaryDialog() override;
     virtual void dispose() override;
 
     const css::uno::Reference<
@@ -141,7 +141,7 @@ private:
 public:
     SvxEditDictionaryDialog( vcl::Window* pParent,
             const OUString& rName );
-    virtual ~SvxEditDictionaryDialog();
+    virtual ~SvxEditDictionaryDialog() override;
     virtual void dispose() override;
 };
 

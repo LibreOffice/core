@@ -37,7 +37,7 @@ class XMLChartPlotAreaOOoTContext  : public XMLProcAttrTransformerContext
 public:
     explicit XMLChartPlotAreaOOoTContext(
         XMLTransformerBase & rTransformer, const OUString & rQName );
-    virtual ~XMLChartPlotAreaOOoTContext();
+    virtual ~XMLChartPlotAreaOOoTContext() override;
 
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,

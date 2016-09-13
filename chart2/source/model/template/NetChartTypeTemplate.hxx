@@ -36,7 +36,7 @@ public:
         bool bHasLines = true,
         bool bHasFilledArea = false
         );
-    virtual ~NetChartTypeTemplate();
+    virtual ~NetChartTypeTemplate() override;
 
 protected:
     // ____ XChartTypeTemplate ____

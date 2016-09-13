@@ -35,7 +35,7 @@ public:
                            const OUString& rQName,
                               ::xmloff::token::XMLTokenEnum eLocalName );
 
-    virtual ~XMLFormPropOASISTransformerContext();
+    virtual ~XMLFormPropOASISTransformerContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;

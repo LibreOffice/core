@@ -59,7 +59,7 @@ class EmojiView : public ThumbnailView
 public:
     EmojiView ( vcl::Window* pParent);
 
-    virtual ~EmojiView ();
+    virtual ~EmojiView () override;
 
     // Fill view with emoji unicodes
     void Populate ();

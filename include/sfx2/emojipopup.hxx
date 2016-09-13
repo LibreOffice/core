@@ -31,7 +31,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     EmojiPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
-    virtual ~EmojiPopup();
+    virtual ~EmojiPopup() override;
 
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };

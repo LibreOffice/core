@@ -58,7 +58,7 @@ class UpdateCheck :
 {
     UpdateCheck();
 
-    virtual ~UpdateCheck();
+    virtual ~UpdateCheck() override;
 
 public:
     inline SAL_CALL operator rtl::Reference< UpdateCheckConfigListener > ()

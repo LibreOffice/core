@@ -55,7 +55,7 @@ class XBMReader : public GraphicReader
 public:
 
     explicit        XBMReader( SvStream& rStm );
-    virtual         ~XBMReader();
+    virtual         ~XBMReader() override;
 
     ReadState       ReadXBM( Graphic& rGraphic );
 };

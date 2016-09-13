@@ -32,7 +32,7 @@ private:
 public:
     SwVbaPane( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const css::uno::Reference< css::frame::XModel >& xModel ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaPane();
+    virtual ~SwVbaPane() override;
 
     // Methods
     virtual css::uno::Any SAL_CALL View(  ) throw (css::uno::RuntimeException, std::exception) override;

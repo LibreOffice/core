@@ -28,7 +28,7 @@ class SwFooterFrame;
 class SwAccessibleHeaderFooter : public SwAccessibleContext
 {
 protected:
-    virtual ~SwAccessibleHeaderFooter();
+    virtual ~SwAccessibleHeaderFooter() override;
 
 public:
     SwAccessibleHeaderFooter( SwAccessibleMap* pInitMap,

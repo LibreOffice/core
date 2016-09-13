@@ -39,7 +39,7 @@ class FWE_DLLPUBLIC ActionTriggerContainer :    public PropertySetContainer,
 {
     public:
         ActionTriggerContainer();
-        virtual ~ActionTriggerContainer();
+        virtual ~ActionTriggerContainer() override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )

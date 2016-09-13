@@ -160,7 +160,7 @@ public:
     SwUndoFormatColl( const SwPaM&, SwFormatColl*,
                    const bool bReset,
                    const bool bResetListAttrs );
-    virtual ~SwUndoFormatColl();
+    virtual ~SwUndoFormatColl() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -202,7 +202,7 @@ class SwUndoSetFlyFormat : public SwUndo, public SwClient
 
 public:
     SwUndoSetFlyFormat( SwFrameFormat& rFlyFormat, SwFrameFormat& rNewFrameFormat );
-    virtual ~SwUndoSetFlyFormat();
+    virtual ~SwUndoSetFlyFormat() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

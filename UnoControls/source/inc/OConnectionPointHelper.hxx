@@ -44,7 +44,7 @@ public:
                             OConnectionPointContainerHelper*    pContainerImplementation    ,
                             css::uno::Type                       aType                       );
 
-    virtual ~OConnectionPointHelper();
+    virtual ~OConnectionPointHelper() override;
 
     //  XInterface
 

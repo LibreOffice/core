@@ -120,7 +120,7 @@ class GridWindow : public vcl::Window
 public:
     explicit GridWindow(vcl::Window* pParent);
     void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap);
-    virtual ~GridWindow();
+    virtual ~GridWindow() override;
     virtual void dispose() override;
 
     void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );

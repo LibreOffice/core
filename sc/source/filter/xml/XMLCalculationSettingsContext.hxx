@@ -46,7 +46,7 @@ public:
                         const OUString& rLName,
                         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList);
 
-    virtual ~ScXMLCalculationSettingsContext();
+    virtual ~ScXMLCalculationSettingsContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -68,7 +68,7 @@ public:
                         const OUString& rLName,
                         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
-    virtual ~ScXMLNullDateContext();
+    virtual ~ScXMLNullDateContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -86,7 +86,7 @@ public:
                         const OUString& rLName,
                         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
-    virtual ~ScXMLIterationContext();
+    virtual ~ScXMLIterationContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

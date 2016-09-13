@@ -28,7 +28,7 @@ class ResourceMenuController : public cppu::ImplInheritanceHelper< svt::PopupMen
 public:
     ResourceMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Sequence< css::uno::Any >& rxArgs, bool bToolbarContainer );
-    virtual ~ResourceMenuController();
+    virtual ~ResourceMenuController() override;
 
     // XPopupMenuController
     virtual void SAL_CALL updatePopupMenu() throw ( css::uno::RuntimeException, std::exception ) override;

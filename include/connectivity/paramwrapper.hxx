@@ -107,7 +107,7 @@ namespace param
         void SAL_CALL dispose();
 
     protected:
-        virtual ~ParameterWrapper();
+        virtual ~ParameterWrapper() override;
 
         // disambiguations
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
@@ -137,7 +137,7 @@ namespace param
         Parameters      m_aParameters;
 
     protected:
-        virtual ~ParameterWrapperContainer();
+        virtual ~ParameterWrapperContainer() override;
 
     public:
         /** creates an empty container

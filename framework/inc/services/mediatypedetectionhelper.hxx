@@ -65,7 +65,7 @@ class MediaTypeDetectionHelper  :   public ::cppu::WeakImplHelper< css::util::XS
             @descr      This method destruct an instance of this class and clear some member.
         *//*-*****************************************************************************************************/
 
-        virtual ~MediaTypeDetectionHelper();
+        virtual ~MediaTypeDetectionHelper() override;
 
         //  XInterface, XTypeProvider, XServiceInfo
 

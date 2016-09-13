@@ -117,7 +117,7 @@ public:
 
     /// create a new model with an empty, default instance
     Model();
-    virtual ~Model() throw();
+    virtual ~Model() throw() override;
 
     // get Model implementation from API object
     static Model* getModel( const css::uno::Reference<css::xforms::XModel>& );

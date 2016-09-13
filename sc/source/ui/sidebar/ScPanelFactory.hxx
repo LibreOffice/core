@@ -45,7 +45,7 @@ public:
     const ScPanelFactory& operator=(const ScPanelFactory&) = delete;
 
     ScPanelFactory();
-    virtual ~ScPanelFactory();
+    virtual ~ScPanelFactory() override;
 
     // XUIElementFactory
     css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(

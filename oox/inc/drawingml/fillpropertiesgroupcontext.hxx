@@ -83,7 +83,7 @@ public:
     explicit            ArtisticEffectContext(
                             ::oox::core::ContextHandler2Helper& rParent,
                             ArtisticEffectProperties& rEffect );
-    virtual             ~ArtisticEffectContext();
+    virtual             ~ArtisticEffectContext() override;
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -103,7 +103,7 @@ public:
     explicit            BlipExtensionContext(
                             ::oox::core::ContextHandler2Helper& rParent,
                             BlipFillProperties& rBlipProps );
-    virtual             ~BlipExtensionContext();
+    virtual             ~BlipExtensionContext() override;
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -124,7 +124,7 @@ public:
                             ::oox::core::ContextHandler2Helper& rParent,
                             const ::oox::AttributeList& rAttribs,
                             BlipFillProperties& rBlipProps );
-    virtual             ~DuotoneContext();
+    virtual             ~DuotoneContext() override;
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -146,7 +146,7 @@ public:
                             ::oox::core::ContextHandler2Helper& rParent,
                             const ::oox::AttributeList& rAttribs,
                             BlipFillProperties& rBlipProps );
-    virtual             ~ColorChangeContext();
+    virtual             ~ColorChangeContext() override;
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(
@@ -233,7 +233,7 @@ public:
     explicit            SimpleFillPropertiesContext(
                             ::oox::core::ContextHandler2Helper& rParent,
                             Color& rColor );
-    virtual             ~SimpleFillPropertiesContext();
+    virtual             ~SimpleFillPropertiesContext() override;
 
 protected:
     Color&              mrColor;

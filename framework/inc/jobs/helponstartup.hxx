@@ -87,7 +87,7 @@ class HelpOnStartup : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css
                     so this class can't make trouble
                     related to inline/symbols etcpp.!
          */
-        virtual ~HelpOnStartup();
+        virtual ~HelpOnStartup() override;
 
     // uno interface
     public:

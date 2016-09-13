@@ -120,7 +120,7 @@ public:
     , m_bResizeNoScale( false )
     {}
 
-    virtual ~SfxInPlaceClient_Impl();
+    virtual ~SfxInPlaceClient_Impl() override;
 
     void SizeHasChanged();
     DECL_LINK_TYPED(TimerHdl, Timer *, void);

@@ -47,7 +47,7 @@ public:
                      OUString const & rClashingName,
                      OUString const & rProposedNewName,
                      bool bAllowOverwrite );
-    virtual ~NameClashDialog();
+    virtual ~NameClashDialog() override;
     virtual void dispose() override;
     const OUString& getNewName() const { return maNewName; }
 };

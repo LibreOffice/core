@@ -46,7 +46,7 @@ namespace rptui
         OXUndoEnvironment& operator=(const OXUndoEnvironment&) = delete;
 
     protected:
-        virtual ~OXUndoEnvironment();
+        virtual ~OXUndoEnvironment() override;
 
         void SetUndoMode(bool _bUndo);
 

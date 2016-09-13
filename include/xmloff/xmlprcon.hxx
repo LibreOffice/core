@@ -47,7 +47,7 @@ public:
             const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
               sal_Int32 nStartIdx = -1, sal_Int32 nEndIdx = -1 );
 
-    virtual ~SvXMLPropertySetContext();
+    virtual ~SvXMLPropertySetContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

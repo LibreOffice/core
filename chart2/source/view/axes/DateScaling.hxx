@@ -38,7 +38,7 @@ class DateScaling :
 {
 public:
     DateScaling( const Date& rNullDate, sal_Int32 nTimeUnit, bool bShifted );
-    virtual ~DateScaling();
+    virtual ~DateScaling() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
@@ -78,7 +78,7 @@ class InverseDateScaling :
 {
 public:
     InverseDateScaling( const Date& rNullDate, sal_Int32 nTimeUnit, bool bShifted );
-    virtual ~InverseDateScaling();
+    virtual ~InverseDateScaling() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()

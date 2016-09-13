@@ -71,7 +71,7 @@ namespace pcr
     public:
                                     OPropertyEditor (vcl::Window* pParent);
 
-                                    virtual ~OPropertyEditor();
+                                    virtual ~OPropertyEditor() override;
         virtual void                dispose() override;
 
         void                        EnableUpdate();

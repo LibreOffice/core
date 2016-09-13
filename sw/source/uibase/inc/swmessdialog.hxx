@@ -28,7 +28,7 @@ protected:
 public:
     SwMessageAndEditDialog(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription);
-    virtual ~SwMessageAndEditDialog();
+    virtual ~SwMessageAndEditDialog() override;
     virtual void dispose() override;
 };
 

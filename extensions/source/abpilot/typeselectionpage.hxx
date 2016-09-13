@@ -59,7 +59,7 @@ namespace abp
 
     public:
         explicit TypeSelectionPage( OAddressBookSourcePilot* _pParent );
-        virtual ~TypeSelectionPage();
+        virtual ~TypeSelectionPage() override;
         virtual void        dispose() override;
 
         // retrieves the currently selected type

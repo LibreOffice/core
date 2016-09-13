@@ -87,7 +87,7 @@ public:
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext )
                             throw( css::uno::RuntimeException );
 
-    virtual             ~XmlFilterBase();
+    virtual             ~XmlFilterBase() override;
 
     /** Has to be implemented by each filter, returns the current theme. */
     virtual const ::oox::drawingml::Theme*

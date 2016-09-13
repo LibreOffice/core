@@ -59,7 +59,7 @@ public:
         E_DATEPATTERNS
     };
                                 SvtSysLocaleOptions();
-                                virtual ~SvtSysLocaleOptions();
+                                virtual ~SvtSysLocaleOptions() override;
 
     // ConfigItem methods
 

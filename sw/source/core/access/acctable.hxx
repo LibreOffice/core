@@ -61,7 +61,7 @@ protected:
     // This derived class additionally sets MULTISELECTABLE(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet ) override;
 
-    virtual ~SwAccessibleTable();
+    virtual ~SwAccessibleTable() override;
 
     // #i77106#
     inline void SetDesc( const OUString& sNewDesc )
@@ -285,7 +285,7 @@ inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()
 class SwAccessibleTableColHeaders : public SwAccessibleTable
 {
 protected:
-    virtual ~SwAccessibleTableColHeaders()
+    virtual ~SwAccessibleTableColHeaders() override
     {}
 
     virtual SwAccessibleTableData_Impl* CreateNewTableData() override;

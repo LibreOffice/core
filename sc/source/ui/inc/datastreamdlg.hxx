@@ -57,7 +57,7 @@ class DataStreamDlg : public ModalDialog
 
 public:
     DataStreamDlg(ScDocShell *pDocShell, vcl::Window* pParent);
-    virtual ~DataStreamDlg();
+    virtual ~DataStreamDlg() override;
     virtual void dispose() override;
 
     void Init( const DataStream& rStrm );

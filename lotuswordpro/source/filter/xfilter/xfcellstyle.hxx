@@ -84,7 +84,7 @@ class XFCellStyle : public XFStyle
 public:
     XFCellStyle();
 
-    virtual ~XFCellStyle();
+    virtual ~XFCellStyle() override;
 
 public:
     /**

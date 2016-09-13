@@ -63,7 +63,7 @@ namespace comphelper
 
     public:
         explicit GenericPropertySet( PropertySetInfo* pInfo ) throw();
-        virtual ~GenericPropertySet() throw();
+        virtual ~GenericPropertySet() throw() override;
 
         // XInterface
         virtual  Any SAL_CALL queryAggregation( const  Type & rType ) throw( RuntimeException, std::exception) override;

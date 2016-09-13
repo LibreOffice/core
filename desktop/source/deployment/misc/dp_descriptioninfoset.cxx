@@ -62,7 +62,7 @@ class EmptyNodeList:
 public:
     EmptyNodeList();
 
-    virtual ~EmptyNodeList();
+    virtual ~EmptyNodeList() override;
 
     EmptyNodeList(const EmptyNodeList&) = delete;
     const EmptyNodeList& operator=(const EmptyNodeList&) = delete;
@@ -146,7 +146,7 @@ class FileDoesNotExistFilter
     css::uno::Reference< css::ucb::XCommandEnvironment > m_xCommandEnv;
 
 public:
-    virtual ~FileDoesNotExistFilter();
+    virtual ~FileDoesNotExistFilter() override;
     explicit FileDoesNotExistFilter(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
 

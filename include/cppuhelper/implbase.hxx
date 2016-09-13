@@ -101,7 +101,7 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakImplHelper:
 protected:
     WeakImplHelper() {}
 
-    virtual ~WeakImplHelper() {}
+    virtual ~WeakImplHelper() SAL_OVERRIDE {}
 
 public:
     css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType)

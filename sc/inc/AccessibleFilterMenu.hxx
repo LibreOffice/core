@@ -50,7 +50,7 @@ public:
     explicit ScAccessibleFilterMenu(
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
             ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos);
-    virtual ~ScAccessibleFilterMenu();
+    virtual ~ScAccessibleFilterMenu() override;
 
     virtual bool SAL_CALL isVisible()
         throw (css::uno::RuntimeException, std::exception) override;

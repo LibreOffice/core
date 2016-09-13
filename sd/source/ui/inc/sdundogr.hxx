@@ -33,7 +33,7 @@ public:
                    SdUndoGroup(SdDrawDocument* pSdDrawDocument)
                               : SdUndoAction(pSdDrawDocument),
                                 aCtn() {}
-    virtual       ~SdUndoGroup();
+    virtual       ~SdUndoGroup() override;
 
     virtual bool   Merge( SfxUndoAction* pNextAction ) override;
 

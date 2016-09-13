@@ -45,7 +45,7 @@ private:
 
 public:
     CellLineStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel);
-    virtual ~CellLineStyleControl();
+    virtual ~CellLineStyleControl() override;
     virtual void dispose() override;
 
     void GetFocus() override;

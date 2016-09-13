@@ -70,7 +70,7 @@ protected:
 
 public:
     EditHTMLParser(SvStream& rIn, const OUString& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs);
-    virtual ~EditHTMLParser();
+    virtual ~EditHTMLParser() override;
 
     SvParserState CallParser(EditEngine* pEE, const EditPaM& rPaM);
 

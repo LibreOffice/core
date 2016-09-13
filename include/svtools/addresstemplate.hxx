@@ -97,7 +97,7 @@ namespace svt
             const css::uno::Sequence< css::util::AliasProgrammaticPair >& _rMapping
         );
 
-        virtual ~AddressBookSourceDialog();
+        virtual ~AddressBookSourceDialog() override;
         virtual void dispose() override;
 
         // to be used if the object was constructed for editing a field mapping only

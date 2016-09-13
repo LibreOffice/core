@@ -28,7 +28,7 @@ class SmartTagMenuController : public svt::PopupMenuControllerBase
 {
 public:
     explicit SmartTagMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~SmartTagMenuController();
+    virtual ~SmartTagMenuController() override;
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;

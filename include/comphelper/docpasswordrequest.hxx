@@ -44,7 +44,7 @@ class COMPHELPER_DLLPUBLIC SimplePasswordRequest :
 {
 public:
     explicit    SimplePasswordRequest( css::task::PasswordRequestMode eMode );
-    virtual     ~SimplePasswordRequest();
+    virtual     ~SimplePasswordRequest() override;
 
     bool         isPassword() const;
 
@@ -74,7 +74,7 @@ public:
                             css::task::PasswordRequestMode eMode,
                             const OUString& rDocumentUrl,
                             bool bPasswordToModify = false );
-    virtual             ~DocPasswordRequest();
+    virtual             ~DocPasswordRequest() override;
 
     bool            isPassword() const;
 

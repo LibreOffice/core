@@ -133,7 +133,7 @@ protected:
     virtual void Load (SvStream& rIn, sal_uInt16 nVersion) override;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
-    virtual             ~SdStyleSheet();
+    virtual             ~SdStyleSheet() override;
 
     void throwIfDisposed() throw (css::uno::RuntimeException);
 

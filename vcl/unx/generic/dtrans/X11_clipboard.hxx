@@ -60,7 +60,7 @@ namespace x11 {
         static css::uno::Reference<css::datatransfer::clipboard::XClipboard>
         create( SelectionManager& rManager, Atom aSelection );
 
-        virtual ~X11Clipboard();
+        virtual ~X11Clipboard() override;
 
         /*
          * XServiceInfo

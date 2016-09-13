@@ -28,7 +28,7 @@
 class XMLAttributeContainerHandler : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLAttributeContainerHandler();
+    virtual ~XMLAttributeContainerHandler() override;
 
     virtual bool equals( const css::uno::Any& r1, const css::uno::Any& r2 ) const override;
 

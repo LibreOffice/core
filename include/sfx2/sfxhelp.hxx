@@ -41,7 +41,7 @@ private:
 
 public:
     SfxHelp();
-    virtual ~SfxHelp();
+    virtual ~SfxHelp() override;
 
     virtual OUString        GetHelpText( const OUString&, const vcl::Window* pWindow ) override;
 

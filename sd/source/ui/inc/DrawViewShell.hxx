@@ -91,7 +91,7 @@ public:
         PageKind ePageKind = PK_STANDARD,
         FrameView* pFrameView = nullptr);
 
-    virtual ~DrawViewShell();
+    virtual ~DrawViewShell() override;
 
     virtual void Init (bool bIsMainViewShell) override;
 

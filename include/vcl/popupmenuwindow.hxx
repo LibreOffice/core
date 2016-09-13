@@ -29,7 +29,7 @@ private:
     ImplData* mpImplData;
 public:
     PopupMenuFloatingWindow( vcl::Window* pParent );
-    virtual ~PopupMenuFloatingWindow();
+    virtual ~PopupMenuFloatingWindow() override;
     virtual void dispose() override;
 
     sal_uInt16      GetMenuStackLevel() const;

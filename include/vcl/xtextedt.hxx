@@ -37,7 +37,7 @@ private:
 
 public:
                         ExtTextEngine();
-                        virtual ~ExtTextEngine();
+                        virtual ~ExtTextEngine() override;
 
     TextSelection       MatchGroup( const TextPaM& rCursor ) const;
     bool                Search( TextSelection& rSel, const css::util::SearchOptions& rSearchOptions, bool bForward = true );
@@ -50,7 +50,7 @@ protected:
 
 public:
                     ExtTextView( ExtTextEngine* pEng, vcl::Window* pWindow );
-                    virtual ~ExtTextView();
+                    virtual ~ExtTextView() override;
 
     bool            MatchGroup();
 

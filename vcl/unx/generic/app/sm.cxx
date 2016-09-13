@@ -54,7 +54,7 @@ public:
     IceSalSession() {}
 
 private:
-    virtual ~IceSalSession() {}
+    virtual ~IceSalSession() override {}
 
     virtual void queryInteraction() override;
     virtual void interactionDone() override;

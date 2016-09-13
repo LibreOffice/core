@@ -102,7 +102,7 @@ public:
             bool bIsInteractive,
             bool bIsStart, EditView* pView );
 
-    virtual ~TextConvWrapper();
+    virtual ~TextConvWrapper() override;
 
     void    Convert();
 };

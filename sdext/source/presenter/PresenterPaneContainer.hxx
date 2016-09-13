@@ -60,7 +60,7 @@ class PresenterPaneContainer
 public:
     explicit PresenterPaneContainer (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterPaneContainer();
+    virtual ~PresenterPaneContainer() override;
     PresenterPaneContainer(const PresenterPaneContainer&) = delete;
     PresenterPaneContainer& operator=(const PresenterPaneContainer&) = delete;
 

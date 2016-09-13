@@ -79,7 +79,7 @@ public:
         const OUString & rUri,
         const css::uno::Reference< css::embed::XStorage > & xParentStorage,
         const css::uno::Reference< css::embed::XStorage > & xStorageToWrap );
-    virtual ~Storage();
+    virtual ~Storage() override;
 
     bool isDocumentStorage() const { return m_bIsDocumentStorage; }
 
@@ -297,7 +297,7 @@ public:
         const OUString & rUri,
         const css::uno::Reference< css::embed::XStorage >  & xParentStorage,
         const css::uno::Reference< css::io::XOutputStream > & xStreamToWrap );
-    virtual ~OutputStream();
+    virtual ~OutputStream() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL
@@ -374,7 +374,7 @@ public:
         const css::uno::Reference< css::embed::XStorage >  & xParentStorage,
         const css::uno::Reference< css::io::XStream > & xStreamToWrap );
 
-    virtual ~Stream();
+    virtual ~Stream() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL

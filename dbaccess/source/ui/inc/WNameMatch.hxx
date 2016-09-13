@@ -78,7 +78,7 @@ namespace dbaui
         virtual OUString        GetTitle() const override ;
 
         OWizNameMatching(vcl::Window* pParent);
-        virtual ~OWizNameMatching();
+        virtual ~OWizNameMatching() override;
         virtual void dispose() override;
     };
 }

@@ -55,7 +55,7 @@ namespace dbaui
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     public:
         OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode);
-        virtual ~OAppBorderWindow();
+        virtual ~OAppBorderWindow() override;
         virtual void dispose() override;
 
         // Window overrides
@@ -104,7 +104,7 @@ namespace dbaui
                             ,OApplicationController&            _rAppController
                             ,PreviewMode _ePreviewMode
                             );
-        virtual ~OApplicationView();
+        virtual ~OApplicationView() override;
         virtual void dispose() override;
 
         /// automatically creates mnemonics for the icon/texts in our left hand side panel

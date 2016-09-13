@@ -89,7 +89,7 @@ public:
             ORptFilter& rImport, sal_uInt16 nPrfx,
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
-    virtual ~RptMLMasterStylesContext_Impl();
+    virtual ~RptMLMasterStylesContext_Impl() override;
     RptMLMasterStylesContext_Impl(const RptMLMasterStylesContext_Impl&) = delete;
     RptMLMasterStylesContext_Impl& operator=(const RptMLMasterStylesContext_Impl&) = delete;
     virtual void EndElement() override;

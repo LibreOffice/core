@@ -40,7 +40,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 public:
     ManifestWriter( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~ManifestWriter();
+    virtual ~ManifestWriter() override;
 
     // XManifestWriter
     virtual void SAL_CALL writeManifestSequence( const css::uno::Reference< css::io::XOutputStream >& rStream, const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence )

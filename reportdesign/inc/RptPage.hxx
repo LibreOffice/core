@@ -47,7 +47,7 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
     // (BegDragObj)
     void removeTempObject(SdrObject *_pToRemoveObj);
 
-    virtual ~OReportPage();
+    virtual ~OReportPage() override;
 
 protected:
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;

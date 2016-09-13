@@ -39,7 +39,7 @@ class ParaULSpacingWindow : public VclVBox,
 {
 public:
     explicit ParaULSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
-    virtual ~ParaULSpacingWindow();
+    virtual ~ParaULSpacingWindow() override;
     virtual void dispose() override;
 
     void SetValue(const SvxULSpaceItem* pItem);
@@ -59,7 +59,7 @@ class ParaLRSpacingWindow : public VclVBox,
 {
 public:
     explicit ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
-    virtual ~ParaLRSpacingWindow();
+    virtual ~ParaLRSpacingWindow() override;
     virtual void dispose() override;
 
     void SetValue(SfxItemState eState, const SfxPoolItem* pState);

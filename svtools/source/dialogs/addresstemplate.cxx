@@ -258,7 +258,7 @@ namespace svt
 
     public:
         AssignmentPersistentData();
-        virtual ~AssignmentPersistentData();
+        virtual ~AssignmentPersistentData() override;
 
         // IAssigmentData overridables
         virtual OUString getDatasourceName() const override;

@@ -55,7 +55,7 @@ namespace frm
 
     protected:
         ORichTextFeatureDispatcher( EditView& _rView, const css::util::URL&  _rURL );
-        virtual ~ORichTextFeatureDispatcher( );
+        virtual ~ORichTextFeatureDispatcher( ) override;
 
     public:
         /// clean up resources associated with this instance

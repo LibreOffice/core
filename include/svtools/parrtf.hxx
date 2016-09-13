@@ -56,7 +56,7 @@ protected:
     void ReadBitmapData();
     void ReadOLEData();
 
-    virtual ~SvRTFParser();
+    virtual ~SvRTFParser() override;
 
     rtl_TextEncoding GetCodeSet() const             { return eCodeSet; }
     void SetEncoding( rtl_TextEncoding eEnc );

@@ -48,7 +48,7 @@ namespace toolkit
         AnimatedImagesPeer();
 
     protected:
-        virtual ~AnimatedImagesPeer();
+        virtual ~AnimatedImagesPeer() override;
 
     public:
         // XAnimation

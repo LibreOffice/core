@@ -48,7 +48,7 @@ class ContainerListener : public ::cppu::WeakImplHelper1< XEventListener >
 public:
     explicit ContainerListener(ContainerStats *pStats)
         : m_pStats(pStats) { m_pStats->m_nAlive++; }
-    virtual ~ContainerListener() { m_pStats->m_nAlive--; }
+    virtual ~ContainerListener() override { m_pStats->m_nAlive--; }
     virtual void SAL_CALL disposing( const EventObject& )
         throw (RuntimeException, std::exception) override
     {

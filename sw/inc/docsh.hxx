@@ -168,7 +168,7 @@ public:
     SwDocShell( SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED );
     SwDocShell( SfxModelFlags i_nSfxCreationFlags );
     SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode = SfxObjectCreateMode::STANDARD );
-    virtual ~SwDocShell();
+    virtual ~SwDocShell() override;
 
     /// OLE 2.0-notification.
     DECL_LINK_TYPED( Ole2ModifiedHdl, bool, void );

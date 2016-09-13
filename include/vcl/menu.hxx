@@ -229,7 +229,7 @@ protected:
     Menu();
 
 public:
-    virtual ~Menu();
+    virtual ~Menu() override;
     virtual void dispose() override;
 
     void Activate();
@@ -427,7 +427,7 @@ protected:
 public:
     MenuBar();
     MenuBar( const MenuBar& rMenu );
-    virtual ~MenuBar();
+    virtual ~MenuBar() override;
     virtual void dispose() override;
 
     MenuBar& operator =( const MenuBar& rMenu );
@@ -509,7 +509,7 @@ public:
     PopupMenu();
     PopupMenu( const PopupMenu& rMenu );
     explicit PopupMenu( const ResId& );
-    virtual ~PopupMenu();
+    virtual ~PopupMenu() override;
     virtual void dispose() override;
 
     virtual bool IsMenuBar() const override { return false; }

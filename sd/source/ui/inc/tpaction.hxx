@@ -93,7 +93,7 @@ private:
 
 public:
             SdTPAction( vcl::Window* pParent, const SfxItemSet& rInAttrs );
-            virtual ~SdTPAction();
+            virtual ~SdTPAction() override;
     virtual void dispose() override;
 
     static  VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet& );

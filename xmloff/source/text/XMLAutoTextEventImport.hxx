@@ -47,7 +47,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext
         ) throw();
 
-    virtual ~XMLAutoTextEventImport() throw();
+    virtual ~XMLAutoTextEventImport() throw() override;
 
     // XInitialization
     virtual void SAL_CALL initialize(

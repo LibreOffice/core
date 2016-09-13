@@ -36,7 +36,7 @@ private:
 
 public:
     SwVbaParagraph( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& xDocument, const css::uno::Reference< css::text::XTextRange >& xTextRange ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaParagraph();
+    virtual ~SwVbaParagraph() override;
 
     // XParagraph
     virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getRange() throw ( css::uno::RuntimeException, std::exception ) override;
@@ -56,7 +56,7 @@ private:
     css::uno::Reference< css::text::XTextDocument > mxTextDocument;
 public:
     SwVbaParagraphs( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextDocument >& xDocument ) throw (css::uno::RuntimeException);
-    virtual ~SwVbaParagraphs() {}
+    virtual ~SwVbaParagraphs() override {}
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

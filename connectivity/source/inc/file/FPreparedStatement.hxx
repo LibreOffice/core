@@ -67,7 +67,7 @@ namespace connectivity
             virtual void parseParamterElem(const OUString& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem) override;
             virtual void initializeResultSet(OResultSet* _pResult) override;
 
-            virtual ~OPreparedStatement();
+            virtual ~OPreparedStatement() override;
         public:
             DECLARE_SERVICE_INFO();
             // a Constructor, that is needed for when Returning the Object is needed:

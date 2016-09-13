@@ -28,7 +28,7 @@ class ExponentialRegressionCurveCalculator : public RegressionCurveCalculator
 {
 public:
     ExponentialRegressionCurveCalculator();
-    virtual ~ExponentialRegressionCurveCalculator();
+    virtual ~ExponentialRegressionCurveCalculator() override;
 
 protected:
     virtual OUString ImplGetRepresentation(

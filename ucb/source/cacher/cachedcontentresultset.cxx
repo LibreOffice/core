@@ -403,7 +403,7 @@ public:
     explicit CCRS_PropertySetInfo(   Reference<
             XPropertySetInfo > const & xPropertySetInfoOrigin );
 
-    virtual ~CCRS_PropertySetInfo();
+    virtual ~CCRS_PropertySetInfo() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

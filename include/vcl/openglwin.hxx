@@ -34,7 +34,7 @@ class VCL_DLLPUBLIC OpenGLWindow : public vcl::Window
 {
 public:
                    OpenGLWindow(vcl::Window* pParent, bool bInit = true);
-    virtual        ~OpenGLWindow();
+    virtual        ~OpenGLWindow() override;
     virtual void   dispose() override;
 
     OpenGLContext& getContext();

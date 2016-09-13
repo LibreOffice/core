@@ -32,7 +32,7 @@ public:
                      const OUString& rTitle,
                      const OUString& rTabBgColorNoColorText,
                      const Color& rDefaultColor );
-    virtual ~ScTabBgColorDlg();
+    virtual ~ScTabBgColorDlg() override;
     virtual void dispose() override;
 
     void GetSelectedColor( Color& rColor ) const;
@@ -41,7 +41,7 @@ public:
     {
     public:
         ScTabBgColorValueSet(vcl::Window* pParent, WinBits nStyle);
-        virtual ~ScTabBgColorValueSet();
+        virtual ~ScTabBgColorValueSet() override;
         virtual void dispose() override;
 
         void SetDialog(ScTabBgColorDlg* pTabBgColorDlg)

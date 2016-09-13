@@ -106,7 +106,7 @@ class ScVbaHlinkContainer : public ::cppu::WeakImplHelper< container::XIndexAcce
 public:
     explicit ScVbaHlinkContainer() throw (uno::RuntimeException);
     explicit ScVbaHlinkContainer( const ScVbaHlinkContainerRef& rxSheetContainer, const ScRangeList& rScRanges ) throw (uno::RuntimeException);
-    virtual ~ScVbaHlinkContainer();
+    virtual ~ScVbaHlinkContainer() override;
 
     /** Inserts the passed hyperlink into the collection. Will remove a
         Hyperlink object with the same anchor as the passed Hyperlink object. */

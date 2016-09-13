@@ -56,7 +56,7 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
 
         /** @short  standard dtor.
          */
-        virtual ~FrameLoaderFactory();
+        virtual ~FrameLoaderFactory() override;
 
 
     // uno interface

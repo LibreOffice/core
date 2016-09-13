@@ -52,7 +52,7 @@ public:
 
     ProgressBar( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual ~ProgressBar();
+    virtual ~ProgressBar() override;
 
     //  XInterface
 

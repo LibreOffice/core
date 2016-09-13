@@ -76,7 +76,7 @@ class XFConfigManager : public XFStyleContainer
 {
 public:
     XFConfigManager();
-    virtual ~XFConfigManager();
+    virtual ~XFConfigManager() override;
 
 public:
     /**

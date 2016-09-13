@@ -56,7 +56,7 @@ class SwMailConfigPage : public SfxTabPage
 
 public:
     SwMailConfigPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwMailConfigPage();
+    virtual ~SwMailConfigPage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent,

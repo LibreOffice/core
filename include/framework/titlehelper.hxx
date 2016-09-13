@@ -69,7 +69,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
 
         /** @short  free all internally used resources.
          */
-        virtual ~TitleHelper();
+        virtual ~TitleHelper() override;
 
 
         /** set an outside component which uses this container and must be set

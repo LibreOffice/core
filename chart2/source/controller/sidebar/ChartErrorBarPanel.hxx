@@ -61,7 +61,7 @@ public:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController);
-    virtual ~ChartErrorBarPanel();
+    virtual ~ChartErrorBarPanel() override;
     virtual void dispose() override;
 
     virtual void updateData() override;

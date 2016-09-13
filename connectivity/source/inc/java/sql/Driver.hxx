@@ -37,7 +37,7 @@ namespace connectivity
         ::comphelper::ResourceBasedEventLogger  m_aLogger;
 
     protected:
-        virtual ~java_sql_Driver();
+        virtual ~java_sql_Driver() override;
 
     public:
         java_sql_Driver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);

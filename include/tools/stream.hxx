@@ -116,7 +116,7 @@ public:
     SvLockBytes(SvStream * pTheStream, bool bTheOwner = false) :
         m_pStream(pTheStream), m_bOwner(bTheOwner), m_bSync(false) {}
 
-    virtual ~SvLockBytes() { close(); }
+    virtual ~SvLockBytes() override { close(); }
 
     const SvStream * GetStream() const { return m_pStream; }
 
@@ -589,7 +589,7 @@ public:
                     // Switches to Read StreamMode on failed attempt of Write opening
                     SvFileStream( const OUString& rFileName, StreamMode eOpenMode );
                     SvFileStream();
-                    virtual ~SvFileStream();
+                    virtual ~SvFileStream() override;
 
     virtual void    ResetError() override;
 
@@ -640,7 +640,7 @@ protected:
 public:
                     SvMemoryStream( void* pBuf, sal_Size nSize, StreamMode eMode);
                     SvMemoryStream( sal_Size nInitSize=512, sal_Size nResize=64 );
-                    virtual ~SvMemoryStream();
+                    virtual ~SvMemoryStream() override;
 
     virtual void    ResetError() override;
 
@@ -665,7 +665,7 @@ class TOOLS_DLLPUBLIC SvScriptStream: public SvStream
 
 public:
     SvScriptStream(const OUString& rUrl);
-    virtual ~SvScriptStream();
+    virtual ~SvScriptStream() override;
 
     /** Read a line of bytes.
 

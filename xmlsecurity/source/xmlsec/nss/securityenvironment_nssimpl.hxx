@@ -64,7 +64,7 @@ private:
 
     public:
         SecurityEnvironment_NssImpl();
-        virtual ~SecurityEnvironment_NssImpl();
+        virtual ~SecurityEnvironment_NssImpl() override;
 
         //Methods from XSecurityEnvironment
 

@@ -83,7 +83,7 @@ class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
 class EDITENG_DLLPUBLIC EditAbstractDialogFactory : virtual public VclAbstractDialogFactory
 {
 public:
-                                        virtual ~EditAbstractDialogFactory();   // needed for export of vtable
+                                        virtual ~EditAbstractDialogFactory() override;   // needed for export of vtable
     static EditAbstractDialogFactory*   Create();
     virtual AbstractThesaurusDialog*        CreateThesaurusDialog( vcl::Window*, css::uno::Reference< css::linguistic2::XThesaurus >  xThesaurus,
                                                 const OUString &rWord, sal_Int16 nLanguage ) = 0;

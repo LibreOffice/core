@@ -58,7 +58,7 @@ public:
         vcl::Window* pParentWindow,
         FrameView* pFrameView = nullptr);
 
-    virtual ~OutlineViewShell();
+    virtual ~OutlineViewShell() override;
 
     virtual void Shutdown() override;
 

@@ -51,7 +51,7 @@ private:
 public:
     SwXMLBlockListContext( SwXMLBlockListImport& rImport, sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
-    virtual ~SwXMLBlockListContext();
+    virtual ~SwXMLBlockListContext() override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
@@ -63,7 +63,7 @@ class SwXMLBlockContext : public SvXMLImportContext
 public:
     SwXMLBlockContext( SwXMLBlockListImport& rImport, sal_Int32 Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
-    virtual ~SwXMLBlockContext();
+    virtual ~SwXMLBlockContext() override;
 };
 
 class SwXMLTextBlockDocumentContext : public SvXMLImportContext
@@ -79,7 +79,7 @@ public:
         sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
-    virtual ~SwXMLTextBlockDocumentContext();
+    virtual ~SwXMLTextBlockDocumentContext() override;
 };
 
 class SwXMLTextBlockBodyContext : public SvXMLImportContext
@@ -95,7 +95,7 @@ public:
         sal_Int32, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
-    virtual ~SwXMLTextBlockBodyContext();
+    virtual ~SwXMLTextBlockBodyContext() override;
 };
 
 class SwXMLTextBlockTextContext : public SvXMLImportContext
@@ -112,7 +112,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
-    virtual ~SwXMLTextBlockTextContext();
+    virtual ~SwXMLTextBlockTextContext() override;
 };
 
 class SwXMLTextBlockParContext : public SvXMLImportContext
@@ -127,7 +127,7 @@ public:
     virtual void SAL_CALL characters( const OUString & aChars )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
-    virtual ~SwXMLTextBlockParContext();
+    virtual ~SwXMLTextBlockParContext() override;
 };
 
 SwXMLTextBlockTokenHandler::SwXMLTextBlockTokenHandler()

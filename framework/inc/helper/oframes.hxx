@@ -165,7 +165,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
                         This method is protected, because its not allowed to use this class as a member!
                         You MUST use a dynamical instance (pointer). That's the reason for a protected dtor.
         *//*-*****************************************************************************************************/
-        virtual ~OFrames();
+        virtual ~OFrames() override;
 
         /*-****************************************************************************************************
             @short      reset instance to default values

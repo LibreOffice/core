@@ -47,7 +47,7 @@ namespace framework
 
         public:
             HeaderMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext, bool _bFooter = false );
-            virtual ~HeaderMenuController();
+            virtual ~HeaderMenuController() override;
 
             // XServiceInfo
             DECLARE_XSERVICEINFO

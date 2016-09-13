@@ -83,7 +83,7 @@ private:
 
 public:
     explicit ErrorBar( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~ErrorBar();
+    virtual ~ErrorBar() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

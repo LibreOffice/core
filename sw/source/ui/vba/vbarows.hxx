@@ -45,7 +45,7 @@ private:
 public:
     SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows ) throw ( css::uno::RuntimeException );
     SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows, sal_Int32 nStarIndex, sal_Int32 nEndIndex ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaRows() {}
+    virtual ~SwVbaRows() override {}
 
     // Attributes
     virtual ::sal_Int32 SAL_CALL getAlignment() throw (css::uno::RuntimeException, std::exception) override;

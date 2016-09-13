@@ -40,7 +40,7 @@ protected:
 
 public:
     SdrUndoManager(sal_uInt16 nMaxUndoActionCount = 20);
-    virtual ~SdrUndoManager();
+    virtual ~SdrUndoManager() override;
 
     /// react depending on edit mode and if no more undo is possible
     virtual bool Undo() override;

@@ -62,7 +62,7 @@ protected:
 public:
 
     explicit    PDFDialog( const Reference< XComponentContext >& rxContext );
-    virtual     ~PDFDialog();
+    virtual     ~PDFDialog() override;
 };
 
 

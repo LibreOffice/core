@@ -44,7 +44,7 @@ public:
         maFalseStr( ::xmloff::token::GetXMLToken( eFalse ) )
     {}
 
-    virtual ~XMLNamedBoolPropertyHdl();
+    virtual ~XMLNamedBoolPropertyHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

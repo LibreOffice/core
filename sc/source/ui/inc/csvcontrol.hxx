@@ -232,7 +232,7 @@ private:
 public:
     explicit                    ScCsvControl( ScCsvControl& rParent );
     explicit                    ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, WinBits nBits );
-    virtual                     ~ScCsvControl();
+    virtual                     ~ScCsvControl() override;
     virtual void                dispose() override;
 
     // event handling ---------------------------------------------------------

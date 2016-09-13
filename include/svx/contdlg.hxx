@@ -58,7 +58,7 @@ public:
 
                         SvxContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
                                       vcl::Window* pParent);
-    virtual             ~SvxContourDlg();
+    virtual             ~SvxContourDlg() override;
     virtual void        dispose() override;
 
     const Graphic&      GetGraphic() const;

@@ -71,7 +71,7 @@ class HierarchyContentProvider : public ::ucbhelper::ContentProviderImplHelper,
 public:
     explicit HierarchyContentProvider(
                 const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~HierarchyContentProvider();
+    virtual ~HierarchyContentProvider() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

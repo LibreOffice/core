@@ -30,7 +30,7 @@ class SfxOpenUrlHint: public SfxSimpleHint
 public:
     SfxOpenUrlHint(const OUString& sDocumentURL);
     const OUString& GetDocumentURL() const;
-    virtual ~SfxOpenUrlHint();
+    virtual ~SfxOpenUrlHint() override;
 };
 
 #endif

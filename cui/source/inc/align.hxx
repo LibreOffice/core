@@ -57,7 +57,7 @@ class AlignmentTabPage : public SfxTabPage
     static const sal_uInt16 s_pRanges[];
 
 public:
-    virtual             ~AlignmentTabPage();
+    virtual             ~AlignmentTabPage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );

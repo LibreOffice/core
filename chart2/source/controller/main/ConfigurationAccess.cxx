@@ -47,7 +47,7 @@ private:
 
 public:
     CalcConfigItem();
-    virtual ~CalcConfigItem();
+    virtual ~CalcConfigItem() override;
 
     FieldUnit getFieldUnit();
     virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) override;

@@ -40,7 +40,7 @@ class CURI:
 {
 public:
     explicit CURI();
-    virtual ~CURI() {}
+    virtual ~CURI() override {}
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;

@@ -36,7 +36,7 @@ public:
     XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const css::uno::Reference< css::frame::XModel >& rxModel );
 
-    virtual ~XMLBasicImportContext();
+    virtual ~XMLBasicImportContext() override;
 
     virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& rxAttrList ) override;
@@ -59,7 +59,7 @@ public:
     XMLBasicImportChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& rxHandler );
 
-    virtual ~XMLBasicImportChildContext();
+    virtual ~XMLBasicImportChildContext() override;
 
     virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;

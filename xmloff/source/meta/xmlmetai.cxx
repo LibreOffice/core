@@ -45,7 +45,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         const css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2>& rDocBuilder);
 
-    virtual ~XMLDocumentBuilderContext();
+    virtual ~XMLDocumentBuilderContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,

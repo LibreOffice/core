@@ -62,7 +62,7 @@ class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit wind
 {
 public:
     ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh);
-    virtual         ~ScTextWnd();
+    virtual         ~ScTextWnd() override;
     virtual void    dispose() override;
 
     virtual void            SetTextString( const OUString& rString ) override;
@@ -159,7 +159,7 @@ private:
 
 public:
                     ScPosWnd( vcl::Window* pParent );
-    virtual         ~ScPosWnd();
+    virtual         ~ScPosWnd() override;
     virtual void    dispose() override;
 
     void            SetPos( const OUString& rPosStr );        // Displayed Text
@@ -187,7 +187,7 @@ class ScInputBarGroup : public ScTextWndBase
 
 public:
                     ScInputBarGroup( vcl::Window* Parent, ScTabViewShell* pViewSh );
-    virtual         ~ScInputBarGroup();
+    virtual         ~ScInputBarGroup() override;
     virtual void    dispose() override;
     virtual void    InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
     virtual void    RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) override;
@@ -223,7 +223,7 @@ class ScInputWindow : public ToolBox                        // Parent toolbox
 {
 public:
                     ScInputWindow( vcl::Window* pParent, SfxBindings* pBind );
-    virtual         ~ScInputWindow();
+    virtual         ~ScInputWindow() override;
     virtual void    dispose() override;
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;

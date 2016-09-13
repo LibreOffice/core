@@ -47,7 +47,7 @@ protected:
 public:
 
     XMLFontAutoStylePool( SvXMLExport& rExport, bool tryToEmbedFonts = false );
-    virtual ~XMLFontAutoStylePool();
+    virtual ~XMLFontAutoStylePool() override;
 
     OUString Add(
             const OUString& rFamilyName,

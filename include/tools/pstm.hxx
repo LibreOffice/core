@@ -152,7 +152,7 @@ public:
     virtual void        ResetError() override;
 
                         SvPersistStream( SvClassManager &, SvStream * pStream );
-                        virtual ~SvPersistStream();
+                        virtual ~SvPersistStream() override;
 
     void                ClearStream();
 

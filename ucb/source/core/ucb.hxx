@@ -62,7 +62,7 @@ class UniversalContentBroker :
 {
 public:
     explicit UniversalContentBroker( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~UniversalContentBroker();
+    virtual ~UniversalContentBroker() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

@@ -78,7 +78,7 @@ public:
     void    GetAttrState(SfxItemSet &);
 
              SwTextShell(SwView &rView);
-    virtual ~SwTextShell();
+    virtual ~SwTextShell() override;
     /// Create item set for the insert frame dialog.
     SfxItemSet CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr);
 };

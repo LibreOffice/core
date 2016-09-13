@@ -38,7 +38,7 @@ class NumberFormatCodeMapper : public cppu::WeakImplHelper
 public:
     NumberFormatCodeMapper( const css::uno::Reference <
                     css::uno::XComponentContext >& rxContext );
-    virtual ~NumberFormatCodeMapper();
+    virtual ~NumberFormatCodeMapper() override;
 
     virtual css::i18n::NumberFormatCode SAL_CALL getDefault( sal_Int16 nFormatType, sal_Int16 nFormatUsage, const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::i18n::NumberFormatCode SAL_CALL getFormatCode( sal_Int16 nFormatIndex, const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;

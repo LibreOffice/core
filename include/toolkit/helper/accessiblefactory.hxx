@@ -122,7 +122,7 @@ namespace toolkit
             createAccessible( Menu* _pMenu, bool _bIsMenuBar ) = 0;
 
     protected:
-        virtual ~IAccessibleFactory() {}
+        virtual ~IAccessibleFactory() override {}
     };
 
 

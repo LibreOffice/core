@@ -31,7 +31,7 @@ namespace connectivity
         class ODbaseConnection : public ODbaseConnection_Base
         {
         protected:
-            virtual ~ODbaseConnection();
+            virtual ~ODbaseConnection() override;
         public:
             ODbaseConnection(ODriver*   _pDriver);
             // XServiceInfo

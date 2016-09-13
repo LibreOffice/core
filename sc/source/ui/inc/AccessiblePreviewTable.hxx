@@ -39,7 +39,7 @@ public:
                             ScPreviewShell* pViewShell, sal_Int32 nIndex );
 
 protected:
-    virtual ~ScAccessiblePreviewTable();
+    virtual ~ScAccessiblePreviewTable() override;
 
     using ScAccessibleContextBase::IsDefunc;
 

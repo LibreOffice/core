@@ -41,7 +41,7 @@ public:
     Deck(const DeckDescriptor& rDeckDescriptor,
          vcl::Window* pParentWindow,
          const std::function<void()>& rCloserAction);
-    virtual ~Deck();
+    virtual ~Deck() override;
     virtual void dispose() override;
 
     const OUString& GetId() const { return msId; }

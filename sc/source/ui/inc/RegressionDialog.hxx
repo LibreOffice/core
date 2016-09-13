@@ -24,7 +24,7 @@ public:
         SfxBindings* pB, SfxChildWindow* pCW,
         vcl::Window* pParent, ScViewData* pViewData );
 
-    virtual ~ScRegressionDialog();
+    virtual ~ScRegressionDialog() override;
 
     virtual bool Close() override;
 

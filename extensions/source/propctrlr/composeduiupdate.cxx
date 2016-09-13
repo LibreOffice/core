@@ -145,7 +145,7 @@ namespace pcr
         virtual void SAL_CALL setHelpSectionText( const OUString& HelpText ) throw (NoSupportException, RuntimeException, std::exception) override;
 
     protected:
-        virtual ~CachedInspectorUI();
+        virtual ~CachedInspectorUI() override;
 
         /// determines whether the instance is already disposed
         inline bool isDisposed() const { return m_bDisposed; }

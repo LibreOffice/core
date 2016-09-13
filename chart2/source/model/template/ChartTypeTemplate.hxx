@@ -76,7 +76,7 @@ class ChartTypeTemplate : public ::cppu::WeakImplHelper<
 public:
     explicit ChartTypeTemplate( css::uno::Reference< css::uno::XComponentContext > const & xContext,
         const OUString & rServiceName );
-    virtual ~ChartTypeTemplate();
+    virtual ~ChartTypeTemplate() override;
 
 protected:
     // ____ XChartTypeTemplate ____

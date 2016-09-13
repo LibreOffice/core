@@ -45,7 +45,7 @@ public:
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd, const css::uno::Reference< css::text::XText >& rText) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual ~SwVbaRange();
+    virtual ~SwVbaRange() override;
     const css::uno::Reference< css::text::XTextDocument >& getDocument() const { return mxTextDocument; }
 
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getXTextRange() throw (css::uno::RuntimeException, std::exception) override;

@@ -111,7 +111,7 @@ public:
     explicit TestBridgeImpl( const Reference< XComponentContext > & xContext )
         : m_xContext( xContext )
         {}
-    virtual ~TestBridgeImpl()
+    virtual ~TestBridgeImpl() override
     {
     }
 
@@ -339,7 +339,7 @@ class MyClass : public osl::DebugBase<MyClass>, public OWeakObject
 {
 public:
     MyClass();
-    virtual ~MyClass();
+    virtual ~MyClass() override;
 };
 
 

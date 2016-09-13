@@ -101,7 +101,7 @@ public:
                bool                                              bIntrinsicAnimationsAllowed,
                bool                                              bDisableAnimationZOrder );
 
-    virtual ~SlideImpl();
+    virtual ~SlideImpl() override;
 
 
     // Slide interface

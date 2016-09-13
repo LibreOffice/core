@@ -40,7 +40,7 @@ namespace sdr
         public:
             // basic constructor, used from SdrObject.
             explicit ViewContactOfSdrCaptionObj(SdrCaptionObj& rCaptionObj);
-            virtual ~ViewContactOfSdrCaptionObj();
+            virtual ~ViewContactOfSdrCaptionObj() override;
 
         protected:
             // This method is responsible for creating the graphical visualisation data

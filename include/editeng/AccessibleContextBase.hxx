@@ -75,7 +75,7 @@ public:
     AccessibleContextBase (
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
         const sal_Int16 aRole);
-    virtual ~AccessibleContextBase();
+    virtual ~AccessibleContextBase() override;
 
 
     /** Call all accessiblity event listeners to inform them about the

@@ -49,7 +49,7 @@ class PptEscherEx : public EscherEx
     public:
 
                 PptEscherEx( SvStream& rOut, const OUString& );
-                virtual ~PptEscherEx();
+                virtual ~PptEscherEx() override;
 
         void    OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance = 0 ) override;
         void    CloseContainer() override;

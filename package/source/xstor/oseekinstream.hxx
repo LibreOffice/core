@@ -40,7 +40,7 @@ public:
                       const css::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
-    virtual ~OInputSeekStream();
+    virtual ~OInputSeekStream() override;
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) override;
 

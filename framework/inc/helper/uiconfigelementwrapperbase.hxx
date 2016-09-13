@@ -59,7 +59,7 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
 
     public:
         UIConfigElementWrapperBase( sal_Int16 nType );
-        virtual  ~UIConfigElementWrapperBase();
+        virtual  ~UIConfigElementWrapperBase() override;
 
         //  XInterface
         virtual void SAL_CALL acquire() throw () override

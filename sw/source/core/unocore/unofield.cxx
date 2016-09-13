@@ -1160,7 +1160,7 @@ public:
         , m_pProps((pFormat) ? nullptr : new SwFieldProperties_Impl)
     { }
 
-    virtual ~Impl()
+    virtual ~Impl() override
     {
         if (m_pTextObject)
         {

@@ -61,7 +61,7 @@ public:
 
     explicit SfxSaveAsTemplateDialog();
 
-    virtual ~SfxSaveAsTemplateDialog();
+    virtual ~SfxSaveAsTemplateDialog() override;
     virtual void dispose() override;
 };
 

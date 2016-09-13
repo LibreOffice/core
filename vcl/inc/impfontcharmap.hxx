@@ -29,7 +29,7 @@ class VCL_PLUGIN_PUBLIC ImplFontCharMap : public SvRefBase
 {
 public:
     explicit            ImplFontCharMap( const CmapResult& );
-    virtual             ~ImplFontCharMap();
+    virtual             ~ImplFontCharMap() override;
 
 private:
     friend class FontCharMap;

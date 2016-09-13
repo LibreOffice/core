@@ -41,7 +41,7 @@ namespace fileaccess {
 
         explicit XCommandInfo_impl( shell* pMyShell );
 
-        virtual ~XCommandInfo_impl();
+        virtual ~XCommandInfo_impl() override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL

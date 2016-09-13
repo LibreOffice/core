@@ -34,7 +34,7 @@ protected:
     virtual bool                Notify( NotifyEvent& rNEvt ) override;
 public:
     MacroEventListBox( vcl::Window* pParent, WinBits nStyle );
-    virtual ~MacroEventListBox();
+    virtual ~MacroEventListBox() override;
     virtual void dispose() override;
 
     virtual void Resize() override;

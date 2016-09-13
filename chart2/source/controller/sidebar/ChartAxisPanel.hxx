@@ -63,7 +63,7 @@ public:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController);
-    virtual ~ChartAxisPanel();
+    virtual ~ChartAxisPanel() override;
     virtual void dispose() override;
 
     virtual void updateData() override;

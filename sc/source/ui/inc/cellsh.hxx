@@ -78,7 +78,7 @@ private:
 
 public:
                 ScCellShell(ScViewData* pData);
-    virtual     ~ScCellShell();
+    virtual     ~ScCellShell() override;
 
     void        Execute(SfxRequest &);
     void        GetState(SfxItemSet &);

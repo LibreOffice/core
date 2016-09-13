@@ -46,7 +46,7 @@ class DispatchDisabler : public ::cppu::WeakImplHelper<
     css::uno::Reference< css::frame::XDispatchProvider > mxMaster;
 public:
              DispatchDisabler(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
-    virtual ~DispatchDisabler() {}
+    virtual ~DispatchDisabler() override {}
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::css::uno::Sequence< ::css::uno::Any >& aArguments )

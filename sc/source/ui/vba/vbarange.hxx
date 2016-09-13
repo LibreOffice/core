@@ -136,7 +136,7 @@ public:
     const ScRangeList& getScRangeList() throw (css::uno::RuntimeException);
     static const ScRangeList& getScRangeList( const css::uno::Reference< ov::excel::XRange >& rxRange ) throw (css::uno::RuntimeException);
 
-    virtual ~ScVbaRange();
+    virtual ~ScVbaRange() override;
      virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() override { return this; }
     bool isSingleCellRange();
 

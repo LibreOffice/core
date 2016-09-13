@@ -72,7 +72,7 @@ friend class SwEnvPreview;
 
 public:
      SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert);
-    virtual ~SwEnvDlg();
+    virtual ~SwEnvDlg() override;
     virtual void dispose() override;
 };
 
@@ -103,7 +103,7 @@ class SwEnvPage : public SfxTabPage
 
 public:
     SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwEnvPage();
+    virtual ~SwEnvPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);

@@ -165,7 +165,7 @@ class AddonsOptions_Impl : public ConfigItem
         //  constructor / destructor
 
          AddonsOptions_Impl();
-        virtual ~AddonsOptions_Impl();
+        virtual ~AddonsOptions_Impl() override;
 
         //  overridden methods of baseclass
 

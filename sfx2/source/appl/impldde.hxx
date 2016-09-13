@@ -48,7 +48,7 @@ class SvDDEObject : public SvLinkSource
     DECL_LINK_TYPED( ImplDoneDDEData, bool, void );
 
 protected:
-    virtual ~SvDDEObject();
+    virtual ~SvDDEObject() override;
 
 public:
     SvDDEObject();

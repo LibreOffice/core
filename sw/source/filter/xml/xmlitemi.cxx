@@ -63,7 +63,7 @@ class SwXMLImportTableItemMapper_Impl: public SvXMLImportItemMapper
 public:
 
     explicit SwXMLImportTableItemMapper_Impl(SvXMLItemMapEntriesRef rMapEntries);
-    virtual ~SwXMLImportTableItemMapper_Impl();
+    virtual ~SwXMLImportTableItemMapper_Impl() override;
 
     virtual bool handleSpecialItem( const SvXMLItemMapEntry& rEntry,
                                 SfxPoolItem& rItem,
@@ -254,7 +254,7 @@ public:
                   SfxItemSet&  rItemSet,
                   SvXMLImportItemMapper & rIMapper,
                   const SvXMLUnitConverter& rUnitConv );
-    virtual ~SwXMLItemSetContext_Impl();
+    virtual ~SwXMLItemSetContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                    const OUString& rLocalName,

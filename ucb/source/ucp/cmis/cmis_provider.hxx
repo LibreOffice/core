@@ -24,7 +24,7 @@ private:
 
 public:
     explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~ContentProvider();
+    virtual ~ContentProvider() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

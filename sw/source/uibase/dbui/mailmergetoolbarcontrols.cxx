@@ -50,7 +50,7 @@ public:
     {
     }
 
-    virtual ~MMCurrentEntryController()
+    virtual ~MMCurrentEntryController() override
     {
     }
 
@@ -115,7 +115,7 @@ public:
     {
     }
 
-    virtual ~MMExcludeEntryController()
+    virtual ~MMExcludeEntryController() override
     {
     }
 

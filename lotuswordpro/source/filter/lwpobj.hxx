@@ -83,7 +83,7 @@ class LwpObject: public salhelper::SimpleReferenceObject
 public:
     LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm);
 protected:
-    virtual ~LwpObject();
+    virtual ~LwpObject() override;
     LwpObjectHeader m_ObjHdr;
     LwpObjectStream* m_pObjStrm;
     LwpFoundry* m_pFoundry;

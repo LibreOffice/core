@@ -72,7 +72,7 @@ class Listener
 {
 public:
     explicit Listener (SlideSorter& rSlideSorter);
-    virtual ~Listener();
+    virtual ~Listener() override;
 
     /** Connect to the current controller of the view shell as listener.
         This method is called once during initialization and every time a

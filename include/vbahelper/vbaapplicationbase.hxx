@@ -54,7 +54,7 @@ class VBAHELPER_DLLPUBLIC VbaApplicationBase : public ApplicationBase_BASE
 
 protected:
     VbaApplicationBase( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~VbaApplicationBase();
+    virtual ~VbaApplicationBase() override;
 
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException) = 0;
 public:

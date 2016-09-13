@@ -71,7 +71,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
-            virtual ~OColumn();
+            virtual ~OColumn() override;
         public:
             virtual void    SAL_CALL acquire() throw() override;
             virtual void    SAL_CALL release() throw() override;

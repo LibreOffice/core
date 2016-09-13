@@ -42,7 +42,7 @@ private:
 
 public:
     explicit SvxUnoGluePointAccess( SdrObject* pObject ) throw();
-    virtual ~SvxUnoGluePointAccess() throw();
+    virtual ~SvxUnoGluePointAccess() throw() override;
 
     // XIdentifierContainer
     virtual sal_Int32 SAL_CALL insert( const uno::Any& aElement ) throw (lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;

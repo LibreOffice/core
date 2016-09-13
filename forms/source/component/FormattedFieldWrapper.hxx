@@ -52,7 +52,7 @@ private:
     OFormattedFieldWrapper(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
 
 protected:
-    virtual ~OFormattedFieldWrapper();
+    virtual ~OFormattedFieldWrapper() override;
 
 public:
     // if we act as formatted, this is the PersistObject interface of our aggregate, used

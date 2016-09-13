@@ -36,7 +36,7 @@ class XMLCodeNameProvider : public ::cppu::WeakImplHelper< css::container::XName
 
 public:
     explicit XMLCodeNameProvider(ScDocument* pDoc);
-    virtual ~XMLCodeNameProvider();
+    virtual ~XMLCodeNameProvider() override;
 
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw (css::uno::RuntimeException, std::exception ) override;

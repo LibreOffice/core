@@ -45,7 +45,7 @@ protected:
 
 public:
     VCLXPointer();
-    virtual ~VCLXPointer();
+    virtual ~VCLXPointer() override;
 
     const Pointer&      GetPointer() const { return maPointer; }
 

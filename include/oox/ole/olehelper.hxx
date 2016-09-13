@@ -154,7 +154,7 @@ protected:
                                   sal_Int32 nSize );
 public:
     MSConvertOCXControls( const css::uno::Reference< css::frame::XModel >& rxModel );
-    virtual ~MSConvertOCXControls();
+    virtual ~MSConvertOCXControls() override;
     bool ReadOCXStorage( tools::SvRef<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp );
     bool ReadOCXCtlsStream(tools::SvRef<SotStorageStream>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp,
                                    sal_Int32 nPos, sal_Int32 nSize );

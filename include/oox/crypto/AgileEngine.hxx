@@ -64,7 +64,7 @@ class AgileEngine : public CryptoEngine
 
 public:
     AgileEngine();
-    virtual ~AgileEngine();
+    virtual ~AgileEngine() override;
 
     AgileEncryptionInfo& getInfo() { return mInfo;}
 

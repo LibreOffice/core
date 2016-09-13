@@ -225,7 +225,7 @@ public:
                     ScTabViewShell( SfxViewFrame*           pViewFrame,
                                     SfxViewShell*           pOldSh );
 
-    virtual         ~ScTabViewShell();
+    virtual         ~ScTabViewShell() override;
 
     vcl::Window* GetDialogParent();
 

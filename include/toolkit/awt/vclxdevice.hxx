@@ -56,7 +56,7 @@ public:
 
 public:
                             VCLXDevice();
-                            virtual ~VCLXDevice();
+                            virtual ~VCLXDevice() override;
 
     void                    SetOutputDevice( const VclPtr<OutputDevice> &pOutDev ) { mpOutputDevice = pOutDev; }
     const VclPtr<OutputDevice>& GetOutputDevice() const { return mpOutputDevice; }
@@ -102,7 +102,7 @@ public:
 class VCLXVirtualDevice : public VCLXDevice
 {
 public:
-                    virtual ~VCLXVirtualDevice();
+                    virtual ~VCLXVirtualDevice() override;
 
     void            SetVirtualDevice( VirtualDevice* pVDev ) { SetOutputDevice( pVDev ); }
 };

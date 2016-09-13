@@ -36,7 +36,7 @@ class TextWindowPeer: public VCLXWindow {
 public:
     explicit TextWindowPeer(TextView & view);
 
-    virtual ~TextWindowPeer() {}
+    virtual ~TextWindowPeer() override {}
 
     TextWindowPeer(const TextWindowPeer&) = delete;
     TextWindowPeer& operator=(const TextWindowPeer&) = delete;

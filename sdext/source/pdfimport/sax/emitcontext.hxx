@@ -38,7 +38,7 @@ namespace pdfi
     public:
         explicit SaxEmitter( const css::uno::Reference<
                                     css::xml::sax::XDocumentHandler >& xDocHdl );
-        virtual ~SaxEmitter();
+        virtual ~SaxEmitter() override;
 
         virtual void beginTag( const char* pTag, const PropertyMap& rProperties ) override;
         virtual void write( const OUString& rString ) override;

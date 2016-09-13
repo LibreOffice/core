@@ -38,7 +38,7 @@ class View3DConverter : public ConverterBase< View3DModel >
 {
 public:
     explicit            View3DConverter( const ConverterRoot& rParent, View3DModel& rModel );
-    virtual             ~View3DConverter();
+    virtual             ~View3DConverter() override;
 
     /** Converts the OOXML plot area model to a chart2 diagram. */
     void                convertFromModel(
@@ -53,7 +53,7 @@ class WallFloorConverter : public ConverterBase< WallFloorModel >
 {
 public:
     explicit            WallFloorConverter( const ConverterRoot& rParent, WallFloorModel& rModel );
-    virtual             ~WallFloorConverter();
+    virtual             ~WallFloorConverter() override;
 
     /** Converts the OOXML wall/floor model to a chart2 diagram. */
     void                convertFromModel(
@@ -68,7 +68,7 @@ class DataTableConverter : public ConverterBase< DataTableModel >
 {
 public:
     explicit            DataTableConverter( const ConverterRoot& rParent, DataTableModel& rModel );
-    virtual             ~DataTableConverter();
+    virtual             ~DataTableConverter() override;
 
     /** Converts the OOXML data table model to a chart2 diagram. */
     void                convertFromModel(
@@ -82,7 +82,7 @@ class PlotAreaConverter : public ConverterBase< PlotAreaModel >
 {
 public:
     explicit            PlotAreaConverter( const ConverterRoot& rParent, PlotAreaModel& rModel );
-    virtual             ~PlotAreaConverter();
+    virtual             ~PlotAreaConverter() override;
 
     /** Converts the OOXML plot area model to a chart2 diagram. */
     void                convertFromModel( View3DModel& rView3DModel );

@@ -319,7 +319,7 @@ public:
         sal_uInt16 nSubType = 0,
         sal_uLong nFormat = 0,
         bool bIsFormField = true );
-    virtual ~SwInputField();
+    virtual ~SwInputField() override;
 
     void SetFormatField( SwFormatField& rFormatField );
     SwFormatField* GetFormatField() { return mpFormatField;}

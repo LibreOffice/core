@@ -49,7 +49,7 @@ class ProgressLogImpl : public ::dp_misc::MutexHolder, public t_log_helper
 
 protected:
     virtual void SAL_CALL disposing() override;
-    virtual ~ProgressLogImpl();
+    virtual ~ProgressLogImpl() override;
 
 public:
     ProgressLogImpl( Sequence<Any> const & args,

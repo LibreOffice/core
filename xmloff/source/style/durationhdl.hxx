@@ -28,7 +28,7 @@
 class XMLDurationMS16PropHdl_Impl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLDurationMS16PropHdl_Impl();
+    virtual ~XMLDurationMS16PropHdl_Impl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

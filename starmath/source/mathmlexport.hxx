@@ -97,7 +97,7 @@ public:
     SmXMLExport(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLExportFlags nExportFlags);
-    virtual ~SmXMLExport() {};
+    virtual ~SmXMLExport() override {};
 
     // XUnoTunnel
     sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception) override;

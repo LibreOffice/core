@@ -192,7 +192,7 @@ public:
     virtual void setHeight( double nHeight ) override;
     virtual double getWidth() const override;
     virtual void setWidth( double nWidth) override;
-    virtual ~ConcreteXShapeGeometryAttributes();
+    virtual ~ConcreteXShapeGeometryAttributes() override;
 };
 
 #define VBA_LEFT "PositionX"

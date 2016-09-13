@@ -68,7 +68,7 @@ public:
     /** Creates a pivot cache field by reading an SXFIELD record. */
     explicit            XclImpPCField( const XclImpRoot& rRoot,
                             XclImpPivotCache& rPCache, sal_uInt16 nFieldIdx );
-    virtual             ~XclImpPCField();
+    virtual             ~XclImpPCField() override;
 
     // general field/item access ----------------------------------------------
 
@@ -144,7 +144,7 @@ class XclImpPivotCache : protected XclImpRoot
 {
 public:
     explicit            XclImpPivotCache( const XclImpRoot& rRoot );
-    virtual             ~XclImpPivotCache();
+    virtual             ~XclImpPivotCache() override;
 
     // data access ------------------------------------------------------------
 
@@ -297,7 +297,7 @@ class XclImpPivotTable : protected XclImpRoot
 {
 public:
     explicit            XclImpPivotTable( const XclImpRoot& rRoot );
-    virtual             ~XclImpPivotTable();
+    virtual             ~XclImpPivotTable() override;
 
     // cache/field access, misc. ----------------------------------------------
 
@@ -372,7 +372,7 @@ class XclImpPivotTableManager : protected XclImpRoot
 {
 public:
     explicit            XclImpPivotTableManager( const XclImpRoot& rRoot );
-    virtual             ~XclImpPivotTableManager();
+    virtual             ~XclImpPivotTableManager() override;
 
     // pivot cache records ----------------------------------------------------
 

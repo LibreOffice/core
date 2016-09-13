@@ -121,7 +121,7 @@ class BaseContainer : public BaseLock
 
         /** @short  standard dtor.
          */
-        virtual ~BaseContainer();
+        virtual ~BaseContainer() override;
 
 
         /** @short  initialize this generic intsnace with some specialized values

@@ -38,7 +38,7 @@ public:
         vcl::Window* pParent,
         const SdrObject* pObj1,
         const SdrObject* pObj2);
-    virtual ~MorphDlg();
+    virtual ~MorphDlg() override;
     virtual void dispose() override;
 
     void            SaveSettings() const;

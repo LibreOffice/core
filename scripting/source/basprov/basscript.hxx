@@ -77,7 +77,7 @@ namespace basprov
             BasicManager& documentBasicManager,
             const css::uno::Reference< css::document::XScriptInvocationContext >& documentScriptContext
         );
-        virtual ~BasicScriptImpl();
+        virtual ~BasicScriptImpl() override;
 
         // XInterface
         DECLARE_XINTERFACE()

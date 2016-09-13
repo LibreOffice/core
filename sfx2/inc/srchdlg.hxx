@@ -57,7 +57,7 @@ private:
 
 public:
     SearchDialog( vcl::Window* pWindow, const OUString& rConfigName );
-    virtual ~SearchDialog();
+    virtual ~SearchDialog() override;
     virtual void dispose() override;
 
     void         SetFindHdl( const Link<SearchDialog&,void>& rLink ) { m_aFindHdl = rLink; }

@@ -105,7 +105,7 @@ namespace pcr
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
        );
 
-        virtual ~EventHandler();
+        virtual ~EventHandler() override;
 
     protected:
         // XPropertyHandler overridables

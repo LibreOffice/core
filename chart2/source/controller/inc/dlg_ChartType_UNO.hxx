@@ -40,7 +40,7 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
     static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
 private:
-    virtual ~ChartTypeUnoDlg();
+    virtual ~ChartTypeUnoDlg() override;
 
     // OGenericUnoDialog overridables
     virtual void implInitialize(const css::uno::Any& _rValue) override;

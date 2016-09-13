@@ -28,7 +28,7 @@ class MeanValueRegressionCurveCalculator : public RegressionCurveCalculator
 {
 public:
     MeanValueRegressionCurveCalculator();
-    virtual ~MeanValueRegressionCurveCalculator();
+    virtual ~MeanValueRegressionCurveCalculator() override;
 
 protected:
     virtual OUString ImplGetRepresentation(

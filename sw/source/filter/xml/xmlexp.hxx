@@ -113,7 +113,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLExportFlags nExportFlags);
 
-    virtual ~SwXMLExport();
+    virtual ~SwXMLExport() override;
 
     virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
 

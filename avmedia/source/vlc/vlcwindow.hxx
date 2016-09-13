@@ -35,7 +35,7 @@ class VLCWindow : public ::cppu::WeakImplHelper< css::media::XPlayerWindow,
     css::awt::Rectangle   mSize;
 public:
     VLCWindow( VLCPlayer& player, const intptr_t prevWinID );
-    virtual ~VLCWindow();
+    virtual ~VLCWindow() override;
 
     void SAL_CALL update() throw (css::uno::RuntimeException, std::exception) override;
     sal_Bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel ) throw (css::uno::RuntimeException, std::exception) override;

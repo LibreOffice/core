@@ -55,7 +55,7 @@ namespace rptui
         // do not allow copy
         OXReportControllerObserver(const OXReportControllerObserver&) = delete;
         OXReportControllerObserver& operator=(const OXReportControllerObserver&) = delete;
-        virtual  ~OXReportControllerObserver(); // UNO Object must have private destructor!
+        virtual  ~OXReportControllerObserver() override; // UNO Object must have private destructor!
     public:
         OXReportControllerObserver(const OReportController& _rController);
 

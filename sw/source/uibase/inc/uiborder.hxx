@@ -33,7 +33,7 @@ public:
      // SW_BORDER_MODE_FRAME
 
      SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType);
-    virtual ~SwBorderDlg();
+    virtual ~SwBorderDlg() override;
 };
 
 #endif

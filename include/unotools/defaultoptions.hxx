@@ -35,7 +35,7 @@ private:
 public:
 
     SvtDefaultOptions();
-    virtual ~SvtDefaultOptions();
+    virtual ~SvtDefaultOptions() override;
 
     OUString  GetDefaultPath( sal_uInt16 nId ) const;
 };

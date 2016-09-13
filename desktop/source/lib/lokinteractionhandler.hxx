@@ -86,7 +86,7 @@ public:
             desktop::LibLibreOffice_Impl *,
             desktop::LibLODocument_Impl *pLOKDocumt = nullptr);
 
-    virtual ~LOKInteractionHandler();
+    virtual ~LOKInteractionHandler() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (com::sun::star::uno::RuntimeException, std::exception) override;

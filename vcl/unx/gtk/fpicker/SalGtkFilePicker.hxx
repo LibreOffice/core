@@ -263,7 +263,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         static void update_preview_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
         static void dialog_mapped_cb(GtkWidget *widget, SalGtkFilePicker *pobjFP);
     public:
-         virtual ~SalGtkFilePicker();
+         virtual ~SalGtkFilePicker() override;
 
 };
 #endif // INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKFILEPICKER_HXX

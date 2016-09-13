@@ -41,7 +41,7 @@ namespace dbaui
     {
     protected:
         OSingleDocumentController( const css::uno::Reference< css::uno::XComponentContext>& _rxORB );
-        virtual ~OSingleDocumentController();
+        virtual ~OSingleDocumentController() override;
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;

@@ -48,7 +48,7 @@ namespace framework
 
         public:
             LanguageSelectionMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~LanguageSelectionMenuController();
+            virtual ~LanguageSelectionMenuController() override;
 
             // XServiceInfo
             DECLARE_XSERVICEINFO

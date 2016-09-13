@@ -46,7 +46,7 @@ private:
 
 public:
     FontworkBar(SfxViewShell* pViewShell);
-    virtual ~FontworkBar();
+    virtual ~FontworkBar() override;
 
     static void execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBindings );
     static void getState( SdrView* pSdrView, SfxItemSet& rSet );

@@ -46,7 +46,7 @@ namespace framework
 
         public:
             FontSizeMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~FontSizeMenuController();
+            virtual ~FontSizeMenuController() override;
 
             // XServiceInfo
             DECLARE_XSERVICEINFO

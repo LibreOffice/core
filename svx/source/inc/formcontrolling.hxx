@@ -182,7 +182,7 @@ namespace svx
 
     protected:
         /// dtor
-        virtual ~FormControllerHelper();
+        virtual ~FormControllerHelper() override;
 
         // XFeatureInvalidation
         virtual void SAL_CALL invalidateFeatures( const css::uno::Sequence< ::sal_Int16 >& Features ) throw (css::uno::RuntimeException, std::exception) override;

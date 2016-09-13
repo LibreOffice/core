@@ -60,7 +60,7 @@ private:
     using OutputDevice::SetDrawMode;
 public:
             SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs);
-            virtual ~SdPrintOptions();
+            virtual ~SdPrintOptions() override;
     virtual void dispose() override;
 
     static  VclPtr<SfxTabPage> Create( vcl::Window*, const SfxItemSet* );

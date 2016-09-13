@@ -46,7 +46,7 @@ public:
     /// @@@ copy construction allowed, but assigment is not? @@@
     SwFormatURL( const SwFormatURL& );
 
-    virtual ~SwFormatURL();
+    virtual ~SwFormatURL() override;
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;

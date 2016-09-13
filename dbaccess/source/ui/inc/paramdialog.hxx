@@ -83,7 +83,7 @@ namespace dbaui
             const css::uno::Reference< css::container::XIndexAccess > & _rParamContainer,
             const css::uno::Reference< css::sdbc::XConnection > & _rxConnection,
             const css::uno::Reference< css::uno::XComponentContext >& rxContext);
-        virtual ~OParameterDialog();
+        virtual ~OParameterDialog() override;
         virtual void dispose() override;
 
         const css::uno::Sequence< css::beans::PropertyValue >&

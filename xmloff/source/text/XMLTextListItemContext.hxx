@@ -45,7 +45,7 @@ public:
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             const bool bIsHeader = false );
-    virtual ~XMLTextListItemContext();
+    virtual ~XMLTextListItemContext() override;
 
     virtual void EndElement() override;
 

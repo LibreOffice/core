@@ -85,7 +85,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 {
     public:
          SvtCompatibilityOptions();
-        virtual ~SvtCompatibilityOptions();
+        virtual ~SvtCompatibilityOptions() override;
 
         //  interface
 

@@ -73,7 +73,7 @@ public:
                           sal_uInt16 nPrefix,
                           const OUString& rLocalName,
                           ::std::vector< OUString > & rAddresses );
-    virtual ~SchXMLDomain2Context();
+    virtual ~SchXMLDomain2Context() override;
     virtual void StartElement( const Reference< xml::sax::XAttributeList >& xAttrList ) override;
 };
 

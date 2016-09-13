@@ -59,7 +59,7 @@ class Oxt_Handler  :    public  ::cppu::WeakImplHelper<
     public:
 
                  Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
-        virtual ~Oxt_Handler(                                                                        );
+        virtual ~Oxt_Handler(                                                                        ) override;
 
         //  XInterface, XTypeProvider, XServiceInfo
 

@@ -40,7 +40,7 @@ namespace connectivity
                   ::std::vector<sal_Int32>        m_aEvoabFields;
 
         protected:
-            virtual ~OEvoabResultSetMetaData();
+            virtual ~OEvoabResultSetMetaData() override;
         public:
           explicit OEvoabResultSetMetaData(const OUString& _aTableName);
           void setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(css::sdbc::SQLException);

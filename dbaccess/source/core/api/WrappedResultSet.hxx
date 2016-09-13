@@ -37,7 +37,7 @@ namespace dbaccess
     public:
         explicit WrappedResultSet(sal_Int32 i_nMaxRows) : OCacheSet(i_nMaxRows)
         {}
-        virtual ~WrappedResultSet()
+        virtual ~WrappedResultSet() override
         {
             m_xRowLocate = nullptr;
         }

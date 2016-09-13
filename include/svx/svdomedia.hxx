@@ -39,7 +39,7 @@ public:
                                     SdrMediaObj();
                                     SdrMediaObj( const Rectangle& rRect );
 
-        virtual                     ~SdrMediaObj();
+        virtual                     ~SdrMediaObj() override;
 
         virtual bool                HasTextEdit() const override;
 

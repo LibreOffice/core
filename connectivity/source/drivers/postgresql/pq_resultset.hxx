@@ -76,7 +76,7 @@ public:
         PGresult *result,
         const OUString &schema,
         const OUString &table );
-    virtual ~ResultSet();
+    virtual ~ResultSet() override;
 
 public: // XCloseable
     virtual void SAL_CALL close(  )

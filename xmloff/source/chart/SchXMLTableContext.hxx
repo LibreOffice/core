@@ -51,7 +51,7 @@ public:
                         SvXMLImport& rImport,
                         const OUString& rLocalName,
                         SchXMLTable& aTable );
-    virtual ~SchXMLTableContext();
+    virtual ~SchXMLTableContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
@@ -95,7 +95,7 @@ public:
     SchXMLTableColumnsContext( SvXMLImport& rImport,
                                const OUString& rLocalName,
                                SchXMLTable& aTable );
-    virtual ~SchXMLTableColumnsContext();
+    virtual ~SchXMLTableColumnsContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
@@ -112,7 +112,7 @@ public:
     SchXMLTableColumnContext( SvXMLImport& rImport,
                               const OUString& rLocalName,
                               SchXMLTable& aTable );
-    virtual ~SchXMLTableColumnContext();
+    virtual ~SchXMLTableColumnContext() override;
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
@@ -129,7 +129,7 @@ public:
                             SvXMLImport& rImport,
                             const OUString& rLocalName,
                             SchXMLTable& aTable );
-    virtual ~SchXMLTableRowsContext();
+    virtual ~SchXMLTableRowsContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
@@ -148,7 +148,7 @@ public:
                            SvXMLImport& rImport,
                            const OUString& rLocalName,
                            SchXMLTable& aTable );
-    virtual ~SchXMLTableRowContext();
+    virtual ~SchXMLTableRowContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
@@ -172,7 +172,7 @@ public:
                             SvXMLImport& rImport,
                             const OUString& rLocalName,
                             SchXMLTable& aTable );
-    virtual ~SchXMLTableCellContext();
+    virtual ~SchXMLTableCellContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,

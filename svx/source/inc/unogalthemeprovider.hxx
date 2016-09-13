@@ -36,7 +36,7 @@ class GalleryThemeProvider : public ::cppu::WeakImplHelper< css::lang::XInitiali
 public:
 
     GalleryThemeProvider();
-    virtual ~GalleryThemeProvider();
+    virtual ~GalleryThemeProvider() override;
 
 protected:
 

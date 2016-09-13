@@ -84,7 +84,7 @@ class ValueSetAcc :
 public:
 
     explicit ValueSetAcc(ValueSet* pParent);
-    virtual ~ValueSetAcc();
+    virtual ~ValueSetAcc() override;
 
     void                FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     bool                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
@@ -210,7 +210,7 @@ private:
 public:
 
     ValueItemAcc( ValueSetItem* pParent, bool bIsTransientChildrenDisabled );
-    virtual ~ValueItemAcc();
+    virtual ~ValueItemAcc() override;
 
     void    ParentDestroyed();
 

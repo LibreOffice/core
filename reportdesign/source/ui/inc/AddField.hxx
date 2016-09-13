@@ -80,7 +80,7 @@ public:
     OAddFieldWindow(vcl::Window* pParent
                     , const css::uno::Reference< css::beans::XPropertySet >& _xRowSet);
 
-    virtual ~OAddFieldWindow();
+    virtual ~OAddFieldWindow() override;
     virtual void dispose() override;
     virtual void Resize() override;
     virtual void GetFocus() override;

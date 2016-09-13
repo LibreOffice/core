@@ -58,7 +58,7 @@ class SwXAutoTextContainer : public cppu::WeakImplHelper
     SwGlossaries *pGlossaries;
 
 protected:
-    virtual ~SwXAutoTextContainer();    // ref-counted objects are not to be deleted from outside -> protected dtor
+    virtual ~SwXAutoTextContainer() override;    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
     SwXAutoTextContainer();
@@ -103,7 +103,7 @@ class SwXAutoTextGroup : public cppu::WeakImplHelper
     OUString                m_sGroupName;   // prefix m_ to disambiguate from some local vars in the implementation
 
 protected:
-    virtual ~SwXAutoTextGroup();    // ref-counted objects are not to be deleted from outside -> protected dtor
+    virtual ~SwXAutoTextGroup() override;    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
         SwXAutoTextGroup(const OUString& rName, SwGlossaries* pGloss);
@@ -196,7 +196,7 @@ protected:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 protected:
-    virtual ~SwXAutoTextEntry();    // ref-counted objects are not to be deleted from outside -> protected dtor
+    virtual ~SwXAutoTextEntry() override;    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
     SwXAutoTextEntry(SwGlossaries* , const OUString& rGroupName, const OUString& rEntryName);
@@ -251,7 +251,7 @@ class SwAutoTextEventDescriptor : public SvBaseEventDescriptor
 public:
     SwAutoTextEventDescriptor(  SwXAutoTextEntry& rAutoText );
 
-    virtual ~SwAutoTextEventDescriptor();
+    virtual ~SwAutoTextEventDescriptor() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw( css::uno::RuntimeException, std::exception ) override;

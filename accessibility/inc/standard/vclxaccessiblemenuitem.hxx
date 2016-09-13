@@ -57,7 +57,7 @@ protected:
 
 public:
     VCLXAccessibleMenuItem( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = nullptr );
-    virtual ~VCLXAccessibleMenuItem();
+    virtual ~VCLXAccessibleMenuItem() override;
 
     // XInterface
     DECLARE_XINTERFACE()

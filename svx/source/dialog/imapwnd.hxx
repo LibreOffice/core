@@ -68,7 +68,7 @@ public:
                                 SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA ),
                                 mpObj           ( rIMapUserData.mpObj ) {}
 
-                            virtual ~IMapUserData() { }
+                            virtual ~IMapUserData() override { }
 
     virtual SdrObjUserData* Clone( SdrObject * ) const override { return new IMapUserData( *this ); }
 
@@ -116,7 +116,7 @@ protected:
 public:
 
                         IMapWindow( vcl::Window* pParent, WinBits nBits, const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame );
-                        virtual ~IMapWindow();
+                        virtual ~IMapWindow() override;
     virtual void        dispose() override;
 
     void                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );

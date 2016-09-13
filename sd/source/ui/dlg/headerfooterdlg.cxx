@@ -75,7 +75,7 @@ private:
 
 public:
     explicit PresLayoutPreview(vcl::Window* pParent);
-    virtual ~PresLayoutPreview();
+    virtual ~PresLayoutPreview() override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
     virtual Size GetOptimalSize() const override;
@@ -153,7 +153,7 @@ private:
 
 public:
     HeaderFooterTabPage( vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode );
-    virtual ~HeaderFooterTabPage();
+    virtual ~HeaderFooterTabPage() override;
     virtual void dispose() override;
 
     void    init( const HeaderFooterSettings& rSettings, bool bNotOnTitle );

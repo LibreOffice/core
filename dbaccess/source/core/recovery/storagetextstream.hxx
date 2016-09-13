@@ -37,7 +37,7 @@ namespace dbaccess
             const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
-        virtual ~StorageTextOutputStream();
+        virtual ~StorageTextOutputStream() override;
 
         void    writeLine( const OUString& i_rLine );
         void    writeLine();

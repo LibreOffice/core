@@ -55,7 +55,7 @@ public:
             const css::uno::Reference< css::beans::XPropertySet > & rPageStylePropSet,
                bool bFooter, bool bLft );
 
-    virtual ~XMLTableHeaderFooterContext();
+    virtual ~XMLTableHeaderFooterContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
@@ -78,7 +78,7 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             css::uno::Reference< css::text::XTextCursor >& xCursor );
 
-    virtual ~XMLHeaderFooterRegionContext();
+    virtual ~XMLHeaderFooterRegionContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,

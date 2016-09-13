@@ -288,7 +288,7 @@ public:
         const css::uno::Reference< css::frame::XModel > &,
         FieldUnit const eDefaultFieldUnit );
 
-    virtual ~SvXMLExport();
+    virtual ~SvXMLExport() override;
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
     static SvXMLExport* getImplementation( const css::uno::Reference< css::uno::XInterface >& ) throw();

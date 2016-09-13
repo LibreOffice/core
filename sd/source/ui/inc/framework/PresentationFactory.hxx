@@ -57,7 +57,7 @@ public:
 
     PresentationFactory (
         const css::uno::Reference<css::frame::XController>& rxController);
-    virtual ~PresentationFactory();
+    virtual ~PresentationFactory() override;
 
     virtual void SAL_CALL disposing() override;
 

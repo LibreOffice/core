@@ -39,7 +39,7 @@ private:
 
 public:
                             ScCellSearchObj();
-    virtual                 ~ScCellSearchObj();
+    virtual                 ~ScCellSearchObj() override;
 
     SvxSearchItem*          GetSearchItem() const       { return pSearchItem; }
 

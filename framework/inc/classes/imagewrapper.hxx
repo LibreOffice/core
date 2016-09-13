@@ -36,7 +36,7 @@ class FWE_DLLPUBLIC ImageWrapper :
 {
     public:
         ImageWrapper( const Image& aImage );
-        virtual ~ImageWrapper();
+        virtual ~ImageWrapper() override;
 
         const Image&    GetImage() const
         {

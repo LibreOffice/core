@@ -65,7 +65,7 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper
 
 public:
     SwXDispatchProviderInterceptor(SwView& rView);
-    virtual ~SwXDispatchProviderInterceptor();
+    virtual ~SwXDispatchProviderInterceptor() override;
 
     //XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(css::uno::RuntimeException, std::exception) override;
@@ -109,7 +109,7 @@ class SwXDispatch : public cppu::WeakImplHelper
     bool            m_bListenerAdded;
 public:
     SwXDispatch(SwView& rView);
-    virtual ~SwXDispatch();
+    virtual ~SwXDispatch() override;
 
     virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
         throw (css::uno::RuntimeException,

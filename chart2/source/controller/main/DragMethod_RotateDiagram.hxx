@@ -42,7 +42,7 @@ public:
         , const css::uno::Reference< css::frame::XModel >& xChartModel
         , RotationDirection eRotationDirection
         );
-    virtual ~DragMethod_RotateDiagram();
+    virtual ~DragMethod_RotateDiagram() override;
 
     virtual void TakeSdrDragComment(OUString& rStr) const override;
 

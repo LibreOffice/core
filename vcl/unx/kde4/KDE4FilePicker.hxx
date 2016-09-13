@@ -80,7 +80,7 @@ protected:
 
 public:
     explicit KDE4FilePicker( const css::uno::Reference< css::uno::XComponentContext >& );
-    virtual ~KDE4FilePicker();
+    virtual ~KDE4FilePicker() override;
 
     // XFilePickerNotifier
     virtual void SAL_CALL addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) throw( css::uno::RuntimeException, std::exception ) override;

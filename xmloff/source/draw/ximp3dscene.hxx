@@ -43,7 +43,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes,
         bool bTemporaryShape);
-    virtual ~SdXML3DSceneShapeContext();
+    virtual ~SdXML3DSceneShapeContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
     virtual void EndElement() override;

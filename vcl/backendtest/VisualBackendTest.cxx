@@ -127,7 +127,7 @@ public:
         }
     }
 
-    virtual ~VisualBackendTestWindow()
+    virtual ~VisualBackendTestWindow() override
     {
         disposeOnce();
     }

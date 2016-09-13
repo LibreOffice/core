@@ -34,7 +34,7 @@ private:
 public:
     HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
                        const css::uno::Reference< css::frame::XDispatch >& _xDisp );
-    virtual ~HelpDispatch_Impl();
+    virtual ~HelpDispatch_Impl() override;
 
     // XDispatch
     virtual void SAL_CALL   dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw(css::uno::RuntimeException, std::exception) override;

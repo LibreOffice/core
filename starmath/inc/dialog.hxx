@@ -72,7 +72,7 @@ public:
     static VclPtr<SfxTabPage> Create(vcl::Window *pWindow, const SfxItemSet &rSet);
 
     SmPrintOptionsTabPage(vcl::Window *pParent, const SfxItemSet &rOptions);
-    virtual ~SmPrintOptionsTabPage();
+    virtual ~SmPrintOptionsTabPage() override;
     virtual void dispose() override;
 };
 
@@ -111,7 +111,7 @@ class SmFontDialog : public ModalDialog
 
 public:
     SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes);
-    virtual ~SmFontDialog();
+    virtual ~SmFontDialog() override;
     virtual void dispose() override;
 
     const vcl::Font& GetFont() const
@@ -137,7 +137,7 @@ class SmFontSizeDialog : public ModalDialog
 
 public:
     SmFontSizeDialog(vcl::Window *pParent);
-    virtual ~SmFontSizeDialog();
+    virtual ~SmFontSizeDialog() override;
     virtual void dispose() override;
 
     void ReadFrom(const SmFormat &rFormat);
@@ -165,7 +165,7 @@ class SmFontTypeDialog : public ModalDialog
 
 public:
     SmFontTypeDialog(vcl::Window *pParent, OutputDevice *pFntListDevice);
-    virtual ~SmFontTypeDialog();
+    virtual ~SmFontTypeDialog() override;
     virtual void dispose() override;
 
     void ReadFrom(const SmFormat &rFormat);
@@ -234,7 +234,7 @@ class SmDistanceDialog : public ModalDialog
 
 public:
     SmDistanceDialog(vcl::Window *pParent);
-    virtual ~SmDistanceDialog();
+    virtual ~SmDistanceDialog() override;
     virtual void dispose() override;
 
     void ReadFrom(const SmFormat &rFormat);
@@ -259,7 +259,7 @@ class SmAlignDialog : public ModalDialog
 
 public:
     SmAlignDialog(vcl::Window *pParent);
-    virtual ~SmAlignDialog();
+    virtual ~SmAlignDialog() override;
     virtual void dispose() override;
 
     void ReadFrom(const SmFormat &rFormat);
@@ -291,7 +291,7 @@ class SmShowSymbolSetWindow : public Control
     DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
 public:
     SmShowSymbolSetWindow(vcl::Window *pParent, WinBits nStyle);
-    virtual ~SmShowSymbolSetWindow();
+    virtual ~SmShowSymbolSetWindow() override;
     virtual void dispose() override;
     void setScrollbar(ScrollBar *pVScrollBar);
     void calccols();
@@ -309,7 +309,7 @@ class SmShowSymbolSet : public VclHBox
 
 public:
     SmShowSymbolSet(vcl::Window *pParent);
-    virtual ~SmShowSymbolSet();
+    virtual ~SmShowSymbolSet() override;
     virtual void dispose() override;
 
     void    SetSymbolSet(const SymbolPtrVec_t& rSymbolSet) { aSymbolWindow->SetSymbolSet(rSymbolSet); }
@@ -377,7 +377,7 @@ class SmSymbolDialog : public ModalDialog
 public:
     SmSymbolDialog(vcl::Window * pParent, OutputDevice *pFntListDevice,
             SmSymbolManager &rSymbolMgr, SmViewShell &rViewShell);
-    virtual ~SmSymbolDialog();
+    virtual ~SmSymbolDialog() override;
     virtual void dispose() override;
 
     bool    SelectSymbolSet(const OUString &rSymbolSetName);
@@ -467,7 +467,7 @@ class SmSymDefineDialog : public ModalDialog
 
 public:
     SmSymDefineDialog(vcl::Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr);
-    virtual ~SmSymDefineDialog();
+    virtual ~SmSymDefineDialog() override;
     virtual void dispose() override;
 
     using OutputDevice::SetFont;

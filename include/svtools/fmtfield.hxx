@@ -265,7 +265,7 @@ public:
         ResetConformanceTester();
     }
 
-    virtual ~DoubleNumericField();
+    virtual ~DoubleNumericField() override;
     virtual void dispose() override;
 
 protected:

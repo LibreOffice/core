@@ -34,7 +34,7 @@ protected:
 public:
     RSCINST aInst;
     RscInstNode( sal_uInt32 nId );
-    virtual ~RscInstNode();
+    virtual ~RscInstNode() override;
     virtual sal_uInt32  GetId() const override;
     RscInstNode *   Left() const { return static_cast<RscInstNode *>(pLeft); };
     RscInstNode *   Right() const{ return static_cast<RscInstNode *>(pRight); };
@@ -61,7 +61,7 @@ protected:
 public:
                     RscArray( Atom nId, sal_uInt32 nTypId,
                               RscTop * pSuper, RscEnum * pTypeClass );
-                    virtual ~RscArray();
+                    virtual ~RscArray() override;
     virtual RSCCLASS_TYPE   GetClassType() const override;
 
     virtual RscTop *    GetTypeClass() const override;
@@ -96,7 +96,7 @@ class RscClassArray : public RscArray
 public:
                     RscClassArray( Atom nId, sal_uInt32 nTypId,
                                    RscTop * pSuper, RscEnum * pTypeClass );
-                    virtual ~RscClassArray();
+                    virtual ~RscClassArray() override;
     virtual void    WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
                                     RscTypCont * pTC, sal_uInt32 nTab,
                                     const RscId & aId, const char * ) override;

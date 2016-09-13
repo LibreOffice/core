@@ -41,7 +41,7 @@ public:
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
 
-    virtual ~AccessibleGraphicShape();
+    virtual ~AccessibleGraphicShape() override;
 
     //=====  XAccessibleImage  ================================================
 

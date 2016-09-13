@@ -53,7 +53,7 @@ class GridProperties :
 public:
     explicit GridProperties( css::uno::Reference< css::uno::XComponentContext > const & xContext );
     explicit GridProperties();
-    virtual ~GridProperties();
+    virtual ~GridProperties() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

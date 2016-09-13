@@ -115,7 +115,7 @@ protected:
 
 public:
     SvpSalGraphics();
-    virtual ~SvpSalGraphics();
+    virtual ~SvpSalGraphics() override;
 
     virtual SalGraphicsImpl* GetImpl() const override { return nullptr; };
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;

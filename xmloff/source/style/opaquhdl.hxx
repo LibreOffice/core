@@ -28,7 +28,7 @@
 class XMLOpaquePropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLOpaquePropHdl();
+    virtual ~XMLOpaquePropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

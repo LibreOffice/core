@@ -373,7 +373,7 @@ class MainSequence : public EffectSequenceHelper, public ISequenceListener
 public:
     MainSequence();
     MainSequence( const css::uno::Reference< css::animations::XAnimationNode >& xTimingRootNode );
-    virtual ~MainSequence();
+    virtual ~MainSequence() override;
 
     virtual css::uno::Reference< css::animations::XAnimationNode > getRootNode() override;
     void reset( const css::uno::Reference< css::animations::XAnimationNode >& xTimingRootNode );

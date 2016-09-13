@@ -69,7 +69,7 @@ class SwNumNamesDlg : public ModalDialog
 
 public:
     explicit SwNumNamesDlg(vcl::Window *pParent);
-    virtual ~SwNumNamesDlg();
+    virtual ~SwNumNamesDlg() override;
     virtual void dispose() override;
     void SetUserNames(const OUString *pList[]);
     OUString GetName() const { return m_pFormEdit->GetText(); }

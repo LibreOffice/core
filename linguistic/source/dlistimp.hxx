@@ -88,7 +88,7 @@ class DicList :
 
 public:
     DicList();
-    virtual ~DicList();
+    virtual ~DicList() override;
 
     // XDictionaryList
     virtual ::sal_Int16 SAL_CALL getCount(  ) throw (css::uno::RuntimeException, std::exception) override;

@@ -86,7 +86,7 @@ protected:
 
 public:
     AccessibleDialogControlShape (DialogWindow*, DlgEdObj*);
-    virtual ~AccessibleDialogControlShape();
+    virtual ~AccessibleDialogControlShape() override;
 
     // XInterface
     DECLARE_XINTERFACE()

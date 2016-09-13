@@ -73,7 +73,7 @@ public:
         ,m_bAllowViews(true)
     {
     }
-    virtual ~TableListFacade();
+    virtual ~TableListFacade() override;
 
 private:
     virtual void    updateTableObjectList( bool _bAllowViews ) override;
@@ -233,7 +233,7 @@ public:
         ,m_xConnection( _rxConnection )
     {
     }
-    virtual ~QueryListFacade();
+    virtual ~QueryListFacade() override;
 
 private:
     virtual void    updateTableObjectList( bool _bAllowViews ) override;

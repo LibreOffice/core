@@ -52,7 +52,7 @@ public:
         const css::uno::Reference< css::chart2::data::XDataSequence > & rValues,
         const css::uno::Reference< css::chart2::data::XDataSequence > & rLabels );
 
-    virtual ~LabeledDataSequence();
+    virtual ~LabeledDataSequence() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()

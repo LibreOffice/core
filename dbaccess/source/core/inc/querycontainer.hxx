@@ -90,7 +90,7 @@ namespace dbaccess
 
         // helper
         virtual void SAL_CALL disposing() override;
-        virtual ~OQueryContainer();
+        virtual ~OQueryContainer() override;
 
         /** ctor of the container. The parent has to support the <type scope="css::sdbc">XConnection</type>
             interface.<BR>

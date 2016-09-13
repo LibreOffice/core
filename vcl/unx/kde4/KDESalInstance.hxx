@@ -28,7 +28,7 @@ class KDESalInstance : public X11SalInstance
 {
     public:
         explicit KDESalInstance(SalYieldMutex* pMutex);
-        virtual ~KDESalInstance() {}
+        virtual ~KDESalInstance() override {}
         virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
 
         virtual bool hasNativeFileSelection() const override { return true; }

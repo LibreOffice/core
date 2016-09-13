@@ -31,7 +31,7 @@ public:
         , m_exprType(type)
         {}
 
-    virtual ~AstBaseType() {}
+    virtual ~AstBaseType() override {}
 
     virtual bool isUnsigned() const override {
         switch (m_exprType) {

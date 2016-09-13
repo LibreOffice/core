@@ -46,7 +46,7 @@ public:
                            sal_uInt16 nPrfx,
                            const OUString& rLName,
                            const css::uno::Reference<css::xforms::XModel2> & xModel );
-    virtual ~XFormsInstanceContext();
+    virtual ~XFormsInstanceContext() override;
 
     // implement SvXMLImportContext & TokenContext methods:
     // We override CreateChildContext, because we want to read

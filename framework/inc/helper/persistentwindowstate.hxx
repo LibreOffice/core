@@ -76,7 +76,7 @@ class PersistentWindowState :   public  ::cppu::WeakImplHelper<
 
         // ctor/dtor
                  PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-        virtual ~PersistentWindowState(                                                                   );
+        virtual ~PersistentWindowState(                                                                   ) override;
 
         // XInitialization
         virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)

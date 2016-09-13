@@ -31,7 +31,7 @@ namespace cmis
 
             StdOutputStream( boost::shared_ptr< std::ostream > const & pStream );
 
-            virtual ~StdOutputStream( );
+            virtual ~StdOutputStream( ) override;
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
                 throw ( css::uno::RuntimeException, std::exception ) override;

@@ -32,7 +32,7 @@ class Linear3DTransformation : public ::cppu::WeakImplHelper<
 {
 public:
     Linear3DTransformation( const css::drawing::HomogenMatrix& rHomMatrix, bool bSwapXAndY  );
-    virtual ~Linear3DTransformation();
+    virtual ~Linear3DTransformation() override;
 
     // ____ XTransformation ____
     /// @see css::chart2::XTransformation

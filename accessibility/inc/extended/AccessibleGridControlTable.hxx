@@ -43,7 +43,7 @@ public:
             ::svt::table::IAccessibleTable& rTable);
 
 protected:
-    virtual ~AccessibleGridControlTable();
+    virtual ~AccessibleGridControlTable() override;
 private:
     std::vector< AccessibleGridControlTableCell* > m_pCellVector;
     std::vector< css::uno::Reference< css::accessibility::XAccessible> > m_pAccessCellVector;

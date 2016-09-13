@@ -32,7 +32,7 @@ class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
 {
  public:
     SalGenericSystem();
-    virtual ~SalGenericSystem();
+    virtual ~SalGenericSystem() override;
     virtual int ShowNativeDialog( const OUString& rTitle,
                                   const OUString& rMessage,
                                   const std::list< OUString >& rButtons,

@@ -117,7 +117,7 @@ protected:
 
 public:
             ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh );
-            virtual ~ScPreview();
+            virtual ~ScPreview() override;
     virtual void dispose() override;
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;

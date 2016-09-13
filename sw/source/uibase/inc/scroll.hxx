@@ -49,7 +49,7 @@ public:
     bool    IsAuto() { return bAuto;}
 
     SwScrollbar(vcl::Window *pParent, bool bHori = true );
-    virtual ~SwScrollbar();
+    virtual ~SwScrollbar() override;
 };
 
 #endif

@@ -52,7 +52,7 @@ namespace sdr
 
         public:
             ViewObjectContactOfE3d(ObjectContact& rObjectContact, ViewContact& rViewContact);
-            virtual ~ViewObjectContactOfE3d();
+            virtual ~ViewObjectContactOfE3d() override;
 
             // access to the local primitive sequence. This will ensure that the list is
             // current in comparing the local list content with a fresh created incarnation

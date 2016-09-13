@@ -40,7 +40,7 @@ namespace sdr
             ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact,
                                             ViewContact& rViewContact,
                                             const ::avmedia::MediaItem& rMediaItem );
-            virtual ~ViewObjectContactOfSdrMediaObj();
+            virtual ~ViewObjectContactOfSdrMediaObj() override;
 
         public:
 

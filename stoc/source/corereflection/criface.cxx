@@ -339,7 +339,7 @@ public:
         , _pParamTypes( nullptr )
         , _pParamInfos( nullptr )
         {}
-    virtual ~IdlInterfaceMethodImpl();
+    virtual ~IdlInterfaceMethodImpl() override;
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type & rType ) throw(css::uno::RuntimeException, std::exception) override;

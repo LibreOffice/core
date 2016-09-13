@@ -48,7 +48,7 @@ public:
     SvXMLAttributeList( const SvXMLAttributeList& );
     SvXMLAttributeList( const css::uno::Reference<
         css::xml::sax::XAttributeList> & rAttrList );
-    virtual ~SvXMLAttributeList();
+    virtual ~SvXMLAttributeList() override;
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
     static SvXMLAttributeList* getImplementation( const css::uno::Reference< css::uno::XInterface >& ) throw();

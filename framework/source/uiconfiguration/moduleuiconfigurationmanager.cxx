@@ -78,7 +78,7 @@ public:
             const css::uno::Reference< css::uno::XComponentContext >& xServiceManager,
             const css::uno::Sequence< css::uno::Any >& aArguments);
 
-    virtual ~ModuleUIConfigurationManager();
+    virtual ~ModuleUIConfigurationManager() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

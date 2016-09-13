@@ -49,7 +49,7 @@ namespace pcr
         static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
 
     protected:
-        virtual ~XSDValidationPropertyHandler();
+        virtual ~XSDValidationPropertyHandler() override;
 
     protected:
         // XPropertyHandler overriables

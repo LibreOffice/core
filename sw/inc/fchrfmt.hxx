@@ -35,7 +35,7 @@ class SW_DLLPUBLIC SwFormatCharFormat: public SfxPoolItem, public SwClient
 public:
     /// single argument ctors shall be explicit.
     explicit SwFormatCharFormat( SwCharFormat *pFormat );
-    virtual ~SwFormatCharFormat();
+    virtual ~SwFormatCharFormat() override;
 
     /// @@@ public copy ctor, but no copy assignment?
     SwFormatCharFormat( const SwFormatCharFormat& rAttr );

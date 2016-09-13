@@ -73,7 +73,7 @@ public:
         const OUString& rLocalName,
         css::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
-    virtual ~XMLIndexAlphabeticalSourceContext();
+    virtual ~XMLIndexAlphabeticalSourceContext() override;
 
 protected:
 

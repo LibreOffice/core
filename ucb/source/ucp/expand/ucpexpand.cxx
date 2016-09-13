@@ -69,7 +69,7 @@ public:
           m_xComponentContext( xComponentContext ),
           m_xMacroExpander( util::theMacroExpander::get(xComponentContext) )
         {}
-    virtual ~ExpandContentProviderImpl() throw ();
+    virtual ~ExpandContentProviderImpl() throw () override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

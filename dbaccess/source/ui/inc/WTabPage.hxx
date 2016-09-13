@@ -35,7 +35,7 @@ namespace dbaui
         OWizardPage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription );
 
     public:
-        virtual ~OWizardPage();
+        virtual ~OWizardPage() override;
         virtual void dispose() override;
         virtual void        Reset ( )           = 0;
         virtual bool    LeavePage()         = 0;

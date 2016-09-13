@@ -68,7 +68,7 @@ namespace connectivity
         std::vector< VectorVal > m_vector;
 
     protected:
-        virtual ~ORefVector(){}
+        virtual ~ORefVector() override {}
     public:
         typedef std::vector< VectorVal > Vector;
 

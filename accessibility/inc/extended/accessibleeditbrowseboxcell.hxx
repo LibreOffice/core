@@ -48,7 +48,7 @@ namespace accessibility
         );
 
     protected:
-        virtual ~EditBrowseBoxTableCell();
+        virtual ~EditBrowseBoxTableCell() override;
 
     protected:
         // XAccessibleComponent
@@ -123,7 +123,7 @@ namespace accessibility
         );
 
     protected:
-        virtual ~EditBrowseBoxTableCellAccess();
+        virtual ~EditBrowseBoxTableCellAccess() override;
 
         // XAccessible
         virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) override;

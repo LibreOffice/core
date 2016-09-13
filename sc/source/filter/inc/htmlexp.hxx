@@ -177,7 +177,7 @@ class ScHTMLExport : public ScExportBase
 public:
                         ScHTMLExport( SvStream&, const OUString&, ScDocument*, const ScRange&,
                                       bool bAll, const OUString& aStreamPath, const OUString& rFilterOptions );
-    virtual             ~ScHTMLExport();
+    virtual             ~ScHTMLExport() override;
     void                Write();
     const OUString&     GetNonConvertibleChars() const
     {

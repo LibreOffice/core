@@ -61,7 +61,7 @@ namespace accessibility
             ::svt::AccessibleBrowseBoxObjType _eType = ::svt::BBTYPE_TABLECELL
         );
 
-        virtual ~AccessibleBrowseBoxCell();
+        virtual ~AccessibleBrowseBoxCell() override;
 
     private:
         AccessibleBrowseBoxCell( const AccessibleBrowseBoxCell& ) = delete;

@@ -38,7 +38,7 @@ public:
     PasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMinPasswdLen,
             sal_uInt16 nMaxPasswdLen /* 0 -> no max len enforced */,
             bool bIsPasswordToModify );
-    virtual ~PasswordToOpenModifyDialog();
+    virtual ~PasswordToOpenModifyDialog() override;
 
     // AbstractPasswordToOpenModifyDialog
     OUString  GetPasswordToOpen() const;

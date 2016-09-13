@@ -54,7 +54,7 @@ class OInstanceLocker : public ::cppu::WeakImplHelper< css::lang::XComponent,
 
 public:
     explicit OInstanceLocker();
-    virtual ~OInstanceLocker();
+    virtual ~OInstanceLocker() override;
 
 // XComponent
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
@@ -92,7 +92,7 @@ public:
                     sal_Int32 nMode,
                     const css::uno::Reference< css::embed::XActionsApproval >& rApproval );
 
-    virtual ~OLockListener();
+    virtual ~OLockListener() override;
 
     void Init();
     void Dispose();

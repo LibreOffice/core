@@ -42,7 +42,7 @@ public:
     AttributeList();
     AttributeList(const AttributeList &r);
 
-    virtual ~AttributeList();
+    virtual ~AttributeList() override;
 
     // methods that are not contained in any interface
     void AddAttribute(const OUString &sName , const OUString &sType , const OUString &sValue);

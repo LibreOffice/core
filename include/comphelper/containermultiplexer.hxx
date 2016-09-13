@@ -77,7 +77,7 @@ namespace comphelper
                                 m_xContainer;
         OContainerListener*     m_pListener;
 
-        virtual ~OContainerListenerAdapter();
+        virtual ~OContainerListenerAdapter() override;
 
     public:
         OContainerListenerAdapter(OContainerListener* _pListener,

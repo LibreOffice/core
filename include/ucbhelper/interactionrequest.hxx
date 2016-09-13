@@ -70,7 +70,7 @@ protected:
     void setRequest( const css::uno::Any & rRequest );
 
     InteractionRequest();
-    virtual ~InteractionRequest();
+    virtual ~InteractionRequest() override;
 
 public:
     /**
@@ -163,7 +163,7 @@ protected:
       * method the way that they call this method.
       */
     void recordSelection();
-    virtual ~InteractionContinuation();
+    virtual ~InteractionContinuation() override;
 
 public:
     InteractionContinuation( InteractionRequest * pRequest );

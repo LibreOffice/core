@@ -45,7 +45,7 @@ class ScRedlineOptionsTabPage : public SfxTabPage
 public:
 
     ScRedlineOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~ScRedlineOptionsTabPage();
+    virtual ~ScRedlineOptionsTabPage() override;
     virtual void dispose() override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 

@@ -40,7 +40,7 @@ public:
         SvxRulerSupportFlags nRulerFlags,
         SfxBindings& rBindings,
         WinBits nWinStyle);
-    virtual ~Ruler();
+    virtual ~Ruler() override;
     virtual void dispose() override;
 
     void SetNullOffset(const Point& rOffset);

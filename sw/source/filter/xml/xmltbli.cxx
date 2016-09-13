@@ -427,7 +427,7 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
 
-    virtual ~SwXMLTableCellContext_Impl();
+    virtual ~SwXMLTableCellContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -747,7 +747,7 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
 
-    virtual ~SwXMLTableColContext_Impl();
+    virtual ~SwXMLTableColContext_Impl() override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
@@ -833,7 +833,7 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
 
-    virtual ~SwXMLTableColsContext_Impl();
+    virtual ~SwXMLTableColsContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -890,7 +890,7 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable, bool bInHead=false );
 
-    virtual ~SwXMLTableRowContext_Impl();
+    virtual ~SwXMLTableRowContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
@@ -1011,7 +1011,7 @@ public:
             SwXMLTableContext *pTable,
             bool bHead );
 
-    virtual ~SwXMLTableRowsContext_Impl();
+    virtual ~SwXMLTableRowsContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
@@ -1071,7 +1071,7 @@ public:
     SwXMLDDETableContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName);
 
-    virtual ~SwXMLDDETableContext_Impl();
+    virtual ~SwXMLDDETableContext_Impl() override;
 
     virtual void StartElement(
         const Reference<xml::sax::XAttributeList> & xAttrList) override;

@@ -48,7 +48,7 @@ protected:
 
 public:
     SdrVirtObj(SdrObject& rNewObj);
-    virtual ~SdrVirtObj();
+    virtual ~SdrVirtObj() override;
     SdrObject& ReferencedObj();
     const SdrObject& GetReferencedObj() const;
     virtual void NbcSetAnchorPos(const Point& rAnchorPos) override;

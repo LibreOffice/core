@@ -77,7 +77,7 @@ namespace dbaccess
         OColumn( const bool _bNameIsReadOnly );
 
     public:
-        virtual ~OColumn();
+        virtual ~OColumn() override;
 
     // css::lang::XTypeProvider
         virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) override;
@@ -206,7 +206,7 @@ namespace dbaccess
             bool _bAddColumn = false,
             bool _bDropColumn = false,
             bool _bUseHardRef = true);
-        virtual ~OColumns();
+        virtual ~OColumns() override;
 
         //XInterface
         virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;

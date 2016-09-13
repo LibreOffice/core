@@ -68,7 +68,7 @@ namespace reportdesign
             l.notify();
         }
     protected:
-        virtual ~OFixedLine();
+        virtual ~OFixedLine() override;
     public:
         explicit OFixedLine(css::uno::Reference< css::uno::XComponentContext > const & _xContext);
         explicit OFixedLine(css::uno::Reference< css::uno::XComponentContext > const & _xContext

@@ -98,7 +98,7 @@ private:
     void CaretBlinkStop();
 public:
     explicit SmGraphicWindow(SmViewShell* pShell);
-    virtual ~SmGraphicWindow();
+    virtual ~SmGraphicWindow() override;
     virtual void dispose() override;
 
     // Window
@@ -192,7 +192,7 @@ public:
                    SfxChildWindow *pChildWindow,
                    Window         *pParent);
 
-    virtual ~SmCmdBoxWindow ();
+    virtual ~SmCmdBoxWindow () override;
     virtual void dispose() override;
 
     void AdjustPosition();
@@ -276,7 +276,7 @@ protected:
 public:
 
     SmViewShell(SfxViewFrame *pFrame, SfxViewShell *pOldSh);
-    virtual ~SmViewShell();
+    virtual ~SmViewShell() override;
 
     SmDocShell * GetDoc()
     {

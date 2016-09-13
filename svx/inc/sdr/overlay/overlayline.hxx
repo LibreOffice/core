@@ -40,7 +40,7 @@ namespace sdr
             OverlayLineStriped(
                 const basegfx::B2DPoint& rBasePos,
                 const basegfx::B2DPoint& rSecondPos);
-            virtual ~OverlayLineStriped();
+            virtual ~OverlayLineStriped() override;
 
             // change second position
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }

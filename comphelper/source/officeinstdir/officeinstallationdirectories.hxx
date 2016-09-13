@@ -45,7 +45,7 @@ class OfficeInstallationDirectories : public mutex_holder, public UnoImplBase
 public:
     explicit OfficeInstallationDirectories(
         const css::uno::Reference< css::uno::XComponentContext > & xCtx );
-    virtual ~OfficeInstallationDirectories();
+    virtual ~OfficeInstallationDirectories() override;
 
     // XOfficeInstallationDirectories
     virtual OUString SAL_CALL

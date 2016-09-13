@@ -61,7 +61,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName );
 
-    virtual ~XMLIndexSimpleEntryContext();
+    virtual ~XMLIndexSimpleEntryContext() override;
 
 protected:
 

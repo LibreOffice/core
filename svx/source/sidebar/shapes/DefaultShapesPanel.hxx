@@ -46,7 +46,7 @@ public:
     static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    virtual ~DefaultShapesPanel();
+    virtual ~DefaultShapesPanel() override;
     virtual void dispose() override;
 
 private:

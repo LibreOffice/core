@@ -244,7 +244,7 @@ public:
     explicit            ItemControlConnection( sal_uInt16 nSlot, ControlType& rControl,
                             ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 
-    virtual             ~ItemControlConnection();
+    virtual             ~ItemControlConnection() override;
 
 protected:
     /** Actions according to current flags for the control. */
@@ -379,7 +379,7 @@ class ItemConnectionArray : public ItemConnectionBase
 {
 public:
     explicit            ItemConnectionArray();
-    virtual             ~ItemConnectionArray();
+    virtual             ~ItemConnectionArray() override;
 
     /** Adds a new connection to the list.
         @descr  Takes ownership of the connection! */

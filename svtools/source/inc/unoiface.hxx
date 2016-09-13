@@ -61,7 +61,7 @@ protected:
 
 public:
                     VCLXMultiLineEdit();
-                    virtual ~VCLXMultiLineEdit();
+                    virtual ~VCLXMultiLineEdit() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -121,7 +121,7 @@ protected:
 
 public:
                     VCLXFileControl();
-                    virtual ~VCLXFileControl();
+                    virtual ~VCLXFileControl() override;
 
     virtual void SetWindow( const VclPtr< vcl::Window > &pWindow ) override;
 
@@ -177,7 +177,7 @@ protected:
 
 public:
     SVTXFormattedField();
-    virtual ~SVTXFormattedField();
+    virtual ~SVTXFormattedField() override;
 
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
@@ -246,7 +246,7 @@ private:
 protected:
     virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 
-    virtual ~SVTXRoadmap();
+    virtual ~SVTXRoadmap() override;
 
 public:
     SVTXRoadmap();
@@ -286,7 +286,7 @@ class SVTXNumericField : public css::awt::XNumericField, public SVTXFormattedFie
 {
 public:
                     SVTXNumericField();
-                    virtual ~SVTXNumericField();
+                    virtual ~SVTXNumericField() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -326,7 +326,7 @@ class SVTXCurrencyField : public css::awt::XCurrencyField, public SVTXFormattedF
 {
 public:
                     SVTXCurrencyField();
-                    virtual ~SVTXCurrencyField();
+                    virtual ~SVTXCurrencyField() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -379,7 +379,7 @@ protected:
 
 public:
                     VCLXProgressBar();
-                    virtual ~VCLXProgressBar();
+                    virtual ~VCLXProgressBar() override;
 
     // css::uno::XInterface
     css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
@@ -412,7 +412,7 @@ class SVTXDateField : public VCLXDateField
 {
 public:
                     SVTXDateField();
-                    virtual ~SVTXDateField();
+                    virtual ~SVTXDateField() override;
 
     // css::awt::VclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;

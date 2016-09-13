@@ -119,7 +119,7 @@ struct XclImpRootData : public XclRootData
 
     explicit            XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
                             tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc );
-    virtual             ~XclImpRootData();
+    virtual             ~XclImpRootData() override;
 };
 
 /** Access to global data from other classes. */

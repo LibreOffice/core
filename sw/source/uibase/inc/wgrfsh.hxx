@@ -25,7 +25,7 @@ class SwWebGrfShell: public SwGrfShell
 {
 public:
     SwWebGrfShell(SwView &rShell);
-    virtual     ~SwWebGrfShell();
+    virtual     ~SwWebGrfShell() override;
 
     SFX_DECL_INTERFACE(SW_WEBGRFSHELL)
 

@@ -62,7 +62,7 @@ class SwPagePreviewWin : public vcl::Window
 
 public:
     SwPagePreviewWin( vcl::Window* pParent, SwPagePreview& rView );
-    virtual ~SwPagePreviewWin();
+    virtual ~SwPagePreviewWin() override;
 
     // calls SwViewShell::Paint
     virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
@@ -294,7 +294,7 @@ public:
     void SetVScrollbarThumbPos( const sal_uInt16 _nNewThumbPos );
 
     SwPagePreview( SfxViewFrame* pFrame, SfxViewShell* );
-    virtual ~SwPagePreview();
+    virtual ~SwPagePreview() override;
 };
 
 

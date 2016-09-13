@@ -34,7 +34,7 @@ class SchXMLListItemContext : public SvXMLImportContext
 {
 public:
     SchXMLListItemContext( SvXMLImport& rImport, const OUString& rLocalName, OUString& rText );
-    virtual ~SchXMLListItemContext();
+    virtual ~SchXMLListItemContext() override;
     virtual void StartElement( const Reference< xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 

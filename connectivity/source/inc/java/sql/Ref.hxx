@@ -35,7 +35,7 @@ namespace connectivity
     protected:
     // Static data for the class
         static jclass theClass;
-        virtual ~java_sql_Ref();
+        virtual ~java_sql_Ref() override;
     public:
         virtual jclass getMyClass() const override;
 

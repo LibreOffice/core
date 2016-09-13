@@ -43,7 +43,7 @@ public:
 private:
                 ScTpCalcOptions( vcl::Window*            pParent,
                                  const SfxItemSet&  rCoreSet );
-                virtual ~ScTpCalcOptions();
+                virtual ~ScTpCalcOptions() override;
     virtual void dispose() override;
 
 private:

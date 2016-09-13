@@ -54,7 +54,7 @@ private:
 
 public:
     SwLineNumberingDlg(SwView *pVw);
-    virtual ~SwLineNumberingDlg();
+    virtual ~SwLineNumberingDlg() override;
     virtual void dispose() override;
 };
 

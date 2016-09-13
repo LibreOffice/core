@@ -597,7 +597,7 @@ private:
 public:
     explicit RtfAttributeOutput(RtfExport& rExport);
 
-    virtual ~RtfAttributeOutput();
+    virtual ~RtfAttributeOutput() override;
 
     /// Return the right export class.
     virtual MSWordExportBase& GetExport() override;

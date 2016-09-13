@@ -72,7 +72,7 @@ class XFTable : public XFContent
 public:
     XFTable();
 
-    virtual ~XFTable();
+    virtual ~XFTable() override;
 
 public:
     void    SetTableName(const OUString& name);

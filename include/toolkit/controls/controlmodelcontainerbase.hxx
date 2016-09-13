@@ -102,7 +102,7 @@ protected:
 public:
                         ControlModelContainerBase( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                         ControlModelContainerBase( const ControlModelContainerBase& rModel );
-                        virtual ~ControlModelContainerBase();
+                        virtual ~ControlModelContainerBase() override;
 
     UnoControlModel*    Clone() const override;
 
@@ -187,7 +187,7 @@ class ResourceListener  :public css::util::XModifyListener,
 {
     public:
         ResourceListener( const css::uno::Reference< css::util::XModifyListener >& xListener );
-        virtual ~ResourceListener();
+        virtual ~ResourceListener() override;
 
         void startListening( const css::uno::Reference< css::resource::XStringResourceResolver  >& rResource );
         void stopListening();
@@ -237,7 +237,7 @@ protected:
 
 public:
     ControlContainerBase( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~ControlContainerBase();
+    virtual ~ControlContainerBase() override;
 
     DECLIMPL_SERVICEINFO_DERIVED( ControlContainerBase, UnoControlBase, "toolkit.ControlContainerBase" )
 

@@ -64,7 +64,7 @@ namespace dlgprov
              const css::uno::Reference< css::beans::XIntrospectionAccess >& xIntrospect,
              bool bProviderMode,
              const css::uno::Reference< css::script::XScriptListener >& xRTLListener ,const OUString& sDialogLibName );
-        virtual ~DialogEventsAttacherImpl();
+        virtual ~DialogEventsAttacherImpl() override;
 
         // XScriptEventsAttacher
         virtual void SAL_CALL attachEvents( const css::uno::Sequence<
@@ -98,7 +98,7 @@ namespace dlgprov
     public:
         DialogAllListenerImpl( const css::uno::Reference< css::script::XScriptListener >& rxListener,
             const OUString& rScriptType, const OUString& rScriptCode );
-        virtual ~DialogAllListenerImpl();
+        virtual ~DialogAllListenerImpl() override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
@@ -126,7 +126,7 @@ namespace dlgprov
         virtual void firing_impl( const css::script::ScriptEvent& aScriptEvent, css::uno::Any* pRet ) = 0;
     public:
         explicit DialogScriptListenerImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) : m_xContext( rxContext ) {}
-        virtual ~DialogScriptListenerImpl();
+        virtual ~DialogScriptListenerImpl() override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source )

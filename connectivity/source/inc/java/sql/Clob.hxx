@@ -36,7 +36,7 @@ namespace connectivity
     protected:
     // Static data for the class
         static jclass theClass;
-        virtual ~java_sql_Clob();
+        virtual ~java_sql_Clob() override;
     public:
         virtual jclass getMyClass() const override;
 

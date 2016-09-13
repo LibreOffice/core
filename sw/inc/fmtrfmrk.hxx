@@ -48,7 +48,7 @@ class SwFormatRefMark
 public:
     SwFormatRefMark( const OUString& rText );
     SwFormatRefMark( const SwFormatRefMark& rRefMark );
-    virtual ~SwFormatRefMark( );
+    virtual ~SwFormatRefMark( ) override;
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;

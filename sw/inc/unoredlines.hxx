@@ -41,7 +41,7 @@ class SwXRedlines : public SwRedlinesBaseClass,
     public SwUnoCollection
 {
 protected:
-    virtual ~SwXRedlines();
+    virtual ~SwXRedlines() override;
 public:
     SwXRedlines(SwDoc* pDoc);
 
@@ -71,7 +71,7 @@ class SwXRedlineEnumeration
     SwDoc* pDoc;
     sal_uInt16 nCurrentIndex;
 protected:
-    virtual ~SwXRedlineEnumeration();
+    virtual ~SwXRedlineEnumeration() override;
 public:
     SwXRedlineEnumeration(SwDoc& rDoc);
 

@@ -38,7 +38,7 @@ public:
                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         OUStringBuffer& sValue);
 
-    virtual ~ScXMLContentContext();
+    virtual ~ScXMLContentContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

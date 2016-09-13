@@ -112,7 +112,7 @@ public:
                                 SdrObjUserData( IV_IMAPINFO, ID_IMAPINFO ),
                                 aImageMap( rImageMap ) {};
 
-    virtual                 ~SgaIMapInfo() {};
+    virtual                 ~SgaIMapInfo() override {};
 
     virtual SdrObjUserData* Clone( SdrObject* ) const override
                             {
@@ -170,7 +170,7 @@ private:
 protected:
 
                                     GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObjectPos, bool bLazy );
-                                    virtual ~GalleryTransferable();
+                                    virtual ~GalleryTransferable() override;
 
     void                            InitData( bool bLazy );
 

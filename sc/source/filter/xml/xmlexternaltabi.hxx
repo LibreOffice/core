@@ -34,7 +34,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLExternalTabData& rRefInfo );
 
-    virtual ~ScXMLExternalRefTabSourceContext();
+    virtual ~ScXMLExternalRefTabSourceContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -59,7 +59,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLExternalTabData& rRefInfo );
 
-    virtual ~ScXMLExternalRefRowsContext();
+    virtual ~ScXMLExternalRefRowsContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -79,7 +79,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLExternalTabData& rRefInfo );
 
-    virtual ~ScXMLExternalRefRowContext();
+    virtual ~ScXMLExternalRefRowContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -100,7 +100,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLExternalTabData& rRefInfo );
 
-    virtual ~ScXMLExternalRefCellContext();
+    virtual ~ScXMLExternalRefCellContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -130,7 +130,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLExternalRefCellContext& rParent );
 
-    virtual ~ScXMLExternalRefCellTextContext();
+    virtual ~ScXMLExternalRefCellTextContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

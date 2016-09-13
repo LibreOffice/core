@@ -99,7 +99,7 @@ class SwLabFormatPage : public SfxTabPage
 
 public:
     SwLabFormatPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwLabFormatPage();
+    virtual ~SwLabFormatPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);
@@ -128,7 +128,7 @@ class SwSaveLabelDlg : public ModalDialog
 
 public:
     SwSaveLabelDlg(SwLabFormatPage* pParent, SwLabRec& rRec);
-    virtual ~SwSaveLabelDlg();
+    virtual ~SwSaveLabelDlg() override;
     virtual void dispose() override;
 
     void SetLabel(const OUString& rMake, const OUString& rType)

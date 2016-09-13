@@ -77,7 +77,7 @@ public:
                                    sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    OUString& rAddress );
-    virtual ~SchXMLCategoriesContext();
+    virtual ~SchXMLCategoriesContext() override;
     virtual void StartElement( const Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
@@ -88,7 +88,7 @@ public:
                         sal_uInt16 nPrefix, const OUString& rLocalName,
                         const Reference< beans::XPropertySet >& rAxisProps );
 
-    virtual ~DateScaleContext();
+    virtual ~DateScaleContext() override;
     virtual void StartElement( const Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
 private:

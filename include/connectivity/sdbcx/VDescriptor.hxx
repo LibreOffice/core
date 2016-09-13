@@ -59,7 +59,7 @@ namespace connectivity
         public:
             ODescriptor(::cppu::OBroadcastHelper& _rBHelper, bool _bCase, bool _bNew = false);
 
-            virtual ~ODescriptor();
+            virtual ~ODescriptor() override;
 
             bool     isNew()  const         { return m_bNew;    }
             void     setNew(bool _bNew);

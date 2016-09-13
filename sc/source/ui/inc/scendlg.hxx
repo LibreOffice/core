@@ -33,7 +33,7 @@ class ScNewScenarioDlg : public ModalDialog
 {
 public:
     ScNewScenarioDlg(vcl::Window* pParent, const OUString& rName, bool bEdit = false, bool bSheetProtected = false);
-    virtual ~ScNewScenarioDlg();
+    virtual ~ScNewScenarioDlg() override;
     virtual void dispose() override;
     void SetScenarioData( const OUString& rName, const OUString& rComment,
                           const Color& rColor, ScScenarioFlags nFlags );

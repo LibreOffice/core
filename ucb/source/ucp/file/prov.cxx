@@ -258,7 +258,7 @@ class XPropertySetInfoImpl2
 {
 public:
     XPropertySetInfoImpl2();
-    virtual ~XPropertySetInfoImpl2();
+    virtual ~XPropertySetInfoImpl2() override;
 
     // XInterface
     virtual Any SAL_CALL

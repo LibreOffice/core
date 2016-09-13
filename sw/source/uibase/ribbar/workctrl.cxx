@@ -376,7 +376,7 @@ public:
     SwZoomBox_Impl(
         vcl::Window* pParent,
         sal_uInt16 nSlot );
-    virtual ~SwZoomBox_Impl();
+    virtual ~SwZoomBox_Impl() override;
 
 protected:
     virtual void    Select() override;
@@ -542,7 +542,7 @@ public:
     SwJumpToSpecificBox_Impl(
         vcl::Window* pParent,
         sal_uInt16 nSlot );
-    virtual ~SwJumpToSpecificBox_Impl();
+    virtual ~SwJumpToSpecificBox_Impl() override;
 
 protected:
     void            Select();

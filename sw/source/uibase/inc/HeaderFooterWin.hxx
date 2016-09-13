@@ -30,7 +30,7 @@ class SwHeaderFooterWin : public SwFrameMenuButtonBase
 
 public:
     SwHeaderFooterWin( SwEditWin *pEditWin, const SwFrame *pFrame, bool bHeader );
-    virtual ~SwHeaderFooterWin( );
+    virtual ~SwHeaderFooterWin( ) override;
     virtual void dispose() override;
 
     void SetOffset( Point aOffset, long nXLineStart, long nXLineEnd );

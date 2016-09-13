@@ -88,7 +88,7 @@ public:
         const OUString & rRangeRepresentation,
         const OUString & rRole );
     UncachedDataSequence( const UncachedDataSequence & rSource );
-    virtual ~UncachedDataSequence();
+    virtual ~UncachedDataSequence() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()

@@ -40,7 +40,7 @@ private:
 public:
     ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, const css::uno::Reference< css::text::XSimpleText >& xRange, const css::uno::Any& Start, const css::uno::Any& Length, bool bReplace = false  ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
-    virtual ~ScVbaCharacters() {}
+    virtual ~ScVbaCharacters() override {}
     // Attributes
     virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception) override;

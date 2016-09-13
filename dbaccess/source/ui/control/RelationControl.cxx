@@ -100,7 +100,7 @@ namespace dbaui
         void lateInit();
 
     protected:
-        virtual ~ORelationControl() { disposeOnce(); }
+        virtual ~ORelationControl() override { disposeOnce(); }
         virtual void dispose() override { m_pListCell.disposeAndClear(); ORelationControl_Base::dispose(); }
         virtual void Resize() override;
         virtual Size GetOptimalSize() const override;

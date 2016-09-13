@@ -30,7 +30,7 @@ class WW8FibData : public ::sw::ExternalData
 
 public:
     WW8FibData();
-    virtual ~WW8FibData();
+    virtual ~WW8FibData() override;
 
     void setReadOnlyRecommended(bool bReadOnlyRecommended);
     void setWriteReservation(bool bWriteReservation);

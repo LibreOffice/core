@@ -55,7 +55,7 @@ public:
 
        BaseContainerControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual ~BaseContainerControl();
+    virtual ~BaseContainerControl() override;
 
     //  XInterface
 

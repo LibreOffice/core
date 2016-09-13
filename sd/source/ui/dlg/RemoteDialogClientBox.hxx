@@ -77,7 +77,7 @@ public:
     {
         m_pParent = pParent;
     }
-    virtual ~ClientRemovedListener();
+    virtual ~ClientRemovedListener() override;
 
     // XEventListener
     virtual void SAL_CALL disposing(css::lang::EventObject const & evt)
@@ -130,7 +130,7 @@ class ClientBox : public Control
 
 public:
     ClientBox( vcl::Window* pParent, WinBits nStyle );
-    virtual ~ClientBox();
+    virtual ~ClientBox() override;
     virtual void dispose() override;
 
     void MouseButtonDown( const MouseEvent& rMEvt ) override;

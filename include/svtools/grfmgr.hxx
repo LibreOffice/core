@@ -328,7 +328,7 @@ public:
                             GraphicObject( const Graphic& rGraphic );
                             GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = nullptr );
                             explicit GraphicObject( const OString& rUniqueID );
-                            virtual ~GraphicObject();
+                            virtual ~GraphicObject() override;
 
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
     bool                    operator==( const GraphicObject& rCacheObj ) const;

@@ -41,7 +41,7 @@ public:
                            const OUString& rQName,
                               sal_uInt16 nActionMap );
 
-    virtual ~XMLMergeElemTransformerContext();
+    virtual ~XMLMergeElemTransformerContext() override;
 
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,

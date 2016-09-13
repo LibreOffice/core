@@ -20,7 +20,7 @@ private:
 
 public:
     ScPivotLayoutTreeList(vcl::Window* pParent, WinBits nBits);
-    virtual ~ScPivotLayoutTreeList();
+    virtual ~ScPivotLayoutTreeList() override;
     virtual bool DoubleClickHdl() override;
 
     void Setup(ScPivotLayoutDialog* pParent, SvPivotTreeListType eType);

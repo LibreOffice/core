@@ -61,7 +61,7 @@ namespace stoc_connector
     {
     public:
         explicit PipeConnection( const OUString &sConnectionDescription );
-        virtual ~PipeConnection();
+        virtual ~PipeConnection() override;
 
         virtual sal_Int32 SAL_CALL read( css::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
@@ -90,7 +90,7 @@ namespace stoc_connector
     {
     public:
         explicit SocketConnection( const OUString & sConnectionDescription  );
-        virtual ~SocketConnection();
+        virtual ~SocketConnection() override;
 
         virtual sal_Int32 SAL_CALL read( css::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )

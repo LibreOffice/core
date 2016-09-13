@@ -40,7 +40,7 @@ private:
 
 public:
     ScOleObjectShell(ScViewData* pData);
-    virtual ~ScOleObjectShell();
+    virtual ~ScOleObjectShell() override;
 
 };
 

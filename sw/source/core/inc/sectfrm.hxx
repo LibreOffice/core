@@ -56,7 +56,7 @@ class SwSectionFrame: public SwLayoutFrame, public SwFlowFrame
     bool IsEndnoteAtMyEnd() const;
 
     virtual void DestroyImpl() override;
-    virtual ~SwSectionFrame();
+    virtual ~SwSectionFrame() override;
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;

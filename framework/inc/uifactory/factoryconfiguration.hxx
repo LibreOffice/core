@@ -47,7 +47,7 @@ class ConfigurationAccess_ControllerFactory : // interfaces
 {
 public:
                     ConfigurationAccess_ControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const OUString& _sRoot );
-    virtual       ~ConfigurationAccess_ControllerFactory();
+    virtual       ~ConfigurationAccess_ControllerFactory() override;
 
     void          readConfigurationData();
     void          updateConfigurationData();

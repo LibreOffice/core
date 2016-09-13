@@ -43,7 +43,7 @@ class CellUndo : public SdrUndoAction, public sdr::ObjectUser
 {
 public:
     CellUndo( const SdrObjectWeakRef& xObjRef, const CellRef& xCell );
-    virtual ~CellUndo();
+    virtual ~CellUndo() override;
 
     virtual void            Undo() override;
     virtual void            Redo() override;
@@ -95,7 +95,7 @@ class InsertRowUndo : public SdrUndoAction
 {
 public:
     InsertRowUndo( const TableModelRef& xTable, sal_Int32 nIndex, RowVector& aNewRows );
-    virtual ~InsertRowUndo();
+    virtual ~InsertRowUndo() override;
 
     virtual void            Undo() override;
     virtual void            Redo() override;
@@ -112,7 +112,7 @@ class RemoveRowUndo : public SdrUndoAction
 {
 public:
     RemoveRowUndo( const TableModelRef& xTable, sal_Int32 nIndex, RowVector& aRemovedRows );
-    virtual ~RemoveRowUndo();
+    virtual ~RemoveRowUndo() override;
 
     virtual void            Undo() override;
     virtual void            Redo() override;
@@ -129,7 +129,7 @@ class InsertColUndo : public SdrUndoAction
 {
 public:
     InsertColUndo( const TableModelRef& xTable, sal_Int32 nIndex, ColumnVector& aNewCols, CellVector& aCells );
-    virtual ~InsertColUndo();
+    virtual ~InsertColUndo() override;
 
     virtual void            Undo() override;
     virtual void            Redo() override;
@@ -147,7 +147,7 @@ class RemoveColUndo : public SdrUndoAction
 {
 public:
     RemoveColUndo( const TableModelRef& xTable, sal_Int32 nIndex, ColumnVector& aNewCols, CellVector& aCells );
-    virtual ~RemoveColUndo();
+    virtual ~RemoveColUndo() override;
 
     virtual void            Undo() override;
     virtual void            Redo() override;
@@ -165,7 +165,7 @@ class TableColumnUndo : public SdrUndoAction
 {
 public:
     explicit TableColumnUndo( const TableColumnRef& xCol );
-    virtual ~TableColumnUndo();
+    virtual ~TableColumnUndo() override;
 
     virtual void            Undo() override;
     virtual void            Redo() override;
@@ -205,7 +205,7 @@ class TableRowUndo : public SdrUndoAction
 {
 public:
     explicit TableRowUndo( const TableRowRef& xRow );
-    virtual ~TableRowUndo();
+    virtual ~TableRowUndo() override;
 
     virtual void            Undo() override;
     virtual void            Redo() override;

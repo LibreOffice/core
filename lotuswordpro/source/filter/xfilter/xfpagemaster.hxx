@@ -78,7 +78,7 @@ class XFPageMaster : public XFStyle
 public:
     XFPageMaster();
 
-    virtual ~XFPageMaster();
+    virtual ~XFPageMaster() override;
 
 public:
     void    SetPageWidth(double width);

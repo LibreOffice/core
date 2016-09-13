@@ -35,7 +35,7 @@ class ScVbaPivotTables : public ScVbaPivotTables_BASE
 
 public:
     ScVbaPivotTables( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
-    virtual ~ScVbaPivotTables() {}
+    virtual ~ScVbaPivotTables() override {}
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

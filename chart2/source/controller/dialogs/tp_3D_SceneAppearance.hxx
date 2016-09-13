@@ -38,7 +38,7 @@ public:
         vcl::Window* pWindow,
         const css::uno::Reference< css::frame::XModel > & xChartModel,
         ControllerLockHelper & rControllerLockHelper );
-    virtual ~ThreeD_SceneAppearance_TabPage();
+    virtual ~ThreeD_SceneAppearance_TabPage() override;
     virtual void dispose() override;
 
     virtual void ActivatePage() override;

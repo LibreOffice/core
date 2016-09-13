@@ -44,7 +44,7 @@ public:
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
-    virtual ~XMLTextShapeStyleContext();
+    virtual ~XMLTextShapeStyleContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,

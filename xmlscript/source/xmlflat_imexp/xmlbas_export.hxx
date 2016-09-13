@@ -49,7 +49,7 @@ namespace xmlscript
 
     public:
         explicit XMLBasicExporterBase(bool bOasis);
-        virtual ~XMLBasicExporterBase();
+        virtual ~XMLBasicExporterBase() override;
 
         // XServiceInfo
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -76,7 +76,7 @@ namespace xmlscript
     {
     public:
         explicit XMLBasicExporter();
-        virtual ~XMLBasicExporter();
+        virtual ~XMLBasicExporter() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  )
@@ -91,7 +91,7 @@ namespace xmlscript
     {
     public:
         explicit XMLOasisBasicExporter();
-        virtual ~XMLOasisBasicExporter();
+        virtual ~XMLOasisBasicExporter() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  )

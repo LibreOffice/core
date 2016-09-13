@@ -68,7 +68,7 @@ class DataSeries :
 {
 public:
     explicit DataSeries( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~DataSeries();
+    virtual ~DataSeries() override;
 
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()

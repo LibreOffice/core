@@ -94,7 +94,7 @@ namespace cairocanvas
                                const css::rendering::RenderState&  renderState     ) const;
 
     protected:
-        virtual ~TextLayout(); // we're a ref-counted UNO class. _We_ destroy ourselves.
+        virtual ~TextLayout() override; // we're a ref-counted UNO class. _We_ destroy ourselves.
 
     private:
         css::rendering::StringContext              maText;

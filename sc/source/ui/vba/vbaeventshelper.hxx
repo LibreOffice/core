@@ -33,7 +33,7 @@ public:
     ScVbaEventsHelper(
         const css::uno::Sequence< css::uno::Any >& rArgs,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~ScVbaEventsHelper();
+    virtual ~ScVbaEventsHelper() override;
 
     virtual void SAL_CALL notifyEvent( const css::document::EventObject& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
 

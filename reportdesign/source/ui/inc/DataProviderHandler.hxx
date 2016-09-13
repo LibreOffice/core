@@ -87,7 +87,7 @@ namespace rptui
         virtual sal_Bool SAL_CALL suspend(sal_Bool Suspend) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~DataProviderHandler() {}
+        virtual ~DataProviderHandler() override {}
     private:
         DataProviderHandler(DataProviderHandler &) = delete;
         void operator =(DataProviderHandler &) = delete;

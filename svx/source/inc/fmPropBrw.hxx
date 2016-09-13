@@ -82,7 +82,7 @@ public:
         vcl::Window* pParent,
         const SfxChildWinInfo* _pInfo
     );
-    virtual ~FmPropBrw();
+    virtual ~FmPropBrw() override;
     virtual void dispose() override;
 
     using SfxFloatingWindow::StateChanged;

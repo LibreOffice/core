@@ -34,7 +34,7 @@ protected:
     void MouseButtonUp(const MouseEvent& rMouseEvent) override;
 public:
     SidebarScrollBar(SwSidebarWin& rSidebarWin, WinBits nStyle, SwView& rView);
-    virtual ~SidebarScrollBar();
+    virtual ~SidebarScrollBar() override;
 };
 
 }

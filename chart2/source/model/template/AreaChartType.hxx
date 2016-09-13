@@ -28,7 +28,7 @@ class AreaChartType : public ChartType
 {
 public:
     explicit AreaChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~AreaChartType();
+    virtual ~AreaChartType() override;
 
     virtual OUString SAL_CALL
         getImplementationName()

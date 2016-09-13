@@ -72,7 +72,7 @@ public:
     SidebarController(
         SidebarDockingWindow* pParentWindow,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    virtual ~SidebarController();
+    virtual ~SidebarController() override;
     SidebarController(const SidebarController&) = delete;
     SidebarController& operator=( const SidebarController& ) = delete;
 

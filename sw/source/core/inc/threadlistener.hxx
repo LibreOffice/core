@@ -39,7 +39,7 @@ class ThreadListener : public IFinishedThreadListener
     public:
 
         ThreadListener( ThreadManager& rThreadListenerOwner );
-        virtual ~ThreadListener();
+        virtual ~ThreadListener() override;
 
         void ListenToThread( const oslInterlockedCount nThreadID,
                              ObservableThread& rThread );

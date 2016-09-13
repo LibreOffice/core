@@ -42,7 +42,7 @@ private:
 
 public:
     MasterPasswordCreateDialog( vcl::Window* pParent, ResMgr * pResMgr );
-    virtual ~MasterPasswordCreateDialog();
+    virtual ~MasterPasswordCreateDialog() override;
     virtual void dispose() override;
 
     OUString GetMasterPassword() const { return m_pEDMasterPasswordCrt->GetText(); }

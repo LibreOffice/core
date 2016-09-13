@@ -28,7 +28,7 @@ class ScFormEditData : public formula::FormEditData
 {
 public:
                         ScFormEditData();
-                        virtual ~ScFormEditData();
+                        virtual ~ScFormEditData() override;
 
     ScInputHandler*     GetInputHandler()   { return pInputHandler;}
     ScDocShell*         GetDocShell()       { return pScDocShell;}

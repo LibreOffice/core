@@ -76,7 +76,7 @@ class XFCell : public XFContentContainer
 public:
     XFCell();
 
-    virtual ~XFCell();
+    virtual ~XFCell() override;
 
 public:
     using XFContentContainer::Add;

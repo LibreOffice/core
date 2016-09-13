@@ -30,7 +30,7 @@ protected:
 
 public:
     LineNumberWindow (vcl::Window* pParent, ModulWindow* pModulWin);
-    virtual ~LineNumberWindow();
+    virtual ~LineNumberWindow() override;
     virtual void dispose() override;
 
     void DoScroll( long nVertScroll );

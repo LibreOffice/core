@@ -29,7 +29,7 @@ public:
     {
     }
 
-    virtual ~Test()
+    virtual ~Test() override
     {
     }
 

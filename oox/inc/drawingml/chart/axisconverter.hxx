@@ -40,7 +40,7 @@ public:
     explicit            AxisDispUnitsConverter(
                             const ConverterRoot& rParent,
                             AxisDispUnitsModel& rModel );
-    virtual             ~AxisDispUnitsConverter();
+    virtual             ~AxisDispUnitsConverter() override;
 
     /** Creates a chart2 axis and inserts it into the passed coordinate system. */
     void                convertFromModel(
@@ -56,7 +56,7 @@ public:
     explicit            AxisConverter(
                             const ConverterRoot& rParent,
                             AxisModel& rModel );
-    virtual             ~AxisConverter();
+    virtual             ~AxisConverter() override;
 
     /** Creates a chart2 axis and inserts it into the passed coordinate system. */
     void convertFromModel(

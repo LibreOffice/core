@@ -43,7 +43,7 @@ class UCBHELPER_DLLPUBLIC SimpleNameClashResolveRequest : public ucbhelper::Inte
 {
     rtl::Reference< InteractionSupplyName > m_xNameSupplier;
 
-    virtual ~SimpleNameClashResolveRequest();
+    virtual ~SimpleNameClashResolveRequest() override;
 
 public:
     /**

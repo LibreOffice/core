@@ -59,7 +59,7 @@ namespace dbaccess
 
     public:
         OComponentDefinition_Impl();
-        virtual ~OComponentDefinition_Impl();
+        virtual ~OComponentDefinition_Impl() override;
 
         inline size_t size() const { return m_aColumns.size(); }
 
@@ -90,7 +90,7 @@ protected:
     rtl::Reference<OColumnPropertyListener> m_xColumnPropertyListener;
     bool                        m_bTable;
 
-    virtual ~OComponentDefinition();
+    virtual ~OComponentDefinition() override;
     virtual void SAL_CALL disposing() override;
 
     const   OComponentDefinition_Impl& getDefinition() const { return dynamic_cast< const OComponentDefinition_Impl& >( *m_pImpl.get() ); }

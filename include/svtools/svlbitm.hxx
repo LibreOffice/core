@@ -108,7 +108,7 @@ protected:
 public:
     SvLBoxString(const OUString& rText);
     SvLBoxString();
-    virtual ~SvLBoxString();
+    virtual ~SvLBoxString() override;
 
     virtual SvLBoxItemType GetType() const override;
     virtual void InitViewData(SvTreeListBox* pView,
@@ -149,7 +149,7 @@ public:
     // for that kind).
     SvLBoxButton( SvLBoxButtonKind eTheKind, SvLBoxButtonData* pBData );
     SvLBoxButton();
-    virtual ~SvLBoxButton();
+    virtual ~SvLBoxButton() override;
     virtual void InitViewData(SvTreeListBox* pView,
                               SvTreeListEntry* pEntry,
                               SvViewDataItem* pViewData = nullptr) override;
@@ -232,7 +232,7 @@ public:
                      Image aBmp2,
                      bool bExpanded);
     SvLBoxContextBmp();
-    virtual ~SvLBoxContextBmp();
+    virtual ~SvLBoxContextBmp() override;
 
     virtual SvLBoxItemType GetType() const override;
     virtual void InitViewData(SvTreeListBox* pView,

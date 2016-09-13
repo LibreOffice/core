@@ -53,7 +53,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtExtendedSecurityOptions : public utl
         };
 
          SvtExtendedSecurityOptions();
-        virtual ~SvtExtendedSecurityOptions();
+        virtual ~SvtExtendedSecurityOptions() override;
 
         OpenHyperlinkMode                               GetOpenHyperlinkMode();
 

@@ -70,7 +70,7 @@ class XFRow : public XFContent
 public:
     XFRow();
 
-    virtual ~XFRow();
+    virtual ~XFRow() override;
 
 public:
     void    AddCell(XFCell *pCell);

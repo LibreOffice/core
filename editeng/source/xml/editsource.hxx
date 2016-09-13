@@ -29,7 +29,7 @@ class SvxEditEngineSource : public SvxEditSource
 {
 public:
     explicit SvxEditEngineSource( EditEngine* pEditEngine );
-    virtual ~SvxEditEngineSource();
+    virtual ~SvxEditEngineSource() override;
 
     virtual SvxEditSource*      Clone() const override;
     virtual SvxTextForwarder*   GetTextForwarder() override;

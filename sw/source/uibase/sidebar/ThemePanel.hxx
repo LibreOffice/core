@@ -58,7 +58,7 @@ public:
 private:
     ThemePanel(vcl::Window* pParent,
                    const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    virtual ~ThemePanel();
+    virtual ~ThemePanel() override;
 
     virtual void dispose() override;
 

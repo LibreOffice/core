@@ -51,7 +51,7 @@ protected:
 
     virtual void InvalidateCursorPos_() override;
 
-    virtual ~SwAccessibleCell();
+    virtual ~SwAccessibleCell() override;
 
 public:
     SwAccessibleCell( SwAccessibleMap* pInitMap, const SwCellFrame *pCellFrame );

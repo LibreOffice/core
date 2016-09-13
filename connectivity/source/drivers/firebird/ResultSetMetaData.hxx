@@ -42,7 +42,7 @@ namespace connectivity
             XSQLDA*         m_pSqlda;
             OUString        m_sTableName;
 
-            virtual ~OResultSetMetaData();
+            virtual ~OResultSetMetaData() override;
 
             void verifyValidColumn(sal_Int32 column) throw(css::sdbc::SQLException);
         public:

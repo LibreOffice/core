@@ -103,7 +103,7 @@ public:
     XSecParser( XSecController* pXSecController,
         const css::uno::Reference<
             css::xml::sax::XDocumentHandler >& xNextHandler );
-    virtual ~XSecParser(){};
+    virtual ~XSecParser() override {};
 
     /*
      * XDocumentHandler

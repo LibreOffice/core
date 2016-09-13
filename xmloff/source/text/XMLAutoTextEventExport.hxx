@@ -54,7 +54,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext, OUString const & implementationName, SvXMLExportFlags nFlags
         );
 
-    virtual ~XMLAutoTextEventExport();
+    virtual ~XMLAutoTextEventExport() override;
 
     // XInitialization
     virtual void SAL_CALL initialize(

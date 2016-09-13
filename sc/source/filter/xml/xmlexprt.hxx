@@ -234,7 +234,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLExportFlags nExportFlag);
 
-    virtual ~ScXMLExport();
+    virtual ~ScXMLExport() override;
 
     static sal_Int16 GetMeasureUnit();
     inline ScDocument*          GetDocument()           { return pDoc; }

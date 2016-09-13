@@ -34,7 +34,7 @@ class SwDrawBaseShell: public SwBaseShell
     DECL_LINK_TYPED(ValidatePosition, SvxSwFrameValidation&, void );
 public:
                 SwDrawBaseShell(SwView &rShell);
-    virtual     ~SwDrawBaseShell();
+    virtual     ~SwDrawBaseShell() override;
 
     SFX_DECL_INTERFACE(SW_DRAWBASESHELL)
 

@@ -70,7 +70,7 @@ private:
 
 public:
     SvxPathTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxPathTabPage();
+    virtual ~SvxPathTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );

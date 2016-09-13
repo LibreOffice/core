@@ -30,7 +30,7 @@ class ContentIdentifier : public cppu::WeakImplHelper <
 {
 public:
     explicit ContentIdentifier( const OUString& ContentId );
-    virtual ~ContentIdentifier();
+    virtual ~ContentIdentifier() override;
 
     // XContentIdentifier
     virtual OUString SAL_CALL getContentIdentifier()

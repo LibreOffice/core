@@ -190,7 +190,7 @@ public:
             css::lang::WrappedTargetException, std::exception ) override;
 
 
-    virtual ~JavaMigration();
+    virtual ~JavaMigration() override;
 
 private:
     OUString m_sUserDir;

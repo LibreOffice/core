@@ -43,7 +43,7 @@ namespace dbaui
         OJoinDesignView(vcl::Window* pParent,
                         OJoinController& _rController,
                         const css::uno::Reference< css::uno::XComponentContext >& );
-        virtual ~OJoinDesignView();
+        virtual ~OJoinDesignView() override;
         virtual void dispose() override;
 
         // set the view readonly or not

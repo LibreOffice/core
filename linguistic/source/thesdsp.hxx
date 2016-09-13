@@ -63,7 +63,7 @@ class ThesaurusDispatcher :
 
 public:
     ThesaurusDispatcher();
-    virtual ~ThesaurusDispatcher();
+    virtual ~ThesaurusDispatcher() override;
 
     // XSupportedLocales
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL

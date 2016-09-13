@@ -115,7 +115,7 @@ public:
 
     DocumentHolder( const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     OCommonEmbeddedObject* pEmbObj );
-    virtual ~DocumentHolder();
+    virtual ~DocumentHolder() override;
 
     OCommonEmbeddedObject* GetEmbedObject() { return m_pEmbedObj; }
 

@@ -41,7 +41,7 @@ public:
     AccessibleOLEShape (
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
-    virtual ~AccessibleOLEShape();
+    virtual ~AccessibleOLEShape() override;
 
     //=====  XAccessibleAction  ===============================================
 

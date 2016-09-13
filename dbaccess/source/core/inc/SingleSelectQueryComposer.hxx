@@ -196,7 +196,7 @@ namespace dbaccess
         OUString impl_getColumnNameOrderBy_throw(const css::uno::Reference< css::beans::XPropertySet >& column);
 
     protected:
-        virtual ~OSingleSelectQueryComposer();
+        virtual ~OSingleSelectQueryComposer() override;
     public:
 
         OSingleSelectQueryComposer( const css::uno::Reference< css::container::XNameAccess>& _xTableSupplier,

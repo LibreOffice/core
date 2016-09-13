@@ -92,7 +92,7 @@ namespace comphelper
         OPropertyBag(const OPropertyBag&) = delete;
         const OPropertyBag& operator=(const OPropertyBag&) = delete;
         OPropertyBag();
-        virtual ~OPropertyBag();
+        virtual ~OPropertyBag() override;
 
     protected:
         DECLARE_XINTERFACE()

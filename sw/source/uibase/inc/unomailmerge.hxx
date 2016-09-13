@@ -130,7 +130,7 @@ class SwXMailMerge :
     SwXMailMerge( const SwXMailMerge & ) = delete;
     SwXMailMerge & operator = ( const SwXMailMerge & ) = delete;
 protected:
-    virtual ~SwXMailMerge();
+    virtual ~SwXMailMerge() override;
 public:
     SwXMailMerge();
 

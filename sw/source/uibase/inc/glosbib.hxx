@@ -97,7 +97,7 @@ public:
     SwGlossaryGroupDlg(vcl::Window * pParent,
                         std::vector<OUString> const& rPathArr,
                         SwGlossaryHdl *pGlosHdl);
-    virtual ~SwGlossaryGroupDlg();
+    virtual ~SwGlossaryGroupDlg() override;
     virtual void dispose() override;
 
     const OUString&     GetCreatedGroupName() const {return sCreatedGroup;}

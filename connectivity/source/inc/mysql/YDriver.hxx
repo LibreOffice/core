@@ -101,7 +101,7 @@ namespace connectivity
             virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
         protected:
             /// dtor
-            virtual ~ODriverDelegator();
+            virtual ~ODriverDelegator() override;
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
         };

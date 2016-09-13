@@ -42,7 +42,7 @@ class PresentationFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     PresentationFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath ) throw();
-    virtual ~PresentationFragmentHandler() throw();
+    virtual ~PresentationFragmentHandler() throw() override;
     virtual void finalizeImport() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 

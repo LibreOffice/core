@@ -43,7 +43,7 @@ public:
         const ScVbaPalette& dPalette,
         const css::uno::Reference< css::beans::XPropertySet >& xPropertySet,
         ScCellRangeObj* pRangeObj = nullptr, bool bFormControl = false ) throw ( css::uno::RuntimeException );
-    virtual ~ScVbaFont();// {}
+    virtual ~ScVbaFont() override;// {}
 
     // Attributes
     virtual css::uno::Any SAL_CALL getSize() throw (css::uno::RuntimeException, std::exception) override;

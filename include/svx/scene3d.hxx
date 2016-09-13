@@ -90,7 +90,7 @@ protected:
 public:
     E3dScene();
     E3dScene(E3dDefaultAttributes& rDefault);
-    virtual ~E3dScene();
+    virtual ~E3dScene() override;
 
     virtual void SetBoundRectDirty() override;
 

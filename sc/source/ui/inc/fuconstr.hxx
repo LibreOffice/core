@@ -29,7 +29,7 @@ class FuConstruct : public FuDraw
     FuConstruct(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);
 
-    virtual ~FuConstruct();
+    virtual ~FuConstruct() override;
                                        // Mouse- & Key-Events
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;

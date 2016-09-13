@@ -38,7 +38,7 @@ public:
         const css::uno::Reference< css::container::XNameContainer > & rTable,
         css::uno::Reference< css::document::XGraphicObjectResolver >& rGrfResolver);
 
-    virtual ~SvxXMLXTableImport() throw ();
+    virtual ~SvxXMLXTableImport() throw () override;
 
     static bool load( const OUString &rPath, const OUString &rReferer,
                       const css::uno::Reference < css::embed::XStorage > &xStorage,

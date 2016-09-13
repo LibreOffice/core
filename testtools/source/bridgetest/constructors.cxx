@@ -57,7 +57,7 @@ public:
     Impl& operator=(const Impl&) = delete;
 
 private:
-    virtual ~Impl() {}
+    virtual ~Impl() override {}
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & arguments)
@@ -190,7 +190,7 @@ public:
     Impl2(): m_attr1(0.0) {}
 
 private:
-    virtual ~Impl2() {}
+    virtual ~Impl2() override {}
 
     virtual void SAL_CALL initialize(
         css::uno::Sequence< css::uno::Any > const & arguments)

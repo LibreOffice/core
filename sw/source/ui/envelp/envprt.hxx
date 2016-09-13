@@ -58,7 +58,7 @@ class SwEnvPrtPage : public SfxTabPage
 
 public:
     SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwEnvPrtPage();
+    virtual ~SwEnvPrtPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window* pParent, const SfxItemSet* rSet);

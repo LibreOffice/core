@@ -140,7 +140,7 @@ public:
         }
     }
 
-    virtual ~Parser() {}
+    virtual ~Parser() override {}
 
     virtual boost::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
 
@@ -375,7 +375,7 @@ public:
 protected:
     explicit IpcThread(char const * name): Thread(name), m_handler(nullptr) {}
 
-    virtual ~IpcThread() {}
+    virtual ~IpcThread() override {}
 
     bool process(OString const & arguments, bool * waitProcessed);
 
@@ -391,7 +391,7 @@ private:
         IpcThread("PipeIPC"), pipe_(pipe)
     {}
 
-    virtual ~PipeIpcThread() {}
+    virtual ~PipeIpcThread() override {}
 
     void execute() override;
 
@@ -452,7 +452,7 @@ private:
         IpcThread("DbusIPC"), connection_(std::move(connection))
     {}
 
-    virtual ~DbusIpcThread() {}
+    virtual ~DbusIpcThread() override {}
 
     void execute() override;
 

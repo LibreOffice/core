@@ -41,7 +41,7 @@ public:
     SchXMLBodyContext_Impl( SchXMLImportHelper& rImpHelper,
                 SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName );
-    virtual ~SchXMLBodyContext_Impl();
+    virtual ~SchXMLBodyContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,

@@ -62,7 +62,7 @@ class ClassificationCategoriesController : public ClassificationCategoriesContro
 
 public:
     explicit ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
-    virtual ~ClassificationCategoriesController();
+    virtual ~ClassificationCategoriesController() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
@@ -91,7 +91,7 @@ class SAL_WARN_UNUSED ClassificationControl : public vcl::Window
 
 public:
     explicit ClassificationControl(vcl::Window* pParent);
-    virtual ~ClassificationControl();
+    virtual ~ClassificationControl() override;
     virtual void dispose() override;
     virtual void Resize() override;
     const VclPtr<ListBox>& getCategories(SfxClassificationPolicyType eType);

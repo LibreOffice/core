@@ -226,7 +226,7 @@ public:
         : m_rSplitCategoriesList( rSplitCategoriesList )
         , mrModel( rModel )
     {}
-    virtual ~SplitCategoriesProvider_ForLabeledDataSequences()
+    virtual ~SplitCategoriesProvider_ForLabeledDataSequences() override
     {}
 
     virtual sal_Int32 getLevelCount() const override;

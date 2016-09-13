@@ -142,7 +142,7 @@ class SFX2_DLLPUBLIC MetadatableMixin :
 public:
     MetadatableMixin() {};
 
-    virtual ~MetadatableMixin() {}
+    virtual ~MetadatableMixin() override {}
 
     // css::rdf::XNode:
     virtual OUString SAL_CALL getStringValue()

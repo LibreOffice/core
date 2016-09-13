@@ -44,7 +44,7 @@ public:
 
     virtual SfxItemPool* Clone() const override;
 protected:
-    virtual ~XOutdevItemPool();
+    virtual ~XOutdevItemPool() override;
 };
 
 #endif // INCLUDED_SVX_XPOOL_HXX

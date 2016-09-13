@@ -79,7 +79,7 @@ protected:
 
 public:
     SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings );
-    virtual ~SvxHpLinkDlg ();
+    virtual ~SvxHpLinkDlg () override;
     virtual void dispose() override;
 
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage ) override;

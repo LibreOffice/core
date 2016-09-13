@@ -63,7 +63,7 @@ class SVX_DLLPUBLIC FmFormView : public E3dView
 public:
 
     FmFormView(FmFormModel* pModel, OutputDevice* pOut = nullptr);
-    virtual ~FmFormView();
+    virtual ~FmFormView() override;
 
     /** create a control pair (label/bound control) for the database field description given.
         @param rFieldDesc

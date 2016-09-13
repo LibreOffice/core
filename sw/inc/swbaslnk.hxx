@@ -37,7 +37,7 @@ public:
         : ::sfx2::SvBaseLink( nMode, nFormat ), pContentNode( pNode ),
         bSwapIn( false ), bNoDataFlag( false ), bIgnoreDataChanged( false )
     {}
-    virtual ~SwBaseLink();
+    virtual ~SwBaseLink() override;
 
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const css::uno::Any & rValue ) override;

@@ -105,7 +105,7 @@ class SaxExpatParser
 
 public:
     SaxExpatParser();
-    virtual ~SaxExpatParser();
+    virtual ~SaxExpatParser() override;
 
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments)

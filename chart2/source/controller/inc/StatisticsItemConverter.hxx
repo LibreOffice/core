@@ -39,7 +39,7 @@ public:
         const css::uno::Reference< css::frame::XModel > & xChartModel,
         const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool );
-    virtual ~StatisticsItemConverter();
+    virtual ~StatisticsItemConverter() override;
 
 protected:
     virtual const sal_uInt16 * GetWhichPairs() const override;

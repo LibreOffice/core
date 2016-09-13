@@ -88,7 +88,7 @@ public:
 
     virtual void Convert(XFCell * pCell, LwpTableLayout* pCellsMap=nullptr);
 protected:
-    virtual ~LwpCellList();
+    virtual ~LwpCellList() override;
 
     sal_uInt8 cColumn;
     LwpObjectID cParent;
@@ -115,7 +115,7 @@ protected:
     sal_uInt16 cRowID;
     void Read() override;
 private:
-    virtual ~LwpRowList();
+    virtual ~LwpRowList() override;
 };
 /**
  * @brief
@@ -133,7 +133,7 @@ protected:
     //LwpContent m_TheContent;
     void Read() override;
 private:
-    virtual ~LwpNumericValue();
+    virtual ~LwpNumericValue() override;
 };
 
 /**
@@ -154,7 +154,7 @@ protected:
     LwpObjectID cpCellRange;
     void Read() override;
 private:
-    virtual ~LwpTableRange();
+    virtual ~LwpTableRange() override;
 };
 /**
  * @brief
@@ -171,7 +171,7 @@ protected:
     LwpObjectID cpFolder;
     void Read() override;
 private:
-    virtual ~LwpCellRange();
+    virtual ~LwpCellRange() override;
 };
 /**
  * @brief
@@ -190,7 +190,7 @@ protected:
     LwpObjectID cqTable;
     void Read() override;
 private:
-    virtual ~LwpFolder();
+    virtual ~LwpFolder() override;
 };
 /**
  * @brief
@@ -217,7 +217,7 @@ protected:
     sal_uInt8 cFlags;                // Used to fix dependent formula when we're
                                 //  dropped, sorted.
 private:
-    virtual ~LwpDependent();
+    virtual ~LwpDependent() override;
 };
 
 /**

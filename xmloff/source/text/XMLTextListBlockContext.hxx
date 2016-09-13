@@ -57,7 +57,7 @@ public:
                 const OUString& rLName,
                 const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
                 const bool bRestartNumberingAtSubList = false );
-    virtual ~XMLTextListBlockContext();
+    virtual ~XMLTextListBlockContext() override;
 
     virtual void EndElement() override;
 

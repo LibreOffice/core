@@ -158,7 +158,7 @@ class SvtLinguConfigItem : public utl::ConfigItem
 
 public:
     SvtLinguConfigItem();
-    virtual ~SvtLinguConfigItem();
+    virtual ~SvtLinguConfigItem() override;
 
     // utl::ConfigItem
     virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;

@@ -46,7 +46,7 @@ public:
                 , ChartTypeTemplateProvider* pTemplateProvider
                 , Dialog * pParentDialog
                 , bool bHideDescription = false );
-    virtual ~RangeChooserTabPage();
+    virtual ~RangeChooserTabPage() override;
     virtual void dispose() override;
 
     //RangeSelectionListenerParent

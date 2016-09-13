@@ -45,7 +45,7 @@ class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
 
 public:
     SvxHtmlOptions();
-    virtual ~SvxHtmlOptions();
+    virtual ~SvxHtmlOptions() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
 

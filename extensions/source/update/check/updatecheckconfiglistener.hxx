@@ -33,7 +33,7 @@ struct UpdateCheckConfigListener : public virtual salhelper::SimpleReferenceObje
     virtual void autoCheckIntervalChanged() = 0;
 
 protected:
-    virtual ~UpdateCheckConfigListener() {}
+    virtual ~UpdateCheckConfigListener() override {}
 };
 
 #endif

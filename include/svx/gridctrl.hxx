@@ -75,7 +75,7 @@ public:
     DbGridRow(CursorWrapper* pCur, bool bPaintCursor);
     void SetState(CursorWrapper* pCur, bool bPaintCursor);
 
-    virtual ~DbGridRow();
+    virtual ~DbGridRow() override;
 
     bool HasField(sal_uInt32 nPos) const { return nPos < m_aVariants.size(); }
     const ::svxform::DataColumn& GetField(sal_uInt32 nPos) const { return *m_aVariants[ nPos ]; }
@@ -203,7 +203,7 @@ public:
 
     public:
         NavigationBar(vcl::Window* pParent);
-        virtual ~NavigationBar();
+        virtual ~NavigationBar() override;
         virtual void dispose() override;
 
         // Status methods for Controls
@@ -376,7 +376,7 @@ public:
         vcl::Window* pParent,
         WinBits nBits = WB_BORDER);
 
-    virtual ~DbGridControl();
+    virtual ~DbGridControl() override;
     virtual void dispose() override;
 
     virtual void Init() override;

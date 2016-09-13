@@ -736,7 +736,7 @@ namespace osl_StreamPipe
         sal_Char buf[256];
         Pipe_DataSink_Thread( ) { }
 
-        virtual ~Pipe_DataSink_Thread( )
+        virtual ~Pipe_DataSink_Thread( ) override
             {
             }
     protected:
@@ -782,7 +782,7 @@ namespace osl_StreamPipe
                 printf("create pipe\n");
                 aListenPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
             }
-        virtual ~Pipe_DataSource_Thread( )
+        virtual ~Pipe_DataSource_Thread( ) override
             {
                 aListenPipe.close();
             }

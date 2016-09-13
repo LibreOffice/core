@@ -61,7 +61,7 @@ namespace connectivity
             OString                         m_aPassword;
             ::dbtools::WarningsContainer    m_aWarnings;
 
-            virtual ~OEvoabConnection();
+            virtual ~OEvoabConnection() override;
 
         public:
             explicit OEvoabConnection( OEvoabDriver& _rDriver );

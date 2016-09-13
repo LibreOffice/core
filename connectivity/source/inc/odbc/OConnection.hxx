@@ -84,7 +84,7 @@ namespace connectivity
 
             OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver*  _pDriver);
             //  OConnection(const SQLHANDLE _pConnectionHandle);
-            virtual ~OConnection();
+            virtual ~OConnection() override;
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;

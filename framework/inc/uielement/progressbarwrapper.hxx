@@ -39,7 +39,7 @@ class ProgressBarWrapper : public UIElementWrapperBase
         //  constructor / destructor
 
         ProgressBarWrapper();
-        virtual ~ProgressBarWrapper();
+        virtual ~ProgressBarWrapper() override;
 
         // public interfaces
         void setStatusBar( const css::uno::Reference< css::awt::XWindow >& rStatusBar, bool bOwnsInstance = false );

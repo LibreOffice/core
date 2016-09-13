@@ -53,7 +53,7 @@ class OOXMLSecParser: public cppu::WeakImplHelper
 
 public:
     explicit OOXMLSecParser(XSecController* pXSecController);
-    virtual ~OOXMLSecParser();
+    virtual ~OOXMLSecParser() override;
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;

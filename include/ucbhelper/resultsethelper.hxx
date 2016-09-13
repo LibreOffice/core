@@ -126,7 +126,7 @@ public:
     /**
       * Destructor.
       */
-    virtual ~ResultSetImplHelper();
+    virtual ~ResultSetImplHelper() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

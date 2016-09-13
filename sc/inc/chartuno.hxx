@@ -55,7 +55,7 @@ private:
 
 public:
                             ScChartsObj(ScDocShell* pDocSh, SCTAB nT);
-    virtual                 ~ScChartsObj();
+    virtual                 ~ScChartsObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -141,7 +141,7 @@ protected:
 
 public:
                             ScChartObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN);
-    virtual                 ~ScChartObj();
+    virtual                 ~ScChartObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

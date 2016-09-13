@@ -94,7 +94,7 @@ class XMLTableImportContext : public SvXMLImportContext
 {
 public:
     XMLTableImportContext( const rtl::Reference< XMLTableImport >& xThis, sal_uInt16 nPrfx, const OUString& rLName, Reference< XColumnRowRange >& xColumnRowRange );
-    virtual ~XMLTableImportContext();
+    virtual ~XMLTableImportContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 
@@ -133,7 +133,7 @@ public:
                           sal_uInt16 nPrfx, const OUString& rLName,
                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
-    virtual ~XMLCellImportContext();
+    virtual ~XMLCellImportContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) override;
 

@@ -50,7 +50,7 @@ private:
 
 public:
                                     SvtFolderPicker();
-    virtual                        ~SvtFolderPicker();
+    virtual                        ~SvtFolderPicker() override;
 
 
     // XFolderPicker2 functions

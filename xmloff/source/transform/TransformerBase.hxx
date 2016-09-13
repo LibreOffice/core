@@ -80,7 +80,7 @@ protected:
 public:
     XMLTransformerBase( XMLTransformerActionInit *pInit=nullptr,
                            ::xmloff::token::XMLTokenEnum *pTKMapInit=nullptr ) throw();
-    virtual ~XMLTransformerBase() throw();
+    virtual ~XMLTransformerBase() throw() override;
 
     // css::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument()

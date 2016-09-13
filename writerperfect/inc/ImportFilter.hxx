@@ -60,7 +60,7 @@ public:
     {
     }
 
-    virtual ~ImportFilterImpl()
+    virtual ~ImportFilterImpl() override
     {
     }
 

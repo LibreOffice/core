@@ -31,7 +31,7 @@ public:
                                     const OUString& rLocalName,
                                     const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
-    virtual ~XMLCalculationSettingsContext();
+    virtual ~XMLCalculationSettingsContext() override;
     virtual void EndElement() override;
 
 };

@@ -68,7 +68,7 @@ private:
     static NeonLockStore m_aNeonLockStore;
 
 protected:
-    virtual ~NeonSession();
+    virtual ~NeonSession() override;
 
 public:
     NeonSession( const rtl::Reference< DAVSessionFactory > & rSessionFactory,

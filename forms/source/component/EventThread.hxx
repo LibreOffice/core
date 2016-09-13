@@ -87,7 +87,7 @@ public:
     virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
 
     explicit OComponentEventThread(::cppu::OComponentHelper* pCompImpl);
-    virtual ~OComponentEventThread();
+    virtual ~OComponentEventThread() override;
 
     void addEvent( const css::lang::EventObject* _pEvt );
     void addEvent( const css::lang::EventObject* _pEvt, const css::uno::Reference< css::awt::XControl>& rControl,

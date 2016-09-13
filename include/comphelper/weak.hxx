@@ -38,7 +38,7 @@ class COMPHELPER_DLLPUBLIC OWeakTypeObject : public ::cppu::OWeakObject, public 
 {
 public:
     OWeakTypeObject();
-    virtual ~OWeakTypeObject();
+    virtual ~OWeakTypeObject() override;
 
     virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type & rType )  throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL acquire() throw () override;

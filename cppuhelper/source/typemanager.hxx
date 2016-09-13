@@ -64,7 +64,7 @@ public:
         rtl::OUString const & name);
 
 private:
-    virtual ~TypeManager() throw ();
+    virtual ~TypeManager() throw () override;
 
     virtual void SAL_CALL disposing() override;
 

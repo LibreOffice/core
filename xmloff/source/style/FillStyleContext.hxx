@@ -36,7 +36,7 @@ public:
 
     XMLGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
-    virtual ~XMLGradientStyleContext();
+    virtual ~XMLGradientStyleContext() override;
 
     virtual void EndElement() override;
 
@@ -55,7 +55,7 @@ public:
 
     XMLHatchStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
-    virtual ~XMLHatchStyleContext();
+    virtual ~XMLHatchStyleContext() override;
 
     virtual void EndElement() override;
 
@@ -75,7 +75,7 @@ public:
 
     XMLBitmapStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
-    virtual ~XMLBitmapStyleContext();
+    virtual ~XMLBitmapStyleContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
@@ -99,7 +99,7 @@ public:
 
     XMLTransGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
-    virtual ~XMLTransGradientStyleContext();
+    virtual ~XMLTransGradientStyleContext() override;
 
     virtual void EndElement() override;
 
@@ -118,7 +118,7 @@ public:
 
     XMLMarkerStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
-    virtual ~XMLMarkerStyleContext();
+    virtual ~XMLMarkerStyleContext() override;
 
     virtual void EndElement() override;
 
@@ -137,7 +137,7 @@ public:
 
     XMLDashStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
-    virtual ~XMLDashStyleContext();
+    virtual ~XMLDashStyleContext() override;
 
     virtual void EndElement() override;
 

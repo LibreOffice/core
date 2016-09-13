@@ -101,7 +101,7 @@ class SVX_DLLPUBLIC SvxGridTabPage : public SfxTabPage
 
 public:
     SvxGridTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxGridTabPage();
+    virtual ~SvxGridTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent, const SfxItemSet& rAttrSet );

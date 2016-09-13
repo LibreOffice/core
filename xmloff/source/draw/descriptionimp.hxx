@@ -37,7 +37,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         const css::uno::Reference< css::drawing::XShape >& rxShape );
-    virtual ~SdXMLDescriptionContext();
+    virtual ~SdXMLDescriptionContext() override;
 
     virtual void EndElement() override;
 

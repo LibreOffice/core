@@ -56,7 +56,7 @@ namespace dbaui
                         ,const css::uno::Reference< css::ucb::XContent>& _xContent
                         ,const OUString& _sDefaultName
                         ,const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
-        virtual ~OCollectionView();
+        virtual ~OCollectionView() override;
         virtual void dispose() override;
         const css::uno::Reference< css::ucb::XContent>& getSelectedFolder() const { return m_xContent;}
         OUString getName() const;

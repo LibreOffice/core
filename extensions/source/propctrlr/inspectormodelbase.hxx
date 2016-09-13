@@ -57,7 +57,7 @@ namespace pcr
         ::std::unique_ptr< InspectorModelProperties >                     m_pProperties;
 
     protected:
-        virtual ~ImplInspectorModel();
+        virtual ~ImplInspectorModel() override;
 
     public:
         ImplInspectorModel();

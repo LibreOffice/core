@@ -214,7 +214,7 @@ private:
 
 public:
     explicit SwConnectionDisposedListener_Impl(SwDBManager& rMgr);
-    virtual ~SwConnectionDisposedListener_Impl();
+    virtual ~SwConnectionDisposedListener_Impl() override;
 
     void Dispose() { m_pDBManager = nullptr; }
 
@@ -228,7 +228,7 @@ class SwDataSourceRemovedListener : public cppu::WeakImplHelper<sdb::XDatabaseRe
 
 public:
     explicit SwDataSourceRemovedListener(SwDBManager& rDBManager);
-    virtual ~SwDataSourceRemovedListener();
+    virtual ~SwDataSourceRemovedListener() override;
     virtual void SAL_CALL registeredDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL revokedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL changedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception) override;

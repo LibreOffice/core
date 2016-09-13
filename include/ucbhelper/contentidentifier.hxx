@@ -46,7 +46,7 @@ class UCBHELPER_DLLPUBLIC ContentIdentifier :
 {
 public:
     ContentIdentifier( const OUString& rURL );
-    virtual ~ContentIdentifier();
+    virtual ~ContentIdentifier() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL

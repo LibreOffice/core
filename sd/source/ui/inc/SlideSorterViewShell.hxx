@@ -56,7 +56,7 @@ public:
         FrameView* pFrameView,
         const bool bIsCenterPane);
 
-    virtual ~SlideSorterViewShell();
+    virtual ~SlideSorterViewShell() override;
 
     /** Late initialization that has to be called after a new instance has
         completed its construction.

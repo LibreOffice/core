@@ -86,7 +86,7 @@ namespace svx
 
     public:
         DbRegistrationOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
-        virtual ~DbRegistrationOptionsPage();
+        virtual ~DbRegistrationOptionsPage() override;
         virtual void dispose() override;
 
         static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );

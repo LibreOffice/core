@@ -66,7 +66,7 @@ class StyleMap :
 public:
 
     StyleMap();
-    virtual ~StyleMap();
+    virtual ~StyleMap() override;
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
     static StyleMap* getImplementation(

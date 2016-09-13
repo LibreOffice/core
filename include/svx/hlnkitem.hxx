@@ -67,7 +67,7 @@ public:
                                     SvxLinkInsertMode eTyp = HLINK_FIELD,
                                     HyperDialogEvent nEvents = HyperDialogEvent::NONE,
                                     SvxMacroTableDtor *pMacroTbl =nullptr );
-    virtual ~SvxHyperlinkItem () { delete pMacroTable; }
+    virtual ~SvxHyperlinkItem () override { delete pMacroTable; }
 
     inline SvxHyperlinkItem& operator=( const SvxHyperlinkItem &rItem );
 

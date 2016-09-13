@@ -41,7 +41,7 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
 
     public:
         X509Certificate_NssImpl() ;
-        virtual ~X509Certificate_NssImpl() ;
+        virtual ~X509Certificate_NssImpl() override ;
 
         //Methods from XCertificate
         virtual sal_Int16 SAL_CALL getVersion(  ) throw ( css::uno::RuntimeException, std::exception) override ;

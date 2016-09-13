@@ -69,7 +69,7 @@ class LoginDialog : public ModalDialog
 public:
     LoginDialog(vcl::Window* pParent, sal_uInt16 nFlags,
         const OUString& rServer, const OUString &rRealm);
-    virtual ~LoginDialog();
+    virtual ~LoginDialog() override;
     virtual void    dispose() override;
 
     OUString        GetName() const                             { return m_pNameED->GetText(); }

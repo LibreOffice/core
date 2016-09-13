@@ -28,7 +28,7 @@ class FilledNetChartType : public NetChartType_Base
 {
 public:
     explicit FilledNetChartType( css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~FilledNetChartType();
+    virtual ~FilledNetChartType() override;
 
     virtual OUString SAL_CALL
         getImplementationName()

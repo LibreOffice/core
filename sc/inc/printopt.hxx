@@ -58,7 +58,7 @@ public:
                 ScTpPrintItem( sal_uInt16 nWhich,
                                const ScPrintOptions& rOpt );
                 ScTpPrintItem( const ScTpPrintItem& rItem );
-                virtual ~ScTpPrintItem();
+                virtual ~ScTpPrintItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

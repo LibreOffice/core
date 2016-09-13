@@ -102,7 +102,7 @@ class SwTabFrame: public SwLayoutFrame, public SwFlowFrame
     virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool bHead, bool &rReformat ) override;
 
     virtual void DestroyImpl() override;
-    virtual ~SwTabFrame();
+    virtual ~SwTabFrame() override;
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;

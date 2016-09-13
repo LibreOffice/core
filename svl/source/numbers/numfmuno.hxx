@@ -47,7 +47,7 @@ private:
 
 public:
                         SvNumberFormatterServiceObj();
-    virtual             ~SvNumberFormatterServiceObj();
+    virtual             ~SvNumberFormatterServiceObj() override;
 
     // XNumberFormatter
     virtual void SAL_CALL attachNumberFormatsSupplier(
@@ -110,7 +110,7 @@ private:
 
 public:
                     SvNumberFormatsObj(SvNumberFormatsSupplierObj& pParent, ::comphelper::SharedMutex& _rMutex);
-    virtual         ~SvNumberFormatsObj();
+    virtual         ~SvNumberFormatsObj() override;
 
 
     // XNumberFormats
@@ -174,7 +174,7 @@ private:
 
 public:
     SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, const ::comphelper::SharedMutex& _rMutex );
-    virtual         ~SvNumberFormatObj();
+    virtual         ~SvNumberFormatObj() override;
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
@@ -248,7 +248,7 @@ private:
 
 public:
                     SvNumberFormatSettingsObj( SvNumberFormatsSupplierObj& rParent, const ::comphelper::SharedMutex& _rMutex);
-    virtual         ~SvNumberFormatSettingsObj();
+    virtual         ~SvNumberFormatSettingsObj() override;
 
 
     // XPropertySet

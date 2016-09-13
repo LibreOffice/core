@@ -30,7 +30,7 @@ class ScDrawPage: public FmFormPage
 
 public:
     explicit ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage = false);
-    virtual ~ScDrawPage();
+    virtual ~ScDrawPage() override;
 
     virtual ScDrawPage* Clone() const override;
     virtual ScDrawPage* Clone(SdrModel* pNewModel) const override;

@@ -44,7 +44,7 @@ public:
         : ::sfx2::SvBaseLink( ::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SIMPLE_FILE ),
             pSdrObj( pObj1 )
     {}
-    virtual ~ImpSdrObjTextLink();
+    virtual ~ImpSdrObjTextLink() override;
 
     virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(

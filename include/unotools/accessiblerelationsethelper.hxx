@@ -52,7 +52,7 @@ public:
     AccessibleRelationSetHelper ();
     AccessibleRelationSetHelper (const AccessibleRelationSetHelper& rHelper);
 protected:
-    virtual ~AccessibleRelationSetHelper();
+    virtual ~AccessibleRelationSetHelper() override;
 public:
 
     //=====  XAccessibleRelationSet  ==========================================

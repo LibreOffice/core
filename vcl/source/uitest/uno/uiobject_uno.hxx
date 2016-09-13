@@ -35,7 +35,7 @@ private:
 public:
 
     explicit UIObjectUnoObj(std::unique_ptr<UIObject> pObj);
-    virtual ~UIObjectUnoObj();
+    virtual ~UIObjectUnoObj() override;
 
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getChild(const OUString& rID)
         throw (css::uno::RuntimeException, std::exception) override;

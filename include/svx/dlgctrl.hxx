@@ -111,7 +111,7 @@ public:
                 sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80 );
     void SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder = 200,
         sal_uInt16 nCircle = 80);
-    virtual ~SvxRectCtl();
+    virtual ~SvxRectCtl() override;
     virtual void dispose() override;
 
     virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
@@ -166,7 +166,7 @@ protected:
 public:
     SvxPixelCtl( vcl::Window* pParent, sal_uInt16 nNumber = 8 );
 
-    virtual ~SvxPixelCtl();
+    virtual ~SvxPixelCtl() override;
     virtual void dispose() override;
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
@@ -351,7 +351,7 @@ protected:
 
 public:
     SvxPreviewBase(vcl::Window* pParent);
-    virtual ~SvxPreviewBase();
+    virtual ~SvxPreviewBase() override;
     virtual void dispose() override;
 
     // change support
@@ -388,7 +388,7 @@ private:
 
 public:
     SvxXLinePreview( vcl::Window* pParent );
-    virtual ~SvxXLinePreview();
+    virtual ~SvxXLinePreview() override;
     virtual void dispose() override;
 
     void SetLineAttributes(const SfxItemSet& rItemSet);
@@ -415,7 +415,7 @@ private:
 
 public:
     SvxXRectPreview(vcl::Window* pParent);
-    virtual ~SvxXRectPreview();
+    virtual ~SvxXRectPreview() override;
     virtual void dispose() override;
 
     void SetAttributes(const SfxItemSet& rItemSet);
@@ -441,7 +441,7 @@ private:
 public:
     SvxXShadowPreview(vcl::Window *pParent);
 
-    virtual ~SvxXShadowPreview();
+    virtual ~SvxXShadowPreview() override;
     virtual void dispose() override;
 
     void SetRectangleAttributes(const SfxItemSet& rItemSet);

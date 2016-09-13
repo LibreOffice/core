@@ -36,7 +36,7 @@ public:
     typedef std::vector<XclObj*>::iterator iterator;
 
     explicit            XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx );
-    virtual             ~XclExpObjList();
+    virtual             ~XclExpObjList() override;
 
     /// return: 1-based ObjId
     ///! count>=0xFFFF: Obj will be deleted, return 0
@@ -113,7 +113,7 @@ protected:
             void                SaveTextRecs( XclExpStream& rStrm );
 
 public:
-    virtual                     ~XclObj();
+    virtual                     ~XclObj() override;
 
     inline sal_uInt16           GetObjType() const { return mnObjType; }
 
@@ -166,7 +166,7 @@ class XclObjComment : public XclObj
 public:
                                 XclObjComment( XclExpObjectManager& rObjMgr,
                                     const Rectangle& rRect, const EditTextObject& rEditObj, SdrCaptionObj* pCaption, bool bVisible, const ScAddress& rAddress, Rectangle &rFrom, Rectangle &To );
-    virtual                     ~XclObjComment();
+    virtual                     ~XclObjComment() override;
 
     /** c'tor process for formatted text objects above .
        @descr used to construct the MSODRAWING Escher object properties. */
@@ -189,7 +189,7 @@ private:
 protected:
 public:
                                 XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, bool bFilt );
-    virtual                     ~XclObjDropDown();
+    virtual                     ~XclObjDropDown() override;
 };
 
 // --- class XclTxo --------------------------------------------------
@@ -234,7 +234,7 @@ private:
 
 public:
                                 XclObjOle( XclExpObjectManager& rObjMgr, const SdrObject& rObj );
-    virtual                     ~XclObjOle();
+    virtual                     ~XclObjOle() override;
 
     virtual void                Save( XclExpStream& rStrm ) override;
 };
@@ -250,7 +250,7 @@ public:
                                 XclObjAny( XclExpObjectManager& rObjMgr,
                                     const css::uno::Reference< css::drawing::XShape >& rShape,
                                     ScDocument* pDoc);
-    virtual                     ~XclObjAny();
+    virtual                     ~XclObjAny() override;
 
     const css::uno::Reference< css::drawing::XShape >&
                                 GetShape() const { return mxShape; }
@@ -385,7 +385,7 @@ private:
 protected:
 public:
                                 ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab );
-    virtual                     ~ExcEScenario();
+    virtual                     ~ExcEScenario() override;
 
     virtual sal_uInt16              GetNum() const override;
     virtual sal_Size            GetLen() const override;
@@ -404,7 +404,7 @@ private:
 protected:
 public:
                                 ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab );
-    virtual                     ~ExcEScenarioManager();
+    virtual                     ~ExcEScenarioManager() override;
 
     virtual void                Save( XclExpStream& rStrm ) override;
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
@@ -500,7 +500,7 @@ class XclExpFileEncryption : public XclExpRecord
 {
 public:
     explicit XclExpFileEncryption( const XclExpRoot& rRoot );
-    virtual ~XclExpFileEncryption();
+    virtual ~XclExpFileEncryption() override;
 
 private:
     virtual void WriteBody( XclExpStream& rStrm ) override;
@@ -524,7 +524,7 @@ class XclExpInterfaceEnd : public XclExpRecord
 {
 public:
     explicit XclExpInterfaceEnd();
-    virtual ~XclExpInterfaceEnd();
+    virtual ~XclExpInterfaceEnd() override;
 
 private:
     virtual void WriteBody( XclExpStream& rStrm ) override;
@@ -536,7 +536,7 @@ class XclExpWriteAccess : public XclExpRecord
 {
 public:
     explicit XclExpWriteAccess();
-    virtual ~XclExpWriteAccess();
+    virtual ~XclExpWriteAccess() override;
 
 private:
     virtual void WriteBody( XclExpStream& rStrm ) override;
@@ -562,7 +562,7 @@ class XclExpProt4Rev : public XclExpRecord
 {
 public:
     explicit XclExpProt4Rev();
-    virtual ~XclExpProt4Rev();
+    virtual ~XclExpProt4Rev() override;
 
 private:
     virtual void WriteBody( XclExpStream& rStrm ) override;
@@ -572,7 +572,7 @@ class XclExpProt4RevPass : public XclExpRecord
 {
 public:
     explicit XclExpProt4RevPass();
-    virtual ~XclExpProt4RevPass();
+    virtual ~XclExpProt4RevPass() override;
 
 private:
     virtual void WriteBody( XclExpStream& rStrm ) override;

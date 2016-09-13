@@ -50,7 +50,7 @@ public:
     CreationWizardUnoDlg() = delete;
 
     CreationWizardUnoDlg( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~CreationWizardUnoDlg();
+    virtual ~CreationWizardUnoDlg() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;

@@ -272,7 +272,7 @@ class WrappedDataSourceLabelsInFirstRowProperty : public WrappedProperty
 {
 public:
     explicit WrappedDataSourceLabelsInFirstRowProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
-    virtual ~WrappedDataSourceLabelsInFirstRowProperty();
+    virtual ~WrappedDataSourceLabelsInFirstRowProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -370,7 +370,7 @@ class WrappedDataSourceLabelsInFirstColumnProperty : public WrappedProperty
 {
 public:
     explicit WrappedDataSourceLabelsInFirstColumnProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
-    virtual ~WrappedDataSourceLabelsInFirstColumnProperty();
+    virtual ~WrappedDataSourceLabelsInFirstColumnProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -468,7 +468,7 @@ class WrappedHasLegendProperty : public WrappedProperty
 {
 public:
     explicit WrappedHasLegendProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
-    virtual ~WrappedHasLegendProperty();
+    virtual ~WrappedHasLegendProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -552,7 +552,7 @@ class WrappedHasMainTitleProperty : public WrappedProperty
 {
 public:
     explicit WrappedHasMainTitleProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
-    virtual ~WrappedHasMainTitleProperty();
+    virtual ~WrappedHasMainTitleProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
@@ -625,7 +625,7 @@ class WrappedHasSubTitleProperty : public WrappedProperty
 {
 public:
     explicit WrappedHasSubTitleProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
-    virtual ~WrappedHasSubTitleProperty();
+    virtual ~WrappedHasSubTitleProperty() override;
 
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;

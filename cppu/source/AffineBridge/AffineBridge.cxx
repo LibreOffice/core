@@ -69,7 +69,7 @@ public:
     OuterThread         * m_pOuterThread;
 
     explicit  AffineBridge();
-    virtual  ~AffineBridge();
+    virtual  ~AffineBridge() override;
 
     virtual void  v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) override;
     virtual void  v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) override;

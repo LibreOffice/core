@@ -48,7 +48,7 @@ class UnsafeBridge : public cppu::Enterable
     sal_Int32           m_count;
     oslThreadIdentifier m_threadId;
 
-    virtual  ~UnsafeBridge();
+    virtual  ~UnsafeBridge() override;
 
 public:
     explicit UnsafeBridge();

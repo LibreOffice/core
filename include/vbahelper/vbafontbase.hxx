@@ -79,7 +79,7 @@ public:
         const css::uno::Reference< css::container::XIndexAccess >& xPalette,
         const css::uno::Reference< css::beans::XPropertySet >& xPropertySet,
         bool bFormControl = false ) throw ( css::uno::RuntimeException );
-    virtual ~VbaFontBase();// {}
+    virtual ~VbaFontBase() override;// {}
 
     // Attributes
     virtual css::uno::Any SAL_CALL getSize() throw (css::uno::RuntimeException, std::exception) override;

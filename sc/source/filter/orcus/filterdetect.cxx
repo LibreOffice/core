@@ -27,7 +27,7 @@ class OrcusFormatDetect : public ::cppu::WeakImplHelper<
 {
 public:
     explicit            OrcusFormatDetect();
-    virtual             ~OrcusFormatDetect();
+    virtual             ~OrcusFormatDetect() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw( css::uno::RuntimeException, std::exception ) override;

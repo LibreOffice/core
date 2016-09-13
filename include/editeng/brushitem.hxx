@@ -73,7 +73,7 @@ public:
     SvxBrushItem( const SvxBrushItem& );
     SvxBrushItem( const CntWallpaperItem&, sal_uInt16 nWhich );
 
-    virtual ~SvxBrushItem();
+    virtual ~SvxBrushItem() override;
 
 public:
 

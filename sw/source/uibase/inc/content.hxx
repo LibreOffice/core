@@ -113,7 +113,7 @@ public:
     SwGraphicContent(const SwContentType* pCnt, const OUString& rName, const OUString& rLink, long nYPos)
         : SwContent( pCnt, rName, nYPos ), sLink( rLink )
         {}
-    virtual ~SwGraphicContent();
+    virtual ~SwGraphicContent() override;
 
     const OUString&   GetLink() const {return sLink;}
 };
@@ -125,7 +125,7 @@ public:
     SwTOXBaseContent(const SwContentType* pCnt, const OUString& rName, long nYPos, const SwTOXBase& rBase)
         : SwContent( pCnt, rName, nYPos ), pBase(&rBase)
         {}
-    virtual ~SwTOXBaseContent();
+    virtual ~SwTOXBaseContent() override;
 
     const SwTOXBase* GetTOXBase() const {return pBase;}
 };
@@ -155,7 +155,7 @@ protected:
         static OUString     RemoveNewline(const OUString&);
 public:
         SwContentType(SwWrtShell* pParent, ContentTypeId nType, sal_uInt8 nLevel );
-        virtual ~SwContentType();
+        virtual ~SwContentType() override;
 
         void                Init(bool* pbInvalidateWindow = nullptr);
 

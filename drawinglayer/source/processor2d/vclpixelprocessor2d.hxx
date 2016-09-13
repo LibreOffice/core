@@ -71,7 +71,7 @@ namespace drawinglayer
             VclPixelProcessor2D(
                 const geometry::ViewInformation2D& rViewInformation,
                 OutputDevice& rOutDev);
-            virtual ~VclPixelProcessor2D();
+            virtual ~VclPixelProcessor2D() override;
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

@@ -52,7 +52,7 @@ public:
 
     explicit CEvent();
 
-    virtual ~CEvent();
+    virtual ~CEvent() override;
     virtual OUString SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() throw (css::uno::RuntimeException, std::exception) override;

@@ -29,7 +29,7 @@ public:
         , m_pMemberType(pMemberType)
         , m_pRelativName(nullptr)
     {}
-    virtual ~AstSequence()
+    virtual ~AstSequence() override
     {
         if ( m_pRelativName )
             delete m_pRelativName;

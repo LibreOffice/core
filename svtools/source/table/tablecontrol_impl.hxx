@@ -151,7 +151,7 @@ namespace svt { namespace table
 
     public:
         explicit TableControl_Impl( TableControl& _rAntiImpl );
-        virtual ~TableControl_Impl();
+        virtual ~TableControl_Impl() override;
 
         /** to be called when the anti-impl instance has been resized
         */
@@ -461,7 +461,7 @@ namespace svt { namespace table
 
     public:
         explicit TableFunctionSet(TableControl_Impl* _pTableControl);
-        virtual ~TableFunctionSet();
+        virtual ~TableFunctionSet() override;
 
         virtual void BeginDrag() override;
         virtual void CreateAnchor() override;

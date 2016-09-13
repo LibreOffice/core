@@ -41,7 +41,7 @@ public:
     const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync, bool bFields) override;
     void SetDocStat(const SwDocStat& rStat) override;
     void UpdateDocStat(bool bCompleteAsync, bool bFields) override;
-    virtual ~DocumentStatisticsManager();
+    virtual ~DocumentStatisticsManager() override;
 
 private:
 

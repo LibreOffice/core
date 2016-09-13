@@ -45,7 +45,7 @@ class DNDListenerContainer :    public vcl::unohelper::MutexHelper,
 public:
 
     DNDListenerContainer( sal_Int8 nDefaultActions );
-    virtual ~DNDListenerContainer();
+    virtual ~DNDListenerContainer() override;
 
     sal_uInt32 fireDropEvent(
         const css::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext >& context,

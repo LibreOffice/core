@@ -52,7 +52,7 @@ public:
 class SVX_DLLPUBLIC SdrCaptionEscIsRelItem: public SdrYesNoItem {
 public:
     SdrCaptionEscIsRelItem(bool bRel=true): SdrYesNoItem(SDRATTR_CAPTIONESCISREL,bRel) {}
-    virtual ~SdrCaptionEscIsRelItem();
+    virtual ~SdrCaptionEscIsRelItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
@@ -66,7 +66,7 @@ public:
 class SVX_DLLPUBLIC SdrCaptionEscRelItem: public SfxInt32Item {
 public:
     SdrCaptionEscRelItem(long nEscRel=5000): SfxInt32Item(SDRATTR_CAPTIONESCREL,nEscRel) {}
-    virtual ~SdrCaptionEscRelItem();
+    virtual ~SdrCaptionEscRelItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 

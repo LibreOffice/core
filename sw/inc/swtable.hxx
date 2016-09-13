@@ -129,7 +129,7 @@ public:
 
 
     explicit SwTable();
-    virtual ~SwTable();
+    virtual ~SwTable() override;
 
     // @@@ public copy ctor, but no copy assignment?
     SwTable( const SwTable& rTable );       // no copy of the lines !!
@@ -338,7 +338,7 @@ class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrameFormat.
 public:
 
     SwTableLine( SwTableLineFormat*, sal_uInt16 nBoxes, SwTableBox *pUp );
-    virtual ~SwTableLine();
+    virtual ~SwTableLine() override;
 
           SwTableBoxes &GetTabBoxes() { return m_aBoxes; }
     const SwTableBoxes &GetTabBoxes() const { return m_aBoxes; }
@@ -402,7 +402,7 @@ public:
     SwTableBox( SwTableBoxFormat*, sal_uInt16 nLines, SwTableLine *pUp = nullptr );
     SwTableBox( SwTableBoxFormat*, const SwStartNode&, SwTableLine *pUp = nullptr );
     SwTableBox( SwTableBoxFormat*, const SwNodeIndex&, SwTableLine *pUp = nullptr );
-    virtual ~SwTableBox();
+    virtual ~SwTableBox() override;
 
           SwTableLines &GetTabLines() { return m_aLines; }
     const SwTableLines &GetTabLines() const { return m_aLines; }

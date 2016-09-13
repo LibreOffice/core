@@ -40,7 +40,7 @@ class FastPropertySetInfo : public ::cppu::WeakAggImplHelper1< css::beans::XProp
 {
 public:
     explicit FastPropertySetInfo( const PropertyVector& rProps );
-    virtual ~FastPropertySetInfo();
+    virtual ~FastPropertySetInfo() override;
 
     void addProperties( const PropertyVector& rProps );
 
@@ -62,7 +62,7 @@ class FastPropertySet : public ::cppu::WeakAggImplHelper3<  css::beans::XPropert
 {
 public:
     explicit FastPropertySet( const rtl::Reference< FastPropertySetInfo >& xInfo );
-    virtual ~FastPropertySet();
+    virtual ~FastPropertySet() override;
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (css::uno::RuntimeException, std::exception) override;

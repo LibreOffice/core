@@ -36,7 +36,7 @@ public:
     ToolPanelModule (
         const css::uno::Reference<css::frame::XController>& rxController,
         const OUString& rsRightPaneURL);
-    virtual ~ToolPanelModule();
+    virtual ~ToolPanelModule() override;
 
     virtual void SaveResourceState() override;
     // XConfigurationChangeListener

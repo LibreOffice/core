@@ -69,7 +69,7 @@ class XMLFilterDialogComponent :    public XMLFilterDialogComponentBase,
 {
 public:
     explicit XMLFilterDialogComponent( const Reference< XComponentContext >& rxContext );
-    virtual ~XMLFilterDialogComponent();
+    virtual ~XMLFilterDialogComponent() override;
 
 protected:
     // XInterface

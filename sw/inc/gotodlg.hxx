@@ -30,7 +30,7 @@ class SwGotoPageDlg : public ModalDialog
 public:
     SwGotoPageDlg(vcl::Window *parent = nullptr, SfxBindings* _pBindings = nullptr);
 
-    virtual ~SwGotoPageDlg();
+    virtual ~SwGotoPageDlg() override;
     virtual void dispose() override;
 
     sal_uInt16 GetPageSelection() const{

@@ -223,7 +223,7 @@ public:
     static const FileFormat* getFileFormats() { return aFileFormats; }
 
     explicit ScBootstrapFixture( const OUString& rsBaseString );
-    virtual ~ScBootstrapFixture();
+    virtual ~ScBootstrapFixture() override;
 
     void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
 

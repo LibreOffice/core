@@ -92,7 +92,7 @@ private:
 
 public:
     GlobalEventConfig_Impl( );
-    virtual ~GlobalEventConfig_Impl( );
+    virtual ~GlobalEventConfig_Impl( ) override;
 
     void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 

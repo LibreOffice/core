@@ -53,7 +53,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
-    virtual ~ScXMLSortContext();
+    virtual ~ScXMLSortContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -82,7 +82,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLSortContext* pTempSortContext);
 
-    virtual ~ScXMLSortByContext();
+    virtual ~ScXMLSortByContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

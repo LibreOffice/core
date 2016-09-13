@@ -46,7 +46,7 @@ private:
 
 public:
     ExtrusionBar(SfxViewShell* pViewShell);
-    virtual ~ExtrusionBar();
+    virtual ~ExtrusionBar() override;
 
     static void execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBindings );
     static void getState( SdrView* pSdrView, SfxItemSet& rSet );

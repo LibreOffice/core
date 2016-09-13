@@ -80,7 +80,7 @@ protected:
     DECL_LINK_TYPED( SwitchReadOnlyHandler, Button*, void );
     SAL_DLLPRIVATE void KillDispatcher_Impl();
 
-    virtual                 ~SfxViewFrame();
+    virtual                 ~SfxViewFrame() override;
 
 public:
                             SfxViewFrame( SfxFrame& rFrame, SfxObjectShell *pDoc = nullptr );

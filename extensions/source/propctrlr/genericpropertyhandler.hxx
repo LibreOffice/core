@@ -90,7 +90,7 @@ namespace pcr
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
-        virtual ~GenericPropertyHandler();
+        virtual ~GenericPropertyHandler() override;
 
     protected:
         // XPropertyHandler overridables

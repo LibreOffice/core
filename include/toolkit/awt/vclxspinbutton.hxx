@@ -45,7 +45,7 @@ namespace toolkit
         VCLXSpinButton();
 
     protected:
-        virtual ~VCLXSpinButton( );
+        virtual ~VCLXSpinButton( ) override;
 
         // XInterface
         DECLARE_XINTERFACE()

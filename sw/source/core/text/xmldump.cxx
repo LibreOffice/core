@@ -107,7 +107,7 @@ class XmlPortionDumper:public SwPortionHandler
     {
     }
 
-    virtual ~ XmlPortionDumper(  )
+    virtual ~ XmlPortionDumper(  ) override
     {
     }
 

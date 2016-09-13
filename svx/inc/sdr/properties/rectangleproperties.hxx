@@ -41,7 +41,7 @@ namespace sdr
             RectangleProperties(const RectangleProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~RectangleProperties();
+            virtual ~RectangleProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;

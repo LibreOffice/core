@@ -78,7 +78,7 @@ protected:
 
 public:
     VCLXAccessibleComponent( VCLXWindow* pVCLXWindow );
-    virtual ~VCLXAccessibleComponent();
+    virtual ~VCLXAccessibleComponent() override;
 
     VCLXWindow*    GetVCLXWindow() const;
     VclPtr<vcl::Window> GetWindow() const;

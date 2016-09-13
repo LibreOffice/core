@@ -123,7 +123,7 @@ protected:
 
 public:
                         ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg);
-                        virtual ~ParaWin();
+                        virtual ~ParaWin() override;
         virtual void    dispose() override;
 
         void            SetFunctionDesc(const IFunctionDescription* pFDesc);

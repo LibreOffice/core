@@ -67,7 +67,7 @@ protected:
 
 public:
     SwBaseShell(SwView &rShell);
-    virtual     ~SwBaseShell();
+    virtual     ~SwBaseShell() override;
 
     SFX_DECL_INTERFACE(SW_BASESHELL)
 

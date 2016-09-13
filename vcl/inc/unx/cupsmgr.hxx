@@ -59,7 +59,7 @@ class CUPSManager : public PrinterInfoManager
     bool                                                        m_bPPDThreadRunning;
 
     CUPSManager();
-    virtual ~CUPSManager();
+    virtual ~CUPSManager() override;
 
     virtual void initialize() override;
 

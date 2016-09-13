@@ -36,7 +36,7 @@ public:
     ScreenshotAnnotationDlg(
         vcl::Window* pParent,
         Dialog& rParentDialog);
-    virtual ~ScreenshotAnnotationDlg();
+    virtual ~ScreenshotAnnotationDlg() override;
 };
 
 #endif

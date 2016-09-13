@@ -90,7 +90,7 @@ private:
     ImeStatusWindow(ImeStatusWindow &) = delete;
     void operator =(const ImeStatusWindow&) = delete;
 
-    virtual ~ImeStatusWindow();
+    virtual ~ImeStatusWindow() override;
 
     virtual void SAL_CALL
     disposing(css::lang::EventObject const & rSource)

@@ -47,7 +47,7 @@ public:
     , pFolder ( pNewFolder )
     {
     }
-    virtual ~ContentInfo ()
+    virtual ~ContentInfo () override
     {
         if ( bFolder )
             pFolder->clearParent();

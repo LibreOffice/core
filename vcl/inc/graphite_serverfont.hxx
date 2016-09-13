@@ -38,7 +38,7 @@ public:
     GraphiteLayoutImpl(const gr_face * pFace,
                        ServerFont & rServerFont) throw()
     : GraphiteLayout(pFace), mrServerFont(rServerFont) {};
-    virtual ~GraphiteLayoutImpl() throw() {};
+    virtual ~GraphiteLayoutImpl() throw() override {};
     virtual sal_GlyphId getKashidaGlyph(int & width) override;
 private:
     ServerFont & mrServerFont;
@@ -99,7 +99,7 @@ public:
         virtual void    DropGlyph( int nStart ) override { maImpl.DropGlyph(nStart); };
         virtual void    Simplify( bool bIsBase ) override { maImpl.Simplify(bIsBase); };
 
-        virtual ~GraphiteServerFontLayout() throw();
+        virtual ~GraphiteServerFontLayout() throw() override;
 
         static bool IsGraphiteEnabledFont(ServerFont& rServerFont);
 };

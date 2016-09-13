@@ -98,7 +98,7 @@ namespace svt { namespace table
         void dispose();
 
     protected:
-        virtual ~ColumnChangeMultiplexer();
+        virtual ~ColumnChangeMultiplexer() override;
 
         // XGridColumnListener
         virtual void SAL_CALL columnChanged( const GridColumnEvent& i_event ) throw (RuntimeException, std::exception) override;

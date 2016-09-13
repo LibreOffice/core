@@ -114,7 +114,7 @@ namespace canvas
         Values getValues() const;
 
     protected:
-        virtual ~ParametricPolyPolygon(); // we're a ref-counted UNO class. _We_ destroy ourselves.
+        virtual ~ParametricPolyPolygon() override; // we're a ref-counted UNO class. _We_ destroy ourselves.
         ParametricPolyPolygon(const ParametricPolyPolygon&) = delete;
         ParametricPolyPolygon& operator=( const ParametricPolyPolygon& ) = delete;
 

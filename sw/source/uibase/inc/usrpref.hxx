@@ -38,7 +38,7 @@ private:
 
 public:
     SwContentViewConfig(bool bWeb, SwMasterUsrPref& rParent);
-    virtual ~SwContentViewConfig();
+    virtual ~SwContentViewConfig() override;
 
     // utl::ConfigItem
     virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
@@ -59,7 +59,7 @@ private:
 
 public:
     SwLayoutViewConfig(bool bWeb, SwMasterUsrPref& rParent);
-    virtual ~SwLayoutViewConfig();
+    virtual ~SwLayoutViewConfig() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
@@ -77,7 +77,7 @@ private:
 
 public:
     SwGridConfig(bool bWeb, SwMasterUsrPref& rParent);
-    virtual ~SwGridConfig();
+    virtual ~SwGridConfig() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
@@ -95,7 +95,7 @@ private:
 
 public:
     SwCursorConfig(SwMasterUsrPref& rParent);
-    virtual ~SwCursorConfig();
+    virtual ~SwCursorConfig() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
@@ -112,7 +112,7 @@ private:
 
 public:
     SwWebColorConfig(SwMasterUsrPref& rParent);
-    virtual ~SwWebColorConfig();
+    virtual ~SwWebColorConfig() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();

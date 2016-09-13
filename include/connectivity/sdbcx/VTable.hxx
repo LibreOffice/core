@@ -94,7 +94,7 @@ namespace connectivity
                     const OUString& SchemaName  = OUString(),
                     const OUString& CatalogName = OUString());
 
-            virtual ~OTable();
+            virtual ~OTable() override;
 
             DECLARE_SERVICE_INFO();
             //XInterface

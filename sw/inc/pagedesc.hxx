@@ -274,7 +274,7 @@ public:
         { return m_StyleName < pd.m_StyleName; }
 
     SwPageDesc( const SwPageDesc& );
-    virtual ~SwPageDesc();
+    virtual ~SwPageDesc() override;
 };
 
 namespace std {

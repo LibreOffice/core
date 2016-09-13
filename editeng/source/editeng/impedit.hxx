@@ -197,7 +197,7 @@ private:
 
 public:
                 IdleFormattter();
-                virtual ~IdleFormattter();
+                virtual ~IdleFormattter() override;
 
     void        DoIdleFormat( EditView* pV );
     void        ForceTimeout();
@@ -273,7 +273,7 @@ protected:
 
 public:
                     ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindow );
-                    virtual ~ImpEditView();
+                    virtual ~ImpEditView() override;
 
     EditView*       GetEditViewPtr() { return pEditView; }
 
@@ -700,7 +700,7 @@ protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 public:
-                            virtual ~ImpEditEngine();
+                            virtual ~ImpEditEngine() override;
                             ImpEditEngine(const ImpEditEngine&) = delete;
     ImpEditEngine&          operator=(const ImpEditEngine&) = delete;
 

@@ -78,7 +78,7 @@ namespace dbaui
         DECL_LINK_TYPED(OnInvalidateTimer, Timer*, void);
     public:
         explicit OSelectionBrowseBox( vcl::Window* pParent );
-                                    virtual ~OSelectionBrowseBox();
+                                    virtual ~OSelectionBrowseBox() override;
         virtual void                dispose() override;
 
         void                        initialize();

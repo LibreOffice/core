@@ -93,7 +93,7 @@ public:
                                 ScImportAsciiDlg(
                                     vcl::Window* pParent, const OUString& aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall );
-                                virtual ~ScImportAsciiDlg();
+                                virtual ~ScImportAsciiDlg() override;
     virtual void                dispose() override;
 
     void                        GetOptions( ScAsciiOptions& rOpt );

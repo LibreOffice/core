@@ -87,7 +87,7 @@ namespace svt
 
     protected:
         OGenericUnoDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
-        virtual ~OGenericUnoDialog();
+        virtual ~OGenericUnoDialog() override;
 
     public:
         // UNO

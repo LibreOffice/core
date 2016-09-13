@@ -45,7 +45,7 @@ class SvpSalTimer : public SalTimer
     SvpSalInstance* m_pInstance;
 public:
     SvpSalTimer( SvpSalInstance* pInstance ) : m_pInstance( pInstance ) {}
-    virtual ~SvpSalTimer();
+    virtual ~SvpSalTimer() override;
 
     // override all pure virtual methods
     virtual void Start( sal_uLong nMS ) override;
@@ -90,7 +90,7 @@ public:
     static SvpSalInstance*  s_pDefaultInstance;
 
     SvpSalInstance( SalYieldMutex *pMutex );
-    virtual ~SvpSalInstance();
+    virtual ~SvpSalInstance() override;
 
     void                    CloseWakeupPipe(bool log);
     void                    CreateWakeupPipe(bool log);

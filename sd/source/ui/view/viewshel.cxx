@@ -101,7 +101,7 @@ class ViewShellObjectBarFactory
 {
 public:
     explicit ViewShellObjectBarFactory (::sd::ViewShell& rViewShell);
-    virtual ~ViewShellObjectBarFactory();
+    virtual ~ViewShellObjectBarFactory() override;
     virtual SfxShell* CreateShell (
         ::sd::ShellId nId,
         vcl::Window* pParentWindow,

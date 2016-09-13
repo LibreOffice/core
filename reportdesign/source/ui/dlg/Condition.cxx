@@ -100,7 +100,7 @@ class OColorPopup : public FloatingWindow
     sal_uInt16             m_nSlotId;
 public:
     OColorPopup(vcl::Window* _pParent,Condition* _pCondition);
-    virtual ~OColorPopup();
+    virtual ~OColorPopup() override;
     virtual void dispose() override;
     VclPtr<ValueSet>        m_aColorSet;
 

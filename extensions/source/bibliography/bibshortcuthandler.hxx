@@ -56,7 +56,7 @@ class BibWindow : public vcl::Window, public BibShortCutHandler
 {
 public:
                             BibWindow( vcl::Window* pParent,WinBits nStyle = WB_3DLOOK);
-    virtual                 ~BibWindow();
+    virtual                 ~BibWindow() override;
 };
 
 class BibSplitWindow : public SplitWindow, public BibShortCutHandler

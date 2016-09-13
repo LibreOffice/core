@@ -55,7 +55,7 @@ private:
 public:
     ImpSWFDialog( vcl::Window* pParent,
                   css::uno::Sequence< css::beans::PropertyValue >& rFilterData );
-    virtual ~ImpSWFDialog();
+    virtual ~ImpSWFDialog() override;
     virtual void dispose() override;
 
     css::uno::Sequence< css::beans::PropertyValue > GetFilterData();

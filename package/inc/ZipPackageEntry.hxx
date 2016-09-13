@@ -57,7 +57,7 @@ protected:
 public:
     ZipEntry aEntry;
     ZipPackageEntry();
-    virtual ~ZipPackageEntry();
+    virtual ~ZipPackageEntry() override;
 
     const OUString& GetMediaType () const { return msMediaType; }
     void SetMediaType ( const OUString & sNewType) { msMediaType = sNewType; }

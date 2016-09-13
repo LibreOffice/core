@@ -44,7 +44,7 @@ public:
         const css::uno::Reference<css::frame::XController>& rxController,
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
 
-    virtual ~AccessibleOutlineView();
+    virtual ~AccessibleOutlineView() override;
 
     /** Complete the initialization begun in the constructor.
     */

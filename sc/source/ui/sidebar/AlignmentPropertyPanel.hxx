@@ -65,7 +65,7 @@ public:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-    virtual ~AlignmentPropertyPanel();
+    virtual ~AlignmentPropertyPanel() override;
     virtual void dispose() override;
 
 private:

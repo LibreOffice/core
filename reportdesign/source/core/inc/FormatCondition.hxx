@@ -73,7 +73,7 @@ namespace reportdesign
             l.notify();
         }
     protected:
-        virtual ~OFormatCondition();
+        virtual ~OFormatCondition() override;
     public:
         explicit OFormatCondition(css::uno::Reference< css::uno::XComponentContext > const & _xContext
             );

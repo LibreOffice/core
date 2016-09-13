@@ -55,7 +55,7 @@ class OOXMLDocPropHandler : public ::cppu::WeakImplHelper< css::xml::sax::XFastD
 public:
     explicit            OOXMLDocPropHandler( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::document::XDocumentProperties >& rDocProp );
 
-    virtual             ~OOXMLDocPropHandler();
+    virtual             ~OOXMLDocPropHandler() override;
 
     void InitNew();
     void AddCustomProperty( const css::uno::Any& aAny );

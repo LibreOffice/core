@@ -53,7 +53,7 @@ public:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-    virtual ~MediaPlaybackPanel();
+    virtual ~MediaPlaybackPanel() override;
     virtual void dispose() override;
 
 protected:

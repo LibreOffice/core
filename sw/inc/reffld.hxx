@@ -99,7 +99,7 @@ public:
     SwGetRefField( SwGetRefFieldType*, const OUString& rSetRef,
                     sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFormat );
 
-    virtual ~SwGetRefField();
+    virtual ~SwGetRefField() override;
 
     virtual OUString GetFieldName() const override;
 

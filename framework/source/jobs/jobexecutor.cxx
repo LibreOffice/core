@@ -84,7 +84,7 @@ private:
 public:
 
     explicit JobExecutor(const css::uno::Reference< css::uno::XComponentContext >& xContext);
-    virtual ~JobExecutor();
+    virtual ~JobExecutor() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

@@ -157,7 +157,7 @@ public:
 
     ScAddress       aPos;
 
-                    virtual ~ScFormulaCell();
+                    virtual ~ScFormulaCell() override;
 
     ScFormulaCell* Clone() const;
     ScFormulaCell* Clone( const ScAddress& rPos ) const;

@@ -36,7 +36,7 @@ protected:
 public:
     //ZipPackageFolderEnumeration (unordered_map < OUString, css::uno::Reference < css::container::XNamed >, hashFunc, eqFunc > &rInput);
     ZipPackageFolderEnumeration (ContentHash &rInput);
-    virtual ~ZipPackageFolderEnumeration();
+    virtual ~ZipPackageFolderEnumeration() override;
 
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  )

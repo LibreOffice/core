@@ -60,7 +60,7 @@ protected:
         throw (css::uno::RuntimeException, css::beans::UnknownPropertyException, css::lang::WrappedTargetException, std::exception) override;
 public:
     explicit SmModel( SfxObjectShell *pObjSh = nullptr );
-    virtual ~SmModel() throw ();
+    virtual ~SmModel() throw () override;
 
     //XInterface
     virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;

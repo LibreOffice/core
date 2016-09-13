@@ -118,7 +118,7 @@ public:
                 static SfxPoolItem* CreateDefault();
                 ScTpViewItem( sal_uInt16 nWhich, const ScViewOptions& rOpt );
                 ScTpViewItem( const ScTpViewItem&  rItem );
-                virtual ~ScTpViewItem();
+                virtual ~ScTpViewItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

@@ -59,7 +59,7 @@ class SwLinguServiceEventListener :
 
 public:
     SwLinguServiceEventListener();
-    virtual ~SwLinguServiceEventListener();
+    virtual ~SwLinguServiceEventListener() override;
 
     /// XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& rEventObj ) throw(css::uno::RuntimeException, std::exception) override;

@@ -38,7 +38,7 @@ private:
 
 public:
                     EditDataObject();
-                    virtual ~EditDataObject();
+                    virtual ~EditDataObject() override;
 
     SvMemoryStream& GetStream() { return maBinData; }
     SvMemoryStream& GetRTFStream() { return maRTFData; }

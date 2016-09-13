@@ -37,7 +37,7 @@ public:
         macros.
     */
     ImpressViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
-    virtual ~ImpressViewShellBase();
+    virtual ~ImpressViewShellBase() override;
 
     /** Callback function for general slot calls.
     */

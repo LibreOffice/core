@@ -203,7 +203,7 @@ public:
         get(m_pCCED, "cc");
         get(m_pBCCED, "bcc");
     }
-    virtual ~SwCopyToDialog() { disposeOnce(); }
+    virtual ~SwCopyToDialog() override { disposeOnce(); }
     virtual void dispose() override
     {
         m_pCCED.clear();

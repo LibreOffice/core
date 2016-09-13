@@ -105,7 +105,7 @@ public:
     /** If there still are managed children these are disposed and
         released.
     */
-    virtual ~ChildrenManagerImpl();
+    virtual ~ChildrenManagerImpl() override;
 
     /** Do that part of the initialization that you can not or should not do
         in the constructor like registering at broadcasters.

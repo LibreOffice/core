@@ -334,7 +334,7 @@ class DXFLWPolyLineEntity : public DXFBasicEntity
         DXFVector*  pP;
 
         DXFLWPolyLineEntity();
-        virtual ~DXFLWPolyLineEntity();
+        virtual ~DXFLWPolyLineEntity() override;
 
     protected:
 
@@ -358,7 +358,7 @@ struct DXFEdgeTypeLine : public DXFEdgeType
     DXFVector aStartPoint;              // 10,20
     DXFVector aEndPoint;                // 11,21
     DXFEdgeTypeLine();
-    virtual ~DXFEdgeTypeLine();
+    virtual ~DXFEdgeTypeLine() override;
     virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 struct DXFEdgeTypeCircularArc : public DXFEdgeType
@@ -369,7 +369,7 @@ struct DXFEdgeTypeCircularArc : public DXFEdgeType
     double    fEndAngle;                // 51
     sal_Int32 nIsCounterClockwiseFlag;  // 73
     DXFEdgeTypeCircularArc();
-    virtual ~DXFEdgeTypeCircularArc();
+    virtual ~DXFEdgeTypeCircularArc() override;
     virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 struct DXFEdgeTypeEllipticalArc : public DXFEdgeType
@@ -382,7 +382,7 @@ struct DXFEdgeTypeEllipticalArc : public DXFEdgeType
     sal_Int32 nIsCounterClockwiseFlag;  // 73
 
     DXFEdgeTypeEllipticalArc();
-    virtual ~DXFEdgeTypeEllipticalArc();
+    virtual ~DXFEdgeTypeEllipticalArc() override;
     virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 struct DXFEdgeTypeSpline : public DXFEdgeType
@@ -394,7 +394,7 @@ struct DXFEdgeTypeSpline : public DXFEdgeType
     sal_Int32 nControlCount;            // 76
 
     DXFEdgeTypeSpline();
-    virtual ~DXFEdgeTypeSpline();
+    virtual ~DXFEdgeTypeSpline() override;
     virtual bool EvaluateGroup( DXFGroupReader & rDGR ) override;
 };
 
@@ -443,7 +443,7 @@ class DXFHatchEntity : public DXFBasicEntity
         DXFBoundaryPathData* pBoundaryPathData;
 
         DXFHatchEntity();
-        virtual ~DXFHatchEntity();
+        virtual ~DXFHatchEntity() override;
 
     protected:
 

@@ -60,7 +60,7 @@ namespace svt
     {
         public:
             PopupMenuControllerBase( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~PopupMenuControllerBase();
+            virtual ~PopupMenuControllerBase() override;
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override = 0;

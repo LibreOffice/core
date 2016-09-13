@@ -39,7 +39,7 @@ namespace connectivity
         {
         protected:
             ::osl::Mutex                m_aMutex;       // mutex is need to control member access
-            virtual ~MozillaBootstrap();
+            virtual ~MozillaBootstrap() override;
         protected:
             ProfileAccess * m_ProfileAccess;
         public:

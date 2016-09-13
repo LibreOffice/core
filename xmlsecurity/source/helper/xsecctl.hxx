@@ -385,7 +385,7 @@ private:
 
 public:
     explicit XSecController(const css::uno::Reference<css::uno::XComponentContext>& rxCtx);
-    virtual ~XSecController();
+    virtual ~XSecController() override;
 
     sal_Int32 getNewSecurityId(  );
 

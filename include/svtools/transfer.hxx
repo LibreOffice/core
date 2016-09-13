@@ -148,7 +148,7 @@ private:
     public:
 
                               TerminateListener( TransferableHelper& rDropTargetHelper );
-        virtual               ~TerminateListener();
+        virtual               ~TerminateListener() override;
     };
 
     friend class TransferableHelper::TerminateListener;
@@ -212,7 +212,7 @@ private:
 
 protected:
 
-    virtual             ~TransferableHelper();
+    virtual             ~TransferableHelper() override;
 
     void                AddFormat( SotClipboardFormatId nFormat );
     void                AddFormat( const css::datatransfer::DataFlavor& rFlavor );
@@ -387,7 +387,7 @@ private:
     public:
 
         DragGestureListener( DragSourceHelper& rDragSourceHelper );
-        virtual ~DragGestureListener();
+        virtual ~DragGestureListener() override;
     };
 
     friend class DragSourceHelper::DragGestureListener;
@@ -438,7 +438,7 @@ private:
     public:
 
         DropTargetListener( DropTargetHelper& rDropTargetHelper );
-        virtual ~DropTargetListener();
+        virtual ~DropTargetListener() override;
     };
 
     friend class DropTargetHelper::DropTargetListener;
@@ -494,7 +494,7 @@ protected:
 public:
 
                         TransferDataContainer();
-                        virtual ~TransferDataContainer();
+                        virtual ~TransferDataContainer() override;
 
     void                CopyINetBookmark( const INetBookmark& rBkmk );
     void                CopyINetImage( const INetImage& rINtImg );

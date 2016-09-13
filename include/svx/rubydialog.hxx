@@ -42,7 +42,7 @@ protected:
 
 public:
     RubyPreview(vcl::Window *pParent);
-    virtual ~RubyPreview();
+    virtual ~RubyPreview() override;
     virtual void dispose() override;
     void setRubyDialog(SvxRubyDialog* pParentDlg)
     {
@@ -153,7 +153,7 @@ protected:
 public:
                         SvxRubyDialog(SfxBindings *pBindings, SfxChildWindow *pCW,
                                     vcl::Window* pParent);
-    virtual             ~SvxRubyDialog();
+    virtual             ~SvxRubyDialog() override;
     virtual void        dispose() override;
 
     virtual void        Activate() override;

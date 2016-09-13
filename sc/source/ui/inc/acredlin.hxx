@@ -42,7 +42,7 @@ class ScRedlinData : public RedlinData
 {
 public:
                     ScRedlinData();
-                    virtual ~ScRedlinData();
+                    virtual ~ScRedlinData() override;
     SCTAB           nTable;
     SCCOL           nCol;
     SCROW           nRow;
@@ -162,7 +162,7 @@ public:
                     ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                ScViewData*      ptrViewData);
 
-                    virtual ~ScAcceptChgDlg();
+                    virtual ~ScAcceptChgDlg() override;
     virtual void    dispose() override;
 
     void            ReInit(ScViewData* ptrViewData);

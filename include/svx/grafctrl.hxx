@@ -30,7 +30,7 @@ class SvxGrafToolBoxControl : public SfxToolBoxControl
 {
 public:
     SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxGrafToolBoxControl();
+    virtual ~SvxGrafToolBoxControl() override;
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
@@ -98,7 +98,7 @@ class SVX_DLLPUBLIC SvxGrafModeToolBoxControl : public SfxToolBoxControl, public
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
                         SvxGrafModeToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-                        virtual ~SvxGrafModeToolBoxControl();
+                        virtual ~SvxGrafModeToolBoxControl() override;
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;

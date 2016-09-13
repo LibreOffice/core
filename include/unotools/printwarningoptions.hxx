@@ -45,7 +45,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtPrintWarningOptions : public utl::de
 {
     public:
          SvtPrintWarningOptions();
-        virtual ~SvtPrintWarningOptions();
+        virtual ~SvtPrintWarningOptions() override;
 
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Print/Warning..."

@@ -35,7 +35,7 @@ class DrawCommandDispatch: public FeatureCommandDispatchBase
 {
 public:
     DrawCommandDispatch( const css::uno::Reference< css::uno::XComponentContext >& rxContext, ChartController* pController );
-    virtual ~DrawCommandDispatch();
+    virtual ~DrawCommandDispatch() override;
 
     virtual bool isFeatureSupported( const OUString& rCommandURL ) override;
 

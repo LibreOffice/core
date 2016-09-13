@@ -44,7 +44,7 @@ public:
     SdUnoDrawView (
         DrawViewShell& rViewShell,
         View& rView) throw();
-    virtual ~SdUnoDrawView() throw();
+    virtual ~SdUnoDrawView() throw() override;
 
     // XSelectionSupplier
 

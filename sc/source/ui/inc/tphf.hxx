@@ -27,7 +27,7 @@ class ScStyleDlg;
 class ScHFPage : public SvxHFPage
 {
 public:
-    virtual         ~ScHFPage();
+    virtual         ~ScHFPage() override;
     virtual void    dispose() override;
 
     virtual void    Reset( const SfxItemSet* rSet ) override;

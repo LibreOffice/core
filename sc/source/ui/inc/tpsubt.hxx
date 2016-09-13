@@ -40,7 +40,7 @@ protected:
                        const SfxItemSet& rArgSet );
 
 public:
-    virtual ~ScTpSubTotalGroup();
+    virtual ~ScTpSubTotalGroup() override;
     virtual void dispose() override;
 
     bool            DoReset         ( sal_uInt16            nGroupNo,
@@ -84,7 +84,7 @@ protected:
                         const SfxItemSet&    rArgSet );
 
 public:
-    virtual ~ScTpSubTotalGroup1();
+    virtual ~ScTpSubTotalGroup1() override;
 
     static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
             const SfxItemSet*     rArgSet );
@@ -100,7 +100,7 @@ protected:
                         const SfxItemSet&    rArgSet );
 
 public:
-    virtual ~ScTpSubTotalGroup2();
+    virtual ~ScTpSubTotalGroup2() override;
 
     static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
             const SfxItemSet*     rArgSet );
@@ -116,7 +116,7 @@ protected:
                         const SfxItemSet&    rArgSet );
 
 public:
-    virtual ~ScTpSubTotalGroup3();
+    virtual ~ScTpSubTotalGroup3() override;
 
     static  VclPtr<SfxTabPage> Create      ( vcl::Window*               pParent,
             const SfxItemSet*     rArgSet );
@@ -132,7 +132,7 @@ protected:
                          const SfxItemSet&  rArgSet );
 
 public:
-    virtual ~ScTpSubTotalOptions();
+    virtual ~ScTpSubTotalOptions() override;
     virtual void        dispose() override;
     static VclPtr<SfxTabPage>  Create      ( vcl::Window*               pParent,
             const SfxItemSet*     rArgSet );

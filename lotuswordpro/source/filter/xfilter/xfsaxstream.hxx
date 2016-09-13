@@ -83,7 +83,7 @@ class XFSaxStream : public IXFStream
 public:
     explicit XFSaxStream(css::uno::Reference<css::xml::sax::XDocumentHandler>& xHandler);
 
-    virtual ~XFSaxStream();
+    virtual ~XFSaxStream() override;
 
 public:
     /**

@@ -49,7 +49,7 @@ protected:
                 SwGrfFormatColl *pGrColl, SwAttrSet* pAutoAttr = nullptr );
 
 public:
-    virtual ~SwNoTextNode();
+    virtual ~SwNoTextNode() override;
 
     virtual SwContentFrame *MakeFrame( SwFrame* ) override;
 

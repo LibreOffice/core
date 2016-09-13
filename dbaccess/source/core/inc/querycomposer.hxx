@@ -55,7 +55,7 @@ namespace dbaccess
 
     protected:
         virtual void SAL_CALL disposing() override;
-        virtual ~OQueryComposer();
+        virtual ~OQueryComposer() override;
     public:
 
         OQueryComposer( const css::uno::Reference< css::sdbc::XConnection>& _xConnection );

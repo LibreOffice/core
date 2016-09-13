@@ -50,7 +50,7 @@ class ToggleButtonToolbarController : public ComplexToolbarController
                                        sal_uInt16 nID,
                                        Style eStyle,
                                        const OUString& aCommand );
-        virtual ~ToggleButtonToolbarController();
+        virtual ~ToggleButtonToolbarController() override;
 
         // XComponent
         virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;

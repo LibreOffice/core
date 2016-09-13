@@ -70,7 +70,7 @@ private:
 
 public:
     explicit EncryptorImpl(const css::uno::Reference< css::uno::XComponentContext > & xContext);
-    virtual ~EncryptorImpl();
+    virtual ~EncryptorImpl() override;
 
     /* XEncryptionResultBroadcaster */
     virtual void SAL_CALL addEncryptionResultListener(

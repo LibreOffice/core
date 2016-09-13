@@ -32,7 +32,7 @@ namespace framework
     {
         public:
             GraphicNameAccess();
-            virtual ~GraphicNameAccess();
+            virtual ~GraphicNameAccess() override;
 
             void addElement( const OUString& rName, const css::uno::Reference< css::graphic::XGraphic >& rElement );
 

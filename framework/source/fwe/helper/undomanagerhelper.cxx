@@ -66,7 +66,7 @@ namespace framework
         explicit            UndoActionWrapper(
                                 Reference< XUndoAction > const& i_undoAction
                             );
-        virtual             ~UndoActionWrapper();
+        virtual             ~UndoActionWrapper() override;
 
         virtual OUString    GetComment() const override;
         virtual void        Undo() override;
@@ -170,7 +170,7 @@ namespace framework
         }
 
     protected:
-        virtual ~UndoManagerRequest()
+        virtual ~UndoManagerRequest() override
         {
         }
 

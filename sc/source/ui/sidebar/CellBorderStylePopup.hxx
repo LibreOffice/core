@@ -31,7 +31,7 @@ public:
     CellBorderStylePopup(
         vcl::Window* pParent,
         const ::std::function<svx::sidebar::PopupControl*(svx::sidebar::PopupContainer*)>& rControlCreator);
-    virtual ~CellBorderStylePopup();
+    virtual ~CellBorderStylePopup() override;
 };
 
 } } // end of namespace sc::sidebar

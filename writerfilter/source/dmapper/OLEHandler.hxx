@@ -78,7 +78,7 @@ class OLEHandler : public LoggedProperties
 
 public:
     OLEHandler(DomainMapper& rDomainMapper);
-    virtual ~OLEHandler();
+    virtual ~OLEHandler() override;
 
     const css::uno::Reference<css::drawing::XShape>& getShape() { return m_xShape; };
 

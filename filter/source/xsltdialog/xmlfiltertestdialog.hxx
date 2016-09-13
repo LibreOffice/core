@@ -36,7 +36,7 @@ class XMLFilterTestDialog : public ModalDialog
 public:
     XMLFilterTestDialog(vcl::Window* pParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext);
-    virtual ~XMLFilterTestDialog();
+    virtual ~XMLFilterTestDialog() override;
     virtual void dispose() override;
 
     void test( const filter_info_impl& rFilterInfo );

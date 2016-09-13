@@ -57,7 +57,7 @@ private:
 
 public:
     ScEditShell(EditView* pView, ScViewData* pData);
-    virtual ~ScEditShell();
+    virtual ~ScEditShell() override;
 
     void    SetEditView(EditView* pView);
     EditView* GetEditView() {return pEditView;}

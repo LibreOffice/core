@@ -41,7 +41,7 @@ class ChartTypeManager :
 public:
     explicit ChartTypeManager(
         css::uno::Reference< css::uno::XComponentContext > const & xContext );
-    virtual ~ChartTypeManager();
+    virtual ~ChartTypeManager() override;
 
     virtual OUString SAL_CALL
         getImplementationName()

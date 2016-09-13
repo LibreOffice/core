@@ -70,7 +70,7 @@ public:
                             XclExpObjectManager& rObjMgr,
                             SvStream& rStrm,
                             const XclEscherEx* pParent = nullptr );
-    virtual             ~XclEscherEx();
+    virtual             ~XclEscherEx() override;
 
     /** Called by MSODRAWING record constructors to initialize the DFF stream
         fragment they will own. returns the DFF fragment identifier. */

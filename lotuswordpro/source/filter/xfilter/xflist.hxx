@@ -74,7 +74,7 @@ class   XFList : public XFContentContainer
 public:
     XFList();
 
-    virtual ~XFList();
+    virtual ~XFList() override;
 
 public:
     /**

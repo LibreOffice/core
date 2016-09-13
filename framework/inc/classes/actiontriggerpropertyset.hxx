@@ -47,7 +47,7 @@ class ActionTriggerPropertySet :  private cppu::BaseMutex,
 {
     public:
         FWE_DLLPUBLIC ActionTriggerPropertySet();
-        FWE_DLLPUBLIC virtual ~ActionTriggerPropertySet();
+        FWE_DLLPUBLIC virtual ~ActionTriggerPropertySet() override;
 
         // XInterface
         virtual FWE_DLLPUBLIC css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )

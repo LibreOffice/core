@@ -59,7 +59,7 @@ namespace unotools
 
         SAL_DLLPRIVATE void setComponentInfo( sal_uInt32 redShift, sal_uInt32 greenShift, sal_uInt32 blueShift );
 
-        virtual ~VclCanvasBitmap();
+        virtual ~VclCanvasBitmap() override;
 
     public:
         // XBitmap

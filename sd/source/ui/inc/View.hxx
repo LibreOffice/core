@@ -81,7 +81,7 @@ public:
         SdDrawDocument& rDrawDoc,
         OutputDevice* pOutDev,
         ViewShell* pViewSh=nullptr);
-    virtual ~View();
+    virtual ~View() override;
 
     void                    CompleteRedraw( OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 

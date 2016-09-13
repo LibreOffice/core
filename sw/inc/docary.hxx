@@ -188,7 +188,7 @@ public:
 
     SwFrameFormats();
     // frees all SwFrameFormat!
-    virtual ~SwFrameFormats();
+    virtual ~SwFrameFormats() override;
 
     void clear()        { return m_Array.clear(); }
     bool empty()  const { return m_Array.empty(); }

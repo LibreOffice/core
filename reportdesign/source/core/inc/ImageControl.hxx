@@ -75,7 +75,7 @@ namespace reportdesign
             l.notify();
         }
     protected:
-        virtual ~OImageControl();
+        virtual ~OImageControl() override;
     public:
         explicit OImageControl(css::uno::Reference< css::uno::XComponentContext > const & _xContext);
         explicit OImageControl(css::uno::Reference< css::uno::XComponentContext > const & _xContext

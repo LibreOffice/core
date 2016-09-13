@@ -34,7 +34,7 @@ namespace ucb { namespace ucp { namespace ext
     {
     public:
         explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-        virtual ~ContentProvider();
+        virtual ~ContentProvider() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;

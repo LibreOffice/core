@@ -70,7 +70,7 @@ private:
     StylePresetsPanel(vcl::Window* pParent,
                    const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    virtual ~StylePresetsPanel();
+    virtual ~StylePresetsPanel() override;
     virtual void dispose() override;
 
     VclPtr<ValueSet> mpValueSet;

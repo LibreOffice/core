@@ -34,7 +34,7 @@ private:
 
 public:
     SwVbaHeadersFooters( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps, bool isHeader );
-    virtual ~SwVbaHeadersFooters() {}
+    virtual ~SwVbaHeadersFooters() override {}
 
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException) override;
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException) override;

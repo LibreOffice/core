@@ -45,7 +45,7 @@ class ComplexToolbarController : public svt::ToolboxController
                                   ToolBox* pToolBar,
                                   sal_uInt16       nID,
                                   const OUString& aCommand );
-        virtual ~ComplexToolbarController();
+        virtual ~ComplexToolbarController() override;
 
         // XComponent
         virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;

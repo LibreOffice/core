@@ -68,7 +68,7 @@ public:
                             XmlFilterBase& rFilter,
                             const OUString& rFragmentPath,
                             bool bEnableTrimSpace = true );
-    virtual             ~FragmentHandler2();
+    virtual             ~FragmentHandler2() override;
 
     // resolve ambiguity from base classes
     virtual void SAL_CALL acquire() throw() override { FragmentHandler::acquire(); }

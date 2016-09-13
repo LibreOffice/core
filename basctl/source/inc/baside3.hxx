@@ -126,7 +126,7 @@ class DialogWindowLayout : public Layout
 {
 public:
     DialogWindowLayout (vcl::Window* pParent, ObjectCatalog&);
-    virtual ~DialogWindowLayout();
+    virtual ~DialogWindowLayout() override;
     virtual void dispose() override;
 public:
     void ShowPropertyBrowser ();

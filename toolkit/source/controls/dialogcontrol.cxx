@@ -149,7 +149,7 @@ protected:
 public:
     explicit UnoControlDialogModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     UnoControlDialogModel( const UnoControlDialogModel& rModel );
-    virtual ~UnoControlDialogModel();
+    virtual ~UnoControlDialogModel() override;
 
     UnoControlModel*    Clone() const override;
     // css::beans::XMultiPropertySet

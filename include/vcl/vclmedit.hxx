@@ -60,7 +60,7 @@ protected:
 public:
                     VclMultiLineEdit( vcl::Window* pParent,
                                       WinBits nWinStyle = WB_LEFT | WB_BORDER );
-    virtual         ~VclMultiLineEdit();
+    virtual         ~VclMultiLineEdit() override;
     virtual void    dispose() override;
 
     void            SelectionChanged();

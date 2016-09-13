@@ -37,7 +37,7 @@ class DataSequenceConverter : public ConverterBase< DataSequenceModel >
 {
 public:
     explicit            DataSequenceConverter( const ConverterRoot& rParent, DataSequenceModel& rModel );
-    virtual             ~DataSequenceConverter();
+    virtual             ~DataSequenceConverter() override;
 
     /** Creates a data sequence object from the contained formula link. */
     css::uno::Reference< css::chart2::data::XDataSequence >
@@ -51,7 +51,7 @@ class DataSourceConverter : public ConverterBase< DataSourceModel >
 {
 public:
     explicit            DataSourceConverter( const ConverterRoot& rParent, DataSourceModel& rModel );
-    virtual             ~DataSourceConverter();
+    virtual             ~DataSourceConverter() override;
 
     /** Creates a data sequence object from the contained series data. */
     css::uno::Reference< css::chart2::data::XDataSequence >

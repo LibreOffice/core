@@ -38,7 +38,7 @@ public:
         const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
         const css::awt::Size* pRefSize = nullptr );
 
-    virtual ~TitleItemConverter();
+    virtual ~TitleItemConverter() override;
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const override;
     virtual bool ApplyItemSet( const SfxItemSet & rItemSet ) override;

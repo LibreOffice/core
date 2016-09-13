@@ -41,7 +41,7 @@ namespace svt { namespace table
 
     public:
         explicit TableDataWindow( TableControl_Impl& _rTableControl );
-        virtual ~TableDataWindow();
+        virtual ~TableDataWindow() override;
         virtual void dispose() override;
 
         inline void SetSelectHdl(const Link<LinkParamNone*,void>& rLink)

@@ -86,7 +86,7 @@ class UpdateCheckConfig : public ::cppu::WeakImplHelper<
                        const css::uno::Reference< css::container::XNameContainer >& xIgnoredUpdates,
                        const ::rtl::Reference< UpdateCheckConfigListener >& rListener );
 
-    virtual ~UpdateCheckConfig();
+    virtual ~UpdateCheckConfig() override;
 
 public:
 

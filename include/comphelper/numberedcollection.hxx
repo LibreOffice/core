@@ -77,7 +77,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
 
         /** @short  free all internally used resources.
          */
-        virtual ~NumberedCollection();
+        virtual ~NumberedCollection() override;
 
 
         /** set an outside component which uses this container and must be set

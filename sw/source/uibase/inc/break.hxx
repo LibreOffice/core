@@ -64,7 +64,7 @@ protected:
 
 public:
     SwBreakDlg( vcl::Window *pParent, SwWrtShell &rSh );
-    virtual ~SwBreakDlg();
+    virtual ~SwBreakDlg() override;
     virtual void dispose() override;
 
     const OUString& GetTemplateName() { return aTemplate; }

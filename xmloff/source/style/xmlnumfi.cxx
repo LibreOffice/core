@@ -139,7 +139,7 @@ public:
                                     const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext, sal_uInt16 nNewType,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
-    virtual     ~SvXMLNumFmtElementContext();
+    virtual     ~SvXMLNumFmtElementContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
@@ -161,7 +161,7 @@ public:
                                     const OUString& rLName,
                                     SvXMLNumFmtElementContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
-    virtual     ~SvXMLNumFmtEmbeddedTextContext();
+    virtual     ~SvXMLNumFmtEmbeddedTextContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
@@ -181,7 +181,7 @@ public:
                                     const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
-    virtual     ~SvXMLNumFmtMapContext();
+    virtual     ~SvXMLNumFmtMapContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
@@ -201,7 +201,7 @@ public:
                                     const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList );
-    virtual     ~SvXMLNumFmtPropContext();
+    virtual     ~SvXMLNumFmtPropContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,

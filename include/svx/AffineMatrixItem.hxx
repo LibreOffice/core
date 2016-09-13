@@ -32,7 +32,7 @@ public:
     AffineMatrixItem(const css::geometry::AffineMatrix2D* pMatrix = nullptr);
     AffineMatrixItem(SvStream& rIn);
     AffineMatrixItem(const AffineMatrixItem&);
-    virtual ~AffineMatrixItem();
+    virtual ~AffineMatrixItem() override;
 
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = nullptr ) const override;

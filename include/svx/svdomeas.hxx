@@ -48,7 +48,7 @@ public:
 
 public:
     SdrMeasureObjGeoData();
-    virtual ~SdrMeasureObjGeoData();
+    virtual ~SdrMeasureObjGeoData() override;
 };
 
 
@@ -87,7 +87,7 @@ protected:
 public:
     SdrMeasureObj();
     SdrMeasureObj(const Point& rPt1, const Point& rPt2);
-    virtual ~SdrMeasureObj();
+    virtual ~SdrMeasureObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;

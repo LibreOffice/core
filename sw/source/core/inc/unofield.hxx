@@ -53,7 +53,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    virtual ~SwXFieldMaster();
+    virtual ~SwXFieldMaster() override;
 
     SwXFieldMaster(SwFieldType& rType, SwDoc * pDoc);
 
@@ -158,7 +158,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    virtual ~SwXTextField();
+    virtual ~SwXTextField() override;
 
     SwXTextField(SwFormatField& rFormat, SwDoc & rDoc);
 
@@ -281,7 +281,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    virtual ~SwXFieldEnumeration();
+    virtual ~SwXFieldEnumeration() override;
 
 public:
     explicit SwXFieldEnumeration(SwDoc & rDoc);

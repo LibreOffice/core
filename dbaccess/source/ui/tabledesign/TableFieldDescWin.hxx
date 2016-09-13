@@ -54,7 +54,7 @@ namespace dbaui
 
     public:
         explicit OTableFieldDescWin( vcl::Window* pParent);
-        virtual ~OTableFieldDescWin();
+        virtual ~OTableFieldDescWin() override;
         virtual void dispose() override;
 
         void Init();

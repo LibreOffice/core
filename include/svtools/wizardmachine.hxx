@@ -103,7 +103,7 @@ namespace svt
                 must be the OWizardMachine (which is derived from Window)
          */
         OWizardPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
-        virtual ~OWizardPage();
+        virtual ~OWizardPage() override;
 
         // IWizardPageController overridables
         virtual void        initializePage() override;
@@ -170,7 +170,7 @@ namespace svt
     public:
         OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, WizardButtonFlags _nButtonFlags );
         OWizardMachine(vcl::Window* _pParent, WizardButtonFlags _nButtonFlags );
-        virtual ~OWizardMachine();
+        virtual ~OWizardMachine() override;
         virtual void dispose() override;
 
         /// enable (or disable) buttons

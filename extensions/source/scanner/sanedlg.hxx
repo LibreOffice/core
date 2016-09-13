@@ -104,7 +104,7 @@ private:
     bool SetAdjustedNumericalValue( const char* pOption, double fValue, int nElement = 0 );
 public:
     SaneDlg( vcl::Window*, Sane&, bool );
-    virtual ~SaneDlg();
+    virtual ~SaneDlg() override;
     virtual void dispose() override;
 
     virtual short Execute() override;

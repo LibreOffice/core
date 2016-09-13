@@ -36,7 +36,7 @@ namespace dbaxml
         OXMLTableFilterList( SvXMLImport& rImport, sal_uInt16 nPrfx,
                     const OUString& rLName);
 
-        virtual ~OXMLTableFilterList();
+        virtual ~OXMLTableFilterList() override;
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,

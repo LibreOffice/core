@@ -82,7 +82,7 @@ public:
     XFFrame();
     explicit XFFrame(bool isTextBox);
 
-    virtual ~XFFrame();
+    virtual ~XFFrame() override;
 
 public:
     using XFContentContainer::Add;

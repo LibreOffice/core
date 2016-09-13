@@ -92,7 +92,7 @@ class Thesaurus :
 
 public:
     Thesaurus();
-    virtual ~Thesaurus();
+    virtual ~Thesaurus() override;
 
     // XSupportedLocales (for XThesaurus)
     virtual Sequence< Locale > SAL_CALL getLocales() throw(RuntimeException, std::exception) override;

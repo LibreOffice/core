@@ -251,7 +251,7 @@ namespace pdfi
         // helper method for resolveHyperlinks
         bool resolveHyperlink( const std::list<Element*>::iterator& link_it, std::list<Element*>& rElements );
     public:
-        virtual ~PageElement();
+        virtual ~PageElement() override;
 
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) override;
 
@@ -276,7 +276,7 @@ namespace pdfi
     protected:
         DocumentElement() : Element( nullptr ) {}
     public:
-        virtual ~DocumentElement();
+        virtual ~DocumentElement() override;
 
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& ) override;
     };

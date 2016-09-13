@@ -192,7 +192,7 @@ protected:
 public:
     XPropertyList(const XPropertyList&) = delete;
     XPropertyList& operator=(const XPropertyList&) = delete;
-    virtual ~XPropertyList();
+    virtual ~XPropertyList() override;
 
     XPropertyListType Type() const { return meType; }
     long Count() const;
@@ -283,7 +283,7 @@ protected:
 
 public:
     XLineEndList(const OUString& rPath, const OUString& rReferer);
-    virtual ~XLineEndList();
+    virtual ~XLineEndList() override;
 
     XLineEndEntry* GetLineEnd(long nIndex) const;
 
@@ -304,7 +304,7 @@ protected:
 
 public:
     XDashList(const OUString& rPath, const OUString& rReferer);
-    virtual ~XDashList();
+    virtual ~XDashList() override;
 
     void Replace(std::unique_ptr<XDashEntry> pEntry, long nIndex);
     XDashEntry* GetDash(long nIndex) const;
@@ -331,7 +331,7 @@ protected:
     virtual Bitmap CreateBitmapForUI(long nIndex) override;
 public:
     XHatchList(const OUString& rPath, const OUString& rReferer);
-    virtual ~XHatchList();
+    virtual ~XHatchList() override;
 
     void Replace(std::unique_ptr<XHatchEntry> pEntry, long nIndex);
     XHatchEntry* GetHatch(long nIndex) const;
@@ -351,7 +351,7 @@ protected:
 
 public:
     XGradientList(const OUString& rPath, const OUString& rReferer);
-    virtual ~XGradientList();
+    virtual ~XGradientList() override;
 
     void Replace(std::unique_ptr<XGradientEntry> pEntry, long nIndex);
     XGradientEntry* GetGradient(long nIndex) const;

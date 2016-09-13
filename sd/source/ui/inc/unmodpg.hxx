@@ -49,7 +49,7 @@ public:
         bool                    bTheNewBckgrndVisible,
         bool                    bTheNewBckgrndObjsVisible);
 
-    virtual ~ModifyPageUndoAction();
+    virtual ~ModifyPageUndoAction() override;
     virtual void Undo() override;
     virtual void Redo() override;
 

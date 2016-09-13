@@ -84,7 +84,7 @@ class GtkSalTimer : public SalTimer
     struct SalGtkTimeoutSource *m_pTimeout;
 public:
     GtkSalTimer();
-    virtual ~GtkSalTimer();
+    virtual ~GtkSalTimer() override;
     virtual void Start( sal_uLong nMS ) override;
     virtual void Stop() override;
     bool         Expired();
@@ -101,7 +101,7 @@ class GtkData : public SalGenericData
 
 public:
     GtkData( SalInstance *pInstance );
-    virtual ~GtkData();
+    virtual ~GtkData() override;
 
     void Init();
     virtual void Dispose() override;
@@ -140,7 +140,7 @@ class GtkSalDisplay : public SalDisplay
                            int nWidth, int nHeight, int nXHot, int nYHot );
 public:
              GtkSalDisplay( GdkDisplay* pDisplay );
-    virtual ~GtkSalDisplay();
+    virtual ~GtkSalDisplay() override;
 
     GdkDisplay* GetGdkDisplay() const { return m_pGdkDisplay; }
     bool        IsX11Display() const { return m_bX11Display; }

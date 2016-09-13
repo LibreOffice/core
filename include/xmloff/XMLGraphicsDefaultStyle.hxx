@@ -38,7 +38,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles);
 
-    virtual ~XMLGraphicsDefaultStyle();
+    virtual ~XMLGraphicsDefaultStyle() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,

@@ -66,7 +66,7 @@ class SwSequenceOptionDialog : public SvxStandardDialog
 public:
     SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV,
                             const OUString& rSeqFieldType );
-    virtual ~SwSequenceOptionDialog();
+    virtual ~SwSequenceOptionDialog() override;
     virtual void dispose() override;
     virtual void Apply() override;
 

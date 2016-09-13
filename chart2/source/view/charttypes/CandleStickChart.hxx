@@ -34,7 +34,7 @@ public:
 
     CandleStickChart( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
                       , sal_Int32 nDimensionCount );
-    virtual ~CandleStickChart();
+    virtual ~CandleStickChart() override;
 
     virtual void createShapes() override;
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) override;

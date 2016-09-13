@@ -47,7 +47,7 @@ namespace xforms
         ODataTypeRepository( );
 
     protected:
-        virtual ~ODataTypeRepository( );
+        virtual ~ODataTypeRepository( ) override;
 
         // XDataTypeRepository
         virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL getBasicDataType( sal_Int16 dataTypeClass ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;

@@ -35,7 +35,7 @@ class AxisDispUnitsContext : public ContextBase< AxisDispUnitsModel >
 {
 public:
     explicit            AxisDispUnitsContext( ::oox::core::ContextHandler2Helper& rParent, AxisDispUnitsModel& rModel );
-    virtual             ~AxisDispUnitsContext();
+    virtual             ~AxisDispUnitsContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -50,7 +50,7 @@ class AxisContextBase : public ContextBase< AxisModel >
 {
 public:
     explicit            AxisContextBase( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel );
-    virtual             ~AxisContextBase();
+    virtual             ~AxisContextBase() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -62,7 +62,7 @@ class CatAxisContext : public AxisContextBase
 {
 public:
     explicit            CatAxisContext( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel );
-    virtual             ~CatAxisContext();
+    virtual             ~CatAxisContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -74,7 +74,7 @@ class DateAxisContext : public AxisContextBase
 {
 public:
     explicit            DateAxisContext( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel );
-    virtual             ~DateAxisContext();
+    virtual             ~DateAxisContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -86,7 +86,7 @@ class SerAxisContext : public AxisContextBase
 {
 public:
     explicit            SerAxisContext( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel );
-    virtual             ~SerAxisContext();
+    virtual             ~SerAxisContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };
@@ -98,7 +98,7 @@ class ValAxisContext : public AxisContextBase
 {
 public:
     explicit            ValAxisContext( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel );
-    virtual             ~ValAxisContext();
+    virtual             ~ValAxisContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 };

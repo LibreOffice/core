@@ -401,7 +401,7 @@ namespace dbaui
             return m_xModel;
         }
 
-        virtual ~OApplicationController();
+        virtual ~OApplicationController() override;
 
     public:
         explicit OApplicationController(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);

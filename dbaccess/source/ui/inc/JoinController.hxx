@@ -77,7 +77,7 @@ namespace dbaui
         */
         void saveTableWindows( ::comphelper::NamedValueCollection& o_rViewSettings ) const;
 
-        virtual ~OJoinController();
+        virtual ~OJoinController() override;
     public:
         OJoinController(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 

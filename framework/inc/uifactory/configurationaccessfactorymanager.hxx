@@ -39,7 +39,7 @@ namespace framework {
 {
     public:
                       ConfigurationAccess_FactoryManager( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const OUString& _sRoot );
-        virtual       ~ConfigurationAccess_FactoryManager();
+        virtual       ~ConfigurationAccess_FactoryManager() override;
 
         void          readConfigurationData();
 

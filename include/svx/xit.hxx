@@ -49,7 +49,7 @@ public:
                         const OUString& rName = OUString());
             NameOrIndex(sal_uInt16 nWhich, SvStream& rIn);
             NameOrIndex(const NameOrIndex& rNameOrIndex);
-           virtual ~NameOrIndex() {};
+           virtual ~NameOrIndex() override {};
 
     virtual bool         operator==(const SfxPoolItem& rItem) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;

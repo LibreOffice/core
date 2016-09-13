@@ -79,7 +79,7 @@ public:
         RegisterIndex( m_pNode->GetNodes() );
     }
 
-   virtual  ~SwNodeIndex()
+   virtual  ~SwNodeIndex() override
         { DeRegisterIndex( m_pNode->GetNodes() ); }
 
     inline sal_uLong operator++();

@@ -53,7 +53,7 @@ class FASTSAX_DLLPUBLIC FastSaxParser
 
 public:
     FastSaxParser();
-    virtual ~FastSaxParser();
+    virtual ~FastSaxParser() override;
 
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception) override;

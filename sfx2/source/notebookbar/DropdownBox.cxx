@@ -45,7 +45,7 @@ public:
         m_pBox->SetSizePixel(Size(100, 75));
     }
 
-    virtual ~Popup()
+    virtual ~Popup() override
     {
         disposeOnce();
     }

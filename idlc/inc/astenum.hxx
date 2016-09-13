@@ -29,7 +29,7 @@ class AstEnum : public AstType
 public:
     AstEnum(const OString& name, AstScope* pScope);
 
-    virtual ~AstEnum();
+    virtual ~AstEnum() override;
 
     sal_Int32 getEnumValueCount()
         { return m_enumValueCount++; }

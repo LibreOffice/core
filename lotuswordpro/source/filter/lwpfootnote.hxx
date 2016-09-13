@@ -103,7 +103,7 @@ class LwpFribFootnote: public LwpFrib
 
 public:
     explicit LwpFribFootnote(LwpPara* pPara );
-    virtual ~LwpFribFootnote(){}
+    virtual ~LwpFribFootnote() override {}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     void RegisterNewStyle();
     void XFConvert(XFContentContainer* pCont);
@@ -124,7 +124,7 @@ class LwpFootnote : public LwpOrderedObject
 {
 public:
     LwpFootnote(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpFootnote();
+    virtual ~LwpFootnote() override;
     void RegisterStyle() override;
     void XFConvert(XFContentContainer * pCont) override;
 protected:
@@ -152,7 +152,7 @@ class LwpFootnoteTable : public LwpTable
 {
 public:
     LwpFootnoteTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpFootnoteTable(){}
+    virtual ~LwpFootnoteTable() override {}
 protected:
     void Read() override;
 };
@@ -245,7 +245,7 @@ protected:
     void RegisterFootnoteStyle();
     void RegisterEndnoteStyle();
 private:
-    virtual ~LwpFootnoteOptions();
+    virtual ~LwpFootnoteOptions() override;
 
     sal_uInt16 m_nFlag;
     LwpFootnoteNumberOptions m_FootnoteNumbering;

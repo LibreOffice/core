@@ -59,7 +59,7 @@ namespace dbaui
                             ,const css::uno::Any& _aDataSourceName
                             ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
 
-        virtual ~OUserAdminDlg();
+        virtual ~OUserAdminDlg() override;
         virtual void dispose() override;
 
         virtual const SfxItemSet* getOutputSet() const override;

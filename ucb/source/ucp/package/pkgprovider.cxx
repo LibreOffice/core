@@ -58,7 +58,7 @@ public:
              const uno::Reference< container::XHierarchicalNameAccess > & xNA,
              ContentProvider* pOwner )
     : m_aName( rName ), m_xNA( xNA ), m_pOwner( pOwner ) {}
-    virtual ~Package() { m_pOwner->removePackage( m_aName ); }
+    virtual ~Package() override { m_pOwner->removePackage( m_aName ); }
 
     // XInterface
     virtual uno::Any SAL_CALL

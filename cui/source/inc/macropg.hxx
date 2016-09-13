@@ -82,7 +82,7 @@ protected:
 
 public:
 
-    virtual                     ~SvxMacroTabPage_();
+    virtual                     ~SvxMacroTabPage_() override;
     virtual void                dispose() override;
     void                        InitResources();
 

@@ -25,7 +25,7 @@ class SfxCheckinDialog : public ModalDialog
 
     public:
         SfxCheckinDialog( vcl::Window* pParent );
-        virtual ~SfxCheckinDialog();
+        virtual ~SfxCheckinDialog() override;
         virtual void dispose() override;
 
         OUString GetComment( );

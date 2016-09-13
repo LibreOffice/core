@@ -42,7 +42,7 @@ public:
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
     {}
 
-    virtual ~SfxVisibilityItem() {}
+    virtual ~SfxVisibilityItem() override {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 

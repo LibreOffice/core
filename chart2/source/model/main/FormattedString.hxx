@@ -51,7 +51,7 @@ class FormattedString :
 public:
     explicit FormattedString( css::uno::Reference<
            css::uno::XComponentContext > const & xContext );
-    virtual ~FormattedString();
+    virtual ~FormattedString() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()

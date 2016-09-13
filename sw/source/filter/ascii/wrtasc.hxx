@@ -34,7 +34,7 @@ class SwASCWriter : public Writer
 
 public:
     SwASCWriter( const OUString& rFilterName );
-    virtual ~SwASCWriter();
+    virtual ~SwASCWriter() override;
 
     const OUString& GetLineEnd() const { return m_sLineEnd; }
 };

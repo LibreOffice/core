@@ -186,7 +186,7 @@ namespace comphelper
             const css::uno::Reference< css::lang::XComponent >& _rxComponent
         );
 
-        virtual ~OComponentProxyAggregation();
+        virtual ~OComponentProxyAggregation() override;
 
         // XInterface
         DECLARE_XINTERFACE()

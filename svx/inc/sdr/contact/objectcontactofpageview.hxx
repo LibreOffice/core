@@ -49,7 +49,7 @@ namespace sdr
 
             // basic constructor, used from SdrPageView.
             explicit ObjectContactOfPageView(SdrPageWindow& rPageWindow);
-            virtual ~ObjectContactOfPageView();
+            virtual ~ObjectContactOfPageView() override;
 
             // LazyInvalidate request. This is used from the VOCs to mark that they
             // got invalidated by an ActionChanged() call. An active view needs to remember

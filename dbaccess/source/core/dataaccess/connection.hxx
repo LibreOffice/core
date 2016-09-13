@@ -104,7 +104,7 @@ protected:
     bool                            m_bSupportsGroups;
 
 protected:
-    virtual ~OConnection();
+    virtual ~OConnection() override;
 public:
     OConnection(ODatabaseSource& _rDB
                 ,css::uno::Reference< css::sdbc::XConnection >& _rxMaster

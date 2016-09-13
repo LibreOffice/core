@@ -44,7 +44,7 @@ public:
     virtual void Deactivate() override;
 
 protected:
-    virtual ~FuDisplayOrder();
+    virtual ~FuDisplayOrder() override;
     void implClearOverlay();
 
     Pointer                 maPtr;

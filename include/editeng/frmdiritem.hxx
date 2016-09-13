@@ -39,7 +39,7 @@ public:
 
     SvxFrameDirectionItem( SvxFrameDirection nValue /*= FRMDIR_HORI_LEFT_TOP*/,
                             sal_uInt16 nWhich  );
-    virtual ~SvxFrameDirectionItem();
+    virtual ~SvxFrameDirectionItem() override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;

@@ -40,7 +40,7 @@ typedef ::cppu::WeakImplHelper<
     {
         public:
             MenuBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~MenuBarFactory();
+            virtual ~MenuBarFactory() override;
 
             virtual OUString SAL_CALL getImplementationName()
                 throw (css::uno::RuntimeException, std::exception) override

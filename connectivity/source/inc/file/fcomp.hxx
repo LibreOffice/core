@@ -47,7 +47,7 @@ namespace connectivity
         public:
             OPredicateCompiler(OSQLAnalyzer* pAnalyzer);
 
-            virtual ~OPredicateCompiler();
+            virtual ~OPredicateCompiler() override;
 
             inline static void * SAL_CALL operator new( size_t nSize )
                 { return ::rtl_allocateMemory( nSize ); }
@@ -86,7 +86,7 @@ namespace connectivity
 
         public:
             OPredicateInterpreter(const ::rtl::Reference<OPredicateCompiler>& rComp) : m_rCompiler(rComp){}
-            virtual ~OPredicateInterpreter();
+            virtual ~OPredicateInterpreter() override;
 
             bool        evaluate(OCodeList& rCodeList);
             void        evaluateSelection(OCodeList& rCodeList,ORowSetValueDecoratorRef& _rVal);

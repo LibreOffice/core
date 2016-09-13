@@ -44,7 +44,7 @@ public:
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList);
 
-    virtual ~XMLTextMasterStylesContext();
+    virtual ~XMLTextMasterStylesContext() override;
 };
 
 #endif  //  _XMLOFF_XMLTEXTMASTERSTYLECONTEXT_HXX

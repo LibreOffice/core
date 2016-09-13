@@ -25,7 +25,7 @@ public:
     OUString GetEntryText () const;
     void SetEntryText( OUString const & sStr );
     void HideHelpBtn();
-    virtual ~InputDialog();
+    virtual ~InputDialog() override;
     virtual void dispose() override;
 
 private:

@@ -50,7 +50,7 @@ class FontIdentificator : public ::cppu::WeakAggImplHelper3< XMaterialHolder, XI
     Font        m_aFont;
 public:
 FontIdentificator() {}
-    virtual ~FontIdentificator();
+    virtual ~FontIdentificator() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) override;

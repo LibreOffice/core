@@ -38,7 +38,7 @@ class SAL_DLLPRIVATE CurrentContextChecker :
 public:
     CurrentContextChecker();
 
-    virtual ~CurrentContextChecker();
+    virtual ~CurrentContextChecker() override;
 
     virtual sal_Bool SAL_CALL perform(
         css::uno::Reference< ::test::testtools::bridgetest::XCurrentContextChecker > const & other,

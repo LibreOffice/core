@@ -61,7 +61,7 @@ private:
 
 public:
     explicit SvxUnoMarkerTable( SdrModel* pModel ) throw();
-    virtual ~SvxUnoMarkerTable() throw();
+    virtual ~SvxUnoMarkerTable() throw() override;
 
     void dispose();
 

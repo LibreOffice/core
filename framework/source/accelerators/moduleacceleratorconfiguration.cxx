@@ -69,7 +69,7 @@ public:
             const css::uno::Sequence< css::uno::Any >& lArguments);
 
     /** TODO */
-    virtual ~ModuleAcceleratorConfiguration();
+    virtual ~ModuleAcceleratorConfiguration() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override

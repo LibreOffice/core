@@ -46,7 +46,7 @@ protected:
 
 public:
     ExcelToSc( XclImpRoot& rRoot );
-    virtual             ~ExcelToSc();
+    virtual             ~ExcelToSc() override;
     virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, sal_Size nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) override;
 
@@ -119,7 +119,7 @@ private:
     bool                HandleOleLink(sal_uInt16 nXtiIndex, const XclImpExtName& rExtName, ExternalTabInfo& rExtInfo);
 public:
     ExcelToSc8( XclImpRoot& rRoot );
-    virtual             ~ExcelToSc8();
+    virtual             ~ExcelToSc8() override;
 
     virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) override;
 

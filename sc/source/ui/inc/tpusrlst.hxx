@@ -44,7 +44,7 @@ public:
 private:
             ScTpUserLists( vcl::Window*              pParent,
                            const SfxItemSet&    rArgSet );
-            virtual ~ScTpUserLists();
+            virtual ~ScTpUserLists() override;
     virtual void dispose() override;
 
 private:

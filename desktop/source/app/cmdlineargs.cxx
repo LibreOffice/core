@@ -82,7 +82,7 @@ public:
         }
     }
 
-    virtual ~ExtCommandLineSupplier() {}
+    virtual ~ExtCommandLineSupplier() override {}
 
     virtual boost::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
 

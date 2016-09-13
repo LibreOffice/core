@@ -47,7 +47,7 @@ class AddonsToolBarManager : public ToolBarManager
                               const css::uno::Reference< css::frame::XFrame >& rFrame,
                               const OUString& rResourceName,
                               ToolBox* pToolBar );
-        virtual ~AddonsToolBarManager();
+        virtual ~AddonsToolBarManager() override;
 
         // XComponent
         void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;

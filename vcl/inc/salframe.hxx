@@ -113,7 +113,7 @@ private:
 
 public:
                             SalFrame();
-    virtual                 ~SalFrame();
+    virtual                 ~SalFrame() override;
 
     SalFrameGeometry        maGeometry;
 

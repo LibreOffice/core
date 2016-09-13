@@ -144,7 +144,7 @@ public:
     OGroupsSortingDialog( vcl::Window* pParent
                         ,bool _bReadOnly
                         ,::rptui::OReportController* _pController);
-    virtual ~OGroupsSortingDialog();
+    virtual ~OGroupsSortingDialog() override;
     virtual void dispose() override;
 
     /* updates the current view

@@ -66,7 +66,7 @@ private:
 
 public:
     explicit TblStylePrHandler( DomainMapper & rDMapper );
-    virtual ~TblStylePrHandler( );
+    virtual ~TblStylePrHandler( ) override;
 
     const PropertyMapPtr&       getProperties() { return m_pProperties; };
     inline TblStyleType         getType() { return m_nType; };

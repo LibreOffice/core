@@ -62,7 +62,7 @@ class LinePropertyPanel : public LinePropertyPanelBase,
                           public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    virtual ~LinePropertyPanel();
+    virtual ~LinePropertyPanel() override;
     virtual void dispose() override;
 
     static VclPtr<vcl::Window> Create(

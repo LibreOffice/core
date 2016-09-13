@@ -80,7 +80,7 @@ namespace connectivity
             OKey(bool _bCase);
             OKey(const OUString& Name,const std::shared_ptr<KeyProperties>& _rProps,bool _bCase);
 
-            virtual ~OKey( );
+            virtual ~OKey( ) override;
 
             DECLARE_SERVICE_INFO();
             //XInterface

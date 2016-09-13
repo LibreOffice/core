@@ -47,7 +47,7 @@ namespace dbaccess
         void fillJoinedColumns_throw(const OUString& i_sLeftColumn,const OUString& i_sRightColumn);
     protected:
         virtual void makeNewStatement( ) override;
-        virtual ~OptimisticSet();
+        virtual ~OptimisticSet() override;
     public:
         OptimisticSet(const css::uno::Reference< css::uno::XComponentContext>& _rContext,
                       const css::uno::Reference< css::sdbc::XConnection>& i_xConnection,

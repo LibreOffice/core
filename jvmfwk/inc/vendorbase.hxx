@@ -89,7 +89,7 @@ public:
 
     MalformedVersionException(const MalformedVersionException &);
 
-    virtual ~MalformedVersionException();
+    virtual ~MalformedVersionException() override;
 
     MalformedVersionException & operator =(const MalformedVersionException &);
 };

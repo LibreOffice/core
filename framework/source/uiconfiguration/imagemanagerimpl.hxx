@@ -77,7 +77,7 @@ namespace framework
     {
         public:
             explicit GlobalImageList(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
-            virtual ~GlobalImageList();
+            virtual ~GlobalImageList() override;
 
             virtual Image                           getImageFromCommandURL( vcl::ImageType nImageType, const OUString& rCommandURL ) override;
             virtual bool                            hasImage( vcl::ImageType nImageType, const OUString& rCommandURL ) override;

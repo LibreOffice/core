@@ -25,7 +25,7 @@ private:
 
 public:
     X11OpenGLSalGraphicsImpl( X11SalGraphics& rParent );
-    virtual ~X11OpenGLSalGraphicsImpl();
+    virtual ~X11OpenGLSalGraphicsImpl() override;
 
 protected:
     virtual rtl::Reference<OpenGLContext> CreateWinContext() override;

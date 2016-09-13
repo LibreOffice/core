@@ -37,7 +37,7 @@ class SvxAccessibleTextPropertySet : public SvxUnoTextRangeBase,
 {
 public:
     SvxAccessibleTextPropertySet( const SvxEditSource*, const SvxItemPropertySet* );
-    virtual ~SvxAccessibleTextPropertySet() throw();
+    virtual ~SvxAccessibleTextPropertySet() throw() override;
 
     // XTextRange
     virtual css::uno::Reference< css::text::XText > SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) override;

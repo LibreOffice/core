@@ -98,7 +98,7 @@ class PiePositionHelper : public PolarPlottingPositionHelper
 {
 public:
     PiePositionHelper( NormalAxis eNormalAxis, double fAngleDegreeOffset );
-    virtual ~PiePositionHelper();
+    virtual ~PiePositionHelper() override;
 
     bool    getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius, bool bUseRings, double fMaxOffset ) const;
 

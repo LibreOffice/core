@@ -50,7 +50,7 @@ public:
         ::std::vector< XMLPropertyState > &rProps,
         const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
-    virtual ~XMLTextShapePropertySetContext_Impl();
+    virtual ~XMLTextShapePropertySetContext_Impl() override;
 
     using SvXMLPropertySetContext::CreateChildContext;
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,

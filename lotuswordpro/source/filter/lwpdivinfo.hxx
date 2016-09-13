@@ -89,7 +89,7 @@ public:
 protected:
     void Read() override;
 private:
-    virtual ~LwpDivInfo();
+    virtual ~LwpDivInfo() override;
 
     LwpObjectID m_ParentID;
     LwpAtomHolder m_Name;

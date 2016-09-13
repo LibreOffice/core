@@ -46,7 +46,7 @@ class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 public:
             ScDocumentPool();
 protected:
-            virtual ~ScDocumentPool();
+            virtual ~ScDocumentPool() override;
 public:
 
     virtual SfxItemPool*        Clone() const override;

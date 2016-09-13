@@ -47,7 +47,7 @@ protected:
 
 public:
                     VCLXRegion();
-                    virtual ~VCLXRegion();
+                    virtual ~VCLXRegion() override;
 
     const vcl::Region&   GetRegion() const                   { return maRegion; }
 

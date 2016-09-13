@@ -40,7 +40,7 @@ public:
     SfxStringListItem( sal_uInt16 nWhich, const std::vector<OUString> *pList=nullptr );
     SfxStringListItem( sal_uInt16 nWhich, SvStream& rStream );
     SfxStringListItem( const SfxStringListItem& rItem );
-    virtual ~SfxStringListItem();
+    virtual ~SfxStringListItem() override;
 
     std::vector<OUString>&       GetList();
 

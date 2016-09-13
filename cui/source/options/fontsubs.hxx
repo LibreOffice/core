@@ -92,7 +92,7 @@ class SvxFontSubstTabPage : public SfxTabPage
     void            CheckEnable();
 
 
-    virtual ~SvxFontSubstTabPage();
+    virtual ~SvxFontSubstTabPage() override;
     virtual void dispose() override;
 
 public:

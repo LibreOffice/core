@@ -71,7 +71,7 @@ class SwTestAccountSettingsDialog : public SfxModalDialog
     DECL_LINK_TYPED(TestHdl, void*, void);
 public:
     explicit SwTestAccountSettingsDialog(SwMailConfigPage* pParent);
-    virtual ~SwTestAccountSettingsDialog();
+    virtual ~SwTestAccountSettingsDialog() override;
     virtual void dispose() override;
 };
 
@@ -111,7 +111,7 @@ class SwAuthenticationSettingsDialog : public SfxModalDialog
 
 public:
     SwAuthenticationSettingsDialog(SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem);
-    virtual ~SwAuthenticationSettingsDialog();
+    virtual ~SwAuthenticationSettingsDialog() override;
     virtual void dispose() override;
 };
 

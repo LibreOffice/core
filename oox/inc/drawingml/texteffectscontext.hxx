@@ -26,7 +26,7 @@ public:
     TextEffectsContext(oox::core::ContextHandler2Helper& rParent,
                        sal_Int32 aElementToken,
                        std::vector<css::beans::PropertyValue>& rTextEffectsProperties);
-    virtual ~TextEffectsContext();
+    virtual ~TextEffectsContext() override;
 
     virtual void onStartElement(const oox::AttributeList& rAttribs) override;
     virtual void onEndElement() override;

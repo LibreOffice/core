@@ -31,7 +31,7 @@ class SwXMLBodyContentContext_Impl : public SvXMLImportContext
 public:
 
     SwXMLBodyContentContext_Impl( SwXMLImport& rImport, const OUString& rLName );
-    virtual ~SwXMLBodyContentContext_Impl();
+    virtual ~SwXMLBodyContentContext_Impl() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,

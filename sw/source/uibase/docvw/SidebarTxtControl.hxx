@@ -53,7 +53,7 @@ class SidebarTextControl : public Control
                            WinBits nBits,
                            SwView& rDocView,
                            SwPostItMgr& rPostItMgr );
-        virtual ~SidebarTextControl();
+        virtual ~SidebarTextControl() override;
         virtual void dispose() override;
 
         virtual void GetFocus() override;

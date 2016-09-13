@@ -62,7 +62,7 @@ class ConfigurationController
 {
 public:
     ConfigurationController() throw();
-    virtual ~ConfigurationController() throw();
+    virtual ~ConfigurationController() throw() override;
     ConfigurationController(const ConfigurationController&) = delete;
     ConfigurationController& operator=(const ConfigurationController&) = delete;
 

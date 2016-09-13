@@ -83,7 +83,7 @@ protected:
 
 public:
     explicit                    ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc );
-    virtual                     ~ScHTMLParser();
+    virtual                     ~ScHTMLParser() override;
 
     virtual sal_uLong           Read( SvStream& rStrm, const OUString& rBaseURL  ) override = 0;
 
@@ -214,7 +214,7 @@ private:
 
 public:
                         ScHTMLLayoutParser( EditEngine*, const OUString& rBaseURL, const Size& aPageSize, ScDocument* );
-    virtual             ~ScHTMLLayoutParser();
+    virtual             ~ScHTMLLayoutParser() override;
     virtual sal_uLong   Read( SvStream&, const OUString& rBaseURL  ) override;
     virtual const ScHTMLTable*  GetGlobalTable() const override;
 };
@@ -554,7 +554,7 @@ public:
                             ::std::vector< ScEEParseEntry* >& rEEParseList,
                             ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser );
 
-    virtual             ~ScHTMLGlobalTable();
+    virtual             ~ScHTMLGlobalTable() override;
 
     /** Recalculates sizes and resulting positions of all document entries. */
     void                Recalc();
@@ -569,7 +569,7 @@ class ScHTMLQueryParser : public ScHTMLParser
 {
 public:
     explicit            ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc );
-    virtual             ~ScHTMLQueryParser();
+    virtual             ~ScHTMLQueryParser() override;
 
     virtual sal_uLong   Read( SvStream& rStrm, const OUString& rBaseURL  ) override;
 

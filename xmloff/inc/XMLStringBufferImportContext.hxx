@@ -43,7 +43,7 @@ public:
         const OUString& sLocalName,
         OUStringBuffer& rBuffer);
 
-    virtual ~XMLStringBufferImportContext();
+    virtual ~XMLStringBufferImportContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,

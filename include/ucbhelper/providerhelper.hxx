@@ -133,7 +133,7 @@ public:
 
     ContentProviderImplHelper(
                 const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~ContentProviderImplHelper();
+    virtual ~ContentProviderImplHelper() override;
 
 
     // XInterface

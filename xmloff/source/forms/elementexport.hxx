@@ -271,7 +271,7 @@ namespace xmloff
             const OUString& _rControlId,
             const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
 
-        virtual ~OColumnExport();
+        virtual ~OColumnExport() override;
 
     protected:
         // OControlExport overridables

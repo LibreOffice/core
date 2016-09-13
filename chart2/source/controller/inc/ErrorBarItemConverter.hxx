@@ -46,7 +46,7 @@ public:
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory );
-    virtual ~ErrorBarItemConverter();
+    virtual ~ErrorBarItemConverter() override;
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const override;
     virtual bool ApplyItemSet( const SfxItemSet & rItemSet ) override;

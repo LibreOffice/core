@@ -100,7 +100,7 @@ namespace pcr
         explicit PropertyHandler(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
-        virtual ~PropertyHandler();
+        virtual ~PropertyHandler() override;
 
         // default implementations for XPropertyHandler
         virtual void SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) throw (css::uno::RuntimeException, css::lang::NullPointerException, std::exception) override;

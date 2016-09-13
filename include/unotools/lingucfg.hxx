@@ -156,7 +156,7 @@ class UNOTOOLS_DLLPUBLIC SvtLinguConfig: public utl::detail::Options
 
 public:
     SvtLinguConfig();
-    virtual ~SvtLinguConfig();
+    virtual ~SvtLinguConfig() override;
 
     // borrowed from utl::ConfigItem
 

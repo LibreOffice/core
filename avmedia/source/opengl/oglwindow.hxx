@@ -28,7 +28,7 @@ class OGLWindow : public ::cppu::WeakImplHelper< css::media::XPlayerWindow, css:
 {
 public:
     OGLWindow( libgltf::glTFHandle& rHandle, const rtl::Reference<OpenGLContext> & rContext, vcl::Window& rEventHandlerParent );
-    virtual ~OGLWindow();
+    virtual ~OGLWindow() override;
 
     virtual void SAL_CALL update() throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel ) throw (css::uno::RuntimeException, std::exception) override;

@@ -54,7 +54,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         SvXMLExportFlags nExportFlags = SvXMLExportFlags::ALL );
-    virtual ~SchXMLExport();
+    virtual ~SchXMLExport() override;
 
     rtl::Reference< XMLPropertySetMapper > GetPropertySetMapper() const;
 };

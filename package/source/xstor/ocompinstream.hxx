@@ -58,7 +58,7 @@ public:
                       const css::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
-    virtual ~OInputCompStream();
+    virtual ~OInputCompStream() override;
 
     void InternalDispose();
 

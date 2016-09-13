@@ -52,7 +52,7 @@ namespace sdr { namespace contact {
         }
 
         explicit ViewContactOfUnoControl( SdrUnoObj& _rUnoObject );
-        virtual ~ViewContactOfUnoControl();
+        virtual ~ViewContactOfUnoControl() override;
 
         /** retrieves a temporary XControl instance, whose parent is the given window
             @seealso SdrUnoObj::GetTemporaryControlForWindow

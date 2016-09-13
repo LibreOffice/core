@@ -67,7 +67,7 @@ public:
 
     explicit SvxBoxItem( const sal_uInt16 nId );
     SvxBoxItem( const SvxBoxItem &rCpy );
-    virtual ~SvxBoxItem();
+    virtual ~SvxBoxItem() override;
     SvxBoxItem &operator=( const SvxBoxItem& rBox );
 
     // "pure virtual Methods" from SfxPoolItem
@@ -183,7 +183,7 @@ public:
 
     explicit SvxBoxInfoItem( const sal_uInt16 nId );
     SvxBoxInfoItem( const SvxBoxInfoItem &rCpy );
-    virtual ~SvxBoxInfoItem();
+    virtual ~SvxBoxInfoItem() override;
     SvxBoxInfoItem &operator=( const SvxBoxInfoItem &rCpy );
 
     // "pure virtual Methods" from SfxPoolItem

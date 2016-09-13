@@ -79,7 +79,7 @@ class acc_Intersection
         Reference< security::XAccessControlContext > const & x2 );
 
 public:
-    virtual ~acc_Intersection();
+    virtual ~acc_Intersection() override;
 
     static inline Reference< security::XAccessControlContext > create(
         Reference< security::XAccessControlContext > const & x1,
@@ -132,7 +132,7 @@ class acc_Union
         Reference< security::XAccessControlContext > const & x2 );
 
 public:
-    virtual ~acc_Union();
+    virtual ~acc_Union() override;
 
     static inline Reference< security::XAccessControlContext > create(
         Reference< security::XAccessControlContext > const & x1,
@@ -192,7 +192,7 @@ public:
         : m_permissions( permissions )
     {}
 
-    virtual ~acc_Policy();
+    virtual ~acc_Policy() override;
 
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
@@ -338,7 +338,7 @@ protected:
 
 public:
     explicit AccessController( Reference< XComponentContext > const & xComponentContext );
-    virtual ~AccessController();
+    virtual ~AccessController() override;
 
     //  XInitialization impl
     virtual void SAL_CALL initialize(

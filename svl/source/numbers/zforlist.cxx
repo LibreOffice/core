@@ -169,7 +169,7 @@ class SvNumberFormatterRegistry_Impl : public utl::ConfigurationListener
 
 public:
                             SvNumberFormatterRegistry_Impl();
-    virtual                 ~SvNumberFormatterRegistry_Impl();
+    virtual                 ~SvNumberFormatterRegistry_Impl() override;
 
     void                    Insert( SvNumberFormatter* pThis )
                                 { aFormatters.push_back( pThis ); }

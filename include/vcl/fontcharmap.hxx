@@ -39,7 +39,7 @@ public:
      **/
     FontCharMap();
     FontCharMap( const CmapResult& rCR );
-    virtual ~FontCharMap();
+    virtual ~FontCharMap() override;
 
     /** Get the default font character map
 

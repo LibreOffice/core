@@ -75,7 +75,7 @@ protected:
         throw (css::lang::IllegalArgumentException,
                 css::uno::RuntimeException);
 
-    virtual ~SwXMeta();
+    virtual ~SwXMeta() override;
 
     SwXMeta(SwXMeta const&) = delete;
     SwXMeta& operator=(SwXMeta const&) = delete;
@@ -224,7 +224,7 @@ class SwXMetaField
 
 private:
 
-    virtual ~SwXMetaField();
+    virtual ~SwXMetaField() override;
 
     friend css::uno::Reference< css::rdf::XMetadatable >
         SwXMeta::CreateXMeta(::sw::Meta &,

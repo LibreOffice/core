@@ -36,7 +36,7 @@ public:
     VAxisBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
            , const AxisProperties& rAxisProperties
            , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
-    virtual ~VAxisBase();
+    virtual ~VAxisBase() override;
 
     /**
      * Return the number of dimensions the diagram has.  2 for x and y, and 3

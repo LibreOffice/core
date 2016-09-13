@@ -33,7 +33,7 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
     OUString      m_aUnicodeEntry;
  public:
     SalGenericData( SalGenericDataType t, SalInstance *pInstance ) : SalData(), m_eType( t ), m_pDisplay( nullptr ) { m_pInstance = pInstance; SetSalData( this ); }
-    virtual ~SalGenericData() {}
+    virtual ~SalGenericData() override {}
     virtual void Dispose() {}
 
     SalGenericDisplay *GetDisplay() const { return m_pDisplay; }

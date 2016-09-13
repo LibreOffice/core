@@ -46,7 +46,7 @@ namespace pcr
     {
     public:
         TabOrderListBox( vcl::Window* pParent, WinBits nBits  );
-        virtual ~TabOrderListBox();
+        virtual ~TabOrderListBox() override;
 
         void            MoveSelection( long nRelPos );
 
@@ -99,7 +99,7 @@ namespace pcr
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 
-        virtual ~TabOrderDialog();
+        virtual ~TabOrderDialog() override;
         virtual void dispose() override;
 
         void SetModified();

@@ -32,7 +32,7 @@ public:
 
                             SfxGlobalNameItem();
                             SfxGlobalNameItem( sal_uInt16 nWhich, const SvGlobalName& );
-                            virtual ~SfxGlobalNameItem();
+                            virtual ~SfxGlobalNameItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

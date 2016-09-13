@@ -32,7 +32,7 @@ namespace frm
         OSelectAllDispatcher( EditView& _rView, const css::util::URL&  _rURL );
 
     protected:
-        virtual ~OSelectAllDispatcher();
+        virtual ~OSelectAllDispatcher() override;
 
         // XDispatch
         virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments )

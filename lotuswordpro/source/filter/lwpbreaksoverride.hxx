@@ -69,7 +69,7 @@ class LwpBreaksOverride : public LwpOverride
 
 public:
     LwpBreaksOverride();
-    virtual ~LwpBreaksOverride();
+    virtual ~LwpBreaksOverride() override;
 
     virtual LwpBreaksOverride* clone() const override;
 

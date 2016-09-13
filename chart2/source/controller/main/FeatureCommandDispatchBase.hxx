@@ -51,7 +51,7 @@ class FeatureCommandDispatchBase: public CommandDispatch
 {
 public:
     explicit FeatureCommandDispatchBase( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~FeatureCommandDispatchBase();
+    virtual ~FeatureCommandDispatchBase() override;
 
     // late initialisation, especially for adding as listener
     virtual void initialize() override;

@@ -48,7 +48,7 @@ public:
 
     explicit OOXMLFastContextHandler(OOXMLFastContextHandler * pContext);
 
-    virtual ~OOXMLFastContextHandler();
+    virtual ~OOXMLFastContextHandler() override;
 
     // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement (Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs)
@@ -243,7 +243,7 @@ class OOXMLFastContextHandlerStream : public OOXMLFastContextHandler
 {
 public:
     explicit OOXMLFastContextHandlerStream(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerStream();
+    virtual ~OOXMLFastContextHandlerStream() override;
 
     virtual ResourceEnum_t getResource() const override { return STREAM; }
 
@@ -263,7 +263,7 @@ class OOXMLFastContextHandlerProperties : public OOXMLFastContextHandler
 {
 public:
     explicit OOXMLFastContextHandlerProperties(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerProperties();
+    virtual ~OOXMLFastContextHandlerProperties() override;
 
     virtual OOXMLValue::Pointer_t getValue() const override;
     virtual ResourceEnum_t getResource() const override { return PROPERTIES; }
@@ -300,7 +300,7 @@ class OOXMLFastContextHandlerPropertyTable :
 {
 public:
     explicit OOXMLFastContextHandlerPropertyTable(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerPropertyTable();
+    virtual ~OOXMLFastContextHandlerPropertyTable() override;
 
 protected:
     OOXMLTable mTable;
@@ -314,7 +314,7 @@ class OOXMLFastContextHandlerValue :
 {
 public:
     explicit OOXMLFastContextHandlerValue(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerValue();
+    virtual ~OOXMLFastContextHandlerValue() override;
 
     void setValue(const OOXMLValue::Pointer_t& pValue);
     virtual OOXMLValue::Pointer_t getValue() const override;
@@ -337,7 +337,7 @@ class OOXMLFastContextHandlerTable : public OOXMLFastContextHandler
 {
 public:
     explicit OOXMLFastContextHandlerTable(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerTable();
+    virtual ~OOXMLFastContextHandlerTable() override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext (Token_t Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
@@ -362,7 +362,7 @@ class OOXMLFastContextHandlerXNote : public OOXMLFastContextHandlerProperties
 {
 public:
     explicit OOXMLFastContextHandlerXNote(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerXNote();
+    virtual ~OOXMLFastContextHandlerXNote() override;
 
     void checkId(const OOXMLValue::Pointer_t& pValue);
 
@@ -388,7 +388,7 @@ class OOXMLFastContextHandlerTextTableCell : public OOXMLFastContextHandler
 {
 public:
     explicit OOXMLFastContextHandlerTextTableCell(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerTextTableCell();
+    virtual ~OOXMLFastContextHandlerTextTableCell() override;
 
     virtual std::string getType() const override { return "TextTableCell"; }
 
@@ -400,7 +400,7 @@ class OOXMLFastContextHandlerTextTableRow : public OOXMLFastContextHandler
 {
 public:
     explicit OOXMLFastContextHandlerTextTableRow(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerTextTableRow();
+    virtual ~OOXMLFastContextHandlerTextTableRow() override;
 
     virtual std::string getType() const override { return "TextTableRow"; }
 
@@ -417,7 +417,7 @@ class OOXMLFastContextHandlerTextTable : public OOXMLFastContextHandler
 public:
     explicit OOXMLFastContextHandlerTextTable(OOXMLFastContextHandler * pContext);
 
-    virtual ~OOXMLFastContextHandlerTextTable();
+    virtual ~OOXMLFastContextHandlerTextTable() override;
 
     virtual std::string getType() const override { return "TextTable"; }
 
@@ -437,7 +437,7 @@ private:
 
 public:
     explicit OOXMLFastContextHandlerShape(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerShape();
+    virtual ~OOXMLFastContextHandlerShape() override;
 
     virtual std::string getType() const override { return "Shape"; }
 
@@ -486,7 +486,7 @@ class OOXMLFastContextHandlerWrapper : public OOXMLFastContextHandler
 {
 public:
     explicit OOXMLFastContextHandlerWrapper(OOXMLFastContextHandler * pParent, css::uno::Reference<css::xml::sax::XFastContextHandler> const & xContext);
-    virtual ~OOXMLFastContextHandlerWrapper();
+    virtual ~OOXMLFastContextHandlerWrapper() override;
 
     // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startUnknownElement(const OUString & Namespace, const OUString & Name, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)

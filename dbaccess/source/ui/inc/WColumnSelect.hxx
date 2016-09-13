@@ -79,7 +79,7 @@ namespace dbaui
         virtual OUString        GetTitle() const override ;
 
         OWizColumnSelect(vcl::Window* pParent);
-        virtual ~OWizColumnSelect();
+        virtual ~OWizColumnSelect() override;
         virtual void dispose() override;
     };
 }

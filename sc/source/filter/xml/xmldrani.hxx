@@ -49,7 +49,7 @@ public:
                         const OUString& rLName,
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
 
-    virtual ~ScXMLDatabaseRangesContext();
+    virtual ~ScXMLDatabaseRangesContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -109,7 +109,7 @@ public:
                         const OUString& rLName,
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
 
-    virtual ~ScXMLDatabaseRangeContext();
+    virtual ~ScXMLDatabaseRangeContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -150,7 +150,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
-    virtual ~ScXMLSourceSQLContext();
+    virtual ~ScXMLSourceSQLContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -174,7 +174,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
-    virtual ~ScXMLSourceTableContext();
+    virtual ~ScXMLSourceTableContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -198,7 +198,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
-    virtual ~ScXMLSourceQueryContext();
+    virtual ~ScXMLSourceQueryContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -221,7 +221,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
-    virtual ~ScXMLConResContext();
+    virtual ~ScXMLConResContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -245,7 +245,7 @@ public:
                                         css::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
-    virtual ~ScXMLSubTotalRulesContext();
+    virtual ~ScXMLSubTotalRulesContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -268,7 +268,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
-    virtual ~ScXMLSortGroupsContext();
+    virtual ~ScXMLSortGroupsContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -292,7 +292,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
-    virtual ~ScXMLSubTotalRuleContext();
+    virtual ~ScXMLSubTotalRuleContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -321,7 +321,7 @@ public:
                         const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLSubTotalRuleContext* pSubTotalRuleContext);
 
-    virtual ~ScXMLSubTotalFieldContext();
+    virtual ~ScXMLSubTotalFieldContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,

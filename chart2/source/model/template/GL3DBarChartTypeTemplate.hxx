@@ -30,7 +30,7 @@ public:
             css::uno::XComponentContext>& xContext,
         const OUString& rServiceName );
 
-    virtual ~GL3DBarChartTypeTemplate();
+    virtual ~GL3DBarChartTypeTemplate() override;
 
     virtual css::uno::Reference<css::chart2::XChartType> getChartTypeForIndex( sal_Int32 nChartTypeIndex ) override;
 

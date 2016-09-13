@@ -43,7 +43,7 @@ private:
 
 public:
     SvxForbiddenCharactersTable( const css::uno::Reference< css::uno::XComponentContext >& rxContext);
-    virtual ~SvxForbiddenCharactersTable() {}
+    virtual ~SvxForbiddenCharactersTable() override {}
 
     Map& GetMap() { return maMap; }
     const css::i18n::ForbiddenCharacters* GetForbiddenCharacters( sal_uInt16 nLanguage, bool bGetDefault );

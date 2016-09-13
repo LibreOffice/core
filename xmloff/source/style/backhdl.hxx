@@ -29,7 +29,7 @@
 class XMLBackGraphicPositionPropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLBackGraphicPositionPropHdl();
+    virtual ~XMLBackGraphicPositionPropHdl() override;
 
     /// TabStops will be imported/exported as XML-Elements. So the Import/Export-work must be done at another place.
     using XMLPropertyHandler::importXML;

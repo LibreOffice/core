@@ -70,7 +70,7 @@ private:
 
 public:
     oneToOneMappingWithFlag( UnicodePairWithFlag *rpTableWF, const size_t rnSize, const UnicodePairFlag rnFlag );
-    virtual ~oneToOneMappingWithFlag();
+    virtual ~oneToOneMappingWithFlag() override;
 
     // make index for fast search
     void makeIndex();

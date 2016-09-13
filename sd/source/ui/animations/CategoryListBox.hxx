@@ -29,7 +29,7 @@ class CategoryListBox : public ListBox
 {
 public:
     explicit CategoryListBox( vcl::Window* pParent );
-    virtual ~CategoryListBox();
+    virtual ~CategoryListBox() override;
 
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 

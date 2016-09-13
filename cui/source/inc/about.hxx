@@ -66,7 +66,7 @@ protected:
 
 public:
     AboutDialog(vcl::Window* pParent);
-    virtual ~AboutDialog();
+    virtual ~AboutDialog() override;
     virtual void dispose() override;
 
     DECL_LINK_TYPED( HandleClick, Button*, void );

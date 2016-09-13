@@ -29,7 +29,7 @@ class SwAccessibleEmbeddedObject : public   SwAccessibleNoTextFrame
 
 {
 protected:
-    virtual ~SwAccessibleEmbeddedObject();
+    virtual ~SwAccessibleEmbeddedObject() override;
 
 public:
     SwAccessibleEmbeddedObject( SwAccessibleMap* pInitMap,

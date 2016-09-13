@@ -40,7 +40,7 @@ protected:
 public:
     // basic constructor, used from SdrObject.
     explicit ViewContactOfPageObj(SdrPageObj& rPageObj);
-    virtual ~ViewContactOfPageObj();
+    virtual ~ViewContactOfPageObj() override;
 
     // #WIP# React on changes of the object of this ViewContact
     virtual void ActionChanged() override;

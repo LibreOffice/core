@@ -42,7 +42,7 @@ public:
         : IdlMemberImpl( pReflection, rName, pTypeDescr, pTypeDescr )
         , _nValue( nValue )
         {}
-    virtual ~IdlEnumFieldImpl();
+    virtual ~IdlEnumFieldImpl() override;
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type & rType ) throw(css::uno::RuntimeException, std::exception) override;

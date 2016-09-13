@@ -37,7 +37,7 @@ public:
         macros.
     */
     GraphicViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
-    virtual ~GraphicViewShellBase();
+    virtual ~GraphicViewShellBase() override;
 
     /** Callback function for general slot calls.
     */

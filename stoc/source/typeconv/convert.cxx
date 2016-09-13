@@ -251,7 +251,7 @@ class TypeConverter_Impl : public WeakImplHelper< XTypeConverter, XServiceInfo >
 
 public:
     TypeConverter_Impl();
-    virtual ~TypeConverter_Impl();
+    virtual ~TypeConverter_Impl() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) override;

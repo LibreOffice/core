@@ -33,7 +33,7 @@ private:
 
 public:
     SwVbaFrame( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel, const css::uno::Reference< css::text::XTextFrame >& xTextFrame ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaFrame();
+    virtual ~SwVbaFrame() override;
 
    // Methods
     virtual void SAL_CALL Select() throw ( css::uno::RuntimeException, std::exception ) override;

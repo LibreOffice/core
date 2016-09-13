@@ -39,7 +39,7 @@ class ColorPropertySet : public ::cppu::WeakImplHelper<
 public:
     // if bFillColor == false, the color is a LineColor
     explicit ColorPropertySet( sal_Int32 nColor, bool bFillColor = true );
-    virtual ~ColorPropertySet();
+    virtual ~ColorPropertySet() override;
 
 protected:
     // ____ XPropertySet ____

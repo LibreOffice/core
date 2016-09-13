@@ -52,7 +52,7 @@ class ScDispatchProviderInterceptor : public cppu::WeakImplHelper<
 public:
 
                             ScDispatchProviderInterceptor(ScTabViewShell* pViewSh);
-    virtual                 ~ScDispatchProviderInterceptor();
+    virtual                 ~ScDispatchProviderInterceptor() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -97,7 +97,7 @@ class ScDispatch : public cppu::WeakImplHelper<
 public:
 
                             ScDispatch(ScTabViewShell* pViewSh);
-    virtual                 ~ScDispatch();
+    virtual                 ~ScDispatch() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

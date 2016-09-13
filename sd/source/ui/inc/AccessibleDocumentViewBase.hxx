@@ -114,7 +114,7 @@ public:
         const css::uno::Reference<css::frame::XController>& rxController,
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
 
-    virtual ~AccessibleDocumentViewBase();
+    virtual ~AccessibleDocumentViewBase() override;
 
     /** Initialize a new object.  Call this method directly after creating a
         new object.  It finished the initialization begun in the constructor

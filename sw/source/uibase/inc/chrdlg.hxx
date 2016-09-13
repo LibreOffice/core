@@ -48,7 +48,7 @@ public:
     SwCharDlg(vcl::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
               SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr);
 
-    virtual ~SwCharDlg();
+    virtual ~SwCharDlg() override;
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 };
@@ -77,7 +77,7 @@ public:
                         SwCharURLPage( vcl::Window* pParent,
                                            const SfxItemSet& rSet );
 
-                        virtual ~SwCharURLPage();
+                        virtual ~SwCharURLPage() override;
     virtual void        dispose() override;
     static VclPtr<SfxTabPage> Create( vcl::Window* pParent,
                                       const SfxItemSet* rAttrSet);

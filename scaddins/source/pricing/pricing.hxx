@@ -212,7 +212,7 @@ private:
 
 public:
                                 ScaPricingAddIn();
-    virtual                     ~ScaPricingAddIn();
+    virtual                     ~ScaPricingAddIn() override;
 
     static OUString      getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();

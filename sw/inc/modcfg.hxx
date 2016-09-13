@@ -80,7 +80,7 @@ class SwRevisionConfig : public utl::ConfigItem
 
 public:
     SwRevisionConfig();
-    virtual ~SwRevisionConfig();
+    virtual ~SwRevisionConfig() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
@@ -111,7 +111,7 @@ class SwCompareConfig : public utl::ConfigItem
 
 public:
     SwCompareConfig();
-    virtual ~SwCompareConfig();
+    virtual ~SwCompareConfig() override;
 
     virtual void    Notify( const css::uno::Sequence< OUString >& ) override { };
     void            Load();
@@ -139,7 +139,7 @@ class SwInsertConfig : public utl::ConfigItem
 
 public:
     SwInsertConfig(bool bWeb);
-    virtual ~SwInsertConfig();
+    virtual ~SwInsertConfig() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
@@ -166,7 +166,7 @@ class SwTableConfig : public utl::ConfigItem
 
 public:
     SwTableConfig(bool bWeb);
-    virtual ~SwTableConfig();
+    virtual ~SwTableConfig() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
@@ -196,7 +196,7 @@ class SwMiscConfig : public utl::ConfigItem
 
 public:
     SwMiscConfig();
-    virtual ~SwMiscConfig();
+    virtual ~SwMiscConfig() override;
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();

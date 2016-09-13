@@ -170,7 +170,7 @@ public:
     :   Edit(pParent, nBits),
         pBrowse(pBrowse_)
     {}
-    virtual ~ImpItemEdit() { disposeOnce(); }
+    virtual ~ImpItemEdit() override { disposeOnce(); }
     virtual void dispose() override { pBrowse.clear(); Edit::dispose(); }
     virtual void KeyInput(const KeyEvent& rEvt) override;
 };

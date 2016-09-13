@@ -74,7 +74,7 @@ class XFSection : public XFContentContainer
 public:
     XFSection();
 
-    virtual ~XFSection();
+    virtual ~XFSection() override;
 
 public:
 

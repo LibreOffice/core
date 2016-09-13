@@ -66,7 +66,7 @@ namespace connectivity
 
         protected:
             virtual void SAL_CALL disposing() override;
-            virtual ~OHsqlConnection();
+            virtual ~OHsqlConnection() override;
 
         public:
             OHsqlConnection(

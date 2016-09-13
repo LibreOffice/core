@@ -136,7 +136,7 @@ public:
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
 private:
-    virtual ~UrlReference() {}
+    virtual ~UrlReference() override {}
 
     stoc::uriproc::UriReference base_;
 };
@@ -178,7 +178,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    virtual ~Parser() {}
+    virtual ~Parser() override {}
 };
 
 OUString Parser::getImplementationName()

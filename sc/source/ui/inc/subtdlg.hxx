@@ -28,7 +28,7 @@ class ScSubTotalDlg : public SfxTabDialog
 {
 public:
     ScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet);
-    virtual ~ScSubTotalDlg();
+    virtual ~ScSubTotalDlg() override;
     virtual void dispose() override;
 private:
     VclPtr<PushButton> m_pBtnRemove;

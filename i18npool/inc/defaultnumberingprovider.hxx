@@ -43,7 +43,7 @@ class DefaultNumberingProvider : public cppu::WeakImplHelper
 public:
     DefaultNumberingProvider(
         const css::uno::Reference < css::uno::XComponentContext >& rxContext );
-    virtual ~DefaultNumberingProvider();
+    virtual ~DefaultNumberingProvider() override;
 
     //XDefaultNumberingProvider
     virtual css::uno::Sequence< css::uno::Reference<

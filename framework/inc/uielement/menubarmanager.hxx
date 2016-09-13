@@ -98,7 +98,7 @@ class MenuBarManager : public css::frame::XStatusListener                ,
             bool bDeleteChildren,
             bool bHasMenuBar = true );
 
-        virtual ~MenuBarManager();
+        virtual ~MenuBarManager() override;
 
         // XInterface
         virtual void SAL_CALL acquire() throw() override;

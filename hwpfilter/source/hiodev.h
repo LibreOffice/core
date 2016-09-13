@@ -81,7 +81,7 @@ class HStreamIODev : public HIODev
         gz_stream *_gzfp;
     public:
         explicit HStreamIODev(HStream* stream);
-        virtual ~HStreamIODev();
+        virtual ~HStreamIODev() override;
 /**
  * Check whether the stream is available
  */
@@ -145,7 +145,7 @@ class HMemIODev : public HIODev
     int pos, length;
     public:
         HMemIODev(char *s, int len);
-        virtual ~HMemIODev();
+        virtual ~HMemIODev() override;
 
         virtual bool open() override;
         virtual void close() override;

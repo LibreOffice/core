@@ -79,7 +79,7 @@ protected:
         const OUString &tableName);
 
 
-    virtual ~Columns();
+    virtual ~Columns() override;
 
 public: // XAppend
     virtual void SAL_CALL appendByDescriptor(

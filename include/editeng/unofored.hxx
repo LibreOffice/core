@@ -33,7 +33,7 @@ private:
 
 public:
                         SvxEditEngineForwarder( EditEngine& rEngine );
-    virtual             ~SvxEditEngineForwarder();
+    virtual             ~SvxEditEngineForwarder() override;
 
     virtual sal_Int32   GetParagraphCount() const override;
     virtual sal_Int32   GetTextLen( sal_Int32 nParagraph ) const override;

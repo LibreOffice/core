@@ -29,7 +29,7 @@ public:
     SdCGMFilter (
         SfxMedium& rMedium,
         ::sd::DrawDocShell& rDocShell );
-    virtual ~SdCGMFilter();
+    virtual ~SdCGMFilter() override;
 
     bool        Import();
     bool        Export() override;

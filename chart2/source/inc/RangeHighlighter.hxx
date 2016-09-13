@@ -51,7 +51,7 @@ class RangeHighlighter :
 public:
     explicit RangeHighlighter(
         const css::uno::Reference< css::view::XSelectionSupplier > & xSelectionSupplier );
-    virtual ~RangeHighlighter();
+    virtual ~RangeHighlighter() override;
 
 protected:
     // ____ XRangeHighlighter ____

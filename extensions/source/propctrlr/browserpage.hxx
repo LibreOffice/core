@@ -38,7 +38,7 @@ namespace pcr
 
     public:
         explicit OBrowserPage(vcl::Window* pParent);
-        virtual ~OBrowserPage();
+        virtual ~OBrowserPage() override;
         virtual void dispose() override;
 
         sal_Int32 getMinimumWidth();

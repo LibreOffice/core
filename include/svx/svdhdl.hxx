@@ -265,7 +265,7 @@ private:
 
 public:
     explicit SdrHdlColor(const Point& rRef, Color aCol = Color(COL_BLACK), const Size& rSize = Size(11, 11), bool bLum = false);
-    virtual ~SdrHdlColor();
+    virtual ~SdrHdlColor() override;
 
     bool IsUseLuminance() const { return bUseLuminance; }
 
@@ -300,7 +300,7 @@ private:
 
 public:
     SdrHdlGradient(const Point& rRef1, const Point& rRef2, bool bGrad = true);
-    virtual ~SdrHdlGradient();
+    virtual ~SdrHdlGradient() override;
 
     bool IsGradient() const { return bGradient; }
 
@@ -338,7 +338,7 @@ protected:
 
 public:
     SdrHdlLine(SdrHdl& rHdl1, SdrHdl& rHdl2, SdrHdlKind eNewKind=SdrHdlKind::MirrorAxis) { eKind=eNewKind; pHdl1=&rHdl1; pHdl2=&rHdl2; }
-    virtual ~SdrHdlLine();
+    virtual ~SdrHdlLine() override;
 
     virtual Pointer GetPointer() const override;
 };
@@ -357,7 +357,7 @@ protected:
 public:
     // this is not a Copy-Ctor!!!
     SdrHdlBezWgt(const SdrHdl* pRefHdl1, SdrHdlKind eNewKind=SdrHdlKind::BezierWeight) { eKind=eNewKind; pHdl1=pRefHdl1; }
-    virtual ~SdrHdlBezWgt();
+    virtual ~SdrHdlBezWgt() override;
 };
 
 
@@ -382,7 +382,7 @@ class ImpEdgeHdl: public SdrHdl
 
 public:
     ImpEdgeHdl(const Point& rPnt, SdrHdlKind eNewKind): SdrHdl(rPnt,eNewKind),eLineCode(SdrEdgeLineCode::MiddleLine) {}
-    virtual ~ImpEdgeHdl();
+    virtual ~ImpEdgeHdl() override;
 
     void SetLineCode(SdrEdgeLineCode eCode);
     SdrEdgeLineCode GetLineCode() const     { return eLineCode; }
@@ -398,7 +398,7 @@ class ImpMeasureHdl: public SdrHdl
 
 public:
     ImpMeasureHdl(const Point& rPnt, SdrHdlKind eNewKind): SdrHdl(rPnt,eNewKind) {}
-    virtual ~ImpMeasureHdl();
+    virtual ~ImpMeasureHdl() override;
 
     virtual Pointer GetPointer() const override;
 };

@@ -39,7 +39,7 @@ public:
     PopupWindowController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                            const css::uno::Reference< css::frame::XFrame >& xFrame,
                            const OUString& aCommandURL );
-    virtual ~PopupWindowController();
+    virtual ~PopupWindowController() override;
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) = 0;
 

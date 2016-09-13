@@ -69,7 +69,7 @@ class   XFSaxAttrList : public IXFAttrList
 public:
     XFSaxAttrList();
 
-    virtual ~XFSaxAttrList();
+    virtual ~XFSaxAttrList() override;
 
 public:
     //Interface ISaxAttributeList:

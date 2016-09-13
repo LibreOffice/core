@@ -62,7 +62,7 @@ namespace frm
         virtual AttributeCheckState implGetCheckState( const SfxPoolItem& _rItem ) const;
 
     protected:
-        virtual ~AttributeHandler();
+        virtual ~AttributeHandler() override;
     };
 
     namespace AttributeHandlerFactory

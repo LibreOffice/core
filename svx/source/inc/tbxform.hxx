@@ -48,7 +48,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxFmTbxCtlAbsRec();
+    virtual ~SvxFmTbxCtlAbsRec() override;
 
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
 
@@ -63,7 +63,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxFmTbxCtlRecText();
+    virtual ~SvxFmTbxCtlRecText() override;
 
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
 };
@@ -75,7 +75,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxFmTbxCtlRecFromText();
+    virtual ~SvxFmTbxCtlRecFromText() override;
 
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
 };
@@ -89,7 +89,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     SvxFmTbxCtlRecTotal( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxFmTbxCtlRecTotal();
+    virtual ~SvxFmTbxCtlRecTotal() override;
 
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window* pParent ) override;
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,

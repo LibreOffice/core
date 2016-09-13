@@ -61,7 +61,7 @@ protected:
 
 public:
     SVTXGridControl();
-    virtual ~SVTXGridControl();
+    virtual ~SVTXGridControl() override;
 
     // XGridDataListener
     virtual void SAL_CALL rowsInserted( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;

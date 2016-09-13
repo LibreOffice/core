@@ -47,7 +47,7 @@ public:
     ScRefreshTimer();
     ScRefreshTimer( sal_uLong nSeconds );
     ScRefreshTimer( const ScRefreshTimer& r );
-    virtual ~ScRefreshTimer();
+    virtual ~ScRefreshTimer() override;
 
     ScRefreshTimer& operator=( const ScRefreshTimer& r );
     bool operator==( const ScRefreshTimer& r ) const;

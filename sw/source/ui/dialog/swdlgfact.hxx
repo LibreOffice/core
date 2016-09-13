@@ -352,7 +352,7 @@ public:
     explicit AbstractMailMergeWizard_Impl( SwMailMergeWizard* p )
      : pDlg(p)
      {}
-    virtual         ~AbstractMailMergeWizard_Impl();
+    virtual         ~AbstractMailMergeWizard_Impl() override;
     virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
     virtual long    GetResult() override;
 

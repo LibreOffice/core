@@ -30,7 +30,7 @@
 class SVX_DLLPUBLIC SdrMeasureTextIsFixedAngleItem: public SdrYesNoItem {
 public:
     SdrMeasureTextIsFixedAngleItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,bOn) {}
-    virtual ~SdrMeasureTextIsFixedAngleItem();
+    virtual ~SdrMeasureTextIsFixedAngleItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
@@ -38,7 +38,7 @@ public:
 class SVX_DLLPUBLIC SdrMeasureTextFixedAngleItem: public SdrAngleItem {
 public:
     SdrMeasureTextFixedAngleItem(long nVal=0): SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal)  {}
-    virtual ~SdrMeasureTextFixedAngleItem();
+    virtual ~SdrMeasureTextFixedAngleItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
@@ -46,7 +46,7 @@ public:
 class SVX_DLLPUBLIC SdrMeasureDecimalPlacesItem: public SfxInt16Item {
 public:
     SdrMeasureDecimalPlacesItem(sal_Int16 nVal=2): SfxInt16Item(SDRATTR_MEASUREDECIMALPLACES,nVal)  {}
-    virtual ~SdrMeasureDecimalPlacesItem();
+    virtual ~SdrMeasureDecimalPlacesItem() override;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 

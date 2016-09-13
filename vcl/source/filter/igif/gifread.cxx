@@ -105,7 +105,7 @@ public:
     const Graphic&      GetIntermediateGraphic();
 
     explicit            GIFReader( SvStream& rStm );
-    virtual             ~GIFReader();
+    virtual             ~GIFReader() override;
 };
 
 GIFReader::GIFReader( SvStream& rStm )

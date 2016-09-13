@@ -30,7 +30,7 @@ class TableContext : public ShapeContext
 {
 public:
     TableContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pShapePtr );
-    virtual ~TableContext();
+    virtual ~TableContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

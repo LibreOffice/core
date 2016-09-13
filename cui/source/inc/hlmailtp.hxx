@@ -52,7 +52,7 @@ protected:
 
 public:
     SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
-    virtual ~SvxHyperlinkMailTp();
+    virtual ~SvxHyperlinkMailTp() override;
     virtual void dispose() override;
 
     static VclPtr<IconChoicePage> Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );

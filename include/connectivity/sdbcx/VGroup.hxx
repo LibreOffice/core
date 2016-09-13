@@ -66,7 +66,7 @@ namespace connectivity
         public:
             OGroup(bool _bCase);
             OGroup( const OUString& Name, bool _bCase);
-            virtual ~OGroup();
+            virtual ~OGroup() override;
             DECLARE_SERVICE_INFO();
 
             // XInterface

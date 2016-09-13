@@ -40,7 +40,7 @@ public:
     explicit DataSource(
         const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rSequences );
 
-    virtual ~DataSource();
+    virtual ~DataSource() override;
 
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()

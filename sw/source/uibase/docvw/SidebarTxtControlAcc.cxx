@@ -44,7 +44,7 @@ class SidebarTextEditSource : public SvxEditSource,
 {
     public:
         explicit SidebarTextEditSource(SidebarTextControl& rSidebarTextControl);
-        virtual ~SidebarTextEditSource();
+        virtual ~SidebarTextEditSource() override;
 
         virtual SvxEditSource* Clone() const override;
 
@@ -128,7 +128,7 @@ class SidebarTextControlAccessibleContext : public VCLXAccessibleComponent
 {
     public:
         explicit SidebarTextControlAccessibleContext( SidebarTextControl& rSidebarTextControl );
-        virtual ~SidebarTextControlAccessibleContext();
+        virtual ~SidebarTextControlAccessibleContext() override;
 
         virtual sal_Int32 SAL_CALL
                 getAccessibleChildCount()

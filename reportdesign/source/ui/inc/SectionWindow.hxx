@@ -96,7 +96,7 @@ namespace rptui
         OSectionWindow( OViewsWindow* _pParent
                         ,const css::uno::Reference< css::report::XSection >& _xSection
                         ,const OUString& _sColorEntry);
-        virtual ~OSectionWindow();
+        virtual ~OSectionWindow() override;
         virtual void dispose() override;
 
         inline OStartMarker&    getStartMarker()    { return *m_aStartMarker.get();     }

@@ -61,7 +61,7 @@ protected:
 
 public:
     explicit            Splitter( vcl::Window* pParent, WinBits nStyle = WB_VSCROLL );
-    virtual             ~Splitter();
+    virtual             ~Splitter() override;
     virtual void        dispose() override;
 
     void                StartSplit();

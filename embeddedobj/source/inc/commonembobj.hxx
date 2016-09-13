@@ -238,7 +238,7 @@ public:
         const css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr,
         const css::uno::Sequence< css::beans::PropertyValue >& aObjectDescr );
 
-    virtual ~OCommonEmbeddedObject();
+    virtual ~OCommonEmbeddedObject() override;
 
     void SaveObject_Impl();
 

@@ -45,7 +45,7 @@ protected:
 
 public:
     explicit            MoreButton( vcl::Window* pParent, WinBits nStyle = 0 );
-    virtual             ~MoreButton();
+    virtual             ~MoreButton() override;
     virtual void        dispose() override;
 
     void                Click() override;

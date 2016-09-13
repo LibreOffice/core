@@ -36,7 +36,7 @@ class SVT_DLLPUBLIC GenericToolboxController : public svt::ToolboxController
                                   ToolBox* pToolBox,
                                   sal_uInt16   nID,
                                   const OUString& aCommand );
-        virtual ~GenericToolboxController();
+        virtual ~GenericToolboxController() override;
 
         // XComponent
         virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;

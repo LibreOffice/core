@@ -55,7 +55,7 @@ public:
             // returns NULL otherwise
     static ScSelectionTransferObj* CreateFromView( ScTabView* pSource );
 
-    virtual     ~ScSelectionTransferObj();
+    virtual     ~ScSelectionTransferObj() override;
 
     void        ForgetView();
     ScTabView*  GetView() const     { return pView; }

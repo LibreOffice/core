@@ -129,7 +129,7 @@ namespace {
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
    protected:
-        virtual ~Wizard();
+        virtual ~Wizard() override;
 
     protected:
         virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) override;

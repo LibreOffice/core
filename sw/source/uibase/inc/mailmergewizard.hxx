@@ -61,7 +61,7 @@ protected:
 
 public:
     SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem>& rConfigItem);
-    virtual ~SwMailMergeWizard();
+    virtual ~SwMailMergeWizard() override;
 
     SwView*                     GetSwView() {return m_pSwView;}
     SwMailMergeConfigItem&      GetConfigItem() { return *m_xConfigItem.get();}

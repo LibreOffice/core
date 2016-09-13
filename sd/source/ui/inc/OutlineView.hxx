@@ -60,7 +60,7 @@ public:
     OutlineView (DrawDocShell& rDocSh,
         vcl::Window* pWindow,
         OutlineViewShell& rOutlineViewSh);
-    virtual ~OutlineView();
+    virtual ~OutlineView() override;
 
     /** This method is called by the view shell that owns the view to tell
         the view that it can safely connect to the application.

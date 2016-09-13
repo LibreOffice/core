@@ -76,7 +76,7 @@ class VBAMacroResolver : public VBAMacroResolverBase
 {
 public:
     explicit            VBAMacroResolver();
-    virtual             ~VBAMacroResolver();
+    virtual             ~VBAMacroResolver() override;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 

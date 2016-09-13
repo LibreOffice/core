@@ -54,7 +54,7 @@ private:
 
 public:
                             ScAutoFormatsObj();
-    virtual                 ~ScAutoFormatsObj();
+    virtual                 ~ScAutoFormatsObj() override;
 
                             // XNameContainer
     virtual void SAL_CALL   insertByName( const OUString& aName,
@@ -129,7 +129,7 @@ private:
 
 public:
                             ScAutoFormatObj(sal_uInt16 nIndex);
-    virtual                 ~ScAutoFormatObj();
+    virtual                 ~ScAutoFormatObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -229,7 +229,7 @@ private:
 
 public:
                             ScAutoFormatFieldObj(sal_uInt16 nFormat, sal_uInt16 nField);
-    virtual                 ~ScAutoFormatFieldObj();
+    virtual                 ~ScAutoFormatFieldObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

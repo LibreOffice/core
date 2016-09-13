@@ -943,7 +943,7 @@ private:
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
 
-    virtual ~DocxAttributeOutput();
+    virtual ~DocxAttributeOutput() override;
 
     /// Return the right export class.
     virtual DocxExport& GetExport() override;

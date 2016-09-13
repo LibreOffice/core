@@ -92,7 +92,7 @@ class LwpGraphicObject : public LwpGraphicOleObject
 {
 public:
     LwpGraphicObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpGraphicObject();
+    virtual ~LwpGraphicObject() override;
 private:
     unsigned char m_sDataFormat[AFID_MAX_FILE_FORMAT_SIZE];
     unsigned char m_sServerContextFormat[AFID_MAX_CONTEXT_FORMAT_SIZE];

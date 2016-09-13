@@ -33,7 +33,7 @@ class DataInterpreter : public ::cppu::WeakImplHelper<
 {
 public:
     explicit DataInterpreter( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~DataInterpreter();
+    virtual ~DataInterpreter() override;
 
     const css::uno::Reference< css::uno::XComponentContext >&
         GetComponentContext() const { return m_xContext;}

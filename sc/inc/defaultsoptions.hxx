@@ -47,7 +47,7 @@ public:
     ScTpDefaultsItem( sal_uInt16 nWhich,
                    const ScDefaultsOptions& rOpt );
     ScTpDefaultsItem( const ScTpDefaultsItem& rItem );
-    virtual ~ScTpDefaultsItem();
+    virtual ~ScTpDefaultsItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

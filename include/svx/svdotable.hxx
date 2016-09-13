@@ -100,7 +100,7 @@ class SVX_DLLPUBLIC SdrTableObj : public ::SdrTextObj
 public:
     SdrTableObj(SdrModel* _pModel);
     SdrTableObj(SdrModel* _pModel, const ::Rectangle& rNewRect, sal_Int32 nColumns, sal_Int32 nRows);
-    virtual ~SdrTableObj();
+    virtual ~SdrTableObj() override;
 
 
     // Table stuff

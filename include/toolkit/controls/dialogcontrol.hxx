@@ -49,7 +49,7 @@ private:
 public:
 
                                 UnoDialogControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-                                virtual ~UnoDialogControl();
+                                virtual ~UnoDialogControl() override;
     OUString             GetComponentServiceName() override;
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException, std::exception) override;
@@ -172,7 +172,7 @@ class UnoMultiPageModel : public ControlModelContainerBase
 {
 public:
     UnoMultiPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~UnoMultiPageModel();
+    virtual ~UnoMultiPageModel() override;
     UnoMultiPageModel( const UnoMultiPageModel& rModel );
 
     UnoControlModel*    Clone() const override;
@@ -200,7 +200,7 @@ class UnoMultiPageControl :  public ControlContainerBase
     void bindPage( const css::uno::Reference< css::awt::XControl >& _rxControl );
 public:
     UnoMultiPageControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~UnoMultiPageControl();
+    virtual ~UnoMultiPageControl() override;
     OUString     GetComponentServiceName() override;
 
     // css::lang::XServiceInfo
@@ -247,7 +247,7 @@ class UnoPageModel : public ControlModelContainerBase
 {
 public:
     UnoPageModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~UnoPageModel();
+    virtual ~UnoPageModel() override;
     UnoPageModel( const UnoPageModel& rModel );
 
     UnoControlModel*    Clone() const override;
@@ -269,7 +269,7 @@ class UnoPageControl :  public ControlContainerBase
 {
 public:
     UnoPageControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~UnoPageControl();
+    virtual ~UnoPageControl() override;
     OUString     GetComponentServiceName() override;
 
 
@@ -281,7 +281,7 @@ class UnoFrameModel : public ControlModelContainerBase
 {
 public:
     UnoFrameModel( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~UnoFrameModel();
+    virtual ~UnoFrameModel() override;
     UnoFrameModel( const UnoFrameModel& rModel );
 
     UnoControlModel*    Clone() const override;
@@ -302,7 +302,7 @@ protected:
     virtual void        ImplSetPosSize( css::uno::Reference< css::awt::XControl >& rxCtrl ) override;
 public:
     UnoFrameControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~UnoFrameControl();
+    virtual ~UnoFrameControl() override;
     OUString     GetComponentServiceName() override;
 
 // css::lang::XServiceInfo

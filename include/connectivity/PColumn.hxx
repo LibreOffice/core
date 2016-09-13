@@ -55,7 +55,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
-            virtual ~OParseColumn();
+            virtual ~OParseColumn() override;
         public:
             OParseColumn(const css::uno::Reference< css::beans::XPropertySet>& _xColumn, bool _bCase);
             OParseColumn(const OUString& Name,
@@ -122,7 +122,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
-            virtual ~OOrderColumn();
+            virtual ~OOrderColumn() override;
         public:
             OOrderColumn(
                 const css::uno::Reference< css::beans::XPropertySet>& _xColumn,

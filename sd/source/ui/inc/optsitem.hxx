@@ -48,7 +48,7 @@ private:
 public:
 
     SdOptionsItem( const SdOptionsGeneric& rParent, const OUString& rSubTree );
-    virtual ~SdOptionsItem();
+    virtual ~SdOptionsItem() override;
 
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
@@ -118,7 +118,7 @@ protected:
 
 public:
             SdOptionsLayout( sal_uInt16 nConfigId, bool bUseConfig );
-            virtual ~SdOptionsLayout() {}
+            virtual ~SdOptionsLayout() override {}
 
     bool    operator==( const SdOptionsLayout& rOpt ) const;
 
@@ -168,7 +168,7 @@ protected:
 public:
 
             SdOptionsContents( sal_uInt16 nConfigId, bool bUseConfig );
-            virtual ~SdOptionsContents() {}
+            virtual ~SdOptionsContents() override {}
 
     bool    operator==( const SdOptionsContents& rOpt ) const;
 };
@@ -240,7 +240,7 @@ protected:
 public:
 
             SdOptionsMisc( sal_uInt16 nConfigId, bool bUseConfig );
-            virtual ~SdOptionsMisc() {}
+            virtual ~SdOptionsMisc() override {}
 
     bool    operator==( const SdOptionsMisc& rOpt ) const;
 
@@ -361,7 +361,7 @@ protected:
 public:
 
             SdOptionsSnap( sal_uInt16 nConfigId, bool bUseConfig );
-            virtual ~SdOptionsSnap() {}
+            virtual ~SdOptionsSnap() override {}
 
     bool    operator==( const SdOptionsSnap& rOpt ) const;
 
@@ -421,7 +421,7 @@ protected:
 public:
 
     explicit SdOptionsZoom(sal_uInt16 nConfigId);
-    virtual ~SdOptionsZoom() {}
+    virtual ~SdOptionsZoom() override {}
 
     void    GetScale( sal_Int32& rX, sal_Int32& rY ) const { Init(); rX = nX; rY = nY; }
     void    SetScale( sal_Int32 nInX, sal_Int32 nInY ) { if( nX != nInX || nY != nInY ) { OptionsChanged(); nX = nInX; nY = nInY; } }
@@ -438,7 +438,7 @@ protected:
 public:
 
     explicit SdOptionsGrid(sal_uInt16 nConfigId);
-    virtual ~SdOptionsGrid();
+    virtual ~SdOptionsGrid() override;
 
     void    SetDefaults();
 
@@ -509,7 +509,7 @@ protected:
 public:
 
             SdOptionsPrint( sal_uInt16 nConfigId, bool bUseConfig );
-            virtual ~SdOptionsPrint() {}
+            virtual ~SdOptionsPrint() override {}
 
     bool    operator==( const SdOptionsPrint& rOpt ) const;
 
@@ -584,7 +584,7 @@ class SdOptions : public SdOptionsLayout, public SdOptionsContents,
 public:
 
                         explicit SdOptions( sal_uInt16 nConfigId );
-                        virtual ~SdOptions();
+                        virtual ~SdOptions() override;
 
     void                StoreConfig();
 };

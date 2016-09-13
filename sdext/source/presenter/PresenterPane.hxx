@@ -47,7 +47,7 @@ public:
     PresenterPane (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
-    virtual ~PresenterPane();
+    virtual ~PresenterPane() override;
 
     // XPane
 

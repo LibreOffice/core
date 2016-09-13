@@ -43,7 +43,7 @@ class ScInsertTableDlg : public ModalDialog
 {
 public:
             ScInsertTableDlg( vcl::Window* pParent, ScViewData& rViewData, SCTAB nTabCount, bool bFromFile );
-            virtual ~ScInsertTableDlg();
+            virtual ~ScInsertTableDlg() override;
     virtual void dispose() override;
 
     virtual short   Execute() override; // override to set parent dialog

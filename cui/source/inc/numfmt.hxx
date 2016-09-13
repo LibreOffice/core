@@ -66,7 +66,7 @@ class SvxNumberFormatTabPage : public SfxTabPage
     static const sal_uInt16 pRanges[];
 
 public:
-    virtual ~SvxNumberFormatTabPage();
+    virtual ~SvxNumberFormatTabPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent,

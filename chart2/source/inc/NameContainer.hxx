@@ -50,7 +50,7 @@ public:
     NameContainer() = delete;
     NameContainer( const css::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName );
     explicit NameContainer( const NameContainer & rOther );
-    virtual ~NameContainer();
+    virtual ~NameContainer() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;

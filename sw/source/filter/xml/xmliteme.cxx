@@ -68,7 +68,7 @@ public:
             SvXMLItemMapEntriesRef rMapEntries,
             SwXMLExport& rExp );
 
-    virtual ~SwXMLTableItemMapper_Impl();
+    virtual ~SwXMLTableItemMapper_Impl() override;
 
     virtual void handleSpecialItem( SvXMLAttributeList& rAttrList,
                                     const SvXMLItemMapEntry& rEntry,

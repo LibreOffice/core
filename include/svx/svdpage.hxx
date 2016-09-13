@@ -342,7 +342,7 @@ private:
 public:
     // construct/destruct
     SdrPageProperties(SdrPage& rSdrPage);
-    virtual ~SdrPageProperties();
+    virtual ~SdrPageProperties() override;
 
     // Notify(...) from baseclass SfxListener
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
@@ -447,7 +447,7 @@ protected:
 
 public:
     explicit SdrPage(SdrModel& rNewModel, bool bMasterPage=false);
-    virtual ~SdrPage();
+    virtual ~SdrPage() override;
     virtual SdrPage* Clone() const override;
     virtual SdrPage* Clone(SdrModel* pNewModel) const;
     bool             IsMasterPage() const       { return mbMaster; }
@@ -541,7 +541,7 @@ class SVX_DLLPUBLIC StandardCheckVisisbilityRedirector : public sdr::contact::Vi
 {
 public:
     StandardCheckVisisbilityRedirector();
-    virtual ~StandardCheckVisisbilityRedirector();
+    virtual ~StandardCheckVisisbilityRedirector() override;
 
     // all default implementations just call the same methods at the original. To do something
     // different, override the method and at least do what the method does.

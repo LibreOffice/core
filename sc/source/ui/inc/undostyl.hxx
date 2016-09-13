@@ -62,7 +62,7 @@ public:
                                         SfxStyleFamily eFam,
                                         const ScStyleSaveData& rOld,
                                         const ScStyleSaveData& rNew );
-    virtual         ~ScUndoModifyStyle();
+    virtual         ~ScUndoModifyStyle() override;
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -76,7 +76,7 @@ class ScUndoApplyPageStyle: public ScSimpleUndo
 {
 public:
                     ScUndoApplyPageStyle( ScDocShell* pDocSh, const OUString& rNewStyle );
-    virtual         ~ScUndoApplyPageStyle();
+    virtual         ~ScUndoApplyPageStyle() override;
 
     void            AddSheetAction( SCTAB nTab, const OUString& rOld );
 

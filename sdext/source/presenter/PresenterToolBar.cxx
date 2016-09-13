@@ -133,7 +133,7 @@ namespace {
     {
     public:
         explicit Element (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
-        virtual ~Element();
+        virtual ~Element() override;
         Element(const Element&) = delete;
         Element& operator=(const Element&) = delete;
 
@@ -212,7 +212,7 @@ namespace {
         static ::rtl::Reference<Element> Create (
             const ::rtl::Reference<PresenterToolBar>& rpToolBar);
 
-        virtual ~Button();
+        virtual ~Button() override;
         virtual void SAL_CALL disposing() override;
 
         virtual void Paint (
@@ -302,7 +302,7 @@ namespace {
             const SharedElementMode& rpDisabledMode) override;
     private:
         CurrentTimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
-        virtual ~CurrentTimeLabel();
+        virtual ~CurrentTimeLabel() override;
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) override;
     };
 
@@ -320,7 +320,7 @@ namespace {
     private:
         TimeValue maStartTimeValue;
         PresentationTimeLabel (const ::rtl::Reference<PresenterToolBar>& rpToolBar);
-        virtual ~PresentationTimeLabel();
+        virtual ~PresentationTimeLabel() override;
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) override;
     };
 

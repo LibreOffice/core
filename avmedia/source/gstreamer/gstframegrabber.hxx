@@ -42,7 +42,7 @@ public:
     // static create method instead of public Ctor
     static FrameGrabber* create( const OUString &rURL );
 
-    virtual ~FrameGrabber();
+    virtual ~FrameGrabber() override;
 
     // XFrameGrabber
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (css::uno::RuntimeException, std::exception) override;

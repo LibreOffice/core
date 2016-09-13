@@ -50,7 +50,7 @@ public:
     // cTor only if ScAddInAsync::Get fails.
     // nIndex: Index from FunctionCollection
     ScAddInAsync(sal_uLong nHandle, LegacyFuncData* pFuncData, ScDocument* pDoc);
-    virtual         ~ScAddInAsync();
+    virtual         ~ScAddInAsync() override;
     static ScAddInAsync*    Get( sal_uLong nHandle );
     static void     CallBack( sal_uLong nHandle, void* pData );
     static void     RemoveDocument( ScDocument* pDocument );

@@ -56,7 +56,7 @@ namespace framework
     {
         public:
             ModuleImageManager( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~ModuleImageManager();
+            virtual ~ModuleImageManager() override;
 
             // XComponent
             virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;

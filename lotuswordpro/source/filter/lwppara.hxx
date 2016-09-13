@@ -264,7 +264,7 @@ protected:
         MAX_INDENT_LEVELS   = 10
     };
 private:
-    virtual ~LwpPara();
+    virtual ~LwpPara() override;
 
     static void OverrideAlignment(LwpAlignmentOverride* base,LwpAlignmentOverride* over,XFParaStyle* pOverStyle);
     void OverrideIndent(LwpIndentOverride* base,LwpIndentOverride* over,XFParaStyle* pOverStyle);

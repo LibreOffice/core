@@ -69,7 +69,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    virtual ~Factory() {}
+    virtual ~Factory() override {}
 
     css::uno::Reference< css::uno::XComponentContext > m_context;
 };

@@ -68,7 +68,7 @@ private:
 
 public:
     explicit SignatureCreatorImpl( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~SignatureCreatorImpl();
+    virtual ~SignatureCreatorImpl() override;
 
     /* XBlockerMonitor */
     virtual void SAL_CALL setBlockerId( sal_Int32 id )

@@ -31,7 +31,7 @@ public:
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
         ScCheckListMenuWindow* pWin,
         const OUString& rName);
-    virtual ~ScAccessibleFilterTopWindow();
+    virtual ~ScAccessibleFilterTopWindow() override;
 
     // XAccessibleContext
 

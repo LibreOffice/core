@@ -55,7 +55,7 @@ class ThumbnailViewAcc :
 public:
 
     ThumbnailViewAcc( ThumbnailView* pParent, bool bIsTransientChildrenDisabled );
-    virtual ~ThumbnailViewAcc();
+    virtual ~ThumbnailViewAcc() override;
 
     void FireAccessibleEvent( short nEventId,
                               const css::uno::Any& rOldValue,
@@ -177,7 +177,7 @@ private:
 public:
 
     ThumbnailViewItemAcc( ThumbnailViewItem* pParent, bool bIsTransientChildrenDisabled );
-    virtual ~ThumbnailViewItemAcc();
+    virtual ~ThumbnailViewItemAcc() override;
 
     void FireAccessibleEvent( short nEventId,
                               const css::uno::Any& rOldValue,

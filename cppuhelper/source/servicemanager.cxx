@@ -449,7 +449,7 @@ public:
     const ContentEnumeration& operator=(const ContentEnumeration&) = delete;
 
 private:
-    virtual ~ContentEnumeration() {}
+    virtual ~ContentEnumeration() override {}
 
     virtual sal_Bool SAL_CALL hasMoreElements()
         throw (css::uno::RuntimeException, std::exception) override;
@@ -508,7 +508,7 @@ public:
     const SingletonFactory& operator=(const SingletonFactory&) = delete;
 
 private:
-    virtual ~SingletonFactory() {}
+    virtual ~SingletonFactory() override {}
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithContext(
@@ -564,7 +564,7 @@ public:
     const ImplementationWrapper& operator=(const ImplementationWrapper&) = delete;
 
 private:
-    virtual ~ImplementationWrapper() {}
+    virtual ~ImplementationWrapper() override {}
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithContext(

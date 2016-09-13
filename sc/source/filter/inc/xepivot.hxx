@@ -73,7 +73,7 @@ public:
                             sal_uInt16 nFieldIdx,
                             const ScDPObject& rDPObj, const ScDPSaveGroupDimension& rGroupDim,
                             const XclExpPCField& rBaseField );
-    virtual             ~XclExpPCField();
+    virtual             ~XclExpPCField() override;
 
     /** Sets the passed field as direct grouping child field of this field. */
     void                SetGroupChildField( const XclExpPCField& rChildField );

@@ -41,7 +41,7 @@ private:
     SCTAB   nTab;
 public:
             ScTabDeletedHint( SCTAB nTabNo = SCTAB_MAX );
-    virtual ~ScTabDeletedHint();
+    virtual ~ScTabDeletedHint() override;
 
     SCTAB   GetTab() const { return nTab; }
 };
@@ -52,7 +52,7 @@ private:
     SCTAB   nTab;
 public:
             ScTabSizeChangedHint( SCTAB nTabNo = SCTAB_MAX );
-    virtual ~ScTabSizeChangedHint();
+    virtual ~ScTabSizeChangedHint() override;
 
     SCTAB   GetTab() const  { return nTab; }
 };
@@ -70,7 +70,7 @@ private:
 public:
                 ScUndoObjData( SdrObject* pObj, const ScAddress& rOS, const ScAddress& rOE,
                                                 const ScAddress& rNS, const ScAddress& rNE );
-                virtual ~ScUndoObjData();
+                virtual ~ScUndoObjData() override;
 
     virtual void     Undo() override;
     virtual void     Redo() override;
@@ -84,7 +84,7 @@ private:
     SCTAB                   mnTab;
 public:
                 ScUndoAnchorData( SdrObject* pObj, ScDocument* pDoc, SCTAB nTab );
-                virtual ~ScUndoAnchorData();
+                virtual ~ScUndoAnchorData() override;
 
     virtual void     Undo() override;
     virtual void     Redo() override;
@@ -109,7 +109,7 @@ private:
 
 public:
                     ScDrawLayer( ScDocument* pDocument, const OUString& rName );
-    virtual         ~ScDrawLayer();
+    virtual         ~ScDrawLayer() override;
 
     virtual SdrPage*  AllocPage(bool bMasterPage) override;
     virtual SdrModel* AllocModel() const override;

@@ -57,7 +57,7 @@ protected:
 
 public:
     SvtSearchOptions_Impl();
-    virtual ~SvtSearchOptions_Impl();
+    virtual ~SvtSearchOptions_Impl() override;
 
     virtual void    Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 

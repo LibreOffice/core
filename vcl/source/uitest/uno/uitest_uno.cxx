@@ -37,7 +37,7 @@ private:
 public:
 
     UITestUnoObj();
-    virtual ~UITestUnoObj();
+    virtual ~UITestUnoObj() override;
 
     void SAL_CALL executeCommand(const OUString& rCommand)
         throw (css::uno::RuntimeException, std::exception) override;

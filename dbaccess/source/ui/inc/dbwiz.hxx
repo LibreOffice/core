@@ -71,7 +71,7 @@ public:
         ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         ,const css::uno::Any& _aDataSourceName
         );
-    virtual ~ODbTypeWizDialog();
+    virtual ~ODbTypeWizDialog() override;
     virtual void dispose() override;
 
     virtual const SfxItemSet* getOutputSet() const override;

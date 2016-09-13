@@ -125,7 +125,7 @@ public:
 private:
     inline SingletonFactory() {}
 
-    virtual inline ~SingletonFactory() {}
+    virtual inline ~SingletonFactory() override {}
 
     SingletonFactory(const SingletonFactory&) = delete;
     SingletonFactory& operator=(const SingletonFactory&) = delete;

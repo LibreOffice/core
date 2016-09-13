@@ -66,7 +66,7 @@ namespace dbaccess
                         oslInterlockedCount& _nInAppend
                         );
 
-        virtual ~OViewContainer();
+        virtual ~OViewContainer() override;
 
     protected:
         // OFilteredContainer overridables

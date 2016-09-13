@@ -219,7 +219,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         //  constructor / destructor
 
          SvtCompatibilityOptions_Impl();
-        virtual ~SvtCompatibilityOptions_Impl();
+        virtual ~SvtCompatibilityOptions_Impl() override;
 
         void SetDefault( const OUString & sName, bool bValue );
 

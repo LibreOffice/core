@@ -52,7 +52,7 @@ public:
     PresenterCurrentSlideObserver (
         const ::rtl::Reference<PresenterController>& rxPresenterController,
         const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController);
-    virtual ~PresenterCurrentSlideObserver();
+    virtual ~PresenterCurrentSlideObserver() override;
 
     virtual void SAL_CALL disposing() override;
 

@@ -35,7 +35,7 @@ private:
 
 public:
     SvxNewTableDialog( vcl::Window* pWindow );
-    virtual ~SvxNewTableDialog();
+    virtual ~SvxNewTableDialog() override;
 
     virtual short Execute() override;
 

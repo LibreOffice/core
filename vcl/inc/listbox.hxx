@@ -252,7 +252,7 @@ public:
     virtual void  FillLayoutData() const override;
 
                     ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle );
-    virtual         ~ImplListBoxWindow();
+    virtual         ~ImplListBoxWindow() override;
     virtual void    dispose() override;
 
     ImplEntryList*  GetEntryList() const { return mpEntryList; }
@@ -386,7 +386,7 @@ protected:
 
 public:
                     ImplListBox( vcl::Window* pParent, WinBits nWinStyle );
-                    virtual ~ImplListBox();
+                    virtual ~ImplListBox() override;
     virtual void    dispose() override;
 
     const ImplEntryList*    GetEntryList() const            { return maLBWindow->GetEntryList(); }
@@ -482,7 +482,7 @@ protected:
 
 public:
                     ImplListBoxFloatingWindow( vcl::Window* pParent );
-    virtual         ~ImplListBoxFloatingWindow();
+    virtual         ~ImplListBoxFloatingWindow() override;
     virtual void    dispose() override;
     void            SetImplListBox( ImplListBox* pLB )  { mpImplLB = pLB; }
 

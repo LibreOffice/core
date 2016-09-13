@@ -49,7 +49,7 @@ public:
     SwUndoAttr( const SwPaM&, const SfxItemSet &, const SetAttrMode nFlags );
     SwUndoAttr( const SwPaM&, const SfxPoolItem&, const SetAttrMode nFlags );
 
-    virtual ~SwUndoAttr();
+    virtual ~SwUndoAttr() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -70,7 +70,7 @@ public:
     SwUndoResetAttr( const SwPaM&, sal_uInt16 nFormatId );
     SwUndoResetAttr( const SwPosition&, sal_uInt16 nFormatId );
 
-    virtual ~SwUndoResetAttr();
+    virtual ~SwUndoResetAttr() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -114,7 +114,7 @@ public:
                    SwFormat& rFormat,
                    bool bSaveDrawPt = true );
 
-    virtual ~SwUndoFormatAttr();
+    virtual ~SwUndoFormatAttr() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -132,7 +132,7 @@ class SwUndoFormatResetAttr : public SwUndo
     public:
         SwUndoFormatResetAttr( SwFormat& rChangedFormat,
                             const sal_uInt16 nWhichId );
-        virtual ~SwUndoFormatResetAttr();
+        virtual ~SwUndoFormatResetAttr() override;
 
         virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
         virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -183,7 +183,7 @@ class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
 public:
     SwUndoMoveLeftMargin( const SwPaM&, bool bRight, bool bModulus );
 
-    virtual ~SwUndoMoveLeftMargin();
+    virtual ~SwUndoMoveLeftMargin() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -202,7 +202,7 @@ public:
     // registers at the format and saves old attributes
     SwUndoDefaultAttr( const SfxItemSet& rOldSet, const SwDoc* pDoc );
 
-    virtual ~SwUndoDefaultAttr();
+    virtual ~SwUndoDefaultAttr() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -218,7 +218,7 @@ class SwUndoChangeFootNote : public SwUndo, private SwUndRng
 public:
     SwUndoChangeFootNote( const SwPaM& rRange, const OUString& rText,
                           sal_uInt16 nNum, bool bIsEndNote );
-    virtual ~SwUndoChangeFootNote();
+    virtual ~SwUndoChangeFootNote() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -234,7 +234,7 @@ class SwUndoFootNoteInfo : public SwUndo
 public:
     SwUndoFootNoteInfo( const SwFootnoteInfo &rInfo, const SwDoc* pDoc );
 
-    virtual ~SwUndoFootNoteInfo();
+    virtual ~SwUndoFootNoteInfo() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -247,7 +247,7 @@ class SwUndoEndNoteInfo : public SwUndo
 public:
     SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo, const SwDoc* pDoc );
 
-    virtual ~SwUndoEndNoteInfo();
+    virtual ~SwUndoEndNoteInfo() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

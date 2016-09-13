@@ -39,7 +39,7 @@ namespace fileaccess {
         FileContentIdentifier( const OUString& aUnqPath,
                                bool IsNormalized = true );
 
-        virtual ~FileContentIdentifier();
+        virtual ~FileContentIdentifier() override;
 
         // XInterface
         virtual css::uno::Any SAL_CALL

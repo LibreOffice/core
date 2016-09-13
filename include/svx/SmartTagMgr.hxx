@@ -122,7 +122,7 @@ private:
 public:
 
     SmartTagMgr( const OUString& rApplicationName );
-    virtual ~SmartTagMgr();
+    virtual ~SmartTagMgr() override;
 
     /** Triggers configuration reading, library loading and listener registration
         NOTE: MUST BE CALLED AFTER CONSTRUCTION!

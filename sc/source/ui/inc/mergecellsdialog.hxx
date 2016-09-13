@@ -30,7 +30,7 @@ class ScMergeCellsDialog : public ModalDialog
 
 public:
     ScMergeCellsDialog( vcl::Window * pParent );
-    virtual ~ScMergeCellsDialog();
+    virtual ~ScMergeCellsDialog() override;
     virtual void dispose() override;
 
     ScMergeCellsOption GetMergeCellsOption();

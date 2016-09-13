@@ -33,7 +33,7 @@ class RegressionCurveCalculator : public
 {
 public:
     RegressionCurveCalculator();
-    virtual ~RegressionCurveCalculator();
+    virtual ~RegressionCurveCalculator() override;
 
     static bool isLinearScaling(
         const css::uno::Reference< css::chart2::XScaling >& xScaling );

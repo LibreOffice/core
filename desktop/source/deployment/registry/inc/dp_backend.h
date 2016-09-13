@@ -89,7 +89,7 @@ protected:
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
 
-    virtual ~Package();
+    virtual ~Package() override;
     Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
              OUString const & url,
              OUString const & name,
@@ -109,7 +109,7 @@ public:
         const OUString m_shortDescr;
         const sal_uInt16 m_smallIcon;
     public:
-        virtual ~TypeInfo();
+        virtual ~TypeInfo() override;
         TypeInfo( OUString const & mediaType,
                   OUString const & fileFilter,
                   OUString const & shortDescr,
@@ -308,7 +308,7 @@ protected:
     void check();
     virtual void SAL_CALL disposing() override;
 
-    virtual ~PackageRegistryBackend();
+    virtual ~PackageRegistryBackend() override;
     PackageRegistryBackend(
         css::uno::Sequence<css::uno::Any> const & args,
         css::uno::Reference<css::uno::XComponentContext> const & xContext );

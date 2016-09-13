@@ -318,7 +318,7 @@ public:
 
     OStorage(   OStorage_Impl* pImpl, bool bReadOnlyWrap );
 
-    virtual ~OStorage();
+    virtual ~OStorage() override;
 
     void SAL_CALL InternalDispose( bool bNotifyImpl );
 

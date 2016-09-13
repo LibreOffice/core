@@ -87,7 +87,7 @@ public:
     , m_bWaitSaveCompleted( false )
     {}
 
-    virtual ~ODummyEmbeddedObject();
+    virtual ~ODummyEmbeddedObject() override;
 
 // XEmbeddedObject
 

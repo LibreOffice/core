@@ -70,7 +70,7 @@ class VCLStatusIndicator : public  ::cppu::WeakImplHelper< css::task::XStatusInd
         VCLStatusIndicator(const css::uno::Reference< css::awt::XWindow >&               xParentWindow);
 
         /// dtor
-        virtual ~VCLStatusIndicator();
+        virtual ~VCLStatusIndicator() override;
 
         /// XStatusIndicator
         virtual void SAL_CALL start(const OUString& sText ,

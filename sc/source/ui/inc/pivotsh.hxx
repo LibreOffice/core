@@ -39,7 +39,7 @@ private:
 
 public:
     ScPivotShell(ScTabViewShell* pView);
-    virtual ~ScPivotShell();
+    virtual ~ScPivotShell() override;
 
     void Execute(SfxRequest& rReq);
     void GetState(SfxItemSet& rSet);

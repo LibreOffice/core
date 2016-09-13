@@ -36,7 +36,7 @@ private:
 
 public:
     SwVbaRow( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nIndex ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaRow();
+    virtual ~SwVbaRow() override;
 
     // Attributes
     virtual css::uno::Any SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) override;

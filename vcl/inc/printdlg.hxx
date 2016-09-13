@@ -56,7 +56,7 @@ namespace vcl
 
         public:
             PrintPreviewWindow( vcl::Window* pParent );
-            virtual ~PrintPreviewWindow();
+            virtual ~PrintPreviewWindow() override;
             virtual void dispose() override;
 
             virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
@@ -244,7 +244,7 @@ namespace vcl
 
     public:
         PrintDialog( vcl::Window*, const std::shared_ptr< PrinterController >& );
-        virtual ~PrintDialog();
+        virtual ~PrintDialog() override;
         virtual void dispose() override;
 
         bool isPrintToFile();
@@ -270,7 +270,7 @@ namespace vcl
 
     public:
         PrintProgressDialog(vcl::Window* i_pParent, int i_nMax);
-        virtual ~PrintProgressDialog();
+        virtual ~PrintProgressDialog() override;
         virtual void dispose() override;
         bool isCanceled() const { return mbCanceled; }
         void setProgress( int i_nCurrent );

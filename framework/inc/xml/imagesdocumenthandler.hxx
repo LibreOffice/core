@@ -65,7 +65,7 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< css::xml::sax:
         };
 
         OReadImagesDocumentHandler( ImageListsDescriptor& aItems );
-        virtual ~OReadImagesDocumentHandler();
+        virtual ~OReadImagesDocumentHandler() override;
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()

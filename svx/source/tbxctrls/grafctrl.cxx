@@ -230,7 +230,7 @@ protected:
 public:
 
                             ImplGrafControl( vcl::Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame );
-                            virtual ~ImplGrafControl();
+                            virtual ~ImplGrafControl() override;
     virtual void            dispose() override;
 
     void                    Update( const SfxPoolItem* pItem ) { maField->Update( pItem ); }

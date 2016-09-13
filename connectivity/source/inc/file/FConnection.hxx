@@ -71,7 +71,7 @@ namespace connectivity
 
             void throwUrlNotValid(const OUString & _rsUrl,const OUString & _rsMessage);
 
-            virtual ~OConnection();
+            virtual ~OConnection() override;
         public:
 
             OConnection(OFileDriver*    _pDriver);

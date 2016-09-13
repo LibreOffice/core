@@ -261,7 +261,7 @@ public:
     explicit SdrModel();
     explicit SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers);
     explicit SdrModel(const OUString& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable);
-    virtual ~SdrModel();
+    virtual ~SdrModel() override;
     void ClearModel(bool bCalledFromDestructor);
 
     // Override this to enable the Swap/LoadOnDemand of graphics.

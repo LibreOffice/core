@@ -42,7 +42,7 @@ public:
                              double         fStep,
                              double         fMax,
                              sal_uInt16     nPossDir );
-            virtual ~ScFillSeriesDlg();
+            virtual ~ScFillSeriesDlg() override;
     virtual void dispose() override;
 
     FillDir     GetFillDir() const          { return theFillDir; }

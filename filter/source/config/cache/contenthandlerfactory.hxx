@@ -56,7 +56,7 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
 
         /** @short  standard dtor.
          */
-        virtual ~ContentHandlerFactory();
+        virtual ~ContentHandlerFactory() override;
 
 
     // uno interface

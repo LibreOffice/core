@@ -120,7 +120,7 @@ namespace DOM
 
     public:
 
-        virtual ~CNode();
+        virtual ~CNode() override;
 
         static CNode * GetImplementation(css::uno::Reference<
                 css::uno::XInterface> const& xNode);

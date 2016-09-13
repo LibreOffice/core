@@ -44,7 +44,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtFontOptions : public utl::detail::Op
 {
     public:
          SvtFontOptions();
-        virtual ~SvtFontOptions();
+        virtual ~SvtFontOptions() override;
 
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Font"

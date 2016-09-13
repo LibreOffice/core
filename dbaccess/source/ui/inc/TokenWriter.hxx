@@ -97,7 +97,7 @@ namespace dbaui
                                 const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
                                 const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
-        virtual ~ODatabaseImportExport();
+        virtual ~ODatabaseImportExport() override;
 
         virtual void initialize();
     public:

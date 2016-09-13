@@ -52,7 +52,7 @@ public:
     //          for export - pStream must be 0
     SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
                         SvStream* pStream );
-    virtual ~SwAsciiFilterDlg();
+    virtual ~SwAsciiFilterDlg() override;
     virtual void dispose() override;
 
     void FillOptions( SwAsciiOptions& rOptions );

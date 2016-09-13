@@ -28,7 +28,7 @@ class FuInsertGraphic : public FuPoor
  public:
     FuInsertGraphic( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
-    virtual ~FuInsertGraphic();
+    virtual ~FuInsertGraphic() override;
 };
 
 class FuInsertOLE : public FuPoor
@@ -57,7 +57,7 @@ class FuInsertMedia : public FuPoor
  public:
     FuInsertMedia( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
-    virtual ~FuInsertMedia();
+    virtual ~FuInsertMedia() override;
 };
 
 void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage );

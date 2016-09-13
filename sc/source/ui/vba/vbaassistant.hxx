@@ -40,7 +40,7 @@ private:
     sal_Int32       m_nAnimation;
 public:
     ScVbaAssistant( const css::uno::Reference< ov::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext );
-    virtual ~ScVbaAssistant();
+    virtual ~ScVbaAssistant() override;
     // XAssistant
     virtual sal_Bool SAL_CALL getOn() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setOn( sal_Bool _on ) throw (css::uno::RuntimeException, std::exception) override;

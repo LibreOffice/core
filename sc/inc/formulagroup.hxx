@@ -149,7 +149,7 @@ class SC_DLLPUBLIC FormulaGroupInterpreterSoftware : public FormulaGroupInterpre
 {
 public:
     FormulaGroupInterpreterSoftware();
-    virtual ~FormulaGroupInterpreterSoftware() {}
+    virtual ~FormulaGroupInterpreterSoftware() override {}
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) override;
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) override;

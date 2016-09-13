@@ -41,7 +41,7 @@ namespace x11 {
         css::uno::Reference< XInterface >     m_xManagerRef;
     public:
         DropTargetDropContext( ::Window, Time, SelectionManager& );
-        virtual ~DropTargetDropContext();
+        virtual ~DropTargetDropContext() override;
 
         // XDropTargetDropContext
         virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation ) throw(std::exception) override;
@@ -58,7 +58,7 @@ namespace x11 {
         css::uno::Reference< XInterface >     m_xManagerRef;
     public:
         DropTargetDragContext( ::Window, Time, SelectionManager& );
-        virtual ~DropTargetDragContext();
+        virtual ~DropTargetDragContext() override;
 
         // XDropTargetDragContext
         virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw(std::exception) override;
@@ -74,7 +74,7 @@ namespace x11 {
         css::uno::Reference< XInterface >     m_xManagerRef;
     public:
         DragSourceContext( ::Window, Time, SelectionManager& );
-        virtual ~DragSourceContext();
+        virtual ~DragSourceContext() override;
 
         // XDragSourceContext
         virtual sal_Int32   SAL_CALL getCurrentCursor() throw(std::exception) override;

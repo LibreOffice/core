@@ -104,7 +104,7 @@ namespace pcr
     public:
                                     OBrowserListBox( vcl::Window* pParent );
 
-                                    virtual ~OBrowserListBox();
+                                    virtual ~OBrowserListBox() override;
         virtual void                dispose() override;
 
         void                        UpdateAll();

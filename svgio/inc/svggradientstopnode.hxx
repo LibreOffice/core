@@ -40,7 +40,7 @@ namespace svgio
             SvgGradientStopNode(
                 SvgDocument& rDocument,
                 SvgNode* pParent);
-            virtual ~SvgGradientStopNode();
+            virtual ~SvgGradientStopNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;

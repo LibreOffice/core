@@ -42,7 +42,7 @@ protected:
 
 public:
     Oasis2OOoTransformer () throw();
-    virtual ~Oasis2OOoTransformer() throw();
+    virtual ~Oasis2OOoTransformer() throw() override;
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 

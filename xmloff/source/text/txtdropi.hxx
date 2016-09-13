@@ -42,7 +42,7 @@ public:
         sal_Int32 nWholeWOrdIdx,
         ::std::vector< XMLPropertyState > &rProps );
 
-    virtual ~XMLTextDropCapImportContext();
+    virtual ~XMLTextDropCapImportContext() override;
 
     virtual void EndElement() override;
 

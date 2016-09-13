@@ -95,7 +95,7 @@ public:
     SvxSearchDialogWrapper( vcl::Window*pParent, sal_uInt16 nId,
                             SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
-    virtual ~SvxSearchDialogWrapper ();
+    virtual ~SvxSearchDialogWrapper () override;
     SvxSearchDialog *getDialog () { return dialog;}
     static void SetSearchLabel(const SearchLabel& rSL);
     static void SetSearchLabel(const OUString& sStr);
@@ -121,7 +121,7 @@ friend class SvxJSearchOptionsDialog;
 
 public:
     SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
-    virtual ~SvxSearchDialog();
+    virtual ~SvxSearchDialog() override;
     virtual void dispose() override;
 
     virtual bool    Close() override;

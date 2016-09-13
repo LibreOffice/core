@@ -35,7 +35,7 @@ public:
     XMLFillBitmapSizePropertyHandler();
 
     // Just needed for virtual destruction
-    virtual ~XMLFillBitmapSizePropertyHandler();
+    virtual ~XMLFillBitmapSizePropertyHandler() override;
 
     /// Imports the given value in cas of the given XML-data-type
     virtual bool importXML(

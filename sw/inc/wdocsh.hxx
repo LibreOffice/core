@@ -36,7 +36,7 @@ private:
 
 public:
     SwWebDocShell();
-    virtual ~SwWebDocShell();
+    virtual ~SwWebDocShell() override;
 
     virtual void        FillClass( SvGlobalName * pClassName,
                                    SotClipboardFormatId * pClipFormat,

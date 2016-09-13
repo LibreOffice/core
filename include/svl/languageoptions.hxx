@@ -75,7 +75,7 @@ public:
 
     // bDontLoad is for referencing purposes only
     SvtLanguageOptions( bool _bDontLoad = false );
-    virtual ~SvtLanguageOptions();
+    virtual ~SvtLanguageOptions() override;
 
     // CJK options
     bool    IsCJKFontEnabled() const;
@@ -122,7 +122,7 @@ private:
 
 public:
     SvtSystemLanguageOptions();
-    virtual ~SvtSystemLanguageOptions();
+    virtual ~SvtSystemLanguageOptions() override;
 
     virtual void    Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
 

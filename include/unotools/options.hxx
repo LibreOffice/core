@@ -78,7 +78,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC Options
 public:
     Options();
 
-    virtual ~Options() = 0;
+    virtual ~Options() override = 0;
 
 private:
     Options(Options &) = delete;

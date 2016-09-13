@@ -69,7 +69,7 @@ public:
         :m_aErrors( _rxContext )
     {
     }
-    virtual ~LocalNameApproval()
+    virtual ~LocalNameApproval() override
     {
     }
 

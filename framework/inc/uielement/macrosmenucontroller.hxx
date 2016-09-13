@@ -48,7 +48,7 @@ namespace framework
 
         public:
             MacrosMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~MacrosMenuController();
+            virtual ~MacrosMenuController() override;
 
             // XServiceInfo
             DECLARE_XSERVICEINFO

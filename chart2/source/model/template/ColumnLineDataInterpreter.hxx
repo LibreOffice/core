@@ -30,7 +30,7 @@ public:
     explicit ColumnLineDataInterpreter(
         sal_Int32 nNumberOfLines,
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~ColumnLineDataInterpreter();
+    virtual ~ColumnLineDataInterpreter() override;
 
 protected:
     // ____ XDataInterpreter ____

@@ -308,7 +308,7 @@ protected:
     LwpNumericFormat cNumerics;
 
 private:
-    virtual ~LwpLayoutNumerics(){}
+    virtual ~LwpLayoutNumerics() override {}
 };
 
 #endif

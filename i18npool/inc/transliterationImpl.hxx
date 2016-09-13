@@ -38,7 +38,7 @@ public:
     // Constructors
     TransliterationImpl(const css::uno::Reference < css::uno::XComponentContext >& xContext);
     // Destructor
-    virtual ~TransliterationImpl();
+    virtual ~TransliterationImpl() override;
 
     // Methods
     virtual OUString SAL_CALL getName(  ) throw(css::uno::RuntimeException, std::exception) override ;

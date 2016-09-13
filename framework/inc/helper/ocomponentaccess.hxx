@@ -127,7 +127,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnum
             @seealso    class Desktop
         *//*-*****************************************************************************************************/
 
-        virtual ~OComponentAccess();
+        virtual ~OComponentAccess() override;
 
 
     private:

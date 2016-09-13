@@ -407,7 +407,7 @@ public:
                                     pJump = new short[ r.pJump[0] + 1 ];
                                     memcpy( pJump, r.pJump, (r.pJump[0] + 1) * sizeof(short) );
                                 }
-    virtual                     ~FormulaJumpToken();
+    virtual                     ~FormulaJumpToken() override;
     virtual short*              GetJump() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new FormulaJumpToken(*this); }

@@ -35,7 +35,7 @@ class ViewOverlayManager : public SfxListener
 {
 public:
     ViewOverlayManager( ViewShellBase& rViewShellBase );
-    virtual ~ViewOverlayManager();
+    virtual ~ViewOverlayManager() override;
 
     void onZoomChanged();
     void UpdateTags();

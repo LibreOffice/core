@@ -62,7 +62,7 @@ private:
     DECL_LINK_TYPED(StartPageHdl, Button*, void);
 public:
     SwTitlePageDlg( vcl::Window *pParent );
-    virtual ~SwTitlePageDlg();
+    virtual ~SwTitlePageDlg() override;
     virtual void dispose() override;
 };
 

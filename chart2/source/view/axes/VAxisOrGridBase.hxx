@@ -37,7 +37,7 @@ class VAxisOrGridBase : public PlotterBase
 {
 public:
     VAxisOrGridBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
-    virtual ~VAxisOrGridBase();
+    virtual ~VAxisOrGridBase() override;
 
     virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix ) override;
     virtual void setExplicitScaleAndIncrement(

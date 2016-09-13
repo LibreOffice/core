@@ -77,7 +77,7 @@ private:
 public:
     explicit                    AnalysisAddIn(
                                     const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual                     ~AnalysisAddIn();
+    virtual                     ~AnalysisAddIn() override;
 
     double                      FactDouble( sal_Int32 nNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 

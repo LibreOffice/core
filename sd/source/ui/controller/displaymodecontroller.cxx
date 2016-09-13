@@ -54,7 +54,7 @@ class DisplayModeToolbarMenu : public svtools::ToolbarMenu
 public:
     DisplayModeToolbarMenu( DisplayModeController& rController,
         const Reference< XFrame >& xFrame, vcl::Window* pParent );
-    virtual ~DisplayModeToolbarMenu();
+    virtual ~DisplayModeToolbarMenu() override;
     virtual void dispose() override;
 
 protected:

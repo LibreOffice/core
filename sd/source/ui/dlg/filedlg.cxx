@@ -63,7 +63,7 @@ private:
 
 public:
     explicit SdFileDialog_Imp();
-    virtual ~SdFileDialog_Imp();
+    virtual ~SdFileDialog_Imp() override;
 
     ErrCode Execute();
 

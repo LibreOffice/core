@@ -35,7 +35,7 @@ public:
                                     const OUString& rLName,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList
                                     );
-    virtual                     ~ScXMLLabelRangesContext();
+    virtual                     ~ScXMLLabelRangesContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
                                     sal_uInt16 nPrefix,
@@ -62,7 +62,7 @@ public:
                                     const OUString& rLName,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList
                                     );
-    virtual                     ~ScXMLLabelRangeContext();
+    virtual                     ~ScXMLLabelRangeContext() override;
 
     virtual SvXMLImportContext* CreateChildContext(
                                     sal_uInt16 nPrefix,

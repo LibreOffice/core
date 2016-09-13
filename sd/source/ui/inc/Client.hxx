@@ -41,7 +41,7 @@ class Client : public SfxInPlaceClient
 
 public:
     Client (SdrOle2Obj* pObj, ViewShell* pSdViewShell, vcl::Window* pWindow);
-    virtual ~Client();
+    virtual ~Client() override;
     void            SetSdrGrafObj(SdrGrafObj* pObj) { pSdrGrafObj = pObj; }
 };
 

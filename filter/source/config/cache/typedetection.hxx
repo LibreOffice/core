@@ -56,7 +56,7 @@ public:
 
     /** @short  standard dtor.
      */
-    virtual ~TypeDetection();
+    virtual ~TypeDetection() override;
 
 
 // private helper

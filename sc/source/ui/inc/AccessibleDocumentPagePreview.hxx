@@ -41,7 +41,7 @@ public:
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScPreviewShell* pViewShell );
 protected:
-    virtual ~ScAccessibleDocumentPagePreview();
+    virtual ~ScAccessibleDocumentPagePreview() override;
 
     using ScAccessibleDocumentBase::IsDefunc;
 

@@ -136,7 +136,7 @@ protected:
 
 public:
                         ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef );
-    virtual             ~ScRefHandler();
+    virtual             ~ScRefHandler() override;
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) override = 0;
     virtual void        AddRefEntry() override;
@@ -181,7 +181,7 @@ private:
     template<class TParentWindow, class TArg>
     ScRefHdlrImplBase( TParentWindow* pParent, const OUString& rID, const OUString& rUIXMLDescription, const TArg &rArg, SfxBindings *pB = nullptr );
 
-    virtual ~ScRefHdlrImplBase();
+    virtual ~ScRefHdlrImplBase() override;
 
     template<class, class, bool> friend struct ScRefHdlrImpl;
 };

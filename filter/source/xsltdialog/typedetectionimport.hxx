@@ -62,7 +62,7 @@ class TypeDetectionImporter : public cppu::WeakImplHelper < css::xml::sax::XDocu
 {
 public:
     TypeDetectionImporter();
-    virtual ~TypeDetectionImporter();
+    virtual ~TypeDetectionImporter() override;
 
     static void doImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference < css::io::XInputStream >& xOS, XMLFilterVector& rFilters );
 

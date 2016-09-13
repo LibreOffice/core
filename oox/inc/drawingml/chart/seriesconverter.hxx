@@ -42,7 +42,7 @@ class DataLabelConverter : public ConverterBase< DataLabelModel >
 {
 public:
     explicit            DataLabelConverter( const ConverterRoot& rParent, DataLabelModel& rModel );
-    virtual             ~DataLabelConverter();
+    virtual             ~DataLabelConverter() override;
 
     /** Converts OOXML data label settings for the passed data point. */
     void                convertFromModel(
@@ -55,7 +55,7 @@ class DataLabelsConverter : public ConverterBase< DataLabelsModel >
 {
 public:
     explicit            DataLabelsConverter( const ConverterRoot& rParent, DataLabelsModel& rModel );
-    virtual             ~DataLabelsConverter();
+    virtual             ~DataLabelsConverter() override;
 
     /** Converts OOXML data label settings for the passed data series. */
     void                convertFromModel(
@@ -68,7 +68,7 @@ class ErrorBarConverter : public ConverterBase< ErrorBarModel >
 {
 public:
     explicit            ErrorBarConverter( const ConverterRoot& rParent, ErrorBarModel& rModel );
-    virtual             ~ErrorBarConverter();
+    virtual             ~ErrorBarConverter() override;
 
     /** Converts an OOXML errorbar and inserts it into the passed data series. */
     void                convertFromModel(
@@ -84,7 +84,7 @@ class TrendlineLabelConverter : public ConverterBase< TrendlineLabelModel >
 {
 public:
     explicit            TrendlineLabelConverter( const ConverterRoot& rParent, TrendlineLabelModel& rModel );
-    virtual             ~TrendlineLabelConverter();
+    virtual             ~TrendlineLabelConverter() override;
 
     /** Converts the OOXML trendline label. */
     void                convertFromModel( PropertySet& rPropSet );
@@ -95,7 +95,7 @@ class TrendlineConverter : public ConverterBase< TrendlineModel >
 {
 public:
     explicit            TrendlineConverter( const ConverterRoot& rParent, TrendlineModel& rModel );
-    virtual             ~TrendlineConverter();
+    virtual             ~TrendlineConverter() override;
 
     /** Converts an OOXML trendline and inserts it into the passed data series. */
     void                convertFromModel(
@@ -107,7 +107,7 @@ class DataPointConverter : public ConverterBase< DataPointModel >
 {
 public:
     explicit            DataPointConverter( const ConverterRoot& rParent, DataPointModel& rModel );
-    virtual             ~DataPointConverter();
+    virtual             ~DataPointConverter() override;
 
     /** Converts settings for a data point in the passed series. */
     void                convertFromModel(
@@ -121,7 +121,7 @@ class SeriesConverter : public ConverterBase< SeriesModel >
 {
 public:
     explicit            SeriesConverter( const ConverterRoot& rParent, SeriesModel& rModel );
-    virtual             ~SeriesConverter();
+    virtual             ~SeriesConverter() override;
 
     /** Creates a labeled data sequence object from category data link. */
     css::uno::Reference< css::chart2::data::XLabeledDataSequence >

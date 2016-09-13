@@ -54,7 +54,7 @@ public:
     /**
     * Destructor
     */
-    virtual ~Calendar_gregorian();
+    virtual ~Calendar_gregorian() override;
 
     // Methods in XCalendar
     virtual void SAL_CALL loadCalendar(const OUString& uniqueID, const css::lang::Locale& rLocale) throw(css::uno::RuntimeException, std::exception) override;

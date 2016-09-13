@@ -32,7 +32,7 @@ class ScVbaWindows : public ScVbaWindows_BASE
 {
 public:
     ScVbaWindows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~ScVbaWindows() {}
+    virtual ~ScVbaWindows() override {}
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

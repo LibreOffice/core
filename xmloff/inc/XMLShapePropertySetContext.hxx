@@ -37,7 +37,7 @@ public:
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
 
-    virtual ~XMLShapePropertySetContext();
+    virtual ~XMLShapePropertySetContext() override;
 
     virtual void EndElement() override;
 

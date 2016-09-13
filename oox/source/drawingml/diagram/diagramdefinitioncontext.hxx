@@ -29,7 +29,7 @@ class DiagramDefinitionContext : public ::oox::core::ContextHandler2
 {
 public:
     DiagramDefinitionContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttributes, const DiagramLayoutPtr &pLayout );
-    virtual ~DiagramDefinitionContext();
+    virtual ~DiagramDefinitionContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

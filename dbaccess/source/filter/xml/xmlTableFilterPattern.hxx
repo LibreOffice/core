@@ -35,7 +35,7 @@ namespace dbaxml
                                 ,bool _bNameFilter
                                 ,OXMLTableFilterList& _rParent);
 
-        virtual ~OXMLTableFilterPattern();
+        virtual ~OXMLTableFilterPattern() override;
 
         virtual void Characters( const OUString& rChars ) override;
     };

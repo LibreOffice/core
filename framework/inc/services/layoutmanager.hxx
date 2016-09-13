@@ -81,7 +81,7 @@ namespace framework
             enum { DOCKINGAREAS_COUNT = 4 };
 
             LayoutManager( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-            virtual ~LayoutManager();
+            virtual ~LayoutManager() override;
 
             /** declaration of XInterface, XTypeProvider, XServiceInfo */
             FWK_DECLARE_XINTERFACE

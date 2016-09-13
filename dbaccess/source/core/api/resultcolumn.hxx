@@ -51,7 +51,7 @@ namespace dbaccess
         mutable ::boost::optional< sal_Int32 > m_nPrecision;
         mutable ::boost::optional< sal_Int32 > m_nScale;
 
-        virtual ~OResultColumn();
+        virtual ~OResultColumn() override;
     public:
         OResultColumn(
             const css::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,

@@ -25,7 +25,7 @@ class XMLErrorBarStylePropertyHdl : public XMLEnumPropertyHdl
 {
 public:
     XMLErrorBarStylePropertyHdl(  const SvXMLEnumMapEntry* pEnumMap, const css::uno::Type & rType );
-    virtual ~XMLErrorBarStylePropertyHdl();
+    virtual ~XMLErrorBarStylePropertyHdl() override;
 
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
 };

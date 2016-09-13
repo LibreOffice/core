@@ -58,7 +58,7 @@ public:
             , m_ePropertyType( ePropertyType )
     {
     }
-    virtual ~WrappedSeriesOrDiagramProperty() {};
+    virtual ~WrappedSeriesOrDiagramProperty() override {};
 
     bool detectInnerValue( PROPERTYTYPE& rValue, bool& rHasAmbiguousValue ) const
     {

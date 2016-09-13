@@ -154,7 +154,7 @@ public:
                     ColorListBox( vcl::Window* pParent,
                                   WinBits nWinStyle = WB_BORDER );
                     ColorListBox( vcl::Window* pParent, const ResId& rResId );
-    virtual         ~ColorListBox();
+    virtual         ~ColorListBox() override;
     virtual void    dispose() override;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
@@ -306,7 +306,7 @@ public:
     typedef Color (*ColorDistFunc)(Color, Color);
 
                     LineListBox( vcl::Window* pParent, WinBits nWinStyle = WB_BORDER );
-    virtual         ~LineListBox();
+    virtual         ~LineListBox() override;
     virtual void    dispose() override;
 
     /** Set the width in Twips */
@@ -388,7 +388,7 @@ protected:
 public:
                     FontNameBox( vcl::Window* pParent,
                                  WinBits nWinStyle = WB_SORT );
-    virtual         ~FontNameBox();
+    virtual         ~FontNameBox() override;
     virtual void    dispose() override;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;

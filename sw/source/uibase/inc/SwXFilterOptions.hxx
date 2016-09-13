@@ -47,7 +47,7 @@ class SwXFilterOptions : public ::cppu::WeakImplHelper<
 
 public:
                             SwXFilterOptions();
-    virtual                 ~SwXFilterOptions();
+    virtual                 ~SwXFilterOptions() override;
 
                             // XPropertyAccess
     virtual css::uno::Sequence< css::beans::PropertyValue >

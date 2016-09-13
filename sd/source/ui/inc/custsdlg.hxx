@@ -58,7 +58,7 @@ private:
 
 public:
                 SdCustomShowDlg( vcl::Window* pWindow, SdDrawDocument& rDrawDoc );
-                virtual ~SdCustomShowDlg();
+                virtual ~SdCustomShowDlg() override;
     virtual void dispose() override;
     bool         IsModified() const { return bModified; }
     bool         IsCustomShow() const;
@@ -95,7 +95,7 @@ public:
 
                     SdDefineCustomShowDlg( vcl::Window* pWindow,
                             SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS );
-                    virtual ~SdDefineCustomShowDlg();
+                    virtual ~SdDefineCustomShowDlg() override;
     virtual void    dispose() override;
 
     bool            IsModified() const { return bModified; }

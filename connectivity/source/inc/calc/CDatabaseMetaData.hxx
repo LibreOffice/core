@@ -42,7 +42,7 @@ namespace connectivity
             virtual sal_Int32 SAL_CALL getMaxColumnsInTable(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
         protected:
-            virtual ~OCalcDatabaseMetaData();
+            virtual ~OCalcDatabaseMetaData() override;
         public:
             OCalcDatabaseMetaData(file::OConnection* _pCon);
         };

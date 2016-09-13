@@ -51,7 +51,7 @@ class CustomAnimationList : public SvTreeListBox, public ISequenceListener
 
 public:
     explicit CustomAnimationList( vcl::Window* pParent );
-    virtual ~CustomAnimationList();
+    virtual ~CustomAnimationList() override;
     virtual void dispose() override;
 
     // methods

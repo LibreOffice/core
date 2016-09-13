@@ -36,7 +36,7 @@ public:
                                DeviceFormat eFormat,
                                const SystemGraphicsData *pData,
                                X11SalGraphics* pNewGraphics);
-    virtual ~X11OpenGLSalVirtualDevice();
+    virtual ~X11OpenGLSalVirtualDevice() override;
 
     // SalGeometryProvider
     virtual long GetWidth() const override { return mnWidth; }

@@ -69,7 +69,7 @@ public:
     LNG_DLLPUBLIC SpellAlternatives();
     SpellAlternatives(const OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
                       const css::uno::Sequence< OUString > &rAlternatives );
-    virtual ~SpellAlternatives();
+    virtual ~SpellAlternatives() override;
     SpellAlternatives(const SpellAlternatives&) = delete;
     SpellAlternatives& operator=( const SpellAlternatives& ) = delete;
 

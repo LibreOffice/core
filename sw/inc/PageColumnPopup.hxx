@@ -30,7 +30,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     PageColumnPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
-    virtual ~PageColumnPopup();
+    virtual ~PageColumnPopup() override;
 
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };

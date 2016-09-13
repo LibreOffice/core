@@ -85,7 +85,7 @@ class ScOrcusConditionalFormat : public orcus::spreadsheet::iface::import_condit
 {
 public:
     ScOrcusConditionalFormat(SCTAB nTab, ScDocument& rDoc);
-    virtual ~ScOrcusConditionalFormat();
+    virtual ~ScOrcusConditionalFormat() override;
 
     virtual void set_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red,
             orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue) override;
@@ -148,7 +148,7 @@ class ScOrcusAutoFilter : public orcus::spreadsheet::iface::import_auto_filter
 public:
     ScOrcusAutoFilter(ScDocument& rDoc);
 
-    virtual ~ScOrcusAutoFilter();
+    virtual ~ScOrcusAutoFilter() override;
 
     virtual void set_range(const char* p_ref, size_t n_ref) override;
 
@@ -170,7 +170,7 @@ class ScOrcusSheetProperties : public orcus::spreadsheet::iface::import_sheet_pr
     SCTAB mnTab;
 public:
     ScOrcusSheetProperties(SCTAB nTab, ScDocumentImport& rDoc);
-    virtual ~ScOrcusSheetProperties();
+    virtual ~ScOrcusSheetProperties() override;
 
     virtual void set_column_width(orcus::spreadsheet::col_t col, double width, orcus::length_unit_t unit) override;
 

@@ -75,7 +75,7 @@ protected:
     css::uno::Reference< css::accessibility::XAccessibleContext > m_xParentContext;
 
 protected:
-    virtual ~VCLXAccessibleListItem();
+    virtual ~VCLXAccessibleListItem() override;
     /** this function is called upon disposing the component
     */
     virtual void SAL_CALL   disposing() override;

@@ -81,7 +81,7 @@ protected:
 
 public:
     SvxPageWindow(vcl::Window* pParent);
-    virtual ~SvxPageWindow();
+    virtual ~SvxPageWindow() override;
     virtual void dispose() override;
 
     //UUUU

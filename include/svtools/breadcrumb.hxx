@@ -50,7 +50,7 @@ class SVT_DLLPUBLIC Breadcrumb : public VclHBox
 
     public:
         Breadcrumb( vcl::Window* pParent );
-        virtual ~Breadcrumb();
+        virtual ~Breadcrumb() override;
 
         void dispose() override;
         void EnableFields( bool bEnable );

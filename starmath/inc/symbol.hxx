@@ -86,7 +86,7 @@ private:
 public:
     SmSymbolManager();
     SmSymbolManager(const SmSymbolManager& rSymbolSetManager);
-    virtual ~SmSymbolManager();
+    virtual ~SmSymbolManager() override;
 
     SmSymbolManager &   operator = (const SmSymbolManager& rSymbolSetManager);
 

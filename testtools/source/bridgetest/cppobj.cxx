@@ -151,7 +151,7 @@ public:
                   m_bFirstCall( true ),
                   m_bSequenceOfCallTestPassed( true )
         {}
-    virtual ~Test_Impl()
+    virtual ~Test_Impl() override
         {
             OSL_TRACE( "> scalar Test_Impl dtor <" );
         }

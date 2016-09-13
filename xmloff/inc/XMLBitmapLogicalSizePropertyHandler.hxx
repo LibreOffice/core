@@ -35,7 +35,7 @@ public:
     XMLBitmapLogicalSizePropertyHandler();
 
     // Just needed for virtual destruction
-    virtual ~XMLBitmapLogicalSizePropertyHandler();
+    virtual ~XMLBitmapLogicalSizePropertyHandler() override;
 
     /// Imports the given value in cas of the given XML-data-type
     virtual bool importXML(

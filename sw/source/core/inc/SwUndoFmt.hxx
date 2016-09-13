@@ -44,7 +44,7 @@ protected:
 public:
     SwUndoFormatCreate(SwUndoId nUndoId, SwFormat * pNew, SwFormat * pDerivedFrom,
                     SwDoc * pDoc);
-    virtual ~SwUndoFormatCreate();
+    virtual ~SwUndoFormatCreate() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -68,7 +68,7 @@ protected:
 
 public:
     SwUndoFormatDelete(SwUndoId nUndoId, SwFormat * pOld, SwDoc * pDoc);
-    virtual ~SwUndoFormatDelete();
+    virtual ~SwUndoFormatDelete() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -90,7 +90,7 @@ public:
     SwUndoRenameFormat(SwUndoId nUndoId, const OUString & sOldName,
                     const OUString & sNewName,
                     SwDoc * pDoc);
-    virtual ~SwUndoRenameFormat();
+    virtual ~SwUndoRenameFormat() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

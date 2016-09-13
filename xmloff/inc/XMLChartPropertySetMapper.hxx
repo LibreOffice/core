@@ -31,7 +31,7 @@ class SvXMLExport;
 class XMLChartPropHdlFactory : public XMLPropertyHandlerFactory
 {
 public:
-    virtual ~XMLChartPropHdlFactory();
+    virtual ~XMLChartPropHdlFactory() override;
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const override;
 };
 
@@ -39,7 +39,7 @@ class XMLChartPropertySetMapper : public XMLPropertySetMapper
 {
 public:
     explicit XMLChartPropertySetMapper( bool bForExport );
-            virtual ~XMLChartPropertySetMapper();
+            virtual ~XMLChartPropertySetMapper() override;
 };
 
 class XMLChartExportPropertyMapper : public SvXMLExportPropertyMapper
@@ -72,7 +72,7 @@ private:
 public:
     XMLChartExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper,
                                   SvXMLExport& rExport );
-    virtual ~XMLChartExportPropertyMapper();
+    virtual ~XMLChartExportPropertyMapper() override;
 
     void setChartDoc( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 };
@@ -85,7 +85,7 @@ private:
 public:
     XMLChartImportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper,
                                   const SvXMLImport& rImport );
-    virtual ~XMLChartImportPropertyMapper();
+    virtual ~XMLChartImportPropertyMapper() override;
 
     virtual bool handleSpecialItem(
         XMLPropertyState& rProperty,

@@ -67,7 +67,7 @@ protected:
 
 public:
     SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
-    virtual ~SvxHyperlinkDocTp();
+    virtual ~SvxHyperlinkDocTp() override;
     virtual void dispose() override;
 
     static VclPtr<IconChoicePage> Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );

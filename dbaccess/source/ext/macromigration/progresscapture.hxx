@@ -52,7 +52,7 @@ namespace dbmm
         virtual void SAL_CALL reset(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~ProgressCapture();
+        virtual ~ProgressCapture() override;
 
     private:
         ::std::unique_ptr< ProgressCapture_Data > m_pData;

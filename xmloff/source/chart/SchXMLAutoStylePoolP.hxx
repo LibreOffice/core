@@ -39,7 +39,7 @@ protected:
 
 public:
     explicit SchXMLAutoStylePoolP( SchXMLExport& rSchXMLExport );
-    virtual ~SchXMLAutoStylePoolP();
+    virtual ~SchXMLAutoStylePoolP() override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CHART_SCHXMLAUTOSTYLEPOOLP_HXX

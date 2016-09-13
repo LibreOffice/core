@@ -56,7 +56,7 @@ public:
     */
     explicit ToolBarModule (
         const css::uno::Reference<css::frame::XController>& rxController);
-    virtual ~ToolBarModule();
+    virtual ~ToolBarModule() override;
 
     virtual void SAL_CALL disposing() override;
 

@@ -56,7 +56,7 @@ class GraphicExportFilter :
 
 public:
     explicit GraphicExportFilter( const Reference<XComponentContext>& rxContext );
-    virtual ~GraphicExportFilter();
+    virtual ~GraphicExportFilter() override;
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence<PropertyValue>& rDescriptor ) throw(RuntimeException, std::exception) override;

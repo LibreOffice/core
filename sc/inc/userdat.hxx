@@ -67,7 +67,7 @@ public:
                     ScIMapInfo();
                     ScIMapInfo( const ImageMap& rImageMap );
                     ScIMapInfo( const ScIMapInfo& rIMapInfo );
-    virtual         ~ScIMapInfo();
+    virtual         ~ScIMapInfo() override;
 
     virtual SdrObjUserData* Clone( SdrObject* pObj ) const override;
 
@@ -79,7 +79,7 @@ class ScMacroInfo : public SdrObjUserData
 {
 public:
                     ScMacroInfo();
-    virtual         ~ScMacroInfo();
+    virtual         ~ScMacroInfo() override;
 
     virtual SdrObjUserData* Clone( SdrObject* pObj ) const override;
 

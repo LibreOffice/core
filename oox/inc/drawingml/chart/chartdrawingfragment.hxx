@@ -85,7 +85,7 @@ public:
                             const css::awt::Size& rChartSize,
                             const css::awt::Point& rShapesOffset,
                             bool bOleSupport );
-    virtual             ~ChartDrawingFragment();
+    virtual             ~ChartDrawingFragment() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void        onCharacters( const OUString& rChars ) override;

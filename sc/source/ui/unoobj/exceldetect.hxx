@@ -23,7 +23,7 @@ class ScExcelBiffDetect : public cppu::WeakImplHelper<css::document::XExtendedFi
 {
 public:
     explicit ScExcelBiffDetect( const css::uno::Reference<css::uno::XComponentContext>& xContext );
-    virtual ~ScExcelBiffDetect();
+    virtual ~ScExcelBiffDetect() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;

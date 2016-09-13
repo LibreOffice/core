@@ -52,7 +52,7 @@ namespace framework
     {
         public:
             ImageManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-            virtual ~ImageManager();
+            virtual ~ImageManager() override;
 
             virtual OUString SAL_CALL getImplementationName()
                 throw (css::uno::RuntimeException, std::exception) override

@@ -33,7 +33,7 @@ public:
     FuConstUnoControl(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                        SdrModel* pDoc, SfxRequest& rReq);
 
-    virtual ~FuConstUnoControl();
+    virtual ~FuConstUnoControl() override;
                                        // Mouse- & Key-Events
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;

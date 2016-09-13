@@ -54,7 +54,7 @@ class SwGlossaryList : public AutoTimer
 
 public:
         SwGlossaryList();
-        virtual ~SwGlossaryList();
+        virtual ~SwGlossaryList() override;
 
     void            HasLongName(const OUString& rBegin, std::vector<OUString> *pLongNames);
     bool            GetShortName(const OUString& rLongName,

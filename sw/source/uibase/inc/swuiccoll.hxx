@@ -47,7 +47,7 @@ class SwCondCollPage : public SfxTabPage
 
     bool                m_bNewTemplate;
 
-    virtual ~SwCondCollPage();
+    virtual ~SwCondCollPage() override;
     virtual void dispose() override;
 
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;

@@ -93,7 +93,7 @@ namespace accessibility
 
         // receive pointer to our frontend class and view window
         AccessibleTextHelper_Impl();
-        virtual ~AccessibleTextHelper_Impl();
+        virtual ~AccessibleTextHelper_Impl() override;
 
         // XAccessibleContext child handling methods
         sal_Int32 SAL_CALL getAccessibleChildCount();

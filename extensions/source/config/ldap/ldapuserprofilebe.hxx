@@ -55,7 +55,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
     public:
 
         explicit LdapUserProfileBe(const uno::Reference<uno::XComponentContext>& xContext);
-        virtual ~LdapUserProfileBe() ;
+        virtual ~LdapUserProfileBe() override ;
 
         // XServiceInfo
         virtual OUString SAL_CALL

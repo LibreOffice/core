@@ -97,7 +97,7 @@ public:
               sal_uInt16 nFamily=0,
               bool bDefaultStyle = false );
 
-    virtual ~SvXMLStyleContext();
+    virtual ~SvXMLStyleContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -206,7 +206,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
         bool bAutomatic = false );
 
-    virtual ~SvXMLStylesContext();
+    virtual ~SvXMLStylesContext() override;
 
     // Create child element.
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,

@@ -41,7 +41,7 @@ public:
     void Setup(ScPivotLayoutDialog* pParent);
 
     ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBits nBits, SvPivotTreeListType eType = UNDEFINED);
-    virtual ~ScPivotLayoutTreeListBase();
+    virtual ~ScPivotLayoutTreeListBase() override;
     virtual void dispose() override;
 
     virtual bool NotifyAcceptDrop(SvTreeListEntry* pEntry) override;

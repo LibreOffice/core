@@ -61,7 +61,7 @@ public:
                                     ScOutlineMode eMode,
                                     ScViewData* pViewData,
                                     ScSplitPos eWhich );
-    virtual                     ~ScOutlineWindow();
+    virtual                     ~ScOutlineWindow() override;
     virtual void                dispose() override;
 
     /** Sets the size of the header area (width/height dep. on window type). */

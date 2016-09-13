@@ -60,7 +60,7 @@ class OTableContainerListener:
     ::std::map< OUString,bool> m_aRefNames;
 
 protected:
-    virtual ~OTableContainerListener(){}
+    virtual ~OTableContainerListener() override {}
 public:
     explicit OTableContainerListener(OTableHelper* _pComponent) : m_pComponent(_pComponent){}
     // noncopyable

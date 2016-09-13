@@ -87,7 +87,7 @@ namespace migration
     public:
         explicit OO3ExtensionMigration(css::uno::Reference<
             css::uno::XComponentContext > const & ctx);
-        virtual ~OO3ExtensionMigration();
+        virtual ~OO3ExtensionMigration() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
@@ -114,7 +114,7 @@ namespace migration
                                           css::ucb::XProgressHandler >
     {
     public:
-        virtual ~TmpRepositoryCommandEnv();
+        virtual ~TmpRepositoryCommandEnv() override;
         TmpRepositoryCommandEnv();
 
         // XCommandEnvironment

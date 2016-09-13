@@ -234,7 +234,7 @@ public:
              rtl::Reference< DAVSessionFactory > const & rSessionFactory,
              bool isCollection )
         throw (css::ucb::ContentCreationException, css::uno::RuntimeException);
-    virtual ~Content();
+    virtual ~Content() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

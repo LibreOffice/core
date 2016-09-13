@@ -35,7 +35,7 @@ private:
 
 public:
                     SvtFilterOptions();
-    virtual        ~SvtFilterOptions();
+    virtual        ~SvtFilterOptions() override;
 
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
     void                    Load();

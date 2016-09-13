@@ -64,7 +64,7 @@ public:
         SdDrawDocument* pDoc,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         bool bHorizontalLayout );
-    virtual ~SlideTransitionPane();
+    virtual ~SlideTransitionPane() override;
     virtual void dispose() override;
 
     // Window

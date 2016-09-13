@@ -62,7 +62,7 @@ public:
         {
         }
 
-    virtual ~ODataInputStream();
+    virtual ~ODataInputStream() override;
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
                                                             throw ( NotConnectedException,
@@ -498,7 +498,7 @@ public:
         : m_bValidStream( false )
         {
         }
-    virtual ~ODataOutputStream();
+    virtual ~ODataOutputStream() override;
 
 public: // XOutputStream
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
@@ -908,7 +908,7 @@ public:
         {
         }
 
-    virtual ~OObjectOutputStream();
+    virtual ~OObjectOutputStream() override;
 
 public:
     // XOutputStream
@@ -1171,7 +1171,7 @@ public:
         , m_bValidMarkable(false)
         {
         }
-    virtual ~OObjectInputStream();
+    virtual ~OObjectInputStream() override;
 
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)

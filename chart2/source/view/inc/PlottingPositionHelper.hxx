@@ -147,7 +147,7 @@ class PolarPlottingPositionHelper : public PlottingPositionHelper
 public:
     PolarPlottingPositionHelper( NormalAxis eNormalAxis=NormalAxis_Z );
     PolarPlottingPositionHelper( const PolarPlottingPositionHelper& rSource );
-    virtual ~PolarPlottingPositionHelper();
+    virtual ~PolarPlottingPositionHelper() override;
 
     virtual PlottingPositionHelper* clone() const override;
 

@@ -46,7 +46,7 @@ private:
         ShadowOverlayObject( const basegfx::B2DPoint& rBasePos,
                              const basegfx::B2DPoint& rSecondPosition,
                              Color aBaseColor );
-        virtual ~ShadowOverlayObject();
+        virtual ~ShadowOverlayObject() override;
 
 public:
         void SetShadowState(ShadowState aState);

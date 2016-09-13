@@ -57,7 +57,7 @@ namespace xmloff
         std::unique_ptr<OFormLayerXMLExport_Impl> m_pImpl;
 
     protected:
-        virtual ~OFormLayerXMLExport();
+        virtual ~OFormLayerXMLExport() override;
 
     public:
         OFormLayerXMLExport(SvXMLExport& _rContext);

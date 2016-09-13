@@ -36,7 +36,7 @@ class NamedPropertyValuesContainer : public cppu::WeakImplHelper< container::XNa
 {
 public:
     NamedPropertyValuesContainer() throw();
-    virtual ~NamedPropertyValuesContainer() throw();
+    virtual ~NamedPropertyValuesContainer() throw() override;
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )

@@ -1106,7 +1106,7 @@ public:
         sTransporters[ maID ] = this;
     }
 
-    virtual ~EncHashTransporter()
+    virtual ~EncHashTransporter() override
     {
         sTransporters.erase( maID );
         if( maUDigest )

@@ -67,7 +67,7 @@ protected:
 
 protected:
     explicit EncryptionEngine( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    virtual ~EncryptionEngine(){};
+    virtual ~EncryptionEngine() override {};
 
     virtual void tryToPerform( )
         throw (css::uno::Exception, css::uno::RuntimeException) override;

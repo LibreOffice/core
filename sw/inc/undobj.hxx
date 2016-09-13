@@ -95,7 +95,7 @@ private:
 
 public:
     SwUndo(SwUndoId const nId, const SwDoc* pDoc);
-    virtual ~SwUndo();
+    virtual ~SwUndo() override;
 
     /**
        Returns textual comment for this undo object.
@@ -239,7 +239,7 @@ protected:
 
     SwUndoInserts( SwUndoId nUndoId, const SwPaM& );
 public:
-    virtual ~SwUndoInserts();
+    virtual ~SwUndoInserts() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -280,7 +280,7 @@ protected:
     sal_uLong GetMvNodeCnt() const { return SwUndoSaveSection::GetMvNodeCnt(); }
 
 public:
-    virtual ~SwUndoFlyBase();
+    virtual ~SwUndoFlyBase() override;
 
 };
 
@@ -291,7 +291,7 @@ class SwUndoInsLayFormat : public SwUndoFlyBase
 public:
     SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx );
 
-    virtual ~SwUndoInsLayFormat();
+    virtual ~SwUndoInsLayFormat() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

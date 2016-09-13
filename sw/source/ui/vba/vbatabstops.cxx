@@ -79,7 +79,7 @@ public:
         mnTabStops = lcl_getTabStops( xParaProps ).getLength();
     }
 
-    virtual ~TabStopCollectionHelper() {}
+    virtual ~TabStopCollectionHelper() override {}
 
     virtual sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override
     {

@@ -120,7 +120,7 @@ public:
         const bool* aAllowedTokenTypes,
         bool bTOC=false);
 
-    virtual ~XMLIndexTemplateContext();
+    virtual ~XMLIndexTemplateContext() override;
 
     /** add template; to be called by child template entry contexts */
     void addTemplateEntry(

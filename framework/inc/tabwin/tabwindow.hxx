@@ -61,7 +61,7 @@ class TabWindow :  public css::lang::XTypeProvider             ,
 {
     public:
         TabWindow( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-        virtual ~TabWindow();
+        virtual ~TabWindow() override;
 
         //  XInterface, XTypeProvider, XServiceInfo
         FWK_DECLARE_XINTERFACE

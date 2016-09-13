@@ -104,7 +104,7 @@ public:
     */
     SRotate(const glm::vec3& Axis, const glm::vec3& Origin, double Angle,
             bool bInter, double T0, double T1);
-    virtual ~SRotate(){}
+    virtual ~SRotate() override {}
 private:
     /** axis to rotate CCW about
     */
@@ -149,7 +149,7 @@ public:
 
     */
     SScale(const glm::vec3& Scale, const glm::vec3& Origin,bool bInter, double T0, double T1);
-    virtual ~SScale(){}
+    virtual ~SScale() override {}
 private:
     glm::vec3 scale;
     glm::vec3 origin;
@@ -181,7 +181,7 @@ public:
 
     */
     STranslate(const glm::vec3& Vector,bool bInter, double T0, double T1);
-    virtual ~STranslate(){}
+    virtual ~STranslate() override {}
 private:
     /** vector to translate by
     */
@@ -214,7 +214,7 @@ public:
 
     */
     SEllipseTranslate(double dWidth, double dHeight, double dStartPosition, double dEndPosition, bool bInter, double T0, double T1);
-    virtual ~SEllipseTranslate(){}
+    virtual ~SEllipseTranslate() override {}
 private:
     /** width and length of the ellipse
      */
@@ -237,7 +237,7 @@ public:
     virtual void interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const override;
 
     RotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle, bool bScale, bool bInter, double T0, double T1);
-    virtual ~RotateAndScaleDepthByWidth(){}
+    virtual ~RotateAndScaleDepthByWidth() override {}
 private:
     glm::vec3 axis;
     glm::vec3 origin;
@@ -256,7 +256,7 @@ public:
     virtual void interpolate(glm::mat4& matrix, double t, double SlideWidthScale, double SlideHeightScale) const override;
 
     RotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle, bool bScale, bool bInter, double T0, double T1);
-    virtual ~RotateAndScaleDepthByHeight(){}
+    virtual ~RotateAndScaleDepthByHeight() override {}
 private:
     glm::vec3 axis;
     glm::vec3 origin;

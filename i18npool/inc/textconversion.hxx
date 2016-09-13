@@ -41,7 +41,7 @@ class TextConversionService: public cppu::WeakImplHelper
 {
 public:
         TextConversionService(const char* pImplName);
-        virtual ~TextConversionService();
+        virtual ~TextConversionService() override;
         // Methods
         virtual css::i18n::TextConversionResult SAL_CALL
         getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,

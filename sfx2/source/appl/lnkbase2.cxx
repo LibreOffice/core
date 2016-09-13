@@ -105,7 +105,7 @@ public:
         bIsInDTOR( false )
     {}
 #endif
-    virtual ~ImplDdeItem();
+    virtual ~ImplDdeItem() override;
 
     virtual DdeData* Get( SotClipboardFormatId ) override;
     virtual bool     Put( const DdeData* ) override;

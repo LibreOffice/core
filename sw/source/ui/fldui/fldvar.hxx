@@ -93,7 +93,7 @@ protected:
 public:
                         SwFieldVarPage(vcl::Window* pParent, const SfxItemSet* pSet);
 
-                        virtual ~SwFieldVarPage();
+                        virtual ~SwFieldVarPage() override;
     virtual void        dispose() override;
 
     static VclPtr<SfxTabPage>  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);

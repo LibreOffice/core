@@ -44,7 +44,7 @@ namespace pcr
         static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
 
     protected:
-        virtual ~ButtonNavigationHandler();
+        virtual ~ButtonNavigationHandler() override;
 
         static bool    isNavigationCapableButton( const css::uno::Reference< css::beans::XPropertySet >& _rxComponent );
 

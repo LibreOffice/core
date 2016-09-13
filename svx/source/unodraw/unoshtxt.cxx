@@ -122,7 +122,7 @@ private:
 public:
     SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText );
     SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const vcl::Window& rWindow );
-    virtual ~SvxTextEditSourceImpl();
+    virtual ~SvxTextEditSourceImpl() override;
 
     void SAL_CALL acquire();
     void SAL_CALL release();

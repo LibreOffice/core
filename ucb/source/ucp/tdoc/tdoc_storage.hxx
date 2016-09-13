@@ -46,7 +46,7 @@ namespace tdoc_ucp {
         StorageElementFactory(
             const css::uno::Reference< css::uno::XComponentContext > & rxContext,
             const rtl::Reference< OfficeDocumentsManager > & xDocsMgr );
-        virtual ~StorageElementFactory();
+        virtual ~StorageElementFactory() override;
 
         css::uno::Reference< css::embed::XStorage >
         createTemporaryStorage()

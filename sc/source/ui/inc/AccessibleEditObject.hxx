@@ -55,7 +55,7 @@ public:
         const OUString& rDescription, EditObjectType eObjectType);
 
 protected:
-    virtual ~ScAccessibleEditObject();
+    virtual ~ScAccessibleEditObject() override;
 
     using ScAccessibleContextBase::IsDefunc;
 

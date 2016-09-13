@@ -43,7 +43,7 @@ public:
                     ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                 ScDocument*     pDocument,
                                 const ScRefAddress& rCursorPos );
-                    virtual ~ScTabOpDlg();
+                    virtual ~ScTabOpDlg() override;
     virtual void    dispose() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) override;

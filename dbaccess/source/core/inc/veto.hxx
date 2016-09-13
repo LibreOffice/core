@@ -45,7 +45,7 @@ namespace dbaccess
         virtual css::uno::Any SAL_CALL getDetails() throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~Veto();
+        virtual ~Veto() override;
 
     private:
         Veto( const Veto& ) = delete;

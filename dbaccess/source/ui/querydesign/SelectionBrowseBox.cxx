@@ -250,7 +250,7 @@ namespace
         virtual void Select() override;
     public:
         explicit OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent);
-        virtual ~OSelectionBrwBoxHeader() { disposeOnce(); }
+        virtual ~OSelectionBrwBoxHeader() override { disposeOnce(); }
         virtual void dispose() override { m_pBrowseBox.clear(); ::svt::EditBrowserHeader::dispose(); }
     };
     OSelectionBrwBoxHeader::OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent)

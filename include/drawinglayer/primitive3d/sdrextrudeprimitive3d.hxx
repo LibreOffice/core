@@ -90,7 +90,7 @@ namespace drawinglayer
                 bool bCharacterMode,
                 bool bCloseFront,
                 bool bCloseBack);
-            virtual ~SdrExtrudePrimitive3D();
+            virtual ~SdrExtrudePrimitive3D() override;
 
             /// data read access
             const basegfx::B2DPolyPolygon& getPolyPolygon() const { return maPolyPolygon; }

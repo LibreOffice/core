@@ -110,7 +110,7 @@ namespace dbaccess
                         ,public OTableColumn_PBase
     {
     protected:
-        virtual ~OTableColumn();
+        virtual ~OTableColumn() override;
 
     public:
         OTableColumn(const OUString& _rName);
@@ -145,7 +145,7 @@ namespace dbaccess
         css::uno::Reference< css::beans::XPropertySet >   m_xOriginalTableColumn;
 
     protected:
-        virtual ~OQueryColumn();
+        virtual ~OQueryColumn() override;
 
     public:
         OQueryColumn(
@@ -190,7 +190,7 @@ namespace dbaccess
 
     protected:
         OColumnWrapper( const css::uno::Reference< css::beans::XPropertySet >& _rCol, const bool _bNameIsReadOnly );
-        virtual ~OColumnWrapper();
+        virtual ~OColumnWrapper() override;
 
     public:
         virtual void SAL_CALL getFastPropertyValue(
@@ -272,7 +272,7 @@ namespace dbaccess
                                 ,public ::comphelper::OIdPropertyArrayUsageHelper < OTableColumnWrapper >
     {
     protected:
-        virtual ~OTableColumnWrapper();
+        virtual ~OTableColumnWrapper() override;
 
     public:
         OTableColumnWrapper( const css::uno::Reference< css::beans::XPropertySet >& rCol,

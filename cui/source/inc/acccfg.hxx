@@ -67,7 +67,7 @@ public:
         , m_pAccelConfigPage(nullptr)
     {
     }
-    virtual ~SfxAccCfgTabListBox_Impl();
+    virtual ~SfxAccCfgTabListBox_Impl() override;
     virtual void dispose() override;
 
     void SetAccelConfigPage(SfxAcceleratorConfigPage* pAccelConfigPage)
@@ -171,7 +171,7 @@ private:
 
 public:
                                 SfxAcceleratorConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
-    virtual                     ~SfxAcceleratorConfigPage();
+    virtual                     ~SfxAcceleratorConfigPage() override;
     virtual void                dispose() override;
 
     virtual bool                FillItemSet( SfxItemSet* ) override;

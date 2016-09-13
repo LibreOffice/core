@@ -42,7 +42,7 @@ public:
     TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
                 , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
                 , const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~TitlesAndObjectsTabPage();
+    virtual ~TitlesAndObjectsTabPage() override;
     virtual void dispose() override;
 
     virtual void        initializePage() override;

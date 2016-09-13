@@ -32,7 +32,7 @@ namespace dbaxml
                     const OUString& rLName,
                     const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList
                     ,const sal_uInt16 _nToken);
-        virtual ~OXMLDataSourceInfo();
+        virtual ~OXMLDataSourceInfo() override;
     };
 } // namespace dbaxml
 

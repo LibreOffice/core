@@ -39,7 +39,7 @@ private:
 
 public:
                             ScDocumentConfiguration(ScDocShell* pDocShell);
-    virtual                 ~ScDocumentConfiguration();
+    virtual                 ~ScDocumentConfiguration() override;
 
                             // SfxListener
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

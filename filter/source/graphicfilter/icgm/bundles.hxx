@@ -81,7 +81,7 @@ public:
 
     virtual Bundle*     Clone() override { return new MarkerBundle( *this ); } ;
             MarkerBundle&   operator=( const MarkerBundle& rMarkerBundle );
-    virtual             ~MarkerBundle() {};
+    virtual             ~MarkerBundle() override {};
 };
 
 
@@ -119,7 +119,7 @@ public:
 
     virtual Bundle*     Clone() override { return new TextBundle( *this ); } ;
             TextBundle& operator=( const TextBundle& rTextBundle );
-    virtual             ~TextBundle() {};
+    virtual             ~TextBundle() override {};
 };
 
 

@@ -67,7 +67,7 @@ class DocBasicItem : public ::cppu::WeakImplHelper< util::XCloseListener >
 {
 public:
     explicit DocBasicItem( StarBASIC& rDocBasic );
-    virtual ~DocBasicItem();
+    virtual ~DocBasicItem() override;
 
     inline const SbxObjectRef& getClassModules() const { return mxClassModules; }
     inline bool isDocClosed() const { return mbDocClosed; }

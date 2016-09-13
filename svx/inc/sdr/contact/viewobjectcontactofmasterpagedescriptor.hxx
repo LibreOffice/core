@@ -34,7 +34,7 @@ namespace sdr
         {
         public:
             ViewObjectContactOfMasterPageDescriptor(ObjectContact& rObjectContact, ViewContact& rViewContact);
-            virtual ~ViewObjectContactOfMasterPageDescriptor();
+            virtual ~ViewObjectContactOfMasterPageDescriptor() override;
 
             // access to MasterPageDescriptor
             sdr::MasterPageDescriptor& GetMasterPageDescriptor() const;

@@ -131,7 +131,7 @@ public:
                     const Point& rPtPos, SwPaM* pRing = nullptr );
     // note: *intentionally* links the new shell cursor into the old one's Ring
     SwShellCursor( SwShellCursor& );
-    virtual ~SwShellCursor();
+    virtual ~SwShellCursor() override;
 
     virtual void FillRects() override;   // For Table- und normal cursors.
     /// @see SwSelPaintRects::FillStartEnd(), override for text selections.
@@ -182,7 +182,7 @@ public:
     SwShellTableCursor( const SwCursorShell& rCursorSh,
                     const SwPosition &rMkPos, const Point& rMkPt,
                     const SwPosition &rPtPos, const Point& rPtPt );
-    virtual ~SwShellTableCursor();
+    virtual ~SwShellTableCursor() override;
 
     virtual void FillRects() override;   // For table and normal cursor.
     /// @see SwSelPaintRects::FillStartEnd(), override for table selections.

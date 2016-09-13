@@ -69,7 +69,7 @@ public:
     typedef std::vector<XclExpUserBView*>::const_iterator const_iterator;
 
                                 XclExpUserBViewList( const ScChangeTrack& rChangeTrack );
-    virtual                     ~XclExpUserBViewList();
+    virtual                     ~XclExpUserBViewList() override;
 
     inline iterator begin () { return aViews.begin(); }
     inline iterator end () { return aViews.end(); }
@@ -162,7 +162,7 @@ private:
 
 public:
     inline                      XclExpChTrEmpty( sal_uInt16 nNum ) : nRecNum( nNum ) {}
-    virtual                     ~XclExpChTrEmpty();
+    virtual                     ~XclExpChTrEmpty() override;
 
     virtual sal_uInt16              GetNum() const override;
     virtual sal_Size            GetLen() const override;
@@ -176,7 +176,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 
 public:
-    virtual                     ~XclExpChTr0x0195();
+    virtual                     ~XclExpChTr0x0195() override;
 
     virtual sal_uInt16              GetNum() const override;
     virtual sal_Size            GetLen() const override;
@@ -194,7 +194,7 @@ private:
 
 public:
     inline                      XclExpChTr0x0194( const ScChangeTrack& rChangeTrack );
-    virtual                     ~XclExpChTr0x0194();
+    virtual                     ~XclExpChTr0x0194() override;
 
     virtual sal_uInt16              GetNum() const override;
     virtual sal_Size            GetLen() const override;
@@ -218,7 +218,7 @@ private:
 
 public:
     inline                      XclExpChTrHeader() : nCount( 0 ) {}
-    virtual                     ~XclExpChTrHeader();
+    virtual                     ~XclExpChTrHeader() override;
 
     inline void                 SetGUID( const sal_uInt8* pGUID )   { memcpy( aGUID, pGUID, 16 ); }
     inline void                 SetCount( sal_uInt32 nNew )         { nCount = nNew; }
@@ -278,7 +278,7 @@ public:
     XclExpChTrInfo( const OUString& rUsername, const DateTime& rDateTime,
                     const sal_uInt8* pGUID );
 
-    virtual                     ~XclExpChTrInfo();
+    virtual                     ~XclExpChTrInfo() override;
 
     virtual sal_uInt16              GetNum() const override;
     virtual sal_Size            GetLen() const override;
@@ -327,7 +327,7 @@ public:
     inline                      XclExpChTrTabId( sal_uInt16 nCount ) :
                                     pBuffer( nullptr ), nTabCount( nCount ) {}
                                 XclExpChTrTabId( const XclExpChTrTabIdBuffer& rBuffer );
-    virtual                     ~XclExpChTrTabId();
+    virtual                     ~XclExpChTrTabId() override;
 
     void                        Copy( const XclExpChTrTabIdBuffer& rBuffer );
 
@@ -388,7 +388,7 @@ public:
                                     const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer,
                                     sal_uInt16 nNewOpCode = EXC_CHTR_OP_UNKNOWN );
-    virtual                     ~XclExpChTrAction();
+    virtual                     ~XclExpChTrAction() override;
 
     inline const OUString&      GetUsername() const             { return sUsername; }
     inline const DateTime&      GetDateTime() const             { return aDateTime; }
@@ -481,7 +481,7 @@ public:
                                     const ScChangeActionContent& rAction,
                                     const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
-    virtual                     ~XclExpChTrCellContent();
+    virtual                     ~XclExpChTrCellContent() override;
 
     virtual sal_uInt16              GetNum() const override;
     virtual sal_Size            GetActionByteCount() const override;
@@ -510,7 +510,7 @@ public:
                                     const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer,
                                     ScChangeTrack& rChangeTrack );
-    virtual                     ~XclExpChTrInsert();
+    virtual                     ~XclExpChTrInsert() override;
 
     virtual sal_uInt16              GetNum() const override;
     virtual sal_Size            GetActionByteCount() const override;
@@ -533,7 +533,7 @@ public:
                                     const ScChangeAction& rAction,
                                     const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
-    virtual                     ~XclExpChTrInsertTab();
+    virtual                     ~XclExpChTrInsertTab() override;
 
     virtual sal_uInt16              GetNum() const override;
     virtual sal_Size            GetActionByteCount() const override;
@@ -559,7 +559,7 @@ public:
                                     const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer,
                                     ScChangeTrack& rChangeTrack );
-    virtual                     ~XclExpChTrMoveRange();
+    virtual                     ~XclExpChTrMoveRange() override;
 
     virtual sal_uInt16              GetNum() const override;
     virtual sal_Size            GetActionByteCount() const override;
@@ -576,7 +576,7 @@ protected:
 
 public:
                                 XclExpChTr0x014A( const XclExpChTrInsert& rAction );
-    virtual                     ~XclExpChTr0x014A();
+    virtual                     ~XclExpChTr0x014A() override;
 
     virtual sal_uInt16              GetNum() const override;
     virtual sal_Size            GetActionByteCount() const override;
@@ -608,7 +608,7 @@ class XclExpChangeTrack : protected XclExpRoot
 
 public:
                                 XclExpChangeTrack( const XclExpRoot& rRoot );
-                                virtual ~XclExpChangeTrack();
+                                virtual ~XclExpChangeTrack() override;
 
     void                        Write();
     void                        WriteXml( XclExpXmlStream& rStrm );

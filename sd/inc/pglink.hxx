@@ -30,7 +30,7 @@ class SdPageLink : public ::sfx2::SvBaseLink
 
 public:
     SdPageLink(SdPage* pPg, const OUString& rFileName, const OUString& rBookmarkName);
-    virtual ~SdPageLink();
+    virtual ~SdPageLink() override;
 
     virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(

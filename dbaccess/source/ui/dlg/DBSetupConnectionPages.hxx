@@ -42,7 +42,7 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OSpreadSheetConnectionPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
-        virtual ~OSpreadSheetConnectionPageSetup();
+        virtual ~OSpreadSheetConnectionPageSetup() override;
         virtual void dispose() override;
 
     protected:
@@ -64,7 +64,7 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OTextConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
-        virtual ~OTextConnectionPageSetup();
+        virtual ~OTextConnectionPageSetup() override;
         virtual void dispose() override;
     protected:
         virtual bool prepareLeave() override;
@@ -84,7 +84,7 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OLDAPConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
-        virtual ~OLDAPConnectionPageSetup();
+        virtual ~OLDAPConnectionPageSetup() override;
         virtual void dispose() override;
         virtual void callModifiedHdl(void* pControl = nullptr) override;
 
@@ -114,7 +114,7 @@ namespace dbaui
 
     public:
         MySQLNativeSetupPage( vcl::Window* _pParent, const SfxItemSet& _rCoreAttrs );
-        virtual ~MySQLNativeSetupPage();
+        virtual ~MySQLNativeSetupPage() override;
         virtual void dispose() override;
 
         static VclPtr<OGenericAdministrationPage> Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
@@ -140,7 +140,7 @@ namespace dbaui
                                         , sal_uInt16 _nHelpTextResId
                                         , sal_uInt16 _nHeaderTextResId
                                         , sal_uInt16 _nDriverClassId );
-        virtual ~OGeneralSpecialJDBCConnectionPageSetup();
+        virtual ~OGeneralSpecialJDBCConnectionPageSetup() override;
         virtual void dispose() override;
     static VclPtr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
     static VclPtr<OGenericAdministrationPage> CreateOracleJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
@@ -176,7 +176,7 @@ namespace dbaui
     {
     public:
                 OJDBCConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
-        virtual ~OJDBCConnectionPageSetup();
+        virtual ~OJDBCConnectionPageSetup() override;
         virtual void dispose() override;
         static VclPtr<OGenericAdministrationPage> CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
@@ -207,7 +207,7 @@ namespace dbaui
         };
 
         OMySQLIntroPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
-        virtual ~OMySQLIntroPageSetup();
+        virtual ~OMySQLIntroPageSetup() override;
         virtual void dispose() override;
 
         static VclPtr<OMySQLIntroPageSetup> CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet );
@@ -237,7 +237,7 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
         static VclPtr<OGenericAdministrationPage> CreateAuthentificationTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OAuthentificationPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
-        virtual ~OAuthentificationPageSetup();
+        virtual ~OAuthentificationPageSetup() override;
         virtual void dispose() override;
 
     protected:
@@ -270,7 +270,7 @@ namespace dbaui
         VclPtr<FixedText>   m_pFTFinalText;
 
         OFinalDBPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
-        virtual ~OFinalDBPageSetup();
+        virtual ~OFinalDBPageSetup() override;
         virtual void dispose() override;
         bool IsDatabaseDocumentToBeRegistered();
         bool IsDatabaseDocumentToBeOpened();

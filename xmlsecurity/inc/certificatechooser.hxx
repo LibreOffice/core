@@ -67,7 +67,7 @@ private:
 
 public:
     CertificateChooser(vcl::Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
-    virtual ~CertificateChooser();
+    virtual ~CertificateChooser() override;
     virtual void dispose() override;
 
     short Execute() override;

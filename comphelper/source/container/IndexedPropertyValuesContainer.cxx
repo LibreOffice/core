@@ -35,7 +35,7 @@ class IndexedPropertyValuesContainer : public cppu::WeakImplHelper< container::X
 {
 public:
     IndexedPropertyValuesContainer() throw();
-    virtual ~IndexedPropertyValuesContainer() throw();
+    virtual ~IndexedPropertyValuesContainer() throw() override;
 
     // XIndexContainer
     virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, const css::uno::Any& aElement )

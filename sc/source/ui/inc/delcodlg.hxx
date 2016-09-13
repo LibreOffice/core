@@ -48,7 +48,7 @@ private:
 public:
             ScDeleteContentsDlg( vcl::Window* pParent,
                                  InsertDeleteFlags nCheckDefaults = InsertDeleteFlags::NONE );
-            virtual ~ScDeleteContentsDlg();
+            virtual ~ScDeleteContentsDlg() override;
     virtual void dispose() override;
     void    DisableObjects();
 

@@ -36,7 +36,7 @@ class XMLOFF_DLLPUBLIC XMLDocumentSettingsContext : public SvXMLImportContext
 public:
     XMLDocumentSettingsContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList);
-    virtual ~XMLDocumentSettingsContext();
+    virtual ~XMLDocumentSettingsContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,

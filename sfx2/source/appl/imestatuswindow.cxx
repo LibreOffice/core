@@ -55,7 +55,7 @@ class WeakPropertyChangeListener : public ::cppu::WeakImplHelper<css::beans::XPr
         {
         }
 
-        virtual ~WeakPropertyChangeListener()
+        virtual ~WeakPropertyChangeListener() override
         {
         }
 

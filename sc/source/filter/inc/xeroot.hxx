@@ -105,7 +105,7 @@ struct XclExpRootData : public XclRootData
 
     explicit            XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
                             tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc );
-    virtual             ~XclExpRootData();
+    virtual             ~XclExpRootData() override;
 };
 
 /** Access to global data from other classes. */

@@ -65,7 +65,7 @@ class LwpBackgroundOverride : public LwpOverride
 
 public:
     LwpBackgroundOverride(){}
-    virtual ~LwpBackgroundOverride(){}
+    virtual ~LwpBackgroundOverride() override {}
 
     virtual LwpBackgroundOverride* clone() const override;
 

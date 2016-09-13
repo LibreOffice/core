@@ -371,7 +371,7 @@ private:
 
 public:
     SfxLibraryContainer();
-    virtual ~SfxLibraryContainer();
+    virtual ~SfxLibraryContainer() override;
 
 
     // Interface to set the BasicManager (Hack for password implementation)

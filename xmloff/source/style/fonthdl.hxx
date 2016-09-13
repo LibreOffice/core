@@ -28,7 +28,7 @@
 class XMLFontFamilyNamePropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLFontFamilyNamePropHdl();
+    virtual ~XMLFontFamilyNamePropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -40,7 +40,7 @@ public:
 class XMLFontFamilyPropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLFontFamilyPropHdl();
+    virtual ~XMLFontFamilyPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -52,7 +52,7 @@ public:
 class XMLFontEncodingPropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLFontEncodingPropHdl();
+    virtual ~XMLFontEncodingPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -64,7 +64,7 @@ public:
 class XMLFontPitchPropHdl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLFontPitchPropHdl();
+    virtual ~XMLFontPitchPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
     virtual bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

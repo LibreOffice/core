@@ -60,7 +60,7 @@ public:
             const SvXMLUnitConverter& rUnitConv,
             sal_uInt16 nWhich   );
 
-    virtual ~SwXMLBrushItemImportContext();
+    virtual ~SwXMLBrushItemImportContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,

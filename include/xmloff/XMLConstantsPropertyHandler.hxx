@@ -42,7 +42,7 @@ public:
                                  enum ::xmloff::token::XMLTokenEnum eDflt);
 
     // Just needed for virtual destruction
-    virtual ~XMLConstantsPropertyHandler();
+    virtual ~XMLConstantsPropertyHandler() override;
 
     /// Imports the given value in cas of the given XML-data-type
     virtual bool importXML(

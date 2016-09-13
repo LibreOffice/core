@@ -93,7 +93,7 @@ namespace DOM
         static ::rtl::Reference<CDocument>
             CreateCDocument(xmlDocPtr const pDoc);
 
-        virtual ~CDocument();
+        virtual ~CDocument() override;
 
         // needed by CXPathAPI
         ::osl::Mutex & GetMutex() { return m_Mutex; }

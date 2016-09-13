@@ -41,7 +41,7 @@ class CopyDlg
 public:
     CopyDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
         const XColorListRef &pColList, ::sd::View* pView );
-    virtual ~CopyDlg();
+    virtual ~CopyDlg() override;
     virtual void dispose() override;
 
     void    GetAttr( SfxItemSet& rOutAttrs );

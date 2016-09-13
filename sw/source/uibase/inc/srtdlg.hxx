@@ -85,7 +85,7 @@ class SwSortDlg : public SvxStandardDialog
 
 public:
     SwSortDlg(vcl::Window * pParent, SwWrtShell &rSh);
-    virtual ~SwSortDlg();
+    virtual ~SwSortDlg() override;
     virtual void dispose() override;
 };
 

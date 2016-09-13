@@ -51,7 +51,7 @@ public:
         , nTabStyle(0)
     {
     }
-    virtual ~TabWin_Impl() { disposeOnce(); }
+    virtual ~TabWin_Impl() override { disposeOnce(); }
     virtual void dispose() override { mpPage.clear(); vcl::Window::dispose(); }
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;

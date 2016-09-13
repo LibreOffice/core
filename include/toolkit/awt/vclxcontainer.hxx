@@ -39,7 +39,7 @@ class TOOLKIT_DLLPUBLIC VCLXContainer : public css::awt::XVclContainer,
 {
 public:
                     VCLXContainer();
-                    virtual ~VCLXContainer();
+                    virtual ~VCLXContainer() override;
 
     // css::uno::XInterface
     css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;

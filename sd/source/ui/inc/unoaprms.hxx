@@ -148,7 +148,7 @@ public:
         void SetSecondPlayFull(bool bTheOldPlayFull, bool bTheNewPlayFull)
             { bOldSecondPlayFull = bTheOldPlayFull; bNewSecondPlayFull = bTheNewPlayFull; }
 
-    virtual ~SdAnimationPrmsUndoAction();
+    virtual ~SdAnimationPrmsUndoAction() override;
     virtual void Undo() override;
     virtual void Redo() override;
 };

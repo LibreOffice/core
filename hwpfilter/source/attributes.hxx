@@ -33,7 +33,7 @@ struct AttributeListImpl_impl;
 class AttributeListImpl : public WeakImplHelper< XAttributeList >
 {
 protected:
-    virtual ~AttributeListImpl();
+    virtual ~AttributeListImpl() override;
 
 public:
     AttributeListImpl();

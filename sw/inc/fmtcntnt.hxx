@@ -36,7 +36,7 @@ class SW_DLLPUBLIC SwFormatContent: public SfxPoolItem
 public:
     SwFormatContent( const SwStartNode* pStartNode = nullptr );
     SwFormatContent( const SwFormatContent &rCpy );
-    virtual ~SwFormatContent();
+    virtual ~SwFormatContent() override;
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;

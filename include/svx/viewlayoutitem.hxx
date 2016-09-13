@@ -33,7 +33,7 @@ public:
 
     SvxViewLayoutItem( sal_uInt16 nColumns = 0, bool bBookMode = false, sal_uInt16 nWhich = SID_ATTR_VIEWLAYOUT );
     SvxViewLayoutItem( const SvxViewLayoutItem& );
-    virtual ~SvxViewLayoutItem();
+    virtual ~SvxViewLayoutItem() override;
 
     void                    SetBookMode( bool bNew ) {mbBookMode = bNew; }
     bool                    IsBookMode() const {return mbBookMode; }

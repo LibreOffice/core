@@ -153,7 +153,7 @@ namespace dbaui
 
     public:
         SbaXFormAdapter();
-        virtual ~SbaXFormAdapter();
+        virtual ~SbaXFormAdapter() override;
 
     //  css::uno::Reference< css::reflection::XIdlClass >  getIdlClass();
     //  css::uno::Sequence<css::uno::Reference< css::reflection::XIdlClass > > getIdlClasses();

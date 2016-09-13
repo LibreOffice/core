@@ -70,7 +70,7 @@ public:
     bool isSelected() const { osl::MutexGuard const guard( m_aMutex ); return m_bSelected; }
 
 private:
-    virtual ~PDFPasswordRequest() {}
+    virtual ~PDFPasswordRequest() override {}
 };
 
 PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry, const OUString& rName ) :
@@ -128,7 +128,7 @@ public:
     UnsupportedEncryptionFormatRequest& operator=(const UnsupportedEncryptionFormatRequest&) = delete;
 
 private:
-    virtual ~UnsupportedEncryptionFormatRequest() {}
+    virtual ~UnsupportedEncryptionFormatRequest() override {}
 
     virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException, std::exception) override {
         return uno::makeAny(

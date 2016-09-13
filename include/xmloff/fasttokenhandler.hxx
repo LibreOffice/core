@@ -65,7 +65,7 @@ class XMLOFF_DLLPUBLIC FastTokenHandler : public cppu::WeakImplHelper1<
 {
 public:
     explicit FastTokenHandler();
-    virtual ~FastTokenHandler();
+    virtual ~FastTokenHandler() override;
 
     // XFastTokenHandler
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken )

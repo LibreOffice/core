@@ -38,7 +38,7 @@ public:
     SfxStyleDialog(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription, SfxStyleSheetBase&);
 
-    virtual ~SfxStyleDialog();
+    virtual ~SfxStyleDialog() override;
     virtual void dispose() override;
 
     SfxStyleSheetBase&          GetStyleSheet() { return *pStyle; }

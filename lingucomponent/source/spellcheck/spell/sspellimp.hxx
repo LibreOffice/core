@@ -79,7 +79,7 @@ class SpellChecker :
 
 public:
     SpellChecker();
-    virtual ~SpellChecker();
+    virtual ~SpellChecker() override;
 
     // XSupportedLocales (for XSpellChecker)
     virtual Sequence< Locale > SAL_CALL getLocales() throw(RuntimeException, std::exception) override;

@@ -33,7 +33,7 @@ private:
     OUString msDefaultFilePath;
 public:
     explicit SwVbaOptions( css::uno::Reference< css::uno::XComponentContext >& m_xContext );
-    virtual ~SwVbaOptions();
+    virtual ~SwVbaOptions() override;
 
     // Attributes
     virtual ::sal_Int32 SAL_CALL getDefaultBorderLineStyle() throw (css::uno::RuntimeException, std::exception) override;

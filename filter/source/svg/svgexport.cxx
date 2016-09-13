@@ -163,7 +163,7 @@ public:
         SvXMLElementExport aExp( *pSVGExport, XML_NAMESPACE_NONE, "g", true, true );
         pSVGExport->GetDocHandler()->characters( text );
     }
-    virtual ~FixedTextField() {}
+    virtual ~FixedTextField() override {}
 };
 
 
@@ -179,7 +179,7 @@ public:
     {
         implGrowCharSet( aTextFieldCharSets, text, aOOOAttrDateTimeField );
     }
-    virtual ~FixedDateTimeField() {}
+    virtual ~FixedDateTimeField() override {}
 };
 
 
@@ -196,7 +196,7 @@ public:
         static const OUString sFieldId = aOOOAttrFooterField;
         implGrowCharSet( aTextFieldCharSets, text, sFieldId );
     }
-    virtual ~FooterField() {}
+    virtual ~FooterField() override {}
 };
 
 
@@ -207,7 +207,7 @@ public:
     {
         return OUString( "VariableTextField" );
     }
-    virtual ~VariableTextField() {}
+    virtual ~VariableTextField() override {}
 };
 
 
@@ -306,7 +306,7 @@ public:
             aTextFieldCharSets[ *aMasterPageIt ][ sFieldId ].insert( (sal_Unicode)( format ) );
         }
     }
-    virtual ~VariableDateTimeField() {}
+    virtual ~VariableDateTimeField() override {}
 };
 
 

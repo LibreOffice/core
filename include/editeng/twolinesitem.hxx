@@ -36,7 +36,7 @@ public:
                      sal_Unicode nEndBracket /*= 0*/,
                      sal_uInt16 nId  );
     SvxTwoLinesItem( const SvxTwoLinesItem& rAttr );
-    virtual ~SvxTwoLinesItem();
+    virtual ~SvxTwoLinesItem() override;
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;

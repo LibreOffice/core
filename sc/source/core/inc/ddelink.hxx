@@ -53,7 +53,7 @@ public:
                         sal_uInt8 nM );
             ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr );
             ScDdeLink( ScDocument* pD, const ScDdeLink& rOther );
-    virtual ~ScDdeLink();
+    virtual ~ScDdeLink() override;
 
     void            Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
 

@@ -57,7 +57,7 @@ class SW_DLLPUBLIC SwComboBox : public ComboBox
 public:
 
     SwComboBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~SwComboBox();
+    virtual ~SwComboBox() override;
 
     void                    InsertSwEntry(const SwBoxEntry&);
     virtual sal_Int32       InsertEntry(const OUString& rStr, sal_Int32 = COMBOBOX_APPEND) override;

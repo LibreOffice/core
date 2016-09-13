@@ -68,7 +68,7 @@ public:
     TransferableData (
         SlideSorterViewShell* pViewShell,
         const ::std::vector<TransferableData::Representative>& rRepresentatives);
-    virtual ~TransferableData();
+    virtual ~TransferableData() override;
 
     const ::std::vector<Representative>& GetRepresentatives() const { return maRepresentatives;}
 

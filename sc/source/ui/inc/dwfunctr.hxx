@@ -82,7 +82,7 @@ public:
                                         vcl::Window* pParent,
                                         const ResId& rResId );
 
-                    virtual ~ScFunctionWin();
+                    virtual ~ScFunctionWin() override;
     virtual void    dispose() override;
 
     using ::vcl::Window::Notify;

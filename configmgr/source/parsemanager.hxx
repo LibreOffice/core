@@ -47,7 +47,7 @@ public:
     enum { NAMESPACE_OOR = 1, NAMESPACE_XS = 2, NAMESPACE_XSI = 3 };
 
 private:
-    virtual ~ParseManager();
+    virtual ~ParseManager() override;
 
     xmlreader::XmlReader reader_;
     rtl::Reference< Parser > parser_;

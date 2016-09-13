@@ -173,7 +173,7 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
-            virtual ~OCommonStatement();
+            virtual ~OCommonStatement() override;
 
         protected:
             void         parseSql( const OUString& sql, QueryData& _out_rQueryData );
@@ -239,7 +239,7 @@ namespace connectivity
                             ,public OStatement_IBase
         {
         protected:
-            virtual ~OStatement(){}
+            virtual ~OStatement() override {}
 
         public:
             explicit OStatement( OEvoabConnection* _pConnection)

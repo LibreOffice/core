@@ -138,7 +138,7 @@ namespace drawinglayer
             VclMetafileProcessor2D(
                 const geometry::ViewInformation2D& rViewInformation,
                 OutputDevice& rOutDev);
-            virtual ~VclMetafileProcessor2D();
+            virtual ~VclMetafileProcessor2D() override;
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

@@ -51,7 +51,7 @@ public:
 
     // bDontLoad is for referencing purposes only
     SvtCJKOptions(bool bDontLoad = false);
-    virtual ~SvtCJKOptions();
+    virtual ~SvtCJKOptions() override;
 
     bool IsCJKFontEnabled() const;
     bool IsVerticalTextEnabled() const;

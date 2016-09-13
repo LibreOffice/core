@@ -53,7 +53,7 @@ class ScFormulaDlg : public formula::FormulaDlg,
 public:
                     ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                         vcl::Window* pParent, ScViewData* pViewData ,formula::IFunctionManager* _pFunctionMgr);
-                    virtual ~ScFormulaDlg();
+                    virtual ~ScFormulaDlg() override;
     virtual void dispose() override;
 
     // IFormulaEditorHelper

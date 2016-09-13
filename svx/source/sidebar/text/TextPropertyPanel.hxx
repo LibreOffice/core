@@ -44,7 +44,7 @@ class TextPropertyPanel
       public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
-    virtual ~TextPropertyPanel();
+    virtual ~TextPropertyPanel() override;
     virtual void dispose() override;
 
     static VclPtr<vcl::Window> Create (

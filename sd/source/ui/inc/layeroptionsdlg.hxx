@@ -48,7 +48,7 @@ public:
 
     SdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs,
         bool bDeletable, const OUString& rStr );
-    virtual ~SdInsertLayerDlg();
+    virtual ~SdInsertLayerDlg() override;
     virtual void dispose() override;
 
     void                GetAttr( SfxItemSet& rOutAttrs );

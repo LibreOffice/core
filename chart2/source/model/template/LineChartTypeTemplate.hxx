@@ -42,7 +42,7 @@ public:
         bool bSymbols,
         bool bHasLines = true,
         sal_Int32 nDim = 2 );
-    virtual ~LineChartTypeTemplate();
+    virtual ~LineChartTypeTemplate() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()

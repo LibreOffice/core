@@ -63,7 +63,7 @@ private:
 
 public:
     explicit                    ScCsvTableBox( vcl::Window* pParent, WinBits nBits );
-    virtual                     ~ScCsvTableBox();
+    virtual                     ~ScCsvTableBox() override;
     virtual void                dispose() override;
 
     /** Finishes initialization. Must be called after constructing a new object. */

@@ -41,7 +41,7 @@ protected:
 public:
     SwUndoRedline( SwUndoId nUserId, const SwPaM& rRange );
 
-    virtual ~SwUndoRedline();
+    virtual ~SwUndoRedline() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
@@ -80,7 +80,7 @@ class SwUndoRedlineSort : public SwUndoRedline
 public:
     SwUndoRedlineSort( const SwPaM& rRange, const SwSortOptions& rOpt );
 
-    virtual ~SwUndoRedlineSort();
+    virtual ~SwUndoRedlineSort() override;
 
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
@@ -121,7 +121,7 @@ public:
     SwUndoCompDoc( const SwPaM& rRg, bool bIns );
     SwUndoCompDoc( const SwRangeRedline& rRedl );
 
-    virtual ~SwUndoCompDoc();
+    virtual ~SwUndoCompDoc() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

@@ -35,7 +35,7 @@ public:
     explicit UndoCommandDispatch(
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         const css::uno::Reference< css::frame::XModel > & xModel );
-    virtual ~UndoCommandDispatch();
+    virtual ~UndoCommandDispatch() override;
 
     // late initialisation, especially for adding as listener
     virtual void initialize() override;

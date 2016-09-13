@@ -313,7 +313,7 @@ public:
 protected:
     /** Destruction.
      */
-    virtual ~FileLockBytes();
+    virtual ~FileLockBytes() override;
 };
 
 } // namespace store
@@ -541,7 +541,7 @@ public:
 protected:
     /* Destruction.
      */
-    virtual ~MappedLockBytes();
+    virtual ~MappedLockBytes() override;
 };
 
 } // namespace store
@@ -679,7 +679,7 @@ public:
 protected:
     /** Destruction.
      */
-    virtual ~MemoryLockBytes();
+    virtual ~MemoryLockBytes() override;
 };
 
 } // namespace store

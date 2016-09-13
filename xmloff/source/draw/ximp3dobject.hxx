@@ -46,7 +46,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
-    virtual ~SdXML3DObjectContext();
+    virtual ~SdXML3DObjectContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
 };
@@ -66,7 +66,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
-    virtual ~SdXML3DCubeObjectShapeContext();
+    virtual ~SdXML3DCubeObjectShapeContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
     virtual void EndElement() override;
@@ -87,7 +87,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
-    virtual ~SdXML3DSphereObjectShapeContext();
+    virtual ~SdXML3DSphereObjectShapeContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
     virtual void EndElement() override;
@@ -106,7 +106,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
-    virtual ~SdXML3DPolygonBasedShapeContext();
+    virtual ~SdXML3DPolygonBasedShapeContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
     virtual void EndElement() override;
@@ -122,7 +122,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
-    virtual ~SdXML3DLatheObjectShapeContext();
+    virtual ~SdXML3DLatheObjectShapeContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
     virtual void EndElement() override;
@@ -138,7 +138,7 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes >& rShapes);
-    virtual ~SdXML3DExtrudeObjectShapeContext();
+    virtual ~SdXML3DExtrudeObjectShapeContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
     virtual void EndElement() override;

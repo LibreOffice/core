@@ -108,7 +108,7 @@ public:
 
     virtual void freeResources() override;
 
-    virtual ~X11SalGraphicsImpl();
+    virtual ~X11SalGraphicsImpl() override;
 
     virtual bool setClipRegion( const vcl::Region& ) override;
     //

@@ -35,7 +35,7 @@ namespace dbaui
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:
         OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift = true);
-        virtual ~OTitleWindow();
+        virtual ~OTitleWindow() override;
         virtual void dispose() override;
 
         // Window overrides

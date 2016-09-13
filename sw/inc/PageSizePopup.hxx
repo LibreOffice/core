@@ -30,7 +30,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     PageSizePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
-    virtual ~PageSizePopup();
+    virtual ~PageSizePopup() override;
 
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };

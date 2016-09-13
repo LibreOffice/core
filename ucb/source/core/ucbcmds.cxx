@@ -202,7 +202,7 @@ class CommandProcessorInfo :
 
 public:
     CommandProcessorInfo();
-    virtual ~CommandProcessorInfo();
+    virtual ~CommandProcessorInfo() override;
 
     // XCommandInfo methods
     virtual uno::Sequence< ucb::CommandInfo > SAL_CALL getCommands()

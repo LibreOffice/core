@@ -35,7 +35,7 @@ private:
 
 public:
     SwVbaAutoTextEntry( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XAutoTextEntry >& xEntry ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaAutoTextEntry();
+    virtual ~SwVbaAutoTextEntry() override;
 
     // XAutoTextEntry
     virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL Insert( const css::uno::Reference< ooo::vba::word::XRange >& _where, const css::uno::Any& _richtext ) throw ( css::uno::RuntimeException, std::exception ) override;
@@ -51,7 +51,7 @@ class SwVbaAutoTextEntries : public SwVbaAutoTextEntries_BASE
 {
 public:
     SwVbaAutoTextEntries( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) throw (css::uno::RuntimeException);
-    virtual ~SwVbaAutoTextEntries() {}
+    virtual ~SwVbaAutoTextEntries() override {}
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

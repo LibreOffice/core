@@ -147,7 +147,7 @@ protected:
 
 public:
     SwTransferable( SwWrtShell& );
-    virtual ~SwTransferable();
+    virtual ~SwTransferable() override;
 
     static SotExchangeDest GetSotDestination( const SwWrtShell& rSh );
 

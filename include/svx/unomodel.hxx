@@ -55,7 +55,7 @@ private:
 
 public:
     SvxUnoDrawingModel( SdrModel* pDoc ) throw();
-    virtual ~SvxUnoDrawingModel() throw();
+    virtual ~SvxUnoDrawingModel() throw() override;
 
     SdrModel* GetDoc() const { return mpDoc; }
 

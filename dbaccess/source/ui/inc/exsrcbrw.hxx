@@ -83,7 +83,7 @@ namespace dbaui
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~SbaExternalSourceBrowser();
+        virtual ~SbaExternalSourceBrowser() override;
 
         virtual css::uno::Reference< css::sdbc::XRowSet >  CreateForm() override;
         virtual bool InitializeForm( const css::uno::Reference< css::beans::XPropertySet >& i_formProperties ) override;

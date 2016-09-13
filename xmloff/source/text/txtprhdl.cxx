@@ -247,7 +247,7 @@ static SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
 class XMLDropCapPropHdl_Impl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLDropCapPropHdl_Impl ();
+    virtual ~XMLDropCapPropHdl_Impl () override;
 
     virtual bool equals(
             const css::uno::Any& r1,
@@ -303,7 +303,7 @@ bool XMLDropCapPropHdl_Impl::exportXML(
 class XMLOpaquePropHdl_Impl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLOpaquePropHdl_Impl ();
+    virtual ~XMLOpaquePropHdl_Impl () override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -353,7 +353,7 @@ XMLOpaquePropHdl_Impl::~XMLOpaquePropHdl_Impl ()
 class XMLContourModePropHdl_Impl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLContourModePropHdl_Impl ();
+    virtual ~XMLContourModePropHdl_Impl () override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -403,7 +403,7 @@ XMLContourModePropHdl_Impl::~XMLContourModePropHdl_Impl()
 class XMLParagraphOnlyPropHdl_Impl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLParagraphOnlyPropHdl_Impl ();
+    virtual ~XMLParagraphOnlyPropHdl_Impl () override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -467,7 +467,7 @@ SvXMLEnumMapEntry const pXML_Wrap_Enum[] =
 class XMLWrapPropHdl_Impl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLWrapPropHdl_Impl ();
+    virtual ~XMLWrapPropHdl_Impl () override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -521,7 +521,7 @@ class XMLFrameProtectPropHdl_Impl : public XMLPropertyHandler
 public:
     explicit XMLFrameProtectPropHdl_Impl( enum XMLTokenEnum eVal ) :
            sVal( GetXMLToken(eVal) ) {}
-    virtual ~XMLFrameProtectPropHdl_Impl ();
+    virtual ~XMLFrameProtectPropHdl_Impl () override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -710,7 +710,7 @@ bool XMLTextColumnsPropertyHandler::exportXML(
 class XMLHoriMirrorPropHdl_Impl : public XMLPropertyHandler
 {
 public:
-    virtual ~XMLHoriMirrorPropHdl_Impl ();
+    virtual ~XMLHoriMirrorPropHdl_Impl () override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -762,7 +762,7 @@ public:
     XMLGrfMirrorPropHdl_Impl( enum XMLTokenEnum eVal, bool bH ) :
            sVal( GetXMLToken( eVal ) ),
         bHori( bH ) {}
-    virtual ~XMLGrfMirrorPropHdl_Impl ();
+    virtual ~XMLGrfMirrorPropHdl_Impl () override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -856,7 +856,7 @@ class XMLTextEmphasizePropHdl_Impl : public XMLPropertyHandler
 {
 public:
     XMLTextEmphasizePropHdl_Impl() {}
-    virtual ~XMLTextEmphasizePropHdl_Impl();
+    virtual ~XMLTextEmphasizePropHdl_Impl() override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -957,7 +957,7 @@ class XMLTextCombineCharPropHdl_Impl : public XMLPropertyHandler
 {
 public:
     XMLTextCombineCharPropHdl_Impl() {}
-    virtual ~XMLTextCombineCharPropHdl_Impl();
+    virtual ~XMLTextCombineCharPropHdl_Impl() override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -1001,7 +1001,7 @@ class XMLTextRelWidthHeightPropHdl_Impl : public XMLPropertyHandler
 {
 public:
     XMLTextRelWidthHeightPropHdl_Impl() {}
-    virtual ~XMLTextRelWidthHeightPropHdl_Impl();
+    virtual ~XMLTextRelWidthHeightPropHdl_Impl() override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -1056,7 +1056,7 @@ class XMLTextSyncWidthHeightPropHdl_Impl : public XMLPropertyHandler
 public:
     explicit XMLTextSyncWidthHeightPropHdl_Impl( enum XMLTokenEnum eValue ) :
            sValue( GetXMLToken(eValue) )    {}
-    virtual ~XMLTextSyncWidthHeightPropHdl_Impl();
+    virtual ~XMLTextSyncWidthHeightPropHdl_Impl() override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -1102,7 +1102,7 @@ class XMLTextRotationAnglePropHdl_Impl : public XMLPropertyHandler
 
 public:
     XMLTextRotationAnglePropHdl_Impl()  {}
-    virtual ~XMLTextRotationAnglePropHdl_Impl();
+    virtual ~XMLTextRotationAnglePropHdl_Impl() override;
 
     virtual bool importXML(
             const OUString& rStrImpValue,
@@ -1165,7 +1165,7 @@ class XMLNumber8OneBasedHdl : public XMLPropertyHandler
 
 public:
     XMLNumber8OneBasedHdl() {}
-    virtual ~XMLNumber8OneBasedHdl() {};
+    virtual ~XMLNumber8OneBasedHdl() override {};
 
     virtual bool importXML(
             const OUString& rStrImpValue,

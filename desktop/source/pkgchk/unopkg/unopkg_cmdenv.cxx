@@ -68,7 +68,7 @@ class CommandEnvironmentImpl
                       bool & accept, bool & decline);
 
 public:
-    virtual ~CommandEnvironmentImpl();
+    virtual ~CommandEnvironmentImpl() override;
     CommandEnvironmentImpl(
         Reference<XComponentContext> const & xComponentContext,
         OUString const & log_file,

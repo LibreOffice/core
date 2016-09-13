@@ -48,7 +48,7 @@ class OFSInputStreamContainer : public cppu::WeakImplHelper < css::io::XInputStr
 public:
     explicit OFSInputStreamContainer( const css::uno::Reference < css::io::XInputStream >& xStream );
 
-    virtual ~OFSInputStreamContainer();
+    virtual ~OFSInputStreamContainer() override;
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) throw( css::uno::RuntimeException, std::exception ) override;

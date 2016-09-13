@@ -116,7 +116,7 @@ namespace pcr
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        virtual ~SQLCommandDesigner();
+        virtual ~SQLCommandDesigner() override;
 
         /** opens a new frame for interactively designing an SQL command
             @precond
@@ -193,7 +193,7 @@ namespace pcr
         /// sets a new EscapeProcessing property value
         virtual void     setEscapeProcessing( const bool _bEscapeProcessing ) const = 0;
 
-        virtual ~ISQLCommandAdapter();
+        virtual ~ISQLCommandAdapter() override;
     };
 
 

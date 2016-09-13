@@ -53,7 +53,7 @@ namespace dbaui
 
     public:
         ORelationTableView( vcl::Window* pParent, ORelationDesignView* pView );
-        virtual ~ORelationTableView();
+        virtual ~ORelationTableView() override;
         virtual void dispose() override;
 
         virtual void RemoveTabWin( OTableWindow* pTabWin ) override;

@@ -56,7 +56,7 @@ public:
                              SfxChildWindow* pChild,
                              vcl::Window *pParent,
                              SfxChildWinInfo* pInfo);
-    virtual ~SwWordCountFloatDlg();
+    virtual ~SwWordCountFloatDlg() override;
     virtual void dispose() override;
     void    UpdateCounts();
 

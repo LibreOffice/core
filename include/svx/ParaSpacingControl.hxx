@@ -34,7 +34,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     ParaULSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
-    virtual ~ParaULSpacingControl();
+    virtual ~ParaULSpacingControl() override;
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
@@ -48,7 +48,7 @@ public:
     SFX_DECL_TOOLBOX_CONTROL();
 
     ParaLRSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
-    virtual ~ParaLRSpacingControl();
+    virtual ~ParaLRSpacingControl() override;
 
     virtual void SAL_CALL dispose()
         throw (css::uno::RuntimeException, std::exception) override;

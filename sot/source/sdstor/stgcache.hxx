@@ -100,7 +100,7 @@ class StgPage : public salhelper::SimpleReferenceObject
     sal_uInt8*      mpData;                // nSize bytes
     short           mnSize;                // size of this page
              StgPage( short nData, sal_Int32 nPage );
-    virtual ~StgPage();
+    virtual ~StgPage() override;
 public:
              StgPage(const StgPage&) = delete;
     StgPage& operator=(const StgPage&) = delete;

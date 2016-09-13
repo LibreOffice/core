@@ -39,7 +39,7 @@ namespace dbaccess
         css::uno::Reference < css::sdbc::XRow >       m_xRow;
         css::uno::Reference < css::sdbc::XRowUpdate > m_xRowUpdate;
 
-        virtual ~ODataColumn();
+        virtual ~ODataColumn() override;
     public:
         ODataColumn  (const css::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
                       const css::uno::Reference < css::sdbc::XRow >& _xRow,

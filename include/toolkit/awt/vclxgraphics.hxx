@@ -76,7 +76,7 @@ private:
 
 public:
                     VCLXGraphics();
-                    virtual ~VCLXGraphics();
+                    virtual ~VCLXGraphics() override;
 
     void            Init( OutputDevice* pOutDev );
     void            InitOutputDevice( InitOutDevFlags nFlags );

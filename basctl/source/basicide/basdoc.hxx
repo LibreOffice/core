@@ -56,7 +56,7 @@ private:
 
 public:
                         DocShell();
-                        virtual ~DocShell();
+                        virtual ~DocShell() override;
 
     SfxPrinter*         GetPrinter( bool bCreate );
     void                SetPrinter( SfxPrinter* pPrinter );

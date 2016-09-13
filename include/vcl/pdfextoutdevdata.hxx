@@ -98,7 +98,7 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
 public:
 
     PDFExtOutDevData( const OutputDevice& rOutDev );
-    virtual ~PDFExtOutDevData();
+    virtual ~PDFExtOutDevData() override;
 
     bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction );
     void ResetSyncData();

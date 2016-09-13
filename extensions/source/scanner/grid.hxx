@@ -49,7 +49,7 @@ class GridDialog : public ModalDialog
 public:
     GridDialog(double* pXValues, double* pYValues, int nValues,
                 vcl::Window* pParent);
-    virtual ~GridDialog();
+    virtual ~GridDialog() override;
     virtual void dispose() override;
     void setBoundings(double fMinX, double fMinY, double fMaxX, double fMaxY);
     double* getNewYValues();

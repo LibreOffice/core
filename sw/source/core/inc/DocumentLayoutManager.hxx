@@ -54,7 +54,7 @@ public:
     //Non Interface methods
     void ClearSwLayouterEntries();
 
-    virtual ~DocumentLayoutManager();
+    virtual ~DocumentLayoutManager() override;
 
 private:
 

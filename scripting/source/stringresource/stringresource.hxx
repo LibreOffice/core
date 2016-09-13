@@ -154,7 +154,7 @@ protected:
 public:
     explicit StringResourceImpl(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~StringResourceImpl();
+    virtual ~StringResourceImpl() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
@@ -306,7 +306,7 @@ protected:
 public:
     explicit StringResourcePersistenceImpl(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~StringResourcePersistenceImpl();
+    virtual ~StringResourcePersistenceImpl() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
@@ -415,7 +415,7 @@ class StringResourceWithStorageImpl : public StringResourceWithStorageImpl_BASE
 
 public:
     explicit StringResourceWithStorageImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~StringResourceWithStorageImpl();
+    virtual ~StringResourceWithStorageImpl() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )
@@ -540,7 +540,7 @@ class StringResourceWithLocationImpl : public StringResourceWithLocationImpl_BAS
 
 public:
     explicit StringResourceWithLocationImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    virtual ~StringResourceWithLocationImpl();
+    virtual ~StringResourceWithLocationImpl() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  )

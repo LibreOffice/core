@@ -170,7 +170,7 @@ namespace
             RestoreUnoCursors(aUpdater);
             RestoreShellCursors(aUpdater);
         }
-        virtual ~ContentIdxStoreImpl(){};
+        virtual ~ContentIdxStoreImpl() override {};
         private:
             inline void SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
             inline void RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater);

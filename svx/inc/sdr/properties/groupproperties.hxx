@@ -53,7 +53,7 @@ namespace sdr
             GroupProperties(const GroupProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~GroupProperties();
+            virtual ~GroupProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;

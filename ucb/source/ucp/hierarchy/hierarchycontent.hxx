@@ -196,7 +196,7 @@ public:
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
             const css::ucb::ContentInfo& Info );
 
-    virtual ~HierarchyContent();
+    virtual ~HierarchyContent() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )

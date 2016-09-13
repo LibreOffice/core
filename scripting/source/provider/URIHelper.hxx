@@ -61,7 +61,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext )
             throw( css::uno::RuntimeException );
 
-    virtual ~ScriptingFrameworkURIHelper();
+    virtual ~ScriptingFrameworkURIHelper() override;
 
     virtual void SAL_CALL
         initialize( const css::uno::Sequence < css::uno::Any > & args )

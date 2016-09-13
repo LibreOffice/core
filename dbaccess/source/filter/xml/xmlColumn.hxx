@@ -48,7 +48,7 @@ namespace dbaxml
                     ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
                     ,const css::uno::Reference< css::beans::XPropertySet >&    _xTable
                     );
-        virtual ~OXMLColumn();
+        virtual ~OXMLColumn() override;
         virtual void EndElement() override;
     };
 } // namespace dbaxml

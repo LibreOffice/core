@@ -73,7 +73,7 @@ protected:
 
 public:
     SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const OUString& rBaseURL, bool bNewDoc );
-    virtual ~SwCSS1Parser();
+    virtual ~SwCSS1Parser() override;
 
     virtual bool ParseStyleSheet( const OUString& rIn ) override;
 

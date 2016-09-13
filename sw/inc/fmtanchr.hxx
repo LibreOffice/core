@@ -46,7 +46,7 @@ class SW_DLLPUBLIC SwFormatAnchor: public SfxPoolItem
 public:
     SwFormatAnchor( RndStdIds eRnd = FLY_AT_PAGE, sal_uInt16 nPageNum = 0 );
     SwFormatAnchor( const SwFormatAnchor &rCpy );
-    virtual ~SwFormatAnchor();
+    virtual ~SwFormatAnchor() override;
 
     SwFormatAnchor &operator=( const SwFormatAnchor& );
 

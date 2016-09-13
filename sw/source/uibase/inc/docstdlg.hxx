@@ -31,7 +31,7 @@ class SwDocStatPage: public SfxTabPage
 {
 public:
     SwDocStatPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwDocStatPage();
+    virtual ~SwDocStatPage() override;
     virtual void dispose() override;
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);

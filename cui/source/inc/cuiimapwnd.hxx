@@ -45,7 +45,7 @@ public:
                                 const OUString& rURL, const OUString& rAlternativeText, const OUString& rDescription,
                                 const OUString& rTarget, const OUString& rName,
                                 TargetList& rTargetList );
-    virtual             ~URLDlg();
+    virtual             ~URLDlg() override;
     virtual void        dispose() override;
 
     OUString            GetURL() const { return m_pEdtURL->GetText(); }

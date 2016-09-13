@@ -36,7 +36,7 @@ private:
 public:
     XMLBasicExportFilter(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& rxHandler );
-    virtual ~XMLBasicExportFilter();
+    virtual ~XMLBasicExportFilter() override;
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument()

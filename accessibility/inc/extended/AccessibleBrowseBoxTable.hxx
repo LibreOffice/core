@@ -38,7 +38,7 @@ public:
         ::svt::IAccessibleTableProvider& rBrowseBox );
 
 protected:
-    virtual ~AccessibleBrowseBoxTable();
+    virtual ~AccessibleBrowseBoxTable() override;
 
 public:
     // XAccessibleContext

@@ -40,7 +40,7 @@ public:
         sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo);
-    virtual ~SpellDialogChildWindow();
+    virtual ~SpellDialogChildWindow() override;
 
     /** This method makes the one from the base class public so that
         it can be called from the view shell when one is created.

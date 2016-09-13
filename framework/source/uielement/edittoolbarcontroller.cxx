@@ -52,7 +52,7 @@ class EditControl : public Edit
 {
     public:
         EditControl( vcl::Window* pParent, WinBits nStyle, EditToolbarController* pEditToolbarController );
-        virtual ~EditControl();
+        virtual ~EditControl() override;
         virtual void dispose() override;
 
         virtual void Modify() override;
