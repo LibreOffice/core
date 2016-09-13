@@ -768,9 +768,12 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             if(SfxViewShell* pViewShell = GetSfxViewShell())
             {
                 if (pOtherShell)
+                {
                     // An other shell wants to know about our existing
                     // selection.
-                    SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelection);
+                    if (pViewShell != pOtherShell)
+                        SfxLokHelper::notifyOtherView(pViewShell, pOtherShell, LOK_CALLBACK_GRAPHIC_VIEW_SELECTION, "selection", sSelection);
+                }
                 else
                 {
                     // We have a new selection, so both pViewShell and the

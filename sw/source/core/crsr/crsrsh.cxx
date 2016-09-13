@@ -1192,12 +1192,15 @@ OUString SwCursorShell::getPageRectangles()
     return OUString::fromUtf8(comphelper::string::join("; ", v).getStr());
 }
 
-void SwCursorShell::NotifyCursor(SfxViewShell* pViewShell) const
+void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const
 {
     // Cursor position and visibility.
-    m_pVisibleCursor->SetPosAndShow(pViewShell);
+    m_pVisibleCursor->SetPosAndShow(pOtherShell);
     // Text selection.
-    m_pCurrentCursor->Show(pViewShell);
+    m_pCurrentCursor->Show(pOtherShell);
+    // Graphic selection.
+    auto pView = const_cast<SdrView*>(GetDrawView());
+    pView->AdjustMarkHdl(pOtherShell);
 }
 
 /// go to the next SSelection
