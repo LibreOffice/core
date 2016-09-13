@@ -1203,11 +1203,13 @@ void SvXMLNumFmtElementContext::EndElement()
         case XML_TOK_STYLE_YEAR:
 //! I18N doesn't provide SYSTEM or extended date information yet
             {
-                // Y after G (era) is replaced by E, also if we're switching to the
-                // other second known calendar for a locale.
+                // Y after G (era) is replaced by E for a secondary calendar.
+                // Do not replace for default calendar.
+                // Also replace Y by E if we're switching to the secondary
+                // calendar of a locale if it is known to implicitly use E.
                 bool bImplicitEC = (!sCalendar.isEmpty() &&
                         rParent.GetLocaleData().doesSecondaryCalendarUseEC( sCalendar));
-                if (rParent.HasEra() || bImplicitEC)
+                if (bImplicitEC || (!sCalendar.isEmpty() && rParent.HasEra()))
                 {
                     // If E or EE is the first format keyword, passing
                     // bImplicitEC=true suppresses the superfluous calendar
