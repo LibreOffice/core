@@ -586,7 +586,7 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
     default: // finish
         {
             SwMailMergeConfigItem* pMMConfig = m_pView->GetMailMergeConfigItem();
-            SwView* pSourceView = pMMConfig->GetSourceView();
+            SwView* pSourceView = pMMConfig ? pMMConfig->GetSourceView() : nullptr;
             if(pSourceView)
             {
                 pMMConfig->GetSourceView()->GetViewFrame()->GetFrame().Appear();
