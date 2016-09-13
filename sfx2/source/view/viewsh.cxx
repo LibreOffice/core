@@ -1533,6 +1533,15 @@ void SfxViewShell::NotifyOtherViews(int nType, const OString& rKey, const OStrin
     SfxLokHelper::notifyOtherViews(this, nType, rKey, rPayload);
 }
 
+void SfxViewShell::NotifyOtherView(OutlinerViewShell* pOther, int nType, const OString& rKey, const OString& rPayload)
+{
+    auto pOtherShell = dynamic_cast<SfxViewShell*>(pOther);
+    if (!pOtherShell)
+        return;
+
+    SfxLokHelper::notifyOtherView(this, pOtherShell, nType, rKey, rPayload);
+}
+
 void SfxViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("sfxViewShell"));

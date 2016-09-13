@@ -80,6 +80,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pPointer            = nullptr;
     pBackgroundColor    = nullptr;
     mpViewShell = nullptr;
+    mpOtherShell = nullptr;
     nScrollDiffX        = 0;
     nExtraCursorFlags   = 0;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
@@ -120,6 +121,11 @@ void ImpEditView::SetBackgroundColor( const Color& rColor )
 void ImpEditView::RegisterViewShell(OutlinerViewShell* pViewShell)
 {
     mpViewShell = pViewShell;
+}
+
+void ImpEditView::RegisterOtherShell(OutlinerViewShell* pOtherShell)
+{
+    mpOtherShell = pOtherShell;
 }
 
 const OutlinerViewShell* ImpEditView::GetViewShell() const
@@ -1005,8 +1011,17 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             aRect.setWidth(0);
 
             OString sRect = aRect.toString();
-            mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
-            mpViewShell->NotifyOtherViews(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+            if (mpOtherShell)
+            {
+                // An other shell wants to know about our existing cursor.
+                if (mpViewShell != mpOtherShell)
+                    mpViewShell->NotifyOtherView(mpOtherShell, LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+            }
+            else
+            {
+                mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+                mpViewShell->NotifyOtherViews(LOK_CALLBACK_INVALIDATE_VIEW_CURSOR, "rectangle", sRect);
+            }
         }
 
         CursorDirection nCursorDir = CursorDirection::NONE;
