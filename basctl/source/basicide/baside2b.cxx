@@ -1348,7 +1348,7 @@ void EditorWindow::DestroyProgress()
 void EditorWindow::ForceSyntaxTimeout()
 {
     aSyntaxIdle.Stop();
-    aSyntaxIdle.GetIdleHdl().Call(&aSyntaxIdle);
+    aSyntaxIdle.Invoke();
 }
 
 // BreakPointWindow

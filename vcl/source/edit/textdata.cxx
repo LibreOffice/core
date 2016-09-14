@@ -242,7 +242,7 @@ void IdleFormatter::DoIdleFormat( TextView* pV, sal_uInt16 nMaxRestarts )
     if ( mnRestarts > nMaxRestarts )
     {
         mnRestarts = 0;
-        ((Link<Idle *, void>&)GetIdleHdl()).Call( this );
+        Invoke();
     }
     else
     {
@@ -256,7 +256,7 @@ void IdleFormatter::ForceTimeout()
     {
         Stop();
         mnRestarts = 0;
-        ((Link<Idle *, void>&)GetIdleHdl()).Call( this );
+        Invoke();
     }
 }
 

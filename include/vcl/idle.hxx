@@ -20,13 +20,19 @@
 #ifndef INCLUDED_VCL_IDLE_HXX
 #define INCLUDED_VCL_IDLE_HXX
 
-#include <tools/link.hxx>
-#include <vcl/scheduler.hxx>
+#include <vcl/timer.hxx>
 
-class VCL_DLLPUBLIC Idle : public Task
+/**
+ * An idle is a timer to be scheduled immediately.
+ *
+ * It's - more or less - just a convenience class.
+ */
+class VCL_DLLPUBLIC Idle : public Timer
 {
-protected:
-    Link<Idle *, void> maIdleHdl;          // Callback Link
+private:
+    // Delete all timeout specific functions, we don't want in an Idle
+    void          SetTimeout( sal_uInt64 nTimeoutMs ) = delete;
+    sal_uInt64    GetTimeout() const = delete;
 
 protected:
     virtual bool ReadyForSchedule( bool bIdle, sal_uInt64 nTimeNow ) const override;
@@ -35,17 +41,22 @@ protected:
 
 public:
     Idle( const sal_Char *pDebugName = nullptr );
-    Idle( const Idle& rIdle );
 
-    virtual void    Start() override;
+    virtual void  Start() override;
 
-    /// Make it possible to associate a callback with this idle handler
-    /// of course, you can also sub-class and override 'Invoke'
-    void            SetIdleHdl( const Link<Idle *, void>& rLink ) { maIdleHdl = rLink; }
-    const Link<Idle *, void>& GetIdleHdl() const { return maIdleHdl; }
-    virtual void Invoke() override;
-    Idle&           operator=( const Idle& rIdle );
+    /**
+     * Convenience function for more readable code
+     *
+     * TODO: actually rename it and it's instances to SetInvokeHandler
+     */
+    inline void   SetIdleHdl( const Link<Idle *, void>& rLink );
 };
+
+inline void Idle::SetIdleHdl( const Link<Idle*, void> &rLink )
+{
+    SetInvokeHandler( Link<Timer*, void>( rLink.GetInstance(),
+        reinterpret_cast< Link<Timer*, void>::Stub* >( rLink.GetFunction()) ) );
+}
 
 #endif // INCLUDED_VCL_IDLE_HXX
 

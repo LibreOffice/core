@@ -798,7 +798,7 @@ void IdleFormattter::ForceTimeout()
     if ( IsActive() )
     {
         Stop();
-        ((Link<Idle *, void>&)GetIdleHdl()).Call( this );
+        Invoke();
     }
 }
 
