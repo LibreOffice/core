@@ -584,7 +584,7 @@ namespace cppcanvas
                             s.ReadInt32( pathLength );
                             SAL_INFO("cppcanvas.emf", "EMF+\tpath length: " << pathLength);
 
-                            sal_Size pos = s.Tell ();
+                            sal_uInt64 const pos = s.Tell ();
 
                             sal_uInt32 pathHeader;
                             sal_Int32 pathPoints, pathFlags;
@@ -1068,7 +1068,7 @@ namespace cppcanvas
                 {
                     s.ReadInt32( customStartCapLen );
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomStartCapLen: " << customStartCapLen);
-                    sal_Size pos = s.Tell();
+                    sal_uInt64 const pos = s.Tell();
 
                     customStartCap = new EMFPCustomLineCap();
                     customStartCap->Read(s, rR);
@@ -1083,7 +1083,7 @@ namespace cppcanvas
                 {
                     s.ReadInt32( customEndCapLen );
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomEndCapLen: " << customEndCapLen);
-                    sal_Size pos = s.Tell();
+                    sal_uInt64 const pos = s.Tell();
 
                     customEndCap = new EMFPCustomLineCap();
                     customEndCap->Read(s, rR);
@@ -1822,7 +1822,7 @@ namespace cppcanvas
             while (length >= 12) {
                 sal_uInt16 type, flags;
                 sal_uInt32 size, dataSize;
-                sal_Size next;
+                sal_uInt64 next;
 
                 rMF.ReadUInt16( type ).ReadUInt16( flags ).ReadUInt32( size ).ReadUInt32( dataSize );
 

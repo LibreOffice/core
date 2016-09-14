@@ -410,7 +410,7 @@ ScRange XclImpDrawObjBase::GetUsedArea( SCTAB nScTab ) const
     return aScUsedArea;
 }
 
-sal_Size XclImpDrawObjBase::GetProgressSize() const
+std::size_t XclImpDrawObjBase::GetProgressSize() const
 {
     return DoGetProgressSize();
 }
@@ -790,7 +790,7 @@ void XclImpDrawObjBase::DoReadObj8SubRec( XclImpStream&, sal_uInt16, sal_uInt16 
 {
 }
 
-sal_Size XclImpDrawObjBase::DoGetProgressSize() const
+std::size_t XclImpDrawObjBase::DoGetProgressSize() const
 {
     return 1;
 }
@@ -886,7 +886,7 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
         nSubRecSize = rStrm.ReaduInt16();
         rStrm.PushPosition();
         // sometimes the last subrecord has an invalid length (OBJLBSDATA) -> min()
-        nSubRecSize = static_cast< sal_uInt16 >( ::std::min< sal_Size >( nSubRecSize, rStrm.GetRecLeft() ) );
+        nSubRecSize = static_cast< sal_uInt16 >( ::std::min< std::size_t >( nSubRecSize, rStrm.GetRecLeft() ) );
 
         switch( nSubRecId )
         {
@@ -952,9 +952,9 @@ void XclImpDrawObjVector::InsertGrouped( XclImpDrawObjRef const & xDrawObj )
     mObjs.push_back( xDrawObj );
 }
 
-sal_Size XclImpDrawObjVector::GetProgressSize() const
+std::size_t XclImpDrawObjVector::GetProgressSize() const
 {
-    sal_Size nProgressSize = 0;
+    std::size_t nProgressSize = 0;
     for( ::std::vector< XclImpDrawObjRef >::const_iterator aIt = mObjs.begin(), aEnd = mObjs.end(); aIt != aEnd; ++aIt )
         nProgressSize += (*aIt)->GetProgressSize();
     return nProgressSize;
@@ -1006,7 +1006,7 @@ void XclImpGroupObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_u
     ReadMacro5( rStrm, nMacroSize );
 }
 
-sal_Size XclImpGroupObj::DoGetProgressSize() const
+std::size_t XclImpGroupObj::DoGetProgressSize() const
 {
     return XclImpDrawObjBase::DoGetProgressSize() + maChildren.GetProgressSize();
 }
@@ -1681,7 +1681,7 @@ void XclImpChartObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId
     }
 }
 
-sal_Size XclImpChartObj::DoGetProgressSize() const
+std::size_t XclImpChartObj::DoGetProgressSize() const
 {
     return mxChart ? mxChart->GetProgressSize() : 1;
 }
@@ -2657,9 +2657,9 @@ XclImpListBoxObj::XclImpListBoxObj( const XclImpRoot& rRoot ) :
 {
 }
 
-void XclImpListBoxObj::ReadFullLbsData( XclImpStream& rStrm, sal_Size nRecLeft )
+void XclImpListBoxObj::ReadFullLbsData( XclImpStream& rStrm, std::size_t nRecLeft )
 {
-    sal_Size nRecEnd = rStrm.GetRecPos() + nRecLeft;
+    std::size_t nRecEnd = rStrm.GetRecPos() + nRecLeft;
     ReadLbsData( rStrm );
     OSL_ENSURE( (rStrm.GetRecPos() == nRecEnd) || (rStrm.GetRecPos() + mnEntryCount == nRecEnd),
         "XclImpListBoxObj::ReadFullLbsData - invalid size of OBJLBSDATA record" );
@@ -3037,7 +3037,7 @@ void XclImpPictureObj::ReadFlags8( XclImpStream& rStrm )
 
 void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
 {
-    sal_Size nLinkEnd = rStrm.GetRecPos() + nLinkSize;
+    std::size_t nLinkEnd = rStrm.GetRecPos() + nLinkSize;
     if( nLinkSize >= 6 )
     {
         sal_uInt16 nFmlaSize;
@@ -3120,8 +3120,8 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
         if( rStrm.GetRecLeft() <= 8 ) return;
 
         // position and size of control data in 'Ctls' stream
-        mnCtlsStrmPos = static_cast< sal_Size >( rStrm.ReaduInt32() );
-        mnCtlsStrmSize = static_cast< sal_Size >( rStrm.ReaduInt32() );
+        mnCtlsStrmPos = static_cast< std::size_t >( rStrm.ReaduInt32() );
+        mnCtlsStrmSize = static_cast< std::size_t >( rStrm.ReaduInt32() );
 
         if( rStrm.GetRecLeft() <= 8 ) return;
 
@@ -3285,14 +3285,14 @@ OUString XclImpObjectManager::GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId 
     return sOleName;
 }
 
-void XclImpDffConverter::StartProgressBar( sal_Size nProgressSize )
+void XclImpDffConverter::StartProgressBar( std::size_t nProgressSize )
 {
     mxProgress.reset( new ScfProgressBar( GetDocShell(), STR_PROGRESS_CALCULATING ) );
     mxProgress->AddSegment( nProgressSize );
     mxProgress->Activate();
 }
 
-void XclImpDffConverter::Progress( sal_Size nDelta )
+void XclImpDffConverter::Progress( std::size_t nDelta )
 {
     OSL_ENSURE( mxProgress, "XclImpDffConverter::Progress - invalid call, no progress bar" );
     mxProgress->Progress( nDelta );
@@ -3689,7 +3689,7 @@ OUString XclImpDffConverter::ReadHlinkProperty( SvStream& rDffStrm ) const
 
 void XclImpDffConverter::ProcessDgContainer( SvStream& rDffStrm, const DffRecordHeader& rDgHeader )
 {
-    sal_Size nEndPos = rDgHeader.GetRecEndFilePos();
+    std::size_t nEndPos = rDgHeader.GetRecEndFilePos();
     while( rDffStrm.Tell() < nEndPos )
     {
         DffRecordHeader aHeader;
@@ -3718,7 +3718,7 @@ void XclImpDffConverter::ProcessDgContainer( SvStream& rDffStrm, const DffRecord
 
 void XclImpDffConverter::ProcessShGrContainer( SvStream& rDffStrm, const DffRecordHeader& rShGrHeader )
 {
-    sal_Size nEndPos = rShGrHeader.GetRecEndFilePos();
+    std::size_t nEndPos = rShGrHeader.GetRecEndFilePos();
     while( rDffStrm.Tell() < nEndPos )
     {
         DffRecordHeader aHeader;
@@ -3951,9 +3951,9 @@ void XclImpDrawing::SetSkipObj( sal_uInt16 nObjId )
     maSkipObjs.push_back( nObjId );
 }
 
-sal_Size XclImpDrawing::GetProgressSize() const
+std::size_t XclImpDrawing::GetProgressSize() const
 {
-    sal_Size nProgressSize = maRawObjs.GetProgressSize();
+    std::size_t nProgressSize = maRawObjs.GetProgressSize();
     for( XclImpObjMap::const_iterator aIt = maObjMap.begin(), aEnd = maObjMap.end(); aIt != aEnd; ++aIt )
         nProgressSize += aIt->second->GetProgressSize();
     return nProgressSize;
@@ -4251,7 +4251,7 @@ void XclImpObjectManager::ConvertObjects()
         return;
 
     // get total progress bar size for all sheet drawing managers
-    sal_Size nProgressSize = 0;
+    std::size_t nProgressSize = 0;
     for( XclImpSheetDrawingMap::iterator aIt = maSheetDrawings.begin(), aEnd = maSheetDrawings.end(); aIt != aEnd; ++aIt )
         nProgressSize += aIt->second->GetProgressSize();
     // nothing to do if progress bar is zero (no objects present)

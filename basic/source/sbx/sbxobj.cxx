@@ -603,9 +603,9 @@ bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     OUString aDfltProp;
     aClassName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_ASCII_US);
     aDfltProp = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_ASCII_US);
-    sal_Size nPos = rStrm.Tell();
+    sal_uInt64 nPos = rStrm.Tell();
     rStrm.ReadUInt32( nSize );
-    sal_Size nNewPos = rStrm.Tell();
+    sal_uInt64 const nNewPos = rStrm.Tell();
     nPos += nSize;
     DBG_ASSERT( nPos >= nNewPos, "SBX: Loaded too much data" );
     if( nPos != nNewPos )
@@ -640,9 +640,9 @@ bool SbxObject::StoreData( SvStream& rStrm ) const
     }
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aClassName, RTL_TEXTENCODING_ASCII_US);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aDfltProp, RTL_TEXTENCODING_ASCII_US);
-    sal_Size nPos = rStrm.Tell();
+    sal_uInt64 const nPos = rStrm.Tell();
     rStrm.WriteUInt32( 0 );
-    sal_Size nNew = rStrm.Tell();
+    sal_uInt64 const nNew = rStrm.Tell();
     rStrm.Seek( nPos );
     rStrm.WriteUInt32( nNew - nPos );
     rStrm.Seek( nNew );

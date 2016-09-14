@@ -133,9 +133,9 @@ public:
     /** Returns the byte count the header will take on export. */
     sal_uInt16          GetHeaderSize() const;
     /** Returns the byte count the character buffer will take on export. */
-    sal_Size            GetBufferSize() const;
+    std::size_t         GetBufferSize() const;
     /** Returns the byte count the whole string will take on export. */
-    sal_Size            GetSize() const;
+    std::size_t         GetSize() const;
 
     /** Returns the specified character from the (already encoded) string. */
     sal_uInt16          GetChar( sal_uInt16 nCharIdx ) const;

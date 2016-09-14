@@ -87,7 +87,7 @@ public:
     inline const XclExpRoot& GetRoot() const { return mrRoot; }
 
     /** Starts a new record: writes header data, stores calculated record size. */
-    void                StartRecord( sal_uInt16 nRecId, sal_Size nRecSize );
+    void                StartRecord( sal_uInt16 nRecId, std::size_t nRecSize );
     /** Checks and corrects real record length. Must be called every time a record is finished. */
     void                EndRecord();
 
@@ -107,11 +107,11 @@ public:
     XclExpStream& operator<<( double fValue );
 
     /** Writes nBytes bytes from memory. */
-    sal_Size            Write( const void* pData, sal_Size nBytes );
+    std::size_t         Write( const void* pData, std::size_t nBytes );
     /** Writes a sequence of nBytes zero bytes (respects slice setting). */
-    void                WriteZeroBytes( sal_Size nBytes );
+    void                WriteZeroBytes( std::size_t nBytes );
 
-    void                WriteZeroBytesToRecord( sal_Size nBytes );
+    void                WriteZeroBytesToRecord( std::size_t nBytes );
 
     /** Copies nBytes bytes from current position of the stream rInStrm.
         @descr  Omitting the second parameter means: read to end of stream. */
@@ -153,7 +153,7 @@ private:
     /** Rewrites correct record length, if different from calculated. */
     void                UpdateRecSize();
     /** Recalculates mnCurrSize and mnSliceSize. */
-    void                UpdateSizeVars( sal_Size nSize );
+    void                UpdateSizeVars( std::size_t nSize );
     /** Writes CONTINUE header, internal setup. */
     void                StartContinue();
     /** Refreshes counter vars, creates CONTINUE records. */
@@ -163,7 +163,7 @@ private:
     sal_uInt16          PrepareWrite();
 
     /** Writes a raw sequence of zero bytes. */
-    void                WriteRawZeroBytes( sal_Size nBytes );
+    void                WriteRawZeroBytes( std::size_t nBytes );
 
 private:
     SvStream&           mrStrm;         /// Reference to the system output stream.
@@ -180,10 +180,10 @@ private:
     sal_uInt16          mnHeaderSize;   /// Record size written in last record header.
     sal_uInt16          mnCurrSize;     /// Count of bytes already written in current record.
     sal_uInt16          mnSliceSize;    /// Count of bytes already written in current slice.
-    sal_Size            mnPredictSize;   /// Predicted size received from calling function.
+    std::size_t         mnPredictSize;   /// Predicted size received from calling function.
 
                         // stream position data
-    sal_Size            mnLastSizePos;  /// Stream position of size field in current header.
+    std::size_t         mnLastSizePos;  /// Stream position of size field in current header.
     bool                mbInRec;        /// true = currently writing inside of a record.
 };
 
@@ -215,8 +215,8 @@ public:
 private:
     void Init( const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
 
-    static sal_uInt32 GetBlockPos( sal_Size nStrmPos );
-    static sal_uInt16 GetOffsetInBlock( sal_Size nStrmPos );
+    static sal_uInt32 GetBlockPos( std::size_t nStrmPos );
+    static sal_uInt16 GetOffsetInBlock( std::size_t nStrmPos );
 
 private:
     ::msfilter::MSCodec_Std97 maCodec;      /// Crypto algorithm implementation.
