@@ -40,9 +40,8 @@ void SfxLokHelper::destroyView(int nId)
     unsigned nViewShellId = nId;
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
 
-    for (std::size_t i = 0; i < rViewArr.size(); ++i)
+    for (SfxViewShell* pViewShell : rViewArr)
     {
-        SfxViewShell* pViewShell = rViewArr[i];
         if (pViewShell->GetViewShellId() == nViewShellId)
         {
             SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
@@ -58,9 +57,8 @@ void SfxLokHelper::setView(int nId)
     unsigned nViewShellId = nId;
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
 
-    for (std::size_t i = 0; i < rViewArr.size(); ++i)
+    for (SfxViewShell* pViewShell : rViewArr)
     {
-        SfxViewShell* pViewShell = rViewArr[i];
         if (pViewShell->GetViewShellId() == nViewShellId)
         {
             if (pViewShell == SfxViewShell::Current())
