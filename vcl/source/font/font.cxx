@@ -124,7 +124,7 @@ void Font::SetFontSize( const Size& rSize )
 
 void Font::SetFamily( FontFamily eFamily )
 {
-    if( mpImplFont->GetFamilyType() != eFamily )
+    if( mpImplFont->GetFamilyTypeNoAsk() != eFamily )
         mpImplFont->SetFamilyType( eFamily );
 }
 
