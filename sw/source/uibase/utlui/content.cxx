@@ -1097,6 +1097,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
     VclPtrInstance<PopupMenu> pSubPop2;
     VclPtrInstance<PopupMenu> pSubPop3;
     VclPtrInstance<PopupMenu> pSubPop4; // Edit
+    bool bSubPop4 = false;
 
     for(int i = 1; i <= MAXLEVEL; ++i)
     {
@@ -1172,7 +1173,6 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
 
         if(!bReadonly && (bEditable || bDeletable))
         {
-            bool bSubPop4 = false;
             if(ContentTypeId::INDEX == nContentType)
             {
                 bSubPop4 = true;
@@ -1247,8 +1247,9 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
     pPop->SetPopupMenu( 1, pSubPop1 );
     pPop->SetPopupMenu( 2, pSubPop2 );
     pPop->SetPopupMenu( 3, pSubPop3 );
+    if (!bSubPop4)
+        pSubPop4.disposeAndClear();
     return pPop;
-
 }
 
 // Indentation for outlines (and sections)
