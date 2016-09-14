@@ -914,6 +914,7 @@ static gboolean postDocumentLoad(gpointer pData)
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
     priv->m_nViewId = priv->m_pDocument->pClass->getView(priv->m_pDocument);
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
+    priv->m_pDocument->pClass->requestOtherViewCursors(priv->m_pDocument);
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     priv->m_nParts = priv->m_pDocument->pClass->getParts(priv->m_pDocument);
     aGuard.unlock();

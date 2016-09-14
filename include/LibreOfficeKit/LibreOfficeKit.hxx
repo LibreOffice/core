@@ -435,6 +435,14 @@ public:
                                             nTileWidth, nTileHeight);
     }
 
+    /**
+     * Request cursor position to other views.
+     */
+    inline void requestOtherViewCursors()
+    {
+        return mpDoc->pClass->requestOtherViewCursors(mpDoc);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
@@ -558,6 +566,7 @@ public:
     {
         return mpThis->pClass->getVersionInfo(mpThis);
     }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

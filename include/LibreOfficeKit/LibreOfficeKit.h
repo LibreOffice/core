@@ -244,6 +244,10 @@ struct _LibreOfficeKitDocumentClass
                            const int nTileWidth,
                            const int nTileHeight);
 
+    /// Request cursor position to other views.
+    /// @see lok::Document::requestOtherViewCursors().
+    void (*requestOtherViewCursors) (LibreOfficeKitDocument* pThis);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

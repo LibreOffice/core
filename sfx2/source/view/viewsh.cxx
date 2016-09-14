@@ -1604,11 +1604,8 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
     return pImp->m_xAccExec->execute(aKey.GetKeyCode());
 }
 
-void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCallback, void* pData)
+void SfxViewShell::requestOtherViewCursors()
 {
-    pImp->m_pLibreOfficeKitViewCallback = pCallback;
-    pImp->m_pLibreOfficeKitViewData = pData;
-
     // Ask other views to tell us about their cursors.
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
@@ -1616,6 +1613,12 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
         pViewShell->NotifyCursor(this);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
+}
+
+void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCallback, void* pData)
+{
+    pImp->m_pLibreOfficeKitViewCallback = pCallback;
+    pImp->m_pLibreOfficeKitViewData = pData;
 }
 
 void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const

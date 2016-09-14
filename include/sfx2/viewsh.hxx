@@ -323,6 +323,8 @@ public:
     SAL_DLLPRIVATE void TakeFrameOwnership_Impl();
     SAL_DLLPRIVATE bool ExecKey_Impl(const KeyEvent& aKey);
 
+    /// Request cursor position of other views.
+    void requestOtherViewCursors();
     /// The actual per-view implementation of lok::Document::registerCallback().
     void registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Invokes the registered callback, if there are any.

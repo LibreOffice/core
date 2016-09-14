@@ -444,6 +444,7 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           int* pFontWidth,
                           int* pFontHeight);
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
+static void doc_requestOtherViewCursors(LibreOfficeKitDocument* pThis);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
@@ -489,6 +490,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
         m_pDocumentClass->renderFont = doc_renderFont;
         m_pDocumentClass->getPartHash = doc_getPartHash;
+        m_pDocumentClass->requestOtherViewCursors = doc_requestOtherViewCursors;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -1366,6 +1368,18 @@ static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
     strcpy(pMemory, aString.getStr());
     return pMemory;
 
+}
+
+static void doc_requestOtherViewCursors(LibreOfficeKitDocument* /*pThis*/)
+{
+    SolarMutexGuard aGuard;
+
+    int nView = SfxLokHelper::getView();
+    if (nView < 0)
+        return;
+
+    if (SfxViewShell* pViewShell = SfxViewFrame::Current()->GetViewShell())
+        pViewShell->requestOtherViewCursors();
 }
 
 static void doc_setPartMode(LibreOfficeKitDocument* pThis,
