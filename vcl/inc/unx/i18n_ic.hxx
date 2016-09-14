@@ -67,7 +67,7 @@ public:
     void HandleDestroyIM();
 
     void EndExtTextInput( EndExtTextInputFlags nFlags );        // unused
-    void  CommitKeyEvent( sal_Unicode* pText, sal_Size nLength );
+    void  CommitKeyEvent( sal_Unicode* pText, std::size_t nLength );
     int  UpdateSpotLocation();
 
     void Map( SalFrame *pFrame );

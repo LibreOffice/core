@@ -2873,8 +2873,8 @@ void SwWW8ImplReader::PostProcessAttrs()
  So a encoding converter that on an undefined character attempts to
  convert from 1252 on the undefined character
 */
-sal_Size Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
-    sal_Char *pIn, sal_Size nInLen, sal_Unicode *pOut, sal_Size nOutLen)
+std::size_t Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
+    sal_Char *pIn, std::size_t nInLen, sal_Unicode *pOut, std::size_t nOutLen)
 {
     const sal_uInt32 nFlags =
         RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
@@ -2888,8 +2888,8 @@ sal_Size Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
         RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE |
         RTL_TEXTTOUNICODE_FLAGS_FLUSH;
 
-    sal_Size nDestChars=0;
-    sal_Size nConverted=0;
+    std::size_t nDestChars=0;
+    std::size_t nConverted=0;
 
     do
     {
@@ -2985,7 +2985,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         return true;
     }
 
-    sal_Size nAvailableStrLen = m_pStrm->remainingSize() / (m_bIsUnicode ? 2 : 1);
+    std::size_t nAvailableStrLen = m_pStrm->remainingSize() / (m_bIsUnicode ? 2 : 1);
     OSL_ENSURE(nAvailableStrLen, "Document claimed to have more text than available");
     if (!nAvailableStrLen)
     {
@@ -2994,7 +2994,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         return true;
     }
 
-    sal_Int32 nValidStrLen = std::min<sal_Size>(nRequestedStrLen, nAvailableStrLen);
+    sal_Int32 nValidStrLen = std::min<std::size_t>(nRequestedStrLen, nAvailableStrLen);
 
     // Reset Unicode flag and correct FilePos if needed.
     // Note: Seek is not expensive, as we're checking inline whether or not
@@ -3500,7 +3500,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
     // Reset Unicode flag and correct FilePos if needed.
     // Note: Seek is not expensive, as we're checking inline whether or not
     // the correct FilePos has already been reached.
-    sal_Size nRequestedPos = m_pSBase->WW8Cp2Fc(nCpOfs+nPosCp, &m_bIsUnicode);
+    std::size_t nRequestedPos = m_pSBase->WW8Cp2Fc(nCpOfs+nPosCp, &m_bIsUnicode);
     if (!checkSeek(*m_pStrm, nRequestedPos))
         return false;
 
@@ -5479,13 +5479,13 @@ namespace
     void DecryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
     {
         rIn.Seek(STREAM_SEEK_TO_END);
-        const sal_Size nLen = rIn.Tell();
+        const std::size_t nLen = rIn.Tell();
         rIn.Seek(0);
 
         sal_uInt8 in[WW_BLOCKSIZE];
-        for (sal_Size nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
+        for (std::size_t nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
         {
-            sal_Size nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
+            std::size_t nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
             nBS = rIn.ReadBytes(in, nBS);
             rCtx.InitCipher(nBlock);
             rCtx.Decode(in, nBS, in, nBS);
@@ -5495,18 +5495,18 @@ namespace
 
     void DecryptXOR(msfilter::MSCodec_XorWord95 &rCtx, SvStream &rIn, SvStream &rOut)
     {
-        sal_Size nSt = rIn.Tell();
+        std::size_t nSt = rIn.Tell();
         rIn.Seek(STREAM_SEEK_TO_END);
-        sal_Size nLen = rIn.Tell();
+        std::size_t nLen = rIn.Tell();
         rIn.Seek(nSt);
 
         rCtx.InitCipher();
         rCtx.Skip(nSt);
 
         sal_uInt8 in[0x4096];
-        for (sal_Size nI = nSt; nI < nLen; nI += 0x4096)
+        for (std::size_t nI = nSt; nI < nLen; nI += 0x4096)
         {
-            sal_Size nBS = (nLen - nI > 0x4096 ) ? 0x4096 : nLen - nI;
+            std::size_t nBS = (nLen - nI > 0x4096 ) ? 0x4096 : nLen - nI;
             nBS = rIn.ReadBytes(in, nBS);
             rCtx.Decode(in, nBS);
             rOut.WriteBytes(in, nBS);
@@ -5765,7 +5765,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         pTempMain = MakeTemp(aDecryptMain);
 
                         m_pStrm->Seek(0);
-                        sal_Size nUnencryptedHdr = 0x44;
+                        std::size_t nUnencryptedHdr = 0x44;
                         sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
                         nUnencryptedHdr = m_pStrm->ReadBytes(pIn, nUnencryptedHdr);
 

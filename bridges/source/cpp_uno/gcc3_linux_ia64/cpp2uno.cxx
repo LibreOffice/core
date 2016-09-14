@@ -601,7 +601,7 @@ bridges::cpp_uno::shared::VtableFactory::Slot * bridges::cpp_uno::shared::Vtable
 }
 
 
-sal_Size bridges::cpp_uno::shared::VtableFactory::getBlockSize(
+std::size_t bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
     return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;

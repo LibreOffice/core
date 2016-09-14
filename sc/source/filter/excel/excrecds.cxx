@@ -91,20 +91,20 @@ const sal_uInt8     ExcDummy_00::pMyData[] = {
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
 };
-const sal_Size ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
+const std::size_t ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
 
 //-------------------------------------------------------- class ExcDummy_04x -
 const sal_uInt8     ExcDummy_040::pMyData[] = {
     0x40, 0x00, 0x02, 0x00, 0x00, 0x00,                     // BACKUP
     0x8d, 0x00, 0x02, 0x00, 0x00, 0x00,                     // HIDEOBJ
 };
-const sal_Size ExcDummy_040::nMyLen = sizeof( ExcDummy_040::pMyData );
+const std::size_t ExcDummy_040::nMyLen = sizeof( ExcDummy_040::pMyData );
 
 const sal_uInt8     ExcDummy_041::pMyData[] = {
     0x0e, 0x00, 0x02, 0x00, 0x01, 0x00,                     // PRECISION
     0xda, 0x00, 0x02, 0x00, 0x00, 0x00                      // BOOKBOOL
 };
-const sal_Size ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
+const std::size_t ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
 
 //-------------------------------------------------------- class ExcDummy_02a -
 const sal_uInt8      ExcDummy_02a::pMyData[] = {
@@ -116,7 +116,7 @@ const sal_uInt8      ExcDummy_02a::pMyData[] = {
     0x62, 0x50, 0x3f,
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      // SAVERECALC
 };
-const sal_Size ExcDummy_02a::nMyLen = sizeof( ExcDummy_02a::pMyData );
+const std::size_t ExcDummy_02a::nMyLen = sizeof( ExcDummy_02a::pMyData );
 
 //----------------------------------------------------------- class ExcRecord -
 
@@ -150,7 +150,7 @@ sal_uInt16 ExcEmptyRec::GetNum() const
     return 0;
 }
 
-sal_Size ExcEmptyRec::GetLen() const
+std::size_t ExcEmptyRec::GetLen() const
 {
     return 0;
 }
@@ -174,7 +174,7 @@ void ExcBoolRecord::SaveCont( XclExpStream& rStrm )
     rStrm << (sal_uInt16)(bVal ? 0x0001 : 0x0000);
 }
 
-sal_Size ExcBoolRecord::GetLen() const
+std::size_t ExcBoolRecord::GetLen() const
 {
     return 2;
 }
@@ -207,7 +207,7 @@ sal_uInt16 ExcBof::GetNum() const
     return 0x0809;
 }
 
-sal_Size ExcBof::GetLen() const
+std::size_t ExcBof::GetLen() const
 {
     return 8;
 }
@@ -230,7 +230,7 @@ sal_uInt16 ExcBofW::GetNum() const
     return 0x0809;
 }
 
-sal_Size ExcBofW::GetLen() const
+std::size_t ExcBofW::GetLen() const
 {
     return 8;
 }
@@ -242,14 +242,14 @@ sal_uInt16 ExcEof::GetNum() const
     return 0x000A;
 }
 
-sal_Size ExcEof::GetLen() const
+std::size_t ExcEof::GetLen() const
 {
     return 0;
 }
 
 //--------------------------------------------------------- class ExcDummy_00 -
 
-sal_Size ExcDummy_00::GetLen() const
+std::size_t ExcDummy_00::GetLen() const
 {
     return nMyLen;
 }
@@ -261,7 +261,7 @@ const sal_uInt8* ExcDummy_00::GetData() const
 
 //-------------------------------------------------------- class ExcDummy_04x -
 
-sal_Size ExcDummy_040::GetLen() const
+std::size_t ExcDummy_040::GetLen() const
 {
     return nMyLen;
 }
@@ -271,7 +271,7 @@ const sal_uInt8* ExcDummy_040::GetData() const
     return pMyData;
 }
 
-sal_Size ExcDummy_041::GetLen() const
+std::size_t ExcDummy_041::GetLen() const
 {
     return nMyLen;
 }
@@ -361,14 +361,14 @@ void ExcBundlesheet::SaveCont( XclExpStream& rStrm )
     rStrm.WriteByteString(aName);             // 8 bit length, max 255 chars
 }
 
-sal_Size ExcBundlesheet::GetLen() const
+std::size_t ExcBundlesheet::GetLen() const
 {
     return 7 + std::min( aName.getLength(), (sal_Int32) 255 );
 }
 
 //--------------------------------------------------------- class ExcDummy_02 -
 
-sal_Size ExcDummy_02a::GetLen() const
+std::size_t ExcDummy_02a::GetLen() const
 {
     return nMyLen;
 }
@@ -571,7 +571,7 @@ ExcFilterCondition::~ExcFilterCondition()
     delete pText;
 }
 
-sal_Size ExcFilterCondition::GetTextBytes() const
+std::size_t ExcFilterCondition::GetTextBytes() const
 {
     return pText ? (1 + pText->GetBufferSize()) : 0;
 }

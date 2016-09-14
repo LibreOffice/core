@@ -65,7 +65,8 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
 
         SvMemoryStream* pStream = ( nT == SotClipboardFormatId::EDITENGINE ) ? &GetStream() : &GetRTFStream();
         pStream->Seek( STREAM_SEEK_TO_END );
-        sal_Size nLen = pStream->Tell();
+        sal_Int32 nLen = pStream->Tell();
+        if (nLen < 0) { abort(); }
         pStream->Seek(0);
 
         uno::Sequence< sal_Int8 > aSeq( nLen );

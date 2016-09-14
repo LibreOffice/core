@@ -74,7 +74,7 @@ blobs to avoid needlessly complicating the Calc logic.
 struct AutoFormatSwBlob
 {
     sal_uInt8 *pData;
-    sal_Size size;
+    std::size_t size;
 
     AutoFormatSwBlob() : pData(nullptr), size(0)
     {

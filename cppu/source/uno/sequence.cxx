@@ -42,7 +42,7 @@ namespace cppu
 
 
 static inline uno_Sequence * reallocSeq(
-    uno_Sequence * pReallocate, sal_Size nElementSize, sal_Int32 nElements )
+    uno_Sequence * pReallocate, std::size_t nElementSize, sal_Int32 nElements )
 {
     OSL_ASSERT( nElements >= 0 );
     uno_Sequence * pNew = nullptr;

@@ -405,8 +405,8 @@ class UCBStorageStream_Impl : public SvRefBase, public SvStream
                                 virtual ~UCBStorageStream_Impl() override;
 public:
 
-    virtual sal_uLong           GetData( void* pData, sal_uLong nSize ) override;
-    virtual sal_uLong           PutData( const void* pData, sal_uLong nSize ) override;
+    virtual std::size_t         GetData(void* pData, std::size_t nSize) override;
+    virtual std::size_t         PutData(const void* pData, std::size_t nSize) override;
     virtual sal_uInt64          SeekPos( sal_uInt64 nPos ) override;
     virtual void                SetSize( sal_uInt64 nSize ) override;
     virtual void                FlushData() override;
@@ -869,9 +869,9 @@ void UCBStorageStream_Impl::CopySourceToTemporary()
 
 // UCBStorageStream_Impl must have a SvStream interface, because it then can be used as underlying stream
 // of an OLEStorage; so every write access caused by storage operations marks the UCBStorageStream as modified
-sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
+std::size_t UCBStorageStream_Impl::GetData(void* pData, std::size_t const nSize)
 {
-    sal_uLong aResult = 0;
+    std::size_t aResult = 0;
 
     if( !Init() )
         return 0;
@@ -884,13 +884,13 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
         // read the tail of the data from original stream
         // copy this tail to the temporary stream
 
-        sal_uLong aToRead = nSize - aResult;
+        std::size_t aToRead = nSize - aResult;
         pData = static_cast<void*>( static_cast<char*>(pData) + aResult );
 
         try
         {
             Sequence<sal_Int8> aData( aToRead );
-            sal_uLong aReaded = m_rSource->readBytes( aData, aToRead );
+            std::size_t aReaded = m_rSource->readBytes( aData, aToRead );
             aResult += m_pStream->WriteBytes(static_cast<void*>(aData.getArray()), aReaded);
             memcpy( pData, aData.getArray(), aReaded );
         }
@@ -907,7 +907,7 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
     return aResult;
 }
 
-sal_uLong UCBStorageStream_Impl::PutData( const void* pData, sal_uLong nSize )
+std::size_t UCBStorageStream_Impl::PutData(const void* pData, std::size_t const nSize)
 {
     if ( !(m_nMode & StreamMode::WRITE) )
     {
@@ -918,7 +918,7 @@ sal_uLong UCBStorageStream_Impl::PutData( const void* pData, sal_uLong nSize )
     if( !nSize || !Init() )
         return 0;
 
-    sal_uLong aResult = m_pStream->WriteBytes( pData, nSize );
+    std::size_t aResult = m_pStream->WriteBytes( pData, nSize );
 
     m_bModified = aResult > 0;
 
