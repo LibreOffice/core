@@ -250,8 +250,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
 
         // Force updating of native menu labels.
         NativeSetItemText( nSection, nItemPos, aText );
-        if (!!aImage)
-            NativeSetItemIcon( nSection, nItemPos, aImage );
+        NativeSetItemIcon( nSection, nItemPos, aImage );
         NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( GetFrame()->GetWindow() ) );
 
         if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == nullptr )
@@ -870,19 +869,25 @@ void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const 
 #if GLIB_CHECK_VERSION(2,38,0)
     SolarMutexGuard aGuard;
 
-    SvMemoryStream* pMemStm = new SvMemoryStream;
-    vcl::PNGWriter aWriter(rImage.GetBitmapEx());
-    aWriter.Write(*pMemStm);
+    if (!!rImage)
+    {
+        SvMemoryStream* pMemStm = new SvMemoryStream;
+        vcl::PNGWriter aWriter(rImage.GetBitmapEx());
+        aWriter.Write(*pMemStm);
 
-    GBytes *pBytes = g_bytes_new_with_free_func(pMemStm->GetData(),
-                                                pMemStm->Seek(STREAM_SEEK_TO_END),
-                                                DestroyMemoryStream,
-                                                pMemStm);
+        GBytes *pBytes = g_bytes_new_with_free_func(pMemStm->GetData(),
+                                                    pMemStm->Seek(STREAM_SEEK_TO_END),
+                                                    DestroyMemoryStream,
+                                                    pMemStm);
 
-    GIcon *pIcon = g_bytes_icon_new(pBytes);
-    g_lo_menu_set_icon_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, pIcon );
-    g_object_unref(pIcon);
-    g_bytes_unref(pBytes);
+        GIcon *pIcon = g_bytes_icon_new(pBytes);
+
+        g_lo_menu_set_icon_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, pIcon );
+        g_object_unref(pIcon);
+        g_bytes_unref(pBytes);
+    }
+    else
+        g_lo_menu_set_icon_to_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos, nullptr );
 #else
     (void)nSection;
     (void)nItemPos;
