@@ -26,6 +26,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/sfxuno.hxx>
 #include <svl/SfxBroadcaster.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class ResMgr;
 namespace vcl { class Window; }
@@ -93,6 +94,35 @@ enum SfxInterfaceId
     SFX_INTERFACE_APP               =  SFX_INTERFACE_SW_START,
 };
 
+enum class SfxShellFeature
+{
+    NONE                    = 0x0000,
+    // Writer only, class SwView
+    SwChildWindowLabel      = 0x0001,
+    SwChildWindowMailmerge  = 0x0002,
+    // Basic only, class Shell
+    BasicShowBrowser        = 0x0004,
+    // Forms only, class FmFormShell
+    FormShowDatabaseBar     = 0x0008,
+    FormShowField           = 0x0010,
+    FormShowProperies       = 0x0020,
+    FormShowExplorer        = 0x0040,
+    FormShowFilterBar       = 0x0080,
+    FormShowFilterNavigator = 0x0100,
+    FormShowTextControlBar  = 0x0200,
+    FormTBControls          = 0x0400,
+    FormTBMoreControls      = 0x0800,
+    FormTBDesign            = 0x1000,
+    FormShowDataNavigator   = 0x2000,
+    // masks to make sure modules don't use flags from an other
+    SwMask                  = 0x0003,
+    BasicMask               = 0x0004,
+    FormMask                = 0x3ff8
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxShellFeature> : is_typed_flags<SfxShellFeature, 0x3fff> {};
+}
 
 typedef void (*SfxExecFunc)(SfxShell *, SfxRequest &rReq);
 typedef void (*SfxStateFunc)(SfxShell *, SfxItemSet &rSet);
@@ -380,7 +410,7 @@ public:
         */
     SfxViewFrame*               GetFrame() const;
 
-    virtual bool                HasUIFeature( sal_uInt32 nFeature );
+    virtual bool                HasUIFeature(SfxShellFeature nFeature) const;
     void                        UIFeatureChanged();
 
     // Items

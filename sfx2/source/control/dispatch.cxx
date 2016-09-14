@@ -1397,8 +1397,8 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
                 continue;
 
             // check whether toolbar needs activation of a special feature
-            sal_uInt32 nFeature = pIFace->GetObjectBarFeature(nNo);
-            if ( nFeature && !pShell->HasUIFeature( nFeature ) )
+            SfxShellFeature nFeature = pIFace->GetObjectBarFeature(nNo);
+            if ((nFeature != SfxShellFeature::NONE) && !pShell->HasUIFeature(nFeature))
                 continue;
 
             // check for toolboxes that are exclusively for a viewer
@@ -1443,8 +1443,8 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
                     continue;
             }
 
-            sal_uInt32 nFeature = pIFace->GetChildWindowFeature(nNo);
-            if ( nFeature && !pShell->HasUIFeature( nFeature ) )
+            SfxShellFeature nFeature = pIFace->GetChildWindowFeature(nNo);
+            if ((nFeature != SfxShellFeature::NONE) && !pShell->HasUIFeature(nFeature))
                 continue;
 
             // slot decides whether a ChildWindow is shown when document is OLE server or OLE client

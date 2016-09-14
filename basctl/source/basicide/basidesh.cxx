@@ -136,7 +136,7 @@ SFX_IMPL_INTERFACE(basctl_Shell, SfxViewShell)
 void basctl_Shell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
-    GetStaticInterface()->RegisterChildWindow(SID_SHOW_PROPERTYBROWSER, false, BASICIDE_UI_FEATURE_SHOW_BROWSER);
+    GetStaticInterface()->RegisterChildWindow(SID_SHOW_PROPERTYBROWSER, false, SfxShellFeature::BasicShowBrowser);
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
 
     GetStaticInterface()->RegisterPopupMenu("dialog");

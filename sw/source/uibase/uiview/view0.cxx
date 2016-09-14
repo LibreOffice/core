@@ -110,7 +110,7 @@ void SwView::InitInterface_Impl()
 #endif
     GetStaticInterface()->RegisterChildWindow(FN_INSERT_FIELD_DATA_ONLY);
 
-    GetStaticInterface()->RegisterChildWindow(FN_SYNC_LABELS, false, CHILDWIN_LABEL);
+    GetStaticInterface()->RegisterChildWindow(FN_SYNC_LABELS, false, SfxShellFeature::SwChildWindowLabel);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                             RID_TOOLS_TOOLBOX);
@@ -146,7 +146,7 @@ void SwView::SetMailMergeConfigItem(std::shared_ptr<SwMailMergeConfigItem>& rCon
     UIFeatureChanged();
 }
 
-std::shared_ptr<SwMailMergeConfigItem> SwView::GetMailMergeConfigItem()
+std::shared_ptr<SwMailMergeConfigItem> SwView::GetMailMergeConfigItem() const
 {
     return m_pViewImpl->GetMailMergeConfigItem();
 }
