@@ -294,7 +294,7 @@ void ScRawToken::SetDouble(double rVal)
     nValue = rVal;
 }
 
-void ScRawToken::SetErrorConstant( sal_uInt16 nErr )
+void ScRawToken::SetErrorConstant( FormulaError nErr )
 {
     eOp   = ocPush;
     eType = svError;
@@ -4736,8 +4736,8 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                         }
                         else
                         {
-                            sal_uInt16 nErr = pMat->GetError(nC, nR);
-                            if (nErr)
+                            FormulaError nErr = pMat->GetError(nC, nR);
+                            if (nErr != FormulaError::NONE)
                                 rBuf.append(ScGlobal::GetErrorString(nErr));
                             else
                                 appendDouble(rCxt, rBuf, pMat->GetDouble(nC, nR));
@@ -4851,30 +4851,30 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
         break;
         case svError:
         {
-            sal_uInt16 nErr = rToken.GetError();
+            FormulaError nErr = rToken.GetError();
             OpCode eOpErr;
             switch (nErr)
             {
                 break;
-                case errDivisionByZero:
+                case FormulaError::DivisionByZero:
                     eOpErr = ocErrDivZero;
                 break;
-                case errNoValue:
+                case FormulaError::NoValue:
                     eOpErr = ocErrValue;
                 break;
-                case errNoRef:
+                case FormulaError::NoRef:
                     eOpErr = ocErrRef;
                 break;
-                case errNoName:
+                case FormulaError::NoName:
                     eOpErr = ocErrName;
                 break;
-                case errIllegalFPOperation:
+                case FormulaError::IllegalFPOperation:
                     eOpErr = ocErrNum;
                 break;
-                case NOTAVAILABLE:
+                case FormulaError::NotAvailable:
                     eOpErr = ocErrNA;
                 break;
-                case errNoCode:
+                case FormulaError::NoCode:
                 default:
                     eOpErr = ocErrNull;
             }

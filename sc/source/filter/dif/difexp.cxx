@@ -31,6 +31,7 @@
 #include "cellvalue.hxx"
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
+#include <formula/errorcodes.hxx>
 
 void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
     const ScAddress& rOutPos, const rtl_TextEncoding eNach )
@@ -168,7 +169,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     bWriteStringData = true;
                 break;
                 case CELLTYPE_FORMULA:
-                    if (aCell.mpFormula->GetErrCode())
+                    if (aCell.mpFormula->GetErrCode() != FormulaError::NONE)
                         aOS.appendAscii(pNumDataERROR);
                     else if (aCell.mpFormula->IsValue())
                     {

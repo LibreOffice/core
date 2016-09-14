@@ -89,7 +89,7 @@ private:
     double mfMSE;                       // mean squared error (variation)
     double mfRMSE;                      // root mean squared error (standard deviation)
     double mfSMAPE;                     // symmetric mean absolute error
-    sal_uInt16 mnErrorValue;
+    FormulaError mnErrorValue;
     bool bAdditive;                     // true: additive method, false: mulitplicative method
     bool bEDS;                          // true: EDS, false: ETS
 
@@ -119,7 +119,7 @@ public:
     bool PreprocessDataRange( const ScMatrixRef& rMatX, const ScMatrixRef& rMatY, int& rSmplInPrd,
                               bool bDataCompletion, int nAggregation, const ScMatrixRef& rTMat,
                               ScETSType eETSType );
-    sal_uInt16 GetError() { return mnErrorValue; };
+    FormulaError GetError() { return mnErrorValue; };
     bool GetForecastRange( const ScMatrixRef& rTMat, const ScMatrixRef& rFcMat );
     bool GetStatisticValue( const ScMatrixRef& rTypeMat, const ScMatrixRef& rStatMat );
     bool GetSamplesInPeriod( double& rVal );
@@ -146,7 +146,7 @@ ScETSForecastCalculation::ScETSForecastCalculation( SCSIZE nSize, SvNumberFormat
     , mfMSE(0.0)
     , mfRMSE(0.0)
     , mfSMAPE(0.0)
-    , mnErrorValue(0)
+    , mnErrorValue(FormulaError::NONE)
     , bAdditive(false)
     , bEDS(false)
 {
@@ -180,7 +180,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
             if ( rTMat->GetDouble( 0 ) < maRange[ 0 ].X )
             {
                 // target cannot be less than start of X-range
-                mnErrorValue = errIllegalFPOperation;
+                mnErrorValue = FormulaError::IllegalFPOperation;
                 return false;
             }
         }
@@ -189,7 +189,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
             if ( rTMat->GetDouble( 0 ) < maRange[ mnCount - 1 ].X )
             {
                 // target cannot be before end of X-range
-                mnErrorValue = errIllegalFPOperation;
+                mnErrorValue = FormulaError::IllegalFPOperation;
                 return false;
             }
         }
@@ -237,7 +237,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
             if ( nAggregation == 0 )
             {
                 // identical X-values are not allowed
-                mnErrorValue = errNoValue;
+                mnErrorValue = FormulaError::NoValue;
                 return false;
             }
             double fTmp = maRange[ i - 1 ].Y;
@@ -340,7 +340,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
             if ( fmod( fStep, mfStepSize ) != 0.0 )
             {
                 // step not constant nor multiple of mfStepSize in case of gaps
-                mnErrorValue = errNoValue;
+                mnErrorValue = FormulaError::NoValue;
                 return false;
             }
             bHasGap = true;
@@ -379,7 +379,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
                     if ( static_cast< double >( nMissingXCount ) / fOriginalCount > 0.3 )
                     {
                         // maximum of 30% missing points exceeded
-                        mnErrorValue = errNoValue;
+                        mnErrorValue = FormulaError::NoValue;
                         return false;
                     }
                 }
@@ -422,7 +422,7 @@ bool ScETSForecastCalculation::prefillTrendData()
         // we need at least 2 periods in the data range
         if ( mnCount < 2 * mnSmplInPrd )
         {
-            mnErrorValue = errNoValue;
+            mnErrorValue = FormulaError::NoValue;
             return false;
         }
 
@@ -445,7 +445,7 @@ bool ScETSForecastCalculation::prefillPerIdx()
         if ( mnSmplInPrd == 0 )
         {
             // should never happen; if mnSmplInPrd equals 0, bEDS is true
-            mnErrorValue = errUnknownState;
+            mnErrorValue = FormulaError::UnknownState;
             return false;
         }
         SCSIZE nPeriods = mnCount / mnSmplInPrd;
@@ -458,7 +458,7 @@ bool ScETSForecastCalculation::prefillPerIdx()
             if ( aPeriodAverage[ i ] == 0.0 )
             {
                 SAL_WARN( "sc.core", "prefillPerIdx(), average of 0 will cause divide by zero error, quitting calculation" );
-                mnErrorValue = errDivisionByZero;
+                mnErrorValue = FormulaError::DivisionByZero;
                 return false;
             }
         }
@@ -1243,7 +1243,7 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
         double fVal = GetDoubleWithDefault( 1.0 );
         if ( fmod( fVal, 1.0 ) != 0 || fVal < 0.0 )
         {
-            PushError( errIllegalFPOperation );
+            PushError( FormulaError::IllegalFPOperation );
             return;
         }
         nSmplInPrd = static_cast< int >( fVal );
@@ -1399,7 +1399,7 @@ void ScInterpreter::ScConcat_MS()
     ReverseStack( nParamCount );
 
     size_t nRefInList = 0;
-    while ( nParamCount-- > 0 && !nGlobalError )
+    while ( nParamCount-- > 0 && nGlobalError == FormulaError::NONE )
     {
         switch ( GetStackType() )
         {
@@ -1411,7 +1411,7 @@ void ScInterpreter::ScConcat_MS()
             {
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
-                if ( nGlobalError )
+                if ( nGlobalError != FormulaError::NONE )
                     break;
                 ScRefCellValue aCell( *pDok, aAdr );
                 if ( !aCell.isEmpty() )
@@ -1430,7 +1430,7 @@ void ScInterpreter::ScConcat_MS()
             {
                 ScRange aRange;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
-                if ( nGlobalError )
+                if ( nGlobalError != FormulaError::NONE )
                     break;
                 // we need to read row for row, so we can't use ScCellIter
                 SCCOL nCol1, nCol2;
@@ -1439,7 +1439,7 @@ void ScInterpreter::ScConcat_MS()
                 aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                 if ( nTab1 != nTab2 )
                 {
-                    SetError( errIllegalParameter);
+                    SetError( FormulaError::IllegalParameter);
                     break;
                 }
                 if ( nRow1 > nRow2 )
@@ -1478,7 +1478,7 @@ void ScInterpreter::ScConcat_MS()
                     SCSIZE nC, nR;
                     pMat->GetDimensions(nC, nR);
                     if (nC == 0 || nR == 0)
-                        SetError(errIllegalArgument);
+                        SetError(FormulaError::IllegalArgument);
                     else
                     {
                         for ( SCSIZE j = 0; j < nC; j++ )
@@ -1500,7 +1500,7 @@ void ScInterpreter::ScConcat_MS()
             break;
             default:
                 PopError();
-                SetError( errIllegalArgument);
+                SetError( FormulaError::IllegalArgument);
                 break;
         }
     }
@@ -1529,7 +1529,7 @@ void ScInterpreter::ScTextJoin_MS()
             {
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
-                if ( nGlobalError )
+                if ( nGlobalError != FormulaError::NONE )
                     break;
                 ScRefCellValue aCell( *pDok, aAdr );
                 if ( !aCell.isEmpty() )
@@ -1548,7 +1548,7 @@ void ScInterpreter::ScTextJoin_MS()
             {
                 ScRange aRange;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
-                if ( nGlobalError )
+                if ( nGlobalError != FormulaError::NONE )
                     break;
                 // we need to read row for row, so we can't use ScCellIterator
                 SCCOL nCol1, nCol2;
@@ -1557,7 +1557,7 @@ void ScInterpreter::ScTextJoin_MS()
                 aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                 if ( nTab1 != nTab2 )
                 {
-                    SetError( errIllegalParameter);
+                    SetError( FormulaError::IllegalParameter);
                     break;
                 }
                 if ( nRow1 > nRow2 )
@@ -1598,7 +1598,7 @@ void ScInterpreter::ScTextJoin_MS()
                     SCSIZE nC, nR;
                     pMat->GetDimensions(nC, nR);
                     if (nC == 0 || nR == 0)
-                        SetError(errIllegalArgument);
+                        SetError(FormulaError::IllegalArgument);
                     else
                     {
                         for ( SCSIZE j = 0; j < nC; j++ )
@@ -1625,7 +1625,7 @@ void ScInterpreter::ScTextJoin_MS()
             break;
             default:
                 PopError();
-                SetError( errIllegalArgument);
+                SetError( FormulaError::IllegalArgument);
                 break;
         }
         if ( aDelimiters.empty() )
@@ -1642,7 +1642,7 @@ void ScInterpreter::ScTextJoin_MS()
         SCSIZE nIdx = 0;
         nRefInList = 0;
         // get the strings to be joined
-        while ( nParamCount-- > 0 && !nGlobalError )
+        while ( nParamCount-- > 0 && nGlobalError == FormulaError::NONE )
         {
             switch ( GetStackType() )
             {
@@ -1671,7 +1671,7 @@ void ScInterpreter::ScTextJoin_MS()
                 {
                     ScAddress aAdr;
                     PopSingleRef( aAdr );
-                    if ( nGlobalError )
+                    if ( nGlobalError != FormulaError::NONE )
                         break;
                     ScRefCellValue aCell( *pDok, aAdr );
                     OUString aStr;
@@ -1708,7 +1708,7 @@ void ScInterpreter::ScTextJoin_MS()
                 {
                     ScRange aRange;
                     PopDoubleRef( aRange, nParamCount, nRefInList);
-                    if ( nGlobalError )
+                    if ( nGlobalError != FormulaError::NONE )
                         break;
                     // we need to read row for row, so we can't use ScCellIterator
                     SCCOL nCol1, nCol2;
@@ -1717,7 +1717,7 @@ void ScInterpreter::ScTextJoin_MS()
                     aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                     if ( nTab1 != nTab2 )
                     {
-                        SetError( errIllegalParameter);
+                        SetError( FormulaError::IllegalParameter);
                         break;
                     }
                     if ( nRow1 > nRow2 )
@@ -1774,7 +1774,7 @@ void ScInterpreter::ScTextJoin_MS()
                         SCSIZE nC, nR;
                         pMat->GetDimensions(nC, nR);
                         if (nC == 0 || nR == 0)
-                            SetError(errIllegalArgument);
+                            SetError(FormulaError::IllegalArgument);
                         else
                         {
                             OUString aStr;
@@ -1835,7 +1835,7 @@ void ScInterpreter::ScTextJoin_MS()
                 break;
                 default:
                     PopError();
-                    SetError( errIllegalArgument);
+                    SetError( FormulaError::IllegalArgument);
                     break;
             }
         }
@@ -1850,9 +1850,9 @@ void ScInterpreter::ScIfs_MS()
 
     ReverseStack( nParamCount );
 
-    nGlobalError = 0;   // propagate only for condition or active result path
+    nGlobalError = FormulaError::NONE;   // propagate only for condition or active result path
     bool bFinished = false;
-    while ( nParamCount > 0 && !bFinished && !nGlobalError )
+    while ( nParamCount > 0 && !bFinished && nGlobalError == FormulaError::NONE )
     {
         bool bVal = GetBool();
         nParamCount--;
@@ -1885,11 +1885,11 @@ void ScInterpreter::ScIfs_MS()
         }
     }
 
-    if ( nGlobalError || !bFinished  )
+    if ( nGlobalError != FormulaError::NONE || !bFinished  )
     {
         if ( !bFinished )
             PushNA(); // no true expression found
-        if ( nGlobalError )
+        if ( nGlobalError != FormulaError::NONE )
             PushNoValue(); // expression returned something other than true or false
         return;
     }
@@ -1907,7 +1907,7 @@ void ScInterpreter::ScIfs_MS()
         PushTokenRef( xToken );
     }
     else
-        PushError( errUnknownStackVariable );
+        PushError( FormulaError::UnknownStackVariable );
 }
 
 
@@ -1920,7 +1920,7 @@ void ScInterpreter::ScSwitch_MS()
 
     ReverseStack( nParamCount );
 
-    nGlobalError = 0;   // propagate only for match or active result path
+    nGlobalError = FormulaError::NONE;   // propagate only for match or active result path
     bool isValue = false;
     double fRefVal = 0;
     svl::SharedString aRefStr;
@@ -1960,7 +1960,7 @@ void ScInterpreter::ScSwitch_MS()
     }
     nParamCount--;
     bool bFinished = false;
-    while ( nParamCount > 1 && !bFinished && !nGlobalError )
+    while ( nParamCount > 1 && !bFinished && nGlobalError == FormulaError::NONE )
     {
         double fVal = 0;
         svl::SharedString aStr;
@@ -1969,7 +1969,7 @@ void ScInterpreter::ScSwitch_MS()
         else
             aStr = GetString();
         nParamCount--;
-        if ( nGlobalError || (( isValue && rtl::math::approxEqual( fRefVal, fVal ) ) ||
+        if ( nGlobalError != FormulaError::NONE || (( isValue && rtl::math::approxEqual( fRefVal, fVal ) ) ||
              ( !isValue && aRefStr.getDataIgnoreCase() == aStr.getDataIgnoreCase() )) )
         {
             // TRUE
@@ -1992,11 +1992,11 @@ void ScInterpreter::ScSwitch_MS()
                 PushNA();
                 return;
             }
-            nGlobalError = 0;
+            nGlobalError = FormulaError::NONE;
         }
     }
 
-    if ( nGlobalError || !bFinished  )
+    if ( nGlobalError != FormulaError::NONE || !bFinished  )
     {
         if ( !bFinished )
             PushNA(); // no true expression found
@@ -2018,7 +2018,7 @@ void ScInterpreter::ScSwitch_MS()
         PushTokenRef( xToken );
     }
     else
-        PushError( errUnknownStackVariable );
+        PushError( FormulaError::UnknownStackVariable );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

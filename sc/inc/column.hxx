@@ -360,7 +360,7 @@ public:
     void SetValue( SCROW nRow, double fVal );
     void SetValues( SCROW nRow, const std::vector<double>& rVals );
     void SetValue( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, double fVal, bool bBroadcast = true );
-    void        SetError( SCROW nRow, const sal_uInt16 nError);
+    void        SetError( SCROW nRow, const FormulaError nError);
 
     void        GetString( SCROW nRow, OUString& rString ) const;
     double* GetValueCell( SCROW nRow );
@@ -376,7 +376,7 @@ public:
     SCSIZE      GetCellCount() const;
     sal_uInt32 GetWeightedCount() const;
     sal_uInt32 GetCodeCount() const;       // RPN-Code in formulas
-    sal_uInt16  GetErrCode( SCROW nRow ) const;
+    FormulaError  GetErrCode( SCROW nRow ) const;
 
     bool    HasStringData( SCROW nRow ) const;
     bool    HasValueData( SCROW nRow ) const;
@@ -403,7 +403,7 @@ public:
                 position broadcasted. */
     bool BroadcastBroadcasters( SCROW nRow1, SCROW nRow2, ScHint& rHint );
 
-    bool CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nErrCode );
+    bool CompileErrorCells( sc::CompileFormulaContext& rCxt, FormulaError nErrCode );
 
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 

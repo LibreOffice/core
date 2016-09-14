@@ -602,7 +602,7 @@ public:
 class Sc10FontCollection : public ScCollection
 {
 protected:
-    sal_uLong nError;
+    sal_uLong           nError;
 public:
                         Sc10FontCollection( SvStream& rStream );
     sal_uLong           GetError() { return nError; }
@@ -761,7 +761,7 @@ class Sc10Import
     Sc10NameCollection*     pNameCollection;
     Sc10PatternCollection*  pPatternCollection;
     Sc10DataBaseCollection* pDataBaseCollection;
-    sal_uLong                   nError;
+    sal_uLong               nError;
     SCTAB                   nShowTab;
     ScViewOptions           aSc30ViewOpt;
     ScfStreamProgressBar*   pPrgrsBar;
@@ -770,7 +770,7 @@ public:
                               Sc10Import( SvStream& rStr, ScDocument* pDocument );
                               ~Sc10Import();
 
-    sal_uLong                   Import();
+    sal_uLong               Import();
     void                    LoadFileHeader();
     void                    LoadFileInfo();
     void                    LoadEditStateInfo();

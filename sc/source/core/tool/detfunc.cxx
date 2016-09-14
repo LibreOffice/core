@@ -21,6 +21,7 @@
 #include <svtools/colorcfg.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
+#include <formula/errorcodes.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdtditm.hxx>
@@ -285,7 +286,7 @@ inline bool Intersect( SCCOL nStartCol1, SCROW nStartRow1, SCCOL nEndCol1, SCROW
 bool ScDetectiveFunc::HasError( const ScRange& rRange, ScAddress& rErrPos )
 {
     rErrPos = rRange.aStart;
-    sal_uInt16 nError = 0;
+    FormulaError nError = FormulaError::NONE;
 
     ScCellIterator aIter( pDoc, rRange);
     for (bool bHasCell = aIter.first(); bHasCell; bHasCell = aIter.next())
@@ -294,11 +295,11 @@ bool ScDetectiveFunc::HasError( const ScRange& rRange, ScAddress& rErrPos )
             continue;
 
         nError = aIter.getFormulaCell()->GetErrCode();
-        if (nError)
+        if (nError != FormulaError::NONE)
             rErrPos = aIter.GetPos();
     }
 
-    return (nError != 0);
+    return (nError != FormulaError::NONE);
 }
 
 Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) const

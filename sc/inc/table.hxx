@@ -34,6 +34,7 @@
 #include "cellvalue.hxx"
 #include <formula/types.hxx>
 #include "calcmacros.hxx"
+#include "formula/errorcodes.hxx"
 
 #include <set>
 #include <map>
@@ -362,7 +363,7 @@ public:
 
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetValues( SCCOL nCol, SCROW nRow, const std::vector<double>& rVals );
-    void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
+    void        SetError( SCCOL nCol, SCROW nRow, FormulaError nError);
     SCSIZE      GetPatternCount( SCCOL nCol ) const;
     SCSIZE      GetPatternCount( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
     bool        ReservePatternCount( SCCOL nCol, SCSIZE nReserve );
@@ -522,11 +523,11 @@ public:
     bool        HasStringCells( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow ) const;
 
-    sal_uInt16      GetErrCode( const ScAddress& rPos ) const
+    FormulaError    GetErrCode( const ScAddress& rPos ) const
                     {
                         return ValidColRow(rPos.Col(),rPos.Row()) ?
                             aCol[rPos.Col()].GetErrCode( rPos.Row() ) :
-                            0;
+                            FormulaError::NONE;
                     }
 
     void        ResetChanged( const ScRange& rRange );
@@ -549,7 +550,7 @@ public:
                 position broadcasted. */
     bool BroadcastBroadcasters( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScHint& rHint );
 
-    bool CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nErrCode );
+    bool CompileErrorCells( sc::CompileFormulaContext& rCxt, FormulaError nErrCode );
 
     void UpdateReference(
         sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc = nullptr,

@@ -166,7 +166,7 @@ static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, doubl
 
 void ScInterpreter::ScNoName()
 {
-    PushError(errNoName);
+    PushError(FormulaError::NoName);
 }
 
 void ScInterpreter::ScBadName()
@@ -176,7 +176,7 @@ void ScInterpreter::ScBadName()
     {
         PopError();
     }
-    PushError( errNoName);
+    PushError( FormulaError::NoName);
 }
 
 double ScInterpreter::phi(double x)
@@ -440,7 +440,7 @@ double ScInterpreter::Fakultaet(double x)
         }
     }
     else
-        SetError(errNoValue);
+        SetError(FormulaError::NoValue);
     return x;
 }
 
@@ -576,7 +576,7 @@ double ScInterpreter::GetGamma(double fZ)
 
     if (fZ > fMaxGammaArgument)
     {
-        SetError(errIllegalFPOperation);
+        SetError(FormulaError::IllegalFPOperation);
         return HUGE_VAL;
     }
 
@@ -591,7 +591,7 @@ double ScInterpreter::GetGamma(double fZ)
         double fLogTest = lcl_GetLogGammaHelper(fZ+2) - boost::math::log1p(fZ) - log( fabs(fZ));
         if (fLogTest >= fLogDblMax)
         {
-            SetError( errIllegalFPOperation);
+            SetError( FormulaError::IllegalFPOperation);
             return HUGE_VAL;
         }
         return lcl_GetGammaHelper(fZ+2) / (fZ+1) / fZ;
@@ -605,7 +605,7 @@ double ScInterpreter::GetGamma(double fZ)
     if (fLogDivisor<0.0)
         if (fLogPi - fLogDivisor > fLogDblMax)  // overflow
         {
-            SetError(errIllegalFPOperation);
+            SetError(FormulaError::IllegalFPOperation);
             return HUGE_VAL;
         }
 
@@ -647,7 +647,7 @@ double ScInterpreter::GetTDist( double T, double fDF, int nType )
             double R = 0.5 * GetBetaDist( X, 0.5 * fDF, 0.5 );
             return ( T < 0 ? R : 1 - R );
     }
-    SetError( errIllegalArgument );
+    SetError( FormulaError::IllegalArgument );
     return HUGE_VAL;
 }
 
@@ -766,7 +766,7 @@ void ScInterpreter::ScGamma()
     else
     {
         double fResult = GetGamma(x);
-        if (nGlobalError)
+        if (nGlobalError != FormulaError::NONE)
         {
             PushError( nGlobalError);
             return;
@@ -857,7 +857,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
             return -2.0*fX + 2.0;
         if (fX == 1.0 && fB < 1.0)
         {
-            SetError(errIllegalArgument);
+            SetError(FormulaError::IllegalArgument);
             return HUGE_VAL;
         }
         if (fX <= 0.01)
@@ -871,7 +871,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
             return fA * fX;
         if (fX == 0.0 && fA < 1.0)
         {
-            SetError(errIllegalArgument);
+            SetError(FormulaError::IllegalArgument);
             return HUGE_VAL;
         }
         return fA * pow(fX,fA-1);
@@ -880,7 +880,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
     {
         if (fA < 1.0 && fX == 0.0)
         {
-            SetError(errIllegalArgument);
+            SetError(FormulaError::IllegalArgument);
             return HUGE_VAL;
         }
         else
@@ -890,7 +890,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
     {
         if (fB < 1.0 && fX == 1.0)
         {
-            SetError(errIllegalArgument);
+            SetError(FormulaError::IllegalArgument);
             return HUGE_VAL;
         }
         else
@@ -1431,7 +1431,7 @@ void ScInterpreter::ScCritBinom()
                     for (i = 0; i < max && fSum < alpha; i++)
                     {
                         const double x = GetBetaDistPDF( p, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
-                        if ( !nGlobalError )
+                        if ( nGlobalError == FormulaError::NONE )
                         {
                             fSum += x;
                         }
@@ -1468,7 +1468,7 @@ void ScInterpreter::ScCritBinom()
                     for (i = 0; i < max && fSum < alpha; i++)
                     {
                         const double x = GetBetaDistPDF( q, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
-                        if ( !nGlobalError )
+                        if ( nGlobalError == FormulaError::NONE )
                         {
                             fSum += x;
                         }
@@ -1735,7 +1735,7 @@ void ScInterpreter::ScChiDist()
         return;
     }
     fResult = GetChiDist( fChi, fDF);
-    if (nGlobalError)
+    if (nGlobalError != FormulaError::NONE)
     {
         PushError( nGlobalError);
         return;
@@ -1888,7 +1888,7 @@ void ScInterpreter::ScHypGeomDist_MS()
     {
         double fVal = 0.0;
 
-        for ( int i = 0; i <= x && !nGlobalError; i++ )
+        for ( int i = 0; i <= x && nGlobalError == FormulaError::NONE; i++ )
             fVal += GetHypGeomDist( i, n, M, N );
 
         PushDouble( fVal );
@@ -2207,7 +2207,7 @@ void ScInterpreter::ScGammaInv()
         double fStart = fAlpha * fBeta;
         double fVal = lcl_IterateInverse( aFunc, fStart*0.5, fStart, bConvError );
         if (bConvError)
-            SetError(errNoConvergence);
+            SetError(FormulaError::NoConvergence);
         PushDouble(fVal);
     }
 }
@@ -2257,7 +2257,7 @@ void ScInterpreter::ScBetaInv()
         // 0..1 as range for iteration so it isn't extended beyond the valid range
         double fVal = lcl_IterateInverse( aFunc, 0.0, 1.0, bConvError );
         if (bConvError)
-            PushError( errNoConvergence);
+            PushError( FormulaError::NoConvergence);
         else
             PushDouble(fA + fVal*(fB-fA));                  // scale to (A,B)
     }
@@ -2310,7 +2310,7 @@ double ScInterpreter::GetTInv( double fAlpha, double fSize, int nType )
     ScTDistFunction aFunc( *this, fAlpha, fSize, nType );
     double fVal = lcl_IterateInverse( aFunc, fSize * 0.5, fSize, bConvError );
     if (bConvError)
-        SetError(errNoConvergence);
+        SetError(FormulaError::NoConvergence);
     return fVal;
 }
 
@@ -2345,7 +2345,7 @@ void ScInterpreter::ScFInv()
     ScFDistFunction aFunc( *this, fP, fF1, fF2 );
     double fVal = lcl_IterateInverse( aFunc, fF1*0.5, fF1, bConvError );
     if (bConvError)
-        SetError(errNoConvergence);
+        SetError(FormulaError::NoConvergence);
     PushDouble(fVal);
 }
 
@@ -2366,7 +2366,7 @@ void ScInterpreter::ScFInv_LT()
     ScFDistFunction aFunc( *this, ( 1.0 - fP ), fF1, fF2 );
     double fVal = lcl_IterateInverse( aFunc, fF1*0.5, fF1, bConvError );
     if (bConvError)
-        SetError(errNoConvergence);
+        SetError(FormulaError::NoConvergence);
     PushDouble(fVal);
 }
 
@@ -2400,7 +2400,7 @@ void ScInterpreter::ScChiInv()
     ScChiDistFunction aFunc( *this, fP, fDF );
     double fVal = lcl_IterateInverse( aFunc, fDF*0.5, fDF, bConvError );
     if (bConvError)
-        SetError(errNoConvergence);
+        SetError(FormulaError::NoConvergence);
     PushDouble(fVal);
 }
 
@@ -2435,7 +2435,7 @@ void ScInterpreter::ScChiSqInv()
     ScChiSqDistFunction aFunc( *this, fP, fDF );
     double fVal = lcl_IterateInverse( aFunc, fDF*0.5, fDF, bConvError );
     if (bConvError)
-        SetError(errNoConvergence);
+        SetError(FormulaError::NoConvergence);
     PushDouble(fVal);
 }
 
@@ -2520,7 +2520,7 @@ void ScInterpreter::ScZTest()
             while (nParam-- > 0)
             {
                 ScRange aRange;
-                sal_uInt16 nErr = 0;
+                FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParam, nRefInList);
                 ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(fVal, nErr))
@@ -2528,7 +2528,7 @@ void ScInterpreter::ScZTest()
                     fSum += fVal;
                     fSumSqr += fVal*fVal;
                     rValCount++;
-                    while ((nErr == 0) && aValIter.GetNext(fVal, nErr))
+                    while ((nErr == FormulaError::NONE) && aValIter.GetNext(fVal, nErr))
                     {
                         fSum += fVal;
                         fSumSqr += fVal*fVal;
@@ -2571,10 +2571,10 @@ void ScInterpreter::ScZTest()
             }
         }
         break;
-        default : SetError(errIllegalParameter); break;
+        default : SetError(FormulaError::IllegalParameter); break;
     }
     if (rValCount <= 1.0)
-        PushError( errDivisionByZero);
+        PushError( FormulaError::DivisionByZero);
     else
     {
         double mue = fSum/rValCount;
@@ -2859,7 +2859,7 @@ void ScInterpreter::ScKurt()
 
     if (fCount == 0.0)
     {
-        PushError( errDivisionByZero);
+        PushError( FormulaError::DivisionByZero);
         return;
     }
 
@@ -2873,7 +2873,7 @@ void ScInterpreter::ScKurt()
 
     if (fStdDev == 0.0)
     {
-        PushError( errDivisionByZero);
+        PushError( FormulaError::DivisionByZero);
         return;
     }
 
@@ -2898,7 +2898,7 @@ void ScInterpreter::ScHarMean()
     ScAddress aAdr;
     ScRange aRange;
     size_t nRefInList = 0;
-    while ((nGlobalError == 0) && (nParamCount-- > 0))
+    while ((nGlobalError == FormulaError::NONE) && (nParamCount-- > 0))
     {
         switch (GetStackType())
         {
@@ -2911,7 +2911,7 @@ void ScInterpreter::ScHarMean()
                     nValCount++;
                 }
                 else
-                    SetError( errIllegalArgument);
+                    SetError( FormulaError::IllegalArgument);
                 break;
             }
             case svSingleRef :
@@ -2927,14 +2927,14 @@ void ScInterpreter::ScHarMean()
                         nValCount++;
                     }
                     else
-                        SetError( errIllegalArgument);
+                        SetError( FormulaError::IllegalArgument);
                 }
                 break;
             }
             case formula::svDoubleRef :
             case svRefList :
             {
-                sal_uInt16 nErr = 0;
+                FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
                 ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
@@ -2946,9 +2946,9 @@ void ScInterpreter::ScHarMean()
                         nValCount++;
                     }
                     else
-                        SetError( errIllegalArgument);
+                        SetError( FormulaError::IllegalArgument);
                     SetError(nErr);
-                    while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
+                    while ((nErr == FormulaError::NONE) && aValIter.GetNext(nCellVal, nErr))
                     {
                         if (nCellVal > 0.0)
                         {
@@ -2956,7 +2956,7 @@ void ScInterpreter::ScHarMean()
                             nValCount++;
                         }
                         else
-                            SetError( errIllegalArgument);
+                            SetError( FormulaError::IllegalArgument);
                     }
                     SetError(nErr);
                 }
@@ -2981,7 +2981,7 @@ void ScInterpreter::ScHarMean()
                                 nValCount++;
                             }
                             else
-                                SetError( errIllegalArgument);
+                                SetError( FormulaError::IllegalArgument);
                         }
                     }
                     else
@@ -2996,16 +2996,16 @@ void ScInterpreter::ScHarMean()
                                     nValCount++;
                                 }
                                 else
-                                    SetError( errIllegalArgument);
+                                    SetError( FormulaError::IllegalArgument);
                             }
                     }
                 }
             }
             break;
-            default : SetError(errIllegalParameter); break;
+            default : SetError(FormulaError::IllegalParameter); break;
         }
     }
-    if (nGlobalError == 0)
+    if (nGlobalError == FormulaError::NONE)
         PushDouble((double)nValCount/nVal);
     else
         PushError( nGlobalError);
@@ -3020,7 +3020,7 @@ void ScInterpreter::ScGeoMean()
     ScRange aRange;
 
     size_t nRefInList = 0;
-    while ((nGlobalError == 0) && (nParamCount-- > 0))
+    while ((nGlobalError == FormulaError::NONE) && (nParamCount-- > 0))
     {
         switch (GetStackType())
         {
@@ -3033,7 +3033,7 @@ void ScInterpreter::ScGeoMean()
                     nValCount++;
                 }
                 else
-                    SetError( errIllegalArgument);
+                    SetError( FormulaError::IllegalArgument);
                 break;
             }
             case svSingleRef :
@@ -3049,14 +3049,14 @@ void ScInterpreter::ScGeoMean()
                         nValCount++;
                     }
                     else
-                        SetError( errIllegalArgument);
+                        SetError( FormulaError::IllegalArgument);
                 }
                 break;
             }
             case formula::svDoubleRef :
             case svRefList :
             {
-                sal_uInt16 nErr = 0;
+                FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 double nCellVal;
                 ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
@@ -3068,9 +3068,9 @@ void ScInterpreter::ScGeoMean()
                         nValCount++;
                     }
                     else
-                        SetError( errIllegalArgument);
+                        SetError( FormulaError::IllegalArgument);
                     SetError(nErr);
-                    while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
+                    while ((nErr == FormulaError::NONE) && aValIter.GetNext(nCellVal, nErr))
                     {
                         if (nCellVal > 0.0)
                         {
@@ -3078,7 +3078,7 @@ void ScInterpreter::ScGeoMean()
                             nValCount++;
                         }
                         else
-                            SetError( errIllegalArgument);
+                            SetError( FormulaError::IllegalArgument);
                     }
                     SetError(nErr);
                 }
@@ -3103,7 +3103,7 @@ void ScInterpreter::ScGeoMean()
                                 nValCount++;
                             }
                             else
-                                SetError( errIllegalArgument);
+                                SetError( FormulaError::IllegalArgument);
                         }
                     }
                     else
@@ -3118,16 +3118,16 @@ void ScInterpreter::ScGeoMean()
                                     nValCount++;
                                 }
                                 else
-                                    SetError( errIllegalArgument);
+                                    SetError( FormulaError::IllegalArgument);
                             }
                     }
                 }
             }
             break;
-            default : SetError(errIllegalParameter); break;
+            default : SetError(FormulaError::IllegalParameter); break;
         }
     }
-    if (nGlobalError == 0)
+    if (nGlobalError == FormulaError::NONE)
         PushDouble(exp(nVal / nValCount));
     else
         PushError( nGlobalError);
@@ -3141,9 +3141,9 @@ void ScInterpreter::ScStandard()
         double mue   = GetDouble();
         double x     = GetDouble();
         if (sigma < 0.0)
-            PushError( errIllegalArgument);
+            PushError( FormulaError::IllegalArgument);
         else if (sigma == 0.0)
-            PushError( errDivisionByZero);
+            PushError( FormulaError::DivisionByZero);
         else
             PushDouble((x-mue)/sigma);
     }
@@ -3190,7 +3190,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
             case svRefList :
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
-                sal_uInt16 nErr = 0;
+                FormulaError nErr = FormulaError::NONE;
                 ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst(fVal, nErr))
                 {
@@ -3198,7 +3198,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
                     values.push_back(fVal);
                     fCount++;
                     SetError(nErr);
-                    while ((nErr == 0) && aValIter.GetNext(fVal, nErr))
+                    while ((nErr == FormulaError::NONE) && aValIter.GetNext(fVal, nErr))
                     {
                         fSum += fVal;
                         values.push_back(fVal);
@@ -3241,16 +3241,16 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
             }
             break;
             default :
-                SetError(errIllegalParameter);
+                SetError(FormulaError::IllegalParameter);
             break;
         }
     }
 
-    if (nGlobalError)
+    if (nGlobalError != FormulaError::NONE)
     {
         PushError( nGlobalError);
         return false;
-    } // if (nGlobalError)
+    } // if (nGlobalError != FormulaError::NONE)
     return true;
 }
 
@@ -3300,9 +3300,9 @@ void ScInterpreter::ScSkewp()
 double ScInterpreter::GetMedian( vector<double> & rArray )
 {
     size_t nSize = rArray.size();
-    if (rArray.empty() || nSize == 0 || nGlobalError)
+    if (rArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE)
     {
-        SetError( errNoValue);
+        SetError( FormulaError::NoValue);
         return 0.0;
     }
 
@@ -3360,14 +3360,14 @@ double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile
 double ScInterpreter::GetPercentileExclusive( vector<double> & rArray, double fPercentile )
 {
     size_t nSize1 = rArray.size() + 1;
-    if ( rArray.empty() || nSize1 == 1 || nGlobalError )
+    if ( rArray.empty() || nSize1 == 1 || nGlobalError != FormulaError::NONE)
     {
-        SetError( errNoValue );
+        SetError( FormulaError::NoValue );
         return 0.0;
     }
     if ( fPercentile * nSize1 < 1.0 || fPercentile * nSize1 > (double) ( nSize1 - 1 ) )
     {
-        SetError( errIllegalParameter );
+        SetError( FormulaError::IllegalParameter );
         return 0.0;
     }
 
@@ -3400,9 +3400,9 @@ void ScInterpreter::ScPercentile( bool bInclusive )
     }
     vector<double> aArray;
     GetNumberSequenceArray( 1, aArray, false );
-    if ( aArray.empty() || aArray.size() == 0 || nGlobalError )
+    if ( aArray.empty() || aArray.size() == 0 || nGlobalError != FormulaError::NONE )
     {
-        SetError( errNoValue );
+        SetError( FormulaError::NoValue );
         return;
     }
     if ( bInclusive )
@@ -3423,9 +3423,9 @@ void ScInterpreter::ScQuartile( bool bInclusive )
     }
     vector<double> aArray;
     GetNumberSequenceArray( 1, aArray, false );
-    if ( aArray.empty() || aArray.size() == 0 || nGlobalError )
+    if ( aArray.empty() || aArray.size() == 0 || nGlobalError != FormulaError::NONE )
     {
-        SetError( errNoValue );
+        SetError( FormulaError::NoValue );
         return;
     }
     if ( bInclusive )
@@ -3442,7 +3442,7 @@ void ScInterpreter::ScModalValue()
     vector<double> aSortArray;
     GetSortArray( nParamCount, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
-    if (aSortArray.empty() || nSize == 0 || nGlobalError)
+    if (aSortArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE)
         PushNoValue();
     else
     {
@@ -3497,7 +3497,7 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
      * we may or will need a real sorted array again, see #i32345. */
     GetNumberSequenceArray(1, aSortArray, false );
     SCSIZE nSize = aSortArray.size();
-    if (aSortArray.empty() || nSize == 0 || nGlobalError || nSize < k)
+    if (aSortArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE || nSize < k)
         PushNoValue();
     else
     {
@@ -3528,7 +3528,7 @@ void ScInterpreter::ScPercentrank( bool bInclusive )
     vector<double> aSortArray;
     GetSortArray( 1, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
-    if ( aSortArray.empty() || nSize == 0 || nGlobalError )
+    if ( aSortArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE )
         PushNoValue();
     else
     {
@@ -3621,7 +3621,7 @@ void ScInterpreter::ScTrimMean()
     vector<double> aSortArray;
     GetSortArray( 1, aSortArray, nullptr, false, false );
     SCSIZE nSize = aSortArray.size();
-    if (aSortArray.empty() || nSize == 0 || nGlobalError)
+    if (aSortArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE)
         PushNoValue();
     else
     {
@@ -3663,7 +3663,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
             case svRefList :
             {
                 PopDoubleRef( aRange, nParam, nRefInList);
-                if (nGlobalError)
+                if (nGlobalError != FormulaError::NONE)
                     break;
 
                 aRange.PutInOrder();
@@ -3671,14 +3671,14 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                 nCellCount *= aRange.aEnd.Row() - aRange.aStart.Row() + 1;
                 rArray.reserve( rArray.size() + nCellCount);
 
-                sal_uInt16 nErr = 0;
+                FormulaError nErr = FormulaError::NONE;
                 double fCellVal;
                 ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
                 if (aValIter.GetFirst( fCellVal, nErr))
                 {
                     rArray.push_back( fCellVal);
                     SetError(nErr);
-                    while ((nErr == 0) && aValIter.GetNext( fCellVal, nErr))
+                    while ((nErr == FormulaError::NONE) && aValIter.GetNext( fCellVal, nErr))
                         rArray.push_back( fCellVal);
                     SetError(nErr);
                 }
@@ -3711,23 +3711,23 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                             OUString aStr = pMat->GetString( i ).getString();
                             if ( aStr.getLength() > 0 )
                             {
-                                sal_uInt16 nErr = nGlobalError;
-                                nGlobalError = 0;
+                                FormulaError nErr = nGlobalError;
+                                nGlobalError = FormulaError::NONE;
                                 double fVal = ConvertStringToValue( aStr );
-                                if ( !nGlobalError )
+                                if ( nGlobalError == FormulaError::NONE )
                                 {
                                     rArray.push_back( fVal );
                                     nGlobalError = nErr;
                                 }
                                 else
                                 {
-                                    rArray.push_back( CreateDoubleError( errNoValue));
+                                    rArray.push_back( CreateDoubleError( FormulaError::NoValue));
                                     // Propagate previous error if any, else
                                     // the current #VALUE! error.
-                                    if (nErr)
+                                    if (nErr != FormulaError::NONE)
                                         nGlobalError = nErr;
                                     else
-                                        nGlobalError = errNoValue;
+                                        nGlobalError = FormulaError::NoValue;
                                 }
                             }
                         }
@@ -3745,10 +3745,10 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
             break;
             default :
                 PopError();
-                SetError( errIllegalParameter);
+                SetError( FormulaError::IllegalParameter);
             break;
         }
-        if (nGlobalError)
+        if (nGlobalError != FormulaError::NONE)
             break;  // while
     }
     // nParam > 0 in case of error, clean stack environment and obtain earlier
@@ -3761,15 +3761,15 @@ void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortAr
 {
     GetNumberSequenceArray( nParamCount, rSortArray, bConvertTextInArray );
     if (rSortArray.size() > MAX_ANZ_DOUBLE_FOR_SORT)
-        SetError( errMatrixSize);
+        SetError( FormulaError::MatrixSize);
     else if ( rSortArray.empty() )
     {
         if ( bAllowEmptyArray )
             return;
-        SetError( errNoValue);
+        SetError( FormulaError::NoValue);
     }
 
-    if (nGlobalError == 0)
+    if (nGlobalError == FormulaError::NONE)
         QuickSort( rSortArray, pIndexOrder);
 }
 
@@ -3866,7 +3866,7 @@ void ScInterpreter::ScRank( bool bAverage )
     GetSortArray( 1, aSortArray, nullptr, false, false );
     double fVal = GetDouble();
     SCSIZE nSize = aSortArray.size();
-    if ( aSortArray.empty() || nSize == 0 || nGlobalError )
+    if ( aSortArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE )
         PushNoValue();
     else
     {
@@ -3878,7 +3878,7 @@ void ScInterpreter::ScRank( bool bAverage )
             double fFirstPos = -1.0;
             bool bFinished = false;
             SCSIZE i;
-            for ( i = 0; i < nSize && !bFinished && !nGlobalError; i++ )
+            for ( i = 0; i < nSize && !bFinished && nGlobalError == FormulaError::NONE; i++ )
             {
                 if ( aSortArray[ i ] == fVal )
                 {
@@ -3949,7 +3949,7 @@ void ScInterpreter::ScAveDev()
             case formula::svDoubleRef :
             case svRefList :
             {
-                sal_uInt16 nErr = 0;
+                FormulaError nErr = FormulaError::NONE;
                 double nCellVal;
                 PopDoubleRef( aRange, nParam, nRefInList);
                 ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
@@ -3958,7 +3958,7 @@ void ScInterpreter::ScAveDev()
                     rVal += nCellVal;
                     rValCount++;
                     SetError(nErr);
-                    while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
+                    while ((nErr == FormulaError::NONE) && aValIter.GetNext(nCellVal, nErr))
                     {
                         rVal += nCellVal;
                         rValCount++;
@@ -3996,11 +3996,11 @@ void ScInterpreter::ScAveDev()
             }
             break;
             default :
-                SetError(errIllegalParameter);
+                SetError(FormulaError::IllegalParameter);
             break;
         }
     }
-    if (nGlobalError)
+    if (nGlobalError != FormulaError::NONE)
     {
         PushError( nGlobalError);
         return;
@@ -4028,7 +4028,7 @@ void ScInterpreter::ScAveDev()
             case formula::svDoubleRef :
             case svRefList :
             {
-                sal_uInt16 nErr = 0;
+                FormulaError nErr = FormulaError::NONE;
                 double nCellVal;
                 PopDoubleRef( aRange, nParam, nRefInList);
                 ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags );
@@ -4066,7 +4066,7 @@ void ScInterpreter::ScAveDev()
                 }
             }
             break;
-            default : SetError(errIllegalParameter); break;
+            default : SetError(FormulaError::IllegalParameter); break;
         }
     }
     PushDouble(rVal / rValCount);
@@ -4134,7 +4134,7 @@ void ScInterpreter::ScProbability()
                         }
                     }
                     else
-                        SetError( errIllegalArgument);
+                        SetError( FormulaError::IllegalArgument);
                 }
             }
             if (bStop || fabs(fSum -1.0) > 1.0E-7)
@@ -4238,7 +4238,7 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
         if ( _bPearson )
         {
             if (fSumSqrDeltaX == 0.0 || ( !_bStexy && fSumSqrDeltaY == 0.0) )
-                PushError( errDivisionByZero);
+                PushError( FormulaError::DivisionByZero);
             else if ( _bStexy )
                 PushDouble( sqrt( (fSumSqrDeltaY - fSumDeltaXDeltaY *
                             fSumDeltaXDeltaY / fSumSqrDeltaX) / (fCount-2)));
@@ -4259,7 +4259,7 @@ void ScInterpreter::ScRSQ()
 {
     // Same as ScPearson()*ScPearson()
     ScPearson();
-    if (!nGlobalError)
+    if (nGlobalError == FormulaError::NONE)
     {
         switch (GetStackType())
         {
@@ -4341,7 +4341,7 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
             }
         }
         if (fSumSqrDeltaX == 0.0)
-            PushError( errDivisionByZero);
+            PushError( FormulaError::DivisionByZero);
         else
         {
             if ( bSlope )
@@ -4424,7 +4424,7 @@ void ScInterpreter::ScForecast()
             }
         }
         if (fSumSqrDeltaX == 0.0)
-            PushError( errDivisionByZero);
+            PushError( FormulaError::DivisionByZero);
         else
             PushDouble( fMeanY + fSumDeltaXDeltaY / fSumSqrDeltaX * (fVal - fMeanX));
     }

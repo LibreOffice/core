@@ -1298,7 +1298,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rName,
                                 long nParamCount ) :
     bValidCount( false ),
-    nErrCode( formula::errNoCode ),      // before function was called
+    nErrCode( FormulaError::NoCode ),      // before function was called
     bHasString( true ),
     fValue( 0.0 ),
     xMatrix( nullptr )
@@ -1464,7 +1464,7 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
     if ( xFunction.is() )
     {
         uno::Any aAny;
-        nErrCode = 0;
+        nErrCode = FormulaError::NONE;
 
         try
         {
@@ -1472,34 +1472,32 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
         }
         catch(lang::IllegalArgumentException&)
         {
-            nErrCode = formula::errIllegalArgument;
+            nErrCode = FormulaError::IllegalArgument;
         }
-
         catch(const reflection::InvocationTargetException& rWrapped)
         {
             if ( rWrapped.TargetException.getValueType().equals(
                     cppu::UnoType<lang::IllegalArgumentException>::get()) )
-                nErrCode = formula::errIllegalArgument;
+                nErrCode = FormulaError::IllegalArgument;
             else if ( rWrapped.TargetException.getValueType().equals(
                     cppu::UnoType<sheet::NoConvergenceException>::get()) )
-                nErrCode = formula::errNoConvergence;
+                nErrCode = FormulaError::NoConvergence;
             else
-                nErrCode = formula::errNoValue;
+                nErrCode = FormulaError::NoValue;
         }
-
         catch(uno::Exception&)
         {
-            nErrCode = formula::errNoValue;
+            nErrCode = FormulaError::NoValue;
         }
 
-        if (!nErrCode)
+        if (nErrCode == FormulaError::NONE)
             SetResult( aAny );      // convert result to Calc types
     }
 }
 
 void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 {
-    nErrCode = 0;
+    nErrCode = FormulaError::NONE;
     xVarRes = nullptr;
 
     // Reflection* pRefl = rNewRes.getReflection();
@@ -1509,7 +1507,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
     switch (eClass)
     {
         case uno::TypeClass_VOID:
-            nErrCode = formula::NOTAVAILABLE;         // #NA
+            nErrCode = FormulaError::NotAvailable;         // #NA
             break;
 
         case uno::TypeClass_ENUM:
@@ -1545,7 +1543,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     xVarRes.set( xInterface, uno::UNO_QUERY );
 
                 if (!xVarRes.is())
-                    nErrCode = formula::errNoValue;          // unknown interface
+                    nErrCode = FormulaError::NoValue;          // unknown interface
             }
             break;
 
@@ -1683,7 +1681,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             }
 
             if (!xMatrix)                       // no array found
-                nErrCode = formula::errNoValue;          //TODO: code for error in return type???
+                nErrCode = FormulaError::NoValue;          //TODO: code for error in return type???
     }
 }
 

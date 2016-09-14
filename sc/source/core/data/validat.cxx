@@ -645,8 +645,8 @@ bool ScValidationData::GetSelectionFromFormula(
         // Use an interim matrix to create the TypedStrData below.
         xMatRef = new ScFullMatrix(1, 1, 0.0);
 
-        sal_uInt16 nErrCode = aValidationSrc.GetErrCode();
-        if (nErrCode)
+        FormulaError nErrCode = aValidationSrc.GetErrCode();
+        if (nErrCode != FormulaError::NONE)
         {
             /* TODO : to use later in an alert box?
              * OUString rStrResult = "...";
@@ -750,9 +750,9 @@ bool ScValidationData::GetSelectionFromFormula(
             }
             else
             {
-                sal_uInt16 nErr = nMatVal.GetError();
+                FormulaError nErr = nMatVal.GetError();
 
-                if( 0 != nErr )
+                if( FormulaError::NONE != nErr )
                 {
                     aValStr = ScGlobal::GetErrorString( nErr );
                 }
