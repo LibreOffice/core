@@ -119,7 +119,7 @@ public:
             const XMLPropertyState& rProperty,
             SvXmlExportFlags nFlags,
             const ::std::vector< XMLPropertyState > *pProperties,
-            sal_uInt32 nIdx = 0 ) const override;
+            sal_uInt32 nIdx ) const override;
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
     virtual void handleSpecialItem(
@@ -128,7 +128,7 @@ public:
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
             const ::std::vector< XMLPropertyState > *pProperties,
-            sal_uInt32 nIdx = 0 ) const override;
+            sal_uInt32 nIdx ) const override;
 };
 
 class ScXMLRowExportPropertyMapper : public SvXMLExportPropertyMapper
@@ -159,7 +159,7 @@ public:
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
             const ::std::vector< XMLPropertyState > *pProperties,
-            sal_uInt32 nIdx = 0 ) const override;
+            sal_uInt32 nIdx ) const override;
 };
 
 class ScXMLTableExportPropertyMapper : public SvXMLExportPropertyMapper
@@ -177,7 +177,7 @@ public:
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
             const ::std::vector< XMLPropertyState > *pProperties,
-            sal_uInt32 nIdx = 0 ) const override;
+            sal_uInt32 nIdx ) const override;
 };
 
 class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP

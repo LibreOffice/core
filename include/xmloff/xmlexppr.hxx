@@ -89,7 +89,7 @@ protected:
                      const SvXMLNamespaceMap& rNamespaceMap,
                      SvXmlExportFlags nFlags,
                      const ::std::vector< XMLPropertyState > *pProperties,
-                     sal_uInt32 nIdx = 0 ) const;
+                     sal_uInt32 nIdx ) const;
 
     void exportElementItems(
             SvXMLExport& rExport,
@@ -154,7 +154,7 @@ public:
             const XMLPropertyState& rProperty,
             SvXmlExportFlags nFlags,
             const ::std::vector< XMLPropertyState > *pProperties,
-            sal_uInt32 nIdx = 0 ) const;
+            sal_uInt32 nIdx ) const;
 
     /** this method is called for every item that has the
         MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
@@ -164,7 +164,7 @@ public:
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
             const ::std::vector< XMLPropertyState > *pProperties,
-            sal_uInt32 nIdx = 0 ) const;
+            sal_uInt32 nIdx ) const;
 
     const rtl::Reference<XMLPropertySetMapper>& getPropertySetMapper() const;
 

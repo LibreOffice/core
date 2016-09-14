@@ -44,8 +44,8 @@ public:
     TokenContext( SvXMLImport& rImport,
                   sal_uInt16 nPrefix,
                   const OUString& rLocalName,
-                  const SvXMLTokenMapEntry* pAttributes = nullptr,
-                  const SvXMLTokenMapEntry* pChildren = nullptr );
+                  const SvXMLTokenMapEntry* pAttributes,
+                  const SvXMLTokenMapEntry* pChildren );
 
     virtual ~TokenContext() override;
 

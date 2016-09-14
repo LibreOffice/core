@@ -721,7 +721,7 @@ public:
     sal_Int32                       mnCurrentZ;
     std::shared_ptr<ShapeSortContext> mpParentContext;
 
-    ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, std::shared_ptr<ShapeSortContext> pParentContext = nullptr );
+    ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, std::shared_ptr<ShapeSortContext> pParentContext );
 
     void popGroupAndSort();
 private:

@@ -93,7 +93,7 @@ public:
                             const XMLPropertyState& rProperty,
                             SvXmlExportFlags nFlags,
                             const ::std::vector< XMLPropertyState >* pProperties,
-                            sal_uInt32 nIdx = 0
+                            sal_uInt32 nIdx
                             ) const override;
 
     void SetAutoStyles( bool bIsInAutoStyles ) { mbIsInAutoStyles = bIsInAutoStyles; }
@@ -104,7 +104,7 @@ public:
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
             const ::std::vector< XMLPropertyState > *pProperties,
-            sal_uInt32 nIdx = 0 ) const override;
+            sal_uInt32 nIdx ) const override;
 };
 
 class XMLPageExportPropertyMapper : public SvXMLExportPropertyMapper
@@ -126,7 +126,7 @@ public:
                             const XMLPropertyState& rProperty,
                             SvXmlExportFlags nFlags,
                             const ::std::vector< XMLPropertyState >* pProperties,
-                            sal_uInt32 nIdx = 0
+                            sal_uInt32 nIdx
                             ) const override;
 };
 

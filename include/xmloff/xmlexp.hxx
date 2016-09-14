@@ -270,8 +270,8 @@ public:
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
-        const enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID,
-        SvXMLExportFlags nExportFlag = SvXMLExportFlags::ALL );
+        const enum ::xmloff::token::XMLTokenEnum eClass,
+        SvXMLExportFlags nExportFlag );
 
     SvXMLExport(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,

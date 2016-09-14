@@ -320,7 +320,7 @@ public:
 
     InputStreamTransformer( URLParameter* urlParam,
                             Databases*    pDatatabases,
-                            bool isRoot = false );
+                            bool isRoot );
 
     virtual ~InputStreamTransformer() override;
 

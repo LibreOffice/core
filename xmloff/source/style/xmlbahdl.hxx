@@ -33,7 +33,7 @@ class XMLNumberPropHdl : public XMLPropertyHandler
     sal_Int8 nBytes;
 
 public:
-    explicit XMLNumberPropHdl( sal_Int8 nB=4 ) : nBytes( nB ) {}
+    explicit XMLNumberPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLNumberPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -49,7 +49,7 @@ class XMLNumberNonePropHdl : public XMLPropertyHandler
     sal_Int8        nBytes;
 public:
     explicit XMLNumberNonePropHdl( sal_Int8 nB = 4 );
-    XMLNumberNonePropHdl( enum ::xmloff::token::XMLTokenEnum eZeroString, sal_Int8 nB = 4 );
+    XMLNumberNonePropHdl( enum ::xmloff::token::XMLTokenEnum eZeroString, sal_Int8 nB );
     virtual ~XMLNumberNonePropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -63,7 +63,7 @@ class XMLMeasurePropHdl : public XMLPropertyHandler
 {
     sal_Int8 nBytes;
 public:
-    explicit XMLMeasurePropHdl( sal_Int8 nB=4 ) : nBytes( nB ) {}
+    explicit XMLMeasurePropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLMeasurePropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -77,7 +77,7 @@ class XMLPercentPropHdl : public XMLPropertyHandler
 {
     sal_Int8 nBytes;
 public:
-    explicit XMLPercentPropHdl( sal_Int8 nB=4 ) : nBytes( nB ) {}
+    explicit XMLPercentPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLPercentPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -101,7 +101,7 @@ class XMLNegPercentPropHdl : public XMLPropertyHandler
 {
     sal_Int8 nBytes;
 public:
-    explicit XMLNegPercentPropHdl( sal_Int8 nB=4 ) : nBytes( nB ) {}
+    explicit XMLNegPercentPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLNegPercentPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
@@ -115,7 +115,7 @@ class XMLMeasurePxPropHdl : public XMLPropertyHandler
 {
     sal_Int8 nBytes;
 public:
-    explicit XMLMeasurePxPropHdl( sal_Int8 nB=4 ) : nBytes( nB ) {}
+    explicit XMLMeasurePxPropHdl( sal_Int8 nB ) : nBytes( nB ) {}
     virtual ~XMLMeasurePxPropHdl() override;
 
     virtual bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;

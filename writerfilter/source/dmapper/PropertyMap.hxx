@@ -94,7 +94,7 @@ class PropValue
     GrabBagType m_GrabBagType;
 
 public:
-    PropValue(const css::uno::Any& rValue, GrabBagType i_GrabBagType = NO_GRAB_BAG) :
+    PropValue(const css::uno::Any& rValue, GrabBagType i_GrabBagType) :
         m_aValue(rValue), m_GrabBagType(i_GrabBagType) {}
 
     PropValue() : m_aValue(), m_GrabBagType(NO_GRAB_BAG) {}
