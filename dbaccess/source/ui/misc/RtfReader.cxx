@@ -140,7 +140,7 @@ void ORTFReader::NextToken( int nToken )
                     bool bInsertRow = true;
                     if ( !m_xTable.is() ) // use first line as header
                     {
-                        sal_Size nTell = rInput.Tell(); // perhaps alters position of the stream
+                        sal_uInt64 const nTell = rInput.Tell(); // perhaps alters position of the stream
 
                         m_bError = !CreateTable(nToken);
                         bInsertRow = m_bAppendFirstLine;

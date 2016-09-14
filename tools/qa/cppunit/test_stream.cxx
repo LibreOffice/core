@@ -123,7 +123,7 @@ namespace
 
         aMemStream.Seek(0);
         CPPUNIT_ASSERT(aMemStream.good());
-        sal_Size nRet = aMemStream.ReadBytes(buffer, sizeof(buffer));
+        std::size_t nRet = aMemStream.ReadBytes(buffer, sizeof(buffer));
         CPPUNIT_ASSERT(nRet == 3);
         CPPUNIT_ASSERT(!aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());

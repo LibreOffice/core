@@ -305,7 +305,7 @@ public:
 
 protected:
     explicit            XclExpCellBase(
-                            sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos );
+                            sal_uInt16 nRecId, std::size_t nContSize, const XclAddress& rXclPos );
 
     /** Sets this record to a new column position. */
     inline void         SetXclCol( sal_uInt16 nXclCol ) { maXclPos.mnCol = nXclCol; }
@@ -334,15 +334,15 @@ public:
     virtual void        Save( XclExpStream& rStrm ) override;
 
 protected:
-    explicit            XclExpSingleCellBase( sal_uInt16 nRecId, sal_Size nContSize,
+    explicit            XclExpSingleCellBase( sal_uInt16 nRecId, std::size_t nContSize,
                             const XclAddress& rXclPos, sal_uInt32 nXFId );
 
     explicit            XclExpSingleCellBase( const XclExpRoot& rRoot,
-                            sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos,
+                            sal_uInt16 nRecId, std::size_t nContSize, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_Int16 nScript, sal_uInt32 nForcedXFId );
 
-    inline void         SetContSize( sal_Size nContSize ) { mnContSize = nContSize; }
-    inline sal_Size     GetContSize() const { return mnContSize; }
+    inline void         SetContSize( std::size_t nContSize ) { mnContSize = nContSize; }
+    inline std::size_t  GetContSize() const { return mnContSize; }
 
     inline void         SetXFId( sal_uInt32 nXFId ) { maXFId.mnXFId = nXFId; }
     inline sal_uInt32   GetXFId() const { return maXFId.mnXFId; }
@@ -355,7 +355,7 @@ private:
 
 private:
     XclExpXFId          maXFId;         /// The XF identifier of the cell formatting.
-    sal_Size            mnContSize;     /// The size of the cell contents.
+    std::size_t         mnContSize;     /// The size of the cell contents.
 };
 
 /** Represents a NUMBER record that describes a cell with a double value. */
@@ -494,7 +494,7 @@ public:
 
 protected:
     explicit            XclExpMultiCellBase( sal_uInt16 nRecId, sal_uInt16 nMulRecId,
-                            sal_Size nContSize, const XclAddress& rXclPos );
+                            std::size_t nContSize, const XclAddress& rXclPos );
 
     /** Returns the number of cells this record represents. */
     sal_uInt16          GetCellCount() const;
@@ -525,7 +525,7 @@ private:
     typedef ::std::vector< XclExpMultiXFId > XclExpMultiXFIdDeq;
 
     sal_uInt16          mnMulRecId;     /// Record ID for multiple record variant.
-    sal_Size            mnContSize;     /// Data size of contents for one cell
+    std::size_t         mnContSize;     /// Data size of contents for one cell
     XclExpMultiXFIdDeq  maXFIds;        /// The XF identifiers of the cell formatting.
 };
 

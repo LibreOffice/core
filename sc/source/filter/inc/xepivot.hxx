@@ -89,7 +89,7 @@ public:
     sal_uInt16          GetItemIndex( const OUString& rItemName ) const;
 
     /** Returns the size an item index needs to write out. */
-    sal_Size            GetIndexSize() const;
+    std::size_t         GetIndexSize() const;
     /** Writes the item index at the passed source row position as part of the SXINDEXLIST record. */
     void                WriteIndex( XclExpStream& rStrm, sal_uInt32 nSrcRow ) const;
 

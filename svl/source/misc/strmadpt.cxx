@@ -143,7 +143,7 @@ bool SvInputStream::open()
 }
 
 // virtual
-sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
+std::size_t SvInputStream::GetData(void * pData, std::size_t const nSize)
 {
     if (!open())
     {
@@ -172,8 +172,8 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
         {
             sal_Int32 nRemain
                 = sal_Int32(
-                    std::min(sal_uLong(nSize - nRead),
-                             sal_uLong(std::numeric_limits< sal_Int32 >::max())));
+                    std::min(std::size_t(nSize - nRead),
+                             std::size_t(std::numeric_limits<sal_Int32>::max())));
             if (nRemain == 0)
                 break;
             uno::Sequence< sal_Int8 > aBuffer;
@@ -209,8 +209,8 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
                 sal_Int32 nRemain
                     = sal_Int32(
                         std::min(
-                            sal_uLong(nSize - nRead),
-                            sal_uLong(std::numeric_limits< sal_Int32 >::max())));
+                            std::size_t(nSize - nRead),
+                            std::size_t(std::numeric_limits<sal_Int32>::max())));
                 if (nRemain == 0)
                     break;
                 uno::Sequence< sal_Int8 > aBuffer;
@@ -239,7 +239,7 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
 }
 
 // virtual
-sal_uLong SvInputStream::PutData(void const *, sal_uLong)
+std::size_t SvInputStream::PutData(void const *, std::size_t)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
@@ -269,7 +269,7 @@ sal_uInt64 SvInputStream::SeekPos(sal_uInt64 const nPos)
                             < STREAM_SEEK_TO_END)
                         {
                             m_nSeekedFrom = Tell();
-                            return sal_uLong(nLength);
+                            return sal_uInt64(nLength);
                         }
                     }
                     catch (const io::IOException&)
@@ -351,27 +351,27 @@ SvInputStream::~SvInputStream()
 //  SvOutputStream
 
 // virtual
-sal_uLong SvOutputStream::GetData(void *, sal_uLong)
+std::size_t SvOutputStream::GetData(void *, std::size_t)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
 }
 
 // virtual
-sal_uLong SvOutputStream::PutData(void const * pData, sal_uLong nSize)
+std::size_t SvOutputStream::PutData(void const * pData, std::size_t nSize)
 {
     if (!m_xStream.is())
     {
         SetError(ERRCODE_IO_CANTWRITE);
         return 0;
     }
-    sal_uLong nWritten = 0;
+    std::size_t nWritten = 0;
     for (;;)
     {
         sal_Int32 nRemain
             = sal_Int32(
-                std::min(sal_uLong(nSize - nWritten),
-                         sal_uLong(std::numeric_limits< sal_Int32 >::max())));
+                std::min(std::size_t(nSize - nWritten),
+                         std::size_t(std::numeric_limits<sal_Int32>::max())));
         if (nRemain == 0)
             break;
         try

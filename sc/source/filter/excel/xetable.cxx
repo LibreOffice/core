@@ -535,7 +535,7 @@ XclExpTableopRef XclExpTableopBuffer::TryCreate( const ScAddress& rScPos, const 
 // Cell records
 
 XclExpCellBase::XclExpCellBase(
-        sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos ) :
+        sal_uInt16 nRecId, std::size_t nContSize, const XclAddress& rXclPos ) :
     XclExpRecord( nRecId, nContSize + 4 ),
     maXclPos( rXclPos )
 {
@@ -564,7 +564,7 @@ void XclExpCellBase::RemoveUnusedBlankCells( const ScfUInt16Vec& /*rXFIndexes*/ 
 // Single cell records ========================================================
 
 XclExpSingleCellBase::XclExpSingleCellBase(
-        sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos, sal_uInt32 nXFId ) :
+        sal_uInt16 nRecId, std::size_t nContSize, const XclAddress& rXclPos, sal_uInt32 nXFId ) :
     XclExpCellBase( nRecId, 2, rXclPos ),
     maXFId( nXFId ),
     mnContSize( nContSize )
@@ -572,7 +572,7 @@ XclExpSingleCellBase::XclExpSingleCellBase(
 }
 
 XclExpSingleCellBase::XclExpSingleCellBase( const XclExpRoot& rRoot,
-        sal_uInt16 nRecId, sal_Size nContSize, const XclAddress& rXclPos,
+        sal_uInt16 nRecId, std::size_t nContSize, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_Int16 nScript, sal_uInt32 nForcedXFId ) :
     XclExpCellBase( nRecId, 2, rXclPos ),
     maXFId( nForcedXFId ),
@@ -1103,7 +1103,7 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
 // Multiple cell records ======================================================
 
 XclExpMultiCellBase::XclExpMultiCellBase(
-        sal_uInt16 nRecId, sal_uInt16 nMulRecId, sal_Size nContSize, const XclAddress& rXclPos ) :
+        sal_uInt16 nRecId, sal_uInt16 nMulRecId, std::size_t nContSize, const XclAddress& rXclPos ) :
     XclExpCellBase( nRecId, 0, rXclPos ),
     mnMulRecId( nMulRecId ),
     mnContSize( nContSize )
@@ -1165,7 +1165,7 @@ void XclExpMultiCellBase::Save( XclExpStream& rStrm )
         {
             sal_uInt16 nCount = nEndXclCol - nBegXclCol;
             bool bIsMulti = nCount > 1;
-            sal_Size nTotalSize = GetRecSize() + (2 + mnContSize) * nCount;
+            std::size_t nTotalSize = GetRecSize() + (2 + mnContSize) * nCount;
             if( bIsMulti ) nTotalSize += 2;
 
             rStrm.StartRecord( bIsMulti ? mnMulRecId : GetRecId(), nTotalSize );

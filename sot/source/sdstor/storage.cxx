@@ -100,9 +100,9 @@ void SotStorageStream::ResetError()
          pOwnStm->ResetError();
 }
 
-sal_uLong SotStorageStream::GetData( void* pData, sal_uLong nSize )
+std::size_t SotStorageStream::GetData(void* pData, std::size_t const nSize)
 {
-    sal_uLong nRet = 0;
+    std::size_t nRet = 0;
 
     if( pOwnStm )
     {
@@ -115,9 +115,9 @@ sal_uLong SotStorageStream::GetData( void* pData, sal_uLong nSize )
     return nRet;
 }
 
-sal_uLong SotStorageStream::PutData( const void* pData, sal_uLong nSize )
+std::size_t SotStorageStream::PutData(const void* pData, std::size_t const nSize)
 {
-    sal_uLong nRet = 0;
+    std::size_t nRet = 0;
 
     if( pOwnStm )
     {
