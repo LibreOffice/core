@@ -48,7 +48,7 @@ public:
     void StartBackgroundJobs() override;
 
     // Our own 'IdleTimer' calls the following method
-    DECL_LINK_TYPED( DoIdleJobs, Idle *, void );
+    DECL_LINK_TYPED( DoIdleJobs, Timer *, void );
 
     virtual ~DocumentTimerManager() override;
 
@@ -61,7 +61,7 @@ private:
 
     bool mbStartIdleTimer; //< idle timer mode start/stop
     sal_Int32 mIdleBlockCount;
-    Idle  maIdle;
+    Timer maDocIdleTimer;
 };
 
 }
