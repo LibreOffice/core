@@ -70,6 +70,11 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			, \
 				--enable-shared --disable-static \
 			) \
+			$(if $(filter MACOSX,$(OS)), \
+				$(if $(filter 1, \
+						$(shell expr '$(MAC_OS_X_VERSION_MIN_REQUIRED)' \
+							'<' 101200)), \
+					ac_cv_func_clock_gettime=no)) \
 		&& if [ -n "$${FB_CPU_ARG}" ]; then \
 			   $(MAKE_PRE) $(MAKE) $(INVOKE_FPA) SHELL='$(SHELL)' firebird_embedded $(MAKE_POST); \
 			else \
