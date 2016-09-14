@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_c77d28e9",
+        "filename": "binaryurp/source/unmarshal.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-14T16:40:55Z",
+      "side": 1,
+      "message": "doesn\u0027t make much of a difference, so i didn\u0027t revert it after the initial \"sed\"...",
+      "parentUuid": "ba5da102_e7fdcc6f",
+      "revId": "5a7f08a6cfca24dc26abfe4a8a544eb4bd4caf04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_87efb0af",
         "filename": "binaryurp/source/writer.cxx",
         "patchSetId": 2
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_4723d805",
+        "filename": "binaryurp/source/writer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-14T16:40:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba5da102_87efb0af",
+      "range": {
+        "startLine": 414,
+        "startChar": 49,
+        "endLine": 414,
+        "endChar": 78
+      },
+      "revId": "5a7f08a6cfca24dc26abfe4a8a544eb4bd4caf04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_c708c894",
         "filename": "vcl/source/window/mouse.cxx",
         "patchSetId": 2
@@ -53,6 +95,24 @@
       "writtenOn": "2016-09-14T15:41:13Z",
       "side": 1,
       "message": "sal_Size is known to map to either sal_uInt32 or sal_uInt64, os it\u0027s known to be an acceptable UNO type for makeAny (even though different ones on differnt platforms, for better or worse); there\u0027s no such knowledge for std::size_t; make up your mind what UNO type should be used here",
+      "revId": "5a7f08a6cfca24dc26abfe4a8a544eb4bd4caf04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_6720dcf8",
+        "filename": "vcl/source/window/mouse.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-14T16:40:55Z",
+      "side": 1,
+      "message": "will be fixed in a follow-up",
+      "parentUuid": "ba5da102_c708c894",
       "revId": "5a7f08a6cfca24dc26abfe4a8a544eb4bd4caf04",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
