@@ -178,7 +178,7 @@ private:
 
 public:
 
-    virtual ~SalAquaFilePicker();
+    virtual ~SalAquaFilePicker() override;
 
     void filterControlChanged();
 
