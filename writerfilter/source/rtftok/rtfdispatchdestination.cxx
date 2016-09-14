@@ -61,7 +61,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_FLDINST:
         {
             // Look for the field type
-            sal_Size nPos = Strm().Tell();
+            sal_uInt64 const nPos = Strm().Tell();
             OStringBuffer aBuf;
             char ch = 0;
             bool bFoundCode = false;
@@ -192,7 +192,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             if (!m_pSuperstream)
             {
                 Id nId = 0;
-                sal_Size nPos = m_nGroupStartPos - 1;
+                std::size_t nPos = m_nGroupStartPos - 1;
                 switch (nKeyword)
                 {
                 case RTF_HEADER:
@@ -235,7 +235,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 // Check if this is an endnote.
                 OStringBuffer aBuf;
                 char ch;
-                sal_Size nCurrent = Strm().Tell();
+                sal_uInt64 const nCurrent = Strm().Tell();
                 for (int i = 0; i < 7; ++i)
                 {
                     Strm().ReadChar(ch);

@@ -1665,7 +1665,7 @@ void Output::writeString( const OUString& rStr )
     StringHelper::appendEncString( maLine, rStr );
 }
 
-void Output::writeArray( const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep )
+void Output::writeArray( const sal_uInt8* pnData, std::size_t nSize, sal_Unicode cSep )
 {
     const sal_uInt8* pnEnd = pnData ? (pnData + nSize) : nullptr;
     for( const sal_uInt8* pnByte = pnData; pnByte < pnEnd; ++pnByte )
@@ -1991,7 +1991,7 @@ void OutputObjectBase::writeStringItem( const String& rName, const OUString& rDa
         mxOut->writeAscii( ",cut" );
 }
 
-void OutputObjectBase::writeArrayItem( const String& rName, const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep )
+void OutputObjectBase::writeArrayItem( const String& rName, const sal_uInt8* pnData, std::size_t nSize, sal_Unicode cSep )
 {
     ItemGuard aItem( mxOut, rName );
     mxOut->writeArray( pnData, nSize, cSep );
@@ -2169,7 +2169,7 @@ OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rt
     OUString aString;
     if( nDumpSize > 0 )
     {
-        ::std::vector< sal_Char > aBuffer( static_cast< sal_Size >( nLen ) + 1 );
+        ::std::vector< sal_Char > aBuffer( static_cast< std::size_t >( nLen ) + 1 );
         sal_Int32 nCharsRead = mxStrm->readMemory( &aBuffer.front(), nLen );
         aBuffer[ nCharsRead ] = 0;
         aString = OStringToOUString( OString( &aBuffer.front() ), eTextEnc );

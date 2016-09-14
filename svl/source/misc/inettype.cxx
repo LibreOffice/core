@@ -118,7 +118,7 @@ inline TypeIDMapEntry * Registration::getEntry(INetContentType eTypeID)
 }
 
 MediaTypeEntry const * seekEntry(OUString const & rTypeName,
-                                 MediaTypeEntry const * pMap, sal_Size nSize);
+                                 MediaTypeEntry const * pMap, std::size_t nSize);
 
 /** A mapping from type names to type ids and extensions.  Sorted by type
     name.
@@ -499,21 +499,21 @@ namespace
 {
 
 MediaTypeEntry const * seekEntry(OUString const & rTypeName,
-                                 MediaTypeEntry const * pMap, sal_Size nSize)
+                                 MediaTypeEntry const * pMap, std::size_t nSize)
 {
 #if defined DBG_UTIL
-    for (sal_Size i = 0; i < nSize - 1; ++i)
+    for (std::size_t i = 0; i < nSize - 1; ++i)
         DBG_ASSERT(
             rtl_str_compare(
                 pMap[i].m_pTypeName, pMap[i + 1].m_pTypeName) < 0,
             "seekEntry(): Bad map");
 #endif
 
-    sal_Size nLow = 0;
-    sal_Size nHigh = nSize;
+    std::size_t nLow = 0;
+    std::size_t nHigh = nSize;
     while (nLow != nHigh)
     {
-        sal_Size nMiddle = (nLow + nHigh) / 2;
+        std::size_t nMiddle = (nLow + nHigh) / 2;
         MediaTypeEntry const * pEntry = pMap + nMiddle;
         sal_Int32 nCmp = rTypeName.compareToIgnoreAsciiCaseAscii(pEntry->m_pTypeName);
         if (nCmp < 0)
@@ -582,7 +582,7 @@ OUString INetContentTypes::GetContentType(INetContentType eTypeID)
     static bool bInitialized = false;
     if (!bInitialized)
     {
-        for (sal_Size i = 0; i <= CONTENT_TYPE_LAST; ++i)
+        for (std::size_t i = 0; i <= CONTENT_TYPE_LAST; ++i)
             aMap[aStaticTypeNameMap[i].m_eTypeID] = aStaticTypeNameMap[i].m_pTypeName;
         aMap[CONTENT_TYPE_UNKNOWN] = CONTENT_TYPE_STR_APP_OCTSTREAM;
         aMap[CONTENT_TYPE_TEXT_PLAIN] = CONTENT_TYPE_STR_TEXT_PLAIN

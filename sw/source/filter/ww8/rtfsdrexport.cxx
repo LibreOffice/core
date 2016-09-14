@@ -105,7 +105,7 @@ inline sal_uInt16 impl_GetUInt16(const sal_uInt8*& pVal)
     return nRet;
 }
 
-inline sal_Int32 impl_GetPointComponent(const sal_uInt8*& pVal, sal_Size& rVerticesPos, sal_uInt16 nPointSize)
+inline sal_Int32 impl_GetPointComponent(const sal_uInt8*& pVal, std::size_t& rVerticesPos, sal_uInt16 nPointSize)
 {
     sal_Int32 nRet = 0;
     if ((nPointSize == 0xfff0) || (nPointSize == 4))
@@ -262,7 +262,7 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const Rectangle& rRec
                     aVertices.nPropSize >= 6 && aSegments.nPropSize >= 6)
             {
                 const sal_uInt8* pVerticesIt = aVertices.pBuf + 6;
-                sal_Size nVerticesPos = 6;
+                std::size_t nVerticesPos = 6;
                 const sal_uInt8* pSegmentIt = aSegments.pBuf;
 
                 OStringBuffer aSegmentInfo(512);

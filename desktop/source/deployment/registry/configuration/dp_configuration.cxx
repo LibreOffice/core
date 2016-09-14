@@ -602,7 +602,7 @@ OUString replaceOrigin(
     OString origin;
     sal_Char const * pBytes = reinterpret_cast<sal_Char const *>(
         bytes.data());
-    sal_Size nBytes = bytes.size();
+    std::size_t nBytes = bytes.size();
     size_t write_pos = 0;
     while (nBytes > 0)
     {

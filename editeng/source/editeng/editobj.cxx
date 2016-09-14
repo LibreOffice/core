@@ -371,7 +371,7 @@ void EditTextObject::Store( SvStream& rOStream ) const
     if ( rOStream.GetError() )
         return;
 
-    sal_Size nStartPos = rOStream.Tell();
+    sal_uInt64 const nStartPos = rOStream.Tell();
 
     sal_uInt16 nWhich = static_cast<sal_uInt16>(EE_FORMAT_BIN);
     rOStream.WriteUInt16( nWhich );
@@ -381,7 +381,7 @@ void EditTextObject::Store( SvStream& rOStream ) const
 
     StoreData( rOStream );
 
-    sal_Size nEndPos = rOStream.Tell();
+    sal_uInt64 const nEndPos = rOStream.Tell();
     nStructSz = nEndPos - nStartPos - sizeof( nWhich ) - sizeof( nStructSz );
     rOStream.Seek( nStartPos + sizeof( nWhich ) );
     rOStream.WriteUInt32( nStructSz );
@@ -390,7 +390,7 @@ void EditTextObject::Store( SvStream& rOStream ) const
 
 EditTextObject* EditTextObject::Create( SvStream& rIStream )
 {
-    sal_Size nStartPos = rIStream.Tell();
+    sal_uInt64 const nStartPos = rIStream.Tell();
 
     // First check what type of Object...
     sal_uInt16 nWhich;
@@ -413,7 +413,7 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream )
     pTxtObj->CreateData(rIStream);
 
     // Make sure that the stream is left at the correct place.
-    sal_Size nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
+    std::size_t nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
     rIStream.Seek( nStartPos + nFullSz );
     return pTxtObj;
 }

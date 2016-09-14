@@ -984,7 +984,7 @@ RTLFUNC(FindPropertyObject)
 static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                                       bool bBinary, short nBlockLen, bool bIsArray )
 {
-    sal_Size nFPos = pStrm->Tell();
+    sal_uInt64 const nFPos = pStrm->Tell();
 
     bool bIsVariant = !rVar.IsFixed();
     SbxDataType eType = rVar.GetType();
@@ -1091,7 +1091,7 @@ static bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 
     double aDouble;
 
-    sal_Size nFPos = pStrm->Tell();
+    sal_uInt64 const nFPos = pStrm->Tell();
 
     bool bIsVariant = !rVar.IsFixed();
     SbxDataType eVarType = rVar.GetType();
@@ -1261,7 +1261,9 @@ void PutGet( SbxArray& rPar, bool bPut )
 
     if( bHasRecordNo )
     {
-        sal_Size nFilePos = bRandom ? (sal_Size)(nBlockLen * nRecordNo) : (sal_Size)nRecordNo;
+        sal_uInt64 const nFilePos = bRandom
+            ? static_cast<sal_uInt64>(nBlockLen * nRecordNo)
+            : static_cast<sal_uInt64>(nRecordNo);
         pStrm->Seek( nFilePos );
     }
 
@@ -1277,7 +1279,7 @@ void PutGet( SbxArray& rPar, bool bPut )
 
     if( pArr )
     {
-        sal_Size nFPos = pStrm->Tell();
+        sal_uInt64 const nFPos = pStrm->Tell();
         short nDims = pArr->GetDims();
         std::unique_ptr<short[]> pDims(new short[ nDims ]);
         bRet = lcl_WriteReadSbxArray(*pArr,pStrm,!bRandom,nDims,pDims.get(),bPut);

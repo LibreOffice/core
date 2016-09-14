@@ -34,7 +34,7 @@ void BitmapTools::loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
 
-    sal_Size nSize = rStream.remainingSize();
+    std::size_t nSize = rStream.remainingSize();
     std::vector<sal_Int8> aBuffer(nSize + 1);
     rStream.ReadBytes(aBuffer.data(), nSize);
     aBuffer[nSize] = 0;
