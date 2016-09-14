@@ -66,7 +66,7 @@ AccessibleGridControlTable::getAccessibleChild( sal_Int32 nChildIndex )
     }
     if(!m_pAccessCellVector[nChildIndex].is())
     {
-        AccessibleGridControlTableCell* pCell = new AccessibleGridControlTableCell(this, m_aTable, nChildIndex/m_aTable.GetColumnCount(), nChildIndex%m_aTable.GetColumnCount(), TCTYPE_TABLECELL);
+        AccessibleGridControlTableCell* pCell = new AccessibleGridControlTableCell(this, m_aTable, nChildIndex/m_aTable.GetColumnCount(), nChildIndex%m_aTable.GetColumnCount());
         m_pCellVector[nChildIndex] = pCell;
         m_pAccessCellVector[nChildIndex] = pCell;
     }
@@ -99,7 +99,7 @@ AccessibleGridControlTable::getAccessibleAtPoint( const awt::Point& rPoint )
     sal_Int32 nRow = 0;
     sal_Int32 nColumnPos = 0;
     if( m_aTable.ConvertPointToCellAddress( nRow, nColumnPos, VCLPoint( rPoint ) ) )
-        xChild = new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumnPos, TCTYPE_TABLECELL);
+        xChild = new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumnPos);
     return xChild;
 }
 
@@ -219,7 +219,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTable::getAccessibleCellA
     }
     if(!m_pAccessCellVector[nChildIndex].is())
     {
-        AccessibleGridControlTableCell* pCell = new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumn, TCTYPE_TABLECELL);
+        AccessibleGridControlTableCell* pCell = new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumn);
         m_pCellVector[nChildIndex] = pCell;
         m_pAccessCellVector[nChildIndex] = pCell;
     }
