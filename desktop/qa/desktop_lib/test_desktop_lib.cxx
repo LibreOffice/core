@@ -99,6 +99,7 @@ public:
     void testRedlineWriter();
     void testTrackChanges();
     void testRedlineCalc();
+    void testPaintPartTile();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -129,6 +130,7 @@ public:
     CPPUNIT_TEST(testRedlineWriter);
     CPPUNIT_TEST(testTrackChanges);
     CPPUNIT_TEST(testRedlineCalc);
+    CPPUNIT_TEST(testPaintPartTile);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -1472,6 +1474,78 @@ void DesktopLOKTest::testRedlineCalc()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
+class ViewCallback
+{
+public:
+    bool m_bTilesInvalidated;
+
+    ViewCallback()
+        : m_bTilesInvalidated(false)
+    {
+    }
+
+    static void callback(int nType, const char* pPayload, void* pData)
+    {
+        static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
+    }
+
+    void callbackImpl(int nType, const char* /*pPayload*/)
+    {
+        switch (nType)
+        {
+        case LOK_CALLBACK_INVALIDATE_TILES:
+        {
+            m_bTilesInvalidated = true;
+        }
+        break;
+        }
+    }
+};
+
+void DesktopLOKTest::testPaintPartTile()
+{
+    // Load an impress doc of 2 slides.
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("2slides.odp");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    ViewCallback aView1;
+    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
+    int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
+
+    // Create a second view.
+    pDocument->m_pDocumentClass->createView(pDocument);
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    ViewCallback aView2;
+    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
+
+    // Go to the second slide in the second view.
+    pDocument->m_pDocumentClass->setPart(pDocument, 1);
+
+    // Switch back to the first view and start typing.
+    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
+
+    // Call paintPartTile() to paint the second part (in whichever view it finds suitable for this).
+    unsigned char pPixels[256 * 256 * 4];
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, pPixels, 1, 256, 256, 0, 0, 256, 256);
+
+    // Type again.
+    Scheduler::ProcessEventsToIdle();
+    aView1.m_bTilesInvalidated = false;
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    // This failed: paintPartTile() (as a side-effect) ended the text edit of
+    // the first view, so there were no invalidations.
+    CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

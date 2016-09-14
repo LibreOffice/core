@@ -1483,6 +1483,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               const int nTilePosX, const int nTilePosY,
                               const int nTileWidth, const int nTileHeight)
 {
+    SolarMutexGuard aGuard;
     SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " ["
                << nTileWidth << "x" << nTileHeight << "]@("
                << nTilePosX << ", " << nTilePosY << ") to ["
@@ -1500,8 +1501,27 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         // Text documents have a single coordinate system; don't change part.
         int nOrigPart = 0;
         const bool isText = (doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT);
+        int nOrigViewId = doc_getView(pThis);
+        int nViewId = nOrigViewId;
         if (!isText)
         {
+            // Check if just switching to an other view is enough, that has
+            // less side-effects.
+            if (nPart != doc_getPart(pThis))
+            {
+                SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+                while (pViewShell)
+                {
+                    if (pViewShell->getPart() == nPart)
+                    {
+                        nViewId = pViewShell->GetViewShellId();
+                        doc_setView(pThis, nViewId);
+                        break;
+                    }
+                    pViewShell = SfxViewShell::GetNext(*pViewShell);
+                }
+            }
+
             nOrigPart = doc_getPart(pThis);
             if (nPart != nOrigPart)
             {
@@ -1514,6 +1534,10 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         if (!isText && nPart != nOrigPart)
         {
             doc_setPart(pThis, nOrigPart);
+        }
+        if (!isText && nViewId != nOrigViewId)
+        {
+            doc_setView(pThis, nOrigViewId);
         }
     }
     catch (const std::exception&)
