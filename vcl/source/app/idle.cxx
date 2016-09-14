@@ -20,42 +20,15 @@
 #include <vcl/idle.hxx>
 #include "saltimer.hxx"
 
-void Idle::SetDeletionFlags()
-{
-    // If no AutoIdle, then stop.
-    if ( !mbAuto )
-        Scheduler::SetDeletionFlags();
-}
-
-void Idle::Invoke()
-{
-    maIdleHdl.Call( this );
-}
-
-Idle& Idle::operator=( const Idle& rIdle )
-{
-    Scheduler::operator=(rIdle);
-    maIdleHdl = rIdle.maIdleHdl;
-    mbAuto = rIdle.mbAuto;
-    return *this;
-}
-
 Idle::Idle( const sal_Char *pDebugName )
-    : Scheduler( pDebugName )
-    , mbAuto( false )
+    : Timer( pDebugName )
 {
     mePriority = SchedulerPriority::DEFAULT_IDLE;
 }
 
-Idle::Idle( const Idle& rIdle ) : Scheduler(rIdle)
-{
-    maIdleHdl = rIdle.maIdleHdl;
-    mbAuto = rIdle.mbAuto;
-}
-
 void Idle::Start()
 {
-    Scheduler::Start();
+    Timer::Start();
 
     sal_uInt64 nPeriod = Scheduler::ImmediateTimeoutMs;
     if (Scheduler::GetDeterministicMode())
@@ -88,17 +61,7 @@ void Idle::UpdateMinPeriod( const sal_uInt64 /* nTime */, sal_uInt64 &nMinPeriod
 AutoIdle::AutoIdle( const sal_Char *pDebugName )
     : Idle( pDebugName )
 {
-}
-
-AutoIdle::AutoIdle( const AutoIdle& rIdle ) : Idle( rIdle )
-{
     mbAuto = true;
-}
-
-AutoIdle& AutoIdle::operator=( const AutoIdle& rIdle )
-{
-    Idle::operator=( rIdle );
-    return *this;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

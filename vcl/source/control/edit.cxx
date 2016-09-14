@@ -1923,7 +1923,7 @@ void Edit::LoseFocus()
     {
         //notify an update latest when the focus is lost
         mpUpdateDataTimer->Stop();
-        mpUpdateDataTimer->Timeout();
+        mpUpdateDataTimer->Invoke();
     }
 
     if ( !mpSubEdit )
