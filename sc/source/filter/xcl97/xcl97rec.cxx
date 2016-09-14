@@ -864,7 +864,7 @@ sal_uInt16 XclTxo::GetNum() const
     return EXC_ID_TXO;
 }
 
-sal_Size XclTxo::GetLen() const
+std::size_t XclTxo::GetLen() const
 {
     return 18;
 }
@@ -1194,7 +1194,7 @@ sal_uInt16 ExcBof8_Base::GetNum() const
     return 0x0809;
 }
 
-sal_Size ExcBof8_Base::GetLen() const
+std::size_t ExcBof8_Base::GetLen() const
 {
     return 16;
 }
@@ -1237,7 +1237,7 @@ void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )
     rStrm << nGrbit << GetName();
 }
 
-sal_Size ExcBundlesheet8::GetLen() const
+std::size_t ExcBundlesheet8::GetLen() const
 {   // Text max 255 chars
     return 8 + GetName().GetBufferSize();
 }
@@ -1268,7 +1268,7 @@ sal_uInt16 XclObproj::GetNum() const
     return 0x00D3;
 }
 
-sal_Size XclObproj::GetLen() const
+std::size_t XclObproj::GetLen() const
 {
     return 0;
 }
@@ -1289,7 +1289,7 @@ sal_uInt16 XclCodename::GetNum() const
     return 0x01BA;
 }
 
-sal_Size XclCodename::GetLen() const
+std::size_t XclCodename::GetLen() const
 {
     return aName.GetSize();
 }
@@ -1428,7 +1428,7 @@ sal_uInt16 ExcEScenario::GetNum() const
     return 0x00AF;
 }
 
-sal_Size ExcEScenario::GetLen() const
+std::size_t ExcEScenario::GetLen() const
 {
     return nRecLen;
 }
@@ -1521,7 +1521,7 @@ sal_uInt16 ExcEScenarioManager::GetNum() const
     return 0x00AE;
 }
 
-sal_Size ExcEScenarioManager::GetLen() const
+std::size_t ExcEScenarioManager::GetLen() const
 {
     return 8;
 }
@@ -1646,7 +1646,7 @@ sal_uInt16 XclCalccount::GetNum() const
     return 0x000C;
 }
 
-sal_Size XclCalccount::GetLen() const
+std::size_t XclCalccount::GetLen() const
 {
     return 2;
 }
@@ -1673,7 +1673,7 @@ sal_uInt16 XclIteration::GetNum() const
     return 0x0011;
 }
 
-sal_Size XclIteration::GetLen() const
+std::size_t XclIteration::GetLen() const
 {
     return 2;
 }
@@ -1700,7 +1700,7 @@ sal_uInt16 XclDelta::GetNum() const
     return 0x0010;
 }
 
-sal_Size XclDelta::GetLen() const
+std::size_t XclDelta::GetLen() const
 {
     return 8;
 }
@@ -1797,8 +1797,8 @@ void XclExpWriteAccess::WriteBody( XclExpStream& rStrm )
         0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
         0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
 
-    sal_Size nDataSize = sizeof(aData);
-    for (sal_Size i = 0; i < nDataSize; ++i)
+    std::size_t nDataSize = sizeof(aData);
+    for (std::size_t i = 0; i < nDataSize; ++i)
         rStrm << aData[i];
 }
 

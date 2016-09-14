@@ -34,7 +34,7 @@ namespace ww8
     {
         if (checkSeek(rSt, nPos))
         {
-            sal_Size nRemainingSize = rSt.remainingSize();
+            std::size_t nRemainingSize = rSt.remainingSize();
             nSize = std::min<sal_uInt32>(nRemainingSize, nSize);
             m_pData = o3tl::make_shared_array<sal_uInt8>(nSize);
             mn_size = rSt.ReadBytes(m_pData.get(), nSize);

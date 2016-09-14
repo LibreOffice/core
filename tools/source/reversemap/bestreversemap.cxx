@@ -32,10 +32,10 @@ struct Encoder
     void checkSupports(sal_Unicode c)
     {
         sal_Char aTempArray[8];
-        sal_Size nTempSize;
+        std::size_t nTempSize;
         sal_uInt32 nCvtInfo;
 
-        sal_Size nChars = rtl_convertUnicodeToText(m_aConverter,
+        std::size_t nChars = rtl_convertUnicodeToText(m_aConverter,
             nullptr, &c, 1, aTempArray, sizeof(aTempArray),
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |  RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR,
              &nCvtInfo, &nTempSize);

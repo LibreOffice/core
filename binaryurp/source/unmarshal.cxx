@@ -54,7 +54,7 @@ namespace binaryurp {
 
 namespace {
 
-void * allocate(sal_Size size) {
+void * allocate(std::size_t size) {
     void * p = rtl_allocateMemory(size);
     if (p == nullptr) {
         throw std::bad_alloc();
@@ -454,7 +454,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
             "binaryurp::Unmarshal: sequence size too large");
     }
     void * buf = allocate(
-        SAL_SEQUENCE_HEADER_SIZE + static_cast< sal_Size >(size));
+        SAL_SEQUENCE_HEADER_SIZE + static_cast< std::size_t >(size));
     static_cast< sal_Sequence * >(buf)->nRefCount = 0;
     static_cast< sal_Sequence * >(buf)->nElements =
         static_cast< sal_Int32 >(n);

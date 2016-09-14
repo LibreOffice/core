@@ -210,19 +210,19 @@ ConverterFactory::Get (rtl_TextEncoding nEncoding)
 
 // wrapper for rtl_convertUnicodeToText that handles the usual cases for
 // textconversion in drawtext
-sal_Size
+std::size_t
 ConverterFactory::Convert (const sal_Unicode *pText, int nTextLen,
-                           unsigned char *pBuffer, sal_Size nBufferSize, rtl_TextEncoding nEncoding)
+                           unsigned char *pBuffer, std::size_t nBufferSize, rtl_TextEncoding nEncoding)
 {
     const sal_uInt32 nCvtFlags =  RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK
         | RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK ;
     sal_uInt32  nCvtInfo;
-    sal_Size    nCvtChars;
+    std::size_t    nCvtChars;
 
     rtl_UnicodeToTextConverter aConverter = Get (nEncoding);
     rtl_UnicodeToTextContext   aContext   = rtl_createUnicodeToTextContext (aConverter);
 
-    sal_Size nSize = rtl_convertUnicodeToText (aConverter, aContext,
+    std::size_t nSize = rtl_convertUnicodeToText (aConverter, aContext,
                                                pText, nTextLen, reinterpret_cast<char*>(pBuffer), nBufferSize,
                                                nCvtFlags, &nCvtInfo, &nCvtChars);
 

@@ -106,12 +106,12 @@ inline bool isMIMECharsetEncoding(rtl_TextEncoding eEncoding);
 sal_Unicode * convertToUnicode(const sal_Char * pBegin,
                                       const sal_Char * pEnd,
                                       rtl_TextEncoding eEncoding,
-                                      sal_Size & rSize);
+                                      std::size_t & rSize);
 
 sal_Char * convertFromUnicode(const sal_Unicode * pBegin,
                                      const sal_Unicode * pEnd,
                                      rtl_TextEncoding eEncoding,
-                                     sal_Size & rSize);
+                                     std::size_t & rSize);
 
 inline void writeEscapeSequence(INetMIMEOutputSink & rSink,
                                        sal_uInt32 nChar);
@@ -189,7 +189,7 @@ inline bool isMIMECharsetEncoding(rtl_TextEncoding eEncoding)
 sal_Unicode * convertToUnicode(const sal_Char * pBegin,
                                          const sal_Char * pEnd,
                                          rtl_TextEncoding eEncoding,
-                                         sal_Size & rSize)
+                                         std::size_t & rSize)
 {
     if (eEncoding == RTL_TEXTENCODING_DONTKNOW)
         return nullptr;
@@ -199,11 +199,11 @@ sal_Unicode * convertToUnicode(const sal_Char * pBegin,
         = rtl_createTextToUnicodeContext(hConverter);
     sal_Unicode * pBuffer;
     sal_uInt32 nInfo;
-    for (sal_Size nBufferSize = pEnd - pBegin;;
+    for (std::size_t nBufferSize = pEnd - pBegin;;
          nBufferSize += nBufferSize / 3 + 1)
     {
         pBuffer = new sal_Unicode[nBufferSize];
-        sal_Size nSrcCvtBytes;
+        std::size_t nSrcCvtBytes;
         rSize = rtl_convertTextToUnicode(
                     hConverter, hContext, pBegin, pEnd - pBegin, pBuffer,
                     nBufferSize,
@@ -229,7 +229,7 @@ sal_Unicode * convertToUnicode(const sal_Char * pBegin,
 sal_Char * convertFromUnicode(const sal_Unicode * pBegin,
                                         const sal_Unicode * pEnd,
                                         rtl_TextEncoding eEncoding,
-                                        sal_Size & rSize)
+                                        std::size_t & rSize)
 {
     if (eEncoding == RTL_TEXTENCODING_DONTKNOW)
         return nullptr;
@@ -239,11 +239,11 @@ sal_Char * convertFromUnicode(const sal_Unicode * pBegin,
         = rtl_createUnicodeToTextContext(hConverter);
     sal_Char * pBuffer;
     sal_uInt32 nInfo;
-    for (sal_Size nBufferSize = pEnd - pBegin;;
+    for (std::size_t nBufferSize = pEnd - pBegin;;
          nBufferSize += nBufferSize / 3 + 1)
     {
         pBuffer = new sal_Char[nBufferSize];
-        sal_Size nSrcCvtBytes;
+        std::size_t nSrcCvtBytes;
         rSize = rtl_convertUnicodeToText(
                     hConverter, hContext, pBegin, pEnd - pBegin, pBuffer,
                     nBufferSize,
@@ -384,7 +384,7 @@ bool translateUTF8Char(const sal_Char *& rBegin,
     {
         sal_Unicode aUTF16[2];
         const sal_Unicode * pUTF16End = putUTF32Character(aUTF16, nUCS4);
-        sal_Size nSize;
+        std::size_t nSize;
         sal_Char * pBuffer = convertFromUnicode(aUTF16, pUTF16End, eEncoding,
                                                 nSize);
         if (!pBuffer)
@@ -633,7 +633,7 @@ bool parseParameters(ParameterList const & rInput,
             Parameter * pNext = p;
             do
             {
-                sal_Size nSize;
+                std::size_t nSize;
                 sal_Unicode * pUnicode
                     = convertToUnicode(pNext->m_aValue.getStr(),
                                                  pNext->m_aValue.getStr()
@@ -1330,17 +1330,17 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                 else
                 {
                     sal_Char * pTargetBuffer = nullptr;
-                    sal_Size nTargetSize = 0;
+                    std::size_t nTargetSize = 0;
                     rtl_UnicodeToTextConverter hConverter
                         = rtl_createUnicodeToTextConverter(eCharsetEncoding);
                     rtl_UnicodeToTextContext hContext
                         = rtl_createUnicodeToTextContext(hConverter);
-                    for (sal_Size nBufferSize = m_pBufferEnd - m_pBuffer;;
+                    for (std::size_t nBufferSize = m_pBufferEnd - m_pBuffer;;
                          nBufferSize += nBufferSize / 3 + 1)
                     {
                         pTargetBuffer = new sal_Char[nBufferSize];
                         sal_uInt32 nInfo;
-                        sal_Size nSrcCvtBytes;
+                        std::size_t nSrcCvtBytes;
                         nTargetSize
                             = rtl_convertUnicodeToText(
                                   hConverter, hContext, m_pBuffer,
@@ -1358,7 +1358,7 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                     }
                     rtl_destroyUnicodeToTextContext(hConverter, hContext);
                     rtl_destroyUnicodeToTextConverter(hConverter);
-                    for (sal_Size k = 0; k < nTargetSize; ++k)
+                    for (std::size_t k = 0; k < nTargetSize; ++k)
                     {
                         sal_uInt32 nUCS4 = static_cast<unsigned char>(pTargetBuffer[k]);
                         bool bEscape = needsEncodedWordEscape(nUCS4);
@@ -2646,7 +2646,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
             bEncodedWord = bEncodedWord && q != pEnd && *q++ == '=';
 
             sal_Unicode * pUnicodeBuffer = nullptr;
-            sal_Size nUnicodeSize = 0;
+            std::size_t nUnicodeSize = 0;
             if (bEncodedWord)
             {
                 pUnicodeBuffer
@@ -2732,7 +2732,7 @@ void INetMIMEOutputSink::writeSequence(const sal_Char * pBegin,
 
 void INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
 {
-    sal_Size nLength = rtl_str_getLength(pSequence);
+    std::size_t nLength = rtl_str_getLength(pSequence);
     writeSequence(pSequence, pSequence + nLength);
 }
 

@@ -1836,7 +1836,7 @@ void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
 
     if( aEMFWriter.WriteEMF( rMTF ) )
     {
-        sal_Size nTotalSize = aStream.Tell();
+        std::size_t nTotalSize = aStream.Tell();
         if( nTotalSize > SAL_MAX_UINT32 )
             return;
         aStream.Seek( 0 );

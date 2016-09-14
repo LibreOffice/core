@@ -270,7 +270,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
     {
         std::unique_ptr<sal_Unicode[]> aWork(new sal_Unicode[rLen+1]);
         sal_Unicode *pNewBuf = aWork.get();
-        sal_Size nNewLen;
+        std::size_t nNewLen;
         if (eCharSet != RTL_TEXTENCODING_UCS2)
         {
             nNewLen = rLen;
@@ -279,7 +279,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
             rtl_TextToUnicodeContext hContext =
                 rtl_createTextToUnicodeContext(hConverter);
 
-            sal_Size nCntBytes;
+            std::size_t nCntBytes;
             sal_uInt32 nInfo;
             nNewLen = rtl_convertTextToUnicode( hConverter, hContext, pBuf,
                 rLen, pNewBuf, nNewLen,

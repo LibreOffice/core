@@ -77,9 +77,9 @@ using namespace ::com::sun::star::i18n;
 
 namespace
 {
-sal_Size lcl_getFileSize(SvStream& _rStream)
+std::size_t lcl_getFileSize(SvStream& _rStream)
 {
-    sal_Size nFileSize = 0;
+    std::size_t nFileSize = 0;
     _rStream.Seek(STREAM_SEEK_TO_END);
     _rStream.SeekRel(-1);
     char cEOL;
@@ -538,13 +538,13 @@ void ODbaseTable::construct()
         }
         fillColumns();
 
-        sal_Size nFileSize = lcl_getFileSize(*m_pFileStream);
+        std::size_t nFileSize = lcl_getFileSize(*m_pFileStream);
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
         // seems to be empty or someone wrote bullshit into the dbase file
         // try and recover if m_aHeader.db_slng is sane
         if (m_aHeader.db_anz == 0 && m_aHeader.db_slng)
         {
-            sal_Size nRecords = (nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng;
+            std::size_t nRecords = (nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng;
             if (nRecords > 0)
                 m_aHeader.db_anz = nRecords;
         }
@@ -804,12 +804,12 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
     if (!bRetrieveData)
         return true;
 
-    sal_Size nByteOffset = 1;
+    std::size_t nByteOffset = 1;
     // Fields:
     OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
     OSQLColumns::Vector::const_iterator aEnd  = _rCols.get().end();
-    const sal_Size nCount = _rRow->get().size();
-    for (sal_Size i = 1; aIter != aEnd && nByteOffset <= m_nBufferSize && i < nCount;++aIter, i++)
+    const std::size_t nCount = _rRow->get().size();
+    for (std::size_t i = 1; aIter != aEnd && nByteOffset <= m_nBufferSize && i < nCount;++aIter, i++)
     {
         // Lengths depending on data type:
         sal_Int32 nLen = 0;
@@ -1509,13 +1509,13 @@ bool ODbaseTable::InsertRow(OValueRefVector& rRow, const Reference<XIndexAccess>
 
     // Copy new row completely:
     // ... and add at the end as new Record:
-    sal_Size nTempPos = m_nFilePos;
+    std::size_t nTempPos = m_nFilePos;
 
-    m_nFilePos = (sal_Size)m_aHeader.db_anz + 1;
+    m_nFilePos = (std::size_t)m_aHeader.db_anz + 1;
     bool bInsertRow = UpdateBuffer( rRow, nullptr, _xCols, true );
     if ( bInsertRow )
     {
-        sal_Size nFileSize = 0, nMemoFileSize = 0;
+        std::size_t nFileSize = 0, nMemoFileSize = 0;
 
         nFileSize = lcl_getFileSize(*m_pFileStream);
 
@@ -1562,11 +1562,11 @@ bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow, const 
         return false;
 
     // position on desired record:
-    sal_Size nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
+    std::size_t nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nPos);
     m_pFileStream->ReadBytes(m_pBuffer, m_aHeader.db_slng);
 
-    sal_Size nMemoFileSize( 0 );
+    std::size_t nMemoFileSize( 0 );
     if (HasMemoFields() && m_pMemoStream)
     {
         m_pMemoStream->Seek(STREAM_SEEK_TO_END);
@@ -1589,7 +1589,7 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 {
     // Set the Delete-Flag (be it set or not):
     // Position on desired record:
-    sal_Size nFilePos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
+    std::size_t nFilePos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nFilePos);
 
     OValueRefRow aRow = new OValueRefVector(_rCols.get().size());
@@ -1958,7 +1958,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                     char cNext = pData[nLen]; // Mark's scratch and replaced by 0
                     pData[nLen] = '\0';       // This is because the buffer is always a sign of greater ...
 
-                    sal_Size nBlockNo = strtol(pData,nullptr,10); // Block number read
+                    std::size_t nBlockNo = strtol(pData,nullptr,10); // Block number read
 
                     // Next initial character restore again:
                     pData[nLen] = cNext;
@@ -2015,10 +2015,10 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
 }
 
 
-bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
+bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr)
 {
     // if the BlockNo 0 is given, the block will be appended at the end
-    sal_Size nSize = 0;
+    std::size_t nSize = 0;
     OString aStr;
     css::uno::Sequence<sal_Int8> aValue;
     sal_uInt8 nHeader[4];
@@ -2051,7 +2051,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
                 m_pMemoStream->SeekRel(4L);
                 m_pMemoStream->ReadBytes(sHeader, 4);
 
-                sal_Size nOldSize;
+                std::size_t nOldSize;
                 if (m_aMemoHeader.db_typ == MemoFoxPro)
                     nOldSize = ((((unsigned char)sHeader[0]) * 256 +
                                  (unsigned char)sHeader[1]) * 256 +
@@ -2064,7 +2064,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
                                  (unsigned char)sHeader[0]  - 8;
 
                 // fits the new length in the used blocks
-                sal_Size nUsedBlocks = ((nSize + 8) / m_aMemoHeader.db_size) + (((nSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0),
+                std::size_t nUsedBlocks = ((nSize + 8) / m_aMemoHeader.db_size) + (((nSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0),
                       nOldUsedBlocks = ((nOldSize + 8) / m_aMemoHeader.db_size) + (((nOldSize + 8) % m_aMemoHeader.db_size > 0) ? 1 : 0);
                 bAppend = nUsedBlocks > nOldUsedBlocks;
             }
@@ -2073,7 +2073,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
 
     if (bAppend)
     {
-        sal_Size nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        sal_uInt64 const nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
         // fill last block
         rBlockNr = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
 
@@ -2137,7 +2137,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
     // Write the new block number
     if (bAppend)
     {
-        sal_Size nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        sal_uInt64 const nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
         m_aMemoHeader.db_next = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
 
         // Write the new block number
@@ -2629,16 +2629,16 @@ bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 
         goto Error;
     else
     {
-        sal_Size nEntryLen = m_aHeader.db_slng;
+        std::size_t nEntryLen = m_aHeader.db_slng;
 
         OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
-        sal_Size nPos = m_aHeader.db_kopf + (sal_Size)(m_nFilePos-1) * nEntryLen;
+        std::size_t nPos = m_aHeader.db_kopf + (std::size_t)(m_nFilePos-1) * nEntryLen;
 
         m_pFileStream->Seek(nPos);
         if (m_pFileStream->GetError() != ERRCODE_NONE)
             goto Error;
 
-        sal_Size nRead = m_pFileStream->ReadBytes(m_pBuffer, nEntryLen);
+        std::size_t nRead = m_pFileStream->ReadBytes(m_pBuffer, nEntryLen);
         if (nRead != nEntryLen)
         {
             SAL_WARN("connectivity.drivers", "ODbaseTable::seekRow: short read!");
@@ -2675,7 +2675,7 @@ End:
     return true;
 }
 
-bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
+bool ODbaseTable::ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable)
 {
     m_pMemoStream->Seek(nBlockNo * m_aMemoHeader.db_size);
     switch (m_aMemoHeader.db_typ)
@@ -2776,7 +2776,7 @@ bool ODbaseTable::WriteBuffer()
     OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
 
     // position on desired record:
-    sal_Size nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
+    std::size_t nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nPos);
     return m_pFileStream->WriteBytes(m_pBuffer, m_aHeader.db_slng) > 0;
 }

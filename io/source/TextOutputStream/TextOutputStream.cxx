@@ -114,11 +114,11 @@ Sequence<sal_Int8> OTextOutputStream::implConvert( const OUString& rSource )
     const sal_Unicode *puSource = rSource.getStr();
     sal_Int32 nSourceSize = rSource.getLength();
 
-    sal_Size nTargetCount = 0;
-    sal_Size nSourceCount = 0;
+    std::size_t nTargetCount = 0;
+    std::size_t nSourceCount = 0;
 
     sal_uInt32 uiInfo;
-    sal_Size nSrcCvtChars;
+    std::size_t nSrcCvtChars;
 
     // take nSourceSize * 3 as preference
     // this is an upper boundary for converting to utf8,

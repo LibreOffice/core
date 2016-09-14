@@ -159,7 +159,7 @@ inline bool isBitfieldCompression( ScanlineFormat nScanlineFormat )
 bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown, bool bMSOFormat)
 {
     // BITMAPINFOHEADER or BITMAPCOREHEADER or BITMAPV5HEADER
-    const sal_Size aStartPos(rIStm.Tell());
+    const std::size_t aStartPos(rIStm.Tell());
     rIStm.ReadUInt32( rHeader.nSize );
 
     // BITMAPCOREHEADER
@@ -198,7 +198,7 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
     else
     {
         // BITMAPCOREHEADER, BITMAPV5HEADER or unknown. Read as far as possible
-        sal_Size nUsed(sizeof(rHeader.nSize));
+        std::size_t nUsed(sizeof(rHeader.nSize));
 
         auto readUInt16 = [&nUsed, &rHeader, &rIStm](sal_uInt16 & v) {
             if (nUsed < rHeader.nSize) {
@@ -514,11 +514,11 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     if (bNative)
     {
         if (nAlignedWidth
-            > std::numeric_limits<sal_Size>::max() / rHeader.nHeight)
+            > std::numeric_limits<std::size_t>::max() / rHeader.nHeight)
         {
             return false;
         }
-        sal_Size n = nAlignedWidth * rHeader.nHeight;
+        std::size_t n = nAlignedWidth * rHeader.nHeight;
         if (rIStm.ReadBytes(rAcc.GetBuffer(), n) != n)
         {
             return false;

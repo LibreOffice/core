@@ -400,7 +400,7 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, sal_uInt16) const
         eFontTextEncoding = RTL_TEXTENCODING_SYMBOL;
 
     // Check if we have stored unicode
-    sal_Size nStreamPos = rStrm.Tell();
+    sal_uInt64 const nStreamPos = rStrm.Tell();
     sal_uInt32 nMagic = STORE_UNICODE_MAGIC_MARKER;
     rStrm.ReadUInt32( nMagic );
     if ( nMagic == STORE_UNICODE_MAGIC_MARKER )

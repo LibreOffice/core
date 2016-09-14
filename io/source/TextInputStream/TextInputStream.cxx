@@ -296,9 +296,9 @@ sal_Int32 OTextInputStream::implReadNext()
 
         // Try to convert
         sal_uInt32 uiInfo;
-        sal_Size nSrcCvtBytes = 0;
-        sal_Size nTargetCount = 0;
-        sal_Size nSourceCount = 0;
+        std::size_t nSrcCvtBytes = 0;
+        std::size_t nTargetCount = 0;
+        std::size_t nSourceCount = 0;
         while( true )
         {
             const sal_Int8 *pbSource = mSeqSource.getConstArray();

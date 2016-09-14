@@ -4320,7 +4320,7 @@ void XclImpChart::UpdateObjFrame( const XclObjLineData& rLineData, const XclObjF
     mxChartData->UpdateObjFrame( rLineData, rFillData );
 }
 
-sal_Size XclImpChart::GetProgressSize() const
+std::size_t XclImpChart::GetProgressSize() const
 {
     return
         (mxChartData ? XclImpChChart::GetProgressSize() : 0) +

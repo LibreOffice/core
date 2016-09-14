@@ -862,7 +862,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ONDXPage& rPage)
 SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& rPage)
 {
     // Page doesn't exist yet
-    sal_Size nSize = rPage.GetPagePos() + 1;
+    std::size_t nSize = rPage.GetPagePos() + 1;
     nSize *= DINDEX_PAGE_SIZE;
     if (nSize > rStream.Seek(STREAM_SEEK_TO_END))
     {
@@ -886,9 +886,9 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
     // check if we have to fill the stream with '\0'
     if(i < rPage.rIndex.getHeader().db_maxkeys)
     {
-        sal_Size nTell = rStream.Tell() % DINDEX_PAGE_SIZE;
+        std::size_t nTell = rStream.Tell() % DINDEX_PAGE_SIZE;
         sal_uInt16 nBufferSize = rStream.GetBufferSize();
-        sal_Size nRemainSize = nBufferSize - nTell;
+        std::size_t nRemainSize = nBufferSize - nTell;
         if ( nRemainSize <= nBufferSize )
         {
             std::unique_ptr<char[]> pEmptyData( new char[nRemainSize] );

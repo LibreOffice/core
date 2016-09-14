@@ -69,7 +69,7 @@ private:
     ScfProgressBar*     mpSubRowFinal;      /// Sub progress bar for finalizing ROW records.
     sal_Int32           mnSegRowFinal;      /// Progress segment for finalizing ROW records.
 
-    sal_Size            mnRowCount;         /// Number of created ROW records.
+    std::size_t         mnRowCount;         /// Number of created ROW records.
 };
 
 // Calc->Excel cell address/range conversion ==================================
@@ -426,7 +426,7 @@ public:
                    ~XclExpCachedMatrix();
 
     /** Returns the byte count of all contained data. */
-    sal_Size        GetSize() const;
+    std::size_t     GetSize() const;
     /** Writes the complete matrix to stream. */
     void            Save( XclExpStream& rStrm ) const;
 

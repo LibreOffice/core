@@ -113,7 +113,7 @@ storeError
 PageData::Allocator_Impl::initialize (sal_uInt16 nPageSize)
 {
     char name[RTL_CACHE_NAME_LENGTH + 1];
-    sal_Size size = sal::static_int_cast< sal_Size >(nPageSize);
+    std::size_t size = sal::static_int_cast< std::size_t >(nPageSize);
     (void) snprintf (name, sizeof(name), "store_page_alloc_%" SAL_PRIuUINTPTR, size);
 
     m_page_cache = rtl_cache_create (name, size, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0);
