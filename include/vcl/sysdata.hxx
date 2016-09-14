@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_SYSDATA_HXX
 #define INCLUDED_VCL_SYSDATA_HXX
 
+#include <sal/types.h>
+
 #include <vector>
 #include <cstddef>
 
@@ -70,7 +72,9 @@ struct SystemEnvData
     int                 nDepth;         // depth of said visual
     long                aColormap;      // the colormap being used
     void*               pAppContext;    // the application context in use
-    long                aShellWindow;   // the window of the frame's shell
+    // note: this is a "long" in Xlib *but* in the protocol it's only 32-bit
+    // however, the GTK3 vclplug wants to store pointers in here!
+    sal_IntPtr          aShellWindow;   // the window of the frame's shell
     void*               pShellWidget;   // the frame's shell widget
     const char*         pToolkit;       // the toolkit in use (gtk2 vs gtk3)
 #endif

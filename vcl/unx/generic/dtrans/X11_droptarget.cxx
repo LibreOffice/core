@@ -65,7 +65,7 @@ void DropTarget::initialize( const Sequence< Any >& arguments ) throw( css::uno:
 
         if( m_pSelectionManager->getDisplay() ) // #136582# sanity check
         {
-            sal_Size aWindow = None;
+            sal_IntPtr aWindow = None;
             arguments.getConstArray()[1] >>= aWindow;
             m_pSelectionManager->registerDropTarget( aWindow, this );
             m_aTargetWindow = aWindow;
