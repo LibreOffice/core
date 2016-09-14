@@ -71,6 +71,7 @@ public:
     void testViewLock();
     void testUndoLimiting();
     void testCreateViewGraphicSelection();
+    void testCreateViewTextCursor();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -97,6 +98,7 @@ public:
     CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST(testUndoLimiting);
     CPPUNIT_TEST(testCreateViewGraphicSelection);
+    CPPUNIT_TEST(testCreateViewTextCursor);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -866,6 +868,8 @@ public:
     bool m_bCursorVisibleChanged;
     bool m_bViewLock;
     bool m_bTilesInvalidated;
+    std::map<int, bool> m_aViewCursorInvalidations;
+    std::map<int, bool> m_aViewCursorVisibilities;
 
     ViewCallback()
         : m_bGraphicSelectionInvalidated(false),
@@ -917,6 +921,24 @@ public:
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
             m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
+        }
+        break;
+        case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            int nViewId = aTree.get_child("viewId").get_value<int>();
+            m_aViewCursorInvalidations[nViewId] = true;
+        }
+        break;
+        case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            int nViewId = aTree.get_child("viewId").get_value<int>();
+            m_aViewCursorVisibilities[nViewId] = OString("true") == pPayload;
         }
         break;
         }
@@ -1142,6 +1164,53 @@ void SdTiledRenderingTest::testCreateViewGraphicSelection()
     // This failed, the created new view had no "view selection" of the first
     // view's selected shape.
     CPPUNIT_ASSERT(aView2.m_bGraphicViewSelectionInvalidated);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testCreateViewTextCursor()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document and register a callback.
+    SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // Begin text edit.
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pSdrView = pViewShell->GetView();
+    CPPUNIT_ASSERT(pSdrView->IsTextEdit());
+
+    // Make sure that creating a new view either doesn't affect the previous
+    // one, or at least the effect is not visible at the end.
+    aView1.m_aViewCursorInvalidations.clear();
+    aView1.m_aViewCursorVisibilities.clear();
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    bool bFoundCursor = false;
+    for (const auto& rInvalidation : aView1.m_aViewCursorInvalidations)
+    {
+        auto itVisibility = aView1.m_aViewCursorVisibilities.find(rInvalidation.first);
+        // For each cursor invalidation: if there is no visibility or the visibility is true, that's a problem.
+        if (itVisibility == aView1.m_aViewCursorVisibilities.end() || (itVisibility != aView1.m_aViewCursorVisibilities.end() && itVisibility->second))
+        {
+            bFoundCursor = true;
+            break;
+        }
+    }
+    // This failed: the second view created an unexpected view cursor in the
+    // first view.
+    CPPUNIT_ASSERT(!bFoundCursor);
 
     mxComponent->dispose();
     mxComponent.clear();
