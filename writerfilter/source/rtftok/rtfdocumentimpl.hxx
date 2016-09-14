@@ -417,7 +417,7 @@ public:
     void setAuthor(OUString& rAuthor);
     void setAuthorInitials(OUString& rAuthorInitials);
     void setIgnoreFirst(OUString& rIgnoreFirst);
-    void seek(sal_Size nPos);
+    void seek(sal_uInt64 nPos);
     const css::uno::Reference<css::lang::XMultiServiceFactory>& getModelFactory()
     {
         return m_xModelFactory;
@@ -460,8 +460,8 @@ private:
     writerfilter::Reference<Properties>::Pointer_t createStyleProperties();
     void resetSprms();
     void resetAttributes();
-    void resolveSubstream(sal_Size nPos, Id nId);
-    void resolveSubstream(sal_Size nPos, Id nId, OUString& rIgnoreFirst);
+    void resolveSubstream(std::size_t nPos, Id nId);
+    void resolveSubstream(std::size_t nPos, Id nId, OUString& rIgnoreFirst);
 
     void text(OUString& rString);
     // Sends a single character to dmapper, taking care of buffering.
@@ -585,8 +585,8 @@ private:
     RTFDocumentImpl* m_pSuperstream;
     /// Type of the stream: header, footer, footnote, etc.
     Id m_nStreamType;
-    std::queue< std::pair<Id, sal_Size> > m_nHeaderFooterPositions;
-    sal_Size m_nGroupStartPos;
+    std::queue< std::pair<Id, std::size_t> > m_nHeaderFooterPositions;
+    std::size_t m_nGroupStartPos;
     /// Ignore the first occurrence of this text.
     OUString m_aIgnoreFirst;
     /// Bookmark name <-> index map.

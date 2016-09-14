@@ -145,8 +145,8 @@ class StgTmpStrm : public SvMemoryStream
     OUString m_aName;
     SvFileStream* m_pStrm;
     using SvMemoryStream::GetData;
-    virtual sal_Size GetData( void* pData, sal_Size nSize ) override;
-    virtual sal_Size PutData( const void* pData, sal_Size nSize ) override;
+    virtual std::size_t GetData( void* pData, std::size_t nSize ) override;
+    virtual std::size_t PutData( const void* pData, std::size_t nSize ) override;
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override;
     virtual void FlushData() override;
 

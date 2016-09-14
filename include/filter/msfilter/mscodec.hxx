@@ -103,7 +103,7 @@ public:
         @param nBytes
             Size of the passed data block.
     */
-    virtual void                Decode( sal_uInt8* pnData, sal_Size nBytes )=0;
+    virtual void                Decode( sal_uInt8* pnData, std::size_t nBytes )=0;
 
     /** Lets the cipher skip a specific amount of bytes.
 
@@ -117,11 +117,11 @@ public:
         @param nBytes
             Number of bytes to be skipped (cipher "seeks" forward).
      */
-    void                Skip( sal_Size nBytes );
+    void                Skip( std::size_t nBytes );
 
 protected:
     sal_uInt8           mpnKey[ 16 ];   /// Encryption key.
-    sal_Size            mnOffset;       /// Key offset.
+    std::size_t         mnOffset;       /// Key offset.
 
 private:
                         MSCodec_Xor95( const MSCodec_Xor95& ) = delete;
@@ -150,7 +150,7 @@ public:
         @param nBytes
             Size of the passed data block.
     */
-    virtual void                Decode( sal_uInt8* pnData, sal_Size nBytes ) override;
+    virtual void                Decode( sal_uInt8* pnData, std::size_t nBytes ) override;
 };
 
 /** Encodes and decodes data from protected MSO Word 95- documents.
@@ -171,7 +171,7 @@ public:
         @param nBytes
             Size of the passed data block.
     */
-    virtual void                Decode( sal_uInt8* pnData, sal_Size nBytes ) override;
+    virtual void                Decode( sal_uInt8* pnData, std::size_t nBytes ) override;
 };
 
 
@@ -278,8 +278,8 @@ public:
             true = Encoding was successful (no error occurred).
     */
     bool                Encode(
-                            const void* pData, sal_Size nDatLen,
-                            sal_uInt8* pBuffer, sal_Size nBufLen );
+                            const void* pData, std::size_t nDatLen,
+                            sal_uInt8* pBuffer, std::size_t nBufLen );
 
     /** Decodes a block of memory.
 
@@ -304,8 +304,8 @@ public:
             true = Decoding was successful (no error occurred).
     */
     bool                Decode(
-                            const void* pData, sal_Size nDatLen,
-                            sal_uInt8* pBuffer, sal_Size nBufLen );
+                            const void* pData, std::size_t nDatLen,
+                            sal_uInt8* pBuffer, std::size_t nBufLen );
 
     /** Lets the cipher skip a specific amount of bytes.
 
@@ -319,7 +319,7 @@ public:
         @param nDatLen
             Number of bytes to be skipped (cipher "seeks" forward).
      */
-    bool                Skip( sal_Size nDatLen );
+    bool                Skip( std::size_t nDatLen );
 
     /** Gets salt data and salt digest.
 

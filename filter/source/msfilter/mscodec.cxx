@@ -60,23 +60,23 @@ inline void lclRotateLeft( Type& rnValue, sal_uInt8 nBits, sal_uInt8 nWidth )
         ((rnValue << nBits) | ((rnValue & nMask) >> (nWidth - nBits))) & nMask );
 }
 
-sal_Size lclGetLen( const sal_uInt8* pnPassData, sal_Size nBufferSize )
+std::size_t lclGetLen( const sal_uInt8* pnPassData, std::size_t nBufferSize )
 {
-    sal_Size nLen = 0;
+    std::size_t nLen = 0;
     while( (nLen < nBufferSize) && pnPassData[ nLen ] ) ++nLen;
     return nLen;
 }
 
-sal_uInt16 lclGetKey( const sal_uInt8* pnPassData, sal_Size nBufferSize )
+sal_uInt16 lclGetKey( const sal_uInt8* pnPassData, std::size_t nBufferSize )
 {
-    sal_Size nLen = lclGetLen( pnPassData, nBufferSize );
+    std::size_t nLen = lclGetLen( pnPassData, nBufferSize );
     if( !nLen ) return 0;
 
     sal_uInt16 nKey = 0;
     sal_uInt16 nKeyBase = 0x8000;
     sal_uInt16 nKeyEnd = 0xFFFF;
     const sal_uInt8* pnChar = pnPassData + nLen - 1;
-    for( sal_Size nIndex = 0; nIndex < nLen; ++nIndex, --pnChar )
+    for( std::size_t nIndex = 0; nIndex < nLen; ++nIndex, --pnChar )
     {
         sal_uInt8 cChar = *pnChar & 0x7F;
         for( sal_uInt8 nBit = 0; nBit < 8; ++nBit )
@@ -92,16 +92,16 @@ sal_uInt16 lclGetKey( const sal_uInt8* pnPassData, sal_Size nBufferSize )
     return nKey ^ nKeyEnd;
 }
 
-sal_uInt16 lclGetHash( const sal_uInt8* pnPassData, sal_Size nBufferSize )
+sal_uInt16 lclGetHash( const sal_uInt8* pnPassData, std::size_t nBufferSize )
 {
-    sal_Size nLen = lclGetLen( pnPassData, nBufferSize );
+    std::size_t nLen = lclGetLen( pnPassData, nBufferSize );
 
     sal_uInt16 nHash = static_cast< sal_uInt16 >( nLen );
     if( nLen )
         nHash ^= 0xCE4B;
 
     const sal_uInt8* pnChar = pnPassData;
-    for( sal_Size nIndex = 0; nIndex < nLen; ++nIndex, ++pnChar )
+    for( std::size_t nIndex = 0; nIndex < nLen; ++nIndex, ++pnChar )
     {
         sal_uInt16 cChar = *pnChar;
         sal_uInt8 nRot = static_cast< sal_uInt8 >( (nIndex + 1) % 15 );
@@ -145,8 +145,8 @@ void MSCodec_Xor95::InitKey( const sal_uInt8 pnPassData[ 16 ] )
         0xBF, 0x0F, 0x00, 0x00
     };
 
-    sal_Size nIndex;
-    sal_Size nLen = lclGetLen( pnPassData, 16 );
+    std::size_t nIndex;
+    std::size_t nLen = lclGetLen( pnPassData, 16 );
     const sal_uInt8* pnFillChar = spnFillChars;
     for( nIndex = nLen; nIndex < sizeof( mpnKey ); ++nIndex, ++pnFillChar )
         mpnKey[ nIndex ] = *pnFillChar;
@@ -202,7 +202,7 @@ void MSCodec_Xor95::InitCipher()
     mnOffset = 0;
 }
 
-void MSCodec_XorXLS95::Decode( sal_uInt8* pnData, sal_Size nBytes )
+void MSCodec_XorXLS95::Decode( sal_uInt8* pnData, std::size_t nBytes )
 {
     const sal_uInt8* pnCurrKey = mpnKey + mnOffset;
     const sal_uInt8* pnKeyLast = mpnKey + 0x0F;
@@ -218,7 +218,7 @@ void MSCodec_XorXLS95::Decode( sal_uInt8* pnData, sal_Size nBytes )
     Skip( nBytes );
 }
 
-void MSCodec_XorWord95::Decode( sal_uInt8* pnData, sal_Size nBytes )
+void MSCodec_XorWord95::Decode( sal_uInt8* pnData, std::size_t nBytes )
 {
     const sal_uInt8* pnCurrKey = mpnKey + mnOffset;
     const sal_uInt8* pnKeyLast = mpnKey + 0x0F;
@@ -240,7 +240,7 @@ void MSCodec_XorWord95::Decode( sal_uInt8* pnData, sal_Size nBytes )
 }
 
 
-void MSCodec_Xor95::Skip( sal_Size nBytes )
+void MSCodec_Xor95::Skip( std::size_t nBytes )
 {
     mnOffset = (mnOffset + nBytes) & 0x0F;
 }
@@ -432,8 +432,8 @@ void MSCodec_Std97::CreateSaltDigest( const sal_uInt8 nSaltData[16], sal_uInt8 n
 }
 
 bool MSCodec_Std97::Encode (
-    const void *pData,   sal_Size nDatLen,
-    sal_uInt8  *pBuffer, sal_Size nBufLen)
+    const void *pData,   std::size_t nDatLen,
+    sal_uInt8  *pBuffer, std::size_t nBufLen)
 {
     rtlCipherError result;
 
@@ -444,8 +444,8 @@ bool MSCodec_Std97::Encode (
 }
 
 bool MSCodec_Std97::Decode (
-    const void *pData,   sal_Size nDatLen,
-    sal_uInt8  *pBuffer, sal_Size nBufLen)
+    const void *pData,   std::size_t nDatLen,
+    sal_uInt8  *pBuffer, std::size_t nBufLen)
 {
     rtlCipherError result;
 
@@ -455,15 +455,15 @@ bool MSCodec_Std97::Decode (
     return (result == rtl_Cipher_E_None);
 }
 
-bool MSCodec_Std97::Skip( sal_Size nDatLen )
+bool MSCodec_Std97::Skip( std::size_t nDatLen )
 {
     sal_uInt8 pnDummy[ 1024 ];
-    sal_Size nDatLeft = nDatLen;
+    std::size_t nDatLeft = nDatLen;
     bool bResult = true;
 
     while (bResult && nDatLeft)
     {
-        sal_Size nBlockLen = ::std::min< sal_Size >( nDatLeft, sizeof(pnDummy) );
+        std::size_t nBlockLen = ::std::min< std::size_t >( nDatLeft, sizeof(pnDummy) );
         bResult = Decode( pnDummy, nBlockLen, pnDummy, nBlockLen );
         nDatLeft -= nBlockLen;
     }

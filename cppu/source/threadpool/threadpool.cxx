@@ -361,9 +361,9 @@ struct uno_ThreadPool_Equal
 
 struct uno_ThreadPool_Hash
 {
-    sal_Size operator () ( const uno_ThreadPool &a  )  const
+    std::size_t operator () ( const uno_ThreadPool &a  )  const
         {
-            return reinterpret_cast<sal_Size>( a );
+            return reinterpret_cast<std::size_t>( a );
         }
 };
 

@@ -75,7 +75,7 @@ namespace slideshow
                              const css::uno::Reference< css::drawing::XShape >&        rxShape,
                              const OUString&                                   rServiceName,
                              const char**                                      pPropCopyTable,
-                             sal_Size                                          nNumPropEntries,
+                             std::size_t                                       nNumPropEntries,
                              const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
             /** destroy the object

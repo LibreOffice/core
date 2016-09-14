@@ -522,10 +522,10 @@ private:
                                                                                                                                        uno::RuntimeException, std::exception) override
     {
         const uno::Sequence< rendering::ARGBColor > aTemp( convertIntegerToARGB(deviceColor) );
-        const sal_Size nLen(aTemp.getLength());
+        const std::size_t nLen(aTemp.getLength());
         uno::Sequence< rendering::RGBColor > aRes( nLen );
         rendering::RGBColor* pOut = aRes.getArray();
-        for( sal_Size i=0; i<nLen; ++i )
+        for( std::size_t i=0; i<nLen; ++i )
         {
             *pOut++ = rendering::RGBColor(aTemp[i].Red,
                                           aTemp[i].Green,
@@ -538,7 +538,7 @@ private:
     virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) throw (lang::IllegalArgumentException,
                                                                                                                                          uno::RuntimeException, std::exception) override
     {
-        const sal_Size  nLen( deviceColor.getLength() );
+        const std::size_t  nLen( deviceColor.getLength() );
         const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
         CPPUNIT_ASSERT_MESSAGE("number of channels no multiple of pixel element count",
                                nLen%nBytesPerPixel==0);
@@ -548,7 +548,7 @@ private:
 
         if( getPalette().is() )
         {
-            for( sal_Size i=0; i<nLen; ++i )
+            for( std::size_t i=0; i<nLen; ++i )
             {
                 *pOut++ = rendering::ARGBColor(
                     1.0,
@@ -559,7 +559,7 @@ private:
         }
         else
         {
-            for( sal_Size i=0; i<nLen; i+=4 )
+            for( std::size_t i=0; i<nLen; i+=4 )
             {
                 *pOut++ = rendering::ARGBColor(
                     vcl::unotools::toDoubleColor(deviceColor[i+3]),
@@ -578,7 +578,7 @@ private:
                    uno::RuntimeException,
                    std::exception) override
     {
-        const sal_Size  nLen( deviceColor.getLength() );
+        const std::size_t  nLen( deviceColor.getLength() );
         const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
         CPPUNIT_ASSERT_MESSAGE("number of channels no multiple of pixel element count",
                                nLen%nBytesPerPixel==0);
@@ -588,7 +588,7 @@ private:
 
         if( getPalette().is() )
         {
-            for( sal_Size i=0; i<nLen; ++i )
+            for( std::size_t i=0; i<nLen; ++i )
             {
                 *pOut++ = rendering::ARGBColor(
                     1.0,
@@ -599,7 +599,7 @@ private:
         }
         else
         {
-            for( sal_Size i=0; i<nLen; i+=4 )
+            for( std::size_t i=0; i<nLen; i+=4 )
             {
                 const double fAlpha=vcl::unotools::toDoubleColor(deviceColor[i+3]);
                 *pOut++ = rendering::ARGBColor(

@@ -1258,7 +1258,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
     }
 }
 
-sal_Size StgTmpStrm::GetData( void* pData, sal_Size n )
+std::size_t StgTmpStrm::GetData( void* pData, std::size_t n )
 {
     if( m_pStrm )
     {
@@ -1270,7 +1270,7 @@ sal_Size StgTmpStrm::GetData( void* pData, sal_Size n )
         return SvMemoryStream::GetData( pData, n );
 }
 
-sal_Size StgTmpStrm::PutData( const void* pData, sal_Size n )
+std::size_t StgTmpStrm::PutData( const void* pData, std::size_t n )
 {
     sal_uInt32 nCur = Tell();
     sal_uInt32 nNew = nCur + n;
