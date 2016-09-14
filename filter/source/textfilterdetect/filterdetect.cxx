@@ -46,7 +46,7 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
 
     // Read the stream header
     pInStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
-    const sal_Size nUniPos = pInStream->Tell();
+    const sal_uInt64 nUniPos = pInStream->Tell();
     const sal_uInt16 nSize = 4096;
 
     OString sHeader;

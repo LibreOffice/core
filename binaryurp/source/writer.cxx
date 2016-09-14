@@ -412,15 +412,15 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     unsigned char const * p = &buffer[0];
     std::vector< unsigned char >::size_type n = buffer.size();
     OSL_ASSERT(header.size() <= SAL_MAX_INT32 && SAL_MAX_INT32 <= SAL_MAX_SIZE);
-    sal_Size k = SAL_MAX_INT32 - header.size();
+    std::size_t k = SAL_MAX_INT32 - header.size();
     if (n < k) {
-        k = static_cast< sal_Size >(n);
+        k = static_cast< std::size_t >(n);
     }
     css::uno::Sequence< sal_Int8 > s(
         static_cast< sal_Int32 >(header.size() + k));
     OSL_ASSERT(!header.empty());
     memcpy(
-        s.getArray(), &header[0], static_cast< sal_Size >(header.size()));
+        s.getArray(), &header[0], static_cast< std::size_t >(header.size()));
     for (;;) {
         memcpy(s.getArray() + s.getLength() - k, p, k);
         try {
@@ -438,7 +438,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
         p += k;
         k = SAL_MAX_INT32;
         if (n < k) {
-            k = static_cast< sal_Size >(n);
+            k = static_cast< std::size_t >(n);
         }
         s.realloc(k);
     }

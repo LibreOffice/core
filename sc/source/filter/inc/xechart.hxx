@@ -164,7 +164,7 @@ class XclExpChGroupBase : public XclExpRecord, protected XclExpChRoot
 public:
     explicit            XclExpChGroupBase(
                             const XclExpChRoot& rRoot, sal_uInt16 nFrType,
-                            sal_uInt16 nRecId, sal_Size nRecSize = 0 );
+                            sal_uInt16 nRecId, std::size_t nRecSize = 0 );
     virtual             ~XclExpChGroupBase() override;
 
     /** Saves the header record. Calls WriteSubRecords() to let derived classes write sub records. */
@@ -190,7 +190,7 @@ class XclExpChFutureRecordBase : public XclExpFutureRecord, protected XclExpChRo
 {
 public:
     explicit            XclExpChFutureRecordBase( const XclExpChRoot& rRoot,
-                            XclFutureRecType eRecType, sal_uInt16 nRecId, sal_Size nRecSize = 0 );
+                            XclFutureRecType eRecType, sal_uInt16 nRecId, std::size_t nRecSize = 0 );
 
     /** Writes missing CHFRBLOCKBEGIN records and this record. */
     virtual void        Save( XclExpStream& rStrm ) override;

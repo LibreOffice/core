@@ -53,7 +53,7 @@ class VBACompressionChunk
 {
 public:
 
-    VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, sal_Size nChunkSize);
+    VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, std::size_t nChunkSize);
 
     void write();
 
@@ -63,7 +63,7 @@ private:
     sal_uInt8* mpCompressedChunkStream;
 
     // same as DecompressedChunkEnd in the spec
-    sal_Size mnChunkSize;
+    std::size_t mnChunkSize;
 
     // CompressedCurrent according to the spec
     sal_uInt64 mnCompressedCurrent;

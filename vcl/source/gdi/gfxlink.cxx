@@ -269,7 +269,7 @@ std::shared_ptr<sal_uInt8> GfxLink::GetSwapInData() const
         pData = o3tl::make_shared_array<sal_uInt8>(mnSwapInDataSize);
         xIStm->ReadBytes( pData.get(), mnSwapInDataSize );
         bool bError = ( ERRCODE_NONE != xIStm->GetError() );
-        sal_Size nActReadSize = xIStm->Tell();
+        std::size_t nActReadSize = xIStm->Tell();
         if (nActReadSize != mnSwapInDataSize)
         {
             bError = true;

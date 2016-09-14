@@ -734,7 +734,7 @@ void GtkDropTarget::initialize(const Sequence<Any>& rArguments) throw( Exception
                                static_cast<OWeakObject*>(this));
     }
 
-    sal_Size nFrame = 0;
+    std::size_t nFrame = 0;
     rArguments.getConstArray()[1] >>= nFrame;
 
     if (!nFrame)
@@ -870,7 +870,7 @@ void GtkDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rArgume
                                static_cast<OWeakObject*>(this));
     }
 
-    sal_Size nFrame = 0;
+    std::size_t nFrame = 0;
     rArguments.getConstArray()[1] >>= nFrame;
 
     if (!nFrame)

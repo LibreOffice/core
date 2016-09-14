@@ -95,7 +95,7 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
 
         std::unique_ptr< SvStream > pInStream( ::utl::UcbStreamHelper::CreateStream( xInStream ) );
         pInStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
-        sal_Size nUniPos = pInStream->Tell();
+        sal_uInt64 const nUniPos = pInStream->Tell();
 
         const sal_uInt16 nSize = 4000;
         bool  bTryUtf16 = false;

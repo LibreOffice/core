@@ -124,7 +124,7 @@ void XclExpXmlEndSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->write( "/>" );
 }
 
-XclExpRecord::XclExpRecord( sal_uInt16 nRecId, sal_Size nRecSize ) :
+XclExpRecord::XclExpRecord( sal_uInt16 nRecId, std::size_t nRecSize ) :
     mnRecSize( nRecSize ),
     mnRecId( nRecId )
 {
@@ -134,7 +134,7 @@ XclExpRecord::~XclExpRecord()
 {
 }
 
-void XclExpRecord::SetRecHeader( sal_uInt16 nRecId, sal_Size nRecSize )
+void XclExpRecord::SetRecHeader( sal_uInt16 nRecId, std::size_t nRecSize )
 {
     SetRecId( nRecId );
     SetRecSize( nRecSize );
@@ -178,13 +178,13 @@ void XclExpBoolRecord::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
 }
 
-XclExpDummyRecord::XclExpDummyRecord( sal_uInt16 nRecId, const void* pRecData, sal_Size nRecSize ) :
+XclExpDummyRecord::XclExpDummyRecord( sal_uInt16 nRecId, const void* pRecData, std::size_t nRecSize ) :
     XclExpRecord( nRecId )
 {
     SetData( pRecData, nRecSize );
 }
 
-void XclExpDummyRecord::SetData( const void* pRecData, sal_Size nRecSize )
+void XclExpDummyRecord::SetData( const void* pRecData, std::size_t nRecSize )
 {
     mpData = pRecData;
     SetRecSize( pRecData ? nRecSize : 0 );
@@ -197,7 +197,7 @@ void XclExpDummyRecord::WriteBody( XclExpStream& rStrm )
 
 // Future records =============================================================
 
-XclExpFutureRecord::XclExpFutureRecord( XclFutureRecType eRecType, sal_uInt16 nRecId, sal_Size nRecSize ) :
+XclExpFutureRecord::XclExpFutureRecord( XclFutureRecType eRecType, sal_uInt16 nRecId, std::size_t nRecSize ) :
     XclExpRecord( nRecId, nRecSize ),
     meRecType( eRecType )
 {

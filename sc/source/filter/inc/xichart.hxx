@@ -1301,7 +1301,7 @@ public:
     /** Returns true, if the plot area has benn moved and/or resized manually. */
     bool                IsManualPlotArea() const;
     /** Returns the number of units on the progress bar needed for the chart. */
-    static inline sal_Size  GetProgressSize() { return 2 * EXC_CHART_PROGRESS_SIZE; }
+    static inline std::size_t GetProgressSize() { return 2 * EXC_CHART_PROGRESS_SIZE; }
 
     /** Converts and writes all properties to the passed chart. */
     void                Convert(
@@ -1391,7 +1391,7 @@ public:
     void                UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData );
 
     /** Returns the number of units on the progress bar needed for the chart. */
-    sal_Size            GetProgressSize() const;
+    std::size_t         GetProgressSize() const;
     /** Returns true, if the chart is based on a pivot table. */
     inline bool         IsPivotChart() const { return mbIsPivotChart; }
 

@@ -170,12 +170,12 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
           rtl_TextToUnicodeContext aContext =
                 rtl_createTextToUnicodeContext(aConverter);
 
-          sal_Size nBufferSize = nInsertTextLength * 2;
+          std::size_t nBufferSize = nInsertTextLength * 2;
 
           pInsertTextString = static_cast<sal_Unicode*>(alloca(nBufferSize));
 
           sal_uInt32  nConversionInfo;
-          sal_Size    nConvertedChars;
+          std::size_t nConvertedChars;
 
         rtl_convertTextToUnicode( aConverter, aContext,
                 pMBString, nMBLength,

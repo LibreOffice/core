@@ -748,9 +748,9 @@ Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
                     aDropTargetSN = "com.sun.star.datatransfer.dnd.X11DropTarget";
 
                     aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aDragSourceAL[ 1 ] = makeAny( (sal_Size)(pEnvData->aShellWindow) );
+                    aDragSourceAL[ 1 ] = makeAny( (std::size_t)(pEnvData->aShellWindow) );
                     aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aDropTargetAL[ 1 ] = makeAny( (sal_Size)(pEnvData->aShellWindow) );
+                    aDropTargetAL[ 1 ] = makeAny( (std::size_t)(pEnvData->aShellWindow) );
 #endif
                     if( !aDragSourceSN.isEmpty() )
                         mpWindowImpl->mpFrameData->mxDragSource.set(

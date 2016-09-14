@@ -241,7 +241,7 @@ sal_uInt32 SvParser::GetNextChar()
     }
     else
     {
-        sal_Size nChars = 0;
+        std::size_t nChars = 0;
         do
         {
             sal_Char c1;    // signed, that's the text converter expects
@@ -264,7 +264,7 @@ sal_uInt32 SvParser::GetNextChar()
 
                     sal_Unicode cUC;
                     sal_uInt32 nInfo = 0;
-                    sal_Size nCvtBytes;
+                    std::size_t nCvtBytes;
                     nChars = rtl_convertTextToUnicode(
                                 pImplData->hConv, pImplData->hContext,
                                 &c1, 1, &cUC, 1,

@@ -311,7 +311,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                 }
 
                 sal_uInt32 nCvtInfo;
-                sal_Size nSrcCvtBytes;
+                std::size_t nSrcCvtBytes;
                 int nOutLen = rtl_convertTextToUnicode(
                     aConverter, aCvtContext,
                     cCharsInp, j, cCharsOut, NOUTSIZE,

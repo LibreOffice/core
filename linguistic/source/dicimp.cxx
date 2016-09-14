@@ -94,8 +94,8 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg )
     if (!rpStream.get() || rpStream->GetError())
         return -1;
 
-    sal_Size nSniffPos = rpStream->Tell();
-    static sal_Size nVerOOo7Len = sal::static_int_cast< sal_Size >(strlen( pVerOOo7 ));
+    sal_uInt64 const nSniffPos = rpStream->Tell();
+    static std::size_t nVerOOo7Len = sal::static_int_cast< std::size_t >(strlen( pVerOOo7 ));
     pMagicHeader[ nVerOOo7Len ] = '\0';
     if ((rpStream->ReadBytes(static_cast<void *>(pMagicHeader), nVerOOo7Len) == nVerOOo7Len) &&
         !strcmp(pMagicHeader, pVerOOo7))

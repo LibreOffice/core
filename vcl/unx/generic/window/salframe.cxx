@@ -3163,8 +3163,8 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 
     sal_Unicode *pBuffer;
     sal_Unicode *pString;
-    sal_Size     nBufferSize = nLen * 2;
-    sal_Size     nSize;
+    std::size_t  nBufferSize = nLen * 2;
+    std::size_t  nSize;
     pBuffer = static_cast<sal_Unicode*>(malloc( nBufferSize + 2 ));
     pBuffer[ 0 ] = 0;
 
@@ -3182,7 +3182,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
                  rtl_createTextToUnicodeContext( aConverter );
 
         sal_uInt32  nConversionInfo;
-        sal_Size    nConvertedChars;
+        std::size_t nConvertedChars;
 
         // convert to single byte text stream
         nSize = rtl_convertTextToUnicode(
