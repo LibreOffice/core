@@ -4946,8 +4946,8 @@ SvStream* EscherExGlobal::ImplQueryPictureStream()
 class SvNullStream : public SvStream
 {
 protected:
-    virtual sal_Size GetData( void* pData, sal_Size nSize ) override { memset( pData, 0, nSize ); return nSize; }
-    virtual sal_Size PutData( const void*, sal_Size nSize ) override { return nSize; }
+    virtual std::size_t GetData( void* pData, std::size_t nSize ) override { memset( pData, 0, nSize ); return nSize; }
+    virtual std::size_t PutData( const void*, std::size_t nSize ) override { return nSize; }
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override { return nPos; }
     virtual void SetSize( sal_uInt64 ) override {}
     virtual void FlushData() override {}

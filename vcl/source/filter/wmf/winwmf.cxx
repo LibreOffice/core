@@ -1156,7 +1156,7 @@ static const long   aMaxWidth = 1024;
 
 bool WMFReader::ReadHeader()
 {
-    sal_Size nStrmPos = pWMF->Tell();
+    sal_uInt64 const nStrmPos = pWMF->Tell();
 
     sal_uInt32 nPlaceableMetaKey(0);
     // if available read the METAFILEHEADER

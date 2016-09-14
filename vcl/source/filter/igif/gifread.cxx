@@ -270,7 +270,7 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
     if (nLen > nMaxPossible)
         nLen = nMaxPossible;
     std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nLen ]);
-    sal_Size nRead = rIStm.ReadBytes(pBuf.get(), nLen);
+    std::size_t nRead = rIStm.ReadBytes(pBuf.get(), nLen);
     nCount = nRead/3UL;
     if( NO_PENDING( rIStm ) )
     {
@@ -417,7 +417,7 @@ bool GIFReader::ReadExtension()
                 std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nCount]);
 
                 bRet = false;
-                sal_Size nRead = rIStm.ReadBytes(pBuffer.get(), nCount);
+                std::size_t nRead = rIStm.ReadBytes(pBuffer.get(), nCount);
                 if (NO_PENDING(rIStm) && cSize < nRead)
                 {
                     cSize = pBuffer[cSize];
@@ -437,7 +437,7 @@ bool GIFReader::ReadLocalHeader()
     sal_uInt8   pBuf[ 9 ];
     bool    bRet = false;
 
-    sal_Size nRead = rIStm.ReadBytes(pBuf, 9);
+    std::size_t nRead = rIStm.ReadBytes(pBuf, 9);
     if (NO_PENDING(rIStm) && nRead == 9)
     {
         SvMemoryStream  aMemStm;

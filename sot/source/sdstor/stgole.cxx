@@ -48,7 +48,7 @@ StgInternalStream::~StgInternalStream()
     delete m_pStrm;
 }
 
-sal_uLong StgInternalStream::GetData( void* pData, sal_uLong nSize )
+std::size_t StgInternalStream::GetData(void* pData, std::size_t nSize)
 {
     if( m_pStrm )
     {
@@ -60,7 +60,7 @@ sal_uLong StgInternalStream::GetData( void* pData, sal_uLong nSize )
         return 0;
 }
 
-sal_uLong StgInternalStream::PutData( const void* pData, sal_uLong nSize )
+std::size_t StgInternalStream::PutData(const void* pData, std::size_t nSize)
 {
     if( m_pStrm )
     {
