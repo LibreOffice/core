@@ -421,8 +421,8 @@ endef
 $(foreach ide,\
 	debug \
 	kdevelop \
-	vs2012 \
 	vs2013 \
+	vs2015 \
 	vim \
 	xcode \
 	qtcreator \
