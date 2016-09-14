@@ -639,7 +639,7 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
     mnOldPos = nStrmPos;
 }
 
-static const char* lcl_GetErrorString( sal_uInt16 nScErrCode )
+static const char* lcl_GetErrorString( FormulaError nScErrCode )
 {
     sal_uInt8 nXclErrCode = XclTools::GetXclErrorCode( nScErrCode );
     switch( nXclErrCode )

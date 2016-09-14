@@ -751,7 +751,7 @@ void ScDPOutput::DataCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const sheet::Data
     long nFlags = rData.Flags;
     if ( nFlags & sheet::DataResultFlags::ERROR )
     {
-        pDoc->SetError( nCol, nRow, nTab, formula::errNoValue );
+        pDoc->SetError( nCol, nRow, nTab, FormulaError::NoValue );
     }
     else if ( nFlags & sheet::DataResultFlags::HASDATA )
     {

@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/sheet/FormulaToken.hpp>
+#include "formula/errorcodes.hxx"
 #include "formula/token.hxx"
 #include "formula/tokenarray.hxx"
 #include "formula/FormulaCompiler.hxx"
@@ -262,13 +263,13 @@ FormulaToken* FormulaToken::GetFAPOrigToken() const
     return nullptr;
 }
 
-sal_uInt16 FormulaToken::GetError() const
+FormulaError FormulaToken::GetError() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetError: virtual dummy called" );
-    return 0;
+    return FormulaError::NONE;
 }
 
-void FormulaToken::SetError( sal_uInt16 )
+void FormulaToken::SetError( FormulaError )
 {
     SAL_WARN( "formula.core", "FormulaToken::SetError: virtual dummy called" );
 }
@@ -719,7 +720,7 @@ FormulaTokenArray::FormulaTokenArray() :
     nLen(0),
     nRPN(0),
     nIndex(0),
-    nError(0),
+    nError(FormulaError::NONE),
     nMode(ScRecalcMode::NORMAL),
     bHyperLink(false),
     mbFromRangeName(false)
@@ -802,7 +803,8 @@ void FormulaTokenArray::Clear()
         delete [] pCode;
     }
     pCode = nullptr; pRPN = nullptr;
-    nError = nLen = nIndex = nRPN = 0;
+    nError = FormulaError::NONE;
+    nLen = nIndex = nRPN = 0;
     bHyperLink = false;
     mbFromRangeName = false;
     ClearRecalcMode();
@@ -1802,8 +1804,8 @@ bool FormulaExternalToken::operator==( const FormulaToken& r ) const
 }
 
 
-sal_uInt16      FormulaErrorToken::GetError() const             { return nError; }
-void            FormulaErrorToken::SetError( sal_uInt16 nErr )  { nError = nErr; }
+FormulaError      FormulaErrorToken::GetError() const             { return nError; }
+void            FormulaErrorToken::SetError( FormulaError nErr )  { nError = nErr; }
 bool FormulaErrorToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&

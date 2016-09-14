@@ -24,6 +24,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <formula/token.hxx>
+#include <formula/errorcodes.hxx>
 #include "tokenarray.hxx"
 #include "stlpool.hxx"
 #include "tabvwsh.hxx"
@@ -311,7 +312,7 @@ IMPL_LINK_TYPED(ScConditionFrmtEntry, OnEdChanged, Edit&, rEdit, void)
     std::unique_ptr<ScTokenArray> ta(aComp.CompileString(aFormula));
 
     // Error, warn the user
-    if( ta->GetCodeError() || ( ta->GetLen() == 0 ) )
+    if( ta->GetCodeError() != FormulaError::NONE || ( ta->GetLen() == 0 ) )
     {
         rEdit.SetControlBackground(COL_LIGHTRED);
         maFtVal->SetText(ScGlobal::GetRscString(STR_VALID_DEFERROR));

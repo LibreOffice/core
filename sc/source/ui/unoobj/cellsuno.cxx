@@ -1147,7 +1147,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                     case uno::TypeClass_VOID:
                     {
                         // void = "no value"
-                        rDoc.SetError( nDocCol, nDocRow, nTab, formula::NOTAVAILABLE );
+                        rDoc.SetError( nDocCol, nDocRow, nTab, FormulaError::NotAvailable );
                     }
                     break;
 
@@ -3647,7 +3647,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryFormulaC
                 {
                     ScFormulaCell* pFCell = aIter.getFormulaCell();
                     bool bAdd = false;
-                    if (pFCell->GetErrCode())
+                    if (pFCell->GetErrCode() != FormulaError::NONE)
                     {
                         if ( nResultFlags & sheet::FormulaResult::ERROR )
                             bAdd = true;
@@ -6550,12 +6550,12 @@ sal_Int32 SAL_CALL ScCellObj::getError() throw(uno::RuntimeException, std::excep
         return 0;
     }
 
-    sal_uInt16 nError = 0;
+    FormulaError nError = FormulaError::NONE;
     ScRefCellValue aCell(pDocSh->GetDocument(), aCellPos);
     if (aCell.meType == CELLTYPE_FORMULA)
         nError = aCell.mpFormula->GetErrCode();
 
-    return nError;
+    return (sal_Int32)nError;
 }
 
 // XFormulaTokens

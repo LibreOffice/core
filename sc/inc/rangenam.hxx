@@ -119,7 +119,7 @@ public:
     ScTokenArray*   GetCode()                       { return pCode; }
     SC_DLLPUBLIC void   SetCode( ScTokenArray& );
     const ScTokenArray* GetCode() const             { return pCode; }
-    SC_DLLPUBLIC sal_uInt16 GetErrCode() const;
+    SC_DLLPUBLIC FormulaError GetErrCode() const;
     bool            HasReferences() const;
     void            AddType( Type nType );
     Type            GetType() const                 { return eType; }

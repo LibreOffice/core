@@ -34,6 +34,7 @@
 #include "xeescher.hxx"
 #include "xeextlst.hxx"
 #include "tokenarray.hxx"
+#include <formula/errorcodes.hxx>
 #include <thread>
 #include <comphelper/threadpool.hxx>
 
@@ -1045,8 +1046,8 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 
 void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
 {
-    sal_uInt16 nScErrCode = mrScFmlaCell.GetErrCode();
-    if( nScErrCode )
+    FormulaError nScErrCode = mrScFmlaCell.GetErrCode();
+    if( nScErrCode != FormulaError::NONE )
     {
         rStrm << EXC_FORMULA_RES_ERROR << sal_uInt8( 0 )
             << XclTools::GetXclErrorCode( nScErrCode )
