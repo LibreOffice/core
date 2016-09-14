@@ -40,44 +40,44 @@ namespace sw
 DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
                                                                 mbStartIdleTimer( false ),
                                                                 mIdleBlockCount( 0 ),
-                                                                maIdle("DocumentTimerManagerIdleTimer")
+                                                                maDocIdle( i_rSwdoc )
 {
-    maIdle.SetPriority( TaskPriority::LOWEST );
-    maIdle.SetInvokeHandler( LINK( this, DocumentTimerManager, DoIdleJobs) );
-    maIdle.SetDebugName( "sw::DocumentTimerManager maIdle" );
+    maDocIdle.SetPriority( TaskPriority::LOWEST );
+    maDocIdle.SetInvokeHandler( LINK( this, DocumentTimerManager, DoIdleJobs) );
+    maDocIdle.SetDebugName( "sw::DocumentTimerManager maDocIdle" );
 }
 
 void DocumentTimerManager::StartIdling()
 {
     mbStartIdleTimer = true;
     if( !mIdleBlockCount )
-        maIdle.Start();
+        maDocIdle.Start();
 }
 
 void DocumentTimerManager::StopIdling()
 {
     mbStartIdleTimer = false;
-    maIdle.Stop();
+    maDocIdle.Stop();
 }
 
 void DocumentTimerManager::BlockIdling()
 {
-    maIdle.Stop();
+    maDocIdle.Stop();
     ++mIdleBlockCount;
 }
 
 void DocumentTimerManager::UnblockIdling()
 {
     --mIdleBlockCount;
-    if( !mIdleBlockCount && mbStartIdleTimer && !maIdle.IsActive() )
-        maIdle.Start();
+    if( !mIdleBlockCount && mbStartIdleTimer && !maDocIdle.IsActive() )
+        maDocIdle.Start();
 }
 
 void DocumentTimerManager::StartBackgroundJobs()
 {
     // Trigger DoIdleJobs(), asynchronously.
-    if (!maIdle.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
-        maIdle.Start();
+    if (!maDocIdle.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
+        maDocIdle.Start();
 }
 
 IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
@@ -96,10 +96,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
         for(SwViewShell& rSh : pShell->GetRingContainer())
         {
             if( rSh.ActionPend() )
-            {
-                pIdle->Start();
                 return;
-            }
         }
 
         if( pTmpRoot->IsNeedGrammarCheck() )
@@ -119,9 +116,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
             if ((*pLayIter)->IsIdleFormat())
             {
                 (*pLayIter)->GetCurrShell()->LayoutIdle();
-
                 // Defer the remaining work.
-                pIdle->Start();
                 return;
             }
         }
@@ -135,11 +130,8 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
                 /* && !pStartSh->GetViewOptions()->IsFieldName()*/ )
         {
             if ( m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().IsInUpdateFields() ||
-                 m_rDoc.getIDocumentFieldsAccess().IsExpFieldsLocked() )
-            {
-                pIdle->Start();
+                      m_rDoc.getIDocumentFieldsAccess().IsExpFieldsLocked() )
                 return;
-            }
 
             //  Action brackets!
             m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetInUpdateFields( true );
@@ -167,6 +159,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
     if( pModLogFile && 1 != (long)pModLogFile )
         delete pModLogFile, static_cast<long&>(pModLogFile) = 1;
 #endif
+    pIdle->Stop();
 }
 
 DocumentTimerManager::~DocumentTimerManager() {}

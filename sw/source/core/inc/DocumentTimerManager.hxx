@@ -21,8 +21,8 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTTIMERMANAGER_HXX
 
 #include <IDocumentTimerAccess.hxx>
+#include <SwDocIdle.hxx>
 
-#include <vcl/idle.hxx>
 #include <sal/types.h>
 #include <tools/link.hxx>
 
@@ -47,7 +47,6 @@ public:
 
     void StartBackgroundJobs() override;
 
-    // Our own 'IdleTimer' calls the following method
     DECL_LINK( DoIdleJobs, Timer *, void );
 
     virtual ~DocumentTimerManager() override;
@@ -61,7 +60,7 @@ private:
 
     bool mbStartIdleTimer; //< idle timer mode start/stop
     sal_Int32 mIdleBlockCount;
-    Idle  maIdle;
+    SwDocIdle maDocIdle;
 };
 
 }
