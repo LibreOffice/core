@@ -29,6 +29,8 @@
 #include "sal/types.h"
 #include "test/testtools/bridgetest/XMulti.hpp"
 
+#include <dllapi.hxx>
+
 namespace testtools { namespace bridgetest {
 
 class Multi: public cppu::WeakImplHelper< test::testtools::bridgetest::XMulti >
@@ -109,6 +111,7 @@ private:
     double m_attribute3;
 };
 
+LO_DLLPUBLIC_TESTTOOLS
 OUString testMulti( css::uno::Reference< test::testtools::bridgetest::XMulti >  const & multi);
 
 } }

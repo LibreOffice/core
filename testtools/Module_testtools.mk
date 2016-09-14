@@ -15,9 +15,9 @@ $(eval $(call gb_Module_add_targets,testtools,\
 	CustomTarget_bridgetest \
 	InternalUnoApi_bridgetest \
 	InternalUnoApi_performance \
-	StaticLibrary_bridgetest \
 	Library_cppobj \
 	Library_bridgetest \
+	Library_bridgetest-common \
 	Library_constructors \
 	Rdb_uno_services \
 ))

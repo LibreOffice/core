@@ -26,14 +26,11 @@ $(eval $(call gb_Library_use_api,testtools_cppobj,\
 
 $(eval $(call gb_Library_use_external,testtools_cppobj,boost_headers))
 
-$(eval $(call gb_Library_use_static_libraries,testtools_cppobj,\
-    testtools_bridgetest_s \
-))
-
 $(eval $(call gb_Library_use_libraries,testtools_cppobj,\
     cppu \
     cppuhelper \
     sal \
+    testtools_bridgetest-common \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,testtools_cppobj,\

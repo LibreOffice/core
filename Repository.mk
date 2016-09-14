@@ -487,6 +487,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	test-setupvcl \
 	testtools_cppobj \
 	testtools_bridgetest \
+	testtools_bridgetest-common \
 	testtools_constructors \
 	unobootstrapprotector \
 	unoexceptionprotector \
