@@ -366,7 +366,7 @@ struct WinMtfLineStyle : GDIObj
         , bTransparent(bTrans)
     {}
 
-    WinMtfLineStyle( const Color& rColor, const LineInfo& rStyle, bool bTrans = false)
+    WinMtfLineStyle( const Color& rColor, const LineInfo& rStyle, bool bTrans)
         : aLineColor  (rColor)
         , aLineInfo   (rStyle)
         , bTransparent(bTrans)
@@ -673,7 +673,7 @@ protected:
                         WinMtf(
                             GDIMetaFile& rGDIMetaFile,
                             SvStream& rStreamWMF,
-                            FilterConfigItem* pConfigItem = nullptr
+                            FilterConfigItem* pConfigItem
                         );
                         ~WinMtf();
 };
@@ -742,7 +742,7 @@ private:
 public:
 
     WMFReader(SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
-              FilterConfigItem* pConfigItem = nullptr,
+              FilterConfigItem* pConfigItem,
               WMF_EXTERNALHEADER* pExtHeader = nullptr);
 
     // read WMF file from stream and fill the GDIMetaFile

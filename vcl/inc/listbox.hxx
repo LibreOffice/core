@@ -530,7 +530,7 @@ protected:
     virtual void  FillLayoutData() const override;
 
 public:
-                    ImplWin( vcl::Window* pParent, WinBits nWinStyle = 0 );
+                    ImplWin( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
@@ -576,7 +576,7 @@ private:
     Link<void*,void> maMBDownHdl;
 
 public:
-                    ImplBtn( vcl::Window* pParent, WinBits nWinStyle = 0 );
+                    ImplBtn( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     void    MBDown();

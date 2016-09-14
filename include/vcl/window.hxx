@@ -1204,7 +1204,7 @@ public:
 
     bool                                HandleScrollCommand( const CommandEvent& rCmd,
                                                              ScrollBar* pHScrl,
-                                                             ScrollBar* pVScrl = nullptr );
+                                                             ScrollBar* pVScrl );
 
     void                                SaveBackground( const Point& rPos, const Size& rSize,
                                                         const Point& rDestOff, VirtualDevice& rSaveDevice );

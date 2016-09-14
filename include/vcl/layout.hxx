@@ -658,7 +658,7 @@ private:
     void create_owned_areas();
 
     friend class VclPtr<MessageDialog>;
-    MessageDialog(vcl::Window* pParent, WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
+    MessageDialog(vcl::Window* pParent, WinBits nStyle);
 public:
 
     MessageDialog(vcl::Window* pParent,

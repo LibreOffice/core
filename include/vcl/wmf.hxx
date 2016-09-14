@@ -55,7 +55,7 @@ struct WMF_EXTERNALHEADER
     }
 };
 
-bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem, WMF_EXTERNALHEADER *pExtHeader = nullptr );
+bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem, WMF_EXTERNALHEADER *pExtHeader );
 
 VCL_DLLPUBLIC bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF );
 

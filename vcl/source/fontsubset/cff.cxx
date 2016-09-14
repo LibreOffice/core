@@ -1681,7 +1681,7 @@ const char* CffSubsetterContext::getGlyphName( int nGlyphIndex)
 class Type1Emitter
 {
 public:
-    explicit    Type1Emitter( FILE* pOutFile, bool bPfbSubset = true);
+    explicit    Type1Emitter( FILE* pOutFile, bool bPfbSubset);
     ~Type1Emitter();
     void        setSubsetName( const char* );
 

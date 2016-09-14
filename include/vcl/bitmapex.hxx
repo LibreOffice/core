@@ -326,7 +326,7 @@ public:
      */
     bool                Adjust(
                             short nLuminancePercent,
-                            short nContrastPercent = 0,
+                            short nContrastPercent,
                             short nChannelRPercent = 0,
                             short nChannelGPercent = 0,
                             short nChannelBPercent = 0,
@@ -409,7 +409,7 @@ public:
                             const basegfx::B2DHomMatrix& rTransformation,
                             const basegfx::B2DRange& rVisibleRange,
                             double fMaximumArea,
-                            bool bSmooth = true) const;
+                            bool bSmooth) const;
 
     /** Create ColorStack-modified version of this BitmapEx
 

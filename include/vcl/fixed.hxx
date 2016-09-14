@@ -82,7 +82,7 @@ public:
 class VCL_DLLPUBLIC SelectableFixedText : public Edit
 {
 public:
-    explicit SelectableFixedText( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit SelectableFixedText( vcl::Window* pParent, WinBits nStyle );
 
     virtual void    LoseFocus() override;
     virtual void    ApplySettings(vcl::RenderContext&) override;

@@ -33,7 +33,7 @@ namespace x11 {
         SelectionManager&               m_rManager;
         Atom                m_aSelection;
     public:
-        X11Transferable( SelectionManager& rManager, Atom selection = None );
+        X11Transferable( SelectionManager& rManager, Atom selection );
         virtual ~X11Transferable() override;
 
         /*
