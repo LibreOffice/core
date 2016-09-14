@@ -1185,11 +1185,8 @@ void Test::testUserDefinedNumberFormats()
     }
     {  // tdf#79399 tdf#101462 Native Number Formats
         sCode = "[NatNum5][$-0404]General\\ ";
-        sExpected = OUStringLiteral1(22777) +  // 壹
-                    OUStringLiteral1(20336) +  // 佰
-                    OUStringLiteral1(36019) +  // 貳
-                    OUStringLiteral1(25342) +  // 拾
-                    " ";
+        const sal_Unicode aZhNumber[6] = { 22777, 20336, 36019, 25342 , 32, 0 };
+        sExpected = OUString(aZhNumber) ;
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
         sCode = "[DBNum2][$-0404]General\\ ";
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
