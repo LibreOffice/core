@@ -163,7 +163,7 @@ public:
 
     XMLTextFieldExport( SvXMLExport& rExp,
                         /// XMLPropertyState for the combined characters field
-                        XMLPropertyState* pCombinedCharState = nullptr );
+                        XMLPropertyState* pCombinedCharState );
     virtual ~XMLTextFieldExport();
 
     /// Export this field and the surrounding span element with the formatting.

@@ -83,7 +83,7 @@ public:
                                 const sal_Int16 nTypeKey,
                                 const double& rValue,
                                 const OUString& rCurrencySymbol,
-                                bool bExportValue = true);
+                                bool bExportValue);
     static bool GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& rCurrencySymbol,
         css::uno::Reference< css::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
     static sal_Int16 GetCellType(const sal_Int32 nNumberFormat, bool& bIsStandard,
@@ -95,7 +95,7 @@ public:
     static void SetNumberFormatAttributes(SvXMLExport& rXMLExport,
                                           const OUString& rValue,
                                           const OUString& rCharacters,
-                                          bool bExportValue = true,
+                                          bool bExportValue,
                                           bool bExportTypeAttribute = true);
 
     bool GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& rCurrencySymbol);
@@ -103,7 +103,7 @@ public:
     void WriteAttributes(const sal_Int16 nTypeKey,
                                           const double& rValue,
                                           const OUString& rCurrencySymbol,
-                                          bool bExportValue = true, sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
+                                          bool bExportValue, sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
     void SetNumberFormatAttributes(const sal_Int32 nNumberFormat,
                                           const double& rValue,
                                           bool bExportValue = true,

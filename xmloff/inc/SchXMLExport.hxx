@@ -53,7 +53,7 @@ public:
     SchXMLExport(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
-        SvXMLExportFlags nExportFlags = SvXMLExportFlags::ALL );
+        SvXMLExportFlags nExportFlags );
     virtual ~SchXMLExport() override;
 
     rtl::Reference< XMLPropertySetMapper > GetPropertySetMapper() const;

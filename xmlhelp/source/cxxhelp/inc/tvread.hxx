@@ -166,7 +166,7 @@ namespace treeview {
         friend class TVChildTarget;
 
     public:
-        TVRead( const ConfigData& configData,TVDom* tvDom = nullptr );
+        TVRead( const ConfigData& configData, TVDom* tvDom );
 
         virtual ~TVRead() override;
 

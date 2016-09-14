@@ -81,7 +81,7 @@ public:
                            const OUString& rQName,
                            XMLPropType eP,
                            const OUString& rStyleFamily,
-                           bool _bControlStyle = false );
+                           bool _bControlStyle );
 
     virtual ~XMLPropertiesTContext_Impl() override;
 

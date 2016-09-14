@@ -60,7 +60,7 @@ public:
         bool bIsEnd,    /// mark end of a change
         /// true if change mark is encountered outside of a paragraph
         /// (usually before a section or table)
-        bool bIsOutsideOfParagraph = false);
+        bool bIsOutsideOfParagraph);
 
     virtual ~XMLChangeImportContext() override;
 

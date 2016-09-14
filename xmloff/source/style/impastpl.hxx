@@ -118,7 +118,7 @@ struct XMLAutoStyleFamily
 
     XMLAutoStyleFamily( sal_Int32 nFamily, const OUString& rStrName,
             const rtl::Reference<SvXMLExportPropertyMapper>& rMapper,
-            const OUString& rStrPrefix, bool bAsFamily = true );
+            const OUString& rStrPrefix, bool bAsFamily );
 
     explicit XMLAutoStyleFamily( sal_Int32 nFamily );
     ~XMLAutoStyleFamily();
