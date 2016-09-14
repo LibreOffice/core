@@ -20,33 +20,45 @@
 #ifndef INCLUDED_VCL_IDLE_HXX
 #define INCLUDED_VCL_IDLE_HXX
 
-#include <tools/link.hxx>
-#include <vcl/scheduler.hxx>
+#include <vcl/timer.hxx>
 
-class VCL_DLLPUBLIC Idle : public Scheduler
+/**
+ * An idle is a low priority timer to be scheduled immediately.
+ *
+ * Therefore the timeout is set to ImmediateTimeoutMs and the initial,
+ * priority is DEFAULT_IDLE.
+ *
+ * It's - more or less - just a convenience class.
+ */
+class VCL_DLLPUBLIC Idle : public Timer
 {
+private:
+    // Delete all timeout specific functions, we don't want in an Idle
+    void          SetTimeout( sal_uInt64 nTimeoutMs ) = delete;
+    sal_uInt64    GetTimeout() const = delete;
+
 protected:
-    Link<Idle *, void> maIdleHdl;          // Callback Link
-    bool               mbAuto;
-
-    virtual void SetDeletionFlags() override;
-
     virtual bool ReadyForSchedule( const sal_uInt64 nTime ) const override;
     virtual void UpdateMinPeriod( const sal_uInt64 nTime, sal_uInt64 &nMinPeriod ) const override;
 
 public:
     Idle( const sal_Char *pDebugName = nullptr );
-    Idle( const Idle& rIdle );
 
-    virtual void    Start() override;
+    virtual void  Start() override;
 
-    /// Make it possible to associate a callback with this idle handler
-    /// of course, you can also sub-class and override 'Invoke'
-    void            SetIdleHdl( const Link<Idle *, void>& rLink ) { maIdleHdl = rLink; }
-    const Link<Idle *, void>& GetIdleHdl() const { return maIdleHdl; }
-    virtual void Invoke() override;
-    Idle&           operator=( const Idle& rIdle );
+    /**
+     * Convenience function for more readable code
+     *
+     * TODO: actually rename it and it's instances to SetInvokeHandler
+     */
+    inline void   SetIdleHdl( const Link<Idle *, void>& rLink );
 };
+
+inline void Idle::SetIdleHdl( const Link<Idle*, void> &rLink )
+{
+    SetInvokeHandler( Link<Timer*, void>( rLink.GetInstance(),
+        reinterpret_cast< Link<Timer*, void>::Stub* >( rLink.GetFunction()) ) );
+}
 
 /**
  * An auto-idle is long running task processing small chunks of data, which
@@ -61,8 +73,6 @@ class VCL_DLLPUBLIC AutoIdle : public Idle
 {
 public:
     AutoIdle( const sal_Char *pDebugName = nullptr );
-    AutoIdle( const AutoIdle& rIdle );
-    AutoIdle& operator=( const AutoIdle& rIdle );
 };
 
 #endif // INCLUDED_VCL_IDLE_HXX

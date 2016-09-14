@@ -27,10 +27,11 @@ class ImplSchedulerDataPrinter(object):
     def as_string(self, gdbobj):
         if gdbobj['mpScheduler']:
             sched = gdbobj['mpScheduler'].dereference()
-            if gdbobj['mpScheduler'].dynamic_cast( self.timer_type_ptr ):
-                sched_type = "Timer"
-            elif gdbobj['mpScheduler'].dynamic_cast( self.idle_type_ptr ):
+            timer = gdbobj['mpScheduler'].dynamic_cast( self.timer_type_ptr )
+            if gdbobj['mpScheduler'].dynamic_cast( self.idle_type_ptr ):
                 sched_type = "Idle"
+            elif timer:
+                sched_type = "Timer"
             else:
                 assert sched_type, "Scheduler object neither Timer nor Idle"
             res = "{:7s}{:10s}".format( sched_type, str(sched['mePriority']) )
@@ -39,6 +40,12 @@ class ImplSchedulerDataPrinter(object):
                 res = "{}   (scheduler debug name not set) ({})".format(res, str(sched.dynamic_type))
             else:
                 res = "{} '{}' ({})".format(res, str(name.string()), str(sched.dynamic_type))
+            val_type = gdb.lookup_type(str( sched.dynamic_type )).pointer()
+            timer = gdbobj['mpScheduler'].cast( val_type )
+            if (sched_type == "Timer"):
+                res = "{}: {}ms".format(res, timer['mnTimeout'])
+            else:
+                assert 0 == timer['mnTimeout'], "Idle with timeout == {}".format( timer['mnTimeout'] )
             return res
         else:
             return "(no scheduler - to be deleted)"

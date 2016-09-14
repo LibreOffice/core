@@ -26,9 +26,9 @@
 class VCL_DLLPUBLIC Timer : public Scheduler
 {
 protected:
-    Link<Timer *, void> maTimeoutHdl;          // Callback Link
-    sal_uInt64      mnTimeout;
-    bool            mbAuto;
+    Link<Timer *, void> maInvokeHandler;   ///< Callback Link
+    sal_uInt64          mnTimeout;
+    bool                mbAuto;
 
     virtual void SetDeletionFlags() override;
 
@@ -37,29 +37,45 @@ protected:
 
 public:
     Timer( const sal_Char *pDebugName = nullptr );
-    Timer( const Timer& rTimer );
 
-    /// Make it possible to associate a callback with this timer handler
-    /// of course, you can also sub-class and override 'Invoke'
-    void            SetTimeoutHdl( const Link<Timer *, void>& rLink ) { maTimeoutHdl = rLink; }
-    const Link<Timer *, void>& GetTimeoutHdl() const { return maTimeoutHdl; }
+    /**
+     * Calls the maInvokeHandler with the parameter this.
+     */
+    virtual void    Invoke() override;
+    /**
+     * Calls the maInvokeHandler with the parameter.
+     *
+     * Convenience Invoke function, mainly used to call with nullptr.
+     *
+     * @param arg parameter for the Link::Call function
+     */
+    void            Invoke( Timer *arg );
+    void            SetInvokeHandler( const Link<Timer *, void>& rLink ) { maInvokeHandler = rLink; }
+    bool            HasInvokeHandler() const { return maInvokeHandler.IsSet(); };
+
+    /**
+     * Convenience function for more readable code
+     *
+     * TODO: actually use SetInvokeHandler and drop it
+     */
+    inline void     SetTimeoutHdl( const Link<Timer *, void>& rLink );
+
     void            SetTimeout( sal_uInt64 nTimeoutMs );
     sal_uInt64      GetTimeout() const { return mnTimeout; }
-    virtual void    Invoke() override;
-    void            Timeout() { Invoke(); }
-    Timer&          operator=( const Timer& rTimer );
     virtual void    Start() override;
 };
+
+inline void Timer::SetTimeoutHdl( const Link<Timer *, void>& rLink )
+{
+    SetInvokeHandler( rLink );
+}
 
 /// An auto-timer is a multi-shot timer re-emitting itself at
 /// interval until destroyed.
 class VCL_DLLPUBLIC AutoTimer : public Timer
 {
 public:
-                    AutoTimer();
-                    AutoTimer( const AutoTimer& rTimer );
-
-    AutoTimer&      operator=( const AutoTimer& rTimer );
+    AutoTimer( const sal_Char *pDebugName = nullptr );
 };
 
 #endif // INCLUDED_VCL_TIMER_HXX
