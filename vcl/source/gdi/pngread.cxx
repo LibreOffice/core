@@ -85,7 +85,7 @@ private:
     sal_uInt8*          mpTransTab;     // for transparency in images with palette colortype
     sal_uInt8*          mpScanCurrent;  // pointer into the current scanline
     sal_uInt8*          mpColorTable;
-    sal_Size            mnStreamSize;   // estimate of PNG file size
+    std::size_t         mnStreamSize;   // estimate of PNG file size
     sal_uInt32          mnChunkType;    // Type of current PNG chunk
     sal_Int32           mnChunkLen;     // Length of current PNG chunk
     Size                maOrigSize;     // pixel size of the full image
@@ -220,7 +220,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     maChunkIter = maChunkSeq.begin();
 
     // estimate PNG file size (to allow sanity checks)
-    const sal_Size nStreamPos = mrPNGStream.Tell();
+    const std::size_t nStreamPos = mrPNGStream.Tell();
     mrPNGStream.Seek( STREAM_SEEK_TO_END );
     mnStreamSize = mrPNGStream.Tell();
     mrPNGStream.Seek( nStreamPos );
@@ -278,7 +278,7 @@ bool PNGReaderImpl::ReadNextChunk()
         rChunkData.nType = mnChunkType;
 
         // fdo#61847 truncate over-long, trailing chunks
-        const sal_Size nStreamPos = mrPNGStream.Tell();
+        const std::size_t nStreamPos = mrPNGStream.Tell();
         if( mnChunkLen < 0 || nStreamPos + mnChunkLen >= mnStreamSize )
             mnChunkLen = mnStreamSize - nStreamPos;
 

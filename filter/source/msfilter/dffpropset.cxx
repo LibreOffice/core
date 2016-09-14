@@ -1297,7 +1297,7 @@ bool DffPropSet::GetPropertyBool( sal_uInt32 nId ) const
 
 OUString DffPropSet::GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const
 {
-    sal_Size nOldPos = rStrm.Tell();
+    sal_uInt64 const nOldPos = rStrm.Tell();
     OUStringBuffer aBuffer;
     sal_uInt32 nBufferSize = GetPropertyValue( nId, 0 );
     if( (nBufferSize > 0) && SeekToContent( nId, rStrm ) )

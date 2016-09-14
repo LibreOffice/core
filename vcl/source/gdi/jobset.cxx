@@ -246,7 +246,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                      " max possible entries, but " << nRead << " claimed, truncating");
             return rIStream;
         }
-        sal_Size nFirstPos = rIStream.Tell();
+        sal_uInt64 const nFirstPos = rIStream.Tell();
         std::unique_ptr<char[]> pTempBuf(new char[nRead]);
         rIStream.ReadBytes(pTempBuf.get(), nRead);
         if (nRead >= sizeof(ImplOldJobSetupData))

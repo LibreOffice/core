@@ -141,7 +141,7 @@ bool SfxLockBytesItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
         else
             return false;
 
-        sal_uLong nRead = 0;
+        std::size_t nRead = 0;
         css::uno::Sequence< sal_Int8 > aSeq( nLen );
 
         _xVal->ReadAt( 0, aSeq.getArray(), nLen, &nRead );

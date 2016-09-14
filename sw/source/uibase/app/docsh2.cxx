@@ -732,7 +732,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
                         {
                             sal_uInt32 nLen = aStat.nSize;
-                            sal_uLong nRead = 0;
+                            std::size_t nRead = 0;
                             uno::Sequence< sal_Int8 > aSeq( nLen );
                             aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
@@ -798,7 +798,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         if ( aLockBytes.Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
                         {
                             sal_uInt32 nLen = aStat.nSize;
-                            sal_uLong nRead = 0;
+                            std::size_t nRead = 0;
                             uno::Sequence< sal_Int8 > aSeq( nLen );
                             aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 

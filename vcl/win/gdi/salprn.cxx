@@ -382,7 +382,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     }
 
     // make Outputbuffer
-    const sal_Size nDriverDataLen = sizeof(SalDriverData) + nSysJobSize-1;
+    const std::size_t nDriverDataLen = sizeof(SalDriverData) + nSysJobSize-1;
     pOutBuffer                  = (SalDriverData*)rtl_allocateZeroMemory( nDriverDataLen );
     pOutBuffer->mnSysSignature  = SAL_DRIVERDATA_SYSSIGN;
     // calculate driver data offset including structure padding

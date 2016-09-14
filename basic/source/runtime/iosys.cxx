@@ -213,8 +213,8 @@ class OslStream : public SvStream
 public:
                         OslStream( const OUString& rName, StreamMode nStrmMode );
                        virtual ~OslStream() override;
-    virtual sal_Size GetData( void* pData, sal_Size nSize ) override;
-    virtual sal_Size PutData( const void* pData, sal_Size nSize ) override;
+    virtual std::size_t GetData(void* pData, std::size_t nSize) override;
+    virtual std::size_t PutData(const void* pData, std::size_t nSize) override;
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override;
     virtual void        FlushData() override;
     virtual void        SetSize( sal_uInt64 nSize) override;
@@ -257,14 +257,14 @@ OslStream::~OslStream()
     maFile.close();
 }
 
-sal_Size OslStream::GetData(void* pData, sal_Size nSize)
+std::size_t OslStream::GetData(void* pData, std::size_t nSize)
 {
     sal_uInt64 nBytesRead = nSize;
     maFile.read( pData, nBytesRead, nBytesRead );
     return nBytesRead;
 }
 
-sal_Size OslStream::PutData(const void* pData, sal_Size nSize)
+std::size_t OslStream::PutData(const void* pData, std::size_t nSize)
 {
     sal_uInt64 nBytesWritten;
     maFile.write( pData, nSize, nBytesWritten );
@@ -309,8 +309,8 @@ public:
     explicit UCBStream( Reference< XInputStream > & xIS );
     explicit UCBStream( Reference< XStream > & xS );
                        virtual ~UCBStream() override;
-    virtual sal_Size GetData( void* pData, sal_Size nSize ) override;
-    virtual sal_Size PutData( const void* pData, sal_Size nSize ) override;
+    virtual std::size_t GetData( void* pData, std::size_t nSize ) override;
+    virtual std::size_t PutData( const void* pData, std::size_t nSize ) override;
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override;
     virtual void        FlushData() override;
     virtual void        SetSize( sal_uInt64 nSize ) override;
@@ -352,7 +352,7 @@ UCBStream::~UCBStream()
     }
 }
 
-sal_Size UCBStream::GetData(void* pData, sal_Size nSize)
+std::size_t UCBStream::GetData(void* pData, std::size_t nSize)
 {
     try
     {
@@ -383,7 +383,7 @@ sal_Size UCBStream::GetData(void* pData, sal_Size nSize)
     return 0;
 }
 
-sal_Size UCBStream::PutData(const void* pData, sal_Size nSize)
+std::size_t UCBStream::PutData(const void* pData, std::size_t nSize)
 {
     try
     {

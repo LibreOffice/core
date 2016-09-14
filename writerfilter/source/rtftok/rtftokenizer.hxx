@@ -42,7 +42,7 @@ public:
     /// To be invoked by the popState() callback to single when the importer leaves a group.
     void popGroup();
     OUString getPosition();
-    sal_Size getGroupStart()
+    std::size_t getGroupStart()
     {
         return m_nGroupStart;
     }
@@ -68,8 +68,8 @@ private:
     /// Same as the size of the importer's states, except that this can be negative for invalid input.
     int m_nGroup;
     sal_Int32 m_nLineNumber;
-    sal_Size m_nLineStartPos;
-    sal_Size m_nGroupStart;
+    std::size_t m_nLineStartPos;
+    std::size_t m_nGroupStart;
 };
 } // namespace rtftok
 } // namespace writerfilter

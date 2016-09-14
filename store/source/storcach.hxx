@@ -65,7 +65,7 @@ class PageCache :
     }
 
     Entry * lookup_Impl (Entry * entry, sal_uInt32 nOffset);
-    void rescale_Impl (sal_Size new_size);
+    void rescale_Impl (std::size_t new_size);
 
 public:
     // Construction
