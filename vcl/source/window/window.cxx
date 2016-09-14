@@ -2395,7 +2395,7 @@ Size Window::GetSizePixel() const
     {
         VclPtr<vcl::Window> xWindow( const_cast<Window*>(this) );
         mpWindowImpl->mpFrameData->maResizeIdle.Stop();
-        mpWindowImpl->mpFrameData->maResizeIdle.GetIdleHdl().Call( nullptr );
+        mpWindowImpl->mpFrameData->maResizeIdle.Invoke( nullptr );
         if( xWindow->IsDisposed() )
             return Size(0,0);
     }
