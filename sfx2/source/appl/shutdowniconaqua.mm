@@ -133,7 +133,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
 {
     public:
         RecentFilesStringLength() {}
-        virtual ~RecentFilesStringLength() {}
+        virtual ~RecentFilesStringLength() override {}
 
         // XStringWidth
         sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
