@@ -532,14 +532,14 @@ void Application::Reschedule( bool i_bAllEvents )
 
 void Scheduler::ProcessAllPendingEvents()
 {
-    int nSanity = 1000;
-    while( Scheduler::ProcessTaskScheduling() ||
-           ImplYield(false, true, 0) )
+    int nSanity = 1;
+    // nReleased == 1, because we don't run the LO event loop via timer
+    while( ImplYield( false, true, 1 )
+        || Scheduler::ProcessTaskScheduling(IdleRunPolicy::IDLE_VIA_LOOP) )
     {
-        if (nSanity-- < 0)
+        if (0 == ++nSanity % 1000)
         {
-            SAL_WARN("vcl.schedule", "Unexpected volume of events to process");
-            break;
+            SAL_WARN("vcl.schedule", "ProcessAllPendingEvents: " << nSanity);
         }
     }
 }
