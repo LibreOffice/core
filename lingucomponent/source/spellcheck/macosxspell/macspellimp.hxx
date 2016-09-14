@@ -86,7 +86,7 @@ class MacSpellChecker :
 
 public:
     MacSpellChecker();
-    virtual ~MacSpellChecker();
+    virtual ~MacSpellChecker() override;
 
     // XSupportedLocales (for XSpellChecker)
     virtual Sequence< Locale > SAL_CALL getLocales() throw(RuntimeException) override;
