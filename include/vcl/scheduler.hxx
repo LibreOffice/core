@@ -45,8 +45,8 @@ class VCL_DLLPUBLIC Scheduler final
     static void ImplStartTimer ( sal_uInt64 nMS, bool bForce, sal_uInt64 nTime );
 
 public:
-    static const SAL_CONSTEXPR sal_uInt64 ImmediateTimeoutMs = 1;
-    static const SAL_CONSTEXPR sal_uInt64 InfiniteTimeoutMs = 1000 * 60 * 60 * 24; // 1 day
+    static const SAL_CONSTEXPR sal_uInt64 ImmediateTimeoutMs = 0;
+    static const SAL_CONSTEXPR sal_uInt64 InfiniteTimeoutMs = SAL_MAX_UINT64; // 1 day
 
     static void       ImplDeInitScheduler();
 
