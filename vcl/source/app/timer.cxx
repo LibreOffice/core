@@ -46,25 +46,22 @@ void Timer::UpdateMinPeriod( const sal_uInt64 nTime, sal_uInt64 &nMinPeriod ) co
     }
 }
 
-Timer::Timer(const sal_Char *pDebugName) :
-    Scheduler(pDebugName),
-    mnTimeout(ImmediateTimeoutMs),
-    mbAuto(false)
+Timer::Timer(const sal_Char *pDebugName)
+    : Scheduler( pDebugName )
+    , mnTimeout( ImmediateTimeoutMs )
+    , mbAuto( false )
 {
     mePriority = SchedulerPriority::DEFAULT;
 }
 
-Timer::Timer( const Timer& rTimer ) :
-    Scheduler(rTimer),
-    mnTimeout(rTimer.mnTimeout),
-    mbAuto(rTimer.mbAuto)
-{
-    maTimeoutHdl = rTimer.maTimeoutHdl;
-}
-
 void Timer::Invoke()
 {
-    maTimeoutHdl.Call( this );
+    maInvokeHandler.Call( this );
+}
+
+void Timer::Invoke( Timer *arg )
+{
+    maInvokeHandler.Call( arg );
 }
 
 void Timer::Start()
@@ -83,28 +80,10 @@ void Timer::SetTimeout( sal_uInt64 nNewTimeout )
     }
 }
 
-Timer& Timer::operator=( const Timer& rTimer )
-{
-    Scheduler::operator=(rTimer);
-    maTimeoutHdl = rTimer.maTimeoutHdl;
-    mnTimeout = rTimer.mnTimeout;
-    mbAuto = rTimer.mbAuto;
-    return *this;
-}
-
-AutoTimer::AutoTimer()
+AutoTimer::AutoTimer( const sal_Char *pDebugName )
+    : Timer( pDebugName )
 {
     mbAuto = true;
 }
 
-AutoTimer::AutoTimer( const AutoTimer& rTimer ) : Timer( rTimer )
-{
-    mbAuto = true;
-}
-
-AutoTimer& AutoTimer::operator=( const AutoTimer& rTimer )
-{
-    Timer::operator=( rTimer );
-    return *this;
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
