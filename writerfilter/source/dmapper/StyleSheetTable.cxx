@@ -944,7 +944,13 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 
                         // Standard is handled already in applyDefaults().
                         if (sConvertedStyleName != "Standard")
+                        {
                             StyleSheetTable_Impl::SetPropertiesToDefault(xStyle);
+
+                            // resolve import conflicts with built-in styles
+                            if( pEntry->sBaseStyleIdentifier.isEmpty() && !xStyle->getParentStyle().isEmpty() )
+                                xStyle->setParentStyle( "Standard" );
+                        }
                     }
                     else
                     {
