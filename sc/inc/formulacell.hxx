@@ -296,13 +296,13 @@ public:
     bool            GetMatrixOrigin( ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
     sc::MatrixEdge  GetMatrixEdge( ScAddress& rOrgPos ) const;
-    sal_uInt16      GetErrCode();   // interpret first if necessary
-    sal_uInt16      GetRawError();  // don't interpret, just return code or result error
-    bool GetErrorOrValue( sal_uInt16& rErr, double& rVal );
+    FormulaError    GetErrCode();   // interpret first if necessary
+    FormulaError    GetRawError();  // don't interpret, just return code or result error
+    bool            GetErrorOrValue( FormulaError& rErr, double& rVal );
     sc::FormulaResultValue GetResult();
     sc::FormulaResultValue GetResult() const;
     sal_uInt8       GetMatrixFlag() const { return cMatrixFlag;}
-    ScTokenArray* GetCode() { return pCode;}
+    ScTokenArray*   GetCode() { return pCode;}
     const ScTokenArray* GetCode() const { return pCode;}
 
     void SetCode( ScTokenArray* pNew );
@@ -364,10 +364,10 @@ public:
     svl::SharedString GetResultString() const;
 
     /* Sets the shared code array to error state in addition to the cell result */
-    void SetErrCode( sal_uInt16 n );
+    void SetErrCode( FormulaError n );
 
     /* Sets just the result to error */
-    void SetResultError( sal_uInt16 n );
+    void SetResultError( FormulaError n );
 
     bool IsHyperLinkCell() const;
     EditTextObject* CreateURLObject();

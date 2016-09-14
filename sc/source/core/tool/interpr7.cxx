@@ -88,7 +88,7 @@ void ScInterpreter::ScFilterXML()
         OUString aString = GetString().getString();
         if(aString.isEmpty() || aXPathExpression.isEmpty())
         {
-            PushError( formula::errNoValue );
+            PushError( FormulaError::NoValue );
             return;
         }
 
@@ -105,7 +105,7 @@ void ScInterpreter::ScFilterXML()
 
         if(!pDoc)
         {
-            PushError( formula::errNoValue );
+            PushError( FormulaError::NoValue );
             return;
         }
 
@@ -117,7 +117,7 @@ void ScInterpreter::ScFilterXML()
 
         if(!pXPathObj)
         {
-            PushError( formula::errNoValue );
+            PushError( FormulaError::NoValue );
             return;
         }
 
@@ -130,7 +130,7 @@ void ScInterpreter::ScFilterXML()
                     xmlNodeSetPtr pNodeSet = pXPathObj->nodesetval;
                     if(!pNodeSet)
                     {
-                        PushError( formula::errNoValue );
+                        PushError( FormulaError::NoValue );
                         return;
                     }
 
@@ -138,7 +138,7 @@ void ScInterpreter::ScFilterXML()
                     if (nNode >= nSize)
                     {
                         // For pJumpMatrix
-                        PushError( formula::NOTAVAILABLE);
+                        PushError( FormulaError::NotAvailable);
                         return;
                     }
 
@@ -153,7 +153,7 @@ void ScInterpreter::ScFilterXML()
                         xResMat = GetNewMat( 1, nMatRows, true);
                         if (!xResMat)
                         {
-                            PushError( formula::errCodeOverflow);
+                            PushError( FormulaError::CodeOverflow);
                             return;
                         }
                     }
@@ -184,9 +184,9 @@ void ScInterpreter::ScFilterXML()
                         else
                         {
                             if (xResMat)
-                                xResMat->PutError( formula::NOTAVAILABLE, 0, nNode);
+                                xResMat->PutError( FormulaError::NotAvailable, 0, nNode);
                             else
-                                PushError( formula::NOTAVAILABLE );
+                                PushError( FormulaError::NotAvailable );
                         }
                     }
                     if (xResMat)
@@ -237,14 +237,14 @@ void ScInterpreter::ScWebservice()
 
         if(aURI.isEmpty())
         {
-            PushError( formula::errNoValue );
+            PushError( FormulaError::NoValue );
             return;
         }
 
         uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
         if(!xFileAccess.is())
         {
-            PushError( formula::errNoValue );
+            PushError( FormulaError::NoValue );
             return;
         }
 
@@ -255,12 +255,12 @@ void ScInterpreter::ScWebservice()
         catch (...)
         {
             // don't let any exceptions pass
-            PushError( formula::errNoValue );
+            PushError( FormulaError::NoValue );
             return;
         }
         if ( !xStream.is() )
         {
-            PushError( formula::errNoValue );
+            PushError( FormulaError::NoValue );
             return;
         }
 
@@ -304,7 +304,7 @@ void ScInterpreter::ScEncodeURL()
         OUString aStr = GetString().getString();
         if ( aStr.isEmpty() )
         {
-            PushError( formula::errNoValue );
+            PushError( FormulaError::NoValue );
             return;
         }
 
@@ -335,7 +335,7 @@ void ScInterpreter::ScDebugVar()
     SvtMiscOptions aMiscOptions;
     if (!aMiscOptions.IsExperimentalMode())
     {
-        PushError(formula::errNoName);
+        PushError(FormulaError::NoName);
         return;
     }
 

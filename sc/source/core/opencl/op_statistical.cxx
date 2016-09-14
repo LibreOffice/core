@@ -194,7 +194,7 @@ void OpVar::GenSlidingWindowFunction(std::stringstream &ss,
         }
     }
     ss << "    if (fCount <= 1.0)\n";
-    ss << "        return CreateDoubleError(errDivisionByZero);\n";
+    ss << "        return CreateDoubleError(FormulaError::DivisionByZero);\n";
     ss << "    else\n";
     ss << "        return vSum * pow(fCount - 1.0,-1.0);\n";
     ss << "}\n";
@@ -2657,7 +2657,7 @@ void OpSlope::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "    }\n";
 
         ss << "    if (fCount < 1.0)\n";
-        ss << "        return CreateDoubleError(errNoValue);\n";
+        ss << "        return CreateDoubleError(FormulaError::NoValue);\n";
         ss << "    else\n";
         ss << "    {\n";
         ss << "        fMeanX = fSumX * pow(fCount,-1.0);\n";
@@ -2701,7 +2701,7 @@ void OpSlope::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "            fSumSqrDeltaX += (argX-fMeanX) * (argX-fMeanX);\n";
         ss << "        }\n";
         ss << "        if(fSumSqrDeltaX == 0.0)\n";
-        ss << "            return CreateDoubleError(errDivisionByZero);\n";
+        ss << "            return CreateDoubleError(FormulaError::DivisionByZero);\n";
         ss << "        else\n";
         ss << "        {\n";
         ss << "            return fSumDeltaXDeltaY*pow(fSumSqrDeltaX,-1.0);\n";
@@ -3321,7 +3321,7 @@ void OpPearson::GenSlidingWindowFunction(
     ss << "      double tmp = ( fSumDeltaXDeltaY / ";
     ss << "sqrt( fSumX * fSumY));\n\t";
     ss << "      if (isnan(tmp))\n";
-    ss << "          return CreateDoubleError(errNoValue);\n";
+    ss << "          return CreateDoubleError(FormulaError::NoValue);\n";
     ss << "      return tmp;\n";
     ss << "}\n";
 }
@@ -4738,7 +4738,7 @@ void OpNormsinv:: GenSlidingWindowFunction
     ss << "z = q < 0.0 ? (-1)*z : z;\n";
     ss <<"}\n";
     ss <<"if (isnan(z))\n";
-    ss <<"    return CreateDoubleError(errNoValue);\n";
+    ss <<"    return CreateDoubleError(FormulaError::NoValue);\n";
     ss <<"return z;\n";
     ss <<"}\n";
 }
@@ -7012,7 +7012,7 @@ void OpCovar::GenSlidingWindowFunction(std::stringstream& ss,
                 ss << "    }\n";
             }
             ss << "    if(cnt < 1) {\n";
-            ss << "        return CreateDoubleError(errNoValue);\n";
+            ss << "        return CreateDoubleError(FormulaError::NoValue);\n";
             ss << "    }\n";
             ss << "    else {\n";
             ss << "        vMean0 = vSum0 / cnt;\n";

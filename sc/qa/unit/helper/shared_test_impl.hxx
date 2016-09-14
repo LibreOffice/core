@@ -14,6 +14,7 @@
 #include "conditio.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
+#include <formula/errorcodes.hxx>
 
 struct FindCondFormatByEnclosingRange
 {
@@ -259,8 +260,8 @@ void testFunctionsExcel2010_Impl( ScDocument& rDoc )
                 OString::number( rDoc.GetValue( ScAddress( 2, nRow, 0)) );
 
             ScFormulaCell* pFC = rDoc.GetFormulaCell( ScAddress( 1, nRow, 0) );
-            if ( pFC && pFC->GetErrCode() != 0 )
-                aStr += ", error code =" + OString::number( pFC->GetErrCode() );
+            if ( pFC && pFC->GetErrCode() != FormulaError::NONE )
+                aStr += ", error code =" + OString::number( (int)pFC->GetErrCode() );
 
             CPPUNIT_ASSERT_MESSAGE( OString( "Expected a formula cell without error at row " +
                     aStr ).getStr(), isFormulaWithoutError( rDoc, ScAddress( 1, nRow, 0)));

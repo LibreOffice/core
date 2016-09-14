@@ -187,7 +187,7 @@ private:
     css::uno::Reference<css::uno::XInterface> xCaller;
     bool                        bValidCount;
     // result:
-    sal_uInt16                  nErrCode;
+    FormulaError                nErrCode;
     bool                        bHasString;
     double                      fValue;
     OUString                    aString;
@@ -214,7 +214,7 @@ public:
 
     void                SetResult( const css::uno::Any& rNewRes );
 
-    sal_uInt16          GetErrCode() const      { return nErrCode; }
+    FormulaError        GetErrCode() const      { return nErrCode; }
     bool                HasString() const       { return bHasString; }
     bool                HasMatrix() const       { return xMatrix.get(); }
     bool                HasVarRes() const       { return ( xVarRes.is() ); }
