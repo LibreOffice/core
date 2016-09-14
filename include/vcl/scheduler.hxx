@@ -36,6 +36,11 @@ enum class SchedulerPriority {
     LOWEST         ///< Low, very idle cleanup tasks
 };
 
+enum class IdleRunPolicy {
+    IDLE_VIA_TIMER,  ///< Idles are scheduled via immediate timers (ImmediateTimeoutMs)
+    IDLE_VIA_LOOP    ///< Return indicates processed events, so they are processed in a loop
+};
+
 class VCL_DLLPUBLIC Scheduler
 {
     friend struct ImplSchedulerData;
@@ -51,7 +56,7 @@ protected:
     const sal_Char     *mpDebugName;        /// Useful for debugging
     SchedulerPriority   mePriority;         /// Scheduler priority
 
-    static const SAL_CONSTEXPR sal_uInt64 ImmediateTimeoutMs = 1;
+    static const SAL_CONSTEXPR sal_uInt64 ImmediateTimeoutMs = 0;
     static const SAL_CONSTEXPR sal_uInt64 InfiniteTimeoutMs  = SAL_MAX_UINT64;
 
     static void ImplStartTimer(sal_uInt64 nMS, bool bForce = false);
@@ -81,12 +86,13 @@ public:
     inline bool     IsActive() const;
 
     Scheduler&      operator=( const Scheduler& rScheduler );
-    static void ImplDeInitScheduler();
+    static void     ImplDeInitScheduler();
 
     /// Process one pending Timer with highhest priority
     static void       CallbackTaskScheduling();
     /// Process one pending task ahead of time with highest priority.
-    static bool       ProcessTaskScheduling();
+    static bool       ProcessTaskScheduling( IdleRunPolicy eIdleRunPolicy
+                          = IdleRunPolicy::IDLE_VIA_TIMER );
     /// Process all events until we are idle
     static void       ProcessAllPendingEvents();
     /// Are there any pending tasks in the LO task queue?
