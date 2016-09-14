@@ -33,6 +33,7 @@ struct MyCallSiteInfo
     std::string returnType;
     std::string nameAndParams;
     std::string paramName;
+    std::string paramType;
     int paramIndex; // because in some declarations the names are empty
     std::string callValue;
     std::string sourceLocation;
@@ -55,27 +56,6 @@ public:
 
     virtual void run() override
     {
-        // there is a crash here that I can't seem to workaround
-        //  clang-3.8: /home/noel/clang/src/tools/clang/lib/AST/Type.cpp:1878: bool clang::Type::isConstantSizeType() const: Assertion `!isDependentType() && "This doesn't make sense for dependent types"' failed.
-        FileID mainFileID = compiler.getSourceManager().getMainFileID();
-        static const char* prefix = SRCDIR "/oox/source";
-        const FileEntry * fe = compiler.getSourceManager().getFileEntryForID(mainFileID);
-        if (strncmp(prefix, fe->getDir()->getName(), strlen(prefix)) == 0) {
-            return;
-        }
-        if (strcmp(fe->getDir()->getName(), SRCDIR "/sw/source/filter/ww8") == 0)
-        {
-            return;
-        }
-        if (strcmp(fe->getDir()->getName(), SRCDIR "/sc/source/filter/oox") == 0)
-        {
-            return;
-        }
-        if (strcmp(fe->getDir()->getName(), SRCDIR "/sd/source/filter/eppt") == 0)
-        {
-            return;
-        }
-
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
         // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
@@ -84,7 +64,7 @@ public:
         std::string output;
         for (const MyCallSiteInfo & s : callSet)
             output += s.returnType + "\t" + s.nameAndParams + "\t" + s.sourceLocation + "\t"
-                        + s.paramName + "\t" + s.callValue + "\n";
+                        + s.paramName + "\t" + s.paramType + "\t" + s.callValue + "\n";
         ofstream myfile;
         myfile.open( SRCDIR "/loplugin.constantparam.log", ios::app | ios::out);
         myfile << output;
@@ -98,11 +78,11 @@ public:
     bool VisitDeclRefExpr( const DeclRefExpr* );
     bool VisitCXXConstructExpr( const CXXConstructExpr* );
 private:
-    MyCallSiteInfo niceName(const FunctionDecl* functionDecl, int paramIndex, llvm::StringRef paramName, const std::string& callValue);
+    void addToCallSet(const FunctionDecl* functionDecl, int paramIndex, llvm::StringRef paramName, const std::string& callValue);
     std::string getCallValue(const Expr* arg);
 };
 
-MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, int paramIndex, llvm::StringRef paramName, const std::string& callValue)
+void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramIndex, llvm::StringRef paramName, const std::string& callValue)
 {
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
@@ -113,6 +93,21 @@ MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, int par
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
 #endif
+
+
+    if (!functionDecl->getNameInfo().getLoc().isValid())
+        return;
+    if (ignoreLocation(functionDecl))
+        return;
+    // ignore stuff that forms part of the stable URE interface
+    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(functionDecl->getLocation())))
+        return;
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( functionDecl->getLocation() );
+    StringRef filename = compiler.getSourceManager().getFilename(expansionLoc);
+    if (!filename.startswith(SRCDIR))
+        return;
+    filename = filename.substr(strlen(SRCDIR)+1);
+
 
     MyCallSiteInfo aInfo;
     aInfo.returnType = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
@@ -137,13 +132,13 @@ MyCallSiteInfo ConstantParam::niceName(const FunctionDecl* functionDecl, int par
     }
     aInfo.paramName = paramName;
     aInfo.paramIndex = paramIndex;
+    if (paramIndex < (int)functionDecl->getNumParams())
+        aInfo.paramType = functionDecl->getParamDecl(paramIndex)->getType().getCanonicalType().getAsString();
     aInfo.callValue = callValue;
 
-    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( functionDecl->getLocation() );
-    StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
-    aInfo.sourceLocation = std::string(name.substr(strlen(SRCDIR)+1)) + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
+    aInfo.sourceLocation = filename.str() + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
 
-    return aInfo;
+    callSet.insert(aInfo);
 }
 
 std::string ConstantParam::getCallValue(const Expr* arg)
@@ -164,6 +159,15 @@ std::string ConstantParam::getCallValue(const Expr* arg)
     }
     if (isa<CXXNullPtrLiteralExpr>(arg)) {
         return "0";
+    }
+    if (isa<MaterializeTemporaryExpr>(arg))
+    {
+        const CXXBindTemporaryExpr* strippedArg = dyn_cast_or_null<CXXBindTemporaryExpr>(arg->IgnoreParenCasts());
+        if (strippedArg && isa<CXXTemporaryObjectExpr>(strippedArg->getSubExpr())
+            && dyn_cast<CXXTemporaryObjectExpr>(strippedArg->getSubExpr())->getNumArgs() == 0)
+        {
+            return "defaultConstruct";
+        }
     }
     return "unknown2";
 }
@@ -202,15 +206,6 @@ bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
         functionDecl = functionDecl->getTemplateInstantiationPattern();
 #endif
 
-    if (!functionDecl->getNameInfo().getLoc().isValid() || ignoreLocation(functionDecl)) {
-        return true;
-    }
-    // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              functionDecl->getNameInfo().getLoc()))) {
-        return true;
-    }
-
     unsigned len = std::max(callExpr->getNumArgs(), functionDecl->getNumParams());
     for (unsigned i = 0; i < len; ++i) {
         const Expr* valExpr;
@@ -225,8 +220,7 @@ bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
         std::string paramName = i < functionDecl->getNumParams()
                                 ? functionDecl->getParamDecl(i)->getName()
                                 : llvm::StringRef("###" + std::to_string(i));
-        MyCallSiteInfo funcInfo = niceName(functionDecl, i, paramName, callValue);
-        callSet.insert(funcInfo);
+        addToCallSet(functionDecl, i, paramName, callValue);
     }
     return true;
 }
@@ -241,8 +235,7 @@ bool ConstantParam::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     const FunctionDecl* functionDecl = dyn_cast<FunctionDecl>(decl);
     for (unsigned i = 0; i < functionDecl->getNumParams(); ++i)
     {
-        MyCallSiteInfo funcInfo = niceName(functionDecl, i, functionDecl->getParamDecl(i)->getName(), "unknown3");
-        callSet.insert(funcInfo);
+        addToCallSet(functionDecl, i, functionDecl->getParamDecl(i)->getName(), "unknown3");
     }
     return true;
 }
@@ -251,15 +244,6 @@ bool ConstantParam::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr
 {
     const CXXConstructorDecl* constructorDecl = constructExpr->getConstructor();
     constructorDecl = constructorDecl->getCanonicalDecl();
-
-    // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
-                              constructorDecl->getNameInfo().getLoc()))) {
-        return true;
-    }
-    if (!constructorDecl->getNameInfo().getLoc().isValid() || ignoreLocation(constructorDecl)) {
-        return true;
-    }
 
     unsigned len = std::max(constructExpr->getNumArgs(), constructorDecl->getNumParams());
     for (unsigned i = 0; i < len; ++i) {
@@ -275,8 +259,7 @@ bool ConstantParam::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr
         std::string paramName = i < constructorDecl->getNumParams()
                                 ? constructorDecl->getParamDecl(i)->getName()
                                 : llvm::StringRef("###" + std::to_string(i));
-        MyCallSiteInfo funcInfo = niceName(constructorDecl, i, paramName, callValue);
-        callSet.insert(funcInfo);
+        addToCallSet(constructorDecl, i, paramName, callValue);
     }
     return true;
 }

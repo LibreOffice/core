@@ -106,8 +106,8 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
                 &aAnchorCharFormatDep );
 }
 
-SwEndNoteInfo::SwEndNoteInfo(SwTextFormatColl *pFormat) :
-    SwClient(pFormat),
+SwEndNoteInfo::SwEndNoteInfo() :
+    SwClient(nullptr),
     aPageDescDep( this, nullptr ),
     aCharFormatDep( this, nullptr ),
     aAnchorCharFormatDep( this, nullptr ),
@@ -240,7 +240,7 @@ SwFootnoteInfo::SwFootnoteInfo(const SwFootnoteInfo& rInfo) :
 }
 
 SwFootnoteInfo::SwFootnoteInfo() :
-    SwEndNoteInfo( nullptr ),
+    SwEndNoteInfo(),
     ePos( FTNPOS_PAGE ),
     eNum( FTNNUM_DOC )
 {

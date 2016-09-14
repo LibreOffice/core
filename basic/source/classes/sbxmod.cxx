@@ -2168,8 +2168,8 @@ void SbMethod::Broadcast( sal_uInt32 nHintId )
 
 // Implementation of SbJScriptMethod (method class as a wrapper for JavaScript-functions)
 
-SbJScriptMethod::SbJScriptMethod( const OUString& r, SbxDataType t, SbModule* p )
-        : SbMethod( r, t, p )
+SbJScriptMethod::SbJScriptMethod( const OUString& r, SbxDataType t )
+        : SbMethod( r, t, nullptr )
 {
 }
 

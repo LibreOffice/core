@@ -1041,7 +1041,7 @@ ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
     {
         SharedShellFactory pFactory = iFactory->second;
         if (pFactory != nullptr)
-            aResult.mpShell = pFactory->CreateShell(nShellId, nullptr, nullptr);
+            aResult.mpShell = pFactory->CreateShell(nShellId);
 
         // Exit the loop when the shell has been successfully created.
         if (aResult.mpShell != nullptr)

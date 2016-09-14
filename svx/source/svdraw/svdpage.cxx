@@ -71,7 +71,7 @@ public:
 static const sal_Int32 InitialObjectContainerCapacity (64);
 
 
-SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList):
+SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage):
     maList(),
     mxNavigationOrder(),
     mbIsNavigationOrderDirty(false)
@@ -79,7 +79,7 @@ SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewU
     maList.reserve(InitialObjectContainerCapacity);
     pModel=pNewModel;
     pPage=pNewPage;
-    pUpList=pNewUpList;
+    pUpList=nullptr;
     bObjOrdNumsDirty=false;
     bRectsDirty=false;
     pOwnerObj=nullptr;
