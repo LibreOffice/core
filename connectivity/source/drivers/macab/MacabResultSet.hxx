@@ -87,7 +87,7 @@ namespace connectivity
                                 sal_Int32 nHandle) const override;
 
             // you can't delete objects of this type
-            virtual ~MacabResultSet();
+            virtual ~MacabResultSet() override;
 
         public:
             DECLARE_SERVICE_INFO();

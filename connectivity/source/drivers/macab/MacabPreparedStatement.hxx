@@ -57,7 +57,7 @@ namespace connectivity
 
             virtual void resetParameters() const throw(css::sdbc::SQLException) override;
             virtual void getNextParameter(OUString &rParameter) const throw(css::sdbc::SQLException) override;
-            virtual ~MacabPreparedStatement();
+            virtual ~MacabPreparedStatement() override;
 
         public:
             DECLARE_SERVICE_INFO();

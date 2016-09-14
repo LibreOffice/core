@@ -132,7 +132,7 @@ class MacabConditionBoolean : public MacabCondition
 
     public:
         MacabConditionBoolean(MacabCondition *pLeft, MacabCondition *pRight);
-        virtual ~MacabConditionBoolean();
+        virtual ~MacabConditionBoolean() override;
 };
 
 class MacabConditionOr : public MacabConditionBoolean

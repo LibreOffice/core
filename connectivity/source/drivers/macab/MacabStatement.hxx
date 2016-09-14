@@ -92,7 +92,7 @@ namespace connectivity
 
             virtual void resetParameters() const throw(css::sdbc::SQLException);
             virtual void getNextParameter(OUString &rParameter) const throw(css::sdbc::SQLException);
-            virtual ~MacabCommonStatement();
+            virtual ~MacabCommonStatement() override;
 
         public:
             ::cppu::OBroadcastHelper& rBHelper;
@@ -155,7 +155,7 @@ namespace connectivity
         class MacabStatement : public MacabStatement_BASE
         {
         protected:
-            virtual ~MacabStatement() { }
+            virtual ~MacabStatement() override { }
 
         public:
             explicit MacabStatement(MacabConnection* _pConnection);

@@ -44,7 +44,7 @@ namespace connectivity
             inline MacabConnection* getOwnConnection() const { return m_xConnection.get(); }
 
             explicit MacabDatabaseMetaData(MacabConnection* _pCon);
-            virtual ~MacabDatabaseMetaData();
+            virtual ~MacabDatabaseMetaData() override;
 
             // this interface is really BIG
             // XDatabaseMetaData

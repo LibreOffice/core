@@ -68,7 +68,7 @@ namespace connectivity
             virtual void construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info) throw(css::sdbc::SQLException);
 
             explicit MacabConnection(MacabDriver* _pDriver);
-            virtual ~MacabConnection();
+            virtual ~MacabConnection() override;
 
             void closeAllStatements () throw( css::sdbc::SQLException);
 

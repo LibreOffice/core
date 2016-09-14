@@ -32,7 +32,7 @@ namespace connectivity
             public:
                 MacabHeader();
                 MacabHeader(const sal_Int32 _size, macabfield **_fields);
-                virtual ~MacabHeader();
+                virtual ~MacabHeader() override;
                 void operator+= (const MacabHeader *r);
                 OUString getString(const sal_Int32 i) const;
                 void sortRecord();

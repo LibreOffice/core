@@ -44,7 +44,7 @@ namespace connectivity
                                                         //  of the corresponding AddressBook field
 
         protected:
-            virtual ~MacabResultSetMetaData();
+            virtual ~MacabResultSetMetaData() override;
 
         public:
             MacabResultSetMetaData(MacabConnection* _pConnection, OUString const & _sTableName);
