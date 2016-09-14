@@ -72,7 +72,7 @@ protected:
     SAL_DLLPRIVATE void         ImplShowFocus();
     SAL_DLLPRIVATE void         ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* pItem,
                                              const Rectangle& rCurRect, bool bFirstInGroup,
-                                             bool bLastInGroup = false, bool bIsCurrentItem = false);
+                                             bool bLastInGroup, bool bIsCurrentItem = false);
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
     SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
 

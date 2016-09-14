@@ -48,7 +48,7 @@ class PNGWriterImpl
 public:
 
     PNGWriterImpl(const BitmapEx& BmpEx,
-                  const css::uno::Sequence<css::beans::PropertyValue>* pFilterData = nullptr);
+                  const css::uno::Sequence<css::beans::PropertyValue>* pFilterData);
 
     bool Write(SvStream& rOutStream);
 

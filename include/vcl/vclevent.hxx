@@ -212,7 +212,7 @@ private:
     void*   pData;
 
 public:
-    VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat = nullptr );
+    VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat );
     virtual ~VclWindowEvent() override;
 
     vcl::Window* GetWindow() const { return pWindow; }

@@ -66,7 +66,7 @@ protected:
     Rectangle *     ImplFindPartRect( const Point& rPt );
 
 public:
-    explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle = 0 );
+    explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle );
     explicit        SpinField( vcl::Window* pParent, const ResId& );
     virtual         ~SpinField() override;
     virtual void    dispose() override;

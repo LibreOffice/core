@@ -274,7 +274,7 @@ protected:
                     DockingWindow( WindowType nType );
 
 public:
-    DockingWindow(vcl::Window* pParent, WinBits nStyle = WB_STDDOCKWIN);
+    DockingWindow(vcl::Window* pParent, WinBits nStyle);
     DockingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
         const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual ~DockingWindow() override;

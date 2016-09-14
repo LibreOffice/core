@@ -151,7 +151,7 @@ public:
                     CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
                                       sal_uLong nScrollLines,
                                       CommandWheelMode nWheelMode, sal_uInt16 nKeyModifier,
-                                      bool bHorz = false, bool bDeltaIsPixel = false );
+                                      bool bHorz, bool bDeltaIsPixel = false );
 
     long            GetDelta() const { return mnDelta; }
     long            GetNotchDelta() const { return mnNotchDelta; }
@@ -208,7 +208,7 @@ class VCL_DLLPUBLIC CommandDialogData
 {
     ShowDialogId   m_nDialogId;
 public:
-    CommandDialogData( ShowDialogId nDialogId = ShowDialogId::Preferences )
+    CommandDialogData( ShowDialogId nDialogId )
     : m_nDialogId( nDialogId )
     {}
 

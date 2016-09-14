@@ -523,7 +523,7 @@ class VCL_DLLPUBLIC TriStateBox : public CheckBox
                     TriStateBox & operator= ( const TriStateBox & ) = delete;
 
 public:
-    explicit        TriStateBox( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit        TriStateBox( vcl::Window* pParent, WinBits nStyle );
 };
 
 class VCL_DLLPUBLIC DisclosureButton : public CheckBox

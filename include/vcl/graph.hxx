@@ -180,7 +180,7 @@ public:
                           long nExtraData = 0L,
                           OutputDevice* pFirstFrameOutDev = nullptr );
     void            StopAnimation( OutputDevice* pOutputDevice,
-                          long nExtraData = 0L );
+                          long nExtraData );
 
     void            SetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
     Link<Animation*,void> GetAnimationNotifyHdl() const;

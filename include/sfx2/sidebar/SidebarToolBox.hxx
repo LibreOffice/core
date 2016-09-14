@@ -49,7 +49,7 @@ public:
     virtual void InsertItem(const OUString& rCommand,
             const css::uno::Reference<css::frame::XFrame>& rFrame,
             ToolBoxItemBits nBits,
-            const Size& rRequestedSize = Size(),
+            const Size& rRequestedSize,
             sal_uInt16 nPos = TOOLBOX_APPEND) override;
 
     virtual bool Notify (NotifyEvent& rEvent) override;

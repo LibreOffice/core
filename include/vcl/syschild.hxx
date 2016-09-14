@@ -37,7 +37,7 @@ private:
                             SystemChildWindow & operator= (const SystemChildWindow &) = delete;
 
 public:
-    explicit                SystemChildWindow( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit                SystemChildWindow( vcl::Window* pParent, WinBits nStyle );
                             // create a SystemChildWindow using the given SystemWindowData
     explicit                SystemChildWindow( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow = true );
     virtual                 ~SystemChildWindow() override;

@@ -70,7 +70,7 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance
         ImplSVEvent*        m_pData;
         SalEvent            m_nEvent;
 
-        SalUserEvent( const SalFrame* pFrame, ImplSVEvent* pData, SalEvent nEvent = SalEvent::UserEvent )
+        SalUserEvent( const SalFrame* pFrame, ImplSVEvent* pData, SalEvent nEvent )
                 : m_pFrame( pFrame ),
                   m_pData( pData ),
                   m_nEvent( nEvent )

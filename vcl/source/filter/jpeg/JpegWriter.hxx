@@ -43,7 +43,7 @@ class JPEGWriter
 public:
     JPEGWriter( SvStream& rStream,
                 const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
-                bool* pExportWasGrey = nullptr );
+                bool* pExportWasGrey );
 
     virtual ~JPEGWriter() {};
 

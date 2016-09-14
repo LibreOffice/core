@@ -48,7 +48,7 @@ public:
 
                     Hatch();
                     Hatch( const Hatch& rHatch );
-                    Hatch( HatchStyle eStyle, const Color& rHatchColor, long nDistance, sal_uInt16 nAngle10 = 0 );
+                    Hatch( HatchStyle eStyle, const Color& rHatchColor, long nDistance, sal_uInt16 nAngle10 );
                     ~Hatch();
 
     Hatch&          operator=( const Hatch& rHatch );
