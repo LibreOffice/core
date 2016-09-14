@@ -54,6 +54,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
+#include <saltimer.hxx>
 
 #include "salinst.hxx"
 #include "salframe.hxx"
@@ -513,22 +514,17 @@ bool Application::Reschedule( bool i_bAllEvents )
 
 void Scheduler::ProcessEventsToSignal(bool& bSignal)
 {
-    while(!bSignal && (Scheduler::ProcessTaskScheduling() ||
-          ImplYield(false, false, 0)))
-    {
-    }
+    while (!bSignal && Application::Reschedule( false ) );
 }
 
 void Scheduler::ProcessEventsToIdle()
 {
-    int nSanity = 1000;
-    while( Scheduler::ProcessTaskScheduling() ||
-           ImplYield(false, true, 0) )
+    int nSanity = 1;
+    while( Application::Reschedule( true ) )
     {
-        if (nSanity-- < 0)
+        if (0 == ++nSanity % 1000)
         {
-            SAL_WARN("vcl.schedule", "Unexpected volume of events to process");
-            break;
+            SAL_WARN("vcl.schedule", "ProcessEventsToIdle: " << nSanity);
         }
     }
 #if OSL_DEBUG_LEVEL > 0
