@@ -126,13 +126,13 @@ public:
                                                  sal_uInt16& rArrangeIndex );
                    static Point     ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos);
                    static Rectangle ImplConvertToAbsPos(vcl::Window* pReference, const Rectangle& rRect);
-    SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId = nullptr );
+    SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
     virtual        void             doDeferredInit(WinBits nBits) override;
 
 public:
-    explicit        FloatingWindow(vcl::Window* pParent, WinBits nStyle = WB_STDFLOATWIN);
+    explicit        FloatingWindow(vcl::Window* pParent, WinBits nStyle);
     explicit        FloatingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
                                    const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual         ~FloatingWindow() override;

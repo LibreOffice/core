@@ -62,6 +62,9 @@ for k,v in callDict.iteritems():
     # windows-only stuff
     if "ShutdownIcon::OpenURL" in k:
         continue
+    # template magic
+    if k.startswith("void VclPtr::VclPtr(const VclPtr<type-parameter-?-?> &,typename UpCast<"):
+        continue
     if k in definitionToSourceLocationMap:
         tmp1list.append((k, definitionToSourceLocationMap[k]))
 

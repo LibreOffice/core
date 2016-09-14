@@ -79,7 +79,7 @@ private:
     SAL_DLLPRIVATE void ImplUpdateLinkedField();
 
 public:
-                    Slider( vcl::Window* pParent, WinBits nStyle = WB_HORZ );
+                    Slider( vcl::Window* pParent, WinBits nStyle);
     virtual         ~Slider() override;
     virtual void    dispose() override;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;

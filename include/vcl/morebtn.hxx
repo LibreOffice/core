@@ -44,7 +44,7 @@ protected:
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
 
 public:
-    explicit            MoreButton( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit            MoreButton( vcl::Window* pParent, WinBits nStyle );
     virtual             ~MoreButton() override;
     virtual void        dispose() override;
 

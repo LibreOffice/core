@@ -40,7 +40,7 @@ class GtkSalObject : public SalObject
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
     static void         signalDestroy( GtkWidget*, gpointer );
 public:
-    GtkSalObject( GtkSalFrame* pParent, bool bShow = true );
+    GtkSalObject( GtkSalFrame* pParent, bool bShow );
     virtual ~GtkSalObject() override;
 
     // override all pure virtual methods

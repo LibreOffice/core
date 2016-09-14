@@ -1314,7 +1314,7 @@ private:
 public:
 
     SystemTextLayoutData        GetSysTextLayoutData( const Point& rStartPt, const OUString& rStr,
-                                                      sal_Int32 nIndex, sal_Int32 nLen = -1,
+                                                      sal_Int32 nIndex, sal_Int32 nLen,
                                                       const long* pDXAry = nullptr ) const;
 
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;

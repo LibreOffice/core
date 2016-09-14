@@ -634,7 +634,7 @@ public:
     bool                    Vectorize(
                                 GDIMetaFile& rMtf,
                                 sal_uInt8 cReduce,
-                                const Link<long,void>* pProgress = nullptr );
+                                const Link<long,void>* pProgress );
 
     /** Change various global color characteristics
 

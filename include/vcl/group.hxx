@@ -43,7 +43,7 @@ private:
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;
 
 public:
-    explicit        GroupBox( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit        GroupBox( vcl::Window* pParent, WinBits nStyle );
 
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;

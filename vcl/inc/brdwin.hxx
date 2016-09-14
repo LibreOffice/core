@@ -119,9 +119,9 @@ private:
 public:
                             ImplBorderWindow( vcl::Window* pParent,
                                               SystemParentData* pParentData,
-                                              WinBits nStyle = 0,
+                                              WinBits nStyle,
                                               BorderWindowStyle nTypeStyle = BorderWindowStyle::NONE );
-                            ImplBorderWindow( vcl::Window* pParent, WinBits nStyle = 0,
+                            ImplBorderWindow( vcl::Window* pParent, WinBits nStyle,
                                               BorderWindowStyle nTypeStyle = BorderWindowStyle::NONE );
     virtual                 ~ImplBorderWindow() override;
     virtual void            dispose() override;

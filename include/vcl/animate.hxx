@@ -102,7 +102,7 @@ public:
                         const Point& rDestPt,
                         const Size& rDestSz,
                         long nExtraData,
-                        OutputDevice* pFirstFrameOutDev = nullptr);
+                        OutputDevice* pFirstFrameOutDev);
 
     void            Stop( OutputDevice* pOutDev = nullptr, long nExtraData = 0 );
 
@@ -143,7 +143,7 @@ public:
     bool            Mirror( BmpMirrorFlags nMirrorFlags );
     bool            Adjust(
                         short nLuminancePercent,
-                        short nContrastPercent = 0,
+                        short nContrastPercent,
                         short nChannelRPercent = 0,
                         short nChannelGPercent = 0,
                         short nChannelBPercent = 0,

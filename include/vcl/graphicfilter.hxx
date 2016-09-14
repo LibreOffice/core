@@ -190,7 +190,7 @@ public:
         As some formats (Mtf's) do not have a unique header, it makes sense
         to supply the file name (incl. ext.), so that the format can be
         derived from the extension */
-    GraphicDescriptor( SvStream& rInStream, const OUString* pPath = nullptr );
+    GraphicDescriptor( SvStream& rInStream, const OUString* pPath );
 
     virtual ~GraphicDescriptor();
 
@@ -274,8 +274,8 @@ public:
     bool            IsExportPixelFormat( sal_uInt16 nFormat );
 
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
-                                    sal_uInt16 nFormat,
-                                        const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
+                                       sal_uInt16 nFormat,
+                                       const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
     sal_uInt16          ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
                                     SvStream& rOStm, sal_uInt16 nFormat,
                                         const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );

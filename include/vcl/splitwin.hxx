@@ -145,17 +145,17 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
     void                InsertItem( sal_uInt16 nId, vcl::Window* pWindow, long nSize,
-                                    sal_uInt16 nPos, sal_uInt16 nIntoSetId = 0,
+                                    sal_uInt16 nPos, sal_uInt16 nIntoSetId,
                                     SplitWindowItemFlags nBits = SplitWindowItemFlags::NONE );
     void                InsertItem( sal_uInt16 nId, long nSize,
-                                    sal_uInt16 nPos, sal_uInt16 nIntoSetId = 0,
+                                    sal_uInt16 nPos, sal_uInt16 nIntoSetId,
                                     SplitWindowItemFlags nBits = SplitWindowItemFlags::NONE );
     void                RemoveItem( sal_uInt16 nId );
     void                Clear();
 
     void                SplitItem( sal_uInt16 nId, long nNewSize,
                                    bool bPropSmall,
-                                   bool bPropGreat = false );
+                                   bool bPropGreat );
     void                SetItemSize( sal_uInt16 nId, long nNewSize );
     long                GetItemSize( sal_uInt16 nId ) const;
     /** Set a range that limits the (variable part of the) size with an

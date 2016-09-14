@@ -666,7 +666,7 @@ The following structure describes the permissions used in PDF security
         Colors and other state information MUST
         be set again or are undefined.
     */
-    void NewPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight = 0, Orientation eOrientation = Inherit );
+    void NewPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, Orientation eOrientation = Inherit );
     /** Play a metafile like an outputdevice would do
     */
     struct PlayMetafileContext
@@ -870,7 +870,7 @@ The following structure describes the permissions used in PDF security
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType = XYZ );
+    sal_Int32           CreateNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType );
     /** Create a new destination to be used in a link
 
     @param rRect
@@ -887,7 +887,7 @@ The following structure describes the permissions used in PDF security
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType = XYZ );
+    sal_Int32           CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType );
     /** Create a new link on a page
 
     @param rRect
@@ -926,7 +926,7 @@ The following structure describes the permissions used in PDF security
         @returns
             the internal destination Id.
     */
-    sal_Int32           RegisterDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType = XYZ );
+    sal_Int32           RegisterDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType );
 
 
     /** Set the destination for a link
@@ -993,7 +993,7 @@ The following structure describes the permissions used in PDF security
         @returns
         the outline item id of the new item
     */
-    sal_Int32 CreateOutlineItem( sal_Int32 nParent, const OUString& rText = OUString(), sal_Int32 nDestID = -1 );
+    sal_Int32 CreateOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID = -1 );
 
     /** Set an outline item's parent
 

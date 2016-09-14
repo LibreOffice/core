@@ -51,7 +51,7 @@ private:
     DECL_DLLPRIVATE_LINK_TYPED( ImplTimeout, Timer*, void );
 
 public:
-    explicit        SpinButton( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit        SpinButton( vcl::Window* pParent, WinBits nStyle );
 
     void            Up();
     void            Down();

@@ -284,7 +284,7 @@ public:
     using ListBox::GetSavedValue;
     using ListBox::IsValueChangedFromSaved;
 
-    explicit        MultiListBox( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit        MultiListBox( vcl::Window* pParent, WinBits nStyle );
 
 };
 

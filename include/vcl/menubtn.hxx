@@ -81,7 +81,7 @@ public:
 class VCL_DLLPUBLIC MenuToggleButton : public MenuButton
 {
 public:
-    explicit        MenuToggleButton( vcl::Window* pParent, WinBits nStyle = 0 );
+    explicit        MenuToggleButton( vcl::Window* pParent, WinBits nStyle );
     virtual         ~MenuToggleButton() override;
 
     void            SetActive( bool bSel );

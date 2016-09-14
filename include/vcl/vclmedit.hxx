@@ -59,7 +59,7 @@ protected:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 public:
                     VclMultiLineEdit( vcl::Window* pParent,
-                                      WinBits nWinStyle = WB_LEFT | WB_BORDER );
+                                      WinBits nWinStyle );
     virtual         ~VclMultiLineEdit() override;
     virtual void    dispose() override;
 

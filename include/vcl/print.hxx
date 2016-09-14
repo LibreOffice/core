@@ -683,7 +683,7 @@ public:
     */
     static css::uno::Any setRangeControlOpt( const OUString& i_rID, const OUString& i_rTitle, const OUString& i_rHelpId,
                              const OUString& i_rProperty, sal_Int32 i_nValue, sal_Int32 i_nMinValue,
-                             sal_Int32 i_nMaxValue = -2, const UIControlOptions& i_rControlOptions = UIControlOptions());
+                             sal_Int32 i_nMaxValue, const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     /** Show a string field
 

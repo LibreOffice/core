@@ -129,7 +129,7 @@ public:
     */
     Rectangle       GetBoundRect( OutputDevice& i_rReference, Rectangle* pHairline = nullptr ) const;
 
-    void            Adjust( short nLuminancePercent, short nContrastPercent = 0,
+    void            Adjust( short nLuminancePercent, short nContrastPercent,
                             short nChannelRPercent = 0,  short nChannelGPercent = 0,
                             short nChannelBPercent = 0,  double fGamma = 1.0,
                             bool bInvert = false, bool msoBrightness = false );
