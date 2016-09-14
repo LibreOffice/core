@@ -192,7 +192,7 @@ void SvFileStream::FlushData()
     }
 }
 
-bool SvFileStream::LockRange( std::size_t nByteOffset, std::size_t nBytes )
+bool SvFileStream::LockRange(sal_uInt64 const nByteOffset, std::size_t nBytes)
 {
     bool bRetVal = false;
     if( IsOpen() )
@@ -204,7 +204,7 @@ bool SvFileStream::LockRange( std::size_t nByteOffset, std::size_t nBytes )
     return bRetVal;
 }
 
-bool SvFileStream::UnlockRange( std::size_t nByteOffset, std::size_t nBytes )
+bool SvFileStream::UnlockRange(sal_uInt64 const nByteOffset, std::size_t nBytes)
 {
     bool bRetVal = false;
     if( IsOpen() )
