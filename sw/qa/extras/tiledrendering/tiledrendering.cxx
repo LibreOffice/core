@@ -1209,6 +1209,7 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     ViewCallback aView2;
     aView2.m_aViewCursor = Rectangle();
     aView2.m_bViewSelectionSet = false;
+    aView2.m_bViewLock = false;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     // Difference was 935 twips, the new view didn't see the editeng cursor of
     // the old one. The new difference should be <1px, but here we deal with twips.
@@ -1216,6 +1217,9 @@ void SwTiledRenderingTest::testShapeTextUndoGroupShells()
     // This was false, editeng text selection of the first view wasn't noticed
     // by the second view.
     CPPUNIT_ASSERT(aView2.m_bViewSelectionSet);
+    // This was false, the new view wasn't aware of the shape text lock created
+    // by the old view.
+    CPPUNIT_ASSERT(aView2.m_bViewLock);
 
     mxComponent->dispose();
     mxComponent.clear();
