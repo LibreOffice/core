@@ -507,7 +507,7 @@ public:
     bool                        Revert();
     bool                        Insert( ::ucbhelper::Content *pContent );
     UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect );
-    void                        OpenStream( UCBStorageElement_Impl*, StreamMode, bool, const OString* pKey );
+    void                        OpenStream( UCBStorageElement_Impl*, StreamMode, bool );
     void                        SetProps( const Sequence < Sequence < PropertyValue > >& rSequence, const OUString& );
     void                        GetProps( sal_Int32&, Sequence < Sequence < PropertyValue > >& rSequence, const OUString& );
     sal_Int32                   GetObjectCount();
@@ -1815,7 +1815,7 @@ void UCBStorage_Impl::ReadContent()
                     else if ( aMediaType.isEmpty() )
                     {
                         // older files didn't have that special content type, so they must be detected
-                        OpenStream( pElement, StreamMode::STD_READ, m_bDirect, nullptr );
+                        OpenStream( pElement, StreamMode::STD_READ, m_bDirect );
                         if ( Storage::IsStorageFile( pElement->m_xStream ) )
                             pElement->m_bIsStorage = true;
                         else
@@ -2672,7 +2672,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
         }
 
         // stream is opened the first time
-        pImp->OpenStream( pElement, nMode, bDirect, nullptr );
+        pImp->OpenStream( pElement, nMode, bDirect );
 
         // if name has been changed before creating the stream: set name!
         pElement->m_xStream->m_aName = rEleName;
@@ -2682,12 +2682,12 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
     return nullptr;
 }
 
-void UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect, const OString* pKey )
+void UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect )
 {
     OUString aName( m_aURL );
     aName += "/";
     aName += pElement->m_aOriginalName;
-    pElement->m_xStream = new UCBStorageStream_Impl( aName, nMode, nullptr, bDirect, pKey, m_bRepairPackage, m_xProgressHandler );
+    pElement->m_xStream = new UCBStorageStream_Impl( aName, nMode, nullptr, bDirect, nullptr, m_bRepairPackage, m_xProgressHandler );
 }
 
 BaseStorage* UCBStorage::OpenUCBStorage( const OUString& rEleName, StreamMode nMode, bool bDirect )

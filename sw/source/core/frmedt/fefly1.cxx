@@ -767,9 +767,7 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
 
 void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                         const Graphic* pGraphic,
-                        const SfxItemSet* pFlyAttrSet,
-                        const SfxItemSet* pGrfAttrSet,
-                        SwFrameFormat* pFrameFormat )
+                        const SfxItemSet* pFlyAttrSet )
 {
     SwFlyFrameFormat* pFormat = nullptr;
     SET_CURR_SHELL( this );
@@ -821,7 +819,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
         pFormat = GetDoc()->getIDocumentContentOperations().Insert(*pCursor, rGrfName,
                                 rFltName, pGraphic,
                                 pFlyAttrSet,
-                                pGrfAttrSet, pFrameFormat );
+                                nullptr, nullptr );
         OSL_ENSURE( pFormat, "Doc->getIDocumentContentOperations().Insert(notxt) failed." );
 
         pCursor = dynamic_cast<SwShellCursor*>(pCursor->GetNext());
@@ -850,8 +848,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
 }
 
 SwFlyFrameFormat* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
-                        const SfxItemSet* pFlyAttrSet,
-                        SwFrameFormat* pFrameFormat )
+                        const SfxItemSet* pFlyAttrSet )
 {
     SwFlyFrameFormat* pFormat = nullptr;
     SET_CURR_SHELL( this );
@@ -859,7 +856,7 @@ SwFlyFrameFormat* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
             pFormat = GetDoc()->getIDocumentContentOperations().Insert(rPaM, xObj,
-                                    pFlyAttrSet, nullptr, pFrameFormat );
+                                    pFlyAttrSet, nullptr, nullptr );
             OSL_ENSURE( pFormat, "Doc->getIDocumentContentOperations().Insert(notxt) failed." );
 
         }

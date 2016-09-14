@@ -101,7 +101,7 @@ private:
     /// simple ActionChildInserted forwarder to have it on a central place
     static void impChildInserted(SdrObject& rChild);
 public:
-    SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList=nullptr);
+    SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage);
     virtual ~SdrObjList();
 
     virtual SdrObjList* Clone() const;

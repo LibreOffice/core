@@ -44,7 +44,6 @@ struct TypeIDMapEntry
 {
     OUString m_aTypeName;
     OUString m_aPresentation;
-    OUString m_aSystemFileType;
 };
 
 struct TypeNameMapEntry
@@ -88,8 +87,7 @@ public:
 
     static INetContentType RegisterContentType(OUString const & rTypeName,
                                                OUString const & rPresentation,
-                                               OUString const * pExtension,
-                                               OUString const * pSystemFileType);
+                                               OUString const * pExtension);
 
     static INetContentType GetContentType(OUString const & rTypeName);
 
@@ -421,8 +419,7 @@ TypeNameMapEntry * Registration::getExtensionEntry(OUString const & rTypeName)
 // static
 INetContentType Registration::RegisterContentType(OUString const & rTypeName,
                                                   OUString const & rPresentation,
-                                                  OUString const * pExtension,
-                                                  OUString const * pSystemFileType)
+                                                  OUString const * pExtension)
 {
     Registration &rRegistration = theRegistration::get();
 
@@ -435,8 +432,6 @@ INetContentType Registration::RegisterContentType(OUString const & rTypeName,
     TypeIDMapEntry * pTypeIDMapEntry = new TypeIDMapEntry;
     pTypeIDMapEntry->m_aTypeName = aTheTypeName;
     pTypeIDMapEntry->m_aPresentation = rPresentation;
-    if (pSystemFileType)
-        pTypeIDMapEntry->m_aSystemFileType = *pSystemFileType;
     rRegistration.m_aTypeIDMap.insert( ::std::make_pair( eTypeID, pTypeIDMapEntry ) );
 
     rRegistration.m_aTypeNameMap.insert(std::make_pair(aTheTypeName,
@@ -542,8 +537,7 @@ INetContentType INetContentTypes::RegisterContentType(OUString const & rTypeName
     INetContentType eTypeID = GetContentType(rTypeName);
     if (eTypeID == CONTENT_TYPE_UNKNOWN)
         eTypeID = Registration::RegisterContentType(rTypeName, rPresentation,
-                                                    pExtension,
-                                                    nullptr/*pSystemFileType*/);
+                                                    pExtension);
     else if (eTypeID > CONTENT_TYPE_LAST)
     {
         TypeIDMapEntry * pTypeEntry = Registration::getEntry(eTypeID);

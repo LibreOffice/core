@@ -570,9 +570,7 @@ public:
     void Insert(const OUString& rGrfName,
                 const OUString& rFltName,
                 const Graphic* pGraphic,
-                const SfxItemSet* pFlyAttrSet = nullptr,
-                const SfxItemSet* pGrfAttrSet = nullptr,
-                SwFrameFormat* = nullptr );
+                const SfxItemSet* pFlyAttrSet = nullptr );
 
     /// Insertion of a drawing object which have to be already inserted in the DrawModel.
     void InsertDrawObj( SdrObject& rDrawObj,
@@ -624,8 +622,7 @@ public:
     bool GetPageNumber( long nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
 
     SwFlyFrameFormat* InsertObject( const svt::EmbeddedObjectRef&,
-                const SfxItemSet* pFlyAttrSet,
-                SwFrameFormat* = nullptr );
+                const SfxItemSet* pFlyAttrSet );
     bool    FinishOLEObj(); ///< Shutdown server.
 
     void GetTableAttr( SfxItemSet & ) const;

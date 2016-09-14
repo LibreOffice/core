@@ -8601,10 +8601,8 @@ void ScInterpreter::ScErrorType_ODF()
         PushNA();
 }
 
-bool ScInterpreter::MayBeRegExp( const OUString& rStr, const ScDocument* pDoc, bool bIgnoreWildcards )
+bool ScInterpreter::MayBeRegExp( const OUString& rStr, bool bIgnoreWildcards )
 {
-    if ( pDoc && !pDoc->GetDocOptions().IsFormulaRegexEnabled() )
-        return false;
     if ( rStr.isEmpty() || (rStr.getLength() == 1 && !rStr.startsWith(".")) )
         return false;   // single meta characters can not be a regexp
     // First two characters are wildcard '?' and '*' characters.
@@ -8624,11 +8622,8 @@ bool ScInterpreter::MayBeRegExp( const OUString& rStr, const ScDocument* pDoc, b
     return false;
 }
 
-bool ScInterpreter::MayBeWildcard( const OUString& rStr, const ScDocument* pDoc )
+bool ScInterpreter::MayBeWildcard( const OUString& rStr )
 {
-    if ( pDoc && !pDoc->GetDocOptions().IsFormulaWildcardsEnabled() )
-        return false;
-
     // Wildcards with '~' escape, if there are no wildcards then an escaped
     // character does not make sense, but it modifies the search pattern in an
     // Excel compatible wildcard search..
@@ -8652,16 +8647,16 @@ utl::SearchParam::SearchType ScInterpreter::DetectSearchType( const OUString& rS
     if (pDoc)
     {
         if (pDoc->GetDocOptions().IsFormulaWildcardsEnabled())
-            return MayBeWildcard( rStr, nullptr) ? utl::SearchParam::SRCH_WILDCARD : utl::SearchParam::SRCH_NORMAL;
+            return MayBeWildcard( rStr ) ? utl::SearchParam::SRCH_WILDCARD : utl::SearchParam::SRCH_NORMAL;
         if (pDoc->GetDocOptions().IsFormulaRegexEnabled())
-            return MayBeRegExp( rStr, nullptr) ? utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL;
+            return MayBeRegExp( rStr ) ? utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL;
     }
     else
     {
         /* TODO: obtain the global config for this rare case? */
-        if (MayBeRegExp( rStr, nullptr, true))
+        if (MayBeRegExp( rStr, true))
             return utl::SearchParam::SRCH_REGEXP;
-        if (MayBeWildcard( rStr, nullptr))
+        if (MayBeWildcard( rStr ))
             return utl::SearchParam::SRCH_WILDCARD;
     }
     return utl::SearchParam::SRCH_NORMAL;

@@ -1088,14 +1088,12 @@ namespace cairocanvas
     void CanvasHelper::doPolyPolygonPath( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                         Operation aOperation,
                         bool bNoLineJoin,
-                        const uno::Sequence< rendering::Texture >* pTextures,
-                        cairo_t* pCairo ) const
+                        const uno::Sequence< rendering::Texture >* pTextures ) const
     {
         const ::basegfx::B2DPolyPolygon& rPolyPoly(
             ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
 
-        if( !pCairo )
-            pCairo = mpCairo.get();
+        cairo_t* pCairo = mpCairo.get();
 
         if(bNoLineJoin && Stroke == aOperation)
         {

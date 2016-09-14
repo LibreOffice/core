@@ -168,7 +168,7 @@ void ScConditionEntry::StartListening()
     start_listen_to(*mpListener, pFormula1, rRanges);
     start_listen_to(*mpListener, pFormula2, rRanges);
 
-    mpListener->setCallback([&]() { pCondFormat->DoRepaint(nullptr);});
+    mpListener->setCallback([&]() { pCondFormat->DoRepaint();});
 }
 
 void ScConditionEntry::SetParent(ScConditionalFormat* pParent)
@@ -1593,7 +1593,7 @@ ScCondFormatEntry::~ScCondFormatEntry()
 void ScCondFormatEntry::DataChanged() const
 {
     if ( pCondFormat )
-        pCondFormat->DoRepaint( nullptr );
+        pCondFormat->DoRepaint();
 }
 
 ScFormatEntry* ScCondFormatEntry::Clone( ScDocument* pDoc ) const
@@ -1820,7 +1820,7 @@ void ScConditionalFormat::RemoveEntry(size_t n)
     if (n < maEntries.size())
     {
         maEntries.erase(maEntries.begin() + n);
-        DoRepaint(nullptr);
+        DoRepaint();
     }
 }
 
@@ -1903,18 +1903,10 @@ ScCondFormatData ScConditionalFormat::GetData( ScRefCellValue& rCell, const ScAd
     return aData;
 }
 
-void ScConditionalFormat::DoRepaint( const ScRange* pModified )
+void ScConditionalFormat::DoRepaint()
 {
-    if(pModified)
-    {
-        if(maRanges.Intersects(*pModified))
-            pDoc->RepaintRange(*pModified);
-    }
-    else
-    {
-        // all conditional format cells
-        pDoc->RepaintRange( maRanges );
-    }
+    // all conditional format cells
+    pDoc->RepaintRange( maRanges );
 }
 
 void ScConditionalFormat::CompileAll()
