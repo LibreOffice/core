@@ -573,8 +573,8 @@ private:
     SvFileStream (const SvFileStream&) = delete;
     SvFileStream & operator= (const SvFileStream&) = delete;
 
-    bool LockRange( std::size_t nByteOffset, std::size_t nBytes );
-    bool UnlockRange( std::size_t nByteOffset, std::size_t nBytes );
+    bool LockRange( sal_uInt64 nByteOffset, std::size_t nBytes );
+    bool UnlockRange( sal_uInt64 nByteOffset, std::size_t nBytes );
     bool LockFile();
     void UnlockFile();
 
