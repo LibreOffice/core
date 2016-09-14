@@ -1237,6 +1237,13 @@ void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const
         rEditView.RegisterOtherShell(nullptr);
         // Text selection, if any.
         rEditView.DrawSelection(pOtherShell);
+
+        // Shape text lock.
+        if (OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView())
+        {
+            OString sRect = pOutlinerView->GetOutputArea().toString();
+            SfxLokHelper::notifyOtherView(GetSfxViewShell(), pOtherShell, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRect);
+        }
     }
     else
     {
