@@ -48,7 +48,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         // system data
         m_aSystemData.nSize         = sizeof( SystemEnvData );
         m_aSystemData.aWindow       = pParent->GetNativeWindowHandle(m_pSocket);
-        m_aSystemData.aShellWindow  = reinterpret_cast<long>(this);
+        m_aSystemData.aShellWindow  = reinterpret_cast<sal_IntPtr>(this);
         m_aSystemData.pSalFrame     = nullptr;
         m_aSystemData.pWidget       = m_pSocket;
         m_aSystemData.nScreen       = pParent->getXScreenNumber().getXScreen();
