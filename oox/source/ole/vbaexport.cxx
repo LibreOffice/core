@@ -112,7 +112,7 @@ OUString generateGUIDString()
 
 }
 
-VBACompressionChunk::VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, sal_Size nChunkSize)
+VBACompressionChunk::VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, std::size_t nChunkSize)
     : mrCompressedStream(rCompressedStream)
     , mpUncompressedData(pData)
     , mpCompressedChunkStream(nullptr)
@@ -357,7 +357,7 @@ void VBACompressionChunk::writeRawChunk()
     // we need to use up to 4096 bytes of the original stream
     // and fill the rest with padding
     mrCompressedStream.WriteBytes(mpUncompressedData, mnChunkSize);
-    sal_Size nPadding = 4096 - mnChunkSize;
+    std::size_t nPadding = 4096 - mnChunkSize;
     for (size_t i = 0; i < nPadding; ++i)
     {
         mrCompressedStream.WriteUInt8(0);
@@ -378,11 +378,11 @@ void VBACompression::write()
     mrCompressedStream.WriteUInt8(0x01); // signature byte of a compressed container
     bool bStreamNotEnded = true;
     const sal_uInt8* pData = static_cast<const sal_uInt8*>(mrUncompressedStream.GetData());
-    sal_Size nSize = mrUncompressedStream.GetEndOfData();
-    sal_Size nRemainingSize = nSize;
+    std::size_t nSize = mrUncompressedStream.GetEndOfData();
+    std::size_t nRemainingSize = nSize;
     while(bStreamNotEnded)
     {
-        sal_Size nChunkSize = nRemainingSize > 4096 ? 4096 : nRemainingSize;
+        std::size_t nChunkSize = nRemainingSize > 4096 ? 4096 : nRemainingSize;
         VBACompressionChunk aChunk(mrCompressedStream, &pData[nSize - nRemainingSize], nChunkSize);
         aChunk.write();
 

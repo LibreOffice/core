@@ -1660,7 +1660,7 @@ OUString GeometryHandler::impl_ConvertUIToMimeType_nothrow(const OUString& _sUIN
     ::std::vector< OUString >::const_iterator aFind = ::std::find(aList.begin(),aList.end(),_sUIName);
     if ( aFind != aList.end() )
     {
-        const sal_Size nPos = aFind - aList.begin();
+        const std::size_t nPos = aFind - aList.begin();
         const uno::Reference< report::XReportDefinition> xReportDefinition(m_xReportComponent,uno::UNO_QUERY);
         if ( xReportDefinition.is() )
         {

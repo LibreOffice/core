@@ -63,7 +63,7 @@ namespace OpenStormBento
 *   @param  number of bytes to be read
 *   @return number of bytes read
 */
-sal_uLong   LtcUtBenValueStream::GetData( void* pData, sal_uLong nSize )
+std::size_t LtcUtBenValueStream::GetData(void* pData, std::size_t nSize)
 {
     //unsigned long AmtLeft;
     unsigned long AmtRead;
@@ -82,7 +82,7 @@ sal_uLong   LtcUtBenValueStream::GetData( void* pData, sal_uLong nSize )
 *   @param  size of buffer to be written
 *   @return number of bytes written into value stream
 */
-sal_uLong   LtcUtBenValueStream::PutData( const void* /*pData*/, sal_uLong nSize )
+std::size_t LtcUtBenValueStream::PutData(const void* /*pData*/, std::size_t nSize)
 {
     /* Because we only support IMPORT filter, PutData implementation is ignored
         It won't bring negative influence to read-only stream object */

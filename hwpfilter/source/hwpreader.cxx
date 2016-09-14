@@ -124,7 +124,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHWP(const OUString &rURL
     SvFileStream aFileStream(rURL, StreamMode::READ);
     std::unique_ptr<HStream> stream(new HStream);
     byte aData[32768];
-    sal_Size nRead, nBlock = 32768;
+    std::size_t nRead, nBlock = 32768;
 
     while (true)
     {

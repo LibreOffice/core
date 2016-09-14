@@ -1168,7 +1168,7 @@ void UcbLockBytes::terminate_Impl()
 }
 
 ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
-        void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const
+        void *pBuffer, std::size_t nCount, std::size_t *pRead) const
 {
     if ( IsSynchronMode() )
     {
@@ -1230,13 +1230,13 @@ ErrCode UcbLockBytes::ReadAt(sal_uInt64 const nPos,
 
     memcpy (pBuffer, aData.getConstArray(), nSize);
     if (pRead)
-        *pRead = sal_uLong(nSize);
+        *pRead = static_cast<std::size_t>(nSize);
 
     return ERRCODE_NONE;
 }
 
 ErrCode UcbLockBytes::WriteAt(sal_uInt64 const nPos, const void *pBuffer,
-        sal_uLong nCount, sal_uLong *pWritten)
+        std::size_t nCount, std::size_t *pWritten)
 {
     if ( pWritten )
         *pWritten = 0;
@@ -1296,7 +1296,7 @@ ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
 {
     SvLockBytesStat aStat;
     Stat( &aStat, (SvLockBytesStatFlag) 0 );
-    sal_uLong nSize = aStat.nSize;
+    std::size_t nSize = aStat.nSize;
 
     if ( nSize > nNewSize )
     {
@@ -1313,7 +1313,7 @@ ErrCode UcbLockBytes::SetSize (sal_uInt64 const nNewSize)
 
     if ( nSize < nNewSize )
     {
-        sal_uLong nDiff = nNewSize-nSize, nCount=0;
+        std::size_t nDiff = nNewSize-nSize, nCount=0;
         sal_uInt8* pBuffer = new sal_uInt8[ nDiff ];
         memset(pBuffer, 0, nDiff); // initialize for enhanced security
         WriteAt( nSize, pBuffer, nDiff, &nCount );

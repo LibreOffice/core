@@ -2215,7 +2215,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 sal_uInt16 nElemSizeSeg = 2;
                 rIn.ReadUInt16( nNumElemSeg ).ReadUInt16( nNumElemMemSeg ).ReadUInt16( nElemSizeSeg );
             }
-            sal_Size nMaxEntriesPossible = rIn.remainingSize() / sizeof(sal_uInt16);
+            std::size_t nMaxEntriesPossible = rIn.remainingSize() / sizeof(sal_uInt16);
             if (nNumElemSeg > nMaxEntriesPossible)
             {
                 SAL_WARN("filter.ms", "NumElem list is longer than remaining bytes, ppt or parser is wrong");
@@ -5724,13 +5724,13 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
 
             if ( mnIdClusters-- > 2 )
             {
-                const sal_Size nFIDCLsize = sizeof(sal_uInt32) * 2;
+                const std::size_t nFIDCLsize = sizeof(sal_uInt32) * 2;
                 if ( aDggAtomHd.nRecLen == ( mnIdClusters * nFIDCLsize + 16 ) )
                 {
-                    sal_Size nMaxEntriesPossible = rStCtrl.remainingSize() / nFIDCLsize;
+                    std::size_t nMaxEntriesPossible = rStCtrl.remainingSize() / nFIDCLsize;
                     SAL_WARN_IF(nMaxEntriesPossible < mnIdClusters,
                         "filter.ms", "FIDCL list longer than remaining bytes, ppt or parser is wrong");
-                    mnIdClusters = std::min(nMaxEntriesPossible, static_cast<sal_Size>(mnIdClusters));
+                    mnIdClusters = std::min(nMaxEntriesPossible, static_cast<std::size_t>(mnIdClusters));
 
                     maFidcls.resize(mnIdClusters);
                     for (sal_uInt32 i = 0; i < mnIdClusters; ++i)

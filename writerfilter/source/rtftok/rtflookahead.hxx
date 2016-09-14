@@ -27,7 +27,7 @@ namespace rtftok
 class RTFLookahead : public RTFListener
 {
 public:
-    RTFLookahead(SvStream& rStream, sal_Size nGroupStart);
+    RTFLookahead(SvStream& rStream, sal_uInt64 nGroupStart);
     virtual ~RTFLookahead() override;
     virtual RTFError dispatchDestination(RTFKeyword nKeyword) override;
     virtual RTFError dispatchFlag(RTFKeyword nKeyword) override;

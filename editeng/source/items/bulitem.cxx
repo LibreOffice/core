@@ -116,7 +116,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
     {
         // Safe Load with Test on empty Bitmap
         Bitmap          aBmp;
-        const sal_Size    nOldPos = rStrm.Tell();
+        sal_uInt64 const nOldPos = rStrm.Tell();
         // Ignore Errorcode when reading Bitmap,
         // see comment in SvxBulletItem::Store()
         bool bOldError = rStrm.GetError() != 0;
@@ -288,7 +288,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
         StoreFont( rStrm, aFont );
     else
     {
-        sal_Size _nStart = rStrm.Tell();
+        sal_uInt64 const _nStart = rStrm.Tell();
 
         // Small preliminary estimate of the size ...
         sal_uInt16 nFac = ( rStrm.GetCompressMode() != SvStreamCompressFlags::NONE ) ? 3 : 1;
@@ -299,7 +299,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
             WriteDIB(aBmp, rStrm, false, true);
         }
 
-        sal_Size nEnd = rStrm.Tell();
+        sal_uInt64 const nEnd = rStrm.Tell();
         // Item can not write with an overhead more than 64K or SfxMultiRecord
         // will crash. Then prefer to forego on the bitmap, it is only
         // important for the outliner and only for <= 5.0.

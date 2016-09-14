@@ -25,8 +25,8 @@
 
 // Constants ==================================================================
 
-const sal_Size EXC_REC_SEEK_TO_BEGIN        = 0;
-const sal_Size EXC_REC_SEEK_TO_END          = static_cast< sal_Size >( -1 );
+const std::size_t EXC_REC_SEEK_TO_BEGIN     = 0;
+const std::size_t EXC_REC_SEEK_TO_END       = static_cast<std::size_t>( -1 );
 
 const sal_uInt16 EXC_MAXRECSIZE_BIFF5       = 2080;
 const sal_uInt16 EXC_MAXRECSIZE_BIFF8       = 8224;

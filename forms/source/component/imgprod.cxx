@@ -44,8 +44,8 @@ public:
     explicit ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > & rStreamRef );
     virtual             ~ImgProdLockBytes() override;
 
-    virtual ErrCode     ReadAt( sal_uInt64 nPos, void* pBuffer, sal_Size nCount, sal_Size * pRead ) const override;
-    virtual ErrCode     WriteAt( sal_uInt64 nPos, const void* pBuffer, sal_Size nCount, sal_Size * pWritten ) override;
+    virtual ErrCode     ReadAt( sal_uInt64 nPos, void* pBuffer, std::size_t nCount, std::size_t * pRead ) const override;
+    virtual ErrCode     WriteAt( sal_uInt64 nPos, const void* pBuffer, std::size_t nCount, std::size_t * pWritten ) override;
     virtual ErrCode     Flush() const override;
     virtual ErrCode     SetSize( sal_uInt64 nSize ) override;
     virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const override;
@@ -90,7 +90,7 @@ ImgProdLockBytes::~ImgProdLockBytes()
 
 
 ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
-        void* pBuffer, sal_Size nCount, sal_Size * pRead) const
+        void* pBuffer, std::size_t nCount, std::size_t * pRead) const
 {
     if( GetStream() )
     {
@@ -101,7 +101,7 @@ ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
     }
     else
     {
-        const sal_Size nSeqLen = maSeq.getLength();
+        const std::size_t nSeqLen = maSeq.getLength();
         ErrCode nErr = ERRCODE_NONE;
 
         if( nPos < nSeqLen )
@@ -121,7 +121,7 @@ ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
 
 
 ErrCode ImgProdLockBytes::WriteAt(sal_uInt64 const nPos,
-        const void* pBuffer, sal_Size nCount, sal_Size * pWritten)
+        const void* pBuffer, std::size_t nCount, std::size_t * pWritten)
 {
     if( GetStream() )
         return SvLockBytes::WriteAt( nPos, pBuffer, nCount, pWritten );

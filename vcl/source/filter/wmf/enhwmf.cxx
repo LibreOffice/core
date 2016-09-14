@@ -418,7 +418,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 
 #if OSL_DEBUG_LEVEL > 1
         // debug code - write the stream to debug file /tmp/emf-stream.emf
-        int pos = pWMF->Tell();
+        sal_uInt64 const pos = pWMF->Tell();
         pWMF->Seek(0);
         SvFileStream file( OUString( "/tmp/emf-stream.emf" ), StreamMode::WRITE | StreamMode::TRUNC );
 
@@ -432,7 +432,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
     }
     bEMFPlus = true;
 
-    sal_Size pos = pWMF->Tell();
+    sal_uInt64 const pos = pWMF->Tell();
     void *buffer = malloc( length );
     pOut->PassEMFPlus( buffer, pWMF->ReadBytes(buffer, length) );
     free( buffer );

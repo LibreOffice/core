@@ -87,7 +87,7 @@ void XclExpProgressBar::Initialize()
             SCCOL nLastUsedScCol;
             SCROW nLastUsedScRow;
             rDoc.GetTableArea( nScTab, nLastUsedScCol, nLastUsedScRow );
-            sal_Size nSegSize = static_cast< sal_Size >( nLastUsedScRow + 1 );
+            std::size_t nSegSize = static_cast< std::size_t >( nLastUsedScRow + 1 );
             maSubSegRowCreate[ nScTab ] = mpSubRowCreate->AddSegment( nSegSize );
         }
     }
@@ -996,7 +996,7 @@ void XclExpCachedMatrix::GetDimensions( SCSIZE & nCols, SCSIZE & nRows ) const
     OSL_ENSURE( nCols <= 256, "XclExpCachedMatrix::GetDimensions - too many columns" );
 }
 
-sal_Size XclExpCachedMatrix::GetSize() const
+std::size_t XclExpCachedMatrix::GetSize() const
 {
     SCSIZE nCols, nRows;
 

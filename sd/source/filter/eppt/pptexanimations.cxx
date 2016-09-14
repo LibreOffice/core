@@ -876,7 +876,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
     WriteAnimationNode( rStrm, aAnim );
 }
 
-void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, const Any ** pAny, sal_Size nLen )
+void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, const Any ** pAny, std::size_t nLen )
 {
     // storing user data into pAny, to allow direct access later
     memset( pAny, 0, nLen );
