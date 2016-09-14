@@ -410,7 +410,7 @@ bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     if( xObj.is() )
     {
         Rectangle aRect = pOle2Obj->GetLogicRect();
-        if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
+        if ( aRect.GetWidth() == 101 && aRect.GetHeight() == 101 )
         {
             // TODO/LATER: is it possible that this method is used to create an iconified object?
             // default size
@@ -478,7 +478,7 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
     if( xObj.is() )
     {
         Rectangle aRect = pOle2Obj->GetLogicRect();
-        if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
+        if ( aRect.GetWidth() == 101 && aRect.GetHeight() == 101 )
         {
             // default size
             try
