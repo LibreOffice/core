@@ -158,6 +158,7 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
             // registers the view shell of this draw view, and not the view
             // shell of pView.
             OutlinerView* pOutlinerView = pView->ImpMakeOutlinerView(static_cast<vcl::Window*>(pOutDev), !bEmpty, nullptr, GetSfxViewShell());
+            pOutlinerView->HideCursor();
             pView->GetTextEditOutliner()->InsertView(pOutlinerView);
         }
     }
@@ -911,6 +912,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
                             if(&rOutDev != pWin && OUTDEV_WINDOW == rOutDev.GetOutDevType())
                             {
                                 OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), !bEmpty, nullptr);
+                                pOutlView->HideCursor();
                                 pTextEditOutliner->InsertView(pOutlView);
                             }
                         }
