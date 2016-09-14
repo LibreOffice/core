@@ -839,7 +839,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
 
     SvMemoryStream aStream;
     const void* aData = aLink.GetData();
-    sal_Size nDataSize = aLink.GetDataSize();
+    std::size_t nDataSize = aLink.GetDataSize();
 
     switch ( aLink.GetType() )
     {

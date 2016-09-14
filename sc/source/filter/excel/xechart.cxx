@@ -423,7 +423,7 @@ void XclExpChRoot::FinalizeFutureRecBlock( XclExpStream& rStrm )
 }
 
 XclExpChGroupBase::XclExpChGroupBase( const XclExpChRoot& rRoot,
-        sal_uInt16 nFrType, sal_uInt16 nRecId, sal_Size nRecSize ) :
+        sal_uInt16 nFrType, sal_uInt16 nRecId, std::size_t nRecSize ) :
     XclExpRecord( nRecId, nRecSize ),
     XclExpChRoot( rRoot ),
     maFrBlock( nFrType )
@@ -467,7 +467,7 @@ void XclExpChGroupBase::SetFutureRecordContext( sal_uInt16 nFrContext, sal_uInt1
 }
 
 XclExpChFutureRecordBase::XclExpChFutureRecordBase( const XclExpChRoot& rRoot,
-        XclFutureRecType eRecType, sal_uInt16 nRecId, sal_Size nRecSize ) :
+        XclFutureRecType eRecType, sal_uInt16 nRecId, std::size_t nRecSize ) :
     XclExpFutureRecord( eRecType, nRecId, nRecSize ),
     XclExpChRoot( rRoot )
 {
@@ -1061,7 +1061,7 @@ void XclExpChSourceLink::Save( XclExpStream& rStrm )
     // CHFORMATRUNS record
     if( mxString && mxString->IsRich() )
     {
-        sal_Size nRecSize = (1 + mxString->GetFormatsCount()) * ((GetBiff() == EXC_BIFF8) ? 2 : 1);
+        std::size_t nRecSize = (1 + mxString->GetFormatsCount()) * ((GetBiff() == EXC_BIFF8) ? 2 : 1);
         rStrm.StartRecord( EXC_ID_CHFORMATRUNS, nRecSize );
         mxString->WriteFormats( rStrm, true );
         rStrm.EndRecord();

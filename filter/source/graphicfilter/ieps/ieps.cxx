@@ -316,7 +316,7 @@ static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
         oslFileError eFileErr = osl_readFile(pOut, aBuf, 32000, &nCount);
         while (eFileErr == osl_File_E_None && nCount)
         {
-            aMemStm.WriteBytes(aBuf, sal::static_int_cast< sal_Size >(nCount));
+            aMemStm.WriteBytes(aBuf, sal::static_int_cast<std::size_t>(nCount));
             eFileErr = osl_readFile(pOut, aBuf, 32000, &nCount);
         }
 

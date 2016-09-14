@@ -135,7 +135,7 @@ bool ExcelToSc8::HandleOleLink(sal_uInt16 nXtiIndex, const XclImpExtName& rExtNa
 
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
 // otherwise it will seek to the first byte past additional content after <nFormulaLen>
-ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn, std::size_t nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
 {
     bool                    bError = false;
     bool                    bArrayFormula = false;
@@ -164,7 +164,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
         return ConvOK;
     }
 
-    sal_Size nEndPos = aIn.GetRecPos() + nFormulaLen;
+    std::size_t nEndPos = aIn.GetRecPos() + nFormulaLen;
 
     while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
@@ -386,7 +386,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 {
                     // nFakt -> skip bytes or words    AttrChoose
                     nData++;
-                    aIn.Ignore(static_cast<sal_Size>(nData) * nFakt);
+                    aIn.Ignore(static_cast<std::size_t>(nData) * nFakt);
                 }
                 else if( nOpt & 0x10 )                      // AttrSum
                     DoMulArgs( ocSum, 1 );
@@ -953,7 +953,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 }
 
 // stream seeks to first byte after <nFormulaLen>
-ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen,
+ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std::size_t nFormulaLen,
                               SCsTAB nTab, const FORMULA_TYPE eFT )
 {
     sal_uInt8                   nOp, nLen;
@@ -975,7 +975,7 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
     if( nFormulaLen == 0 )
         return ConvOK;
 
-    sal_Size nEndPos = aIn.GetRecPos() + nFormulaLen;
+    std::size_t nEndPos = aIn.GetRecPos() + nFormulaLen;
 
     while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
@@ -1033,7 +1033,7 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 {
                     // nFakt -> skip bytes or words    AttrChoose
                     ++nData;
-                    aIn.Ignore(static_cast<sal_Size>(nData) * nFakt);
+                    aIn.Ignore(static_cast<std::size_t>(nData) * nFakt);
                 }
             }
                 break;
@@ -1296,7 +1296,7 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
     return eRet;
 }
 
-void ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, sal_Size nFormulaLen,
+void ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, std::size_t nFormulaLen,
                                        const OUString& rUrl, const vector<OUString>& rTabNames )
 {
     if( !GetDocShell() )
@@ -1328,7 +1328,7 @@ void ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& 
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aFileUrl);
     sal_uInt16 nTabCount = static_cast< sal_uInt16 >( rTabNames.size() );
 
-    sal_Size nEndPos = rStrm.GetRecPos() + nFormulaLen;
+    std::size_t nEndPos = rStrm.GetRecPos() + nFormulaLen;
 
     while( (rStrm.GetRecPos() < nEndPos) && !bError )
     {
@@ -1500,16 +1500,16 @@ void ExcelToSc8::ExcRelToScRel8( sal_uInt16 nRow, sal_uInt16 nC, ScSingleRefData
 }
 
 // stream seeks to first byte after <nLen>
-void ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
+void ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, std::size_t nLen )
 {
     sal_uInt8                   nOp;
     sal_uInt16                  nRow1, nRow2, nCol1, nCol2;
     SCTAB                                   nTab1, nTab2;
     sal_uInt16                  nIxti;
 
-    sal_Size nSeek;
+    std::size_t nSeek;
 
-    sal_Size nEndPos = aIn.GetRecPos() + nLen;
+    std::size_t nEndPos = aIn.GetRecPos() + nLen;
 
     while( aIn.IsValid() && (aIn.GetRecPos() < nEndPos) )
     {

@@ -151,7 +151,7 @@ bool PolyPolygonIsMixedOpenAndClosed( const basegfx::B2DPolyPolygon& rPoly )
     return bRetval;
 }
 
-typedef std::map<OUString,sal_Size> ElementRefMapType;
+typedef std::map<OUString,std::size_t> ElementRefMapType;
 
 struct AnnotatingVisitor
 {
@@ -499,7 +499,7 @@ struct AnnotatingVisitor
             mrStopVec(rStopVec)
         {}
 
-        bool operator()( sal_Size rLHS, sal_Size rRHS )
+        bool operator()( std::size_t rLHS, std::size_t rRHS )
         {
             return mrStopVec[rLHS].mnStopPosition < mrStopVec[rRHS].mnStopPosition;
         }
@@ -517,8 +517,8 @@ struct AnnotatingVisitor
             return; //easy! :-)
 
         // join similar colors
-        std::vector<sal_Size> aNewStops { rGradient.maStops.front() };
-        for( sal_Size i=1; i<rGradient.maStops.size(); ++i )
+        std::vector<std::size_t> aNewStops { rGradient.maStops.front() };
+        for( std::size_t i=1; i<rGradient.maStops.size(); ++i )
         {
             if( maGradientStopVector[rGradient.maStops[i]].maStopColor !=
                 maGradientStopVector[aNewStops.back()].maStopColor )
@@ -545,9 +545,9 @@ struct AnnotatingVisitor
         // those two stops around this border (metric is
         // super-simplistic: take euclidean distance of colors, weigh
         // with stop distance)
-        sal_Size nMaxIndex=0;
+        std::size_t nMaxIndex=0;
         double    fMaxDistance=0.0;
-        for( sal_Size i=1; i<rGradient.maStops.size(); ++i )
+        for( std::size_t i=1; i<rGradient.maStops.size(); ++i )
         {
             const double fCurrDistance(
                 colorDiffSquared(

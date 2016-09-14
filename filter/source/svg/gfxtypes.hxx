@@ -55,7 +55,7 @@ struct GradientStop
 struct Gradient
 {
     enum GradientType { LINEAR, RADIAL};
-    std::vector<sal_Size> maStops;
+    std::vector<std::size_t> maStops;
     basegfx::B2DHomMatrix maTransform;
     GradientType          meType;
     union

@@ -43,7 +43,7 @@
 
 namespace
 {
-    bool TryStartNextRecord(XclImpStream& rIn, sal_Size nProgressBasePos)
+    bool TryStartNextRecord(XclImpStream& rIn, std::size_t nProgressBasePos)
     {
         bool bValid = true;
         // i#115255 fdo#40304 BOUNDSHEET doesn't point to a valid
@@ -106,8 +106,8 @@ FltError ImportExcel::Read()
 
     /*  #i104057# Need to track a base position for progress bar calculation,
         because sheet substreams may not be in order of sheets. */
-    sal_Size nProgressBasePos = 0;
-    sal_Size nProgressBaseSize = 0;
+    std::size_t nProgressBasePos = 0;
+    std::size_t nProgressBaseSize = 0;
 
     for (; eAkt != Z_Ende; mnLastRecId = nOpcode)
     {
@@ -841,8 +841,8 @@ FltError ImportExcel8::Read()
 
     /*  #i104057# Need to track a base position for progress bar calculation,
         because sheet substreams may not be in order of sheets. */
-    sal_Size nProgressBasePos = 0;
-    sal_Size nProgressBaseSize = 0;
+    std::size_t nProgressBasePos = 0;
+    std::size_t nProgressBaseSize = 0;
 
     bool bSheetHasCodeName = false;
 

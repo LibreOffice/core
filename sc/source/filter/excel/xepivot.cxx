@@ -274,7 +274,7 @@ sal_uInt16 XclExpPCField::GetItemIndex( const OUString& rItemName ) const
     return EXC_PC_NOITEM;
 }
 
-sal_Size XclExpPCField::GetIndexSize() const
+std::size_t XclExpPCField::GetIndexSize() const
 {
     return Has16BitIndexes() ? 2 : 1;
 }
@@ -844,7 +844,7 @@ void XclExpPivotCache::WriteSxindexlistList( XclExpStream& rStrm ) const
 {
     if( HasItemIndexList() )
     {
-        sal_Size nRecSize = 0;
+        std::size_t nRecSize = 0;
         size_t nPos, nSize = maFieldList.GetSize();
         for( nPos = 0; nPos < nSize; ++nPos )
             nRecSize += maFieldList.GetRecord( nPos )->GetIndexSize();
@@ -1491,7 +1491,7 @@ void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sa
 {
     if( nLineCount > 0 )
     {
-        sal_Size nLineSize = 8 + 2 * nIndexCount;
+        std::size_t nLineSize = 8 + 2 * nIndexCount;
         rStrm.StartRecord( EXC_ID_SXLI, nLineSize * nLineCount );
 
         /*  Excel expects the records to be filled completely, do not

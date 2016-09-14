@@ -139,8 +139,8 @@ private:
     Index               nStartIdx;
     const SvPersistStream * pRefStm;
 
-    virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize ) override;
-    virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize ) override;
+    virtual std::size_t GetData( void* pData, std::size_t nSize ) override;
+    virtual std::size_t PutData( const void* pData, std::size_t nSize ) override;
     virtual sal_uInt64  SeekPos(sal_uInt64 nPos) override;
     virtual void        FlushData() override;
 

@@ -119,8 +119,8 @@ bool IsUserWordbook( const OUString& rFile )
     if ( pStream && !pStream->GetError() )
     {
         static const sal_Char*      pVerOOo7    = "OOoUserDict1";
-        sal_Size nSniffPos = pStream->Tell();
-        static sal_Size nVerOOo7Len = sal::static_int_cast< sal_Size >(strlen( pVerOOo7 ));
+        sal_uInt64 const nSniffPos = pStream->Tell();
+        static std::size_t nVerOOo7Len = sal::static_int_cast< std::size_t >(strlen( pVerOOo7 ));
         sal_Char pMagicHeader[MAX_HEADER_LENGTH];
         pMagicHeader[ nVerOOo7Len ] = '\0';
         if ((pStream->ReadBytes(static_cast<void *>(pMagicHeader), nVerOOo7Len) == nVerOOo7Len))

@@ -90,18 +90,18 @@ void SvPersistStream::ResetError()
     pStm->ResetError();
 }
 
-sal_uIntPtr SvPersistStream::GetData( void* pData, sal_uIntPtr nSize )
+std::size_t SvPersistStream::GetData( void* pData, std::size_t nSize )
 {
     DBG_ASSERT( pStm, "stream not set" );
-    sal_Size const nRet = pStm->ReadBytes( pData, nSize );
+    std::size_t const nRet = pStm->ReadBytes( pData, nSize );
     SetError( pStm->GetError() );
     return nRet;
 }
 
-sal_uIntPtr SvPersistStream::PutData( const void* pData, sal_uIntPtr nSize )
+std::size_t SvPersistStream::PutData( const void* pData, std::size_t nSize )
 {
     DBG_ASSERT( pStm, "stream not set" );
-    sal_Size const nRet = pStm->WriteBytes( pData, nSize );
+    std::size_t const nRet = pStm->WriteBytes( pData, nSize );
     SetError( pStm->GetError() );
     return nRet;
 }
