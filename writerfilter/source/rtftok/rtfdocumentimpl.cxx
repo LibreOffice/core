@@ -338,14 +338,14 @@ void RTFDocumentImpl::setIgnoreFirst(OUString& rIgnoreFirst)
     m_aIgnoreFirst = rIgnoreFirst;
 }
 
-void RTFDocumentImpl::resolveSubstream(sal_Size nPos, Id nId)
+void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId)
 {
     OUString aStr;
     resolveSubstream(nPos, nId, aStr);
 }
-void RTFDocumentImpl::resolveSubstream(sal_Size nPos, Id nId, OUString& rIgnoreFirst)
+void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString& rIgnoreFirst)
 {
-    sal_Size nCurrent = Strm().Tell();
+    sal_uInt64 const nCurrent = Strm().Tell();
     // Seek to header position, parse, then seek back.
     auto pImpl = std::make_shared<RTFDocumentImpl>(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator, m_rMediaDescriptor);
     pImpl->setSuperstream(this);
@@ -600,7 +600,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     }
     while (!m_nHeaderFooterPositions.empty())
     {
-        std::pair<Id, sal_Size> aPair = m_nHeaderFooterPositions.front();
+        std::pair<Id, std::size_t> aPair = m_nHeaderFooterPositions.front();
         m_nHeaderFooterPositions.pop();
         resolveSubstream(aPair.second, aPair.first);
     }
@@ -635,7 +635,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     m_bNeedSect = false;
 }
 
-void RTFDocumentImpl::seek(sal_Size nPos)
+void RTFDocumentImpl::seek(sal_uInt64 const nPos)
 {
     Strm().Seek(nPos);
 }
@@ -1545,7 +1545,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
         else if (std::get<0>(aTuple) == BUFFER_RESOLVESUBSTREAM)
         {
             RTFSprms& rAttributes = std::get<1>(aTuple)->getAttributes();
-            sal_Size nPos = rAttributes.find(0)->getInt();
+            std::size_t nPos = rAttributes.find(0)->getInt();
             Id nId = rAttributes.find(1)->getInt();
             OUString aCustomMark = rAttributes.find(2)->getString();
             resolveSubstream(nPos, nId, aCustomMark);
