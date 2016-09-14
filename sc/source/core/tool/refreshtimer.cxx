@@ -120,7 +120,7 @@ void ScRefreshTimer::Invoke()
     {
         // now we COULD make the call in another thread ...
         ::osl::MutexGuard aGuard( (*ppControl)->GetMutex() );
-        maTimeoutHdl.Call( this );
+        Timer::Invoke();
         // restart from now on, don't execute immediately again if timed out
         // a second time during refresh
         if ( IsActive() )
