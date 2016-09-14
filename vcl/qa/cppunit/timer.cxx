@@ -19,6 +19,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/scheduler.hxx>
 #include "svdata.hxx"
 #include "salinst.hxx"
 
@@ -125,7 +126,7 @@ void TimerTest::testIdle()
 {
     bool bTriggered = false;
     IdleBool aTest( bTriggered );
-    while ( Application::Reschedule() );
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_MESSAGE("idle triggered", bTriggered);
 }
 
@@ -438,7 +439,7 @@ void TimerTest::testInvokedReStart()
 {
     sal_Int32 nCount = 0;
     IdleInvokedReStart aIdle( nCount );
-    while ( Application::Reschedule() );
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL( nCount, sal_Int32(2) );
 }
 
@@ -473,7 +474,7 @@ void TimerTest::testPriority()
         aLowPrioIdle.SetPriority( TaskPriority::LOWEST );
         IdleSerializer aHighPrioIdle( "IdleSerializer HighPrio", 1, nProcessed );
         aHighPrioIdle.SetPriority( TaskPriority::HIGHEST );
-        while ( Application::Reschedule() );
+        Scheduler::ProcessEventsToIdle();
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Not all idles processed", sal_uInt32(2), nProcessed );
     }
 
@@ -484,7 +485,7 @@ void TimerTest::testPriority()
         aHighPrioIdle.SetPriority( TaskPriority::HIGHEST );
         IdleSerializer aLowPrioIdle( "IdleSerializer LowPrio", 2, nProcessed );
         aLowPrioIdle.SetPriority( TaskPriority::LOWEST );
-        while ( Application::Reschedule() );
+        Scheduler::ProcessEventsToIdle();
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Not all idles processed", sal_uInt32(2), nProcessed );
     }
 }
