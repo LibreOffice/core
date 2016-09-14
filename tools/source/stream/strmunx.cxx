@@ -48,20 +48,20 @@ struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {};
 
 struct InternalStreamLock
 {
-    std::size_t        m_nStartPos;
-    std::size_t        m_nEndPos;
+    sal_uInt64         m_nStartPos;
+    sal_uInt64         m_nEndPos;
     SvFileStream*      m_pStream;
     osl::DirectoryItem m_aItem;
 
-    InternalStreamLock( std::size_t, std::size_t, SvFileStream* );
+    InternalStreamLock( sal_uInt64, sal_uInt64, SvFileStream* );
     ~InternalStreamLock();
 };
 
 struct LockList : public rtl::Static< std::vector<InternalStreamLock>, LockList > {};
 
 InternalStreamLock::InternalStreamLock(
-    std::size_t nStart,
-    std::size_t nEnd,
+    sal_uInt64 const nStart,
+    sal_uInt64 const nEnd,
     SvFileStream* pStream ) :
         m_nStartPos( nStart ),
         m_nEndPos( nEnd ),
@@ -90,7 +90,7 @@ InternalStreamLock::~InternalStreamLock()
 #endif
 }
 
-bool lockFile( std::size_t nStart, std::size_t nEnd, SvFileStream* pStream )
+bool lockFile( sal_uInt64 const nStart, sal_uInt64 const nEnd, SvFileStream* pStream )
 {
     osl::DirectoryItem aItem;
     if (osl::DirectoryItem::get( pStream->GetFileName(), aItem) != osl::FileBase::E_None )
@@ -145,7 +145,7 @@ bool lockFile( std::size_t nStart, std::size_t nEnd, SvFileStream* pStream )
     return true;
 }
 
-void unlockFile( std::size_t nStart, std::size_t nEnd, SvFileStream const * pStream )
+void unlockFile( sal_uInt64 const nStart, sal_uInt64 const nEnd, SvFileStream const * pStream )
 {
     osl::MutexGuard aGuard( LockMutex::get() );
     std::vector<InternalStreamLock> &rLockList = LockList::get();
@@ -379,7 +379,7 @@ void SvFileStream::FlushData()
     // does not exist locally
 }
 
-bool SvFileStream::LockRange( std::size_t nByteOffset, std::size_t nBytes )
+bool SvFileStream::LockRange(sal_uInt64 const nByteOffset, std::size_t nBytes)
 {
     int nLockMode = 0;
 
@@ -428,7 +428,7 @@ bool SvFileStream::LockRange( std::size_t nByteOffset, std::size_t nBytes )
     return true;
 }
 
-bool SvFileStream::UnlockRange( std::size_t nByteOffset, std::size_t nBytes )
+bool SvFileStream::UnlockRange(sal_uInt64 const nByteOffset, std::size_t nBytes)
 {
     if ( ! IsOpen() )
         return false;
