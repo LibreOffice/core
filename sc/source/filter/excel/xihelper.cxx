@@ -812,9 +812,9 @@ XclImpCachedValue::~XclImpCachedValue()
 {
 }
 
-sal_uInt16 XclImpCachedValue::GetScError() const
+FormulaError XclImpCachedValue::GetScError() const
 {
-    return (mnType == EXC_CACHEDVAL_ERROR) ? XclTools::GetScErrorCode( mnBoolErr ) : 0;
+    return (mnType == EXC_CACHEDVAL_ERROR) ? XclTools::GetScErrorCode( mnBoolErr ) : FormulaError::NONE;
 }
 
 // Matrix Cached Values ==============================================================

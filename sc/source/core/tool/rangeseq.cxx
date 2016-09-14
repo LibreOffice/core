@@ -42,7 +42,7 @@ static bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
             continue;
 
         ScFormulaCell* pCell = aIter.getFormulaCell();
-        if (pCell->GetErrCode() != 0)
+        if (pCell->GetErrCode() != FormulaError::NONE)
             return true;
     }
     return false;   // no error found
@@ -182,10 +182,10 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, const
         OUString* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
         {
-            sal_uInt16 nErrCode = pDoc->GetStringForFormula(
+            FormulaError nErrCode = pDoc->GetStringForFormula(
                         ScAddress((SCCOL)(nStartCol+nCol), (SCROW)(nStartRow+nRow), nTab),
                         pColAry[nCol] );
-            if ( nErrCode != 0 )
+            if ( nErrCode != FormulaError::NONE )
                 bHasErrors = true;
         }
         pRowAry[nRow] = aColSeq;
@@ -265,7 +265,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const 
                 continue;
             }
 
-            if (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetErrCode() != 0)
+            if (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetErrCode() != FormulaError::NONE)
             {
                 // if NV is allowed, leave empty for errors
                 bHasErrors = true;

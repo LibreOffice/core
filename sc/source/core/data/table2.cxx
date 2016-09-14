@@ -1815,7 +1815,7 @@ void ScTable::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress
         mpCondFormatList->CompileXML();
 }
 
-bool ScTable::CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nErrCode )
+bool ScTable::CompileErrorCells( sc::CompileFormulaContext& rCxt, FormulaError nErrCode )
 {
     bool bCompiled = false;
     for (SCCOL i = 0; i <= MAXCOL; ++i)

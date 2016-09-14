@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TABVWSH_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TABVWSH_HXX
 
+#include <formula/errorcodes.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/viewsh.hxx>
@@ -359,7 +360,7 @@ public:
 
     void    ExecuteCellFormatDlg( SfxRequest& rReq, const OString &rTabPage);
 
-    bool    GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode );
+    bool    GetFunction( OUString& rFuncStr, FormulaError nErrCode );
 
     void    StartSimpleRefDialog( const OUString& rTitle, const OUString& rInitVal,
                                     bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection );

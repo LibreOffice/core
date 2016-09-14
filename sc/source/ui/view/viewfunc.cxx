@@ -416,7 +416,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             {   // try to parse with first parser-correction
                 pArr = aComp.CompileString( aComp.GetCorrectedFormula() );
             }
-            if ( !pArr->GetCodeError() )
+            if ( pArr->GetCodeError() == FormulaError::NONE )
             {
                 bAddEqual = true;
                 aComp.CompileTokenArray();
@@ -466,8 +466,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         // cells and the error be set explicitly, so that
         // via FormulaCell copy-ctor and Interpreter it will be, when possible,
         // ironed out again, too intelligent.. e.g.: =1))
-        sal_uInt16 nError = pArr->GetCodeError();
-        if ( !nError )
+        FormulaError nError = pArr->GetCodeError();
+        if ( nError == FormulaError::NONE )
         {
             //  update list of recent functions with all functions that
             //  are not within parentheses
@@ -510,7 +510,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             sal_uLong nIndex = (sal_uLong) static_cast<const SfxUInt32Item*>( pDoc->GetAttr(
                 nCol, nRow, i, ATTR_VALUE_FORMAT ))->GetValue();
             if ( pFormatter->GetType( nIndex ) == css::util::NumberFormat::TEXT ||
-                 ( ( rString[0] == '+' || rString[0] == '-' ) && nError && rString == aFormula ) )
+                 ( ( rString[0] == '+' || rString[0] == '-' ) && nError != FormulaError::NONE && rString == aFormula ) )
             {
                 if ( pData )
                 {
@@ -523,7 +523,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             else
             {
                 ScFormulaCell* pCell = new ScFormulaCell( aCell, *pDoc, aPos );
-                if ( nError )
+                if ( nError != FormulaError::NONE )
                 {
                     pCell->GetCode()->DelRPN();
                     pCell->SetErrCode( nError );
@@ -2655,7 +2655,7 @@ bool ScViewFunc::InsertName( const OUString& rName, const OUString& rSymbol,
         nType |= ScRangeData::Type::Criteria;
     pNewEntry->AddType(nType);
 
-    if ( !pNewEntry->GetErrCode() )     //  text valid?
+    if ( pNewEntry->GetErrCode() == FormulaError::NONE )     //  text valid?
     {
         ScDocShellModificator aModificator( *pDocSh );
 

@@ -43,6 +43,7 @@
 #include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/editstat.hxx>
+#include <formula/errorcodes.hxx>
 
 #include "appluno.hxx"
 #include "xmlimprt.hxx"
@@ -3412,7 +3413,7 @@ bool ScXMLImport::IsFormulaErrorConstant( const OUString& rStr ) const
     if (!mpComp)
         return false;
 
-    return mpComp->GetErrorConstant(rStr) > 0;
+    return mpComp->GetErrorConstant(rStr) > FormulaError::NONE;
 }
 
 ScEditEngineDefaulter* ScXMLImport::GetEditEngine()

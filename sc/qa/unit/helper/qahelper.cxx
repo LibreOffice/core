@@ -18,7 +18,7 @@
 #include <svx/svdoole2.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
-
+#include <formula/errorcodes.hxx>
 #include <cppunit/Asserter.h>
 #include <cppunit/AdditionalMessage.h>
 
@@ -522,7 +522,7 @@ bool isFormulaWithoutError(ScDocument& rDoc, const ScAddress& rPos)
     if (!pFC)
         return false;
 
-    return pFC->GetErrCode() == 0;
+    return pFC->GetErrCode() == FormulaError::NONE;
 }
 
 OUString toString(

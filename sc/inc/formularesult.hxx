@@ -33,12 +33,12 @@ struct FormulaResultValue
 
     double mfValue;
     svl::SharedString maString;
-    sal_uInt16 mnError;
+    FormulaError mnError;
 
     FormulaResultValue();
     FormulaResultValue( double fValue );
-    FormulaResultValue(const svl::SharedString& rStr );
-    FormulaResultValue( sal_uInt16 nErr );
+    FormulaResultValue( const svl::SharedString& rStr );
+    FormulaResultValue( FormulaError nErr );
 };
 
 }
@@ -71,7 +71,7 @@ class ScFormulaResult
         double          mfValue;    // double result direct for performance and memory consumption
         const formula::FormulaToken*  mpToken;    // if not, result token obtained from interpreter
     };
-    sal_uInt16              mnError;    // error code
+    FormulaError        mnError;    // error code
     bool                mbToken :1; // whether content of union is a token
     bool                mbEmpty :1; // empty cell result
     bool                mbEmptyDisplayedAsString :1;    // only if mbEmpty
@@ -154,15 +154,15 @@ public:
         one paragraph */
     bool IsMultiline() const;
 
-    bool GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const;
+    bool GetErrorOrDouble( FormulaError& rErr, double& rVal ) const;
     sc::FormulaResultValue GetResult() const;
 
     /** Get error code if set or GetCellResultType() is formula::svError or svUnknown,
         else 0. */
-    sal_uInt16 GetResultError() const;
+    FormulaError GetResultError() const;
 
     /** Set error code, don't touch token or double. */
-    void SetResultError( sal_uInt16 nErr );
+    void SetResultError( FormulaError nErr );
 
     /** Set direct double. Shouldn't be used externally except in
         ScFormulaCell for rounded CalcAsShown or SetErrCode() or

@@ -140,10 +140,10 @@ struct UpdateFormulaCell : public unary_function<ScFormulaCell*, void>
         if (!pCode->HasExternalRef())
             return;
 
-        if (pCode->GetCodeError())
+        if (pCode->GetCodeError() != FormulaError::NONE)
         {
             // Clear the error code, or a cell with error won't get re-compiled.
-            pCode->SetCodeError(0);
+            pCode->SetCodeError(FormulaError::NONE);
             pCell->SetCompile(true);
             pCell->CompileTokenArray();
         }
@@ -883,9 +883,9 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
                 SAL_WARN("sc.ui","ScExternalRefCache::setCellRangeData - not a one element matrix");
             else
             {
-                sal_uInt16 nErr = GetDoubleErrorValue( pMat->GetDouble(0,0));
-                SAL_WARN("sc.ui","ScExternalRefCache::setCellRangeData - matrix error value is " << nErr <<
-                        (nErr == errMatrixSize ? ", ok" : ", not ok"));
+                FormulaError nErr = GetDoubleErrorValue( pMat->GetDouble(0,0));
+                SAL_WARN("sc.ui","ScExternalRefCache::setCellRangeData - matrix error value is " << (int)nErr <<
+                        (nErr == FormulaError::MatrixSize ? ", ok" : ", not ok"));
             }
         }
     }
@@ -1547,8 +1547,8 @@ static FormulaToken* convertToToken( ScDocument* pHostDoc, ScDocument* pSrcDoc, 
         case CELLTYPE_FORMULA:
         {
             ScFormulaCell* pFCell = rCell.mpFormula;
-            sal_uInt16 nError = pFCell->GetErrCode();
-            if (nError)
+            FormulaError nError = pFCell->GetErrCode();
+            if (nError != FormulaError::NONE)
                 return new FormulaErrorToken( nError);
             else if (pFCell->IsValue())
             {
@@ -1933,7 +1933,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
         if (!getSrcDocTable( *pSrcDoc, rTabName, nTab, nFileId))
         {
             // specified table name doesn't exist in the source document.
-            ScExternalRefCache::TokenRef pToken(new FormulaErrorToken(errNoRef));
+            ScExternalRefCache::TokenRef pToken(new FormulaErrorToken(FormulaError::NoRef));
             return pToken;
         }
 
@@ -1964,7 +1964,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     if (!pSrcDoc)
     {
         // Source document not reachable.  Throw a reference error.
-        pToken.reset(new FormulaErrorToken(errNoRef));
+        pToken.reset(new FormulaErrorToken(FormulaError::NoRef));
         return pToken;
     }
 
@@ -1972,7 +1972,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     if (!getSrcDocTable( *pSrcDoc, rTabName, nTab, nFileId))
     {
         // specified table name doesn't exist in the source document.
-        pToken.reset(new FormulaErrorToken(errNoRef));
+        pToken.reset(new FormulaErrorToken(FormulaError::NoRef));
         return pToken;
     }
 
@@ -2037,7 +2037,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
     {
         // Source document is not reachable.  Throw a reference error.
         pArray.reset(new ScTokenArray);
-        pArray->AddToken(FormulaErrorToken(errNoRef));
+        pArray->AddToken(FormulaErrorToken(FormulaError::NoRef));
         return pArray;
     }
 
@@ -2263,7 +2263,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefTokenFromSrcDoc(
     if (!pToken.get())
     {
         // Generate an error for unresolvable cells.
-        pToken.reset( new FormulaErrorToken( errNoValue));
+        pToken.reset( new FormulaErrorToken( FormulaError::NoValue));
     }
 
     // Get number format information.
@@ -2285,7 +2285,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     {
         // specified table name doesn't exist in the source document.
         pArray.reset(new ScTokenArray);
-        pArray->AddToken(FormulaErrorToken(errNoRef));
+        pArray->AddToken(FormulaErrorToken(FormulaError::NoRef));
         return pArray;
     }
 
@@ -2867,12 +2867,12 @@ public:
                         case sc::FormulaResultValue::Error:
                         case sc::FormulaResultValue::Invalid:
                         default:
-                            pTok.reset(new FormulaErrorToken(errNoValue));
+                            pTok.reset(new FormulaErrorToken(FormulaError::NoValue));
                     }
                 }
                 break;
                 default:
-                    pTok.reset(new FormulaErrorToken(errNoValue));
+                    pTok.reset(new FormulaErrorToken(FormulaError::NoValue));
             }
 
             if (pTok)

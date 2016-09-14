@@ -110,7 +110,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
             fBestX = fXPrev = fSaveVal;
 
             pFormula->Interpret();
-            bool bError = ( pFormula->GetErrCode() != 0 );
+            bool bError = ( pFormula->GetErrCode() != FormulaError::NONE );
             // bError always corresponds with fF
 
             fFPrev = pFormula->GetValue() - fTargetVal;
@@ -132,7 +132,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                 *pVCell = fX;
                 SetDirty( aVRange, false );
                 pFormula->Interpret();
-                bError = ( pFormula->GetErrCode() != 0 );
+                bError = ( pFormula->GetErrCode() != FormulaError::NONE );
                 fF = pFormula->GetValue() - fTargetVal;
 
                 if ( fF == fFPrev && !bError )
@@ -166,7 +166,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                             *pVCell = fHorX;
                             SetDirty( aVRange, false );
                             pFormula->Interpret();
-                            bHorMoveError = ( pFormula->GetErrCode() != 0 );
+                            bHorMoveError = ( pFormula->GetErrCode() != FormulaError::NONE );
                             if ( bHorMoveError )
                                 break;
 
@@ -243,12 +243,12 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
             pFormula->Interpret();
             if ( !bDoneIteration )
             {
-                SetError( nVCol, nVRow, nVTab, NOTAVAILABLE );
+                SetError( nVCol, nVRow, nVTab, FormulaError::NotAvailable );
             }
         }
         else
         {
-            SetError( nVCol, nVRow, nVTab, NOTAVAILABLE );
+            SetError( nVCol, nVRow, nVTab, FormulaError::NotAvailable );
         }
     }
     return bRet;

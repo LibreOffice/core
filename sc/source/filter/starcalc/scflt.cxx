@@ -21,6 +21,7 @@
 #include <editeng/eeitem.hxx>
 
 #include <com/sun/star/style/NumberingType.hpp>
+#include <formula/errorcodes.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -443,7 +444,7 @@ Sc10NameData::Sc10NameData(SvStream& rStream)
 
 Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
     ScCollection (4, 4),
-    nError     (0)
+    nError       (0)
 {
     sal_uInt16 ID;
     rStream.ReadUInt16( ID );

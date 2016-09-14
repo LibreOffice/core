@@ -1150,9 +1150,9 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
 }
 
 
-sal_uInt16 FormulaCompiler::GetErrorConstant( const OUString& rName ) const
+FormulaError FormulaCompiler::GetErrorConstant( const OUString& rName ) const
 {
-    sal_uInt16 nError = 0;
+    FormulaError nError = FormulaError::NONE;
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));
     if (iLook != mxSymbols->getHashMap()->end())
     {
@@ -1161,25 +1161,25 @@ sal_uInt16 FormulaCompiler::GetErrorConstant( const OUString& rName ) const
             // Not all may make sense in a formula, but these we know as
             // opcodes.
             case ocErrNull:
-                nError = errNoCode;
+                nError = FormulaError::NoCode;
                 break;
             case ocErrDivZero:
-                nError = errDivisionByZero;
+                nError = FormulaError::DivisionByZero;
                 break;
             case ocErrValue:
-                nError = errNoValue;
+                nError = FormulaError::NoValue;
                 break;
             case ocErrRef:
-                nError = errNoRef;
+                nError = FormulaError::NoRef;
                 break;
             case ocErrName:
-                nError = errNoName;
+                nError = FormulaError::NoName;
                 break;
             case ocErrNum:
-                nError = errIllegalFPOperation;
+                nError = FormulaError::IllegalFPOperation;
                 break;
             case ocErrNA:
-                nError = NOTAVAILABLE;
+                nError = FormulaError::NotAvailable;
                 break;
             default:
                 ;   // nothing
@@ -1198,31 +1198,31 @@ void FormulaCompiler::EnableStopOnError( bool bEnable )
     mbStopOnError = bEnable;
 }
 
-void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError ) const
+void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError nError ) const
 {
     OpCode eOp;
     switch (nError)
     {
         default:
-        case errNoCode:
+        case FormulaError::NoCode:
             eOp = ocErrNull;
             break;
-        case errDivisionByZero:
+        case FormulaError::DivisionByZero:
             eOp = ocErrDivZero;
             break;
-        case errNoValue:
+        case FormulaError::NoValue:
             eOp = ocErrValue;
             break;
-        case errNoRef:
+        case FormulaError::NoRef:
             eOp = ocErrRef;
             break;
-        case errNoName:
+        case FormulaError::NoName:
             eOp = ocErrName;
             break;
-        case errIllegalFPOperation:
+        case FormulaError::IllegalFPOperation:
             eOp = ocErrNum;
             break;
-        case NOTAVAILABLE:
+        case FormulaError::NotAvailable:
             eOp = ocErrNA;
             break;
     }
@@ -1242,7 +1242,7 @@ bool FormulaCompiler::GetToken()
     FormulaCompilerRecursionGuard aRecursionGuard( nRecursion );
     if ( nRecursion > nRecursionMax )
     {
-        SetError( errStackOverflow );
+        SetError( FormulaError::StackOverflow );
         mpToken = new FormulaByteToken( ocStop );
         return false;
     }
@@ -1252,7 +1252,7 @@ bool FormulaCompiler::GetToken()
         aCorrectedSymbol.clear();
     }
     bool bStop = false;
-    if (pArr->GetCodeError() && mbStopOnError)
+    if (pArr->GetCodeError() != FormulaError::NONE && mbStopOnError)
         bStop = true;
     else
     {
@@ -1343,7 +1343,7 @@ bool FormulaCompiler::GetToken()
 // RPN creation by recursion
 void FormulaCompiler::Factor()
 {
-    if (pArr->GetCodeError() && mbStopOnError)
+    if (pArr->GetCodeError() != FormulaError::NONE && mbStopOnError)
         return;
 
     CurrentFactor pFacToken( this );
@@ -1363,7 +1363,7 @@ void FormulaCompiler::Factor()
             SetError(
                 ( mpToken->GetType() == svString
                || mpToken->GetType() == svSingleRef )
-               ? errNoName : errOperatorExpected );
+               ? FormulaError::NoName : FormulaError::OperatorExpected );
             if ( bAutoCorrect && !pStack )
             {   // assume multiplication
                 aCorrectedFormula += mxSymbols->getSymbol( ocMul);
@@ -1371,7 +1371,7 @@ void FormulaCompiler::Factor()
                 NextToken();
                 eOp = Expression();
                 if( eOp != ocClose )
-                    SetError( errPairExpected);
+                    SetError( FormulaError::PairExpected);
                 else
                     NextToken();
             }
@@ -1381,7 +1381,7 @@ void FormulaCompiler::Factor()
     {
         NextToken();
         eOp = Expression();
-        while ((eOp == ocSep) && (!pArr->GetCodeError() || !mbStopOnError))
+        while ((eOp == ocSep) && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
         {   // range list  (A1;A2)  converted to  (A1~A2)
             pFacToken = mpToken;
             NextToken();
@@ -1389,14 +1389,14 @@ void FormulaCompiler::Factor()
             eOp = Expression();
             // Do not ignore error here, regardless of bIgnoreErrors, otherwise
             // errors like =(1;) would also result in display of =(1~)
-            if (!pArr->GetCodeError())
+            if (pArr->GetCodeError() == FormulaError::NONE)
             {
                 pFacToken->NewOpCode( ocUnion, FormulaToken::PrivateAccess());
                 PutCode( pFacToken);
             }
         }
         if (eOp != ocClose)
-            SetError( errPairExpected);
+            SetError( FormulaError::PairExpected);
         else
             NextToken();
     }
@@ -1448,14 +1448,14 @@ void FormulaCompiler::Factor()
             eOp = NextToken();
             if (eOp != ocOpen)
             {
-                SetError( errPairExpected);
+                SetError( FormulaError::PairExpected);
                 PutCode( pFacToken );
             }
             else
             {
                 eOp = NextToken();
                 if (eOp != ocClose)
-                    SetError( errPairExpected);
+                    SetError( FormulaError::PairExpected);
                 PutCode( pFacToken);
                 NextToken();
             }
@@ -1483,13 +1483,13 @@ void FormulaCompiler::Factor()
                     }
                 }
                 else
-                    SetError( errPairExpected);
+                    SetError( FormulaError::PairExpected);
                 sal_uInt8 nSepCount = 0;
                 const sal_uInt16 nSepPos = pArr->nIndex - 1;    // separator position, if any
                 if( !bNoParam )
                 {
                     nSepCount++;
-                    while ((eOp == ocSep) && (!pArr->GetCodeError() || !mbStopOnError))
+                    while ((eOp == ocSep) && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
                     {
                         NextToken();
                         CheckSetForceArrayParameter( mpToken, nSepCount);
@@ -1498,7 +1498,7 @@ void FormulaCompiler::Factor()
                     }
                 }
                 if (eOp != ocClose)
-                    SetError( errPairExpected);
+                    SetError( FormulaError::PairExpected);
                 else
                     NextToken();
                 pFacToken->SetByte( nSepCount );
@@ -1547,10 +1547,10 @@ void FormulaCompiler::Factor()
                     eOp = Expression();
                 }
                 else
-                    SetError( errPairExpected);
+                    SetError( FormulaError::PairExpected);
                 if (eOp != ocClose)
-                    SetError( errPairExpected);
-                else if ( !pArr->GetCodeError() )
+                    SetError( FormulaError::PairExpected);
+                else if ( pArr->GetCodeError() == FormulaError::NONE )
                     pFacToken->SetByte( 1 );
                 PutCode( pFacToken );
                 NextToken();
@@ -1589,12 +1589,12 @@ void FormulaCompiler::Factor()
                 bNoParam = true;
             }
             else
-                SetError( errPairExpected);
+                SetError( FormulaError::PairExpected);
             sal_uInt8 nSepCount = 0;
             if( !bNoParam )
             {
                 nSepCount++;
-                while ((eOp == ocSep) && (!pArr->GetCodeError() || !mbStopOnError))
+                while ((eOp == ocSep) && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
                 {
                     NextToken();
                     CheckSetForceArrayParameter( mpToken, nSepCount);
@@ -1605,7 +1605,7 @@ void FormulaCompiler::Factor()
             if (bBadName)
                 ;   // nothing, keep current token for return
             else if (eOp != ocClose)
-                SetError( errPairExpected);
+                SetError( FormulaError::PairExpected);
             else
                 NextToken();
             // Jumps are just normal functions for the FunctionAutoPilot tree view
@@ -1643,7 +1643,7 @@ void FormulaCompiler::Factor()
                 eOp = Expression();
             }
             else
-                SetError( errPairExpected);
+                SetError( FormulaError::PairExpected);
             PutCode( pFacToken );
             // During AutoCorrect (since pArr->GetCodeError() is
             // ignored) an unlimited ocIf would crash because
@@ -1670,7 +1670,7 @@ void FormulaCompiler::Factor()
             }
             short nJumpCount = 0;
             while ( (nJumpCount < (FORMULA_MAXJUMPCOUNT - 1)) && (eOp == ocSep)
-                    && (!pArr->GetCodeError() || !mbStopOnError))
+                    && (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError))
             {
                 if ( ++nJumpCount <= nJumpMax )
                     pFacToken->GetJump()[nJumpCount] = pc-1;
@@ -1681,7 +1681,7 @@ void FormulaCompiler::Factor()
                 PutCode( mpToken );
             }
             if (eOp != ocClose)
-                SetError( errPairExpected);
+                SetError( FormulaError::PairExpected);
             else
             {
                 NextToken();
@@ -1710,7 +1710,7 @@ void FormulaCompiler::Factor()
                 if (bLimitOk)
                     pFacToken->GetJump()[ 0 ] = nJumpCount;
                 else
-                    SetError( errIllegalParameter);
+                    SetError( FormulaError::IllegalParameter);
             }
         }
         else if ( eOp == ocMissing )
@@ -1720,11 +1720,11 @@ void FormulaCompiler::Factor()
         }
         else if ( eOp == ocClose )
         {
-            SetError( errParameterExpected );
+            SetError( FormulaError::ParameterExpected );
         }
         else if ( eOp == ocSep )
         {   // Subsequent ocSep
-            SetError( errParameterExpected );
+            SetError( FormulaError::ParameterExpected );
             if ( bAutoCorrect && !pStack )
             {
                 aCorrectedSymbol.clear();
@@ -1738,7 +1738,7 @@ void FormulaCompiler::Factor()
         }
         else
         {
-            SetError( errUnknownToken );
+            SetError( FormulaError::UnknownToken );
             if ( bAutoCorrect && !pStack )
             {
                 if ( eOp == ocStop )
@@ -1918,7 +1918,7 @@ OpCode FormulaCompiler::Expression()
     FormulaCompilerRecursionGuard aRecursionGuard( nRecursion );
     if ( nRecursion > nRecursionMax )
     {
-        SetError( errStackOverflow );
+        SetError( FormulaError::StackOverflow );
         return ocStop;      //! generate token instead?
     }
     NotLine();
@@ -1934,7 +1934,7 @@ OpCode FormulaCompiler::Expression()
 }
 
 
-void FormulaCompiler::SetError( sal_uInt16 /*nError*/ )
+void FormulaCompiler::SetError( FormulaError /*nError*/ )
 {
 }
 
@@ -1967,7 +1967,7 @@ bool FormulaCompiler::CompileTokenArray()
 {
     glSubTotal = false;
     bCorrected = false;
-    if (!pArr->GetCodeError() || !mbStopOnError)
+    if (pArr->GetCodeError() == FormulaError::NONE || !mbStopOnError)
     {
         if ( bAutoCorrect )
         {
@@ -1992,9 +1992,9 @@ bool FormulaCompiler::CompileTokenArray()
         OpCode eOp = Expression();
         // Some trailing garbage that doesn't form an expression?
         if (eOp != ocStop)
-            SetError( errOperatorExpected);
+            SetError( FormulaError::OperatorExpected);
 
-        sal_uInt16 nErrorBeforePop = pArr->GetCodeError();
+        FormulaError nErrorBeforePop = pArr->GetCodeError();
 
         while( pStack )
             PopTokenArray();
@@ -2006,10 +2006,10 @@ bool FormulaCompiler::CompileTokenArray()
         }
 
         // once an error, always an error
-        if( !pArr->GetCodeError() && nErrorBeforePop )
+        if( pArr->GetCodeError() == FormulaError::NONE && nErrorBeforePop != FormulaError::NONE )
             pArr->SetCodeError( nErrorBeforePop);
 
-        if (pArr->GetCodeError() && mbStopOnError)
+        if (pArr->GetCodeError() != FormulaError::NONE && mbStopOnError)
         {
             pArr->DelRPN();
             pArr->SetHyperLink( false);
@@ -2361,7 +2361,7 @@ OpCode FormulaCompiler::NextToken()
     if ( (eOp == ocPush || eOp == ocColRowNameAuto) &&
             !( (eLastOp == ocOpen) || (eLastOp == ocSep) ||
                 (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)) )
-        SetError( errOperatorExpected);
+        SetError( FormulaError::OperatorExpected);
     // Operator and Plus => operator
     if (eOp == ocAdd && (eLastOp == ocOpen || eLastOp == ocSep ||
                 (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)))
@@ -2375,7 +2375,7 @@ OpCode FormulaCompiler::NextToken()
                 && (eLastOp == ocOpen || eLastOp == ocSep ||
                     (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_STOP_UN_OP)))
         {
-            SetError( errVariableExpected);
+            SetError( FormulaError::VariableExpected);
             if ( bAutoCorrect && !pStack )
             {
                 if ( eOp == eLastOp || eLastOp == ocOpen )
@@ -2476,10 +2476,10 @@ void FormulaCompiler::PutCode( FormulaTokenRef& p )
             *pCode++ = p.get();
             ++pc;
         }
-        SetError( errCodeOverflow);
+        SetError( FormulaError::CodeOverflow);
         return;
     }
-    if (pArr->GetCodeError() && mbJumpCommandReorder)
+    if (pArr->GetCodeError() != FormulaError::NONE && mbJumpCommandReorder)
         return;
     ForceArrayOperator( p);
     p->IncRef();
