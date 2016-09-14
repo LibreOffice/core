@@ -54,6 +54,7 @@
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #endif
+#include <saltimer.hxx>
 
 #include "salinst.hxx"
 #include "salframe.hxx"
@@ -528,16 +529,33 @@ void Application::Reschedule( bool i_bAllEvents )
 
 void Scheduler::ProcessAllPendingEvents()
 {
-    int nSanity = 1000;
-    while( Scheduler::ProcessTaskScheduling() ||
-           ImplYield(false, true, 0) )
+    int nSanity = 1;
+    while( Scheduler::ProcessTaskScheduling( IdleRunPolicy::IDLE_VIA_LOOP )
+        || ImplYield( false, true, 0 ) )
     {
-        if (nSanity-- < 0)
+        if (0 == ++nSanity % 1000)
         {
-            SAL_WARN("vcl.schedule", "Unexpected volume of events to process");
-            break;
+            SAL_WARN("vcl.schedule", "ProcessAllPendingEvents: " << nSanity);
         }
     }
+#if OSL_DEBUG_LEVEL > 0
+    ImplSchedulerData* pSchedulerData = ImplGetSVData()->mpFirstSchedulerData;
+    bool bAnyIdle = false;
+    while ( pSchedulerData )
+    {
+        if ( pSchedulerData->mpScheduler && !pSchedulerData->mbInScheduler )
+        {
+            Idle *pIdle = dynamic_cast<Idle*>( pSchedulerData->mpScheduler );
+            if ( pIdle )
+            {
+                bAnyIdle = true;
+                SAL_WARN( "vcl.schedule",  "Unprocessed Idle: " << pSchedulerData->GetDebugName() );
+            }
+        }
+        pSchedulerData = pSchedulerData->mpNext;
+    }
+    assert( !bAnyIdle );
+#endif
 }
 
 void Application::Yield()

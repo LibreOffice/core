@@ -119,9 +119,6 @@ void Scheduler::ImplStartTimer( sal_uInt64 nMS, bool bForce )
         pSVData->mpSalTimer->SetCallback(Scheduler::CallbackTaskScheduling);
     }
 
-    if ( !nMS )
-        nMS = 1;
-
     // Only if smaller timeout, to avoid skipping.
     if (nMS < pSVData->mnTimerPeriod || (bForce && nMS != pSVData->mnTimerPeriod) )
     {
@@ -168,10 +165,9 @@ inline void Scheduler::UpdateMinPeriod( ImplSchedulerData *pSchedulerData,
 {
     if ( nMinPeriod > ImmediateTimeoutMs )
         pSchedulerData->mpScheduler->UpdateMinPeriod( nTime, nMinPeriod );
-    assert( nMinPeriod >= ImmediateTimeoutMs );
 }
 
-bool Scheduler::ProcessTaskScheduling()
+bool Scheduler::ProcessTaskScheduling( IdleRunPolicy eIdleRunPolicy )
 {
     ImplSVData*        pSVData = ImplGetSVData();
     sal_uInt64         nTime = tools::Time::GetSystemTicks();
@@ -239,8 +235,12 @@ next_entry:
         }
     }
 
-    if ( nMinPeriod != InfiniteTimeoutMs )
+    if ( nMinPeriod != InfiniteTimeoutMs
+            && ((eIdleRunPolicy == IdleRunPolicy::IDLE_VIA_TIMER)
+                || (nMinPeriod > ImmediateTimeoutMs)) )
+    {
         ImplStartTimer( nMinPeriod, true );
+    }
     else if ( pSVData->mpSalTimer )
         pSVData->mpSalTimer->Stop();
 
