@@ -103,9 +103,8 @@ namespace accessibility
     AccessibleGridControlTableCell::AccessibleGridControlTableCell(const css::uno::Reference<XAccessible >& _rxParent,
                                 ::svt::table::IAccessibleTable& _rTable,
                                 sal_Int32 _nRowPos,
-                                sal_uInt16 _nColPos,
-                                ::svt::table::AccessibleTableControlObjType  eObjType)
-        :AccessibleGridControlCell( _rxParent, _rTable, _nRowPos, _nColPos, eObjType )
+                                sal_uInt16 _nColPos)
+        :AccessibleGridControlCell( _rxParent, _rTable, _nRowPos, _nColPos, TCTYPE_TABLECELL )
     {
     }
 

@@ -31,8 +31,8 @@ using namespace ::comphelper;
 // class VCLXAccessibleMenuSeparator
 
 
-VCLXAccessibleMenuSeparator::VCLXAccessibleMenuSeparator( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu )
-    :OAccessibleMenuItemComponent( pParent, nItemPos, pMenu )
+VCLXAccessibleMenuSeparator::VCLXAccessibleMenuSeparator( Menu* pParent, sal_uInt16 nItemPos )
+    :OAccessibleMenuItemComponent( pParent, nItemPos, nullptr )
 {
 }
 

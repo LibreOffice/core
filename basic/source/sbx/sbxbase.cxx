@@ -119,15 +119,7 @@ void SbxBase::AddFactory( SbxFactory* pFac )
 {
     SbxAppData& r = GetSbxData_Impl();
 
-    // From 1996-03-06: take the HandleLast-Flag into account
-    sal_uInt16 nPos = r.m_Factories.size(); // Insert position
-    if( !pFac->IsHandleLast() )         // Only if not self HandleLast
-    {
-        // Rank new factory in front of factories with HandleLast
-        while (nPos > 0 && r.m_Factories[ nPos-1 ]->IsHandleLast())
-            nPos--;
-    }
-    r.m_Factories.insert(r.m_Factories.begin() + nPos, std::unique_ptr<SbxFactory>(pFac));
+    r.m_Factories.insert(r.m_Factories.begin(), std::unique_ptr<SbxFactory>(pFac));
 }
 
 void SbxBase::RemoveFactory( SbxFactory* pFac )
