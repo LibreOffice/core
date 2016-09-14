@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_87efb0af",
+        "filename": "binaryurp/source/writer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-09-14T15:55:41Z",
+      "side": 1,
+      "message": "the\n\n  SAL_MAX_INT32 \u003c\u003d SAL_MAX_SIZE\n\nno longer makes sense now\n\n(and the use of sal_Size for k was originally motivated by the use of rtl_copyMemory, which was replaced by memcpy in a naive way with 36a2db3722b79ed3df075d7f3fa77fb761bcf5a4; given the limiting factor is the sal_Int32-based \n\n  bridge_-\u003egetConnection()-\u003ewrite(s);\n\nit probably makes sense to change k to sal_Int32 instead)",
+      "range": {
+        "startLine": 414,
+        "startChar": 49,
+        "endLine": 414,
+        "endChar": 78
+      },
+      "revId": "5a7f08a6cfca24dc26abfe4a8a544eb4bd4caf04",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_c708c894",
         "filename": "vcl/source/window/mouse.cxx",
         "patchSetId": 2
