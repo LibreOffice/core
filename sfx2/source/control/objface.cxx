@@ -56,9 +56,9 @@ struct SfxObjectUI_Impl
     sal_uInt16  nPos;
     sal_uInt32  nResId;
     bool        bContext;
-    sal_uInt32  nFeature;
+    SfxShellFeature nFeature;
 
-    SfxObjectUI_Impl(sal_uInt16 n, sal_uInt32 nId, sal_uInt32 nFeat) :
+    SfxObjectUI_Impl(sal_uInt16 n, sal_uInt32 nId, SfxShellFeature nFeat) :
         nPos(n),
         nResId(nId),
         bContext(false),
@@ -95,7 +95,7 @@ struct SfxInterface_Impl
     }
 };
 
-static SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, sal_uInt32 nResId, sal_uInt32 nFeature);
+static SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, sal_uInt32 nResId, SfxShellFeature nFeature);
 
 // constuctor, registeres a new unit
 SfxInterface::SfxInterface( const char *pClassName,
@@ -362,17 +362,17 @@ void SfxInterface::RegisterPopupMenu( const OUString& rResourceName )
 
 void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, sal_uInt32 nResId)
 {
-    RegisterObjectBar(nPos, nResId, 0UL);
+    RegisterObjectBar(nPos, nResId, SfxShellFeature::NONE);
 }
 
-void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, sal_uInt32 nResId, sal_uInt32 nFeature)
+void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, sal_uInt32 nResId, SfxShellFeature nFeature)
 {
     SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl(nPos, nResId, nFeature);
     if ( pUI )
         pImplData->aObjectBars.push_back(pUI);
 }
 
-SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, sal_uInt32 nResId, sal_uInt32 nFeature)
+SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, sal_uInt32 nResId, SfxShellFeature nFeature)
 {
     if ((nPos & SFX_VISIBILITY_MASK) == 0)
         nPos |= SFX_VISIBILITY_STANDARD;
@@ -428,10 +428,10 @@ sal_uInt16 SfxInterface::GetObjectBarCount() const
 
 void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext)
 {
-    RegisterChildWindow(nId, bContext, 0UL);
+    RegisterChildWindow(nId, bContext, SfxShellFeature::NONE);
 }
 
-void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, sal_uInt32 nFeature)
+void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, SfxShellFeature nFeature)
 {
     SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, nId, nFeature);
     pUI->bContext = bContext;
@@ -464,7 +464,7 @@ sal_uInt32 SfxInterface::GetChildWindowId (sal_uInt16 nNo) const
     return nRet;
 }
 
-sal_uInt32 SfxInterface::GetChildWindowFeature (sal_uInt16 nNo) const
+SfxShellFeature SfxInterface::GetChildWindowFeature (sal_uInt16 nNo) const
 {
     if ( pGenoType )
     {
@@ -504,7 +504,7 @@ sal_uInt32 SfxInterface::GetStatusBarId() const
         return pImplData->nStatBarResId;
 }
 
-sal_uInt32 SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const
+SfxShellFeature SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const
 {
     bool bGenoType = (pGenoType != nullptr && pGenoType->UseAsSuperClass());
     if ( bGenoType )

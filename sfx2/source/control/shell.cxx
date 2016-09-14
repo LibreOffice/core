@@ -657,7 +657,7 @@ SfxObjectShell* SfxShell::GetObjectShell()
         return nullptr;
 }
 
-bool SfxShell::HasUIFeature( sal_uInt32 )
+bool SfxShell::HasUIFeature(SfxShellFeature) const
 {
     return false;
 }

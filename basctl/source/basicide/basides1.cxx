@@ -952,11 +952,12 @@ void Shell::GetState(SfxItemSet &rSet)
         pCurWin->GetState( rSet );
 }
 
-bool Shell::HasUIFeature( sal_uInt32 nFeature )
+bool Shell::HasUIFeature(SfxShellFeature nFeature) const
 {
+    assert((nFeature & ~SfxShellFeature::BasicMask) != SfxShellFeature::NONE);
     bool bResult = false;
 
-    if ( (nFeature & BASICIDE_UI_FEATURE_SHOW_BROWSER) == BASICIDE_UI_FEATURE_SHOW_BROWSER )
+    if (nFeature & SfxShellFeature::BasicShowBrowser)
     {
         // fade out (in) property browser in module (dialog) windows
         if (dynamic_cast<DialogWindow*>(pCurWin.get()) && !pCurWin->IsReadOnly())

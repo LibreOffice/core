@@ -555,17 +555,20 @@ void SwView::GetDrawState(SfxItemSet &rSet)
         }
 }
 
-bool SwView::HasUIFeature( sal_uInt32 nFeature )
+bool SwView::HasUIFeature(SfxShellFeature nFeature) const
 {
-    bool bRet = false;
+    assert((nFeature & ~SfxShellFeature::SwMask) != SfxShellFeature::NONE);
     switch(nFeature)
     {
-        case CHILDWIN_LABEL     : bRet = m_pWrtShell->IsLabelDoc(); break;
+    case SfxShellFeature::SwChildWindowLabel:
+        return m_pWrtShell->IsLabelDoc();
 #if HAVE_FEATURE_DBCONNECTIVITY
-        case CHILDWIN_MAILMERGE : bRet = nullptr != GetMailMergeConfigItem(); break;
+    case SfxShellFeature::SwChildWindowMailmerge:
+        return (nullptr != GetMailMergeConfigItem());
 #endif
+    default:
+        return false;
     }
-    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
