@@ -44,9 +44,9 @@ public:
                 }
 };
 
-static sal_Size GetSvError( DWORD nWntError )
+static std::size_t GetSvError( DWORD nWntError )
 {
-    static struct { DWORD wnt; sal_Size sv; } errArr[] =
+    static struct { DWORD wnt; std::size_t sv; } errArr[] =
     {
         { ERROR_SUCCESS,                SVSTREAM_OK },
         { ERROR_ACCESS_DENIED,          SVSTREAM_ACCESS_DENIED },
@@ -86,7 +86,7 @@ static sal_Size GetSvError( DWORD nWntError )
         { (DWORD)0xFFFFFFFF, SVSTREAM_GENERALERROR }
     };
 
-    sal_Size nRetVal = SVSTREAM_GENERALERROR;    // default error
+    std::size_t nRetVal = SVSTREAM_GENERALERROR;    // default error
     int i=0;
     do
     {
@@ -133,7 +133,7 @@ SvFileStream::~SvFileStream()
 }
 
 /// Does not check for EOF, makes isEof callable
-sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
+std::size_t SvFileStream::GetData( void* pData, std::size_t nSize )
 {
     DWORD nCount = 0;
     if( IsOpen() )
@@ -141,14 +141,14 @@ sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
         bool bResult = ReadFile(pInstanceData->hFile,(LPVOID)pData,nSize,&nCount,NULL);
         if( !bResult )
         {
-            sal_Size nTestError = GetLastError();
+            std::size_t nTestError = GetLastError();
             SetError(::GetSvError( nTestError ) );
         }
     }
     return (DWORD)nCount;
 }
 
-sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
+std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
 {
     DWORD nCount = 0;
     if( IsOpen() )
@@ -192,7 +192,7 @@ void SvFileStream::FlushData()
     }
 }
 
-bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
+bool SvFileStream::LockRange( std::size_t nByteOffset, std::size_t nBytes )
 {
     bool bRetVal = false;
     if( IsOpen() )
@@ -204,7 +204,7 @@ bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     return bRetVal;
 }
 
-bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
+bool SvFileStream::UnlockRange( std::size_t nByteOffset, std::size_t nBytes )
 {
     bool bRetVal = false;
     if( IsOpen() )
@@ -339,7 +339,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     if( (pInstanceData->hFile==INVALID_HANDLE_VALUE) &&
          (nAccessMode & GENERIC_WRITE))
     {
-        sal_Size nErr = ::GetSvError( GetLastError() );
+        std::size_t nErr = ::GetSvError( GetLastError() );
         if(nErr==SVSTREAM_ACCESS_DENIED || nErr==SVSTREAM_SHARING_VIOLATION)
         {
             nMode &= (~StreamMode::WRITE);
@@ -409,7 +409,7 @@ void SvFileStream::SetSize(sal_uInt64 const nSize)
     {
         int bError = false;
         HANDLE hFile = pInstanceData->hFile;
-        sal_Size nOld = SetFilePointer( hFile, 0L, NULL, FILE_CURRENT );
+        DWORD const nOld = SetFilePointer( hFile, 0L, NULL, FILE_CURRENT );
         if( nOld != 0xffffffff )
         {
             if( SetFilePointer(hFile,nSize,NULL,FILE_BEGIN ) != 0xffffffff)

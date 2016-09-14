@@ -53,7 +53,7 @@ public:
     virtual void            SaveXml( XclExpXmlStream& rStrm ) override;
 
     virtual sal_uInt16          GetNum() const = 0;
-    virtual sal_Size        GetLen() const = 0;
+    virtual std::size_t     GetLen() const = 0;
 
 protected:
     virtual void            SaveCont( XclExpStream& rStrm );
@@ -72,7 +72,7 @@ protected:
 public:
     virtual void            Save( XclExpStream& rStrm ) override;
     virtual sal_uInt16          GetNum() const override;
-    virtual sal_Size        GetLen() const override;
+    virtual std::size_t     GetLen() const override;
 };
 
 //--------------------------------------------------------- class ExcDummyRec -
@@ -100,7 +100,7 @@ protected:
     inline                  ExcBoolRecord() : bVal( false ) {}
 
 public:
-    virtual sal_Size        GetLen() const override;
+    virtual std::size_t     GetLen() const override;
 };
 
 //--------------------------------------------------------- class ExcBof_Base -
@@ -128,7 +128,7 @@ public:
                             ExcBof();
 
     virtual sal_uInt16          GetNum() const override;
-    virtual sal_Size        GetLen() const override;
+    virtual std::size_t     GetLen() const override;
 };
 
 //------------------------------------------------------------- class ExcBofW -
@@ -142,7 +142,7 @@ public:
                             ExcBofW();
 
     virtual sal_uInt16          GetNum() const override;
-    virtual sal_Size        GetLen() const override;
+    virtual std::size_t     GetLen() const override;
 };
 
 //-------------------------------------------------------------- class ExcEof -
@@ -152,7 +152,7 @@ class ExcEof : public ExcRecord
 private:
 public:
     virtual sal_uInt16          GetNum() const override;
-    virtual sal_Size        GetLen() const override;
+    virtual std::size_t     GetLen() const override;
 };
 
 //--------------------------------------------------------- class ExcDummy_00 -
@@ -162,9 +162,9 @@ class ExcDummy_00 : public ExcDummyRec
 {
 private:
     static const sal_uInt8      pMyData[];
-    static const sal_Size   nMyLen;
+    static const std::size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen() const override;
+    virtual std::size_t        GetLen() const override;
     virtual const sal_uInt8*        GetData() const override;
 };
 
@@ -212,9 +212,9 @@ class ExcDummy_040 : public ExcDummyRec
 {
 private:
     static const sal_uInt8      pMyData[];
-    static const sal_Size   nMyLen;
+    static const std::size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen() const override;
+    virtual std::size_t        GetLen() const override;
     virtual const sal_uInt8*        GetData() const override;
 };
 
@@ -222,9 +222,9 @@ class ExcDummy_041 : public ExcDummyRec
 {
 private:
     static const sal_uInt8      pMyData[];
-    static const sal_Size   nMyLen;
+    static const std::size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen() const override;
+    virtual std::size_t        GetLen() const override;
     virtual const sal_uInt8*        GetData() const override;
 };
 
@@ -271,7 +271,7 @@ private:
 
 public:
                             ExcBundlesheet( RootData& rRootData, SCTAB nTab );
-    virtual sal_Size        GetLen() const override;
+    virtual std::size_t     GetLen() const override;
 };
 
 //--------------------------------------------------------- class ExcDummy_02 -
@@ -281,9 +281,9 @@ class ExcDummy_02a : public ExcDummyRec
 {
 private:
     static const sal_uInt8      pMyData[];
-    static const sal_Size   nMyLen;
+    static const std::size_t   nMyLen;
 public:
-    virtual sal_Size        GetLen() const override;
+    virtual std::size_t        GetLen() const override;
     virtual const sal_uInt8*        GetData() const override;
 };
 
@@ -359,7 +359,7 @@ public:
                             ~ExcFilterCondition();
 
     inline bool             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
-    sal_uLong               GetTextBytes() const;
+    std::size_t             GetTextBytes() const;
 
     void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, OUString* pT );
 

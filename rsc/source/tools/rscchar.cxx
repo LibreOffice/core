@@ -30,7 +30,7 @@
 
 char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
 {
-    sal_Size nMaxUniCodeBuf = strlen( pStr ) + 1;
+    std::size_t nMaxUniCodeBuf = strlen( pStr ) + 1;
     if( nMaxUniCodeBuf * 6 > 0x0FFFFF )
         RscExit( 10 );
 

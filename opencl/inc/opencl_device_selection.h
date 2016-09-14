@@ -347,7 +347,7 @@ public:
 
     bool open(SvStream* pStream)
     {
-        sal_Size nSize = pStream->remainingSize();
+        std::size_t nSize = pStream->remainingSize();
         std::vector<sal_uInt8> aBuffer(nSize + 1);
         pStream->ReadBytes(aBuffer.data(), nSize);
         aBuffer[nSize] = 0;

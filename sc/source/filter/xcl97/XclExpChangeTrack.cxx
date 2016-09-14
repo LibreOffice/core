@@ -69,9 +69,9 @@ static void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
 
 // write string and fill rest of <nLength> with zero bytes
 // <nLength> is without string header
-static void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rString, sal_Size nLength )
+static void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rString, std::size_t nLength )
 {
-    sal_Size nStrBytes = rString.GetBufferSize();
+    std::size_t nStrBytes = rString.GetBufferSize();
     OSL_ENSURE( nLength >= nStrBytes, "lcl_WriteFixedString - String too long" );
     if( rString.Len() > 0 )
         rStrm << rString;
@@ -88,7 +88,7 @@ static inline void lcl_GenerateGUID( sal_uInt8* pGUID, bool& rValidGUID )
 static inline void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
 {
     rStrm.SetSliceSize( 16 );
-    for( sal_Size nIndex = 0; nIndex < 16; nIndex++ )
+    for( std::size_t nIndex = 0; nIndex < 16; nIndex++ )
         rStrm << pGUID[ nIndex ];
     rStrm.SetSliceSize( 0 );
 }
@@ -121,7 +121,7 @@ sal_uInt16 XclExpUserBView::GetNum() const
     return 0x01A9;
 }
 
-sal_Size XclExpUserBView::GetLen() const
+std::size_t XclExpUserBView::GetLen() const
 {
     return 50 + ((sUsername.Len() > 0) ? sUsername.GetSize() : 0);
 }
@@ -181,7 +181,7 @@ sal_uInt16 XclExpUsersViewBegin::GetNum() const
     return 0x01AA;
 }
 
-sal_Size XclExpUsersViewBegin::GetLen() const
+std::size_t XclExpUsersViewBegin::GetLen() const
 {
     return 64;
 }
@@ -196,7 +196,7 @@ sal_uInt16 XclExpUsersViewEnd::GetNum() const
     return 0x01AB;
 }
 
-sal_Size XclExpUsersViewEnd::GetLen() const
+std::size_t XclExpUsersViewEnd::GetLen() const
 {
     return 2;
 }
@@ -211,7 +211,7 @@ sal_uInt16 XclExpChTr0x0191::GetNum() const
     return 0x0191;
 }
 
-sal_Size XclExpChTr0x0191::GetLen() const
+std::size_t XclExpChTr0x0191::GetLen() const
 {
     return 2;
 }
@@ -227,7 +227,7 @@ sal_uInt16 XclExpChTr0x0198::GetNum() const
     return 0x0198;
 }
 
-sal_Size XclExpChTr0x0198::GetLen() const
+std::size_t XclExpChTr0x0198::GetLen() const
 {
     return 4;
 }
@@ -243,7 +243,7 @@ sal_uInt16 XclExpChTr0x0192::GetNum() const
     return 0x0192;
 }
 
-sal_Size XclExpChTr0x0192::GetLen() const
+std::size_t XclExpChTr0x0192::GetLen() const
 {
     return 512;
 }
@@ -258,7 +258,7 @@ sal_uInt16 XclExpChTr0x0197::GetNum() const
     return 0x0197;
 }
 
-sal_Size XclExpChTr0x0197::GetLen() const
+std::size_t XclExpChTr0x0197::GetLen() const
 {
     return 2;
 }
@@ -272,7 +272,7 @@ sal_uInt16 XclExpChTrEmpty::GetNum() const
     return nRecNum;
 }
 
-sal_Size XclExpChTrEmpty::GetLen() const
+std::size_t XclExpChTrEmpty::GetLen() const
 {
     return 0;
 }
@@ -291,7 +291,7 @@ sal_uInt16 XclExpChTr0x0195::GetNum() const
     return 0x0195;
 }
 
-sal_Size XclExpChTr0x0195::GetLen() const
+std::size_t XclExpChTr0x0195::GetLen() const
 {
     return 162;
 }
@@ -313,7 +313,7 @@ sal_uInt16 XclExpChTr0x0194::GetNum() const
     return 0x0194;
 }
 
-sal_Size XclExpChTr0x0194::GetLen() const
+std::size_t XclExpChTr0x0194::GetLen() const
 {
     return 162;
 }
@@ -340,7 +340,7 @@ sal_uInt16 XclExpChTrHeader::GetNum() const
     return 0x0196;
 }
 
-sal_Size XclExpChTrHeader::GetLen() const
+std::size_t XclExpChTrHeader::GetLen() const
 {
     return 50;
 }
@@ -531,7 +531,7 @@ sal_uInt16 XclExpChTrInfo::GetNum() const
     return 0x0138;
 }
 
-sal_Size XclExpChTrInfo::GetLen() const
+std::size_t XclExpChTrInfo::GetLen() const
 {
     return 158;
 }
@@ -642,7 +642,7 @@ sal_uInt16 XclExpChTrTabId::GetNum() const
     return 0x013D;
 }
 
-sal_Size XclExpChTrTabId::GetLen() const
+std::size_t XclExpChTrTabId::GetLen() const
 {
     return nTabCount << 1;
 }
@@ -743,7 +743,7 @@ void XclExpChTrAction::Save( XclExpStream& rStrm )
     CompleteSaveAction( rStrm );
 }
 
-sal_Size XclExpChTrAction::GetLen() const
+std::size_t XclExpChTrAction::GetLen() const
 {
     return GetHeaderByteCount() + GetActionByteCount();
 }
@@ -932,7 +932,7 @@ void XclExpChTrCellContent::GetCellData(
                 rpData->mxTokArr = GetFormulaCompiler().CreateFormula(
                     EXC_FMLATYPE_CELL, *pTokenArray, &pFmlCell->aPos, &rRefLog );
                 rpData->nType = EXC_CHTR_TYPE_FORMULA;
-                sal_Size nSize = rpData->mxTokArr->GetSize() + 3;
+                std::size_t nSize = rpData->mxTokArr->GetSize() + 3;
 
                 for( XclExpRefLog::const_iterator aIt = rRefLog.begin(), aEnd = rRefLog.end(); aIt != aEnd; ++aIt )
                 {
@@ -941,7 +941,7 @@ void XclExpChTrCellContent::GetCellData(
                     else
                         nSize += (aIt->mnFirstXclTab == aIt->mnLastXclTab) ? 6 : 8;
                 }
-                rpData->nSize = ::std::min< sal_Size >( nSize, 0xFFFF );
+                rpData->nSize = ::std::min< std::size_t >( nSize, 0xFFFF );
                 rXclLength1 = 0x00000052;
                 rXclLength2 = 0x0018;
             }
@@ -970,9 +970,9 @@ sal_uInt16 XclExpChTrCellContent::GetNum() const
     return 0x013B;
 }
 
-sal_Size XclExpChTrCellContent::GetActionByteCount() const
+std::size_t XclExpChTrCellContent::GetActionByteCount() const
 {
-    sal_Size nLen = 16;
+    std::size_t nLen = 16;
     if( pOldData )
         nLen += pOldData->nSize;
     if( pNewData )
@@ -1166,7 +1166,7 @@ sal_uInt16 XclExpChTrInsert::GetNum() const
     return 0x0137;
 }
 
-sal_Size XclExpChTrInsert::GetActionByteCount() const
+std::size_t XclExpChTrInsert::GetActionByteCount() const
 {
     return 16;
 }
@@ -1237,7 +1237,7 @@ sal_uInt16 XclExpChTrInsertTab::GetNum() const
     return 0x014D;
 }
 
-sal_Size XclExpChTrInsertTab::GetActionByteCount() const
+std::size_t XclExpChTrInsertTab::GetActionByteCount() const
 {
     return 276;
 }
@@ -1304,7 +1304,7 @@ sal_uInt16 XclExpChTrMoveRange::GetNum() const
     return 0x0140;
 }
 
-sal_Size XclExpChTrMoveRange::GetActionByteCount() const
+std::size_t XclExpChTrMoveRange::GetActionByteCount() const
 {
     return 24;
 }
@@ -1356,7 +1356,7 @@ sal_uInt16 XclExpChTr0x014A::GetNum() const
     return 0x014A;
 }
 
-sal_Size XclExpChTr0x014A::GetActionByteCount() const
+std::size_t XclExpChTr0x014A::GetActionByteCount() const
 {
     return 14;
 }
@@ -1378,7 +1378,7 @@ void XclExpChTr0x014A::SaveXml( XclExpXmlStream& rStrm )
     pStream->endElement( XML_rfmt );
 }
 
-sal_Size ExcXmlRecord::GetLen() const
+std::size_t ExcXmlRecord::GetLen() const
 {
     return 0;
 }

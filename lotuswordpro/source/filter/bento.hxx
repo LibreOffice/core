@@ -181,8 +181,8 @@ public: // Overridden methods
     sal_uLong GetSize() { return m_ulValueLength; };
 protected: // Overridden methods
 
-    virtual sal_uLong   GetData( void* pData, sal_uLong nSize ) override;
-    virtual sal_uLong   PutData( const void* pData, sal_uLong nSize ) override;
+    virtual std::size_t GetData(void* pData, std::size_t nSize) override;
+    virtual std::size_t PutData(const void* pData, std::size_t nSize) override;
     virtual sal_uInt64   SeekPos( sal_uInt64 nPos ) override;
     virtual void    SetSize( sal_uInt64 nSize ) override;
     virtual void    FlushData() override;

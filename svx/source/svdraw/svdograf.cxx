@@ -1430,7 +1430,7 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
                 sal_uInt8 * pBuffer = new sal_uInt8[ nSize ];
                 memcpy( pBuffer, pSourceData, nSize );
 
-                SvMemoryStream* pStream = new SvMemoryStream( static_cast<void*>(pBuffer), (sal_Size)nSize, StreamMode::READ );
+                SvMemoryStream* pStream = new SvMemoryStream( static_cast<void*>(pBuffer), (std::size_t)nSize, StreamMode::READ );
                 pStream->ObjectOwnsMemory( true );
                 xStream.set( new utl::OInputStreamWrapper( pStream, true ) );
             }

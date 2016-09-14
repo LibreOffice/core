@@ -163,7 +163,7 @@ throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css
     sal_uInt32 nRead = mpStream->ReadBytes(static_cast<void*>(aData.getArray()), nBytesToRead);
     checkError();
 
-    if (nRead < (sal_Size)aData.getLength())
+    if (nRead < (std::size_t)aData.getLength())
         aData.realloc( nRead );
 
     if ( sal::static_int_cast<sal_uInt32>(nBytesToRead) > nRead )
@@ -315,7 +315,7 @@ void OTempFileService::checkConnected ()
         mpStream = mpTempFile->GetStream( StreamMode::STD_READWRITE );
         if ( mpStream && mbHasCachedPos )
         {
-            mpStream->Seek( sal::static_int_cast<sal_Size>(mnCachedPos) );
+            mpStream->Seek( sal::static_int_cast<std::size_t>(mnCachedPos) );
             if ( mpStream->SvStream::GetError () == ERRCODE_NONE )
             {
                 mbHasCachedPos = false;

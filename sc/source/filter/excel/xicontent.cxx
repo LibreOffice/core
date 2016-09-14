@@ -113,7 +113,7 @@ void lclAppendString32( OUString& rString, XclImpStream& rStrm, sal_uInt32 nChar
     sal_uInt16 nReadChars = ulimit_cast< sal_uInt16 >( nChars );
     rString += rStrm.ReadRawUniString( nReadChars, b16Bit );
     // ignore remaining chars
-    sal_Size nIgnore = nChars - nReadChars;
+    std::size_t nIgnore = nChars - nReadChars;
     if( b16Bit )
         nIgnore *= 2;
     rStrm.Ignore( nIgnore );
