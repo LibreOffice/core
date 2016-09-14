@@ -672,8 +672,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
     }
     // Page does not yet exist in the ctor, that's why we do it here!
 
-    else if ( m_nDlgType == 1100 ||
-              m_nDlgType == 1101 )
+    else if (m_nDlgType == 1101) // nNoArrowNoShadowDlg from chart2/source/controller/dialogs/dlg_ObjectProperties.cxx
     {
         m_pFlLineEnds->Hide();
         m_pFLEdgeStyle->Hide();
