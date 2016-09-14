@@ -49,7 +49,7 @@ public:
                     Player& i_rPlayer,
                     NSView* i_pParentView
                     );
-    virtual ~Window();
+    virtual ~Window() override;
 
     void    processGraphEvent();
     void    updatePointer();

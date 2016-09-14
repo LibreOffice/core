@@ -33,7 +33,7 @@ class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
 public:
 
     explicit FrameGrabber( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
-    virtual  ~FrameGrabber();
+    virtual  ~FrameGrabber() override;
 
     bool    create( const ::rtl::OUString& rURL );
     bool    create( AVAsset* pMovie );

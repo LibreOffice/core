@@ -35,7 +35,7 @@ class Player
 {
 public:
     explicit Player( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
-    virtual  ~Player();
+    virtual  ~Player() override;
 
     bool create( const ::rtl::OUString& rURL );
     bool create( AVAsset* );

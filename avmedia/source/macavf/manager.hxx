@@ -34,7 +34,7 @@ class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
 public:
 
     Manager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
-    virtual ~Manager();
+    virtual ~Manager() override;
 
     // XManager
     virtual css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const ::rtl::OUString& aURL ) throw (css::uno::RuntimeException) override;
