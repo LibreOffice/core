@@ -58,7 +58,7 @@ class CoreTextFontFace : public PhysicalFontFace
 {
 public:
                                     CoreTextFontFace( const FontAttributes&, sal_IntPtr nFontID );
-    virtual                         ~CoreTextFontFace();
+    virtual                         ~CoreTextFontFace() override;
 
     PhysicalFontFace*               Clone() const override;
     LogicalFontInstance*            CreateFontInstance( FontSelectPattern& ) const override;
@@ -189,7 +189,7 @@ protected:
 
 public:
                             AquaSalGraphics();
-    virtual                 ~AquaSalGraphics();
+    virtual                 ~AquaSalGraphics() override;
 
     bool                    IsPenVisible() const    { return maLineColor.IsVisible(); }
     bool                    IsBrushVisible() const  { return maFillColor.IsVisible(); }

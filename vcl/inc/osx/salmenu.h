@@ -53,7 +53,7 @@ private:
     static void statusLayout();
 public:
     AquaSalMenu( bool bMenuBar );
-    virtual ~AquaSalMenu();
+    virtual ~AquaSalMenu() override;
 
     virtual bool VisibleMenuBar() override;
     // must return true to actually display native menu bars
@@ -100,7 +100,7 @@ class AquaSalMenuItem : public SalMenuItem
 {
 public:
     AquaSalMenuItem( const SalItemParams* );
-    virtual ~AquaSalMenuItem();
+    virtual ~AquaSalMenuItem() override;
 
     sal_uInt16          mnId;                 // Item ID
     VclPtr<Menu>        mpVCLMenu;            // VCL Menu into which this MenuItem is inserted

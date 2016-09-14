@@ -103,7 +103,7 @@ public:
     */
     AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle );
 
-    virtual ~AquaSalFrame();
+    virtual ~AquaSalFrame() override;
 
     virtual SalGraphics*        AcquireGraphics() override;
     virtual void                ReleaseGraphics( SalGraphics* pGraphics ) override;

@@ -29,7 +29,7 @@ class VCL_DLLPUBLIC AquaSalSystem : public SalSystem
 {
 public:
     AquaSalSystem() {}
-    virtual ~AquaSalSystem();
+    virtual ~AquaSalSystem() override;
 
     // get info about the display
     virtual unsigned int GetDisplayScreenCount() override;

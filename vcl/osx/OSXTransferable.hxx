@@ -41,7 +41,7 @@ public:
                            DataFlavorMapperPtr_t pDataFlavorMapper,
                            NSPasteboard* pasteboard);
 
-  virtual ~OSXTransferable();
+  virtual ~OSXTransferable() override;
   OSXTransferable(const OSXTransferable&) = delete;
   OSXTransferable& operator=(const OSXTransferable&) = delete;
 

@@ -81,7 +81,7 @@ public:
   AquaClipboard(NSPasteboard* pasteboard = nullptr,
                 bool bUseSystemClipboard = true);
 
-  virtual ~AquaClipboard();
+  virtual ~AquaClipboard() override;
   AquaClipboard(const AquaClipboard&) = delete;
   AquaClipboard& operator=(const AquaClipboard&) = delete;
 

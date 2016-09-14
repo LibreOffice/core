@@ -74,7 +74,7 @@ class DragSource : public ::cppu::BaseMutex,
 {
 public:
   DragSource();
-  virtual ~DragSource();
+  virtual ~DragSource() override;
   DragSource(const DragSource&) = delete;
   DragSource& operator=(const DragSource&) = delete;
 

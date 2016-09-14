@@ -51,7 +51,7 @@ public:
 
 public:
     QuartzSalBitmap();
-    virtual ~QuartzSalBitmap();
+    virtual ~QuartzSalBitmap() override;
 
 public:
 

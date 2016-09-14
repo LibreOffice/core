@@ -62,7 +62,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     public:
     AquaSalInfoPrinter( const SalPrinterQueueInfo& pInfo );
-    virtual ~AquaSalInfoPrinter();
+    virtual ~AquaSalInfoPrinter() override;
 
     void                        SetupPrinterGraphics( CGContextRef i_xContext ) const;
 
@@ -117,7 +117,7 @@ class AquaSalPrinter : public SalPrinter
     AquaSalInfoPrinter*         mpInfoPrinter;          // pointer to the compatible InfoPrinter
     public:
     AquaSalPrinter( AquaSalInfoPrinter* i_pInfoPrinter );
-    virtual ~AquaSalPrinter();
+    virtual ~AquaSalPrinter() override;
 
     virtual bool                    StartJob( const OUString* i_pFileName,
                                               const OUString& i_rJobName,

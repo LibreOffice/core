@@ -79,7 +79,7 @@ class DropTarget: public cppu::BaseMutex,
 {
 public:
   DropTarget();
-  virtual ~DropTarget();
+  virtual ~DropTarget() override;
   DropTarget(const DropTarget&) = delete;
   DropTarget& operator=(const DropTarget&) = delete;
 

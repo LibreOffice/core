@@ -34,7 +34,7 @@ class CTLayout : public SalLayout
 {
 public:
     explicit        CTLayout( const CoreTextStyle* );
-    virtual         ~CTLayout();
+    virtual         ~CTLayout() override;
 
     virtual bool    LayoutText( ImplLayoutArgs& ) override;
     virtual void    AdjustLayout( ImplLayoutArgs& ) override;

@@ -148,7 +148,7 @@ class DataProviderBaseImpl : public DataProvider
 public:
   DataProviderBaseImpl(const Any& data);
   DataProviderBaseImpl(id data);
-  virtual ~DataProviderBaseImpl();
+  virtual ~DataProviderBaseImpl() override;
 
 protected:
   Any mData;

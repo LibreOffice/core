@@ -35,7 +35,7 @@ class DragSourceContext: public cppu::BaseMutex,
 {
 public:
   DragSourceContext();
-  virtual ~DragSourceContext();
+  virtual ~DragSourceContext() override;
   DragSourceContext(const DragSourceContext&) = delete;
   DragSourceContext& operator=(const DragSourceContext&) = delete;
 

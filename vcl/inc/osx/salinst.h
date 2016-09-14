@@ -79,7 +79,7 @@ public:
 
 public:
     AquaSalInstance();
-    virtual ~AquaSalInstance();
+    virtual ~AquaSalInstance() override;
 
     virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
     virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
