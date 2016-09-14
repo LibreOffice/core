@@ -26,19 +26,27 @@ class ImplSchedulerDataPrinter(object):
 
     def as_string(self, gdbobj):
         if gdbobj['mpTask']:
-            sched = gdbobj['mpTask'].dereference()
-            if gdbobj['mpTask'].dynamic_cast( self.timer_type_ptr ):
-                sched_type = "Timer"
-            elif gdbobj['mpTask'].dynamic_cast( self.idle_type_ptr ):
-                sched_type = "Idle"
+            task  = gdbobj['mpTask'].dereference()
+            timer = gdbobj['mpTask'].dynamic_cast( self.timer_type_ptr )
+            idle  = gdbobj['mpTask'].dynamic_cast( self.idle_type_ptr )
+            if idle:
+                task_type = "Idle"
+            elif timer:
+                task_type = "Timer"
             else:
-                assert sched_type, "Task object neither Timer nor Idle"
-            res = "{:7s}{:10s} active: {:6s}".format( sched_type, str(sched['mePriority']), str(sched['mbActive']) )
-            name = sched['mpDebugName']
+                task_type = "Task"
+            res = "{:7s}{:10s} active: {:6s}".format( task_type, str(task['mePriority']), str(task['mbActive']) )
+            name = task['mpDebugName']
             if not name:
                 res = res + "   (task debug name not set)"
             else:
-                res = "{} '{}' ({})".format(res, str(name.string()), str(sched.dynamic_type))
+                res = "{} '{}' ({})".format(res, str(name.string()), str(task.dynamic_type))
+            val_type = gdb.lookup_type(str( task.dynamic_type )).pointer()
+            timer = gdbobj['mpTask'].cast( val_type )
+            if (task_type == "Timer"):
+                res = "{}: {}ms".format(res, timer['mnTimeout'])
+            else:
+                assert 1 == timer['mnTimeout'], "Idle with timeout == {}".format( timer['mnTimeout'] )
             return res
         else:
             assert gdbobj['mbDelete'], "No task set and not marked for deletion!"

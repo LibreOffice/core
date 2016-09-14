@@ -20,25 +20,9 @@
 #include <vcl/idle.hxx>
 #include "saltimer.hxx"
 
-void Idle::Invoke()
+Idle::Idle( const sal_Char *pDebugName )
+    : Timer( pDebugName )
 {
-    maIdleHdl.Call( this );
-}
-
-Idle& Idle::operator=( const Idle& rIdle )
-{
-    Task::operator=(rIdle);
-    maIdleHdl = rIdle.maIdleHdl;
-    return *this;
-}
-
-Idle::Idle( const sal_Char *pDebugName ) : Task( pDebugName )
-{
-}
-
-Idle::Idle( const Idle& rIdle ) : Task(rIdle)
-{
-    maIdleHdl = rIdle.maIdleHdl;
 }
 
 void Idle::Start()
