@@ -1412,7 +1412,7 @@ PixmapHolder* SelectionManager::getPixmapHolder( Atom selection )
     return it->second->m_pPixmap;
 }
 
-static sal_Size GetTrueFormatSize(int nFormat)
+static std::size_t GetTrueFormatSize(int nFormat)
 {
     // http://mail.gnome.org/archives/wm-spec-list/2003-March/msg00067.html
     return nFormat == 32 ? sizeof(long) : nFormat/8;
@@ -1541,7 +1541,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
         }
         else
         {
-            sal_Size nUnitSize = GetTrueFormatSize(nFormat);
+            std::size_t nUnitSize = GetTrueFormatSize(nFormat);
             XChangeProperty( m_pDisplay,
                              requestor,
                              property,
@@ -1846,7 +1846,7 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
                      nFormat, nBytes );
 #endif
 
-            sal_Size nUnitSize = GetTrueFormatSize(nFormat);
+            std::size_t nUnitSize = GetTrueFormatSize(nFormat);
 
             if( it->second->m_eState == Selection::WaitingForData ||
                 it->second->m_eState == Selection::WaitingForResponse )
@@ -1948,7 +1948,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
                          (const unsigned char*)rInc.m_aData.getConstArray()+rInc.m_nBufferPos );
 #endif
 
-                sal_Size nUnitSize = GetTrueFormatSize(rInc.m_nFormat);
+                std::size_t nUnitSize = GetTrueFormatSize(rInc.m_nFormat);
 
                 XChangeProperty( m_pDisplay,
                                  rInc.m_aRequestor,
@@ -2046,7 +2046,7 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
                                     &pData );
             }
             it->second->m_eState        = Selection::Inactive;
-            sal_Size nUnitSize = GetTrueFormatSize(nFormat);
+            std::size_t nUnitSize = GetTrueFormatSize(nFormat);
             it->second->m_aData         = Sequence< sal_Int8 >(reinterpret_cast<sal_Int8*>(pData), nItems * nUnitSize);
             it->second->m_aDataArrived.set();
             if( pData )

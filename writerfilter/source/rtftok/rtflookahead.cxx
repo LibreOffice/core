@@ -17,11 +17,11 @@ namespace writerfilter
 namespace rtftok
 {
 
-RTFLookahead::RTFLookahead(SvStream& rStream, sal_Size nGroupStart)
+RTFLookahead::RTFLookahead(SvStream& rStream, sal_uInt64 nGroupStart)
     : m_rStream(rStream),
       m_bHasTable(false)
 {
-    sal_Size nPos = m_rStream.Tell();
+    sal_uInt64 const nPos = m_rStream.Tell();
     m_rStream.Seek(nGroupStart);
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
     m_pTokenizer.reset(new RTFTokenizer(*this, &m_rStream, xStatusIndicator));

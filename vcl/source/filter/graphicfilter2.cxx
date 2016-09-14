@@ -948,8 +948,8 @@ bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, bool )
         nFormat = GraphicFileFormat::PCT;
     else
     {
-        sal_Size nStreamPos = rStm.Tell();
-        sal_Size nStreamLen = rStm.remainingSize();
+        sal_uInt64 const nStreamPos = rStm.Tell();
+        sal_uInt64 const nStreamLen = rStm.remainingSize();
         if (isPCT(rStm, nStreamPos, nStreamLen))
         {
             bRet = true;

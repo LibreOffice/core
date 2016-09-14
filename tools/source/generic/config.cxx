@@ -117,7 +117,7 @@ static sal_uInt8* ImplSysReadConfig( const OUString& rFileName,
                 if (nRead > 2 && memcmp(pBuf, BOM, 3) == 0)
                 {
                     nRead -= 3;
-                    memmove(pBuf, pBuf + 3, sal::static_int_cast<sal_Size>(nRead * sizeof(sal_uInt8)) );
+                    memmove(pBuf, pBuf + 3, sal::static_int_cast<std::size_t>(nRead * sizeof(sal_uInt8)) );
                     rbIsUTF8BOM = true;
                 }
 

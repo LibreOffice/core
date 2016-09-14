@@ -39,8 +39,8 @@ class XclImpName : protected XclImpRoot
     {
         XclImpStream& mrStrm;
         XclImpStreamPos maStrmPos;
-        sal_Size mnStrmPos;
-        sal_Size mnStrmSize;
+        std::size_t mnStrmPos;
+        std::size_t mnStrmSize;
 
         TokenStrmData( XclImpStream& rStrm );
     };

@@ -133,7 +133,7 @@ void EntryCache::destroy (Entry * entry)
 }
 
 // highbit():= log2() + 1 (complexity O(1))
-static int highbit(sal_Size n)
+static int highbit(std::size_t n)
 {
     int k = 1;
 
@@ -190,7 +190,7 @@ PageCache::PageCache (sal_uInt16 nPageSize)
 PageCache::~PageCache()
 {
     double s_x = 0.0;
-    sal_Size i, n = m_hash_size;
+    std::size_t i, n = m_hash_size;
     for (i = 0; i < n; i++)
     {
         int x = 0;
@@ -219,15 +219,15 @@ PageCache::~PageCache()
     OSL_TRACE("Hits: %zu, Misses: %zu", m_nHit, m_nMissed);
 }
 
-void PageCache::rescale_Impl (sal_Size new_size)
+void PageCache::rescale_Impl (std::size_t new_size)
 {
-    sal_Size new_bytes = new_size * sizeof(Entry*);
+    std::size_t new_bytes = new_size * sizeof(Entry*);
     Entry ** new_table = static_cast<Entry**>(rtl_allocateMemory(new_bytes));
 
     if (new_table != nullptr)
     {
         Entry ** old_table = m_hash_table;
-        sal_Size old_size  = m_hash_size;
+        std::size_t old_size  = m_hash_size;
 
         SAL_INFO(
             "store",
@@ -241,7 +241,7 @@ void PageCache::rescale_Impl (sal_Size new_size)
         m_hash_size  = new_size;
         m_hash_shift = highbit(m_hash_size) - 1;
 
-        sal_Size i;
+        std::size_t i;
         for (i = 0; i < old_size; i++)
         {
             Entry * curr = old_table[i];
@@ -276,7 +276,7 @@ Entry * PageCache::lookup_Impl (Entry * entry, sal_uInt32 nOffset)
     }
     if (lookups > 2)
     {
-        sal_Size new_size = m_hash_size, ave = m_hash_entries >> m_hash_shift;
+        std::size_t new_size = m_hash_size, ave = m_hash_entries >> m_hash_shift;
         for (; ave > 4; new_size *= 2, ave /= 2)
             continue;
         if (new_size != m_hash_size)

@@ -240,12 +240,12 @@ sal_uInt16 XclExpString::GetHeaderSize() const
         (IsWriteFormats() ? 2 : 0);     // richtext formattting count
 }
 
-sal_Size XclExpString::GetBufferSize() const
+std::size_t XclExpString::GetBufferSize() const
 {
-    return static_cast<sal_Size>(mnLen) * (mbIsUnicode ? 2 : 1);
+    return static_cast<std::size_t>(mnLen) * (mbIsUnicode ? 2 : 1);
 }
 
-sal_Size XclExpString::GetSize() const
+std::size_t XclExpString::GetSize() const
 {
     return
         GetHeaderSize() +                                   // header

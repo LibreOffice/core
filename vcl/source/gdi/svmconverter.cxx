@@ -287,7 +287,7 @@ void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, OUString& rSt
     {
         sal_uInt16  nType;
         sal_uInt32  nActionSize;
-        sal_Size    nStringLen;
+        std::size_t nStringLen;
 
         rIStm.Seek( nStrmPos );
         rIStm  .ReadUInt16( nType )

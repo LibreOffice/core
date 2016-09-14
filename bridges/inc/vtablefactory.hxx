@@ -72,7 +72,7 @@ public:
 
         /** The size of the raw vtable block, in bytes.
          */
-        sal_Size size;
+        std::size_t size;
     };
 
     /** The vtable structure corresponding to an interface type.
@@ -143,7 +143,7 @@ private:
         by slotCount)
         @return  the size of the raw vtable block, in bytes
      */
-    static sal_Size getBlockSize(sal_Int32 slotCount);
+    static std::size_t getBlockSize(sal_Int32 slotCount);
 
     // This function is not defined in the generic part, but instead has to be
     // defined individually for each CPP--UNO bridge:

@@ -202,7 +202,7 @@ void ExcelToSc::GetDummy( const ScTokenArray*& pErgebnis )
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
 // otherwise it will seek to the first byte after the additional content (eg
 // inline arrays) following <nFormulaLen>
-ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, std::size_t nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
 {
     RootData&       rR = GetOldRoot();
     sal_uInt8           nOp, nLen;
@@ -232,7 +232,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
         return ConvOK;
     }
 
-    sal_Size nEndPos = aIn.GetRecPos() + nFormulaLen;
+    std::size_t nEndPos = aIn.GetRecPos() + nFormulaLen;
 
     while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
@@ -396,7 +396,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 {
                     // nFakt -> skip bytes or words    AttrChoose
                     ++nData;
-                    aIn.Ignore(static_cast<sal_Size>(nData) * nFakt);
+                    aIn.Ignore(static_cast<std::size_t>(nData) * nFakt);
                 }
                 else if( nOpt & 0x10 )                      // AttrSum
                     DoMulArgs( ocSum, 1 );
@@ -896,12 +896,12 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
 }
 
 // stream seeks to first byte after <nFormulaLen>
-ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_Size nFormulaLen,
+ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std::size_t nFormulaLen,
                             SCsTAB nTab, const FORMULA_TYPE eFT )
 {
     RootData&       rR = GetOldRoot();
     sal_uInt8           nOp, nLen;
-    sal_Size        nIgnore;
+    std::size_t        nIgnore;
     bool            bError = false;
     const bool      bRangeName = eFT == FT_RangeName;
     const bool      bSharedFormula = eFT == FT_SharedFormula;
@@ -921,7 +921,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_
     if( nFormulaLen == 0 )
         return ConvOK;
 
-    sal_Size nEndPos = aIn.GetRecPos() + nFormulaLen;
+    std::size_t nEndPos = aIn.GetRecPos() + nFormulaLen;
 
     while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
@@ -988,7 +988,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_
                 {
                     // nFakt -> skip bytes or words    AttrChoose
                     ++nData;
-                    aIn.Ignore(static_cast<sal_Size>(nData) * nFakt);
+                    aIn.Ignore(static_cast<std::size_t>(nData) * nFakt);
                 }
             }
                 break;
@@ -1323,12 +1323,12 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, sal_
     return eRet;
 }
 
-void ExcelToSc::ConvertExternName( const ScTokenArray*& /*rpArray*/, XclImpStream& /*rStrm*/, sal_Size /*nFormulaLen*/,
+void ExcelToSc::ConvertExternName( const ScTokenArray*& /*rpArray*/, XclImpStream& /*rStrm*/, std::size_t /*nFormulaLen*/,
                                       const OUString& /*rUrl*/, const vector<OUString>& /*rTabNames*/ )
 {
 }
 
-void ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen )
+void ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, std::size_t nLen )
 {
     OSL_ENSURE_BIFF( GetBiff() == EXC_BIFF5 );
     if( GetBiff() != EXC_BIFF5 )
@@ -1341,8 +1341,8 @@ void ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
     sal_uInt16 nTabFirst, nTabLast;
     sal_Int16 nRefIdx;
 
-    sal_Size nSeek;
-    sal_Size nEndPos = rStrm.GetRecPos() + nLen;
+    std::size_t nSeek;
+    std::size_t nEndPos = rStrm.GetRecPos() + nLen;
 
     while( rStrm.IsValid() && (rStrm.GetRecPos() < nEndPos) )
     {
@@ -1901,7 +1901,7 @@ void ExcelToSc::ReadExtensionMemArea( XclImpStream& aIn )
     sal_uInt16 nCount(0);
     nCount = aIn.ReaduInt16();
 
-    aIn.Ignore( static_cast<sal_Size>(nCount) * ((GetBiff() == EXC_BIFF8) ? 8 : 6) ); // drop the ranges
+    aIn.Ignore( static_cast<std::size_t>(nCount) * ((GetBiff() == EXC_BIFF8) ? 8 : 6) ); // drop the ranges
 }
 
 void ExcelToSc::ReadExtensions( const ExtensionTypeVec& rExtensions,

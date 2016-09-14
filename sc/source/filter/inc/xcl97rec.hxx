@@ -209,7 +209,7 @@ public:
     virtual void                Save( XclExpStream& rStrm ) override;
 
     virtual sal_uInt16              GetNum() const override;
-    virtual sal_Size            GetLen() const override;
+    virtual std::size_t         GetLen() const override;
 
 private:
     virtual void                SaveCont( XclExpStream& rStrm ) override;
@@ -279,7 +279,7 @@ public:
                                 ExcBof8_Base();
 
     virtual sal_uInt16              GetNum() const override;
-    virtual sal_Size            GetLen() const override;
+    virtual std::size_t         GetLen() const override;
 };
 
 // --- class ExcBofW8 ------------------------------------------------
@@ -314,7 +314,7 @@ public:
                                 ExcBundlesheet8( RootData& rRootData, SCTAB nTab );
                                 ExcBundlesheet8( const OUString& rString );
 
-    virtual sal_Size            GetLen() const override;
+    virtual std::size_t         GetLen() const override;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };
@@ -325,7 +325,7 @@ class XclObproj : public ExcRecord
 {
 public:
     virtual sal_uInt16              GetNum() const override;
-    virtual sal_Size            GetLen() const override;
+    virtual std::size_t         GetLen() const override;
 };
 
 // ---- class XclCodename --------------------------------------------
@@ -339,7 +339,7 @@ public:
                                 XclCodename( const OUString& );
 
     virtual sal_uInt16              GetNum() const override;
-    virtual sal_Size            GetLen() const override;
+    virtual std::size_t         GetLen() const override;
 };
 
 // ---- Scenarios ----------------------------------------------------
@@ -358,7 +358,7 @@ protected:
 public:
                                 ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const OUString& rTxt );
 
-    inline sal_Size             GetStringBytes() const
+    inline std::size_t          GetStringBytes() const
                                     { return sText.GetSize(); }
 
     void                        WriteAddress( XclExpStream& rStrm ) const ;
@@ -370,7 +370,7 @@ public:
 class ExcEScenario : public ExcRecord
 {
 private:
-    sal_Size                    nRecLen;
+    std::size_t                 nRecLen;
     XclExpString                sName;
     XclExpString                sComment;
     XclExpString                sUserName;
@@ -388,7 +388,7 @@ public:
     virtual                     ~ExcEScenario() override;
 
     virtual sal_uInt16              GetNum() const override;
-    virtual sal_Size            GetLen() const override;
+    virtual std::size_t         GetLen() const override;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };
@@ -410,7 +410,7 @@ public:
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 
     virtual sal_uInt16              GetNum() const override;
-    virtual sal_Size            GetLen() const override;
+    virtual std::size_t         GetLen() const override;
 };
 
 /** Represents a FEATHDR (SHEETPROTECTION) record that stores sheet protection
@@ -453,7 +453,7 @@ public:
                                 XclCalccount( const ScDocument& );
 
     virtual sal_uInt16              GetNum() const override;
-    virtual sal_Size            GetLen() const override;
+    virtual std::size_t         GetLen() const override;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };
@@ -468,7 +468,7 @@ public:
                                 XclIteration( const ScDocument& );
 
     virtual sal_uInt16              GetNum() const override;
-    virtual sal_Size            GetLen() const override;
+    virtual std::size_t         GetLen() const override;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };
@@ -483,7 +483,7 @@ public:
                                 XclDelta( const ScDocument& );
 
     virtual sal_uInt16              GetNum() const override;
-    virtual sal_Size            GetLen() const override;
+    virtual std::size_t         GetLen() const override;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
 };

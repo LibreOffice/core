@@ -59,16 +59,16 @@ RTFError RTFTokenizer::resolveParse()
     RTFError ret;
     // for hex chars
     int b = 0, count = 2;
-    sal_Size nPercentSize = 0;
-    sal_Size nLastPos = 0;
+    std::size_t nPercentSize = 0;
+    sal_uInt64 nLastPos = 0;
 
     if (m_xStatusIndicator.is())
     {
         static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
         OUString sDocLoad(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr).toString());
 
-        sal_Size nCurrentPos = Strm().Tell();
-        sal_Size nEndPos = nCurrentPos + Strm().remainingSize();
+        sal_uInt64 const nCurrentPos = Strm().Tell();
+        sal_uInt64 const nEndPos = nCurrentPos + Strm().remainingSize();
         m_xStatusIndicator->start(sDocLoad, nEndPos);
         nPercentSize = nEndPos / 100;
 
@@ -79,7 +79,7 @@ RTFError RTFTokenizer::resolveParse()
     {
         //SAL_INFO("writerfilter", OSL_THIS_FUNC << ": parsing character '" << ch << "'");
 
-        sal_Size nCurrentPos = Strm().Tell();
+        sal_uInt64 const nCurrentPos = Strm().Tell();
         if (m_xStatusIndicator.is() && nCurrentPos > (nLastPos + nPercentSize))
             m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
 

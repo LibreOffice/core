@@ -50,7 +50,7 @@ SvStream& WriteXFillExchangeData( SvStream& rOStm, const XFillExchangeData& rDat
         sal_uInt16              nWhich = aIter.FirstWhich();
         const SfxPoolItem*  pItem;
         sal_uInt32          nItemCount = 0;
-        sal_Size            nFirstPos = rOStm.Tell();
+        sal_uInt64 const    nFirstPos = rOStm.Tell();
 
         rOStm.WriteUInt32( nItemCount );
 
