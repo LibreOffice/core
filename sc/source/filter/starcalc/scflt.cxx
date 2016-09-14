@@ -19,7 +19,7 @@
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-
+#include <formula/errorcodes.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -367,17 +367,17 @@ static OUString lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
     return aName;
 }
 
-template < typename T > sal_uLong insert_new( ScCollection* pCollection, SvStream& rStream )
+template < typename T > FormulaError insert_new( ScCollection* pCollection, SvStream& rStream )
 {
     std::unique_ptr<T> pData(new (::std::nothrow) T( rStream));
-    sal_uLong nError = rStream.GetError();
+    FormulaError nError = (FormulaError)rStream.GetError();
     if (pData)
     {
-        if (!nError)
+        if (nError == FormulaError::NONE)
             pCollection->Insert( pData.release() );
     }
     else
-        nError = errOutOfMemory;
+        nError = FormulaError::OutOfMemory;
     return nError;
 }
 
@@ -401,7 +401,7 @@ Sc10FontData::Sc10FontData(SvStream& rStream)
 
 Sc10FontCollection::Sc10FontCollection(SvStream& rStream)
     : ScCollection(4, 4)
-    , nError(0)
+    , nError(FormulaError::NONE)
 {
     sal_uInt16 ID(0);
     rStream.ReadUInt16( ID );
@@ -409,7 +409,7 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream)
     {
         sal_uInt16 nAnz(0);
         rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == FormulaError::NONE); i++)
         {
             nError = insert_new<Sc10FontData>( this, rStream);
         }
@@ -417,7 +417,7 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream)
     else
     {
         OSL_FAIL( "FontID" );
-        nError = errUnknownID;
+        nError = FormulaError::UnknownID;
     }
 }
 
@@ -442,7 +442,7 @@ Sc10NameData::Sc10NameData(SvStream& rStream)
 
 Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
     ScCollection (4, 4),
-    nError     (0)
+    nError       (FormulaError::NONE)
 {
     sal_uInt16 ID;
     rStream.ReadUInt16( ID );
@@ -450,7 +450,7 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
     {
         sal_uInt16 nAnz;
         rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == FormulaError::NONE); i++)
         {
             nError = insert_new<Sc10NameData>( this, rStream);
         }
@@ -458,7 +458,7 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
     else
     {
         OSL_FAIL( "NameID" );
-        nError = errUnknownID;
+        nError = FormulaError::UnknownID;
     }
 }
 
@@ -492,7 +492,7 @@ Sc10PatternData::Sc10PatternData(SvStream& rStream)
 
 Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream)
     : ScCollection(4, 4)
-    , nError(0)
+    , nError(FormulaError::NONE)
 {
     sal_uInt16 ID;
     rStream.ReadUInt16( ID );
@@ -500,7 +500,7 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream)
     {
         sal_uInt16 nAnz;
         rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == FormulaError::NONE); i++)
         {
             nError = insert_new<Sc10PatternData>( this, rStream);
         }
@@ -508,7 +508,7 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream)
     else
     {
         OSL_FAIL( "PatternID" );
-        nError = errUnknownID;
+        nError = FormulaError::UnknownID;
     }
 }
 
@@ -551,7 +551,7 @@ Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
 
 Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream)
     : ScCollection(4, 4)
-    , nError(0)
+    , nError(FormulaError::NONE)
 {
     sal_uInt16 ID;
     rStream.ReadUInt16( ID );
@@ -560,7 +560,7 @@ Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream)
         lcl_ReadFixedString( rStream, ActName, sizeof(ActName));
         sal_uInt16 nAnz;
         rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == FormulaError::NONE); i++)
         {
             nError = insert_new<Sc10DataBaseData>( this, rStream);
         }
@@ -568,7 +568,7 @@ Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream)
     else
     {
         OSL_FAIL( "DataBaseID" );
-        nError = errUnknownID;
+        nError = FormulaError::UnknownID;
     }
 }
 
@@ -928,7 +928,7 @@ Sc10Import::Sc10Import(SvStream& rStr, ScDocument* pDocument ) :
     pNameCollection     (nullptr),
     pPatternCollection  (nullptr),
     pDataBaseCollection (nullptr),
-    nError              (0),
+    nError              (FormulaError::NONE),
     nShowTab            (0)
 {
     pPrgrsBar = nullptr;
@@ -948,7 +948,7 @@ Sc10Import::~Sc10Import()
         "*Sc10Import::Sc10Import(): Progressbar lebt noch!?" );
 }
 
-sal_uLong Sc10Import::Import()
+FormulaError Sc10Import::Import()
 {
     pPrgrsBar = new ScfStreamProgressBar( rStream, pDoc->GetDocumentShell() );
 
@@ -959,25 +959,25 @@ sal_uLong Sc10Import::Import()
     pDoc->GetFormatTable()->ChangeNullDate( 1, 1, 1900 );
 
     LoadFileHeader();                           pPrgrsBar->Progress();
-    if (!nError) { LoadFileInfo();              pPrgrsBar->Progress(); }
-    if (!nError) { LoadEditStateInfo();         pPrgrsBar->Progress(); }
-    if (!nError) { LoadProtect();               pPrgrsBar->Progress(); }
-    if (!nError) { LoadViewColRowBar();         pPrgrsBar->Progress(); }
-    if (!nError) { LoadScrZoom();               pPrgrsBar->Progress(); }
-    if (!nError) { LoadPalette();               pPrgrsBar->Progress(); }
-    if (!nError) { LoadFontCollection();        pPrgrsBar->Progress(); }
-    if (!nError) { LoadNameCollection();        pPrgrsBar->Progress(); }
-    if (!nError) { LoadPatternCollection();     pPrgrsBar->Progress(); }
-    if (!nError) { LoadDataBaseCollection();    pPrgrsBar->Progress(); }
-    if (!nError) { LoadTables();                pPrgrsBar->Progress(); }
-    if (!nError) { LoadObjects();               pPrgrsBar->Progress(); }
-    if (!nError) { ImportNameCollection();      pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadFileInfo();              pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadEditStateInfo();         pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadProtect();               pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadViewColRowBar();         pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadScrZoom();               pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadPalette();               pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadFontCollection();        pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadNameCollection();        pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadPatternCollection();     pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadDataBaseCollection();    pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadTables();                pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { LoadObjects();               pPrgrsBar->Progress(); }
+    if (nError == FormulaError::NONE) { ImportNameCollection();      pPrgrsBar->Progress(); }
     pDoc->SetViewOptions( aSc30ViewOpt );
 
 #if OSL_DEBUG_LEVEL > 0
-    if (nError)
+    if (nError != FormulaError::NONE)
     {
-        OSL_FAIL( OString::number(nError).getStr());
+        OSL_FAIL( OString::number((int)nError).getStr());
     }
 #endif
 
@@ -994,8 +994,8 @@ void Sc10Import::LoadFileHeader()
     Sc10FileHeader FileHeader;
     lcl_ReadFileHeader(rStream, FileHeader);
 
-    nError = rStream.GetError();
-    if ( nError == 0 )
+    nError = (FormulaError)rStream.GetError();
+    if ( nError == FormulaError::NONE )
     {
         sal_Char Sc10CopyRight[32];
         strcpy(Sc10CopyRight, "Blaise-Tabelle");
@@ -1005,7 +1005,7 @@ void Sc10Import::LoadFileHeader()
         if ((strcmp(FileHeader.CopyRight, Sc10CopyRight) != 0)
             || (FileHeader.Version < 101)
             || (FileHeader.Version > 102))
-            nError = errUnknownFormat;
+            nError = FormulaError::UnknownFormat;
     }
 }
 
@@ -1014,7 +1014,7 @@ void Sc10Import::LoadFileInfo()
     Sc10FileInfo FileInfo;
     rStream.ReadBytes(&FileInfo, sizeof(FileInfo));
 
-    nError = rStream.GetError();
+    nError = (FormulaError)rStream.GetError();
     // TODO: ? copy info, byte swapping
 }
 
@@ -1037,7 +1037,7 @@ void Sc10Import::LoadEditStateInfo()
 
     assert(rStream.GetError() || rStream.Tell() == nOldPos + sizeof(Sc10EditStateInfo));
 
-    nError = rStream.GetError();
+    nError = (FormulaError)rStream.GetError();
     nShowTab = static_cast<SCTAB>(EditStateInfo.DeltaZ);
     // TODO: ? copy cursor position and offset of the table (shall we do that??)
 
@@ -1046,7 +1046,7 @@ void Sc10Import::LoadEditStateInfo()
 void Sc10Import::LoadProtect()
 {
     lcl_ReadSheetProtect(rStream, SheetProtect);
-    nError = rStream.GetError();
+    nError = (FormulaError)rStream.GetError();
 
     ScDocProtection aProtection;
     aProtection.setProtected(static_cast<bool>(SheetProtect.Protect));
@@ -1058,7 +1058,7 @@ void Sc10Import::LoadViewColRowBar()
 {
     bool bViewColRowBar;
     rStream.ReadCharAsBool( bViewColRowBar );
-    nError = rStream.GetError();
+    nError = (FormulaError)rStream.GetError();
     aSc30ViewOpt.SetOption( VOPT_HEADER, bViewColRowBar );
 }
 
@@ -1067,7 +1067,7 @@ void Sc10Import::LoadScrZoom()
     // TODO: unfortunately Zoom is a 6-byte TP real number (don't know how to translate that)
     sal_Char cZoom[6];
     rStream.ReadBytes(cZoom, sizeof(cZoom));
-    nError = rStream.GetError();
+    nError = (FormulaError)rStream.GetError();
 }
 
 void Sc10Import::LoadPalette()
@@ -1077,20 +1077,20 @@ void Sc10Import::LoadPalette()
     lcl_ReadPalette(rStream, RasterPalette);
     lcl_ReadPalette(rStream, FramePalette);
 
-    nError = rStream.GetError();
+    nError = (FormulaError)rStream.GetError();
 }
 
 void Sc10Import::LoadFontCollection()
 {
     pFontCollection = new Sc10FontCollection(rStream);
-    if (!nError)
+    if (nError == FormulaError::NONE)
         nError = pFontCollection->GetError();
 }
 
 void Sc10Import::LoadNameCollection()
 {
     pNameCollection = new Sc10NameCollection(rStream);
-    if (!nError)
+    if (nError == FormulaError::NONE)
         nError = pNameCollection->GetError();
 }
 
@@ -1110,9 +1110,9 @@ void Sc10Import::ImportNameCollection()
 void Sc10Import::LoadPatternCollection()
 {
     pPatternCollection = new Sc10PatternCollection( rStream );
-    if (!nError)
+    if (nError == FormulaError::NONE)
         nError = pPatternCollection->GetError();
-    if (nError == errOutOfMemory)
+    if (nError == FormulaError::OutOfMemory)
         return;     // hopeless
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     for( sal_uInt16 i = 0 ; i < pPatternCollection->GetCount() ; i++ )
@@ -1343,9 +1343,9 @@ void Sc10Import::LoadPatternCollection()
 void Sc10Import::LoadDataBaseCollection()
 {
     pDataBaseCollection = new Sc10DataBaseCollection(rStream);
-    if (!nError)
+    if (nError != FormulaError::NONE)
         nError = pDataBaseCollection->GetError();
-    if (nError == errOutOfMemory)
+    if (nError == FormulaError::OutOfMemory)
         return;     // hopeless
     for( sal_uInt16 i = 0 ; i < pDataBaseCollection->GetCount() ; i++ )
     {
@@ -1388,7 +1388,7 @@ void Sc10Import::LoadTables()
 
     sal_Int16 nTabCount;
     rStream.ReadInt16( nTabCount );
-    for (sal_Int16 Tab = 0; (Tab < nTabCount) && (nError == 0); Tab++)
+    for (sal_Int16 Tab = 0; (Tab < nTabCount) && (nError == FormulaError::NONE); Tab++)
     {
         Sc10PageFormat   PageFormat;
         sal_Int16            DataBaseIndex;
@@ -1462,8 +1462,8 @@ void Sc10Import::LoadTables()
 
         rStream.ReadUChar( Visible );
 
-        nError = rStream.GetError();
-        if (nError != 0) return;
+        nError = (FormulaError)rStream.GetError();
+        if (nError != FormulaError::NONE) return;
 
         if (TabNo == 0)
             pDoc->RenameTab(static_cast<SCTAB> (TabNo), SC10TOSTRING( TabName ), false);
@@ -1479,7 +1479,7 @@ void Sc10Import::LoadTables()
         if (ID != ColWidthID)
         {
             OSL_FAIL( "ColWidthID" );
-            nError = errUnknownID;
+            nError = FormulaError::UnknownID;
             return;
         }
         DataCount = ReadAndSanitizeDataCount(rStream);
@@ -1500,7 +1500,7 @@ void Sc10Import::LoadTables()
         if (ID != ColAttrID)
         {
             OSL_FAIL( "ColAttrID" );
-            nError = errUnknownID;
+            nError = FormulaError::UnknownID;
             return;
         }
 
@@ -1530,7 +1530,7 @@ void Sc10Import::LoadTables()
         if (ID != RowHeightID)
         {
             OSL_FAIL( "RowHeightID" );
-            nError = errUnknownID;
+            nError = FormulaError::UnknownID;
             return;
         }
 
@@ -1550,7 +1550,7 @@ void Sc10Import::LoadTables()
         if (ID != RowAttrID)
         {
             OSL_FAIL( "RowAttrID" );
-            nError = errUnknownID;
+            nError = FormulaError::UnknownID;
             return;
         }
 
@@ -1580,17 +1580,17 @@ void Sc10Import::LoadTables()
         if (ID != TableID)
         {
             OSL_FAIL( "TableID" );
-            nError = errUnknownID;
+            nError = FormulaError::UnknownID;
             return;
         }
-        for (SCCOL Col = 0; (Col <= SC10MAXCOL) && (nError == 0); Col++)
+        for (SCCOL Col = 0; (Col <= SC10MAXCOL) && (nError == FormulaError::NONE); Col++)
         {
             rStream.ReadUInt16( Count );
-            nError = rStream.GetError();
-            if ((Count != 0) && (nError == 0))
+            nError = (FormulaError)rStream.GetError();
+            if ((Count != 0) && (nError == FormulaError::NONE))
                 LoadCol(Col, static_cast<SCTAB> (TabNo));
         }
-        OSL_ENSURE( nError == 0, "Stream" );
+        OSL_ENSURE( nError == FormulaError::NONE, "Stream" );
     }
     pPrgrsBar->Progress();
 
@@ -1606,13 +1606,13 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
     sal_uInt16 Row;
     rStream.ReadUInt16( CellCount );
     SCROW nScCount = static_cast< SCROW >( CellCount );
-    if (nScCount > MAXROW) nError = errUnknownFormat;
-    for (sal_uInt16 i = 0; (i < CellCount) && (nError == 0); i++)
+    if (nScCount > MAXROW) nError = FormulaError::UnknownFormat;
+    for (sal_uInt16 i = 0; (i < CellCount) && (nError == FormulaError::NONE); i++)
     {
         rStream.ReadUChar( CellType );
         rStream.ReadUInt16( Row );
-        nError = rStream.GetError();
-        if (nError == 0)
+        nError = (FormulaError)rStream.GetError();
+        if (nError == FormulaError::NONE)
         {
             switch (CellType)
             {
@@ -1661,7 +1661,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                 case ctNote :
                     break;
                 default :
-                    nError = errUnknownFormat;
+                    nError = FormulaError::UnknownFormat;
                     break;
             }
             sal_uInt16 nNoteLen(0);
@@ -1697,18 +1697,18 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     Sc10ColAttr aFlag;
     Sc10ColAttr aPattern;
 
-    if (nError == 0) LoadAttr(aFont);
-    if (nError == 0) LoadAttr(aAttr);
-    if (nError == 0) LoadAttr(aJustify);
-    if (nError == 0) LoadAttr(aFrame);
-    if (nError == 0) LoadAttr(aRaster);
-    if (nError == 0) LoadAttr(aValue);
-    if (nError == 0) LoadAttr(aColor);
-    if (nError == 0) LoadAttr(aFrameColor);
-    if (nError == 0) LoadAttr(aFlag);
-    if (nError == 0) LoadAttr(aPattern);
+    if (nError == FormulaError::NONE) LoadAttr(aFont);
+    if (nError == FormulaError::NONE) LoadAttr(aAttr);
+    if (nError == FormulaError::NONE) LoadAttr(aJustify);
+    if (nError == FormulaError::NONE) LoadAttr(aFrame);
+    if (nError == FormulaError::NONE) LoadAttr(aRaster);
+    if (nError == FormulaError::NONE) LoadAttr(aValue);
+    if (nError == FormulaError::NONE) LoadAttr(aColor);
+    if (nError == FormulaError::NONE) LoadAttr(aFrameColor);
+    if (nError == FormulaError::NONE) LoadAttr(aFlag);
+    if (nError == FormulaError::NONE) LoadAttr(aPattern);
 
-    if (nError)
+    if (nError != FormulaError::NONE)
         return;
 
     SCROW nStart;
@@ -2141,7 +2141,7 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
     rAttr.pData = new (::std::nothrow) Sc10ColData[rAttr.Count];
     if (rAttr.pData == nullptr)
     {
-        nError = errOutOfMemory;
+        nError = FormulaError::OutOfMemory;
         rAttr.Count = 0;
         return;
     }
@@ -2152,7 +2152,7 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
         rStream.ReadUInt16( rAttr.pData[i].Value );
     }
 
-    nError = rStream.GetError();
+    nError = (FormulaError)rStream.GetError();
 }
 
 void Sc10Import::ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& nKey)
@@ -2309,13 +2309,13 @@ void Sc10Import::LoadObjects()
         rStream.ReadUInt16( nAnz );
         sal_Char Reserved[32];
         rStream.ReadBytes(Reserved, sizeof(Reserved));
-        nError = rStream.GetError();
-        if ((nAnz > 0) && (nError == 0))
+        nError = (FormulaError)rStream.GetError();
+        if ((nAnz > 0) && (nError == FormulaError::NONE))
         {
             sal_uInt8 ObjectType;
             Sc10GraphHeader GraphHeader;
             bool IsOleObject = false; // TODO: this is only a band-aid
-            for (sal_uInt16 i = 0; (i < nAnz) && (nError == 0) && !rStream.IsEof() && !IsOleObject; i++)
+            for (sal_uInt16 i = 0; (i < nAnz) && (nError == FormulaError::NONE) && !rStream.IsEof() && !IsOleObject; i++)
             {
                 rStream.ReadUChar( ObjectType );
                 lcl_ReadGraphHeader(rStream, GraphHeader);
@@ -2354,7 +2354,7 @@ void Sc10Import::LoadObjects()
                         rStream.SeekRel(ImageHeader.Size);
 
                         if( ImageHeader.Typ != 1 && ImageHeader.Typ != 2 )
-                            nError = errUnknownFormat;
+                            nError = FormulaError::UnknownFormat;
                         break;
                     }
                     case otChart :
@@ -2363,7 +2363,7 @@ void Sc10Import::LoadObjects()
                         Sc10ChartSheetData ChartSheetData;
                         Sc10ChartTypeData* pTypeData = new (::std::nothrow) Sc10ChartTypeData;
                         if (!pTypeData)
-                            nError = errOutOfMemory;
+                            nError = FormulaError::OutOfMemory;
                         else
                         {
                             lcl_ReadChartHeader(rStream, ChartHeader);
@@ -2386,17 +2386,17 @@ void Sc10Import::LoadObjects()
                         break;
                     }
                     default :
-                        nError = errUnknownFormat;
+                        nError = FormulaError::UnknownFormat;
                         break;
                 }
-                nError = rStream.GetError();
+                nError = (FormulaError)rStream.GetError();
             }
         }
     }
     else
     {
         OSL_FAIL( "ObjectID" );
-        nError = errUnknownID;
+        nError = FormulaError::UnknownID;
     }
 }
 

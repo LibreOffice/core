@@ -41,6 +41,7 @@
 #include "editutil.hxx"
 #include "tokenarray.hxx"
 #include "refupdatecontext.hxx"
+#include <formula/errorcodes.hxx>
 #include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <memory>
@@ -1037,7 +1038,7 @@ bool ScConditionEntry::IsError( const ScAddress& rPos ) const
 
     if (rCell.meType == CELLTYPE_FORMULA)
     {
-        if (rCell.mpFormula->GetErrCode())
+        if (rCell.mpFormula->GetErrCode() != FormulaError::NONE)
             return true;
     }
 

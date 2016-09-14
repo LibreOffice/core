@@ -2267,7 +2267,7 @@ public:
 
         if (!rCell.isEmpty())
         {
-            if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode())
+            if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
                 // Error values are compared as string.
                 return false;
 
@@ -2392,7 +2392,7 @@ public:
 
         if (!rCell.isEmpty())
         {
-            if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode())
+            if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
             {
                 // Error cell is evaluated as string (for now).
                 aCellStr = mrStrPool.intern(ScGlobal::GetErrorString(rCell.mpFormula->GetErrCode()));
@@ -2590,7 +2590,7 @@ public:
         {
             if (rItem.meType == ScQueryEntry::ByString)
             {
-                if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode())
+                if (rCell.meType == CELLTYPE_FORMULA && rCell.mpFormula->GetErrCode() != FormulaError::NONE)
                     // Error values are compared as string.
                     return std::pair<bool,bool>(false, bTestEqual);
 

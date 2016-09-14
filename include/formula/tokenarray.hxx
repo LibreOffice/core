@@ -123,7 +123,7 @@ protected:
     sal_uInt16      nLen;                   // Length of token array
     sal_uInt16      nRPN;                   // Length of RPN array
     sal_uInt16      nIndex;                 // Current step index
-    sal_uInt16      nError;                 // Error code
+    FormulaError    nError;                 // Error code
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
     bool            bHyperLink;             // If HYPERLINK() occurs in the formula.
     bool            mbFromRangeName;        // If this array originates from a named expression
@@ -230,11 +230,11 @@ public:
 
     FormulaToken** GetArray() const  { return pCode; }
     FormulaToken** GetCode()  const  { return pRPN; }
-    sal_uInt16    GetLen() const     { return nLen; }
-    sal_uInt16    GetCodeLen() const { return nRPN; }
-    void      Reset()            { nIndex = 0; }
-    sal_uInt16    GetCodeError() const      { return nError; }
-    void      SetCodeError( sal_uInt16 n )  { nError = n; }
+    sal_uInt16     GetLen() const     { return nLen; }
+    sal_uInt16     GetCodeLen() const { return nRPN; }
+    void           Reset()            { nIndex = 0; }
+    FormulaError   GetCodeError() const      { return nError; }
+    void      SetCodeError( FormulaError n )  { nError = n; }
     void      SetHyperLink( bool bVal ) { bHyperLink = bVal; }
     bool      IsHyperLink() const       { return bHyperLink; }
 

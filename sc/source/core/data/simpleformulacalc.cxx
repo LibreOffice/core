@@ -31,7 +31,7 @@ ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const Sc
     ScCompiler aComp(mpDoc, maAddr);
     aComp.SetGrammar(eGram);
     mpCode.reset(aComp.CompileString(rFormula));
-    if(!mpCode->GetCodeError() && mpCode->GetLen())
+    if(mpCode->GetCodeError() == FormulaError::NONE && mpCode->GetLen())
         aComp.CompileTokenArray();
 }
 
@@ -99,12 +99,12 @@ bool ScSimpleFormulaCalculator::IsMatrix()
     return mbMatrixResult;
 }
 
-sal_uInt16 ScSimpleFormulaCalculator::GetErrCode()
+FormulaError ScSimpleFormulaCalculator::GetErrCode()
 {
     Calculate();
 
-    sal_uInt16 nErr = mpCode->GetCodeError();
-    if (nErr)
+    FormulaError nErr = mpCode->GetCodeError();
+    if (nErr != FormulaError::NONE)
         return nErr;
     return maResult.GetResultError();
 }
@@ -113,8 +113,8 @@ double ScSimpleFormulaCalculator::GetValue()
 {
     Calculate();
 
-    if ((!mpCode->GetCodeError() || mpCode->GetCodeError() == formula::errDoubleRef) &&
-            !maResult.GetResultError())
+    if ((mpCode->GetCodeError() == FormulaError::NONE || mpCode->GetCodeError() == FormulaError::DoubleRef) &&
+            maResult.GetResultError() == FormulaError::NONE)
         return maResult.GetDouble();
 
     return 0.0;
@@ -127,8 +127,8 @@ svl::SharedString ScSimpleFormulaCalculator::GetString()
     if (mbMatrixResult)
         return svl::SharedString( maMatrixFormulaResult);   // string not interned
 
-    if ((!mpCode->GetCodeError() || mpCode->GetCodeError() == formula::errDoubleRef) &&
-            !maResult.GetResultError())
+    if ((mpCode->GetCodeError() == FormulaError::NONE || mpCode->GetCodeError() == FormulaError::DoubleRef) &&
+            maResult.GetResultError() == FormulaError::NONE)
         return maResult.GetString();
 
     return svl::SharedString::getEmptyString();

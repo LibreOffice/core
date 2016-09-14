@@ -1732,9 +1732,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         }
 
                         if (bError)
-                            aCol[nCol].SetError(static_cast<SCROW>(nRow), formula::errNoValue);
+                            aCol[nCol].SetError(static_cast<SCROW>(nRow), FormulaError::NoValue);
                         else if (bOverflow)
-                            aCol[nCol].SetError(static_cast<SCROW>(nRow), formula::errIllegalFPOperation);
+                            aCol[nCol].SetError(static_cast<SCROW>(nRow), FormulaError::IllegalFPOperation);
                         else
                             aCol[nCol].SetValue(static_cast<SCROW>(nRow), nVal);
                     }
@@ -1834,9 +1834,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             }
 
                             if (bError)
-                                aCol[nCol].SetError(static_cast<SCROW>(nRow), formula::errNoValue);
+                                aCol[nCol].SetError(static_cast<SCROW>(nRow), FormulaError::NoValue);
                             else if (bOverflow)
-                                aCol[nCol].SetError(static_cast<SCROW>(nRow), formula::errIllegalFPOperation);
+                                aCol[nCol].SetError(static_cast<SCROW>(nRow), FormulaError::IllegalFPOperation);
                             else
                             {
                                 nStringValue = (sal_Int32)nVal;
@@ -2183,7 +2183,7 @@ void ScTable::GetAutoFormatData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
     }
 }
 
-void ScTable::SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError)
+void ScTable::SetError( SCCOL nCol, SCROW nRow, FormulaError nError)
 {
     if (ValidColRow(nCol, nRow))
         aCol[nCol].SetError( nRow, nError );

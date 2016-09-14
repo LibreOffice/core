@@ -24,6 +24,7 @@
 #include "scitems.hxx"
 #include <editeng/justifyitem.hxx>
 #include <comphelper/classids.hxx>
+#include <formula/errorcodes.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
@@ -1965,13 +1966,13 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 break;
             case CELLTYPE_FORMULA :
                 {
-                    sal_uInt16 nErrCode;
+                    FormulaError nErrCode;
                     if ( bShowFormulas )
                     {
                         pCell->mpFormula->GetFormula(aString);
                         bString = true;
                     }
-                    else if ((nErrCode = pCell->mpFormula->GetErrCode()) != 0)
+                    else if ((nErrCode = pCell->mpFormula->GetErrCode()) != FormulaError::NONE)
                     {
                         aString = ScGlobal::GetErrorString( nErrCode );
                         bString = true;

@@ -1903,9 +1903,9 @@ void ScCompiler::SetRefConvention( const ScCompiler::Convention *pConvP )
             "ScCompiler::SetRefConvention: unsupported grammar resulting");
 }
 
-void ScCompiler::SetError(sal_uInt16 nError)
+void ScCompiler::SetError(FormulaError nError)
 {
-    if( !pArr->GetCodeError() )
+    if( pArr->GetCodeError() == FormulaError::NONE)
         pArr->SetCodeError( nError);
 }
 
@@ -2158,7 +2158,7 @@ Label_MaskStateMachine:
                 {   // This catches also $Sheet1.A$1, for example.
                     if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                     {
-                        SetError(errStringOverflow);
+                        SetError(FormulaError::StringOverflow);
                         eState = ssStop;
                     }
                     else
@@ -2178,7 +2178,7 @@ Label_MaskStateMachine:
                     {
                         if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                         {
-                            SetError(errStringOverflow);
+                            SetError(FormulaError::StringOverflow);
                             eState = ssStop;
                             break;  // for
                         }
@@ -2198,7 +2198,7 @@ Label_MaskStateMachine:
                     mnRangeOpPosInSymbol = pSym - &cSymbol[0];
                     if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                     {
-                        SetError(errStringOverflow);
+                        SetError(FormulaError::StringOverflow);
                         eState = ssStop;
                     }
                     else
@@ -2236,7 +2236,7 @@ Label_MaskStateMachine:
             {
                 if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                 {
-                    SetError(errStringOverflow);
+                    SetError(FormulaError::StringOverflow);
                     eState = ssStop;
                 }
                 else if (c == cDecSep)
@@ -2307,7 +2307,7 @@ Label_MaskStateMachine:
                 {
                     if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                     {
-                        SetError(errStringOverflow);
+                        SetError(FormulaError::StringOverflow);
                         eState = ssSkipString;
                     }
                     else
@@ -2365,7 +2365,7 @@ Label_MaskStateMachine:
                     {
                         if (pSym == &cSymbol[ MAXSTRLEN-1 ])
                         {
-                            SetError( errStringOverflow);
+                            SetError( FormulaError::StringOverflow);
                             eState = ssStop;
                         }
                         else
@@ -2380,7 +2380,7 @@ Label_MaskStateMachine:
                     {
                         if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                         {
-                            SetError( errStringOverflow);
+                            SetError( FormulaError::StringOverflow);
                             eState = ssStop;
                         }
                         else
@@ -2400,7 +2400,7 @@ Label_MaskStateMachine:
                     {
                         if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                         {
-                            SetError( errStringOverflow);
+                            SetError( FormulaError::StringOverflow);
                             eState = ssStop;
                         }
                         else
@@ -2416,7 +2416,7 @@ Label_MaskStateMachine:
             case ssGetReference:
                 if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                 {
-                    SetError( errStringOverflow);
+                    SetError( FormulaError::StringOverflow);
                     eState = ssSkipReference;
                 }
                 SAL_FALLTHROUGH;
@@ -2597,7 +2597,7 @@ Label_MaskStateMachine:
         nSrcPos = nSrcPos + nSpaces;
         OUStringBuffer aSymbol;
         mnRangeOpPosInSymbol = -1;
-        sal_uInt16 nErr = 0;
+        FormulaError nErr = FormulaError::NONE;
         do
         {
             bi18n = false;
@@ -2608,10 +2608,10 @@ Label_MaskStateMachine:
             ParseResult aRes = pConv->parseAnyToken( aFormula, nSrcPos, pCharClass );
 
             if ( !aRes.TokenType )
-                SetError( nErr = errIllegalChar );      // parsed chars as string
+                SetError( nErr = FormulaError::IllegalChar );      // parsed chars as string
             if ( aRes.EndPos <= nSrcPos )
             {   // ?!?
-                SetError( nErr = errIllegalChar );
+                SetError( nErr = FormulaError::IllegalChar );
                 nSrcPos = aFormula.getLength();
                 aSymbol.truncate();
             }
@@ -2645,11 +2645,11 @@ Label_MaskStateMachine:
                 if ( bi18n )
                     aSymbol.append(pStart[nSrcPos++]);
             }
-        } while ( bi18n && !nErr );
+        } while ( bi18n && nErr == FormulaError::NONE );
         sal_Int32 nLen = aSymbol.getLength();
         if ( nLen >= MAXSTRLEN )
         {
-            SetError( errStringOverflow );
+            SetError( FormulaError::StringOverflow );
             nLen = MAXSTRLEN-1;
         }
         lcl_UnicodeStrNCpy( cSymbol, aSymbol.getStr(), nLen );
@@ -2914,7 +2914,7 @@ bool ScCompiler::IsValue( const OUString& rSym )
 
     if( nType == css::util::NumberFormat::TEXT )
         // HACK: number too big!
-        SetError( errIllegalArgument );
+        SetError( FormulaError::IllegalArgument );
     maRawToken.SetDouble( fVal );
     return true;
 }
@@ -2928,7 +2928,7 @@ bool ScCompiler::IsString()
     bool bQuote = ((cSymbol[0] == '"') && (cSymbol[nLen] == '"'));
     if ((bQuote ? nLen-2 : nLen) > MAXSTRLEN-1)
     {
-        SetError(errStringOverflow);
+        SetError(FormulaError::StringOverflow);
         return false;
     }
     if ( bQuote )
@@ -3652,8 +3652,8 @@ bool ScCompiler::IsBoolean( const OUString& rName )
 
 bool ScCompiler::IsErrorConstant( const OUString& rName ) const
 {
-    sal_uInt16 nError = GetErrorConstant( rName);
-    if (nError)
+    FormulaError nError = GetErrorConstant( rName);
+    if (nError != FormulaError::NONE)
     {
         maRawToken.SetErrorConstant( nError);
         return true;
@@ -4037,7 +4037,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
         aToken.sbyte.cByte = (sal_uInt8) ( nSpaces > 255 ? 255 : nSpaces );
         if( !static_cast<ScTokenArray*>(pArr)->AddRawToken( aToken ) )
         {
-            SetError(errCodeOverflow);
+            SetError(FormulaError::CodeOverflow);
             return false;
         }
     }
@@ -4235,7 +4235,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     if ( meExtendedErrorDetection != EXTENDED_ERROR_DETECTION_NONE )
     {
         // set an error
-        SetError( errNoName );
+        SetError( FormulaError::NoName );
         if (meExtendedErrorDetection == EXTENDED_ERROR_DETECTION_NAME_BREAK)
             return false;   // end compilation
     }
@@ -4359,7 +4359,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             {
                 if( !nBrackets )
                 {
-                    SetError( errPairExpected );
+                    SetError( FormulaError::PairExpected );
                     if ( bAutoCorrect )
                     {
                         bCorrected = true;
@@ -4381,7 +4381,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             case ocArrayOpen:
             {
                 if( bInArray )
-                    SetError( errNestedArray );
+                    SetError( FormulaError::NestedArray );
                 else
                     bInArray = true;
                 // Don't count following column separator as parameter separator.
@@ -4401,7 +4401,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                 }
                 else
                 {
-                    SetError( errPairExpected );
+                    SetError( FormulaError::PairExpected );
                     if ( bAutoCorrect )
                     {
                         bCorrected = true;
@@ -4448,7 +4448,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             // args so the correction dialog can do better?
             if ( !static_cast<ScTokenArray*>(pArr)->Add( new FormulaMissingToken ) )
             {
-                SetError(errCodeOverflow); break;
+                SetError(FormulaError::CodeOverflow); break;
             }
         }
         if (bOOXML)
@@ -4463,7 +4463,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                 if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep, ocSep)) ||
                         !static_cast<ScTokenArray*>(pArr)->Add( new FormulaDoubleToken( 1.0)))
                 {
-                    SetError(errCodeOverflow); break;
+                    SetError(FormulaError::CodeOverflow); break;
                 }
             }
         }
@@ -4479,7 +4479,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                 if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep, ocSep)) ||
                         !static_cast<ScTokenArray*>(pArr)->Add( new FormulaDoubleToken( 1.0)))
                 {
-                    SetError(errCodeOverflow); break;
+                    SetError(FormulaError::CodeOverflow); break;
                 }
                 ++pFunctionStack[ nFunction ].nSep;
             }
@@ -4487,7 +4487,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         FormulaToken* pNewToken = static_cast<ScTokenArray*>(pArr)->Add( maRawToken.CreateToken());
         if (!pNewToken)
         {
-            SetError(errCodeOverflow);
+            SetError(FormulaError::CodeOverflow);
             break;
         }
         else if (eLastOp == ocRange && pNewToken->GetOpCode() == ocPush && pNewToken->GetType() == svSingleRef)
@@ -4512,14 +4512,14 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             case ocTableRefOpen:
                 SAL_WARN_IF( maTableRefs.empty(), "sc.core", "ocTableRefOpen without TableRefEntry");
                 if (maTableRefs.empty())
-                    SetError(errPair);
+                    SetError(FormulaError::Pair);
                 else
                     ++maTableRefs.back().mnLevel;
                 break;
             case ocTableRefClose:
                 SAL_WARN_IF( maTableRefs.empty(), "sc.core", "ocTableRefClose without TableRefEntry");
                 if (maTableRefs.empty())
-                    SetError(errPair);
+                    SetError(FormulaError::Pair);
                 else
                 {
                     if (--maTableRefs.back().mnLevel == 0)
@@ -4540,7 +4540,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             FormulaByteToken aToken( ocArrayClose );
             if( !pArr->AddToken( aToken ) )
             {
-                SetError(errCodeOverflow);
+                SetError(FormulaError::CodeOverflow);
             }
             else if ( bAutoCorrect )
                 aCorrectedFormula += mxSymbols->getSymbol(ocArrayClose);
@@ -4553,7 +4553,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             {
                 if( !pArr->AddToken( aToken ) )
                 {
-                    SetError(errCodeOverflow);
+                    SetError(FormulaError::CodeOverflow);
                     break;  // while
                 }
                 if ( bAutoCorrect )
@@ -4621,9 +4621,9 @@ bool ScCompiler::HandleRange()
     const ScRangeData* pRangeData = GetRangeData( *mpToken);
     if (pRangeData)
     {
-        sal_uInt16 nErr = pRangeData->GetErrCode();
-        if( nErr )
-            SetError( errNoName );
+        FormulaError nErr = pRangeData->GetErrCode();
+        if( nErr != FormulaError::NONE )
+            SetError( FormulaError::NoName );
         else if (mbJumpCommandReorder)
         {
             ScTokenArray* pNew;
@@ -4675,7 +4675,7 @@ bool ScCompiler::HandleRange()
         }
     }
     else
-        SetError(errNoName);
+        SetError(FormulaError::NoName);
     return true;
 }
 
@@ -4693,7 +4693,7 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
             const OUString* pFile = pRefMgr->getExternalFileName(_aToken.GetIndex());
             if (!pFile)
             {
-                SetError(errNoName);
+                SetError(FormulaError::NoName);
                 return true;
             }
 
@@ -4703,7 +4703,7 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
 
             if (!xNew)
             {
-                SetError(errNoName);
+                SetError(FormulaError::NoName);
                 return true;
             }
 
@@ -4882,8 +4882,8 @@ void ScCompiler::CreateStringFromMatrix( OUStringBuffer& rBuffer, const FormulaT
                     AppendBoolean(rBuffer, pMatrix->GetDouble(nC, nR) != 0.0);
                 else
                 {
-                    sal_uInt16 nErr = pMatrix->GetError(nC, nR);
-                    if (nErr)
+                    FormulaError nErr = pMatrix->GetError(nC, nR);
+                    if (nErr != FormulaError::NONE)
                         rBuffer.append(ScGlobal::GetErrorString(nErr));
                     else
                         AppendDouble(rBuffer, pMatrix->GetDouble(nC, nR));
@@ -5031,12 +5031,12 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                 // Write the resulting reference if TableRef is not supported.
                 const ScTableRefToken* pTR = dynamic_cast<const ScTableRefToken*>(_pTokenP);
                 if (!pTR)
-                    AppendErrorConstant( aBuffer, errNoCode);
+                    AppendErrorConstant( aBuffer, FormulaError::NoCode);
                 else
                 {
                     const FormulaToken* pRef = pTR->GetAreaRefRPN();
                     if (!pRef)
-                        AppendErrorConstant( aBuffer, errNoCode);
+                        AppendErrorConstant( aBuffer, FormulaError::NoCode);
                     else
                     {
                         switch (pRef->GetType())
@@ -5051,7 +5051,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                                 AppendErrorConstant( aBuffer, pRef->GetError());
                                 break;
                             default:
-                                AppendErrorConstant( aBuffer, errNoCode);
+                                AppendErrorConstant( aBuffer, FormulaError::NoCode);
                         }
                     }
                 }
@@ -5143,7 +5143,7 @@ bool ScCompiler::HandleColRowName()
     const ScAddress aAbs = rRef.toAbs(aPos);
     if (!ValidAddress(aAbs))
     {
-        SetError( errNoRef );
+        SetError( FormulaError::NoRef );
         return true;
     }
     SCCOL nCol = aAbs.Col();
@@ -5302,7 +5302,7 @@ bool ScCompiler::HandleColRowName()
                 bFound = true;
         }
         if ( !bFound )
-            SetError(errNoRef);
+            SetError(FormulaError::NoRef);
         else if (mbJumpCommandReorder)
         {
             ScTokenArray* pNew = new ScTokenArray();
@@ -5345,7 +5345,7 @@ bool ScCompiler::HandleColRowName()
         }
     }
     else
-        SetError(errNoName);
+        SetError(FormulaError::NoName);
     return true;
 }
 
@@ -5353,7 +5353,7 @@ bool ScCompiler::HandleDbData()
 {
     ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(mpToken->GetIndex());
     if ( !pDBData )
-        SetError(errNoName);
+        SetError(FormulaError::NoName);
     else if (mbJumpCommandReorder)
     {
         ScComplexRefData aRefData;
@@ -5392,20 +5392,20 @@ bool ScCompiler::HandleTableRef()
     ScTableRefToken* pTR = dynamic_cast<ScTableRefToken*>(mpToken.get());
     if (!pTR)
     {
-        SetError(errUnknownToken);
+        SetError(FormulaError::UnknownToken);
         return true;
     }
 
     ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex( pTR->GetIndex());
     if ( !pDBData )
-        SetError(errNoName);
+        SetError(FormulaError::NoName);
     else if (mbJumpCommandReorder)
     {
         ScRange aDBRange;
         pDBData->GetArea(aDBRange);
         aDBRange.aEnd.SetTab(aDBRange.aStart.Tab());
         ScRange aRange( aDBRange);
-        sal_uInt16 nError = 0;
+        FormulaError nError = FormulaError::NONE;
         bool bForwardToClose = false;
         ScTableRefToken::Item eItem = pTR->GetItem();
         switch (eItem)
@@ -5419,7 +5419,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasTotals())
                         aRange.aEnd.IncRow(-1);
                     if (aRange.aEnd.Row() < aRange.aStart.Row())
-                        nError = errNoRef;
+                        nError = FormulaError::NoRef;
                     bForwardToClose = true;
                 }
                 break;
@@ -5433,7 +5433,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasHeader())
                         aRange.aEnd.SetRow( aRange.aStart.Row());
                     else
-                        nError = errNoRef;
+                        nError = FormulaError::NoRef;
                     bForwardToClose = true;
                 }
                 break;
@@ -5448,7 +5448,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasTotals())
                         aRange.aEnd.IncRow(-1);
                     if (aRange.aEnd.Row() < aRange.aStart.Row())
-                        nError = errNoRef;
+                        nError = FormulaError::NoRef;
                     bForwardToClose = true;
                 }
                 break;
@@ -5457,7 +5457,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasTotals())
                         aRange.aStart.SetRow( aRange.aEnd.Row());
                     else
-                        nError = errNoRef;
+                        nError = FormulaError::NoRef;
                     bForwardToClose = true;
                 }
                 break;
@@ -5466,7 +5466,7 @@ bool ScCompiler::HandleTableRef()
                     if (pDBData->HasHeader())
                         aRange.aStart.IncRow();
                     if (aRange.aEnd.Row() < aRange.aStart.Row())
-                        nError = errNoRef;
+                        nError = FormulaError::NoRef;
                     bForwardToClose = true;
                 }
                 break;
@@ -5479,7 +5479,7 @@ bool ScCompiler::HandleTableRef()
                     }
                     else
                     {
-                        nError = errNoValue;
+                        nError = FormulaError::NoValue;
                         // For *some* relative row reference in named
                         // expressions' thisrow special handling below.
                         aRange.aEnd.SetRow( aRange.aStart.Row());
@@ -5519,7 +5519,7 @@ bool ScCompiler::HandleTableRef()
                             eState = ((eState == sOpen || eState == sSep) ? sOpen : sStop);
                             if (++nLevel > 2)
                             {
-                                SetError( errPair);
+                                SetError( FormulaError::Pair);
                                 eState = sStop;
                             }
                             break;
@@ -5553,8 +5553,8 @@ bool ScCompiler::HandleTableRef()
                             break;
                         case ocBad:
                             eState = sLast;
-                            if (!nError)
-                                nError = errNoName;
+                            if (nError == FormulaError::NONE)
+                                nError = FormulaError::NoName;
                             break;
                         default:
                             eState = sStop;
@@ -5567,9 +5567,9 @@ bool ScCompiler::HandleTableRef()
             } while (eState != sStop);
         }
         ScTokenArray* pNew = new ScTokenArray();
-        if (!nError || nError == errNoValue)
+        if (nError == FormulaError::NONE || nError == FormulaError::NoValue)
         {
-            // The errNoValue case generates a thisrow reference that can be
+            // The FormulaError::NoValue case generates a thisrow reference that can be
             // used to save named expressions in A1 syntax notation.
             if (bColumnRange)
             {
@@ -5623,7 +5623,7 @@ bool ScCompiler::HandleTableRef()
                     }
                     aRefData.SetRelName( bCol1RelName);
                     aRefData.SetFlag3D( true);
-                    if (nError)
+                    if (nError != FormulaError::NONE)
                     {
                         aRefData.SetAddress( aRange.aStart, aRange.aStart);
                         pTR->SetAreaRefRPN( new ScSingleRefToken( aRefData));   // set reference at TableRef
@@ -5652,7 +5652,7 @@ bool ScCompiler::HandleTableRef()
                     aRefData.Ref1.SetRelName( bRelName);
                     aRefData.Ref2.SetRelName( bRelName);
                     aRefData.Ref1.SetFlag3D( true);
-                    if (nError)
+                    if (nError != FormulaError::NONE)
                     {
                         aRefData.SetRange( aRange, aRange.aStart);
                         pTR->SetAreaRefRPN( new ScDoubleRefToken( aRefData));   // set reference at TableRef
@@ -5667,7 +5667,7 @@ bool ScCompiler::HandleTableRef()
             }
             else
             {
-                pTR->SetAreaRefRPN( pNew->Add( new FormulaErrorToken( errNoRef)));
+                pTR->SetAreaRefRPN( pNew->Add( new FormulaErrorToken( FormulaError::NoRef)));
             }
         }
         else
@@ -5677,7 +5677,7 @@ bool ScCompiler::HandleTableRef()
         while (nLevel-- > 0)
         {
             if (!GetTokenIfOpCode( ocTableRefClose))
-                SetError( errPair);
+                SetError( FormulaError::Pair);
         }
         PushTokenArray( pNew, true );
         pNew->Reset();

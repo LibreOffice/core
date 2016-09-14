@@ -331,7 +331,7 @@ std::unique_ptr<ScTokenArray> DefinedName::getScTokens()
     // Compile the tokens into RPN once to populate information into tokens
     // where necessary, e.g. for TableRef inner reference. RPN can be discarded
     // after, a resulting error must be reset.
-    sal_uInt16 nErr = pArray->GetCodeError();
+    FormulaError nErr = pArray->GetCodeError();
     aCompiler.CompileTokenArray();
     pArray->DelRPN();
     pArray->SetCodeError(nErr);

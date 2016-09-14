@@ -12,15 +12,15 @@
 
 namespace sc {
 
-FormulaResultValue::FormulaResultValue() : meType(Invalid), mfValue(0.0), mnError(0) {}
-FormulaResultValue::FormulaResultValue( double fValue ) : meType(Value), mfValue(fValue), mnError(0) {}
-FormulaResultValue::FormulaResultValue( const svl::SharedString& rStr ) : meType(String), mfValue(0.0), maString(rStr), mnError(0) {}
-FormulaResultValue::FormulaResultValue( sal_uInt16 nErr ) : meType(Error), mfValue(0.0), mnError(nErr) {}
+FormulaResultValue::FormulaResultValue() : meType(Invalid), mfValue(0.0), mnError(FormulaError::NONE) {}
+FormulaResultValue::FormulaResultValue( double fValue ) : meType(Value), mfValue(fValue), mnError(FormulaError::NONE) {}
+FormulaResultValue::FormulaResultValue( const svl::SharedString& rStr ) : meType(String), mfValue(0.0), maString(rStr), mnError(FormulaError::NONE) {}
+FormulaResultValue::FormulaResultValue( FormulaError nErr ) : meType(Error), mfValue(0.0), mnError(nErr) {}
 
 }
 
 ScFormulaResult::ScFormulaResult() :
-    mpToken(nullptr), mnError(0), mbToken(true),
+    mpToken(nullptr), mnError(FormulaError::NONE), mbToken(true),
     mbEmpty(false), mbEmptyDisplayedAsString(false),
     meMultiline(MULTILINE_UNKNOWN) {}
 
@@ -55,7 +55,7 @@ ScFormulaResult::ScFormulaResult( const ScFormulaResult & r ) :
 }
 
 ScFormulaResult::ScFormulaResult( const formula::FormulaToken* p ) :
-    mnError(0), mbToken(false), mbEmpty(false), mbEmptyDisplayedAsString(false),
+    mnError(FormulaError::NONE), mbToken(false), mbEmpty(false), mbEmptyDisplayedAsString(false),
     meMultiline(MULTILINE_UNKNOWN)
 {
     SetToken( p);
@@ -69,7 +69,7 @@ ScFormulaResult::~ScFormulaResult()
 
 void ScFormulaResult::ResetToDefaults()
 {
-    mnError = 0;
+    mnError = FormulaError::NONE;
     mbEmpty = false;
     mbEmptyDisplayedAsString = false;
     meMultiline = MULTILINE_UNKNOWN;
@@ -219,7 +219,7 @@ void ScFormulaResult::SetDouble( double f )
 formula::StackVar ScFormulaResult::GetType() const
 {
     // Order is significant.
-    if (mnError)
+    if (mnError != FormulaError::NONE)
         return formula::svError;
     if (mbEmpty)
         return formula::svEmptyCell;
@@ -311,9 +311,9 @@ bool ScFormulaResult::IsMultiline() const
     return meMultiline == MULTILINE_TRUE;
 }
 
-bool ScFormulaResult::GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const
+bool ScFormulaResult::GetErrorOrDouble( FormulaError& rErr, double& rVal ) const
 {
-    if (mnError)
+    if (mnError != FormulaError::NONE)
     {
         rErr = mnError;
         return true;
@@ -334,7 +334,7 @@ bool ScFormulaResult::GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const
         }
     }
 
-    if (rErr)
+    if (rErr != FormulaError::NONE)
         return true;
 
     if (!isValue(sv))
@@ -346,11 +346,11 @@ bool ScFormulaResult::GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const
 
 sc::FormulaResultValue ScFormulaResult::GetResult() const
 {
-    if (mnError)
+    if (mnError != FormulaError::NONE)
         return sc::FormulaResultValue(mnError);
 
     formula::StackVar sv = GetCellResultType();
-    sal_uInt16 nErr = 0;
+    FormulaError nErr = FormulaError::NONE;
     if (sv == formula::svError)
     {
         if (GetType() == formula::svMatrixCell)
@@ -365,7 +365,7 @@ sc::FormulaResultValue ScFormulaResult::GetResult() const
         }
     }
 
-    if (nErr)
+    if (nErr != FormulaError::NONE)
         return sc::FormulaResultValue(nErr);
 
     if (isValue(sv))
@@ -382,9 +382,9 @@ sc::FormulaResultValue ScFormulaResult::GetResult() const
     return sc::FormulaResultValue();
 }
 
-sal_uInt16 ScFormulaResult::GetResultError() const
+FormulaError ScFormulaResult::GetResultError() const
 {
-    if (mnError)
+    if (mnError != FormulaError::NONE)
         return mnError;
     formula::StackVar sv = GetCellResultType();
     if (sv == formula::svError)
@@ -396,10 +396,10 @@ sal_uInt16 ScFormulaResult::GetResultError() const
         if (mpToken)
             return mpToken->GetError();
     }
-    return 0;
+    return FormulaError::NONE;
 }
 
-void ScFormulaResult::SetResultError( sal_uInt16 nErr )
+void ScFormulaResult::SetResultError( FormulaError nErr )
 {
     mnError = nErr;
 }

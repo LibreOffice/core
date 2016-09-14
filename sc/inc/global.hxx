@@ -35,6 +35,7 @@ class SfxItemSet;
 class Color;
 struct ScCalcConfig;
 enum class SvtScriptType;
+enum class FormulaError;
 
 #define SC_COLLATOR_IGNORES ( \
     css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
@@ -571,8 +572,8 @@ public:
     static ScFunctionMgr*   GetStarCalcFunctionMgr();
     static void             ResetFunctionList();
 
-    static OUString         GetErrorString(sal_uInt16 nErrNumber);
-    static OUString         GetLongErrorString(sal_uInt16 nErrNumber);
+    static OUString         GetErrorString(FormulaError nErrNumber);
+    static OUString         GetLongErrorString(FormulaError nErrNumber);
     static bool             EETextObjEqual( const EditTextObject* pObj1,
                                             const EditTextObject* pObj2 );
     static bool             CheckWidthInvalidate( bool& bNumFormatChanged,
@@ -676,11 +677,11 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
 
         In any case, if rError is set 0.0 is returned.
 
-        If nStringNoValueError is errCellNoValue, that is unconditionally
+        If nStringNoValueError is FormulaError::CellNoValue, that is unconditionally
         assigned to rError and 0.0 is returned. The caller is expected to
         handle this situation. Used by the interpreter.
 
-        Usually errNoValue is passed as nStringNoValueError.
+        Usually FormulaError::NoValue is passed as nStringNoValueError.
 
         Otherwise, depending on the string conversion configuration different
         approaches are taken:
@@ -778,7 +779,7 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
 
      */
     static double ConvertStringToValue( const OUString& rStr, const ScCalcConfig& rConfig,
-            sal_uInt16 & rError, sal_uInt16 nStringNoValueError,
+            FormulaError & rError, FormulaError nStringNoValueError,
             SvNumberFormatter* pFormatter, short & rCurFmtType );
 
 };

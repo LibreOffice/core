@@ -30,6 +30,7 @@
 class ScDocument;
 struct ScDBQueryParamBase;
 struct ScQueryParamBase;
+enum class FormulaError;
 
 /**
  * Base class for abstracting range data backends for database functions.
@@ -71,7 +72,7 @@ public:
      * @return 0-based column index
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const = 0;
-    virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = nullptr) const = 0;
+    virtual SCCOL findFieldColumn(const OUString& rStr, FormulaError* pErr = nullptr) const = 0;
     virtual std::unique_ptr<ScDBQueryParamBase> createQueryParam(const ScDBRangeBase* pQueryRef) const = 0;
     virtual bool isRangeEqual(const ScRange& rRange) const = 0;
 
@@ -122,7 +123,7 @@ public:
      * @return 0-based column index
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const override;
-    virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = nullptr) const override;
+    virtual SCCOL findFieldColumn(const OUString& rStr, FormulaError* pErr = nullptr) const override;
     virtual std::unique_ptr<ScDBQueryParamBase> createQueryParam(const ScDBRangeBase* pQueryRef) const override;
     virtual bool isRangeEqual(const ScRange& rRange) const override;
 
@@ -162,7 +163,7 @@ public:
      * @return 0-based column index
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const override;
-    virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = nullptr) const override;
+    virtual SCCOL findFieldColumn(const OUString& rStr, FormulaError* pErr = nullptr) const override;
     virtual std::unique_ptr<ScDBQueryParamBase> createQueryParam(const ScDBRangeBase* pQueryRef) const override;
     virtual bool isRangeEqual(const ScRange& rRange) const override;
 

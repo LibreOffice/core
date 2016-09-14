@@ -899,12 +899,12 @@ void Test::testValueIterator()
         bool bHas = false;
         size_t nCheckPos = 0;
         double fVal;
-        sal_uInt16 nErr;
+        FormulaError nErr;
         for (bHas = aIter.GetFirst(fVal, nErr); bHas; bHas = aIter.GetNext(fVal, nErr), ++nCheckPos)
         {
             CPPUNIT_ASSERT_MESSAGE("Iteration longer than expected.", nCheckPos < nCheckLen);
             CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos], fVal);
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), nErr);
+            CPPUNIT_ASSERT_EQUAL(0, (int)nErr);
         }
     }
 
@@ -5774,8 +5774,8 @@ void Test::testFormulaWizardSubformula()
     m_pDoc->SetString(ScAddress(1,2,0), "=gibberish");  // B3
 
     ScSimpleFormulaCalculator aFCell1( m_pDoc, ScAddress(0,0,0), "=B1:B3", true );
-    sal_uInt16 nErrCode = aFCell1.GetErrCode();
-    CPPUNIT_ASSERT( nErrCode == 0 || aFCell1.IsMatrix() );
+    FormulaError nErrCode = aFCell1.GetErrCode();
+    CPPUNIT_ASSERT( nErrCode == FormulaError::NONE || aFCell1.IsMatrix() );
     CPPUNIT_ASSERT_EQUAL( OUString("{1;#DIV/0!;#NAME?}"), aFCell1.GetString().getString() );
 
     m_pDoc->SetString(ScAddress(1,0,0), "=NA()");       // B1
@@ -5783,7 +5783,7 @@ void Test::testFormulaWizardSubformula()
     m_pDoc->SetString(ScAddress(1,2,0), "=1+2");        // B3
     ScSimpleFormulaCalculator aFCell2( m_pDoc, ScAddress(0,0,0), "=B1:B3", true );
     nErrCode = aFCell2.GetErrCode();
-    CPPUNIT_ASSERT( nErrCode == 0 || aFCell2.IsMatrix() );
+    CPPUNIT_ASSERT( nErrCode == FormulaError::NONE || aFCell2.IsMatrix() );
     CPPUNIT_ASSERT_EQUAL( OUString("{#N/A;2;3}"), aFCell2.GetString().getString() );
 
     m_pDoc->DeleteTab(0);

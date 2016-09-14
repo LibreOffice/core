@@ -39,6 +39,7 @@ class ScJumpMatrix;
 class ScMatrix;
 struct ScComplexRefData;
 struct ScSingleRefData;
+enum class FormulaError;
 
 namespace formula
 {
@@ -161,8 +162,8 @@ public:
     virtual short*              GetJump() const;
     virtual const OUString&     GetExternal() const;
     virtual FormulaToken*       GetFAPOrigToken() const;
-    virtual sal_uInt16          GetError() const;
-    virtual void                SetError( sal_uInt16 );
+    virtual FormulaError        GetError() const;
+    virtual void                SetError( FormulaError );
 
     virtual const ScSingleRefData*  GetSingleRef() const;
     virtual ScSingleRefData*        GetSingleRef();
@@ -431,16 +432,16 @@ public:
 
 class FORMULA_DLLPUBLIC FormulaErrorToken : public FormulaToken
 {
-            sal_uInt16          nError;
+         FormulaError          nError;
 public:
-                                FormulaErrorToken( sal_uInt16 nErr ) :
+                                FormulaErrorToken( FormulaError nErr ) :
                                     FormulaToken( svError ), nError( nErr) {}
                                 FormulaErrorToken( const FormulaErrorToken& r ) :
                                     FormulaToken( r ), nError( r.nError) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaErrorToken(*this); }
-    virtual sal_uInt16          GetError() const override;
-    virtual void                SetError( sal_uInt16 nErr ) override;
+    virtual FormulaError        GetError() const override;
+    virtual void                SetError( FormulaError nErr ) override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 

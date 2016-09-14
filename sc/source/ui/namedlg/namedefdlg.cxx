@@ -11,7 +11,7 @@
 
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
-
+#include <formula/errorcodes.hxx>
 #include <sfx2/app.hxx>
 
 #include "document.hxx"
@@ -122,7 +122,7 @@ bool ScNameDefDlg::IsFormulaValid()
     ScCompiler aComp( mpDoc, maCursorPos);
     aComp.SetGrammar( mpDoc->GetGrammar() );
     ScTokenArray* pCode = aComp.CompileString(m_pEdRange->GetText());
-    if (pCode->GetCodeError())
+    if (pCode->GetCodeError() != FormulaError::NONE)
     {
         //TODO: info message
         delete pCode;
@@ -233,7 +233,7 @@ void ScNameDefDlg::AddPushed()
             pNewEntry->AddType(nType);
 
             // aExpression valid?
-            if ( 0 == pNewEntry->GetErrCode() )
+            if ( FormulaError::NONE == pNewEntry->GetErrCode() )
             {
                 if ( !pRangeName->insert( pNewEntry, false /*bReuseFreeIndex*/ ) )
                     pNewEntry = nullptr;

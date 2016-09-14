@@ -24,98 +24,108 @@
 #include <sal/mathconf.h>
 #include <sal/types.h>
 
-namespace formula {
+enum class FormulaError
+{
+    NONE                 = 0,
 
-const sal_uInt16 errIllegalChar          = 501;
-const sal_uInt16 errIllegalArgument      = 502;
-const sal_uInt16 errIllegalFPOperation   = 503; // #NUM!
-const sal_uInt16 errIllegalParameter     = 504;
-const sal_uInt16 errIllegalJump          = 505;
-const sal_uInt16 errSeparator            = 506;
-const sal_uInt16 errPair                 = 507;
-const sal_uInt16 errPairExpected         = 508;
-const sal_uInt16 errOperatorExpected     = 509;
-const sal_uInt16 errVariableExpected     = 510;
-const sal_uInt16 errParameterExpected    = 511;
-const sal_uInt16 errCodeOverflow         = 512;
-const sal_uInt16 errStringOverflow       = 513;
-const sal_uInt16 errStackOverflow        = 514;
-const sal_uInt16 errUnknownState         = 515;
-const sal_uInt16 errUnknownVariable      = 516;
-const sal_uInt16 errUnknownOpCode        = 517;
-const sal_uInt16 errUnknownStackVariable = 518;
-const sal_uInt16 errNoValue              = 519; // #VALUE!
-const sal_uInt16 errUnknownToken         = 520;
-const sal_uInt16 errNoCode               = 521; // #NULL!
-const sal_uInt16 errCircularReference    = 522;
-const sal_uInt16 errNoConvergence        = 523;
-const sal_uInt16 errNoRef                = 524; // #REF!
-const sal_uInt16 errNoName               = 525; // #NAME?
-const sal_uInt16 errDoubleRef            = 526;
+    // these 3 are only used by the starcalc filter in sc/source/filter/starcalc/*
+    UnknownFormat        = 1,
+    UnknownID            = 2,
+    OutOfMemory          = 3,
+
+    IllegalChar          = 501,
+    IllegalArgument      = 502,
+    IllegalFPOperation   = 503, // #NUM!
+    IllegalParameter     = 504,
+    IllegalJump          = 505,
+    Separator            = 506,
+    Pair                 = 507,
+    PairExpected         = 508,
+    OperatorExpected     = 509,
+    VariableExpected     = 510,
+    ParameterExpected    = 511,
+    CodeOverflow         = 512,
+    StringOverflow       = 513,
+    StackOverflow        = 514,
+    UnknownState         = 515,
+    UnknownVariable      = 516,
+    UnknownOpCode        = 517,
+    UnknownStackVariable = 518,
+    NoValue              = 519, // #VALUE!
+    UnknownToken         = 520,
+    NoCode               = 521, // #NULL!
+    CircularReference    = 522,
+    NoConvergence        = 523,
+    NoRef                = 524, // #REF!
+    NoName               = 525, // #NAME?
+    DoubleRef            = 526,
 // Not displayed, temporary for TrackFormulas,
-// Cell depends on another cell that has errCircularReference
-const sal_uInt16 errTrackFromCircRef     = 528;
+// Cell depends on another cell that has FormulaError::CircularReference
+    TrackFromCircRef     = 528,
 // ScInterpreter internal:  no numeric value but numeric queried. If this is
 // set as mnStringNoValueError no error is generated but 0 returned.
-const sal_uInt16 errCellNoValue          = 529;
+    CellNoValue          = 529,
 // Interpreter: needed AddIn not found
-const sal_uInt16 errNoAddin              = 530;
+    NoAddin              = 530,
 // Interpreter: needed Macro not found
-const sal_uInt16 errNoMacro              = 531;
+    NoMacro              = 531,
 // Interpreter: Division by zero
-const sal_uInt16 errDivisionByZero       = 532; // #DIV/0!
+    DivisionByZero       = 532, // #DIV/0!
 // Compiler: a non-simple (str,err,val) value was put in an array
-const sal_uInt16 errNestedArray          = 533;
+    NestedArray          = 533,
 // ScInterpreter internal:  no numeric value but numeric queried. If this is
 // temporarily (!) set as mnStringNoValueError, the error is generated and can
 // be used to distinguish that condition from all other (inherited) errors. Do
 // not use for anything else! Never push or inherit the error otherwise!
-const sal_uInt16 errNotNumericString     = 534;
+    NotNumericString     = 534,
 // ScInterpreter internal:  jump matrix already has a result at this position,
 // do not overwrite in case of empty code path.
-const sal_uInt16 errJumpMatHasResult     = 535;
+    JumpMatHasResult     = 535,
 // ScInterpreter internal:  (matrix) element is not a numeric value, i.e.
-// string or empty, to be distinguished from the general errNoValue NAN and not
+// string or empty, to be distinguished from the general FormulaError::NoValue NAN and not
 // to be used as result.
-const sal_uInt16 errElementNaN           = 536;
+    ElementNaN           = 536,
 // ScInterpreter/ScFormulaCell internal:  keep dirty, retry interpreting next
 // round.
-const sal_uInt16 errRetryCircular        = 537;
+    RetryCircular        = 537,
 // If matrix could not be allocated.
-const sal_uInt16 errMatrixSize           = 538;
+    MatrixSize           = 538,
 
 // Interpreter: NA() not available condition, not a real error
-const sal_uInt16 NOTAVAILABLE            = 0x7fff;
+    NotAvailable         = 0x7fff
+};
 
+namespace ScErrorCodes
+{
 
 /** Unconditionally construct a double value of NAN where the lower bits
     represent an interpreter error code. */
-inline double CreateDoubleError( sal_uInt16 nErr )
+inline double CreateDoubleError( FormulaError nErr )
 {
     sal_math_Double smVal;
     ::rtl::math::setNan( &smVal.value );
-    smVal.nan_parts.fraction_lo = nErr;
+    smVal.nan_parts.fraction_lo = static_cast<sal_uInt16>(nErr);
     return smVal.value;
 }
 
 /** Recreate the error code of a coded double error, if any. */
-inline sal_uInt16 GetDoubleErrorValue( double fVal )
+inline FormulaError GetDoubleErrorValue( double fVal )
 {
     if ( ::rtl::math::isFinite( fVal ) )
-        return 0;
+        return FormulaError::NONE;
     if ( ::rtl::math::isInf( fVal ) )
-        return errIllegalFPOperation;       // normal INF
+        return FormulaError::IllegalFPOperation;       // normal INF
     sal_uInt32 nErr = reinterpret_cast< sal_math_Double * >( &fVal)->nan_parts.fraction_lo;
     if ( nErr & 0xffff0000 )
-        return errNoValue;                  // just a normal NAN
+        return FormulaError::NoValue;                  // just a normal NAN
     if (!nErr)
         // Another NAN, e.g. -nan(0x8000000000000) from calculating with -inf
-        return errIllegalFPOperation;
+        return FormulaError::IllegalFPOperation;
     // Any other error known to us as error code.
-    return (sal_uInt16)(nErr & 0x0000ffff);
+    return (FormulaError)(nErr & 0x0000ffff);
 }
 
-} // namespace formula
+} // namespace ScErrorCodes
 
 #endif // INCLUDED_FORMULA_ERRORCODES_HXX
 

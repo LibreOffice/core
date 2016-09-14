@@ -1027,6 +1027,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
         {
             ScMatrixValue nMatVal = mrMatrix.Get( nCol, nRow );
 
+            FormulaError nScError;
             if( SC_MATVAL_EMPTY == nMatVal.nType )
             {
                 rStrm.SetSliceSize( 9 );
@@ -1046,7 +1047,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
                 rStrm << EXC_CACHEDVAL_BOOL << nBool;
                 rStrm.WriteZeroBytes( 7 );
             }
-            else if( sal_uInt16 nScError = nMatVal.GetError() )
+            else if( (nScError = nMatVal.GetError()) != FormulaError::NONE )
             {
                 sal_Int8 nError ( XclTools::GetXclErrorCode( nScError ) );
                 rStrm.SetSliceSize( 9 );

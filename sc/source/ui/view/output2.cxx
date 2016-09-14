@@ -597,7 +597,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth
     if (eType == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pFCell = rCell.mpFormula;
-        if (pFCell->GetErrCode() != 0 || pOutput->mbShowFormulas)
+        if (pFCell->GetErrCode() != FormulaError::NONE || pOutput->mbShowFormulas)
         {
             SetHashText();      // If the error string doesn't fit, always use "###". Also for "display formulas" (#i116691#)
             return;

@@ -23,6 +23,7 @@
 
 #include <sfx2/app.hxx>
 #include <editeng/acorrcfg.hxx>
+#include <formula/errorcodes.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -1434,8 +1435,8 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
             bColRowName = false;
     }
 
-    sal_uInt16 nErrCode = pCalc->GetErrCode();
-    if ( nErrCode != 0 )
+    FormulaError nErrCode = pCalc->GetErrCode();
+    if ( nErrCode != FormulaError::NONE )
         return ScGlobal::GetErrorString(nErrCode);
 
     SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());

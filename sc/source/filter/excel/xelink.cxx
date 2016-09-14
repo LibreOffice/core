@@ -1185,7 +1185,7 @@ void XclExpCrn::WriteDouble( XclExpStream& rStrm, double fValue )
 {
     if( ::rtl::math::isNan( fValue ) )
     {
-        sal_uInt16 nScError = formula::GetDoubleErrorValue(fValue);
+        FormulaError nScError = ScErrorCodes::GetDoubleErrorValue(fValue);
         WriteError( rStrm, XclTools::GetXclErrorCode( nScError ) );
     }
     else

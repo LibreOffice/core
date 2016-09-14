@@ -49,6 +49,7 @@
 
 enum class SvtScriptType;
 enum class ScMF;
+enum class FormulaError;
 namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
 namespace svl {
@@ -1000,7 +1001,7 @@ public:
 
     void SetValues( const ScAddress& rPos, const std::vector<double>& rVals );
 
-    void SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const sal_uInt16 nError);
+    void SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const FormulaError nError);
 
     SC_DLLPUBLIC void SetFormula(
         const ScAddress& rPos, const ScTokenArray& rArray );
@@ -1057,7 +1058,7 @@ public:
     std::shared_ptr<sc::FormulaGroupContext>& GetFormulaGroupContext();
 
     SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );
-    sal_uInt16 GetStringForFormula( const ScAddress& rPos, OUString& rString );
+    FormulaError GetStringForFormula( const ScAddress& rPos, OUString& rString );
     SC_DLLPUBLIC double GetValue( const ScAddress& rPos ) const;
     SC_DLLPUBLIC double GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     SC_DLLPUBLIC void GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue ) const;
@@ -1188,7 +1189,7 @@ public:
      * @return true if at least one cell is re-compiled, false if no cells are
      *         re-compiled.
      */
-    bool CompileErrorCells(sal_uInt16 nErrCode);
+    bool CompileErrorCells(FormulaError nErrCode);
 
     ScAutoNameCache* GetAutoNameCache()     { return pAutoNameCache; }
     void             SetPreviewFont( SfxItemSet* pFontSet );
@@ -1225,7 +1226,7 @@ public:
                     // if CalcFormulaTree() is currently running
     bool            IsCalculatingFormulaTree() { return bCalculatingFormulaTree; }
 
-    sal_uInt16          GetErrCode( const ScAddress& ) const;
+    FormulaError    GetErrCode( const ScAddress& ) const;
 
                     /** Shrink a range to only include data area.
 

@@ -24,6 +24,7 @@
 #include "ftools.hxx"
 
 class SfxObjectShell;
+enum class FormulaError;
 
 // BIFF versions ==============================================================
 
@@ -115,9 +116,9 @@ public:
     static sal_uInt8    GetXclOrientFromRot( sal_uInt16 nXclRot );
 
     /** Converts a Calc error code to an Excel error code. */
-    static sal_uInt8    GetXclErrorCode( sal_uInt16 nScError );
+    static sal_uInt8    GetXclErrorCode( FormulaError nScError );
     /** Converts an Excel error code to a Calc error code. */
-    static sal_uInt16       GetScErrorCode( sal_uInt8 nXclError );
+    static FormulaError GetScErrorCode( sal_uInt8 nXclError );
 
     /** Converts the passed BIFF error to a double containing the respective Calc error code. */
     static double       ErrorToDouble( sal_uInt8 nXclError );

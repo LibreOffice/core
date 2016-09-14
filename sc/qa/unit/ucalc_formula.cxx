@@ -1141,11 +1141,11 @@ void Test::testFormulaRefUpdate()
     aPos = ScAddress(2,1,0);
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL(formula::errNoRef, pFC->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL((int)FormulaError::NoRef, (int)pFC->GetErrCode());
     aPos = ScAddress(2,2,0);
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL(formula::errNoRef, pFC->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL((int)FormulaError::NoRef, (int)pFC->GetErrCode());
 
     // Clear all and start over.
     clearRange(m_pDoc, ScRange(0,0,0,10,10,0));
@@ -1245,11 +1245,11 @@ void Test::testFormulaRefUpdate()
     // Both A4 and A5 should show #REF! errors.
     pFC = m_pDoc->GetFormulaCell(ScAddress(0,3,0));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL(formula::errNoRef, pFC->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL((int)FormulaError::NoRef, (int)pFC->GetErrCode());
 
     pFC = m_pDoc->GetFormulaCell(ScAddress(0,4,0));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_EQUAL(formula::errNoRef, pFC->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL((int)FormulaError::NoRef, (int)pFC->GetErrCode());
 
     m_pDoc->DeleteTab(0);
 }
@@ -1862,7 +1862,7 @@ void Test::testFormulaRefUpdateInsertRows()
     rFunc.InsertCells(ScRange(0,1,0,MAXCOL,3,0), &aMark, INS_INSROWS_BEFORE, false, true);
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,5,0));
     CPPUNIT_ASSERT(pFC);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("This formula cell should not be an error.", static_cast<sal_uInt16>(0), pFC->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This formula cell should not be an error.", 0, (int)pFC->GetErrCode());
     ASSERT_DOUBLES_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,5,0), "MAX(A7:A9)", "Wrong formula!");
@@ -3547,19 +3547,19 @@ void Test::testFuncSUM()
 
     // Set #DIV/0! error to A3. A4 should also inherit this error.
     m_pDoc->SetString(ScAddress(0,2,0), "=1/0");
-    sal_uInt16 nErr = m_pDoc->GetErrCode(ScAddress(0,2,0));
+    FormulaError nErr = m_pDoc->GetErrCode(ScAddress(0,2,0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell should have a division by zero error.",
-                           errDivisionByZero, nErr);
+                           (int)FormulaError::DivisionByZero, (int)nErr);
     nErr = m_pDoc->GetErrCode(ScAddress(0,3,0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SUM should have also inherited a div-by-zero error.",
-                           errDivisionByZero, nErr);
+                           (int)FormulaError::DivisionByZero, (int)nErr);
 
     // Set #NA! to A2. A4 should now inherit this error.
     m_pDoc->SetString(ScAddress(0,1,0), "=NA()");
     nErr = m_pDoc->GetErrCode(ScAddress(0,1,0));
-    CPPUNIT_ASSERT_MESSAGE("A2 should be an error.", nErr);
+    CPPUNIT_ASSERT_MESSAGE("A2 should be an error.", nErr != FormulaError::NONE);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A4 should have inherited the same error as A2.",
-                           nErr, m_pDoc->GetErrCode(ScAddress(0,3,0)));
+                           (int)nErr, (int)m_pDoc->GetErrCode(ScAddress(0,3,0)));
 
     m_pDoc->DeleteTab(0);
 }
@@ -3642,8 +3642,8 @@ void Test::testFuncSUMPRODUCT()
 
     // Force an error in C2 and test ForcedArray matrix error propagation.
     m_pDoc->SetString( 2, 1, 0, "=1/0");
-    sal_uInt16 nError = m_pDoc->GetErrCode(aPos);
-    CPPUNIT_ASSERT_MESSAGE("Formula result should be a propagated error", nError);
+    FormulaError nError = m_pDoc->GetErrCode(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Formula result should be a propagated error", nError != FormulaError::NONE);
 
     // Test ForceArray propagation of SUMPRODUCT parameters to ABS and + operator.
     // => ABS({-3,4})*({-3,4}+{-3,4}) => {3,4}*{-6,8} => {-18,32} => 14
@@ -3715,8 +3715,8 @@ void Test::testFuncMIN()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCols);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), nRows);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula in C1 is invalid.", static_cast<sal_uInt16>(0), m_pDoc->GetErrCode(ScAddress(2,0,0)));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula in C2 is invalid.", static_cast<sal_uInt16>(0), m_pDoc->GetErrCode(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula in C1 is invalid.", 0, (int)m_pDoc->GetErrCode(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Formula in C2 is invalid.", 0, (int)m_pDoc->GetErrCode(ScAddress(2,1,0)));
 
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,0,0)));
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,1,0)));
@@ -3962,8 +3962,8 @@ void Test::testFuncCHOOSE()
     m_pDoc->InsertTab(0, "Formula");
 
     m_pDoc->SetString(ScAddress(0,0,0), "=CHOOSE(B1;\"one\";\"two\";\"three\")");
-    sal_uInt16 nError = m_pDoc->GetErrCode(ScAddress(0,0,0));
-    CPPUNIT_ASSERT_MESSAGE("Formula result should be an error since B1 is still empty.", nError);
+    FormulaError nError = m_pDoc->GetErrCode(ScAddress(0,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Formula result should be an error since B1 is still empty.", nError != FormulaError::NONE);
     m_pDoc->SetValue(ScAddress(1,0,0), 1.0);
     CPPUNIT_ASSERT_EQUAL(OUString("one"), m_pDoc->GetString(ScAddress(0,0,0)));
     m_pDoc->SetValue(ScAddress(1,0,0), 2.0);
@@ -3972,7 +3972,7 @@ void Test::testFuncCHOOSE()
     CPPUNIT_ASSERT_EQUAL(OUString("three"), m_pDoc->GetString(ScAddress(0,0,0)));
     m_pDoc->SetValue(ScAddress(1,0,0), 4.0);
     nError = m_pDoc->GetErrCode(ScAddress(0,0,0));
-    CPPUNIT_ASSERT_MESSAGE("Formula result should be an error due to out-of-bound input..", nError);
+    CPPUNIT_ASSERT_MESSAGE("Formula result should be an error due to out-of-bound input..", nError != FormulaError::NONE);
 
     m_pDoc->DeleteTab(0);
 }
@@ -4285,9 +4285,9 @@ void Test::testFuncLOOKUP()
     printRange(m_pDoc, ScRange(0,4,0,1,6,0), "Data range for LOOKUP.");
 
     // Values for B5:B7 should be 1, 2, and 3.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("This formula should not have an error code.", static_cast<sal_uInt16>(0), m_pDoc->GetErrCode(ScAddress(1,4,0)));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("This formula should not have an error code.", static_cast<sal_uInt16>(0), m_pDoc->GetErrCode(ScAddress(1,5,0)));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("This formula should not have an error code.", static_cast<sal_uInt16>(0), m_pDoc->GetErrCode(ScAddress(1,6,0)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This formula should not have an error code.", 0, (int)m_pDoc->GetErrCode(ScAddress(1,4,0)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This formula should not have an error code.", 0, (int)m_pDoc->GetErrCode(ScAddress(1,5,0)));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("This formula should not have an error code.", 0, (int)m_pDoc->GetErrCode(ScAddress(1,6,0)));
 
     ASSERT_DOUBLES_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,4,0)));
     ASSERT_DOUBLES_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,5,0)));
@@ -4923,7 +4923,7 @@ void Test::testFuncINDIRECT2()
     // Check formula cell error
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,9,2));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
-    CPPUNIT_ASSERT_MESSAGE("This formula cell should be an error.", pFC->GetErrCode() != 0);
+    CPPUNIT_ASSERT_MESSAGE("This formula cell should be an error.", pFC->GetErrCode() != FormulaError::NONE);
 
     m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
@@ -5617,15 +5617,15 @@ void Test::testExternalRefFunctions()
     // areas these tests may be adapted.
     m_pDoc->SetString(0, 0, 0, "=SUM('file:///extdata.fake'#Data.B1:AMJ1048575)");
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell( ScAddress(0,0,0));
-    sal_uInt16 nErr = pFC->GetErrCode();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("huge external range reference expected to yield errMatrixSize", errMatrixSize, nErr);
+    FormulaError nErr = pFC->GetErrCode();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("huge external range reference expected to yield FormulaError::MatrixSize", (int)FormulaError::MatrixSize, (int)nErr);
 
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0,0,0,0, aMark, "'file:///extdata.fake'#Data.B1:AMJ1048575");
     pFC = m_pDoc->GetFormulaCell( ScAddress(0,0,0));
     nErr = pFC->GetErrCode();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("huge external range reference expected to yield errMatrixSize", errMatrixSize, nErr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("huge external range reference expected to yield FormulaError::MatrixSize", (int)FormulaError::MatrixSize, (int)nErr);
     SCSIZE nMatCols, nMatRows;
     const ScMatrix* pMat = pFC->GetMatrix();
     CPPUNIT_ASSERT_MESSAGE("matrix expected", pMat != nullptr);

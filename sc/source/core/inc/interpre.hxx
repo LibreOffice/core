@@ -157,7 +157,7 @@ public:
      */
     static utl::SearchParam::SearchType DetectSearchType( const OUString& rStr, const ScDocument* pDoc );
 
-    /// Fail safe division, returning an errDivisionByZero coded into a double
+    /// Fail safe division, returning an FormulaError::DivisionByZero coded into a double
     /// if denominator is 0.0
     static inline double div( const double& fNumerator, const double& fDenominator );
 
@@ -195,7 +195,7 @@ private:
                 pCur;                   // current token
     ScTokenStack* pStackObj;            // contains the stacks
     const formula::FormulaToken ** pStack;  // the current stack
-    sal_uInt16  nGlobalError;           // global (local to this formula expression) error
+    FormulaError nGlobalError;          // global (local to this formula expression) error
     sal_uInt16  sp;                     // stack pointer
     sal_uInt16  maxsp;                  // the maximal used stack pointer
     sal_uLong   nFuncFmtIndex;          // NumberFormatIndex of a function
@@ -204,7 +204,7 @@ private:
     short       nFuncFmtType;           // NumberFormatType of a function
     short       nCurFmtType;            // current NumberFormatType
     short       nRetFmtType;            // NumberFormatType of an expression
-    sal_uInt16  mnStringNoValueError;   // the error set in ConvertStringToValue() if no value
+    FormulaError mnStringNoValueError;   // the error set in ConvertStringToValue() if no value
     sal_uInt16  mnSubTotalFlags;        // flags for subtotal and aggregate functions
     sal_uInt8   cPar;                   // current count of parameters
     bool        bCalcAsShown;           // precision as shown
@@ -235,13 +235,13 @@ double ConvertStringToValue( const OUString& );
 public:
 /** For matrix back calls into the current interpreter.
     Uses rError instead of nGlobalError and rCurFmtType instead of nCurFmtType. */
-double ConvertStringToValue( const OUString&, sal_uInt16& rError, short& rCurFmtType );
+double ConvertStringToValue( const OUString&, FormulaError& rError, short& rCurFmtType );
 private:
 double GetCellValue( const ScAddress&, ScRefCellValue& rCell );
 double GetCellValueOrZero( const ScAddress&, ScRefCellValue& rCell );
 double GetValueCellValue( const ScAddress&, double fOrig );
 void GetCellString( svl::SharedString& rStr, ScRefCellValue& rCell );
-static sal_uInt16 GetCellErrCode( const ScRefCellValue& rCell );
+static FormulaError GetCellErrCode( const ScRefCellValue& rCell );
 
 bool CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt8* pCellArr);
@@ -267,7 +267,7 @@ void PushWithoutError( const formula::FormulaToken& r );
     Increments RefCount of the original token if not substituted.
     ATTENTION! The token had to be allocated with `new' and must not be used
     after this call if no RefCount was set because possibly it gets immediately
-    deleted in case of an errStackOverflow or if substituted with formula::FormulaErrorToken! */
+    deleted in case of an FormulaError::StackOverflow or if substituted with formula::FormulaErrorToken! */
 void PushTempToken( formula::FormulaToken* );
 
 /** Pushes the token or substitutes with formula::FormulaErrorToken in case
@@ -280,7 +280,7 @@ void PushTokenRef( const formula::FormulaConstTokenRef& );
     explicit formula::FormulaErrorToken. Increments RefCount.
     ATTENTION! The token had to be allocated with `new' and must not be used
     after this call if no RefCount was set because possibly it gets immediately
-    decremented again and thus deleted in case of an errStackOverflow! */
+    decremented again and thus deleted in case of an FormulaError::StackOverflow! */
 void PushTempTokenWithoutError( const formula::FormulaToken* );
 
 /** If nGlobalError is set push formula::FormulaErrorToken.
@@ -289,7 +289,7 @@ void PushTempTokenWithoutError( const formula::FormulaToken* );
     @return: <TRUE/> if nGlobalError. */
 inline bool IfErrorPushError()
 {
-    if (nGlobalError)
+    if (nGlobalError != FormulaError::NONE)
     {
         PushTempTokenWithoutError( new formula::FormulaErrorToken( nGlobalError));
         return true;
@@ -395,7 +395,7 @@ void PushSingleRef( const ScRefAddress& rRef );
 void PushDoubleRef( const ScRefAddress& rRef1, const ScRefAddress& rRef2 );
 void PushMatrix( const sc::RangeMatrix& rMat );
 void PushMatrix(const ScMatrixRef& pMat);
-void PushError( sal_uInt16 nError );
+void PushError( FormulaError nError );
 /// Raw stack type without default replacements.
 formula::StackVar GetRawStackType();
 /// Stack type with replacement of defaults, e.g. svMissing and formula::svEmptyCell will result in formula::svDouble.
@@ -650,7 +650,7 @@ void ScExternal();
 void ScMissing();
 void ScMacro();
 bool SetSbxVariable( SbxVariable* pVar, const ScAddress& );
-sal_uInt16 GetErrorType();
+FormulaError GetErrorType();
 void ScErrorType();
 void ScErrorType_ODF();
 void ScDBArea();
@@ -688,9 +688,9 @@ void ScGetWeekOfYear();
 void ScGetIsoWeekOfYear();
 void ScWeeknumOOo();
 void ScEasterSunday();
-sal_uInt16 GetWeekendAndHolidayMasks( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
+FormulaError GetWeekendAndHolidayMasks( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
         ::std::vector<double>& rSortArray, bool bWeekendMask[ 7 ] );
-sal_uInt16 GetWeekendAndHolidayMasks_MS( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
+FormulaError GetWeekendAndHolidayMasks_MS( const sal_uInt8 nParamCount, const sal_uInt32 nNullDate,
         ::std::vector<double>& rSortArray, bool bWeekendMask[ 7 ], bool bWorkdayFunction );
 static inline sal_Int16 GetDayOfWeek( sal_Int32 n );
 void ScNetWorkdays( bool bOOXML_Version );
@@ -964,14 +964,14 @@ public:
 
     formula::StackVar Interpret();
 
-    void SetError(sal_uInt16 nError)
-            { if (nError && !nGlobalError) nGlobalError = nError; }
+    void SetError(FormulaError nError)
+            { if (nError != FormulaError::NONE && nGlobalError == FormulaError::NONE) nGlobalError = nError; }
     void AssertFormulaMatrix();
 
     void SetLinkManager(sfx2::LinkManager* pLinkMgr)
             { mpLinkManager = pLinkMgr; }
 
-    sal_uInt16                  GetError() const            { return nGlobalError; }
+    FormulaError                GetError() const            { return nGlobalError; }
     formula::StackVar           GetResultType() const       { return xResult->GetType(); }
     svl::SharedString GetStringResult() const;
     double                      GetNumResult() const        { return xResult->GetDouble(); }
@@ -1065,7 +1065,7 @@ inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUStri
 {
     if ( rResult.getLength() + rAdd.getLength() > SAL_MAX_UINT16 )
     {
-        SetError( formula::errStringOverflow );
+        SetError( FormulaError::StringOverflow );
         rResult.clear();
         return false;
     }
@@ -1076,11 +1076,11 @@ inline void ScInterpreter::TreatDoubleError( double& rVal )
 {
     if ( !::rtl::math::isFinite( rVal ) )
     {
-        sal_uInt16 nErr = formula::GetDoubleErrorValue( rVal );
-        if ( nErr )
+        FormulaError nErr = ScErrorCodes::GetDoubleErrorValue( rVal );
+        if ( nErr != FormulaError::NONE )
             SetError( nErr );
         else
-            SetError( formula::errNoValue );
+            SetError( FormulaError::NoValue );
         rVal = 0.0;
     }
 }

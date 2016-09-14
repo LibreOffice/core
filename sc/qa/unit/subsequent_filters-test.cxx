@@ -3125,8 +3125,8 @@ void ScFiltersTest::testVBAUserFunctionXLSM()
     CPPUNIT_ASSERT_EQUAL(OUString("=MYFUNC()"), aFormula);
 
     // Check the formula state after the load.
-    sal_uInt16 nErrCode = pFC->GetErrCode();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), nErrCode);
+    FormulaError nErrCode = pFC->GetErrCode();
+    CPPUNIT_ASSERT_EQUAL(0, (int)nErrCode);
 
     // Check the result.
     CPPUNIT_ASSERT_EQUAL(42.0, rDoc.GetValue(ScAddress(0,0,0)));
@@ -3170,7 +3170,7 @@ void ScFiltersTest::testErrorOnExternalReferences()
 
     ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(0,0,0));
     CPPUNIT_ASSERT(pFC);
-    CPPUNIT_ASSERT_EQUAL(formula::errNoName, pFC->GetErrCode());
+    CPPUNIT_ASSERT_EQUAL((int)FormulaError::NoName, (int)pFC->GetErrCode());
 
     if (!checkFormula(rDoc, ScAddress(0,0,0), "'file:///Path/To/FileA.ods'#$Sheet1.A1A"))
         CPPUNIT_FAIL("Formula changed");

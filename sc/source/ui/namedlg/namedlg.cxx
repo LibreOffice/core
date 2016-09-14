@@ -34,7 +34,7 @@
 
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
-
+#include <formula/errorcodes.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <map>
@@ -299,7 +299,7 @@ bool ScNameDlg::IsFormulaValid()
     ScCompiler aComp( mpDoc, maCursorPos);
     aComp.SetGrammar( mpDoc->GetGrammar() );
     ScTokenArray* pCode = aComp.CompileString(m_pEdAssign->GetText());
-    if (pCode->GetCodeError())
+    if (pCode->GetCodeError() != FormulaError::NONE)
     {
         m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         delete pCode;

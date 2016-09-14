@@ -492,8 +492,8 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclFormulaType eType,
     if( mxData->mbOk )
     {
         XclExpScToken aTokData( GetNextToken() );
-        sal_uInt16 nScError = rScTokArr.GetCodeError();
-        if( (nScError != 0) && (!aTokData.Is() || (aTokData.GetOpCode() == ocStop)) )
+        FormulaError nScError = rScTokArr.GetCodeError();
+        if( (nScError != FormulaError::NONE) && (!aTokData.Is() || (aTokData.GetOpCode() == ocStop)) )
         {
             // #i50253# convert simple ocStop token to error code formula (e.g. =#VALUE!)
             AppendErrorToken( XclTools::GetXclErrorCode( nScError ), aTokData.mnSpaces );
@@ -1286,13 +1286,14 @@ void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
                 ScMatrixValue nMatVal = pMatrix->Get( nScCol, nScRow );
                 if( ScMatrix::IsValueType( nMatVal.nType ) )    // value, boolean, or error
                 {
+                    FormulaError nErr;
                     if( ScMatrix::IsBooleanType( nMatVal.nType ) )
                     {
                         AppendExt( EXC_CACHEDVAL_BOOL );
                         AppendExt( static_cast< sal_uInt8 >( nMatVal.GetBoolean() ? 1 : 0 ) );
                         AppendExt( 0, 7 );
                     }
-                    else if( sal_uInt16 nErr = nMatVal.GetError() )
+                    else if( (nErr = nMatVal.GetError()) != FormulaError::NONE )
                     {
                         AppendExt( EXC_CACHEDVAL_ERROR );
                         AppendExt( XclTools::GetXclErrorCode( nErr ) );

@@ -51,6 +51,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/fieldupdater.hxx>
+#include <formula/errorcodes.hxx>
 #include <osl/diagnose.h>
 
 #include <cstring>
@@ -1125,7 +1126,7 @@ void ScColumn::CopyStaticToDocument(
                     if (rFC.GetDirty() && pDocument->GetAutoCalc())
                         rFC.Interpret();
 
-                    if (rFC.GetErrCode())
+                    if (rFC.GetErrCode() != FormulaError::NONE)
                         // Skip cells with error.
                         break;
 
@@ -1445,8 +1446,8 @@ class CopyByCloneHandler
 
         if (bCloneValue)
         {
-            sal_uInt16 nErr = rSrcCell.GetErrCode();
-            if (nErr)
+            FormulaError nErr = rSrcCell.GetErrCode();
+            if (nErr != FormulaError::NONE)
             {
                 // error codes are cloned with values
                 ScFormulaCell* pErrCell = new ScFormulaCell(&mrDestCol.GetDoc(), aDestPos);
@@ -2875,7 +2876,7 @@ public:
     {
         // for unconditional compilation
         // bCompile=true and pCode->nError=0
-        pCell->GetCode()->SetCodeError(0);
+        pCell->GetCode()->SetCodeError(FormulaError::NONE);
         pCell->SetCompile(true);
         pCell->CompileTokenArray(mrCxt);
     }
@@ -2913,10 +2914,10 @@ class CompileErrorCellsHandler
     sc::CompileFormulaContext& mrCxt;
     ScColumn& mrColumn;
     sc::CellStoreType::iterator miPos;
-    sal_uInt16 mnErrCode;
+    FormulaError mnErrCode;
     bool mbCompiled;
 public:
-    CompileErrorCellsHandler( sc::CompileFormulaContext& rCxt, ScColumn& rColumn, sal_uInt16 nErrCode ) :
+    CompileErrorCellsHandler( sc::CompileFormulaContext& rCxt, ScColumn& rColumn, FormulaError nErrCode ) :
         mrCxt(rCxt),
         mrColumn(rColumn),
         miPos(mrColumn.GetCellStore().begin()),
@@ -2927,19 +2928,19 @@ public:
 
     void operator() (size_t nRow, ScFormulaCell* pCell)
     {
-        sal_uInt16 nCurError = pCell->GetRawError();
-        if (!nCurError)
+        FormulaError nCurError = pCell->GetRawError();
+        if (nCurError == FormulaError::NONE)
             // It's not an error cell. Skip it.
             return;
 
-        if (mnErrCode && nCurError != mnErrCode)
+        if (mnErrCode != FormulaError::NONE && nCurError != mnErrCode)
             // Error code is specified, and it doesn't match. Skip it.
             return;
 
         sc::CellStoreType::position_type aPos = mrColumn.GetCellStore().position(miPos, nRow);
         miPos = aPos.first;
         sc::SharedFormulaUtil::unshareFormulaCell(aPos, *pCell);
-        pCell->GetCode()->SetCodeError(0);
+        pCell->GetCode()->SetCodeError(FormulaError::NONE);
         OUString aFormula = pCell->GetFormula(mrCxt);
         pCell->Compile(mrCxt, aFormula);
         ScColumn::JoinNewFormulaCell(aPos, *pCell);
@@ -3456,7 +3457,7 @@ void ScColumn::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgres
     RegroupFormulaCells();
 }
 
-bool ScColumn::CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nErrCode )
+bool ScColumn::CompileErrorCells( sc::CompileFormulaContext& rCxt, FormulaError nErrCode )
 {
     CompileErrorCellsHandler aHdl(rCxt, *this, nErrCode);
     sc::ProcessFormula(maCells, aHdl);

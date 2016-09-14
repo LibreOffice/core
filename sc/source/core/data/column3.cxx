@@ -936,8 +936,8 @@ public:
                         // Always just copy the original row to the Undo Documen;
                         // do not create Value/string cells from formulas
 
-                        sal_uInt16 nErr = rSrcCell.GetErrCode();
-                        if (nErr)
+                        FormulaError nErr = rSrcCell.GetErrCode();
+                        if (nErr != FormulaError::NONE)
                         {
                             // error codes are cloned with values
                             if (bNumeric)
@@ -1190,7 +1190,7 @@ class MixDataHandler
             ScAddress aPos(mrDestColumn.GetCol(), nDestRow, mrDestColumn.GetTab());
 
             ScFormulaCell* pFC = new ScFormulaCell(&mrDestColumn.GetDoc(), aPos);
-            pFC->SetErrCode(errNoValue);
+            pFC->SetErrCode(FormulaError::NoValue);
 
             miNewCellsPos = maNewCells.set(miNewCellsPos, nDestRow-mnRowOffset, pFC);
         }
@@ -1998,8 +1998,8 @@ class FilterEntriesHandler
             case CELLTYPE_FORMULA:
             {
                 ScFormulaCell* pFC = rCell.mpFormula;
-                sal_uInt16 nErr = pFC->GetErrCode();
-                if (nErr)
+                FormulaError nErr = pFC->GetErrCode();
+                if (nErr != FormulaError::NONE)
                 {
                     // Error cell is evaluated as string (for now).
                     OUString aErr = ScGlobal::GetErrorString(nErr);
@@ -2365,7 +2365,7 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
     aFunc.commitCells(*this);
 }
 
-void ScColumn::SetError( SCROW nRow, const sal_uInt16 nError)
+void ScColumn::SetError( SCROW nRow, const FormulaError nError)
 {
     if (!ValidRow(nRow))
         return;
@@ -2605,15 +2605,15 @@ SCSIZE ScColumn::GetCellCount() const
     return aFunc.getCount();
 }
 
-sal_uInt16 ScColumn::GetErrCode( SCROW nRow ) const
+FormulaError ScColumn::GetErrCode( SCROW nRow ) const
 {
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
     sc::CellStoreType::const_iterator it = aPos.first;
     if (it == maCells.end())
-        return 0;
+        return FormulaError::NONE;
 
     if (it->type != sc::element_type_formula)
-        return 0;
+        return FormulaError::NONE;
 
     const ScFormulaCell* p = sc::formula_block::at(*it->data, aPos.second);
     return const_cast<ScFormulaCell*>(p)->GetErrCode();

@@ -36,9 +36,9 @@
 
 static const char* publicFunc =
  "\n"
- "#define errIllegalFPOperation 503 // #NUM!\n"
- "#define errNoValue 519 // #VALUE!\n"
- "#define errDivisionByZero 532 // #DIV/0!\n"
+ "#define FormulaError::IllegalFPOperation 503 // #NUM!\n"
+ "#define FormulaError::NoValue 519 // #VALUE!\n"
+ "#define FormulaError::DivisionByZero 532 // #DIV/0!\n"
  "#define NOTAVAILABLE 0x7fff // #N/A\n"
  "\n"
  "double CreateDoubleError(ulong nErr)\n"
@@ -51,9 +51,9 @@ static const char* publicFunc =
  "    if (isfinite(fVal))\n"
  "        return 0;\n"
  "    if (isinf(fVal))\n"
- "        return errIllegalFPOperation; // normal INF\n"
+ "        return FormulaError::IllegalFPOperation; // normal INF\n"
  "    if (as_ulong(fVal) & 0XFFFF0000u)\n"
- "        return errNoValue;            // just a normal NAN\n"
+ "        return FormulaError::NoValue;            // just a normal NAN\n"
  "    return (as_ulong(fVal) & 0XFFFF); // any other error\n"
  "}\n"
  "\n"
@@ -1772,7 +1772,7 @@ public:
         if (isAverage())
             ss <<
                 "if (nCount==0)\n"
-                "    return CreateDoubleError(errDivisionByZero);\n";
+                "    return CreateDoubleError(FormulaError::DivisionByZero);\n";
         else if (isMinOrMax())
             ss <<
                 "if (nCount==0)\n"
@@ -2166,7 +2166,7 @@ public:
     virtual std::string GetBottom() override { return "1.0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
-        return "(" + rhs + "==0 ? CreateDoubleError(errDivisionByZero) : (" + lhs + "/" + rhs + ") )";
+        return "(" + rhs + "==0 ? CreateDoubleError(FormulaError::DivisionByZero) : (" + lhs + "/" + rhs + ") )";
     }
     virtual std::string BinFuncName() const override { return "fdiv"; }
 
@@ -2176,7 +2176,7 @@ public:
         {
             ss <<
                 "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ")) {\n"
-                "    return CreateDoubleError(errDivisionByZero);\n"
+                "    return CreateDoubleError(FormulaError::DivisionByZero);\n"
                 "}\n";
             return true;
         }

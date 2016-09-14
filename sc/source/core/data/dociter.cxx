@@ -151,7 +151,7 @@ void ScValueIterator::SetPos(size_t nPos)
     maCurPos = mpCells->position(maCurPos.first, nPos);
 }
 
-bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
+bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
 {
     while (true)
     {
@@ -175,7 +175,7 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
                     ++mnTab;
                     if (mnTab > maEndPos.Tab())
                     {
-                        rErr = 0;
+                        rErr = FormulaError::NONE;
                         return false; // Over and out
                     }
                 }
@@ -205,7 +205,7 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
             {
                 bNumValid = false;
                 rValue = sc::numeric_block::at(*maCurPos.first->data, maCurPos.second);
-                rErr = 0;
+                rErr = FormulaError::NONE;
                 if (bCalcAsShown)
                 {
                     ScAttrArray_IterGetNumberFormat(nNumFormat, pAttrArray,
@@ -227,7 +227,7 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
 
                 if (rCell.GetErrorOrValue(rErr, rValue))
                 {
-                    if ( rErr && ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                    if ( rErr != FormulaError::NONE && ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
                     {
                         IncPos();
                         break;
@@ -249,7 +249,7 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
             {
                 if (bTextAsZero)
                 {
-                    rErr = 0;
+                    rErr = FormulaError::NONE;
                     rValue = 0.0;
                     nNumFmtType = css::util::NumberFormat::NUMBER;
                     nNumFmtIndex = 0;
@@ -282,7 +282,7 @@ void ScValueIterator::GetCurNumFmtInfo( short& nType, sal_uLong& nIndex )
     nIndex = nNumFmtIndex;
 }
 
-bool ScValueIterator::GetFirst(double& rValue, sal_uInt16& rErr)
+bool ScValueIterator::GetFirst(double& rValue, FormulaError& rErr)
 {
     mnCol = maStartPos.Col();
     mnTab = maStartPos.Tab();
@@ -300,7 +300,7 @@ bool ScValueIterator::GetFirst(double& rValue, sal_uInt16& rErr)
     return GetThis(rValue, rErr);
 }
 
-bool ScValueIterator::GetNext(double& rValue, sal_uInt16& rErr)
+bool ScValueIterator::GetNext(double& rValue, FormulaError& rErr)
 {
     IncPos();
     return GetThis(rValue, rErr);
@@ -388,7 +388,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
         if (maCurPos.first == mpCells->end() || nRow > mpParam->nRow2)
         {
             // Bottom of the range reached. Bail out.
-            rValue.mnError = 0;
+            rValue.mnError = FormulaError::NONE;
             return false;
         }
 
@@ -426,7 +426,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                     }
                     nNumFmtType = css::util::NumberFormat::NUMBER;
                     nNumFmtIndex = 0;
-                    rValue.mnError = 0;
+                    rValue.mnError = FormulaError::NONE;
                     return true; // Found it!
                 }
 
@@ -461,7 +461,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                     {
                         rValue.maString = aCell.getString(mpDoc);
                         rValue.mfValue = 0.0;
-                        rValue.mnError = 0;
+                        rValue.mnError = FormulaError::NONE;
                         rValue.mbIsNumber = false;
                         return true;
                     }
@@ -554,7 +554,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::getCurrent(Value& rValue)
             rValue.maString = rMat.GetString(mpParam->mnField, mnCurRow).getString();
             rValue.mfValue = rMat.GetDouble(mpParam->mnField, mnCurRow);
             rValue.mbIsNumber = !bIsStrVal;
-            rValue.mnError = 0;
+            rValue.mnError = FormulaError::NONE;
             return true;
         }
     }
@@ -748,7 +748,7 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
 }
 
 ScDBQueryDataIterator::Value::Value() :
-    mnError(0), mbIsNumber(true)
+    mnError(FormulaError::NONE), mbIsNumber(true)
 {
     ::rtl::math::setNan(&mfValue);
 }
@@ -965,7 +965,7 @@ bool ScCellIterator::getCurrent()
                 ScFormulaCell* pCell = sc::formula_block::at(*maCurColPos.first->data, maCurColPos.second);
                 // Skip formula cells with Subtotal formulae or errors, depending on mnSubTotalFlags
                 if ( ( ( mnSubTotalFlags & SUBTOTAL_IGN_NESTED_ST_AG ) && pCell->IsSubTotal() ) ||
-                     ( ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) && pCell->GetErrCode() ) )
+                     ( ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) && pCell->GetErrCode() != FormulaError::NONE ) )
                 {
                     incPos();
                     continue;
@@ -2206,7 +2206,7 @@ ScHorizontalValueIterator::~ScHorizontalValueIterator()
     delete pCellIter;
 }
 
-bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
+bool ScHorizontalValueIterator::GetNext( double& rValue, FormulaError& rErr )
 {
     bool bFound = false;
     while ( !bFound )
@@ -2228,7 +2228,7 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
                 {
                     bNumValid = false;
                     rValue = pCell->mfValue;
-                    rErr = 0;
+                    rErr = FormulaError::NONE;
                     if ( bCalcAsShown )
                     {
                         ScColumn* pCol = &pDoc->maTabs[nCurTab]->aCol[nCurCol];
@@ -2242,7 +2242,7 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
             case CELLTYPE_FORMULA:
                 {
                     rErr = pCell->mpFormula->GetErrCode();
-                    if (rErr || pCell->mpFormula->IsValue())
+                    if (rErr != FormulaError::NONE || pCell->mpFormula->IsValue())
                     {
                         rValue = pCell->mpFormula->GetValue();
                         bNumValid = false;

@@ -3488,7 +3488,7 @@ void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& r
         rString.clear();
 }
 
-sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rString )
+FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rString )
 {
     // Used in formulas (add-in parameters etc), so it must use the same semantics as
     // ScInterpreter::GetCellString: always format values as numbers.
@@ -3498,10 +3498,10 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rSt
     if (aCell.isEmpty())
     {
         rString = EMPTY_OUSTRING;
-        return 0;
+        return FormulaError::NONE;
     }
 
-    sal_uInt16 nErr = 0;
+    FormulaError nErr = FormulaError::NONE;
     OUString aStr;
     SvNumberFormatter* pFormatter = GetFormatTable();
     switch (aCell.meType)
@@ -3938,7 +3938,7 @@ void ScDocument::CompileXML()
     SetAutoCalc( bOldAutoCalc );
 }
 
-bool ScDocument::CompileErrorCells(sal_uInt16 nErrCode)
+bool ScDocument::CompileErrorCells(FormulaError nErrCode)
 {
     bool bCompiled = false;
     sc::CompileFormulaContext aCxt(this);
@@ -3990,12 +3990,12 @@ void ScDocument::CalcAfterLoad( bool bStartListening )
     }
 }
 
-sal_uInt16 ScDocument::GetErrCode( const ScAddress& rPos ) const
+FormulaError ScDocument::GetErrCode( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
     if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetErrCode( rPos );
-    return 0;
+    return FormulaError::NONE;
 }
 
 void ScDocument::ResetChanged( const ScRange& rRange )

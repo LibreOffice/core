@@ -52,6 +52,7 @@ using std::endl;
 using ::std::pair;
 using ::std::advance;
 using ::std::unary_function;
+using namespace ScErrorCodes;
 
 /**
  * Custom string trait struct to tell mdds::multi_type_matrix about the
@@ -73,17 +74,17 @@ double convertStringToValue( ScInterpreter* pErrorInterpreter, const OUString& r
 {
     if (pErrorInterpreter)
     {
-        sal_uInt16 nError = 0;
+        FormulaError nError = FormulaError::NONE;
         short nCurFmtType = 0;
         double fValue = pErrorInterpreter->ConvertStringToValue( rStr, nError, nCurFmtType);
-        if (nError)
+        if (nError != FormulaError::NONE)
         {
             pErrorInterpreter->SetError( nError);
-            return formula::CreateDoubleError( nError);
+            return ScErrorCodes::CreateDoubleError( nError);
         }
         return fValue;
     }
-    return formula::CreateDoubleError( formula::errNoValue);
+    return ScErrorCodes::CreateDoubleError( FormulaError::NoValue);
 }
 
 struct ElemEqualZero : public unary_function<double, double>
@@ -244,7 +245,7 @@ public:
     bool ValidColRow( SCSIZE nC, SCSIZE nR) const;
     bool ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const;
     bool ValidColRowOrReplicated( SCSIZE & rC, SCSIZE & rR ) const;
-    void SetErrorAtInterpreter( sal_uInt16 nError ) const;
+    void SetErrorAtInterpreter( FormulaError nError ) const;
 
     void PutDouble(double fVal, SCSIZE nC, SCSIZE nR);
     void PutDouble( double fVal, SCSIZE nIndex);
@@ -256,9 +257,9 @@ public:
 
     void PutEmpty(SCSIZE nC, SCSIZE nR);
     void PutEmptyPath(SCSIZE nC, SCSIZE nR);
-    void PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR );
+    void PutError( FormulaError nErrorCode, SCSIZE nC, SCSIZE nR );
     void PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR);
-    sal_uInt16 GetError( SCSIZE nC, SCSIZE nR) const;
+    FormulaError GetError( SCSIZE nC, SCSIZE nR) const;
     double GetDouble(SCSIZE nC, SCSIZE nR) const;
     double GetDouble( SCSIZE nIndex) const;
     double GetDoubleWithStringConversion(SCSIZE nC, SCSIZE nR) const;
@@ -364,7 +365,7 @@ void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
     else
     {
         // Invalid matrix size, allocate 1x1 matrix with error value.
-        maMat.resize(1, 1, formula::CreateDoubleError( formula::errMatrixSize));
+        maMat.resize(1, 1, ScErrorCodes::CreateDoubleError( FormulaError::MatrixSize));
         maMatFlag.resize(1, 1);
     }
 }
@@ -379,7 +380,7 @@ void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR, double fVal)
     else
     {
         // Invalid matrix size, allocate 1x1 matrix with error value.
-        maMat.resize(1, 1, formula::CreateDoubleError( formula::errStackOverflow));
+        maMat.resize(1, 1, ScErrorCodes::CreateDoubleError( FormulaError::StackOverflow));
         maMatFlag.resize(1, 1);
     }
 }
@@ -437,7 +438,7 @@ bool ScMatrixImpl::ValidColRowOrReplicated( SCSIZE & rC, SCSIZE & rR ) const
     return ValidColRow( rC, rR) || ValidColRowReplicated( rC, rR);
 }
 
-void ScMatrixImpl::SetErrorAtInterpreter( sal_uInt16 nError ) const
+void ScMatrixImpl::SetErrorAtInterpreter( FormulaError nError ) const
 {
     if ( pErrorInterpreter )
         pErrorInterpreter->SetError( nError);
@@ -523,9 +524,9 @@ void ScMatrixImpl::PutEmptyPath(SCSIZE nC, SCSIZE nR)
     }
 }
 
-void ScMatrixImpl::PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR )
+void ScMatrixImpl::PutError( FormulaError nErrorCode, SCSIZE nC, SCSIZE nR )
 {
-    maMat.set(nR, nC, formula::CreateDoubleError(nErrorCode));
+    maMat.set(nR, nC, ScErrorCodes::CreateDoubleError(nErrorCode));
 }
 
 void ScMatrixImpl::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
@@ -538,17 +539,17 @@ void ScMatrixImpl::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
     }
 }
 
-sal_uInt16 ScMatrixImpl::GetError( SCSIZE nC, SCSIZE nR) const
+FormulaError ScMatrixImpl::GetError( SCSIZE nC, SCSIZE nR) const
 {
     if (ValidColRowOrReplicated( nC, nR ))
     {
         double fVal = maMat.get_numeric(nR, nC);
-        return formula::GetDoubleErrorValue(fVal);
+        return ScErrorCodes::GetDoubleErrorValue(fVal);
     }
     else
     {
         OSL_FAIL("ScMatrixImpl::GetError: dimension error");
-        return formula::errNoValue;
+        return FormulaError::NoValue;
     }
 }
 
@@ -559,8 +560,8 @@ double ScMatrixImpl::GetDouble(SCSIZE nC, SCSIZE nR) const
         double fVal = maMat.get_numeric(nR, nC);
         if ( pErrorInterpreter )
         {
-            sal_uInt16 nError = formula::GetDoubleErrorValue(fVal);
-            if ( nError )
+            FormulaError nError = ScErrorCodes::GetDoubleErrorValue(fVal);
+            if ( nError != FormulaError::NONE )
                 SetErrorAtInterpreter( nError);
         }
         return fVal;
@@ -568,7 +569,7 @@ double ScMatrixImpl::GetDouble(SCSIZE nC, SCSIZE nR) const
     else
     {
         OSL_FAIL("ScMatrixImpl::GetDouble: dimension error");
-        return formula::CreateDoubleError( formula::errNoValue);
+        return ScErrorCodes::CreateDoubleError( FormulaError::NoValue);
     }
 }
 
@@ -606,7 +607,7 @@ svl::SharedString ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
             default:
                 OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
         }
-        SetErrorAtInterpreter(formula::GetDoubleErrorValue(fErr));
+        SetErrorAtInterpreter(ScErrorCodes::GetDoubleErrorValue(fErr));
     }
     else
     {
@@ -658,8 +659,8 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
             ;
     }
 
-    sal_uInt16 nError = formula::GetDoubleErrorValue(fVal);
-    if (nError)
+    FormulaError nError = ScErrorCodes::GetDoubleErrorValue(fVal);
+    if (nError != FormulaError::NONE)
     {
         SetErrorAtInterpreter( nError);
         return svl::SharedString( ScGlobal::GetErrorString( nError));   // string not interned
@@ -1018,7 +1019,7 @@ double EvalMatrix(const MatrixImplType& rMat)
             mdds::mtm::element_t eType = rMat.get_type(aPos);
             if (eType != mdds::mtm::element_numeric && eType != mdds::mtm::element_boolean)
                 // assuming a CompareMat this is an error
-                return formula::CreateDoubleError(formula::errIllegalArgument);
+                return ScErrorCodes::CreateDoubleError(FormulaError::IllegalArgument);
 
             double fVal = rMat.get_numeric(aPos);
             if (!::rtl::math::isFinite(fVal))
@@ -1497,7 +1498,7 @@ inline double evaluate( double fVal, ScQueryOp eOp )
     }
 
     OSL_TRACE( "evaluate: unhandled comparison operator: %d", (int)eOp);
-    return formula::CreateDoubleError( formula::errUnknownState);
+    return ScErrorCodes::CreateDoubleError( FormulaError::UnknownState);
 }
 
 class CompareMatrixFunc : public std::unary_function<MatrixImplType::element_block_type, void>
@@ -1695,7 +1696,7 @@ public:
     ToDoubleArray( size_t nSize, bool bEmptyAsZero ) :
         maArray(nSize, 0.0), miPos(maArray.begin()), mbEmptyAsZero(bEmptyAsZero)
     {
-        mfNaN = formula::CreateDoubleError( formula::errElementNaN);
+        mfNaN = ScErrorCodes::CreateDoubleError( FormulaError::ElementNaN);
     }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
@@ -1766,7 +1767,7 @@ class MergeDoubleArrayFunc : public std::unary_function<MatrixImplType::element_
 public:
     MergeDoubleArrayFunc(std::vector<double>& rArray) : mrArray(rArray), miPos(mrArray.begin())
     {
-        mfNaN = formula::CreateDoubleError( formula::errElementNaN);
+        mfNaN = ScErrorCodes::CreateDoubleError( FormulaError::ElementNaN);
     }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
@@ -1782,7 +1783,7 @@ public:
                 numeric_element_block::const_iterator itEnd = numeric_element_block::end(*node.data);
                 for (; it != itEnd; ++it, ++miPos)
                 {
-                    if (formula::GetDoubleErrorValue(*miPos) == formula::errElementNaN)
+                    if (ScErrorCodes::GetDoubleErrorValue(*miPos) == FormulaError::ElementNaN)
                         continue;
 
                     *miPos = op(*miPos, *it);
@@ -1795,7 +1796,7 @@ public:
                 boolean_element_block::const_iterator itEnd = boolean_element_block::end(*node.data);
                 for (; it != itEnd; ++it, ++miPos)
                 {
-                    if (formula::GetDoubleErrorValue(*miPos) == formula::errElementNaN)
+                    if (ScErrorCodes::GetDoubleErrorValue(*miPos) == FormulaError::ElementNaN)
                         continue;
 
                     *miPos = op(*miPos, *it ? 1.0 : 0.0);
@@ -1813,7 +1814,7 @@ public:
                 // Empty element is equivalent of having a numeric value of 0.0.
                 for (size_t i = 0; i < node.size; ++i, ++miPos)
                 {
-                    if (formula::GetDoubleErrorValue(*miPos) == formula::errElementNaN)
+                    if (ScErrorCodes::GetDoubleErrorValue(*miPos) == FormulaError::ElementNaN)
                         continue;
 
                     *miPos = op(*miPos, 0.0);
@@ -2452,15 +2453,15 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
 
     std::vector<OUString> aString(nMaxCol * nMaxRow);
     std::vector<bool> aValid(nMaxCol * nMaxRow, true);
-    std::vector<sal_uInt16> nErrors(nMaxCol * nMaxRow, 0);
+    std::vector<FormulaError> nErrors(nMaxCol * nMaxRow,FormulaError::NONE);
 
     size_t nRowOffset = 0;
     size_t nColOffset = 0;
     std::function<void(size_t, size_t, double)> aDoubleFunc =
         [&](size_t nRow, size_t nCol, double nVal)
         {
-            sal_uInt16 nErr = formula::GetDoubleErrorValue(nVal);
-            if (nErr)
+            FormulaError nErr = ScErrorCodes::GetDoubleErrorValue(nVal);
+            if (nErr != FormulaError::NONE)
             {
                 aValid[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = false;
                 nErrors[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = nErr;
@@ -2521,8 +2522,8 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
     std::function<void(size_t, size_t, double)> aDoubleFunc2 =
         [&](size_t nRow, size_t nCol, double nVal)
         {
-            sal_uInt16 nErr = formula::GetDoubleErrorValue(nVal);
-            if (nErr)
+            FormulaError nErr = ScErrorCodes::GetDoubleErrorValue(nVal);
+            if (nErr != FormulaError::NONE)
             {
                 aValid[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = false;
                 nErrors[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = nErr;
@@ -2610,7 +2611,7 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
             }
             else
             {
-                pos = maMat.set(pos, formula::CreateDoubleError(nErrors[nMaxRow * i + j]));
+                pos = maMat.set(pos, ScErrorCodes::CreateDoubleError(nErrors[nMaxRow * i + j]));
             }
             pos = MatrixImplType::next_position(pos);
         }
@@ -2654,7 +2655,7 @@ ScFullMatrix::ScFullMatrix( SCSIZE nC, SCSIZE nR) :
         pImpl.reset( new ScMatrixImpl( nC, nR));
     else
         // Invalid matrix size, allocate 1x1 matrix with error value.
-        pImpl.reset( new ScMatrixImpl( 1,1, formula::CreateDoubleError( formula::errMatrixSize)));
+        pImpl.reset( new ScMatrixImpl( 1,1, ScErrorCodes::CreateDoubleError( FormulaError::MatrixSize)));
 }
 
 ScFullMatrix::ScFullMatrix(SCSIZE nC, SCSIZE nR, double fInitVal) :
@@ -2664,7 +2665,7 @@ ScFullMatrix::ScFullMatrix(SCSIZE nC, SCSIZE nR, double fInitVal) :
         pImpl.reset( new ScMatrixImpl( nC, nR, fInitVal));
     else
         // Invalid matrix size, allocate 1x1 matrix with error value.
-        pImpl.reset( new ScMatrixImpl( 1,1, formula::CreateDoubleError( formula::errMatrixSize)));
+        pImpl.reset( new ScMatrixImpl( 1,1, ScErrorCodes::CreateDoubleError( FormulaError::MatrixSize)));
 }
 
 ScFullMatrix::ScFullMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals ) :
@@ -2674,7 +2675,7 @@ ScFullMatrix::ScFullMatrix( size_t nC, size_t nR, const std::vector<double>& rIn
         pImpl.reset( new ScMatrixImpl( nC, nR, rInitVals));
     else
         // Invalid matrix size, allocate 1x1 matrix with error value.
-        pImpl.reset( new ScMatrixImpl( 1,1, formula::CreateDoubleError( formula::errMatrixSize)));
+        pImpl.reset( new ScMatrixImpl( 1,1, ScErrorCodes::CreateDoubleError( FormulaError::MatrixSize)));
 }
 
 ScFullMatrix::~ScFullMatrix()
@@ -2794,7 +2795,7 @@ void ScFullMatrix::PutEmptyPath(SCSIZE nC, SCSIZE nR)
     pImpl->PutEmptyPath(nC, nR);
 }
 
-void ScFullMatrix::PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR )
+void ScFullMatrix::PutError( FormulaError nErrorCode, SCSIZE nC, SCSIZE nR )
 {
     pImpl->PutError(nErrorCode, nC, nR);
 }
@@ -2804,7 +2805,7 @@ void ScFullMatrix::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
     pImpl->PutBoolean(bVal, nC, nR);
 }
 
-sal_uInt16 ScFullMatrix::GetError( SCSIZE nC, SCSIZE nR) const
+FormulaError ScFullMatrix::GetError( SCSIZE nC, SCSIZE nR) const
 {
     return pImpl->GetError(nC, nR);
 }
@@ -3075,8 +3076,8 @@ struct COp<T, double>
 
 /** A template for operations where operands are supposed to be numeric.
     A non-numeric (string) operand leads to the configured conversion to number
-    method being called if in interpreter context and an errNoValue DoubleError
-    if conversion was not possible, else to an unconditional errNoValue
+    method being called if in interpreter context and an FormulaError::NoValue DoubleError
+    if conversion was not possible, else to an unconditional FormulaError::NoValue
     DoubleError.
     An empty operand evaluates to 0.
     XXX: semantically TEmptyRes and types other than number_value_type are
@@ -3106,9 +3107,9 @@ public:
     {
         if (mpErrorInterpreter)
         {
-            sal_uInt16 nErr = mpErrorInterpreter->GetError();
-            if (nErr)
-                mfVal = formula::CreateDoubleError( nErr);
+            FormulaError nErr = mpErrorInterpreter->GetError();
+            if (nErr != FormulaError::NONE)
+                mfVal = ScErrorCodes::CreateDoubleError( nErr);
         }
     }
 
@@ -3618,7 +3619,7 @@ void ScVectorRefMatrix::PutEmptyPath(SCSIZE nC, SCSIZE nR)
     mpFullMatrix->PutEmptyPath(nC, nR);
 }
 
-void ScVectorRefMatrix::PutError(sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR)
+void ScVectorRefMatrix::PutError(FormulaError nErrorCode, SCSIZE nC, SCSIZE nR)
 {
     ensureFullMatrix();
     mpFullMatrix->PutError(nErrorCode, nC, nR);
@@ -3666,7 +3667,7 @@ void ScVectorRefMatrix::PutEmptyPathVector(SCSIZE nCount, SCSIZE nC, SCSIZE nR)
     mpFullMatrix->PutEmptyPathVector(nCount, nC, nR);
 }
 
-sal_uInt16 ScVectorRefMatrix::GetError(SCSIZE nC, SCSIZE nR) const
+FormulaError ScVectorRefMatrix::GetError(SCSIZE nC, SCSIZE nR) const
 {
     const_cast<ScVectorRefMatrix*>(this)->ensureFullMatrix();
     return mpFullMatrix->GetError(nC, nR);

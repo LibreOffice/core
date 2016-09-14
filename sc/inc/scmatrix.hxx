@@ -40,6 +40,7 @@
 class ScInterpreter;
 class SvNumberFormatter;
 class ScMatrixImpl;
+enum class FormulaError;
 
 namespace formula { class DoubleVectorRefToken; }
 
@@ -64,7 +65,7 @@ struct ScMatrixValue
     const svl::SharedString& GetString() const { return aStr; }
 
     /// Only valid if ScMatrix methods indicate that this is no string!
-    sal_uInt16 GetError() const { return formula::GetDoubleErrorValue( fVal); }
+    FormulaError GetError() const { return ScErrorCodes::GetDoubleErrorValue( fVal); }
 
     /// Only valid if ScMatrix methods indicate that this is a boolean
     bool GetBoolean() const         { return fVal != 0.0; }
@@ -274,7 +275,7 @@ public:
 
     /// Jump sal_False without path
     virtual void PutEmptyPath( SCSIZE nC, SCSIZE nR) = 0;
-    virtual void PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR ) = 0;
+    virtual void PutError( FormulaError nErrorCode, SCSIZE nC, SCSIZE nR ) = 0;
     virtual void PutBoolean( bool bVal, SCSIZE nC, SCSIZE nR) = 0;
 
     virtual void FillDouble( double fVal,
@@ -300,12 +301,12 @@ public:
         @ATTENTION: MUST NOT be used if the element is a string!
                     Use GetErrorIfNotString() instead if not sure.
         @returns 0 if no error, else one of err... constants */
-    virtual sal_uInt16 GetError( SCSIZE nC, SCSIZE nR) const = 0;
+    virtual FormulaError GetError( SCSIZE nC, SCSIZE nR) const = 0;
 
     /** Use in ScInterpreter to obtain the error code, if any.
         @returns 0 if no error or string element, else one of err... constants */
-    sal_uInt16 GetErrorIfNotString( SCSIZE nC, SCSIZE nR) const
-        { return IsValue( nC, nR) ? GetError( nC, nR) : 0; }
+    FormulaError GetErrorIfNotString( SCSIZE nC, SCSIZE nR) const
+        { return IsValue( nC, nR) ? GetError( nC, nR) : FormulaError::NONE; }
 
     /// @return 0.0 if empty or empty path, else value or DoubleError.
     virtual double GetDouble( SCSIZE nC, SCSIZE nR) const = 0;
@@ -493,7 +494,7 @@ public:
 
     /// Jump sal_False without path
     virtual void PutEmptyPath( SCSIZE nC, SCSIZE nR) override;
-    virtual void PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR ) override;
+    virtual void PutError( FormulaError nErrorCode, SCSIZE nC, SCSIZE nR ) override;
     virtual void PutBoolean( bool bVal, SCSIZE nC, SCSIZE nR) override;
 
     virtual void FillDouble( double fVal,
@@ -519,7 +520,7 @@ public:
         @ATTENTION: MUST NOT be used if the element is a string!
                     Use GetErrorIfNotString() instead if not sure.
         @returns 0 if no error, else one of err... constants */
-    virtual sal_uInt16 GetError( SCSIZE nC, SCSIZE nR) const override;
+    virtual FormulaError GetError( SCSIZE nC, SCSIZE nR) const override;
 
     /// @return 0.0 if empty or empty path, else value or DoubleError.
     virtual double GetDouble( SCSIZE nC, SCSIZE nR) const override;
@@ -711,7 +712,7 @@ public:
 
     /// Jump sal_False without path
     virtual void PutEmptyPath(SCSIZE nC, SCSIZE nR) override;
-    virtual void PutError(sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR ) override;
+    virtual void PutError(FormulaError nErrorCode, SCSIZE nC, SCSIZE nR ) override;
     virtual void PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR) override;
 
     virtual void FillDouble(double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2) override;
@@ -736,7 +737,7 @@ public:
         @ATTENTION: MUST NOT be used if the element is a string!
                     Use GetErrorIfNotString() instead if not sure.
         @returns 0 if no error, else one of err... constants */
-    virtual sal_uInt16 GetError(SCSIZE nC, SCSIZE nR) const override;
+    virtual FormulaError GetError(SCSIZE nC, SCSIZE nR) const override;
 
     /// @return 0.0 if empty or empty path, else value or DoubleError.
     virtual double GetDouble(SCSIZE nC, SCSIZE nR) const override;

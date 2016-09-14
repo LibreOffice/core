@@ -777,7 +777,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         rSet.Put( SfxStringItem( nWhich, OUString("...") ) );
                     else
                     {
-                        sal_uInt16 nErrCode = 0;
+                        FormulaError nErrCode = FormulaError::NONE;
                         ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(nPosX, nPosY, nTab));
                         if (pCell)
                         {
@@ -803,7 +803,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_STATUS_SUM:
                 {
                     OUString aFuncStr;
-                    if ( pTabViewShell->GetFunction( aFuncStr, 0 ) )
+                    if ( pTabViewShell->GetFunction( aFuncStr, FormulaError::NONE ) )
                         rSet.Put( SfxStringItem( nWhich, aFuncStr ) );
                 }
                 break;

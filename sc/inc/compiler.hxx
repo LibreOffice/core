@@ -130,7 +130,7 @@ public:
             rtl_uString* mpDataIgnoreCase;
         } sharedstring;
         ScMatrix*    pMat;
-        sal_uInt16   nError;
+        FormulaError nError;
         sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to 255 characters + 0)
         short        nJump[ FORMULA_MAXJUMPCOUNT + 1 ];     // If/Chose token
     };
@@ -152,7 +152,7 @@ public:
     void SetSingleReference( const ScSingleRefData& rRef );
     void SetDoubleReference( const ScComplexRefData& rRef );
     void SetDouble( double fVal );
-    void SetErrorConstant( sal_uInt16 nErr );
+    void SetErrorConstant( FormulaError nErr );
 
     // These methods are ok to use, reference count not cleared.
     void SetName(sal_Int16 nSheet, sal_uInt16 nIndex);
@@ -304,7 +304,7 @@ private:
 
     bool   NextNewToken(bool bInArray);
 
-    virtual void SetError(sal_uInt16 nError) override;
+    virtual void SetError(FormulaError nError) override;
     sal_Int32 NextSymbol(bool bInArray);
     bool IsValue( const OUString& );
     bool IsOpCode( const OUString&, bool bInArray );

@@ -2236,14 +2236,14 @@ public:
                         continue;
                     }
 
-                    sal_uInt16 nErr;
+                    FormulaError nErr;
                     double fVal;
                     if (rCell.GetErrorOrValue(nErr, fVal))
                     {
                         ScAddress aAdr(mnCol, nThisRow, mnTab);
 
-                        if (nErr)
-                            fVal = formula::CreateDoubleError(nErr);
+                        if (nErr != FormulaError::NONE)
+                            fVal = ScErrorCodes::CreateDoubleError(nErr);
 
                         if (!aBucket.maNumVals.empty() && nThisRow == nPrevRow + 1)
                         {
@@ -2374,12 +2374,12 @@ bool appendToBlock(
 
                     sc::FormulaResultValue aRes = rFC.GetResult();
 
-                    if (aRes.meType == sc::FormulaResultValue::Invalid || aRes.mnError)
+                    if (aRes.meType == sc::FormulaResultValue::Invalid || aRes.mnError != FormulaError::NONE)
                     {
-                        if (aRes.mnError == formula::errCircularReference)
+                        if (aRes.mnError == FormulaError::CircularReference)
                         {
                             // This cell needs to be recalculated on next visit.
-                            rFC.SetErrCode(0);
+                            rFC.SetErrCode(FormulaError::NONE);
                             rFC.SetDirtyVar();
                         }
                         return false;
@@ -2495,12 +2495,12 @@ copyFirstFormulaBlock(
     {
         ScFormulaCell& rFC = **it;
         sc::FormulaResultValue aRes = rFC.GetResult();
-        if (aRes.meType == sc::FormulaResultValue::Invalid || aRes.mnError)
+        if (aRes.meType == sc::FormulaResultValue::Invalid || aRes.mnError != FormulaError::NONE)
         {
-            if (aRes.mnError == formula::errCircularReference)
+            if (aRes.mnError == FormulaError::CircularReference)
             {
                 // This cell needs to be recalculated on next visit.
-                rFC.SetErrCode(0);
+                rFC.SetErrCode(FormulaError::NONE);
                 rFC.SetDirtyVar();
             }
             return nullptr;
@@ -2742,8 +2742,8 @@ void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLe
     for (; pResults != pResEnd; ++pResults, ++itCell)
     {
         ScFormulaCell& rCell = **itCell;
-        sal_uInt16 nErr = formula::GetDoubleErrorValue(*pResults);
-        if (nErr != 0)
+        FormulaError nErr = ScErrorCodes::GetDoubleErrorValue(*pResults);
+        if (nErr != FormulaError::NONE)
             rCell.SetResultError(nErr);
         else
             rCell.SetResultDouble(*pResults);
@@ -3163,7 +3163,7 @@ public:
         if (mrData.eFunc != SUBTOTAL_FUNC_CNT2) // it doesn't interest us
         {
 
-            if (pCell->GetErrCode())
+            if (pCell->GetErrCode() != FormulaError::NONE)
             {
                 if (mrData.eFunc != SUBTOTAL_FUNC_CNT) // simply remove from count
                     mrData.bError = true;

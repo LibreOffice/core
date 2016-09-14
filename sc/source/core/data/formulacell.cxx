@@ -557,7 +557,7 @@ void ScFormulaCellGroup::compileCode(
     if (!mpCode)
         return;
 
-    if (mpCode->GetLen() && !mpCode->GetCodeError() && !mpCode->GetCodeLen())
+    if (mpCode->GetLen() && mpCode->GetCodeError() == FormulaError::NONE && !mpCode->GetCodeLen())
     {
         ScCompiler aComp(&rDoc, rPos, *mpCode);
         aComp.SetGrammar(eGram);
@@ -700,7 +700,7 @@ ScFormulaCell::ScFormulaCell(
     assert(pArray); // Never pass a NULL pointer here.
 
     // Generate RPN token array.
-    if (pCode->GetLen() && !pCode->GetCodeError() && !pCode->GetCodeLen())
+    if (pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen())
     {
         ScCompiler aComp( pDocument, aPos, *pCode);
         aComp.SetGrammar(eTempGrammar);
@@ -750,7 +750,7 @@ ScFormulaCell::ScFormulaCell(
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
 
     // RPN array generation
-    if( pCode->GetLen() && !pCode->GetCodeError() && !pCode->GetCodeLen() )
+    if( pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen() )
     {
         ScCompiler aComp( pDocument, aPos, *pCode);
         aComp.SetGrammar(eTempGrammar);
@@ -838,9 +838,9 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
     //  set back any errors and recompile
     //  not in the Clipboard - it must keep the received error flag
     //  Special Length=0: as bad cells are generated, then they are also retained
-    if ( pCode->GetCodeError() && !pDocument->IsClipboard() && pCode->GetLen() )
+    if ( pCode->GetCodeError() != FormulaError::NONE && !pDocument->IsClipboard() && pCode->GetLen() )
     {
-        pCode->SetCodeError( 0 );
+        pCode->SetCodeError( FormulaError::NONE );
         bCompile = true;
     }
     // Compile ColRowNames on URM_MOVE/URM_COPY _after_ UpdateReference !
@@ -975,7 +975,7 @@ ScFormulaVectorState ScFormulaCell::GetVectorState() const
 void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
                                 const FormulaGrammar::Grammar eGrammar ) const
 {
-    if( pCode->GetCodeError() && !pCode->GetLen() )
+    if( pCode->GetCodeError() != FormulaError::NONE && !pCode->GetLen() )
     {
         rBuffer = OUStringBuffer( ScGlobal::GetErrorString( pCode->GetCodeError()));
         return;
@@ -1039,7 +1039,7 @@ void ScFormulaCell::GetFormula( OUString& rFormula, const FormulaGrammar::Gramma
 OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt ) const
 {
     OUStringBuffer aBuf;
-    if (pCode->GetCodeError() && !pCode->GetLen())
+    if (pCode->GetCodeError() != FormulaError::NONE && !pCode->GetLen())
     {
         aBuf = OUStringBuffer( ScGlobal::GetErrorString( pCode->GetCodeError()));
         return aBuf.makeStringAndClear();
@@ -1097,7 +1097,7 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
     MaybeInterpret();
 
     const ScMatrix* pMat = nullptr;
-    if (!pCode->GetCodeError() && aResult.GetType() == svMatrixCell &&
+    if (pCode->GetCodeError() == FormulaError::NONE && aResult.GetType() == svMatrixCell &&
             ((pMat = aResult.GetToken().get()->GetMatrix()) != nullptr))
         pMat->GetDimensions( rCols, rRows );
     else
@@ -1136,7 +1136,7 @@ void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
     aComp.SetGrammar(eGrammar);
     pCode = aComp.CompileString( rFormula );
     delete pCodeOld;
-    if( !pCode->GetCodeError() )
+    if( pCode->GetCodeError() == FormulaError::NONE )
     {
         if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() && rFormula == aResult.GetHybridFormula() )
         {   // not recursive CompileTokenArray/Compile/CompileTokenArray
@@ -1170,7 +1170,7 @@ void ScFormulaCell::Compile(
     ScCompiler aComp(rCxt, aPos);
     pCode = aComp.CompileString( rFormula );
     delete pCodeOld;
-    if( !pCode->GetCodeError() )
+    if( pCode->GetCodeError() == FormulaError::NONE )
     {
         if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() && rFormula == aResult.GetHybridFormula() )
         {   // not recursive CompileTokenArray/Compile/CompileTokenArray
@@ -1196,7 +1196,7 @@ void ScFormulaCell::CompileTokenArray( bool bNoListening )
     {
         Compile( aResult.GetHybridFormula(), bNoListening, eTempGrammar);
     }
-    else if( bCompile && !pDocument->IsClipOrUndo() && !pCode->GetCodeError() )
+    else if( bCompile && !pDocument->IsClipOrUndo() && pCode->GetCodeError() == FormulaError::NONE )
     {
         // RPN length may get changed
         bool bWasInFormulaTree = pDocument->IsInFormulaTree( this );
@@ -1212,7 +1212,7 @@ void ScFormulaCell::CompileTokenArray( bool bNoListening )
         ScCompiler aComp(pDocument, aPos, *pCode);
         aComp.SetGrammar(pDocument->GetGrammar());
         bSubTotal = aComp.CompileTokenArray();
-        if( !pCode->GetCodeError() )
+        if( pCode->GetCodeError() == FormulaError::NONE )
         {
             nFormatType = aComp.GetNumFormatType();
             bChanged = true;
@@ -1237,7 +1237,7 @@ void ScFormulaCell::CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNo
         rCxt.setGrammar(eTempGrammar);
         Compile(rCxt, aResult.GetHybridFormula(), bNoListening);
     }
-    else if( bCompile && !pDocument->IsClipOrUndo() && !pCode->GetCodeError() )
+    else if( bCompile && !pDocument->IsClipOrUndo() && pCode->GetCodeError() == FormulaError::NONE)
     {
         // RPN length may get changed
         bool bWasInFormulaTree = pDocument->IsInFormulaTree( this );
@@ -1252,7 +1252,7 @@ void ScFormulaCell::CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNo
             EndListeningTo( pDocument );
         ScCompiler aComp(rCxt, aPos, *pCode);
         bSubTotal = aComp.CompileTokenArray();
-        if( !pCode->GetCodeError() )
+        if( pCode->GetCodeError() == FormulaError::NONE )
         {
             nFormatType = aComp.GetNumFormatType();
             bChanged = true;
@@ -1345,7 +1345,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
         pCode = aComp.CompileString( aFormula, aFormulaNmsp );
         delete pCodeOld;
 
-        if( !pCode->GetCodeError() )
+        if( pCode->GetCodeError() == FormulaError::NONE )
         {
             if ( !pCode->GetLen() )
             {
@@ -1355,7 +1355,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
                     pCode->AddBad( aFormula );
             }
             bSubTotal = aComp.CompileTokenArray();
-            if( !pCode->GetCodeError() )
+            if( pCode->GetCodeError() == FormulaError::NONE )
             {
                 nFormatType = aComp.GetNumFormatType();
                 bChanged = true;
@@ -1402,7 +1402,7 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
         bNewCompiled = true;
     }
     // The RPN array is not created when a Calc 3.0-Doc has been read as the Range Names exist until now.
-    if( pCode->GetLen() && !pCode->GetCodeLen() && !pCode->GetCodeError() )
+    if( pCode->GetLen() && !pCode->GetCodeLen() && pCode->GetCodeError() == FormulaError::NONE )
     {
         ScCompiler aComp(rCxt, aPos, *pCode);
         bSubTotal = aComp.CompileTokenArray();
@@ -1421,7 +1421,7 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
     if ( aResult.IsValue() && !::rtl::math::isFinite( aResult.GetDouble() ) )
     {
         OSL_FAIL("Formula cell INFINITY!!! Where does this document come from?");
-        aResult.SetResultError( errIllegalFPOperation );
+        aResult.SetResultError( FormulaError::IllegalFPOperation );
         bDirty = true;
     }
 
@@ -1436,7 +1436,7 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
 
     // Do the cells need to be calculated? After Load cells can contain an error code, and then start
     // the listener and Recalculate (if needed) if not ScRecalcMode::NORMAL
-    if( !bNewCompiled || !pCode->GetCodeError() )
+    if( !bNewCompiled || pCode->GetCodeError() == FormulaError::NONE )
     {
         if (bStartListening)
             StartListeningTo(pDocument);
@@ -1505,12 +1505,12 @@ void ScFormulaCell::Interpret()
     {
         if (!pDocument->GetDocOptions().IsIter())
         {
-            aResult.SetResultError( errCircularReference );
+            aResult.SetResultError( FormulaError::CircularReference );
             return;
         }
 
-        if (aResult.GetResultError() == errCircularReference)
-            aResult.SetResultError( 0 );
+        if (aResult.GetResultError() == FormulaError::CircularReference)
+            aResult.SetResultError( FormulaError::NONE );
 
         // Start or add to iteration list.
         if (!pDocument->GetRecursionHelper().IsDoingIteration() ||
@@ -1684,7 +1684,7 @@ void ScFormulaCell::Interpret()
                             // circular dependency don't, no matter whether
                             // single cells did.
                             pIterCell->ResetDirty();
-                            pIterCell->aResult.SetResultError( errNoConvergence);
+                            pIterCell->aResult.SetResultError( FormulaError::NoConvergence);
                             pIterCell->bChanged = true;
                         }
                     }
@@ -1750,7 +1750,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 {
     RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
     nSeenInIteration = pDocument->GetRecursionHelper().GetIteration();
-    if( !pCode->GetCodeLen() && !pCode->GetCodeError() )
+    if( !pCode->GetCodeLen() && pCode->GetCodeError() == FormulaError::NONE )
     {
         // #i11719# no RPN and no error and no token code but result string present
         // => interpretation of this cell during name-compilation and unknown names
@@ -1763,7 +1763,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         // condition further down.
         if ( !pCode->GetLen() && !aResult.GetHybridFormula().isEmpty() )
         {
-            pCode->SetCodeError( errNoCode );
+            pCode->SetCodeError( FormulaError::NoCode );
             // This is worth an assertion; if encountered in daily work
             // documents we might need another solution. Or just confirm correctness.
             OSL_FAIL( "ScFormulaCell::Interpret: no RPN, no error, no token, but hybrid formula string" );
@@ -1791,20 +1791,21 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         pDocument->IncInterpretLevel();
         ScInterpreter* p = new ScInterpreter( this, pDocument, aPos, *pCode );
         StackCleaner aStackCleaner( pDocument, p);
-        sal_uInt16 nOldErrCode = aResult.GetResultError();
+        FormulaError nOldErrCode = aResult.GetResultError();
         if ( nSeenInIteration == 0 )
         {   // Only the first time
             // With bChanged=false, if a newly compiled cell has a result of
             // 0.0, no change is detected and the cell will not be repainted.
             // bChanged = false;
-            aResult.SetResultError( 0 );
+            aResult.SetResultError( FormulaError::NONE );
         }
 
         switch ( aResult.GetResultError() )
         {
-            case errCircularReference :     // will be determined again if so
-                aResult.SetResultError( 0 );
+            case FormulaError::CircularReference :     // will be determined again if so
+                aResult.SetResultError( FormulaError::NONE );
             break;
+            default: break;
         }
 
         bool bOldRunning = bRunning;
@@ -1823,20 +1824,20 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         bool bContentChanged = false;
 
         // Do not create a HyperLink() cell if the formula results in an error.
-        if( p->GetError() && pCode->IsHyperLink())
+        if( p->GetError() != FormulaError::NONE && pCode->IsHyperLink())
             pCode->SetHyperLink(false);
 
-        if( p->GetError() && p->GetError() != errCircularReference)
+        if( p->GetError() != FormulaError::NONE && p->GetError() != FormulaError::CircularReference)
         {
             bChanged = true;
 
-            if (p->GetError() == errRetryCircular)
+            if (p->GetError() == FormulaError::RetryCircular)
             {
                 // Array formula matrix calculation corner case. Keep dirty
                 // state, do not remove from formula tree or anything else, but
-                // store errCircularReference in case this cell does not get
+                // store FormulaError::CircularReference in case this cell does not get
                 // recalculated.
-                aResult.SetResultError( errCircularReference);
+                aResult.SetResultError( FormulaError::CircularReference);
                 return;
             }
 
@@ -2068,7 +2069,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
 
         // Precision as shown?
-        if ( aResult.IsValue() && !p->GetError()
+        if ( aResult.IsValue() && p->GetError() == FormulaError::NONE
           && pDocument->GetDocOptions().IsCalcAsShown()
           && nFormatType != css::util::NumberFormat::DATE
           && nFormatType != css::util::NumberFormat::TIME
@@ -2092,7 +2093,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         if ( aResult.IsValue() && !::rtl::math::isFinite( aResult.GetDouble() ) )
         {
             // Coded double error may occur via filter import.
-            sal_uInt16 nErr = GetDoubleErrorValue( aResult.GetDouble());
+            FormulaError nErr = ScErrorCodes::GetDoubleErrorValue( aResult.GetDouble());
             aResult.SetResultError( nErr);
             bChanged = bContentChanged = true;
         }
@@ -2162,7 +2163,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
     else
     {
         // Cells with compiler errors should not be marked dirty forever
-        OSL_ENSURE( pCode->GetCodeError(), "no RPN code und no errors ?!?!" );
+        OSL_ENSURE( pCode->GetCodeError() != FormulaError::NONE, "no RPN code and no errors ?!?!" );
         ResetDirty();
     }
 }
@@ -2431,7 +2432,7 @@ void ScFormulaCell::SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatr
     aResult.SetMatrix(nCols, nRows, pMat, pUL);
 }
 
-void ScFormulaCell::SetErrCode( sal_uInt16 n )
+void ScFormulaCell::SetErrCode( FormulaError n )
 {
     /* FIXME: check the numerous places where ScTokenArray::GetCodeError() is
      * used whether it is solely for transport of a simple result error and get
@@ -2443,7 +2444,7 @@ void ScFormulaCell::SetErrCode( sal_uInt16 n )
     aResult.SetResultError( n );
 }
 
-void ScFormulaCell::SetResultError( sal_uInt16 n )
+void ScFormulaCell::SetResultError( FormulaError n )
 {
     aResult.SetResultError( n );
 }
@@ -2580,7 +2581,7 @@ bool ScFormulaCell::IsValue()
 bool ScFormulaCell::IsValueNoError()
 {
     MaybeInterpret();
-    if (pCode->GetCodeError())
+    if (pCode->GetCodeError() != FormulaError::NONE)
         return false;
 
     return aResult.IsValueNoError();
@@ -2592,7 +2593,7 @@ bool ScFormulaCell::IsValueNoError() const
         // false if the cell is dirty & needs to be interpreted.
         return false;
 
-    if (pCode->GetCodeError())
+    if (pCode->GetCodeError() != FormulaError::NONE)
         return false;
 
     return aResult.IsValueNoError();
@@ -2606,8 +2607,8 @@ bool ScFormulaCell::IsHybridValueCell()
 double ScFormulaCell::GetValue()
 {
     MaybeInterpret();
-    if ((!pCode->GetCodeError() || pCode->GetCodeError() == errDoubleRef) &&
-            !aResult.GetResultError())
+    if ((pCode->GetCodeError() == FormulaError::NONE || pCode->GetCodeError() == FormulaError::DoubleRef) &&
+            aResult.GetResultError() == FormulaError::NONE)
         return aResult.GetDouble();
     return 0.0;
 }
@@ -2615,8 +2616,8 @@ double ScFormulaCell::GetValue()
 svl::SharedString ScFormulaCell::GetString()
 {
     MaybeInterpret();
-    if ((!pCode->GetCodeError() || pCode->GetCodeError() == errDoubleRef) &&
-            !aResult.GetResultError())
+    if ((pCode->GetCodeError() == FormulaError::NONE || pCode->GetCodeError() == FormulaError::DoubleRef) &&
+            aResult.GetResultError() == FormulaError::NONE)
         return aResult.GetString();
 
     return svl::SharedString::getEmptyString();
@@ -2784,33 +2785,33 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
     }
 }
 
-sal_uInt16 ScFormulaCell::GetErrCode()
+FormulaError ScFormulaCell::GetErrCode()
 {
     MaybeInterpret();
 
     /* FIXME: If ScTokenArray::SetCodeError() was really only for code errors
      * and not also abused for signaling other error conditions we could bail
      * out even before attempting to interpret broken code. */
-    sal_uInt16 nErr =  pCode->GetCodeError();
-    if (nErr)
+    FormulaError nErr =  pCode->GetCodeError();
+    if (nErr != FormulaError::NONE)
         return nErr;
     return aResult.GetResultError();
 }
 
-sal_uInt16 ScFormulaCell::GetRawError()
+FormulaError ScFormulaCell::GetRawError()
 {
-    sal_uInt16 nErr =  pCode->GetCodeError();
-    if (nErr)
+    FormulaError nErr =  pCode->GetCodeError();
+    if (nErr != FormulaError::NONE)
         return nErr;
     return aResult.GetResultError();
 }
 
-bool ScFormulaCell::GetErrorOrValue( sal_uInt16& rErr, double& rVal )
+bool ScFormulaCell::GetErrorOrValue( FormulaError& rErr, double& rVal )
 {
     MaybeInterpret();
 
     rErr = pCode->GetCodeError();
-    if (rErr)
+    if (rErr != FormulaError::NONE)
         return true;
 
     return aResult.GetErrorOrDouble(rErr, rVal);
@@ -2820,8 +2821,8 @@ sc::FormulaResultValue ScFormulaCell::GetResult()
 {
     MaybeInterpret();
 
-    sal_uInt16 nErr = pCode->GetCodeError();
-    if (nErr)
+    FormulaError nErr = pCode->GetCodeError();
+    if (nErr != FormulaError::NONE)
         return sc::FormulaResultValue(nErr);
 
     return aResult.GetResult();
@@ -2829,8 +2830,8 @@ sc::FormulaResultValue ScFormulaCell::GetResult()
 
 sc::FormulaResultValue ScFormulaCell::GetResult() const
 {
-    sal_uInt16 nErr = pCode->GetCodeError();
-    if (nErr)
+    FormulaError nErr = pCode->GetCodeError();
+    if (nErr != FormulaError::NONE)
         return sc::FormulaResultValue(nErr);
 
     return aResult.GetResult();
@@ -3543,7 +3544,7 @@ void ScFormulaCell::UpdateCompile( bool bForceIfNameInUse )
     if ( bForceIfNameInUse && !bCompile )
         bCompile = pCode->HasNameOrColRowName();
     if ( bCompile )
-        pCode->SetCodeError( 0 );   // make sure it will really be compiled
+        pCode->SetCodeError( FormulaError::NONE );   // make sure it will really be compiled
     CompileTokenArray();
 }
 

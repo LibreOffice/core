@@ -19,6 +19,7 @@
 #include "stringutil.hxx"
 #include "dbdocfun.hxx"
 
+#include <formula/errorcodes.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
@@ -2304,11 +2305,10 @@ void Test::testFuncGETPIVOTDATALeafAccess()
 
     m_pDoc->CalcAll();
 
-    const sal_uInt16 nNoError = 0; // no error
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
-        sal_uInt16 nErr = m_pDoc->GetErrCode(ScAddress(4,i,1));
-        CPPUNIT_ASSERT_EQUAL(nNoError, nErr);
+        FormulaError nErr = m_pDoc->GetErrCode(ScAddress(4,i,1));
+        CPPUNIT_ASSERT_EQUAL((sal_uInt16)FormulaError::NONE, (sal_uInt16)nErr);
         double fVal = m_pDoc->GetValue(ScAddress(4,i,1));
         CPPUNIT_ASSERT_EQUAL(aChecks[i].mfResult, fVal);
     }

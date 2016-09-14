@@ -48,6 +48,7 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class CharClass;
+enum class FormulaError;
 
 namespace formula
 {
@@ -219,7 +220,7 @@ public:
      */
     OpCode GetEnglishOpCode( const OUString& rName ) const;
 
-    sal_uInt16 GetErrorConstant( const OUString& rName ) const;
+    FormulaError GetErrorConstant( const OUString& rName ) const;
 
     void EnableJumpCommandReorder( bool bEnable );
     void EnableStopOnError( bool bEnable );
@@ -279,7 +280,7 @@ protected:
     virtual void fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& xMap ) const;
     virtual void fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry >& _rVec, bool _bIsEnglish) const;
 
-    virtual void SetError(sal_uInt16 nError);
+    virtual void SetError(FormulaError nError);
     virtual FormulaTokenRef ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2 );
     virtual bool HandleExternalReference(const FormulaToken& _aToken);
     virtual bool HandleRange();
@@ -298,7 +299,7 @@ protected:
         Calc: ForceArray or ReferenceOrForceArray type. */
     virtual bool IsForceArrayParameter( const FormulaToken* pToken, sal_uInt16 nParam ) const;
 
-    void AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError ) const;
+    void AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError nError ) const;
 
     bool   GetToken();
     OpCode NextToken();

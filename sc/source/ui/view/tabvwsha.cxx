@@ -63,7 +63,7 @@
 
 using namespace com::sun::star;
 
-bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
+bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
 {
     OUString aStr;
 
@@ -79,9 +79,9 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
         ScSubTotalFunc eFunc = (ScSubTotalFunc)nFunc;
 
         if (bIgnoreError && (eFunc == SUBTOTAL_FUNC_CNT || eFunc == SUBTOTAL_FUNC_CNT2))
-            nErrCode = 0;
+            nErrCode = FormulaError::NONE;
 
-        if (nErrCode)
+        if (nErrCode != FormulaError::NONE)
         {
             rFuncStr = ScGlobal::GetLongErrorString(nErrCode);
             return true;

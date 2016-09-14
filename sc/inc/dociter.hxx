@@ -77,7 +77,7 @@ class ScValueIterator            // walk through all values in an area
      * See if the cell at the current position is a non-empty cell. If not,
      * move to the next non-empty cell position.
      */
-    bool GetThis( double& rValue, sal_uInt16& rErr );
+    bool GetThis( double& rValue, FormulaError& rErr );
 
 public:
 
@@ -88,10 +88,10 @@ public:
     void GetCurNumFmtInfo( short& nType, sal_uLong& nIndex );
 
     /// Does NOT reset rValue if no value found!
-    bool GetFirst( double& rValue, sal_uInt16& rErr );
+    bool GetFirst( double& rValue, FormulaError& rErr );
 
     /// Does NOT reset rValue if no value found!
-    bool GetNext( double& rValue, sal_uInt16& rErr );
+    bool GetNext( double& rValue, FormulaError& rErr );
 };
 
 class ScDBQueryDataIterator
@@ -99,9 +99,9 @@ class ScDBQueryDataIterator
 public:
     struct Value
     {
-        OUString maString;
+        OUString        maString;
         double          mfValue;
-        sal_uInt16      mnError;
+        FormulaError    mnError;
         bool            mbIsNumber;
 
         Value();
@@ -468,7 +468,7 @@ public:
                                                const ScRange& rRange );
                     ~ScHorizontalValueIterator();
     /// Does NOT reset rValue if no value found!
-    bool            GetNext( double& rValue, sal_uInt16& rErr );
+    bool            GetNext( double& rValue, FormulaError& rErr );
 };
 
 //  returns all areas with non-default formatting (horizontal)

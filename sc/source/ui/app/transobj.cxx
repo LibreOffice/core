@@ -53,6 +53,7 @@
 
 #include <editeng/paperinf.hxx>
 #include <editeng/sizeitem.hxx>
+#include <formula/errorcodes.hxx>
 #include <svx/algitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
@@ -816,9 +817,9 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
             SCCOL nCol = aIter.GetPos().Col() - nSubX;
             SCROW nRow = aIter.GetPos().Row() - nSubY;
 
-            sal_uInt16 nErrCode = pFCell->GetErrCode();
+            FormulaError nErrCode = pFCell->GetErrCode();
             ScAddress aPos(nCol, nRow, nDestTab);
-            if (nErrCode)
+            if (nErrCode != FormulaError::NONE)
             {
                 if ( static_cast<const SvxHorJustifyItem*>(pDestDoc->GetAttr(
                         nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY))->GetValue() ==

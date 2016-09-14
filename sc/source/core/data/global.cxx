@@ -355,118 +355,114 @@ const OUString& ScGlobal::GetRscString( sal_uInt16 nIndex )
     return *ppRscString[ nIndex ];
 }
 
-OUString ScGlobal::GetErrorString(sal_uInt16 nErrNumber)
+OUString ScGlobal::GetErrorString(FormulaError nErr)
 {
-    OUString sResStr;
-    switch (nErrNumber)
+    sal_uInt16 nErrNumber;
+    switch (nErr)
     {
-        case formula::NOTAVAILABLE          : nErrNumber = STR_NV_STR; break;
-        case formula::errNoRef              : nErrNumber = STR_NO_REF_TABLE; break;
-        case formula::errNoName             : nErrNumber = STR_NO_NAME_REF; break;
-        case formula::errNoAddin            : nErrNumber = STR_NO_ADDIN; break;
-        case formula::errNoMacro            : nErrNumber = STR_NO_MACRO; break;
-        case formula::errDoubleRef          :
-        case formula::errNoValue            : nErrNumber = STR_NO_VALUE; break;
-        case formula::errNoCode             : nErrNumber = STR_NULL_ERROR; break;
-        case formula::errDivisionByZero     : nErrNumber = STR_DIV_ZERO; break;
-        case formula::errIllegalFPOperation : nErrNumber = STR_NUM_ERROR; break;
+        case FormulaError::NotAvailable       : nErrNumber = STR_NV_STR; break;
+        case FormulaError::NoRef              : nErrNumber = STR_NO_REF_TABLE; break;
+        case FormulaError::NoName             : nErrNumber = STR_NO_NAME_REF; break;
+        case FormulaError::NoAddin            : nErrNumber = STR_NO_ADDIN; break;
+        case FormulaError::NoMacro            : nErrNumber = STR_NO_MACRO; break;
+        case FormulaError::DoubleRef          :
+        case FormulaError::NoValue            : nErrNumber = STR_NO_VALUE; break;
+        case FormulaError::NoCode             : nErrNumber = STR_NULL_ERROR; break;
+        case FormulaError::DivisionByZero     : nErrNumber = STR_DIV_ZERO; break;
+        case FormulaError::IllegalFPOperation : nErrNumber = STR_NUM_ERROR; break;
 
-        default          : sResStr = GetRscString(STR_ERROR_STR) + OUString::number( nErrNumber );
-                           nErrNumber = 0;
-                           break;
+        default          : return GetRscString(STR_ERROR_STR) + OUString::number( (int)nErr );
     }
-    if( nErrNumber )
-        sResStr = GetRscString( nErrNumber );
-    return sResStr;
+    return GetRscString( nErrNumber );
 }
 
-OUString ScGlobal::GetLongErrorString(sal_uInt16 nErrNumber)
+OUString ScGlobal::GetLongErrorString(FormulaError nErr)
 {
-    switch (nErrNumber)
+    sal_uInt16 nErrNumber;
+    switch (nErr)
     {
-        case 0:
+        case FormulaError::NONE:
+            nErrNumber = 0;
             break;
-        case 1:
-        case formula::errIllegalArgument:
+        case FormulaError::UnknownFormat:
+        case FormulaError::IllegalArgument:
             nErrNumber = STR_LONG_ERR_ILL_ARG;
         break;
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case formula::errIllegalFPOperation:
+        case FormulaError::UnknownID:
+        case FormulaError::OutOfMemory:
+        case FormulaError::IllegalFPOperation:
             nErrNumber = STR_LONG_ERR_ILL_FPO;
         break;
-        case formula::errIllegalChar:
+        case FormulaError::IllegalChar:
             nErrNumber = STR_LONG_ERR_ILL_CHAR;
         break;
-        case formula::errIllegalParameter:
+        case FormulaError::IllegalParameter:
             nErrNumber = STR_LONG_ERR_ILL_PAR;
         break;
-        case formula::errSeparator:
+        case FormulaError::Separator:
             nErrNumber = STR_LONG_ERR_ILL_SEP;
         break;
-        case formula::errPair:
-        case formula::errPairExpected:
+        case FormulaError::Pair:
+        case FormulaError::PairExpected:
             nErrNumber = STR_LONG_ERR_PAIR;
         break;
-        case formula::errOperatorExpected:
+        case FormulaError::OperatorExpected:
             nErrNumber = STR_LONG_ERR_OP_EXP;
         break;
-        case formula::errVariableExpected:
-        case formula::errParameterExpected:
+        case FormulaError::VariableExpected:
+        case FormulaError::ParameterExpected:
             nErrNumber = STR_LONG_ERR_VAR_EXP;
         break;
-        case formula::errCodeOverflow:
+        case FormulaError::CodeOverflow:
             nErrNumber = STR_LONG_ERR_CODE_OVF;
         break;
-        case formula::errStringOverflow:
+        case FormulaError::StringOverflow:
             nErrNumber = STR_LONG_ERR_STR_OVF;
         break;
-        case formula::errStackOverflow:
+        case FormulaError::StackOverflow:
             nErrNumber = STR_LONG_ERR_STACK_OVF;
         break;
-        case formula::errMatrixSize:
+        case FormulaError::MatrixSize:
             nErrNumber = STR_LONG_ERR_MATRIX_SIZE;
         break;
-        case formula::errIllegalJump:
-        case formula::errUnknownState:
-        case formula::errUnknownVariable:
-        case formula::errUnknownOpCode:
-        case formula::errUnknownStackVariable:
-        case formula::errUnknownToken:
-        case formula::errNoCode:
-        case formula::errDoubleRef:
+        case FormulaError::IllegalJump:
+        case FormulaError::UnknownState:
+        case FormulaError::UnknownVariable:
+        case FormulaError::UnknownOpCode:
+        case FormulaError::UnknownStackVariable:
+        case FormulaError::UnknownToken:
+        case FormulaError::NoCode:
+        case FormulaError::DoubleRef:
             nErrNumber = STR_LONG_ERR_SYNTAX;
         break;
-        case formula::errCircularReference:
+        case FormulaError::CircularReference:
             nErrNumber = STR_LONG_ERR_CIRC_REF;
         break;
-        case formula::errNoConvergence:
+        case FormulaError::NoConvergence:
             nErrNumber = STR_LONG_ERR_NO_CONV;
         break;
-        case formula::errNoRef:
+        case FormulaError::NoRef:
             nErrNumber = STR_LONG_ERR_NO_REF;
         break;
-        case formula::errNoName:
+        case FormulaError::NoName:
             nErrNumber = STR_LONG_ERR_NO_NAME;
         break;
-        case formula::errNoAddin:
+        case FormulaError::NoAddin:
             nErrNumber = STR_LONG_ERR_NO_ADDIN;
         break;
-        case formula::errNoMacro:
+        case FormulaError::NoMacro:
             nErrNumber = STR_LONG_ERR_NO_MACRO;
         break;
-        case formula::errDivisionByZero:
+        case FormulaError::DivisionByZero:
             nErrNumber = STR_LONG_ERR_DIV_ZERO;
         break;
-        case formula::errNestedArray:
+        case FormulaError::NestedArray:
             nErrNumber = STR_ERR_LONG_NESTED_ARRAY;
         break;
-        case formula::errNoValue:
+        case FormulaError::NoValue:
             nErrNumber = STR_LONG_ERR_NO_VALUE;
         break;
-        case formula::NOTAVAILABLE:
+        case FormulaError::NotAvailable:
             nErrNumber = STR_LONG_ERR_NV;
         break;
         default:

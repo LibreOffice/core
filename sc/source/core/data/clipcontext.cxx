@@ -17,6 +17,7 @@
 #include <clipparam.hxx>
 
 #include <svl/intitem.hxx>
+#include <formula/errorcodes.hxx>
 
 namespace sc {
 
@@ -203,8 +204,8 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
                 // Good.
                 break;
 
-            sal_uInt16 nErr = rSrcCell.mpFormula->GetErrCode();
-            if (nErr)
+            FormulaError nErr = rSrcCell.mpFormula->GetErrCode();
+            if (nErr != FormulaError::NONE)
             {
                 // error codes are cloned with values
                 if (!bNumeric)

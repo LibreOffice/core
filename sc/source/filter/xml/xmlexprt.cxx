@@ -97,6 +97,7 @@
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/eeitem.hxx>
+#include <formula/errorcodes.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/XMLEventExport.hxx>
 
@@ -3144,7 +3145,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                             AddAttribute(sAttrFormula, GetNamespaceMap().GetQNameByKey(nNamespacePrefix, aFormula.copy(1, aFormula.getLength()-2), false));
                         }
                     }
-                    if (pFormulaCell->GetErrCode())
+                    if (pFormulaCell->GetErrCode() != FormulaError::NONE)
                     {
                         AddAttribute(sAttrValueType, XML_STRING);
                         AddAttribute(sAttrStringValue, aCell.maBaseCell.getString(pDoc));

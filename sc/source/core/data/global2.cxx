@@ -378,14 +378,14 @@ bool isEmptyString( const OUString& rStr )
 }
 
 double ScGlobal::ConvertStringToValue( const OUString& rStr, const ScCalcConfig& rConfig,
-        sal_uInt16 & rError, sal_uInt16 nStringNoValueError,
+        FormulaError & rError, FormulaError nStringNoValueError,
         SvNumberFormatter* pFormatter, short & rCurFmtType )
 {
     // We keep ScCalcConfig::StringConversion::LOCALE default until
     // we provide a friendly way to convert string numbers into numbers in the UI.
 
     double fValue = 0.0;
-    if (nStringNoValueError == formula::errCellNoValue)
+    if (nStringNoValueError == FormulaError::CellNoValue)
     {
         // Requested that all strings result in 0, error handled by caller.
         rError = nStringNoValueError;
@@ -482,7 +482,7 @@ Label_fallback_to_unambiguous:
                     if (p < pStop && !rtl::isAsciiDigit(*p))
                         rError = nStringNoValueError;
                     p = pLastStart;
-                    while (p < pStop && !rError && eState < blank)
+                    while (p < pStop && rError == FormulaError::NONE && eState < blank)
                     {
                         if (eState == minute)
                             rCurFmtType |= css::util::NumberFormat::TIME;
@@ -563,7 +563,7 @@ Label_fallback_to_unambiguous:
                             eState == hour || (eState == minute && p <= pLastStart))
                         rError = nStringNoValueError;
 
-                    if (!rError)
+                    if (rError == FormulaError::NONE)
                     {
                         // Catch the very last unit at end of string.
                         if (p > pLastStart && eState < done)
@@ -574,7 +574,7 @@ Label_fallback_to_unambiguous:
                         }
                         if (bDate && nUnit[hour] > 23)
                             rError = nStringNoValueError;
-                        if (!rError)
+                        if (rError == FormulaError::NONE)
                         {
                             if (bDate && nUnit[day] == 0)
                                 nUnit[day] = 1;
@@ -611,7 +611,7 @@ Label_fallback_to_unambiguous:
             default:
                 rError = nStringNoValueError;
         }
-        if (rError)
+        if (rError != FormulaError::NONE)
             fValue = 0.0;
     }
     return fValue;

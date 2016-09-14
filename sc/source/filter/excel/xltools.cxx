@@ -197,49 +197,50 @@ sal_uInt8 XclTools::GetXclOrientFromRot( sal_uInt16 nXclRot )
     return EXC_ORIENT_NONE;
 }
 
-sal_uInt8 XclTools::GetXclErrorCode( sal_uInt16 nScError )
+sal_uInt8 XclTools::GetXclErrorCode( FormulaError nScError )
 {
     switch( nScError )
     {
-        case formula::errIllegalArgument:        return EXC_ERR_VALUE;
-        case formula::errIllegalFPOperation:     return EXC_ERR_NUM;     // maybe DIV/0 or NUM...
-        case formula::errDivisionByZero:         return EXC_ERR_DIV0;
-        case formula::errIllegalParameter:       return EXC_ERR_VALUE;
-        case formula::errPairExpected:           return EXC_ERR_VALUE;
-        case formula::errOperatorExpected:       return EXC_ERR_VALUE;
-        case formula::errVariableExpected:       return EXC_ERR_VALUE;
-        case formula::errParameterExpected:      return EXC_ERR_VALUE;
-        case formula::errNoValue:                return EXC_ERR_VALUE;
-        case formula::errCircularReference:      return EXC_ERR_VALUE;
-        case formula::errNoCode:                 return EXC_ERR_NULL;
-        case formula::errNoRef:                  return EXC_ERR_REF;
-        case formula::errNoName:                 return EXC_ERR_NAME;
-        case formula::errNoAddin:                return EXC_ERR_NAME;
-        case formula::errNoMacro:                return EXC_ERR_NAME;
-        case formula::NOTAVAILABLE:              return EXC_ERR_NA;
+        case FormulaError::IllegalArgument:        return EXC_ERR_VALUE;
+        case FormulaError::IllegalFPOperation:     return EXC_ERR_NUM;     // maybe DIV/0 or NUM...
+        case FormulaError::DivisionByZero:         return EXC_ERR_DIV0;
+        case FormulaError::IllegalParameter:       return EXC_ERR_VALUE;
+        case FormulaError::PairExpected:           return EXC_ERR_VALUE;
+        case FormulaError::OperatorExpected:       return EXC_ERR_VALUE;
+        case FormulaError::VariableExpected:       return EXC_ERR_VALUE;
+        case FormulaError::ParameterExpected:      return EXC_ERR_VALUE;
+        case FormulaError::NoValue:                return EXC_ERR_VALUE;
+        case FormulaError::CircularReference:      return EXC_ERR_VALUE;
+        case FormulaError::NoCode:                 return EXC_ERR_NULL;
+        case FormulaError::NoRef:                  return EXC_ERR_REF;
+        case FormulaError::NoName:                 return EXC_ERR_NAME;
+        case FormulaError::NoAddin:                return EXC_ERR_NAME;
+        case FormulaError::NoMacro:                return EXC_ERR_NAME;
+        case FormulaError::NotAvailable:           return EXC_ERR_NA;
+        default: break;
     }
     return EXC_ERR_NA;
 }
 
-sal_uInt16 XclTools::GetScErrorCode( sal_uInt8 nXclError )
+FormulaError XclTools::GetScErrorCode( sal_uInt8 nXclError )
 {
     switch( nXclError )
     {
-        case EXC_ERR_NULL:  return formula::errNoCode;
-        case EXC_ERR_DIV0:  return formula::errDivisionByZero;
-        case EXC_ERR_VALUE: return formula::errNoValue;
-        case EXC_ERR_REF:   return formula::errNoRef;
-        case EXC_ERR_NAME:  return formula::errNoName;
-        case EXC_ERR_NUM:   return formula::errIllegalFPOperation;
-        case EXC_ERR_NA:    return formula::NOTAVAILABLE;
+        case EXC_ERR_NULL:  return FormulaError::NoCode;
+        case EXC_ERR_DIV0:  return FormulaError::DivisionByZero;
+        case EXC_ERR_VALUE: return FormulaError::NoValue;
+        case EXC_ERR_REF:   return FormulaError::NoRef;
+        case EXC_ERR_NAME:  return FormulaError::NoName;
+        case EXC_ERR_NUM:   return FormulaError::IllegalFPOperation;
+        case EXC_ERR_NA:    return FormulaError::NotAvailable;
         default:            OSL_FAIL( "XclTools::GetScErrorCode - unknown error code" );
     }
-    return formula::NOTAVAILABLE;
+    return FormulaError::NotAvailable;
 }
 
 double XclTools::ErrorToDouble( sal_uInt8 nXclError )
 {
-    return formula::CreateDoubleError(GetScErrorCode( nXclError ));
+    return ScErrorCodes::CreateDoubleError(GetScErrorCode( nXclError ));
 }
 
 XclBoolError XclTools::ErrorToEnum( double& rfDblValue, bool bErrOrBool, sal_uInt8 nValue )

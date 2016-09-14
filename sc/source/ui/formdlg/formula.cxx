@@ -31,6 +31,7 @@
 #include <tools/urlobj.hxx>
 #include <formula/formulahelper.hxx>
 #include <formula/IFunctionDescription.hxx>
+#include <formula/errorcodes.hxx>
 
 #include "tokenuno.hxx"
 #include "formula.hxx"
@@ -331,8 +332,8 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
             bColRowName = false;
     }
 
-    sal_uInt16 nErrCode = pFCell->GetErrCode();
-    if ( nErrCode == 0 || pFCell->IsMatrix() )
+    FormulaError nErrCode = pFCell->GetErrCode();
+    if ( nErrCode == FormulaError::NONE || pFCell->IsMatrix() )
     {
         SvNumberFormatter& aFormatter = *(m_pDoc->GetFormatTable());
         Color* pColor;

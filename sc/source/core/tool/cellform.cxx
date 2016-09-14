@@ -95,9 +95,9 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
                 }
                 else
                 {
-                    sal_uInt16 nErrCode = pFCell->GetErrCode();
+                    FormulaError nErrCode = pFCell->GetErrCode();
 
-                    if (nErrCode != 0)
+                    if (nErrCode != FormulaError::NONE)
                         rString = ScGlobal::GetErrorString(nErrCode);
                     else if ( pFCell->IsEmptyDisplayedAsString() )
                         rString.clear();
@@ -161,8 +161,8 @@ void ScCellFormat::GetInputString(
             else
                 aString = pFC->GetString().getString();
 
-            sal_uInt16 nErrCode = pFC->GetErrCode();
-            if (nErrCode != 0)
+            FormulaError nErrCode = pFC->GetErrCode();
+            if (nErrCode != FormulaError::NONE)
                 aString = EMPTY_OUSTRING;
         }
         break;

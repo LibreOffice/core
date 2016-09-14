@@ -33,6 +33,7 @@
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <formula/errorcodes.hxx>
 #include <svl/zforlist.hxx>
 #include <o3tl/make_unique.hxx>
 
@@ -129,7 +130,7 @@ void initFromCell(
 
     ScAddress aPos(nCol, nRow, nTab);
 
-    if (pDoc->GetErrCode(aPos))
+    if (pDoc->GetErrCode(aPos) != FormulaError::NONE)
     {
         rData.SetErrorString(rCache.InternString(aDocStr));
     }

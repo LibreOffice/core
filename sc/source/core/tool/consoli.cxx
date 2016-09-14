@@ -662,7 +662,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                                 ppSumSqr[nArrX][nArrY]);
                     if (ppCount[nArrX][nArrY] < 0.0)
                         pDestDoc->SetError( sal::static_int_cast<SCCOL>(nCol+nArrX),
-                                            sal::static_int_cast<SCROW>(nRow+nArrY), nTab, formula::errNoValue );
+                                            sal::static_int_cast<SCROW>(nRow+nArrY), nTab, FormulaError::NoValue );
                     else
                         pDestDoc->SetValue( sal::static_int_cast<SCCOL>(nCol+nArrX),
                                             sal::static_int_cast<SCROW>(nRow+nArrY), nTab, fVal );

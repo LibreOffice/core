@@ -122,7 +122,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
     ScCompiler aComp( pDoc, aPos, *pCode );
     aComp.SetGrammar(pDoc->GetGrammar());
     aComp.CompileTokenArray();
-    if ( !pCode->GetCodeError() )
+    if ( pCode->GetCodeError() == FormulaError::NONE )
         eType |= Type::AbsPos;
 }
 
@@ -165,7 +165,7 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
     std::unique_ptr<ScTokenArray> pOldCode( pCode);     // old pCode will be deleted
     pCode = pNewCode;
     pCode->SetFromRangeName(true);
-    if( !pCode->GetCodeError() )
+    if( pCode->GetCodeError() == FormulaError::NONE )
     {
         pCode->Reset();
         FormulaToken* p = pCode->GetNextReference();
@@ -189,7 +189,7 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
 
 void ScRangeData::CompileUnresolvedXML( sc::CompileFormulaContext& rCxt )
 {
-    if (pCode->GetCodeError() == errNoName)
+    if (pCode->GetCodeError() == FormulaError::NoName)
     {
         // Reconstruct the symbol/formula and then recompile.
         OUString aSymbol;
@@ -518,9 +518,9 @@ SCCOL ScRangeData::GetMaxCol() const
     return mnMaxCol >= 0 ? mnMaxCol : MAXCOL;
 }
 
-sal_uInt16 ScRangeData::GetErrCode() const
+FormulaError ScRangeData::GetErrCode() const
 {
-    return pCode ? pCode->GetCodeError() : 0;
+    return pCode ? pCode->GetCodeError() : FormulaError::NONE;
 }
 
 bool ScRangeData::HasReferences() const
@@ -634,7 +634,7 @@ void ScRangeData::SetCode( ScTokenArray& rArr )
 
 void ScRangeData::InitCode()
 {
-    if( !pCode->GetCodeError() )
+    if( pCode->GetCodeError() == FormulaError::NONE )
     {
         pCode->Reset();
         FormulaToken* p = pCode->GetNextReference();

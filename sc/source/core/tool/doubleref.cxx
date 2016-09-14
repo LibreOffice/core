@@ -324,7 +324,7 @@ SCCOL ScDBInternalRange::findFieldColumn(SCCOL nIndex) const
     return nIndex + nDBCol1 - 1;
 }
 
-SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr) const
+SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, FormulaError* pErr) const
 {
     const ScAddress& s = maRange.aStart;
     const ScAddress& e = maRange.aEnd;
@@ -342,7 +342,7 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     ScAddress aLook( nDBCol1, nDBRow1, nDBTab1 );
     while (!bFound && (aLook.Col() <= nDBCol2))
     {
-        sal_uInt16 nErr = getDoc()->GetStringForFormula( aLook, aCellStr );
+        FormulaError nErr = getDoc()->GetStringForFormula( aLook, aCellStr );
         if (pErr)
             *pErr = nErr;
         lcl_uppercase(aCellStr);
@@ -433,10 +433,10 @@ SCCOL ScDBExternalRange::findFieldColumn(SCCOL nIndex) const
     return nIndex - 1;
 }
 
-SCCOL ScDBExternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr) const
+SCCOL ScDBExternalRange::findFieldColumn(const OUString& rStr, FormulaError* pErr) const
 {
     if (pErr)
-        *pErr = 0;
+        *pErr = FormulaError::NONE;
 
     OUString aUpper = rStr;
     lcl_uppercase(aUpper);
