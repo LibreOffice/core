@@ -100,7 +100,7 @@ public:
 
     void Execute( SfxRequest& );
     void GetState( SfxItemSet& );
-    virtual bool HasUIFeature( sal_uInt32 nFeature ) override;
+    virtual bool HasUIFeature(SfxShellFeature nFeature) const override;
 
     void ExecuteTextAttribute( SfxRequest& );
     void GetTextAttributeState( SfxItemSet& );

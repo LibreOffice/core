@@ -39,9 +39,6 @@ class StarBASIC;
 
 namespace basctl
 {
-
-const sal_uLong BASICIDE_UI_FEATURE_SHOW_BROWSER = 0x00000001;
-
 class Layout;
 class ModulWindow;
 class ModulWindowLayout;
@@ -180,7 +177,7 @@ public:
     void                ExecuteBasic( SfxRequest& rReq );
     void                ExecuteDialog( SfxRequest& rReq );
 
-    virtual bool        HasUIFeature( sal_uInt32 nFeature ) override;
+    virtual bool        HasUIFeature(SfxShellFeature nFeature) const override;
 
     bool                CallBasicErrorHdl( StarBASIC* pBasic );
     long                CallBasicBreakHdl( StarBASIC* pBasic );
