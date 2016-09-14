@@ -391,6 +391,7 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
                                 long* pHeight);
 static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
                                        const char* pArguments);
+
 static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                                 LibreOfficeKitCallback pCallback,
                                 void* pData);
@@ -442,9 +443,6 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           int* pFontWidth,
                           int* pFontHeight);
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
-static void doc_setCallbackLatch(LibreOfficeKitDocument* pThis,
-                                 bool bCallbackLatch);
-
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
@@ -490,8 +488,6 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
         m_pDocumentClass->renderFont = doc_renderFont;
         m_pDocumentClass->getPartHash = doc_getPartHash;
-
-        m_pDocumentClass->setCallbackLatch = doc_setCallbackLatch;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -2364,19 +2360,6 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
         }
     }
     return nullptr;
-}
-
-static void doc_setCallbackLatch(LibreOfficeKitDocument* pThis, bool bCallbackLatch)
-{
-    SolarMutexGuard aGuard;
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-
-    int nView = SfxLokHelper::getView();
-    if (nView < 0)
-        return;
-
-    if (pDocument->mpCallbackFlushHandlers[nView])
-        pDocument->mpCallbackFlushHandlers[nView]->setEventLatch(bCallbackLatch);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
