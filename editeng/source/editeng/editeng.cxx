@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -1349,6 +1350,10 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     }
 
     pEditView->pImpEditView->SetEditSelection( aCurSel );
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        pEditView->pImpEditView->DrawSelection();
+    }
     pImpEditEngine->UpdateSelections();
 
     if ( ( !IsVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ) ||
