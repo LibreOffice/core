@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_12883ce7",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-15T16:52:16Z",
+      "side": 1,
+      "message": "Nitpick: name mrCol instead, \u0027m\u0027 prefix as for other member variables.",
+      "range": {
+        "startLine": 545,
+        "startChar": 14,
+        "endLine": 545,
+        "endChar": 18
+      },
+      "revId": "69372bd00a7deeceef7b31009827036b6add05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_326d4033",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-15T16:52:16Z",
+      "side": 1,
+      "message": "Nitpick: name rCol instead.",
+      "range": {
+        "startLine": 555,
+        "startChar": 78,
+        "endLine": 555,
+        "endChar": 83
+      },
+      "revId": "69372bd00a7deeceef7b31009827036b6add05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_125f5c73",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-15T16:52:16Z",
+      "side": 1,
+      "message": "Creating a CopyFromClipContext for each and every numeric cell is way too much overhead. Instead, look what CopyFromClipContext::isDateCell() does and implement only the necessary bits.",
+      "range": {
+        "startLine": 572,
+        "startChar": 24,
+        "endLine": 572,
+        "endChar": 43
+      },
+      "revId": "69372bd00a7deeceef7b31009827036b6add05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_526ab41b",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-15T16:52:16Z",
+      "side": 1,
+      "message": "This is unnecessarily exececuted if both, mbNumeric and mbDateTime, are false.",
+      "revId": "69372bd00a7deeceef7b31009827036b6add05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_32546053",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-15T16:52:16Z",
+      "side": 1,
+      "message": "Same here, creating a CopyFromClipContext for each is unnecessary overhead.",
+      "revId": "69372bd00a7deeceef7b31009827036b6add05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_d264044b",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-15T16:52:16Z",
+      "side": 1,
+      "message": "Additionally, if both, mbNumeric and mbDateTime, are true, then no check is needed at all as both are stored as a numeric element.",
+      "revId": "69372bd00a7deeceef7b31009827036b6add05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
