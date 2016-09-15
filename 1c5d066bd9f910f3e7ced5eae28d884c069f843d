@@ -126,6 +126,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_b2dcf019",
+        "filename": "include/tools/urlobj.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-09-15T15:47:03Z",
+      "side": 1,
+      "message": "otherwise unit tests failed, so it is really needed",
+      "parentUuid": "1a95cdbc_fb3f2fd4",
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_8dfc2640",
         "filename": "include/tools/urlobj.hxx",
         "patchSetId": 5
@@ -267,6 +285,30 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_d2e164d2",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-09-15T15:47:03Z",
+      "side": 1,
+      "message": "So just search for the string and only remove it when it is at the end of the URL?",
+      "parentUuid": "1a95cdbc_5b582357",
+      "range": {
+        "startLine": 1481,
+        "startChar": 76,
+        "endLine": 1481,
+        "endChar": 88
+      },
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_ed992a21",
         "filename": "tools/source/fsys/urlobj.cxx",
         "patchSetId": 5
@@ -326,6 +368,30 @@
       "side": 1,
       "message": "There is no use case, but as this is a low level function that may get called for every type it should handle every type. As is, it treats every non-directory type as a file and resolves a symlink, which is wrong.",
       "parentUuid": "3a98d1f4_ed1cca79",
+      "range": {
+        "startLine": 1482,
+        "startChar": 38,
+        "endLine": 1482,
+        "endChar": 46
+      },
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_92d8cc1f",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1001226
+      },
+      "writtenOn": "2016-09-15T15:47:03Z",
+      "side": 1,
+      "message": "Which type is the right one?",
+      "parentUuid": "1a95cdbc_7b55df1b",
       "range": {
         "startLine": 1482,
         "startChar": 38,
