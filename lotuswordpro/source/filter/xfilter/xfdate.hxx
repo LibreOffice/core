@@ -77,7 +77,6 @@ public:
 
 private:
     OUString  m_strText;
-    OUString  m_strDate;
 };
 
 class XFDateStart : public XFDate
