@@ -123,21 +123,19 @@ class ObjectRepresentation
 private:
 
     Reference< XInterface >         mxObject;
-    GDIMetaFile*                    mpMtf;
+    std::unique_ptr<GDIMetaFile>    mxMtf;
 
 public:
+    ObjectRepresentation();
+    ObjectRepresentation(const Reference< XInterface >& rxIf,
+                         const GDIMetaFile& rMtf);
+    ObjectRepresentation(const ObjectRepresentation& rPresentation);
 
-                                      ObjectRepresentation();
-                                      ObjectRepresentation( const Reference< XInterface >& rxIf,
-                                                            const GDIMetaFile& rMtf );
-                                      ObjectRepresentation( const ObjectRepresentation& rPresentation );
-                                      ~ObjectRepresentation();
-
-    ObjectRepresentation&             operator=( const ObjectRepresentation& rPresentation );
+    ObjectRepresentation& operator=(const ObjectRepresentation& rPresentation);
 
     const Reference< XInterface >&    GetObject() const { return mxObject; }
-    bool                          HasRepresentation() const { return mpMtf != nullptr; }
-    const GDIMetaFile&                GetRepresentation() const { return *mpMtf; }
+    bool                              HasRepresentation() const { return static_cast<bool>(mxMtf); }
+    const GDIMetaFile&                GetRepresentation() const { return *mxMtf; }
 };
 
 struct PagePropertySet

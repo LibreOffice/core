@@ -32,8 +32,7 @@
 
 //      modify style (cell or page style)
 
-ScStyleSaveData::ScStyleSaveData() :
-    pItems( nullptr )
+ScStyleSaveData::ScStyleSaveData()
 {
 }
 
@@ -41,27 +40,15 @@ ScStyleSaveData::ScStyleSaveData( const ScStyleSaveData& rOther ) :
     aName( rOther.aName ),
     aParent( rOther.aParent )
 {
-    if (rOther.pItems)
-        pItems = new SfxItemSet( *rOther.pItems );
-    else
-        pItems = nullptr;
-}
-
-ScStyleSaveData::~ScStyleSaveData()
-{
-    delete pItems;
+    if (rOther.xItems)
+        xItems.reset(new SfxItemSet(*rOther.xItems));
 }
 
 ScStyleSaveData& ScStyleSaveData::operator=( const ScStyleSaveData& rOther )
 {
     aName   = rOther.aName;
     aParent = rOther.aParent;
-
-    delete pItems;
-    if (rOther.pItems)
-        pItems = new SfxItemSet( *rOther.pItems );
-    else
-        pItems = nullptr;
+    xItems.reset(rOther.xItems ? new SfxItemSet(*rOther.xItems) : nullptr);
 
     return *this;
 }
@@ -72,8 +59,7 @@ void ScStyleSaveData::InitFromStyle( const SfxStyleSheetBase* pSource )
     {
         aName   = pSource->GetName();
         aParent = pSource->GetParent();
-        delete pItems;
-        pItems = new SfxItemSet( const_cast<SfxStyleSheetBase*>(pSource)->GetItemSet() );
+        xItems.reset(new SfxItemSet(const_cast<SfxStyleSheetBase*>(pSource)->GetItemSet()));
     }
     else
         *this = ScStyleSaveData();      // empty

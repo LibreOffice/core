@@ -373,48 +373,36 @@ SVGExport::SVGExport(
         XML_NAMESPACE_ANIMATION);
 }
 
-
 SVGExport::~SVGExport()
 {
     GetDocHandler()->endDocument();
 }
 
-
-ObjectRepresentation::ObjectRepresentation() :
-    mpMtf( nullptr )
+ObjectRepresentation::ObjectRepresentation()
 {
 }
-
 
 ObjectRepresentation::ObjectRepresentation( const Reference< XInterface >& rxObject,
                                             const GDIMetaFile& rMtf ) :
     mxObject( rxObject ),
-    mpMtf( new GDIMetaFile( rMtf ) )
+    mxMtf( new GDIMetaFile( rMtf ) )
 {
 }
-
 
 ObjectRepresentation::ObjectRepresentation( const ObjectRepresentation& rPresentation ) :
     mxObject( rPresentation.mxObject ),
-    mpMtf( rPresentation.mpMtf ? new GDIMetaFile( *rPresentation.mpMtf ) : nullptr )
+    mxMtf( rPresentation.mxMtf ? new GDIMetaFile( *rPresentation.mxMtf ) : nullptr )
 {
 }
-
-
-ObjectRepresentation::~ObjectRepresentation()
-{
-    delete mpMtf;
-}
-
 
 ObjectRepresentation& ObjectRepresentation::operator=( const ObjectRepresentation& rPresentation )
 {
     // Check for self-assignment
     if (this == &rPresentation)
         return *this;
+
     mxObject = rPresentation.mxObject;
-    delete mpMtf;
-    mpMtf = rPresentation.mpMtf ? new GDIMetaFile( *rPresentation.mpMtf ) : nullptr;
+    mxMtf.reset(rPresentation.mxMtf ? new GDIMetaFile(*rPresentation.mxMtf) : nullptr);
 
     return *this;
 }

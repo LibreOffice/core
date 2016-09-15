@@ -31,19 +31,18 @@ class ScStyleSaveData
 private:
     OUString        aName;
     OUString        aParent;
-    SfxItemSet*     pItems;
+    std::unique_ptr<SfxItemSet>  xItems;
 
 public:
-                        ScStyleSaveData();
-                        ScStyleSaveData( const ScStyleSaveData& rOther );
-                        ~ScStyleSaveData();
+    ScStyleSaveData();
+    ScStyleSaveData( const ScStyleSaveData& rOther );
     ScStyleSaveData&    operator=( const ScStyleSaveData& rOther );
 
     void                InitFromStyle( const SfxStyleSheetBase* pSource );
 
     const OUString&     GetName() const     { return aName; }
     const OUString&     GetParent() const   { return aParent; }
-    const SfxItemSet*   GetItems() const    { return pItems; }
+    const SfxItemSet*   GetItems() const    { return xItems.get(); }
 };
 
 class ScUndoModifyStyle: public ScSimpleUndo
