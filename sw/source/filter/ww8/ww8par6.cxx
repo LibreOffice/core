@@ -1655,7 +1655,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
             WW8FlyPara *pNowStyleApo=nullptr;
             sal_uInt16 nColl = pPap->GetIstd();
             ww::sti eSti = eVer < ww::eWW6 ? ww::GetCanonicalStiFromStc( static_cast< sal_uInt8 >(nColl) ) : static_cast<ww::sti>(nColl);
-            while (eSti != ww::stiNil && nColl < pIo->m_vColl.size() && nullptr == (pNowStyleApo = pIo->m_vColl[nColl].m_pWWFly))
+            while (eSti != ww::stiNil && nColl < pIo->m_vColl.size() && nullptr == (pNowStyleApo = pIo->m_vColl[nColl].m_xWWFly.get()))
             {
                 nColl = pIo->m_vColl[nColl].m_nBase;
                 eSti = eVer < ww::eWW6 ? ww::GetCanonicalStiFromStc( static_cast< sal_uInt8 >(nColl) ) : static_cast<ww::sti>(nColl);
@@ -4977,13 +4977,12 @@ void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
     if (m_pAktColl && m_nAktColl < m_vColl.size()) // only for Styledef, sonst anders geloest
     {
         SwWW8StyInf& rSI = m_vColl[m_nAktColl];
-        if (!rSI.m_pWWFly)
-            rSI.m_pWWFly = new WW8FlyPara(m_bVer67);
-        rSI.m_pWWFly->Read(*pData, m_pStyles);
-        if (rSI.m_pWWFly->IsEmpty())
+        if (!rSI.m_xWWFly)
+            rSI.m_xWWFly.reset(new WW8FlyPara(m_bVer67));
+        rSI.m_xWWFly->Read(*pData, m_pStyles);
+        if (rSI.m_xWWFly->IsEmpty())
         {
-            delete m_vColl[m_nAktColl].m_pWWFly;
-            m_vColl[m_nAktColl].m_pWWFly = nullptr;
+            m_vColl[m_nAktColl].m_xWWFly.reset();
         }
     }
 }

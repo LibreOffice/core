@@ -221,7 +221,7 @@ public:
     rtl_TextEncoding m_eRTLFontSrcCharSet;    // rtl_TextEncoding for the font
     rtl_TextEncoding m_eCJKFontSrcCharSet;    // rtl_TextEncoding for the font
     SwFormat*      m_pFormat;
-    WW8FlyPara* m_pWWFly;
+    std::unique_ptr<WW8FlyPara> m_xWWFly;
     SwNumRule*  m_pOutlineNumrule;
     long        m_nFilePos;
     sal_uInt16      m_nBase;
@@ -261,7 +261,7 @@ public:
         m_eRTLFontSrcCharSet(0),
         m_eCJKFontSrcCharSet(0),
         m_pFormat( nullptr ),
-        m_pWWFly( nullptr ),
+        m_xWWFly( nullptr ),
         m_pOutlineNumrule( nullptr ),
         m_nFilePos( 0 ),
         m_nBase( 0 ),
@@ -283,11 +283,6 @@ public:
         m_bParaAutoAfter(false)
 
     {}
-
-    ~SwWW8StyInf()
-    {
-        delete m_pWWFly;
-    }
 
     void SetOrgWWIdent( const OUString& rName, const sal_uInt16 nId )
     {

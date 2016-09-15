@@ -482,7 +482,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     // Frame in Style Definition (word appears to ignore them if inside an
     // text autoshape)
     if (!m_bTxbxFlySection && m_nAktColl < m_vColl.size())
-        aRet.mpStyleApo = StyleExists(m_nAktColl) ? m_vColl[m_nAktColl].m_pWWFly : nullptr;
+        aRet.mpStyleApo = StyleExists(m_nAktColl) ? m_vColl[m_nAktColl].m_xWWFly.get() : nullptr;
 
     /*
     #i1140#
@@ -3863,8 +3863,8 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
             rSI.m_bParaAutoBefore = pj->m_bParaAutoBefore;
             rSI.m_bParaAutoAfter = pj->m_bParaAutoAfter;
 
-            if (pj->m_pWWFly)
-                rSI.m_pWWFly = new WW8FlyPara(pIo->m_bVer67, pj->m_pWWFly);
+            if (pj->m_xWWFly)
+                rSI.m_xWWFly.reset(new WW8FlyPara(pIo->m_bVer67, pj->m_xWWFly.get()));
         }
     }
     else if( pIo->m_bNewDoc && bStyExist )
