@@ -4977,10 +4977,10 @@ void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
     if (m_pAktColl && m_nAktColl < m_vColl.size()) // only for Styledef, sonst anders geloest
     {
         SwWW8StyInf& rSI = m_vColl[m_nAktColl];
-        WW8FlyPara* pFly = rSI.m_pWWFly ? rSI.m_pWWFly : new WW8FlyPara(m_bVer67);
-        m_vColl[m_nAktColl].m_pWWFly = pFly;
-        pFly->Read(*pData, m_pStyles);
-        if (pFly->IsEmpty())
+        if (!rSI.m_pWWFly)
+            rSI.m_pWWFly = new WW8FlyPara(m_bVer67);
+        rSI.m_pWWFly->Read(*pData, m_pStyles);
+        if (rSI.m_pWWFly->IsEmpty())
         {
             delete m_vColl[m_nAktColl].m_pWWFly;
             m_vColl[m_nAktColl].m_pWWFly = nullptr;
