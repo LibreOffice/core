@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_92efecaf",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 4599,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-09-15T15:55:59Z",
+      "side": 1,
+      "message": "Hm I find it weird that the style gets applied on click of that radio button. The dialog has OK and Cancel button which suggests to me that changes apply once you click the OK button, not before.",
+      "revId": "357f1a03a211ac025628a80d8948e00e24c8444d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_f234a84b",
+        "filename": "cui/source/customize/cfg.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 4629,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-09-15T15:55:59Z",
+      "side": 1,
+      "message": "Please remove this branch.",
+      "revId": "357f1a03a211ac025628a80d8948e00e24c8444d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_72f2589c",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 8
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-09-15T15:55:59Z",
+      "side": 1,
+      "message": "I find this margin too much. Please use 6px, max. 12.\nKeep in mind that translated text might be much longer.",
+      "revId": "357f1a03a211ac025628a80d8948e00e24c8444d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
