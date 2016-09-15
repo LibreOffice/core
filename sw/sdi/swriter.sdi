@@ -9972,6 +9972,7 @@ SfxVoidItem RejectTrackedChange FN_REDLINE_REJECT_DIRECT
 ]
 
 SfxVoidItem NextTrackedChange FN_REDLINE_NEXT_CHANGE
+( SfxUInt16Item NextTrackedChange FN_REDLINE_NEXT_CHANGE )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9985,8 +9986,6 @@ SfxVoidItem NextTrackedChange FN_REDLINE_NEXT_CHANGE
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
