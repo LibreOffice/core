@@ -45,7 +45,7 @@ RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
     fInputFile = fFile;
 
     // state: pointer at the end of the input buffer
-    nInputPos = nInputEndPos = nInputBufLen = READBUFFER_MAX;
+    nInputPos = nInputEndPos = READBUFFER_MAX;
     pInput    = static_cast<char *>(rtl_allocateMemory( nInputBufLen ));
 }
 

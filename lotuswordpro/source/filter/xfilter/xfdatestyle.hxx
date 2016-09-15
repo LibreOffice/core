@@ -112,8 +112,6 @@ public:
     virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
-    bool    m_bFixed;
-    bool    m_bAutoOrder;
     XFStyleContainer    m_aParts;
 };
 

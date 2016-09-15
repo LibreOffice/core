@@ -159,8 +159,6 @@ void    XFDatePart::ToXml(IXFStream *pStrm)
 
 XFDateStyle::XFDateStyle()
 {
-    m_bFixed = false;
-    m_bAutoOrder = false;
 }
 
 XFDateStyle::~XFDateStyle()

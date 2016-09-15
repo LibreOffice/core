@@ -80,18 +80,11 @@ public:
 private:
     sal_Int32   m_nBrightness;
     sal_Int32   m_nContrast;
-    sal_Int32   m_nGamma;
-    sal_Int32   m_nTransparent;
-    sal_Int32   m_nAdjustRed;
-    sal_Int32   m_nAdjustGreen;
-    sal_Int32   m_nAdjustBlue;
     double      m_fClipLeft;
     double      m_fClipRight;
     double      m_fClipTop;
     double      m_fClipBottom;
-    bool    m_bHoriFlip;
-    bool    m_bVertFlip;
-    enumXFColorMode m_eColorMode;
+    bool        m_bHoriFlip;
 };
 
 inline void XFImageStyle::SetBrightness(sal_Int32 brightness)

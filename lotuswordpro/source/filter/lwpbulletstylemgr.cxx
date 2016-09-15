@@ -73,7 +73,6 @@
 
 LwpBulletStyleMgr::LwpBulletStyleMgr()
     : m_pFoundry(nullptr)
-    , m_pBulletList(nullptr)
     , m_bContinue(true)
     , m_bIsBulletSkipped(false)
 {
@@ -81,11 +80,6 @@ LwpBulletStyleMgr::LwpBulletStyleMgr()
 
 LwpBulletStyleMgr::~LwpBulletStyleMgr()
 {
-    if (m_pBulletList)
-    {
-        delete m_pBulletList;
-    }
-
     m_vIDsPairList.clear();
     m_vStyleNameList.clear();
 }

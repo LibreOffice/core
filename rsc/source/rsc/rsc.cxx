@@ -296,7 +296,6 @@ OString RscCmdLine::substitutePaths( const OString& rIn )
 
 RscCompiler::RscCompiler( RscCmdLine * pLine, RscTypCont * pTypCont )
 {
-    fListing      = nullptr;
     fExitFile     = nullptr;
 
     //Set Command Line, set Type Container
@@ -307,9 +306,6 @@ RscCompiler::RscCompiler( RscCmdLine * pLine, RscTypCont * pTypCont )
 RscCompiler::~RscCompiler()
 {
     pTC->pEH->SetListFile( nullptr );
-
-    if( fListing )
-        fclose( fListing );
 
     if( fExitFile )
         fclose( fExitFile );
@@ -346,7 +342,7 @@ ERRTYPE RscCompiler::Start()
                 aIndex = pTC->aFileTab.NextIndex( aIndex );
             }
 
-            pTC->pEH->SetListFile( fListing );
+            pTC->pEH->SetListFile( nullptr );
         }
     }
 

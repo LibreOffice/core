@@ -125,7 +125,6 @@ private:
 
     enumXFPageUsage m_eUsage;
     enumXFTextDir   m_eTextDir;
-    bool    m_bPrintOrient;
 
     XFBorders   *m_pBorders;
     XFShadow    *m_pShadow;

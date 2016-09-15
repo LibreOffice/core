@@ -156,12 +156,10 @@ protected:
     XFShadow    *m_pShadow;
     XFBGImage   *m_pBGImage;
     XFColor     m_aBackColor;
-    bool    m_bProtectContent;
-    bool    m_bProtectSize;
-    bool    m_bProtectPos;
-    bool    m_bPrintable;
-    bool    m_bBackground;
-    sal_Int16 m_nTransparency;
+    bool        m_bProtectContent;
+    bool        m_bProtectSize;
+    bool        m_bProtectPos;
+    sal_Int16   m_nTransparency;
 
     enumXFTextDir   m_eTextDir;
     enumXFFrameXPos m_eXPos;

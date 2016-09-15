@@ -184,7 +184,7 @@ class Test_osl_executeProcess : public CppUnit::TestFixture
     OUString     temp_file_url_;
     OUString     temp_file_path_;
     rtl_uString* parameters_[2];
-    int          parameters_count_;
+    static const int parameters_count_ = 2;
     OUString    suCWD;
     OUString    suExecutableFileURL;
 
@@ -192,8 +192,7 @@ public:
 
     // ctor
     Test_osl_executeProcess() :
-        env_param_(OUString("-env")),
-        parameters_count_(2)
+        env_param_(OUString("-env"))
     {
         parameters_[0] = env_param_.pData;
         suCWD = getExecutablePath();

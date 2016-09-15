@@ -108,7 +108,6 @@ void    XFTimePart::ToXml(IXFStream *pStrm)
 
 XFTimeStyle::XFTimeStyle()
 {
-    m_bFixed = true;
     m_bAmPm = false;
     m_bTruncate = true;
 }

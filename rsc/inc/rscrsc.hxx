@@ -80,7 +80,6 @@ private:
 public:
     RscTypCont*     pTC;        // string and id manager
     RscCmdLine*     pCL;        // command line
-    FILE *          fListing;   // output file for listings
     FILE *          fExitFile;  // when deconstructed, this file must be deleted
 
                     RscCompiler( RscCmdLine *, RscTypCont * );

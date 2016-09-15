@@ -127,7 +127,6 @@ public:
     void    SetTruncate(bool bTrunc);
 
 private:
-    bool    m_bFixed;
     bool    m_bAmPm;
     std::vector<XFTimePart> m_aParts;
     bool    m_bTruncate;

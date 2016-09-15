@@ -69,7 +69,7 @@
 #include "xfbgimage.hxx"
 
 XFPageMaster::XFPageMaster() : m_fPageWidth(0), m_fPageHeight(0), m_eUsage(enumXFPageUsageNone),
-m_eTextDir(enumXFTextDirNone), m_bPrintOrient(true), m_pBorders(nullptr), m_pShadow(nullptr),
+m_eTextDir(enumXFTextDirNone), m_pBorders(nullptr), m_pShadow(nullptr),
 m_pColumns(nullptr), m_pBGImage(nullptr), m_pHeaderStyle(nullptr), m_pFooterStyle(nullptr),
 m_eSepAlign(enumXFAlignNone), m_fSepWidth(0), m_aSepColor(0), m_fSepSpaceAbove(0),
 m_fSepSpaceBelow(0), m_nSepLengthPercent(0)
@@ -219,10 +219,7 @@ void    XFPageMaster::ToXml(IXFStream *pStream)
 
     m_aMargin.ToXml(pStream);
 
-    if( m_bPrintOrient )
-        pAttrList->AddAttribute( "style:print-orientation", "portrait" );
-    else
-        pAttrList->AddAttribute( "style:print-orientation", "landscape" );
+    pAttrList->AddAttribute( "style:print-orientation", "portrait" );
 
     if( m_pBorders )
         m_pBorders->ToXml(pStream);

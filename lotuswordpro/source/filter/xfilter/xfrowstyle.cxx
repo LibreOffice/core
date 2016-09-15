@@ -64,7 +64,6 @@ XFRowStyle::XFRowStyle():m_fHeight(0)
 {
     m_fHeight = 0;
     m_fMinHeight = 0;
-    m_pBGImage = nullptr;
 }
 
 enumXFStyle XFRowStyle::GetStyleFamily()
@@ -90,11 +89,9 @@ void    XFRowStyle::ToXml(IXFStream *pStrm)
     else if( m_fHeight )
         pAttrList->AddAttribute( "style:row-height", OUString::number(m_fHeight) + "cm" );
 
-    if( m_aBackColor.IsValid() && !m_pBGImage )
+    if( m_aBackColor.IsValid() )
         pAttrList->AddAttribute( "fo:background-color", m_aBackColor.ToString() );
     pStrm->StartElement( "style:properties" );
-    if( m_pBGImage )
-        m_pBGImage->ToXml(pStrm);
     pStrm->EndElement( "style:properties" );
 
     pStrm->EndElement( "style:style" );
@@ -107,13 +104,6 @@ XFRowStyle& XFRowStyle::operator=(XFRowStyle const &other)
         m_fHeight = other.m_fHeight;
         m_fMinHeight = other.m_fMinHeight;
         m_aBackColor = other.m_aBackColor;
-
-        delete m_pBGImage;
-
-        if( other.m_pBGImage )
-            m_pBGImage = new XFBGImage(*other.m_pBGImage);
-        else
-            m_pBGImage = nullptr;
     }
     return *this;
 }

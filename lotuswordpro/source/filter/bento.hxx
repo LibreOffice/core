@@ -265,7 +265,6 @@ public: // Internal methods
     explicit CBenValue(BenObjectID TypeID):CBenIDListElmt(TypeID)
     {
         cpProperty = nullptr;
-        cpReferencedList = nullptr;
     }
 
     void SetProperty(pCBenProperty pProperty)
@@ -281,7 +280,6 @@ public: // Internal methods
 private: // Data
     pCBenProperty cpProperty;
     CUtOwningList cValueSegments;
-    pCBenValue cpReferencedList;
 };
 
 class CBenProperty : public CBenIDListElmt

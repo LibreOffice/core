@@ -62,8 +62,6 @@
 
 XFDate::XFDate()
 {
-    m_bFixed = false;
-    m_bValued = false;
 }
 
 XFDate::~XFDate()
@@ -77,11 +75,6 @@ void    XFDate::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     if( !GetStyleName().isEmpty() )
         pAttrList->AddAttribute( "style:data-style-name", GetStyleName() );
-    if (m_bValued)
-        pAttrList->AddAttribute( "text:date-value", m_strDate );
-
-    if( m_bFixed )
-        pAttrList->AddAttribute( "text:fixed", "true" );
 
     pStrm->StartElement( "text:date" );
     if (!m_strText.isEmpty())

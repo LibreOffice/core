@@ -82,25 +82,22 @@ public:
 
 private:
     enumXFLineNumberPos m_ePosition;
-    double      m_fOffset;
-    sal_Int32   m_nIncrement;
-    sal_Int32   m_nSepIncrement;
+    double     m_fOffset;
+    sal_Int32  m_nIncrement;
+    static const sal_Int32  m_nSepIncrement = 3;
     OUString   m_strSeparator;
     OUString   m_strNumFmt;
     OUString   m_strTextStyle;
-    bool    m_bRestartOnPage;
-    bool    m_bCountEmptyLines;
-    bool    m_bCountFrameLines;
+    bool       m_bRestartOnPage;
+    bool       m_bCountEmptyLines;
 };
 
 inline XFLineNumberConfig::XFLineNumberConfig()
     : m_ePosition(enumXFLineNumberLeft)
     , m_fOffset(0)
     , m_nIncrement(5)
-    , m_nSepIncrement(3)
     , m_bRestartOnPage(false)
     , m_bCountEmptyLines(true)
-    , m_bCountFrameLines(false)
 {}
 
 inline void XFLineNumberConfig::SetNumberOffset(double offset)
@@ -158,10 +155,7 @@ inline void XFLineNumberConfig::ToXml(IXFStream *pStrm)
     else
         pAttrList->AddAttribute( "text:count-empty-lines", "false" );
 
-    if( m_bCountFrameLines )
-        pAttrList->AddAttribute( "text:count-in-floating-frames", "true" );
-    else
-        pAttrList->AddAttribute( "text:count-in-floating-frames", "false" );
+    pAttrList->AddAttribute( "text:count-in-floating-frames", "false" );
 
     pStrm->StartElement( "text:linenumbering-configuration" );
 

@@ -123,7 +123,9 @@ bool SingleValFields::VisitFieldDecl( const FieldDecl* fieldDecl )
     fieldDecl = fieldDecl->getCanonicalDecl();
     const FieldDecl* canonicalDecl = fieldDecl;
 
-    if( ignoreLocation( fieldDecl ) || !isInterestingType(fieldDecl->getType()) )
+    if( ignoreLocation( fieldDecl )
+        || isInUnoIncludeFile( compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocation()))
+        || !isInterestingType(fieldDecl->getType()) )
         return true;
 
     MyFieldInfo aInfo;

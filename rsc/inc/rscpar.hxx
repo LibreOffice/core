@@ -37,7 +37,7 @@ class RscFileInst
     sal_uLong           lSrcIndex;  // Index auf Basisdatei
     FILE *              fInputFile; // Eingabedatei
     char *              pInput;     // Lesepuffer
-    sal_uInt32          nInputBufLen; // Laenge des Lesepuffers
+    static const sal_uInt32 nInputBufLen = READBUFFER_MAX; // Laenge des Lesepuffers
     sal_uInt32          nInputPos;  // Position im Lesepuffer
     sal_uInt32          nInputEndPos;// Ende im Lesepuffer
     char *              pLine;      // Zeile

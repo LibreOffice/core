@@ -61,7 +61,6 @@
 
 XFDrawRect::XFDrawRect()
 {
-    m_fCornerRadius = 0;
 }
 
 void XFDrawRect::ToXml(IXFStream *pStrm)
@@ -70,8 +69,6 @@ void XFDrawRect::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
 
-    if( 0 != m_fCornerRadius )
-        pAttrList->AddAttribute( "draw:corner-radius", OUString::number(m_fCornerRadius) + "cm" );
     XFDrawObject::ToXml(pStrm);
 
     pStrm->StartElement( "draw:rect" );

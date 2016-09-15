@@ -86,7 +86,6 @@ private:
     double  m_fHeight;
     double  m_fMinHeight;
     XFColor m_aBackColor;
-    XFBGImage   *m_pBGImage;
 };
 
 inline void XFRowStyle::SetRowHeight(double height)

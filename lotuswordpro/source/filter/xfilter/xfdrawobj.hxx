@@ -100,10 +100,6 @@ public:
 protected:
     double          m_fRotate;
     XFPoint         m_aRotatePoint;
-    double          m_fScaleX;
-    double          m_fScaleY;
-    double          m_fSkewX;
-    double          m_fSkewY;
     unsigned int    m_nFlag;
 };
 

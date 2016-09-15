@@ -158,8 +158,6 @@ bool LtgGmTime(long rtime,LtTm& rtm)
     rtm.tm_min = (long)(caltim / 60);
     rtm.tm_sec = (long)(caltim - (rtm.tm_min) * 60);
 
-    rtm.tm_isdst = 0;
-
     //adjust year & month
     rtm.tm_year += 1900;
     ++(rtm.tm_mon);

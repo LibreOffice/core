@@ -8214,7 +8214,7 @@ namespace rtl_OStringBuffer
     class  append_006_Int32_WrongRadix : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
-        sal_Int32 intVal;
+        static const sal_Int32 intVal = 11;
 
     public:
         void setUp() override
@@ -8224,8 +8224,6 @@ namespace rtl_OStringBuffer
             arrOUS[2] = new OString( kTestStr25 );
             arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
-            intVal = 11;
-
         }
 
         void tearDown() override
@@ -13966,7 +13964,7 @@ namespace rtl_OStringBuffer
     class  append_007_Int64_WrongRadix : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
-        sal_Int64 intVal;
+        static const sal_Int64 intVal = 11;
 
     public:
         void setUp() override
@@ -13976,8 +13974,6 @@ namespace rtl_OStringBuffer
             arrOUS[2] = new OString( kTestStr25 );
             arrOUS[3] = new OString( "" );
             arrOUS[4] = new OString( kTestStr28 );
-            intVal = 11;
-
         }
 
         void tearDown() override

@@ -48,12 +48,11 @@ class Memory : public CppUnit::TestFixture
 {
     // for normal alloc functions
     char       *m_pMemory;
-    sal_uInt32  m_nSizeOfMemory;
+    static const sal_uInt32  m_nSizeOfMemory = 1024;
 
 public:
     Memory()
         : m_pMemory(nullptr)
-        , m_nSizeOfMemory(1024)
     {
     }
 
@@ -96,12 +95,11 @@ class TestZeroMemory : public CppUnit::TestFixture
 {
     // for zero functions
     char       *m_pZeroMemory;
-    sal_uInt32  m_nSizeOfZeroMemory;
+    static const sal_uInt32  m_nSizeOfZeroMemory = 50 * 1024 * 1024;
 
 public:
     TestZeroMemory()
         : m_pZeroMemory(nullptr)
-        , m_nSizeOfZeroMemory( 50 * 1024 * 1024 )
     {
     }
 

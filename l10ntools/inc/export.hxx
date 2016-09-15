@@ -128,7 +128,6 @@ private:
     bool bNextMustBeDefineEOL;          ///< define but no \ at lineend
     std::size_t nLevel; // res. recursive? how deep?
     ExportListType nList;                       ///< cur. res. is List
-    std::size_t nListIndex;
     std::size_t nListLevel;
     bool bMergeMode;
     OString sMergeSrc;

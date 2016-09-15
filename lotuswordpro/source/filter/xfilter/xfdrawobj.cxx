@@ -62,10 +62,6 @@
 XFDrawObject::XFDrawObject()
 {
     m_fRotate = 0;
-    m_fScaleX = 0;
-    m_fScaleY = 0;
-    m_fSkewX = 0;
-    m_fSkewY = 0;
     m_nFlag = 0;
     m_eType = enumXFFrameDrawing;
 }
@@ -120,11 +116,11 @@ void XFDrawObject::ToXml(IXFStream *pStrm)
     if( m_nFlag&XFDRAWOBJECT_FLAG_TRANLATE )
         strTransform += "translate (" + OUString::number(m_aRotatePoint.GetX()) + "cm " + OUString::number(m_aRotatePoint.GetY()) + "cm) ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SCALE )
-        strTransform += "scale (" + OUString::number(m_fScaleX) + "cm " + OUString::number(m_fScaleY) + "cm) ";
+        strTransform += "scale (" + OUString::number(0) + "cm " + OUString::number(0) + "cm) ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SKEWX )
-        strTransform += "skewX (" + OUString::number(m_fSkewX) + " ";
+        strTransform += "skewX (" + OUString::number(0) + " ";
     if( m_nFlag&XFDRAWOBJECT_FLAG_SKEWY )
-        strTransform += "skewY (" + OUString::number(m_fSkewY) + " ";
+        strTransform += "skewY (" + OUString::number(0) + " ";
     strTransform = strTransform.trim();
 
     if( !strTransform.isEmpty() )

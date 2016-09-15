@@ -93,7 +93,6 @@ private:
     double      m_fMarginRight;
     XFColor     m_aBackColor;
     XFColumns   *m_pColumns;
-    XFBGImage   *m_pBackImage;
 };
 
 #endif

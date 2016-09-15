@@ -57,15 +57,10 @@ public:
     ~Unicode2TextConverter();
 
     css::uno::Sequence<sal_Int8> convert( const sal_Unicode * , sal_Int32 nLength );
-    bool canContinue() {  return m_bCanContinue; }
 
 private:
-    void init( rtl_TextEncoding encoding );
-
     rtl_UnicodeToTextConverter      m_convUnicode2Text;
     rtl_UnicodeToTextContext        m_contextUnicode2Text;
-    bool                            m_bCanContinue;
-    bool                            m_bInitialized;
     rtl_TextEncoding                m_rtlEncoding;
     css::uno::Sequence<sal_Unicode> m_seqSource;
 };

@@ -119,9 +119,7 @@ struct ParaNumbering
     LwpFribParaNumber* pParaNumber;
     LwpFribText* pSuffix;
 
-    sal_uInt16 nPrefixLevel;//hidelevels of prefix text frib
     sal_uInt16 nNumLevel;//hidelevels of paranumber frib
-    sal_uInt16 nSuffixLevel;//hidelevels of suffix text frib
 
     ParaNumbering()
     {
@@ -133,9 +131,7 @@ struct ParaNumbering
         pPrefix = nullptr;
         pParaNumber = nullptr;
         pSuffix = nullptr;
-        nPrefixLevel = 0;
         nNumLevel = 0;
-        nSuffixLevel = 0;
     }
 };
 

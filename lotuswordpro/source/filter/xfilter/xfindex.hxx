@@ -167,7 +167,6 @@ private:
     OUString        m_strTitle;
     bool            m_bProtect;
     bool            m_bSeparator;
-    XFParagraph*    m_pTitle;
 
     std::vector<XFIndexTemplate *>  m_aTemplates; // template entry + style
 

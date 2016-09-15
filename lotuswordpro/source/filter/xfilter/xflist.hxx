@@ -95,8 +95,6 @@ public:
 private:
     bool    m_bOrdered;
     bool    m_bContinueNumber;
-    XFListItem  *m_pHeader;
-
 };
 
 inline void XFList::SetOrdered(bool ordered)

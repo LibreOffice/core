@@ -197,7 +197,6 @@ Export::Export(const OString &rOutput)
                 bNextMustBeDefineEOL( false ),
                 nLevel( 0 ),
                 nList( ExportListType::NONE ),
-                nListIndex( 0 ),
                 nListLevel( 0 ),
                 bMergeMode( false ),
                 bError( false ),
@@ -221,7 +220,6 @@ Export::Export(
                 bNextMustBeDefineEOL( false ),
                 nLevel( 0 ),
                 nList( ExportListType::NONE ),
-                nListIndex( 0 ),
                 nListLevel( 0 ),
                 bMergeMode( true ),
                 sMergeSrc( rMergeSource ),
@@ -248,7 +246,6 @@ void Export::Init()
     bNextMustBeDefineEOL = false;
     nLevel = 0;
     nList = ExportListType::NONE;
-    nListIndex = 0;
     for ( size_t i = 0, n = aResStack.size(); i < n;  ++i )
         delete aResStack[ i ];
     aResStack.clear();
@@ -510,13 +507,11 @@ void Export::Execute( int nToken, const char * pToken )
             else if (sKey =="STRINGLIST")
             {
                 nList = ExportListType::String;
-                nListIndex = 0;
                 nListLevel = 1;
             }
             else if (sKey == "FILTERLIST")
             {
                 nList = ExportListType::Filter;
-                nListIndex = 0;
                 nListLevel = 1;
             }
             if (sToken.indexOf( '{' ) != -1
@@ -557,7 +552,6 @@ void Export::Execute( int nToken, const char * pToken )
                 }
                 if( nList != ExportListType::NONE )
                 {
-                    nListIndex = 0;
                     nListLevel = 1;
                 }
             }
@@ -850,9 +844,6 @@ void Export::InsertListEntry(const OString &rLine)
 
     if (!pResData)
         std::exit(EXIT_FAILURE);
-
-    if( pResData->m_aList.empty() )
-        nListIndex = 0;
 
     pResData->m_aList.push_back(rLine);
 }

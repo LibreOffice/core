@@ -64,13 +64,10 @@ XFIndex::XFIndex()
     : m_eType(enumXFIndexTOC)
     , m_bProtect(true)
     , m_bSeparator(false)
-    , m_pTitle(nullptr)
 {}
 
 XFIndex::~XFIndex()
 {
-    delete m_pTitle;
-
     while(m_aTemplates.size()>0)
     {
         XFIndexTemplate * pTemplate = m_aTemplates.back();
@@ -230,8 +227,6 @@ void    XFIndex::ToXml(IXFStream *pStrm)
     {
         pAttrList->AddAttribute( "text:name", m_strTitle + "_Head" );
         pStrm->StartElement( "text:index-title" );
-        if( m_pTitle )
-            m_pTitle->ToXml(pStrm);
         pStrm->EndElement( "text:index-title" );
     }
 
