@@ -36,7 +36,6 @@ class SbProperty;
 class SbiRuntime;
 typedef std::deque< sal_uInt16 > SbiBreakpoints;
 class SbiImage;
-class SbProcedureProperty;
 class SbIfaceMapperMethod;
 class SbClassModuleObject;
 
