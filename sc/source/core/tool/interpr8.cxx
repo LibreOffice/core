@@ -195,11 +195,6 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
         }
     }
 
-    if ( rSmplInPrd != 1 )
-        mnSmplInPrd = rSmplInPrd;
-    else
-        mnSmplInPrd = CalcPeriodLen();
-
     // Month intervals don't have exact stepsize, so first
     // detect if month interval is used.
     // Method: assume there is an month interval and verify.
@@ -378,6 +373,16 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
             }
         }
     }
+
+    if ( rSmplInPrd != 1 )
+        mnSmplInPrd = rSmplInPrd;
+    else
+    {
+         mnSmplInPrd = CalcPeriodLen();
+        if ( mnSmplInPrd == 1 )
+            bEDS = true; // period length 1 means no periodic data: EDS suffices
+    }
+
     if ( !initData() )
         return false;  // note: mnErrorValue is set in called function(s)
 
@@ -536,7 +541,7 @@ SCSIZE ScETSForecastCalculation::CalcPeriodLen()
     SCSIZE nBestVal = mnCount;
     double fBestME = ::std::numeric_limits<double>::max();
 
-    for ( SCSIZE nPeriodLen = mnCount / 2; nPeriodLen > 1; nPeriodLen-- )
+    for ( SCSIZE nPeriodLen = mnCount / 2; nPeriodLen >= 1; nPeriodLen-- )
     {
         double fMeanError = 0.0;
         SCSIZE nPeriods = mnCount / nPeriodLen;
@@ -548,7 +553,7 @@ SCSIZE ScETSForecastCalculation::CalcPeriodLen()
         }
         fMeanError /= static_cast< double >( ( nPeriods - 1 ) * nPeriodLen - 1 );
 
-        if ( fMeanError < fBestME || fMeanError == 0.0 )
+        if ( fMeanError <= fBestME || fMeanError == 0.0 )
         {
             nBestVal = nPeriodLen;
             fBestME = fMeanError;
