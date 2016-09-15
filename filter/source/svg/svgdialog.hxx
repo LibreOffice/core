@@ -30,10 +30,11 @@
 
 class ResMgr;
 
-class SVGDialog : public ::svt::OGenericUnoDialog,
-                  public ::comphelper::OPropertyArrayUsageHelper< SVGDialog >,
-                  public css::beans::XPropertyAccess,
-                  public css::document::XExporter
+class SVGDialog final:
+    public ::svt::OGenericUnoDialog,
+    public ::comphelper::OPropertyArrayUsageHelper< SVGDialog >,
+    public css::beans::XPropertyAccess,
+    public css::document::XExporter
 {
 private:
 

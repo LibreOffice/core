@@ -57,7 +57,10 @@ namespace pcr
         {
             ::osl::MutexGuard aGuard(m_aMutex);
             if (m_pDialog)
+            {
                 destroyDialog();
+                ControlCharacterDialog::destroyItemSet(m_pFontItems, m_pItemPool, m_pItemPoolDefaults);
+            }
         }
     }
 
@@ -149,14 +152,6 @@ namespace pcr
 
         return VclPtr<ControlCharacterDialog>::Create(_pParent, *m_pFontItems);
     }
-
-
-    void OControlFontDialog::destroyDialog()
-    {
-        OGenericUnoDialog::destroyDialog();
-        ControlCharacterDialog::destroyItemSet(m_pFontItems, m_pItemPool, m_pItemPoolDefaults);
-    }
-
 
     void OControlFontDialog::executedDialog(sal_Int16 _nExecutionResult)
     {

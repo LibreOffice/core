@@ -133,7 +133,6 @@ namespace {
 
     protected:
         virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) override;
-        virtual void destroyDialog() override;
 
     private:
         css::uno::Sequence< css::uno::Sequence< sal_Int16 > >         m_aWizardSteps;
@@ -146,16 +145,32 @@ namespace {
     {
     }
 
+    namespace {
+
+    OUString lcl_getHelpURL( const OString& sHelpId )
+    {
+        OUStringBuffer aBuffer;
+        OUString aTmp(
+            OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) );
+        INetURLObject aHID( aTmp );
+        if ( aHID.GetProtocol() == INetProtocol::NotValid )
+            aBuffer.append( INET_HID_SCHEME );
+        aBuffer.append( aTmp.getStr() );
+        return aBuffer.makeStringAndClear();
+    }
+
+    }
 
     Wizard::~Wizard()
     {
-        // we do this here cause the base class' call to destroyDialog won't reach us anymore: we're within an dtor,
-        // so this virtual-method-call the base class does not work, we're already dead then...
         if ( m_pDialog )
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             if ( m_pDialog )
+            {
+                m_sHelpURL = lcl_getHelpURL( m_pDialog->GetHelpId() );
                 destroyDialog();
+            }
         }
     }
 
@@ -250,20 +265,6 @@ namespace {
             return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
     }
 
-
-    OUString lcl_getHelpURL( const OString& sHelpId )
-    {
-        OUStringBuffer aBuffer;
-        OUString aTmp(
-            OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) );
-        INetURLObject aHID( aTmp );
-        if ( aHID.GetProtocol() == INetProtocol::NotValid )
-            aBuffer.append( INET_HID_SCHEME );
-        aBuffer.append( aTmp.getStr() );
-        return aBuffer.makeStringAndClear();
-    }
-
-
     VclPtr<Dialog> Wizard::createDialog( vcl::Window* i_pParent )
     {
         VclPtrInstance<WizardShell> pDialog( i_pParent, m_xController, m_aWizardSteps );
@@ -271,16 +272,6 @@ namespace {
         pDialog->setTitleBase( m_sTitle );
         return pDialog.get();
     }
-
-
-    void Wizard::destroyDialog()
-    {
-        if ( m_pDialog )
-            m_sHelpURL = lcl_getHelpURL( m_pDialog->GetHelpId() );
-
-        Wizard_Base::destroyDialog();
-    }
-
 
     OUString SAL_CALL Wizard::getImplementationName() throw(RuntimeException, std::exception)
     {

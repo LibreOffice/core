@@ -79,7 +79,6 @@ namespace pcr
     protected:
     // OGenericUnoDialog overridables
         virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
-        virtual void    destroyDialog() override;
         virtual void    executedDialog(sal_Int16 _nExecutionResult) override;
     };
 

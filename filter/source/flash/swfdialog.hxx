@@ -30,10 +30,11 @@ namespace vcl { class Window; }
 class ResMgr;
 
 
-class SWFDialog : public ::svt::OGenericUnoDialog,
-                  public ::comphelper::OPropertyArrayUsageHelper< SWFDialog >,
-                  public css::beans::XPropertyAccess,
-                  public css::document::XExporter
+class SWFDialog final:
+    public ::svt::OGenericUnoDialog,
+    public ::comphelper::OPropertyArrayUsageHelper< SWFDialog >,
+    public css::beans::XPropertyAccess,
+    public css::document::XExporter
 {
 private:
 

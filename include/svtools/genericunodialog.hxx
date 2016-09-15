@@ -121,8 +121,8 @@ namespace svt
         */
         virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) = 0;
 
-        /// called to destroy the dialog used. the default implementation just deletes m_pDialog and resets it to NULL
-        virtual void destroyDialog();
+        /// called to destroy the dialog used. deletes m_pDialog and resets it to NULL
+        void destroyDialog();
 
         /** called after the dialog has been executed
             @param      _nExecutionResult       the execution result as returned by Dialog::Execute

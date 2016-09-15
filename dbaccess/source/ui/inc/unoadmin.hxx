@@ -53,7 +53,6 @@ protected:
     virtual ~ODatabaseAdministrationDialog() override;
 protected:
 // OGenericUnoDialog overridables
-    virtual void destroyDialog() override;
     virtual void implInitialize(const css::uno::Any& _rValue) override;
 };
 

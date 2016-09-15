@@ -30,8 +30,9 @@ namespace vcl { class Window; }
 
 typedef ::cppu::ImplInheritanceHelper < ::svt::OGenericUnoDialog, XPropertyAccess, XExporter >  PDFDialog_Base;
 
-class PDFDialog : public PDFDialog_Base,
-                  public ::comphelper::OPropertyArrayUsageHelper< PDFDialog >
+class PDFDialog final:
+    public PDFDialog_Base,
+    public ::comphelper::OPropertyArrayUsageHelper< PDFDialog >
 {
 private:
     Sequence< PropertyValue >   maMediaDescriptor;
