@@ -2593,6 +2593,12 @@ void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const css::uno::
 
 void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument)
 {
+    // use true as fallback to get every document on EmergencySave/AutoRecovery!
+    bool bModified = true;
+    css::uno::Reference< css::util::XModifiable > xModify(xDocument, css::uno::UNO_QUERY);
+    if (xModify.is())
+        bModified = xModify->isModified();
+
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     /* SAFE */ {
@@ -2603,11 +2609,6 @@ void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::fr
     {
         AutoRecovery::TDocumentInfo& rInfo = *pIt;
 
-        // use sal_True as fallback ... so we recognize every document on EmergencySave/AutoRecovery!
-        bool bModified = true;
-        css::uno::Reference< css::util::XModifiable > xModify(xDocument, css::uno::UNO_QUERY);
-        if (xModify.is())
-            bModified = xModify->isModified();
         if (bModified)
         {
             rInfo.DocumentState |= AutoRecovery::E_MODIFIED;
