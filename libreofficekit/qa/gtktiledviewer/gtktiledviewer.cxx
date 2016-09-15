@@ -482,6 +482,8 @@ static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
                                                      GTK_RESPONSE_YES,
                                                      "Reject",
                                                      GTK_RESPONSE_NO,
+                                                     "Jump",
+                                                     GTK_RESPONSE_APPLY,
                                                      nullptr);
     GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG (pDialog));
 
@@ -518,7 +520,7 @@ static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
     gint res = gtk_dialog_run(GTK_DIALOG(pDialog));
 
     // Dispatch the matching command, if necessary.
-    if (res == GTK_RESPONSE_YES || res == GTK_RESPONSE_NO)
+    if (res == GTK_RESPONSE_YES || res == GTK_RESPONSE_NO || res == GTK_RESPONSE_APPLY)
     {
         GtkTreeSelection* pSelection = gtk_tree_view_get_selection(GTK_TREE_VIEW(pTreeView));
         GtkTreeIter aTreeIter;
@@ -531,8 +533,11 @@ static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
             std::string aCommand;
             if (res == GTK_RESPONSE_YES)
                 aCommand = ".uno:AcceptTrackedChange";
-            else
+            else if (res == GTK_RESPONSE_NO)
                 aCommand = ".uno:RejectTrackedChange";
+            else
+                // Just select the given redline, don't accept or reject it.
+                aCommand = ".uno:NextTrackedChange";
             // Without the '.uno:' prefix.
             std::string aKey = aCommand.substr(strlen(".uno:"));
 

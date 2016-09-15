@@ -3853,15 +3853,39 @@ void SwUiWriterTest::testRedlineParam()
     pWrtShell->EndDoc();
     pWrtShell->Insert("zzz");
 
-    // Move the cursor to the start again, and reject the second change.
+    // Select the first redline.
     pWrtShell->SttDoc();
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(1))}
+        {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(0))}
     }));
-    lcl_dispatchCommand(mxComponent, ".uno:RejectTrackedChange", aPropertyValues);
+    lcl_dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    // This failed: the parameter wasn't handled so the next change (zzz) was
+    // selected, not the first one (aaa).
+    CPPUNIT_ASSERT_EQUAL(OUString("aaa"), pShellCursor->GetText());
+
+    // Select the second redline.
+    pWrtShell->SttDoc();
+    aPropertyValues = comphelper::InitPropertySequence(
+    {
+        {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(1))}
+    });
+    lcl_dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+    pShellCursor = pWrtShell->getShellCursor(false);
+    CPPUNIT_ASSERT_EQUAL(OUString("zzz"), pShellCursor->GetText());
+
+    // Move the cursor to the start again, and reject the second change.
+    pWrtShell->SttDoc();
+    aPropertyValues = comphelper::InitPropertySequence(
+    {
+        {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(1))}
+    });
+    lcl_dispatchCommand(mxComponent, ".uno:RejectTrackedChange", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+    pShellCursor = pWrtShell->getShellCursor(false);
 
     // This was 'middlezzz', the uno command rejected the redline under the
     // cursor, instead of the requested one.

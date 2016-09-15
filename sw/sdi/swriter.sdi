@@ -7272,6 +7272,7 @@ SfxVoidItem RejectTrackedChange FN_REDLINE_REJECT_DIRECT
 ]
 
 SfxVoidItem NextTrackedChange FN_REDLINE_NEXT_CHANGE
+( SfxUInt16Item NextTrackedChange FN_REDLINE_NEXT_CHANGE )
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
