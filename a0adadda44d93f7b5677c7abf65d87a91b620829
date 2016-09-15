@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_52d8f4ef",
+        "filename": "sw/source/core/undo/docundo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-15T19:54:48Z",
+      "side": 1,
+      "message": "it\u0027s a reasonable postcondition that a successfull LeaveListAction leaves a SfxListUndoAction on the undo stack, so good to use assert() here - but then the \"if (pListAction)\" is redundant, i\u0027ll remove that in a follow-up...",
+      "revId": "a0adadda44d93f7b5677c7abf65d87a91b620829",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
