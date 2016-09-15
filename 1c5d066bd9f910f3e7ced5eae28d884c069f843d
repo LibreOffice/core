@@ -309,6 +309,30 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_32db80ef",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-15T19:54:59Z",
+      "side": 1,
+      "message": "rTheAbsURIRef.copy(0, rTheAbsURIRef.length() - 12)\nwill do the right thing",
+      "parentUuid": "ba5da102_d2e164d2",
+      "range": {
+        "startLine": 1481,
+        "startChar": 76,
+        "endLine": 1481,
+        "endChar": 88
+      },
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a98d1f4_ed992a21",
         "filename": "tools/source/fsys/urlobj.cxx",
         "patchSetId": 5
@@ -392,6 +416,30 @@
       "side": 1,
       "message": "Which type is the right one?",
       "parentUuid": "1a95cdbc_7b55df1b",
+      "range": {
+        "startLine": 1482,
+        "startChar": 38,
+        "endLine": 1482,
+        "endChar": 46
+      },
+      "revId": "1c5d066bd9f910f3e7ced5eae28d884c069f843d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_72e5f8a6",
+        "filename": "tools/source/fsys/urlobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-15T19:54:59Z",
+      "side": 1,
+      "message": "I would guess that you only need to check for \n  eStatus \u003d\u003d  E_None",
+      "parentUuid": "ba5da102_92d8cc1f",
       "range": {
         "startLine": 1482,
         "startChar": 38,
