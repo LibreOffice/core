@@ -248,7 +248,7 @@ void Statement::raiseSQLException(
     buf.append( sql );
     buf.append( "')" );
     OUString error = buf.makeStringAndClear();
-    log( m_pSettings, LogLevel::ERROR, error );
+    log(m_pSettings, LogLevel::Error, error);
     throw SQLException( error, *this, OUString(), 1, Any() );
 }
 
@@ -299,7 +299,7 @@ static void raiseSQLException(
     buf.append( OStringToOUString( sql, pSettings->encoding ) );
     buf.append( "')" );
     OUString error = buf.makeStringAndClear();
-    log( pSettings, LogLevel::ERROR, error );
+    log(pSettings, LogLevel::Error, error);
     throw SQLException( error, owner, OUString(), 1, Any() );
 }
 
@@ -347,13 +347,13 @@ static std::vector< OUString > lookupKeys(
                         // is ambigous, as I don't know postgresql searchpath,
                         // I can't continue here, as I may write to a different table
                         keySupplier.clear();
-                        if( isLog( pSettings, LogLevel::INFO ) )
+                        if (isLog(pSettings, LogLevel::Info))
                         {
                             OStringBuffer buf( 128 );
                             buf.append( "Can't offer updateable result set because table " );
                             buf.append( OUStringToOString(name, pSettings->encoding) );
                             buf.append( " is duplicated, add schema to resolve ambiguity" );
-                            log( pSettings, LogLevel::INFO, buf.makeStringAndClear().getStr() );
+                            log(pSettings, LogLevel::Info, buf.makeStringAndClear().getStr());
                         }
                         break;
                     }
@@ -364,13 +364,13 @@ static std::vector< OUString > lookupKeys(
     }
     else
     {
-        if( isLog( pSettings, LogLevel::INFO ) )
+        if (isLog(pSettings, LogLevel::Info))
         {
             OStringBuffer buf( 128 );
             buf.append( "Can't offer updateable result set ( table " );
             buf.append( OUStringToOString(table, pSettings->encoding) );
             buf.append( " is unknown)" );
-            log( pSettings, LogLevel::INFO, buf.makeStringAndClear().getStr() );
+            log(pSettings, LogLevel::Info, buf.makeStringAndClear().getStr());
         }
     }
 
@@ -411,13 +411,13 @@ static std::vector< OUString > lookupKeys(
         }
         if( ! ret.size() )
         {
-            if( isLog( pSettings, LogLevel::INFO ) )
+            if (isLog(pSettings, LogLevel::Info))
             {
                 OStringBuffer buf( 128 );
                 buf.append( "Can't offer updateable result set ( table " );
                 buf.append( OUStringToOString(table, pSettings->encoding) );
                 buf.append( " does not have a primary key)" );
-                log( pSettings, LogLevel::INFO, buf.makeStringAndClear().getStr() );
+                log(pSettings, LogLevel::Info, buf.makeStringAndClear().getStr());
             }
         }
     }
@@ -455,7 +455,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
         // otherwise the table name is empty
         *(data->pLastTableInserted) =
             extractTableFromInsert( OStringToOUString( cmd, pSettings->encoding ) );
-        if( isLog( pSettings, LogLevel::SQL ) )
+        if (isLog(pSettings, LogLevel::Sql))
         {
             OStringBuffer buf( 128 );
             buf.append( "executed command '" );
@@ -474,7 +474,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                 buf.append(
                     OUStringToOString( *data->pLastTableInserted, pSettings->encoding ) );
             }
-            log( pSettings, LogLevel::SQL, buf.makeStringAndClear().getStr() );
+            log(pSettings, LogLevel::Sql, buf.makeStringAndClear().getStr());
         }
         PQclear( result );
         break;
@@ -565,13 +565,13 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                 buf.append( "can't support updateable result for selects with multiple tables (" );
                 buf.append( cmd );
                 buf.append( ")" );
-                log( pSettings, LogLevel::SQL, buf.makeStringAndClear().getStr() );
+                log(pSettings, LogLevel::Sql, buf.makeStringAndClear().getStr() );
             }
             if( ! (*(data->pLastResultset)).is() )
             {
-                if( isLog( pSettings, LogLevel::ERROR ) )
+                if (isLog( pSettings, LogLevel::Error))
                 {
-                    log( pSettings, LogLevel::ERROR,  aReason.getStr());
+                    log(pSettings, LogLevel::Error,  aReason.getStr());
                 }
 
                 // TODO: How to react here correctly ?
@@ -598,7 +598,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                         data->ppSettings,result, schema, table ) );
         *(data->pMultipleResultAvailable) = true;
         ret = true;
-        if( isLog( pSettings, LogLevel::SQL ) )
+        if (isLog(pSettings, LogLevel::Sql))
         {
             OStringBuffer buf( 128 );
             buf.append( "executed query '" );
@@ -609,7 +609,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
             buf.append( "ms, returnedRows=" );
             buf.append( returnedRows );
             buf.append( "." );
-            log( pSettings, LogLevel::SQL, buf.makeStringAndClear().getStr() );
+            log(pSettings, LogLevel::Sql, buf.makeStringAndClear().getStr());
         }
         break;
     }

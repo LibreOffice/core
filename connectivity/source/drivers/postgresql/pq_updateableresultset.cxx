@@ -198,9 +198,9 @@ OUString UpdateableResultSet::buildWhereClause()
 void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
-    if( isLog( *m_ppSettings, LogLevel::INFO ) )
+    if (isLog(*m_ppSettings, LogLevel::Info))
     {
-        log( *m_ppSettings, LogLevel::INFO,"UpdateableResultSet::insertRow got called"  );
+        log(*m_ppSettings, LogLevel::Info, "UpdateableResultSet::insertRow got called");
     }
     if( ! m_insertRow )
         throw SQLException(
@@ -292,9 +292,9 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException, s
 void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
-    if( isLog( *m_ppSettings, LogLevel::INFO ) )
+    if (isLog(*m_ppSettings, LogLevel::Info))
     {
-        log( *m_ppSettings, LogLevel::INFO,"UpdateableResultSet::updateRow got called"  );
+        log(*m_ppSettings, LogLevel::Info, "UpdateableResultSet::updateRow got called");
     }
     if( m_insertRow )
         throw SQLException(
@@ -341,9 +341,9 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException, s
 
 void UpdateableResultSet::deleteRow(  ) throw (SQLException, RuntimeException, std::exception)
 {
-    if( isLog( *m_ppSettings, LogLevel::INFO ) )
+    if (isLog(*m_ppSettings, LogLevel::Info))
     {
-        log( *m_ppSettings, LogLevel::INFO,"UpdateableResultSet::deleteRow got called"  );
+        log(*m_ppSettings, LogLevel::Info, "UpdateableResultSet::deleteRow got called");
     }
     if( m_insertRow )
         throw SQLException(

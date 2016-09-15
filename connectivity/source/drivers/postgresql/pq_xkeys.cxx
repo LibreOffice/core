@@ -110,12 +110,12 @@ void Keys::refresh()
 {
     try
     {
-        if( isLog( m_pSettings, LogLevel::INFO ) )
+        if (isLog(m_pSettings, LogLevel::Info))
         {
             OString buf( "sdbcx.Keys get refreshed for table " +
                          OUStringToOString( m_schemaName, m_pSettings->encoding ) +
                          "." + OUStringToOString( m_tableName,m_pSettings->encoding ));
-            log( m_pSettings, LogLevel::INFO, buf.getStr() );
+            log(m_pSettings, LogLevel::Info, buf.getStr());
         }
 
         osl::MutexGuard guard( m_refMutex->mutex );
