@@ -870,6 +870,7 @@ public:
     bool m_bTilesInvalidated;
     std::map<int, bool> m_aViewCursorInvalidations;
     std::map<int, bool> m_aViewCursorVisibilities;
+    bool m_bViewSelectionSet;
 
     ViewCallback()
         : m_bGraphicSelectionInvalidated(false),
@@ -877,7 +878,8 @@ public:
           m_nPart(0),
           m_bCursorVisibleChanged(false),
           m_bViewLock(false),
-          m_bTilesInvalidated(false)
+          m_bTilesInvalidated(false),
+          m_bViewSelectionSet(false)
     {
     }
 
@@ -939,6 +941,11 @@ public:
             boost::property_tree::read_json(aStream, aTree);
             int nViewId = aTree.get_child("viewId").get_value<int>();
             m_aViewCursorVisibilities[nViewId] = OString("true") == pPayload;
+        }
+        break;
+        case LOK_CALLBACK_TEXT_VIEW_SELECTION:
+        {
+            m_bViewSelectionSet = true;
         }
         break;
         }
@@ -1189,6 +1196,12 @@ void SdTiledRenderingTest::testCreateViewTextCursor()
     SdrView* pSdrView = pViewShell->GetView();
     CPPUNIT_ASSERT(pSdrView->IsTextEdit());
 
+    // Create an editeng text selection.
+    EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+    // 0th para, 0th char -> 0th para, 1st char.
+    ESelection aWordSelection(0, 0, 0, 1);
+    rEditView.SetSelection(aWordSelection);
+
     // Make sure that creating a new view either doesn't affect the previous
     // one, or at least the effect is not visible at the end.
     aView1.m_aViewCursorInvalidations.clear();
@@ -1196,6 +1209,7 @@ void SdTiledRenderingTest::testCreateViewTextCursor()
     SfxLokHelper::createView();
     pXImpressDocument->initializeForTiledRendering({});
     ViewCallback aView2;
+    aView2.m_bViewSelectionSet = false;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     bool bFoundCursor = false;
     for (const auto& rInvalidation : aView1.m_aViewCursorInvalidations)
@@ -1211,6 +1225,9 @@ void SdTiledRenderingTest::testCreateViewTextCursor()
     // This failed: the second view created an unexpected view cursor in the
     // first view.
     CPPUNIT_ASSERT(!bFoundCursor);
+    // This failed: the text view selection of the first view wasn't seen by
+    // the second view.
+    CPPUNIT_ASSERT(aView2.m_bViewSelectionSet);
 
     mxComponent->dispose();
     mxComponent.clear();
