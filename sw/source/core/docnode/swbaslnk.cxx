@@ -380,16 +380,6 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
         ReleaseRef();
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    {
-        OUString sGrfNm;
-        if(GetLinkManager())
-            GetLinkManager()->GetDisplayNames( this, 0, &sGrfNm, 0, 0 );
-        int x = 0;
-        ++x;
-    }
-#endif
-
     bool bRes = false;
 
     if( GetObj() )
