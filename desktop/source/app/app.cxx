@@ -981,6 +981,12 @@ void Desktop::HandleBootstrapErrors(
 
                 if (aBackupFileHelper.isPopPossible())
                 {
+                    // for linux (and probably others?) we need to instantiate XDesktop2
+                    // to be able to open a *.ui-file based dialog, so do this here locally.
+                    // does no harm on win, so better always do this (in error case only anyways)
+                    Reference< XComponentContext > xLocalContext = ::comphelper::getProcessComponentContext();
+                    Reference< XDesktop2 > xDesktop = css::frame::Desktop::create(xLocalContext);
+
                     ScopedVclPtrInstance< MessageDialog > aQueryShouldRestore(
                         Application::GetDefDialogParent(),
                         "QueryTryToRestoreConfigurationDialog",
