@@ -776,7 +776,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
                             aEffectiveValue <<= _rxInStream->readUTF();
                             break;
                         case 1: // double
-                            aEffectiveValue <<= (double)_rxInStream->readDouble();
+                            aEffectiveValue <<= _rxInStream->readDouble();
                             break;
                         case 2:
                             break;
