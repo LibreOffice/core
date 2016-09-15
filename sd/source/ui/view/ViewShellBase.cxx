@@ -88,6 +88,7 @@
 #include <tools/diagnose_ex.h>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <editeng/editview.hxx>
 
 #include "fubullet.hxx"
 #include "drawview.hxx"
@@ -1049,7 +1050,21 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
     if (!pDrawView)
         return;
 
-    pDrawView->AdjustMarkHdl(pOtherShell);
+    if (pDrawView->GetTextEditObject())
+    {
+        // Blinking cursor.
+        EditView& rEditView = pDrawView->GetTextEditOutlinerView()->GetEditView();
+        rEditView.RegisterOtherShell(pOtherShell);
+        rEditView.ShowCursor();
+        rEditView.RegisterOtherShell(nullptr);
+        // Text selection, if any.
+        rEditView.DrawSelection(pOtherShell);
+    }
+    else
+    {
+        // Graphic selection.
+        pDrawView->AdjustMarkHdl(pOtherShell);
+    }
 }
 
 //===== ViewShellBase::Implementation =========================================
