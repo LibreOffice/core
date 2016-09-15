@@ -57,6 +57,8 @@ IMPL_LINK_NOARG_TYPED(RemoteDialog, HandleConnectButton, Button*, void)
     {
         CloseHdl( *this );
     }
+#else
+    (void) this;
 #endif
 }
 
