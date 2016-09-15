@@ -1576,11 +1576,9 @@ class WW8SHDLong
 {
     sal_uInt32 m_cvFore;
     sal_uInt32 m_cvBack;
-    sal_uInt16 m_ipat;
 
 public:
-    WW8SHDLong() : m_cvFore(0), m_cvBack(0), m_ipat(0) {}
-    virtual ~WW8SHDLong() {}
+    WW8SHDLong() : m_cvFore(0), m_cvBack(0) {}
 
     void Write(WW8Export & rExport);
     void setCvFore(sal_uInt32 cvFore) { m_cvFore = cvFore; }

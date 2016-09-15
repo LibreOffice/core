@@ -485,7 +485,6 @@ class SwTextFormatInfo : public SwTextPaintInfo
     SwLineLayout    *m_pRoot;       // The Root of the current line (pCurr)
     SwLinePortion   *m_pLast;       // The last Portion
     SwFlyPortion    *m_pFly;        // The following FlyPortion
-    SwFieldPortion    *m_pLastField;    // Wrapped Field
     SwLinePortion   *m_pUnderflow;  // Underflow: Last Portion
     SwLinePortion   *m_pRest;       // The Rest is the start of the next Line
 

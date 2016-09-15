@@ -1149,8 +1149,6 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
         pImpl->nFlagsInProgress |= SfxLoadedFlags::MAINDOCUMENT;
         static_cast<SfxHeaderAttributes_Impl*>(GetHeaderAttributes())->SetAttributes();
         pImpl->bImportDone = true;
-        if( !IsAbortingImport() )
-            PositionView_Impl();
 
         if ( ( GetModifyPasswordHash() || GetModifyPasswordInfo().getLength() ) && !IsModifyPasswordEntered() )
             SetReadOnly();
@@ -1320,21 +1318,6 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
 
         // created untitled document can't be modified
         SetModified( false );
-    }
-}
-
-
-void SfxObjectShell::PositionView_Impl()
-{
-    MarkData_Impl *pMark = Get_Impl()->pMarkData;
-    if( pMark )
-    {
-        SfxViewShell* pSh = pMark->pFrame->GetViewShell();
-        if( !pMark->aUserData.isEmpty() )
-            pSh->ReadUserData( pMark->aUserData, true );
-        else if( !pMark->aMark.isEmpty() )
-            pSh->JumpToMark( pMark->aMark );
-        DELETEZ( Get_Impl()->pMarkData );
     }
 }
 

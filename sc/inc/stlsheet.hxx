@@ -55,10 +55,6 @@ public:
     virtual bool        HasFollowSupport () const override;
     virtual bool        HasParentSupport () const override;
 
-    virtual const OUString& GetName() const override;
-    virtual const OUString& GetParent() const override;
-    virtual const OUString& GetFollow() const override;
-
     virtual bool SetName(const OUString& rNewName, bool bReindexNow = true) override;
 
     void                SetUsage( ScStyleSheet::Usage eUse ) const { eUsage = eUse; }

@@ -332,7 +332,6 @@ protected:
     mutable XRenderPictFormat*      m_pXRenderFormat;
     XID                             m_aXRenderPicture;
 
-    Region                          pPaintRegion_;
     Region                          mpClipRegion;
 #if ENABLE_CAIRO_CANVAS
     vcl::Region                     maClipRegion;

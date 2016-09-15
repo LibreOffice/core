@@ -54,7 +54,6 @@ class SW_DLLPUBLIC SwFormatDrop: public SfxPoolItem, public SwClient
     SwModify* pDefinedIn;       /**< Modify-Object, that contains DropCaps.
                                   Can only be TextFormatCollection/TextNode. */
     sal_uInt16 nDistance;       ///< Distance to beginning of text.
-    sal_uInt16 nReadFormat;        ///< For Sw3-Reader: CharFormat-Id (load Pool!).
     sal_uInt8  nLines;          ///< Line count.
     sal_uInt8  nChars;          ///< Character count.
     bool   bWholeWord;      ///< First word with initials.

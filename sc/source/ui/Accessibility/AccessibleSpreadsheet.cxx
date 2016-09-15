@@ -286,7 +286,6 @@ void ScAccessibleSpreadsheet::ConstructScAccessibleSpreadsheet(
 {
     mpViewShell = pViewShell;
     mpMarkedRanges = nullptr;
-    mpSortedMarkedCells = nullptr;
     mpAccDoc = pAccDoc;
     mpAccCell.clear();
     meSplitPos = eSplitPos;

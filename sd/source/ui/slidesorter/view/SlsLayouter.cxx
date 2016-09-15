@@ -30,10 +30,10 @@ class Layouter::Implementation
 {
 public:
     VclPtr<sd::Window> mpWindow;
-    sal_Int32 mnRequestedLeftBorder;
-    sal_Int32 mnRequestedRightBorder;
-    sal_Int32 mnRequestedTopBorder;
-    sal_Int32 mnRequestedBottomBorder;
+    static const sal_Int32 mnRequestedLeftBorder = 5;
+    static const sal_Int32 mnRequestedRightBorder = 5;
+    static const sal_Int32 mnRequestedTopBorder = 5;
+    static const sal_Int32 mnRequestedBottomBorder = 5;
     sal_Int32 mnLeftBorder;
     sal_Int32 mnRightBorder;
     sal_Int32 mnTopBorder;
@@ -430,10 +430,6 @@ Layouter::Implementation::Implementation (
     sd::Window *pWindow,
     const std::shared_ptr<view::Theme>& rpTheme)
     : mpWindow(pWindow),
-      mnRequestedLeftBorder(5),
-      mnRequestedRightBorder(5),
-      mnRequestedTopBorder(5),
-      mnRequestedBottomBorder(5),
       mnLeftBorder(5),
       mnRightBorder(5),
       mnTopBorder(5),
@@ -458,10 +454,6 @@ Layouter::Implementation::Implementation (
 
 Layouter::Implementation::Implementation (const Implementation& rImplementation)
     : mpWindow(rImplementation.mpWindow),
-      mnRequestedLeftBorder(rImplementation.mnRequestedLeftBorder),
-      mnRequestedRightBorder(rImplementation.mnRequestedRightBorder),
-      mnRequestedTopBorder(rImplementation.mnRequestedTopBorder),
-      mnRequestedBottomBorder(rImplementation.mnRequestedBottomBorder),
       mnLeftBorder(rImplementation.mnLeftBorder),
       mnRightBorder(rImplementation.mnRightBorder),
       mnTopBorder(rImplementation.mnTopBorder),

@@ -579,7 +579,6 @@ SwFormatPageDesc::SwFormatPageDesc( const SwFormatPageDesc &rCpy )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( const_cast<SwPageDesc*>(rCpy.GetPageDesc()) ),
     oNumOffset( rCpy.oNumOffset ),
-    nDescNameIdx( rCpy.nDescNameIdx ),
     pDefinedIn( nullptr )
 {
 }
@@ -587,7 +586,6 @@ SwFormatPageDesc::SwFormatPageDesc( const SwFormatPageDesc &rCpy )
 SwFormatPageDesc::SwFormatPageDesc( const SwPageDesc *pDesc )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( const_cast<SwPageDesc*>(pDesc) ),
-    nDescNameIdx( 0xFFFF ), // IDX_NO_VALUE
     pDefinedIn( nullptr )
 {
 }
@@ -597,7 +595,6 @@ SwFormatPageDesc &SwFormatPageDesc::operator=(const SwFormatPageDesc &rCpy)
     if (rCpy.GetPageDesc())
         RegisterToPageDesc(*const_cast<SwPageDesc*>(rCpy.GetPageDesc()));
     oNumOffset = rCpy.oNumOffset;
-    nDescNameIdx = rCpy.nDescNameIdx;
     pDefinedIn = nullptr;
 
     return *this;

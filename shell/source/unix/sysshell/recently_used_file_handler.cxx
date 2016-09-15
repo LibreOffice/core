@@ -307,18 +307,16 @@ namespace /* private */ {
     public:
         recent_item_writer( recently_used_file& file ) :
             file_(file),
-            max_items_to_write_(MAX_RECENTLY_USED_ITEMS),
             items_written_(0)
         {}
 
         void operator() (const recently_used_item* item)
         {
-            if (items_written_++ < max_items_to_write_)
+            if (items_written_++ < MAX_RECENTLY_USED_ITEMS)
                 item->write_xml(file_);
         }
     private:
         recently_used_file& file_;
-        int max_items_to_write_;
         int items_written_;
     };
 

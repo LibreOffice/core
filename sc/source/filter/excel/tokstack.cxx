@@ -31,11 +31,8 @@ const sal_uInt16    TokenPool::nScTokenOff = 8192;
 
 TokenStack::TokenStack(  )
 {
-    const sal_uInt16 nNewSize = 1024;
-    pStack = new TokenId[ nNewSize ];
-
+    pStack = new TokenId[ nSize ];
     Reset();
-    nSize = nNewSize;
 }
 
 TokenStack::~TokenStack()
@@ -74,7 +71,6 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
     pP_Dbl = new double[ nP_Dbl ];
 
     // pool for error codes
-    nP_Err = 8;
     pP_Err = new sal_uInt16[ nP_Err ];
 
     // pool for References

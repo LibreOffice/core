@@ -308,7 +308,6 @@ class ScDPDimension : public cppu::WeakImplHelper<
     ScDPSource*         pSource;
     long                nDim;               // dimension index (== column ID)
     rtl::Reference<ScDPHierarchies> mxHierarchies;
-    long                nUsedHier;
     sal_uInt16          nFunction;          // enum GeneralFunction
     OUString            aName;              // if empty, take from source
     std::unique_ptr<OUString> mpLayoutName;
@@ -401,7 +400,7 @@ public:
     bool getIsDataLayoutDimension() const;
     sal_uInt16 getFunction() const { return nFunction;}
     void setFunction(sal_uInt16 nNew);       // for data dimension
-    long getUsedHierarchy() const { return nUsedHier;}
+    static long getUsedHierarchy() { return 0;}
 
     bool                        HasSelectedPage() const     { return bHasSelectedPage; }
     const ScDPItemData&         GetSelectedData();
@@ -416,7 +415,9 @@ class ScDPHierarchies : public cppu::WeakImplHelper<
 private:
     ScDPSource*         pSource;
     long                nDim;
-    long                nHierCount;
+    //  date columns have 3 hierarchies (flat/quarter/week), other columns only one
+    // #i52547# don't offer the incomplete date hierarchy implementation
+    static const long   nHierCount = 1;
     ScDPHierarchy**     ppHiers;
 
 public:
@@ -446,7 +447,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(css::uno::RuntimeException, std::exception) override;
 
-    long            getCount() const;
+    static long     getCount();
     ScDPHierarchy*  getByIndex(long nIndex) const;
 };
 

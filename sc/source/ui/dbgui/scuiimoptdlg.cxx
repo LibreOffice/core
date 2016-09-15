@@ -34,7 +34,6 @@ class ScDelimiterTable
 public:
     explicit ScDelimiterTable( const OUString& rDelTab )
             :   theDelTab ( rDelTab ),
-                cSep      ( '\t' ),
                 nCount    ( comphelper::string::getTokenCount(rDelTab, '\t') ),
                 nIter     ( 0 )
             {}
@@ -47,7 +46,7 @@ public:
 
 private:
     const OUString      theDelTab;
-    const sal_Unicode   cSep;
+    static const sal_Unicode   cSep = '\t';
     const sal_Int32    nCount;
     sal_Int32          nIter;
 };

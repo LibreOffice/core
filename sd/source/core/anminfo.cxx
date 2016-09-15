@@ -45,7 +45,6 @@ SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
                  mbDimHide                  (false),
                  mbSoundOn                  (false),
                  mbPlayFull                 (false),
-                 mpPathObj                  (nullptr),
                  meClickAction              (presentation::ClickAction_NONE),
                  meSecondEffect             (presentation::AnimationEffect_NONE),
                  meSecondSpeed              (presentation::AnimationSpeed_SLOW),
@@ -60,7 +59,7 @@ SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
 
 SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject)
                : SdrObjUserData             (rAnmInfo),
-                    mePresObjKind               (PRESOBJ_NONE),
+                 mePresObjKind               (PRESOBJ_NONE),
                  meEffect                   (rAnmInfo.meEffect),
                  meTextEffect               (rAnmInfo.meTextEffect),
                  meSpeed                    (rAnmInfo.meSpeed),
@@ -73,7 +72,6 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rOb
                  maSoundFile                (rAnmInfo.maSoundFile),
                  mbSoundOn                  (rAnmInfo.mbSoundOn),
                  mbPlayFull                 (rAnmInfo.mbPlayFull),
-                 mpPathObj                  (nullptr),
                  meClickAction              (rAnmInfo.meClickAction),
                  meSecondEffect             (rAnmInfo.meSecondEffect),
                  meSecondSpeed              (rAnmInfo.meSecondSpeed),

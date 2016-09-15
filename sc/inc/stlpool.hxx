@@ -51,8 +51,6 @@ public:
 
     ScStyleSheet*       FindCaseIns( const OUString& rName, SfxStyleFamily eFam );
 
-    const OUString*     GetForceStdName() const { return pForceStdName; }
-
     virtual SfxStyleSheetBase& Make( const OUString&, SfxStyleFamily eFam,
                                      sal_uInt16 nMask = SFXSTYLEBIT_ALL) override;
 
@@ -69,7 +67,6 @@ protected:
 private:
     SfxStyleSheetBase*  pActualStyleSheet;
     ScDocument*         pDoc;
-    const OUString*       pForceStdName;
 };
 
 #endif // INCLUDED_SC_INC_STLPOOL_HXX

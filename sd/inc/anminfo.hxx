@@ -49,7 +49,6 @@ public:
     OUString                    maSoundFile;    ///< Path to the sound file in MS DOS notation
     bool                        mbSoundOn;      ///< Sound on / off
     bool                        mbPlayFull;     ///< play sound completely.
-    SdrPathObj*                 mpPathObj;      ///< The path object
     css::presentation::ClickAction     meClickAction;  ///< Action at mouse click
     css::presentation::AnimationEffect meSecondEffect; ///< for object fading.
     css::presentation::AnimationSpeed  meSecondSpeed;  ///< for object fading.

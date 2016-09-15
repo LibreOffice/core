@@ -180,8 +180,7 @@ std::shared_ptr<PageCacheManager> PageCacheManager::Instance()
 
 PageCacheManager::PageCacheManager()
     : mpPageCaches(new PageCacheContainer()),
-      mpRecentlyUsedPageCaches(new RecentlyUsedPageCaches()),
-      mnMaximalRecentlyCacheCount(2)
+      mpRecentlyUsedPageCaches(new RecentlyUsedPageCaches())
 {
 }
 

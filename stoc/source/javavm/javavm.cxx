@@ -557,7 +557,6 @@ JavaVirtualMachine::JavaVirtualMachine(
     m_xContext(rContext),
     m_bDisposed(false),
     m_pJavaVm(nullptr),
-    m_bDontCreateJvm(false),
     m_aAttachGuards(destroyAttachGuards) // TODO check for validity
 {}
 
@@ -665,12 +664,6 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     jfw::JavaInfoGuard info;
     while (!m_xVirtualMachine.is()) // retry until successful
     {
-        // This is the second attempt to create Java.  m_bDontCreateJvm is
-        // set which means instantiating the JVM might crash.
-        if (m_bDontCreateJvm)
-            //throw css::uno::RuntimeException();
-            return css::uno::Any();
-
         stoc_javavm::JVM aJvm;
         initVMConfiguration(&aJvm, m_xContext->getServiceManager(),
                             m_xContext);

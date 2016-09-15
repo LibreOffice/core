@@ -1081,7 +1081,6 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
             rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
         }
     }
-    pAttrArray = nullptr;
 }
 
 void ScQueryCellIterator::InitPos()
@@ -2170,7 +2169,6 @@ ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
         const ScRange& rRange ) :
     pDoc( pDocument ),
     nEndTab( rRange.aEnd.Tab() ),
-    bNumValid( false ),
     bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() )
 {
     SCCOL nStartCol = rRange.aStart.Col();
@@ -2226,7 +2224,6 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
         {
             case CELLTYPE_VALUE:
                 {
-                    bNumValid = false;
                     rValue = pCell->mfValue;
                     rErr = 0;
                     if ( bCalcAsShown )
@@ -2245,7 +2242,6 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
                     if (rErr || pCell->mpFormula->IsValue())
                     {
                         rValue = pCell->mpFormula->GetValue();
-                        bNumValid = false;
                         bFound = true;
                     }
                 }

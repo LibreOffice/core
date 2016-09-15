@@ -261,7 +261,6 @@ protected:
 private:
     ScTabViewShell* mpViewShell;
     ScRangeList*    mpMarkedRanges;
-    std::vector<ScMyAddress>* mpSortedMarkedCells;
     ScAccessibleDocument* mpAccDoc;
     rtl::Reference<ScAccessibleCell> mpAccCell;
     Rectangle       maVisCells;

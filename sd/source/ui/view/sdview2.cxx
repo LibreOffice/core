@@ -765,7 +765,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                                 pAction->SetSoundOn(pInfo->mbSoundOn, pInfo->mbSoundOn);
                                 pAction->SetSound(pInfo->maSoundFile, pInfo->maSoundFile);
                                 pAction->SetPlayFull(pInfo->mbPlayFull, pInfo->mbPlayFull);
-                                pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
+                                pAction->SetPathObj(nullptr, nullptr);
                                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
                                 pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
                                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);

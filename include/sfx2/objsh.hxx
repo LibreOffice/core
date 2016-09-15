@@ -681,7 +681,6 @@ public:
     SAL_DLLPRIVATE bool ImportFromGeneratedStream_Impl(
                     const css::uno::Reference< css::io::XStream >& xStream,
                     const css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr );
-    SAL_DLLPRIVATE void PositionView_Impl();
     SAL_DLLPRIVATE void UpdateFromTemplate_Impl();
     SAL_DLLPRIVATE bool CanReload_Impl();
     SAL_DLLPRIVATE void SetNamedVisibility_Impl();

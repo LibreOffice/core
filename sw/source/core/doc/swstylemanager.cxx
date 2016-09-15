@@ -112,11 +112,18 @@ std::shared_ptr<SfxItemSet> SwStyleManager::cacheAutomaticStyle( const SfxItemSe
 {
     StylePool& rAutoPool = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? aAutoCharPool : aAutoParaPool;
     std::shared_ptr<SfxItemSet> pStyle = rAutoPool.insertItemSet( rSet );
-    SwStyleCache* &rpCache = eFamily == IStyleAccess::AUTO_STYLE_CHAR ?
-                             mpCharCache : mpParaCache;
-    if( !rpCache )
-        rpCache = new SwStyleCache();
-    rpCache->addStyleName( pStyle );
+    if (eFamily == IStyleAccess::AUTO_STYLE_CHAR)
+    {
+        if (!mpCharCache)
+            mpCharCache = new SwStyleCache();
+        mpCharCache->addStyleName( pStyle );
+    }
+    else
+    {
+        if (!mpParaCache)
+            mpParaCache = new SwStyleCache();
+        mpParaCache->addStyleName( pStyle );
+    }
     return pStyle;
 }
 

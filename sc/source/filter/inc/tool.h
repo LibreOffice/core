@@ -88,7 +88,6 @@ private:
     FormIdent           aIdents[ nSize_ ]; //gepufferte Formate
     bool                bValid[ nSize_ ];
     FormIdent           aCompareIdent;      // zum Vergleichen
-    sal_uInt8           nDefaultFormat;     // Defaultformat der Datei
     SvNumberFormatter*  pFormTable;         // Value-Format-Table-Anker
     StampTyp            nIndex;
     LanguageType        eLanguage;          // Systemsprache

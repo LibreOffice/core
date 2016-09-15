@@ -3747,7 +3747,7 @@ void WW8SHDLong::Write( WW8Export& rExport )
 {
     rExport.InsUInt32( m_cvFore );
     rExport.InsUInt32( m_cvBack );
-    rExport.InsUInt16( m_ipat );
+    rExport.InsUInt16( 0 ); // ipat
 }
 
 void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )

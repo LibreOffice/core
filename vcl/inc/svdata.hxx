@@ -210,8 +210,6 @@ struct ImplSVCtrlData
     ImageList*              mpPinImgList;                   // ImageList for PIN
     ImageList*              mpSplitHPinImgList;             // ImageList for Horizontale SplitWindows
     ImageList*              mpSplitVPinImgList;             // ImageList for Vertikale SplitWindows (PIN's)
-    ImageList*              mpSplitHArwImgList;             // ImageList for Horizontale SplitWindows (Arrows)
-    ImageList*              mpSplitVArwImgList;             // ImageList for Vertikale SplitWindows (Arrows)
     Image*                  mpDisclosurePlus;
     Image*                  mpDisclosureMinus;
     ImplTBDragMgr*          mpTBDragMgr;                    // DragMgr for ToolBox

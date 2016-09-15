@@ -130,7 +130,6 @@ class EasyFile
 {
 private:
     SvStream*   pOStm;
-    SfxMedium*  pMedium;
     bool        bOpen;
 
 public:
@@ -3139,7 +3138,6 @@ OUString HtmlExport::GetButtonName( int nButton )
 
 EasyFile::EasyFile()
 {
-    pMedium = nullptr;
     pOStm = nullptr;
     bOpen = false;
 }
@@ -3179,7 +3177,6 @@ sal_uLong EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
     if( nErr != 0 )
     {
         bOpen = false;
-        delete pMedium;
         delete pOStm;
         pOStm = nullptr;
     }
@@ -3221,18 +3218,6 @@ sal_uLong EasyFile::close()
     pOStm = nullptr;
 
     bOpen = false;
-
-    if( pMedium )
-    {
-        // transmitted
-        pMedium->Close();
-        pMedium->Commit();
-
-        nErr = pMedium->GetError();
-
-        delete pMedium;
-        pMedium = nullptr;
-    }
 
     return nErr;
 }

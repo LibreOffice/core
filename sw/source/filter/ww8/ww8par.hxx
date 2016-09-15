@@ -650,7 +650,7 @@ public:
     WW8FormulaControl(const OUString& rN, SwWW8ImplReader &rRdr)
         : mrRdr(rRdr), mfUnknown(0), mfDropdownIndex(0),
         mfToolTip(0), mfNoMark(0), mfUseSize(0), mfNumbersOnly(0), mfDateOnly(0),
-        mfUnused(0), mnSize(0), mhpsCheckBox(20), mnChecked(0), mnMaxLen(0), msName( rN )
+        mfUnused(0), mhpsCheckBox(20), mnChecked(0), mnMaxLen(0), msName( rN )
     {
     }
     sal_uInt8 mfUnknown:2;
@@ -661,7 +661,6 @@ public:
     sal_uInt8 mfNumbersOnly:1;
     sal_uInt8 mfDateOnly:1;
     sal_uInt8 mfUnused:3;
-    sal_uInt16 mnSize;
 
     sal_uInt16 mhpsCheckBox;
     sal_uInt16 mnChecked;
@@ -1233,8 +1232,6 @@ private:
 
     ANLDRuleMap m_aANLDRules;
     WW8_OLST* m_pNumOlst;         // position in text
-
-    SwNode* m_pNode_FLY_AT_PARA; // set: WW8SwFlyPara()   read: CreateSwTable()
 
     SdrModel* m_pDrawModel;
     SdrPage* m_pDrawPg;

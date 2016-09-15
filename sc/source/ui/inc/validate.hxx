@@ -40,8 +40,6 @@ protected:
     void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , ScDocument* );
     void            (ScRefHandlerCaller::*m_pSetActiveHdl)();
     void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::RefEdit* pEdit, formula::RefButton* pButton );
-    void            (ScRefHandlerCaller::*m_pRefInputStartPostHdl)( formula::RefEdit* pEdit, formula::RefButton* pButton );
-    void            (ScRefHandlerCaller::*m_pRefInputDonePreHdl)();
     void            (ScRefHandlerCaller::*m_pRefInputDonePostHdl)();
 
 public:
@@ -66,7 +64,7 @@ public:
     void    SetRefInputStartPreHdl( PINPUTSTARTDLTYPE pNewHdl   ){  m_pRefInputStartPreHdl = pNewHdl;   }
     void    SetRefInputDonePostHdl( void            (ScRefHandlerCaller::*pNewHdl)()    ){  m_pRefInputDonePostHdl = pNewHdl;   }
 
-    ScRefHandlerHelper():m_pHandler(nullptr), m_pSetReferenceHdl( nullptr ), m_pSetActiveHdl(nullptr),  m_pRefInputStartPreHdl( nullptr ), m_pRefInputStartPostHdl( nullptr ), m_pRefInputDonePreHdl( nullptr ),  m_pRefInputDonePostHdl( nullptr ){}
+    ScRefHandlerHelper():m_pHandler(nullptr), m_pSetReferenceHdl( nullptr ), m_pSetActiveHdl(nullptr),  m_pRefInputStartPreHdl( nullptr ), m_pRefInputDonePostHdl( nullptr ){}
 };
 
 class ScValidationDlg;
@@ -222,17 +220,12 @@ public:
             (m_pHandler->*m_pRefInputStartPreHdl)( pEdit, pButton );
         m_bRefInputting = true;
         ScValidationDlgBase::RefInputStart( pEdit, pButton );
-        if ( m_pHandler && m_pRefInputStartPostHdl )
-            (m_pHandler->*m_pRefInputStartPostHdl)( pEdit, pButton );
     }
 
     virtual void        RefInputDone( bool bForced = false ) override
     {
         if( !CanInputDone( bForced ) )
             return;
-
-        if ( m_pHandler && m_pRefInputDonePreHdl )
-            (m_pHandler->*m_pRefInputDonePreHdl)();
 
         ScValidationDlgBase::RefInputDone( bForced );
         m_bRefInputting = false;

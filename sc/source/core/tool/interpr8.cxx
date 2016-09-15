@@ -95,7 +95,7 @@ private:
 
     // constants used in determining best fit for alpha, beta, gamma
     const double cfMinABCResolution = 0.001;  // minimum change of alpha, beta, gamma
-    const SCSIZE cnScenarios = 1000;          // No. of scenarios to calculate for PI calculations
+    static const SCSIZE cnScenarios = 1000;   // No. of scenarios to calculate for PI calculations
 
     bool initData();
     bool prefillBaseData();

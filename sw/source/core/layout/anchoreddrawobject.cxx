@@ -126,8 +126,6 @@ Point SwPosNotify::LastObjPos() const
 class SwObjPosOscillationControl
 {
     private:
-        sal_uInt8 mnPosStackSize;
-
         const SwAnchoredDrawObject* mpAnchoredDrawObj;
 
         std::vector<Point*> maObjPositions;
@@ -141,8 +139,7 @@ class SwObjPosOscillationControl
 
 SwObjPosOscillationControl::SwObjPosOscillationControl(
                                 const SwAnchoredDrawObject& _rAnchoredDrawObj )
-    : mnPosStackSize( 20 ),
-      mpAnchoredDrawObj( &_rAnchoredDrawObj )
+    : mpAnchoredDrawObj( &_rAnchoredDrawObj )
 {
 }
 
@@ -161,7 +158,7 @@ bool SwObjPosOscillationControl::OscillationDetected()
 {
     bool bOscillationDetected = false;
 
-    if ( maObjPositions.size() == mnPosStackSize )
+    if ( maObjPositions.size() == 20 )
     {
         // position stack is full -> oscillation
         bOscillationDetected = true;

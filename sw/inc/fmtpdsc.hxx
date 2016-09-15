@@ -39,7 +39,6 @@ class SwEndNoteInfo;
 class SW_DLLPUBLIC SwFormatPageDesc : public SfxPoolItem, public SwClient
 {
     ::boost::optional<sal_uInt16> oNumOffset;          ///< Offset page number.
-    sal_uInt16 nDescNameIdx;        ///< SW3-Reader: stringpool-index of style name.
     SwModify* pDefinedIn;       /**< Points to the object in which the
                                  attribute was set (ContentNode/Format). */
 protected:

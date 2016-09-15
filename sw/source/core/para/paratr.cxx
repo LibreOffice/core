@@ -54,7 +54,6 @@ SwFormatDrop::SwFormatDrop()
     SwClient( nullptr ),
     pDefinedIn( nullptr ),
     nDistance( 0 ),
-    nReadFormat( USHRT_MAX ),
     nLines( 0 ),
     nChars( 0 ),
     bWholeWord( false )
@@ -66,7 +65,6 @@ SwFormatDrop::SwFormatDrop( const SwFormatDrop &rCpy )
     SwClient( rCpy.GetRegisteredInNonConst() ),
     pDefinedIn( nullptr ),
     nDistance( rCpy.GetDistance() ),
-    nReadFormat( rCpy.nReadFormat ),
     nLines( rCpy.GetLines() ),
     nChars( rCpy.GetChars() ),
     bWholeWord( rCpy.GetWholeWord() )
@@ -84,7 +82,6 @@ void SwFormatDrop::SetCharFormat( SwCharFormat *pNew )
         GetRegisteredInNonConst()->Remove( this );
     if(pNew)
         pNew->Add( this );
-    nReadFormat = USHRT_MAX;
 }
 
 void SwFormatDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )

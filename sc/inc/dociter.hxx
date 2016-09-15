@@ -268,7 +268,6 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
 
     std::unique_ptr<ScQueryParam> mpParam;
     ScDocument*     pDoc;
-    const ScAttrArray*  pAttrArray;
     SCTAB           nTab;
     SCCOL           nCol;
     SCROW           nRow;
@@ -459,7 +458,6 @@ private:
     SCROW                     nCurRow;
     SCTAB                     nCurTab;
     SCROW                     nAttrEndRow;
-    bool                      bNumValid;
     bool                      bCalcAsShown;
 
 public:

@@ -216,8 +216,8 @@ private:
     OUString        msEffectName;
     CustomAnimationEffectPtr mpEffect;
     const CustomAnimationPresets* mpCustomAnimationPresets;
-    const long nIconWidth = 19;
-    const long nItemMinHeight = 38;
+    static const long nIconWidth = 19;
+    static const long nItemMinHeight = 38;
 };
 
 CustomAnimationListEntryItem::CustomAnimationListEntryItem( const OUString& aDescription, const CustomAnimationEffectPtr& pEffect, CustomAnimationList* pParent  )
@@ -384,7 +384,7 @@ public:
 
 private:
     OUString        msDescription;
-    const long nIconWidth = 19;
+    static const long nIconWidth = 19;
 };
 
 CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( const OUString& aDescription )

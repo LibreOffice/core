@@ -77,7 +77,6 @@ X11SalGraphics::X11SalGraphics():
     m_nXScreen( 0 ),
     m_pXRenderFormat(nullptr),
     m_aXRenderPicture(0),
-    pPaintRegion_(nullptr),
     mpClipRegion(nullptr),
 #if ENABLE_CAIRO_CANVAS
     maClipRegion(),
@@ -117,7 +116,6 @@ void X11SalGraphics::freeResources()
 {
     Display *pDisplay = GetXDisplay();
 
-    SAL_WARN_IF( pPaintRegion_, "vcl", "pPaintRegion_" );
     if( mpClipRegion )
     {
         XDestroyRegion( mpClipRegion );

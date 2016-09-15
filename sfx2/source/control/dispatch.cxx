@@ -115,8 +115,6 @@ struct SfxDispatcher_Impl
         for (SfxRequestPtrArray::iterator aI = aReqArr.begin(), aEnd = aReqArr.end(); aI != aEnd; ++aI)
             delete *aI;
     }
-    const SfxSlotServer* pCachedServ1;  // last called message
-    const SfxSlotServer* pCachedServ2;  // penultimate called Message
     SfxShellStack_Impl   aStack;        // active functionality
     Idle                 aIdle;        // for Flush
     std::deque<SfxToDo_Impl> aToDoStack;    // not processed Push/Pop
@@ -425,8 +423,6 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     xImp.reset(new SfxDispatcher_Impl);
     xImp->bFlushed = true;
 
-    xImp->pCachedServ1 = nullptr;
-    xImp->pCachedServ2 = nullptr;
     xImp->bFlushing = false;
     xImp->bUpdated = false;
     xImp->bLocked = false;
@@ -1579,12 +1575,6 @@ void SfxDispatcher::FlushImpl()
     // Invalidate bindings, if possible
     if ( !pSfxApp->IsDowning() )
     {
-        if ( bModify )
-        {
-            xImp->pCachedServ1 = nullptr;
-            xImp->pCachedServ2 = nullptr;
-        }
-
         InvalidateBindings_Impl( bModify );
     }
 
@@ -2187,8 +2177,6 @@ void SfxDispatcher::RemoveShell_Impl( SfxShell& rShell )
     if ( !SfxGetpApp()->IsDowning() )
     {
         xImp->bUpdated = false;
-        xImp->pCachedServ1 = nullptr;
-        xImp->pCachedServ2 = nullptr;
         InvalidateBindings_Impl(true);
     }
 }

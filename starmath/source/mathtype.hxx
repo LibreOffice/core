@@ -66,7 +66,6 @@ public:
         , nVAlign(0)
         , nPendingAttributes(0)
         , nInsertion(0)
-        , nDefaultSize(12)
         , nLSize(0)
         , nDSize(0)
         , nCurSize(0)
@@ -93,7 +92,6 @@ public:
         , nVAlign(0)
         , nPendingAttributes(0)
         , nInsertion(0)
-        , nDefaultSize(12)
         , nLSize(0)
         , nDSize(0)
         , nCurSize(0)
@@ -172,7 +170,6 @@ private:
     sal_uLong nInsertion;
 
     std::vector<sal_Int16> aSizeTable;
-    sal_Int16 nDefaultSize;
     sal_Int16 nLSize;
     sal_Int16 nDSize;
     sal_Int16 nCurSize;

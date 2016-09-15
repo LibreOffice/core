@@ -78,8 +78,7 @@ void ScNavigatorDlg::ReleaseFocus()
 ColumnEdit::ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId )
     :   SpinField   ( pParent, rResId ),
         rDlg        ( *pParent ),
-        nCol        ( 0 ),
-        nKeyGroup   ( KEYGROUP_ALPHA )
+        nCol        ( 0 )
 {
     SetMaxTextLen( SCNAV_COLDIGITS );   // 1...256...18278 or A...IV...ZZZ
 }
@@ -169,7 +168,6 @@ void ColumnEdit::EvalText()
         nCol = 0;
 
     SetText( aStrCol );
-    nKeyGroup = KEYGROUP_ALPHA;
 }
 
 void ColumnEdit::ExecuteCol()

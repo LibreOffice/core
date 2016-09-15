@@ -200,8 +200,6 @@ class SwOszControl
     static const SwFlyFrame *pStack5;
 
     const SwFlyFrame *pFly;
-    // #i3317#
-    sal_uInt8 mnPosStackSize;
     std::vector<Point*> maObjPositions;
 
 public:
@@ -218,9 +216,7 @@ const SwFlyFrame *SwOszControl::pStack4 = nullptr;
 const SwFlyFrame *SwOszControl::pStack5 = nullptr;
 
 SwOszControl::SwOszControl( const SwFlyFrame *pFrame )
-    : pFly( pFrame ),
-      // #i3317#
-      mnPosStackSize( 20 )
+    : pFly( pFrame )
 {
     if ( !SwOszControl::pStack1 )
         SwOszControl::pStack1 = pFly;
@@ -275,9 +271,9 @@ bool SwOszControl::ChkOsz()
 {
     bool bOscillationDetected = false;
 
-    if ( maObjPositions.size() == mnPosStackSize )
+    if ( maObjPositions.size() == 20 )
     {
-        // position stack is full -> oscillation
+        // #i3317# position stack is full -> oscillation
         bOscillationDetected = true;
     }
     else

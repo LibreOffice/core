@@ -4055,21 +4055,6 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTableRowsObj )
 
 ScSpreadsheetSettingsObj::~ScSpreadsheetSettingsObj()
 {
-    SolarMutexGuard g;
-
-    if (pDocShell)
-        pDocShell->GetDocument().RemoveUnoObject(*this);
-}
-
-void ScSpreadsheetSettingsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
-{
-    //  Referenz-Update interessiert hier nicht
-
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
-    {
-        pDocShell = nullptr;       // ungueltig geworden
-    }
 }
 
 // XPropertySet

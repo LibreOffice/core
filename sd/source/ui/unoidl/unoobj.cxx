@@ -797,10 +797,6 @@ css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
         case WID_STYLE:
             aRet = GetStyleSheet();
             break;
-        case WID_ANIMPATH:
-            if( pInfo && pInfo->mpPathObj )
-                aRet <<= pInfo->mpPathObj->getUnoShape();
-            break;
         case WID_IMAGEMAP:
             {
                 uno::Reference< uno::XInterface > xImageMap;

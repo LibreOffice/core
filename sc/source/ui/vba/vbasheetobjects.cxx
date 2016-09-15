@@ -354,7 +354,6 @@ protected:
 protected:
     uno::Reference< container::XIndexContainer > mxFormIC;
     OUString maModelServiceName;
-    sal_Int16 mnComponentType;
 };
 
 ScVbaControlContainer::ScVbaControlContainer(
@@ -365,8 +364,7 @@ ScVbaControlContainer::ScVbaControlContainer(
         const uno::Type& rVbaType,
         const OUString& rModelServiceName ) throw (uno::RuntimeException) :
     ScVbaObjectContainer( rxParent, rxContext, rxModel, rxSheet, rVbaType ),
-    maModelServiceName( rModelServiceName ),
-    mnComponentType( form::FormComponentType::COMMANDBUTTON )
+    maModelServiceName( rModelServiceName )
 {
 }
 
@@ -399,7 +397,7 @@ bool ScVbaControlContainer::implPickShape( const uno::Reference< drawing::XShape
         uno::Reference< beans::XPropertySet > xModelProps( xControlShape->getControl(), uno::UNO_QUERY_THROW );
         sal_Int16 nClassId = -1;
         return lclGetProperty( nClassId, xModelProps, "ClassId" ) &&
-            (nClassId == mnComponentType) && implCheckProperties( xModelProps );
+            (nClassId == form::FormComponentType::COMMANDBUTTON) && implCheckProperties( xModelProps );
     }
     catch( uno::Exception& )
     {

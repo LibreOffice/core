@@ -916,7 +916,6 @@ private:
     long nCpO;                      // Origin Cp -- the basis for nNewCp
 
     WW8_CP nLineEnd;                // points *after* the <CR>
-    long nLastWhereIdxCp;           // last result of WhereIdx()
     sal_uInt16 nPLCF;                   // this many PLCFs are managed
     ManTypes nManType;
     bool mbDoingDrawTextBox;        //Normally we adjust the end of attributes

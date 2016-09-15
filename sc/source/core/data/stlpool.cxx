@@ -59,8 +59,7 @@ ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
                                     ScDocument*     pDocument )
     :   SfxStyleSheetPool( rPoolP ),
         pActualStyleSheet( nullptr ),
-        pDoc( pDocument ),
-        pForceStdName( nullptr )
+        pDoc( pDocument )
 {
 }
 

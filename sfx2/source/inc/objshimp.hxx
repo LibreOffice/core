@@ -109,7 +109,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     sal_uInt16          nEventId;           // If Open/Create as to be sent
                                             // before Activate
     AutoReloadTimer_Impl *pReloadTimer;
-    MarkData_Impl*      pMarkData;
     SfxLoadedFlags      nLoadedFlags;
     SfxLoadedFlags      nFlagsInProgress;
     bool                bModalMode;

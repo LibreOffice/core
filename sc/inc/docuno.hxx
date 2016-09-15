@@ -775,13 +775,8 @@ class ScSpreadsheetSettingsObj : public cppu::WeakImplHelper<
                                     css::lang::XServiceInfo>,
                                  public SfxListener
 {
-private:
-    ScDocShell*             pDocShell;
-
 public:
     virtual                 ~ScSpreadsheetSettingsObj() override;
-
-    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             /// XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >

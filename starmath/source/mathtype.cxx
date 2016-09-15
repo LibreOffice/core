@@ -1820,6 +1820,7 @@ void MathType::HandleAlign(sal_uInt8 nHorAlign, sal_uInt8 /*nVAlign*/, int &rSet
  * indicator by mathtype file format*/
 bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
 {
+    const sal_Int16 nDefaultSize = 12;
     bool bRet=false;
     if (nLstSize < 0)
     {

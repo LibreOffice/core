@@ -142,8 +142,6 @@ private:
     rtl::Reference< jvmaccess::VirtualMachine > m_xVirtualMachine;
     rtl::Reference< jvmaccess::UnoVirtualMachine > m_xUnoVirtualMachine;
     JavaVM * m_pJavaVm;
-        // stored as an instance member for backwards compatibility in getJavaVM
-    bool m_bDontCreateJvm;
         // If the first creation of Java failed and this flag is set then the
         // next call to getJavaVM throws a RuntimException.  This is useful when
         // the second attempt to create Java might cause a crash.

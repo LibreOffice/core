@@ -274,39 +274,6 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
         GetItemSet().SetParent( nullptr );
 }
 
-// Dirty tricks, to always save the default template as "standard"
-// even though when shown to the user it is renamed:
-
-const OUString& ScStyleSheet::GetName() const
-{
-    const OUString& rBase = SfxStyleSheet::GetName();
-    const OUString* pForceStdName = static_cast<ScStyleSheetPool*>(pPool)->GetForceStdName();
-    if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
-        return *pForceStdName;
-    else
-        return rBase;
-}
-
-const OUString& ScStyleSheet::GetParent() const
-{
-    const OUString& rBase = SfxStyleSheet::GetParent();
-    const OUString* pForceStdName = static_cast<ScStyleSheetPool*>(pPool)->GetForceStdName();
-    if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
-        return *pForceStdName;
-    else
-        return rBase;
-}
-
-const OUString& ScStyleSheet::GetFollow() const
-{
-    const OUString& rBase = SfxStyleSheet::GetFollow();
-    const OUString* pForceStdName = static_cast<ScStyleSheetPool*>(pPool)->GetForceStdName();
-    if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
-        return *pForceStdName;
-    else
-        return rBase;
-}
-
 // Avoid creating a Style "Standard" if this is not the Standard-Name;
 // otherwise two styles would have the same name when storing.
 // (on loading the style is created directly per Make with the name; making this query

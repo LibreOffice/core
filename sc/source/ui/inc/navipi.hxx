@@ -136,7 +136,6 @@ protected:
 private:
     ScNavigatorDlg& rDlg;
     SCCOL           nCol;
-    sal_uInt16          nKeyGroup;
 
     void    EvalText        ();
     void    ExecuteCol      ();

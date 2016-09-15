@@ -547,7 +547,6 @@ protected:
     bool                mbRelativeAsOffset;         /// True = relative row/column index is (signed) offset, false = explicit index.
     bool                mb2dRefsAs3dRefs;           /// True = convert all 2D references to 3D references in sheet specified by base address.
     bool                mbSpecialTokens;            /// True = special handling for tExp and tTbl tokens, false = exit with error.
-    bool                mbAllowNulChars;            /// True = keep NUL characters in string tokens.
 
 private:
     typedef ::std::vector< size_t > SizeTypeVector;
@@ -569,8 +568,7 @@ FormulaParserImpl::FormulaParserImpl( const FormulaParser& rParent ) :
     mnMaxXlsRow( rParent.getAddressConverter().getMaxXlsAddress().Row() ),
     mbRelativeAsOffset( false ),
     mb2dRefsAs3dRefs( false ),
-    mbSpecialTokens( false ),
-    mbAllowNulChars( false )
+    mbSpecialTokens( false )
 {
     // reserve enough space to make resize(), push_back() etc. cheap
     maTokenStorage.reserve( 0x2000 );
@@ -618,7 +616,7 @@ OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId, bool bUseRefShee
 void FormulaParserImpl::initializeImport( const CellAddress& rBaseAddr, FormulaType eType )
 {
     maBaseAddr = ScAddress( rBaseAddr.Column, rBaseAddr.Row, rBaseAddr.Sheet );
-    mbRelativeAsOffset = mb2dRefsAs3dRefs = mbSpecialTokens = mbAllowNulChars = false;
+    mbRelativeAsOffset = mb2dRefsAs3dRefs = mbSpecialTokens = false;
     switch( eType )
     {
         case FORMULATYPE_CELL:
@@ -634,8 +632,6 @@ void FormulaParserImpl::initializeImport( const CellAddress& rBaseAddr, FormulaT
         break;
         case FORMULATYPE_VALIDATION:
             mbRelativeAsOffset = true;
-            // enable NUL characters in BIFF import, string list is single tStr token with NUL separators
-            mbAllowNulChars = false;
         break;
         case FORMULATYPE_DEFINEDNAME:
             mbRelativeAsOffset = true;

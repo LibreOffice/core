@@ -62,8 +62,6 @@ private:
     sal_uInt32 m_nReadBufferSize;
     sal_uInt32 m_nReadBufferFilled;
     sal_uInt32 m_nPageSize;
-    sal_uInt32 m_nMinPages;
-    sal_uInt32 m_nMaxPages;
     sal_uInt32 m_nPages;
     bool m_bEOF;
 
@@ -100,8 +98,6 @@ SvDataPipe_Impl::SvDataPipe_Impl()
                           1000,
                           sal_uInt32(std::numeric_limits< sal_uInt32 >::max()
                                      - sizeof (Page) + 1)))
-    , m_nMinPages(100)
-    , m_nMaxPages(std::numeric_limits< sal_uInt32 >::max())
     , m_nPages( 0 )
     , m_bEOF( false )
 {}
@@ -463,7 +459,7 @@ void SvDataPipe_Impl::remove(Page * pPage)
 
     m_pFirstPage = m_pFirstPage->m_pNext;
 
-    if (m_nPages <= m_nMinPages)
+    if (m_nPages <= 100) // min pages
         return;
 
     pPage->m_pPrev->m_pNext = pPage->m_pNext;
@@ -595,7 +591,7 @@ void SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
 
             if (m_pWritePage->m_pNext == m_pFirstPage)
             {
-                if (m_nPages == m_nMaxPages)
+                if (m_nPages == std::numeric_limits< sal_uInt32 >::max())
                     break;
 
                 Page * pNew

@@ -38,15 +38,18 @@ for fieldInfo, assignValues in fieldAssignDict.iteritems():
         continue
     if "?" in assignValues:
         continue
-    # if it contains anything other than this set, ignore it
-    if len(assignValues - set(["0", "1", "-1", "nullptr"])) > 0:
-        continue
+    #if len(assignValues - set(["0", "1", "-1", "nullptr"])) > 0:
+    #    continue
     # ignore things which are locally declared but are actually redeclarations of things from 3rd party code
-    parentClass = fieldInfo[0]
-    if parentClass == "_mwmhints":
+    containingClass = fieldInfo[0]
+    if containingClass == "_mwmhints":
         continue
     # ignore things which are representations of on-disk structures
-    if parentClass in ["SEPr", "WW8Dop", ]:
+    if containingClass in ["SEPr", "WW8Dop", "BmpInfoHeader", "BmpFileHeader", "Exif::ExifIFD",
+            "sw::WW8FFData", "FFDataHeader", "INetURLHistory_Impl::head_entry"]:
+        continue
+    # Windows-only
+    if containingClass in ["SfxAppData_Impl", "sfx2::ImplDdeItem"]:
         continue
     v0 = fieldInfo[0] + " " + fieldInfo[1]
     v1 = (",".join(assignValues))

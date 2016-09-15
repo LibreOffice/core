@@ -948,7 +948,7 @@ public:
     DynamicKernelSlidingArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index = 0 ) :
-        Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(nullptr)
+        Base(config, s, ft, index), mpCodeGen(CodeGen)
     {
         FormulaToken* t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
@@ -1101,13 +1101,6 @@ public:
     }
     ~DynamicKernelSlidingArgument()
     {
-        if (mpClmem2)
-        {
-            cl_int err;
-            err = clReleaseMemObject(mpClmem2);
-            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
-            mpClmem2 = nullptr;
-        }
     }
 
     size_t GetArrayLength() const { return mpDVR->GetArrayLength(); }
@@ -1123,8 +1116,6 @@ protected:
     const formula::DoubleVectorRefToken* mpDVR;
     // from parent nodes
     std::shared_ptr<SlidingFunctionBase> mpCodeGen;
-    // controls whether to invoke the reduction kernel during marshaling or not
-    cl_mem mpClmem2;
 };
 
 /// A mixed string/numberic vector

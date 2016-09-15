@@ -789,8 +789,7 @@ namespace {
             const sal_uInt16 nPaperTray)
             : PrinterPage(ePageKind, MapMode(), bPrintMarkedOnly, rsPageString,
                 rPageStringOffset, nDrawMode, eOrientation, nPaperTray),
-              mnPageIndex(nPageIndex),
-              mnGap(500)
+              mnPageIndex(nPageIndex)
         {
         }
 
@@ -850,7 +849,7 @@ namespace {
 
     private:
         const sal_uInt16 mnPageIndex;
-        const sal_Int32 mnGap;
+        static const sal_Int32 mnGap = 500;
     };
 
     /** Print two slides to one printer page so that the resulting pages

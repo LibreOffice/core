@@ -894,8 +894,6 @@ public:
     explicit Tokens2RangeStringXML(ScDocument* pDoc) :
         mpRangeStr(new OUStringBuffer),
         mpDoc(pDoc),
-        mcRangeSep(' '),
-        mcAddrSep(':'),
         mbFirst(true)
     {
     }
@@ -903,8 +901,6 @@ public:
     Tokens2RangeStringXML(const Tokens2RangeStringXML& r) :
         mpRangeStr(r.mpRangeStr),
         mpDoc(r.mpDoc),
-        mcRangeSep(r.mcRangeSep),
-        mcAddrSep(r.mcAddrSep),
         mbFirst(r.mbFirst)
     {
     }
@@ -984,10 +980,10 @@ private:
 
 private:
     shared_ptr<OUStringBuffer>  mpRangeStr;
-    ScDocument*         mpDoc;
-    sal_Unicode         mcRangeSep;
-    sal_Unicode         mcAddrSep;
-    bool                mbFirst;
+    ScDocument*                 mpDoc;
+    static const sal_Unicode    mcRangeSep = ' ';
+    static const sal_Unicode    mcAddrSep = ':';
+    bool                        mbFirst;
 };
 
 void lcl_convertTokensToString(OUString& rStr, const vector<ScTokenRef>& rTokens, ScDocument* pDoc)

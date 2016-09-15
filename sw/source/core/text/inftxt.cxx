@@ -1438,7 +1438,6 @@ void SwTextFormatInfo::Init()
     m_pRoot = nullptr;
     m_pLast = nullptr;
     m_pFly = nullptr;
-    m_pLastField = nullptr;
     m_pLastTab = nullptr;
     m_pUnderflow = nullptr;
     m_cTabDecimal = 0;
@@ -1473,7 +1472,6 @@ SwTextFormatInfo::SwTextFormatInfo( const SwTextFormatInfo& rInf,
     m_pRoot = &rLay;
     m_pLast = &rLay;
     m_pFly = nullptr;
-    m_pLastField = nullptr;
     m_pUnderflow = nullptr;
     m_pRest = nullptr;
     m_pLastTab = nullptr;
