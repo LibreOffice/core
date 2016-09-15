@@ -590,7 +590,11 @@ void Connection::loadDatabaseFile(const OUString& srcLocation, const OUString& t
 isc_svc_handle Connection::attachServiceManager()
 {
     ISC_STATUS_ARRAY aStatusVector;
+#if SAL_TYPES_SIZEOFPOINTER == 8
     isc_svc_handle aServiceHandle = 0;
+#else
+    isc_svc_handle aServiceHandle = nullptr;
+#endif
 
     char aSPBBuffer[256];
     char* pSPB = aSPBBuffer;
