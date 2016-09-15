@@ -828,8 +828,8 @@ void FormulaDlg_Impl::FillListboxes()
     }
     else if ( pData )
     {
-        pFuncPage->SetCategory( pData->GetCatSel() );
-        pFuncPage->SetFunction( pData->GetFuncSel() );
+        pFuncPage->SetCategory( 1 );
+        pFuncPage->SetFunction( LISTBOX_ENTRY_NOTFOUND );
     }
     FuncSelHdl(*pFuncPage);
 
@@ -1902,8 +1902,6 @@ void FormEditData::Reset()
     pParent = nullptr;
     nMode = 0;
     nFStart = 0;
-    nCatSel = 1;        //! oder 0 (zuletzt benutzte)
-    nFuncSel = LISTBOX_ENTRY_NOTFOUND;
     nOffset = 0;
     nEdFocus = 0;
     bMatrix = false;
@@ -1918,8 +1916,6 @@ FormEditData& FormEditData::operator=( const FormEditData& r )
     pParent         = r.pParent;
     nMode           = r.nMode;
     nFStart         = r.nFStart;
-    nCatSel         = r.nCatSel;
-    nFuncSel        = r.nFuncSel;
     nOffset         = r.nOffset;
     nEdFocus        = r.nEdFocus;
     aUndoStr        = r.aUndoStr;

@@ -1260,8 +1260,7 @@ SharedConfigData::SharedConfigData( const OUString& rFileName,
     mxContext( rxContext ),
     mxRootStrg( rxRootStrg ),
     maSysFileName( rSysFileName ),
-    mbLoaded( false ),
-    mbPwCancelled( false )
+    mbLoaded( false )
 {
     OUString aFileUrl = InputOutputHelper::convertFileNameToUrl( rFileName );
     if( !aFileUrl.isEmpty() )
@@ -1461,11 +1460,6 @@ void Config::eraseNameList( const String& rListName )
 NameListRef Config::getNameList( const String& rListName ) const
 {
     return implGetNameList( rListName );
-}
-
-bool Config::isPasswordCancelled() const
-{
-    return mxCfgData->isPasswordCancelled();
 }
 
 bool Config::implIsValid() const
@@ -2576,11 +2570,6 @@ DumperBase::~DumperBase()
 bool DumperBase::isImportEnabled() const
 {
     return !isValid() || cfg().isImportEnabled();
-}
-
-bool DumperBase::isImportCancelled() const
-{
-    return isValid() && cfg().isPasswordCancelled();
 }
 
 void DumperBase::construct( const ConfigRef& rxConfig )

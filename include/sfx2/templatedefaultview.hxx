@@ -29,7 +29,6 @@ public:
 protected:
     long    mnItemMaxSize;
     long    mnTextHeight;
-    long    mnItemPadding;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEDEFAULTVIEW_HXX

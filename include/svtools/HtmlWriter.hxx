@@ -28,7 +28,6 @@ private:
     bool mbElementOpen;
     bool mbContentWritten;
     bool mbPrettyPrint;
-    rtl_TextEncoding maEncoding;
 
 public:
     HtmlWriter(SvStream& rStream);

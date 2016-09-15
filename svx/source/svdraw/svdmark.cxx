@@ -47,7 +47,6 @@ SdrMark::SdrMark(SdrObject* pNewObj, SdrPageView* pNewPageView)
 :   mpSelectedSdrObject(pNewObj),
     mpPageView(pNewPageView),
     mpPoints(nullptr),
-    mpLines(nullptr),
     mpGluePoints(nullptr),
     mbCon1(false),
     mbCon2(false),
@@ -66,7 +65,6 @@ SdrMark::SdrMark(const SdrMark& rMark)
     mpSelectedSdrObject(nullptr),
     mpPageView(nullptr),
     mpPoints(nullptr),
-    mpLines(nullptr),
     mpGluePoints(nullptr),
     mbCon1(false),
     mbCon2(false),
@@ -82,20 +80,8 @@ SdrMark::~SdrMark()
         mpSelectedSdrObject->RemoveObjectUser( *this );
     }
 
-    if(mpPoints)
-    {
-        delete mpPoints;
-    }
-
-    if(mpLines)
-    {
-        delete mpLines;
-    }
-
-    if(mpGluePoints)
-    {
-        delete mpGluePoints;
-    }
+    delete mpPoints;
+    delete mpGluePoints;
 }
 
 void SdrMark::ObjectInDestruction(const SdrObject& rObject)
@@ -147,26 +133,6 @@ SdrMark& SdrMark::operator=(const SdrMark& rMark)
         else
         {
             *mpPoints = *rMark.mpPoints;
-        }
-    }
-
-    if(!rMark.mpLines)
-    {
-        if(mpLines)
-        {
-            delete mpLines;
-            mpLines = nullptr;
-        }
-    }
-    else
-    {
-        if(!mpLines)
-        {
-            mpLines = new SdrUShortCont(*rMark.mpLines);
-        }
-        else
-        {
-            *mpLines = *rMark.mpLines;
         }
     }
 

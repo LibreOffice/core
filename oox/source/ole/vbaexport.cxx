@@ -402,7 +402,6 @@ VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length, Sv
     ,mnUnencryptedByte1(0)
     ,mnEncryptedByte1(0)
     ,mnEncryptedByte2(0)
-    ,mnVersion(2)
     ,mnProjKey(nProjKey)
     ,mnIgnoredLength(0)
     ,mnSeed(pSeed ? *pSeed : 0x00)
@@ -424,6 +423,7 @@ void VBAEncryption::writeSeed()
 
 void VBAEncryption::writeVersionEnc()
 {
+    static const sal_uInt8 mnVersion = 2; // the encrypted version
     mnVersionEnc = mnSeed ^ mnVersion;
     exportString(mrEncryptedData, createHexStringFromDigit(mnVersionEnc));
 }

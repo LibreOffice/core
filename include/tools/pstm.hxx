@@ -137,7 +137,6 @@ private:
     UniqueIndex<SvPersistBase>
                         aPUIdx;
     Index               nStartIdx;
-    const SvPersistStream * pRefStm;
 
     virtual std::size_t GetData(void* pData, std::size_t nSize) override;
     virtual std::size_t PutData(const void* pData, std::size_t nSize) override;

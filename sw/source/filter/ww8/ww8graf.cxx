@@ -2802,15 +2802,6 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         aSet.Put(makeSdrTextAutoGrowHeightItem(false));
         aSet.Put(makeSdrTextAutoGrowWidthItem(false));
         pSdrTextObj->SetMergedItemSet(aSet);
-
-        long nAngle = pRecord->nTextRotationAngle;
-        if ( nAngle )
-        {
-            double a = nAngle*nPi180;
-            pSdrTextObj->NbcRotate(pSdrTextObj->GetCurrentBoundRect().Center(), nAngle,
-                sin(a), cos(a) );
-        }
-
         pSdrTextObj->NbcSetLayer( pThisGroup->GetLayer() );
         pThisGroup->GetSubList()->NbcInsertObject(pSdrTextObj);
     }

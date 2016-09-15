@@ -1464,7 +1464,6 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                 ReadFontCollection();
 
             // reading TxPF, TxSI
-            PPTTextCharacterStyleAtomInterpreter    aTxCFStyle; // SJ: TODO, this atom needs to be interpreted, it contains character default styles for standard objects (instance4)
             PPTTextParagraphStyleAtomInterpreter    aTxPFStyle;
             PPTTextSpecInfoAtomInterpreter          aTxSIStyle; // styles (default language setting ... )
 
@@ -1607,7 +1606,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                                 if ( aTxSIStyle.bValid && !aTxSIStyle.aList.empty() )
                                     aTxSI = *( aTxSIStyle.aList[ 0 ] );
 
-                                rE2.pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxCFStyle, aTxPFStyle, aTxSI );
+                                rE2.pStyleSheet = new PPTStyleSheet( aSlideHd, rStCtrl, *this, aTxPFStyle, aTxSI );
                                 pDefaultSheet = rE2.pStyleSheet;
                             }
                             if ( SeekToRec( rStCtrl, PPT_PST_ColorSchemeAtom, aSlideHd.GetRecEndFilePos() ) )
@@ -4026,8 +4025,8 @@ void PPTParaSheet::UpdateBulletRelSize(  sal_uInt32 nLevel, sal_uInt16 nFontHeig
 }
 
 PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, SdrPowerPointImport& rManager,
-                                const PPTTextCharacterStyleAtomInterpreter& /*rTxCFStyle*/, const PPTTextParagraphStyleAtomInterpreter& rTxPFStyle,
-                                    const PPTTextSpecInfo& rTextSpecInfo ) :
+                              const PPTTextParagraphStyleAtomInterpreter& rTxPFStyle,
+                              const PPTTextSpecInfo& rTextSpecInfo ) :
 
     PPTNumberFormatCreator  ( new PPTExtParaProv( rManager, rIn, &rSlideHd ) ),
     maTxSI                  ( rTextSpecInfo )
@@ -4636,21 +4635,6 @@ PPTTextRulerInterpreter::~PPTTextRulerInterpreter()
 {
     if ( ! ( --mpImplRuler->nRefCount ) )
         delete mpImplRuler;
-}
-
-PPTTextCharacterStyleAtomInterpreter::PPTTextCharacterStyleAtomInterpreter()
-    : nFlags1(0)
-    , nFlags2(0)
-    , nFlags3(0)
-    , n1(0)
-    , nFontHeight(0)
-    , nFontColor(0)
-{
-}
-
-
-PPTTextCharacterStyleAtomInterpreter::~PPTTextCharacterStyleAtomInterpreter()
-{
 }
 
 PPTTextParagraphStyleAtomInterpreter::PPTTextParagraphStyleAtomInterpreter() :

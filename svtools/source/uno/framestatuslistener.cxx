@@ -41,7 +41,6 @@ FrameStatusListener::FrameStatusListener(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame ) :
     OWeakObject()
-    ,   m_bInitialized( true )
     ,   m_bDisposed( false )
     ,   m_xFrame( xFrame )
     ,   m_xContext( rxContext )
@@ -170,44 +169,32 @@ void FrameStatusListener::addStatusListener( const OUString& aCommandURL )
         if ( pIter != m_aListenerMap.end() )
             return;
 
-        // Check if we are already initialized. Implementation starts adding itself as status listener when
-        // intialize is called.
-        if ( !m_bInitialized )
+        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+        if ( m_xContext.is() && xDispatchProvider.is() )
         {
-            // Put into the unordered_map of status listener. Will be activated when initialized is called
-            m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
-            return;
-        }
-        else
-        {
-            // Add status listener directly as intialize has already been called.
-            Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-            if ( m_xContext.is() && xDispatchProvider.is() )
+            Reference< XURLTransformer > xURLTransformer( css::util::URLTransformer::create( m_xContext ) );
+            aTargetURL.Complete = aCommandURL;
+            xURLTransformer->parseStrict( aTargetURL );
+            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
+
+            xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
+            if ( aIter != m_aListenerMap.end() )
             {
-                Reference< XURLTransformer > xURLTransformer( css::util::URLTransformer::create( m_xContext ) );
-                aTargetURL.Complete = aCommandURL;
-                xURLTransformer->parseStrict( aTargetURL );
-                xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
+                Reference< XDispatch > xOldDispatch( aIter->second );
+                aIter->second = xDispatch;
 
-                xStatusListener.set( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
-                if ( aIter != m_aListenerMap.end() )
+                try
                 {
-                    Reference< XDispatch > xOldDispatch( aIter->second );
-                    aIter->second = xDispatch;
-
-                    try
-                    {
-                        if ( xOldDispatch.is() )
-                            xOldDispatch->removeStatusListener( xStatusListener, aTargetURL );
-                    }
-                    catch (const Exception&)
-                    {
-                    }
+                    if ( xOldDispatch.is() )
+                        xOldDispatch->removeStatusListener( xStatusListener, aTargetURL );
                 }
-                else
-                    m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, xDispatch ));
+                catch (const Exception&)
+                {
+                }
             }
+            else
+                m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, xDispatch ));
         }
     }
 
@@ -230,9 +217,6 @@ void FrameStatusListener::bindListener()
 
     {
         SolarMutexGuard aSolarMutexGuard;
-
-        if ( !m_bInitialized )
-            return;
 
         // Collect all registered command URL's and store them temporary
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
@@ -298,9 +282,6 @@ void FrameStatusListener::bindListener()
 void FrameStatusListener::unbindListener()
 {
     SolarMutexGuard aSolarMutexGuard;
-
-    if ( !m_bInitialized )
-        return;
 
     // Collect all registered command URL's and store them temporary
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );

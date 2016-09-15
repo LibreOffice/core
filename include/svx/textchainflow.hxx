@@ -53,7 +53,6 @@ public:
 protected:
     // Cursor related
     bool mbPossiblyCursorOut;
-    CursorChainingEvent maCursorEvent;
     ESelection maOverflowPosSel;
     ESelection maPostChainingSel;
 

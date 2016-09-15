@@ -58,7 +58,6 @@ namespace drawinglayer
             geometry::ViewInformation3D*                mpLastRLGViewInformation;
 
             bool                                        mbSmoothNormals : 1; // Plane self
-            bool                                        mbSmoothHorizontalNormals : 1; // always
             bool                                        mbSmoothLids : 1; // Front/back
             bool                                        mbCharacterMode : 1;
             bool                                        mbCloseFront : 1;
@@ -98,7 +97,6 @@ namespace drawinglayer
             double getDiagonal() const { return mfDiagonal; }
             double getBackScale() const { return mfBackScale; }
             bool getSmoothNormals() const { return mbSmoothNormals; }
-            bool getSmoothHorizontalNormals() const { return mbSmoothHorizontalNormals; }
             bool getSmoothLids() const { return mbSmoothLids; }
             bool getCharacterMode() const { return mbCharacterMode; }
             bool getCloseFront() const { return mbCloseFront; }

@@ -56,7 +56,6 @@ SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream )
     , pStm( pStream )
     , aPUIdx( 1 )
     , nStartIdx( 1 )
-    , pRefStm( nullptr )
 {
     DBG_ASSERT( nStartIdx != 0, "zero index not allowed" );
     m_isWritable = true;
@@ -123,10 +122,7 @@ SvPersistStream::Index SvPersistStream::GetIndex( SvPersistBase * pObj ) const
     PersistBaseMap::const_iterator it = aPTable.find( pObj );
     if( it == aPTable.end() )
     {
-        if ( pRefStm )
-            return pRefStm->GetIndex( pObj );
-        else
-            return 0;
+        return 0;
     }
     return it->second;
 }
@@ -135,8 +131,6 @@ SvPersistBase * SvPersistStream::GetObject( Index nIdx ) const
 {
     if( nIdx >= nStartIdx )
         return aPUIdx.Get( nIdx );
-    else if( pRefStm )
-        return pRefStm->GetObject( nIdx );
     return nullptr;
 }
 

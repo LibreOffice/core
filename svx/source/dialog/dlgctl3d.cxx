@@ -249,6 +249,8 @@ void Svx3DPreviewControl::Set3DAttributes( const SfxItemSet& rAttr )
 #define NO_LIGHT_SELECTED           (0xffffffff)
 #define MAX_NUMBER_LIGHTS              (8)
 
+static const sal_Int32 g_nInteractionStartDistance = 5 * 5 * 2;
+
 Svx3DLightControl::Svx3DLightControl(vcl::Window* pParent, WinBits nStyle)
 :   Svx3DPreviewControl(pParent, nStyle),
     maChangeCallback(),
@@ -262,7 +264,6 @@ Svx3DLightControl::Svx3DLightControl(vcl::Window* pParent, WinBits nStyle)
     mfRotateY(45.0),
     mfRotateZ(0.0),
     maActionStartPoint(),
-    mnInteractionStartDistance(5 * 5 * 2),
     mfSaveActionStartHor(0.0),
     mfSaveActionStartVer(0.0),
     mfSaveActionStartRotZ(0.0),
@@ -604,7 +605,7 @@ void Svx3DLightControl::Tracking( const TrackingEvent& rTEvt )
 
         if(!mbMouseMoved)
         {
-            if(sal_Int32(aDeltaPos.X() * aDeltaPos.X() + aDeltaPos.Y() * aDeltaPos.Y()) > mnInteractionStartDistance)
+            if(sal_Int32(aDeltaPos.X() * aDeltaPos.X() + aDeltaPos.Y() * aDeltaPos.Y()) > g_nInteractionStartDistance)
             {
                 if(mbGeometrySelected)
                 {

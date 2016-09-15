@@ -26,7 +26,6 @@ VCL_BUILDER_FACTORY(TemplateDefaultView)
 TemplateDefaultView::TemplateDefaultView( Window* pParent)
     : TemplateLocalView(pParent)
     , mnTextHeight(30)
-    , mnItemPadding(5)//TODO:: Change padding to 10. It looks really crowded and occupied.
 {
     Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
