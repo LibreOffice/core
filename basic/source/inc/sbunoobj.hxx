@@ -268,8 +268,6 @@ class SbUnoServiceCtor : public SbxMethod
 
     css::uno::Reference< css::reflection::XServiceConstructorDescription > m_xServiceCtorDesc;
 
-    SbUnoServiceCtor* pNext;
-
 public:
 
     SbUnoServiceCtor( const OUString& aName_, css::uno::Reference< css::reflection::XServiceConstructorDescription > const & xServiceCtorDesc );

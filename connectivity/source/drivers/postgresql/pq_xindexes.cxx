@@ -98,9 +98,9 @@ void Indexes::refresh()
         {
             OStringBuffer buf;
             buf.append( "sdbcx.Indexes get refreshed for table " );
-            buf.append( OUStringToOString( m_schemaName, m_pSettings->encoding ) );
+            buf.append( OUStringToOString( m_schemaName, ConnectionSettings::encoding ) );
             buf.append( "." );
-            buf.append( OUStringToOString( m_tableName,m_pSettings->encoding ) );
+            buf.append( OUStringToOString( m_tableName, ConnectionSettings::encoding ) );
             log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear().getStr() );
         }
 

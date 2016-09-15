@@ -138,8 +138,6 @@ protected: // Data
 
     unsigned morkPos_;
     int nextAddValueId_;
-    int defaultScope_;
-    int defaultListScope_;
     int defaultTableId_;
 
     // Indicates entity is being parsed

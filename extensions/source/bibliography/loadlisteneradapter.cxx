@@ -62,7 +62,6 @@ namespace bib
     OComponentAdapterBase::OComponentAdapterBase( const Reference< XComponent >& _rxComp )
         :m_xComponent( _rxComp )
         ,m_pListener( nullptr )
-        ,m_nLockCount( 0 )
         ,m_bListening( false )
     {
         OSL_ENSURE( m_xComponent.is(), "OComponentAdapterBase::OComponentAdapterBase: invalid component!" );
@@ -166,35 +165,35 @@ namespace bib
 
     void SAL_CALL OLoadListenerAdapter::loaded( const EventObject& _rEvent ) throw (RuntimeException, std::exception)
     {
-        if ( !locked() && getLoadListener( ) )
+        if ( getLoadListener( ) )
             getLoadListener( )->_loaded( _rEvent );
     }
 
 
     void SAL_CALL OLoadListenerAdapter::unloading( const EventObject& _rEvent ) throw (RuntimeException, std::exception)
     {
-        if ( !locked() && getLoadListener( ) )
+        if ( getLoadListener( ) )
             getLoadListener( )->_unloading( _rEvent );
     }
 
 
     void SAL_CALL OLoadListenerAdapter::unloaded( const EventObject& _rEvent ) throw (RuntimeException, std::exception)
     {
-        if ( !locked() && getLoadListener( ) )
+        if ( getLoadListener( ) )
             getLoadListener( )->_unloaded( _rEvent );
     }
 
 
     void SAL_CALL OLoadListenerAdapter::reloading( const EventObject& _rEvent ) throw (RuntimeException, std::exception)
     {
-        if ( !locked() && getLoadListener( ) )
+        if ( getLoadListener( ) )
             getLoadListener( )->_reloading( _rEvent );
     }
 
 
     void SAL_CALL OLoadListenerAdapter::reloaded( const EventObject& _rEvent ) throw (RuntimeException, std::exception)
     {
-        if ( !locked() && getLoadListener( ) )
+        if ( getLoadListener( ) )
             getLoadListener( )->_reloaded( _rEvent );
     }
 

@@ -140,7 +140,6 @@ private:
 
     static css::uno::Sequence< OUString > m_aInterceptedURL;
 
-    comphelper::OInterfaceContainerHelper2*    m_pDisposeEventListeners;
     StatusChangeListenerContainer*    m_pStatCL;
 };
 

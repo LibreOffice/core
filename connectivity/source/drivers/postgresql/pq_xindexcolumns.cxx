@@ -109,7 +109,7 @@ void IndexColumns::refresh()
         {
             OStringBuffer buf;
             buf.append( "sdbcx.IndexColumns get refreshed for index " );
-            buf.append( OUStringToOString( m_indexName, m_pSettings->encoding ) );
+            buf.append( OUStringToOString( m_indexName, ConnectionSettings::encoding ) );
             log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear().getStr() );
         }
 

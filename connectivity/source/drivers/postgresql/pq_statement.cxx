@@ -243,7 +243,7 @@ void Statement::raiseSQLException(
     OUStringBuffer buf(128);
     buf.append( "pq_driver: ");
     buf.append(
-        OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) );
+        OUString( errorMsg, strlen(errorMsg), ConnectionSettings::encoding ) );
     buf.append( " (caused by statement '" );
     buf.append( sql );
     buf.append( "')" );
@@ -294,9 +294,9 @@ static void raiseSQLException(
         buf.append( "]" );
     }
     buf.append(
-        OUString( errorMsg, strlen(errorMsg) , pSettings->encoding ) );
+        OUString( errorMsg, strlen(errorMsg) , ConnectionSettings::encoding ) );
     buf.append( " (caused by statement '" );
-    buf.append( OStringToOUString( sql, pSettings->encoding ) );
+    buf.append( OStringToOUString( sql, ConnectionSettings::encoding ) );
     buf.append( "')" );
     OUString error = buf.makeStringAndClear();
     log( pSettings, LogLevel::ERROR, error );
@@ -351,7 +351,7 @@ static std::vector< OUString > lookupKeys(
                         {
                             OStringBuffer buf( 128 );
                             buf.append( "Can't offer updateable result set because table " );
-                            buf.append( OUStringToOString(name, pSettings->encoding) );
+                            buf.append( OUStringToOString(name, ConnectionSettings::encoding) );
                             buf.append( " is duplicated, add schema to resolve ambiguity" );
                             log( pSettings, LogLevel::INFO, buf.makeStringAndClear().getStr() );
                         }
@@ -368,7 +368,7 @@ static std::vector< OUString > lookupKeys(
         {
             OStringBuffer buf( 128 );
             buf.append( "Can't offer updateable result set ( table " );
-            buf.append( OUStringToOString(table, pSettings->encoding) );
+            buf.append( OUStringToOString(table, ConnectionSettings::encoding) );
             buf.append( " is unknown)" );
             log( pSettings, LogLevel::INFO, buf.makeStringAndClear().getStr() );
         }
@@ -415,7 +415,7 @@ static std::vector< OUString > lookupKeys(
             {
                 OStringBuffer buf( 128 );
                 buf.append( "Can't offer updateable result set ( table " );
-                buf.append( OUStringToOString(table, pSettings->encoding) );
+                buf.append( OUStringToOString(table, ConnectionSettings::encoding) );
                 buf.append( " does not have a primary key)" );
                 log( pSettings, LogLevel::INFO, buf.makeStringAndClear().getStr() );
             }
@@ -454,7 +454,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
         // in case it was a single insert, extract the name of the table,
         // otherwise the table name is empty
         *(data->pLastTableInserted) =
-            extractTableFromInsert( OStringToOUString( cmd, pSettings->encoding ) );
+            extractTableFromInsert( OStringToOUString( cmd, ConnectionSettings::encoding ) );
         if( isLog( pSettings, LogLevel::SQL ) )
         {
             OStringBuffer buf( 128 );
@@ -472,7 +472,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                 buf.append( *(data->pLastOidInserted) );
                 buf.append( ", diagnosedTable=" );
                 buf.append(
-                    OUStringToOString( *data->pLastTableInserted, pSettings->encoding ) );
+                    OUStringToOString( *data->pLastTableInserted, ConnectionSettings::encoding ) );
             }
             log( pSettings, LogLevel::SQL, buf.makeStringAndClear().getStr() );
         }
@@ -490,7 +490,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
         tokenizeSQL( cmd, vec );
         OUString sourceTable =
             OStringToOUString(
-                extractSingleTableFromSelect( vec ), pSettings->encoding );
+                extractSingleTableFromSelect( vec ), ConnectionSettings::encoding );
 
         if( data->concurrency ==
             css::sdbc::ResultSetConcurrency::UPDATABLE )
@@ -513,7 +513,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     if( -1 == PQfnumber(
                             result,
                             OUStringToOString( sourceTableKeys[i] ,
-                                               pSettings->encoding ).getStr()) )
+                                               ConnectionSettings::encoding ).getStr()) )
                     {
                         break;
                     }
@@ -539,11 +539,11 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                 {
                     OStringBuffer buf( 128 );
                     buf.append( "can't support updateable resultset for table " );
-                    buf.append( OUStringToOString( schema, pSettings->encoding ) );
+                    buf.append( OUStringToOString( schema, ConnectionSettings::encoding ) );
                     buf.append( "." );
-                    buf.append( OUStringToOString( table, pSettings->encoding ) );
+                    buf.append( OUStringToOString( table, ConnectionSettings::encoding ) );
                     buf.append( ", because resultset does not contain a part of the primary key ( column " );
-                    buf.append( OUStringToOString( sourceTableKeys[i], pSettings->encoding ) );
+                    buf.append( OUStringToOString( sourceTableKeys[i], ConnectionSettings::encoding ) );
                     buf.append( " is missing )" );
                     aReason = buf.makeStringAndClear();
                 }
@@ -552,9 +552,9 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
 
                     OStringBuffer buf( 128 );
                     buf.append( "can't support updateable resultset for table " );
-                    buf.append( OUStringToOString( schema, pSettings->encoding ) );
+                    buf.append( OUStringToOString( schema, ConnectionSettings::encoding ) );
                     buf.append( "." );
-                    buf.append( OUStringToOString( table, pSettings->encoding ) );
+                    buf.append( OUStringToOString( table, ConnectionSettings::encoding ) );
                     buf.append( ", because resultset table does not have a primary key " );
                     aReason = buf.makeStringAndClear();
                 }
@@ -580,7 +580,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     new FakedUpdateableResultSet(
                         data->refMutex, data->owner,
                         data->ppSettings,result, schema, table,
-                        OStringToOUString( aReason, pSettings->encoding) );
+                        OStringToOUString( aReason, ConnectionSettings::encoding) );
             }
 
         }
@@ -751,13 +751,13 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
             for( int i = 0 ; i < keyColumnNames.getLength() ; i ++ )
             {
                 OUString value;
-                OString columnName = OUStringToOString( keyColumnNames[i], pConnectionSettings->encoding );
+                OString columnName = OUStringToOString( keyColumnNames[i], ConnectionSettings::encoding );
                 String2StringMap::const_iterator ii = namedValues.begin();
                 for( ; ii != namedValues.end() ; ++ii )
                 {
                     if( columnName.equalsIgnoreAsciiCase( ii->first ) )
                     {
-                        value = OStringToOUString( ii->second , pConnectionSettings->encoding );
+                        value = OStringToOUString( ii->second , ConnectionSettings::encoding );
                         break;
                     }
                 }

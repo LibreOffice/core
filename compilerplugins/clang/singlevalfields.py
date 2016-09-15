@@ -52,12 +52,20 @@ for fieldInfo, assignValues in fieldAssignDict.iteritems():
         continue
     # ignore things which are representations of on-disk structures
     if containingClass in ["SEPr", "WW8Dop", "BmpInfoHeader", "BmpFileHeader", "Exif::ExifIFD",
-            "sw::WW8FFData", "FFDataHeader", "INetURLHistory_Impl::head_entry", "ImplPPTParaPropSet", "SvxSwAutoFormatFlags"]:
+            "sw::WW8FFData", "FFDataHeader", "INetURLHistory_Impl::head_entry", "ImplPPTParaPropSet", "SvxSwAutoFormatFlags",
+            "T602ImportFilter::T602ImportFilter::format602struct", "DataNode"]:
+        continue
+    if v2.startswith("hwpfilter/source"):
+        continue
+    # ignore things which are representations of structures from external code
+    if v2.startswith("desktop/unx/source/splashx.c"):
         continue
     # Windows-only
-    if containingClass in ["SfxAppData_Impl", "sfx2::ImplDdeItem", "SvFileStream", "DdeService", "DdeTopic", "DdeItem", "DdeConnection", "connectivity::sdbcx::OUser", "connectivity::sdbcx::OGroup", "connectivity::sdbcx::OCatalog"]:
+    if containingClass in ["SfxAppData_Impl", "sfx2::ImplDdeItem", "SvFileStream",
+            "DdeService", "DdeTopic", "DdeItem", "DdeConnection", "connectivity::sdbcx::OUser", "connectivity::sdbcx::OGroup", "connectivity::sdbcx::OCatalog",
+            "cairocanvas::SpriteHelper"]:
         continue
-    if v2.startswith("include/svl/svdde.hxx"):
+    if v2.startswith("include/svl/svdde.hxx") or v2.startswith("embeddedobj/source/inc/oleembobj.hxx"):
         continue
     # Some of our supported compilers don't do constexpr, which means o3tl::typed_flags can't be 'static const'
     if containingClass in ["WaitWindow_Impl"]:

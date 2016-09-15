@@ -52,27 +52,10 @@
 
 using namespace com::sun::star;
 
-struct SvxColorTabPageShadow
-{
-    PageType nUnknownType;
-    sal_Int32  nUnknownPos;
-    bool   bIsAreaTP;
-    ChangeType nChangeType;
-    SvxColorTabPageShadow()
-        : nUnknownType( PageType::Unknown )
-        , nUnknownPos( LISTBOX_ENTRY_NOTFOUND )
-        , bIsAreaTP( false )
-        , nChangeType( ChangeType::NONE )
-    {
-    }
-};
-
-
 SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "ColorPage", "cui/ui/colorpage.ui", &rInAttrs)
     , meType( XPropertyListType::Color )
     , mpTopDlg( GetParentDialog() )
-    , pShadow             ( new SvxColorTabPageShadow() )
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
     , pnColorListState( nullptr )
@@ -188,8 +171,6 @@ SvxColorTabPage::~SvxColorTabPage()
 
 void SvxColorTabPage::dispose()
 {
-    delete pShadow;
-    pShadow = nullptr;
     mpTopDlg.clear();
     m_pSelectPalette.clear();
     m_pValSetColorList.clear();

@@ -90,8 +90,6 @@ SFTreeListBox::SFTreeListBox(vcl::Window* pParent)
                    WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION |
                    WB_HASLINES | WB_HASLINESATROOT | WB_TABSTOP );
     SetNodeDefaultImages();
-
-    nMode = 0xFF;    // everything
 }
 
 VCL_BUILDER_FACTORY(SFTreeListBox)

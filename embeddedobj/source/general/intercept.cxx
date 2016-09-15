@@ -49,7 +49,6 @@ void Interceptor::DisconnectDocHolder()
 
 Interceptor::Interceptor( DocumentHolder* pDocHolder )
     : m_pDocHolder( pDocHolder ),
-      m_pDisposeEventListeners(nullptr),
       m_pStatCL(nullptr)
 {
     m_aInterceptedURL[0] = ".uno:Save";
@@ -58,12 +57,10 @@ Interceptor::Interceptor( DocumentHolder* pDocHolder )
     m_aInterceptedURL[3] = ".uno:CloseWin";
     m_aInterceptedURL[4] = ".uno:CloseFrame";
     m_aInterceptedURL[5] = ".uno:SaveAs";
-
 }
 
 Interceptor::~Interceptor()
 {
-    delete m_pDisposeEventListeners;
     delete m_pStatCL;
 }
 

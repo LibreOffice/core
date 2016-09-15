@@ -457,7 +457,6 @@ void ODbaseTable::fillColumns()
 ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConnection)
     : ODbaseTable_BASE(_pTables,_pConnection)
     , m_pMemoStream(nullptr)
-    , m_bWriteableMemo(false)
 {
     // initialize the header
     memset(&m_aHeader, 0, sizeof(m_aHeader));
@@ -477,7 +476,6 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables, ODbaseConnection* _pConne
                        SchemaName,
                        CatalogName)
     , m_pMemoStream(nullptr)
-    , m_bWriteableMemo(false)
 {
     memset(&m_aHeader, 0, sizeof(m_aHeader));
     m_eEncoding = getConnection()->getTextEncoding();
@@ -530,7 +528,6 @@ void ODbaseTable::construct()
             m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
             if ( !m_pMemoStream )
             {
-                m_bWriteableMemo = false;
                 m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
             }
             if (m_pMemoStream)

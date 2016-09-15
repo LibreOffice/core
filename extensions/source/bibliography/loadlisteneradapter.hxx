@@ -59,7 +59,6 @@ namespace bib
     private:
         css::uno::Reference< css::lang::XComponent >  m_xComponent;
         OComponentListener*                 m_pListener;
-        sal_Int32                           m_nLockCount;
         bool                                m_bListening    : 1;
 
         // impl method for dispose - virtual, 'cause you at least need to remove the listener from the broadcaster
@@ -89,10 +88,6 @@ namespace bib
     // base for ref-counting, implemented by OComponentAdapter
         virtual void SAL_CALL acquire(  ) throw () = 0;
         virtual void SAL_CALL release(  ) throw () = 0;
-
-    // helper
-        /// get the lock count
-        sal_Int32   locked() const { return m_nLockCount; }
 
         /// dispose the object - stop listening and such
         void dispose();

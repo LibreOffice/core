@@ -144,7 +144,7 @@ ResultSetMetaData::ResultSetMetaData(
             & ( m_colDesc[col].precision ),
             & ( m_colDesc[col].scale ) );
         char *name = PQfname( pResult, col );
-        m_colDesc[col].name = OUString( name, strlen(name) , (*m_ppSettings)->encoding );
+        m_colDesc[col].name = OUString( name, strlen(name) , ConnectionSettings::encoding );
         m_colDesc[col].typeOid = PQftype( pResult, col );
         m_colDesc[col].type = css::sdbc::DataType::LONGVARCHAR;
     }

@@ -322,7 +322,6 @@ SbiInstance::SbiInstance( StarBASIC* p )
     , bReschedule(true)
     , bCompatibility(false)
     , pRun(nullptr)
-    , pNext(nullptr)
     , nCallLvl(0)
     , nBreakCallLvl(0)
 {

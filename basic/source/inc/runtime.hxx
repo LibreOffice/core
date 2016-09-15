@@ -154,7 +154,6 @@ class SbiInstance
     ComponentVector_t ComponentVector;
 public:
     SbiRuntime*  pRun;              // Call-Stack
-    SbiInstance* pNext;             // instances chain
 
     // #31460 new concept for StepInto/Over/Out,
     // explanation see runtime.cxx at SbiInstance::CalcBreakCallLevel()

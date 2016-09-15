@@ -121,7 +121,7 @@ Any ResultSet::getValue( sal_Int32 columnIndex )
         ret <<= OUString(
             PQgetvalue( m_result, m_row , columnIndex -1 ) ,
             PQgetlength( m_result, m_row , columnIndex -1 ) ,
-            (*m_ppSettings)->encoding );
+            ConnectionSettings::encoding );
 
     }
     return ret;
@@ -160,7 +160,7 @@ sal_Int32 ResultSet::findColumn( const OUString& columnName )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     sal_Int32 res = PQfnumber( m_result,
-                               OUStringToOString( columnName, (*m_ppSettings)->encoding ).getStr());
+                               OUStringToOString( columnName, ConnectionSettings::encoding ).getStr());
     /* PQfnumber return -1 for not found, which is what we want
      * other than that we use col number as 1-based not 0-based */
     if(res >= 0)

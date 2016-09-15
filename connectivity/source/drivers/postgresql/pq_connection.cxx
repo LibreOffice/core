@@ -276,7 +276,7 @@ Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sq
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 
-    OString byteSql = OUStringToOString( sql, m_settings.encoding );
+    OString byteSql = OUStringToOString( sql, ConnectionSettings::encoding );
     PreparedStatement *stmt = new PreparedStatement( m_refMutex, this, &m_settings, byteSql );
     Reference< XPreparedStatement > ret = stmt;
 
@@ -365,7 +365,7 @@ OUString Connection::getCatalog() throw (SQLException, RuntimeException, std::ex
                             OUString(), 1, Any() );
     }
     char * p = PQdb(m_settings.pConnection );
-    return OUString( p, strlen(p) ,  m_settings.encoding );
+    return OUString( p, strlen(p) ,  ConnectionSettings::encoding );
 }
 
 void Connection::setTransactionIsolation( sal_Int32 )
@@ -523,7 +523,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         nColon = url.indexOf( ':' , 1+ nColon );
         if( nColon != -1 )
         {
-             o = OUStringToOString( url.getStr()+nColon+1, m_settings.encoding );
+             o = OUStringToOString( url.getStr()+nColon+1, ConnectionSettings::encoding );
         }
     }
     {
@@ -539,7 +539,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 OUString errorMessage;
                 if ( err != nullptr)
                 {
-                    errorMessage = OUString( err, strlen(err), m_settings.encoding );
+                    errorMessage = OUString( err, strlen(err), ConnectionSettings::encoding );
                     free(err);
                 }
                 else
@@ -563,7 +563,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 }
             }
         }
-        properties2arrays( args , tc, m_settings.encoding, keywords, values );
+        properties2arrays( args , tc, ConnectionSettings::encoding, keywords, values );
         keywords.push_back(nullptr, SAL_NO_ACQUIRE);
         values.push_back(nullptr, SAL_NO_ACQUIRE);
 
@@ -677,7 +677,7 @@ bool isLog( ConnectionSettings *settings, int loglevel )
 
 void log( ConnectionSettings *settings, sal_Int32 level, const OUString &logString )
 {
-    log( settings, level, OUStringToOString( logString, settings->encoding ).getStr() );
+    log( settings, level, OUStringToOString( logString, ConnectionSettings::encoding ).getStr() );
 }
 void log( ConnectionSettings *settings, sal_Int32 level, const char *str )
 {

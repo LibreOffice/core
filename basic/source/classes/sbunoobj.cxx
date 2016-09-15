@@ -3715,17 +3715,13 @@ static SbUnoServiceCtor* pFirstCtor = nullptr;
 void clearUnoServiceCtors()
 {
     SbUnoServiceCtor* pCtor = pFirstCtor;
-    while( pCtor )
-    {
+    if( pCtor )
         pCtor->SbxValue::Clear();
-        pCtor = pCtor->pNext;
-    }
 }
 
 SbUnoServiceCtor::SbUnoServiceCtor( const OUString& aName_, Reference< XServiceConstructorDescription > const & xServiceCtorDesc )
     : SbxMethod( aName_, SbxOBJECT )
     , m_xServiceCtorDesc( xServiceCtorDesc )
-    , pNext(nullptr)
 {
 }
 
