@@ -779,8 +779,6 @@ public:
     void                eraseNameList( const OUString& rListName );
     NameListRef         getNameList( const OUString& rListName ) const;
 
-    bool                isPasswordCancelled() const { return mbPwCancelled; }
-
 protected:
     virtual bool        implIsValid() const override;
     virtual void        implProcessConfigItemStr(
@@ -808,7 +806,6 @@ private:
     NameListMap         maNameLists;
     OUString            maConfigPath;
     bool                mbLoaded;
-    bool                mbPwCancelled;
 };
 
 
@@ -871,8 +868,6 @@ public:
     /** Returns true, if the passed name list contains an entry for the passed key. */
     template< typename Type >
     bool                hasName( const NameListWrapper& rListWrp, Type nKey ) const;
-
-    bool                isPasswordCancelled() const;
 
 protected:
                         Config() {}
@@ -1707,7 +1702,6 @@ public:
     virtual             ~DumperBase() override;
 
     bool                isImportEnabled() const;
-    bool                isImportCancelled() const;
 
 protected:
                         DumperBase() {}
@@ -1724,9 +1718,8 @@ protected:
 do {                                                \
     DumperClassName aDumper( *this );               \
     aDumper.dump();                                 \
-    bool bCancelled = aDumper.isImportCancelled();  \
-    if( !aDumper.isImportEnabled() || bCancelled )  \
-        return aDumper.isValid() && !bCancelled;    \
+    if( !aDumper.isImportEnabled() )                \
+        return aDumper.isValid();                   \
 } while( false )
 
 #else   // OOX_INCLUDE_DUMPER

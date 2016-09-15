@@ -134,7 +134,6 @@ private:
     sal_uInt8 mnUnencryptedByte1; // the last unencrypted byte read or written
     sal_uInt8 mnEncryptedByte1; // the last encrypted byte read or written
     sal_uInt8 mnEncryptedByte2; // the next-to-last encrypted byte read or written
-    sal_uInt8 mnVersion; // the encrypted version
     sal_Unicode mnProjKey; // a project-specific encryption key
     sal_uInt8 mnIgnoredLength; // the length in bytes of IgnoredEnc
 

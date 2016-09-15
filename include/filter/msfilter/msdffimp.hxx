@@ -224,7 +224,6 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     sal_uInt32      *pYRelTo;
     sal_uInt32      nLayoutInTableCell;
     sal_uInt32      nFlags;
-    sal_Int32       nTextRotationAngle;
     sal_Int32       nDxTextLeft;    ///< distance of text box from surrounding shape
     sal_Int32       nDyTextTop;
     sal_Int32       nDxTextRight;

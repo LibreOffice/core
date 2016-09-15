@@ -659,7 +659,6 @@ Config::Config( const OUString& rFileName )
     mpActGroup      = nullptr;
     mnDataUpdateId  = 0;
     mnLockCount     = 1;
-    mbPersistence   = true;
 
 #ifdef DBG_UTIL
     OString aTraceStr("Config::Config( " + OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8) + " )");
@@ -727,7 +726,7 @@ void Config::DeleteGroup(const OString& rGroup)
         delete pGroup;
 
         // Rewrite config data
-        if ( !mnLockCount && mbPersistence )
+        if ( !mnLockCount )
             ImplWriteConfig( mpData );
         else
         {
@@ -885,7 +884,7 @@ void Config::WriteKey(const OString& rKey, const OString& rStr)
         {
             pKey->maValue = rStr;
 
-            if ( !mnLockCount && mbPersistence )
+            if ( !mnLockCount )
                 ImplWriteConfig( mpData );
             else
             {
@@ -929,7 +928,7 @@ void Config::DeleteKey(const OString& rKey)
             delete pKey;
 
             // Rewrite config file
-            if ( !mnLockCount && mbPersistence )
+            if ( !mnLockCount )
                 ImplWriteConfig( mpData );
             else
             {
@@ -1026,7 +1025,7 @@ OString Config::ReadKey(sal_uInt16 nKey) const
 
 void Config::Flush()
 {
-    if ( mpData->mbModified && mbPersistence )
+    if ( mpData->mbModified )
         ImplWriteConfig( mpData );
 }
 

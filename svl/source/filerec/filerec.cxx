@@ -297,7 +297,6 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter(sal_uInt8  nRecordType,
                                                  sal_uInt8  nContentVer)
     :  SfxSingleRecordWriter( nRecordType, pStream, nContentTag, nContentVer )
     , _nContentStartPos(0)
-    , _nContentSize(0)
     , _nContentCount(0)
 {
     // space for own header
@@ -317,7 +316,7 @@ sal_uInt32 SfxMultiFixRecordWriter::Close()
 
         // write extended header after SfxSingleRecord
         _pStream->WriteUInt16( _nContentCount );
-        _pStream->WriteUInt32( _nContentSize );
+        _pStream->WriteUInt32( 0 );
 
         // seek to end of record or stay after the header
         _pStream->Seek(nEndPos);

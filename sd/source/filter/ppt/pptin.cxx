@@ -422,7 +422,7 @@ bool ImplSdPPTImport::Import()
 
                                         if ( !aPropItem.Read( pHyperlink->aSubAdress ) )
                                             break;
-                                        pHyperlink->nStartPos = pHyperlink->nEndPos = -1;
+                                        pHyperlink->nStartPos = -1;
 
                                         if ( !pHyperlink->aSubAdress.isEmpty() ) // get the converted subaddress
                                         {

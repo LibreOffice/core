@@ -113,7 +113,6 @@ struct SdHyperlinkEntry
     OUString    aSubAdress;
 
     sal_Int32   nStartPos;
-    sal_Int32   nEndPos;
 
     OUString    aConvSubString;
 };
@@ -631,19 +630,6 @@ public:
     virtual bool ReadFormControl( tools::SvRef<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const = 0;
 };
 
-struct PPTTextCharacterStyleAtomInterpreter
-{
-    sal_uInt16      nFlags1;
-    sal_uInt16      nFlags2;
-    sal_uInt16      nFlags3;
-    sal_Int32       n1;
-    sal_uInt16      nFontHeight;
-    sal_Int32       nFontColor;
-
-                    PPTTextCharacterStyleAtomInterpreter();
-                    ~PPTTextCharacterStyleAtomInterpreter();
-};
-
 struct PPTTextParagraphStyleAtomInterpreter
 {
     bool        bValid;
@@ -861,7 +847,6 @@ struct PPTStyleSheet : public PPTNumberFormatCreator
                         PPTStyleSheet(
                             const DffRecordHeader& rSlideHd,
                             SvStream& rSt, SdrPowerPointImport&,
-                            const PPTTextCharacterStyleAtomInterpreter&,
                             const PPTTextParagraphStyleAtomInterpreter&,
                             const PPTTextSpecInfo&
                         );

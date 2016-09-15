@@ -153,7 +153,6 @@ void B3dTransformationSet::Reset()
     mbPerspective = true;
 
     mbProjectionValid = false;
-    mbObjectToDeviceValid = false;
 
     CalcViewport();
 }
@@ -170,8 +169,6 @@ void B3dTransformationSet::SetOrientation(const basegfx::B3DPoint& rVRP, const b
 {
     maOrientation.identity();
     Orientation(maOrientation, rVRP, rVPN, rVUP);
-
-    mbObjectToDeviceValid = false;
 
     PostSetOrientation();
 }
@@ -202,9 +199,6 @@ void B3dTransformationSet::PostSetProjection()
     // Assign and compute inverse
     maInvProjection = GetProjection();
     maInvProjection.invert();
-
-    // invalidate dependent matrices
-    mbObjectToDeviceValid = false;
 }
 
 /// Transformations for viewport
@@ -292,7 +286,6 @@ void B3dTransformationSet::SetRatio(double fNew)
     {
         mfRatio = fNew;
         mbProjectionValid = false;
-        mbObjectToDeviceValid = false;
     }
 }
 
@@ -306,7 +299,6 @@ void B3dTransformationSet::SetDeviceRectangle(double fL, double fR, double fB, d
         mfTopBound = fT;
 
         mbProjectionValid = false;
-        mbObjectToDeviceValid = false;
 
         // Broadcast changes
         DeviceRectangleChange();
@@ -323,7 +315,6 @@ void B3dTransformationSet::SetPerspective(bool bNew)
     {
         mbPerspective = bNew;
         mbProjectionValid = false;
-        mbObjectToDeviceValid = false;
     }
 }
 
@@ -335,7 +326,6 @@ void B3dTransformationSet::SetViewportRectangle(Rectangle const & rRect, Rectang
         maVisibleRectangle = rVisible;
 
         mbProjectionValid = false;
-        mbObjectToDeviceValid = false;
     }
 }
 

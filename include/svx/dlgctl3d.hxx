@@ -85,7 +85,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewContr
 
     // interaction parameters
     Point                       maActionStartPoint;
-    sal_Int32                   mnInteractionStartDistance;
     double                      mfSaveActionStartHor;
     double                      mfSaveActionStartVer;
     double                      mfSaveActionStartRotZ;

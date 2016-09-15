@@ -40,9 +40,7 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
     mpOverflChText = nullptr;
     mpUnderflChText = nullptr;
 
-    maCursorEvent = CursorChainingEvent::NULL_EVENT;
     mbPossiblyCursorOut = false;
-
 }
 
 

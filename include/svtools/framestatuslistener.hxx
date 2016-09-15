@@ -85,8 +85,7 @@ class SVT_DLLPUBLIC FrameStatusListener : public css::frame::XStatusListener,
                                     css::uno::Reference< css::frame::XDispatch >,
                                     OUStringHash > URLToDispatchMap;
 
-        bool                                                      m_bInitialized : 1,
-                                                                  m_bDisposed : 1;
+        bool                                                      m_bDisposed : 1;
         css::uno::Reference< css::frame::XFrame >                 m_xFrame;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         URLToDispatchMap                                          m_aListenerMap;

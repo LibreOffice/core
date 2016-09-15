@@ -49,7 +49,6 @@ protected:
     SdrObject*                                          mpSelectedSdrObject; // the selected object
     SdrPageView*                                        mpPageView;
     SdrUShortCont*                                      mpPoints;     // Selected Points
-    SdrUShortCont*                                      mpLines;      // Selected Line
     SdrUShortCont*                                      mpGluePoints; // Selected Gluepoints (their Id's)
     bool                                                mbCon1;       // for Connectors
     bool                                                mbCon2;       // for Connectors

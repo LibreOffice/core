@@ -78,7 +78,6 @@ private:
 
     // Flags
     bool mbPerspective              : 1;
-    bool mbObjectToDeviceValid      : 1;
     bool mbProjectionValid          : 1;
 
 public:

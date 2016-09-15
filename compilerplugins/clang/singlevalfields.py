@@ -34,6 +34,12 @@ with io.open("loplugin.singlevalfields.log", "rb", buffering=1024*1024) as txt:
 
 tmp1list = list()
 for fieldInfo, assignValues in fieldAssignDict.iteritems():
+    v0 = fieldInfo[0] + " " + fieldInfo[1]
+    v1 = (",".join(assignValues))
+    v2 = ""
+    if fieldInfo not in definitionToSourceLocationMap:
+        continue
+    v2 = definitionToSourceLocationMap[fieldInfo]
     if len(assignValues) != 1:
         continue
     if "?" in assignValues:
@@ -46,19 +52,16 @@ for fieldInfo, assignValues in fieldAssignDict.iteritems():
         continue
     # ignore things which are representations of on-disk structures
     if containingClass in ["SEPr", "WW8Dop", "BmpInfoHeader", "BmpFileHeader", "Exif::ExifIFD",
-            "sw::WW8FFData", "FFDataHeader", "INetURLHistory_Impl::head_entry"]:
+            "sw::WW8FFData", "FFDataHeader", "INetURLHistory_Impl::head_entry", "ImplPPTParaPropSet", "SvxSwAutoFormatFlags"]:
         continue
     # Windows-only
-    if containingClass in ["SfxAppData_Impl", "sfx2::ImplDdeItem"]:
+    if containingClass in ["SfxAppData_Impl", "sfx2::ImplDdeItem", "SvFileStream", "DdeService", "DdeTopic", "DdeItem", "DdeConnection", "connectivity::sdbcx::OUser", "connectivity::sdbcx::OGroup", "connectivity::sdbcx::OCatalog"]:
+        continue
+    if v2.startswith("include/svl/svdde.hxx"):
         continue
     # Some of our supported compilers don't do constexpr, which means o3tl::typed_flags can't be 'static const'
     if containingClass in ["WaitWindow_Impl"]:
         continue
-    v0 = fieldInfo[0] + " " + fieldInfo[1]
-    v1 = (",".join(assignValues))
-    v2 = ""
-    if fieldInfo in definitionToSourceLocationMap:
-        v2 = definitionToSourceLocationMap[fieldInfo]
     tmp1list.append((v0,v1,v2))
 
 # sort results by filename:lineno
