@@ -292,7 +292,7 @@ void PreparedStatement::raiseSQLException( const char * errorMsg )
     buf.appendAscii( m_executedStatement.getStr() );
     buf.append( "')" );
     OUString error = buf.makeStringAndClear();
-    log( m_pSettings, LogLevel::ERROR, error );
+    log(m_pSettings, LogLevel::Error, error);
     throw SQLException( error, *this, OUString(), 1, Any() );
 }
 

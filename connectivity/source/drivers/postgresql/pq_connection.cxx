@@ -54,6 +54,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/uuid.h>
 #include <rtl/bootstrap.hxx>
+#include <o3tl/enumarray.hxx>
 #include <osl/module.h>
 
 #include <cppuhelper/implementationentry.hxx>
@@ -127,9 +128,9 @@ css::uno::Sequence<OUString> ConnectionGetSupportedServiceNames()
     return Sequence< OUString > { "com.sun.star.sdbc.Connection" };
 }
 
-static sal_Int32 readLogLevelFromConfiguration()
+static LogLevel readLogLevelFromConfiguration()
 {
-    sal_Int32 loglevel = LogLevel::NONE;
+    LogLevel nLogLevel = LogLevel::NONE;
     OUString fileName;
     osl_getModuleURLFromFunctionAddress(
         reinterpret_cast<oslGenericFunction>(readLogLevelFromConfiguration), &fileName.pData );
@@ -144,20 +145,20 @@ static sal_Int32 readLogLevelFromConfiguration()
     if( bootstrapHandle.getFrom( "PQ_LOGLEVEL", str ) )
     {
         if ( str == "NONE" )
-            loglevel = LogLevel::NONE;
+            nLogLevel = LogLevel::NONE;
         else if ( str == "ERROR" )
-            loglevel = LogLevel::ERROR;
+            nLogLevel = LogLevel::Error;
         else if ( str == "SQL" )
-            loglevel = LogLevel::SQL;
+            nLogLevel = LogLevel::Sql;
         else if ( str == "INFO" )
-            loglevel = LogLevel::INFO;
+            nLogLevel = LogLevel::Info;
         else
         {
             fprintf( stderr, "unknown loglevel %s\n",
                      OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
-    return loglevel;
+    return nLogLevel;
 }
 
 Connection::Connection(
@@ -167,15 +168,15 @@ Connection::Connection(
       m_ctx( ctx ) ,
       m_refMutex( refMutex )
 {
-    m_settings.loglevel = readLogLevelFromConfiguration();
+    m_settings.m_nLogLevel = readLogLevelFromConfiguration();
 
-    if( m_settings.loglevel > LogLevel::NONE )
+    if (m_settings.m_nLogLevel != LogLevel::NONE)
     {
         m_settings.logFile = fopen( "sdbc-pqsql.log", "a" );
         if( m_settings.logFile )
         {
             setvbuf( m_settings.logFile, nullptr, _IONBF, 0 );
-            log( &m_settings, m_settings.loglevel , "set this loglevel" );
+            log(&m_settings, m_settings.m_nLogLevel , "set this loglevel");
         }
         else
         {
@@ -211,7 +212,7 @@ void Connection::close() throw ( SQLException, RuntimeException, std::exception 
         // silently ignore, if the connection has been closed already
         if( m_settings.pConnection )
         {
-            log( &m_settings, LogLevel::INFO, "closing connection" );
+            log(&m_settings, LogLevel::Info, "closing connection");
             PQfinish( m_settings.pConnection );
             m_settings.pConnection = nullptr;
         }
@@ -592,13 +593,13 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     m_settings.catalog = OUString( p, strlen(p), RTL_TEXTENCODING_UTF8);
     m_settings.tc = tc;
 
-    if( isLog( &m_settings, LogLevel::INFO ) )
+    if (isLog(&m_settings, LogLevel::Info))
     {
         OUStringBuffer buf( 128 );
         buf.append( "connection to '" );
         buf.append( url );
         buf.append( "' successfully opened" );
-        log( &m_settings, LogLevel::INFO, buf.makeStringAndClear() );
+        log(&m_settings, LogLevel::Info, buf.makeStringAndClear());
     }
 }
 
@@ -617,9 +618,9 @@ void Connection::checkClosed() throw ( SQLException, RuntimeException )
 Reference< XNameAccess > Connection::getTables()
     throw (css::uno::RuntimeException, std::exception)
 {
-    if( isLog( &m_settings, LogLevel::INFO ) )
+    if (isLog(&m_settings, LogLevel::Info))
     {
-        log( &m_settings, LogLevel::INFO, "Connection::getTables() got called" );
+        log(&m_settings, LogLevel::Info, "Connection::getTables() got called");
     }
     MutexGuard guard( m_refMutex->mutex );
     if( !m_settings.tables.is() )
@@ -633,9 +634,9 @@ Reference< XNameAccess > Connection::getTables()
 Reference< XNameAccess > Connection::getViews()
     throw (css::uno::RuntimeException, std::exception)
 {
-    if( isLog( &m_settings, LogLevel::INFO ) )
+    if (isLog(&m_settings, LogLevel::Info))
     {
-        log( &m_settings, LogLevel::INFO, "Connection::getViews() got called" );
+        log(&m_settings, LogLevel::Info, "Connection::getViews() got called");
     }
     MutexGuard guard( m_refMutex->mutex );
     if( !m_settings.views.is() )
@@ -650,9 +651,9 @@ Reference< XNameAccess > Connection::getViews()
 Reference< XNameAccess > Connection::getUsers()
     throw (css::uno::RuntimeException, std::exception)
 {
-    if( isLog( &m_settings, LogLevel::INFO ) )
+    if (isLog(&m_settings, LogLevel::Info))
     {
-        log( &m_settings, LogLevel::INFO, "Connection::getUsers() got called" );
+        log(&m_settings, LogLevel::Info, "Connection::getUsers() got called");
     }
 
     MutexGuard guard( m_refMutex->mutex );
@@ -670,20 +671,21 @@ Reference< XInterface >  ConnectionCreateInstance(
 }
 
 
-bool isLog( ConnectionSettings *settings, int loglevel )
+bool isLog(ConnectionSettings *settings, LogLevel nLevel)
 {
-    return settings->loglevel >= loglevel && settings->logFile;
+    return static_cast<int>(settings->m_nLogLevel) >= static_cast<int>(nLevel)
+           && settings->logFile;
 }
 
-void log( ConnectionSettings *settings, sal_Int32 level, const OUString &logString )
+void log(ConnectionSettings *settings, LogLevel nLevel, const OUString &logString)
 {
-    log( settings, level, OUStringToOString( logString, settings->encoding ).getStr() );
+    log(settings, nLevel, OUStringToOString(logString, settings->encoding ).getStr());
 }
-void log( ConnectionSettings *settings, sal_Int32 level, const char *str )
+void log(ConnectionSettings *settings, LogLevel nLevel, const char *str)
 {
-    if( isLog( settings, level ) )
+    if (isLog(settings, nLevel))
     {
-        static const char *strLevel[] = { "NONE", "ERROR", "SQL", "INFO", "DATA" };
+        static const o3tl::enumarray<LogLevel, const char*> strLevel = {"NONE", "ERROR", "SQL", "INFO"};
 
         time_t t = ::time( nullptr );
         char *pString;
@@ -705,7 +707,7 @@ void log( ConnectionSettings *settings, sal_Int32 level, const char *str )
                 break;
             }
         }
-        fprintf( settings->logFile, "%s [%s]: %s\n", pString, strLevel[level], str );
+        fprintf(settings->logFile, "%s [%s]: %s\n", pString, strLevel[nLevel], str);
     }
 }
 

@@ -280,14 +280,14 @@ void Columns::refresh()
 {
     try
     {
-        if( isLog( m_pSettings, LogLevel::INFO ) )
+        if (isLog(m_pSettings, LogLevel::Info))
         {
             OStringBuffer buf;
             buf.append( "sdbcx.Columns get refreshed for table " );
             buf.append( OUStringToOString( m_schemaName, m_pSettings->encoding ) );
             buf.append( "." );
             buf.append( OUStringToOString( m_tableName, m_pSettings->encoding ) );
-            log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear().getStr() );
+            log(m_pSettings, LogLevel::Info, buf.makeStringAndClear().getStr());
         }
         osl::MutexGuard guard( m_refMutex->mutex );
 

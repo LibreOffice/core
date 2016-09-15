@@ -1131,14 +1131,14 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
 
     MutexGuard guard( m_refMutex->mutex );
 
-    if( isLog( m_pSettings, LogLevel::INFO ) )
+    if (isLog(m_pSettings, LogLevel::Info))
     {
         OUStringBuffer buf( 128 );
         buf.append( "DatabaseMetaData::getTables got called with " );
         buf.append( schemaPattern );
         buf.append( "." );
         buf.append( tableNamePattern );
-        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+        log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
     }
     // ignore catalog, as a single pq connection does not support multiple catalogs
 
@@ -1263,9 +1263,9 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
 {
     MutexGuard guard( m_refMutex->mutex );
 
-    if( isLog( m_pSettings, LogLevel::INFO ) )
+    if (isLog(m_pSettings, LogLevel::Info))
     {
-        log( m_pSettings, LogLevel::INFO, "DatabaseMetaData::getSchemas() got called" );
+        log(m_pSettings, LogLevel::Info, "DatabaseMetaData::getSchemas() got called");
     }
     // <b>TABLE_SCHEM</b> string =&amp;gt; schema name
     Reference< XStatement > statement = m_origin->createStatement();
@@ -1469,7 +1469,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
     // continue !
     MutexGuard guard( m_refMutex->mutex );
 
-    if( isLog( m_pSettings, LogLevel::INFO ) )
+    if (isLog(m_pSettings, LogLevel::Info))
     {
         OUStringBuffer buf( 128 );
         buf.append( "DatabaseMetaData::getColumns got called with " );
@@ -1478,7 +1478,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
         buf.append( tableNamePattern );
         buf.append( "." );
         buf.append( columnNamePattern );
-        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+        log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
     }
 
     // ignore catalog, as a single pq connection
@@ -1652,7 +1652,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
 
     MutexGuard guard( m_refMutex->mutex );
 
-    if( isLog( m_pSettings, LogLevel::INFO ) )
+    if (isLog(m_pSettings, LogLevel::Info))
     {
         OUStringBuffer buf( 128 );
         buf.append( "DatabaseMetaData::getColumnPrivileges got called with " );
@@ -1661,7 +1661,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
         buf.append( table );
         buf.append( "." );
         buf.append( columnNamePattern );
-        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+        log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
     }
 
     Reference< XParameters > parameters( m_getColumnPrivs_stmt, UNO_QUERY_THROW );
@@ -1681,14 +1681,14 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTablePrivileges(
 {
     MutexGuard guard( m_refMutex->mutex );
 
-    if( isLog( m_pSettings, LogLevel::INFO ) )
+    if (isLog(m_pSettings, LogLevel::Info))
     {
         OUStringBuffer buf( 128 );
         buf.append( "DatabaseMetaData::getTablePrivileges got called with " );
         buf.append( schemaPattern );
         buf.append( "." );
         buf.append( tableNamePattern );
-        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+        log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
     }
 
     Reference< XParameters > parameters( m_getTablePrivs_stmt, UNO_QUERY_THROW );
@@ -1739,14 +1739,14 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
 //        5. KEY_SEQ short =&gt; sequence number within primary key
 //        6. PK_NAME string =&gt; primary key name (may be NULL )
 
-    if( isLog( m_pSettings, LogLevel::INFO ) )
+    if (isLog(m_pSettings, LogLevel::Info))
     {
         OUStringBuffer buf( 128 );
         buf.append( "DatabaseMetaData::getPrimaryKeys got called with " );
         buf.append( schema );
         buf.append( "." );
         buf.append( table );
-        log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
+        log(m_pSettings, LogLevel::Info, buf.makeStringAndClear());
     }
 
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
@@ -2331,9 +2331,9 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
     // Note: Indexes start at 0 (in the API doc, they start at 1)
     MutexGuard guard( m_refMutex->mutex );
 
-    if( isLog( m_pSettings, LogLevel::INFO ) )
+    if (isLog(m_pSettings, LogLevel::Info))
     {
-        log( m_pSettings, LogLevel::INFO, "DatabaseMetaData::getTypeInfo() got called" );
+        log(m_pSettings, LogLevel::Info, "DatabaseMetaData::getTypeInfo() got called");
     }
 
     Reference< XStatement > statement = m_origin->createStatement();

@@ -80,18 +80,17 @@ struct ConnectionSettings;
 
 // Logging API
 
-namespace LogLevel
+enum class LogLevel
 {
-// when you add a loglevel, extend the log function !
-static const sal_Int32 NONE = 0;
-static const sal_Int32 ERROR = 1;
-static const sal_Int32 SQL = 2;
-static const sal_Int32 INFO = 3;
-static const sal_Int32 DATA = 4;
-}
-bool isLog( ConnectionSettings *settings, int loglevel );
-void log( ConnectionSettings *settings, sal_Int32 level, const OUString &logString );
-void log( ConnectionSettings *settings, sal_Int32 level, const char *str );
+    NONE    = 0,
+    Error,
+    Sql,
+    Info,
+    LAST = Info
+};
+bool isLog(ConnectionSettings *settings, LogLevel nLevel);
+void log(ConnectionSettings *settings, LogLevel nLevel, const OUString &logString);
+void log(ConnectionSettings *settings, LogLevel nLevel, const char *str);
 
 
 class Tables;
@@ -107,7 +106,7 @@ struct ConnectionSettings
         pViewsImpl(nullptr),
         showSystemColumns( false ),
         logFile( nullptr ),
-        loglevel( LogLevel::INFO )
+        m_nLogLevel(LogLevel::Info)
     {}
     rtl_TextEncoding encoding;
     PGconn *pConnection;
@@ -123,7 +122,7 @@ struct ConnectionSettings
     OUString catalog;
     bool showSystemColumns;
     FILE *logFile;
-    sal_Int32 loglevel;
+    LogLevel m_nLogLevel;
 };
 
 
