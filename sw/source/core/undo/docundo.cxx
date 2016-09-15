@@ -320,37 +320,34 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
         SfxListUndoAction *const pListAction(
             dynamic_cast<SfxListUndoAction*>(pUndoAction));
         assert(pListAction);
-        if (pListAction)
+        if (UNDO_END != eUndoId)
         {
-            if (UNDO_END != eUndoId)
+            OSL_ENSURE(pListAction->GetId() == eUndoId,
+                    "EndUndo(): given ID different from StartUndo()");
+            // comment set by caller of EndUndo
+            OUString comment = SW_RES(UNDO_BASE + eUndoId);
+            if (pRewriter)
             {
-                OSL_ENSURE(pListAction->GetId() == eUndoId,
-                        "EndUndo(): given ID different from StartUndo()");
-                // comment set by caller of EndUndo
-                OUString comment = SW_RES(UNDO_BASE + eUndoId);
-                if (pRewriter)
-                {
-                    comment = pRewriter->Apply(comment);
-                }
-                pListAction->SetComment(comment);
+                comment = pRewriter->Apply(comment);
             }
-            else if ((UNDO_START != pListAction->GetId()))
-            {
-                // comment set by caller of StartUndo: nothing to do here
-            }
-            else if (pLastUndo)
-            {
-                // comment was not set at StartUndo or EndUndo:
-                // take comment of last contained action
-                // (note that this works recursively, i.e. the last contained
-                // action may be a list action created by StartUndo/EndUndo)
-                OUString const comment(pLastUndo->GetComment());
-                pListAction->SetComment(comment);
-            }
-            else
-            {
-                OSL_ENSURE(false, "EndUndo(): no comment?");
-            }
+            pListAction->SetComment(comment);
+        }
+        else if ((UNDO_START != pListAction->GetId()))
+        {
+            // comment set by caller of StartUndo: nothing to do here
+        }
+        else if (pLastUndo)
+        {
+            // comment was not set at StartUndo or EndUndo:
+            // take comment of last contained action
+            // (note that this works recursively, i.e. the last contained
+            // action may be a list action created by StartUndo/EndUndo)
+            OUString const comment(pLastUndo->GetComment());
+            pListAction->SetComment(comment);
+        }
+        else
+        {
+            OSL_ENSURE(false, "EndUndo(): no comment?");
         }
     }
 
@@ -646,7 +643,7 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
     }
     SfxUndoAction *const pRepeatAction(GetUndoAction());
     assert(pRepeatAction);
-    if (!pRepeatAction || !pRepeatAction->CanRepeat(rContext))
+    if (!pRepeatAction->CanRepeat(rContext))
     {
         return false;
     }
