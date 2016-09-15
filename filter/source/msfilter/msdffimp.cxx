@@ -168,9 +168,7 @@ struct SvxMSDffBLIPInfos : public std::vector<SvxMSDffBLIPInfo> {};
 void Impl_OlePres::Write( SvStream & rStm )
 {
     WriteClipboardFormat( rStm, SotClipboardFormatId::GDIMETAFILE );
-    rStm.WriteInt32( nJobLen + 4 );       // a TargetDevice that's always empty
-    if( nJobLen )
-        rStm.WriteBytes(pJob, nJobLen);
+    rStm.WriteInt32( 4 );       // a TargetDevice that's always empty
     rStm.WriteUInt32( nAspect );
     rStm.WriteInt32( -1 );      //L-Index always -1
     rStm.WriteInt32( nAdvFlags );

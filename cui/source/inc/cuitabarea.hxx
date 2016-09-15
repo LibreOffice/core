@@ -702,7 +702,6 @@ enum class ColorModel
     CMYK // can be extend with more models, e.g. HSV
 };
 
-struct SvxColorTabPageShadow;
 class SvxColorTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -712,8 +711,6 @@ private:
     XPropertyListType   meType;
 
     VclPtr<Window>             mpTopDlg;
-
-    SvxColorTabPageShadow *pShadow;
 
     PaletteManager             maPaletteManager;
     VclPtr<ListBox>            m_pSelectPalette;

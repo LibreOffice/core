@@ -96,7 +96,7 @@ OUString concatQualified( const OUString & a, const OUString &b)
 
 static inline OString iOUStringToOString( const OUString& str, ConnectionSettings *settings) {
     OSL_ENSURE(settings, "pgsql-sdbc: OUStringToOString got NULL settings");
-    return OUStringToOString( str, settings->encoding );
+    return OUStringToOString( str, ConnectionSettings::encoding );
 }
 
 OString OUStringToOString( const OUString& str, ConnectionSettings *settings) {
@@ -118,7 +118,7 @@ void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, Connect
         // (X/Open SQL CLI, March 1995, ISBN: 1-85912-081-4, X/Open Document Number: C451)
         // 22018 is for "Invalid character value" and seems to be the best match.
         // We have no good XInterface Reference to pass here, so just give NULL
-        throw SQLException(OUString(errstr, strlen(errstr), settings->encoding),
+        throw SQLException(OUString(errstr, strlen(errstr), ConnectionSettings::encoding),
                            nullptr,
                            OUString("22018"),
                            -1,
@@ -164,7 +164,7 @@ static inline void ibufferQuoteIdentifier( OUStringBuffer & buf, const OUString 
     {
         char *errstr = PQerrorMessage(settings->pConnection);
         // Implementation-defined SQLACCESS error
-        throw SQLException(OUString(errstr, strlen(errstr), settings->encoding),
+        throw SQLException(OUString(errstr, strlen(errstr), ConnectionSettings::encoding),
                            nullptr,
                            OUString("22018"),
                            -1,

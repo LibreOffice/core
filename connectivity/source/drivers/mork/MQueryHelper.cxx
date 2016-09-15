@@ -70,10 +70,7 @@ void MQueryHelperResultEntry::setValue( const OString &key, const OUString & rVa
 }
 
 MQueryHelper::MQueryHelper(const OColumnAlias& _ca)
-    :m_nIndex( 0 )
-    ,m_bHasMore( true )
-    ,m_bAtEnd( false )
-    ,m_rColumnAlias( _ca )
+    :m_rColumnAlias( _ca )
     ,m_aError()
 {
     m_aResults.clear();
@@ -99,7 +96,6 @@ void MQueryHelper::append(MQueryHelperResultEntry* resEnt)
 {
     if ( resEnt != nullptr ) {
         m_aResults.push_back( resEnt );
-        m_bAtEnd   = false;
     }
 }
 
@@ -115,9 +111,6 @@ void MQueryHelper::clear_results()
 
 void MQueryHelper::reset()
 {
-    m_nIndex = 0;
-    m_bHasMore = true;
-    m_bAtEnd = false;
     clear_results();
     m_aError.reset();
 }

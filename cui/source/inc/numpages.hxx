@@ -44,9 +44,8 @@ class SvxNumberingPreview : public vcl::Window
     const SvxNumRule*   pActNum;
     vcl::Font           aStdFont;
     long                nPageWidth;
-    const OUString*     pOutlineNames;
     bool                bPosition;
-    sal_uInt16              nActLevel;
+    sal_uInt16          nActLevel;
 
     protected:
         virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;

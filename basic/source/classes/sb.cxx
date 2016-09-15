@@ -1390,11 +1390,8 @@ void StarBASIC::QuitAndExitApplication()
 void StarBASIC::Stop()
 {
     SbiInstance* p = GetSbData()->pInst;
-    while( p )
-    {
+    if( p )
         p->Stop();
-        p = p->pNext;
-    }
 }
 
 bool StarBASIC::IsRunning()

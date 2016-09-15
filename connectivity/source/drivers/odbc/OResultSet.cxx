@@ -97,7 +97,6 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,m_nCurrentFetchState(0)
                         ,m_bWasNull(true)
                         ,m_bEOF(true)
-                        ,m_bFreeHandle(false)
                         ,m_bInserting(false)
                         ,m_bRowInserted(false)
                         ,m_bRowDeleted(false)
@@ -184,8 +183,6 @@ void OResultSet::disposing()
 
     ::osl::MutexGuard aGuard(m_aMutex);
     releaseBuffer();
-    if(m_bFreeHandle)
-        m_pStatement->getOwnConnection()->freeStatementHandle(m_aStatementHandle);
 
     m_xStatement.clear();
     m_xMetaData.clear();

@@ -412,8 +412,6 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
             addBookmark( pFileDbBase_DBHelp, documentPath, fileB, std::string(), jarfileB, titleB);
 
             const HashSet *hidlist = streamTable.appl_hidlist;
-            if (!hidlist)
-                hidlist = streamTable.default_hidlist;
             if (hidlist && !hidlist->empty())
             {
                 // now iterate over all elements of the hidlist
@@ -436,8 +434,6 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
 
             // now the keywords
             const Hashtable *anchorToLL = streamTable.appl_keywords;
-            if (!anchorToLL)
-                anchorToLL = streamTable.default_keywords;
             if (anchorToLL && !anchorToLL->empty())
             {
                 std::string fakedHid = URLEncoder::encode(documentPath);
@@ -463,8 +459,6 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
 
             // and last the helptexts
             const Stringtable *helpTextHash = streamTable.appl_helptexts;
-            if (!helpTextHash)
-                helpTextHash = streamTable.default_helptexts;
             if (helpTextHash && !helpTextHash->empty())
             {
                 Stringtable::const_iterator aEnd = helpTextHash->end();
@@ -486,8 +480,6 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
             {
                 // now the indexing
                 xmlDocPtr document = streamTable.appl_doc;
-                if (!document)
-                    document = streamTable.default_doc;
                 if (document)
                 {
                     std::string temp = module;

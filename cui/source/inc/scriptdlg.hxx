@@ -47,7 +47,6 @@ class SFTreeListBox : public SvTreeListBox
 {
    friend class SvxScriptOrgDialog;
 private:
-    sal_uInt16          nMode;
     Image m_hdImage;
     Image m_libImage;
     Image m_macImage;

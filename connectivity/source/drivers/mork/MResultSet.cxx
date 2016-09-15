@@ -74,12 +74,10 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectiv
     ,m_xStatement(*pStmt)
     ,m_xMetaData(nullptr)
     ,m_nRowPos(0)
-    ,m_nOldRowPos(0)
     ,m_bWasNull(false)
     ,m_nFetchSize(0)
     ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
     ,m_nFetchDirection(FetchDirection::FORWARD)
-    ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
     ,m_pSQLIterator( _pSQLIterator )
     ,m_pParseTree( _pSQLIterator->getParseTree() )
     ,m_aQueryHelper(pStmt->getOwnConnection()->getColumnAlias())
@@ -88,7 +86,6 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectiv
     ,m_nParamIndex(0)
     ,m_bIsAlwaysFalseQuery(false)
     ,m_pKeySet(nullptr)
-    ,m_nNewRow(0)
     ,m_nUpdatedRow(0)
     ,m_bIsReadOnly(TRISTATE_INDET)
 {
@@ -647,7 +644,7 @@ void OResultSet::getFastPropertyValue(
     switch(nHandle)
     {
         case PROPERTY_ID_RESULTSETCONCURRENCY:
-            rValue <<= (sal_Int32)m_nResultSetConcurrency;
+            rValue <<= (sal_Int32)ResultSetConcurrency::UPDATABLE;
             break;
         case PROPERTY_ID_RESULTSETTYPE:
             rValue <<= m_nResultSetType;
@@ -1758,8 +1755,6 @@ void SAL_CALL OResultSet::insertRow(  ) throw(css::sdbc::SQLException, css::uno:
     SAL_INFO("connectivity.mork", "in, m_nRowPos = " << m_nRowPos);
 //    m_RowStates = RowStates_Inserted;
     updateRow();
-    m_nOldRowPos = 0;
-    m_nNewRow = 0;
     //m_aQueryHelper.setRowStates(getCurrentCardNumber(),m_RowStates);
     SAL_INFO("connectivity.mork", "out, m_nRowPos = " << m_nRowPos);
 }
@@ -1790,7 +1785,7 @@ void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(css::sdbc::SQLException, cs
     SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     if (rowInserted())
     {
-        m_nRowPos = m_nOldRowPos;
+        m_nRowPos = 0;
         fetchCurrentRow();
     }
 }
