@@ -50,6 +50,7 @@ const char *MorkMagicHeader = "// <!-- <mdb:mork:z v=\"1.4\"/> -->";
 
 const char *MorkDictColumnMeta = "<(a=c)>";
 
+static const int defaultScope_ = 0x80;
 
 MorkParser::MorkParser() :
     columns_(),
@@ -60,8 +61,6 @@ MorkParser::MorkParser() :
     morkData_(),
     morkPos_(0),
     nextAddValueId_(0x7fffffff),
-    defaultScope_(0x80),
-    defaultListScope_(0x81),
     defaultTableId_(1),
     nowParsing_(NPValues)
 {
@@ -616,7 +615,7 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
         << ( ( int ) TableIter->first < 0 ? "-" : " " )
         << TableIter->first << std::endl;
 #endif
-        MorkRowMap* rows = getRows( defaultListScope_, &TableIter->second );
+        MorkRowMap* rows = getRows( 0x81/*defaultListScope*/, &TableIter->second );
         if (!rows) return;
         for ( MorkRowMap::Map::const_iterator RowIter = rows->map.begin();
              RowIter != rows->map.end(); ++RowIter )

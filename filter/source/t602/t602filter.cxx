@@ -278,8 +278,8 @@ bool SAL_CALL T602ImportFilter::importImpl( const Sequence< css::beans::Property
     xImporter->setTargetDocument(mxDoc);
 
     char fs[32], fs2[32];
-    sprintf(fs, "%ipt", ini.fontsize);
-    sprintf(fs2,"%ipt", 2*ini.fontsize);
+    sprintf(fs, "%ipt", inistruct::fontsize);
+    sprintf(fs2,"%ipt", 2*inistruct::fontsize);
 
     mpAttrList = new SvXMLAttributeList;
 
@@ -485,7 +485,6 @@ void T602ImportFilter::Reset602()
     ini.xcode    = KAM;
     ini.ruscode    = false;
     ini.reformatpars= false;
-    ini.fontsize    = 10;
 
     fst.nowfnt    = fst.oldfnt    = standard;
     fst.uline    = fst.olduline    = false;

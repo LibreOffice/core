@@ -93,7 +93,6 @@ namespace connectivity
             DBFMemoHeader   m_aMemoHeader;
             SvStream*       m_pMemoStream;
             rtl_TextEncoding m_eEncoding;
-            bool        m_bWriteableMemo;
 
             void alterColumn(sal_Int32 index,
                              const css::uno::Reference< css::beans::XPropertySet>& descriptor ,

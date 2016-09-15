@@ -109,8 +109,7 @@ private:
     GDIMetaFile*        pAMTF;              // only created if Graphics is not a Metafile
     ScopedVclPtrInstance<VirtualDevice> pVDev;
 
-    double              nBoundingX1;        // this represents the bounding box
-    double              nBoundingX2;
+    double              nBoundingX2;        // this represents the bounding box
     double              nBoundingY2;
 
     StackMember*        pGDIStack;
@@ -242,7 +241,6 @@ PSWriter::PSWriter()
     , pMTF(nullptr)
     , pAMTF(nullptr)
     , pVDev()
-    , nBoundingX1(0)
     , nBoundingX2(0)
     , nBoundingY2(0)
     , pGDIStack(nullptr)
@@ -401,7 +399,6 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         pMTF = pAMTF;
     }
     pVDev->SetMapMode( pMTF->GetPrefMapMode() );
-    nBoundingX1 = 0;
     nBoundingX2 = pMTF->GetPrefSize().Width();
     nBoundingY2 = pMTF->GetPrefSize().Height();
 

@@ -98,7 +98,6 @@ class Views;
 struct ConnectionSettings
 {
     ConnectionSettings() :
-        encoding( RTL_TEXTENCODING_UTF8),
         pConnection(nullptr),
         maxNameLen(0),
         maxIndexKeys(0),
@@ -108,7 +107,7 @@ struct ConnectionSettings
         logFile( nullptr ),
         m_nLogLevel(LogLevel::Info)
     {}
-    rtl_TextEncoding encoding;
+    static const rtl_TextEncoding encoding = RTL_TEXTENCODING_UTF8;
     PGconn *pConnection;
     sal_Int32 maxNameLen;
     sal_Int32 maxIndexKeys;

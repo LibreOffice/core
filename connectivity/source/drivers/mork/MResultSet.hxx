@@ -77,12 +77,10 @@ namespace connectivity
             css::uno::Reference< css::uno::XInterface>            m_xStatement;
             css::uno::Reference< css::sdbc::XResultSetMetaData>   m_xMetaData;
             sal_uInt32                                  m_nRowPos;
-            sal_uInt32                                  m_nOldRowPos;
             bool                                        m_bWasNull;
             sal_Int32                                   m_nFetchSize;
             sal_Int32                                   m_nResultSetType;
             sal_Int32                                   m_nFetchDirection;
-            sal_Int32                                   m_nResultSetConcurrency;
 
 
             std::shared_ptr< ::connectivity::OSQLParseTreeIterator >
@@ -232,7 +230,6 @@ protected:
             sal_Int32                m_nParamIndex;
             bool                 m_bIsAlwaysFalseQuery;
             ::rtl::Reference<OKeySet>     m_pKeySet;
-            sal_Int32                 m_nNewRow;        //inserted row
             sal_Int32                     m_nUpdatedRow;    //updated row
             TriState                      m_bIsReadOnly;
             inline void resetParameters() { m_nParamIndex = 0; }

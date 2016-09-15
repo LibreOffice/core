@@ -443,7 +443,6 @@ class IconLBoxString : public SvLBoxString
 {
     Image* m_pMacroImg;
     Image* m_pComponentImg;
-    int m_nxImageOffset;
 
 public:
     IconLBoxString( const OUString& sText, Image* pMacroImg, Image* pComponentImg );
@@ -458,7 +457,6 @@ IconLBoxString::IconLBoxString( const OUString& sText,
         , m_pMacroImg( pMacroImg )
         , m_pComponentImg( pComponentImg )
 {
-    m_nxImageOffset = 20;
 }
 
 
@@ -486,7 +484,7 @@ void IconLBoxString::Paint(const Point& aPos, SvTreeListBox& /*aDevice*/, vcl::R
         }
 
         Point aPnt(aPos);
-        aPnt.X() += m_nxImageOffset;
+        aPnt.X() += 20;
         rRenderContext.DrawText(aPnt, aPureMethod);
     }
 }

@@ -77,7 +77,6 @@ void SvTokenStream::InitCtor()
     aStrFalse = OString("FALSE");
     nLine       = nColumn = 0;
     nBufPos     = 0;
-    nTabSize    = 4;
     nMaxPos     = 0;
     c           = GetNextChar();
     FillTokenList();

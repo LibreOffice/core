@@ -69,7 +69,6 @@ public:
     SbiSymPool    aRtlSyms;         // Runtime-Library
     SbiCodeGen    aGen;             // Code-Generator
     SbiSymPool*   pPool;
-    SbiExprType   eCurExpr;
     short         nBase;            // OPTION BASE-value
     bool          bText;            // OPTION COMPARE TEXT
     bool          bExplicit;        // true: OPTION EXPLICIT

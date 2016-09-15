@@ -218,7 +218,7 @@ void PreparedStatement::checkColumnIndex( sal_Int32 parameterIndex )
         buf.append( ", got " );
         buf.append( parameterIndex );
         buf.append( ", statement '" );
-        buf.append( OStringToOUString( m_stmt, m_pSettings->encoding ) );
+        buf.append( OStringToOUString( m_stmt, ConnectionSettings::encoding ) );
         buf.append( "')" );
         throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
     }
@@ -287,7 +287,7 @@ void PreparedStatement::raiseSQLException( const char * errorMsg )
     OUStringBuffer buf(128);
     buf.append( "pq_driver: ");
     buf.append(
-        OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) );
+        OUString( errorMsg, strlen(errorMsg) , ConnectionSettings::encoding ) );
     buf.append( " (caused by statement '" );
     buf.appendAscii( m_executedStatement.getStr() );
     buf.append( "')" );
@@ -521,7 +521,7 @@ void PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )
     checkColumnIndex( parameterIndex );
     OStringBuffer buf( 20 );
     buf.append( "'" );
-    OString y = OUStringToOString( x, m_pSettings->encoding );
+    OString y = OUStringToOString( x, ConnectionSettings::encoding );
     buf.ensureCapacity( y.getLength() * 2 + 2 );
     int len = PQescapeString( const_cast<char*>(buf.getStr())+1, y.getStr() , y.getLength() );
     buf.setLength( 1 + len );

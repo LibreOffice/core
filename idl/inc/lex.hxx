@@ -101,7 +101,7 @@ class SvTokenStream
     sal_uLong       nLine, nColumn;
     int             nBufPos;
     int             c;          // next character
-    sal_uInt16      nTabSize;   // length of tabulator
+    static const sal_uInt16 nTabSize = 4;   // length of tabulator
     OString         aStrTrue;
     OString         aStrFalse;
     sal_uLong       nMaxPos;

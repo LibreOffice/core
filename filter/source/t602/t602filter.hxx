@@ -75,7 +75,7 @@ struct inistruct
         tcode xcode;        // KAM    encoding set - forced
         bool ruscode;       // false  Russian tables turned on
         bool reformatpars;  // false  Reformat paragraphs (whitespaces and line breaks)
-        sal_Int16 fontsize;       // font size in points
+        static const sal_Int16 fontsize = 10; // font size in points
 
         inistruct()
             : showcomm( true )
@@ -83,7 +83,6 @@ struct inistruct
             , xcode ( KAM )
             , ruscode ( false )
             , reformatpars ( false )
-            , fontsize (10)
         {
         };
 };

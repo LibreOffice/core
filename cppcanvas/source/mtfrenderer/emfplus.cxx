@@ -387,14 +387,12 @@ namespace cppcanvas
             sal_Int32 parts;
             sal_Int32 *combineMode;
             sal_Int32 initialState;
-            EMFPPath *initialPath;
             float ix, iy, iw, ih;
 
             EMFPRegion ()
                 : parts(0)
                 , combineMode(nullptr)
                 , initialState(0)
-                , initialPath(nullptr)
                 , ix(0.0)
                 , iy(0.0)
                 , iw(0.0)
@@ -407,10 +405,6 @@ namespace cppcanvas
                 if (combineMode) {
                     delete [] combineMode;
                     combineMode = nullptr;
-                }
-                if (initialPath) {
-                    delete initialPath;
-                    initialPath = nullptr;
                 }
             }
 

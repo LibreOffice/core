@@ -205,7 +205,6 @@ private:
     css::uno::Reference< css::embed::XStorage >               m_xUserConfigStorage;
     bool                                                      m_bReadOnly;
     bool                                                      m_bModified;
-    bool                                                      m_bConfigRead;
     bool                                                      m_bDisposed;
     OUString                                                  m_aXMLPostfix;
     OUString                                                  m_aPropUIName;
@@ -852,7 +851,6 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     , m_xUserConfigStorage( nullptr )
     , m_bReadOnly( true )
     , m_bModified( false )
-    , m_bConfigRead( false )
     , m_bDisposed( false )
     , m_aXMLPostfix( ".xml" )
     , m_aPropUIName( "UIName" )
@@ -951,7 +949,6 @@ void SAL_CALL ModuleUIConfigurationManager::dispose() throw (css::uno::RuntimeEx
     m_xDefaultConfigStorage.clear();
     m_xUserConfigStorage.clear();
     m_xUserRootCommit.clear();
-    m_bConfigRead = false;
     m_bModified = false;
     m_bDisposed = true;
     aGuard.clear();

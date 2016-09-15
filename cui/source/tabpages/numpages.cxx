@@ -2369,7 +2369,6 @@ SvxNumberingPreview::SvxNumberingPreview(vcl::Window* pParent, WinBits nWinBits)
     : Window(pParent, nWinBits)
     , pActNum(nullptr)
     , nPageWidth(0)
-    , pOutlineNames(nullptr)
     , bPosition(false)
     , nActLevel(SAL_MAX_UINT16)
 {
@@ -2633,30 +2632,20 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectan
                     nTextOffset = nTextOffset + nXStep;
                     nPreNum++;
                 }
-                if (pOutlineNames)
+                //#i5153# the selected rectangle(s) should be black
+                if (0 != (nActLevel & (1<<nLevel)))
                 {
-                    //#i5153# outline numberings still use the style names as text
-                    pVDev->SetFont(aStdFont);
-                    sMsg = pOutlineNames[nLevel];
-                    pVDev->DrawText(Point(nXStart + nTextOffset, nYStart), sMsg);
+                    pVDev->SetFillColor( aBlackColor );
+                    pVDev->SetLineColor( aBlackColor );
                 }
                 else
                 {
-                    //#i5153# the selected rectangle(s) should be black
-                    if (0 != (nActLevel & (1<<nLevel)))
-                    {
-                        pVDev->SetFillColor( aBlackColor );
-                        pVDev->SetLineColor( aBlackColor );
-                    }
-                    else
-                    {
-                        //#i5153# unselected levels are gray
-                        pVDev->SetFillColor( aLineColor );
-                        pVDev->SetLineColor( aLineColor );
-                    }
-                    Rectangle aRect1(Point(nXStart + nTextOffset, nYStart + nTopOffset), Size(nWidth, nRectHeight));
-                    pVDev->DrawRect(aRect1);
+                    //#i5153# unselected levels are gray
+                    pVDev->SetFillColor( aLineColor );
+                    pVDev->SetLineColor( aLineColor );
                 }
+                Rectangle aRect1(Point(nXStart + nTextOffset, nYStart + nTopOffset), Size(nWidth, nRectHeight));
+                pVDev->DrawRect(aRect1);
             }
         }
     }

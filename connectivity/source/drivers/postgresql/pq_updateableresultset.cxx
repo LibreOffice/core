@@ -92,14 +92,13 @@ css::uno::Reference< css::sdbc::XCloseable > UpdateableResultSet::createFromPGRe
     const OUString &table,
     const std::vector< OUString > &primaryKey )
 {
-    ConnectionSettings *pSettings = *ppSettings;
     sal_Int32 columnCount = PQnfields( result );
     sal_Int32 rowCount = PQntuples( result );
     std::vector< OUString > columnNames( columnCount );
     for( int i = 0 ; i < columnCount ; i ++ )
     {
         char * name = PQfname( result, i );
-        columnNames[i] = OUString( name, strlen(name), pSettings->encoding );
+        columnNames[i] = OUString( name, strlen(name), ConnectionSettings::encoding );
     }
     std::vector< std::vector< Any > > data( rowCount );
 
@@ -115,7 +114,7 @@ css::uno::Reference< css::sdbc::XCloseable > UpdateableResultSet::createFromPGRe
                 char * val = PQgetvalue( result, row, col );
 
                 aRow[col] = makeAny(
-                    OUString( val, strlen( val ) , (*ppSettings)->encoding ) );
+                    OUString( val, strlen( val ), ConnectionSettings::encoding ) );
             }
         }
         data[row] = aRow;

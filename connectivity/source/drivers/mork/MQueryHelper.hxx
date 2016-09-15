@@ -166,9 +166,6 @@ namespace connectivity
 
             mutable ::osl::Mutex        m_aMutex;
             resultsArray        m_aResults;
-            sal_uInt32          m_nIndex;
-            bool            m_bHasMore;
-            bool            m_bAtEnd;
             void            append(MQueryHelperResultEntry* resEnt );
             void            clear_results();
             OColumnAlias        m_rColumnAlias;
