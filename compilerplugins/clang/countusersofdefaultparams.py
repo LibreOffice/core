@@ -17,8 +17,8 @@ def normalizeTypeParams( line ):
 # I have not yet found a way of suppressing the gbuild output.
 with io.open("loplugin.countusersofdefaultparams.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
-        if line.startswith("defn:\t"):
-            tokens = line.strip().split("\t")
+        tokens = line.strip().split("\t")
+        if tokens[0] == "defn:":
             access = tokens[1]
             returnType = tokens[2]
             nameAndParams = tokens[3]
@@ -27,8 +27,7 @@ with io.open("loplugin.countusersofdefaultparams.log", "rb", buffering=1024*1024
             definitionToSourceLocationMap[funcInfo] = sourceLocation
             if not funcInfo in callDict:
                 callDict[funcInfo] = set()
-        elif line.startswith("call:\t"):
-            tokens = line.strip().split("\t")
+        elif tokens[0] == "call:":
             returnType = tokens[1]
             nameAndParams = tokens[2]
             sourceLocationOfCall = tokens[3]

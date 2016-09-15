@@ -9,10 +9,10 @@ definitionToFileDict = {}
 
 with open("loplugin.mergeclasses.log") as txt:
     for line in txt:
+        tokens = line.strip().split("\t")
     
-        if line.startswith("instantiated:\t"):
-            idx1 = line.find("\t")
-            clazzName = line[idx1+1 : len(line)-1]
+        if tokens[0] == "instantiated:":
+            clazzName = tokens[1]
             if (clazzName.startswith("const ")):
                 clazzName = clazzName[6:]
             if (clazzName.startswith("class ")):
@@ -21,20 +21,16 @@ with open("loplugin.mergeclasses.log") as txt:
                 clazzName = clazzName[:len(clazzName)-3]
             instantiatedSet.add(clazzName)
             
-        elif line.startswith("definition:\t"):
-            idx1 = line.find("\t")
-            idx2 = line.find("\t", idx1+1)
-            clazzName = line[idx1+1 : idx2]
-            # the +2 is so we skip the leading /
-            fileName  = line[idx2+2 : len(line)-1]
+        elif tokens[0] == "definition:":
+            clazzName = tokens[1]
+            # the 1.. is so we skip the leading /
+            fileName  = tokens[1][1..]
             definitionSet.add(clazzName)
             definitionToFileDict[clazzName] = fileName
             
-        elif line.startswith("has-subclass:\t"):
-            idx1 = line.find("\t")
-            idx2 = line.find("\t", idx1+1)
-            child  = line[idx1+1 : idx2]
-            parent = line[idx2+1 : len(line)-1]
+        elif tokens[0] == "has-subclass:":
+            child  = tokens[1]
+            parent = tokens[2]
             if (parent.startswith("class ")):
                 parent = parent[6:]
             elif (parent.startswith("struct ")):

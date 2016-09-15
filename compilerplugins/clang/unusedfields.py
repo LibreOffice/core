@@ -25,21 +25,18 @@ def normalizeTypeParams( line ):
 # I have not yet found a way of suppressing the gbuild output.
 with io.open("loplugin.unusedfields.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
-        if line.startswith("definition:\t"):
-            idx1 = line.find("\t",12)
-            idx2 = line.find("\t",idx1+1)
-            idx3 = line.find("\t",idx2+1)
-            funcInfo = (normalizeTypeParams(line[12:idx1]), line[idx1+1:idx2])
+        tokens = line.strip().split("\t")
+        if tokens[0] == "definition:":
+            funcInfo = (normalizeTypeParams(tokens[1]), tokens[2])
             definitionSet.add(funcInfo)
-            definitionToTypeMap[funcInfo] = line[idx2+1:idx3].strip()
-            definitionToSourceLocationMap[funcInfo] = line[idx3+1:].strip()
-        elif line.startswith("touch:\t"):
-            idx1 = line.find("\t",7)
-            callInfo = (normalizeTypeParams(line[7:idx1]), line[idx1+1:].strip())
+            definitionToTypeMap[funcInfo] = tokens[3]
+            definitionToSourceLocationMap[funcInfo] = tokens[4]
+        elif tokens[0] == "touch:":
+            callInfo = (normalizeTypeParams(tokens[1]), tokens[2])
             callSet.add(callInfo)
-        elif line.startswith("read:\t"):
+        elif tokens[0] == "read:":
             idx1 = line.find("\t",6)
-            readInfo = (normalizeTypeParams(line[6:idx1]), line[idx1+1:].strip())
+            readInfo = (normalizeTypeParams(tokens[1]), tokens[2])
             readFromSet.add(readInfo)
 
 # Invert the definitionToSourceLocationMap

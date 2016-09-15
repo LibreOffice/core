@@ -9,15 +9,12 @@ overridingSet = set()
 
 with io.open("loplugin.unnecessaryvirtual.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
-    
-        if line.startswith("definition:\t"):
-            idx1 = line.find("\t")
-            clazzName = line[idx1+1 : len(line)-1]
+        tokens = line.strip().split("\t")
+        if tokens[0] == "definition:":
+            clazzName = tokens[1]
             definitionSet.add(clazzName)
-            
-        elif line.startswith("overriding:\t"):
-            idx1 = line.find("\t")
-            clazzName = line[idx1+1 : len(line)-1]
+        elif tokens[0] == "overriding:":
+            clazzName = tokens[1]
             overridingSet.add(clazzName)
             
 with open("loplugin.unnecessaryvirtual.report", "wt") as f:

@@ -16,22 +16,17 @@ def normalizeTypeParams( line ):
 # reading as binary (since we known it is pure ascii) is much faster than reading as unicode
 with io.open("loplugin.singlevalfields.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
-        if line.startswith("defn:\t"):
-            idx1 = line.find("\t")
-            idx2 = line.find("\t",idx1+1)
-            idx3 = line.find("\t",idx2+1)
-            parentClass = normalizeTypeParams(line[idx1+1:idx2])
-            fieldName = normalizeTypeParams(line[idx2+1:idx3])
-            sourceLocation = line[idx3+1:].strip()
+        tokens = line.strip().split("\t")
+        if tokens[0] == "defn:":
+            parentClass = normalizeTypeParams(tokens[1])
+            fieldName = normalizeTypeParams(tokens[2])
+            sourceLocation = tokens[3]
             fieldInfo = (parentClass, fieldName)
             definitionToSourceLocationMap[fieldInfo] = sourceLocation
-        elif line.startswith("asgn:\t"):
-            idx1 = line.find("\t")
-            idx2 = line.find("\t",idx1+1)
-            idx3 = line.find("\t",idx2+1)
-            parentClass = normalizeTypeParams(line[idx1+1:idx2])
-            fieldName = normalizeTypeParams(line[idx2+1:idx3])
-            assignValue = line[idx3+1:].strip()
+        elif tokens[0] == "asgn:":
+            parentClass = normalizeTypeParams(tokens[1])
+            fieldName = normalizeTypeParams(tokens[2])
+            assignValue = tokens[3]
             fieldInfo = (parentClass, fieldName)
             if not fieldInfo in fieldAssignDict:
                 fieldAssignDict[fieldInfo] = set()
