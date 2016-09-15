@@ -101,6 +101,7 @@ SvxBorderLine::SvxBorderLine( const Color *pCol, long nWidth,
 , m_bUseLeftTop( false )
 , m_pColorOutFn( pColorOutFn )
 , m_pColorInFn( pColorInFn )
+, m_pColorGapFn( nullptr )
 {
     if ( pCol )
         aColor = *pCol;
