@@ -17,7 +17,6 @@
 
 #include <rtl/ustrbuf.hxx>
 
-// No-op for now; it needs implementing.
 rtl_uString *osl_backtraceAsString()
 {
     OUStringBuffer aBuf;
