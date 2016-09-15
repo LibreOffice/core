@@ -22,6 +22,8 @@ export VCL_HIDE_WINDOWS=1
 
 gb_SDKDIR := $(MACOSX_SDK_PATH)
 
+gb_COMPILEROPTFLAGS := -O1
+
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 # Darwin mktemp -t expects a prefix, not a pattern
