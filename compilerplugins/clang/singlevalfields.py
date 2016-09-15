@@ -51,6 +51,9 @@ for fieldInfo, assignValues in fieldAssignDict.iteritems():
     # Windows-only
     if containingClass in ["SfxAppData_Impl", "sfx2::ImplDdeItem"]:
         continue
+    # Some of our supported compilers don't do constexpr, which means o3tl::typed_flags can't be 'static const'
+    if containingClass in ["WaitWindow_Impl"]:
+        continue
     v0 = fieldInfo[0] + " " + fieldInfo[1]
     v1 = (",".join(assignValues))
     v2 = ""
