@@ -81,6 +81,7 @@
 #include <comphelper/configuration.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/backupfilehelper.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -567,6 +568,14 @@ void Desktop::Init()
         {
             SetBootstrapError( BE_OFFICECONFIG_BROKEN, e.Message );
         }
+
+        static bool bTryHardOfficeconfigBroken(false);
+
+        if (bTryHardOfficeconfigBroken)
+        {
+            SAL_WARN("configmgr", "################# Desktop::Init() #####################");
+            SetBootstrapError(BE_OFFICECONFIG_BROKEN, OUString());
+        }
     }
 
     if ( true )
@@ -938,15 +947,87 @@ void Desktop::HandleBootstrapErrors(
     }
     else if ( aBootstrapError == BE_OFFICECONFIG_BROKEN )
     {
-        OUString msg(
-            GetMsgString(
+        // test restore of registrymodifications
+        static bool bFeatureSecureUserConfig(true);
+        static sal_uInt16 nNumCopies(5);
+        bool bFireOriginalError(true);
+
+        if (bFeatureSecureUserConfig)
+        {
+            // try to asccess user layer configuration file
+            OUString conf("${CONFIGURATION_LAYERS}");
+            rtl::Bootstrap::expandMacros(conf);
+            const OUString aTokenUser("user:");
+            sal_Int32 nStart(conf.indexOf(aTokenUser));
+            OUString aUser;
+
+            if (-1 != nStart)
+            {
+                nStart += aTokenUser.getLength();
+                sal_Int32 nEnd(conf.indexOf(' ', nStart));
+
+                if (-1 == nEnd)
+                {
+                    nEnd = conf.getLength();
+                }
+
+                aUser = conf.copy(nStart, nEnd - nStart);
+                aUser.startsWith("!", &aUser);
+            }
+
+            if (!aUser.isEmpty())
+            {
+                comphelper::BackupFileHelper aBackupFileHelper(aUser, nNumCopies);
+
+                if (aBackupFileHelper.isPopPossible())
+                {
+                    ScopedVclPtrInstance< MessageDialog > aQueryShouldRestore(
+                        Application::GetDefDialogParent(),
+                        "QueryTryToRestoreConfigurationDialog",
+                        "desktop/ui/querytrytorestoreconfigurationdialog.ui");
+
+                    if (aQueryShouldRestore.get())
+                    {
+                        if (!aErrorMessage.isEmpty())
+                        {
+                            OUString aPrimaryText(aQueryShouldRestore->get_primary_text());
+
+                            aPrimaryText += "\n(\"" + aErrorMessage + "\")";
+                            aQueryShouldRestore->set_primary_text(aPrimaryText);
+                        }
+
+                        if (RET_YES == aQueryShouldRestore->Execute())
+                        {
+                            aBackupFileHelper.tryPop();
+                            bFireOriginalError = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        // set flag at BackupFileHelper to be able to know if _exit was called and
+        // actions are executed after this
+        comphelper::BackupFileHelper::setExitWasCalled();
+
+        if (bFireOriginalError)
+        {
+            OUString msg(
+                GetMsgString(
                 STR_CONFIG_ERR_ACCESS_GENERAL,
                 ("A general error occurred while accessing your central"
-                 " configuration.")));
-        if (!aErrorMessage.isEmpty()) {
-            msg += "\n(\"" + aErrorMessage + "\")";
+                " configuration.")));
+            if (!aErrorMessage.isEmpty()) {
+                msg += "\n(\"" + aErrorMessage + "\")";
+            }
+            FatalError(MakeStartupErrorMessage(msg));
         }
-        FatalError(MakeStartupErrorMessage(msg));
+        else
+        {
+            // Already presented all information to the user.
+            // just do what FatalError does at it's end
+            _exit(EXITHELPER_FATAL_ERROR);
+        }
     }
     else if ( aBootstrapError == BE_USERINSTALL_FAILED )
     {

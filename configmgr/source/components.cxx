@@ -614,25 +614,48 @@ Components::Components(
 
 Components::~Components()
 {
-    flushModifications();
+    SAL_WARN("configmgr", "################# Components::~Components() #####################");
+
+    // get flag if _exit was already called which is a sign to not to secure user config
+    const bool bExitWasCalled(comphelper::BackupFileHelper::getExitWasCalled());
+
+#ifndef WNT
+    // we can add a SAL_WARN here for other systems where the destructor gets called after
+    // an _exit() call - which should not happen. Still safe - the getExitWasCalled() is
+    // used, but a hint that _exit behaves different on a system
+    SAL_WARN_IF(bExitWasCalled, "configmgr", "Components::~Components() called after _exit() call");
+#endif
+
+    if (bExitWasCalled)
+    {
+        osl::MutexGuard g(*lock_);
+
+        if (writeThread_.is())
+        {
+            writeThread_->join();
+        }
+    }
+    else
+    {
+        flushModifications();
+    }
+
     for (WeakRootSet::iterator i(roots_.begin()); i != roots_.end(); ++i) {
         (*i)->setAlive(false);
     }
 
-    // test backup of registrymodifications (currently off)
-    static bool bFeatureSecureUserConfig(false);
+    // test backup of registrymodifications
+    static bool bFeatureSecureUserConfig(true);
 
-    if (bFeatureSecureUserConfig && ModificationTarget::File == modificationTarget_ && !modificationFileUrl_.isEmpty())
+    if (!bExitWasCalled &&
+        bFeatureSecureUserConfig &&
+        ModificationTarget::File == modificationTarget_ &&
+        !modificationFileUrl_.isEmpty())
     {
         static sal_uInt16 nNumCopies(5);
         comphelper::BackupFileHelper aBackupFileHelper(modificationFileUrl_, nNumCopies);
-        aBackupFileHelper.tryPush();
-        static bool bTryPop(false);
 
-        if (bTryPop)
-        {
-            aBackupFileHelper.tryPop();
-        }
+        aBackupFileHelper.tryPush();
     }
 }
 

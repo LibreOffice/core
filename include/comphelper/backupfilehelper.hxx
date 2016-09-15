@@ -14,6 +14,7 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
+#include <osl/file.hxx>
 
 namespace comphelper
 {
@@ -51,6 +52,15 @@ namespace comphelper
         osl::File           maBaseFile;
         bool                mbBaseFileIsOpen;
 
+        // internal flag if _exit() was called already - a hint to evtl.
+        // not create copies of potentially not well-defined data. This
+        // may be used in destructors of static instances - which unfortunately
+        // get called on WNT but not on linux. Thus I thought about encapsulating
+        // in some '#ifdefs', but it's just more safe to always do it and
+        // allows to add a SAL_WARN when one of these destructors is called
+        // after _exit()
+        static bool         mbExitWasCalled;
+
         // internal upper limit (max) of allowed backups
         static sal_uInt16   mnMaxAllowedBackups;
 
@@ -68,6 +78,10 @@ namespace comphelper
          *          reduce the number of existing backups
          */
         BackupFileHelper(const OUString& rBaseURL, sal_uInt16 nNumBackups = 5);
+
+        // allow to set flag when app had to call _exit()
+        static void setExitWasCalled();
+        static bool getExitWasCalled();
 
         /** tries to create a new backup, if there is none yet, or if the
          *  last differs from the base file. It will then put a new verion
