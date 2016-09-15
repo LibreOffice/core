@@ -278,8 +278,6 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
 #if HAVE_FEATURE_OPENGL
         VCL_GL_INFO("PaintHelper::DoPaint on " <<
                     typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "' begin");
-
-        OutputDevice::PaintScope aScope( m_pWindow );
 #endif
         // double-buffering: setup the buffer if it does not exist
         if (!pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
@@ -636,9 +634,6 @@ void Window::ImplCallOverlapPaint()
     {
         // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
         //         because we were called from the Sal layer
-#if HAVE_FEATURE_OPENGL
-        OutputDevice::PaintScope aScope( GetOutDev() );
-#endif
         ImplCallPaint(nullptr, mpWindowImpl->mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
     }
 }
@@ -658,10 +653,6 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
         return;
     }
 
-#if HAVE_FEATURE_OPENGL
-    OutputDevice::PaintScope aScope(this);
-#endif
-
     // save paint events until resizing or initial sizing done
     if (mpWindowImpl->mbFrame &&
         (mpWindowImpl->mpFrameData->maResizeIdle.IsActive() ||
@@ -679,9 +670,6 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandleResizeTimerHdl, Idle *, void)
 {
     if( mpWindowImpl->mbReallyVisible )
     {
-#if HAVE_FEATURE_OPENGL
-        OutputDevice::PaintScope aScope(this);
-#endif
         ImplCallResize();
         if( mpWindowImpl->mpFrameData->maPaintIdle.IsActive() )
         {

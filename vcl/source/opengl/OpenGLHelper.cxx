@@ -1072,44 +1072,4 @@ void OpenGLHelper::debugMsgPrint(const int nType, const char *pFormat, ...)
     va_end (aArgs);
 }
 
-#if HAVE_FEATURE_OPENGL || defined(ANDROID)
-
-OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)
-    : pHandle( nullptr )
-{
-    if( pDev->mpGraphics || pDev->AcquireGraphics() )
-    {
-    }
-}
-
-/**
- * Flush all the queued rendering commands to the screen for this context.
- */
-void OutputDevice::PaintScope::flush()
-{
-    if( pHandle )
-    {
-        OpenGLContext *pContext = static_cast<OpenGLContext *>( pHandle );
-        pHandle = nullptr;
-        pContext->mnPainting--;
-        assert( pContext->mnPainting >= 0 );
-        if( pContext->mnPainting == 0 )
-        {
-            pContext->makeCurrent();
-            pContext->AcquireDefaultFramebuffer();
-            glFlush();
-            pContext->swapBuffers();
-            CHECK_GL_ERROR();
-        }
-        pContext->release();
-    }
-}
-
-OutputDevice::PaintScope::~PaintScope()
-{
-    flush();
-}
-
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
