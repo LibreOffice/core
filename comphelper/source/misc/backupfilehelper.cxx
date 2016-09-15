@@ -15,6 +15,7 @@
 namespace comphelper
 {
     sal_uInt16 BackupFileHelper::mnMaxAllowedBackups = 10;
+    bool BackupFileHelper::mbExitWasCalled = false;
 
     BackupFileHelper::BackupFileHelper(
         const OUString& rBaseURL,
@@ -26,6 +27,16 @@ namespace comphelper
         maBaseFile(rBaseURL),
         mbBaseFileIsOpen(false)
     {
+    }
+
+    void BackupFileHelper::setExitWasCalled()
+    {
+        mbExitWasCalled = true;
+    }
+
+    bool BackupFileHelper::getExitWasCalled()
+    {
+        return mbExitWasCalled;
     }
 
     bool BackupFileHelper::tryPush()
