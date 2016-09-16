@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_2d8965cb",
+        "filename": "oox/source/drawingml/shapepropertymap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-09-16T18:43:47Z",
+      "side": 1,
+      "message": "not sure if copy ctor of enumarray works as intended here",
+      "range": {
+        "startLine": 57,
+        "startChar": 4,
+        "endLine": 57,
+        "endChar": 33
+      },
+      "revId": "822774dfa1de1eacc3950989d9d5c53ddc834eee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
