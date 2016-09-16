@@ -1058,7 +1058,11 @@ void SdTiledRenderingTest::testCursorViews()
     // second view as well, even if the second view was created after begin
     // text edit in the first view.
     ViewCallback aView2;
+    aView2.m_bViewLock = false;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    // This failed: the second view didn't get a lock notification, even if the
+    // first view already started text edit.
+    CPPUNIT_ASSERT(aView2.m_bViewLock);
     SfxLokHelper::setView(nView1);
     aView2.m_bTilesInvalidated = false;
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
