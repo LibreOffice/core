@@ -363,6 +363,10 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         m_pIbDbcolAllFrom->Enable( false );
     }
 
+    // by default, select header button
+    m_pRbHeadlColnms->Check(true);
+    m_pRbHeadlEmpty->Check(false);
+
     m_pRbAsTable->SetClickHdl( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
     m_pRbAsField->SetClickHdl( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
     m_pRbAsText->SetClickHdl( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
