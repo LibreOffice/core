@@ -26,6 +26,8 @@ import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XWindow;
+import com.sun.star.awt.XLayoutConstrains;
+import com.sun.star.awt.Size;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -108,6 +110,16 @@ public class AccessibleFixedText extends TestCase {
             XFixedText xFT = UnoRuntime.queryInterface(
                                      XFixedText.class, txtControl);
             xFT.setText("FxedText");
+
+            /* Set the text control to its preferred size, otherwise it
+             * defaults to the size hard coded in its constructor (100 x 12) */
+            XLayoutConstrains xLCTxt = UnoRuntime.queryInterface(
+                XLayoutConstrains.class, txtControl);
+            Size textSize = xLCTxt.getPreferredSize();
+            XWindow xWinTxt = UnoRuntime.queryInterface(
+                XWindow.class, txtControl);
+            xWinTxt.setPosSize(0, 0, textSize.Width, textSize.Height,
+                               PosSize.SIZE);
 
             XControlContainer ctrlCont = UnoRuntime.queryInterface(
                                                  XControlContainer.class,
