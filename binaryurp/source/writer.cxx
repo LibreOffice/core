@@ -19,9 +19,11 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+#include <cstring>
 #include <exception>
+#include <limits>
 #include <vector>
-#include <string.h>
 
 #include "com/sun/star/connection/XConnection.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
@@ -411,18 +413,17 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     OSL_ASSERT(!buffer.empty());
     unsigned char const * p = &buffer[0];
     std::vector< unsigned char >::size_type n = buffer.size();
-    OSL_ASSERT(header.size() <= SAL_MAX_INT32 && SAL_MAX_INT32 <= SAL_MAX_SIZE);
-    sal_Size k = SAL_MAX_INT32 - header.size();
+    OSL_ASSERT(header.size() <= SAL_MAX_INT32);
+    /*static_*/assert(SAL_MAX_INT32 <= std::numeric_limits<std::size_t>::max());
+    std::size_t k = SAL_MAX_INT32 - header.size();
     if (n < k) {
-        k = static_cast< sal_Size >(n);
+        k = n;
     }
-    css::uno::Sequence< sal_Int8 > s(
-        static_cast< sal_Int32 >(header.size() + k));
+    css::uno::Sequence<sal_Int8> s(header.size() + k);
     OSL_ASSERT(!header.empty());
-    memcpy(
-        s.getArray(), &header[0], static_cast< sal_Size >(header.size()));
+    std::memcpy(s.getArray(), &header[0], header.size());
     for (;;) {
-        memcpy(s.getArray() + s.getLength() - k, p, k);
+        std::memcpy(s.getArray() + s.getLength() - k, p, k);
         try {
             bridge_->getConnection()->write(s);
         } catch (const css::io::IOException & e) {
@@ -431,14 +432,14 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
                 "Binary URP write raised IO exception: " + e.Message,
                 css::uno::Reference< css::uno::XInterface >(), exc);
         }
-        n = static_cast< std::vector< unsigned char >::size_type >(n - k);
+        n -= k;
         if (n == 0) {
             break;
         }
         p += k;
         k = SAL_MAX_INT32;
         if (n < k) {
-            k = static_cast< sal_Size >(n);
+            k = n;
         }
         s.realloc(k);
     }
