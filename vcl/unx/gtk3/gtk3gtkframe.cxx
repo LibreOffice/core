@@ -993,7 +993,7 @@ void GtkSalFrame::InitCommon()
 
 
     // connect signals
-    g_signal_connect( G_OBJECT(m_pWindow), "style-set", G_CALLBACK(signalStyleSet), this );
+    g_signal_connect( G_OBJECT(m_pWindow), "style-updated", G_CALLBACK(signalStyleUpdated), this );
     gtk_widget_set_has_tooltip(pEventWidget, true);
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "query-tooltip", G_CALLBACK(signalTooltipQuery), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-press-event", G_CALLBACK(signalButton), this ));
@@ -3145,20 +3145,25 @@ gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
     return true;
 }
 
-void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer frame )
+void GtkSalFrame::signalStyleUpdated(GtkWidget*, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
-    // every frame gets an initial style set on creation
-    // do not post these as the whole application tends to
-    // redraw itself to adjust to the new style
-    // where there IS no new style resulting in tremendous unnecessary flickering
-    if( pPrevious != nullptr )
+    // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
+    GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::SettingsChanged );
+
+    // fire off font-changed when the system cairo font hints change
+    GtkInstance *pInstance = static_cast<GtkInstance*>(GetSalData()->m_pInstance);
+    const cairo_font_options_t* pLastCairoFontOptions = pInstance->GetLastSeenCairoFontOptions();
+    const cairo_font_options_t* pCurrentCairoFontOptions = gdk_screen_get_font_options(gdk_screen_get_default());
+    bool bFontSettingsChanged = true;
+    if (pLastCairoFontOptions && pCurrentCairoFontOptions)
+        bFontSettingsChanged = !cairo_font_options_equal(pLastCairoFontOptions, pCurrentCairoFontOptions);
+    else if (!pLastCairoFontOptions && !pCurrentCairoFontOptions)
+        bFontSettingsChanged = false;
+    if (bFontSettingsChanged)
     {
-        // signalStyleSet does NOT usually have the gdk lock
-        // so post user event to safely dispatch the SalEvent::SettingsChanged
-        // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
-        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::SettingsChanged );
+        pInstance->ResetLastSeenCairoFontOptions();
         GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::FontChanged );
     }
 }

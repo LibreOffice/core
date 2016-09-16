@@ -242,7 +242,11 @@ class GtkSalFrame : public SalFrame
 
     // signals
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
-    static void         signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer );
+#if GTK_CHECK_VERSION(3,0,0)
+    static void         signalStyleUpdated(GtkWidget*, gpointer);
+#else
+    static void         signalStyleSet(GtkWidget*, GtkStyle* pPrevious, gpointer);
+#endif
 #if GTK_CHECK_VERSION(3,0,0)
     static gboolean     signalDraw( GtkWidget*, cairo_t *cr, gpointer );
     static void         sizeAllocated(GtkWidget*, GdkRectangle *pAllocation, gpointer frame);
