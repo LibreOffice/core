@@ -1823,25 +1823,11 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
 
         if(p1stPara)
         {
-            if(nParaAnz == 1)
-            {
-                // if its only one paragraph, check if it is empty
-                OUString aStr(rOutl.GetText(p1stPara));
-                if (aStr.isEmpty())
-                {
-                    // gotcha!
-                    nParaAnz = 0;
-                }
-            }
-
             // to remove the grey field background
             rOutl.UpdateFields();
 
-            if(nParaAnz != 0)
-            {
-                // create new text object
-                pNewText = rOutl.CreateParaObject( 0, nParaAnz );
-            }
+            // create new text object
+            pNewText = rOutl.CreateParaObject( 0, nParaAnz );
         }
         SetOutlinerParaObject(pNewText);
     }
