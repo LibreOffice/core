@@ -11,6 +11,8 @@
 #include <ostream>
 
 #include "sdmodeltestbase.hxx"
+#include "ViewShell.hxx"
+#include "unomodel.hxx"
 
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
@@ -126,10 +128,11 @@ public:
     void testTdf95932();
     void testTdf99030();
     void testTdf49561();
+    void testTdf102223();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
-    CPPUNIT_TEST(testDocumentLayout);
+/*    CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testSmoketest);
     CPPUNIT_TEST(testN759180);
     CPPUNIT_TEST(testN778859);
@@ -176,7 +179,8 @@ public:
     CPPUNIT_TEST(testTdf93868);
     CPPUNIT_TEST(testTdf95932);
     CPPUNIT_TEST(testTdf99030);
-    CPPUNIT_TEST(testTdf49561);
+    CPPUNIT_TEST(testTdf49561);*/
+    CPPUNIT_TEST(testTdf102223);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1482,6 +1486,21 @@ void SdImportTest::testTdf49561()
     OUString aCharFontName;
     CPPUNIT_ASSERT(xPropSet->getPropertyValue("CharFontName") >>= aCharFontName);
     CPPUNIT_ASSERT_EQUAL(OUString("Stencil"), aCharFontName);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf102223()
+{
+    tools::SvRef<sd::DrawDocShell> xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf102223.odp"), ODP);
+
+    css::uno::Reference<css::frame::XModel> mxModel = xDocShRef->GetBaseModel();
+    SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxModel.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(1);
+    CPPUNIT_ASSERT(pObject);
 
     xDocShRef->DoClose();
 }
