@@ -1059,6 +1059,17 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
         rEditView.RegisterOtherShell(nullptr);
         // Text selection, if any.
         rEditView.DrawSelection(pOtherShell);
+
+        // Shape text lock.
+        if (OutlinerView* pOutlinerView = pDrawView->GetTextEditOutlinerView())
+        {
+            Rectangle aRectangle = pOutlinerView->GetOutputArea();
+            vcl::Window* pWin = pThisShell->GetActiveWindow();
+            if (pWin && pWin->GetMapMode().GetMapUnit() == MAP_100TH_MM)
+                aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
+            OString sRectangle = aRectangle.toString();
+            SfxLokHelper::notifyOtherView(&pDrawViewShell->GetViewShellBase(), pOtherShell, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
+        }
     }
     else
     {
