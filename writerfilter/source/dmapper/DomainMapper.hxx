@@ -64,12 +64,6 @@ class StyleSheetTable;
 class GraphicZOrderHelper;
 class GraphicNamingHelper;
 
-// different context types require different sprm handling (e.g. names)
-enum SprmType
-{
-    SPRM_DEFAULT,
-    SPRM_LIST
-};
 class DomainMapper : public LoggedProperties, public LoggedTable,
                     public BinaryObj, public LoggedStream
 {

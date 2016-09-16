@@ -78,10 +78,6 @@ enum class ControlType {
 // all parts like slider, buttons
     Scrollbar          =  60,
     Slider             =  65,
-// Border around a group of related
-// items, perhaps also displaying
-// a label of identification
-    Groupbox           =  70,
 // A separator line
     Fixedline          =  80,
 // A toolbar control with buttons and a grip
@@ -220,7 +216,6 @@ enum class ControlState {
     FOCUSED         = 0x0002,
     PRESSED         = 0x0004,
     ROLLOVER        = 0x0008,
-    HIDDEN          = 0x0010,
     DEFAULT         = 0x0020,
     SELECTED        = 0x0040,
     DOUBLEBUFFERING = 0x4000,  ///< Set when the control is painted using double-buffering via VirtualDevice.
@@ -228,7 +223,7 @@ enum class ControlState {
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ControlState> : is_typed_flags<ControlState, 0xc07f> {};
+    template<> struct typed_flags<ControlState> : is_typed_flags<ControlState, 0xc06f> {};
 }
 
 class ControlCacheKey

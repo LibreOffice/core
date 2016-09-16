@@ -92,7 +92,6 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
         case ControlType::Frame:
         case ControlType::Scrollbar:
         case ControlType::WindowBackground:
-        case ControlType::Groupbox:
         case ControlType::Fixedline:
             return true;
 
@@ -479,12 +478,6 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         }
 
         draw( QStyle::CC_SpinBox, &option, m_image.get(),
-              vclStateValue2StateFlag(nControlState, value) );
-    }
-    else if (type == ControlType::Groupbox)
-    {
-        QStyleOptionGroupBox option;
-        draw( QStyle::CC_GroupBox, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if (type == ControlType::Radiobutton)
