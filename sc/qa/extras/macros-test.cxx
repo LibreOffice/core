@@ -330,8 +330,8 @@ void ScMacrosTest::testVba()
             aOutParam);
         OUString aStringRes;
         aRet >>= aStringRes;
-        SAL_INFO("sc.qa", "value of Ret " << aStringRes);
-        CPPUNIT_ASSERT_MESSAGE( "script reported failure", aStringRes == "OK" );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "script reported failure", OUString("OK"), aStringRes);
         pFoundShell->DoClose();
         if ( bWorkbooksHandling )
         {
