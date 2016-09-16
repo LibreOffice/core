@@ -39,6 +39,8 @@
 #include <svtools/grfmgr.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
+
+#include <functional>
 #include <vector>
 
 class OutlinerEditEng;
