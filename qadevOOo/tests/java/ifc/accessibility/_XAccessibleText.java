@@ -402,11 +402,6 @@ public class _XAccessibleText extends MultiMethodTest {
                     log.println("Component rect: " + bounds.X + ", " +
                                 bounds.Y + ", " + bounds.Width + ", " +
                                 bounds.Height);
-                    //TODO: For some reason that still needs to be investigated,
-                    // the above test keeps failing on Mac OS X:
-                    if (!System.getProperty("os.name").equals("Mac OS X")) {
-                        res &= localres;
-                    }
                 }
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
