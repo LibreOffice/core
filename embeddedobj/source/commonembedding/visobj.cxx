@@ -174,6 +174,8 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
     bool bBackToLoaded = false;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
+        // restore original VisualAreaSize, because writer objects set
+        // themselves to a default size OLESIZE
         awt::Size aOrigSize = getVisualAreaSize(nAspect);
         changeState(embed::EmbedStates::RUNNING);
         if (aOrigSize != getVisualAreaSize(nAspect))
