@@ -244,6 +244,11 @@ struct _LibreOfficeKitDocumentClass
                            const int nTileWidth,
                            const int nTileHeight);
 
+    /// @see lok::Document::getViewIds().
+    bool (*getViewIds) (LibreOfficeKitDocument* pThis,
+                       int* pArray,
+                       size_t nSize);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

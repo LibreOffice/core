@@ -29,6 +29,8 @@ public:
     static int getView(SfxViewShell* pViewShell = nullptr);
     /// Get the number of views of the current object shell.
     static std::size_t getViewsCount();
+    /// Get viewIds of all existing views.
+    static bool getViewIds(int* pArray, size_t nSize);
 
     /// Invoke the LOK callback of all views except pThisView, with a payload of rKey-rPayload.
     static void notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload);
