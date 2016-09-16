@@ -63,6 +63,7 @@ public:
     void testColRowResize();
     void testUndoShells();
     void testCreateViewGraphicSelection();
+    void testTextEditViews();
     void testGraphicInvalidate();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
@@ -78,6 +79,7 @@ public:
     CPPUNIT_TEST(testColRowResize);
     CPPUNIT_TEST(testUndoShells);
     CPPUNIT_TEST(testCreateViewGraphicSelection);
+    CPPUNIT_TEST(testTextEditViews);
     CPPUNIT_TEST(testGraphicInvalidate);
     CPPUNIT_TEST_SUITE_END();
 
@@ -635,6 +637,57 @@ void ScTiledRenderingTest::testUndoShells()
     sal_Int32 nView1 = SfxLokHelper::getView();
     // This was -1: ScSimpleUndo did not remember what view shell created it.
     CPPUNIT_ASSERT_EQUAL(nView1, pUndoManager->GetUndoAction()->GetViewShellId());
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+bool lcl_hasEditView(ScViewData& rViewData)
+{
+    bool bResult = false;
+    for (unsigned int i=0; i<4; i++)
+    {
+        bResult = rViewData.HasEditView( (ScSplitPos) i );
+        if (bResult) break;
+    }
+    return bResult;
+}
+
+void ScTiledRenderingTest::testTextEditViews()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    // view #1
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
+
+    // text edit a cell in view #1
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
+
+    // view #2
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // move cell cursor i view #2
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN);
+    Scheduler::ProcessEventsToIdle();
+
+    // check that text edit view in view #1 has not be killed
+    CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
+
+    mxComponent->dispose();
+    mxComponent.clear();
 
     comphelper::LibreOfficeKit::setActive(false);
 }

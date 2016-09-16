@@ -99,10 +99,19 @@
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 extern SfxViewShell* pScActiveViewShell;            // global.cxx
 
 using namespace com::sun::star;
+
+struct BoolLock
+{
+    bool& mflag;
+    explicit BoolLock( bool& flag ) : mflag(flag)
+    { mflag = true; }
+    ~BoolLock() { mflag = false; }
+};
 
 void ScTabViewShell::Activate(bool bMDI)
 {
@@ -114,7 +123,7 @@ void ScTabViewShell::Activate(bool bMDI)
     {
         // for input row (ClearCache)
         ScModule* pScMod = SC_MOD();
-        pScMod->ViewShellChanged();
+        pScMod->ViewShellChanged(/*bStopEditing=*/ !comphelper::LibreOfficeKit::isActive());
 
         ActivateView( true, bFirstActivate );
 
@@ -154,7 +163,7 @@ void ScTabViewShell::Activate(bool bMDI)
             }
         }
 
-        UpdateInputHandler( true );
+        UpdateInputHandler( /*bForce=*/ true, /*bStopEditing=*/ !comphelper::LibreOfficeKit::isActive() );
 
         if ( bFirstActivate )
         {
@@ -237,7 +246,7 @@ void ScTabViewShell::Deactivate(bool bMDI)
     bIsActive = false;
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl(this);
 
-    if( bMDI )
+    if( bMDI && !comphelper::LibreOfficeKit::isActive())
     {
         //  during shell deactivation, shells must not be switched, or the loop
         //  through the shell stack (in SfxDispatcher::DoDeactivate_Impl) will not work
@@ -275,12 +284,15 @@ void ScTabViewShell::SetActive()
 
 bool ScTabViewShell::PrepareClose(bool bUI)
 {
+    BoolLock aBoolLock(bInPrepareClose);
     // Call EnterHandler even in formula mode here,
     // so a formula change in an embedded object isn't lost
     // (ScDocShell::PrepareClose isn't called then).
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( this );
     if ( pHdl && pHdl->IsInputMode() )
+    {
         pHdl->EnterHandler();
+    }
 
     // draw text edit mode must be closed
     FuPoor* pPoor = GetDrawFuncPtr();
@@ -1669,6 +1681,8 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     bInFormatDialog(false),
     bReadOnly(false),
     bForceFocusOnCurCell(false),
+    bInPrepareClose(false),
+    bInDispose(false),
     nCurRefDlgId(0),
     pAccessibilityBroadcaster(nullptr),
     mbInSwitch(false)
@@ -1737,6 +1751,8 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
 
 ScTabViewShell::~ScTabViewShell()
 {
+    bInDispose = true;
+
     // Notify other LOK views that we are going away.
     SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", "false");
     SfxLokHelper::notifyOtherViews(this, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "");
