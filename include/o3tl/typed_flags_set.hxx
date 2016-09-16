@@ -79,7 +79,11 @@ struct is_typed_flags {
         {
 #if !HAVE_CXX11_CONSTEXPR || HAVE_CXX14_CONSTEXPR
             assert(detail::isNonNegative(value));
-            assert((value & ~M) == 0);
+            assert(
+                static_cast<typename std::underlying_type<E>::type>(~M) == 0
+                    // avoid "operands don't affect result" warnings when M
+                    // covers all bits of the underlying type
+                || (value & ~M) == 0);
 #endif
         }
 
