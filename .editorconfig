@@ -1,0 +1,25 @@
+# EditorConfig: http://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# General settings
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+# Source code files
+[*.{c,cxx,cpp,h,hxx,hpp,java,py}]
+indent_style = space
+indent_size = 4
+
+# Makefiles
+[{Makefile,*.mk}]
+indent_style = tab
+trim_trailing_whitespace = false
+
+# Patch files
+[*.patch.*]
+trim_trailing_whitespace = false
