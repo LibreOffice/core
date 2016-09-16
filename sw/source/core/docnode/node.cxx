@@ -433,10 +433,14 @@ bool SwNode::IsProtect() const
     SwFrameFormat* pFlyFormat = GetFlyFormat();
     if( pFlyFormat )
     {
-        if( pFlyFormat->GetProtect().IsContentProtected() )
+        if (pFlyFormat->GetProtect().IsContentProtected())
             return true;
         const SwFormatAnchor& rAnchor = pFlyFormat->GetAnchor();
-        return rAnchor.GetContentAnchor() && rAnchor.GetContentAnchor()->nNode.GetNode().IsProtect();
+        const SwPosition* pAnchorPos = rAnchor.GetContentAnchor();
+        if (!pAnchorPos)
+            return false;
+        const SwNode& rAnchorNd = pAnchorPos->nNode.GetNode();
+        return &rAnchorNd != this && rAnchorNd.IsProtect();
     }
 
     if( nullptr != ( pSttNd = FindFootnoteStartNode() ) )
