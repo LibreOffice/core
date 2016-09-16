@@ -19,7 +19,11 @@
 #include <comphelper/string.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/editview.hxx>
+#include <editeng/editobj.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/outlobj.hxx>
 #include <osl/conditn.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -64,6 +68,7 @@ public:
     void testPartHash();
     void testResizeTable();
     void testResizeTableColumn();
+    void testTdf102223();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -85,6 +90,7 @@ public:
     CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST(testResizeTable);
     CPPUNIT_TEST(testResizeTableColumn);
+    CPPUNIT_TEST(testTdf102223);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -812,6 +818,47 @@ void SdTiledRenderingTest::testResizeTableColumn()
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn2, nActualColumn2);
     xmlFreeDoc(pXmlDoc);
     pXmlDoc = nullptr;
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testTdf102223()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf102223.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pActualPage->GetObj(2));
+    CPPUNIT_ASSERT(pTableObject);
+    SdrView* pView = pViewShell->GetView();
+
+    // select contents of cell
+    Rectangle aRect = pTableObject->GetCurrentBoundRect();
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      1, MOUSE_LEFT, 0);
+    pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      1, MOUSE_LEFT, 0);
+    pView->SdrBeginTextEdit(pTableObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
+    CPPUNIT_ASSERT_EQUAL(OUString("Red"), rEditView.GetSelected());
+    const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(rEditView.GetAttribs().Get(EE_CHAR_FONTHEIGHT));
+    CPPUNIT_ASSERT_EQUAL((int)1411, (int)rItem.GetHeight());
+
+    // cut contents of cell
+    uno::Sequence<beans::PropertyValue> aArgs;
+    comphelper::dispatchCommand(".uno:Cut", aArgs);
+
+    pView->SdrBeginTextEdit(pTableObject);
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView2.SetSelection(ESelection(0, 0, 0, 1)); // start para, start char, end para, end char.
+    const SvxFontHeightItem& rItem2 = static_cast<const SvxFontHeightItem&>(rEditView2.GetAttribs().Get(EE_CHAR_FONTHEIGHT));
+    CPPUNIT_ASSERT_EQUAL((int)1411, (int)rItem2.GetHeight());
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 
