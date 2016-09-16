@@ -85,6 +85,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		LDFLAGS="$(strip $(LDFLAGS) \
 			$(if $(SYSTEM_OPENSSL),,-L$(call gb_UnpackedTarball_get_dir,openssl)) \
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
+			$(if $(SYSTEM_ZLIB),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \
 			$(if $(filter WNT-GCC,$(OS)-$(COM)), -shared-libgcc \
 				$(if $(MINGW_SHARED_GCCLIB),-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols)) \
