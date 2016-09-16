@@ -155,6 +155,9 @@ private:
 
     bool                    bForceFocusOnCurCell; // #i123629#
 
+    bool                    bInPrepareClose;
+    bool                    bInDispose;
+
     ScRangeListRef          aChartSource;
     Rectangle               aChartPos;
     SCTAB                   nChartDestTab;
