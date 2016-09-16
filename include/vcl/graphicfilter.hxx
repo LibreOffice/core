@@ -126,9 +126,7 @@ enum class GraphicFileFormat
     WMF = 0x00f6,
     SGV = 0x00f7,
     EMF = 0x00f8,
-    SVG = 0x00f9,
-    MOV = 0x00fa,
-    XXX = 0xffff
+    SVG = 0x00f9
 };
 
 

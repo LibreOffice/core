@@ -55,7 +55,6 @@
 #include "PresentationViewShell.hxx"
 #include "FormShellManager.hxx"
 #include "ToolBarManager.hxx"
-#include "SidebarPanelId.hxx"
 #include "Window.hxx"
 #include "framework/ConfigurationController.hxx"
 #include "DocumentRenderer.hxx"

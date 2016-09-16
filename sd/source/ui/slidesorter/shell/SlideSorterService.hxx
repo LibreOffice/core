@@ -50,8 +50,7 @@ class SlideSorterService
       public SlideSorterServiceInterfaceBase
 {
 public:
-    explicit SlideSorterService (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    explicit SlideSorterService();
     virtual ~SlideSorterService() override;
     SlideSorterService(const SlideSorterService&) = delete;
     SlideSorterService& operator=(const SlideSorterService&) = delete;

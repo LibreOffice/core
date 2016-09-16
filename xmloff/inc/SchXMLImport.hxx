@@ -124,12 +124,6 @@ enum SchXMLPlotAreaAttrTokenMap
     XML_TOK_PA_LIGHTING_MODE
 };
 
-enum SchXMLAutoStyleAttrMap
-{
-    XML_TOK_AS_FAMILY,
-    XML_TOK_AS_NAME
-};
-
 enum SchXMLCellAttrMap
 {
     XML_TOK_CELL_VAL_TYPE,

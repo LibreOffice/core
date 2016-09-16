@@ -28,8 +28,7 @@ enum ConditionType
 {
     thread_type_set,
     thread_type_reset,
-    thread_type_wait,
-    thread_type_check
+    thread_type_wait
 };
 
 /** thread for testing Condition.
