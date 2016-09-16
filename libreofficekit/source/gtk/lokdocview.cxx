@@ -2532,7 +2532,7 @@ static void lok_doc_view_finalize (GObject* object)
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, nullptr, nullptr);
     aGuard.unlock();
 
-    if (priv->m_pDocument && priv->m_pDocument->pClass->getViews(priv->m_pDocument) > 1)
+    if (priv->m_pDocument && priv->m_pDocument->pClass->getViewsCount(priv->m_pDocument) > 1)
     {
         priv->m_pDocument->pClass->destroyView(priv->m_pDocument, priv->m_nViewId);
     }

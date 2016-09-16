@@ -219,8 +219,8 @@ struct _LibreOfficeKitDocumentClass
     void (*setView) (LibreOfficeKitDocument* pThis, int nId);
     /// @see lok::Document::getView().
     int (*getView) (LibreOfficeKitDocument* pThis);
-    /// @see lok::Document::getViews().
-    int (*getViews) (LibreOfficeKitDocument* pThis);
+    /// @see lok::Document::getViewsCount().
+    int (*getViewsCount) (LibreOfficeKitDocument* pThis);
 
     /// @see lok::Document::renderFont().
     unsigned char* (*renderFont) (LibreOfficeKitDocument* pThis,

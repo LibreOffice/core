@@ -897,7 +897,7 @@ void SwTiledRenderingTest::testViewCursorCleanup()
     // Now destroy the second view.
     SfxLokHelper::destroyView(nView2);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), SfxLokHelper::getViews());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), SfxLokHelper::getViewsCount());
     // Make sure that the graphic view selection on the first view is cleaned up.
     CPPUNIT_ASSERT(!aView1.m_bGraphicViewSelection);
     mxComponent->dispose();
