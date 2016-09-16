@@ -94,6 +94,20 @@ std::size_t SfxLokHelper::getViewsCount()
     return rViewArr.size();
 }
 
+bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
+{
+    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    if (rViewArr.size() > nSize)
+        return false;
+
+    for (std::size_t i = 0; i < rViewArr.size(); ++i)
+    {
+        SfxViewShell* pViewShell = rViewArr[i];
+        pArray[i] = pViewShell->GetViewShellId();
+    }
+    return true;
+}
+
 void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell* pOtherView, int nType, const OString& rKey, const OString& rPayload)
 {
     boost::property_tree::ptree aTree;
