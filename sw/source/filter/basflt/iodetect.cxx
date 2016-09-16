@@ -24,6 +24,7 @@
 #include <svtools/parhtml.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <o3tl/enumarray.hxx>
 
 
 using namespace ::com::sun::star;
@@ -33,7 +34,7 @@ static bool IsDocShellRegistered()
     return SvtModuleOptions().IsWriter();
 }
 
-SwIoDetect aFilterDetect[] =
+o3tl::enumarray<ReaderWriterType, SwIoDetect> aFilterDetect =
 {
     SwIoDetect( FILTER_RTF ),
     SwIoDetect( FILTER_BAS ),
@@ -46,6 +47,11 @@ SwIoDetect aFilterDetect[] =
     SwIoDetect( FILTER_TEXT_DLG ),
     SwIoDetect( FILTER_TEXT )
 };
+
+SwIoDetect& GetSwIoDetect(ReaderWriterType eType)
+{
+    return aFilterDetect[eType];
+}
 
 const OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
 {

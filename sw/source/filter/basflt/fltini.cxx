@@ -57,6 +57,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <rtl/bootstrap.hxx>
+#include <o3tl/enumarray.hxx>
+#include <o3tl/enumrange.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -68,8 +70,8 @@ Reader* GetRTFReader();
 Reader* GetWW8Reader();
 
 // Note: if editing, please don't forget to modify also the enum
-// ReaderWriterEnum and aFilterDetect in shellio.hxx
-SwReaderWriterEntry aReaderWriter[] =
+// ReaderWriterType and aFilterDetect in iodetect.cxx
+o3tl::enumarray<ReaderWriterType, SwReaderWriterEntry> aReaderWriter =
 {
     SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  true  ),
     SwReaderWriterEntry( nullptr,               &::GetASCWriter,  false ),
@@ -108,20 +110,16 @@ SwRead SwGetReaderXML() // SW_DLLPUBLIC
         return ReadXML;
 }
 
-inline void SetFltPtr( sal_uInt16 rPos, SwRead pReader )
-{
-        aReaderWriter[ rPos ].pReader = pReader;
-}
 
 namespace sw {
 
 Filters::Filters()
 {
-    SetFltPtr( READER_WRITER_BAS, (ReadAscii = new AsciiReader) );
-    SetFltPtr( READER_WRITER_HTML, (ReadHTML = new HTMLReader) );
-    SetFltPtr( READER_WRITER_XML, (ReadXML = new XMLReader)  );
-    SetFltPtr( READER_WRITER_TEXT_DLG, ReadAscii );
-    SetFltPtr( READER_WRITER_TEXT, ReadAscii );
+    aReaderWriter[ ReaderWriterType::Bas ].pReader =  ReadAscii = new AsciiReader;
+    aReaderWriter[ ReaderWriterType::Html ].pReader = ReadHTML = new HTMLReader;
+    aReaderWriter[ ReaderWriterType::Xml ].pReader =  ReadXML = new XMLReader;
+    aReaderWriter[ ReaderWriterType::TextDlg ].pReader = ReadAscii;
+    aReaderWriter[ ReaderWriterType::Text ].pReader = ReadAscii;
 }
 
 Filters::~Filters()
@@ -161,15 +159,15 @@ namespace SwReaderWriter {
 
 Reader* GetRtfReader()
 {
-    return aReaderWriter[READER_WRITER_RTF].GetReader();
+    return aReaderWriter[ReaderWriterType::Rtf].GetReader();
 }
 
 void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
-    for( int n = 0; n < MAXFILTER; ++n )
-        if ( aFilterDetect[n].IsFilter( rFltName ) )
+    for( ReaderWriterType aType : o3tl::enumrange<ReaderWriterType>() )
+        if ( GetSwIoDetect(aType).IsFilter( rFltName ) )
         {
-            aReaderWriter[n].GetWriter( rFltName, rBaseURL, xRet );
+            aReaderWriter[aType].GetWriter( rFltName, rBaseURL, xRet );
             break;
         }
 }
@@ -177,9 +175,9 @@ void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& x
 SwRead GetReader( const OUString& rFltName )
 {
     SwRead pRead = nullptr;
-    for( int n = 0; n < MAXFILTER; ++n )
+    for( ReaderWriterType n : o3tl::enumrange<ReaderWriterType>() )
     {
-        if ( aFilterDetect[n].IsFilter( rFltName ) )
+        if ( GetSwIoDetect(n).IsFilter( rFltName ) )
         {
             pRead = aReaderWriter[n].GetReader();
             // add special treatment for some readers
