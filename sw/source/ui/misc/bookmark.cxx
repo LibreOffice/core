@@ -257,8 +257,8 @@ bool SwInsertBookmarkDlg::HaveBookmarksChanged()
             if (aTableBookmark.first != ppBookmark->get() ||
                 aTableBookmark.second != ppBookmark->get()->GetName())
                 return true;
+            ++ppBookmark;
         }
-        ++ppBookmark;
     }
     return false;
 }
