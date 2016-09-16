@@ -69,9 +69,9 @@ void PriorityFilterTest::testPriority()
             aMsg.append("' should be '");
             aMsg.append(aFormatCorrect);
             aMsg.append("'");
-            CPPUNIT_ASSERT_MESSAGE(rtl::OUStringToOString(aMsg.makeStringAndClear(),
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(rtl::OUStringToOString(aMsg.makeStringAndClear(),
                                                           RTL_TEXTENCODING_UTF8).getStr(),
-                                   aTypeName == aFormatCorrect);
+                                   aFormatCorrect, aTypeName);
         }
         catch (const uno::Exception &e)
         {
