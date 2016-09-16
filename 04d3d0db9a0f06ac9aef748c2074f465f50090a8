@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_8defd1af",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T14:47:04Z",
+      "side": 1,
+      "message": "Use LANGUAGE_MASK_PRIMARY (0x3ff) instead of 0x00FF.",
+      "range": {
+        "startLine": 579,
+        "startChar": 72,
+        "endLine": 579,
+        "endChar": 78
+      },
+      "revId": "04d3d0db9a0f06ac9aef748c2074f465f50090a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_ad2ad5e5",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T14:47:04Z",
+      "side": 1,
+      "message": "Ditto, LANGUAGE_MASK_PRIMARY",
+      "range": {
+        "startLine": 582,
+        "startChar": 78,
+        "endLine": 582,
+        "endChar": 84
+      },
+      "revId": "04d3d0db9a0f06ac9aef748c2074f465f50090a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_ed34cd4b",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T14:47:04Z",
+      "side": 1,
+      "message": "Also in en-US LANGUAGE_ENGLISH_US locale.",
+      "range": {
+        "startLine": 612,
+        "startChar": 15,
+        "endLine": 612,
+        "endChar": 35
+      },
+      "revId": "04d3d0db9a0f06ac9aef748c2074f465f50090a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_2d3fa526",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T14:47:04Z",
+      "side": 1,
+      "message": "Again, LANGUAGE_MASK_PRIMARY",
+      "range": {
+        "startLine": 631,
+        "startChar": 70,
+        "endLine": 631,
+        "endChar": 76
+      },
+      "revId": "04d3d0db9a0f06ac9aef748c2074f465f50090a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_4d3cd92f",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T14:47:04Z",
+      "side": 1,
+      "message": "DItto, LANGUAGE_MASK_PRIMARY",
+      "range": {
+        "startLine": 633,
+        "startChar": 76,
+        "endLine": 633,
+        "endChar": 82
+      },
+      "revId": "04d3d0db9a0f06ac9aef748c2074f465f50090a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_6d499dd0",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T14:47:04Z",
+      "side": 1,
+      "message": "Instead of doing all these multiple MsLangId::getRealLanguage( maLocale.meLanguage) calls throughout the entire switch in all cases, do it once before the switches, also for the switch ( aTmpLocale.mnCalendarType \u0026 0x7F ) above.",
+      "range": {
+        "startLine": 650,
+        "startChar": 17,
+        "endLine": 650,
+        "endChar": 64
+      },
+      "revId": "04d3d0db9a0f06ac9aef748c2074f465f50090a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
