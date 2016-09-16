@@ -46,7 +46,6 @@ class DLLEXPORT HIODev
         virtual ~HIODev();
 
         virtual bool open() = 0;
-        virtual void close() = 0;
         virtual void flush() = 0;
         virtual int  state() const = 0;
 /* gzip routine wrapper */
@@ -73,7 +72,7 @@ struct gz_stream;
  * This controls the HStream given by constructor
  * @short Stream IO device
  */
-class HStreamIODev : public HIODev
+class HStreamIODev final: public HIODev
 {
     private:
 /* zlib으로 압축을 풀기 위한 자료 구조 */
@@ -86,10 +85,6 @@ class HStreamIODev : public HIODev
  * Check whether the stream is available
  */
         virtual bool open() override;
-/**
- * Free stream object
- */
-        virtual void close() override;
 /**
  * If the stream is gzipped, flush the stream.
  */
@@ -139,7 +134,7 @@ class HStreamIODev : public HIODev
  * The HMemIODev class controls the Input/Output device.
  * @short Memory IO device
  */
-class HMemIODev : public HIODev
+class HMemIODev final: public HIODev
 {
     uchar *ptr;
     int pos, length;
@@ -148,7 +143,6 @@ class HMemIODev : public HIODev
         virtual ~HMemIODev() override;
 
         virtual bool open() override;
-        virtual void close() override;
         virtual void flush() override;
         virtual int  state() const override;
 /* gzip routine wrapper */
