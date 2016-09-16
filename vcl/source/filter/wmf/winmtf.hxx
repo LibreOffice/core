@@ -73,7 +73,6 @@ enum class BkMode
 enum class WMFRasterOp {
     NONE                 = 0,
     Black                = 1,
-    MaskNotPen           = 3,
     Not                  = 6,
     XorPen               = 7,
     Nop                  = 11,

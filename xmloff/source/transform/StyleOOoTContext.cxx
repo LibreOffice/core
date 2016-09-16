@@ -85,7 +85,6 @@ static const XMLPropType aPropTypes[XML_FAMILY_TYPE_END][MAX_PROP_TYPES] =
     ENTRY1( END ),                              // XML_FAMILY_TYPE_FILL_IMAGE,
     ENTRY1( END ),                              // XML_FAMILY_TYPE_STROKE_DASH,
     ENTRY1( END ),                              // XML_FAMILY_TYPE_MARKER,
-    ENTRY1( END )                               // XML_FAMILY_TYPE_PRESENTATION_PAGE_LAYOUT,
 };
 
 static const XMLTokenEnum aPropTokens[XML_PROP_TYPE_END] =

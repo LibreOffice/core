@@ -40,8 +40,6 @@ enum FactoryId
 {
     SdDrawingDocumentFactoryId,
     SdPresentationDocumentFactoryId,
-
-    ModuleControllerFactoryId,
 };
 typedef std::unordered_map<OUString, FactoryId, OUStringHash> FactoryMap;
 

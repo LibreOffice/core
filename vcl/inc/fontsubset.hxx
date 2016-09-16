@@ -43,8 +43,7 @@ public:
         TYPE3_FONT  = 1<<6,                     ///< PSType3 Postscript font
         TYPE42_FONT = 1<<7,                     ///< PSType42 wrapper for an SFNT_TTF
         ANY_SFNT    = SFNT_TTF | SFNT_CFF,
-        ANY_TYPE1   = TYPE1_PFA | TYPE1_PFB,
-        ANY_FONT    = 0xFF
+        ANY_TYPE1   = TYPE1_PFA | TYPE1_PFB
     };
 
     bool        LoadFont( FontType eInFontType,

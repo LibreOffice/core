@@ -105,7 +105,6 @@ QStyle::SFlags vclStateValue2SFlags( ControlState nState,
     ( (nState & ControlState::PRESSED)?  QStyle::Style_Down:          QStyle::Style_Raised )  |
     ( (nState & ControlState::SELECTED)? QStyle::Style_Selected :     QStyle::Style_Default ) |
     ( (nState & ControlState::ROLLOVER)? QStyle::Style_MouseOver:     QStyle::Style_Default );
-    //TODO ( (nState & ControlState::HIDDEN)?   QStyle::Style_: QStyle::Style_Default ) |
 
     switch ( aValue.getTristateVal() )
     {
@@ -1281,7 +1280,6 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     // no ControlType::TabBody for KDE
     ( (nType == ControlType::Scrollbar)   && (nPart == ControlPart::Entire || nPart == ControlPart::DrawBackgroundHorz || nPart == ControlPart::DrawBackgroundVert) ) ||
     ( (nType == ControlType::Scrollbar)   && (nPart == ControlPart::HasThreeButtons) ) || // TODO small optimization is possible here: return this only if the style really has 3 buttons
-    // ControlType::Groupbox not supported
     // ControlType::Fixedline not supported
     ( (nType == ControlType::Toolbar)     && (nPart == ControlPart::Entire ||
                                       nPart == ControlPart::DrawBackgroundHorz || nPart == ControlPart::DrawBackgroundVert ||

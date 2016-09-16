@@ -71,17 +71,6 @@ namespace o3tl
     template<> struct typed_flags<BmpDitherFlags> : is_typed_flags<BmpDitherFlags, 0x07> {};
 }
 
-enum class BmpVectorizeFlags
-{
-    Inner         = 0x0001,
-    Outer         = 0x0002,
-    ReduceEdges   = 0x0004,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<BmpVectorizeFlags> : is_typed_flags<BmpVectorizeFlags, 0x07> {};
-}
-
 #define BMP_COL_TRANS               Color( 252, 3, 251 )
 
 enum BmpConversion

@@ -23,12 +23,6 @@
 // has to be adjusted!
 #define FADE_EFFECT_COUNT 57
 
-enum FadeSpeed
-{
-    FADE_SPEED_SLOW,
-    FADE_SPEED_MEDIUM,
-    FADE_SPEED_FAST
-};
 // has to be adjusted!
 #define FADE_SPEED_COUNT 3
 

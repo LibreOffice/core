@@ -83,8 +83,7 @@ public:
     {
         NormalMode,
         MultiSelectionMode,
-        DragAndDropMode,
-        ButtonMode
+        DragAndDropMode
     };
     void SwitchToNormalMode();
     void SwitchToDragAndDropMode(const Point& rMousePosition);

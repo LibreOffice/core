@@ -20,13 +20,6 @@
 #ifndef INCLUDED_SD_INC_RESLTN_HXX
 #define INCLUDED_SD_INC_RESLTN_HXX
 
-enum PublishingResolution
-{
-    RESOLUTION_HIGH,
-    RESOLUTION_MEDIUM,
-    RESOLUTION_LOW
-};
-
 enum PublishingFormat
 {
     FORMAT_GIF,

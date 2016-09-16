@@ -40,26 +40,13 @@ using ::sd::slidesorter::view::Layouter;
 
 namespace sd { namespace slidesorter {
 
-namespace {
-    enum Properties
-    {
-        PropertyDocumentSlides,
-        PropertyHighlightCurrentSlide,
-        PropertyShowSelection,
-        PropertyCenterSelection,
-        PropertySuspendPreviewUpdatesDuringFullScreenPresentation,
-        PropertyOrientationVertical
-    };
-}
-
 //===== SlideSorterService ==========================================================
 
-SlideSorterService::SlideSorterService (const Reference<XComponentContext>& rxContext)
+SlideSorterService::SlideSorterService()
     : SlideSorterServiceInterfaceBase(m_aMutex),
       mpSlideSorter(),
       mxParentWindow()
 {
-    (void)rxContext;
 }
 
 SlideSorterService::~SlideSorterService()
@@ -473,10 +460,10 @@ void SlideSorterService::ThrowIfDisposed()
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_Draw_SlideSorter_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_Draw_SlideSorter_get_implementation(css::uno::XComponentContext* /*context*/,
                                                       css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::slidesorter::SlideSorterService(context));
+    return cppu::acquire(new sd::slidesorter::SlideSorterService);
 }
 
 

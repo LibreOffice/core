@@ -56,8 +56,7 @@ enum FormularCommand
     FC_SIN,
     FC_SQRT,
     FC_TAN,
-    FC_VAL,
-    FC_LAST
+    FC_VAL
 };
 struct FormularCommandNameTable
 {

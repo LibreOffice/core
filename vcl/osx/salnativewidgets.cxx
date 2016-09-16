@@ -328,14 +328,8 @@ UInt32 AquaSalGraphics::getState( ControlState nState )
     const bool bDrawActive = mpFrame == nullptr || [mpFrame->getNSWindow() isKeyWindow];
     if( !(nState & ControlState::ENABLED) || ! bDrawActive )
     {
-        if( ! (nState & ControlState::HIDDEN) )
-            return kThemeStateInactive;
-        else
-            return kThemeStateUnavailableInactive;
+        return kThemeStateInactive;
     }
-
-    if( nState & ControlState::HIDDEN )
-        return kThemeStateUnavailable;
 
     if( nState & ControlState::PRESSED )
         return kThemeStatePressed;

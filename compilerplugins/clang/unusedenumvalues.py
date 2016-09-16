@@ -15,9 +15,11 @@ excludedSourceFiles = set([
     "sw/inc/toxe.hxx",
     "sw/inc/poolfmt.hxx",
     "sw/inc/hintids.hxx",
+    "vcl/inc/unx/XIM.h",
     ])
 excludedTypes = set([
-    "SwVarFormat", "RES_FIELDS", "SwFillOrder", "SwIoDetect", "SwDocumentSettingsPropertyHandles"
+    "SwVarFormat", "RES_FIELDS", "SwFillOrder", "SwIoDetect", "SwDocumentSettingsPropertyHandles",
+    "SalGenericDataType", "SwDateSubFormat", "XclFutureRecType", "ds_status", "MediaCommand",
     ])
 
 # clang does not always use exactly the same numbers in the type-parameter vars it generates
@@ -54,11 +56,10 @@ for k, definitions in sourceLocationToDefinitionMap.iteritems():
 untouchedSet = set()
 for d in definitionSet:
     clazz = d[0] + " " + d[1]
-    if clazz in exclusionSet:
-        continue
     if d in touchSet:
         continue
-    srcLoc = definitionToSourceLocationMap[d];
+    srcLoc = definitionToSourceLocationMap[d]
+    srcLocWithoutLineNo = srcLoc.split(":")[0]
     # ignore external source code
     if (srcLoc.startswith("external/")):
         continue
@@ -77,8 +78,12 @@ for d in definitionSet:
         or srcLoc.startswith("include/typelib/")
         or srcLoc.startswith("include/uno/")):
         continue
-    if srcLoc in excludedSourceFiles or d[0] in excludedTypes:
+    if srcLocWithoutLineNo in excludedSourceFiles or d[0] in excludedTypes:
         continue
+    # structure definitions
+    if srcLoc.startswith("lotuswordpro/"):
+        continue
+        
     # used in templates to find the last member of an enum
     if d[1] == "LAST" or d[1].endswith("_END"):
         continue
