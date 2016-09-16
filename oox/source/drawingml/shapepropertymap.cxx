@@ -36,7 +36,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-static const sal_Int32 spnDefaultShapeIds[ SHAPEPROP_END + 1 ] = // one for the PROP_END_LIST
+static const ShapePropertyIds spnDefaultShapeIds =
 {
     PROP_LineStyle, PROP_LineWidth, PROP_LineColor, PROP_LineTransparence, PROP_LineDash, PROP_LineJoint,
     PROP_LineStartName, PROP_LineStartWidth, PROP_LineStartCenter, PROP_LineEndName, PROP_LineEndWidth, PROP_LineEndCenter,
@@ -45,30 +45,21 @@ static const sal_Int32 spnDefaultShapeIds[ SHAPEPROP_END + 1 ] = // one for the 
     PROP_FillBitmapPositionOffsetX, PROP_FillBitmapPositionOffsetY, PROP_FillBitmapRectanglePoint,
     PROP_FillHatch,
     PROP_ShadowXDistance,
-    PROP_FillBitmapName,
-    PROP_END_LIST
+    PROP_FillBitmapName
 };
 
 } // namespace
 
 ShapePropertyInfo ShapePropertyInfo::DEFAULT( spnDefaultShapeIds, true, false, false, false );
 
-ShapePropertyInfo::ShapePropertyInfo( const sal_Int32* pnPropertyIds,
+ShapePropertyInfo::ShapePropertyInfo( const ShapePropertyIds& rnPropertyIds,
         bool bNamedLineMarker, bool bNamedLineDash, bool bNamedFillGradient, bool bNamedFillBitmapUrl ) :
+    mrPropertyIds(rnPropertyIds),
     mbNamedLineMarker( bNamedLineMarker ),
     mbNamedLineDash( bNamedLineDash ),
     mbNamedFillGradient( bNamedFillGradient ),
     mbNamedFillBitmapUrl( bNamedFillBitmapUrl )
 {
-    assert(pnPropertyIds);
-    // normally we should not reach PROP_COUNT but it prevents infinite loops if we hit a bug
-    for(size_t i = 0; i < static_cast<size_t>(PROP_COUNT); ++i)
-    {
-        if(pnPropertyIds[i] == PROP_END_LIST)
-            break;
-
-        maPropertyIds.push_back(pnPropertyIds[i]);
-    }
 }
 
 ShapePropertyMap::ShapePropertyMap( ModelObjectHelper& rModelObjHelper, const ShapePropertyInfo& rShapePropInfo ) :
@@ -77,7 +68,7 @@ ShapePropertyMap::ShapePropertyMap( ModelObjectHelper& rModelObjHelper, const Sh
 {
 }
 
-bool ShapePropertyMap::supportsProperty( ShapePropertyId ePropId ) const
+bool ShapePropertyMap::supportsProperty( ShapeProperty ePropId ) const
 {
     return maShapePropInfo.has( ePropId );
 }
@@ -87,7 +78,7 @@ bool ShapePropertyMap::hasNamedLineMarkerInTable( const OUString& rMarkerName ) 
     return maShapePropInfo.mbNamedLineMarker && mrModelObjHelper.hasLineMarker( rMarkerName );
 }
 
-bool ShapePropertyMap::setAnyProperty( ShapePropertyId ePropId, const Any& rValue )
+bool ShapePropertyMap::setAnyProperty( ShapeProperty ePropId, const Any& rValue )
 {
     // get current property identifier for the specified property
     sal_Int32 nPropId = maShapePropInfo[ ePropId ];
@@ -96,23 +87,23 @@ bool ShapePropertyMap::setAnyProperty( ShapePropertyId ePropId, const Any& rValu
     // special handling for properties supporting named objects in tables
     switch( ePropId )
     {
-        case SHAPEPROP_LineStart:
-        case SHAPEPROP_LineEnd:
+        case ShapeProperty::LineStart:
+        case ShapeProperty::LineEnd:
             return setLineMarker( nPropId, rValue );
 
-        case SHAPEPROP_LineDash:
+        case ShapeProperty::LineDash:
             return setLineDash( nPropId, rValue );
 
-        case SHAPEPROP_FillGradient:
+        case ShapeProperty::FillGradient:
             return setFillGradient( nPropId, rValue );
 
-        case SHAPEPROP_GradientTransparency:
+        case ShapeProperty::GradientTransparency:
             return setGradientTrans( nPropId, rValue );
 
-        case SHAPEPROP_FillBitmapUrl:
+        case ShapeProperty::FillBitmapUrl:
             return setFillBitmapUrl( nPropId, rValue );
 
-        case SHAPEPROP_FillBitmapNameFromUrl:
+        case ShapeProperty::FillBitmapNameFromUrl:
             return setFillBitmapNameFromUrl( nPropId, rValue );
 
         default:;   // suppress compiler warnings
