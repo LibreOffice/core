@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_ed9e8d06",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T19:27:23Z",
+      "side": 1,
+      "message": "This can be a little confusing when reading, rather use braces for do...while\n\n do\n {\n     ++nDate;\n }\n while (...);\n\nI\u0027ll change it.",
+      "revId": "4ecebc4a309740deb16efe75e651cd212b0db5b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_0da4a155",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T19:27:23Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "4ecebc4a309740deb16efe75e651cd212b0db5b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

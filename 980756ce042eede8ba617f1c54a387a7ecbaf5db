@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_cd99c921",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T19:27:23Z",
+      "side": 0,
+      "message": "Somehow you manged to change file mode from 100644 (-rw-r--r--) to 100755 (-rwxr-xr-x), edited on Windows? I\u0027ll change that back.",
+      "revId": "980756ce042eede8ba617f1c54a387a7ecbaf5db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
