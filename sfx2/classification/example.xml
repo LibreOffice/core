@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
 <baf:BusinessAuthorization xmlns:baf="urn:tscp:names:baf:1.1">
+    <!-- Translators: this string can be localized -->
     <baf:PolicyAuthorityName>TSCP Example Policy Authority</baf:PolicyAuthorityName>
+    <!-- Translators: this string can be localized -->
     <baf:PolicyName>TSCP Example Policy</baf:PolicyName>
     <baf:AdministrativeData>
         <baf:ProgramID>urn:example:tscp:1</baf:ProgramID>
     </baf:AdministrativeData>
     <baf:Included>
+        <!-- Translators: the Name attribute in this string can be localized -->
         <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:non-business" Name="Non-Business">
             <baf:LabelingRules/>
             <baf:ImpactLevel>
@@ -13,10 +16,12 @@
                 <baf:ConfidentalityValue>0</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
+        <!-- Translators: the Name attribute in this string can be localized -->
         <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:general-business" Name="General Business">
             <baf:LabelingRules>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Header</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
                     <baf:Value>Classification: General Business</baf:Value>
                 </baf:VisualMarkingPart>
             </baf:LabelingRules>
@@ -25,18 +30,22 @@
                 <baf:ConfidentalityValue>1</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
+        <!-- Translators: the Name attribute in this string can be localized -->
         <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:confidential" Name="Confidential">
             <baf:LabelingRules>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Header</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
                     <baf:Value>Classification: Confidential</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Footer</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
                     <baf:Value>This content is marked Confidential. Do not distribute it externally without business approval.</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Watermark</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
                     <baf:Value>Confidential</baf:Value>
                 </baf:VisualMarkingPart>
             </baf:LabelingRules>
@@ -45,18 +54,22 @@
                 <baf:ConfidentalityValue>2</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
+        <!-- Translators: the Name attribute in this string can be localized -->
         <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:internal-only" Name="Internal Only">
             <baf:LabelingRules>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Header</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
                     <baf:Value>Classification: Internal Only</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Footer</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
                     <baf:Value>This content is marked Internal Only. Do not distribute it outside of the business.</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Watermark</baf:Identifier>
+                    <!-- Translators: this string can be localized -->
                     <baf:Value>Internal Only</baf:Value>
                 </baf:VisualMarkingPart>
             </baf:LabelingRules>
