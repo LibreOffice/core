@@ -19,6 +19,7 @@
 
 #include "scitems.hxx"
 #include <svl/hint.hxx>
+#include <comphelper/lok.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/numfmtsh.hxx>
 #include <svx/numinf.hxx>
@@ -235,8 +236,14 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             case FID_KILLEDITVIEW:
             case FID_KILLEDITVIEW_NOPAINT:
-                StopEditShell();
-                KillEditView( nSlot == FID_KILLEDITVIEW_NOPAINT );
+                if (!comphelper::LibreOfficeKit::isActive()
+                    || this == SfxViewShell::Current()
+                    || bInPrepareClose
+                    || bInDispose)
+                {
+                    StopEditShell();
+                    KillEditView( nSlot == FID_KILLEDITVIEW_NOPAINT );
+                }
                 break;
 
             case SFX_HINT_DOCCHANGED:
