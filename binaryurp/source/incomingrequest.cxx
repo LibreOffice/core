@@ -19,6 +19,7 @@
 
 #include "sal/config.h"
 
+#include <cassert>
 #include <list>
 #include <vector>
 
@@ -27,6 +28,7 @@
 #include "rtl/byteseq.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
+#include "sal/log.hxx"
 #include "sal/types.h"
 #include "typelib/typedescription.hxx"
 #include "uno/dispatcher.hxx"
@@ -51,7 +53,9 @@ IncomingRequest::IncomingRequest(
     setter_(setter), inArguments_(inArguments),
     currentContextMode_(currentContextMode), currentContext_(currentContext)
 {
-    OSL_ASSERT(bridge.is() && member.is() && member.get()->bComplete);
+    assert(bridge.is());
+    assert(member.is());
+    assert(member.get()->bComplete);
 }
 
 IncomingRequest::~IncomingRequest() {}
@@ -98,17 +102,14 @@ void IncomingRequest::execute() const {
                 tid_, member_, setter_, isExc, ret, outArgs, false);
             return;
         } catch (const css::uno::RuntimeException & e) {
-            OSL_TRACE(
-                "caught UNO runtime exception '%s'",
-                (OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
-                 getStr()));
+            SAL_INFO("binaryurp", "caught UNO runtime exception " << e.Message);
         } catch (const std::exception & e) {
-            OSL_TRACE("caught C++ exception '%s'", e.what());
+            SAL_INFO("binaryurp", "caught C++ exception " << e.what());
         }
         bridge_->terminate(false);
     } else {
         if (isExc) {
-            OSL_TRACE("oneway method raised exception");
+            SAL_INFO("binaryurp", "oneway method raised exception");
         }
         bridge_->decrementCalls();
     }
@@ -122,15 +123,16 @@ static size_t size_t_round(size_t val)
 bool IncomingRequest::execute_throw(
     BinaryAny * returnValue, std::vector< BinaryAny > * outArguments) const
 {
-    OSL_ASSERT(
-        returnValue != nullptr &&
+    assert(returnValue != nullptr);
+    assert(
         returnValue->getType().equals(
-            css::uno::TypeDescription(cppu::UnoType<void>::get())) &&
-        outArguments != nullptr && outArguments->empty());
+            css::uno::TypeDescription(cppu::UnoType<void>::get())));
+    assert(outArguments != nullptr);
+    assert(outArguments->empty());
     bool isExc = false;
     switch (functionId_) {
     case SPECIAL_FUNCTION_ID_RESERVED:
-        OSL_ASSERT(false); // this cannot happen
+        assert(false); // this cannot happen
         break;
     case SPECIAL_FUNCTION_ID_RELEASE:
         bridge_->releaseStub(oid_, type_);
@@ -144,11 +146,10 @@ bool IncomingRequest::execute_throw(
                 try {
                     ifc = prov->getInstance(oid_);
                 } catch (const css::container::NoSuchElementException & e) {
-                    OSL_TRACE(
-                        "initial element '%s': NoSuchElementException '%s'",
-                        OUStringToOString(oid_, RTL_TEXTENCODING_UTF8).getStr(),
-                        (OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
-                         getStr()));
+                    SAL_INFO(
+                        "binaryurp",
+                        "initial element " << oid_
+                            << ": NoSuchElementException " << e.Message);
                 }
             }
             if (ifc.is()) {
@@ -174,7 +175,7 @@ bool IncomingRequest::execute_throw(
         SAL_FALLTHROUGH;
     default:
         {
-            OSL_ASSERT(object_.is());
+            assert(object_.is());
             css::uno::TypeDescription retType;
             std::list< std::vector< char > > outBufs;
             std::vector< void * > args;
@@ -187,10 +188,10 @@ bool IncomingRequest::execute_throw(
                                 member_.get())->
                         pAttributeTypeRef);
                     if (setter_) {
-                        OSL_ASSERT(inArguments_.size() == 1);
+                        assert(inArguments_.size() == 1);
                         args.push_back(inArguments_[0].getValue(t));
                     } else {
-                        OSL_ASSERT(inArguments_.empty());
+                        assert(inArguments_.empty());
                         retType = t;
                     }
                     break;
@@ -223,11 +224,11 @@ bool IncomingRequest::execute_throw(
                             outArguments->push_back(BinaryAny());
                         }
                     }
-                    OSL_ASSERT(i == inArguments_.end());
+                    assert(i == inArguments_.end());
                     break;
                 }
             default:
-                OSL_ASSERT(false); // this cannot happen
+                assert(false); // this cannot happen
                 break;
             }
             size_t nSize = 0;
@@ -252,7 +253,7 @@ bool IncomingRequest::execute_throw(
                     uno_destructData(&retBuf[0], retType.get(), nullptr);
                 }
                 if (!outArguments->empty()) {
-                    OSL_ASSERT(
+                    assert(
                         member_.get()->eTypeClass ==
                         typelib_TypeClass_INTERFACE_METHOD);
                     typelib_InterfaceMethodTypeDescription * mtd =
@@ -274,8 +275,8 @@ bool IncomingRequest::execute_throw(
                                 &(*j++)[0], mtd->pParams[k].pTypeRef, nullptr);
                         }
                     }
-                    OSL_ASSERT(i == outArguments->end());
-                    OSL_ASSERT(j == outBufs.end());
+                    assert(i == outArguments->end());
+                    assert(j == outBufs.end());
                 }
             }
             break;

@@ -31,6 +31,7 @@
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "cppuhelper/exc_hlp.hxx"
 #include "osl/mutex.hxx"
+#include "sal/log.hxx"
 #include "uno/dispatcher.hxx"
 
 #include "binaryany.hxx"
@@ -74,7 +75,7 @@ Writer::Writer(rtl::Reference< Bridge > const  & bridge):
     Thread("binaryurpWriter"), bridge_(bridge), marshal_(bridge, state_),
     stop_(false)
 {
-    OSL_ASSERT(bridge.is());
+    assert(bridge.is());
 }
 
 void Writer::sendDirectRequest(
@@ -83,7 +84,7 @@ void Writer::sendDirectRequest(
     css::uno::TypeDescription const & member,
     std::vector< BinaryAny > const & inArguments)
 {
-    OSL_ASSERT(!unblocked_.check());
+    assert(!unblocked_.check());
     sendRequest(
         tid, oid, type, member, inArguments, false,
         css::uno::UnoInterfaceReference());
@@ -94,7 +95,7 @@ void Writer::sendDirectReply(
     bool exception, BinaryAny const & returnValue,
     std::vector< BinaryAny > const & outArguments)
 {
-    OSL_ASSERT(!unblocked_.check());
+    assert(!unblocked_.check());
     sendReply(tid, member, false, exception, returnValue,outArguments);
 }
 
@@ -153,7 +154,7 @@ void Writer::execute() {
                 if (stop_) {
                     return;
                 }
-                OSL_ASSERT(!queue_.empty());
+                assert(!queue_.empty());
                 item = queue_.front();
                 queue_.pop_front();
                 if (queue_.empty()) {
@@ -179,11 +180,9 @@ void Writer::execute() {
             }
         }
     } catch (const css::uno::Exception & e) {
-        OSL_TRACE(
-            "caught UNO exception '%s'",
-            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        SAL_INFO("binaryurp", "caught UNO exception " << e.Message);
     } catch (const std::exception & e) {
-        OSL_TRACE("caught C++ exception '%s'", e.what());
+        SAL_INFO("binaryurp", "caught C++ exception " << e.what());
     }
     bridge_->terminate(false);
     bridge_.clear();
@@ -196,7 +195,9 @@ void Writer::sendRequest(
     std::vector< BinaryAny > const & inArguments, bool currentContextMode,
     css::uno::UnoInterfaceReference const & currentContext)
 {
-    OSL_ASSERT(tid.getLength() != 0 && !oid.isEmpty() && member.is());
+    assert(tid.getLength() != 0);
+    assert(!oid.isEmpty());
+    assert(member.is());
     css::uno::TypeDescription t(type);
     sal_Int32 functionId = 0;
     bool bForceSynchronous = false;
@@ -207,7 +208,7 @@ void Writer::sendRequest(
             typelib_InterfaceAttributeTypeDescription * atd =
                 reinterpret_cast< typelib_InterfaceAttributeTypeDescription * >(
                     member.get());
-            OSL_ASSERT(atd->pInterface != nullptr);
+            assert(atd->pInterface != nullptr);
             if (!t.is()) {
                 t = css::uno::TypeDescription(&atd->pInterface->aBase);
             }
@@ -236,10 +237,10 @@ void Writer::sendRequest(
             break;
         }
     default:
-        OSL_ASSERT(false); // this cannot happen
+        assert(false); // this cannot happen
         break;
     }
-    OSL_ASSERT(functionId >= 0);
+    assert(functionId >= 0);
     if (functionId > SAL_MAX_UINT16) {
         throw css::uno::RuntimeException("function ID too large for URP");
     }
@@ -300,7 +301,7 @@ void Writer::sendRequest(
     switch (member.get()->eTypeClass) {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         if (!inArguments.empty()) { // setter
-            OSL_ASSERT(inArguments.size() == 1);
+            assert(inArguments.size() == 1);
             marshal_.writeValue(
                 &buf,
                 css::uno::TypeDescription(
@@ -325,11 +326,11 @@ void Writer::sendRequest(
                         *i++);
                 }
             }
-            OSL_ASSERT(i == inArguments.end());
+            assert(i == inArguments.end());
             break;
         }
     default:
-        OSL_ASSERT(false); // this cannot happen
+        assert(false); // this cannot happen
         break;
     }
     sendMessage(buf);
@@ -344,7 +345,9 @@ void Writer::sendReply(
     bool exception, BinaryAny const & returnValue,
     std::vector< BinaryAny > const & outArguments)
 {
-    OSL_ASSERT(tid.getLength() != 0 && member.is() && member.get()->bComplete);
+    assert(tid.getLength() != 0);
+    assert(member.is());
+    assert(member.get()->bComplete);
     std::vector< unsigned char > buf;
     bool newTid = tid != lastTid_;
     Marshal::write8(&buf, 0x80 | (exception ? 0x20 : 0) | (newTid ? 0x08 : 0));
@@ -390,11 +393,11 @@ void Writer::sendReply(
                             *i++);
                     }
                 }
-                OSL_ASSERT(i == outArguments.end());
+                assert(i == outArguments.end());
                 break;
             }
         default:
-            OSL_ASSERT(false); // this cannot happen
+            assert(false); // this cannot happen
             break;
         }
     }
@@ -411,17 +414,17 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     }
     Marshal::write32(&header, static_cast< sal_uInt32 >(buffer.size()));
     Marshal::write32(&header, 1);
-    OSL_ASSERT(!buffer.empty());
+    assert(!buffer.empty());
     unsigned char const * p = &buffer[0];
     std::vector< unsigned char >::size_type n = buffer.size();
-    OSL_ASSERT(header.size() <= SAL_MAX_INT32);
+    assert(header.size() <= SAL_MAX_INT32);
     /*static_*/assert(SAL_MAX_INT32 <= std::numeric_limits<std::size_t>::max());
     std::size_t k = SAL_MAX_INT32 - header.size();
     if (n < k) {
         k = n;
     }
     css::uno::Sequence<sal_Int8> s(header.size() + k);
-    OSL_ASSERT(!header.empty());
+    assert(!header.empty());
     std::memcpy(s.getArray(), &header[0], header.size());
     for (;;) {
         std::memcpy(s.getArray() + s.getLength() - k, p, k);

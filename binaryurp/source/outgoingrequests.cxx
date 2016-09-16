@@ -19,6 +19,8 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "rtl/byteseq.hxx"
 #include "osl/mutex.hxx"
@@ -48,14 +50,14 @@ OutgoingRequest OutgoingRequests::top(rtl::ByteSequence const & tid) {
         throw css::uno::RuntimeException(
             "URP: reply for unknown TID");
     }
-    OSL_ASSERT(!i->second.empty());
+    assert(!i->second.empty());
     return i->second.back();
 }
 
 void OutgoingRequests::pop(rtl::ByteSequence const & tid) throw () {
     osl::MutexGuard g(mutex_);
     Map::iterator i(map_.find(tid));
-    OSL_ASSERT(i != map_.end());
+    assert(i != map_.end());
     i->second.pop_back();
     if (i->second.empty()) {
         map_.erase(i);
