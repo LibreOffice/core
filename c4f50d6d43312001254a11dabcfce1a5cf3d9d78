@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_f26ca80a",
+        "filename": "sc/source/ui/navipi/navipi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T11:09:33Z",
+      "side": 1,
+      "message": "Better initialize with 0. Strictly seen not necessary when following the loop\u0027s logic under the precondition that a scenario comes always after the sheet where it belongs to, but initializing makes it easier for the inexperienced eye.\n\nNitpick: as this is a plain numeric integer variable give it the prefix \u0027n\u0027, so nLastSheet.",
+      "range": {
+        "startLine": 964,
+        "startChar": 10,
+        "endLine": 964,
+        "endChar": 20
+      },
+      "revId": "c4f50d6d43312001254a11dabcfce1a5cf3d9d78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_cd862965",
+        "filename": "sc/source/ui/navipi/navipi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T11:09:33Z",
+      "side": 1,
+      "message": "For comments we use C++ // comments.\n/* I sometimes use for TODO or FIXME comments.",
+      "range": {
+        "startLine": 971,
+        "startChar": 12,
+        "endLine": 971,
+        "endChar": 14
+      },
+      "revId": "c4f50d6d43312001254a11dabcfce1a5cf3d9d78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

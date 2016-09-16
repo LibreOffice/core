@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_327700d6",
+        "filename": "sc/source/ui/navipi/navipi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T11:09:33Z",
+      "side": 0,
+      "message": "Actually having a space between parentheses in function definitions is better readable.",
+      "revId": "69372bd00a7deeceef7b31009827036b6add05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_527474ce",
+        "filename": "sc/source/ui/navipi/navipi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T11:09:33Z",
+      "side": 0,
+      "message": "Just a side note: we prefer to not have mixed cosmetic whitespace changes with functional changes in submitted patches.",
+      "revId": "69372bd00a7deeceef7b31009827036b6add05f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
