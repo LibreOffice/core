@@ -52,4 +52,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 endif
 endif
 
+ifneq ($(SYSTEM_ZLIB),TRUE)
+$(eval $(call gb_UnpackedTarball_add_patches,python3, \
+    external/python3/internal-zlib.patch.0 \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
