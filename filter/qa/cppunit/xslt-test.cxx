@@ -76,7 +76,7 @@ void XsltFilterTest::testXsltCopyNew()
     oslFileHandle tempFile;
     OUString tempURL;
     osl::File::RC rc = osl::File::createTempFile(nullptr, &tempFile, &tempURL);
-    CPPUNIT_ASSERT(osl::FileBase::E_None == rc);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, rc);
     osl_closeFile(tempFile); // close it so xSFA can open it on WNT
 
     OUString source(
@@ -133,7 +133,7 @@ void XsltFilterTest::testXsltCopyOld()
     oslFileHandle tempFile;
     OUString tempURL;
     osl::File::RC rc = osl::File::createTempFile(nullptr, &tempFile, &tempURL);
-    CPPUNIT_ASSERT(osl::FileBase::E_None == rc);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, rc);
     osl_closeFile(tempFile); // close it so xSFA can open it on WNT
 
     OUString source(
