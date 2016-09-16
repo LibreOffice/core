@@ -215,7 +215,7 @@ public:
     ScInputHandler*     GetRefInputHdl() { return pRefInputHandler;}
 
     void                ViewShellGone(ScTabViewShell* pViewSh);
-    void                ViewShellChanged();
+    void                ViewShellChanged(bool bStopEditing = true);
     // communication with function-autopilot
     void                InputGetSelection( sal_Int32& rStart, sal_Int32& rEnd );
     void                InputSetSelection( sal_Int32 nStart, sal_Int32 nEnd );

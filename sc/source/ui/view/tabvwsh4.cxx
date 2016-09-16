@@ -99,6 +99,7 @@
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 extern SfxViewShell* pScActiveViewShell;            // global.cxx
 
@@ -114,7 +115,7 @@ void ScTabViewShell::Activate(bool bMDI)
     {
         // for input row (ClearCache)
         ScModule* pScMod = SC_MOD();
-        pScMod->ViewShellChanged();
+        pScMod->ViewShellChanged(/*bStopEditing=*/ !comphelper::LibreOfficeKit::isActive());
 
         ActivateView( true, bFirstActivate );
 
@@ -154,7 +155,7 @@ void ScTabViewShell::Activate(bool bMDI)
             }
         }
 
-        UpdateInputHandler( true );
+        UpdateInputHandler( /*bForce=*/ true, /*bStopEditing=*/ !comphelper::LibreOfficeKit::isActive() );
 
         if ( bFirstActivate )
         {
@@ -237,7 +238,7 @@ void ScTabViewShell::Deactivate(bool bMDI)
     bIsActive = false;
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl(this);
 
-    if( bMDI )
+    if( bMDI && !comphelper::LibreOfficeKit::isActive())
     {
         //  during shell deactivation, shells must not be switched, or the loop
         //  through the shell stack (in SfxDispatcher::DoDeactivate_Impl) will not work

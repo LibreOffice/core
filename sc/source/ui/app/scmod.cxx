@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include "scitems.hxx"
@@ -1386,12 +1387,12 @@ ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, bool bUseRef )
     return pHdl;
 }
 
-void ScModule::ViewShellChanged()
+void ScModule::ViewShellChanged(bool bStopEditing /*=true*/)
 {
     ScInputHandler* pHdl   = GetInputHdl();
     ScTabViewShell* pShell = ScTabViewShell::GetActiveViewShell();
     if ( pShell && pHdl )
-        pShell->UpdateInputHandler();
+        pShell->UpdateInputHandler(false, bStopEditing);
 }
 
 void ScModule::SetInputMode( ScInputMode eMode, const OUString* pInitText )
