@@ -58,21 +58,21 @@ struct SwIoDetect
     }
 };
 
-enum ReaderWriterEnum {
-    READER_WRITER_RTF,
-    READER_WRITER_BAS,
-    READER_WRITER_WW6,
-    READER_WRITER_WW8,
-    READER_WRITER_RTF_WH,
-    READER_WRITER_HTML,
-    READER_WRITER_WW5,
-    READER_WRITER_XML,
-    READER_WRITER_TEXT_DLG,
-    READER_WRITER_TEXT,
-    MAXFILTER
+enum class ReaderWriterType {
+    Rtf,
+    Bas,
+    Ww6,
+    Ww8,
+    RtfWh,
+    Html,
+    Ww5,
+    Xml,
+    TextDlg,
+    Text,
+    LAST = Text
 };
 
-extern SwIoDetect aFilterDetect[];
+SwIoDetect& GetSwIoDetect(ReaderWriterType);
 
 /** The following class is a wrapper for basic i/o functions of Writer 3.0.
  Everything is static. All filter names mentioned are Writer-internal
