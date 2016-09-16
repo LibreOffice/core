@@ -1019,7 +1019,7 @@ void GtkSalFrame::InitCommon()
 
 
     // connect signals
-    g_signal_connect( G_OBJECT(m_pWindow), "style-set", G_CALLBACK(signalStyleSet), this );
+    g_signal_connect( G_OBJECT(m_pWindow), "style-updated", G_CALLBACK(signalStyleUpdated), this );
     gtk_widget_set_has_tooltip(pEventWidget, true);
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "query-tooltip", G_CALLBACK(signalTooltipQuery), this ));
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "button-press-event", G_CALLBACK(signalButton), this ));
@@ -3061,22 +3061,13 @@ gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
     return true;
 }
 
-void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer frame )
+void GtkSalFrame::signalStyleUpdated(GtkWidget*, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
-    // every frame gets an initial style set on creation
-    // do not post these as the whole application tends to
-    // redraw itself to adjust to the new style
-    // where there IS no new style resulting in tremendous unnecessary flickering
-    if( pPrevious != nullptr )
-    {
-        // signalStyleSet does NOT usually have the gdk lock
-        // so post user event to safely dispatch the SALEVENT_SETTINGSCHANGED
-        // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
-        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SALEVENT_SETTINGSCHANGED );
-        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SALEVENT_FONTCHANGED );
-    }
+    // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
+    GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SALEVENT_SETTINGSCHANGED );
+    GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SALEVENT_FONTCHANGED );
 }
 
 gboolean GtkSalFrame::signalWindowState( GtkWidget*, GdkEvent* pEvent, gpointer frame )
