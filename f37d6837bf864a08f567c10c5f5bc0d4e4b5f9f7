@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_8dc5115d",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4857,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T14:12:41Z",
+      "side": 0,
+      "message": "I\u0027m not sure that completely removing this check is right. In the Thai locale Arabic Ascii digits are used unless the format code contains the LCID modifier or here the \u0027T\u0027 which modifies to use Thai numerals. An oddity of the early MS-Excel Thai edition.. e.g. format code T0 displays integer using Thai numerals.\n\nFor Excel export rKeywords[NF_KEY_THAI_T]\u003d\u003d\u0027T\u0027 (see SvNumberFormatter::FillKeywordTableForExcel()), but for Word export rKeywords[NF_KEY_THAI_T] is empty because Word only uses a subset of format codes.\n\nSo we\u0027d need some test with and without \u0027T\u0027 and with and without [NatNum1] that creates format codes for Word and Excel and see what happens if we replace this check with the general handling you implemented. Or we just keep the rKeywords[NF_KEY_THAI_T] \u003d\u003d \"T\" check for ((nLanguageID \u0026 LANGUAGE_MASK_PRIMARY) \u003d\u003d LANGUAGE_THAI) for now and postpone decisions to later..\n\nBtw, I also don\u0027t know if Word actually supports all this MS-LCID stuff, this needs to be checked and if it completely bails out on those, not just ignoring, parameterize this conversion. Probably it\u0027s easiest to add a dummy lower case keyword to NfKeywordTable to indicate whether LCID and/or DBNum are supported at all by the caller.",
+      "revId": "f37d6837bf864a08f567c10c5f5bc0d4e4b5f9f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

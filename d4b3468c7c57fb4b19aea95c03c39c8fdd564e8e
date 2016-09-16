@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_4dc13980",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4638,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T14:12:41Z",
+      "side": 1,
+      "message": "I think the full MS-LCID is unsigned 32-bit, isn\u0027t it? So this might go wrong..",
+      "revId": "d4b3468c7c57fb4b19aea95c03c39c8fdd564e8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_6d551dc5",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4880,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T14:12:41Z",
+      "side": 1,
+      "message": "((nLanguageID \u0026 0x00FF) \u003d\u003d 0x0001) is wrong. For detecting the primary language ID being Arabic it should be (generic attempt)\n\n MsLangId::getPrimaryLanguage( nLanguageID) \u003d\u003d MsLangId::getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)\n\nor\n\n (nLanguageID \u0026 LANGUAGE_MASK_PRIMARY) \u003d\u003d (LANGUAGE_ARABIC_SAUDI_ARABIA \u0026 LANGUAGE_MASK_PRIMARY)\n \nbut as we already have LANGUAGE_ARABIC_PRIMARY_ONLY as a special define we can use that, so\n\n MsLangId::getPrimaryLanguage( nLanguageID) \u003d\u003d LANGUAGE_ARABIC_PRIMARY_ONLY\n\nor\n\n  (nLanguageID \u0026 LANGUAGE_MASK_PRIMARY) \u003d\u003d LANGUAGE_ARABIC_PRIMARY_ONLY\n\nSee also the explanatory comment in include/i18nlangtag/lang.h",
+      "range": {
+        "startLine": 4880,
+        "startChar": 21,
+        "endLine": 4880,
+        "endChar": 53
+      },
+      "revId": "d4b3468c7c57fb4b19aea95c03c39c8fdd564e8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_8d00b1ac",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4882,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T14:12:41Z",
+      "side": 1,
+      "message": "But ... actually I\u0027d just use\n\n switch (nLanguageID \u0026 LANGUAGE_MASK_PRIMARY)\n\nhere ...",
+      "revId": "d4b3468c7c57fb4b19aea95c03c39c8fdd564e8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_ed25ad5c",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4884,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-16T14:12:41Z",
+      "side": 1,
+      "message": "... and for all LangIDs do\n\n case ... \u0026 LANGUAGE_MASK_PRIMARY:\n\nwhich works regardless of the sublanguage (i.e. country) being used without having to specify a case for all known LangIDs of the same primary language and then somewhen missing one that we might add in future. So,\n\n case LANGUAGE_ARABIC_SAUDI_ARABIA \u0026 LANGUAGE_MASK_PRIMARY:\n     ...\n case LANGUAGE_FARSI \u0026 LANGUAGE_MASK_PRIMARY:\n     ...\n case LANGUAGE_NEPALI \u0026 LANGUAGE_MASK_PRIMARY:\n     ...\n case LANGUAGE_BENGALI \u0026 LANGUAGE_MASK_PRIMARY:\n     ...\n ...",
+      "revId": "d4b3468c7c57fb4b19aea95c03c39c8fdd564e8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
