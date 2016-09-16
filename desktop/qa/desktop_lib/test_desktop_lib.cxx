@@ -309,11 +309,11 @@ void DesktopLOKTest::testGetFonts()
 void DesktopLOKTest::testCreateView()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViews(pDocument));
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
 
     int nId0 = pDocument->m_pDocumentClass->getView(pDocument);
     int nId1 = pDocument->m_pDocumentClass->createView(pDocument);
-    CPPUNIT_ASSERT_EQUAL(2, pDocument->m_pDocumentClass->getViews(pDocument));
+    CPPUNIT_ASSERT_EQUAL(2, pDocument->m_pDocumentClass->getViewsCount(pDocument));
 
     // Make sure the created view is the active one, then switch to the old
     // one.
@@ -322,7 +322,7 @@ void DesktopLOKTest::testCreateView()
     CPPUNIT_ASSERT_EQUAL(nId0, pDocument->m_pDocumentClass->getView(pDocument));
 
     pDocument->m_pDocumentClass->destroyView(pDocument, nId1);
-    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViews(pDocument));
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViewsCount(pDocument));
 }
 
 void DesktopLOKTest::testGetPartPageRectangles()

@@ -84,7 +84,7 @@ int SfxLokHelper::getView(SfxViewShell* pViewShell)
     return pViewShell->GetViewShellId();
 }
 
-std::size_t SfxLokHelper::getViews()
+std::size_t SfxLokHelper::getViewsCount()
 {
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
     return rViewArr.size();
@@ -105,7 +105,7 @@ void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell* pOther
 
 void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload)
 {
-    if (SfxLokHelper::getViews() <= 1)
+    if (SfxLokHelper::getViewsCount() <= 1)
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();

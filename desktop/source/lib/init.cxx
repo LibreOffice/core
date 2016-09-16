@@ -438,7 +438,7 @@ static int doc_createView(LibreOfficeKitDocument* pThis);
 static void doc_destroyView(LibreOfficeKitDocument* pThis, int nId);
 static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
 static int doc_getView(LibreOfficeKitDocument* pThis);
-static int doc_getViews(LibreOfficeKitDocument* pThis);
+static int doc_getViewsCount(LibreOfficeKitDocument* pThis);
 static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           const char *pFontName,
                           int* pFontWidth,
@@ -485,7 +485,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->destroyView = doc_destroyView;
         m_pDocumentClass->setView = doc_setView;
         m_pDocumentClass->getView = doc_getView;
-        m_pDocumentClass->getViews = doc_getViews;
+        m_pDocumentClass->getViewsCount = doc_getViewsCount;
 
         m_pDocumentClass->renderFont = doc_renderFont;
         m_pDocumentClass->getPartHash = doc_getPartHash;
@@ -2308,11 +2308,11 @@ static int doc_getView(LibreOfficeKitDocument* /*pThis*/)
     return SfxLokHelper::getView();
 }
 
-static int doc_getViews(LibreOfficeKitDocument* /*pThis*/)
+static int doc_getViewsCount(LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
 
-    return SfxLokHelper::getViews();
+    return SfxLokHelper::getViewsCount();
 }
 
 unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,

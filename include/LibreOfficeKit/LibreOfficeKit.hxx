@@ -363,7 +363,7 @@ public:
      * By default a loaded document has 1 view.
      * @return the ID of the new view.
      */
-    uintptr_t createView()
+    int createView()
     {
         return mpDoc->pClass->createView(mpDoc);
     }
@@ -372,7 +372,7 @@ public:
      * Destroy a view of an existing document.
      * @param nId a view ID, returned by createView().
      */
-    void destroyView(uintptr_t nId)
+    void destroyView(int nId)
     {
         mpDoc->pClass->destroyView(mpDoc, nId);
     }
@@ -381,7 +381,7 @@ public:
      * Set an existing view of an existing document as current.
      * @param nId a view ID, returned by createView().
      */
-    void setView(uintptr_t nId)
+    void setView(int nId)
     {
         mpDoc->pClass->setView(mpDoc, nId);
     }
@@ -390,7 +390,7 @@ public:
      * Get the current view.
      * @return a view ID, previously returned by createView().
      */
-    uintptr_t getView()
+    int getView()
     {
         return mpDoc->pClass->getView(mpDoc);
     }
@@ -398,9 +398,9 @@ public:
     /**
      * Get number of views of this document.
      */
-    inline int getViews()
+    inline int getViewsCount()
     {
-        return mpDoc->pClass->getViews(mpDoc);
+        return mpDoc->pClass->getViewsCount(mpDoc);
     }
 
     /**
