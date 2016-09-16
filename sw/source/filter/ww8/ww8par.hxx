@@ -221,7 +221,7 @@ public:
     rtl_TextEncoding m_eRTLFontSrcCharSet;    // rtl_TextEncoding for the font
     rtl_TextEncoding m_eCJKFontSrcCharSet;    // rtl_TextEncoding for the font
     SwFormat*      m_pFormat;
-    std::unique_ptr<WW8FlyPara> m_xWWFly;
+    std::shared_ptr<WW8FlyPara> m_xWWFly;
     SwNumRule*  m_pOutlineNumrule;
     long        m_nFilePos;
     sal_uInt16      m_nBase;
