@@ -435,6 +435,22 @@ public:
                                             nTileWidth, nTileHeight);
     }
 
+    /**
+     * Returns the viewID for each existing view. Since viewIDs are not reused,
+     * viewIDs are not the same as the index of the view in the view array over
+     * time. Use getViewsCount() to know the minimal nSize that's large enough.
+     *
+     * @param pArray the array to write the viewIDs into
+     * @param nSize the size of pArray
+     * @returns true if pArray was large enough and result is written, false
+     * otherwise.
+     */
+    inline bool getViewIds(int* pArray,
+                           size_t nSize)
+    {
+        return mpDoc->pClass->getViewIds(mpDoc, pArray, nSize);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

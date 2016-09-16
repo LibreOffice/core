@@ -315,6 +315,12 @@ void DesktopLOKTest::testCreateView()
     int nId1 = pDocument->m_pDocumentClass->createView(pDocument);
     CPPUNIT_ASSERT_EQUAL(2, pDocument->m_pDocumentClass->getViewsCount(pDocument));
 
+    // Test getViewIds().
+    std::vector<int> aViewIds(2);
+    CPPUNIT_ASSERT(pDocument->m_pDocumentClass->getViewIds(pDocument, aViewIds.data(), aViewIds.size()));
+    CPPUNIT_ASSERT_EQUAL(nId0, aViewIds[0]);
+    CPPUNIT_ASSERT_EQUAL(nId1, aViewIds[1]);
+
     // Make sure the created view is the active one, then switch to the old
     // one.
     CPPUNIT_ASSERT_EQUAL(nId1, pDocument->m_pDocumentClass->getView(pDocument));
