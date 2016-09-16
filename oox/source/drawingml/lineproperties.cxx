@@ -320,15 +320,15 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
     {
         if( bLineEnd )
         {
-            rPropMap.setProperty( SHAPEPROP_LineEnd, aNamedMarker );
-            rPropMap.setProperty( SHAPEPROP_LineEndWidth, nMarkerWidth );
-            rPropMap.setProperty( SHAPEPROP_LineEndCenter, bMarkerCenter );
+            rPropMap.setProperty( ShapeProperty::LineEnd, aNamedMarker );
+            rPropMap.setProperty( ShapeProperty::LineEndWidth, nMarkerWidth );
+            rPropMap.setProperty( ShapeProperty::LineEndCenter, bMarkerCenter );
         }
         else
         {
-            rPropMap.setProperty( SHAPEPROP_LineStart, aNamedMarker );
-            rPropMap.setProperty( SHAPEPROP_LineStartWidth, nMarkerWidth );
-            rPropMap.setProperty( SHAPEPROP_LineStartCenter, bMarkerCenter );
+            rPropMap.setProperty( ShapeProperty::LineStart, aNamedMarker );
+            rPropMap.setProperty( ShapeProperty::LineStartWidth, nMarkerWidth );
+            rPropMap.setProperty( ShapeProperty::LineStartCenter, bMarkerCenter );
         }
     }
 }
@@ -386,27 +386,27 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
             aLineDash.DashLen *= nBaseLineWidth;
             aLineDash.Distance *= nBaseLineWidth;
 
-            if( rPropMap.setProperty( SHAPEPROP_LineDash, aLineDash ) )
+            if( rPropMap.setProperty( ShapeProperty::LineDash, aLineDash ) )
                 eLineStyle = drawing::LineStyle_DASH;
         }
 
         // set final line style property
-        rPropMap.setProperty( SHAPEPROP_LineStyle, eLineStyle );
+        rPropMap.setProperty( ShapeProperty::LineStyle, eLineStyle );
 
         // line joint type
         if( moLineJoint.has() )
-            rPropMap.setProperty( SHAPEPROP_LineJoint, lclGetLineJoint( moLineJoint.get() ) );
+            rPropMap.setProperty( ShapeProperty::LineJoint, lclGetLineJoint( moLineJoint.get() ) );
 
         // line width in 1/100mm
-        rPropMap.setProperty( SHAPEPROP_LineWidth, nLineWidth );
+        rPropMap.setProperty( ShapeProperty::LineWidth, nLineWidth );
 
         // line color and transparence
         Color aLineColor = maLineFill.getBestSolidColor();
         if( aLineColor.isUsed() )
         {
-            rPropMap.setProperty( SHAPEPROP_LineColor, aLineColor.getColor( rGraphicHelper, nPhClr ) );
+            rPropMap.setProperty( ShapeProperty::LineColor, aLineColor.getColor( rGraphicHelper, nPhClr ) );
             if( aLineColor.hasTransparency() )
-                rPropMap.setProperty( SHAPEPROP_LineTransparency, aLineColor.getTransparency() );
+                rPropMap.setProperty( ShapeProperty::LineTransparency, aLineColor.getTransparency() );
         }
 
         // line markers
