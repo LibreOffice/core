@@ -29,11 +29,11 @@
             </info>
             <value>Some Value</value>
         </prop>
-        <prop oor:name="LastUpdateTime" oor:type="xs:int" oor:nillable="false">
+        <prop oor:name="LastUpdateTime" oor:type="xs:long" oor:nillable="false">
             <info>
                 <desc>The last time the update check ran</desc>
             </info>
-            <value>-1</value>
+            <value>0</value>
         </prop>
         <prop oor:name="URL" oor:type="xs:string" oor:nillable="false">
             <info>
