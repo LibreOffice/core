@@ -19,6 +19,10 @@ $(eval $(call gb_CppunitTest_use_externals,desktop_app, \
     icu_headers \
     icui18n \
     icuuc \
+	$(if $(ENABLE_ONLINE_UPDATE_MAR),\
+		curl \
+        orcus-parser \
+        orcus )\
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
