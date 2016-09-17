@@ -80,9 +80,14 @@ struct is_typed_flags {
 #if !HAVE_CXX11_CONSTEXPR || HAVE_CXX14_CONSTEXPR
             assert(detail::isNonNegative(value));
             assert(
-                static_cast<typename std::underlying_type<E>::type>(~M) == 0
-                    // avoid "operands don't affect result" warnings when M
-                    // covers all bits of the underlying type
+                // avoid "operands don't affect result" warnings when M
+                // covers all bits of the underlying type
+                // also avoid "truncation of constant value" warnings when
+                // M is unsigned but ~M is promoted to a signed type
+                static_cast<std::make_unsigned<decltype(M)>::type>(
+                    static_cast<std::make_unsigned<decltype(~M)>::type>(~M)
+                ) == 0
+                // here is what we actually wanted to assert:
                 || (value & ~M) == 0);
 #endif
         }
