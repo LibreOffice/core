@@ -2557,11 +2557,9 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
 
         // remove the selected items from their groups
         // (empty groups are removed, too)
-        sal_Int32 nEntryCount = rItems.getLength();
-        sal_Int32 nEntry;
         if ( pGroupDimension )
         {
-            for (nEntry=0; nEntry<nEntryCount; nEntry++)
+            for (sal_Int32 nEntry = 0; nEntry < rItems.getLength(); nEntry++)
             {
                 const OUString& aEntryName = rItems[nEntry];
                 if ( pBaseGroupDim )
@@ -2624,7 +2622,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
             throw RuntimeException();
         }
 
-        for (nEntry=0; nEntry<nEntryCount; nEntry++)
+        for (sal_Int32 nEntry = 0; nEntry < rItems.getLength(); nEntry++)
         {
             OUString aEntryName(rItems[nEntry]);
 
