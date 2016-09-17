@@ -97,6 +97,7 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     bool                bIsInUndo:1;
     bool                bDocumentModifiedPending:1;
     bool                bUpdateEnabled:1;
+    bool                mbUcalcTest:1; // avoid loading the styles in the ucalc test
     sal_uInt16          nDocumentLock;
     sal_Int16           nCanUpdate;  // stores the UpdateDocMode from loading a document till update links
 
@@ -420,6 +421,8 @@ public:
     virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
     void SnapVisArea( Rectangle& rRect ) const;
+
+    void SetIsInUcalc();
 };
 
 void UpdateAcceptChangesDialog();

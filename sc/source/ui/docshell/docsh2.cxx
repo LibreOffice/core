@@ -61,18 +61,20 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     aDocument.UpdStlShtPtrsFrmNms();
 
 #if ENABLE_ORCUS
-    /* Create styles that are imported through Orcus */
+    if (!mbUcalcTest)
+    {
+        /* Create styles that are imported through Orcus */
 
-    OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
-    rtl::Bootstrap::expandMacros(aURL);
+        OUString aURL("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml");
+        rtl::Bootstrap::expandMacros(aURL);
 
-    OUString aPath;
-    osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
+        OUString aPath;
+        osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
 
-    ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
-    if (!pOrcus)
-        return false;
-    pOrcus->importODS_Styles(aDocument, aPath);
+        ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
+        if (pOrcus)
+            pOrcus->importODS_Styles(aDocument, aPath);
+    }
 #endif
 
     //  SetDocumentModified is not allowed anymore in Load/InitNew!
