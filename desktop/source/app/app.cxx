@@ -1239,9 +1239,6 @@ void restartOnMac(bool passArguments) {
 bool isTimeForUpdateCheck()
 {
     sal_uInt64 nLastUpdate = officecfg::Office::Update::Update::LastUpdateTime::get();
-    if (nLastUpdate == 0)
-        return true;
-
     sal_uInt64 nNow = tools::Time::GetSystemTicks();
 
     sal_uInt64 n7DayInMS = 1000 * 60 * 60 * 24 * 7; // 7 days in ms
@@ -1495,7 +1492,10 @@ int Desktop::Main()
             if (isTimeForUpdateCheck())
             {
                 sal_uInt64 nNow = tools::Time::GetSystemTicks();
-                officecfg::Office::Update::Update::LastUpdateTime::set(nNow);
+                std::shared_ptr< comphelper::ConfigurationChanges > batch(
+                        comphelper::ConfigurationChanges::create());
+                officecfg::Office::Update::Update::LastUpdateTime::set(nNow, batch);
+                batch->commit();
                 m_aUpdateThread = std::thread(update_checker);
             }
         }
