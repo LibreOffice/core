@@ -594,19 +594,21 @@ bool ScDocShell::Load( SfxMedium& rMedium )
             aDocument.UpdStlShtPtrsFrmNms();
 
 #if ENABLE_ORCUS
-            /* Create styles that are imported through Orcus */
+            if (!mbUcalcTest)
+            {
+                /* Create styles that are imported through Orcus */
 
-            OUString aURL("$BRAND_BASE_DIR" LIBO_SHARE_FOLDER "/calc/styles.xml");
-            rtl::Bootstrap::expandMacros(aURL);
+                OUString aURL("$BRAND_BASE_DIR" LIBO_SHARE_FOLDER "/calc/styles.xml");
+                rtl::Bootstrap::expandMacros(aURL);
 
-            OUString aPath;
-            osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
+                OUString aPath;
+                osl::FileBase::getSystemPathFromFileURL(aURL, aPath);
 
-            ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
-            if (!pOrcus)
-                return false;
+                ScOrcusFilters* pOrcus = ScFormatFilter::Get().GetOrcusFilters();
 
-            pOrcus->importODS_Styles(aDocument, aPath);
+                if (pOrcus)
+                    pOrcus->importODS_Styles(aDocument, aPath);
+            }
 #endif
 
             bRet = LoadXML( &rMedium, nullptr );
@@ -2675,6 +2677,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     bIsInUndo       ( false ),
     bDocumentModifiedPending( false ),
     bUpdateEnabled  ( true ),
+    mbUcalcTest(rShell.mbUcalcTest),
     nDocumentLock   ( 0 ),
     nCanUpdate (css::document::UpdateDocMode::ACCORDING_TO_CONFIG),
     pOldAutoDBRange ( nullptr ),
@@ -2719,6 +2722,7 @@ ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags ) :
     bIsInUndo       ( false ),
     bDocumentModifiedPending( false ),
     bUpdateEnabled  ( true ),
+    mbUcalcTest     ( false ),
     nDocumentLock   ( 0 ),
     nCanUpdate (css::document::UpdateDocMode::ACCORDING_TO_CONFIG),
     pOldAutoDBRange ( nullptr ),
@@ -3241,6 +3245,11 @@ bool ScDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPas
         bRes = true;
     }
     return bRes;
+}
+
+void ScDocShell::SetIsInUcalc()
+{
+    mbUcalcTest = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
