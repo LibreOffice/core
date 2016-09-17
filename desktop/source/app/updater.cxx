@@ -437,7 +437,7 @@ std::string download_content(const OString& rURL, bool bFile)
     return response_body;
 }
 
-OUString generateHash(const OUString& rURL)
+OUString generateHash(const OUString& /*rURL*/)
 {
     return OUString();
 }
