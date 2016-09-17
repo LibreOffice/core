@@ -1281,7 +1281,7 @@ void ScDPCache::Dump() const
         FieldsType::const_iterator it = maFields.begin(), itEnd = maFields.end();
         for (size_t i = 0; it != itEnd; ++it, ++i)
         {
-            const Field& fld = *it;
+            const Field& fld = *(*it);
             cout << "* source dimension: " << GetDimensionName(i) << " (ID = " << i << ")" << endl;
             cout << "    item count: " << fld.maItems.size() << endl;
             if (bDumpItems)
@@ -1306,7 +1306,7 @@ void ScDPCache::Dump() const
         GroupFieldsType::const_iterator it = maGroupFields.begin(), itEnd = maGroupFields.end();
         for (size_t i = maFields.size(); it != itEnd; ++it, ++i)
         {
-            const GroupItems& gi = *it;
+            const GroupItems& gi = *(*it);
             cout << "* group dimension: (unnamed) (ID = " << i << ")" << endl;
             cout << "    item count: " << gi.maItems.size() << endl;
             cout << "    group type: " << getGroupTypeName(gi.mnGroupType) << endl;

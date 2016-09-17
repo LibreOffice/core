@@ -3778,12 +3778,12 @@ bool ScDPCollection::HasTable( const ScRange& rRange ) const
 
 namespace {
 
-struct DumpTable : std::unary_function<ScDPObject, void>
+struct DumpTable : std::unary_function<std::unique_ptr<ScDPObject>, void>
 {
-    void operator() (const ScDPObject& rObj) const
+    void operator() (const std::unique_ptr<ScDPObject>& rObj) const
     {
-        cout << "-- '" << rObj.GetName() << "'" << endl;
-        ScDPSaveData* pSaveData = rObj.GetSaveData();
+        cout << "-- '" << rObj->GetName() << "'" << endl;
+        ScDPSaveData* pSaveData = rObj->GetSaveData();
         if (!pSaveData)
             return;
 
