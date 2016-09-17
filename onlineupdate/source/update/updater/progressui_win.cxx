@@ -182,7 +182,7 @@ InitDialog(HWND hDlg)
 
 // Message handler for update dialog.
 static LRESULT CALLBACK
-DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+DialogProc(HWND hDlg, UINT message, WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
   switch (message)
   {
@@ -205,7 +205,7 @@ DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 int
-InitProgressUI(int *argc, WCHAR ***argv)
+InitProgressUI(int* /*argc*/, WCHAR*** /*argv*/)
 {
   return 0;
 }

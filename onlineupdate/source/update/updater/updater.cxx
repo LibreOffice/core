@@ -2293,7 +2293,7 @@ ProcessReplaceRequest()
 
 #ifdef _WIN32
 static void
-WaitForServiceFinishThread(void *param)
+WaitForServiceFinishThread(void* /*param*/)
 {
     // We wait at most 10 minutes, we already waited 5 seconds previously
     // before deciding to show this UI.
