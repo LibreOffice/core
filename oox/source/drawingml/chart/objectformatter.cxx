@@ -507,6 +507,7 @@ struct ObjectTypeFormatEntry
     const AutoFormatEntry* mpAutoFills;     /// Automatic fill formatting for all chart styles.
     const AutoTextEntry* mpAutoTexts;       /// Automatic text attributes for all chart styles.
     bool                mbIsFrame;          /// True = object is a frame, false = object is a line.
+    ObjectTypeFormatEntry() = delete;       // MSVC fails to create default ctor
 };
 
 #define TYPEFORMAT_FRAME( obj_type, prop_type, auto_texts, auto_lines, auto_fills ) \
@@ -515,7 +516,7 @@ struct ObjectTypeFormatEntry
 #define TYPEFORMAT_LINE( obj_type, prop_type, auto_texts, auto_lines ) \
     { obj_type, prop_type, auto_lines, nullptr,  auto_texts, false }
 
-static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
+static const ObjectTypeFormatEntry spObjTypeFormatEntries[]
 {
     //                object type                property info      auto text          auto line            auto fill
     TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     saCommonPropInfo, nullptr,                 spNoFormats,         spChartSpaceFill ),
