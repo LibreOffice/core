@@ -134,6 +134,7 @@ void Test::setUp()
         SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
         SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
+    m_pImpl->m_xDocShell->SetIsInUcalc();
     m_pImpl->m_xDocShell->DoInitUnitTest();
     m_pDoc = &m_pImpl->m_xDocShell->GetDocument();
 }
@@ -4436,6 +4437,7 @@ void Test::testCopyPasteFormulasExternalDoc()
     m_pDoc = &getDocShell().GetDocument();
 
     ScDocShellRef xExtDocSh = new ScDocShell;
+    xExtDocSh->SetIsInUcalc();
     OUString aExtDocName("file:///extdata.fake");
     OUString aExtSh1Name("ExtSheet1");
     OUString aExtSh2Name("ExtSheet2");

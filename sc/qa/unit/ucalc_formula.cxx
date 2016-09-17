@@ -5289,6 +5289,7 @@ void Test::testFormulaMatrixResultUpdate()
 void Test::testExternalRef()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
+    xExtDocSh->SetIsInUcalc();
     OUString aExtDocName("file:///extdata.fake");
     OUString aExtSh1Name("Data1");
     OUString aExtSh2Name("Data2");
@@ -5461,6 +5462,7 @@ void Test::testExternalRef()
 void Test::testExternalRangeName()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
+    xExtDocSh->SetIsInUcalc();
     OUString aExtDocName("file:///extdata.fake");
     OUString aExtSh1Name("Data1");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
@@ -5557,6 +5559,7 @@ void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc)
 void Test::testExternalRefFunctions()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
+    xExtDocSh->SetIsInUcalc();
     OUString aExtDocName("file:///extdata.fake");
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
