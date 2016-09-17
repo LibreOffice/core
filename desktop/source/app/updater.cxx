@@ -12,10 +12,10 @@
 #if UNX
 #include <unistd.h>
 #include <errno.h>
-#include <fstream>
 
 #endif
 
+#include <fstream>
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
 
