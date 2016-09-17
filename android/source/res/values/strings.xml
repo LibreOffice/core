@@ -53,7 +53,7 @@
     <string name="local_file_system">Local file system</string>
     <string name="external_sd_file_system">External SD</string>
     <string name="otg_file_system">OTG device (experimental)</string>
-    <string name="owncloud">ownCloud</string>
+    <string name="owncloud">Remote server</string>
 
     <string name="owncloud_wrong_connection">Cannot connect to ownCloud server. Check your configuration.</string>
     <string name="owncloud_unauthorized">Cannot log into ownCloud server. Check your configuration.</string>
