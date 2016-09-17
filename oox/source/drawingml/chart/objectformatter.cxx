@@ -515,7 +515,7 @@ struct ObjectTypeFormatEntry
 #define TYPEFORMAT_LINE( obj_type, prop_type, auto_texts, auto_lines ) \
     { obj_type, prop_type, auto_lines, nullptr,  auto_texts, false }
 
-static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
+static const ObjectTypeFormatEntry spObjTypeFormatEntries[]
 {
     //                object type                property info      auto text          auto line            auto fill
     TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     saCommonPropInfo, nullptr,                 spNoFormats,         spChartSpaceFill ),
