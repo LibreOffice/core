@@ -1155,7 +1155,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
     // source options must be first!
 
     uno::Reference<beans::XPropertySet> xSourceProp( xSource, uno::UNO_QUERY );
-    OSL_ENSURE( xSourceProp.is(), "no properties at source" );
+    SAL_WARN_IF( !xSourceProp.is(), "sc.core", "no properties at source" );
     if ( xSourceProp.is() )
     {
         // source options are not available for external sources
@@ -1186,7 +1186,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         // reset all orientations
         //TODO: "forgetSettings" or similar at source ?????
         //TODO: reset all duplicated dimensions, or reuse them below !!!
-        OSL_FAIL( "ScDPSaveData::WriteToSource" );
+        SAL_INFO("sc.core", "ScDPSaveData::WriteToSource");
 
         lcl_ResetOrient( xSource );
 
@@ -1232,7 +1232,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                     if ((*iter)->GetDupFlag())
                     {
                         uno::Reference<util::XCloneable> xCloneable(xIntDim, uno::UNO_QUERY);
-                        OSL_ENSURE(xCloneable.is(), "cannot clone dimension");
+                        SAL_WARN_IF(!xCloneable.is(), "sc", "cannot clone dimension");
                         if (xCloneable.is())
                         {
                             uno::Reference<util::XCloneable> xNew = xCloneable->createClone();
@@ -1248,7 +1248,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                         (*iter)->WriteToSource( xIntDim );
                 }
             }
-            OSL_ENSURE(bFound, "WriteToSource: Dimension not found");
+            SAL_WARN_IF(!bFound, "sc.core", "WriteToSource: Dimension not found: " + aName + ".");
         }
 
         if ( xSourceProp.is() )
@@ -1263,7 +1263,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("exception in WriteToSource");
+        SAL_WARN("sc.core", "exception in WriteToSource");
     }
 }
 
@@ -1280,7 +1280,7 @@ bool ScDPSaveData::IsEmpty() const
 void ScDPSaveData::RemoveAllGroupDimensions( const OUString& rSrcDimName, std::vector<OUString>* pDeletedNames )
 {
     if (!pDimensionData)
-        // No group dimensions exist.  Nothing to do.
+        // No group dimensions exist. Nothing to do.
         return;
 
     // Remove numeric group dimension (exists once at most). No need to delete

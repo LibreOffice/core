@@ -2847,7 +2847,10 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
         }
 
         if (pDimData)
+        {
+            (itCache->second)->ClearGroupFields();
             pDimData->WriteToCache(*itCache->second);
+        }
 
         return itCache->second.get();
     }
@@ -3440,6 +3443,71 @@ bool ScDPCollection::ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject
     return true;
 }
 
+bool ScDPCollection::GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDimensionSaveData** pGroups) const
+{
+    for (const std::unique_ptr<ScDPObject>& aTable : maTables)
+    {
+        const ScDPObject& rRefObj = *aTable.get();
+
+        if (&rRefObj == &rDPObj)
+            continue;
+
+        if (rDPObj.IsSheetData()){
+            if(!rRefObj.IsSheetData())
+                continue;
+
+            const ScSheetSourceDesc* pDesc = rDPObj.GetSheetDesc();
+            const ScSheetSourceDesc* pRefDesc = rRefObj.GetSheetDesc();
+            if (pDesc == nullptr || pRefDesc == nullptr)
+                continue;
+
+            if (pDesc->HasRangeName())
+            {
+                if (!pRefDesc->HasRangeName())
+                    continue;
+
+               if (pDesc->GetRangeName() == pRefDesc->GetRangeName())
+               {
+                    *pGroups = rRefObj.GetSaveData()->GetExistingDimensionData();
+                    return true;
+               }
+            }
+            else
+            {
+                if (pRefDesc->HasRangeName())
+                    continue;
+
+                if (pDesc->GetSourceRange() == pRefDesc->GetSourceRange())
+                {
+                    *pGroups = rRefObj.GetSaveData()->GetExistingDimensionData();
+                    return true;
+                }
+            }
+        }
+        else if (rDPObj.IsImportData())
+        {
+            if (!rRefObj.IsImportData ())
+                continue;
+
+            const ScImportSourceDesc* pDesc = rDPObj.GetImportSourceDesc();
+            const ScImportSourceDesc* pRefDesc = rRefObj.GetImportSourceDesc();
+            if (pDesc == nullptr || pRefDesc == nullptr)
+                continue;
+
+            if (pDesc->aDBName.equals(pRefDesc->aDBName) &&
+                pDesc->aObject.equals(pRefDesc->aObject) &&
+                pDesc->GetCommandType() == pRefDesc->GetCommandType())
+            {
+                *pGroups = rRefObj.GetSaveData()->GetExistingDimensionData();
+                return true;
+            }
+
+        }
+    }
+    return false;
+}
+
+
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
     maTables.erase( std::remove_if(maTables.begin(), maTables.end(), MatchByTable(nTab)), maTables.end());
@@ -3619,6 +3687,18 @@ bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
     return true;
 }
 
+bool ScDPCollection::HasTable(const ScDPObject* pDPObj) const
+{
+    for (const std::unique_ptr<ScDPObject>& aTable : maTables)
+    {
+        if (aTable.get() == pDPObj)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 ScDPCollection::SheetCaches& ScDPCollection::GetSheetCaches()
 {
     return maSheetCaches;
@@ -3673,12 +3753,12 @@ bool ScDPCollection::HasTable( const ScRange& rRange ) const
 
 namespace {
 
-struct DumpTable : std::unary_function<ScDPObject, void>
+struct DumpTable : std::unary_function<std::unique_ptr<ScDPObject>, void>
 {
-    void operator() (const ScDPObject& rObj) const
+    void operator() (const std::unique_ptr<ScDPObject>& rObj) const
     {
-        cout << "-- '" << rObj.GetName() << "'" << endl;
-        ScDPSaveData* pSaveData = rObj.GetSaveData();
+        cout << "-- '" << rObj->GetName() << "'" << endl;
+        ScDPSaveData* pSaveData = rObj->GetSaveData();
         if (!pSaveData)
             return;
 

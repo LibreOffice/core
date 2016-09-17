@@ -182,7 +182,7 @@ ScPivotFuncData::ScPivotFuncData( SCCOL nCol, PivotFunc nFuncMask ) :
 void ScPivotFuncData::Dump() const
 {
     cout << "ScPivotFuncData: (col=" << mnCol << ", original dim=" << mnOriginalDim
-        << ", func mask=" << mnFuncMask << ", duplicate count=" << static_cast<int>(mnDupCount)
+        << ", func mask=" << static_cast<int>(mnFuncMask) << ", duplicate count=" << static_cast<int>(mnDupCount)
         << ")" << endl;
 }
 #endif

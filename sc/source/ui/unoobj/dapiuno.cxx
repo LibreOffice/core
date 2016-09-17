@@ -39,6 +39,7 @@
 #include "dpdimsave.hxx"
 #include "hints.hxx"
 #include <dputil.hxx>
+#include "globstr.hrc"
 
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
@@ -1386,7 +1387,6 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     mpDPObject->SetSaveData(aSaveData);
     ScSheetSourceDesc aSheetDesc(pDocSh ? &pDocSh->GetDocument() : nullptr);
     mpDPObject->SetSheetDesc(aSheetDesc);
-    mpDPObject->GetSource();
 }
 
 ScDataPilotDescriptor::~ScDataPilotDescriptor()
@@ -2528,12 +2528,27 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
 {
     SolarMutexGuard aGuard;
 
-    Reference< XDataPilotField > xRet;
-    OUString sNewDim;
-
     if( !rItems.hasElements() )
         throw IllegalArgumentException();
 
+    Reference< XNameAccess > xMembers = GetMembers();
+    if (!xMembers.is())
+    {
+        SAL_WARN("sc.ui", "Cannot access members of the field object.");
+        throw RuntimeException();
+    }
+
+    for (const OUString& aEntryName : rItems)
+    {
+        if (!xMembers->hasByName(aEntryName))
+        {
+            SAL_WARN("sc.ui", "There is no member with that name: " + aEntryName + ".");
+            throw IllegalArgumentException();
+        }
+    }
+
+    Reference< XDataPilotField > xRet;
+    OUString sNewDim;
     ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
@@ -2557,11 +2572,9 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
 
         // remove the selected items from their groups
         // (empty groups are removed, too)
-        sal_Int32 nEntryCount = rItems.getLength();
-        sal_Int32 nEntry;
         if ( pGroupDimension )
         {
-            for (nEntry=0; nEntry<nEntryCount; nEntry++)
+            for (sal_Int32 nEntry = 0; nEntry < rItems.getLength(); nEntry++)
             {
                 const OUString& aEntryName = rItems[nEntry];
                 if ( pBaseGroupDim )
@@ -2614,26 +2627,11 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         }
         OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
-        //! localized prefix string
-        OUString aGroupName = pGroupDimension->CreateGroupName( "Group" );
+        OUString aGroupName = pGroupDimension->CreateGroupName( ScGlobal::GetRscString(STR_PIVOT_GROUP) );
         ScDPSaveGroupItem aGroup( aGroupName );
-        Reference< XNameAccess > xMembers = GetMembers();
-        if (!xMembers.is())
-        {
-            delete pNewGroupDim;
-            throw RuntimeException();
-        }
-
-        for (nEntry=0; nEntry<nEntryCount; nEntry++)
+        for (sal_Int32 nEntry = 0; nEntry < rItems.getLength(); nEntry++)
         {
             OUString aEntryName(rItems[nEntry]);
-
-            if (!xMembers->hasByName(aEntryName))
-            {
-                delete pNewGroupDim;
-                throw IllegalArgumentException();
-            }
-
             if ( pBaseGroupDim )
             {
                 // for each selected (intermediate) group, add all its items
@@ -2681,10 +2679,11 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
             try
             {
                 xRet.set(xFields->getByName(sNewDim), UNO_QUERY);
-                OSL_ENSURE(xRet.is(), "there is a name, so there should be also a field");
+                SAL_WARN_IF(!xRet.is(), "sc.ui", "there is a name, so there should be also a field");
             }
             catch (const container::NoSuchElementException&)
             {
+                SAL_WARN("sc.ui", "Cannot find field with that name: " + sNewDim + ".");
                 // Avoid throwing exception that's not specified in the method signature.
                 throw RuntimeException();
             }
@@ -2790,7 +2789,7 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
 
         // apply changes
         pDPObj->SetSaveData( aSaveData );
-        SetDPObject( pDPObj );
+        ScDBDocFunc(*GetDocShell()).RefreshPivotTableGroups(pDPObj);
     }
 
     // return the UNO object of the new dimension, after writing back saved data
