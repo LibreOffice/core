@@ -20,6 +20,8 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lib, \
 	cppu \
 	cppuhelper \
 	sal \
+	sc \
+	scfilt \
 	sfx \
 	sofficeapp \
 	subsequenttest \
