@@ -52,6 +52,7 @@
 #include <limits.h>
 #include <errno.h>
 #include <algorithm>
+#include <memory>
 
 #include <config_version.h>
 
