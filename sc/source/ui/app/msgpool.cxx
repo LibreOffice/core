@@ -35,7 +35,8 @@ static SfxItemInfo const aMsgItemInfos[] =
     { SID_PIVOT_TABLE,           true },   // SCITEM_PIVOTDATA
     { SID_SOLVE,                 true },   // SCITEM_SOLVEDATA
     { SID_SCUSERLISTS,           true },   // SCITEM_USERLIST
-    { SID_PRINTER_NOTFOUND_WARN, true }    // SCITEM_PRINTWARN
+    { SID_PRINTER_NOTFOUND_WARN, true },   // SCITEM_PRINTWARN
+    { 0,                         false }  // SCITEM_CONDFORMATDLGDATA
 };
 
 ScMessagePool::ScMessagePool()
@@ -53,7 +54,8 @@ ScMessagePool::ScMessagePool()
     aGlobalSolveItem        ( ScSolveItem           ( SCITEM_SOLVEDATA, nullptr ) ),
     aGlobalUserListItem     ( ScUserListItem        ( SCITEM_USERLIST ) ),
 
-    aPrintWarnItem          ( SfxBoolItem           ( SCITEM_PRINTWARN, false ) )
+    aPrintWarnItem          ( SfxBoolItem           ( SCITEM_PRINTWARN, false ) ),
+    aCondFormatDlgItem      ( ScCondFormatDlgItem   ( nullptr, -1, false ) )
 {
     ppPoolDefaults = new SfxPoolItem*[MSGPOOL_END - MSGPOOL_START + 1];
 
@@ -67,6 +69,7 @@ ScMessagePool::ScMessagePool()
     ppPoolDefaults[SCITEM_SOLVEDATA         - MSGPOOL_START] = &aGlobalSolveItem;
     ppPoolDefaults[SCITEM_USERLIST          - MSGPOOL_START] = &aGlobalUserListItem;
     ppPoolDefaults[SCITEM_PRINTWARN         - MSGPOOL_START] = &aPrintWarnItem;
+    ppPoolDefaults[SCITEM_CONDFORMATDLGDATA - MSGPOOL_START] = &aCondFormatDlgItem;
 
     SetDefaults( ppPoolDefaults );
 

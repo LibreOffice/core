@@ -79,7 +79,9 @@ class AbstractScCondFormatManagerDlg : public VclAbstractDialog
 public:
     virtual ScConditionalFormatList* GetConditionalFormatList() = 0;
 
-    virtual bool CondFormatsChanged() = 0;
+    virtual bool CondFormatsChanged() const = 0;
+
+    virtual void SetModified() = 0;
 
     virtual ScConditionalFormat* GetCondFormatSelected() = 0;
 };
