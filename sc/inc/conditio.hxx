@@ -523,6 +523,8 @@ public:
 
     void startRendering();
     void endRendering();
+
+    sal_uInt32 getMaxKey() const;
 };
 
 #endif

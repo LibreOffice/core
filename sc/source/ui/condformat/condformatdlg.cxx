@@ -33,6 +33,7 @@
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "condformatdlgentry.hxx"
+#include "condformatdlgitem.hxx"
 
 #include "globstr.hrc"
 
@@ -412,19 +413,14 @@ IMPL_LINK_NOARG_TYPED( ScCondFormatList, ScrollHdl, ScrollBar*, void )
     DoScroll(mpScrollBar->GetDelta());
 }
 
-// Conditional Format Dialog
-//
 ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     vcl::Window* pParent, ScViewData* pViewData,
-    const ScConditionalFormat* pFormat, const ScRangeList& rRange,
-    const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType,
-    bool bManaged)
+    const ScCondFormatDlgItem* pItem)
         : ScAnyRefDlg(pB, pCW, pParent, "ConditionalFormatDialog",
                         "modules/scalc/ui/conditionalformatdialog.ui")
-    , mbManaged(bManaged)
-    , maPos(rPos)
     , mpViewData(pViewData)
     , mpLastEdit(nullptr)
+    , mpDlgItem(static_cast<ScCondFormatDlgItem*>(pItem->Clone()))
 {
     get(mpBtnOk, "ok");
     get(mpBtnAdd, "add");
@@ -438,10 +434,39 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     get(mpRbRange, "rbassign");
     mpRbRange->SetReferences(this, mpEdRange);
 
-    maKey = pFormat ? pFormat->GetKey() : 0;
+    ScConditionalFormat* pFormat = nullptr;
+    mnKey = mpDlgItem->GetIndex();
+    if (mpDlgItem->IsManaged() && mpDlgItem->GetConditionalFormatList())
+    {
+        pFormat = mpDlgItem->GetConditionalFormatList()->GetFormat(mnKey);
+    }
+    else if (!mpDlgItem->IsManaged())
+    {
+        ScDocument* pDoc = mpViewData->GetDocument();
+        pFormat = pDoc->GetCondFormList(mpViewData->GetTabNo())->GetFormat ( mnKey );
+    }
+
+    ScRangeList aRange;
+    if (pFormat)
+    {
+        aRange = pFormat->GetRange();
+    }
+    else
+    {
+        // this is for adding a new entry
+        mpViewData->GetMarkData().FillRangeListWithMarks(&aRange, false);
+        if(aRange.empty())
+        {
+            ScAddress aPos(mpViewData->GetCurX(), mpViewData->GetCurY(), mpViewData->GetTabNo());
+            ScRange* pRange = new ScRange(aPos);
+            aRange.push_back(pRange);
+        }
+        mnKey = 0;
+    }
+    maPos = aRange.GetTopLeftCorner();
 
     get(mpCondFormList, "list");
-    mpCondFormList->init(mpViewData->GetDocument(), this, pFormat, rRange, rPos, eType);
+    mpCondFormList->init(mpViewData->GetDocument(), this, pFormat, aRange, maPos, mpDlgItem->GetDialogType());
 
     mpBtnOk->SetClickHdl(LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
     mpBtnAdd->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, AddBtnHdl ) );
@@ -451,7 +476,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     mpEdRange->SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
 
     OUString aRangeString;
-    rRange.Format(aRangeString, ScRefFlags::VALID, pViewData->GetDocument(),
+    aRange.Format(aRangeString, ScRefFlags::VALID, pViewData->GetDocument(),
                     pViewData->GetDocument()->GetAddressConvention());
     mpEdRange->SetText(aRangeString);
 
@@ -589,15 +614,29 @@ void ScCondFormatDlg::OkPressed()
 {
     ScConditionalFormat* pFormat = GetConditionalFormat();
 
-    if(pFormat)
-        mpViewData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(maKey,
-            pFormat, maPos.Tab(), pFormat->GetRange());
-    else
-        mpViewData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(maKey,
-            nullptr, maPos.Tab(), ScRangeList());
-
-    if ( mbManaged )
+    if (!mpDlgItem->IsManaged())
     {
+        if(pFormat)
+            mpViewData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(mnKey,
+                    pFormat, maPos.Tab(), pFormat->GetRange());
+        else
+            mpViewData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(mnKey,
+                    nullptr, maPos.Tab(), ScRangeList());
+    }
+    else
+    {
+        ScConditionalFormatList* pList = mpDlgItem->GetConditionalFormatList();
+        sal_uInt32 nKey = mnKey;
+        if (mnKey == 0)
+        {
+            nKey = pList->getMaxKey() + 1;
+        }
+
+        pFormat->SetKey(nKey);
+        pList->erase(nKey);
+        pList->InsertNew(pFormat);
+        mpViewData->GetViewShell()->GetPool().Put(*mpDlgItem);
+
         SetDispatcherLock( false );
         // Queue message to open Conditional Format Manager Dialog
         GetBindings().GetDispatcher()->Execute( SID_OPENDLG_CONDFRMT_MANAGER,
@@ -610,8 +649,9 @@ void ScCondFormatDlg::OkPressed()
 //
 void ScCondFormatDlg::CancelPressed()
 {
-    if ( mbManaged )
+    if ( mpDlgItem->IsManaged() )
     {
+        mpViewData->GetViewShell()->GetPool().Put(*mpDlgItem);
         SetDispatcherLock( false );
         // Queue message to open Conditional Format Manager Dialog
         GetBindings().GetDispatcher()->Execute( SID_OPENDLG_CONDFRMT_MANAGER,
@@ -619,142 +659,6 @@ void ScCondFormatDlg::CancelPressed()
     }
     Close();
 }
-
-// Parse xml string parameters used to initialize the Conditional Format Dialog
-// when it is created.
-//
-bool ScCondFormatDlg::ParseXmlString(const OUString&    sXMLString,
-                                     sal_uInt32&        nIndex,
-                                     sal_uInt8&         nType,
-                                     bool&              bManaged)
-{
-    bool bRetVal = false;
-    OString sTagName;
-    OUString sTagValue;
-
-    xmlNodePtr      pXmlRoot  = nullptr;
-    xmlNodePtr      pXmlNode  = nullptr;
-
-    OString sOString = OUStringToOString( sXMLString, RTL_TEXTENCODING_UTF8 );
-    xmlDocPtr pXmlDoc = xmlParseMemory(sOString.getStr(), sOString.getLength());
-
-    if( pXmlDoc )
-    {
-        bRetVal = true;
-        pXmlRoot = xmlDocGetRootElement( pXmlDoc );
-        pXmlNode = pXmlRoot->children;
-
-        while (pXmlNode != nullptr && bRetVal)
-        {
-            sTagName  = OUStringToOString("Index", RTL_TEXTENCODING_UTF8);
-            if (xmlStrcmp(pXmlNode->name, reinterpret_cast<xmlChar const *>(sTagName.getStr())) == 0)
-            {
-                if (pXmlNode->children != nullptr && pXmlNode->children->type == XML_TEXT_NODE)
-                {
-                    sTagValue = OUString(reinterpret_cast<char*>(pXmlNode->children->content),
-                                     strlen(reinterpret_cast<char*>(pXmlNode->children->content)),
-                                     RTL_TEXTENCODING_UTF8);
-                    nIndex   = sTagValue.toUInt32();
-                    pXmlNode = pXmlNode->next;
-                    continue;
-                }
-            }
-
-            sTagName  = OUStringToOString("Type", RTL_TEXTENCODING_UTF8);
-            if (xmlStrcmp(pXmlNode->name, reinterpret_cast<xmlChar const *>(sTagName.getStr())) == 0)
-            {
-                if (pXmlNode->children != nullptr && pXmlNode->children->type == XML_TEXT_NODE)
-                {
-                    sTagValue = OUString(reinterpret_cast<char*>(pXmlNode->children->content),
-                                     strlen(reinterpret_cast<char*>(pXmlNode->children->content)),
-                                     RTL_TEXTENCODING_UTF8);
-                    nType    = sTagValue.toUInt32();
-                    pXmlNode = pXmlNode->next;
-                    continue;
-                }
-            }
-
-            sTagName  = OUStringToOString("Managed", RTL_TEXTENCODING_UTF8);
-            if (xmlStrcmp(pXmlNode->name, reinterpret_cast<xmlChar const *>(sTagName.getStr())) == 0)
-            {
-                if (pXmlNode->children != nullptr && pXmlNode->children->type == XML_TEXT_NODE)
-                {
-                    sTagValue = OUString(reinterpret_cast<char*>(pXmlNode->children->content),
-                                     strlen(reinterpret_cast<char*>(pXmlNode->children->content)),
-                                     RTL_TEXTENCODING_UTF8);
-                    bManaged = sTagValue.toBoolean();
-                    pXmlNode = pXmlNode->next;
-                    continue;
-                }
-            }
-            bRetVal = false;
-        }
-    }
-
-    xmlFreeDoc(pXmlDoc);
-    return bRetVal;
-}
-
-// Generate xml string parameters used to initialize the Conditional Format Dialog
-// when it is created.
-//
-OUString ScCondFormatDlg::GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, bool bManaged)
-{
-    OUString sReturn;
-
-    OString sTagName;
-    OString sTagValue;
-
-    xmlNodePtr      pXmlRoot  = nullptr;
-    xmlNodePtr      pXmlNode  = nullptr;
-
-    xmlChar*        pBuffer   = nullptr;
-    const xmlChar*  pTagName  = nullptr;
-    const xmlChar*  pTagValue = nullptr;
-
-    xmlDocPtr pXmlDoc = xmlNewDoc(reinterpret_cast<const xmlChar*>("1.0"));
-
-    sTagName = OUStringToOString("ScCondFormatDlg", RTL_TEXTENCODING_UTF8);
-    pTagName = reinterpret_cast<const xmlChar*>(sTagName.getStr());
-    pXmlRoot = xmlNewDocNode(pXmlDoc, nullptr, pTagName, nullptr);
-
-    xmlDocSetRootElement(pXmlDoc, pXmlRoot);
-
-    sTagName  = OUStringToOString("Index", RTL_TEXTENCODING_UTF8);
-    sTagValue = OUStringToOString(OUString::number(nIndex), RTL_TEXTENCODING_UTF8);
-    pTagName  = reinterpret_cast<const xmlChar*>(sTagName.getStr());
-    pTagValue = reinterpret_cast<const xmlChar*>(sTagValue.getStr());
-    pXmlNode  = xmlNewDocNode(pXmlDoc, nullptr, pTagName, pTagValue);
-
-    xmlAddChild(pXmlRoot, pXmlNode);
-
-    sTagName  = OUStringToOString("Type", RTL_TEXTENCODING_UTF8);
-    sTagValue = OUStringToOString(OUString::number(nType), RTL_TEXTENCODING_UTF8);
-    pTagName  = reinterpret_cast<const xmlChar*>(sTagName.getStr());
-    pTagValue = reinterpret_cast<const xmlChar*>(sTagValue.getStr());
-    pXmlNode  = xmlNewDocNode(pXmlDoc, nullptr, pTagName, pTagValue);
-
-    xmlAddChild(pXmlRoot, pXmlNode);
-
-    sTagName  = OUStringToOString("Managed", RTL_TEXTENCODING_UTF8);
-    sTagValue = OUStringToOString(OUString::boolean(bManaged), RTL_TEXTENCODING_UTF8);
-    pTagName  = reinterpret_cast<const xmlChar*>(sTagName.getStr());
-    pTagValue = reinterpret_cast<const xmlChar*>(sTagValue.getStr());
-    pXmlNode  = xmlNewDocNode(pXmlDoc, nullptr, pTagName, pTagValue);
-
-    xmlAddChild(pXmlRoot, pXmlNode);
-
-    int nSize = 0;
-    xmlDocDumpMemory(pXmlDoc, &pBuffer, &nSize);
-
-    sReturn = OUString(reinterpret_cast<char const *>(pBuffer), nSize, RTL_TEXTENCODING_UTF8);
-
-    xmlFree(pBuffer);
-    xmlFreeDoc(pXmlDoc);
-
-    return sReturn;
-}
-
 
 IMPL_LINK_TYPED( ScCondFormatDlg, EdRangeModifyHdl, Edit&, rEdit, void )
 {
@@ -775,8 +679,6 @@ IMPL_LINK_TYPED( ScCondFormatDlg, RangeGetFocusHdl, Control&, rControl, void )
     mpLastEdit = static_cast<formula::RefEdit*>(&rControl);
 }
 
-// Conditional Format Dialog button click event handler.
-//
 IMPL_LINK_TYPED( ScCondFormatDlg, BtnPressedHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnOk)

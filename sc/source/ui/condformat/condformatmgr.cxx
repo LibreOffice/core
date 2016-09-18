@@ -161,6 +161,7 @@ IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, RemoveBtnHdl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, EditBtnClickHdl, Button*, void)
 {
+    mbModified = true;
     EditBtnHdl(nullptr);
 }
 IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, EditBtnHdl, SvTreeListBox*, bool)
@@ -170,6 +171,7 @@ IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, EditBtnHdl, SvTreeListBox*, bool)
     if(!pFormat)
         return false;
 
+    mbModified = true;
     EndDialog( DLG_RET_EDIT );
 
     return false;
@@ -177,7 +179,18 @@ IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, EditBtnHdl, SvTreeListBox*, bool)
 
 IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, AddBtnHdl, Button*, void)
 {
+    mbModified = true;
     EndDialog( DLG_RET_ADD );
+}
+
+void ScCondFormatManagerDlg::SetModified()
+{
+    mbModified = true;
+}
+
+bool ScCondFormatManagerDlg::CondFormatsChanged() const
+{
+    return mbModified;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

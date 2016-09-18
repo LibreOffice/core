@@ -57,6 +57,7 @@
 #include "reffact.hxx"
 #include "condformatdlg.hxx"
 #include "xmlsourcedlg.hxx"
+#include "condformatdlgitem.hxx"
 
 #include "RandomNumberGeneratorDialog.hxx"
 #include "SamplingDialog.hxx"
@@ -467,55 +468,27 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
         case WID_CONDFRMT_REF:
         {
-            sal_uInt32  nIndex      = sal_uInt32(-1);
-            sal_uInt8   nType       = 0;
-            bool        bManaged    = false;
             bool        bFound      = false;
-
-            ScRangeList aRangeList;
-            ScConditionalFormat* pCondFormat;
-            condformat::dialog::ScCondFormatDialogType aDialogType;
-
-            // Get the pool item stored it by Conditional Format Manager Dialog.
+            const ScCondFormatDlgItem* pDlgItem = nullptr;
+            // Get the pool item stored by Conditional Format Manager Dialog.
             const SfxPoolItem* pItem = nullptr;
-            sal_uInt32 nItems(GetPool().GetItemCount2( SCITEM_STRING ));
+            sal_uInt32 nItems(GetPool().GetItemCount2( SCITEM_CONDFORMATDLGDATA ));
             for( sal_uInt32 nIter = 0; nIter < nItems; ++nIter )
             {
-                if( nullptr != (pItem = GetPool().GetItem2( SCITEM_STRING, nIter ) ) )
+                if( nullptr != (pItem = GetPool().GetItem2( SCITEM_CONDFORMATDLGDATA, nIter ) ) )
                 {
-                    if ( ScCondFormatDlg::ParseXmlString(
-                            static_cast<const SfxStringItem*>(pItem)->GetValue(),
-                            nIndex, nType, bManaged))
-                    {
-                        bFound = true;
-                        break;
-                    }
+                    pDlgItem = static_cast<const ScCondFormatDlgItem*>(pItem);
+                    bFound = true;
+                    break;
                 }
             }
 
             ScViewData& rViewData = GetViewData();
             rViewData.SetRefTabNo( rViewData.GetTabNo() );
 
-            aDialogType = static_cast< condformat::dialog::ScCondFormatDialogType > ( nType );
-            pCondFormat = pDoc->GetCondFormList(rViewData.GetTabNo())->GetFormat ( nIndex );
+            pResult = VclPtr<ScCondFormatDlg>::Create( pB, pCW, pParent, &rViewData, pDlgItem );
 
-            if ( pCondFormat )
-                aRangeList = pCondFormat->GetRange();
-            else
-            {
-                rViewData.GetMarkData().FillRangeListWithMarks(&aRangeList, false);
-                ScAddress aPos(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
-                if(aRangeList.empty())
-                {
-                    ScRange* pRange = new ScRange(aPos);
-                    aRangeList.push_back(pRange);
-                }
-            }
-
-            pResult = VclPtr<ScCondFormatDlg>::Create( pB, pCW, pParent, &rViewData, pCondFormat, aRangeList,
-                aRangeList.GetTopLeftCorner(), aDialogType, bManaged );
-
-            // Remove the pool item stored it by Conditional Format Manager Dialog.
+            // Remove the pool item stored by Conditional Format Manager Dialog.
             if ( bFound && pItem )
                 GetPool().Remove( *pItem );
         }
