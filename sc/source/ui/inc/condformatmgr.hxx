@@ -53,7 +53,8 @@ public:
 
     ScConditionalFormatList* GetConditionalFormatList();
 
-    bool CondFormatsChanged() { return mbModified;}
+    bool CondFormatsChanged() const;
+    void SetModified();
 
     ScConditionalFormat* GetCondFormatSelected();
 
