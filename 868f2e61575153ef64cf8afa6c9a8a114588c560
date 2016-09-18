@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_7f1a2019",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000210
+      },
+      "writtenOn": "2016-09-18T05:09:54Z",
+      "side": 1,
+      "message": "I believe this is because the class has a member which is a reference\n\nhttps://msdn.microsoft.com/en-us/library/2cf74y2b(v\u003dvs.120).aspx",
+      "revId": "868f2e61575153ef64cf8afa6c9a8a114588c560",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
