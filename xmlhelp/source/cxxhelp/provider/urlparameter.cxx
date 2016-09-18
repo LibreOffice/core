@@ -27,6 +27,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/character.hxx>
 #include <libxslt/xslt.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
@@ -45,26 +46,6 @@
 
 #include "urlparameter.hxx"
 #include "databases.hxx"
-
-namespace chelp {
-
-    inline bool ascii_isDigit( sal_Unicode ch )
-    {
-        return ((ch >= 0x0030) && (ch <= 0x0039));
-    }
-
-    inline bool ascii_isLetter( sal_Unicode ch )
-    {
-        return ( ( (ch >= 0x0041) && (ch <= 0x005A) ) ||
-                 ( (ch >= 0x0061) && (ch <= 0x007A) ) );
-    }
-
-    inline bool isLetterOrDigit( sal_Unicode ch )
-    {
-        return ascii_isLetter( ch ) || ascii_isDigit( ch );
-    }
-
-}
 
 using namespace cppu;
 using namespace com::sun::star::io;
@@ -469,7 +450,7 @@ bool URLParameter::module()
 {
     sal_Int32 idx = 0,length = m_aExpr.getLength();
 
-    while( idx < length && isLetterOrDigit( (m_aExpr.getStr())[idx] ) )
+    while( idx < length && rtl::isAsciiAlphanumeric( (m_aExpr.getStr())[idx] ) )
         ++idx;
 
     if( idx != 0 )
