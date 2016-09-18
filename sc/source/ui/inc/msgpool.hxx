@@ -28,6 +28,7 @@
 #include <svl/eitem.hxx>
 
 #include "uiitems.hxx"
+#include "condformatdlgitem.hxx"
 
 class ScDocumentPool;
 
@@ -44,6 +45,7 @@ class ScMessagePool: public SfxItemPool
     ScUserListItem      aGlobalUserListItem;
 
     SfxBoolItem         aPrintWarnItem;
+    ScCondFormatDlgItem aCondFormatDlgItem;
 
     SfxPoolItem**   ppPoolDefaults;
     ScDocumentPool* pDocPool;
