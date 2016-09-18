@@ -127,9 +127,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             case SID_OPENDLG_CONDFRMT:
             case SID_OPENDLG_COLORSCALE:
             case SID_OPENDLG_DATABAR:
-
-            pScMod->InputEnterHandler();
-            pTabViewShell->UpdateInputHandler();
+                pScMod->InputEnterHandler();
+                pTabViewShell->UpdateInputHandler();
             break;
 
             default:
