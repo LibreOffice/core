@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_ffaab084",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4638,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-09-18T08:26:52Z",
+      "side": 1,
+      "message": "Yes. I have to change to sal_uInt32",
+      "parentUuid": "ba5da102_4dc13980",
+      "revId": "d4b3468c7c57fb4b19aea95c03c39c8fdd564e8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_6d551dc5",
         "filename": "svl/source/numbers/zformat.cxx",
         "patchSetId": 3
@@ -70,6 +88,24 @@
       "writtenOn": "2016-09-16T14:12:41Z",
       "side": 1,
       "message": "... and for all LangIDs do\n\n case ... \u0026 LANGUAGE_MASK_PRIMARY:\n\nwhich works regardless of the sublanguage (i.e. country) being used without having to specify a case for all known LangIDs of the same primary language and then somewhen missing one that we might add in future. So,\n\n case LANGUAGE_ARABIC_SAUDI_ARABIA \u0026 LANGUAGE_MASK_PRIMARY:\n     ...\n case LANGUAGE_FARSI \u0026 LANGUAGE_MASK_PRIMARY:\n     ...\n case LANGUAGE_NEPALI \u0026 LANGUAGE_MASK_PRIMARY:\n     ...\n case LANGUAGE_BENGALI \u0026 LANGUAGE_MASK_PRIMARY:\n     ...\n ...",
+      "revId": "d4b3468c7c57fb4b19aea95c03c39c8fdd564e8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_dfa5ecb5",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4884,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-09-18T08:26:52Z",
+      "side": 1,
+      "message": "Actually it does not work for:\n- Mongolian, as there is 5 LCID with same primary mask, but only 3 is using Mongolian numerals\n- Chinese traditional and simplified have same primary mask\nOther languages seem OK.\nI will see how I could treat these two special cases.",
+      "parentUuid": "ba5da102_ed25ad5c",
       "revId": "d4b3468c7c57fb4b19aea95c03c39c8fdd564e8e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
