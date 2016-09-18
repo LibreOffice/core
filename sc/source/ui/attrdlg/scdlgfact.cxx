@@ -422,9 +422,14 @@ ScConditionalFormatList* AbstractScCondFormatManagerDlg_Impl::GetConditionalForm
     return pDlg->GetConditionalFormatList();
 }
 
-bool AbstractScCondFormatManagerDlg_Impl::CondFormatsChanged()
+bool AbstractScCondFormatManagerDlg_Impl::CondFormatsChanged() const
 {
     return pDlg->CondFormatsChanged();
+}
+
+void AbstractScCondFormatManagerDlg_Impl::SetModified()
+{
+    return pDlg->SetModified();
 }
 
 ScConditionalFormat* AbstractScCondFormatManagerDlg_Impl::GetCondFormatSelected()
