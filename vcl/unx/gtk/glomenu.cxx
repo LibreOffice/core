@@ -253,6 +253,8 @@ g_lo_menu_set_icon (GLOMenu     *menu,
 #endif
 
     g_lo_menu_set_attribute_value (menu, position, G_MENU_ATTRIBUTE_ICON, value);
+    if (value)
+      g_variant_unref (value);
 }
 
 void
