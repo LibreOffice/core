@@ -22,8 +22,11 @@
 #include "rangelst.hxx"
 #include "condformathelper.hxx"
 #include "viewdata.hxx"
+#include "condformatdlgitem.hxx"
 
 #include "anyrefdg.hxx"
+
+#include <memory>
 
 #define DLG_RET_ADD         8
 #define DLG_RET_EDIT        16
@@ -34,24 +37,6 @@ class ScFormatEntry;
 class ScConditionalFormat;
 struct ScDataBarFormatData;
 class ScCondFrmtEntry;
-
-namespace condformat {
-
-namespace dialog {
-
-enum ScCondFormatDialogType
-{
-    NONE,
-    CONDITION,
-    COLORSCALE,
-    DATABAR,
-    ICONSET,
-    DATE
-};
-
-}
-
-}
 
 class ScCondFormatDlg;
 
@@ -108,13 +93,14 @@ private:
     VclPtr<formula::RefButton> mpRbRange;
 
     VclPtr<ScCondFormatList> mpCondFormList;
-    sal_Int32 maKey;
+    sal_Int32 mnKey;
 
-    bool mbManaged;
     ScAddress maPos;
     ScViewData* mpViewData;
 
     VclPtr<formula::RefEdit> mpLastEdit;
+
+    std::shared_ptr<ScCondFormatDlgItem> mpDlgItem;
 
     OUString msBaseTitle;
     void updateTitle();
@@ -128,17 +114,12 @@ protected:
 
 public:
     SC_DLLPUBLIC ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pWindow,
-                                 ScViewData* pViewData, const ScConditionalFormat* pFormat,
-                                 const ScRangeList& rRange, const ScAddress& rPos,
-                                 condformat::dialog::ScCondFormatDialogType eType, bool bManaged);
+                                 ScViewData* pViewData, const ScCondFormatDlgItem* pDlgItem);
     virtual ~ScCondFormatDlg() override;
     virtual void dispose() override;
 
     SC_DLLPUBLIC ScConditionalFormat* GetConditionalFormat() const;
 
-    static OUString GenerateXmlString(sal_uInt32 nIndex, sal_uInt8 nType, bool bManaged);
-    static bool ParseXmlString(const OUString& sXMLString, sal_uInt32& nIndex,
-                               sal_uInt8& nType, bool& bManaged);
     virtual void SetReference(const ScRange&, ScDocument*) override;
     virtual bool IsRefInputMode() const override;
     virtual void SetActive() override;

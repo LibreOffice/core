@@ -145,7 +145,9 @@ class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDl
 
     virtual ScConditionalFormatList* GetConditionalFormatList() override;
 
-    virtual bool CondFormatsChanged() override;
+    virtual bool CondFormatsChanged() const override;
+
+    virtual void SetModified() override;
 
     virtual ScConditionalFormat* GetCondFormatSelected() override;
 };
