@@ -34,7 +34,7 @@ namespace o3tl
      */
     struct UnsafeRefCountingPolicy
     {
-        typedef sal_uInt32 ref_count_t;
+        typedef sal_Size ref_count_t;
         static void incrementCount( ref_count_t& rCount ) { ++rCount; }
         static bool decrementCount( ref_count_t& rCount ) { return --rCount != 0; }
     };
