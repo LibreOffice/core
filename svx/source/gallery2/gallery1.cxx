@@ -193,10 +193,16 @@ Gallery* Gallery::GetGalleryInstance()
 
 void Gallery::ImplLoad( const OUString& rMultiPath )
 {
+OString blah = OUStringToOString( rMultiPath, RTL_TEXTENCODING_UTF8 );
+fprintf( stderr, "void Gallery::ImplLoad( \"%s\" )\n", blah.pData->buffer );
+
     const sal_Int32 nTokenCount = comphelper::string::getTokenCount(rMultiPath, ';');
     bool            bIsReadOnlyDir;
 
     bMultiPath = ( nTokenCount > 0 );
+
+OString configpath = OUStringToOString( SvtPathOptions().GetConfigPath(), RTL_TEXTENCODING_UTF8 );
+fprintf( stderr, "void Gallery::ImplLoad SvtPathOptions().GetConfigPath() is \"%s\"\n", configpath.pData->buffer );
 
     INetURLObject aCurURL(SvtPathOptions().GetConfigPath());
     ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
@@ -227,6 +233,8 @@ void Gallery::ImplLoad( const OUString& rMultiPath )
 
 void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadOnly )
 {
+fprintf( stderr, "void Gallery::ImplLoadSubDirs\n" );
+
     rbDirIsReadOnly = false;
 
     try

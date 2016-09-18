@@ -61,6 +61,9 @@ protected:
 
 Gallery* createGallery( const OUString& rURL )
 {
+OString blah = OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 );
+fprintf( stderr, "gengal createGallery( \"%s\" )\n", blah.pData->buffer );
+
     return new Gallery( rURL );
 }
 
@@ -73,9 +76,9 @@ static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL
                          const OUString& aDestDir, std::vector<INetURLObject> &rFiles,
                          bool bRelativeURLs )
 {
-    Gallery* pGallery;
+fprintf( stderr, "gengal top of static void createTheme\n" );
 
-    pGallery = createGallery( aGalleryURL );
+    Gallery* pGallery = createGallery( aGalleryURL );
     if (!pGallery ) {
             fprintf( stderr, "Could't create '%s'\n",
                      OUStringToOString( aGalleryURL, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -170,9 +173,10 @@ static INetURLObject Smartify( const OUString &rPath )
 
 void GalApp::Init()
 {
-    try {
         if( !mbInBuildTree && getenv( "OOO_INSTALL_PREFIX" ) == nullptr ) {
             OUString fileName = GetAppFileName();
+OString blah = OUStringToOString( fileName, RTL_TEXTENCODING_UTF8 );
+fprintf( stderr, "gengal GalApp::Init() fileName is \"%s\"\n", blah.pData->buffer );
             int lastSlash = fileName.lastIndexOf( '/' );
 #ifdef _WIN32
         // Don't know which directory separators GetAppFileName() returns on Windows.
@@ -180,32 +184,30 @@ void GalApp::Init()
             if( fileName.lastIndexOf( '\\' ) > lastSlash )
                 lastSlash = fileName.lastIndexOf( '\\' );
 #endif
-            OUString baseBinDir = fileName.copy( 0, lastSlash );
-            OUString installPrefix = baseBinDir + "/../..";
+            OUString path = fileName.copy( 0, lastSlash );
+            OUString installPrefix = path + "/../..";
 
-            OUString envVar( "OOO_INSTALL_PREFIX");
-            osl_setEnvironment(envVar.pData, installPrefix.pData);
+            OUString envVar( "OOO_INSTALL_PREFIX" );
+            osl_setEnvironment( envVar.pData, installPrefix.pData );
         }
         SAL_INFO("svx", "OOO_INSTALL_PREFIX=" << getenv( "OOO_INSTALL_PREFIX" ) );
 
-        uno::Reference<uno::XComponentContext> xComponentContext
-            = ::cppu::defaultBootstrap_InitialComponentContext();
-        xMSF.set( xComponentContext->getServiceManager(), uno::UNO_QUERY );
-        if( !xMSF.is() )
+        uno::Reference<uno::XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
+        bool okay = true;
+        if ( ! xComponentContext.is() )
+            okay = false;
+        else
         {
-            fprintf( stderr, "Failed to bootstrap\n" );
+            xMSF.set( xComponentContext->getServiceManager(), uno::UNO_QUERY );
+            if( !xMSF.is() ) okay = false;
+        }
+        if ( ! okay )
+        {
+            fprintf( stderr, "GalApp::Init can not bootstrap\n" );
             exit( 1 );
         }
-        ::comphelper::setProcessServiceFactory( xMSF );
 
-        // For backwards compatibility, in case some code still uses plain
-        // createInstance w/o args directly to obtain an instance:
-        css::ucb::UniversalContentBroker::create(xComponentContext);
-    } catch (const uno::Exception &e) {
-        fprintf( stderr, "Bootstrap exception '%s'\n",
-                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-        exit( 1 );
-    }
+        ::comphelper::setProcessServiceFactory( xMSF );
 }
 
 std::vector<OUString> ReadResponseFile_Impl(OUString const& rInput)
@@ -275,6 +277,8 @@ ReadResponseFile(std::vector<INetURLObject> & rFiles, OUString const& rInput)
 
 int GalApp::Main()
 {
+fprintf( stderr, "hola from gengal GalApp::Main()\n" );
+
     try
     {
         OUString aPath, aDestDir;
@@ -341,6 +345,7 @@ void GalApp::DeInit()
 
 void vclmain::createApplication()
 {
+fprintf( stderr, "top of gengal vclmain::createApplication()\n" );
     Application::EnableConsoleOnly();
     static GalApp aGalApp;
 }
