@@ -77,6 +77,7 @@
 #include "docpool.hxx"
 #include "condformatdlg.hxx"
 #include "attrib.hxx"
+#include "condformatdlgitem.hxx"
 
 #include "globstr.hrc"
 #include "scui_def.hxx"
@@ -1934,20 +1935,18 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_OPENDLG_CONDDATE:
             {
                 sal_uInt32  nIndex      = sal_uInt32(-1);
-                sal_uInt8   nType       = 0;
                 bool        bManaged    = false;
 
-                // Get the pool item stored it by Conditional Format Manager Dialog.
-                sal_uInt32 nItems(pTabViewShell->GetPool().GetItemCount2( SCITEM_STRING ));
+                // Get the pool item stored by Conditional Format Manager Dialog.
+                sal_uInt32 nItems(pTabViewShell->GetPool().GetItemCount2( SCITEM_CONDFORMATDLGDATA ));
                 for( sal_uInt32 nIter = 0; nIter < nItems; ++nIter )
                 {
-                    const SfxPoolItem* pItem = pTabViewShell->GetPool().GetItem2( SCITEM_STRING, nIter );
+                    const SfxPoolItem* pItem = pTabViewShell->GetPool().GetItem2( SCITEM_CONDFORMATDLGDATA, nIter );
                     if( pItem != nullptr )
                     {
-                        if ( ScCondFormatDlg::ParseXmlString(
-                                static_cast<const SfxStringItem*>(pItem)->GetValue(),
-                                nIndex, nType, bManaged))
-                            break;
+                        const ScCondFormatDlgItem* pDlgItem = static_cast<const ScCondFormatDlgItem*>(pItem);
+                        nIndex = pDlgItem->GetIndex();
+                        break;
                     }
                 }
 
@@ -2070,12 +2069,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     // Put the xml string parameter to initialize the
                     // Conditional Format Dialog.
-                    pTabViewShell->GetPool().Put( SfxStringItem( SCITEM_STRING,
-                                                      ScCondFormatDlg::GenerateXmlString(
-                                                        pCondFormat ? pCondFormat->GetKey() : sal_uInt32(-1),
-                                                        sal_uInt8(eType),
-                                                        false
-                                                      ) ) );
+                    ScCondFormatDlgItem aDlgItem(nullptr, nIndex, false);
+                    aDlgItem.SetDialogType(eType);
+                    pTabViewShell->GetPool().Put(aDlgItem);
 
                     sal_uInt16      nId      = ScCondFormatDlgWrapper::GetChildWindowId();
                     SfxViewFrame*   pViewFrm = pTabViewShell->GetViewFrame();
@@ -2424,7 +2420,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_OPENDLG_CONDFRMT_MANAGER:
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
+                assert(pFact);
 
                 ScViewData* pData = GetViewData();
                 ScDocument* pDoc = pData->GetDocument();
@@ -2437,44 +2433,62 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
 
-                ScConditionalFormatList* pList = pDoc->GetCondFormList( aPos.Tab() );
+                ScConditionalFormatList* pList = nullptr;
+
+                sal_uInt32 nItems(pTabViewShell->GetPool().GetItemCount2( SCITEM_CONDFORMATDLGDATA ));
+                const ScCondFormatDlgItem* pDlgItem = nullptr;
+                for( sal_uInt32 nIter = 0; nIter < nItems; ++nIter )
+                {
+                    const SfxPoolItem* pItem = pTabViewShell->GetPool().GetItem2( SCITEM_CONDFORMATDLGDATA, nIter );
+                    if( pItem != nullptr )
+                    {
+                        pDlgItem= static_cast<const ScCondFormatDlgItem*>(pItem);
+                        pList = const_cast<ScCondFormatDlgItem*>(pDlgItem)->GetConditionalFormatList();
+                        break;
+                    }
+                }
+
+                if (!pList)
+                    pList = pDoc->GetCondFormList( aPos.Tab() );
+
                 std::unique_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
                     pTabViewShell->GetDialogParent(), pDoc, pList));
+
+                if (pDlgItem)
+                    pDlg->SetModified();
+
                 short nRet = pDlg->Execute();
+                ScConditionalFormatList* pCondFormatList = pDlg->GetConditionalFormatList();
                 if(nRet == RET_OK && pDlg->CondFormatsChanged())
                 {
-                    ScConditionalFormatList* pCondFormatList = pDlg->GetConditionalFormatList();
                     pData->GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList, aPos.Tab());
                 }
                 else if(nRet == DLG_RET_ADD)
                 {
                     // Put the xml string parameter to initialize the
                     // Conditional Format Dialog. ( add new )
-                    pTabViewShell->GetPool().Put( SfxStringItem( SCITEM_STRING,
-                                                      ScCondFormatDlg::GenerateXmlString(
-                                                        sal_uInt32(-1),
-                                                        sal_uInt8(condformat::dialog::ScCondFormatDialogType::CONDITION),
-                                                        true
-                                                      ) ) );
-
+                    pTabViewShell->GetPool().Put(ScCondFormatDlgItem(
+                                std::shared_ptr<ScConditionalFormatList>(pCondFormatList), -1, true));
                     // Queue message to open Conditional Format Dialog
                     GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
                 }
                 else if (nRet == DLG_RET_EDIT)
                 {
                     ScConditionalFormat* pFormat = pDlg->GetCondFormatSelected();
+                    sal_Int32 nIndex = pFormat ? pFormat->GetKey() : -1;
                     // Put the xml string parameter to initialize the
                     // Conditional Format Dialog. ( edit selected conditional format )
-                    pTabViewShell->GetPool().Put( SfxStringItem( SCITEM_STRING,
-                                                      ScCondFormatDlg::GenerateXmlString(
-                                                        pFormat ? pFormat->GetKey() : sal_uInt32(-1),
-                                                        sal_uInt8(condformat::dialog::ScCondFormatDialogType::CONDITION),
-                                                        true
-                                                      ) ) );
+                    pTabViewShell->GetPool().Put(ScCondFormatDlgItem(
+                                std::shared_ptr<ScConditionalFormatList>(pCondFormatList), nIndex, true));
 
                     // Queue message to open Conditional Format Dialog
                     GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
                 }
+                else
+                    delete pCondFormatList;
+
+                if (pDlgItem)
+                    pTabViewShell->GetPool().Remove(*pDlgItem);
             }
             break;
 
