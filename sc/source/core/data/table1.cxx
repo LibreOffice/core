@@ -2115,14 +2115,7 @@ sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
     if(!mpCondFormatList)
         mpCondFormatList.reset(new ScConditionalFormatList());
 
-    sal_uLong nMax = 0;
-    for(ScConditionalFormatList::const_iterator itr = mpCondFormatList->begin();
-            itr != mpCondFormatList->end(); ++itr)
-    {
-        sal_uLong nKey = (*itr)->GetKey();
-        if(nKey > nMax)
-            nMax = nKey;
-    }
+    sal_uInt32 nMax = mpCondFormatList->getMaxKey();
 
     pNew->SetKey(nMax+1);
     mpCondFormatList->InsertNew(pNew);

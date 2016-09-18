@@ -2282,4 +2282,16 @@ void ScConditionalFormatList::clear()
     m_ConditionalFormats.clear();
 }
 
+sal_uInt32 ScConditionalFormatList::getMaxKey() const
+{
+    sal_uInt32 nMax = 0;
+    for (const auto& aEntry : m_ConditionalFormats)
+    {
+        if (aEntry->GetKey() > nMax)
+            nMax = aEntry->GetKey();
+    }
+
+    return nMax;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
