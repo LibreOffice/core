@@ -118,6 +118,16 @@ private:
     void operator =(SvxTableController &) = delete;
 
     // internals
+    enum class TblAction
+    {
+        NONE,
+        GotoFirstCell, GotoFirstColumn, GotoFirstRow,
+        GotoLeftCell, GotoUpCell, GotoRightCell, GotoDownCell,
+        GotoLastCell, GotoLastColumn, GotoLastRow,
+        EditCell, StopTextEdit,
+        RemoveSelection, StartSelection,
+        HandledByView, Tab
+    };
     SVX_DLLPRIVATE void ApplyBorderAttr( const SfxItemSet& rAttr );
     SVX_DLLPRIVATE void UpdateTableShape();
 
@@ -134,12 +144,12 @@ private:
 
     SVX_DLLPRIVATE void MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow );
 
-    SVX_DLLPRIVATE void EditCell( const CellPos& rPos, vcl::Window* pWindow, sal_uInt16 nAction = 0 );
+    SVX_DLLPRIVATE void EditCell(const CellPos& rPos, vcl::Window* pWindow, TblAction nAction = TblAction::NONE);
     SVX_DLLPRIVATE void StopTextEdit();
 
-    SVX_DLLPRIVATE sal_uInt16 getKeyboardAction( const KeyEvent& rKEvt, vcl::Window* pWindow );
-    SVX_DLLPRIVATE bool executeAction( sal_uInt16 nAction, bool bSelect, vcl::Window* pWindow );
-    SVX_DLLPRIVATE void gotoCell( const CellPos& rCell, bool bSelect, vcl::Window* pWindow, sal_uInt16 nAction = 0 );
+    SVX_DLLPRIVATE TblAction getKeyboardAction(const KeyEvent& rKEvt, vcl::Window* pWindow);
+    SVX_DLLPRIVATE bool executeAction(TblAction nAction, bool bSelect, vcl::Window* pWindow);
+    SVX_DLLPRIVATE void gotoCell(const CellPos& rCell, bool bSelect, vcl::Window* pWindow, TblAction nAction = TblAction::NONE);
 
     SVX_DLLPRIVATE void StartSelection( const CellPos& rPos );
     SVX_DLLPRIVATE void UpdateSelection( const CellPos& rPos );
