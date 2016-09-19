@@ -1839,7 +1839,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         {
             // copy the hint here, but insert it later
             pNewHt = MakeTextAttr( *GetDoc(), pHt->GetAttr(),
-                    nAttrStt, nAttrEnd, COPY, pDest );
+                    nAttrStt, nAttrEnd, CopyOrNewType::Copy, pDest );
 
             lcl_CopyHint(nWhich, pHt, pNewHt, nullptr, pDest);
             aArr.push_back( pNewHt );

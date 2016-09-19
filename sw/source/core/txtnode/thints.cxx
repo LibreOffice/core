@@ -985,7 +985,7 @@ SwTextAttr* MakeTextAttr(
     SfxPoolItem& rAttr,
     sal_Int32 const nStt,
     sal_Int32 const nEnd,
-    CopyOrNew_t const bIsCopy,
+    CopyOrNewType const bIsCopy,
     SwTextNode *const pTextNode )
 {
     if ( isCHRATR(rAttr.Which()) )
@@ -1042,7 +1042,7 @@ SwTextAttr* MakeTextAttr(
     case RES_TXTATR_ANNOTATION:
         {
             pNew = new SwTextAnnotationField( static_cast<SwFormatField &>(rNew), nStt, rDoc.IsClipBoard() );
-            if (bIsCopy == COPY)
+            if (bIsCopy == CopyOrNewType::Copy)
             {
                 // On copy of the annotation field do not keep the annotated text range by removing
                 // the relation to its annotation mark (relation established via annotation field's name).
@@ -1090,7 +1090,7 @@ SwTextAttr* MakeTextAttr(
     case RES_TXTATR_META:
     case RES_TXTATR_METAFIELD:
         pNew = SwTextMeta::CreateTextMeta( rDoc.GetMetaFieldManager(), pTextNode,
-                static_cast<SwFormatMeta&>(rNew), nStt, nEnd, bIsCopy == COPY );
+                static_cast<SwFormatMeta&>(rNew), nStt, nEnd, bIsCopy == CopyOrNewType::Copy );
         break;
     default:
         assert(RES_TXTATR_AUTOFMT == rNew.Which());
@@ -1223,7 +1223,7 @@ SwTextAttr* SwTextNode::InsertItem(
             rAttr,
             nStart,
             nEnd,
-            (nMode & SetAttrMode::IS_COPY) ? COPY : NEW,
+            (nMode & SetAttrMode::IS_COPY) ? CopyOrNewType::Copy : CopyOrNewType::New,
             this );
 
     if ( pNew )
