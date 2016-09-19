@@ -1435,11 +1435,16 @@ void ScViewData::ResetEditView()
 
 void ScViewData::KillEditView()
 {
+    EditEngine* pEngine = nullptr;
     for (sal_uInt16 i=0; i<4; i++)
         if (pEditView[i])
         {
             if (bEditActive[i])
-                pEditView[i]->GetEditEngine()->RemoveView(pEditView[i]);
+            {
+                pEngine = pEditView[i]->GetEditEngine();
+                if (pEngine)
+                    pEngine->RemoveView(pEditView[i]);
+            }
             delete pEditView[i];
             pEditView[i] = nullptr;
         }
