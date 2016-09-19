@@ -62,8 +62,7 @@ enum class SvxLineSpaceRule
 {
     Auto,
     Fix,
-    Min,
-    End
+    Min
 };
 
 enum class SvxInterLineSpaceRule

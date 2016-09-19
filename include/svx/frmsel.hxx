@@ -55,10 +55,6 @@ enum class FrameSelFlags
 
     /** If set, all four outer frame borders are enabled. */
     Outer           = Left | Right | Top | Bottom,
-    /** If set, both inner frame borders are enabled. */
-    Inner           = InnerHorizontal | InnerVertical,
-    /** If set, both diagonal frame borders are enabled. */
-    Diagonal        = DiagonalTLBR | DiagonalBLTR,
 
     /** If set, all frame borders will support the don't care state. */
     DontCare        = 0x0100

@@ -27,12 +27,11 @@ class AstScope;
 // Enum defining the different kinds of Ast nodes
 enum NodeType
 {
-    NT_object,              // Denotes an object
-    NT_service,             // Denotes an servcie
+    NT_service,             // Denotes a service
     NT_interface_member,    // Denotes an interface which is exported from object
-    NT_service_member,      // Denotes an service which is exported from object
+    NT_service_member,      // Denotes a service which is exported from object
     NT_observes,            // Denotes an observed interface
-    NT_needs,               // Denotes an needed service
+    NT_needs,               // Denotes a needed service
     NT_module,              // Denotes a module
     NT_root,                // Denotes the root of AST
     NT_interface,           // Denotes an interface

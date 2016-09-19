@@ -20,6 +20,7 @@ excludedSourceFiles = set([
 excludedTypes = set([
     "SwVarFormat", "RES_FIELDS", "SwFillOrder", "SwIoDetect", "SwDocumentSettingsPropertyHandles",
     "SalGenericDataType", "SwDateSubFormat", "XclFutureRecType", "ds_status", "MediaCommand",
+    "EmfPlusHatchStyle"
     ])
 
 # clang does not always use exactly the same numbers in the type-parameter vars it generates

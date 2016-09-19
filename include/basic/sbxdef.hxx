@@ -81,9 +81,6 @@ enum SbxDataType {
     SbxVECTOR = 0x1000,  // simple counted array
     SbxARRAY  = 0x2000,  // array
     SbxBYREF  = 0x4000,  // access by reference
-
-    SbxUSER1  = 256,     // first user defined data type
-    SbxUSERn  = 2047     // last user defined data type
 };
 
 const sal_uInt32 SBX_TYPE_WITH_EVENTS_FLAG = 0x10000;
