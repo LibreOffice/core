@@ -2149,9 +2149,9 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
 sal_Int32 ScInterpreter::GetInt32()
 {
     double fVal = GetDouble();
-    if (rtl::math::isNan(fVal))
+    if (!rtl::math::isFinite(fVal))
     {
-        SetError(errIllegalArgument);
+        SetError( GetDoubleErrorValue( fVal));
         return SAL_MAX_INT32;
     }
     if (fVal > 0.0)
@@ -2178,9 +2178,9 @@ sal_Int32 ScInterpreter::GetInt32()
 sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
 {
     double fVal = GetDoubleWithDefault( nDefault);
-    if (rtl::math::isNan(fVal))
+    if (!rtl::math::isFinite(fVal))
     {
-        SetError(errIllegalArgument);
+        SetError( GetDoubleErrorValue( fVal));
         return SAL_MAX_INT32;
     }
     if (fVal > 0.0)
@@ -2207,9 +2207,9 @@ sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
 sal_Int16 ScInterpreter::GetInt16()
 {
     double fVal = GetDouble();
-    if (rtl::math::isNan(fVal))
+    if (!rtl::math::isFinite(fVal))
     {
-        SetError(errIllegalArgument);
+        SetError( GetDoubleErrorValue( fVal));
         return SAL_MAX_INT16;
     }
     if (fVal > 0.0)
@@ -2236,7 +2236,12 @@ sal_Int16 ScInterpreter::GetInt16()
 sal_uInt32 ScInterpreter::GetUInt32()
 {
     double fVal = rtl::math::approxFloor( GetDouble());
-    if (rtl::math::isNan(fVal) || fVal < 0.0 || fVal > SAL_MAX_UINT32)
+    if (!rtl::math::isFinite(fVal))
+    {
+        SetError( GetDoubleErrorValue( fVal));
+        return SAL_MAX_UINT32;
+    }
+    if (fVal < 0.0 || fVal > SAL_MAX_UINT32)
     {
         SetError( errIllegalArgument);
         return SAL_MAX_UINT32;
