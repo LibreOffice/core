@@ -113,8 +113,8 @@ private:
     SwDocShell* m_pDocShell;
     SwView* m_pView;
 
-    typedef enum { UNDO = int(true), REDO = int(false) } UndoOrRedo_t;
-    bool impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo);
+    enum class UndoOrRedoType { Undo, Redo };
+    bool impl_DoUndoRedo(UndoOrRedoType undoOrRedo);
 
     // UGLY: should not be called
     using SdrUndoManager::Repeat;

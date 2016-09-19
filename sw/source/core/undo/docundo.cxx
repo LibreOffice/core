@@ -542,7 +542,7 @@ private:
     bool const m_bSaveCursor;
 };
 
-bool UndoManager::impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo)
+bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo)
 {
     SwDoc & rDoc(*GetUndoNodes().GetDoc());
 
@@ -573,7 +573,7 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo)
     ::sw::UndoRedoContext context(rDoc, *pEditShell);
 
     // N.B. these may throw!
-    if (UNDO == undoOrRedo)
+    if (UndoOrRedoType::Undo == undoOrRedo)
     {
         bRet = SdrUndoManager::UndoWithContext(context);
     }
@@ -608,7 +608,7 @@ bool UndoManager::Undo()
     }
     else
     {
-        return impl_DoUndoRedo(UNDO);
+        return impl_DoUndoRedo(UndoOrRedoType::Undo);
     }
 }
 
@@ -620,7 +620,7 @@ bool UndoManager::Redo()
     }
     else
     {
-        return impl_DoUndoRedo(REDO);
+        return impl_DoUndoRedo(UndoOrRedoType::Redo);
     }
 }
 
