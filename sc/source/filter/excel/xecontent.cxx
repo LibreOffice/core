@@ -836,6 +836,18 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
         case SC_COND_NOTDUPLICATE:
             pRet = nullptr;
             break;
+        case SC_COND_BEGINS_WITH:
+            pRet = "beginsWith";
+        break;
+        case SC_COND_ENDS_WITH:
+            pRet = "endsWith";
+        break;
+        case SC_COND_CONTAINS_TEXT:
+            pRet = "containsText";
+        break;
+        case SC_COND_NOT_CONTAINS_TEXT:
+            pRet = "notContains";
+        break;
         case SC_COND_DIRECT:
             break;
         case SC_COND_NONE:
