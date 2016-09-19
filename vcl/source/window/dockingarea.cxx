@@ -149,7 +149,7 @@ void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
         rRenderContext.SetBackground(aWallpaper);
     }
-    else if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Entire))
+    else if (!rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Entire))
     {
         Wallpaper aWallpaper;
         aWallpaper.SetStyle(WallpaperStyle::ApplicationGradient);
