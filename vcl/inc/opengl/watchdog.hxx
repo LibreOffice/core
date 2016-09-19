@@ -14,6 +14,44 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
+#include <atomic>
+
+struct WatchdogTimingsValues
+{
+    /// delays to take various actions in 1/4 of a second increments.
+    int mnDisableEntries;
+    int mnAbortAfter;
+};
+
+enum class WatchdogTimingMode
+{
+    NORMAL,
+    SHADER_COMPILE
+};
+
+class WatchdogTimings
+{
+private:
+    std::vector<WatchdogTimingsValues> maTimingValues;
+    std::atomic<bool> mbRelaxed;
+
+public:
+    WatchdogTimings();
+
+    void setRelax(bool bRelaxed)
+    {
+        mbRelaxed = bRelaxed;
+    }
+
+    WatchdogTimingsValues getWatchdogTimingsValues(WatchdogTimingMode eMode)
+    {
+        size_t index = 0;
+        index = (eMode == WatchdogTimingMode::SHADER_COMPILE) ? 1 : 0;
+        index = mbRelaxed ? index + 2 : index;
+
+        return maTimingValues[index];
+    }
+};
 
 class OpenGLWatchdogThread : private salhelper::Thread
 {
