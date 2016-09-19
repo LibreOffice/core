@@ -68,7 +68,7 @@ class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
 
     EditTextObject( SfxItemPool* pPool );
 
-    void StoreData( SvStream& rStrm ) const;
+    void StoreData( SvStream& rStrm, bool bStarOfficeCompatible ) const;
     void CreateData( SvStream& rStrm );
 
 public:
@@ -96,7 +96,7 @@ public:
 
     EditTextObject* Clone() const;
 
-    void Store( SvStream& rOStream ) const;
+    void Store( SvStream& rOStream, bool bStarOfficeCompatible ) const;
 
     static EditTextObject* Create( SvStream& rIStream );
 

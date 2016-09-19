@@ -3423,7 +3423,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     pDataObj->GetString() = aText;
 
     SvxFontItem::EnableStoreUnicodeNames( true );
-    WriteBin( pDataObj->GetStream(), aSelection, true );
+    WriteBin( pDataObj->GetStream(), aSelection, true, false/*bStarOfficeCompatible*/ );
     pDataObj->GetStream().Seek( 0 );
     SvxFontItem::EnableStoreUnicodeNames( false );
 

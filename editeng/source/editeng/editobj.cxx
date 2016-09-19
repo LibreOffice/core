@@ -69,7 +69,7 @@ XEditAttribute* MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem
     return pNew;
 }
 
-XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE )
+XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
 {
     pItem = &rAttr;
     nStart = nS;
@@ -366,7 +366,7 @@ SvtScriptType EditTextObject::GetScriptType() const
 }
 
 
-void EditTextObject::Store( SvStream& rOStream ) const
+void EditTextObject::Store( SvStream& rOStream, bool bStarOfficeCompatible ) const
 {
     if ( rOStream.GetError() )
         return;
@@ -379,7 +379,7 @@ void EditTextObject::Store( SvStream& rOStream ) const
     sal_uInt32 nStructSz = 0;
     rOStream.WriteUInt32( nStructSz );
 
-    StoreData( rOStream );
+    StoreData( rOStream, bStarOfficeCompatible );
 
     sal_uInt64 const nEndPos = rOStream.Tell();
     nStructSz = nEndPos - nStartPos - sizeof( nWhich ) - sizeof( nStructSz );
@@ -418,9 +418,9 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream )
     return pTxtObj;
 }
 
-void EditTextObject::StoreData( SvStream& rStrm ) const
+void EditTextObject::StoreData( SvStream& rStrm, bool bStarOfficeCompatible ) const
 {
-    mpImpl->StoreData(rStrm);
+    mpImpl->StoreData(rStrm, bStarOfficeCompatible);
 }
 
 void EditTextObject::CreateData( SvStream& rStrm )
@@ -1084,14 +1084,14 @@ public:
 
 }
 
-void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
+void EditTextObjectImpl::StoreData( SvStream& rOStream, bool bStarOfficeCompatible ) const
 {
-    sal_uInt16 nVer = 602;
+    sal_uInt16 nVer = bStarOfficeCompatible ? 602 : 999;
     rOStream.WriteUInt16( nVer );
 
     rOStream.WriteBool( bOwnerOfPool );
 
-    // First store the pool, later only the Surregate
+    // First store the pool, later only the Surrogate
     if ( bOwnerOfPool )
     {
         GetPool()->SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );
@@ -1103,17 +1103,22 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
     rOStream.WriteUInt16( eEncoding );
 
     // The number of paragraphs ...
-    size_t nParagraphs = aContents.size();
+    sal_Int32 nParagraphs = aContents.size();
     // FIXME: this truncates, check usage of stream and if it can be changed,
     // i.e. is not persistent, adapt this and reader.
-    sal_uInt16 nParagraphs_Stream = static_cast<sal_uInt16>(nParagraphs);
-    rOStream.WriteUInt16( nParagraphs_Stream );
+    if (bStarOfficeCompatible)
+    {
+        nParagraphs = static_cast<sal_uInt16>(nParagraphs);
+        rOStream.WriteUInt16( nParagraphs );
+    }
+    else
+        rOStream.WriteInt32( nParagraphs );
 
     sal_Unicode nUniChar = CH_FEATURE;
     char cFeatureConverted = OString(&nUniChar, 1, eEncoding).toChar();
 
     // The individual paragraphs ...
-    for (size_t nPara = 0; nPara < nParagraphs_Stream; ++nPara)
+    for (sal_Int32 nPara = 0; nPara < nParagraphs; ++nPara)
     {
         const ContentInfo& rC = *aContents[nPara].get();
 
@@ -1154,7 +1159,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
                 {
                     // Don't create a new Attrib with StarBats font, MBR changed the
                     // SvxFontItem::Store() to store StarBats instead of StarSymbol!
-                    for (sal_uInt16 nChar = rAttr.GetStart(); nChar < rAttr.GetEnd(); ++nChar)
+                    for (sal_Int32 nChar = rAttr.GetStart(); nChar < rAttr.GetEnd(); ++nChar)
                     {
                         sal_Unicode cOld = rC.GetText()[ nChar ];
                         char cConv = OUStringToOString(OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
@@ -1219,8 +1224,16 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
             rOStream.WriteUInt16( rX.GetItem()->Which() );
             GetPool()->StoreSurrogate(rOStream, rX.GetItem());
-            rOStream.WriteUInt16( rX.GetStart() );
-            rOStream.WriteUInt16( rX.GetEnd() );
+            if (bStarOfficeCompatible)
+            {
+                rOStream.WriteUInt16( rX.GetStart() );
+                rOStream.WriteUInt16( rX.GetEnd() );
+            }
+            else
+            {
+                rOStream.WriteInt32( rX.GetStart() );
+                rOStream.WriteInt32( rX.GetEnd() );
+            }
         }
     }
 
@@ -1235,11 +1248,14 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
     rOStream.WriteBool( bStoreUnicodeStrings );
     if ( bStoreUnicodeStrings )
     {
-        for ( size_t nPara = 0; nPara < nParagraphs_Stream; nPara++ )
+        for ( sal_Int32 nPara = 0; nPara < nParagraphs; nPara++ )
         {
             const ContentInfo& rC = *aContents[nPara].get();
-            sal_uInt16 nL = rC.GetText().getLength();
-            rOStream.WriteUInt16( nL );
+            sal_Int32 nL = rC.GetText().getLength();
+            if (bStarOfficeCompatible)
+                rOStream.WriteUInt16( nL );
+            else
+                rOStream.WriteInt32( nL );
             // FIXME this isn't endian safe, but presumably this is just used for copy/paste?
             rOStream.WriteBytes(rC.GetText().getStr(), nL*sizeof(sal_Unicode));
 
@@ -1247,10 +1263,20 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
             // Copy/Paste from EA3 to BETA or from BETA to EA3 not possible, not needed...
             // If needed, change nL back to sal_uLong and increase version...
             nL = rC.GetStyle().getLength();
-            rOStream.WriteUInt16( nL );
+            if (bStarOfficeCompatible)
+                rOStream.WriteUInt16( nL );
+            else
+                rOStream.WriteInt32( nL );
             rOStream.WriteBytes(rC.GetStyle().getStr(), nL*sizeof(sal_Unicode));
         }
     }
+}
+
+static void ReadUInt16IntoInt32(SvStream& rIStream, sal_Int32& rVal)
+{
+    sal_uInt16 nTmp;
+    rIStream.ReadUInt16( nTmp );
+    rVal = nTmp;
 }
 
 void EditTextObjectImpl::CreateData( SvStream& rIStream )
@@ -1286,12 +1312,15 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
     rtl_TextEncoding eSrcEncoding = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet );
 
     // The number of paragraphs ...
-    sal_uInt16 nParagraphs(0);
-    rIStream.ReadUInt16( nParagraphs );
+    sal_Int32 nParagraphs(0);
+    if (nVersion >= 999)
+        rIStream.ReadInt32( nParagraphs );
+    else
+        ReadUInt16IntoInt32(rIStream, nParagraphs );
 
     const size_t nMinParaRecordSize = 6 + eSrcEncoding == RTL_TEXTENCODING_UNICODE ? 4 : 2;
     const size_t nMaxParaRecords = rIStream.remainingSize() / nMinParaRecordSize;
-    if (nParagraphs > nMaxParaRecords)
+    if ((size_t)nParagraphs > nMaxParaRecords)
     {
         SAL_WARN("editeng", "Parsing error: " << nMaxParaRecords <<
                  " max possible entries, but " << nParagraphs<< " claimed, truncating");
@@ -1299,7 +1328,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
     }
 
     // The individual paragraphs ...
-    for ( sal_uLong nPara = 0; nPara < nParagraphs; nPara++ )
+    for ( sal_Int32 nPara = 0; nPara < nParagraphs; nPara++ )
     {
         ContentInfo* pC = CreateAndInsertContent();
 
@@ -1331,18 +1360,27 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         }
 
         // And the individual attributes
-        // Items as Surregate => always 8 bytes per Attributes
-        // Which = 2; Surregat = 2; Start = 2; End = 2;
+        // Items as Surrogate => always 8 bytes per Attributes
+        // Which = 2; Surrogate = 2; Start = 2; End = 2;
         for (size_t nAttr = 0; nAttr < nAttribs; ++nAttr)
         {
-            sal_uInt16 _nWhich(0), nStart(0), nEnd(0);
+            sal_uInt16 _nWhich(0);
+            sal_Int32 nStart(0), nEnd(0);
             const SfxPoolItem* pItem;
 
             rIStream.ReadUInt16( _nWhich );
             _nWhich = pPool->GetNewWhich( _nWhich );
             pItem = pPool->LoadSurrogate( rIStream, _nWhich, 0 );
-            rIStream.ReadUInt16( nStart );
-            rIStream.ReadUInt16( nEnd );
+            if (nVersion >= 999)
+            {
+                rIStream.ReadInt32( nStart );
+                rIStream.ReadInt32( nEnd );
+            }
+            else
+            {
+                ReadUInt16IntoInt32(rIStream, nStart );
+                ReadUInt16IntoInt32(rIStream, nEnd );
+            }
             if ( pItem )
             {
                 if ( pItem->Which() == EE_FEATURE_NOTCONV )
@@ -1410,7 +1448,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                     pPool->Remove(*rAttr.GetItem());
                     pC->maCharAttribs[nAttr] = std::unique_ptr<XEditAttribute>(pNewAttr);
 
-                    for ( sal_uInt16 nChar = pNewAttr->GetStart(); nChar < pNewAttr->GetEnd(); nChar++ )
+                    for ( sal_Int32 nChar = pNewAttr->GetStart(); nChar < pNewAttr->GetEnd(); nChar++ )
                     {
                         sal_Unicode cOld = pC->GetText()[ nChar ];
                         DBG_ASSERT( cOld >= 0xF000, "cOld not converted?!" );
@@ -1437,7 +1475,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 aNewFontItem.SetFamilyName( GetFontToSubsFontName( hConv ) );
                 pC->GetParaAttribs().Put( aNewFontItem );
 
-                for ( sal_uInt16 nChar = 0; nChar < pC->GetText().getLength(); nChar++ )
+                for ( sal_Int32 nChar = 0; nChar < pC->GetText().getLength(); nChar++ )
                 {
                     const ContentInfo::XEditAttributesType& rAttribs = pC->maCharAttribs;
                     if ( std::none_of(rAttribs.begin(), rAttribs.end(),
@@ -1496,17 +1534,20 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         rIStream.ReadCharAsBool( bUnicodeStrings );
         if ( bUnicodeStrings )
         {
-            for (sal_uInt16 nPara = 0; nPara < nParagraphs; ++nPara)
+            for (sal_Int32 nPara = 0; nPara < nParagraphs; ++nPara)
             {
                 ContentInfo& rC = *aContents[nPara].get();
-                sal_uInt16 nL(0);
+                sal_Int32 nL(0);
 
                 // Text
-                rIStream.ReadUInt16(nL);
+                if ( nVersion >= 999 )
+                    rIStream.ReadInt32(nL);
+                else
+                    ReadUInt16IntoInt32(rIStream, nL);
                 if (nL)
                 {
                     size_t nMaxElementsPossible = rIStream.remainingSize() / sizeof(sal_Unicode);
-                    if (nL > nMaxElementsPossible)
+                    if ((size_t)nL > nMaxElementsPossible)
                     {
                         SAL_WARN("editeng", "Parsing error: " << nMaxElementsPossible <<
                                  " max possible entries, but " << nL << " claimed, truncating");
@@ -1522,11 +1563,14 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 }
 
                 // StyleSheetName
-                rIStream.ReadUInt16( nL );
+                if ( nVersion >= 999 )
+                    rIStream.ReadInt32(nL);
+                else
+                    ReadUInt16IntoInt32(rIStream, nL);
                 if ( nL )
                 {
                     size_t nMaxElementsPossible = rIStream.remainingSize() / sizeof(sal_Unicode);
-                    if (nL > nMaxElementsPossible)
+                    if ((size_t)nL > nMaxElementsPossible)
                     {
                         SAL_WARN("editeng", "Parsing error: " << nMaxElementsPossible <<
                                  " max possible entries, but " << nL << " claimed, truncating");

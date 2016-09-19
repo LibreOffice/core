@@ -215,7 +215,7 @@ void ImpEditEngine::Write(SvStream& rOutput, EETextFormat eFormat, const EditSel
         else if ( eFormat == EE_FORMAT_HTML )
             ;
         else if ( eFormat == EE_FORMAT_BIN)
-            WriteBin( rOutput, rSel );
+            WriteBin( rOutput, rSel, false, true/*bStarOfficeCompatible*/ );
         else
         {
             OSL_FAIL( "Write: Unknown Format" );
@@ -290,11 +290,11 @@ static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_Int32 
     }
 }
 
-sal_uInt32 ImpEditEngine::WriteBin(SvStream& rOutput, const EditSelection& rSel, bool bStoreUnicodeStrings)
+sal_uInt32 ImpEditEngine::WriteBin(SvStream& rOutput, const EditSelection& rSel, bool bStoreUnicodeStrings, bool bStarOfficeCompatible)
 {
     std::unique_ptr<EditTextObject> xObj(CreateTextObject(rSel, nullptr));
     xObj->mpImpl->StoreUnicodeStrings(bStoreUnicodeStrings);
-    xObj->Store(rOutput);
+    xObj->Store(rOutput, bStarOfficeCompatible);
     return 0;
 }
 
@@ -1260,37 +1260,33 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             for (size_t nAttr = 0; nAttr < nNewAttribs; ++nAttr)
             {
                 const XEditAttribute& rX = *pC->GetCharAttribs()[nAttr].get();
-                // Can happen when paragraphs > 16K, it is simply wrapped.
-                if ( rX.GetEnd() <= aPaM.GetNode()->Len() )
+                if ( !bAllreadyHasAttribs || rX.IsFeature() )
                 {
-                    if ( !bAllreadyHasAttribs || rX.IsFeature() )
-                    {
-                        // Normal attributes then go faster ...
-                        // Features shall not be inserted through
-                        // EditDoc:: InsertAttrib, using FastInsertText they are
-                        // already in the flow
-                        DBG_ASSERT( rX.GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute too large!" );
-                        EditCharAttrib* pAttr;
-                        if ( !bConvertItems )
-                            pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *(rX.GetItem()), rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
-                        else
-                        {
-                            SfxPoolItem* pNew = rX.GetItem()->Clone();
-                            ConvertItem( *pNew, eSourceUnit, eDestUnit );
-                            pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *pNew, rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
-                            delete pNew;
-                        }
-                        DBG_ASSERT( pAttr->GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute does not fit! (1)" );
-                        aPaM.GetNode()->GetCharAttribs().InsertAttrib( pAttr );
-                        if ( pAttr->Which() == EE_FEATURE_FIELD )
-                            bUpdateFields = true;
-                    }
+                    // Normal attributes then go faster ...
+                    // Features shall not be inserted through
+                    // EditDoc:: InsertAttrib, using FastInsertText they are
+                    // already in the flow
+                    DBG_ASSERT( rX.GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute too large!" );
+                    EditCharAttrib* pAttr;
+                    if ( !bConvertItems )
+                        pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *(rX.GetItem()), rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
                     else
                     {
-                        DBG_ASSERT( rX.GetEnd()+nStartPos <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute does not fit! (2)" );
-                        // Tabs and other Features can not be inserted through InsertAttrib:
-                        aEditDoc.InsertAttrib( aPaM.GetNode(), rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos, *rX.GetItem() );
+                        SfxPoolItem* pNew = rX.GetItem()->Clone();
+                        ConvertItem( *pNew, eSourceUnit, eDestUnit );
+                        pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *pNew, rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
+                        delete pNew;
                     }
+                    DBG_ASSERT( pAttr->GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute does not fit! (1)" );
+                    aPaM.GetNode()->GetCharAttribs().InsertAttrib( pAttr );
+                    if ( pAttr->Which() == EE_FEATURE_FIELD )
+                        bUpdateFields = true;
+                }
+                else
+                {
+                    DBG_ASSERT( rX.GetEnd()+nStartPos <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute does not fit! (2)" );
+                    // Tabs and other Features can not be inserted through InsertAttrib:
+                    aEditDoc.InsertAttrib( aPaM.GetNode(), rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos, *rX.GetItem() );
                 }
             }
             if ( bUpdateFields )

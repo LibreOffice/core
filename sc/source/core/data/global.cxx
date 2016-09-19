@@ -854,8 +854,8 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
 
         SvMemoryStream  aStream1;
         SvMemoryStream  aStream2;
-        pObj1->Store( aStream1 );
-        pObj2->Store( aStream2 );
+        pObj1->Store( aStream1, true/*bStarOfficeCompatible*/ );
+        pObj2->Store( aStream2, true/*bStarOfficeCompatible*/ );
         const sal_uInt64 nSize = aStream1.Tell();
         if ( aStream2.Tell() == nSize )
             if ( !memcmp( aStream1.GetData(), aStream2.GetData(), (sal_uInt16) nSize ) )
