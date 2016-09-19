@@ -155,6 +155,7 @@ GtkInstance::GtkInstance( SalYieldMutex* pMutex )
     : X11SalInstance( pMutex )
 #endif
     , bNeedsInit(true)
+    , m_pLastCairoFontOptions(nullptr)
 {
 }
 
@@ -200,6 +201,7 @@ GtkInstance::~GtkInstance()
     while( !m_aTimers.empty() )
         delete *m_aTimers.begin();
     DeInitAtkBridge();
+    ResetLastSeenCairoFontOptions();
 }
 
 SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
@@ -483,7 +485,24 @@ GtkInstance::getPrintWrapper() const
 
 const cairo_font_options_t* GtkInstance::GetCairoFontOptions()
 {
-    return gdk_screen_get_font_options(gdk_screen_get_default());
+    const cairo_font_options_t* pCairoFontOptions = gdk_screen_get_font_options(gdk_screen_get_default());
+    if (!m_pLastCairoFontOptions && pCairoFontOptions)
+        m_pLastCairoFontOptions = cairo_font_options_copy(pCairoFontOptions);
+    return pCairoFontOptions;
+}
+
+const cairo_font_options_t* GtkInstance::GetLastSeenCairoFontOptions()
+{
+    return m_pLastCairoFontOptions;
+}
+
+void GtkInstance::ResetLastSeenCairoFontOptions()
+{
+    if (m_pLastCairoFontOptions)
+    {
+        cairo_font_options_destroy(m_pLastCairoFontOptions);
+        m_pLastCairoFontOptions = nullptr;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

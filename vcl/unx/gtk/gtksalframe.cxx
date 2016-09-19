@@ -3235,7 +3235,21 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
         // so post user event to safely dispatch the SalEvent::SettingsChanged
         // note: settings changed for multiple frames is avoided in winproc.cxx ImplHandleSettings
         GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::SettingsChanged );
-        GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::FontChanged );
+
+        // fire off font-changed when the system cairo font hints change
+        GtkInstance *pInstance = static_cast<GtkInstance*>(GetSalData()->m_pInstance);
+        const cairo_font_options_t* pLastCairoFontOptions = pInstance->GetLastSeenCairoFontOptions();
+        const cairo_font_options_t* pCurrentCairoFontOptions = gdk_screen_get_font_options(gdk_screen_get_default());
+        bool bFontSettingsChanged = true;
+        if (pLastCairoFontOptions && pCurrentCairoFontOptions)
+            bFontSettingsChanged = !cairo_font_options_equal(pLastCairoFontOptions, pCurrentCairoFontOptions);
+        else if (!pLastCairoFontOptions && !pCurrentCairoFontOptions)
+            bFontSettingsChanged = false;
+        if (bFontSettingsChanged)
+        {
+            pInstance->ResetLastSeenCairoFontOptions();
+            GtkSalFrame::getDisplay()->SendInternalEvent( pThis, nullptr, SalEvent::FontChanged );
+        }
     }
 
     /* #i64117# gtk sets a nice background pixmap

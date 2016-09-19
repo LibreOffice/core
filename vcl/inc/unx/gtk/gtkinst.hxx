@@ -242,6 +242,8 @@ public:
 #endif
 
     virtual const cairo_font_options_t* GetCairoFontOptions() override;
+            const cairo_font_options_t* GetLastSeenCairoFontOptions();
+                                   void ResetLastSeenCairoFontOptions();
 
     void                        RemoveTimer (SalTimer *pTimer);
 
@@ -254,6 +256,7 @@ private:
 #endif
     bool                        IsTimerExpired();
     bool                        bNeedsInit;
+    cairo_font_options_t*       m_pLastCairoFontOptions;
 
     mutable std::shared_ptr<vcl::unx::GtkPrintWrapper> m_xPrintWrapper;
 };
