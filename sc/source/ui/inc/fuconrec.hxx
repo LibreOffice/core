@@ -36,6 +36,7 @@ class FuConstRectangle : public FuConstruct
 
     virtual void Activate() override;
     virtual void Deactivate() override;
+    static void SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt16 nSlotId);
 
     // Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle) override;
