@@ -661,14 +661,14 @@ ScInputHandler::~ScInputHandler()
     if ( pInputWin && pInputWin->GetInputHandler() == this )
         pInputWin->SetInputHandler( nullptr );
 
-    delete pRangeFindList;
-    delete pEditDefaults;
-    delete pEngine;
-    delete pLastState;
-    delete pDelayTimer;
-    delete pColumnData;
-    delete pFormulaData;
-    delete pFormulaDataPara;
+    delete pRangeFindList;     pRangeFindList = nullptr;
+    delete pEditDefaults;      pEditDefaults = nullptr;
+    delete pEngine;            pEngine = nullptr;
+    delete pLastState;         pLastState = nullptr;
+    delete pDelayTimer;        pDelayTimer = nullptr;
+    delete pColumnData;        pColumnData = nullptr;
+    delete pFormulaData;       pFormulaData = nullptr;
+    delete pFormulaDataPara;   pFormulaDataPara = nullptr;
 }
 
 void ScInputHandler::SetRefScale( const Fraction& rX, const Fraction& rY )
