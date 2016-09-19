@@ -21,6 +21,8 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editerr.hxx>
 #include <svx/dlgutil.hxx>
+#include <svx/sdrpagewindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svx/svxerr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
@@ -1064,6 +1066,19 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
 
                     if (mpView->SdrBeginTextEdit(pTextObj, pPV, mpWindow, true, pOutl) && mxTextObj->GetObjInventor() == SdrInventor)
                     {
+                        //tdf#102293 flush overlay before going on to pass clicks down to
+                        //the outline view which will want to paint selections
+                        for (sal_uInt32 b = 0; b < pPV->PageWindowCount(); ++b)
+                        {
+                            const SdrPageWindow& rPageWindow = *pPV->GetPageWindow(b);
+                            if (!rPageWindow.GetPaintWindow().OutputToWindow())
+                                continue;
+                            rtl::Reference< sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                            if (!xManager.is())
+                                continue;
+                            xManager->flush();
+                        }
+
                         bFirstObjCreated = true;
                         DeleteDefaultText();
 
