@@ -780,6 +780,13 @@ bool OpenGLHelper::isDeviceBlacklisted()
 #elif defined( _WIN32 )
         WinOpenGLDeviceInfo aInfo;
         bBlacklisted = aInfo.isDeviceBlocked();
+
+        if (aInfo.GetWindowsVersion() == 0x00060001 && /* Windows 7 */
+            aInfo.GetAdapterVendorID() == "0x1022")    /* AMD */
+        {
+            SAL_INFO("vcl.opengl", "Relaxing watchdog timings.");
+            OpenGLZone::relaxWatchdogTimings();
+        }
 #else
         bBlacklisted = false;
 #endif
@@ -806,7 +813,25 @@ void OpenGLZone::leave() { gnLeaveCount++; }
 namespace {
     static volatile bool gbWatchdogFiring = false;
     static oslCondition gpWatchdogExit = nullptr;
+    static WatchdogTimings gWatchdogTimings;
     static rtl::Reference<OpenGLWatchdogThread> gxWatchdog;
+}
+
+WatchdogTimings::WatchdogTimings()
+    : mnMode(0)
+    , maDisableEntries({ 6 /* 1.5s */,  20 /* 5s */ })
+    , maAbortAfter({ 20 /* 5s */, 120 /* 30s */ })
+{}
+
+void WatchdogTimings::relax()
+{
+    osl::MutexGuard g(maMutex);
+
+    maDisableEntries[0] = 180; /* 45s */
+    maDisableEntries[1] = 180; /* 45s */
+
+    maAbortAfter[0] = 240; /* 60s */
+    maAbortAfter[1] = 240; /* 60s */
 }
 
 OpenGLWatchdogThread::OpenGLWatchdogThread()
@@ -816,25 +841,24 @@ OpenGLWatchdogThread::OpenGLWatchdogThread()
 
 void OpenGLWatchdogThread::execute()
 {
-    // delays to take various actions in 1/4 of a second increments.
-    static const int nDisableEntries[2] = { 6 /* 1.5s */, 20 /* 5s */ };
-    static const int nAbortAfter[2]     = { 20 /* 10s */, 120 /* 30s */ };
-
     int nUnchanged = 0; // how many unchanged nEnters
-    TimeValue aHalfSecond(0, 1000*1000*1000*0.25);
+    TimeValue aQuarterSecond(0, 1000*1000*1000*0.25);
     bool bAbortFired = false;
 
     do {
         sal_uInt64 nLastEnters = OpenGLZone::gnEnterCount;
 
-        osl_waitCondition(gpWatchdogExit, &aHalfSecond);
+        osl_waitCondition(gpWatchdogExit, &aQuarterSecond);
 
         if (OpenGLZone::isInZone())
         {
-            int nType = 0;
+            osl::MutexGuard g(gWatchdogTimings.maMutex);
+
             // The shader compiler can take a long time, first time.
             if (gbInShaderCompile)
-                nType = 1;
+                gWatchdogTimings.setMode(1);
+            else
+                gWatchdogTimings.setMode(0);
 
             if (nLastEnters == OpenGLZone::gnEnterCount)
                 nUnchanged++;
@@ -843,12 +867,12 @@ void OpenGLWatchdogThread::execute()
             SAL_INFO("vcl.opengl", "GL watchdog - unchanged " <<
                      nUnchanged << " enter count " <<
                      OpenGLZone::gnEnterCount << " type " <<
-                     (nType ? "in shader" : "normal gl") <<
-                     "breakpoints mid: " << nDisableEntries[nType] <<
-                     " max " << nAbortAfter[nType]);
+                     (gWatchdogTimings.getMode() ? "in shader" : "normal gl") <<
+                     "breakpoints mid: " << gWatchdogTimings.getDisableEntries() <<
+                     " max " << gWatchdogTimings.getAbortAfter());
 
             // Not making progress
-            if (nUnchanged >= nDisableEntries[nType])
+            if (nUnchanged >= gWatchdogTimings.getDisableEntries())
             {
                 static bool bFired = false;
                 if (!bFired)
@@ -869,7 +893,7 @@ void OpenGLWatchdogThread::execute()
             }
 
             // Not making even more progress
-            if (nUnchanged >= nAbortAfter[nType])
+            if (nUnchanged >= gWatchdogTimings.getAbortAfter())
             {
                 if (!bAbortFired)
                 {
@@ -941,6 +965,11 @@ void OpenGLZone::hardDisable()
 
         OpenGLWatchdogThread::stop();
     }
+}
+
+void OpenGLZone::relaxWatchdogTimings()
+{
+    gWatchdogTimings.relax();
 }
 
 OpenGLVCLContextZone::OpenGLVCLContextZone()

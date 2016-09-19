@@ -38,6 +38,7 @@ public:
     ~OpenGLZone() { gnLeaveCount++; }
     static bool isInZone() { return gnEnterCount != gnLeaveCount; }
     static void hardDisable();
+    static void relaxWatchdogTimings();
 };
 
 /// Create this to not only enter the zone, but set VCL context.
