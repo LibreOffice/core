@@ -124,12 +124,6 @@ the MX4J package, which is open source software.  The
 original software and related information is available
 at http://mx4j.sourceforge.net/.
 
-The Windows Installer is built with the Nullsoft
-Scriptable Install System (NSIS), which is
-open source software.  The original software and
-related information is available at
-http://nsis.sourceforge.net/.
-
 Java compilation software for JSP pages is provided by Eclipse, 
 which is open source software.  The original software and 
 related information is available at
