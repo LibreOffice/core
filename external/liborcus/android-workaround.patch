@@ -1,0 +1,22 @@
+diff --git a/src/parser/sax_parser_base.cpp b/src/parser/sax_parser_base.cpp
+index 743130d..2624bd5 100644
+--- a/src/parser/sax_parser_base.cpp
++++ b/src/parser/sax_parser_base.cpp
+@@ -12,6 +12,17 @@
+ #include <vector>
+ #include <memory>
+ 
++#ifdef __ANDROID__
++namespace std
++{
++int stoi(const std::string& str, std::size_t* /*pos*/ = 0, int base = 10)
++{
++    char* end;
++    return strtol(str.c_str(), &end, base);
++}
++}
++#endif
++
+ namespace orcus { namespace sax {
+ 
+ malformed_xml_error::malformed_xml_error(const std::string& msg, std::ptrdiff_t offset) :
