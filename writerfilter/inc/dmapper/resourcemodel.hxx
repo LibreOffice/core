@@ -347,7 +347,7 @@ public:
 };
 
 /**
-   An SPRM.
+   An SPRM: Section, Paragraph and Run Modifier
 
  */
 class Sprm
