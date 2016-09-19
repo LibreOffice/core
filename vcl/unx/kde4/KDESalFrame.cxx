@@ -243,7 +243,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetTabHighlightTextColor( aButn );
 
     // Disable color
-    style.SetDisableColor( aMid );
+    style.SetDisableColor( toColor( pal.color( QPalette::Disabled, QPalette::WindowText ) ) );
 
     // Workspace
     style.SetWorkspaceColor( aMid );
