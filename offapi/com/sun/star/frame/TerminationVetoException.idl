@@ -33,6 +33,10 @@
     After his own operation will be finished, he MUST try to terminate the
     office again. Any other veto listener can intercept that again or office
     will die really.
+
+    Since LibreOffice 5.3:
+    Throwing this exception will only prevent *termination*.
+    Exiting LibreOffice will close all the windows, but the process will keep running.
     </p>
 
     @see XDesktop::terminate()
