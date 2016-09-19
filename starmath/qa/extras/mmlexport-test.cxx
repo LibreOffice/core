@@ -35,9 +35,11 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+    void testTdf97049();
     void testTdf101022();
 
     CPPUNIT_TEST_SUITE(MathMLExportTest);
+    CPPUNIT_TEST(testTdf97049);
     CPPUNIT_TEST(testTdf101022);
     CPPUNIT_TEST_SUITE_END();
 
@@ -83,6 +85,16 @@ xmlDocPtr MathMLExportTest::exportAndParse()
     xmlDocPtr pDoc = parseXml(aTempFile);
     CPPUNIT_ASSERT(pDoc);
     return pDoc;
+}
+
+void MathMLExportTest::testTdf97049()
+{
+    mxDocShell->SetText("intd {{1 over x} dx}");
+    xmlDocPtr pDoc = exportAndParse();
+    assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:mo[1]", "stretchy", "true");
+    auto aContent = getXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:mo[1]");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aContent.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0x222B), aContent[0]);
 }
 
 void MathMLExportTest::testTdf101022()
