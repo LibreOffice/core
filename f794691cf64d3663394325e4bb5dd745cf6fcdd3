@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_22b96fea",
+        "filename": ".editorconfig",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-19T14:19:29Z",
+      "side": 1,
+      "message": "cpp, hpp, c, h",
+      "revId": "f794691cf64d3663394325e4bb5dd745cf6fcdd3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
