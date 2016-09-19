@@ -170,23 +170,16 @@ int RTFTokenizer::asHex(char ch)
         ret = ch - '0';
     else
     {
-        if (rtl::isAsciiLowerCase(ch))
-        {
-            if (ch < 'a' || ch > 'f')
-                return -1;
+        if (ch >= 'a' && ch <= 'f')
             ret = ch - 'a';
-        }
-        else
-        {
-            if (ch < 'A' || ch > 'F')
-                return -1;
+        else if (ch >= 'A' && ch <= 'F')
             ret = ch - 'A';
-        }
+        else
+            return -1;
         ret += 10;
     }
     return ret;
 }
-
 
 void RTFTokenizer::pushGroup()
 {
