@@ -28,7 +28,8 @@
 #include <functional>
 #include <algorithm>
 
-// can't have static linkage because SUNPRO 5.2 complains
+namespace {
+
 Point ImplTaskPaneListGetPos( const vcl::Window *w )
 {
     Point pos;
@@ -45,6 +46,8 @@ Point ImplTaskPaneListGetPos( const vcl::Window *w )
         pos = w->OutputToAbsoluteScreenPixel( w->GetPosPixel() );
 
     return pos;
+}
+
 }
 
 // compares window pos left-to-right
