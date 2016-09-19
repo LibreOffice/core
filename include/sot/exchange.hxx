@@ -89,7 +89,6 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
 
 enum class SotExchangeActionFlags {
     NONE             = 0x0000,
-    CreateTheme      = 0x0100,
     KeepPosSize      = 0x0200,
     InsertImageMap   = 0x0400,
     ReplaceImageMap  = 0x0800,
@@ -97,7 +96,7 @@ enum class SotExchangeActionFlags {
     InsertTargetUrl  = 0x2000,
 };
 namespace o3tl {
-    template<> struct typed_flags<SotExchangeActionFlags> : is_typed_flags<SotExchangeActionFlags, 0x3f00> {};
+    template<> struct typed_flags<SotExchangeActionFlags> : is_typed_flags<SotExchangeActionFlags, 0x3e00> {};
 }
 
 // destinations

@@ -35,14 +35,6 @@ typedef ::std::vector< OUString > AddressList_Impl;
 
 class SFX2_DLLPUBLIC SfxMailModel
 {
-public:
-    enum AddressRole
-    {
-        ROLE_TO,
-        ROLE_CC,
-        ROLE_BCC
-    };
-
 protected:
     enum SaveResult
     {

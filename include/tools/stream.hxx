@@ -56,7 +56,6 @@ enum class StreamMode {
     SHARE_DENYALL            = 0x0800,  // overrides denyread,write,none
 // masks
     READWRITE                = READ | WRITE,
-    SHARE_DENYREADWRITE      = SHARE_DENYREAD | SHARE_DENYWRITE,
     STD_READ                 = READ | SHARE_DENYNONE | NOCREATE,
     STD_WRITE                = WRITE | SHARE_DENYALL,
     STD_READWRITE            = READWRITE | SHARE_DENYALL

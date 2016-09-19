@@ -61,8 +61,7 @@ enum SvxIconChoiceCtrlPositionMode
 {
     IcnViewPositionModeFree = 0,                // Free pixel-perfekt positioning
     IcnViewPositionModeAutoArrange = 1,         // Auto arrange
-    IcnViewPositionModeAutoAdjust = 2,          // Auto adjust
-    IcnViewPositionModeLast = IcnViewPositionModeAutoAdjust
+    IcnViewPositionModeAutoAdjust = 2          // Auto adjust
 };
 
 class SvxIconChoiceCtrlEntry

@@ -120,7 +120,6 @@ enum class SfxObjectShellFlags
 {
     HASOPENDOC      = 0x01L,
     HASMENU         = 0x04L,
-    DONTLOADFILTERS = 0x08L,
     DONTCLOSE       = 0x10L,
     NODOCINFO       = 0x20L,
     STD_NORMAL      = HASOPENDOC,
@@ -128,7 +127,7 @@ enum class SfxObjectShellFlags
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SfxObjectShellFlags> : is_typed_flags<SfxObjectShellFlags, 0xf00003d> {};
+    template<> struct typed_flags<SfxObjectShellFlags> : is_typed_flags<SfxObjectShellFlags, 0xf000035> {};
 }
 
 #define SFX_TITLE_TITLE    0

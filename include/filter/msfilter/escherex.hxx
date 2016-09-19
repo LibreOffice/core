@@ -200,14 +200,6 @@ enum ESCHER_AnchorText
     ESCHER_AnchorBottomCenteredBaseline
 };
 
-enum ESCHER_cDir
-{
-    ESCHER_cDir0,       // Right
-    ESCHER_cDir90,      // Down
-    ESCHER_cDir180,     // Left
-    ESCHER_cDir270      // Up
-};
-
 //  connector style
 enum ESCHER_cxSTYLE
 {
@@ -228,54 +220,6 @@ enum ESCHER_txfl
     ESCHER_txflVertN            // Vertical, non-@
 };
 
-//  text direction (needed for Bi-Di support)
-enum ESCHER_txDir
-{
-    ESCHER_txdirLTR,            // left-to-right text direction
-    ESCHER_txdirRTL,            // right-to-left text direction
-    ESCHER_txdirContext         // context text direction
-};
-
-// Callout Type
-enum ESCHER_spcot
-{
-    ESCHER_spcotRightAngle  = 1,
-    ESCHER_spcotOneSegment  = 2,
-    ESCHER_spcotTwoSegment  = 3,
-    ESCHER_spcotThreeSegment= 4
-};
-
-// Callout Angle
-enum ESCHER_spcoa
-{
-    ESCHER_spcoaAny,
-    ESCHER_spcoa30,
-    ESCHER_spcoa45,
-    ESCHER_spcoa60,
-    ESCHER_spcoa90,
-    ESCHER_spcoa0
-};
-
-//  Callout Drop
-enum ESCHER_spcod
-{
-    ESCHER_spcodTop,
-    ESCHER_spcodCenter,
-    ESCHER_spcodBottom,
-    ESCHER_spcodSpecified
-};
-
-// FontWork alignment
-enum ESCHER_GeoTextAlign
-{
-    ESCHER_AlignTextStretch,        // Stretch each line of text to fit width.
-    ESCHER_AlignTextCenter,         // Center text on width.
-    ESCHER_AlignTextLeft,           // Left justify.
-    ESCHER_AlignTextRight,          // Right justify.
-    ESCHER_AlignTextLetterJust,     // Spread letters out to fit width.
-    ESCHER_AlignTextWordJust,       // Spread words out to fit width.
-    ESCHER_AlignTextInvalid         // Invalid
-};
 
 //  flags for pictures
 enum ESCHER_BlipFlags
@@ -288,71 +232,6 @@ enum ESCHER_BlipFlags
    /* Or the following flags with any of the above. */
     ESCHER_BlipFlagDoNotSave = 4,
     ESCHER_BlipFlagLinkToFile = 8
-};
-
-
-enum ESCHER_3DRenderMode
-{
-    ESCHER_FullRender,      // Generate a full rendering
-    ESCHER_Wireframe,       // Generate a wireframe
-    ESCHER_BoundingCube     // Generate a bounding cube
-};
-
-
-enum ESCHER_xFormType
-{
-    ESCHER_xFormAbsolute,   // Apply transform in absolute space centered on shape
-    ESCHER_xFormShape,      // Apply transform to shape geometry
-    ESCHER_xFormDrawing     // Apply transform in drawing space
-};
-
-
-enum ESCHER_ShadowType
-{
-    ESCHER_ShadowOffset,    // N pixel offset shadow
-    ESCHER_ShadowDouble,    // Use second offset too
-    ESCHER_ShadowRich,      // Rich perspective shadow (cast relative to shape)
-    ESCHER_ShadowShape,     // Rich perspective shadow (cast in shape space)
-    ESCHER_ShadowDrawing,   // Perspective shadow cast in drawing space
-    ESCHER_ShadowEmbossOrEngrave
-};
-
-//  - the type of a (length) measurement
-enum ESCHER_dzType
-   {
-   ESCHER_dzTypeMin         = 0,
-   ESCHER_dzTypeDefault     = 0,        // Default size, ignore the values
-   ESCHER_dzTypeA           = 1,        // Values are in EMUs
-   ESCHER_dzTypeV           = 2,        // Values are in pixels
-   ESCHER_dzTypeShape       = 3,        // Values are 16.16 fractions of shape size
-   ESCHER_dzTypeFixedAspect = 4,        // Aspect ratio is fixed
-   ESCHER_dzTypeAFixed      = 5,        // EMUs, fixed aspect ratio
-   ESCHER_dzTypeVFixed      = 6,        // Pixels, fixed aspect ratio
-   ESCHER_dzTypeShapeFixed  = 7,        // Proportion of shape, fixed aspect ratio
-   ESCHER_dzTypeFixedAspectEnlarge= 8,  // Aspect ratio is fixed, favor larger size
-   ESCHER_dzTypeAFixedBig    = 9,       // EMUs, fixed aspect ratio
-   ESCHER_dzTypeVFixedBig    = 10,      // Pixels, fixed aspect ratio
-   ESCHER_dzTypeShapeFixedBig= 11,      // Proportion of shape, fixed aspect ratio
-   ESCHER_dzTypeMax          = 11
-};
-
-// compound line style
-enum ESCHER_LineStyle
-{
-    ESCHER_LineSimple,          // Single line (of width lineWidth)
-    ESCHER_LineDouble,          // Double lines of equal width
-    ESCHER_LineThickThin,       // Double lines, one thick, one thin
-    ESCHER_LineThinThick,       // Double lines, reverse order
-    ESCHER_LineTriple           // Three lines, thin, thick, thin
-};
-
-//  how to "fill" the line contour
-enum ESCHER_LineType
-{
-   ESCHER_lineSolidType,        // Fill with a solid color
-   ESCHER_linePattern,          // Fill with a pattern (bitmap)
-   ESCHER_lineTexture,          // A texture (pattern with its own color map)
-   ESCHER_linePicture           // Center a picture in the shape
 };
 
 // dashed line style
