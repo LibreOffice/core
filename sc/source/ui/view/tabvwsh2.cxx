@@ -218,6 +218,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             break;
 
         case SID_DRAW_LINE:
+        case SID_LINE_ARROW_END:
+        case SID_LINE_ARROW_CIRCLE:
+        case SID_LINE_ARROW_SQUARE:
+        case SID_LINE_ARROW_START:
+        case SID_LINE_CIRCLE_ARROW:
+        case SID_LINE_SQUARE_ARROW:
+        case SID_LINE_ARROWS:
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
             pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, rReq));
@@ -361,6 +368,13 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
                 break;
 
             case SID_DRAW_LINE:
+            case SID_LINE_ARROW_END:
+            case SID_LINE_ARROW_CIRCLE:
+            case SID_LINE_ARROW_SQUARE:
+            case SID_LINE_ARROW_START:
+            case SID_LINE_CIRCLE_ARROW:
+            case SID_LINE_SQUARE_ARROW:
+            case SID_LINE_ARROWS:
             case SID_DRAW_RECT:
             case SID_DRAW_ELLIPSE:
             case SID_DRAW_POLYGON:
