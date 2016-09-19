@@ -125,8 +125,11 @@ bool ScDocument::CopyOneCellFromClip(
         if (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB)
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
-                maTabs[i]->CopyConditionalFormat(nCol1, nRow, nCol2, nRow, nCol1 - aClipRange.aStart.Col(),
-                        nRow - aClipRange.aStart.Row(), pSrcTab);
+                for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+                {
+                    maTabs[i]->CopyConditionalFormat(nCol, nRow, nCol, nRow, nCol - aClipRange.aStart.Col(),
+                            nRow - aClipRange.aStart.Row(), pSrcTab);
+                }
             }
     }
 
