@@ -280,9 +280,9 @@ storeError OStorePageManager::iget (
         if (eErrCode != store_E_NotExists)
             return eErrCode;
 
-        if (eMode == store_AccessReadWrite)
+        if (eMode == storeAccessMode::ReadWrite)
             return store_E_NotExists;
-        if (eMode == store_AccessReadOnly)
+        if (eMode == storeAccessMode::ReadOnly)
             return store_E_NotExists;
 
         if (!base::isWriteable())
@@ -477,7 +477,7 @@ storeError OStorePageManager::remove (const OStorePageKey &rKey)
 
         // Acquire page write access.
         OStorePageDescriptor aDescr (xNode->m_aDescr);
-        eErrCode = base::acquirePage (aDescr, store_AccessReadWrite);
+        eErrCode = base::acquirePage (aDescr, storeAccessMode::ReadWrite);
         if (eErrCode != store_E_None)
             return eErrCode;
 

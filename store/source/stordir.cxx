@@ -123,7 +123,7 @@ storeError OStoreDirectory_Impl::create (
         return store_E_NotDirectory;
 
     inode_holder_type xNode (aPage.get());
-    eErrCode = xManager->acquirePage (xNode->m_aDescr, store_AccessReadOnly);
+    eErrCode = xManager->acquirePage (xNode->m_aDescr, storeAccessMode::ReadOnly);
     if (eErrCode != store_E_None)
         return eErrCode;
 

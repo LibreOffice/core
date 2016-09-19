@@ -197,14 +197,14 @@ struct FileHandle
         sal_uInt32 nFlags = 0;
         switch (eAccessMode)
         {
-        case store_AccessCreate:
-        case store_AccessReadCreate:
+        case storeAccessMode::Create:
+        case storeAccessMode::ReadCreate:
             nFlags |= osl_File_OpenFlag_Create;
             SAL_FALLTHROUGH;
-        case store_AccessReadWrite:
+        case storeAccessMode::ReadWrite:
             nFlags |= osl_File_OpenFlag_Write;
             SAL_FALLTHROUGH;
-        case store_AccessReadOnly:
+        case storeAccessMode::ReadOnly:
             nFlags |= osl_File_OpenFlag_Read;
             break;
         default:
@@ -243,7 +243,7 @@ struct FileHandle
         {
             // Already existing (O_CREAT | O_EXCL).
             result = osl_openFile (aFileUrl.pData, &m_handle, osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
-            if ((result == osl_File_E_None) && (eAccessMode == store_AccessCreate))
+            if ((result == osl_File_E_None) && (eAccessMode == storeAccessMode::Create))
             {
                 // Truncate existing file.
                 result = osl_setFileSize (m_handle, 0);
@@ -853,7 +853,7 @@ FileLockBytes_createInstance (
     if (result != store_E_None)
         return result;
 
-    if (eAccessMode == store_AccessReadOnly)
+    if (eAccessMode == storeAccessMode::ReadOnly)
     {
         ResourceHolder<FileMapping> xMapping;
         if (xMapping.get().initialize (xFile.get().m_handle) == osl_File_E_None)

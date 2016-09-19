@@ -59,14 +59,14 @@ extern "C" {
     @see store_openDirectory()
     @see store_openStream()
  */
-typedef enum
+enum class storeAccessMode
 {
-    store_AccessCreate,
-    store_AccessReadCreate,
-    store_AccessReadWrite,
-    store_AccessReadOnly,
-    store_Access_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-} storeAccessMode;
+    Create,
+    ReadCreate,
+    ReadWrite,
+    ReadOnly,
+    FORCE_EQUAL_SIZE = SAL_MAX_ENUM
+};
 
 
 /** Error Code enumeration.

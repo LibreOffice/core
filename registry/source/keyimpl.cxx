@@ -219,11 +219,11 @@ RegError ORegKey::getValueInfo(const OUString& valueName, RegValueType* pValueTy
 {
     OStoreStream    rValue;
     sal_uInt8*      pBuffer;
-    storeAccessMode accessMode = store_AccessReadWrite;
+    storeAccessMode accessMode = storeAccessMode::ReadWrite;
 
     if (m_pRegistry->isReadOnly())
     {
-        accessMode = store_AccessReadOnly;
+        accessMode = storeAccessMode::ReadOnly;
     }
 
     OUString sImplValueName( VALUE_PREFIX );
@@ -301,7 +301,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if ( rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT , sImplValueName, store_AccessCreate) )
+    if ( rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT , sImplValueName, storeAccessMode::Create) )
     {
         return RegError::SET_VALUE_FAILED;
     }
@@ -371,7 +371,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, store_AccessCreate) )
+    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, storeAccessMode::Create) )
     {
         return RegError::SET_VALUE_FAILED;
     }
@@ -430,7 +430,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, store_AccessCreate) )
+    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, storeAccessMode::Create) )
     {
         return RegError::SET_VALUE_FAILED;
     }
@@ -498,7 +498,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
 
     REG_GUARD(m_pRegistry->m_mutex);
 
-    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, store_AccessCreate) )
+    if (rValue.create(getStoreFile(), m_name + m_pRegistry->ROOT, sImplValueName, storeAccessMode::Create) )
     {
         return RegError::SET_VALUE_FAILED;
     }
@@ -557,11 +557,11 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
     sal_uInt8*      pBuffer;
     RegValueType    valueType;
     sal_uInt32      valueSize;
-    storeAccessMode accessMode = store_AccessReadWrite;
+    storeAccessMode accessMode = storeAccessMode::ReadWrite;
 
     if (m_pRegistry->isReadOnly())
     {
-        accessMode = store_AccessReadOnly;
+        accessMode = storeAccessMode::ReadOnly;
     }
 
     OUString sImplValueName( VALUE_PREFIX );
@@ -651,11 +651,11 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     sal_uInt8*      pBuffer;
     RegValueType    valueType;
     sal_uInt32      valueSize;
-    storeAccessMode accessMode = store_AccessReadWrite;
+    storeAccessMode accessMode = storeAccessMode::ReadWrite;
 
     if (m_pRegistry->isReadOnly())
     {
-        accessMode = store_AccessReadOnly;
+        accessMode = storeAccessMode::ReadOnly;
     }
 
     OUString sImplValueName( VALUE_PREFIX );
@@ -765,11 +765,11 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     sal_uInt8*      pBuffer;
     RegValueType    valueType;
     sal_uInt32      valueSize;
-    storeAccessMode accessMode = store_AccessReadWrite;
+    storeAccessMode accessMode = storeAccessMode::ReadWrite;
 
     if (m_pRegistry->isReadOnly())
     {
-        accessMode = store_AccessReadOnly;
+        accessMode = storeAccessMode::ReadOnly;
     }
 
     OUString sImplValueName( VALUE_PREFIX );
@@ -871,11 +871,11 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
     sal_uInt8*      pBuffer;
     RegValueType    valueType;
     sal_uInt32      valueSize;
-    storeAccessMode accessMode = store_AccessReadWrite;
+    storeAccessMode accessMode = storeAccessMode::ReadWrite;
 
     if (m_pRegistry->isReadOnly())
     {
-        accessMode = store_AccessReadOnly;
+        accessMode = storeAccessMode::ReadOnly;
     }
 
     OUString sImplValueName( VALUE_PREFIX );
@@ -1009,7 +1009,7 @@ OStoreDirectory ORegKey::getStoreDir()
     OStoreDirectory rStoreDir;
     OUString        fullPath;
     OUString        relativName;
-    storeAccessMode accessMode = store_AccessReadWrite;
+    storeAccessMode accessMode = storeAccessMode::ReadWrite;
 
     if ( m_name.equals(m_pRegistry->ROOT) )
     {
@@ -1023,7 +1023,7 @@ OStoreDirectory ORegKey::getStoreDir()
 
     if (m_pRegistry->isReadOnly())
     {
-        accessMode = store_AccessReadOnly;
+        accessMode = storeAccessMode::ReadOnly;
     }
 
     rStoreDir.create(getStoreFile(), fullPath, relativName, accessMode);

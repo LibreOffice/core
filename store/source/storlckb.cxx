@@ -101,19 +101,19 @@ storeError OStoreLockBytes::create (
     }
 
     inode_holder_type xNode (aPage.get());
-    if (eMode != store_AccessReadOnly)
-        eErrCode = xManager->acquirePage (xNode->m_aDescr, store_AccessReadWrite);
+    if (eMode != storeAccessMode::ReadOnly)
+        eErrCode = xManager->acquirePage (xNode->m_aDescr, storeAccessMode::ReadWrite);
     else
-        eErrCode = xManager->acquirePage (xNode->m_aDescr, store_AccessReadOnly);
+        eErrCode = xManager->acquirePage (xNode->m_aDescr, storeAccessMode::ReadOnly);
     if (eErrCode != store_E_None)
         return eErrCode;
 
     m_xManager   = xManager;
     m_xNode      = xNode;
-    m_bWriteable = (eMode != store_AccessReadOnly);
+    m_bWriteable = (eMode != storeAccessMode::ReadOnly);
 
     // Check for truncation.
-    if (eMode == store_AccessCreate)
+    if (eMode == storeAccessMode::Create)
     {
         // Truncate to zero length.
         eErrCode = setSize(0);
