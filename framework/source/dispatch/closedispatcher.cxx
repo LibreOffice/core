@@ -23,6 +23,8 @@
 #include <services.h>
 #include <general.h>
 
+#include <com/sun/star/bridge/BridgeFactory.hpp>
+#include <com/sun/star/bridge/XBridgeFactory2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
@@ -286,6 +288,12 @@ IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     bool bCloseFrame           = false;
     bool bEstablishBackingMode = false;
     bool bTerminateApp         = false;
+    bool bHasActiveConnections = false;
+
+    css::uno::Reference<css::bridge::XBridgeFactory2> bridgeFac( css::bridge::BridgeFactory::create(xContext) );
+    const css::uno::Sequence< css::uno::Reference<css::bridge::XBridge> >seqBridges = bridgeFac->getExistingBridges();
+    bHasActiveConnections = seqBridges.getLength() > 0;
+
 
     // Analyze the environment a first time.
     // If we found some special cases, we can
@@ -310,13 +318,15 @@ IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     else if (aCheck1.m_bReferenceIsHelp)
         bCloseFrame = true;
 
-    // c) If we are already in "backing mode", we have to terminate
-    //    the application, if this special frame is closed.
-    //    It doesn't matter, how many other frames (can be the help or hidden frames only)
-    //    are open then.
-    //    => terminate the application!
-    else if (aCheck1.m_bReferenceIsBacking)
-        bTerminateApp = true;
+    // c) If we are already in "backing mode", we terminate the application, if no active UNO connections are found.
+    //    If there is an active UNO connection, we only close the frame and leave the application alive.
+    //    It doesn't matter, how many other frames (can be the help or hidden frames only) are open then.
+    else if (aCheck1.m_bReferenceIsBacking) {
+        if (bHasActiveConnections)
+            bCloseFrame = true;
+        else
+            bTerminateApp = true;
+    }
 
     // d) Otherwhise we have to: close all views to the same document, close the
     //    document inside our own frame and decide then again, what has to be done!
@@ -352,7 +362,9 @@ IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
             //     application or establish the backing mode now.
             //     And that depends from the dispatched URL ...
             {
-                if (eOperation == E_CLOSE_FRAME)
+                if (bHasActiveConnections)
+                    bCloseFrame = true;
+                else if (eOperation == E_CLOSE_FRAME)
                     bTerminateApp = true;
                 else if( SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE) )
                     bEstablishBackingMode = true;
