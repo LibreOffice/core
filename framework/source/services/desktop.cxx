@@ -224,9 +224,14 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     aReadLock.clear();
 
-    // Ask normal terminate listener. They could stop terminate without closing any open document.
+    // try to close all open frames.
+    // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
+    bool bIsEventTestingMode = Application::IsEventTestingModeEnabled();
+    bool bFramesClosed = impl_closeFrames(!bIsEventTestingMode);
+
+    // Ask normal terminate listener. They could stop terminating the process.
     Desktop::TTerminateListenerList lCalledTerminationListener;
-    bool                      bVeto = false;
+    bool bVeto = false;
     impl_sendQueryTerminationEvent(lCalledTerminationListener, bVeto);
     if ( bVeto )
     {
@@ -234,10 +239,6 @@ sal_Bool SAL_CALL Desktop::terminate()
         return false;
     }
 
-    // try to close all open frames.
-    // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
-    bool bIsEventTestingMode = Application::IsEventTestingModeEnabled();
-    bool bFramesClosed = impl_closeFrames(!bIsEventTestingMode);
     if (bIsEventTestingMode)
     {
         Application::Quit();
