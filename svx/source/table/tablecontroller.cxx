@@ -190,25 +190,6 @@ SvxTableController::~SvxTableController()
     }
 }
 
-
-const sal_uInt16 ACTION_NONE = 0;
-const sal_uInt16 ACTION_GOTO_FIRST_CELL = 1;
-const sal_uInt16 ACTION_GOTO_FIRST_COLUMN = 2;
-const sal_uInt16 ACTION_GOTO_FIRST_ROW = 3;
-const sal_uInt16 ACTION_GOTO_LEFT_CELL = 4;
-const sal_uInt16 ACTION_GOTO_UP_CELL = 5;
-const sal_uInt16 ACTION_GOTO_RIGHT_CELL = 6;
-const sal_uInt16 ACTION_GOTO_DOWN_CELL = 7;
-const sal_uInt16 ACTION_GOTO_LAST_CELL = 8;
-const sal_uInt16 ACTION_GOTO_LAST_COLUMN = 9;
-const sal_uInt16 ACTION_GOTO_LAST_ROW = 10;
-const sal_uInt16 ACTION_EDIT_CELL = 11;
-const sal_uInt16 ACTION_STOP_TEXT_EDIT = 12;
-const sal_uInt16 ACTION_REMOVE_SELECTION = 13;
-const sal_uInt16 ACTION_START_SELECTION = 14;
-const sal_uInt16 ACTION_HANDLED_BY_VIEW = 15;
-const sal_uInt16 ACTION_TAB = 18;
-
 bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWindow )
 {
     if( !checkTableObject() )
@@ -239,7 +220,7 @@ bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWindow 
         }
     }
 
-    sal_uInt16 nAction = getKeyboardAction( rKEvt, pWindow );
+    TblAction nAction = getKeyboardAction(rKEvt, pWindow);
 
     return executeAction( nAction, rKEvt.GetKeyCode().IsShift(), pWindow );
 }
@@ -1452,14 +1433,14 @@ bool SvxTableController::checkTableObject()
 }
 
 
-sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Window* /*pWindow*/ )
+SvxTableController::TblAction SvxTableController::getKeyboardAction(const KeyEvent& rKEvt, vcl::Window* /*pWindow*/)
 {
     const bool bMod1 = rKEvt.GetKeyCode().IsMod1(); // ctrl
     const bool bMod2 = rKEvt.GetKeyCode().IsMod2(); // Alt
 
     const bool bTextEdit = mpView->IsTextEdit();
 
-    sal_uInt16 nAction = ACTION_HANDLED_BY_VIEW;
+    TblAction nAction = TblAction::HandledByView;
 
     sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( !pTableObj )
@@ -1474,12 +1455,12 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
         if( bTextEdit )
         {
             // escape during text edit ends text edit
-            nAction = ACTION_STOP_TEXT_EDIT;
+            nAction = TblAction::StopTextEdit;
         }
         if( mbCellSelectionMode )
         {
             // escape with selected cells removes selection
-            nAction = ACTION_REMOVE_SELECTION;
+            nAction = TblAction::RemoveSelection;
         }
         break;
     }
@@ -1489,7 +1470,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
         {
             // when not already editing, return starts text edit
             setSelectionStart( SdrTableObj::getFirstCell() );
-            nAction = ACTION_EDIT_CELL;
+            nAction = TblAction::EditCell;
         }
         break;
     }
@@ -1501,18 +1482,18 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
         else if( bTextEdit )
         {
             // f2 during text edit stops text edit
-            nAction = ACTION_STOP_TEXT_EDIT;
+            nAction = TblAction::StopTextEdit;
         }
         else if( mbCellSelectionMode )
         {
             // f2 with selected cells removes selection
-            nAction = ACTION_REMOVE_SELECTION;
+            nAction = TblAction::RemoveSelection;
         }
         else
         {
             // f2 with no selection and no text edit starts text edit
             setSelectionStart( SdrTableObj::getFirstCell() );
-            nAction = ACTION_EDIT_CELL;
+            nAction = TblAction::EditCell;
         }
         break;
     }
@@ -1524,12 +1505,12 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
             if( bMod1 && !bMod2 )
             {
                 // ctrl + home jumps to first cell
-                nAction = ACTION_GOTO_FIRST_CELL;
+                nAction = TblAction::GotoFirstCell;
             }
             else if( !bMod1 && bMod2 )
             {
                 // alt + home jumps to first column
-                nAction = ACTION_GOTO_FIRST_COLUMN;
+                nAction = TblAction::GotoFirstColumn;
             }
         }
         break;
@@ -1542,12 +1523,12 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
             if( bMod1 && !bMod2 )
             {
                 // ctrl + end jumps to last cell
-                nAction = ACTION_GOTO_LAST_CELL;
+                nAction = TblAction::GotoLastCell;
             }
             else if( !bMod1 && bMod2 )
             {
                 // alt + home jumps to last column
-                nAction = ACTION_GOTO_LAST_COLUMN;
+                nAction = TblAction::GotoLastColumn;
             }
         }
         break;
@@ -1556,7 +1537,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
     case awt::Key::TAB:
     {
         if( bTextEdit || mbCellSelectionMode )
-            nAction = ACTION_TAB;
+            nAction = TblAction::Tab;
         break;
     }
 
@@ -1574,11 +1555,11 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
         {
             if( (nCode == awt::Key::UP) || (nCode == awt::Key::NUM8) )
             {
-                nAction = ACTION_GOTO_LEFT_CELL;
+                nAction = TblAction::GotoLeftCell;
             }
             else if( (nCode == awt::Key::DOWN) || (nCode == awt::Key::NUM2) )
             {
-                nAction = ACTION_GOTO_RIGHT_CELL;
+                nAction = TblAction::GotoRightCell;
             }
             break;
         }
@@ -1594,7 +1575,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
             bTextMove = pOLV && ( aOldSelection.IsEqual(pOLV->GetSelection()) );
             if( !bTextMove )
             {
-                nAction = ACTION_NONE;
+                nAction = TblAction::NONE;
             }
         }
 
@@ -1605,19 +1586,19 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
             {
             case awt::Key::LEFT:
             case awt::Key::NUM4:
-                nAction = ACTION_GOTO_LEFT_CELL;
+                nAction = TblAction::GotoLeftCell;
                 break;
             case awt::Key::RIGHT:
             case awt::Key::NUM6:
-                nAction = ACTION_GOTO_RIGHT_CELL;
+                nAction = TblAction::GotoRightCell;
                 break;
             case awt::Key::DOWN:
             case awt::Key::NUM2:
-                nAction = ACTION_GOTO_DOWN_CELL;
+                nAction = TblAction::GotoDownCell;
                 break;
             case awt::Key::UP:
             case awt::Key::NUM8:
-                nAction = ACTION_GOTO_UP_CELL;
+                nAction = TblAction::GotoUpCell;
                 break;
             }
         }
@@ -1625,18 +1606,18 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
     }
     case awt::Key::PAGEUP:
         if( bMod2 )
-            nAction = ACTION_GOTO_FIRST_ROW;
+            nAction = TblAction::GotoFirstRow;
         break;
 
     case awt::Key::PAGEDOWN:
         if( bMod2 )
-            nAction = ACTION_GOTO_LAST_ROW;
+            nAction = TblAction::GotoLastRow;
         break;
     }
     return nAction;
 }
 
-bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::Window* pWindow )
+bool SvxTableController::executeAction(TblAction nAction, bool bSelect, vcl::Window* pWindow)
 {
     sdr::table::SdrTableObj* pTableObj = dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() );
     if( !pTableObj )
@@ -1644,87 +1625,87 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::W
 
     switch( nAction )
     {
-    case ACTION_GOTO_FIRST_CELL:
+    case TblAction::GotoFirstCell:
     {
         gotoCell( SdrTableObj::getFirstCell(), bSelect, pWindow, nAction );
         break;
     }
 
-    case ACTION_GOTO_LEFT_CELL:
+    case TblAction::GotoLeftCell:
     {
         gotoCell( pTableObj->getLeftCell( getSelectionEnd(), !bSelect ), bSelect, pWindow, nAction );
         break;
     }
 
-    case ACTION_GOTO_RIGHT_CELL:
+    case TblAction::GotoRightCell:
     {
         gotoCell( pTableObj->getRightCell( getSelectionEnd(), !bSelect ), bSelect, pWindow, nAction);
         break;
     }
 
-    case ACTION_GOTO_LAST_CELL:
+    case TblAction::GotoLastCell:
     {
         gotoCell( pTableObj->getLastCell(), bSelect, pWindow, nAction );
         break;
     }
 
-    case ACTION_GOTO_FIRST_COLUMN:
+    case TblAction::GotoFirstColumn:
     {
         CellPos aPos( SdrTableObj::getFirstCell().mnCol, getSelectionEnd().mnRow );
         gotoCell( aPos, bSelect, pWindow, nAction );
         break;
     }
 
-    case ACTION_GOTO_LAST_COLUMN:
+    case TblAction::GotoLastColumn:
     {
         CellPos aPos( pTableObj->getLastCell().mnCol, getSelectionEnd().mnRow );
         gotoCell( aPos, bSelect, pWindow, nAction );
         break;
     }
 
-    case ACTION_GOTO_FIRST_ROW:
+    case TblAction::GotoFirstRow:
     {
         CellPos aPos( getSelectionEnd().mnCol, SdrTableObj::getFirstCell().mnRow );
         gotoCell( aPos, bSelect, pWindow, nAction );
         break;
     }
 
-    case ACTION_GOTO_UP_CELL:
+    case TblAction::GotoUpCell:
     {
         gotoCell( pTableObj->getUpCell(getSelectionEnd(), !bSelect), bSelect, pWindow, nAction );
         break;
     }
 
-    case ACTION_GOTO_DOWN_CELL:
+    case TblAction::GotoDownCell:
     {
         gotoCell( pTableObj->getDownCell(getSelectionEnd(), !bSelect), bSelect, pWindow, nAction );
         break;
     }
 
-    case ACTION_GOTO_LAST_ROW:
+    case TblAction::GotoLastRow:
     {
         CellPos aPos( getSelectionEnd().mnCol, pTableObj->getLastCell().mnRow );
         gotoCell( aPos, bSelect, pWindow, nAction );
         break;
     }
 
-    case ACTION_EDIT_CELL:
+    case TblAction::EditCell:
         EditCell( getSelectionStart(), pWindow, nAction );
         break;
 
-    case ACTION_STOP_TEXT_EDIT:
+    case TblAction::StopTextEdit:
         StopTextEdit();
         break;
 
-    case ACTION_REMOVE_SELECTION:
+    case TblAction::RemoveSelection:
         RemoveSelection();
         break;
 
-    case ACTION_START_SELECTION:
+    case TblAction::StartSelection:
         StartSelection( getSelectionStart() );
         break;
 
-    case ACTION_TAB:
+    case TblAction::Tab:
     {
         if( bSelect )
             gotoCell( pTableObj->getPreviousCell( getSelectionEnd(), true ), false, pWindow, nAction );
@@ -1741,13 +1722,15 @@ bool SvxTableController::executeAction( sal_uInt16 nAction, bool bSelect, vcl::W
         }
         break;
     }
+    default:
+        break;
     }
 
-    return nAction != ACTION_HANDLED_BY_VIEW;
+    return nAction != TblAction::HandledByView;
 }
 
 
-void SvxTableController::gotoCell( const CellPos& rPos, bool bSelect, vcl::Window* pWindow, sal_uInt16 nAction )
+void SvxTableController::gotoCell(const CellPos& rPos, bool bSelect, vcl::Window* pWindow, TblAction nAction /*= TblAction::NONE */)
 {
     if( mxTableObj.is() && static_cast<SdrTableObj*>(mxTableObj.get())->IsTextEditActive() )
         mpView->SdrEndTextEdit(true);
@@ -1856,7 +1839,7 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
 }
 
 
-void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, sal_uInt16 nAction /*= ACTION_NONE */ )
+void SvxTableController::EditCell(const CellPos& rPos, vcl::Window* pWindow, TblAction nAction /*= TblAction::NONE */)
 {
     SdrPageView* pPV = mpView->GetSdrPageView();
 
@@ -1906,10 +1889,10 @@ void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, sa
                 ESelection aNewSelection;
 
                 const WritingMode eMode = pTableObj->GetWritingMode();
-                if( ((nAction == ACTION_GOTO_LEFT_CELL) || (nAction == ACTION_GOTO_RIGHT_CELL)) && (eMode != WritingMode_TB_RL) )
+                if (((nAction == TblAction::GotoLeftCell) || (nAction == TblAction::GotoRightCell)) && (eMode != WritingMode_TB_RL))
                 {
-                    const bool bLast = ((nAction == ACTION_GOTO_LEFT_CELL) && (eMode == WritingMode_LR_TB)) ||
-                                         ((nAction == ACTION_GOTO_RIGHT_CELL) && (eMode == WritingMode_RL_TB));
+                    const bool bLast = ((nAction == TblAction::GotoLeftCell) && (eMode == WritingMode_LR_TB)) ||
+                                         ((nAction == TblAction::GotoRightCell) && (eMode == WritingMode_RL_TB));
 
                     if( bLast )
                         aNewSelection = ESelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
