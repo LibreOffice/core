@@ -23,6 +23,7 @@
 #include <osl/interlck.h>
 
 #include <utility>
+#include <cstddef>
 
 namespace o3tl
 {
@@ -34,7 +35,7 @@ namespace o3tl
      */
     struct UnsafeRefCountingPolicy
     {
-        typedef sal_Size ref_count_t;
+        typedef std::size_t ref_count_t;
         static void incrementCount( ref_count_t& rCount ) { ++rCount; }
         static bool decrementCount( ref_count_t& rCount ) { return --rCount != 0; }
     };
