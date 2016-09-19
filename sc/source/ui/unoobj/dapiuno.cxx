@@ -39,6 +39,7 @@
 #include "dpdimsave.hxx"
 #include "hints.hxx"
 #include <dputil.hxx>
+#include "globstr.hrc"
 
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
@@ -2612,8 +2613,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         }
         OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
-        //! localized prefix string
-        OUString aGroupName = pGroupDimension->CreateGroupName( "Group" );
+        OUString aGroupName = pGroupDimension->CreateGroupName( ScGlobal::GetRscString(STR_PIVOT_GROUP) );
         ScDPSaveGroupItem aGroup( aGroupName );
         Reference< XMembersAccess > xMembers = GetMembers();
         if (!xMembers.is())
