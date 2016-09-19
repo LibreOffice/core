@@ -404,7 +404,7 @@ inline sal_Bool SvListView::IsExpanded( SvListEntry* pEntry ) const
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");
     SvViewData* pData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
     DBG_ASSERT(pData,"Entry not in Table");
-    return pData->IsExpanded();
+    return pData && pData->IsExpanded();
 }
 inline sal_Bool SvListView::IsSelected( SvListEntry* pEntry ) const
 {
