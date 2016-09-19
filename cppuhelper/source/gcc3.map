@@ -430,6 +430,11 @@ global:
     _ZN4cppu15supportsServiceEPN3com3sun4star4lang12XServiceInfoERKN3rtl8OUStringE; # cppu::supportsService(com::sun::star::lang::XServiceInfo*, rtl::OUString const&)
 } UDK_3.8;
 
+LIBO_UDK_5.3 { # LibO 5.3
+global:
+    _ZN3com3sun4star3uno19WeakReferenceHelperaSEOS3_; # com::sun::star::uno::WeakReferenceHelper::operator=(com::sun::star::uno::WeakReferenceHelper&&)
+} LIBO_UDK_3.9;
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:

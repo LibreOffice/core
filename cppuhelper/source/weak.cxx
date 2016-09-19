@@ -24,7 +24,9 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
+
 #include <algorithm>
+#include <utility>
 
 using namespace osl;
 using namespace com::sun::star::uno;
@@ -483,6 +485,14 @@ WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& r
     }
     Reference< XInterface > xInt( rWeakRef.get() );
     return operator = ( xInt );
+}
+
+WeakReferenceHelper & WeakReferenceHelper::operator =(
+    WeakReferenceHelper && other)
+{
+    clear();
+    std::swap(m_pImpl, other.m_pImpl);
+    return *this;
 }
 
 WeakReferenceHelper & SAL_CALL

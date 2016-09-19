@@ -63,6 +63,11 @@ public:
     */
     WeakReferenceHelper( const WeakReferenceHelper & rWeakRef );
 
+#if defined LIBO_INTERNAL_ONLY
+    WeakReferenceHelper(WeakReferenceHelper && other): m_pImpl(other.m_pImpl)
+    { other.m_pImpl = nullptr; }
+#endif
+
     /** Initialize this reference with the hard interface reference xInt. If the implementation
         behind xInt does not support XWeak or xInt is null then this reference will be null.
 
@@ -79,6 +84,10 @@ public:
         @param rWeakRef another weak ref
     */
     WeakReferenceHelper & SAL_CALL operator = ( const WeakReferenceHelper & rWeakRef );
+
+#if defined LIBO_INTERNAL_ONLY
+    WeakReferenceHelper & operator =(WeakReferenceHelper && other);
+#endif
 
     /** Releases this reference and takes over hard reference xInt.
         If the implementation behind xInt does not support XWeak
