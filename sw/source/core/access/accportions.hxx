@@ -38,15 +38,15 @@ namespace com { namespace sun { namespace star {
 class SwAccessiblePortionData : public SwPortionHandler
 {
     // the node this portion is referring to
-    const SwTextNode* pTextNode;
+    const SwTextNode* m_pTextNode;
 
     // variables used while collecting the data
-    OUStringBuffer aBuffer;
-    sal_Int32 nModelPosition;
-    const SwViewOption* pViewOptions;
+    OUStringBuffer m_aBuffer;
+    sal_Int32 m_nModelPosition;
+    const SwViewOption* m_pViewOptions;
 
     // the accessible string
-    OUString sAccessibleString;
+    OUString m_sAccessibleString;
 
     // positions array
     // instances of Position_t must always include the minimum and
@@ -54,20 +54,20 @@ class SwAccessiblePortionData : public SwPortionHandler
     // algorithms)
     typedef std::vector<sal_Int32> Positions_t;
 
-    Positions_t aLineBreaks;        /// position of line breaks
-    Positions_t aModelPositions;    /// position of portion breaks in the model
-    Positions_t aAccessiblePositions;   /// portion breaks in sAccessibleString
-    Positions_t aFieldPosition;
-    Positions_t aAttrFieldType;
+    Positions_t m_aLineBreaks;        /// position of line breaks
+    Positions_t m_aModelPositions;    /// position of portion breaks in the model
+    Positions_t m_aAccessiblePositions;   /// portion breaks in sAccessibleString
+    Positions_t m_aFieldPosition;
+    Positions_t m_aAttrFieldType;
 
     typedef std::vector<sal_uInt8> PortionAttrs_t;
-    PortionAttrs_t aPortionAttrs;   /// additional portion attributes
+    PortionAttrs_t m_aPortionAttrs;   /// additional portion attributes
 
-    Positions_t* pSentences;    /// positions of sentence breaks
+    Positions_t* m_pSentences;    /// positions of sentence breaks
 
-    size_t nBeforePortions;     /// # of portions before first model character
-    bool bFinished;
-    bool bLastIsSpecial;    /// set if last portion was 'Special()'
+    size_t m_nBeforePortions;     /// # of portions before first model character
+    bool m_bFinished;
+    bool m_bLastIsSpecial;    /// set if last portion was 'Special()'
 
     /// returns the index of the first position whose value is smaller
     /// or equal, and whose following value is equal or larger
