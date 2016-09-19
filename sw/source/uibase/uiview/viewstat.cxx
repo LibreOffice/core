@@ -52,6 +52,7 @@
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svl/visitem.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
@@ -285,12 +286,12 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 SwDoc *pDoc = m_pWrtShell->GetDoc();
                 SwPaM *pCursor = m_pWrtShell->GetCursor();
+                bool bDisable = false;
                 if (GetDocShell()->HasChangeRecordProtection())
-                    rSet.DisableItem(nWhich);
-                else if (pCursor->HasMark() && !comphelper::LibreOfficeKit::isActive())
+                    bDisable = true;
+                else if (pCursor->HasMark())
                 {
                     // If the selection does not contain redlines, disable accepting/rejecting changes.
-                    // Though LibreOfficeKit wants to handle changes by index, so always allow there.
                     sal_uInt16 index = 0;
                     const SwRedlineTable& table = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
                     const SwRangeRedline* redline = table.FindAtPosition( *pCursor->Start(), index );
@@ -311,14 +312,26 @@ void SwView::GetState(SfxItemSet &rSet)
                         }
                     }
                     if( redline == nullptr )
-                        rSet.DisableItem(nWhich);
+                        bDisable = true;
                 }
-                else if (!comphelper::LibreOfficeKit::isActive())
+                else
                 {
                     // If the cursor position isn't on a redline, disable
                     // accepting/rejecting changes.
                     if (nullptr == pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), nullptr))
-                        rSet.DisableItem(nWhich);
+                        bDisable = true;
+                }
+
+                // LibreOfficeKit wants to handle changes by index, so always allow here.
+                if (bDisable && !comphelper::LibreOfficeKit::isActive())
+                    rSet.DisableItem(nWhich);
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    OString aPayload(".uno:TrackedChangeIndex=");
+                    sal_uInt16 nRedline = 0;
+                    if (pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), &nRedline))
+                        aPayload += OString::number(nRedline);
+                    libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload.getStr());
                 }
             }
             break;
