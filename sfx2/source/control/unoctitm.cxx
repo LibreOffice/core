@@ -1119,7 +1119,8 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         aEvent.FeatureURL.Path == "Strikeout" ||
         aEvent.FeatureURL.Path == "Underline" ||
         aEvent.FeatureURL.Path == "ModifiedStatus" ||
-        aEvent.FeatureURL.Path == "TrackChanges")
+        aEvent.FeatureURL.Path == "TrackChanges" ||
+        aEvent.FeatureURL.Path == "AcceptTrackedChange")
     {
         bool bTemp = false;
         aEvent.State >>= bTemp;

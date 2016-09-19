@@ -97,6 +97,7 @@ public:
     GtkWidget* m_pStatusBar;
     GtkWidget* m_pProgressBar;
     GtkWidget* m_pStatusbarLabel;
+    GtkWidget* m_pRedlineLabel;
     GtkWidget* m_pZoomLabel;
     GtkToolItem* m_pSaveButton;
     GtkToolItem* m_pCopyButton;
@@ -145,6 +146,7 @@ public:
         m_pStatusBar(nullptr),
         m_pProgressBar(nullptr),
         m_pStatusbarLabel(nullptr),
+        m_pRedlineLabel(nullptr),
         m_pZoomLabel(nullptr),
         m_pSaveButton(nullptr),
         m_pCopyButton(nullptr),
@@ -786,7 +788,7 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
             lok_doc_view_set_visible_area(LOK_DOC_VIEW(pDocView), &aVisibleArea);
         }
     }
-    std::string aZoom = std::to_string(int(fZoom * 100)) + std::string("%");
+    std::string aZoom = std::string("Zoom: ") + std::to_string(int(fZoom * 100)) + std::string("%");
     gtk_label_set_text(GTK_LABEL(rWindow.m_pZoomLabel), aZoom.c_str());
 }
 
@@ -1158,6 +1160,15 @@ static void signalCommand(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pD
                 // later, the correct sensitivity can be restored.
                 rWindow.m_aToolItemSensitivities[pItem] = bSensitive;
             }
+        }
+        else if (aKey == ".uno:TrackedChangeIndex")
+        {
+            std::string aText = std::string("Current redline: ");
+            if (aValue.empty())
+                aText += "none";
+            else
+                aText += aValue;
+            gtk_label_set_text(GTK_LABEL(rWindow.m_pRedlineLabel), aText.c_str());
         }
     }
 }
@@ -1800,7 +1811,9 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_widget_set_hexpand(rWindow.m_pStatusbarLabel, TRUE);
     gtk_container_add(GTK_CONTAINER(pStatusBar), rWindow.m_pStatusbarLabel);
 
-    rWindow.m_pZoomLabel = gtk_label_new("100%");
+    rWindow.m_pRedlineLabel = gtk_label_new("Current redline: none");
+    gtk_container_add(GTK_CONTAINER(pStatusBar), rWindow.m_pRedlineLabel);
+    rWindow.m_pZoomLabel = gtk_label_new("Zoom: 100%");
     gtk_container_add(GTK_CONTAINER(pStatusBar), rWindow.m_pZoomLabel);
 
     gtk_widget_show_all(pWindow);
@@ -1813,6 +1826,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_widget_hide(rWindow.m_pFormulabarEntry);
     // Hide the non-progressbar children of the status bar by default.
     gtk_widget_hide(rWindow.m_pStatusbarLabel);
+    gtk_widget_hide(rWindow.m_pRedlineLabel);
     gtk_widget_hide(rWindow.m_pZoomLabel);
 
     g_aWindows[pWindow] = rWindow;
