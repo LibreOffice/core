@@ -27,6 +27,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <UndoManager.hxx>
+#include <cmdid.h>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/lokhelper.hxx>
 
@@ -128,6 +129,7 @@ private:
     int m_nInvalidations;
     int m_nRedlineTableSizeChanged;
     int m_nRedlineTableEntryModified;
+    int m_nTrackedChangeIndex;
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
@@ -136,7 +138,8 @@ SwTiledRenderingTest::SwTiledRenderingTest()
       m_nSelectionAfterSearchResult(0),
       m_nInvalidations(0),
       m_nRedlineTableSizeChanged(0),
-      m_nRedlineTableEntryModified(0)
+      m_nRedlineTableEntryModified(0),
+      m_nTrackedChangeIndex(-1)
 {
 }
 
@@ -157,6 +160,7 @@ void SwTiledRenderingTest::callback(int nType, const char* pPayload, void* pData
 
 void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 {
+    OString aPayload(pPayload);
     switch (nType)
     {
     case LOK_CALLBACK_INVALIDATE_TILES:
@@ -218,6 +222,19 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
     {
         ++m_nRedlineTableEntryModified;
+    }
+    break;
+    case LOK_CALLBACK_STATE_CHANGED:
+    {
+        OString aTrackedChangeIndexPrefix(".uno:TrackedChangeIndex=");
+        if (aPayload.startsWith(aTrackedChangeIndexPrefix))
+        {
+            OString sIndex = aPayload.copy(aTrackedChangeIndexPrefix.getLength());
+            if (sIndex.isEmpty())
+                m_nTrackedChangeIndex = -1;
+            else
+                m_nTrackedChangeIndex = sIndex.toInt32();
+        }
     }
     break;
     }
@@ -1273,6 +1290,15 @@ void SwTiledRenderingTest::testTrackChangesCallback()
     // Assert that we get exactly one notification about the redline insert.
     // This was 0, as LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED wasn't sent.
     CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableSizeChanged);
+
+    CPPUNIT_ASSERT_EQUAL(-1, m_nTrackedChangeIndex);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    SfxItemSet aSet(pWrtShell->GetDoc()->GetAttrPool(), FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_ACCEPT_DIRECT);
+    SfxVoidItem aItem(FN_REDLINE_ACCEPT_DIRECT);
+    aSet.Put(aItem);
+    pWrtShell->GetView().GetState(aSet);
+    // This failed, LOK_CALLBACK_STATE_CHANGED wasn't sent.
+    CPPUNIT_ASSERT_EQUAL(0, m_nTrackedChangeIndex);
 
     comphelper::LibreOfficeKit::setActive(false);
 }

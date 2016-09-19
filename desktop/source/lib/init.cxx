@@ -1203,6 +1203,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:SortAscending"),
         OUString(".uno:SortDescending"),
         OUString(".uno:TrackChanges"),
+        OUString(".uno:AcceptTrackedChange"),
     };
 
     util::URL aCommandURL;
