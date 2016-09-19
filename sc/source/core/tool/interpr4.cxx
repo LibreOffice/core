@@ -2021,14 +2021,36 @@ double ScInterpreter::GetDoubleFromMatrix(const ScMatrixRef& pMat)
         return 0.0;
 
     if ( !pJumpMatrix )
-        return pMat->GetDoubleWithStringConversion( 0, 0);
+    {
+        double fVal = pMat->GetDoubleWithStringConversion( 0, 0);
+        sal_uInt16 nErr = GetDoubleErrorValue( fVal);
+        if (nErr)
+        {
+            // Do not propagate the coded double error, but set nGlobalError in
+            // case the matrix did not have an error interpreter set.
+            SetError( nErr);
+            fVal = 0.0;
+        }
+        return fVal;
+    }
 
     SCSIZE nCols, nRows, nC, nR;
     pMat->GetDimensions( nCols, nRows);
     pJumpMatrix->GetPos( nC, nR);
     // Use vector replication for single row/column arrays.
     if ( (nC < nCols || nCols == 1) && (nR < nRows || nRows == 1) )
-        return pMat->GetDoubleWithStringConversion( nC, nR);
+    {
+        double fVal = pMat->GetDoubleWithStringConversion( nC, nR);
+        sal_uInt16 nErr = GetDoubleErrorValue( fVal);
+        if (nErr)
+        {
+            // Do not propagate the coded double error, but set nGlobalError in
+            // case the matrix did not have an error interpreter set.
+            SetError( nErr);
+            fVal = 0.0;
+        }
+        return fVal;
+    }
 
     SetError( errNoValue);
     return 0.0;
