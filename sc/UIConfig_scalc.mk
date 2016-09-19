@@ -50,6 +50,7 @@ $(eval $(call gb_UIConfig_add_statusbarfiles,modules/scalc,\
 
 $(eval $(call gb_UIConfig_add_toolbarfiles,modules/scalc,\
 	sc/uiconfig/scalc/toolbar/alignmentbar \
+	sc/uiconfig/scalc/toolbar/arrowsbar \
 	sc/uiconfig/scalc/toolbar/arrowshapes \
 	sc/uiconfig/scalc/toolbar/basicshapes \
 	sc/uiconfig/scalc/toolbar/calloutshapes \
