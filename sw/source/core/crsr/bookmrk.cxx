@@ -133,7 +133,8 @@ namespace
         if ( ch_end == aEndMark )
         {
             SwPaM aEnd(rEnd, rEnd);
-            --aEnd.Start()->nContent;
+            if (aEnd.Start()->nContent > 0)
+                --aEnd.Start()->nContent;
             io_pDoc->getIDocumentContentOperations().DeleteRange(aEnd);
         }
 
