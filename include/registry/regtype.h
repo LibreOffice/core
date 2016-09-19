@@ -81,8 +81,6 @@ enum class SAL_DLLPUBLIC_RTTI RegError
 {
     /// no error.
     NO_ERROR,
-    /// internal registry error.
-    INTERNAL_ERROR,
 
     /// registry is not open.
     REGISTRY_NOT_OPEN,
@@ -131,23 +129,6 @@ enum class SAL_DLLPUBLIC_RTTI RegError
         the value of a key already exists and the merge process will replace it.
     */
     MERGE_CONFLICT,
-
-    /** a recursion was detected resolving different link targets (no longer
-        used).
-    */
-    DETECT_RECURSION,
-    /** the link is invalid and can not be resolved (now used by all
-        link-related operations, as links are no longer supported).
-    */
-    INVALID_LINK,
-    /// the specified linkname is not valid (no longer used).
-    INVALID_LINKNAME,
-    /// the linknane is not valid (no longer used).
-    INVALID_LINKTARGET,
-    /// the link target points to a nonexisting key (no longer used).
-    LINKTARGET_NOT_EXIST,
-    /// the reserved buffer for the resolved keyname is to small.
-    BUFFERSIZE_TOSMALL
 };
 
 /// specify the calling convention for the registry API

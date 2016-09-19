@@ -58,14 +58,6 @@ MSFILTER_DLLPUBLIC sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cBullet,
     rtl_TextEncoding& r_ioChrSet, OUString& r_ioFontName);
 
 
-enum TextCategory
-{
-    latin,      //Latin
-    cs,         //Complex Script
-    ea,         //East Asian
-    sym         //Symbol
-};
-
 #define OOXML_COLOR_AUTO 0x0a
 
 /**

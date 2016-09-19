@@ -31,10 +31,7 @@ enum SvxNumType
     SVX_ROMAN_LOWER = css::style::NumberingType::ROMAN_LOWER,
     SVX_ARABIC = css::style::NumberingType::ARABIC,
     SVX_NUMBER_NONE = css::style::NumberingType::NUMBER_NONE,
-    SVX_CHAR_SPECIAL = css::style::NumberingType::CHAR_SPECIAL,
     SVX_PAGEDESC = css::style::NumberingType::PAGE_DESCRIPTOR,
-    SVX_BITMAP = css::style::NumberingType::BITMAP,
-    SVX_CHARS_UPPER_LETTER_N = css::style::NumberingType::CHARS_UPPER_LETTER_N
 };
 
 /*--------------------------------------------------------------------

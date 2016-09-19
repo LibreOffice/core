@@ -45,10 +45,7 @@ enum class CubeFaces
     Top           = 0x0008,
     Right         = 0x0010,
     Front         = 0x0020,
-    Full          = Bottom | Back | Left | Top | Right | Front,
-    OpenTopBottom = Back | Left | Right | Front,
-    OpenLeftRight = Bottom | Back | Top | Front,
-    OpenFrontBack = Bottom | Left | Top | Right
+    Full          = Bottom | Back | Left | Top | Right | Front
 };
 namespace o3tl
 {
