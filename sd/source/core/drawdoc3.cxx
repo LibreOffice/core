@@ -1241,6 +1241,7 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
         {
             // Do not delete master pages that have their precious flag set
             bool bDeleteMaster = !pMaster->IsPrecious();
+            bool bSoleOwnerOfStyleSheet = true;
             OUString aLayoutName = pMaster->GetLayoutName();
 
             if(bOnlyDuplicatePages )
@@ -1255,6 +1256,10 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
                     {
                         // duplicate page found -> remove it
                         bDeleteMaster = true;
+
+                        const SfxStyleSheet* pRefSheet = pMaster->getSdrPageProperties().GetStyleSheet();
+                        const SfxStyleSheet* pTestSheet = pMPg->getSdrPageProperties().GetStyleSheet();
+                        bSoleOwnerOfStyleSheet = pRefSheet != pTestSheet;
                     }
                 }
             }
@@ -1288,7 +1293,7 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
                     delete pNotesMaster;
 
                 if( bUndo )
-                    AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pMaster));
+                    AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pMaster, bSoleOwnerOfStyleSheet));
 
                 RemoveMasterPage( pMaster->GetPageNum() );
 
