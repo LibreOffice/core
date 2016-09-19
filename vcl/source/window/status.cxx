@@ -1352,7 +1352,8 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
     &&   IsReallyVisible()
     &&   (!mnPercent || (mnPercent != nNewPercent)) )
     {
-        Invalidate(maPrgsFrameRect);
+        bool bNeedErase = ImplGetSVData()->maNWFData.mbProgressNeedsErase;
+        Invalidate(maPrgsFrameRect, bNeedErase ? InvalidateFlags::NONE : InvalidateFlags::NoErase);
         Flush();
     }
     mnPercent = nNewPercent;
