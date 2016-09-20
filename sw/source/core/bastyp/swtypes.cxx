@@ -80,9 +80,9 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwCursor_SavePos )
 
 Size GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
 {
-    const MapMode aMapTwip(MAP_TWIP);
+    const MapMode aMapTwip(MapUnit::Twip);
     Size aSize(rGraphic.GetPrefSize());
-    if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
+    if (MapUnit::Pixel == rGraphic.GetPrefMapMode().GetMapUnit())
     {
         if (!pOutDev)
             pOutDev = Application::GetDefaultDevice();

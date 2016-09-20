@@ -28,7 +28,7 @@ SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParen
 {
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("results");
     Size aControlSize(150, 120);
-    aControlSize = pContainer->LogicToPixel(aControlSize, MAP_APPFONT);
+    aControlSize = pContainer->LogicToPixel(aControlSize, MapUnit::AppFont);
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(aControlSize.Height());
 

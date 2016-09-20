@@ -358,7 +358,7 @@ void PNGWriterImpl::ImplWriteTransparent()
 
 void PNGWriterImpl::ImplWritepHYs(const BitmapEx& rBmpEx)
 {
-    if (rBmpEx.GetPrefMapMode() == MAP_100TH_MM)
+    if (rBmpEx.GetPrefMapMode() == MapUnit::MM_100th)
     {
         Size aPrefSize(rBmpEx.GetPrefSize());
 

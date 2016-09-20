@@ -217,7 +217,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     {
         aPageSize = OutputDevice::LogicToLogic(
                         Size( CM_1_TO_TWIP,  CM_1_TO_TWIP ),
-                        MapMode( MAP_TWIP ),
+                        MapMode( MapUnit::Twip ),
                         MapMode( (MapUnit)rSet->GetPool()->GetMetric( nW ) ) );
     }
 
@@ -749,9 +749,9 @@ IMPL_LINK_TYPED( SvxGrfCropPage, CropModifyHdl, Edit&, rField, void )
 
 Size SvxGrfCropPage::GetGrfOrigSize( const Graphic& rGrf ) const
 {
-    const MapMode aMapTwip( MAP_TWIP );
+    const MapMode aMapTwip( MapUnit::Twip );
     Size aSize( rGrf.GetPrefSize() );
-    if( MAP_PIXEL == rGrf.GetPrefMapMode().GetMapUnit() )
+    if( MapUnit::Pixel == rGrf.GetPrefMapMode().GetMapUnit() )
         aSize = PixelToLogic( aSize, aMapTwip );
     else
         aSize = OutputDevice::LogicToLogic( aSize,
@@ -765,7 +765,7 @@ SvxCropExample::SvxCropExample( vcl::Window* pPar, WinBits nStyle )
     : Window( pPar, nStyle)
     , aFrameSize( OutputDevice::LogicToLogic(
                             Size( CM_1_TO_TWIP / 2, CM_1_TO_TWIP / 2 ),
-                            MapMode( MAP_TWIP ), GetMapMode() ))
+                            MapMode( MapUnit::Twip ), GetMapMode() ))
     , aTopLeft(0,0)
     , aBottomRight(0,0)
 {
@@ -774,7 +774,7 @@ SvxCropExample::SvxCropExample( vcl::Window* pPar, WinBits nStyle )
 
 Size SvxCropExample::GetOptimalSize() const
 {
-    return LogicToPixel(Size(78, 78), MAP_APPFONT);
+    return LogicToPixel(Size(78, 78), MapUnit::AppFont);
 }
 
 VCL_BUILDER_DECL_FACTORY(SvxCropExample)

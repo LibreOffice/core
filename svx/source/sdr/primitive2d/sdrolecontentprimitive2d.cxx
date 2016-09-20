@@ -73,13 +73,13 @@ namespace drawinglayer
                     // get PrefSize from the graphic in 100th mm
                     Size aPrefSize(aGraphic.GetPrefSize());
 
-                    if(MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit())
+                    if(MapUnit::Pixel == aGraphic.GetPrefMapMode().GetMapUnit())
                     {
-                        aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MAP_100TH_MM);
+                        aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapUnit::MM_100th);
                     }
                     else
                     {
-                        aPrefSize = OutputDevice::LogicToLogic(aPrefSize, aGraphic.GetPrefMapMode(), MAP_100TH_MM);
+                        aPrefSize = OutputDevice::LogicToLogic(aPrefSize, aGraphic.GetPrefMapMode(), MapUnit::MM_100th);
                     }
 
                     const double fOffsetX((aScale.getX() - aPrefSize.getWidth()) / 2.0);
