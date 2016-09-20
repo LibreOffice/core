@@ -23,6 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
+#include <editeng/editview.hxx>
 
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -514,13 +515,31 @@ int ScTabViewShell::getPart() const
     return GetViewData().GetTabNo();
 }
 
-void ScTabViewShell::NotifyCursor(SfxViewShell* pViewShell) const
+void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
 {
-    const ScGridWindow* pGridWindow = GetViewData().GetActiveWin();
-    if (!pGridWindow)
-        return;
+    ScDrawView* pDrView = const_cast<ScTabViewShell*>(this)->GetScDrawView();
+    if (pDrView)
+    {
+        if (pDrView->GetTextEditObject())
+        {
+            // Blinking cursor.
+            EditView& rEditView = pDrView->GetTextEditOutlinerView()->GetEditView();
+            rEditView.RegisterOtherShell(pOtherShell);
+            rEditView.ShowCursor();
+            rEditView.RegisterOtherShell(nullptr);
+            // Text selection, if any.
+            rEditView.DrawSelection(pOtherShell);
+        }
+        else
+        {
+            // Graphic selection.
+            pDrView->AdjustMarkHdl(pOtherShell);
+        }
+    }
 
-    pGridWindow->updateLibreOfficeKitCellCursor(pViewShell);
+    const ScGridWindow* pWin = GetViewData().GetActiveWin();
+    if (pWin)
+        pWin->updateLibreOfficeKitCellCursor(pOtherShell);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

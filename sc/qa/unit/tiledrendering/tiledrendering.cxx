@@ -62,6 +62,7 @@ public:
     void testViewLock();
     void testColRowResize();
     void testUndoShells();
+    void testCreateViewGraphicSelection();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -75,6 +76,7 @@ public:
     CPPUNIT_TEST(testViewLock);
     CPPUNIT_TEST(testColRowResize);
     CPPUNIT_TEST(testUndoShells);
+    CPPUNIT_TEST(testCreateViewGraphicSelection);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -377,6 +379,8 @@ public:
     bool m_bOwnCursorInvalidated;
     bool m_bViewCursorInvalidated;
     bool m_bTextViewSelectionInvalidated;
+    bool m_bGraphicSelection;
+    bool m_bGraphicViewSelection;
     bool m_bViewLock;
 
     ViewCallback()
@@ -417,6 +421,16 @@ public:
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
             m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
+        }
+        break;
+        case LOK_CALLBACK_GRAPHIC_SELECTION:
+        {
+            m_bGraphicSelection = true;
+        }
+        break;
+        case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
+        {
+            m_bGraphicViewSelection = true;
         }
         break;
         }
@@ -608,6 +622,43 @@ void ScTiledRenderingTest::testUndoShells()
     // This was -1: ScSimpleUndo did not remember what view shell created it.
     CPPUNIT_ASSERT_EQUAL(nView1, pUndoManager->GetUndoAction()->GetViewShellId());
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testCreateViewGraphicSelection()
+{
+    // Load a document
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document that has a shape and create two views.
+    ScModelObj* pModelObj = createDoc("shape.ods");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // Mark the graphic in the first view.
+    const ScViewData* pViewData = ScDocShell::GetViewData();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdrModel* pDrawModel = pViewData->GetDocument()->GetDrawLayer();
+    SdrPage* pDrawPage = pDrawModel->GetPage(0);
+    SdrObject* pObject = pDrawPage->GetObj(0);
+    SdrView* pView = pViewShell->GetSdrView();
+    aView1.m_bGraphicSelection = false;
+    aView1.m_bGraphicViewSelection = false;
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    CPPUNIT_ASSERT(aView1.m_bGraphicSelection);
+
+    // Create a second view.
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    aView2.m_bGraphicViewSelection = false;
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    CPPUNIT_ASSERT(aView2.m_bGraphicViewSelection);
+    CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);
+
+    mxComponent->dispose();
+    mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
 

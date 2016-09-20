@@ -845,6 +845,11 @@ void ScDrawView::MakeVisible( const Rectangle& rRect, vcl::Window& rWin )
         pViewData->GetView()->MakeVisible( rRect );
 }
 
+SfxViewShell* ScDrawView::GetSfxViewShell() const
+{
+    return pViewData->GetViewShell();
+}
+
 void ScDrawView::DeleteMarked()
 {
     // try to delete a note caption object with its cell note in the Calc document
