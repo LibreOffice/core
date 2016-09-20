@@ -189,7 +189,7 @@ void CompressGraphicsDialog::Update()
     pDummyVDev->SetMapMode( m_aGraphic.GetPrefMapMode() );
 
     Size aPixelSize = m_aGraphic.GetSizePixel();
-    Size aOriginalSize100mm( pDummyVDev->PixelToLogic( m_aGraphic.GetSizePixel(), MAP_100TH_MM ) );
+    Size aOriginalSize100mm( pDummyVDev->PixelToLogic( m_aGraphic.GetSizePixel(), MapUnit::Map100thMM ) );
 
     OUString aBitmapSizeString = SVX_RESSTR(STR_IMAGE_ORIGINAL_SIZE);
     OUString aWidthString  = GetUnitString( aOriginalSize100mm.Width(),  eFieldUnit, cSeparator );
@@ -243,12 +243,12 @@ void CompressGraphicsDialog::UpdateResolutionLB()
 
 double CompressGraphicsDialog::GetViewWidthInch()
 {
-    return (double) MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MAP_100TH_MM, FUNIT_INCH) / 100.0;
+    return (double) MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MapUnit::Map100thMM, FUNIT_INCH) / 100.0;
 }
 
 double CompressGraphicsDialog::GetViewHeightInch()
 {
-    return (double) MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MAP_100TH_MM, FUNIT_INCH) / 100.0;
+    return (double) MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MapUnit::Map100thMM, FUNIT_INCH) / 100.0;
 }
 
 BmpScaleFlag CompressGraphicsDialog::GetSelectedInterpolationType()

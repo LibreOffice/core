@@ -58,7 +58,7 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
 GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
             Control         ( pParent, nStyle ),
             aUpdateIdle     ( "svx GraphCtrl Update" ),
-            aMap100         ( MAP_100TH_MM ),
+            aMap100         ( MapUnit::Map100thMM ),
             nWinStyle       ( 0 ),
             eObjKind        ( OBJ_NONE ),
             nPolyEdit       ( 0 ),
@@ -195,7 +195,7 @@ void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
     else
         aGraphic = rGraphic;
 
-    if ( aGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+    if ( aGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
         aGraphSize = Application::GetDefaultDevice()->PixelToLogic( aGraphic.GetPrefSize(), aMap100 );
     else
         aGraphSize = OutputDevice::LogicToLogic( aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), aMap100 );

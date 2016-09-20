@@ -45,13 +45,13 @@ double lclGetTwipsScale( MapUnit eMapUnit )
         Calc's strange definition of a point (1 inch == 72.27 points, instead
         of 72 points).
         NOTE: Calc's definition changed from TeX points (72.27) to PS points
-        (72), so the MAP_TWIP case now actually also delivers a scale of 1.0
+        (72), so the MapUnit::MapTwip case now actually also delivers a scale of 1.0
     */
     double fScale = 1.0;
     switch( eMapUnit )
     {
-        case MAP_TWIP:      fScale = 1;               break;  // Calc twips <-> real twips
-        case MAP_100TH_MM:  fScale = HMM_PER_TWIPS;   break;  // Calc twips <-> 1/100mm
+        case MapUnit::MapTwip:      fScale = 1;               break;  // Calc twips <-> real twips
+        case MapUnit::Map100thMM:  fScale = HMM_PER_TWIPS;   break;  // Calc twips <-> 1/100mm
         default:            OSL_FAIL( "lclGetTwipsScale - map unit not implemented" );
     }
     return fScale;
@@ -183,8 +183,8 @@ void XclObjAnchor::SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 
     double fScale = 1.0;
     switch( eMapUnit )
     {
-        case MAP_TWIP:      fScale = HMM_PER_TWIPS; break;  // Calc twips -> 1/100mm
-        case MAP_100TH_MM:  fScale = 1.0;           break;  // Calc 1/100mm -> 1/100mm
+        case MapUnit::MapTwip:      fScale = HMM_PER_TWIPS; break;  // Calc twips -> 1/100mm
+        case MapUnit::Map100thMM:  fScale = 1.0;           break;  // Calc 1/100mm -> 1/100mm
         default:            OSL_FAIL( "XclObjAnchor::SetRect - map unit not implemented" );
     }
 

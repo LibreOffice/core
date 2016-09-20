@@ -252,7 +252,7 @@ PresenterTextView::Implementation::Implementation()
       mnTop(0),
       mnTotalHeight(-1)
 {
-    mpOutputDevice->SetMapMode(MAP_PIXEL);
+    mpOutputDevice->SetMapMode(MapUnit::MapPixel);
 
     GetEditEngine();
 }
@@ -330,7 +330,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine()
                 EEControlBits(~EEControlBits::PASTESPECIAL) );
 
         pEditEngine->SetWordDelimiters (" .=+-*/(){}[];\"");
-        pEditEngine->SetRefMapMode (MAP_PIXEL);
+        pEditEngine->SetRefMapMode (MapUnit::MapPixel);
         pEditEngine->SetPaperSize (Size(800, 0));
         pEditEngine->EraseVirtualDevice();
         pEditEngine->ClearModifyFlag();
@@ -387,7 +387,7 @@ void PresenterTextView::Implementation::SetFontDescriptor (
 
     SvxFontHeightItem aFontHeight(
         Application::GetDefaultDevice()->LogicToPixel(
-            Size(0, nFontHeight), MapMode (MAP_POINT)).Height(),
+            Size(0, nFontHeight), MapMode (MapUnit::MapPoint)).Height(),
         100,
         EE_CHAR_FONTHEIGHT);
     mpEditEngineItemPool->SetPoolDefaultItem( aFontHeight);
@@ -454,7 +454,7 @@ Reference<rendering::XBitmap> const & PresenterTextView::Implementation::GetBitm
         mpOutputDevice.disposeAndClear();
         mpOutputDevice = VclPtr<VirtualDevice>::Create(*Application::GetDefaultDevice(),
                                                        DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
-        mpOutputDevice->SetMapMode(MAP_PIXEL);
+        mpOutputDevice->SetMapMode(MapUnit::MapPixel);
         mpOutputDevice->SetOutputSizePixel(maSize);
         mpOutputDevice->SetLineColor();
         mpOutputDevice->SetFillColor();

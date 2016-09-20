@@ -703,7 +703,7 @@ PresLayoutPreview::~PresLayoutPreview()
 
 Size PresLayoutPreview::GetOptimalSize() const
 {
-    return LogicToPixel(Size(80, 80), MAP_APPFONT);
+    return LogicToPixel(Size(80, 80), MapUnit::MapAppFont);
 }
 
 void PresLayoutPreview::init( SdPage *pMaster )

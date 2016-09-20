@@ -733,7 +733,7 @@ TPGalleryThemeProperties::TPGalleryThemeProperties( vcl::Window* pWindow, const 
 {
     get(m_pCbbFileType, "filetype");
     get(m_pLbxFound, "files");
-    Size aSize(LogicToPixel(Size(172, 156), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(172, 156), MapUnit::MapAppFont));
     m_pLbxFound->set_width_request(aSize.Width());
     m_pLbxFound->set_height_request(aSize.Height());
     m_pLbxFound->EnableMultiSelection(true);

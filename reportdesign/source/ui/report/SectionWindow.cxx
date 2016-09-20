@@ -57,7 +57,7 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
     SetMapMode( rMapMode );
     ImplInitSettings();
     // TRY
-    m_aSplitter->SetMapMode( MapMode( MAP_100TH_MM ) );
+    m_aSplitter->SetMapMode( MapMode( MapUnit::Map100thMM ) );
     m_aSplitter->SetStartSplitHdl(LINK(this, OSectionWindow,StartSplitHdl));
     m_aSplitter->SetSplitHdl(LINK(this, OSectionWindow,SplitHdl));
     m_aSplitter->SetEndSplitHdl(LINK(this, OSectionWindow,EndSplitHdl));

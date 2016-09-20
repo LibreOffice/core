@@ -132,7 +132,7 @@ static void lcl_addOutplaceProperties(
         const rtl::Reference < XMLPropertySetMapper >& rMapper )
 {
     {
-        MapMode aMode( MAP_100TH_MM ); // the API expects this map mode for the embedded objects
+        MapMode aMode( MapUnit::Map100thMM ); // the API expects this map mode for the embedded objects
         Size aSize = rObj.GetSize( &aMode ); // get the size in the requested map mode
 
         if( aSize.Width() && aSize.Height() )

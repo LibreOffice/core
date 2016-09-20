@@ -66,11 +66,11 @@ public:
     SvTabListBox( vcl::Window* pParent, WinBits = WB_BORDER );
     virtual ~SvTabListBox() override;
     virtual void dispose() override;
-    void            SetTabs(const long* pTabs, MapUnit = MAP_APPFONT);
+    void            SetTabs(const long* pTabs, MapUnit = MapUnit::MapAppFont);
     sal_uInt16      TabCount() const { return (sal_uInt16)nTabCount; }
     using SvTreeListBox::GetTab;
     long            GetTab( sal_uInt16 nTab ) const;
-    void            SetTab( sal_uInt16 nTab, long nValue, MapUnit = MAP_APPFONT );
+    void            SetTab( sal_uInt16 nTab, long nValue, MapUnit = MapUnit::MapAppFont );
     long            GetLogicTab( sal_uInt16 nTab );
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,

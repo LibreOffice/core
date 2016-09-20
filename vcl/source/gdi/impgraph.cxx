@@ -696,7 +696,7 @@ MapMode ImpGraphic::ImplGetPrefMapMode() const
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
                     // svg not yet buffered in maEx, return default PrefMapMode
-                    aMapMode = MapMode(MAP_100TH_MM);
+                    aMapMode = MapMode(MapUnit::Map100thMM);
                 }
                 else
                 {
@@ -1075,7 +1075,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             rOStm.WriteInt32( 0 );
             rOStm.WriteInt32( aSize.Width() );
             rOStm.WriteInt32( aSize.Height() );
-            rOStm.WriteInt32( aMapMode.GetMapUnit() );
+            rOStm.WriteInt32( (sal_uInt16)aMapMode.GetMapUnit() );
             rOStm.WriteInt32( aMapMode.GetScaleX().GetNumerator() );
             rOStm.WriteInt32( aMapMode.GetScaleX().GetDenominator() );
             rOStm.WriteInt32( aMapMode.GetScaleY().GetNumerator() );

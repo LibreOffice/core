@@ -299,7 +299,7 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL 
     for ( sal_uInt16 j = 1; j < nCount; j++ )
     {
         aSize.Width() = (*pColOffset)[j] - nOff;
-        aSize = pDefaultDev->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
+        aSize = pDefaultDev->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
         maColWidths[ j-1 ] = aSize.Width();
         nOff = (*pColOffset)[j];
     }

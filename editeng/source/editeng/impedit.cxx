@@ -179,7 +179,7 @@ void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild)
         if (!rChild.IsMapModeEnabled())
         {
             MapMode aMapMode(rChild.GetMapMode());
-            aMapMode.SetMapUnit(MAP_TWIP);
+            aMapMode.SetMapUnit(MapUnit::MapTwip);
             aMapMode.SetScaleX(rParent.GetMapMode().GetScaleX());
             aMapMode.SetScaleY(rParent.GetMapMode().GetScaleY());
             rChild.SetMapMode(aMapMode);
@@ -351,7 +351,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
         if (comphelper::LibreOfficeKit::isActive() && mpViewShell && !pOldRegion)
         {
             pOutWin->Push(PushFlags::MAPMODE);
-            if (pOutWin->GetMapMode().GetMapUnit() == MAP_TWIP)
+            if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
             {
                 // Find the parent that is not right
                 // on top of us to use its offset.
@@ -369,10 +369,10 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                 }
             }
 
-            bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MAP_100TH_MM;
+            bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM;
 
             Point aOrigin;
-            if (pOutWin->GetMapMode().GetMapUnit() == MAP_TWIP)
+            if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
                 // Writer comments: they use editeng, but are separate widgets.
                 aOrigin = pOutWin->GetMapMode().GetOrigin();
 
@@ -388,7 +388,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                     Rectangle& rStart = aRectangles.front();
                     Rectangle aStart = Rectangle(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
                     if (bMm100ToTwip)
-                        aStart = OutputDevice::LogicToLogic(aStart, MAP_100TH_MM, MAP_TWIP);
+                        aStart = OutputDevice::LogicToLogic(aStart, MapUnit::Map100thMM, MapUnit::MapTwip);
                     aStart.Move(aOrigin.getX(), aOrigin.getY());
 
                     mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
@@ -396,7 +396,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                     Rectangle& rEnd = aRectangles.back();
                     Rectangle aEnd = Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
                     if (bMm100ToTwip)
-                        aEnd = OutputDevice::LogicToLogic(aEnd, MAP_100TH_MM, MAP_TWIP);
+                        aEnd = OutputDevice::LogicToLogic(aEnd, MapUnit::Map100thMM, MapUnit::MapTwip);
                     aEnd.Move(aOrigin.getX(), aOrigin.getY());
 
                     mpViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
@@ -406,7 +406,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                 for (Rectangle & rRectangle : aRectangles)
                 {
                     if (bMm100ToTwip)
-                        rRectangle = OutputDevice::LogicToLogic(rRectangle, MAP_100TH_MM, MAP_TWIP);
+                        rRectangle = OutputDevice::LogicToLogic(rRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
                     rRectangle.Move(aOrigin.getX(), aOrigin.getY());
                     v.push_back(rRectangle.toString().getStr());
                 }
@@ -444,7 +444,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
 
 void ImpEditView::GetSelectionRectangles(std::vector<Rectangle>& rLogicRects)
 {
-    bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MAP_100TH_MM;
+    bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM;
     vcl::Region aRegion;
     DrawSelection(aEditSelection, &aRegion);
     aRegion.GetRegionRectangles(rLogicRects);
@@ -452,7 +452,7 @@ void ImpEditView::GetSelectionRectangles(std::vector<Rectangle>& rLogicRects)
     for (Rectangle& rRectangle : rLogicRects)
     {
         if (bMm100ToTwip)
-            rRectangle = OutputDevice::LogicToLogic(rRectangle, MAP_100TH_MM, MAP_TWIP);
+            rRectangle = OutputDevice::LogicToLogic(rRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
     }
 }
 
@@ -460,7 +460,7 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice* _pTarget, const Point& rD
 {
     if ( rDocPosTopLeft.X() != rDocPosBottomRight.X() )
     {
-        bool bPixelMode = _pTarget->GetMapMode() == MAP_PIXEL;
+        bool bPixelMode = _pTarget->GetMapMode() == MapUnit::MapPixel;
 
         Point aPnt1( GetWindowPos( rDocPosTopLeft ) );
         Point aPnt2( GetWindowPos( rDocPosBottomRight ) );
@@ -1007,9 +1007,9 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             Rectangle aRect(rPos.getX(), rPos.getY(), rPos.getX() + GetCursor()->GetWidth(), rPos.getY() + GetCursor()->GetHeight());
 
             // LOK output is always in twips, convert from mm100 if necessary.
-            if (pOutWin->GetMapMode().GetMapUnit() == MAP_100TH_MM)
-                aRect = OutputDevice::LogicToLogic(aRect, MAP_100TH_MM, MAP_TWIP);
-            else if (pOutWin->GetMapMode().GetMapUnit() == MAP_TWIP)
+            if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                aRect = OutputDevice::LogicToLogic(aRect, MapUnit::Map100thMM, MapUnit::MapTwip);
+            else if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
             {
                 // Writer comments: they use editeng, but are separate widgets.
                 Point aOrigin = pOutWin->GetMapMode().GetOrigin();

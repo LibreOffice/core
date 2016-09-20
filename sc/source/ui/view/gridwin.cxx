@@ -978,7 +978,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
         vcl::Font aOldFont = GetFont();
         SetFont(mpFilterBox->GetFont());
         MapMode aOldMode = GetMapMode();
-        SetMapMode( MAP_PIXEL );
+        SetMapMode( MapUnit::MapPixel );
 
         nHeight  = GetTextHeight();
         nHeight *= SC_FILTERLISTBOX_LINES;
@@ -1104,7 +1104,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
         vcl::Font aOldFont = GetFont();
         SetFont(mpFilterBox->GetFont());
         MapMode aOldMode = GetMapMode();
-        SetMapMode(MAP_PIXEL);
+        SetMapMode(MapUnit::MapPixel);
 
         nHeight  = GetTextHeight();
         nHeight *= SC_FILTERLISTBOX_LINES;
@@ -1584,7 +1584,7 @@ bool ScGridWindow::IsCellCoveredByText(SCsCOL nPosX, SCsROW nPosY, SCTAB nTab, S
             &aZoomX, &aZoomY);
 
     MapMode aCurrentMapMode(GetMapMode());
-    SetMapMode(MAP_PIXEL);
+    SetMapMode(MapUnit::MapPixel);
 
     // obtain the bounding box of the text in first non-empty cell
     // to the left
@@ -4614,7 +4614,7 @@ void ScGridWindow::ScrollPixel( long nDifX, long nDifY )
 
     bIsInScroll = true;
 
-    SetMapMode(MAP_PIXEL);
+    SetMapMode(MapUnit::MapPixel);
     Scroll( nDifX, nDifY, ScrollFlags::Children );
     SetMapMode( GetDrawMapMode() );             // generated shifted MapMode
 
@@ -5194,7 +5194,7 @@ std::shared_ptr<ScFieldEditEngine> createEditEngine( ScDocShell* pDocSh, const S
     std::shared_ptr<ScFieldEditEngine> pEngine(new ScFieldEditEngine(&rDoc, rDoc.GetEditPool()));
     ScSizeDeviceProvider aProv(pDocSh);
     pEngine->SetRefDevice(aProv.GetDevice());
-    pEngine->SetRefMapMode(MAP_100TH_MM);
+    pEngine->SetRefMapMode(MapUnit::Map100thMM);
     SfxItemSet aDefault = pEngine->GetEmptyItemSet();
     rPat.FillEditItemSet(&aDefault);
     aDefault.Put( SvxAdjustItem(toSvxAdjust(rPat), EE_PARA_JUST) );

@@ -95,9 +95,9 @@ MapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
 {
     // Own attributes: Twips, everything else 1/100 mm
     if ( nWhich >= ATTR_STARTINDEX && nWhich <= ATTR_ENDINDEX )
-        return MAP_TWIP;
+        return MapUnit::MapTwip;
     else
-        return MAP_100TH_MM;
+        return MapUnit::Map100thMM;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

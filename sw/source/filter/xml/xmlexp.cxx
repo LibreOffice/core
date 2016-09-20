@@ -357,7 +357,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     SwDoc *pDoc = getDoc();
     const Rectangle rRect =
         pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
-    bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MAP_TWIP;
+    bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MapUnit::MapTwip;
 
    OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
 

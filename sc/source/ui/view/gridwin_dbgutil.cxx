@@ -46,7 +46,7 @@ void ScGridWindow::dumpColumnInformationPixel()
     for (SCCOL nCol = 0; nCol <= 20; ++nCol)
     {
         sal_uInt16 nWidth = pDoc->GetColWidth(nCol, nTab);
-        long nPixel = LogicToPixel(Point(nWidth, 0), MapMode(MAP_TWIP)).getX();
+        long nPixel = LogicToPixel(Point(nWidth, 0), MapMode(MapUnit::MapTwip)).getX();
         std::cout << "Column: " << nCol << ", Width: " << nPixel << "px" << std::endl;
     }
 }
@@ -58,7 +58,7 @@ void ScGridWindow::dumpColumnInformationHmm()
     for (SCCOL nCol = 0; nCol <= 20; ++nCol)
     {
         sal_uInt16 nWidth = pDoc->GetColWidth(nCol, nTab);
-        long nPixel = LogicToLogic(Point(nWidth, 0), MAP_TWIP, MAP_100TH_MM).getX();
+        long nPixel = LogicToLogic(Point(nWidth, 0), MapUnit::MapTwip, MapUnit::Map100thMM).getX();
         std::cout << "Column: " << nCol << ", Width: " << nPixel << "hmm" << std::endl;
     }
 }

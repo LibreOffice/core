@@ -713,7 +713,7 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
         if( rMtf.GetActionSize() )
         {
-            MapMode         aMap( MAP_100TH_MM );
+            MapMode         aMap( MapUnit::Map100thMM );
             ScopedVclPtrInstance< VirtualDevice > aVDev;
             const Size      aLogSize1( aVDev->PixelToLogic( Size( 1, 1 ), aMap ) );
 

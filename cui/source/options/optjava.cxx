@@ -108,7 +108,7 @@ public:
         if (rBar.GetItemCount() < 4)
             return;
         long nCheckWidth = std::max(GetControlColumnWidth() + 12,
-            rBar.LogicToPixel(Size(15, 0), MAP_APPFONT).Width());
+            rBar.LogicToPixel(Size(15, 0), MapUnit::MapAppFont).Width());
         long nVersionWidth = 12 +
             std::max(rBar.GetTextWidth(rBar.GetItemText(3)),
             GetTextWidth("0.0.0_00-icedtea"));
@@ -123,7 +123,7 @@ public:
         aStaticTabs[2] = nCheckWidth;
         aStaticTabs[3] = aStaticTabs[2] + nVendorWidth;
         aStaticTabs[4] = aStaticTabs[3] + nVersionWidth;
-        SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+        SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
     }
     virtual void Resize() override
     {
@@ -163,7 +163,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
 
     SvSimpleTableContainer *pJavaListContainer = get<SvSimpleTableContainer>("javas");
     Size aControlSize(177, 60);
-    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
     pJavaListContainer->set_width_request(aControlSize.Width());
     pJavaListContainer->set_height_request(aControlSize.Height());
     m_pJavaList = VclPtr<SvxJavaListBox>::Create(*pJavaListContainer, m_sAccessibilityText);

@@ -100,11 +100,11 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
 
         if( aBmpSize.Width() && aBmpSize.Height() )
         {
-            if( aBmpEx.GetPrefMapMode().GetMapUnit() != MAP_PIXEL &&
+            if( aBmpEx.GetPrefMapMode().GetMapUnit() != MapUnit::MapPixel &&
                 aBmpEx.GetPrefSize().Width() > 0 &&
                 aBmpEx.GetPrefSize().Height() > 0 )
             {
-                Size aLogSize( OutputDevice::LogicToLogic( aBmpEx.GetPrefSize(), aBmpEx.GetPrefMapMode(), MAP_100TH_MM ) );
+                Size aLogSize( OutputDevice::LogicToLogic( aBmpEx.GetPrefSize(), aBmpEx.GetPrefMapMode(), MapUnit::Map100thMM ) );
 
                 if( aLogSize.Width() > 0 && aLogSize.Height() > 0 )
                 {

@@ -159,7 +159,7 @@ void SwAddrSourceLB::setColSizes()
 
     long nTabs[] = { 2, 0, nWidth/2 };
 
-    SvSimpleTable::SetTabs(&nTabs[0], MAP_PIXEL);
+    SvSimpleTable::SetTabs(&nTabs[0], MapUnit::MapPixel);
 }
 
 SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
@@ -195,7 +195,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     m_pTablePB->SetClickHdl(LINK( this, SwAddressListDialog, TableSelectHdl_Impl));
 
     SvSimpleTableContainer *pHeaderTreeContainer = get<SvSimpleTableContainer>("sources");
-    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(182 , 102), MAP_APPFONT);
+    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(182 , 102), MapUnit::MapAppFont);
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
     m_pListLB = VclPtr<SwAddrSourceLB>::Create(*pHeaderTreeContainer);

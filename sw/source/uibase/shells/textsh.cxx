@@ -355,7 +355,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 {
                     Size aSize(static_cast<const SvxSizeItem*>(pItem)->GetSize());
                     aSize = OutputDevice::LogicToLogic
-                                    ( aSize, MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ) );
+                                    ( aSize, MapMode( MapUnit::MapTwip ), MapMode( MapUnit::Map100thMM ) );
 
                     if(aSize.Width() > MINLAY&& aSize.Height()> MINLAY)
                     {

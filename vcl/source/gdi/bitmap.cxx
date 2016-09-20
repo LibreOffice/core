@@ -55,7 +55,7 @@ Bitmap::Bitmap(const Bitmap& rBitmap)
 
 Bitmap::Bitmap(SalBitmap* pSalBitmap)
     : mxImpBmp(new ImpBitmap(pSalBitmap))
-    , maPrefMapMode(MapMode(MAP_PIXEL))
+    , maPrefMapMode(MapMode(MapUnit::MapPixel))
     , maPrefSize(mxImpBmp->ImplGetSize())
 {
 }
@@ -1531,7 +1531,7 @@ bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal
         if (xImpBmp->ImplCreate(*mxImpBmp) && xImpBmp->ImplReplace(rSearchColor, rReplaceColor, nTol))
         {
             ImplSetImpBitmap(xImpBmp);
-            maPrefMapMode = MapMode( MAP_PIXEL );
+            maPrefMapMode = MapMode( MapUnit::MapPixel );
             maPrefSize = xImpBmp->ImplGetSize();
             return true;
         }

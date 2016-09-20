@@ -492,7 +492,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
     if (nPageCount <= 1)
     {
         // #i57181# Paper size depends on Language, like in Writer
-        Size aDefSize = SvxPaperInfo::GetDefaultPaperSize( MAP_100TH_MM );
+        Size aDefSize = SvxPaperInfo::GetDefaultPaperSize( MapUnit::Map100thMM );
 
         // Insert handout page
         SdPage* pHandoutPage = AllocSdPage(false);
@@ -579,7 +579,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             else
             {
                 // Impress: always use screen format, landscape.
-                Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN_4_3, MAP_100TH_MM) );
+                Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN_4_3, MapUnit::Map100thMM) );
                 pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
                 pPage->SetBorder(0, 0, 0, 0);
             }
@@ -1008,7 +1008,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
 
     if ( pIMapInfo )
     {
-        const MapMode       aMap100( MAP_100TH_MM );
+        const MapMode       aMap100( MapUnit::Map100thMM );
         Size                aGraphSize;
         Point               aRelPoint( rWinPoint );
         ImageMap&           rImageMap = (ImageMap&) pIMapInfo->GetImageMap();
@@ -1034,7 +1034,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
             if ( rGeo.nShearAngle )
                 ShearPoint( aRelPoint, rRect.TopLeft(), -rGeo.nTan );
 
-            if ( pGrafObj->GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL )
+            if ( pGrafObj->GetGrafPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
                 aGraphSize = Application::GetDefaultDevice()->PixelToLogic( pGrafObj->GetGrafPrefSize(), aMap100 );
             else
                 aGraphSize = OutputDevice::LogicToLogic( pGrafObj->GetGrafPrefSize(),

@@ -904,7 +904,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         {
             ImplSetImpBitmap(xImpBmp);
             SAL_INFO( "vcl.opengl", "Ref count: " << mxImpBmp.use_count() );
-            maPrefMapMode = MapMode( MAP_PIXEL );
+            maPrefMapMode = MapMode( MapUnit::MapPixel );
             maPrefSize = xImpBmp->ImplGetSize();
             return true;
         }

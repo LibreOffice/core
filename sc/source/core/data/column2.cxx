@@ -357,7 +357,7 @@ long ScColumn::GetNeededSize(
         //  the font is not reset each time with !bEditEngine
         vcl::Font aOldFont = pDev->GetFont();
 
-        MapMode aHMMMode( MAP_100TH_MM, Point(), rZoomX, rZoomY );
+        MapMode aHMMMode( MapUnit::Map100thMM, Point(), rZoomX, rZoomY );
 
         // save in document ?
         ScFieldEditEngine* pEngine = pDocument->CreateFieldEditEngine();

@@ -199,10 +199,10 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterCo
                 {
                     Size aDestMapSize( 300, 300 );
                     const MapMode aMapMode( aBmp.GetPrefMapMode() );
-                    if ( aMapMode.GetMapUnit() != MAP_PIXEL )
+                    if ( aMapMode.GetMapUnit() != MapUnit::MapPixel )
                     {
                         const Size aPrefSize( rGraphic.GetPrefSize() );
-                        aDestMapSize = OutputDevice::LogicToLogic( aPrefSize, aMapMode, MAP_INCH );
+                        aDestMapSize = OutputDevice::LogicToLogic( aPrefSize, aMapMode, MapUnit::MapInch );
                     }
                     ImplWriteResolution( mnXResPos, aDestMapSize.Width() );
                     ImplWriteResolution( mnYResPos, aDestMapSize.Height() );

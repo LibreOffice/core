@@ -86,7 +86,7 @@ void SwAddressTable::setColSizes()
     nTabs_Impl[1] = 0;
     nTabs_Impl[2] = nWidth;
 
-    SvSimpleTable::SetTabs(&nTabs_Impl[0], MAP_PIXEL);
+    SvSimpleTable::SetTabs(&nTabs_Impl[0], MapUnit::MapPixel);
 }
 
 SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
@@ -101,7 +101,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
     get(m_pPreviewPB, "preview");
 
     SvSimpleTableContainer *pHeaderTreeContainer = get<SvSimpleTableContainer>("table");
-    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(238 , 50), MAP_APPFONT);
+    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(238 , 50), MapUnit::MapAppFont);
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
     m_pTable = VclPtr<SwAddressTable>::Create(*pHeaderTreeContainer);

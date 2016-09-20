@@ -163,7 +163,7 @@ void Client::ViewChanged()
 
             // TODO/LEAN: maybe we can do this without requesting the VisualArea?
             // working with the visual area might need running state, so the object may switch itself to this state
-            MapMode             aMap100( MAP_100TH_MM );
+            MapMode             aMap100( MapUnit::Map100thMM );
             Rectangle           aVisArea;
             Size aSize = pSdrOle2Obj->GetOrigObjSize( &aMap100 );
 

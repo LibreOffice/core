@@ -463,7 +463,7 @@ const Graphic* EmbeddedObjectRef::GetGraphic() const
 
 Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
 {
-    MapMode aSourceMapMode( MAP_100TH_MM );
+    MapMode aSourceMapMode( MapUnit::Map100thMM );
     Size aResult;
 
     if ( mpImpl->nViewAspect == embed::Aspects::MSOLE_ICON )
@@ -640,7 +640,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
 
 void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUString &rText, OutputDevice *pOut )
 {
-    MapMode aMM( MAP_APPFONT );
+    MapMode aMM( MapUnit::MapAppFont );
     Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, nullptr );
     vcl::Font aFnt( OUString("Helvetica"), aAppFontSz );
     aFnt.SetTransparent( true );

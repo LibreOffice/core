@@ -138,7 +138,7 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     {
         aTwipSz =
             Application::GetDefaultDevice()->PixelToLogic( aTwipSz,
-                                                MapMode(MAP_TWIP) );
+                                                MapMode(MapUnit::MapTwip) );
     }
 
     // die Breite bearbeiten
@@ -214,7 +214,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         Size aTwipSpc( rPixSpace.Width(), rPixSpace.Height() );
         aTwipSpc =
             Application::GetDefaultDevice()->PixelToLogic( aTwipSpc,
-                                                MapMode(MAP_TWIP) );
+                                                MapMode(MapUnit::MapTwip) );
         nLeftSpace = nRightSpace = aTwipSpc.Width();
         nUpperSpace = nLowerSpace = (sal_uInt16)aTwipSpc.Height();
     }

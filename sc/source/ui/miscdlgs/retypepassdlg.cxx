@@ -40,7 +40,7 @@ ScRetypePassDlg::ScRetypePassDlg(vcl::Window* pParent) :
     get(mpTextDocStatus, "docStatusLabel");
     get(mpBtnRetypeDoc, "retypeDocButton");
     vcl::Window *pScrolledWindow = get<vcl::Window>("scrolledwindow");
-    Size aSize(LogicToPixel(Size(190, 90), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(190, 90), MapUnit::MapAppFont));
     pScrolledWindow->set_width_request(aSize.Width());
     pScrolledWindow->set_height_request(aSize.Height());
     get(mpSheetsBox, "sheetsBox");

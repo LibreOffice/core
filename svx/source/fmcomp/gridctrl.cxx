@@ -427,7 +427,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     Rectangle   aRect(static_cast<DbGridControl*>(GetParent())->GetControlArea());
     long nH = aRect.GetSize().Height();
     long nW = GetParent()->GetOutputSizePixel().Width();
-    Size aBorder = LogicToPixel(Size(2, 2),MAP_APPFONT);
+    Size aBorder = LogicToPixel(Size(2, 2),MapUnit::MapAppFont);
     aBorder = Size(CalcZoom(aBorder.Width()), CalcZoom(aBorder.Height()));
     sal_uInt16      nX = 1;
     sal_uInt16      nY = 0;
@@ -436,7 +436,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     if (m_aAbsolute->GetTextHeight() > nH)
     {
         vcl::Font aApplFont (m_aAbsolute->GetFont());
-        const Size pointAbsoluteSize(m_aAbsolute->PixelToLogic( Size( 0, nH - 2 ), MapMode(MAP_POINT) ));
+        const Size pointAbsoluteSize(m_aAbsolute->PixelToLogic( Size( 0, nH - 2 ), MapMode(MapUnit::MapPoint) ));
         aApplFont.SetFontSize( pointAbsoluteSize );
         m_aAbsolute->SetControlFont( aApplFont );
 

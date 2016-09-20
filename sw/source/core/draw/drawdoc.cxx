@@ -57,7 +57,7 @@ SwDrawModel::SwDrawModel(SwDoc *const pDoc)
                      pDoc->GetDocShell(), true )
     , m_pDoc( pDoc )
 {
-    SetScaleUnit( MAP_TWIP );
+    SetScaleUnit( MapUnit::MapTwip );
     SetSwapGraphics();
 
     // use common InitDrawModelAndDocShell which will set the associations as needed,

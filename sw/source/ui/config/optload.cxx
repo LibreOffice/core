@@ -432,7 +432,7 @@ void SwCaptionPreview::SetPreviewText(const OUString& rText)
 
 Size SwCaptionPreview::GetOptimalSize() const
 {
-    return LogicToPixel(Size(106 , 20), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(106 , 20), MapMode(MapUnit::MapAppFont));
 }
 
 void SwCaptionPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)

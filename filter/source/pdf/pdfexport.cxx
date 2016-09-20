@@ -199,7 +199,7 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                     rPDFExtOutDevData.SetCurrentPageNumber( nCurrentPage );
 
                     GDIMetaFile                 aMtf;
-                    const MapMode               aMapMode( MAP_100TH_MM );
+                    const MapMode               aMapMode( MapUnit::Map100thMM );
                     const Size                  aMtfSize( aPageSize.Width, aPageSize.Height );
 
                     pOut->Push();
@@ -241,7 +241,7 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
             {
                 bRet = true;                            // #i18334# nPageCount == 0,
                 rPDFWriter.NewPage( 10000, 10000 );     // creating dummy page
-                rPDFWriter.SetMapMode( MAP_100TH_MM );
+                rPDFWriter.SetMapMode( MapUnit::Map100thMM );
             }
         }
     }
@@ -1014,7 +1014,7 @@ void PDFExport::showErrors( const std::set< vcl::PDFWriter::ErrorCode >& rErrors
 
 bool PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
 {
-    const Size      aSizePDF( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_POINT ) );
+    const Size      aSizePDF( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapUnit::MapPoint ) );
     Point           aOrigin;
     Rectangle       aPageRect( aOrigin, rMtf.GetPrefSize() );
     bool        bRet = true;
@@ -1071,7 +1071,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     OutputDevice* pDev = rWriter.GetReferenceDevice();
     pDev->Push();
     pDev->SetFont( aFont );
-    pDev->SetMapMode( MapMode( MAP_POINT ) );
+    pDev->SetMapMode( MapMode( MapUnit::MapPoint ) );
     int w = 0;
     while( ( w = pDev->GetTextWidth( msWatermark ) ) > nTextWidth )
     {
@@ -1094,7 +1094,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     pDev->Pop();
 
     rWriter.Push();
-    rWriter.SetMapMode( MapMode( MAP_POINT ) );
+    rWriter.SetMapMode( MapMode( MapUnit::MapPoint ) );
     rWriter.SetFont( aFont );
     rWriter.SetTextColor( COL_LIGHTGREEN );
     Point aTextPoint;

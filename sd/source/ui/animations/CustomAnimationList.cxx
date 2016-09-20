@@ -434,7 +434,7 @@ void CustomAnimationTriggerEntryItem::Paint(const Point& rPos, SvTreeListBox& rD
     // draw the category title
 
     int nVertBorder = ((aSize.Height() - rDev.GetTextHeight()) >> 1);
-    int nHorzBorder = rRenderContext.LogicToPixel(Size(3, 3), MAP_APPFONT).Width();
+    int nHorzBorder = rRenderContext.LogicToPixel(Size(3, 3), MapUnit::MapAppFont).Width();
 
     aOutRect.Left() += nHorzBorder;
     aOutRect.Right() -= nHorzBorder;
@@ -969,7 +969,7 @@ void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const Rectan
     {
         Color aOldColor(rRenderContext.GetTextColor());
         rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetDisableColor());
-        ::Point aOffset(rRenderContext.LogicToPixel(Point(6, 6), MAP_APPFONT));
+        ::Point aOffset(rRenderContext.LogicToPixel(Point(6, 6), MapUnit::MapAppFont));
 
         Rectangle aRect(Point(0,0), GetOutputSizePixel());
 

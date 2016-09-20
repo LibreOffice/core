@@ -205,7 +205,7 @@ void SwViewShell::InitPrt( OutputDevice *pOutDev )
 
         maPrtOffst += pOutDev->GetMapMode().GetOrigin();
         MapMode aMapMode( pOutDev->GetMapMode() );
-        aMapMode.SetMapUnit( MAP_TWIP );
+        aMapMode.SetMapUnit( MapUnit::MapTwip );
         pOutDev->SetMapMode( aMapMode );
         pOutDev->SetLineColor();
         pOutDev->SetFillColor();

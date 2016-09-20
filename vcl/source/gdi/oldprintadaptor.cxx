@@ -57,7 +57,7 @@ OldStylePrintAdaptor::~OldStylePrintAdaptor()
 
 void OldStylePrintAdaptor::StartPage()
 {
-    Size aPaperSize( getPrinter()->PixelToLogic( getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+    Size aPaperSize( getPrinter()->PixelToLogic( getPrinter()->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) ) );
     mpData->maPages.push_back( AdaptorPage() );
     mpData->maPages.back().maPageSize.Width = aPaperSize.getWidth();
     mpData->maPages.back().maPageSize.Height = aPaperSize.getHeight();

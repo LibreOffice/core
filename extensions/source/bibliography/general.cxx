@@ -336,7 +336,7 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
 
     SetText(BIB_RESSTR(ST_TYPE_TITLE));
 
-    Size aSize(LogicToPixel(Size(0, 209), MapMode(MAP_APPFONT)));
+    Size aSize(LogicToPixel(Size(0, 209), MapMode(MapUnit::MapAppFont)));
     set_height_request(aSize.Height());
 }
 

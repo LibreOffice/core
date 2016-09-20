@@ -3779,10 +3779,10 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         return false;
 
     const GraphicObject& rGraphicObject = pObj->GetGraphicObject();
-    const MapMode aMapMode100thmm(MAP_100TH_MM);
+    const MapMode aMapMode100thmm(MapUnit::Map100thMM);
     Size aGraphicSize(rGraphicObject.GetPrefSize());
 
-    if( MAP_PIXEL == rGraphicObject.GetPrefMapMode().GetMapUnit() )
+    if( MapUnit::MapPixel == rGraphicObject.GetPrefMapMode().GetMapUnit() )
         aGraphicSize = Application::GetDefaultDevice()->PixelToLogic( aGraphicSize, aMapMode100thmm );
     else
         aGraphicSize = OutputDevice::LogicToLogic( aGraphicSize, rGraphicObject.GetPrefMapMode(), aMapMode100thmm);

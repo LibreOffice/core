@@ -39,7 +39,7 @@ void SidebarScrollBar::LogicInvalidate(const Rectangle* pRectangle)
         Push(PushFlags::MAPMODE);
         EnableMapMode();
         MapMode aMapMode = GetMapMode();
-        aMapMode.SetMapUnit(MAP_TWIP);
+        aMapMode.SetMapUnit(MapUnit::MapTwip);
         SetMapMode(aMapMode);
         aRectangle = Rectangle(Point(0, 0), PixelToLogic(GetSizePixel()));
         Pop();

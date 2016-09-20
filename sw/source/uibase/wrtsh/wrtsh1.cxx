@@ -413,7 +413,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 {
                     SwRect aArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, xObj.GetObject() );
                     aArea.Pos() += GetAnyCurRect( RECT_FLY_EMBEDDED, nullptr, xObj.GetObject() ).Pos();
-                    MapMode aMapMode( MAP_TWIP );
+                    MapMode aMapMode( MapUnit::MapTwip );
                     Size aSize = xObj.GetSize( &aMapMode );
                     aArea.Width( aSize.Width() );
                     aArea.Height( aSize.Height() );
@@ -504,7 +504,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
     CalcBoundRect( aBound, aFrameMgr.GetAnchor() );
 
     //The Size should be suggested by the OLE server
-    MapMode aMapMode( MAP_TWIP );
+    MapMode aMapMode( MapUnit::MapTwip );
     Size aSz = xRef.GetSize( &aMapMode );
 
     //Object size can be limited
@@ -650,7 +650,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                 MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
 
                 // TODO/LATER: needs complete VisArea?!
-                Size aSize( OutputDevice::LogicToLogic( aRect.SVRect(), MAP_TWIP, aUnit ).GetSize() );
+                Size aSize( OutputDevice::LogicToLogic( aRect.SVRect(), MapUnit::MapTwip, aUnit ).GetSize() );
                 awt::Size aSz;
                 aSz.Width = aSize.Width();
                 aSz.Height = aSize.Height();
@@ -755,7 +755,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     // nothing can be scaled.
     if( _aVisArea.Width() && _aVisArea.Height() )
     {
-        const MapMode aTmp( MAP_TWIP );
+        const MapMode aTmp( MapUnit::MapTwip );
         MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
         _aVisArea = OutputDevice::LogicToLogic( _aVisArea, aUnit, aTmp);
         Size aObjArea;

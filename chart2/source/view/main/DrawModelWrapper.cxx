@@ -58,12 +58,12 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
 {
     m_pChartItemPool = ChartItemPool::CreateChartItemPool();
 
-    SetScaleUnit(MAP_100TH_MM);
+    SetScaleUnit(MapUnit::Map100thMM);
     SetScaleFraction(Fraction(1, 1));
     SetDefaultFontHeight(423);     // 12pt
 
     SfxItemPool* pMasterPool = &GetItemPool();
-    pMasterPool->SetDefaultMetric(MAP_100TH_MM);
+    pMasterPool->SetDefaultMetric(MapUnit::Map100thMM);
     pMasterPool->SetPoolDefaultItem(SfxBoolItem(EE_PARA_HYPHENATE, true) );
     pMasterPool->SetPoolDefaultItem(makeSvx3DPercentDiagonalItem (5));
 
@@ -113,7 +113,7 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
     m_pRefDevice.disposeAndClear();
     m_pRefDevice = VclPtr<VirtualDevice>::Create(*pDefaultDevice);
     MapMode aMapMode = m_pRefDevice->GetMapMode();
-    aMapMode.SetMapUnit(MAP_100TH_MM);
+    aMapMode.SetMapUnit(MapUnit::Map100thMM);
     m_pRefDevice->SetMapMode(aMapMode);
     SetRefDevice(m_pRefDevice.get());
     rOutliner.SetRefDevice(m_pRefDevice.get());

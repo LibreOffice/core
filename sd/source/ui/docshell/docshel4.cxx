@@ -126,7 +126,7 @@ SfxPrinter* DrawDocShell::GetPrinter(bool bCreate)
         mpPrinter->SetDrawMode( nMode );
 
         MapMode aMM (mpPrinter->GetMapMode());
-        aMM.SetMapUnit(MAP_100TH_MM);
+        aMM.SetMapUnit(MapUnit::Map100thMM);
         mpPrinter->SetMapMode(aMM);
         UpdateRefDevice();
     }

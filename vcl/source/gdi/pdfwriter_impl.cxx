@@ -177,7 +177,7 @@ void doTestCode()
     aWriter.BeginStructureElement( PDFWriter::Document );
     // set duration of 3 sec for first page
     aWriter.SetAutoAdvanceTime( 3 );
-    aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
+    aWriter.SetMapMode( MapMode( MapUnit::Map100thMM ) );
 
     aWriter.SetFillColor( Color( COL_LIGHTRED ) );
     aWriter.SetLineColor( Color( COL_LIGHTGREEN ) );
@@ -229,7 +229,7 @@ void doTestCode()
     aWriter.AddStream( "text/plain", new PDFTestOutputStream(), true );
     // set transitional mode
     aWriter.SetPageTransition( PDFWriter::WipeRightToLeft, 1500 );
-    aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
+    aWriter.SetMapMode( MapMode( MapUnit::Map100thMM ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
     aWriter.SetFont( Font( OUString( "Times" ), Size( 0, 500 ) ) );
     aWriter.DrawText( Rectangle( Point( 4500, 1500 ), Size( 12000, 3000 ) ),
@@ -301,7 +301,7 @@ void doTestCode()
         for( int nY = 0; nY < 256; nY++ )
             pAcc->SetPixel( nX, nY, BitmapColor( (sal_uInt8)((nX+nY)/2) ) );
     aTransMask.ReleaseAccess( pAcc );
-    aTransMask.SetPrefMapMode( MAP_MM );
+    aTransMask.SetPrefMapMode( MapUnit::MapMM );
     aTransMask.SetPrefSize( Size( 10, 10 ) );
 
     aWriter.DrawBitmap( Point( 600, 13500 ), Size( 3000, 3000 ), aTransMask );
@@ -349,13 +349,13 @@ void doTestCode()
     aWriter.DrawPolyLine( aLIPoly, aLI );
 
     aWriter.NewPage( 595, 842 );
-    aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
+    aWriter.SetMapMode( MapMode( MapUnit::Map100thMM ) );
     Wallpaper aWall( aTransMask );
     aWall.SetStyle( WallpaperStyle::Tile );
     aWriter.DrawWallpaper( Rectangle( Point( 4400, 4200 ), Size( 10200, 6300 ) ), aWall );
 
     aWriter.NewPage( 595, 842 );
-    aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
+    aWriter.SetMapMode( MapMode( MapUnit::Map100thMM ) );
     aWriter.SetFont( Font( OUString( "Times" ), Size( 0, 500 ) ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
     aRect = Rectangle( Point( 4500, 6000 ), Size( 6000, 1500 ) );
@@ -1370,7 +1370,7 @@ template < class GEOMETRY >
 GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevice* _pPixelConversion, const GEOMETRY& _rObject )
 {
     GEOMETRY aPoint;
-    if ( MAP_PIXEL == _rSource.GetMapUnit() )
+    if ( MapUnit::MapPixel == _rSource.GetMapUnit() )
     {
         aPoint = _pPixelConversion->PixelToLogic( _rObject, _rDest );
     }
@@ -1713,7 +1713,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
                                PDFWriter& i_rOuterFace)
         :
         m_pReferenceDevice( nullptr ),
-        m_aMapMode( MAP_POINT, Point(), Fraction( 1, pointToPixel(1) ), Fraction( 1, pointToPixel(1) ) ),
+        m_aMapMode( MapUnit::MapPoint, Point(), Fraction( 1, pointToPixel(1) ), Fraction( 1, pointToPixel(1) ) ),
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_nNextFID( 1 ),
@@ -2206,7 +2206,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
             pVDev->SetReferenceDevice( m_aContext.DPIx, m_aContext.DPIy );
 
         pVDev->SetOutputSizePixel( Size( 640, 480 ) );
-        pVDev->SetMapMode( MAP_MM );
+        pVDev->SetMapMode( MapUnit::MapMM );
 
         m_pReferenceDevice->mpPDFWriter = this;
         m_pReferenceDevice->ImplUpdateFontData();
@@ -3571,7 +3571,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
 
                 OutputDevice* pRef = getReferenceDevice();
                 pRef->Push( PushFlags::FONT | PushFlags::MAPMODE );
-                pRef->SetMapMode( MapMode( MAP_PIXEL ) );
+                pRef->SetMapMode( MapMode( MapUnit::MapPixel ) );
                 Font aFont( pFont->GetFamilyName(), pFont->GetStyleName(), Size( 0, 1000 ) );
                 aFont.SetWeight( pFont->GetWeight() );
                 aFont.SetItalic( pFont->GetItalic() );
@@ -10792,7 +10792,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
 
     ScopedVclPtrInstance< VirtualDevice > aDev;
     aDev->SetOutputSizePixel( rObject.m_aSize );
-    aDev->SetMapMode( MapMode( MAP_PIXEL ) );
+    aDev->SetMapMode( MapMode( MapUnit::MapPixel ) );
     if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
         aDev->SetDrawMode( aDev->GetDrawMode() |
                           ( DrawModeFlags::GrayLine | DrawModeFlags::GrayFill | DrawModeFlags::GrayText |
@@ -11546,7 +11546,7 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
 sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& rSize )
 {
     Size aPtSize( lcl_convert( m_aGraphicsStack.front().m_aMapMode,
-                               MapMode( MAP_POINT ),
+                               MapMode( MapUnit::MapPoint ),
                                getReferenceDevice(),
                                rSize ) );
     // check if we already have this gradient

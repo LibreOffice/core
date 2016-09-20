@@ -626,7 +626,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     {
         Size aPixelSpc =
             Application::GetDefaultDevice()->LogicToPixel( aTwipSpc,
-                                                MapMode(MAP_TWIP) );
+                                                MapMode(MapUnit::MapTwip) );
         if( !aPixelSpc.Width() && aTwipSpc.Width() )
             aPixelSpc.Width() = 1;
         if( !aPixelSpc.Height() && aTwipSpc.Height() )
@@ -699,7 +699,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         {
             aPixelSz =
                 Application::GetDefaultDevice()->LogicToPixel( aTwipSz,
-                                                    MapMode(MAP_TWIP) );
+                                                    MapMode(MapUnit::MapTwip) );
             if( !aPixelSz.Width() && aTwipSz.Width() )
                 aPixelSz.Width() = 1;
             if( !aPixelSz.Height() && aTwipSz.Height() )
@@ -893,7 +893,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     {
         Size aPixelSpc =
             Application::GetDefaultDevice()->LogicToPixel( aTwipSpc,
-                                                MapMode(MAP_TWIP) );
+                                                MapMode(MapUnit::MapTwip) );
         if( !aPixelSpc.Width() && aTwipSpc.Width() )
             aPixelSpc.Width() = 1;
         if( !aPixelSpc.Height() && aTwipSpc.Height() )
@@ -964,7 +964,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         {
             aPixelSz =
                 Application::GetDefaultDevice()->LogicToPixel( aTwipSz,
-                                                    MapMode(MAP_TWIP) );
+                                                    MapMode(MapUnit::MapTwip) );
             if( !aPixelSz.Width() && aTwipSz.Width() )
                 aPixelSz.Width() = 1;
             if( !aPixelSz.Height() && aTwipSz.Height() )
@@ -1336,7 +1336,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
         {
             Size aPixelBorder =
                 Application::GetDefaultDevice()->LogicToPixel( aTwipBorder,
-                                                    MapMode(MAP_TWIP) );
+                                                    MapMode(MapUnit::MapTwip) );
             if( !aPixelBorder.Width() && aTwipBorder.Width() )
                 aPixelBorder.Width() = 1;
             if( !aPixelBorder.Height() && aTwipBorder.Height() )
@@ -1575,7 +1575,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
         {
             nGutter = (sal_uInt16)Application::GetDefaultDevice()
                             ->LogicToPixel( Size(nGutter,0),
-                                            MapMode(MAP_TWIP) ).Width();
+                                            MapMode(MapUnit::MapTwip) ).Width();
         }
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_gutter).
             append("=\"").append(static_cast<sal_Int32>(nGutter)).append("\"");
@@ -1795,7 +1795,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             Size aMM100Size;
             const SwFormatFrameSize& rSize = rFrameFormat.GetFrameSize();
             aMM100Size = OutputDevice::LogicToLogic( rSize.GetSize(),
-                            MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
+                            MapMode( MapUnit::MapTwip ), MapMode( MapUnit::Map100thMM ));
 
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGraphicURL,
                     "JPG", nFlags, &aMM100Size );
@@ -1880,7 +1880,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrameFormat& rFrameFormat,
     {
         nSize -= HTML_PARSPACE;
         nSize = (sal_Int16)Application::GetDefaultDevice()
-            ->LogicToPixel( Size(nSize,0), MapMode(MAP_TWIP) ).Width();
+            ->LogicToPixel( Size(nSize,0), MapMode(MapUnit::MapTwip) ).Width();
 
         aSpacer = OStringBuffer(OOO_STRING_SVTOOLS_HTML_spacer).
             append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type).

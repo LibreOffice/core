@@ -215,7 +215,7 @@ void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
         if (m_pStatus && m_pStatus->IsVisible())
         {
             Size aStatusSize(aPlaygroundPos.X(), GetTextHeight() + 2);
-            aStatusSize = LogicToPixel(aStatusSize, MAP_APPFONT);
+            aStatusSize = LogicToPixel(aStatusSize, MapUnit::MapAppFont);
             aStatusSize.Width() = aTreeViewSize.Width() - 2 - 2;
 
             Point aStatusPos( aPlaygroundPos.X() + 2, aTreeViewPos.Y() + aTreeViewSize.Height() - aStatusSize.Height() );

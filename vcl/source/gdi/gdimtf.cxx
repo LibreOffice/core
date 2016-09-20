@@ -419,7 +419,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                 BitmapEx aBitmapEx;
                 if( aBitmapEx.Create( xBitmapCanvas, aSize ) )
                 {
-                    if ( pOut->GetMapMode() == MAP_PIXEL )
+                    if ( pOut->GetMapMode() == MapUnit::MapPixel )
                         pOut->DrawBitmapEx( rPos, aBitmapEx );
                     else
                         pOut->DrawBitmapEx( rPos, rLogicDestSize, aBitmapEx );
@@ -706,7 +706,7 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
             ( MetaActionType::POP == nType ) )
         {
             pModAct->Execute( aMapVDev.get() );
-            if( aMapVDev->GetMapMode().GetMapUnit() == MAP_PIXEL )
+            if( aMapVDev->GetMapMode().GetMapUnit() == MapUnit::MapPixel )
             {
                 aOffset = aMapVDev->LogicToPixel( aBaseOffset, GetPrefMapMode() );
                 MapMode aMap( aMapVDev->GetMapMode() );

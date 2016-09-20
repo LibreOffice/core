@@ -478,7 +478,7 @@ void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize)
         Size aSize( rSize );
         aSize.Width() -= (aBorder.Left() + aBorder.Right());
         aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
-        Size aObjSizePixel = mpImpl->mpViewWindow->LogicToPixel( aObjSize, MAP_100TH_MM );
+        Size aObjSizePixel = mpImpl->mpViewWindow->LogicToPixel( aObjSize, MapUnit::Map100thMM );
         SfxViewShell::SetZoomFactor(
             Fraction( aSize.Width(), std::max( aObjSizePixel.Width(), (long int)1 ) ),
             Fraction( aSize.Height(), std::max( aObjSizePixel.Height(), (long int)1) ) );
@@ -550,7 +550,7 @@ sal_uInt16 ViewShellBase::SetPrinter (
           nDiffFlags & SfxPrinterChangeFlags::CHG_SIZE) && pNewPrinter  )
     {
         MapMode aMap = pNewPrinter->GetMapMode();
-        aMap.SetMapUnit(MAP_100TH_MM);
+        aMap.SetMapUnit(MapUnit::Map100thMM);
         MapMode aOldMap = pNewPrinter->GetMapMode();
         pNewPrinter->SetMapMode(aMap);
         Size aNewSize = pNewPrinter->GetOutputSize();
@@ -1064,8 +1064,8 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
         {
             Rectangle aRectangle = pOutlinerView->GetOutputArea();
             vcl::Window* pWin = pThisShell->GetActiveWindow();
-            if (pWin && pWin->GetMapMode().GetMapUnit() == MAP_100TH_MM)
-                aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
+            if (pWin && pWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
             OString sRectangle = aRectangle.toString();
             SfxLokHelper::notifyOtherView(&pDrawViewShell->GetViewShellBase(), pOtherShell, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
         }

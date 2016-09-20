@@ -608,7 +608,7 @@ The following structure describes the permissions used in PDF security
         OUString                        SignReason;
         OUString                        SignContact;
         css::lang::Locale               DocumentLocale; // defines the document default language
-        sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
+        sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MapUnit::MapPixel )
                                                         // 0 here specifies a default handling
         PDFWriter::ColorMode            ColorMode;
         css::uno::Reference< css::security::XCertificate> SignCertificate;

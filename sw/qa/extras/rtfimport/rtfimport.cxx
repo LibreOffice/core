@@ -147,7 +147,7 @@ DECLARE_RTFIMPORT_TEST(testN192129, "n192129.rtf")
 {
     // We expect that the result will be 16x16px.
     Size aExpectedSize(16, 16);
-    MapMode aMap(MAP_100TH_MM);
+    MapMode aMap(MapUnit::Map100thMM);
     aExpectedSize = Application::GetDefaultDevice()->PixelToLogic(aExpectedSize, aMap);
 
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent, uno::UNO_QUERY);

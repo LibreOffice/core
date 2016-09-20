@@ -49,7 +49,7 @@ MapMode::ImplMapMode::ImplMapMode() :
     maScaleX( 1, 1 ),
     maScaleY( 1, 1 )
 {
-    meUnit      = MAP_PIXEL;
+    meUnit      = MapUnit::MapPixel;
     mbSimple    = true;
 }
 
@@ -134,38 +134,38 @@ double MapMode::GetUnitMultiplier() const
     double  nMul;
     switch ( GetMapUnit() )
     {
-        case MAP_PIXEL :
-        case MAP_SYSFONT :
-        case MAP_APPFONT :
+        case MapUnit::MapPixel :
+        case MapUnit::MapSysFont :
+        case MapUnit::MapAppFont :
 
-        case MAP_100TH_MM :
+        case MapUnit::Map100thMM :
             nMul = 1;
             break;
-        case MAP_10TH_MM :
+        case MapUnit::Map10thMM :
             nMul = 10;
             break;
-        case MAP_MM :
+        case MapUnit::MapMM :
             nMul = 100;
             break;
-        case MAP_CM :
+        case MapUnit::MapCM :
             nMul = 1000;
             break;
-        case MAP_1000TH_INCH :
+        case MapUnit::Map1000thInch :
             nMul = 2.54;
             break;
-        case MAP_100TH_INCH :
+        case MapUnit::Map100thInch :
             nMul = 25.4;
             break;
-        case MAP_10TH_INCH :
+        case MapUnit::Map10thInch :
             nMul = 254;
             break;
-        case MAP_INCH :
+        case MapUnit::MapInch :
             nMul = 2540;
             break;
-        case MAP_TWIP :
+        case MapUnit::MapTwip :
             nMul = 1.76388889;
             break;
-        case MAP_POINT :
+        case MapUnit::MapPoint :
             nMul = 35.27777778;
             break;
         default:
@@ -215,7 +215,7 @@ SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
-    rOStm.WriteUInt16( rMapMode.mpImplMapMode->meUnit );
+    rOStm.WriteUInt16( (sal_uInt16)rMapMode.mpImplMapMode->meUnit );
     WritePair( rOStm, rMapMode.mpImplMapMode->maOrigin );
     WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleX );
     WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleY );
