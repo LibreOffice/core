@@ -72,8 +72,8 @@ void SwFlyInContentFrame::SetRefPoint( const Point& rPoint,
         pNotify = new SwFlyNotify( this );
     aRef = rPoint;
     SetCurrRelPos( rRelAttr );
-    SWRECTFN( GetAnchorFrame() )
-    (Frame().*fnRect->fnSetPos)( rPoint + rRelPos );
+    SwRectFnSet aRectFnSet(GetAnchorFrame());
+    (Frame().*aRectFnSet->fnSetPos)( rPoint + rRelPos );
     // #i68520#
     InvalidateObjRectWithSpaces();
     if( pNotify )

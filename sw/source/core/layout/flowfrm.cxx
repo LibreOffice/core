@@ -495,7 +495,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
     }
     SwFrame *pFloat = pStart;
     SwFrame *pLst = nullptr;
-    SWRECTFN( pParent )
+    SwRectFnSet aRectFnSet(pParent);
     SwTwips nGrowVal = 0;
     do
     {   pFloat->mpUpper = pParent;
@@ -512,7 +512,7 @@ bool SwFlowFrame::PasteTree( SwFrame *pStart, SwLayoutFrame *pParent, SwFrame *p
         else
             bRet = true;
 
-        nGrowVal += (pFloat->Frame().*fnRect->fnGetHeight)();
+        nGrowVal += (pFloat->Frame().*aRectFnSet->fnGetHeight)();
         if ( pFloat->GetNext() )
             pFloat = pFloat->GetNext();
         else
@@ -1540,26 +1540,26 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPageGrid_(
                 const long nGridLineHeight =
                         pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
 
-                SWRECTFN( (&m_rThis) )
-                const SwTwips nBodyPrtTop = (pBodyFrame->*fnRect->fnGetPrtTop)();
+                SwRectFnSet aRectFnSet(&m_rThis);
+                const SwTwips nBodyPrtTop = (pBodyFrame->*aRectFnSet->fnGetPrtTop)();
                 const SwTwips nProposedPrtTop =
-                        (*fnRect->fnYInc)( (m_rThis.Frame().*fnRect->fnGetTop)(),
+                        (*aRectFnSet->fnYInc)( (m_rThis.Frame().*aRectFnSet->fnGetTop)(),
                                            _nUpperSpaceWithoutGrid );
 
                 const SwTwips nSpaceAbovePrtTop =
-                        (*fnRect->fnYDiff)( nProposedPrtTop, nBodyPrtTop );
+                        (*aRectFnSet->fnYDiff)( nProposedPrtTop, nBodyPrtTop );
                 const SwTwips nSpaceOfCompleteLinesAbove =
                         nGridLineHeight * ( nSpaceAbovePrtTop / nGridLineHeight );
                 SwTwips nNewPrtTop =
-                        (*fnRect->fnYInc)( nBodyPrtTop, nSpaceOfCompleteLinesAbove );
-                if ( (*fnRect->fnYDiff)( nProposedPrtTop, nNewPrtTop ) > 0 )
+                        (*aRectFnSet->fnYInc)( nBodyPrtTop, nSpaceOfCompleteLinesAbove );
+                if ( (*aRectFnSet->fnYDiff)( nProposedPrtTop, nNewPrtTop ) > 0 )
                 {
-                    nNewPrtTop = (*fnRect->fnYInc)( nNewPrtTop, nGridLineHeight );
+                    nNewPrtTop = (*aRectFnSet->fnYInc)( nNewPrtTop, nGridLineHeight );
                 }
 
                 const SwTwips nNewUpperSpace =
-                        (*fnRect->fnYDiff)( nNewPrtTop,
-                                            (m_rThis.Frame().*fnRect->fnGetTop)() );
+                        (*aRectFnSet->fnYDiff)( nNewPrtTop,
+                                            (m_rThis.Frame().*aRectFnSet->fnGetTop)() );
 
                 nUpperSpaceAmountConsideredForPageGrid =
                         nNewUpperSpace - _nUpperSpaceWithoutGrid;
@@ -1899,9 +1899,9 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             bSamePage = pNewPage == pOldPage;
             // Set deadline, so the footnotes don't think up
             // silly things...
-            SWRECTFN( pOldBoss )
+            SwRectFnSet aRectFnSet(pOldBoss);
             SwSaveFootnoteHeight aHeight( pOldBoss,
-                (pOldBoss->Frame().*fnRect->fnGetBottom)() );
+                (pOldBoss->Frame().*aRectFnSet->fnGetBottom)() );
             SwContentFrame* pStart = m_rThis.IsContentFrame() ?
                 static_cast<SwContentFrame*>(&m_rThis) : static_cast<SwLayoutFrame&>(m_rThis).ContainsContent();
             OSL_ENSURE( pStart || ( m_rThis.IsTabFrame() && !static_cast<SwTabFrame&>(m_rThis).Lower() ),

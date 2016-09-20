@@ -52,7 +52,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 {
     const SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
 
-    SWRECTFN( (&GetAnchorFrame()) );
+    SwRectFnSet aRectFnSet(&GetAnchorFrame());
 
     const SwFrameFormat& rFrameFormat = GetFrameFormat();
     const SvxLRSpaceItem &rLR = rFrameFormat.GetLRSpace();
@@ -103,11 +103,11 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // determine absolute 'vertical' position, depending on layout-direction
         // #i26791# - determine offset to 'vertical' frame
         // anchor position, depending on layout-direction
-        if( bVert )
+        if( aRectFnSet.bVert )
         {
-            OSL_ENSURE( !bRev, "<SwToLayoutAnchoredObjectPosition::CalcPosition()> - reverse layout set." );
+            OSL_ENSURE( !aRectFnSet.bRev, "<SwToLayoutAnchoredObjectPosition::CalcPosition()> - reverse layout set." );
 
-            if ( bVertL2R )
+            if ( aRectFnSet.bVertL2R )
                    aRelPos.X() = nRelPosY;
             else
                    aRelPos.X() = -nRelPosY - aObjBoundRect.Width();
@@ -159,7 +159,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
                                      nWidth, nOffset, bDummy );
         }
 
-        SwTwips nObjWidth = (aObjBoundRect.*fnRect->fnGetWidth)();
+        SwTwips nObjWidth = (aObjBoundRect.*aRectFnSet->fnGetWidth)();
 
         // determine relative horizontal position
         SwTwips nRelPosX;
@@ -179,9 +179,9 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
             nRelPosX = (nWidth / 2) - (nObjWidth / 2);
         else if ( text::HoriOrientation::RIGHT == eHoriOrient )
             nRelPosX = nWidth - ( nObjWidth +
-                             ( bVert ? rUL.GetLower() : rLR.GetRight() ) );
+                             ( aRectFnSet.bVert ? rUL.GetLower() : rLR.GetRight() ) );
         else
-            nRelPosX = bVert ? rUL.GetUpper() : rLR.GetLeft();
+            nRelPosX = aRectFnSet.bVert ? rUL.GetUpper() : rLR.GetLeft();
         nRelPosX += nOffset;
 
         // no 'negative' relative horizontal position
@@ -195,7 +195,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // determine absolute 'horizontal' position, depending on layout-direction
         // #i26791# - determine offset to 'horizontal' frame
         // anchor position, depending on layout-direction
-        if( bVert || bVertL2R )
+        if( aRectFnSet.bVert || aRectFnSet.bVertL2R )
         {
 
             aRelPos.Y() = nRelPosX;

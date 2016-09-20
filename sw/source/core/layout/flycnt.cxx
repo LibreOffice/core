@@ -384,11 +384,11 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
             // the anchor frame, thus it has to move forward.
             bool bConsiderWrapInfluenceDueToMovedFwdAnchor( false );
             do {
-                SWRECTFN( this )
-                Point aOldPos( (Frame().*fnRect->fnGetPos)() );
+                SwRectFnSet aRectFnSet(this);
+                Point aOldPos( (Frame().*aRectFnSet->fnGetPos)() );
                 SwFlyFreeFrame::MakeAll(pRenderContext);
                 const bool bPosChgDueToOwnFormat =
-                                        aOldPos != (Frame().*fnRect->fnGetPos)();
+                                        aOldPos != (Frame().*aRectFnSet->fnGetPos)();
                 // #i3317#
                 if ( !ConsiderObjWrapInfluenceOnObjPos() &&
                      OverlapsPrevColumn() )
@@ -446,7 +446,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     }
                 }
 
-                if ( aOldPos != (Frame().*fnRect->fnGetPos)() ||
+                if ( aOldPos != (Frame().*aRectFnSet->fnGetPos)() ||
                      ( !GetValidPosFlag() &&
                        ( pFooter || bPosChgDueToOwnFormat ) ) )
                 {
@@ -506,9 +506,9 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 }
                 if ( pCellFrame )
                 {
-                    SWRECTFN( pCellFrame )
-                    if ( (pCellFrame->Frame().*fnRect->fnGetTop)() == 0 &&
-                         (pCellFrame->Frame().*fnRect->fnGetHeight)() == 0 )
+                    SwRectFnSet aRectFnSet(pCellFrame);
+                    if ( (pCellFrame->Frame().*aRectFnSet->fnGetTop)() == 0 &&
+                         (pCellFrame->Frame().*aRectFnSet->fnGetHeight)() == 0 )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = false;
                     }

@@ -108,8 +108,8 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         {
             bNoGrid = false;
             long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
-            SWRECTFN( this )
-            long nSize = (Frame().*fnRect->fnGetWidth)();
+            SwRectFnSet aRectFnSet(this);
+            long nSize = (Frame().*aRectFnSet->fnGetWidth)();
             long nBorder = 0;
             if( GRID_LINES_CHARS == pGrid->GetGridType() )
             {
@@ -119,11 +119,11 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                 nSize -= nBorder;
                 nBorder /= 2;
             }
-            (Prt().*fnRect->fnSetPosX)( nBorder );
-            (Prt().*fnRect->fnSetWidth)( nSize );
+            (Prt().*aRectFnSet->fnSetPosX)( nBorder );
+            (Prt().*aRectFnSet->fnSetWidth)( nSize );
 
             // Height of body frame:
-            nBorder = (Frame().*fnRect->fnGetHeight)();
+            nBorder = (Frame().*aRectFnSet->fnGetHeight)();
 
             // Number of possible lines in area of body frame:
             long nNumberOfLines = nBorder / nSum;
@@ -139,8 +139,8 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             const bool bAdjust = static_cast<SwPageFrame*>(GetUpper())->GetFormat()->GetDoc()->
                                         GetFootnoteIdxs().empty();
 
-            (Prt().*fnRect->fnSetPosY)( bAdjust ? nBorder : 0 );
-            (Prt().*fnRect->fnSetHeight)( nSize );
+            (Prt().*aRectFnSet->fnSetPosY)( bAdjust ? nBorder : 0 );
+            (Prt().*aRectFnSet->fnSetHeight)( nSize );
         }
     }
     if( bNoGrid )

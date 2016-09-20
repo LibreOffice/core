@@ -1073,8 +1073,8 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
             SwTableBox* pSelBox = rBoxes[n];
             const SwRowFrame* pRow = GetRowFrame( *pSelBox->GetUpper() );
             OSL_ENSURE( pRow, "Where is the SwTableLine's Frame?" );
-            SWRECTFN( pRow )
-            pRowHeights[ n ] = (pRow->Frame().*fnRect->fnGetHeight)();
+            SwRectFnSet aRectFnSet(pRow);
+            pRowHeights[ n ] = (pRow->Frame().*aRectFnSet->fnGetHeight)();
         }
     }
 

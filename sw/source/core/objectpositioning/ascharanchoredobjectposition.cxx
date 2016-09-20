@@ -82,14 +82,14 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     // swap anchor frame, if swapped. Note: destructor takes care of the 'undo'
     SwFrameSwapper aFrameSwapper( &rAnchorFrame, false );
 
-    SWRECTFN( ( &rAnchorFrame ) )
+    SwRectFnSet aRectFnSet(&rAnchorFrame);
 
     Point aAnchorPos( mrProposedAnchorPos );
 
     const SwFrameFormat& rFrameFormat = GetFrameFormat();
 
     SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
-    SwTwips nObjWidth = (aObjBoundRect.*fnRect->fnGetWidth)();
+    SwTwips nObjWidth = (aObjBoundRect.*aRectFnSet->fnGetWidth)();
 
     // determine spacing values considering layout-/text-direction
     const SvxLRSpaceItem& rLRSpace = rFrameFormat.GetLRSpace();
@@ -304,7 +304,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             // set new anchor position and relative position
             SwFlyInContentFrame* pFlyInContentFrame = &(const_cast<SwFlyInContentFrame&>(rFlyInContentFrame));
             pFlyInContentFrame->SetRefPoint( aAnchorPos, aRelAttr, aRelPos );
-            if( nObjWidth != (pFlyInContentFrame->Frame().*fnRect->fnGetWidth)() )
+            if( nObjWidth != (pFlyInContentFrame->Frame().*aRectFnSet->fnGetWidth)() )
             {
                 // recalculate object bound rectangle, if object width has changed.
                 aObjBoundRect = GetAnchoredObj().GetObjRect();
@@ -314,7 +314,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
                 aObjBoundRect.Height( aObjBoundRect.Height() + rULSpace.GetLower() );
             }
         }
-        OSL_ENSURE( (rFlyInContentFrame.Frame().*fnRect->fnGetHeight)(),
+        OSL_ENSURE( (rFlyInContentFrame.Frame().*aRectFnSet->fnGetHeight)(),
             "SwAnchoredObjectPosition::CalcPosition(..) - fly frame has an invalid height" );
     }
 

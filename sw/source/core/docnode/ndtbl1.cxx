@@ -1272,23 +1272,23 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
 {
     SwTwips nRet = 0;
     const SwFrame *pFrame = pCell->Lower(); // The whole Line
-    SWRECTFN( pCell )
+    SwRectFnSet aRectFnSet(pCell);
     while ( pFrame )
     {
-        const SwTwips nAdd = (pFrame->Frame().*fnRect->fnGetWidth)() -
-                             (pFrame->Prt().*fnRect->fnGetWidth)();
+        const SwTwips nAdd = (pFrame->Frame().*aRectFnSet->fnGetWidth)() -
+                             (pFrame->Prt().*aRectFnSet->fnGetWidth)();
 
         // pFrame does not necessarily have to be a SwTextFrame!
         const SwTwips nCalcFitToContent = pFrame->IsTextFrame() ?
                                           const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pFrame))->CalcFitToContent() :
-                                          (pFrame->Prt().*fnRect->fnGetWidth)();
+                                          (pFrame->Prt().*aRectFnSet->fnGetWidth)();
 
         nRet = std::max( nRet, nCalcFitToContent + nAdd );
         pFrame = pFrame->GetNext();
     }
     // Surrounding border as well as left and Right Border also need to be respected
-    nRet += (pCell->Frame().*fnRect->fnGetWidth)() -
-            (pCell->Prt().*fnRect->fnGetWidth)();
+    nRet += (pCell->Frame().*aRectFnSet->fnGetWidth)() -
+            (pCell->Prt().*aRectFnSet->fnGetWidth)();
 
     // To compensate for the accuracy of calculation later on in SwTable::SetTabCols
     // we keep adding up a little.
@@ -1317,7 +1317,7 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
                     ::lcl_CalcCellFit( pCell ) :
                     MINLAY + sal_uInt16(pCell->Frame().Width() - pCell->Prt().Width());
 
-    SWRECTFN( pTab )
+    SwRectFnSet aRectFnSet(pTab);
 
     for ( size_t i = 0 ; i <= rCols.Count(); ++i )
     {
@@ -1327,14 +1327,14 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
         nColRight += rCols.GetLeftMin();
 
         // Adapt values to the proportions of the Table (Follows)
-        if ( rCols.GetLeftMin() != (pTab->Frame().*fnRect->fnGetLeft)() )
+        if ( rCols.GetLeftMin() != (pTab->Frame().*aRectFnSet->fnGetLeft)() )
         {
-            const long nDiff = (pTab->Frame().*fnRect->fnGetLeft)() - rCols.GetLeftMin();
+            const long nDiff = (pTab->Frame().*aRectFnSet->fnGetLeft)() - rCols.GetLeftMin();
             nColLeft  += nDiff;
             nColRight += nDiff;
         }
-        const long nCellLeft  = (pCell->Frame().*fnRect->fnGetLeft)();
-        const long nCellRight = (pCell->Frame().*fnRect->fnGetRight)();
+        const long nCellLeft  = (pCell->Frame().*aRectFnSet->fnGetLeft)();
+        const long nCellRight = (pCell->Frame().*aRectFnSet->fnGetRight)();
 
         // Calculate overlapping value
         long nWidth = 0;
@@ -1384,7 +1384,7 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
         const SwTabFrame *pTab = pSelUnion->GetTable();
         const SwRect &rUnion = pSelUnion->GetUnion();
 
-        SWRECTFN( pTab )
+        SwRectFnSet aRectFnSet(pTab);
         bool bRTL = pTab->IsRightToLeft();
 
         const SwLayoutFrame *pCell = pTab->FirstCell();
@@ -1394,8 +1394,8 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
         {
             if ( pCell->IsCellFrame() && pCell->FindTabFrame() == pTab && ::IsFrameInTableSel( rUnion, pCell ) )
             {
-                const long nCLeft  = (pCell->Frame().*fnRect->fnGetLeft)();
-                const long nCRight = (pCell->Frame().*fnRect->fnGetRight)();
+                const long nCLeft  = (pCell->Frame().*aRectFnSet->fnGetLeft)();
+                const long nCRight = (pCell->Frame().*aRectFnSet->fnGetRight)();
 
                 bool bNotInCols = true;
 
@@ -1418,9 +1418,9 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
                     // Adapt values to the proportions of the Table (Follows)
                     long nLeftA  = nColLeft;
                     long nRightA = nColRight;
-                    if ( rCols.GetLeftMin() !=  sal_uInt16((pTab->Frame().*fnRect->fnGetLeft)()) )
+                    if ( rCols.GetLeftMin() !=  sal_uInt16((pTab->Frame().*aRectFnSet->fnGetLeft)()) )
                     {
-                        const long nDiff = (pTab->Frame().*fnRect->fnGetLeft)() - rCols.GetLeftMin();
+                        const long nDiff = (pTab->Frame().*aRectFnSet->fnGetLeft)() - rCols.GetLeftMin();
                         nLeftA  += nDiff;
                         nRightA += nDiff;
                     }
