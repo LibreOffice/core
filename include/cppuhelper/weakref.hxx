@@ -86,7 +86,7 @@ public:
     WeakReferenceHelper & SAL_CALL operator = ( const WeakReferenceHelper & rWeakRef );
 
 #if defined LIBO_INTERNAL_ONLY
-    WeakReferenceHelper & operator =(WeakReferenceHelper && other);
+    WeakReferenceHelper & SAL_CALL operator =(WeakReferenceHelper && other);
 #endif
 
     /** Releases this reference and takes over hard reference xInt.
