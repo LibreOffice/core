@@ -827,8 +827,8 @@ void WatchdogTimings::relax()
 {
     osl::MutexGuard g(maMutex);
 
-    maDisableEntries[0] = 180; /* 45s */
-    maDisableEntries[1] = 180; /* 45s */
+    maDisableEntries[0] = 60; /* 15s */
+    maDisableEntries[1] = 60; /* 15s */
 
     maAbortAfter[0] = 240; /* 60s */
     maAbortAfter[1] = 240; /* 60s */
