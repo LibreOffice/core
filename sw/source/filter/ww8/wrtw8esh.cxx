@@ -1622,9 +1622,9 @@ void SwBasicEscherEx::WriteGrfBullet(const Graphic& rGrf)
     OString aUniqueId = aGraphicObject.GetUniqueID();
     if ( !aUniqueId.isEmpty() )
     {
-        const MapMode aMap100mm( MAP_100TH_MM );
+        const MapMode aMap100mm( MapUnit::Map100thMM );
         Size    aSize( rGrf.GetPrefSize() );
-        if ( MAP_PIXEL == rGrf.GetPrefMapMode().GetMapUnit() )
+        if ( MapUnit::MapPixel == rGrf.GetPrefMapMode().GetMapUnit() )
         {
             aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap100mm );
         }
@@ -1706,10 +1706,10 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrameFormat& rFormat, sal_uI
 
         if (!aUniqueId.isEmpty())
         {
-            const   MapMode aMap100mm( MAP_100TH_MM );
+            const   MapMode aMap100mm( MapUnit::Map100thMM );
             Size    aSize( aGraphic.GetPrefSize() );
 
-            if ( MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit() )
+            if ( MapUnit::MapPixel == aGraphic.GetPrefMapMode().GetMapUnit() )
             {
                 aSize = Application::GetDefaultDevice()->PixelToLogic(
                     aSize, aMap100mm );
@@ -1914,8 +1914,8 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
         {
             const Graphic &rGraphic = pGraphicObject->GetGraphic();
             Size aSize(rGraphic.GetPrefSize());
-            const MapMode aMap100mm(MAP_100TH_MM);
-            if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
+            const MapMode aMap100mm(MapUnit::Map100thMM);
+            if (MapUnit::MapPixel == rGraphic.GetPrefMapMode().GetMapUnit())
             {
                 aSize = Application::GetDefaultDevice()->PixelToLogic(
                     aSize, aMap100mm);
@@ -2211,7 +2211,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eS
 
 void SwBasicEscherEx::Init()
 {
-    MapUnit eMap = MAP_TWIP;
+    MapUnit eMap = MapUnit::MapTwip;
     if (SwDrawModel *pModel = rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
     {
         // PPT arbeitet nur mit Einheiten zu 576DPI
@@ -2222,7 +2222,7 @@ void SwBasicEscherEx::Init()
     // MS-DFF-Properties sind grossteils in EMU (English Metric Units) angegeben
     // 1mm=36000emu, 1twip=635emu
     Fraction aFact(360, 1);
-    aFact /= GetMapFactor(MAP_100TH_MM, eMap).X();
+    aFact /= GetMapFactor(MapUnit::Map100thMM, eMap).X();
     // create little values
     aFact = Fraction(aFact.GetNumerator(), aFact.GetDenominator());
     mnEmuMul = aFact.GetNumerator();

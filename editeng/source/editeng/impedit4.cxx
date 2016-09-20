@@ -535,7 +535,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     rOutput.WriteChar( '}' ) << endl;
 
     // DefTab:
-    MapMode aTwpMode( MAP_TWIP );
+    MapMode aTwpMode( MapUnit::MapTwip );
     sal_uInt16 nDefTabTwps = (sal_uInt16) GetRefDevice()->LogicToLogic(
                                         Point( aEditDoc.GetDefTab(), 0 ),
                                         &GetRefMapMode(), &aTwpMode ).X();
@@ -965,7 +965,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             SvxFont aFont;
             ContentNode* pNode = aEditDoc.GetObject( nPara );
             SeekCursor( pNode, nPos, aFont );
-            MapMode aPntMode( MAP_POINT );
+            MapMode aPntMode( MapUnit::MapPoint );
             long nFontHeight = GetRefDevice()->LogicToLogic(
                     aFont.GetFontSize(), &GetRefMapMode(), &aPntMode ).Height();
             nFontHeight *=2;    // Half Points
@@ -3112,7 +3112,7 @@ bool ImpEditEngine::ImplHasText() const
 sal_Int32 ImpEditEngine::LogicToTwips(sal_Int32 n)
 {
     Size aSz(n, 0);
-    MapMode aTwipsMode( MAP_TWIP );
+    MapMode aTwipsMode( MapUnit::MapTwip );
     aSz = pRefDev->LogicToLogic( aSz, nullptr, &aTwipsMode );
     return aSz.Width();
 }

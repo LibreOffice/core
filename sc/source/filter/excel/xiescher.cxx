@@ -1703,7 +1703,7 @@ SdrObjectPtr XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
             inserted into the draw page. */
         sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT;
         MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xEmbObj->getMapUnit( nAspect ) );
-        Size aSize( vcl::Window::LogicToLogic( rAnchorRect.GetSize(), MapMode( MAP_100TH_MM ), MapMode( aUnit ) ) );
+        Size aSize( vcl::Window::LogicToLogic( rAnchorRect.GetSize(), MapMode( MapUnit::Map100thMM ), MapMode( aUnit ) ) );
         css::awt::Size aAwtSize( aSize.Width(), aSize.Height() );
         xEmbObj->setVisualAreaSize( nAspect, aAwtSize );
 
@@ -1766,7 +1766,7 @@ void XclImpChartObj::FinalizeTabChart()
 
     // create the object anchor
     XclObjAnchor aAnchor;
-    aAnchor.SetRect( GetRoot(), GetCurrScTab(), Rectangle( 1000, 500, nWidth, nHeight ), MAP_100TH_MM );
+    aAnchor.SetRect( GetRoot(), GetCurrScTab(), Rectangle( 1000, 500, nWidth, nHeight ), MapUnit::Map100thMM );
     SetAnchor( aAnchor );
 }
 
@@ -4131,7 +4131,7 @@ void XclImpSheetDrawing::ConvertObjects( XclImpDffConverter& rDffConv )
 
 Rectangle XclImpSheetDrawing::CalcAnchorRect( const XclObjAnchor& rAnchor, bool /*bDffAnchor*/ ) const
 {
-    return rAnchor.GetRect( GetRoot(), maScUsedArea.aStart.Tab(), MAP_100TH_MM );
+    return rAnchor.GetRect( GetRoot(), maScUsedArea.aStart.Tab(), MapUnit::Map100thMM );
 }
 
 void XclImpSheetDrawing::OnObjectInserted( const XclImpDrawObjBase& rDrawObj )

@@ -71,7 +71,7 @@ sal_Int32 SidebarChildWindow::GetDefaultWidth (vcl::Window* pWindow)
         // Width of the paragraph panel.
         const static sal_Int32 nMaxPropertyPageWidth (115);
 
-        return pWindow->LogicToPixel(Point(nMaxPropertyPageWidth,1), MAP_APPFONT).X()
+        return pWindow->LogicToPixel(Point(nMaxPropertyPageWidth,1), MapUnit::MapAppFont).X()
             + TabBar::GetDefaultWidth() * pWindow->GetDPIScaleFactor();
     }
     else

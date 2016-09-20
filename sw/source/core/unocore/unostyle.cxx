@@ -1571,7 +1571,7 @@ sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, SwDoc* p
 
     const SfxItemPool& rPool = pDoc->GetAttrPool();
     const MapUnit eMapUnit(rPool.GetMetric(rEntry.nWID));
-    if(eMapUnit != MAP_100TH_MM)
+    if(eMapUnit != MapUnit::Map100thMM)
         SvxUnoConvertFromMM(eMapUnit, o_aValue);
     return rEntry.nMemberId & (~SFX_METRIC_ITEM);
 }
@@ -2304,7 +2304,7 @@ uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertySimpleEntry
         // since this means they are intended as percent values
         if(XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
             bAllowedConvert = !aResult.has<sal_Int32>() || aResult.get<sal_Int32>() > 0;
-        if(eMapUnit != MAP_100TH_MM && bAllowedConvert)
+        if(eMapUnit != MapUnit::Map100thMM && bAllowedConvert)
             SvxUnoConvertToMM(eMapUnit, aResult);
     }
     return aResult;
@@ -3603,7 +3603,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                     const SfxItemPool& rPool = m_pDocShell->GetDoc()->GetAttrPool();
                     const MapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
 
-                    if(eMapUnit != MAP_100TH_MM)
+                    if(eMapUnit != MapUnit::Map100thMM)
                     {
                         SvxUnoConvertFromMM(eMapUnit, aValue);
                     }
@@ -4087,7 +4087,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
                     const SfxItemPool& rPool = mrDoc.GetAttrPool();
                     const MapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
 
-                    if(eMapUnit != MAP_100TH_MM)
+                    if(eMapUnit != MapUnit::Map100thMM)
                     {
                         SvxUnoConvertToMM(eMapUnit, aTarget);
                     }

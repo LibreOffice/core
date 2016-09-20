@@ -67,7 +67,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
 {
     SetRefDevice( pView->GetDocShell()->GetDoc()->getIDocumentDeviceAccess().getPrinter( false ) );
 
-    MapMode aMapMode (MAP_TWIP);
+    MapMode aMapMode (MapUnit::MapTwip);
     SetRefMapMode(aMapMode);
 
      Size aSize( 1, 1 );

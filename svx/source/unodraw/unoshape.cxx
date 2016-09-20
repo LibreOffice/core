@@ -485,11 +485,11 @@ void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
     if(mpModel)
     {
         MapUnit eMapUnit = mpModel->GetItemPool().GetMetric(0);
-        if(eMapUnit != MAP_100TH_MM)
+        if(eMapUnit != MapUnit::Map100thMM)
         {
             switch(eMapUnit)
             {
-                case MAP_TWIP :
+                case MapUnit::MapTwip :
                 {
                     rPoint.A() = MM_TO_TWIPS(rPoint.A());
                     rPoint.B() = MM_TO_TWIPS(rPoint.B());
@@ -511,11 +511,11 @@ void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon
     if(mpModel)
     {
         MapUnit eMapUnit = mpModel->GetItemPool().GetMetric(0);
-        if(eMapUnit != MAP_100TH_MM)
+        if(eMapUnit != MapUnit::Map100thMM)
         {
             switch(eMapUnit)
             {
-                case MAP_TWIP :
+                case MapUnit::MapTwip :
                 {
                     basegfx::B2DHomMatrix aTransform;
                     const double fMMToTWIPS(72.0 / 127.0);
@@ -537,15 +537,15 @@ void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon
 void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 {
     DBG_TESTSOLARMUTEX();
-    MapUnit eMapUnit = MAP_100TH_MM;
+    MapUnit eMapUnit = MapUnit::Map100thMM;
     if(mpModel)
     {
         eMapUnit = mpModel->GetItemPool().GetMetric(0);
-        if(eMapUnit != MAP_100TH_MM)
+        if(eMapUnit != MapUnit::Map100thMM)
         {
             switch(eMapUnit)
             {
-                case MAP_TWIP :
+                case MapUnit::MapTwip :
                 {
                     rPoint.A() = TWIPS_TO_MM(rPoint.A());
                     rPoint.B() = TWIPS_TO_MM(rPoint.B());
@@ -564,15 +564,15 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
 {
     DBG_TESTSOLARMUTEX();
-    MapUnit eMapUnit = MAP_100TH_MM;
+    MapUnit eMapUnit = MapUnit::Map100thMM;
     if(mpModel)
     {
         eMapUnit = mpModel->GetItemPool().GetMetric(0);
-        if(eMapUnit != MAP_100TH_MM)
+        if(eMapUnit != MapUnit::Map100thMM)
         {
             switch(eMapUnit)
             {
-                case MAP_TWIP :
+                case MapUnit::MapTwip :
                 {
                     basegfx::B2DHomMatrix aTransform;
                     const double fTWIPSToMM(127.0 / 72.0);
@@ -660,7 +660,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
         return aAny;
 
     ScopedVclPtrInstance< VirtualDevice > pVDev;
-    pVDev->SetMapMode(MapMode(MAP_100TH_MM));
+    pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
 
     SdrModel* pModel = mpObj->GetModel();
     SdrPage* pPage = mpObj->GetPage();
@@ -690,7 +690,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     {
         Graphic aGraph(aMtf);
         aGraph.SetPrefSize(aSize);
-        aGraph.SetPrefMapMode(MAP_100TH_MM);
+        aGraph.SetPrefMapMode(MapUnit::Map100thMM);
 
         Reference< awt::XBitmap > xBmp( aGraph.GetXGraphic(), UNO_QUERY );
         aAny <<= xBmp;

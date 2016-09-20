@@ -2491,15 +2491,15 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
             static_cast<const SwNoTextFrame*>(Lower())->GetGrfArea( aClip, &aOrig );
             // OD 16.04.2003 #i13147# - copy method code <SvxContourDlg::ScaleContour(..)>
             // in order to avoid that graphic has to be loaded for contour scale.
-            //SvxContourDlg::ScaleContour( rContour, aGrf, MAP_TWIP, aOrig.SSize() );
+            //SvxContourDlg::ScaleContour( rContour, aGrf, MapUnit::MapTwip, aOrig.SSize() );
             {
                 OutputDevice*   pOutDev = Application::GetDefaultDevice();
-                const MapMode   aDispMap( MAP_TWIP );
+                const MapMode   aDispMap( MapUnit::MapTwip );
                 const MapMode   aGrfMap( pGrfObj->GetPrefMapMode() );
                 const Size      aGrfSize( pGrfObj->GetPrefSize() );
                 Size            aOrgSize;
                 Point           aNewPoint;
-                bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+                bool            bPixelMap = aGrfMap.GetMapUnit() == MapUnit::MapPixel;
 
                 if ( bPixelMap )
                     aOrgSize = pOutDev->PixelToLogic( aGrfSize, aDispMap );

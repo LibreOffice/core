@@ -137,7 +137,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
         pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
 
         pPrinter = VclPtr<SfxPrinter>::Create( pSet );
-        pPrinter->SetMapMode( MAP_100TH_MM );
+        pPrinter->SetMapMode( MapUnit::Map100thMM );
         UpdateDrawPrinter();
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     }
@@ -197,7 +197,7 @@ VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
 #endif
         pVirtualDevice_100th_mm->SetReferenceDevice(VirtualDevice::RefDevMode::MSO1);
         MapMode aMapMode( pVirtualDevice_100th_mm->GetMapMode() );
-        aMapMode.SetMapUnit( MAP_100TH_MM );
+        aMapMode.SetMapUnit( MapUnit::Map100thMM );
         pVirtualDevice_100th_mm->SetMapMode( aMapMode );
     }
     return pVirtualDevice_100th_mm;
@@ -591,9 +591,9 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
                 {
                     pDev = GetPrinter();
                     aScope.setOldMapMode(pDev->GetMapMode());
-                    pDev->SetMapMode( MAP_PIXEL );  // Important for GetNeededSize
+                    pDev->SetMapMode( MapUnit::MapPixel );  // Important for GetNeededSize
 
-                    Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
+                    Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MapUnit::MapTwip );
                     nPPTX = aPix1000.X() / 1000.0;
                     nPPTY = aPix1000.Y() / 1000.0;
                 }

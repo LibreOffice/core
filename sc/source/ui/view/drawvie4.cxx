@@ -472,7 +472,7 @@ void ScDrawView::SetMarkedOriginalSize()
 
                 if ( nAspect == embed::Aspects::MSOLE_ICON )
                 {
-                    MapMode aMapMode( MAP_100TH_MM );
+                    MapMode aMapMode( MapUnit::Map100thMM );
                     aOriginalSize = static_cast<SdrOle2Obj*>(pObj)->GetOrigObjSize( &aMapMode );
                     bDo = true;
                 }
@@ -485,7 +485,7 @@ void ScDrawView::SetMarkedOriginalSize()
                         aSz = xObj->getVisualAreaSize( static_cast<SdrOle2Obj*>(pObj)->GetAspect() );
                         aOriginalSize = OutputDevice::LogicToLogic(
                                             Size( aSz.Width, aSz.Height ),
-                                            aUnit, MAP_100TH_MM );
+                                            aUnit, MapUnit::Map100thMM );
                         bDo = true;
                     } catch( embed::NoVisualAreaSizeException& )
                     {
@@ -499,8 +499,8 @@ void ScDrawView::SetMarkedOriginalSize()
             const Graphic& rGraphic = static_cast<SdrGrafObj*>(pObj)->GetGraphic();
 
             MapMode aSourceMap = rGraphic.GetPrefMapMode();
-            MapMode aDestMap( MAP_100TH_MM );
-            if (aSourceMap.GetMapUnit() == MAP_PIXEL)
+            MapMode aDestMap( MapUnit::Map100thMM );
+            if (aSourceMap.GetMapUnit() == MapUnit::MapPixel)
             {
                 // consider pixel correction, so that the bitmap is correct on the screen
                 Fraction aNormScaleX, aNormScaleY;

@@ -246,7 +246,7 @@ namespace dbp
         m_aContext.xObjectModel = _rxObjectModel;
         initContext();
 
-        SetPageSizePixel(LogicToPixel(::Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MAP_APPFONT));
+        SetPageSizePixel(LogicToPixel(::Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MapUnit::MapAppFont));
         defaultButton(WizardButtonFlags::NEXT);
         enableButtons(WizardButtonFlags::FINISH, false);
     }

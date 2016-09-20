@@ -273,8 +273,8 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
         {
             ::svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
             Size aSize;
-            MapMode aMap100( MAP_100TH_MM );
-            MapUnit aMapUnit = MAP_100TH_MM;
+            MapMode aMap100( MapUnit::Map100thMM );
+            MapUnit aMapUnit = MapUnit::Map100thMM;
 
             if ( nAspect == embed::Aspects::MSOLE_ICON )
             {
@@ -301,7 +301,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
                     // Rechteck mit ausgewogenem Kantenverhaeltnis
                     aSize.Width() = 5000;
                     aSize.Height() = 5000;
-                    Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
+                    Size aTmp = OutputDevice::LogicToLogic( aSize, MapUnit::Map100thMM, aMapUnit );
                     aSz.Width = aTmp.Width();
                     aSz.Height = aTmp.Height();
                     xObj->setVisualAreaSize( nAspect, aSz );
@@ -340,7 +340,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
                     awt::Size aSz = xObj->getVisualAreaSize( nAspect );
 
                     Size aNewSize( aSz.Width, aSz.Height );
-                    aNewSize = OutputDevice::LogicToLogic( aNewSize, aMapUnit, MAP_100TH_MM );
+                    aNewSize = OutputDevice::LogicToLogic( aNewSize, aMapUnit, MapUnit::Map100thMM );
 
                     if ( aNewSize != aSize )
                     {
@@ -484,7 +484,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     }
     if (bSizeCh)
     {
-        aSize = vcl::Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
+        aSize = vcl::Window::LogicToLogic( aSize, MapMode( MapUnit::Map100thMM ), MapMode( aMapUnit ) );
         aSz.Width = aSize.Width();
         aSz.Height = aSize.Height();
         xObj->setVisualAreaSize( nAspect, aSz );

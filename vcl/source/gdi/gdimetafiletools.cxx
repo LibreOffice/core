@@ -276,7 +276,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
     // start with empty region
     aClips.push_back(basegfx::B2DPolyPolygon());
 
-    // start with default MapMode (MAP_PIXEL)
+    // start with default MapMode (MapUnit::MapPixel)
     aMapModes.push_back(MapMode());
 
     for(sal_uLong i(0); i < nObjCount; ++i)
@@ -715,7 +715,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     // combination with the current MapMode
                     Size aLogicalSize(rBitmapEx.GetPrefSize());
 
-                    if(MAP_PIXEL == rBitmapEx.GetPrefMapMode().GetMapUnit())
+                    if(MapUnit::MapPixel == rBitmapEx.GetPrefMapMode().GetMapUnit())
                     {
                         aLogicalSize = Application::GetDefaultDevice()->PixelToLogic(aLogicalSize, aMapModes.back().GetMapUnit());
                     }
@@ -742,7 +742,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     // combination with the current MapMode
                     Size aLogicalSize(rBitmap.GetPrefSize());
 
-                    if(MAP_PIXEL == rBitmap.GetPrefMapMode().GetMapUnit())
+                    if(MapUnit::MapPixel == rBitmap.GetPrefMapMode().GetMapUnit())
                     {
                         aLogicalSize = Application::GetDefaultDevice()->PixelToLogic(aLogicalSize, aMapModes.back().GetMapUnit());
                     }

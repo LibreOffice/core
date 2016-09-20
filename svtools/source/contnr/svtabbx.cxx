@@ -132,7 +132,7 @@ void SvTabListBox::SetTabs(const long* pTabs, MapUnit eMapUnit)
     nTabCount = nCount;
 
     MapMode aMMSource( eMapUnit );
-    MapMode aMMDest( MAP_PIXEL );
+    MapMode aMMDest( MapUnit::MapPixel );
 
     pTabs++;
     for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++, pTabs++ )
@@ -155,7 +155,7 @@ void SvTabListBox::SetTab( sal_uInt16 nTab,long nValue,MapUnit eMapUnit )
     {
         DBG_ASSERT(pTabList,"TabList?");
         MapMode aMMSource( eMapUnit );
-        MapMode aMMDest( MAP_PIXEL );
+        MapMode aMMDest( MapUnit::MapPixel );
         Size aSize( nValue, 0 );
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
         nValue = aSize.Width();

@@ -235,7 +235,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
 {
     get(m_pShowExampleCB, "showexample");
     get(m_pExampleContainerWIN, "example");
-    Size aWinSize(LogicToPixel(Size(150, 188), MapMode(MAP_APPFONT)));
+    Size aWinSize(LogicToPixel(Size(150, 188), MapMode(MapUnit::MapAppFont)));
     m_pExampleContainerWIN->set_width_request(aWinSize.Width());
     m_pExampleContainerWIN->set_height_request(aWinSize.Height());
     m_pExampleContainerWIN->SetSizePixel(aWinSize);
@@ -624,7 +624,7 @@ void SwIndexTreeLB::setColSizes()
 
     for(sal_uInt16 i = 1; i <= MAXLEVEL; ++i)
         nTabs_Impl[i+1] = nTabs_Impl[i] + nWidth;
-    SvSimpleTable::SetTabs(&nTabs_Impl[0], MAP_PIXEL);
+    SvSimpleTable::SetTabs(&nTabs_Impl[0], MapUnit::MapPixel);
 }
 
 class SwAddStylesDlg_Impl : public SfxModalDialog
@@ -658,7 +658,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
     get(m_pRightPB, "right");
     OUString sHBFirst = get<FixedText>("notapplied")->GetText();
     SvSimpleTableContainer *pHeaderTreeContainer = get<SvSimpleTableContainer>("styles");
-    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(273, 164), MAP_APPFONT);
+    Size aSize = pHeaderTreeContainer->LogicToPixel(Size(273, 164), MapUnit::MapAppFont);
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
     m_pHeaderTree = VclPtr<SwIndexTreeLB>::Create(*pHeaderTreeContainer);
@@ -3940,7 +3940,7 @@ std::vector<long> SwEntryBrowseBox::GetOptimalColWidths() const
 
 Size SwEntryBrowseBox::GetOptimalSize() const
 {
-    Size aSize = LogicToPixel(Size(276 , 175), MapMode(MAP_APPFONT));
+    Size aSize = LogicToPixel(Size(276 , 175), MapMode(MapUnit::MapAppFont));
 
     std::vector<long> aWidths = GetOptimalColWidths();
 

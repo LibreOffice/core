@@ -87,7 +87,7 @@ DISPLACEMENT FUNCTIONS
 
 - Move( long nX, long nX)
 - Move( long nX, long nX, long nDPIX, long nDPIY ) - Move method getting specifics how to
-                                             handle MapMode( MAP_PIXEL )
+                                             handle MapMode( MapUnit::MapPixel )
 
 
 TRANSFORMATION FUNCTIONS

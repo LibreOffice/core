@@ -268,9 +268,9 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
 
     SetSwapGraphics();
 
-    SetScaleUnit(MAP_100TH_MM);
+    SetScaleUnit(MapUnit::Map100thMM);
     SfxItemPool& rPool = GetItemPool();
-    rPool.SetDefaultMetric(MAP_100TH_MM);
+    rPool.SetDefaultMetric(MapUnit::Map100thMM);
     SvxFrameDirectionItem aModeItem( FRMDIR_ENVIRONMENT, EE_PARA_WRITINGDIR );
     rPool.SetPoolDefaultItem( aModeItem );
 
@@ -2042,7 +2042,7 @@ ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )
 IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
                                           const Point& rWinPoint, const vcl::Window& rCmpWnd )
 {
-    const MapMode       aMap100( MAP_100TH_MM );
+    const MapMode       aMap100( MapUnit::Map100thMM );
     MapMode             aWndMode = rCmpWnd.GetMapMode();
     Point               aRelPoint( rCmpWnd.LogicToLogic( rWinPoint, &aWndMode, &aMap100 ) );
     Rectangle           aLogRect = rCmpWnd.LogicToLogic( pObj->GetLogicRect(), &aWndMode, &aMap100 );
@@ -2073,7 +2073,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
             if ( rGeo.nShearAngle )
                 ShearPoint( aRelPoint, aLogRect.TopLeft(), -rGeo.nTan );
 
-            if ( rGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+            if ( rGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
                 aGraphSize = rCmpWnd.PixelToLogic( rGraphic.GetPrefSize(),
                                                          aMap100 );
             else

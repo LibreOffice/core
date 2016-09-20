@@ -44,7 +44,7 @@ ScOverlayHint::ScOverlayHint(const OUString& rTit, const OUString& rMsg, const C
     , m_aTitle(rTit)
     , m_aMessage(convertLineEnd(rMsg, LINEEND_CR))
     , m_aTextFont(rFont)
-    , m_aMapMode(MAP_PIXEL)
+    , m_aMapMode(MapUnit::MapPixel)
     , m_nLeft(0)
     , m_nTop(0)
 {
@@ -158,7 +158,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlayObje
 Size ScOverlayHint::GetSizePixel() const
 {
     basegfx::B2DRange aRange;
-    createOverlaySequence(0, 0, MAP_PIXEL, aRange);
+    createOverlaySequence(0, 0, MapUnit::MapPixel, aRange);
     return Size(aRange.getWidth(), aRange.getHeight());
 }
 

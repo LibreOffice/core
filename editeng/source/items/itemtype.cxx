@@ -39,45 +39,45 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
 
     switch ( eDestUnit )
     {
-        case MAP_100TH_MM:
-        case MAP_10TH_MM:
-        case MAP_MM:
-        case MAP_CM:
+        case MapUnit::Map100thMM:
+        case MapUnit::Map10thMM:
+        case MapUnit::MapMM:
+        case MapUnit::MapCM:
         {
             nRet = (long)OutputDevice::LogicToLogic(
-                nVal, (MapUnit)eSrcUnit, (MapUnit)MAP_100TH_MM );
+                nVal, (MapUnit)eSrcUnit, (MapUnit)MapUnit::Map100thMM );
 
             switch ( eDestUnit )
             {
-                case MAP_100TH_MM:  nRet *= 1000; break;
-                case MAP_10TH_MM:   nRet *= 100; break;
-                case MAP_MM:        nRet *= 10; break;
+                case MapUnit::Map100thMM:  nRet *= 1000; break;
+                case MapUnit::Map10thMM:   nRet *= 100; break;
+                case MapUnit::MapMM:        nRet *= 10; break;
                 default: ;//prevent warning
             }
             break;
         }
 
-        case MAP_1000TH_INCH:
-        case MAP_100TH_INCH:
-        case MAP_10TH_INCH:
-        case MAP_INCH:
+        case MapUnit::Map1000thInch:
+        case MapUnit::Map100thInch:
+        case MapUnit::Map10thInch:
+        case MapUnit::MapInch:
         {
             nRet = OutputDevice::LogicToLogic(
-                nVal, (MapUnit)eSrcUnit, (MapUnit)MAP_1000TH_INCH );
+                nVal, (MapUnit)eSrcUnit, (MapUnit)MapUnit::Map1000thInch );
 
             switch ( eDestUnit )
             {
-                case MAP_1000TH_INCH:   nRet *= 1000; break;
-                case MAP_100TH_INCH:    nRet *= 100; break;
-                case MAP_10TH_INCH:     nRet *= 10; break;
+                case MapUnit::Map1000thInch:   nRet *= 1000; break;
+                case MapUnit::Map100thInch:    nRet *= 100; break;
+                case MapUnit::Map10thInch:     nRet *= 10; break;
                 default: ;//prevent warning
             }
             break;
         }
 
-        case MAP_POINT:
-        case MAP_TWIP:
-        case MAP_PIXEL:
+        case MapUnit::MapPoint:
+        case MapUnit::MapTwip:
+        case MapUnit::MapPixel:
             return OUString::number( (long)OutputDevice::LogicToLogic(
                         nVal, (MapUnit)eSrcUnit, (MapUnit)eDestUnit ));
 
@@ -86,7 +86,7 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
             return OUString();
     }
 
-    if ( MAP_CM == eDestUnit || MAP_INCH == eDestUnit )
+    if ( MapUnit::MapCM == eDestUnit || MapUnit::MapInch == eDestUnit )
     {
         sal_Int32 nMod = nRet % 10;
 
@@ -174,32 +174,32 @@ sal_uInt16 GetMetricId( MapUnit eUnit )
 
     switch ( eUnit )
     {
-        case MAP_100TH_MM:
-        case MAP_10TH_MM:
-        case MAP_MM:
+        case MapUnit::Map100thMM:
+        case MapUnit::Map10thMM:
+        case MapUnit::MapMM:
             nId = RID_SVXITEMS_METRIC_MM;
             break;
 
-        case MAP_CM:
+        case MapUnit::MapCM:
             nId = RID_SVXITEMS_METRIC_CM;
             break;
 
-        case MAP_1000TH_INCH:
-        case MAP_100TH_INCH:
-        case MAP_10TH_INCH:
-        case MAP_INCH:
+        case MapUnit::Map1000thInch:
+        case MapUnit::Map100thInch:
+        case MapUnit::Map10thInch:
+        case MapUnit::MapInch:
             nId = RID_SVXITEMS_METRIC_INCH;
             break;
 
-        case MAP_POINT:
+        case MapUnit::MapPoint:
             nId = RID_SVXITEMS_METRIC_POINT;
             break;
 
-        case MAP_TWIP:
+        case MapUnit::MapTwip:
             nId = RID_SVXITEMS_METRIC_TWIP;
             break;
 
-        case MAP_PIXEL:
+        case MapUnit::MapPixel:
             nId = RID_SVXITEMS_METRIC_PIXEL;
             break;
 

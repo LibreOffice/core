@@ -184,7 +184,7 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
     m_pRemoveBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
 
     Size aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
-                               MapMode( MAP_APPFONT ) );
+                               MapMode( MapUnit::MapAppFont ) );
     m_pOptionsBtn->SetSizePixel( aSize );
     m_pEnableBtn->SetSizePixel( aSize );
     m_pRemoveBtn->SetSizePixel( aSize );
@@ -1574,7 +1574,7 @@ ShowLicenseDialog::ShowLicenseDialog( vcl::Window * pParent,
     : ModalDialog(pParent, "ShowLicenseDialog", "desktop/ui/showlicensedialog.ui")
 {
     get(m_pLicenseText, "textview");
-    Size aSize(m_pLicenseText->LogicToPixel(Size(290, 170), MAP_APPFONT));
+    Size aSize(m_pLicenseText->LogicToPixel(Size(290, 170), MapUnit::MapAppFont));
     m_pLicenseText->set_width_request(aSize.Width());
     m_pLicenseText->set_height_request(aSize.Height());
     m_pLicenseText->SetText(xPackage->getLicenseText());

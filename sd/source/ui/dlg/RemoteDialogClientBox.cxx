@@ -119,7 +119,7 @@ VCL_BUILDER_DECL_FACTORY(ClientBox)
 
 Size ClientBox::GetOptimalSize() const
 {
-    return LogicToPixel(Size(200, 140), MAP_APPFONT);
+    return LogicToPixel(Size(200, 140), MapUnit::MapAppFont);
 }
 
 ClientBox::~ClientBox()
@@ -167,7 +167,7 @@ void ClientBox::CalcActiveHeight( const long nPos )
     aSize.Width() -= ICON_OFFSET;
 
     aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
-                               MapMode( MAP_APPFONT ) );
+                               MapMode( MapUnit::MapAppFont ) );
     aTextHeight += aSize.Height();
 
     if ( aTextHeight < m_nStdHeight )
@@ -356,7 +356,7 @@ void ClientBox::RecalcAll()
 
     Size aPBSize = LogicToPixel(
                       Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
-                      MapMode( MAP_APPFONT ) );
+                      MapMode( MapUnit::MapAppFont ) );
     m_aPinBox->SetSizePixel( aPBSize );
     m_aDeauthoriseButton->SetSizePixel( m_aDeauthoriseButton->GetOptimalSize() );
 

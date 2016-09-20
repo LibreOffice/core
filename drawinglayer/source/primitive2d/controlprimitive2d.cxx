@@ -135,8 +135,8 @@ namespace drawinglayer
                             {   // #i93162# For painting the control setting a Zoom (using setZoom() at the xControlView)
                                 // is needed to define the font size. Normally this is done in
                                 // ViewObjectContactOfUnoControl::createPrimitive2DSequence by using positionControlForPaint().
-                                // For some reason the difference between MAP_TWIPS and MAP_100TH_MM still plays
-                                // a role there so that for Draw/Impress/Calc (the MAP_100TH_MM users) i need to set a zoom
+                                // For some reason the difference between MapUnit::MapTwipS and MapUnit::Map100thMM still plays
+                                // a role there so that for Draw/Impress/Calc (the MapUnit::Map100thMM users) i need to set a zoom
                                 // here, too. The factor includes the needed scale, but is calculated by pure comparisons. It
                                 // is somehow related to the twips/100thmm relationship.
                                 bool bUserIs100thmm(false);
@@ -160,7 +160,7 @@ namespace drawinglayer
 
                                                 if(pWindow)
                                                 {
-                                                    if(MAP_100TH_MM == pWindow->GetMapMode().GetMapUnit())
+                                                    if(MapUnit::Map100thMM == pWindow->GetMapMode().GetMapUnit())
                                                     {
                                                         bUserIs100thmm = true;
                                                     }

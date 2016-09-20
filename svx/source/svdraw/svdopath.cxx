@@ -2946,11 +2946,11 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
 
     // force MapUnit to 100th mm
     const MapUnit eMapUnit(GetObjectMapUnit());
-    if(eMapUnit != MAP_100TH_MM)
+    if(eMapUnit != MapUnit::Map100thMM)
     {
         switch(eMapUnit)
         {
-            case MAP_TWIP :
+            case MapUnit::MapTwip :
             {
                 // position
                 aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
@@ -3016,11 +3016,11 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
 
     // force metric to pool metric
     const MapUnit eMapUnit(GetObjectMapUnit());
-    if(eMapUnit != MAP_100TH_MM)
+    if(eMapUnit != MapUnit::Map100thMM)
     {
         switch(eMapUnit)
         {
-            case MAP_TWIP :
+            case MapUnit::MapTwip :
             {
                 // position
                 aTranslate.setX(ImplMMToTwips(aTranslate.getX()));

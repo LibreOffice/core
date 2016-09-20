@@ -1131,10 +1131,10 @@ void EscherPropertyContainer::CreateLineProperties(
 static Size lcl_SizeToEmu(Size aPrefSize, const MapMode& aPrefMapMode)
 {
     Size aRetSize;
-    if (aPrefMapMode == MAP_PIXEL)
-        aRetSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
+    if (aPrefMapMode == MapUnit::MapPixel)
+        aRetSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MapUnit::Map100thMM );
     else
-        aRetSize = OutputDevice::LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM );
+        aRetSize = OutputDevice::LogicToLogic( aPrefSize, aPrefMapMode, MapUnit::Map100thMM );
     return aRetSize;
 }
 
@@ -1384,7 +1384,7 @@ GraphicObject lclDrawHatch( const css::drawing::Hatch& rHatch, const Color& rBac
 
     pVDev->SetOutputSizePixel(Size(2, 2));
     pVDev->EnableOutput(false);
-    pVDev->SetMapMode(MapMode(MAP_100TH_MM));
+    pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
     aMtf.Clear();
     aMtf.Record(pVDev);
     pVDev->SetLineColor();
@@ -1393,7 +1393,7 @@ GraphicObject lclDrawHatch( const css::drawing::Hatch& rHatch, const Color& rBac
     pVDev->DrawHatch(tools::PolyPolygon(rRect), Hatch((HatchStyle)rHatch.Style, Color(rHatch.Color), rHatch.Distance, (sal_uInt16)rHatch.Angle));
     aMtf.Stop();
     aMtf.WindStart();
-    aMtf.SetPrefMapMode(MapMode(MAP_100TH_MM));
+    aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
     aMtf.SetPrefSize(rRect.GetSize());
 
     return GraphicObject(Graphic(aMtf));

@@ -59,7 +59,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
 
     SvSimpleTableContainer *pCheckLBContainer = get<SvSimpleTableContainer>("checklb");
     Size aControlSize(248, 75);
-    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
     pCheckLBContainer->set_width_request(aControlSize.Width());
     pCheckLBContainer->set_height_request(aControlSize.Height());
 
@@ -421,7 +421,7 @@ void SvxFontSubstCheckListBox::setColSizes()
     long nW1 = rBar.GetTextWidth(rBar.GetItemText(3));
     long nW2 = rBar.GetTextWidth(rBar.GetItemText(4));
     long nMax = std::max( nW1, nW2 ) + 6; // width of the longest header + a little offset
-    long nMin = rBar.LogicToPixel(Size(10, 0), MAP_APPFONT).Width();
+    long nMin = rBar.LogicToPixel(Size(10, 0), MapUnit::MapAppFont).Width();
     nMax = std::max( nMax, nMin );
     const long nDoubleMax = 2*nMax;
     const long nRest = GetSizePixel().Width() - nDoubleMax;
@@ -429,7 +429,7 @@ void SvxFontSubstCheckListBox::setColSizes()
     aStaticTabs[2] = nMax;
     aStaticTabs[3] = nDoubleMax;
     aStaticTabs[4] = nDoubleMax + nRest/2;
-    SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+    SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
 }
 
 void SvxFontSubstCheckListBox::Resize()

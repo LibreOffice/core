@@ -341,7 +341,7 @@ void ClassificationControl::SetOptimalSize()
 {
     // Same as SvxColorDockingWindow.
     const Size aLogicalAttrSize(150 * m_pLabels.size(), 0);
-    Size aSize(LogicToPixel(aLogicalAttrSize,MAP_APPFONT));
+    Size aSize(LogicToPixel(aLogicalAttrSize,MapUnit::MapAppFont));
 
     auto& pLabel = m_pLabels[SfxClassificationPolicyType::IntellectualProperty];
     auto& pCategories = m_pCategories[SfxClassificationPolicyType::IntellectualProperty];

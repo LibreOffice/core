@@ -2135,7 +2135,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
                 sal_uInt16 nSubId( 0 );
                 SfxItemPool& rPool = pShell->GetPool();
                 sal_uInt16 nWhich = rPool.GetWhich( nSID );
-                if ( rPool.GetMetric( nWhich ) == MAP_TWIP )
+                if ( rPool.GetMetric( nWhich ) == MapUnit::MapTwip )
                     nSubId |= CONVERT_TWIPS;
                 pItem->QueryValue( aState, (sal_uInt8)nSubId );
             }

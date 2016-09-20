@@ -271,7 +271,7 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     m_nSendCount(0),
     m_nErrorCount(0)
 {
-    Size aSize = m_pContainer->LogicToPixel(Size(226, 80), MAP_APPFONT);
+    Size aSize = m_pContainer->LogicToPixel(Size(226, 80), MapUnit::MapAppFont);
     m_pContainer->set_width_request(aSize.Width());
     m_pContainer->set_height_request(aSize.Height());
     m_pStatus = VclPtr<SvSimpleTable>::Create(*m_pContainer);
@@ -296,7 +296,7 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     static long nTabs[] = {2, 0, nPos1};
     m_pStatus->SetStyle( m_pStatus->GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_pStatus->SetSelectionMode( SelectionMode::Single );
-    m_pStatus->SetTabs(&nTabs[0], MAP_PIXEL);
+    m_pStatus->SetTabs(&nTabs[0], MapUnit::MapPixel);
     m_pStatus->SetSpaceBetweenEntries(3);
 
     UpdateTransferStatus();

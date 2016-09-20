@@ -86,7 +86,7 @@ SvxMeasurePage::SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs
         rOutAttrs               ( rInAttrs ),
         aAttrSet                ( *rInAttrs.GetPool() ),
         pView( nullptr ),
-        eUnit( MAP_100TH_MM ),
+        eUnit( MapUnit::Map100thMM ),
         bPositionModified       ( false )
 {
     get(m_pMtrFldLineDist, "MTR_LINE_DIST");

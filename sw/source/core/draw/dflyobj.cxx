@@ -751,9 +751,9 @@ void SwVirtFlyDrawObj::NbcCrop(const Point& rRef, const Fraction& xFact, const F
     GraphicObject const *pGraphicObject = pSh->GetGraphicObj();
     if (!pGraphicObject)
         return;
-    const MapMode aMapMode100thmm(MAP_100TH_MM);
+    const MapMode aMapMode100thmm(MapUnit::Map100thMM);
     Size aGraphicSize(pGraphicObject->GetPrefSize());
-    if( MAP_PIXEL == pGraphicObject->GetPrefMapMode().GetMapUnit() )
+    if( MapUnit::MapPixel == pGraphicObject->GetPrefMapMode().GetMapUnit() )
         aGraphicSize = Application::GetDefaultDevice()->PixelToLogic( aGraphicSize, aMapMode100thmm );
     else
         aGraphicSize = OutputDevice::LogicToLogic( aGraphicSize, pGraphicObject->GetPrefMapMode(), aMapMode100thmm);

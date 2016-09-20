@@ -1268,7 +1268,7 @@ Rectangle SmTextForwarder::GetParaBounds( sal_Int32 nPara ) const
 MapMode SmTextForwarder::GetMapMode() const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    return pEditEngine ? pEditEngine->GetRefMapMode() : MapMode( MAP_100TH_MM );
+    return pEditEngine ? pEditEngine->GetRefMapMode() : MapMode( MapUnit::Map100thMM );
 }
 
 OutputDevice* SmTextForwarder::GetRefDevice() const

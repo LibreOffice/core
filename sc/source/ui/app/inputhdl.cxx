@@ -679,7 +679,7 @@ void ScInputHandler::SetRefScale( const Fraction& rX, const Fraction& rY )
         aScaleY = rY;
         if (pEngine)
         {
-            MapMode aMode( MAP_100TH_MM, Point(), aScaleX, aScaleY );
+            MapMode aMode( MapUnit::Map100thMM, Point(), aScaleX, aScaleY );
             pEngine->SetRefMapMode( aMode );
         }
     }
@@ -703,7 +703,7 @@ void ScInputHandler::UpdateRefDevice()
     else
         pEngine->SetRefDevice( nullptr );
 
-    MapMode aMode( MAP_100TH_MM, Point(), aScaleX, aScaleY );
+    MapMode aMode( MapUnit::Map100thMM, Point(), aScaleX, aScaleY );
     pEngine->SetRefMapMode( aMode );
 
     //  SetRefDevice(NULL) uses VirtualDevice, SetRefMapMode forces creation of a local VDev,

@@ -471,7 +471,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
     {
         Size aTmp(aNewSz.Width, aNewSz.Height);
         aTmp = Application::GetDefaultDevice()
-                    ->PixelToLogic( aTmp, MapMode( MAP_100TH_MM ) );
+                    ->PixelToLogic( aTmp, MapMode( MapUnit::Map100thMM ) );
         aNewSz.Width = aTmp.Width();
         aNewSz.Height = aTmp.Height();
     }
@@ -734,7 +734,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     {
         Size aTmpSz( aNewSz.Width, aNewSz.Height );
         aTmpSz = Application::GetDefaultDevice()
-                        ->PixelToLogic( aTmpSz, MapMode( MAP_100TH_MM ) );
+                        ->PixelToLogic( aTmpSz, MapMode( MapUnit::Map100thMM ) );
         aNewSz.Width  = aTmpSz.Width();
         aNewSz.Height = aTmpSz.Height();
     }
@@ -1694,7 +1694,7 @@ void SwHTMLParser::InsertInput()
             if( (aSz.Width() || aSz.Height()) && Application::GetDefaultDevice() )
             {
                 aSz = Application::GetDefaultDevice()
-                    ->PixelToLogic( aSz, MapMode( MAP_100TH_MM ) );
+                    ->PixelToLogic( aSz, MapMode( MapUnit::Map100thMM ) );
             }
             aTmp <<= FormButtonType_SUBMIT;
             xPropSet->setPropertyValue("ButtonType", aTmp );
@@ -1782,7 +1782,7 @@ void SwHTMLParser::InsertInput()
         {
             Size aNewSz( nSize, 0 );
             aNewSz = Application::GetDefaultDevice()
-                        ->PixelToLogic( aNewSz, MapMode( MAP_100TH_MM ) );
+                        ->PixelToLogic( aNewSz, MapMode( MapUnit::Map100thMM ) );
             aSz.Width() = aNewSz.Width();
             OSL_ENSURE( !aTextSz.Width(), "Text-Breite ist gegeben" );
             bMinWidth = false;

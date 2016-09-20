@@ -75,7 +75,7 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     mbMTSelecting( false )
 {
     mpEditEngine->SetRefDevice( mpBackgrDev.get() );
-    mpEditEngine->SetRefMapMode( MapMode( MAP_PIXEL ) );
+    mpEditEngine->SetRefMapMode( MapMode( MapUnit::MapPixel ) );
     maEdEngSize = mpEditEngine->GetPaperSize();
 
     mpPopup->SetMenuFlags( mpPopup->GetMenuFlags() | MenuFlags::NoAutoMnemonics );

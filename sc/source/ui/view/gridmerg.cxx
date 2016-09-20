@@ -35,7 +35,7 @@ ScGridMerger::ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePix
     //  optimize (DrawGrid) only for pixel MapMode,
     //  to avoid rounding errors
 
-    bOptimize = ( pDev->GetMapMode().GetMapUnit() == MAP_PIXEL );
+    bOptimize = ( pDev->GetMapMode().GetMapUnit() == MapUnit::MapPixel );
 }
 
 ScGridMerger::~ScGridMerger()

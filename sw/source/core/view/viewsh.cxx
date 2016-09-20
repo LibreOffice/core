@@ -1850,7 +1850,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
     // setup the output device to draw the tile
     MapMode aMapMode(rDevice.GetMapMode());
-    aMapMode.SetMapUnit(MAP_TWIP);
+    aMapMode.SetMapUnit(MapUnit::MapTwip);
     aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
 
     // Scaling. Must convert from pixels to twips. We know

@@ -130,7 +130,7 @@ DropdownToolbarController::DropdownToolbarController(
 
     // default dropdown size
     ::Size aLogicalSize( 0, 160 );
-    ::Size aPixelSize = m_pListBoxControl->LogicToPixel( aLogicalSize, MAP_APPFONT );
+    ::Size aPixelSize = m_pListBoxControl->LogicToPixel( aLogicalSize, MapUnit::MapAppFont );
 
     m_pListBoxControl->SetSizePixel( ::Size( nWidth, aPixelSize.Height() ));
     m_pToolbar->SetItemWindow( m_nID, m_pListBoxControl );

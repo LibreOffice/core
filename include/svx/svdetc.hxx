@@ -80,14 +80,14 @@ public:
 
     // Default FontHeight is 847. The font height uses logical units (MapUnit/MapFraction
     // see below for further details). The default setting 847/100mm corresponds to about
-    // 24 Point. If e.g. one would use Twips (SetMapUnit(MAP_TWIP)) (20 Twip = 1 Point)
+    // 24 Point. If e.g. one would use Twips (SetMapUnit(MapUnit::MapTwip)) (20 Twip = 1 Point)
     // instead, one would need to set the font height to 480, in order to get a 24 Point height.
     static size_t      GetFontHeight()                      { return GetDefaults().nFontHeight; }
 
     // The MapMode is needed for the global Outliner.
     // Incidentally, every newly instantiated SdrModel is assigned this MapMode by default.
-    // Default MapUnit is MAP_100TH_MM
-    static MapUnit    GetMapUnit()                         { return MAP_100TH_MM; }
+    // Default MapUnit is MapUnit::Map100thMM
+    static MapUnit    GetMapUnit()                         { return MapUnit::Map100thMM; }
 
     // Default MapFraction is 1/1.
     static Fraction   GetMapFraction()                     { return GetDefaults().aMapFraction; }

@@ -176,7 +176,7 @@ namespace drawinglayer
                     {
                         const uno::Reference< rendering::XGraphicDevice > xGraphicDevice;
 
-                        aBitmapEx.SetPrefMapMode(MapMode(MAP_100TH_MM));
+                        aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
                         aBitmapEx.SetPrefSize(Size(basegfx::fround(fWidth), basegfx::fround(fHeight)));
                         XBitmap = vcl::unotools::xBitmapFromBitmapEx(xGraphicDevice, aBitmapEx);
                     }

@@ -120,7 +120,7 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
             const MapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
 
             sal_uInt8 nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
-            if( eMapUnit == MAP_100TH_MM )
+            if( eMapUnit == MapUnit::Map100thMM )
                 nMemberId &= (~CONVERT_TWIPS);
 
             // DVO, OD 10.10.2003 #i18732#
@@ -133,7 +133,7 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
 
     // check for needed metric translation
     const MapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
-    if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != MAP_100TH_MM)
+    if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != MapUnit::Map100thMM)
     {
         SvxUnoConvertToMM( eMapUnit, rValue );
     }
@@ -153,7 +153,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
     uno::Any aValue( rValue );
 
     const MapUnit eMapUnit = pPool->GetMetric((sal_uInt16)pEntry->mnHandle);
-    if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != MAP_100TH_MM)
+    if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != MapUnit::Map100thMM)
     {
         SvxUnoConvertFromMM( eMapUnit, aValue );
     }
@@ -187,7 +187,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
         {
             std::unique_ptr<SfxPoolItem> pNewItem( pPool->GetDefaultItem( nWhich ).Clone() );
             sal_uInt8 nMemberId = pEntry->mnMemberId & (~SFX_METRIC_ITEM);
-            if( pPool->GetMetric(nWhich) == MAP_100TH_MM )
+            if( pPool->GetMetric(nWhich) == MapUnit::Map100thMM )
                 nMemberId &= (~CONVERT_TWIPS);
 
             if( !pNewItem->PutValue( aValue, nMemberId ) )

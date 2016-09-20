@@ -116,9 +116,9 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
             if( aPrefSize.Width() && aPrefSize.Height() )
             {
                 if( pWindow )
-                    aSize = pWindow->PixelToLogic( aPrefSize, MAP_TWIP );
+                    aSize = pWindow->PixelToLogic( aPrefSize, MapUnit::MapTwip );
                 else
-                    aSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_TWIP );
+                    aSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MapUnit::MapTwip );
             }
             else
                 aSize = Size( 2835, 2835 );

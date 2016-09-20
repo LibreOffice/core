@@ -259,11 +259,11 @@ unsigned char * JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
             Point       aEmptyPoint;
             Fraction    aFractX( 1, rParam.X_density );
             Fraction    aFractY( 1, rParam.Y_density );
-            MapMode     aMapMode( nUnit == 1 ? MAP_INCH : MAP_CM, aEmptyPoint, aFractX, aFractY );
-            Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MAP_100TH_MM );
+            MapMode     aMapMode( nUnit == 1 ? MapUnit::MapInch : MapUnit::MapCM, aEmptyPoint, aFractX, aFractY );
+            Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MapUnit::Map100thMM );
 
             maBmp.SetPrefSize( aPrefSize );
-            maBmp.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+            maBmp.SetPrefMapMode( MapMode( MapUnit::Map100thMM ) );
         }
     }
 

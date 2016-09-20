@@ -45,7 +45,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( vcl::Window* pParent, const OUString& rName,
 {
     get(m_pEdName, "name");
     get(m_pEdComment, "comment");
-    Size aSize(m_pEdComment->LogicToPixel(Size(183, 46), MAP_APPFONT));
+    Size aSize(m_pEdComment->LogicToPixel(Size(183, 46), MapUnit::MapAppFont));
     m_pEdComment->set_width_request(aSize.Width());
     m_pEdComment->set_height_request(aSize.Height());
     get(m_pCbShowFrame, "showframe");

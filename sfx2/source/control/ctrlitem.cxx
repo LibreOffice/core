@@ -341,7 +341,7 @@ MapUnit SfxControllerItem::GetCoreMetric() const
     }
 
     SAL_INFO( "sfx.control", "W1: Can not find ItemPool!" );
-    return MAP_100TH_MM;
+    return MapUnit::Map100thMM;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

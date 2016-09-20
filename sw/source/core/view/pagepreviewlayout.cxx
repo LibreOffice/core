@@ -208,7 +208,7 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
     mbLayoutInfoValid = true;
 
     // calculate scaling
-    MapMode aMapMode( MAP_TWIP );
+    MapMode aMapMode( MapUnit::MapTwip );
     Size aWinSize = mrParentViewShell.GetOut()->PixelToLogic( _rPxWinSize, aMapMode );
     Fraction aXScale( aWinSize.Width(), mnPreviewLayoutWidth );
     Fraction aYScale( aWinSize.Height(), mnPreviewLayoutHeight );

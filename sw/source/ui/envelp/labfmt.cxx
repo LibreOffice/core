@@ -112,7 +112,7 @@ SwLabPreview::SwLabPreview(vcl::Window* pParent)
     , m_aPWidthStr(SW_RESSTR(STR_PWIDTH))
     , m_aPHeightStr(SW_RESSTR(STR_PHEIGHT))
 {
-    SetMapMode(MAP_PIXEL);
+    SetMapMode(MapUnit::MapPixel);
 
     // FIXME RenderContext
 
@@ -139,7 +139,7 @@ SwLabPreview::SwLabPreview(vcl::Window* pParent)
 
 Size SwLabPreview::GetOptimalSize() const
 {
-    return LogicToPixel(Size(146 , 161), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(146 , 161), MapMode(MapUnit::MapAppFont));
 }
 
 VCL_BUILDER_FACTORY(SwLabPreview)

@@ -85,7 +85,7 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & (RscWindowFlags::XYMapMode | RscWindowFlags::X | RscWindowFlags::Y) )
     {
         // use size as per resource
-        MapUnit ePosMap = MAP_PIXEL;
+        MapUnit ePosMap = MapUnit::MapPixel;
 
         bPos = true;
 
@@ -100,7 +100,7 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & (RscWindowFlags::WHMapMode | RscWindowFlags::Width | RscWindowFlags::Height) )
     {
         // use size as per resource
-        MapUnit eSizeMap = MAP_PIXEL;
+        MapUnit eSizeMap = MapUnit::MapPixel;
 
         bSize = true;
 

@@ -1252,7 +1252,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                         const Size aSz( GetSelectedFlyFrame()->Prt().SSize() );
                         ScopedVclPtrInstance< VirtualDevice > pVirtDev(*GetWin());
 
-                        MapMode aTmp( MAP_TWIP );
+                        MapMode aTmp( MapUnit::MapTwip );
                         pVirtDev->SetMapMode( aTmp );
                         if( pVirtDev->SetOutputSize( aSz ) )
                         {

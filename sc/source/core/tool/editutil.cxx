@@ -331,7 +331,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
     else
     {
         MapMode aMode = pDev->GetMapMode();
-        pDev->SetMapMode( MAP_PIXEL );
+        pDev->SetMapMode( MapUnit::MapPixel );
 
         long nTextHeight = pDoc->GetNeededSize( nCol, nRow, nTab,
                                                 pDev, nPPTX, nPPTY, aZoomX, aZoomY, false );
@@ -711,7 +711,7 @@ ScTabEditEngine::ScTabEditEngine( const ScPatternAttr& rPattern,
 
 void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
 {
-    SetRefMapMode(MAP_100TH_MM);
+    SetRefMapMode(MapUnit::Map100thMM);
     SfxItemSet* pEditDefaults = new SfxItemSet( GetEmptyItemSet() );
     rPattern.FillEditItemSet( pEditDefaults );
     SetDefaults( pEditDefaults );

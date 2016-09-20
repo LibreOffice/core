@@ -79,8 +79,8 @@ namespace sdr
                         if (comphelper::LibreOfficeKit::isActive())
                         {
                             aSizeLogic = Size(DEFAULT_VALUE_FOR_HITTEST_TWIP, DEFAULT_VALUE_FOR_HITTEST_TWIP);
-                            if (pManager->getOutputDevice().GetMapMode().GetMapUnit() == MAP_100TH_MM)
-                                aSizeLogic = OutputDevice::LogicToLogic(aSizeLogic, MAP_TWIP, MAP_100TH_MM);
+                            if (pManager->getOutputDevice().GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                                aSizeLogic = OutputDevice::LogicToLogic(aSizeLogic, MapUnit::MapTwip, MapUnit::Map100thMM);
                         }
 
                         fLogicTolerance = aSizeLogic.Width();

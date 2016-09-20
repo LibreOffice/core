@@ -133,7 +133,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
         // class.
         pWindow->SetBackground(Wallpaper());
         pWindow->SetCenterAllowed(false);
-        pWindow->SetMapMode(MapMode(MAP_PIXEL));
+        pWindow->SetMapMode(MapMode(MapUnit::MapPixel));
         pWindow->SetViewSize(mrView.GetModelArea().GetSize());
     }
 }

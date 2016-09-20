@@ -792,7 +792,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*r
 {
     rRenderContext.Push(PushFlags::MAPMODE);
 
-    rRenderContext.SetMapMode(MAP_TWIP);
+    rRenderContext.SetMapMode(MapUnit::MapTwip);
 
     Size aWinSize = rRenderContext.GetOutputSize();
 
@@ -909,7 +909,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*r
 
 Size RubyPreview::GetOptimalSize() const
 {
-    return LogicToPixel(Size(215, 50), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(215, 50), MapMode(MapUnit::MapAppFont));
 }
 
 void RubyEdit::GetFocus()

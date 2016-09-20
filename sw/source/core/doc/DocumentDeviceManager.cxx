@@ -78,7 +78,7 @@ void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDe
         if ( mpPrt )
         {
             MapMode aMapMode( mpPrt->GetMapMode() );
-            aMapMode.SetMapUnit( MAP_TWIP );
+            aMapMode.SetMapUnit( MapUnit::MapTwip );
             mpPrt->SetMapMode( aMapMode );
         }
 
@@ -272,7 +272,7 @@ VirtualDevice& DocumentDeviceManager::CreateVirtualDevice_() const
         pNewVir->Compat_ZeroExtleadBug();
 
     MapMode aMapMode( pNewVir->GetMapMode() );
-    aMapMode.SetMapUnit( MAP_TWIP );
+    aMapMode.SetMapUnit( MapUnit::MapTwip );
     pNewVir->SetMapMode( aMapMode );
 
     const_cast<DocumentDeviceManager*>(this)->setVirtualDevice( pNewVir );

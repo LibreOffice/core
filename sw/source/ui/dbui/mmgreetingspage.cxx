@@ -250,7 +250,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
     get(m_pNeutralCB, "general");
     get(m_pPreviewFI, "previewft");
     get(m_pPreviewWIN, "preview");
-    Size aSize(LogicToPixel(Size(186, 21), MapMode(MAP_APPFONT)));
+    Size aSize(LogicToPixel(Size(186, 21), MapMode(MapUnit::MapAppFont)));
     m_pPreviewWIN->set_width_request(aSize.Width());
     m_pPreviewWIN->set_height_request(aSize.Height());
     get(m_pAssignPB, "assign");
@@ -427,7 +427,7 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent) :
     get(m_pBodyFT, "bodyft");
     get(m_pBodyMLE, "bodymle");
     m_pBodyMLE->SetStyle(m_pBodyMLE->GetStyle() | WB_HSCROLL | WB_VSCROLL | WB_IGNORETAB);
-    Size aSize(LogicToPixel(Size(180, 50), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(180, 50), MapUnit::MapAppFont));
     m_pBodyMLE->set_width_request(aSize.Width());
     m_pBodyMLE->set_height_request(aSize.Height());
     get(m_pOK, "ok");

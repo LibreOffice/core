@@ -229,7 +229,7 @@ void SAL_CALL ChartController::setPosSize(
 
     if(xWindow.is() && m_pChartWindow)
     {
-        Size aLogicSize = m_pChartWindow->PixelToLogic( Size( Width, Height ), MapMode( MAP_100TH_MM )  );
+        Size aLogicSize = m_pChartWindow->PixelToLogic( Size( Width, Height ), MapMode( MapUnit::Map100thMM )  );
 
         //todo: for standalone chart: detect whether we are standalone
         //change map mode to fit new size
@@ -239,7 +239,7 @@ void SAL_CALL ChartController::setPosSize(
         sal_Int32 nScaleYNumerator = aLogicSize.Height();
         sal_Int32 nScaleYDenominator = aModelPageSize.Height;
         MapMode aNewMapMode(
-                    MAP_100TH_MM,
+                    MapUnit::Map100thMM,
                     Point(0,0),
                     Fraction(nScaleXNumerator, nScaleXDenominator),
                     Fraction(nScaleYNumerator, nScaleYDenominator) );

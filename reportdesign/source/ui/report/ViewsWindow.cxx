@@ -173,7 +173,7 @@ OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
     , m_bInUnmark(false)
 {
     SetPaintTransparent(true);
-    SetMapMode(MapMode(MAP_100TH_MM));
+    SetMapMode(MapMode(MapUnit::Map100thMM));
     m_aColorConfig.AddListener(this);
     ImplInitSettings();
 }
