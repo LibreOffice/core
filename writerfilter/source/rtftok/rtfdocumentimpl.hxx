@@ -195,7 +195,7 @@ private:
     Id m_nHRule;
     boost::optional<Id> m_oWrap;
 public:
-    RTFFrame();
+    RTFFrame(RTFParserState* pParserState);
     sal_Int16 m_nAnchorType;
 
     /// Convert the stored properties to Sprms
@@ -213,8 +213,9 @@ class RTFDocumentImpl;
 class RTFParserState
 {
 public:
-    RTFParserState();
+    RTFParserState(RTFDocumentImpl* pDocumentImpl);
 
+    RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
     Destination eDestination;
     RTFFieldStatus eFieldStatus;
