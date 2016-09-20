@@ -155,6 +155,9 @@ public:
 
     static void CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle );
     void SyncForGrid( SdrObject* pObj );
+
+    /// See SdrMarkView::GetSfxViewShell().
+    SfxViewShell* GetSfxViewShell() const override;
 };
 
 #endif
