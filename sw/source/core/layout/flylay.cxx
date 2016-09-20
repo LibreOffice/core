@@ -146,7 +146,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea || m_bFormatHeightOnly || !m_bValidContentPos )
     {
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         const SwFormatFrameSize *pSz;
         {   // Additional scope, so aAccess will be destroyed before the check!
 
@@ -216,7 +216,7 @@ void SwFlyFreeFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     Unlock();
 
 #if OSL_DEBUG_LEVEL > 0
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     OSL_ENSURE( m_bHeightClipped || ( (Frame().*fnRect->fnGetHeight)() > 0 &&
             (Prt().*fnRect->fnGetHeight)() > 0),
             "SwFlyFreeFrame::Format(), flipping Fly." );
@@ -928,7 +928,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             }
 
             rRect = pClip->Frame();
-            SWRECTFN( pClip )
+            SWRECTFN fnRect(pClip);
 
             // vertical clipping: Top and Bottom, also to PrtArea if necessary
             if( rV.GetVertOrient() != text::VertOrientation::NONE &&
@@ -1018,7 +1018,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 }
                 const SwLayoutFrame* pHoriClipFrame =
                         pFly->GetAnchorFrame()->FindPageFrame()->GetUpper();
-                SWRECTFN( pFly->GetAnchorFrame() )
+                SWRECTFN fnRect(pFly->GetAnchorFrame());
                 (rRect.*fnRect->fnSetLeft)( (pHoriClipFrame->Frame().*fnRect->fnGetLeft)() );
                 (rRect.*fnRect->fnSetRight)((pHoriClipFrame->Frame().*fnRect->fnGetRight)());
             }
@@ -1027,7 +1027,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 // #i26945#
                 const SwFrame *pClip =
                         const_cast<SwFlyFrame*>(pFly)->GetAnchorFrameContainingAnchPos();
-                SWRECTFN( pClip )
+                SWRECTFN fnRect(pClip);
                 const SwLayoutFrame *pUp = pClip->GetUpper();
                 const SwFrame *pCell = pUp->IsCellFrame() ? pUp : nullptr;
                 const SwFrameType nType = bMove
@@ -1124,7 +1124,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
         else
         {
             const SwFrame *pUp = pFly->GetAnchorFrame()->GetUpper();
-            SWRECTFN( pFly->GetAnchorFrame() )
+            SWRECTFN fnRect(pFly->GetAnchorFrame());
             while( pUp->IsColumnFrame() || pUp->IsSctFrame() || pUp->IsColBodyFrame())
                 pUp = pUp->GetUpper();
             rRect = pUp->Frame();
@@ -1151,11 +1151,11 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             const SvxULSpaceItem &rUL = pFormat->GetULSpace();
             if( bMove )
             {
-                nTop = bVert ? static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().X() :
+                nTop = fnRect.bVert ? static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().X() :
                                static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().Y();
                 nTop = (*fnRect->fnYInc)( nTop, -nHeight );
                 long nWidth = (pFly->Frame().*fnRect->fnGetWidth)();
-                (rRect.*fnRect->fnSetLeftAndWidth)( bVert ?
+                (rRect.*fnRect->fnSetLeftAndWidth)( fnRect.bVert ?
                             static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().Y() :
                             static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().X(), nWidth );
                 nHeight = 2*nHeight - rUL.GetLower() - rUL.GetUpper();
@@ -1187,7 +1187,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             const SwFrame* pUp = pAnchorFrame->GetUpper();
             rRect = pUp->Prt();
             rRect += pUp->Frame().Pos();
-            SWRECTFN( pAnchorFrame )
+            SWRECTFN fnRect(pAnchorFrame);
             long nHeight = (9*(rRect.*fnRect->fnGetHeight)())/10;
             long nTop;
             const SvxULSpaceItem &rUL = pFormat->GetULSpace();
@@ -1195,10 +1195,10 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             long nTmpH = 0;
             if( bMove )
             {
-                nTop = (*fnRect->fnYInc)( bVert ? pSdrObj->GetAnchorPos().X() :
+                nTop = (*fnRect->fnYInc)( fnRect.bVert ? pSdrObj->GetAnchorPos().X() :
                                        pSdrObj->GetAnchorPos().Y(), -nHeight );
                 long nWidth = (aSnapRect.*fnRect->fnGetWidth)();
-                (rRect.*fnRect->fnSetLeftAndWidth)( bVert ?
+                (rRect.*fnRect->fnSetLeftAndWidth)( fnRect.bVert ?
                             pSdrObj->GetAnchorPos().Y() :
                             pSdrObj->GetAnchorPos().X(), nWidth );
             }
@@ -1206,8 +1206,8 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             {
                 // #i26791# - value of <nTmpH> is needed to
                 // calculate value of <nTop>.
-                nTmpH = bVert ? pSdrObj->GetCurrentBoundRect().GetWidth() :
-                                pSdrObj->GetCurrentBoundRect().GetHeight();
+                nTmpH = fnRect.bVert ? pSdrObj->GetCurrentBoundRect().GetWidth() :
+                                       pSdrObj->GetCurrentBoundRect().GetHeight();
                 nTop = (*fnRect->fnYInc)( (aSnapRect.*fnRect->fnGetTop)(),
                                           rUL.GetLower() + nTmpH - nHeight );
             }

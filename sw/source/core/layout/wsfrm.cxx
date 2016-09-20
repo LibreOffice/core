@@ -988,7 +988,7 @@ void SwContentFrame::Cut()
         }
         else
         {
-            SWRECTFN( this )
+            SWRECTFN fnRect(this);
             long nFrameHeight = (Frame().*fnRect->fnGetHeight)();
             if( nFrameHeight )
                 pUp->Shrink( nFrameHeight );
@@ -1098,7 +1098,7 @@ void SwLayoutFrame::Cut()
     if ( GetNext() )
         GetNext()->InvalidatePos_();
 
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     SwTwips nShrink = (Frame().*fnRect->fnGetHeight)();
 
     // Remove first, then shrink upper.
@@ -1158,7 +1158,7 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
 
     if ( nDist )
     {
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
 
         SwTwips nPrtHeight = (Prt().*fnRect->fnGetHeight)();
         if( nPrtHeight > 0 && nDist > (LONG_MAX - nPrtHeight) )
@@ -1219,7 +1219,7 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
                     return 0;
             }
 
-            SWRECTFN( this )
+            SWRECTFN fnRect(this);
             SwTwips nReal = (Frame().*fnRect->fnGetHeight)();
             ShrinkFrame( nDist, bTst, bInfo );
             nReal -= (Frame().*fnRect->fnGetHeight)();
@@ -1408,7 +1408,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
     SwTwips nReal = 0,
             nAdd  = 0;
     SwFrame *pFrame = nullptr;
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
 
     if( IsBodyFrame() )
     {
@@ -1486,7 +1486,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 if ( !bTst )
                 {
                     (pFrame->GetNext()->Frame().*fnRect->fnSetHeight)(nAddMax-nAdd);
-                    if( bVert && !bVertL2R && !bRev )
+                    if( fnRect.bVert && !fnRect.bVertL2R && !fnRect.bRev )
                         pFrame->GetNext()->Frame().Pos().X() += nAdd;
                     pFrame->GetNext()->InvalidatePrt();
                     if ( pFrame->GetNext()->GetNext() )
@@ -1500,7 +1500,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
     {
         SwTwips nTmp = (pFrame->Frame().*fnRect->fnGetHeight)();
         (pFrame->Frame().*fnRect->fnSetHeight)( nTmp - nReal );
-        if( bVert && !bVertL2R && !bRev )
+        if( fnRect.bVert && !fnRect.bVertL2R && !fnRect.bRev )
             pFrame->Frame().Pos().X() += nReal;
         pFrame->InvalidatePrt();
         if ( pFrame->GetNext() )
@@ -1706,7 +1706,7 @@ void SwFrame::ValidateThisAndAllLowers( const sal_uInt16 nStage )
 
 SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 {
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
 
     SwTwips nFrameHeight = (Frame().*fnRect->fnGetHeight)();
     if( nFrameHeight > 0 &&
@@ -1811,7 +1811,7 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
 
 SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 {
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     OSL_ENSURE( nDist >= 0, "nDist < 0" );
     OSL_ENSURE( nDist <= (Frame().*fnRect->fnGetHeight)(),
             "nDist > than current size." );
@@ -2161,7 +2161,7 @@ SwTwips SwLayoutFrame::InnerHeight() const
     if (!pCnt)
         return 0;
 
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     SwTwips nRet = 0;
     if( pCnt->IsColumnFrame() || pCnt->IsCellFrame() )
     {
@@ -2204,7 +2204,7 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
 
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     const SwTwips nFrameHeight = (Frame().*fnRect->fnGetHeight)();
     const SwTwips nFramePos = Frame().Pos().X();
 
@@ -2382,7 +2382,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         return 0;
 
     OSL_ENSURE( nDist >= 0, "nDist < 0" );
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     SwTwips nFrameHeight = (Frame().*fnRect->fnGetHeight)();
     if ( nDist > nFrameHeight )
         nDist = nFrameHeight;
@@ -2567,12 +2567,12 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
     const bool bWidthChgd  = rOldSize.Width()  != Prt().Width();
 
     // declare and init variables <bVert>, <bRev> and <fnRect>
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
 
     // This shortcut basically tries to handle only lower frames that
     // are affected by the size change. Otherwise much more lower frames
     // are invalidated.
-    if ( !( bVert ? bHeightChgd : bWidthChgd ) &&
+    if ( !( fnRect.bVert ? bHeightChgd : bWidthChgd ) &&
          ! Lower()->IsColumnFrame() &&
            ( ( IsBodyFrame() && IsInDocBody() && ( !IsInSct() || !FindSctFrame()->IsColLocked() ) ) ||
                 // #i10826# Section frames without columns should not
@@ -2631,7 +2631,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
             }
             // Check, if variable size of body frame resp. section frame has grown
             // OD 28.10.2002 #97265# - correct check, if variable size has grown.
-            SwTwips nOldHeight = bVert ? rOldSize.Width() : rOldSize.Height();
+            SwTwips nOldHeight = fnRect.bVert ? rOldSize.Width() : rOldSize.Height();
             if( nOldHeight < (Prt().*fnRect->fnGetHeight)() )
             {
                 // If variable size of body|section frame has grown, only found
@@ -2649,7 +2649,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
                 // variable size of body|section frame has shrunk. Thus,
                 // invalidate all lowers not matching the new body|section size
                 // and the dedicated new last lower.
-                if( bVert )
+                if( fnRect.bVert )
                 {
                     SwTwips nBot = Frame().Left() + Prt().Left();
                     while ( pLowerFrame && pLowerFrame->GetPrev() && pLowerFrame->Frame().Left() < nBot )
@@ -2702,7 +2702,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
     // Declare booleans <bFixChgd> and <bVarChgd>, indicating for text frame
     // adjustment, if fixed/variable size has changed.
     bool bFixChgd, bVarChgd;
-    if( bVert == pLowerFrame->IsNeighbourFrame() )
+    if( fnRect.bVert == pLowerFrame->IsNeighbourFrame() )
     {
         bFixChgd = bWidthChgd;
         bVarChgd = bHeightChgd;
@@ -2718,7 +2718,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
     // In vertical layout these are neighbour frames (cell and column frames),
     //      header frames and footer frames.
     // In horizontal layout these are all frames, which aren't neighbour frames.
-    const SwFrameType nFixWidth = bVert ? (FRM_NEIGHBOUR | FRM_HEADFOOT)
+    const SwFrameType nFixWidth = fnRect.bVert ? (FRM_NEIGHBOUR | FRM_HEADFOOT)
                                    : ~SwFrameType(FRM_NEIGHBOUR);
 
     // Declare const unsigned short <nFixHeight> and init it this frame types
@@ -2726,7 +2726,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
     // In vertical layout these are all frames, which aren't neighbour frames,
     //      header frames, footer frames, body frames or foot note container frames.
     // In horizontal layout these are neighbour frames.
-    const SwFrameType nFixHeight = bVert ? ~SwFrameType(FRM_NEIGHBOUR | FRM_HEADFOOT | FRM_BODYFTNC)
+    const SwFrameType nFixHeight = fnRect.bVert ? ~SwFrameType(FRM_NEIGHBOUR | FRM_HEADFOOT | FRM_BODYFTNC)
                                    : FRM_NEIGHBOUR;
 
     // Travel through all lowers using <GetNext()>
@@ -2920,7 +2920,7 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
     // Finally adjust the columns if width is set to auto
     // Possible optimization: execute this code earlier in this function and
     // return???
-    if ( ( (bVert && bHeightChgd) || (! bVert && bWidthChgd) ) &&
+    if ( ( (fnRect.bVert && bHeightChgd) || (! fnRect.bVert && bWidthChgd) ) &&
            Lower()->IsColumnFrame() )
     {
         // get column attribute
@@ -3255,7 +3255,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
         long nMinimum = nMinHeight;
         long nMaximum;
         bool bNoBalance = false;
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         if( IsSctFrame() )
         {
             nMaximum = (Frame().*fnRect->fnGetHeight)() - nBorder +

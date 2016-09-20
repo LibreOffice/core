@@ -484,7 +484,7 @@ void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
     {
         // To get a text flow we need to invalidate
         SwFrame *pInva = pMaster->FindLastLower();
-        SWRECTFN( pMaster )
+        SWRECTFN fnRect(pMaster);
         const long nBottom = (pMaster->*fnRect->fnGetPrtBottom)();
         while ( pInva )
         {
@@ -1258,12 +1258,12 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         OSL_ENSURE( pAttrs->GetSize().Height() != 0 || rFrameSz.GetHeightPercent(), "FrameAttr height is 0." );
         OSL_ENSURE( pAttrs->GetSize().Width()  != 0 || rFrameSz.GetWidthPercent(), "FrameAttr width is 0." );
 
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         if( !HasFixSize() )
         {
             long nMinHeight = 0;
             if( IsMinHeight() )
-                nMinHeight = bVert ? aRelSize.Width() : aRelSize.Height();
+                nMinHeight = fnRect.bVert ? aRelSize.Width() : aRelSize.Height();
 
             SwTwips nRemaining = CalcContentHeight(pAttrs, nMinHeight, nUL);
             if( IsMinHeight() && (nRemaining + nUL) < nMinHeight )
@@ -1306,7 +1306,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         {
             mbValidSize = true;  // Fixed Frames do not Format itself
             // Flys set their size using the attr
-            SwTwips nNewSize = bVert ? aRelSize.Width() : aRelSize.Height();
+            SwTwips nNewSize = fnRect.bVert ? aRelSize.Width() : aRelSize.Height();
             nNewSize -= nUL;
             if( nNewSize < MINFLY )
                 nNewSize = MINFLY;
@@ -1323,7 +1323,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         if ( !m_bFormatHeightOnly )
         {
             OSL_ENSURE( aRelSize == CalcRel( rFrameSz ), "SwFlyFrame::Format CalcRel problem" );
-            SwTwips nNewSize = bVert ? aRelSize.Height() : aRelSize.Width();
+            SwTwips nNewSize = fnRect.bVert ? aRelSize.Height() : aRelSize.Width();
 
             if ( rFrameSz.GetWidthSizeType() != ATT_FIX_SIZE )
             {
@@ -1695,7 +1695,7 @@ void SwFlyFrame::MakeObjPos()
         // update relative position
         SetCurrRelPos( aObjPositioning.GetRelPos() );
 
-        SWRECTFN( GetAnchorFrame() );
+        SWRECTFN fnRect(GetAnchorFrame());
         maFrame.Pos( aObjPositioning.GetRelPos() );
         maFrame.Pos() += (GetAnchorFrame()->Frame().*fnRect->fnGetPos)();
         // #i69335#
@@ -1710,7 +1710,7 @@ void SwFlyFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
         mbValidPrtArea = true;
 
         // OD 31.07.2003 #110978# - consider vertical layout
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         (this->*fnRect->fnSetXMargins)( rAttrs.CalcLeftLine(),
                                         rAttrs.CalcRightLine() );
         (this->*fnRect->fnSetYMargins)( rAttrs.CalcTopLine(),
@@ -1727,10 +1727,10 @@ void SwFlyFrame::MakeContentPos( const SwBorderAttrs &rAttrs )
         const SwTwips nUL = rAttrs.CalcTopLine()  + rAttrs.CalcBottomLine();
         Size aRelSize( CalcRel( GetFormat()->GetFrameSize() ) );
 
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         long nMinHeight = 0;
         if( IsMinHeight() )
-            nMinHeight = bVert ? aRelSize.Width() : aRelSize.Height();
+            nMinHeight = fnRect.bVert ? aRelSize.Width() : aRelSize.Height();
 
         Point aNewContentPos;
         aNewContentPos = Prt().Pos();
@@ -1748,18 +1748,18 @@ void SwFlyFrame::MakeContentPos( const SwBorderAttrs &rAttrs )
             {
                 if( nAdjust == SDRTEXTVERTADJUST_CENTER )
                 {
-                    if( bVertL2R )
+                    if( fnRect.bVertL2R )
                         aNewContentPos.setX(aNewContentPos.getX() + nDiff/2);
-                    else if( bVert )
+                    else if( fnRect.bVert )
                         aNewContentPos.setX(aNewContentPos.getX() - nDiff/2);
                     else
                         aNewContentPos.setY(aNewContentPos.getY() + nDiff/2);
                 }
                 else if( nAdjust == SDRTEXTVERTADJUST_BOTTOM )
                 {
-                    if( bVertL2R )
+                    if( fnRect.bVertL2R )
                         aNewContentPos.setX(aNewContentPos.getX() + nDiff);
-                    else if( bVert )
+                    else if( fnRect.bVert )
                         aNewContentPos.setX(aNewContentPos.getX() - nDiff);
                     else
                         aNewContentPos.setY(aNewContentPos.getY() + nDiff);
@@ -1785,7 +1785,7 @@ void SwFlyFrame::InvalidateContentPos()
 
 SwTwips SwFlyFrame::Grow_( SwTwips nDist, bool bTst )
 {
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     if ( Lower() && !IsColLocked() && !HasFixSize() )
     {
         SwTwips nSize = (Frame().*fnRect->fnGetHeight)();
@@ -1862,7 +1862,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
 {
     if( Lower() && !IsColLocked() && !HasFixSize() )
     {
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         SwTwips nHeight = (Frame().*fnRect->fnGetHeight)();
         if ( nDist > nHeight )
             nDist = nHeight;
@@ -1871,7 +1871,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
         if ( IsMinHeight() )
         {
             const SwFormatFrameSize& rFormatSize = GetFormat()->GetFrameSize();
-            SwTwips nFormatHeight = bVert ? rFormatSize.GetWidth() : rFormatSize.GetHeight();
+            SwTwips nFormatHeight = fnRect.bVert ? rFormatSize.GetWidth() : rFormatSize.GetHeight();
 
             nVal = std::min( nDist, nHeight - nFormatHeight );
         }
@@ -2655,7 +2655,7 @@ void SwFlyFrame::Calc(vcl::RenderContext* pRenderContext) const
 
 SwTwips SwFlyFrame::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips nMinHeight, const SwTwips nUL)
 {
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     SwTwips nHeight = 0;
     if ( Lower() )
     {

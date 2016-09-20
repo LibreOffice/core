@@ -480,7 +480,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
     if ( mpFrameInfo )
     {
         const SwFrame* pFrame = &mpFrameInfo->mrFrame;
-        SWRECTFN( pFrame )
+        SWRECTFN fnRect(pFrame);
 
         bool bPlacement = false;
         bool bWritingMode = false;
@@ -695,7 +695,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 const SwTabFrame* pTabFrame = pThisCell->FindTabFrame();
                 const SwTable* pTable = pTabFrame->GetTable();
 
-                SWRECTFNX( pTabFrame )
+                SWRECTFN fnRectX(pTabFrame);
 
                 const TableColumnsMapEntry& rCols = SwEnhancedPDFExportHelper::GetTableColumnsMap()[ pTable ];
 
@@ -1177,7 +1177,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 if ( aIter == rTableColumnsMap.end() )
                 {
-                    SWRECTFN( pTabFrame )
+                    SWRECTFN fnRect(pTabFrame);
                     TableColumnsMapEntry& rCols = rTableColumnsMap[ pTable ];
 
                     const SwTabFrame* pMasterFrame = pTabFrame->IsFollow() ? pTabFrame->FindMaster( true ) : pTabFrame;

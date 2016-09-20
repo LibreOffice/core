@@ -1272,7 +1272,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
 {
     SwTwips nRet = 0;
     const SwFrame *pFrame = pCell->Lower(); // The whole Line
-    SWRECTFN( pCell )
+    SWRECTFN fnRect(pCell);
     while ( pFrame )
     {
         const SwTwips nAdd = (pFrame->Frame().*fnRect->fnGetWidth)() -
@@ -1317,7 +1317,7 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
                     ::lcl_CalcCellFit( pCell ) :
                     MINLAY + sal_uInt16(pCell->Frame().Width() - pCell->Prt().Width());
 
-    SWRECTFN( pTab )
+    SWRECTFN fnRect(pTab);
 
     for ( size_t i = 0 ; i <= rCols.Count(); ++i )
     {
@@ -1384,7 +1384,7 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
         const SwTabFrame *pTab = pSelUnion->GetTable();
         const SwRect &rUnion = pSelUnion->GetUnion();
 
-        SWRECTFN( pTab )
+        SWRECTFN fnRect(pTab);
         bool bRTL = pTab->IsRightToLeft();
 
         const SwLayoutFrame *pCell = pTab->FirstCell();

@@ -272,7 +272,7 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         pSdrObj[ 0 ] = pTmpObj;
         pTextRanger[ 0 ] = pTmpRanger;
     }
-    SWRECTFN( pFrame )
+    SWRECTFN fnRect(pFrame);
     long nTmpTop = (rLine.*fnRect->fnGetTop)();
     // fnGetBottom is top + height
     long nTmpBottom = (rLine.*fnRect->fnGetBottom)();
@@ -393,7 +393,7 @@ SwRect SwTextFly::GetFrame_( const SwRect &rRect ) const
     SwRect aRet;
     if( ForEach( rRect, &aRet, true ) )
     {
-        SWRECTFN( pCurrFrame )
+        SWRECTFN fnRect(pCurrFrame);
         (aRet.*fnRect->fnSetTop)( (rRect.*fnRect->fnGetTop)() );
 
         // Do not always adapt the bottom
@@ -875,7 +875,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
         }
         // Make ourselves a little smaller than we are,
         // so that 1-Twip-overlappings are ignored (#49532)
-        SWRECTFN( pCurrFrame )
+        SWRECTFN fnRect(pCurrFrame);
         const long nRight = (aRect.*fnRect->fnGetRight)() - 1;
         const long nLeft = (aRect.*fnRect->fnGetLeft)() + 1;
         const bool bR2L = pCurrFrame->IsRightToLeft();
@@ -930,7 +930,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
                             std::lower_bound( mpAnchoredObjList->begin(),
                                               mpAnchoredObjList->end(),
                                               pAnchoredObj,
-                                              AnchoredObjOrder( bR2L, fnRect ) );
+                                              AnchoredObjOrder( bR2L, fnRect.fnRect ) );
 
                     mpAnchoredObjList->insert( aInsPosIter, pAnchoredObj );
                 }
@@ -943,7 +943,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
                     const SwFormatVertOrient &rTmpFormat =
                                     pAnchoredObj->GetFrameFormat().GetVertOrient();
                     if( text::VertOrientation::BOTTOM != rTmpFormat.GetVertOrient() )
-                        nMinBottom = ( bVert && nMinBottom ) ?
+                        nMinBottom = ( fnRect.bVert && nMinBottom ) ?
                                      std::min( nMinBottom, aBound.Left() ) :
                                      std::max( nMinBottom, (aBound.*fnRect->fnGetBottom)() );
                 }
@@ -1019,7 +1019,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
             SwRect aRect( pAnchoredObj->GetObjRectWithSpaces() );
 
             // Optimierung
-            SWRECTFN( pCurrFrame )
+            SWRECTFN fnRect(pCurrFrame);
             if( (aRect.*fnRect->fnGetLeft)() > (rRect.*fnRect->fnGetRight)() )
                 break;
             // #i68520#
@@ -1103,7 +1103,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
     // Usually the right margin is the right margin of the Printarea
     OSL_ENSURE( ! pCurrFrame->IsVertical() || ! pCurrFrame->IsSwapped(),
             "SwTextFly::CalcRightMargin with swapped frame" );
-    SWRECTFN( pCurrFrame )
+    SWRECTFN fnRect(pCurrFrame);
     // #118796# - correct determination of right of printing area
     SwTwips nRight = (pCurrFrame->*fnRect->fnGetPrtRight)();
     SwTwips nFlyRight = (rFly.*fnRect->fnGetRight)();
@@ -1191,7 +1191,7 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
 {
     OSL_ENSURE( ! pCurrFrame->IsVertical() || ! pCurrFrame->IsSwapped(),
             "SwTextFly::CalcLeftMargin with swapped frame" );
-    SWRECTFN( pCurrFrame )
+    SWRECTFN fnRect(pCurrFrame);
     // #118796# - correct determination of left of printing area
     SwTwips nLeft = (pCurrFrame->*fnRect->fnGetPrtLeft)();
     const SwTwips nFlyLeft = (rFly.*fnRect->fnGetLeft)();
@@ -1252,7 +1252,7 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
 SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
                             const SwRect &rLine ) const
 {
-    SWRECTFN( pCurrFrame )
+    SWRECTFN fnRect(pCurrFrame);
 
     const long nXPos = pCurrFrame->IsRightToLeft() ?
                        rLine.Right() :
@@ -1347,7 +1347,7 @@ SwSurround SwTextFly::GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
     // "ideal page wrap":
     if ( SURROUND_IDEAL == eSurroundForTextWrap )
     {
-        SWRECTFN( pCurrFrame )
+        SWRECTFN fnRect(pCurrFrame);
         const long nCurrLeft = (pCurrFrame->*fnRect->fnGetPrtLeft)();
         const long nCurrRight = (pCurrFrame->*fnRect->fnGetPrtRight)();
         const SwRect aRect( pAnchoredObj->GetObjRectWithSpaces() );

@@ -451,7 +451,7 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
     aMoveBwdLayoutInfo.mnNewUpperPosY = p_rNewUpperFrame.Frame().Pos().Y();
     aMoveBwdLayoutInfo.mnNewUpperWidth = p_rNewUpperFrame.Frame().Width();
     aMoveBwdLayoutInfo.mnNewUpperHeight =  p_rNewUpperFrame.Frame().Height();
-    SWRECTFN( (&p_rNewUpperFrame) )
+    SWRECTFN fnRect(&p_rNewUpperFrame);
     const SwFrame* pLastLower( p_rNewUpperFrame.Lower() );
     while ( pLastLower && pLastLower->GetNext() )
     {

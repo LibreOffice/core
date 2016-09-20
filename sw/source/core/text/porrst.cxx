@@ -318,7 +318,7 @@ bool SwTextFrame::FormatEmpty()
             nHeight = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
     }
 
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     const SwTwips nChg = nHeight - (Prt().*fnRect->fnGetHeight)();
 
     if( !nChg )
@@ -356,7 +356,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
         pFrame = pFrame->GetUpper();
     if( ( SwFrameType::Body| SwFrameType::Fly ) & pFrame->GetType() )
     {
-        SWRECTFN( pFrame )
+        SWRECTFN fnRect(pFrame);
         rRegStart = (pFrame->*fnRect->fnGetPrtTop)();
         pFrame = pFrame->FindPageFrame();
         if( pFrame->IsPageFrame() )
@@ -447,7 +447,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                     }
                 }
                 const long nTmpDiff = pDesc->GetRegAscent() - rRegDiff;
-                if ( bVert )
+                if ( fnRect.bVert )
                     rRegStart -= nTmpDiff;
                 else
                     rRegStart += nTmpDiff;

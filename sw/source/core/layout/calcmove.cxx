@@ -91,8 +91,8 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool & )
                     return false;
             }
         }
-        SWRECTFN( this )
-        SWRECTFNX( pNewUpper )
+        SWRECTFN fnRect(this);
+        SWRECTFN fnRectX(pNewUpper);
         if( std::abs( (pNewUpper->Prt().*fnRectX->fnGetWidth)() -
                  (GetUpper()->Prt().*fnRect->fnGetWidth)() ) > 1 ) {
             // In this case, only a WouldFit_ with test move is possible
@@ -492,7 +492,7 @@ void SwFrame::MakePos()
 
         pPrv = lcl_Prev( this, false );
         const SwFrameType nMyType = GetType();
-        SWRECTFN( ( IsCellFrame() && GetUpper() ? GetUpper() : this  ) )
+        SWRECTFN fnRect((IsCellFrame() && GetUpper() ? GetUpper() : this));
         if ( !bUseUpper && pPrv )
         {
             maFrame.Pos( pPrv->Frame().Pos() );
@@ -507,16 +507,16 @@ void SwFrame::MakePos()
                                           (pPrv->Frame().*fnRect->fnGetWidth)() );
 
                 // cells may now leave their uppers
-                if( bVert && SwFrameType::Cell & nMyType && !mbReverse )
+                if( fnRect.bVert && SwFrameType::Cell & nMyType && !mbReverse )
                     maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width() + pPrv->Frame().Width());
             }
-            else if( bVert && FRM_NOTE_VERT & nMyType )
+            else if( fnRect.bVert && FRM_NOTE_VERT & nMyType )
             {
                 if( mbReverse )
                     maFrame.Pos().setX(maFrame.Pos().getX() + pPrv->Frame().Width());
                 else
                 {
-                    if ( bVertL2R )
+                    if ( fnRect.bVertL2R )
                            maFrame.Pos().setX(maFrame.Pos().getX() + pPrv->Frame().Width());
                     else
                            maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width());
@@ -561,10 +561,10 @@ void SwFrame::MakePos()
                                           (pPrv->Frame().*fnRect->fnGetWidth)() );
 
                     // cells may now leave their uppers
-                    if( bVert && SwFrameType::Cell & nMyType && !mbReverse )
+                    if( fnRect.bVert && SwFrameType::Cell & nMyType && !mbReverse )
                         maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width() + pPrv->Frame().Width());
                 }
-                else if( bVert && FRM_NOTE_VERT & nMyType )
+                else if( fnRect.bVert && FRM_NOTE_VERT & nMyType )
                 {
                     if( mbReverse )
                         maFrame.Pos().setX(maFrame.Pos().getX() + pPrv->Frame().Width());
@@ -584,14 +584,14 @@ void SwFrame::MakePos()
 
                 if( FRM_NEIGHBOUR & nMyType && IsRightToLeft() )
                 {
-                    if( bVert )
+                    if( fnRect.bVert )
                         maFrame.Pos().setY(maFrame.Pos().getY() + GetUpper()->Prt().Height()
                                           - maFrame.Height());
                     else
                         maFrame.Pos().setX(maFrame.Pos().getX() + GetUpper()->Prt().Width()
                                           - maFrame.Width());
                 }
-                else if( bVert && !bVertL2R && FRM_NOTE_VERT & nMyType && !mbReverse )
+                else if( fnRect.bVert && !fnRect.bVertL2R && FRM_NOTE_VERT & nMyType && !mbReverse )
                     maFrame.Pos().setX(maFrame.Pos().getX() - maFrame.Width() + GetUpper()->Prt().Width());
             }
         }
@@ -601,7 +601,7 @@ void SwFrame::MakePos()
             maFrame.Pos().setY(0);
         }
 
-        if( IsBodyFrame() && bVert && !bVertL2R && !mbReverse && GetUpper() )
+        if( IsBodyFrame() && fnRect.bVert && !fnRect.bVertL2R && !mbReverse && GetUpper() )
             maFrame.Pos().setX(maFrame.Pos().getX() + GetUpper()->Prt().Width() - maFrame.Width());
         mbValidPos = true;
     }
@@ -949,7 +949,7 @@ bool SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
     {
         mbValidPrtArea = true;
 
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         const bool bTextFrame = IsTextFrame();
         SwTwips nUpper = 0;
         if ( bTextFrame && static_cast<SwTextFrame*>(this)->IsHiddenNow() )
@@ -1048,7 +1048,7 @@ bool SwContentFrame::MakePrtArea( const SwBorderAttrs &rAttrs )
                 nLower=0;
             }
 
-            (Prt().*fnRect->fnSetPosY)( (!bVert || mbReverse) ? nUpper : nLower);
+            (Prt().*fnRect->fnSetPosY)( (!fnRect.bVert || mbReverse) ? nUpper : nLower);
             nUpper += nLower;
             nUpper -= (Frame().*fnRect->fnGetHeight)() -
                       (Prt().*fnRect->fnGetHeight)();
@@ -1246,7 +1246,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         }
     }
 
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
@@ -1259,7 +1259,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             SwFrame *pPre = GetIndPrev();
             if ( CheckMoveFwd( bMakePage, bKeep, bMovedBwd ) )
             {
-                SWREFRESHFN( this )
+                fnRect.Refresh(this);
                 bMovedFwd = true;
                 if ( bMovedBwd )
                 {
@@ -1408,7 +1408,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
              ( !bFootnote || !GetUpper()->FindFootnoteFrame()->GetPrev() )
              && MoveBwd( bDummy ) )
         {
-            SWREFRESHFN( this )
+            fnRect.Refresh(this);
             bMovedBwd = true;
             bFormatted = false;
             if ( bKeep && bMoveable )
@@ -1417,7 +1417,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 {
                     bMovedFwd = true;
                     bMoveable = IsMoveable();
-                    SWREFRESHFN( this )
+                    fnRect.Refresh(this);
                 }
                 Point aOldPos = (Frame().*fnRect->fnGetPos)();
                 MakePos();
@@ -1679,7 +1679,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
         if ( !bMovedFwd && !MoveFwd( bMakePage, false ) )
             bMakePage = false;
-        SWREFRESHFN( this )
+        fnRect.Refresh(this);
 
         // If MoveFwd moves the paragraph to the next page, a following
         // paragraph, which contains footnotes can cause the old upper
