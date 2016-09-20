@@ -2019,18 +2019,19 @@ void SbiRuntime::StepLSET()
 
         sal_Int32 nVarStrLen = aRefVarString.getLength();
         sal_Int32 nValStrLen = aRefValString.getLength();
-        OUStringBuffer aNewStr;
+        OUString aNewStr;
         if( nVarStrLen > nValStrLen )
         {
-            aNewStr.append(aRefValString);
-            comphelper::string::padToLength(aNewStr, nVarStrLen, ' ');
+            OUStringBuffer buf(aRefValString);
+            comphelper::string::padToLength(buf, nVarStrLen, ' ');
+            aNewStr = buf.makeStringAndClear();
         }
         else
         {
             aNewStr = aRefValString.copy( 0, nVarStrLen );
         }
 
-        refVar->PutString(aNewStr.makeStringAndClear());
+        refVar->PutString(aNewStr);
         refVar->SetFlags( n );
     }
 }
