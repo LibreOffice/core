@@ -73,7 +73,7 @@ private:
     bool m_bTextGraphicObject;
     /// if inside \pict, but actually it's a shape (not a picture)
     bool m_bFakePict;
-    writerfilter::dmapper::GraphicZOrderHelper m_aGraphicZOrderHelper;
+    std::stack<writerfilter::dmapper::GraphicZOrderHelper> m_aGraphicZOrderHelpers;
 };
 } // namespace rtftok
 } // namespace writerfilter

@@ -1172,6 +1172,18 @@ DECLARE_RTFIMPORT_TEST(testDoDhgtOld, "do-dhgt-old.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("b"), xShape->getString());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf84684, "tdf84684.rtf")
+{
+    // The ZOrder of the two children of the group shape were swapped.
+    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xChild1(xGroup->getByIndex(0), uno::UNO_QUERY);
+    // This was Pie 2.
+    CPPUNIT_ASSERT_EQUAL(OUString("Rectangle 1"), xChild1->getName());
+    uno::Reference<container::XNamed> xChild2(xGroup->getByIndex(1), uno::UNO_QUERY);
+    // This was Rectangle 1.
+    CPPUNIT_ASSERT_EQUAL(OUString("Pie 2"), xChild2->getName());
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo61909, "fdo61909.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
@@ -2570,7 +2582,7 @@ DECLARE_RTFIMPORT_TEST(testTdf90097, "tdf90097.rtf")
 {
     // Get the second child of the group shape.
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
     uno::Sequence< uno::Sequence<awt::Point> > aPolyPolySequence;
     xShape->getPropertyValue("PolyPolygon") >>= aPolyPolySequence;
     uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];

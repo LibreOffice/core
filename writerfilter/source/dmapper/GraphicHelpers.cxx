@@ -261,7 +261,7 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldSt
         // std::map is iterated sorted by key
 
         // Old-style ordering differs in what should happen when there is already an item with the same z-order:
-        // we belong under it in case of new-style, but we belong below it in case of old-style.
+        // we belong under it in case of new-style, but we belong above it in case of old-style.
         bool bCond = bOldStyle ? (it->first > relativeHeight) : (it->first >= relativeHeight);
 
         if( bCond )
