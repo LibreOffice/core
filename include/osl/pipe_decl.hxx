@@ -58,6 +58,10 @@ public:
     */
     inline Pipe(const Pipe& pipe);
 
+#if defined LIBO_INTERNAL_ONLY
+    inline Pipe(Pipe && other);
+#endif
+
     /** Constructs a Pipe reference without acquiring the handle
     */
     inline Pipe( oslPipe pipe, __sal_NoAcquire noacquire );
@@ -102,6 +106,10 @@ public:
         be discarded.
     */
     inline Pipe& SAL_CALL operator= (const Pipe& pipe);
+
+#if defined LIBO_INTERNAL_ONLY
+    inline Pipe & operator =(Pipe && other);
+#endif
 
     /** Assignment operator. If pipe was already created, the old one will
         be discarded.
