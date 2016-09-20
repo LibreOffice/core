@@ -24,7 +24,7 @@
 
 #include <cassert>
 #include <cstddef>
-#include <string.h>
+#include <cstring>
 
 #include <rtl/strbuf.h>
 #include <rtl/string.hxx>
@@ -233,6 +233,57 @@ public:
         }
         return *this;
     }
+
+    /** Assign from a string.
+
+        @since LibreOffice 5.3
+    */
+    OStringBuffer & operator =(OString const & string) {
+        sal_Int32 n = string.getLength();
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        std::memcpy(pData->buffer, string.pData->buffer, n + 1);
+        pData->length = n;
+        return *this;
+    }
+
+    /** Assign from a string literal.
+
+        @since LibreOffice 5.3
+    */
+    template<typename T>
+    typename
+        libreoffice_internal::ConstCharArrayDetector<T, OStringBuffer &>::Type
+    operator =(T & literal) {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        sal_Int32 const n
+            = libreoffice_internal::ConstCharArrayDetector<T>::length;
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        std::memcpy(
+            pData->buffer,
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            n + 1);
+        pData->length = n;
+        return *this;
+    }
+
+#if defined LIBO_INTERNAL_ONLY
+    /** @overload @since LibreOffice 5.3 */
+    template<typename T1, typename T2>
+    OStringBuffer & operator =(OStringConcat<T1, T2> const & concat) {
+        sal_Int32 const n = concat.length();
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        *concat.addData(pData->buffer) = 0;
+        pData->length = n;
+        return *this;
+    }
+#endif
 
     /**
         Release the string data.
