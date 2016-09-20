@@ -484,10 +484,10 @@ void SvxNumberFormat::SetIndentAt( const long nIndentAt )
 
 Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
 {
-    const MapMode aMapMM100( MAP_100TH_MM );
+    const MapMode aMapMM100( MapUnit::Map100thMM );
     const Size& rSize = pGraphic->GetPrefSize();
     Size aRetSize;
-    if ( pGraphic->GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+    if ( pGraphic->GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
     {
         OutputDevice* pOutDev = Application::GetDefaultDevice();
         MapMode aOldMap( pOutDev->GetMapMode() );

@@ -948,7 +948,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             aSize = aObjDesc.maSize;
                         else
                         {
-                            MapMode aMapMode( MAP_100TH_MM );
+                            MapMode aMapMode( MapUnit::Map100thMM );
                             aSize = aObjRef.GetSize( &aMapMode );
                         }
                     }
@@ -958,7 +958,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( aObjDesc.mnViewAspect ) );
                         if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
                         {
-                            Size aTmp( OutputDevice::LogicToLogic( aObjDesc.maSize, MAP_100TH_MM, aMapUnit ) );
+                            Size aTmp( OutputDevice::LogicToLogic( aObjDesc.maSize, MapUnit::Map100thMM, aMapUnit ) );
                             aSz.Width = aTmp.Width();
                             aSz.Height = aTmp.Height();
                             xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
@@ -979,13 +979,13 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         {
                             aSize.Width()  = 14100;
                             aSize.Height() = 10000;
-                            aSize = OutputDevice::LogicToLogic( Size(14100, 10000), MAP_100TH_MM, aMapUnit );
+                            aSize = OutputDevice::LogicToLogic( Size(14100, 10000), MapUnit::Map100thMM, aMapUnit );
                             aSz.Width = aSize.Width();
                             aSz.Height = aSize.Height();
                             xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
                         }
 
-                        aSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
+                        aSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MapUnit::Map100thMM );
                     }
 
                     Size aMaxSize( mrDoc.GetMaxObjSize() );
@@ -1117,7 +1117,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             aSize = aObjDesc.maSize;
                         else
                         {
-                            MapMode aMapMode( MAP_100TH_MM );
+                            MapMode aMapMode( MapUnit::Map100thMM );
                             aSize = aObjRef.GetSize( &aMapMode );
                         }
                     }
@@ -1136,7 +1136,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                         if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
                         {
-                            Size aTmp( OutputDevice::LogicToLogic( aObjDesc.maSize, MAP_100TH_MM, aMapUnit ) );
+                            Size aTmp( OutputDevice::LogicToLogic( aObjDesc.maSize, MapUnit::Map100thMM, aMapUnit ) );
                             if ( aSz.Width != aTmp.Width() || aSz.Height != aTmp.Height() )
                             {
                                 aSz.Width = aTmp.Width();
@@ -1149,13 +1149,13 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                         if( !aSize.Width() || !aSize.Height() )
                         {
-                            aSize = OutputDevice::LogicToLogic( Size(14100, 10000), MAP_100TH_MM, aMapUnit );
+                            aSize = OutputDevice::LogicToLogic( Size(14100, 10000), MapUnit::Map100thMM, aMapUnit );
                             aSz.Width = aSize.Width();
                             aSz.Height = aSize.Height();
                             xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
                         }
 
-                        aSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
+                        aSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MapUnit::Map100thMM );
                     }
 
                     Size aMaxSize( mrDoc.GetMaxObjSize() );
@@ -1226,7 +1226,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             // restrict movement to WorkArea
             Size aImageMapSize = OutputDevice::LogicToLogic(aGraphic.GetPrefSize(),
-                aGraphic.GetPrefMapMode(), MapMode(MAP_100TH_MM));
+                aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM));
 
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
@@ -1523,7 +1523,7 @@ bool View::PasteRTFTable( const ::tools::SvRef<SotStorageStream>& xStm, SdrPage*
 {
     std::unique_ptr<SdDrawDocument> pModel(new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, mpDocSh ));
     pModel->NewOrLoadCompleted(NEW_DOC);
-    pModel->GetItemPool().SetDefaultMetric(MAP_100TH_MM);
+    pModel->GetItemPool().SetDefaultMetric(MapUnit::Map100thMM);
     pModel->InsertPage(pModel->AllocPage(false));
 
     Reference< XComponent > xComponent( new SdXImpressDocument( pModel.get(), true ) );

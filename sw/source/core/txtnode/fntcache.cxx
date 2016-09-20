@@ -510,7 +510,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
                          GetpApp()->GetDefaultDevice();
     if ( pWin )
     {
-        MapMode aTmpMap( MAP_TWIP );
+        MapMode aTmpMap( MapUnit::MapTwip );
         MapMode aOldMap = pWin->GetMapMode( );
         pWin->SetMapMode( aTmpMap );
         const vcl::Font aOldFnt( pWin->GetFont() );

@@ -35,10 +35,10 @@ SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
 {
     rOutDev.Push( PushFlags::FONT | PushFlags::MAPMODE |
                   PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::TEXTCOLOR );
-    if (bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode().GetMapUnit())
+    if (bUseMap100th_mm  &&  MapUnit::Map100thMM != rOutDev.GetMapMode().GetMapUnit())
     {
         SAL_WARN("starmath", "incorrect MapMode?");
-        rOutDev.SetMapMode( MAP_100TH_MM );     //format for 100% always
+        rOutDev.SetMapMode( MapUnit::Map100thMM );     //format for 100% always
     }
 }
 

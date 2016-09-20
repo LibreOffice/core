@@ -208,7 +208,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
             Size aSz( 0, static_cast<const SvxFontHeightItem&>(rItem).GetHeight() );
             MapUnit eUnit = rPool.GetMetric( rItem.Which() );
             MapMode aItemMapMode(eUnit);
-            MapMode aPntMap( MAP_POINT );
+            MapMode aPntMap( MapUnit::MapPoint );
             aSz = OutputDevice::LogicToLogic( aSz, aItemMapMode, aPntMap );
             aDebStr.append(" Points=");
             aDebStr.append(static_cast<sal_Int32>(aSz.Height()));
@@ -278,7 +278,7 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
             Size aSz( 0, (short)static_cast<const SvxKerningItem&>(rItem).GetValue() );
             MapUnit eUnit = rPool.GetMetric( rItem.Which() );
             MapMode aItemMapMode(eUnit);
-            MapMode aPntMap( MAP_POINT );
+            MapMode aPntMap( MapUnit::MapPoint );
             aSz = OutputDevice::LogicToLogic( aSz, aItemMapMode, aPntMap );
             aDebStr.append(" Points=");
             aDebStr.append(static_cast<sal_Int32>(aSz.Height()));

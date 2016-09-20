@@ -216,7 +216,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                     // without MapMode-Offset !!!!!
                     // without MapMode-Offset, without Offset, w ... !!!!!
                     aPt = pWindow->LogicToPixel(
-                            aPt, MapMode( MAP_TWIP ) );
+                            aPt, MapMode( MapUnit::MapTwip ) );
                     sText += "?" + OUString::number( aPt.getX() )
                           + "," + OUString::number( aPt.getY() );
                 }

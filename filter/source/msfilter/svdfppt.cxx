@@ -2503,7 +2503,7 @@ Size SdrPowerPointImport::GetPageSize() const
         long nInchMul = 1, nInchDiv = 1;
         if ( bInch )
         {   // temporarily convert size (for rounding it) from inch to metric units
-            Fraction aFact(GetMapFactor(eMap,MAP_100TH_MM).X());
+            Fraction aFact(GetMapFactor(eMap,MapUnit::Map100thMM).X());
             nInchMul = aFact.GetNumerator();
             nInchDiv = aFact.GetDenominator();
             aRet.Width() = BigMulDiv( aRet.Width(), nInchMul, nInchDiv );

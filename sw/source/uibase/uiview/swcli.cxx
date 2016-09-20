@@ -138,7 +138,7 @@ void SwOleClient::ViewChanged()
     // first convert to TWIPS before scaling, because scaling factors are calculated for
     // the TWIPS mapping and so they will produce the best results if applied to TWIPS based
     // coordinates
-    const MapMode aMyMap ( MAP_TWIP );
+    const MapMode aMyMap ( MapUnit::MapTwip );
     const MapMode aObjMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) ) );
     aVisSize = OutputDevice::LogicToLogic( aVisSize, aObjMap, aMyMap );
 

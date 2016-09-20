@@ -97,7 +97,7 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
 
     pWindow->Show(bInitiallyVisible);
 
-    pWindow->SetMapMode(MAP_PIXEL);
+    pWindow->SetMapMode(MapUnit::MapPixel);
     pWindow->SetBackground();
     if ( ! bEnableParentClip)
     {

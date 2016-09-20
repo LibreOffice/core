@@ -90,7 +90,7 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 {
     //EnableChildTransparentMode();
     SetHelpId(HID_REPORTSECTION);
-    SetMapMode(MapMode(MAP_100TH_MM));
+    SetMapMode(MapMode(MapUnit::Map100thMM));
     SetParentClipMode(ParentClipMode::Clip);
     EnableChildTransparentMode( false );
     SetPaintTransparent( false );

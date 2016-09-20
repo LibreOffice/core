@@ -227,7 +227,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
     {
         try
         {
-            MapUnit aContainerMapUnit( MAP_100TH_MM );
+            MapUnit aContainerMapUnit( MapUnit::Map100thMM );
             uno::Reference< embed::XVisualObject > xParentVis( mpObj->GetParentXModel(), uno::UNO_QUERY );
             if ( xParentVis.is() )
                 aContainerMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xParentVis->getMapUnit( mpObj->GetAspect() ) );
@@ -462,7 +462,7 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
         throw uno::RuntimeException();
 
     Rectangle aLogicRect = impl_getScaledRect_nothrow();
-    MapUnit aContainerMapUnit( MAP_100TH_MM );
+    MapUnit aContainerMapUnit( MapUnit::Map100thMM );
     uno::Reference< embed::XVisualObject > xParentVis( mpObj->GetParentXModel(), uno::UNO_QUERY );
     if ( xParentVis.is() )
         aContainerMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xParentVis->getMapUnit( mpObj->GetAspect() ) );
@@ -512,7 +512,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
         return;
 
     // new scaled object area
-    MapUnit aContainerMapUnit( MAP_100TH_MM );
+    MapUnit aContainerMapUnit( MapUnit::Map100thMM );
     uno::Reference< embed::XVisualObject > xParentVis( mpObj->GetParentXModel(), uno::UNO_QUERY );
     if ( xParentVis.is() )
         aContainerMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xParentVis->getMapUnit( mpObj->GetAspect() ) );

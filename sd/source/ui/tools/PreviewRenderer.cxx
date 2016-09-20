@@ -160,7 +160,7 @@ Image PreviewRenderer::RenderSubstitution (
         // Set a map mode that makes a typical substitution text completely
         // visible.
         MapMode aMapMode (mpPreviewDevice->GetMapMode());
-        aMapMode.SetMapUnit(MAP_100TH_MM);
+        aMapMode.SetMapUnit(MapUnit::Map100thMM);
         Fraction aFinalScale(25 * rPreviewPixelSize.Width(), 28000);
         aMapMode.SetScaleX(aFinalScale);
         aMapMode.SetScaleY(aFinalScale);
@@ -365,7 +365,7 @@ void PreviewRenderer::SetupOutputSize (
     // First set the map mode to some arbitrary scale that is numerically
     // stable.
     MapMode aMapMode (mpPreviewDevice->GetMapMode());
-    aMapMode.SetMapUnit(MAP_PIXEL);
+    aMapMode.SetMapUnit(MapUnit::MapPixel);
 
     // Adapt it to the desired width.
     const Size aPageModelSize (rPage.GetSize());
@@ -449,7 +449,7 @@ Image PreviewRenderer::ScaleBitmap (
             (long)((nWidth*1.0 * aSize.Height()) / aSize.Width() + 0.5));
         Size aPreviewSize (aFrameSize.Width()-2,aFrameSize.Height()-2);
         MapMode aMapMode (mpPreviewDevice->GetMapMode());
-        aMapMode.SetMapUnit(MAP_PIXEL);
+        aMapMode.SetMapUnit(MapUnit::MapPixel);
         aMapMode.SetOrigin (Point());
         aMapMode.SetScaleX (1.0);
         aMapMode.SetScaleY (1.0);

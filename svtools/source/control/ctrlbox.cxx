@@ -517,7 +517,7 @@ void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, lo
     basegfx::B2DPolyPolygon aPolygons = svtools::ApplyLineDashing(rPolygon, nDashing, nPix);
 
     // Handle problems of width 1px in Pixel mode: 0.5px gives a 1px line
-    if (rDev.GetMapMode().GetMapUnit() == MAP_PIXEL && nWidth == nPix)
+    if (rDev.GetMapMode().GetMapUnit() == MapUnit::MapPixel && nWidth == nPix)
         nWidth = 0;
 
     for ( sal_uInt32 i = 0; i < aPolygons.count( ); i++ )
@@ -717,7 +717,7 @@ void LineListBox::ImplInit()
     eSourceUnit = FUNIT_POINT;
 
     aVirDev->SetLineColor();
-    aVirDev->SetMapMode( MapMode( MAP_TWIP ) );
+    aVirDev->SetMapMode( MapMode( MapUnit::MapTwip ) );
 
     UpdatePaintLineColor();
 }

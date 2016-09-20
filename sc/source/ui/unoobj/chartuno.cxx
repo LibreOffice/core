@@ -231,7 +231,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
             sal_Int64 nAspect(embed::Aspects::MSOLE_CONTENT);
             MapUnit aMapUnit(VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) ));
             Size aSize(aInsRect.GetSize());
-            aSize = vcl::Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aMapUnit ) );
+            aSize = vcl::Window::LogicToLogic( aSize, MapMode( MapUnit::Map100thMM ), MapMode( aMapUnit ) );
             awt::Size aSz;
             aSz.Width = aSize.Width();
             aSz.Height = aSize.Height();

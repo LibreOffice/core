@@ -495,7 +495,7 @@ void UnoDialogControl::setMenuBar( const Reference< XMenuBar >& rxMenuBar ) thro
 }
 static ::Size ImplMapPixelToAppFont( OutputDevice* pOutDev, const ::Size& aSize )
 {
-    ::Size aTmp = pOutDev->PixelToLogic( aSize, MAP_APPFONT );
+    ::Size aTmp = pOutDev->PixelToLogic( aSize, MapUnit::MapAppFont );
     return aTmp;
 }
 // css::awt::XWindowListener
@@ -506,7 +506,7 @@ throw (css::uno::RuntimeException, std::exception)
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
     if ( pOutDev && !mbSizeModified )
     {
-        // Currentley we are simply using MAP_APPFONT
+        // Currentley we are simply using MapUnit::MapAppFont
         ::Size aAppFontSize( e.Width, e.Height );
 
         Reference< XControl > xDialogControl( *this, UNO_QUERY_THROW );
@@ -547,7 +547,7 @@ throw (css::uno::RuntimeException, std::exception)
     DBG_ASSERT( pOutDev, "Missing Default Device!" );
     if ( pOutDev && !mbPosModified )
     {
-        // Currentley we are simply using MAP_APPFONT
+        // Currentley we are simply using MapUnit::MapAppFont
         ::Size aTmp( e.X, e.Y );
         aTmp = ImplMapPixelToAppFont( pOutDev, aTmp );
 

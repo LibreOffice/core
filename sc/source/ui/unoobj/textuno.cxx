@@ -211,7 +211,7 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
         ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool );
 
         pHdrEngine->EnableUndo( false );
-        pHdrEngine->SetRefMapMode( MAP_TWIP );
+        pHdrEngine->SetRefMapMode( MapUnit::MapTwip );
 
         //  default font must be set, independently of document
         //  -> use global pool from module
@@ -859,7 +859,7 @@ ScDrawTextCursor* ScDrawTextCursor::getImplementation(const uno::Reference<uno::
 ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
 {
     SfxItemPool* pEnginePool = EditEngine::CreatePool();
-    pEnginePool->SetDefaultMetric( MAP_100TH_MM );
+    pEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
     pEnginePool->FreezeIdRanges();
 
     pEditEngine = new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true);     // TRUE: become owner of pool
@@ -960,7 +960,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         if (pDocShell)
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
         else
-            pEditEngine->SetRefMapMode( MAP_100TH_MM );
+            pEditEngine->SetRefMapMode( MapUnit::Map100thMM );
         pForwarder = new SvxEditEngineForwarder(*pEditEngine);
     }
 

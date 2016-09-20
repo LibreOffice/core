@@ -894,7 +894,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     {
         rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::MAPMODE);
         rRenderContext.SetLineColor(Color(COL_WHITE));
-        rRenderContext.SetMapMode(MapMode(MAP_PIXEL));
+        rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
         Size aSize = GetSizePixel();
         rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
                                 Point(aSize.Width() - 1, aSize.Height() - 1));

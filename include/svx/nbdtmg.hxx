@@ -186,7 +186,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
     public:
         NBOTypeMgrBase()
             : pSet(nullptr)
-            , eCoreUnit(MAP_TWIP)
+            , eCoreUnit(MapUnit::MapTwip)
             , aNumCharFmtName(OUString())
             , bIsLoading(false)
         {}

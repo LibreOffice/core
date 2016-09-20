@@ -189,15 +189,15 @@ void Impl_OlePres::Write( SvStream & rStm )
         DBG_ASSERT( pMtf->GetPrefMapMode().GetOrigin() == Point(),
                     "Origin-Verschiebung im Mtf" );
         MapUnit nMU = pMtf->GetPrefMapMode().GetMapUnit();
-        if( MAP_100TH_MM != nMU )
+        if( MapUnit::Map100thMM != nMU )
         {
             Size aPrefS( pMtf->GetPrefSize() );
             Size aS( aPrefS );
-            aS = OutputDevice::LogicToLogic( aS, nMU, MAP_100TH_MM );
+            aS = OutputDevice::LogicToLogic( aS, nMU, MapUnit::Map100thMM );
 
             pMtf->Scale( Fraction( aS.Width(), aPrefS.Width() ),
                          Fraction( aS.Height(), aPrefS.Height() ) );
-            pMtf->SetPrefMapMode( MAP_100TH_MM );
+            pMtf->SetPrefMapMode( MapUnit::Map100thMM );
             pMtf->SetPrefSize( aS );
         }
         WriteWindowMetafileBits( rStm, *pMtf );
@@ -1018,7 +1018,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
         if ( nLineFlags & 0x10 )
         {
-            bool bScaleArrows = rManager.pSdrModel->GetScaleUnit() == MAP_TWIP;
+            bool bScaleArrows = rManager.pSdrModel->GetScaleUnit() == MapUnit::MapTwip;
 
             // LineStart
 
@@ -2628,7 +2628,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         if( eShadowType != mso_shadowOffset && !bNonZeroShadowOffset )
         {
             //0.12" == 173 twip == 302 100mm
-            sal_uInt32 nDist = rManager.pSdrModel->GetScaleUnit() == MAP_TWIP ? 173: 302;
+            sal_uInt32 nDist = rManager.pSdrModel->GetScaleUnit() == MapUnit::MapTwip ? 173: 302;
             rSet.Put( makeSdrShadowXDistItem( nDist ) );
             rSet.Put( makeSdrShadowYDistItem( nDist ) );
         }
@@ -3138,7 +3138,7 @@ void SvxMSDffManager::ScaleEmu( sal_Int32& rVal ) const
 sal_uInt32 SvxMSDffManager::ScalePt( sal_uInt32 nVal ) const
 {
     MapUnit eMap = pSdrModel->GetScaleUnit();
-    Fraction aFact( GetMapFactor( MAP_POINT, eMap ).X() );
+    Fraction aFact( GetMapFactor( MapUnit::MapPoint, eMap ).X() );
     long aMul = aFact.GetNumerator();
     long aDiv = aFact.GetDenominator() * 65536;
     aFact = Fraction( aMul, aDiv ); // try again to shorten it
@@ -3158,7 +3158,7 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
         // PPT works in units of 576DPI
         // WW on the other side uses twips, i.e. 1440DPI.
         MapUnit eMap = pSdrModel->GetScaleUnit();
-        Fraction aFact( GetMapFactor(MAP_INCH, eMap).X() );
+        Fraction aFact( GetMapFactor(MapUnit::MapInch, eMap).X() );
         long nMul=aFact.GetNumerator();
         long nDiv=aFact.GetDenominator()*nApplicationScale;
         aFact=Fraction(nMul,nDiv); // try again to shorten it
@@ -3170,7 +3170,7 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
 
         // MS-DFF-Properties are mostly given in EMU (English Metric Units)
         // 1mm=36000emu, 1twip=635emu
-        aFact=GetMapFactor(MAP_100TH_MM,eMap).X();
+        aFact=GetMapFactor(MapUnit::Map100thMM,eMap).X();
         nMul=aFact.GetNumerator();
         nDiv=aFact.GetDenominator()*360;
         aFact=Fraction(nMul,nDiv); // try again to shorten it
@@ -3180,7 +3180,7 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
         nEmuDiv=aFact.GetDenominator();
 
         // And something for typographic Points
-        aFact=GetMapFactor(MAP_POINT,eMap).X();
+        aFact=GetMapFactor(MapUnit::MapPoint,eMap).X();
         nPntMul=aFact.GetNumerator();
         nPntDiv=aFact.GetDenominator();
     }
@@ -3691,7 +3691,7 @@ static Size lcl_GetPrefSize(const Graphic& rGraf, const MapMode& aWanted)
     if (aPrefMapMode == aWanted)
         return rGraf.GetPrefSize();
     Size aRetSize;
-    if (aPrefMapMode == MAP_PIXEL)
+    if (aPrefMapMode == MapUnit::MapPixel)
     {
         aRetSize = Application::GetDefaultDevice()->PixelToLogic(
             rGraf.GetPrefSize(), aWanted);
@@ -3721,7 +3721,7 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
         sal_uInt32  nTop( 0 ),  nBottom( 0 ), nLeft( 0 ), nRight( 0 );
 
         if ( pSet ) // use crop attributes ?
-            aCropSize = lcl_GetPrefSize( rGraf, MAP_100TH_MM );
+            aCropSize = lcl_GetPrefSize( rGraf, MapUnit::Map100thMM );
         else
         {
             aCropBitmap = rGraf.GetBitmapEx();
@@ -4423,7 +4423,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             rOutliner.SetUpdateMode( false );
                             rOutliner.SetText( *pParaObj );
                             ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::BITMASK);
-                            pVirDev->SetMapMode( MAP_100TH_MM );
+                            pVirDev->SetMapMode( MapUnit::Map100thMM );
                             sal_Int32 i, nParagraphs = rOutliner.GetParagraphCount();
                             if ( nParagraphs )
                             {
@@ -6479,7 +6479,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
                         aMtf.Scale( (double) aMtfSize100.Width() / aOldSize.Width(),
                                     (double) aMtfSize100.Height() / aOldSize.Height() );
                         aMtf.SetPrefSize( aMtfSize100 );
-                        aMtf.SetPrefMapMode( MAP_100TH_MM );
+                        aMtf.SetPrefMapMode( MapUnit::Map100thMM );
                         rData = aMtf;
                     }
                 }
@@ -6584,7 +6584,7 @@ bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile &
     // SV tries to guess a best match for the right value
     Size aSize = rMtf.GetPrefSize();
     const MapMode& aMMSrc = rMtf.GetPrefMapMode();
-    MapMode aMMDst( MAP_100TH_MM );
+    MapMode aMMDst( MapUnit::Map100thMM );
     aSize = OutputDevice::LogicToLogic( aSize, aMMSrc, aMMDst );
     aEle.SetSize( aSize );
     aEle.SetAspect( nAspect );
@@ -7031,7 +7031,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
                 else
                 {
                     aSz = rVisArea.GetSize();
-                    aSz = OutputDevice::LogicToLogic( aSz, MapMode( MAP_100TH_MM ), aMapMode );
+                    aSz = OutputDevice::LogicToLogic( aSz, MapMode( MapUnit::Map100thMM ), aMapMode );
                 }
 
                 // don't modify the object

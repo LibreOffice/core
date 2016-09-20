@@ -93,7 +93,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         Size aTwipSpc( rPixSpace.Width(), rPixSpace.Height() );
         aTwipSpc =
             Application::GetDefaultDevice()->PixelToLogic( aTwipSpc,
-                                                MapMode(MAP_TWIP) );
+                                                MapMode(MapUnit::MapTwip) );
         nLeftSpace = nRightSpace = (sal_uInt16)aTwipSpc.Width();
         nUpperSpace = nLowerSpace = (sal_uInt16)aTwipSpc.Height();
     }
@@ -465,7 +465,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
     {
         aTwipSz = Application::GetDefaultDevice()
-                    ->PixelToLogic( aTwipSz, MapMode( MAP_TWIP ) );
+                    ->PixelToLogic( aTwipSz, MapMode( MapUnit::MapTwip ) );
     }
 
     if( SVX_CSS1_LTYPE_TWIP== aPropInfo.eWidthType )

@@ -146,7 +146,7 @@ void ImplReadMapMode( SvStream& rIStm, MapMode& rMapMode )
 
 void ImplWriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
-    rOStm.WriteInt16( rMapMode.GetMapUnit() );
+    rOStm.WriteInt16( (sal_uInt16)rMapMode.GetMapUnit() );
     WritePair( rOStm, rMapMode.GetOrigin() );
     rOStm.WriteInt32( rMapMode.GetScaleX().GetNumerator() );
     rOStm.WriteInt32( rMapMode.GetScaleX().GetDenominator() );

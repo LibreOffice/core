@@ -645,11 +645,11 @@ void OCopyTableWizard::construct()
     AddButton( m_pbNext = VclPtr<PushButton>::Create(this, WB_TABSTOP));
     AddButton( m_pbFinish = VclPtr<PushButton>::Create(this, WB_TABSTOP));
 
-    m_pbHelp->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
-    m_pbCancel->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
-    m_pbPrev->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
-    m_pbNext->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
-    m_pbFinish->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
+    m_pbHelp->SetSizePixel( LogicToPixel( Size( 50, 14 ), MapUnit::MapAppFont ) );
+    m_pbCancel->SetSizePixel( LogicToPixel( Size( 50, 14 ), MapUnit::MapAppFont ) );
+    m_pbPrev->SetSizePixel( LogicToPixel( Size( 50, 14 ), MapUnit::MapAppFont ) );
+    m_pbNext->SetSizePixel( LogicToPixel( Size( 50, 14 ), MapUnit::MapAppFont ) );
+    m_pbFinish->SetSizePixel( LogicToPixel( Size( 50, 14 ), MapUnit::MapAppFont ) );
 
     m_pbPrev->SetText(ModuleRes(STR_WIZ_PB_PREV));
     m_pbNext->SetText(ModuleRes(STR_WIZ_PB_NEXT));

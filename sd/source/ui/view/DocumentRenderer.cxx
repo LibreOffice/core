@@ -1432,7 +1432,7 @@ private:
         {
 
             MapMode aMap (aInfo.mpPrinter->GetMapMode());
-            aMap.SetMapUnit(MAP_100TH_MM);
+            aMap.SetMapUnit(MapUnit::Map100thMM);
             aInfo.maMap = aMap;
             mpPrinter->SetMapMode(aMap);
 
@@ -1623,7 +1623,7 @@ private:
         Rectangle aOutRect(aPageOfs, rInfo.mpPrinter->GetOutputSize());
         if( aOutRect.GetWidth() > aOutRect.GetHeight() )
         {
-            Size aPaperSize( rInfo.mpPrinter->PixelToLogic( rInfo.mpPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+            Size aPaperSize( rInfo.mpPrinter->PixelToLogic( rInfo.mpPrinter->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) ) );
             maPrintSize.Width  = aPaperSize.Height();
             maPrintSize.Height = aPaperSize.Width();
             const long nRotatedWidth = aOutRect.GetHeight();

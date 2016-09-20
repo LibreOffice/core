@@ -923,7 +923,7 @@ void OFieldExpressionControl::InsertRows( long nRow )
 
 Size OFieldExpressionControl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(106, 75), MAP_APPFONT);
+    return LogicToPixel(Size(106, 75), MapUnit::MapAppFont);
 }
 
 // class OGroupsSortingDialog

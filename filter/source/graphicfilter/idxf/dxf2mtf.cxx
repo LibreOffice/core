@@ -878,9 +878,9 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
         // simply set map mode to 1/100-mm (1/10-mm) if the graphic
         // does not get not too small (<0.5cm)
         if( ( aPrefSize.Width() < 500 ) && ( aPrefSize.Height() < 500 ) )
-            rMTF.SetPrefMapMode( MapMode( MAP_10TH_MM ) );
+            rMTF.SetPrefMapMode( MapMode( MapUnit::Map10thMM ) );
         else
-            rMTF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+            rMTF.SetPrefMapMode( MapMode( MapUnit::Map100thMM ) );
     }
 
     pVirDev.disposeAndClear();

@@ -1819,7 +1819,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
                     if ( pDrawObj )
                     {
                         Rectangle aRect = pDrawObj->GetLogicRect();
-                        MapMode aMapMode( MAP_100TH_MM );
+                        MapMode aMapMode( MapUnit::Map100thMM );
                         Size aOleSize = pDrawObj->GetOrigObjSize( &aMapMode );
                         aRect.SetSize( aOleSize );
                         aObjArea = aRect;

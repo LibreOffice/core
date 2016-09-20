@@ -2762,7 +2762,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                 // HTML source view and prospect adapt to the printer's paper size
                 aTmpSize = pPrinter->GetPaperSize();
                 aTmpSize = OutputDevice::LogicToLogic( aTmpSize,
-                            pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
+                            pPrinter->GetMapMode(), MapMode( MapUnit::Map100thMM ));
                 aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
                 #if 0
                 // #i115048# it seems users didn't like getting double the formatted page size
@@ -2859,7 +2859,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                 if ( pPrinter )
                 {
                     awt::Size aNewPageSize;
-                    const Size aPageSize = pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
+                    const Size aPageSize = pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) );
                     aNewPageSize = awt::Size( aPageSize.Width(), aPageSize.Height() );
                     if ( ( pPagePrintSettings->GetLandscape() &&
                            aPageSize.Width() < aPageSize.Height() ) ||

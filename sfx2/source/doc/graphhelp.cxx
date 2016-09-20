@@ -142,7 +142,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
                            pMF->mm = MM_ANISOTROPIC;
 
                         MapMode aMetaMode = pGDIMeta->GetPrefMapMode();
-                        MapMode aWinMode( MAP_100TH_MM );
+                        MapMode aWinMode( MapUnit::Map100thMM );
 
                         if ( aWinMode == pGDIMeta->GetPrefMapMode() )
                         {

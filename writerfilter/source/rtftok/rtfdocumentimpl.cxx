@@ -846,8 +846,8 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         {
             Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
             Size aSize(aGraphic.GetPrefSize());
-            MapMode aMap(MAP_100TH_MM);
-            if (aGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL)
+            MapMode aMap(MapUnit::Map100thMM);
+            if (aGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
                 aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap);
             else
                 aSize = OutputDevice::LogicToLogic(aSize, aGraphic.GetPrefMapMode(), aMap);

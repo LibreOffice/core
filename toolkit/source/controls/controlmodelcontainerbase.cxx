@@ -1382,7 +1382,7 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
     xP->getPropertyValue("PositionY") >>= nY;
     xP->getPropertyValue("Width") >>= nWidth;
     xP->getPropertyValue("Height") >>= nHeight;
-    MapMode aMode( MAP_APPFONT );
+    MapMode aMode( MapUnit::MapAppFont );
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     if ( pOutDev )
     {

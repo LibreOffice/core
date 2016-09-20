@@ -1547,7 +1547,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
     mrOut.Push( PushFlags::MAPMODE );
     MapMode aMapMode( mrOut.GetMapMode() );
-    aMapMode.SetMapUnit( MAP_TWIP );
+    aMapMode.SetMapUnit( MapUnit::MapTwip );
     mrOut.SetMapMode( aMapMode );
 
     // Create new cursor and lock the view:

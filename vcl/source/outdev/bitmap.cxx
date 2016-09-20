@@ -196,7 +196,7 @@ Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
         if( !aBmp.IsEmpty() )
         {
             // do downsampling if necessary
-            Size aDstSizeTwip( PixelToLogic( LogicToPixel( rDstSz ), MAP_TWIP ) );
+            Size aDstSizeTwip( PixelToLogic( LogicToPixel( rDstSz ), MapUnit::MapTwip ) );
 
             // #103209# Normalize size (mirroring has to happen outside of this method)
             aDstSizeTwip = Size( labs(aDstSizeTwip.Width()), labs(aDstSizeTwip.Height()) );
@@ -1199,14 +1199,14 @@ void OutputDevice::DrawTransformedBitmapEx(
             basegfx::fround(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
             basegfx::fround(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
         const Point aOrigin = GetMapMode().GetOrigin();
-        if (comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MAP_PIXEL)
+        if (comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             aDestPt.Move(aOrigin.getX(), aOrigin.getY());
             EnableMapMode(false);
         }
 
         DrawBitmapEx(aDestPt, aDestSize, rBitmapEx);
-        if (comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MAP_PIXEL)
+        if (comphelper::LibreOfficeKit::isActive() && GetMapMode().GetMapUnit() != MapUnit::MapPixel)
         {
             EnableMapMode();
             aDestPt.Move(-aOrigin.getX(), -aOrigin.getY());

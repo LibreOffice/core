@@ -127,7 +127,7 @@ void TextCharacterSpacingControl::Initialize()
     {
         MapUnit eUnit = GetCoreMetric();
         MapUnit eOrgUnit = (MapUnit)eUnit;
-        MapUnit ePntUnit(MAP_POINT);
+        MapUnit ePntUnit(MapUnit::MapPoint);
         long nBig = maEditKerning->Normalize(nKerning);
         nKerning = LogicToLogic(nBig, eOrgUnit, ePntUnit);
         maEditKerning->SetValue(nKerning);
@@ -151,7 +151,7 @@ void TextCharacterSpacingControl::ExecuteCharacterSpacing(long nValue, bool bClo
     long nSign = (nValue < 0) ? -1 : 1;
     nValue = nValue * nSign;
 
-    long nVal = LogicToLogic(nValue, MAP_POINT, (MapUnit)eUnit);
+    long nVal = LogicToLogic(nValue, MapUnit::MapPoint, (MapUnit)eUnit);
     short nKern = (nValue == 0) ? 0 : (short)maEditKerning->Denormalize(nVal);
 
     SvxKerningItem aKernItem(nSign * nKern, SID_ATTR_CHAR_KERNING);

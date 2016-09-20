@@ -156,7 +156,7 @@ std::shared_ptr<vcl::Font> Theme::GetFont (
     if (pFont)
     {
         // Transform the point size to pixel size.
-        const MapMode aFontMapMode (MAP_POINT);
+        const MapMode aFontMapMode (MapUnit::MapPoint);
         const Size aFontSize (rDevice.LogicToPixel(pFont->GetFontSize(), aFontMapMode));
 
         // Transform the font size to the logical coordinates of the device.

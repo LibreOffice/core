@@ -271,7 +271,7 @@ sal_Int32 ComplexToolbarController::getFontSizePixel( const vcl::Window* pWindow
 
     // Calculate height of the application font used by window
     sal_Int32 nHeight = sal_Int32( rFont.GetFontHeight() );
-    ::Size aPixelSize = pWindow->LogicToPixel( ::Size( 0, nHeight ), MAP_APPFONT );
+    ::Size aPixelSize = pWindow->LogicToPixel( ::Size( 0, nHeight ), MapUnit::MapAppFont );
     return aPixelSize.Height();
 }
 

@@ -727,13 +727,13 @@ SvStream& SvxFontHeightItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) 
     rStrm.WriteUInt16( GetHeight() );
 
     if( FONTHEIGHT_UNIT_VERSION <= nItemVersion )
-        rStrm.WriteUInt16( GetProp() ).WriteUInt16( GetPropUnit() );
+        rStrm.WriteUInt16( GetProp() ).WriteUInt16( (sal_uInt16)GetPropUnit() );
     else
     {
         // When exporting to the old versions the relative information is lost
         // when there is no percentage
         sal_uInt16 _nProp = GetProp();
-        if( MAP_RELATIVE != GetPropUnit() )
+        if( MapUnit::MapRelative != GetPropUnit() )
             _nProp = 100;
         rStrm.WriteUInt16( _nProp );
     }
@@ -744,7 +744,8 @@ SvStream& SvxFontHeightItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) 
 SfxPoolItem* SvxFontHeightItem::Create( SvStream& rStrm,
                                                  sal_uInt16 nVersion ) const
 {
-    sal_uInt16 nsize, nprop = 0, nPropUnit = MAP_RELATIVE;
+    sal_uInt16 nsize, nprop = 0;
+    MapUnit nPropUnit = MapUnit::MapRelative;
 
     rStrm.ReadUInt16( nsize );
 
@@ -758,7 +759,11 @@ SfxPoolItem* SvxFontHeightItem::Create( SvStream& rStrm,
     }
 
     if( FONTHEIGHT_UNIT_VERSION <= nVersion )
-        rStrm.ReadUInt16( nPropUnit );
+    {
+        sal_uInt16 nTmp;
+        rStrm.ReadUInt16( nTmp );
+        nPropUnit = (MapUnit)nTmp;
+    }
 
     SvxFontHeightItem* pItem = new SvxFontHeightItem( nsize, 100, Which() );
     pItem->SetProp( nprop, (MapUnit)nPropUnit );
@@ -801,22 +806,22 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 aFontHeight.Height = fRoundPoints;
             }
 
-            aFontHeight.Prop = (sal_Int16)(MAP_RELATIVE == ePropUnit ? nProp : 100);
+            aFontHeight.Prop = (sal_Int16)(MapUnit::MapRelative == ePropUnit ? nProp : 100);
 
             float fRet = (float)(short)nProp;
             switch( ePropUnit )
             {
-                case MAP_RELATIVE:
+                case MapUnit::MapRelative:
                     fRet = 0.;
                 break;
-                case MAP_100TH_MM:
+                case MapUnit::Map100thMM:
                     fRet = convertMm100ToTwip(fRet);
                     fRet /= 20.;
                 break;
-                case MAP_POINT:
+                case MapUnit::MapPoint:
 
                 break;
-                case MAP_TWIP:
+                case MapUnit::MapTwip:
                     fRet /= 20.;
                 break;
                 default: ;//prevent warning
@@ -843,24 +848,24 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_FONTHEIGHT_PROP:
-            rVal <<= (sal_Int16)(MAP_RELATIVE == ePropUnit ? nProp : 100);
+            rVal <<= (sal_Int16)(MapUnit::MapRelative == ePropUnit ? nProp : 100);
         break;
         case MID_FONTHEIGHT_DIFF:
         {
             float fRet = (float)(short)nProp;
             switch( ePropUnit )
             {
-                case MAP_RELATIVE:
+                case MapUnit::MapRelative:
                     fRet = 0.;
                 break;
-                case MAP_100TH_MM:
+                case MapUnit::Map100thMM:
                     fRet = convertMm100ToTwip(fRet);
                     fRet /= 20.;
                 break;
-                case MAP_POINT:
+                case MapUnit::MapPoint:
 
                 break;
-                case MAP_TWIP:
+                case MapUnit::MapTwip:
                     fRet /= 20.;
                 break;
                 default: ;//prevent warning
@@ -885,11 +890,11 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, M
     short nDiff = 0;
     switch( eProp )
     {
-        case MAP_RELATIVE:
+        case MapUnit::MapRelative:
             nRet *= 100;
             nRet /= nProp;
         break;
-        case MAP_POINT:
+        case MapUnit::MapPoint:
         {
             short nTemp = (short)nProp;
             nDiff = nTemp * 20;
@@ -897,11 +902,11 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, M
                 nDiff = (short)convertTwipToMm100((long)(nDiff));
         }
         break;
-        case MAP_100TH_MM:
+        case MapUnit::Map100thMM:
             //then the core is surely also in 1/100 mm
             nDiff = (short)nProp;
         break;
-        case MAP_TWIP:
+        case MapUnit::MapTwip:
             // Here surely TWIP
             nDiff = ((short)nProp);
         break;
@@ -926,7 +931,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if ( rVal >>= aFontHeight )
             {
                 // Height
-                ePropUnit = MAP_RELATIVE;
+                ePropUnit = MapUnit::MapRelative;
                 nProp = 100;
                 double fPoint = aFontHeight.Height;
                 if( fPoint < 0. || fPoint > 10000. )
@@ -944,7 +949,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_FONTHEIGHT:
         {
-            ePropUnit = MAP_RELATIVE;
+            ePropUnit = MapUnit::MapRelative;
             nProp = 100;
             double fPoint = 0;
             if(!(rVal >>= fPoint))
@@ -973,7 +978,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             nHeight *= nNew;
             nHeight /= 100;
             nProp = nNew;
-            ePropUnit = MAP_RELATIVE;
+            ePropUnit = MapUnit::MapRelative;
         }
         break;
         case MID_FONTHEIGHT_DIFF:
@@ -990,7 +995,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nCoreDiffValue = (sal_Int16)(fValue * 20.);
             nHeight += bConvert ? nCoreDiffValue : convertTwipToMm100(nCoreDiffValue);
             nProp = (sal_uInt16)((sal_Int16)fValue);
-            ePropUnit = MAP_POINT;
+            ePropUnit = MapUnit::MapPoint;
         }
         break;
     }
@@ -1006,7 +1011,7 @@ bool SvxFontHeightItem::GetPresentation
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
-    if( MAP_RELATIVE != ePropUnit )
+    if( MapUnit::MapRelative != ePropUnit )
     {
         rText = OUString::number( (short)nProp ) +
                 " " + EE_RESSTR( GetMetricId( ePropUnit ) );
@@ -1016,8 +1021,8 @@ bool SvxFontHeightItem::GetPresentation
     else if( 100 == nProp )
     {
         rText = GetMetricText( (long)nHeight,
-                                eCoreUnit, MAP_POINT, pIntl ) +
-                " " + EE_RESSTR(GetMetricId(MAP_POINT));
+                                eCoreUnit, MapUnit::MapPoint, pIntl ) +
+                " " + EE_RESSTR(GetMetricId(MapUnit::MapPoint));
     }
     else
         rText = OUString::number( nProp ) + "%";
@@ -1049,7 +1054,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewP
 {
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
-    if( MAP_RELATIVE != eUnit )
+    if( MapUnit::MapRelative != eUnit )
         nHeight = nNewHeight + ::ItemToControl( (short)nNewProp, eUnit,
                                                 FUNIT_TWIP );
     else if( 100 != nNewProp )
@@ -1066,7 +1071,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
 {
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
-    if( MAP_RELATIVE != eMetric )
+    if( MapUnit::MapRelative != eMetric )
         nHeight = nNewHeight +
                 ::ControlToItem( ::ItemToControl((short)nNewProp, eMetric,
                                         FUNIT_TWIP ), FUNIT_TWIP,
@@ -1086,7 +1091,7 @@ void SvxFontHeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("height"), BAD_CAST(OString::number(nHeight).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("prop"), BAD_CAST(OString::number(nProp).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("propUnit"), BAD_CAST(OString::number(ePropUnit).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("propUnit"), BAD_CAST(OString::number((int)ePropUnit).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
@@ -1194,8 +1199,8 @@ bool SvxFontWidthItem::GetPresentation
     if ( 100 == nProp )
     {
         rText = GetMetricText( (long)nWidth,
-                                eCoreUnit, MAP_POINT, pIntl ) +
-                " " + EE_RESSTR(GetMetricId(MAP_POINT));
+                                eCoreUnit, MapUnit::MapPoint, pIntl ) +
+                " " + EE_RESSTR(GetMetricId(MapUnit::MapPoint));
     }
     else
         rText = OUString::number( nProp ) + "%";
@@ -2033,8 +2038,8 @@ bool SvxKerningItem::GetPresentation
     switch ( ePres )
     {
         case SfxItemPresentation::Nameless:
-            rText = GetMetricText( (long)GetValue(), eCoreUnit, MAP_POINT, pIntl ) +
-                    " " + EE_RESSTR(GetMetricId(MAP_POINT));
+            rText = GetMetricText( (long)GetValue(), eCoreUnit, MapUnit::MapPoint, pIntl ) +
+                    " " + EE_RESSTR(GetMetricId(MapUnit::MapPoint));
             return true;
         case SfxItemPresentation::Complete:
         {
@@ -2049,8 +2054,8 @@ bool SvxKerningItem::GetPresentation
             if ( nId )
                 rText += EE_RESSTR(nId);
             rText = rText +
-                    GetMetricText( (long)GetValue(), eCoreUnit, MAP_POINT, pIntl ) +
-                    " " + EE_RESSTR(GetMetricId(MAP_POINT));
+                    GetMetricText( (long)GetValue(), eCoreUnit, MapUnit::MapPoint, pIntl ) +
+                    " " + EE_RESSTR(GetMetricId(MapUnit::MapPoint));
             return true;
         }
         default: ; //prevent warning

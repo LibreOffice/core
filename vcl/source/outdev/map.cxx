@@ -28,12 +28,14 @@
 #include <outdev.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <o3tl/enumarray.hxx>
 
-static int const s_ImplArySize = MAP_PIXEL+1;
-static const long aImplNumeratorAry[s_ImplArySize] =
-    {    1,   1,   5,  50,    1,   1,  1, 1,  1,    1, 1 };
-static const long aImplDenominatorAry[s_ImplArySize] =
-     { 2540, 254, 127, 127, 1000, 100, 10, 1, 72, 1440, 1 };
+// we don't actually handle units beyond, hence the zeros in the arrays
+static const MapUnit s_MaxValidUnit = MapUnit::MapPixel;
+static const o3tl::enumarray<MapUnit,long> aImplNumeratorAry =
+     {    1,   1,   5,  50,    1,   1,  1, 1,  1,    1, 1, 0, 0, 0 };
+static const o3tl::enumarray<MapUnit,long> aImplDenominatorAry =
+     { 2540, 254, 127, 127, 1000, 100, 10, 1, 72, 1440, 1, 0, 0, 0 };
 
 /*
 Reduces accuracy until it is a fraction (should become
@@ -148,76 +150,76 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     rMapRes.mfScaleY = 1.0;
     switch ( rMapMode.GetMapUnit() )
     {
-        case MAP_RELATIVE:
+        case MapUnit::MapRelative:
             break;
-        case MAP_100TH_MM:
+        case MapUnit::Map100thMM:
             rMapRes.mnMapScNumX   = 1;
             rMapRes.mnMapScDenomX = 2540;
             rMapRes.mnMapScNumY   = 1;
             rMapRes.mnMapScDenomY = 2540;
             break;
-        case MAP_10TH_MM:
+        case MapUnit::Map10thMM:
             rMapRes.mnMapScNumX   = 1;
             rMapRes.mnMapScDenomX = 254;
             rMapRes.mnMapScNumY   = 1;
             rMapRes.mnMapScDenomY = 254;
             break;
-        case MAP_MM:
+        case MapUnit::MapMM:
             rMapRes.mnMapScNumX   = 5;      // 10
             rMapRes.mnMapScDenomX = 127;    // 254
             rMapRes.mnMapScNumY   = 5;      // 10
             rMapRes.mnMapScDenomY = 127;    // 254
             break;
-        case MAP_CM:
+        case MapUnit::MapCM:
             rMapRes.mnMapScNumX   = 50;     // 100
             rMapRes.mnMapScDenomX = 127;    // 254
             rMapRes.mnMapScNumY   = 50;     // 100
             rMapRes.mnMapScDenomY = 127;    // 254
             break;
-        case MAP_1000TH_INCH:
+        case MapUnit::Map1000thInch:
             rMapRes.mnMapScNumX   = 1;
             rMapRes.mnMapScDenomX = 1000;
             rMapRes.mnMapScNumY   = 1;
             rMapRes.mnMapScDenomY = 1000;
             break;
-        case MAP_100TH_INCH:
+        case MapUnit::Map100thInch:
             rMapRes.mnMapScNumX   = 1;
             rMapRes.mnMapScDenomX = 100;
             rMapRes.mnMapScNumY   = 1;
             rMapRes.mnMapScDenomY = 100;
             break;
-        case MAP_10TH_INCH:
+        case MapUnit::Map10thInch:
             rMapRes.mnMapScNumX   = 1;
             rMapRes.mnMapScDenomX = 10;
             rMapRes.mnMapScNumY   = 1;
             rMapRes.mnMapScDenomY = 10;
             break;
-        case MAP_INCH:
+        case MapUnit::MapInch:
             rMapRes.mnMapScNumX   = 1;
             rMapRes.mnMapScDenomX = 1;
             rMapRes.mnMapScNumY   = 1;
             rMapRes.mnMapScDenomY = 1;
             break;
-        case MAP_POINT:
+        case MapUnit::MapPoint:
             rMapRes.mnMapScNumX   = 1;
             rMapRes.mnMapScDenomX = 72;
             rMapRes.mnMapScNumY   = 1;
             rMapRes.mnMapScDenomY = 72;
             break;
-        case MAP_TWIP:
+        case MapUnit::MapTwip:
             rMapRes.mnMapScNumX   = 1;
             rMapRes.mnMapScDenomX = 1440;
             rMapRes.mnMapScNumY   = 1;
             rMapRes.mnMapScDenomY = 1440;
             break;
-        case MAP_PIXEL:
+        case MapUnit::MapPixel:
             rMapRes.mnMapScNumX   = 1;
             rMapRes.mnMapScDenomX = nDPIX;
             rMapRes.mnMapScNumY   = 1;
             rMapRes.mnMapScDenomY = nDPIY;
             break;
-        case MAP_SYSFONT:
-        case MAP_APPFONT:
+        case MapUnit::MapSysFont:
+        case MapUnit::MapAppFont:
             {
             ImplSVData* pSVData = ImplGetSVData();
             if ( !pSVData->maGDIData.mnAppFontX )
@@ -246,7 +248,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
 
     // set offset according to MapMode
     Point aOrigin = rMapMode.GetOrigin();
-    if ( rMapMode.GetMapUnit() != MAP_RELATIVE )
+    if ( rMapMode.GetMapUnit() != MapUnit::MapRelative )
     {
         rMapRes.mnMapOfsX = aOrigin.X();
         rMapRes.mnMapOfsY = aOrigin.Y();
@@ -694,7 +696,7 @@ void OutputDevice::SetMapMode()
 void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
 {
 
-    bool bRelMap = (rNewMapMode.GetMapUnit() == MAP_RELATIVE);
+    bool bRelMap = (rNewMapMode.GetMapUnit() == MapUnit::MapRelative);
 
     if ( mpMetaFile )
     {
@@ -817,11 +819,11 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
     Point aPt( LogicToLogic( Point(), nullptr, &rNewMapMode ) );
     if ( eNew != eOld )
     {
-        if ( eOld > MAP_PIXEL )
+        if ( eOld > MapUnit::MapPixel )
         {
             SAL_WARN( "vcl.gdi", "Not implemented MapUnit" );
         }
-        else if ( eNew > MAP_PIXEL )
+        else if ( eNew > MapUnit::MapPixel )
         {
             SAL_WARN( "vcl.gdi", "Not implemented MapUnit" );
         }
@@ -835,12 +837,12 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
                                     aXF.GetDenominator(), aF.GetDenominator() );
             aYF = ImplMakeFraction( aYF.GetNumerator(),   aF.GetNumerator(),
                                     aYF.GetDenominator(), aF.GetDenominator() );
-            if ( eOld == MAP_PIXEL )
+            if ( eOld == MapUnit::MapPixel )
             {
                 aXF *= Fraction( mnDPIX, 1 );
                 aYF *= Fraction( mnDPIY, 1 );
             }
-            else if ( eNew == MAP_PIXEL )
+            else if ( eNew == MapUnit::MapPixel )
             {
                 aXF *= Fraction( 1, mnDPIX );
                 aYF *= Fraction( 1, mnDPIY );
@@ -848,7 +850,7 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
         }
     }
 
-    MapMode aNewMapMode( MAP_RELATIVE, Point( -aPt.X(), -aPt.Y() ), aXF, aYF );
+    MapMode aNewMapMode( MapUnit::MapRelative, Point( -aPt.X(), -aPt.Y() ), aXF, aYF );
     SetMapMode( aNewMapMode );
 
     if ( eNew != eOld )
@@ -1480,7 +1482,7 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
                                                                         \
     if ( !mbMap || pMapModeSource != &maMapMode )                       \
     {                                                                   \
-        if ( pMapModeSource->GetMapUnit() == MAP_RELATIVE )             \
+        if ( pMapModeSource->GetMapUnit() == MapUnit::MapRelative )             \
             aMapResSource = maMapRes;                                   \
         ImplCalcMapResolution( *pMapModeSource,                         \
                                mnDPIX, mnDPIY, aMapResSource );         \
@@ -1489,7 +1491,7 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
         aMapResSource = maMapRes;                                       \
     if ( !mbMap || pMapModeDest != &maMapMode )                         \
     {                                                                   \
-        if ( pMapModeDest->GetMapUnit() == MAP_RELATIVE )               \
+        if ( pMapModeDest->GetMapUnit() == MapUnit::MapRelative )               \
             aMapResDest = maMapRes;                                     \
         ImplCalcMapResolution( *pMapModeDest,                           \
                                mnDPIX, mnDPIY, aMapResDest );           \
@@ -1501,35 +1503,35 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
 {
     (void) eUnitSource;
     (void) eUnitDest;
-    DBG_ASSERT( eUnitSource != MAP_SYSFONT
-                && eUnitSource != MAP_APPFONT
-                && eUnitSource != MAP_RELATIVE,
+    DBG_ASSERT( eUnitSource != MapUnit::MapSysFont
+                && eUnitSource != MapUnit::MapAppFont
+                && eUnitSource != MapUnit::MapRelative,
                 "Source MapUnit is not permitted" );
-    DBG_ASSERT( eUnitDest != MAP_SYSFONT
-                && eUnitDest != MAP_APPFONT
-                && eUnitDest != MAP_RELATIVE,
+    DBG_ASSERT( eUnitDest != MapUnit::MapSysFont
+                && eUnitDest != MapUnit::MapAppFont
+                && eUnitDest != MapUnit::MapRelative,
                 "Destination MapUnit is not permitted" );
-    SAL_WARN_IF( eUnitSource == MAP_PIXEL, "vcl",
-                       "MAP_PIXEL approximated with 72dpi" );
-    SAL_WARN_IF( eUnitDest == MAP_PIXEL, "vcl",
-                       "MAP_PIXEL approximated with 72dpi" );
+    SAL_WARN_IF( eUnitSource == MapUnit::MapPixel, "vcl",
+                       "MapUnit::MapPixel approximated with 72dpi" );
+    SAL_WARN_IF( eUnitDest == MapUnit::MapPixel, "vcl",
+                       "MapUnit::MapPixel approximated with 72dpi" );
 }
 
 #define ENTER3( eUnitSource, eUnitDest )                                \
     long nNumerator      = 1;       \
     long nDenominator    = 1;       \
-    SAL_WARN_IF( eUnitSource >= s_ImplArySize, "vcl", "Invalid source map unit");    \
-    SAL_WARN_IF( eUnitDest >= s_ImplArySize, "vcl", "Invalid destination map unit"); \
-    if( (eUnitSource < s_ImplArySize) && (eUnitDest < s_ImplArySize) )  \
+    SAL_WARN_IF( eUnitSource > s_MaxValidUnit, "vcl", "Invalid source map unit");    \
+    SAL_WARN_IF( eUnitDest > s_MaxValidUnit, "vcl", "Invalid destination map unit"); \
+    if( (eUnitSource <= s_MaxValidUnit) && (eUnitDest <= s_MaxValidUnit) )  \
     {   \
         nNumerator   = aImplNumeratorAry[eUnitSource] *             \
                            aImplDenominatorAry[eUnitDest];              \
         nDenominator     = aImplNumeratorAry[eUnitDest] *               \
                            aImplDenominatorAry[eUnitSource];            \
     } \
-    if ( eUnitSource == MAP_PIXEL )                                     \
+    if ( eUnitSource == MapUnit::MapPixel )                                     \
         nDenominator *= 72;                                             \
-    else if( eUnitDest == MAP_PIXEL )                                   \
+    else if( eUnitDest == MapUnit::MapPixel )                                   \
         nNumerator *= 72
 
 #define ENTER4( rMapModeSource, rMapModeDest )                          \
@@ -1951,7 +1953,7 @@ namespace vcl {
 
 long Window::ImplLogicUnitToPixelX( long nX, MapUnit eUnit )
 {
-    if ( eUnit != MAP_PIXEL )
+    if ( eUnit != MapUnit::MapPixel )
     {
         ImplFrameData* pFrameData = mpWindowImpl->mpFrameData;
 
@@ -1976,7 +1978,7 @@ long Window::ImplLogicUnitToPixelX( long nX, MapUnit eUnit )
 
 long Window::ImplLogicUnitToPixelY( long nY, MapUnit eUnit )
 {
-    if ( eUnit != MAP_PIXEL )
+    if ( eUnit != MapUnit::MapPixel )
     {
         ImplFrameData* pFrameData = mpWindowImpl->mpFrameData;
 

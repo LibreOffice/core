@@ -67,7 +67,7 @@ VCL_BUILDER_FACTORY_ARGS(SvxSwFrameExample, 0)
 
 Size SvxSwFrameExample::GetOptimalSize() const
 {
-    return LogicToPixel(Size(52, 86), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(52, 86), MapMode(MapUnit::MapAppFont));
 }
 
 void SvxSwFrameExample::InitColors_Impl()
@@ -474,7 +474,7 @@ Rectangle SvxSwFrameExample::DrawInnerFrame_Impl(vcl::RenderContext& rRenderCont
 
 void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    rRenderContext.SetMapMode(MAP_PIXEL);
+    rRenderContext.SetMapMode(MapUnit::MapPixel);
 
     InitAllRects_Impl(rRenderContext);
 

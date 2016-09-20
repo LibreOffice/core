@@ -1400,7 +1400,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                     if (aSrcMapMode!=pA->GetMapMode())
                     {
-                        if( pA->GetMapMode().GetMapUnit() == MAP_RELATIVE )
+                        if( pA->GetMapMode().GetMapUnit() == MapUnit::MapRelative )
                         {
                             MapMode aMM = pA->GetMapMode();
                             Fraction aScaleX = aMM.GetScaleX();
@@ -1637,7 +1637,7 @@ void WMFWriter::WriteHeader( const GDIMetaFile &, bool bPlaceable )
     if( bPlaceable )
     {
         sal_uInt16  nCheckSum, nValue;
-        Size    aSize( OutputDevice::LogicToLogic(Size(1,1),MapMode(MAP_INCH), aTargetMapMode) );
+        Size    aSize( OutputDevice::LogicToLogic(Size(1,1),MapMode(MapUnit::MapInch), aTargetMapMode) );
         sal_uInt16  nUnitsPerInch = (sal_uInt16) ( ( aSize.Width() + aSize.Height() ) >> 1 );
 
         nCheckSum=0;
@@ -1721,7 +1721,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     }
     else
     {
-        aTargetMapMode = MapMode( MAP_INCH );
+        aTargetMapMode = MapMode( MapUnit::MapInch );
 
         const long      nUnit = pVirDev->LogicToPixel( Size( 1, 1 ), aTargetMapMode ).Width();
         const Fraction  aFrac( 1, nUnit );

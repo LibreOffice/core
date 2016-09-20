@@ -38,7 +38,7 @@ SdrOutliner* FuText::MakeOutliner()
     //  so the device must be taken from the model here.
     OutputDevice* pRef = pDrDoc->GetRefDevice();
     if (pRef && pRef != pWindow)
-        pRef->SetMapMode( MapMode(MAP_100TH_MM) );
+        pRef->SetMapMode( MapMode(MapUnit::Map100thMM) );
 
     return pOutl;
 }

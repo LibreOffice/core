@@ -871,7 +871,7 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
 WinMtfOutput::~WinMtfOutput()
 {
     mpGDIMetaFile->AddAction( new MetaPopAction() );
-    mpGDIMetaFile->SetPrefMapMode( MAP_100TH_MM );
+    mpGDIMetaFile->SetPrefMapMode( MapUnit::Map100thMM );
     if ( mrclFrame.IsEmpty() )
         mpGDIMetaFile->SetPrefSize( Size( mnDevWidth, mnDevHeight ) );
     else
@@ -1458,7 +1458,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
         SolarMutexGuard aGuard;
         ScopedVclPtrInstance< VirtualDevice > pVDev;
         sal_Int32 nTextWidth;
-        pVDev->SetMapMode( MapMode( MAP_100TH_MM ) );
+        pVDev->SetMapMode( MapMode( MapUnit::Map100thMM ) );
         pVDev->SetFont( maFont );
         if( pDXArry )
         {
@@ -1506,7 +1506,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
             SolarMutexGuard aGuard;
             ScopedVclPtrInstance< VirtualDevice > pVDev;
             pDX = new long[ rText.getLength() ];
-            pVDev->SetMapMode( MAP_100TH_MM );
+            pVDev->SetMapMode( MapUnit::Map100thMM );
             pVDev->SetFont( maLatestFont );
             pVDev->GetTextArray( rText, pDX, 0, rText.getLength());
         }
@@ -1523,7 +1523,7 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
     if ( mbComplexClip )
     {
         VclPtrInstance< VirtualDevice > pVDev;
-        MapMode aMapMode( MAP_100TH_MM );
+        MapMode aMapMode( MapUnit::Map100thMM );
         aMapMode.SetOrigin( Point( -rPos.X(), -rPos.Y() ) );
         const Size aOutputSizePixel( pVDev->LogicToPixel( rSize, aMapMode ) );
         const Size aSizePixel( rBitmap.GetSizePixel() );

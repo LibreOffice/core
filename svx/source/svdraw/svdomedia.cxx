@@ -184,7 +184,7 @@ const uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot() const
 
 void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /* = false */ )
 {
-    Size aSize( Application::GetDefaultDevice()->PixelToLogic( getPreferredSize(), MAP_100TH_MM ) );
+    Size aSize( Application::GetDefaultDevice()->PixelToLogic( getPreferredSize(), MapUnit::Map100thMM ) );
     Size aMaxSize( rMaxRect.GetSize() );
 
     if( aSize.Height() != 0 && aSize.Width() != 0 )

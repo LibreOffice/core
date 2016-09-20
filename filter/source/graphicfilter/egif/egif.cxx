@@ -101,10 +101,10 @@ bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfi
 
     Size            aSize100;
     const MapMode   aMap( rGraphic.GetPrefMapMode() );
-    bool            bLogSize = ( aMap.GetMapUnit() != MAP_PIXEL );
+    bool            bLogSize = ( aMap.GetMapUnit() != MapUnit::MapPixel );
 
     if( bLogSize )
-        aSize100 = OutputDevice::LogicToLogic( rGraphic.GetPrefSize(), aMap, MAP_100TH_MM );
+        aSize100 = OutputDevice::LogicToLogic( rGraphic.GetPrefSize(), aMap, MapUnit::Map100thMM );
 
     bStatus = true;
     nLastPercent = 0;

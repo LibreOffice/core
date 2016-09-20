@@ -3311,7 +3311,7 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
         Reference< XChartDocument > const & xChartDoc, const Rectangle& rChartRect ) :
     XclExpChGroupBase( XclExpChRoot( rRoot, *this ), EXC_CHFRBLOCK_TYPE_CHART, EXC_ID_CHCHART, 16 )
 {
-    Size aPtSize = OutputDevice::LogicToLogic( rChartRect.GetSize(), MapMode( MAP_100TH_MM ), MapMode( MAP_POINT ) );
+    Size aPtSize = OutputDevice::LogicToLogic( rChartRect.GetSize(), MapMode( MapUnit::Map100thMM ), MapMode( MapUnit::MapPoint ) );
     // rectangle is stored in 16.16 fixed-point format
     maRect.mnX = maRect.mnY = 0;
     maRect.mnWidth = static_cast< sal_Int32 >( aPtSize.Width() << 16 );

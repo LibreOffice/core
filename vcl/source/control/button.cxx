@@ -1081,7 +1081,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         // prepare single line hint (needed on mac to decide between normal push button and
         // rectangular bevel button look)
         Size aFontSize(Application::GetSettings().GetStyleSettings().GetPushButtonFont().GetFontSize());
-        aFontSize = rRenderContext.LogicToPixel(aFontSize, MapMode(MAP_POINT));
+        aFontSize = rRenderContext.LogicToPixel(aFontSize, MapMode(MapUnit::MapPoint));
         Size aInRectSize(rRenderContext.LogicToPixel(Size(aInRect.GetWidth(), aInRect.GetHeight())));
         aControlValue.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height());
 
@@ -2471,7 +2471,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
 {
     if ( !maImage )
     {
-        MapMode     aResMapMode( MAP_100TH_MM );
+        MapMode     aResMapMode( MapUnit::Map100thMM );
         Point       aPos  = pDev->LogicToPixel( rPos );
         Size        aSize = pDev->LogicToPixel( rSize );
         Size        aImageSize = pDev->LogicToPixel( Size( 300, 300 ), aResMapMode );
@@ -2866,7 +2866,7 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, DrawButtonFlags 
 void RadioButton::ImplSetMinimumNWFSize()
 {
     Push( PushFlags::MAPMODE );
-    SetMapMode( MAP_PIXEL );
+    SetMapMode( MapUnit::MapPixel );
 
     ImplControlValue aControlValue;
     Size aCurSize( GetSizePixel() );
@@ -3358,7 +3358,7 @@ void CheckBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                      DrawFlags nFlags )
 {
-    MapMode     aResMapMode( MAP_100TH_MM );
+    MapMode     aResMapMode( MapUnit::Map100thMM );
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
     Size        aImageSize = pDev->LogicToPixel( Size( 300, 300 ), aResMapMode );
@@ -3729,7 +3729,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFl
 void CheckBox::ImplSetMinimumNWFSize()
 {
     Push( PushFlags::MAPMODE );
-    SetMapMode( MAP_PIXEL );
+    SetMapMode( MapUnit::MapPixel );
 
     ImplControlValue aControlValue;
     Size aCurSize( GetSizePixel() );

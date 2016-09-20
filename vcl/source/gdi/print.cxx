@@ -253,7 +253,7 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     mpAlphaVDev = pOldAlphaVDev;
 
     Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
-    const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
+    const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MapUnit::MapInch ) );
     const long      nBaseExtent = std::max( FRound( aDPISize.Width() / 300. ), 1L );
     long            nMove;
     const sal_uInt16    nTrans = ( nTransparencePercent < 13 ) ? 0 :
@@ -1449,7 +1449,7 @@ bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
         return false;
 
     const Size aPixSize = LogicToPixel( rSize );
-    const Size aPageSize = PixelToLogic( aPixSize, MAP_100TH_MM );
+    const Size aPageSize = PixelToLogic( aPixSize, MapUnit::Map100thMM );
     bool bNeedToChange(maJobSetup.ImplGetConstData().GetPaperWidth() != aPageSize.Width() ||
         maJobSetup.ImplGetConstData().GetPaperHeight() != aPageSize.Height());
 
@@ -1542,7 +1542,7 @@ OUString Printer::GetPaperName( Paper ePaper )
 
 OUString Printer::GetPaperName() const
 {
-    Size  aPageSize = PixelToLogic( GetPaperSizePixel(), MAP_100TH_MM );
+    Size  aPageSize = PixelToLogic( GetPaperSizePixel(), MapUnit::Map100thMM );
     Paper ePaper    = ImplGetPaperFormat( aPageSize.Width(), aPageSize.Height() );
     if( ePaper == PAPER_USER )
         ePaper = ImplGetPaperFormat( aPageSize.Height(), aPageSize.Width() );

@@ -280,7 +280,7 @@ OStyle::OStyle()
 :OStyle_PBASE(m_aBHelper)
 ,m_aSize(21000,29700)
 {
-    const ::Size aDefaultSize = SvxPaperInfo::GetDefaultPaperSize( MAP_100TH_MM );
+    const ::Size aDefaultSize = SvxPaperInfo::GetDefaultPaperSize( MapUnit::Map100thMM );
     m_aSize.Height = aDefaultSize.Height();
     m_aSize.Width = aDefaultSize.Width();
 
@@ -591,7 +591,7 @@ void OReportDefinition::init()
     {
         m_pImpl->m_pReportModel.reset(new OReportModel(this));
         m_pImpl->m_pReportModel->GetItemPool().FreezeIdRanges();
-        m_pImpl->m_pReportModel->SetScaleUnit( MAP_100TH_MM );
+        m_pImpl->m_pReportModel->SetScaleUnit( MapUnit::Map100thMM );
         SdrLayerAdmin& rAdmin = m_pImpl->m_pReportModel->GetLayerAdmin();
         rAdmin.NewStandardLayer(RPT_LAYER_FRONT);
         rAdmin.NewLayer("back", RPT_LAYER_BACK);
