@@ -34,7 +34,6 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/setup/UpdateCheckConfig.hpp>
 
 #include <cuires.hrc>
 #include <dialmgr.hxx>
