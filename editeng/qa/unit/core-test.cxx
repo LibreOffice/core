@@ -27,7 +27,6 @@
 #include "editeng/editobj.hxx"
 #include "editeng/flditem.hxx"
 #include "svl/srchitem.hxx"
-#include "rtl/strbuf.hxx"
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -429,15 +428,12 @@ void Test::testHyperlinkSearch()
         sal_Int32 nEnd = aTrickyOnes[n].mnEnd;
         pNode->UnExpandPositions(nStart,nEnd);
 
-        rtl::OStringBuffer aBuf;
-        aBuf = "bound check start is ";
-        aBuf.append(nStart).append(" but should be ").append(aTrickyOnes[n].mnNewStart);
-        aBuf.append(" in row ").append((sal_Int32)n);
-        CPPUNIT_ASSERT_MESSAGE(aBuf.getStr(), nStart == aTrickyOnes[n].mnNewStart);
-        aBuf = "bound check end is ";
-        aBuf.append(nEnd).append(" but should be ").append(aTrickyOnes[n].mnNewEnd);
-        aBuf.append(" in row ").append((sal_Int32)n);
-        CPPUNIT_ASSERT_MESSAGE(aBuf.getStr(), nEnd == aTrickyOnes[n].mnNewEnd);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            OString("in row " + OString::number(n)).getStr(),
+            aTrickyOnes[n].mnNewStart, nStart);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            OString("in row " + OString::number(n)).getStr(),
+            aTrickyOnes[n].mnNewEnd, nEnd);
     }
 
     SvxSearchItem aItem(1); //SID_SEARCH_ITEM);
