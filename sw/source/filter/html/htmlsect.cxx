@@ -608,7 +608,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     {
         nTwipWidth = Application::GetDefaultDevice()
                              ->PixelToLogic( Size(nWidth, 0),
-                                             MapMode(MAP_TWIP) ).Width();
+                                             MapMode(MapUnit::Twip) ).Width();
     }
 
     if( !nPrcWidth && nTwipWidth < MINFLY )
@@ -699,7 +699,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         {
             nGutter = (sal_uInt16)Application::GetDefaultDevice()
                              ->PixelToLogic( Size(nGutter, 0),
-                                             MapMode(MAP_TWIP) ).Width();
+                                             MapMode(MapUnit::Twip) ).Width();
         }
 
         SwFormatCol aFormatCol;

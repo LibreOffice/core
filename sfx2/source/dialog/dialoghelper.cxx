@@ -55,27 +55,27 @@ void setPreviewsToSamePlace(vcl::Window *pParent, VclBuilderContainer *pPage)
 
 Size getParagraphPreviewOptimalSize(const vcl::Window *pReference)
 {
-    return pReference->LogicToPixel(Size(68 , 112), MAP_APPFONT);
+    return pReference->LogicToPixel(Size(68 , 112), MapUnit::AppFont);
 }
 
 Size getDrawPreviewOptimalSize(const vcl::Window *pReference)
 {
-    return pReference->LogicToPixel(Size(88, 42), MAP_APPFONT);
+    return pReference->LogicToPixel(Size(88, 42), MapUnit::AppFont);
 }
 
 Size getDrawListBoxOptimalSize(const vcl::Window *pReference)
 {
-    return pReference->LogicToPixel(Size(88, 110), MAP_APPFONT);
+    return pReference->LogicToPixel(Size(88, 110), MapUnit::AppFont);
 }
 
 Size getPreviewStripSize(const vcl::Window *pReference)
 {
-    return pReference->LogicToPixel(Size(70 , 40), MapMode(MAP_APPFONT));
+    return pReference->LogicToPixel(Size(70 , 40), MapMode(MapUnit::AppFont));
 }
 
 Size getPreviewOptionsSize(const vcl::Window *pReference)
 {
-    return pReference->LogicToPixel(Size(70 , 27), MapMode(MAP_APPFONT));
+    return pReference->LogicToPixel(Size(70 , 27), MapMode(MapUnit::AppFont));
 }
 
 OUString getWidestTime(const LocaleDataWrapper& rWrapper)
