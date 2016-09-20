@@ -57,8 +57,19 @@ public:
     }
 
 private:
-    void run() override
-    { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    void run() override {
+        // DISABLE_DYNLOADING makes SAL_DLLPUBLIC_{EXPORT,IMPORT,TEMPLAT} expand
+        // to visibility("hidden") attributes, which would cause bogus warnings
+        // here (e.g., in UBSan builds that explicitly define DISBALE_DYNLOADING
+        // in jurt/source/pipe/staticsalhack.cxx); alternatively, change
+        // include/sal/types.h to make those SAL_DLLPUBLIC_* expand to nothing
+        // for DISABLE_DYNLOADING:
+        if (!compiler.getPreprocessor().getIdentifierInfo("DISABLE_DYNLOADING")
+            ->hasMacroDefinition())
+        {
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        }
+    }
 };
 
 static loplugin::Plugin::Registration<Visitor> reg("dllprivate");
