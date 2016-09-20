@@ -6476,7 +6476,6 @@ AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
-HAVE_GCC_VISIBILITY_BROKEN=
 if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
 
     AC_LANG_PUSH([C++])
@@ -6518,16 +6517,14 @@ istringstream strm( "test" ); return 0;
     ])
     AC_MSG_RESULT([$gccvisok])
     if test "$gccvisok" = "no"; then
-        AC_MSG_WARN([Your gcc is not -fvisibility-inlines-hidden safe, disabling that.])
-        add_warning "Your gcc is not -fvisibility-inlines-hidden safe, disabling that."
-        HAVE_GCC_VISIBILITY_BROKEN="TRUE"
+        AC_MSG_ERROR([Your gcc is not -fvisibility-inlines-hidden safe. This is no longer supported.])
     fi
 
     LDFLAGS=$sharedlink_ldflags_save
 
     # As the below test checks things when linking self-compiled dynamic libraries, it presumably is irrelevant
     # when we don't make any dynamic libraries?
-    if test "$DISABLE_DYNLOADING" = "" -a "$HAVE_GCC_VISIBILITY_BROKEN" != "TRUE"; then
+    if test "$DISABLE_DYNLOADING" = ""; then
         AC_MSG_CHECKING([if gcc is -fvisibility-inlines-hidden safe (Clang bug 11250)])
         cat > conftestlib1.cc <<_ACEOF
 template<typename T> struct S1 { virtual ~S1() {} virtual void f() {} };
@@ -6610,8 +6607,6 @@ _ACEOF
 
     AC_LANG_POP([C++])
 fi
-
-AC_SUBST(HAVE_GCC_VISIBILITY_BROKEN)
 
 dnl ===================================================================
 dnl  Clang++ tests

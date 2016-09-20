@@ -110,9 +110,7 @@ gb_VISIBILITY_FLAGS := -fvisibility-ms-compat
 endif
 endif
 endif
-ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
 gb_VISIBILITY_FLAGS_CXX := -fvisibility-inlines-hidden
-endif
 gb_CXXFLAGS_COMMON += $(gb_VISIBILITY_FLAGS_CXX)
 
 ifeq ($(HAVE_GCC_STACK_PROTECTOR_STRONG),TRUE)
