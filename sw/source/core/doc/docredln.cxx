@@ -841,7 +841,6 @@ SwRedlineData::SwRedlineData( RedlineType_t eT, sal_uInt16 nAut )
     aStamp( DateTime::SYSTEM ),
     eType( eT ), nAuthor( nAut ), nSeqNo( 0 )
 {
-    aStamp.SetSec( 0 );
     aStamp.SetNanoSec( 0 );
 }
 
