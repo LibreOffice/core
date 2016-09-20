@@ -80,7 +80,7 @@ SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RectPoint eRpt,
     , mbUpdateForeground(true)
     , mbUpdateBackground(true)
 {
-    SetMapMode(MAP_100TH_MM);
+    SetMapMode(MapUnit::Map100thMM);
     Resize_Impl();
 }
 
@@ -95,7 +95,7 @@ void SvxRectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder, sal_uInt
 
 Size SvxRectCtl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(78, 39), MAP_APPFONT);
+    return LogicToPixel(Size(78, 39), MapUnit::MapAppFont);
 }
 
 VCL_BUILDER_FACTORY(SvxRectCtl)
@@ -824,7 +824,7 @@ void SvxPixelCtl::Resize()
 
 Size SvxPixelCtl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(72, 72), MAP_APPFONT);
+    return LogicToPixel(Size(72, 72), MapUnit::MapAppFont);
 }
 
 VCL_BUILDER_FACTORY_ARGS(SvxPixelCtl, 8)
@@ -1705,7 +1705,7 @@ SvxPreviewBase::SvxPreviewBase(vcl::Window* pParent)
     //  Draw the control's border as a flat thin black line.
     SetBorderStyle(WindowBorderStyle::MONO);
     SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
-    SetMapMode(MAP_100TH_MM);
+    SetMapMode(MapUnit::Map100thMM);
 
     // init model
     mpModel->GetItemPool().FreezeIdRanges();

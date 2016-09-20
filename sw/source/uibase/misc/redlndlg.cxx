@@ -1204,7 +1204,7 @@ void SwRedlineAcceptDlg::Initialize(const OUString& rExtraData)
                         {
                             sal_Int32 n3 = aStr.indexOf(';');
                             aStr = aStr.copy(n3 + 1);
-                            m_pTable->SetTab(i, aStr.toInt32(), MAP_PIXEL);
+                            m_pTable->SetTab(i, aStr.toInt32(), MapUnit::MapPixel);
                         }
                     }
                 }

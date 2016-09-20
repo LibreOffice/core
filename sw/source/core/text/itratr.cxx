@@ -565,7 +565,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
         pOut = Application::GetDefaultDevice();
 
     MapMode aOldMap( pOut->GetMapMode() );
-    pOut->SetMapMode( MapMode( MAP_TWIP ) );
+    pOut->SetMapMode( MapMode( MapUnit::MapTwip ) );
 
     rMin = 0;
     rMax = 0;
@@ -804,7 +804,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
     OSL_ENSURE( pOut, "GetScalingOfSelectedText without outdev" );
 
     MapMode aOldMap( pOut->GetMapMode() );
-    pOut->SetMapMode( MapMode( MAP_TWIP ) );
+    pOut->SetMapMode( MapMode( MapUnit::MapTwip ) );
 
     if ( nStt == nEnd )
     {

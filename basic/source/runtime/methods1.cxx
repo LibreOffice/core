@@ -747,7 +747,7 @@ RTLFUNC(TwipsPerPixelX)
 
     sal_Int32 nResult = 0;
     Size aSize( 100,0 );
-    MapMode aMap( MAP_TWIP );
+    MapMode aMap( MapUnit::MapTwip );
     OutputDevice* pDevice = Application::GetDefaultDevice();
     if( pDevice )
     {
@@ -764,7 +764,7 @@ RTLFUNC(TwipsPerPixelY)
 
     sal_Int32 nResult = 0;
     Size aSize( 0,100 );
-    MapMode aMap( MAP_TWIP );
+    MapMode aMap( MapUnit::MapTwip );
     OutputDevice* pDevice = Application::GetDefaultDevice();
     if( pDevice )
     {
@@ -1345,9 +1345,9 @@ static double GetDialogZoomFactor( bool bX, long nValue )
         Size aRefSize( nValue, nValue );
         Fraction aFracX( 1, 26 );
         Fraction aFracY( 1, 24 );
-        MapMode aMap( MAP_APPFONT, Point(), aFracX, aFracY );
+        MapMode aMap( MapUnit::MapAppFont, Point(), aFracX, aFracY );
         Size aScaledSize = pDevice->LogicToPixel( aRefSize, aMap );
-        aRefSize = pDevice->LogicToPixel( aRefSize, MapMode(MAP_TWIP) );
+        aRefSize = pDevice->LogicToPixel( aRefSize, MapMode(MapUnit::MapTwip) );
 
         double nRef, nScaled;
         if( bX )

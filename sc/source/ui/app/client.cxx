@@ -206,7 +206,7 @@ void ScClient::ViewChanged()
     }
 
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
-    Size aVisSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
+    Size aVisSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MapUnit::Map100thMM );
 
     // Take over position and size into document
     SdrOle2Obj* pDrawObj = GetDrawObj();

@@ -387,7 +387,7 @@ public:
 
     virtual Size GetOptimalSize() const override
     {
-        return LogicToPixel(Size(70, 88), MAP_APPFONT);
+        return LogicToPixel(Size(70, 88), MapUnit::MapAppFont);
     }
 };
 

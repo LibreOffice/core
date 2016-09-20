@@ -104,7 +104,7 @@ namespace
     public:
         PropertyHolder()
         :   maTransformation(),
-            maMapUnit(MAP_100TH_MM),
+            maMapUnit(MapUnit::Map100thMM),
             maLineColor(),
             maFillColor(),
             maTextColor(COL_BLACK),
@@ -2661,14 +2661,14 @@ namespace
                 case MetaActionType::MAPMODE :
                 {
                     /** CHECKED, WORKS WELL */
-                    // the most necessary MapMode to be interpreted is MAP_RELATIVE,
+                    // the most necessary MapMode to be interpreted is MapUnit::MapRelative,
                     // but also the others may occur. Even not yet supported ones
                     // may need to be added here later
                     const MetaMapModeAction* pA = static_cast<const MetaMapModeAction*>(pAction);
                     const MapMode& rMapMode = pA->GetMapMode();
                     basegfx::B2DHomMatrix aMapping;
 
-                    if(MAP_RELATIVE == rMapMode.GetMapUnit())
+                    if(MapUnit::MapRelative == rMapMode.GetMapUnit())
                     {
                         aMapping = getTransformFromMapMode(rMapMode);
                     }
@@ -2676,21 +2676,21 @@ namespace
                     {
                         switch(rMapMode.GetMapUnit())
                         {
-                            case MAP_100TH_MM :
+                            case MapUnit::Map100thMM :
                             {
-                                if(MAP_TWIP == rPropertyHolders.Current().getMapUnit())
+                                if(MapUnit::MapTwip == rPropertyHolders.Current().getMapUnit())
                                 {
-                                    // MAP_TWIP -> MAP_100TH_MM
+                                    // MapUnit::MapTwip -> MapUnit::Map100thMM
                                     const double fTwipTo100thMm(127.0 / 72.0);
                                     aMapping.scale(fTwipTo100thMm, fTwipTo100thMm);
                                 }
                                 break;
                             }
-                            case MAP_TWIP :
+                            case MapUnit::MapTwip :
                             {
-                                if(MAP_100TH_MM == rPropertyHolders.Current().getMapUnit())
+                                if(MapUnit::Map100thMM == rPropertyHolders.Current().getMapUnit())
                                 {
-                                    // MAP_100TH_MM -> MAP_TWIP
+                                    // MapUnit::Map100thMM -> MapUnit::MapTwip
                                     const double f100thMmToTwip(72.0 / 127.0);
                                     aMapping.scale(f100thMmToTwip, f100thMmToTwip);
                                 }
@@ -2733,7 +2733,7 @@ namespace
 
                         // convert to target MapUnit if not pixels
                         aFontSize = OutputDevice::LogicToLogic(
-                            aFontSize, MAP_PIXEL, rPropertyHolders.Current().getMapUnit());
+                            aFontSize, MapUnit::MapPixel, rPropertyHolders.Current().getMapUnit());
 
                         aCorrectedFont.SetFontSize(aFontSize);
                         rPropertyHolders.Current().setFont(aCorrectedFont);

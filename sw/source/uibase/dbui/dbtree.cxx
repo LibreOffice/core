@@ -164,7 +164,7 @@ VCL_BUILDER_DECL_FACTORY(SwDBTreeList)
 
 Size SwDBTreeList::GetOptimalSize() const
 {
-    return LogicToPixel(Size(100, 62), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(100, 62), MapMode(MapUnit::MapAppFont));
 }
 
 SwDBTreeList::~SwDBTreeList()

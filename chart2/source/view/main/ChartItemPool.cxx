@@ -203,7 +203,7 @@ SfxItemPool* ChartItemPool::Clone() const
 
 MapUnit ChartItemPool::GetMetric(sal_uInt16 /* nWhich */) const
 {
-    return MAP_100TH_MM;
+    return MapUnit::Map100thMM;
 }
 
 SfxItemPool* ChartItemPool::CreateChartItemPool()

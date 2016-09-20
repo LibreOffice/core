@@ -1244,7 +1244,7 @@ void FrameSelector::Resize()
 
 Size FrameSelector::GetOptimalSize() const
 {
-    return LogicToPixel(Size(61, 65), MAP_APPFONT);
+    return LogicToPixel(Size(61, 65), MapUnit::MapAppFont);
 }
 
 

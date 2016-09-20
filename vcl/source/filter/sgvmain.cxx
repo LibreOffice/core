@@ -899,7 +899,7 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 
     rMtf.Stop();
     rMtf.WindStart();
-    MapMode aMap(MAP_10TH_MM,Point(),Fraction(1,4),Fraction(1,4));
+    MapMode aMap(MapUnit::Map10thMM,Point(),Fraction(1,4),Fraction(1,4));
     rMtf.SetPrefMapMode(aMap);
     rMtf.SetPrefSize(Size((sal_Int16)aPage.Paper.Size.x,(sal_Int16)aPage.Paper.Size.y));
     bRet=true;

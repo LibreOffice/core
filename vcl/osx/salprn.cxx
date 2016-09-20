@@ -449,7 +449,7 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
             // also SetPaperSizeUser has the advantage that we can share a
             // platform independent paper matching algorithm
             VclPtr<Printer> pPrinter( i_rController.getPrinter() );
-            pPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
+            pPrinter->SetMapMode( MapMode( MapUnit::Map100thMM ) );
             pPrinter->SetPaperSizeUser( aCurSize, true );
 
             // create view

@@ -1441,7 +1441,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 
                         Size aRootSize( aRootRect.SSize() );
 
-                        const MapMode aTmpMap( MAP_TWIP );
+                        const MapMode aTmpMap( MapUnit::MapTwip );
                         const Size& rEditSize = GetEditWin().GetOutputSizePixel();
                         const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
 

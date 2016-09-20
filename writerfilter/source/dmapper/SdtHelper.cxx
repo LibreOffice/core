@@ -33,7 +33,7 @@ awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet, OUString& r
         if (rItem.getLength() > aLongest.getLength())
             aLongest = rItem;
 
-    MapMode aMap(MAP_100TH_MM);
+    MapMode aMap(MapUnit::Map100thMM);
     OutputDevice* pOut = Application::GetDefaultDevice();
     pOut->Push(PushFlags::FONT | PushFlags::MAPMODE);
 

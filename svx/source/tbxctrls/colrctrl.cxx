@@ -190,13 +190,13 @@ SvxColorDockingWindow::SvxColorDockingWindow
     nCount          ( 0 )
 {
     SetText(SVX_RESSTR(STR_COLORTABLE));
-    SetSizePixel(LogicToPixel(Size(150, 22), MapMode(MAP_APPFONT)));
+    SetSizePixel(LogicToPixel(Size(150, 22), MapMode(MapUnit::MapAppFont)));
     SetHelpId(HID_CTRL_COLOR);
 
     aColorSet->SetSelectHdl( LINK( this, SvxColorDockingWindow, SelectHdl ) );
     aColorSet->SetHelpId(HID_COLOR_CTL_COLORS);
-    aColorSet->SetPosSizePixel(LogicToPixel(Point(2, 2), MapMode(MAP_APPFONT)),
-                              LogicToPixel(Size(146, 18), MapMode(MAP_APPFONT)));
+    aColorSet->SetPosSizePixel(LogicToPixel(Point(2, 2), MapMode(MapUnit::MapAppFont)),
+                              LogicToPixel(Size(146, 18), MapMode(MapUnit::MapAppFont)));
 
     // Get the model from the view shell.  Using SfxObjectShell::Current()
     // is unreliable when called at the wrong times.

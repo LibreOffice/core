@@ -192,7 +192,7 @@ public:
     }
     virtual Size GetOptimalSize() const override
     {
-        Size aSize(LogicToPixel(Size(PREVIEW_WIDTH, PREVIEW_HEIGHT), MAP_APPFONT));
+        Size aSize(LogicToPixel(Size(PREVIEW_WIDTH, PREVIEW_HEIGHT), MapUnit::MapAppFont));
         aSize.setWidth(aSize.getWidth()+1);
         aSize.setHeight(aSize.getHeight()+1);
         return aSize;
@@ -226,7 +226,7 @@ SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
     get(mpScanButton, "scanButton");
     get(mpButtonOption, "optionsButton");
     get(mpOptionTitle, "optionTitleLabel");
-    Size aSize(LogicToPixel(Size(130, 102), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(130, 102), MapUnit::MapAppFont));
     mpOptionTitle->set_width_request(aSize.Width());
     mpOptionTitle->set_height_request(aSize.Height() / 2);
     get(mpOptionDescTxt, "optionsDescLabel");
@@ -952,12 +952,12 @@ void ScanPreview::UpdatePreviewBounds()
 void ScanPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     Window::Paint(rRenderContext, rRect);
-    rRenderContext.SetMapMode(MAP_APPFONT);
+    rRenderContext.SetMapMode(MapUnit::MapAppFont);
     rRenderContext.SetFillColor(Color(COL_WHITE));
     rRenderContext.SetLineColor(Color(COL_WHITE));
     rRenderContext.DrawRect(Rectangle(Point(0, 0),
                                       Size(PREVIEW_WIDTH, PREVIEW_HEIGHT)));
-    rRenderContext.SetMapMode(MapMode(MAP_PIXEL));
+    rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
     // check for sane values
     rRenderContext.DrawBitmap(maPreviewRect.TopLeft(), maPreviewRect.GetSize(), maPreviewBitmap);
 
@@ -1244,7 +1244,7 @@ void ScanPreview::DrawDrag(vcl::RenderContext& rRenderContext)
 
     RasterOp eROP = rRenderContext.GetRasterOp();
     rRenderContext.SetRasterOp(RasterOp::Invert);
-    rRenderContext.SetMapMode(MapMode(MAP_PIXEL));
+    rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
 
     if (mbDragDrawn)
         DrawRectangles(rRenderContext, aLastUL, aLastBR);
@@ -1255,7 +1255,7 @@ void ScanPreview::DrawDrag(vcl::RenderContext& rRenderContext)
 
     mbDragDrawn = true;
     rRenderContext.SetRasterOp(eROP);
-    rRenderContext.SetMapMode(MAP_APPFONT);
+    rRenderContext.SetMapMode(MapUnit::MapAppFont);
 }
 
 Point ScanPreview::GetPixelPos( const Point& rIn) const
@@ -1268,12 +1268,12 @@ Point ScanPreview::GetPixelPos( const Point& rIn) const
           / ( maMaxBottomRight.Y() - maMinTopLeft.Y() ) )
         );
 
-    return LogicToPixel(aConvert, MAP_APPFONT);
+    return LogicToPixel(aConvert, MapUnit::MapAppFont);
 }
 
 Point ScanPreview::GetLogicPos(const Point& rIn) const
 {
-    Point aConvert = PixelToLogic(rIn, MAP_APPFONT);
+    Point aConvert = PixelToLogic(rIn, MapUnit::MapAppFont);
     if( aConvert.X() < 0 )
         aConvert.X() = 0;
     if( aConvert.X() >= PREVIEW_WIDTH )

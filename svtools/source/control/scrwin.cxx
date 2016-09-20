@@ -230,7 +230,7 @@ void ScrollableWindow::Resize()
     // select the shifted map-mode
     if ( aPixOffset != aOldPixOffset )
     {
-        Window::SetMapMode( MapMode( MAP_PIXEL ) );
+        Window::SetMapMode( MapMode( MapUnit::MapPixel ) );
         Window::Scroll(
             aPixOffset.X() - aOldPixOffset.X(),
             aPixOffset.Y() - aOldPixOffset.Y() );

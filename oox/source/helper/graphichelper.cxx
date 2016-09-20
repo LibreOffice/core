@@ -116,7 +116,7 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
     // get the metric of the output device
     OSL_ENSURE( xFrame.is(), "GraphicHelper::GraphicHelper - cannot get target frame" );
     // some default just in case, 100 000 is 1 meter in MM100
-    Size aDefault = Application::GetDefaultDevice()->LogicToPixel(Size(100000, 100000), MapMode(MAP_100TH_MM));
+    Size aDefault = Application::GetDefaultDevice()->LogicToPixel(Size(100000, 100000), MapMode(MapUnit::Map100thMM));
     maDeviceInfo.PixelPerMeterX = aDefault.Width();
     maDeviceInfo.PixelPerMeterY = aDefault.Height();
     if( xFrame.is() ) try

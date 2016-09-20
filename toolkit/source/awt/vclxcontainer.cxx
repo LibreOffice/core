@@ -244,7 +244,7 @@ throw(css::uno::RuntimeException, std::exception)
             Value >>= nVal;
             Size aSize( nVal, nVal );
             vcl::Window* pWindow = GetWindow();
-            MapMode aMode( MAP_APPFONT );
+            MapMode aMode( MapUnit::MapAppFont );
             toolkit::ScrollableInterface* pScrollable = dynamic_cast< toolkit::ScrollableInterface* >( pWindow );
             if ( pWindow && pScrollable )
             {

@@ -58,7 +58,7 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
 {
     set_id("chart_window");
     this->SetHelpId( HID_SCH_WIN_DOCUMENT );
-    this->SetMapMode( MapMode(MAP_100TH_MM) );
+    this->SetMapMode( MapMode(MapUnit::Map100thMM) );
     adjustHighContrastMode();
     // chart does not depend on exact pixel painting => enable antialiased drawing
     SetAntialiasing( AntialiasingFlags::EnableB2dDraw | GetAntialiasing() );

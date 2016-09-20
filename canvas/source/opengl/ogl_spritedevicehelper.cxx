@@ -160,7 +160,7 @@ namespace oglcanvas
         // Map a one-by-one millimeter box to pixel
         SystemChildWindow* pChildWindow = mxContext->getChildWindow();
         const MapMode aOldMapMode( pChildWindow->GetMapMode() );
-        pChildWindow->SetMapMode( MapMode(MAP_MM) );
+        pChildWindow->SetMapMode( MapMode(MapUnit::MapMM) );
         const Size aPixelSize( pChildWindow->LogicToPixel(Size(1,1)) );
         pChildWindow->SetMapMode( aOldMapMode );
 
@@ -175,7 +175,7 @@ namespace oglcanvas
         // Map the pixel dimensions of the output window to millimeter
         SystemChildWindow* pChildWindow = mxContext->getChildWindow();
         const MapMode aOldMapMode( pChildWindow->GetMapMode() );
-        pChildWindow->SetMapMode( MapMode(MAP_MM) );
+        pChildWindow->SetMapMode( MapMode(MapUnit::MapMM) );
         const Size aLogSize( pChildWindow->PixelToLogic(pChildWindow->GetOutputSizePixel()) );
         pChildWindow->SetMapMode( aOldMapMode );
 

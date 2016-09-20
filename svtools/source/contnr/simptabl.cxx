@@ -382,7 +382,7 @@ void SvSimpleTable::HBarEndDrag()
         for(sal_uInt16 i=1;i<nPrivTabCount;i++)
         {
             nNewSize = static_cast< sal_uInt16 >( aHeaderBar->GetItemSize(i) ) + nPos;
-            SetTab( i, nNewSize, MAP_PIXEL );
+            SetTab( i, nNewSize, MapUnit::MapPixel );
             nPos = nNewSize;
         }
     }

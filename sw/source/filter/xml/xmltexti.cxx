@@ -286,7 +286,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                 if ( xObj.is() )
                 {
                     //TODO/LATER: is it enough to only set the VisAreaSize?
-                    lcl_setObjectVisualArea( xObj, nAspect, aTwipSize, MAP_TWIP );
+                    lcl_setObjectVisualArea( xObj, nAspect, aTwipSize, MapUnit::MapTwip );
                 }
 
                 if( pTextCursor )
@@ -527,7 +527,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     pDoc->GetPersist()->GetEmbeddedObjectContainer().GetEmbeddedObject( aObjName );
         if( xObj.is() )
             lcl_setObjectVisualArea( xObj, ( nDrawAspect ? nDrawAspect : embed::Aspects::MSOLE_CONTENT ),
-                                     aVisArea.GetSize(), MAP_100TH_MM );
+                                     aVisArea.GetSize(), MapUnit::Map100thMM );
     }
 
     return xPropSet;
@@ -656,7 +656,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     lcl_setObjectVisualArea( aAppletImpl.GetApplet(),
                             embed::Aspects::MSOLE_CONTENT,
                             Size( nWidth, nHeight ),
-                            MAP_100TH_MM );
+                            MapUnit::Map100thMM );
 
     SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCursor->GetPaM(),
                                        ::svt::EmbeddedObjectRef( aAppletImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT ),
@@ -718,7 +718,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
         lcl_setObjectVisualArea( xObj,
                                 embed::Aspects::MSOLE_CONTENT,
                                 Size( nWidth, nHeight ),
-                                MAP_100TH_MM );
+                                MapUnit::Map100thMM );
 
         if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
         {
@@ -851,7 +851,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
         lcl_setObjectVisualArea( xObj,
                                 embed::Aspects::MSOLE_CONTENT,
                                 Size( nWidth, nHeight ),
-                                MAP_100TH_MM );
+                                MapUnit::Map100thMM );
 
         if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
         {

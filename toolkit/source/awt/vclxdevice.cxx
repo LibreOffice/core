@@ -149,7 +149,7 @@ css::awt::DeviceInfo VCLXDevice::getInfo() throw(css::uno::RuntimeException, std
         aInfo.Width = aDevSz.Width();
         aInfo.Height = aDevSz.Height();
 
-        Size aTmpSz = mpOutputDevice->LogicToPixel( Size( 1000, 1000 ), MapMode( MAP_CM ) );
+        Size aTmpSz = mpOutputDevice->LogicToPixel( Size( 1000, 1000 ), MapMode( MapUnit::MapCM ) );
         aInfo.PixelPerMeterX = aTmpSz.Width()/10;
         aInfo.PixelPerMeterY = aTmpSz.Height()/10;
 

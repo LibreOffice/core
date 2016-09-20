@@ -235,7 +235,7 @@ void WizardDialog::ImplPosCtrls()
 
 
 long WizardDialog::LogicalCoordinateToPixel(int iCoordinate){
-    Size aLocSize = LogicToPixel(Size( iCoordinate, 0 ), MAP_APPFONT );
+    Size aLocSize = LogicToPixel(Size( iCoordinate, 0 ), MapUnit::MapAppFont );
     int iPixelCoordinate =  aLocSize.Width();
     return iPixelCoordinate;
 }

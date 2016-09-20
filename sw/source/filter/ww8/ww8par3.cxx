@@ -2365,8 +2365,8 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
                             static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() );
                 aTmp <<= ((float)aSize.Height()) / 20.0;
 
-                aFont.SetFontSize(OutputDevice::LogicToLogic(aSize, MAP_TWIP,
-                    MAP_100TH_MM));
+                aFont.SetFontSize(OutputDevice::LogicToLogic(aSize, MapUnit::MapTwip,
+                    MapUnit::Map100thMM));
             }
             break;
 
@@ -2405,7 +2405,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
     if (pOut)
     {
         pOut->Push( PushFlags::FONT | PushFlags::MAPMODE );
-        pOut->SetMapMode( MapMode( MAP_100TH_MM ));
+        pOut->SetMapMode( MapMode( MapUnit::Map100thMM ));
         pOut->SetFont( aFont );
         aRet.Width  = pOut->GetTextWidth(rString);
         aRet.Width += 500; //plus size of button, total hack territory

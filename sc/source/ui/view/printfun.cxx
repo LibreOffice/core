@@ -191,7 +191,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
 
     //  unified MapMode for all calls (e.g. Repaint!!!)
     //  else, EditEngine outputs different text heights
-    pDev->SetMapMode(MAP_PIXEL);
+    pDev->SetMapMode(MapUnit::MapPixel);
 
     pBorderItem = nullptr;
     pBackgroundItem = nullptr;
@@ -248,7 +248,7 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
         pPageData           ( pData )
 {
     pDev = pPrinter.get();
-    aSrcOffset = pPrinter->PixelToLogic( pPrinter->GetPageOffsetPixel(), MAP_100TH_MM );
+    aSrcOffset = pPrinter->PixelToLogic( pPrinter->GetPageOffsetPixel(), MapUnit::Map100thMM );
     Construct( pOptions );
 }
 
@@ -547,7 +547,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     if ( bMetaFile && pDev->GetOutDevType() == OUTDEV_VIRDEV )
         aOutputData.SetSnapPixel();
 
-    Point aLogStart = pDev->PixelToLogic( Point(nScrX,nScrY), MAP_100TH_MM );
+    Point aLogStart = pDev->PixelToLogic( Point(nScrX,nScrY), MapUnit::Map100thMM );
     long nLogStX = aLogStart.X();
     long nLogStY = aLogStart.Y();
 
@@ -713,7 +713,7 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
     if ( bChangeCol )
     {
         OutputDevice* pRefDev = pDoc->GetPrinter();     // use the printer also for Preview
-        pRefDev->SetMapMode( MAP_PIXEL );               // important for GetNeededSize
+        pRefDev->SetMapMode( MapUnit::MapPixel );               // important for GetNeededSize
 
         pDoc->ExtendPrintArea( pRefDev,
                             nPrintTab, nStartCol, nStartRow, nEndCol, nEndRow );
@@ -1114,8 +1114,8 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOu
     SvxGraphicPosition ePos;
     if ( pGraphic && pGraphic->IsSupportedGraphic() )
     {
-        const MapMode aMapMM( MAP_100TH_MM );
-        if ( pGraphic->GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+        const MapMode aMapMM( MapUnit::Map100thMM );
+        if ( pGraphic->GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
             aGrfSize = pRefDev->PixelToLogic( pGraphic->GetPrefSize(), aMapMM );
         else
             aGrfSize = OutputDevice::LogicToLogic( pGraphic->GetPrefSize(),
@@ -1519,7 +1519,7 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     aMMOffset.X() = (long)(aMMOffset.X() * HMM_PER_TWIPS);
     aMMOffset.Y() = (long)(aMMOffset.Y() * HMM_PER_TWIPS);
     aMMOffset += Point( nLogStX, nLogStY );
-    MapMode aDrawMapMode( MAP_100TH_MM, aMMOffset, aLogicMode.GetScaleX(), aLogicMode.GetScaleY() );
+    MapMode aDrawMapMode( MapUnit::Map100thMM, aMMOffset, aLogicMode.GetScaleX(), aLogicMode.GetScaleY() );
 
     //  get pixel rectangle
 
@@ -1609,7 +1609,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
         OutputDevice* pRefDev = pDoc->GetPrinter();     // use the printer also for Preview
         Fraction aPrintFrac( nZoom, 100 );              // without nManualZoom
         //  MapMode, as it would arrive at the printer:
-        pRefDev->SetMapMode( MapMode( MAP_100TH_MM, Point(), aPrintFrac, aPrintFrac ) );
+        pRefDev->SetMapMode( MapMode( MapUnit::Map100thMM, Point(), aPrintFrac, aPrintFrac ) );
 
         //  when rendering (PDF), don't use printer as ref device, but printer's MapMode
         //  has to be set anyway, as charts still use it (#106409#)
@@ -2569,13 +2569,13 @@ void ScPrintFunc::InitModes()               // set MapModes from  nZoom etc.
         aHorFract = Fraction( (long)( nEffZoom / nFact ), 10000 );
     }
 
-    aLogicMode = MapMode( MAP_100TH_MM, Point(), aHorFract, aZoomFract );
+    aLogicMode = MapMode( MapUnit::Map100thMM, Point(), aHorFract, aZoomFract );
 
     Point aLogicOfs( -aOffset.X(), -aOffset.Y() );
-    aOffsetMode = MapMode( MAP_100TH_MM, aLogicOfs, aHorFract, aZoomFract );
+    aOffsetMode = MapMode( MapUnit::Map100thMM, aLogicOfs, aHorFract, aZoomFract );
 
     Point aTwipsOfs( (long) ( -aOffset.X() / nScaleX + 0.5 ), (long) ( -aOffset.Y() / nScaleY + 0.5 ) );
-    aTwipMode = MapMode( MAP_TWIP, aTwipsOfs, aHorFract, aZoomFract );
+    aTwipMode = MapMode( MapUnit::MapTwip, aTwipsOfs, aHorFract, aZoomFract );
 }
 
 void ScPrintFunc::ApplyPrintSettings()
@@ -2597,14 +2597,14 @@ void ScPrintFunc::ApplyPrintSettings()
                 aEnumSize.Width() = aEnumSize.Height();
                 aEnumSize.Height() = nTemp;
         }
-        Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MAP_TWIP, true );
+        Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MapUnit::MapTwip, true );
         sal_uInt16 nPaperBin = static_cast<const SvxPaperBinItem&>(pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
 
         pPrinter->SetPaper( ePaper );
         if ( PAPER_USER == ePaper )
         {
             MapMode aPrinterMode = pPrinter->GetMapMode();
-            MapMode aLocalMode( MAP_TWIP );
+            MapMode aLocalMode( MapUnit::MapTwip );
             pPrinter->SetMapMode( aLocalMode );
             pPrinter->SetPaperSizeUser( aEnumSize );
             pPrinter->SetMapMode( aPrinterMode );

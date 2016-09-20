@@ -1763,7 +1763,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pDescriptionField, "desc");
     m_pDescriptionField->set_height_request(m_pDescriptionField->GetTextHeight()*4);
     get(m_pEntries, "entries");
-    Size aSize(LogicToPixel(Size(108, 115), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(108, 115), MapUnit::MapAppFont));
     m_pEntries->set_height_request(aSize.Height());
     m_pEntries->set_width_request(aSize.Width());
 
@@ -5015,7 +5015,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     get(pBtnImport, "importButton");
     get(pBtnDelete, "deleteButton");
 
-    aTbSize = pTbSymbol->LogicToPixel(Size(160, 80), MapMode(MAP_APPFONT));
+    aTbSize = pTbSymbol->LogicToPixel(Size(160, 80), MapMode(MapUnit::MapAppFont));
     pTbSymbol->set_width_request(aTbSize.Width());
     pTbSymbol->set_height_request(aTbSize.Height());
     pTbSymbol->SetStyle(pTbSymbol->GetStyle() | WB_SCROLL | WB_LINESPACING);
@@ -5630,7 +5630,7 @@ SvxIconChangeDialog::SvxIconChangeDialog(
     get(pFImageInfo, "infoImage");
     get(pLineEditDescription, "addrTextview");
 
-    Size aSize(LogicToPixel(Size(140, 83), MapMode(MAP_APPFONT)));
+    Size aSize(LogicToPixel(Size(140, 83), MapMode(MapUnit::MapAppFont)));
     pLineEditDescription->set_width_request(aSize.Width());
     pLineEditDescription->set_height_request(aSize.Height());
 

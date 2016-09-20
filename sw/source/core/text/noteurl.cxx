@@ -45,7 +45,7 @@ void SwNoteURL::FillImageMap( ImageMap *pMap, const Point &rPos,
     const size_t nCount = m_List.size();
     if( nCount )
     {
-        MapMode aMap( MAP_100TH_MM );
+        MapMode aMap( MapUnit::Map100thMM );
         for( size_t i = 0; i < nCount; ++i )
         {
             const SwURLNote &rNote = m_List[i];

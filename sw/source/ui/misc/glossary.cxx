@@ -845,7 +845,7 @@ SwGlTreeListBox::SwGlTreeListBox(vcl::Window* pParent, WinBits nBits)
 
 Size SwGlTreeListBox::GetOptimalSize() const
 {
-    return LogicToPixel(Size(212, 84), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(212, 84), MapMode(MapUnit::MapAppFont));
 }
 
 VCL_BUILDER_FACTORY_ARGS(SwGlTreeListBox, WB_BORDER | WB_TABSTOP)

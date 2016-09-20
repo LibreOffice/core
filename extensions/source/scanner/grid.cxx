@@ -153,7 +153,7 @@ GridWindow::GridWindow(vcl::Window* pParent)
     , m_aHandles()
     , m_nDragIndex(0xffffffff)
 {
-    SetMapMode(MapMode(MAP_PIXEL));
+    SetMapMode(MapMode(MapUnit::MapPixel));
 }
 
 void GridWindow::Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap)
@@ -197,7 +197,7 @@ void GridWindow::onResize()
 
 Size GridWindow::GetOptimalSize() const
 {
-    return LogicToPixel(Size(240, 200), MAP_APPFONT);
+    return LogicToPixel(Size(240, 200), MapUnit::MapAppFont);
 }
 
 GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, vcl::Window* pParent )

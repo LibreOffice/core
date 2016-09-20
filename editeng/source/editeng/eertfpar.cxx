@@ -55,7 +55,7 @@ EditRTFParser::EditRTFParser(
     SvxRTFParser(rAttrPool, rIn, nullptr),
     aCurSel(aSel),
     mpEditEngine(pEditEngine),
-    aRTFMapMode(MAP_TWIP),
+    aRTFMapMode(MapUnit::MapTwip),
     nDefFont(0),
     nDefTab(0),
     bLastActionInsertParaBreak(false)
@@ -143,7 +143,7 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
 {
     // Problem: DefFont and DefFontHeight
     Size aSz( 12, 0 );
-    MapMode aPntMode( MAP_POINT );
+    MapMode aPntMode( MapUnit::MapPoint );
     MapMode _aEditMapMode(mpEditEngine->GetRefDevice()->GetMapMode().GetMapUnit());
     aSz = mpEditEngine->GetRefDevice()->LogicToLogic(aSz, &aPntMode, &_aEditMapMode);
     SvxFontHeightItem aFontHeightItem( aSz.Width(), 100, EE_CHAR_FONTHEIGHT );
@@ -495,7 +495,7 @@ void EditRTFParser::CreateStyleSheets()
 
 void EditRTFParser::CalcValue()
 {
-    const MapUnit eDestUnit = static_cast< MapUnit >( aEditMapMode.GetMapUnit() );
+    const MapUnit eDestUnit = aEditMapMode.GetMapUnit();
     const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
     if (eDestUnit != eSrcUnit)
         nTokenValue = OutputDevice::LogicToLogic( (long)nTokenValue, eSrcUnit, eDestUnit );

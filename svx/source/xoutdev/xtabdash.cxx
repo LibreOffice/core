@@ -101,7 +101,7 @@ Bitmap XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
 
     if(pDash && (pDash->GetDots() || pDash->GetDashes()))
     {
-        const basegfx::B2DHomMatrix aScaleMatrix(OutputDevice::LogicToLogic(MAP_100TH_MM, MAP_PIXEL));
+        const basegfx::B2DHomMatrix aScaleMatrix(OutputDevice::LogicToLogic(MapUnit::Map100thMM, MapUnit::MapPixel));
         const basegfx::B2DVector aScaleVector(aScaleMatrix * basegfx::B2DVector(1.0, 0.0));
         const double fScaleValue(aScaleVector.getLength() * (nFactor * (1.4 / 2.0)));
         const double fLineWidthInUnits(fLineWidth / fScaleValue);

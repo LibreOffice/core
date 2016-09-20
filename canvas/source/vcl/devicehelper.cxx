@@ -54,7 +54,7 @@ namespace vclcanvas
         // Map a one-by-one millimeter box to pixel
         OutputDevice& rOutDev = mpOutDev->getOutDev();
         const MapMode aOldMapMode( rOutDev.GetMapMode() );
-        rOutDev.SetMapMode( MapMode(MAP_MM) );
+        rOutDev.SetMapMode( MapMode(MapUnit::MapMM) );
         const Size aPixelSize( rOutDev.LogicToPixel(Size(1,1)) );
         rOutDev.SetMapMode( aOldMapMode );
 
@@ -69,7 +69,7 @@ namespace vclcanvas
         // Map the pixel dimensions of the output window to millimeter
         OutputDevice& rOutDev = mpOutDev->getOutDev();
         const MapMode aOldMapMode( rOutDev.GetMapMode() );
-        rOutDev.SetMapMode( MapMode(MAP_MM) );
+        rOutDev.SetMapMode( MapMode(MapUnit::MapMM) );
         const Size aLogSize( rOutDev.PixelToLogic(rOutDev.GetOutputSizePixel()) );
         rOutDev.SetMapMode( aOldMapMode );
 

@@ -496,7 +496,7 @@ bool SwFormatCol::GetPresentation
             const long nWdth = static_cast<long>(GetLineWidth());
             rText = rText + " " + SW_RESSTR( STR_LINE_WIDTH ) + " " +
                     ::GetMetricText( nWdth, eCoreUnit,
-                                      MAP_POINT, pIntl );
+                                      MapUnit::MapPoint, pIntl );
         }
     }
     else

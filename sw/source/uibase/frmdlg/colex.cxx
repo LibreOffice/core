@@ -356,7 +356,7 @@ SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
     : Window(pParent)
     , m_aFrameSize(1,1)
 {
-    SetMapMode( MapMode( MAP_TWIP ) );
+    SetMapMode( MapMode( MapUnit::MapTwip ) );
     m_aWinSize = GetOptimalSize();
     m_aWinSize.Height() -= 4;
     m_aWinSize.Width() -= 4;
@@ -513,7 +513,7 @@ void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)
 
 Size SwColumnOnlyExample::GetOptimalSize() const
 {
-    return LogicToPixel(Size(75, 46), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(75, 46), MapMode(MapUnit::MapAppFont));
 }
 
 SwPageGridExample::~SwPageGridExample()

@@ -801,7 +801,7 @@ bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgre
                         else
                         {
                             ScopedVclPtrInstance< VirtualDevice > pVDev;
-                            pVDev->SetMapMode( MapMode( MAP_100TH_MM ) );
+                            pVDev->SetMapMode( MapMode( MapUnit::Map100thMM ) );
                             FmFormView aView( aModel.GetModel(), pVDev );
 
                             aView.hideMarkHandles();

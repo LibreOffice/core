@@ -391,8 +391,8 @@ void ScPatternAttr::GetFont(
             aFraction = *pScale;
         Size aSize( 0, (long) nFontHeight );
         MapMode aDestMode = pOutDev->GetMapMode();
-        MapMode aSrcMode( MAP_TWIP, Point(), aFraction, aFraction );
-        if (aDestMode.GetMapUnit() == MAP_PIXEL && pOutDev->GetDPIX() > 0)
+        MapMode aSrcMode( MapUnit::MapTwip, Point(), aFraction, aFraction );
+        if (aDestMode.GetMapUnit() == MapUnit::MapPixel && pOutDev->GetDPIX() > 0)
             aEffSize = pOutDev->LogicToPixel( aSize, aSrcMode );
         else
         {

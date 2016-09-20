@@ -194,7 +194,7 @@ bool SdGRFFilter::Import()
             Point       aPos;
             Size        aPagSize( pPage->GetSize() );
             Size        aGrfSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
-                                  aGraphic.GetPrefMapMode(), MAP_100TH_MM ) );
+                                  aGraphic.GetPrefMapMode(), MapUnit::Map100thMM ) );
 
             aPagSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
             aPagSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
