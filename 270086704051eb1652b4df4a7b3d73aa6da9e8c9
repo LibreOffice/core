@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_d5ba2bc0",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-20T13:00:17Z",
+      "side": 1,
+      "message": "i don\u0027t get the logic of this: it means that the first time we reach a non-BOOKMARK in the core bookmark array we stop comparing the rest of the aTableBookmarks (since the if will never match) and end up in the \"return false\" case below?",
+      "revId": "270086704051eb1652b4df4a7b3d73aa6da9e8c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
