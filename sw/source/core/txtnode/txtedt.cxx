@@ -199,14 +199,14 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
     if ( pEnd2Pos )
     {
         // we are inside a special portion, take left border
-        SWRECTFN( pEndFrame )
-        (aRect.*fnRect->fnSetTop)( (pEnd2Pos->aLine.*fnRect->fnGetTop)() );
+        SwRectFnSet aRectFnSet(pEndFrame);
+        (aRect.*aRectFnSet->fnSetTop)( (pEnd2Pos->aLine.*aRectFnSet->fnGetTop)() );
         if ( pEndFrame->IsRightToLeft() )
-            (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetLeft)() );
+            (aRect.*aRectFnSet->fnSetLeft)( (pEnd2Pos->aPortion.*aRectFnSet->fnGetLeft)() );
         else
-            (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetRight)() );
-        (aRect.*fnRect->fnSetWidth)( 1 );
-        (aRect.*fnRect->fnSetHeight)( (pEnd2Pos->aLine.*fnRect->fnGetHeight)() );
+            (aRect.*aRectFnSet->fnSetLeft)( (pEnd2Pos->aPortion.*aRectFnSet->fnGetRight)() );
+        (aRect.*aRectFnSet->fnSetWidth)( 1 );
+        (aRect.*aRectFnSet->fnSetHeight)( (pEnd2Pos->aLine.*aRectFnSet->fnGetHeight)() );
         delete pEnd2Pos;
     }
 
@@ -232,14 +232,14 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
     if ( pSt2Pos )
     {
         // we are inside a special portion, take right border
-        SWRECTFN( pStartFrame )
-        (aTmp.*fnRect->fnSetTop)( (pSt2Pos->aLine.*fnRect->fnGetTop)() );
+        SwRectFnSet aRectFnSet(pStartFrame);
+        (aTmp.*aRectFnSet->fnSetTop)( (pSt2Pos->aLine.*aRectFnSet->fnGetTop)() );
         if ( pStartFrame->IsRightToLeft() )
-            (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
+            (aTmp.*aRectFnSet->fnSetLeft)( (pSt2Pos->aPortion.*aRectFnSet->fnGetRight)() );
         else
-            (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
-        (aTmp.*fnRect->fnSetWidth)( 1 );
-        (aTmp.*fnRect->fnSetHeight)( (pSt2Pos->aLine.*fnRect->fnGetHeight)() );
+            (aTmp.*aRectFnSet->fnSetLeft)( (pSt2Pos->aPortion.*aRectFnSet->fnGetLeft)() );
+        (aTmp.*aRectFnSet->fnSetWidth)( 1 );
+        (aTmp.*aRectFnSet->fnSetHeight)( (pSt2Pos->aLine.*aRectFnSet->fnGetHeight)() );
         delete pSt2Pos;
     }
 
@@ -252,17 +252,17 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
             bSameFrame = false;
             SwRect aStFrame( pStartFrame->PaintArea() );
             {
-                SWRECTFN( pStartFrame )
-                (aTmp.*fnRect->fnSetLeft)( (aStFrame.*fnRect->fnGetLeft)() );
-                (aTmp.*fnRect->fnSetRight)( (aStFrame.*fnRect->fnGetRight)() );
-                (aTmp.*fnRect->fnSetBottom)( (aStFrame.*fnRect->fnGetBottom)() );
+                SwRectFnSet aRectFnSet(pStartFrame);
+                (aTmp.*aRectFnSet->fnSetLeft)( (aStFrame.*aRectFnSet->fnGetLeft)() );
+                (aTmp.*aRectFnSet->fnSetRight)( (aStFrame.*aRectFnSet->fnGetRight)() );
+                (aTmp.*aRectFnSet->fnSetBottom)( (aStFrame.*aRectFnSet->fnGetBottom)() );
             }
             aStFrame = pEndFrame->PaintArea();
             {
-                SWRECTFN( pEndFrame )
-                (aRect.*fnRect->fnSetTop)( (aStFrame.*fnRect->fnGetTop)() );
-                (aRect.*fnRect->fnSetLeft)( (aStFrame.*fnRect->fnGetLeft)() );
-                (aRect.*fnRect->fnSetRight)( (aStFrame.*fnRect->fnGetRight)() );
+                SwRectFnSet aRectFnSet(pEndFrame);
+                (aRect.*aRectFnSet->fnSetTop)( (aStFrame.*aRectFnSet->fnGetTop)() );
+                (aRect.*aRectFnSet->fnSetLeft)( (aStFrame.*aRectFnSet->fnGetLeft)() );
+                (aRect.*aRectFnSet->fnSetRight)( (aStFrame.*aRectFnSet->fnGetRight)() );
             }
             aRect.Union( aTmp );
             while( true )
@@ -276,15 +276,15 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
     }
     if( bSameFrame )
     {
-        SWRECTFN( pStartFrame )
-        if( (aTmp.*fnRect->fnGetTop)() == (aRect.*fnRect->fnGetTop)() )
-            (aRect.*fnRect->fnSetLeft)( (aTmp.*fnRect->fnGetLeft)() );
+        SwRectFnSet aRectFnSet(pStartFrame);
+        if( (aTmp.*aRectFnSet->fnGetTop)() == (aRect.*aRectFnSet->fnGetTop)() )
+            (aRect.*aRectFnSet->fnSetLeft)( (aTmp.*aRectFnSet->fnGetLeft)() );
         else
         {
             SwRect aStFrame( pStartFrame->PaintArea() );
-            (aRect.*fnRect->fnSetLeft)( (aStFrame.*fnRect->fnGetLeft)() );
-            (aRect.*fnRect->fnSetRight)( (aStFrame.*fnRect->fnGetRight)() );
-            (aRect.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetTop)() );
+            (aRect.*aRectFnSet->fnSetLeft)( (aStFrame.*aRectFnSet->fnGetLeft)() );
+            (aRect.*aRectFnSet->fnSetRight)( (aStFrame.*aRectFnSet->fnGetRight)() );
+            (aRect.*aRectFnSet->fnSetTop)( (aTmp.*aRectFnSet->fnGetTop)() );
         }
 
         if( aTmp.Height() > aRect.Height() )

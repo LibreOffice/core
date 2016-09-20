@@ -272,10 +272,10 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         pSdrObj[ 0 ] = pTmpObj;
         pTextRanger[ 0 ] = pTmpRanger;
     }
-    SWRECTFN( pFrame )
-    long nTmpTop = (rLine.*fnRect->fnGetTop)();
+    SwRectFnSet aRectFnSet(pFrame);
+    long nTmpTop = (rLine.*aRectFnSet->fnGetTop)();
     // fnGetBottom is top + height
-    long nTmpBottom = (rLine.*fnRect->fnGetBottom)();
+    long nTmpBottom = (rLine.*aRectFnSet->fnGetBottom)();
 
     Range aRange( std::min( nTmpTop, nTmpBottom ), std::max( nTmpTop, nTmpBottom ) );
 
@@ -301,10 +301,10 @@ const SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
 
         if( bSet && nIdx < nCount )
         {
-            (aRet.*fnRect->fnSetTopAndHeight)( (rLine.*fnRect->fnGetTop)(),
-                                               (rLine.*fnRect->fnGetHeight)() );
-            (aRet.*fnRect->fnSetLeft)( (*pTmp)[ nIdx ] );
-            (aRet.*fnRect->fnSetRight)( (*pTmp)[ nIdx + 1 ] + 1 );
+            (aRet.*aRectFnSet->fnSetTopAndHeight)( (rLine.*aRectFnSet->fnGetTop)(),
+                                               (rLine.*aRectFnSet->fnGetHeight)() );
+            (aRet.*aRectFnSet->fnSetLeft)( (*pTmp)[ nIdx ] );
+            (aRet.*aRectFnSet->fnSetRight)( (*pTmp)[ nIdx + 1 ] + 1 );
         }
     }
     return aRet;
@@ -393,15 +393,15 @@ SwRect SwTextFly::GetFrame_( const SwRect &rRect ) const
     SwRect aRet;
     if( ForEach( rRect, &aRet, true ) )
     {
-        SWRECTFN( pCurrFrame )
-        (aRet.*fnRect->fnSetTop)( (rRect.*fnRect->fnGetTop)() );
+        SwRectFnSet aRectFnSet(pCurrFrame);
+        (aRet.*aRectFnSet->fnSetTop)( (rRect.*aRectFnSet->fnGetTop)() );
 
         // Do not always adapt the bottom
-        const SwTwips nRetBottom = (aRet.*fnRect->fnGetBottom)();
-        const SwTwips nRectBottom = (rRect.*fnRect->fnGetBottom)();
-        if ( (*fnRect->fnYDiff)( nRetBottom, nRectBottom ) > 0 ||
-             (aRet.*fnRect->fnGetHeight)() < 0 )
-            (aRet.*fnRect->fnSetBottom)( nRectBottom );
+        const SwTwips nRetBottom = (aRet.*aRectFnSet->fnGetBottom)();
+        const SwTwips nRectBottom = (rRect.*aRectFnSet->fnGetBottom)();
+        if ( (*aRectFnSet->fnYDiff)( nRetBottom, nRectBottom ) > 0 ||
+             (aRet.*aRectFnSet->fnGetHeight)() < 0 )
+            (aRet.*aRectFnSet->fnSetBottom)( nRectBottom );
     }
     return aRet;
 }
@@ -875,9 +875,9 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
         }
         // Make ourselves a little smaller than we are,
         // so that 1-Twip-overlappings are ignored (#49532)
-        SWRECTFN( pCurrFrame )
-        const long nRight = (aRect.*fnRect->fnGetRight)() - 1;
-        const long nLeft = (aRect.*fnRect->fnGetLeft)() + 1;
+        SwRectFnSet aRectFnSet(pCurrFrame);
+        const long nRight = (aRect.*aRectFnSet->fnGetRight)() - 1;
+        const long nLeft = (aRect.*aRectFnSet->fnGetLeft)() + 1;
         const bool bR2L = pCurrFrame->IsRightToLeft();
 
         const IDocumentDrawModelAccess& rIDDMA = pCurrFrame->GetTextNode()->getIDocumentDrawModelAccess();
@@ -904,12 +904,12 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
             }
 
             const SwRect aBound( pAnchoredObj->GetObjRectWithSpaces() );
-            if ( nRight < (aBound.*fnRect->fnGetLeft)() ||
-                 (*fnRect->fnYDiff)( (aRect.*fnRect->fnGetTop)(),
-                                     (aBound.*fnRect->fnGetBottom)() ) > 0 ||
-                 nLeft > (aBound.*fnRect->fnGetRight)() ||
-                 (aBound.*fnRect->fnGetHeight)() >
-                                    2 * (pPage->Frame().*fnRect->fnGetHeight)() )
+            if ( nRight < (aBound.*aRectFnSet->fnGetLeft)() ||
+                 (*aRectFnSet->fnYDiff)( (aRect.*aRectFnSet->fnGetTop)(),
+                                     (aBound.*aRectFnSet->fnGetBottom)() ) > 0 ||
+                 nLeft > (aBound.*aRectFnSet->fnGetRight)() ||
+                 (aBound.*aRectFnSet->fnGetHeight)() >
+                                    2 * (pPage->Frame().*aRectFnSet->fnGetHeight)() )
             {
                 continue;
             }
@@ -930,7 +930,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
                             std::lower_bound( mpAnchoredObjList->begin(),
                                               mpAnchoredObjList->end(),
                                               pAnchoredObj,
-                                              AnchoredObjOrder( bR2L, fnRect ) );
+                                              AnchoredObjOrder( bR2L, aRectFnSet.fnRect ) );
 
                     mpAnchoredObjList->insert( aInsPosIter, pAnchoredObj );
                 }
@@ -943,9 +943,9 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
                     const SwFormatVertOrient &rTmpFormat =
                                     pAnchoredObj->GetFrameFormat().GetVertOrient();
                     if( text::VertOrientation::BOTTOM != rTmpFormat.GetVertOrient() )
-                        nMinBottom = ( bVert && nMinBottom ) ?
+                        nMinBottom = ( aRectFnSet.bVert && nMinBottom ) ?
                                      std::min( nMinBottom, aBound.Left() ) :
-                                     std::max( nMinBottom, (aBound.*fnRect->fnGetBottom)() );
+                                     std::max( nMinBottom, (aBound.*aRectFnSet->fnGetBottom)() );
                 }
 
                 bOn = true;
@@ -953,8 +953,8 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
         }
         if( nMinBottom )
         {
-            SwTwips nMax = (pCurrFrame->GetUpper()->*fnRect->fnGetPrtBottom)();
-            if( (*fnRect->fnYDiff)( nMinBottom, nMax ) > 0 )
+            SwTwips nMax = (pCurrFrame->GetUpper()->*aRectFnSet->fnGetPrtBottom)();
+            if( (*aRectFnSet->fnYDiff)( nMinBottom, nMax ) > 0 )
                 nMinBottom = nMax;
         }
     }
@@ -1019,8 +1019,8 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
             SwRect aRect( pAnchoredObj->GetObjRectWithSpaces() );
 
             // Optimierung
-            SWRECTFN( pCurrFrame )
-            if( (aRect.*fnRect->fnGetLeft)() > (rRect.*fnRect->fnGetRight)() )
+            SwRectFnSet aRectFnSet(pCurrFrame);
+            if( (aRect.*aRectFnSet->fnGetLeft)() > (rRect.*aRectFnSet->fnGetRight)() )
                 break;
             // #i68520#
             if ( mpCurrAnchoredObj != pAnchoredObj && aRect.IsOver( rRect ) )
@@ -1064,11 +1064,11 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
                         continue;
                     if( !bRet || (
                         ( !pCurrFrame->IsRightToLeft() &&
-                          ( (aFly.*fnRect->fnGetLeft)() <
-                            (pRect->*fnRect->fnGetLeft)() ) ) ||
+                          ( (aFly.*aRectFnSet->fnGetLeft)() <
+                            (pRect->*aRectFnSet->fnGetLeft)() ) ) ||
                         ( pCurrFrame->IsRightToLeft() &&
-                          ( (aFly.*fnRect->fnGetRight)() >
-                            (pRect->*fnRect->fnGetRight)() ) ) ) )
+                          ( (aFly.*aRectFnSet->fnGetRight)() >
+                            (pRect->*aRectFnSet->fnGetRight)() ) ) ) )
                         *pRect = aFly;
                     if( rSur.IsContour() )
                     {
@@ -1103,13 +1103,13 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
     // Usually the right margin is the right margin of the Printarea
     OSL_ENSURE( ! pCurrFrame->IsVertical() || ! pCurrFrame->IsSwapped(),
             "SwTextFly::CalcRightMargin with swapped frame" );
-    SWRECTFN( pCurrFrame )
+    SwRectFnSet aRectFnSet(pCurrFrame);
     // #118796# - correct determination of right of printing area
-    SwTwips nRight = (pCurrFrame->*fnRect->fnGetPrtRight)();
-    SwTwips nFlyRight = (rFly.*fnRect->fnGetRight)();
+    SwTwips nRight = (pCurrFrame->*aRectFnSet->fnGetPrtRight)();
+    SwTwips nFlyRight = (rFly.*aRectFnSet->fnGetRight)();
     SwRect aLine( rLine );
-    (aLine.*fnRect->fnSetRight)( nRight );
-    (aLine.*fnRect->fnSetLeft)( (rFly.*fnRect->fnGetLeft)() );
+    (aLine.*aRectFnSet->fnSetRight)( nRight );
+    (aLine.*aRectFnSet->fnSetLeft)( (rFly.*aRectFnSet->fnGetLeft)() );
 
     // It is possible that there is another object that is _above_ us
     // and protrudes into the same line.
@@ -1141,7 +1141,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
 
         const SwRect aTmp( SwContourCache::CalcBoundRect
                 ( pNext, aLine, pCurrFrame, nFlyRight, true ) );
-        SwTwips nTmpRight = (aTmp.*fnRect->fnGetRight)();
+        SwTwips nTmpRight = (aTmp.*aRectFnSet->fnGetRight)();
 
         // optimization:
         // Record in nNextTop at which Y-position frame related changes are
@@ -1152,20 +1152,20 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
         // Especially in HTML documents there are often (dummy) paragraphs in
         // 2 pt font, and they used to only evade big frames after huge numbers
         // of empty lines.
-        const long nTmpTop = (aTmp.*fnRect->fnGetTop)();
-        if( (*fnRect->fnYDiff)( nTmpTop, (aLine.*fnRect->fnGetTop)() ) > 0 )
+        const long nTmpTop = (aTmp.*aRectFnSet->fnGetTop)();
+        if( (*aRectFnSet->fnYDiff)( nTmpTop, (aLine.*aRectFnSet->fnGetTop)() ) > 0 )
         {
-            if( (*fnRect->fnYDiff)( nNextTop, nTmpTop ) > 0 )
+            if( (*aRectFnSet->fnYDiff)( nNextTop, nTmpTop ) > 0 )
                 SetNextTop( nTmpTop ); // upper border of next frame
         }
-        else if (!(aTmp.*fnRect->fnGetWidth)()) // typical for Objects with contour wrap
+        else if (!(aTmp.*aRectFnSet->fnGetWidth)()) // typical for Objects with contour wrap
         {   // For Objects with contour wrap that start before the current
             // line, and end below it, but do not actually overlap it, the
             // optimization has to be disabled, because the circumstances
             // can change in the next line.
-            if( ! (aTmp.*fnRect->fnGetHeight)() ||
-                (*fnRect->fnYDiff)( (aTmp.*fnRect->fnGetBottom)(),
-                                    (aLine.*fnRect->fnGetTop)() ) > 0 )
+            if( ! (aTmp.*aRectFnSet->fnGetHeight)() ||
+                (*aRectFnSet->fnYDiff)( (aTmp.*aRectFnSet->fnGetBottom)(),
+                                    (aLine.*aRectFnSet->fnGetTop)() ) > 0 )
                 SetNextTop( 0 );
         }
         if( aTmp.IsOver( aLine ) && nTmpRight > nFlyRight )
@@ -1181,7 +1181,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
             }
         }
     }
-    (rFly.*fnRect->fnSetRight)( nRight );
+    (rFly.*aRectFnSet->fnSetRight)( nRight );
 }
 
 // #i68520#
@@ -1191,16 +1191,16 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
 {
     OSL_ENSURE( ! pCurrFrame->IsVertical() || ! pCurrFrame->IsSwapped(),
             "SwTextFly::CalcLeftMargin with swapped frame" );
-    SWRECTFN( pCurrFrame )
+    SwRectFnSet aRectFnSet(pCurrFrame);
     // #118796# - correct determination of left of printing area
-    SwTwips nLeft = (pCurrFrame->*fnRect->fnGetPrtLeft)();
-    const SwTwips nFlyLeft = (rFly.*fnRect->fnGetLeft)();
+    SwTwips nLeft = (pCurrFrame->*aRectFnSet->fnGetPrtLeft)();
+    const SwTwips nFlyLeft = (rFly.*aRectFnSet->fnGetLeft)();
 
     if( nLeft > nFlyLeft )
         nLeft = rFly.Left();
 
     SwRect aLine( rLine );
-    (aLine.*fnRect->fnSetLeft)( nLeft );
+    (aLine.*aRectFnSet->fnSetLeft)( nLeft );
 
     // It is possible that there is another object that is _above_ us
     // and protrudes into the same line.
@@ -1215,7 +1215,7 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
         // #i68520#
         const SwAnchoredObject* pNext = (*mpAnchoredObjList)[ nFlyPos ];
         const SwRect aTmp( pNext->GetObjRectWithSpaces() );
-        if( (aTmp.*fnRect->fnGetLeft)() >= nFlyLeft )
+        if( (aTmp.*aRectFnSet->fnGetLeft)() >= nFlyLeft )
             break;
     }
 
@@ -1234,29 +1234,29 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
         const SwRect aTmp( SwContourCache::CalcBoundRect
                 ( pNext, aLine, pCurrFrame, nFlyLeft, false ) );
 
-        if( (aTmp.*fnRect->fnGetLeft)() < nFlyLeft && aTmp.IsOver( aLine ) )
+        if( (aTmp.*aRectFnSet->fnGetLeft)() < nFlyLeft && aTmp.IsOver( aLine ) )
         {
             // #118796# - no '+1', because <..fnGetRight>
             // returns the correct value.
-            SwTwips nTmpRight = (aTmp.*fnRect->fnGetRight)();
+            SwTwips nTmpRight = (aTmp.*aRectFnSet->fnGetRight)();
             if ( nLeft <= nTmpRight )
                 nLeft = nTmpRight;
 
             break;
         }
     }
-    (rFly.*fnRect->fnSetLeft)( nLeft );
+    (rFly.*aRectFnSet->fnSetLeft)( nLeft );
 }
 
 // #i68520#
 SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
                             const SwRect &rLine ) const
 {
-    SWRECTFN( pCurrFrame )
+    SwRectFnSet aRectFnSet(pCurrFrame);
 
     const long nXPos = pCurrFrame->IsRightToLeft() ?
                        rLine.Right() :
-                       (rLine.*fnRect->fnGetLeft)();
+                       (rLine.*aRectFnSet->fnGetLeft)();
 
     SwRect aFly = mbIgnoreContour ?
                   pAnchoredObj->GetObjRectWithSpaces() :
@@ -1267,7 +1267,7 @@ SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
         return aFly;
 
     // so the line may grow up to the lower edge of the frame
-    SetNextTop( (aFly.*fnRect->fnGetBottom)() );
+    SetNextTop( (aFly.*aRectFnSet->fnGetBottom)() );
     SwAnchoredObjList::size_type nFlyPos = GetPos( pAnchoredObj );
 
     // LEFT and RIGHT, we grow the rectangle.
@@ -1347,12 +1347,12 @@ SwSurround SwTextFly::GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
     // "ideal page wrap":
     if ( SURROUND_IDEAL == eSurroundForTextWrap )
     {
-        SWRECTFN( pCurrFrame )
-        const long nCurrLeft = (pCurrFrame->*fnRect->fnGetPrtLeft)();
-        const long nCurrRight = (pCurrFrame->*fnRect->fnGetPrtRight)();
+        SwRectFnSet aRectFnSet(pCurrFrame);
+        const long nCurrLeft = (pCurrFrame->*aRectFnSet->fnGetPrtLeft)();
+        const long nCurrRight = (pCurrFrame->*aRectFnSet->fnGetPrtRight)();
         const SwRect aRect( pAnchoredObj->GetObjRectWithSpaces() );
-        long nFlyLeft = (aRect.*fnRect->fnGetLeft)();
-        long nFlyRight = (aRect.*fnRect->fnGetRight)();
+        long nFlyLeft = (aRect.*aRectFnSet->fnGetLeft)();
+        long nFlyRight = (aRect.*aRectFnSet->fnGetRight)();
 
         if ( nFlyRight < nCurrLeft || nFlyLeft > nCurrRight )
             eSurroundForTextWrap = SURROUND_PARALLEL;

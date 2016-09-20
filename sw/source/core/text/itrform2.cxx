@@ -483,14 +483,14 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             // its size so that its ends on the grid
             const SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
             const SwLayoutFrame* pBody = pPageFrame->FindBodyCont();
-            SWRECTFN( pPageFrame )
+            SwRectFnSet aRectFnSet(pPageFrame);
 
             const long nGridOrigin = pBody ?
-                                    (pBody->*fnRect->fnGetPrtLeft)() :
-                                    (pPageFrame->*fnRect->fnGetPrtLeft)();
+                                    (pBody->*aRectFnSet->fnGetPrtLeft)() :
+                                    (pPageFrame->*aRectFnSet->fnGetPrtLeft)();
 
             SwTwips nStartX = rInf.X() + GetLeftMargin();
-            if ( bVert )
+            if ( aRectFnSet.bVert )
             {
                 Point aPoint( nStartX, 0 );
                 m_pFrame->SwitchHorizontalToVertical( aPoint );
@@ -1834,10 +1834,10 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         if( IsRegisterOn() )
         {
             SwTwips nTmpY = Y() + m_pCurr->GetAscent() + nLineHeight - m_pCurr->Height();
-            SWRECTFN( m_pFrame )
-            if ( bVert )
+            SwRectFnSet aRectFnSet(m_pFrame);
+            if ( aRectFnSet.bVert )
                 nTmpY = m_pFrame->SwitchHorizontalToVertical( nTmpY );
-            nTmpY = (*fnRect->fnYDiff)( nTmpY, RegStart() );
+            nTmpY = (*aRectFnSet->fnYDiff)( nTmpY, RegStart() );
             const sal_uInt16 nDiff = sal_uInt16( nTmpY % RegDiff() );
             if( nDiff )
                 nLineHeight += RegDiff() - nDiff;
@@ -1868,9 +1868,9 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
          nTmpRight > USHRT_MAX ||
          nTmpFirst > USHRT_MAX )
     {
-        SWRECTFN( rInf.GetTextFrame() )
-        nTmpLeft = (rInf.GetTextFrame()->Frame().*fnRect->fnGetLeft)();
-        nTmpRight = (rInf.GetTextFrame()->Frame().*fnRect->fnGetRight)();
+        SwRectFnSet aRectFnSet(rInf.GetTextFrame());
+        nTmpLeft = (rInf.GetTextFrame()->Frame().*aRectFnSet->fnGetLeft)();
+        nTmpRight = (rInf.GetTextFrame()->Frame().*aRectFnSet->fnGetRight)();
         nTmpFirst = nTmpLeft;
     }
 
@@ -2444,17 +2444,17 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
             const SwPageFrame* pPageFrame = m_pFrame->FindPageFrame();
             const SwLayoutFrame* pBody = pPageFrame->FindBodyCont();
 
-            SWRECTFN( pPageFrame )
+            SwRectFnSet aRectFnSet(pPageFrame);
 
             const long nGridOrigin = pBody ?
-                                    (pBody->*fnRect->fnGetPrtLeft)() :
-                                    (pPageFrame->*fnRect->fnGetPrtLeft)();
+                                    (pBody->*aRectFnSet->fnGetPrtLeft)() :
+                                    (pPageFrame->*aRectFnSet->fnGetPrtLeft)();
 
             const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
             SwTwips nStartX = GetLeftMargin();
-            if ( bVert )
+            if ( aRectFnSet.bVert )
             {
                 Point aPoint( nStartX, 0 );
                 m_pFrame->SwitchHorizontalToVertical( aPoint );

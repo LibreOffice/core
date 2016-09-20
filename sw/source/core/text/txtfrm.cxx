@@ -543,11 +543,11 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
                         {
                             bRet = false;
                             // set needed data structure values for object positioning
-                            SWRECTFN( (&_rFrame) );
+                            SwRectFnSet aRectFnSet(&_rFrame);
                             SwRect aLastCharRect( _rFrame.Frame() );
-                            (aLastCharRect.*fnRect->fnSetWidth)( 1 );
+                            (aLastCharRect.*aRectFnSet->fnSetWidth)( 1 );
                             _pAnchoredObj->maLastCharRect = aLastCharRect;
-                            _pAnchoredObj->mnLastTopOfLine = (aLastCharRect.*fnRect->fnGetTop)();
+                            _pAnchoredObj->mnLastTopOfLine = (aLastCharRect.*aRectFnSet->fnGetTop)();
                         }
                     }
                 }
@@ -1853,32 +1853,32 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
     aOldFrame = pFrame->Frame();
     aOldPrt = pFrame->Prt();
 
-    SWRECTFN( pFrame )
-    SwTwips nLower = (pFrame->*fnRect->fnGetBottomMargin)();
+    SwRectFnSet aRectFnSet(pFrame);
+    SwTwips nLower = (pFrame->*aRectFnSet->fnGetBottomMargin)();
 
     pFrame->Frame() = pFrame->GetUpper()->Prt();
     pFrame->Frame() += pFrame->GetUpper()->Frame().Pos();
 
-    (pFrame->Frame().*fnRect->fnSetHeight)( nMaxHeight );
+    (pFrame->Frame().*aRectFnSet->fnSetHeight)( nMaxHeight );
     if( pFrame->GetPrev() )
-        (pFrame->Frame().*fnRect->fnSetPosY)(
-                (pFrame->GetPrev()->Frame().*fnRect->fnGetBottom)() -
-                ( bVert ? nMaxHeight + 1 : 0 ) );
+        (pFrame->Frame().*aRectFnSet->fnSetPosY)(
+                (pFrame->GetPrev()->Frame().*aRectFnSet->fnGetBottom)() -
+                ( aRectFnSet.bVert ? nMaxHeight + 1 : 0 ) );
 
     SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFrame );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
-    (pFrame->Prt().*fnRect->fnSetPosX)( rAttrs.CalcLeft( pFrame ) );
+    (pFrame->Prt().*aRectFnSet->fnSetPosX)( rAttrs.CalcLeft( pFrame ) );
 
     if( pPre )
     {
         SwTwips nUpper = pFrame->CalcUpperSpace( &rAttrs, pPre );
-        (pFrame->Prt().*fnRect->fnSetPosY)( nUpper );
+        (pFrame->Prt().*aRectFnSet->fnSetPosY)( nUpper );
     }
-    (pFrame->Prt().*fnRect->fnSetHeight)(
-        std::max( 0L , (pFrame->Frame().*fnRect->fnGetHeight)() -
-                  (pFrame->Prt().*fnRect->fnGetTop)() - nLower ) );
-    (pFrame->Prt().*fnRect->fnSetWidth)(
-        (pFrame->Frame().*fnRect->fnGetWidth)() -
+    (pFrame->Prt().*aRectFnSet->fnSetHeight)(
+        std::max( 0L , (pFrame->Frame().*aRectFnSet->fnGetHeight)() -
+                  (pFrame->Prt().*aRectFnSet->fnGetTop)() - nLower ) );
+    (pFrame->Prt().*aRectFnSet->fnSetWidth)(
+        (pFrame->Frame().*aRectFnSet->fnGetWidth)() -
         ( rAttrs.CalcLeft( pFrame ) + rAttrs.CalcRight( pFrame ) ) );
     pOldPara = pFrame->HasPara() ? pFrame->GetPara() : nullptr;
     pFrame->SetPara( new SwParaPortion(), false );
@@ -1934,7 +1934,7 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTextFrame::WouldFit with swapped frame" );
-    SWRECTFN( this );
+    SwRectFnSet aRectFnSet(this);
 
     if( IsLocked() )
         return false;
@@ -1950,7 +1950,7 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
     if ( IsEmpty() && !bTst )
     {
         bSplit = false;
-        SwTwips nHeight = bVert ? Prt().SSize().Width() : Prt().SSize().Height();
+        SwTwips nHeight = aRectFnSet.bVert ? Prt().SSize().Width() : Prt().SSize().Height();
         if( rMaxHeight < nHeight )
             return false;
         else
@@ -1963,13 +1963,13 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
     // GetPara can still be 0 in edge cases
     // We return true in order to be reformatted on the new Page
     OSL_ENSURE( HasPara() || IsHiddenNow(), "WouldFit: GetFormatted() and then !HasPara()" );
-    if( !HasPara() || ( !(Frame().*fnRect->fnGetHeight)() && IsHiddenNow() ) )
+    if( !HasPara() || ( !(Frame().*aRectFnSet->fnGetHeight)() && IsHiddenNow() ) )
         return true;
 
     // Because the Orphan flag only exists for a short moment, we also check
     // whether the Framesize is set to very huge by CalcPreps, in order to
     // force a MoveFwd
-    if( IsWidow() || ( bVert ?
+    if( IsWidow() || ( aRectFnSet.bVert ?
                        ( 0 == Frame().Left() ) :
                        ( LONG_MAX - 20000 < Frame().Bottom() ) ) )
     {
@@ -1980,8 +1980,8 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
             // whether there's a Follow with a real height at all.
             // Else (e.g. for newly created SctFrames) we ignore the IsWidow() and
             // still check if we can find enough room
-            if( ( ( ! bVert && LONG_MAX - 20000 >= Frame().Bottom() ) ||
-                  (   bVert && 0 < Frame().Left() ) ) &&
+            if( ( ( ! aRectFnSet.bVert && LONG_MAX - 20000 >= Frame().Bottom() ) ||
+                  (   aRectFnSet.bVert && 0 < Frame().Left() ) ) &&
                   ( GetFollow()->IsVertical() ?
                     !GetFollow()->Frame().Width() :
                     !GetFollow()->Frame().Height() ) )
@@ -2598,36 +2598,36 @@ const SwScriptInfo* SwTextFrame::GetScriptInfo() const
 static SwTwips lcl_CalcFlyBasePos( const SwTextFrame& rFrame, SwRect aFlyRect,
                             SwTextFly& rTextFly )
 {
-    SWRECTFN( (&rFrame) )
+    SwRectFnSet aRectFnSet(&rFrame);
     SwTwips nRet = rFrame.IsRightToLeft() ?
-                   (rFrame.Frame().*fnRect->fnGetRight)() :
-                   (rFrame.Frame().*fnRect->fnGetLeft)();
+                   (rFrame.Frame().*aRectFnSet->fnGetRight)() :
+                   (rFrame.Frame().*aRectFnSet->fnGetLeft)();
 
     do
     {
         SwRect aRect = rTextFly.GetFrame( aFlyRect );
-        if ( 0 != (aRect.*fnRect->fnGetWidth)() )
+        if ( 0 != (aRect.*aRectFnSet->fnGetWidth)() )
         {
             if ( rFrame.IsRightToLeft() )
             {
-                if ( (aRect.*fnRect->fnGetRight)() -
-                     (aFlyRect.*fnRect->fnGetRight)() >= 0 )
+                if ( (aRect.*aRectFnSet->fnGetRight)() -
+                     (aFlyRect.*aRectFnSet->fnGetRight)() >= 0 )
                 {
-                    (aFlyRect.*fnRect->fnSetRight)(
-                        (aRect.*fnRect->fnGetLeft)() );
-                    nRet = (aRect.*fnRect->fnGetLeft)();
+                    (aFlyRect.*aRectFnSet->fnSetRight)(
+                        (aRect.*aRectFnSet->fnGetLeft)() );
+                    nRet = (aRect.*aRectFnSet->fnGetLeft)();
                 }
                 else
                     break;
             }
             else
             {
-                if ( (aFlyRect.*fnRect->fnGetLeft)() -
-                     (aRect.*fnRect->fnGetLeft)() >= 0 )
+                if ( (aFlyRect.*aRectFnSet->fnGetLeft)() -
+                     (aRect.*aRectFnSet->fnGetLeft)() >= 0 )
                 {
-                    (aFlyRect.*fnRect->fnSetLeft)(
-                        (aRect.*fnRect->fnGetRight)() + 1 );
-                    nRet = (aRect.*fnRect->fnGetRight)();
+                    (aFlyRect.*aRectFnSet->fnSetLeft)(
+                        (aRect.*aRectFnSet->fnGetRight)() + 1 );
+                    nRet = (aRect.*aRectFnSet->fnGetRight)();
                 }
                 else
                     break;
@@ -2636,7 +2636,7 @@ static SwTwips lcl_CalcFlyBasePos( const SwTextFrame& rFrame, SwRect aFlyRect,
         else
             break;
     }
-    while ( (aFlyRect.*fnRect->fnGetWidth)() > 0 );
+    while ( (aFlyRect.*aRectFnSet->fnGetWidth)() > 0 );
 
     return nRet;
 }
@@ -2650,7 +2650,7 @@ void SwTextFrame::CalcBaseOfstForFly()
     if ( !pNode->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_FLY_OFFSETS) )
         return;
 
-    SWRECTFN( this )
+    SwRectFnSet aRectFnSet(this);
 
     SwRect aFlyRect( Frame().Pos() + Prt().Pos(), Prt().SSize() );
 
@@ -2659,7 +2659,7 @@ void SwTextFrame::CalcBaseOfstForFly()
     // (empty paragraph with and without a dummy portion)
     SwTwips nFlyAnchorVertOfstNoWrap = 0;
     {
-        SwTwips nTop = (aFlyRect.*fnRect->fnGetTop)();
+        SwTwips nTop = (aFlyRect.*aRectFnSet->fnGetTop)();
         const SwLineLayout* pLay = GetPara();
         SwTwips nLineHeight = 200;
         while( pLay && pLay->IsDummy() && pLay->GetNext() )
@@ -2672,7 +2672,7 @@ void SwTextFrame::CalcBaseOfstForFly()
         {
             nLineHeight = pLay->Height();
         }
-        (aFlyRect.*fnRect->fnSetTopAndHeight)( nTop, nLineHeight );
+        (aFlyRect.*aRectFnSet->fnSetTopAndHeight)( nTop, nLineHeight );
     }
 
     SwTextFly aTextFly( this );
@@ -2687,8 +2687,8 @@ void SwTextFrame::CalcBaseOfstForFly()
 
     // make values relative to frame start position
     SwTwips nLeft = IsRightToLeft() ?
-                    (Frame().*fnRect->fnGetRight)() :
-                    (Frame().*fnRect->fnGetLeft)();
+                    (Frame().*aRectFnSet->fnGetRight)() :
+                    (Frame().*aRectFnSet->fnGetLeft)();
 
     mnFlyAnchorOfst = nRet1 - nLeft;
     mnFlyAnchorOfstNoWrap = nRet2 - nLeft;

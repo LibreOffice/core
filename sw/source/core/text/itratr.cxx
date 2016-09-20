@@ -1018,12 +1018,12 @@ SwTwips SwTextNode::GetWidthOfLeadingTabs() const
             // Only consider master frames:
             if ( !pFrame->IsFollow() )
             {
-                SWRECTFN( pFrame )
+                SwRectFnSet aRectFnSet(pFrame);
                 SwRect aRect;
                 pFrame->GetCharRect( aRect, aPos );
                 nRet = pFrame->IsRightToLeft() ?
-                            (pFrame->*fnRect->fnGetPrtRight)() - (aRect.*fnRect->fnGetRight)() :
-                            (aRect.*fnRect->fnGetLeft)() - (pFrame->*fnRect->fnGetPrtLeft)();
+                            (pFrame->*aRectFnSet->fnGetPrtRight)() - (aRect.*aRectFnSet->fnGetRight)() :
+                            (aRect.*aRectFnSet->fnGetLeft)() - (pFrame->*aRectFnSet->fnGetPrtLeft)();
                 break;
             }
         }

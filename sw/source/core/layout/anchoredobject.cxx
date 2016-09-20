@@ -262,7 +262,7 @@ void SwAnchoredObject::CheckCharRect( const SwFormatAnchor& _rAnch,
     {
         // check positioning and alignment for invalidation of position
         {
-            SWRECTFN( (&_rAnchorCharFrame) );
+            SwRectFnSet aRectFnSet(&_rAnchorCharFrame);
             // determine positioning and alignment
             SwFormatVertOrient aVert( GetFrameFormat().GetVertOrient() );
             SwFormatHoriOrient aHori( GetFrameFormat().GetHoriOrient() );
@@ -273,19 +273,19 @@ void SwAnchoredObject::CheckCharRect( const SwFormatAnchor& _rAnch,
             // of anchor character has changed.
             const sal_Int16 eVertRelOrient = aVert.GetRelationOrient();
             if ( ( aHori.GetRelationOrient() == text::RelOrientation::CHAR &&
-                   (aCharRect.*fnRect->fnGetLeft)() !=
-                        (maLastCharRect.*fnRect->fnGetLeft)() ) ||
+                   (aCharRect.*aRectFnSet->fnGetLeft)() !=
+                        (maLastCharRect.*aRectFnSet->fnGetLeft)() ) ||
                  ( eVertRelOrient == text::RelOrientation::CHAR &&
-                   ( (aCharRect.*fnRect->fnGetTop)() !=
-                        (maLastCharRect.*fnRect->fnGetTop)() ||
-                     (aCharRect.*fnRect->fnGetHeight)() !=
-                        (maLastCharRect.*fnRect->fnGetHeight)() ) ) ||
+                   ( (aCharRect.*aRectFnSet->fnGetTop)() !=
+                        (maLastCharRect.*aRectFnSet->fnGetTop)() ||
+                     (aCharRect.*aRectFnSet->fnGetHeight)() !=
+                        (maLastCharRect.*aRectFnSet->fnGetHeight)() ) ) ||
                  ( ( ( eVertRelOrient == text::RelOrientation::FRAME ) ||
                      ( eVertRelOrient == text::RelOrientation::PRINT_AREA ) ||
                      ( eVertRelOrient == text::RelOrientation::PAGE_FRAME ) ||
                      ( eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA ) ) &&
-                   ( (aCharRect.*fnRect->fnGetTop)() !=
-                        (maLastCharRect.*fnRect->fnGetTop)() ) ) )
+                   ( (aCharRect.*aRectFnSet->fnGetTop)() !=
+                        (maLastCharRect.*aRectFnSet->fnGetTop)() ) ) )
             {
                 // #i26945#, #i35911# - unlock position of
                 // anchored object, if it isn't registered at the page,

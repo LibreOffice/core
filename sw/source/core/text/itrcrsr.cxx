@@ -1785,11 +1785,11 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
             SwTextInfo aInf( const_cast<SwTextFrame*>(this) );
             SwTextIter aLine( const_cast<SwTextFrame*>(this), &aInf );
             // We have to care for top-to-bottom layout, where right becomes top etc.
-            SWRECTFN( this )
-            SwTwips nTop = (aRect.*fnRect->fnGetTop)();
-            SwTwips nBottom = (aRect.*fnRect->fnGetBottom)();
-            SwTwips nLeft = (aRect.*fnRect->fnGetLeft)();
-            SwTwips nRight = (aRect.*fnRect->fnGetRight)();
+            SwRectFnSet aRectFnSet(this);
+            SwTwips nTop = (aRect.*aRectFnSet->fnGetTop)();
+            SwTwips nBottom = (aRect.*aRectFnSet->fnGetBottom)();
+            SwTwips nLeft = (aRect.*aRectFnSet->fnGetLeft)();
+            SwTwips nRight = (aRect.*aRectFnSet->fnGetRight)();
             SwTwips nY = aLine.Y(); // Top position of the first line
             SwTwips nLastY = nY;
             while( nY < nTop && aLine.Next() ) // line above rectangle
@@ -1813,7 +1813,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
                 {
                     nLastY += nY;
                     nLastY /= 2;
-                    if( bVert )
+                    if( aRectFnSet.bVert )
                     {
                         aPoint.X() = nLastY;
                         aPoint.Y() = nLeft;
@@ -1828,7 +1828,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
                     SwCursorMoveState aState( MV_UPDOWN );
                     if( GetCursorOfst( &aPosL, aPoint, &aState ) )
                     {
-                        if( bVert )
+                        if( aRectFnSet.bVert )
                         {
                             aPoint.X() = nLastY;
                             aPoint.Y() = nRight;

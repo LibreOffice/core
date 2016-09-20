@@ -59,8 +59,8 @@ SwTextFrameBreak::SwTextFrameBreak( SwTextFrame *pNewFrame, const SwTwips nRst )
     : m_nRstHeight(nRst), m_pFrame(pNewFrame)
 {
     SwSwapIfSwapped swap(m_pFrame);
-    SWRECTFN( m_pFrame )
-    m_nOrigin = (m_pFrame->*fnRect->fnGetPrtTop)();
+    SwRectFnSet aRectFnSet(m_pFrame);
+    m_nOrigin = (m_pFrame->*aRectFnSet->fnGetPrtTop)();
     m_bKeep = !m_pFrame->IsMoveable() || IsNastyFollow( m_pFrame );
     if( !m_bKeep && m_pFrame->IsInSct() )
     {
@@ -74,8 +74,8 @@ SwTextFrameBreak::SwTextFrameBreak( SwTextFrame *pNewFrame, const SwTwips nRst )
     if( !m_nRstHeight && !m_pFrame->IsFollow() && m_pFrame->IsInFootnote() && m_pFrame->HasPara() )
     {
         m_nRstHeight = m_pFrame->GetFootnoteFrameHeight();
-        m_nRstHeight += (m_pFrame->Prt().*fnRect->fnGetHeight)() -
-                      (m_pFrame->Frame().*fnRect->fnGetHeight)();
+        m_nRstHeight += (m_pFrame->Prt().*aRectFnSet->fnGetHeight)() -
+                      (m_pFrame->Frame().*aRectFnSet->fnGetHeight)();
         if( m_nRstHeight < 0 )
             m_nRstHeight = 0;
     }
@@ -106,7 +106,7 @@ bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
     bool bFit = false;
 
     SwSwapIfSwapped swap(m_pFrame);
-    SWRECTFN( m_pFrame )
+    SwRectFnSet aRectFnSet(m_pFrame);
     // nOrigin is an absolut value, rLine referes to the swapped situation.
 
     SwTwips nTmpY;
@@ -115,10 +115,10 @@ bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
     else
         nTmpY = rLine.Y() + rLine.GetLineHeight();
 
-    SwTwips nLineHeight = (*fnRect->fnYDiff)( nTmpY , m_nOrigin );
+    SwTwips nLineHeight = (*aRectFnSet->fnYDiff)( nTmpY , m_nOrigin );
 
     // Calculate extra space for bottom border.
-    nLineHeight += (m_pFrame->*fnRect->fnGetBottomMargin)();
+    nLineHeight += (m_pFrame->*aRectFnSet->fnGetBottomMargin)();
 
     if( m_nRstHeight )
         bFit = m_nRstHeight >= nLineHeight;
@@ -126,7 +126,7 @@ bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
     {
         // The Frame has a height to fit on the page.
         SwTwips nHeight =
-            (*fnRect->fnYDiff)( (m_pFrame->GetUpper()->*fnRect->fnGetPrtBottom)(), m_nOrigin );
+            (*aRectFnSet->fnYDiff)( (m_pFrame->GetUpper()->*aRectFnSet->fnGetPrtBottom)(), m_nOrigin );
         SwTwips nDiff = nHeight - nLineHeight;
 
         // Hide whitespace may require not to insert a new page.
@@ -206,14 +206,14 @@ bool SwTextFrameBreak::IsBreakNow( SwTextMargin &rLine )
 void SwTextFrameBreak::SetRstHeight( const SwTextMargin &rLine )
 {
     // Consider bottom margin
-    SWRECTFN( m_pFrame )
+    SwRectFnSet aRectFnSet(m_pFrame);
 
-    m_nRstHeight = (m_pFrame->*fnRect->fnGetBottomMargin)();
+    m_nRstHeight = (m_pFrame->*aRectFnSet->fnGetBottomMargin)();
 
-    if ( bVert )
+    if ( aRectFnSet.bVert )
     {
            if ( m_pFrame->IsVertLR() )
-              m_nRstHeight = (*fnRect->fnYDiff)( m_pFrame->SwitchHorizontalToVertical( rLine.Y() ) , m_nOrigin );
+              m_nRstHeight = (*aRectFnSet->fnYDiff)( m_pFrame->SwitchHorizontalToVertical( rLine.Y() ) , m_nOrigin );
            else
                m_nRstHeight += m_nOrigin - m_pFrame->SwitchHorizontalToVertical( rLine.Y() );
     }
@@ -373,21 +373,21 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
         return false;
 
     // Remaining height of the master
-    SWRECTFN( pFrame )
+    SwRectFnSet aRectFnSet(pFrame);
 
-    const SwTwips nDocPrtTop = (pFrame->*fnRect->fnGetPrtTop)();
+    const SwTwips nDocPrtTop = (pFrame->*aRectFnSet->fnGetPrtTop)();
     SwTwips nOldHeight;
     SwTwips nTmpY = rLine.Y() + rLine.GetLineHeight();
 
-    if ( bVert )
+    if ( aRectFnSet.bVert )
     {
         nTmpY = pFrame->SwitchHorizontalToVertical( nTmpY );
-        nOldHeight = -(pFrame->Prt().*fnRect->fnGetHeight)();
+        nOldHeight = -(pFrame->Prt().*aRectFnSet->fnGetHeight)();
     }
     else
-        nOldHeight = (pFrame->Prt().*fnRect->fnGetHeight)();
+        nOldHeight = (pFrame->Prt().*aRectFnSet->fnGetHeight)();
 
-    const SwTwips nChg = (*fnRect->fnYDiff)( nTmpY, nDocPrtTop + nOldHeight );
+    const SwTwips nChg = (*aRectFnSet->fnYDiff)( nTmpY, nDocPrtTop + nOldHeight );
 
     // below the Widows-treshold...
     if( rLine.GetLineNr() >= nWidLines )
@@ -404,8 +404,8 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
             // multiple lines (e.g. via frames).
             if( !pMaster->IsLocked() && pMaster->GetUpper() )
             {
-                const SwTwips nTmpRstHeight = (pMaster->Frame().*fnRect->fnBottomDist)
-                            ( (pMaster->GetUpper()->*fnRect->fnGetPrtBottom)() );
+                const SwTwips nTmpRstHeight = (pMaster->Frame().*aRectFnSet->fnBottomDist)
+                            ( (pMaster->GetUpper()->*aRectFnSet->fnGetPrtBottom)() );
                 if ( nTmpRstHeight >=
                      SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
                 {
@@ -427,8 +427,8 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
 
     if( 0 > nChg && !pMaster->IsLocked() && pMaster->GetUpper() )
     {
-        SwTwips nTmpRstHeight = (pMaster->Frame().*fnRect->fnBottomDist)
-                             ( (pMaster->GetUpper()->*fnRect->fnGetPrtBottom)() );
+        SwTwips nTmpRstHeight = (pMaster->Frame().*aRectFnSet->fnBottomDist)
+                             ( (pMaster->GetUpper()->*aRectFnSet->fnGetPrtBottom)() );
         if( nTmpRstHeight >= SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
         {
             pMaster->Prepare( PREP_ADJUST_FRM );
