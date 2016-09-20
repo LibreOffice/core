@@ -260,7 +260,7 @@ VCL_BUILDER_DECL_FACTORY(ColorFieldControl)
 
 Size ColorFieldControl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(158, 158), MAP_APPFONT);
+    return LogicToPixel(Size(158, 158), MapUnit::AppFont);
 }
 
 void ColorFieldControl::UpdateBitmap()

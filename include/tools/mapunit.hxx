@@ -22,10 +22,17 @@
 
 #include <sal/types.h>
 
-enum MapUnit { MAP_100TH_MM, MAP_10TH_MM, MAP_MM, MAP_CM,
-               MAP_1000TH_INCH, MAP_100TH_INCH, MAP_10TH_INCH, MAP_INCH,
-               MAP_POINT, MAP_TWIP, MAP_PIXEL, MAP_SYSFONT, MAP_APPFONT,
-               MAP_RELATIVE, MAP_LASTENUMDUMMY };
+enum class MapUnit
+{
+    MM_100th, MM_10th, MM, CM,
+    Inch_1000th, Inch_100th, Inch_10th, Inch,
+    Point, Twip,
+    Pix, /* Pixel - can't use the actual word 'Pixel' because of X11 header conflicts */
+    SysFont, AppFont,
+    Relative,
+    LAST = Relative,
+    LASTENUMDUMMY // used as an error return
+};
 
 inline sal_Int64 convertTwipToMm100(sal_Int64 n)
 {
