@@ -782,7 +782,7 @@ bool OpenGLHelper::isDeviceBlacklisted()
         bBlacklisted = aInfo.isDeviceBlocked();
 
         if (aInfo.GetWindowsVersion() == 0x00060001 && /* Windows 7 */
-            aInfo.GetAdapterVendorID() == "0x1022")    /* AMD */
+            (aInfo.GetAdapterVendorID() == "0x1002" || aInfo.GetAdapterVendorID() == "0x1022")) /* AMD */
         {
             SAL_INFO("vcl.opengl", "Relaxing watchdog timings.");
             OpenGLZone::relaxWatchdogTimings();
