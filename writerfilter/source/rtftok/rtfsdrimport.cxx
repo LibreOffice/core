@@ -67,10 +67,13 @@ RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
     uno::Reference<drawing::XDrawPageSupplier> xDrawings(xDstDoc, uno::UNO_QUERY);
     if (xDrawings.is())
         m_aParents.push(xDrawings->getDrawPage());
+    m_aGraphicZOrderHelpers.push(writerfilter::dmapper::GraphicZOrderHelper());
 }
 
 RTFSdrImport::~RTFSdrImport()
 {
+    if (!m_aGraphicZOrderHelpers.empty())
+        m_aGraphicZOrderHelpers.pop();
     if (m_aParents.size())
         m_aParents.pop();
 }
@@ -127,18 +130,25 @@ std::vector<beans::PropertyValue> RTFSdrImport::getTextFrameDefaults(bool bNew)
 void RTFSdrImport::pushParent(uno::Reference<drawing::XShapes> const& xParent)
 {
     m_aParents.push(xParent);
+    m_aGraphicZOrderHelpers.push(writerfilter::dmapper::GraphicZOrderHelper());
 }
 
 void RTFSdrImport::popParent()
 {
+    if (!m_aGraphicZOrderHelpers.empty())
+        m_aGraphicZOrderHelpers.pop();
     m_aParents.pop();
 }
 
 void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> const& xPropertySet,
                                sal_Int32 const nZOrder, bool const bOldStyle)
 {
-    xPropertySet->setPropertyValue("ZOrder", uno::makeAny(m_aGraphicZOrderHelper.findZOrder(nZOrder, bOldStyle)));
-    m_aGraphicZOrderHelper.addItem(xPropertySet, nZOrder);
+    if (!m_aGraphicZOrderHelpers.empty())
+    {
+        writerfilter::dmapper::GraphicZOrderHelper& rHelper = m_aGraphicZOrderHelpers.top();
+        xPropertySet->setPropertyValue("ZOrder", uno::makeAny(rHelper.findZOrder(nZOrder, bOldStyle)));
+        rHelper.addItem(xPropertySet, nZOrder);
+    }
 }
 
 void RTFSdrImport::resolveLineColorAndWidth(bool bTextFrame, const uno::Reference<beans::XPropertySet>& xPropertySet, uno::Any& rLineColor, uno::Any& rLineWidth)
@@ -809,7 +819,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     {
         resolveLineColorAndWidth(m_bTextFrame, xPropertySet, aLineColor, aLineWidth);
         if (rShape.oZ)
-            resolveDhgt(xPropertySet, *rShape.oZ, /*bOldStyle=*/false);
+        {
+            bool bOldStyle = m_aParents.size() > 1;
+            resolveDhgt(xPropertySet, *rShape.oZ, bOldStyle);
+        }
         if (m_bTextFrame)
             // Writer textframes implement text::WritingMode2, which is a different data type.
             xPropertySet->setPropertyValue("WritingMode", uno::makeAny(sal_Int16(eWritingMode)));
