@@ -6494,9 +6494,7 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
         AC_EGREP_HEADER(visibility push, string, stlvisok=yes, stlvisok=no)
         AC_MSG_RESULT([$stlvisok])
         if test "$stlvisok" = "no"; then
-            AC_MSG_WARN([Your libstdc++ headers are not visibility safe. Disabling visibility])
-            add_warning "Your libstdc++ headers are not visibility safe. Disabling visibility"
-            unset HAVE_GCC_VISIBILITY_FEATURE
+            AC_MSG_ERROR([Your libstdc++ headers are not visibility safe. This is no longer supported.])
         fi
     fi
 
