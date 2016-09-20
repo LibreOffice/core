@@ -57,9 +57,8 @@ static const char* publicFunc =
  "    return (as_ulong(fVal) & 0XFFFF); // any other error\n"
  "}\n"
  "\n"
- "int isNan(double a) { return isnan(a); }\n"
  "double fsum_count(double a, double b, __private int *p) {\n"
- "    bool t = isNan(a);\n"
+ "    bool t = isnan(a);\n"
  "    (*p) += t?0:1;\n"
  "    return t?b:a+b;\n"
  "}\n"
@@ -75,8 +74,8 @@ static const char* publicFunc =
  "    (*p) += t?0:1;\n"
  "    return result;\n"
  "}\n"
- "double fsum(double a, double b) { return isNan(a)?b:a+b; }\n"
- "double legalize(double a, double b) { return isNan(a)?b:a;}\n"
+ "double fsum(double a, double b) { return isnan(a)?b:a+b; }\n"
+ "double legalize(double a, double b) { return isnan(a)?b:a;}\n"
  "double fsub(double a, double b) { return a-b; }\n"
  "double fdiv(double a, double b) { return a/b; }\n"
  "double strequal(unsigned a, unsigned b) { return (a==b)?1.0:0; }\n"
@@ -917,7 +916,7 @@ public:
     virtual std::string GenSlidingWindowDeclRef( bool nested ) const override
     {
         std::stringstream ss;
-        ss << "(!isNan(" << VectorRef::GenSlidingWindowDeclRef();
+        ss << "(!isnan(" << VectorRef::GenSlidingWindowDeclRef();
         ss << ")?" << VectorRef::GenSlidingWindowDeclRef();
         ss << ":" << mStringArgument.GenSlidingWindowDeclRef(nested);
         ss << ")";
@@ -1171,7 +1170,7 @@ public:
     virtual std::string GenSlidingWindowDeclRef( bool nested ) const override
     {
         std::stringstream ss;
-        ss << "(!isNan(" << mDoubleArgument.GenSlidingWindowDeclRef();
+        ss << "(!isnan(" << mDoubleArgument.GenSlidingWindowDeclRef();
         ss << ")?" << mDoubleArgument.GenSlidingWindowDeclRef();
         ss << ":" << mStringArgument.GenSlidingWindowDeclRef(nested);
         ss << ")";
@@ -1421,12 +1420,12 @@ public:
             ss << "    tmp = " << mpCodeGen->GetBottom() << ";\n";
             ss << "    int loopOffset = l*512;\n";
             ss << "    if((loopOffset + lidx + offset + 256) < end) {\n";
-            ss << "        tmp = legalize((isNan(A[loopOffset + lidx + offset])?tmp:tmp+1.0)";
+            ss << "        tmp = legalize((isnan(A[loopOffset + lidx + offset])?tmp:tmp+1.0)";
             ss << ", tmp);\n";
-            ss << "        tmp = legalize((isNan(A[loopOffset + lidx + offset+256])?tmp:tmp+1.0)";
+            ss << "        tmp = legalize((isnan(A[loopOffset + lidx + offset+256])?tmp:tmp+1.0)";
             ss << ", tmp);\n";
             ss << "    } else if ((loopOffset + lidx + offset) < end)\n";
-            ss << "        tmp = legalize((isNan(A[loopOffset + lidx + offset])?tmp:tmp+1.0)";
+            ss << "        tmp = legalize((isnan(A[loopOffset + lidx + offset])?tmp:tmp+1.0)";
             ss << ", tmp);\n";
             ss << "    shm_buf[lidx] = tmp;\n";
             ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
@@ -1754,7 +1753,7 @@ public:
 
                 if (!bNanHandled)
                 {
-                    ss << "if (isNan(";
+                    ss << "if (isnan(";
                     ss << vSubArguments[i]->GenSlidingWindowDeclRef();
                     ss << "))\n";
                     if (ZeroReturnZero())
@@ -1915,7 +1914,7 @@ public:
                                     static_cast<const formula::SingleVectorRefToken*>
                                     (vSubArguments[i]->GetFormulaToken());
                                 temp3 << pSVR->GetArrayLength();
-                                temp3 << ")||isNan(" << vSubArguments[i]
+                                temp3 << ")||isnan(" << vSubArguments[i]
                                     ->GenSlidingWindowDeclRef();
                                 temp3 << ")?0:";
                                 temp3 << vSubArguments[i]->GenSlidingWindowDeclRef();
@@ -1928,7 +1927,7 @@ public:
                                     static_cast<const formula::DoubleVectorRefToken*>
                                     (vSubArguments[i]->GetFormulaToken());
                                 temp3 << pSVR->GetArrayLength();
-                                temp3 << ")||isNan(" << vSubArguments[i]
+                                temp3 << ")||isnan(" << vSubArguments[i]
                                     ->GenSlidingWindowDeclRef(true);
                                 temp3 << ")?0:";
                                 temp3 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
@@ -1991,7 +1990,7 @@ public:
                                 static_cast<const formula::SingleVectorRefToken*>
                                 (vSubArguments[i]->GetFormulaToken());
                             temp4 << pSVR->GetArrayLength();
-                            temp4 << ")||isNan(" << vSubArguments[i]
+                            temp4 << ")||isnan(" << vSubArguments[i]
                                 ->GenSlidingWindowDeclRef();
                             temp4 << ")?0:";
                             temp4 << vSubArguments[i]->GenSlidingWindowDeclRef();
@@ -2004,7 +2003,7 @@ public:
                                 static_cast<const formula::DoubleVectorRefToken*>
                                 (vSubArguments[i]->GetFormulaToken());
                             temp4 << pSVR->GetArrayLength();
-                            temp4 << ")||isNan(" << vSubArguments[i]
+                            temp4 << ")||isnan(" << vSubArguments[i]
                                 ->GenSlidingWindowDeclRef(true);
                             temp4 << ")?0:";
                             temp4 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
@@ -2052,7 +2051,7 @@ public:
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const override
     {
         std::stringstream ss;
-        ss << "(isNan(" << lhs << ")?" << rhs << ":" << rhs << "+1.0)";
+        ss << "(isnan(" << lhs << ")?" << rhs << ":" << rhs << "+1.0)";
         return ss.str();
     }
     virtual std::string BinFuncName() const override { return "fcount"; }

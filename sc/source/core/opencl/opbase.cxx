@@ -229,7 +229,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
         ss << "    if(singleIndex>=";
         ss << pTmpDVR1->GetArrayLength();
         ss << " ||";
-        ss << "isNan(";
+        ss << "isnan(";
         ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
         ss << "))\n";
         ss << "        tmp";
@@ -249,7 +249,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
         ss << "    if(doubleIndex>=";
         ss << pTmpDVR2->GetArrayLength();
         ss << " ||";
-        ss << "isNan(";
+        ss << "isnan(";
         ss << vSubArguments[i]->GenSlidingWindowDeclRef();
         ss << "))\n";
         ss << "        tmp";
@@ -265,7 +265,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
         vSubArguments[i]->GetFormulaToken()->GetOpCode() != ocPush)
     {
         ss << "    if(";
-        ss << "isNan(";
+        ss << "isnan(";
         ss << vSubArguments[i]->GenSlidingWindowDeclRef();
         ss << "))\n";
         ss << "        tmp";

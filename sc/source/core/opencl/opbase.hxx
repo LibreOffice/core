@@ -217,7 +217,7 @@ public:
         SubArguments& vSubArguments, int argumentNum );
     static void CheckAllSubArgumentIsNan( std::stringstream& ss,
         SubArguments& vSubArguments );
-    // only check isNan
+    // only check isnan
     static void CheckSubArgumentIsNan2( std::stringstream& ss,
         SubArguments& vSubArguments, int argumentNum, const std::string& p );
     static void UnrollDoubleVector( std::stringstream& ss,

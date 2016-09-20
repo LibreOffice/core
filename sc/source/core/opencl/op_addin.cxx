@@ -54,7 +54,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    {\n";
             ss << "        x = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if (isNan(x))\n";
+            ss << "        if (isnan(x))\n";
             ss << "            x = 0.0;\n";
             ss << "    }\n";
         }
@@ -86,7 +86,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    {\n";
             ss << "        N = ";
             ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
-            ss << "        if (isNan(N))\n";
+            ss << "        if (isnan(N))\n";
             ss << "            N = 0.0;\n";
             ss << "    }\n";
         }
@@ -225,7 +225,7 @@ void OpGestep::GenSlidingWindowFunction(
         }
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
-            ss << "        if (isNan(";
+            ss << "        if (isnan(";
             ss << vSubArguments[i]->GenSlidingWindowDeclRef();
             ss << "))\n";
             ss << "            tmp"<<i<<" = 0;\n";
