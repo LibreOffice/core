@@ -2864,7 +2864,8 @@ void ChartExport::_exportAxis(
     // category axis, so we ideally need an algorithm that decides
     // when to map the crossing to the tick mark and when to the
     // middle of the category
-    if (nAxisType == XML_valAx)
+    sal_Int32 nChartType = getChartType();
+    if (nAxisType == XML_valAx && (nChartType == chart::TYPEID_LINE || nChartType == chart::TYPEID_SCATTER))
     {
         pFS->singleElement( FSNS( XML_c, XML_crossBetween ),
                 XML_val, "midCat",
