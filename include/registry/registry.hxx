@@ -90,11 +90,23 @@ public:
     /// Copy constructor
     inline Registry(const Registry& toCopy);
 
+    Registry(Registry && other): m_pApi(other.m_pApi), m_hImpl(other.m_hImpl)
+    { other.m_hImpl = nullptr; }
+
     /// Destructor. The Destructor close the registry if it is open.
     inline ~Registry();
 
     /// Assign operator
     inline Registry& operator = (const Registry& toAssign);
+
+    Registry & operator =(Registry && other) {
+        if (m_hImpl != nullptr) {
+            m_pApi->release(m_hImpl);
+        }
+        m_hImpl = other.m_hImpl;
+        other.m_hImpl = nullptr;
+        return *this;
+    }
 
     /// checks if the registry points to a valid registry data file.
     inline bool isValid() const;
