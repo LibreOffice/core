@@ -80,8 +80,6 @@ private:
     bool mbIsHexString = false;
 
 public:
-    ToggleUnicodeCodepoint();
-
     /**
     Build an input string of valid UTF16 units to toggle.
         -do not call the other functions until the input process is complete

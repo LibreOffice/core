@@ -1000,14 +1000,6 @@ OUString SAL_CALL unicode::formatPercent(double dNumber,
     return aRet;
 }
 
-ToggleUnicodeCodepoint::ToggleUnicodeCodepoint ()
-{
-    maInput = OUStringBuffer();
-    maOutput = OUStringBuffer();
-    maUtf16 = OUStringBuffer();
-    maCombining = OUStringBuffer();
-}
-
 bool ToggleUnicodeCodepoint::AllowMoreInput(sal_Unicode uChar)
 {
     //arbitrarily chosen maximum length allowed - normal max usage would be around 30.
