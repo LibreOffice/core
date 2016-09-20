@@ -2894,7 +2894,8 @@ static bool lcl_ParenthesisFollows( const sal_Unicode* p )
 
 bool ScCompiler::IsValue( const OUString& rSym )
 {
-    if (FormulaGrammar::isODFF( GetGrammar()))
+    const sal_Int32 nFormulaLanguage = FormulaGrammar::extractFormulaLanguage( GetGrammar());
+    if (nFormulaLanguage == css::sheet::FormulaLanguage::ODFF || nFormulaLanguage == css::sheet::FormulaLanguage::OOXML)
     {
         // Speedup things for ODFF, only well-formed numbers, not locale
         // dependent nor user input.
