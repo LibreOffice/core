@@ -224,7 +224,7 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
     MapUnit eUnit = (MapUnit)pPool->GetMetric(GetWhich(SID_ATTR_TABSTOP));
     const SfxPoolItem* pOld = GetOldItem(*rSet, SID_ATTR_TABSTOP);
 
-    if (MAP_100TH_MM != eUnit)
+    if (MapUnit::Map100thMM != eUnit)
     {
         // If the ItemSet contains a LRSpaceItem with negative first line indent,
         // the TabStopItem needs to have a DefTab at position 0.
@@ -245,7 +245,7 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
         for (sal_uInt16 i = 0; i < aNewTabs.Count(); ++i)
         {
             SvxTabStop aTmpStop = aNewTabs[i];
-            aTmpStop.GetTabPos() = LogicToLogic(aTmpStop.GetTabPos(), MAP_100TH_MM, eUnit);
+            aTmpStop.GetTabPos() = LogicToLogic(aTmpStop.GetTabPos(), MapUnit::Map100thMM, eUnit);
             aTmp.Insert(aTmpStop);
         }
 
@@ -278,7 +278,7 @@ void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)
 
     if (pItem)
     {
-        if (MAP_100TH_MM != eUnit)
+        if (MapUnit::Map100thMM != eUnit)
         {
             SvxTabStopItem aTmp(*static_cast<const SvxTabStopItem*>(pItem));
             aNewTabs.Remove(0, aNewTabs.Count());
@@ -286,7 +286,7 @@ void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)
             for (sal_uInt16 i = 0; i < aTmp.Count(); ++i)
             {
                 SvxTabStop aTmpStop = aTmp[i];
-                aTmpStop.GetTabPos() = LogicToLogic(aTmpStop.GetTabPos(), eUnit, MAP_100TH_MM);
+                aTmpStop.GetTabPos() = LogicToLogic(aTmpStop.GetTabPos(), eUnit, MapUnit::Map100thMM);
                 aNewTabs.Insert(aTmpStop);
             }
         }
@@ -301,7 +301,7 @@ void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)
     pItem = GetItem(*rSet, SID_ATTR_TABSTOP_DEFAULTS);
 
     if (pItem)
-        nDefDist = LogicToLogic(long(static_cast<const SfxUInt16Item*>(pItem)->GetValue()), eUnit, MAP_100TH_MM);
+        nDefDist = LogicToLogic(long(static_cast<const SfxUInt16Item*>(pItem)->GetValue()), eUnit, MapUnit::Map100thMM);
 
     // Tab pos currently selected
     sal_uInt16 nTabPos = 0;
@@ -373,7 +373,7 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
     {
         nOffset = static_cast<const SfxInt32Item*>(pItem)->GetValue();
         MapUnit eUnit = (MapUnit)GetItemSet().GetPool()->GetMetric(GetWhich(SID_ATTR_TABSTOP));
-        nOffset = OutputDevice::LogicToLogic(nOffset, eUnit, MAP_100TH_MM);
+        nOffset = OutputDevice::LogicToLogic(nOffset, eUnit, MapUnit::Map100thMM);
     }
 
     // Correct current TabPos and default tabs
@@ -479,7 +479,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn, void )
     {
         nOffset = static_cast<const SfxInt32Item*>(pItem)->GetValue();
         MapUnit eUnit = (MapUnit)GetItemSet().GetPool()->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
-        nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MAP_100TH_MM  );
+        nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MapUnit::Map100thMM  );
     }
     const long nReal = nVal - nOffset;
     sal_Int32 nSize = m_pTabBox->GetEntryCount();

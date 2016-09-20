@@ -74,7 +74,7 @@ VCL_BUILDER_FACTORY_ARGS(ScCsvTableBox, WB_BORDER)
 
 Size ScCsvTableBox::GetOptimalSize() const
 {
-    Size aDefault(LogicToPixel(Size(243, 82), MapMode(MAP_APPFONT)));
+    Size aDefault(LogicToPixel(Size(243, 82), MapMode(MapUnit::MapAppFont)));
     return aDefault;
 }
 

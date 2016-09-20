@@ -1387,7 +1387,7 @@ IMPL_LINK_NOARG(CustomPropertiesEditButton, ClickHdl, Button*, void)
 void CustomPropertiesYesNoButton::Resize()
 {
     const long nWidth = GetSizePixel().Width();
-    const long n3Width = LogicToPixel( Size( 3, 3 ), MAP_APPFONT ).Width();
+    const long n3Width = LogicToPixel( Size( 3, 3 ), MapUnit::MapAppFont ).Width();
     const long nNewWidth = ( nWidth / 2 ) - n3Width - 2;
     Size aSize = m_aYesButton->GetSizePixel();
     const long nDelta = aSize.Width() - nNewWidth;
@@ -1461,14 +1461,14 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
                         Application::GetSettings().GetLanguageTag().getLanguageType() )
 {
-    Point aPos(LogicToPixel(Point(159, 2), MAP_APPFONT));
+    Point aPos(LogicToPixel(Point(159, 2), MapUnit::MapAppFont));
 
     m_aEditButton->SetPosSizePixel(aPos,
-        LogicToPixel(Size(RSC_CD_TEXTBOX_HEIGHT, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
+        LogicToPixel(Size(RSC_CD_TEXTBOX_HEIGHT, RSC_CD_TEXTBOX_HEIGHT), MapUnit::MapAppFont));
 
-    m_aRemoveButton->SetSizePixel(LogicToPixel(Size(RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT), MAP_APPFONT));
+    m_aRemoveButton->SetSizePixel(LogicToPixel(Size(RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT), MapUnit::MapAppFont));
 
-    Size aSize(LogicToPixel(Size(61, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(61, RSC_CD_TEXTBOX_HEIGHT), MapUnit::MapAppFont));
     m_aValueEdit->SetPosSizePixel(aPos, aSize);
     m_aDurationField->SetPosSizePixel(aPos, aSize);
     m_aDateField->SetPosSizePixel(aPos, aSize);

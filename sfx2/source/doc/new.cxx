@@ -62,7 +62,7 @@ void SfxPreviewBase_Impl::Resize()
 
 Size SfxPreviewBase_Impl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(127, 129), MAP_APPFONT);
+    return LogicToPixel(Size(127, 129), MapUnit::MapAppFont);
 }
 
 void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/, GDIMetaFile* pFile)
@@ -350,7 +350,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     pAntiImplP->get(m_pRegionLb, "categories");
     pAntiImplP->get(m_pTemplateLb, "templates");
 
-    Size aSize(m_pRegionLb->LogicToPixel(Size(127, 72), MAP_APPFONT));
+    Size aSize(m_pRegionLb->LogicToPixel(Size(127, 72), MapUnit::MapAppFont));
     m_pRegionLb->set_width_request(aSize.Width());
     m_pRegionLb->set_height_request(aSize.Height());
     m_pTemplateLb->set_width_request(aSize.Width());

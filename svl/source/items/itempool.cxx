@@ -176,7 +176,7 @@ SfxItemPool::SfxItemPool
     pItemInfos(pInfo),
     pImpl( new SfxItemPool_Impl( this, rName, nStartWhich, nEndWhich ) )
 {
-    pImpl->eDefMetric = MAP_TWIP;
+    pImpl->eDefMetric = MapUnit::MapTwip;
     pImpl->nVersion = 0;
     pImpl->bStreaming = false;
     pImpl->nLoadingVersion = 0;

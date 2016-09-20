@@ -774,11 +774,11 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
 
     // force metric to pool metric
     MapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
-    if(eMapUnit != MAP_100TH_MM)
+    if(eMapUnit != MapUnit::Map100thMM)
     {
         switch(eMapUnit)
         {
-            case MAP_TWIP :
+            case MapUnit::MapTwip :
             {
                 // position
                 aTranslate.setX(ImplMMToTwips(aTranslate.getX()));

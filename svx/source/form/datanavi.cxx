@@ -314,7 +314,7 @@ namespace svxform
     {
         get(m_pToolBox, "toolbar");
         get(m_pItemList, "items");
-        Size aSize(LogicToPixel(Size(63, 100), MAP_APPFONT));
+        Size aSize(LogicToPixel(Size(63, 100), MapUnit::MapAppFont));
         m_pItemList->set_width_request(aSize.Width());
         m_pItemList->set_height_request(aSize.Height());
 
@@ -2155,7 +2155,7 @@ namespace svxform
         SetText( SVX_RES( RID_STR_DATANAVIGATOR ) );
 
         Size aSize = m_aDataWin->GetOutputSizePixel();
-        Size aLogSize = PixelToLogic( aSize, MAP_APPFONT );
+        Size aLogSize = PixelToLogic( aSize, MapUnit::MapAppFont );
         SfxDockingWindow::SetFloatingSize( aLogSize );
 
         m_aDataWin->Show();
@@ -2213,13 +2213,13 @@ namespace svxform
     {
         SfxDockingWindow::Resize();
 
-        Size aLogOutputSize = PixelToLogic( GetOutputSizePixel(), MAP_APPFONT );
+        Size aLogOutputSize = PixelToLogic( GetOutputSizePixel(), MapUnit::MapAppFont );
         Size aLogExplSize = aLogOutputSize;
         aLogExplSize.Width() -= 2;
         aLogExplSize.Height() -= 2;
 
-        Point aExplPos = LogicToPixel( Point(1,1), MAP_APPFONT );
-        Size aExplSize = LogicToPixel( aLogExplSize, MAP_APPFONT );
+        Point aExplPos = LogicToPixel( Point(1,1), MapUnit::MapAppFont );
+        Size aExplSize = LogicToPixel( aLogExplSize, MapUnit::MapAppFont );
 
         m_aDataWin->SetPosSizePixel( aExplPos, aExplSize );
     }
@@ -2630,7 +2630,7 @@ namespace svxform
                     SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught" );
                 }
 
-                Size a3and1Sz = LogicToPixel( Size( 3, 1 ), MAP_APPFONT );
+                Size a3and1Sz = LogicToPixel( Size( 3, 1 ), MapUnit::MapAppFont );
                 Size aNewSz = m_pDefaultED->GetSizePixel();
                 Point aNewPnt = m_pDefaultED->GetPosPixel();
                 aNewPnt.Y() += a3and1Sz.Height();
@@ -2894,7 +2894,7 @@ namespace svxform
         SvSimpleTableContainer* pNamespacesListContainer =
             get<SvSimpleTableContainer>("namespaces");
         Size aControlSize(175, 72);
-        aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+        aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
         pNamespacesListContainer->set_width_request(aControlSize.Width());
         pNamespacesListContainer->set_height_request(aControlSize.Height());
         m_pNamespacesList = VclPtr<SvSimpleTable>::Create(*pNamespacesListContainer, 0);

@@ -90,14 +90,14 @@ static sal_Int16 GetFilterFormat(const OUString& rExt)
 
 static MapUnit GetMapUnit( sal_Int32 nUnit )
 {
-    MapUnit aMapUnit( MAP_PIXEL );
+    MapUnit aMapUnit( MapUnit::MapPixel );
     switch( nUnit )
     {
-        case UNIT_INCH  :   aMapUnit = MAP_INCH; break;
-        case UNIT_CM    :   aMapUnit = MAP_CM; break;
-        case UNIT_MM    :   aMapUnit = MAP_MM; break;
-        case UNIT_POINT :   aMapUnit = MAP_POINT; break;
-        case UNIT_PIXEL :   aMapUnit = MAP_PIXEL; break;
+        case UNIT_INCH  :   aMapUnit = MapUnit::MapInch; break;
+        case UNIT_CM    :   aMapUnit = MapUnit::MapCM; break;
+        case UNIT_MM    :   aMapUnit = MapUnit::MapMM; break;
+        case UNIT_POINT :   aMapUnit = MapUnit::MapPoint; break;
+        case UNIT_PIXEL :   aMapUnit = MapUnit::MapPixel; break;
     }
     return aMapUnit;
 }
@@ -600,7 +600,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
 
     mnFormat = GetFilterFormat( maExt );
 
-    Size aResolution( Application::GetDefaultDevice()->LogicToPixel( Size( 100, 100 ), MAP_CM ) );
+    Size aResolution( Application::GetDefaultDevice()->LogicToPixel( Size( 100, 100 ), MapUnit::MapCM ) );
     maResolution.Width = aResolution.Width();
     maResolution.Height= aResolution.Height();
     maOriginalSize = GetOriginalSize();
@@ -838,7 +838,7 @@ void ExportDialog::updateControls()
     if ( !mbIsPixelFormat )
     {
         awt::Size aSize100thmm( maSize );
-        Size aSize( LogicToLogic( Size( aSize100thmm.Width * 100, aSize100thmm.Height * 100 ), MAP_100TH_MM,
+        Size aSize( LogicToLogic( Size( aSize100thmm.Width * 100, aSize100thmm.Height * 100 ), MapUnit::Map100thMM,
             MapMode( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) ) ) );
         mpMfSizeX->SetValue( aSize.Width() );
         mpMfSizeY->SetValue( aSize.Height() );
@@ -846,7 +846,7 @@ void ExportDialog::updateControls()
     else
     {
         MapUnit aMapUnit( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) );
-        if ( aMapUnit == MAP_PIXEL )
+        if ( aMapUnit == MapUnit::MapPixel )
         {   // calculating pixel count via resolution and original graphic size
             mpMfSizeX->SetDecimalDigits( 0 );
             mpMfSizeY->SetDecimalDigits( 0 );
@@ -860,11 +860,11 @@ void ExportDialog::updateControls()
             double fRatio;
             switch( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) )
             {
-                case MAP_INCH : fRatio = static_cast< double >( maResolution.Width ) * 0.0254; break;
-                case MAP_MM :   fRatio = static_cast< double >( maResolution.Width ) * 0.001; break;
-                case MAP_POINT :fRatio = ( static_cast< double >( maResolution.Width ) * 0.0254 ) / 72.0; break;
+                case MapUnit::MapInch : fRatio = static_cast< double >( maResolution.Width ) * 0.0254; break;
+                case MapUnit::MapMM :   fRatio = static_cast< double >( maResolution.Width ) * 0.001; break;
+                case MapUnit::MapPoint :fRatio = ( static_cast< double >( maResolution.Width ) * 0.0254 ) / 72.0; break;
                 default:
-                case MAP_CM :   fRatio = static_cast< double >( maResolution.Width ) * 0.01; break;
+                case MapUnit::MapCM :   fRatio = static_cast< double >( maResolution.Width ) * 0.01; break;
             }
             mpMfSizeX->SetValue( static_cast< sal_Int32 >( ( static_cast< double >( maSize.Width * 100 ) / fRatio ) + 0.5 ) );
             mpMfSizeY->SetValue( static_cast< sal_Int32 >( ( static_cast< double >( maSize.Height * 100 ) / fRatio ) + 0.5 ) );
@@ -998,12 +998,12 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
     {
         switch( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) )
         {
-            case MAP_INCH :     maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * mpMfSizeX->GetValue() / 100.0 + 0.5 ); break;
-            case MAP_CM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.01 * mpMfSizeX->GetValue() / 100.0 + 0.5 ); break;
-            case MAP_MM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.001 * mpMfSizeX->GetValue() / 100.0 + 0.5 ); break;
-            case MAP_POINT :    maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * mpMfSizeX->GetValue() / 100.0 * 72 + 0.5 ); break;
+            case MapUnit::MapInch :     maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * mpMfSizeX->GetValue() / 100.0 + 0.5 ); break;
+            case MapUnit::MapCM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.01 * mpMfSizeX->GetValue() / 100.0 + 0.5 ); break;
+            case MapUnit::MapMM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.001 * mpMfSizeX->GetValue() / 100.0 + 0.5 ); break;
+            case MapUnit::MapPoint :    maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * mpMfSizeX->GetValue() / 100.0 * 72 + 0.5 ); break;
             default:
-            case MAP_PIXEL :    maSize.Width = mpMfSizeX->GetValue(); break;
+            case MapUnit::MapPixel :    maSize.Width = mpMfSizeX->GetValue(); break;
         }
         maSize.Height = static_cast< sal_Int32 >( fRatio * maSize.Width + 0.5 );
     }
@@ -1014,7 +1014,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
         sal_Int32 nHeight= static_cast< sal_Int32 >( nWidth * fRatio );
         const Size aSource( static_cast< sal_Int32 >( nWidth ), static_cast< sal_Int32 >( nHeight ) );
         MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ),Point(), aFract, aFract );
-        Size aDest( LogicToLogic( aSource, aSourceMapMode, MAP_100TH_MM ) );
+        Size aDest( LogicToLogic( aSource, aSourceMapMode, MapUnit::Map100thMM ) );
 
         maSize.Width = aDest.Width();
         maSize.Height = aDest.Height();
@@ -1030,12 +1030,12 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
     {
         switch( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) )
         {
-            case MAP_INCH :     maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * mpMfSizeY->GetValue() / 100.0 + 0.5 ); break;
-            case MAP_CM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.01 * mpMfSizeY->GetValue() / 100.0 + 0.5 ); break;
-            case MAP_MM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.001 * mpMfSizeY->GetValue() / 100.0 + 0.5 ); break;
-            case MAP_POINT :    maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * mpMfSizeY->GetValue() / 100.0 * 72 + 0.5 ); break;
+            case MapUnit::MapInch :     maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * mpMfSizeY->GetValue() / 100.0 + 0.5 ); break;
+            case MapUnit::MapCM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.01 * mpMfSizeY->GetValue() / 100.0 + 0.5 ); break;
+            case MapUnit::MapMM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.001 * mpMfSizeY->GetValue() / 100.0 + 0.5 ); break;
+            case MapUnit::MapPoint :    maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * mpMfSizeY->GetValue() / 100.0 * 72 + 0.5 ); break;
             default:
-            case MAP_PIXEL :    maSize.Height = mpMfSizeY->GetValue(); break;
+            case MapUnit::MapPixel :    maSize.Height = mpMfSizeY->GetValue(); break;
         }
         maSize.Width = static_cast< sal_Int32 >( fRatio * maSize.Height + 0.5 );
     }
@@ -1046,7 +1046,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
         sal_Int32 nWidth = static_cast< sal_Int32 >( nHeight * fRatio );
         const Size aSource( static_cast< sal_Int32 >( nWidth ), static_cast< sal_Int32 >( nHeight ) );
         MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ),Point(), aFract, aFract );
-        Size aDest( LogicToLogic( aSource, aSourceMapMode, MAP_100TH_MM ) );
+        Size aDest( LogicToLogic( aSource, aSourceMapMode, MapUnit::Map100thMM ) );
 
         maSize.Height = aDest.Height();
         maSize.Width = aDest.Width();

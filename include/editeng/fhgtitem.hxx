@@ -74,7 +74,7 @@ public:
         }
 
     void SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewProp = 100,
-                     MapUnit eUnit = MAP_RELATIVE );
+                     MapUnit eUnit = MapUnit::MapRelative );
 
     void SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
                      MapUnit eUnit, MapUnit eCoreUnit );

@@ -39,7 +39,7 @@
 
 void IMapObject::AppendCERNCoords(OStringBuffer& rBuf, const Point& rPoint100)
 {
-    const Point aPixPt( Application::GetDefaultDevice()->LogicToPixel( rPoint100, MapMode( MAP_100TH_MM ) ) );
+    const Point aPixPt( Application::GetDefaultDevice()->LogicToPixel( rPoint100, MapMode( MapUnit::Map100thMM ) ) );
 
     rBuf.append('(');
     rBuf.append(static_cast<sal_Int32>(aPixPt.X()));
@@ -50,7 +50,7 @@ void IMapObject::AppendCERNCoords(OStringBuffer& rBuf, const Point& rPoint100)
 
 void IMapObject::AppendNCSACoords(OStringBuffer& rBuf, const Point& rPoint100)
 {
-    const Point aPixPt( Application::GetDefaultDevice()->LogicToPixel( rPoint100, MapMode( MAP_100TH_MM ) ) );
+    const Point aPixPt( Application::GetDefaultDevice()->LogicToPixel( rPoint100, MapMode( MapUnit::Map100thMM ) ) );
 
     rBuf.append(static_cast<sal_Int32>(aPixPt.X()));
     rBuf.append(',');

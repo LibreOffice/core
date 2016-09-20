@@ -364,8 +364,8 @@ ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap
     , mnPictureIdMax( 1 )
     , mnXmlNamespace( nXmlNamespace )
     , maFraction( 1, 576 )
-    , maMapModeSrc( MAP_100TH_MM )
-    , maMapModeDest( MAP_INCH, Point(), maFraction, maFraction )
+    , maMapModeSrc( MapUnit::Map100thMM )
+    , maMapModeDest( MapUnit::MapInch, Point(), maFraction, maFraction )
     , mpShapeMap( pShapeMap ? pShapeMap : &maShapeMap )
 {
     mpURLTransformer.reset(new URLTransformer);

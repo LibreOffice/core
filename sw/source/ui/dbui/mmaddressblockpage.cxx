@@ -64,14 +64,14 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pP
     get(m_pSettingsFI, "settingsft");
     get(m_pAddressCB, "address");
     get(m_pSettingsWIN, "settingspreview");
-    Size aSize(LogicToPixel(Size(164 , 45), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(164 , 45), MapUnit::MapAppFont));
     m_pSettingsWIN->set_width_request(aSize.Width());
     m_pSettingsWIN->set_height_request(aSize.Height());
     get(m_pSettingsPB, "settings");
     get(m_pHideEmptyParagraphsCB, "hideempty");
     get(m_pAssignPB, "assign");
     get(m_pPreviewWIN, "addresspreview");
-    aSize = LogicToPixel(Size(176, 46), MAP_APPFONT);
+    aSize = LogicToPixel(Size(176, 46), MapUnit::MapAppFont);
     m_pPreviewWIN->set_width_request(aSize.Width());
     m_pPreviewWIN->set_height_request(aSize.Height());
     get(m_pDocumentIndexFI, "documentindex");
@@ -322,7 +322,7 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
     , m_rConfig(rConfig)
 {
     get(m_pPreview, "preview");
-    Size aSize(m_pPreview->LogicToPixel(Size(192, 100), MAP_APPFONT));
+    Size aSize(m_pPreview->LogicToPixel(Size(192, 100), MapUnit::MapAppFont));
     m_pPreview->set_width_request(aSize.Width());
     m_pPreview->set_height_request(aSize.Height());
     get(m_pNewPB, "new");
@@ -858,7 +858,7 @@ SwAssignFieldsControl::SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits
 
 Size SwAssignFieldsControl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(248 , 120), MAP_APPFONT);
+    return LogicToPixel(Size(248 , 120), MapUnit::MapAppFont);
 }
 
 void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
@@ -1163,7 +1163,7 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
     get(m_pPreviewFI, "PREVIEW_LABEL");
     get(m_pOK, "ok");
     get(m_pPreviewWIN, "PREVIEW");
-    Size aSize(LogicToPixel(Size(248 , 45), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(248 , 45), MapUnit::MapAppFont));
     m_pPreviewWIN->set_width_request(aSize.Width());
     m_pPreviewWIN->set_height_request(aSize.Height());
     get(m_pFieldsControl, "FIELDS");
@@ -1327,7 +1327,7 @@ void AddressMultiLineEdit::dispose()
 
 Size AddressMultiLineEdit::GetOptimalSize() const
 {
-    return LogicToPixel(Size(160, 60), MAP_APPFONT);
+    return LogicToPixel(Size(160, 60), MapUnit::MapAppFont);
 }
 
 VCL_BUILDER_DECL_FACTORY(AddressMultiLineEdit)

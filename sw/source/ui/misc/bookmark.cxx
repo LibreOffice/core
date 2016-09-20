@@ -350,7 +350,7 @@ BookmarkTable::BookmarkTable(SvSimpleTableContainer& rParent) :
 {
     static long nTabs[] = {3, 0, 40, 150};
 
-    SetTabs(nTabs, MAP_PIXEL);
+    SetTabs(nTabs, MapUnit::MapPixel);
     SetSelectionMode(SelectionMode::Multiple);
     InsertHeaderEntry(OUString(SW_RES(STR_PAGE)));
     InsertHeaderEntry(OUString(SW_RES(STR_BOOKMARK_NAME)));

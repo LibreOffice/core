@@ -179,17 +179,17 @@ ImplRulerData& ImplRulerData::operator=( const ImplRulerData& rData )
 
 static const RulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
 {
-{ MAP_100TH_MM,        100,    25.0,    25.0,     50.0,    100.0,  " mm"    }, // MM
-{ MAP_100TH_MM,       1000,   100.0,   500.0,   1000.0,   1000.0,  " cm"    }, // CM
-{ MAP_MM,             1000,    10.0,   250.0,    500.0,   1000.0,  " m"     }, // M
-{ MAP_CM,           100000, 12500.0, 25000.0,  50000.0, 100000.0,  " km"    }, // KM
-{ MAP_1000TH_INCH,    1000,    62.5,   125.0,    500.0,   1000.0,  "\""     }, // INCH
-{ MAP_100TH_INCH,     1200,   120.0,   120.0,    600.0,   1200.0,  "'"      }, // FOOT
-{ MAP_10TH_INCH,    633600, 63360.0, 63360.0, 316800.0, 633600.0,  " miles" }, // MILE
-{ MAP_POINT,             1,    12.0,    12.0,     12.0,     36.0,  " pt"    }, // POINT
-{ MAP_100TH_MM,        423,   423.0,   423.0,    423.0,    846.0,  " pi"    }, // PICA
-{ MAP_100TH_MM,        371,   371.0,   371.0,    371.0,    743.0,  " ch"    }, // CHAR
-{ MAP_100TH_MM,        551,   551.0,   551.0,    551.0,   1102.0,  " li"    }  // LINE
+{ MapUnit::Map100thMM,        100,    25.0,    25.0,     50.0,    100.0,  " mm"    }, // MM
+{ MapUnit::Map100thMM,       1000,   100.0,   500.0,   1000.0,   1000.0,  " cm"    }, // CM
+{ MapUnit::MapMM,             1000,    10.0,   250.0,    500.0,   1000.0,  " m"     }, // M
+{ MapUnit::MapCM,           100000, 12500.0, 25000.0,  50000.0, 100000.0,  " km"    }, // KM
+{ MapUnit::Map1000thInch,    1000,    62.5,   125.0,    500.0,   1000.0,  "\""     }, // INCH
+{ MapUnit::Map100thInch,     1200,   120.0,   120.0,    600.0,   1200.0,  "'"      }, // FOOT
+{ MapUnit::Map10thInch,    633600, 63360.0, 63360.0, 316800.0, 633600.0,  " miles" }, // MILE
+{ MapUnit::MapPoint,             1,    12.0,    12.0,     12.0,     36.0,  " pt"    }, // POINT
+{ MapUnit::Map100thMM,        423,   423.0,   423.0,    423.0,    846.0,  " pi"    }, // PICA
+{ MapUnit::Map100thMM,        371,   371.0,   371.0,    371.0,    743.0,  " ch"    }, // CHAR
+{ MapUnit::Map100thMM,        551,   551.0,   551.0,    551.0,   1102.0,  " li"    }  // LINE
 };
 
 static RulerTabData ruler_tab =
@@ -260,7 +260,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     mnUnitIndex     = RULER_UNIT_CM;
     meUnit          = FUNIT_CM;
     maZoom          = Fraction( 1, 1 );
-    meSourceUnit    = MAP_100TH_MM;
+    meSourceUnit    = MapUnit::Map100thMM;
 
     // Recalculate border widths
     if ( nWinBits & WB_BORDER )
@@ -289,7 +289,7 @@ void Ruler::ImplInit( WinBits nWinBits )
 Ruler::Ruler( vcl::Window* pParent, WinBits nWinStyle ) :
     Window( pParent, nWinStyle & WB_3DLOOK ),
     maVirDev( VclPtr<VirtualDevice>::Create(*this) ),
-    maMapMode( MAP_100TH_MM ),
+    maMapMode( MapUnit::Map100thMM ),
     mpSaveData(new ImplRulerData),
     mpData(nullptr),
     mpDragData(new ImplRulerData)

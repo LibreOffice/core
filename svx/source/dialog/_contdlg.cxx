@@ -273,7 +273,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
     m_pTbx1->SetSizePixel( aTbxSize );
     m_pTbx1->SetSelectHdl( LINK( this, SvxSuperContourDlg, Tbx1ClickHdl ) );
 
-    aPos.X() += aTbxSize.Width() + LogicToPixel( Size( 3, 0 ), MapMode( MAP_APPFONT ) ).Width();
+    aPos.X() += aTbxSize.Width() + LogicToPixel( Size( 3, 0 ), MapMode( MapUnit::MapAppFont ) ).Width();
     m_pMtfTolerance->SetPosPixel( aPos );
     m_pMtfTolerance->SetValue( 10L );
 
@@ -355,10 +355,10 @@ void SvxSuperContourDlg::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     DBG_ASSERT(  m_pContourWnd->GetGraphic().GetType() != GraphicType::NONE, "Graphic must've been set first!" );
 
     tools::PolyPolygon aPolyPoly( rPolyPoly );
-    const MapMode   aMap100( MAP_100TH_MM );
+    const MapMode   aMap100( MapUnit::Map100thMM );
     const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
     OutputDevice*   pOutDev = Application::GetDefaultDevice();
-    bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+    bool            bPixelMap = aGrfMap.GetMapUnit() == MapUnit::MapPixel;
 
     for ( sal_uInt16 j = 0, nPolyCount = aPolyPoly.Count(); j < nPolyCount; j++ )
     {
@@ -383,10 +383,10 @@ tools::PolyPolygon SvxSuperContourDlg::GetPolyPolygon()
 {
     tools::PolyPolygon aRetPolyPoly( m_pContourWnd->GetPolyPolygon() );
 
-    const MapMode   aMap100( MAP_100TH_MM );
+    const MapMode   aMap100( MapUnit::Map100thMM );
     const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
     OutputDevice*   pOutDev = Application::GetDefaultDevice();
-    bool            bPixelMap = aGrfMap.GetMapUnit() == MAP_PIXEL;
+    bool            bPixelMap = aGrfMap.GetMapUnit() == MapUnit::MapPixel;
 
     for ( sal_uInt16 j = 0, nPolyCount = aRetPolyPoly.Count(); j < nPolyCount; j++ )
     {
@@ -598,7 +598,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, CreateHdl, Idle *, void)
 {
     aCreateIdle.Stop();
 
-    const Rectangle aWorkRect = m_pContourWnd->LogicToPixel( m_pContourWnd->GetWorkRect(), MapMode( MAP_100TH_MM ) );
+    const Rectangle aWorkRect = m_pContourWnd->LogicToPixel( m_pContourWnd->GetWorkRect(), MapMode( MapUnit::Map100thMM ) );
     const Graphic&  rGraphic = m_pContourWnd->GetGraphic();
     const bool      bValid = aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom();
 

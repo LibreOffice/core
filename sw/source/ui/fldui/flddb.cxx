@@ -58,7 +58,7 @@ SwFieldDBPage::SwFieldDBPage(vcl::Window* pParent, const SfxItemSet *const pCore
     m_pTypeLB->set_height_request(nHeight);
     m_pDatabaseTLB->set_height_request(nHeight);
 
-    long nWidth = m_pTypeLB->LogicToPixel(Size(FIELD_COLUMN_WIDTH, 0), MapMode(MAP_APPFONT)).Width();
+    long nWidth = m_pTypeLB->LogicToPixel(Size(FIELD_COLUMN_WIDTH, 0), MapMode(MapUnit::MapAppFont)).Width();
     m_pTypeLB->set_width_request(nWidth);
     m_pDatabaseTLB->set_width_request(nWidth*2);
 

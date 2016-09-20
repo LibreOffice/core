@@ -105,8 +105,8 @@ SdSnapLineDlg::SdSnapLineDlg(
     nYValue = static_cast<const SfxInt32Item&>( rInAttrs.Get(ATTR_SNAPLINE_Y)).GetValue();
     nXValue = Fraction(nXValue) / aUIScale;
     nYValue = Fraction(nYValue) / aUIScale;
-    SetMetricValue( *m_pMtrFldX, nXValue, MAP_100TH_MM);
-    SetMetricValue( *m_pMtrFldY, nYValue, MAP_100TH_MM);
+    SetMetricValue( *m_pMtrFldX, nXValue, MapUnit::Map100thMM);
+    SetMetricValue( *m_pMtrFldY, nYValue, MapUnit::Map100thMM);
 
     m_pRbPoint->Check();
 }
@@ -152,8 +152,8 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
     else if ( m_pRbVert->IsChecked() ) eKind = SK_VERTICAL;
     else                            eKind = SK_POINT;
 
-    nXValue = Fraction( GetCoreValue( *m_pMtrFldX, MAP_100TH_MM) ) * aUIScale;
-    nYValue = Fraction( GetCoreValue( *m_pMtrFldY, MAP_100TH_MM) ) * aUIScale;
+    nXValue = Fraction( GetCoreValue( *m_pMtrFldX, MapUnit::Map100thMM) ) * aUIScale;
+    nYValue = Fraction( GetCoreValue( *m_pMtrFldY, MapUnit::Map100thMM) ) * aUIScale;
 
     rOutAttrs.Put(SfxAllEnumItem(ATTR_SNAPLINE_KIND, (sal_uInt16)eKind));
     rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_X, nXValue));

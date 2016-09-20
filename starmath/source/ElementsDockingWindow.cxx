@@ -229,7 +229,7 @@ SmElementsControl::SmElementsControl(vcl::Window *pParent)
     , mxScroll(VclPtr<ScrollBar>::Create(this, WB_VERT))
 {
     set_id("element_selector");
-    SetMapMode( MapMode(MAP_100TH_MM) );
+    SetMapMode( MapMode(MapUnit::Map100thMM) );
     SetDrawMode( DrawModeFlags::Default );
     SetLayoutMode( ComplexTextLayoutFlags::Default );
     SetDigitLanguage( LANGUAGE_ENGLISH );
@@ -515,7 +515,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
     pNode->SetSize(Fraction(10,8));
     pNode->Arrange(*this, maFormat);
 
-    Size aSizePixel = LogicToPixel(Size(pNode->GetWidth(), pNode->GetHeight()), MAP_100TH_MM);
+    Size aSizePixel = LogicToPixel(Size(pNode->GetWidth(), pNode->GetHeight()), MapUnit::Map100thMM);
     if (aSizePixel.Width() > maMaxElementDimensions.Width()) {
         maMaxElementDimensions.Width() = aSizePixel.Width();
     }
@@ -682,7 +682,7 @@ void SmElementsControl::build()
 
 Size SmElementsControl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(100, 100), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(100, 100), MapMode(MapUnit::MapAppFont));
 }
 
 FactoryFunction SmElementsControl::GetUITestFactory() const

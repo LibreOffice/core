@@ -992,7 +992,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         {
             aPixelSz =
                 Application::GetDefaultDevice()->LogicToPixel( aTwipSz,
-                                                    MapMode(MAP_TWIP) );
+                                                    MapMode(MapUnit::MapTwip) );
             if( !aPixelSz.Width() && aTwipSz.Width() )
                 aPixelSz.Width() = 1;
             if( !aPixelSz.Height() && aTwipSz.Height() )

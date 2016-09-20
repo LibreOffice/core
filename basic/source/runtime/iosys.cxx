@@ -83,7 +83,7 @@ SbiInputDialog::SbiInputDialog( vcl::Window* pParent, const OUString& rPrompt )
     SetText( rPrompt );
     aOk->SetClickHdl( LINK( this, SbiInputDialog, Ok ) );
     aCancel->SetClickHdl( LINK( this, SbiInputDialog, Cancel ) );
-    SetMapMode( MapMode( MAP_APPFONT ) );
+    SetMapMode( MapMode( MapUnit::MapAppFont ) );
 
     Point aPt = LogicToPixel( Point( 50, 50 ) );
     Size  aSz = LogicToPixel( Size( 145, 65 ) );

@@ -76,7 +76,7 @@ public:
 
     virtual Size GetOptimalSize() const override
     {
-        return LogicToPixel(Size(43, 14), MAP_APPFONT);
+        return LogicToPixel(Size(43, 14), MapUnit::MapAppFont);
     }
 };
 
@@ -93,7 +93,7 @@ public:
     virtual void GetFocus() override;
     virtual Size GetOptimalSize() const override
     {
-        return LogicToPixel(Size(24, 12), MAP_APPFONT);
+        return LogicToPixel(Size(24, 12), MapUnit::MapAppFont);
     }
 
     void onEditColor();

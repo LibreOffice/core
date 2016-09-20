@@ -505,7 +505,7 @@ bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab );      // no Refresh, incl. Attrs
 
         OutputDevice* pDev = pThis->GetPrinter();
-        pDev->SetMapMode( MAP_PIXEL );              // Important for GetNeededSize
+        pDev->SetMapMode( MapUnit::MapPixel );              // Important for GetNeededSize
         ExtendPrintArea( pDev, nTab, 0, nStartRow, nExtendCol, nEndRow );
         if ( nExtendCol >= nStartCol )
             return false;

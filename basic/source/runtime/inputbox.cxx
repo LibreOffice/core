@@ -58,7 +58,7 @@ SvRTLInputBox::SvRTLInputBox( vcl::Window* pParent, const OUString& rPrompt,
     aEdit( VclPtr<Edit>::Create(this,  WB_LEFT | WB_BORDER) ),
     aOk( VclPtr<OKButton>::Create(this) ), aCancel( VclPtr<CancelButton>::Create(this) ), aPromptText( VclPtr<FixedText>::Create(this, WB_WORDBREAK) )
 {
-    SetMapMode( MapMode( MAP_APPFONT ) );
+    SetMapMode( MapMode( MapUnit::MapAppFont ) );
     Size aDlgSizeApp( 280, 80 );
     PositionDialog( nXTwips, nYTwips, aDlgSizeApp );
     InitButtons( aDlgSizeApp );
@@ -104,7 +104,7 @@ void SvRTLInputBox::PositionDialog(long nXTwips, long nYTwips, const Size& rDlgS
     if( nXTwips != -1 && nYTwips != -1 )
     {
         Point aDlgPosApp( nXTwips, nYTwips );
-        SetPosPixel( LogicToPixel( aDlgPosApp, MAP_TWIP ) );
+        SetPosPixel( LogicToPixel( aDlgPosApp, MapUnit::MapTwip ) );
     }
 }
 

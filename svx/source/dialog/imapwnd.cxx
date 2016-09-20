@@ -84,7 +84,7 @@ void IMapWindow::dispose()
 
 Size IMapWindow::GetOptimalSize() const
 {
-    return LogicToPixel(Size(270, 170), MAP_APPFONT);
+    return LogicToPixel(Size(270, 170), MapUnit::MapAppFont);
 }
 
 void IMapWindow::SetImageMap( const ImageMap& rImageMap )

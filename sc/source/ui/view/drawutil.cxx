@@ -56,7 +56,7 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
         nPixelY += ScViewData::ToPixel(nHeight, nPPTY);
     }
 
-    MapMode aHMMMode( MAP_100TH_MM, Point(), rZoomX, rZoomY );
+    MapMode aHMMMode( MapUnit::Map100thMM, Point(), rZoomX, rZoomY );
     Point aPixelLog = pDev->PixelToLogic( Point( nPixelX,nPixelY ), aHMMMode );
 
     //  Fraction(double) ctor can be used here (and avoid overflows of PixelLog * Zoom)

@@ -377,15 +377,15 @@ void ScDocShell::CalcOutputFactor()
     MapMode aOldMode = pRefDev->GetMapMode();
     vcl::Font aOldFont = pRefDev->GetFont();
 
-    pRefDev->SetMapMode(MAP_PIXEL);
+    pRefDev->SetMapMode(MapUnit::MapPixel);
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pRefDev); // font color doesn't matter here
     pRefDev->SetFont(aDefFont);
-    nPrinterWidth = pRefDev->PixelToLogic( Size( pRefDev->GetTextWidth(aTestString), 0 ), MAP_100TH_MM ).Width();
+    nPrinterWidth = pRefDev->PixelToLogic( Size( pRefDev->GetTextWidth(aTestString), 0 ), MapUnit::Map100thMM ).Width();
     pRefDev->SetFont(aOldFont);
     pRefDev->SetMapMode(aOldMode);
 
     ScopedVclPtrInstance< VirtualDevice > pVirtWindow( *Application::GetDefaultDevice() );
-    pVirtWindow->SetMapMode(MAP_PIXEL);
+    pVirtWindow->SetMapMode(MapUnit::MapPixel);
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pVirtWindow);    // font color doesn't matter here
     pVirtWindow->SetFont(aDefFont);
     nWindowWidth = pVirtWindow->GetTextWidth(aTestString);

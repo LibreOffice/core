@@ -1658,11 +1658,11 @@ public:
         pixel, i.e. some output modes such as metafile recordings
         might be completely unaffected by this method! Use with
         care. Furthermore, if the OutputDevice's MapMode is the
-        default (that's MAP_PIXEL), then any pixel offset set is
+        default (that's MapUnit::MapPixel), then any pixel offset set is
         ignored also. This might be unintuitive for cases, but would
         have been far more fragile to implement. What's more, the
         reason why the pixel offset was introduced (avoiding rounding
-        errors) does not apply for MAP_PIXEL, because one can always
+        errors) does not apply for MapUnit::MapPixel, because one can always
         use the MapMode origin then.
 
         @param rOffset

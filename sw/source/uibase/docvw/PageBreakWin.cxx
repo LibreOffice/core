@@ -102,7 +102,7 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwFrame *pFrame ) :
     m_pMousePt( nullptr )
 {
     // Use pixels for the rest of the drawing
-    SetMapMode( MapMode ( MAP_PIXEL ) );
+    SetMapMode( MapMode ( MapUnit::MapPixel ) );
 
     // Create the line control
     m_pLine = VclPtr<SwBreakDashedLine>::Create( GetEditWin(), &SwViewOption::GetPageBreakColor, this );

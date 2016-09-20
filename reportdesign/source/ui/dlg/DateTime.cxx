@@ -156,12 +156,12 @@ short ODateTimeDialog::Execute()
             if ( m_pDate->IsChecked() )
             {
                 OUString sDateFormat = m_pDateListBox->GetSelectEntry();
-                nWidth = LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MAP_100TH_MM);
+                nWidth = LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MapUnit::Map100thMM);
             }
             if ( m_pTime->IsChecked() )
             {
                 OUString sDateFormat = m_pTimeListBox->GetSelectEntry();
-                nWidth = ::std::max<sal_Int32>(LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MAP_100TH_MM),nWidth);
+                nWidth = ::std::max<sal_Int32>(LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MapUnit::Map100thMM),nWidth);
             }
 
             if ( nWidth > 4000 )

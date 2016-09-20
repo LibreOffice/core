@@ -110,7 +110,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
 {
     get(m_pPathCtrl, "pathctrl");
     Size aControlSize(248, 147);
-    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
     m_pPathCtrl->set_width_request(aControlSize.Width());
     m_pPathCtrl->set_height_request(aControlSize.Height());
 
@@ -134,11 +134,11 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
     Size aSz;
     aSz.Width() = TAB_WIDTH1;
     rBar.InsertItem( ITEMID_TYPE, m_aTypeText,
-                            LogicToPixel( aSz, MapMode( MAP_APPFONT ) ).Width(),
+                            LogicToPixel( aSz, MapMode( MapUnit::MapAppFont ) ).Width(),
                             HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );
     aSz.Width() = TAB_WIDTH2;
     rBar.InsertItem( ITEMID_PATH, m_aPathText,
-                            LogicToPixel( aSz, MapMode( MAP_APPFONT ) ).Width(),
+                            LogicToPixel( aSz, MapMode( MapUnit::MapAppFont ) ).Width(),
                             HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 
     static long aTabs[] = {3, 0, TAB_WIDTH1, TAB_WIDTH1 + TAB_WIDTH2 };
@@ -364,7 +364,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void
             long _nWidth = pBar->GetItemSize(i);
             aSz.Width() =  _nWidth + nTmpSz;
             nTmpSz += _nWidth;
-            m_pPathBox->SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width() );
+            m_pPathBox->SetTab( i, PixelToLogic( aSz, MapMode(MapUnit::MapAppFont) ).Width() );
         }
     }
 }

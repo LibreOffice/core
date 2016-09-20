@@ -28,7 +28,7 @@ PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const OUString& 
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( 600, 16 ) );
 
     long pTabs[] = { 2, 20, 600 };
-    SetTabs( &pTabs[0], MAP_PIXEL );
+    SetTabs( &pTabs[0], MapUnit::MapPixel );
     mpHeaderBar->InsertItem( COLUMN_NAME, rTitle, 600, HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER );
 
     Size aHeadSize = mpHeaderBar->GetSizePixel();

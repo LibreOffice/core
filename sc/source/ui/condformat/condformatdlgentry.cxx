@@ -94,7 +94,7 @@ void ScCondFrmtEntry::SetIndex(sal_Int32 nIndex)
 
 void ScCondFrmtEntry::SetHeight()
 {
-    long nPad = LogicToPixel(Size(42,2), MapMode(MAP_APPFONT)).getHeight();
+    long nPad = LogicToPixel(Size(42,2), MapMode(MapUnit::MapAppFont)).getHeight();
 
     // Calculate maximum height we need from visible widgets
     sal_uInt16 nChildren = GetChildCount();

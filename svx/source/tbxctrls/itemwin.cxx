@@ -60,7 +60,7 @@ SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame 
     mpSh        ( nullptr ),
     mxFrame     ( rFrame )
 {
-    SetSizePixel( LogicToPixel( aLogicalSize, MAP_APPFONT ));
+    SetSizePixel( LogicToPixel( aLogicalSize, MapUnit::MapAppFont ));
     Show();
 
     aDelayTimer.SetTimeout( DELAY_TIMEOUT );
@@ -221,7 +221,7 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+        SetSizePixel(LogicToPixel(aLogicalSize, MapUnit::MapAppFont));
     }
 
     LineLB::DataChanged( rDCEvt );
@@ -245,14 +245,14 @@ SvxMetricField::SvxMetricField(
     vcl::Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits )
     : MetricField(pParent, nBits)
     , aCurTxt()
-    , ePoolUnit(MAP_CM)
+    , ePoolUnit(MapUnit::MapCM)
     , mxFrame(rFrame)
 {
     Size aSize(GetTextWidth( "99,99mm" ),GetTextHeight());
     aSize.Width() += 20;
     aSize.Height() += 6;
     SetSizePixel( aSize );
-    aLogicalSize = PixelToLogic(aSize, MAP_APPFONT);
+    aLogicalSize = PixelToLogic(aSize, MapUnit::MapAppFont);
     SetUnit( FUNIT_MM );
     SetDecimalDigits( 2 );
     SetMax( 5000 );
@@ -376,7 +376,7 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+        SetSizePixel(LogicToPixel(aLogicalSize, MapUnit::MapAppFont));
     }
 
     MetricField::DataChanged( rDCEvt );
@@ -388,7 +388,7 @@ SvxFillTypeBox::SvxFillTypeBox( vcl::Window* pParent ) :
     bSelect ( false ),
     bRelease( true )
 {
-    SetSizePixel( LogicToPixel( Size(40, 40 ),MAP_APPFONT ));
+    SetSizePixel( LogicToPixel( Size(40, 40 ),MapUnit::MapAppFont ));
     Fill();
     SelectEntryPos( drawing::FillStyle_SOLID );
     Show();
@@ -470,7 +470,7 @@ SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent ) :
 
 {
     SetPosPixel( Point( 90, 0 ) );
-    SetSizePixel( LogicToPixel( Size(50, 80 ), MAP_APPFONT ));
+    SetSizePixel( LogicToPixel( Size(50, 80 ), MapUnit::MapAppFont ));
     Show();
 }
 

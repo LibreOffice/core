@@ -483,7 +483,7 @@ LibPage::LibPage(vcl::Window * pParent)
 {
     get(m_pBasicsBox, "location");
     get(m_pLibBox, "library");
-    Size aSize(m_pLibBox->LogicToPixel(Size(130, 87), MAP_APPFONT));
+    Size aSize(m_pLibBox->LogicToPixel(Size(130, 87), MapUnit::MapAppFont));
     m_pLibBox->set_height_request(aSize.Height());
     m_pLibBox->set_width_request(aSize.Width());
     get(m_pEditButton, "edit");
@@ -510,7 +510,7 @@ LibPage::LibPage(vcl::Window * pParent)
     m_pLibBox->SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
 
     long aTabs[] = { 2, 30, 120 };
-    m_pLibBox->SetTabs( aTabs, MAP_PIXEL );
+    m_pLibBox->SetTabs( aTabs, MapUnit::MapPixel );
 
     FillListBox();
     m_pBasicsBox->SelectEntryPos( 0 );

@@ -435,7 +435,7 @@ namespace dbaui
 
     Size ORelationControl::GetOptimalSize() const
     {
-        return LogicToPixel(Size(140, 80), MAP_APPFONT);
+        return LogicToPixel(Size(140, 80), MapUnit::MapAppFont);
     }
 
     // class OTableListBoxControl

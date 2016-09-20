@@ -290,7 +290,7 @@ VCL_BUILDER_DECL_FACTORY(SmShowFont)
 
 Size SmShowFont::GetOptimalSize() const
 {
-    return LogicToPixel(Size(111 , 31), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(111 , 31), MapMode(MapUnit::MapAppFont));
 }
 
 void SmShowFont::SetFont(const vcl::Font& rFont)
@@ -1132,7 +1132,7 @@ void SmShowSymbolSetWindow::Paint(vcl::RenderContext& rRenderContext, const Rect
     rRenderContext.Push(PushFlags::MAPMODE);
 
     // set MapUnit for which 'nLen' has been calculated
-    rRenderContext.SetMapMode(MapMode(MAP_PIXEL));
+    rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
 
     sal_uInt16 v = sal::static_int_cast< sal_uInt16 >((m_pVScrollBar->GetThumbPos() * nColumns));
     size_t nSymbols = aSymbolSet.size();
@@ -1278,7 +1278,7 @@ VCL_BUILDER_FACTORY(SmShowSymbolSet)
 void SmShowSymbolSetWindow::calccols()
 {
     // Height of 16pt in pixels (matching 'aOutputSize')
-    nLen = LogicToPixel(Size(0, 16), MapMode(MAP_POINT)).Height();
+    nLen = LogicToPixel(Size(0, 16), MapMode(MapUnit::MapPoint)).Height();
 
     Size aOutputSize = GetOutputSizePixel();
 

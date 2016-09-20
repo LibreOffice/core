@@ -2246,7 +2246,7 @@ void ScInterpreter::ScCell()
                 vcl::Font   aOldFont( pPrinter->GetFont() );
                 vcl::Font   aDefFont;
 
-                pPrinter->SetMapMode( MAP_TWIP );
+                pPrinter->SetMapMode( MapUnit::MapTwip );
                 // font color doesn't matter here
                 pDok->GetDefPattern()->GetFont( aDefFont, SC_AUTOCOL_BLACK, pPrinter );
                 pPrinter->SetFont( aDefFont );

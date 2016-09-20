@@ -437,7 +437,7 @@ ContentTabPage_Impl::ContentTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindo
         "sfx/ui/helpcontentpage.ui")
 {
     get(m_pContentBox, "content");
-    Size aSize(LogicToPixel(Size(108 , 188), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(108 , 188), MapUnit::MapAppFont));
     m_pContentBox->set_width_request(aSize.Width());
     m_pContentBox->set_height_request(aSize.Height());
 }
@@ -545,7 +545,7 @@ IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Im
     , bIsActivated(false)
 {
     get(m_pIndexCB, "terms");
-    Size aSize(LogicToPixel(Size(108, 97), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(108, 97), MapUnit::MapAppFont));
     m_pIndexCB->set_width_request(aSize.Width());
     m_pIndexCB->set_height_request(aSize.Height());
     get(m_pOpenBtn, "display");
@@ -918,7 +918,7 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
     get(m_pFullWordsCB, "completewords");
     get(m_pScopeCB, "headings");
     get(m_pResultsLB, "results");
-    Size aSize(LogicToPixel(Size(128 , 30), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(128 , 30), MapUnit::MapAppFont));
     m_pResultsLB->set_width_request(aSize.Width());
     m_pResultsLB->set_height_request(aSize.Height());
     get(m_pOpenBtn, "display");
@@ -1268,7 +1268,7 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl(vcl::Window* pParent, SfxHelpIndexW
 {
     get(m_pBookmarksPB, "display");
     get(m_pBookmarksBox, "bookmarks");
-    Size aSize(LogicToPixel(Size(120 , 200), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(120 , 200), MapUnit::MapAppFont));
     m_pBookmarksBox->set_width_request(aSize.Width());
     m_pBookmarksBox->set_height_request(aSize.Height());
 
@@ -2072,7 +2072,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
         }
 
         // set position of the checkbox
-        Size a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
+        Size a3Size = LogicToPixel( Size( 3, 3 ), MapUnit::MapAppFont );
         Size aTBSize = aToolBox->GetSizePixel();
         Size aCBSize = aOnStartupCB->GetSizePixel();
         Point aPnt = aToolBox->GetPosPixel();
@@ -2957,7 +2957,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pIndexWin = VclPtr<SfxHelpIndexWindow_Impl>::Create( this );
     pIndexWin->SetDoubleClickHdl( LINK( this, SfxHelpWindow_Impl, OpenHdl ) );
     pIndexWin->SetSelectFactoryHdl( LINK( this, SfxHelpWindow_Impl, SelectFactoryHdl ) );
-    pIndexWin->SetSizePixel(LogicToPixel(Size(120, 200), MAP_APPFONT));
+    pIndexWin->SetSizePixel(LogicToPixel(Size(120, 200), MapUnit::MapAppFont));
     pIndexWin->Show();
     pTextWin = VclPtr<SfxHelpTextWindow_Impl>::Create( this );
     Reference < XFrames > xFrames = rFrame->getFrames();

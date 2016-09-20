@@ -37,7 +37,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(vcl::Window* pParent, uno::Sequen
 {
     get(m_pDescriptionFI, "description");
     get(m_pBeamerWIN, "beamer");
-    Size aSize(LogicToPixel(Size(338, 150), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(338, 150), MapUnit::MapAppFont));
     m_pBeamerWIN->set_width_request(aSize.Width());
     m_pBeamerWIN->set_height_request(aSize.Height());
 

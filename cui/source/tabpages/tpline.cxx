@@ -353,7 +353,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
     if(!pButton->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS ) && m_pSymbolList)
     {
         ScopedVclPtrInstance< VirtualDevice > pVDev;
-        pVDev->SetMapMode(MapMode(MAP_100TH_MM));
+        pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
         std::unique_ptr<SdrModel> pModel(new SdrModel);
         pModel->GetItemPool().FreezeIdRanges();
         // Page
@@ -498,7 +498,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
     if(pGraphic)
     {
         Size aSize = SvxNumberFormat::GetGraphicSizeMM100(pGraphic);
-        aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)m_ePoolUnit);
+        aSize = OutputDevice::LogicToLogic(aSize, MapUnit::Map100thMM, (MapUnit)m_ePoolUnit);
         m_aSymbolGraphic=*pGraphic;
         if( bResetSize )
         {
@@ -1134,7 +1134,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     else if(nSymType >= 0)
     {
         ScopedVclPtrInstance< VirtualDevice > pVDev;
-        pVDev->SetMapMode(MapMode(MAP_100TH_MM));
+        pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
 
         std::unique_ptr<SdrModel> pModel(new SdrModel);
         pModel->GetItemPool().FreezeIdRanges();
@@ -1181,7 +1181,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                     m_aSymbolGraphic=Graphic(aMeta);
                     m_aSymbolSize=pObj->GetSnapRect().GetSize();
                     m_aSymbolGraphic.SetPrefSize(pInvisibleSquare->GetSnapRect().GetSize());
-                    m_aSymbolGraphic.SetPrefMapMode(MAP_100TH_MM);
+                    m_aSymbolGraphic.SetPrefMapMode(MapUnit::Map100thMM);
                     bPrevSym=true;
                     bEnable=true;
                     bIgnoreGraphic=true;
@@ -1209,7 +1209,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
             {
                 m_aSymbolSize=OutputDevice::LogicToLogic( pGraphic->GetPrefSize(),
                                                         pGraphic->GetPrefMapMode(),
-                                                        MAP_100TH_MM );
+                                                        MapUnit::Map100thMM );
             }
             bPrevSym=true;
         }
@@ -1733,8 +1733,8 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, Edit&, rField, void)
     bool bRatio = m_pSymbolRatioCB->IsChecked();
     long nWidthVal = static_cast<long>(m_pSymbolWidthMF->Denormalize(m_pSymbolWidthMF->GetValue(FUNIT_100TH_MM)));
     long nHeightVal= static_cast<long>(m_pSymbolHeightMF->Denormalize(m_pSymbolHeightMF->GetValue(FUNIT_100TH_MM)));
-    nWidthVal = OutputDevice::LogicToLogic(nWidthVal,MAP_100TH_MM,(MapUnit)m_ePoolUnit );
-    nHeightVal = OutputDevice::LogicToLogic(nHeightVal,MAP_100TH_MM,(MapUnit)m_ePoolUnit);
+    nWidthVal = OutputDevice::LogicToLogic(nWidthVal,MapUnit::Map100thMM,(MapUnit)m_ePoolUnit );
+    nHeightVal = OutputDevice::LogicToLogic(nHeightVal,MapUnit::Map100thMM,(MapUnit)m_ePoolUnit);
     m_aSymbolSize = Size(nWidthVal,nHeightVal);
     double fSizeRatio = (double)1;
 
@@ -1753,7 +1753,7 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, Edit&, rField, void)
         if (bRatio)
         {
             m_aSymbolSize.Height() = m_aSymbolLastSize.Height() + (long)((double)nDelta / fSizeRatio);
-            m_aSymbolSize.Height() = OutputDevice::LogicToLogic( m_aSymbolSize.Height(),(MapUnit)m_ePoolUnit, MAP_100TH_MM );
+            m_aSymbolSize.Height() = OutputDevice::LogicToLogic( m_aSymbolSize.Height(),(MapUnit)m_ePoolUnit, MapUnit::Map100thMM );
             m_pSymbolHeightMF->SetUserValue(m_pSymbolHeightMF->Normalize(m_aSymbolSize.Height()), FUNIT_100TH_MM);
         }
     }
@@ -1764,7 +1764,7 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, Edit&, rField, void)
         if (bRatio)
         {
             m_aSymbolSize.Width() = m_aSymbolLastSize.Width() + (long)((double)nDelta * fSizeRatio);
-            m_aSymbolSize.Width() = OutputDevice::LogicToLogic( m_aSymbolSize.Width(), (MapUnit)m_ePoolUnit, MAP_100TH_MM );
+            m_aSymbolSize.Width() = OutputDevice::LogicToLogic( m_aSymbolSize.Width(), (MapUnit)m_ePoolUnit, MapUnit::Map100thMM );
             m_pSymbolWidthMF->SetUserValue(m_pSymbolWidthMF->Normalize(m_aSymbolSize.Width()), FUNIT_100TH_MM);
         }
     }

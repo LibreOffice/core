@@ -36,7 +36,7 @@ using namespace svx;
 
 ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
     : VclVBox(pParent)
-    , m_eUnit(MAP_TWIP)
+    , m_eUnit(MapUnit::MapTwip)
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
                                   "svx/ui/paraulspacing.ui",
@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, Edit&, void)
 
 ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
     : VclVBox(pParent)
-    , m_eUnit(MAP_TWIP)
+    , m_eUnit(MapUnit::MapTwip)
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
                                   "svx/ui/paralrspacing.ui",

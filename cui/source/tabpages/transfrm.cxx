@@ -900,8 +900,8 @@ void SvxPositionSizeTabPage::Construct()
 
     // take UI units into account
     const sal_uInt16 nDigits(m_pMtrPosX->GetDecimalDigits());
-    TransfrmHelper::ConvertRect( maWorkRange, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
-    TransfrmHelper::ConvertRect( maRange, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
+    TransfrmHelper::ConvertRect( maWorkRange, nDigits, mePoolUnit, meDlgUnit );
+    TransfrmHelper::ConvertRect( maRange, nDigits, mePoolUnit, meDlgUnit );
 
     SetMinMaxPosition();
 }
@@ -969,14 +969,14 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
         double nWidth = static_cast<double>(m_pMtrWidth->GetValue( meDlgUnit ));
         nWidth = MetricField::ConvertDoubleValue( nWidth, m_pMtrWidth->GetBaseValue(), m_pMtrWidth->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
         long lWidth = long(nWidth * (double)aUIScale);
-        lWidth = OutputDevice::LogicToLogic( lWidth, MAP_100TH_MM, (MapUnit)mePoolUnit );
+        lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
         lWidth = static_cast<long>(m_pMtrWidth->Denormalize( lWidth ));
 
         // get Height
         double nHeight = static_cast<double>(m_pMtrHeight->GetValue( meDlgUnit ));
         nHeight = MetricField::ConvertDoubleValue( nHeight, m_pMtrHeight->GetBaseValue(), m_pMtrHeight->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
         long lHeight = long(nHeight * (double)aUIScale);
-        lHeight = OutputDevice::LogicToLogic( lHeight, MAP_100TH_MM, (MapUnit)mePoolUnit );
+        lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
         lHeight = static_cast<long>(m_pMtrHeight->Denormalize( lHeight ));
 
         // put Width & Height to itemset
@@ -1073,7 +1073,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
     { // #i75273# set width
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_WIDTH );
         mfOldWidth = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
-        double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldWidth), (MapUnit)mePoolUnit, MAP_100TH_MM)) / fUIScale);
+        double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldWidth), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
 
         if(m_pMtrWidth->GetDecimalDigits())
             fTmpWidth *= pow(10.0, m_pMtrWidth->GetDecimalDigits());
@@ -1085,7 +1085,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
     { // #i75273# set height
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_HEIGHT );
         mfOldHeight = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
-        double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldHeight), (MapUnit)mePoolUnit, MAP_100TH_MM)) / fUIScale);
+        double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldHeight), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
 
         if(m_pMtrHeight->GetDecimalDigits())
             fTmpHeight *= pow(10.0, m_pMtrHeight->GetDecimalDigits());
@@ -1310,7 +1310,7 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
         }
     }
 
-    const double fMaxLong((double)(MetricField::ConvertValue( LONG_MAX, 0, MAP_100TH_MM, meDlgUnit ) - 1L));
+    const double fMaxLong((double)(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1L));
     fLeft = basegfx::clamp(fLeft, -fMaxLong, fMaxLong);
     fRight = basegfx::clamp(fRight, -fMaxLong, fMaxLong);
     fTop = basegfx::clamp(fTop, - fMaxLong, fMaxLong);

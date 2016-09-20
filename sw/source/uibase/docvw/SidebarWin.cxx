@@ -96,7 +96,7 @@ void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild, MouseEvent* p
     if (!rChild.IsMapModeEnabled())
     {
         MapMode aMapMode(rChild.GetMapMode());
-        aMapMode.SetMapUnit(MAP_TWIP);
+        aMapMode.SetMapUnit(MapUnit::MapTwip);
         aMapMode.SetScaleX(rParent.GetMapMode().GetScaleX());
         aMapMode.SetScaleY(rParent.GetMapMode().GetScaleY());
         rChild.SetMapMode(aMapMode);

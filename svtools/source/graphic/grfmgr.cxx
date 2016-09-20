@@ -290,7 +290,7 @@ bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
         tools::Polygon aClipPoly( Rectangle( rPt, rSz ) );
         const sal_uInt16 nRot10 = pAttr->GetRotation() % 3600;
         const Point     aOldOrigin( rPt );
-        const MapMode   aMap100( MAP_100TH_MM );
+        const MapMode   aMap100( MapUnit::Map100thMM );
         Size            aSize100;
         long            nTotalWidth, nTotalHeight;
 
@@ -304,7 +304,7 @@ bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
 
         rClipPolyPoly = aClipPoly;
 
-        if( maGraphic.GetPrefMapMode() == MAP_PIXEL )
+        if( maGraphic.GetPrefMapMode() == MapUnit::MapPixel )
             aSize100 = Application::GetDefaultDevice()->PixelToLogic( maGraphic.GetPrefSize(), aMap100 );
         else
         {
@@ -723,7 +723,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
 
     // #104115# Convert the crop margins to graphic object mapmode
     const MapMode aMapGraph( aTransGraphic.GetPrefMapMode() );
-    const MapMode aMap100( MAP_100TH_MM );
+    const MapMode aMap100( MapUnit::Map100thMM );
 
     Size aCropLeftTop;
     Size aCropRightBottom;
@@ -732,9 +732,9 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
     {
         GDIMetaFile aMtf( aTransGraphic.GetGDIMetaFile() );
 
-        if( aMapGraph == MAP_PIXEL )
+        if( aMapGraph == MapUnit::MapPixel )
         {
-            // crops are in 1/100th mm -> to aMapGraph -> to MAP_PIXEL
+            // crops are in 1/100th mm -> to aMapGraph -> to MapUnit::MapPixel
             aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel(
                 Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
                 aMap100);
@@ -805,9 +805,9 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         // convert crops to pixel
         if(rAttr.IsCropped())
         {
-            if( aMapGraph == MAP_PIXEL )
+            if( aMapGraph == MapUnit::MapPixel )
             {
-                // crops are in 1/100th mm -> to MAP_PIXEL
+                // crops are in 1/100th mm -> to MapUnit::MapPixel
                 aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel(
                     Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
                     aMap100);
@@ -817,7 +817,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
             }
             else
             {
-                // crops are in GraphicObject units -> to MAP_PIXEL
+                // crops are in GraphicObject units -> to MapUnit::MapPixel
                 aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel(
                     Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
                     aMapGraph);
@@ -1153,12 +1153,12 @@ basegfx::B2DVector GraphicObject::calculateCropScaling(
     double fRightCrop,
     double fBottomCrop) const
 {
-    const MapMode aMapMode100thmm(MAP_100TH_MM);
+    const MapMode aMapMode100thmm(MapUnit::Map100thMM);
     Size aBitmapSize(GetPrefSize());
     double fFactorX(1.0);
     double fFactorY(1.0);
 
-    if(MAP_PIXEL == GetPrefMapMode().GetMapUnit())
+    if(MapUnit::MapPixel == GetPrefMapMode().GetMapUnit())
     {
         aBitmapSize = Application::GetDefaultDevice()->PixelToLogic(aBitmapSize, aMapMode100thmm);
     }

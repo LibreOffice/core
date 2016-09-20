@@ -1621,7 +1621,7 @@ ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rE
     get(m_pErrors, "errors");
     get(m_pExplanation, "message");
 
-    Size aSize(LogicToPixel(Size(100, 75), MapMode(MAP_APPFONT)));
+    Size aSize(LogicToPixel(Size(100, 75), MapMode(MapUnit::MapAppFont)));
     m_pErrors->set_width_request(aSize.Width());
     m_pErrors->set_height_request(aSize.Height());
     m_pExplanation->set_width_request(aSize.Width());

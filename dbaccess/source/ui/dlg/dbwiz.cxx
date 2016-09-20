@@ -78,7 +78,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
     m_eType = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(*m_pOutSet);
 
-    SetPageSizePixel(LogicToPixel(::Size(PAGE_X, PAGE_Y), MAP_APPFONT));
+    SetPageSizePixel(LogicToPixel(::Size(PAGE_X, PAGE_Y), MapUnit::MapAppFont));
     defaultButton(WizardButtonFlags::NEXT);
     enableButtons(WizardButtonFlags::FINISH, false);
     enableAutomaticNextButtonState();

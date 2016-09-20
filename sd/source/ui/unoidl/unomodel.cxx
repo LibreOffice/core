@@ -1925,7 +1925,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                     pView->SetPageVisible( false );
                     pView->SetGlueVisible( false );
 
-                    pOut->SetMapMode( MAP_100TH_MM );
+                    pOut->SetMapMode( MapUnit::Map100thMM );
                     pOut->IntersectClipRegion( aVisArea );
 
                     uno::Reference< frame::XModel > xModel;
@@ -2268,7 +2268,7 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     nTilePosY = convertTwipToMm100( nTilePosY );
 
     MapMode aMapMode = rDevice.GetMapMode();
-    aMapMode.SetMapUnit( MAP_100TH_MM );
+    aMapMode.SetMapUnit( MapUnit::Map100thMM );
     aMapMode.SetOrigin( Point( -nTilePosX,
                                -nTilePosY) );
     aMapMode.SetScaleX( scaleX );

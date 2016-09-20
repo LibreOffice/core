@@ -495,14 +495,14 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
     if (nFlags & FileViewFlags::SHOW_ONLYTITLE)
     {
         long pTabs[] = { 2, 20, 600 };
-        SetTabs(&pTabs[0], MAP_PIXEL);
+        SetTabs(&pTabs[0], MapUnit::MapPixel);
 
         mpHeaderBar->InsertItem(COLUMN_TITLE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TITLE), 600, nBits | HeaderBarItemBits::UPARROW);
     }
     else
     {
         long pTabs[] = { 5, 20, 180, 320, 400, 600 };
-        SetTabs(&pTabs[0], MAP_PIXEL);
+        SetTabs(&pTabs[0], MapUnit::MapPixel);
         SetTabJustify(2, AdjustRight); // column "Size"
 
         mpHeaderBar->InsertItem(COLUMN_TITLE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HeaderBarItemBits::UPARROW);
@@ -1012,7 +1012,7 @@ VCL_BUILDER_DECL_FACTORY(SvtFileView)
 
 Size SvtFileView::GetOptimalSize() const
 {
-    return LogicToPixel(Size(208, 50), MAP_APPFONT);
+    return LogicToPixel(Size(208, 50), MapUnit::MapAppFont);
 }
 
 void SvtFileView::SetViewMode( FileViewMode eMode )
@@ -1313,7 +1313,7 @@ IMPL_LINK( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
             long nWidth = pBar->GetItemSize(i);
             aSize.Width() =  nWidth + nTmpSize;
             nTmpSize += nWidth;
-            mpImpl->mpView->SetTab( i, aSize.Width(), MAP_PIXEL );
+            mpImpl->mpView->SetTab( i, aSize.Width(), MapUnit::MapPixel );
         }
     }
 }

@@ -127,7 +127,7 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 
             Size aDrawSize = aRect.GetSize();
 
-            MapMode aMapMode( MAP_100TH_MM );
+            MapMode aMapMode( MapUnit::Map100thMM );
             Size aOleSize = pObj->GetOrigObjSize( &aMapMode );
 
             if ( pClient->GetAspect() != embed::Aspects::MSOLE_ICON
@@ -139,7 +139,7 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                 {
                     MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( pClient->GetAspect() ) );
                     aOleSize = OutputDevice::LogicToLogic( aDrawSize,
-                                            MAP_100TH_MM, aUnit );
+                                            MapUnit::Map100thMM, aUnit );
                     awt::Size aSz( aOleSize.Width(), aOleSize.Height() );
                     xObj->setVisualAreaSize( pClient->GetAspect(), aSz );
                 }

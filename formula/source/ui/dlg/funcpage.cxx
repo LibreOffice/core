@@ -65,7 +65,7 @@ FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManage
     get(m_pLbCategory, "category");
     get(m_pLbFunction, "function");
     m_pLbFunction->SetStyle(m_pLbFunction->GetStyle() | WB_SORT);
-    Size aSize(LogicToPixel(Size(86 , 162), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(86 , 162), MapUnit::MapAppFont));
     m_pLbFunction->set_height_request(aSize.Height());
     m_pLbFunction->set_width_request(aSize.Width());
     m_aHelpId = m_pLbFunction->GetHelpId();

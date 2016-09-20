@@ -1617,7 +1617,7 @@ WatchWindow::WatchWindow (Layout* pParent) :
     tabs[ 1 ] = 0;
     tabs[ 2 ] = nVarTabWidth;
     tabs[ 3 ] = nVarTabWidth + nValueTabWidth;
-    aTreeListBox->SvHeaderTabListBox::SetTabs( tabs, MAP_PIXEL );
+    aTreeListBox->SvHeaderTabListBox::SetTabs( tabs, MapUnit::MapPixel );
     aTreeListBox->InitHeaderBar( aHeaderBar.get() );
 
     aTreeListBox->SetNodeDefaultImages( );
@@ -1802,7 +1802,7 @@ IMPL_LINK_NOARG( WatchWindow, implEndDragHdl, HeaderBar *, void )
     for( sal_uInt16 i = 1 ; i < nTabs ; ++i )
     {
         nPos += aHeaderBar->GetItemSize( i );
-        aTreeListBox->SetTab( i, nPos, MAP_PIXEL );
+        aTreeListBox->SetTab( i, nPos, MapUnit::MapPixel );
     }
 }
 

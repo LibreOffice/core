@@ -780,9 +780,9 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
         MapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
         const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(rSet.Get( nWhich ));
 
-        if( rItem.GetProp() != 100 || MAP_RELATIVE != rItem.GetPropUnit() )
+        if( rItem.GetProp() != 100 || MapUnit::MapRelative != rItem.GetPropUnit() )
         {
-            bool bPtRel = MAP_POINT == rItem.GetPropUnit();
+            bool bPtRel = MapUnit::MapPoint == rItem.GetPropUnit();
             pSizeBox->SetPtRelative( bPtRel );
             pSizeBox->SetValue( bPtRel ? ((short)rItem.GetProp()) * 10 : rItem.GetProp() );
         }
@@ -1079,7 +1079,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     }
 
     if ( bChanged || !pOldHeight ||
-         bRel != ( MAP_RELATIVE != pOldHeight->GetPropUnit() || 100 != pOldHeight->GetProp() ) )
+         bRel != ( MapUnit::MapRelative != pOldHeight->GetPropUnit() || 100 != pOldHeight->GetProp() ) )
     {
         MapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
         if ( pSizeBox->IsRelative() )
@@ -1090,7 +1090,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 
             SvxFontHeightItem aHeight( 240, 100, nWhich );
             if ( pSizeBox->IsPtRelative() )
-                aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)( nSize / 10 ), MAP_POINT, eUnit );
+                aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)( nSize / 10 ), MapUnit::MapPoint, eUnit );
             else
                 aHeight.SetHeight( rOldItem.GetHeight(), (sal_uInt16)nSize );
             rSet.Put( aHeight );
@@ -2826,7 +2826,7 @@ IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, Button*, pBox, void )
 IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl, Edit&, void)
 {
     long nVal = static_cast<long>(m_pKerningMF->GetValue());
-    nVal = LogicToLogic( nVal, MAP_POINT, MAP_TWIP );
+    nVal = LogicToLogic( nVal, MapUnit::MapPoint, MapUnit::MapTwip );
     long nKern = (short)m_pKerningMF->Denormalize( nVal );
 
     SvxFont& rFont = GetPreviewFont();
@@ -3005,12 +3005,12 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>(rSet->Get( nWhich ));
         MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
         MapUnit eOrgUnit = (MapUnit)eUnit;
-        MapUnit ePntUnit( MAP_POINT );
+        MapUnit ePntUnit( MapUnit::MapPoint );
         long nBig = static_cast<long>(m_pKerningMF->Normalize( static_cast<long>(rItem.GetValue()) ));
         long nKerning = LogicToLogic( nBig, eOrgUnit, ePntUnit );
 
         // set Kerning at the Font, convert into Twips before
-        long nKern = LogicToLogic( rItem.GetValue(), (MapUnit)eUnit, MAP_TWIP );
+        long nKern = LogicToLogic( rItem.GetValue(), (MapUnit)eUnit, MapUnit::MapTwip );
         rFont.SetFixKerning( (short)nKern );
         rCJKFont.SetFixKerning( (short)nKern );
         rCTLFont.SetFixKerning( (short)nKern );
@@ -3179,7 +3179,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
 
     long nTmp = static_cast<long>(m_pKerningMF->GetValue());
-    long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)eUnit );
+    long nVal = LogicToLogic( nTmp, MapUnit::MapPoint, (MapUnit)eUnit );
     nKerning = (short)m_pKerningMF->Denormalize( nVal );
 
     SfxItemState eOldKernState = rOldSet.GetItemState( nWhich, false );

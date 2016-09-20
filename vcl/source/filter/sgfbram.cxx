@@ -433,7 +433,7 @@ bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMt
     }
     rMtf.Stop();
     rMtf.WindStart();
-    MapMode aMap( MAP_10TH_MM, Point(),
+    MapMode aMap( MapUnit::Map10thMM, Point(),
                   Fraction( 1, 4 ), Fraction( 1, 4 ) );
     rMtf.SetPrefMapMode( aMap );
     rMtf.SetPrefSize( Size( (short)rHead.Xsize, (short)rHead.Ysize ) );

@@ -584,7 +584,7 @@ Size SdrGrafObj::getOriginalSize() const
         aSize = Size ( aCroppedWidth, aCroppedHeight);
     }
 
-    if ( GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL )
+    if ( GetGrafPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
         aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, GetModel()->GetScaleUnit() );
     else
         aSize = OutputDevice::LogicToLogic( aSize, GetGrafPrefMapMode(), GetModel()->GetScaleUnit() );
@@ -1243,12 +1243,12 @@ void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
 {
     Size aSize;
     Size aMaxSize( rMaxRect.GetSize() );
-    if ( pGraphic->GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
-        aSize = Application::GetDefaultDevice()->PixelToLogic( pGraphic->GetPrefSize(), MAP_100TH_MM );
+    if ( pGraphic->GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
+        aSize = Application::GetDefaultDevice()->PixelToLogic( pGraphic->GetPrefSize(), MapUnit::Map100thMM );
     else
         aSize = OutputDevice::LogicToLogic( pGraphic->GetPrefSize(),
                                             pGraphic->GetPrefMapMode(),
-                                            MapMode( MAP_100TH_MM ) );
+                                            MapMode( MapUnit::Map100thMM ) );
 
     if( aSize.Height() != 0 && aSize.Width() != 0 )
     {

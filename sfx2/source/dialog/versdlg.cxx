@@ -188,7 +188,7 @@ void SfxVersionsTabListBox_Impl::setColSizes()
     long aStaticTabs[] = { 3, 0, 0, 0 };
     aStaticTabs[2] = nMax;
     aStaticTabs[3] = nMax + nMaxAuthorWidth;
-    SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+    SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
 }
 
 SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersionOnClose )
@@ -207,7 +207,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
 
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("versions");
     Size aControlSize(260, 114);
-    aControlSize = pContainer->LogicToPixel(aControlSize, MAP_APPFONT);
+    aControlSize = pContainer->LogicToPixel(aControlSize, MapUnit::MapAppFont);
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(aControlSize.Height());
 
@@ -540,7 +540,7 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame )
 
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("versions");
     Size aControlSize(260, 114);
-    aControlSize = pContainer->LogicToPixel(aControlSize, MAP_APPFONT);
+    aControlSize = pContainer->LogicToPixel(aControlSize, MapUnit::MapAppFont);
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(aControlSize.Height());
 

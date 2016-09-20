@@ -1256,8 +1256,8 @@ bool WMFReader::ReadHeader()
     if( ( labs( aWMFSize.Width() ) > 1 ) && ( labs( aWMFSize.Height() ) > 1 ) )
     {
         const Fraction  aFrac( 1, nUnitsPerInch );
-        MapMode         aWMFMap( MAP_INCH, Point(), aFrac, aFrac );
-        Size            aSize100( OutputDevice::LogicToLogic( aWMFSize, aWMFMap, MAP_100TH_MM ) );
+        MapMode         aWMFMap( MapUnit::MapInch, Point(), aFrac, aFrac );
+        Size            aSize100( OutputDevice::LogicToLogic( aWMFSize, aWMFMap, MapUnit::Map100thMM ) );
         aDevExt = Size( labs( aSize100.Width() ), labs( aSize100.Height() ) );
     }
     pOut->SetDevExt( aDevExt );

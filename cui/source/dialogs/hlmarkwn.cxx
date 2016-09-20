@@ -95,7 +95,7 @@ VCL_BUILDER_DECL_FACTORY(SvxHlmarkTreeLBox)
 
 Size SvxHlmarkTreeLBox::GetOptimalSize() const
 {
-    return LogicToPixel(Size(103, 162), MAP_APPFONT);
+    return LogicToPixel(Size(103, 162), MapUnit::MapAppFont);
 }
 
 void SvxHlmarkTreeLBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)

@@ -665,7 +665,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
 
         bool bSuccess = false;
         const SfxPoolItem* pItem = nullptr;
-        MapUnit eMapUnit( MAP_100TH_MM );
+        MapUnit eMapUnit( MapUnit::Map100thMM );
 
         // Extra scope so that aInternalSet is destroyed before
         // rListener->dispatchFinished potentially calls
@@ -775,7 +775,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
             if ( bSuccess && pItem && dynamic_cast< const SfxVoidItem *>( pItem ) ==  nullptr )
             {
                 sal_uInt16 nSubId( 0 );
-                if ( eMapUnit == MAP_TWIP )
+                if ( eMapUnit == MapUnit::MapTwip )
                     nSubId |= CONVERT_TWIPS;
                 pItem->QueryValue( aEvent.Result, (sal_uInt8)nSubId );
             }
@@ -892,7 +892,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         {
             // Retrieve metric from pool to have correct sub ID when calling QueryValue
             sal_uInt16     nSubId( 0 );
-            MapUnit eMapUnit( MAP_100TH_MM );
+            MapUnit eMapUnit( MapUnit::Map100thMM );
 
             // retrieve the core metric
             // it's enough to check the objectshell, the only shell that does not use the pool of the document
@@ -906,7 +906,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
                     eMapUnit = GetCoreMetric( pShell->GetPool(), nSID );
             }
 
-            if ( eMapUnit == MAP_TWIP )
+            if ( eMapUnit == MapUnit::MapTwip )
                 nSubId |= CONVERT_TWIPS;
 
             pState->QueryValue( aState, (sal_uInt8)nSubId );

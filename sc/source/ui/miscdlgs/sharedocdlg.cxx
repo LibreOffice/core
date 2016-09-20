@@ -63,7 +63,7 @@ public:
             GetSizePixel().Width() - nAccessedWidth);
         long aStaticTabs[]= { 2, 0, 0 };
         aStaticTabs[2] = nWebSiteWidth;
-        SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+        SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
     }
 };
 

@@ -251,7 +251,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         }
         bIsDontCare = !pBoxInfo->IsValid( SvxBoxInfoItemValidFlags::DISABLE );
     }
-    if(!mbUseMarginItem && eFUnit == FUNIT_MM && MAP_TWIP == rCoreAttrs.GetPool()->GetMetric( GetWhich( SID_ATTR_BORDER_INNER ) ))
+    if(!mbUseMarginItem && eFUnit == FUNIT_MM && MapUnit::MapTwip == rCoreAttrs.GetPool()->GetMetric( GetWhich( SID_ATTR_BORDER_INNER ) ))
     {
         //#i91548# changing the number of decimal digits changes the minimum values, too
         lcl_SetDecimalDigitsTo1(*m_pLeftMF);
@@ -540,7 +540,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
             // Determine the width first as some styles can be missing depending on it
             sal_Int64 nWidthPt =  static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                         sal_Int64( nWidth ), m_pLineWidthMF->GetDecimalDigits( ),
-                        MAP_TWIP,m_pLineWidthMF->GetUnit() ));
+                        MapUnit::MapTwip, m_pLineWidthMF->GetUnit() ));
             m_pLineWidthMF->SetValue( nWidthPt );
             m_pLbLineStyle->SetWidth( nWidth );
 
@@ -896,7 +896,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 m_pLineWidthMF->GetValue( ),
                 m_pLineWidthMF->GetDecimalDigits( ),
-                m_pLineWidthMF->GetUnit(), MAP_TWIP ));
+                m_pLineWidthMF->GetUnit(), MapUnit::MapTwip ));
     m_pLbLineStyle->SetWidth( nVal );
 
     m_pFrameSel->SetStyleToSelection( nVal,
@@ -911,7 +911,7 @@ IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox&, rLb, void )
         sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                     m_pLineWidthMF->GetValue( ),
                     m_pLineWidthMF->GetDecimalDigits( ),
-                    m_pLineWidthMF->GetUnit(), MAP_TWIP ));
+                    m_pLineWidthMF->GetUnit(), MapUnit::MapTwip ));
         m_pFrameSel->SetStyleToSelection ( nVal,
             SvxBorderStyle( m_pLbLineStyle->GetSelectEntryStyle() ) );
     }
@@ -1111,7 +1111,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 m_pLineWidthMF->GetValue( ),
                 m_pLineWidthMF->GetDecimalDigits( ),
-                m_pLineWidthMF->GetUnit(), MAP_TWIP ));
+                m_pLineWidthMF->GetUnit(), MapUnit::MapTwip ));
     m_pLbLineStyle->SetWidth( nVal );
 }
 

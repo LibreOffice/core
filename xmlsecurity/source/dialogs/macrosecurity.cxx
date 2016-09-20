@@ -357,7 +357,7 @@ public:
         {
             const long nControlWidth = GetSizePixel().Width();
             long aTabLocs[] = { 3, 0, 35*nControlWidth/100, 70*nControlWidth/100 };
-            SvSimpleTable::SetTabs(aTabLocs, MAP_PIXEL);
+            SvSimpleTable::SetTabs(aTabLocs, MapUnit::MapPixel);
         }
     }
 };

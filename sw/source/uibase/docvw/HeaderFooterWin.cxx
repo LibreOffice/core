@@ -257,7 +257,7 @@ bool SwHeaderFooterWin::Contains( const Point &rDocPt ) const
 void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     // Use pixels for the rest of the drawing
-    SetMapMode(MapMode(MAP_PIXEL));
+    SetMapMode(MapMode(MapUnit::MapPixel));
 
     const Rectangle aRect(Rectangle(Point(0, 0), rRenderContext.PixelToLogic(GetSizePixel())));
     drawinglayer::primitive2d::Primitive2DContainer aSeq(3);

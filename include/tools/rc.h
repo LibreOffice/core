@@ -23,11 +23,6 @@
 #include <tools/rcid.h>
 #include <o3tl/typed_flags_set.hxx>
 
-// Defines for all "Window" resources.
-// (Here are all window styles that are not in WinBits)
-#define RSC_EXTRAMAPUNIT                0xFFFF // do not change that value!
-
-
 // Attributes in *.src files
 enum class RSWND {
     NONE         = 0x00,

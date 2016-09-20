@@ -63,9 +63,9 @@ using namespace ::com::sun::star::style;
 
 ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
     : mpEscherEx(&rEx)
-    , maMapModeSrc(MAP_100TH_MM)
+    , maMapModeSrc(MapUnit::Map100thMM)
     // PowerPoint: 576 dpi, WinWord: 1440 dpi, Excel: 1440 dpi
-    , maMapModeDest( MAP_INCH, Point(), Fraction( 1, EES_MAP_FRACTION ), Fraction( 1, EES_MAP_FRACTION ) )
+    , maMapModeDest( MapUnit::MapInch, Point(), Fraction( 1, EES_MAP_FRACTION ), Fraction( 1, EES_MAP_FRACTION ) )
     , mpPicStrm(nullptr)
     , mpHostAppData(nullptr)
     , mbIsTitlePossible(false)

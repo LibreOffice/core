@@ -247,7 +247,7 @@ bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
 
 void SvxFontSizeBox_Impl::SetOptimalSize()
 {
-    Size aPrefSize(LogicToPixel(m_aLogicalSize, MAP_APPFONT));
+    Size aPrefSize(LogicToPixel(m_aLogicalSize, MapUnit::MapAppFont));
     aPrefSize.Width() = get_preferred_size().Width();
     SetSizePixel(aPrefSize);
 }

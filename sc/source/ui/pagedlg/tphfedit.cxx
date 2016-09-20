@@ -72,7 +72,7 @@ ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLoc
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
 
-    SetMapMode( MAP_TWIP );
+    SetMapMode( MapUnit::MapTwip );
     SetPointer( PointerStyle::Text );
     SetBackground( aBgColor );
 

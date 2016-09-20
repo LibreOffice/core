@@ -196,7 +196,7 @@ SwPagePreviewWin::SwPagePreviewWin( vcl::Window *pParent, SwPagePreview& rPView 
     SetHelpId(HID_PAGEPREVIEW);
     SetFillColor( GetBackground().GetColor() );
     SetLineColor( GetBackground().GetColor());
-    SetMapMode( MapMode(MAP_TWIP) );
+    SetMapMode( MapMode(MapUnit::MapTwip) );
 
     const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(false);
     mnRow = pUsrPref->GetPagePrevRow();     // 1 row

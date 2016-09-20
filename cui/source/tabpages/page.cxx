@@ -118,7 +118,7 @@ Size GetMinBorderSpace_Impl( const SvxShadowItem& rShadow, const SvxBoxItem& rBo
 
 long ConvertLong_Impl( const long nIn, MapUnit eUnit )
 {
-    return OutputDevice::LogicToLogic( nIn, eUnit, MAP_TWIP );
+    return OutputDevice::LogicToLogic( nIn, eUnit, MapUnit::MapTwip );
 }
 
 bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
@@ -290,7 +290,7 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     }
 
     MapMode aOldMode = mpDefPrinter->GetMapMode();
-    mpDefPrinter->SetMapMode( MAP_TWIP );
+    mpDefPrinter->SetMapMode( MapUnit::MapTwip );
 
     // set first- and last-values for the margins
     Size aPaperSize = mpDefPrinter->GetPaperSize();
@@ -535,22 +535,22 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     m_pBspWin->SetSize( Size( ConvertLong_Impl( aPaperSize.Width(), eUnit ),
                            ConvertLong_Impl( aPaperSize.Height(), eUnit ) ) );
 
-    aPaperSize = OutputDevice::LogicToLogic(aPaperSize, (MapUnit)eUnit, MAP_100TH_MM);
+    aPaperSize = OutputDevice::LogicToLogic(aPaperSize, (MapUnit)eUnit, MapUnit::Map100thMM);
     if ( bLandscape )
         Swap( aPaperSize );
 
     // Actual Paper Format
-    Paper ePaper = SvxPaperInfo::GetSvxPaper( aPaperSize, MAP_100TH_MM, true );
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aPaperSize, MapUnit::Map100thMM, true );
 
     if ( PAPER_USER != ePaper )
-        aPaperSize = SvxPaperInfo::GetPaperSize( ePaper, MAP_100TH_MM );
+        aPaperSize = SvxPaperInfo::GetPaperSize( ePaper, MapUnit::Map100thMM );
 
     if ( bLandscape )
         Swap( aPaperSize );
 
     // write values into the edits
-    SetMetricValue( *m_pPaperHeightEdit, aPaperSize.Height(), MAP_100TH_MM );
-    SetMetricValue( *m_pPaperWidthEdit, aPaperSize.Width(), MAP_100TH_MM );
+    SetMetricValue( *m_pPaperHeightEdit, aPaperSize.Height(), MapUnit::Map100thMM );
+    SetMetricValue( *m_pPaperWidthEdit, aPaperSize.Width(), MapUnit::Map100thMM );
     m_pPaperSizeBox->Clear();
 
     m_pPaperSizeBox->FillPaperSizeEntries( ( ePaperStart == PAPER_A3 ) ? PaperSizeApp::Std : PaperSizeApp::Draw );
@@ -953,7 +953,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
 
     if ( ePaper != PAPER_USER )
     {
-        Size aSize( SvxPaperInfo::GetPaperSize( ePaper, MAP_100TH_MM ) );
+        Size aSize( SvxPaperInfo::GetPaperSize( ePaper, MapUnit::Map100thMM ) );
 
         if ( m_pLandscapeBtn->IsChecked() )
             Swap( aSize );
@@ -964,8 +964,8 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
         if ( aSize.Width() < m_pPaperWidthEdit->GetMin( FUNIT_100TH_MM ) )
             m_pPaperWidthEdit->SetMin(
                 m_pPaperWidthEdit->Normalize( aSize.Width() ), FUNIT_100TH_MM );
-        SetMetricValue( *m_pPaperHeightEdit, aSize.Height(), MAP_100TH_MM );
-        SetMetricValue( *m_pPaperWidthEdit, aSize.Width(), MAP_100TH_MM );
+        SetMetricValue( *m_pPaperHeightEdit, aSize.Height(), MapUnit::Map100thMM );
+        SetMetricValue( *m_pPaperWidthEdit, aSize.Width(), MapUnit::Map100thMM );
 
         CalcMargin_Impl();
 
@@ -984,28 +984,28 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
 
             if ( bScreen || m_pRightMarginEdit->GetValue() == 0 )
             {
-                SetMetricValue( *m_pRightMarginEdit, nTmp, MAP_CM );
+                SetMetricValue( *m_pRightMarginEdit, nTmp, MapUnit::MapCM );
                 if ( !bScreen &&
                      m_pRightMarginEdit->GetFirst() > m_pRightMarginEdit->GetValue() )
                     m_pRightMarginEdit->SetValue( m_pRightMarginEdit->GetFirst() );
             }
             if ( bScreen || m_pLeftMarginEdit->GetValue() == 0 )
             {
-                SetMetricValue( *m_pLeftMarginEdit, nTmp, MAP_CM );
+                SetMetricValue( *m_pLeftMarginEdit, nTmp, MapUnit::MapCM );
                 if ( !bScreen &&
                      m_pLeftMarginEdit->GetFirst() > m_pLeftMarginEdit->GetValue() )
                     m_pLeftMarginEdit->SetValue( m_pLeftMarginEdit->GetFirst() );
             }
             if ( bScreen || m_pBottomMarginEdit->GetValue() == 0 )
             {
-                SetMetricValue( *m_pBottomMarginEdit, nTmp, MAP_CM );
+                SetMetricValue( *m_pBottomMarginEdit, nTmp, MapUnit::MapCM );
                 if ( !bScreen &&
                      m_pBottomMarginEdit->GetFirst() > m_pBottomMarginEdit->GetValue() )
                     m_pBottomMarginEdit->SetValue( m_pBottomMarginEdit->GetFirst() );
             }
             if ( bScreen || m_pTopMarginEdit->GetValue() == 0 )
             {
-                SetMetricValue( *m_pTopMarginEdit, nTmp, MAP_CM );
+                SetMetricValue( *m_pTopMarginEdit, nTmp, MapUnit::MapCM );
                 if ( !bScreen &&
                      m_pTopMarginEdit->GetFirst() > m_pTopMarginEdit->GetValue() )
                     m_pTopMarginEdit->SetValue( m_pTopMarginEdit->GetFirst() );
@@ -1038,12 +1038,12 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, Button *, pBtn, void )
     {
         bLandscape = m_pLandscapeBtn->IsChecked();
 
-        const long lWidth = GetCoreValue( *m_pPaperWidthEdit, MAP_100TH_MM );
-        const long lHeight = GetCoreValue( *m_pPaperHeightEdit, MAP_100TH_MM );
+        const long lWidth = GetCoreValue( *m_pPaperWidthEdit, MapUnit::Map100thMM );
+        const long lHeight = GetCoreValue( *m_pPaperHeightEdit, MapUnit::Map100thMM );
 
         // swap width and height
-        SetMetricValue( *m_pPaperWidthEdit, lHeight, MAP_100TH_MM );
-        SetMetricValue( *m_pPaperHeightEdit, lWidth, MAP_100TH_MM );
+        SetMetricValue( *m_pPaperWidthEdit, lHeight, MapUnit::Map100thMM );
+        SetMetricValue( *m_pPaperHeightEdit, lWidth, MapUnit::Map100thMM );
 
         // recalculate margins if necessary
         CalcMargin_Impl();
@@ -1065,7 +1065,7 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
         eOri = Orientation::Landscape;
     Orientation eOldOri = mpDefPrinter->GetOrientation();
     mpDefPrinter->SetOrientation( eOri );
-    mpDefPrinter->SetMapMode( MAP_TWIP );
+    mpDefPrinter->SetMapMode( MapUnit::MapTwip );
 
     // set first- and last-values for margins
     Size aPaperSize = mpDefPrinter->GetPaperSize();
@@ -1133,16 +1133,16 @@ IMPL_LINK_NOARG(SvxPageDescPage, BorderModify_Impl, Edit&, void)
 void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
 {
     // Size
-    Size aSize( GetCoreValue( *m_pPaperWidthEdit, MAP_TWIP ),
-                GetCoreValue( *m_pPaperHeightEdit, MAP_TWIP ) );
+    Size aSize( GetCoreValue( *m_pPaperWidthEdit, MapUnit::MapTwip ),
+                GetCoreValue( *m_pPaperHeightEdit, MapUnit::MapTwip ) );
 
     m_pBspWin->SetSize( aSize );
 
     // Margins
-    m_pBspWin->SetTop( GetCoreValue( *m_pTopMarginEdit, MAP_TWIP ) );
-    m_pBspWin->SetBottom( GetCoreValue( *m_pBottomMarginEdit, MAP_TWIP ) );
-    m_pBspWin->SetLeft( GetCoreValue( *m_pLeftMarginEdit, MAP_TWIP ) );
-    m_pBspWin->SetRight( GetCoreValue( *m_pRightMarginEdit, MAP_TWIP ) );
+    m_pBspWin->SetTop( GetCoreValue( *m_pTopMarginEdit, MapUnit::MapTwip ) );
+    m_pBspWin->SetBottom( GetCoreValue( *m_pBottomMarginEdit, MapUnit::MapTwip ) );
+    m_pBspWin->SetLeft( GetCoreValue( *m_pLeftMarginEdit, MapUnit::MapTwip ) );
+    m_pBspWin->SetRight( GetCoreValue( *m_pRightMarginEdit, MapUnit::MapTwip ) );
 
     // Layout
     m_pBspWin->SetUsage( PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() ) );
@@ -1540,14 +1540,14 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl, Control&, void)
 void SvxPageDescPage::CalcMargin_Impl()
 {
     // current values for page margins
-    long nBT = GetCoreValue( *m_pTopMarginEdit, MAP_TWIP );
-    long nBB = GetCoreValue( *m_pBottomMarginEdit, MAP_TWIP );
+    long nBT = GetCoreValue( *m_pTopMarginEdit, MapUnit::MapTwip );
+    long nBB = GetCoreValue( *m_pBottomMarginEdit, MapUnit::MapTwip );
 
-    long nBL = GetCoreValue( *m_pLeftMarginEdit, MAP_TWIP );
-    long nBR = GetCoreValue( *m_pRightMarginEdit, MAP_TWIP );
+    long nBL = GetCoreValue( *m_pLeftMarginEdit, MapUnit::MapTwip );
+    long nBR = GetCoreValue( *m_pRightMarginEdit, MapUnit::MapTwip );
 
-    long nH  = GetCoreValue( *m_pPaperHeightEdit, MAP_TWIP );
-    long nW  = GetCoreValue( *m_pPaperWidthEdit, MAP_TWIP );
+    long nH  = GetCoreValue( *m_pPaperHeightEdit, MapUnit::MapTwip );
+    long nW  = GetCoreValue( *m_pPaperWidthEdit, MapUnit::MapTwip );
 
     long nWidth = nBL + nBR + MINBODY;
     long nHeight = nBT + nBB + MINBODY;
@@ -1560,9 +1560,9 @@ void SvxPageDescPage::CalcMargin_Impl()
             nTmp -= nWidth - nW;
 
             if ( nBL <= nBR )
-                SetMetricValue( *m_pRightMarginEdit, nTmp, MAP_TWIP );
+                SetMetricValue( *m_pRightMarginEdit, nTmp, MapUnit::MapTwip );
             else
-                SetMetricValue( *m_pLeftMarginEdit, nTmp, MAP_TWIP );
+                SetMetricValue( *m_pLeftMarginEdit, nTmp, MapUnit::MapTwip );
         }
 
         if ( nHeight > nH )
@@ -1571,9 +1571,9 @@ void SvxPageDescPage::CalcMargin_Impl()
             nTmp -= nHeight - nH;
 
             if ( nBT <= nBB )
-                SetMetricValue( *m_pBottomMarginEdit, nTmp, MAP_TWIP );
+                SetMetricValue( *m_pBottomMarginEdit, nTmp, MapUnit::MapTwip );
             else
-                SetMetricValue( *m_pTopMarginEdit, nTmp, MAP_TWIP );
+                SetMetricValue( *m_pTopMarginEdit, nTmp, MapUnit::MapTwip );
         }
     }
 }

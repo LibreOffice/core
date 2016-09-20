@@ -59,7 +59,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vc
     EnableRTL (false);
 
     MapMode aMap(GetMapMode());
-    aMap.SetMapUnit(MAP_100TH_MM);
+    aMap.SetMapUnit(MapUnit::Map100thMM);
     SetMapMode(aMap);
 
     // set HelpId
@@ -462,8 +462,8 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     const MapMode&  rMap = GetMapMode();
     const Point     aOutOrg( PixelToLogic( Point() ) );
     const Size      aOutSize( GetOutputSize() );
-    const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, rMap ) );
-    const Size      aOffset( LogicToLogic( Size( 1000, 1000 ), MAP_100TH_MM, rMap ) );
+    const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MapUnit::MapPoint, rMap ) );
+    const Size      aOffset( LogicToLogic( Size( 1000, 1000 ), MapUnit::Map100thMM, rMap ) );
     OUString        aText( SdResId( STR_PRES_PAUSE ) );
     bool            bDrawn = false;
 
@@ -479,7 +479,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     {
         Size aGrfSize;
 
-        if( maLogo.GetPrefMapMode() == MAP_PIXEL )
+        if( maLogo.GetPrefMapMode() == MapUnit::MapPixel )
             aGrfSize = PixelToLogic( maLogo.GetPrefSize() );
         else
             aGrfSize = LogicToLogic( maLogo.GetPrefSize(), maLogo.GetPrefMapMode(), rMap );
@@ -536,7 +536,7 @@ void ShowWindow::DrawEndScene()
     vcl::Font       aFont( GetSettings().GetStyleSettings().GetMenuFont() );
 
     const Point     aOutOrg( PixelToLogic( Point() ) );
-    const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, GetMapMode() ) );
+    const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MapUnit::MapPoint, GetMapMode() ) );
     const OUString  aText( SdResId( STR_PRES_SOFTEND ) );
 
     aFont.SetFontSize( aTextSize );

@@ -4892,7 +4892,7 @@ void SwHTMLParser::InsertSpacer()
             {
                 nSize = Application::GetDefaultDevice()
                             ->PixelToLogic( Size(0,nSize),
-                                            MapMode(MAP_TWIP) ).Height();
+                                            MapMode(MapUnit::MapTwip) ).Height();
             }
 
             // einen Absatz-Abstand setzen
@@ -4940,7 +4940,7 @@ void SwHTMLParser::InsertSpacer()
             {
                 nSize = Application::GetDefaultDevice()
                             ->PixelToLogic( Size(nSize,0),
-                                            MapMode(MAP_TWIP) ).Width();
+                                            MapMode(MapUnit::MapTwip) ).Width();
             }
 
             if( !m_pPam->GetPoint()->nContent.GetIndex() )
@@ -4975,7 +4975,7 @@ sal_uInt16 SwHTMLParser::ToTwips( sal_uInt16 nPixel )
     if( nPixel && Application::GetDefaultDevice() )
     {
         long nTwips = Application::GetDefaultDevice()->PixelToLogic(
-                    Size( nPixel, nPixel ), MapMode( MAP_TWIP ) ).Width();
+                    Size( nPixel, nPixel ), MapMode( MapUnit::MapTwip ) ).Width();
         return nTwips <= USHRT_MAX ? (sal_uInt16)nTwips : USHRT_MAX;
     }
     else

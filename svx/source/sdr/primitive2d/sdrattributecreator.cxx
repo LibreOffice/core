@@ -642,7 +642,7 @@ namespace drawinglayer
                 if(GraphicType::Bitmap == aGraphic.GetType())
                 {
                     aGraphic.SetPrefSize(aGraphic.GetBitmapEx().GetSizePixel());
-                    aGraphic.SetPrefMapMode(MAP_PIXEL);
+                    aGraphic.SetPrefMapMode(MapUnit::MapPixel);
                 }
             }
 
@@ -659,11 +659,11 @@ namespace drawinglayer
 
             if(aGraphic.GetPrefMapMode() != aDestinationMapUnit)
             {
-                // #i100360# for MAP_PIXEL, LogicToLogic will not work properly,
+                // #i100360# for MapUnit::MapPixel, LogicToLogic will not work properly,
                 // so fallback to Application::GetDefaultDevice()
                 Size aNewSize(0, 0);
 
-                if(MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit())
+                if(MapUnit::MapPixel == aGraphic.GetPrefMapMode().GetMapUnit())
                 {
                     aNewSize = Application::GetDefaultDevice()->PixelToLogic(
                         aGraphic.GetPrefSize(),

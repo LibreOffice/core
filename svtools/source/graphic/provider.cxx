@@ -501,13 +501,13 @@ void ImplCalculateCropRect( ::Graphic& rGraphic, const text::GraphicCrop& rGraph
             if ( rGraphicCropLogic.Left || rGraphicCropLogic.Top || rGraphicCropLogic.Right || rGraphicCropLogic.Bottom )
             {
                 Size aSize100thMM( 0, 0 );
-                if( rGraphic.GetPrefMapMode().GetMapUnit() != MAP_PIXEL )
+                if( rGraphic.GetPrefMapMode().GetMapUnit() != MapUnit::MapPixel )
                 {
-                    aSize100thMM = OutputDevice::LogicToLogic( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), MAP_100TH_MM );
+                    aSize100thMM = OutputDevice::LogicToLogic( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), MapUnit::Map100thMM );
                 }
                 else
                 {
-                    aSize100thMM = Application::GetDefaultDevice()->PixelToLogic( rGraphic.GetPrefSize(), MAP_100TH_MM );
+                    aSize100thMM = Application::GetDefaultDevice()->PixelToLogic( rGraphic.GetPrefSize(), MapUnit::Map100thMM );
                 }
                 if ( aSize100thMM.Width() && aSize100thMM.Height() )
                 {
@@ -627,10 +627,10 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
     {
         ScopedVclPtrInstance< VirtualDevice > aDummyVDev;
         GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
-        Size aMtfSize( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_100TH_MM ) );
+        Size aMtfSize( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MapUnit::Map100thMM ) );
         if ( aMtfSize.Width() && aMtfSize.Height() )
         {
-            MapMode aNewMapMode( MAP_100TH_MM );
+            MapMode aNewMapMode( MapUnit::Map100thMM );
             aNewMapMode.SetScaleX( static_cast< double >( aLogicalSize.Width ) / static_cast< double >( aMtfSize.Width() ) );
             aNewMapMode.SetScaleY( static_cast< double >( aLogicalSize.Height ) / static_cast< double >( aMtfSize.Height() ) );
             aDummyVDev->EnableOutput( false );
@@ -680,7 +680,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                         }
                         ::Graphic aGraphic( aBmpEx );
                         const Size aSize100thmm( aDummyVDev->LogicToPixel( aSize ) );
-                        Size aSize100thmm2( aDummyVDev->PixelToLogic( aSize100thmm, MAP_100TH_MM ) );
+                        Size aSize100thmm2( aDummyVDev->PixelToLogic( aSize100thmm, MapUnit::Map100thMM ) );
 
                         ImplApplyBitmapResolution( aGraphic, nImageResolution,
                             aGraphic.GetSizePixel(), awt::Size( aSize100thmm2.Width(), aSize100thmm2.Height() ) );

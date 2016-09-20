@@ -994,7 +994,7 @@ void SwSrcEditWindow::SetFont()
     //font height is stored in point and set in twip
     aSize.Height() =
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() * 20;
-    aFont.SetFontSize(m_pOutWin->LogicToPixel(aSize, MAP_TWIP));
+    aFont.SetFontSize(m_pOutWin->LogicToPixel(aSize, MapUnit::MapTwip));
     GetTextEngine()->SetFont( aFont );
     m_pOutWin->SetFont(aFont);
 }

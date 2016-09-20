@@ -865,7 +865,7 @@ void NavigatorTree::UserData::_disposing(const lang::EventObject& _rSource)
 
 Size NavigatorTree::GetOptimalSize() const
 {
-    return LogicToPixel(Size(100, 70), MAP_APPFONT);
+    return LogicToPixel(Size(100, 70), MapUnit::MapAppFont);
 }
 
 // class ONavigatorImpl

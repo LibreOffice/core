@@ -195,7 +195,7 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl, Edit&, void)
 {
     mpCBXWrapText->EnableTriState(false);
     sal_uInt16 nVal = (sal_uInt16)mpMFLeftIndent->GetValue();
-    SfxUInt16Item aItem( SID_ATTR_ALIGN_INDENT,  (sal_uInt16)CalcToUnit( nVal,  MAP_TWIP ) );
+    SfxUInt16Item aItem( SID_ATTR_ALIGN_INDENT,  (sal_uInt16)CalcToUnit( nVal,  MapUnit::MapTwip ) );
 
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_INDENT,
             SfxCallMode::RECORD, { &aItem });
@@ -297,7 +297,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         {
                 const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
                 sal_uInt16 nVal = pItem->GetValue();
-                mpMFLeftIndent->SetValue( CalcToPoint(nVal, MAP_TWIP, 1) );
+                mpMFLeftIndent->SetValue( CalcToPoint(nVal, MapUnit::MapTwip, 1) );
         }
         else
         {

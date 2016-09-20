@@ -365,7 +365,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
     if ( bNullTab )
     {
         MapUnit eUnit = (MapUnit)pPool->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
-        if ( MAP_100TH_MM != eUnit )
+        if ( MapUnit::Map100thMM != eUnit )
         {
 
             // negative first line indent -> set null default tabstob if applicable
@@ -837,7 +837,7 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void )
             // if the value has been changed at SetMin,
             // it is time for the default
             if ( m_pLineDistAtMetricBox->GetValue() != nTemp )
-                SetMetricValue( *m_pLineDistAtMetricBox, FIX_DIST_DEF, MAP_TWIP ); // fix is only in Writer
+                SetMetricValue( *m_pLineDistAtMetricBox, FIX_DIST_DEF, MapUnit::MapTwip ); // fix is only in Writer
             m_pLineDistAtPercentBox->Hide();
             m_pLineDistAtMetricBox->Show();
             m_pLineDistAtMetricBox->Enable();
@@ -908,7 +908,7 @@ void SvxStdParagraphTabPage::UpdateExample_Impl()
         case LLINESPACE_DURCH:
         case LLINESPACE_FIX:
             m_pExampleWin->SetLineSpace( (SvxPrevLineSpace)nPos,
-                (sal_uInt16)GetCoreValue( *m_pLineDistAtMetricBox, MAP_TWIP ) );
+                (sal_uInt16)GetCoreValue( *m_pLineDistAtMetricBox, MapUnit::MapTwip ) );
             break;
     }
     m_pExampleWin->Invalidate();

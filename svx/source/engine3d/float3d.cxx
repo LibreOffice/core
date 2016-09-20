@@ -97,7 +97,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , pConvertTo3DItem(nullptr)
     , pConvertTo3DLatheItem(nullptr)
     , mpImpl(new Svx3DWinImpl())
-    , ePoolUnit(MAP_MM)
+    , ePoolUnit(MapUnit::MapMM)
     , mpRemember2DAttributes(nullptr)
 {
     get(m_pBtnGeo, "geometry");
@@ -191,7 +191,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
 
     get(m_pCtlPreview, "preview");
     get(m_pCtlLightPreview, "lightpreview");
-    Size aSize(LogicToPixel(Size(83, 76), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(83, 76), MapUnit::MapAppFont));
     m_pCtlPreview->set_width_request(aSize.Width());
     m_pCtlLightPreview->set_width_request(aSize.Width());
     m_pCtlPreview->set_height_request(aSize.Height());

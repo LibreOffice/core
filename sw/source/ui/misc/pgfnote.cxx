@@ -89,7 +89,7 @@ IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl, Edit&, void)
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 m_pLineWidthEdit->GetValue( ),
                 m_pLineWidthEdit->GetDecimalDigits( ),
-                m_pLineWidthEdit->GetUnit(), MAP_TWIP ));
+                m_pLineWidthEdit->GetUnit(), MapUnit::MapTwip ));
     m_pLineTypeBox->SetWidth( nVal );
 }
 
@@ -191,7 +191,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
 
     sal_Int64 nWidthPt = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
             sal_Int64( pFootnoteInfo->GetLineWidth() ), m_pLineWidthEdit->GetDecimalDigits(),
-            MAP_TWIP, m_pLineWidthEdit->GetUnit( ) ));
+            MapUnit::MapTwip, m_pLineWidthEdit->GetUnit( ) ));
     m_pLineWidthEdit->SetValue( nWidthPt );
 
     // Separator style
@@ -290,7 +290,7 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
     long nWidth = static_cast<long>(MetricField::ConvertDoubleValue(
                    m_pLineWidthEdit->GetValue( ),
                    m_pLineWidthEdit->GetDecimalDigits( ),
-                   m_pLineWidthEdit->GetUnit(), MAP_TWIP ));
+                   m_pLineWidthEdit->GetUnit(), MapUnit::MapTwip ));
     rFootnoteInfo.SetLineWidth( nWidth );
 
     // Separator color

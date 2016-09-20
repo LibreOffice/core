@@ -204,7 +204,7 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pPathBtn->SetClickHdl( LINK( this, SvxPathTabPage, PathHdl_Impl ) );
 
     Size aControlSize(236 , 147);
-    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
     m_pPathCtrl->set_width_request(aControlSize.Width());
     m_pPathCtrl->set_height_request(aControlSize.Height());
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
@@ -227,7 +227,7 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     long aTabs[] = {3, 0, 0, 0};
     aTabs[2] = nWidth1 + 12;
     aTabs[3] = aTabs[2] + nWidth2 + 12;
-    pPathBox->SetTabs(aTabs, MAP_PIXEL);
+    pPathBox->SetTabs(aTabs, MapUnit::MapPixel);
 
     pPathBox->SetDoubleClickHdl( LINK( this, SvxPathTabPage, DoubleClickPathHdl_Impl ) );
     pPathBox->SetSelectHdl( LINK( this, SvxPathTabPage, PathSelect_Impl ) );
@@ -342,7 +342,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
     long aTabs[] = {3, 0, 0, 0};
     aTabs[2] = nWidth1 + 12;
     aTabs[3] = aTabs[2] + nWidth2 + 12;
-    pPathBox->SetTabs(aTabs, MAP_PIXEL);
+    pPathBox->SetTabs(aTabs, MapUnit::MapPixel);
 
 #if 0
     String aUserData = GetUserData();
@@ -716,7 +716,7 @@ IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
             long _nWidth = pBar->GetItemSize(i);
             aSz.Width() =  _nWidth + nTmpSz;
             nTmpSz += _nWidth;
-            pPathBox->SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width() );
+            pPathBox->SetTab( i, PixelToLogic( aSz, MapMode(MapUnit::MapAppFont) ).Width() );
         }
     }
 }

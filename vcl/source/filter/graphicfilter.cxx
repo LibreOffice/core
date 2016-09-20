@@ -846,10 +846,10 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
         Size aOriginalSize;
         Size aPrefSize( rGraphic.GetPrefSize() );
         MapMode aPrefMapMode( rGraphic.GetPrefMapMode() );
-        if ( aPrefMapMode == MAP_PIXEL )
-            aOriginalSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
+        if ( aPrefMapMode == MapUnit::MapPixel )
+            aOriginalSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MapUnit::Map100thMM );
         else
-            aOriginalSize = OutputDevice::LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM );
+            aOriginalSize = OutputDevice::LogicToLogic( aPrefSize, aPrefMapMode, MapUnit::Map100thMM );
         if ( !nLogicalWidth )
             nLogicalWidth = aOriginalSize.Width();
         if ( !nLogicalHeight )
@@ -861,7 +861,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             if( nMode == 1 )
             {
                 Bitmap      aBitmap( rGraphic.GetBitmap() );
-                MapMode     aMap( MAP_100TH_INCH );
+                MapMode     aMap( MapUnit::Map100thInch );
 
                 sal_Int32   nDPI = rConfigItem.ReadInt32( "Resolution", 75 );
                 Fraction    aFrac( 1, std::min( std::max( nDPI, sal_Int32( 75 ) ), sal_Int32( 600 ) ) );
@@ -879,7 +879,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             else if( nMode == 2 )
             {
                aGraphic = rGraphic;
-               aGraphic.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+               aGraphic.SetPrefMapMode( MapMode( MapUnit::Map100thMM ) );
                aGraphic.SetPrefSize( Size( nLogicalWidth, nLogicalHeight ) );
             }
             else
@@ -898,7 +898,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             if( ( nMode == 1 ) || ( nMode == 2 ) )
             {
                 GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
-                Size aNewSize( OutputDevice::LogicToLogic( Size( nLogicalWidth, nLogicalHeight ), MAP_100TH_MM, aMtf.GetPrefMapMode() ) );
+                Size aNewSize( OutputDevice::LogicToLogic( Size( nLogicalWidth, nLogicalHeight ), MapUnit::Map100thMM, aMtf.GetPrefMapMode() ) );
 
                 if( aNewSize.Width() && aNewSize.Height() )
                 {
@@ -1916,11 +1916,11 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 aSizePixel.Height()=(sal_uLong)(((double)aSizePixel.Height())*fFak);
             }
 
-            aVirDev->SetMapMode(MapMode(MAP_PIXEL));
+            aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
             aVirDev->SetOutputSizePixel(aSizePixel);
             Graphic aGraphic2=aGraphic;
             aGraphic2.Draw(aVirDev.get(),Point(0,0),aSizePixel); // this changes the MapMode
-            aVirDev->SetMapMode(MapMode(MAP_PIXEL));
+            aVirDev->SetMapMode(MapMode(MapUnit::MapPixel));
             aGraphic=Graphic(aVirDev->GetBitmap(Point(0,0),aSizePixel));
         }
     }

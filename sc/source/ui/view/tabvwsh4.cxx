@@ -332,7 +332,7 @@ void ScTabViewShell::UpdateOleZoom()
         if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
         {
             vcl::Window* pWin = GetActiveWin();
-            Size aWinHMM = pWin->PixelToLogic( pWin->GetOutputSizePixel(), MAP_100TH_MM );
+            Size aWinHMM = pWin->PixelToLogic( pWin->GetOutputSizePixel(), MapUnit::Map100thMM );
             SetZoomFactor( Fraction( aWinHMM.Width(),aObjSize.Width() ),
                             Fraction( aWinHMM.Height(),aObjSize.Height() ) );
         }
@@ -361,7 +361,7 @@ void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
 
         if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
         {
-            Size aLogicSize = GetWindow()->PixelToLogic( aSize, MAP_100TH_MM );
+            Size aLogicSize = GetWindow()->PixelToLogic( aSize, MapUnit::Map100thMM );
             SfxViewShell::SetZoomFactor( Fraction( aLogicSize.Width(),aObjSize.Width() ),
                             Fraction( aLogicSize.Height(),aObjSize.Height() ) );
         }

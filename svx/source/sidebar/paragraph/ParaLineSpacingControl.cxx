@@ -62,7 +62,7 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
 
     mpActLineDistFld = mpLineDistAtPercentBox.get();
 
-    meLNSpaceUnit = MAP_100TH_MM;
+    meLNSpaceUnit = MapUnit::Map100thMM;
 
     Link<Button*,void> aLink = LINK(this, ParaLineSpacingControl, PredefinedValuesHandler);
     mpSpacing1Button->SetClickHdl(aLink);
@@ -120,7 +120,7 @@ void ParaLineSpacingControl::Initialize()
 
     if( eState >= SfxItemState::DEFAULT )
     {
-        MapUnit eUnit = MAP_100TH_MM;
+        MapUnit eUnit = MapUnit::Map100thMM;
         meLNSpaceUnit = eUnit;
 
         switch( currSPItem->GetLineSpaceRule() )
@@ -309,7 +309,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
             mpLineDistAtMetricBox->SetMin(mpLineDistAtMetricBox->Normalize(MIN_FIXED_DISTANCE), FUNIT_TWIP);
 
             if (mpLineDistAtMetricBox->GetValue() != nTemp)
-                SetMetricValue(*mpLineDistAtMetricBox, FIX_DIST_DEF, MAP_TWIP);
+                SetMetricValue(*mpLineDistAtMetricBox, FIX_DIST_DEF, MapUnit::MapTwip);
 
             mpLineDistLabel->Enable();
             mpActLineDistFld->Show();

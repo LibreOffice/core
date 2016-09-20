@@ -581,7 +581,7 @@ namespace frm
         // translate coordinates
         Point aPos( _rPos );
         Size aSize( _rSize );
-        if ( aOriginalMapMode.GetMapUnit() == MAP_PIXEL )
+        if ( aOriginalMapMode.GetMapUnit() == MapUnit::MapPixel )
         {
             aPos = _pDev->PixelToLogic( _rPos, aNormalizedMapMode );
             aSize = _pDev->PixelToLogic( _rSize, aNormalizedMapMode );

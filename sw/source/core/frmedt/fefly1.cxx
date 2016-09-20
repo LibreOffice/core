@@ -1506,7 +1506,7 @@ const SwFrameFormat* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
                         aPt -= pFly->Frame().Pos();
                         // without MapMode-Offset, without Offset, o ... !!!!!
                         aPt = GetOut()->LogicToPixel(
-                                aPt, MapMode( MAP_TWIP ) );
+                                aPt, MapMode( MapUnit::MapTwip ) );
                         ((( *pURL += "?" ) += OUString::number( aPt.getX() ))
                                   += "," ) += OUString::number(aPt.getY() );
                     }
@@ -2031,8 +2031,8 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
         }
 
         sal_Int32 nBaseline = ::comphelper::getINT32(aBaseline);
-        const MapMode aSourceMapMode( MAP_100TH_MM );
-        const MapMode aTargetMapMode( MAP_TWIP );
+        const MapMode aSourceMapMode( MapUnit::Map100thMM );
+        const MapMode aTargetMapMode( MapUnit::MapTwip );
         nBaseline = OutputDevice::LogicToLogic( nBaseline, aSourceMapMode.GetMapUnit(), aTargetMapMode.GetMapUnit() );
 
         OSL_ENSURE( nBaseline > 0, "Wrong value of Baseline while retrieving from Starmath!" );

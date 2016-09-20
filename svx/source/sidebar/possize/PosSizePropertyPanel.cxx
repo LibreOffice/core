@@ -810,14 +810,14 @@ void PosSizePropertyPanel::executeSize()
         double nWidth = (double)mpMtrWidth->GetValue( meDlgUnit );
         nWidth = MetricField::ConvertDoubleValue( nWidth, mpMtrWidth->GetBaseValue(), mpMtrWidth->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
         long lWidth = (long)(nWidth * (double)aUIScale);
-        lWidth = OutputDevice::LogicToLogic( lWidth, MAP_100TH_MM, (MapUnit)mePoolUnit );
+        lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
         lWidth = (long)mpMtrWidth->Denormalize( lWidth );
 
         // get Height
         double nHeight = (double)mpMtrHeight->GetValue( meDlgUnit );
         nHeight = MetricField::ConvertDoubleValue( nHeight, mpMtrHeight->GetBaseValue(), mpMtrHeight->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
         long lHeight = (long)(nHeight * (double)aUIScale);
-        lHeight = OutputDevice::LogicToLogic( lHeight, MAP_100TH_MM, (MapUnit)mePoolUnit );
+        lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
         lHeight = (long)mpMtrWidth->Denormalize( lHeight );
 
         // put Width & Height to itemset
@@ -1067,8 +1067,8 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     TransfrmHelper::ScaleRect( maRect, aUIScale );
 
     const sal_uInt16 nDigits(mpMtrPosX->GetDecimalDigits());
-    TransfrmHelper::ConvertRect( maWorkArea, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
-    TransfrmHelper::ConvertRect( maRect, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
+    TransfrmHelper::ConvertRect( maWorkArea, nDigits, mePoolUnit, meDlgUnit );
+    TransfrmHelper::ConvertRect( maRect, nDigits, mePoolUnit, meDlgUnit );
 
     double fLeft(maWorkArea.getMinX());
     double fTop(maWorkArea.getMinY());
@@ -1080,7 +1080,7 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     fRight  -= maRect.getWidth();
     fBottom -= maRect.getHeight();
 
-    const double fMaxLong((double)(MetricField::ConvertValue( LONG_MAX, 0, MAP_100TH_MM, meDlgUnit ) - 1L));
+    const double fMaxLong((double)(MetricField::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1L));
     fLeft = basegfx::clamp(fLeft, -fMaxLong, fMaxLong);
     fRight = basegfx::clamp(fRight, -fMaxLong, fMaxLong);
     fTop = basegfx::clamp(fTop, - fMaxLong, fMaxLong);

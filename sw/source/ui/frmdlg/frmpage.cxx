@@ -2639,7 +2639,7 @@ BmpWindow::BmpWindow(vcl::Window* pPar, WinBits nStyle)
 
 Size BmpWindow::GetOptimalSize() const
 {
-    return LogicToPixel(Size(127 , 66), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(127 , 66), MapMode(MapUnit::MapAppFont));
 }
 
 VCL_BUILDER_FACTORY_ARGS(BmpWindow, 0)

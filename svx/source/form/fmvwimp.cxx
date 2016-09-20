@@ -1475,7 +1475,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
 
             // create a button control
             const MapMode eTargetMode( pOutDev->GetMapMode() );
-            const MapMode eSourceMode(MAP_100TH_MM);
+            const MapMode eSourceMode(MapUnit::Map100thMM);
             const sal_uInt16 nObjID = OBJ_FM_BUTTON;
             ::Size controlSize(4000, 500);
             FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, nObjID, nullptr ));
@@ -1556,7 +1556,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     ::Size aTextSize( _rOutDev.GetTextWidth(sFieldName + _rFieldPostfix), _rOutDev.GetTextHeight() );
 
     MapMode   eTargetMode( _rOutDev.GetMapMode() ),
-              eSourceMode( MAP_100TH_MM );
+              eSourceMode( MapUnit::Map100thMM );
 
     // Textbreite ist mindestens 4cm
     // Texthoehe immer halber cm

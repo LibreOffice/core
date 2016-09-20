@@ -137,7 +137,7 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pCtlXRectPreview->EnableRTL(false);
 
     // Calculate size of dropdown listboxes
-    Size aSize = LogicToPixel(Size(108, 103), MAP_APPFONT);
+    Size aSize = LogicToPixel(Size(108, 103), MapUnit::MapAppFont);
 
     m_pLbColor->set_width_request(aSize.Width());
     m_pLbColor->set_height_request(aSize.Height());
@@ -151,7 +151,7 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pLbBitmap->set_height_request(aSize.Height());
 
     // Calculate size of display boxes
-    Size aSize2 = LogicToPixel(Size(110, 42), MAP_APPFONT);
+    Size aSize2 = LogicToPixel(Size(110, 42), MapUnit::MapAppFont);
     m_pCtlBitmapPreview->set_width_request(aSize2.Width());
     m_pCtlBitmapPreview->set_height_request(aSize2.Height());
     m_pCtlXRectPreview->set_width_request(aSize2.Width());

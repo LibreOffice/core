@@ -103,7 +103,7 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     SetHelpId(UID_RPT_RPT_APP_VIEW);
     ImplInitSettings();
 
-    SetMapMode( MapMode( MAP_100TH_MM ) );
+    SetMapMode( MapMode( MapUnit::Map100thMM ) );
 
     // now create the task pane on the right side :-)
     m_pTaskPane = VclPtr<OTaskWindow>::Create(this);
@@ -161,7 +161,7 @@ void ODesignView::dispose()
 
 void ODesignView::initialize()
 {
-    SetMapMode( MapMode( MAP_100TH_MM ) );
+    SetMapMode( MapMode( MapUnit::Map100thMM ) );
     m_aScrollWindow->initialize();
     m_aScrollWindow->Show();
 }

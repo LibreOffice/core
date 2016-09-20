@@ -30,7 +30,7 @@
 SvxXMeasurePreview::SvxXMeasurePreview(vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle)
 {
-    SetMapMode(MAP_100TH_MM);
+    SetMapMode(MapUnit::Map100thMM);
 
     // Scale: 1:2
     MapMode aMapMode = GetMapMode();

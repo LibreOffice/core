@@ -200,7 +200,7 @@ DlgEditor::DlgEditor (
 {
     pDlgEdModel->GetItemPool().FreezeIdRanges();
     pDlgEdView.reset(new DlgEdView(*pDlgEdModel, rWindow_, *this));
-    pDlgEdModel->SetScaleUnit( MAP_100TH_MM );
+    pDlgEdModel->SetScaleUnit( MapUnit::Map100thMM );
 
     SdrLayerAdmin& rAdmin = pDlgEdModel->GetLayerAdmin();
     rAdmin.NewLayer( rAdmin.GetControlLayerName() );
@@ -221,7 +221,7 @@ DlgEditor::DlgEditor (
     aMarkIdle.SetPriority(SchedulerPriority::LOW);
     aMarkIdle.SetIdleHdl( LINK( this, DlgEditor, MarkTimeout ) );
 
-    rWindow.SetMapMode( MapMode( MAP_100TH_MM ) );
+    rWindow.SetMapMode( MapMode( MapUnit::Map100thMM ) );
     pDlgEdPage->SetSize( rWindow.PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
 
     pDlgEdView->ShowSdrPage(pDlgEdView->GetModel()->GetPage(0));
@@ -1150,7 +1150,7 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
         MapMode aOldMap( pPrinter->GetMapMode());
         vcl::Font aOldFont( pPrinter->GetFont() );
 
-        MapMode aMap( MAP_100TH_MM );
+        MapMode aMap( MapUnit::Map100thMM );
         pPrinter->SetMapMode( aMap );
         vcl::Font aFont;
         aFont.SetAlignment( ALIGN_BOTTOM );
@@ -1215,13 +1215,13 @@ bool DlgEditor::AdjustPageSize()
         if ( pDlgEdForm && pDlgEdForm->TransformFormToSdrCoordinates( nFormXIn, nFormYIn, nFormWidthIn, nFormHeightIn, nFormX, nFormY, nFormWidth, nFormHeight ) )
         {
             Size aPageSizeDelta( 400, 300 );
-            aPageSizeDelta = rWindow.PixelToLogic( aPageSizeDelta, MapMode( MAP_100TH_MM ) );
+            aPageSizeDelta = rWindow.PixelToLogic( aPageSizeDelta, MapMode( MapUnit::Map100thMM ) );
 
             sal_Int32 nNewPageWidth = nFormX + nFormWidth + aPageSizeDelta.Width();
             sal_Int32 nNewPageHeight = nFormY + nFormHeight + aPageSizeDelta.Height();
 
             Size aPageSizeMin( DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN );
-            aPageSizeMin = rWindow.PixelToLogic( aPageSizeMin, MapMode( MAP_100TH_MM ) );
+            aPageSizeMin = rWindow.PixelToLogic( aPageSizeMin, MapMode( MapUnit::Map100thMM ) );
             sal_Int32 nPageWidthMin = aPageSizeMin.Width();
             sal_Int32 nPageHeightMin = aPageSizeMin.Height();
 

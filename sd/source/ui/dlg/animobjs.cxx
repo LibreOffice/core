@@ -59,7 +59,7 @@ SdDisplay::SdDisplay(vcl::Window* pWin)
     : Control(pWin, 0)
     , aScale(1, 1)
 {
-    SetMapMode( MAP_PIXEL );
+    SetMapMode( MapUnit::MapPixel );
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
 }
@@ -105,7 +105,7 @@ void SdDisplay::SetScale( const Fraction& rFrac )
 
 Size SdDisplay::GetOptimalSize() const
 {
-    return LogicToPixel(Size(147, 87), MAP_APPFONT);
+    return LogicToPixel(Size(147, 87), MapUnit::MapAppFont);
 }
 
 void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
@@ -534,7 +534,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
             Size            aObjSize( aObjRect.GetSize() );
             Point           aOrigin( Point( -aObjRect.Left(), -aObjRect.Top() ) );
             MapMode         aMap( pVD->GetMapMode() );
-            aMap.SetMapUnit( MAP_100TH_MM );
+            aMap.SetMapUnit( MapUnit::Map100thMM );
             aMap.SetOrigin( aOrigin );
             pVD->SetMapMode( aMap );
             pVD->SetOutputSize( aObjSize );
@@ -896,7 +896,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
     DBG_ASSERT( pOutWin, "Window does not exist!" );
 
     // find window center
-    const MapMode       aMap100( MAP_100TH_MM );
+    const MapMode       aMap100( MapUnit::Map100thMM );
     Size                aMaxSizeLog;
     Size                aMaxSizePix;
     Size                aTemp( pOutWin->GetOutputSizePixel() );
@@ -913,7 +913,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         Size            aTmpSizeLog;
         const Size      aTmpSizePix( rBmpEx.GetSizePixel() );
 
-        if ( aGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+        if ( aGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
             aTmpSizeLog = pDefDev->PixelToLogic( aGraphic.GetPrefSize(), aMap100 );
         else
             aTmpSizeLog = OutputDevice::LogicToLogic( aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), aMap100 );

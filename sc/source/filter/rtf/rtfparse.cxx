@@ -43,7 +43,7 @@ ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
         bNewDef( false )
 {
     // RTF default FontSize 12Pt
-    long nMM = OutputDevice::LogicToLogic( 12, MAP_POINT, MAP_100TH_MM );
+    long nMM = OutputDevice::LogicToLogic( 12, MapUnit::MapPoint, MapUnit::Map100thMM );
     pPool->SetPoolDefaultItem( SvxFontHeightItem( nMM, 100, EE_CHAR_FONTHEIGHT ) );
     // Free-flying pInsDefault
     pInsDefault = new ScRTFCellDefault( pPool );

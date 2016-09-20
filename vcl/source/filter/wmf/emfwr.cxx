@@ -243,7 +243,7 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
     maVDev->EnableOutput( false );
     maVDev->SetMapMode( rMtf.GetPrefMapMode() );
     // don't work with pixel as destination map mode -> higher resolution preferable
-    maDestMapMode.SetMapUnit( MAP_100TH_MM );
+    maDestMapMode.SetMapUnit( MapUnit::Map100thMM );
     mHandlesUsed = std::vector<bool>(MAXHANDLES, false);
     mnHandleCount = mnRecordCount = mnRecordPos = mnRecordPlusPos = 0;
     mbRecordOpen = mbRecordPlusOpen = false;
@@ -252,7 +252,7 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
     mnHorTextAlign = 0;
 
     const Size aMtfSizePix( maVDev->LogicToPixel( rMtf.GetPrefSize(), rMtf.GetPrefMapMode() ) );
-    const Size aMtfSizeLog( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
+    const Size aMtfSizeLog( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapUnit::Map100thMM ) );
 
     // seek over header
     // use [MS-EMF 2.2.11] HeaderExtension2 Object, otherwise resulting EMF cannot be converted with GetWinMetaFileBits()

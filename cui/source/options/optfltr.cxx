@@ -158,7 +158,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
     get( aShadingRB,      "shading"     );
 
     Size aControlSize(248, 55);
-    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
     m_pCheckLBContainer->set_width_request(aControlSize.Width());
     m_pCheckLBContainer->set_height_request(aControlSize.Height());
 

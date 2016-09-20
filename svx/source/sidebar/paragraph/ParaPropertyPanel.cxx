@@ -136,7 +136,7 @@ void ParaPropertyPanel::HandleContextChange (
             mpToolBoxHighlight->Hide();
 
             Size aSize(PROPERTYPAGE_WIDTH,TEXT_SECTIONPAGE_HEIGHT);
-            aSize = LogicToPixel( aSize,MapMode(MAP_APPFONT) );
+            aSize = LogicToPixel( aSize,MapMode(MapUnit::MapAppFont) );
             aSize.setWidth(GetOutputSizePixel().Width());
             SetSizePixel(aSize);
         }*/
@@ -225,8 +225,8 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl, v
                     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
 
                     maTxtLeft += INDENT_STEP;
-                    sal_Int64 nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(MAP_TWIP), MAP_100TH_MM );
-                    nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
+                    sal_Int64 nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(MapUnit::MapTwip), MapUnit::Map100thMM );
+                    nVal = OutputDevice::LogicToLogic( (long)nVal, MapUnit::Map100thMM, (MapUnit)m_eLRSpaceUnit );
                     aMargin.SetTextLeft( (const long)nVal );
                     aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
                     aMargin.SetTextFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
@@ -258,8 +258,8 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl, v
 
                     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
 
-                    sal_Int64 nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(MAP_TWIP), MAP_100TH_MM );
-                    nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
+                    sal_Int64 nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(MapUnit::MapTwip), MapUnit::Map100thMM );
+                    nVal = OutputDevice::LogicToLogic( (long)nVal, MapUnit::Map100thMM, (MapUnit)m_eLRSpaceUnit );
 
                     aMargin.SetTextLeft( (const long)nVal );
                     aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
@@ -369,18 +369,18 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
     {
         const SvxLRSpaceItem* pSpace = static_cast<const SvxLRSpaceItem*>(pState);
         maTxtLeft = pSpace->GetTextLeft();
-        maTxtLeft = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)m_eLRSpaceUnit, MAP_100TH_MM );
-        maTxtLeft = OutputDevice::LogicToLogic( maTxtLeft, MAP_100TH_MM, (MapUnit)(MAP_TWIP) );
+        maTxtLeft = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)m_eLRSpaceUnit, MapUnit::Map100thMM );
+        maTxtLeft = OutputDevice::LogicToLogic( maTxtLeft, MapUnit::Map100thMM, (MapUnit)(MapUnit::MapTwip) );
 
         long aTxtRight = pSpace->GetRight();
-        aTxtRight = OutputDevice::LogicToLogic( aTxtRight, (MapUnit)m_eLRSpaceUnit, MAP_100TH_MM );
-        aTxtRight = OutputDevice::LogicToLogic( aTxtRight, MAP_100TH_MM, (MapUnit)(MAP_TWIP) );
+        aTxtRight = OutputDevice::LogicToLogic( aTxtRight, (MapUnit)m_eLRSpaceUnit, MapUnit::Map100thMM );
+        aTxtRight = OutputDevice::LogicToLogic( aTxtRight, MapUnit::Map100thMM, (MapUnit)(MapUnit::MapTwip) );
 
         long aTxtFirstLineOfst = pSpace->GetTextFirstLineOfst();
-        aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, (MapUnit)m_eLRSpaceUnit, MAP_100TH_MM );
-        aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MAP_100TH_MM, (MapUnit)(MAP_TWIP) );
+        aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, (MapUnit)m_eLRSpaceUnit, MapUnit::Map100thMM );
+        aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::Map100thMM, (MapUnit)(MapUnit::MapTwip) );
 
-        long nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(MAP_TWIP), MAP_100TH_MM );
+        long nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(MapUnit::MapTwip), MapUnit::Map100thMM );
         nVal = (long)mpLeftIndent->Normalize( (long)nVal );
 
         if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)
@@ -390,7 +390,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
             mpFLineIndent->SetMin( nVal*(-1), FUNIT_100TH_MM );
         }
 
-        long nrVal = OutputDevice::LogicToLogic( aTxtRight, (MapUnit)(MAP_TWIP), MAP_100TH_MM );
+        long nrVal = OutputDevice::LogicToLogic( aTxtRight, (MapUnit)(MapUnit::MapTwip), MapUnit::Map100thMM );
         nrVal = (long)mpRightIndent->Normalize( (long)nrVal );
 
         switch (maContext.GetCombinedContext_DI())
@@ -421,7 +421,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         mpLeftIndent->SetValue( nVal, FUNIT_100TH_MM );
         mpRightIndent->SetValue( nrVal, FUNIT_100TH_MM );
 
-        long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, (MapUnit)(MAP_TWIP), MAP_100TH_MM );
+        long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, (MapUnit)(MapUnit::MapTwip), MapUnit::Map100thMM );
         nfVal = (long)mpFLineIndent->Normalize( (long)nfVal );
         mpFLineIndent->SetValue( nfVal, FUNIT_100TH_MM );
 
@@ -475,18 +475,18 @@ void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eS
         const SvxULSpaceItem* pOldItem = static_cast<const SvxULSpaceItem*>(pState);
 
         maUpper = pOldItem->GetUpper();
-        maUpper = OutputDevice::LogicToLogic( maUpper, (MapUnit)m_eULSpaceUnit, MAP_100TH_MM );
-        maUpper = OutputDevice::LogicToLogic( maUpper, MAP_100TH_MM, (MapUnit)(MAP_TWIP) );
+        maUpper = OutputDevice::LogicToLogic( maUpper, (MapUnit)m_eULSpaceUnit, MapUnit::Map100thMM );
+        maUpper = OutputDevice::LogicToLogic( maUpper, MapUnit::Map100thMM, (MapUnit)(MapUnit::MapTwip) );
 
         maLower = pOldItem->GetLower();
-        maLower = OutputDevice::LogicToLogic( maLower, (MapUnit)m_eULSpaceUnit, MAP_100TH_MM );
-        maLower = OutputDevice::LogicToLogic( maLower, MAP_100TH_MM, (MapUnit)(MAP_TWIP) );
+        maLower = OutputDevice::LogicToLogic( maLower, (MapUnit)m_eULSpaceUnit, MapUnit::Map100thMM );
+        maLower = OutputDevice::LogicToLogic( maLower, MapUnit::Map100thMM, (MapUnit)(MapUnit::MapTwip) );
 
-        sal_Int64 nVal = OutputDevice::LogicToLogic( maUpper, (MapUnit)(MAP_TWIP), MAP_100TH_MM );
+        sal_Int64 nVal = OutputDevice::LogicToLogic( maUpper, (MapUnit)(MapUnit::MapTwip), MapUnit::Map100thMM );
         nVal = mpTopDist->Normalize( nVal );
         mpTopDist->SetValue( nVal, FUNIT_100TH_MM );
 
-        nVal = OutputDevice::LogicToLogic( maLower, (MapUnit)(MAP_TWIP), MAP_100TH_MM );
+        nVal = OutputDevice::LogicToLogic( maLower, (MapUnit)(MapUnit::MapTwip), MapUnit::Map100thMM );
         nVal = mpBottomDist->Normalize( nVal );
         mpBottomDist->SetValue( nVal, FUNIT_100TH_MM );
     }

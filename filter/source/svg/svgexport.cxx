@@ -1967,7 +1967,7 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPag
 
                     aMtf.AddAction( new MetaBmpExScaleAction( aNullPt, aSize, aGraphic.GetBitmapEx() ) );
                     aMtf.SetPrefSize( aSize );
-                    aMtf.SetPrefMapMode( MAP_100TH_MM );
+                    aMtf.SetPrefMapMode( MapUnit::Map100thMM );
 
                     (*mpObjects)[ rxShape ] = ObjectRepresentation( rxShape, aMtf );
                 }
@@ -2032,14 +2032,14 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPag
                                             pAction->Duplicate();
                                             aEmbeddedBitmapMtf.AddAction( pAction );
                                             aEmbeddedBitmapMtf.SetPrefSize( aSize );
-                                            aEmbeddedBitmapMtf.SetPrefMapMode( MAP_100TH_MM );
+                                            aEmbeddedBitmapMtf.SetPrefMapMode( MapUnit::Map100thMM );
                                             mEmbeddedBitmapActionSet.insert( ObjectRepresentation( rxShape, aEmbeddedBitmapMtf ) );
                                             pAction->Duplicate();
                                             aMtf.AddAction( pAction );
                                         }
                                     }
                                     aMtf.SetPrefSize( aSize );
-                                    aMtf.SetPrefMapMode( MAP_100TH_MM );
+                                    aMtf.SetPrefMapMode( MapUnit::Map100thMM );
                                     mEmbeddedBitmapActionMap[ rxShape ] = ObjectRepresentation( rxShape, aMtf );
                                 }
                             }
@@ -2324,7 +2324,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
 
 void SVGExport::writeMtf( const GDIMetaFile& rMtf )
 {
-    const Size aSize( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_MM ) );
+    const Size aSize( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapUnit::MapMM ) );
     rtl::OUString aAttr;
     Reference< XExtendedDocumentHandler> xExtDocHandler( GetDocHandler(), UNO_QUERY );
 
@@ -2363,8 +2363,8 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
         aObjects.push_back( ObjectRepresentation( Reference< XInterface >(), rMtf ) );
         SVGFontExport aSVGFontExport( *this, aObjects );
 
-        Point aPoint100thmm( OutputDevice::LogicToLogic( rMtf.GetPrefMapMode().GetOrigin(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
-        Size  aSize100thmm( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
+        Point aPoint100thmm( OutputDevice::LogicToLogic( rMtf.GetPrefMapMode().GetOrigin(), rMtf.GetPrefMapMode(), MapUnit::Map100thMM ) );
+        Size  aSize100thmm( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapUnit::Map100thMM ) );
 
         SVGActionWriter aWriter( *this, aSVGFontExport );
         aWriter.WriteMetaFile( aPoint100thmm, aSize100thmm, rMtf,

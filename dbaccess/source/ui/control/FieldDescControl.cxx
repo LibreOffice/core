@@ -290,7 +290,7 @@ void OFieldDescControl::CheckScrollBars()
     // Which one is the last one that fits?
     sal_uInt16 nLastVisible;
     const sal_Int32 nControlHeight = GetMaxControlHeight();
-    const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
+    const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MapUnit::MapAppFont).Height();
     if (bNeedHScrollBar)
         nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - nControl_Spacing_y - nHScrollHeight) / (nControl_Spacing_y + nControlHeight));
     else
@@ -369,7 +369,7 @@ void OFieldDescControl::ScrollAllAggregates()
     if (m_nOldVThumb != m_pVertScroll->GetThumbPos())
     {
         const sal_Int32 nControlHeight = GetMaxControlHeight();
-        const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
+        const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MapUnit::MapAppFont).Height();
         nDeltaY = (m_nOldVThumb - m_pVertScroll->GetThumbPos()) * (nControl_Spacing_y + nControlHeight);
         m_nOldVThumb = m_pVertScroll->GetThumbPos();
     }
@@ -994,7 +994,7 @@ void OFieldDescControl::SetPosSize( VclPtr<Control>& rControl, long nRow, sal_uI
     const sal_Int32 nControlHeight = GetMaxControlHeight();
     Size aSize(0,nControlHeight);
     if ( isRightAligned() && nCol )
-        aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
+        aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MapUnit::MapAppFont).Width();
     else
     {
         switch( nCol )
@@ -1041,7 +1041,7 @@ void OFieldDescControl::SetPosSize( VclPtr<Control>& rControl, long nRow, sal_uI
     rControl->SetSizePixel( aSize );
     aSize = rControl->GetSizePixel( );
 
-    const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
+    const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MapUnit::MapAppFont).Height();
     aPosition.Y() += ((nRow+1)*nControl_Spacing_y) +
                     (nRow*nControlHeight);
 

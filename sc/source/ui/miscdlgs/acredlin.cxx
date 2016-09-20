@@ -1772,7 +1772,7 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
         {
             sal_Int32 n1 = aStr.indexOf(';');
             aStr = aStr.copy( n1+1 );
-            pTheView->SetTab(i, (sal_uInt16)aStr.toInt32(), MAP_PIXEL);
+            pTheView->SetTab(i, (sal_uInt16)aStr.toInt32(), MapUnit::MapPixel);
         }
     }
 }

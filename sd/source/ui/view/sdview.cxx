@@ -719,8 +719,8 @@ bool View::SdrBeginTextEdit(
             if (OutlinerView* pView = GetTextEditOutlinerView())
             {
                 Rectangle aRectangle = pView->GetOutputArea();
-                if (pWin && pWin->GetMapMode().GetMapUnit() == MAP_100TH_MM)
-                    aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
+                if (pWin && pWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                    aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
                 OString sRectangle = aRectangle.toString();
                 SfxLokHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
             }
@@ -886,7 +886,7 @@ void View::SetMarkedOriginalSize()
 
                     if ( nAspect == embed::Aspects::MSOLE_ICON )
                     {
-                        MapMode aMap100( MAP_100TH_MM );
+                        MapMode aMap100( MapUnit::Map100thMM );
                         aOleSize = static_cast<SdrOle2Obj*>(pObj)->GetOrigObjSize( &aMap100 );
                         bOK = true;
                     }
@@ -896,7 +896,7 @@ void View::SetMarkedOriginalSize()
                         try
                         {
                             awt::Size aSz = xObj->getVisualAreaSize( nAspect );
-                            aOleSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MAP_100TH_MM );
+                            aOleSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aUnit, MapUnit::Map100thMM );
                             bOK = true;
                         }
                         catch( embed::NoVisualAreaSizeException& )

@@ -510,7 +510,7 @@ void ImplDrawButton( OutputDevice *const pDev, Rectangle aFillRect,
         Size aBrdSize( 1, 1 );
         if ( pDev->GetOutDevType() == OUTDEV_PRINTER )
         {
-            aBrdSize = pDev->LogicToPixel( Size( 20, 20 ), MapMode(MAP_100TH_MM) );
+            aBrdSize = pDev->LogicToPixel( Size( 20, 20 ), MapMode(MapUnit::Map100thMM) );
             if ( !aBrdSize.Width() )
                 aBrdSize.Width() = 1;
             if ( !aBrdSize.Height() )

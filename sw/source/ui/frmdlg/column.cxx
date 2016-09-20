@@ -523,7 +523,7 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     long nLineWidth = static_cast<long>(MetricField::ConvertDoubleValue(
             m_pLineWidthEdit->GetValue( ),
             m_pLineWidthEdit->GetDecimalDigits( ),
-            m_pLineWidthEdit->GetUnit(), MAP_TWIP ));
+            m_pLineWidthEdit->GetUnit(), MapUnit::MapTwip ));
     m_pLineTypeDLB->SetWidth( nLineWidth );
 
     // Fill the color listbox
@@ -753,7 +753,7 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, Edit&, void )
         long nLineWidth = static_cast<long>(MetricField::ConvertDoubleValue(
                 m_pLineWidthEdit->GetValue( ),
                 m_pLineWidthEdit->GetDecimalDigits( ),
-                m_pLineWidthEdit->GetUnit(), MAP_TWIP ));
+                m_pLineWidthEdit->GetUnit(), MapUnit::MapTwip ));
         if( !bEnable )
             m_pColMgr->SetNoLine();
         else

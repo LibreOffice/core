@@ -123,7 +123,7 @@ PaintBufferGuard::~PaintBufferGuard()
         {
             // Make sure that the +1 value GetSize() adds to the size is in pixels.
             Size aPaintRectSize;
-            if (m_pWindow->GetMapMode().GetMapUnit() == MAP_PIXEL)
+            if (m_pWindow->GetMapMode().GetMapUnit() == MapUnit::MapPixel)
             {
                 aPaintRectSize = m_aPaintRect.GetSize();
             }
@@ -1338,8 +1338,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     bool bOutput = IsOutputEnabled();
     EnableOutput();
 
-    SAL_WARN_IF( GetMapMode().GetMapUnit() != MAP_PIXEL, "vcl", "MapMode must be PIXEL based" );
-    if ( GetMapMode().GetMapUnit() != MAP_PIXEL )
+    SAL_WARN_IF( GetMapMode().GetMapUnit() != MapUnit::MapPixel, "vcl", "MapMode must be PIXEL based" );
+    if ( GetMapMode().GetMapUnit() != MapUnit::MapPixel )
         return;
 
     // preserve graphicsstate

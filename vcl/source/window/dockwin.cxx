@@ -377,7 +377,7 @@ void DockingWindow::ImplLoadRes( const ResId& rResId )
     {
         // use Sizes of the Resource
         Point   aPos;
-        MapUnit ePosMap = MAP_PIXEL;
+        MapUnit ePosMap = MapUnit::MapPixel;
 
         if ( RSC_DOCKINGWINDOW_XYMAPMODE & nMask )
             ePosMap = (MapUnit)ReadLongRes();

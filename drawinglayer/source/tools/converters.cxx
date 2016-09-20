@@ -50,7 +50,7 @@ namespace drawinglayer
             if(!rSeq.empty() && nDiscreteWidth && nDiscreteHeight)
             {
                 // get destination size in pixels
-                const MapMode aMapModePixel(MAP_PIXEL);
+                const MapMode aMapModePixel(MapUnit::MapPixel);
                 const sal_uInt32 nViewVisibleArea(nDiscreteWidth * nDiscreteHeight);
                 drawinglayer::primitive2d::Primitive2DContainer aSequence(rSeq);
 

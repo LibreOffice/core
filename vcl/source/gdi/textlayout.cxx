@@ -129,26 +129,26 @@ namespace vcl
 
         // also, use a higher-resolution map unit than "pixels", which should save us some rounding errors when
         // translating coordinates between the reference device and the target device.
-        OSL_ENSURE( aTargetMapMode.GetMapUnit() == MAP_PIXEL,
+        OSL_ENSURE( aTargetMapMode.GetMapUnit() == MapUnit::MapPixel,
             "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: this class is not expected to work with such target devices!" );
             // we *could* adjust all the code in this class to handle this case, but at the moment, it's not necessary
         const MapUnit eTargetMapUnit = m_rReferenceDevice.GetMapMode().GetMapUnit();
         aTargetMapMode.SetMapUnit( eTargetMapUnit );
-        OSL_ENSURE( aTargetMapMode.GetMapUnit() != MAP_PIXEL,
+        OSL_ENSURE( aTargetMapMode.GetMapUnit() != MapUnit::MapPixel,
             "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: a reference device which has map mode PIXEL?!" );
 
         m_rTargetDevice.SetMapMode( aTargetMapMode );
 
         // now that the Zoom is part of the map mode, reset the target device's font to the "unzoomed" version
         Font aDrawFont( m_aUnzoomedPointFont );
-        aDrawFont.SetFontSize( OutputDevice::LogicToLogic( aDrawFont.GetFontSize(), MAP_POINT, eTargetMapUnit ) );
+        aDrawFont.SetFontSize( OutputDevice::LogicToLogic( aDrawFont.GetFontSize(), MapUnit::MapPoint, eTargetMapUnit ) );
         _rTargetDevice.SetFont( aDrawFont );
 
         // transfer font to the reference device
         m_rReferenceDevice.Push( PushFlags::FONT | PushFlags::TEXTLAYOUTMODE );
         Font aRefFont( m_aUnzoomedPointFont );
         aRefFont.SetFontSize( OutputDevice::LogicToLogic(
-            aRefFont.GetFontSize(), MAP_POINT, m_rReferenceDevice.GetMapMode().GetMapUnit() ) );
+            aRefFont.GetFontSize(), MapUnit::MapPoint, m_rReferenceDevice.GetMapMode().GetMapUnit() ) );
         m_rReferenceDevice.SetFont( aRefFont );
     }
 

@@ -1353,13 +1353,13 @@ void SvxPathControl::Resize()
         m_pHeaderBar->SetItemSize(ITEMID_NAME, nFirstColumnWidth);
         m_pHeaderBar->SetItemSize(ITEMID_TYPE, 0xFFFF);
         long nTabs[] = {2, 0, nFirstColumnWidth};
-        m_pFocusCtrl->SetTabs(&nTabs[0], MAP_PIXEL);
+        m_pFocusCtrl->SetTabs(&nTabs[0], MapUnit::MapPixel);
     }
 }
 
 Size SvxPathControl::GetOptimalSize() const
 {
-    Size aDefSize(LogicToPixel(Size(150, 0), MapMode(MAP_APPFONT)));
+    Size aDefSize(LogicToPixel(Size(150, 0), MapMode(MapUnit::MapAppFont)));
     Size aOptSize(m_pVBox->GetOptimalSize());
     long nRowHeight(GetTextHeight());
     aOptSize.Height() = nRowHeight * 10;
@@ -1413,7 +1413,7 @@ XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl
     static long nTabs[] = {2, 0, nTabSize };
 
     SetSelectionMode( SelectionMode::Multiple );
-    SetTabs( &nTabs[0], MAP_PIXEL );
+    SetTabs( &nTabs[0], MapUnit::MapPixel );
     SetScrolledHdl( LINK( this, XMLFilterListBox, TabBoxScrollHdl_Impl ) );
     SetHighlightRange();
     Show();
@@ -1464,7 +1464,7 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
             long nW = m_pHeaderBar->GetItemSize(i);
             aSz.Width() =  nW + nTmpSz;
             nTmpSz += nW;
-            SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width() );
+            SetTab( i, PixelToLogic( aSz, MapMode(MapUnit::MapAppFont) ).Width() );
         }
     }
 }

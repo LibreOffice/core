@@ -99,7 +99,7 @@ void ScCondFormatManagerWindow::setColSizes()
         return;
     long aStaticTabs[]= { 2, 0, 0 };
     aStaticTabs[2] = rBar.GetSizePixel().Width() / 2;
-    SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
+    SvSimpleTable::SetTabs(aStaticTabs, MapUnit::MapPixel);
 }
 
 ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList):
@@ -109,7 +109,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument*
     mbModified(false)
 {
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("CONTAINER");
-    Size aSize(LogicToPixel(Size(290, 220), MAP_APPFONT));
+    Size aSize(LogicToPixel(Size(290, 220), MapUnit::MapAppFont));
     pContainer->set_width_request(aSize.Width());
     pContainer->set_height_request(aSize.Height());
     m_pCtrlManager = VclPtr<ScCondFormatManagerWindow>::Create(*pContainer, mpDoc, mpFormatList);

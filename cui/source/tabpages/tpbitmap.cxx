@@ -298,12 +298,12 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 
     pItem = GetItem( rGeoAttr, SID_ATTR_TRANSFORM_WIDTH );
     m_fObjectWidth = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
-    double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_fObjectWidth),(MapUnit)mePoolUnit, MAP_100TH_MM )) / fUIScale);
+    double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_fObjectWidth), mePoolUnit, MapUnit::Map100thMM )) / fUIScale);
     m_fObjectWidth = fTmpWidth;
 
     pItem = GetItem( rGeoAttr, SID_ATTR_TRANSFORM_HEIGHT );
     m_fObjectHeight = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
-    double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_fObjectHeight),(MapUnit)mePoolUnit, MAP_100TH_MM )) / fUIScale);
+    double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_fObjectHeight), mePoolUnit, MapUnit::Map100thMM )) / fUIScale);
     m_fObjectHeight = fTmpHeight;
 
     XFillBitmapItem aItem( static_cast<const XFillBitmapItem&>(rAttrs->Get(XATTR_FILLBITMAP)) );
@@ -324,8 +324,8 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     {
         BitmapEx aBmpEx(pGraphicObject->GetGraphic().GetBitmapEx());
         Size aTempBitmapSize = aBmpEx.GetSizePixel();
-        rBitmapSize.Width() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Width()),MAP_PIXEL, MAP_100TH_MM )) / fUIScale);
-        rBitmapSize.Height() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Height()),MAP_PIXEL, MAP_100TH_MM )) / fUIScale);
+        rBitmapSize.Width() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Width()),MapUnit::MapPixel, MapUnit::Map100thMM )) / fUIScale);
+        rBitmapSize.Height() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Height()),MapUnit::MapPixel, MapUnit::Map100thMM )) / fUIScale);
         CalculateBitmapPresetSize();
     }
 
@@ -376,8 +376,8 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 
     if(eRelative != TRISTATE_TRUE)
     {
-        nWidth = (OutputDevice::LogicToLogic(static_cast<long>(nWidth),(MapUnit)mePoolUnit, MAP_100TH_MM )) / fUIScale;
-        nHeight = (OutputDevice::LogicToLogic(static_cast<long>(nHeight),(MapUnit)mePoolUnit, MAP_100TH_MM )) / fUIScale;
+        nWidth = (OutputDevice::LogicToLogic(static_cast<long>(nWidth), mePoolUnit, MapUnit::Map100thMM )) / fUIScale;
+        nHeight = (OutputDevice::LogicToLogic(static_cast<long>(nHeight), mePoolUnit, MapUnit::Map100thMM )) / fUIScale;
     }
 
     if(m_pBitmapStyleLB->GetSelectEntryPos() == 0)
@@ -537,8 +537,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
     Size aTempBitmapSize = aBmpEx.GetSizePixel();
     const double fUIScale(double(mpView->GetModel()->GetUIScale()));
 
-    rBitmapSize.Width() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Width()),MAP_PIXEL, MAP_100TH_MM )) / fUIScale);
-    rBitmapSize.Height() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Height()),MAP_PIXEL, MAP_100TH_MM )) / fUIScale);
+    rBitmapSize.Width() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Width()),MapUnit::MapPixel, MapUnit::Map100thMM )) / fUIScale);
+    rBitmapSize.Height() = ((OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Height()),MapUnit::MapPixel, MapUnit::Map100thMM )) / fUIScale);
     CalculateBitmapPresetSize();
     ModifyBitmapStyleHdl( *m_pBitmapStyleLB );
     ModifyBitmapPositionHdl( *m_pPositionLB );

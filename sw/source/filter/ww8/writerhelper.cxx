@@ -175,9 +175,9 @@ namespace ww8
         , mbForBullet(true)
         , maGrf(rGrf)
     {
-        const MapMode aMap100mm( MAP_100TH_MM );
+        const MapMode aMap100mm( MapUnit::Map100thMM );
         Size    aSize( rGrf.GetPrefSize() );
-        if ( MAP_PIXEL == rGrf.GetPrefMapMode().GetMapUnit() )
+        if ( MapUnit::MapPixel == rGrf.GetPrefMapMode().GetMapUnit() )
         {
             aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap100mm );
         }

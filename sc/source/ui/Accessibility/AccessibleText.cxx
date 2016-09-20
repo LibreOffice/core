@@ -1096,7 +1096,7 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
                 mpEditEngine = new ScFieldEditEngine(nullptr, pEnginePool, nullptr, true);
                 mbEditEngineCreated = true;
                 mpEditEngine->EnableUndo( false );
-                mpEditEngine->SetRefMapMode( MAP_100TH_MM );
+                mpEditEngine->SetRefMapMode( MapUnit::Map100thMM );
                 mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
 
                 mpEditEngine->SetText(pTxtWnd->GetTextString());
@@ -1309,7 +1309,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
         if (pDocShell)
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
         else
-            pEditEngine->SetRefMapMode( MAP_100TH_MM );
+            pEditEngine->SetRefMapMode( MapUnit::Map100thMM );
         pForwarder = new SvxEditEngineForwarder(*pEditEngine);
     }
 
@@ -1412,7 +1412,7 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
         ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool );
 
         pHdrEngine->EnableUndo( false );
-        pHdrEngine->SetRefMapMode( MAP_TWIP );
+        pHdrEngine->SetRefMapMode( MapUnit::MapTwip );
 
         //  default font must be set, independently of document
         //  -> use global pool from module
@@ -1535,7 +1535,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
         if (mpDocSh)
             mpEditEngine->SetRefDevice(mpDocSh->GetRefDevice());
         else
-            mpEditEngine->SetRefMapMode( MAP_100TH_MM );
+            mpEditEngine->SetRefMapMode( MapUnit::Map100thMM );
         mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
     }
 
