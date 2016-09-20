@@ -1210,7 +1210,7 @@ sal_uInt32 ToggleUnicodeCodepoint::CharsToDelete()
 OUString ToggleUnicodeCodepoint::ReplacementString()
 {
     OUString sIn = StringToReplace();
-    maOutput = "";
+    OUStringBuffer output = "";
     sal_Int32 nUPlus = sIn.indexOf("U+");
     // convert from hex notation to glyph
     if( nUPlus != -1 || (sIn.getLength() > 1 && mbIsHexString) )
@@ -1224,13 +1224,13 @@ OUString ToggleUnicodeCodepoint::ReplacementString()
         while( nUPlus > 0 )
         {
             nUnicode = sIn.copy(0, nUPlus).toUInt32(16);
-            maOutput.appendUtf32( nUnicode );
+            output.appendUtf32( nUnicode );
 
             sIn = sIn.copy(nUPlus+2);
             nUPlus = sIn.indexOf("U+");
         }
         nUnicode = sIn.toUInt32(16);
-        maOutput.appendUtf32( nUnicode );
+        output.appendUtf32( nUnicode );
     }
     // convert from glyph to hex notation
     else
@@ -1242,11 +1242,11 @@ OUString ToggleUnicodeCodepoint::ReplacementString()
             //pad with zeros - minimum length of 4.
             for( sal_Int32 i = 4 - aTmp.getLength(); i > 0; --i )
                 aTmp.insert( 0,"0" );
-            maOutput.append( "U+" );
-            maOutput.append( aTmp );
+            output.append( "U+" );
+            output.append( aTmp );
         }
     }
-    return maOutput.toString();
+    return output.toString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

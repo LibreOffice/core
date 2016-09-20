@@ -72,7 +72,6 @@ class I18NUTIL_DLLPUBLIC ToggleUnicodeCodepoint
 {
 private:
     OUStringBuffer maInput;
-    OUStringBuffer maOutput;
     OUStringBuffer maUtf16;
     OUStringBuffer maCombining;
     bool mbAllowMoreChars = true;
