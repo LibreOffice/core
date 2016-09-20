@@ -365,7 +365,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     }
 
     // by default, select header button
-    m_pRbHeadlColnms->Check(true);
+    m_pRbHeadlColnms->Check();
     m_pRbHeadlEmpty->Check(false);
 
     m_pRbAsTable->SetClickHdl( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
