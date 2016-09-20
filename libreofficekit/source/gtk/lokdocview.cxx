@@ -1035,13 +1035,21 @@ payloadToRectangle (LOKDocView* pDocView, const char* pPayload)
     ++ppCoordinate;
     if (!*ppCoordinate)
         return aRet;
-    aRet.width = atoi(*ppCoordinate);
+    long l = atol(*ppCoordinate);
+    if (l > std::numeric_limits<int>::max())
+        aRet.width = std::numeric_limits<int>::max();
+    else
+        aRet.width = l;
     if (aRet.x + aRet.width > priv->m_nDocumentWidthTwips)
         aRet.width = priv->m_nDocumentWidthTwips - aRet.x;
     ++ppCoordinate;
     if (!*ppCoordinate)
         return aRet;
-    aRet.height = atoi(*ppCoordinate);
+    l = atol(*ppCoordinate);
+    if (l > std::numeric_limits<int>::max())
+        aRet.height = std::numeric_limits<int>::max();
+    else
+        aRet.height = l;
     if (aRet.y + aRet.height > priv->m_nDocumentHeightTwips)
         aRet.height = priv->m_nDocumentHeightTwips - aRet.y;
     g_strfreev(ppCoordinates);
