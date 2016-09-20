@@ -72,7 +72,6 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
                 "cui/ui/areatabpage.ui",
                rInAttrs ),
     m_rOutAttrs (rInAttrs ),
-    m_eRP( RectPoint::LT ),
 
     m_pColorList( nullptr ),
     m_pGradientList( nullptr ),

@@ -616,7 +616,7 @@ void SdrHdl::CreateB2dIAObject()
                                 default:
                                     break;
                             }
-                            pNewOverlayObject = new sdr::overlay::OverlayHandle(aPosition, aB2DSize, aHandleStrokeColor, aHandleFillColor, nRotationAngle);
+                            pNewOverlayObject = new sdr::overlay::OverlayHandle(aPosition, aB2DSize, aHandleStrokeColor, aHandleFillColor);
                         }
                         else
                         {

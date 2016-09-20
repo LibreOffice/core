@@ -245,7 +245,7 @@ sal_Unicode BulletsTypeMgr::aDynamicBulletTypes[]={' ',' ',' ',' ',' ',' ',' ','
 sal_Unicode BulletsTypeMgr::aDynamicRTLBulletTypes[]={' ',' ',' ',' ',' ',' ',' ',' '};
 
 BulletsTypeMgr::BulletsTypeMgr()
-    : NBOTypeMgrBase(eNBOType::BULLETS)
+    : NBOTypeMgrBase()
 {
     Init();
 }
@@ -495,7 +495,7 @@ vcl::Font BulletsTypeMgr::GetBulCharFont(sal_uInt16 nIndex)
 }
 // Graphic Bullet Type lib
 GraphicBulletsTypeMgr::GraphicBulletsTypeMgr()
-    : NBOTypeMgrBase(eNBOType::BULLETS)
+    : NBOTypeMgrBase()
 {
     Init();
 }
@@ -717,7 +717,7 @@ MixBulletsSettings_Impl* MixBulletsTypeMgr::pActualBullets[] ={nullptr,nullptr,n
 MixBulletsSettings_Impl* MixBulletsTypeMgr::pDefaultActualBullets[] ={nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr};
 
 MixBulletsTypeMgr::MixBulletsTypeMgr()
-    : NBOTypeMgrBase(eNBOType::MIXBULLETS)
+    : NBOTypeMgrBase()
 {
     Init();
     for(sal_Int32 nItem = 0; nItem < DEFAULT_BULLET_TYPES; nItem++ )
@@ -1170,7 +1170,7 @@ bool MixBulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
 }
 // Numbering Type lib
 NumberingTypeMgr::NumberingTypeMgr()
-    : NBOTypeMgrBase(eNBOType::NUMBERING)
+    : NBOTypeMgrBase()
     , pNumberSettingsArr (new NumberSettingsArr_Impl)
 {
     Init();
@@ -1357,7 +1357,7 @@ bool NumberingTypeMgr::IsCustomized(sal_uInt16 nIndex)
 }
 // Multi-level /Outline Type lib
 OutlineTypeMgr::OutlineTypeMgr()
-    : NBOTypeMgrBase(eNBOType::OUTLINE)
+    : NBOTypeMgrBase()
 {
     Init();
     for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ )

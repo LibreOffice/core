@@ -46,8 +46,7 @@ const sal_uInt16 SID_HELPMENU            = (SID_SFX_START + 410);
 namespace framework
 {
 
-AddonMenu::AddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame ) :
-    m_xFrame( rFrame )
+AddonMenu::AddonMenu()
 {
 }
 
@@ -62,8 +61,8 @@ bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
     return aCmdURL.startsWith( ADDONSPOPUPMENU_URL_PREFIX_STR );
 }
 
-AddonPopupMenu::AddonPopupMenu( const css::uno::Reference< css::frame::XFrame >& rFrame ) :
-    AddonMenu( rFrame )
+AddonPopupMenu::AddonPopupMenu() :
+    AddonMenu()
 {
 }
 
@@ -94,12 +93,12 @@ bool AddonMenuManager::HasAddonMenuElements()
 }
 
 // Factory method to create different Add-On menu types
-VclPtr<PopupMenu> AddonMenuManager::CreatePopupMenuType( MenuType eMenuType, const Reference< XFrame >& rFrame )
+VclPtr<PopupMenu> AddonMenuManager::CreatePopupMenuType( MenuType eMenuType )
 {
     if ( eMenuType == ADDON_MENU )
-        return VclPtr<AddonMenu>::Create( rFrame );
+        return VclPtr<AddonMenu>::Create();
     else if ( eMenuType == ADDON_POPUPMENU )
-        return VclPtr<AddonPopupMenu>::Create( rFrame );
+        return VclPtr<AddonPopupMenu>::Create();
     else
         return nullptr;
 }
@@ -115,7 +114,7 @@ VclPtr<AddonMenu> AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& 
     const Sequence< Sequence< PropertyValue > >& rAddonMenuEntries = aOptions.GetAddonsMenu();
     if ( rAddonMenuEntries.getLength() > 0 )
     {
-        pAddonMenu = static_cast<AddonMenu *>(AddonMenuManager::CreatePopupMenuType( ADDON_MENU, rFrame ).get());
+        pAddonMenu = static_cast<AddonMenu *>(AddonMenuManager::CreatePopupMenuType( ADDON_MENU ).get());
         ::rtl::OUString aModuleIdentifier = GetModuleIdentifier( rContext, rFrame );
         AddonMenuManager::BuildMenu( pAddonMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, rAddonMenuEntries, rFrame, aModuleIdentifier );
 
@@ -235,7 +234,7 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                  AddonMenuManager::IsCorrectContext( aModuleIdentifier, aContext ))
             {
                 sal_uInt16          nId             = nUniqueMenuId++;
-                VclPtr<AddonPopupMenu> pAddonPopupMenu = static_cast<AddonPopupMenu *>(AddonMenuManager::CreatePopupMenuType( ADDON_POPUPMENU, rFrame ).get());
+                VclPtr<AddonPopupMenu> pAddonPopupMenu = static_cast<AddonPopupMenu *>(AddonMenuManager::CreatePopupMenuType( ADDON_POPUPMENU ).get());
 
                 AddonMenuManager::BuildMenu( pAddonPopupMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, aModuleIdentifier );
 
@@ -291,7 +290,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
             VclPtr<PopupMenu> pSubMenu;
             if ( aAddonSubMenu.getLength() > 0 )
             {
-                pSubMenu = AddonMenuManager::CreatePopupMenuType( nSubMenuType, rFrame );
+                pSubMenu = AddonMenuManager::CreatePopupMenuType( nSubMenuType );
                 AddonMenuManager::BuildMenu( pSubMenu, nSubMenuType, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, rModuleIdentifier );
 
                 // Don't create a menu item for an empty sub menu

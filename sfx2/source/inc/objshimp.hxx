@@ -37,12 +37,6 @@
 namespace svtools { class AsynchronLink; }
 
 class SfxViewFrame;
-struct MarkData_Impl
-{
-    OUString aMark;
-    OUString aUserData;
-    SfxViewFrame* pFrame;
-};
 
 class SfxBasicManagerHolder;
 

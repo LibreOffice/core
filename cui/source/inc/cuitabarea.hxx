@@ -221,7 +221,6 @@ private:
     VclPtr<SvxXRectPreview>    m_pCtlXRectPreview;
 
     const SfxItemSet&   m_rOutAttrs;
-    RectPoint          m_eRP;
 
     XColorListRef         m_pColorList;
     XGradientListRef      m_pGradientList;

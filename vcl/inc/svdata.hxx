@@ -117,7 +117,6 @@ struct ImplSVAppData
     OUString*               mpToolkitName;                  // Toolkit Name
     Help*                   mpHelp;                         // Application help
     VclPtr<PopupMenu>       mpActivePopupMenu;              // Actives Popup-Menu (in Execute)
-    ImplIdleMgr*            mpIdleMgr;                      // Idle-Manager
     VclPtr<ImplWheelWindow> mpWheelWindow;                  // WheelWindow
     ImplHotKey*             mpFirstHotKey;                  // HotKey-Verwaltung
     ImplEventHook*          mpFirstEventHook;               // Event-Hooks
