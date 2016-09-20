@@ -2115,11 +2115,11 @@ void SvxTableController::updateSelectionOverlay()
                 Rectangle aSelectionEnd(aEndRect.Right(), aEndRect.Top(), aEndRect.Right(), aEndRect.Bottom());
                 Rectangle aSelection(a2DRange.getMinX(), a2DRange.getMinY(), a2DRange.getMaxX(), a2DRange.getMaxY());
 
-                if (pOutDev->GetMapMode().GetMapUnit() == MAP_100TH_MM)
+                if (pOutDev->GetMapMode().GetMapUnit() == MapUnit::MM_100th)
                 {
-                    aSelectionStart = OutputDevice::LogicToLogic(aSelectionStart, MAP_100TH_MM, MAP_TWIP);
-                    aSelectionEnd = OutputDevice::LogicToLogic(aSelectionEnd, MAP_100TH_MM, MAP_TWIP);
-                    aSelection = OutputDevice::LogicToLogic(aSelection, MAP_100TH_MM, MAP_TWIP);
+                    aSelectionStart = OutputDevice::LogicToLogic(aSelectionStart, MapUnit::MM_100th, MapUnit::Twip);
+                    aSelectionEnd = OutputDevice::LogicToLogic(aSelectionEnd, MapUnit::MM_100th, MapUnit::Twip);
+                    aSelection = OutputDevice::LogicToLogic(aSelection, MapUnit::MM_100th, MapUnit::Twip);
                 }
 
                 if(SfxViewShell* pViewShell = SfxViewShell::Current())

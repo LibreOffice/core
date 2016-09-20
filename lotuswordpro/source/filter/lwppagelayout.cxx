@@ -644,7 +644,7 @@ void LwpPageLayout::GetWidthAndHeight(double& fWidth, double& fHeight)
         if (!bScreen)//Printer available
         {
             Size aPaperSize = pPrinter->GetPaperSize();
-            aPaperSize = pPrinter->PixelToLogic( aPaperSize, MapMode( MAP_10TH_MM ) );
+            aPaperSize = pPrinter->PixelToLogic( aPaperSize, MapMode( MapUnit::MM_10th ) );
             fWidth = static_cast<double>(aPaperSize.Width())/100;   //cm unit
             fHeight = static_cast<double>(aPaperSize.Height())/100;
         }

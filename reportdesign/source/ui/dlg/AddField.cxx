@@ -394,8 +394,8 @@ void OAddFieldWindow::Resize()
     const Size aWindowSize( GetOutputSizePixel() );
 
 
-    const Size aRelated(LogicToPixel( Size( RELATED_CONTROLS, RELATED_CONTROLS ), MAP_APPFONT ));
-    const Size aFixedTextSize(LogicToPixel( Size( FIXEDTEXT_WIDTH, FIXEDTEXT_HEIGHT ), MAP_APPFONT ));
+    const Size aRelated(LogicToPixel( Size( RELATED_CONTROLS, RELATED_CONTROLS ), MapUnit::AppFont ));
+    const Size aFixedTextSize(LogicToPixel( Size( FIXEDTEXT_WIDTH, FIXEDTEXT_HEIGHT ), MapUnit::AppFont ));
 
     // ToolBar
     Size aToolbarSize( m_aActions->GetSizePixel() );

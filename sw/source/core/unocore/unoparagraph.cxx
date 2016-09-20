@@ -530,7 +530,7 @@ throw(uno::RuntimeException)
             {
                 const MapUnit eMapUnit(rSet.GetPool()->GetMetric(rEntry.nWID));
 
-                if(eMapUnit != MAP_100TH_MM)
+                if(eMapUnit != MapUnit::MM_100th)
                 {
                     SvxUnoConvertToMM(eMapUnit, rAny);
                 }

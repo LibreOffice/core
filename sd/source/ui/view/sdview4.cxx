@@ -173,7 +173,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         // create  new object
         Size aSize;
 
-        if ( rGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+        if ( rGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::Pix )
         {
             ::OutputDevice* pOutDev = nullptr;
             if( mpViewSh )
@@ -183,13 +183,13 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                 pOutDev = Application::GetDefaultDevice();
 
             if( pOutDev )
-                aSize = pOutDev->PixelToLogic( rGraphic.GetPrefSize(), MAP_100TH_MM );
+                aSize = pOutDev->PixelToLogic( rGraphic.GetPrefSize(), MapUnit::MM_100th );
         }
         else
         {
             aSize = OutputDevice::LogicToLogic( rGraphic.GetPrefSize(),
                                                 rGraphic.GetPrefMapMode(),
-                                                MapMode( MAP_100TH_MM ) );
+                                                MapMode( MapUnit::MM_100th ) );
         }
 
         pNewGrafObj = new SdrGrafObj( rGraphic, Rectangle( rPos, aSize ) );
@@ -489,9 +489,9 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
                     ::sd::Window* pWin = mpViewSh->GetActiveWindow();
 
                     if( pWin )
-                        aPrefSize = pWin->PixelToLogic( aPrefSize, MAP_100TH_MM );
+                        aPrefSize = pWin->PixelToLogic( aPrefSize, MapUnit::MM_100th );
                     else
-                        aPrefSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
+                        aPrefSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MapUnit::MM_100th );
                 }
                 else
                     aPrefSize  = Size( 5000, 5000 );

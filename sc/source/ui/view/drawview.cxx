@@ -313,7 +313,7 @@ void ScDrawView::RecalcScale()
     }
     else
     {
-        Point aLogic = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
+        Point aLogic = pDev->LogicToPixel( Point(1000,1000), MapUnit::Twip );
         nPPTX = aLogic.X() / 1000.0;
         nPPTY = aLogic.Y() / 1000.0;
                                             //! Zoom, handed over ???
@@ -559,8 +559,8 @@ bool ScDrawView::SdrBeginTextEdit(
         if (OutlinerView* pView = GetTextEditOutlinerView())
         {
             Rectangle aRectangle = pView->GetOutputArea();
-            if (pWinL && pWinL->GetMapMode().GetMapUnit() == MAP_100TH_MM)
-                aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
+            if (pWinL && pWinL->GetMapMode().GetMapUnit() == MapUnit::MM_100th)
+                aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::MM_100th, MapUnit::Twip);
             OString sRectangle = aRectangle.toString();
             SfxLokHelper::notifyOtherViews(pViewSh, LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
         }

@@ -59,7 +59,7 @@ VCL_BUILDER_DECL_FACTORY(GalleryPreview)
 
 Size GalleryPreview::GetOptimalSize() const
 {
-    return LogicToPixel(Size(70, 88), MAP_APPFONT);
+    return LogicToPixel(Size(70, 88), MapUnit::AppFont);
 }
 
 bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )

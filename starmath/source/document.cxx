@@ -262,10 +262,10 @@ void SmDocShell::ArrangeFormula()
         else
         {
             pOutDev = &SM_MOD()->GetDefaultVirtualDev();
-            pOutDev->SetMapMode( MapMode(MAP_100TH_MM) );
+            pOutDev->SetMapMode( MapMode(MapUnit::MM_100th) );
         }
     }
-    OSL_ENSURE(pOutDev->GetMapMode().GetMapUnit() == MAP_100TH_MM,
+    OSL_ENSURE(pOutDev->GetMapMode().GetMapUnit() == MapUnit::MM_100th,
                "Sm : falscher MapMode");
 
     const SmFormat &rFormat = GetFormat();
@@ -334,7 +334,7 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
         // set font heights
         SvxFontHeightItem aFontHeigt(
                         Application::GetDefaultDevice()->LogicToPixel(
-                        Size( 0, 11 ), MapMode( MAP_POINT ) ).Height(), 100,
+                        Size( 0, 11 ), MapMode( MapUnit::Point ) ).Height(), 100,
                         EE_CHAR_FONTHEIGHT );
         rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
         aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CJK );
@@ -368,7 +368,7 @@ EditEngine& SmDocShell::GetEditEngine()
                 EEControlBits(~EEControlBits::PASTESPECIAL) );
 
         mpEditEngine->SetWordDelimiters(" .=+-*/(){}[];\"");
-        mpEditEngine->SetRefMapMode( MAP_PIXEL );
+        mpEditEngine->SetRefMapMode( MapUnit::Pix );
 
         mpEditEngine->SetPaperSize( Size( 800, 0 ) );
 
@@ -507,13 +507,13 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
             //!this class.
 
             const MapUnit eOld = pPrinter->GetMapMode().GetMapUnit();
-            if ( MAP_100TH_MM != eOld )
+            if ( MapUnit::MM_100th != eOld )
             {
                 MapMode aMap( pPrinter->GetMapMode() );
-                aMap.SetMapUnit( MAP_100TH_MM );
+                aMap.SetMapUnit( MapUnit::MM_100th );
                 Point aTmp( aMap.GetOrigin() );
-                aTmp.X() = OutputDevice::LogicToLogic( aTmp.X(), eOld, MAP_100TH_MM );
-                aTmp.Y() = OutputDevice::LogicToLogic( aTmp.Y(), eOld, MAP_100TH_MM );
+                aTmp.X() = OutputDevice::LogicToLogic( aTmp.X(), eOld, MapUnit::MM_100th );
+                aTmp.Y() = OutputDevice::LogicToLogic( aTmp.Y(), eOld, MapUnit::MM_100th );
                 aMap.SetOrigin( aTmp );
                 pPrinter->SetMapMode( aMap );
             }
@@ -532,13 +532,13 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
             //!this class.
 
             const MapUnit eOld = pRefDev->GetMapMode().GetMapUnit();
-            if ( MAP_100TH_MM != eOld )
+            if ( MapUnit::MM_100th != eOld )
             {
                 MapMode aMap( pRefDev->GetMapMode() );
-                aMap.SetMapUnit( MAP_100TH_MM );
+                aMap.SetMapUnit( MapUnit::MM_100th );
                 Point aTmp( aMap.GetOrigin() );
-                aTmp.X() = OutputDevice::LogicToLogic( aTmp.X(), eOld, MAP_100TH_MM );
-                aTmp.Y() = OutputDevice::LogicToLogic( aTmp.Y(), eOld, MAP_100TH_MM );
+                aTmp.X() = OutputDevice::LogicToLogic( aTmp.X(), eOld, MapUnit::MM_100th );
+                aTmp.Y() = OutputDevice::LogicToLogic( aTmp.Y(), eOld, MapUnit::MM_100th );
                 aMap.SetOrigin( aTmp );
                 pRefDev->SetMapMode( aMap );
             }
@@ -581,7 +581,7 @@ Printer* SmDocShell::GetPrt()
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
         mpPrinter = VclPtr<SfxPrinter>::Create(pOptions);
-        mpPrinter->SetMapMode(MapMode(MAP_100TH_MM));
+        mpPrinter->SetMapMode(MapMode(MapUnit::MM_100th));
     }
     return mpPrinter;
 }
@@ -602,7 +602,7 @@ void SmDocShell::SetPrinter( SfxPrinter *pNew )
 {
     mpPrinter.disposeAndClear();
     mpPrinter = pNew;    //Transfer ownership
-    mpPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
+    mpPrinter->SetMapMode( MapMode(MapUnit::MM_100th) );
     SetFormulaArranged(false);
     Repaint();
 }

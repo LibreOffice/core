@@ -328,15 +328,15 @@ public:
     void                 SetPersist( ::comphelper::IEmbeddedHelper *p ) { m_pEmbeddedHelper = p; }
 
     // Unit for the symbol coordination
-    // Default is 1 logical unit = 1/100mm (Unit=MAP_100TH_MM, Fract=(1,1)).
+    // Default is 1 logical unit = 1/100mm (Unit=MapUnit::MM_100th, Fract=(1,1)).
     // Examples:
-    //   MAP_POINT,    Fraction(72,1)    : 1 log Einh = 72 Point   = 1 Inch
-    //   MAP_POINT,    Fraction(1,20)    : 1 log Einh = 1/20 Point = 1 Twip
-    //   MAP_TWIP,     Fraction(1,1)     : 1 log Einh = 1 Twip
-    //   MAP_100TH_MM, Fraction(1,10)    : 1 log Einh = 1/1000mm
-    //   MAP_MM,       Fraction(1000,1)  : 1 log Einh = 1000mm     = 1m
-    //   MAP_CM,       Fraction(100,1)   : 1 log Einh = 100cm      = 1m
-    //   MAP_CM,       Fraction(100000,1): 1 log Einh = 100000cm   = 1km
+    //   MapUnit::Point,    Fraction(72,1)    : 1 log Einh = 72 Point   = 1 Inch
+    //   MapUnit::Point,    Fraction(1,20)    : 1 log Einh = 1/20 Point = 1 Twip
+    //   MapUnit::Twip,     Fraction(1,1)     : 1 log Einh = 1 Twip
+    //   MapUnit::MM_100th, Fraction(1,10)    : 1 log Einh = 1/1000mm
+    //   MapUnit::MM,       Fraction(1000,1)  : 1 log Einh = 1000mm     = 1m
+    //   MapUnit::CM,       Fraction(100,1)   : 1 log Einh = 100cm      = 1m
+    //   MapUnit::CM,       Fraction(100000,1): 1 log Einh = 100000cm   = 1km
     // (FWIW: you cannot represent light years).
     // The scaling unit is needed for the Engine to serve the Clipboard
     // with the correct sizes.
