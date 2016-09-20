@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_b5edb790",
+        "filename": "sw/source/ui/misc/bookmark.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-20T16:17:24Z",
+      "side": 1,
+      "message": "is this function supposed to check that nothing else modified bookmarks while the dialog is up?\n\nwhat if we run through the whole loop but aTableBookmarks still has elements in it?  that would mean some bookmark was removed from the document?",
+      "revId": "0f68cdf88cec5a90b7460e03ad4035079f76c49f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
