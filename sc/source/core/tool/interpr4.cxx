@@ -2146,9 +2146,8 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
     return nResultVal;
 }
 
-sal_Int32 ScInterpreter::GetInt32()
+sal_Int32 ScInterpreter::double_to_int32(double fVal)
 {
-    double fVal = GetDouble();
     if (!rtl::math::isFinite(fVal))
     {
         SetError( GetDoubleErrorValue( fVal));
@@ -2175,33 +2174,18 @@ sal_Int32 ScInterpreter::GetInt32()
     return static_cast<sal_Int32>(fVal);
 }
 
+sal_Int32 ScInterpreter::GetInt32()
+{
+    return double_to_int32(GetDouble());
+}
+
 sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
 {
-    double fVal = GetDoubleWithDefault( nDefault);
-    if (!rtl::math::isFinite(fVal))
-    {
-        SetError( GetDoubleErrorValue( fVal));
-        return SAL_MAX_INT32;
-    }
-    if (fVal > 0.0)
-    {
-        fVal = rtl::math::approxFloor( fVal);
-        if (fVal > SAL_MAX_INT32)
-        {
-            SetError( errIllegalArgument);
-            return SAL_MAX_INT32;
-        }
-    }
-    else if (fVal < 0.0)
-    {
-        fVal = rtl::math::approxCeil( fVal);
-        if (fVal < SAL_MIN_INT32)
-        {
-            SetError( errIllegalArgument);
-            return SAL_MAX_INT32;
-        }
-    }
-    return static_cast<sal_Int32>(fVal);
+    bool bMissing = IsMissing();
+    double fVal = GetDouble();
+    if ( bMissing )
+        return nDefault;
+    return double_to_int32(fVal);
 }
 
 sal_Int16 ScInterpreter::GetInt16()

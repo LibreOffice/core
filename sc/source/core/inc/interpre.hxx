@@ -411,6 +411,7 @@ double GetDoubleFromMatrix(const ScMatrixRef& pMat);
 double GetDouble();
 double GetDoubleWithDefault(double nDefault);
 bool IsMissing();
+sal_Int32 double_to_int32(double fVal);
 /** if GetDouble() not within int32 limits sets nGlobalError and returns SAL_MAX_INT32 */
 sal_Int32 GetInt32();
 /** if GetDoubleWithDefault() not within int32 limits sets nGlobalError and returns SAL_MAX_INT32 */
