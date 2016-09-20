@@ -57,7 +57,7 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
          ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isNan(";
+         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
          ss << "tmp"<<dataCol<<"))\n";
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
@@ -104,7 +104,7 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -120,7 +120,7 @@ void OpDmax::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -187,7 +187,7 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
          ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isNan(";
+         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
          ss << "tmp"<<dataCol<<"))\n";
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
@@ -235,7 +235,7 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -251,7 +251,7 @@ void OpDmin::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -318,7 +318,7 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
          ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isNan(";
+         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
          ss << "tmp"<<dataCol<<"))\n";
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
@@ -365,7 +365,7 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -381,7 +381,7 @@ void OpDproduct::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -448,7 +448,7 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
          ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isNan(";
+         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
          ss << "tmp"<<dataCol<<"))\n";
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
@@ -496,7 +496,7 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -512,7 +512,7 @@ void OpDaverage::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -583,7 +583,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
          ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isNan(";
+         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
          ss << "tmp"<<dataCol<<"))\n";
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
@@ -631,7 +631,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -647,7 +647,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -682,7 +682,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -698,7 +698,7 @@ void OpDstdev::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -768,7 +768,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
          ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isNan(";
+         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
          ss << "tmp"<<dataCol<<"))\n";
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
@@ -816,7 +816,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -832,7 +832,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -867,7 +867,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -883,7 +883,7 @@ void OpDstdevp::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -951,7 +951,7 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
          ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isNan(";
+         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
          ss << "tmp"<<dataCol<<"))\n";
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
@@ -999,7 +999,7 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -1015,7 +1015,7 @@ void OpDsum::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -1083,7 +1083,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
          ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isNan(";
+         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
          ss << "tmp"<<dataCol<<"))\n";
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
@@ -1131,7 +1131,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -1147,7 +1147,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -1182,7 +1182,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -1198,7 +1198,7 @@ void OpDvar::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -1268,7 +1268,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
          GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
          ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isNan(";
+         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
          ss << "tmp"<<dataCol<<"))\n";
          ss << "        tmp"<<dataCol<<"=0;\n";
      }
@@ -1316,7 +1316,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -1332,7 +1332,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -1367,7 +1367,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -1383,7 +1383,7 @@ void OpDvarp::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -1451,7 +1451,7 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
             ->GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
          ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isNan(";
+         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
          ss << "tmp"<<dataCol<<"))\n";
          ss << "        tmp"<<dataCol<<"=DBL_MIN;\n";
      }
@@ -1499,7 +1499,7 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -1515,7 +1515,7 @@ void OpDcount::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
@@ -1582,7 +1582,7 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
             ->GetFormulaToken());
          ss << "    tmp"<<dataCol<<"=";
          ss << vSubArguments[dataCol]->GenSlidingWindowDeclRef()<<";\n";
-         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isNan(";
+         ss << "    if(gid0>="<<pTmpDVR1->GetArrayLength()<<" ||isnan(";
          ss << "tmp"<<dataCol<<"))\n";
          ss << "        tmp"<<dataCol<<"=DBL_MIN;\n";
      }
@@ -1630,7 +1630,7 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "        tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "        if(isNan(tmp"<<i<<"))\n";
+                ss << "        if(isnan(tmp"<<i<<"))\n";
                 ss <<"            tmp"<<i<<" = 0;\n";
             }
             ss << "        flag = false;\n";
@@ -1646,7 +1646,7 @@ void OpDcount2::GenSlidingWindowFunction(std::stringstream &ss,
                     throw Unhandled(__FILE__, __LINE__);
                 ss << "                tmp"<<i<<"=";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef()<<";\n";
-                ss << "                if(!isNan(tmp"<<i<<")){\n";
+                ss << "                if(!isnan(tmp"<<i<<")){\n";
                 ss << "                    if(tmp"<<(i-dataCol-1)<<"!=tmp";
                 ss << i<<"){\n";
                 ss << "                        continue;\n";
