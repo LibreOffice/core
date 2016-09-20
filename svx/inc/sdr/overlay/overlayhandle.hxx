@@ -22,7 +22,6 @@ class SVX_DLLPUBLIC OverlayHandle : public OverlayObjectWithBasePosition
 protected:
     basegfx::B2DSize maSize;
     Color maStrokeColor;
-    float mfTransparency;
 
     // geometry creation for OverlayObject
     virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
@@ -31,8 +30,7 @@ public:
     OverlayHandle(const basegfx::B2DPoint& rBasePos,
                   const basegfx::B2DSize& rSize,
                   Color& rStrokeColor,
-                  Color& rFillColor,
-                  float fTransparency = 0.0f);
+                  Color& rFillColor);
 
     virtual ~OverlayHandle() override;
 };

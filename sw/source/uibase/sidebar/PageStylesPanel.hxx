@@ -82,7 +82,6 @@ private:
 
     ::std::unique_ptr<SfxInt16Item>      mpPageColumnItem;
     ::std::unique_ptr<SvxPageItem>       mpPageItem;
-    ::std::unique_ptr<XFillStyleItem>    mpBgFillStyleItem;
     ::std::unique_ptr<XFillColorItem>    mpBgColorItem;
     ::std::unique_ptr<XFillGradientItem> mpBgGradientItem;
     ::std::unique_ptr<XFillHatchItem>    mpBgHatchItem;

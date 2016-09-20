@@ -111,7 +111,6 @@ protected:
     MapMode             maMapModeSrc;
     MapMode             maMapModeDest;
 
-    css::uno::Reference< css::task::XStatusIndicator >    mXStatusIndicator;
     css::uno::Reference< css::drawing::XDrawPage >        mXDrawPage;
     css::uno::Reference< css::drawing::XShapes >          mXShapes;
 
@@ -120,8 +119,6 @@ protected:
     // own extensions
 
     EscherExHostAppData*    mpHostAppData;
-
-    sal_uInt32              mnPagesWritten;
 
     bool                    mbIsTitlePossible;
 

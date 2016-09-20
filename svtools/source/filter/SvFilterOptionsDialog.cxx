@@ -242,15 +242,12 @@ sal_Int16 SvFilterOptionsDialog::execute()
         }
         if ( nFormat < nFilterCount )
         {
-            std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() ));
-            FltCallDialogParameter aFltCallDlgPara( Application::GetDefDialogParent(),  pResMgr.get(), meFieldUnit );
+            FltCallDialogParameter aFltCallDlgPara( Application::GetDefDialogParent(), meFieldUnit );
             aFltCallDlgPara.aFilterData = maFilterDataSequence;
             aFltCallDlgPara.aFilterExt = aGraphicFilter.GetExportFormatShortName( nFormat );
             bool bIsPixelFormat( aGraphicFilter.IsExportPixelFormat( nFormat ) );
             if ( ScopedVclPtrInstance<ExportDialog>( aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection, bIsPixelFormat )->Execute() == RET_OK )
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
-
-            pResMgr.reset();
 
             // taking the out parameter from the dialog
             maFilterDataSequence = aFltCallDlgPara.aFilterData;

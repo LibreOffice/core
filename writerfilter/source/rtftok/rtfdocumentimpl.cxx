@@ -225,7 +225,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_xFrame(xFrame),
       m_xStatusIndicator(xStatusIndicator),
       m_pMapperStream(nullptr),
-      m_aDefaultState(this),
+      m_aDefaultState(),
       m_bSkipUnknown(false),
       m_aFontIndexes(),
       m_aColorTable(),
@@ -3181,9 +3181,8 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
     }
 }
 
-RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
-    : m_pDocumentImpl(pDocumentImpl),
-      nInternalState(RTFInternalState::NORMAL),
+RTFParserState::RTFParserState()
+    : nInternalState(RTFInternalState::NORMAL),
       eDestination(Destination::NORMAL),
       eFieldStatus(RTFFieldStatus::NONE),
       nBorderState(RTFBorderState::NONE),
@@ -3212,7 +3211,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
       aPicture(),
       aShape(),
       aDrawingObject(),
-      aFrame(this),
+      aFrame(),
       eRunType(RunType::LOCH),
       isRightToLeft(false),
       nYear(0),
@@ -3237,7 +3236,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
 
 void RTFDocumentImpl::resetFrame()
 {
-    m_aStates.top().aFrame = RTFFrame(&m_aStates.top());
+    m_aStates.top().aFrame = RTFFrame();
 }
 
 RTFColorTableEntry::RTFColorTableEntry()
@@ -3293,9 +3292,8 @@ RTFDrawingObject::RTFDrawingObject()
 {
 }
 
-RTFFrame::RTFFrame(RTFParserState* pParserState)
-    : m_pDocumentImpl(pParserState->m_pDocumentImpl),
-      m_nX(0),
+RTFFrame::RTFFrame()
+    : m_nX(0),
       m_nY(0),
       m_nW(0),
       m_nH(0),

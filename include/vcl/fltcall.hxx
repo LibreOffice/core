@@ -34,16 +34,14 @@ struct FltCallDialogParameter
 {
 
     VclPtr<vcl::Window> pWindow;
-    ResMgr*     pResMgr;
     FieldUnit   eFieldUnit;
     OUString    aFilterExt;
 
     // In and Out PropertySequence for all filter dialogs
     css::uno::Sequence< css::beans::PropertyValue > aFilterData;
 
-    FltCallDialogParameter( vcl::Window* pW, ResMgr* pRsMgr, FieldUnit eFiUni ) :
+    FltCallDialogParameter( vcl::Window* pW, FieldUnit eFiUni ) :
         pWindow         ( pW ),
-        pResMgr         ( pRsMgr ),
         eFieldUnit      ( eFiUni ) {};
 };
 

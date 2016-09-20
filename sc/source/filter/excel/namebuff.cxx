@@ -190,22 +190,22 @@ ExtNameBuff::ExtNameBuff( const XclImpRoot& rRoot ) :
 {
 }
 
-void ExtNameBuff::AddDDE( const OUString& rName, sal_Int16 nRefIdx )
+void ExtNameBuff::AddDDE( sal_Int16 nRefIdx )
 {
-    ExtName aNew( rName, 0x0001 );
+    ExtName aNew( 0x0001 );
     maExtNames[ nRefIdx ].push_back( aNew );
 }
 
-void ExtNameBuff::AddOLE( const OUString& rName, sal_Int16 nRefIdx, sal_uInt32 nStorageId )
+void ExtNameBuff::AddOLE( sal_Int16 nRefIdx, sal_uInt32 nStorageId )
 {
-    ExtName aNew( rName, 0x0002 );
+    ExtName aNew( 0x0002 );
     aNew.nStorageId = nStorageId;
     maExtNames[ nRefIdx ].push_back( aNew );
 }
 
-void ExtNameBuff::AddName( const OUString& rName, sal_Int16 nRefIdx )
+void ExtNameBuff::AddName( sal_Int16 nRefIdx )
 {
-    ExtName aNew( GetScAddInName( rName ), 0x0004 );
+    ExtName aNew( 0x0004 );
     maExtNames[ nRefIdx ].push_back( aNew );
 }
 

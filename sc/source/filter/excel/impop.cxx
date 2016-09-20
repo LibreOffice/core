@@ -582,20 +582,19 @@ void ImportExcel::Externname25()
     nOpt = aIn.ReaduInt16();
     nRes = aIn.ReaduInt32();
 
-    OUString aName( aIn.ReadByteString( false ) );
+    aIn.ReadByteString( false ); // name
 
     if( ( nOpt & 0x0001 ) || ( ( nOpt & 0xFFFE ) == 0x0000 ) )
     {// external name
-        aName = ScfTools::ConvertToScDefinedName( aName );
-        pExcRoot->pExtNameBuff->AddName( aName, mnLastRefIdx );
+        pExcRoot->pExtNameBuff->AddName( mnLastRefIdx );
     }
     else if( nOpt & 0x0010 )
     {// ole link
-        pExcRoot->pExtNameBuff->AddOLE( aName, mnLastRefIdx, nRes );        // nRes is storage ID
+        pExcRoot->pExtNameBuff->AddOLE( mnLastRefIdx, nRes );        // nRes is storage ID
     }
     else
     {// dde link
-        pExcRoot->pExtNameBuff->AddDDE( aName, mnLastRefIdx );
+        pExcRoot->pExtNameBuff->AddDDE( mnLastRefIdx );
     }
 }
 
