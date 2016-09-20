@@ -44,6 +44,8 @@ class UITest(object):
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
 
+            return component
+
     def execute_dialog_through_command(self, command):
         with EventListener(self._xContext, "DialogExecute") as event:
             self._xUITest.executeCommand(command)
