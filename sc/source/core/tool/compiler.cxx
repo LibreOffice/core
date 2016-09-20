@@ -2885,8 +2885,51 @@ bool ScCompiler::IsOpCode2( const OUString& rName )
     return bFound;
 }
 
+static bool lcl_ParenthesisFollows( const sal_Unicode* p )
+{
+    while (*p == ' ')
+        p++;
+    return *p == '(';
+}
+
 bool ScCompiler::IsValue( const OUString& rSym )
 {
+    if (FormulaGrammar::isODFF( GetGrammar()))
+    {
+        // Speedup things for ODFF, only well-formed numbers, not locale
+        // dependent nor user input.
+        rtl_math_ConversionStatus eStatus;
+        sal_Int32 nParseEnd;
+        double fVal = rtl::math::stringToDouble( rSym, '.', 0, &eStatus, &nParseEnd);
+        if (nParseEnd != rSym.getLength())
+        {
+            // Not (only) a number.
+
+            if (nParseEnd > 0)
+                return false;   // partially a number => no such thing
+
+            if (lcl_ParenthesisFollows( aFormula.getStr() + nSrcPos))
+                return false;   // some function name, not a constant
+
+            // Could be TRUE or FALSE constant.
+            if (rSym.equalsIgnoreAsciiCase("TRUE"))
+            {
+                maRawToken.SetDouble( 1.0 );
+                return true;
+            }
+            if (rSym.equalsIgnoreAsciiCase("FALSE"))
+            {
+                maRawToken.SetDouble( 0.0 );
+                return true;
+            }
+            return false;
+        }
+        if (eStatus == rtl_math_ConversionStatus_OutOfRange)
+            SetError( errIllegalArgument );
+        maRawToken.SetDouble( fVal );
+        return true;
+    }
+
     double fVal;
     sal_uInt32 nIndex = mxSymbols->isEnglish() ? mpFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) : 0;
 
@@ -2905,10 +2948,7 @@ bool ScCompiler::IsValue( const OUString& rSym )
 
     if (nType == css::util::NumberFormat::LOGICAL)
     {
-        const sal_Unicode* p = aFormula.getStr() + nSrcPos;
-        while( *p == ' ' )
-            p++;
-        if (*p == '(')
+        if (lcl_ParenthesisFollows( aFormula.getStr() + nSrcPos))
             return false;   // Boolean function instead.
     }
 
