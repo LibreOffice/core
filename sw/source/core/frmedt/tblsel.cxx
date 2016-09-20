@@ -474,7 +474,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
             SwSelUnion *pUnion = &rSelUnion;
             const SwTabFrame *pTable = pUnion->GetTable();
 
-            SWRECTFN( pTable )
+            SWRECTFN fnRect(pTable);
             bool bRTL = pTable->IsRightToLeft();
 
             if( !pTable->IsValid() && nLoopMax  )
@@ -522,8 +522,8 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
 
                         // ignore if FrameRect is outside the union
 
-                        const long nXFuzzy = bVert ? 0 : 20;
-                        const long nYFuzzy = bVert ? 20 : 0;
+                        const long nXFuzzy = fnRect.bVert ? 0 : 20;
+                        const long nYFuzzy = fnRect.bVert ? 20 : 0;
 
                         if( !(  rUnion.Top()  + nYFuzzy > nFrameBottom ||
                                 nUnionBottom < rFrameRect.Top() + nYFuzzy ||
@@ -934,7 +934,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     long nWidth;
     SwTableBox* pLastBox = nullptr;
 
-    SWRECTFN( pStart->GetUpper() )
+    SWRECTFN fnRect(pStart->GetUpper());
 
     for ( auto & rSelUnion : aUnions )
     {
@@ -984,7 +984,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 rBoxes.insert( pBox );
                                 aPosArr.insert(
                                     CmpLPt( (pCell->Frame().*fnRect->fnGetPos)(),
-                                    pBox, bVert ) );
+                                    pBox, fnRect.bVert ) );
 
                                 pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ];
                                 aNew.SetWidth( nTmpWidth );
@@ -1001,7 +1001,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 rBoxes.insert( pBox );
                                 aPosArr.insert(
                                     CmpLPt( (pCell->Frame().*fnRect->fnGetPos)(),
-                                    pBox, bVert ) );
+                                    pBox, fnRect.bVert ) );
                             }
                         }
                         // overlapping on left- or right-side
@@ -1048,7 +1048,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             rBoxes.insert( pBox );
                             aPosArr.insert(
                                 CmpLPt( (pCell->Frame().*fnRect->fnGetPos)(),
-                                pBox, bVert ) );
+                                pBox, fnRect.bVert ) );
 
                             pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos+1 ];
                             aNew.SetWidth( nRight );
@@ -1088,7 +1088,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             pLastBox = pBox;
                             rBoxes.insert( pBox );
                             aPosArr.insert( CmpLPt( Point( rUnion.Left(),
-                                                pCell->Frame().Top()), pBox, bVert ));
+                                                pCell->Frame().Top()), pBox, fnRect.bVert ));
 
                             if( pUndo )
                                 pUndo->AddNewBox( pBox->GetSttIdx() );
@@ -1266,7 +1266,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
         nWidth = 0;
         long nY = !aPosArr.empty() ?
-                    ( bVert ?
+                    ( fnRect.bVert ?
                       aPosArr[ 0 ].X() :
                       aPosArr[ 0 ].Y() ) :
                   0;
@@ -1276,7 +1276,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             const CmpLPt& rPt = aPosArr[ n ];
             if( bCalcWidth )
             {
-                if( nY == ( bVert ? rPt.X() : rPt.Y() ) ) // same Y level?
+                if( nY == ( fnRect.bVert ? rPt.X() : rPt.Y() ) ) // same Y level?
                     nWidth += rPt.pSelBox->GetFrameFormat()->GetFrameSize().GetWidth();
                 else
                     bCalcWidth = false;     // one line ready
@@ -1593,7 +1593,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
     const SwTabFrame *pOrg = rpStart->FindTabFrame();
     const SwTabFrame *pTab = pOrg;
 
-    SWRECTFN( pTab )
+    SWRECTFN fnRect(pTab);
 
     bool bRTL = pTab->IsRightToLeft();
     const long nTmpWish = pOrg->GetFormat()->GetFrameSize().GetWidth();
@@ -1767,7 +1767,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
     }
     else
     {
-        SWRECTFN( pTable )
+        SWRECTFN fnRect(pTable);
         long nSttTop = (pStart->Frame().*fnRect->fnGetTop)();
         long nEndTop = (pEnd->Frame().*fnRect->fnGetTop)();
         if( nSttTop == nEndTop )
@@ -1776,7 +1776,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
                 (pEnd->Frame().*fnRect->fnGetLeft)() )
                 bExchange = true;
         }
-        else if( bVert == ( nSttTop < nEndTop ) )
+        else if( fnRect.bVert == ( nSttTop < nEndTop ) )
             bExchange = true;
     }
     if ( bExchange )
@@ -1806,7 +1806,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
     const long nWish = std::max( 1L, pTable->GetFormat()->GetFrameSize().GetWidth() );
     while ( pTable )
     {
-        SWRECTFN( pTable )
+        SWRECTFN fnRect(pTable);
         const long nOfst = (pTable->*fnRect->fnGetPrtLeft)();
         const long nPrtWidth = (pTable->Prt().*fnRect->fnGetWidth)();
         long nSt1 = ::lcl_CalcWish( pStart, nWish, nPrtWidth ) + nOfst;
@@ -1840,7 +1840,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
             nSt2 = nEd2;
             nEd2 = nTmp;
         }
-        if( bVert )
+        if( fnRect.bVert )
         {
             aSt = Point( nSt2, nSt1 );
             aEd = Point( nEd2, nEd1 );
@@ -1962,7 +1962,7 @@ bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
     const SwLayoutFrame *pEnd = pCntNd->getLayoutFrame( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
                                 &aMkPos )->GetUpper();
 
-    SWRECTFN( pStart->GetUpper() )
+    SWRECTFN fnRect(pStart->GetUpper());
 
     // First, compute tables and rectangles
     SwSelUnions aUnions;

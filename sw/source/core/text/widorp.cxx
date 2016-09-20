@@ -59,7 +59,7 @@ SwTextFrameBreak::SwTextFrameBreak( SwTextFrame *pNewFrame, const SwTwips nRst )
     : m_nRstHeight(nRst), m_pFrame(pNewFrame)
 {
     SwSwapIfSwapped swap(m_pFrame);
-    SWRECTFN( m_pFrame )
+    SWRECTFN fnRect(m_pFrame);
     m_nOrigin = (m_pFrame->*fnRect->fnGetPrtTop)();
     m_bKeep = !m_pFrame->IsMoveable() || IsNastyFollow( m_pFrame );
     if( !m_bKeep && m_pFrame->IsInSct() )
@@ -106,7 +106,7 @@ bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
     bool bFit = false;
 
     SwSwapIfSwapped swap(m_pFrame);
-    SWRECTFN( m_pFrame )
+    SWRECTFN fnRect(m_pFrame);
     // nOrigin is an absolut value, rLine referes to the swapped situation.
 
     SwTwips nTmpY;
@@ -206,11 +206,11 @@ bool SwTextFrameBreak::IsBreakNow( SwTextMargin &rLine )
 void SwTextFrameBreak::SetRstHeight( const SwTextMargin &rLine )
 {
     // Consider bottom margin
-    SWRECTFN( m_pFrame )
+    SWRECTFN fnRect(m_pFrame);
 
     m_nRstHeight = (m_pFrame->*fnRect->fnGetBottomMargin)();
 
-    if ( bVert )
+    if ( fnRect.bVert )
     {
            if ( m_pFrame->IsVertLR() )
               m_nRstHeight = (*fnRect->fnYDiff)( m_pFrame->SwitchHorizontalToVertical( rLine.Y() ) , m_nOrigin );
@@ -373,13 +373,13 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
         return false;
 
     // Remaining height of the master
-    SWRECTFN( pFrame )
+    SWRECTFN fnRect(pFrame);
 
     const SwTwips nDocPrtTop = (pFrame->*fnRect->fnGetPrtTop)();
     SwTwips nOldHeight;
     SwTwips nTmpY = rLine.Y() + rLine.GetLineHeight();
 
-    if ( bVert )
+    if ( fnRect.bVert )
     {
         nTmpY = pFrame->SwitchHorizontalToVertical( nTmpY );
         nOldHeight = -(pFrame->Prt().*fnRect->fnGetHeight)();

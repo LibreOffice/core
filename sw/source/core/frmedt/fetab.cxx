@@ -527,7 +527,7 @@ void SwFEShell::GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox ) const
         if (g_pColumnCacheLastTable == pTab->GetTable())
         {
             bDel = false;
-            SWRECTFN( pTab )
+            SWRECTFN fnRect(pTab);
 
             const SwPageFrame* pPage = pTab->FindPageFrame();
             const sal_uLong nLeftMin = (pTab->Frame().*fnRect->fnGetLeft)() -
@@ -539,7 +539,7 @@ void SwFEShell::GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox ) const
             {
                 // if TabFrame was changed, we only shift a little bit
                 // as the width is the same
-                SWRECTFNX( g_pColumnCacheLastTabFrame )
+                SWRECTFN fnRectX(g_pColumnCacheLastTabFrame);
                 if ((g_pColumnCacheLastTabFrame->Frame().*fnRectX->fnGetWidth)() ==
                     (pTab->Frame().*fnRect->fnGetWidth)() )
                 {
@@ -600,14 +600,14 @@ void SwFEShell::GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox ) const
         if (g_pRowCacheLastTable == pTab->GetTable())
         {
             bDel = false;
-            SWRECTFN( pTab )
+            SWRECTFN fnRect(pTab);
             const SwPageFrame* pPage = pTab->FindPageFrame();
-            const long nLeftMin  = ( bVert ?
+            const long nLeftMin  = ( fnRect.bVert ?
                                      pTab->GetPrtLeft() - pPage->Frame().Left() :
                                      pTab->GetPrtTop() - pPage->Frame().Top() );
-            const long nLeft     = bVert ? LONG_MAX : 0;
+            const long nLeft     = fnRect.bVert ? LONG_MAX : 0;
             const long nRight    = (pTab->Prt().*fnRect->fnGetHeight)();
-            const long nRightMax = bVert ? nRight : LONG_MAX;
+            const long nRightMax = fnRect.bVert ? nRight : LONG_MAX;
 
             if (g_pRowCacheLastTabFrame != pTab || g_pRowCacheLastCellFrame != pBox)
                 bDel = true;
@@ -1358,7 +1358,7 @@ size_t SwFEShell::GetCurTabColNum() const
 
     size_t nRet = 0;
 
-    SWRECTFN( pFrame )
+    SWRECTFN fnRect(pFrame);
 
     const SwPageFrame* pPage = pFrame->FindPageFrame();
 
@@ -1467,7 +1467,7 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                     // We first check if the given point is 'close' to the left or top
                     // border of the table frame:
                     OSL_ENSURE( pFrame, "Nested table frame without outer table" );
-                    SWRECTFN( pFrame )
+                    SWRECTFN fnRect(pFrame);
                     const bool bRTL = pFrame->IsRightToLeft();
 
                     SwRect aTabRect = pFrame->Prt();
@@ -1478,8 +1478,8 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                                           (aTabRect.*fnRect->fnGetLeft)();
                     const SwTwips nTop  = (aTabRect.*fnRect->fnGetTop)();
 
-                    SwTwips& rPointX = bVert ? aPt.Y() : aPt.X();
-                    SwTwips& rPointY = bVert ? aPt.X() : aPt.Y();
+                    SwTwips& rPointX = fnRect.bVert ? aPt.Y() : aPt.X();
+                    SwTwips& rPointY = fnRect.bVert ? aPt.X() : aPt.Y();
 
                     const SwTwips nXDiff = (*fnRect->fnXDiff)( nLeft, rPointX ) * ( bRTL ? (-1) : 1 );
                     const SwTwips nYDiff = (*fnRect->fnYDiff)( nTop, rPointY );
@@ -1581,10 +1581,10 @@ static const SwCellFrame *lcl_FindFrame( const SwLayoutFrame *pLay, const Point 
                     SwRect aTabRect = pTabFrame->Prt();
                     aTabRect.Pos() += pTabFrame->Frame().Pos();
 
-                    SWRECTFN( pTabFrame )
+                    SWRECTFN fnRect(pTabFrame);
 
                     const SwTwips nTabTop  = (aTabRect.*fnRect->fnGetTop)();
-                    const SwTwips nMouseTop  = bVert ? rPt.X() : rPt.Y();
+                    const SwTwips nMouseTop = fnRect.bVert ? rPt.X() : rPt.Y();
 
                     // Do not allow to drag upper table border:
                     if ( !::IsSame( nTabTop, nMouseTop ) )
@@ -2186,7 +2186,7 @@ bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
     // if the table is in relative values (USHRT_MAX)
     // then it should be recalculated to absolute values now
     const SwFormatFrameSize& rTableFrameSz = pTab->GetFormat()->GetFrameSize();
-    SWRECTFN( pTab )
+    SWRECTFN fnRect(pTab);
     long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
     if( TBLVAR_CHGABS == pTab->GetTable()->GetTableChgMode() &&
         ( eType & nsTableChgWidthHeightType::WH_COL_LEFT || eType & nsTableChgWidthHeightType::WH_COL_RIGHT ) &&
