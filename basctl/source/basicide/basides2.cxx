@@ -96,21 +96,20 @@ sal_uInt16 Shell::SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags )
 
 void Shell::SetMDITitle()
 {
-    OUStringBuffer aTitleBuf;
+    OUString aTitle;
     if ( !m_aCurLibName.isEmpty() )
     {
         LibraryLocation eLocation = m_aCurDocument.getLibraryLocation( m_aCurLibName );
-        aTitleBuf = m_aCurDocument.getTitle(eLocation) + "." + m_aCurLibName ;
+        aTitle = m_aCurDocument.getTitle(eLocation) + "." + m_aCurLibName ;
     }
     else
-        aTitleBuf = IDE_RESSTR(RID_STR_ALL) ;
+        aTitle = IDE_RESSTR(RID_STR_ALL) ;
 
     DocumentSignature aCurSignature( m_aCurDocument );
     if ( aCurSignature.getScriptingSignatureState() == SignatureState::OK )
     {
-        aTitleBuf = aTitleBuf + " " + IDE_RESSTR(RID_STR_SIGNED) + " ";
+        aTitle += " " + IDE_RESSTR(RID_STR_SIGNED) + " ";
     }
-    OUString aTitle(aTitleBuf.makeStringAndClear());
 
     SfxViewFrame* pViewFrame = GetViewFrame();
     if ( pViewFrame )
