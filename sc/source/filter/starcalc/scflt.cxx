@@ -20,6 +20,7 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
+#include <com/sun/star/style/NumberingType.hpp>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -859,7 +860,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
         SvxPageItem aPageItem(ATTR_PAGE);
         aPageItem.SetPageUsage( SVX_PAGE_ALL );
         aPageItem.SetLandscape( pPage->Orientation != 1 );
-        aPageItem.SetNumType( SVX_ARABIC );
+        aPageItem.SetNumType( css::style::NumberingType::ARABIC );
         pSet->Put(aPageItem);
 
         pSet->Put(SvxLRSpaceItem( pPage->Left, pPage->Right, 0,0, ATTR_LRSPACE ));

@@ -1038,19 +1038,19 @@ OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
 
     switch (mePageNumType)
     {
-        case SVX_CHARS_UPPER_LETTER:
+        case css::style::NumberingType::CHARS_UPPER_LETTER:
             aPageNumValue += OUStringLiteral1( (nNum - 1) % 26 + 'A' );
             break;
-        case SVX_CHARS_LOWER_LETTER:
+        case css::style::NumberingType::CHARS_LOWER_LETTER:
             aPageNumValue += OUStringLiteral1( (nNum - 1) % 26 + 'a' );
             break;
-        case SVX_ROMAN_UPPER:
+        case css::style::NumberingType::ROMAN_UPPER:
             bUpper = true;
             SAL_FALLTHROUGH;
-        case SVX_ROMAN_LOWER:
+        case css::style::NumberingType::ROMAN_LOWER:
             aPageNumValue += SvxNumberFormat::CreateRomanString(nNum, bUpper);
             break;
-        case SVX_NUMBER_NONE:
+        case css::style::NumberingType::NUMBER_NONE:
             aPageNumValue = " ";
             break;
         default:

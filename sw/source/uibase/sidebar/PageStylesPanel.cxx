@@ -454,8 +454,8 @@ IMPL_LINK_NOARG_TYPED( PageStylesPanel, ModifyColumnCountHdl, ListBox&, void )
 
 IMPL_LINK_NOARG_TYPED( PageStylesPanel, ModifyNumberingHdl, ListBox&, void )
 {
-    sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(mpNumberSelectLB->GetEntryData(mpNumberSelectLB->GetSelectEntryPos()));
-    mpPageItem->SetNumType((SvxNumType)nEntryData);
+    SvxNumType nEntryData = static_cast<SvxNumType>(reinterpret_cast<sal_uLong>(mpNumberSelectLB->GetEntryData(mpNumberSelectLB->GetSelectEntryPos())));
+    mpPageItem->SetNumType(nEntryData);
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD, { mpPageItem.get() });
 }
 

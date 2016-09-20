@@ -986,7 +986,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_USHORT2:
         {
             rAny >>= nTmp16;
-            if(nTmp16 <= SVX_NUMBER_NONE )
+            if(nTmp16 <= css::style::NumberingType::NUMBER_NONE )
                 SetFormat(nTmp16);
             else {
                 //exception(wrong_value)

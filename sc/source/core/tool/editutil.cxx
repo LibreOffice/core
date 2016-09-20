@@ -750,20 +750,20 @@ static OUString lcl_GetNumStr(sal_Int32 nNo, SvxNumType eType)
     {
         switch( eType )
         {
-        case SVX_CHARS_UPPER_LETTER:
-        case SVX_CHARS_LOWER_LETTER:
+        case css::style::NumberingType::CHARS_UPPER_LETTER:
+        case css::style::NumberingType::CHARS_LOWER_LETTER:
             aTmpStr = lcl_GetCharStr( nNo );
             break;
 
-        case SVX_ROMAN_UPPER:
-        case SVX_ROMAN_LOWER:
+        case css::style::NumberingType::ROMAN_UPPER:
+        case css::style::NumberingType::ROMAN_LOWER:
             if( nNo < 4000 )
-                aTmpStr = SvxNumberFormat::CreateRomanString( nNo, ( eType == SVX_ROMAN_UPPER ) );
+                aTmpStr = SvxNumberFormat::CreateRomanString( nNo, ( eType == css::style::NumberingType::ROMAN_UPPER ) );
             else
                 aTmpStr.clear();
             break;
 
-        case SVX_NUMBER_NONE:
+        case css::style::NumberingType::NUMBER_NONE:
             aTmpStr.clear();
             break;
 
@@ -776,7 +776,7 @@ static OUString lcl_GetNumStr(sal_Int32 nNo, SvxNumType eType)
             break;
         }
 
-        if( SVX_CHARS_UPPER_LETTER == eType )
+        if( css::style::NumberingType::CHARS_UPPER_LETTER == eType )
             aTmpStr = aTmpStr.toAsciiUpperCase();
     }
     return aTmpStr;
@@ -788,7 +788,7 @@ ScHeaderFieldData::ScHeaderFieldData()
         aTime( tools::Time::EMPTY )
 {
     nPageNo = nTotalPages = 0;
-    eNumType = SVX_ARABIC;
+    eNumType = css::style::NumberingType::ARABIC;
 }
 
 ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP )

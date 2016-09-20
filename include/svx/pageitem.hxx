@@ -21,18 +21,8 @@
 
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
-#include <com/sun/star/style/NumberingType.hpp>
 
-enum SvxNumType
-{
-    SVX_CHARS_UPPER_LETTER = css::style::NumberingType::CHARS_UPPER_LETTER,
-    SVX_CHARS_LOWER_LETTER = css::style::NumberingType::CHARS_LOWER_LETTER,
-    SVX_ROMAN_UPPER = css::style::NumberingType::ROMAN_UPPER,
-    SVX_ROMAN_LOWER = css::style::NumberingType::ROMAN_LOWER,
-    SVX_ARABIC = css::style::NumberingType::ARABIC,
-    SVX_NUMBER_NONE = css::style::NumberingType::NUMBER_NONE,
-    SVX_PAGEDESC = css::style::NumberingType::PAGE_DESCRIPTOR,
-};
+using SvxNumType = sal_Int16; // css::style::NumberingType constants
 
 /*--------------------------------------------------------------------
   usage of the page

@@ -867,7 +867,7 @@ bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         {
             sal_Int16 nSet = 0;
             rAny >>= nSet;
-            if(nSet < (sal_Int16) SVX_NUMBER_NONE )
+            if(nSet < css::style::NumberingType::NUMBER_NONE )
                 SetFormat(nSet);
             else {
             }

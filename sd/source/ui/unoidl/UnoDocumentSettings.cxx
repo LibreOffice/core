@@ -711,7 +711,7 @@ throw (UnknownPropertyException, PropertyVetoException,
             case HANDLE_PAGENUMFMT:
                 {
                     sal_Int32 nValue = 0;
-                    if( (*pValues >>= nValue ) && (nValue >= SVX_CHARS_UPPER_LETTER ) && (nValue <= SVX_PAGEDESC) )
+                    if( (*pValues >>= nValue ) && (nValue >= css::style::NumberingType::CHARS_UPPER_LETTER ) && (nValue <= css::style::NumberingType::PAGE_DESCRIPTOR) )
                     {
                         pDoc->SetPageNumType((SvxNumType)nValue);
                         bOk = true;

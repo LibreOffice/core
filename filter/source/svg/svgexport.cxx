@@ -933,9 +933,9 @@ void SVGFilter::implGenerateMetaData()
         }
 
         // Add a (global) Page Numbering Type attribute for the document
-        // NOTE: at present pSdrModel->GetPageNumType() returns always SVX_ARABIC
+        // NOTE: at present pSdrModel->GetPageNumType() returns always css::style::NumberingType::ARABIC
         // so the following code fragment is pretty unuseful
-        sal_Int32 nPageNumberingType =  SVX_ARABIC;
+        sal_Int32 nPageNumberingType = css::style::NumberingType::ARABIC;
         SvxDrawPage* pSvxDrawPage = SvxDrawPage::getImplementation( mSelectedPages[0] );
         if( pSvxDrawPage )
         {
@@ -946,24 +946,24 @@ void SVGFilter::implGenerateMetaData()
             // That is used by CalcFieldHdl method.
             mVisiblePagePropSet.nPageNumberingType = nPageNumberingType;
         }
-        if( nPageNumberingType != SVX_NUMBER_NONE )
+        if( nPageNumberingType != css::style::NumberingType::NUMBER_NONE )
         {
             OUString sNumberingType;
             switch( nPageNumberingType )
             {
-                case SVX_CHARS_UPPER_LETTER:
+                case css::style::NumberingType::CHARS_UPPER_LETTER:
                     sNumberingType = "alpha-upper";
                     break;
-                case SVX_CHARS_LOWER_LETTER:
+                case css::style::NumberingType::CHARS_LOWER_LETTER:
                     sNumberingType = "alpha-lower";
                     break;
-                case SVX_ROMAN_UPPER:
+                case css::style::NumberingType::ROMAN_UPPER:
                     sNumberingType = "roman-upper";
                     break;
-                case SVX_ROMAN_LOWER:
+                case css::style::NumberingType::ROMAN_LOWER:
                     sNumberingType = "roman-lower";
                     break;
-                case SVX_ARABIC:
+                case css::style::NumberingType::ARABIC:
                     // arabic numbering type is the default, so we do not append any attribute for it
                 default:
                     // in case the numbering type is not handled we fall back on arabic numbering
@@ -1033,7 +1033,7 @@ void SVGFilter::implGenerateMetaData()
 
                             //  Page Number Field
                             xPropSet->getPropertyValue( "IsPageNumberVisible" )  >>= bPageNumberVisibility;
-                            bPageNumberVisibility = bPageNumberVisibility && ( nPageNumberingType != SVX_NUMBER_NONE );
+                            bPageNumberVisibility = bPageNumberVisibility && ( nPageNumberingType != css::style::NumberingType::NUMBER_NONE );
                             if( bPageNumberVisibility ) // visibility default value: 'hidden'
                             {
                                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrPageNumberVisibility, "visible" );
@@ -1379,7 +1379,7 @@ void SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
     mVisiblePagePropSet.bIsDateTimeFieldVisible             = true;
     mVisiblePagePropSet.bIsDateTimeFieldFixed               = true;
     mVisiblePagePropSet.nDateTimeFormat                     = SVXDATEFORMAT_B;
-    mVisiblePagePropSet.nPageNumberingType                  = SVX_ARABIC;
+    mVisiblePagePropSet.nPageNumberingType                  = css::style::NumberingType::ARABIC;
 
     //  We collect info on master page elements visibility, and placeholder text shape content.
     Reference< XPropertySet > xPropSet( rxPage, UNO_QUERY );
@@ -2274,20 +2274,20 @@ IMPL_LINK_TYPED( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
             {
                 switch( mVisiblePagePropSet.nPageNumberingType )
                 {
-                    case SVX_CHARS_UPPER_LETTER:
+                    case css::style::NumberingType::CHARS_UPPER_LETTER:
                         aRepresentation += "QWERTYUIOPASDFGHJKLZXCVBNM";
                         break;
-                    case SVX_CHARS_LOWER_LETTER:
+                    case css::style::NumberingType::CHARS_LOWER_LETTER:
                         aRepresentation += "qwertyuiopasdfghjklzxcvbnm";
                         break;
-                    case SVX_ROMAN_UPPER:
+                    case css::style::NumberingType::ROMAN_UPPER:
                         aRepresentation += "IVXLCDM";
                         break;
-                    case SVX_ROMAN_LOWER:
+                    case css::style::NumberingType::ROMAN_LOWER:
                         aRepresentation += "ivxlcdm";
                         break;
                     // arabic numbering type is the default
-                    case SVX_ARABIC:
+                    case css::style::NumberingType::ARABIC:
                     // in case the numbering type is not handled we fall back on arabic numbering
                     default:
                         aRepresentation += "0123456789";

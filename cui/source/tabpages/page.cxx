@@ -466,7 +466,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     }
 
     // general page data
-    SvxNumType eNumType = SVX_ARABIC;
+    SvxNumType eNumType = css::style::NumberingType::ARABIC;
     bLandscape = ( mpDefPrinter->GetOrientation() == Orientation::Landscape );
     sal_uInt16 nUse = (sal_uInt16)SVX_PAGE_ALL;
     pItem = GetItem( *rSet, SID_ATTR_PAGE );
@@ -805,10 +805,10 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 
     //Get the NumType value
     nPos = m_pNumberFormatBox->GetSelectEntryPos();
-    sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pNumberFormatBox->GetEntryData(nPos));
+    SvxNumType nEntryData = static_cast<SvxNumType>(reinterpret_cast<sal_uLong>(m_pNumberFormatBox->GetEntryData(nPos)));
     if ( m_pNumberFormatBox->IsValueChangedFromSaved() )
     {
-        aPage.SetNumType( (SvxNumType)nEntryData );
+        aPage.SetNumType( nEntryData );
         bMod = true;
     }
 

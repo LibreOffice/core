@@ -420,7 +420,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     aPageItem.SetDescName(rPageDesc.GetName());
     aPageItem.SetPageUsage(lcl_convertUseToSvx(rPageDesc.GetUseOn()));
     aPageItem.SetLandscape(rPageDesc.GetLandscape());
-    aPageItem.SetNumType((SvxNumType)rPageDesc.GetNumType().GetNumberingType());
+    aPageItem.SetNumType(rPageDesc.GetNumType().GetNumberingType());
     rSet.Put(aPageItem);
 
     // Size

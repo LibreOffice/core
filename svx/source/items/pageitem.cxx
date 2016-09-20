@@ -23,6 +23,7 @@
 #include <svx/pageitem.hxx>
 #include <editeng/itemtype.hxx>
 #include <svx/unomid.hxx>
+#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <svl/itemset.hxx>
@@ -36,7 +37,7 @@ SfxPoolItem* SvxPageItem::CreateDefault() { return new   SvxPageItem(0);}
 
 SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
 
-    eNumType    ( SVX_ARABIC ),
+    eNumType    ( css::style::NumberingType::ARABIC ),
     bLandscape  ( false ),
     eUse        ( SVX_PAGE_ALL )
 {
@@ -101,7 +102,7 @@ bool SvxPageItem::GetPresentation
             {
                 rText = aDescName + cpDelimTmp;
             }
-            DBG_ASSERT( eNumType <= SVX_NUMBER_NONE, "enum overflow" );
+            DBG_ASSERT( eNumType <= css::style::NumberingType::NUMBER_NONE, "enum overflow" );
             rText += SVX_RESSTR(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType) + cpDelimTmp;
             if ( bLandscape )
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_TRUE);
@@ -121,7 +122,7 @@ bool SvxPageItem::GetPresentation
             {
                 rText += aDescName + cpDelimTmp;
             }
-            DBG_ASSERT( eNumType <= SVX_NUMBER_NONE, "enum overflow" );
+            DBG_ASSERT( eNumType <= css::style::NumberingType::NUMBER_NONE, "enum overflow" );
             rText += SVX_RESSTR(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType) + cpDelimTmp;
             if ( bLandscape )
                 rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_TRUE);
