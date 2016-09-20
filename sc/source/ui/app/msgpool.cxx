@@ -35,7 +35,8 @@ static SfxItemInfo const aMsgItemInfos[] =
     { SID_PIVOT_TABLE,           true },   // SCITEM_PIVOTDATA
     { SID_SOLVE,                 true },   // SCITEM_SOLVEDATA
     { SID_SCUSERLISTS,           true },   // SCITEM_USERLIST
-    { SID_PRINTER_NOTFOUND_WARN, true }    // SCITEM_PRINTWARN
+    { SID_PRINTER_NOTFOUND_WARN, true },   // SCITEM_PRINTWARN
+    { 0,                         false }  // SCITEM_CONDFORMATDLGDATA
 };
 
 ScMessagePool::ScMessagePool()
