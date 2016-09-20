@@ -6565,9 +6565,7 @@ _ACEOF
         rm -fr libconftest*
         AC_MSG_RESULT([$gccvisinlineshiddenok])
         if test "$gccvisinlineshiddenok" = "no"; then
-            AC_MSG_WARN([Your gcc/clang is not -fvisibility-inlines-hidden safe, disabling that.])
-            add_warning "Your gcc/clang is not -fvisibility-inlines-hidden safe, disabling that."
-            HAVE_GCC_VISIBILITY_BROKEN="TRUE"
+            AC_MSG_ERROR([Your gcc/clang is not -fvisibility-inlines-hidden safe. This is no longer supported.])
         fi
     fi
 
