@@ -90,7 +90,7 @@ private:
     sal_Int32           mnChunkLen;     // Length of current PNG chunk
     Size                maOrigSize;     // pixel size of the full image
     Size                maTargetSize;   // pixel size of the result image
-    Size                maPhysSize;     // preferred size in MAP_100TH_MM units
+    Size                maPhysSize;     // preferred size in MapUnit::MM_100th units
     sal_uInt32          mnBPP;          // number of bytes per pixel
     sal_uInt32          mnScansize;     // max size of scanline
     sal_uInt32          mnYpos;         // latest y position in full image
@@ -408,7 +408,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
                     {
                         mbpHYs = true;
 
-                        // convert into MAP_100TH_MM
+                        // convert into MapUnit::MM_100th
                         maPhysSize.Width()  = (sal_Int32)( (100000.0 * maOrigSize.Width()) / nXPixelPerMeter );
                         maPhysSize.Height() = (sal_Int32)( (100000.0 * maOrigSize.Height()) / nYPixelPerMeter );
                     }
@@ -455,7 +455,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
         if ( mbpHYs && maPhysSize.Width() && maPhysSize.Height() )
         {
-            aRet.SetPrefMapMode( MAP_100TH_MM );
+            aRet.SetPrefMapMode( MapUnit::MM_100th );
             aRet.SetPrefSize( maPhysSize );
         }
     }

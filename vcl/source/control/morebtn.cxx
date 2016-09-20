@@ -32,7 +32,7 @@ struct ImplMoreButtonData
 void MoreButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     mpMBData     = new ImplMoreButtonData;
-    meUnit       = MAP_PIXEL;
+    meUnit       = MapUnit::Pix;
     mbState      = false;
 
     mpMBData->mpItemList = nullptr;

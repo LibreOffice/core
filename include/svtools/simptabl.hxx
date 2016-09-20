@@ -96,7 +96,7 @@ public:
                             sal_uInt16 nCol=HEADERBAR_APPEND,
                             HeaderBarItemBits nBits = HeaderBarItemBits::STDSTYLE);
 
-    void            SetTabs(const long* pTabs, MapUnit = MAP_APPFONT);
+    void            SetTabs(const long* pTabs, MapUnit = MapUnit::AppFont);
 
     void            ClearHeader();
 

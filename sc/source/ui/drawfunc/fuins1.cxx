@@ -127,8 +127,8 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     //  at 100% view scale (as in SetMarkedOriginalSize),
     //  instead of respecting the current view scale
     MapMode aSourceMap = rGraphic.GetPrefMapMode();
-    MapMode aDestMap( MAP_100TH_MM );
-    if ( aSourceMap.GetMapUnit() == MAP_PIXEL && pDrawView )
+    MapMode aDestMap( MapUnit::MM_100th );
+    if ( aSourceMap.GetMapUnit() == MapUnit::Pix && pDrawView )
     {
         Fraction aScaleX, aScaleY;
         pDrawView->CalcNormScale( aScaleX, aScaleY );
@@ -186,9 +186,9 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     if( rPrefSize.Width() && rPrefSize.Height() )
     {
         if( pWindow )
-            aSize = pWindow->PixelToLogic( rPrefSize, MAP_100TH_MM );
+            aSize = pWindow->PixelToLogic( rPrefSize, MapUnit::MM_100th );
         else
-            aSize = Application::GetDefaultDevice()->PixelToLogic( rPrefSize, MAP_100TH_MM );
+            aSize = Application::GetDefaultDevice()->PixelToLogic( rPrefSize, MapUnit::MM_100th );
     }
     else
         aSize = Size( 5000, 5000 );

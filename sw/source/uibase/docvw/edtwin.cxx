@@ -5105,7 +5105,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     // initially use the input language
     m_bUseInputLanguage = true;
 
-    SetMapMode(MapMode(MAP_TWIP));
+    SetMapMode(MapMode(MapUnit::Twip));
 
     SetPointer( PointerStyle::Text );
     m_aTimer.SetTimeoutHdl(LINK(this, SwEditWin, TimerHandler));
