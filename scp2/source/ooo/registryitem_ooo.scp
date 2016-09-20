@@ -180,7 +180,11 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Sta
     Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
     ModuleID = gid_Module_Root;
     Name = "DisplayName";
-    Value = "%PRODUCTNAME %PRODUCTVERSION";
+#if defined WINDOWS_X64
+    Value = "%PRODUCTNAME %PRODUCTVERSION 64-bit";
+#else
+    Value = "%PRODUCTNAME %PRODUCTVERSION 32-bit";
+#endif
 End
 
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Displayname2
