@@ -6608,9 +6608,7 @@ _ACEOF
 
         AC_MSG_RESULT([$gccvisbroken])
         if test "$gccvisbroken" = "yes"; then
-            AC_MSG_WARN([Your gcc is not -fvisibility=hidden safe. Disabling visibility])
-            add_warning "Your gcc is not -fvisibility=hidden safe. Disabling visibility"
-            unset HAVE_GCC_VISIBILITY_FEATURE
+            AC_MSG_ERROR([Your gcc is not -fvisibility=hidden safe. This is no longer supported.])
         fi
     fi
 
