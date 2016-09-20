@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_d535cbf7",
+        "filename": "sw/source/core/inc/frame.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-20T19:30:12Z",
+      "side": 1,
+      "message": "const SwRectFn\u0026 operator -\u003e() const { return fnRect; }\nor\nSwRectFn operator -\u003e() const { return fnRect; }",
+      "revId": "e2ef7cc28d03a56e6f4ae8c55b82419d66dbeef8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
