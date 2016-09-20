@@ -16,6 +16,24 @@
       "revId": "e2ef7cc28d03a56e6f4ae8c55b82419d66dbeef8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_15174352",
+        "filename": "sw/source/core/inc/frame.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-09-20T20:22:49Z",
+      "side": 1,
+      "message": "Thanks!\nconst is unnecessary here, missed that.",
+      "parentUuid": "ba5da102_d535cbf7",
+      "revId": "e2ef7cc28d03a56e6f4ae8c55b82419d66dbeef8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
