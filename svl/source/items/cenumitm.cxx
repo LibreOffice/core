@@ -25,6 +25,7 @@
 #include "whassert.hxx"
 
 #include <comphelper/extract.hxx>
+#include <libxml/xmlwriter.h>
 
 
 // virtual
@@ -173,6 +174,14 @@ bool SfxBoolItem::GetPresentation(SfxItemPresentation,
 {
     rText = GetValueTextByVal(m_bValue);
     return true;
+}
+
+void SfxBoolItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxBoolItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetValueTextByVal(m_bValue).toUtf8().getStr()));
+    xmlTextWriterEndElement(pWriter);
 }
 
 // virtual

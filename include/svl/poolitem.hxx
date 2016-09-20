@@ -245,6 +245,7 @@ public:
                                     MapUnit ePresMetric,
                                     OUString &rText,
                                     const IntlWrapper * = nullptr ) const override;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 
     // create a copy of itself
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

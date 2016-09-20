@@ -193,6 +193,10 @@ void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("sfxPoolItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("typeName"), BAD_CAST(typeid(*this).name()));
+    OUString rText;
+    if (GetPresentation( SFX_ITEM_PRESENTATION_COMPLETE, MAP_100TH_MM, MAP_100TH_MM, rText))
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(rText.getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
@@ -240,6 +244,12 @@ bool SfxVoidItem::GetPresentation
     return true;
 }
 
+void SfxVoidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxVoidItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
 
 SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
 {

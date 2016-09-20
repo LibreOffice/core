@@ -43,7 +43,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/mapunit.hxx>
 #include <unotools/configmgr.hxx>
-
+#include <libxml/xmlwriter.h>
 #include <editeng/unonrule.hxx>
 
 #define DEF_WRITER_LSPACE   500     //Standard Indentation
@@ -691,6 +691,27 @@ void SvxNumRule::Store( SvStream &rStream )
         DestroyFontToSubsFontConverter(pConverter);
 }
 
+void SvxNumRule::dumpAsXml(struct _xmlTextWriter* pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("svxNumRule"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("levelCount"), BAD_CAST(OUString::number(nLevelCount).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("continuousNumbering"), BAD_CAST(OUString::number(bContinuousNumbering).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("numberingType"), BAD_CAST(OUString::number((int)eNumberingType).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("featureFlags"), BAD_CAST(OUString::number((int)nFeatureFlags).getStr()));
+    for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
+    {
+        if(aFmts[i])
+        {
+            xmlTextWriterStartElement(pWriter, BAD_CAST("aFmts"));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("i"), BAD_CAST(OUString::number(i).getStr()));
+            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", aFmts[i]);
+            xmlTextWriterEndElement(pWriter);
+        }
+    }
+    xmlTextWriterEndElement(pWriter);
+}
+
+
 SvxNumRule::~SvxNumRule()
 {
     for(SvxNumberFormat* aFmt : aFmts)
@@ -963,6 +984,14 @@ bool SvxNumBulletItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberI
         }
     }
     return false;
+}
+
+void SvxNumBulletItem::dumpAsXml(struct _xmlTextWriter* pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("svxNumBulletItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    pNumRule->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 SvxNumRule* SvxConvertNumRule( const SvxNumRule* pRule, sal_uInt16 nLevels, SvxNumRuleType eType )
