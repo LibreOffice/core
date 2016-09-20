@@ -1352,9 +1352,7 @@ AC_ARG_ENABLE(ccache,
 AC_ARG_ENABLE(64-bit,
     AS_HELP_STRING([--enable-64-bit],
         [Build a 64-bit LibreOffice on platforms where the normal build is 32-bit.
-         At the moment meaningful only for iOS and Windows. On Windows this option is
-         experimental and possibly quite broken, and you should use it only if you are
-         hacking on 64-bitness support.]), ,)
+         At the moment meaningful only for iOS and Windows.]), ,)
 
 AC_ARG_ENABLE(extra-gallery,
     AS_HELP_STRING([--enable-extra-gallery],
@@ -3611,8 +3609,7 @@ if test "$_os" = "WINNT"; then
         # bits, too) needed when installing a 32-bit LibreOffice on a
         # 64-bit OS. The 64-bit Explorer extension is a feature that
         # has been present since long in OOo. Don't confuse it with
-        # building LibreOffice itself as 64-bit code, which is
-        # unfinished work and highly experimental.
+        # building LibreOffice itself as 64-bit code.
 
         BUILD_X64=
         CXX_X64_BINARY=
