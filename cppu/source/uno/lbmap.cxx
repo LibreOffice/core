@@ -62,10 +62,20 @@ class Mapping
 public:
     inline explicit Mapping( uno_Mapping * pMapping = nullptr );
     inline Mapping( const Mapping & rMapping );
+    Mapping(Mapping && other): _pMapping(other._pMapping)
+    { other._pMapping = nullptr; }
     inline ~Mapping();
     inline Mapping & SAL_CALL operator = ( uno_Mapping * pMapping );
     inline Mapping & SAL_CALL operator = ( const Mapping & rMapping )
         { return operator = ( rMapping._pMapping ); }
+    Mapping & operator =(Mapping && other) {
+        if (_pMapping != nullptr) {
+            (*_pMapping->release)(_pMapping);
+        }
+        _pMapping = other._pMapping;
+        other._pMapping = nullptr;
+        return *this;
+    }
     inline uno_Mapping * SAL_CALL get() const
         { return _pMapping; }
     inline bool SAL_CALL is() const
