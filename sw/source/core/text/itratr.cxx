@@ -1018,7 +1018,7 @@ SwTwips SwTextNode::GetWidthOfLeadingTabs() const
             // Only consider master frames:
             if ( !pFrame->IsFollow() )
             {
-                SWRECTFN( pFrame )
+                SWRECTFN fnRect(pFrame);
                 SwRect aRect;
                 pFrame->GetCharRect( aRect, aPos );
                 nRet = pFrame->IsRightToLeft() ?

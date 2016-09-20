@@ -95,7 +95,7 @@ SwSectionFrame::SwSectionFrame( SwSectionFrame &rSect, bool bMaster ) :
 void SwSectionFrame::Init()
 {
     assert(GetUpper() && "SwSectionFrame::Init before insertion?!");
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     long nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
     (Frame().*fnRect->fnSetWidth)( nWidth );
     (Frame().*fnRect->fnSetHeight)( 0 );
@@ -276,7 +276,7 @@ void SwSectionFrame::Cut_( bool bRemove )
         pPrepFrame->Prepare( PREP_FTN );
     if ( pUp )
     {
-        SWRECTFN( this );
+        SWRECTFN fnRect(this);
         SwTwips nFrameHeight = (Frame().*fnRect->fnGetHeight)();
         if( nFrameHeight > 0 )
         {
@@ -314,7 +314,7 @@ void SwSectionFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
         }
     }
 
-    SWRECTFN( pParent )
+    SWRECTFN fnRect(pParent);
     if( pSect && HasToBreak( pSect ) )
     {
         if( pParent->IsColBodyFrame() ) // dealing with a single-column area
@@ -482,7 +482,7 @@ bool SwSectionFrame::SplitSect( SwFrame* pFrame, bool bApres )
         SwSectionFrame* pNew = new SwSectionFrame( *pSect->GetSection(), pSect );
         pNew->InsertBehind( pSect->GetUpper(), pSect );
         pNew->Init();
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         (pNew->*fnRect->fnMakePos)( nullptr, pSect, true );
         // OD 25.03.2003 #108339# - restore content:
         // determine layout frame for restoring content after the initialization
@@ -669,7 +669,7 @@ void SwSectionFrame::MoveContentAndDelete( SwSectionFrame* pDel, bool bSave )
                 pPrvSct = new SwSectionFrame( *pParent->GetSection(), pUp );
                 pPrvSct->InsertBehind( pUp, pPrv );
                 pPrvSct->Init();
-                SWRECTFN( pUp )
+                SWRECTFN fnRect(pUp);
                 (pPrvSct->*fnRect->fnMakePos)( pUp, pPrv, true );
                 pUp = FirstLeaf( pPrvSct );
                 pPrv = nullptr;
@@ -707,7 +707,7 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         {
             if( GetUpper() )
             {
-                SWRECTFN( GetUpper() )
+                SWRECTFN fnRect(GetUpper());
                 (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), false );
             }
         }
@@ -844,7 +844,7 @@ bool SwSectionFrame::CalcMinDiff( SwTwips& rMinDiff ) const
 {
     if( ToMaximize( true ) )
     {
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         rMinDiff = (GetUpper()->*fnRect->fnGetPrtBottom)();
         rMinDiff = (Frame().*fnRect->fnBottomDist)( rMinDiff );
         return true;
@@ -967,7 +967,7 @@ void SwSectionFrame::CollectEndnotes( SwLayouter* pLayouter )
 |*/
 void SwSectionFrame::CheckClipping( bool bGrow, bool bMaximize )
 {
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     long nDiff;
     SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
     if( bGrow && ( !IsInFly() || !GetUpper()->IsColBodyFrame() ||
@@ -979,7 +979,7 @@ void SwSectionFrame::CheckClipping( bool bGrow, bool bMaximize )
         if( nDiff > 0 )
         {
             long nAdd = GetUpper()->Grow( nDiff );
-            if( bVert && !bRev )
+            if( fnRect.bVert && !fnRect.bRev )
                 nDeadLine -= nAdd;
             else
                 nDeadLine += nAdd;
@@ -1026,7 +1026,7 @@ void SwSectionFrame::CheckClipping( bool bGrow, bool bMaximize )
         // OD 18.09.2002 #100522#
         // Determine, if height has changed.
         // Note: In vertical layout the height equals the width value.
-        bool bHeightChanged = bVert ?
+        bool bHeightChanged = fnRect.bVert ?
                             (aOldSz.Width() != Prt().Width()) :
                             (aOldSz.Height() != Prt().Height());
         // Last but not least we have changed the height again, thus the inner
@@ -1058,7 +1058,7 @@ void SwSectionFrame::SimpleFormat()
     if ( IsJoinLocked() || IsColLocked() )
         return;
     LockJoin();
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     if( GetPrev() || GetUpper() )
     {
         // assure notifications on position changes.
@@ -1149,7 +1149,7 @@ class ExtraFormatToPositionObjs
                  mpSectFrame->Lower()->GetNext() )
             {
                 // grow section till bottom of printing area of upper frame
-                SWRECTFN( mpSectFrame );
+                SWRECTFN fnRect(mpSectFrame);
                 SwTwips nTopMargin = (mpSectFrame->*fnRect->fnGetTopMargin)();
                 Size aOldSectPrtSize( mpSectFrame->Prt().SSize() );
                 SwTwips nDiff = (mpSectFrame->Frame().*fnRect->fnBottomDist)(
@@ -1220,7 +1220,7 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
         mbValidSize = mbValidPos = mbValidPrtArea = true;
         return;
     }
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     if ( !mbValidPrtArea )
     {
         PROTOCOL( this, PROT::PrintArea, DbgAction::NONE, nullptr )
@@ -1591,7 +1591,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
             pNew = new SwSectionFrame( *pSect, false );
             pNew->InsertBefore( pLayLeaf, pLayLeaf->Lower() );
             pNew->Init();
-            SWRECTFN( pNew )
+            SWRECTFN fnRect(pNew);
             (pNew->*fnRect->fnMakePos)( pLayLeaf, nullptr, true );
 
             // If our section frame has a successor then that has to be
@@ -1799,7 +1799,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf( MakePageType )
         pNew = new SwSectionFrame( *pSect, true );
         pNew->InsertBefore( pLayLeaf, nullptr );
         pNew->Init();
-        SWRECTFN( pNew )
+        SWRECTFN fnRect(pNew);
         (pNew->*fnRect->fnMakePos)( pLayLeaf, pNew->GetPrev(), true );
 
         pLayLeaf = FirstLeaf( pNew );
@@ -1849,7 +1849,7 @@ static SwTwips lcl_DeadLine( const SwFrame* pFrame )
         else
             break;
     }
-    SWRECTFN( pFrame )
+    SWRECTFN fnRect(pFrame);
     return pUp ? (pUp->*fnRect->fnGetPrtBottom)() :
                  (pFrame->Frame().*fnRect->fnGetBottom)();
 }
@@ -1857,7 +1857,7 @@ static SwTwips lcl_DeadLine( const SwFrame* pFrame )
 /// checks whether the SectionFrame is still able to grow, as case may be the environment has to be asked
 bool SwSectionFrame::Growable() const
 {
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     if( (*fnRect->fnYDiff)( lcl_DeadLine( this ),
         (Frame().*fnRect->fnGetBottom)() ) > 0 )
         return true;
@@ -1869,7 +1869,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
 {
     if ( !IsColLocked() && !HasFixSize() )
     {
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         long nFrameHeight = (Frame().*fnRect->fnGetHeight)();
         if( nFrameHeight > 0 && nDist > (LONG_MAX - nFrameHeight) )
             nDist = LONG_MAX - nFrameHeight;
@@ -1994,7 +1994,7 @@ SwTwips SwSectionFrame::Shrink_( SwTwips nDist, bool bTst )
         }
         else
         {
-            SWRECTFN( this )
+            SWRECTFN fnRect(this);
             long nFrameHeight = (Frame().*fnRect->fnGetHeight)();
             if ( nDist > nFrameHeight )
                 nDist = nFrameHeight;
@@ -2494,7 +2494,7 @@ void SwSectionFrame::InvalidateFootnotePos()
 
 SwTwips SwSectionFrame::CalcUndersize() const
 {
-    SWRECTFN(this);
+    SWRECTFN fnRect(this);
     return InnerHeight() - (Prt().*fnRect->fnGetHeight)();
 }
 

@@ -82,7 +82,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     // swap anchor frame, if swapped. Note: destructor takes care of the 'undo'
     SwFrameSwapper aFrameSwapper( &rAnchorFrame, false );
 
-    SWRECTFN( ( &rAnchorFrame ) )
+    SWRECTFN fnRect(&rAnchorFrame);
 
     Point aAnchorPos( mrProposedAnchorPos );
 

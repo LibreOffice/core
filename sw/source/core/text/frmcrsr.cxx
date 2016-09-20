@@ -194,13 +194,13 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     pFrame->GetFormatted();
     const SwFrame* pTmpFrame = static_cast<SwFrame*>(pFrame->GetUpper());
 
-    SWRECTFN ( pFrame )
+    SWRECTFN fnRect(pFrame);
     const SwTwips nUpperMaxY = (pTmpFrame->*fnRect->fnGetPrtBottom)();
     const SwTwips nFrameMaxY = (pFrame->*fnRect->fnGetPrtBottom)();
 
     // nMaxY is an absolute value
-    SwTwips nMaxY = bVert ?
-                    ( bVertL2R ? std::min( nFrameMaxY, nUpperMaxY ) : std::max( nFrameMaxY, nUpperMaxY ) ) :
+    SwTwips nMaxY = fnRect.bVert ?
+                    ( fnRect.bVertL2R ? std::min( nFrameMaxY, nUpperMaxY ) : std::max( nFrameMaxY, nUpperMaxY ) ) :
                     std::min( nFrameMaxY, nUpperMaxY );
 
     bool bRet = false;
@@ -213,11 +213,11 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         pTextNd->GetFirstLineOfsWithNum( nFirstOffset );
 
         Point aPnt2;
-        if ( bVert )
+        if ( fnRect.bVert )
         {
             if( nFirstOffset > 0 )
                 aPnt1.Y() += nFirstOffset;
-            if ( aPnt1.X() < nMaxY && !bVertL2R )
+            if ( aPnt1.X() < nMaxY && !fnRect.bVertL2R )
                 aPnt1.X() = nMaxY;
             aPnt2.X() = aPnt1.X() + pFrame->Prt().Width();
             aPnt2.Y() = aPnt1.Y();
@@ -242,7 +242,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         if ( pCMS )
         {
             pCMS->m_aRealHeight.X() = 0;
-            pCMS->m_aRealHeight.Y() = bVert ? -rOrig.Width() : rOrig.Height();
+            pCMS->m_aRealHeight.Y() = fnRect.bVert ? -rOrig.Width() : rOrig.Height();
         }
 
         if ( pFrame->IsRightToLeft() )
@@ -256,7 +256,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             return false;
 
         SwFrameSwapper aSwapper( pFrame, true );
-        if ( bVert )
+        if ( fnRect.bVert )
             nMaxY = pFrame->SwitchVerticalToHorizontal( nMaxY );
 
         bool bGoOn = true;
@@ -278,7 +278,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             if ( pFrame->IsRightToLeft() )
                 pFrame->SwitchLTRtoRTL( rOrig );
 
-            if ( bVert )
+            if ( fnRect.bVert )
                 pFrame->SwitchHorizontalToVertical( rOrig );
 
             if( pFrame->IsUndersized() && pCMS && !pFrame->GetNext() &&
@@ -304,7 +304,7 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                 }
             }
 
-            if ( bVert )
+            if ( fnRect.bVert )
             {
                 if ( pCMS->m_bRealHeight )
                 {
@@ -364,14 +364,14 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     pFrame->GetFormatted();
     const SwFrame* pTmpFrame = static_cast<SwFrame*>(pFrame->GetUpper());
 
-    SWRECTFN( pTmpFrame )
+    SWRECTFN fnRect(pTmpFrame);
     SwTwips nUpperMaxY = (pTmpFrame->*fnRect->fnGetPrtBottom)();
 
     // nMaxY is in absolute value
     SwTwips nMaxY;
-    if ( bVert )
+    if ( fnRect.bVert )
     {
-        if ( bVertL2R )
+        if ( fnRect.bVertL2R )
             nMaxY = std::min( (pFrame->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
         else
             nMaxY = std::max( (pFrame->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
@@ -382,9 +382,9 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     {
         Point aPnt1 = pFrame->Frame().Pos() + pFrame->Prt().Pos();
         Point aPnt2;
-        if ( bVert )
+        if ( fnRect.bVert )
         {
-            if ( aPnt1.X() < nMaxY && !bVertL2R )
+            if ( aPnt1.X() < nMaxY && !fnRect.bVertL2R )
                 aPnt1.X() = nMaxY;
 
             aPnt2.X() = aPnt1.X() + pFrame->Prt().Width();
@@ -410,7 +410,7 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
             return false;
 
         SwFrameSwapper aSwapper( pFrame, true );
-        if ( bVert )
+        if ( fnRect.bVert )
             nMaxY = pFrame->SwitchVerticalToHorizontal( nMaxY );
 
         SwTextSizeInfo aInf( pFrame );
@@ -428,7 +428,7 @@ bool SwTextFrame::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
             if ( pFrame->IsRightToLeft() )
                 pFrame->SwitchLTRtoRTL( rOrig );
 
-            if ( bVert )
+            if ( fnRect.bVert )
                 pFrame->SwitchHorizontalToVertical( rOrig );
 
             return true;
@@ -457,7 +457,7 @@ bool SwTextFrame::GetTopOfLine( SwTwips& _onTopOfLine,
     }
     else
     {
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         if ( IsEmpty() || !(Prt().*fnRect->fnGetHeight)() )
         {
             // consider upper space amount considered
@@ -469,7 +469,7 @@ bool SwTextFrame::GetTopOfLine( SwTwips& _onTopOfLine,
             // determine formatted text frame that contains the requested position
             SwTextFrame* pFrame = &(const_cast<SwTextFrame*>(this)->GetFrameAtOfst( nOffset ));
             pFrame->GetFormatted();
-            SWREFRESHFN( pFrame )
+            fnRect.Refresh(pFrame);
             // If proportional line spacing is applied
             // to the text frame, the top of the anchor character is also the
             // top of the line.
@@ -497,7 +497,7 @@ bool SwTextFrame::GetTopOfLine( SwTwips& _onTopOfLine,
                 aLine.CharCursorToLine( nOffset );
                 // determine top of line
                 _onTopOfLine = aLine.Y();
-                if ( bVert )
+                if ( fnRect.bVert )
                 {
                     _onTopOfLine = pFrame->SwitchHorizontalToVertical( _onTopOfLine );
                 }
@@ -1650,10 +1650,10 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                          pUp->GetUpper()->GetUpper()->IsSctFrame() )
                     pUp = pUp->GetUpper()->GetUpper()->GetUpper();
             }
-            SWRECTFN( this )
+            SWRECTFN fnRect(this);
             SwTwips nLimit = (pUp->*fnRect->fnGetPrtBottom)();
             SwTwips nRectBottom = rRect.Bottom();
-            if ( bVert )
+            if ( fnRect.bVert )
                 nRectBottom = SwitchHorizontalToVertical( nRectBottom );
 
             if( (*fnRect->fnYDiff)( nLimit, nRectBottom ) < 0 )

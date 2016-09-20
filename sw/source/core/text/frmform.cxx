@@ -200,7 +200,7 @@ bool SwTextFrame::CalcFollow( const sal_Int32 nTextOfst )
         const SwFrame *pOldUp = GetUpper();
 #endif
 
-        SWRECTFN ( this )
+        SWRECTFN fnRect(this);
         SwTwips nOldBottom = (GetUpper()->Frame().*fnRect->fnGetBottom)();
         SwTwips nMyPos = (Frame().*fnRect->fnGetTop)();
 
@@ -231,7 +231,7 @@ bool SwTextFrame::CalcFollow( const sal_Int32 nTextOfst )
 
         pMyFollow->CalcFootnoteFlag();
         if ( !pMyFollow->GetNext() && !pMyFollow->HasFootnote() )
-            nOldBottom = bVert ? 0 : LONG_MAX;
+            nOldBottom =  fnRect.bVert ? 0 : LONG_MAX;
 
         while( true )
         {
@@ -330,7 +330,7 @@ bool SwTextFrame::CalcFollow( const sal_Int32 nTextOfst )
         const long nRemaining =
                  - (GetUpper()->Frame().*fnRect->fnBottomDist)( nOldBottom );
         if (  nRemaining > 0 && !GetUpper()->IsSctFrame() &&
-              nRemaining != ( bVert ?
+              nRemaining != ( fnRect.bVert ?
                               nMyPos - Frame().Right() :
                               Frame().Top() - nMyPos ) )
         {
@@ -354,7 +354,7 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
     // AdjustFrame is called with a swapped frame during
     // formatting but the frame is not swapped during FormatEmpty
     SwSwapIfSwapped swap( this );
-    SWRECTFN ( this )
+    SWRECTFN fnRect(this);
 
     // The Frame's size variable is incremented by Grow or decremented by Shrink.
     // If the size cannot change, nothing should happen!
@@ -375,7 +375,7 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
                     if( (pCont->Frame().*fnRect->fnBottomDist)( nBot ) > 0 )
                     {
                         (Frame().*fnRect->fnAddBottom)( nChgHght );
-                        if( bVert )
+                        if( fnRect.bVert )
                             Prt().SSize().Width() += nChgHght;
                         else
                             Prt().SSize().Height() += nChgHght;
@@ -757,7 +757,7 @@ void SwTextFrame::SetOfst_( const sal_Int32 nNewOfst )
 bool SwTextFrame::CalcPreps()
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(), "SwTextFrame::CalcPreps with swapped frame" );
-    SWRECTFN( this );
+    SWRECTFN fnRect(this);
 
     SwParaPortion *pPara = GetPara();
     if ( !pPara )
@@ -795,7 +795,7 @@ bool SwTextFrame::CalcPreps()
                     GetFollow()->SetJustWidow( true );
                     GetFollow()->Prepare();
                 }
-                else if ( bVert )
+                else if ( fnRect.bVert )
                 {
                     Frame().Width( Frame().Width() + Frame().Left() );
                     Prt().Width( Prt().Width() + Frame().Left() );
@@ -823,7 +823,7 @@ bool SwTextFrame::CalcPreps()
                 Shrink( nChgHeight );
                 SwRect &rRepaint = pPara->GetRepaint();
 
-                if ( bVert )
+                if ( fnRect.bVert )
                 {
                     SwRect aRepaint( Frame().Pos() + Prt().Pos(), Prt().SSize() );
                     SwitchVerticalToHorizontal( aRepaint );
@@ -913,14 +913,14 @@ bool SwTextFrame::CalcPreps()
                 const SwTwips nMust = (GetUpper()->*fnRect->fnGetPrtBottom)();
                 const SwTwips nIs   = (Frame().*fnRect->fnGetBottom)();
 
-                if( bVert && nIs < nMust )
+                if( fnRect.bVert && nIs < nMust )
                 {
                     Shrink( nMust - nIs );
                     if( Prt().Width() < 0 )
                         Prt().Width( 0 );
                     SetUndersized( true );
                 }
-                else if ( ! bVert && nIs > nMust )
+                else if ( ! fnRect.bVert && nIs > nMust )
                 {
                     Shrink( nIs - nMust );
                     if( Prt().Height() < 0 )
@@ -1686,7 +1686,7 @@ void SwTextFrame::Format_( vcl::RenderContext* pRenderContext, SwParaPortion *pP
 // Shrink() or Grow() to adjust the frame's size to the changed required space.
 void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs * )
 {
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
 
     CalcAdditionalFirstLineOffset();
 
