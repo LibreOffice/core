@@ -28,6 +28,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
@@ -994,6 +995,14 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
     Reference <XNameAccess> xCols = xColsSupp->getColumns();
 
+    static bool isSelectionBookmarks = true; // TODO is this always true here?
+    uno::Reference<sdbcx::XRowLocate> xRowLocate;
+    if (isSelectionBookmarks)
+    {
+        xRowLocate.set(xResultSet, uno::UNO_QUERY);
+        assert(xRowLocate.is());
+    }
+
     do{                                 // middle checked loop!!
     if( bAsTable )          // Daten als Tabelle einfuegen
     {
@@ -1071,9 +1080,16 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             {
                 if(pSelection)
                 {
-                    sal_Int32 nPos = 0;
-                    pSelection[i] >>= nPos;
-                    bBreak = !xResultSet->absolute(nPos);
+                    if (isSelectionBookmarks)
+                    {
+                        bBreak = !xRowLocate->moveToBookmark(pSelection[i]);
+                    }
+                    else
+                    {
+                        sal_Int32 nPos = 0;
+                        pSelection[i] >>= nPos;
+                        bBreak = !xResultSet->absolute(nPos);
+                    }
                 }
                 else if(!i)
                     bBreak = !xResultSet->first();
@@ -1264,9 +1280,16 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 {
                     if(pSelection)
                     {
-                        sal_Int32 nPos = 0;
-                        pSelection[i] >>= nPos;
-                        bBreak = !xResultSet->absolute(nPos);
+                        if (isSelectionBookmarks)
+                        {
+                            bBreak = !xRowLocate->moveToBookmark(pSelection[i]);
+                        }
+                        else
+                        {
+                            sal_Int32 nPos = 0;
+                            pSelection[i] >>= nPos;
+                            bBreak = !xResultSet->absolute(nPos);
+                        }
                     }
                     else if(!i)
                         bBreak = !xResultSet->first();
