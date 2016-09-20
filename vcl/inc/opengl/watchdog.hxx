@@ -14,40 +14,42 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
-#include <osl/mutex.hxx>
+#include <atomic>
 
-struct WatchdogTimings
+struct WatchdogTimingsValues
 {
-    osl::Mutex maMutex;
-
-    int mnMode;
-
     /// delays to take various actions in 1/4 of a second increments.
-    std::vector<int> maDisableEntries;
-    std::vector<int> maAbortAfter;
+    int mnDisableEntries;
+    int mnAbortAfter;
+};
 
+enum class WatchdogTimingMode
+{
+    NORMAL,
+    SHADER_COMPILE
+};
+
+class WatchdogTimings
+{
+private:
+    std::vector<WatchdogTimingsValues> maTimingValues;
+    std::atomic<bool> mbRelaxed;
+
+public:
     WatchdogTimings();
 
-    void relax();
-
-    int getMode()
+    void setRelax(bool bRelaxed)
     {
-        return mnMode;
+        mbRelaxed = bRelaxed;
     }
 
-    void setMode(int nMode)
+    WatchdogTimingsValues getWatchdogTimingsValues(WatchdogTimingMode eMode)
     {
-        mnMode = nMode;
-    }
+        size_t index = 0;
+        index = (eMode == WatchdogTimingMode::SHADER_COMPILE) ? 1 : 0;
+        index = mbRelaxed ? index + 2 : index;
 
-    int getDisableEntries()
-    {
-       return maDisableEntries[mnMode];
-    }
-
-    int getAbortAfter()
-    {
-        return maAbortAfter[mnMode];
+        return maTimingValues[index];
     }
 };
 

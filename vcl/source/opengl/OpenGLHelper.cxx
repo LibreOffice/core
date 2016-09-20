@@ -818,20 +818,10 @@ namespace {
 }
 
 WatchdogTimings::WatchdogTimings()
-    : mnMode(0)
-    , maDisableEntries({ 6 /* 1.5s */,  20 /* 5s */ })
-    , maAbortAfter({ 20 /* 5s */, 120 /* 30s */ })
-{}
-
-void WatchdogTimings::relax()
+    : maTimingValues({{6,   20} /* 1.5s,  5s */, {20, 120} /*  5s, 30s */,
+                      {60, 240} /*  15s, 60s */, {60, 240} /* 15s, 60s */})
+    , mbRelaxed(false)
 {
-    osl::MutexGuard g(maMutex);
-
-    maDisableEntries[0] = 60; /* 15s */
-    maDisableEntries[1] = 60; /* 15s */
-
-    maAbortAfter[0] = 240; /* 60s */
-    maAbortAfter[1] = 240; /* 60s */
 }
 
 OpenGLWatchdogThread::OpenGLWatchdogThread()
@@ -852,13 +842,9 @@ void OpenGLWatchdogThread::execute()
 
         if (OpenGLZone::isInZone())
         {
-            osl::MutexGuard g(gWatchdogTimings.maMutex);
-
             // The shader compiler can take a long time, first time.
-            if (gbInShaderCompile)
-                gWatchdogTimings.setMode(1);
-            else
-                gWatchdogTimings.setMode(0);
+            WatchdogTimingMode eMode = gbInShaderCompile ? WatchdogTimingMode::SHADER_COMPILE : WatchdogTimingMode::NORMAL;
+            WatchdogTimingsValues aTimingValues = gWatchdogTimings.getWatchdogTimingsValues(eMode);
 
             if (nLastEnters == OpenGLZone::gnEnterCount)
                 nUnchanged++;
@@ -867,12 +853,12 @@ void OpenGLWatchdogThread::execute()
             SAL_INFO("vcl.opengl", "GL watchdog - unchanged " <<
                      nUnchanged << " enter count " <<
                      OpenGLZone::gnEnterCount << " type " <<
-                     (gWatchdogTimings.getMode() ? "in shader" : "normal gl") <<
-                     "breakpoints mid: " << gWatchdogTimings.getDisableEntries() <<
-                     " max " << gWatchdogTimings.getAbortAfter());
+                     (eMode == WatchdogTimingMode::SHADER_COMPILE ? "in shader" : "normal gl") <<
+                     "breakpoints mid: " << aTimingValues.mnDisableEntries <<
+                     " max " << aTimingValues.mnAbortAfter);
 
             // Not making progress
-            if (nUnchanged >= gWatchdogTimings.getDisableEntries())
+            if (nUnchanged >= aTimingValues.mnDisableEntries)
             {
                 static bool bFired = false;
                 if (!bFired)
@@ -893,7 +879,7 @@ void OpenGLWatchdogThread::execute()
             }
 
             // Not making even more progress
-            if (nUnchanged >= gWatchdogTimings.getAbortAfter())
+            if (nUnchanged >= aTimingValues.mnAbortAfter)
             {
                 if (!bAbortFired)
                 {
@@ -969,7 +955,7 @@ void OpenGLZone::hardDisable()
 
 void OpenGLZone::relaxWatchdogTimings()
 {
-    gWatchdogTimings.relax();
+    gWatchdogTimings.setRelax(true);
 }
 
 OpenGLVCLContextZone::OpenGLVCLContextZone()
