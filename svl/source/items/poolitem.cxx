@@ -195,7 +195,7 @@ void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("typeName"), BAD_CAST(typeid(*this).name()));
     OUString rText;
-    if (GetPresentation( SfxItemPresentation::Complete, MAP_100TH_MM, MAP_100TH_MM, rText))
+    if (GetPresentation( SfxItemPresentation::Complete, MapUnit::MM_100th, MapUnit::MM_100th, rText))
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(rText.getStr()));
     xmlTextWriterEndElement(pWriter);
 }

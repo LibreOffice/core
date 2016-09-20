@@ -45,8 +45,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 
-static MapMode aTWIPSMode( MAP_TWIP );
-static MapMode a100thmmMode( MAP_100TH_MM );
+static MapMode aTWIPSMode( MapUnit::Twip );
+static MapMode a100thmmMode( MapUnit::MM_100th );
 
 
 Point Writer::map( const Point& rPoint ) const

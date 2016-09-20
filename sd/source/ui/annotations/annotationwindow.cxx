@@ -367,7 +367,7 @@ void AnnotationWindow::StartEdit()
 
 void AnnotationWindow::Rescale()
 {
-    MapMode aMode(MAP_100TH_MM);
+    MapMode aMode(MapUnit::MM_100th);
     aMode.SetOrigin( Point() );
     mpOutliner->SetRefMapMode( aMode );
     SetMapMode( aMode );

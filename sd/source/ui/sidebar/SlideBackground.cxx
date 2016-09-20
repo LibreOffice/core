@@ -718,7 +718,7 @@ void SlideBackground::NotifyItemUpdate(
                 if(mpPaperOrientation->GetSelectEntryPos() == 0)
                    Swap(aPaperSize);
 
-                Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, static_cast<MapUnit>(meUnit),true);
+                Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, meUnit, true);
                 mpPaperSizeBox->SetSelection( ePaper );
             }
         }

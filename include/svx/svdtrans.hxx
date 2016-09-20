@@ -261,12 +261,12 @@ SVX_DLLPUBLIC FrPair GetMapFactor(MapUnit eS, MapUnit eD);
 FrPair GetMapFactor(FieldUnit eS, FieldUnit eD);
 
 inline bool IsMetric(MapUnit eU) {
-    return (eU==MAP_100TH_MM || eU==MAP_10TH_MM || eU==MAP_MM || eU==MAP_CM);
+    return (eU==MapUnit::MM_100th || eU==MapUnit::MM_10th || eU==MapUnit::MM || eU==MapUnit::CM);
 }
 
 inline bool IsInch(MapUnit eU) {
-    return (eU==MAP_1000TH_INCH || eU==MAP_100TH_INCH || eU==MAP_10TH_INCH || eU==MAP_INCH ||
-            eU==MAP_POINT       || eU==MAP_TWIP);
+    return (eU==MapUnit::Inch_1000th || eU==MapUnit::Inch_100th || eU==MapUnit::Inch_10th || eU==MapUnit::Inch ||
+            eU==MapUnit::Point       || eU==MapUnit::Twip);
 }
 
 inline bool IsMetric(FieldUnit eU) {

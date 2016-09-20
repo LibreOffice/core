@@ -36,7 +36,7 @@ SvxParaPrevWindow::SvxParaPrevWindow( vcl::Window* pParent,  WinBits nBits) :
 
 {
     // Count in Twips by default
-    SetMapMode(MapMode(MAP_TWIP));
+    SetMapMode(MapMode(MapUnit::Twip));
 
     aSize = Size(11905, 16837);
 

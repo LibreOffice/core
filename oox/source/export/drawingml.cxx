@@ -1090,8 +1090,8 @@ void DrawingML::WriteSrcRect( const Reference< XPropertySet >& rXPropSet, const 
     const MapMode& rMapMode = aGraphicObject.GetPrefMapMode();
 
     // GraphicCrop is in mm100, so in case the original size is in pixels, convert it over.
-    if (rMapMode.GetMapUnit() == MAP_PIXEL)
-        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, MapMode(MAP_100TH_MM));
+    if (rMapMode.GetMapUnit() == MapUnit::Pix)
+        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, MapMode(MapUnit::MM_100th));
 
     if ( GetProperty( rXPropSet, "GraphicCrop" ) )
     {

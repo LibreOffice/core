@@ -155,7 +155,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
 {
     bIsLoading = true;
     MapUnit      eOldCoreUnit=eCoreUnit;
-    eCoreUnit = MAP_100TH_MM;
+    eCoreUnit = MapUnit::MM_100th;
     INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
     aFile.Append( filename);
     std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
@@ -194,7 +194,7 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
 {
     if (bIsLoading) return;
     MapUnit      eOldCoreUnit=eCoreUnit;
-    eCoreUnit = MAP_100TH_MM;
+    eCoreUnit = MapUnit::MM_100th;
     INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
     aFile.Append( filename);
     std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE ));
@@ -646,7 +646,7 @@ void GraphicBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sa
             {
                         Size aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
                         sal_Int16 eOrient = text::VertOrientation::LINE_CENTER;
-                aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)GetMapUnit());
+                aSize = OutputDevice::LogicToLogic(aSize, MapUnit::MM_100th, (MapUnit)GetMapUnit());
                         SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH );
                         aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
             }
@@ -960,7 +960,7 @@ void MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
                 sEmpty = sEmpty.replaceFirst("%LIST_NUM",sNUM);
                 pEntry->pGrfObj = new Graphic(*pGrf);
                 pEntry->aSize = aFmt.GetGraphicSize();
-                pEntry->aSize = OutputDevice::LogicToLogic(pEntry->aSize,(MapUnit)GetMapUnit(),MAP_100TH_MM);
+                pEntry->aSize = OutputDevice::LogicToLogic(pEntry->aSize,(MapUnit)GetMapUnit(),MapUnit::MM_100th);
                 sal_uInt16 nDIndex = rGrfTMgr.GetNBOIndexForNumRule(aNum,mLevel);
                 if (nDIndex!=(sal_uInt16)0xFFFF)
                     pEntry->aSize=Size(0,0);
@@ -1022,7 +1022,7 @@ void MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
                     static_cast<GrfBulDataRelation*>(pActualBullets[nIndex]->pBullets)->pGrfObj = new Graphic(*pGrf);
                     static_cast<GrfBulDataRelation*>(pActualBullets[nIndex]->pBullets)->pGrfObj = new Graphic(*pGrf);
                     Size aTmpSize = aFmt.GetGraphicSize();
-                    aTmpSize = OutputDevice::LogicToLogic(aTmpSize,(MapUnit)GetMapUnit(),MAP_100TH_MM);
+                    aTmpSize = OutputDevice::LogicToLogic(aTmpSize,(MapUnit)GetMapUnit(),MapUnit::MM_100th);
                     sal_uInt16 nDIndex = rGrfTMgr.GetNBOIndexForNumRule(aNum,mLevel);
                     if (nDIndex!=(sal_uInt16)0xFFFF)
                         aTmpSize=Size(0,0);
@@ -1110,7 +1110,7 @@ void MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
                         if (aSize.Width()==0 && aSize.Height()==0) {
                             aSize = SvxNumberFormat::GetGraphicSizeMM100( pEntry->pGrfObj );
                         }
-                        aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)GetMapUnit());
+                        aSize = OutputDevice::LogicToLogic(aSize, MapUnit::MM_100th, (MapUnit)GetMapUnit());
                     }
                     SvxBrushItem aBrush(*(pEntry->pGrfObj), GPOS_AREA, SID_ATTR_BRUSH );
                     aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
@@ -1126,7 +1126,7 @@ void MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
                                     if (aSize.Width()==0 && aSize.Height()==0) {
                                         aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
                                     }
-                                    aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)GetMapUnit());
+                                    aSize = OutputDevice::LogicToLogic(aSize, MapUnit::MM_100th, (MapUnit)GetMapUnit());
                                 }
                                 SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH );
                                 aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
@@ -1650,7 +1650,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
                             aSize = SvxNumberFormat::GetGraphicSizeMM100( pGrf );
                         }
                     }
-                    aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)GetMapUnit());
+                    aSize = OutputDevice::LogicToLogic(aSize, MapUnit::MM_100th, (MapUnit)GetMapUnit());
                     aFmt.SetGraphicBrush( pLevelSettings->pBrushItem, &aSize, &eOrient );
             }
         } else
