@@ -835,7 +835,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
 
         // --> OD #i98753#
         // set size of embedded object at the object description structure
-        m_aObjDesc.maSize = OutputDevice::LogicToLogic( m_pWrtShell->GetObjSize(), MAP_TWIP, MAP_100TH_MM );
+        m_aObjDesc.maSize = OutputDevice::LogicToLogic( m_pWrtShell->GetObjSize(), MapUnit::Twip, MapUnit::MM_100th );
         // <--
         PrepareOLE( m_aObjDesc );
         AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
@@ -982,7 +982,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         //Now adjust it. Thus in GetData the first query can still
         //be answered with delayed rendering.
         Size aSz( OLESIZE );
-        m_aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
+        m_aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MapUnit::Twip, MapUnit::MM_100th );
 
         PrepareOLE( m_aObjDesc );
         AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
@@ -1075,7 +1075,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr 
     //Now adjust it. Thus in GetData the first query can still
     //be answered with delayed rendering.
     Size aSz( OLESIZE );
-    m_aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
+    m_aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MapUnit::Twip, MapUnit::MM_100th );
 
     PrepareOLE( m_aObjDesc );
     AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
@@ -1857,7 +1857,7 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 // if no other graphic is provided
                 // TODO/LATER: in future a default bitmap could be used
                 OUString aMimeType;
-                MapMode aMapMode( MAP_100TH_MM );
+                MapMode aMapMode( MapUnit::MM_100th );
                 aGraphic.SetPrefSize( Size( 2500, 2500 ) );
                 aGraphic.SetPrefMapMode( aMapMode );
                 xObjRef.SetGraphic( aGraphic, aMimeType );
@@ -1872,7 +1872,7 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                     aSize = aObjDesc.maSize;
                 else
                 {
-                    MapMode aMapMode( MAP_100TH_MM );
+                    MapMode aMapMode( MapUnit::MM_100th );
                     aSize = xObjRef.GetSize( &aMapMode );
                 }
             }
@@ -1880,7 +1880,7 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             {
                 aSize = Size( aObjDesc.maSize );    //always 100TH_MM
                 MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( aObjDesc.mnViewAspect ) );
-                aSize = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aUnit );
+                aSize = OutputDevice::LogicToLogic( aSize, MapUnit::MM_100th, aUnit );
                 awt::Size aSz;
                 try
                 {
@@ -3095,7 +3095,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         //be answered with delayed rendering.
         m_aObjDesc.maDragStartPos = rSttPos;
         m_aObjDesc.maSize = OutputDevice::LogicToLogic( Size( OLESIZE ),
-                                                MAP_TWIP, MAP_100TH_MM );
+                                                MapUnit::Twip, MapUnit::MM_100th );
         PrepareOLE( m_aObjDesc );
         AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
     }

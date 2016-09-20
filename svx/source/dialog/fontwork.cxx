@@ -421,7 +421,7 @@ void SvxFontWorkDialog::SetDistance_Impl(const XFormTextDistanceItem* pItem)
     // Use HasChildPathFocus() instead of HasFocus() at SpinFields
     if ( pItem && !m_pMtrFldDistance->HasChildPathFocus() )
     {
-        SetMetricValue(*m_pMtrFldDistance, pItem->GetValue(), MAP_100TH_MM);
+        SetMetricValue(*m_pMtrFldDistance, pItem->GetValue(), MapUnit::MM_100th);
     }
 }
 
@@ -432,7 +432,7 @@ void SvxFontWorkDialog::SetStart_Impl(const XFormTextStartItem* pItem)
     // Use HasChildPathFocus() instead of HasFocus() at SpinFields
     if ( pItem && !m_pMtrFldTextStart->HasChildPathFocus() )
     {
-        SetMetricValue(*m_pMtrFldTextStart, pItem->GetValue(), MAP_100TH_MM);
+        SetMetricValue(*m_pMtrFldTextStart, pItem->GetValue(), MapUnit::MM_100th);
     }
 }
 
@@ -513,8 +513,8 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
 
                 if ( bRestoreValues )
                 {
-                    SetMetricValue(*m_pMtrFldShadowX, nSaveShadowX, MAP_100TH_MM);
-                    SetMetricValue(*m_pMtrFldShadowY, nSaveShadowY, MAP_100TH_MM);
+                    SetMetricValue(*m_pMtrFldShadowX, nSaveShadowX, MapUnit::MM_100th);
+                    SetMetricValue(*m_pMtrFldShadowY, nSaveShadowY, MapUnit::MM_100th);
 
                     XFormTextShadowXValItem aXItem( nSaveShadowX );
                     XFormTextShadowYValItem aYItem( nSaveShadowY );
@@ -604,7 +604,7 @@ void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
         }
         else
         {
-            SetMetricValue(*m_pMtrFldShadowX, pItem->GetValue(), MAP_100TH_MM);
+            SetMetricValue(*m_pMtrFldShadowX, pItem->GetValue(), MapUnit::MM_100th);
         }
     }
 }
@@ -626,7 +626,7 @@ void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
         }
         else
         {
-            SetMetricValue(*m_pMtrFldShadowY, pItem->GetValue(), MAP_100TH_MM);
+            SetMetricValue(*m_pMtrFldShadowY, pItem->GetValue(), MapUnit::MM_100th);
         }
     }
 }
@@ -712,8 +712,8 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectShadowHdl_Impl, ToolBox *, void)
 
         if (nLastShadowTbxId == nShadowNormalId)
         {
-            nSaveShadowX = GetCoreValue(*m_pMtrFldShadowX, MAP_100TH_MM);
-            nSaveShadowY = GetCoreValue(*m_pMtrFldShadowY, MAP_100TH_MM);
+            nSaveShadowX = GetCoreValue(*m_pMtrFldShadowX, MapUnit::MM_100th);
+            nSaveShadowY = GetCoreValue(*m_pMtrFldShadowY, MapUnit::MM_100th);
         }
         else if (nLastShadowTbxId == nShadowSlantId)
         {
@@ -759,9 +759,9 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, InputTimoutHdl_Impl, Idle *, void)
         m_pMtrFldShadowY->SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
     }
 
-    long nValue = GetCoreValue(*m_pMtrFldDistance, MAP_100TH_MM);
+    long nValue = GetCoreValue(*m_pMtrFldDistance, MapUnit::MM_100th);
     XFormTextDistanceItem aDistItem( nValue );
-    nValue = GetCoreValue(*m_pMtrFldTextStart, MAP_100TH_MM);
+    nValue = GetCoreValue(*m_pMtrFldTextStart, MapUnit::MM_100th);
     XFormTextStartItem aStartItem( nValue );
 
     sal_Int32 nValueX(0L);
@@ -773,8 +773,8 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, InputTimoutHdl_Impl, Idle *, void)
     // methos regarding to the kind of value accessed.
     if (nLastShadowTbxId == nShadowNormalId)
     {
-        nValueX = GetCoreValue(*m_pMtrFldShadowX, MAP_100TH_MM);
-        nValueY = GetCoreValue(*m_pMtrFldShadowY, MAP_100TH_MM);
+        nValueX = GetCoreValue(*m_pMtrFldShadowX, MapUnit::MM_100th);
+        nValueY = GetCoreValue(*m_pMtrFldShadowY, MapUnit::MM_100th);
     }
     else if (nLastShadowTbxId == nShadowSlantId)
     {

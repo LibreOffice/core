@@ -361,7 +361,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     m_pMenu->SetSelectHdl( LINK( this, SvxStyleBox_Impl, MenuSelectHdl ) );
     for(VclPtr<MenuButton> & rpButton : m_pButtons)
         rpButton = nullptr;
-    aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
+    aLogicalSize = PixelToLogic( GetSizePixel(), MapUnit::AppFont );
     SetOptimalSize();
     EnableAutocomplete( true );
     EnableUserDraw( true );
@@ -618,7 +618,7 @@ bool SvxStyleBox_Impl::AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle&
 
 void SvxStyleBox_Impl::SetOptimalSize()
 {
-    Size aSize(LogicToPixel(aLogicalSize, MAP_APPFONT));
+    Size aSize(LogicToPixel(aLogicalSize, MapUnit::AppFont));
     set_width_request(aSize.Width());
     set_height_request(aSize.Height());
     SetSizePixel(aSize);
@@ -1095,7 +1095,7 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
 
 void SvxFontNameBox_Impl::SetOptimalSize()
 {
-    Size aSize(LogicToPixel(aLogicalSize, MAP_APPFONT));
+    Size aSize(LogicToPixel(aLogicalSize, MapUnit::AppFont));
     set_width_request(aSize.Width());
     set_height_request(aSize.Height());
     SetSizePixel(aSize);
