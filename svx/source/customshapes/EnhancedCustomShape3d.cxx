@@ -269,9 +269,9 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             fMap /= aFraction.GetDenominator();
             pMap = &fMap;
         }
-        if ( pModel->GetScaleUnit() != MAP_100TH_MM )
+        if ( pModel->GetScaleUnit() != MapUnit::MM_100th )
         {
-            DBG_ASSERT( pModel->GetScaleUnit() == MAP_TWIP, "EnhancedCustomShape3d::Current MapMode is Unsupported" );
+            DBG_ASSERT( pModel->GetScaleUnit() == MapUnit::Twip, "EnhancedCustomShape3d::Current MapMode is Unsupported" );
             fMap *= 1440.0 / 2540.0;
             pMap = &fMap;
         }
@@ -500,14 +500,14 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                         // from regular 3D objects for some time, also needs to be removed from CustomShapes
 
                         //Size aLogicalSize = aFillBmp.GetPrefSize();
-                        //if ( aFillBmp.GetPrefMapMode() == MAP_PIXEL )
-                        //  aLogicalSize = Application::GetDefaultDevice()->PixelToLogic( aLogicalSize, MAP_100TH_MM );
+                        //if ( aFillBmp.GetPrefMapMode() == MapUnit::Pix )
+                        //  aLogicalSize = Application::GetDefaultDevice()->PixelToLogic( aLogicalSize, MapUnit::MM_100th );
                         //else
-                        //  aLogicalSize = OutputDevice::LogicToLogic( aLogicalSize, aFillBmp.GetPrefMapMode(), MAP_100TH_MM );
+                        //  aLogicalSize = OutputDevice::LogicToLogic( aLogicalSize, aFillBmp.GetPrefMapMode(), MapUnit::MM_100th );
                         //aLogicalSize.Width()  *= 5;           ;//             :-(     nice scaling, look at engine3d/obj3d.cxx
                         //aLogicalSize.Height() *= 5;
                         //aFillBmp.SetPrefSize( aLogicalSize );
-                        //aFillBmp.SetPrefMapMode( MAP_100TH_MM );
+                        //aFillBmp.SetPrefMapMode( MapUnit::MM_100th );
                         //p3DObj->SetMergedItem(XFillBitmapItem(String(), Graphic(aFillBmp)));
                     }
                     else

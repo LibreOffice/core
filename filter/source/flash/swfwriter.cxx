@@ -27,8 +27,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
 
-static MapMode aTWIPSMode( MAP_TWIP );
-static MapMode a100thmmMode( MAP_100TH_MM );
+static MapMode aTWIPSMode( MapUnit::Twip );
+static MapMode a100thmmMode( MapUnit::MM_100th );
 
 static sal_Int32 map100thmm( sal_Int32 n100thMM )
 {

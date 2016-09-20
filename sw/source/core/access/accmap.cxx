@@ -3112,8 +3112,8 @@ void SwAccessibleMap::FireEvents()
 
 Rectangle SwAccessibleMap::GetVisibleArea() const
 {
-    MapMode aSrc( MAP_TWIP );
-    MapMode aDest( MAP_100TH_MM );
+    MapMode aSrc( MapUnit::Twip );
+    MapMode aDest( MapUnit::MM_100th );
     return OutputDevice::LogicToLogic( GetVisArea().SVRect(), aSrc, aDest );
 }
 
@@ -3121,8 +3121,8 @@ Rectangle SwAccessibleMap::GetVisibleArea() const
 // relative to the screen!
 Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
 {
-    MapMode aSrc( MAP_100TH_MM );
-    MapMode aDest( MAP_TWIP );
+    MapMode aSrc( MapUnit::MM_100th );
+    MapMode aDest( MapUnit::Twip );
 
     Point aPoint = rPoint;
 
@@ -3141,8 +3141,8 @@ Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
 
 Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
 {
-    MapMode aSrc( MAP_100TH_MM );
-    MapMode aDest( MAP_TWIP );
+    MapMode aSrc( MapUnit::MM_100th );
+    MapMode aDest( MapUnit::Twip );
     Size aSize( OutputDevice::LogicToLogic( rSize, aSrc, aDest ) );
     if( GetShell()->GetWin() )
     {

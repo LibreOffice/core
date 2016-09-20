@@ -2148,21 +2148,21 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         return rStr;
 
     // Metric query
-    MapUnit eMapUnit = MAP_CM;
+    MapUnit eMapUnit = MapUnit::CM;
     FieldUnit eFieldUnit = pSh->GetModule()->GetFieldUnit();
     switch ( eFieldUnit )
     {
-        case FUNIT_MM:          eMapUnit = MAP_MM; break;
+        case FUNIT_MM:          eMapUnit = MapUnit::MM; break;
         case FUNIT_CM:
         case FUNIT_M:
-        case FUNIT_KM:          eMapUnit = MAP_CM; break;
-        case FUNIT_TWIP:        eMapUnit = MAP_TWIP; break;
+        case FUNIT_KM:          eMapUnit = MapUnit::CM; break;
+        case FUNIT_TWIP:        eMapUnit = MapUnit::Twip; break;
         case FUNIT_POINT:
-        case FUNIT_PICA:        eMapUnit = MAP_POINT; break;
+        case FUNIT_PICA:        eMapUnit = MapUnit::Point; break;
         case FUNIT_INCH:
         case FUNIT_FOOT:
-        case FUNIT_MILE:        eMapUnit = MAP_INCH; break;
-        case FUNIT_100TH_MM:    eMapUnit = MAP_100TH_MM; break;
+        case FUNIT_MILE:        eMapUnit = MapUnit::Inch; break;
+        case FUNIT_100TH_MM:    eMapUnit = MapUnit::MM_100th; break;
         default: ;//prevent warning
     }
 

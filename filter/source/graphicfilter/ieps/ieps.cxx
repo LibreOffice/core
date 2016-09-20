@@ -129,17 +129,17 @@ static void MakeAsMeta(Graphic &rGraphic)
 
     if( !aSize.Width() || !aSize.Height() )
         aSize = Application::GetDefaultDevice()->PixelToLogic(
-            aBmp.GetSizePixel(), MAP_100TH_MM );
+            aBmp.GetSizePixel(), MapUnit::MM_100th );
     else
         aSize = OutputDevice::LogicToLogic( aSize,
-            aBmp.GetPrefMapMode(), MAP_100TH_MM );
+            aBmp.GetPrefMapMode(), MapUnit::MM_100th );
 
     pVDev->EnableOutput( false );
     aMtf.Record( pVDev );
     pVDev->DrawBitmap( Point(), aSize, rGraphic.GetBitmap() );
     aMtf.Stop();
     aMtf.WindStart();
-    aMtf.SetPrefMapMode( MAP_100TH_MM );
+    aMtf.SetPrefMapMode( MapUnit::MM_100th );
     aMtf.SetPrefSize( aSize );
     rGraphic = aMtf;
 }
@@ -514,7 +514,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     pVDev->Pop();
     aMtf.Stop();
     aMtf.WindStart();
-    aMtf.SetPrefMapMode( MAP_POINT );
+    aMtf.SetPrefMapMode( MapUnit::Point );
     aMtf.SetPrefSize( Size( nWidth, nHeight ) );
     rGraphic = aMtf;
 }
@@ -680,13 +680,13 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                 aMtf.Record( pVDev );
                                 aSize = aBitmap.GetPrefSize();
                                 if( !aSize.Width() || !aSize.Height() )
-                                    aSize = Application::GetDefaultDevice()->PixelToLogic( aBitmap.GetSizePixel(), MAP_100TH_MM );
+                                    aSize = Application::GetDefaultDevice()->PixelToLogic( aBitmap.GetSizePixel(), MapUnit::MM_100th );
                                 else
-                                    aSize = OutputDevice::LogicToLogic( aSize, aBitmap.GetPrefMapMode(), MAP_100TH_MM );
+                                    aSize = OutputDevice::LogicToLogic( aSize, aBitmap.GetPrefMapMode(), MapUnit::MM_100th );
                                 pVDev->DrawBitmap( Point(), aSize, aBitmap );
                                 aMtf.Stop();
                                 aMtf.WindStart();
-                                aMtf.SetPrefMapMode( MAP_100TH_MM );
+                                aMtf.SetPrefMapMode( MapUnit::MM_100th );
                                 aMtf.SetPrefSize( aSize );
                                 aGraphic = aMtf;
                                 bHasPreview = bRetValue = true;
@@ -735,7 +735,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                                                       aGfxLink, aGraphic.GetGDIMetaFile() ) ) );
                     CreateMtfReplacementAction( aMtf, rStream, nOrigPos, nPSSize, nPosWMF, nSizeWMF, nPosTIFF, nSizeTIFF );
                     aMtf.WindStart();
-                    aMtf.SetPrefMapMode( MAP_POINT );
+                    aMtf.SetPrefMapMode( MapUnit::Point );
                     aMtf.SetPrefSize( Size( nWidth, nHeight ) );
                     rGraphic = aMtf;
                     bRetValue = true;
