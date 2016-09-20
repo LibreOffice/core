@@ -971,17 +971,17 @@ sal_Bool SvxMeasureUnitToMapUnit( const short eApi, int& eVcl ) throw()
 {
     switch( eVcl )
     {
-    case util::MeasureUnit::MM_100TH:       eVcl = MAP_100TH_MM;    break;
-    case util::MeasureUnit::MM_10TH:        eVcl = MAP_10TH_MM;     break;
-    case util::MeasureUnit::MM:             eVcl = MAP_MM;          break;
-    case util::MeasureUnit::CM:             eVcl = MAP_CM;          break;
-    case util::MeasureUnit::INCH_1000TH:    eVcl = MAP_1000TH_INCH; break;
-    case util::MeasureUnit::INCH_100TH:     eVcl = MAP_100TH_INCH;  break;
-    case util::MeasureUnit::INCH_10TH:      eVcl = MAP_10TH_INCH;   break;
-    case util::MeasureUnit::INCH:           eVcl = MAP_INCH;        break;
-    case util::MeasureUnit::POINT:          eVcl = MAP_POINT;       break;
-    case util::MeasureUnit::TWIP:           eVcl = MAP_TWIP;        break;
-    case util::MeasureUnit::PERCENT:        eVcl = MAP_RELATIVE;    break;
+    case util::MeasureUnit::MM_100TH:       eVcl = MapUnit::MM_100th;    break;
+    case util::MeasureUnit::MM_10TH:        eVcl = MapUnit::MM_10th;     break;
+    case util::MeasureUnit::MM:             eVcl = MapUnit::MM;          break;
+    case util::MeasureUnit::CM:             eVcl = MapUnit::CM;          break;
+    case util::MeasureUnit::INCH_1000TH:    eVcl = MapUnit::Inch_1000th; break;
+    case util::MeasureUnit::INCH_100TH:     eVcl = MapUnit::Inch_100th;  break;
+    case util::MeasureUnit::INCH_10TH:      eVcl = MapUnit::Inch_10th;   break;
+    case util::MeasureUnit::INCH:           eVcl = MapUnit::Inch;        break;
+    case util::MeasureUnit::POINT:          eVcl = MapUnit::Point;       break;
+    case util::MeasureUnit::TWIP:           eVcl = MapUnit::Twip;        break;
+    case util::MeasureUnit::PERCENT:        eVcl = MapUnit::Relative;    break;
     default:
         return false;
     }
@@ -997,17 +997,17 @@ bool SvxMapUnitToMeasureUnit( const MapUnit eVcl, short& eApi ) throw()
 {
     switch( eVcl )
     {
-    case MAP_100TH_MM:      eApi = util::MeasureUnit::MM_100TH;     break;
-    case MAP_10TH_MM:       eApi = util::MeasureUnit::MM_10TH;      break;
-    case MAP_MM:            eApi = util::MeasureUnit::MM;           break;
-    case MAP_CM:            eApi = util::MeasureUnit::CM;           break;
-    case MAP_1000TH_INCH:   eApi = util::MeasureUnit::INCH_1000TH;  break;
-    case MAP_100TH_INCH:    eApi = util::MeasureUnit::INCH_100TH;   break;
-    case MAP_10TH_INCH:     eApi = util::MeasureUnit::INCH_10TH;    break;
-    case MAP_INCH:          eApi = util::MeasureUnit::INCH;         break;
-    case MAP_POINT:         eApi = util::MeasureUnit::POINT;        break;
-    case MAP_TWIP:          eApi = util::MeasureUnit::TWIP;         break;
-    case MAP_RELATIVE:      eApi = util::MeasureUnit::PERCENT;      break;
+    case MapUnit::MM_100th:      eApi = util::MeasureUnit::MM_100TH;     break;
+    case MapUnit::MM_10th:       eApi = util::MeasureUnit::MM_10TH;      break;
+    case MapUnit::MM:            eApi = util::MeasureUnit::MM;           break;
+    case MapUnit::CM:            eApi = util::MeasureUnit::CM;           break;
+    case MapUnit::Inch_1000th:   eApi = util::MeasureUnit::INCH_1000TH;  break;
+    case MapUnit::Inch_100th:    eApi = util::MeasureUnit::INCH_100TH;   break;
+    case MapUnit::Inch_10th:     eApi = util::MeasureUnit::INCH_10TH;    break;
+    case MapUnit::Inch:          eApi = util::MeasureUnit::INCH;         break;
+    case MapUnit::Point:         eApi = util::MeasureUnit::POINT;        break;
+    case MapUnit::Twip:          eApi = util::MeasureUnit::TWIP;         break;
+    case MapUnit::Relative:      eApi = util::MeasureUnit::PERCENT;      break;
     default:
         return false;
     }

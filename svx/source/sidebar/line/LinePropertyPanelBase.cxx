@@ -167,7 +167,7 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mpStyleItem(),
     mpDashItem(),
     mnTrans(0),
-    meMapUnit(MAP_MM),
+    meMapUnit(MapUnit::MM),
     mnWidthCoreValue(0),
     mpStartItem(),
     mpEndItem(),
@@ -707,7 +707,7 @@ void LinePropertyPanelBase::SetWidthIcon()
         return;
     }
 
-    long nVal = LogicToLogic(mnWidthCoreValue * 10,(MapUnit)meMapUnit , MAP_POINT);
+    long nVal = LogicToLogic(mnWidthCoreValue * 10,(MapUnit)meMapUnit , MapUnit::Point);
     const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
 
     if(nVal <= 6)

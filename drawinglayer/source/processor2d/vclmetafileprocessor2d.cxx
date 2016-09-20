@@ -818,7 +818,7 @@ namespace drawinglayer
                             double fFactorY(1.0);
 
                             {
-                                const MapMode aMapMode100thmm(MAP_100TH_MM);
+                                const MapMode aMapMode100thmm(MapUnit::MM_100th);
                                 const Size aBitmapSize(OutputDevice::LogicToLogic(
                                     rGraphicPrimitive.getGraphicObject().GetPrefSize(),
                                     rGraphicPrimitive.getGraphicObject().GetPrefMapMode(), aMapMode100thmm));
@@ -909,7 +909,7 @@ namespace drawinglayer
                                 pPDFControl->Location = aRectLogic;
 
                                 Size aFontSize(pPDFControl->TextFont.GetFontSize());
-                                aFontSize = OutputDevice::LogicToLogic(aFontSize, MapMode(MAP_POINT), mpOutputDevice->GetMapMode());
+                                aFontSize = OutputDevice::LogicToLogic(aFontSize, MapMode(MapUnit::Point), mpOutputDevice->GetMapMode());
                                 pPDFControl->TextFont.SetFontSize(aFontSize);
 
                                 mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
@@ -2033,10 +2033,10 @@ namespace drawinglayer
                                 // prepare view transformation for target renderers
                                 // ATTENTION! Need to apply another scaling because of the potential DPI differences
                                 // between Printer and VDev (mpOutputDevice and aBufferDevice here).
-                                // To get the DPI, LogicToPixel from (1,1) from MAP_INCH needs to be used.
+                                // To get the DPI, LogicToPixel from (1,1) from MapUnit::Inch needs to be used.
                                 basegfx::B2DHomMatrix aViewTransform(aBufferDevice->GetViewTransformation());
-                                const Size aDPIOld(mpOutputDevice->LogicToPixel(Size(1, 1), MAP_INCH));
-                                const Size aDPINew(aBufferDevice->LogicToPixel(Size(1, 1), MAP_INCH));
+                                const Size aDPIOld(mpOutputDevice->LogicToPixel(Size(1, 1), MapUnit::Inch));
+                                const Size aDPINew(aBufferDevice->LogicToPixel(Size(1, 1), MapUnit::Inch));
                                 const double fDPIXChange((double)aDPIOld.getWidth() / (double)aDPINew.getWidth());
                                 const double fDPIYChange((double)aDPIOld.getHeight() / (double)aDPINew.getHeight());
 

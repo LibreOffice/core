@@ -502,7 +502,7 @@ ScFieldEditEngine& ScDocument::GetEditEngine()
         pEditEngine = new ScFieldEditEngine(this, GetEnginePool(), GetEditPool());
         pEditEngine->SetUpdateMode( false );
         pEditEngine->EnableUndo( false );
-        pEditEngine->SetRefMapMode( MAP_100TH_MM );
+        pEditEngine->SetRefMapMode( MapUnit::MM_100th );
         ApplyAsianEditSettings( *pEditEngine );
     }
     return *pEditEngine;
@@ -515,7 +515,7 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
         pNoteEngine = new ScNoteEditEngine( GetEnginePool(), GetEditPool() );
         pNoteEngine->SetUpdateMode( false );
         pNoteEngine->EnableUndo( false );
-        pNoteEngine->SetRefMapMode( MAP_100TH_MM );
+        pNoteEngine->SetRefMapMode( MapUnit::MM_100th );
         ApplyAsianEditSettings( *pNoteEngine );
         const SfxItemSet& rItemSet = GetDefPattern()->GetItemSet();
         SfxItemSet* pEEItemSet = new SfxItemSet( pNoteEngine->GetEmptyItemSet() );

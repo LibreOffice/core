@@ -587,13 +587,13 @@ namespace svxform
     {
         SfxDockingWindow::Resize();
 
-        Size aLogOutputSize = PixelToLogic( GetOutputSizePixel(), MAP_APPFONT );
+        Size aLogOutputSize = PixelToLogic( GetOutputSizePixel(), MapUnit::AppFont );
         Size aLogExplSize = aLogOutputSize;
         aLogExplSize.Width() -= 6;
         aLogExplSize.Height() -= 6;
 
-        Point aExplPos = LogicToPixel( Point(3,3), MAP_APPFONT );
-        Size aExplSize = LogicToPixel( aLogExplSize, MAP_APPFONT );
+        Point aExplPos = LogicToPixel( Point(3,3), MapUnit::AppFont );
+        Size aExplSize = LogicToPixel( aLogExplSize, MapUnit::AppFont );
 
         m_pNavigatorTree->SetPosSizePixel( aExplPos, aExplSize );
     }

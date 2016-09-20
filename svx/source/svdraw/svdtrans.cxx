@@ -575,27 +575,27 @@ long BigMulDiv(long nVal, long nMul, long nDiv)
 FrPair GetInchOrMM(MapUnit eU)
 {
     switch (eU) {
-        case MAP_1000TH_INCH: return FrPair(1000,1);
-        case MAP_100TH_INCH : return FrPair( 100,1);
-        case MAP_10TH_INCH  : return FrPair(  10,1);
-        case MAP_INCH       : return FrPair(   1,1);
-        case MAP_POINT      : return FrPair(  72,1);
-        case MAP_TWIP       : return FrPair(1440,1);
-        case MAP_100TH_MM   : return FrPair( 100,1);
-        case MAP_10TH_MM    : return FrPair(  10,1);
-        case MAP_MM         : return FrPair(   1,1);
-        case MAP_CM         : return FrPair(   1,10);
-        case MAP_PIXEL      : {
+        case MapUnit::Inch_1000th: return FrPair(1000,1);
+        case MapUnit::Inch_100th : return FrPair( 100,1);
+        case MapUnit::Inch_10th  : return FrPair(  10,1);
+        case MapUnit::Inch       : return FrPair(   1,1);
+        case MapUnit::Point      : return FrPair(  72,1);
+        case MapUnit::Twip       : return FrPair(1440,1);
+        case MapUnit::MM_100th   : return FrPair( 100,1);
+        case MapUnit::MM_10th    : return FrPair(  10,1);
+        case MapUnit::MM         : return FrPair(   1,1);
+        case MapUnit::CM         : return FrPair(   1,10);
+        case MapUnit::Pix      : {
             ScopedVclPtrInstance< VirtualDevice > pVD;
-            pVD->SetMapMode(MapMode(MAP_100TH_MM));
+            pVD->SetMapMode(MapMode(MapUnit::MM_100th));
             Point aP(pVD->PixelToLogic(Point(64,64))); // 64 pixels for more accuracy
             return FrPair(6400,aP.X(),6400,aP.Y());
         }
-        case MAP_APPFONT: case MAP_SYSFONT: {
+        case MapUnit::AppFont: case MapUnit::SysFont: {
             ScopedVclPtrInstance< VirtualDevice > pVD;
             pVD->SetMapMode(MapMode(eU));
             Point aP(pVD->LogicToPixel(Point(32,32))); // 32 units for more accuracy
-            pVD->SetMapMode(MapMode(MAP_100TH_MM));
+            pVD->SetMapMode(MapMode(MapUnit::MM_100th));
             aP=pVD->PixelToLogic(aP);
             return FrPair(3200,aP.X(),3200,aP.Y());
         }
@@ -667,22 +667,22 @@ void GetMeterOrInch(MapUnit eMU, short& rnKomma, long& rnMul, long& rnDiv, bool&
     bool bMetr = false, bInch = false;
     switch (eMU) {
         // Metrisch
-        case MAP_100TH_MM   : bMetr = true; nKomma=5; break;
-        case MAP_10TH_MM    : bMetr = true; nKomma=4; break;
-        case MAP_MM         : bMetr = true; nKomma=3; break;
-        case MAP_CM         : bMetr = true; nKomma=2; break;
+        case MapUnit::MM_100th   : bMetr = true; nKomma=5; break;
+        case MapUnit::MM_10th    : bMetr = true; nKomma=4; break;
+        case MapUnit::MM         : bMetr = true; nKomma=3; break;
+        case MapUnit::CM         : bMetr = true; nKomma=2; break;
         // Inch
-        case MAP_1000TH_INCH: bInch = true; nKomma=3; break;
-        case MAP_100TH_INCH : bInch = true; nKomma=2; break;
-        case MAP_10TH_INCH  : bInch = true; nKomma=1; break;
-        case MAP_INCH       : bInch = true; nKomma=0; break;
-        case MAP_POINT      : bInch = true; rnDiv=72;  break;          // 1Pt   = 1/72"
-        case MAP_TWIP       : bInch = true; rnDiv=144; nKomma=1; break; // 1Twip = 1/1440"
+        case MapUnit::Inch_1000th: bInch = true; nKomma=3; break;
+        case MapUnit::Inch_100th : bInch = true; nKomma=2; break;
+        case MapUnit::Inch_10th  : bInch = true; nKomma=1; break;
+        case MapUnit::Inch       : bInch = true; nKomma=0; break;
+        case MapUnit::Point      : bInch = true; rnDiv=72;  break;          // 1Pt   = 1/72"
+        case MapUnit::Twip       : bInch = true; rnDiv=144; nKomma=1; break; // 1Twip = 1/1440"
         // Sonstiges
-        case MAP_PIXEL      : break;
-        case MAP_SYSFONT    : break;
-        case MAP_APPFONT    : break;
-        case MAP_RELATIVE   : break;
+        case MapUnit::Pix      : break;
+        case MapUnit::SysFont    : break;
+        case MapUnit::AppFont    : break;
+        case MapUnit::Relative   : break;
         default: break;
     } // switch
     rnKomma=nKomma;
@@ -840,76 +840,76 @@ void SdrFormatter::TakeUnitStr(MapUnit eUnit, OUString& rStr)
     switch(eUnit)
     {
         // metrically
-        case MAP_100TH_MM   :
+        case MapUnit::MM_100th   :
         {
             rStr = "/100mm";
             break;
         }
-        case MAP_10TH_MM    :
+        case MapUnit::MM_10th    :
         {
             rStr = "/10mm";
             break;
         }
-        case MAP_MM         :
+        case MapUnit::MM         :
         {
             rStr = "mm";
             break;
         }
-        case MAP_CM         :
+        case MapUnit::CM         :
         {
             rStr = "cm";
             break;
         }
 
         // Inch
-        case MAP_1000TH_INCH:
+        case MapUnit::Inch_1000th:
         {
             rStr = "/1000\"";
             break;
         }
-        case MAP_100TH_INCH :
+        case MapUnit::Inch_100th :
         {
             rStr = "/100\"";
             break;
         }
-        case MAP_10TH_INCH  :
+        case MapUnit::Inch_10th  :
         {
             rStr = "/10\"";
             break;
         }
-        case MAP_INCH       :
+        case MapUnit::Inch       :
         {
             rStr = "\"";
             break;
         }
-        case MAP_POINT      :
+        case MapUnit::Point      :
         {
             rStr = "pt";
             break;
         }
-        case MAP_TWIP       :
+        case MapUnit::Twip       :
         {
             rStr = "twip";
             break;
         }
 
         // others
-        case MAP_PIXEL      :
+        case MapUnit::Pix      :
         {
             rStr = "pixel";
             break;
         }
-        case MAP_SYSFONT    :
+        case MapUnit::SysFont    :
         {
             rStr = "sysfont";
             break;
         }
-        case MAP_APPFONT    :
+        case MapUnit::AppFont    :
         {
             rStr = "appfont";
             break;
         }
-        case MAP_RELATIVE   :
+        case MapUnit::Relative   :
         {
             rStr = "%";
             break;

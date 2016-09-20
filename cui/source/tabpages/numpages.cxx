@@ -969,7 +969,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
                 {
                     Size aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
                     sal_Int16 eOrient = text::VertOrientation::LINE_CENTER;
-                    aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)eCoreUnit);
+                    aSize = OutputDevice::LogicToLogic(aSize, MapUnit::MM_100th, (MapUnit)eCoreUnit);
                     SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH );
                     aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
                 }
@@ -2013,7 +2013,7 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton, v
     }
     if(bSucc)
     {
-        aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)eCoreUnit);
+        aSize = OutputDevice::LogicToLogic(aSize, MapUnit::MM_100th, (MapUnit)eCoreUnit);
 
         sal_uInt16 nMask = 1;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -2171,9 +2171,9 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
     long nWidthVal = static_cast<long>(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_100TH_MM)));
     long nHeightVal = static_cast<long>(m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FUNIT_100TH_MM)));
     nWidthVal = OutputDevice::LogicToLogic( nWidthVal ,
-                                                MAP_100TH_MM, (MapUnit)eCoreUnit );
+                                                MapUnit::MM_100th, (MapUnit)eCoreUnit );
     nHeightVal = OutputDevice::LogicToLogic( nHeightVal,
-                                                MAP_100TH_MM, (MapUnit)eCoreUnit);
+                                                MapUnit::MM_100th, (MapUnit)eCoreUnit);
     double  fSizeRatio;
 
     bool bRepaint = false;
@@ -2201,7 +2201,7 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
                     {
                         aSize.Height() = aInitSize[i].Height() + (long)((double)nDelta / fSizeRatio);
                         m_pHeightMF->SetUserValue(m_pHeightMF->Normalize(
-                            OutputDevice::LogicToLogic( aSize.Height(), (MapUnit)eCoreUnit, MAP_100TH_MM )),
+                            OutputDevice::LogicToLogic( aSize.Height(), (MapUnit)eCoreUnit, MapUnit::MM_100th )),
                                 FUNIT_100TH_MM);
                     }
                 }
@@ -2213,7 +2213,7 @@ IMPL_LINK_TYPED( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
                     {
                         aSize.Width() = aInitSize[i].Width() + (long)((double)nDelta * fSizeRatio);
                         m_pWidthMF->SetUserValue(m_pWidthMF->Normalize(
-                            OutputDevice::LogicToLogic( aSize.Width(), (MapUnit)eCoreUnit, MAP_100TH_MM )),
+                            OutputDevice::LogicToLogic( aSize.Width(), (MapUnit)eCoreUnit, MapUnit::MM_100th )),
                                 FUNIT_100TH_MM);
                     }
                 }

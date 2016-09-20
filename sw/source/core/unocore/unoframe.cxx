@@ -1442,7 +1442,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             const SfxItemPool& rPool = pDoc->GetAttrPool();
             const MapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
 
-            if(eMapUnit != MAP_100TH_MM)
+            if(eMapUnit != MapUnit::MM_100th)
             {
                 SvxUnoConvertFromMM(eMapUnit, aValue);
             }
@@ -2248,7 +2248,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 const SwRect &rRect = pTmpFrame->Frame();
                 Size aMM100Size = OutputDevice::LogicToLogic(
                         Size( rRect.Width(), rRect.Height() ),
-                        MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
+                        MapMode( MapUnit::Twip ), MapMode( MapUnit::MM_100th ));
                 aAny <<= awt::Size( aMM100Size.Width(), aMM100Size.Height() );
             }
         }
@@ -2347,7 +2347,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             const SfxItemPool& rPool = pDoc->GetAttrPool();
             const MapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
 
-            if(eMapUnit != MAP_100TH_MM)
+            if(eMapUnit != MapUnit::MM_100th)
             {
                 SvxUnoConvertToMM(eMapUnit, aAny);
             }
@@ -2966,9 +2966,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                         {
                             aSz.Width() = aSz.Height() = 5000;
                             aSz = OutputDevice::LogicToLogic
-                                                    ( aSz, MapMode( MAP_100TH_MM ), aRefMap );
+                                                    ( aSz, MapMode( MapUnit::MM_100th ), aRefMap );
                         }
-                        MapMode aMyMap( MAP_TWIP );
+                        MapMode aMyMap( MapUnit::Twip );
                         aSz = OutputDevice::LogicToLogic( aSz, aRefMap, aMyMap );
                         SwFormatFrameSize aFrameSz;
                         aFrameSz.SetSize(aSz);
