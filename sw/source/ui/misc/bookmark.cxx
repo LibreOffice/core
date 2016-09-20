@@ -249,17 +249,24 @@ bool SwInsertBookmarkDlg::HaveBookmarksChanged()
     if (pMarkAccess->getBookmarksCount() != m_nLastBookmarksCount)
         return true;
 
-    IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
-    for (std::pair<sw::mark::IMark*,OUString> & aTableBookmark : aTableBookmarks)
+    std::vector<std::pair<sw::mark::IMark*, OUString>>::const_iterator aListIter = aTableBookmarks.begin();
+    for (IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
+         ppBookmark != pMarkAccess->getBookmarksEnd(); ++ppBookmark)
     {
         if (IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
-            if (aTableBookmark.first != ppBookmark->get() ||
-                aTableBookmark.second != ppBookmark->get()->GetName())
+            // more bookmarks then expected
+            if (aListIter == aTableBookmarks.end())
                 return true;
-            ++ppBookmark;
+            if (aListIter->first != ppBookmark->get() ||
+                aListIter->second != ppBookmark->get()->GetName())
+                return true;
+            ++aListIter;
         }
     }
+    // less bookmarks then expected
+    if (aListIter != aTableBookmarks.end())
+        return true;
     return false;
 }
 
@@ -267,6 +274,7 @@ void SwInsertBookmarkDlg::PopulateTable()
 {
     aTableBookmarks.clear();
     m_pBookmarksBox->Clear();
+
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
     for (IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
          ppBookmark != pMarkAccess->getBookmarksEnd(); ++ppBookmark)
