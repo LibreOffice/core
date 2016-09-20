@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_55237b05",
+        "filename": "editeng/source/items/numitem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-09-20T14:41:47Z",
+      "side": 1,
+      "message": "Given this is for debugging, maybe don\u0027t invent \"readable\" names, just expose the memory layout as-is. format -\u003e aFmts. Also, other dumpAsXml() code exposes the pointer address via \"ptr\" attribute, so maybe use it here as well, instead of inventing \"ptrSvxNumberFormat\". If you want to show what is the class name of the instance at the given address, it\u0027s better to rely on RTTI to do so, see e.g. SdrObject::dumpAsXml(), the symbol attribute.",
+      "revId": "e0fd3d930035d6795d0f60fa3ab77d158552db0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
