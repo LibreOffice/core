@@ -53,12 +53,12 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     ,m_aReportWindow(VclPtr<rptui::OReportWindow>::Create(this,m_pParent))
     ,m_pReportDefinitionMultiPlexer(nullptr)
 {
-    SetMapMode( MapMode( MAP_100TH_MM ) );
+    SetMapMode( MapMode( MapUnit::MM_100th ) );
 
     impl_initScrollBar( *m_aHScroll.get() );
     impl_initScrollBar( *m_aVScroll.get() );
 
-    m_aReportWindow->SetMapMode( MapMode( MAP_100TH_MM ) );
+    m_aReportWindow->SetMapMode( MapMode( MapUnit::MM_100th ) );
     m_aReportWindow->Show();
 
     // normally we should be SCROLL_PANE
@@ -170,7 +170,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
     else
         m_aCornerWin->Hide();
 
-    const Point aOffset = LogicToPixel( Point( SECTION_OFFSET, SECTION_OFFSET ), MAP_APPFONT );
+    const Point aOffset = LogicToPixel( Point( SECTION_OFFSET, SECTION_OFFSET ), MapUnit::AppFont );
     // resize scrollbars and set their ranges
     {
         Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH*m_pParent->getController().getZoomValue()),100);

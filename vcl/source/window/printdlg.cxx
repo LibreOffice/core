@@ -233,18 +233,18 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
 
     // use correct measurements
     const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );
-    MapUnit eUnit = MAP_MM;
+    MapUnit eUnit = MapUnit::MM;
     int nDigits = 0;
     if( rLocWrap.getMeasurementSystemEnum() == MEASURE_US )
     {
-        eUnit = MAP_100TH_INCH;
+        eUnit = MapUnit::Inch_100th;
         nDigits = 2;
     }
-    Size aLogicPaperSize( LogicToLogic( i_rOrigSize, MapMode( MAP_100TH_MM ), MapMode( eUnit ) ) );
+    Size aLogicPaperSize( LogicToLogic( i_rOrigSize, MapMode( MapUnit::MM_100th ), MapMode( eUnit ) ) );
     OUString aNumText( rLocWrap.getNum( aLogicPaperSize.Width(), nDigits ) );
     aBuf.append( aNumText )
         .append( sal_Unicode( ' ' ) );
-    aBuf.appendAscii( eUnit == MAP_MM ? "mm" : "in" );
+    aBuf.appendAscii( eUnit == MapUnit::MM ? "mm" : "in" );
     if( !i_rPaperName.isEmpty() )
     {
         aBuf.append( " (" );
@@ -256,7 +256,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     aNumText = rLocWrap.getNum( aLogicPaperSize.Height(), nDigits );
     aBuf.append( aNumText )
         .append( sal_Unicode( ' ' ) );
-    aBuf.appendAscii( eUnit == MAP_MM ? "mm" : "in" );
+    aBuf.appendAscii( eUnit == MapUnit::MM ? "mm" : "in" );
     maVertDim->SetText( aBuf.makeStringAndClear() );
 
     Resize();
@@ -269,7 +269,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     GDIMetaFile aMtf( maMtf );
 
     Size aVDevSize( maPageVDev->GetOutputSizePixel() );
-    const Size aLogicSize( maPageVDev->PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
+    const Size aLogicSize( maPageVDev->PixelToLogic( aVDevSize, MapMode( MapUnit::MM_100th ) ) );
     Size aOrigSize( maOrigSize );
     if( aOrigSize.Width() < 1 )
         aOrigSize.Width() = aLogicSize.Width();
@@ -279,7 +279,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
 
     maPageVDev->Erase();
     maPageVDev->Push();
-    maPageVDev->SetMapMode( MAP_100TH_MM );
+    maPageVDev->SetMapMode( MapUnit::MM_100th );
     DrawModeFlags nOldDrawMode = maPageVDev->GetDrawMode();
     if( mbGreyscale )
         maPageVDev->SetDrawMode( maPageVDev->GetDrawMode() |
@@ -296,8 +296,8 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
 
     maPageVDev->Pop();
 
-    SetMapMode( MAP_PIXEL );
-    maPageVDev->SetMapMode( MAP_PIXEL );
+    SetMapMode( MapUnit::Pixel );
+    maPageVDev->SetMapMode( MapUnit::Pixel );
 
     maPreviewBitmap = Bitmap(maPageVDev->GetBitmap(Point(0, 0), aVDevSize));
 
@@ -327,7 +327,7 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
 {
     Window::Paint(rRenderContext, i_rRect);
 
-    rRenderContext.SetMapMode(MAP_PIXEL);
+    rRenderContext.SetMapMode(MapUnit::Pixel);
     rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetFieldTextColor());
 
     int nPages = mnRows * mnColumns;
@@ -653,7 +653,7 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
 
     // setup sizes for N-Up
     Size aNupSize( maPController->getPrinter()->PixelToLogic(
-                         maPController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+                         maPController->getPrinter()->GetPaperSizePixel(), MapMode( MapUnit::MM_100th ) ) );
     if( maPController->getPrinter()->GetOrientation() == Orientation::Landscape )
     {
         maNupLandscapeSize = aNupSize;
@@ -1328,7 +1328,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
 
     if( i_bNewPage )
     {
-        const MapMode aMapMode( MAP_100TH_MM );
+        const MapMode aMapMode( MapUnit::MM_100th );
         GDIMetaFile aMtf;
         VclPtr<Printer> aPrt( maPController->getPrinter() );
         if( nPages > 0 )
@@ -1342,7 +1342,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
             }
         }
 
-        Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
+        Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MapUnit::MM_100th ) );
         mpPreviewWindow->setPreview( aMtf, aCurPageSize,
                                     aPrt->GetPaperName(),
                                     nPages > 0 ? OUString() : maNoPageStr,
@@ -1916,7 +1916,7 @@ PrintProgressDialog::PrintProgressDialog(vcl::Window* i_pParent, int i_nMax)
     mpText->set_width_request(mpText->get_preferred_size().Width());
 
     //Pick a useful max width
-    mpProgress->set_width_request(mpProgress->LogicToPixel(Size(100, 0), MapMode(MAP_APPFONT)).Width());
+    mpProgress->set_width_request(mpProgress->LogicToPixel(Size(100, 0), MapMode(MapUnit::AppFont)).Width());
 
     mpButton->SetClickHdl( LINK( this, PrintProgressDialog, ClickHdl ) );
 

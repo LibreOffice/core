@@ -112,8 +112,8 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
     if( !bContourMapModeValid )
     {
         const MapMode aGrfMap( GetGraphic().GetPrefMapMode() );
-        bool bPixelGrf = aGrfMap.GetMapUnit() == MAP_PIXEL;
-        const MapMode aContourMap( bPixelGrf ? MAP_PIXEL : MAP_100TH_MM );
+        bool bPixelGrf = aGrfMap.GetMapUnit() == MapUnit::Pixel;
+        const MapMode aContourMap( bPixelGrf ? MapUnit::Pixel : MapUnit::MM_100th );
         if( bPixelGrf ? !bPixelContour : aGrfMap != aContourMap )
         {
             double nGrfDPIx = 0.0;
@@ -123,7 +123,7 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
                 {
                     const Size aGrfPixelSize( GetGraphic().GetSizePixel() );
                     const Size aGrfPrefMapModeSize( GetGraphic().GetPrefSize() );
-                    if ( aGrfMap.GetMapUnit() == MAP_INCH )
+                    if ( aGrfMap.GetMapUnit() == MapUnit::Inch )
                     {
                         nGrfDPIx = aGrfPixelSize.Width() / ( (double)aGrfMap.GetScaleX() * aGrfPrefMapModeSize.Width() );
                         nGrfDPIy = aGrfPixelSize.Height() / ( (double)aGrfMap.GetScaleY() * aGrfPrefMapModeSize.Height() );
@@ -132,7 +132,7 @@ const tools::PolyPolygon *SwNoTextNode::HasContour() const
                     {
                         const Size aGrf1000thInchSize =
                             OutputDevice::LogicToLogic( aGrfPrefMapModeSize,
-                                                        aGrfMap, MAP_1000TH_INCH );
+                                                        aGrfMap, MapUnit::Inch_1000th );
                         nGrfDPIx = 1000.0 * aGrfPixelSize.Width() / aGrf1000thInchSize.Width();
                         nGrfDPIy = 1000.0 * aGrfPixelSize.Height() / aGrf1000thInchSize.Height();
                     }
@@ -203,11 +203,11 @@ bool SwNoTextNode::GetContourAPI( tools::PolyPolygon &rContour ) const
     if( bContourMapModeValid )
     {
         const MapMode aGrfMap( GetGraphic().GetPrefMapMode() );
-        const MapMode aContourMap( MAP_100TH_MM );
-        OSL_ENSURE( aGrfMap.GetMapUnit() != MAP_PIXEL ||
-                aGrfMap == MapMode( MAP_PIXEL ),
+        const MapMode aContourMap( MapUnit::MM_100th );
+        OSL_ENSURE( aGrfMap.GetMapUnit() != MapUnit::Pixel ||
+                aGrfMap == MapMode( MapUnit::Pixel ),
                     "scale factor for pixel unsupported" );
-        if( aGrfMap.GetMapUnit() != MAP_PIXEL &&
+        if( aGrfMap.GetMapUnit() != MapUnit::Pixel &&
             aGrfMap != aContourMap )
         {
             sal_uInt16 nPolyCount = rContour.Count();
@@ -234,7 +234,7 @@ bool SwNoTextNode::IsPixelContour() const
     if( bContourMapModeValid )
     {
         const MapMode aGrfMap( GetGraphic().GetPrefMapMode() );
-        bRet = aGrfMap.GetMapUnit() == MAP_PIXEL;
+        bRet = aGrfMap.GetMapUnit() == MapUnit::Pixel;
     }
     else
     {

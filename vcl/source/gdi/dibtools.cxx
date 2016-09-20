@@ -943,7 +943,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
             if(bRet && aHeader.nXPelsPerMeter && aHeader.nYPelsPerMeter)
             {
                 MapMode aMapMode(
-                    MAP_MM,
+                    MapUnit::MM,
                     Point(),
                     Fraction(1000, aHeader.nXPelsPerMeter),
                     Fraction(1000, aHeader.nYPelsPerMeter));
@@ -1358,7 +1358,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
 
 bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess* pAccAlpha, bool bCompressed)
 {
-    const MapMode aMapPixel(MAP_PIXEL);
+    const MapMode aMapPixel(MapUnit::Pixel);
     DIBV5Header aHeader;
     sal_uLong nImageSizePos(0);
     sal_uLong nEndPos(0);
@@ -1421,7 +1421,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
         // MapMode is integer-based, and suffers from roundoffs,
         // especially if maPrefSize is small. Trying to circumvent
         // that by performing part of the math in floating point.
-        const Size aScale100000(OutputDevice::LogicToLogic(Size(100000, 100000), MAP_100TH_MM, rBitmap.GetPrefMapMode()));
+        const Size aScale100000(OutputDevice::LogicToLogic(Size(100000, 100000), MapUnit::MM_100th, rBitmap.GetPrefMapMode()));
         const double fBmpWidthM((double)rBitmap.GetPrefSize().Width() / aScale100000.Width());
         const double fBmpHeightM((double)rBitmap.GetPrefSize().Height() / aScale100000.Height());
 

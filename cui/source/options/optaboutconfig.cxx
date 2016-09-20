@@ -137,7 +137,7 @@ void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
 
 Size CuiCustomMultilineEdit::GetOptimalSize() const
 {
-    return LogicToPixel(Size(150, GetTextHeight()), MAP_APPFONT);
+    return LogicToPixel(Size(150, GetTextHeight()), MapUnit::AppFont);
 }
 
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxItemSet& rItemSet*/ ) :
@@ -150,7 +150,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     m_vectorOfModified(),
     m_pPrefBox( VclPtr<SvSimpleTable>::Create(*m_pPrefCtrl, WB_SCROLL | WB_HSCROLL | WB_VSCROLL ) )
 {
-    Size aControlSize(LogicToPixel(Size(385, 230), MAP_APPFONT));
+    Size aControlSize(LogicToPixel(Size(385, 230), MapUnit::AppFont));
     m_pPrefCtrl->set_width_request(aControlSize.Width());
     m_pPrefCtrl->set_height_request(aControlSize.Height());
 
@@ -179,7 +179,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     m_options.searchFlag |= (util::SearchFlags::REG_NOT_BEGINOFLINE |
                                         util::SearchFlags::REG_NOT_ENDOFLINE);
 
-    m_pPrefBox->SetTabs(aTabs, MAP_PIXEL);
+    m_pPrefBox->SetTabs(aTabs, MapUnit::Pixel);
     m_pPrefBox->SetAlternatingRowColors( true );
 }
 

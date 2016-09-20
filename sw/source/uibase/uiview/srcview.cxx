@@ -688,10 +688,10 @@ sal_Int32 SwSrcView::PrintSource(
     pOutDev->Push();
 
     TextEngine* pTextEngine = aEditWin->GetTextEngine();
-    pOutDev->SetMapMode( MAP_100TH_MM );
+    pOutDev->SetMapMode( MapUnit::MM_100th );
     vcl::Font aFont( aEditWin->GetOutWin()->GetFont() );
     Size aSize( aFont.GetFontSize() );
-    aSize = aEditWin->GetOutWin()->PixelToLogic( aSize, MAP_100TH_MM );
+    aSize = aEditWin->GetOutWin()->PixelToLogic( aSize, MapUnit::MM_100th );
     aFont.SetFontSize( aSize );
     aFont.SetColor( COL_BLACK );
     pOutDev->SetFont( aFont );

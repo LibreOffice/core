@@ -73,7 +73,7 @@ Window::Window(vcl::Window* pParent)
     SetDialogControlFlags( DialogControlFlags::Return | DialogControlFlags::WantFocus );
 
     MapMode aMap(GetMapMode());
-    aMap.SetMapUnit(MAP_100TH_MM);
+    aMap.SetMapUnit(MapUnit::MM_100th);
     SetMapMode(aMap);
 
     // whit it, the vcl::WindowColor is used in the slide mode
@@ -1003,8 +1003,8 @@ void Window::LogicInvalidate(const Rectangle* pRectangle)
     else
     {
         Rectangle aRectangle(*pRectangle);
-        if (GetMapMode().GetMapUnit() == MAP_100TH_MM)
-            aRectangle = OutputDevice::LogicToLogic(aRectangle, MAP_100TH_MM, MAP_TWIP);
+        if (GetMapMode().GetMapUnit() == MapUnit::MM_100th)
+            aRectangle = OutputDevice::LogicToLogic(aRectangle, MapUnit::MM_100th, MapUnit::Twip);
         sRectangle = aRectangle.toString();
     }
     SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();

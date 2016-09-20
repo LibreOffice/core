@@ -2207,7 +2207,7 @@ void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
 
     OUString aPresentation;
-    GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS, MAP_100TH_MM, MAP_100TH_MM, aPresentation);
+    GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS, MapUnit::MM_100th, MapUnit::MM_100th, aPresentation);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
 
     xmlTextWriterEndElement(pWriter);
