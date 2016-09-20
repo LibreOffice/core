@@ -255,7 +255,7 @@ typedef void *                   sal_Handle;
 #   define SAL_CALL         __cdecl
 #   define SAL_CALL_ELLIPSE __cdecl
 #elif defined SAL_UNX
-#   if defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
+#   if defined(__GNUC__)
 #     if defined(DISABLE_DYNLOADING)
 #       define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("hidden")))
 #       define SAL_JNI_EXPORT        __attribute__ ((visibility("default")))

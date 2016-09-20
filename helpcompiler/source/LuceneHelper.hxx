@@ -15,14 +15,14 @@
 #pragma warning(disable : 4068 4263 4264 4266)
 #endif
 
-#if defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
+#if defined(__GNUC__)
 #  pragma GCC visibility push (default)
 #endif
 
 #include <CLucene.h>
 #include <CLucene/analysis/LanguageBasedAnalyzer.h>
 
-#if defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
+#if defined(__GNUC__)
 #  pragma GCC visibility pop
 #endif
 

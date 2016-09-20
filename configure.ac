@@ -5946,7 +5946,7 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
-        AC_MSG_RESULT([no])
+        AC_MSG_ERROR([no  This is no longer supported.])
     fi
 
     AC_MSG_CHECKING([whether $CC supports -mno-avx])
@@ -6488,7 +6488,7 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
 
     # Assume visibility is not broken with libc++. The below test is very much designed for libstdc++
     # only.
-    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE" -a "$CPP_LIBRARY" = GLIBCXX; then
+    if test "$CPP_LIBRARY" = GLIBCXX; then
         dnl gcc#19664, gcc#22482, rhbz#162935
         AC_MSG_CHECKING([if STL headers are visibility safe (GCC bug 22482)])
         AC_EGREP_HEADER(visibility push, string, stlvisok=yes, stlvisok=no)
@@ -6498,38 +6498,36 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
         fi
     fi
 
-    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
-        sharedlink_ldflags_save=$LDFLAGS
-        LDFLAGS="$LDFLAGS -fvisibility-inlines-hidden $PICSWITCH $LINKFLAGSSHL"
+    sharedlink_ldflags_save=$LDFLAGS
+    LDFLAGS="$LDFLAGS -fvisibility-inlines-hidden $PICSWITCH $LINKFLAGSSHL"
 
-        AC_MSG_CHECKING([if gcc is -fvisibility-inlines-hidden safe with STL headers])
-        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+    AC_MSG_CHECKING([if gcc is -fvisibility-inlines-hidden safe with STL headers])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <sstream>
 using namespace std;
-            ]], [[
+        ]], [[
 istringstream strm( "test" ); return 0;
-            ]])],
-            # Ugh, surely bad to assume an error message will contain
-            # the word "unresolvable", a problem with
-            # -fvisibility-inlines-hidden and STL headers might cause
-            # some more obscure message on some platform, and anway,
-            # the error message could be localised.
-            [$EGREP -q unresolvable conftest.err;
-            if test $? -eq 0; then gccvisok=no; else gccvisok=yes; fi],[gccvisok=no
-        ])
-        AC_MSG_RESULT([$gccvisok])
-        if test "$gccvisok" = "no"; then
-            AC_MSG_WARN([Your gcc is not -fvisibility-inlines-hidden safe, disabling that.])
-            add_warning "Your gcc is not -fvisibility-inlines-hidden safe, disabling that."
-            HAVE_GCC_VISIBILITY_BROKEN="TRUE"
-        fi
-
-        LDFLAGS=$sharedlink_ldflags_save
+        ]])],
+        # Ugh, surely bad to assume an error message will contain
+        # the word "unresolvable", a problem with
+        # -fvisibility-inlines-hidden and STL headers might cause
+        # some more obscure message on some platform, and anway,
+        # the error message could be localised.
+        [$EGREP -q unresolvable conftest.err;
+        if test $? -eq 0; then gccvisok=no; else gccvisok=yes; fi],[gccvisok=no
+    ])
+    AC_MSG_RESULT([$gccvisok])
+    if test "$gccvisok" = "no"; then
+        AC_MSG_WARN([Your gcc is not -fvisibility-inlines-hidden safe, disabling that.])
+        add_warning "Your gcc is not -fvisibility-inlines-hidden safe, disabling that."
+        HAVE_GCC_VISIBILITY_BROKEN="TRUE"
     fi
+
+    LDFLAGS=$sharedlink_ldflags_save
 
     # As the below test checks things when linking self-compiled dynamic libraries, it presumably is irrelevant
     # when we don't make any dynamic libraries?
-    if test "$DISABLE_DYNLOADING" = "" -a "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE" -a "$HAVE_GCC_VISIBILITY_BROKEN" != "TRUE"; then
+    if test "$DISABLE_DYNLOADING" = "" -a "$HAVE_GCC_VISIBILITY_BROKEN" != "TRUE"; then
         AC_MSG_CHECKING([if gcc is -fvisibility-inlines-hidden safe (Clang bug 11250)])
         cat > conftestlib1.cc <<_ACEOF
 template<typename T> struct S1 { virtual ~S1() {} virtual void f() {} };
@@ -6573,9 +6571,8 @@ _ACEOF
         fi
     fi
 
-    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
-        AC_MSG_CHECKING([if gcc has a visibility bug with class-level attributes (GCC bug 26905)])
-        cat >visibility.cxx <<_ACEOF
+    AC_MSG_CHECKING([if gcc has a visibility bug with class-level attributes (GCC bug 26905)])
+    cat >visibility.cxx <<_ACEOF
 #pragma GCC visibility push(hidden)
 struct __attribute__ ((visibility ("default"))) TestStruct {
   static void Init();
@@ -6584,32 +6581,31 @@ __attribute__ ((visibility ("default"))) void TestFunc() {
   TestStruct::Init();
 }
 _ACEOF
-        if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx; then
-            gccvisbroken=yes
-        else
-            case "$host_cpu" in
-            i?86|x86_64)
-                if test "$_os" = "Darwin" -o "$WITH_MINGW" = "yes"; then
+    if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx; then
+        gccvisbroken=yes
+    else
+        case "$host_cpu" in
+        i?86|x86_64)
+            if test "$_os" = "Darwin" -o "$WITH_MINGW" = "yes"; then
+                gccvisbroken=no
+            else
+                if $EGREP -q '@PLT|@GOT' visibility.s || test "$ENABLE_LTO" = "TRUE"; then
                     gccvisbroken=no
                 else
-                    if $EGREP -q '@PLT|@GOT' visibility.s || test "$ENABLE_LTO" = "TRUE"; then
-                        gccvisbroken=no
-                    else
-                        gccvisbroken=yes
-                    fi
+                    gccvisbroken=yes
                 fi
-                ;;
-            *)
-                gccvisbroken=no
-                ;;
-            esac
-        fi
-        rm -f visibility.s visibility.cxx
+            fi
+            ;;
+        *)
+            gccvisbroken=no
+            ;;
+        esac
+    fi
+    rm -f visibility.s visibility.cxx
 
-        AC_MSG_RESULT([$gccvisbroken])
-        if test "$gccvisbroken" = "yes"; then
-            AC_MSG_ERROR([Your gcc is not -fvisibility=hidden safe. This is no longer supported.])
-        fi
+    AC_MSG_RESULT([$gccvisbroken])
+    if test "$gccvisbroken" = "yes"; then
+        AC_MSG_ERROR([Your gcc is not -fvisibility=hidden safe. This is no longer supported.])
     fi
 
     CPPFLAGS="$save_CPPFLAGS"
@@ -6617,7 +6613,6 @@ _ACEOF
     AC_LANG_POP([C++])
 fi
 
-AC_SUBST(HAVE_GCC_VISIBILITY_FEATURE)
 AC_SUBST(HAVE_GCC_VISIBILITY_BROKEN)
 
 dnl ===================================================================
