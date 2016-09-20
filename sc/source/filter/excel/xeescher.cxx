@@ -258,7 +258,7 @@ void XclExpDffAnchorBase::SetFlags( const SdrObject& rSdrObj )
 void XclExpDffAnchorBase::SetSdrObject( const SdrObject& rSdrObj )
 {
     ImplSetFlags( rSdrObj );
-    ImplCalcAnchorRect( rSdrObj.GetCurrentBoundRect(), MAP_100TH_MM );
+    ImplCalcAnchorRect( rSdrObj.GetCurrentBoundRect(), MapUnit::MM_100th );
 }
 
 void XclExpDffAnchorBase::WriteDffData( EscherEx& rEscherEx ) const
@@ -271,7 +271,7 @@ void XclExpDffAnchorBase::WriteDffData( EscherEx& rEscherEx ) const
 void XclExpDffAnchorBase::WriteData( EscherEx& rEscherEx, const Rectangle& rRect )
 {
     // the passed rectangle is in twips
-    ImplCalcAnchorRect( rRect, MAP_TWIP );
+    ImplCalcAnchorRect( rRect, MapUnit::Twip );
     WriteDffData( rEscherEx );
 }
 
@@ -327,7 +327,7 @@ void XclExpDffEmbeddedAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUni
 XclExpDffNoteAnchor::XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect ) :
     XclExpDffAnchorBase( rRoot, EXC_ESC_ANCHOR_SIZELOCKED )
 {
-    maAnchor.SetRect( rRoot, rRoot.GetCurrScTab(), rRect, MAP_100TH_MM );
+    maAnchor.SetRect( rRoot, rRoot.GetCurrScTab(), rRect, MapUnit::MM_100th );
 }
 
 XclExpDffDropDownAnchor::XclExpDffDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos ) :

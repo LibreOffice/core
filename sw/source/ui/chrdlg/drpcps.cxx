@@ -348,7 +348,7 @@ void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const Rectangle& 
     if (!IsVisible())
         return;
 
-    rRenderContext.SetMapMode(MapMode(MAP_PIXEL));
+    rRenderContext.SetMapMode(MapMode(MapUnit::Pix));
     rRenderContext.SetLineColor();
 
     rRenderContext.SetFillColor(maBackColor);

@@ -313,7 +313,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         pViewShell  ( pViewSh ),
         pOptions    ( new ScViewOptions ),
         pSpellingView ( nullptr ),
-        aLogicMode  ( MAP_100TH_MM ),
+        aLogicMode  ( MapUnit::MM_100th ),
         eDefZoomType( SvxZoomType::PERCENT ),
         aDefZoomX   ( 1,1 ),
         aDefZoomY   ( 1,1 ),
@@ -2427,7 +2427,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             {
                 Point& rSplitPos = rTabSett.maSplitPos;
                 rSplitPos = Point( bHSplit ? pViewTab->nHSplitPos : 0, bVSplit ? pViewTab->nVSplitPos : 0 );
-                rSplitPos = Application::GetDefaultDevice()->PixelToLogic( rSplitPos, MapMode( MAP_TWIP ) );
+                rSplitPos = Application::GetDefaultDevice()->PixelToLogic( rSplitPos, MapMode( MapUnit::Twip ) );
                 if( pDocShell )
                     rSplitPos.X() = (long)((double)rSplitPos.X() / pDocShell->GetOutputFactor());
             }
@@ -2563,7 +2563,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
             else
             {
                 Point aPixel = Application::GetDefaultDevice()->LogicToPixel(
-                                rTabSett.maSplitPos, MapMode( MAP_TWIP ) );  //! Zoom?
+                                rTabSett.maSplitPos, MapMode( MapUnit::Twip ) );  //! Zoom?
                 // the test for use of printer metrics for text formatting here
                 // effectively results in the nFactor = 1.0 regardless of the Option setting.
                 if( pDocShell && SC_MOD()->GetInputOptions().GetTextWysiwyg())

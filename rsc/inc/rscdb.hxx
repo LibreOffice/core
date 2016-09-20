@@ -46,6 +46,7 @@ enum class ButtonType;
 enum class WindowAlign;
 enum class SfxStyleFamily;
 enum class RSWND;
+enum class MapUnit;
 
 struct WriteRcContext
 {
@@ -154,6 +155,7 @@ class RscTypCont
     inline void SETCONST( RscConst *p1, const char * p2, ButtonType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, WindowAlign p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, SfxStyleFamily p3 ) { SETCONST(p1, p2, static_cast<sal_uInt16>(p3)); }
+    inline void SETCONST( RscConst *p1, const char * p2, MapUnit p3 ) { SETCONST(p1, p2, static_cast<sal_uInt16>(p3)); }
     void        InitLangType();
     RscEnum *   InitFieldUnitsType();
     RscEnum *   InitColor();

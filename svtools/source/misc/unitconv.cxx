@@ -111,7 +111,7 @@ void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit )
 
 void SetMetricValue( MetricField& rField, long nCoreValue, MapUnit eUnit )
 {
-    sal_Int64 nVal = OutputDevice::LogicToLogic( nCoreValue, (MapUnit)eUnit, MAP_100TH_MM );
+    sal_Int64 nVal = OutputDevice::LogicToLogic( nCoreValue, (MapUnit)eUnit, MapUnit::MM_100th );
     nVal = rField.Normalize( nVal );
     rField.SetValue( nVal, FUNIT_100TH_MM );
 
@@ -136,7 +136,7 @@ long GetCoreValue( const MetricField& rField, MapUnit eUnit )
     }
     if( bRoundBefore )
         nVal = rField.Denormalize( nVal );
-    sal_Int64 nUnitVal = OutputDevice::LogicToLogic( static_cast<long>(nVal), MAP_100TH_MM, (MapUnit)eUnit );
+    sal_Int64 nUnitVal = OutputDevice::LogicToLogic( static_cast<long>(nVal), MapUnit::MM_100th, (MapUnit)eUnit );
     if( ! bRoundBefore )
         nUnitVal = rField.Denormalize( nUnitVal );
     return static_cast<long>(nUnitVal);
@@ -147,23 +147,23 @@ long CalcToUnit( float nIn, MapUnit eUnit )
 {
     // nIn ist in Points
 
-    DBG_ASSERT( eUnit == MAP_TWIP       ||
-                eUnit == MAP_100TH_MM   ||
-                eUnit == MAP_10TH_MM    ||
-                eUnit == MAP_MM         ||
-                eUnit == MAP_CM, "this unit is not implemented" );
+    DBG_ASSERT( eUnit == MapUnit::Twip       ||
+                eUnit == MapUnit::MM_100th   ||
+                eUnit == MapUnit::MM_10th    ||
+                eUnit == MapUnit::MM         ||
+                eUnit == MapUnit::CM, "this unit is not implemented" );
 
     float nTmp = nIn;
 
-    if ( MAP_TWIP != eUnit )
+    if ( MapUnit::Twip != eUnit )
         nTmp = nIn * 10 / 567;
 
     switch ( eUnit )
     {
-        case MAP_100TH_MM:  nTmp *= 100; break;
-        case MAP_10TH_MM:   nTmp *= 10;  break;
-        case MAP_MM:                     break;
-        case MAP_CM:        nTmp /= 10;  break;
+        case MapUnit::MM_100th:  nTmp *= 100; break;
+        case MapUnit::MM_10th:   nTmp *= 10;  break;
+        case MapUnit::MM:                     break;
+        case MapUnit::CM:        nTmp /= 10;  break;
         default: ;//prevent warning
     }
 
@@ -180,46 +180,46 @@ long ItemToControl( long nIn, MapUnit eItem, FieldUnit eCtrl )
 
     switch ( eItem )
     {
-        case MAP_100TH_MM:
-        case MAP_10TH_MM:
-        case MAP_MM:
+        case MapUnit::MM_100th:
+        case MapUnit::MM_10th:
+        case MapUnit::MM:
         {
-            if ( eItem == MAP_10TH_MM )
+            if ( eItem == MapUnit::MM_10th )
                 nIn /= 10;
-            else if ( eItem == MAP_100TH_MM )
+            else if ( eItem == MapUnit::MM_100th )
                 nIn /= 100;
             nOut = TransformMetric( nIn, FUNIT_MM, eCtrl );
         }
         break;
 
-        case MAP_CM:
+        case MapUnit::CM:
         {
             nOut = TransformMetric( nIn, FUNIT_CM, eCtrl );
         }
         break;
 
-        case MAP_1000TH_INCH:
-        case MAP_100TH_INCH:
-        case MAP_10TH_INCH:
-        case MAP_INCH:
+        case MapUnit::Inch_1000th:
+        case MapUnit::Inch_100th:
+        case MapUnit::Inch_10th:
+        case MapUnit::Inch:
         {
-            if ( eItem == MAP_10TH_INCH )
+            if ( eItem == MapUnit::Inch_10th )
                 nIn /= 10;
-            else if ( eItem == MAP_100TH_INCH )
+            else if ( eItem == MapUnit::Inch_100th )
                 nIn /= 100;
-            else if ( eItem == MAP_1000TH_INCH )
+            else if ( eItem == MapUnit::Inch_1000th )
                 nIn /= 1000;
             nOut = TransformMetric( nIn, FUNIT_INCH, eCtrl );
         }
         break;
 
-        case MAP_POINT:
+        case MapUnit::Point:
         {
             nOut = TransformMetric( nIn, FUNIT_POINT, eCtrl );
         }
         break;
 
-        case MAP_TWIP:
+        case MapUnit::Twip:
         {
             nOut = TransformMetric( nIn, FUNIT_TWIP, eCtrl );
         }
@@ -240,24 +240,24 @@ FieldUnit MapToFieldUnit( const MapUnit eUnit )
 {
     switch ( eUnit )
     {
-        case MAP_100TH_MM:
-        case MAP_10TH_MM:
-        case MAP_MM:
+        case MapUnit::MM_100th:
+        case MapUnit::MM_10th:
+        case MapUnit::MM:
             return FUNIT_MM;
 
-        case MAP_CM:
+        case MapUnit::CM:
             return FUNIT_CM;
 
-        case MAP_1000TH_INCH:
-        case MAP_100TH_INCH:
-        case MAP_10TH_INCH:
-        case MAP_INCH:
+        case MapUnit::Inch_1000th:
+        case MapUnit::Inch_100th:
+        case MapUnit::Inch_10th:
+        case MapUnit::Inch:
             return FUNIT_INCH;
 
-        case MAP_POINT:
+        case MapUnit::Point:
             return FUNIT_POINT;
 
-        case MAP_TWIP:
+        case MapUnit::Twip:
             return FUNIT_TWIP;
         default: ;//prevent warning
     }
@@ -267,30 +267,30 @@ FieldUnit MapToFieldUnit( const MapUnit eUnit )
 
 long CalcToPoint( long nIn, MapUnit eUnit, sal_uInt16 nFactor )
 {
-    DBG_ASSERT( eUnit == MAP_TWIP       ||
-                eUnit == MAP_100TH_MM   ||
-                eUnit == MAP_10TH_MM    ||
-                eUnit == MAP_MM         ||
-                eUnit == MAP_CM, "this unit is not implemented" );
+    DBG_ASSERT( eUnit == MapUnit::Twip       ||
+                eUnit == MapUnit::MM_100th   ||
+                eUnit == MapUnit::MM_10th    ||
+                eUnit == MapUnit::MM         ||
+                eUnit == MapUnit::CM, "this unit is not implemented" );
 
     long nRet = 0;
 
-    if ( MAP_TWIP == eUnit )
+    if ( MapUnit::Twip == eUnit )
         nRet = nIn;
     else
         nRet = nIn * 567;
 
     switch ( eUnit )
     {
-        case MAP_100TH_MM:  nRet /= 100; break;
-        case MAP_10TH_MM:   nRet /= 10;  break;
-        case MAP_MM:                     break;
-        case MAP_CM:        nRet *= 10;  break;
+        case MapUnit::MM_100th:  nRet /= 100; break;
+        case MapUnit::MM_10th:   nRet /= 10;  break;
+        case MapUnit::MM:                     break;
+        case MapUnit::CM:        nRet *= 10;  break;
         default: ;//prevent warning
     }
 
     // ggf. aufrunden
-    if ( MAP_TWIP != eUnit )
+    if ( MapUnit::Twip != eUnit )
     {
         long nMod = 10;
         long nTmp = nRet % nMod;

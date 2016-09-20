@@ -49,7 +49,7 @@ MapMode::ImplMapMode::ImplMapMode() :
     maScaleX( 1, 1 ),
     maScaleY( 1, 1 )
 {
-    meUnit      = MAP_PIXEL;
+    meUnit      = MapUnit::Pix;
     mbSimple    = true;
 }
 
@@ -134,38 +134,38 @@ double MapMode::GetUnitMultiplier() const
     double  nMul;
     switch ( GetMapUnit() )
     {
-        case MAP_PIXEL :
-        case MAP_SYSFONT :
-        case MAP_APPFONT :
+        case MapUnit::Pix :
+        case MapUnit::SysFont :
+        case MapUnit::AppFont :
 
-        case MAP_100TH_MM :
+        case MapUnit::MM_100th :
             nMul = 1;
             break;
-        case MAP_10TH_MM :
+        case MapUnit::MM_10th :
             nMul = 10;
             break;
-        case MAP_MM :
+        case MapUnit::MM :
             nMul = 100;
             break;
-        case MAP_CM :
+        case MapUnit::CM :
             nMul = 1000;
             break;
-        case MAP_1000TH_INCH :
+        case MapUnit::Inch_1000th :
             nMul = 2.54;
             break;
-        case MAP_100TH_INCH :
+        case MapUnit::Inch_100th :
             nMul = 25.4;
             break;
-        case MAP_10TH_INCH :
+        case MapUnit::Inch_10th :
             nMul = 254;
             break;
-        case MAP_INCH :
+        case MapUnit::Inch :
             nMul = 2540;
             break;
-        case MAP_TWIP :
+        case MapUnit::Twip :
             nMul = 1.76388889;
             break;
-        case MAP_POINT :
+        case MapUnit::Point :
             nMul = 35.27777778;
             break;
         default:
@@ -215,7 +215,7 @@ SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
     VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
-    rOStm.WriteUInt16( rMapMode.mpImplMapMode->meUnit );
+    rOStm.WriteUInt16( (sal_uInt16)rMapMode.mpImplMapMode->meUnit );
     WritePair( rOStm, rMapMode.mpImplMapMode->maOrigin );
     WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleX );
     WriteFraction( rOStm, rMapMode.mpImplMapMode->maScaleY );

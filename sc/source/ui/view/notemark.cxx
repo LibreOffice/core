@@ -78,9 +78,9 @@ IMPL_LINK_NOARG_TYPED(ScNoteMarker, TimeHdl, Timer *, void)
         SvtPathOptions aPathOpt;
         OUString aPath = aPathOpt.GetPalettePath();
         pModel = new SdrModel(aPath, nullptr, nullptr, false);
-        pModel->SetScaleUnit(MAP_100TH_MM);
+        pModel->SetScaleUnit(MapUnit::MM_100th);
         SfxItemPool& rPool = pModel->GetItemPool();
-        rPool.SetDefaultMetric(MAP_100TH_MM);
+        rPool.SetDefaultMetric(MapUnit::MM_100th);
         rPool.FreezeIdRanges();
 
         OutputDevice* pPrinter = pDoc->GetRefDevice();
