@@ -2721,7 +2721,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 // libreofficekit_hook must be exported for dlsym() to find it,
 // though, at least on iOS.
 
-#if defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE) && defined(DISABLE_DYNLOADING)
+#if defined(__GNUC__) && defined(DISABLE_DYNLOADING)
 __attribute__ ((visibility("default")))
 #else
 SAL_DLLPUBLIC_EXPORT
@@ -2741,7 +2741,7 @@ LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user
     return static_cast<LibreOfficeKit*>(gImpl);
 }
 
-#if defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE) && defined(DISABLE_DYNLOADING)
+#if defined(__GNUC__) && defined(DISABLE_DYNLOADING)
 __attribute__ ((visibility("default")))
 #else
 SAL_DLLPUBLIC_EXPORT

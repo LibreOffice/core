@@ -101,21 +101,17 @@ gb_CXXFLAGS_COMMON += -Wimplicit-fallthrough
 endif
 
 
-ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
-gb_VISIBILITY_FLAGS := -DHAVE_GCC_VISIBILITY_FEATURE
 # If CC or CXX already include -fvisibility=hidden, don't duplicate it
 ifeq (,$(filter -fvisibility=hidden,$(CC)))
-gb__visibility_hidden := -fvisibility=hidden
+gb_VISIBILITY_FLAGS := -fvisibility=hidden
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
-gb__visibility_hidden := -fvisibility-ms-compat
+gb_VISIBILITY_FLAGS := -fvisibility-ms-compat
 endif
 endif
-gb_VISIBILITY_FLAGS += $(gb__visibility_hidden)
 endif
 ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
 gb_VISIBILITY_FLAGS_CXX := -fvisibility-inlines-hidden
-endif
 endif
 gb_CXXFLAGS_COMMON += $(gb_VISIBILITY_FLAGS_CXX)
 

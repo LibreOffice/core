@@ -147,7 +147,7 @@ static bool sUseHardLinks = true;
 
 // This variable lives in libbz2.  It's declared in bzlib_private.h, so we just
 // declare it here to avoid including that entire header file.
-#if defined(HAVE_GCC_VISIBILITY_FEATURE)
+#if defined __GNUC__
 extern "C"  __attribute__((visibility("default"))) unsigned int BZ2_crc32Table[256];
 #elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
 extern "C" __global unsigned int BZ2_crc32Table[256];

@@ -1015,10 +1015,8 @@ typedef CL_API_ENTRY void * (CL_API_CALL * PFNCLGETEXTENSIONFUNCTIONADDRESS)(con
 #  ifdef CLEW_BUILD
 #    if defined(_WIN32)
 #      define CLEWAPI extern __declspec(dllexport)
-#    elif defined(HAVE_GCC_VISIBILITY_FEATURE)
-#      define CLEWAPI extern __attribute__ ((visibility("default")))
 #    else
-#      define CLEWAPI extern
+#      define CLEWAPI extern __attribute__ ((visibility("default")))
 #    endif
 #  else
 #    if defined(_WIN32)

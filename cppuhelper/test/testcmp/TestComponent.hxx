@@ -29,7 +29,7 @@
 #elif defined(CPPUHELPER_TEST_COMPONENT_LIB)
 # define CPPUHELPER_TEST_COMPONENT_EXPORT extern
 
-#elif defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
+#elif defined(__GNUC__)
 # define CPPUHELPER_TEST_COMPONENT_EXPORT extern __attribute__ ((weak))
 
 #else
