@@ -221,16 +221,14 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
     mfStepSize = ::std::numeric_limits<double>::max();
     if ( mnMonthDay )
     {
-        aDate = aNullDate + static_cast< long >( maRange[ 0 ].X );
-        maRange[ 0 ].X = aDate.GetYear() * 12 + aDate.GetMonth();
-    }
-    for ( SCSIZE i = 1; i < mnCount; i++ )
-    {
-        if ( mnMonthDay )
+        for ( SCSIZE i = 0; i < mnCount; i++ )
         {
             aDate = aNullDate + static_cast< long >( maRange[ i ].X );
             maRange[ i ].X = aDate.GetYear() * 12 + aDate.GetMonth();
         }
+    }
+    for ( SCSIZE i = 1; i < mnCount; i++ )
+    {
         double fStep = maRange[ i ].X - maRange[ i - 1 ].X;
         if ( fStep == 0.0 )
         {
@@ -245,15 +243,20 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
             switch ( nAggregation )
             {
                 case 1 : // AVERAGE (default)
+                         while ( maRange[ i ].X == maRange[ i - 1 ].X  && i < mnCount )
+                         {
+                             maRange.erase( maRange.begin() + i );
+                             --mnCount;
+                         }
+                         break;
                 case 7 : // SUM
                          while ( maRange[ i ].X == maRange[ i - 1 ].X  && i < mnCount )
                          {
                              fTmp += maRange[ i ].Y;
-                             nCounter++;
                              maRange.erase( maRange.begin() + i );
                              --mnCount;
                          }
-                         maRange[ i - 1 ].Y = ( nAggregation == 1 ? fTmp / nCounter : fTmp );
+                         maRange[ i - 1 ].Y = fTmp;
                          break;
 
                 case 2 : // COUNT
@@ -310,22 +313,11 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
                          break;
             }
             if ( i < mnCount - 1 )
-            {
-                i++;
-                if ( mnMonthDay )
-                {
-                    Date aDate1 = aNullDate + static_cast< long >( maRange[ i ].X );
-                    fStep = 12 * ( aDate1.GetYear() - aDate.GetYear() ) +
-                            ( aDate1.GetMonth() - aDate.GetMonth() );
-                    aDate = aDate1;
-                }
-                else
-                    fStep = maRange[ i ].X - maRange[ i - 1 ].X;
-            }
+                fStep = maRange[ i ].X - maRange[ i - 1 ].X;
             else
                fStep = mfStepSize;
         }
-        if ( fStep < mfStepSize )
+        if ( fStep > 0 && fStep < mfStepSize )
             mfStepSize = fStep;
     }
 
@@ -972,9 +964,6 @@ bool ScETSForecastCalculation::GetStatisticValue( const ScMatrixRef& rTypeMat, c
 
 bool ScETSForecastCalculation::GetSamplesInPeriod( double& rVal )
 {
-    if ( !initCalc() )
-        return false;
-
     rVal = mnSmplInPrd;
     return true;
 }
