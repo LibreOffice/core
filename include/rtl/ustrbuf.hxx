@@ -24,7 +24,7 @@
 
 #include <cassert>
 #include <cstddef>
-#include <string.h>
+#include <cstring>
 
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
@@ -221,6 +221,82 @@ public:
         }
         return *this;
     }
+
+    /** Assign from a string.
+
+        @since LibreOffice 5.3
+    */
+    OUStringBuffer & operator =(OUString const & string) {
+        sal_Int32 n = string.getLength();
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        std::memcpy(
+            pData->buffer, string.pData->buffer,
+            (n + 1) * sizeof (sal_Unicode));
+        pData->length = n;
+        return *this;
+    }
+
+    /** Assign from a string literal.
+
+        @since LibreOffice 5.3
+    */
+    template<typename T>
+    typename
+        libreoffice_internal::ConstCharArrayDetector<T, OUStringBuffer &>::Type
+    operator =(T & literal) {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        sal_Int32 const n
+            = libreoffice_internal::ConstCharArrayDetector<T>::length;
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        char const * from
+            = libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
+                literal);
+        sal_Unicode * to = pData->buffer;
+        for (sal_Int32 i = 0; i <= n; ++i) {
+            to[i] = from[i];
+        }
+        pData->length = n;
+        return *this;
+    }
+
+#if defined LIBO_INTERNAL_ONLY
+    /** @overload @since LibreOffice 5.3 */
+    template<typename T>
+    typename libreoffice_internal::ConstCharArrayDetector<
+        T, OUStringBuffer &>::TypeUtf16
+    operator =(T & literal) {
+        sal_Int32 const n
+            = libreoffice_internal::ConstCharArrayDetector<T>::length;
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        std::memcpy(
+            pData->buffer,
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            (n + 1) * sizeof (sal_Unicode)); //TODO: check for overflow
+        pData->length = n;
+        return *this;
+    }
+#endif
+
+#if defined LIBO_INTERNAL_ONLY
+    /** @overload @since LibreOffice 5.3 */
+    template<typename T1, typename T2>
+    OUStringBuffer & operator =(OUStringConcat<T1, T2> const & concat) {
+        sal_Int32 const n = concat.length();
+        if (n >= nCapacity) {
+            ensureCapacity(n + 16); //TODO: check for overflow
+        }
+        *concat.addData(pData->buffer) = 0;
+        pData->length = n;
+        return *this;
+    }
+#endif
 
     /**
         Release the string data.
