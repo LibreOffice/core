@@ -49,7 +49,7 @@ ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool 
     ScAddress aPos(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("ctrl");
     Size aControlSize(210, 0);
-    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
     pContainer->set_width_request(aControlSize.Width());
     pContainer->set_height_request(10 * GetTextHeight());
     mpTable = VclPtr<ScRangeManagerTable>::Create(*pContainer, m_RangeMap, aPos);

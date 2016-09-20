@@ -68,8 +68,8 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
     );
     this->SetRoadmapHelpId( HID_SCH_WIZARD_ROADMAP );
     this->SetRoadmapInteractive( true );
-    Size aAdditionalRoadmapSize( LogicToPixel( Size( 85, 0 ), MAP_APPFONT ) );
-    Size aSize(LogicToPixel(Size(CHART_WIZARD_PAGEWIDTH, CHART_WIZARD_PAGEHEIGHT), MAP_APPFONT));
+    Size aAdditionalRoadmapSize( LogicToPixel( Size( 85, 0 ), MapUnit::MapAppFont ) );
+    Size aSize(LogicToPixel(Size(CHART_WIZARD_PAGEWIDTH, CHART_WIZARD_PAGEHEIGHT), MapUnit::MapAppFont));
     aSize.Width() += aAdditionalRoadmapSize.Width();
     this->SetSizePixel( aSize );
 

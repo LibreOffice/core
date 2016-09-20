@@ -25,7 +25,7 @@
 inline OUString GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
 {
     OUStringBuffer aVal = OUString::number(
-        MetricField::ConvertValue(nVal_100, 2, MAP_100TH_MM, eFieldUnit));
+        MetricField::ConvertValue(nVal_100, 2, MapUnit::Map100thMM, eFieldUnit));
 
     while( aVal.getLength() < 3 )
         aVal.insert( 0, "0" );

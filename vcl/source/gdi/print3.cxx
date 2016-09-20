@@ -434,7 +434,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
             aMPS.nVerticalSpacing = nValue;
         aMPS.bDrawBorder = xController->getBoolProperty( "NUpDrawBorder", aMPS.bDrawBorder );
         aMPS.nOrder = static_cast<NupOrderType>(xController->getIntProperty( "NUpSubPageOrder", (sal_Int32)aMPS.nOrder ));
-        aMPS.aPaperSize = xController->getPrinter()->PixelToLogic( xController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
+        aMPS.aPaperSize = xController->getPrinter()->PixelToLogic( xController->getPrinter()->GetPaperSizePixel(), MapMode( MapUnit::Map100thMM ) );
         css::beans::PropertyValue* pPgSizeVal = xController->getValue( OUString( "NUpPaperSize" ) );
         css::awt::Size aSizeVal;
         if( pPgSizeVal && (pPgSizeVal->Value >>= aSizeVal) )
@@ -782,7 +782,7 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
               css::uno::makeAny( OUString( i_rPrinter->GetName() ) ) );
     mpImplData->mnDefaultPaperBin = mpImplData->mxPrinter->GetPaperBin();
     mpImplData->mxPrinter->Push();
-    mpImplData->mxPrinter->SetMapMode(MapMode(MAP_100TH_MM));
+    mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
     mpImplData->maDefaultPageSize = mpImplData->mxPrinter->GetPaperSize();
     mpImplData->mxPrinter->Pop();
     mpImplData->mnFixedPaperBin = -1;
@@ -801,7 +801,7 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
     if( mpImplData->mxPrinter.get() )
     {
         mpImplData->mxPrinter->Push();
-        mpImplData->mxPrinter->SetMapMode(MapMode(MAP_100TH_MM));
+        mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
 
         // get current data
         Size aPaperSize(mpImplData->mxPrinter->GetPaperSize());
@@ -928,7 +928,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
 void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
 {
     mxPrinter->Push();
-    mxPrinter->SetMapMode(MapMode(MAP_100TH_MM));
+    mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
     Size aCurSize(mxPrinter->GetPaperSize());
     if (aCurSize != maDefaultPageSize)
         mxPrinter->SetPaperSizeUser(maDefaultPageSize, !isFixedPageSize());
@@ -937,7 +937,7 @@ void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
 
 int PrinterController::getPageCountProtected() const
 {
-    const MapMode aMapMode( MAP_100TH_MM );
+    const MapMode aMapMode( MapUnit::Map100thMM );
 
     mpImplData->mxPrinter->Push();
     mpImplData->mxPrinter->SetMapMode( aMapMode );
@@ -948,7 +948,7 @@ int PrinterController::getPageCountProtected() const
 
 css::uno::Sequence< css::beans::PropertyValue > PrinterController::getPageParametersProtected( int i_nPage ) const
 {
-    const MapMode aMapMode( MAP_100TH_MM );
+    const MapMode aMapMode( MapUnit::Map100thMM );
 
     mpImplData->mxPrinter->Push();
     mpImplData->mxPrinter->SetMapMode( aMapMode );
@@ -984,7 +984,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
 
     // get page parameters
     css::uno::Sequence< css::beans::PropertyValue > aPageParm( getPageParametersProtected( i_nUnfilteredPage ) );
-    const MapMode aMapMode( MAP_100TH_MM );
+    const MapMode aMapMode( MapUnit::Map100thMM );
 
     mpImplData->mxPrinter->Push();
     mpImplData->mxPrinter->SetMapMode( aMapMode );
@@ -1038,7 +1038,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     {
         // save gstate
         o_rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR | PushFlags::FILLCOLOR | PushFlags::CLIPREGION | PushFlags::MAPMODE ) );
-        o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
+        o_rMtf.AddAction( new MetaMapModeAction( MapMode( MapUnit::Map100thMM ) ) );
 
         Rectangle aBorderRect( i_rClipRect );
         o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), true ) );
@@ -1077,7 +1077,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
             return PrinterController::PageSize();
         }
         Size aPaperSize = mpImplData->getRealPaperSize( aPageSize.aSize, true );
-        mpImplData->mxPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
+        mpImplData->mxPrinter->SetMapMode( MapMode( MapUnit::Map100thMM ) );
         mpImplData->mxPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
         if( aPaperSize != aPageSize.aSize )
         {
@@ -1117,8 +1117,8 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
 
     o_rMtf.Clear();
     o_rMtf.SetPrefSize( aPaperSize );
-    o_rMtf.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
-    o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
+    o_rMtf.SetPrefMapMode( MapMode( MapUnit::Map100thMM ) );
+    o_rMtf.AddAction( new MetaMapModeAction( MapMode( MapUnit::Map100thMM ) ) );
 
     int nDocPages = getPageCountProtected();
     if (mpImplData->meJobState != css::view::PrintableState_JOB_STARTED)
@@ -1187,7 +1187,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     o_rMtf.WindStart();
 
     // subsequent getPageFile calls have changed the paper, reset it to current value
-    mpImplData->mxPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
+    mpImplData->mxPrinter->SetMapMode( MapMode( MapUnit::Map100thMM ) );
     mpImplData->mxPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
 
     return PrinterController::PageSize( aPaperSize, true );
@@ -1287,7 +1287,7 @@ void PrinterController::printFilteredPage( int i_nPage )
     }
 
     // in N-Up printing set the correct page size
-    mpImplData->mxPrinter->SetMapMode( MAP_100TH_MM );
+    mpImplData->mxPrinter->SetMapMode( MapUnit::Map100thMM );
     // aPageSize was filtered through mpImplData->getRealPaperSize already by getFilteredPageFile()
     mpImplData->mxPrinter->SetPaperSizeUser( aPageSize.aSize, ! mpImplData->isFixedPageSize() );
     if( mpImplData->mnFixedPaperBin != -1 &&

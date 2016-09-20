@@ -164,7 +164,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
         return false;
     }
 
-    rWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+    rWMF.SetPrefMapMode( MapMode( MapUnit::Map100thMM ) );
 
     // Scale MetaFile to new size and save new size to MetaFile
     Size        aOldSiz( rWMF.GetPrefSize() );
@@ -270,7 +270,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
         pTempSet->Put( aAnchor );
 
         const Size aSizeTwip = OutputDevice::LogicToLogic(
-            aGraph.GetPrefSize(), aGraph.GetPrefMapMode(), MAP_TWIP );
+            aGraph.GetPrefSize(), aGraph.GetPrefMapMode(), MapUnit::MapTwip );
 
         pTempSet->Put( SwFormatFrameSize( ATT_FIX_SIZE, aSizeTwip.Width(),
             aSizeTwip.Height() ) );
@@ -319,7 +319,7 @@ bool SwWW8ImplReader::ImportOleWMF(tools::SvRef<SotStorage> xSrc1,GDIMetaFile &r
         aFinalSize.Width() = rX;
         aFinalSize.Height() = rY;
         aFinalSize = OutputDevice::LogicToLogic(
-            aFinalSize, MAP_TWIP, rWMF.GetPrefMapMode() );
+            aFinalSize, MapUnit::MapTwip, rWMF.GetPrefMapMode() );
         aOrigSize = rWMF.GetPrefSize();
         Fraction aScaleX(aFinalSize.Width(),aOrigSize.Width());
         Fraction aScaleY(aFinalSize.Height(),aOrigSize.Height());
@@ -354,7 +354,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     {
         rGraph = *pGrf;
         const Size aSizeTwip = OutputDevice::LogicToLogic(
-            rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MAP_TWIP );
+            rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MapUnit::MapTwip );
         nX = aSizeTwip.Width();
         nY = aSizeTwip.Height();
     }
@@ -368,7 +368,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
         {
             // 03-META stream is not available. Maybe it's a 03-PICT?
             const Size aSizeTwip = OutputDevice::LogicToLogic(
-                rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MAP_TWIP );
+                rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MapUnit::MapTwip );
             nX = aSizeTwip.Width();
             nY = aSizeTwip.Height();
             // PICT: no WMF available -> Graphic instead of OLE

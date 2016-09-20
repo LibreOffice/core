@@ -303,7 +303,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
 
             aOutDev.SetMapMode( aGraphic.GetPrefMapMode() );
             Size aSizePix = aOutDev.LogicToPixel( aGraphic.GetPrefSize() );
-            aOutDev.SetMapMode(MAP_100TH_MM);
+            aOutDev.SetMapMode(MapUnit::Map100thMM);
 
             Size aSize = aOutDev.PixelToLogic(aSizePix);
             Point aPnt (0, 0);

@@ -2111,7 +2111,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
     if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
     {
         aTwipSz = Application::GetDefaultDevice()
-                    ->PixelToLogic( aTwipSz, MapMode( MAP_TWIP ) );
+                    ->PixelToLogic( aTwipSz, MapMode( MapUnit::MapTwip ) );
     }
 
     // die Breite nur in die erste Zelle setzen!
@@ -2248,7 +2248,7 @@ void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, bool bRelWidt
     if( aTwipSz.Width() && Application::GetDefaultDevice() )
     {
         aTwipSz = Application::GetDefaultDevice()
-                    ->PixelToLogic( aTwipSz, MapMode( MAP_TWIP ) );
+                    ->PixelToLogic( aTwipSz, MapMode( MapUnit::MapTwip ) );
     }
 
     for( i=nCurCol; i<nColsReq; i++ )

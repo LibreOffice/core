@@ -230,7 +230,7 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
     WorkWindow::Paint(rRenderContext, rRect);
 
     rRenderContext.Push();
-    MapMode aMapMode(MAP_100TH_MM);
+    MapMode aMapMode(MapUnit::Map100thMM);
 
     rRenderContext.SetMapMode(aMapMode);
 

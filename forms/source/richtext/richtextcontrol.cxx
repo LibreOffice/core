@@ -345,12 +345,12 @@ namespace frm
 
         ::Size aSize = pControl->GetSizePixel();
         const MapUnit eTargetUnit = pTargetDevice->GetMapMode().GetMapUnit();
-        if ( eTargetUnit != MAP_PIXEL )
+        if ( eTargetUnit != MapUnit::MapPixel )
             aSize = pTargetDevice->PixelToLogic( aSize );
 
         ::Point aPos( _nX, _nY );
         // the XView::draw API talks about pixels, always ...
-        if ( eTargetUnit != MAP_PIXEL )
+        if ( eTargetUnit != MapUnit::MapPixel )
             aPos = pTargetDevice->PixelToLogic( aPos );
 
         pControl->Draw( pTargetDevice, aPos, aSize, DrawFlags::NoControls );

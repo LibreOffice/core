@@ -1583,10 +1583,10 @@ void MSWordExportBase::BulletDefinitions()
 {
     for (size_t i = 0; i < m_vecBulletPic.size(); ++i)
     {
-        const MapMode aMapMode(MAP_TWIP);
+        const MapMode aMapMode(MapUnit::MapTwip);
         const Graphic& rGraphic = *m_vecBulletPic[i];
         Size aSize(rGraphic.GetPrefSize());
-        if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
+        if (MapUnit::MapPixel == rGraphic.GetPrefMapMode().GetMapUnit())
             aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapMode);
         else
             aSize = OutputDevice::LogicToLogic(aSize,rGraphic.GetPrefMapMode(), aMapMode);

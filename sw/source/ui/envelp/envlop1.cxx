@@ -49,12 +49,12 @@ using namespace ::com::sun::star;
 SwEnvPreview::SwEnvPreview(vcl::Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
 {
-    SetMapMode(MapMode(MAP_PIXEL));
+    SetMapMode(MapMode(MapUnit::MapPixel));
 }
 
 Size SwEnvPreview::GetOptimalSize() const
 {
-    return LogicToPixel(Size(84 , 63), MAP_APPFONT);
+    return LogicToPixel(Size(84 , 63), MapUnit::MapAppFont);
 }
 
 VCL_BUILDER_FACTORY_ARGS(SwEnvPreview, 0)

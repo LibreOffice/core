@@ -86,7 +86,7 @@ void SbStdPicture::PropWidth( SbxVariable* pVar, SbxArray*, bool bWrite )
 
     Size aSize = aGraphic.GetPrefSize();
     aSize = Application::GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
-    aSize = Application::GetAppWindow()->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
+    aSize = Application::GetAppWindow()->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
 
     pVar->PutInteger( (sal_Int16)aSize.Width() );
 }
@@ -101,7 +101,7 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, bool bWrite )
 
     Size aSize = aGraphic.GetPrefSize();
     aSize = Application::GetAppWindow()->LogicToPixel( aSize, aGraphic.GetPrefMapMode() );
-    aSize = Application::GetAppWindow()->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
+    aSize = Application::GetAppWindow()->PixelToLogic( aSize, MapMode( MapUnit::MapTwip ) );
 
     pVar->PutInteger( (sal_Int16)aSize.Height() );
 }

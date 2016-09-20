@@ -88,7 +88,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     if (pRef)
     {
         aOldMapMode = pRef->GetMapMode();
-        pRef->SetMapMode( MapMode(MAP_100TH_MM) );
+        pRef->SetMapMode( MapMode(MapUnit::Map100thMM) );
     }
 
     bool bNegativePage = GetViewData().GetDocument()->IsNegativePage( GetViewData().GetTabNo() );
@@ -301,14 +301,14 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
         Size aSize;
         if ( nAspect == embed::Aspects::MSOLE_ICON )
         {
-            MapMode aMapMode( MAP_100TH_MM );
+            MapMode aMapMode( MapUnit::Map100thMM );
             aSize = aObjRef.GetSize( &aMapMode );
         }
         else
         {
             // working with visual area can switch object to running state
             MapUnit aMapObj = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-            MapUnit aMap100 = MAP_100TH_MM;
+            MapUnit aMap100 = MapUnit::Map100thMM;
 
             if ( pDescSize && pDescSize->Width() && pDescSize->Height() )
             {
@@ -413,9 +413,9 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     Point aPos( rPos );
     vcl::Window* pWin = GetActiveWin();
     MapMode aSourceMap = rGraphic.GetPrefMapMode();
-    MapMode aDestMap( MAP_100TH_MM );
+    MapMode aDestMap( MapUnit::Map100thMM );
 
-    if (aSourceMap.GetMapUnit() == MAP_PIXEL)
+    if (aSourceMap.GetMapUnit() == MapUnit::MapPixel)
     {
         // consider pixel correction, so bitmap fits to screen
         Fraction aScaleX, aScaleY;

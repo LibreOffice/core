@@ -105,7 +105,7 @@ using namespace ::com::sun::star;
 bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
     bool bRet = SfxObjectShell::InitNew( xStor );
-    OSL_ENSURE( GetMapUnit() == MAP_TWIP, "map unit is not twip!" );
+    OSL_ENSURE( GetMapUnit() == MapUnit::MapTwip, "map unit is not twip!" );
     bool bHTMLTemplSet = false;
     if( bRet )
     {
@@ -413,7 +413,7 @@ void  SwDocShell::Init_Impl()
     SetAutoStyleFilterIndex(3);
 
     // set map unit to twip
-    SetMapUnit( MAP_TWIP );
+    SetMapUnit( MapUnit::MapTwip );
 }
 
 void SwDocShell::AddLink()

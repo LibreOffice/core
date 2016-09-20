@@ -756,7 +756,7 @@ void ExtensionBox_Impl::Resize()
 
 Size ExtensionBox_Impl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(250, 150), MAP_APPFONT);
+    return LogicToPixel(Size(250, 150), MapUnit::MapAppFont);
 }
 
 VCL_BUILDER_DECL_FACTORY(ExtensionBox)

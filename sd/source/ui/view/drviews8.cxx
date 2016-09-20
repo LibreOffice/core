@@ -65,12 +65,12 @@ void DrawViewShell::ScannerEvent( const css::lang::EventObject& )
                     const SolarMutexGuard aGuard;
                     SdrPage*            pPage = mpDrawView->GetSdrPageView()->GetPage();
                     Size                aBmpSize( aScanBmp.GetPrefSize() ), aPageSize( pPage->GetSize() );
-                    const MapMode       aMap100( MAP_100TH_MM );
+                    const MapMode       aMap100( MapUnit::Map100thMM );
 
                     if( !aBmpSize.Width() || !aBmpSize.Height() )
                         aBmpSize = aScanBmp.GetSizePixel();
 
-                    if( aScanBmp.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+                    if( aScanBmp.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
                         aBmpSize = GetActiveWindow()->PixelToLogic( aBmpSize, aMap100 );
                     else
                         aBmpSize = OutputDevice::LogicToLogic( aBmpSize, aScanBmp.GetPrefMapMode(), aMap100 );

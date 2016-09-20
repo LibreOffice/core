@@ -700,7 +700,7 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
     get(m_pFT_ChooseType, "FT_CAPTION_FOR_WIZARD");
     get(m_pMainTypeList, "charttype");
     get(m_pSubTypeList, "subtype");
-    Size aSize(m_pSubTypeList->LogicToPixel(Size(150, 50), MAP_APPFONT));
+    Size aSize(m_pSubTypeList->LogicToPixel(Size(150, 50), MapUnit::MapAppFont));
     m_pSubTypeList->set_width_request(aSize.Width());
     m_pSubTypeList->set_height_request(aSize.Height());
 

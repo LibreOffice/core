@@ -174,7 +174,7 @@ void ChartLinePanel::Initialize()
     SvxColorToolBoxControl* pToolBoxColor = getColorToolBoxControl(mpTBColor.get());
     pToolBoxColor->setColorSelectFunction(maLineColorWrapper);
 
-    setMapUnit(MAP_100TH_MM);
+    setMapUnit(MapUnit::Map100thMM);
     updateData();
 }
 

@@ -232,7 +232,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         {
             aTwipSz =
                 Application::GetDefaultDevice()->PixelToLogic( aTwipSz,
-                                                    MapMode(MAP_TWIP) );
+                                                    MapMode(MapUnit::MapTwip) );
             pTwipSz = &aTwipSz;
         }
 

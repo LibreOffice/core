@@ -4140,9 +4140,9 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
     css::text::GraphicCrop aGraphicCropStruct;
     xPropSet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 
-    const MapMode aMap100mm( MAP_100TH_MM );
+    const MapMode aMap100mm( MapUnit::Map100thMM );
     const MapMode& rMapMode = aGrafObj.GetPrefMapMode();
-    if (rMapMode.GetMapUnit() == MAP_PIXEL)
+    if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
     {
         aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, aMap100mm);
     }

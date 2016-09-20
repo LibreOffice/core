@@ -861,7 +861,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
     if (rMEvt.IsLeft() || rMEvt.IsMiddle() || rMEvt.IsRight())
     {
         Point aPosPixel;
-        if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MAP_TWIP)
+        if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MapUnit::MapTwip)
         {
             // rMEvt coordinates are in twips.
             Push(PushFlags::MAPMODE);
@@ -872,7 +872,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             aPosPixel = LogicToPixel(rMEvt.GetPosPixel());
             Pop();
         }
-        const Point&        rMousePos = (GetMapMode().GetMapUnit() != MAP_TWIP ? rMEvt.GetPosPixel() : aPosPixel);
+        const Point&        rMousePos = (GetMapMode().GetMapUnit() != MapUnit::MapTwip ? rMEvt.GetPosPixel() : aPosPixel);
         StartTrackingFlags  nTrackFlags = StartTrackingFlags::NONE;
         bool                bHorizontal = ( GetStyle() & WB_HORZ ) != 0;
         bool                bIsInside = false;
@@ -1040,7 +1040,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
     else
     {
         Point aPosPixel;
-        if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MAP_TWIP)
+        if (!IsMapModeEnabled() && GetMapMode().GetMapUnit() == MapUnit::MapTwip)
         {
             // rTEvt coordinates are in twips.
             Push(PushFlags::MAPMODE);
@@ -1051,7 +1051,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
             aPosPixel = LogicToPixel(rTEvt.GetMouseEvent().GetPosPixel());
             Pop();
         }
-        const Point rMousePos = (GetMapMode().GetMapUnit() != MAP_TWIP ? rTEvt.GetMouseEvent().GetPosPixel() : aPosPixel);
+        const Point rMousePos = (GetMapMode().GetMapUnit() != MapUnit::MapTwip ? rTEvt.GetMouseEvent().GetPosPixel() : aPosPixel);
 
         // Dragging is treated in a special way
         if ( meScrollType == ScrollType::Drag )

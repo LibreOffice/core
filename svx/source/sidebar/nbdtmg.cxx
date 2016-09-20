@@ -154,7 +154,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
 {
     bIsLoading = true;
     MapUnit      eOldCoreUnit=eCoreUnit;
-    eCoreUnit = MAP_100TH_MM;
+    eCoreUnit = MapUnit::Map100thMM;
     INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
     aFile.Append( filename);
     std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
@@ -193,7 +193,7 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
 {
     if (bIsLoading) return;
     MapUnit      eOldCoreUnit=eCoreUnit;
-    eCoreUnit = MAP_100TH_MM;
+    eCoreUnit = MapUnit::Map100thMM;
     INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
     aFile.Append( filename);
     std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE ));
@@ -975,7 +975,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
                             aSize = SvxNumberFormat::GetGraphicSizeMM100( pGrf );
                         }
                     }
-                    aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)GetMapUnit());
+                    aSize = OutputDevice::LogicToLogic(aSize, MapUnit::Map100thMM, (MapUnit)GetMapUnit());
                     aFmt.SetGraphicBrush( pLevelSettings->pBrushItem, &aSize, &eOrient );
             }
         } else

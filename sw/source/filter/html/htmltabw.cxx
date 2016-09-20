@@ -116,10 +116,10 @@ void SwHTMLWrtTable::Pixelize( sal_uInt16& rValue )
     if( rValue && Application::GetDefaultDevice() )
     {
         Size aSz( rValue, 0 );
-        aSz = Application::GetDefaultDevice()->LogicToPixel( aSz, MapMode(MAP_TWIP) );
+        aSz = Application::GetDefaultDevice()->LogicToPixel( aSz, MapMode(MapUnit::MapTwip) );
         if( !aSz.Width() )
             aSz.Width() = 1;
-        aSz = Application::GetDefaultDevice()->PixelToLogic( aSz, MapMode(MAP_TWIP) );
+        aSz = Application::GetDefaultDevice()->PixelToLogic( aSz, MapMode(MapUnit::MapTwip) );
         rValue = (sal_uInt16)aSz.Width();
     }
 }
@@ -360,7 +360,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     {
         Size aOldSz( aPixelSz );
         aPixelSz = Application::GetDefaultDevice()->LogicToPixel( aPixelSz,
-                                                        MapMode(MAP_TWIP) );
+                                                        MapMode(MapUnit::MapTwip) );
         if( aOldSz.Width() && !aPixelSz.Width() )
             aPixelSz.Width() = 1;
         if( aOldSz.Height() && !aPixelSz.Height() )
@@ -651,7 +651,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         else if( Application::GetDefaultDevice() )
         {
             sal_Int32 nPixWidth = Application::GetDefaultDevice()->LogicToPixel(
-                        Size(m_nTabWidth,0), MapMode(MAP_TWIP) ).Width();
+                        Size(m_nTabWidth,0), MapMode(MapUnit::MapTwip) ).Width();
             if( !nPixWidth )
                 nPixWidth = 1;
 
@@ -669,7 +669,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     {
         Size aPixelSpc =
             Application::GetDefaultDevice()->LogicToPixel( Size(nHSpace,nVSpace),
-                                                   MapMode(MAP_TWIP) );
+                                                   MapMode(MapUnit::MapTwip) );
         if( !aPixelSpc.Width() && nHSpace )
             aPixelSpc.Width() = 1;
         if( !aPixelSpc.Height() && nVSpace )

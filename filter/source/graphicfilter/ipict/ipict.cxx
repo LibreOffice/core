@@ -1965,7 +1965,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     rGDIMetaFile.Stop();
     pVirDev.disposeAndClear();
 
-    rGDIMetaFile.SetPrefMapMode( MapMode( MAP_INCH, Point(), aHRes, aVRes ) );
+    rGDIMetaFile.SetPrefMapMode( MapMode( MapUnit::MapInch, Point(), aHRes, aVRes ) );
     rGDIMetaFile.SetPrefSize( aBoundingRect.GetSize() );
 
     pPict->SetEndian(nOrigNumberFormat);

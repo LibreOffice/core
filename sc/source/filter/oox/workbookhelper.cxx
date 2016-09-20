@@ -577,7 +577,7 @@ void WorkbookGlobals::initialize()
     // initialise edit engine
     ScDocument& rDoc = getScDocument();
     mxEditEngine.reset( new ScEditEngineDefaulter( rDoc.GetEnginePool() ) );
-    mxEditEngine->SetRefMapMode( MAP_100TH_MM );
+    mxEditEngine->SetRefMapMode( MapUnit::Map100thMM );
     mxEditEngine->SetEditTextObjectPool( rDoc.GetEditPool() );
     mxEditEngine->SetUpdateMode( false );
     mxEditEngine->EnableUndo( false );

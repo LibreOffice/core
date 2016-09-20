@@ -1003,7 +1003,7 @@ void SAL_CALL SmModel::render(
         if (!pOut)
             throw RuntimeException();
 
-        pOut->SetMapMode( MAP_100TH_MM );
+        pOut->SetMapMode( MapUnit::Map100thMM );
 
         uno::Reference< frame::XModel > xModel;
         rSelection >>= xModel;

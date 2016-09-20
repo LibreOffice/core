@@ -419,7 +419,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 
 Size SwOLENode::GetTwipSize() const
 {
-    MapMode aMapMode( MAP_TWIP );
+    MapMode aMapMode( MapUnit::MapTwip );
     return const_cast<SwOLENode*>(this)->aOLEObj.GetObject().GetSize( &aMapMode );
 }
 
@@ -909,8 +909,8 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
             if ( pFrame )
             {
                 Size aSz( pFrame->Frame().SSize() );
-                const MapMode aSrc ( MAP_TWIP );
-                const MapMode aDest( MAP_100TH_MM );
+                const MapMode aSrc ( MapUnit::MapTwip );
+                const MapMode aDest( MapUnit::Map100thMM );
                 aSz = OutputDevice::LogicToLogic( aSz, aSrc, aDest );
                 aArea.SetSize( aSz );
             }

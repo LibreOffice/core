@@ -104,7 +104,7 @@ namespace cairocanvas
     {
         // Map a one-by-one millimeter box to pixel
         const MapMode aOldMapMode( mpRefDevice->GetMapMode() );
-        mpRefDevice->SetMapMode( MapMode(MAP_MM) );
+        mpRefDevice->SetMapMode( MapMode(MapUnit::MapMM) );
         const Size aPixelSize( mpRefDevice->LogicToPixel(Size(1,1)) );
         mpRefDevice->SetMapMode( aOldMapMode );
 
@@ -118,7 +118,7 @@ namespace cairocanvas
 
         // Map the pixel dimensions of the output window to millimeter
         const MapMode aOldMapMode( mpRefDevice->GetMapMode() );
-        mpRefDevice->SetMapMode( MapMode(MAP_MM) );
+        mpRefDevice->SetMapMode( MapMode(MapUnit::MapMM) );
         const Size aLogSize( mpRefDevice->PixelToLogic(mpRefDevice->GetOutputSizePixel()) );
         mpRefDevice->SetMapMode( aOldMapMode );
 

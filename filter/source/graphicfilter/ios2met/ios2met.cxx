@@ -2162,9 +2162,9 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
             ReadCoord(b32);
 
             if (nUnitType==0x00 && xr>0 && yr>0)
-                aGlobMapMode=MapMode(MAP_INCH,Point(0,0),Fraction(10,xr),Fraction(10,yr));
+                aGlobMapMode=MapMode(MapUnit::MapInch,Point(0,0),Fraction(10,xr),Fraction(10,yr));
             else if (nUnitType==0x01 && xr>0 && yr>0)
-                aGlobMapMode=MapMode(MAP_CM,Point(0,0),Fraction(10,xr),Fraction(10,yr));
+                aGlobMapMode=MapMode(MapUnit::MapCM,Point(0,0),Fraction(10,xr),Fraction(10,yr));
             else
                 aGlobMapMode=MapMode();
 

@@ -3400,7 +3400,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     OStringBuffer sOut;
     if( Application::GetDefaultDevice() &&
         nWidth <= Application::GetDefaultDevice()->PixelToLogic(
-                    Size( 1, 1 ), MapMode( MAP_TWIP) ).Width() )
+                    Size( 1, 1 ), MapMode( MapUnit::MapTwip) ).Width() )
     {
         // If the width is smaller than one pixel, then export as 1px
         // so that Netscape and IE show the line.

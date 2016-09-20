@@ -112,7 +112,7 @@ Bitmap XHatchList::CreateBitmap( long nIndex, const Size& rSize) const
             }
         }
 
-        const basegfx::B2DHomMatrix aScaleMatrix(OutputDevice::LogicToLogic(MAP_100TH_MM, MAP_PIXEL));
+        const basegfx::B2DHomMatrix aScaleMatrix(OutputDevice::LogicToLogic(MapUnit::Map100thMM, MapUnit::MapPixel));
         const basegfx::B2DVector aScaleVector(aScaleMatrix * basegfx::B2DVector(1.0, 0.0));
         const double fScaleValue(aScaleVector.getLength());
 

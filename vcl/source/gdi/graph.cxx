@@ -92,7 +92,7 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     if ( aSize.Width() > 0 && aSize.Height() > 0 && pFont && pText && pText->getLength()
          && !(!pOutDev->IsOutputEnabled() /*&& pOutDev->GetConnectMetaFile() */) )
     {
-        MapMode aMapMode( MAP_POINT );
+        MapMode aMapMode( MapUnit::MapPoint );
         Size    aSz = pOutDev->LogicToLogic( Size( 0, 12 ), &aMapMode, nullptr );
         long    nThreshold = aSz.Height() / 2;
         long    nStep = nThreshold / 3;

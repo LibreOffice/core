@@ -219,7 +219,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     {
         nAmount = Application::GetDefaultDevice()
                             ->LogicToPixel( Size(nAmount,0),
-                                            MapMode(MAP_TWIP) ).Width();
+                                            MapMode(MapUnit::MapTwip) ).Width();
     }
     if( nAmount )
     {
@@ -247,7 +247,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     {
         Size aPixelSz =
             Application::GetDefaultDevice()->LogicToPixel( aTwipSz,
-                                                MapMode(MAP_TWIP) );
+                                                MapMode(MapUnit::MapTwip) );
         if( !aPixelSz.Width() && aTwipSz.Width() )
             aPixelSz.Width() = 1;
         if( !aPixelSz.Height() && aTwipSz.Height() )

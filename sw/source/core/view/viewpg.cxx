@@ -102,7 +102,7 @@ void SwViewShell::PrintProspect(
 
     //!! applying view options and formatting the document should now only be done in getRendererCount!
 
-    MapMode aMapMode( MAP_TWIP );
+    MapMode aMapMode( MapUnit::MapTwip );
     Size aPrtSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), aMapMode ) );
 
     SwTwips nMaxRowSz, nMaxColSz;

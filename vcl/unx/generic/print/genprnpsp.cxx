@@ -1103,7 +1103,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
         }
         else
         {
-            xPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
+            xPrinter->SetMapMode( MapMode( MapUnit::Map100thMM ) );
             xPrinter->SetPaperSizeUser( aPageSize.aSize, true );
             PDFNewJobParameters aNewParm(xPrinter->GetPaperSize(), xPrinter->GetPaperBin());
 

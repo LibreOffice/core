@@ -143,7 +143,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     SdrObject* pObj = pSymbolList->GetObj(nStandardSymbol);
 
     ScopedVclPtrInstance< VirtualDevice > pVDev;
-    pVDev->SetMapMode(MapMode(MAP_100TH_MM));
+    pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
     SdrModel* pModel = new SdrModel();
     pModel->GetItemPool().FreezeIdRanges();
     SdrPage* pPage = new SdrPage( *pModel, false );
@@ -164,7 +164,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     Graphic aGraph(aMeta);
     Size aSize = pObj->GetSnapRect().GetSize();
     aGraph.SetPrefSize(aSize);
-    aGraph.SetPrefMapMode(MAP_100TH_MM);
+    aGraph.SetPrefMapMode(MapUnit::Map100thMM);
 
     pView->UnmarkAll();
     pObj=pPage->RemoveObject(0);

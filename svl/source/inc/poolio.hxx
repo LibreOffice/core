@@ -138,7 +138,7 @@ struct SfxItemPool_Impl
         , nStoringEnd(0)
         , nMajorVer(0)
         , nMinorVer(0)
-        , eDefMetric(MAP_CM)
+        , eDefMetric(MapUnit::MapCM)
         , bInSetItem(false)
         , bStreaming(false)
         , mbPersistentRefCounts(false)

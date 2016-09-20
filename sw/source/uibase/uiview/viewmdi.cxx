@@ -102,7 +102,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
         if (pPostItMgr->HasNotes() && pPostItMgr->ShowNotes())
             aPageSize.Width() += pPostItMgr->GetSidebarWidth() + pPostItMgr->GetSidebarBorderWidth();
 
-        const MapMode aTmpMap( MAP_TWIP );
+        const MapMode aTmpMap( MapUnit::MapTwip );
         const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
 
         if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )    // mirrored pages

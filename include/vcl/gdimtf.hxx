@@ -114,7 +114,7 @@ public:
     void            Clear();
     bool            Mirror( BmpMirrorFlags nMirrorFlags );
     void            Move( long nX, long nY );
-    // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
+    // additional Move method getting specifics how to handle MapMode( MapUnit::MapPixel )
     void            Move( long nX, long nY, long nDPIX, long nDPIY );
     void            Scale( double fScaleX, double fScaleY );
     void            Scale( const Fraction& rScaleX, const Fraction& rScaleY );

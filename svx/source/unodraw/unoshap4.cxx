@@ -102,7 +102,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
             {
                 try
                 {
-                    MapUnit aMapUnit( MAP_100TH_MM ); // the API handles with MAP_100TH_MM map mode
+                    MapUnit aMapUnit( MapUnit::Map100thMM ); // the API handles with MapUnit::Map100thMM map mode
                     MapUnit aObjUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT ) );
                     aTmp = OutputDevice::LogicToLogic( aTmp, aMapUnit, aObjUnit );
                     xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, awt::Size( aTmp.Width(), aTmp.Height() ) );
@@ -266,7 +266,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
         awt::Rectangle aVisArea;
         if( dynamic_cast<const SdrOle2Obj* >(mpObj.get()) != nullptr)
         {
-            MapMode aMapMode( MAP_100TH_MM ); // the API uses this map mode
+            MapMode aMapMode( MapUnit::Map100thMM ); // the API uses this map mode
             Size aTmp = static_cast<SdrOle2Obj*>(mpObj.get())->GetOrigObjSize( &aMapMode ); // get the size in the requested map mode
             aVisArea = awt::Rectangle( 0, 0, aTmp.Width(), aTmp.Height() );
         }

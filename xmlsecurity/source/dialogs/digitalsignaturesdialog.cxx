@@ -131,7 +131,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     Size aControlSize(275, 109);
     const long nControlWidth = aControlSize.Width();
-    aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
+    aControlSize = LogicToPixel(aControlSize, MapUnit::MapAppFont);
     SvSimpleTableContainer *pSignatures = get<SvSimpleTableContainer>("signatures");
     pSignatures->set_width_request(aControlSize.Width());
     pSignatures->set_height_request(aControlSize.Height());

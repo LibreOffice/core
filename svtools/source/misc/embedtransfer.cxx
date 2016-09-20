@@ -218,7 +218,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     rDesc.mnOle2Misc = sal::static_int_cast<sal_Int32>(xObj->getStatus( rDesc.mnViewAspect ));
 
     Size aSize;
-    MapMode aMapMode( MAP_100TH_MM );
+    MapMode aMapMode( MapUnit::Map100thMM );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
     {
         if ( pGraphic )
@@ -247,7 +247,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
         aMapMode = MapMode( VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rDesc.mnViewAspect ) ) );
     }
 
-    rDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapMode, MapMode( MAP_100TH_MM ) );
+    rDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapMode, MapMode( MapUnit::Map100thMM ) );
     rDesc.maDragStartPos = Point();
     rDesc.maDisplayName.clear();
 }

@@ -2713,7 +2713,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     if( bOptimize )
     {
         aFont.SetFontSize( Size( 0, GLYPH_FONT_HEIGHT ) );
-        aVDev->SetMapMode( MAP_PIXEL );
+        aVDev->SetMapMode( MapUnit::MapPixel );
     }
     aVDev->SetFont( aFont );
     aVDev->SetTextAlign( ALIGN_TOP );

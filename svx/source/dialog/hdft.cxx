@@ -438,8 +438,8 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     {
         // defaults for distance and height
         long nDefaultDist = bIsCalc ? DEF_DIST_CALC : DEF_DIST_WRITER;
-        SetMetricValue( *m_pDistEdit, nDefaultDist, MAP_100TH_MM );
-        SetMetricValue( *m_pHeightEdit, 500, MAP_100TH_MM );
+        SetMetricValue( *m_pDistEdit, nDefaultDist, MapUnit::Map100thMM );
+        SetMetricValue( *m_pHeightEdit, 500, MapUnit::Map100thMM );
     }
 
     if ( !pSetItem )
@@ -746,18 +746,18 @@ void SvxHFPage::UpdateExample()
     if ( nId == SID_ATTR_PAGE_HEADERSET )
     {
         m_pBspWin->SetHeader( m_pTurnOnBox->IsChecked() );
-        m_pBspWin->SetHdHeight( GetCoreValue( *m_pHeightEdit, MAP_TWIP ) );
-        m_pBspWin->SetHdDist( GetCoreValue( *m_pDistEdit, MAP_TWIP ) );
-        m_pBspWin->SetHdLeft( GetCoreValue( *m_pLMEdit, MAP_TWIP ) );
-        m_pBspWin->SetHdRight( GetCoreValue( *m_pRMEdit, MAP_TWIP ) );
+        m_pBspWin->SetHdHeight( GetCoreValue( *m_pHeightEdit, MapUnit::MapTwip ) );
+        m_pBspWin->SetHdDist( GetCoreValue( *m_pDistEdit, MapUnit::MapTwip ) );
+        m_pBspWin->SetHdLeft( GetCoreValue( *m_pLMEdit, MapUnit::MapTwip ) );
+        m_pBspWin->SetHdRight( GetCoreValue( *m_pRMEdit, MapUnit::MapTwip ) );
     }
     else
     {
         m_pBspWin->SetFooter( m_pTurnOnBox->IsChecked() );
-        m_pBspWin->SetFtHeight( GetCoreValue( *m_pHeightEdit, MAP_TWIP ) );
-        m_pBspWin->SetFtDist( GetCoreValue( *m_pDistEdit, MAP_TWIP ) );
-        m_pBspWin->SetFtLeft( GetCoreValue( *m_pLMEdit, MAP_TWIP ) );
-        m_pBspWin->SetFtRight( GetCoreValue( *m_pRMEdit, MAP_TWIP ) );
+        m_pBspWin->SetFtHeight( GetCoreValue( *m_pHeightEdit, MapUnit::MapTwip ) );
+        m_pBspWin->SetFtDist( GetCoreValue( *m_pDistEdit, MapUnit::MapTwip ) );
+        m_pBspWin->SetFtLeft( GetCoreValue( *m_pLMEdit, MapUnit::MapTwip ) );
+        m_pBspWin->SetFtRight( GetCoreValue( *m_pRMEdit, MapUnit::MapTwip ) );
     }
     m_pBspWin->Invalidate();
 }

@@ -766,7 +766,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                             pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
                             MapMode aMM (pPrinter->GetMapMode());
-                            aMM.SetMapUnit(MAP_100TH_MM);
+                            aMM.SetMapUnit(MapUnit::Map100thMM);
                             pPrinter->SetMapMode(aMM);
 
                             pDocSh->SetPrinter( pPrinter );

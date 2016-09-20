@@ -128,10 +128,10 @@ Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
     if( ( ASPECT_THUMBNAIL == nAspect ) || ( ASPECT_DOCPRINT == nAspect ) )
     {
         // provide size of first page
-        MapMode aSrcMapMode(MAP_PIXEL);
-        MapMode aDstMapMode(MAP_100TH_MM);
+        MapMode aSrcMapMode(MapUnit::MapPixel);
+        MapMode aDstMapMode(MapUnit::Map100thMM);
         Size aSize = mpDoc->GetSdPage(0, PK_STANDARD)->GetSize();
-        aSrcMapMode.SetMapUnit(MAP_100TH_MM);
+        aSrcMapMode.SetMapUnit(MapUnit::Map100thMM);
 
         aSize = Application::GetDefaultDevice()->LogicToLogic(aSize, &aSrcMapMode, &aDstMapMode);
         aVisArea.SetSize(aSize);
@@ -190,7 +190,7 @@ Size DrawDocShell::GetFirstPageSize()
 Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage)
 {
     const sal_uInt16 nMaxEdgePixel = 90;
-    MapMode         aMapMode( MAP_100TH_MM );
+    MapMode         aMapMode( MapUnit::Map100thMM );
     const Size      aSize( pPage->GetSize() );
     const Point     aNullPt;
     ScopedVclPtrInstance< VirtualDevice > pVDev( *Application::GetDefaultDevice() );

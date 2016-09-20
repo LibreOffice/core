@@ -672,11 +672,11 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                 {
                     SfxItemSet          aGrfAttr( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP, 0 );
                     const MapUnit       eOldMetric = rPool.GetMetric( 0 );
-                    const MapMode       aMap100( MAP_100TH_MM );
-                    const MapMode       aMapTwip( MAP_TWIP );
+                    const MapMode       aMap100( MapUnit::Map100thMM );
+                    const MapMode       aMapTwip( MapUnit::MapTwip );
 
                     aGrfAttr.Put(pObj->GetMergedItemSet());
-                    rPool.SetDefaultMetric( MAP_TWIP );
+                    rPool.SetDefaultMetric( MapUnit::MapTwip );
 
                     SfxItemSet  aCropDlgAttr( rPool,
                                             SDRATTR_GRAFCROP, SDRATTR_GRAFCROP,
