@@ -1141,30 +1141,30 @@ static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, long& nDecDigits )
 {
     switch( meUnit )
     {
-        case MAP_100TH_MM :
+        case MapUnit::MM_100th :
             nDecDigits -= 2;
             return FUNIT_MM;
-        case MAP_10TH_MM :
+        case MapUnit::MM_10th :
             nDecDigits -= 1;
             return FUNIT_MM;
-        case MAP_MM :
+        case MapUnit::MM :
             return FUNIT_MM;
-        case MAP_CM :
+        case MapUnit::CM :
             return FUNIT_CM;
-        case MAP_1000TH_INCH :
+        case MapUnit::Inch_1000th :
             nDecDigits -= 3;
             return FUNIT_INCH;
-        case MAP_100TH_INCH :
+        case MapUnit::Inch_100th :
             nDecDigits -= 2;
             return FUNIT_INCH;
-        case MAP_10TH_INCH :
+        case MapUnit::Inch_10th :
             nDecDigits -= 1;
             return FUNIT_INCH;
-        case MAP_INCH :
+        case MapUnit::Inch :
             return FUNIT_INCH;
-        case MAP_POINT :
+        case MapUnit::Point :
             return FUNIT_POINT;
-        case MAP_TWIP :
+        case MapUnit::Twip :
             return FUNIT_TWIP;
         default:
             OSL_FAIL( "default eInUnit" );
@@ -1264,10 +1264,10 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
     if ( eOutUnit == FUNIT_PERCENT ||
          eOutUnit == FUNIT_CUSTOM ||
          eOutUnit == FUNIT_NONE ||
-         eInUnit == MAP_PIXEL ||
-         eInUnit == MAP_SYSFONT ||
-         eInUnit == MAP_APPFONT ||
-         eInUnit == MAP_RELATIVE )
+         eInUnit == MapUnit::Pixel ||
+         eInUnit == MapUnit::SysFont ||
+         eInUnit == MapUnit::AppFont ||
+         eInUnit == MapUnit::Relative )
     {
         OSL_FAIL( "invalid parameters" );
         return nValue;
@@ -1319,10 +1319,10 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
          eInUnit == FUNIT_SECOND ||
          eInUnit == FUNIT_MILLISECOND ||
          eInUnit == FUNIT_PIXEL ||
-         eOutUnit == MAP_PIXEL ||
-         eOutUnit == MAP_SYSFONT ||
-         eOutUnit == MAP_APPFONT ||
-         eOutUnit == MAP_RELATIVE )
+         eOutUnit == MapUnit::Pixel ||
+         eOutUnit == MapUnit::SysFont ||
+         eOutUnit == MapUnit::AppFont ||
+         eOutUnit == MapUnit::Relative )
     {
         OSL_FAIL( "invalid parameters" );
         return nValue;

@@ -448,58 +448,58 @@ MapUnit VCLUnoHelper::UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit )
     switch( nUnoEmbedMapUnit )
     {
         case css::embed::EmbedMapUnits::ONE_100TH_MM:
-            return MAP_100TH_MM;
+            return MapUnit::MM_100th;
         case css::embed::EmbedMapUnits::ONE_10TH_MM:
-            return MAP_10TH_MM;
+            return MapUnit::MM_10th;
         case css::embed::EmbedMapUnits::ONE_MM:
-            return MAP_MM;
+            return MapUnit::MM;
         case css::embed::EmbedMapUnits::ONE_CM:
-            return MAP_CM;
+            return MapUnit::CM;
         case css::embed::EmbedMapUnits::ONE_1000TH_INCH:
-            return MAP_1000TH_INCH;
+            return MapUnit::Inch_1000th;
         case css::embed::EmbedMapUnits::ONE_100TH_INCH:
-            return MAP_100TH_INCH;
+            return MapUnit::Inch_100th;
         case css::embed::EmbedMapUnits::ONE_10TH_INCH:
-            return MAP_10TH_INCH;
+            return MapUnit::Inch_10th;
         case css::embed::EmbedMapUnits::ONE_INCH:
-            return MAP_INCH;
+            return MapUnit::Inch;
         case css::embed::EmbedMapUnits::POINT:
-            return MAP_POINT;
+            return MapUnit::Point;
         case css::embed::EmbedMapUnits::TWIP:
-            return MAP_TWIP;
+            return MapUnit::Twip;
         case css::embed::EmbedMapUnits::PIXEL:
-            return MAP_PIXEL;
+            return MapUnit::Pixel;
     }
 
     OSL_FAIL( "Unexpected UNO map mode is provided!\n" );
-    return MAP_LASTENUMDUMMY;
+    return MapUnit::LASTENUMDUMMY;
 }
 
 sal_Int32 VCLUnoHelper::VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit )
 {
     switch( nVCLMapUnit )
     {
-        case MAP_100TH_MM:
+        case MapUnit::MM_100th:
             return css::embed::EmbedMapUnits::ONE_100TH_MM;
-        case MAP_10TH_MM:
+        case MapUnit::MM_10th:
             return css::embed::EmbedMapUnits::ONE_10TH_MM;
-        case MAP_MM:
+        case MapUnit::MM:
             return css::embed::EmbedMapUnits::ONE_MM;
-        case MAP_CM:
+        case MapUnit::CM:
             return css::embed::EmbedMapUnits::ONE_CM;
-        case MAP_1000TH_INCH:
+        case MapUnit::Inch_1000th:
             return css::embed::EmbedMapUnits::ONE_1000TH_INCH;
-        case MAP_100TH_INCH:
+        case MapUnit::Inch_100th:
             return css::embed::EmbedMapUnits::ONE_100TH_INCH;
-        case MAP_10TH_INCH:
+        case MapUnit::Inch_10th:
             return css::embed::EmbedMapUnits::ONE_10TH_INCH;
-        case MAP_INCH:
+        case MapUnit::Inch:
             return css::embed::EmbedMapUnits::ONE_INCH;
-        case MAP_POINT:
+        case MapUnit::Point:
             return css::embed::EmbedMapUnits::POINT;
-        case MAP_TWIP:
+        case MapUnit::Twip:
             return css::embed::EmbedMapUnits::TWIP;
-        case MAP_PIXEL:
+        case MapUnit::Pixel:
             return css::embed::EmbedMapUnits::PIXEL;
         default: ; // avoid compiler warning
     }
@@ -589,55 +589,55 @@ MapUnit /* MapModeUnit */ VCLUnoHelper::ConvertToMapModeUnit(sal_Int16 /* com.su
     switch(_nMeasureUnit)
     {
     case css::util::MeasureUnit::MM_100TH:
-        eMode = MAP_100TH_MM;
+        eMode = MapUnit::MM_100th;
         break;
 
     case css::util::MeasureUnit::MM_10TH:
-        eMode = MAP_10TH_MM;
+        eMode = MapUnit::MM_10th;
         break;
 
     case css::util::MeasureUnit::MM:
-        eMode = MAP_MM;
+        eMode = MapUnit::MM;
         break;
 
     case css::util::MeasureUnit::CM:
-        eMode = MAP_CM;
+        eMode = MapUnit::CM;
         break;
 
     case css::util::MeasureUnit::INCH_1000TH:
-        eMode = MAP_1000TH_INCH;
+        eMode = MapUnit::Inch_1000th;
         break;
 
     case css::util::MeasureUnit::INCH_100TH:
-        eMode = MAP_100TH_INCH;
+        eMode = MapUnit::Inch_100th;
         break;
 
     case css::util::MeasureUnit::INCH_10TH:
-        eMode = MAP_10TH_INCH;
+        eMode = MapUnit::Inch_10th;
         break;
 
     case css::util::MeasureUnit::INCH:
-        eMode = MAP_INCH;
+        eMode = MapUnit::Inch;
         break;
 
     case css::util::MeasureUnit::POINT:
-        eMode = MAP_POINT;
+        eMode = MapUnit::Point;
         break;
 
     case css::util::MeasureUnit::TWIP:
-        eMode = MAP_TWIP;
+        eMode = MapUnit::Twip;
         break;
 
     case css::util::MeasureUnit::PIXEL:
-        eMode = MAP_PIXEL;
+        eMode = MapUnit::Pixel;
         break;
 
     case css::util::MeasureUnit::APPFONT:
-        eMode = MAP_APPFONT;
+        eMode = MapUnit::AppFont;
         break;
 
     case css::util::MeasureUnit::SYSFONT:
-        eMode = MAP_SYSFONT;
+        eMode = MapUnit::SysFont;
         break;
 
     default:

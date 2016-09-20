@@ -539,7 +539,7 @@ void SwFrameCtrlWindow::Command( const CommandEvent& rCEvt )
 
 Size SwFrameCtrlWindow::GetOptimalSize() const
 {
-    return LogicToPixel(Size(82, 124), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(82, 124), MapMode(MapUnit::AppFont));
 }
 
 void SwFrameCtrlWindow::Resize()

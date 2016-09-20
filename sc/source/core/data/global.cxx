@@ -537,7 +537,7 @@ void ScGlobal::Init()
 void ScGlobal::InitPPT()
 {
     OutputDevice* pDev = Application::GetDefaultDevice();
-    Point aPix1000 = pDev->LogicToPixel( Point(100000,100000), MAP_TWIP );
+    Point aPix1000 = pDev->LogicToPixel( Point(100000,100000), MapUnit::Twip );
     nScreenPPTX = aPix1000.X() / 100000.0;
     nScreenPPTY = aPix1000.Y() / 100000.0;
 }
@@ -569,12 +569,12 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
 
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
     ScopedVclPtrInstance< VirtualDevice > pVirtWindow( *pDefaultDev );
-    pVirtWindow->SetMapMode(MAP_PIXEL);
+    pVirtWindow->SetMapMode(MapUnit::Pixel);
     vcl::Font aDefFont;
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pVirtWindow); // Font color doesn't matter here
     pVirtWindow->SetFont(aDefFont);
     sal_uInt16 nTest = static_cast<sal_uInt16>(
-        pVirtWindow->PixelToLogic(Size(0, pVirtWindow->GetTextHeight()), MAP_TWIP).Height());
+        pVirtWindow->PixelToLogic(Size(0, pVirtWindow->GetTextHeight()), MapUnit::Twip).Height());
 
     if (nTest > nDefFontHeight)
         nDefFontHeight = nTest;

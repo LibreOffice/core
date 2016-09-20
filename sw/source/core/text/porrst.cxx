@@ -395,7 +395,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                                 pOut = Application::GetDefaultDevice();
 
                             MapMode aOldMap( pOut->GetMapMode() );
-                            pOut->SetMapMode( MapMode( MAP_TWIP ) );
+                            pOut->SetMapMode( MapMode( MapUnit::Twip ) );
 
                             aFnt.ChgFnt( pSh, *pOut );
                             rRegDiff = aFnt.GetHeight( pSh, *pOut );

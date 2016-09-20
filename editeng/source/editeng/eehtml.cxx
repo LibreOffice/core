@@ -607,8 +607,8 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
 
     // Font hight and margins, when LogicToLogic is possible:
     MapUnit eUnit = mpEditEngine->GetRefMapMode().GetMapUnit();
-    if ( ( eUnit != MAP_PIXEL ) && ( eUnit != MAP_SYSFONT ) &&
-         ( eUnit != MAP_APPFONT ) && ( eUnit != MAP_RELATIVE ) )
+    if ( ( eUnit != MapUnit::Pixel ) && ( eUnit != MapUnit::SysFont ) &&
+         ( eUnit != MapUnit::AppFont ) && ( eUnit != MapUnit::Relative ) )
     {
         long nPoints = 10;
         if ( nHLevel == 1 )
@@ -620,7 +620,7 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
         else if ( nHLevel == 4 )
             nPoints = 11;
 
-        nPoints = OutputDevice::LogicToLogic( nPoints, MAP_POINT, eUnit );
+        nPoints = OutputDevice::LogicToLogic( nPoints, MapUnit::Point, eUnit );
 
         SvxFontHeightItem aHeightItem( nPoints, 100, EE_CHAR_FONTHEIGHT );
         aItems.Put( aHeightItem );
@@ -635,8 +635,8 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
         if ( !nHLevel || ((nHLevel >= 1) && (nHLevel <= 6)) )
         {
             SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
-            aULSpaceItem.SetUpper( (sal_uInt16)OutputDevice::LogicToLogic( 42, MAP_10TH_MM, eUnit ) );
-            aULSpaceItem.SetLower( (sal_uInt16)OutputDevice::LogicToLogic( 35, MAP_10TH_MM, eUnit ) );
+            aULSpaceItem.SetUpper( (sal_uInt16)OutputDevice::LogicToLogic( 42, MapUnit::MM_10th, eUnit ) );
+            aULSpaceItem.SetLower( (sal_uInt16)OutputDevice::LogicToLogic( 35, MapUnit::MM_10th, eUnit ) );
             aItems.Put( aULSpaceItem );
         }
     }

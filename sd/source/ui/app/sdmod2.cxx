@@ -436,7 +436,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
 
     // Pool has by default MapUnit Twips (Awgh!)
     SfxItemPool& rPool = GetPool();
-    rPool.SetDefaultMetric( MAP_100TH_MM );
+    rPool.SetDefaultMetric( MapUnit::MM_100th );
 
     SfxItemSet*  pRet = new SfxItemSet( rPool,
                         SID_ATTR_METRIC, SID_ATTR_METRIC,

@@ -937,20 +937,20 @@ void SdrModel::ImpSetUIUnit()
     // normalize on meters resp. inch
     switch (eObjUnit)
     {
-        case MAP_100TH_MM   : nUIUnitKomma+=5; break;
-        case MAP_10TH_MM    : nUIUnitKomma+=4; break;
-        case MAP_MM         : nUIUnitKomma+=3; break;
-        case MAP_CM         : nUIUnitKomma+=2; break;
-        case MAP_1000TH_INCH: nUIUnitKomma+=3; break;
-        case MAP_100TH_INCH : nUIUnitKomma+=2; break;
-        case MAP_10TH_INCH  : nUIUnitKomma+=1; break;
-        case MAP_INCH       : nUIUnitKomma+=0; break;
-        case MAP_POINT      : nDiv=72;     break;          // 1Pt   = 1/72"
-        case MAP_TWIP       : nDiv=144; nUIUnitKomma++; break; // 1Twip = 1/1440"
-        case MAP_PIXEL      : break;
-        case MAP_SYSFONT    : break;
-        case MAP_APPFONT    : break;
-        case MAP_RELATIVE   : break;
+        case MapUnit::MM_100th   : nUIUnitKomma+=5; break;
+        case MapUnit::MM_10th    : nUIUnitKomma+=4; break;
+        case MapUnit::MM         : nUIUnitKomma+=3; break;
+        case MapUnit::CM         : nUIUnitKomma+=2; break;
+        case MapUnit::Inch_1000th: nUIUnitKomma+=3; break;
+        case MapUnit::Inch_100th : nUIUnitKomma+=2; break;
+        case MapUnit::Inch_10th  : nUIUnitKomma+=1; break;
+        case MapUnit::Inch       : nUIUnitKomma+=0; break;
+        case MapUnit::Point      : nDiv=72;     break;          // 1Pt   = 1/72"
+        case MapUnit::Twip       : nDiv=144; nUIUnitKomma++; break; // 1Twip = 1/1440"
+        case MapUnit::Pixel      : break;
+        case MapUnit::SysFont    : break;
+        case MapUnit::AppFont    : break;
+        case MapUnit::Relative   : break;
         default: break;
     } // switch
 

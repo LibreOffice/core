@@ -326,12 +326,12 @@ namespace frm
         {
             // by definition, the item should have the unit twip
             sal_uLong nHeight = pFontHeightItem->GetHeight();
-            if ( _rAttribs.GetPool()->GetMetric( getWhich() ) != MAP_TWIP )
+            if ( _rAttribs.GetPool()->GetMetric( getWhich() ) != MapUnit::Twip )
             {
                 nHeight = OutputDevice::LogicToLogic(
                     Size( 0, nHeight ),
                     MapMode( (MapUnit)( _rAttribs.GetPool()->GetMetric( getWhich() ) ) ),
-                    MapMode( MAP_TWIP )
+                    MapMode( MapUnit::Twip )
                 ).Height();
             }
 
@@ -354,11 +354,11 @@ namespace frm
             // correct measurement units
             MapUnit eItemMapUnit = pFontHeightItem->GetPropUnit(); (void)eItemMapUnit;
             sal_uLong nHeight = pFontHeightItem->GetHeight();
-            if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != MAP_TWIP )
+            if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != MapUnit::Twip )
             {
                 nHeight = OutputDevice::LogicToLogic(
                     Size( 0, nHeight ),
-                    MapMode( (MapUnit)( MAP_TWIP ) ),
+                    MapMode( (MapUnit)( MapUnit::Twip ) ),
                     MapMode( (MapUnit)( _rNewAttribs.GetPool()->GetMetric( getWhich() ) ) )
                 ).Height();
             }
