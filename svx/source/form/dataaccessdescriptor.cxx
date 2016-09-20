@@ -37,9 +37,6 @@ namespace svx
     {
         OUString       maName;
         DataAccessDescriptorProperty      mnHandle;
-        css::uno::Type maType;
-        sal_Int16      mnAttributes;
-        sal_uInt8      mnMemberId;
     };
 
     class ODADescriptorImpl
@@ -183,20 +180,20 @@ namespace svx
         {
             static PropertyMapEntry const s_aDesriptorProperties[] =
             {
-                { OUString("ActiveConnection"),   DataAccessDescriptorProperty::Connection,           cppu::UnoType<XConnection>::get(),   PropertyAttribute::TRANSIENT, 0 },
-                { OUString("BookmarkSelection"),  DataAccessDescriptorProperty::BookmarkSelection,    cppu::UnoType<bool>::get(),                                           PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Column"),             DataAccessDescriptorProperty::ColumnObject,         cppu::UnoType<XPropertySet>::get(),  PropertyAttribute::TRANSIENT, 0 },
-                { OUString("ColumnName"),         DataAccessDescriptorProperty::ColumnName,           ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Command"),            DataAccessDescriptorProperty::Command,              ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("CommandType"),        DataAccessDescriptorProperty::CommandType,          ::cppu::UnoType<sal_Int32>::get(),                  PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Component"),          DataAccessDescriptorProperty::Component,            cppu::UnoType<XContent>::get(),      PropertyAttribute::TRANSIENT, 0 },
-                { OUString("ConnectionResource"), DataAccessDescriptorProperty::ConnectionResource,   ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Cursor"),             DataAccessDescriptorProperty::Cursor,               cppu::UnoType<XResultSet>::get(),     PropertyAttribute::TRANSIENT, 0 },
-                { OUString("DataSourceName"),     DataAccessDescriptorProperty::DataSource,           ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("DatabaseLocation"),   DataAccessDescriptorProperty::DatabaseLocation,     ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("EscapeProcessing"),   DataAccessDescriptorProperty::EscapeProcessing,     cppu::UnoType<bool>::get(),                                           PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Filter"),             DataAccessDescriptorProperty::Filter,               ::cppu::UnoType<OUString>::get(),            PropertyAttribute::TRANSIENT, 0 },
-                { OUString("Selection"),          DataAccessDescriptorProperty::Selection,            cppu::UnoType<Sequence< Any >>::get(),            PropertyAttribute::TRANSIENT, 0 }
+                { OUString("ActiveConnection"),   DataAccessDescriptorProperty::Connection,            },
+                { OUString("BookmarkSelection"),  DataAccessDescriptorProperty::BookmarkSelection,     },
+                { OUString("Column"),             DataAccessDescriptorProperty::ColumnObject,          },
+                { OUString("ColumnName"),         DataAccessDescriptorProperty::ColumnName,            },
+                { OUString("Command"),            DataAccessDescriptorProperty::Command,               },
+                { OUString("CommandType"),        DataAccessDescriptorProperty::CommandType,           },
+                { OUString("Component"),          DataAccessDescriptorProperty::Component,             },
+                { OUString("ConnectionResource"), DataAccessDescriptorProperty::ConnectionResource,    },
+                { OUString("Cursor"),             DataAccessDescriptorProperty::Cursor,                },
+                { OUString("DataSourceName"),     DataAccessDescriptorProperty::DataSource,            },
+                { OUString("DatabaseLocation"),   DataAccessDescriptorProperty::DatabaseLocation,      },
+                { OUString("EscapeProcessing"),   DataAccessDescriptorProperty::EscapeProcessing,      },
+                { OUString("Filter"),             DataAccessDescriptorProperty::Filter,                },
+                { OUString("Selection"),          DataAccessDescriptorProperty::Selection,             }
             };
 
             for (unsigned i=0; i<SAL_N_ELEMENTS(s_aDesriptorProperties); ++i)

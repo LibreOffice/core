@@ -221,11 +221,10 @@ inline ExtSheetBuffer::ExtSheetBuffer( RootData* p ) : ExcRoot( p )
 
 struct ExtName
 {
-    OUString          aName;
     sal_uInt32        nStorageId;
     sal_uInt16        nFlags;
 
-    inline          ExtName( const OUString& r, sal_uInt16 n ) : aName( r ), nStorageId( 0 ), nFlags( n ) {}
+    inline          ExtName( sal_uInt16 n ) : nStorageId( 0 ), nFlags( n ) {}
 
     bool            IsDDE() const;
     bool            IsOLE() const;
@@ -236,9 +235,9 @@ class ExtNameBuff : protected XclImpRoot
 public:
     explicit        ExtNameBuff( const XclImpRoot& rRoot );
 
-    void            AddDDE( const OUString& rName, sal_Int16 nRefIdx );
-    void            AddOLE( const OUString& rName, sal_Int16 nRefIdx, sal_uInt32 nStorageId );
-    void            AddName( const OUString& rName, sal_Int16 nRefIdx );
+    void            AddDDE( sal_Int16 nRefIdx );
+    void            AddOLE( sal_Int16 nRefIdx, sal_uInt32 nStorageId );
+    void            AddName( sal_Int16 nRefIdx );
 
     const ExtName*  GetNameByIndex( sal_Int16 nRefIdx, sal_uInt16 nNameIdx ) const;
 

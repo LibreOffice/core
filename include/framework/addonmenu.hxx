@@ -37,11 +37,8 @@ namespace framework
 class FWE_DLLPUBLIC AddonMenu : public PopupMenu
 {
     public:
-        AddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame );
+        AddonMenu();
         virtual ~AddonMenu() override;
-
-    protected:
-        css::uno::Reference< css::frame::XFrame > m_xFrame;
 };
 
 class AddonMenuManager;
@@ -57,7 +54,7 @@ class FWE_DLLPUBLIC AddonPopupMenu : public AddonMenu
         void               SetCommandURL( const OUString& aCmdURL ) { m_aCommandURL = aCmdURL; }
 
     private:
-        AddonPopupMenu( const css::uno::Reference< css::frame::XFrame >& rFrame );
+        AddonPopupMenu();
 
         OUString               m_aCommandURL;
 
@@ -82,7 +79,7 @@ class FWE_DLLPUBLIC AddonMenuManager
         static bool IsCorrectContext(const OUString& rModuleIdentifier, const OUString& rContext);
 
         // Factory method to create different Add-On menu types
-        static VclPtr<PopupMenu> CreatePopupMenuType( MenuType eMenuType, const css::uno::Reference< css::frame::XFrame >& rFrame );
+        static VclPtr<PopupMenu> CreatePopupMenuType( MenuType eMenuType );
 
         // Create the Add-Ons menu
         static VclPtr<AddonMenu> CreateAddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame,

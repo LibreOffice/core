@@ -68,7 +68,6 @@ ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
     , maMapModeDest( MAP_INCH, Point(), Fraction( 1, EES_MAP_FRACTION ), Fraction( 1, EES_MAP_FRACTION ) )
     , mpPicStrm(nullptr)
     , mpHostAppData(nullptr)
-    , mnPagesWritten(0)
     , mbIsTitlePossible(false)
 {
 }
@@ -832,7 +831,6 @@ void ImplEESdrWriter::ImplWritePage(
             ImplWriteShape( aObj, rSolverContainer );
         }
     }
-    mnPagesWritten++;
 }
 
 ImplEscherExSdr::ImplEscherExSdr( EscherEx& rEx )

@@ -181,8 +181,6 @@ class  SVX_DLLPUBLIC OutlineSettings_Impl
 
 class SVX_DLLPUBLIC NBOTypeMgrBase
 {
-    public:
-        NBOType         eType;
     private:
         const SfxItemSet*   pSet;
         MapUnit         eCoreUnit;
@@ -193,9 +191,8 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         NBOTypeMgrBase(const NBOTypeMgrBase&) = delete;
 
     public:
-        NBOTypeMgrBase(const NBOType aType)
-            : eType(aType)
-            , pSet(nullptr)
+        NBOTypeMgrBase()
+            : pSet(nullptr)
             , eCoreUnit(MAP_TWIP)
             , aNumCharFmtName(OUString())
             , bIsLoading(false)

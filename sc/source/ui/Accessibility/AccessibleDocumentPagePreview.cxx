@@ -800,8 +800,6 @@ namespace
 {
     struct ScVisAreaChanged
     {
-        const ScIAccessibleViewForwarder* mpViewForwarder;
-        explicit ScVisAreaChanged(const ScIAccessibleViewForwarder* pViewForwarder) : mpViewForwarder(pViewForwarder) {}
         void operator() (const ScShapeChild& rAccShapeData) const
         {
             if (rAccShapeData.mpAccShape.is())
@@ -818,7 +816,7 @@ void ScShapeChildren::VisAreaChanged() const
     ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin();
     while (aItr != aEndItr)
     {
-        ScVisAreaChanged aVisAreaChanged(&(aItr->maViewForwarder));
+        ScVisAreaChanged aVisAreaChanged;
         std::for_each(aItr->maBackShapes.begin(), aItr->maBackShapes.end(), aVisAreaChanged);
         std::for_each(aItr->maControls.begin(), aItr->maControls.end(), aVisAreaChanged);
         std::for_each(aItr->maForeShapes.begin(), aItr->maForeShapes.end(), aVisAreaChanged);

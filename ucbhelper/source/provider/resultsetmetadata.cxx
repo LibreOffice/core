@@ -56,16 +56,13 @@ struct ResultSetMetaData_Impl
     osl::Mutex                                      m_aMutex;
     std::vector< ::ucbhelper::ResultSetColumnData > m_aColumnData;
     bool                                        m_bObtainedTypes;
-    bool                                        m_bGlobalReadOnlyValue;
 
     explicit ResultSetMetaData_Impl( sal_Int32 nSize )
-    : m_aColumnData( nSize ), m_bObtainedTypes( false ),
-      m_bGlobalReadOnlyValue( true ) {}
+    : m_aColumnData( nSize ), m_bObtainedTypes( false ) {}
 
     explicit ResultSetMetaData_Impl(
         const std::vector< ::ucbhelper::ResultSetColumnData >& rColumnData )
-    : m_aColumnData( rColumnData ), m_bObtainedTypes( false ),
-      m_bGlobalReadOnlyValue( false ) {}
+    : m_aColumnData( rColumnData ), m_bObtainedTypes( false ) {}
 };
 
 }

@@ -61,16 +61,13 @@ class FolderDescriptor
 public:
     FolderDescriptor (
         int nPriority,
-        const OUString& rsTitle,
         const OUString& rsContentIdentifier,
         const Reference<css::ucb::XCommandEnvironment>& rxFolderEnvironment)
         : mnPriority(nPriority),
-          msTitle(rsTitle),
           msContentIdentifier(rsContentIdentifier),
           mxFolderEnvironment(rxFolderEnvironment)
     { }
     int mnPriority;
-    OUString msTitle;
     OUString msContentIdentifier;
     //    Reference<sdbc::XResultSet> mxFolderResultSet;
     Reference<css::ucb::XCommandEnvironment> mxFolderEnvironment;
@@ -336,7 +333,6 @@ TemplateScanner::State TemplateScanner::GatherFolderList()
                 mpFolderDescriptors->insert(
                     FolderDescriptor(
                         Classify(sTitle,sTargetDir),
-                        sTitle,
                         aId,
                         mxFolderEnvironment));
             }

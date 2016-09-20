@@ -47,12 +47,10 @@ primitive2d::Primitive2DContainer OverlayHandle::createOverlayObjectPrimitive2DS
 OverlayHandle::OverlayHandle(const B2DPoint& rBasePos,
                              const B2DSize& rSize,
                              Color& rStrokeColor,
-                             Color& rFillColor,
-                             float fTransparency)
+                             Color& rFillColor)
     : OverlayObjectWithBasePosition(rBasePos, rFillColor)
     , maSize(rSize)
     , maStrokeColor(rStrokeColor)
-    , mfTransparency(fTransparency)
 {
 }
 
