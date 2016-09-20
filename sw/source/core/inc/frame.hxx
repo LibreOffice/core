@@ -1148,26 +1148,34 @@ struct SwRectFnCollection
 typedef SwRectFnCollection* SwRectFn;
 
 extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
-#define SWRECTFN( pFrame )    bool bVert = pFrame->IsVertical(); \
-                            bool bRev = pFrame->IsReverse(); \
-                            bool bVertL2R = pFrame->IsVertLR(); \
-                            SwRectFn fnRect = bVert ? \
-                                ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
-                                ( bRev ? fnRectB2T : fnRectHori );
-#define SWRECTFNX( pFrame )   bool bVertX = pFrame->IsVertical(); \
-                            bool bRevX = pFrame->IsReverse(); \
-                            bool bVertL2RX = pFrame->IsVertLR(); \
-                            SwRectFn fnRectX = bVertX ? \
-                                ( bRevX ? fnRectVL2R : ( bVertL2RX ? fnRectVertL2R : fnRectVert ) ): \
-                                ( bRevX ? fnRectB2T : fnRectHori );
-#define SWREFRESHFN( pFrame ) { if( bVert != pFrame->IsVertical() || \
-                                  bRev  != pFrame->IsReverse() ) \
-                                bVert = pFrame->IsVertical(); \
-                                bRev = pFrame->IsReverse(); \
-                                bVertL2R = pFrame->IsVertLR(); \
-                                fnRect = bVert ? \
-                                    ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
-                                    ( bRev ? fnRectB2T : fnRectHori ); }
+struct SWRECTFN {
+    bool bVert;
+    bool bRev;
+    bool bVertL2R;
+    SwRectFn fnRect;
+
+    explicit SWRECTFN(const SwFrame *pFrame)
+        : bVert(pFrame->IsVertical())
+        , bRev(pFrame->IsReverse())
+        , bVertL2R(pFrame->IsVertLR())
+    {
+        fnRect = bVert ?
+            (bRev ? fnRectVL2R : (bVertL2R ? fnRectVertL2R : fnRectVert)) :
+            (bRev ? fnRectB2T : fnRectHori);
+    }
+
+    SwRectFn operator ->() { return fnRect; }
+
+    void Refresh(const SwFrame *pFrame)
+    {
+        bVert = pFrame->IsVertical();
+        bRev = pFrame->IsReverse();
+        bVertL2R = pFrame->IsVertLR();
+        fnRect = bVert ?
+            (bRev ? fnRectVL2R : (bVertL2R ? fnRectVertL2R : fnRectVert)) :
+            (bRev ? fnRectB2T : fnRectHori);
+    }
+};
 
 #define POS_DIFF( aFrame1, aFrame2 ) \
             ( (aFrame1.*fnRect->fnGetTop)() != (aFrame2.*fnRect->fnGetTop)() || \

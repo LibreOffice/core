@@ -1785,7 +1785,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
             SwTextInfo aInf( const_cast<SwTextFrame*>(this) );
             SwTextIter aLine( const_cast<SwTextFrame*>(this), &aInf );
             // We have to care for top-to-bottom layout, where right becomes top etc.
-            SWRECTFN( this )
+            SWRECTFN fnRect(this);
             SwTwips nTop = (aRect.*fnRect->fnGetTop)();
             SwTwips nBottom = (aRect.*fnRect->fnGetBottom)();
             SwTwips nLeft = (aRect.*fnRect->fnGetLeft)();
@@ -1813,7 +1813,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
                 {
                     nLastY += nY;
                     nLastY /= 2;
-                    if( bVert )
+                    if( fnRect.bVert )
                     {
                         aPoint.X() = nLastY;
                         aPoint.Y() = nLeft;
@@ -1828,7 +1828,7 @@ bool SwTextFrame::FillSelection( SwSelectionList& rSelList, const SwRect& rRect 
                     SwCursorMoveState aState( MV_UPDOWN );
                     if( GetCursorOfst( &aPosL, aPoint, &aState ) )
                     {
-                        if( bVert )
+                        if( fnRect.bVert )
                         {
                             aPoint.X() = nLastY;
                             aPoint.Y() = nRight;

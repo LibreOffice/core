@@ -102,7 +102,7 @@ SwFrameNotify::SwFrameNotify( SwFrame *pF ) :
 
 SwFrameNotify::~SwFrameNotify()
 {
-    SWRECTFN( mpFrame )
+    SWRECTFN fnRect(mpFrame);
     const bool bAbsP = POS_DIFF( maFrame, mpFrame->Frame() );
     const bool bChgWidth =
             (maFrame.*fnRect->fnGetWidth)() != (mpFrame->Frame().*fnRect->fnGetWidth)();
@@ -445,7 +445,7 @@ static void lcl_InvalidatePosOfLowers( SwLayoutFrame& _rLayoutFrame )
 SwLayNotify::~SwLayNotify()
 {
     SwLayoutFrame *pLay = GetLay();
-    SWRECTFN( pLay )
+    SWRECTFN fnRect(pLay);
     bool bNotify = false;
     if ( pLay->Prt().SSize() != maPrt.SSize() )
     {
@@ -646,7 +646,7 @@ SwFlyNotify::~SwFlyNotify()
 
     //Have the size or the position changed,
     //so should the view know this.
-    SWRECTFN( pFly )
+    SWRECTFN fnRect(pFly);
     const bool bPosChgd = POS_DIFF( maFrame, pFly->Frame() );
     const bool bFrameChgd = pFly->Frame().SSize() != maFrame.SSize();
     const bool bPrtChgd = maPrt != pFly->Prt();
@@ -754,7 +754,7 @@ SwContentNotify::~SwContentNotify()
     if ( bSetCompletePaintOnInvalidate )
         pCnt->SetCompletePaint();
 
-    SWRECTFN( pCnt )
+    SWRECTFN fnRect(pCnt);
     if ( pCnt->IsInTab() && ( POS_DIFF( pCnt->Frame(), maFrame ) ||
                              pCnt->Frame().SSize() != maFrame.SSize()))
     {
@@ -1182,11 +1182,11 @@ void AppendAllObjs( const SwFrameFormats *pTable, const SwFrame* pSib )
 static void lcl_SetPos( SwFrame&             _rNewFrame,
                  const SwLayoutFrame& _rLayFrame )
 {
-    SWRECTFN( (&_rLayFrame) )
+    SWRECTFN fnRect(&_rLayFrame);
     (_rNewFrame.Frame().*fnRect->fnSetPos)( (_rLayFrame.Frame().*fnRect->fnGetPos)() );
     // move position by one SwTwip in text flow direction in order to get
     // notifications for a new calculated position after its formatting.
-    if ( bVert )
+    if ( fnRect.bVert )
         _rNewFrame.Frame().Pos().X() -= 1;
     else
         _rNewFrame.Frame().Pos().Y() += 1;
@@ -2545,7 +2545,7 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
 void RestoreContent( SwFrame *pSav, SwLayoutFrame *pParent, SwFrame *pSibling, bool bGrow )
 {
     OSL_ENSURE( pSav && pParent, "no Save or Parent provided for RestoreContent." );
-    SWRECTFN( pParent )
+    SWRECTFN fnRect(pParent);
 
     // If there are already FlowFrames below the new parent, so add the chain (starting with pSav)
     // after the last one. The parts are inserted and invalidated if needed.

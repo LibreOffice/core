@@ -543,7 +543,7 @@ bool sw_HideObj( const SwTextFrame& _rFrame,
                         {
                             bRet = false;
                             // set needed data structure values for object positioning
-                            SWRECTFN( (&_rFrame) );
+                            SWRECTFN fnRect(&_rFrame);
                             SwRect aLastCharRect( _rFrame.Frame() );
                             (aLastCharRect.*fnRect->fnSetWidth)( 1 );
                             _pAnchoredObj->maLastCharRect = aLastCharRect;
@@ -1853,7 +1853,7 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
     aOldFrame = pFrame->Frame();
     aOldPrt = pFrame->Prt();
 
-    SWRECTFN( pFrame )
+    SWRECTFN fnRect(pFrame);
     SwTwips nLower = (pFrame->*fnRect->fnGetBottomMargin)();
 
     pFrame->Frame() = pFrame->GetUpper()->Prt();
@@ -1863,7 +1863,7 @@ SwTestFormat::SwTestFormat( SwTextFrame* pTextFrame, const SwFrame* pPre, SwTwip
     if( pFrame->GetPrev() )
         (pFrame->Frame().*fnRect->fnSetPosY)(
                 (pFrame->GetPrev()->Frame().*fnRect->fnGetBottom)() -
-                ( bVert ? nMaxHeight + 1 : 0 ) );
+                ( fnRect.bVert ? nMaxHeight + 1 : 0 ) );
 
     SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFrame );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
@@ -1934,7 +1934,7 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTextFrame::WouldFit with swapped frame" );
-    SWRECTFN( this );
+    SWRECTFN fnRect(this);
 
     if( IsLocked() )
         return false;
@@ -1950,7 +1950,7 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
     if ( IsEmpty() && !bTst )
     {
         bSplit = false;
-        SwTwips nHeight = bVert ? Prt().SSize().Width() : Prt().SSize().Height();
+        SwTwips nHeight = fnRect.bVert ? Prt().SSize().Width() : Prt().SSize().Height();
         if( rMaxHeight < nHeight )
             return false;
         else
@@ -1969,7 +1969,7 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
     // Because the Orphan flag only exists for a short moment, we also check
     // whether the Framesize is set to very huge by CalcPreps, in order to
     // force a MoveFwd
-    if( IsWidow() || ( bVert ?
+    if( IsWidow() || ( fnRect.bVert ?
                        ( 0 == Frame().Left() ) :
                        ( LONG_MAX - 20000 < Frame().Bottom() ) ) )
     {
@@ -1980,8 +1980,8 @@ bool SwTextFrame::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
             // whether there's a Follow with a real height at all.
             // Else (e.g. for newly created SctFrames) we ignore the IsWidow() and
             // still check if we can find enough room
-            if( ( ( ! bVert && LONG_MAX - 20000 >= Frame().Bottom() ) ||
-                  (   bVert && 0 < Frame().Left() ) ) &&
+            if( ( ( ! fnRect.bVert && LONG_MAX - 20000 >= Frame().Bottom() ) ||
+                  (   fnRect.bVert && 0 < Frame().Left() ) ) &&
                   ( GetFollow()->IsVertical() ?
                     !GetFollow()->Frame().Width() :
                     !GetFollow()->Frame().Height() ) )
@@ -2598,7 +2598,7 @@ const SwScriptInfo* SwTextFrame::GetScriptInfo() const
 static SwTwips lcl_CalcFlyBasePos( const SwTextFrame& rFrame, SwRect aFlyRect,
                             SwTextFly& rTextFly )
 {
-    SWRECTFN( (&rFrame) )
+    SWRECTFN fnRect(&rFrame);
     SwTwips nRet = rFrame.IsRightToLeft() ?
                    (rFrame.Frame().*fnRect->fnGetRight)() :
                    (rFrame.Frame().*fnRect->fnGetLeft)();
@@ -2650,7 +2650,7 @@ void SwTextFrame::CalcBaseOfstForFly()
     if ( !pNode->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_FLY_OFFSETS) )
         return;
 
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
 
     SwRect aFlyRect( Frame().Pos() + Prt().Pos(), Prt().SSize() );
 

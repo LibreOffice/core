@@ -199,9 +199,9 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
 {
     SwTwips nHeight = 0;
     SwTwips nOffset = 0;
-    SWRECTFN( (&_rVertOrientFrame) )
+    SWRECTFN fnRect(&_rVertOrientFrame);
     // #i11860# - top of <_rVertOrientFrame> for object positioning
-    const SwTwips nVertOrientTop = GetTopForObjPos( _rVertOrientFrame, fnRect, bVert );
+    const SwTwips nVertOrientTop = GetTopForObjPos( _rVertOrientFrame, fnRect.fnRect, fnRect.bVert );
     // #i11860# - upper space amount of <_rVertOrientFrame> considered
     // for previous frame
     const SwTwips nVertOrientUpperSpaceForPrevFrameAndPageGrid =
@@ -227,7 +227,7 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
                       nVertOrientUpperSpaceForPrevFrameAndPageGrid;
             // if aligned to page in horizontal layout, consider header and
             // footer frame height appropriately.
-            if( _rVertOrientFrame.IsPageFrame() && !bVert )
+            if( _rVertOrientFrame.IsPageFrame() && !fnRect.bVert )
             {
                 const SwFrame* pPrtFrame =
                         static_cast<const SwPageFrame&>(_rVertOrientFrame).Lower();
@@ -264,7 +264,7 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
                         nVertOrientTop );
             // if aligned to page in horizontal layout, consider header and
             // footer frame height appropriately.
-            if( _rPageAlignLayFrame.IsPageFrame() && !bVert )
+            if( _rPageAlignLayFrame.IsPageFrame() && !fnRect.bVert )
             {
                 const SwFrame* pPrtFrame =
                         static_cast<const SwPageFrame&>(_rPageAlignLayFrame).Lower();
@@ -335,7 +335,7 @@ SwTwips SwAnchoredObjectPosition::GetVertRelPos(
                                     SwTwips& _roVertOffsetToFrameAnchorPos ) const
 {
     SwTwips nRelPosY = 0;
-    SWRECTFN( (&_rVertOrientFrame) );
+    SWRECTFN fnRect(&_rVertOrientFrame);
 
     SwTwips nAlignAreaHeight;
     SwTwips nAlignAreaOffset;
@@ -356,8 +356,8 @@ SwTwips SwAnchoredObjectPosition::GetVertRelPos(
         break;
         case text::VertOrientation::TOP:
         {
-              nRelPosY +=   bVert
-                            ? ( bVertL2R
+              nRelPosY +=   fnRect.bVert
+                            ? ( fnRect.bVertL2R
                                 ? _rLRSpacing.GetLeft()
                                 : _rLRSpacing.GetRight() )
                             : _rULSpacing.GetUpper();
@@ -371,8 +371,8 @@ SwTwips SwAnchoredObjectPosition::GetVertRelPos(
         case text::VertOrientation::BOTTOM:
         {
             nRelPosY += nAlignAreaHeight -
-                        ( nObjHeight + ( bVert
-                                         ? ( bVertL2R
+                        ( nObjHeight + ( fnRect.bVert
+                                         ? ( fnRect.bVertL2R
                                              ? _rLRSpacing.GetRight()
                                              : _rLRSpacing.GetLeft() )
                                          : _rULSpacing.GetLower() ) );
@@ -572,7 +572,7 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
 {
     SwTwips nWidth = 0;
     SwTwips nOffset = 0;
-    SWRECTFN( (&_rHoriOrientFrame) )
+    SWRECTFN fnRect(&_rHoriOrientFrame);
     switch ( _eRelOrient )
     {
         case text::RelOrientation::PRINT_AREA:
@@ -584,7 +584,7 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
                 // consider movement of text frame left
                 nOffset += static_cast<const SwTextFrame&>(_rHoriOrientFrame).GetBaseOfstForFly( !_bObjWrapThrough );
             }
-            else if ( _rHoriOrientFrame.IsPageFrame() && bVert )
+            else if ( _rHoriOrientFrame.IsPageFrame() && fnRect.bVert )
             {
                 // for to-page anchored objects, consider header/footer frame
                 // in vertical layout
@@ -661,7 +661,7 @@ void SwAnchoredObjectPosition::GetHoriAlignmentValues( const SwFrame&  _rHoriOri
             nOffset = (*fnRect->fnXDiff)(
                         (_rPageAlignLayFrame.*fnRect->fnGetPrtLeft)(),
                         (_rHoriOrientFrame.Frame().*fnRect->fnGetLeft)() );
-            if ( _rHoriOrientFrame.IsPageFrame() && bVert )
+            if ( _rHoriOrientFrame.IsPageFrame() && fnRect.bVert )
             {
                 // for to-page anchored objects, consider header/footer frame
                 // in vertical layout
@@ -805,7 +805,7 @@ SwTwips SwAnchoredObjectPosition::CalcRelPosX(
                              nWidth, nOffset, bAlignedRelToPage );
 
     const SwFrame& rAnchorFrame = GetAnchorFrame();
-    SWRECTFN( (&_rHoriOrientFrame) )
+    SWRECTFN fnRect(&_rHoriOrientFrame);
     SwTwips nObjWidth = (GetAnchoredObj().GetObjRect().*fnRect->fnGetWidth)();
     SwTwips nRelPosX = nOffset;
     if ( _rHoriOrient.GetHoriOrient() == text::HoriOrientation::NONE )
@@ -835,9 +835,9 @@ SwTwips SwAnchoredObjectPosition::CalcRelPosX(
     else if ( text::HoriOrientation::RIGHT == eHoriOrient )
         nRelPosX += nWidth -
                     ( nObjWidth +
-                      ( bVert ? _rULSpacing.GetLower() : _rLRSpacing.GetRight() ) );
+                      ( fnRect.bVert ? _rULSpacing.GetLower() : _rLRSpacing.GetRight() ) );
     else
-        nRelPosX += bVert ? _rULSpacing.GetUpper() : _rLRSpacing.GetLeft();
+        nRelPosX += fnRect.bVert ? _rULSpacing.GetUpper() : _rLRSpacing.GetLeft();
 
     // adjust relative position by distance between anchor frame and
     // the frame, the object is oriented at.
@@ -905,13 +905,13 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
     const SwFlyAtContentFrame& rFlyAtContentFrame =
                         static_cast<const SwFlyAtContentFrame&>(GetAnchoredObj());
     const SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
-    SWRECTFN( (&_rHoriOrientFrame) )
+    SWRECTFN fnRect(&_rHoriOrientFrame);
 
     SwTwips nAdjustedRelPosX = _nProposedRelPosX;
 
     // determine proposed object bound rectangle
     Point aTmpPos = (rAnchorTextFrame.Frame().*fnRect->fnGetPos)();
-    if( bVert )
+    if( fnRect.bVert )
     {
         aTmpPos.X() -= _nRelPosY + aObjBoundRect.Width();
         aTmpPos.Y() += nAdjustedRelPosX;
@@ -934,7 +934,7 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
         if ( DrawAsideFly( pFly, aTmpObjRect, pObjContext, nObjIndex,
                            _bEvenPage, _eHoriOrient, _eRelOrient ) )
         {
-            if( bVert )
+            if( fnRect.bVert )
             {
                 const SvxULSpaceItem& rOtherUL = pFly->GetFormat()->GetULSpace();
                 const SwTwips nOtherTop = pFly->Frame().Top() - rOtherUL.GetUpper();
@@ -1029,7 +1029,7 @@ bool SwAnchoredObjectPosition::DrawAsideFly( const SwFlyFrame* _pFly,
 {
     bool bRetVal = false;
 
-    SWRECTFN( (&GetAnchorFrame()) )
+    SWRECTFN fnRect(&GetAnchorFrame());
 
     if ( _pFly->IsFlyAtContentFrame() &&
          (_pFly->Frame().*fnRect->fnBottomDist)( (_rObjRect.*fnRect->fnGetTop)() ) < 0 &&

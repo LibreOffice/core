@@ -2532,7 +2532,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCursor,
     }
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
-    SWRECTFN( pTab )
+    SWRECTFN fnRect(pTab);
     const SwPageFrame* pPage = pTab->FindPageFrame();
     const sal_uLong nLeftMin = (pTab->Frame().*fnRect->fnGetLeft)() -
                            (pPage->Frame().*fnRect->fnGetLeft)();
@@ -2611,14 +2611,14 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     const SwFrame* pFrame = pTab->GetNextLayoutLeaf();
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
-    SWRECTFN( pTab )
+    SWRECTFN fnRect(pTab);
     const SwPageFrame* pPage = pTab->FindPageFrame();
-    const long nLeftMin  = ( bVert ?
+    const long nLeftMin  = ( fnRect.bVert ?
                              pTab->GetPrtLeft() - pPage->Frame().Left() :
                              pTab->GetPrtTop() - pPage->Frame().Top() );
-    const long nLeft     = bVert ? LONG_MAX : 0;
+    const long nLeft     = fnRect.bVert ? LONG_MAX : 0;
     const long nRight    = (pTab->Prt().*fnRect->fnGetHeight)();
-    const long nRightMax = bVert ? nRight : LONG_MAX;
+    const long nRightMax = fnRect.bVert ? nRight : LONG_MAX;
 
     rFill.SetLeftMin( nLeftMin );
     rFill.SetLeft( nLeft );
@@ -2729,7 +2729,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     // we need to switch to absolute ones.
     SwTable& rTab = *pTab->GetTable();
     const SwFormatFrameSize& rTableFrameSz = rTab.GetFrameFormat()->GetFrameSize();
-    SWRECTFN( pTab )
+    SWRECTFN fnRect(pTab);
     // #i17174# - With fix for #i9040# the shadow size is taken
     // from the table width. Thus, add its left and right size to current table
     // printing area width in order to get the correct table size attribute.
@@ -2775,7 +2775,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
 
     // If the Table is still using relative values (USHRT_MAX)
     // we need to switch to absolute ones.
-    SWRECTFN( pTab )
+    SWRECTFN fnRect(pTab);
     SwTabCols aOld( rNew.Count() );
 
     // Set fixed points, LeftMin in Document coordinates, all others relative
@@ -2783,7 +2783,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
 
     aOld.SetRight( (pTab->Prt().*fnRect->fnGetHeight)() );
     long nLeftMin;
-    if ( bVert )
+    if ( fnRect.bVert )
     {
         nLeftMin = pTab->GetPrtLeft() - pPage->Frame().Left();
         aOld.SetLeft    ( LONG_MAX );
@@ -2809,8 +2809,8 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
 
     for ( size_t i = 0; i <= nCount; ++i )
     {
-        const size_t nIdxStt = bVert ? nCount - i : i - 1;
-        const size_t nIdxEnd = bVert ? nCount - i - 1 : i;
+        const size_t nIdxStt = fnRect.bVert ? nCount - i : i - 1;
+        const size_t nIdxEnd = fnRect.bVert ? nCount - i - 1 : i;
 
         const long nOldRowStart = i == 0  ? 0 : aOld[ nIdxStt ];
         const long nOldRowEnd =   i == nCount ? aOld.GetRight() : aOld[ nIdxEnd ];

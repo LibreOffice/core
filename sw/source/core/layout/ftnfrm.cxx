@@ -155,7 +155,7 @@ SwFootnoteContFrame::SwFootnoteContFrame( SwFrameFormat *pFormat, SwFrame* pSib 
 static long lcl_Undersize( const SwFrame* pFrame )
 {
     long nRet = 0;
-    SWRECTFN( pFrame )
+    SWRECTFN fnRect(pFrame);
     if( pFrame->IsTextFrame() )
     {
         if( static_cast<const SwTextFrame*>(pFrame)->IsUndersized() )
@@ -187,7 +187,7 @@ void SwFootnoteContFrame::Format( vcl::RenderContext* /*pRenderContext*/, const 
     const SwPageFootnoteInfo &rInf = pPage->GetPageDesc()->GetFootnoteInfo();
     const SwTwips nBorder = rInf.GetTopDist() + rInf.GetBottomDist() +
                             rInf.GetLineWidth();
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     if ( !mbValidPrtArea )
     {
         mbValidPrtArea = true;
@@ -267,7 +267,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
     // If the page is a special footnote page, take also as much as possible.
     assert(GetUpper() && GetUpper()->IsFootnoteBossFrame());
 
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     if( (Frame().*fnRect->fnGetHeight)() > 0 &&
          nDist > ( LONG_MAX - (Frame().*fnRect->fnGetHeight)() ) )
         nDist = LONG_MAX - (Frame().*fnRect->fnGetHeight)();
@@ -547,7 +547,7 @@ void SwFootnoteFrame::Paste(  SwFrame* pParent, SwFrame* pSibling )
     // insert into tree structure
     InsertBefore( static_cast<SwLayoutFrame*>(pParent), pSibling );
 
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     if( (Frame().*fnRect->fnGetWidth)()!=(pParent->Prt().*fnRect->fnGetWidth)() )
         InvalidateSize_();
     InvalidatePos_();
@@ -1898,7 +1898,7 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
     // to a new position (based on the new column/page)
     const sal_uInt16 nMyNum = FindPageFrame()->GetPhyPageNum();
     const sal_uInt16 nMyCol = lcl_ColumnNum( this );
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
 
     // #i21478# - keep last inserted footnote in order to
     // format the content of the following one.
@@ -2202,7 +2202,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
                 // assure its correct position, probably calculating its previous
                 // footnote frames.
                 {
-                    SWRECTFN( this );
+                    SWRECTFN fnRect(this);
                     SwFrame* aFootnoteContFrame = pFootnoteFrame->GetUpper();
                     if ( (pFootnoteFrame->Frame().*fnRect->fnTopDist)((aFootnoteContFrame->*fnRect->fnGetPrtBottom)()) > 0 )
                     {
@@ -2391,7 +2391,7 @@ void SwFootnoteBossFrame::SetFootnoteDeadLine( const SwTwips nDeadLine )
 
     SwFrame *pCont = FindFootnoteCont();
     const SwTwips nMax = nMaxFootnoteHeight;// current should exceed MaxHeight
-    SWRECTFN( this )
+    SWRECTFN fnRect(this);
     if ( pCont )
     {
         pCont->Calc(getRootFrame()->GetCurrShell()->GetOut());
@@ -2424,7 +2424,7 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
     SwTwips nRet;
     if( pBody )
     {
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         if( IsInSct() )
         {
             nRet = 0;

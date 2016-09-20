@@ -107,7 +107,7 @@ SwTwips SwTextFrameInfo::GetLineStart() const
 // Calculates the character's position and returns the middle position
 SwTwips SwTextFrameInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
 {
-    SWRECTFN( pFrame )
+    SWRECTFN fnRect(pFrame);
     SwFrameSwapper aSwapper( pFrame, true );
 
     SwTextSizeInfo aInf( const_cast<SwTextFrame*>(pFrame) );
@@ -117,7 +117,7 @@ SwTwips SwTextFrameInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
     SwRect aRect;
     if( static_cast<SwTextCursor&>(aLine).GetCharRect( &aRect, nChar ) )
     {
-        if ( bVert )
+        if ( fnRect.bVert )
             pFrame->SwitchHorizontalToVertical( aRect );
 
         nStt = (aRect.*fnRect->fnGetLeft)();
@@ -130,7 +130,7 @@ SwTwips SwTextFrameInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
 
     if( static_cast<SwTextCursor&>(aLine).GetCharRect( &aRect, nChar+1 ) )
     {
-        if ( bVert )
+        if ( fnRect.bVert )
             pFrame->SwitchHorizontalToVertical( aRect );
 
         nNext = (aRect.*fnRect->fnGetLeft)();

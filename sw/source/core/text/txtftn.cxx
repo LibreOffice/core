@@ -130,7 +130,7 @@ bool SwTextFrame::CalcPrepFootnoteAdjust()
         const SwFootnoteContFrame *pCont = pBoss->FindFootnoteCont();
         bool bReArrange = true;
 
-        SWRECTFN( this )
+        SWRECTFN fnRect(this);
         if ( pCont && (*fnRect->fnYDiff)( (pCont->Frame().*fnRect->fnGetTop)(),
                                           (Frame().*fnRect->fnGetBottom)() ) > 0 )
         {
@@ -163,7 +163,7 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
 {
     // nLower is an absolute value. It denotes the bottom of the line
     // containing the footnote.
-    SWRECTFN( pFrame )
+    SWRECTFN fnRect(pFrame);
 
     OSL_ENSURE( !pFrame->IsVertical() || !pFrame->IsSwapped(),
             "lcl_GetFootnoteLower with swapped frame" );
@@ -209,7 +209,7 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
 
     if( nAdd > 0 )
     {
-        if ( bVert )
+        if ( fnRect.bVert )
             nRet -= nAdd;
         else
             nRet += nAdd;
@@ -219,7 +219,7 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
     // the deadline should consider their lower borders.
     const SwFrame* pStartFrame = pFrame->GetUpper()->GetLower();
     OSL_ENSURE( pStartFrame, "Upper has no lower" );
-    SwTwips nFlyLower = bVert ? LONG_MAX : 0;
+    SwTwips nFlyLower = fnRect.bVert ? LONG_MAX : 0;
     while ( pStartFrame != pFrame )
     {
         OSL_ENSURE( pStartFrame, "Frame chain is broken" );
@@ -243,7 +243,7 @@ static SwTwips lcl_GetFootnoteLower( const SwTextFrame* pFrame, SwTwips nLower )
         pStartFrame = pStartFrame->GetNext();
     }
 
-    if ( bVert )
+    if ( fnRect.bVert )
         nRet = std::min( nRet, nFlyLower );
     else
         nRet = std::max( nRet, nFlyLower );
@@ -313,7 +313,7 @@ SwTwips SwTextFrame::GetFootnoteFrameHeight_() const
         const SwFrame *pCont = pFootnoteFrame->GetUpper();
 
         // Height within the Container which we're allowed to consume anyways
-        SWRECTFN( pCont )
+        SWRECTFN fnRect(pCont);
         SwTwips nTmp = (*fnRect->fnYDiff)( (pCont->*fnRect->fnGetPrtBottom)(),
                                            (Frame().*fnRect->fnGetTop)() );
 
@@ -686,7 +686,7 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
         {
             SwFrame *pCont = pFootnoteFrame->GetUpper();
 
-            SWRECTFN ( pCont )
+            SWRECTFN fnRect(pCont);
             long nDiff = (*fnRect->fnYDiff)( (pCont->Frame().*fnRect->fnGetTop)(),
                                              nDeadLine );
 
@@ -890,7 +890,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
                     if( bVertical )
                         nTmpBot = m_pFrame->SwitchHorizontalToVertical( nTmpBot );
 
-                    SWRECTFN( pFootnoteCont )
+                    SWRECTFN fnRect(pFootnoteCont);
 
                     const long nDiff = (*fnRect->fnYDiff)(
                                             (pFootnoteCont->Frame().*fnRect->fnGetTop)(),

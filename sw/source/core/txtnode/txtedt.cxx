@@ -199,7 +199,7 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
     if ( pEnd2Pos )
     {
         // we are inside a special portion, take left border
-        SWRECTFN( pEndFrame )
+        SWRECTFN fnRect(pEndFrame);
         (aRect.*fnRect->fnSetTop)( (pEnd2Pos->aLine.*fnRect->fnGetTop)() );
         if ( pEndFrame->IsRightToLeft() )
             (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetLeft)() );
@@ -232,7 +232,7 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
     if ( pSt2Pos )
     {
         // we are inside a special portion, take right border
-        SWRECTFN( pStartFrame )
+        SWRECTFN fnRect(pStartFrame);
         (aTmp.*fnRect->fnSetTop)( (pSt2Pos->aLine.*fnRect->fnGetTop)() );
         if ( pStartFrame->IsRightToLeft() )
             (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
@@ -252,14 +252,14 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
             bSameFrame = false;
             SwRect aStFrame( pStartFrame->PaintArea() );
             {
-                SWRECTFN( pStartFrame )
+                SWRECTFN fnRect(pStartFrame);
                 (aTmp.*fnRect->fnSetLeft)( (aStFrame.*fnRect->fnGetLeft)() );
                 (aTmp.*fnRect->fnSetRight)( (aStFrame.*fnRect->fnGetRight)() );
                 (aTmp.*fnRect->fnSetBottom)( (aStFrame.*fnRect->fnGetBottom)() );
             }
             aStFrame = pEndFrame->PaintArea();
             {
-                SWRECTFN( pEndFrame )
+                SWRECTFN fnRect(pEndFrame);
                 (aRect.*fnRect->fnSetTop)( (aStFrame.*fnRect->fnGetTop)() );
                 (aRect.*fnRect->fnSetLeft)( (aStFrame.*fnRect->fnGetLeft)() );
                 (aRect.*fnRect->fnSetRight)( (aStFrame.*fnRect->fnGetRight)() );
@@ -276,7 +276,7 @@ static SwRect lcl_CalculateRepaintRect( SwTextFrame& rTextFrame, sal_Int32 nChgS
     }
     if( bSameFrame )
     {
-        SWRECTFN( pStartFrame )
+        SWRECTFN fnRect(pStartFrame);
         if( (aTmp.*fnRect->fnGetTop)() == (aRect.*fnRect->fnGetTop)() )
             (aRect.*fnRect->fnSetLeft)( (aTmp.*fnRect->fnGetLeft)() );
         else

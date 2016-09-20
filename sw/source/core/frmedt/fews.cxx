@@ -745,17 +745,17 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         if ( !pFrame )
             pFrame = pTmp;
         _orRect = pFrame->Frame();
-        SWRECTFN( pFrame )
+        SWRECTFN fnRect(pFrame);
         bRTL = pFrame->IsRightToLeft();
         if ( bRTL )
             aPos = pFrame->Frame().TopRight();
         else
             aPos = (pFrame->Frame().*fnRect->fnGetPos)();
 
-        if( bVert || bVertL2R )
+        if( fnRect.bVert || fnRect.bVertL2R )
         {
-            bVertic = bVert;
-            bVerticalL2R = bVertL2R;
+            bVertic = fnRect.bVert;
+            bVerticalL2R = fnRect.bVertL2R;
             _bMirror = false; // no mirroring in vertical environment
             switch ( _eHoriRelOrient )
             {
@@ -805,7 +805,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
         }
 
-        if ( bVert && !bVertL2R )
+        if ( fnRect.bVert && !fnRect.bVertL2R )
         {
             switch ( _eVertRelOrient )
             {
@@ -817,7 +817,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 break;
             }
         }
-        else if ( bVertL2R )
+        else if ( fnRect.bVertL2R )
         {
             switch ( _eVertRelOrient )
             {
@@ -856,7 +856,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     {
         const SwFrame* pUpper = ( pFrame->IsPageFrame() || pFrame->IsFlyFrame() ) ?
                               pFrame : pFrame->GetUpper();
-        SWRECTFN( pUpper );
+        SWRECTFN fnRect(pUpper);
         if ( _opPercent )
         {
             // If the size is relative from page, then full size should be counted from the page frame.
@@ -904,11 +904,11 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 // to page areas.
                 if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
-                    if ( bVert && !bVertL2R )
+                    if ( fnRect.bVert && !fnRect.bVertL2R )
                     {
                         aPos.X() = aVertEnvironRect.Right();
                     }
-                    else if ( bVertL2R )
+                    else if ( fnRect.bVertL2R )
                     {
                         aPos.X() = aVertEnvironRect.Left();
                     }
@@ -928,7 +928,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 // to page areas.
                 if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
-                    if ( bVert && !bVertL2R )
+                    if ( fnRect.bVert && !fnRect.bVertL2R )
                     {
                         aPos.X() = aVertEnvironRect.Right();
                         if ( _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
@@ -936,7 +936,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                             aPos.setX(aPos.getX() - rVertEnvironLayFrame.GetRightMargin());
                         }
                     }
-                    else if ( bVertL2R )
+                    else if ( fnRect.bVertL2R )
                     {
                         aPos.X() = aVertEnvironRect.Left();
                         if ( _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
@@ -1002,7 +1002,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                         pTextFrame->GetTopOfLine( nTop, aDefaultContentPos );
                     }
                 }
-                if ( bVert || bVertL2R )
+                if ( fnRect.bVert || fnRect.bVertL2R )
                 {
                     aPos.setX(nTop);
                 }
@@ -1032,7 +1032,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     pTextFrame->GetAutoPos( aChRect, aDefaultContentPos );
                 }
                 nLeft = (aChRect.*fnRect->fnGetLeft)();
-                if ( bVert || bVertL2R )
+                if ( fnRect.bVert || fnRect.bVertL2R )
                 {
                     aPos.setY(nLeft);
                 }
@@ -1041,7 +1041,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     aPos.setX(nLeft);
                 }
             }
-            if ( bVert || bVertL2R )
+            if ( fnRect.bVert || fnRect.bVertL2R )
             {
                 _orRect = SwRect( aVertEnvironRect.Left(),
                                   aHoriEnvironRect.Top(),
@@ -1075,7 +1075,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
             // only use 90% of height for character bound
             {
-                if( bVert || bVertL2R )
+                if( fnRect.bVert || fnRect.bVertL2R )
                     _orRect.Width( (_orRect.Width()*9)/10 );
                 else
                     _orRect.Height( (_orRect.Height()*9)/10 );
@@ -1085,10 +1085,10 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         const SwTwips nBaseOfstForFly = ( pFrame->IsTextFrame() && pFly ) ?
                                         static_cast<const SwTextFrame*>(pFrame)->GetBaseOfstForFly( !bWrapThrough ) :
                                          0;
-        if( bVert || bVertL2R )
+        if( fnRect.bVert || fnRect.bVertL2R )
         {
-            bVertic = bVert;
-            bVerticalL2R = bVertL2R;
+            bVertic = fnRect.bVert;
+            bVerticalL2R = fnRect.bVertL2R;
             _bMirror = false;
 
             switch ( _eHoriRelOrient )
