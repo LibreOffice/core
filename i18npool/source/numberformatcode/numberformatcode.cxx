@@ -25,10 +25,8 @@
 
 NumberFormatCodeMapper::NumberFormatCodeMapper(
             const css::uno::Reference < css::uno::XComponentContext >& rxContext )
-        :
-        mxContext( rxContext ),
-        bFormatsValid( false )
 {
+        m_xLocaleData.set( css::i18n::LocaleData::create( rxContext ) );
 }
 
 
@@ -45,10 +43,10 @@ NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage,
     OUString elementUsage = mapElementUsageShortToString(formatUsage);
 
     osl::MutexGuard g(maMutex);
-    getFormats( rLocale );
+    const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
-    for(sal_Int32 i = 0; i < aFormatSeq.getLength(); i++) {
-        if(aFormatSeq[i].isDefault && aFormatSeq[i].formatType == elementType &&
+    for (sal_Int32 i = 0; i < aFormatSeq.getLength(); i++) {
+        if (aFormatSeq[i].isDefault && aFormatSeq[i].formatType == elementType &&
             aFormatSeq[i].formatUsage == elementUsage) {
             css::i18n::NumberFormatCode anumberFormatCode(formatType,
                                                                     formatUsage,
@@ -69,10 +67,10 @@ css::i18n::NumberFormatCode SAL_CALL
 NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(maMutex);
-    getFormats( rLocale );
+    const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
-    for(sal_Int32 i = 0; i < aFormatSeq.getLength(); i++) {
-        if(aFormatSeq[i].formatIndex == formatIndex) {
+    for (sal_Int32 i = 0; i < aFormatSeq.getLength(); i++) {
+        if (aFormatSeq[i].formatIndex == formatIndex) {
             css::i18n::NumberFormatCode anumberFormatCode(mapElementTypeStringToShort(aFormatSeq[i].formatType),
                                                                     mapElementUsageStringToShort(aFormatSeq[i].formatUsage),
                                                                     aFormatSeq[i].formatCode,
@@ -85,7 +83,6 @@ NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::L
     }
     css::i18n::NumberFormatCode defaultNumberFormatCode;
     return defaultNumberFormatCode;
-
 }
 
 
@@ -93,21 +90,21 @@ css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
 NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(maMutex);
-    getFormats( rLocale );
+    const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
     sal_Int32 i, count;
     count = 0;
-    for(i = 0; i < aFormatSeq.getLength(); i++) {
+    for (i = 0; i < aFormatSeq.getLength(); i++) {
         sal_Int16 elementUsage = mapElementUsageStringToShort(aFormatSeq[i].formatUsage);
-        if( elementUsage == formatUsage)
+        if ( elementUsage == formatUsage )
             count++;
     }
 
     css::uno::Sequence<css::i18n::NumberFormatCode> seq(count);
     sal_Int32 j = 0;
-    for(i = 0; i < aFormatSeq.getLength(); i++) {
+    for (i = 0; i < aFormatSeq.getLength(); i++) {
         sal_Int16 elementUsage = mapElementUsageStringToShort(aFormatSeq[i].formatUsage);
-        if( elementUsage == formatUsage) {
+        if ( elementUsage == formatUsage ) {
             seq[j] = css::i18n::NumberFormatCode(mapElementTypeStringToShort(aFormatSeq[i].formatType),
                                                             formatUsage,
                                                             aFormatSeq[i].formatCode,
@@ -119,7 +116,6 @@ NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const css::lang
         }
     }
     return seq;
-
 }
 
 
@@ -127,10 +123,10 @@ css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
 NumberFormatCodeMapper::getAllFormatCodes( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(maMutex);
-    getFormats( rLocale );
+    const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
     css::uno::Sequence<css::i18n::NumberFormatCode> seq(aFormatSeq.getLength());
-    for(sal_Int32 i = 0; i < aFormatSeq.getLength(); i++)
+    for (sal_Int32 i = 0; i < aFormatSeq.getLength(); i++)
     {
         seq[i] = css::i18n::NumberFormatCode(mapElementTypeStringToShort(aFormatSeq[i].formatType),
                                                         mapElementUsageStringToShort(aFormatSeq[i].formatUsage),
@@ -146,30 +142,26 @@ NumberFormatCodeMapper::getAllFormatCodes( const css::lang::Locale& rLocale ) th
 
 // --- private implementation -----------------------------------------
 
-void NumberFormatCodeMapper::setupLocale( const css::lang::Locale& rLocale )
+const css::uno::Sequence< css::i18n::FormatElement >& NumberFormatCodeMapper::getFormats( const css::lang::Locale& rLocale )
 {
-    if ( aLocale.Country    != rLocale.Country
-      || aLocale.Language   != rLocale.Language
-      || aLocale.Variant    != rLocale.Variant )
+    /* Find the FormatElement Sequence in the cache */
+    for (const FormatElementCacheItem& item : m_aFormatElementCache)
     {
-        bFormatsValid = false;
-        aLocale = rLocale;
+        if ( item.first == rLocale )
+            return item.second;
     }
-}
 
+    /* Not found; Get the FormatElement Sequence for the given Locale */
+    css::uno::Sequence< css::i18n::FormatElement > aFormatElementSequence;
+    if ( m_xLocaleData.is() )
+        aFormatElementSequence = m_xLocaleData->getAllFormats( rLocale );
 
-void NumberFormatCodeMapper::getFormats( const css::lang::Locale& rLocale )
-{
-    setupLocale( rLocale );
-    if ( !bFormatsValid )
-    {
-        createLocaleDataObject();
-        if( !mxLocaleData.is() )
-            aFormatSeq = css::uno::Sequence< css::i18n::FormatElement > (0);
-        else
-            aFormatSeq = mxLocaleData->getAllFormats( aLocale );
-        bFormatsValid = true;
-    }
+    /* Add the FormatElement Sequence to the cache */
+    const int FORMATELEMENTCACHE_SIZE = 3;
+    if ( m_aFormatElementCache.size() > FORMATELEMENTCACHE_SIZE )
+        m_aFormatElementCache.pop_front();
+    m_aFormatElementCache.emplace_back( rLocale, aFormatElementSequence );
+    return m_aFormatElementCache.back().second;
 }
 
 
@@ -251,15 +243,6 @@ NumberFormatCodeMapper::mapElementUsageStringToShort(const OUString& formatUsage
     return 0;
 }
 
-
-void
-NumberFormatCodeMapper::createLocaleDataObject() {
-
-    if(mxLocaleData.is())
-        return;
-
-    mxLocaleData.set( css::i18n::LocaleData::create(mxContext) );
-}
 
 OUString SAL_CALL
 NumberFormatCodeMapper::getImplementationName()
