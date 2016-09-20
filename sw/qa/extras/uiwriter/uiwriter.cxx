@@ -190,6 +190,7 @@ public:
     void testClassificationPaste();
     void testRedlineParam();
     void testRedlineViewAuthor();
+    void testRedlineTimestamp();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -285,6 +286,7 @@ public:
     CPPUNIT_TEST(testClassificationPaste);
     CPPUNIT_TEST(testRedlineParam);
     CPPUNIT_TEST(testRedlineViewAuthor);
+    CPPUNIT_TEST(testRedlineTimestamp);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3355,6 +3357,35 @@ void SwUiWriterTest::testRedlineViewAuthor()
     uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
     // This was 'Unknown Author' instead of 'A U. Thor'.
     CPPUNIT_ASSERT_EQUAL(aAuthor, xField->getPropertyValue("Author").get<OUString>());
+}
+
+void SwUiWriterTest::testRedlineTimestamp()
+{
+    // Test that a redline timestamp's second is not always 0.
+
+    // Create a document with minimal content.
+    SwDoc* pDoc = createDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert("middle");
+
+    // Turn on track changes, and add changes to the start and to the end of
+    // the document.
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    pWrtShell->SttDoc();
+    pWrtShell->Insert("aaa");
+    osl::Thread::wait(std::chrono::seconds(1));
+    pWrtShell->EndDoc();
+    pWrtShell->Insert("zzz");
+
+    // Now assert that at least one of the the seconds are not 0.
+    const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rTable.size());
+    sal_uInt16 nSec1 = rTable[0]->GetRedlineData().GetTimeStamp().GetSec();
+    sal_uInt16 nSec2 = rTable[0]->GetRedlineData().GetTimeStamp().GetSec();
+    // This failed, seconds was always 0.
+    CPPUNIT_ASSERT(nSec1 != 0 || nSec2 != 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
