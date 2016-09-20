@@ -1,0 +1,11 @@
+--- configure
++++ configure
+@@ -4255,7 +4255,7 @@
+ 
+   fi
+ 
+-CXXFLAGS="$CXXFLAGS -fvisibility=hidden -Wall -pthread"
++CXXFLAGS="-fvisibility=hidden $CXXFLAGS -Wall -pthread"
+ 
+ # ===========================
+ # Find required base packages
