@@ -418,7 +418,7 @@ sub Download (@)
         # We can not check the existence of file URLs because they point to extensions that
         # have yet to be built.
 
-        next if $protocol ne "http";
+        next if $protocol !~ /(http|https)/;
         my $candidate = File::Spec->catfile($download_path, $name);
         if ( ! -f $candidate)
         {
