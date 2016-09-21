@@ -304,7 +304,7 @@ inline double approxSub(double a, double b)
  */
 inline double approxFloor(double a)
 {
-    return floor( approxValue( a ));
+    return floor( a + 5e-15 );
 }
 
 /** ceil() method taking approxValue() into account.
@@ -313,7 +313,7 @@ inline double approxFloor(double a)
  */
 inline double approxCeil(double a)
 {
-    return ceil( approxValue( a ));
+    return ceil( a - 5e-15 );
 }
 
 /** Tests whether a value is neither INF nor NAN.
