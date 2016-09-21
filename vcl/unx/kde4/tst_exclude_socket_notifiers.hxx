@@ -35,7 +35,7 @@ class TestExcludeSocketNotifiers
     Q_OBJECT
     public:
         TestExcludeSocketNotifiers( const int* pipes );
-        virtual ~TestExcludeSocketNotifiers();
+        virtual ~TestExcludeSocketNotifiers() = override;
         bool received;
     public slots:
         void slotReceived();
