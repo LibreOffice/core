@@ -138,7 +138,7 @@ class SwTextFrame: public SwContentFrame
     void FillCursorPos( SwFillData &rFill ) const;
 
     // Format exactly one Line
-    bool FormatLine( SwTextFormatter &rLine, const bool bPrev );
+    bool FormatLine(SwTextFormatter &rLine, const bool bPrev, int& rLoopProtection);
 
     // In order to safe stack space, we split this method:
     // Format_ calls Format_ with parameters
