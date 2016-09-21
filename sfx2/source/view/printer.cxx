@@ -136,6 +136,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
 
 
 SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
+    VclReferenceBase(),
     Printer( rPrinter.GetName() ),
     pOptions( rPrinter.GetOptions().Clone() ),
     pImpl( new SfxPrinter_Impl ),

@@ -22,16 +22,22 @@
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/vclreferencebase.hxx>
 #include <vector>
 
 namespace vcl { class Window; }
 class Dialog;
 class Bitmap;
 
-class VCL_DLLPUBLIC VclAbstractDialog
+/**
+* Some things multiple-inherit from VclAbstractDialog and OutputDevice,
+* so we need to use virtual inheritance to keep the referencing counting
+* OK.
+*/
+class VCL_DLLPUBLIC VclAbstractDialog : public virtual VclReferenceBase
 {
 public:
-    virtual             ~VclAbstractDialog();
+    virtual             ~VclAbstractDialog() override;
     virtual short       Execute() = 0;
 
     // Screenshot interface
@@ -41,10 +47,10 @@ public:
     virtual OString GetScreenshotId() const { return OString(); };
 };
 
-class VCL_DLLPUBLIC VclAbstractDialog2
+class VCL_DLLPUBLIC VclAbstractDialog2 : public virtual VclReferenceBase
 {
 public:
-    virtual             ~VclAbstractDialog2();
+    virtual             ~VclAbstractDialog2() override;
 
     virtual void        StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) = 0;
     virtual long        GetResult() = 0;
@@ -80,13 +86,13 @@ public:
     virtual             ~VclAbstractDialogFactory();    // needed for export of vtable
     static VclAbstractDialogFactory* Create();
     // The Id is an implementation detail of the factory
-    virtual VclAbstractDialog* CreateVclDialog(vcl::Window* pParent, sal_uInt32 nId) = 0;
+    virtual VclPtr<VclAbstractDialog> CreateVclDialog(vcl::Window* pParent, sal_uInt32 nId) = 0;
 
     // creates instance of PasswordToOpenModifyDialog from cui
-    virtual AbstractPasswordToOpenModifyDialog* CreatePasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) = 0;
+    virtual VclPtr<AbstractPasswordToOpenModifyDialog> CreatePasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) = 0;
 
     // creates instance of ScreenshotAnnotationDlg from cui
-    virtual AbstractScreenshotAnnotationDlg* CreateScreenshotAnnotationDlg(
+    virtual VclPtr<AbstractScreenshotAnnotationDlg> CreateScreenshotAnnotationDlg(
         vcl::Window* pParent,
         Dialog& rParentDialog) = 0;
 };
