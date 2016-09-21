@@ -1091,7 +1091,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
     rOStream.WriteBool( bOwnerOfPool );
 
-    // First store the pool, later only the Surregate
+    // First store the pool, later only the Surrogate
     if ( bOwnerOfPool )
     {
         GetPool()->SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );
@@ -1211,7 +1211,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         rOStream.WriteUInt16( nAttribs );
 
         // And the individual attributes
-        // Items as Surregate => always 8 bytes per Attribute
+        // Items as Surrogate => always 8 bytes per Attribute
         // Which = 2; Surregat = 2; Start = 2; End = 2;
         for (size_t nAttr = 0; nAttr < nAttribs; ++nAttr)
         {
@@ -1331,7 +1331,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         }
 
         // And the individual attributes
-        // Items as Surregate => always 8 bytes per Attributes
+        // Items as Surrogate => always 8 bytes per Attributes
         // Which = 2; Surregat = 2; Start = 2; End = 2;
         for (size_t nAttr = 0; nAttr < nAttribs; ++nAttr)
         {
