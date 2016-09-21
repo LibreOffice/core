@@ -1931,7 +1931,7 @@ class ExitTimer : public Timer
 IMPL_LINK_NOARG_TYPED(Desktop, OpenClients_Impl, void*, void)
 {
     try {
-        // #114963#
+        // #i114963#
         // Enable IPC thread before OpenClients
         //
         // This is because it is possible for another client to connect during the OpenClients() call.
