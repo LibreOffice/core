@@ -856,7 +856,7 @@ void ScFisher();
 void ScFisherInv();
 void ScFact();
 void ScNormDist( int nMinParamCount );
-void ScGammaDist( int nMinParamCount );
+void ScGammaDist( bool bODFF );
 void ScGammaInv();
 void ScExpDist();
 void ScBinomDist();
