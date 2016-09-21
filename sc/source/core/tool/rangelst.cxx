@@ -1376,59 +1376,50 @@ int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
     {
         return 1;
     }
+
+    // gleiche Tabs
+    if ( rStartPos1.Col() < rStartPos2.Col() )
+        return -1;
+    if ( rStartPos1.Col() > rStartPos2.Col() )
+        return 1;
+    // gleiche Cols
+    if ( rStartPos1.Row() < rStartPos2.Row() )
+        return -1;
+    if ( rStartPos1.Row() > rStartPos2.Row() )
+        return 1;
+
+    // erste Ecke gleich, zweite Ecke
+    const ScAddress& rEndPos1 = ps1->pPair->GetRange(0).aEnd;
+    const ScAddress& rEndPos2 = ps2->pPair->GetRange(0).aEnd;
+    if ( rEndPos1.Tab() == rEndPos2.Tab() )
+        nComp = 0;
     else
     {
-        // gleiche Tabs
-        if ( rStartPos1.Col() < rStartPos2.Col() )
-            return -1;
-        if ( rStartPos1.Col() > rStartPos2.Col() )
-            return 1;
-        // gleiche Cols
-        if ( rStartPos1.Row() < rStartPos2.Row() )
-            return -1;
-        if ( rStartPos1.Row() > rStartPos2.Row() )
-            return 1;
-        // erste Ecke gleich, zweite Ecke
-        {
-            const ScAddress& rEndPos1 = ps1->pPair->GetRange(0).aEnd;
-            const ScAddress& rEndPos2 = ps2->pPair->GetRange(0).aEnd;
-            if ( rEndPos1.Tab() == rEndPos2.Tab() )
-                nComp = 0;
-            else
-            {
-                ps1->pDoc->GetName( rEndPos1.Tab(), aStr1 );
-                ps2->pDoc->GetName( rEndPos2.Tab(), aStr2 );
-                nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
-            }
-            if (nComp < 0)
-            {
-                return -1;
-            }
-            else if (nComp > 0)
-            {
-                return 1;
-            }
-            else
-            {
-                // gleiche Tabs
-                if ( rEndPos1.Col() < rEndPos2.Col() )
-                    return -1;
-                if ( rEndPos1.Col() > rEndPos2.Col() )
-                    return 1;
-                // gleiche Cols
-                if ( rEndPos1.Row() < rEndPos2.Row() )
-                    return -1;
-                if ( rEndPos1.Row() > rEndPos2.Row() )
-                    return 1;
-                return 0;
-            }
-        }
+        ps1->pDoc->GetName( rEndPos1.Tab(), aStr1 );
+        ps2->pDoc->GetName( rEndPos2.Tab(), aStr2 );
+        nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
     }
-#ifndef _MSC_VER // MSVC is good enough to warn about unreachable code here.
-                 // Or stupid enough to bother warning about it, depending
-                 // on your point of view.
-    return 0; // just in case
-#endif
+    if (nComp < 0)
+    {
+        return -1;
+    }
+    else if (nComp > 0)
+    {
+        return 1;
+    }
+
+    // gleiche Tabs
+    if ( rEndPos1.Col() < rEndPos2.Col() )
+        return -1;
+    if ( rEndPos1.Col() > rEndPos2.Col() )
+        return 1;
+    // gleiche Cols
+    if ( rEndPos1.Row() < rEndPos2.Row() )
+        return -1;
+    if ( rEndPos1.Row() > rEndPos2.Row() )
+        return 1;
+
+    return 0;
 }
 
 void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
