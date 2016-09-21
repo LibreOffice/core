@@ -172,9 +172,9 @@ sal_Int32 SwTextBoxHelper::getCount(const SwDoc* pDoc)
 {
     sal_Int32 nRet = 0;
     const SwFrameFormats& rSpzFrameFormats = *pDoc->GetSpzFrameFormats();
-    for (SwFrameFormats::const_iterator it = rSpzFrameFormats.begin(); it != rSpzFrameFormats.end(); ++it)
+    for (const auto pFormat : rSpzFrameFormats)
     {
-        if (isTextBox(*it, RES_FLYFRMFMT))
+        if (isTextBox(pFormat, RES_FLYFRMFMT))
             ++nRet;
     }
     return nRet;
@@ -531,9 +531,8 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
 
 void SwTextBoxHelper::saveLinks(const SwFrameFormats& rFormats, std::map<const SwFrameFormat*, const SwFrameFormat*>& rLinks)
 {
-    for (std::size_t i = 0; i < rFormats.size(); ++i)
+    for (const auto pFormat : rFormats)
     {
-        const SwFrameFormat* pFormat = rFormats[i];
         if (SwFrameFormat* pTextBox = getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
             rLinks[pFormat] = pTextBox;
     }
