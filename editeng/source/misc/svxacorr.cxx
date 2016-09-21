@@ -75,10 +75,15 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::utl;
 
-static const int C_NONE             = 0x00;
-static const int C_FULL_STOP        = 0x01;
-static const int C_EXCLAMATION_MARK = 0x02;
-static const int C_QUESTION_MARK    = 0x04;
+enum class Flags {
+    NONE            = 0x00,
+    FullStop        = 0x01,
+    ExclamationMark = 0x02,
+    QuestionMark    = 0x04,
+};
+namespace o3tl {
+    template<> struct typed_flags<Flags> : is_typed_flags<Flags, 0x07> {};
+}
 static const sal_Unicode cNonBreakingSpace = 0xA0;
 
 static const sal_Char pXMLImplWrdStt_ExcptLstStr[] = "WordExceptList.xml";
@@ -915,7 +920,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     if( !bAtStart )
     {
         bool bContinue = true;
-        int nFlag = C_NONE;
+        Flags nFlag = Flags::NONE;
         do {
             switch( *pStr )
             {
@@ -933,30 +938,30 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
                         //previous sentence, so don't autocapitalize this word
                         return false;
                     }
-                    if( nFlag & C_FULL_STOP )
+                    if( nFlag & Flags::FullStop )
                         return false;  // no valid separator -> no replacement
-                    nFlag |= C_FULL_STOP;
+                    nFlag |= Flags::FullStop;
                     pExceptStt = pStr;
                 }
                 break;
             case '!':
             case 0xFF01 :
                 {
-                    if( nFlag & C_EXCLAMATION_MARK )
+                    if( nFlag & Flags::ExclamationMark )
                         return false;   // no valid separator -> no replacement
-                    nFlag |= C_EXCLAMATION_MARK;
+                    nFlag |= Flags::ExclamationMark;
                 }
                 break;
             case '?':
             case 0xFF1F :
                 {
-                    if( nFlag & C_QUESTION_MARK)
+                    if( nFlag & Flags::QuestionMark)
                         return false;   // no valid separator -> no replacement
-                    nFlag |= C_QUESTION_MARK;
+                    nFlag |= Flags::QuestionMark;
                 }
                 break;
             default:
-                if( !nFlag )
+                if( nFlag == Flags::NONE )
                     return false;       // no valid separator -> no replacement
                 else
                     bContinue = false;
@@ -968,7 +973,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
                 return false;       // no valid separator -> no replacement
             }
         } while( bContinue );
-        if( C_FULL_STOP != nFlag )
+        if( Flags::FullStop != nFlag )
             pExceptStt = nullptr;
     }
 
