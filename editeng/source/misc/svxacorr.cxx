@@ -235,7 +235,15 @@ bool SvxAutoCorrect::IsAutoCorrectChar( sal_Unicode cChar )
             cChar == '*'  || cChar == '_'  || cChar == '%' ||
             cChar == '.'  || cChar == ','  || cChar == ';' ||
             cChar == ':'  || cChar == '?' || cChar == '!' ||
-            cChar == '/'  || cChar == '-';
+            cChar == '/';
+}
+
+namespace
+{
+    bool IsCompoundWordDelimChar(sal_Unicode cChar)
+    {
+        return  cChar == '-' || SvxAutoCorrect::IsAutoCorrectChar(cChar);
+    }
 }
 
 bool SvxAutoCorrect::NeedsHardspaceAutocorr( sal_Unicode cChar )
@@ -375,7 +383,7 @@ bool SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
     // Find all compound word delimiters
     for (sal_Int32 n = nSttPos; n < nEndPos; ++n)
     {
-        if (IsAutoCorrectChar(rTxt[ n ]))
+        if (IsCompoundWordDelimChar(rTxt[ n ]))
         {
             aDelimiters.push_back( n + 1 ); // Get position of char after delimiter
         }
@@ -386,7 +394,7 @@ bool SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
     // char will not be included in rTxt.
     // If the last AutoCorrect char was not a newline, then the AutoCorrect
     // character will be the last character in rTxt.
-    if (!IsAutoCorrectChar(rTxt[nEndPos-1]))
+    if (!IsCompoundWordDelimChar(rTxt[nEndPos-1]))
         aDelimiters.push_back(nEndPos);
 
     // Iterate through the word and all words that compose it.
@@ -1326,10 +1334,6 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             OUString aPara;
             OUString* pPara = IsAutoCorrFlag(CapitalStartSentence) ? &aPara : nullptr;
 
-            // since LibO 4.1, '-' is a word separator
-            // fdo#67742 avoid "--" to be replaced by "–" if next is "-"
-            if( rTxt.endsWith( "---" ) )
-                    break;
             bool bChgWord = rDoc.ChgAutoCorrWord( nCapLttrPos, nInsPos,
                                                     *this, pPara );
             if( !bChgWord )
