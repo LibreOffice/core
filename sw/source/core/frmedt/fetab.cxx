@@ -646,9 +646,10 @@ void SwFEShell::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly )
     SET_CURR_SHELL( this );
     StartAllAction();
 
-    do {
+    do
+    {
         pBox = pBox->GetUpper();
-    } while ( !pBox->IsCellFrame() );
+    } while (pBox && !pBox->IsCellFrame());
 
     GetDoc()->SetTabCols( rNew, bCurRowOnly, static_cast<SwCellFrame*>(pBox) );
     EndAllActionAndCall();
@@ -660,8 +661,13 @@ void SwFEShell::GetTabCols( SwTabCols &rToFill ) const
     if( !pFrame || !pFrame->IsInTab() )
         return;
     do
-    {   pFrame = pFrame->GetUpper();
-    } while ( !pFrame->IsCellFrame() );
+    {
+        pFrame = pFrame->GetUpper();
+    }
+    while (pFrame && !pFrame->IsCellFrame());
+
+    if (!pFrame)
+        return;
 
     GetTabCols_( rToFill, pFrame );
 }
@@ -672,8 +678,12 @@ void SwFEShell::GetTabRows( SwTabCols &rToFill ) const
     if( !pFrame || !pFrame->IsInTab() )
         return;
     do
-    {   pFrame = pFrame->GetUpper();
-    } while ( !pFrame->IsCellFrame() );
+    {
+        pFrame = pFrame->GetUpper();
+    } while (pFrame && !pFrame->IsCellFrame());
+
+    if (!pFrame)
+        return;
 
     GetTabRows_( rToFill, pFrame );
 }
@@ -687,9 +697,10 @@ void SwFEShell::SetTabRows( const SwTabCols &rNew, bool bCurColOnly )
     SET_CURR_SHELL( this );
     StartAllAction();
 
-    do {
+    do
+    {
         pBox = pBox->GetUpper();
-    } while ( !pBox->IsCellFrame() );
+    } while (pBox && !pBox->IsCellFrame());
 
     GetDoc()->SetTabRows( rNew, bCurColOnly, static_cast<SwCellFrame*>(pBox) );
     EndAllActionAndCall();
@@ -1029,18 +1040,17 @@ static sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
     else
         pFrame = nullptr;
 
-    if (!pFrame || !pFrame->IsInTab())
-        return USHRT_MAX;
+    const SwFrame* pRow = (pFrame && pFrame->IsInTab()) ? pFrame->GetUpper() : nullptr;
 
-    sal_uInt16 nRet = USHRT_MAX;
-
-    const SwFrame* pRow = pFrame->GetUpper();
-    while ( !pRow->GetUpper()->IsTabFrame() )
+    while (pRow && (!pRow->GetUpper() || !pRow->GetUpper()->IsTabFrame()))
         pRow = pRow->GetUpper();
+
+    if (!pRow)
+        return USHRT_MAX;
 
     const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(pRow->GetUpper());
     const SwTableLine* pTabLine = static_cast<const SwRowFrame*>(pRow)->GetTabLine();
-
+    sal_uInt16 nRet = USHRT_MAX;
     sal_uInt16 nI = 0;
     while ( nI < pTabFrame->GetTable()->GetTabLines().size() )
     {
@@ -1336,11 +1346,18 @@ size_t SwFEShell::GetCurTabColNum() const
     if (!pFrame || !pFrame->IsInTab())
         return 0;
 
-    size_t nRet = 0;
-    do {            // JP 26.09.95: why compare with ContentFrame
-                    //              and not with CellFrame ????
+    do
+    {
+        // JP 26.09.95: why compare with ContentFrame
+        //              and not with CellFrame ????
         pFrame = pFrame->GetUpper();
-    } while ( !pFrame->IsCellFrame() );
+    } while (pFrame && !pFrame->IsCellFrame());
+
+    if (!pFrame)
+        return 0;
+
+    size_t nRet = 0;
+
     SWRECTFN( pFrame )
 
     const SwPageFrame* pPage = pFrame->FindPageFrame();
