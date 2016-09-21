@@ -2107,8 +2107,9 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
     return fFactor;
 }
 
-void ScInterpreter::ScGammaDist( int nMinParamCount )
+void ScInterpreter::ScGammaDist( bool bODFF )
 {
+    sal_uInt8 nMinParamCount = ( bODFF ? 3 : 4 );
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, nMinParamCount, 4 ) )
         return;
@@ -2120,7 +2121,7 @@ void ScInterpreter::ScGammaDist( int nMinParamCount )
     double fBeta = GetDouble();                 // scale
     double fAlpha = GetDouble();                // shape
     double fX = GetDouble();                    // x
-    if (fAlpha <= 0.0 || fBeta <= 0.0)
+    if ((!bODFF && fX < 0) || fAlpha <= 0.0 || fBeta <= 0.0)
         PushIllegalArgument();
     else
     {

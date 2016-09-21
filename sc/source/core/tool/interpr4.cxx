@@ -4299,8 +4299,8 @@ StackVar ScInterpreter::Interpret()
                 case ocGammaLn          :
                 case ocGammaLn_MS       : ScLogGamma();                 break;
                 case ocGamma            : ScGamma();                    break;
-                case ocGammaDist        : ScGammaDist( 3 );             break;
-                case ocGammaDist_MS     : ScGammaDist( 4 );             break;
+                case ocGammaDist        : ScGammaDist( true );          break;
+                case ocGammaDist_MS     : ScGammaDist( false );         break;
                 case ocGammaInv         :
                 case ocGammaInv_MS      : ScGammaInv();                 break;
                 case ocChiTest          :
