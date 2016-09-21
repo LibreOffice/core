@@ -2032,11 +2032,11 @@ bool SvxKerningItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText = GetMetricText( (long)GetValue(), eCoreUnit, MAP_POINT, pIntl ) +
                     " " + EE_RESSTR(GetMetricId(MAP_POINT));
             return true;
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         {
             rText = EE_RESSTR(RID_SVXITEMS_KERNING_COMPLETE);
             sal_uInt16 nId = 0;

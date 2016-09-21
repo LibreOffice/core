@@ -191,11 +191,11 @@ bool SvxPaperBinItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText = OUString::number( GetValue() );
             return true;
 
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         {
             sal_uInt8 nValue = GetValue();
 
@@ -330,13 +330,13 @@ bool SvxSizeItem::GetPresentation
     OUString cpDelimTmp(cpDelim);
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText = GetMetricText( aSize.Width(), eCoreUnit, ePresUnit, pIntl ) +
                     cpDelimTmp +
                     GetMetricText( aSize.Height(), eCoreUnit, ePresUnit, pIntl );
             return true;
 
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             rText = EE_RESSTR(RID_SVXITEMS_SIZE_WIDTH) +
                     GetMetricText( aSize.Width(), eCoreUnit, ePresUnit, pIntl ) +
                     " " + EE_RESSTR(GetMetricId(ePresUnit)) +
@@ -603,7 +603,7 @@ bool SvxLRSpaceItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
         {
             if ( 100 != nPropLeftMargin )
             {
@@ -633,7 +633,7 @@ bool SvxLRSpaceItem::GetPresentation
                                         eCoreUnit, ePresUnit, pIntl );
             return true;
         }
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         {
             rText = EE_RESSTR(RID_SVXITEMS_LRSPACE_LEFT);
             if ( 100 != nPropLeftMargin )
@@ -981,7 +981,7 @@ bool SvxULSpaceItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
         {
             if ( 100 != nPropUpper )
             {
@@ -1000,7 +1000,7 @@ bool SvxULSpaceItem::GetPresentation
                 rText += GetMetricText( (long)nLower, eCoreUnit, ePresUnit, pIntl );
             return true;
         }
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         {
             rText = EE_RESSTR(RID_SVXITEMS_ULSPACE_UPPER);
             if ( 100 != nPropUpper )
@@ -1464,7 +1464,7 @@ bool SvxShadowItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
         {
             rText = ::GetColorString( aShadowColor ) + OUString(cpDelim);
             sal_uInt16 nId = RID_SVXITEMS_TRANSPARENT_FALSE;
@@ -1479,7 +1479,7 @@ bool SvxShadowItem::GetPresentation
                     EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + eLocation);
             return true;
         }
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         {
             rText = EE_RESSTR(RID_SVXITEMS_SHADOW_COMPLETE) +
                     ::GetColorString( aShadowColor ) +
@@ -2066,7 +2066,7 @@ bool SvxBoxItem::GetPresentation
     OUString cpDelimTmp = OUString(cpDelim);
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
         {
             rText.clear();
 
@@ -2106,7 +2106,7 @@ bool SvxBoxItem::GetPresentation
             }
             return true;
         }
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         {
             if( !(pTop || pBottom || pLeft || pRight) )
             {
@@ -3162,7 +3162,7 @@ bool SvxLineItem::GetPresentation
 
     if ( pLine )
         rText = pLine->GetValueString( eCoreUnit, ePresUnit, pIntl,
-            (SFX_ITEM_PRESENTATION_COMPLETE == ePres) );
+            (SfxItemPresentation::Complete == ePres) );
     return true;
 }
 

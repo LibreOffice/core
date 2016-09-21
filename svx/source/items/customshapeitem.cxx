@@ -264,12 +264,12 @@ bool SdrCustomShapeGeometryItem::GetPresentation(
     MapUnit /*ePresentationMetric*/, OUString &rText, const IntlWrapper *) const
 {
     rText += " ";
-    if ( ePresentation == SFX_ITEM_PRESENTATION_COMPLETE )
+    if ( ePresentation == SfxItemPresentation::Complete )
     {
         rText = " " + rText;
         return true;
     }
-    else if ( ePresentation == SFX_ITEM_PRESENTATION_NAMELESS )
+    else if ( ePresentation == SfxItemPresentation::Nameless )
         return true;
     return false;
 }

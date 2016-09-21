@@ -1003,7 +1003,7 @@ void SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItemS
                         } // switch
                         if (aEntry.bIsNum) aEntry.bCanNum = true;
 
-                        rItem.GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS,
+                        rItem.GetPresentation(SfxItemPresentation::Nameless,
                                               pPool->GetMetric(nWhich),
                                               MAP_MM, aEntry.aValue);
                         if (aEntry.bCanNum)

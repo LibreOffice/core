@@ -295,11 +295,11 @@ bool ScProtectionAttr::GetPresentation
 
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText = GetValueText();
             break;
 
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             rText  = ScGlobal::GetRscString(STR_PROTECTION)
                 + ": "
                 + (bProtection ? aStrYes : aStrNo)
@@ -401,11 +401,11 @@ bool ScRangeItem::GetPresentation
 
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         rText = ScGlobal::GetRscString(STR_AREA) + ": ";
         SAL_FALLTHROUGH;
 
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
         {
             /* Always use OOo:A1 format */
             rText += aRange.Format();
@@ -500,7 +500,7 @@ bool ScTableListItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             {
             rText  = "(";
             if ( nCount>0 && pTabArr )
@@ -514,7 +514,7 @@ bool ScTableListItem::GetPresentation
             }
             return true;
 
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             rText.clear();
             return false;
 
@@ -834,7 +834,7 @@ bool ScViewObjectModeItem::GetPresentation
 
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             switch( Which() )
             {
                 case SID_SCATTR_PAGE_CHARTS:
@@ -852,7 +852,7 @@ bool ScViewObjectModeItem::GetPresentation
                 default: break;
             }
             SAL_FALLTHROUGH;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW+GetValue());
             return true;
             break;
@@ -1000,12 +1000,12 @@ bool ScPageScaleToItem::GetPresentation(
 
     switch( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText = aValue;
             return true;
         break;
 
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             rText = aName + " (" + aValue + ")";
             return true;
         break;

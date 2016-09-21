@@ -141,9 +141,9 @@ bool SvxGrfCrop::GetPresentation(
     rText.clear();
     switch( ePres )
     {
-    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SfxItemPresentation::Nameless:
         return true;
-    case SFX_ITEM_PRESENTATION_COMPLETE:
+    case SfxItemPresentation::Complete:
         rText = "L: "  + OUString(::GetMetricText( GetLeft(), eCoreUnit, MAP_MM, pIntl )) +
                 " R: " + OUString(::GetMetricText( GetRight(), eCoreUnit, MAP_MM, pIntl )) +
                 " T: " + OUString(::GetMetricText( GetTop(), eCoreUnit, MAP_MM, pIntl )) +

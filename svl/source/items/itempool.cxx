@@ -469,7 +469,7 @@ bool SfxItemPool::GetPresentation
 )   const
 {
     return rItem.GetPresentation(
-        SFX_ITEM_PRESENTATION_COMPLETE, GetMetric(rItem.Which()), eMetric, rText, pIntlWrapper );
+        SfxItemPresentation::Complete, GetMetric(rItem.Which()), eMetric, rText, pIntlWrapper );
 }
 
 

@@ -422,8 +422,8 @@ bool SvxAdjustItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Nameless:
+        case SfxItemPresentation::Complete:
             rText = GetValueTextByPos( (sal_uInt16)GetAdjust() );
             return true;
         default: ;//prevent warning
@@ -537,13 +537,13 @@ bool SvxWidowsItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
         {
             rText = EE_RESSTR(RID_SVXITEMS_LINES);
             break;
         }
 
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         {
             rText = EE_RESSTR(RID_SVXITEMS_WIDOWS_COMPLETE) + " " + EE_RESSTR(RID_SVXITEMS_LINES);
             break;
@@ -598,13 +598,13 @@ bool SvxOrphansItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
         {
             rText = EE_RESSTR(RID_SVXITEMS_LINES);
             break;
         }
 
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         {
             rText = EE_RESSTR(RID_SVXITEMS_ORPHANS_COMPLETE) + " " + EE_RESSTR(RID_SVXITEMS_LINES);
             break;
@@ -711,7 +711,7 @@ bool SvxHyphenZoneItem::GetPresentation
     OUString cpDelimTmp(cpDelim);
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
         {
             sal_uInt16 nId = RID_SVXITEMS_HYPHEN_FALSE;
 
@@ -728,7 +728,7 @@ bool SvxHyphenZoneItem::GetPresentation
                     OUString::number( nMaxHyphens );
             return true;
         }
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         {
             sal_uInt16 nId = RID_SVXITEMS_HYPHEN_FALSE;
 
@@ -1045,7 +1045,7 @@ bool SvxTabStopItem::GetPresentation
                 rText += ",";
             rText += GetMetricText(
                 ((*this)[i]).GetTabPos(), eCoreUnit, ePresUnit, pIntl );
-            if ( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+            if ( SfxItemPresentation::Complete == ePres )
             {
                 rText += " " + EE_RESSTR(GetMetricId(ePresUnit));
             }
@@ -1256,12 +1256,12 @@ bool SvxPageModelItem::GetPresentation
 
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             if ( bSet )
                 rText = GetValue();
             return true;
 
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             if ( bSet )
             {
                 rText = EE_RESSTR(RID_SVXITEMS_PAGEMODEL_COMPLETE) + GetValue();
