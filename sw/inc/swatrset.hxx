@@ -74,8 +74,6 @@ class SwFormatHoriOrient;
 class SwFormatAnchor;
 class SvxBoxItem;
 class SvxBrushItem;
-class XFillStyleItem;
-class XFillGradientItem;
 class SvxShadowItem;
 class SwFormatPageDesc;
 class SvxFormatBreakItem;

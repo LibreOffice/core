@@ -36,8 +36,6 @@ class SwDoc;
 class SwAttrSet;
 class SdrObject;
 class SvxBrushItem;
-class XFillStyleItem;
-class XFillGradientItem;
 class SdrMarkList;
 class SwNodeIndex;
 class OutputDevice;

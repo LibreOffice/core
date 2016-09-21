@@ -91,7 +91,6 @@ namespace vcl
 #define VSHELLFLAG_SHARELAYOUT          ((long)0x2)
 typedef std::shared_ptr<SwRootFrame> SwRootFramePtr;
 
-class SwViewShell;
 class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 {
     friend void SetOutDev( SwViewShell *pSh, OutputDevice *pOut );
