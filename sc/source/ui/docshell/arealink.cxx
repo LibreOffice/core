@@ -49,9 +49,9 @@
 struct AreaLink_Impl
 {
     ScDocShell* m_pDocSh;
-    AbstractScLinkedAreaDlg* m_pDialog;
+    VclPtr<AbstractScLinkedAreaDlg> m_pDialog;
 
-    AreaLink_Impl() : m_pDocSh( nullptr ), m_pDialog( nullptr ) {}
+    AreaLink_Impl() : m_pDocSh( nullptr ), m_pDialog() {}
 };
 
 
@@ -88,7 +88,7 @@ void ScAreaLink::Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& /* rEn
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    AbstractScLinkedAreaDlg* pDlg = pFact->CreateScLinkedAreaDlg(pParent);
+    VclPtr<AbstractScLinkedAreaDlg> pDlg = pFact->CreateScLinkedAreaDlg(pParent);
     OSL_ENSURE(pDlg, "Dialog create fail!");
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
     pImpl->m_pDialog = pDlg;
@@ -498,7 +498,7 @@ IMPL_LINK_NOARG(ScAreaLink, AreaEndEditHdl, Dialog&, void)
         sfx2::MakeLnkName( aNewLinkName, nullptr, aFileName, aSourceArea, &aFilterName );
         SetName( aNewLinkName );
     }
-    pImpl->m_pDialog = nullptr;    // dialog is deleted with parent
+    pImpl->m_pDialog.clear();    // dialog is deleted with parent
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

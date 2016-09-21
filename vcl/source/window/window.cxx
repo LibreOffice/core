@@ -93,14 +93,24 @@ Window::Window( WindowType nType ) :
 }
 
 Window::Window( vcl::Window* pParent, WinBits nStyle ) :
-    Window(WINDOW_WINDOW)
+    mpWindowImpl(new WindowImpl( WINDOW_WINDOW ))
 {
+    meOutDevType = OUTDEV_WINDOW;
+
+    // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
+    mbEnableRTL = AllSettings::GetLayoutRTL();
+
     ImplInit( pParent, nStyle, nullptr );
 }
 
 Window::Window( vcl::Window* pParent, const ResId& rResId ) :
-    Window(WINDOW_WINDOW)
+    mpWindowImpl(new WindowImpl( WINDOW_WINDOW ))
 {
+    meOutDevType = OUTDEV_WINDOW;
+
+    // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
+    mbEnableRTL = AllSettings::GetLayoutRTL();
+
     rResId.SetRT( RSC_WINDOW );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle, nullptr );

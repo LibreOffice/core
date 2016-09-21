@@ -30,13 +30,13 @@
 
 #include "anyrefdg.hxx"
 
-struct  ScRefHandlerCaller{
-    virtual ~ScRefHandlerCaller(){}
+struct ScRefHandlerCaller : public virtual VclReferenceBase {
+    virtual ~ScRefHandlerCaller() override {}
 };
 class ScRefHandlerHelper
 {
 protected:
-    ScRefHandlerCaller  *m_pHandler;
+    VclPtr<ScRefHandlerCaller>  m_pHandler;
     void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , ScDocument* );
     void            (ScRefHandlerCaller::*m_pSetActiveHdl)();
     void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::RefEdit* pEdit, formula::RefButton* pButton );

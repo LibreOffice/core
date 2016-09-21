@@ -66,11 +66,17 @@ SvxSplitTableDlg::SvxSplitTableDlg( vcl::Window *pParent, bool bIsTableVertical,
 
 SvxSplitTableDlg::~SvxSplitTableDlg()
 {
+    disposeOnce();
+}
+
+void SvxSplitTableDlg::dispose()
+{
     m_pCountEdit.clear();
     m_pHorzBox.clear();
     m_pVertBox.clear();
     m_pPropCB.clear();
     m_pDialog.disposeAndClear();
+    SvxAbstractSplittTableDialog::dispose();
 }
 
 IMPL_LINK( SvxSplitTableDlg, ClickHdl, Button *, pButton, void )
