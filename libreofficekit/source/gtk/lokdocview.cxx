@@ -915,6 +915,28 @@ static gboolean queueDraw(gpointer pData)
     return G_SOURCE_REMOVE;
 }
 
+/// Looks up the author string from initializeForRendering()'s rendering arguments.
+static std::string getAuthorRenderingArgument(LOKDocViewPrivate& priv)
+{
+    std::stringstream aStream;
+    aStream << priv->m_aRenderingArguments;
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    std::string aRet;
+    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aTree)
+    {
+        if (rPair.first == ".uno:Author")
+        {
+            aRet = rPair.second.get<std::string>("value");
+            break;
+        }
+    }
+    return aRet;
+}
+
+/// Author string <-> View ID map
+static std::map<std::string, int> g_aAuthorViews;
+
 /// Set up LOKDocView after the document is loaded, invoked on the main thread by openDocumentInThread() running in a thread.
 static gboolean postDocumentLoad(gpointer pData)
 {
@@ -924,6 +946,7 @@ static gboolean postDocumentLoad(gpointer pData)
     std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument, priv->m_aRenderingArguments.c_str());
     priv->m_nViewId = priv->m_pDocument->pClass->getView(priv->m_pDocument);
+    g_aAuthorViews[getAuthorRenderingArgument(priv)] = priv->m_nViewId;
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
     priv->m_nParts = priv->m_pDocument->pClass->getParts(priv->m_pDocument);
@@ -1602,29 +1625,53 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
     return FALSE;
 }
 
-static const GdkRGBA& getDarkColor(int nViewId)
+static const GdkRGBA& getDarkColor(int nViewId, LOKDocViewPrivate& priv)
 {
     static std::map<int, GdkRGBA> aColorMap;
     auto it = aColorMap.find(nViewId);
     if (it != aColorMap.end())
         return it->second;
 
-    // Based on tools/colordata.hxx, COL_AUTHOR1_DARK..COL_AUTHOR9_DARK.
-    static std::vector<GdkRGBA> aColors =
+    if (priv->m_eDocumentType == LOK_DOCTYPE_TEXT)
     {
-        {((double)198)/255, ((double)146)/255, ((double)0)/255, 0},
-        {((double)6)/255, ((double)70)/255, ((double)162)/255, 0},
-        {((double)87)/255, ((double)157)/255, ((double)28)/255, 0},
-        {((double)105)/255, ((double)43)/255, ((double)157)/255, 0},
-        {((double)197)/255, ((double)0)/255, ((double)11)/255, 0},
-        {((double)0)/255, ((double)128)/255, ((double)128)/255, 0},
-        {((double)140)/255, ((double)132)/255, ((double)0)/255, 0},
-        {((double)43)/255, ((double)85)/255, ((double)107)/255, 0},
-        {((double)209)/255, ((double)118)/255, ((double)0)/255, 0},
-    };
-    static int nColorCounter = 0;
-    GdkRGBA aColor = aColors[nColorCounter++ % aColors.size()];
-    aColorMap[nViewId] = aColor;
+        char* pValues = priv->m_pDocument->pClass->getCommandValues(priv->m_pDocument, ".uno:TrackedChangeAuthors");
+        std::stringstream aInfo;
+        aInfo << "lok::Document::getCommandValues('.uno:TrackedChangeAuthors') returned '" << pValues << "'" << std::endl;
+        g_info("%s", aInfo.str().c_str());
+
+        std::stringstream aStream(pValues);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        for (const auto& rValue : aTree.get_child("authors"))
+        {
+            const std::string& rName = rValue.second.get<std::string>("name");
+            guint32 nColor = rValue.second.get<guint32>("color");
+            GdkRGBA aColor{((double)((guint8)((nColor)>>16)))/255, ((double)((guint8)(((guint16)(nColor)) >> 8)))/255, ((double)((guint8)(nColor)))/255, 0};
+            auto itAuthorViews = g_aAuthorViews.find(rName);
+            if (itAuthorViews != g_aAuthorViews.end())
+                aColorMap[itAuthorViews->second] = aColor;
+        }
+    }
+    else
+    {
+        // Based on tools/colordata.hxx, COL_AUTHOR1_DARK..COL_AUTHOR9_DARK.
+        static std::vector<GdkRGBA> aColors =
+        {
+            {((double)198)/255, ((double)146)/255, ((double)0)/255, 0},
+            {((double)6)/255, ((double)70)/255, ((double)162)/255, 0},
+            {((double)87)/255, ((double)157)/255, ((double)28)/255, 0},
+            {((double)105)/255, ((double)43)/255, ((double)157)/255, 0},
+            {((double)197)/255, ((double)0)/255, ((double)11)/255, 0},
+            {((double)0)/255, ((double)128)/255, ((double)128)/255, 0},
+            {((double)140)/255, ((double)132)/255, ((double)0)/255, 0},
+            {((double)43)/255, ((double)85)/255, ((double)107)/255, 0},
+            {((double)209)/255, ((double)118)/255, ((double)0)/255, 0},
+        };
+        static int nColorCounter = 0;
+        GdkRGBA aColor = aColors[nColorCounter++ % aColors.size()];
+        aColorMap[nViewId] = aColor;
+    }
+    assert(aColorMap.find(nViewId) != aColorMap.end());
     return aColorMap[nViewId];
 }
 
@@ -1666,7 +1713,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
                 // Set a minimal width if it would be 0.
                 rCursor.width = 30;
 
-            const GdkRGBA& rDark = getDarkColor(rPair.first);
+            const GdkRGBA& rDark = getDarkColor(rPair.first, priv);
             cairo_set_source_rgb(pCairo, rDark.red, rDark.green, rDark.blue);
             cairo_rectangle(pCairo,
                             twipToPixel(rCursor.x, priv->m_fZoom),
@@ -1739,7 +1786,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
 
         for (GdkRectangle& rRectangle : rPair.second.m_aRectangles)
         {
-            const GdkRGBA& rDark = getDarkColor(rPair.first);
+            const GdkRGBA& rDark = getDarkColor(rPair.first, priv);
             // 75% transparency.
             cairo_set_source_rgba(pCairo, rDark.red, rDark.green, rDark.blue, 0.25);
             cairo_rectangle(pCairo,
@@ -1764,7 +1811,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         if (rRectangle.m_nPart != priv->m_nPartId && priv->m_eDocumentType != LOK_DOCTYPE_TEXT)
             continue;
 
-        const GdkRGBA& rDark = getDarkColor(rPair.first);
+        const GdkRGBA& rDark = getDarkColor(rPair.first, priv);
         renderGraphicHandle(pDocView, pCairo, rRectangle.m_aRectangle, rDark);
     }
 
@@ -1788,7 +1835,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
         if (rCursor.m_nPart != priv->m_nPartId)
             continue;
 
-        const GdkRGBA& rDark = getDarkColor(rPair.first);
+        const GdkRGBA& rDark = getDarkColor(rPair.first, priv);
         cairo_set_source_rgb(pCairo, rDark.red, rDark.green, rDark.blue);
         cairo_rectangle(pCairo,
                         twipToPixel(rCursor.m_aRectangle.x, priv->m_fZoom),
@@ -1807,7 +1854,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
             continue;
 
         // Draw a rectangle.
-        const GdkRGBA& rDark = getDarkColor(rPair.first);
+        const GdkRGBA& rDark = getDarkColor(rPair.first, priv);
         cairo_set_source_rgb(pCairo, rDark.red, rDark.green, rDark.blue);
         cairo_rectangle(pCairo,
                         twipToPixel(rRectangle.m_aRectangle.x, priv->m_fZoom),

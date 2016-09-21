@@ -212,6 +212,13 @@ public:
     {
         return OUString();
     }
+
+    /// Implementation for
+    /// lok::Document::getCommandValues(".uno:TrackedChangeAuthors").
+    virtual OUString getTrackedChangeAuthors()
+    {
+        return OUString();
+    }
 };
 
 } // namespace vcl

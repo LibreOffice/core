@@ -2115,6 +2115,19 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
     return pJson;
 }
 
+/// Returns the JSON representation of the redline author table.
+static char* getTrackedChangeAuthors(LibreOfficeKitDocument* pThis)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return nullptr;
+    }
+    OUString aAuthors = pDoc->getTrackedChangeAuthors();
+    return strdup(aAuthors.toUtf8().getStr());
+}
+
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
     SolarMutexGuard aGuard;
@@ -2142,6 +2155,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:AcceptTrackedChanges")
     {
         return getTrackedChanges(pThis);
+    }
+    else if (aCommand == ".uno:TrackedChangeAuthors")
+    {
+        return getTrackedChangeAuthors(pThis);
     }
     else if (aCommand.startsWith(aViewRowColumnHeaders))
     {

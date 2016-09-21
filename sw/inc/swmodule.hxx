@@ -189,6 +189,8 @@ public:
     // Redlining.
     sal_uInt16          GetRedlineAuthor();
     OUString            GetRedlineAuthor(sal_uInt16 nPos);
+    /// See SwXTextDocument::getTrackedChangeAuthors().
+    OUString GetRedlineAuthorInfo();
     sal_uInt16          InsertRedlineAuthor(const OUString& rAuthor);
     void                SetRedlineAuthor(const OUString& rAuthor); // for unit tests
 
