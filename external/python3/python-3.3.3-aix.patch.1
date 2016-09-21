@@ -103,15 +103,12 @@ diff -ru python3.orig/configure.ac python3/configure.ac
 diff -ru python3.orig/Makefile.pre.in python3/Makefile.pre.in
 --- python3.orig/Makefile.pre.in	2015-07-05 18:50:07.000000000 +0200
 +++ python3/Makefile.pre.in	2015-07-26 17:34:00.386488960 +0200
-@@ -598,14 +598,20 @@
+@@ -598,14 +598,17 @@
  
  libpython$(LDVERSION).so: $(LIBRARY_OBJS)
  	if test $(INSTSONAME) != $(LDLIBRARY); then \
 -		$(BLDSHARED) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
-+		if [ "`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" != "aix" ]; then \
-+			SONAME="-Wl,-h$(INSTSONAME)"; \
-+		fi; \
-+		$(BLDSHARED) $(SONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
++		$(BLDSHARED) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
  		$(LN) -f $(INSTSONAME) $@; \
  	else \
  		$(BLDSHARED) -o $@ $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \

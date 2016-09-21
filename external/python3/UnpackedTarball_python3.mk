@@ -17,7 +17,7 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,python3,\
 
 $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/i100492-freebsd.patch.1 \
-	external/python3/python-3.3.3-aix.patch.1 \
+	$(if $(filter AIX,$(OS)),external/python3/python-3.3.3-aix.patch.1) \
 	external/python3/python-3.3.0-darwin.patch.1 \
 	external/python3/python-3.5.4-ssl.patch.1 \
 	external/python3/python-3.5.4-msvc-disable.patch.1 \
