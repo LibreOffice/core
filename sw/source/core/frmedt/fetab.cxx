@@ -2373,10 +2373,10 @@ bool SwFEShell::GetAutoSum( OUString& rFormula ) const
 bool SwFEShell::IsTableRightToLeft() const
 {
     SwFrame *pFrame = GetCurrFrame();
-    if( !pFrame || !pFrame->IsInTab() )
+    SwTabFrame *pTab = (pFrame && pFrame->IsInTab()) ? pFrame->ImplFindTabFrame() : nullptr;
+    if (!pTab)
         return false;
-
-    return pFrame->ImplFindTabFrame()->IsRightToLeft();
+    return pTab->IsRightToLeft();
 }
 
 bool SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
