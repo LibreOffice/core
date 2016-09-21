@@ -56,21 +56,20 @@ using namespace ::basegfx;
 
 namespace cui
 {
-const sal_uInt16 COLORMODE_RGB =  0x10;
-const sal_uInt16 COLORMODE_HSV =  0x20;
 
-const sal_uInt16 COLORCOMP_RED   = 0x10;
-const sal_uInt16 COLORCOMP_GREEN = 0x11;
-const sal_uInt16 COLORCOMP_BLUE  = 0x12;
+enum class ColorComponent {
+    Red,
+    Green,
+    Blue,
+    Hue,
+    Saturation,
+    Brightness,
+    Cyan,
+    Yellow,
+    Magenta,
+    Key,
+};
 
-const sal_uInt16 COLORCOMP_HUE  = 0x20;
-const sal_uInt16 COLORCOMP_SAT  = 0x21;
-const sal_uInt16 COLORCOMP_BRI  = 0x22;
-
-const sal_uInt16 COLORCOMP_CYAN    = 0x40;
-const sal_uInt16 COLORCOMP_YELLOW  = 0x41;
-const sal_uInt16 COLORCOMP_MAGENTA = 0x42;
-const sal_uInt16 COLORCOMP_KEY     = 0x43;
 
 // color space conversion helpers
 
@@ -881,7 +880,7 @@ public:
 
     sal_Int32 GetColor() const;
 
-    void setColorComponent(sal_uInt16 nComp, double dValue);
+    void setColorComponent(ColorComponent nComp, double dValue);
 
 private:
     sal_Int16 mnDialogMode;
@@ -1176,27 +1175,27 @@ IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldCo
     {
     case HUE:
         mdSat = x;
-        setColorComponent( COLORCOMP_BRI, y );
+        setColorComponent( ColorComponent::Brightness, y );
         break;
     case SATURATION:
         mdHue = x * 360.0;
-        setColorComponent( COLORCOMP_BRI, y );
+        setColorComponent( ColorComponent::Brightness, y );
         break;
     case BRIGHTNESS:
         mdHue = x * 360.0;
-        setColorComponent( COLORCOMP_SAT, y );
+        setColorComponent( ColorComponent::Saturation, y );
         break;
     case RED:
         mdBlue = x;
-        setColorComponent( COLORCOMP_GREEN, y );
+        setColorComponent( ColorComponent::Green, y );
         break;
     case GREEN:
         mdBlue = x;
-        setColorComponent( COLORCOMP_RED, y );
+        setColorComponent( ColorComponent::Red, y );
         break;
     case BLUE:
         mdRed = x;
-        setColorComponent( COLORCOMP_GREEN, y );
+        setColorComponent( ColorComponent::Green, y );
         break;
     }
 
@@ -1214,22 +1213,22 @@ IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSlide
     switch (meMode)
     {
     case HUE:
-        setColorComponent( COLORCOMP_HUE, dValue * 360.0 );
+        setColorComponent( ColorComponent::Hue, dValue * 360.0 );
         break;
     case SATURATION:
-        setColorComponent( COLORCOMP_SAT, dValue );
+        setColorComponent( ColorComponent::Saturation, dValue );
         break;
     case BRIGHTNESS:
-        setColorComponent( COLORCOMP_BRI, dValue );
+        setColorComponent( ColorComponent::Brightness, dValue );
         break;
     case RED:
-        setColorComponent( COLORCOMP_RED, dValue );
+        setColorComponent( ColorComponent::Red, dValue );
         break;
     case GREEN:
-        setColorComponent( COLORCOMP_GREEN, dValue );
+        setColorComponent( ColorComponent::Green, dValue );
         break;
     case BLUE:
-        setColorComponent( COLORCOMP_BLUE, dValue );
+        setColorComponent( ColorComponent::Blue, dValue );
         break;
     }
 
@@ -1243,52 +1242,52 @@ IMPL_LINK_TYPED(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
 
     if (&rEdit == mpMFRed)
     {
-        setColorComponent( COLORCOMP_RED, ((double)mpMFRed->GetValue()) / 255.0 );
+        setColorComponent( ColorComponent::Red, ((double)mpMFRed->GetValue()) / 255.0 );
         n = UPDATE_ALL &~ (UPDATE_RGB);
     }
     else if (&rEdit == mpMFGreen)
     {
-        setColorComponent( COLORCOMP_GREEN, ((double)mpMFGreen->GetValue()) / 255.0 );
+        setColorComponent( ColorComponent::Green, ((double)mpMFGreen->GetValue()) / 255.0 );
         n = UPDATE_ALL &~ (UPDATE_RGB);
     }
     else if (&rEdit == mpMFBlue)
     {
-        setColorComponent( COLORCOMP_BLUE, ((double)mpMFBlue->GetValue()) / 255.0 );
+        setColorComponent( ColorComponent::Blue, ((double)mpMFBlue->GetValue()) / 255.0 );
         n = UPDATE_ALL &~ (UPDATE_RGB);
     }
     else if (&rEdit == mpMFHue)
     {
-        setColorComponent( COLORCOMP_HUE, (double)mpMFHue->GetValue() );
+        setColorComponent( ColorComponent::Hue, (double)mpMFHue->GetValue() );
         n = UPDATE_ALL &~ (UPDATE_HSB);
     }
     else if (&rEdit == mpMFSaturation)
     {
-        setColorComponent( COLORCOMP_SAT, ((double)mpMFSaturation->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Saturation, ((double)mpMFSaturation->GetValue()) / 100.0 );
         n = UPDATE_ALL &~ (UPDATE_HSB);
     }
     else if (&rEdit == mpMFBrightness)
     {
-        setColorComponent( COLORCOMP_BRI, ((double)mpMFBrightness->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Brightness, ((double)mpMFBrightness->GetValue()) / 100.0 );
         n = UPDATE_ALL &~ (UPDATE_HSB);
     }
     else if (&rEdit == mpMFCyan)
     {
-        setColorComponent( COLORCOMP_CYAN, ((double)mpMFCyan->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Cyan, ((double)mpMFCyan->GetValue()) / 100.0 );
         n = UPDATE_ALL &~ (UPDATE_CMYK);
     }
     else if (&rEdit == mpMFMagenta)
     {
-        setColorComponent( COLORCOMP_MAGENTA, ((double)mpMFMagenta->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Magenta, ((double)mpMFMagenta->GetValue()) / 100.0 );
         n = UPDATE_ALL &~ (UPDATE_CMYK);
     }
     else if (&rEdit == mpMFYellow)
     {
-        setColorComponent( COLORCOMP_YELLOW, ((double)mpMFYellow->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Yellow, ((double)mpMFYellow->GetValue()) / 100.0 );
         n = UPDATE_ALL &~ (UPDATE_CMYK);
     }
     else if (&rEdit == mpMFKey)
     {
-        setColorComponent( COLORCOMP_KEY, ((double)mpMFKey->GetValue()) / 100.0 );
+        setColorComponent( ColorComponent::Key, ((double)mpMFKey->GetValue()) / 100.0 );
         n = UPDATE_ALL&~(UPDATE_CMYK);
     }
     else if (&rEdit == mpEDHex)
@@ -1348,48 +1347,48 @@ IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ModeModifyHdl, RadioButton&, void)
     }
 }
 
-void ColorPickerDialog::setColorComponent( sal_uInt16 nComp, double dValue )
+void ColorPickerDialog::setColorComponent( ColorComponent nComp, double dValue )
 {
     switch( nComp )
     {
-    case COLORCOMP_RED:
+    case ColorComponent::Red:
         mdRed = dValue;
         break;
-    case COLORCOMP_GREEN:
+    case ColorComponent::Green:
         mdGreen = dValue;
         break;
-    case COLORCOMP_BLUE:
+    case ColorComponent::Blue:
         mdBlue = dValue;
         break;
-    case COLORCOMP_HUE:
+    case ColorComponent::Hue:
         mdHue = dValue;
         break;
-    case COLORCOMP_SAT:
+    case ColorComponent::Saturation:
         mdSat = dValue;
         break;
-    case COLORCOMP_BRI:
+    case ColorComponent::Brightness:
         mdBri = dValue;
         break;
-    case COLORCOMP_CYAN:
+    case ColorComponent::Cyan:
         mdCyan = dValue;
         break;
-    case COLORCOMP_YELLOW:
+    case ColorComponent::Yellow:
         mdYellow = dValue;
         break;
-    case COLORCOMP_MAGENTA:
+    case ColorComponent::Magenta:
         mdMagenta = dValue;
         break;
-    case COLORCOMP_KEY:
+    case ColorComponent::Key:
         mdKey = dValue;
         break;
     }
 
-    if (nComp & COLORMODE_RGB)
+    if (nComp == ColorComponent::Red || nComp == ColorComponent::Green || nComp == ColorComponent::Blue)
     {
         RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
         RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
     }
-    else if (nComp & COLORMODE_HSV)
+    else if (nComp == ColorComponent::Hue || nComp == ColorComponent::Saturation || nComp == ColorComponent::Brightness)
     {
         HSVtoRGB( mdHue, mdSat, mdBri, mdRed, mdGreen, mdBlue );
         RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
