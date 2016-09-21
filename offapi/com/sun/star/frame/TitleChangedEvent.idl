@@ -24,11 +24,11 @@
 
  module com {  module sun {  module star {  module frame {
 
-/** todo document me
+/** Contains the information about a changed title.
  */
 struct TitleChangedEvent : com::sun::star::lang::EventObject
 {
-    /** todo document me
+    /** The new title
      */
     string Title;
 };
