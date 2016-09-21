@@ -29,6 +29,7 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 		./configure COIN_SKIP_PROJECTS="Data/Sample" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(DISABLE_DYNLOADING),--disable-shared) \
+			--disable-bzlib \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			--enable-dependency-linking F77=unavailable \
 			$(if $(filter LINUX,$(OS)), \
