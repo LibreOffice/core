@@ -150,19 +150,7 @@ public:
 
     void SetAutoFormatFlag()
         { eType = (RedlineType_t)(eType | nsRedlineType_t::REDLINE_FORM_AUTOFMT); }
-    bool CanCombine( const SwRedlineData& rCmp ) const
-        {
-            return nAuthor == rCmp.nAuthor &&
-                    eType == rCmp.eType &&
-                    sComment == rCmp.sComment &&
-                    GetTimeStamp() == rCmp.GetTimeStamp() &&
-                    (( !pNext && !rCmp.pNext ) ||
-                        ( pNext && rCmp.pNext &&
-                        pNext->CanCombine( *rCmp.pNext ))) &&
-                    (( !pExtraData && !rCmp.pExtraData ) ||
-                        ( pExtraData && rCmp.pExtraData &&
-                            *pExtraData == *rCmp.pExtraData ));
-        }
+    bool CanCombine( const SwRedlineData& rCmp ) const;
 
     // ExtraData gets copied, the pointer is therefore not taken over by
     // the RedlineObject
