@@ -52,11 +52,6 @@
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 
-#define CONTEXT_FLAGS_MULTICOL (HtmlContextFlags::StripPara |  \
-                                HtmlContextFlags::KeepNumrule | \
-                                HtmlContextFlags::KeepAttrs)
-#define CONTEXT_FLAGS_HDRFTR (CONTEXT_FLAGS_MULTICOL)
-#define CONTEXT_FLAGS_FTN (CONTEXT_FLAGS_MULTICOL)
 
 using namespace ::com::sun::star;
 
@@ -149,7 +144,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
         SwFrameFormat *pHdFtFormat;
         bool bNew = false;
-        HtmlContextFlags nFlags = CONTEXT_FLAGS_HDRFTR;
+        HtmlContextFlags nFlags = HtmlContextFlags::MultiColMask;
         if( bHeader )
         {
             pHdFtFormat = const_cast<SwFrameFormat*>(rPageFormat.GetHeader().GetHeaderFormat());
@@ -233,7 +228,7 @@ void SwHTMLParser::NewDivision( int nToken )
                     m_pDoc->GetNodes()[pStartNdIdx->GetIndex()+1]->GetContentNode();
                 SwNodeIndex aTmpSwNodeIndex = SwNodeIndex(*pCNd);
                 SwPosition aNewPos( aTmpSwNodeIndex, SwIndex( pCNd, 0 ) );
-                SaveDocContext( pCntxt, CONTEXT_FLAGS_FTN, &aNewPos );
+                SaveDocContext( pCntxt, HtmlContextFlags::MultiColMask, &aNewPos );
                 aId.clear();
                 aPropInfo.aId.clear();
             }
@@ -648,7 +643,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             aPropInfo.aId.clear();
         }
 
-        InsertFlyFrame( aFrameItemSet, pCntxt, aFlyName, CONTEXT_FLAGS_ABSPOS );
+        InsertFlyFrame(aFrameItemSet, pCntxt, aFlyName);
 
         pCntxt->SetPopStack( true );
         bPositioned = true;
@@ -764,8 +759,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
 void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
                                    HTMLAttrContext *pCntxt,
-                                   const OUString& rName,
-                                   HtmlContextFlags nFlags )
+                                   const OUString& rName )
 {
     RndStdIds eAnchorId =
         static_cast<const SwFormatAnchor&>(rItemSet.Get( RES_ANCHOR )).GetAnchorId();
@@ -785,6 +779,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
                             ->GetContentNode();
 
     SwPosition aNewPos( SwNodeIndex( rFlyCntIdx, 1 ), SwIndex( pCNd, 0 ) );
+    const HtmlContextFlags nFlags = (HtmlContextFlags::ProtectStack|HtmlContextFlags::StripPara);
     SaveDocContext( pCntxt, nFlags, &aNewPos );
 }
 

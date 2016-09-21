@@ -443,8 +443,7 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
                         HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Padding|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Direction,
                         aFrameItemSet );
 
-        InsertFlyFrame( aFrameItemSet, pContext, rPropInfo.aId,
-                        CONTEXT_FLAGS_ABSPOS );
+        InsertFlyFrame(aFrameItemSet, pContext, rPropInfo.aId);
         pContext->SetPopStack( true );
         rPropInfo.aId.clear();
         bRet = true;

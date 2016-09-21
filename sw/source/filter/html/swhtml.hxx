@@ -340,15 +340,12 @@ enum class HtmlContextFlags {
     HeaderDist      = 0x0008,
     FooterDist      = 0x0010,
     KeepAttrs       = 0x0020,
+    MultiColMask    = StripPara | KeepNumrule | KeepAttrs // for headers, footers or footnotes
 };
 namespace o3tl
 {
     template<> struct typed_flags<HtmlContextFlags> : is_typed_flags<HtmlContextFlags, 0x03f> {};
 }
-
-#define CONTEXT_FLAGS_ABSPOS    \
-    (HtmlContextFlags::ProtectStack | \
-     HtmlContextFlags::StripPara)
 
 enum class HtmlFrameFormatFlags {
     Box                 = 0x0001,
@@ -595,7 +592,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     // Fly-Frames einfuegen/verlassen
     void InsertFlyFrame( const SfxItemSet& rItemSet, HTMLAttrContext *pCntxt,
-                         const OUString& rId, HtmlContextFlags nFlags );
+                         const OUString& rId );
 
     void SaveDocContext( HTMLAttrContext *pCntxt, HtmlContextFlags nFlags,
                        const SwPosition *pNewPos );
