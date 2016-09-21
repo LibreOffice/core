@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_73c17780",
+        "filename": "i18npool/inc/numberformatcode.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001390
+      },
+      "writtenOn": "2016-09-21T19:41:48Z",
+      "side": 1,
+      "message": "That would be another change, orthogonal to this one. I am unfamiliar with the specifics but I think the uno Sequence is needed because XLocaleData4-\u003egetAllFormats() is uno api.\n\nNot that what is cached is a call to XLocaleData4-\u003egetAllFormats(rLocale), which returns a Sequence\u003cFormatElement\u003e. That is cached by putting the argument and return value in a queue, which thus has type Queue\u003cPair\u003cLocale,Sequence\u003cFormatElement\u003e\u003e\u003e.",
+      "parentUuid": "ba5da102_78fcf63e",
+      "revId": "6b4e9156f284831943688ee7fe5f7b8f0ad57922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_38027e3f",
         "filename": "i18npool/source/numberformatcode/numberformatcode.cxx",
         "patchSetId": 1
@@ -64,6 +82,24 @@
       "writtenOn": "2016-09-21T13:04:08Z",
       "side": 1,
       "message": "rather just use back() instead of crbegin() ?",
+      "revId": "6b4e9156f284831943688ee7fe5f7b8f0ad57922",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_d3cfa3b1",
+        "filename": "i18npool/source/numberformatcode/numberformatcode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1001390
+      },
+      "writtenOn": "2016-09-21T19:41:48Z",
+      "side": 1,
+      "message": "Ah, yes. I was searching for back() in the reference, but somehow overlooked it. Thanks.",
+      "parentUuid": "ba5da102_38027e3f",
       "revId": "6b4e9156f284831943688ee7fe5f7b8f0ad57922",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
