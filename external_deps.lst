@@ -230,7 +230,7 @@ if (SYSTEM_EXPAT != YES)
 if (SYSTEM_CURL != YES)
     MD5 = c264788f2e4313a05140d712c1ec90c2
     name = curl-7.50.1.tar.gz
-    URL1 = http://curl.haxx.se/download/${name}
+    URL1 = http://curl.haxx.se/download/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATA_FONTS == YES)
