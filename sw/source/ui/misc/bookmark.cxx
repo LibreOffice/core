@@ -255,6 +255,7 @@ bool SwInsertBookmarkDlg::HaveBookmarksChanged()
     {
         if (IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
+            // more bookmarks then expected
             if (aListIter == aTableBookmarks.end())
                 return true;
             if (aListIter->first != ppBookmark->get() ||
@@ -263,6 +264,9 @@ bool SwInsertBookmarkDlg::HaveBookmarksChanged()
             ++aListIter;
         }
     }
+    // less bookmarks then expected
+    if (aListIter != aTableBookmarks.end())
+        return true;
     return false;
 }
 
