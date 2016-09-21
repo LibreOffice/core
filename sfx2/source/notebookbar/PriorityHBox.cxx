@@ -100,12 +100,15 @@ public:
             m_bInitialized = true;
 
             SystemWindow* pSystemWindow = SfxViewFrame::Current()->GetFrame().GetSystemWindow();
-            pSystemWindow->AddEventListener(LINK(this, PriorityHBox, WindowEventListener));
+            if (pSystemWindow)
+            {
+                pSystemWindow->AddEventListener(LINK(this, PriorityHBox, WindowEventListener));
 
-            CalcNeededWidth();
+                CalcNeededWidth();
 
-            long nWidth = pSystemWindow->GetSizePixel().Width();
-            SetSizePixel(Size(nWidth, GetSizePixel().Height()));
+                long nWidth = pSystemWindow->GetSizePixel().Width();
+                SetSizePixel(Size(nWidth, GetSizePixel().Height()));
+            }
         }
 
         VclHBox::Paint(rRenderContext, rRect);

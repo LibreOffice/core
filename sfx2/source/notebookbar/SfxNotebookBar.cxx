@@ -242,7 +242,13 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                                  const Reference<css::frame::XFrame> & xFrame,
                                  const OUString& rUIFile)
 {
-    assert(pSysWindow);
+    if (!pSysWindow)
+    {
+        if (SfxViewFrame::Current() && SfxViewFrame::Current()->GetWindow().GetSystemWindow())
+            pSysWindow = SfxViewFrame::Current()->GetWindow().GetSystemWindow();
+        else
+            return false;
+    }
 
     if (IsActive())
     {
