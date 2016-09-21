@@ -1837,7 +1837,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     Reference< css::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), true, getORB()));
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    AbstractFmSearchDialog* pDialog = nullptr;
+    VclPtr<AbstractFmSearchDialog> pDialog;
     if ( pFact )
     {
         ::std::vector< OUString > aContextNames;
@@ -1851,7 +1851,7 @@ void SbaXDataBrowserController::ExecuteSearch()
         pDialog->SetFoundHandler( LINK( this, SbaXDataBrowserController, OnFoundData ) );
         pDialog->SetCanceledNotFoundHdl( LINK( this, SbaXDataBrowserController, OnCanceledNotFound ) );
         pDialog->Execute();
-        delete pDialog;
+        pDialog.disposeAndClear();
     }
 
     // restore the grid's normal operating state
