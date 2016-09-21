@@ -36,6 +36,7 @@ private:
 public:
     SvxNewTableDialog();
     virtual ~SvxNewTableDialog() override;
+    virtual void dispose() override;
 
     virtual short Execute() override;
 

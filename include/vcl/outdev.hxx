@@ -313,7 +313,12 @@ namespace vcl {
     typedef OutputDevice RenderContext;
 }
 
-class VCL_DLLPUBLIC OutputDevice :public VclReferenceBase
+/**
+* Some things multiple-inherit from VclAbstractDialog and OutputDevice,
+* so we need to use virtual inheritance to keep the referencing counting
+* OK.
+*/
+class VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase
 {
     friend class Printer;
     friend class VirtualDevice;

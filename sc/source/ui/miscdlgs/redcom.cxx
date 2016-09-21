@@ -50,7 +50,7 @@ ScRedComDialog::ScRedComDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
 ScRedComDialog::~ScRedComDialog()
 {
-    delete pDlg;
+    pDlg.disposeAndClear();
 }
 
 ScChangeAction *ScRedComDialog::FindPrev(ScChangeAction *pAction)

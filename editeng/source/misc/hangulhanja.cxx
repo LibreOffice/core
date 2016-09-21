@@ -67,7 +67,7 @@ namespace editeng
         static StringMap        m_aRecentlyUsedList;
 
         // general
-        AbstractHangulHanjaConversionDialog*
+        VclPtr<AbstractHangulHanjaConversionDialog>
                                 m_pConversionDialog;    // the dialog to display for user interaction
         VclPtr<vcl::Window>     m_pUIParent;            // the parent window for any UI we raise
         Reference< XComponentContext >
@@ -237,7 +237,7 @@ namespace editeng
                                                             sal_Int32 _nOptions,
                                                             bool _bIsInteractive,
                                                             HangulHanjaConversion* _pAntiImpl )
-        : m_pConversionDialog( nullptr )
+        : m_pConversionDialog()
         , m_pUIParent( _pUIParent )
         , m_xContext( rxContext )
         , m_aSourceLocale( _rSourceLocale )
@@ -675,7 +675,7 @@ namespace editeng
             else
                 implUpdateData();
             m_pConversionDialog->Execute();
-            DELETEZ( m_pConversionDialog );
+            m_pConversionDialog.disposeAndClear();
         }
         else
         {

@@ -32,7 +32,7 @@ private:
     ScChangeAction  *pChangeAction;
     ScDocShell      *pDocShell;
     OUString        aComment;
-    AbstractSvxPostItDialog* pDlg;
+    VclPtr<AbstractSvxPostItDialog> pDlg;
 
     DECL_LINK_TYPED( PrevHdl, AbstractSvxPostItDialog&, void );
     DECL_LINK_TYPED( NextHdl, AbstractSvxPostItDialog&, void );

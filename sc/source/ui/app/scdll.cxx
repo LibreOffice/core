@@ -104,6 +104,7 @@
 #include "dwfunctr.hxx"
 #include "acredlin.hxx"
 #include <o3tl/make_unique.hxx>
+#include "scabstdlg.hxx"
 
 ScResId::ScResId( sal_uInt16 nId ) :
     ResId( nId, *SC_MOD()->GetResMgr() )

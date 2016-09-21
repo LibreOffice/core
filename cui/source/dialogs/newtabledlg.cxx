@@ -30,9 +30,15 @@ SvxNewTableDialog::SvxNewTableDialog()
 
 SvxNewTableDialog::~SvxNewTableDialog()
 {
+    disposeOnce();
+}
+
+void SvxNewTableDialog::dispose()
+{
     mpNumColumns.clear();
     mpNumRows.clear();
     m_pDialog.disposeAndClear();
+    SvxAbstractNewTableDialog::dispose();
 }
 
 short SvxNewTableDialog::Execute()

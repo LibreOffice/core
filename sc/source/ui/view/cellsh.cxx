@@ -96,7 +96,7 @@ ScCellShell::~ScCellShell()
         pImpl->m_pClipEvtLstnr->release();
     }
 
-    delete pImpl->m_pLinkedDlg;
+    pImpl->m_pLinkedDlg.disposeAndClear();
     delete pImpl->m_pRequest;
 }
 

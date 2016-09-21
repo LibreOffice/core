@@ -34,7 +34,7 @@ class AbstractSvxHpLinkDlg;
 class SVX_DLLPUBLIC SvxHlinkDlgWrapper : public SfxChildWindow
 {
 private:
-    AbstractSvxHpLinkDlg*   mpDlg;
+    VclPtr<AbstractSvxHpLinkDlg>   mpDlg;
 
 public:
     SvxHlinkDlgWrapper( vcl::Window*pParent, sal_uInt16 nId,

@@ -130,6 +130,7 @@
 #include "hints.hxx"
 #include "spellcheckcontext.hxx"
 #include "uiobject.hxx"
+#include "scabstdlg.hxx"
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>

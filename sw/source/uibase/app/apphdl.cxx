@@ -382,7 +382,7 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
 {
     SwView*                  m_pView;       // never owner
     SwView*                  m_pView2Close; // never owner
-    AbstractMailMergeWizard* m_pWizard;     // always owner
+    VclPtr<AbstractMailMergeWizard> m_pWizard;     // always owner
     bool                     m_bDestroyMMToolbarOnCancel;
 
     DECL_LINK_TYPED( EndDialogHdl, Dialog&, void );
@@ -611,15 +611,14 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, DestroyDialogHdl, void*, void)
 {
-    delete m_pWizard;
-    m_pWizard = nullptr;
-
+    m_pWizard.disposeAndClear();
     release();
 }
 
 IMPL_STATIC_LINK_TYPED(SwMailMergeWizardExecutor, DestroyWizardHdl, void*, pDialog, void )
 {
-    delete static_cast<AbstractMailMergeWizard*>(pDialog);
+    VclPtr<AbstractMailMergeWizard> p = static_cast<AbstractMailMergeWizard*>(pDialog);
+    p.disposeAndClear();
 }
 
 IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
@@ -653,8 +652,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
         xMMConfig->Commit();
     }
 
-    delete m_pWizard;
-    m_pWizard = nullptr;
+    m_pWizard.disposeAndClear();
     release();
 }
 

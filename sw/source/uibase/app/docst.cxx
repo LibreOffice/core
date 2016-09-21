@@ -554,7 +554,7 @@ private:
     sal_uInt16 m_nRet;
     rtl::Reference< SwDocStyleSheet > m_xTmp;
     SfxStyleFamily m_nFamily;
-    SfxAbstractApplyTabDialog *m_pDlg;
+    VclPtr<SfxAbstractApplyTabDialog> m_pDlg;
     rtl::Reference< SfxStyleSheetBasePool > m_xBasePool;
     bool m_bModified;
 };

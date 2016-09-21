@@ -222,7 +222,7 @@ class FieldDeletionModify : public SwModify
             }
         }
     private:
-        AbstractFieldInputDlg* mpInputFieldDlg;
+        VclPtr<AbstractFieldInputDlg> mpInputFieldDlg;
         SwFormatField* mpFormatField;
 };
 

@@ -2521,7 +2521,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    delete pImpl->m_pLinkedDlg;
+                    pImpl->m_pLinkedDlg.disposeAndClear();
                     pImpl->m_pLinkedDlg =
                         pFact->CreateScLinkedAreaDlg(pTabViewShell->GetDialogParent());
                     OSL_ENSURE(pImpl->m_pLinkedDlg, "Dialog create fail!");
@@ -2937,4 +2937,7 @@ IMPL_LINK_NOARG_TYPED(ScCellShell, DialogClosed, Dialog&, void)
     ExecuteExternalSource( sFile, sFilter, sOptions, sSource, nRefresh, *(pImpl->m_pRequest) );
 }
 
+CellShell_Impl::~CellShell_Impl()
+{
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
