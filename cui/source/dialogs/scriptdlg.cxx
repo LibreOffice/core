@@ -71,7 +71,7 @@ using namespace css::document;
 
 void ShowErrorDialog( const Any& aException )
 {
-    std::unique_ptr<SvxScriptErrorDialog> pDlg(new SvxScriptErrorDialog( aException ));
+    ScopedVclPtrInstance<SvxScriptErrorDialog> pDlg( aException );
     pDlg->Execute();
 }
 

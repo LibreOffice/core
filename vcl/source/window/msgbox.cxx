@@ -372,8 +372,13 @@ Size MessBox::GetOptimalSize() const
 }
 
 InfoBox::InfoBox( vcl::Window* pParent, const OUString& rMessage ) :
-    InfoBox( pParent, WB_OK | WB_DEF_OK, rMessage )
+    MessBox( pParent, WB_OK | WB_DEF_OK, OUString(), rMessage )
 {
+    // Default Text is the display title from the application
+    if ( GetText().isEmpty() )
+        SetText( Application::GetDisplayName() );
+
+    SetImage( InfoBox::GetStandardImage() );
 }
 
 InfoBox::InfoBox( vcl::Window* pParent, WinBits nStyle, const OUString& rMessage ) :
