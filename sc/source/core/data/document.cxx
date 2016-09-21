@@ -1240,6 +1240,16 @@ struct BroadcastRecalcOnRefMoveHandler : std::unary_function<ScTable*, void>
         if (p)
             p->BroadcastRecalcOnRefMove();
     }
+
+    explicit BroadcastRecalcOnRefMoveHandler( ScDocument* pDoc ) :
+        aSwitch( *pDoc, false),
+        aBulk( pDoc->GetBASM())
+    {
+    }
+
+private:
+    sc::AutoCalcSwitch aSwitch; // first for ctor/dtor order, destroy second
+    ScBulkBroadcast aBulk;      // second for ctor/dtor order, destroy first
 };
 
 }
@@ -1342,7 +1352,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
                 if (*it)
                     (*it)->SetDirtyIfPostponed();
 
-            std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
+            std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
         }
         bRet = true;
     }
@@ -1444,7 +1454,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
             if (*it)
                 (*it)->SetDirtyIfPostponed();
 
-        std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
+        std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
     }
 
     pChartListenerCollection->UpdateDirtyCharts();
@@ -1546,7 +1556,7 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
             std::for_each(maTabs.begin(), maTabs.end(), SetDirtyIfPostponedHandler());
             // Cells containing functions such as CELL, COLUMN or ROW may have
             // changed their values on relocation. Broadcast them.
-            std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
+            std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
         }
         bRet = true;
     }
@@ -1637,7 +1647,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
             if (*it)
                 (*it)->SetDirtyIfPostponed();
 
-        std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
+        std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler( this));
     }
 
     pChartListenerCollection->UpdateDirtyCharts();
