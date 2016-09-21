@@ -2120,7 +2120,7 @@ void ScInterpreter::ScGammaDist( int nMinParamCount )
     double fBeta = GetDouble();                 // scale
     double fAlpha = GetDouble();                // shape
     double fX = GetDouble();                    // x
-    if (fAlpha <= 0.0 || fBeta <= 0.0)
+    if (fX < 0 || fAlpha <= 0.0 || fBeta <= 0.0)
         PushIllegalArgument();
     else
     {
