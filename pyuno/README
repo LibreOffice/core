@@ -8,7 +8,7 @@ Then you'll start to see your exceptions on the console instead of them getting
 lost at the UNO interface.
 
 Python also comes with a gdb script
-libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so-gdb.py
+libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so.1.0-gdb.py
 that is copied to instdir and will be auto-loaded by gdb;
 it provides commands like "py-bt" to get a python-level backtrace,
 and "py-print" to print python variables.
