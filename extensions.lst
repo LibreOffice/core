@@ -39,7 +39,7 @@
 
 # English dictionary
 [ language=en.* || language=de || language=it ]
-    dda5b6e358a2aad1ddbf058143a42109 http://sourceforge.net/projects/aoo-extensions/files/17102/28/dict-en.oxt/download "dict-en.oxt"
+    47edc7a64a9a1e1f7d6e5dfa82ae0c91 https://sourceforge.net/projects/aoo-extensions/files/17102/29/dict-en.oxt/download "dict-en.oxt"
 
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
@@ -47,7 +47,7 @@
 
 # German dictionary.
 [ language=de || language=de_DE || language=nl || language=ru ]
-    a9328ce36b272a034b4706721345076d http://sourceforge.net/projects/aoo-extensions/files/1075/13/dict-de_de-frami_2013-12-06.oxt/download "dict-de_DE-frami_2012-06-17.oxt"
+    cf68110f1097cd8c2f7eb41dfbbfe86d https://sourceforge.net/projects/aoo-extensions/files/1075/14/dict-de_de-frami_2015-12-28.oxt/download "dict-de_de-frami_2015-12-28.oxt"
 
 # Dutch dictionary.
 [ language=nl ]
@@ -55,11 +55,11 @@
 
 # French dictionary.
 [ language=fr || language=nl || language=de || language=de_DE || language=ca || language=ca_XV ]
-    48343ddb4f020f1c335189ba56f8f50c http://sourceforge.net/projects/aoo-extensions/files/17340/3/lo-oo-ressources-linguistiques-fr-v5.1.oxt/download "dict-fr.oxt"
+    c9bc1278b4bd73cbf0666619ed6bcb8d https://sourceforge.net/projects/aoo-extensions/files/17340/5/lo-oo-ressources-linguistiques-fr-v5.3.oxt/download "lo-oo-ressources-linguistiques-fr-v5.3.oxt"
 
 # Italian dictionary.
 [ language=it || language=de || language=de_DE ]
-    b20c2bf3114bdca5749606ad707e19be http://sourceforge.net/projects/aoo-extensions/files/1204/14/dict-it.oxt/download "dict-it.oxt"
+    b20c2bf3114bdca5749606ad707e19be https://sourceforge.net/projects/aoo-extensions/files/1204/14/dict-it.oxt/download "dict-it.oxt"
 
 # Spanish dictionary.
 [ language=es || language=ca || language=ca_XV ]
@@ -76,7 +76,7 @@
 
 # Romanian dictionary.
 [ language=ro ]
-    b05941b975afc0321df0cd48a4d295c8 http://sourceforge.net/projects/aoo-extensions/files/1392/8/dict-ro.1.5.oxt/download "dict-ro.1.5.oxt"
+    c7e22272fd8de1d50fe3b077153be274 https://sourceforge.net/projects/aoo-extensions/files/1392/10/dict-ro.1.7.oxt/download "dict-ro.1.7.oxt"
 
 # Russian dictionary.
 [ language=ru ]
@@ -88,15 +88,15 @@
 
 # Slovenian dictionary.
 [ language=sl ]
-    26b6cebb0534dfd8dc47ea2b746202ce http://sourceforge.net/projects/aoo-extensions/files/3280/7/pack-sl.oxt/download "dict-sl.oxt"
+    a95158fff7aa901938b9bc67c4937a88 https://sourceforge.net/projects/aoo-extensions/files/3280/10/pack-sl.oxt/download "pack-sl.oxt"
 
 # German (Austria) dictionary.
 [ language=de || language=de_AT || language=de_DE ]
-  47b868a8949faba36b8f0ff351940967 http://sourceforge.net/projects/aoo-extensions/files/1697/10/dict-de_at-frami_2013-12-06.oxt/download "dict-de_AT-frami_2012-06-17.oxt"
+  368c87a186ea4b4e170c57c3216a7c4d https://sourceforge.net/projects/aoo-extensions/files/1697/11/dict-de_at-frami_2015-12-28.oxt/download "dict-de_at-frami_2015-12-28.oxt"
 
 # German (Switzerland) dictionary.
 [ language=de || language=de_CH || language=de_DE ]
-    f4ab5c31fa394f05dab58ab773ab5012 http://sourceforge.net/projects/aoo-extensions/files/1699/10/dict-de_ch-frami_2013-12-06.oxt/download "dict-de_CH-frami_2012-06-17.oxt"
+    53a2825eb0809bd00b910fb8bef7775e https://sourceforge.net/projects/aoo-extensions/files/1699/11/dict-de_ch-frami_2015-12-28.oxt/download "dict-de_ch-frami_2015-12-28.oxt"
 
 # Khmer dictionary.
 [ language=km ]
@@ -104,7 +104,7 @@
 
 # Scottish Gaelic.
 [ language=gd ]
-    3a26a49794077643e802cf2cb738ec18 http://sourceforge.net/projects/aoo-extensions/files/4587/10/hunspell-gd-2.8.oxt/download "hunspell-gd-2.8.oxt"
+    b6d877594a0354984c934e069e97c268 https://sourceforge.net/projects/aoo-extensions/files/4587/13/hunspell-gd-3.1.oxt/download "hunspell-gd-3.1.oxt"
 
 # Basque.
 [ language=eu ]
@@ -121,7 +121,7 @@
 
 # Norwegian.
 [ language=nb ]
-    e6ca009bc6aa3d70d8b7d66138b1c28d http://sourceforge.net/projects/aoo-extensions/files/1216/6/dictionary-no-NO-2.1.oxt/download "dictionary-no-NO-2.1.oxt"
+    c06841f7f193e4f083482440999d801b https://sourceforge.net/projects/aoo-extensions/files/1216/2/dictionary-no-no-2.2.oxt/download "dictionary-no-no-2.2.oxt"
 
 # Swedish.
 [ language=sv ]
@@ -137,7 +137,7 @@
 
 # Portuguese (European).
 [ language=pt || language=pt_PT ]
-    57b12ab5d523711198c0f32dc37ecca6 http://sourceforge.net/projects/aoo-extensions/files/1196/38/oo3x-pt-pt-16.7.4.1.oxt/download "dict-pt.oxt"
+    57b12ab5d523711198c0f32dc37ecca6 https://sourceforge.net/projects/aoo-extensions/files/1196/38/oo3x-pt-pt-16.7.4.1.oxt/download "oo3x-pt-pt-16.7.4.1.oxt"
 
 # Catalan.
 [ language=ca ]
