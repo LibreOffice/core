@@ -54,6 +54,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_mailmerge, \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
     sc/util/sc \
+    sc/util/scfilt \
     sfx2/util/sfx \
     sot/util/sot \
     svl/source/fsstor/fsstorage \
