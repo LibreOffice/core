@@ -32,6 +32,7 @@ endif
 endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,langtag, \
+	$(if $(SYSTEM_LIBXML),,external/liblangtag/langtag-libtool-rpath.patch.0) \
     external/liblangtag/clang-cl.patch.0 \
 ))
 
