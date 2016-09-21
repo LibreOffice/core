@@ -34,6 +34,7 @@ class SwAttrSetChg;
 namespace tools { class PolyPolygon; }
 class SwFlyDrawContact;
 class SwFormat;
+class SwViewShell;
 
 #include <anchoredobject.hxx>
 

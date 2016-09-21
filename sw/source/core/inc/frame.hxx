@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FRAME_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FRAME_HXX
 
-#include <vector>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <editeng/borderline.hxx>
@@ -46,13 +45,10 @@ class SwFlowFrame;
 class SwContentFrame;
 class SfxPoolItem;
 class SwAttrSet;
-class SwViewShell;
 class Color;
 class SwBorderAttrs;
 class SwCache;
 class SvxBrushItem;
-class XFillStyleItem;
-class XFillGradientItem;
 class SwSelectionList;
 struct SwPosition;
 struct SwCursorMoveState;
