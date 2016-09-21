@@ -54,7 +54,7 @@ published interface XTerminateListener: com::sun::star::lang::XEventListener
             raises( TerminationVetoException );
 
     /** is called when the master environment is finally terminated.
-        Not veto will be accepted then.
+        No veto will be accepted then.
 
         @param Event
             describe the source of the event (e.g., the desktop)
