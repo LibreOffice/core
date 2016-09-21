@@ -47,10 +47,16 @@ SvxInsRowColDlg::SvxInsRowColDlg(vcl::Window* pParent, bool bCol, const OString&
 
 SvxInsRowColDlg::~SvxInsRowColDlg()
 {
+    disposeOnce();
+}
+
+void SvxInsRowColDlg::dispose()
+{
     m_pCountEdit.clear();
     m_pBeforeBtn.clear();
     m_pAfterBtn.clear();
     m_pDialog.disposeAndClear();
+    SvxAbstractInsRowColDlg::dispose();
 }
 
 short SvxInsRowColDlg::Execute()

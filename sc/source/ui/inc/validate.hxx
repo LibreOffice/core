@@ -30,17 +30,24 @@
 
 #include "anyrefdg.hxx"
 
-struct  ScRefHandlerCaller{
-    virtual ~ScRefHandlerCaller(){}
+struct ScRefHandlerCaller : public virtual VclReferenceBase {
+    virtual ~ScRefHandlerCaller() override {}
 };
 class ScRefHandlerHelper
 {
 protected:
-    ScRefHandlerCaller  *m_pHandler;
+    VclPtr<ScRefHandlerCaller>  m_pHandler;
+// workaround VS2013 issue with pointers to things that contain virtual base class
+#ifdef SAL_W32
+    #pragma pack(push, 16)
+#endif
     void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , ScDocument* );
     void            (ScRefHandlerCaller::*m_pSetActiveHdl)();
     void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::RefEdit* pEdit, formula::RefButton* pButton );
     void            (ScRefHandlerCaller::*m_pRefInputDonePostHdl)();
+#if defined( SAL_W32)
+   #pragma pack(pop)
+#endif
 
 public:
     typedef void            (ScRefHandlerCaller::*PFUNCSETREFHDLTYPE)( const ScRange& , ScDocument* );

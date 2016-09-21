@@ -57,6 +57,7 @@ ScCsvDiff ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
 }
 
 ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
+    VclReferenceBase(),
     Control( &rParent, WB_TABSTOP | WB_NODIALOGCONTROL ),
     mrData( rParent.GetLayoutData() ),
     mxAccessible( nullptr ),
