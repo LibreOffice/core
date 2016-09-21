@@ -695,7 +695,7 @@ void SvxNumRule::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("svxNumRule"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("levelCount"), BAD_CAST(OUString::number(nLevelCount).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("continuousNumbering"), BAD_CAST(OUString::number(bContinuousNumbering).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("continuousNumbering"), BAD_CAST(OUString::boolean(bContinuousNumbering).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("numberingType"), BAD_CAST(OUString::number((int)eNumberingType).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("featureFlags"), BAD_CAST(OUString::number((int)nFeatureFlags).getStr()));
     for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
