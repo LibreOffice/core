@@ -1332,10 +1332,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                VclAbstractDialog* pDlg =
+                VclPtr<VclAbstractDialog> pDlg =
                     pFact->CreateFrameDialog( xFrame, rReq.GetSlot(), sPageURL );
                 short nRet = pDlg->Execute();
-                delete pDlg;
+                pDlg.disposeAndClear();
                 SfxViewFrame* pView = SfxViewFrame::GetFirst();
                 while ( pView )
                 {
@@ -1558,11 +1558,11 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             OUString aLang( aLanguage );
             OSL_TRACE("SfxApplication::OfaExec_Impl: about to create dialog for: %s", OUStringToOString( aLang , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
             // not sure about the vcl::Window*
-            VclAbstractDialog* pDlg = pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage );
+            VclPtr<VclAbstractDialog> pDlg = pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage );
             if( pDlg )
             {
                 pDlg->Execute();
-                delete pDlg;
+                pDlg.disposeAndClear();
             }
             else
             {

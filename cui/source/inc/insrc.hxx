@@ -45,6 +45,7 @@ class SvxInsRowColDlg : public SvxAbstractInsRowColDlg
 public:
     SvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId );
     virtual ~SvxInsRowColDlg() override;
+    virtual void dispose() override;
 
     virtual short Execute() override;
 
