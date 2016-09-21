@@ -82,6 +82,10 @@ public:
         @param rDescr another TypeDescription
     */
     inline TypeDescription( const TypeDescription & rDescr );
+#if defined LIBO_INTERNAL_ONLY
+    TypeDescription(TypeDescription && other): _pTypeDescr(other._pTypeDescr)
+    { other._pTypeDescr = nullptr; }
+#endif
     /** Constructor:
 
         @param pTypeName a type name
@@ -109,6 +113,17 @@ public:
     */
     inline TypeDescription & SAL_CALL operator =( const TypeDescription & rTypeDescr )
         { return this->operator =( rTypeDescr.get() ); }
+
+#if defined LIBO_INTERNAL_ONLY
+    TypeDescription & operator =(TypeDescription && other) {
+        if (_pTypeDescr != nullptr) {
+            typelib_typedescription_release(_pTypeDescr);
+        }
+        _pTypeDescr = other._pTypeDescr;
+        other._pTypeDescr = nullptr;
+        return *this;
+    }
+#endif
 
     /** Tests whether two type descriptions are equal.
 
