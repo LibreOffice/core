@@ -307,14 +307,14 @@ void SwDataSourceRemovedListener::Dispose()
 
 struct SwDBManager_Impl
 {
-    SwDSParam*          pMergeData;
-    AbstractMailMergeDlg*     pMergeDialog;
+    SwDSParam*                    pMergeData;
+    VclPtr<AbstractMailMergeDlg>  pMergeDialog;
     ::rtl::Reference<SwConnectionDisposedListener_Impl> m_xDisposeListener;
     rtl::Reference<SwDataSourceRemovedListener> m_xDataSourceRemovedListener;
 
     explicit SwDBManager_Impl(SwDBManager& rDBManager)
        :pMergeData(nullptr)
-       ,pMergeDialog(nullptr)
+       ,pMergeDialog()
        , m_xDisposeListener(new SwConnectionDisposedListener_Impl(rDBManager))
         {}
 
@@ -2910,7 +2910,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
             //this has been done by the SwConnectionDisposedListener_Impl already
         }
     }
-    DELETEZ(pImpl->pMergeDialog);
+    pImpl->pMergeDialog.disposeAndClear();
 }
 
 void SwDBManager::InsertText(SwWrtShell& rSh,
