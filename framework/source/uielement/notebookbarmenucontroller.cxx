@@ -84,9 +84,29 @@ void NotebookbarMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     SolarMutexGuard aSolarMutexGuard;
     resetPopupMenu( rPopupMenu );
 
+    const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( m_xContext );
+    vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(m_xFrame));
+
+    OUStringBuffer aPath("org.openoffice.Office.UI.Notebookbar/Applications/");
+    switch ( eApp )
+    {
+        case vcl::EnumContext::Application::Application_Writer:
+            aPath.append("Writer");
+            break;
+        case vcl::EnumContext::Application::Application_Calc:
+            aPath.append("Calc");
+            break;
+        case vcl::EnumContext::Application::Application_Impress:
+            aPath.append("Impress");
+            break;
+        default:
+            break;
+    }
+    aPath.append("/Implementations");
+
     const utl::OConfigurationTreeRoot aImplementationsNode(
                                         m_xContext,
-                                        OUString("org.openoffice.Office.UI.Notebookbar/Implementations"),
+                                        OUString( aPath.makeStringAndClear() ),
                                         false);
     if ( !aImplementationsNode.isValid() )
         return;
@@ -222,7 +242,7 @@ void SAL_CALL NotebookbarMenuController::itemSelected( const css::awt::MenuEvent
 
 void SAL_CALL NotebookbarMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
 {
-    OUString aActive = officecfg::Office::UI::Notebookbar::Active::get( m_xContext );
+    OUString aActive;
 
     const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( m_xContext );
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(m_xFrame));
@@ -232,15 +252,15 @@ void SAL_CALL NotebookbarMenuController::itemActivated( const css::awt::MenuEven
     {
         case vcl::EnumContext::Application::Application_Writer:
             aPath.append("Writer");
+            aActive = officecfg::Office::UI::Notebookbar::ActiveWriter::get( m_xContext );
             break;
         case vcl::EnumContext::Application::Application_Calc:
             aPath.append("Calc");
+            aActive = officecfg::Office::UI::Notebookbar::ActiveCalc::get( m_xContext );
             break;
         case vcl::EnumContext::Application::Application_Impress:
             aPath.append("Impress");
-            break;
-        case vcl::EnumContext::Application::Application_Draw:
-            aPath.append("Draw");
+            aActive = officecfg::Office::UI::Notebookbar::ActiveImpress::get( m_xContext );
             break;
         default:
             break;
