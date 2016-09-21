@@ -1110,7 +1110,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
 
 // bPrev is set whether Reformat.Start() was called because of Prev().
 // Else, wo don't know whether we can limit the repaint or not.
-bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
+bool SwTextFrame::FormatLine(SwTextFormatter &rLine, const bool bPrev, sal_Int32& rLoopProtection)
 {
     OSL_ENSURE( ! IsVertical() || IsSwapped(),
             "SwTextFrame::FormatLine( rLine, bPrev) with unswapped frame" );
@@ -1126,7 +1126,12 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
     if( rLine.GetCurr()->IsClipping() )
         rLine.CalcUnclipped( nOldTop, nOldBottom );
 
-    const sal_Int32 nNewStart = rLine.FormatLine( rLine.GetStart() );
+    const sal_Int32 nStart = rLine.GetStart();
+    const sal_Int32 nNewStart = rLine.FormatLine(nStart);
+    if (nNewStart == nStart)
+        ++rLoopProtection;
+    else
+        rLoopProtection = 0;
 
     OSL_ENSURE( Frame().Pos().Y() + Prt().Pos().Y() == rLine.GetFirstPos(),
             "SwTextFrame::FormatLine: frame leaves orbit." );
@@ -1420,6 +1425,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
      * the lines, because it could happen that one line can overflow
      * from the Follow to the Master.
      */
+    int nLoopProtection = 0;
     do
     {
         if( bFirst )
@@ -1481,7 +1487,7 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
         {
             const bool bOldEndHyph = rLine.GetCurr()->IsEndHyph();
             const bool bOldMidHyph = rLine.GetCurr()->IsMidHyph();
-            bFormat = FormatLine( rLine, bPrev );
+            bFormat = FormatLine(rLine, bPrev, nLoopProtection);
             // There can only be one bPrev ... (???)
             bPrev = false;
             if ( bMaxHyph )
@@ -1498,6 +1504,8 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                 }
             }
         }
+        else
+            nLoopProtection = 0;
 
         if( !rInf.IsNewLine() )
         {
@@ -1518,8 +1526,10 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                     break;
             }
         }
-        bBreak = aFrameBreak.IsBreakNowWidAndOrp(rLine);
-    }while( !bBreak );
+        const bool bWillEndlessInsert = nLoopProtection > 250;
+        SAL_WARN_IF(bWillEndlessInsert, "sw", "loop detection triggered");
+        bBreak = aFrameBreak.IsBreakNowWidAndOrp(rLine) || bWillEndlessInsert;
+    } while( !bBreak );
 
     if( pFreeze )
     {
