@@ -65,7 +65,7 @@ $(call gb_UITest_get_target,%) :| $(gb_UITest_DEPS)
 		    || ($(if $(value gb_CppunitTest_postprocess), \
 				    RET=$$?; \
 				    $(call gb_CppunitTest_postprocess,$(gb_UITest_EXECUTABLE_GDB),$@.core,$$RET) >> $@.log 2>&1;) \
-			    cat $@.log; $(gb_UITest_UNITTESTFAILED) Python $*))))
+			    cat $@.log; $(gb_UITest_UNITTESTFAILED) UI $*))))
 
 # always use udkapi and URE services
 define gb_UITest_UITest
