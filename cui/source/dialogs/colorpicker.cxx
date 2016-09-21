@@ -47,12 +47,29 @@
 #include "colorpicker.hxx"
 #include <cmath>
 #include <limits>
+#include <o3tl/typed_flags_set.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::beans;
 using namespace ::basegfx;
+
+enum class UpdateFlags
+{
+    NONE         = 0x00,
+    RGB          = 0x01,
+    CMYK         = 0x02,
+    HSB          = 0x04,
+    ColorChooser = 0x08,
+    ColorSlider  = 0x10,
+    Hex          = 0x20,
+    All          = 0x3f,
+};
+namespace o3tl {
+    template<> struct typed_flags<UpdateFlags> : is_typed_flags<UpdateFlags, 0x3f> {};
+}
+
 
 namespace cui
 {
@@ -853,14 +870,6 @@ void ColorSliderControl::SetValue(const Color& rColor, ColorMode eMode, double d
     }
 }
 
-const sal_uInt16 UPDATE_RGB = 0x01;
-const sal_uInt16 UPDATE_CMYK = 0x02;
-const sal_uInt16 UPDATE_HSB = 0x04;
-const sal_uInt16 UPDATE_COLORCHOOSER = 0x08;
-const sal_uInt16 UPDATE_COLORSLIDER = 0x10;
-const sal_uInt16 UPDATE_HEX = 0x20;
-const sal_uInt16 UPDATE_ALL = 0xff;
-
 class ColorPickerDialog : public ModalDialog
 {
 public:
@@ -871,7 +880,7 @@ public:
     }
     virtual void dispose() override;
 
-    void update_color(sal_uInt16 n = UPDATE_ALL);
+    void update_color(UpdateFlags n = UpdateFlags::All);
 
     DECL_LINK_TYPED(ColorFieldControlModifydl, ColorFieldControl&, void);
     DECL_LINK_TYPED(ColorSliderControlModifyHdl, ColorSliderControl&, void);
@@ -1063,7 +1072,7 @@ sal_Int32 ColorPickerDialog::GetColor() const
     return Color( toInt(mdRed,255.0), toInt(mdGreen,255.0), toInt(mdBlue,255.0) ).GetColor();
 }
 
-void ColorPickerDialog::update_color( sal_uInt16 n )
+void ColorPickerDialog::update_color( UpdateFlags n )
 {
     sal_uInt8 nRed = toInt(mdRed,255.0);
     sal_uInt8 nGreen = toInt(mdGreen,255.0);
@@ -1071,14 +1080,14 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
 
     Color aColor(nRed, nGreen, nBlue);
 
-    if (n & UPDATE_RGB) // update RGB
+    if (n & UpdateFlags::RGB) // update RGB
     {
         mpMFRed->SetValue(nRed);
         mpMFGreen->SetValue(nGreen);
         mpMFBlue->SetValue(nBlue);
     }
 
-    if (n & UPDATE_CMYK) // update CMYK
+    if (n & UpdateFlags::CMYK) // update CMYK
     {
         mpMFCyan->SetValue(toInt(mdCyan, 100.0));
         mpMFMagenta->SetValue(toInt(mdMagenta, 100.0));
@@ -1086,14 +1095,14 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
         mpMFKey->SetValue(toInt(mdKey, 100.0));
     }
 
-    if (n & UPDATE_HSB ) // update HSB
+    if (n & UpdateFlags::HSB ) // update HSB
     {
         mpMFHue->SetValue(toInt(mdHue, 1.0));
         mpMFSaturation->SetValue(toInt( mdSat, 100.0));
         mpMFBrightness->SetValue(toInt( mdBri, 100.0));
     }
 
-    if (n & UPDATE_COLORCHOOSER ) // update Color Chooser 1
+    if (n & UpdateFlags::ColorChooser ) // update Color Chooser 1
     {
         switch( meMode )
         {
@@ -1118,7 +1127,7 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
         }
     }
 
-    if (n & UPDATE_COLORSLIDER) // update Color Chooser 2
+    if (n & UpdateFlags::ColorSlider) // update Color Chooser 2
     {
         switch (meMode)
         {
@@ -1143,7 +1152,7 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
         }
     }
 
-    if (n & UPDATE_HEX) // update hex
+    if (n & UpdateFlags::Hex) // update hex
     {
         mpEDHex->SetColor(aColor.GetColor());
     }
@@ -1166,8 +1175,6 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
 
 IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldControl&, void)
 {
-    sal_uInt16 n = 0;
-
     double x = mpColorField->GetX();
     double y = mpColorField->GetY();
 
@@ -1199,16 +1206,11 @@ IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldCo
         break;
     }
 
-    n = UPDATE_ALL &~ (UPDATE_COLORCHOOSER);
-
-    if (n)
-        update_color(n);
-
+    update_color(UpdateFlags::All & ~(UpdateFlags::ColorChooser));
 }
+
 IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSliderControl&, void)
 {
-    sal_uInt16 n = 0;
-
     double dValue = mpColorSlider->GetValue();
     switch (meMode)
     {
@@ -1232,63 +1234,62 @@ IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSlide
         break;
     }
 
-    n = UPDATE_ALL&~(UPDATE_COLORSLIDER);
-    if (n)
-        update_color(n);
+    update_color(UpdateFlags::All & ~(UpdateFlags::ColorSlider));
 }
+
 IMPL_LINK_TYPED(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
 {
-    sal_uInt16 n = 0;
+    UpdateFlags n = UpdateFlags::NONE;
 
     if (&rEdit == mpMFRed)
     {
         setColorComponent( ColorComponent::Red, ((double)mpMFRed->GetValue()) / 255.0 );
-        n = UPDATE_ALL &~ (UPDATE_RGB);
+        n = UpdateFlags::All & ~(UpdateFlags::RGB);
     }
     else if (&rEdit == mpMFGreen)
     {
         setColorComponent( ColorComponent::Green, ((double)mpMFGreen->GetValue()) / 255.0 );
-        n = UPDATE_ALL &~ (UPDATE_RGB);
+        n = UpdateFlags::All & ~(UpdateFlags::RGB);
     }
     else if (&rEdit == mpMFBlue)
     {
         setColorComponent( ColorComponent::Blue, ((double)mpMFBlue->GetValue()) / 255.0 );
-        n = UPDATE_ALL &~ (UPDATE_RGB);
+        n = UpdateFlags::All & ~(UpdateFlags::RGB);
     }
     else if (&rEdit == mpMFHue)
     {
         setColorComponent( ColorComponent::Hue, (double)mpMFHue->GetValue() );
-        n = UPDATE_ALL &~ (UPDATE_HSB);
+        n = UpdateFlags::All & ~(UpdateFlags::HSB);
     }
     else if (&rEdit == mpMFSaturation)
     {
         setColorComponent( ColorComponent::Saturation, ((double)mpMFSaturation->GetValue()) / 100.0 );
-        n = UPDATE_ALL &~ (UPDATE_HSB);
+        n = UpdateFlags::All & ~(UpdateFlags::HSB);
     }
     else if (&rEdit == mpMFBrightness)
     {
         setColorComponent( ColorComponent::Brightness, ((double)mpMFBrightness->GetValue()) / 100.0 );
-        n = UPDATE_ALL &~ (UPDATE_HSB);
+        n = UpdateFlags::All & ~(UpdateFlags::HSB);
     }
     else if (&rEdit == mpMFCyan)
     {
         setColorComponent( ColorComponent::Cyan, ((double)mpMFCyan->GetValue()) / 100.0 );
-        n = UPDATE_ALL &~ (UPDATE_CMYK);
+        n = UpdateFlags::All & ~(UpdateFlags::CMYK);
     }
     else if (&rEdit == mpMFMagenta)
     {
         setColorComponent( ColorComponent::Magenta, ((double)mpMFMagenta->GetValue()) / 100.0 );
-        n = UPDATE_ALL &~ (UPDATE_CMYK);
+        n = UpdateFlags::All & ~(UpdateFlags::CMYK);
     }
     else if (&rEdit == mpMFYellow)
     {
         setColorComponent( ColorComponent::Yellow, ((double)mpMFYellow->GetValue()) / 100.0 );
-        n = UPDATE_ALL &~ (UPDATE_CMYK);
+        n = UpdateFlags::All & ~(UpdateFlags::CMYK);
     }
     else if (&rEdit == mpMFKey)
     {
         setColorComponent( ColorComponent::Key, ((double)mpMFKey->GetValue()) / 100.0 );
-        n = UPDATE_ALL&~(UPDATE_CMYK);
+        n = UpdateFlags::All & ~(UpdateFlags::CMYK);
     }
     else if (&rEdit == mpEDHex)
     {
@@ -1306,12 +1307,12 @@ IMPL_LINK_TYPED(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
 
                 RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
                 RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
-                n = UPDATE_ALL &~ (UPDATE_HEX);
+                n = UpdateFlags::All & ~(UpdateFlags::Hex);
             }
         }
     }
 
-    if (n)
+    if (n != UpdateFlags::NONE)
         update_color(n);
 }
 
@@ -1343,7 +1344,7 @@ IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ModeModifyHdl, RadioButton&, void)
     if (meMode != eMode)
     {
         meMode = eMode;
-        update_color(UPDATE_COLORCHOOSER | UPDATE_COLORSLIDER);
+        update_color(UpdateFlags::ColorChooser | UpdateFlags::ColorSlider);
     }
 }
 
