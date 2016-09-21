@@ -618,7 +618,8 @@ void XMLTableExport::exportTableTemplates()
                 pElements++;
             }
 
-            if (mbWriter)
+            SvtSaveOptions::ODFSaneDefaultVersion eVersion = mrExport.getSaneDefaultVersion();
+            if (mbWriter && ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0))
             {
                 pElements = getWriterSpecificTableStyleMap();
                 while(pElements->meElement != XML_TOKEN_END)
