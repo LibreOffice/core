@@ -42,9 +42,11 @@ namespace dbaui
         Show();
     }
 
-    OTableConnection::OTableConnection( const OTableConnection& _rConn ) : Window(_rConn.m_pParent.get())
-        ,m_pData(_rConn.GetData()->NewInstance())
-        ,m_pParent(nullptr)
+    OTableConnection::OTableConnection( const OTableConnection& _rConn )
+        : VclReferenceBase()
+         ,Window(_rConn.m_pParent.get())
+         ,m_pData(_rConn.GetData()->NewInstance())
+         ,m_pParent(nullptr)
     {
         *this = _rConn;
     }
