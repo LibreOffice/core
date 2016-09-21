@@ -66,6 +66,9 @@ public:
     virtual                     ~ScCsvTableBox() override;
     virtual void                dispose() override;
 
+    // workaround VS2013 bug in handling virtual bases
+                                ScCsvTableBox( const ScCsvTableBox& ) = delete;
+
     /** Finishes initialization. Must be called after constructing a new object. */
     void Init();
 

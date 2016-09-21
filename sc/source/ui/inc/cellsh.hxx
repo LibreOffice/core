@@ -38,13 +38,15 @@ class AbstractScLinkedAreaDlg;
 struct CellShell_Impl
 {
     TransferableClipboardListener*  m_pClipEvtLstnr;
-    AbstractScLinkedAreaDlg*        m_pLinkedDlg;
+    VclPtr<AbstractScLinkedAreaDlg> m_pLinkedDlg;
     SfxRequest*                     m_pRequest;
 
     CellShell_Impl() :
         m_pClipEvtLstnr( nullptr ),
-        m_pLinkedDlg( nullptr ),
+        m_pLinkedDlg(),
         m_pRequest( nullptr ) {}
+
+    ~CellShell_Impl();
 };
 
 class ScCellShell: public ScFormatShell
