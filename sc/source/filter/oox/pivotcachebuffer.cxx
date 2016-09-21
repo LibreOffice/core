@@ -833,8 +833,8 @@ OUString PivotCacheField::createDateGroupField( const Reference< XDataPilotField
 
 OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotField >& rxBaseDPField, const PivotCacheField& rBaseCacheField, PivotCacheGroupItemVector& orItemNames ) const
 {
-    OSL_ENSURE( hasGroupItems() && !maDiscreteItems.empty(), "PivotCacheField::createParentGroupField - not a group field" );
-    OSL_ENSURE( maDiscreteItems.size() == orItemNames.size(), "PivotCacheField::createParentGroupField - number of item names does not match grouping info" );
+    SAL_WARN_IF( !hasGroupItems() || maDiscreteItems.empty(), "sc", "PivotCacheField::createParentGroupField - not a group field" );
+    SAL_WARN_IF( maDiscreteItems.size() != orItemNames.size(), "sc", "PivotCacheField::createParentGroupField - number of item names does not match grouping info" );
     Reference< XDataPilotFieldGrouping > xDPGrouping( rxBaseDPField, UNO_QUERY );
     if( !xDPGrouping.is() ) return OUString();
 
@@ -860,7 +860,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
     Reference< XDataPilotField > xDPGroupField;
     for( GroupItemMap::iterator aBeg = aItemMap.begin(), aIt = aBeg, aEnd = aItemMap.end(); aIt != aEnd; ++aIt )
     {
-        OSL_ENSURE( !aIt->empty(), "PivotCacheField::createParentGroupField - item/group should not be empty" );
+        SAL_WARN_IF( aIt->empty(), "sc", "PivotCacheField::createParentGroupField - item/group should not be empty" );
         if( !aIt->empty() )
         {
             /*  Insert the names of the items that are part of this group. Calc
@@ -882,7 +882,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
             {
                 // only the first call of createNameGroup() returns the new field
                 Reference< XDataPilotField > xDPNewField = xDPGrouping->createNameGroup( ContainerHelper::vectorToSequence( aMembers ) );
-                OSL_ENSURE( xDPGroupField.is() != xDPNewField.is(), "PivotCacheField::createParentGroupField - missing group field" );
+                SAL_WARN_IF( xDPGroupField.is() == xDPNewField.is(), "sc", "PivotCacheField::createParentGroupField - missing group field" );
                 if( !xDPGroupField.is() )
                     xDPGroupField = xDPNewField;
 
@@ -918,14 +918,15 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 }
                 catch( Exception& )
                 {
+                    SAL_WARN("sc", "PivotCacheField::createParentGroupField - exception was thrown" );
                 }
-                OSL_ENSURE( !aAutoName.isEmpty(), "PivotCacheField::createParentGroupField - cannot find auto-generated group name" );
+                SAL_WARN_IF( aAutoName.isEmpty(), "sc", "PivotCacheField::createParentGroupField - cannot find auto-generated group name" );
 
                 // get the real group name from the list of group items
                 OUString aGroupName;
                 if( const PivotCacheItem* pGroupItem = maGroupItems.getCacheItem( static_cast< sal_Int32 >( aIt - aBeg ) ) )
                     aGroupName = pGroupItem->getName();
-                OSL_ENSURE( !aGroupName.isEmpty(), "PivotCacheField::createParentGroupField - cannot find group name" );
+                SAL_WARN_IF( aGroupName.isEmpty(), "sc", "PivotCacheField::createParentGroupField - cannot find group name" );
                 if( aGroupName.isEmpty() )
                     aGroupName = aAutoName;
 
@@ -945,6 +946,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
             }
             catch( Exception& )
             {
+                SAL_WARN("sc", "PivotCacheField::createParentGroupField - exception was thrown" );
             }
         }
     }

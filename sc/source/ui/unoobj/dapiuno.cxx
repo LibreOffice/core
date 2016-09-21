@@ -2618,6 +2618,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         Reference< XMembersAccess > xMembers = GetMembers();
         if (!xMembers.is())
         {
+            SAL_WARN("sc.ui", "Cannot access members of the field object.");
             delete pNewGroupDim;
             throw RuntimeException();
         }
@@ -2628,6 +2629,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
 
             if (!xMembers->hasByName(aEntryName))
             {
+                SAL_WARN("sc.ui", "There is no member with that name: " + aEntryName + ".");
                 delete pNewGroupDim;
                 throw IllegalArgumentException();
             }
@@ -2679,10 +2681,11 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
             try
             {
                 xRet.set(xFields->getByName(sNewDim), UNO_QUERY);
-                OSL_ENSURE(xRet.is(), "there is a name, so there should be also a field");
+                SAL_WARN_IF(!xRet.is(), "sc.ui", "there is a name, so there should be also a field");
             }
             catch (const container::NoSuchElementException&)
             {
+                SAL_WARN("sc.ui", "Cannot find field with that name: " + sNewDim + ".");
                 // Avoid throwing exception that's not specified in the method signature.
                 throw RuntimeException();
             }
