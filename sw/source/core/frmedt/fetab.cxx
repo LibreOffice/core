@@ -1328,59 +1328,58 @@ bool SwFEShell::DeleteTableSel()
 size_t SwFEShell::GetCurTabColNum() const
 {
     //!!!GetCurMouseTabColNum() mitpflegen!!!!
-    size_t nRet = 0;
-
     SwFrame *pFrame = GetCurrFrame();
     OSL_ENSURE( pFrame, "Cursor parked?" );
 
     // check if SPoint/Mark of current cursor are in a table
-    if( pFrame && pFrame->IsInTab() )
+    if (!pFrame || !pFrame->IsInTab())
+        return 0;
+
+    size_t nRet = 0;
+    do {            // JP 26.09.95: why compare with ContentFrame
+                    //              and not with CellFrame ????
+        pFrame = pFrame->GetUpper();
+    } while ( !pFrame->IsCellFrame() );
+    SWRECTFN( pFrame )
+
+    const SwPageFrame* pPage = pFrame->FindPageFrame();
+
+    // get TabCols, as only via these we get to the position
+    SwTabCols aTabCols;
+    GetTabCols( aTabCols );
+
+    if( pFrame->FindTabFrame()->IsRightToLeft() )
     {
-        do {            // JP 26.09.95: why compare with ContentFrame
-                        //              and not with CellFrame ????
-            pFrame = pFrame->GetUpper();
-        } while ( !pFrame->IsCellFrame() );
-        SWRECTFN( pFrame )
+        long nX = (pFrame->Frame().*fnRect->fnGetRight)() - (pPage->Frame().*fnRect->fnGetLeft)();
 
-        const SwPageFrame* pPage = pFrame->FindPageFrame();
+        const long nRight = aTabCols.GetLeftMin() + aTabCols.GetRight();
 
-        // get TabCols, as only via these we get to the position
-        SwTabCols aTabCols;
-        GetTabCols( aTabCols );
-
-        if( pFrame->FindTabFrame()->IsRightToLeft() )
+        if ( !::IsSame( nX, nRight ) )
         {
-            long nX = (pFrame->Frame().*fnRect->fnGetRight)() - (pPage->Frame().*fnRect->fnGetLeft)();
-
-            const long nRight = aTabCols.GetLeftMin() + aTabCols.GetRight();
-
-            if ( !::IsSame( nX, nRight ) )
-            {
-                nX = nRight - nX + aTabCols.GetLeft();
-                for ( size_t i = 0; i < aTabCols.Count(); ++i )
-                    if ( ::IsSame( nX, aTabCols[i] ) )
-                    {
-                        nRet = i + 1;
-                        break;
-                    }
-            }
+            nX = nRight - nX + aTabCols.GetLeft();
+            for ( size_t i = 0; i < aTabCols.Count(); ++i )
+                if ( ::IsSame( nX, aTabCols[i] ) )
+                {
+                    nRet = i + 1;
+                    break;
+                }
         }
-        else
+    }
+    else
+    {
+        const long nX = (pFrame->Frame().*fnRect->fnGetLeft)() -
+                        (pPage->Frame().*fnRect->fnGetLeft)();
+
+        const long nLeft = aTabCols.GetLeftMin();
+
+        if ( !::IsSame( nX, nLeft + aTabCols.GetLeft() ) )
         {
-            const long nX = (pFrame->Frame().*fnRect->fnGetLeft)() -
-                            (pPage->Frame().*fnRect->fnGetLeft)();
-
-            const long nLeft = aTabCols.GetLeftMin();
-
-            if ( !::IsSame( nX, nLeft + aTabCols.GetLeft() ) )
-            {
-                for ( size_t i = 0; i < aTabCols.Count(); ++i )
-                    if ( ::IsSame( nX, nLeft + aTabCols[i] ) )
-                    {
-                        nRet = i + 1;
-                        break;
-                    }
-            }
+            for ( size_t i = 0; i < aTabCols.Count(); ++i )
+                if ( ::IsSame( nX, nLeft + aTabCols[i] ) )
+                {
+                    nRet = i + 1;
+                    break;
+                }
         }
     }
     return nRet;
