@@ -1020,7 +1020,6 @@ void SwFEShell::SetRowsToRepeat( sal_uInt16 nSet )
 // returns the number of rows consecutively selected from top
 static sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
 {
-    sal_uInt16 nRet = USHRT_MAX;
     Point aTmpPt;
     const SwContentNode *pNd;
     const SwContentFrame *pFrame;
@@ -1030,25 +1029,27 @@ static sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
     else
         pFrame = nullptr;
 
-    if ( pFrame && pFrame->IsInTab() )
+    if (!pFrame || !pFrame->IsInTab())
+        return USHRT_MAX;
+
+    sal_uInt16 nRet = USHRT_MAX;
+
+    const SwFrame* pRow = pFrame->GetUpper();
+    while ( !pRow->GetUpper()->IsTabFrame() )
+        pRow = pRow->GetUpper();
+
+    const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(pRow->GetUpper());
+    const SwTableLine* pTabLine = static_cast<const SwRowFrame*>(pRow)->GetTabLine();
+
+    sal_uInt16 nI = 0;
+    while ( nI < pTabFrame->GetTable()->GetTabLines().size() )
     {
-        const SwFrame* pRow = pFrame->GetUpper();
-        while ( !pRow->GetUpper()->IsTabFrame() )
-            pRow = pRow->GetUpper();
-
-        const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(pRow->GetUpper());
-        const SwTableLine* pTabLine = static_cast<const SwRowFrame*>(pRow)->GetTabLine();
-
-        sal_uInt16 nI = 0;
-        while ( nI < pTabFrame->GetTable()->GetTabLines().size() )
+        if ( pTabFrame->GetTable()->GetTabLines()[ nI ] == pTabLine )
         {
-            if ( pTabFrame->GetTable()->GetTabLines()[ nI ] == pTabLine )
-            {
-                nRet = nI;
-                break;
-            }
-            ++nI;
+            nRet = nI;
+            break;
         }
+        ++nI;
     }
 
     return nRet;
