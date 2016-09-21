@@ -871,6 +871,24 @@ SwRedlineData::~SwRedlineData()
     delete pNext;
 }
 
+bool SwRedlineData::CanCombine(const SwRedlineData& rCmp) const
+{
+    DateTime aTime = GetTimeStamp();
+    aTime.SetSec(0);
+    DateTime aCompareTime = rCmp.GetTimeStamp();
+    aCompareTime.SetSec(0);
+    return nAuthor == rCmp.nAuthor &&
+            eType == rCmp.eType &&
+            sComment == rCmp.sComment &&
+            aTime == aCompareTime &&
+            (( !pNext && !rCmp.pNext ) ||
+                ( pNext && rCmp.pNext &&
+                pNext->CanCombine( *rCmp.pNext ))) &&
+            (( !pExtraData && !rCmp.pExtraData ) ||
+                ( pExtraData && rCmp.pExtraData &&
+                    *pExtraData == *rCmp.pExtraData ));
+}
+
 /// ExtraData is copied. The Pointer's ownership is thus NOT transferred
 /// to the Redline Object!
 void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )

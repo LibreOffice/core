@@ -3960,11 +3960,20 @@ void SwUiWriterTest::testRedlineTimestamp()
     pWrtShell->EndDoc();
     pWrtShell->Insert("zzz");
 
+    // Inserting additional characters at the start changed the table size to
+    // 3, i.e. the first and the second "aaa" wasn't combined.
+    pWrtShell->SttDoc();
+    pWrtShell->Insert("aaa");
+
     // Now assert that at least one of the the seconds are not 0.
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    if (rTable.size() >= 2 && rTable[0]->GetRedlineData().GetTimeStamp().GetMin() != rTable[1]->GetRedlineData().GetTimeStamp().GetMin())
+        // The relatively rare case when waiting for a second also changes the minute.
+        return;
+
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rTable.size());
     sal_uInt16 nSec1 = rTable[0]->GetRedlineData().GetTimeStamp().GetSec();
-    sal_uInt16 nSec2 = rTable[0]->GetRedlineData().GetTimeStamp().GetSec();
+    sal_uInt16 nSec2 = rTable[1]->GetRedlineData().GetTimeStamp().GetSec();
     // This failed, seconds was always 0.
     CPPUNIT_ASSERT(nSec1 != 0 || nSec2 != 0);
 }
