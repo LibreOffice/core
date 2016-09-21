@@ -127,7 +127,9 @@ inline OString getDeviceType(cl_device_id aDeviceId)
 
 inline bool getDeviceInfoBool(cl_device_id aDeviceId, cl_device_info aDeviceInfo)
 {
-    cl_bool bCLBool;
+    cl_bool bCLBool = 0;
+        // init to false in case clGetDeviceInfo returns CL_INVALID_VALUE when
+        // requesting unsupported (in version 1.0) CL_DEVICE_LINKER_AVAILABLE
     clGetDeviceInfo(aDeviceId, aDeviceInfo, sizeof(bCLBool), &bCLBool, nullptr);
     return bCLBool == CL_TRUE;
 }
