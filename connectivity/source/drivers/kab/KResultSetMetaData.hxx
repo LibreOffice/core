@@ -40,7 +40,7 @@ namespace connectivity
                                                         //  of the corresponding KAddressBook field
 
         protected:
-            virtual ~KabResultSetMetaData();
+            virtual ~KabResultSetMetaData() override;
 
         public:
             KabResultSetMetaData();

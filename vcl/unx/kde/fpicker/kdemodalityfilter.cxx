@@ -50,7 +50,7 @@ bool KDEModalityFilter::eventFilter( QObject *pObject, QEvent *pEvent )
     if ( pObject->isWidgetType() && pEvent->type() == QEvent::Show )
     {
         KDialogBase* pDlg = ::qt_cast< KDialogBase* >( pObject );
-        if ( pDlg != NULL && m_nWinId != 0 )
+        if ( pDlg != nullptr && m_nWinId != 0 )
         {
             XSetTransientForHint( qt_xdisplay(), pDlg->winId(), m_nWinId );
             m_nWinId = 0;

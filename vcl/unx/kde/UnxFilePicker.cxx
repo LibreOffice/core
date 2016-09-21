@@ -136,7 +136,7 @@ bool controlIdInfo( sal_Int16 nControlId, OUString &rType, sal_Int32 &rTitleId )
         { ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,       &aListBox,    STR_SVT_FILEPICKER_TEMPLATES },
         { ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE, &aListBox,    STR_SVT_FILEPICKER_IMAGE_TEMPLATE },
         { ExtendedFilePickerElementIds::CHECKBOX_SELECTION,     &aCheckBox,   STR_SVT_FILEPICKER_SELECTION },
-        { 0, 0, 0 }
+        { 0, nullptr, 0 }
     };
 
     for ( pPtr = pArray; pPtr->nId && ( pPtr->nId != nControlId ); ++pPtr )
@@ -193,8 +193,8 @@ UnxFilePicker::UnxFilePicker( const uno::Reference<uno::XComponentContext>& )
           m_nFilePickerPid( -1 ),
           m_nFilePickerWrite( -1 ),
           m_nFilePickerRead( -1 ),
-          m_pNotifyThread( NULL ),
-          m_pCommandThread( NULL ),
+          m_pNotifyThread( nullptr ),
+          m_pCommandThread( nullptr ),
           m_pResMgr( ResMgr::CreateResMgr("fps_office") )
 {
 }
@@ -203,15 +203,15 @@ UnxFilePicker::~UnxFilePicker()
 {
     if ( m_nFilePickerPid > 0 )
     {
-        sendCommand( OUString( "exit" ) );
-        waitpid( m_nFilePickerPid, NULL, 0 );
+        sendCommand( "exit" );
+        waitpid( m_nFilePickerPid, nullptr, 0 );
     }
 
     if ( m_pCommandThread )
     {
         m_pCommandThread->join();
 
-        delete m_pCommandThread, m_pCommandThread = NULL;
+        delete m_pCommandThread; m_pCommandThread = nullptr;
     }
 
     if ( m_pNotifyThread )
@@ -220,7 +220,7 @@ UnxFilePicker::~UnxFilePicker()
 
         m_pNotifyThread->join();
 
-        delete m_pNotifyThread, m_pNotifyThread = NULL;
+        delete m_pNotifyThread; m_pNotifyThread = nullptr;
     }
 
     if ( m_nFilePickerWrite >= 0 )
@@ -229,7 +229,7 @@ UnxFilePicker::~UnxFilePicker()
     if ( m_nFilePickerRead >= 0 )
         close( m_nFilePickerRead );
 
-    delete m_pResMgr, m_pResMgr = NULL;
+    delete m_pResMgr; m_pResMgr = nullptr;
 }
 
 void SAL_CALL UnxFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
@@ -272,7 +272,7 @@ sal_Int16 SAL_CALL UnxFilePicker::execute()
     // this is _not_ an osl::Condition, see i#93366
     m_pCommandThread->execCondition().reset();
 
-    sendCommand( OUString( "exec" ));
+    sendCommand( "exec" );
 
     m_pCommandThread->execCondition().wait();
 
@@ -287,11 +287,10 @@ void SAL_CALL UnxFilePicker::setMultiSelectionMode( sal_Bool bMode )
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OUString aString = bMode?
-        OUString( "setMultiSelection true" ):
-        OUString( "setMultiSelection false" );
-
-    sendCommand( aString );
+    if ( bMode )
+        sendCommand( "setMultiSelection true" );
+    else
+        sendCommand( "setMultiSelection false" );
 }
 
 void SAL_CALL UnxFilePicker::setDefaultName( const OUString &rName )
@@ -328,7 +327,7 @@ OUString SAL_CALL UnxFilePicker::getDisplayDirectory()
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sendCommand( OUString( "getDirectory" ),
+    sendCommand( "getDirectory",
                  m_pCommandThread->getDirectoryCondition() );
 
     return m_pCommandThread->getDirectory();
@@ -340,7 +339,7 @@ uno::Sequence< OUString > SAL_CALL UnxFilePicker::getFiles()
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sendCommand( OUString( "getFiles" ),
+    sendCommand( "getFiles",
                  m_pCommandThread->getFilesCondition() );
 
     return m_pCommandThread->getFiles();
@@ -382,7 +381,7 @@ OUString SAL_CALL UnxFilePicker::getCurrentFilter()
     checkFilePicker();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sendCommand( OUString( "getCurrentFilter" ),
+    sendCommand( "getCurrentFilter",
                  m_pCommandThread->getCurrentFilterCondition() );
 
     return m_pCommandThread->getCurrentFilter();
@@ -828,7 +827,7 @@ void UnxFilePicker::initFilePicker()
 
         // TODO pass here the real parent (not possible for system dialogs
         // yet), and default to GetDefDialogParent() only when the real parent
-        // is NULL
+        // is nullptr
         vcl::Window *pParentWin = Application::GetDefDialogParent();
         if ( pParentWin )
         {
@@ -841,7 +840,7 @@ void UnxFilePicker::initFilePicker()
         }
 
         // Execute the fpicker implementation
-        execlp( helper.getStr(), helper.getStr(), "--winid", pWinId, NULL );
+        execlp( helper.getStr(), helper.getStr(), "--winid", pWinId, nullptr );
 
         // Error, finish the child
         exit( -1 );

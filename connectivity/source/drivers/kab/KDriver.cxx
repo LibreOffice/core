@@ -140,11 +140,11 @@ KabImplModule::KabImplModule( const Reference< XComponentContext >& _rxContext )
     :m_xContext(_rxContext)
     ,m_bAttemptedLoadModule(false)
     ,m_bAttemptedInitialize(false)
-    ,m_hConnectorModule(NULL)
-    ,m_pConnectionFactoryFunc(NULL)
-    ,m_pApplicationInitFunc(NULL)
-    ,m_pApplicationShutdownFunc(NULL)
-    ,m_pKDEVersionCheckFunc(NULL)
+    ,m_hConnectorModule(nullptr)
+    ,m_pConnectionFactoryFunc(nullptr)
+    ,m_pApplicationInitFunc(nullptr)
+    ,m_pApplicationShutdownFunc(nullptr)
+    ,m_pKDEVersionCheckFunc(nullptr)
 {
     if ( !m_xContext.is() )
         throw NullPointerException();
@@ -178,7 +178,7 @@ namespace
     template< typename FUNCTION >
     void lcl_getFunctionFromModuleOrUnload( oslModule& _rModule, const sal_Char* _pAsciiSymbolName, FUNCTION& _rFunction )
     {
-        _rFunction = NULL;
+        _rFunction = nullptr;
         if ( _rModule )
         {
 
@@ -192,7 +192,7 @@ namespace
                 aBuf.append( _pAsciiSymbolName );
                 OSL_FAIL( aBuf.makeStringAndClear().getStr() );
                 osl_unloadModule( _rModule );
-                _rModule = NULL;
+                _rModule = nullptr;
             }
         }
     }
@@ -204,7 +204,7 @@ extern "C" { void SAL_CALL thisModule() {} }
 bool KabImplModule::impl_loadModule()
 {
     if ( m_bAttemptedLoadModule )
-        return ( m_hConnectorModule != NULL );
+        return ( m_hConnectorModule != nullptr );
     m_bAttemptedLoadModule = true;
 
     OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc && !m_pApplicationInitFunc && !m_pApplicationShutdownFunc && !m_pKDEVersionCheckFunc,
@@ -231,15 +231,15 @@ bool KabImplModule::impl_loadModule()
 
 void KabImplModule::impl_unloadModule()
 {
-    OSL_PRECOND( m_hConnectorModule != NULL, "KabImplModule::impl_unloadModule: no module!" );
+    OSL_PRECOND( m_hConnectorModule != nullptr, "KabImplModule::impl_unloadModule: no module!" );
 
     osl_unloadModule( m_hConnectorModule );
-    m_hConnectorModule = NULL;
+    m_hConnectorModule = nullptr;
 
-    m_pConnectionFactoryFunc = NULL;
-    m_pApplicationInitFunc = NULL;
-    m_pApplicationShutdownFunc = NULL;
-    m_pKDEVersionCheckFunc = NULL;
+    m_pConnectionFactoryFunc = nullptr;
+    m_pApplicationInitFunc = nullptr;
+    m_pApplicationShutdownFunc = nullptr;
+    m_pKDEVersionCheckFunc = nullptr;
 
     m_bAttemptedLoadModule = false;
 }
@@ -413,7 +413,7 @@ sal_Bool SAL_CALL KabDriver::acceptsURL( const OUString& url )
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if ( !m_aImplModule.isKDEPresent() )
-        return sal_False;
+        return false;
 
     // here we have to look whether we support this URL format
     return url.startsWith("sdbc:address:" KAB_SERVICE_NAME);

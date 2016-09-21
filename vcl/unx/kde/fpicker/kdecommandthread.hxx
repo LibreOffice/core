@@ -90,7 +90,7 @@ protected:
 
 public:
     KDECommandThread( QWidget *pObject );
-    virtual ~KDECommandThread();
+    virtual ~KDECommandThread() override;
 
     virtual void                run() override;
 

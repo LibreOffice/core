@@ -68,7 +68,7 @@ protected:
 
 public:
     explicit UnxFilePicker( const css::uno::Reference< css::uno::XComponentContext >& );
-    virtual ~UnxFilePicker();
+    virtual ~UnxFilePicker() override;
 
     // XComponent
 

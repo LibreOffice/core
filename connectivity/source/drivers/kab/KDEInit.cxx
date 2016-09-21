@@ -43,7 +43,7 @@ namespace connectivity
         };
 
 
-        KApplication* KDEInit::s_pKApplication = NULL;
+        KApplication* KDEInit::s_pKApplication = nullptr;
         bool          KDEInit::s_bDidInsertCatalogue = false;
 
 
@@ -52,9 +52,9 @@ namespace connectivity
             // TODO: All this is not thread-safe
 
             // we create a KDE application only if it is not already done
-            if (KApplication::kApplication() == NULL)
+            if (KApplication::kApplication() == nullptr)
             {
-                OSL_ENSURE(s_pKApplication == NULL, "KDEInit::Init: inconsistency in the application pointers!");
+                OSL_ENSURE(s_pKApplication == nullptr, "KDEInit::Init: inconsistency in the application pointers!");
 
                 char *kabargs[1] = {const_cast<char*>("libkab1")};
                 KCmdLineArgs::init(1, kabargs, "KAddressBook", *kabargs, "Address Book driver", KAB_DRIVER_VERSION);
@@ -85,10 +85,10 @@ namespace connectivity
                 // which we did not previously insert
                 KGlobal::locale()->removeCatalogue("kaddressbook");
 
-            if ( s_pKApplication != NULL )
+            if ( s_pKApplication != nullptr )
             {
                 delete s_pKApplication;
-                s_pKApplication = NULL;
+                s_pKApplication = nullptr;
             }
         }
     }

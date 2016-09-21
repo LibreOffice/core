@@ -81,7 +81,7 @@ namespace connectivity
                 css::uno::Reference<css::uno::XComponentContext> const &
                     componentContext,
                 css::uno::Reference<css::sdbc::XDriver> const & driver);
-            virtual ~KabConnection();
+            virtual ~KabConnection() override;
 
             void closeAllStatements () throw( css::sdbc::SQLException);
 

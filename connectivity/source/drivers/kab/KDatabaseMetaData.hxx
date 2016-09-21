@@ -21,6 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KDATABASEMETADATA_HXX
 
 #include "KConnection.hxx"
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
 
@@ -36,14 +37,14 @@ namespace connectivity
 
         class KabDatabaseMetaData : public KabDatabaseMetaData_BASE
         {
-            css::uno::Reference< KabConnection >   m_xConnection;
+            css::uno::Reference< css::sdbc::XConnection >   m_xConnection;
             bool                                   m_bUseCatalog;
 
         public:
 
             explicit KabDatabaseMetaData(KabConnection* _pCon);
             static const OUString & getAddressBookTableName();
-            virtual ~KabDatabaseMetaData();
+            virtual ~KabDatabaseMetaData() override;
 
             // this interface is really BIG
             // XDatabaseMetaData

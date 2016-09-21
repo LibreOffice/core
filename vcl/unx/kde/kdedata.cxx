@@ -75,7 +75,7 @@ SalKDEDisplay::~SalKDEDisplay()
     // clean up own members
     doDestruct();
     // prevent SalDisplay from closing KApplication's display
-    pDisp_ = NULL;
+    pDisp_ = nullptr;
 }
 
 /***************************************************************************
@@ -224,7 +224,7 @@ extern "C" {
         if( nMajor != 3 || nMinor < 2 || (nMinor == 2 && nMicro < 2) )
         {
             SAL_INFO( "vcl.kde", "unsuitable qt version " << nMajor << "." << nMinor << "." << nMicro );
-            return NULL;
+            return nullptr;
         }
 
         KDESalInstance* pInstance = new KDESalInstance( new SalYieldMutex() );

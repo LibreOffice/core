@@ -39,7 +39,7 @@ void KabPreparedStatement::checkAndResizeParameters(sal_Int32 nParams) throw(SQL
         m_aParameterRow = new OValueVector();
 
     if (nParams < 1)
-        ::dbtools::throwInvalidIndexException(*this, Any());
+        ::dbtools::throwInvalidIndexException(*this);
 
     if (nParams >= (sal_Int32) (m_aParameterRow->get()).size())
         (m_aParameterRow->get()).resize(nParams);
@@ -56,7 +56,7 @@ void KabPreparedStatement::setKabFields() const throw(SQLException)
         const OUString sError( aResources.getResourceString(
                 STR_INVALID_COLUMN_SELECTION
              ) );
-        ::dbtools::throwGenericSQLException(sError,NULL);
+        ::dbtools::throwGenericSQLException(sError,nullptr);
     }
     m_xMetaData->setKabFields(xColumns);
 }
@@ -104,7 +104,7 @@ void KabPreparedStatement::disposing()
     if (m_aParameterRow.is())
     {
         m_aParameterRow->get().clear();
-        m_aParameterRow = NULL;
+        m_aParameterRow = nullptr;
     }
 }
 
@@ -189,42 +189,42 @@ void SAL_CALL KabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int32)
 
 void SAL_CALL KabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const OUString&) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setObjectNull", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setObjectNull", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setBoolean(sal_Int32, sal_Bool) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setBoolean", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setBoolean", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setByte(sal_Int32, sal_Int8) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setByte", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setByte", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setShort(sal_Int32, sal_Int16) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setShort", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setShort", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setInt(sal_Int32, sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setInt", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setInt", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setLong(sal_Int32, sal_Int64) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setFloat(sal_Int32, float) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setFloat", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setFloat", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setDouble(sal_Int32, double) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setDouble", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setDouble", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setString(sal_Int32 parameterIndex, const OUString &x) throw(SQLException, RuntimeException, std::exception)
@@ -239,33 +239,33 @@ void SAL_CALL KabPreparedStatement::setString(sal_Int32 parameterIndex, const OU
 
 void SAL_CALL KabPreparedStatement::setBytes(sal_Int32, const Sequence< sal_Int8 >&) throw(SQLException, RuntimeException, std::exception)
 {
-   ::dbtools::throwFunctionNotSupportedSQLException("setBytes", NULL);
+   ::dbtools::throwFunctionNotSupportedSQLException("setBytes", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setDate(sal_Int32, const Date&) throw(SQLException, RuntimeException, std::exception)
 {
-   ::dbtools::throwFunctionNotSupportedSQLException("setDate", NULL);
+   ::dbtools::throwFunctionNotSupportedSQLException("setDate", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setTime(sal_Int32, const css::util::Time&) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setTime", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setTime", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setTimestamp(sal_Int32, const DateTime&) throw(SQLException, RuntimeException, std::exception)
 {
 
-   ::dbtools::throwFunctionNotSupportedSQLException("setTimestamp", NULL);
+   ::dbtools::throwFunctionNotSupportedSQLException("setTimestamp", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setBinaryStream(sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setBinaryStream", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setBinaryStream", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setCharacterStream(sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-   ::dbtools::throwFunctionNotSupportedSQLException("setCharacterStream", NULL);
+   ::dbtools::throwFunctionNotSupportedSQLException("setCharacterStream", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setObject(sal_Int32 parameterIndex, const Any& x) throw(SQLException, RuntimeException, std::exception)
@@ -278,32 +278,32 @@ void SAL_CALL KabPreparedStatement::setObject(sal_Int32 parameterIndex, const An
 
 void SAL_CALL KabPreparedStatement::setObjectWithInfo(sal_Int32, const Any&, sal_Int32, sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setObjectWithInfo", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setObjectWithInfo", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setRef(sal_Int32, const Reference< XRef >&) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setRef", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setRef", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setBlob(sal_Int32, const Reference< XBlob >&) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setBlob", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setBlob", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setClob(sal_Int32, const Reference< XClob >&) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setClob", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setClob", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::setArray(sal_Int32, const Reference< XArray >&) throw(SQLException, RuntimeException, std::exception)
 {
-    ::dbtools::throwFunctionNotSupportedSQLException("setArray", NULL);
+    ::dbtools::throwFunctionNotSupportedSQLException("setArray", nullptr);
 }
 
 void SAL_CALL KabPreparedStatement::clearParameters() throw(SQLException, RuntimeException, std::exception)
 {
-   ::dbtools::throwFunctionNotSupportedSQLException("clearParameters", NULL);
+   ::dbtools::throwFunctionNotSupportedSQLException("clearParameters", nullptr);
 }
 
 void KabPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception, std::exception)

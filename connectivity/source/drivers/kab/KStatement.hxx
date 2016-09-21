@@ -88,7 +88,7 @@ namespace connectivity
 
             virtual void resetParameters() const throw(css::sdbc::SQLException);
             virtual void getNextParameter(OUString &rParameter) const throw(css::sdbc::SQLException);
-            virtual ~KabCommonStatement();
+            virtual ~KabCommonStatement() override;
 
         public:
             ::cppu::OBroadcastHelper& rBHelper;
@@ -148,7 +148,7 @@ namespace connectivity
         class KabStatement : public KabStatement_BASE
         {
         protected:
-            virtual ~KabStatement() { }
+            virtual ~KabStatement() override { }
 
         public:
             explicit KabStatement(KabConnection* _pConnection);

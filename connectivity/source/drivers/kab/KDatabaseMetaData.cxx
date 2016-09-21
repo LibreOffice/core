@@ -141,47 +141,47 @@ sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLExcept
 
 sal_Bool SAL_CALL KabDatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::storesLowerCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::storesMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::storesUpperCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException, std::exception)
@@ -192,7 +192,7 @@ sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxIndexLength(  ) throw(SQLException
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL KabDatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException, std::exception)
@@ -219,7 +219,7 @@ OUString SAL_CALL KabDatabaseMetaData::getExtraNameCharacters(  ) throw(SQLExcep
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException, std::exception)
@@ -233,107 +233,107 @@ sal_Bool SAL_CALL KabDatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, 
 
 sal_Bool SAL_CALL KabDatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::dataDefinitionCausesTransactionCommit(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsDataManipulationTransactionsOnly(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsPositionedDelete(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsPositionedUpdate(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOpenStatementsAcrossRollback(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOpenStatementsAcrossCommit(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOpenCursorsAcrossCommit(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92FullSQL(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_True; // should be supported at least
+    return true; // should be supported at least
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException, std::exception)
@@ -356,198 +356,198 @@ sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLExce
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsTransactions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::allProceduresAreCallable(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsStoredProcedures(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSelectForUpdate(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::allTablesAreSelectable(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)
 {
     // for the moment, we have read-only addresses, but this might change in the future
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::usesLocalFiles(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::usesLocalFilePerTable(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsTypeConversion(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::nullPlusNonNullIsNull(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsColumnAliasing(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsTableCorrelationNames(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsConvert( sal_Int32, sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsExpressionsInOrderBy(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsGroupBy(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsGroupByBeyondSelect(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsGroupByUnrelated(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsMultipleTransactions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsMultipleResultSets(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsLikeEscapeClause(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsOrderByUnrelated(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsUnion(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsUnionAll(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::nullsAreSortedAtEnd(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::nullsAreSortedAtStart(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::nullsAreSortedHigh(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::nullsAreSortedLow(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSchemasInProcedureCalls(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCorrelatedSubqueries(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSubqueriesInComparisons(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSubqueriesInExists(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSubqueriesInIns(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsSubqueriesInQuantifieds(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL KabDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException, std::exception)
@@ -649,27 +649,27 @@ OUString SAL_CALL KabDatabaseMetaData::getNumericFunctions(  ) throw(SQLExceptio
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsFullOuterJoins(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsLimitedOuterJoins(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL KabDatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(SQLException, RuntimeException, std::exception)
@@ -702,9 +702,9 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsResultSetType( sal_Int32 setType 
     {
         case ResultSetType::FORWARD_ONLY:
         case ResultSetType::SCROLL_INSENSITIVE:
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
@@ -713,59 +713,59 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsResultSetConcurrency( sal_Int32 s
     {
         case ResultSetType::FORWARD_ONLY:
         case ResultSetType::SCROLL_INSENSITIVE:
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::ownUpdatesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::ownDeletesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::ownInsertsAreVisible( sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::othersUpdatesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::othersDeletesAreVisible( sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::othersInsertsAreVisible( sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::updatesAreDetected( sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::deletesAreDetected( sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::insertsAreDetected( sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabDatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 Reference< XConnection > SAL_CALL KabDatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException, std::exception)

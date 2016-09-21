@@ -97,7 +97,7 @@ protected:
 
 public:
     UnxFilePickerCommandThread( UnxFilePickerNotifyThread *pNotifyThread, int nReadFD );
-    virtual ~UnxFilePickerCommandThread();
+    virtual ~UnxFilePickerCommandThread() override;
 
     YieldingCondition& SAL_CALL execCondition() { return m_aExecCondition; }
     bool SAL_CALL           result();

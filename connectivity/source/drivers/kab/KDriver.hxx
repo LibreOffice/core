@@ -117,8 +117,8 @@ namespace connectivity
             */
             bool    impl_loadModule();
 
-            /** unloads the implementation module, and resets all function pointers to <NULL/>
-                @precond m_hConnectorModule is not <NULL/>
+            /** unloads the implementation module, and resets all function pointers to <nullptr/>
+                @precond m_hConnectorModule is not <nullptr/>
             */
             void    impl_unloadModule();
 

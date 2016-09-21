@@ -54,7 +54,7 @@ namespace
     {
         ::connectivity::SharedResources aResources;
         const OUString sError( aResources.getResourceString(_nErrorId) );
-        ::dbtools::throwGenericSQLException(sError,NULL);
+        ::dbtools::throwGenericSQLException(sError,nullptr);
     }
 }
 
@@ -64,8 +64,8 @@ KabCommonStatement::KabCommonStatement(KabConnection* _pConnection )
     : KabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(KabCommonStatement_BASE::rBHelper),
     m_aParser(_pConnection->getComponentContext()),
-    m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL ),
-    m_pParseTree(NULL),
+    m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser, nullptr ),
+    m_pParseTree(nullptr),
     m_pConnection(_pConnection),
     rBHelper(KabCommonStatement_BASE::rBHelper)
 {
@@ -197,12 +197,12 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
 
                 if (SQL_ISTOKEN(pMiddleRight, NOT))
                 {
-                    // WHERE "Mobile Phone" IS NOT NULL
+                    // WHERE "Mobile Phone" IS NOT nullptr
                     return new KabConditionNotNull(sColumnName);
                 }
                 else
                 {
-                    // WHERE "Mobile Phone" IS NULL
+                    // WHERE "Mobile Phone" IS nullptr
                     return new KabConditionNull(sColumnName);
                 }
             }
@@ -235,7 +235,7 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
 
     // Unreachable:
     OSL_ASSERT(false);
-    return 0;
+    return nullptr;
 }
 
 KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNode) const throw(SQLException)
@@ -281,7 +281,7 @@ KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNo
     lcl_throwError(STR_QUERY_TOO_COMPLEX);
     // Unreachable:
     OSL_ASSERT(false);
-    return 0;
+    return nullptr;
 }
 
 bool KabCommonStatement::isTableKnown(KabResultSet *pResult) const
@@ -314,7 +314,7 @@ void KabCommonStatement::selectAddressees(KabResultSet *pResult) const throw(SQL
     const OSQLParseNode *pParseNode;
 
     pParseNode = m_aSQLIterator.getWhereTree();
-    if (pParseNode != NULL)
+    if (pParseNode != nullptr)
     {
         if (SQL_ISRULE(pParseNode, where_clause))
         {
@@ -339,7 +339,7 @@ void KabCommonStatement::sortAddressees(KabResultSet *pResult) const throw(SQLEx
     const OSQLParseNode *pParseNode;
 
     pParseNode = m_aSQLIterator.getOrderTree();
-    if (pParseNode != NULL)
+    if (pParseNode != nullptr)
     {
         if (SQL_ISRULE(pParseNode, opt_order_by_clause))
         {
@@ -410,7 +410,7 @@ OSL_TRACE("KDE Address book - SQL Request: %s", OUtoCStr(sql));
     OUString aErr;
 
     m_pParseTree = m_aParser.parseTree(aErr, sql);
-    if (m_pParseTree == NULL)
+    if (m_pParseTree == nullptr)
         throw SQLException(aErr, *this, aErr, 0, Any());
 
     m_aSQLIterator.setParseTree(m_pParseTree);

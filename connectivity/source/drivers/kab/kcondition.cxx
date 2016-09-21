@@ -78,7 +78,7 @@ bool KabConditionNull::eval(const ::KABC::Addressee &aAddressee) const
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
 
     return aQtName.isNull();
-// KDE address book currently does not use NULL values.
+// KDE address book currently does not use nullptr values.
 // But it might do it someday
 }
 
@@ -92,7 +92,7 @@ bool KabConditionNotNull::eval(const ::KABC::Addressee &aAddressee) const
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
 
     return !aQtName.isNull();
-// KDE address book currently does not use NULL values.
+// KDE address book currently does not use nullptr values.
 // But it might do it someday
 }
 

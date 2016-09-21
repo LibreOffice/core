@@ -101,9 +101,9 @@ bool isSupportedProtocol( const QString &rProtocol )
         ".uno", ".component", "vnd.sun.star.pkg", "ldap", "db",
         "vnd.sun.star.cmd", "vnd.sun.star.script",
         "telnet",
-        NULL };
+        nullptr };
 
-    for ( const char **pIndex = pOOoProtocols; *pIndex != NULL; ++pIndex )
+    for ( const char **pIndex = pOOoProtocols; *pIndex != nullptr; ++pIndex )
     {
         if ( rProtocol == *pIndex )
             return true;
@@ -432,7 +432,7 @@ void KDEFileDialog::customEvent( QCustomEvent *pEvent )
                                 QString qFileName( addExtension( qLocalSelectedURL.path() ) );
                                 bCanExit =
                                     !QFile::exists( qFileName ) ||
-                                    ( KMessageBox::warningYesNo( 0,
+                                    ( KMessageBox::warningYesNo( nullptr,
                                                                  i18n( "A file named \"%1\" already exists. "
                                                                      "Are you sure you want to overwrite it?" ).arg( qFileName ),
                                                                  i18n( "Overwrite File?" ),
@@ -440,7 +440,7 @@ void KDEFileDialog::customEvent( QCustomEvent *pEvent )
                             }
                             else if ( !isSupportedProtocol( qProtocol ) )
                             {
-                                KMessageBox::sorry( 0,
+                                KMessageBox::sorry( nullptr,
                                         i18n( "Saving using protocol \"%1\" is not supported." ).arg( qProtocol ) );
                                 bCanExit = false;
                             }
@@ -449,7 +449,7 @@ void KDEFileDialog::customEvent( QCustomEvent *pEvent )
                         }
                         else if ( !isSave() && result() == QDialog::Accepted && !isSupportedProtocol( qProtocol ) )
                         {
-                            KMessageBox::information( 0,
+                            KMessageBox::information( nullptr,
                                     i18n( "Protocol \"%1\" is supported only partially. "
                                         "Local copy of the file will be created." ).arg( qProtocol ) );
                             bCanExit = true;
@@ -509,7 +509,7 @@ QWidget* KDEFileDialog::findControl( const QString &rId ) const
     for ( ; it != pList->end() && qName != (*it)->name(); ++it )
         ;
 
-    QWidget *pWidget = NULL;
+    QWidget *pWidget = nullptr;
     if ( it != pList->end() )
         pWidget = static_cast< QWidget* >( *it );
 
@@ -664,7 +664,7 @@ QString KDEFileDialog::addExtension( const QString &rFileName ) const
     QString qExtension;
 
     QWidget *pExtensionWidget = findControl( "100" ); // CHECKBOX_AUTOEXTENSION
-    QCheckBox *pExtensionCB = pExtensionWidget? static_cast< QCheckBox* >( pExtensionWidget->qt_cast( QCheckBox_String ) ): NULL;
+    QCheckBox *pExtensionCB = pExtensionWidget? static_cast< QCheckBox* >( pExtensionWidget->qt_cast( QCheckBox_String ) ): nullptr;
     if ( pExtensionCB && pExtensionCB->isChecked() )
     {
         // FIXME: qFilter can be a MIME; we ignore it now...
@@ -730,9 +730,9 @@ QString KDEFileDialog::localCopy( const QString &rFileName ) const
     KURL qDestURL;
     qDestURL.setPath( qTempFile.name() );
 
-    if ( !KIO::NetAccess::file_copy( rFileName, qDestURL, 0600, true, false, NULL ) )
+    if ( !KIO::NetAccess::file_copy( rFileName, qDestURL, 0600, true ) )
     {
-        KMessageBox::error( 0, KIO::NetAccess::lastErrorString() );
+        KMessageBox::error( nullptr, KIO::NetAccess::lastErrorString() );
         return QString::null;
     }
 

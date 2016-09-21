@@ -73,7 +73,7 @@ public:
     Service& operator=(const Service&) = delete;
 
 private:
-    virtual ~Service() {}
+    virtual ~Service() override {}
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
@@ -146,9 +146,8 @@ Service::Service(): enabled_(false) {
     if (context.is()) {
         OUString desktop;
         context->getValueByName(
-            OUString("system.desktop-environment")) >>=
-            desktop;
-        enabled_ = desktop == "KDE" && KApplication::kApplication() != 0;
+            "system.desktop-environment") >>= desktop;
+        enabled_ = desktop == "KDE" && KApplication::kApplication() != nullptr;
     }
 }
 
@@ -194,9 +193,9 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
 
 static cppu::ImplementationEntry const services[] = {
     { &createInstance, &getServiceImplementationName,
-      &getServiceSupportedServiceNames, &cppu::createSingleComponentFactory, 0,
+      &getServiceSupportedServiceNames, &cppu::createSingleComponentFactory, nullptr,
       0 },
-    { 0, 0, 0, 0, 0, 0 }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
 }

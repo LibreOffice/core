@@ -81,7 +81,7 @@ protected:
 public:
     KDEFileDialog( const QString &startDir, const QString &filter,
                 QWidget *parent, const char *name );
-    virtual ~KDEFileDialog();
+    virtual ~KDEFileDialog() override;
 
 protected:
     virtual void                resizeEvent( QResizeEvent *pEvent ) override;

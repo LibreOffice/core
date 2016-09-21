@@ -92,7 +92,7 @@ int main( int argc, char* argv[] )
 
     KDEModalityFilter qModalityFilter( nWinId );
 
-    KDEFileDialog aFileDialog( NULL, QString(), NULL, THIS_DESKENV_NAME_LOW "filedialog" );
+    KDEFileDialog aFileDialog( nullptr, QString(), nullptr, THIS_DESKENV_NAME_LOW "filedialog" );
 
     KDECommandThread qCommandThread( &aFileDialog );
     qCommandThread.start();

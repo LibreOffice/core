@@ -69,7 +69,7 @@ sal_Int32 SAL_CALL KabResultSetMetaData::getColumnCount() throw(SQLException, Ru
 
 sal_Bool SAL_CALL KabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 OUString SAL_CALL KabResultSetMetaData::getSchemaName(sal_Int32) throw(SQLException, RuntimeException, std::exception)
@@ -123,17 +123,17 @@ OUString SAL_CALL KabResultSetMetaData::getColumnServiceName(sal_Int32) throw(SQ
 
 sal_Bool SAL_CALL KabResultSetMetaData::isCurrency(sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabResultSetMetaData::isAutoIncrement(sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabResultSetMetaData::isSigned(sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Int32 SAL_CALL KabResultSetMetaData::getPrecision(sal_Int32) throw(SQLException, RuntimeException, std::exception)
@@ -148,29 +148,29 @@ sal_Int32 SAL_CALL KabResultSetMetaData::getScale(sal_Int32) throw(css::sdbc::SQ
 
 sal_Int32 SAL_CALL KabResultSetMetaData::isNullable(sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    return (sal_Int32) sal_True;
-// KDE address book currently does not use NULL values.
+    return (sal_Int32) true;
+// KDE address book currently does not use nullptr values.
 // But it might do it someday
 }
 
 sal_Bool SAL_CALL KabResultSetMetaData::isSearchable(sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL KabResultSetMetaData::isReadOnly(sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL KabResultSetMetaData::isDefinitelyWritable(sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL KabResultSetMetaData::isWritable(sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
-    return sal_False;
+    return false;
 }
 
 

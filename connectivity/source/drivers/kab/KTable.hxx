@@ -35,13 +35,13 @@ namespace connectivity
             KabConnection* m_pConnection;
 
         public:
-            KabTable(   sdbcx::OCollection* _pTables,
-                    KabConnection* _pConnection,
-                    const OUString& _Name,
-                    const OUString& _Type,
-                    const OUString& _Description = OUString(),
-                    const OUString& _SchemaName = OUString(),
-                    const OUString& _CatalogName = OUString()
+            KabTable(   sdbcx::OCollection* pTables,
+                    KabConnection* pConnection,
+                    const OUString& Name,
+                    const OUString& Type,
+                    const OUString& Description = OUString(),
+                    const OUString& SchemaName = OUString(),
+                    const OUString& CatalogName = OUString()
                 );
 
             KabConnection* getConnection() { return m_pConnection;}

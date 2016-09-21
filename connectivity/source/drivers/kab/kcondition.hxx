@@ -125,7 +125,7 @@ class KabConditionBoolean : public KabCondition
 
     public:
         KabConditionBoolean(KabCondition *pLeft, KabCondition *pRight);
-        virtual ~KabConditionBoolean();
+        virtual ~KabConditionBoolean() override;
 };
 
 class KabConditionOr : public KabConditionBoolean
