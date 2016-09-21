@@ -27,29 +27,49 @@
         <desc>The implementation description container.</desc>
       </info>
       <prop oor:name="Label" oor:type="xs:string" oor:nillable="false" oor:localized="true">
+        <info>
+          <desc>The implementation name.</desc>
+       </info>
+      </prop>
+      <prop oor:name="File" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>The .ui file name.</desc>
+        </info>
+      </prop>
+      <prop oor:name="HasMenubar" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines if menubar is visible.</desc>
+        </info>
+      </prop>
+    </group>
+    <group oor:name="Application">
       <info>
-        <desc>The implementation name.</desc>
+        <desc>Describes notebookbar settings for one application.</desc>
       </info>
-    </prop>
-    <prop oor:name="File" oor:type="xs:string" oor:nillable="false">
-      <info>
-        <desc>The .ui file name.</desc>
-      </info>
-    </prop>
-    <prop oor:name="HasMenubar" oor:type="xs:boolean" oor:nillable="false">
-      <info>
-        <desc>Determines if menubar is visible.</desc>
-      </info>
-    </prop>
+      <set oor:name="Implementations" oor:node-type="Implementation">
+        <info>
+          <desc>List of implementations.</desc>
+        </info>
+      </set>
     </group>
   </templates>
   <component>
-    <prop oor:name="Active" oor:type="xs:string" oor:nillable="false">
+    <prop oor:name="ActiveWriter" oor:type="xs:string" oor:nillable="false">
       <info>
-        <desc>Contains name of currently used implementation.</desc>
+        <desc>Contains name of currently used implementation in the Writer module.</desc>
       </info>
     </prop>
-    <set oor:name="Implementations" oor:node-type="Implementation">
+    <prop oor:name="ActiveCalc" oor:type="xs:string" oor:nillable="false">
+      <info>
+        <desc>Contains name of currently used implementation in the Calc module.</desc>
+      </info>
+    </prop>
+    <prop oor:name="ActiveImpress" oor:type="xs:string" oor:nillable="false">
+      <info>
+        <desc>Contains name of currently used implementation in the Impress module.</desc>
+      </info>
+    </prop>
+    <set oor:name="Applications" oor:node-type="Application">
       <info>
         <desc>List of implementations.</desc>
       </info>
