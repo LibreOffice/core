@@ -639,14 +639,14 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
                 m_aControlGroups[i]->Enable();
                 css::awt::Point aPosition;
 
-                aPosition.X = SAL_MAX_INT32;
-                aPosition.Y = SAL_MAX_INT32;
+                aPosition.X = SAL_MAX_INT32/2;
+                aPosition.Y = SAL_MAX_INT32/2;
                 aShape.SetHandleControllerPosition(i, aPosition);
                 Point aMaxPosition;
                 aShape.GetHandlePosition(i, aMaxPosition);
 
-                aPosition.X = SAL_MIN_INT32;
-                aPosition.Y = SAL_MIN_INT32;
+                aPosition.X = SAL_MIN_INT32/2;
+                aPosition.Y = SAL_MIN_INT32/2;
                 aShape.SetHandleControllerPosition(i, aPosition);
                 Point aMinPosition;
                 aShape.GetHandlePosition(i, aMinPosition);
