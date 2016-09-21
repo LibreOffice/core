@@ -334,8 +334,8 @@ IMPL_LINK( GalleryBrowser1, EndThemePropertiesDlgHdl, Dialog&, rDialog, void )
 
 IMPL_LINK( GalleryBrowser1, DestroyThemePropertiesDlgHdl, void*, p, void )
 {
-    VclAbstractDialog2* pDialog = static_cast<VclAbstractDialog2*>(p);
-    delete pDialog;
+    VclPtr<VclAbstractDialog2> pDialog = static_cast<VclAbstractDialog2*>(p);
+    pDialog.disposeAndClear();
     delete mpThemePropsDlgItemSet;
     mpThemePropsDlgItemSet = nullptr;
 }

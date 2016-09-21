@@ -63,16 +63,16 @@ public:
 
 class SwWordCountWrapper : public SfxChildWindow
 {
-    std::unique_ptr<AbstractSwWordCountFloatDlg> xAbstDlg;
+    VclPtr<AbstractSwWordCountFloatDlg> xAbstDlg;
 protected:
     SwWordCountWrapper(    vcl::Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
                             SfxChildWinInfo* pInfo );
-
     SFX_DECL_CHILDWINDOW_WITHID(SwWordCountWrapper);
 
 public:
+    virtual ~SwWordCountWrapper() override;
     void    UpdateCounts();
     void    SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);
 };
