@@ -154,12 +154,12 @@ SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
  * The corresponding unit of measure is passed as 'ePresentationMetric'.
  *
  *
- * @return SfxItemPresentation     SFX_ITEM_PRESENTATION_NAMELESS
+ * @return SfxItemPresentation     SfxItemPresentation::Nameless
  *                                 A textual representation (if applicable
  *                                 with a unit of measure) could be created,
  *                                 but it doesn't contain any semantic meaning
  *
- *                                 SFX_ITEM_PRESENTATION_COMPLETE
+ *                                 SfxItemPresentation::Complete
  *                                 A complete textual representation could be
  *                                 created with semantic meaning (if applicable
  *                                 with unit of measure)
@@ -167,10 +167,10 @@ SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
  * Example:
  *
  *    pSvxFontItem->GetPresentation( SFX_PRESENTATION_NAMELESS, ... )
- *      "12pt" with return SFX_ITEM_PRESENTATION_NAMELESS
+ *      "12pt" with return SfxItemPresentation::Nameless
  *
  *    pSvxColorItem->GetPresentation( SFX_PRESENTATION_COMPLETE, ... )
- *        "red" with return SFX_ITEM_PRESENTATION_NAMELESS
+ *        "red" with return SfxItemPresentation::Nameless
  *        Because the SvxColorItem does not know which color it represents
  *        it cannot provide a name, which is communicated by the return value
  *
@@ -195,7 +195,7 @@ void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("typeName"), BAD_CAST(typeid(*this).name()));
     OUString rText;
-    if (GetPresentation( SFX_ITEM_PRESENTATION_COMPLETE, MAP_100TH_MM, MAP_100TH_MM, rText))
+    if (GetPresentation( SfxItemPresentation::Complete, MAP_100TH_MM, MAP_100TH_MM, rText))
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(rText.getStr()));
     xmlTextWriterEndElement(pWriter);
 }

@@ -364,7 +364,7 @@ bool SdrItemPool::GetPresentation(
     if (!IsInvalidItem(&rItem)) {
         sal_uInt16 nWhich=rItem.Which();
         if (nWhich>=SDRATTR_SHADOW_FIRST && nWhich<=SDRATTR_END) {
-            rItem.GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS,
+            rItem.GetPresentation(SfxItemPresentation::Nameless,
                         GetMetric(nWhich),ePresentationMetric,rText,
                         pIntlWrapper);
             OUString aStr;
@@ -640,7 +640,7 @@ bool SdrFractionItem::GetPresentation(
         rText = "?";
     }
 
-    if(ePresentation == SFX_ITEM_PRESENTATION_COMPLETE)
+    if(ePresentation == SfxItemPresentation::Complete)
     {
         OUString aStr;
 
@@ -648,7 +648,7 @@ bool SdrFractionItem::GetPresentation(
         rText = aStr + " " + rText;
         return true;
     }
-    else if(ePresentation == SFX_ITEM_PRESENTATION_NAMELESS)
+    else if(ePresentation == SfxItemPresentation::Nameless)
         return true;
 
     return false;
@@ -690,7 +690,7 @@ bool SdrScaleItem::GetPresentation(
         rText = "?";
     }
 
-    if(ePresentation == SFX_ITEM_PRESENTATION_COMPLETE)
+    if(ePresentation == SfxItemPresentation::Complete)
     {
         OUString aStr;
 
@@ -736,7 +736,7 @@ bool SdrOnOffItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByVal(GetValue());
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -767,7 +767,7 @@ bool SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByVal(GetValue());
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -797,7 +797,7 @@ bool SdrPercentItem::GetPresentation(
     rText = unicode::formatPercent(GetValue(),
         Application::GetSettings().GetUILanguageTag());
 
-    if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
+    if(ePres == SfxItemPresentation::Complete)
     {
         OUString aStr;
 
@@ -882,7 +882,7 @@ bool SdrAngleItem::GetPresentation(
 
     aText.insert(aText.getLength(), sal_Unicode(DEGREE_CHAR));
 
-    if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
+    if(ePres == SfxItemPresentation::Complete)
     {
         OUString aStr;
 
@@ -934,7 +934,7 @@ bool SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
     OUString aStr;
     SdrFormatter::TakeUnitStr((MapUnit)ePresMetric,aStr);
     rText += " " + aStr;
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr2;
 
         SdrItemPool::TakeItemName(Which(), aStr2);
@@ -962,7 +962,7 @@ bool SdrCaptionTypeItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -987,7 +987,7 @@ bool SdrCaptionEscDirItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1019,7 +1019,7 @@ bool SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1078,7 +1078,7 @@ bool SdrTextVertAdjustItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1126,7 +1126,7 @@ bool SdrTextHorzAdjustItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1174,7 +1174,7 @@ bool SdrTextAniKindItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1221,7 +1221,7 @@ bool SdrTextAniDirectionItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1264,7 +1264,7 @@ bool SdrTextAniDelayItem::GetPresentation(
 {
     rText = OUString::number(GetValue()) + "ms";
 
-    if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
+    if(ePres == SfxItemPresentation::Complete)
     {
         OUString aStr;
 
@@ -1319,7 +1319,7 @@ bool SdrTextAniAmountItem::GetPresentation(
         rText += aStr;
     }
 
-    if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
+    if(ePres == SfxItemPresentation::Complete)
     {
         OUString aStr;
 
@@ -1350,7 +1350,7 @@ bool SdrTextFixedCellHeightItem::GetPresentation( SfxItemPresentation ePres,
                                     OUString &rText, const IntlWrapper * ) const
 {
     rText = GetValueTextByVal( GetValue() );
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE)
+    if (ePres==SfxItemPresentation::Complete)
     {
         OUString aStr;
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1446,7 +1446,7 @@ bool SdrCustomShapeAdjustmentItem::GetPresentation(
     {
         rText = rText + " " + OUString::number( GetValue( i ).nValue );
     }
-    if ( ePresentation == SFX_ITEM_PRESENTATION_COMPLETE )
+    if ( ePresentation == SfxItemPresentation::Complete )
     {
         OUString aStr;
 
@@ -1555,7 +1555,7 @@ bool SdrEdgeKindItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1720,7 +1720,7 @@ bool SdrMeasureKindItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1767,7 +1767,7 @@ bool SdrMeasureTextHPosItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1814,7 +1814,7 @@ bool SdrMeasureTextVPosItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1868,7 +1868,7 @@ bool SdrMeasureUnitItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1909,7 +1909,7 @@ bool SdrCircKindItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/, OUString& rText, const IntlWrapper *) const
 {
     rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
-    if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
+    if (ePres==SfxItemPresentation::Complete) {
         OUString aStr;
 
         SdrItemPool::TakeItemName(Which(), aStr);
@@ -1961,7 +1961,7 @@ bool SdrSignedPercentItem::GetPresentation(
     rText = unicode::formatPercent(GetValue(),
         Application::GetSettings().GetUILanguageTag());
 
-    if(ePres == SFX_ITEM_PRESENTATION_COMPLETE)
+    if(ePres == SfxItemPresentation::Complete)
     {
         OUString aStr;
 
@@ -2129,7 +2129,7 @@ bool SdrGrafModeItem::GetPresentation( SfxItemPresentation ePres,
 {
     rText = GetValueTextByPos( sal::static_int_cast< sal_uInt16 >( GetValue() ) );
 
-    if( ePres == SFX_ITEM_PRESENTATION_COMPLETE )
+    if( ePres == SfxItemPresentation::Complete )
     {
         OUString aStr;
 

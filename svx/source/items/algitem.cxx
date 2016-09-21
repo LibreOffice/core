@@ -215,7 +215,7 @@ bool SvxMarginItem::GetPresentation
 
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
         {
             rText = GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl ) +
                         cpDelimTmp +
@@ -226,7 +226,7 @@ bool SvxMarginItem::GetPresentation
                         GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl );
             return true;
         }
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         {
             rText = SVX_RESSTR(RID_SVXITEMS_MARGIN_LEFT) +
                         GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl ) +

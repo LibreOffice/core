@@ -707,7 +707,7 @@ bool SwRotationGrf::GetPresentation(
     SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+    if( SfxItemPresentation::Complete == ePres )
         rText = SW_RESSTR( STR_ROTATION );
     else if( rText.getLength() )
         rText.clear();
@@ -719,7 +719,7 @@ bool SwLuminanceGrf::GetPresentation(
     SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+    if( SfxItemPresentation::Complete == ePres )
         rText = SW_RESSTR( STR_LUMINANCE );
     else if( rText.getLength() )
         rText.clear();
@@ -732,7 +732,7 @@ bool SwContrastGrf::GetPresentation(
     SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+    if( SfxItemPresentation::Complete == ePres )
         rText = SW_RESSTR( STR_CONTRAST );
     else if( rText.getLength() )
         rText.clear();
@@ -745,7 +745,7 @@ bool SwChannelGrf::GetPresentation(
     SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+    if( SfxItemPresentation::Complete == ePres )
     {
         sal_uInt16 nId;
         switch ( Which() )
@@ -772,7 +772,7 @@ bool SwGammaGrf::GetPresentation(
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     OUStringBuffer aText;
-    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+    if( SfxItemPresentation::Complete == ePres )
         aText.append(SW_RESSTR(STR_GAMMA));
     aText.append(unicode::formatPercent(GetValue(),
         Application::GetSettings().GetUILanguageTag()));
@@ -785,7 +785,7 @@ bool SwInvertGrf::GetPresentation(
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     rText.clear();
-    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+    if( SfxItemPresentation::Complete == ePres )
     {
         const sal_uInt16 nId = GetValue() ? STR_INVERT : STR_INVERT_NOT;
         rText = SW_RESSTR( nId );
@@ -797,7 +797,7 @@ bool SwTransparencyGrf::GetPresentation(
     SfxItemPresentation ePres, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+    if( SfxItemPresentation::Complete == ePres )
         rText = SW_RESSTR( STR_TRANSPARENCY );
     else if( rText.getLength() )
         rText.clear();
@@ -811,7 +811,7 @@ bool SwDrawModeGrf::GetPresentation(
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     rText.clear();
-    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+    if( SfxItemPresentation::Complete == ePres )
     {
         sal_uInt16 nId;
         switch ( GetValue() )
@@ -834,7 +834,7 @@ bool SwFormatFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
                                               const IntlWrapper*    /*pIntl*/ ) const
 {
     rText.clear();
-    if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
+    if( SfxItemPresentation::Complete == ePres )
     {
         const sal_uInt16 nId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;
         rText = SW_RESSTR( nId );

@@ -68,10 +68,10 @@ bool XLineTransparenceItem::GetPresentation
 
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
             SAL_FALLTHROUGH;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText += unicode::formatPercent(GetValue(),
                 Application::GetSettings().GetUILanguageTag());
             return true;
@@ -428,10 +428,10 @@ bool XFillTransparenceItem::GetPresentation
 
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
             SAL_FALLTHROUGH;
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText += unicode::formatPercent(GetValue(),
                 Application::GetSettings().GetUILanguageTag());
             return true;

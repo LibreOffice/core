@@ -96,7 +96,7 @@ bool SvxPageItem::GetPresentation
 
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
         {
             if ( !aDescName.isEmpty() )
             {
@@ -115,7 +115,7 @@ bool SvxPageItem::GetPresentation
             }
             return true;
         }
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
         {
             rText += SVX_RESSTR(RID_SVXITEMS_PAGE_COMPLETE);
             if ( !aDescName.isEmpty() )

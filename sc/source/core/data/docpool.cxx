@@ -762,7 +762,7 @@ static bool lcl_HFPresentation
             default:
                 if ( !pIntl )
                     pIntl = ScGlobal::GetScIntlWrapper();
-                pItem->GetPresentation( SFX_ITEM_PRESENTATION_COMPLETE, eCoreMetric, ePresentationMetric, aText, pIntl );
+                pItem->GetPresentation( SfxItemPresentation::Complete, eCoreMetric, ePresentationMetric, aText, pIntl );
 
         }
 
@@ -902,7 +902,7 @@ bool ScDocumentPool::GetPresentation(
         default:
             if ( !pIntl )
                 pIntl = ScGlobal::GetScIntlWrapper();
-            ePresentationRet = rItem.GetPresentation( SFX_ITEM_PRESENTATION_COMPLETE, GetMetric( nW ), ePresentationMetric, rText, pIntl );
+            ePresentationRet = rItem.GetPresentation( SfxItemPresentation::Complete, GetMetric( nW ), ePresentationMetric, rText, pIntl );
         break;
     }
 

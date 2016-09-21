@@ -73,11 +73,11 @@ bool SvxRotateModeItem::GetPresentation(
 
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             rText += "...: ";
             SAL_FALLTHROUGH; // break; // FALL THROUGH!!!
 
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText += OUStringLiteral1( GetValue() );
             return true;
             break;

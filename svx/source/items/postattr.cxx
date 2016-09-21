@@ -50,10 +50,10 @@ bool SvxPostItAuthorItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText = GetValue();
             return true;
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             rText = SVX_RESSTR(RID_SVXITEMS_AUTHOR_COMPLETE) + GetValue();
             return true;
         default: ;//prevent warning
@@ -90,10 +90,10 @@ bool SvxPostItDateItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText = GetValue();
             return true;
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             rText = SVX_RESSTR(RID_SVXITEMS_DATE_COMPLETE) + GetValue();
             return true;
         default: ;//prevent warning
@@ -128,10 +128,10 @@ bool SvxPostItTextItem::GetPresentation
 {
     switch ( ePres )
     {
-        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SfxItemPresentation::Nameless:
             rText = GetValue();
             return true;
-        case SFX_ITEM_PRESENTATION_COMPLETE:
+        case SfxItemPresentation::Complete:
             rText = SVX_RESSTR(RID_SVXITEMS_TEXT_COMPLETE) + GetValue();
             return true;
         default: ;//prevent warning

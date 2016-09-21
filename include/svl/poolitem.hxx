@@ -66,10 +66,10 @@ inline bool Any2Bool( const css::uno::Any&rValue )
  * representation of an item after calling the virtual
  * method <SfxPoolItem::GetPresentation()const>.
  */
-enum SfxItemPresentation
+enum class SfxItemPresentation
 {
-    SFX_ITEM_PRESENTATION_NAMELESS,
-    SFX_ITEM_PRESENTATION_COMPLETE
+    Nameless,
+    Complete
 };
 
 /**
