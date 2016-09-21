@@ -52,8 +52,8 @@ module com {  module sun {  module star {  module  util {
         "MyDocuments" subdirectory. Under Unix this would be the home-directory</dd>
     <dt>\$(home)</dt>
     <dd>The home directory of the user. Under Unix this would be the home-
-        directory. Under Windows this would be the "Documents and Settings\<username>"
-        subdirectory.</dd>
+        directory. Under Windows this would be the CSIDL_PERSONAL directory,
+        for example "Documents and Settings\<username>\Documents".</dd>
     <dt>\$(temp)</dt>
     <dd>The current temporary directory.</dd>
     <dt>\$(path)</dt>
