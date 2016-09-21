@@ -75,6 +75,7 @@ public:
     void testSetViewGraphicSelection();
     void testCreateViewGraphicSelection();
     void testCreateViewTextSelection();
+    void testRedlineColors();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -113,6 +114,7 @@ public:
     CPPUNIT_TEST(testSetViewGraphicSelection);
     CPPUNIT_TEST(testCreateViewGraphicSelection);
     CPPUNIT_TEST(testCreateViewTextSelection);
+    CPPUNIT_TEST(testRedlineColors);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1427,6 +1429,29 @@ void SwTiledRenderingTest::testCreateViewTextSelection()
 
     mxComponent->dispose();
     mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testRedlineColors()
+{
+    // Load a document.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+
+    // Turn on track changes, type "zzz" at the end.
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->EndDoc();
+    pWrtShell->Insert("zzz");
+
+    // Assert that info about exactly one author is returned.
+    OUString aInfo = pXTextDocument->getTrackedChangeAuthors();
+    std::stringstream aStream(aInfo.toUtf8().getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("authors").size());
+
     comphelper::LibreOfficeKit::setActive(false);
 }
 

@@ -3199,6 +3199,11 @@ Pointer SwXTextDocument::getPointer()
     return pWrtShell->GetView().GetEditWin().GetPointer();
 }
 
+OUString SwXTextDocument::getTrackedChangeAuthors()
+{
+    return SW_MOD()->GetRedlineAuthorInfo();
+}
+
 int SwXTextDocument::getPart()
 {
     SolarMutexGuard aGuard;

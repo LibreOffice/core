@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <hintids.hxx>
 #include <sfx2/request.hxx>
@@ -423,6 +424,44 @@ OUString SwModule::GetRedlineAuthor(sal_uInt16 nPos)
     return (*m_pAuthorNames)[nPos];
 }
 
+static ColorData lcl_GetAuthorColor(sal_uInt16 nPos)
+{
+    static const ColorData aColArr[] =
+    {
+        COL_AUTHOR1_DARK, COL_AUTHOR2_DARK, COL_AUTHOR3_DARK,
+        COL_AUTHOR4_DARK, COL_AUTHOR5_DARK, COL_AUTHOR6_DARK,
+        COL_AUTHOR7_DARK, COL_AUTHOR8_DARK, COL_AUTHOR9_DARK
+    };
+
+    return aColArr[nPos % SAL_N_ELEMENTS(aColArr)];
+}
+
+/// Returns a JSON representation of a redline author.
+boost::property_tree::ptree lcl_AuthorToJson(const OUString& rAuthor, size_t nIndex)
+{
+    boost::property_tree::ptree aRet;
+    aRet.put("index", nIndex);
+    aRet.put("name", rAuthor.toUtf8().getStr());
+    aRet.put("color", lcl_GetAuthorColor(nIndex));
+    return aRet;
+}
+
+OUString SwModule::GetRedlineAuthorInfo()
+{
+    boost::property_tree::ptree aTable;
+    for (size_t nAuthor = 0; nAuthor < m_pAuthorNames->size(); ++nAuthor)
+    {
+        boost::property_tree::ptree aAuthor = lcl_AuthorToJson((*m_pAuthorNames)[nAuthor], nAuthor);
+        aTable.push_back(std::make_pair("", aAuthor));
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("authors", aTable);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    return OUString::fromUtf8(aStream.str().c_str());
+}
+
 sal_uInt16 SwModule::InsertRedlineAuthor(const OUString& rAuthor)
 {
     sal_uInt16 nPos = 0;
@@ -442,15 +481,7 @@ static void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
     Color aCol( rAttr.nColor );
 
     if( COL_TRANSPARENT == rAttr.nColor )
-    {
-        static const ColorData aColArr[] = {
-         COL_AUTHOR1_DARK,      COL_AUTHOR2_DARK,   COL_AUTHOR3_DARK,
-         COL_AUTHOR4_DARK,      COL_AUTHOR5_DARK,   COL_AUTHOR6_DARK,
-         COL_AUTHOR7_DARK,      COL_AUTHOR8_DARK,   COL_AUTHOR9_DARK };
-
-        aCol.SetColor( aColArr[ nAuthor % (sizeof( aColArr ) /
-                                           sizeof( aColArr[0] )) ] );
-    }
+        aCol.SetColor(lcl_GetAuthorColor(nAuthor));
 
     bool bBackGr = COL_NONE_COLOR == rAttr.nColor;
 
