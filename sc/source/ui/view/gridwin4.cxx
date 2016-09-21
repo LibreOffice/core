@@ -1087,8 +1087,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     nTopLeftTileCol = std::min(nTopLeftTileCol, (sal_Int32)nEndCol);
     nTopLeftTileRow = std::min(nTopLeftTileRow, (sal_Int32)nEndRow);
-    nTopLeftTileCol = std::max(nTopLeftTileCol, 0);
-    nTopLeftTileRow = std::max(nTopLeftTileRow, 0);
+    nTopLeftTileCol = std::max(nTopLeftTileCol, sal_Int32(0));
+    nTopLeftTileRow = std::max(nTopLeftTileRow, sal_Int32(0));
     nBottomRightTileCol = std::min(nBottomRightTileCol, (sal_Int32)nEndCol);
     nBottomRightTileRow = std::min(nBottomRightTileRow, (sal_Int32)nEndRow);
     nTopLeftTileColOrigin = nTopLeftTileColOrigin * TWIPS_PER_PIXEL;
