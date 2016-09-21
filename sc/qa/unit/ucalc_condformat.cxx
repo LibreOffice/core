@@ -350,27 +350,30 @@ void Test::testCondCopyPasteSingleCellToRange()
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), &aClipDoc);
 
-    ScRange aTargetRange(4,4,0,4,8,0);
+    ScRange aTargetRange(4,4,0,5,8,0);
     pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
 
     std::set<sal_uLong> aCondFormatIndices;
     for(SCROW nRow = 4; nRow <= 8; ++nRow)
     {
-        ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(4, nRow, 0);
-        CPPUNIT_ASSERT(pPastedFormat);
+        for (SCCOL nCol = 4; nCol <= 5; ++nCol)
+        {
+            ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(nCol, nRow, 0);
+            CPPUNIT_ASSERT(pPastedFormat);
 
-        CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(4, nRow, 0)), pPastedFormat->GetRange());
-        sal_uLong nPastedKey = pPastedFormat->GetKey();
-        CPPUNIT_ASSERT( nIndex != nPastedKey);
-        const SfxPoolItem* pItem = m_pDoc->GetAttr( 4, nRow, 0, ATTR_CONDITIONAL );
-        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+            CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(nCol, nRow, 0)), pPastedFormat->GetRange());
+            sal_uLong nPastedKey = pPastedFormat->GetKey();
+            CPPUNIT_ASSERT( nIndex != nPastedKey);
+            const SfxPoolItem* pItem = m_pDoc->GetAttr( nCol, nRow, 0, ATTR_CONDITIONAL );
+            const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
 
-        CPPUNIT_ASSERT(pCondFormatItem);
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-        CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
-        auto itr = aCondFormatIndices.find(nPastedKey);
-        CPPUNIT_ASSERT(itr == aCondFormatIndices.end());
-        aCondFormatIndices.insert(nPastedKey);
+            CPPUNIT_ASSERT(pCondFormatItem);
+            CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+            CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
+            auto itr = aCondFormatIndices.find(nPastedKey);
+            CPPUNIT_ASSERT(itr == aCondFormatIndices.end());
+            aCondFormatIndices.insert(nPastedKey);
+        }
     }
 
     m_pDoc->DeleteTab(0);
