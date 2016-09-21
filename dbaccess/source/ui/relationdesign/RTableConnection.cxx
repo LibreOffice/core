@@ -52,7 +52,7 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const Re
 {
     OTableConnection::Draw(rRenderContext, rRect);
     ORelationTableConnectionData* pData = static_cast< ORelationTableConnectionData* >(GetData().get());
-    if (pData && (pData->GetCardinality() == CARDINAL_UNDEFINED))
+    if (pData && (pData->GetCardinality() == Cardinality::Undefined))
         return;
 
     // search lines for top line
@@ -91,20 +91,21 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const Re
 
     switch (pData->GetCardinality())
     {
-    case CARDINAL_ONE_MANY:
+    case Cardinality::OneMany:
         aSourceText = "1";
         aDestText   = "n";
         break;
 
-    case CARDINAL_MANY_ONE:
+    case Cardinality::ManyOne:
         aSourceText = "n";
         aDestText   = "1";
         break;
 
-    case CARDINAL_ONE_ONE:
+    case Cardinality::OneOne:
         aSourceText = "1";
         aDestText   = "1";
         break;
+    default: break;
     }
 
     if (IsSelected())
