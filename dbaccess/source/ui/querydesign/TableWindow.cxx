@@ -99,7 +99,7 @@ OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_
           ,m_pData( pTabWinData )
           ,m_nMoveCount(0)
           ,m_nMoveIncrement(1)
-          ,m_nSizingFlags( SIZING_NONE )
+          ,m_nSizingFlags( SizingFlags::NONE )
           ,m_bActive( false )
 {
 
@@ -345,9 +345,9 @@ void OTableWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rR
 Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSize) const
 {
     Rectangle aSizingRect = Rectangle( GetPosPixel(), GetSizePixel() );
-    sal_uInt16 nSizingFlags = GetSizingFlags();
+    SizingFlags nSizingFlags = GetSizingFlags();
 
-    if( nSizingFlags & SIZING_TOP )
+    if( nSizingFlags & SizingFlags::Top )
     {
         if( _rPos.Y() < 0 )
             aSizingRect.Top() = 0;
@@ -355,7 +355,7 @@ Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSiz
             aSizingRect.Top() = _rPos.Y();
     }
 
-    if( nSizingFlags & SIZING_BOTTOM )
+    if( nSizingFlags & SizingFlags::Bottom )
     {
         if( _rPos.Y() > _rOutputSize.Height() )
             aSizingRect.Bottom() = _rOutputSize.Height();
@@ -363,7 +363,7 @@ Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSiz
             aSizingRect.Bottom() = _rPos.Y();
     }
 
-    if( nSizingFlags & SIZING_RIGHT )
+    if( nSizingFlags & SizingFlags::Right )
     {
         if( _rPos.X() > _rOutputSize.Width() )
             aSizingRect.Right() = _rOutputSize.Width();
@@ -371,7 +371,7 @@ Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSiz
             aSizingRect.Right() = _rPos.X();
     }
 
-    if( nSizingFlags & SIZING_LEFT )
+    if( nSizingFlags & SizingFlags::Left )
     {
         if( _rPos.X() < 0 )
             aSizingRect.Left() = 0;
@@ -385,19 +385,19 @@ void OTableWindow::setSizingFlag(const Point& _rPos)
 {
     Size    aOutSize = GetOutputSizePixel();
     // Set the flags when the mouse cursor is in the sizing area
-    m_nSizingFlags = SIZING_NONE;
+    m_nSizingFlags = SizingFlags::NONE;
 
     if( _rPos.X() < TABWIN_SIZING_AREA )
-        m_nSizingFlags |= SIZING_LEFT;
+        m_nSizingFlags |= SizingFlags::Left;
 
     if( _rPos.Y() < TABWIN_SIZING_AREA )
-        m_nSizingFlags |= SIZING_TOP;
+        m_nSizingFlags |= SizingFlags::Top;
 
     if( _rPos.X() > aOutSize.Width()-TABWIN_SIZING_AREA )
-        m_nSizingFlags |= SIZING_RIGHT;
+        m_nSizingFlags |= SizingFlags::Right;
 
     if( _rPos.Y() > aOutSize.Height()-TABWIN_SIZING_AREA )
-        m_nSizingFlags |= SIZING_BOTTOM;
+        m_nSizingFlags |= SizingFlags::Bottom;
 }
 
 void OTableWindow::MouseMove( const MouseEvent& rEvt )
@@ -413,28 +413,18 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
     Pointer aPointer;
 
     // Set the mouse cursor when it is in the sizing area
-    switch( m_nSizingFlags )
-    {
-    case SIZING_TOP:
-    case SIZING_BOTTOM:
+    if ( m_nSizingFlags == SizingFlags::Top ||
+         m_nSizingFlags == SizingFlags::Bottom )
         aPointer = Pointer( PointerStyle::SSize );
-        break;
-
-    case SIZING_LEFT:
-    case SIZING_RIGHT:
+    else if ( m_nSizingFlags == SizingFlags::Left ||
+              m_nSizingFlags ==SizingFlags::Right )
         aPointer = Pointer( PointerStyle::ESize );
-        break;
-
-    case SIZING_LEFT+SIZING_TOP:
-    case SIZING_RIGHT+SIZING_BOTTOM:
+    else if ( m_nSizingFlags == (SizingFlags::Left | SizingFlags::Top) ||
+              m_nSizingFlags == (SizingFlags::Right | SizingFlags::Bottom) )
         aPointer = Pointer( PointerStyle::SESize );
-        break;
-
-    case SIZING_RIGHT+SIZING_TOP:
-    case SIZING_LEFT+SIZING_BOTTOM:
+    else if ( m_nSizingFlags == (SizingFlags::Right | SizingFlags::Top) ||
+              m_nSizingFlags == (SizingFlags::Left | SizingFlags::Bottom) )
         aPointer = Pointer( PointerStyle::NESize );
-        break;
-    }
 
     SetPointer( aPointer );
 }
@@ -443,7 +433,7 @@ void OTableWindow::MouseButtonDown( const MouseEvent& rEvt )
 {
     // When resizing, the parent must be informed that
     // the window size of its child has changed
-    if( m_nSizingFlags )
+    if( m_nSizingFlags != SizingFlags::NONE )
         getTableView()->BeginChildSizing( this, GetPointer() );
 
     Window::MouseButtonDown( rEvt );

@@ -30,17 +30,25 @@
 
 #include <comphelper/containermultiplexer.hxx>
 #include "cppuhelper/basemutex.hxx"
+#include <o3tl/typed_flags_set.hxx>
 
 class SvTreeListEntry;
+
+// Flags for the size adjustment of SbaJoinTabWins
+enum class SizingFlags {
+    NONE    = 0x0000,
+    Top     = 0x0001,
+    Bottom  = 0x0002,
+    Left    = 0x0004,
+    Right   = 0x0008,
+};
+namespace o3tl {
+    template<> struct typed_flags<SizingFlags> : is_typed_flags<SizingFlags, 0x0f> {};
+}
+
+
 namespace dbaui
 {
-    // Flags for the size adjustment of SbaJoinTabWins
-    const sal_uInt16 SIZING_NONE    = 0x0000;
-    const sal_uInt16 SIZING_TOP     = 0x0001;
-    const sal_uInt16 SIZING_BOTTOM  = 0x0002;
-    const sal_uInt16 SIZING_LEFT    = 0x0004;
-    const sal_uInt16 SIZING_RIGHT   = 0x0008;
-
     class OJoinDesignView;
     class OJoinTableView;
     class OTableWindowAccess;
@@ -65,8 +73,8 @@ namespace dbaui
                                 m_pContainerListener;
         sal_Int32               m_nMoveCount;           // how often the arrow keys was pressed
         sal_Int32               m_nMoveIncrement;       // how many pixel we should move
-        sal_uInt16              m_nSizingFlags;
-        bool                m_bActive;
+        SizingFlags             m_nSizingFlags;
+        bool                    m_bActive;
 
         // OContainerListener
         virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
@@ -157,7 +165,7 @@ namespace dbaui
         inline css::uno::Reference< css::container::XNameAccess > GetOriginalColumns() const { return m_pData->getColumns(); }
         inline css::uno::Reference< css::beans::XPropertySet >    GetTable() const { return m_pData->getTable(); }
 
-        sal_uInt16                      GetSizingFlags() const { return m_nSizingFlags; }
+        SizingFlags                 GetSizingFlags() const { return m_nSizingFlags; }
         /** set the sizing flag to the direction
             @param  _rPos
                 The EndPosition after resizing.
@@ -165,7 +173,7 @@ namespace dbaui
         void                        setSizingFlag(const Point& _rPos);
         /** set the resizing flag to NONE.
         */
-        void                        resetSizingFlag() { m_nSizingFlags = SIZING_NONE; }
+        void                        resetSizingFlag() { m_nSizingFlags = SizingFlags::NONE; }
 
         /** returns the new sizing
         */
