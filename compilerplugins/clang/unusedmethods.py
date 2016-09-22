@@ -154,7 +154,7 @@ with io.open("loplugin.unusedmethods.log", "rb", buffering=1024*1024) as txt:
             returnType = tokens[1]
             nameAndParams = tokens[2]
             usedReturnSet.add((normalizeTypeParams(returnType), normalizeTypeParams(nameAndParams)))
-        elif tokens[0] == "calledFromOutsideSet:":
+        elif tokens[0] == "outside:":
             returnType = tokens[1]
             nameAndParams = tokens[2]
             calledFromOutsideSet.add((normalizeTypeParams(returnType), normalizeTypeParams(nameAndParams)))
@@ -315,7 +315,22 @@ for d in definitionSet:
     # ignore the SfxPoolItem CreateDefault methods for now
     if d[1].endswith("::CreateDefault()"):
         continue
-    tmp2set.add((method, definitionToSourceLocationMap[d]))
+    # ignore UNO constructor functions
+    if (d[0] == "class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface>" and
+        d[1].endswith("_createInstance(const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &)")):
+        continue
+    if (d[0] == "class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface>" and
+        d[1].endswith("_CreateInstance(const class com::sun::star::uno::Reference<class com::sun::star::lang::XMultiServiceFactory> &)")):
+        continue
+    # debug code
+    if d[1] == "writerfilter::ooxml::OOXMLPropertySet::toString()":
+        continue
+    location = definitionToSourceLocationMap[d];
+    # windows only
+    if location.startswith("include/svl/svdde.hxx"): continue
+    # fluent API (return ref to self)
+    if location.startswith("include/tools/stream.hxx"): continue
+    tmp2set.add((method, location))
 
 # print output, sorted by name and line number
 with open("loplugin.unusedmethods.report-returns", "wt") as f:

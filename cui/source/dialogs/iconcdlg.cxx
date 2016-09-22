@@ -682,7 +682,7 @@ bool IconChoiceDialog::OK_Impl()
 }
 
 
-short IconChoiceDialog::Ok()
+void IconChoiceDialog::Ok()
 {
     bInOK = true;
 
@@ -693,7 +693,6 @@ short IconChoiceDialog::Ok()
         else if ( pExampleSet )
             pOutSet = new SfxItemSet( *pExampleSet );
     }
-    bool _bModified = false;
 
     for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
     {
@@ -709,18 +708,12 @@ short IconChoiceDialog::Ok()
 
                 if ( pPage->FillItemSet( &aTmp ) )
                 {
-                    _bModified = true;
                     pExampleSet->Put( aTmp );
                     pOutSet->Put( aTmp );
                 }
             }
         }
     }
-
-    if ( _bModified || ( pOutSet && pOutSet->Count() > 0 ) )
-        _bModified = true;
-
-    return _bModified ? RET_OK : RET_CANCEL;
 }
 
 void IconChoiceDialog::FocusOnIcon( sal_uInt16 nId )
