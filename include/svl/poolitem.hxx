@@ -34,11 +34,12 @@
 class IntlWrapper;
 class SvStream;
 
-enum SfxItemKind {
-   SFX_ITEMS_NONE,
-   SFX_ITEMS_DELETEONIDLE,
-   SFX_ITEMS_STATICDEFAULT,
-   SFX_ITEMS_POOLDEFAULT
+enum class SfxItemKind : sal_Int8
+{
+   NONE,
+   DeleteOnIdle,
+   StaticDefault,
+   PoolDefault
 };
 
 #define SFX_ITEMS_OLD_MAXREF                0xffef
@@ -180,7 +181,7 @@ private:
 inline void SfxPoolItem::SetRefCount( sal_uLong n )
 {
     m_nRefCount = n;
-    m_nKind = SFX_ITEMS_NONE;
+    m_nKind = SfxItemKind::NONE;
 }
 
 inline void SfxPoolItem::SetKind( SfxItemKind n )
@@ -206,17 +207,17 @@ inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
 
 inline bool IsPoolDefaultItem(const SfxPoolItem *pItem )
 {
-    return pItem && pItem->GetKind() == SFX_ITEMS_POOLDEFAULT;
+    return pItem && pItem->GetKind() == SfxItemKind::PoolDefault;
 }
 
 inline bool IsStaticDefaultItem(const SfxPoolItem *pItem )
 {
-    return pItem && pItem->GetKind() == SFX_ITEMS_STATICDEFAULT;
+    return pItem && pItem->GetKind() == SfxItemKind::StaticDefault;
 }
 
 inline bool IsDefaultItem( const SfxPoolItem *pItem )
 {
-    return pItem && (pItem->GetKind() == SFX_ITEMS_STATICDEFAULT || pItem->GetKind() == SFX_ITEMS_POOLDEFAULT);
+    return pItem && (pItem->GetKind() == SfxItemKind::StaticDefault || pItem->GetKind() == SfxItemKind::PoolDefault);
 }
 
 inline bool IsPooledItem( const SfxPoolItem *pItem )
