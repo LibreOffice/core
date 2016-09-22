@@ -1633,7 +1633,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
         }
     }
 
-    if (SfxViewShell* pViewShell = SfxViewFrame::Current()->GetViewShell())
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
         pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
 }
 
