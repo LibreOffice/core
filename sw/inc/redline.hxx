@@ -326,9 +326,6 @@ public:
 
 class SW_DLLPUBLIC SwRedlineHint : public SfxHint
 {
-#define SWREDLINE_INSERTED  1
-#define SWREDLINE_FOCUS     3
-
 };
 
 #endif
