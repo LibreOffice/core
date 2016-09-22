@@ -648,12 +648,6 @@ void DifColumn::NewEntry( const SCROW nPos, const sal_uInt32 nNumFormat )
 
 }
 
-void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab, const ScPatternAttr& rPattAttr )
-{
-    for (std::vector<ENTRY>::const_iterator it = maEntries.begin(); it != maEntries.end(); ++it)
-        rDoc.ApplyPatternAreaTab( nCol, it->nStart, nCol, it->nEnd, nTab, rPattAttr );
-}
-
 void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 {
     ScPatternAttr aAttr( rDoc.GetPool() );

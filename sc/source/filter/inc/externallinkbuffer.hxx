@@ -211,8 +211,6 @@ public:
 
     /** Returns the type of this external link. */
     inline ExternalLinkType getLinkType() const { return meLinkType; }
-    /** Returns true, if the link refers to the current workbook. */
-    inline bool         isInternalLink() const { return (meLinkType == LINKTYPE_SELF) || (meLinkType == LINKTYPE_INTERNAL); }
 
     /** Returns the relation identifier for the external link fragment. */
     inline const OUString& getRelId() const { return maRelId; }

@@ -374,7 +374,6 @@ private:
 
 private:
     typedef ::std::unique_ptr< VmlDrawing >       VmlDrawingPtr;
-    typedef ::std::unique_ptr< BiffSheetDrawing > BiffSheetDrawingPtr;
 
     const OUString      maSheetCellRanges;  /// Service name for a SheetCellRanges object.
     const ScAddress&    mrMaxApiPos;        /// Reference to maximum Calc cell address from address converter.

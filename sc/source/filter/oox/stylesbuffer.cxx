@@ -1392,19 +1392,6 @@ bool ApiBorderData::hasAnyOuterBorder() const
         ( ( lcl_isBorder( maRight ) && maRight.OuterLineWidth > 0 ) );
 }
 
-bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight )
-{
-    return
-        (rLeft.maLeft       == rRight.maLeft)   &&
-        (rLeft.maRight      == rRight.maRight)  &&
-        (rLeft.maTop        == rRight.maTop)    &&
-        (rLeft.maBottom     == rRight.maBottom) &&
-        (rLeft.maTLtoBR     == rRight.maTLtoBR) &&
-        (rLeft.maBLtoTR     == rRight.maBLtoTR) &&
-        (rLeft.mbBorderUsed == rRight.mbBorderUsed) &&
-        (rLeft.mbDiagUsed   == rRight.mbDiagUsed);
-}
-
 namespace {
 
 inline void lclSetBorderLineWidth( BorderLine& rBorderLine,
@@ -1537,22 +1524,6 @@ void Border::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
         }
         ScfTools::PutItem( rItemSet, aTLBRItem, bSkipPoolDefs );
         ScfTools::PutItem( rItemSet, aBLTRItem, bSkipPoolDefs );
-    }
-}
-
-void Border::writeToPropertyMap( PropertyMap& rPropMap ) const
-{
-    if( maApiData.mbBorderUsed )
-    {
-        rPropMap.setProperty( PROP_LeftBorder, maApiData.maLeft);
-        rPropMap.setProperty( PROP_RightBorder, maApiData.maRight);
-        rPropMap.setProperty( PROP_TopBorder, maApiData.maTop);
-        rPropMap.setProperty( PROP_BottomBorder, maApiData.maBottom);
-    }
-    if( maApiData.mbDiagUsed )
-    {
-        rPropMap.setProperty( PROP_DiagonalTLBR, maApiData.maTLtoBR);
-        rPropMap.setProperty( PROP_DiagonalBLTR, maApiData.maBLtoTR);
     }
 }
 
@@ -1692,14 +1663,6 @@ ApiSolidFillData::ApiSolidFillData() :
     mbTransparent( true ),
     mbUsed( false )
 {
-}
-
-bool operator==( const ApiSolidFillData& rLeft, const ApiSolidFillData& rRight )
-{
-    return
-        (rLeft.mnColor       == rRight.mnColor) &&
-        (rLeft.mbTransparent == rRight.mbTransparent) &&
-        (rLeft.mbUsed        == rRight.mbUsed);
 }
 
 namespace {
@@ -1936,15 +1899,6 @@ void Fill::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
             aBrushItem.SetColor( maApiData.mnColor  );
         }
         ScfTools::PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
-    }
-}
-
-void Fill::writeToPropertyMap( PropertyMap& rPropMap ) const
-{
-    if( maApiData.mbUsed )
-    {
-        rPropMap.setProperty( PROP_CellBackColor, maApiData.mnColor);
-        rPropMap.setProperty( PROP_IsCellBackgroundTransparent, maApiData.mbTransparent);
     }
 }
 

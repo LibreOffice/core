@@ -844,12 +844,6 @@ void SwXDrawPage::InvalidateSwDoc()
     pDoc = nullptr;
 }
 
-SwDoc* SwXDrawPage::GetDoc()
-{
-    return pDoc;
-}
-
-
 namespace
 {
     class theSwXShapeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXShapeUnoTunnelId > {};

@@ -54,11 +54,6 @@ namespace sw { namespace sidebar {
           public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
     {
     public:
-        static VclPtr<vcl::Window> Create(
-            vcl::Window* pParent,
-            const css::uno::Reference< css::frame::XFrame>& rxFrame,
-            SfxBindings* pBindings );
-
         // interface of ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
         virtual void NotifyItemUpdate(
             const sal_uInt16 nSId,

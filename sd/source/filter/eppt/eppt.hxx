@@ -234,10 +234,6 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
                                 css::presentation::AnimationEffect& eEffect,
                                 css::presentation::AnimationEffect& eTextEffect,
                                 bool& bHasSound );
-        void                ImplWriteObjectEffect( SvStream& rSt,
-                                css::presentation::AnimationEffect eEffect,
-                                css::presentation::AnimationEffect eTextEffect,
-                                sal_Int32 nOrder );
         void                ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAction eAction, bool bMediaClickAction );
         void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );

@@ -100,8 +100,6 @@ public:
 
     sal_uLong           fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const;
 
-    /** Writes the specified number format to the passed property map. */
-    void                writeToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const;
     sal_Int32           nextFreeId(){ return ++mnHighestId; }
 private:
     /** Inserts built-in number formats for the current system language. */

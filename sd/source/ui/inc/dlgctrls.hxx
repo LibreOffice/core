@@ -38,11 +38,6 @@ public:
     FadeEffectLB(vcl::Window* pParent, WinBits nStyle);
     virtual ~FadeEffectLB() override;
     virtual void dispose() override;
-    void         Fill();
-
-    void         FillVariantLB(ListBox& rVariantLB);
-
-    void                        applySelected( SdPage* pSlide, ListBox& rVariantLB ) const;
 
     FadeEffectLBImpl*           mpImpl;
 };

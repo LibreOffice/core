@@ -47,8 +47,6 @@ public:
     bool GetWriteCalcConfig() const { return mbWriteConfig;}
 
 private:
-    void OpenCLAutomaticSelectionChanged();
-    void SelectedDeviceChanged();
     void CoupleEmptyAsZeroToStringConversion();
 
 private:

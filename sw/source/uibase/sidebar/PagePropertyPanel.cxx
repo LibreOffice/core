@@ -75,23 +75,6 @@ namespace {
 
 namespace sw { namespace sidebar {
 
-VclPtr<vcl::Window> PagePropertyPanel::Create (
-    vcl::Window* pParent,
-    const css::uno::Reference< css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings)
-{
-    if (pParent == nullptr)
-        throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", nullptr, 0);
-    if ( ! rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", nullptr, 1);
-    if (pBindings == nullptr)
-        throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", nullptr, 2);
-
-    return VclPtr<PagePropertyPanel>::Create( pParent,
-                                              rxFrame,
-                                              pBindings);
-}
-
 PagePropertyPanel::PagePropertyPanel(
             vcl::Window* pParent,
             const css::uno::Reference< css::frame::XFrame>& rxFrame,

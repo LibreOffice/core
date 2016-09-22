@@ -133,19 +133,6 @@ private:
     ::std::vector< sal_uInt8 > maVerifierHash;
 };
 
-/** Helper for BIFF stream codecs. Holds the used codec object. */
-class BiffCodecHelper : public WorkbookHelper
-{
-public:
-    explicit            BiffCodecHelper( const WorkbookHelper& rHelper );
-
-    /** Clones the contained decoder object if existing and sets it at the passed stream. */
-    void                cloneDecoder( BiffInputStream& rStrm );
-
-private:
-    BiffDecoderRef      mxDecoder;          /// The decoder for import filter.
-};
-
 } // namespace xls
 } // namespace oox
 

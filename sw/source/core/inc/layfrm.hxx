@@ -41,11 +41,6 @@ class SwLayoutFrame: public SwFrame
     friend SwFrame* SaveContent( SwLayoutFrame *, SwFrame * );
     friend void   RestoreContent( SwFrame *, SwLayoutFrame *, SwFrame *pSibling, bool bGrow );
 
-#ifdef DBG_UTIL
-    //removes empty SwSectionFrames from a chain
-    friend SwFrame* SwClearDummies( SwFrame* pFrame );
-#endif
-
 protected:
 
     virtual void DestroyImpl() override;

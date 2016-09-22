@@ -235,10 +235,7 @@ public:
     bool Contains( const value_type& x ) const;
     inline bool Contains( const SwFormat* p ) const;
 
-    void DeleteAndDestroy( int aStartIdx, int aEndIdx );
     void DeleteAndDestroyAll( bool keepDefault = false );
-
-    size_t GetPos( const value_type& x ) const;
 
     bool newDefault( const value_type& x );
     void newDefault( const_iterator const& position );

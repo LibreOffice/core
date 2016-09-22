@@ -145,8 +145,6 @@ class DifColumn
 
     void NewEntry( const SCROW nPos, const sal_uInt32 nNumFormat );
 
-    void Apply( ScDocument&, const SCCOL nCol, const SCTAB nTab, const ScPatternAttr& );
-
     void Apply( ScDocument &rDoc, const SCCOL nCol, const SCTAB nTab );
 };
 

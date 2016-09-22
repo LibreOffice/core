@@ -107,12 +107,6 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinAddress& 
     return rStrm;
 }
 
-inline BiffInputStream& operator>>( BiffInputStream& rStrm, BinAddress& orPos )
-{
-    orPos.read( rStrm );
-    return rStrm;
-}
-
 /** A 2D cell range address struct for binary filters. */
 struct BinRange
 {
@@ -124,12 +118,6 @@ struct BinRange
 };
 
 inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRange& orRange )
-{
-    orRange.read( rStrm );
-    return rStrm;
-}
-
-inline BiffInputStream& operator>>( BiffInputStream& rStrm, BinRange& orRange )
 {
     orRange.read( rStrm );
     return rStrm;

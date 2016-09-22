@@ -50,19 +50,6 @@ BiffDrawingBase::BiffDrawingBase( const WorksheetHelper& rHelper, const Referenc
 {
 }
 
-void BiffDrawingBase::finalizeImport()
-{
-    Reference< XShapes > xShapes( mxDrawPage, UNO_QUERY );
-    OSL_ENSURE( xShapes.is(), "BiffDrawingBase::finalizeImport - no shapes container" );
-    if( !xShapes.is() )
-        return;
-}
-
-BiffSheetDrawing::BiffSheetDrawing( const WorksheetHelper& rHelper ) :
-    BiffDrawingBase( rHelper, rHelper.getDrawPage() )
-{
-}
-
 } // namespace xls
 } // namespace oox
 

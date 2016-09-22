@@ -63,13 +63,9 @@ public:
                     SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle );
                     virtual ~SdDocPreviewWin() override;
     virtual void    dispose() override;
-    void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage );
     virtual void    Resize() override;
-    void            startPreview();
 
     virtual bool    Notify( NotifyEvent& rNEvt ) override;
-
-    void            SetClickHdl( const Link<SdDocPreviewWin&,void>& rLink ) { aClickHdl = rLink; }
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 

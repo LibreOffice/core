@@ -1774,18 +1774,6 @@ void ScColumn::PrepareBroadcastersForDestruction()
     }
 }
 
-bool ScColumn::HasBroadcaster() const
-{
-    sc::BroadcasterStoreType::const_iterator it = maBroadcasters.begin(), itEnd = maBroadcasters.end();
-    for (; it != itEnd; ++it)
-    {
-        if (it->type == sc::element_type_broadcaster)
-            // Having a broadcaster block automatically means there is at least one broadcaster.
-            return true;
-    }
-    return false;
-}
-
 ScPostIt* ScColumn::GetCellNote(SCROW nRow)
 {
     return maCellNotes.get<ScPostIt*>(nRow);

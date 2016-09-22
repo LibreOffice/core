@@ -268,9 +268,12 @@ for d in definitionSet:
         continue
     if "::operator" in d[1]:
         continue
+    location = definitionToSourceLocationMap[d];
+    # whacky template stuff
+    if location.startswith("sc/source/ui/vba/vbaformat.hxx"): continue
 
     unusedSet.add(d) # used by the "unused return types" analysis
-    tmp1set.add((method, definitionToSourceLocationMap[d]))
+    tmp1set.add((method, location))
 
 # print out the results, sorted by name and line number
 with open("loplugin.unusedmethods.report-methods", "wt") as f:

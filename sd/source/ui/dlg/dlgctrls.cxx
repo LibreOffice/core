@@ -58,58 +58,6 @@ void FadeEffectLB::dispose()
     ListBox::dispose();
 }
 
-void FadeEffectLB::Fill()
-{
-    InsertEntry( SD_RESSTR( STR_EFFECT_NONE ) );
-    mpImpl->maPresets.push_back( TransitionPresetPtr() );
-    mpImpl->maSet.push_back( "" );
-
-    const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
-
-    for( auto aIter = rPresetList.begin(); aIter != rPresetList.end(); ++aIter )
-    {
-        TransitionPresetPtr pPreset = *aIter;
-        const OUString sLabel( pPreset->getSetLabel() );
-        if( !sLabel.isEmpty() )
-        {
-            if( mpImpl->maNumVariants.find( pPreset->getSetId() ) == mpImpl->maNumVariants.end() )
-            {
-                InsertEntry( sLabel );
-                mpImpl->maSet.push_back( pPreset->getSetId() );
-                mpImpl->maNumVariants[pPreset->getSetId()] = 1;
-            }
-            else
-            {
-                mpImpl->maNumVariants[pPreset->getSetId()]++;
-            }
-            mpImpl->maPresets.push_back( pPreset );
-        }
-    }
-
-    assert( static_cast<size_t>( GetEntryCount() ) == mpImpl->maSet.size() );
-    assert( mpImpl->maPresets.size() == 1 + TransitionPreset::getTransitionPresetList().size() );
-
-    SelectEntryPos(0);
-}
-
-void FadeEffectLB::FillVariantLB(ListBox& rVariantLB)
-{
-    rVariantLB.Clear();
-    for( auto aIter = mpImpl->maPresets.begin(); aIter != mpImpl->maPresets.end(); ++aIter )
-    {
-        TransitionPresetPtr pPreset = *aIter;
-        if( !pPreset )
-            continue;
-        const OUString sLabel( pPreset->getSetLabel() );
-        if( !sLabel.isEmpty() && mpImpl->maSet[GetSelectEntryPos()].equals( pPreset->getSetId() ) )
-        {
-            rVariantLB.InsertEntry( pPreset->getVariantLabel() );
-        }
-    }
-    if( rVariantLB.GetEntryCount() > 0 )
-        rVariantLB.SelectEntryPos( 0 );
-}
-
 VCL_BUILDER_DECL_FACTORY(FadeEffectLB)
 {
     WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
@@ -122,37 +70,5 @@ VCL_BUILDER_DECL_FACTORY(FadeEffectLB)
     rRet = VclPtr<FadeEffectLB>::Create(pParent, nBits);
 }
 
-void FadeEffectLB::applySelected( SdPage* pSlide, ListBox& rVariantLB ) const
-{
-    if( !pSlide )
-        return;
-
-    if( GetSelectEntryPos() == 0 )
-    {
-        pSlide->setTransitionType( 0 );
-        pSlide->setTransitionSubtype( 0 );
-        pSlide->setTransitionDirection( true );
-        pSlide->setTransitionFadeColor( 0 );
-        return;
-    }
-
-    int nMatch = 0;
-    for( auto aIter = mpImpl->maPresets.begin(); aIter != mpImpl->maPresets.end(); ++aIter )
-    {
-        TransitionPresetPtr pPreset = *aIter;
-        if( !pPreset )
-            continue;
-        const OUString sLabel( pPreset->getSetLabel() );
-        if( !sLabel.isEmpty() && mpImpl->maSet[GetSelectEntryPos()].equals( pPreset->getSetId() ) )
-        {
-            if( nMatch == rVariantLB.GetSelectEntryPos() )
-            {
-                pPreset->apply( pSlide );
-                break;
-            }
-            nMatch++;
-        }
-    }
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

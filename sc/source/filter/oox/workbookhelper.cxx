@@ -128,8 +128,6 @@ public:
     inline FilterBase&  getBaseFilter() const { return mrBaseFilter; }
     /** Returns the filter progress bar. */
     inline SegmentProgressBar& getProgressBar() const { return *mxProgressBar; }
-    /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
-    inline bool         isWorkbookFile() const { return mbWorkbook; }
     /** Returns the VBA project storage. */
     const StorageRef&   getVbaProjectStorage() const { return mxVbaPrjStrg; }
     /** Returns the index of the current Calc sheet, if filter currently processes a sheet. */
@@ -226,8 +224,6 @@ public:
 
     /** Returns the text encoding used to import/export byte strings. */
     inline rtl_TextEncoding getTextEncoding() const { return meTextEnc; }
-    /** Returns the codec helper that stores the encoder/decoder object. */
-    inline BiffCodecHelper& getCodecHelper() { return *mxCodecHelper; }
 
 private:
     /** Initializes some basic members and sets needed document properties. */
@@ -257,7 +253,6 @@ private:
     typedef ::std::unique_ptr< AddressConverter >       AddressConvPtr;
     typedef ::std::unique_ptr< oox::drawingml::chart::ChartConverter > ExcelChartConvPtr;
     typedef ::std::unique_ptr< PageSettingsConverter >  PageSettConvPtr;
-    typedef ::std::unique_ptr< BiffCodecHelper >        BiffCodecHelperPtr;
 
     OUString            maCellStyles;           /// Style family name for cell styles.
     OUString            maPageStyles;           /// Style family name for page styles.
@@ -300,7 +295,6 @@ private:
     XmlFilterBase*      mpOoxFilter;            /// Base OOXML/BIFF12 filter object.
 
     // BIFF2-BIFF8 specific
-    BiffCodecHelperPtr  mxCodecHelper;          /// Encoder/decoder helper.
     rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
     ScDocument* mpDoc;
     ScDocShell* mpDocShell;
@@ -664,11 +658,6 @@ SegmentProgressBar& WorkbookHelper::getProgressBar() const
     return mrBookGlob.getProgressBar();
 }
 
-bool WorkbookHelper::isWorkbookFile() const
-{
-    return mrBookGlob.isWorkbookFile();
-}
-
 sal_Int16 WorkbookHelper::getCurrentSheetIndex() const
 {
     return mrBookGlob.getCurrentSheetIndex();
@@ -973,11 +962,6 @@ bool WorkbookHelper::importOoxFragment( const rtl::Reference<FragmentHandler>& r
 rtl_TextEncoding WorkbookHelper::getTextEncoding() const
 {
     return mrBookGlob.getTextEncoding();
-}
-
-BiffCodecHelper& WorkbookHelper::getCodecHelper() const
-{
-    return mrBookGlob.getCodecHelper();
 }
 
 } // namespace xls

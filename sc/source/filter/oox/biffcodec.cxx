@@ -220,17 +220,6 @@ void BiffDecoder_RCF::implDecode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcD
     }
 }
 
-BiffCodecHelper::BiffCodecHelper( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper )
-{
-}
-
-void BiffCodecHelper::cloneDecoder( BiffInputStream& rStrm )
-{
-    if( mxDecoder.get() )
-        rStrm.setDecoder( BiffDecoderRef( mxDecoder->clone() ) );
-}
-
 } // namespace xls
 } // namespace oox
 

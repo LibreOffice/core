@@ -210,7 +210,6 @@ public:
                         const OUString& rTabName, const bool bSameWorkbook );
 
     bool            GetScTabIndex( sal_uInt16 nExcSheetIndex, sal_uInt16& rIn_LastTab_Out_ScIndex );
-    void            GetLink( const sal_uInt16 nExcSheetIndex, OUString &rAppl, OUString &rDoc ) const;
 
     void            Reset();
 };
@@ -226,7 +225,6 @@ struct ExtName
 
     inline          ExtName( sal_uInt16 n ) : nStorageId( 0 ), nFlags( n ) {}
 
-    bool            IsDDE() const;
     bool            IsOLE() const;
 };
 

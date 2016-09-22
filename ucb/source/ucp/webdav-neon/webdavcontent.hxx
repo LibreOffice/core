@@ -323,10 +323,6 @@ public:
                              const std::unique_ptr< DAVResourceAccess > & rResAccess )
         throw ( css::uno::Exception, std::exception );
 
-    void getResourceOptions( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
-                             DAVOptions& rDAVOptions )
-        throw ( css::uno::Exception, std::exception );
-
     static bool isResourceAvailable( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                              const std::unique_ptr< DAVResourceAccess > & rResAccess,
                                      DAVOptions& rDAVOptions );
