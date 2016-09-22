@@ -286,7 +286,6 @@
 #include <rsc/rsc-vcl-shared-types.hxx>
 #include <sot/formats.hxx>
 #include <svl/hint.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/svldllapi.h>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/accessibletable.hxx>

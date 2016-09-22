@@ -169,16 +169,12 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
 
 void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    if ( rHint.GetId() == SFX_HINT_DYING )
     {
-        if ( pSimpleHint->GetId() == SFX_HINT_DYING )
-        {
-            EndListening(*mpViewShell);
-            EndListening(*mpObjectShell);
-            mpViewShell = nullptr;
-            mpObjectShell = nullptr;
-        }
+        EndListening(*mpViewShell);
+        EndListening(*mpObjectShell);
+        mpViewShell = nullptr;
+        mpObjectShell = nullptr;
     }
 }
 

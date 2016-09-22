@@ -328,7 +328,7 @@ IMPL_LINK_NOARG_TYPED(ScDocument, TrackTimeHdl, Idle *, void)
     else if (pShell)                    // execute
     {
         TrackFormulas();
-        pShell->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
+        pShell->Broadcast( SfxHint( FID_DATACHANGED ) );
 
             //  modified...
 

@@ -1018,8 +1018,7 @@ ScChart2DataProvider::~ScChart2DataProvider()
 
 void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
     {
         m_pDocument = nullptr;
     }
@@ -2405,8 +2404,7 @@ ScChart2DataSource::~ScChart2DataSource()
 
 void ScChart2DataSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
     {
         m_pDocument = nullptr;
     }
@@ -2807,43 +2805,7 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
 
 void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
-    {
-        const sal_uInt32 nId = pSimpleHint->GetId();
-        if ( nId ==SFX_HINT_DYING )
-        {
-            m_pDocument = nullptr;
-        }
-        else if ( nId == SFX_HINT_DATACHANGED )
-        {
-            // delayed broadcast as in ScCellRangesBase
-
-            if ( m_bGotDataChangedHint && m_pDocument )
-            {
-                m_aDataArray.clear();
-                lang::EventObject aEvent;
-                aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-
-                if( m_pDocument )
-                {
-                    for (uno::Reference<util::XModifyListener> & xListener: m_aValueListeners)
-                        m_pDocument->AddUnoListenerCall( xListener, aEvent );
-                }
-
-                m_bGotDataChangedHint = false;
-            }
-        }
-        else if ( nId == SC_HINT_CALCALL )
-        {
-            // broadcast from DoHardRecalc - set m_bGotDataChangedHint
-            // (SFX_HINT_DATACHANGED follows separately)
-
-            if ( !m_aValueListeners.empty() )
-                m_bGotDataChangedHint = true;
-        }
-    }
-    else if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
         // Create a range list from the token list, have the range list
         // updated, and bring the change back to the token list.
@@ -2917,12 +2879,46 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
         }
         while (false);
     }
+    else
+    {
+        const sal_uInt32 nId = rHint.GetId();
+        if ( nId ==SFX_HINT_DYING )
+        {
+            m_pDocument = nullptr;
+        }
+        else if ( nId == SFX_HINT_DATACHANGED )
+        {
+            // delayed broadcast as in ScCellRangesBase
+
+            if ( m_bGotDataChangedHint && m_pDocument )
+            {
+                m_aDataArray.clear();
+                lang::EventObject aEvent;
+                aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+
+                if( m_pDocument )
+                {
+                    for (uno::Reference<util::XModifyListener> & xListener: m_aValueListeners)
+                        m_pDocument->AddUnoListenerCall( xListener, aEvent );
+                }
+
+                m_bGotDataChangedHint = false;
+            }
+        }
+        else if ( nId == SC_HINT_CALCALL )
+        {
+            // broadcast from DoHardRecalc - set m_bGotDataChangedHint
+            // (SFX_HINT_DATACHANGED follows separately)
+
+            if ( !m_aValueListeners.empty() )
+                m_bGotDataChangedHint = true;
+        }
+    }
 }
 
 IMPL_LINK_TYPED( ScChart2DataSequence, ValueListenerHdl, const SfxHint&, rHint, void )
 {
-    if ( m_pDocument && dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            static_cast<const SfxSimpleHint&>(rHint).GetId() & SC_HINT_DATACHANGED)
+    if ( m_pDocument && (rHint.GetId() & SC_HINT_DATACHANGED) )
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when

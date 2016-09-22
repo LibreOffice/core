@@ -53,7 +53,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <algorithm>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
 
@@ -1099,25 +1099,20 @@ SdrPageProperties::~SdrPageProperties()
 
 void SdrPageProperties::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
-
-    if(pSimpleHint)
+    switch(rHint.GetId())
     {
-        switch(pSimpleHint->GetId())
-        {
-            case SFX_HINT_DATACHANGED :
+        case SFX_HINT_DATACHANGED :
             {
                 // notify change, broadcast
                 ImpPageChange(*mpSdrPage);
                 break;
             }
-            case SFX_HINT_DYING :
+        case SFX_HINT_DYING :
             {
                 // Style needs to be forgotten
                 ImpRemoveStyleSheet();
                 break;
             }
-        }
     }
 }
 

@@ -248,22 +248,22 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         lcl_processCompatibleSfxHint( xVbaEvents, rHint );
 
     sal_uInt16 nAction = 0;
-    if( dynamic_cast<const SfxSimpleHint*>(&rHint) )
+    if( dynamic_cast<const SfxEventHint*>(&rHint) &&
+        static_cast<const SfxEventHint&>( rHint).GetEventId() == SFX_EVENT_LOADFINISHED )
+    {
+        // #i38126# - own action id
+        nAction = 3;
+    }
+    else
     {
         // switch for more actions
-        switch( static_cast<const SfxSimpleHint&>( rHint).GetId() )
+        switch( rHint.GetId() )
         {
             case SFX_HINT_TITLECHANGED:
                 if( GetMedium() )
                     nAction = 2;
             break;
         }
-    }
-    else if( dynamic_cast<const SfxEventHint*>(&rHint) &&
-        static_cast<const SfxEventHint&>( rHint).GetEventId() == SFX_EVENT_LOADFINISHED )
-    {
-        // #i38126# - own action id
-        nAction = 3;
     }
 
     if( nAction )
@@ -1262,7 +1262,7 @@ void SwDocShell::SetModified( bool bSet )
          }
 
         UpdateChildWindows();
-        Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
+        Broadcast(SfxHint(SFX_HINT_DOCCHANGED));
     }
 }
 

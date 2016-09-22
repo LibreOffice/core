@@ -30,7 +30,6 @@
 #include <unotools/configpaths.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svl/poolitem.hxx>
-#include <svl/smplhint.hxx>
 #include <osl/mutex.hxx>
 
 #include "itemholder2.hxx"

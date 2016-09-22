@@ -19,7 +19,7 @@
 
 #include <svl/broadcast.hxx>
 #include <svl/listener.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <algorithm>
 
 void SvtBroadcaster::Normalize() const
@@ -101,7 +101,7 @@ SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
 SvtBroadcaster::~SvtBroadcaster()
 {
     mbDisposing = true;
-    Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
+    Broadcast( SfxHint(SFX_HINT_DYING) );
 
     Normalize();
 

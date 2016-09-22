@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "ColorListener.hxx"
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <vcl/settings.hxx>
 
 #include "uistrings.hrc"
@@ -51,8 +51,7 @@ void OColorListener::dispose()
 
 void OColorListener::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_COLORS_CHANGED)
+    if (rHint.GetId() == SFX_HINT_COLORS_CHANGED)
     {
         m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).getColor();
         m_nTextBoundaries = m_aColorConfig.GetColorValue(::svtools::DOCBOUNDARIES).nColor;

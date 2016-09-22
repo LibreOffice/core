@@ -40,8 +40,6 @@
 #include <svx/svdtrans.hxx>
 #include <svx/svdpage.hxx>
 
-#include <svl/smplhint.hxx>
-
 
 namespace sdr
 {

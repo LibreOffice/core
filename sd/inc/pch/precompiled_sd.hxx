@@ -384,7 +384,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/slstitm.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>

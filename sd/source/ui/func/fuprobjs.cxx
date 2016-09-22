@@ -22,7 +22,7 @@
 #include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 
 #include "app.hrc"
 #include "res_bmp.hrc"
@@ -149,7 +149,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                 pStyleSheet->GetItemSet().Put( *pOutSet );
-                static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+                static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxHint( SFX_HINT_DATACHANGED ) );
             }
         }
     }

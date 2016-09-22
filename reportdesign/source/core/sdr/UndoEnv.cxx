@@ -39,7 +39,7 @@
 #include <com/sun/star/beans/XIntrospection.hpp>
 
 #include <connectivity/dbtools.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/stl_types.hxx>
 #include <vcl/svapp.hxx>
@@ -191,8 +191,7 @@ void OXUndoEnvironment::ModeChanged()
 
 void OXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_MODECHANGED )
+    if (rHint.GetId() == SFX_HINT_MODECHANGED )
         ModeChanged();
 }
 

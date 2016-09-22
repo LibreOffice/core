@@ -24,7 +24,6 @@
 
 #include <comphelper/string.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svl/smplhint.hxx>
 #include <sal/macros.h>
 #include <tools/poly.hxx>
 #include "scmod.hxx"

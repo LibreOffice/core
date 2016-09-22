@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <tools/ref.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/Metadatable.hxx>
 
@@ -248,11 +248,11 @@ public:
 };
 
 // #i117863#
-class SwSectionFrameMoveAndDeleteHint : public SfxSimpleHint
+class SwSectionFrameMoveAndDeleteHint : public SfxHint
 {
     public:
         SwSectionFrameMoveAndDeleteHint( const bool bSaveContent )
-            : SfxSimpleHint( SFX_HINT_DYING )
+            : SfxHint( SFX_HINT_DYING )
             , mbSaveContent( bSaveContent )
         {}
 

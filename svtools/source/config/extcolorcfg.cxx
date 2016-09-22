@@ -31,7 +31,7 @@
 #include <unotools/configpaths.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svl/poolitem.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
@@ -402,7 +402,7 @@ void    ExtendedColorConfig_Impl::Notify( const uno::Sequence<OUString>& /*rProp
         m_bBroadcastWhenUnlocked = true;
     }
     else
-        Broadcast(SfxSimpleHint(SFX_HINT_COLORS_CHANGED));
+        Broadcast(SfxHint(SFX_HINT_COLORS_CHANGED));
 }
 
 void ExtendedColorConfig_Impl::ImplCommit()
@@ -501,7 +501,7 @@ void ExtendedColorConfig_Impl::SettingsChanged()
 {
     SolarMutexGuard aVclGuard;
 
-    Broadcast( SfxSimpleHint( SFX_HINT_COLORS_CHANGED ) );
+    Broadcast( SfxHint( SFX_HINT_COLORS_CHANGED ) );
 }
 
 void ExtendedColorConfig_Impl::LockBroadcast()
@@ -519,7 +519,7 @@ void ExtendedColorConfig_Impl::UnlockBroadcast()
             if ( ExtendedColorConfig_Impl::IsEnableBroadcast() )
             {
                 m_bBroadcastWhenUnlocked = false;
-                ExtendedColorConfig::m_pImpl->Broadcast(SfxSimpleHint(SFX_HINT_COLORS_CHANGED));
+                ExtendedColorConfig::m_pImpl->Broadcast(SfxHint(SFX_HINT_COLORS_CHANGED));
             }
         }
     }

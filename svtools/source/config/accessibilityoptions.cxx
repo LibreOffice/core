@@ -28,7 +28,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 
 #include <svtools/colorcfg.hxx>
 
@@ -407,12 +407,8 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
 void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     NotifyListeners(0);
-    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSfxSimpleHint )
-    {
-        if ( pSfxSimpleHint->GetId()  == SFX_HINT_ACCESSIBILITY_CHANGED )
-            SetVCLSettings();
-    }
+    if ( rHint.GetId()  == SFX_HINT_ACCESSIBILITY_CHANGED )
+        SetVCLSettings();
 }
 
 

@@ -667,10 +667,9 @@ void EventMultiplexer::Implementation::Notify (
                 break;
         }
     }
-    else if (dynamic_cast<const SfxSimpleHint*>(&rHint))
+    else
     {
-        const SfxSimpleHint& rSimpleHint = static_cast<const SfxSimpleHint&>(rHint);
-        if (rSimpleHint.GetId() == SFX_HINT_DYING)
+        if (rHint.GetId() == SFX_HINT_DYING)
             mpDocument = nullptr;
     }
 }

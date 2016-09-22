@@ -980,8 +980,7 @@ void SAL_CALL LifetimeController::disposing (const lang::EventObject& rEvent)
 void LifetimeController::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
 {
     (void)rBroadcaster;
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint != nullptr && pSimpleHint->GetId() == SFX_HINT_DYING)
+    if (rHint.GetId() == SFX_HINT_DYING)
     {
         mbListeningToViewShellBase = false;
         Update();

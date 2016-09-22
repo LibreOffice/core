@@ -1230,11 +1230,18 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 
 void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint)
+    if ( dynamic_cast<const ScAccWinFocusLostHint*>(&rHint) )
+    {
+        CommitFocusLost();
+    }
+    else if ( dynamic_cast<const ScAccWinFocusGotHint*>(&rHint) )
+    {
+        CommitFocusGained();
+    }
+    else
     {
         // only notify if child exist, otherwise it is not necessary
-        if (pSimpleHint->GetId() == SC_HINT_DATACHANGED)
+        if (rHint.GetId() == SC_HINT_DATACHANGED)
         {
             if (mpTable.is()) // if there is no table there is nothing to notify, because no one recongnizes the change
             {
@@ -1282,11 +1289,11 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
                 }
             }
         }
-        else if (pSimpleHint->GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
+        else if (rHint.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
         {
             GetShapeChildren()->SetDrawBroadcaster();
         }
-        else if (pSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
+        else if (rHint.GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             Size aOutputSize;
             vcl::Window* pSizeWindow = mpViewShell->GetWindow();
@@ -1303,14 +1310,6 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
             aEvent.Source = uno::Reference< XAccessibleContext >(this);
             CommitChange(aEvent);
         }
-    }
-    else if ( dynamic_cast<const ScAccWinFocusLostHint*>(&rHint) )
-    {
-        CommitFocusLost();
-    }
-    else if ( dynamic_cast<const ScAccWinFocusGotHint*>(&rHint) )
-    {
-        CommitFocusGained();
     }
     ScAccessibleDocumentBase::Notify(rBC, rHint);
 }

@@ -45,7 +45,6 @@
 #include <fmtftn.hxx>
 
 #include <docsh.hxx>
-#include <svl/smplhint.hxx>
 
 typedef std::vector<SwStartNode*> SwSttNdPtrs;
 

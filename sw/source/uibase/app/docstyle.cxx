@@ -21,7 +21,6 @@
 
 #include <cstdlib>
 
-#include <svl/smplhint.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/eitem.hxx>

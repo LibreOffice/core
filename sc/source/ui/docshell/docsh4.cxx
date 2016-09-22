@@ -456,7 +456,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     {
                         //  Formeln berechnen und painten wie im TrackTimeHdl
                         aDocument.TrackFormulas();
-                        Broadcast(SfxSimpleHint(FID_DATACHANGED));
+                        Broadcast(SfxHint(FID_DATACHANGED));
 
                         //  wenn FID_DATACHANGED irgendwann mal asynchron werden sollte
                         //  (z.B. mit Invalidate am Window), muss hier ein Update erzwungen werden.
@@ -1235,7 +1235,7 @@ void ScDocShell::DoRecalc( bool bApi )
         if ( pSh )
             pSh->UpdateCharts(true);
 
-        aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+        aDocument.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
 
         //  Wenn es Charts gibt, dann alles painten, damit nicht
         //  PostDataChanged und die Charts nacheinander kommen und Teile
@@ -1272,8 +1272,8 @@ void ScDocShell::DoHardRecalc( bool /* bApi */ )
 
     // CalcAll doesn't broadcast value changes, so SC_HINT_CALCALL is broadcasted globally
     // in addition to SFX_HINT_DATACHANGED.
-    aDocument.BroadcastUno( SfxSimpleHint( SC_HINT_CALCALL ) );
-    aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+    aDocument.BroadcastUno( SfxHint( SC_HINT_CALCALL ) );
+    aDocument.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
 
     // use hard recalc also to disable stream-copying of all sheets
     // (somewhat consistent with charts)

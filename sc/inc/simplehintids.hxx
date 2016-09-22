@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_SIMPLEHINTIDS_HXX
 #define INCLUDED_SC_INC_SIMPLEHINTIDS_HXX
 
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 
 #define SC_HINT_DATACHANGED         SFX_HINT_DATACHANGED
 #define SC_HINT_TABLEOPDIRTY        SFX_HINT_USER00

@@ -52,7 +52,7 @@
 #include <svl/ptitem.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svl/slstitm.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
 #include <svl/undo.hxx>
@@ -115,7 +115,7 @@ SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), SfxObjectShellF
 
 void SmDocShell::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    switch (static_cast<const SfxSimpleHint&>(rHint).GetId())
+    switch (rHint.GetId())
     {
         case HINT_FORMATCHANGED:
             SetFormulaArranged(false);
@@ -1321,7 +1321,7 @@ void SmDocShell::SetModified(bool bModified)
     if( IsEnableSetModified() )
     {
         SfxObjectShell::SetModified( bModified );
-        Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
+        Broadcast(SfxHint(SFX_HINT_DOCCHANGED));
     }
 }
 

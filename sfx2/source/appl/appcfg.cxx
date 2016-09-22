@@ -95,8 +95,7 @@ public:
 
 void SfxEventAsyncer_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if( pHint && pHint->GetId() == SFX_HINT_DYING && pIdle->IsActive() )
+    if( rHint.GetId() == SFX_HINT_DYING && pIdle->IsActive() )
     {
         pIdle->Stop();
         delete this;

@@ -30,7 +30,7 @@
 #endif
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 
 #include <editeng/editdata.hxx>
 #include <svx/svdmrkv.hxx>
@@ -236,8 +236,7 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     //If the stylesheet has been destroyed
     if (&rBC == mpDefaultStyleSheet)
     {
-        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-        if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING)
+        if (rHint.GetId() == SFX_HINT_DYING)
             mpDefaultStyleSheet = nullptr;
         return;
     }

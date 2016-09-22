@@ -516,7 +516,6 @@
 #include <svl/ondemand.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/slstitm.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
 #include <svl/svldllapi.h>

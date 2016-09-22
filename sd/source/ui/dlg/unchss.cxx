@@ -21,7 +21,7 @@
 
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
 
@@ -101,9 +101,9 @@ void StyleSheetUndoAction::Undo()
 
     mpStyleSheet->GetItemSet().Set(aNewSet);
     if( mpStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
-        static_cast<SdStyleSheet*>(mpStyleSheet)->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+        static_cast<SdStyleSheet*>(mpStyleSheet)->GetRealStyleSheet()->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
     else
-        mpStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+        mpStyleSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
 }
 
 void StyleSheetUndoAction::Redo()
@@ -113,9 +113,9 @@ void StyleSheetUndoAction::Redo()
 
     mpStyleSheet->GetItemSet().Set(aNewSet);
     if( mpStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
-        static_cast<SdStyleSheet*>(mpStyleSheet)->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+        static_cast<SdStyleSheet*>(mpStyleSheet)->GetRealStyleSheet()->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
     else
-        mpStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+        mpStyleSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
 }
 
 OUString StyleSheetUndoAction::GetComment() const

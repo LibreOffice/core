@@ -39,7 +39,6 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/fixed.hxx>
 #include "splitwin.hxx"
-#include <svl/smplhint.hxx>
 #include <tools/link.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
