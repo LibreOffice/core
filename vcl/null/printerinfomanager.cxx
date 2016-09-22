@@ -76,11 +76,6 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& /* rPrint
     return aEmptyInfo;
 }
 
-void PrinterInfoManager::changePrinterInfo( const OUString& /* rPrinter */, const PrinterInfo& /* rNewInfo */ )
-{
-
-}
-
 bool PrinterInfoManager::writePrinterConfig()
 {
     return false;
