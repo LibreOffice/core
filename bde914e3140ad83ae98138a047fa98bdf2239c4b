@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_33037f75",
+        "filename": "i18npool/source/numberformatcode/numberformatcode.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-22T07:18:38Z",
+      "side": 1,
+      "message": "this can be simplified to:\n\n  if ( m_xLocaleData.is() )\n        aFormatElementSequence \u003d m_xLocaleData-\u003egetAllFormats( rLocale );\n\nsince Sequence has a default constructor which leaves it with zero elements",
+      "revId": "bde914e3140ad83ae98138a047fa98bdf2239c4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_73f5f781",
+        "filename": "i18npool/source/numberformatcode/numberformatcode.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-22T07:18:38Z",
+      "side": 1,
+      "message": "micro-optimisation: rather do the size check before the emplace_back, that will avoid keeping around an extra empty element inside the deque",
+      "revId": "bde914e3140ad83ae98138a047fa98bdf2239c4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
