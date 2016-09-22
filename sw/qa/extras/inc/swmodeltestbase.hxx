@@ -220,7 +220,6 @@ protected:
             header();
             std::unique_ptr<Resetter> const pChanges(preTest(filename));
             load(mpTestDocumentPath, filename);
-            postTest(filename);
             verify();
             finish();
             maTempFile.EnableKillingFile();
@@ -240,7 +239,6 @@ protected:
         load(mpTestDocumentPath, filename);
         postLoad(filename);
         reload(mpFilter, filename);
-        postTest(filename);
         verify();
         finish();
         maTempFile.EnableKillingFile();
@@ -260,7 +258,6 @@ protected:
         load(mpTestDocumentPath, filename);
         save(OUString::createFromAscii(mpFilter), maTempFile);
         maTempFile.EnableKillingFile(false);
-        postTest(filename);
         verify();
         finish();
         maTempFile.EnableKillingFile();
@@ -291,13 +288,6 @@ protected:
 
     /// Override this function if some special file-specific setup is needed during export test: after load, but before save.
     virtual void postLoad(const char* /*pFilename*/)
-    {
-    }
-
-    /**
-     * Override this function if some special filename-specific teardown is needed
-     */
-    virtual void postTest(const char* /*filename*/)
     {
     }
 

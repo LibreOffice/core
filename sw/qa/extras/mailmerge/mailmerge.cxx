@@ -83,7 +83,6 @@ public:
         initMailMergeJobAndArgs( filename, tablename, aDBName, "LOMM_", aWorkDir, file, selection );
 
         verify();
-        postTest(filename);
         finish();
 
         ::utl::removeTree(aWorkDir);

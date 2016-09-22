@@ -943,8 +943,8 @@ private:
 public:
     void                        DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper );
 
-    virtual void                Erase();
-    virtual void                Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
+    void                        Erase();
+    void                        Erase( const Rectangle& rRect ) { DrawWallpaper( rRect, GetBackground() ); }
 
 protected:
     void                        DrawGradientWallpaper( long nX, long nY, long nWidth, long nHeight, const Wallpaper& rWallpaper );
@@ -1414,12 +1414,12 @@ public:
                         const Image& rImage,
                         sal_uInt16 nStyle = 0)
      */
-    virtual void                DrawImage(
+    void                        DrawImage(
                                     const Point& rPos,
                                     const Image& rImage,
                                     DrawImageFlags nStyle = DrawImageFlags::NONE );
 
-    virtual void                DrawImage(
+    void                        DrawImage(
                                     const Point& rPos,
                                     const Size& rSize,
                                     const Image& rImage,
