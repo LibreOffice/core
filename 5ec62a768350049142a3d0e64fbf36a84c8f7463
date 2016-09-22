@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_2e5f9873",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:18:27Z",
+      "side": 1,
+      "message": "actually i\u0027d say it\u0027s superfluous, should be obvious from the condition that it must not be null...",
+      "parentUuid": "ba5da102_3810c94e",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_581d7d65",
         "filename": "basic/source/basmgr/basmgr.cxx",
         "patchSetId": 1
@@ -70,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_4e54cc53",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:18:27Z",
+      "side": 1,
+      "message": "no, it\u0027s obvious that it has to match the SEQUENCE just above",
+      "parentUuid": "ba5da102_b803f90c",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_d808ad2b",
         "filename": "basic/source/classes/sbunoobj.cxx",
         "patchSetId": 1
@@ -81,6 +117,24 @@
       "writtenOn": "2016-09-07T13:20:02Z",
       "side": 1,
       "message": "Should we add a message to this assert?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_6e519062",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:18:27Z",
+      "side": 1,
+      "message": "no, obvious",
+      "parentUuid": "ba5da102_d808ad2b",
       "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -104,6 +158,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_cec61c16",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4659,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:18:27Z",
+      "side": 1,
+      "message": "this one is a bit less obvious, apparently there\u0027s a hierarchy with a StarBASIC one at the top?",
+      "parentUuid": "ba5da102_f80d7138",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_982555b0",
         "filename": "basic/source/uno/scriptcont.cxx",
         "patchSetId": 1
@@ -121,6 +193,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_eecbe01c",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:18:27Z",
+      "side": 1,
+      "message": "no, it was already superfluous in OSL_FAIL, this just prints 2 newlines...",
+      "parentUuid": "ba5da102_982555b0",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_b82a197d",
         "filename": "basic/source/uno/scriptcont.cxx",
         "patchSetId": 1
@@ -132,6 +222,24 @@
       "writtenOn": "2016-09-07T13:20:02Z",
       "side": 1,
       "message": "Should we keep the \u0027\\n\u0027?",
+      "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_0ed1f4cd",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:18:27Z",
+      "side": 1,
+      "message": "no",
+      "parentUuid": "ba5da102_b82a197d",
       "revId": "5ec62a768350049142a3d0e64fbf36a84c8f7463",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
