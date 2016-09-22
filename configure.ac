@@ -9240,19 +9240,20 @@ AC_SUBST(ICU_LIBS)
 dnl ===================================================================
 dnl Graphite
 dnl ===================================================================
+libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3],["-I${WORKDIR}/UnpackedTarball/graphite/include"],["-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"])
+if test "$with_system_graphite" = "yes"; then
+    libo_MINGW_CHECK_DLL([libgraphite2])
+fi
+if test "$COM" = "MSC"; then # override the above
+    GRAPHITE_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/graphite.lib"
+fi
 
+# This is the old Graphite support that will eventually be removed
 AC_MSG_CHECKING([whether to enable graphite support])
 if test $_os != Darwin -a $_os != Android -a $_os != iOS -a \( -z "$enable_graphite" -o "$enable_graphite" != no \); then
     AC_MSG_RESULT([yes])
     ENABLE_GRAPHITE="TRUE"
     AC_DEFINE(ENABLE_GRAPHITE)
-    libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3],["-I${WORKDIR}/UnpackedTarball/graphite/include"],["-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"])
-    if test "$with_system_graphite" = "yes"; then
-        libo_MINGW_CHECK_DLL([libgraphite2])
-    fi
-    if test "$COM" = "MSC"; then # override the above
-        GRAPHITE_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/graphite.lib"
-    fi
 
 else
     AC_MSG_RESULT([no])
@@ -9339,6 +9340,9 @@ if test "$COM" = "MSC"; then # override the above
     HARFBUZZ_LIBS="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.lib"
 fi
 if test "$with_system_harfbuzz" = "yes"; then
+    if test "$with_system_graphite" = "no"; then
+        AC_MSG_ERROR([--with-system-graphite must be used when --with-system-harfbuzz is used])
+    fi
     AC_MSG_CHECKING([whether system Harfbuzz is built with Graphite support])
     _save_libs="$LIBS"
     _save_cflags="$CFLAGS"
@@ -9347,6 +9351,10 @@ if test "$with_system_harfbuzz" = "yes"; then
     AC_CHECK_FUNC(hb_graphite2_face_get_gr_face,,[AC_MSG_ERROR([Harfbuzz needs to be built with Graphite support.])])
     LIBS="$_save_libs"
     CFLAGS="$_save_cflags"
+else
+    if test "$with_system_graphite" = "yes"; then
+        AC_MSG_ERROR([--without-system-graphite must be used when --without-system-harfbuzz is used])
+    fi
 fi
 
 AC_MSG_CHECKING([whether to use X11])
