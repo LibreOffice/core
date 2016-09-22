@@ -26,6 +26,20 @@ with open("loplugin.unnecessaryvirtual.report", "wt") as f:
         # windows-specific stuff
         if clazz.startswith("canvas::"): continue
         if clazz.startswith("psp::PrinterInfoManager"): continue
+        if clazz.startswith("DdeTopic::"): continue
+        if clazz == "basegfx::unotools::UnoPolyPolygon::void-modifying()const": continue
+        if clazz == "SalLayout::_Bool-IsKashidaPosValid(int,)const": continue
+        if clazz == "SalLayout::void-DisableGlyphInjection(_Bool,)": continue
+        # Linux-TDF specific
+        if clazz == "X11SalFrame::void-updateGraphics(_Bool,)": continue
+        # OSX specific
+        if clazz == "SalFrame::void-SetRepresentedURL(const class rtl::OUString &,)": continue
+        if clazz == "SalMenu::_Bool-AddMenuBarButton(const struct SalMenuButtonItem &,)": continue
+        if clazz == "SalMenu::class Rectangle-GetMenuBarButtonRectPixel(sal_uInt16,class SalFrame *,)": continue
+        if clazz == "SalMenu::void-RemoveMenuBarButton(sal_uInt16,)": continue
+        if clazz == "SalLayout::_Bool-DrawTextSpecial(class SalGraphics &,sal_uInt32,)const": continue
+        # GTK < 3
+        if clazz == "GtkSalDisplay::int-CaptureMouse(class SalFrame *,)": continue
         # some test magic
         if clazz.startswith("apitest::"): continue
         f.write(clazz + "\n")

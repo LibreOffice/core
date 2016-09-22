@@ -295,13 +295,6 @@ protected:
     }
 
     /**
-     * Override this function if some special filename-specific teardown is needed
-     */
-    virtual void postTest(const char* /*filename*/)
-    {
-    }
-
-    /**
      * Override this function if calc layout is not needed
      */
     virtual bool mustCalcLayoutOf(const char* /*filename*/)
