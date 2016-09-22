@@ -2661,7 +2661,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
 
 void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
-            css::uno::Reference< css::i18n::XNumberFormatCode >& rNumberFormatCode,
+            css::uno::Reference< css::i18n::XNumberFormatCode > const & rNumberFormatCode,
             bool bAfterChangingSystemCL )
 {
     using namespace ::com::sun::star;

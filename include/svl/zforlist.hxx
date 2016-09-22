@@ -829,7 +829,7 @@ private:
 
     // Generate additional formats provided by i18n
     SVL_DLLPRIVATE void ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
-                                                      css::uno::Reference< css::i18n::XNumberFormatCode >& rNumberFormatCode,
+                                                      css::uno::Reference< css::i18n::XNumberFormatCode > const & rNumberFormatCode,
                                                       bool bAfterChangingSystemCL );
 
     SVL_DLLPRIVATE SvNumberformat* ImpInsertFormat( const css::i18n::NumberFormatCode& rCode,
