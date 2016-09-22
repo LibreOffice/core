@@ -334,9 +334,12 @@ void SfxItemPool::ReleaseDefaults
     for ( sal_uInt16 n = 0; n < nCount; ++n )
     {
         assert(IsStaticDefaultItem(pDefaults[n]));
-        pDefaults[n]->SetRefCount(0);
+
         if ( bDelete )
             { delete pDefaults[n] ; pDefaults[n]= nullptr; }
+        else
+            pDefaults[n]->SetRefCount(0);
+
     }
 
     if ( bDelete )
@@ -517,9 +520,6 @@ void SfxItemPool::Delete()
                 auto& rItemPtr = pImpl->maPoolDefaults[n];
                 if (rItemPtr)
                 {
-#ifdef DBG_UTIL
-                    SetRefCount(*rItemPtr, 0);
-#endif
                     delete rItemPtr;
                     rItemPtr = nullptr;
                 }
@@ -549,9 +549,6 @@ void SfxItemPool::Delete()
     {
         if (rItemPtr)
         {
-#ifdef DBG_UTIL
-            SetRefCount(*rItemPtr, 0);
-#endif
             delete rItemPtr;
             rItemPtr = nullptr;
         }
@@ -571,7 +568,6 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
         pNewDefault->SetKind(SfxItemKind::PoolDefault);
         if (rOldDefault)
         {
-            rOldDefault->SetRefCount(0);
             DELETEZ(rOldDefault);
         }
         rOldDefault = pNewDefault;
@@ -596,7 +592,6 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
             pImpl->maPoolDefaults[GetIndex_Impl(nWhichId)];
         if (rOldDefault)
         {
-            rOldDefault->SetRefCount(0);
             DELETEZ(rOldDefault);
         }
     }
