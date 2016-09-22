@@ -34,7 +34,6 @@
 
 
 #include <editeng/editview.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/outliner.hxx>

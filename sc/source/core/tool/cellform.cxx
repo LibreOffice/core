@@ -20,7 +20,6 @@
 #include "cellform.hxx"
 
 #include <sfx2/objsh.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
 

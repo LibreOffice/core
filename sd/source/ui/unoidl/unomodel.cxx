@@ -427,10 +427,8 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else
         {
-            const SfxSimpleHint* pSfxHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
-
             // did our SdDrawDocument just died?
-            if(pSfxHint && pSfxHint->GetId() == SFX_HINT_DYING)
+            if(rHint.GetId() == SFX_HINT_DYING)
             {
                 // yes, so we ask for a new one
                 if( mpDocShell )

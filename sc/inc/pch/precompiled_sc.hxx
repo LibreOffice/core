@@ -454,7 +454,6 @@
 #include <svl/poolitem.hxx>
 #include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/stylesheetuser.hxx>

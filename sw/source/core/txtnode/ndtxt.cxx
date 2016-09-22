@@ -2139,7 +2139,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
                 // do not delete note and later add it -> sidebar flickering
                 if (GetDoc()->GetDocShell())
                 {
-                    GetDoc()->GetDocShell()->Broadcast( SfxSimpleHint(SFX_HINT_USER04));
+                    GetDoc()->GetDocShell()->Broadcast( SfxHint(SFX_HINT_USER04));
                 }
                 // Attribut verschieben
                 m_pSwpHints->Delete( pHt );
@@ -2162,7 +2162,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
                         | SetAttrMode::DONTREPLACE );
                 if (GetDoc()->GetDocShell())
                 {
-                    GetDoc()->GetDocShell()->Broadcast( SfxSimpleHint(SFX_HINT_USER04));
+                    GetDoc()->GetDocShell()->Broadcast( SfxHint(SFX_HINT_USER04));
                 }
                 continue;           // while-Schleife weiter, ohne ++ !
             }

@@ -21,7 +21,7 @@
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <svl/itemiter.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
@@ -556,8 +556,7 @@ namespace sdr
                 const svx::ITextProvider& rTextProvider(getTextProvider());
                 if(dynamic_cast<const SfxStyleSheet *>(&rBC) != nullptr)
                 {
-                    const SfxSimpleHint* pSimple = dynamic_cast<const SfxSimpleHint*>(&rHint);
-                    sal_uInt32 nId(pSimple ? pSimple->GetId() : 0L);
+                    sal_uInt32 nId(rHint.GetId());
 
                     if(SFX_HINT_DATACHANGED == nId)
                     {

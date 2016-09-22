@@ -21,7 +21,7 @@
 #define INCLUDED_BASIC_SBX_HXX
 
 #include <tools/ref.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svl/lstner.hxx>
 
 #include <basic/sbxdef.hxx>
@@ -90,11 +90,11 @@ public:
     void                SetComment( const OUString& r )   { aComment = r; }
 };
 
-class BASIC_DLLPUBLIC SbxHint : public SfxSimpleHint
+class BASIC_DLLPUBLIC SbxHint : public SfxHint
 {
     SbxVariable* pVar;
 public:
-    SbxHint( sal_uInt32 n, SbxVariable* v ) : SfxSimpleHint( n ), pVar( v ) {}
+    SbxHint( sal_uInt32 n, SbxVariable* v ) : SfxHint( n ), pVar( v ) {}
     SbxVariable* GetVar() const { return pVar; }
 };
 

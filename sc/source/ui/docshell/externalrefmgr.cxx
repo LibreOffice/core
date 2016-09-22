@@ -42,7 +42,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/objsh.hxx>
 #include <svl/broadcast.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>

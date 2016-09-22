@@ -480,71 +480,68 @@ void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (GetShell())
     {
-        if (SfxSimpleHint const* pSimpleHint = dynamic_cast<SfxSimpleHint const*>(&rHint))
+        switch (rHint.GetId())
         {
-            switch (pSimpleHint->GetId())
-            {
-                case SFX_HINT_DYING:
+            case SFX_HINT_DYING:
                 {
                     EndListening( rBC, true /* log off all */ );
                     aObjectCatalog->UpdateEntries();
                 }
-                break;
-            }
+            break;
+        }
 
-            if (SbxHint const* pSbxHint = dynamic_cast<SbxHint const*>(&rHint))
+        if (SbxHint const* pSbxHint = dynamic_cast<SbxHint const*>(&rHint))
+        {
+            const sal_uInt32 nHintId = pSbxHint->GetId();
+            if (    ( nHintId == SBX_HINT_BASICSTART ) ||
+                    ( nHintId == SBX_HINT_BASICSTOP ) )
             {
-                const sal_uInt32 nHintId = pSbxHint->GetId();
-                if (    ( nHintId == SBX_HINT_BASICSTART ) ||
-                        ( nHintId == SBX_HINT_BASICSTOP ) )
+                if (SfxBindings* pBindings = GetBindingsPtr())
                 {
-                    if (SfxBindings* pBindings = GetBindingsPtr())
-                    {
-                        pBindings->Invalidate( SID_BASICRUN );
-                        pBindings->Update( SID_BASICRUN );
-                        pBindings->Invalidate( SID_BASICCOMPILE );
-                        pBindings->Update( SID_BASICCOMPILE );
-                        pBindings->Invalidate( SID_BASICSTEPOVER );
-                        pBindings->Update( SID_BASICSTEPOVER );
-                        pBindings->Invalidate( SID_BASICSTEPINTO );
-                        pBindings->Update( SID_BASICSTEPINTO );
-                        pBindings->Invalidate( SID_BASICSTEPOUT );
-                        pBindings->Update( SID_BASICSTEPOUT );
-                        pBindings->Invalidate( SID_BASICSTOP );
-                        pBindings->Update( SID_BASICSTOP );
-                        pBindings->Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
-                        pBindings->Update( SID_BASICIDE_TOGGLEBRKPNT );
-                        pBindings->Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
-                        pBindings->Update( SID_BASICIDE_MANAGEBRKPNTS );
-                        pBindings->Invalidate( SID_BASICIDE_MODULEDLG );
-                        pBindings->Update( SID_BASICIDE_MODULEDLG );
-                        pBindings->Invalidate( SID_BASICLOAD );
-                        pBindings->Update( SID_BASICLOAD );
-                    }
+                    pBindings->Invalidate( SID_BASICRUN );
+                    pBindings->Update( SID_BASICRUN );
+                    pBindings->Invalidate( SID_BASICCOMPILE );
+                    pBindings->Update( SID_BASICCOMPILE );
+                    pBindings->Invalidate( SID_BASICSTEPOVER );
+                    pBindings->Update( SID_BASICSTEPOVER );
+                    pBindings->Invalidate( SID_BASICSTEPINTO );
+                    pBindings->Update( SID_BASICSTEPINTO );
+                    pBindings->Invalidate( SID_BASICSTEPOUT );
+                    pBindings->Update( SID_BASICSTEPOUT );
+                    pBindings->Invalidate( SID_BASICSTOP );
+                    pBindings->Update( SID_BASICSTOP );
+                    pBindings->Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
+                    pBindings->Update( SID_BASICIDE_TOGGLEBRKPNT );
+                    pBindings->Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
+                    pBindings->Update( SID_BASICIDE_MANAGEBRKPNTS );
+                    pBindings->Invalidate( SID_BASICIDE_MODULEDLG );
+                    pBindings->Update( SID_BASICIDE_MODULEDLG );
+                    pBindings->Invalidate( SID_BASICLOAD );
+                    pBindings->Update( SID_BASICLOAD );
+                }
 
-                    if ( nHintId == SBX_HINT_BASICSTOP )
-                    {
-                        // not only at error/break or explicit stoppage,
-                        // if the update is turned off due to a programming bug
-                        BasicStopped();
-                        if (pLayout)
-                            pLayout->UpdateDebug(true); // clear...
-                        if( m_pCurLocalizationMgr )
-                            m_pCurLocalizationMgr->handleBasicStopped();
-                    }
-                    else if( m_pCurLocalizationMgr )
-                    {
-                        m_pCurLocalizationMgr->handleBasicStarted();
-                    }
+                if ( nHintId == SBX_HINT_BASICSTOP )
+                {
+                    // not only at error/break or explicit stoppage,
+                    // if the update is turned off due to a programming bug
+                    BasicStopped();
+                    if (pLayout)
+                        pLayout->UpdateDebug(true); // clear...
+                    if( m_pCurLocalizationMgr )
+                        m_pCurLocalizationMgr->handleBasicStopped();
+                }
+                else if( m_pCurLocalizationMgr )
+                {
+                    m_pCurLocalizationMgr->handleBasicStarted();
+                }
 
-                    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
-                    {
-                        BaseWindow* pWin = it->second;
-                        if ( nHintId == SBX_HINT_BASICSTART )
-                            pWin->BasicStarted();
-                        else
-                            pWin->BasicStopped();
-                    }
+                for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+                {
+                    BaseWindow* pWin = it->second;
+                    if ( nHintId == SBX_HINT_BASICSTART )
+                        pWin->BasicStarted();
+                    else
+                        pWin->BasicStopped();
                 }
             }
         }

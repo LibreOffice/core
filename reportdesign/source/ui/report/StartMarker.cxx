@@ -32,7 +32,6 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
-#include <svl/smplhint.hxx>
 
 #define CORNER_SPACE     5
 
@@ -254,8 +253,7 @@ void OStartMarker::setTitle(const OUString& _sTitle)
 void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
 {
     OColorListener::Notify(rBc, rHint);
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_COLORS_CHANGED)
+    if (rHint.GetId() == SFX_HINT_COLORS_CHANGED)
     {
         setColor();
         Invalidate(InvalidateFlags::Children);

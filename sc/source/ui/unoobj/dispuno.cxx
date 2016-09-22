@@ -19,7 +19,7 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
@@ -82,8 +82,7 @@ ScDispatchProviderInterceptor::~ScDispatchProviderInterceptor()
 
 void ScDispatchProviderInterceptor::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
         pViewShell = nullptr;
 }
 
@@ -209,8 +208,7 @@ ScDispatch::~ScDispatch()
 
 void ScDispatch::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
         pViewShell = nullptr;
 }
 

@@ -1552,8 +1552,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
     uno::Reference<uno::XInterface> const xThis(m_wThis);
     if (!xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
-        if (dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            SFX_HINT_DYING == static_cast<const SfxSimpleHint&>(rHint).GetId())
+        if (SFX_HINT_DYING == rHint.GetId())
         {   // if the document dies, must reset to avoid crash in dtor!
             ForgetCurrentAttrs();
             pDocShell = nullptr;
@@ -1597,9 +1596,23 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 rDoc.AddUnoRefChange( nObjectId, *pUndoRanges );
         }
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
+    else if ( dynamic_cast<const ScUnoRefUndoHint*>(&rHint) )
     {
-        const sal_uInt32 nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
+        const ScUnoRefUndoHint& rUndoHint = static_cast<const ScUnoRefUndoHint&>(rHint);
+        if ( rUndoHint.GetObjectId() == nObjectId )
+        {
+            // restore ranges from hint
+
+            aRanges = rUndoHint.GetRanges();
+
+            RefChanged();
+            if ( !aValueListeners.empty() )
+                bGotDataChangedHint = true;     // need to broadcast the undo, too
+        }
+    }
+    else
+    {
+        const sal_uInt32 nId = rHint.GetId();
         if ( nId == SFX_HINT_DYING )
         {
             ForgetCurrentAttrs();
@@ -1654,20 +1667,6 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
             if ( !aValueListeners.empty() )
                 bGotDataChangedHint = true;
-        }
-    }
-    else if ( dynamic_cast<const ScUnoRefUndoHint*>(&rHint) )
-    {
-        const ScUnoRefUndoHint& rUndoHint = static_cast<const ScUnoRefUndoHint&>(rHint);
-        if ( rUndoHint.GetObjectId() == nObjectId )
-        {
-            // restore ranges from hint
-
-            aRanges = rUndoHint.GetRanges();
-
-            RefChanged();
-            if ( !aValueListeners.empty() )
-                bGotDataChangedHint = true;     // need to broadcast the undo, too
         }
     }
 }
@@ -2796,8 +2795,7 @@ void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< 
 
 IMPL_LINK_TYPED( ScCellRangesBase, ValueListenerHdl, const SfxHint&, rHint, void )
 {
-    if ( pDocShell && dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            (static_cast<const SfxSimpleHint&>(rHint).GetId() & SC_HINT_DATACHANGED))
+    if ( pDocShell && (rHint.GetId() & SC_HINT_DATACHANGED))
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when
@@ -9023,8 +9021,7 @@ void ScCellsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
         aRanges.UpdateReference( rRef.GetMode(), &pDocShell->GetDocument(), rRef.GetRange(),
                                         rRef.GetDx(), rRef.GetDy(), rRef.GetDz() );
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
+    else if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -9161,8 +9158,7 @@ void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
             }
         }
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-              static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
+    else if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -9216,8 +9212,7 @@ void ScCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         //! aTotalRange...
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-              static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
+    else if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -9385,9 +9380,9 @@ void ScCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         //! und nun ???
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
+    else
     {
-        const sal_uInt32 nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
+        const sal_uInt32 nId = rHint.GetId();
         if ( nId == SFX_HINT_DYING )
         {
             pDocShell = nullptr;                       // ungueltig geworden
@@ -9448,9 +9443,9 @@ void ScUniqueCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         //! aTotalRange...
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
+    else
     {
-        if ( static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
+        if ( rHint.GetId() == SFX_HINT_DYING )
             pDocShell = nullptr;                       // ungueltig geworden
     }
 }
@@ -9705,9 +9700,9 @@ void ScUniqueCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHi
     {
         //! und nun ???
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
+    else
     {
-        if ( static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
+        if ( rHint.GetId() == SFX_HINT_DYING )
             pDocShell = nullptr;                       // ungueltig geworden
     }
 }

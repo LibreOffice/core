@@ -1500,7 +1500,7 @@ void ScPreview::InvalidateLocationData(sal_uLong nId)
 {
     bLocationValid = false;
     if (pViewShell->HasAccessibilityObjects())
-        pViewShell->BroadcastAccessibility( SfxSimpleHint( nId ) );
+        pViewShell->BroadcastAccessibility( SfxHint( nId ) );
 }
 
 void ScPreview::GetFocus()

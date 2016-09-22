@@ -1180,8 +1180,7 @@ public:
         if (&rBroadcaster != &static_cast<SfxBroadcaster&>(mrBase))
             return;
 
-        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-        if (pSimpleHint != nullptr && pSimpleHint->GetId() == SFX_HINT_DYING)
+        if (rHint.GetId() == SFX_HINT_DYING)
         {
             Dispose();
         }

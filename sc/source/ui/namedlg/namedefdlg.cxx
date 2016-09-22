@@ -256,7 +256,7 @@ void ScNameDefDlg::AddPushed()
                     // call invalidates the stream
                     if (nTab != -1)
                         mpDoc->SetStreamValid(nTab, false);
-                    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+                    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_AREAS_CHANGED ) );
                     mpDocShell->SetDocumentModified();
                     Close();
                 }

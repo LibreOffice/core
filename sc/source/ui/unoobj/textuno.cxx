@@ -1031,9 +1031,9 @@ void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         //! Ref-Update
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
+    else
     {
-        const sal_uInt32 nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
+        const sal_uInt32 nId = rHint.GetId();
         if ( nId == SFX_HINT_DYING )
         {
             pDocShell = nullptr;                       // invalid now

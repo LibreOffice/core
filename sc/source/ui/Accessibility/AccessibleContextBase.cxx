@@ -26,7 +26,7 @@
 #include <tools/gen.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -126,14 +126,10 @@ void SAL_CALL ScAccessibleContextBase::release()
 
 void ScAccessibleContextBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint)
+    if (rHint.GetId() == SFX_HINT_DYING)
     {
-        if (pSimpleHint->GetId() == SFX_HINT_DYING)
-        {
-            // it seems the Broadcaster is dying, since the view is dying
-            dispose();
-        }
+        // it seems the Broadcaster is dying, since the view is dying
+        dispose();
     }
 }
 

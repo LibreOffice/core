@@ -72,7 +72,6 @@
 #include <istyleaccess.hxx>
 #include <dcontact.hxx>
 #include <docsh.hxx>
-#include <svl/smplhint.hxx>
 #include <algorithm>
 #include <map>
 #include <memory>

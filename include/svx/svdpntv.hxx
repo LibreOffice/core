@@ -22,7 +22,6 @@
 
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/undo.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdlayer.hxx>

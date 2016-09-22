@@ -20,7 +20,7 @@
 #define INCLUDED_STARMATH_INC_FORMAT_HXX
 
 
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include "utility.hxx"
 #include <types.hxx>
@@ -140,7 +140,7 @@ public:
 
     void RequestApplyChanges()
     {
-        Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
+        Broadcast(SfxHint(HINT_FORMATCHANGED));
     }
 
 };

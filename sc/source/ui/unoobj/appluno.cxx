@@ -376,7 +376,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
         ScPrintOptions aPrintOpt(pScMod->GetPrintOptions());
         aPrintOpt.SetSkipEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );    // reversed
         pScMod->SetPrintOptions( aPrintOpt );
-        SfxGetpApp()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );    // update previews
+        SfxGetpApp()->Broadcast( SfxHint( SID_SCPRINTOPTIONS ) );    // update previews
     }
 
     if ( bSaveApp )

@@ -261,8 +261,7 @@ IMPL_LINK_TYPED(FormShellManager, WindowEventHandler, VclWindowEvent&, rEvent, v
 
 void FormShellManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint!=nullptr && pSimpleHint->GetId()==SFX_HINT_DYING)
+    if (rHint.GetId()==SFX_HINT_DYING)
     {
         // If all goes well this listener is called after the
         // FormShellManager was notified about the dying form shell by the

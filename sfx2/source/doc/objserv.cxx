@@ -1478,7 +1478,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
 
             Invalidate( SID_SIGNATURE );
             Invalidate( SID_MACRO_SIGNATURE );
-            Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+            Broadcast( SfxHint(SFX_HINT_TITLECHANGED) );
         }
     }
 

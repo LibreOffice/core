@@ -40,7 +40,7 @@
 #include <basic/basmgr.hxx>
 #include <editeng/pbinitem.hxx>
 #include <svx/svdundo.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/scripttypeitem.hxx>
@@ -1940,7 +1940,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                 }
 
-                                pTitleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                                pTitleSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
                             }
                         }
                         else if (pObj == GetPresObj(PRESOBJ_OUTLINE, nIndexOutline))
@@ -2000,7 +2000,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     }
 
                                     pOutlineSheet->GetItemSet().Put(aTempSet);
-                                    pOutlineSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                                    pOutlineSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
                                 }
                             }
                         }
@@ -2016,7 +2016,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                 rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT ));
                                 rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK ));
                                 rSet.Put( SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL ));
-                                pNotesSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                                pNotesSheet->Broadcast(SfxHint(SFX_HINT_DATACHANGED));
                             }
                         }
                     }

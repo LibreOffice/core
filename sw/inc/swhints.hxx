@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWHINTS_HXX
 #define INCLUDED_SW_INC_SWHINTS_HXX
 
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 
 #define SW_BROADCASTID_START            SFX_HINT_USER00
 #define SW_BROADCAST_DRAWVIEWS_CREATED  SW_BROADCASTID_START
