@@ -12,6 +12,7 @@
 #include "plugin.hxx"
 
 #include <cassert>
+#include <string>
 
 #include <clang/Basic/FileManager.h>
 #include <clang/Lex/Lexer.h>
@@ -41,9 +42,51 @@ bool Plugin::ignoreLocation( SourceLocation loc )
         return true;
     const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
     if( bufferName == NULL
-        || strncmp( bufferName, WORKDIR, strlen( WORKDIR )) == 0
         || strncmp( bufferName, SRCDIR "/external/", strlen( SRCDIR "/external/" )) == 0 )
         return true;
+    if( strncmp( bufferName, WORKDIR, strlen( WORKDIR )) == 0 )
+    {
+        // workdir/CustomTarget/vcl/unx/kde4/tst_exclude_socket_notifiers.moc
+        // includes
+        // "../../../../../vcl/unx/kde4/tst_exclude_socket_notifiers.hxx",
+        // making the latter file erroneously match here; so strip any ".."
+        // segments:
+        if (strstr(bufferName, "/..") == nullptr) {
+            return true;
+        }
+        std::string s(bufferName);
+        for (std::string::size_type i = 0;;) {
+            i = s.find("/.", i);
+            if (i == std::string::npos) {
+                break;
+            }
+            if (i + 2 == s.length() || s[i + 2] == '/') {
+                s.erase(i, 2); // [AAA]/.[/CCC] -> [AAA][/CCC]
+            } else if (s[i + 2] == '.'
+                       && (i + 3 == s.length() || s[i + 3] == '/'))
+            {
+                if (i == 0) { // /..[/CCC] -> /..[/CCC]
+                    break;
+                }
+                auto j = s.rfind('/', i - 1);
+                if (j == std::string::npos) {
+                    // BBB/..[/CCC] -> BBB/..[/CCC] (instead of BBB/../CCC ->
+                    // CCC, to avoid wrong ../../CCC -> CCC; relative paths
+                    // shouldn't happen anyway, and even if they did, wouldn't
+                    // match against WORKDIR anyway, as WORKDIR should be
+                    // absolute):
+                    break;
+                }
+                s.erase(j, i + 3 - j); // AAA/BBB/..[/CCC] -> AAA[/CCC]
+                i = j;
+            } else {
+                i += 2;
+            }
+        }
+        if (strncmp(s.c_str(), WORKDIR, strlen(WORKDIR)) == 0) {
+            return true;
+        }
+    }
     if( strncmp( bufferName, BUILDDIR, strlen( BUILDDIR )) == 0
         || strncmp( bufferName, SRCDIR, strlen( SRCDIR )) == 0 )
         return false; // ok
