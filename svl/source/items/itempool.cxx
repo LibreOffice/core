@@ -646,7 +646,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         pItemArr = pImpl->maPoolItems[nIndex];
     }
 
-    SfxPoolItemArrayBase_Impl::iterator ppFree;
+    std::vector<SfxPoolItem*>::iterator ppFree;
     bool ppFreeIsSet = false;
 
     // Is this a 'poolable' item - ie. should we re-use and return
