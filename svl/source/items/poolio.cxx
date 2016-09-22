@@ -40,6 +40,25 @@ void SfxPoolItemArray_Impl::clear()
     maPtrToIndex.clear();
 }
 
+/// Re-build our free list and pointer hash.
+void SfxPoolItemArray_Impl::ReHash()
+{
+    maFree.clear();
+    maPtrToIndex.clear();
+
+    for (size_t nIdx = 0; nIdx < size(); ++nIdx)
+    {
+        SfxPoolItem *pItem = (*this)[nIdx];
+        if (!pItem)
+            maFree.push_back(nIdx);
+        else
+        {
+            maPtrToIndex.insert(std::make_pair(pItem,nIdx));
+            assert(maPtrToIndex.find(pItem) != maPtrToIndex.end());
+        }
+    }
+}
+
 /**
  * Returns the <SfxItemPool> that is being saved.
  * This should only be used in very exceptional cases e.g.
