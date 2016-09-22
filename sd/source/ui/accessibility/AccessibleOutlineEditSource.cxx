@@ -175,8 +175,7 @@ namespace accessibility
 
         if( &rBroadcaster == mpOutliner )
         {
-            const SfxSimpleHint* pHint = dynamic_cast< const SfxSimpleHint * >( &rHint );
-            if( pHint && (pHint->GetId() == SFX_HINT_DYING) )
+            if( rHint.GetId() == SFX_HINT_DYING )
             {
                 bDispose = true;
                 mpOutliner = nullptr;

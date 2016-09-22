@@ -349,7 +349,6 @@
 #include <svl/nfkeytab.hxx>
 #include <svl/ondemand.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/svldllapi.h>
 #include <svl/urihelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>

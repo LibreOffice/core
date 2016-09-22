@@ -817,10 +817,18 @@ void ScNavigatorDlg::DoResize()
 
 void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
-    if ( pSimpleHint )
+    if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
-        const sal_uInt32 nHintId = pSimpleHint->GetId();
+        sal_uLong nEventId = static_cast<const SfxEventHint&>(rHint).GetEventId();
+        if ( nEventId == SFX_EVENT_ACTIVATEDOC )
+        {
+            aLbEntries->ActiveDocChanged();
+            UpdateAll();
+        }
+    }
+    else
+    {
+        const sal_uInt32 nHintId = rHint.GetId();
 
         if ( nHintId == SC_HINT_DOCNAME_CHANGED )
         {
@@ -874,15 +882,6 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 default:
                     break;
             }
-        }
-    }
-    else if ( dynamic_cast<const SfxEventHint*>(&rHint) )
-    {
-        sal_uLong nEventId = static_cast<const SfxEventHint&>(rHint).GetEventId();
-        if ( nEventId == SFX_EVENT_ACTIVATEDOC )
-        {
-            aLbEntries->ActiveDocChanged();
-            UpdateAll();
         }
     }
 }

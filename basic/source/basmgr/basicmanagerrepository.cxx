@@ -30,7 +30,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -577,8 +577,7 @@ namespace basic
 
     void ImplRepository::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
     {
-        const SfxSimpleHint* pSimpleHint = dynamic_cast< const SfxSimpleHint* >( &_rHint );
-        if ( !pSimpleHint || ( pSimpleHint->GetId() != SFX_HINT_DYING ) )
+        if ( _rHint.GetId() != SFX_HINT_DYING )
             // not interested in
             return;
 

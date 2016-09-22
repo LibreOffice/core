@@ -23,7 +23,6 @@
 
 #include <ReportControllerObserver.hxx>
 #include <ReportController.hxx>
-#include <svl/smplhint.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

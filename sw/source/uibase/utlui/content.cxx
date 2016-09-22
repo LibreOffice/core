@@ -2198,8 +2198,7 @@ void SwContentTree::SetConstantShell(SwWrtShell* pSh)
 
 void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
 {
-    SfxSimpleHint const*const pHint(dynamic_cast<SfxSimpleHint const*>(&rHint));
-    if (pHint && SFX_HINT_DOCCHANGED == pHint->GetId())
+    if (SFX_HINT_DOCCHANGED == rHint.GetId())
     {
         m_bActiveDocModified = true;
         return;

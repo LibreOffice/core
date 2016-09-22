@@ -1196,7 +1196,7 @@ void SmMathConfig::ItemSetToConfig(const SfxItemSet &rSet)
             SetIgnoreSpacesRight( bVal );
 
             // reformat (displayed) formulas accordingly
-            Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
+            Broadcast(SfxHint(HINT_FORMATCHANGED));
         }
     }
     if (rSet.GetItemState(SID_SAVE_ONLY_USED_SYMBOLS, true, &pItem) == SfxItemState::SET)

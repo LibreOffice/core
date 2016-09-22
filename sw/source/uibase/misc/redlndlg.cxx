@@ -1254,8 +1254,7 @@ void SwRedlineAcceptPanel::dispose()
 
 void SwRedlineAcceptPanel::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    const SfxSimpleHint *pHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (mpImplDlg && pHint && pHint->GetId() == SFX_HINT_DOCCHANGED)
+    if (mpImplDlg && rHint.GetId() == SFX_HINT_DOCCHANGED)
         mpImplDlg->Activate();
 }
 

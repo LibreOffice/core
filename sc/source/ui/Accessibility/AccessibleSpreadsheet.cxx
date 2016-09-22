@@ -417,10 +417,69 @@ void ScAccessibleSpreadsheet::VisAreaChanged()
 
 void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint)
+    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        if (pSimpleHint->GetId() == SC_HINT_ACC_CURSORCHANGED)
+        const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
+        if (rRef.GetMode() == URM_INSDEL && rRef.GetDz() == 0) //test whether table is inserted or deleted
+        {
+            if (((rRef.GetRange().aStart.Col() == maRange.aStart.Col()) &&
+                (rRef.GetRange().aEnd.Col() == maRange.aEnd.Col())) ||
+                ((rRef.GetRange().aStart.Row() == maRange.aStart.Row()) &&
+                (rRef.GetRange().aEnd.Row() == maRange.aEnd.Row())))
+            {
+                // ignore next SC_HINT_DATACHANGED notification
+                mbDelIns = true;
+
+                sal_Int16 nId(0);
+                SCsCOL nX(rRef.GetDx());
+                SCsROW nY(rRef.GetDy());
+                ScRange aRange(rRef.GetRange());
+                if ((nX < 0) || (nY < 0))
+                {
+                    OSL_ENSURE(!((nX < 0) && (nY < 0)), "should not be possible to remove row and column at the same time");
+                    nId = AccessibleTableModelChangeType::DELETE;
+                    if (nX < 0)
+                    {
+                        nX = -nX;
+                        nY = aRange.aEnd.Row() - aRange.aStart.Row();
+                    }
+                    else
+                    {
+                        nY = -nY;
+                        nX = aRange.aEnd.Col() - aRange.aStart.Col();
+                    }
+                }
+                else if ((nX > 0) || (nY > 0))
+                {
+                    OSL_ENSURE(!((nX > 0) && (nY > 0)), "should not be possible to add row and column at the same time");
+                    nId = AccessibleTableModelChangeType::INSERT;
+                    if (nX < 0)
+                        nY = aRange.aEnd.Row() - aRange.aStart.Row();
+                    else
+                        nX = aRange.aEnd.Col() - aRange.aStart.Col();
+                }
+                else
+                {
+                    OSL_FAIL("is it a deletion or a insertion?");
+                }
+
+                CommitTableModelChange(rRef.GetRange().aStart.Row(),
+                    rRef.GetRange().aStart.Col(),
+                    rRef.GetRange().aStart.Row() + nY,
+                    rRef.GetRange().aStart.Col() + nX, nId);
+
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
+                aEvent.Source = uno::Reference< XAccessibleContext >(this);
+                aEvent.NewValue <<= uno::Reference<XAccessible>(mpAccCell.get());
+
+                CommitChange(aEvent);
+            }
+        }
+    }
+    else
+    {
+        if (rHint.GetId() == SC_HINT_ACC_CURSORCHANGED)
         {
             if (mpViewShell)
             {
@@ -598,7 +657,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 m_LastMarkedRanges = *mpMarkedRanges;
             }
         }
-        else if (pSimpleHint->GetId() == SC_HINT_DATACHANGED)
+        else if (rHint.GetId() == SC_HINT_DATACHANGED)
         {
             if (!mbDelIns)
                 CommitTableModelChange(maRange.aStart.Row(), maRange.aStart.Col(), maRange.aEnd.Row(), maRange.aEnd.Col(), AccessibleTableModelChangeType::UPDATE);
@@ -655,66 +714,6 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 CommitTableModelChange(aNewPos.Top(), aNewPos.Left(), aNewPos.Bottom(), aNewPos.Right(), AccessibleTableModelChangeType::UPDATE);
             }
         }*/
-    }
-    else if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
-    {
-        const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
-        if (rRef.GetMode() == URM_INSDEL && rRef.GetDz() == 0) //test whether table is inserted or deleted
-        {
-            if (((rRef.GetRange().aStart.Col() == maRange.aStart.Col()) &&
-                (rRef.GetRange().aEnd.Col() == maRange.aEnd.Col())) ||
-                ((rRef.GetRange().aStart.Row() == maRange.aStart.Row()) &&
-                (rRef.GetRange().aEnd.Row() == maRange.aEnd.Row())))
-            {
-                // ignore next SC_HINT_DATACHANGED notification
-                mbDelIns = true;
-
-                sal_Int16 nId(0);
-                SCsCOL nX(rRef.GetDx());
-                SCsROW nY(rRef.GetDy());
-                ScRange aRange(rRef.GetRange());
-                if ((nX < 0) || (nY < 0))
-                {
-                    OSL_ENSURE(!((nX < 0) && (nY < 0)), "should not be possible to remove row and column at the same time");
-                    nId = AccessibleTableModelChangeType::DELETE;
-                    if (nX < 0)
-                    {
-                        nX = -nX;
-                        nY = aRange.aEnd.Row() - aRange.aStart.Row();
-                    }
-                    else
-                    {
-                        nY = -nY;
-                        nX = aRange.aEnd.Col() - aRange.aStart.Col();
-                    }
-                }
-                else if ((nX > 0) || (nY > 0))
-                {
-                    OSL_ENSURE(!((nX > 0) && (nY > 0)), "should not be possible to add row and column at the same time");
-                    nId = AccessibleTableModelChangeType::INSERT;
-                    if (nX < 0)
-                        nY = aRange.aEnd.Row() - aRange.aStart.Row();
-                    else
-                        nX = aRange.aEnd.Col() - aRange.aStart.Col();
-                }
-                else
-                {
-                    OSL_FAIL("is it a deletion or a insertion?");
-                }
-
-                CommitTableModelChange(rRef.GetRange().aStart.Row(),
-                    rRef.GetRange().aStart.Col(),
-                    rRef.GetRange().aStart.Row() + nY,
-                    rRef.GetRange().aStart.Col() + nX, nId);
-
-                AccessibleEventObject aEvent;
-                aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
-                aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                aEvent.NewValue <<= uno::Reference<XAccessible>(mpAccCell.get());
-
-                CommitChange(aEvent);
-            }
-        }
     }
 
     ScAccessibleTableBase::Notify(rBC, rHint);

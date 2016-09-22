@@ -201,8 +201,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     if ( &rBC == pDocSh )
     {
         //  from DocShell, only SFX_HINT_DYING is interesting
-        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
-        if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+        if ( rHint.GetId() == SFX_HINT_DYING )
         {
             pDocSh = nullptr;
             EndListening(*SfxGetpApp());
@@ -211,9 +210,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else if (dynamic_cast<const SfxApplication*>( &rBC) !=  nullptr)
     {
-        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
-        if ( !aItemStr.isEmpty() && pSimpleHint &&
-                pSimpleHint->GetId() == SC_HINT_AREAS_CHANGED )
+        if ( !aItemStr.isEmpty() && rHint.GetId() == SC_HINT_AREAS_CHANGED )
         {
             //  check if named range was modified
             ScRange aNew;
@@ -237,9 +234,9 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 bDataChanged = true;
             }
         }
-        else if (const SfxSimpleHint *pSplHint = dynamic_cast<const SfxSimpleHint*>(&rHint))
+        else
         {
-            if (pSplHint->GetId() == SFX_HINT_DYING)
+            if (rHint.GetId() == SFX_HINT_DYING)
             {
                 //  If the range is being deleted, listening must be restarted
                 //  after the deletion is complete (done in GetData)

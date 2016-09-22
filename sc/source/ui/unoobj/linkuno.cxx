@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/sharedstringpool.hxx>
@@ -91,17 +91,16 @@ void ScSheetLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     //! notify if links in document are changed
     //  UpdateRef is not needed here
 
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
-    {
-        if ( pSimpleHint->GetId() == SFX_HINT_DYING )
-            pDocShell = nullptr;       // pointer is invalid
-    }
-    else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
+    if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
         const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
         if ( rLH.GetLinkType() == ScLinkRefType::SHEET && rLH.GetUrl() == aFileName )
             Refreshed_Impl();
+    }
+    else
+    {
+        if ( rHint.GetId() == SFX_HINT_DYING )
+            pDocShell = nullptr;       // pointer is invalid
     }
 }
 
@@ -384,8 +383,7 @@ void ScSheetLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -608,13 +606,7 @@ void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     //! notify if links in document are changed
     //  UpdateRef is not needed here
 
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
-    {
-        if ( pSimpleHint->GetId() == SFX_HINT_DYING )
-            pDocShell = nullptr;       // pointer is invalid
-    }
-    else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
+    if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
         const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
         if ( rLH.GetLinkType() == ScLinkRefType::AREA )
@@ -624,6 +616,11 @@ void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
             if ( pLink && pLink->GetDestArea().aStart == rLH.GetDestPos() )
                 Refreshed_Impl();
         }
+    }
+    else
+    {
+        if ( rHint.GetId() == SFX_HINT_DYING )
+            pDocShell = nullptr;       // pointer is invalid
     }
 }
 
@@ -921,8 +918,7 @@ void ScAreaLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -1047,13 +1043,7 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     //! notify if links in document are changed
     //  UpdateRef is not needed here
 
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
-    {
-        if ( pSimpleHint->GetId() == SFX_HINT_DYING )
-            pDocShell = nullptr;       // pointer is invalid
-    }
-    else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
+    if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
         const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
         if ( rLH.GetLinkType() == ScLinkRefType::DDE &&
@@ -1061,6 +1051,11 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
              rLH.GetDdeTopic() == aTopic &&
              rLH.GetDdeItem()  == aItem )       //! mode is ignored
             Refreshed_Impl();
+    }
+    else
+    {
+        if ( rHint.GetId() == SFX_HINT_DYING )
+            pDocShell = nullptr;       // pointer is invalid
     }
 }
 
@@ -1241,8 +1236,7 @@ void ScDDELinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }

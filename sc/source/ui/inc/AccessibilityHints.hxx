@@ -22,7 +22,6 @@
 
 #include "viewdata.hxx"
 #include <com/sun/star/uno/XInterface.hpp>
-#include <svl/smplhint.hxx>
 #include <svl/hint.hxx>
 
 #define SC_HINT_ACC_SIMPLE_START    SFX_HINT_USER00

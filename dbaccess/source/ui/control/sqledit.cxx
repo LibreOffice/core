@@ -33,7 +33,6 @@
 #include "querycontroller.hxx"
 #include "undosqledit.hxx"
 #include "QueryDesignView.hxx"
-#include <svl/smplhint.hxx>
 #include <vcl/settings.hxx>
 #include <cppuhelper/implbase.hxx>
 

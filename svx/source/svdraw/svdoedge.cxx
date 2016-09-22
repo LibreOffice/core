@@ -25,7 +25,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <editeng/eeitem.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svl/style.hxx>
 
 #include <sdr/contact/viewcontactofsdredgeobj.hxx>
@@ -1559,8 +1559,7 @@ line (CL). The number of object margins per object varies between 0 and 3:
 
 void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    const SfxSimpleHint* pSimple = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    const sal_uInt32 nId = pSimple==nullptr ? 0 : pSimple->GetId();
+    const sal_uInt32 nId = rHint.GetId();
     bool bDataChg=nId==SFX_HINT_DATACHANGED;
     bool bDying=nId==SFX_HINT_DYING;
     bool bObj1=aCon1.pObj!=nullptr && aCon1.pObj->GetBroadcaster()==&rBC;
@@ -1608,13 +1607,13 @@ void SdrEdgeObj::Reformat()
 {
     if( nullptr != aCon1.pObj )
     {
-        SfxSimpleHint aHint( SFX_HINT_DATACHANGED );
+        SfxHint aHint( SFX_HINT_DATACHANGED );
         Notify( *const_cast<SfxBroadcaster*>(aCon1.pObj->GetBroadcaster()), aHint );
     }
 
     if( nullptr != aCon2.pObj )
     {
-        SfxSimpleHint aHint( SFX_HINT_DATACHANGED );
+        SfxHint aHint( SFX_HINT_DATACHANGED );
         Notify( *const_cast<SfxBroadcaster*>(aCon2.pObj->GetBroadcaster()), aHint );
     }
 }

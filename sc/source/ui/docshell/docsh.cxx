@@ -653,18 +653,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
     }
 
-    if ( dynamic_cast<const SfxSimpleHint*>(&rHint) ) // Without parameter
-    {
-        switch ( static_cast<const SfxSimpleHint&>(rHint).GetId() )
-        {
-            case SFX_HINT_TITLECHANGED:
-                aDocument.SetName( SfxShell::GetName() );
-                //  RegisterNewTargetNames gibts nicht mehr
-                SfxGetpApp()->Broadcast(SfxSimpleHint( SC_HINT_DOCNAME_CHANGED )); // Navigator
-                break;
-        }
-    }
-    else if ( dynamic_cast<const SfxStyleSheetHint*>(&rHint) ) // Template changed
+    if ( dynamic_cast<const SfxStyleSheetHint*>(&rHint) ) // Template changed
         NotifyStyle( static_cast<const SfxStyleSheetHint&>(rHint) );
     else if ( dynamic_cast<const ScAutoStyleHint*>(&rHint) )
     {
@@ -997,6 +986,17 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             default:
                 {
                 }
+                break;
+        }
+    }
+    else    // Without parameter
+    {
+        switch ( rHint.GetId() )
+        {
+            case SFX_HINT_TITLECHANGED:
+                aDocument.SetName( SfxShell::GetName() );
+                //  RegisterNewTargetNames gibts nicht mehr
+                SfxGetpApp()->Broadcast(SfxHint( SC_HINT_DOCNAME_CHANGED )); // Navigator
                 break;
         }
     }
@@ -2491,7 +2491,7 @@ bool ScDocShell::DoSaveCompleted( SfxMedium * pNewStor, bool bRegisterRecent )
     bool bRet = SfxObjectShell::DoSaveCompleted( pNewStor, bRegisterRecent );
 
     //  SC_HINT_DOC_SAVED for change ReadOnly -> Read/Write
-    Broadcast( SfxSimpleHint( SC_HINT_DOC_SAVED ) );
+    Broadcast( SfxHint( SC_HINT_DOC_SAVED ) );
     return bRet;
 }
 
@@ -2803,7 +2803,7 @@ void ScDocShell::SetModified( bool bModified )
     if ( SfxObjectShell::IsEnableSetModified() )
     {
         SfxObjectShell::SetModified( bModified );
-        Broadcast( SfxSimpleHint( SFX_HINT_DOCCHANGED ) );
+        Broadcast( SfxHint( SFX_HINT_DOCCHANGED ) );
     }
 }
 
@@ -2819,7 +2819,7 @@ void ScDocShell::SetDocumentModified()
         // of RecalcModeAlways formulas (like OFFSET) after modifying cells
         aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
         aDocument.InvalidateTableArea();    // #i105279# needed here
-        aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+        aDocument.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
 
         pPaintLockData->SetModified(); // Later on ...
         return;
@@ -2856,7 +2856,7 @@ void ScDocShell::SetDocumentModified()
     }
 
     // notify UNO objects after BCA_BRDCST_ALWAYS etc.
-    aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+    aDocument.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
 }
 
 /**
@@ -2894,7 +2894,7 @@ void ScDocShell::SetDrawModified()
     if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
     {
         aDocument.UpdateChartListenerCollection();
-        SfxGetpApp()->Broadcast(SfxSimpleHint( SC_HINT_DRAW_CHANGED ));    // Navigator
+        SfxGetpApp()->Broadcast(SfxHint( SC_HINT_DRAW_CHANGED ));    // Navigator
     }
     SC_MOD()->AnythingChanged();
 }
@@ -3160,7 +3160,7 @@ void ScDocShellModificator::SetDocumentModified()
     {
         // uno broadcast is necessary for api to work
         // -> must also be done during xml import
-        rDoc.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+        rDoc.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
     }
 }
 

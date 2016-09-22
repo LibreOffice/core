@@ -126,7 +126,7 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uInt32 nHint, bool b
             pTab->SetStreamValid(false);
     }
 
-    BroadcastUno(SfxSimpleHint(SC_HINT_DATACHANGED));
+    BroadcastUno(SfxHint(SC_HINT_DATACHANGED));
 }
 
 namespace {

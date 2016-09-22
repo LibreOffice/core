@@ -136,8 +136,7 @@ ScViewPaneBase::~ScViewPaneBase()
 
 void ScViewPaneBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
         pViewShell = nullptr;
 }
 
@@ -2331,8 +2330,7 @@ void ScPreviewObj::release() throw()
 
 void ScPreviewObj::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    const SfxSimpleHint* p = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (p && p->GetId() == SFX_HINT_DYING)
+    if (rHint.GetId() == SFX_HINT_DYING)
         mpViewShell = nullptr;
 }
 

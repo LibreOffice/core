@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SFX2_STRINGHINT_HXX
 #define INCLUDED_SFX2_STRINGHINT_HXX
 
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <rtl/ustring.hxx>
 
-class SfxOpenUrlHint: public SfxSimpleHint
+class SfxOpenUrlHint: public SfxHint
 {
     OUString  msDocumentURL;
 

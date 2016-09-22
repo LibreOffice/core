@@ -120,7 +120,7 @@ void SAL_CALL ScAddInListener::modified( const css::sheet::ResultEvent& aEvent )
     {
         ScDocument* pDoc = *it;
         pDoc->TrackFormulas();
-        pDoc->GetDocumentShell()->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
+        pDoc->GetDocumentShell()->Broadcast( SfxHint( FID_DATACHANGED ) );
     }
 }
 

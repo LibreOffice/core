@@ -133,7 +133,6 @@
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/stritem.hxx>
 #include <svl/svldllapi.h>
 #include <svx/svxdllapi.h>

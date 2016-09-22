@@ -642,7 +642,7 @@ void ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
     }
     SC_MOD()->SetRefDialog( nId, false, pMyViewFrm );
 
-    pSfxApp->Broadcast( SfxSimpleHint( FID_KILLEDITVIEW ) );
+    pSfxApp->Broadcast( SfxHint( FID_KILLEDITVIEW ) );
 
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
     if ( pScViewShell )

@@ -26,7 +26,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
@@ -608,7 +608,7 @@ SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
     aDbgStyleSheetReferences.mnPools--;
 #endif
 
-    Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
+    Broadcast( SfxHint(SFX_HINT_DYING) );
     Clear();
 }
 

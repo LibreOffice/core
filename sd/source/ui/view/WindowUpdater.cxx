@@ -26,7 +26,6 @@
 #include <vcl/split.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/smplhint.hxx>
 
 #include <algorithm>
 

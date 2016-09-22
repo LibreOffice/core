@@ -35,7 +35,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <svl/numuno.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
@@ -1093,46 +1093,42 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     //  Not interested in reference update hints here
 
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    const sal_uInt32 nId = rHint.GetId();
+    if ( nId == SFX_HINT_DYING )
     {
-        const sal_uInt32 nId = pSimpleHint->GetId();
-        if ( nId == SFX_HINT_DYING )
+        pDocShell = nullptr;       // has become invalid
+        if (xNumberAgg.is())
         {
-            pDocShell = nullptr;       // has become invalid
-            if (xNumberAgg.is())
-            {
-                SvNumberFormatsSupplierObj* pNumFmt =
-                    SvNumberFormatsSupplierObj::getImplementation(
+            SvNumberFormatsSupplierObj* pNumFmt =
+                SvNumberFormatsSupplierObj::getImplementation(
                         uno::Reference<util::XNumberFormatsSupplier>(xNumberAgg, uno::UNO_QUERY) );
-                if ( pNumFmt )
-                    pNumFmt->SetNumberFormatter( nullptr );
-            }
-
-            DELETEZ( pPrintFuncCache );     // must be deleted because it has a pointer to the DocShell
+            if ( pNumFmt )
+                pNumFmt->SetNumberFormatter( nullptr );
         }
-        else if ( nId == SFX_HINT_DATACHANGED )
+
+        DELETEZ( pPrintFuncCache );     // must be deleted because it has a pointer to the DocShell
+    }
+    else if ( nId == SFX_HINT_DATACHANGED )
+    {
+        //  cached data for rendering become invalid when contents change
+        //  (if a broadcast is added to SetDrawModified, is has to be tested here, too)
+
+        DELETEZ( pPrintFuncCache );
+
+        // handle "OnCalculate" sheet events (search also for VBA event handlers)
+        if ( pDocShell )
         {
-            //  cached data for rendering become invalid when contents change
-            //  (if a broadcast is added to SetDrawModified, is has to be tested here, too)
-
-            DELETEZ( pPrintFuncCache );
-
-            // handle "OnCalculate" sheet events (search also for VBA event handlers)
-            if ( pDocShell )
+            ScDocument& rDoc = pDocShell->GetDocument();
+            if ( rDoc.GetVbaEventProcessor().is() )
             {
-                ScDocument& rDoc = pDocShell->GetDocument();
-                if ( rDoc.GetVbaEventProcessor().is() )
-                {
-                    // If the VBA event processor is set, HasAnyCalcNotification is much faster than HasAnySheetEventScript
-                    if ( rDoc.HasAnyCalcNotification() && rDoc.HasAnySheetEventScript( ScSheetEventId::CALCULATE, true ) )
-                        HandleCalculateEvents();
-                }
-                else
-                {
-                    if ( rDoc.HasAnySheetEventScript( ScSheetEventId::CALCULATE ) )
-                        HandleCalculateEvents();
-                }
+                // If the VBA event processor is set, HasAnyCalcNotification is much faster than HasAnySheetEventScript
+                if ( rDoc.HasAnyCalcNotification() && rDoc.HasAnySheetEventScript( ScSheetEventId::CALCULATE, true ) )
+                    HandleCalculateEvents();
+            }
+            else
+            {
+                if ( rDoc.HasAnySheetEventScript( ScSheetEventId::CALCULATE ) )
+                    HandleCalculateEvents();
             }
         }
     }
@@ -3008,8 +3004,7 @@ void ScDrawPagesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -3120,8 +3115,7 @@ void ScTableSheetsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -3528,8 +3522,7 @@ void ScTableColumnsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
+    else if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -3792,8 +3785,7 @@ void ScTableRowsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
+    else if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -4104,8 +4096,7 @@ void ScAnnotationsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! nTab bei Referenz-Update anpassen!!!
 
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }
@@ -4238,8 +4229,7 @@ void ScScenariosObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
+    else if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }

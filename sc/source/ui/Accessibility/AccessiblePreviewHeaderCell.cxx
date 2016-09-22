@@ -55,7 +55,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -116,21 +116,17 @@ void SAL_CALL ScAccessiblePreviewHeaderCell::disposing()
 
 void ScAccessiblePreviewHeaderCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint)
+    const sal_uInt32 nId = rHint.GetId();
+    if (nId == SC_HINT_ACC_VISAREACHANGED)
     {
-        const sal_uInt32 nId {pSimpleHint->GetId()};
-        if (nId == SC_HINT_ACC_VISAREACHANGED)
-        {
-            if (mpTextHelper)
-                mpTextHelper->UpdateChildren();
-        }
-        else if ( nId == SFX_HINT_DATACHANGED )
-        {
-            //  column / row layout may change with any document change,
-            //  so it must be invalidated
-            DELETEZ( mpTableInfo );
-        }
+        if (mpTextHelper)
+            mpTextHelper->UpdateChildren();
+    }
+    else if ( nId == SFX_HINT_DATACHANGED )
+    {
+        //  column / row layout may change with any document change,
+        //  so it must be invalidated
+        DELETEZ( mpTableInfo );
     }
 
     ScAccessibleContextBase::Notify(rBC, rHint);

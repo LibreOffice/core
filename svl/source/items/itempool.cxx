@@ -25,7 +25,7 @@
 #include <sal/log.hxx>
 #include "whassert.hxx"
 #include <svl/SfxBroadcaster.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include "poolio.hxx"
 
 #include <algorithm>
@@ -490,7 +490,7 @@ void SfxItemPool::Delete()
         return;
 
     // Inform e.g. running Requests
-    pImpl->aBC.Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
+    pImpl->aBC.Broadcast( SfxHint( SFX_HINT_DYING ) );
 
     // Iterate through twice: first for the SetItems.
     if (pImpl->ppStaticDefaults != nullptr) {

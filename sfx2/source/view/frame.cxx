@@ -292,7 +292,7 @@ void SfxFrame::CancelTransfers()
             if( !pFrm )
             {
                 pObj->CancelTransfers();
-                GetCurrentDocument()->Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
+                GetCurrentDocument()->Broadcast( SfxHint(SFX_HINT_TITLECHANGED) );
             }
         }
 

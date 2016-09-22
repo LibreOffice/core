@@ -19,14 +19,42 @@
 #ifndef INCLUDED_SVL_HINT_HXX
 #define INCLUDED_SVL_HINT_HXX
 
+#include <sal/types.h>
 #include <svl/svldllapi.h>
+
+#define SFX_HINT_DYING              0x00000001
+#define SFX_HINT_NAMECHANGED        0x00000002
+#define SFX_HINT_TITLECHANGED       0x00000004
+#define SFX_HINT_DATACHANGED        0x00000008
+#define SFX_HINT_DOCCHANGED         0x00000010
+#define SFX_HINT_UPDATEDONE         0x00000020
+#define SFX_HINT_DEINITIALIZING     0x00000040
+#define SFX_HINT_MODECHANGED        0x00000080
+    // unused, formerly SFX_HINT_CANCELLABLE
+    // unused, formerly SFX_HINT_DATAAVAILABLE
+    // unused, formerly SFX_HINT_SAVECOMPLETED
+    // unused, formerly SFX_HINT_RELEASEREF
+#define SFX_HINT_COLORS_CHANGED     0x00001000
+#define SFX_HINT_CTL_SETTINGS_CHANGED   0x00002000
+#define SFX_HINT_ACCESSIBILITY_CHANGED  0x00004000
+    // unused, formerly SFX_HINT_VIEWCREATED
+#define SFX_HINT_USER00             0x00010000
+#define SFX_HINT_USER01             0x00020000
+#define SFX_HINT_USER02             0x00040000
+#define SFX_HINT_USER03             0x00080000
+#define SFX_HINT_USER04             0x00100000
+#define SFX_HINT_USER05             0x00200000
 
 class SVL_DLLPUBLIC SfxHint
 {
+private:
+    sal_uInt32 mnId;
 public:
+    SfxHint() : mnId(0) {}
+    explicit SfxHint( sal_uInt32 nId ) : mnId(nId) {}
     virtual ~SfxHint();
+    sal_uInt32 GetId() const { return mnId; }
 };
-
 
 #endif
 

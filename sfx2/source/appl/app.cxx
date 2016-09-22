@@ -219,7 +219,7 @@ SfxApplication::~SfxApplication()
 {
     OSL_ENSURE( GetObjectShells_Impl().size() == 0, "Memory leak: some object shells were not removed!" );
 
-    Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
+    Broadcast( SfxHint(SFX_HINT_DYING) );
 
     for (auto &module : pImpl->aModules)    // Clear modules
         module.reset();

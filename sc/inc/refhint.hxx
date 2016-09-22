@@ -18,7 +18,7 @@ namespace sc {
 struct RefUpdateContext;
 class ColRowReorderMapType;
 
-class RefHint : public SfxSimpleHint
+class RefHint : public SfxHint
 {
 public:
     enum Type {

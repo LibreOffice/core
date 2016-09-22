@@ -2726,8 +2726,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 
     if ( &rBC == m_pData->m_pObjectShell )
     {
-        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-        if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DOCCHANGED )
+        if ( rHint.GetId() == SFX_HINT_DOCCHANGED )
             changing();
 
         const SfxEventHint* pNamedHint = dynamic_cast<const SfxEventHint*>(&rHint);
@@ -2803,18 +2802,15 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             postEvent_Impl( pNamedHint->GetEventName(), pViewHint ? pViewHint->GetController() : Reference< frame::XController2 >() );
         }
 
-        if ( pSimpleHint )
+        if ( rHint.GetId() == SFX_HINT_TITLECHANGED )
         {
-            if ( pSimpleHint->GetId() == SFX_HINT_TITLECHANGED )
-            {
-                OUString aTitle = m_pData->m_pObjectShell->GetTitle();
-                addTitle_Impl( m_pData->m_seqArguments, aTitle );
-                postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::TITLECHANGED ) );
-            }
-            if ( pSimpleHint->GetId() == SFX_HINT_MODECHANGED )
-            {
-                postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::MODECHANGED ) );
-            }
+            OUString aTitle = m_pData->m_pObjectShell->GetTitle();
+            addTitle_Impl( m_pData->m_seqArguments, aTitle );
+            postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::TITLECHANGED ) );
+        }
+        if ( rHint.GetId() == SFX_HINT_MODECHANGED )
+        {
+            postEvent_Impl( GlobalEventConfig::GetEventName( GlobalEventId::MODECHANGED ) );
         }
     }
 }

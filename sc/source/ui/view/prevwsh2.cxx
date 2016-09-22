@@ -18,7 +18,7 @@
  */
 
 #include <svx/svdmodel.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 
 #include "prevwsh.hxx"
 #include "docsh.hxx"
@@ -30,24 +30,7 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     bool bDataChanged = false;
 
-    if (dynamic_cast<const SfxSimpleHint*>(&rHint))
-    {
-        switch ( static_cast<const SfxSimpleHint&>(rHint).GetId() )
-        {
-            case FID_DATACHANGED:
-            case SID_SCPRINTOPTIONS:
-                bDataChanged = true;
-                break;
-            case SC_HINT_DRWLAYER_NEW:
-                {
-                    SfxBroadcaster* pDrawBC = pDocShell->GetDocument().GetDrawBroadcaster();
-                    if (pDrawBC)
-                        StartListening(*pDrawBC);
-                }
-                break;
-        }
-    }
-    else if (dynamic_cast<const ScPaintHint*>(&rHint))
+    if (dynamic_cast<const ScPaintHint*>(&rHint))
     {
         if ( static_cast<const ScPaintHint&>(rHint).GetPrintFlag() )
         {
@@ -61,6 +44,23 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         // SdrHints are no longer used for invalidating, thus react on objectchange instead
         if(SdrHintKind::ObjectChange == static_cast<const SdrHint&>(rHint).GetKind())
             bDataChanged = true;
+    }
+    else
+    {
+        switch ( rHint.GetId() )
+        {
+            case FID_DATACHANGED:
+            case SID_SCPRINTOPTIONS:
+                bDataChanged = true;
+                break;
+            case SC_HINT_DRWLAYER_NEW:
+                {
+                    SfxBroadcaster* pDrawBC = pDocShell->GetDocument().GetDrawBroadcaster();
+                    if (pDrawBC)
+                        StartListening(*pDrawBC);
+                }
+                break;
+        }
     }
 
     if (bDataChanged)

@@ -305,9 +305,9 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
         }
     }
-    else if (const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint))
+    else if (rHint.GetId())
     {
-        switch (pSimpleHint->GetId())
+        switch (rHint.GetId())
         {
             case SFX_HINT_DYING:
                 dispose();

@@ -1174,7 +1174,6 @@ namespace accessibility
 
                 // determine hint type
                 const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
-                const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
                 const TextHint* pTextHint = dynamic_cast<const TextHint*>( &rHint );
                 const SvxViewChangedHint* pViewHint = dynamic_cast<const SvxViewChangedHint*>( &rHint );
                 const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( &rHint );
@@ -1308,9 +1307,9 @@ namespace accessibility
                         }
                     }
                     // it's VITAL to keep the SfxSimpleHint last! It's the base of some classes above!
-                    else if( pSimpleHint )
+                    else if( rHint.GetId() )
                     {
-                        switch( pSimpleHint->GetId() )
+                        switch( rHint.GetId() )
                         {
                             case SFX_HINT_DYING:
                                 // edit source is dying under us, become defunc then
@@ -1349,7 +1348,6 @@ namespace accessibility
 
         // determine hint type
         const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
-        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
         const TextHint* pTextHint = dynamic_cast<const TextHint*>( &rHint );
         const SvxViewChangedHint* pViewHint = dynamic_cast<const SvxViewChangedHint*>( &rHint );
         const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( &rHint );
@@ -1432,10 +1430,10 @@ namespace accessibility
                     ProcessQueue();
             }
             // it's VITAL to keep the SfxSimpleHint last! It's the base of some classes above!
-            else if( pSimpleHint )
+            else if( rHint.GetId() )
             {
                 // handle this event _at once_, because after that, objects are invalid
-                switch( pSimpleHint->GetId() )
+                switch( rHint.GetId() )
                 {
                     case SFX_HINT_DYING:
                         // edit source is dying under us, become defunc then

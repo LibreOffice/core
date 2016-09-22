@@ -222,21 +222,17 @@ public:
 
 void SfxViewNotificatedFrameList_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
+    switch( rHint.GetId() )
     {
-        switch( pSimpleHint->GetId() )
-        {
-            case SFX_HINT_DYING:
-                SfxViewFrame* pFrame = dynamic_cast<SfxViewFrame*>(&rBC);
-                if( pFrame )
-                {
-                    iterator it = std::find( begin(), end(), pFrame );
-                    if( it != end() )
-                        erase( it );
-                }
-                break;
-        }
+        case SFX_HINT_DYING:
+            SfxViewFrame* pFrame = dynamic_cast<SfxViewFrame*>(&rBC);
+            if( pFrame )
+            {
+                iterator it = std::find( begin(), end(), pFrame );
+                if( it != end() )
+                    erase( it );
+            }
+        break;
     }
 }
 
@@ -499,7 +495,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 else
                 {
                     pSh->DoSaveCompleted( pMed );
-                    pSh->Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
+                    pSh->Broadcast( SfxHint(SFX_HINT_MODECHANGED) );
                     rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), true ) );
                     rReq.Done( true );
                     return;
@@ -1032,8 +1028,8 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
         m_pDispatcher->Flush();
         EndListening( *m_xObjSh );
 
-        Notify( *m_xObjSh, SfxSimpleHint(SFX_HINT_TITLECHANGED) );
-        Notify( *m_xObjSh, SfxSimpleHint(SFX_HINT_DOCCHANGED) );
+        Notify( *m_xObjSh, SfxHint(SFX_HINT_TITLECHANGED) );
+        Notify( *m_xObjSh, SfxHint(SFX_HINT_DOCCHANGED) );
 
         if ( 1 == m_xObjSh->GetOwnerLockCount() && m_pImpl->bObjLocked && m_xObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
             m_xObjSh->DoClose();
@@ -1060,7 +1056,7 @@ bool SfxViewFrame::Close()
     // not be saved automatically anymore.
     if ( GetViewShell() )
         GetViewShell()->DiscardClients_Impl();
-    Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
+    Broadcast( SfxHint( SFX_HINT_DYING ) );
 
     if (SfxViewFrame::Current() == this)
         SfxViewFrame::SetViewFrame( nullptr );
@@ -1178,75 +1174,8 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     if( IsDowning_Impl())
         return;
 
-    // we know only SimpleHints
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint )
-    {
-        switch( pSimpleHint->GetId() )
-        {
-            case SFX_HINT_MODECHANGED:
-            {
-                UpdateTitle();
-
-                if ( !m_xObjSh.Is() )
-                    break;
-
-                // Switch r/o?
-                SfxBindings& rBind = GetBindings();
-                rBind.Invalidate( SID_RELOAD );
-                SfxDispatcher *pDispat = GetDispatcher();
-                bool bWasReadOnly = pDispat->GetReadOnly_Impl();
-                bool bIsReadOnly = m_xObjSh->IsReadOnly();
-                if ( bWasReadOnly != bIsReadOnly )
-                {
-                    // Then also TITLE_CHANGED
-                    UpdateTitle();
-                    rBind.Invalidate( SID_FILE_NAME );
-                    rBind.Invalidate( SID_DOCINFO_TITLE );
-                    rBind.Invalidate( SID_EDITDOC );
-
-                    pDispat->GetBindings()->InvalidateAll(true);
-                    pDispat->SetReadOnly_Impl( bIsReadOnly );
-
-                    // Only force and Dispatcher-Update, if it is done next
-                    // anyway, otherwise flickering or GPF is possibel since
-                    // the Writer for example prefers in Resize perform some
-                    // actions which has a SetReadOnlyUI in Dispatcher as a
-                    // result!
-
-                    if ( pDispat->IsUpdated_Impl() )
-                        pDispat->Update_Impl(true);
-                }
-
-                Enable( !m_xObjSh->IsInModalMode() );
-                break;
-            }
-
-            case SFX_HINT_TITLECHANGED:
-            {
-                UpdateTitle();
-                SfxBindings& rBind = GetBindings();
-                rBind.Invalidate( SID_FILE_NAME );
-                rBind.Invalidate( SID_DOCINFO_TITLE );
-                rBind.Invalidate( SID_EDITDOC );
-                rBind.Invalidate( SID_RELOAD );
-                break;
-            }
-
-            case SFX_HINT_DEINITIALIZING:
-                GetFrame().DoClose();
-                break;
-            case SFX_HINT_DYING:
-                // when the Object is being deleted, destroy the view too
-                if ( m_xObjSh.Is() )
-                    ReleaseObjectShell_Impl();
-                else
-                    GetFrame().DoClose();
-                break;
-
-        }
-    }
-    else if ( dynamic_cast<const SfxEventHint*>(&rHint) )
+    // we know only SfxEventHint or simple SfxHint
+    if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
         const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
         // When the Document is loaded asynchronously, was the Dispatcher
@@ -1320,6 +1249,72 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             }
         }
     }
+    else
+    {
+        switch( rHint.GetId() )
+        {
+            case SFX_HINT_MODECHANGED:
+            {
+                UpdateTitle();
+
+                if ( !m_xObjSh.Is() )
+                    break;
+
+                // Switch r/o?
+                SfxBindings& rBind = GetBindings();
+                rBind.Invalidate( SID_RELOAD );
+                SfxDispatcher *pDispat = GetDispatcher();
+                bool bWasReadOnly = pDispat->GetReadOnly_Impl();
+                bool bIsReadOnly = m_xObjSh->IsReadOnly();
+                if ( bWasReadOnly != bIsReadOnly )
+                {
+                    // Then also TITLE_CHANGED
+                    UpdateTitle();
+                    rBind.Invalidate( SID_FILE_NAME );
+                    rBind.Invalidate( SID_DOCINFO_TITLE );
+                    rBind.Invalidate( SID_EDITDOC );
+
+                    pDispat->GetBindings()->InvalidateAll(true);
+                    pDispat->SetReadOnly_Impl( bIsReadOnly );
+
+                    // Only force and Dispatcher-Update, if it is done next
+                    // anyway, otherwise flickering or GPF is possibel since
+                    // the Writer for example prefers in Resize perform some
+                    // actions which has a SetReadOnlyUI in Dispatcher as a
+                    // result!
+
+                    if ( pDispat->IsUpdated_Impl() )
+                        pDispat->Update_Impl(true);
+                }
+
+                Enable( !m_xObjSh->IsInModalMode() );
+                break;
+            }
+
+            case SFX_HINT_TITLECHANGED:
+            {
+                UpdateTitle();
+                SfxBindings& rBind = GetBindings();
+                rBind.Invalidate( SID_FILE_NAME );
+                rBind.Invalidate( SID_DOCINFO_TITLE );
+                rBind.Invalidate( SID_EDITDOC );
+                rBind.Invalidate( SID_RELOAD );
+                break;
+            }
+
+            case SFX_HINT_DEINITIALIZING:
+                GetFrame().DoClose();
+                break;
+            case SFX_HINT_DYING:
+                // when the Object is being deleted, destroy the view too
+                if ( m_xObjSh.Is() )
+                    ReleaseObjectShell_Impl();
+                else
+                    GetFrame().DoClose();
+                break;
+
+        }
+    }
 }
 
 IMPL_LINK_NOARG_TYPED(SfxViewFrame, SwitchReadOnlyHandler, Button*, void)
@@ -1362,8 +1357,8 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
         m_pDispatcher->Push( *pObjSh );
         m_pDispatcher->Flush();
         StartListening( *pObjSh );
-        Notify( *pObjSh, SfxSimpleHint(SFX_HINT_TITLECHANGED) );
-        Notify( *pObjSh, SfxSimpleHint(SFX_HINT_DOCCHANGED) );
+        Notify( *pObjSh, SfxHint(SFX_HINT_TITLECHANGED) );
+        Notify( *pObjSh, SfxHint(SFX_HINT_DOCCHANGED) );
         m_pDispatcher->SetReadOnly_Impl( pObjSh->IsReadOnly() );
     }
     else

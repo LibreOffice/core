@@ -24,7 +24,7 @@
 #include <impedit.hxx>
 #include <editeng/editeng.hxx>
 #include <editdbg.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <editeng/lrspitem.hxx>
 
 void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
@@ -153,10 +153,10 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             pStyle = static_cast<SfxStyleSheet*>( pStyleSheetHint->GetStyleSheet() );
             nId = pStyleSheetHint->GetHint();
         }
-        else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) && dynamic_cast< const SfxStyleSheet* >(&rBC) !=  nullptr )
+        else if ( dynamic_cast< const SfxStyleSheet* >(&rBC) !=  nullptr )
         {
             pStyle = static_cast<SfxStyleSheet*>(&rBC);
-            nId = dynamic_cast<const SfxSimpleHint*>(&rHint)->GetId();
+            nId = rHint.GetId();
         }
 
         if ( pStyle )

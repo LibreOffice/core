@@ -424,13 +424,9 @@ ViewOverlayManager::~ViewOverlayManager()
 
 void ViewOverlayManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint != nullptr)
+    if (rHint.GetId() == SFX_HINT_DOCCHANGED)
     {
-        if (pSimpleHint->GetId() == SFX_HINT_DOCCHANGED)
-        {
-            UpdateTags();
-        }
+        UpdateTags();
     }
 }
 

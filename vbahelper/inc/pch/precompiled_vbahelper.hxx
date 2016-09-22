@@ -125,7 +125,7 @@
 #include <sot/object.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svl/svldllapi.h>
 #include <tools/errcode.hxx>
 #include <tools/gen.hxx>

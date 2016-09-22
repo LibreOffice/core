@@ -521,7 +521,6 @@
 #include <svl/macitem.hxx>
 #include <svl/metitem.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/stritem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/undo.hxx>

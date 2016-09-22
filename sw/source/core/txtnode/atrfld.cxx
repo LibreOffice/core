@@ -39,7 +39,6 @@
 #include "hints.hxx"
 #include <IDocumentFieldsAccess.hxx>
 #include <fieldhint.hxx>
-#include <svl/smplhint.hxx>
 
 
 // constructor for default item in attribute-pool

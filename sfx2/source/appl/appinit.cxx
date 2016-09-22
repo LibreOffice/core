@@ -111,7 +111,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     Scheduler::ImplDeInitScheduler();
 
     SfxApplication* pApp = SfxGetpApp();
-    pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );
+    pApp->Broadcast( SfxHint( SFX_HINT_DEINITIALIZING ) );
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
     pApp->Get_Impl()->pAppDispatch->release();
 

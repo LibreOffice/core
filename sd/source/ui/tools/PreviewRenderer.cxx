@@ -482,8 +482,7 @@ void PreviewRenderer::Notify(SfxBroadcaster&, const SfxHint& rHint)
     if (!mpDocShellOfView)
         return;
 
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING)
+    if (rHint.GetId() == SFX_HINT_DYING)
     {
         // The doc shell is dying.  Our view uses its item pool and
         // has to be destroyed as well.  The next call to

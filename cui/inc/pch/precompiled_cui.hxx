@@ -348,7 +348,6 @@
 #include <svl/lstner.hxx>
 #include <svl/macitem.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
 #include <svl/stylesheetuser.hxx>
