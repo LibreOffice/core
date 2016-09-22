@@ -116,6 +116,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	boost_headers \
 	gio \
 	glm_headers \
+	graphite \
 	harfbuzz \
 	icu_headers \
 	icuuc \
@@ -433,8 +434,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/glyphs/graphite_serverfont \
 ))
 endif
-
-$(eval $(call gb_Library_use_external,vcl,graphite))
 
 endif
 
