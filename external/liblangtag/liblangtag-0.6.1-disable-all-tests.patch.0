@@ -1,0 +1,12 @@
+diff -up ./Makefile.in.dt ./Makefile.in
+--- ./Makefile.in.dt	2016-09-22 15:45:46.545392537 +0200
++++ ./Makefile.in	2016-09-22 15:45:52.262333753 +0200
+@@ -410,7 +410,7 @@ top_srcdir = @top_srcdir@
+ NULL = 
+ AUTOMAKE_OPTIONS = dist-bzip2
+ #SUBDIRS += docs tests
+-SUBDIRS = liblangtag extensions data docs $(am__append_1) tests
++SUBDIRS = liblangtag extensions data docs $(am__append_1)
+ ACLOCAL_AMFLAGS = -I m4macros
+ CONFIGURE_DEPENDENCIES = \
+ 	requires			\
