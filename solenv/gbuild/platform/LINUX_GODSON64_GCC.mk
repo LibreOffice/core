@@ -9,7 +9,7 @@
 
 #please make generic modifications to unxgcc.mk or linux.mk
 gb_CPUDEFS += -DMIPS64
-gb_COMPILERDEFAULTOPTFLAGS := -Os
+gb_COMPILEROPTFLAGS := -Os
 
 include $(GBUILDDIR)/platform/linux.mk
 
