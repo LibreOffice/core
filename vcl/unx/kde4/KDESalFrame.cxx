@@ -208,6 +208,10 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         }
     }
 
+    // Menu
+    std::unique_ptr<KMenuBar> pMenuBar = std::unique_ptr<KMenuBar>( new KMenuBar() );
+    QPalette qMenuCG = pMenuBar->palette();
+
     Color aFore = toColor( pal.color( QPalette::Active, QPalette::WindowText ) );
     Color aBack = toColor( pal.color( QPalette::Active, QPalette::Window ) );
     Color aText = toColor( pal.color( QPalette::Active, QPalette::Text ) );
@@ -215,6 +219,9 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     Color aButn = toColor( pal.color( QPalette::Active, QPalette::ButtonText ) );
     Color aMid = toColor( pal.color( QPalette::Active, QPalette::Mid ) );
     Color aHigh = toColor( pal.color( QPalette::Active, QPalette::Highlight ) );
+    Color aHighText = toColor( pal.color( QPalette::Active, QPalette::HighlightedText ) );
+
+    style.SetSkipDisabledInMenus( TRUE );
 
     // Foreground
     style.SetRadioCheckTextColor( aFore );
@@ -257,7 +264,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Selection
     style.SetHighlightColor( aHigh );
-    style.SetHighlightTextColor( toColor(pal.color( QPalette::HighlightedText))  );
+    style.SetHighlightTextColor( aHighText );
 
     // Tooltip
     style.SetHelpColor( toColor( QToolTip::palette().color( QPalette::Active, QPalette::ToolTipBase )));
@@ -269,7 +276,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetAppFont( aFont );
 
     style.SetMenuFont( aFont ); // will be changed according to pMenuBar
-    //style.SetToolFont( aFont ); //already set above
     style.SetLabelFont( aFont );
     style.SetInfoFont( aFont );
     style.SetRadioCheckFont( aFont );
@@ -291,13 +297,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     int flash_time = QApplication::cursorFlashTime();
     style.SetCursorBlinkTime( flash_time != 0 ? flash_time/2 : STYLE_CURSOR_NOBLINKTIME );
 
-    // Menu
-    style.SetSkipDisabledInMenus( TRUE );
-    std::unique_ptr<KMenuBar> pMenuBar = std::unique_ptr<KMenuBar>( new KMenuBar() );
-
-    // Color
-    QPalette qMenuCG = pMenuBar->palette();
-
     // Menu text and background color, theme specific
     Color aMenuFore = toColor( qMenuCG.color( QPalette::WindowText ) );
     Color aMenuBack = toColor( qMenuCG.color( QPalette::Window ) );
@@ -307,7 +306,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetMenuColor( aMenuBack );
     style.SetMenuBarColor( aMenuBack );
     style.SetMenuHighlightColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
-    style.SetMenuHighlightTextColor( aMenuFore );
+    style.SetMenuHighlightTextColor( toColor ( qMenuCG.color( QPalette::HighlightedText ) ) );
 
     // set special menubar higlight text color
     if ( QApplication::style()->inherits( "HighContrastStyle" ) )
