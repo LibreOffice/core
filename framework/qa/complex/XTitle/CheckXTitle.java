@@ -108,7 +108,7 @@ public class CheckXTitle
         return aParseURL[0];
     }
 
-    private void waitUntilDispatcherAvailable(XModel xModel, String unoURL)
+    private XDispatch waitUntilDispatcherAvailable(XModel xModel, String unoURL)
         throws InterruptedException
     {
         utils.waitForEventIdle(m_xMSF);
@@ -134,17 +134,19 @@ public class CheckXTitle
             Thread.sleep(250);
         }
         assertNotNull("Can not obtain dispatcher for query: " + unoURL, xDispatcher);
+        return xDispatcher;
     }
 
 
     // prepare an uno URL query and dispatch it
-    private void prepareQueryAndDispatch(XDispatchProvider xDisProv, String unoURL)
+    private void prepareQueryAndDispatch(XModel xModel, String unoURL)
+        throws InterruptedException
     {
-        XDispatch xDispatcher = null;
-        URL parsed_url = parseURL(unoURL);
+        // Oddly the dispatcher can disappear even if we just waited for it
+        // before??  Do the wait loop again here.
+        XDispatch xDispatcher = waitUntilDispatcherAvailable(xModel, unoURL);
 
-        xDispatcher = xDisProv.queryDispatch(parsed_url, "", 0);
-        assertNotNull("Can not obtain dispatcher for query: " + unoURL, xDispatcher);
+        URL parsed_url = parseURL(unoURL);
         xDispatcher.dispatch(parsed_url, null);
     }
 
@@ -169,13 +171,11 @@ public class CheckXTitle
         XModel xModel = UnoRuntime.queryInterface( XModel.class, xDoc );
         XController xController = UnoRuntime.queryInterface( XController.class, xModel.getCurrentController() );
         XTitle xTitle = UnoRuntime.queryInterface( XTitle.class, xModel.getCurrentController().getFrame() );
-        XDispatchProvider xDisProv = null;
 
         // get window title with ui in default mode
         String defaultTitle = xTitle.getTitle();
 
-        xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
-        prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_PRINT_PREVIEW );
+        prepareQueryAndDispatch( xModel, UNO_URL_FOR_PRINT_PREVIEW );
         waitUntilDispatcherAvailable( xModel, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
 
         // get window title with ui in print preview mode
@@ -183,19 +183,16 @@ public class CheckXTitle
         assertEquals("Title mismatch between default view window title and print preview window title",
                      defaultTitle, printPreviewTitle);
 
-        xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
-        prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
+        prepareQueryAndDispatch( xModel, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
         waitUntilDispatcherAvailable( xModel, UNO_URL_FOR_CLOSING_DOC );
 
         //get window title with ui back in default mode
         String printPreviewClosedTitle = xTitle.getTitle();
         assertEquals("Title mismatch between default view window title and title after switching from print preview to default view window"                     ,defaultTitle, printPreviewClosedTitle);
 
-        xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
-        prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_CLOSING_DOC );
+        prepareQueryAndDispatch( xModel, UNO_URL_FOR_CLOSING_DOC );
 
         xDoc     = null;
-        xDisProv = null;
     }
 
     /** @short sets frame title and checks for infinite recusion
@@ -218,30 +215,25 @@ public class CheckXTitle
         assertNotNull("Could not create office document", xDoc);
         XModel xModel  = UnoRuntime.queryInterface( XModel.class, xDoc );
         XFrame2 xFrame = UnoRuntime.queryInterface( XFrame2.class, xModel.getCurrentController().getFrame() );
-        XDispatchProvider xDisProv = null;
         // set doc title
         xFrame.setTitle(DOCUMENT_TITLE);
 
         // switch to print preview mode
-        xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
-        prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_PRINT_PREVIEW );
+        prepareQueryAndDispatch( xModel, UNO_URL_FOR_PRINT_PREVIEW );
         waitUntilDispatcherAvailable( xModel, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
 
         // switch back to default mode
-        xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
-        prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
+        prepareQueryAndDispatch( xModel, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
         waitUntilDispatcherAvailable( xModel, UNO_URL_FOR_CLOSING_DOC );
 
         // close document
-        xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
         try{
-                prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_CLOSING_DOC );
+            prepareQueryAndDispatch( xModel, UNO_URL_FOR_CLOSING_DOC );
         } catch( Exception e ) {
             fail(e.toString());
         }
 
         xDoc     = null;
-        xDisProv = null;
     }
 
     /** @short checks creation of new empty document with readonly set to true
