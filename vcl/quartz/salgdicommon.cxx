@@ -1439,8 +1439,8 @@ void AquaSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
         SAL_INFO( "vcl.cg", "CGContextAddLineToPoint(" << mrContext << "," << fX << "," << fY << ")" );
         CGContextAddLineToPoint( mrContext, fX, fY );
     }
-    SAL_INFO( "vcl.cg", "CGContextDrawPath(" << mrContext << ",kCGPathStroke)" );
-    CGContextDrawPath( mrContext, kCGPathStroke );
+    SAL_INFO( "vcl.cg", "CGContextStrokePath(" << mrContext << ")" );
+    CGContextStrokePath(mrContext);
 
     RefreshRect( nX, nY, nWidth, nHeight );
 
