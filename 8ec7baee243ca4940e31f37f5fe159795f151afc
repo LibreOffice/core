@@ -1,0 +1,446 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_ce8e1c27",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "you have moved the function call inside the assert - this means it won\u0027t get executed in release builds!",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_aec1e830",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "yes this can be assert since the only caller of this function has created it.",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_eeba00c0",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "this is rather uninformative - perhaps it would be more useful if you output the value of \"aMod\"? or remove it completely.",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_cedc5c1b",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "i don\u0027t think assert is appropriate here, because this is a UNO listener implementation.\n\npresumably it should be called after the element with \"maLibName\" is inserted or something like that, but since UNO allows multi-threading there is no guarantee that the element has not been removed again by another thread between when it was inserted and when this listener gets to run.\n\nso it needs to handle this case, and SAL_WARN should be used here.",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_eee120d2",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "this value is read from (presumably) untrusted input - it could be anything, and a wrong value does not mean a bug in the program, so assert is inappropriate.",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_4ed12cfb",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "i think this can currently actually happen if you go to LoadBasicManager line 718, invalid input early-return and no libraries are inserted.\n\nso this can\u0027t be an assert, use SAL_WARN.",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_8edb441b",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "assert is inappropriate, this can be a read-error from the storage medium or whatever.",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_0efe546b",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "this string comes from ReadUniOrByteString above so it\u0027s untrusted input, using assert is inappropriate",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_2e031875",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "untrusted input, don\u0027t use assert",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_4ef84c7d",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "the message here isn\u0027t needed, it\u0027s obvious from the condition",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_6ef51082",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "message is unnecessary",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_8ef26499",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "message unnecessary",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_0e357445",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "again",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_2e3a3837",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "again",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_ee2f60f4",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "this should not be an assert, the loading could fail for various reasons outside our control",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_8e4984d3",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "this essentially depends on the assert in line 1360 so this can\u0027t be assert either",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_ae4648bd",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2216,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "the SAL_CALL indicates this is an implementation of a UNO method, and the LibraryName is a parameter... we can\u0027t assume that UNO methods are just called by LO code, they could be called by user\u0027s basic macros or extensions so we need to check the parameters and can\u0027t assume they are correct, so better to use SAL_WARN here not assert.\n\narguably this should throw an exception if the library does not exist, but if you want to do that please do it in a separate commit.",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_ee93e04d",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1981,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "you can remove the #ifdef here since SAL_INFO already does the same check internally (it expands to nothing if OSL_DEBUG_LEVEL is 0)",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_8e20a4f9",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4722,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "i dont understand enough of basic to be able to say whether this is allowed to fail or not.",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_ae1d68bf",
+        "filename": "basic/source/comp/codegen.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "this looks like it should be assert",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_ce78dcfb",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "this is a UNO method parameter so we have to expect that some extension passes in a null pointer or whatever and check it, so use SAL_WARN, not assert.",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_ee7da0e8",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "please remove the \"aMessage\" variable and the #ifdef, use \"\u003c\u003c\" instead",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_0e83b4cd",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "this is a good opportunity to add the \"Message\" member of the exception to the output",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_2e8878e7",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "please remove the variable",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_ae7488fd",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "please remove \"\\n\" from message",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_8e77c401",
+        "filename": "basic/source/uno/scriptcont.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-22T21:12:01Z",
+      "side": 1,
+      "message": "please output the \"Message\" member of the caught exception here too (and rremove \"\\n\" from the string)",
+      "revId": "8ec7baee243ca4940e31f37f5fe159795f151afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
