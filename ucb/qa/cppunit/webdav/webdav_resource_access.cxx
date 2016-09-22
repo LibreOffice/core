@@ -65,15 +65,33 @@ namespace
             const DAVException aTheException(DAVException::DAV_HTTP_ERROR, "http error code", i );
             CPPUNIT_ASSERT_EQUAL( false , ResourceAccess.handleException( aTheException, 1 ) );
         }
+
         // http error code from 500 (SC_INTERNAL_SERVER_ERROR) up should force a retry
-        // except: SC_NOT_IMPLEMENTED
+        // except in special value
+        // 1999 as high limit is just a current (2016-09-25) choice.
+        // RFC poses no limit to the max value of response status code
         for (auto i = SC_INTERNAL_SERVER_ERROR; i < 2000; i++)
         {
             const DAVException aTheException(DAVException::DAV_HTTP_ERROR, "http error code", i );
-            if( i != SC_NOT_IMPLEMENTED )
-                CPPUNIT_ASSERT_EQUAL( true , ResourceAccess.handleException( aTheException, 1 ) );
-            else
-                CPPUNIT_ASSERT_EQUAL( false , ResourceAccess.handleException( aTheException, 1 ) );
+            switch ( i )
+            {
+                // the HTTP response status codes that can be retried
+                case SC_BAD_GATEWAY:
+                case SC_GATEWAY_TIMEOUT:
+                case SC_SERVICE_UNAVAILABLE:
+                case SC_INSUFFICIENT_STORAGE:
+                    CPPUNIT_ASSERT_EQUAL( true , ResourceAccess.handleException( aTheException, 1 ) );
+                    break;
+                    // default is NOT retry
+                default:
+                    CPPUNIT_ASSERT_EQUAL( false , ResourceAccess.handleException( aTheException, 1 ) );
+            }
+        }
+
+        // check the retry request
+        {
+            const DAVException aTheException(DAVException::DAV_HTTP_RETRY, "the-host-name", 8080 );
+            CPPUNIT_ASSERT_EQUAL( true , ResourceAccess.handleException( aTheException, 1 ) );
         }
     }
 
