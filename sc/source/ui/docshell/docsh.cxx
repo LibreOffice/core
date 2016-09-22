@@ -638,7 +638,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const ScTablesHint* pScHint = dynamic_cast< const ScTablesHint* >( &rHint );
     if (pScHint)
     {
-        if (pScHint->GetId() == SC_TAB_INSERTED)
+        if (pScHint->GetTablesHintId() == SC_TAB_INSERTED)
         {
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
             if ( xVbaEvents.is() ) try

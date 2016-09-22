@@ -92,7 +92,7 @@ public:
                     ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2=0);
                     virtual ~ScTablesHint() override;
 
-    sal_uInt16      GetId() const           { return nId; }
+    sal_uInt16      GetTablesHintId() const { return nId; }
     SCTAB           GetTab1() const         { return nTab1; }
     SCTAB           GetTab2() const         { return nTab2; }
 };
@@ -122,7 +122,7 @@ public:
                     ScIndexHint(sal_uInt16 nNewId, sal_uInt16 nIdx);
                     virtual ~ScIndexHint() override;
 
-    sal_uInt16      GetId() const           { return nId; }
+    sal_uInt16      GetIndexHintId() const  { return nId; }
     sal_uInt16      GetIndex() const        { return nIndex; }
 };
 

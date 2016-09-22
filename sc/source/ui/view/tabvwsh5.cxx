@@ -205,7 +205,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const ScTablesHint& rTabHint = static_cast<const ScTablesHint&>(rHint);
         SCTAB nTab1 = rTabHint.GetTab1();
         SCTAB nTab2 = rTabHint.GetTab2();
-        sal_uInt16 nId  = rTabHint.GetId();
+        sal_uInt16 nId  = rTabHint.GetTablesHintId();
         switch (nId)
         {
             case SC_TAB_INSERTED:
@@ -291,7 +291,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     else if (dynamic_cast<const ScIndexHint*>(&rHint))
     {
         const ScIndexHint& rIndexHint = static_cast<const ScIndexHint&>(rHint);
-        sal_uInt16 nId = rIndexHint.GetId();
+        sal_uInt16 nId = rIndexHint.GetIndexHintId();
         sal_uInt16 nIndex = rIndexHint.GetIndex();
         switch (nId)
         {
