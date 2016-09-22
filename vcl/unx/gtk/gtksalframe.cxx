@@ -861,23 +861,11 @@ void GtkSalFrame::moveWindow( long nX, long nY )
 
 void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
 {
-    gint nOrigwidth, nOrigheight;
-    gtk_window_get_size(GTK_WINDOW(m_pWindow), &nOrigwidth, &nOrigheight);
-    if (nWidth > nOrigwidth || nHeight > nOrigheight)
-    {
-        m_bPaintsBlocked = true;
-    }
     gtk_widget_set_size_request(m_pWindow, nWidth, nHeight );
 }
 
 void GtkSalFrame::window_resize(long nWidth, long nHeight)
 {
-    gint nOrigwidth, nOrigheight;
-    gtk_window_get_size(GTK_WINDOW(m_pWindow), &nOrigwidth, &nOrigheight);
-    if (nWidth > nOrigwidth || nHeight > nOrigheight)
-    {
-        m_bPaintsBlocked = true;
-    }
     gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
 }
 
@@ -2894,7 +2882,6 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
 gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->m_bPaintsBlocked = false;
 
     struct SalPaintEvent aEvent( pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height, OpenGLHelper::isVCLOpenGLEnabled() );
 
@@ -2906,7 +2893,6 @@ gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer
 gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
-    pThis->m_bPaintsBlocked = false;
 
     bool bMoved = false, bSized = false;
     int x = pEvent->x, y = pEvent->y;

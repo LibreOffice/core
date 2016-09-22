@@ -104,8 +104,6 @@ class VCL_PLUGIN_PUBLIC SalFrame
     : public vcl::DeletionNotifier
     , public SalGeometryProvider
 {
-protected:
-    bool                    m_bPaintsBlocked;
 private:
     // the VCL window corresponding to this frame
     VclPtr<vcl::Window>     m_pWindow;
@@ -280,8 +278,6 @@ public:
     // (e.g. input methods, printer update handlers).
     long                    CallCallback( SalEvent nEvent, const void* pEvent ) const
         { return m_pProc ? long(m_pProc( m_pWindow, nEvent, pEvent )) : 0; }
-
-    bool PaintsBlocked() const { return m_bPaintsBlocked; }
 };
 
 #endif // INCLUDED_VCL_INC_SALFRAME_HXX

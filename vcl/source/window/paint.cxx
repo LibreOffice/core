@@ -655,8 +655,7 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
 
     // save paint events until resizing or initial sizing done
     if (mpWindowImpl->mbFrame &&
-        (mpWindowImpl->mpFrameData->maResizeIdle.IsActive() ||
-         mpWindowImpl->mpFrame->PaintsBlocked()))
+        mpWindowImpl->mpFrameData->maResizeIdle.IsActive())
     {
         mpWindowImpl->mpFrameData->maPaintIdle.Start();
     }
