@@ -1490,7 +1490,6 @@ endef
 
 endif # SYSTEM_ICU
 
-ifeq ($(ENABLE_HARFBUZZ),TRUE)
 ifneq ($(SYSTEM_HARFBUZZ),)
 
 define gb_LinkTarget__use_harfbuzz
@@ -1515,11 +1514,6 @@ $(call gb_LinkTarget_use_external_project,$(1),harfbuzz)
 endef
 
 endif # SYSTEM_HARFBUZZ
-else # ENABLE_HARFBUZZ != YES
-
-gb_LinkTarget__use_harfbuzz :=
-
-endif # ENABLE_HARFBUZZ
 
 ifeq ($(DISABLE_OPENSSL),TRUE)
 
