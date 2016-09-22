@@ -1215,8 +1215,14 @@ void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const
     }
     else
     {
-        // Cursor position and visibility.
+        // Cursor position.
         m_pVisibleCursor->SetPosAndShow(pOtherShell);
+        // Cursor visibility.
+        if (GetSfxViewShell() != pOtherShell)
+        {
+            OString aPayload = OString::boolean(m_bSVCursorVis);
+            SfxLokHelper::notifyOtherView(GetSfxViewShell(), pOtherShell, LOK_CALLBACK_VIEW_CURSOR_VISIBLE, "visible", aPayload);
+        }
         // Text selection.
         m_pCurrentCursor->Show(pOtherShell);
         // Graphic selection.
