@@ -100,7 +100,7 @@ protected:
 public:
 
     // returns the internal name of this style
-    virtual const OUString& GetName() const;
+    const OUString& GetName() const;
 
     // sets the internal name of this style.
     //

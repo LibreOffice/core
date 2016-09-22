@@ -153,7 +153,6 @@ public:
                 CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sMessage, RTL_TEXTENCODING_UTF8).getStr(), !xComponent.is());
             }
         }
-        postTest(filename);
         verify();
         finish();
     }
