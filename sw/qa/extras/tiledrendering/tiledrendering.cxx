@@ -706,7 +706,10 @@ public:
         break;
         case LOK_CALLBACK_VIEW_CURSOR_VISIBLE:
         {
-            m_bViewCursorVisible = OString("true") == pPayload;
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            m_bViewCursorVisible = aTree.get_child("visible").get_value<std::string>() == "true";
         }
         break;
         case LOK_CALLBACK_GRAPHIC_VIEW_SELECTION:
@@ -870,6 +873,8 @@ void SwTiledRenderingTest::testViewCursorVisibility()
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ViewCallback aView2;
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    // This failed, initially the view cursor in the second view wasn't visible.
+    CPPUNIT_ASSERT(aView2.m_bViewCursorVisible);
 
     // Click on the shape in the second view.
     aView1.m_bViewCursorVisible = true;
@@ -1373,6 +1378,7 @@ void SwTiledRenderingTest::testCreateViewGraphicSelection()
     SdrView* pView = pWrtShell->GetDrawView();
     aView1.m_bGraphicSelection = true;
     pView->MarkObj(pObject, pView->GetSdrPageView());
+    pWrtShell->HideCursor();
     CPPUNIT_ASSERT(aView1.m_bGraphicSelection);
 
     // Create a second view.
