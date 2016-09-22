@@ -2135,12 +2135,6 @@ AC_ARG_WITH(iwyu,
          Use only if you are hacking on it.]),
 ,)
 
-AC_ARG_WITH(harfbuzz,
-    AS_HELP_STRING([--with-harfbuzz],
-        [Enable HarfBuzz support regardless of the platform.
-         Experimental only. Use only if working on it.]),
-,)
-
 dnl ===================================================================
 dnl Branding
 dnl ===================================================================
@@ -9340,32 +9334,20 @@ AC_SUBST(ENABLE_ORCUS)
 dnl ===================================================================
 dnl HarfBuzz
 dnl ===================================================================
-AC_MSG_CHECKING([whether to enable HarfBuzz support])
-if test "$with_harfbuzz" = "yes" -o \( $_os != WINNT -a $_os != Darwin -a $_os != iOS \); then
-    AC_MSG_RESULT([yes])
-    ENABLE_HARFBUZZ="TRUE"
-    if $PKG_CONFIG --atleast-version 0.9.18 harfbuzz; then
-        libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.18],["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"])
-    else
-        libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz >= 0.9.10],[-I${WORKDIR}/UnpackedTarball/harfbuzz/src],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"])
-    fi
-    if test "$COM" = "MSC"; then # override the above
-        HARFBUZZ_LIBS="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.lib"
-    fi
-    if test "$with_system_harfbuzz" = "yes"; then
-        AC_MSG_CHECKING([whether system Harfbuzz is built with Graphite support])
-        _save_libs="$LIBS"
-        _save_cflags="$CFLAGS"
-        LIBS="$LIBS $HARFBUZZ_LIBS"
-        CFLAGS="$CFLAGS $HARFBUZZ_CFLAGS"
-        AC_CHECK_FUNC(hb_graphite2_face_get_gr_face,,[AC_MSG_ERROR([Harfbuzz needs to be built with Graphite support.])])
-        LIBS="$_save_libs"
-        CFLAGS="$_save_cflags"
-    fi
-else
-    AC_MSG_RESULT([no])
+libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.18],["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"])
+if test "$COM" = "MSC"; then # override the above
+    HARFBUZZ_LIBS="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.lib"
 fi
-AC_SUBST(ENABLE_HARFBUZZ)
+if test "$with_system_harfbuzz" = "yes"; then
+    AC_MSG_CHECKING([whether system Harfbuzz is built with Graphite support])
+    _save_libs="$LIBS"
+    _save_cflags="$CFLAGS"
+    LIBS="$LIBS $HARFBUZZ_LIBS"
+    CFLAGS="$CFLAGS $HARFBUZZ_CFLAGS"
+    AC_CHECK_FUNC(hb_graphite2_face_get_gr_face,,[AC_MSG_ERROR([Harfbuzz needs to be built with Graphite support.])])
+    LIBS="$_save_libs"
+    CFLAGS="$_save_cflags"
+fi
 
 AC_MSG_CHECKING([whether to use X11])
 dnl ***************************************
