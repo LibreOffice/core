@@ -1121,7 +1121,7 @@ void DAVResourceAccess::initialize()
                 return;
         }
 
-        // Own URI is needed for redirect cycle detection.
+        // Own URI is needed to redirect cycle detection.
         m_aRedirectURIs.push_back( aURI );
 
         // Success.
@@ -1251,20 +1251,33 @@ bool DAVResourceAccess::handleException( const DAVException & e, int errorCount 
             return true;
         }
         return false;
-    // #67048# copy & paste images doesn't display.
-    // if we have a bad connection try again. Up to three times.
+        // #67048# copy & paste images doesn't display. This bug refers
+        // to an old OOo problem about getting resources from sites with a bad connection.
+        // If we have a bad connection try again. Up to three times.
     case DAVException::DAV_HTTP_ERROR:
-        // retry up to three times, if not a client-side error.
-        // exception: error 501, server side error that
-        // tells us the used method is not implemented
-        // on the server, it's nonsense to insist...
-        if ( ( e.getStatus() < 400 || e.getStatus() >= 500 ) &&
-             ( e.getStatus() != 501 ) &&
-             errorCount < 3 )
-        {
+        // retry up to three times, if not a client-side error (4xx error codes)
+        if ( e.getStatus() < SC_BAD_REQUEST && errorCount < 3 )
             return true;
+        // check the server side errors
+        switch( e.getStatus() )
+        {
+            // the HTTP server side response status codes that can be retried
+            case SC_BAD_GATEWAY:        // retry, can be an eccessive load
+            case SC_GATEWAY_TIMEOUT:    // retry, may be we get lucky
+            case SC_SERVICE_UNAVAILABLE: // retry, the service may become available
+            case SC_INSUFFICIENT_STORAGE: // space may be freed, retry
+            {
+                if ( errorCount < 3 )
+                    return true;
+                else
+                    return false;
+            }
+            break;
+            // all the other HTTP server response status codes are NOT retry
+            default:
+                return false;
         }
-        return false;
+        break;
     // if connection has said retry then retry!
     case DAVException::DAV_HTTP_RETRY:
         return true;
