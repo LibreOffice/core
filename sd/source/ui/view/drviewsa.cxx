@@ -729,8 +729,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
 void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
 {
-    const SfxSimpleHint* pSimple = dynamic_cast< const SfxSimpleHint* >(&rHint);
-    if (pSimple!=nullptr && pSimple->GetId()==SFX_HINT_MODECHANGED)
+    if (rHint.GetId()==SFX_HINT_MODECHANGED)
     {
         // Change to selection when turning on read-only mode.
         if(GetDocSh()->IsReadOnly() && dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) )

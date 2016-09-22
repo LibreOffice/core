@@ -36,7 +36,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -86,23 +86,19 @@ void SAL_CALL ScAccessiblePreviewTable::disposing()
 
 void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint)
+    const sal_uInt32 nId = rHint.GetId();
+    if ( nId == SFX_HINT_DATACHANGED )
     {
-        const sal_uInt32 nId {pSimpleHint->GetId()};
-        if ( nId == SFX_HINT_DATACHANGED )
-        {
-            //  column / row layout may change with any document change,
-            //  so it must be invalidated
-            DELETEZ( mpTableInfo );
-        }
-        else if (nId == SC_HINT_ACC_VISAREACHANGED)
-        {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-            aEvent.Source = uno::Reference< XAccessibleContext >(this);
-            CommitChange(aEvent);
-        }
+        //  column / row layout may change with any document change,
+        //  so it must be invalidated
+        DELETEZ( mpTableInfo );
+    }
+    else if (nId == SC_HINT_ACC_VISAREACHANGED)
+    {
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
+        aEvent.Source = uno::Reference< XAccessibleContext >(this);
+        CommitChange(aEvent);
     }
 
     ScAccessibleContextBase::Notify(rBC, rHint);

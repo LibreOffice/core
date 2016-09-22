@@ -92,20 +92,16 @@ void SAL_CALL ScAccessiblePageHeaderArea::disposing()
 
 void ScAccessiblePageHeaderArea::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint)
+    // only notify if child exist, otherwise it is not necessary
+    if (rHint.GetId() == SC_HINT_ACC_VISAREACHANGED)
     {
-        // only notify if child exist, otherwise it is not necessary
-        if (pSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
-        {
-            if (mpTextHelper)
-                mpTextHelper->UpdateChildren();
+        if (mpTextHelper)
+            mpTextHelper->UpdateChildren();
 
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-            aEvent.Source = uno::Reference< XAccessibleContext >(this);
-            CommitChange(aEvent);
-        }
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
+        aEvent.Source = uno::Reference< XAccessibleContext >(this);
+        CommitChange(aEvent);
     }
     ScAccessibleContextBase::Notify(rBC, rHint);
 }

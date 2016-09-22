@@ -1552,11 +1552,10 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if (dynamic_cast<const SfxSimpleHint*>(&rHint))
+    else
     {
-        const SfxSimpleHint* pSimpleHint = static_cast<const SfxSimpleHint*>(&rHint);
         // only notify if child exist, otherwise it is not necessary
-        if ((pSimpleHint->GetId() == SC_HINT_ACC_TABLECHANGED) &&
+        if ((rHint.GetId() == SC_HINT_ACC_TABLECHANGED) &&
             mpAccessibleSpreadsheet.is())
         {
             FreeAccessibleSpreadsheet();
@@ -1580,12 +1579,12 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if (mpAccessibleSpreadsheet.is())
                 mpAccessibleSpreadsheet->FireFirstCellFocus();
         }
-        else if (pSimpleHint->GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
+        else if (rHint.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
         {
             if (mpChildrenShapes)
                 mpChildrenShapes->SetDrawBroadcaster();
         }
-        else if ((pSimpleHint->GetId() == SC_HINT_ACC_ENTEREDITMODE)) // this event comes only on creating edit field of a cell
+        else if ((rHint.GetId() == SC_HINT_ACC_ENTEREDITMODE)) // this event comes only on creating edit field of a cell
         {
             if (mpViewShell->GetViewData().HasEditView(meSplitPos))
             {
@@ -1609,7 +1608,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
             }
         }
-        else if (pSimpleHint->GetId() == SC_HINT_ACC_LEAVEEDITMODE)
+        else if (rHint.GetId() == SC_HINT_ACC_LEAVEEDITMODE)
         {
             if (mxTempAcc.is())
             {
@@ -1624,7 +1623,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     CommitFocusGained();
             }
         }
-        else if ((pSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED) || (pSimpleHint->GetId() == SC_HINT_ACC_WINDOWRESIZED))
+        else if ((rHint.GetId() == SC_HINT_ACC_VISAREACHANGED) || (rHint.GetId() == SC_HINT_ACC_WINDOWRESIZED))
         {
             Rectangle aOldVisArea(maVisArea);
             maVisArea = GetVisibleArea_Impl();

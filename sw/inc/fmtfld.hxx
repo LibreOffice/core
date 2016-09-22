@@ -25,7 +25,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/SfxBroadcaster.hxx>
-#include <svl/smplhint.hxx>
 
 #include "swdllapi.h"
 #include <calbck.hxx>

@@ -22,7 +22,7 @@ struct BulkDataHint::Impl
 };
 
 BulkDataHint::BulkDataHint( ScDocument& rDoc ) :
-    SfxSimpleHint(SC_HINT_BULK_DATACHANGED), mpImpl(new Impl(rDoc)) {}
+    SfxHint(SC_HINT_BULK_DATACHANGED), mpImpl(new Impl(rDoc)) {}
 
 BulkDataHint::~BulkDataHint()
 {

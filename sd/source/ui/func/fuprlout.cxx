@@ -20,7 +20,6 @@
 #include "fuprlout.hxx"
 #include <vcl/wrkwin.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svl/smplhint.hxx>
 #include <svl/itempool.hxx>
 #include <sot/storage.hxx>
 #include <vcl/msgbox.hxx>

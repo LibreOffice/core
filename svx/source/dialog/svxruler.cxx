@@ -25,7 +25,7 @@
 #include <vcl/settings.hxx>
 #include <svl/eitem.hxx>
 #include <svl/rectitem.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
@@ -3336,11 +3336,8 @@ void SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
     */
 
     // start update
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
-    if(bActive &&
-       pSimpleHint &&
-       pSimpleHint->GetId() == SFX_HINT_UPDATEDONE )
-     {
+    if (bActive && rHint.GetId() == SFX_HINT_UPDATEDONE)
+    {
         Update();
         EndListening(*pBindings);
         bValid = true;

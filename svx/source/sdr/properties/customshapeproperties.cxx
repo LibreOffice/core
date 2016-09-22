@@ -24,7 +24,7 @@
 #include <editeng/eeitem.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svl/whiter.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 
 
 namespace sdr
@@ -212,7 +212,6 @@ namespace sdr
 
             bool bRemoveRenderGeometry = false;
             const SfxStyleSheetHint* pStyleHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
-            const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
 
             if ( pStyleHint && pStyleHint->GetStyleSheet() == GetStyleSheet() )
             {
@@ -224,7 +223,7 @@ namespace sdr
                     break;
                 };
             }
-            else if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DATACHANGED )
+            else if ( rHint.GetId() == SFX_HINT_DATACHANGED )
             {
                 bRemoveRenderGeometry = true;
             }

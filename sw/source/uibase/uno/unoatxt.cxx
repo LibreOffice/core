@@ -48,7 +48,7 @@
 #include <docsh.hxx>
 #include <swmodule.hxx>
 #include <swdll.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svl/macitem.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -763,25 +763,25 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
 {
     if ( &_rBC == &xDocSh )
     {   // it's our document
-        if (const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&_rHint))
-        {
-            if ( SFX_HINT_DEINITIALIZING == pSimpleHint->GetId() )
-            {
-                // our document is dying (possibly because we're shuting down, and the document was notified
-                // earlier than we are?)
-                // stop listening at the docu
-                EndListening( *&xDocSh );
-                // and release our reference
-                xDocSh.Clear();
-            }
-        }
-        else if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&_rHint))
+        if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&_rHint))
         {
             if (SFX_EVENT_PREPARECLOSEDOC == pEventHint->GetEventId())
             {
                 implFlushDocument();
                 xBodyText = nullptr;
                 EndListening( *&xDocSh );
+                xDocSh.Clear();
+            }
+        }
+        else
+        {
+            if ( SFX_HINT_DEINITIALIZING == _rHint.GetId() )
+            {
+                // our document is dying (possibly because we're shuting down, and the document was notified
+                // earlier than we are?)
+                // stop listening at the docu
+                EndListening( *&xDocSh );
+                // and release our reference
                 xDocSh.Clear();
             }
         }

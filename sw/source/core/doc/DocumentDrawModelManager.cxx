@@ -43,7 +43,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdotext.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svl/srchitem.hxx>
 #include <tools/link.hxx>
 #include <unotools/configmgr.hxx>
@@ -226,7 +226,7 @@ SwDrawModel* DocumentDrawModelManager::MakeDrawModel_()
         // Broadcast, so that the FormShell can be connected to the DrawView
         if( m_rDoc.GetDocShell() )
         {
-            SfxSimpleHint aHint( SW_BROADCAST_DRAWVIEWS_CREATED );
+            SfxHint aHint( SW_BROADCAST_DRAWVIEWS_CREATED );
             m_rDoc.GetDocShell()->Broadcast( aHint );
         }
     }

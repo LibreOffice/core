@@ -112,7 +112,7 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
     {
         ScDocument* pDoc = *it;
         pDoc->TrackFormulas();
-        pDoc->GetDocumentShell()->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
+        pDoc->GetDocumentShell()->Broadcast( SfxHint( FID_DATACHANGED ) );
     }
 }
 

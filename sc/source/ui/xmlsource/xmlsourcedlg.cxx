@@ -597,7 +597,7 @@ void ScXMLSourceDlg::OkPressed()
 
     // Don't forget to broadcast the change.
     SfxObjectShell* pShell = mpDoc->GetDocumentShell();
-    pShell->Broadcast(SfxSimpleHint(FID_DATACHANGED));
+    pShell->Broadcast(SfxHint(FID_DATACHANGED));
 
     // Repaint the grid to force repaint the cell values.
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

@@ -879,9 +879,9 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 pList->Update();
         }
     }
-    else if(dynamic_cast<const SfxSimpleHint*>(&rHint))
+    else
     {
-        if (static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DEINITIALIZING)
+        if (rHint.GetId() == SFX_HINT_DEINITIALIZING)
         {
             DELETEZ(m_pWebUsrPref);
             DELETEZ(m_pUsrPref);

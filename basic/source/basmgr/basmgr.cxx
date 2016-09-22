@@ -20,7 +20,7 @@
 #include <tools/stream.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
@@ -851,7 +851,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
 BasicManager::~BasicManager()
 {
     // Notify listener if something needs to be saved
-    Broadcast( SfxSimpleHint( SFX_HINT_DYING) );
+    Broadcast( SfxHint( SFX_HINT_DYING) );
 }
 
 void BasicManager::LegacyDeleteBasicManager( BasicManager*& _rpManager )

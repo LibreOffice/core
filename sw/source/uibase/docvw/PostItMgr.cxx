@@ -64,7 +64,7 @@
 
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 
 #include <svx/svdview.hxx>
 #include <editeng/eeitem.hxx>
@@ -267,51 +267,6 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
-    {
-        sal_uInt32 nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
-        switch ( nId )
-        {
-            case SFX_HINT_MODECHANGED:
-            {
-                if ( mbReadOnly != !!(mpView->GetDocShell()->IsReadOnly()) )
-                {
-                    mbReadOnly = !mbReadOnly;
-                    SetReadOnlyState();
-                    mbLayout = true;
-                }
-                break;
-            }
-            case SFX_HINT_DOCCHANGED:
-            {
-                if ( mpView->GetDocShell() == &rBC )
-                {
-                    if ( !mbWaitingForCalcRects && !mvPostItFields.empty())
-                    {
-                        mbWaitingForCalcRects = true;
-                        mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl) );
-                    }
-                }
-                break;
-            }
-            case SFX_HINT_USER04:
-            {
-                // if we are in a SplitNode/Cut operation, do not delete note and then add again, as this will flicker
-                mbDeleteNote = !mbDeleteNote;
-                break;
-            }
-            case SFX_HINT_DYING:
-            {
-                if ( mpView->GetDocShell() != &rBC )
-                {
-                    // field to be removed is the broadcaster
-                    OSL_FAIL("Notification for removed SwFormatField was not sent!");
-                    RemoveItem(&rBC);
-                }
-                break;
-            }
-        }
-    }
     else if ( dynamic_cast<const SwFormatFieldHint*>(&rHint) )
     {
         const SwFormatFieldHint& rFormatHint = static_cast<const SwFormatFieldHint&>(rHint);
@@ -401,6 +356,51 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         }
                         break;
                     }
+                }
+                break;
+            }
+        }
+    }
+    else
+    {
+        sal_uInt32 nId = rHint.GetId();
+        switch ( nId )
+        {
+            case SFX_HINT_MODECHANGED:
+            {
+                if ( mbReadOnly != !!(mpView->GetDocShell()->IsReadOnly()) )
+                {
+                    mbReadOnly = !mbReadOnly;
+                    SetReadOnlyState();
+                    mbLayout = true;
+                }
+                break;
+            }
+            case SFX_HINT_DOCCHANGED:
+            {
+                if ( mpView->GetDocShell() == &rBC )
+                {
+                    if ( !mbWaitingForCalcRects && !mvPostItFields.empty())
+                    {
+                        mbWaitingForCalcRects = true;
+                        mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl) );
+                    }
+                }
+                break;
+            }
+            case SFX_HINT_USER04:
+            {
+                // if we are in a SplitNode/Cut operation, do not delete note and then add again, as this will flicker
+                mbDeleteNote = !mbDeleteNote;
+                break;
+            }
+            case SFX_HINT_DYING:
+            {
+                if ( mpView->GetDocShell() != &rBC )
+                {
+                    // field to be removed is the broadcaster
+                    OSL_FAIL("Notification for removed SwFormatField was not sent!");
+                    RemoveItem(&rBC);
                 }
                 break;
             }

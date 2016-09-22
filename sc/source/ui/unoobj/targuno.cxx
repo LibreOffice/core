@@ -21,7 +21,7 @@
 #include <vcl/virdev.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svl/itemprop.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -83,8 +83,7 @@ ScLinkTargetTypesObj::~ScLinkTargetTypesObj()
 
 void ScLinkTargetTypesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
         pDocShell = nullptr;       // document gone
 }
 
@@ -150,8 +149,7 @@ ScLinkTargetTypeObj::~ScLinkTargetTypeObj()
 
 void ScLinkTargetTypeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
         pDocShell = nullptr;       // document gone
 }
 

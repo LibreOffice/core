@@ -31,7 +31,6 @@
 #include <vcl/settings.hxx>
 #include <osl/mutex.hxx>
 #include <tools/gen.hxx>
-#include <svl/smplhint.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <svtools/colorcfg.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -754,10 +753,8 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
     }
     else
     {
-        const SfxSimpleHint* pSfxHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
-
         // Has our SdDrawDocument just died?
-        if(pSfxHint && pSfxHint->GetId() == SFX_HINT_DYING)
+        if(rHint.GetId() == SFX_HINT_DYING)
         {
             dispose();
         }

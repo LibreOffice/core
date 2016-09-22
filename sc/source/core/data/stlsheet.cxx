@@ -33,7 +33,7 @@
 #include <sfx2/printer.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include "attrib.hxx"
 
 #include <vcl/svapp.hxx>
@@ -269,8 +269,7 @@ bool ScStyleSheet::IsUsed() const
 
 void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
         GetItemSet().SetParent( nullptr );
 }
 

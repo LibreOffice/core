@@ -27,7 +27,6 @@
 
 #include <IDocumentRedlineAccess.hxx>
 
-#include <svl/smplhint.hxx>
 #include <vector>
 
 class SfxItemSet;

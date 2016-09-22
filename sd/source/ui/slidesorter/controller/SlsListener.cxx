@@ -332,10 +332,9 @@ void Listener::Notify (
                 break;
         }
     }
-    else if (dynamic_cast<const SfxSimpleHint*>(&rHint))
+    else
     {
-        const SfxSimpleHint& rSfxSimpleHint = static_cast<const SfxSimpleHint&>(rHint);
-        switch (rSfxSimpleHint.GetId())
+        switch (rHint.GetId())
         {
             case SFX_HINT_DOCCHANGED:
                 mrController.CheckForMasterPageAssignment();

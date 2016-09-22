@@ -317,18 +317,15 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     // #i105988 keep reference to this object
     rtl::Reference< SvxTextEditSourceImpl > xThis( this );
 
-    if (const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint))
+    if (SFX_HINT_DYING == rHint.GetId())
     {
-        if (SFX_HINT_DYING == pSimpleHint->GetId())
+        if (&rBC == mpView)
         {
-            if (&rBC == mpView)
+            mpView = nullptr;
+            if (mpViewForwarder)
             {
-                mpView = nullptr;
-                if (mpViewForwarder)
-                {
-                    delete mpViewForwarder;
-                    mpViewForwarder = nullptr;
-                }
+                delete mpViewForwarder;
+                mpViewForwarder = nullptr;
             }
         }
     }
@@ -448,7 +445,7 @@ void SvxTextEditSourceImpl::ObjectInDestruction(const SdrObject&)
 {
     mpObject = nullptr;
     dispose();
-    Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
+    Broadcast( SfxHint( SFX_HINT_DYING ) );
 }
 
 /* unregister at all objects and set all references to 0 */

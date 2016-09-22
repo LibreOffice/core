@@ -18,7 +18,7 @@
  */
 
 #include "scitems.hxx"
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/numfmtsh.hxx>
 #include <svx/numinf.hxx>
@@ -42,96 +42,7 @@
 
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (dynamic_cast<const SfxSimpleHint*>(&rHint))                       // ohne Parameter
-    {
-        const sal_uInt32 nSlot = static_cast<const SfxSimpleHint&>(rHint).GetId();
-        switch ( nSlot )
-        {
-            case FID_DATACHANGED:
-                UpdateFormulas();
-                break;
-
-            case FID_REFMODECHANGED:
-                {
-                    bool bRefMode = SC_MOD()->IsFormulaMode();
-                    if (!bRefMode)
-                        StopRefMode();
-                    else
-                    {
-                        GetSelEngine()->Reset();
-                        GetFunctionSet().SetAnchorFlag(true);
-                        //  AnchorFlag, damit gleich mit Control angehaengt werden kann
-                    }
-                }
-                break;
-
-            case FID_KILLEDITVIEW:
-            case FID_KILLEDITVIEW_NOPAINT:
-                StopEditShell();
-                KillEditView( nSlot == FID_KILLEDITVIEW_NOPAINT );
-                break;
-
-            case SFX_HINT_DOCCHANGED:
-                {
-                    ScDocument* pDoc = GetViewData().GetDocument();
-                    if (!pDoc->HasTable( GetViewData().GetTabNo() ))
-                    {
-                        SetTabNo(0);
-                    }
-                }
-                break;
-
-            case SC_HINT_DRWLAYER_NEW:
-                MakeDrawView(TRISTATE_INDET);
-                break;
-
-            case SC_HINT_DOC_SAVED:
-                {
-                    //  beim "Save as" kann ein vorher schreibgeschuetztes Dokument
-                    //  bearbeitbar werden, deshalb die Layer-Locks neu (#39884#)
-                    //  (Invalidate etc. passiert schon vom Sfx her)
-                    //  bei SID_EDITDOC kommt kein SFX_HINT_TITLECHANGED, darum
-                    //  der eigene Hint aus DoSaveCompleted
-                    //! was ist mit SFX_HINT_SAVECOMPLETED ?
-
-                    UpdateLayerLocks();
-
-                    //  Design-Modus bei jedem Speichern anzupassen, waere zuviel
-                    //  (beim Speichern unter gleichem Namen soll er unveraendert bleiben)
-                    //  Darum nur bei SFX_HINT_MODECHANGED (vom ViewFrame)
-                }
-                break;
-
-            case SFX_HINT_MODECHANGED:
-                //  Da man sich nicht mehr darauf verlassen kann, woher
-                //  dieser Hint kommt, den Design-Modus immer dann umschalten, wenn der
-                //  ReadOnly-Status sich wirklich geaendert hat:
-
-                if ( GetViewData().GetSfxDocShell()->IsReadOnly() != bReadOnly )
-                {
-                    bReadOnly = GetViewData().GetSfxDocShell()->IsReadOnly();
-
-                    SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadOnly);
-                    GetViewData().GetDispatcher().ExecuteList(SID_FM_DESIGN_MODE,
-                            SfxCallMode::ASYNCHRON, { &aItem });
-
-                    UpdateInputContext();
-                }
-                break;
-
-            case SC_HINT_SHOWRANGEFINDER:
-                PaintRangeFinder(-1);
-                break;
-
-            case SC_HINT_FORCESETTAB:
-                SetTabNo( GetViewData().GetTabNo(), true );
-                break;
-
-            default:
-                break;
-        }
-    }
-    else if (dynamic_cast<const ScPaintHint*>(&rHint))                    // neu zeichnen
+    if (dynamic_cast<const ScPaintHint*>(&rHint))                    // neu zeichnen
     {
         const ScPaintHint* pHint = static_cast<const ScPaintHint*>(&rHint);
         sal_uInt16 nParts = pHint->GetParts();
@@ -297,6 +208,95 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             case SC_HINT_SHOWRANGEFINDER:
                 PaintRangeFinder( nIndex );
+                break;
+        }
+    }
+    else                       // ohne Parameter
+    {
+        const sal_uInt32 nSlot = rHint.GetId();
+        switch ( nSlot )
+        {
+            case FID_DATACHANGED:
+                UpdateFormulas();
+                break;
+
+            case FID_REFMODECHANGED:
+                {
+                    bool bRefMode = SC_MOD()->IsFormulaMode();
+                    if (!bRefMode)
+                        StopRefMode();
+                    else
+                    {
+                        GetSelEngine()->Reset();
+                        GetFunctionSet().SetAnchorFlag(true);
+                        //  AnchorFlag, damit gleich mit Control angehaengt werden kann
+                    }
+                }
+                break;
+
+            case FID_KILLEDITVIEW:
+            case FID_KILLEDITVIEW_NOPAINT:
+                StopEditShell();
+                KillEditView( nSlot == FID_KILLEDITVIEW_NOPAINT );
+                break;
+
+            case SFX_HINT_DOCCHANGED:
+                {
+                    ScDocument* pDoc = GetViewData().GetDocument();
+                    if (!pDoc->HasTable( GetViewData().GetTabNo() ))
+                    {
+                        SetTabNo(0);
+                    }
+                }
+                break;
+
+            case SC_HINT_DRWLAYER_NEW:
+                MakeDrawView(TRISTATE_INDET);
+                break;
+
+            case SC_HINT_DOC_SAVED:
+                {
+                    //  beim "Save as" kann ein vorher schreibgeschuetztes Dokument
+                    //  bearbeitbar werden, deshalb die Layer-Locks neu (#39884#)
+                    //  (Invalidate etc. passiert schon vom Sfx her)
+                    //  bei SID_EDITDOC kommt kein SFX_HINT_TITLECHANGED, darum
+                    //  der eigene Hint aus DoSaveCompleted
+                    //! was ist mit SFX_HINT_SAVECOMPLETED ?
+
+                    UpdateLayerLocks();
+
+                    //  Design-Modus bei jedem Speichern anzupassen, waere zuviel
+                    //  (beim Speichern unter gleichem Namen soll er unveraendert bleiben)
+                    //  Darum nur bei SFX_HINT_MODECHANGED (vom ViewFrame)
+                }
+                break;
+
+            case SFX_HINT_MODECHANGED:
+                //  Da man sich nicht mehr darauf verlassen kann, woher
+                //  dieser Hint kommt, den Design-Modus immer dann umschalten, wenn der
+                //  ReadOnly-Status sich wirklich geaendert hat:
+
+                if ( GetViewData().GetSfxDocShell()->IsReadOnly() != bReadOnly )
+                {
+                    bReadOnly = GetViewData().GetSfxDocShell()->IsReadOnly();
+
+                    SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadOnly);
+                    GetViewData().GetDispatcher().ExecuteList(SID_FM_DESIGN_MODE,
+                            SfxCallMode::ASYNCHRON, { &aItem });
+
+                    UpdateInputContext();
+                }
+                break;
+
+            case SC_HINT_SHOWRANGEFINDER:
+                PaintRangeFinder(-1);
+                break;
+
+            case SC_HINT_FORCESETTAB:
+                SetTabNo( GetViewData().GetTabNo(), true );
+                break;
+
+            default:
                 break;
         }
     }

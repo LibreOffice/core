@@ -25,7 +25,7 @@
 
 class SvtBroadcaster;
 
-class ScHint : public SfxSimpleHint
+class ScHint : public SfxHint
 {
     ScAddress   aAddress;
 

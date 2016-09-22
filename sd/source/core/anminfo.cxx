@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/smplhint.hxx>
 #include "svx/xtable.hxx"
 #include <svx/svdopath.hxx>
 #include <svl/urihelper.hxx>

@@ -32,7 +32,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -95,8 +95,7 @@ struct SfxRequest_Impl: public SfxListener
 
 void SfxRequest_Impl::Notify( SfxBroadcaster&, const SfxHint &rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+    if ( rHint.GetId() == SFX_HINT_DYING )
         pAnti->Cancel();
 }
 

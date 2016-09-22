@@ -319,8 +319,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
 
 void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DEINITIALIZING )
+    if ( rHint.GetId() == SFX_HINT_DEINITIALIZING )
     {
         // ConfigItems must be removed before ConfigManager
         DeleteCfg();
@@ -1251,7 +1250,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         SetPrintOptions( rNewOpt );
 
         // broadcast causes all previews to recalc page numbers
-        SfxGetpApp()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );
+        SfxGetpApp()->Broadcast( SfxHint( SID_SCPRINTOPTIONS ) );
     }
 
     if ( bSaveAppOptions )
@@ -1553,7 +1552,7 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
         }
 
         SfxApplication* pSfxApp = SfxGetpApp();
-        pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
+        pSfxApp->Broadcast( SfxHint( FID_REFMODECHANGED ) );
     }
 }
 

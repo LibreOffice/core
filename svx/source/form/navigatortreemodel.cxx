@@ -701,9 +701,9 @@ namespace svxform
             }
         }
         // is shell gone?
-        else if (const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint))
+        else if (rHint.GetId())
         {
-            if (pSimpleHint->GetId() == SFX_HINT_DYING)
+            if (rHint.GetId() == SFX_HINT_DYING)
                 UpdateContent(nullptr);
         }
         // changed mark of controls?

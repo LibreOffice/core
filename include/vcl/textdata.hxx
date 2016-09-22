@@ -20,8 +20,10 @@
 #ifndef INCLUDED_VCL_TEXTDATA_HXX
 #define INCLUDED_VCL_TEXTDATA_HXX
 
+#include <sal/types.h>
+#include <tools/solar.h>
 #include <rtl/ustring.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <vcl/dllapi.h>
 
 enum class ExtTextInputAttr;
@@ -125,7 +127,7 @@ inline bool TextSelection::operator != ( const TextSelection& rSel ) const
 #define TEXT_HINT_VIEWSELECTIONCHANGED  101
 #define TEXT_HINT_VIEWCARETCHANGED      102
 
-class VCL_DLLPUBLIC TextHint : public SfxSimpleHint
+class VCL_DLLPUBLIC TextHint : public SfxHint
 {
 private:
     sal_uLong   mnValue;

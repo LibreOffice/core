@@ -986,7 +986,7 @@ void ScUndoRangeNames::DoChange( bool bUndo )
 
     rDoc.CompileHybridFormula();
 
-    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_AREAS_CHANGED ) );
 }
 
 void ScUndoRangeNames::Undo()

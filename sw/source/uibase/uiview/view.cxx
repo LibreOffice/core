@@ -1566,9 +1566,20 @@ SwGlossaryHdl* SwView::GetGlosHdl()
 void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     bool bCallBase = true;
-    if (const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint))
+    if(dynamic_cast<const FmDesignModeChangedHint*>(&rHint))
     {
-        sal_uInt32 nId = pSimpleHint->GetId();
+        bool bDesignMode = static_cast<const FmDesignModeChangedHint&>(rHint).GetDesignMode();
+        if (!bDesignMode && GetDrawFuncPtr())
+        {
+            GetDrawFuncPtr()->Deactivate();
+            SetDrawFuncPtr(nullptr);
+            LeaveDrawCreate();
+            AttrChangedNotify(m_pWrtShell);
+        }
+    }
+    else
+    {
+        sal_uInt32 nId = rHint.GetId();
         switch ( nId )
         {
             // sub shells will be destroyed by the
@@ -1635,17 +1646,6 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     }
                 }
                 break;
-        }
-    }
-    else if(dynamic_cast<const FmDesignModeChangedHint*>(&rHint))
-    {
-        bool bDesignMode = static_cast<const FmDesignModeChangedHint&>(rHint).GetDesignMode();
-        if (!bDesignMode && GetDrawFuncPtr())
-        {
-            GetDrawFuncPtr()->Deactivate();
-            SetDrawFuncPtr(nullptr);
-            LeaveDrawCreate();
-            AttrChangedNotify(m_pWrtShell);
         }
     }
 

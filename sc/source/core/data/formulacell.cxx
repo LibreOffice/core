@@ -2205,11 +2205,7 @@ void ScFormulaCell::SetInChangeTrack( bool bVal )
 
 void ScFormulaCell::Notify( const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (!pSimpleHint)
-        return;
-
-    const sal_uInt32 nHint = pSimpleHint->GetId();
+    const sal_uInt32 nHint = rHint.GetId();
     if (nHint == SC_HINT_REFERENCE)
     {
         const sc::RefHint& rRefHint = static_cast<const sc::RefHint&>(rHint);

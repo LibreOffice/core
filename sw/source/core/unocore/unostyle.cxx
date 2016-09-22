@@ -21,7 +21,7 @@
 #include <hintids.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svl/style.hxx>
 #include <svl/itemiter.hxx>
@@ -245,8 +245,7 @@ namespace sw
         //SfxListener
         virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override
         {
-            const SfxSimpleHint *pHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
-            if(pHint && (pHint->GetId() & SFX_HINT_DYING))
+            if(rHint.GetId() & SFX_HINT_DYING)
             {
                 m_pBasePool = nullptr;
                 m_pDocShell = nullptr;
@@ -2776,15 +2775,12 @@ uno::Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
 
 void SwXStyle::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    const SfxSimpleHint* pHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if(!pHint)
-        return;
-    if((pHint->GetId() & SFX_HINT_DYING) || (pHint->GetId() & SfxStyleSheetHintId::ERASED))
+    if((rHint.GetId() & SFX_HINT_DYING) || (rHint.GetId() & SfxStyleSheetHintId::ERASED))
     {
         m_pBasePool = nullptr;
         EndListening(rBC);
     }
-    else if(pHint->GetId() & (SfxStyleSheetHintId::CHANGED))
+    else if(rHint.GetId() & (SfxStyleSheetHintId::CHANGED))
     {
         static_cast<SfxStyleSheetBasePool&>(rBC).SetSearchMask(m_rEntry.m_eFamily);
         SfxStyleSheetBase* pOwnBase = static_cast<SfxStyleSheetBasePool&>(rBC).Find(m_sStyleName);

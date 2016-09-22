@@ -28,7 +28,7 @@
 #include "unonames.hxx"
 #include "editutil.hxx"
 
-#include <svl/smplhint.hxx>
+#include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
 
 #include <editeng/eeitem.hxx>
@@ -317,8 +317,7 @@ void ScCellFieldsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         //! Ref-Update
     }
-    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
+    else if ( rHint.GetId() == SFX_HINT_DYING )
     {
         pDocShell = nullptr;       // ungueltig geworden
     }

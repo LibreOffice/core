@@ -100,8 +100,7 @@ namespace basprov
             // not interested in
             return;
         }
-        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
-        if ( pSimpleHint && ( pSimpleHint->GetId() == SFX_HINT_DYING ) )
+        if ( rHint.GetId() == SFX_HINT_DYING )
         {
             m_documentBasicManager = nullptr;
             EndListening( rBC );    // prevent multiple notifications

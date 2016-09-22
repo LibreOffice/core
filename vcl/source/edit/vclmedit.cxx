@@ -26,7 +26,6 @@
 #include <vcl/xtextedt.hxx>
 #include <svl/undo.hxx>
 #include <svl/lstner.hxx>
-#include <svl/smplhint.hxx>
 
 #include <svids.hrc>
 #include <vcl/scrbar.hxx>

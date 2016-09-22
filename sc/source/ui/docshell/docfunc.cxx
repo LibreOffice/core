@@ -2087,7 +2087,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     aModificator.SetDocumentModified();
 
-    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_AREALINKS_CHANGED ) );
     return bSuccess;
 }
 
@@ -2583,7 +2583,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     aModificator.SetDocumentModified();
 
-    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_AREALINKS_CHANGED ) );
 
     return true;
 }
@@ -2909,7 +2909,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     aModificator.SetDocumentModified();
 
-    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_AREALINKS_CHANGED ) );
 
     delete pClipDoc;
     return true;
@@ -3057,7 +3057,7 @@ bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
 
         rDocShell.PostPaintExtras();
         aModificator.SetDocumentModified();
-        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
         bSuccess = true;
     }
     else if (!bApi)
@@ -3153,9 +3153,9 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord, bool /* bApi */ )
         aModificator.SetDocumentModified();
 
         SfxApplication* pSfxApp = SfxGetpApp();                                // Navigator
-        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
-        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
-        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+        pSfxApp->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
+        pSfxApp->Broadcast( SfxHint( SC_HINT_DBAREAS_CHANGED ) );
+        pSfxApp->Broadcast( SfxHint( SC_HINT_AREALINKS_CHANGED ) );
 
         bSuccess = true;
     }
@@ -3213,7 +3213,7 @@ void ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
     if (!bVisible)
         rDocShell.Broadcast( ScTablesHint( SC_TAB_HIDDEN, nTab ) );
 
-    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
     rDocShell.PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS);
     aModificator.SetDocumentModified();
 }
@@ -3275,7 +3275,7 @@ bool ScDocFunc::RenameTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
         }
         rDocShell.PostPaintExtras();
         aModificator.SetDocumentModified();
-        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
 
         bSuccess = true;
     }
@@ -3312,7 +3312,7 @@ bool ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bo
         rDocShell.PostPaintExtras();
         ScDocShellModificator aModificator( rDocShell );
         aModificator.SetDocumentModified();
-        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        SfxGetpApp()->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
 
         bSuccess = true;
     }
@@ -4914,7 +4914,7 @@ void ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTA
     if (bModifyDoc)
     {
         aModificator.SetDocumentModified();
-        SfxGetpApp()->Broadcast( SfxSimpleHint(SC_HINT_AREAS_CHANGED) );
+        SfxGetpApp()->Broadcast( SfxHint(SC_HINT_AREAS_CHANGED) );
     }
 }
 
@@ -4936,7 +4936,7 @@ void ScDocFunc::ModifyAllRangeNames(const std::map<OUString, std::unique_ptr<ScR
     rDoc.CompileHybridFormula();
 
     aModificator.SetDocumentModified();
-    SfxGetpApp()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+    SfxGetpApp()->Broadcast(SfxHint(SC_HINT_AREAS_CHANGED));
 }
 
 void ScDocFunc::CreateOneName( ScRangeName& rList,
@@ -5332,7 +5332,7 @@ void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
     if (pBindings)
         pBindings->Invalidate( SID_LINKS );
 
-    SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+    SfxGetpApp()->Broadcast( SfxHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
 }
 
 void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFormat* pFormat, SCTAB nTab, const ScRangeList& rRanges )
@@ -5408,7 +5408,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
         rDocShell.PostPaint(*pRepaintRange, PAINT_GRID);
 
     aModificator.SetDocumentModified();
-    SfxGetpApp()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+    SfxGetpApp()->Broadcast(SfxHint(SC_HINT_AREAS_CHANGED));
 }
 
 void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB nTab )
@@ -5436,7 +5436,7 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
 
     rDoc.SetStreamValid(nTab, false);
     aModificator.SetDocumentModified();
-    SfxGetpApp()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+    SfxGetpApp()->Broadcast(SfxHint(SC_HINT_AREAS_CHANGED));
 }
 
 void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction )
