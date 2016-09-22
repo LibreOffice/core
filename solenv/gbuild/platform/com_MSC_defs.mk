@@ -318,7 +318,7 @@ endef
 
 # $(1): one directory pathname to append to the ld path
 define gb_Helper_extend_ld_path
-$(gb_Helper_set_ld_path);$(shell cygpath -w $(1))
+$(gb_Helper_set_ld_path)';$(shell cygpath -w $(1))'
 endef
 
 else
