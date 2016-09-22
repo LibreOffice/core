@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_136d9b04",
+        "filename": "basic/source/basmgr/basicmanagerrepository.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-22T10:57:23Z",
+      "side": 1,
+      "message": "I will remove this",
+      "parentUuid": "ba5da102_41aca8ed",
+      "revId": "574f5d4508a51baaf4ab8ef0eaeb2ccacf3b01a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_21afb4e4",
         "filename": "basic/source/runtime/basrdll.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-09-12T07:19:53Z",
       "side": 1,
       "message": "either the invariant is that pThis must be non-null here (so an assert is warranted), but then then following if(pThis) is redundant; or the invariant is that pThis may be null here, but then an assert is not warranted",
+      "revId": "574f5d4508a51baaf4ab8ef0eaeb2ccacf3b01a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_b374effd",
+        "filename": "basic/source/runtime/basrdll.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2016-09-22T10:57:23Z",
+      "side": 1,
+      "message": "This seems like a regular assertion. There are also other instances of this behavior throughout the code. What should be the approach here? Should we adjust the code as stated in your comment?",
+      "parentUuid": "ba5da102_21afb4e4",
       "revId": "574f5d4508a51baaf4ab8ef0eaeb2ccacf3b01a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
