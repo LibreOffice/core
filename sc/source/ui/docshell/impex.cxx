@@ -1361,6 +1361,12 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             if ( rStrm.IsEof() && aLine.isEmpty() )
                 break;
 
+            if ( nRow > MAXROW )
+            {
+                bOverflowRow = true;    // display warning on import
+                break;  // for
+            }
+
             EmbeddedNullTreatment( aLine);
 
             sal_Int32 nLineLen = aLine.getLength();
@@ -1452,11 +1458,6 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 xProgress->SetStateOnPercent( rStrm.Tell() - nOldPos );
             }
             ++nRow;
-            if ( nRow > MAXROW )
-            {
-                bOverflowRow = true;    // display warning on import
-                break;  // for
-            }
         }
         // so far nRow/nEndCol pointed to the next free
         if (nRow > nStartRow)
