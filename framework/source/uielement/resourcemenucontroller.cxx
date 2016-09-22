@@ -324,6 +324,7 @@ void ResourceMenuController::itemActivated( const css::awt::MenuEvent& /*rEvent*
         css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
         m_xMenuBarManager.set( new framework::MenuBarManager(
             m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, m_aModuleName, pAwtMenu->GetMenu(), false, true, !m_bContextMenu && !m_bInToolbar ) );
+        m_xFrame->addFrameActionListener( m_xMenuBarManager.get() );
     }
 }
 
