@@ -9,7 +9,6 @@
 
 #please make generic modifications to unxgcc.mk or linux.mk
 gb_CPUDEFS += -DPPC
-gb_CXXFLAGS += -mminimal-toc
 
 include $(GBUILDDIR)/platform/linux.mk
 
