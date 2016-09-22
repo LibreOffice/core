@@ -323,61 +323,6 @@ void PivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, SequenceIn
     }
 }
 
-namespace {
-
-bool lclSeekToPCDField( BiffInputStream& rStrm )
-{
-    sal_Int64 nRecHandle = rStrm.getRecHandle();
-    while( rStrm.startNextRecord() )
-        if( rStrm.getRecId() == BIFF_ID_PCDFIELD )
-            return true;
-    rStrm.startRecordByHandle( nRecHandle );
-    return false;
-}
-
-} // namespace
-
-BiffPivotCacheFragment::BiffPivotCacheFragment(
-        const WorkbookHelper& rHelper, const OUString& rStrmName, PivotCache& rPivotCache ) :
-    BiffWorkbookFragmentBase( rHelper, rStrmName, true ),
-    mrPivotCache( rPivotCache )
-{
-}
-
-bool BiffPivotCacheFragment::importFragment()
-{
-    BiffInputStream& rStrm = getInputStream();
-    if( rStrm.startNextRecord() && (rStrm.getRecId() == BIFF_ID_PCDEFINITION) )
-    {
-        // read PCDEFINITION and optional PCDEFINITION2 records
-        mrPivotCache.importPCDefinition( rStrm );
-
-        // read cache fields as long as another PCDFIELD record can be found
-        while( lclSeekToPCDField( rStrm ) )
-            mrPivotCache.createCacheField( true ).importPCDField( rStrm );
-
-        // finalize the cache (check source range etc.)
-        mrPivotCache.finalizeImport();
-
-        // load the cache records, if the cache is based on a deleted or an external worksheet
-        if( mrPivotCache.isValidDataSource() && mrPivotCache.isBasedOnDummySheet() )
-        {
-            /*  Last call of lclSeekToPCDField() failed and kept stream position
-                unchanged. Stream should point to source data table now. */
-            sal_Int16 nSheet = mrPivotCache.getSourceRange().Sheet;
-            WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, nSheet );
-            if( xSheetGlob.get() )
-            {
-                BiffPivotCacheRecordsContext aContext( *xSheetGlob, mrPivotCache );
-                while( rStrm.startNextRecord() && (rStrm.getRecId() != BIFF_ID_EOF) )
-                    aContext.importRecord( rStrm );
-            }
-        }
-    }
-
-    return rStrm.getRecId() == BIFF_ID_EOF;
-}
-
 BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext( const WorksheetHelper& rHelper, const PivotCache& rPivotCache ) :
     BiffWorksheetContextBase( rHelper ),
     mrPivotCache( rPivotCache ),

@@ -103,9 +103,6 @@ public:
 
     virtual             ~BiffFragmentHandler();
 
-    /** Imports the fragment, returns true, if EOF record has been reached. */
-    virtual bool        importFragment() = 0;
-
 protected:
     /** Returns the BIFF input stream of this fragment. */
     inline BiffInputStream& getInputStream() { return *mxBiffStrm; }
@@ -129,19 +126,6 @@ private:
 
     XInputStreamRef     mxXInStrm;
     BiffInputStreamRef  mxBiffStrm;
-};
-
-/** Fragment handler derived from the WorkbookHelper helper class.
-
-    Used to import global workbook fragments.
- */
-class BiffWorkbookFragmentBase : public BiffFragmentHandler, public WorkbookHelper
-{
-protected:
-    explicit            BiffWorkbookFragmentBase(
-                            const WorkbookHelper& rHelper,
-                            const OUString& rStrmName,
-                            bool bCloneDecoder = false );
 };
 
 } // namespace xls

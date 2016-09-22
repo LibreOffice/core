@@ -193,8 +193,6 @@ private:
     void ProvideBackgroundBitmap();
     css::uno::Reference<css::rendering::XPolyPolygon2D> CreateClipPolyPolygon() const;
 
-    static void UpdateWindowList();
-
     void Invalidate();
 
     void StoreViewMode (const ViewMode eViewMode);

@@ -38,7 +38,6 @@ class ScCondFormatDlgItem : public SfxPoolItem
 {
 public:
 
-    ScCondFormatDlgItem();
     ScCondFormatDlgItem(std::shared_ptr<ScConditionalFormatList> pCondFormats, sal_Int32 nItem, bool bManaged);
 
     virtual ~ScCondFormatDlgItem() override;

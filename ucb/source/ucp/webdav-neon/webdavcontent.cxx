@@ -4117,24 +4117,6 @@ void Content::getResourceOptions(
 }
 
 
-void Content::getResourceOptions(
-                    const uno::Reference< ucb::XCommandEnvironment >& xEnv,
-                    DAVOptions& rDAVOptions )
-    throw ( uno::Exception, std::exception )
-{
-    std::unique_ptr< DAVResourceAccess > xResAccess;
-    {
-        osl::MutexGuard aGuard( m_aMutex );
-        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
-    }
-    getResourceOptions( xEnv, rDAVOptions, xResAccess );
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
-    }
-}
-
-
 //static
 bool Content::isResourceAvailable( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                                   const std::unique_ptr< DAVResourceAccess > & rResAccess,

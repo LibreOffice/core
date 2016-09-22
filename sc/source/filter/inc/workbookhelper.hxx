@@ -73,7 +73,6 @@ struct IgnoreCaseCompare
 };
 
 class AddressConverter;
-class BiffCodecHelper;
 class ConnectionsBuffer;
 class DefinedNamesBuffer;
 class ExcelChartConverter;
@@ -121,8 +120,6 @@ public:
     ::oox::core::FilterBase& getBaseFilter() const;
     /** Returns the filter progress bar. */
     SegmentProgressBar& getProgressBar() const;
-    /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
-    bool                isWorkbookFile() const;
     /** Returns the index of the current Calc sheet, if filter currently processes a sheet. */
     sal_Int16           getCurrentSheetIndex() const;
 
@@ -267,9 +264,6 @@ public:
 
     /** Returns the text encoding used to import/export byte strings. */
     rtl_TextEncoding    getTextEncoding() const;
-
-    /** Returns the codec helper that stores the encoder/decoder object. */
-    BiffCodecHelper&    getCodecHelper() const;
 
 private:
     WorkbookGlobals&    mrBookGlob;

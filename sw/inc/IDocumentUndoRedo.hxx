@@ -207,10 +207,6 @@ public:
     */
     virtual size_t GetUndoActionCount(const bool bCurrentLevel = true) const = 0;
 
-    /** Get the number of Redo actions.
-    */
-    virtual size_t GetRedoActionCount(const bool bCurrentLevel = true) const = 0;
-
     /** Return undo/redo info for this view.
      */
     virtual void SetView(SwView* pView) = 0;

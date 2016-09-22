@@ -138,8 +138,6 @@ public:
     virtual ~SwNavigationPI() override;
     virtual void    dispose() override;
 
-    void            GotoPage(); // jump to page; bindable function
-
     void            UpdateListBox();
     void            MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget, bool bWithCilds);
 

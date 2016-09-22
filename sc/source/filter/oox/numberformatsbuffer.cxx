@@ -2032,12 +2032,6 @@ sal_uLong NumberFormatsBuffer::fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nN
     return pNumFmt->fillToItemSet( rItemSet, bSkipPoolDefs);
 }
 
-void NumberFormatsBuffer::writeToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const
-{
-    if( const NumberFormat* pNumFmt = maNumFmts.get( nNumFmtId ).get() )
-        pNumFmt->writeToPropertyMap( rPropMap );
-}
-
 void NumberFormatsBuffer::insertBuiltinFormats()
 {
     // build a map containing pointers to all tables

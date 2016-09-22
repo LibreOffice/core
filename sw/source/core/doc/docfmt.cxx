@@ -2061,16 +2061,6 @@ SwFrameFormats::rangeFind( const value_type& x ) const
     return rangeFind( x->Which(), x->GetName() );
 }
 
-void SwFrameFormats::DeleteAndDestroy(int aStartIdx, int aEndIdx)
-{
-    if (aEndIdx < aStartIdx)
-        return;
-    for (const_iterator it = begin() + aStartIdx;
-                        it != begin() + aEndIdx; ++it)
-        delete *it;
-    m_PosIndex.erase( begin() + aStartIdx, begin() + aEndIdx);
-}
-
 void SwFrameFormats::DeleteAndDestroyAll( bool keepDefault )
 {
     if ( empty() )
@@ -2082,12 +2072,6 @@ void SwFrameFormats::DeleteAndDestroyAll( bool keepDefault )
         m_PosIndex.erase( begin() + _offset, end() );
     else
         clear();
-}
-
-size_t SwFrameFormats::GetPos( const value_type& x ) const
-{
-    const_iterator const it = find( x );
-    return it == end() ? SIZE_MAX : it - begin();
 }
 
 std::pair<SwFrameFormats::const_iterator,bool> SwFrameFormats::push_back( const value_type& x )

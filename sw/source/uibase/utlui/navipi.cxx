@@ -525,16 +525,6 @@ void SwNavigationPI::MakeMark()
         m_nAutoMarkIdx = 0;
 }
 
-void SwNavigationPI::GotoPage()
-{
-    if (m_pContextWin && m_pContextWin->GetFloatingWindow() && m_pContextWin->GetFloatingWindow()->IsRollUp())
-        ZoomIn();
-    if(IsGlobalMode())
-        ToggleTree();
-    UsePage();
-    GetPageEdit().GrabFocus();
-}
-
 void SwNavigationPI::ZoomOut()
 {
     if (IsZoomedIn())

@@ -67,14 +67,6 @@ bool BiffFragmentHandler::skipFragment()
     return !mxBiffStrm->isEof() && (mxBiffStrm->getRecId() == BIFF_ID_EOF);
 }
 
-BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelper, const OUString& rStrmName, bool bCloneDecoder ) :
-    BiffFragmentHandler( rHelper.getBaseFilter(), rStrmName ),
-    WorkbookHelper( rHelper )
-{
-    if( bCloneDecoder )
-        getCodecHelper().cloneDecoder( getInputStream() );
-}
-
 } // namespace xls
 } // namespace oox
 

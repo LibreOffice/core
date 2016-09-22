@@ -88,21 +88,6 @@ private:
     bool                mbInRecord;
 };
 
-class BiffPivotCacheFragment : public BiffWorkbookFragmentBase
-{
-public:
-    explicit            BiffPivotCacheFragment(
-                            const WorkbookHelper& rHelper,
-                            const OUString& rStrmName,
-                            PivotCache& rPivotCache );
-
-    /** Imports the entire fragment, returns true, if EOF record has been reached. */
-    virtual bool        importFragment() override;
-
-private:
-    PivotCache&         mrPivotCache;
-};
-
 class BiffPivotCacheRecordsContext : public BiffWorksheetContextBase
 {
 public:

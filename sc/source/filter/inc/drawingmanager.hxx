@@ -60,20 +60,9 @@ public:
     explicit            BiffDrawingBase( const WorksheetHelper& rHelper,
                             const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage );
 
-    /** Final processing after import of the all drawing objects. */
-    void                finalizeImport();
-
 private:
     css::uno::Reference< css::drawing::XDrawPage >
                         mxDrawPage;         /// UNO draw page used to insert the shapes.
-};
-
-/** Drawing manager of a single sheet. */
-class BiffSheetDrawing : public BiffDrawingBase
-{
-public:
-    explicit            BiffSheetDrawing( const WorksheetHelper& rHelper );
-
 };
 
 } // namespace xls

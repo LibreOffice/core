@@ -50,6 +50,7 @@ public:
     ErrCode Execute();
     OUString GetPath() const;
     void SetPath( const OUString& rPath );
+    // WIP, please don't remove, dear Clang plugins
     bool IsInsertAsLinkSelected();
 };
 

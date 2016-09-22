@@ -149,7 +149,6 @@ protected:
 private:
     SfxFrame* ExecuteNewDocument( SfxRequest& rReq );
 
-    static void ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewFrame, const sal_Int32 eMedium );
     static SfxFrame* CreateEmptyDocument( const css::uno::Reference< css::frame::XFrame >& i_rFrame );
     static SfxFrame* CreateFromTemplate( const OUString& rTemplatePath, const css::uno::Reference< css::frame::XFrame >& i_rFrame );
 
@@ -158,18 +157,6 @@ private:
     ::std::unique_ptr< ::sd::SdGlobalResourceContainer> mpResourceContainer;
 
     bool mbEventListenerAdded;
-
-    /** Create a new summary page.  When the document has been created in
-        the kiosk mode with automatical transitions then this method adds
-        this kind of transition to the new summary page.
-        @param pViewFrame
-            The view frame that is used to execute the slot for creating the
-            summary page.
-        @param pDocument
-            The document which will contain the summary page and from which
-            the information about the default transition is retrieved.
-    */
-    static void AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocument);
 
     /** Take an outline from a text document and create a new impress
         document according to the structure of the outline.
