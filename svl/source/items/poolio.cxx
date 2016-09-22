@@ -41,32 +41,40 @@ const SfxItemPool* SfxItemPool::GetStoringPool()
     return pStoringPool_;
 }
 
-static sal_uInt16 convertSfxItemKindToUInt16(SfxItemKind x)
+static sal_uInt16 convertSfxItemKindToUInt16(SfxItemKind eKind)
 {
-    if ( x == SFX_ITEMS_NONE )
+    switch (eKind)
+    {
+    case SfxItemKind::NONE:
         return 0;
-    if ( x == SFX_ITEMS_DELETEONIDLE )
+    case SfxItemKind::DeleteOnIdle:
         return 0xfffd;
-    if ( x == SFX_ITEMS_STATICDEFAULT )
+    case SfxItemKind::StaticDefault:
         return 0xfffe;
-    if ( x == SFX_ITEMS_POOLDEFAULT )
+    case SfxItemKind::PoolDefault:
         return 0xffff;
-    assert(false);
-    abort();
+    default:
+        assert("unknown SfxItemKind");
+        return 0;
+    }
 }
 
-static SfxItemKind convertUInt16ToSfxItemKind(sal_uInt16 x)
+static SfxItemKind convertUInt16ToSfxItemKind(sal_uInt16 nRefCnt)
 {
-    if ( x == 0 )
-        return SFX_ITEMS_NONE;
-    if ( x == 0xfffd )
-        return SFX_ITEMS_DELETEONIDLE;
-    if ( x == 0xfffe )
-        return SFX_ITEMS_STATICDEFAULT;
-    if ( x == 0xffff )
-        return SFX_ITEMS_POOLDEFAULT;
-    assert(false);
-    abort();
+    switch (nRefCnt)
+    {
+    case 0:
+        return SfxItemKind::NONE;
+    case 0xfffd:
+        return SfxItemKind::DeleteOnIdle;
+    case 0xfffe:
+        return SfxItemKind::StaticDefault;
+    case 0xffff:
+        return SfxItemKind::PoolDefault;
+    default:
+        assert(false);
+        abort();
+    }
 }
 
 
@@ -688,7 +696,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             SfxPoolItem *pItem =
                     ( *( pImpl->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
                     ->Create( rStream, nVersion );
-            pItem->SetKind( SFX_ITEMS_POOLDEFAULT );
+            pItem->SetKind( SfxItemKind::PoolDefault );
             pImpl->maPoolDefaults[GetIndex_Impl(nWhich)] = pItem;
         }
     }
@@ -851,8 +859,8 @@ const SfxPoolItem* SfxItemPool::LoadSurrogate
  * Saves a surrogate for '*pItem' in 'rStream'
  *
  * @returns sal_True: a real surrogates has been saved
- *                    SFX_ITEMS_NULL for 'pItem==0', SFX_ITEMS_STATICDEFAULT
- *                    and SFX_ITEMS_POOLDEFAULT are 'real' surrogates
+ *                    SFX_ITEMS_NULL for 'pItem==0', SfxItemKind::StaticDefault
+ *                    and SfxItemKind::PoolDefault are 'real' surrogates
  *
  * @returns sal_False: a dummy surrogate (SFX_ITEMS_DIRECT) has been saved;
  *                     the actual Item needs to be saved right after it on

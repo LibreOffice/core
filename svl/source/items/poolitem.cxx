@@ -38,7 +38,7 @@ const char* pw5 = "Wow! 10.000.000 items!";
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     : m_nRefCount(0)
     , m_nWhich(nWhich)
-    , m_nKind(SFX_ITEMS_NONE)
+    , m_nKind(SfxItemKind::NONE)
 {
     DBG_ASSERT(nWhich <= SHRT_MAX, "invalid WhichId");
 #if OSL_DEBUG_LEVEL > 0
@@ -75,7 +75,7 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
 SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
     : m_nRefCount(0) // don't copy that
     , m_nWhich(rCpy.m_nWhich)
-    , m_nKind( SFX_ITEMS_NONE )
+    , m_nKind(SfxItemKind::NONE)
 {
 #if OSL_DEBUG_LEVEL > 0
     ++nItemCount;

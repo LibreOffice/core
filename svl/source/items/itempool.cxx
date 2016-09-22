@@ -228,7 +228,7 @@ SfxItemPool::SfxItemPool
         for ( sal_uInt16 n = 0; n <= pImpl->mnEnd - pImpl->mnStart; ++n )
         {
             (*( ppDefaults + n )) = (*( rPool.pImpl->ppStaticDefaults + n ))->Clone(this);
-            (*( ppDefaults + n ))->SetKind( SFX_ITEMS_STATICDEFAULT );
+            (*( ppDefaults + n ))->SetKind(SfxItemKind::StaticDefault);
         }
 
         SetDefaults( ppDefaults );
@@ -241,7 +241,7 @@ SfxItemPool::SfxItemPool
         if (rPool.pImpl->maPoolDefaults[n])
         {
             pImpl->maPoolDefaults[n] = rPool.pImpl->maPoolDefaults[n]->Clone(this); //resets kind
-            pImpl->maPoolDefaults[n]->SetKind(SFX_ITEMS_POOLDEFAULT);
+            pImpl->maPoolDefaults[n]->SetKind(SfxItemKind::PoolDefault);
         }
 
     // Copy Version map
@@ -263,7 +263,7 @@ void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
     DBG_ASSERT( !pImpl->ppStaticDefaults, "already have Defaults" );
 
     pImpl->ppStaticDefaults = pDefaults;
-    //! if ( (*ppStaticDefaults)->GetKind() != SFX_ITEMS_STATICDEFAULT )
+    //! if ((*ppStaticDefaults)->GetKind() != SfxItemKind::StaticDefault)
     //! FIXME: Probably doesn't work with SetItems at the end
     {
         DBG_ASSERT( (*pImpl->ppStaticDefaults)->GetRefCount() == 0 ||
@@ -273,7 +273,7 @@ void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
         {
             assert(((*(pImpl->ppStaticDefaults + n))->Which() == n + pImpl->mnStart)
                         && "static defaults not sorted" );
-            (*( pImpl->ppStaticDefaults + n ))->SetKind( SFX_ITEMS_STATICDEFAULT );
+            (*( pImpl->ppStaticDefaults + n ))->SetKind(SfxItemKind::StaticDefault);
             DBG_ASSERT( !(pImpl->maPoolItems[n]), "defaults with setitems with items?!" );
         }
     }
@@ -568,7 +568,7 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
         auto& rOldDefault =
             pImpl->maPoolDefaults[GetIndex_Impl(rItem.Which())];
         SfxPoolItem *pNewDefault = rItem.Clone(this);
-        pNewDefault->SetKind(SFX_ITEMS_POOLDEFAULT);
+        pNewDefault->SetKind(SfxItemKind::PoolDefault);
         if (rOldDefault)
         {
             rOldDefault->SetRefCount(0);
@@ -627,7 +627,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     if (bSID)
     {
         assert((rItem.Which() != nWhich ||
-            !IsDefaultItem(&rItem) || rItem.GetKind() == SFX_ITEMS_DELETEONIDLE)
+            !IsDefaultItem(&rItem) || rItem.GetKind() == SfxItemKind::DeleteOnIdle)
                 && "a non Pool Item is Default?!");
         SfxPoolItem *pPoolItem = rItem.Clone(pImpl->mpMaster);
         pPoolItem->SetWhich(nWhich);

@@ -48,7 +48,7 @@ SfxItemDisruptor_Impl::SfxItemDisruptor_Impl(SfxPoolItem *const pItemToDisrupt)
     m_Idle.SetPriority(SchedulerPriority::DEFAULT_IDLE);
 
     DBG_ASSERT( 0 == pItem->GetRefCount(), "disrupting pooled item" );
-    pItem->SetKind( SFX_ITEMS_DELETEONIDLE );
+    pItem->SetKind(SfxItemKind::DeleteOnIdle);
 }
 
 void SfxItemDisruptor_Impl::LaunchDeleteOnIdle()
