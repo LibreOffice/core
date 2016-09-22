@@ -101,9 +101,6 @@ protected:
 
     void createDefaultTemplateMenu ();
 
-    // Exchange view between local/online view.
-    void switchMainView (bool bDisplayLocal);
-
     /**
      *
      * Move templates stored in the filesystem to another folder.

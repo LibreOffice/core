@@ -129,8 +129,6 @@ public:
 
     bool moveTemplates (const std::set<const ThumbnailViewItem*,selection_cmp_fn> &rItems, const sal_uInt16 nTargetItem);
 
-    bool copyFrom (const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail, const OUString &rPath);
-
     bool copyFrom(TemplateContainerItem *pItem, const OUString &rPath);
 
     bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName);
@@ -146,8 +144,6 @@ public:
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
     sal_uInt16 getCurRegionId () const { return mnCurRegionId;}
-
-    const OUString& getCurRegionName () const { return maCurRegionName;}
 
     void setOpenRegionHdl(const Link<void*,void> &rLink);
 

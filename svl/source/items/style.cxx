@@ -855,10 +855,6 @@ void SfxStyleSheetBase::Load( SvStream&, sal_uInt16 )
 {
 }
 
-void SfxStyleSheetBase::Store( SvStream& )
-{
-}
-
 SfxStyleSheet::SfxStyleSheet(const OUString &rName,
                              const SfxStyleSheetBasePool& r_Pool,
                              SfxStyleFamily eFam,

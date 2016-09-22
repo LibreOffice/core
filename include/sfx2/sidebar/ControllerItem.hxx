@@ -94,10 +94,6 @@ public:
     */
     void RequestUpdate();
 
-    /** Return the icon for the command.
-    */
-    Image GetIcon() const;
-
     /** Do not call.  Used by local class only.  Should be a member of
         a local and hidden interface.
     */

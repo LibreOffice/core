@@ -103,25 +103,14 @@ public:
     void                SetNewColorList( XColorListRef const & pColorList )
                             { mpNewColorList = pColorList; }
     const XColorListRef&  GetNewColorList() const { return mpNewColorList; }
-    const XColorListRef&  GetColorList() const { return mpColorList; }
 
-    void                  SetNewGradientList( XGradientListRef const & pGrdLst)
-                            { mpNewGradientList = pGrdLst; }
     const XGradientListRef&  GetNewGradientList() const
                             { return mpNewGradientList; }
 
-    void                  SetNewHatchingList( XHatchListRef const & pHtchLst)
-                            { mpNewHatchingList = pHtchLst; }
     const XHatchListRef&  GetNewHatchingList() const
                             { return mpNewHatchingList; }
 
-    void                  SetNewBitmapList( XBitmapListRef const & pBmpLst)
-                            { mpNewBitmapList = pBmpLst; }
     const XBitmapListRef& GetNewBitmapList() const { return mpNewBitmapList; }
-
-    void                  SetNewPatternList( XPatternListRef const & pPtrnLst )
-                            { mpNewPatternList = pPtrnLst; }
-    const XPatternListRef& GetNewPatternList() const { return mpNewPatternList; }
 };
 
 /************************************************************************/
@@ -810,7 +799,6 @@ public:
     void             SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
 
     void    SetColorList( const XColorListRef& pColList );
-    const XColorListRef& GetColorList() { return pColorList; }
 
     void    SetPageType( PageType* pInType ) { pPageType = pInType; }
     void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
@@ -821,10 +809,6 @@ public:
 
     virtual void FillUserData() override;
 
-    bool IsModified()
-    {
-        return bool(*pnColorListState & ChangeType::MODIFIED);
-    }
     void SetModified(bool bIsModified)
     {
         if (bIsModified)
@@ -836,7 +820,6 @@ public:
     {
         *pnColorListState |= nState;
     }
-    void Update(bool bLoaded);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUITABAREA_HXX

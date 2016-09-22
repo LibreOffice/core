@@ -79,9 +79,7 @@ class LwpBookMark;
 class LwpVersionManager
 {
 public:
-    LwpVersionManager(){}
-    ~LwpVersionManager(){}
-public:
+    LwpVersionManager() = delete;
     static void Read(LwpObjectStream *pStrm);
     static void Skip(LwpObjectStream *pStrm);
 };

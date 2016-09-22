@@ -77,9 +77,7 @@ class LwpMergeOptions;
 class LwpNamedProperties
 {
 public:
-    LwpNamedProperties(){}
-    ~LwpNamedProperties(){}
-public:
+    LwpNamedProperties() = delete;
     static void Read(LwpObjectStream *pStrm);
 };
 /**

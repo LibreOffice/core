@@ -78,7 +78,6 @@ public:
 
     void                SetNewColorList( XColorListRef const & pColTab ) { mpNewColorList = pColTab; }
     const XColorListRef& GetNewColorList() const { return mpNewColorList; }
-    const XColorListRef& GetColorList() const { return pColorList; }
 };
 
 /*************************************************************************/

@@ -229,9 +229,6 @@ public:
     explicit HatchingLB(vcl::Window* pParent, WinBits aWB);
 
     void Fill( const XHatchListRef &pList );
-
-    void    Append( const XHatchEntry& rEntry, const Bitmap& rBitmap );
-    void    Modify( const XHatchEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
 };
 
 /************************************************************************/
@@ -244,8 +241,6 @@ public:
 
     void Fill( const XGradientListRef &pList );
 
-    void    Append( const XGradientEntry& rEntry, const Bitmap& rBitmap );
-    void    Modify( const XGradientEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
     void    SelectEntryByList( const XGradientListRef &pList, const OUString& rStr,
                                const XGradient& rXGradient );
 };
@@ -258,9 +253,6 @@ public:
     explicit BitmapLB(vcl::Window* pParent, WinBits aWB);
 
     void Fill(const XBitmapListRef &pList);
-
-    void Append(const Size& rSize, const XBitmapEntry& rEntry);
-    void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_Int32 nPos);
 
 private:
     BitmapEx        maBitmapEx;

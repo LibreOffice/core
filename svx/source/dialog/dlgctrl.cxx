@@ -1193,34 +1193,6 @@ void HatchingLB::Fill( const XHatchListRef &pList )
     SetUpdateMode( true );
 }
 
-void HatchingLB::Append( const XHatchEntry& rEntry, const Bitmap& rBitmap )
-{
-    if(!rBitmap.IsEmpty())
-    {
-        InsertEntry(rEntry.GetName(), Image(rBitmap));
-    }
-    else
-    {
-        InsertEntry( rEntry.GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-}
-
-void HatchingLB::Modify( const XHatchEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
-{
-    RemoveEntry( nPos );
-
-    if( !rBitmap.IsEmpty() )
-    {
-        InsertEntry( rEntry.GetName(), Image(rBitmap), nPos );
-    }
-    else
-    {
-        InsertEntry( rEntry.GetName(), nPos );
-    }
-}
-
 // Fills the listbox (provisional) with strings
 
 void FillAttrLB::Fill( const XHatchListRef &pList )
@@ -1284,34 +1256,6 @@ void GradientLB::Fill( const XGradientListRef &pList )
 
     AdaptDropDownLineCountToMaximum();
     SetUpdateMode( true );
-}
-
-void GradientLB::Append( const XGradientEntry& rEntry, const Bitmap& rBitmap )
-{
-    if(!rBitmap.IsEmpty())
-    {
-        InsertEntry(rEntry.GetName(), Image(rBitmap));
-    }
-    else
-    {
-        InsertEntry( rEntry.GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-}
-
-void GradientLB::Modify( const XGradientEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
-{
-    RemoveEntry( nPos );
-
-    if(!rBitmap.IsEmpty())
-    {
-        InsertEntry( rEntry.GetName(), Image(rBitmap), nPos );
-    }
-    else
-    {
-        InsertEntry( rEntry.GetName(), nPos );
-    }
 }
 
 void GradientLB::SelectEntryByList( const XGradientListRef &pList, const OUString& rStr,
@@ -1455,39 +1399,6 @@ void BitmapLB::Fill( const XBitmapListRef &pList )
 
     AdaptDropDownLineCountToMaximum();
     SetUpdateMode(true);
-}
-
-void BitmapLB::Append(const Size& rSize, const XBitmapEntry& rEntry)
-{
-    maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
-
-    if(!maBitmapEx.IsEmpty())
-    {
-        formatBitmapExToSize(maBitmapEx, rSize);
-        InsertEntry(rEntry.GetName(), Image(maBitmapEx));
-    }
-    else
-    {
-        InsertEntry(rEntry.GetName());
-    }
-
-    AdaptDropDownLineCountToMaximum();
-}
-
-void BitmapLB::Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_Int32 nPos)
-{
-    RemoveEntry(nPos);
-    maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
-
-    if(!maBitmapEx.IsEmpty())
-    {
-        formatBitmapExToSize(maBitmapEx, rSize);
-        InsertEntry(rEntry.GetName(), Image(maBitmapEx), nPos);
-    }
-    else
-    {
-        InsertEntry(rEntry.GetName());
-    }
 }
 
 FillAttrLB::FillAttrLB(vcl::Window* pParent, WinBits aWB)

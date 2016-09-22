@@ -2875,32 +2875,6 @@ bool SfxObjectShell::LoadFrom( SfxMedium& /*rMedium*/ )
 }
 
 
-bool SfxObjectShell::IsInformationLost()
-{
-    Sequence< PropertyValue > aProps = GetModel()->getArgs();
-    OUString aFilterName;
-    OUString aPreusedFilterName;
-    for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
-    {
-        if ( aProps[nInd].Name == "FilterName" )
-            aProps[nInd].Value >>= aFilterName;
-        else if ( aProps[nInd].Name == "PreusedFilterName" )
-            aProps[nInd].Value >>= aPreusedFilterName;
-    }
-
-    // if current filter can lead to information loss and it was used
-    // for the latest store then the user should be asked to store in own format
-    if ( !aFilterName.isEmpty() && aFilterName.equals( aPreusedFilterName ) )
-    {
-        std::shared_ptr<const SfxFilter> pFilt = GetMedium()->GetFilter();
-        DBG_ASSERT( pFilt && aFilterName.equals( pFilt->GetName() ), "MediaDescriptor contains wrong filter!\n" );
-        return ( pFilt && pFilt->IsAlienFormat() );
-    }
-
-    return false;
-}
-
-
 bool SfxObjectShell::CanReload_Impl()
 
 /*  [Description]

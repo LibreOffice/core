@@ -32,8 +32,6 @@ Size SFX2_DLLPUBLIC getParagraphPreviewOptimalSize(const vcl::Window *pReference
 
 Size SFX2_DLLPUBLIC getDrawPreviewOptimalSize(const vcl::Window *pReference);
 
-Size SFX2_DLLPUBLIC getDrawListBoxOptimalSize(const vcl::Window *pReference);
-
 Size SFX2_DLLPUBLIC getPreviewStripSize(const vcl::Window *pReference);
 
 Size SFX2_DLLPUBLIC getPreviewOptionsSize(const vcl::Window *pReference);

@@ -141,9 +141,6 @@ public:
     void                InsertView( SvListView* );
     void                RemoveView( SvListView* );
 
-    SvListView*         GetView( sal_uLong nPos ) const
-    { return ( nPos < aViewList.size() ) ? aViewList[ nPos ] : nullptr; }
-
     void                Broadcast(
                             SvListAction nActionId,
                             SvTreeListEntry* pEntry1=nullptr,

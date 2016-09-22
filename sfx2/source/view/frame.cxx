@@ -648,50 +648,6 @@ bool SfxUnoFrameItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId
     return ( rVal >>= m_xFrame );
 }
 
-SfxFrameIterator::SfxFrameIterator( const SfxFrame& rFrame, bool bRecur )
-    : pFrame( &rFrame )
-    , bRecursive( bRecur )
-{}
-
-SfxFrame* SfxFrameIterator::FirstFrame()
-{
-    // GetFirst starts the iteration at the first child frame
-    return pFrame->GetChildFrame( 0 );
-}
-
-SfxFrame* SfxFrameIterator::NextFrame( SfxFrame& rPrev )
-{
-    // If recursion is requested testing is done first on Children.
-    SfxFrame *pRet = nullptr;
-    if ( bRecursive )
-        pRet = rPrev.GetChildFrame( 0 );
-    if ( !pRet )
-    {
-        // In other case continue with the siblings of rPrev
-        pRet = NextSibling_Impl( rPrev );
-    }
-
-    return pRet;
-}
-
-
-SfxFrame* SfxFrameIterator::NextSibling_Impl( SfxFrame& rPrev )
-{
-    SfxFrame *pRet = nullptr;
-    if ( &rPrev != pFrame )
-    {
-        SfxFrameArr_Impl& rArr = *rPrev.pParentFrame->pChildArr;
-        SfxFrameArr_Impl::iterator it = std::find( rArr.begin(), rArr.end(), &rPrev );
-        if ( it != rArr.end() && (++it) != rArr.end() )
-            pRet = *it;
-
-        if ( !pRet && rPrev.pParentFrame->pParentFrame )
-            pRet = NextSibling_Impl( *rPrev.pParentFrame );
-    }
-
-    return pRet;
-}
-
 css::uno::Reference< css::frame::XController > SfxFrame::GetController() const
 {
     if ( pImpl->pCurrentViewFrame && pImpl->pCurrentViewFrame->GetViewShell() )
@@ -929,13 +885,6 @@ SfxFrame* SfxFrame::GetNext( SfxFrame& rFrame )
         return *it;
     else
         return nullptr;
-}
-
-const SfxPoolItem* SfxFrame::OpenDocumentSynchron( SfxItemSet& i_rSet, const Reference< XFrame >& i_rTargetFrame )
-{
-    i_rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, i_rTargetFrame ) );
-    i_rSet.ClearItem( SID_TARGETNAME );
-    return SfxGetpApp()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, i_rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

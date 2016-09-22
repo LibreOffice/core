@@ -416,10 +416,4 @@ OUString XPropertyList::GetDefaultExt( XPropertyListType t )
     return OUString();
 }
 
-OUString XPropertyList::GetDefaultExtFilter( XPropertyListType t )
-{
-    OUString aFilter( "*." );
-    return aFilter + GetDefaultExt( t );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

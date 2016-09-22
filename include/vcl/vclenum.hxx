@@ -94,7 +94,7 @@ inline bool operator ==(const ItalicMatrix& a, const ItalicMatrix& b)
 
 inline bool operator !=(const ItalicMatrix& a, const ItalicMatrix& b)
 {
-    return a.xx != b.xx || a.xy != b.xy || a.yx != b.yx || a.yy != b.yy;
+    return !(a == b);
 }
 
 enum class VclAlign

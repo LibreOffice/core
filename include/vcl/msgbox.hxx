@@ -96,9 +96,6 @@ public:
 
 class VCL_DLLPUBLIC QueryBox : public MessBox
 {
-private:
-    SAL_DLLPRIVATE void ImplInitQueryBoxData();
-
 public:
                         QueryBox( vcl::Window* pParent, WinBits nStyle,
                                   const OUString& rMessage );

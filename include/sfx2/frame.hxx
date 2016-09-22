@@ -128,9 +128,6 @@ public:
     static SfxFrame*    GetFirst();
     static SfxFrame*    GetNext( SfxFrame& );
 
-    static const SfxPoolItem*
-                        OpenDocumentSynchron( SfxItemSet& aSet, const css::uno::Reference< css::frame::XFrame >& i_rTargetFrame );
-
     SfxObjectShell*     GetCurrentDocument() const;
     SfxViewFrame*       GetCurrentViewFrame() const;
     SfxFrame&           GetTopFrame() const;
@@ -189,20 +186,6 @@ private:
 };
 
 typedef SvCompatWeakRef<SfxFrame> SfxFrameWeakRef;
-
-class SfxFrameIterator
-{
-    const SfxFrame*         pFrame;
-    bool                    bRecursive;
-
-    SfxFrame*               NextSibling_Impl( SfxFrame& rPrev );
-
-public:
-                            SfxFrameIterator( const SfxFrame& rFrame, bool bRecursive=true );
-    SfxFrame*               FirstFrame();
-    SfxFrame*               NextFrame( SfxFrame& rPrev );
-};
-
 
 class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
 {

@@ -448,8 +448,6 @@ public:
     static OUString getUIRootDir();
     bool            hasBuilder() const { return m_pUIBuilder != nullptr; }
 
-    css::uno::Reference<css::frame::XFrame> getFrame() { return m_pUIBuilder->getFrame(); }
-
     template <typename T> T* get(VclPtr<T>& ret, const OString& sID)
     {
         return m_pUIBuilder->get<T>(ret, sID);

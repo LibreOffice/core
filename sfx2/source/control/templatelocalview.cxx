@@ -701,53 +701,6 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
     return ret;
 }
 
-bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail,
-                                  const OUString &rPath)
-{
-    for (TemplateContainerItem* pRegion : maRegions)
-    {
-        if (pRegion->mnId == nRegionItemId)
-        {
-            sal_uInt16 nId = 0;
-            sal_uInt16 nDocId = 0;
-
-            TemplateContainerItem *pRegionItem =
-                    pRegion;
-
-            if (!pRegionItem->maTemplates.empty())
-            {
-                nId = (pRegionItem->maTemplates.back()).nId+1;
-                nDocId = (pRegionItem->maTemplates.back()).nDocId+1;
-            }
-
-            OUString aPath(rPath);
-            sal_uInt16 nRegionId = pRegion->mnRegionId;
-
-            if (mpDocTemplates->CopyFrom(nRegionId,nDocId,aPath))
-            {
-                TemplateItemProperties aTemplate;
-                aTemplate.nId = nId;
-                aTemplate.nDocId = nDocId;
-                aTemplate.nRegionId = nRegionId;
-                aTemplate.aName = aPath;
-                aTemplate.aRegionName = getRegionName(nRegionId);
-                aTemplate.aThumbnail = rThumbnail;
-                aTemplate.aPath = mpDocTemplates->GetPath(nRegionId,nDocId);
-
-                TemplateContainerItem *pItem = pRegion;
-
-                pItem->maTemplates.push_back(aTemplate);
-
-                return true;
-            }
-
-            break;
-        }
-    }
-
-    return false;
-}
-
 bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &rPath)
 {
     sal_uInt16 nId = 1;
