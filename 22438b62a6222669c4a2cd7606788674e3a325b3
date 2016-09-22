@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_72adf887",
+        "filename": "include/formula/errorcodes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-22T10:24:12Z",
+      "side": 1,
+      "message": "Please derive from sal_uInt16 so size of the enum is never blown to 32-bit, error values are stored in tokens and formula results so that can matter. Additionally, CreateDoubleError() and GetDoubleErrorValue() *depend* on the size being 16-bit to mask the errors into double floating point values.",
+      "revId": "22438b62a6222669c4a2cd7606788674e3a325b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_d39403ea",
+        "filename": "include/formula/errorcodes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-22T10:24:12Z",
+      "side": 1,
+      "message": "This is wrong, see comment for sc/source/filter/inc/scflt.hxx",
+      "revId": "22438b62a6222669c4a2cd7606788674e3a325b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_92c1ac31",
+        "filename": "include/formula/errorcodes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-22T10:24:12Z",
+      "side": 1,
+      "message": "This should not be named ScErrorCodes, it\u0027s confusing as it doesn\u0027t live in the sc/ module. Rather name FormulaDoubleError or some such.",
+      "range": {
+        "startLine": 98,
+        "startChar": 10,
+        "endLine": 98,
+        "endChar": 22
+      },
+      "revId": "22438b62a6222669c4a2cd7606788674e3a325b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_92aa8c6f",
+        "filename": "include/formula/errorcodes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-22T10:24:12Z",
+      "side": 1,
+      "message": "Deriving the enum from sal_uInt16 should also make such casts unnecessary.",
+      "range": {
+        "startLine": 107,
+        "startChar": 34,
+        "endLine": 107,
+        "endChar": 58
+      },
+      "revId": "22438b62a6222669c4a2cd7606788674e3a325b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_52c71445",
+        "filename": "sc/source/core/data/clipcontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-22T10:24:12Z",
+      "side": 1,
+      "message": "I think changing all these if(nErr) or if(!nErr) to explicit comparisons with FormulaError::NONE is unnecessary, isn\u0027t it?",
+      "revId": "22438b62a6222669c4a2cd7606788674e3a325b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

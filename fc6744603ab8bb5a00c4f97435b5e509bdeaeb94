@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_13e83b7c",
+        "filename": "sc/source/filter/inc/scflt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-09-22T10:24:12Z",
+      "side": 0,
+      "message": "Making these FormulaError values is wrong. Specifically, squeezing the sal_uInt32 SvStream::GetError() into FormulaError makes no sense, those are masked and shifted error code / warning code classes, see include/tools/errcode.hxx",
+      "revId": "fc6744603ab8bb5a00c4f97435b5e509bdeaeb94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
