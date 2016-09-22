@@ -39,7 +39,7 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 			REAL_CC="$(shell cygpath -w $(lastword $(filter-out -%,$(CC))))" \
 			REAL_CC_FLAGS="$(filter -%,$(CC))") \
 		   $(if $(verbose),V=1) \
-		   $(gb_Helper_set_ld_path) \
+		   $(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,langtag)/liblangtag/.libs) \
 		   $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
