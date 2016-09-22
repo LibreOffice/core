@@ -30,6 +30,16 @@
 #include <algorithm>
 #include <memory>
 
+/// clear array of PoolItem variants
+/// after all PoolItems are deleted
+/// or all ref counts are decreased
+void SfxPoolItemArray_Impl::clear()
+{
+    maPoolItemVector.clear();
+    maFree.clear();
+    maPtrToIndex.clear();
+}
+
 /**
  * Returns the <SfxItemPool> that is being saved.
  * This should only be used in very exceptional cases e.g.

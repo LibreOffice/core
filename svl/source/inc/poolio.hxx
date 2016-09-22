@@ -68,11 +68,12 @@ typedef std::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
  * often search linearly to ensure uniqueness. If they are
  * non-poolable we maintain an (often large) list of pointers.
  */
-struct SfxPoolItemArray_Impl: public SfxPoolItemArrayBase_Impl
+struct SfxPoolItemArray_Impl
 {
     typedef std::vector<sal_uInt32> FreeList;
     typedef std::unordered_map<SfxPoolItem*,sal_uInt32> PoolItemPtrToIndexMap;
-
+private:
+    std::vector<SfxPoolItem*> maPoolItemVector;
 public:
     /// Track list of indices into our array that contain an empty slot
     FreeList maFree;
@@ -80,6 +81,14 @@ public:
     PoolItemPtrToIndexMap     maPtrToIndex;
 
     SfxPoolItemArray_Impl () {}
+    SfxPoolItem*& operator[](size_t n) {return maPoolItemVector[n];}
+    std::vector<SfxPoolItem*>::iterator begin() {return maPoolItemVector.begin();}
+    std::vector<SfxPoolItem*>::iterator end() {return maPoolItemVector.end();}
+    /// clear array of PoolItem variants after all PoolItems are deleted
+    /// or all ref counts are decreased
+    void clear();
+    size_t size() const {return maPoolItemVector.size();}
+    void push_back(SfxPoolItem* pItem) {maPoolItemVector.push_back(pItem);}
 
     /// re-build the list of free slots and hash from clean
     void SVL_DLLPUBLIC ReHash();
