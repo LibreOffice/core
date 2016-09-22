@@ -762,7 +762,8 @@ void GtkSalMenu::SetFrame(const SalFrame* pFrame)
     }
 
     // Generate the main menu structure.
-    UpdateFull();
+    if ( PrepUpdate() )
+        UpdateFull();
 
     g_lo_menu_insert_section( pMenuModel, 0, nullptr, mpMenuModel );
 
