@@ -2476,13 +2476,13 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     {
         sal_uInt64 nBasis = ((sal_uInt64)floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
         sal_uInt64 nFracPrev = 1L, nDivPrev = 0, nFracNext, nDivNext, nPartialDenom;
-        double fRemainder = fNumber, fTemp;
+        double fRemainder = fNumber;
 
         // Use continued fraction representation of fNumber
         // See https://en.wikipedia.org/wiki/Continued_fraction#Best_rational_approximations
         while ( fRemainder > 0.0 )
         {
-            fTemp = 1.0 / fRemainder;                    // 64bits precision required when fRemainder is very weak
+            double fTemp = 1.0 / fRemainder;             // 64bits precision required when fRemainder is very weak
             nPartialDenom = (sal_uInt64) floor(fTemp);   // due to floating point notation with double precision
             fRemainder = fTemp - (double)nPartialDenom;
             nDivNext = nPartialDenom * nDiv + nDivPrev;
