@@ -278,6 +278,7 @@ struct ImplSVNWFData
     bool                    mbDDListBoxNoTextArea:1;
     bool                    mbEnableAccel:1;                // whether or not accelerators are shown
     bool                    mbAutoAccel:1;                  // whether accelerators are only shown when Alt is held down
+    bool                    mbRolloverMenubar:1;            // theming engine supports rollover in menubar
 };
 
 struct BlendFrameCache

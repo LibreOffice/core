@@ -1804,11 +1804,21 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
             {
                 if (IsMenuBar())
                 {
-                    if (bRollover)
-                        rRenderContext.SetTextColor(rSettings.GetMenuBarRolloverTextColor());
-                    else if (bHighlighted)
-                        rRenderContext.SetTextColor(rSettings.GetMenuBarHighlightTextColor());
+                    if (!ImplGetSVData()->maNWFData.mbRolloverMenubar)
+                    {
+                        if (bRollover)
+                            rRenderContext.SetTextColor(rSettings.GetMenuBarRolloverTextColor());
+                        else if (bHighlighted)
+                            rRenderContext.SetTextColor(rSettings.GetMenuBarHighlightTextColor());
+                    }
                     else
+                    {
+                        if (bHighlighted)
+                            rRenderContext.SetTextColor(rSettings.GetMenuBarHighlightTextColor());
+                        else if (bRollover)
+                            rRenderContext.SetTextColor(rSettings.GetMenuBarRolloverTextColor());
+                    }
+                    if (!bRollover && !bHighlighted)
                         rRenderContext.SetTextColor(rSettings.GetMenuBarTextColor());
                 }
                 else if (bHighlighted)

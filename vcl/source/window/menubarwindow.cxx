@@ -592,7 +592,17 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                 Rectangle aRect = Rectangle(Point(nX, 1), Size(pData->aSz.Width(), GetOutputSizePixel().Height() - 2));
                 rRenderContext.Push(PushFlags::CLIPREGION);
                 rRenderContext.IntersectClipRegion(aRect);
-                bool bRollover = nPos != nHighlightedItem;
+                bool bRollover, bHighlight;
+                if (!ImplGetSVData()->maNWFData.mbRolloverMenubar)
+                {
+                    bHighlight = true;
+                    bRollover = nPos != nHighlightedItem;
+                }
+                else
+                {
+                    bRollover = nPos == nRolloveredItem;
+                    bHighlight = nPos == nHighlightedItem;
+                }
                 if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, ControlPart::MenuItem) &&
                     rRenderContext.IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire))
                 {
@@ -630,7 +640,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                     rRenderContext.DrawRect(aRect);
                 }
                 rRenderContext.Pop();
-                pMenu->ImplPaint(rRenderContext, 0, 0, pData, true/*bHighlight*/, false, bRollover);
+                pMenu->ImplPaint(rRenderContext, 0, 0, pData, bHighlight, false, bRollover);
             }
             return;
         }
@@ -875,6 +885,8 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     pMenu->ImplPaint(rRenderContext, 0);
     if (nHighlightedItem != ITEMPOS_INVALID)
         HighlightItem(rRenderContext, nHighlightedItem);
+    else if (ImplGetSVData()->maNWFData.mbRolloverMenubar && nRolloveredItem != ITEMPOS_INVALID)
+        HighlightItem(rRenderContext, nRolloveredItem);
 
     // in high contrast mode draw a separating line on the lower edge
     if (!rRenderContext.IsNativeControlSupported( ControlType::Menubar, ControlPart::Entire) &&
