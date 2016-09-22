@@ -61,7 +61,7 @@ namespace connectivity
             LoadXPToolkitProfiles(MozillaProductType_Firefox);
         }
         //Thunderbird and firefox profiles are saved in profiles.ini
-        sal_Int32 ProfileAccess::LoadXPToolkitProfiles(MozillaProductType product)
+        void ProfileAccess::LoadXPToolkitProfiles(MozillaProductType product)
         {
             sal_Int32 index=product;
             ProductStruct &rProduct = m_ProductProfileList[index];
@@ -137,7 +137,6 @@ namespace connectivity
                 }
 
             }
-            return static_cast< ::sal_Int32 >(rProduct.mProfileList.size());
         }
 
         OUString ProfileAccess::getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException)

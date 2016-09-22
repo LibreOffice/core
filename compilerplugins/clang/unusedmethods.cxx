@@ -263,7 +263,9 @@ gotfunc:
     {
         const FunctionDecl* parentFunction = parentFunctionDecl(expr);
         if (parentFunction && parentFunction != calleeFunctionDecl) {
-            calledFromOutsideSet.insert(niceName(parentFunction));
+            if (!ignoreLocation(parentFunction)) {
+                calledFromOutsideSet.insert(niceName(parentFunction));
+            }
         }
     }
 

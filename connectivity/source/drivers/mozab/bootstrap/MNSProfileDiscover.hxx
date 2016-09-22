@@ -80,7 +80,7 @@ namespace connectivity
         protected:
             ProductStruct m_ProductProfileList[4];
             void      LoadProductsInfo();
-            sal_Int32 LoadXPToolkitProfiles(MozillaProductType product);
+            void      LoadXPToolkitProfiles(MozillaProductType product);
         };
 
     }

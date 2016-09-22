@@ -79,7 +79,7 @@
 using namespace ::com::sun::star;
 
 
-sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const
+void SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const
 {
     rArr.clear();
 
@@ -105,8 +105,6 @@ sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) c
                 rArr.push_back( sStr );
         }
     }
-
-    return rArr.size();
 }
 
 /// Get current table of contents Mark.

@@ -51,8 +51,6 @@ namespace oglcanvas
 
         const css::geometry::IntegerSize2D& getSize() { return maSize; }
 
-        css::uno::Reference< css::rendering::XBitmapCanvas > queryBitmapCanvas();
-
         css::uno::Reference< css::rendering::XBitmap >
             getScaledBitmap( const css::geometry::RealSize2D&  newSize,
                              bool                                               beFast );

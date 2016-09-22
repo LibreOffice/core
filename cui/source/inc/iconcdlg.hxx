@@ -146,7 +146,7 @@ protected:
     void                    DeActivatePageImpl ();
     void                    ResetPageImpl ();
 
-    short                   Ok();
+    void                    Ok();
 
 public:
 

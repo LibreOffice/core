@@ -995,7 +995,7 @@ public:
     void                SetDefaultTOXBase(const SwTOXBase& rBase);
 
     // Key for management of index.
-    sal_uInt16 GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const;
+    void GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const;
 
     // Sort table text.
     bool SortTable(const SwSelBoxes& rBoxes, const SwSortOptions&);
