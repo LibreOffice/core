@@ -25,6 +25,7 @@
 
 #include <svx/fmshell.hxx>
 #include <sfx2/dispatch.hxx>
+#include <comphelper/lok.hxx>
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -70,7 +71,15 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
 
     // visible area
     Size aVisSizePixel(rWin.GetOutputSizePixel());
+    bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && !rWin.IsMapModeEnabled();
+    if (bTiledRendering)
+    {
+        rWin.Push(PushFlags::MAPMODE);
+        rWin.EnableMapMode();
+    }
     Rectangle aVisArea(rWin.PixelToLogic(Rectangle(Point(0,0), aVisSizePixel)));
+    if (bTiledRendering)
+        rWin.Pop();
     Size aVisAreaSize(aVisArea.GetSize());
 
     if (!aVisArea.IsInside(rRect) && !SlideShow::IsRunning( GetViewShellBase() ) )

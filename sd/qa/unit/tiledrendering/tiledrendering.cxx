@@ -72,6 +72,7 @@ public:
     void testUndoLimiting();
     void testCreateViewGraphicSelection();
     void testCreateViewTextCursor();
+    void testPostKeyEventInvalidation();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -99,6 +100,7 @@ public:
     CPPUNIT_TEST(testUndoLimiting);
     CPPUNIT_TEST(testCreateViewGraphicSelection);
     CPPUNIT_TEST(testCreateViewTextCursor);
+    CPPUNIT_TEST(testPostKeyEventInvalidation);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1232,6 +1234,52 @@ void SdTiledRenderingTest::testCreateViewTextCursor()
     // This failed: the text view selection of the first view wasn't seen by
     // the second view.
     CPPUNIT_ASSERT(aView2.m_bViewSelectionSet);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testPostKeyEventInvalidation()
+{
+    // Load a document and begin text edit on the first slide.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getPart());
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F2);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_F2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+
+    // Create a second view and begin text edit there as well, in parallel.
+    SfxLokHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    pXImpressDocument->setPart(1);
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView2 = pViewShell2->GetView();
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F2);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_F2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView2->GetTextEditObject());
+
+    // Now go left with the cursor in the second view an watch for
+    // invalidations.
+    aView2.m_bTilesInvalidated = false;
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_LEFT);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_LEFT);
+    Scheduler::ProcessEventsToIdle();
+    // This failed: moving the cursor caused unexpected invalidation.
+    CPPUNIT_ASSERT(!aView2.m_bTilesInvalidated);
 
     mxComponent->dispose();
     mxComponent.clear();
