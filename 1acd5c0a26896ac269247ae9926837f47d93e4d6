@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_0e0c9493",
+        "filename": "sc/source/ui/drawfunc/fuconrec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-09-22T20:49:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba5da102_f8af267b",
+      "revId": "1acd5c0a26896ac269247ae9926837f47d93e4d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_18b5bacc",
         "filename": "sc/source/ui/view/tabvwsh2.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-09-21T10:10:27Z",
       "side": 1,
       "message": "SID_DRAWTBX_ARROWS shouldn\u0027t get SfxBoolItem. Please remove this line.",
+      "revId": "1acd5c0a26896ac269247ae9926837f47d93e4d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_2e1158ad",
+        "filename": "sc/source/ui/view/tabvwsh2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-09-22T20:49:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba5da102_18b5bacc",
       "revId": "1acd5c0a26896ac269247ae9926837f47d93e4d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
