@@ -110,19 +110,6 @@ public:
     */
     virtual ~TemplateScanner();
 
-    /** Execute the actual scanning of templates.  When this method
-        terminates the result can be obtained by calling the
-        <member>GetTemplateList</member> method.
-    */
-    void Scan();
-
-    /** Return the list of template folders.  It lies in the responsibility
-        of the caller to take ownership of some or all entries and remove
-        them from the returned list.  All entries that remain until the
-        destructor is called will be destroyed.
-    */
-    std::vector<TemplateDir*>& GetFolderList() { return maFolderList;}
-
     /** Implementation of the AsynchronousTask interface method.
     */
     virtual void RunNextStep() override;
@@ -138,11 +125,6 @@ public:
             started or after it has ended.
     */
     const TemplateEntry* GetLastAddedEntry() const { return mpLastAddedEntry;}
-
-    /** Set whether to sort the template entries inside the regions.
-    */
-    void EnableEntrySorting ()
-        {mbEntrySortingEnabled = true;}
 
 private:
     /** The current state determines which step will be executed next by

@@ -104,21 +104,6 @@ void BinSingleRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelativeA
     setBiff12Data( nCol, nRow, bRelativeAsOffset );
 }
 
-void BinSingleRef2d::readBiff2Data( BiffInputStream& rStrm, bool bRelativeAsOffset )
-{
-    sal_uInt16 nRow;
-    sal_uInt8 nCol;
-    rStrm >> nRow >> nCol;
-    setBiff2Data( nCol, nRow, bRelativeAsOffset );
-}
-
-void BinSingleRef2d::readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffset )
-{
-    sal_uInt16 nRow, nCol;
-    rStrm >> nRow >> nCol;
-    setBiff8Data( nCol, nRow, bRelativeAsOffset );
-}
-
 void BinComplexRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset )
 {
     sal_Int32 nRow1, nRow2;
@@ -129,23 +114,6 @@ void BinComplexRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelative
     nCol2 = rStrm.readuInt16();
     maRef1.setBiff12Data( nCol1, nRow1, bRelativeAsOffset );
     maRef2.setBiff12Data( nCol2, nRow2, bRelativeAsOffset );
-}
-
-void BinComplexRef2d::readBiff2Data( BiffInputStream& rStrm, bool bRelativeAsOffset )
-{
-    sal_uInt16 nRow1, nRow2;
-    sal_uInt8 nCol1, nCol2;
-    rStrm >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-    maRef1.setBiff2Data( nCol1, nRow1, bRelativeAsOffset );
-    maRef2.setBiff2Data( nCol2, nRow2, bRelativeAsOffset );
-}
-
-void BinComplexRef2d::readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffset )
-{
-    sal_uInt16 nRow1, nRow2, nCol1, nCol2;
-    rStrm >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-    maRef1.setBiff8Data( nCol1, nRow1, bRelativeAsOffset );
-    maRef2.setBiff8Data( nCol2, nRow2, bRelativeAsOffset );
 }
 
 // token vector, sequence =====================================================
@@ -1132,11 +1100,6 @@ const FunctionInfo* FunctionProvider::getFuncInfoFromOoxFuncName( const OUString
 const FunctionInfo* FunctionProvider::getFuncInfoFromBiff12FuncId( sal_uInt16 nFuncId ) const
 {
     return mxFuncImpl->maBiff12Funcs.get( nFuncId ).get();
-}
-
-const FunctionInfo* FunctionProvider::getFuncInfoFromBiffFuncId( sal_uInt16 nFuncId ) const
-{
-    return mxFuncImpl->maBiffFuncs.get( nFuncId ).get();
 }
 
 const FunctionInfo* FunctionProvider::getFuncInfoFromMacroName( const OUString& rFuncName ) const

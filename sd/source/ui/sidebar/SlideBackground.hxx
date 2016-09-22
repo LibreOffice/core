@@ -137,7 +137,6 @@ private:
     const OUString GetBitmapSetOrDefault();
     const OUString GetPatternSetOrDefault();
     bool IsImpress();
-    bool IsDraw();
     void addListener();
     void removeListener();
     void populateMasterSlideDropdown();

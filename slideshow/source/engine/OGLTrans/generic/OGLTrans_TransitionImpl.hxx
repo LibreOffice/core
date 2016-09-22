@@ -67,10 +67,6 @@ typedef std::vector<std::shared_ptr<Operation> > Operations_t;
 class TransitionScene
 {
 public:
-    TransitionScene()
-    {
-    }
-
     TransitionScene(
             const Primitives_t& rLeavingSlidePrimitives,
             const Primitives_t& rEnteringSlidePrimitives,

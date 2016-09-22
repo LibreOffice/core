@@ -737,11 +737,6 @@ void OpenGLSalBitmap::updateChecksum() const
         SalBitmap::updateChecksum();
 }
 
-rtl::Reference<OpenGLContext> OpenGLSalBitmap::GetBitmapContext()
-{
-    return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
-}
-
 BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 {
     OpenGLVCLContextZone aContextZone;

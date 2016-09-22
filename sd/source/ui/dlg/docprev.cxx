@@ -50,18 +50,6 @@ using namespace ::com::sun::star::uno;
 
 const int SdDocPreviewWin::FRAME = 4;
 
-void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage )
-{
-    mpObj = pObj;
-    mnShowPage = nShowPage;
-    if (mxSlideShow.is())
-    {
-        mxSlideShow->end();
-        mxSlideShow.clear();
-    }
-    updateViewSettings();
-}
-
 VCL_BUILDER_DECL_FACTORY(SdDocPreviewWin)
 {
     WinBits nWinStyle = 0;
@@ -172,31 +160,6 @@ void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const Recta
     else
     {
         mxSlideShow->paint( rRect );
-    }
-}
-
-void SdDocPreviewWin::startPreview()
-{
-    ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell * >( mpObj );
-    if( pDocShell )
-    {
-        SdDrawDocument* pDoc = pDocShell->GetDoc();
-
-        if( pDoc )
-        {
-            SdPage* pPage = pDoc->GetSdPage( mnShowPage, PK_STANDARD );
-
-            if( pPage && (pPage->getTransitionType() != 0) )
-            {
-                if( !mxSlideShow.is() )
-                    mxSlideShow = sd::SlideShow::Create( pDoc );
-
-                Reference< XDrawPage > xDrawPage( pPage->getUnoPage(), UNO_QUERY );
-                Reference< XAnimationNode > xAnimationNode;
-
-                mxSlideShow->startPreview( xDrawPage, xAnimationNode, this );
-            }
-        }
     }
 }
 

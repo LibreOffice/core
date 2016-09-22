@@ -157,27 +157,9 @@ bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
     return false;
 }
 
-void ExtSheetBuffer::GetLink( const sal_uInt16 nExcIndex, OUString& rAppl, OUString& rDoc ) const
-{
-    OSL_ENSURE( nExcIndex > 0, "*ExtSheetBuffer::GetLink(): Index has to be >0!" );
-
-    if (!nExcIndex || nExcIndex > maEntries.size() )
-        return;
-
-    const Cont &rRet = maEntries[ nExcIndex -1 ];
-
-    rAppl = rRet.aFile;
-    rDoc = rRet.aTab;
-}
-
 void ExtSheetBuffer::Reset()
 {
     maEntries.clear();
-}
-
-bool ExtName::IsDDE() const
-{
-    return ( nFlags & 0x0001 ) != 0;
 }
 
 bool ExtName::IsOLE() const

@@ -135,11 +135,6 @@ SlideBackground::~SlideBackground()
     disposeOnce();
 }
 
-bool SlideBackground::IsDraw()
-{
-    return ( maApplication == vcl::EnumContext::Application_Draw );
-}
-
 bool SlideBackground::IsImpress()
 {
     return ( maApplication == vcl::EnumContext::Application_Impress );

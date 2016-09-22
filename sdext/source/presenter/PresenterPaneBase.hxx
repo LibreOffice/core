@@ -76,7 +76,6 @@ public:
     void SetTitle (const OUString& rsTitle);
     const OUString& GetTitle() const;
     const css::uno::Reference<css::drawing::framework::XPaneBorderPainter>& GetPaneBorderPainter() const;
-    void SetCalloutAnchor (const css::awt::Point& rAnchorPosition);
     const css::awt::Point& GetCalloutAnchor() const;
 
     // XInitialization

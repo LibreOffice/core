@@ -238,8 +238,6 @@ struct BinSingleRef2d
     void                setBiff8Data( sal_uInt16 nCol, sal_uInt16 nRow, bool bRelativeAsOffset );
 
     void                readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset );
-    void                readBiff2Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
-    void                readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
 };
 
 /** A 2D formula cell range reference struct with relative flags. */
@@ -249,8 +247,6 @@ struct BinComplexRef2d
     BinSingleRef2d      maRef2;             /// End (bottom-right) cell address.
 
     void                readBiff12Data( SequenceInputStream& rStrm, bool bRelativeAsOffset );
-    void                readBiff2Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
-    void                readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOffset );
 };
 
 // Token vector, token sequence ===============================================
@@ -551,9 +547,6 @@ public:
 
     /** Returns the function info for a BIFF12 function index, or 0 on error. */
     const FunctionInfo* getFuncInfoFromBiff12FuncId( sal_uInt16 nFuncId ) const;
-
-    /** Returns the function info for a BIFF2-BIFF8 function index, or 0 on error. */
-    const FunctionInfo* getFuncInfoFromBiffFuncId( sal_uInt16 nFuncId ) const;
 
     /** Returns the function info for a macro function referred by the
         EXTERN.CALL function, or 0 on error. */

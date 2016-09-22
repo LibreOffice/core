@@ -127,35 +127,6 @@ const Reference<drawing::framework::XPaneBorderPainter>&
     return mxBorderPainter;
 }
 
-void PresenterPaneBase::SetCalloutAnchor (const css::awt::Point& rCalloutAnchor)
-{
-    mbHasCallout = true;
-    // Anchor is given in the coordinate system of the parent window.
-    // Transform it into the local coordinate system.
-    maCalloutAnchor = rCalloutAnchor;
-    const awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());
-    maCalloutAnchor.X -= aBorderBox.X;
-    maCalloutAnchor.Y -= aBorderBox.Y;
-
-    // Move the bottom of the border window so that it goes through the
-    // callout anchor (special case for bottom callout).
-    sal_Int32 nHeight (rCalloutAnchor.Y - aBorderBox.Y);
-    if (mxBorderPainter.is() && mxPaneId.is())
-        nHeight += mxBorderPainter->getCalloutOffset(mxPaneId->getResourceURL()).Y;
-
-    if (nHeight != aBorderBox.Height)
-    {
-        mxBorderWindow->setPosSize(
-            aBorderBox.X,
-            aBorderBox.Y,
-            aBorderBox.Width,
-            nHeight,
-            awt::PosSize::HEIGHT);
-    }
-
-    mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
-}
-
 const awt::Point& PresenterPaneBase::GetCalloutAnchor() const
 {
     return maCalloutAnchor;

@@ -374,12 +374,6 @@ TemplateScanner::State TemplateScanner::ScanFolder()
     return eNextState;
 }
 
-void TemplateScanner::Scan()
-{
-    while (HasNextStep())
-        RunNextStep();
-}
-
 void TemplateScanner::RunNextStep()
 {
     switch (meState)

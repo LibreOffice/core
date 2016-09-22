@@ -89,7 +89,6 @@ class ScImportExport
 
 public:
     ScImportExport( ScDocument* );                  // the whole document
-    ScImportExport( ScDocument*, const OUString& );   // Range/cell input
     ScImportExport( ScDocument*, const ScAddress& );
     ScImportExport( ScDocument*, const ScRange& );
    ~ScImportExport();

@@ -109,7 +109,6 @@ public:
 
     void            GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool bInverted=false ) const;
     void            GetWholeCoord( GLfloat* pCoord ) const;
-    OpenGLTexture   GetWholeTexture();
     void            Bind();
     void            Unbind();
     void            Read( GLenum nFormat, GLenum nType, sal_uInt8* pData );

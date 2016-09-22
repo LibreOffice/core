@@ -434,8 +434,6 @@ struct ApiBorderData
     bool                hasAnyOuterBorder() const;
 };
 
-bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight );
-
 class Border : public WorkbookHelper
 {
 public:
@@ -460,9 +458,6 @@ public:
     inline const ApiBorderData& getApiData() const { return maApiData; }
 
     void fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
-
-    /** Writes all border attributes to the passed property map. */
-    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
 private:
     /** Returns the border line struct specified by the passed XML token identifier. */
@@ -528,8 +523,6 @@ struct ApiSolidFillData
     explicit            ApiSolidFillData();
 };
 
-bool operator==( const ApiSolidFillData& rLeft, const ApiSolidFillData& rRight );
-
 /** Contains cell fill attributes, either a pattern fill or a gradient fill. */
 class Fill : public WorkbookHelper
 {
@@ -563,12 +556,7 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    /** Returns the converted API fill data struct. */
-    inline const ApiSolidFillData& getApiData() const { return maApiData; }
-
     void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
-    /** Writes all fill attributes to the passed property map. */
-    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
 private:
     typedef std::shared_ptr< PatternFillModel >   PatternModelRef;
