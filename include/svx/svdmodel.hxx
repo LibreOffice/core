@@ -126,7 +126,6 @@ private:
     SdrHintKind                             meHint;
     const SdrObject*                        mpObj;
     const SdrPage*                          mpPage;
-    Rectangle                               maRectangle;
 
 public:
     explicit SdrHint(SdrHintKind eNewHint);
