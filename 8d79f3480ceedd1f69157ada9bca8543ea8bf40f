@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba5da102_ee8cc037",
+        "filename": "svl/source/inc/poolio.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-09-22T19:12:51Z",
+      "side": 1,
+      "message": "done in follow up",
+      "parentUuid": "ba5da102_8ec8a476",
+      "revId": "8d79f3480ceedd1f69157ada9bca8543ea8bf40f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba5da102_aec5685c",
         "filename": "svl/source/inc/poolio.hxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-09-22T19:02:13Z",
       "side": 1,
       "message": "const?",
+      "revId": "8d79f3480ceedd1f69157ada9bca8543ea8bf40f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_ce87fc10",
+        "filename": "svl/source/inc/poolio.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-09-22T19:12:51Z",
+      "side": 1,
+      "message": "thanks, forgot",
+      "parentUuid": "ba5da102_aec5685c",
       "revId": "8d79f3480ceedd1f69157ada9bca8543ea8bf40f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
