@@ -1357,8 +1357,6 @@ endef
 
 endif # SYSTEM_FONTCONFIG
 
-ifeq ($(ENABLE_GRAPHITE),TRUE)
-
 ifneq ($(SYSTEM_GRAPHITE),)
 
 define gb_LinkTarget__use_graphite
@@ -1385,12 +1383,6 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 endef
 
 endif # SYSTEM_GRAPHITE
-
-else # !ENABLE_GRAPHITE
-
-gb_LinkTarget__use_graphite :=
-
-endif # ENABLE_GRAPHITE
 
 ifneq ($(SYSTEM_ICU),)
 
