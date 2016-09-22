@@ -646,7 +646,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         pItemArr = pImpl->maPoolItems[nIndex];
     }
 
-    std::vector<SfxPoolItem*>::iterator ppFree;
+    SfxPoolItemArrayBase_Impl::iterator ppFree;
     bool ppFreeIsSet = false;
 
     // Is this a 'poolable' item - ie. should we re-use and return
@@ -693,7 +693,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         // Unconditionally insert; check for a recently freed place
         if (pItemArr->maFree.size() > 0)
         {
-            auto itr = pItemArr->begin();
+            SfxPoolItemArrayBase_Impl::iterator itr = pItemArr->begin();
             sal_uInt32 nIdx = pItemArr->maFree.back();
             pItemArr->maFree.pop_back();
 
