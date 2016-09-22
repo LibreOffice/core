@@ -136,6 +136,49 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
     aRange.aEnd.SetTab( aRange.aStart.Tab() );
 }
 
+// Evaluate input string - either range, cell or the whole document (when error)
+// If a View exists, the TabNo of the view will be used.
+ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
+    : pDocSh( dynamic_cast< ScDocShell* >(p->GetDocumentShell()) ), pDoc( p ),
+      nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
+      bFormulas( false ), bIncludeFiltered( true ),
+      bAll( false ), bSingle( true ), bUndo( pDocSh != nullptr ),
+      bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
+      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ),
+      mExportTextOptions()
+{
+    pUndoDoc = nullptr;
+    pExtOptions = nullptr;
+
+    SCTAB nTab = ScDocShell::GetCurTab();
+    aRange.aStart.SetTab( nTab );
+    OUString aPos( rPos );
+    // Named range?
+    ScRangeName* pRange = pDoc->GetRangeName();
+    if (pRange)
+    {
+        const ScRangeData* pData = pRange->findByUpperName(ScGlobal::pCharClass->uppercase(aPos));
+        if (pData)
+        {
+            if( pData->HasType( ScRangeData::Type::RefArea )
+                || pData->HasType( ScRangeData::Type::AbsArea )
+                || pData->HasType( ScRangeData::Type::AbsPos ) )
+            {
+                pData->GetSymbol(aPos);
+            }
+        }
+    }
+    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
+    // Range?
+    if (aRange.Parse(aPos, pDoc, eConv) & ScRefFlags::VALID)
+        bSingle = false;
+    // Cell?
+    else if (aRange.aStart.Parse(aPos, pDoc, eConv) & ScRefFlags::VALID)
+        aRange.aEnd = aRange.aStart;
+    else
+        bAll = true;
+}
+
 ScImportExport::~ScImportExport()
 {
     delete pUndoDoc;
