@@ -10,8 +10,6 @@
 # please make generic modifications to unxgcc.mk or android.mk
 gb_CPUDEFS += -DARM32
 gb_COMPILEROPTFLAGS := -Os
-gb_CXXFLAGS += -fno-omit-frame-pointer
-gb_CFLAGS += -fno-omit-frame-pointer
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 include $(GBUILDDIR)/platform/android.mk
