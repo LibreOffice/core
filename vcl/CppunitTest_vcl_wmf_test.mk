@@ -80,6 +80,7 @@ endif
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
     gio \
+    graphite \
     harfbuzz \
     icuuc \
     lcms2 \
@@ -88,10 +89,6 @@ ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
      glew \
  ))
-endif
-
-ifeq ($(ENABLE_GRAPHITE),TRUE)
-$(eval $(call gb_CppunitTest_use_external,vcl_wmf_test,graphite))
 endif
 
 ifeq ($(OS),MACOSX)
