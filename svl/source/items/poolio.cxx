@@ -451,7 +451,6 @@ void SfxItemPool_Impl::readTheItems (
                     {
                         // Reuse
                         SfxItemPool::AddRef( *pOldItem, rpNewItem->GetRefCount() );
-                        SfxItemPool::SetRefCount( *rpNewItem, 0 );
                         delete rpNewItem;
                         rpNewItem = pOldItem;
                         bFound = true;
