@@ -343,7 +343,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             QRect rect( menuItemRect.topLeft() - widgetRect.topLeft(),
                 widgetRect.size().expandedTo( menuItemRect.size()));
             draw( QStyle::CE_MenuItem, &option, m_image.get(),
-                  vclStateValue2StateFlag(nControlState, value), rect );
+                  vclStateValue2StateFlag(nControlState & ~ControlState::PRESSED, value), rect );
         }
         else if( part == ControlPart::Entire )
         {
