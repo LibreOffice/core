@@ -985,9 +985,6 @@ OUString GetString( double f, bool bLeadingSign, sal_uInt16 nMaxDig )
 double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
     double fRestVal, double fPer, double fRate, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    if( nBase == 2 )
-        throw lang::IllegalArgumentException();
-
     sal_uInt32  nPer = sal_uInt32( fPer );
     double      fUsePer = 1.0 / fRate;
     double      fAmorCoeff;
@@ -1033,9 +1030,6 @@ double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int
 double GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
     double fRestVal, double fPer, double fRate, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    if( nBase == 2 )
-        throw lang::IllegalArgumentException();
-
     sal_uInt32  nPer = sal_uInt32( fPer );
     double      fOneRate = fCost * fRate;
     double      fCostDelta = fCost - fRestVal;
