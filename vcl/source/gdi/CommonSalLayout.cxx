@@ -373,7 +373,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             aHbScript = it->maScript;
             // hb_language_from_string() accept ISO639-3 language tag except for Chinese.
             LanguageTag &rTag = rArgs.maLanguageTag;
-            OString sLanguage = OUStringToOString(MsLangId::isChinese(rTag.getLanguageType()) ? rTag.getBcp47():rTag.getLanguage() , RTL_TEXTENCODING_UTF8);
+            OString sLanguage = OUStringToOString(rTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
 
             int nHbFlags = HB_BUFFER_FLAGS_DEFAULT;
             if (nMinRunPos == 0)
