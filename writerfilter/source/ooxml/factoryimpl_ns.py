@@ -706,7 +706,9 @@ def createImpl(modelNode, nsName):
 #include "oox/token/tokens.hxx"
 
 #ifdef _MSC_VER
+#pragma warning(disable:4060) // switch statement contains no 'case' or 'default' labels
 #pragma warning(disable:4065) // switch statement contains 'default' but no 'case' labels
+#pragma warning(disable:4702) // unreachable code
 #endif
 
 namespace writerfilter {
