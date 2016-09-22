@@ -91,7 +91,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="nonbreak">
-                            <property name="label" translatable="yes">Non-breaking s_paces</property>
+                            <property name="label" translatable="yes">Non-breaking _characters</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
