@@ -119,8 +119,6 @@ public:
     const SbxValues& GetValues_Impl() const { return aData; }
     bool Put( const SbxValues& );
 
-    SbxValues * data() { return &aData; }
-
     sal_Unicode GetChar() const;
     sal_Int16   GetInteger() const;
     sal_Int32   GetLong() const;

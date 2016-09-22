@@ -179,11 +179,6 @@ void ControllerItem::ResetFrame()
     mxFrame = nullptr;
 }
 
-Image ControllerItem::GetIcon() const
-{
-    return GetImage(mxFrame, ".uno:" + msCommandName, false);
-}
-
 ControllerItem::ItemUpdateReceiverInterface::~ItemUpdateReceiverInterface()
 {
 }

@@ -177,24 +177,6 @@ void MemRingBuffer::forgetFromStart( sal_Int32 nBytesToForget ) throw (css::io::
 }
 
 
-void MemRingBuffer::shrink() throw ()
-{
-    checkInvariants();
-
-    // Up to now, only shrinking of while buffer works.
-    // No other shrinking supported up to now.
-    if( ! m_nOccupiedBuffer ) {
-        if( m_p ) {
-            free( m_p );
-        }
-        m_p = nullptr;
-        m_nBufferLen = 0;
-        m_nStart = 0;
-    }
-
-    checkInvariants();
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

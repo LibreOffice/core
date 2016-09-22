@@ -38,11 +38,6 @@ public:
         return true;
     }
 
-    const std::vector< vcl::EnumContext::Context >& GetContext() const
-    {
-        return maContext;
-    }
-
 private:
     std::vector<vcl::EnumContext::Context> maContext;
 };

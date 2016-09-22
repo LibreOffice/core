@@ -59,14 +59,6 @@ void PageNumberListBox::SetSelection( sal_uInt16 nPos )
     SelectEntryPos( ( nSelPos != LISTBOX_ENTRY_NOTFOUND ) ? nSelPos : nUserPos );
 }
 
-sal_uInt16 PageNumberListBox::GetSelection() const
-{
-    const sal_Int32 nPos = GetSelectEntryPos();
-    sal_uInt16 nData = (sal_uInt16)reinterpret_cast<sal_uLong>(GetEntryData( nPos ));
-
-    return nData;
-}
-
 Size PageNumberListBox::GetOptimalSize() const
 {
     return Size(150, ListBox::GetOptimalSize().Height());

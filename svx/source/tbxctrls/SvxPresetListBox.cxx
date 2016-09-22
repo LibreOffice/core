@@ -31,7 +31,6 @@
 SvxPresetListBox::SvxPresetListBox(vcl::Window* pParent, WinBits nWinStyle)
     : ValueSet(pParent, nWinStyle),
       nColCount(3),
-      nRowCount(5),
       aIconSize( Size(60,64) )
 {
     SetEdgeBlending(true);

@@ -394,7 +394,6 @@ private:
 
             virtual ~TheModel() override;
 
-            void        SetOwnership( bool bGetsOwnership );
             void        addListener( ChartController* pController );
             void        removeListener(  ChartController* pController );
             void        tryTermination();

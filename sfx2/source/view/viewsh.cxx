@@ -1503,19 +1503,9 @@ void SfxViewShell::setTiledSearching(bool bTiledSearching)
     pImpl->m_bTiledSearching = bTiledSearching;
 }
 
-bool SfxViewShell::isTiledSearching() const
-{
-    return pImpl->m_bTiledSearching;
-}
-
 void SfxViewShell::setTiledPainting(bool bTiledPainting)
 {
     pImpl->m_bTiledPainting = bTiledPainting;
-}
-
-bool SfxViewShell::isTiledPainting() const
-{
-    return pImpl->m_bTiledPainting;
 }
 
 int SfxViewShell::getPart() const

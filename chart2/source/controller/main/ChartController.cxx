@@ -143,11 +143,6 @@ ChartController::TheModel::~TheModel()
 {
 }
 
-void ChartController::TheModel::SetOwnership( bool bGetsOwnership )
-{
-    m_bOwnership                = bGetsOwnership;
-}
-
 void ChartController::TheModel::addListener( ChartController* pController )
 {
     if(m_xCloseable.is())

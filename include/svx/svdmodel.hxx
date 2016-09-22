@@ -137,7 +137,6 @@ public:
     const SdrPage*   GetPage() const { return mpPage;}
     const SdrObject* GetObject() const { return mpObj;}
     SdrHintKind      GetKind() const { return meHint;}
-    const Rectangle& GetRectangle() const { return maRectangle;}
 };
 
 

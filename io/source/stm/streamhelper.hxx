@@ -47,8 +47,6 @@ public:
     sal_Int32   getSize() const throw();
     void    forgetFromStart(sal_Int32 nBytesToForget) throw(css::io::BufferSizeExceededException);
 
-    void shrink() throw();
-
 private:
 
     void resizeBuffer(sal_Int32 nMinSize) throw(css::io::BufferSizeExceededException);

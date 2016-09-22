@@ -551,20 +551,6 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
     return it != m_aPrinters.end() ? it->second.m_aInfo : aEmptyInfo;
 }
 
-void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo )
-{
-    std::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinter );
-
-    SAL_WARN_IF( it == m_aPrinters.end(), "vcl", "Do not change nonexistent printers" );
-
-    if( it != m_aPrinters.end() )
-    {
-        it->second.m_aInfo      = rNewInfo;
-        it->second.m_bModified  = true;
-        writePrinterConfig();
-    }
-}
-
 // need to check writeability / creatability of config files
 static bool checkWriteability( const OUString& rUniPath )
 {

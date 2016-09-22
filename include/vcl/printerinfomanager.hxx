@@ -145,9 +145,6 @@ public:
 
     virtual void setupJobContextData( JobData& rData );
 
-    // changes the info about a named printer
-    virtual void changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo );
-
     // check if the printer configuration has changed
     // if bwait is true, then this method waits for eventual asynchronous
     // printer discovery to finish

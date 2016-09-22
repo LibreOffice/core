@@ -402,8 +402,6 @@ public:
 
     /// Shows or hides items.
     void                ShowItem(sal_uInt16 nItemId, bool bVisible = true);
-    /// Overload to provide ShowItem via command id.
-    void                ShowItem(const OUString& rCommand, bool bVisible) { ShowItem(GetItemId(rCommand), bVisible); }
 
     /// Convenience method to hide items (via ShowItem).
     void                HideItem(sal_uInt16 nItemId) { ShowItem( nItemId, false ); }

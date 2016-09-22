@@ -39,23 +39,6 @@
 #include <vector>
 
 /**
- * class FmSearchThread
- */
-class FmSearchEngine;
-class SAL_WARN_UNUSED FmSearchThread : public ::osl::Thread
-{
-    FmSearchEngine*            m_pEngine;
-    Link<FmSearchThread*,void> m_aTerminationHdl;
-
-    virtual void SAL_CALL run() override;
-    virtual void SAL_CALL onTerminated() override;
-
-public:
-    FmSearchThread(FmSearchEngine* pEngine) : m_pEngine(pEngine) { }
-    void setTerminationHandler(Link<FmSearchThread*,void> aHdl) { m_aTerminationHdl = aHdl; }
-};
-
-/**
  * struct FmSearchProgress - the owner of SearchEngine receives this structure for status updates
  * (at the end of the search)
  */
@@ -360,14 +343,10 @@ private:
     SVX_DLLPRIVATE bool MoveField(sal_Int32& nPos, FieldCollection::iterator& iter, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
     // moves the iterator with respect to the direction/overflow iterator/overflow cursor
     SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const css::uno::Reference< css::container::XIndexAccess >& xAllFields, sal_Int32 nField);
-    // builds a FieldInfo in relation to field number nField (in xAllFields) and adds it to m_arrUsedFields
-    // xAllFields needs to support the DatabaseRecord service
-    SVX_DLLPRIVATE OUString FormatField(const FieldInfo& rField);
-    // formats the field with the NumberFormatter
 
     SVX_DLLPRIVATE bool HasPreviousLoc() { return m_aPreviousLocBookmark.hasValue(); }
 
-    DECL_LINK_TYPED(OnSearchTerminated, FmSearchThread*, void);
+    void OnSearchTerminated();
     // is used by SearchThread, after the return from this handler the thread removes itself
     DECL_LINK_TYPED(OnNewRecordCount, sal_Int32, void);
 };

@@ -54,7 +54,6 @@ protected:
 
     void ReadUnknownData();
     void ReadBitmapData();
-    void ReadOLEData();
 
     virtual ~SvRTFParser() override;
 

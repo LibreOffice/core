@@ -49,10 +49,6 @@ public:
 
     static void storeExceptionHandler(google_breakpad::ExceptionHandler* pExceptionHandler);
 
-    // when we create the ExceptionHandler we have no access to the user
-    // profile yet, so update when we have access
-    static void updateMinidumpLocation();
-
 private:
 
     static osl::Mutex maMutex;

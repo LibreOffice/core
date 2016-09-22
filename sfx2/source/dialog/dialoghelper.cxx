@@ -63,11 +63,6 @@ Size getDrawPreviewOptimalSize(const vcl::Window *pReference)
     return pReference->LogicToPixel(Size(88, 42), MAP_APPFONT);
 }
 
-Size getDrawListBoxOptimalSize(const vcl::Window *pReference)
-{
-    return pReference->LogicToPixel(Size(88, 110), MAP_APPFONT);
-}
-
 Size getPreviewStripSize(const vcl::Window *pReference)
 {
     return pReference->LogicToPixel(Size(70 , 40), MapMode(MAP_APPFONT));

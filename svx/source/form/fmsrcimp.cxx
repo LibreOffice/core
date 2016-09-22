@@ -65,23 +65,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
 
-// = FmSearchThread
-
-void FmSearchThread::run()
-{
-    osl_setThreadName("FmSearchThread");
-
-    m_pEngine->SearchNextImpl();
-};
-
-
-void FmSearchThread::onTerminated()
-{
-    m_aTerminationHdl.Call(this);
-    delete this;
-}
-
-
 // = FmRecordCountListener
 
 //  SMART_UNO_IMPLEMENTATION(FmRecordCountListener, UsrObject);
@@ -319,37 +302,6 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< css::container::XI
     m_arrUsedFields.insert(m_arrUsedFields.end(), fiCurrent);
 
 }
-
-OUString FmSearchEngine::FormatField(const FieldInfo& rField)
-{
-    if (!m_xFormatter.is())
-        return OUString();
-    // sonst werden Datumsflder zum Beispiel zu irgendeinem Default-Wert formatiert
-
-    OUString sReturn;
-    try
-    {
-        if (rField.bDoubleHandling)
-        {
-            double fValue = rField.xContents->getDouble();
-            if (!rField.xContents->wasNull())
-                sReturn = m_xFormatter->convertNumberToString(rField.nFormatKey, fValue);
-        }
-        else
-        {
-            OUString sValue = rField.xContents->getString();
-            if (!rField.xContents->wasNull())
-                sReturn = m_xFormatter->formatString(rField.nFormatKey, sValue);
-        }
-    }
-    catch(...)
-    {
-    }
-
-
-    return sReturn;
-}
-
 
 OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
 {
@@ -983,7 +935,7 @@ void FmSearchEngine::SearchNextImpl()
 }
 
 
-IMPL_LINK_NOARG_TYPED(FmSearchEngine, OnSearchTerminated, FmSearchThread*, void)
+void FmSearchEngine::OnSearchTerminated()
 {
     if (!m_aProgressHandler.IsSet())
         return;
@@ -1077,7 +1029,7 @@ void FmSearchEngine::ImplStartNextSearch()
     m_bSearchingCurrently = true;
 
     SearchNextImpl();
-    LINK(this, FmSearchEngine, OnSearchTerminated).Call(nullptr);
+    OnSearchTerminated();
 }
 
 

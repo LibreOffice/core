@@ -214,10 +214,8 @@ public:
     void SetDirty(bool bDirty) { mbListDirty = bDirty; }
 
     bool IsEmbedInDocument() const { return mbEmbedInDocument; }
-    void SetEmbedInDocument(bool b) { mbEmbedInDocument = b; }
 
     static OUString GetDefaultExt(XPropertyListType t);
-    static OUString GetDefaultExtFilter(XPropertyListType t);
     OUString GetDefaultExt() const { return GetDefaultExt(meType); }
 
     virtual css::uno::Reference< css::container::XNameContainer >

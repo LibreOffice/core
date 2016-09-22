@@ -1541,12 +1541,6 @@ StyleSettings::SetPreferredContextMenuShortcuts( bool bContextMenuShortcuts )
     mxData->mbPreferredContextMenuShortcuts = bContextMenuShortcuts;
 }
 
-bool
-StyleSettings::GetPreferredContextMenuShortcuts() const
-{
-    return mxData->mbPreferredContextMenuShortcuts;
-}
-
 void
 StyleSettings::SetPrimaryButtonWarpsSlider( bool bPrimaryButtonWarpsSlider )
 {

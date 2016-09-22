@@ -177,7 +177,6 @@ public:
 public: // Overridden methods
 
     /* added by  */
-    CBenValue * GetValue(){ return cpValue; };
     sal_uLong GetSize() { return m_ulValueLength; };
 protected: // Overridden methods
 

@@ -233,6 +233,8 @@ for d in definitionSet:
     # used by Windows build
     if any(x in d[1] for x in ["DdeTopic::", "DdeData::", "DdeService::", "DdeTransaction::", "DdeConnection::", "DdeLink::", "DdeItem::", "DdeGetPutItem::"]):
        continue
+    if method == "class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)":
+       continue
     # too much template magic here for my plugin
     if (   ("cairocanvas::" in d[1])
         or ("canvas::" in d[1])
@@ -268,9 +270,14 @@ for d in definitionSet:
         continue
     if "::operator" in d[1]:
         continue
+
     location = definitionToSourceLocationMap[d];
     # whacky template stuff
     if location.startswith("sc/source/ui/vba/vbaformat.hxx"): continue
+    # not sure how this stuff is called
+    if location.startswith("include/test"): continue
+    # leave the debug/dump alone
+    if location.startswith("include/oox/dump"): continue
 
     unusedSet.add(d) # used by the "unused return types" analysis
     tmp1set.add((method, location))
