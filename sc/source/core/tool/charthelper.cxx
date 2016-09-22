@@ -224,13 +224,9 @@ void ScChartHelper::GetChartRanges( const uno::Reference< chart2::XChartDocument
         uno::Reference< chart2::data::XDataSequence > xValues( xLabeledSequence->getValues());
 
         if (xLabel.is())
-             rRanges.push_back( xLabel->getSourceRangeRepresentation() );
-         else
-             rRanges.push_back( OUString() );
-         if (xValues.is())
-             rRanges.push_back( xValues->getSourceRangeRepresentation() );
-         else
-             rRanges.push_back( OUString() );
+            rRanges.push_back( xLabel->getSourceRangeRepresentation() );
+        if (xValues.is())
+            rRanges.push_back( xValues->getSourceRangeRepresentation() );
     }
 }
 
