@@ -30,8 +30,7 @@
 
 
 SalFrame::SalFrame()
-    : m_bPaintsBlocked(false)
-    , m_pWindow(nullptr)
+    : m_pWindow(nullptr)
     , m_pProc(nullptr)
 {
 }
