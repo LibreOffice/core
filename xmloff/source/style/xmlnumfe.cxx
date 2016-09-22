@@ -1321,8 +1321,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NF_SYMBOLTYPE_EXP:
                     bExpFound = true;           // following digits are exponent digits
                     bInInteger = false;
-                    if ( pElemStr && pElemStr->getLength() == 1 )
-                        bExpSign = false;       // for 0.00E0
+                    if ( pElemStr && ( pElemStr->getLength() == 1
+                                  || ( pElemStr->getLength() == 2 && (*pElemStr)[1] == '-' ) ) )
+                        bExpSign = false;       // for 0.00E0 or 0.00E-00
                     break;
                 case NF_SYMBOLTYPE_CURRENCY:
                     bCurrFound = true;
