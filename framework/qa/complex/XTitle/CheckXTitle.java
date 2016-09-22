@@ -100,18 +100,52 @@ public class CheckXTitle
         m_xMSF    = null;
     }
 
+    private URL parseURL(String unoURL)
+    {
+        URL[] aParseURL = new URL[] { new URL() };
+        aParseURL[0].Complete = unoURL;
+        m_xParser.parseStrict(aParseURL);
+        return aParseURL[0];
+    }
+
+    private void waitUntilDispatcherAvailable(XModel xModel, String unoURL)
+        throws InterruptedException
+    {
+        utils.waitForEventIdle(m_xMSF);
+
+        // On Windows, some events such as focus changes are handled
+        // asynchronously using PostMessage (Windows message queue)
+        // so the previous UI transition may still not have completed yet
+        // even though we called waitForEventIdle.
+        //
+        // Loop a few times until the desired dispatcher is available, which
+        // is a better indication that the UI transition has completed.
+
+        XDispatchProvider xDisProv;
+        XDispatch xDispatcher = null;
+        URL parsed_url = parseURL(unoURL);
+
+        for (int ntries = 1; ntries < 5; ++ntries) {
+            xDisProv = UnoRuntime.queryInterface(
+                XDispatchProvider.class, xModel.getCurrentController() );
+            xDispatcher = xDisProv.queryDispatch(parsed_url, "", 0);
+            if (xDispatcher != null)
+                break;
+            Thread.sleep(250);
+        }
+        assertNotNull("Can not obtain dispatcher for query: " + unoURL, xDispatcher);
+    }
+
+
     // prepare an uno URL query and dispatch it
     private void prepareQueryAndDispatch(XDispatchProvider xDisProv, String unoURL)
     {
         XDispatch xDispatcher = null;
-        URL[] aParseURL = new URL[1];
-        aParseURL[0] = new URL();
-        aParseURL[0].Complete = unoURL;
-        m_xParser.parseStrict(aParseURL);
+        URL parsed_url = parseURL(unoURL);
 
-        xDispatcher = xDisProv.queryDispatch(aParseURL[0], "", 0);
+        xDispatcher = xDisProv.queryDispatch(parsed_url, "", 0);
         assertNotNull("Can not obtain dispatcher for query: " + unoURL, xDispatcher);
-        xDispatcher.dispatch(aParseURL[0], null);
+        xDispatcher.dispatch(parsed_url, null);
     }
 
     /** @short checks the numbers displayed in the title
@@ -142,7 +176,8 @@ public class CheckXTitle
 
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
         prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_PRINT_PREVIEW );
-        utils.waitForEventIdle(m_xMSF);
+        waitUntilDispatcherAvailable( xModel, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
+
         // get window title with ui in print preview mode
         String printPreviewTitle = xTitle.getTitle();
         assertEquals("Title mismatch between default view window title and print preview window title",
@@ -150,7 +185,8 @@ public class CheckXTitle
 
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
         prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
-        utils.waitForEventIdle(m_xMSF);
+        waitUntilDispatcherAvailable( xModel, UNO_URL_FOR_CLOSING_DOC );
+
         //get window title with ui back in default mode
         String printPreviewClosedTitle = xTitle.getTitle();
         assertEquals("Title mismatch between default view window title and title after switching from print preview to default view window"                     ,defaultTitle, printPreviewClosedTitle);
@@ -189,14 +225,12 @@ public class CheckXTitle
         // switch to print preview mode
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
         prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_PRINT_PREVIEW );
-        utils.waitForEventIdle(m_xMSF);
+        waitUntilDispatcherAvailable( xModel, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
 
         // switch back to default mode
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
         prepareQueryAndDispatch( xDisProv, UNO_URL_FOR_CLOSING_PRINT_PREVIEW );
-        utils.waitForEventIdle(m_xMSF);
-
-        Thread.sleep(250); // FIXME why is this needed?
+        waitUntilDispatcherAvailable( xModel, UNO_URL_FOR_CLOSING_DOC );
 
         // close document
         xDisProv = UnoRuntime.queryInterface( XDispatchProvider.class, xModel.getCurrentController() );
