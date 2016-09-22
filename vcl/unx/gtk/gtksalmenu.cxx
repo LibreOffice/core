@@ -977,6 +977,7 @@ bool GtkSalMenu::NativeSetItemCommand( unsigned nSection,
             gchar* pLabel = g_lo_menu_get_label_from_item_in_section(pMenu, nSection, nItemPos);
             g_lo_menu_remove_from_section(pMenu, nSection, nItemPos);
             g_lo_menu_insert_in_section(pMenu, nSection, nItemPos, pLabel);
+            g_free(pLabel);
         }
 
         g_lo_menu_set_command_to_item_in_section( pMenu, nSection, nItemPos, aCommand );
