@@ -715,6 +715,19 @@ sal_Bool OleComponent::InitializeObject_Impl()
     return sal_True;
 }
 
+namespace
+{
+    HRESULT OleLoadSeh(LPSTORAGE pIStorage, LPVOID* ppObj)
+    {
+        HRESULT hr = E_FAIL;
+        __try {
+            hr = OleLoad(pIStorage, IID_IUnknown, NULL, ppObj);
+        } __except( EXCEPTION_EXECUTE_HANDLER ) {
+            return E_FAIL;
+        }
+        return hr;
+    }
+}
 
 void OleComponent::LoadEmbeddedObject( const OUString& aTempURL )
 {
@@ -730,7 +743,7 @@ void OleComponent::LoadEmbeddedObject( const OUString& aTempURL )
     if ( FAILED( hr ) || !m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO: transport error code?
 
-    hr = OleLoad( m_pNativeImpl->m_pIStorage, IID_IUnknown, NULL, (void**)&m_pNativeImpl->m_pObj );
+    hr = OleLoadSeh(m_pNativeImpl->m_pIStorage, (void**)&m_pNativeImpl->m_pObj);
     if ( FAILED( hr ) || !m_pNativeImpl->m_pObj )
     {
         throw uno::RuntimeException();
@@ -963,7 +976,7 @@ void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
                 {
                     hr = pObjectStorage->CopyTo( 0, NULL, NULL, m_pNativeImpl->m_pIStorage );
                     if ( SUCCEEDED( hr ) )
-                        hr = OleLoad( m_pNativeImpl->m_pIStorage, IID_IUnknown, NULL, (void**)&m_pNativeImpl->m_pObj );
+                        hr = OleLoadSeh(m_pNativeImpl->m_pIStorage, (void**)&m_pNativeImpl->m_pObj);
                 }
             }
         }
