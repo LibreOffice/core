@@ -96,6 +96,24 @@
       "revId": "22438b62a6222669c4a2cd7606788674e3a325b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_d3bb2374",
+        "filename": "sc/source/core/data/clipcontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-09-22T13:04:24Z",
+      "side": 1,
+      "message": "only if I add some kind of helper method to do auto-conversion to bool.\nWhich would have the nasty side-effect of allowing the enum values to be auto-cast to int, which kind of reduce the value of \u0027enum class\u0027 i.t.o. type checking",
+      "parentUuid": "ba5da102_52c71445",
+      "revId": "22438b62a6222669c4a2cd7606788674e3a325b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
