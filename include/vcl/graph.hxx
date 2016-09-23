@@ -116,6 +116,7 @@ public:
 public:
                     Graphic();
                     Graphic( const Graphic& rGraphic );
+                    Graphic( Graphic&& rGraphic );
                     Graphic( const Bitmap& rBmp );
                     Graphic( const BitmapEx& rBmpEx );
                     Graphic( const SvgDataPtr& rSvgDataPtr );
@@ -125,6 +126,7 @@ public:
     virtual         ~Graphic() override;
 
     Graphic&        operator=( const Graphic& rGraphic );
+    Graphic&        operator=( Graphic&& rGraphic );
     bool            operator==( const Graphic& rGraphic ) const;
     bool            operator!=( const Graphic& rGraphic ) const;
     bool            operator!() const;

@@ -183,13 +183,17 @@ Graphic::Graphic()
 {
 }
 
-Graphic::Graphic( const Graphic& rGraphic ) :
-SvDataCopyStream()
+Graphic::Graphic(const Graphic& rGraphic)
 {
     if( rGraphic.IsAnimated() )
         mxImpGraphic.reset(new ImpGraphic(*rGraphic.mxImpGraphic));
     else
         mxImpGraphic = rGraphic.mxImpGraphic;
+}
+
+Graphic::Graphic(Graphic&& rGraphic)
+    : mxImpGraphic(std::move(rGraphic.mxImpGraphic))
+{
 }
 
 Graphic::Graphic(const Bitmap& rBmp)
@@ -261,6 +265,12 @@ Graphic& Graphic::operator=( const Graphic& rGraphic )
         }
     }
 
+    return *this;
+}
+
+Graphic& Graphic::operator=(Graphic&& rGraphic)
+{
+    mxImpGraphic = std::move(rGraphic.mxImpGraphic);
     return *this;
 }
 
