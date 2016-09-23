@@ -643,18 +643,22 @@ Components::~Components()
         (*i)->setAlive(false);
     }
 
-    // test backup of registrymodifications
-    static bool bFeatureSecureUserConfig(true);
-
     if (!bExitWasCalled &&
-        bFeatureSecureUserConfig &&
         ModificationTarget::File == modificationTarget_ &&
         !modificationFileUrl_.isEmpty())
     {
-        static sal_uInt16 nNumCopies(5);
-        comphelper::BackupFileHelper aBackupFileHelper(modificationFileUrl_, nNumCopies);
+        // test backup of registrymodifications
+        sal_uInt16 nSecureUserConfigNumCopies(0);
 
-        aBackupFileHelper.tryPush();
+        // read configuration from soffice.ini
+        const bool bSecureUserConfig(comphelper::BackupFileHelper::getSecureUserConfig(nSecureUserConfigNumCopies));
+
+        if (bSecureUserConfig)
+        {
+            comphelper::BackupFileHelper aBackupFileHelper(modificationFileUrl_, nSecureUserConfigNumCopies);
+
+            aBackupFileHelper.tryPush();
+        }
     }
 }
 

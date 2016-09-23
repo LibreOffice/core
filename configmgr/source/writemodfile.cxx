@@ -400,6 +400,16 @@ void writeNode(
     }
 }
 
+// helpers to allow sorting of configmgr::Modifications::Node
+typedef std::pair< const rtl::OUString, configmgr::Modifications::Node > ModNodePairEntry;
+struct PairEntrySorter
+{
+    bool operator() (const ModNodePairEntry* pValue1, const ModNodePairEntry* pValue2) const
+    {
+        return pValue1->first.compareTo(pValue2->first) < 0;
+    }
+};
+
 void writeModifications(
     Components & components, TempFile &handle,
     OUString const & parentPathRepresentation,
@@ -459,11 +469,27 @@ void writeModifications(
         OUString pathRep(
             parentPathRepresentation + "/" +
             Data::createSegment(node->getTemplateName(), nodeName));
-        for (const auto & i : modifications.children)
+
+        // copy configmgr::Modifications::Node's to a sortable list. Use pointers
+        // to just reference the data instead of copying it
+        std::vector< const ModNodePairEntry* > ModNodePairEntryVector;
+        ModNodePairEntryVector.reserve(modifications.children.size());
+
+        for (const auto& rCand : modifications.children)
+        {
+            ModNodePairEntryVector.push_back(&rCand);
+        }
+
+        // sort the list
+        std::sort(ModNodePairEntryVector.begin(), ModNodePairEntryVector.end(), PairEntrySorter());
+
+        // now use the list to write entries in sorted order
+        // instead of random as from the unordered map
+        for (const auto & i : ModNodePairEntryVector)
         {
             writeModifications(
-                components, handle, pathRep, node, i.first,
-                node->getMember(i.first), i.second);
+                components, handle, pathRep, node, i->first,
+                node->getMember(i->first), i->second);
         }
     }
 }
@@ -601,9 +627,31 @@ void writeModFile(
     //TODO: Do not write back information about those removed items that did not
     // come from the .xcs/.xcu files, anyway (but had been added dynamically
     // instead):
-    for (Modifications::Node::Children::const_iterator j(
-             data.modifications.getRoot().children.begin());
-         j != data.modifications.getRoot().children.end(); ++j)
+
+    // For profilesafemode it is necessary to detect changes in the
+    // registrymodifications file, this is done based on file size in bytes and crc32.
+    // Unfortunately this write is based on writing unordered map entries, which creates
+    // valid and semantically equal XML-Files, bubt with different crc32 checksums. For
+    // the future usage it will be preferrable to have easily comparable config files
+    // which is guaranteed by writing the entries in sorted order. Indeed with this change
+    // (and in the recursive writeModifications call) the same config files get written
+
+    // copy configmgr::Modifications::Node's to a sortable list. Use pointers
+    // to just reference the data instead of copying it
+    std::vector< const ModNodePairEntry* > ModNodePairEntryVector;
+    ModNodePairEntryVector.reserve(data.modifications.getRoot().children.size());
+
+    for (const auto& rCand : data.modifications.getRoot().children)
+    {
+        ModNodePairEntryVector.push_back(&rCand);
+    }
+
+    // sort the list
+    std::sort(ModNodePairEntryVector.begin(), ModNodePairEntryVector.end(), PairEntrySorter());
+
+    // now use the list to write entries in sorted order
+    // instead of random as from the unordered map
+    for (const auto& j : ModNodePairEntryVector)
     {
         writeModifications(
             components, tmp, "", rtl::Reference< Node >(), j->first,
