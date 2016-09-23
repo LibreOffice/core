@@ -15,6 +15,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
+#include <memory>
 
 namespace comphelper
 {
@@ -45,12 +46,11 @@ namespace comphelper
     {
     private:
         // internal data
-        const OUString&     mrBaseURL;
-        sal_uInt16          mnNumBackups;
-        OUString            maBase;
-        OUString            maExt;
-        osl::File           maBaseFile;
-        bool                mbBaseFileIsOpen;
+        const OUString&                 mrBaseURL;
+        sal_uInt16                      mnNumBackups;
+        OUString                        maBase;
+        OUString                        maName;
+        OUString                        maExt;
 
         // internal flag if _exit() was called already - a hint to evtl.
         // not create copies of potentially not well-defined data. This
@@ -67,6 +67,10 @@ namespace comphelper
     public:
         /** Constructor to handle Backups of the given file
          *
+         *  @param  rxContext
+         *          ComponentContext to use internally; needs to be handed
+         *          over due to usages after DeInit() and thus no access
+         *          anymore using comphelper::getProcessComponentContext()
          *  @param  rBaseURL
          *          URL to an existing file that needs to be backed up
          *
@@ -77,11 +81,20 @@ namespace comphelper
          *          It is used in tryPush() and tryPop() calls to cleanup/
          *          reduce the number of existing backups
          */
-        BackupFileHelper(const OUString& rBaseURL, sal_uInt16 nNumBackups = 5);
+        BackupFileHelper(
+            const OUString& rBaseURL,
+            sal_uInt16 nNumBackups = 5);
 
-        // allow to set flag when app had to call _exit()
+        // allow to set static global flag when app had to call _exit()
         static void setExitWasCalled();
         static bool getExitWasCalled();
+
+        // static helper to read config values - these are derived from
+        // soffice.ini due to cui not being available in all cases. The
+        // boolean SecureUserConfig is returned.
+        // Default for SecureUserConfig is false
+        // Default for SecureUserConfigNumCopies is 0 (zero)
+        static bool getSecureUserConfig(sal_uInt16& rnSecureUserConfigNumCopies);
 
         /** tries to create a new backup, if there is none yet, or if the
          *  last differs from the base file. It will then put a new verion
@@ -113,14 +126,9 @@ namespace comphelper
 
     private:
         // internal helper methods
-        rtl::OUString getName(sal_uInt16 n);
-        bool firstExists();
-        void pop();
-        void push();
-        bool isDifferentOrNew();
-        bool equalsBase(osl::File& rLastFile);
         bool splitBaseURL();
-        bool baseFileOpen();
+        bool baseFileExists();
+        rtl::OUString getName();
     };
 }
 
