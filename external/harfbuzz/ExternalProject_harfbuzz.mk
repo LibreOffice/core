@@ -17,6 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,harfbuzz,\
 
 $(eval $(call gb_ExternalProject_use_externals,harfbuzz,\
 	icu \
+	graphite \
 ))
 
 $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
