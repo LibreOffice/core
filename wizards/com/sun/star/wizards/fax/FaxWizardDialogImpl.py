@@ -65,7 +65,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.nMaxStep = 5
 
             #instantiate The Document Frame for the Preview
-            self.terminateListener = TerminateListenerProcAdapter(self)
+            self.terminateListener = TerminateListenerProcAdapter(self.queryTermination)
             self.myFaxDoc = FaxDocument(xMSF, self.terminateListener)
 
             #create the dialog:
