@@ -77,12 +77,6 @@ public:
     inline void dispatch(
         struct _typelib_TypeDescription const * pMemberType,
         void * pReturn, void * pArgs [], uno_Any ** ppException ) const;
-
-private:
-    inline bool operator == ( UnoInterfaceReference const & ); // not impl
-    inline bool operator != ( UnoInterfaceReference const & ); // not impl
-    inline bool operator == ( uno_Interface * ); // not impl
-    inline bool operator != ( uno_Interface * ); // not impl
 };
 
 
