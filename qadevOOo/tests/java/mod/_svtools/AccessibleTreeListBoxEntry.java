@@ -77,7 +77,7 @@ import com.sun.star.util.XCloseable;
  * @see ifc.accessibility._XAccessibleText
  */
 public class AccessibleTreeListBoxEntry extends TestCase {
-    static XDesktop the_Desk;
+    static XDesktop xDesktop;
     static XTextDocument xTextDoc;
 
     /**
@@ -85,9 +85,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
      */
     @Override
     protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
-        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
-                                                        DesktopTools.createDesktop(
-        Param.getMSF()));
+        xDesktop = DesktopTools.createDesktop(Param.getMSF());
     }
 
     /**
@@ -174,7 +172,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
 
         util.utils.waitForEventIdle(tParam.getMSF());
 
-        XFrame the_frame1 = the_Desk.getCurrentFrame();
+        XFrame the_frame1 = xDesktop.getCurrentFrame();
 
         if (the_frame1 == null) {
             log.println("Current frame was not found !!!");

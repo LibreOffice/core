@@ -88,7 +88,7 @@ import com.sun.star.view.XControlAccess;
  * @see ifc.lang._XComponent
  */
 public class ODatasourceBrowser extends TestCase {
-    XDesktop the_Desk;
+    XDesktop xDesktop;
     XTextDocument xTextDoc;
 
     /**
@@ -96,9 +96,7 @@ public class ODatasourceBrowser extends TestCase {
      */
     @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = UnoRuntime.queryInterface(XDesktop.class,
-                                                        DesktopTools.createDesktop(
-                                                                Param.getMSF()));
+        xDesktop = DesktopTools.createDesktop(Param.getMSF());
         System.setProperty("hideMe", "false");
     }
 
@@ -204,7 +202,7 @@ public class ODatasourceBrowser extends TestCase {
 
         XController secondController = aModel1.getCurrentController();
 
-        XFrame the_frame1 = the_Desk.getCurrentFrame();
+        XFrame the_frame1 = xDesktop.getCurrentFrame();
 
         if (the_frame1 == null) {
             log.println("Current frame was not found !!!");

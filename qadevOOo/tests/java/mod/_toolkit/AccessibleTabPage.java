@@ -75,16 +75,6 @@ public class AccessibleTabPage extends TestCase {
     private static XAccessibleAction accCloseButton = null;
 
     /**
-     * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
-     */
-    @Override
-    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
-        UnoRuntime.queryInterface(XDesktop.class,
-                                                        DesktopTools.createDesktop(
-                                                                Param.getMSF()));
-    }
-
-    /**
      * Closes an InsertFields dialog, disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */

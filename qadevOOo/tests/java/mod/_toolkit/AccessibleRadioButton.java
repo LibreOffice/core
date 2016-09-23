@@ -84,17 +84,6 @@ public class AccessibleRadioButton extends TestCase {
     private static XTextDocument xTextDoc;
     private static XAccessibleAction accCloseButton;
 
-
-    /**
-     * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
-     */
-    @Override
-    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
-        UnoRuntime.queryInterface(XDesktop.class,
-                                                        DesktopTools.createDesktop(
-                                                                Param.getMSF()));
-    }
-
     /**
      * Closes a Hyperlink dialog, disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
