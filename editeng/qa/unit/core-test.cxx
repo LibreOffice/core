@@ -314,7 +314,7 @@ void Test::testAutocorrect()
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
 
-        CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
 
     {
@@ -325,7 +325,7 @@ void Test::testAutocorrect()
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
 
-        CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
 
     {
@@ -348,7 +348,7 @@ void Test::testAutocorrect()
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
 
-        CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
 
     {
@@ -359,7 +359,7 @@ void Test::testAutocorrect()
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
         aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
 
-        CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
 }
 
@@ -386,7 +386,7 @@ void Test::testHyperlinkSearch()
     OUString aSampleText = "Please write email to . if you find a fish(not a dog).";
     aEngine.SetText(aSampleText);
 
-    CPPUNIT_ASSERT_MESSAGE("set text", rDoc.GetParaAsString(sal_Int32(0)) == aSampleText);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("set text", aSampleText, rDoc.GetParaAsString(sal_Int32(0)));
 
     ContentNode *pNode = rDoc.GetObject(0);
     EditSelection aSel(EditPaM(pNode, 22), EditPaM(pNode, 22));
@@ -398,13 +398,13 @@ void Test::testHyperlinkSearch()
     aEngine.UpdateFields();
 
     OUString aContent = pNode->GetExpandedText();
-    CPPUNIT_ASSERT_MESSAGE("get text", aContent ==
-                           "Please write email to jim@bob.com. if you find a fish(not a dog).");
-    CPPUNIT_ASSERT_MESSAGE("wrong length", rDoc.GetTextLen() == (sal_uLong)aContent.getLength());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("get text", OUString("Please write email to jim@bob.com. if you find a fish(not a dog)."),
+                           aContent);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong length", (sal_uLong)aContent.getLength(), rDoc.GetTextLen());
 
     // Check expansion and positioning re-work
-    CPPUNIT_ASSERT_MESSAGE("wrong length", pNode->GetExpandedLen() ==
-                           (sal_uLong)aContent.getLength());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong length", (sal_uLong)aContent.getLength(),
+                           pNode->GetExpandedLen());
     for (sal_Int32 n = 0; n < aContent.getLength(); n++)
     {
         sal_Int32 nStart = n, nEnd = n;
@@ -491,11 +491,11 @@ void Test::testSectionAttributes()
         OUString aParaText = "aaabbbccc";
         aEngine.SetText(aParaText);
         pSet->Put(aBold);
-        CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one item.", static_cast<sal_uInt16>(1), pSet->Count());
         aEngine.QuickSetAttribs(*pSet, ESelection(0,0,0,6)); // 'aaabbb' - end point is not inclusive.
         pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
         pSet->Put(aItalic);
-        CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one item.", static_cast<sal_uInt16>(1), pSet->Count());
 
         aEngine.QuickSetAttribs(*pSet, ESelection(0,3,0,9)); // 'bbbccc'
         std::unique_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
@@ -504,7 +504,7 @@ void Test::testSectionAttributes()
         pEditText->GetAllSections(aAttrs);
 
         // Now, we should have a total of 3 sections.
-        CPPUNIT_ASSERT_MESSAGE("There should be 3 sections.", aAttrs.size() == 3);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 3 sections.", static_cast<size_t>(3), aAttrs.size());
 
         // First section should be 0-3 of paragraph 0, and it should only have boldness applied.
         const editeng::Section* pSecAttr = &aAttrs[0];
@@ -543,7 +543,7 @@ void Test::testSectionAttributes()
         // Apply boldness to paragraphs 1, 3, 5 only. Leave 2 and 4 unformatted.
         pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
         pSet->Put(aBold);
-        CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly one item.", static_cast<sal_uInt16>(1), pSet->Count());
         aEngine.QuickSetAttribs(*pSet, ESelection(0,0,0,3));
         aEngine.QuickSetAttribs(*pSet, ESelection(2,0,2,3));
         aEngine.QuickSetAttribs(*pSet, ESelection(4,0,4,5));
