@@ -818,8 +818,8 @@ namespace {
 }
 
 WatchdogTimings::WatchdogTimings()
-    : maTimingValues({{6,   20} /* 1.5s,  5s */, {20, 120} /*  5s, 30s */,
-                      {60, 240} /*  15s, 60s */, {60, 240} /* 15s, 60s */})
+    : maTimingValues{{{6,   20} /* 1.5s,  5s */, {20, 120} /*  5s, 30s */,
+                      {60, 240} /*  15s, 60s */, {60, 240} /* 15s, 60s */}}
     , mbRelaxed(false)
 {
 }
