@@ -387,6 +387,7 @@ public:
         : m_bOwnCursorInvalidated(false),
           m_bViewCursorInvalidated(false),
           m_bTextViewSelectionInvalidated(false),
+          m_bGraphicViewSelection(false),
           m_bViewLock(false)
     {
     }
