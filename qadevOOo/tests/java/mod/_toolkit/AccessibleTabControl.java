@@ -26,7 +26,6 @@ import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
@@ -42,7 +41,6 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.AccessibilityTools;
-import util.DesktopTools;
 import util.SOfficeFactory;
 
 

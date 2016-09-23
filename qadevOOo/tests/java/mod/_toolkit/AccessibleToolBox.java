@@ -21,7 +21,6 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.awt.XWindow;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
@@ -35,7 +34,6 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 
 import util.AccessibilityTools;
-import util.DesktopTools;
 import util.SOfficeFactory;
 
 /**
