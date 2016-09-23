@@ -18,6 +18,7 @@
 
 package mod._pcr;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;
 import com.sun.star.inspection.XObjectInspectorModel;
 import com.sun.star.uno.UnoRuntime;
@@ -52,10 +53,10 @@ public class ObjectInspectorModel extends TestCase {
      * module variable which holds the Desktop
      * @see com.sun.star.frame.Desktop
      */
-    protected static Object StarDesktop = null;
+    protected static XDesktop xDesktop = null;
 
     /**
-     * assign to the module variable <CODE>StarDesktop</CODE> the desktop
+     * assign to the module variable <CODE>xDesktop</CODE> the desktop
      * @param Param the test parameters
      * @param log the log writer
      * @see lib.TestParameters
@@ -65,7 +66,7 @@ public class ObjectInspectorModel extends TestCase {
     @Override
     protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
         log.println("create a desktop...");
-        StarDesktop = DesktopTools.createDesktop(Param.getMSF());
+        xDesktop = DesktopTools.createDesktop(Param.getMSF());
     }
 
     /**
@@ -129,7 +130,7 @@ public class ObjectInspectorModel extends TestCase {
 
         XFrame existentInspector = null;
 
-        XFrame xFrame = UnoRuntime.queryInterface(XFrame.class, StarDesktop);
+        XFrame xFrame = UnoRuntime.queryInterface(XFrame.class, xDesktop);
 
         existentInspector = xFrame.findFrame( "ObjectInspector", 255 );
 

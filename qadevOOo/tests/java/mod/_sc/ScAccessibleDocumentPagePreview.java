@@ -144,8 +144,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        XDesktop desk = UnoRuntime.queryInterface(
-                XDesktop.class,util.DesktopTools.createDesktop(Param.getMSF()));
+        XDesktop desk = util.DesktopTools.createDesktop(Param.getMSF());
         final XWindow win = desk.getCurrentFrame().getComponentWindow();
 
         tEnv.addObjRelation("EventProducer",

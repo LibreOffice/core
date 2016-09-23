@@ -47,15 +47,6 @@ public class AccessiblePopupMenu extends TestCase {
     private static Point point;
 
     /**
-     * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
-     */
-    @Override
-    protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
-        UnoRuntime.queryInterface(XDesktop.class,
-                DesktopTools.createDesktop(Param.getMSF()));
-    }
-
-    /**
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */

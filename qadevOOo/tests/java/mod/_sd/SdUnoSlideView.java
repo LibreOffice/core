@@ -44,7 +44,7 @@ import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 
 public class SdUnoSlideView extends TestCase {
-    XDesktop the_Desk;
+    XDesktop xDesktop;
     XComponent xImpressDoc;
     XComponent xSecondDrawDoc;
 
@@ -54,9 +54,7 @@ public class SdUnoSlideView extends TestCase {
     */
     @Override
     protected void initialize(TestParameters Param, PrintWriter log) throws Exception {
-        the_Desk = UnoRuntime.queryInterface(
-            XDesktop.class, DesktopTools.createDesktop(
-                                Param.getMSF()) );
+        xDesktop = DesktopTools.createDesktop(Param.getMSF());
     }
 
     /**
@@ -157,7 +155,7 @@ public class SdUnoSlideView extends TestCase {
          //Adding ObjRelations for XController
         tEnv.addObjRelation("FirstModel", aModel);
 
-        XFrame the_frame = the_Desk.getCurrentFrame();
+        XFrame the_frame = xDesktop.getCurrentFrame();
         tEnv.addObjRelation("Frame", the_frame);
 
         //Adding ObjRelations for XController
