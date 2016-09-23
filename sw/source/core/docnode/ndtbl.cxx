@@ -2767,11 +2767,17 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
 void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
                         const SwCellFrame* pBoxFrame )
 {
-    SwTabFrame *pTab;
+    SwTabFrame *pTab = nullptr;
 
-    OSL_ENSURE( pBoxFrame, "SetTabRows called without pBoxFrame" );
-
-    pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
+    if( pBoxFrame )
+    {
+        pTab = const_cast<SwFrame*>(static_cast<SwFrame const *>(pBoxFrame))->ImplFindTabFrame();
+    }
+    else
+    {
+        OSL_ENSURE( false, "must specify pBoxFrame" );
+        return ;
+    }
 
     // If the Table is still using relative values (USHRT_MAX)
     // we need to switch to absolute ones.
