@@ -179,14 +179,23 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             std::list< SvtLinguConfigDictionaryEntry >::const_iterator aDictIt;
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
             {
-                uno::Sequence< rtl::OUString > aLocaleNames( aDictIt->aLocaleNames );
                 uno::Sequence< rtl::OUString > aLocations( aDictIt->aLocations );
-                sal_Int32 nLen2 = aLocaleNames.getLength();
-                for (k = 0;  k < nLen2;  ++k)
+                if ( xAccess.is() && aLocations.getLength() )
                 {
-                    if (xAccess.is() && xAccess->exists(aLocations[k]))
+                    sal_Bool bAllFileExists = sal_False;
+                    sal_Int32 nLength = aLocations.getLength();
+                    for (sal_Int32 i = 0; i < nLength; ++i)
                     {
-                        aLocaleNamesSet.insert( aLocaleNames[k] );
+                        bAllFileExists |= xAccess->exists( aLocations[i] );
+                    }
+                    if ( bAllFileExists )
+                    {
+                        uno::Sequence< rtl::OUString > aLocaleNames( aDictIt->aLocaleNames );
+                        sal_Int32 nLen2 = aLocaleNames.getLength();
+                        for (k = 0;  k < nLen2;  ++k)
+                        {
+                            aLocaleNamesSet.insert( aLocaleNames[k] );
+                        }
                     }
                 }
             }
