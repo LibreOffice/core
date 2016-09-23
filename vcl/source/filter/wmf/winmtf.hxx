@@ -337,16 +337,6 @@ struct WinMtfFillStyle : GDIObj
             && bTransparent == rStyle.bTransparent
             && aType == rStyle.aType;
     }
-
-    WinMtfFillStyle& operator=(const WinMtfFillStyle& rStyle)
-    {
-        aFillColor = rStyle.aFillColor;
-        bTransparent = rStyle.bTransparent;
-        aBmp = rStyle.aBmp;
-        aType = rStyle.aType;
-        return *this;
-    }
-
 };
 
 struct WinMtfLineStyle : GDIObj
@@ -376,14 +366,6 @@ struct WinMtfLineStyle : GDIObj
         return aLineColor == rStyle.aLineColor
             && bTransparent == rStyle.bTransparent
             && aLineInfo == rStyle.aLineInfo;
-    }
-
-    WinMtfLineStyle& operator=( const WinMtfLineStyle& rStyle )
-    {
-        aLineColor = rStyle.aLineColor;
-        bTransparent = rStyle.bTransparent;
-        aLineInfo = rStyle.aLineInfo;
-        return *this;
     }
 
     WinMtfLineStyle& operator=( WinMtfLineStyle* pStyle )
