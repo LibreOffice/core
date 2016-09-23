@@ -23,7 +23,6 @@ import com.sun.star.awt.PosSize;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
@@ -35,7 +34,6 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.AccessibilityTools;
-import util.DesktopTools;
 import util.SOfficeFactory;
 
 
