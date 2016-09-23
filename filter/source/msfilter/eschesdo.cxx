@@ -1209,7 +1209,7 @@ const SdrObject* ImplEESdrObject::GetSdrObject() const
     return EscherEx::GetSdrObject( mXShape );
 }
 
-//  loads and  converts text from shape, result is being saved in mnTextSize respeichert
+// loads and converts text from shape, result is saved in mnTextSize
 sal_uInt32 ImplEESdrObject::ImplGetText()
 {
     Reference< XText > xXText( mXShape, UNO_QUERY );
