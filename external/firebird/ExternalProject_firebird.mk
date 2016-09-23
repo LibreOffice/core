@@ -26,9 +26,7 @@ ifneq ($(OS),WNT)
 INVOKE_FPA:="CPU=\$$(EMPTY) $${FB_CPU_ARG}"
 endif
 
-MAKE_PRE=$(if $(filter WNT,$(OS)),\
-			   PATH="$(shell cygpath -u $(call gb_UnpackedTarball_get_dir,icu)/source/lib):$$PATH",\
-			   $(gb_Helper_set_ld_path))
+MAKE_PRE=$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,icu)/source/lib)
 
 MAKE_POST=$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
@@ -75,7 +73,6 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
 			) \
 		" \
-		&& export $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}"$(call gb_UnpackedTarball_get_dir,icu)/source/lib" \
 		&& MAKE=$(MAKE) ./configure \
 			--without-editline \
 			--with-wire-compress=no \
