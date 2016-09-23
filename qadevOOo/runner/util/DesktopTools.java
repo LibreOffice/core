@@ -120,11 +120,6 @@ public class DesktopTools
      * @param xMSF the MultiServiceFactory
      * @return returns an Array of document kinds like ["swriter"]
      */
-    /**
-     * returns an array of all open documents
-     * @param xMSF the XMultiSerivceFactory
-     * @return returns an array of all open documents
-     */
     public static Object[] getAllOpenDocuments(XMultiServiceFactory xMSF)
     {
         ArrayList<XComponent> components = new ArrayList<XComponent>();
