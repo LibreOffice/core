@@ -736,6 +736,9 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
         }
     }
 
+    if (![NSThread isMainThread])
+        return false;
+
     unsigned/*NSUInteger*/ nEventMask = 0;
     if( nType & VclInputFlags::MOUSE)
         nEventMask |=
