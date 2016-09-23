@@ -1396,7 +1396,7 @@ void SwWW8ReferencedFltEndStack::SetAttrInDoc( const SwPosition& rTmpPos,
             if ( pFltBookmark != nullptr && pFltBookmark->IsTOCBookmark() )
             {
                 const OUString& rName = pFltBookmark->GetName();
-                std::set< OUString, SwWW8::ltstr >::const_iterator aResult = aReferencedTOCBookmarks.find(rName);
+                std::set<OUString>::const_iterator aResult = aReferencedTOCBookmarks.find(rName);
                 if ( aResult == aReferencedTOCBookmarks.end() )
                 {
                     bInsertBookmarkIntoDoc = false;

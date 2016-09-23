@@ -41,30 +41,11 @@
 
 bool    IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
 
-struct StrLT
-{
-    bool operator()( const OUString &rTxt1, const OUString &rTxt2 ) const
-    {
-        return rTxt1 < rTxt2;
-    }
-};
+typedef std::unordered_multimap<OUString, OUString, const OUStringHash> ConvMap;
 
-struct StrEQ
-{
-    bool operator()( const OUString &rTxt1, const OUString &rTxt2 ) const
-    {
-        return rTxt1 == rTxt2;
-    }
-};
+typedef std::set<OUString> ConvMapKeySet;
 
-typedef std::unordered_multimap< OUString, OUString,
-                       const OUStringHash, StrEQ > ConvMap;
-
-typedef std::set< OUString, StrLT > ConvMapKeySet;
-
-typedef std::unordered_multimap< OUString, sal_Int16,
-                       OUStringHash, StrEQ > PropTypeMap;
-
+typedef std::unordered_multimap<OUString, sal_Int16, OUStringHash> PropTypeMap;
 
 class ConvDic :
     public ::cppu::WeakImplHelper

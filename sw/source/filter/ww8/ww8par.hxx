@@ -428,14 +428,6 @@ private:
 
 namespace SwWW8
 {
-    struct ltstr
-    {
-        bool operator()(const OUString &r1, const OUString &r2) const
-        {
-            return r1.compareToIgnoreAsciiCase(r2)<0;
-        }
-    };
-
     struct ltnode
     {
         bool operator()(const SwTextNode *r1, const SwTextNode *r2) const
@@ -455,7 +447,7 @@ public:
 
     // Keep track of referenced TOC bookmarks in order to suppress the import
     // of unreferenced ones.
-    std::set<OUString, SwWW8::ltstr> aReferencedTOCBookmarks;
+    std::set<OUString> aReferencedTOCBookmarks;
 protected:
     virtual void SetAttrInDoc( const SwPosition& rTmpPos,
                                SwFltStackEntry& rEntry ) override;
@@ -473,7 +465,7 @@ public:
     //Keep track of variable names created with fields, and the bookmark
     //mapped to their position, hopefully the same, but very possibly
     //an additional pseudo bookmark
-    std::map<OUString, OUString, SwWW8::ltstr> aFieldVarNames;
+    std::map<OUString, OUString> aFieldVarNames;
 protected:
     SwFltStackEntry *RefToVar(const SwField* pField,SwFltStackEntry& rEntry);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,

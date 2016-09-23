@@ -30,17 +30,9 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-struct LessString
-{
-    bool operator()(const OString& str1, const OString& str2) const
-    {
-        return (str1 < str2);
-    }
-};
-
 typedef ::std::list< OString >               StringList;
 typedef ::std::vector< OString >             StringVector;
-typedef ::std::set< OString, LessString >    StringSet;
+typedef ::std::set< OString >    StringSet;
 
 class AstDeclaration;
 

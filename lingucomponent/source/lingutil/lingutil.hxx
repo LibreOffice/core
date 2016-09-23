@@ -33,14 +33,6 @@
 
 struct SvtLinguConfigDictionaryEntry;
 
-struct lt_rtl_OUString
-{
-    bool operator() (const OUString &r1, const OUString &r2) const
-    {
-        return r1 < r2;
-    }
-};
-
 #if defined(_WIN32)
 
 // to be use to get a path name with long path prefix

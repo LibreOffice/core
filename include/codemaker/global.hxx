@@ -30,17 +30,9 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 
-struct LessString
-{
-    bool operator()(const ::rtl::OString& str1, const ::rtl::OString& str2) const
-    {
-        return (str1 < str2);
-    }
-};
-
 typedef ::std::list< ::rtl::OString >               StringList;
 typedef ::std::vector< ::rtl::OString >             StringVector;
-typedef ::std::set< ::rtl::OString, LessString >    StringSet;
+typedef ::std::set< ::rtl::OString >    StringSet;
 
 
 // FileStream

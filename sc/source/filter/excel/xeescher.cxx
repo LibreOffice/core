@@ -1399,14 +1399,6 @@ XclExpComments::XclExpComments( SCTAB nTab, XclExpRecordList< XclExpNote >& rNot
 {
 }
 
-struct OUStringLess : public std::binary_function<OUString, OUString, bool>
-{
-    bool operator()(const OUString& x, const OUString& y) const
-    {
-        return x.compareTo( y ) < 0;
-    }
-};
-
 void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
 {
     if( mrNotes.IsEmpty() )
@@ -1436,7 +1428,7 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
 
     rComments->startElement( XML_authors, FSEND );
 
-    typedef std::set< OUString, OUStringLess > Authors;
+    typedef std::set<OUString> Authors;
     Authors aAuthors;
 
     size_t nNotes = mrNotes.GetSize();
