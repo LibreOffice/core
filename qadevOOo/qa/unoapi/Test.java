@@ -34,10 +34,14 @@ public final class Test {
     }
 
     @org.junit.Test public void test() {
-        assertTrue(
-            Runner.run(
-                "-sce", "qadevOOo.sce", "-xcl", "knownissues.xcl", "-cs",
-                connection.getDescription()));
+        try {
+            assertTrue(
+                Runner.run(
+                    "-sce", "qadevOOo.sce", "-xcl", "knownissues.xcl", "-cs",
+                    connection.getDescription()));
+        } catch (Exception e) {
+            fail("Could not run test");
+        }
     }
 
     private final OfficeConnection connection = new OfficeConnection();
