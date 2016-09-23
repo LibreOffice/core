@@ -367,14 +367,6 @@ struct WinMtfLineStyle : GDIObj
             && bTransparent == rStyle.bTransparent
             && aLineInfo == rStyle.aLineInfo;
     }
-
-    WinMtfLineStyle& operator=( WinMtfLineStyle* pStyle )
-    {
-        aLineColor = pStyle->aLineColor;
-        bTransparent = pStyle->bTransparent;
-        aLineInfo = pStyle->aLineInfo;
-        return *this;
-    }
 };
 
 struct XForm
