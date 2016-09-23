@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_69798a2f",
+        "filename": "framework/source/dispatch/closedispatcher.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-09-23T12:28:54Z",
+      "side": 1,
+      "message": "declare the var later, where it\u0027s actually initialized",
+      "revId": "0ed89bef1f0734b44e5a738c281df10d6874f4bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_8976de3c",
+        "filename": "framework/source/dispatch/closedispatcher.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-09-23T12:28:54Z",
+      "side": 1,
+      "message": "don\u0027t needlessly keep the sequence of XBridge around until the end of the function (there might be resources tied to an XBridge instance that are only released on destruction)",
+      "revId": "0ed89bef1f0734b44e5a738c281df10d6874f4bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_e993da4d",
+        "filename": "framework/source/dispatch/closedispatcher.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-09-23T12:28:54Z",
+      "side": 1,
+      "message": "there\u0027s of course a race between (a) checking for existing connections/making decisions based on that check here, and (b) connections being created/taken down; for one, document that shortcoming; for another, it might be beneficial to make the time between checking for existing connections and making decisions based on that check as short as possible (e.g., is that \"FrameListAnalyizer aCheck1(...);\" line doing lengthy operations?)",
+      "revId": "0ed89bef1f0734b44e5a738c281df10d6874f4bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_0999ee6e",
+        "filename": "framework/source/dispatch/closedispatcher.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-09-23T12:28:54Z",
+      "side": 1,
+      "message": "...or keep showing the \"backing mode\" window?",
+      "revId": "0ed89bef1f0734b44e5a738c281df10d6874f4bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba5da102_69a0aa91",
+        "filename": "framework/source/dispatch/closedispatcher.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-09-23T12:28:54Z",
+      "side": 1,
+      "message": "...or show the \"backing mode\" window?  (see the second-next \"else if\")",
+      "revId": "0ed89bef1f0734b44e5a738c281df10d6874f4bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
