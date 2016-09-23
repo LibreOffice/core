@@ -5379,7 +5379,7 @@ sal_Bool SAL_CALL ScCellRangeObj::getIsMerged() throw(uno::RuntimeException, std
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
-    return pDocSh && pDocSh->GetDocument().HasAttrib( aRange, HASATTR_MERGED );
+    return pDocSh && pDocSh->GetDocument().HasAttrib( aRange, HasAttrFlags::Merged );
 }
 
 // XCellSeries

@@ -392,7 +392,7 @@ void ScUndoSelectionAttr::DoChange( const bool bUndo )
     SetViewMarkData( aMarkData );
 
     ScRange aEffRange( aRangeCover );
-    if ( rDoc.HasAttrib( aEffRange, HASATTR_MERGED ) )         // merged cells?
+    if ( rDoc.HasAttrib( aEffRange, HasAttrFlags::Merged ) )         // merged cells?
         rDoc.ExtendMerge( aEffRange );
 
     sal_uInt16 nExtFlags = 0;

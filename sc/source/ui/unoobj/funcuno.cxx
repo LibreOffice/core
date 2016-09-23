@@ -157,7 +157,7 @@ static bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     pSrcDoc->CopyToClip(aClipParam, pClipDoc.get(), &aSourceMark, false, false);
 
     if ( pClipDoc->HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
-                                HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                                HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
     {
         ScPatternAttr aPattern( pSrcDoc->GetPool() );
         aPattern.GetItemSet().Put( ScMergeAttr() );             // Defaults

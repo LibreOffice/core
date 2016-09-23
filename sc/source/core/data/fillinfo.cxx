@@ -435,9 +435,9 @@ void ScDocument::FillInfo(
 
     SCCOL nRotMax = nCol2;
     if ( bAnyItem && HasAttrib( 0, nRow1, nTab, MAXCOL, nRow2+1, nTab,
-                                HASATTR_ROTATE | HASATTR_CONDITIONAL ) )
+                                HasAttrFlags::Rotate | HasAttrFlags::Conditional ) )
     {
-        //TODO: check Conditionals also for HASATTR_ROTATE ????
+        //TODO: check Conditionals also for HasAttrFlags::Rotate ????
 
         OSL_ENSURE( nArrCount>2, "nArrCount too small" );
         FindMaxRotCol( nTab, &pRowInfo[1], nArrCount-1, nCol1, nCol2 );

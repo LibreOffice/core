@@ -1158,8 +1158,8 @@ public:
     bool            IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     SC_DLLPUBLIC bool HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt16 nMask ) const;
-    SC_DLLPUBLIC bool HasAttrib( const ScRange& rRange, sal_uInt16 nMask ) const;
+                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2, HasAttrFlags nMask ) const;
+    SC_DLLPUBLIC bool HasAttrib( const ScRange& rRange, HasAttrFlags nMask ) const;
 
     SC_DLLPUBLIC void GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     const ::editeng::SvxBorderLine** ppLeft,

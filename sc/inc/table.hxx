@@ -588,8 +588,8 @@ public:
 
     void        FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 );
 
-    bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nMask ) const;
-    bool        HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const;
+    bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, HasAttrFlags nMask ) const;
+    bool        HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask ) const;
     bool IsMerged( SCCOL nCol, SCROW nRow ) const;
     bool        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow,

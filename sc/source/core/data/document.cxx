@@ -1717,7 +1717,7 @@ bool ScDocument::HasPartOfMerged( const ScRange& rRange )
     SCROW nEndY = rRange.aEnd.Row();
 
     if (HasAttrib( nStartX, nStartY, nTab, nEndX, nEndY, nTab,
-                        HASATTR_MERGED | HASATTR_OVERLAPPED ))
+                        HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
     {
         ExtendMerge( nStartX, nStartY, nEndX, nEndY, nTab );
         ExtendOverlapped( nStartX, nStartY, nEndX, nEndY, nTab );
@@ -5066,9 +5066,9 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
 }
 
 bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt16 nMask ) const
+                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, HasAttrFlags nMask ) const
 {
-    if ( nMask & HASATTR_ROTATE )
+    if ( nMask & HasAttrFlags::Rotate )
     {
         //  Is attribute used in document?
         //  (as in fillinfo)
@@ -5093,44 +5093,17 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
             }
         }
         if (!bAnyItem)
-            nMask &= ~HASATTR_ROTATE;
+            nMask &= ~HasAttrFlags::Rotate;
     }
 
-    if ( nMask & HASATTR_RTL )
-    {
-        //  first check if right-to left is in the pool at all
-        //  (the same item is used in cell and page format)
-
-        ScDocumentPool* pPool = xPoolHelper->GetDocPool();
-
-        bool bHasRtl = false;
-        sal_uInt32 nDirCount = pPool->GetItemCount2( ATTR_WRITINGDIR );
-        for (sal_uInt32 nItem=0; nItem<nDirCount; nItem++)
-        {
-            const SfxPoolItem* pItem = pPool->GetItem2( ATTR_WRITINGDIR, nItem );
-            if ( pItem && static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue() == FRMDIR_HORI_RIGHT_TOP )
-            {
-                bHasRtl = true;
-                break;
-            }
-        }
-        if (!bHasRtl)
-            nMask &= ~HASATTR_RTL;
-    }
-
-    if (!nMask)
+    if (nMask == HasAttrFlags::NONE)
         return false;
 
     bool bFound = false;
     for (SCTAB i=nTab1; i<=nTab2 && !bFound && i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
         {
-            if ( nMask & HASATTR_RTL )
-            {
-                if ( GetEditTextDirection(i) == EE_HTEXTDIR_R2L )       // sheet default
-                    bFound = true;
-            }
-            if ( nMask & HASATTR_RIGHTORCENTER )
+            if ( nMask & HasAttrFlags::RightOrCenter )
             {
                 //  On a RTL sheet, don't start to look for the default left value
                 //  (which is then logically right), instead always assume true.
@@ -5147,7 +5120,7 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     return bFound;
 }
 
-bool ScDocument::HasAttrib( const ScRange& rRange, sal_uInt16 nMask ) const
+bool ScDocument::HasAttrib( const ScRange& rRange, HasAttrFlags nMask ) const
 {
     return HasAttrib( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
                       rRange.aEnd.Col(),   rRange.aEnd.Row(),   rRange.aEnd.Tab(),
@@ -5524,14 +5497,14 @@ void ScDocument::ExtendTotalMerge( ScRange& rRange ) const
         {
             ScRange aTest = aExt;
             aTest.aStart.SetRow( rRange.aEnd.Row() + 1 );
-            if ( HasAttrib( aTest, HASATTR_NOTOVERLAPPED ) )
+            if ( HasAttrib( aTest, HasAttrFlags::NotOverlapped ) )
                 aExt.aEnd.SetRow(rRange.aEnd.Row());
         }
         if ( aExt.aEnd.Col() > rRange.aEnd.Col() )
         {
             ScRange aTest = aExt;
             aTest.aStart.SetCol( rRange.aEnd.Col() + 1 );
-            if ( HasAttrib( aTest, HASATTR_NOTOVERLAPPED ) )
+            if ( HasAttrib( aTest, HasAttrFlags::NotOverlapped ) )
                 aExt.aEnd.SetCol(rRange.aEnd.Col());
         }
 

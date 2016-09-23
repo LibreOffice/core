@@ -1192,7 +1192,7 @@ void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInf
 
 // Test if field contains specific attribute
 
-bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
+bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const
 {
     SCSIZE nStartIndex;
     SCSIZE nEndIndex;
@@ -1203,46 +1203,46 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
     for (SCSIZE i=nStartIndex; i<=nEndIndex && !bFound; i++)
     {
         const ScPatternAttr* pPattern = pData[i].pPattern;
-        if ( nMask & HASATTR_MERGED )
+        if ( nMask & HasAttrFlags::Merged )
         {
             const ScMergeAttr* pMerge =
                     static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
             if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
                 bFound = true;
         }
-        if ( nMask & ( HASATTR_OVERLAPPED | HASATTR_NOTOVERLAPPED | HASATTR_AUTOFILTER ) )
+        if ( nMask & ( HasAttrFlags::Overlapped | HasAttrFlags::NotOverlapped | HasAttrFlags::AutoFilter ) )
         {
             const ScMergeFlagAttr* pMergeFlag =
                     static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem( ATTR_MERGE_FLAG ) );
-            if ( (nMask & HASATTR_OVERLAPPED) && pMergeFlag->IsOverlapped() )
+            if ( (nMask & HasAttrFlags::Overlapped) && pMergeFlag->IsOverlapped() )
                 bFound = true;
-            if ( (nMask & HASATTR_NOTOVERLAPPED) && !pMergeFlag->IsOverlapped() )
+            if ( (nMask & HasAttrFlags::NotOverlapped) && !pMergeFlag->IsOverlapped() )
                 bFound = true;
-            if ( (nMask & HASATTR_AUTOFILTER) && pMergeFlag->HasAutoFilter() )
+            if ( (nMask & HasAttrFlags::AutoFilter) && pMergeFlag->HasAutoFilter() )
                 bFound = true;
         }
-        if ( nMask & HASATTR_LINES )
+        if ( nMask & HasAttrFlags::Lines )
         {
             const SvxBoxItem* pBox =
                     static_cast<const SvxBoxItem*>( &pPattern->GetItem( ATTR_BORDER ) );
             if ( pBox->GetLeft() || pBox->GetRight() || pBox->GetTop() || pBox->GetBottom() )
                 bFound = true;
         }
-        if ( nMask & HASATTR_SHADOW )
+        if ( nMask & HasAttrFlags::Shadow )
         {
             const SvxShadowItem* pShadow =
                     static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ) );
             if ( pShadow->GetLocation() != SVX_SHADOW_NONE )
                 bFound = true;
         }
-        if ( nMask & HASATTR_CONDITIONAL )
+        if ( nMask & HasAttrFlags::Conditional )
         {
             bool bContainsCondFormat =
                     !static_cast<const ScCondFormatItem&>(pPattern->GetItem( ATTR_CONDITIONAL )).GetCondFormatData().empty();
             if ( bContainsCondFormat )
                 bFound = true;
         }
-        if ( nMask & HASATTR_PROTECTED )
+        if ( nMask & HasAttrFlags::Protected )
         {
             const ScProtectionAttr* pProtect =
                     static_cast<const ScProtectionAttr*>( &pPattern->GetItem( ATTR_PROTECTION ) );
@@ -1285,7 +1285,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
             if(bFoundTemp)
                 bFound = true;
         }
-        if ( nMask & HASATTR_ROTATE )
+        if ( nMask & HasAttrFlags::Rotate )
         {
             const SfxInt32Item* pRotate =
                     static_cast<const SfxInt32Item*>( &pPattern->GetItem( ATTR_ROTATE_VALUE ) );
@@ -1295,7 +1295,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
             if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
                 bFound = true;
         }
-        if ( nMask & HASATTR_NEEDHEIGHT )
+        if ( nMask & HasAttrFlags::NeedHeight )
         {
             if (pPattern->GetCellOrientation() != SVX_ORIENTATION_STANDARD)
                 bFound = true;
@@ -1310,26 +1310,19 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
             else if (static_cast<const SfxInt32Item&>(pPattern->GetItem( ATTR_ROTATE_VALUE )).GetValue())
                 bFound = true;
         }
-        if ( nMask & ( HASATTR_SHADOW_RIGHT | HASATTR_SHADOW_DOWN ) )
+        if ( nMask & ( HasAttrFlags::ShadowRight | HasAttrFlags::ShadowDown ) )
         {
             const SvxShadowItem* pShadow =
                     static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ));
             SvxShadowLocation eLoc = pShadow->GetLocation();
-            if ( nMask & HASATTR_SHADOW_RIGHT )
+            if ( nMask & HasAttrFlags::ShadowRight )
                 if ( eLoc == SVX_SHADOW_TOPRIGHT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
                     bFound = true;
-            if ( nMask & HASATTR_SHADOW_DOWN )
+            if ( nMask & HasAttrFlags::ShadowDown )
                 if ( eLoc == SVX_SHADOW_BOTTOMLEFT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
                     bFound = true;
         }
-        if ( nMask & HASATTR_RTL )
-        {
-            const SvxFrameDirectionItem& rDirection =
-                    static_cast<const SvxFrameDirectionItem&>( pPattern->GetItem( ATTR_WRITINGDIR ) );
-            if ( rDirection.GetValue() == FRMDIR_HORI_RIGHT_TOP )
-                bFound = true;
-        }
-        if ( nMask & HASATTR_RIGHTORCENTER )
+        if ( nMask & HasAttrFlags::RightOrCenter )
         {
             //  called only if the sheet is LTR, so physical=logical alignment can be assumed
             SvxCellHorJustify eHorJust = (SvxCellHorJustify)
@@ -2118,7 +2111,7 @@ void ScAttrArray::DeleteArea(SCROW nStartRow, SCROW nEndRow)
 {
     RemoveAreaMerge( nStartRow, nEndRow );  // remove from combined flags
 
-    if ( !HasAttrib( nStartRow, nEndRow, HASATTR_OVERLAPPED | HASATTR_AUTOFILTER) )
+    if ( !HasAttrib( nStartRow, nEndRow, HasAttrFlags::Overlapped | HasAttrFlags::AutoFilter) )
         SetPatternArea( nStartRow, nEndRow, pDocument->GetDefPattern() );
     else
         DeleteAreaSafe( nStartRow, nEndRow );  // leave merge flags
@@ -2261,7 +2254,7 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
     SCROW nDestStart = std::max((long)((long)nStartRow + nDy), (long) 0);
     SCROW nDestEnd = std::min((long)((long)nEndRow + nDy), (long) MAXROW);
 
-    if ( !rAttrArray.HasAttrib( nDestStart, nDestEnd, HASATTR_OVERLAPPED ) )
+    if ( !rAttrArray.HasAttrib( nDestStart, nDestEnd, HasAttrFlags::Overlapped ) )
     {
         CopyArea( nStartRow+nDy, nEndRow+nDy, nDy, rAttrArray );
         return;

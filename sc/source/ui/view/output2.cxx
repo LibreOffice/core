@@ -1537,7 +1537,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
 
                     if ( nTempX < nX1 &&
                          !IsEmptyCellText( pThisRowInfo, nTempX, nY ) &&
-                         !mpDoc->HasAttrib( nTempX,nY,nTab, nX1,nY,nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                         !mpDoc->HasAttrib( nTempX,nY,nTab, nX1,nY,nTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
                     {
                         nCellX = nTempX;
                         bDoCell = true;
@@ -1556,7 +1556,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
 
                     if ( nTempX > nX &&
                          !IsEmptyCellText( pThisRowInfo, nTempX, nY ) &&
-                         !mpDoc->HasAttrib( nTempX,nY,nTab, nX,nY,nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                         !mpDoc->HasAttrib( nTempX,nY,nTab, nX,nY,nTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
                     {
                         nCellX = nTempX;
                         bDoCell = true;
@@ -4530,7 +4530,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
 
                         if ( nTempX > nX &&
                              !IsEmptyCellText( pThisRowInfo, nTempX, nY ) &&
-                             !mpDoc->HasAttrib( nTempX,nY,nTab, nX,nY,nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                             !mpDoc->HasAttrib( nTempX,nY,nTab, nX,nY,nTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
                         {
                             nCellX = nTempX;
                             bDoCell = true;

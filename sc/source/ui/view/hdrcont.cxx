@@ -626,13 +626,13 @@ bool ScHeaderControl::IsSelectionAllowed(SCCOLROW nPos) const
         {
             // row header
             SCROW nRPos = static_cast<SCROW>(nPos);
-            bCellsProtected = pDoc->HasAttrib(0, nRPos, nTab, MAXCOL, nRPos, nTab, HASATTR_PROTECTED);
+            bCellsProtected = pDoc->HasAttrib(0, nRPos, nTab, MAXCOL, nRPos, nTab, HasAttrFlags::Protected);
         }
         else
         {
             // column header
             SCCOL nCPos = static_cast<SCCOL>(nPos);
-            bCellsProtected = pDoc->HasAttrib(nCPos, 0, nTab, nCPos, MAXROW, nTab, HASATTR_PROTECTED);
+            bCellsProtected = pDoc->HasAttrib(nCPos, 0, nTab, nCPos, MAXROW, nTab, HasAttrFlags::Protected);
         }
 
         bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);

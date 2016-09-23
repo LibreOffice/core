@@ -51,7 +51,7 @@ namespace {
 bool isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, bool bSelectLocked, bool bSelectUnlocked)
 {
     bool bCellProtected = pDoc->HasAttrib(
-        nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_PROTECTED);
+        nCol, nRow, nTab, nCol, nRow, nTab, HasAttrFlags::Protected);
 
     if (bCellProtected && !bSelectLocked)
         return false;
@@ -744,9 +744,9 @@ void ScTabView::SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX,
     {
         bSkipCell = pDoc->ColHidden(rCurX, nTab) || pDoc->IsHorOverlapped(rCurX, rCurY, nTab);
         if (bSkipProtected && !bSkipCell)
-            bSkipCell = pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+            bSkipCell = pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HasAttrFlags::Protected);
         if (bSkipUnprotected && !bSkipCell)
-            bSkipCell = !pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+            bSkipCell = !pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HasAttrFlags::Protected);
 
         if (bSkipCell)
         {
@@ -804,9 +804,9 @@ void ScTabView::SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, S
         SCROW nLastRow = -1;
         bSkipCell = pDoc->RowHidden(rCurY, nTab, nullptr, &nLastRow) || pDoc->IsVerOverlapped( rCurX, rCurY, nTab );
         if (bSkipProtected && !bSkipCell)
-            bSkipCell = pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+            bSkipCell = pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HasAttrFlags::Protected);
         if (bSkipUnprotected && !bSkipCell)
-            bSkipCell = !pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+            bSkipCell = !pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HasAttrFlags::Protected);
 
         if (bSkipCell)
         {

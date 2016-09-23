@@ -721,10 +721,10 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
     }
 
     if ( nEndCol < MAXCOL && pDoc->HasAttrib(
-                    nEndCol,nStartRow,nPrintTab, nEndCol,nEndRow,nPrintTab, HASATTR_SHADOW_RIGHT ) )
+                    nEndCol,nStartRow,nPrintTab, nEndCol,nEndRow,nPrintTab, HasAttrFlags::ShadowRight ) )
         ++nEndCol;
     if ( nEndRow < MAXROW && pDoc->HasAttrib(
-                    nStartCol,nEndRow,nPrintTab, nEndCol,nEndRow,nPrintTab, HASATTR_SHADOW_DOWN ) )
+                    nStartCol,nEndRow,nPrintTab, nEndCol,nEndRow,nPrintTab, HasAttrFlags::ShadowDown ) )
         ++nEndRow;
 
     if (!bChangeCol) nEndCol = nOldEndCol;

@@ -149,7 +149,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         if ( nRow <= nOverlapRowMax )
         {
             while ( nCol <= MAXCOL && mpDoc->HasAttrib( nCol, nRow, nTab,
-                nCol, nRow, nTab, HASATTR_OVERLAPPED ) )
+                nCol, nRow, nTab, HasAttrFlags::Overlapped ) )
             {
                 nCol++;
                 nMergeColAdd++;

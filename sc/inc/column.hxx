@@ -210,31 +210,31 @@ public:
     void        DeleteContent( SCROW nRow, bool bBroadcast = true );
     void        FreeAll();
     void        FreeNotes();
-    void Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern );
+    void        Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern );
 
-    bool        HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;
-    bool    HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const;
-    bool IsMerged( SCROW nRow ) const;
-    bool    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
+    bool        HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const;
+    bool        HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask ) const;
+    bool        IsMerged( SCROW nRow ) const;
+    bool        ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
                                 bool bRefresh );
 
-    bool               IsEmptyData() const;
-    bool               IsEmptyAttr() const;
-    bool               IsEmpty() const;
+    bool        IsEmptyData() const;
+    bool        IsEmptyAttr() const;
+    bool        IsEmpty() const;
 
                 // data only:
-    bool               IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
-    SCSIZE         GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
-    bool               HasDataAt(SCROW nRow) const;
-    bool               HasVisibleDataAt(SCROW nRow) const;
-    SCROW              GetFirstDataPos() const;
-    SCROW              GetLastDataPos() const;
-    SCROW GetLastDataPos( SCROW nLastRow ) const;
-    bool               GetPrevDataPos(SCROW& rRow) const;
-    bool               GetNextDataPos(SCROW& rRow) const;
-    void               FindDataAreaPos(SCROW& rRow, bool bDown) const; // (without Broadcaster)
-    void FindUsed( SCROW nStartRow, SCROW nEndRow, mdds::flat_segment_tree<SCROW, bool>& rUsed ) const;
+    bool        IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
+    SCSIZE      GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
+    bool        HasDataAt(SCROW nRow) const;
+    bool        HasVisibleDataAt(SCROW nRow) const;
+    SCROW       GetFirstDataPos() const;
+    SCROW       GetLastDataPos() const;
+    SCROW       GetLastDataPos( SCROW nLastRow ) const;
+    bool        GetPrevDataPos(SCROW& rRow) const;
+    bool        GetNextDataPos(SCROW& rRow) const;
+    void        FindDataAreaPos(SCROW& rRow, bool bDown) const; // (without Broadcaster)
+    void        FindUsed( SCROW nStartRow, SCROW nEndRow, mdds::flat_segment_tree<SCROW, bool>& rUsed ) const;
 
     SCSIZE             VisibleCount( SCROW nStartRow, SCROW nEndRow ) const;
     sc::MatrixEdge     GetBlockMatrixEdges(SCROW nRow1, SCROW nRow2, sc::MatrixEdge nMask ) const;

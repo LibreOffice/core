@@ -172,22 +172,26 @@ enum class ScPasteFunc {
     NONE, ADD, SUB, MUL, DIV
 };
                                         // bits for HasAttr
-#define HASATTR_LINES           1
-#define HASATTR_MERGED          2
-#define HASATTR_OVERLAPPED      4
-#define HASATTR_PROTECTED       8
-#define HASATTR_SHADOW          16
-#define HASATTR_NEEDHEIGHT      32
-#define HASATTR_SHADOW_RIGHT    64
-#define HASATTR_SHADOW_DOWN     128
-#define HASATTR_AUTOFILTER      256
-#define HASATTR_CONDITIONAL     512
-#define HASATTR_ROTATE          1024
-#define HASATTR_NOTOVERLAPPED   2048
-#define HASATTR_RTL             4096
-#define HASATTR_RIGHTORCENTER   8192    // right or centered logical alignment
+enum class HasAttrFlags {
+    NONE            = 0x0000,
+    Lines           = 0x0001,
+    Merged          = 0x0002,
+    Overlapped      = 0x0004,
+    Protected       = 0x0008,
+    Shadow          = 0x0010,
+    NeedHeight      = 0x0020,
+    ShadowRight     = 0x0040,
+    ShadowDown      = 0x0080,
+    AutoFilter      = 0x0100,
+    Conditional     = 0x0200,
+    Rotate          = 0x0400,
+    NotOverlapped   = 0x0800,
+    RightOrCenter   = 0x1000,   // right or centered logical alignment
+};
+namespace o3tl {
+    template<> struct typed_flags<HasAttrFlags> : is_typed_flags<HasAttrFlags, 0x1fff> {};
+}
 
-#define HASATTR_PAINTEXT        ( HASATTR_LINES | HASATTR_SHADOW | HASATTR_CONDITIONAL )
 
 #define EMPTY_OUSTRING ScGlobal::GetEmptyOUString()
 

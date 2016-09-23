@@ -1055,7 +1055,7 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
     }
 
     if ( rDoc.HasAttrib( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
-                            HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                            HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
     {       // "Don't nest merging  !"
         ErrorMessage(STR_MSSG_MERGECELLS_0);
         return false;
@@ -1138,7 +1138,7 @@ bool ScViewFunc::TestRemoveMerge()
     if (GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE)
     {
         ScDocument* pDoc = GetViewData().GetDocument();
-        if ( pDoc->HasAttrib( aRange, HASATTR_MERGED ) )
+        if ( pDoc->HasAttrib( aRange, HasAttrFlags::Merged ) )
             bMerged = true;
     }
     return bMerged;

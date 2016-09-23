@@ -1773,7 +1773,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
         aMarkRange.aStart.SetRow(GetViewData().GetCurY());
         aMarkRange.aStart.SetTab(GetViewData().GetTabNo());
         aMarkRange.aEnd = aMarkRange.aStart;
-        if ( pDoc->HasAttrib( aMarkRange, HASATTR_MERGED ) )
+        if ( pDoc->HasAttrib( aMarkRange, HasAttrFlags::Merged ) )
         {
             aFuncMark.SetMarkArea( aMarkRange );
         }
@@ -2061,7 +2061,7 @@ void ScViewFunc::SetWidthOrHeight(
             {
                 if (rDoc.HasAttrib( static_cast<SCCOL>(nStart),0,nTab,
                             static_cast<SCCOL>(nEnd),MAXROW,nTab,
-                            HASATTR_MERGED | HASATTR_OVERLAPPED ))
+                            HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
                     nStart = 0;
                 if (nStart > 0)             // go upwards because of Lines and cursor
                     --nStart;
@@ -2070,7 +2070,7 @@ void ScViewFunc::SetWidthOrHeight(
             }
             else
             {
-                if (rDoc.HasAttrib( 0,nStart,nTab, MAXCOL,nEnd,nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ))
+                if (rDoc.HasAttrib( 0,nStart,nTab, MAXCOL,nEnd,nTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
                     nStart = 0;
                 if (nStart != 0)
                     --nStart;
@@ -2265,7 +2265,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
     if ( bAnyEdit )
     {
         UpdateEditView();
-        if ( rDoc.HasAttrib( nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_NEEDHEIGHT ) )
+        if ( rDoc.HasAttrib( nCol, nRow, nTab, nCol, nRow, nTab, HasAttrFlags::NeedHeight ) )
         {
             ScInputHandler* pHdl = pScMod->GetInputHdl( GetViewData().GetViewShell() );
             if (pHdl)

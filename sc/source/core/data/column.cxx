@@ -302,12 +302,12 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
     return false;
 }
 
-bool ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
+bool ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const
 {
     return pAttrArray->HasAttrib( nRow1, nRow2, nMask );
 }
 
-bool ScColumn::HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const
+bool ScColumn::HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask ) const
 {
     bool bFound = false;
 
@@ -1831,7 +1831,7 @@ bool ScColumn::TestCopyScenarioTo( const ScColumn& rDestCol ) const
     while (pPattern && bOk)
     {
         if ( static_cast<const ScMergeFlagAttr&>(pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
-            if ( rDestCol.pAttrArray->HasAttrib( nStart, nEnd, HASATTR_PROTECTED ) )
+            if ( rDestCol.pAttrArray->HasAttrib( nStart, nEnd, HasAttrFlags::Protected ) )
                 bOk = false;
 
         pPattern = aAttrIter.Next( nStart, nEnd );

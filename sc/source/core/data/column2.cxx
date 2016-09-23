@@ -983,7 +983,7 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
     if (!bInSel && it != maCells.end() && eType != sc::element_type_empty)
     {
         if ( (eType == sc::element_type_string || eType == sc::element_type_edittext) &&
-             !(HasAttrib( nRow, nRow, HASATTR_PROTECTED) &&
+             !(HasAttrib( nRow, nRow, HasAttrFlags::Protected) &&
                pDocument->IsTabProtected(nTab)) )
             return true;
     }
@@ -1002,7 +1002,7 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
                 it = maCells.position(it, nRow).first;
                 eType = it->type;
                 if ( (eType == sc::element_type_string || eType == sc::element_type_edittext) &&
-                     !(HasAttrib( nRow, nRow, HASATTR_PROTECTED) &&
+                     !(HasAttrib( nRow, nRow, HasAttrFlags::Protected) &&
                        pDocument->IsTabProtected(nTab)) )
                     return true;
                 else
@@ -1014,7 +1014,7 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
             it = maCells.position(it, nRow).first;
             eType = it->type;
             if ( (eType == sc::element_type_string || eType == sc::element_type_edittext) &&
-                 !(HasAttrib( nRow, nRow, HASATTR_PROTECTED) &&
+                 !(HasAttrib( nRow, nRow, HasAttrFlags::Protected) &&
                    pDocument->IsTabProtected(nTab)) )
                 return true;
             else

@@ -372,7 +372,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
                     rSrcDoc.CopyToClip(aClipParam, &aClipDoc, &aSourceMark, false, false);
 
                     if ( aClipDoc.HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
-                                            HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                                            HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
                     {
                         //! ResetAttrib am Dokument !!!
 

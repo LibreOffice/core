@@ -1348,7 +1348,7 @@ util::TriState lclGetMergedState( const uno::Reference< table::XCellRange >& rxC
         of a merged range is part of this range are not covered. */
     ScRange aScRange;
     ScUnoConversion::FillScRange( aScRange, aRangeAddr );
-    bool bHasMerged = getDocumentFromRange( rxCellRange ).HasAttrib( aScRange, HASATTR_MERGED | HASATTR_OVERLAPPED );
+    bool bHasMerged = getDocumentFromRange( rxCellRange ).HasAttrib( aScRange, HasAttrFlags::Merged | HasAttrFlags::Overlapped );
     return bHasMerged ? util::TriState_INDETERMINATE : util::TriState_NO;
 }
 

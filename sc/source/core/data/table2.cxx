@@ -1904,7 +1904,7 @@ const ScPatternAttr* ScTable::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, S
         return nullptr;
 }
 
-bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nMask ) const
+bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, HasAttrFlags nMask ) const
 {
     bool bFound = false;
     for (SCCOL i=nCol1; i<=nCol2 && !bFound; i++)
@@ -1912,7 +1912,7 @@ bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
     return bFound;
 }
 
-bool ScTable::HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const
+bool ScTable::HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask ) const
 {
     std::vector<sc::ColRowSpan> aSpans = rMark.GetMarkedColSpans();
 
@@ -2220,7 +2220,7 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
         bIsEditable = false;
     else if ( IsProtected() && !pDocument->IsScenario(nTab) )
     {
-        bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED );
+        bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HasAttrFlags::Protected );
         if (!bIsEditable)
         {
             // An enhanced protection permission may override the attribute.
@@ -2295,7 +2295,7 @@ bool ScTable::IsSelectionEditable( const ScMarkData& rMark,
     {
         ScRangeList aRanges;
         rMark.FillRangeListWithMarks( &aRanges, false );
-        bIsEditable = !HasAttribSelection( rMark, HASATTR_PROTECTED );
+        bIsEditable = !HasAttribSelection( rMark, HasAttrFlags::Protected );
         if (!bIsEditable)
         {
             // An enhanced protection permission may override the attribute.

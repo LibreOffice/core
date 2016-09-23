@@ -152,7 +152,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uI
 
             if ( ( nExtFlags & SC_PF_WHOLEROWS ) ||
                  aDocument.HasAttrib( nCol1,nRow1,nTab1,
-                                      MAXCOL,nRow2,nTab2, HASATTR_ROTATE | HASATTR_RIGHTORCENTER ) )
+                                      MAXCOL,nRow2,nTab2, HasAttrFlags::Rotate | HasAttrFlags::RightOrCenter ) )
             {
                 nCol1 = 0;
                 nCol2 = MAXCOL;
@@ -198,7 +198,8 @@ void ScDocShell::PostPaintExtras()
 
 void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange )
 {
-    if ( ( rExtFlags & SC_PF_LINES ) == 0 && aDocument.HasAttrib( rRange, HASATTR_PAINTEXT ) )
+    if ( ( rExtFlags & SC_PF_LINES ) == 0 &&
+         aDocument.HasAttrib( rRange, HasAttrFlags::Lines | HasAttrFlags::Shadow | HasAttrFlags::Conditional ) )
     {
         //  If the range contains lines, shadow or conditional formats,
         //  set SC_PF_LINES to include one extra cell in all directions.
@@ -208,7 +209,7 @@ void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange )
 
     if ( ( rExtFlags & SC_PF_WHOLEROWS ) == 0 &&
          ( rRange.aStart.Col() != 0 || rRange.aEnd.Col() != MAXCOL ) &&
-         aDocument.HasAttrib( rRange, HASATTR_ROTATE | HASATTR_RIGHTORCENTER ) )
+         aDocument.HasAttrib( rRange, HasAttrFlags::Rotate | HasAttrFlags::RightOrCenter ) )
     {
         //  If the range contains (logically) right- or center-aligned cells,
         //  or rotated cells, set SC_PF_WHOLEROWS to paint the whole rows.

@@ -1567,7 +1567,7 @@ bool ScGridWindow::IsCellCoveredByText(SCsCOL nPosX, SCsROW nPosY, SCTAB nTab, S
 
     // to the left, there is no cell that would contain (potentially
     // overrunning) text
-    if (nNonEmptyX < 0 || pDoc->HasAttrib(nNonEmptyX, nPosY, nTab, nPosX, nPosY, nTab, HASATTR_MERGED | HASATTR_OVERLAPPED))
+    if (nNonEmptyX < 0 || pDoc->HasAttrib(nNonEmptyX, nPosY, nTab, nPosX, nPosY, nTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped))
         return false;
 
     double nPPTX = pViewData->GetPPTX();
@@ -2257,7 +2257,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         bool bEditAllowed = true;
         if ( pProtect && pProtect->isProtected() )
         {
-            bool bCellProtected = pDoc->HasAttrib(nPosX, nPosY, nTab, nPosX, nPosY, nTab, HASATTR_PROTECTED);
+            bool bCellProtected = pDoc->HasAttrib(nPosX, nPosY, nTab, nPosX, nPosY, nTab, HasAttrFlags::Protected);
             bool bSkipProtected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
             bool bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
 
@@ -2963,7 +2963,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             if ( pProtect && pProtect->isProtected() )
             {
                 // This sheet is protected.  Check if a context menu is allowed on this cell.
-                bool bCellProtected = pDoc->HasAttrib(nCellX, nCellY, nTab, nCellX, nCellY, nTab, HASATTR_PROTECTED);
+                bool bCellProtected = pDoc->HasAttrib(nCellX, nCellY, nTab, nCellX, nCellY, nTab, HasAttrFlags::Protected);
                 bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
                 bool bSelUnprotected = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
 

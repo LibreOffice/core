@@ -522,7 +522,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     if ( aLocalParam.bIncludePattern && rDoc.HasAttrib(
                                         aLocalParam.nCol1, nStartRow        , nTab,
                                         aLocalParam.nCol2, aLocalParam.nRow2, nTab,
-                                        HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                                        HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
     {
         //  Merge-Attribute wuerden beim Sortieren durcheinanderkommen
         if (!bApi)
@@ -979,7 +979,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     }
 
     if (rDoc.HasAttrib( rParam.nCol1, rParam.nRow1+1, nTab,
-                         rParam.nCol2, rParam.nRow2, nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ))
+                         rParam.nCol2, rParam.nRow2, nTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_MSSG_INSERTCELLS_0); // nicht in zusammengefasste einfuegen

@@ -802,7 +802,7 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 }
 
 static bool lcl_SelHasAttrib( ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                        const ScMarkData& rTabSelection, sal_uInt16 nMask )
+                        const ScMarkData& rTabSelection, HasAttrFlags nMask )
 {
     ScMarkData::const_iterator itr = rTabSelection.begin(), itrEnd = rTabSelection.end();
     for (; itr != itrEnd; ++itr)
@@ -1185,7 +1185,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     }
 
     if (bClipOver)
-        if (lcl_SelHasAttrib( pDoc, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, aFilteredMark, HASATTR_OVERLAPPED ))
+        if (lcl_SelHasAttrib( pDoc, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, aFilteredMark, HasAttrFlags::Overlapped ))
         {       // "Cell merge not possible if cells already merged"
             ScDocAttrIterator aIter( pDoc, nStartTab, nStartCol, nStartRow, nUndoEndCol, nUndoEndRow );
             const ScPatternAttr* pPattern = nullptr;

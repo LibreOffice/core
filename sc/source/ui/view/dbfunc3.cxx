@@ -385,7 +385,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     }
 
     if (rDoc.HasAttrib( rParam.nCol1, rParam.nRow1+1, nTab,
-                         rParam.nCol2, rParam.nRow2, nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ))
+                         rParam.nCol2, rParam.nRow2, nTab, HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
     {
         ErrorMessage(STR_MSSG_INSERTCELLS_0);   // do not insert into merged
         return;

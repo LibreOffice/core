@@ -812,7 +812,7 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
             new ScUndoEnterData(&rDocShell, rPos, aOldValues, rText, nullptr));
     }
 
-    if ( bEditDeleted || rDoc.HasAttrib( ScRange(rPos), HASATTR_NEEDHEIGHT ) )
+    if ( bEditDeleted || rDoc.HasAttrib( ScRange(rPos), HasAttrFlags::NeedHeight ) )
         AdjustRowHeight( ScRange(rPos) );
 
     rDocShell.PostPaintCell( rPos );
@@ -831,7 +831,7 @@ bool ScDocFunc::SetValueCell( const ScAddress& rPos, double fVal, bool bInteract
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo = rDoc.IsUndoEnabled();
 
-    bool bHeight = rDoc.HasAttrib(rPos, HASATTR_NEEDHEIGHT);
+    bool bHeight = rDoc.HasAttrib(rPos, HasAttrFlags::NeedHeight);
 
     ScCellValue aOldVal;
     if (bUndo)
@@ -899,7 +899,7 @@ bool ScDocFunc::SetStringCell( const ScAddress& rPos, const OUString& rStr, bool
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo = rDoc.IsUndoEnabled();
 
-    bool bHeight = rDoc.HasAttrib(rPos, HASATTR_NEEDHEIGHT);
+    bool bHeight = rDoc.HasAttrib(rPos, HasAttrFlags::NeedHeight);
 
     ScCellValue aOldVal;
     if (bUndo)
@@ -936,7 +936,7 @@ bool ScDocFunc::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, 
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo = rDoc.IsUndoEnabled();
 
-    bool bHeight = rDoc.HasAttrib(rPos, HASATTR_NEEDHEIGHT);
+    bool bHeight = rDoc.HasAttrib(rPos, HasAttrFlags::NeedHeight);
 
     ScCellValue aOldVal;
     if (bUndo)
@@ -988,7 +988,7 @@ bool ScDocFunc::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, boo
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo = rDoc.IsUndoEnabled();
 
-    bool bHeight = rDoc.HasAttrib(rPos, HASATTR_NEEDHEIGHT);
+    bool bHeight = rDoc.HasAttrib(rPos, HasAttrFlags::NeedHeight);
 
     ScCellValue aOldVal;
     if (bUndo)
@@ -1722,7 +1722,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     ScRange aExtendMergeRange( aTargetRange );
 
-    if( aTargetRange.aStart == aTargetRange.aEnd && rDoc.HasAttrib(aTargetRange, HASATTR_MERGED) )
+    if( aTargetRange.aStart == aTargetRange.aEnd && rDoc.HasAttrib(aTargetRange, HasAttrFlags::Merged) )
     {
         rDoc.ExtendMerge( aExtendMergeRange );
         rDoc.ExtendOverlapped( aExtendMergeRange );
@@ -1800,7 +1800,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     for (; itr != itrEnd && nTabCount; ++itr)
     {
         i = *itr;
-        if( rDoc.HasAttrib( nMergeTestStartCol, nMergeTestStartRow, i, nMergeTestEndCol, nMergeTestEndRow, i, HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+        if( rDoc.HasAttrib( nMergeTestStartCol, nMergeTestStartRow, i, nMergeTestEndCol, nMergeTestEndRow, i, HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
         {
             if (eCmd==INS_CELLSRIGHT)
                 bNeedRefresh = true;
@@ -1905,7 +1905,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     for( ::std::vector<ScRange>::const_iterator iIter( qIncreaseRange.begin()); iIter != qIncreaseRange.end(); ++iIter )
                     {
                         ScRange aRange( *iIter );
-                        if( rDoc.HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
+                        if( rDoc.HasAttrib( aRange, HasAttrFlags::Overlapped | HasAttrFlags::Merged ) )
                         {
                             UnmergeCells( aRange, true );
                         }
@@ -1991,7 +1991,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         while( !qIncreaseRange.empty() )
         {
             ScRange aRange = qIncreaseRange.back();
-            if( !rDoc.HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
+            if( !rDoc.HasAttrib( aRange, HasAttrFlags::Overlapped | HasAttrFlags::Merged ) )
             {
                 switch (eCmd)
                 {
@@ -2166,7 +2166,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     ScRange aExtendMergeRange( rRange );
 
-    if( rRange.aStart == rRange.aEnd && rDoc.HasAttrib(rRange, HASATTR_MERGED) )
+    if( rRange.aStart == rRange.aEnd && rDoc.HasAttrib(rRange, HasAttrFlags::Merged) )
     {
         rDoc.ExtendMerge( aExtendMergeRange );
         rDoc.ExtendOverlapped( aExtendMergeRange );
@@ -2233,7 +2233,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
         SCTAB i = *itr;
-        if ( rDoc.HasAttrib( nUndoStartCol, nUndoStartRow, i, nMergeTestEndCol, nMergeTestEndRow, i, HASATTR_MERGED | HASATTR_OVERLAPPED ))
+        if ( rDoc.HasAttrib( nUndoStartCol, nUndoStartRow, i, nMergeTestEndCol, nMergeTestEndRow, i, HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
         {
             SCCOL nMergeStartCol = nUndoStartCol;
             SCROW nMergeStartRow = nUndoStartRow;
@@ -2340,7 +2340,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     for( ::std::vector<ScRange>::const_iterator iIter( qDecreaseRange.begin()); iIter != qDecreaseRange.end(); ++iIter )
                     {
                         ScRange aRange( *iIter );
-                        if( rDoc.HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
+                        if( rDoc.HasAttrib( aRange, HasAttrFlags::Overlapped | HasAttrFlags::Merged ) )
                         {
                             UnmergeCells( aRange, true );
                         }
@@ -2513,7 +2513,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                 break;
         }
 
-        if( !rDoc.HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
+        if( !rDoc.HasAttrib( aRange, HasAttrFlags::Overlapped | HasAttrFlags::Merged ) )
         {
             ScCellMergeOption aMergeOption(aRange);
             MergeCells( aMergeOption, false, true, true );
@@ -2708,7 +2708,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     if (bClipOver && !bCut)
         if (rDoc.HasAttrib( nDestCol,nDestRow,nDestTab, nUndoEndCol,nUndoEndRow,nDestEndTab,
-                                HASATTR_MERGED | HASATTR_OVERLAPPED ))
+                                HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
         {       // "Zusammenfassen nicht verschachteln !"
             if (!bApi)
                 rDocShell.ErrorMessage(STR_MSSG_MOVEBLOCKTO_0);
@@ -2766,7 +2766,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         if (bClipOver)
             if (rDoc.HasAttrib( nDestCol,nDestRow,nDestTab,
                                     nUndoEndCol,nUndoEndRow,nDestEndTab,
-                                    HASATTR_MERGED | HASATTR_OVERLAPPED ))
+                                    HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
             {
                 rDoc.CopyFromClip( rSource, aSourceMark, InsertDeleteFlags::ALL, nullptr, pClipDoc );
                 for (nTab=nStartTab; nTab<=nEndTab; nTab++)
@@ -4707,7 +4707,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
         }
 
         if ( rDoc.HasAttrib( nStartCol, nStartRow, *itr, nEndCol, nEndRow, *itr,
-                                HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                                HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
         {
             // "Zusammenfassen nicht verschachteln !"
             if (!bApi)
@@ -4822,7 +4822,7 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord )
     {
         SCTAB nTab = *itr;
         ScRange aRange = rOption.getSingleRange(nTab);
-        if ( !rDoc.HasAttrib(aRange, HASATTR_MERGED) )
+        if ( !rDoc.HasAttrib(aRange, HasAttrFlags::Merged) )
             continue;
 
         ScRange aExtended = aRange;

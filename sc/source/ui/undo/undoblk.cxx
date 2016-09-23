@@ -197,7 +197,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
     for( i=0; i<nCount; i++ )
     {
         if ( rDoc.HasAttrib( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(), pTabs[i],
-            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i], HASATTR_MERGED ) )
+            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i], HasAttrFlags::Merged ) )
         {
             SCCOL nEndCol = aWorkRange.aEnd.Col();
             SCROW nEndRow = aWorkRange.aEnd.Row();
@@ -417,7 +417,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     for( i=0; i<nCount; i++ )
     {
         if ( rDoc.HasAttrib( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(), pTabs[i],
-            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i], HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i], HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
         {
             // #i51445# old merge flag attributes must be deleted also for single cells,
             // not only for whole columns/rows
@@ -1235,7 +1235,7 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
 
     rDoc.DeleteAreaTab( aRange, nDelFlags );
     pRefUndoDoc->CopyToDocument(aRange, nUndoFlags, false, rDoc);
-    if ( rDoc.HasAttrib( aRange, HASATTR_MERGED ) )
+    if ( rDoc.HasAttrib( aRange, HasAttrFlags::Merged ) )
         rDoc.ExtendMerge( aRange, true );
 
     aPaintRange.aEnd.SetCol( std::max( aPaintRange.aEnd.Col(), aRange.aEnd.Col() ) );
@@ -1691,7 +1691,7 @@ void ScUndoSelectionStyle::DoChange( const bool bUndo )
     SetViewMarkData( aMarkData );
 
     ScRange aWorkRange( aRange );
-    if ( rDoc.HasAttrib( aWorkRange, HASATTR_MERGED ) )        // Merged cells?
+    if ( rDoc.HasAttrib( aWorkRange, HasAttrFlags::Merged ) )        // Merged cells?
         rDoc.ExtendMerge( aWorkRange, true );
 
     sal_uInt16 nExtFlags = 0;

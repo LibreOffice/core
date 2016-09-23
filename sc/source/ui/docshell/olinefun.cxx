@@ -65,7 +65,7 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
         nEndRow = nEnd;
     }
     if (rDoc.HasAttrib( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
-                            HASATTR_MERGED | HASATTR_OVERLAPPED ))
+                            HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
     {
         nStartCol = 0;
         nStartRow = 0;
