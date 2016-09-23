@@ -2851,8 +2851,8 @@ void ExceptionType::dumpHppFile(
         }
         out << "}\n\n";
     }
-    out << indent() << id_ << "::" << id_ << "(" << id_
-        << " const & the_other)";
+    out << "#if !defined LIBO_INTERNAL_ONLY\n" << indent() << id_ << "::" << id_
+        << "(" << id_ << " const & the_other)";
     bFirst = true;
     if (!base.isEmpty()) {
         out << ": " << codemaker::cpp::scopedCppName(u2b(base))
@@ -2882,7 +2882,7 @@ void ExceptionType::dumpHppFile(
     }
     out << indent() << "return *this;\n";
     dec();
-    out << indent() << "}\n\n";
+    out << indent() << "}\n#endif\n\n";
     if (codemaker::cppumaker::dumpNamespaceClose(out, name_, false)) {
         out << "\n";
     }
@@ -3066,10 +3066,11 @@ void ExceptionType::dumpDeclaration(FileStream & out) {
         }
         out << ");\n\n";
     }
-    out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(" << id_
+    out << "#if !defined LIBO_INTERNAL_ONLY\n" << indent()
+        << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(" << id_
         << " const &);\n\n" << indent() << "inline CPPU_GCC_DLLPRIVATE ~"
         << id_ << "();\n\n" << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_
-        << " & operator =(" << id_ << " const &);\n\n";
+        << " & operator =(" << id_ << " const &);\n#endif\n\n";
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity_->getDirectMembers().begin());
          i != entity_->getDirectMembers().end(); ++i)
