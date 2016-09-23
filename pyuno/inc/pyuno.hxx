@@ -101,7 +101,8 @@ public:
             throw std::bad_alloc();
     }
 
-    PyRef( const PyRef &r ) : m( r.get() ) { Py_XINCREF( m ); }
+    PyRef(const PyRef &r) : m(r.get()) { Py_XINCREF(m); }
+    PyRef(PyRef &&r) : m(r.get()) { r.scratch(); }
 
     ~PyRef() { Py_XDECREF( m ); }
 
@@ -113,11 +114,20 @@ public:
         return m;
     }
 
-    PyRef & operator = (  const PyRef & r )
+    PyRef& operator=(const PyRef& r)
     {
         PyObject *tmp = m;
         m = r.getAcquired();
-        Py_XDECREF( tmp );
+        Py_XDECREF(tmp);
+        return *this;
+    }
+
+    PyRef& operator=(PyRef&& r)
+    {
+        PyObject *tmp = m;
+        m = r.get();
+        r.scratch();
+        Py_XDECREF(tmp);
         return *this;
     }
 
