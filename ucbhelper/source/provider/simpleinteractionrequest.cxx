@@ -18,6 +18,7 @@
  */
 
 #include <ucbhelper/simpleinteractionrequest.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <osl/diagnose.h>
 
@@ -27,69 +28,35 @@ using namespace ucbhelper;
 
 SimpleInteractionRequest::SimpleInteractionRequest(
                                     const uno::Any & rRequest,
-                                    const sal_Int32 nContinuations )
+                                    const ContinuationFlags nContinuations )
 : InteractionRequest( rRequest )
 {
     // Set continuations.
-    OSL_ENSURE( nContinuations != CONTINUATION_UNKNOWN,
+    OSL_ENSURE( nContinuations != ContinuationFlags::NONE,
                 "SimpleInteractionRequest - No continuation!" );
 
-    sal_Int32 nLength = 0;
-
-    uno::Reference< task::XInteractionContinuation > xAbort;
-    uno::Reference< task::XInteractionContinuation > xRetry;
-    uno::Reference< task::XInteractionContinuation > xApprove;
-    uno::Reference< task::XInteractionContinuation > xDisapprove;
-
-    if ( nContinuations & CONTINUATION_ABORT )
+    std::vector< uno::Reference< task::XInteractionContinuation > > aContinuations;
+    if ( nContinuations & ContinuationFlags::Abort )
     {
-        ++nLength;
-        xAbort = new InteractionAbort( this );
+        aContinuations.push_back( new InteractionAbort( this ) );
     }
-
-    if ( nContinuations & CONTINUATION_RETRY )
+    if ( nContinuations & ContinuationFlags::Retry )
     {
-        ++nLength;
-        xRetry = new InteractionRetry( this );
+        aContinuations.push_back( new InteractionRetry( this ) );
     }
-
-    if ( nContinuations & CONTINUATION_APPROVE )
+    if ( nContinuations & ContinuationFlags::Approve )
     {
-        ++nLength;
-        xApprove = new InteractionApprove( this );
+        aContinuations.push_back( new InteractionApprove( this ) );
     }
-
-    if (  nContinuations & CONTINUATION_DISAPPROVE )
+    if (  nContinuations & ContinuationFlags::Disapprove )
     {
-        ++nLength;
-        xDisapprove = new InteractionDisapprove( this );
+        aContinuations.push_back( new InteractionDisapprove( this ) );
     }
-
-    OSL_ENSURE( nLength > 0,
-                "SimpleInteractionRequest - No continuation!" );
-
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > >
-        aContinuations( nLength );
-
-    nLength = 0;
-
-    if ( xAbort.is() )
-        aContinuations[ nLength++ ] = xAbort;
-
-    if ( xRetry.is() )
-        aContinuations[ nLength++ ] = xRetry;
-
-    if ( xApprove.is() )
-        aContinuations[ nLength++ ] = xApprove;
-
-    if ( xDisapprove.is() )
-        aContinuations[ nLength++ ] = xDisapprove;
-
-    setContinuations( aContinuations );
+    setContinuations( comphelper::containerToSequence(aContinuations) );
 }
 
 
-sal_Int32 SimpleInteractionRequest::getResponse() const
+ContinuationFlags SimpleInteractionRequest::getResponse() const
 {
     rtl::Reference< InteractionContinuation > xSelection = getSelection();
     if ( xSelection.is() )
@@ -99,26 +66,26 @@ sal_Int32 SimpleInteractionRequest::getResponse() const
         uno::Reference< task::XInteractionAbort > xAbort(
                                         pSelection, uno::UNO_QUERY );
         if ( xAbort.is() )
-            return CONTINUATION_ABORT;
+            return ContinuationFlags::Abort;
 
         uno::Reference< task::XInteractionRetry > xRetry(
                                         pSelection, uno::UNO_QUERY );
         if ( xRetry.is() )
-            return CONTINUATION_RETRY;
+            return ContinuationFlags::Retry;
 
         uno::Reference< task::XInteractionApprove > xApprove(
                                         pSelection, uno::UNO_QUERY );
         if ( xApprove.is() )
-            return CONTINUATION_APPROVE;
+            return ContinuationFlags::Approve;
 
         uno::Reference< task::XInteractionDisapprove > xDisapprove(
                                         pSelection, uno::UNO_QUERY );
         if ( xDisapprove.is() )
-            return CONTINUATION_DISAPPROVE;
+            return ContinuationFlags::Disapprove;
 
         OSL_FAIL( "SimpleInteractionRequest::getResponse - Unknown continuation!" );
     }
-    return CONTINUATION_UNKNOWN;
+    return ContinuationFlags::NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

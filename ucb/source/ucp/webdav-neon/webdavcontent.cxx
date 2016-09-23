@@ -2586,25 +2586,24 @@ void Content::insert(
                 rtl::Reference< ucbhelper::SimpleInteractionRequest > xRequest
                     = new ucbhelper::SimpleInteractionRequest(
                         aExAsAny,
-                        ucbhelper::CONTINUATION_APPROVE
-                            | ucbhelper::CONTINUATION_DISAPPROVE );
+                        ContinuationFlags::Approve | ContinuationFlags::Disapprove );
                 xIH->handle( xRequest.get() );
 
-                const sal_Int32 nResp = xRequest->getResponse();
+                const ContinuationFlags nResp = xRequest->getResponse();
 
                 switch ( nResp )
                 {
-                    case ucbhelper::CONTINUATION_UNKNOWN:
+                    case ContinuationFlags::NONE:
                         // Not handled; throw.
                         throw aEx;
 //                            break;
 
-                    case ucbhelper::CONTINUATION_APPROVE:
+                    case ContinuationFlags::Approve:
                         // Continue -> Overwrite.
                         bReplaceExisting = true;
                         break;
 
-                    case ucbhelper::CONTINUATION_DISAPPROVE:
+                    case ContinuationFlags::Disapprove:
                         // Abort.
                         throw ucb::CommandFailedException(
                                     OUString(),

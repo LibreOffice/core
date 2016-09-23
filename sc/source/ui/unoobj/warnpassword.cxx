@@ -52,26 +52,14 @@ bool ScWarnPassword::WarningOnPassword( SfxMedium& rMedium )
         rtl::Reference< ucbhelper::SimpleInteractionRequest > xRequest
                     = new ucbhelper::SimpleInteractionRequest(
                         aException,
-                        ucbhelper::CONTINUATION_APPROVE
-                            | ucbhelper::CONTINUATION_DISAPPROVE );
+                        ContinuationFlags::Approve | ContinuationFlags::Disapprove );
 
         xHandler->handle( xRequest.get() );
 
-        const sal_Int32 nResp = xRequest->getResponse();
+        const ContinuationFlags nResp = xRequest->getResponse();
 
-        switch ( nResp )
-        {
-        case ucbhelper::CONTINUATION_UNKNOWN:
-                break;
-
-        case ucbhelper::CONTINUATION_APPROVE:
-                // Continue
-                break;
-
-        case ucbhelper::CONTINUATION_DISAPPROVE:
-                bReturn = false;
-                break;
-        }
+        if ( nResp == ContinuationFlags::Disapprove )
+            bReturn = false;
     }
     return bReturn;
 }
