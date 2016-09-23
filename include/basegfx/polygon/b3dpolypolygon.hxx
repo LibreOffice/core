@@ -46,11 +46,13 @@ namespace basegfx
     public:
         B3DPolyPolygon();
         B3DPolyPolygon(const B3DPolyPolygon& rPolyPolygon);
+        B3DPolyPolygon(B3DPolyPolygon&& rPolygon);
         explicit B3DPolyPolygon(const B3DPolygon& rPolygon);
         ~B3DPolyPolygon();
 
         // assignment operator
         B3DPolyPolygon& operator=(const B3DPolyPolygon& rPolyPolygon);
+        B3DPolyPolygon& operator=(B3DPolyPolygon&& rPolyPolygon);
 
         // compare operators
         bool operator==(const B3DPolyPolygon& rPolyPolygon) const;
