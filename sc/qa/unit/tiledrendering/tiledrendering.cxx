@@ -63,6 +63,7 @@ public:
     void testColRowResize();
     void testUndoShells();
     void testCreateViewGraphicSelection();
+    void testGraphicInvalidate();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -77,6 +78,7 @@ public:
     CPPUNIT_TEST(testColRowResize);
     CPPUNIT_TEST(testUndoShells);
     CPPUNIT_TEST(testCreateViewGraphicSelection);
+    CPPUNIT_TEST(testGraphicInvalidate);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -381,6 +383,7 @@ public:
     bool m_bTextViewSelectionInvalidated;
     bool m_bGraphicSelection;
     bool m_bGraphicViewSelection;
+    bool m_bFullInvalidateTiles;
     bool m_bViewLock;
 
     ViewCallback()
@@ -388,6 +391,7 @@ public:
           m_bViewCursorInvalidated(false),
           m_bTextViewSelectionInvalidated(false),
           m_bGraphicViewSelection(false),
+          m_bFullInvalidateTiles(false),
           m_bViewLock(false)
     {
     }
@@ -434,6 +438,14 @@ public:
             m_bGraphicViewSelection = true;
         }
         break;
+        case LOK_CALLBACK_INVALIDATE_TILES:
+        {
+            std::string text(pPayload);
+            if (text.find("EMPTY") != std::string::npos)
+            {
+                m_bFullInvalidateTiles = true;
+            }
+        }
         }
     }
 };
@@ -657,6 +669,39 @@ void ScTiledRenderingTest::testCreateViewGraphicSelection()
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
     CPPUNIT_ASSERT(aView2.m_bGraphicViewSelection);
     CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testGraphicInvalidate()
+{
+    // Load a document
+    comphelper::LibreOfficeKit::setActive();
+
+    // Load a document that has a shape and create two views.
+    ScModelObj* pModelObj = createDoc("shape.ods");
+    ViewCallback aView;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+
+    // Click to select graphic
+    aView.m_bGraphicSelection = false;
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 1, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    CPPUNIT_ASSERT(aView.m_bGraphicSelection);
+
+    // Drag Drop graphic
+    aView.m_bGraphicSelection = false;
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEMOVE, /*x=*/ 1,/*y=*/ 10,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, /*x=*/ 1, /*y=*/ 10, /*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView.m_bFullInvalidateTiles);
+
+    // Check again
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView.m_bFullInvalidateTiles);
 
     mxComponent->dispose();
     mxComponent.clear();
