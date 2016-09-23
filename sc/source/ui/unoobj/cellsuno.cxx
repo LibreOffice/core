@@ -7052,7 +7052,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
         SCCOL nCount = 0;
         SCCOL nCol;
         for (nCol=0; nCol<=MAXCOL; nCol++)
-            if (rDoc.HasColBreak(nCol, nTab))
+            if (rDoc.HasColBreak(nCol, nTab) != ScBreakType::NONE)
                 ++nCount;
 
         sheet::TablePageBreakData aData;
@@ -7062,10 +7062,10 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
         for (nCol=0; nCol<=MAXCOL; nCol++)
         {
             ScBreakType nBreak = rDoc.HasColBreak(nCol, nTab);
-            if (nBreak)
+            if (nBreak != ScBreakType::NONE)
             {
                 aData.Position    = nCol;
-                aData.ManualBreak = (nBreak & BREAK_MANUAL) != 0;
+                aData.ManualBreak = bool(nBreak & ScBreakType::Manual);
                 pAry[nPos] = aData;
                 ++nPos;
             }
@@ -8828,12 +8828,12 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE )
         {
             ScBreakType nBreak = rDoc.HasColBreak(nCol, nTab);
-            rAny <<= (nBreak != BREAK_NONE);
+            rAny <<= nBreak != ScBreakType::NONE;
         }
         else if ( pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
             ScBreakType nBreak = rDoc.HasColBreak(nCol, nTab);
-            rAny <<= ((nBreak & BREAK_MANUAL) != 0);
+            rAny <<= bool(nBreak & ScBreakType::Manual);
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);
@@ -8981,11 +8981,11 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE )
         {
             ScBreakType nBreak = rDoc.HasRowBreak(nRow, nTab);
-            rAny <<= (nBreak != BREAK_NONE);
+            rAny <<= (nBreak != ScBreakType::NONE);
         }
         else if ( pEntry->nWID == SC_WID_UNO_MANPAGE )
         {
-            bool bBreak = (rDoc.HasRowBreak(nRow, nTab) & BREAK_MANUAL) != 0;
+            bool bBreak(rDoc.HasRowBreak(nRow, nTab) & ScBreakType::Manual);
             rAny <<= bBreak;
         }
         else

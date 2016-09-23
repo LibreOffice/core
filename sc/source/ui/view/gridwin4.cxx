@@ -1338,7 +1338,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     if ( nBreak >= nX1 && nBreak <= nX2+1 )
                     {
                         //! Search for hidden
-                        if (pDoc->HasColBreak(nBreak, nTab) & BREAK_MANUAL)
+                        if (pDoc->HasColBreak(nBreak, nTab) & ScBreakType::Manual)
                             rRenderContext.SetFillColor( aManual );
                         else
                             rRenderContext.SetFillColor( aAutomatic );
@@ -1357,7 +1357,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     if ( nBreak >= nY1 && nBreak <= nY2+1 )
                     {
                         //! Search for hidden
-                        if (pDoc->HasRowBreak(nBreak, nTab) & BREAK_MANUAL)
+                        if (pDoc->HasRowBreak(nBreak, nTab) & ScBreakType::Manual)
                             rRenderContext.SetFillColor( aManual );
                         else
                             rRenderContext.SetFillColor( aAutomatic );

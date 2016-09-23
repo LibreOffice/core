@@ -3589,7 +3589,7 @@ bool ScDocFunc::InsertPageBreak( bool bColumn, const ScAddress& rPos,
     ScBreakType nBreak = bColumn ?
         rDoc.HasColBreak(static_cast<SCCOL>(nPos), nTab) :
         rDoc.HasRowBreak(static_cast<SCROW>(nPos), nTab);
-    if (nBreak & BREAK_MANUAL)
+    if (nBreak & ScBreakType::Manual)
         return true;
 
     if (bRecord)
@@ -3653,7 +3653,7 @@ bool ScDocFunc::RemovePageBreak( bool bColumn, const ScAddress& rPos,
         nBreak = rDoc.HasColBreak(static_cast<SCCOL>(nPos), nTab);
     else
         nBreak = rDoc.HasRowBreak(static_cast<SCROW>(nPos), nTab);
-    if ((nBreak & BREAK_MANUAL) == 0)
+    if (!(nBreak & ScBreakType::Manual))
         // There is no manual break.
         return false;
 

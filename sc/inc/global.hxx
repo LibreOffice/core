@@ -127,10 +127,15 @@ const sal_uInt8   CR_FILTERED    = 16;
 const sal_uInt8   CR_MANUALSIZE  = 32;
 const sal_uInt8   CR_ALL         = (CR_HIDDEN | CR_MANUALBREAK | CR_FILTERED | CR_MANUALSIZE);
 
-typedef sal_uInt8 ScBreakType;
-const ScBreakType BREAK_NONE   = 0;
-const ScBreakType BREAK_PAGE   = 1;
-const ScBreakType BREAK_MANUAL = 2;
+enum class ScBreakType {
+    NONE   = 0x00,
+    Page   = 0x01,
+    Manual = 0x02
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ScBreakType> : is_typed_flags<ScBreakType, 0x03> {};
+}
 
 enum class InsertDeleteFlags : sal_uInt16
 {
@@ -609,14 +614,14 @@ public:
         @param bEscapeEmbedded      If <TRUE/>, embedded quote characters are
                                     escaped by doubling them.
      */
-SC_DLLPUBLIC    static void             AddQuotes( OUString& rString, sal_Unicode cQuote, bool bEscapeEmbedded = true );
+    SC_DLLPUBLIC static void             AddQuotes( OUString& rString, sal_Unicode cQuote, bool bEscapeEmbedded = true );
 
     /** Erases the character cQuote from rString, if it exists at beginning AND end.
         @param bUnescapeEmbedded    If <TRUE/>, embedded doubled quote characters
                                     are unescaped by replacing them with a
                                     single instance.
      */
-SC_DLLPUBLIC    static void             EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescapeEmbedded = true );
+    SC_DLLPUBLIC static void             EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescapeEmbedded = true );
 
     /** Finds an unquoted instance of cChar in rString, starting at
         offset nStart. Unquoted instances may occur when concatenating two
@@ -626,13 +631,13 @@ SC_DLLPUBLIC    static void             EraseQuotes( OUString& rString, sal_Unic
         if cChar==cQuote the first cQuote character from nStart on is found.
         @returns offset if found, else -1
      */
-SC_DLLPUBLIC    static sal_Int32       FindUnquoted( const OUString& rString, sal_Unicode cChar);
+    SC_DLLPUBLIC static sal_Int32       FindUnquoted( const OUString& rString, sal_Unicode cChar);
 
     /** Finds an unquoted instance of cChar in null-terminated pString. Same
         semantics as FindUnquoted( const String&, ...)
         @returns: pointer to cChar if found, else NULL
      */
-SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar );
+    SC_DLLPUBLIC static const sal_Unicode* FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar );
 
     static  rtl_TextEncoding GetCharsetValue( const OUString& rCharSet );
     static  OUString        GetCharsetString( rtl_TextEncoding eVal );

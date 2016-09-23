@@ -967,7 +967,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                 bool bGrow = !bHide && nNew > nPagebreakBreak;
                 if ( bColumn )
                 {
-                    if (rDoc.HasColBreak(static_cast<SCCOL>(nPagebreakBreak), nTab) & BREAK_MANUAL)
+                    if (rDoc.HasColBreak(static_cast<SCCOL>(nPagebreakBreak), nTab) & ScBreakType::Manual)
                     {
                         ScAddress aOldAddr( static_cast<SCCOL>(nPagebreakBreak), nPosY, nTab );
                         pViewFunc->DeletePageBreak( true, true, &aOldAddr, false );
@@ -980,7 +980,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                     if ( bGrow )
                     {
                         // change last break to hard, and change scaleing
-                        bool bManualBreak = (rDoc.HasColBreak(static_cast<SCCOL>(nPagebreakPrev), nTab) & BREAK_MANUAL);
+                        bool bManualBreak(rDoc.HasColBreak(static_cast<SCCOL>(nPagebreakPrev), nTab) & ScBreakType::Manual);
                         if ( static_cast<SCCOL>(nPagebreakPrev) > aPagebreakSource.aStart.Col() && !bManualBreak )
                         {
                             ScAddress aPrev( static_cast<SCCOL>(nPagebreakPrev), nPosY, nTab );
@@ -994,7 +994,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                 }
                 else
                 {
-                    if (rDoc.HasRowBreak(nPagebreakBreak, nTab) & BREAK_MANUAL)
+                    if (rDoc.HasRowBreak(nPagebreakBreak, nTab) & ScBreakType::Manual)
                     {
                         ScAddress aOldAddr( nPosX, nPagebreakBreak, nTab );
                         pViewFunc->DeletePageBreak( false, true, &aOldAddr, false );
@@ -1007,7 +1007,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                     if ( bGrow )
                     {
                         // change last break to hard, and change scaleing
-                        bool bManualBreak = (rDoc.HasRowBreak(nPagebreakPrev, nTab) & BREAK_MANUAL);
+                        bool bManualBreak(rDoc.HasRowBreak(nPagebreakPrev, nTab) & ScBreakType::Manual);
                         if ( nPagebreakPrev > aPagebreakSource.aStart.Row() && !bManualBreak )
                         {
                             ScAddress aPrev( nPosX, nPagebreakPrev, nTab );

@@ -314,8 +314,8 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     long nPosX;
     long nPosY;
     SCSIZE nArrY;
-    ScBreakType nBreak    = BREAK_NONE;
-    ScBreakType nBreakOld = BREAK_NONE;
+    ScBreakType nBreak    = ScBreakType::NONE;
+    ScBreakType nBreakOld = ScBreakType::NONE;
 
     bool bSingle;
     Color aPageColor;
@@ -396,7 +396,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                     nBreak = mpDoc->HasColBreak(nCol, nTab);
                     bool bHidden = mpDoc->ColHidden(nCol, nTab);
 
-                    if ( nBreak || !bHidden )
+                    if ( nBreak != ScBreakType::NONE || !bHidden )
                         break;
                     ++nCol;
                 }
@@ -404,13 +404,13 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                 if (nBreak != nBreakOld)
                 {
                     aGrid.Flush();
-                    rRenderContext.SetLineColor( (nBreak & BREAK_MANUAL) ? aManualColor :
-                                        nBreak ? aPageColor : aGridColor );
+                    rRenderContext.SetLineColor( (nBreak & ScBreakType::Manual) ? aManualColor :
+                                        nBreak != ScBreakType::NONE ? aPageColor : aGridColor );
                     nBreakOld = nBreak;
                 }
             }
 
-            bool bDraw = bGrid || nBreakOld; // simple grid only if set that way
+            bool bDraw = bGrid || nBreakOld != ScBreakType::NONE; // simple grid only if set that way
 
             sal_uInt16 nWidthXplus2 = pRowInfo[0].pCellInfo[nXplus2].nWidth;
             bSingle = bSingleGrid; //! get into Fillinfo !!!!!
@@ -503,20 +503,20 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
                      * priority. Something like GetNextRowBreak() and
                      * GetNextManualRowBreak(). */
                     nBreak = mpDoc->HasRowBreak(i, nTab);
-                    if (!bHiddenRow || nBreak)
+                    if (!bHiddenRow || nBreak != ScBreakType::NONE)
                         break;
                 }
 
                 if (nBreakOld != nBreak)
                 {
                     aGrid.Flush();
-                    rRenderContext.SetLineColor( (nBreak & BREAK_MANUAL) ? aManualColor :
-                                        (nBreak) ? aPageColor : aGridColor );
+                    rRenderContext.SetLineColor( (nBreak & ScBreakType::Manual) ? aManualColor :
+                                        (nBreak != ScBreakType::NONE) ? aPageColor : aGridColor );
                     nBreakOld = nBreak;
                 }
             }
 
-            bool bDraw = bGrid || nBreakOld;    // simple grid only if set so
+            bool bDraw = bGrid || nBreakOld != ScBreakType::NONE;    // simple grid only if set so
 
             bool bNextYisNextRow = (pRowInfo[nArrYplus1].nRowNo == nYplus1);
             bSingle = !bNextYisNextRow;             // Hidden

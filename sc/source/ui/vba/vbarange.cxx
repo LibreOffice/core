@@ -3998,16 +3998,16 @@ ScVbaRange::getPageBreak() throw (uno::RuntimeException, std::exception)
         {
             ScDocument& rDoc = getDocumentFromRange( mxRange );
 
-            ScBreakType nBreak = BREAK_NONE;
+            ScBreakType nBreak = ScBreakType::NONE;
             if ( !bColumn )
                 nBreak = rDoc.HasRowBreak(thisAddress.StartRow, thisAddress.Sheet);
             else
                 nBreak = rDoc.HasColBreak(thisAddress.StartColumn, thisAddress.Sheet);
 
-            if (nBreak & BREAK_PAGE)
+            if (nBreak & ScBreakType::Page)
                 nPageBreak = excel::XlPageBreak::xlPageBreakAutomatic;
 
-            if (nBreak & BREAK_MANUAL)
+            if (nBreak & ScBreakType::Manual)
                 nPageBreak = excel::XlPageBreak::xlPageBreakManual;
         }
     }

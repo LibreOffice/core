@@ -4298,30 +4298,30 @@ void ScDocument::GetAllColBreaks(set<SCCOL>& rBreaks, SCTAB nTab, bool bPage, bo
 
 ScBreakType ScDocument::HasRowBreak(SCROW nRow, SCTAB nTab) const
 {
-    ScBreakType nType = BREAK_NONE;
+    ScBreakType nType = ScBreakType::NONE;
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] || !ValidRow(nRow))
         return nType;
 
     if (maTabs[nTab]->HasRowPageBreak(nRow))
-        nType |= BREAK_PAGE;
+        nType |= ScBreakType::Page;
 
     if (maTabs[nTab]->HasRowManualBreak(nRow))
-        nType |= BREAK_MANUAL;
+        nType |= ScBreakType::Manual;
 
     return nType;
 }
 
 ScBreakType ScDocument::HasColBreak(SCCOL nCol, SCTAB nTab) const
 {
-    ScBreakType nType = BREAK_NONE;
+    ScBreakType nType = ScBreakType::NONE;
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab] || !ValidCol(nCol))
         return nType;
 
     if (maTabs[nTab]->HasColPageBreak(nCol))
-        nType |= BREAK_PAGE;
+        nType |= ScBreakType::Page;
 
     if (maTabs[nTab]->HasColManualBreak(nCol))
-        nType |= BREAK_MANUAL;
+        nType |= ScBreakType::Manual;
 
     return nType;
 }

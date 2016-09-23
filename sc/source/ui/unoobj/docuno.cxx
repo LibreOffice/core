@@ -3749,12 +3749,12 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const OUString& aProperty
     else if ( aPropertyName == SC_UNONAME_NEWPAGE )
     {
         ScBreakType nBreak = rDoc.HasColBreak(nStartCol, nTab);
-        aAny <<= (nBreak != BREAK_NONE);
+        aAny <<= (nBreak != ScBreakType::NONE);
     }
     else if ( aPropertyName == SC_UNONAME_MANPAGE )
     {
         ScBreakType nBreak = rDoc.HasColBreak(nStartCol, nTab);
-        aAny <<= ((nBreak & BREAK_MANUAL) != 0);
+        aAny <<= bool(nBreak & ScBreakType::Manual);
     }
 
     return aAny;
@@ -4023,12 +4023,12 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
     else if ( aPropertyName == SC_UNONAME_NEWPAGE )
     {
         ScBreakType nBreak = rDoc.HasRowBreak(nStartRow, nTab);
-        aAny <<= (nBreak != BREAK_NONE);
+        aAny <<= (nBreak != ScBreakType::NONE);
     }
     else if ( aPropertyName == SC_UNONAME_MANPAGE )
     {
         ScBreakType nBreak = rDoc.HasRowBreak(nStartRow, nTab);
-        aAny <<= ((nBreak & BREAK_MANUAL) != 0);
+        aAny <<= bool(nBreak & ScBreakType::Manual);
     }
     else if ( aPropertyName == SC_UNONAME_CELLBACK || aPropertyName == SC_UNONAME_CELLTRAN )
     {
