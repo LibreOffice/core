@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <comphelper/random.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <sdr/overlay/overlaymanagerbuffered.hxx>
@@ -219,7 +220,10 @@ void SdrPaintWindow::impCreateOverlayManager()
             // Request a repaint so that the buffered overlay manager fills
             // its buffer properly.  This is a workaround for missing buffer
             // updates.
-            rWindow.Invalidate();
+            if (!comphelper::LibreOfficeKit::isActive())
+            {
+                rWindow.Invalidate();
+            }
 
             Color aColA(GetPaintView().getOptionsDrawinglayer().GetStripeColorA());
             Color aColB(GetPaintView().getOptionsDrawinglayer().GetStripeColorB());

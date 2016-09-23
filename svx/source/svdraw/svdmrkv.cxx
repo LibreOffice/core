@@ -209,7 +209,7 @@ void SdrMarkView::ModelHasChanged()
         AdjustMarkHdl();
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (comphelper::LibreOfficeKit::isActive() && GetMarkedObjectCount() > 0)
     {
         //TODO: Is MarkedObjRect valid at this point?
         Rectangle aSelection(GetMarkedObjRect());
