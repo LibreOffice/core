@@ -96,7 +96,7 @@ void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat, const ScAttrArray*& rp
 }
 
 ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
-            sal_uInt16 nSubTotalFlags, bool bTextZero )
+            SubtotalFlags nSubTotalFlags, bool bTextZero )
     : pDoc(pDocument)
     , pAttrArray(nullptr)
     , nNumFormat(0) // Initialized in GetNumberFormat
@@ -190,9 +190,9 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
         SCROW nCurRow = GetRow();
         SCROW nLastRow;
         // Skip all filtered or hidden rows, depending on mnSubTotalFlags
-        if ( ( ( mnSubTotalFlags & SUBTOTAL_IGN_FILTERED ) &&
+        if ( ( ( mnSubTotalFlags & SubtotalFlags::IgnoreFiltered ) &&
                pDoc->RowFiltered( nCurRow, mnTab, nullptr, &nLastRow ) ) ||
-             ( ( mnSubTotalFlags & SUBTOTAL_IGN_HIDDEN ) &&
+             ( ( mnSubTotalFlags & SubtotalFlags::IgnoreHidden ) &&
                pDoc->RowHidden( nCurRow, mnTab, nullptr, &nLastRow ) ) )
         {
             SetPos(nLastRow+1);
@@ -218,7 +218,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
             case sc::element_type_formula:
             {
                 ScFormulaCell& rCell = *sc::formula_block::at(*maCurPos.first->data, maCurPos.second);
-                if ( ( mnSubTotalFlags & SUBTOTAL_IGN_NESTED_ST_AG ) && rCell.IsSubTotal() )
+                if ( ( mnSubTotalFlags & SubtotalFlags::IgnoreNestedStAg ) && rCell.IsSubTotal() )
                 {
                     // Skip subtotal formula cells.
                     IncPos();
@@ -227,7 +227,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
 
                 if (rCell.GetErrorOrValue(rErr, rValue))
                 {
-                    if ( rErr != FormulaError::NONE && ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                    if ( rErr != FormulaError::NONE && ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) )
                     {
                         IncPos();
                         break;
@@ -834,7 +834,7 @@ sc::FormulaGroupEntry* ScFormulaGroupIterator::next()
     return &maEntries[mnIndex++];
 }
 
-ScCellIterator::ScCellIterator( ScDocument* pDoc, const ScRange& rRange, sal_uInt16 nSubTotalFlags ) :
+ScCellIterator::ScCellIterator( ScDocument* pDoc, const ScRange& rRange, SubtotalFlags nSubTotalFlags ) :
     mpDoc(pDoc),
     maStartPos(rRange.aStart),
     maEndPos(rRange.aEnd),
@@ -949,9 +949,9 @@ bool ScCellIterator::getCurrent()
 
         SCROW nLastRow;
         // Skip all filtered or hidden rows, depending on mSubTotalFlags
-        if ( ( ( mnSubTotalFlags & SUBTOTAL_IGN_FILTERED ) &&
+        if ( ( ( mnSubTotalFlags & SubtotalFlags::IgnoreFiltered ) &&
                pCol->GetDoc().RowFiltered(maCurPos.Row(), maCurPos.Tab(), nullptr, &nLastRow) ) ||
-             ( ( mnSubTotalFlags & SUBTOTAL_IGN_HIDDEN ) &&
+             ( ( mnSubTotalFlags & SubtotalFlags::IgnoreHidden ) &&
                pCol->GetDoc().RowHidden(maCurPos.Row(), maCurPos.Tab(), nullptr, &nLastRow) ) )
         {
             setPos(nLastRow+1);
@@ -960,12 +960,12 @@ bool ScCellIterator::getCurrent()
 
         if (maCurColPos.first->type == sc::element_type_formula)
         {
-            if ( mnSubTotalFlags )
+            if ( mnSubTotalFlags != SubtotalFlags::NONE )
             {
                 ScFormulaCell* pCell = sc::formula_block::at(*maCurColPos.first->data, maCurColPos.second);
                 // Skip formula cells with Subtotal formulae or errors, depending on mnSubTotalFlags
-                if ( ( ( mnSubTotalFlags & SUBTOTAL_IGN_NESTED_ST_AG ) && pCell->IsSubTotal() ) ||
-                     ( ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) && pCell->GetErrCode() != FormulaError::NONE ) )
+                if ( ( ( mnSubTotalFlags & SubtotalFlags::IgnoreNestedStAg ) && pCell->IsSubTotal() ) ||
+                     ( ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) && pCell->GetErrCode() != FormulaError::NONE ) )
                 {
                     incPos();
                     continue;

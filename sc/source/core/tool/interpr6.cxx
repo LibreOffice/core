@@ -470,7 +470,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     ScRange aRange;
     size_t nRefInList = 0;
     if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
-         ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
+         ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) ) )
         nGlobalError = FormulaError::NONE;
     while (nParamCount-- > 0)
     {
@@ -550,10 +550,10 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 ScExternalRefCache::CellFormat aFmt;
                 PopExternalSingleRef(pToken, &aFmt);
                 if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
-                     ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
+                     ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) ) )
                 {
                     nGlobalError = FormulaError::NONE;
-                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) )
                         ++nCount;
                     break;
                 }
@@ -567,7 +567,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if ( eType != formula::svEmptyCell &&
                          ( ( pToken->GetOpCode() != ocSubTotal &&
                              pToken->GetOpCode() != ocAggregate ) ||
-                           ( mnSubTotalFlags & SUBTOTAL_IGN_NESTED_ST_AG ) ) )
+                           ( mnSubTotalFlags & SubtotalFlags::IgnoreNestedStAg ) ) )
                         nCount++;
                     if (nGlobalError != FormulaError::NONE)
                         nGlobalError = FormulaError::NONE;
@@ -614,14 +614,14 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             {
                 PopSingleRef( aAdr );
                 if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
-                     ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
+                     ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) ) )
                 {
                     nGlobalError = FormulaError::NONE;
-                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) )
                         ++nCount;
                     break;
                 }
-                if ( ( mnSubTotalFlags & SUBTOTAL_IGN_FILTERED ) &&
+                if ( ( mnSubTotalFlags & SubtotalFlags::IgnoreFiltered ) &&
                      pDok->RowFiltered( aAdr.Row(), aAdr.Tab() ) )
                 {
                     break;
@@ -677,10 +677,10 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
-                     ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
+                     ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) ) )
                 {
                     nGlobalError = FormulaError::NONE;
-                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                    if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) )
                         ++nCount;
                     if ( eFunc == ifCOUNT2 || eFunc == ifCOUNT )
                         break;
@@ -699,7 +699,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if ( nGlobalError != FormulaError::NONE )
                         nGlobalError = FormulaError::NONE;
                 }
-                else if ( ( eFunc == ifSUM || eFunc == ifCOUNT ) && !mnSubTotalFlags )
+                else if ( ( eFunc == ifSUM || eFunc == ifCOUNT ) && mnSubTotalFlags == SubtotalFlags::NONE )
                 {
                     sc::ColumnSpanSet aSet( false );
                     aSet.set( aRange, true );
@@ -743,7 +743,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         {
                             case ifAVERAGE:
                             case ifSUM:
-                                    if ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL )
+                                    if ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal )
                                     {
                                         do
                                         {
@@ -774,7 +774,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                                     }
                                     break;
                             case ifSUMSQ:
-                                    if ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL )
+                                    if ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal )
                                     {
                                         do
                                         {
@@ -801,7 +801,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                             case ifPRODUCT:
                                     do
                                     {
-                                        if ( !( nErr != FormulaError::NONE && ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) ) )
+                                        if ( !( nErr != FormulaError::NONE && ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) ) )
                                         {
                                             SetError(nErr);
                                             fRes *= fVal;
@@ -829,7 +829,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             {
                 ScMatrixRef pMat;
                 PopExternalDoubleRef(pMat);
-                if ( nGlobalError != FormulaError::NONE && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                if ( nGlobalError != FormulaError::NONE && !( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) )
                     break;
 
                 IterateMatrix( pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fRes, fMem );
@@ -845,11 +845,11 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             case svError:
             {
                 PopError();
-                if ( eFunc == ifCOUNT || ( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                if ( eFunc == ifCOUNT || ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) )
                 {
                     nGlobalError = FormulaError::NONE;
                 }
-                else if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SUBTOTAL_IGN_ERR_VAL ) )
+                else if ( eFunc == ifCOUNT2 && !( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) )
                 {
                     nCount++;
                     nGlobalError = FormulaError::NONE;

@@ -220,15 +220,20 @@ enum class ScScenarioFlags{             //  scenario flags
     Value      = 32,
     Protected  = 64
 };
-namespace o3tl
-{
+namespace o3tl {
     template<> struct typed_flags<ScScenarioFlags> : is_typed_flags<ScScenarioFlags, 127> {};
 }
 
-#define SUBTOTAL_IGN_NESTED_ST_AG  0x08
-#define SUBTOTAL_IGN_ERR_VAL       0x04
-#define SUBTOTAL_IGN_HIDDEN        0x02
-#define SUBTOTAL_IGN_FILTERED      0x01
+enum class SubtotalFlags {
+    NONE              = 0x00,
+    IgnoreNestedStAg  = 0x08,
+    IgnoreErrVal      = 0x04,
+    IgnoreHidden      = 0x02,
+    IgnoreFiltered    = 0x01
+};
+namespace o3tl {
+    template<> struct typed_flags<SubtotalFlags> : is_typed_flags<SubtotalFlags, 0x0f> {};
+}
 
 enum class ScCloneFlags{
 /** Default cell clone flags: do not start listening, do not adjust 3D refs to

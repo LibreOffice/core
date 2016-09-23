@@ -6646,12 +6646,12 @@ void ScInterpreter::ScSubTotal()
         const FormulaToken* p = pStack[ sp - nParamCount ];
         PushWithoutError( *p );
         sal_Int32 nFunc = GetInt32();
-        mnSubTotalFlags |= SUBTOTAL_IGN_NESTED_ST_AG | SUBTOTAL_IGN_FILTERED;
+        mnSubTotalFlags |= SubtotalFlags::IgnoreNestedStAg | SubtotalFlags::IgnoreFiltered;
         if (nFunc > 100)
         {
             // For opcodes 101 through 111, we need to skip hidden cells.
             // Other than that these opcodes are identical to 1 through 11.
-            mnSubTotalFlags |= SUBTOTAL_IGN_HIDDEN;
+            mnSubTotalFlags |= SubtotalFlags::IgnoreHidden;
             nFunc -= 100;
         }
 
@@ -6676,7 +6676,7 @@ void ScInterpreter::ScSubTotal()
                 default : PushIllegalArgument();       break;
             }
         }
-        mnSubTotalFlags = 0x00;
+        mnSubTotalFlags = SubtotalFlags::NONE;
         // Get rid of the 1st (fished) parameter.
         double nVal = GetDouble();
         Pop();
@@ -6705,28 +6705,28 @@ void ScInterpreter::ScAggregate()
             switch ( nOption)
             {
                 case 0 : // ignore nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SUBTOTAL_IGN_NESTED_ST_AG;
+                    mnSubTotalFlags = SubtotalFlags::IgnoreNestedStAg;
                     break;
                 case 1 : // ignore hidden rows, nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SUBTOTAL_IGN_HIDDEN | SUBTOTAL_IGN_NESTED_ST_AG;
+                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreNestedStAg;
                     break;
                 case 2 : // ignore error values, nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SUBTOTAL_IGN_ERR_VAL | SUBTOTAL_IGN_NESTED_ST_AG;
+                    mnSubTotalFlags = SubtotalFlags::IgnoreErrVal | SubtotalFlags::IgnoreNestedStAg;
                     break;
                 case 3 : // ignore hidden rows, error values, nested SUBTOTAL and AGGREGATE functions
-                    mnSubTotalFlags = SUBTOTAL_IGN_HIDDEN | SUBTOTAL_IGN_ERR_VAL | SUBTOTAL_IGN_NESTED_ST_AG;
+                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreErrVal | SubtotalFlags::IgnoreNestedStAg;
                     break;
                 case 4 : // ignore nothing
-                    mnSubTotalFlags = 0x00;
+                    mnSubTotalFlags = SubtotalFlags::NONE;
                     break;
                 case 5 : // ignore hidden rows
-                    mnSubTotalFlags = SUBTOTAL_IGN_HIDDEN ;
+                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden ;
                     break;
                 case 6 : // ignore error values
-                    mnSubTotalFlags = SUBTOTAL_IGN_ERR_VAL ;
+                    mnSubTotalFlags = SubtotalFlags::IgnoreErrVal ;
                     break;
                 case 7 : // ignore hidden rows and error values
-                    mnSubTotalFlags = SUBTOTAL_IGN_HIDDEN | SUBTOTAL_IGN_ERR_VAL ;
+                    mnSubTotalFlags = SubtotalFlags::IgnoreHidden | SubtotalFlags::IgnoreErrVal ;
                     break;
                 default :
                     PushIllegalArgument();
@@ -6757,7 +6757,7 @@ void ScInterpreter::ScAggregate()
                 case AGGREGATE_FUNC_QRTEXC  : ScQuartile( false );   break;
                 default : PushIllegalArgument();       break;
             }
-            mnSubTotalFlags = 0x00;
+            mnSubTotalFlags = SubtotalFlags::NONE;
         }
         double nVal = GetDouble();
         // Get rid of the 1st and 2nd (fished) parameters.

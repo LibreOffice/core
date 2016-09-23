@@ -54,12 +54,12 @@ class ScValueIterator            // walk through all values in an area
     const ScAttrArray*  pAttrArray;
     sal_uLong           nNumFormat;     // for CalcAsShown
     sal_uLong           nNumFmtIndex;
-    ScAddress maStartPos;
-    ScAddress maEndPos;
-    SCCOL mnCol;
-    SCTAB mnTab;
+    ScAddress       maStartPos;
+    ScAddress       maEndPos;
+    SCCOL           mnCol;
+    SCTAB           mnTab;
     SCROW           nAttrEndRow;
-    sal_uInt16      mnSubTotalFlags;
+    SubtotalFlags   mnSubTotalFlags;
     short           nNumFmtType;
     bool            bNumValid;
     bool            bCalcAsShown;
@@ -82,7 +82,7 @@ class ScValueIterator            // walk through all values in an area
 public:
 
     ScValueIterator(
-        ScDocument* pDocument, const ScRange& rRange, sal_uInt16 nSubTotalFlags = 0x00,
+        ScDocument* pDocument, const ScRange& rRange, SubtotalFlags nSubTotalFlags = SubtotalFlags::NONE,
         bool bTextAsZero = false );
 
     void GetCurNumFmtInfo( short& nType, sal_uLong& nIndex );
@@ -204,13 +204,13 @@ class ScCellIterator
 {
     typedef std::pair<sc::CellStoreType::const_iterator, size_t> PositionType;
 
-    ScDocument* mpDoc;
-    ScAddress maStartPos;
-    ScAddress maEndPos;
-    ScAddress maCurPos;
+    ScDocument*   mpDoc;
+    ScAddress     maStartPos;
+    ScAddress     maEndPos;
+    ScAddress     maCurPos;
 
-    PositionType maCurColPos;
-    sal_uInt16   mnSubTotalFlags;
+    PositionType  maCurColPos;
+    SubtotalFlags mnSubTotalFlags;
 
     ScRefCellValue maCurCell;
 
@@ -224,7 +224,7 @@ class ScCellIterator
     bool getCurrent();
 
 public:
-    ScCellIterator( ScDocument* pDoc, const ScRange& rRange, sal_uInt16 nSubTotalFlags = 0x00 );
+    ScCellIterator( ScDocument* pDoc, const ScRange& rRange, SubtotalFlags nSubTotalFlags = SubtotalFlags::NONE );
 
     const ScAddress& GetPos() const { return maCurPos; }
 

@@ -204,8 +204,8 @@ private:
     short       nFuncFmtType;           // NumberFormatType of a function
     short       nCurFmtType;            // current NumberFormatType
     short       nRetFmtType;            // NumberFormatType of an expression
-    FormulaError mnStringNoValueError;   // the error set in ConvertStringToValue() if no value
-    sal_uInt16  mnSubTotalFlags;        // flags for subtotal and aggregate functions
+    FormulaError  mnStringNoValueError; // the error set in ConvertStringToValue() if no value
+    SubtotalFlags mnSubTotalFlags;      // flags for subtotal and aggregate functions
     sal_uInt8   cPar;                   // current count of parameters
     bool        bCalcAsShown;           // precision as shown
     bool        bMatrixFormula;         // formula cell is a matrix formula
