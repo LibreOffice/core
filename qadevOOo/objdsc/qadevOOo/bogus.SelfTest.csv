@@ -1,7 +1,0 @@
-# "Name";
-#          "com::sun::star::" will overread
-#                                               method name which is called
-"SelfTest";"com::sun::star::qadevooo::SelfTest";"testmethod()"
-"SelfTest";"com::sun::star::qadevooo::SelfTest";"testmethod2()"
-"SelfTest";"com::sun::star::qadevooo::SelfTest";"testmethod3()"
-# "SelfTest";"com::sun::star::qadevooo::SelfTest#optional";"testmethod4_bogus()"

@@ -138,66 +138,61 @@ public class MultiMethodTest
         this.tRes = new TestResult();
         Class<?> testedClass;
 
-        // Some fake code for a self test.
-        // For normal test we must not be a "ifc.qadevooo._SelfTest"
-        if (! ("ifc.qadevooo._SelfTest").equals(entry.entryName))
+        getInterfaceName();
+        System.out.print("checking: [" + entry.longName + "]");
+
+        // defining a name of the class corresponding to the tested interface
+        // or service
+        String testedClassName;
+
+        testedClassName = getTestedClassName();
+
+        if (entry.EntryType.equals("service"))
         {
-            getInterfaceName();
-            System.out.print("checking: [" + entry.longName + "]");
+            testedClassName = "com.sun.star.beans.XPropertySet";
+        }
 
-            // defining a name of the class corresponding to the tested interface
-            // or service
-            String testedClassName;
+        try
+        {
+            testedClass = Class.forName(testedClassName);
+        }
+        catch (ClassNotFoundException cnfE)
+        {
+            System.out.println();
+            cnfE.printStackTrace(log);
+            log.println("could not find a class : " + getTestedClassName());
+            return null;
+        }
+        System.out.println(" is iface: [" + testedClassName + "] testcode: [" + entry.entryName + "]");
 
-            testedClassName = getTestedClassName();
+        Object oObj = UnoRuntime.queryInterface(testedClass, tEnv.getTestObject());
 
-            if (entry.EntryType.equals("service"))
+        if (oObj == null)
+        {
+            if (entry.isOptional)
             {
-                testedClassName = "com.sun.star.beans.XPropertySet";
+                Summarizer.summarizeDown(entry, "Not supported but optional.OK");
+            }
+            else
+            {
+                Summarizer.summarizeDown(entry, "queryInterface returned null.FAILED");
+                entry.ErrorMsg = "queryInterface returned null";
+                entry.hasErrorMsg = true;
             }
 
-            try
-            {
-                testedClass = Class.forName(testedClassName);
-            }
-            catch (ClassNotFoundException cnfE)
-            {
-                System.out.println();
-                cnfE.printStackTrace(log);
-                log.println("could not find a class : " + getTestedClassName());
-                return null;
-            }
-            System.out.println(" is iface: [" + testedClassName + "] testcode: [" + entry.entryName + "]");
+            return null;
+        }
 
-            Object oObj = UnoRuntime.queryInterface(testedClass, tEnv.getTestObject());
-
-            if (oObj == null)
-            {
-                if (entry.isOptional)
-                {
-                    Summarizer.summarizeDown(entry, "Not supported but optional.OK");
-                }
-                else
-                {
-                    Summarizer.summarizeDown(entry, "queryInterface returned null.FAILED");
-                    entry.ErrorMsg = "queryInterface returned null";
-                    entry.hasErrorMsg = true;
-                }
-
-                return null;
-            }
-
-            //setting the field oObj
-            try
-            {
-                setField("oObj", oObj);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                setSubStates(e.toString());
-                return tRes;
-            }
+        //setting the field oObj
+        try
+        {
+            setField("oObj", oObj);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            setSubStates(e.toString());
+            return tRes;
         }
 
         // to perform some stuff before all method tests
