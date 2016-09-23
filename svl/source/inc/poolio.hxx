@@ -58,8 +58,6 @@ struct SfxPoolVersion_Impl
                     {}
 };
 
-typedef std::vector<SfxPoolItem*> SfxPoolItemArrayBase_Impl;
-
 typedef std::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
 
 /**
@@ -121,7 +119,7 @@ struct SfxItemPool_Impl
     bool                            mbPersistentRefCounts;
 
     SfxItemPool_Impl( SfxItemPool* pMaster, const OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
-        : maPoolItems(nEnd - nStart + 1, static_cast<SfxPoolItemArray_Impl*>(nullptr))
+        : maPoolItems(nEnd - nStart + 1)
         , aName(rName)
         , maPoolDefaults(nEnd - nStart + 1)
         , ppStaticDefaults(nullptr)
