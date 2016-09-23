@@ -723,13 +723,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             OUString aKey( aUsage + "," + aType);
             if (!aDefaultsSet.insert( aKey).second)
             {
-                OUString aStr(  "Duplicated default for usage=\"");
-                aStr += aUsage;
-                aStr += "\" type=\"";
-                aStr += aType;
-                aStr += "\": formatindex=\"";
-                aStr += aFormatIndex;
-                aStr += "\".";
+                OUString aStr = "Duplicated default for usage=\"" + aUsage + "\" type=\"" + aType + "\": formatindex=\"" + aFormatIndex + "\".";
                 incError( aStr);
             }
         }
