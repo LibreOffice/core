@@ -40,12 +40,10 @@ namespace eNBOType
     const NBOType MIXBULLETS = 0x05;
 }
 
-typedef sal_uInt16 NBType;
-namespace eNBType
+enum class NBType
 {
-    const NBOType BULLETS = 0x01;
-    const NBOType GRAPHICBULLETS = 0x02;
-}
+    Bullets = 1, GraphicBullets
+};
 
 class  SVX_DLLPUBLIC NumSettings_Impl
 {
