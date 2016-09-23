@@ -1577,8 +1577,8 @@ namespace cppcanvas
                         // #i44110# correct null-sized output - there
                         // are metafiles which have zero size in at
                         // least one dimension
-                        const Size aMtfSizePix( ::std::max( aMtfSizePixPre.Width(), 1L ),
-                                                ::std::max( aMtfSizePixPre.Height(), 1L ) );
+                        const Size aMtfSizePix( ::std::max( aMtfSizePixPre.Width(), 1 ),
+                                                ::std::max( aMtfSizePixPre.Height(), 1 ) );
 
                         // Setup local transform, such that the
                         // metafile renders itself into the given
@@ -2914,8 +2914,8 @@ namespace cppcanvas
 
             // #i44110# correct null-sized output - there are shapes
             // which have zero size in at least one dimension
-            const Size aMtfSizePix( ::std::max( aMtfSizePixPre.Width(), 1L ),
-                                    ::std::max( aMtfSizePixPre.Height(), 1L ) );
+            const Size aMtfSizePix( ::std::max( aMtfSizePixPre.Width(), 1 ),
+                                    ::std::max( aMtfSizePixPre.Height(), 1 ) );
 
             sal_Int32 nCurrActions(0);
             ActionFactoryParameters aParms(aStateStack,

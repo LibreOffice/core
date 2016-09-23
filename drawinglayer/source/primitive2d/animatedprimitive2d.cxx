@@ -80,7 +80,7 @@ namespace drawinglayer
 
                 if(nIndex >= nLen)
                 {
-                    nIndex = nLen - 1L;
+                    nIndex = nLen - 1;
                 }
 
                 const Primitive2DReference xRef(getChildren()[nIndex], uno::UNO_QUERY_THROW);
