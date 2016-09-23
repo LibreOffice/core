@@ -503,10 +503,10 @@ bool CommonSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
 {
     int nCharCount = mnEndCharPos - mnMinCharPos;
-    DeviceCoordinate pOldCharWidths[nCharCount];
-    DeviceCoordinate pNewCharWidths[nCharCount];
+    std::unique_ptr<DeviceCoordinate[]> const pOldCharWidths(new DeviceCoordinate[nCharCount]);
+    std::unique_ptr<DeviceCoordinate[]> const pNewCharWidths(new DeviceCoordinate[nCharCount]);
 
-    GetCharWidths(pOldCharWidths);
+    GetCharWidths(pOldCharWidths.get());
 
     for (int i = 0; i < nCharCount; ++i)
     {
