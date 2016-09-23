@@ -86,6 +86,7 @@
 #include <calbck.hxx>
 #include <attrhint.hxx>
 #include <memory>
+#include <wrtsh.hxx>
 
 //UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
@@ -1160,6 +1161,28 @@ void SwTextNode::Update(
 #if OSL_DEBUG_LEVEL > 0
         assert( checkFormats.empty());
 #endif
+
+        // The cursors of other shells shouldn't be moved, either.
+        if (SwDocShell* pDocShell = GetDoc()->GetDocShell())
+        {
+            for (SwViewShell& rShell : pDocShell->GetWrtShell()->GetRingContainer())
+            {
+                auto pWrtShell = dynamic_cast<SwWrtShell*>(&rShell);
+                if (!pWrtShell || pWrtShell == pDocShell->GetWrtShell())
+                    continue;
+
+                SwShellCursor* pCursor = pWrtShell->_GetCursor();
+                if (!pCursor)
+                    continue;
+
+                SwIndex& rIndex = const_cast<SwIndex&>(pCursor->Start()->nContent);
+                if (&pCursor->Start()->nNode.GetNode() == this && rIndex.GetIndex() == rPos.GetIndex())
+                {
+                    // The cursor position of this other shell is exactly our insert position.
+                    rIndex.Assign(&aTmpIdxReg, rIndex.GetIndex());
+                }
+            }
+        }
     }
 
     // base class
