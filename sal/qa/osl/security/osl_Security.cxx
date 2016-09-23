@@ -368,7 +368,6 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     /// Get user home directory.
     HKEY hRegKey;
     sal_Char PathA[_MAX_PATH];
-    ::rtl::OUString strHome;
     if (RegOpenKey(HKEY_CURRENT_USER,  "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",  &hRegKey) == ERROR_SUCCESS)
     {
         LONG lRet, lSize = sizeof(PathA);
