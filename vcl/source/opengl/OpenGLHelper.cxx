@@ -818,8 +818,21 @@ namespace {
 }
 
 WatchdogTimings::WatchdogTimings()
-    : maTimingValues{{{6,   20} /* 1.5s,  5s */, {20, 120} /*  5s, 30s */,
-                      {60, 240} /*  15s, 60s */, {60, 240} /* 15s, 60s */}}
+    : maTimingValues
+#ifdef _MSC_VER
+    // note: Apple clang's parser segfaults on this
+                    (
+#else
+    // note: MSVC 2013 can't parse this, error C2797
+                    {
+#endif
+                     {{6,   20} /* 1.5s,  5s */, {20, 120} /*  5s, 30s */,
+                      {60, 240} /*  15s, 60s */, {60, 240} /* 15s, 60s */}
+#ifdef _MSC_VER
+                    )
+#else
+                    }
+#endif
     , mbRelaxed(false)
 {
 }
