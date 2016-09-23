@@ -5934,16 +5934,17 @@ dnl ===================================================================
 dnl visibility and other gcc features
 dnl ===================================================================
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
-    AC_MSG_CHECKING([whether $CC supports -fvisibility=hidden])
-    save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -fvisibility=hidden"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_VISIBILITY_FEATURE=TRUE ],[])
-    CFLAGS=$save_CFLAGS
-
-    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
-        AC_MSG_RESULT([yes])
-    else
-        AC_MSG_ERROR([no  This is no longer supported.])
+    if test "$COM" != MSC; then
+        AC_MSG_CHECKING([whether $CC supports -fvisibility=hidden])
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS -Werror -fvisibility=hidden"
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_VISIBILITY_FEATURE=TRUE ],[])
+        CFLAGS=$save_CFLAGS
+        if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
+            AC_MSG_RESULT([yes])
+        else
+            AC_MSG_ERROR([no  This is no longer supported.])
+        fi
     fi
 
     AC_MSG_CHECKING([whether $CC supports -mno-avx])
