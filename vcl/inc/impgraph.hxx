@@ -46,7 +46,6 @@ private:
     std::unique_ptr<GfxLink>     mpGfxLink;
     GraphicType                  meType;
     mutable sal_uLong            mnSizeBytes;
-    sal_uLong                    mnRefCount;
     bool                         mbSwapOut;
     bool                         mbSwapUnderway;
     bool                         mbDummyContext;
@@ -62,7 +61,9 @@ private:
                         ImpGraphic(const SvgDataPtr& rSvgDataPtr);
                         ImpGraphic( const Animation& rAnimation );
                         ImpGraphic( const GDIMetaFile& rMtf );
+public:
     virtual             ~ImpGraphic();
+private:
 
     ImpGraphic&         operator=( const ImpGraphic& rImpGraphic );
     bool                operator==( const ImpGraphic& rImpGraphic ) const;

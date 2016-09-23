@@ -106,12 +106,12 @@ class VCL_DLLPUBLIC Graphic : public SvDataCopyStream
 {
 private:
 
-    ImpGraphic*    mpImpGraphic;
+    std::shared_ptr<ImpGraphic> mxImpGraphic;
 
 public:
 
     SAL_DLLPRIVATE void ImplTestRefCount();
-    SAL_DLLPRIVATE ImpGraphic* ImplGetImpGraphic() const { return mpImpGraphic; }
+    SAL_DLLPRIVATE ImpGraphic* ImplGetImpGraphic() const { return mxImpGraphic.get(); }
 
 public:
                     Graphic();
