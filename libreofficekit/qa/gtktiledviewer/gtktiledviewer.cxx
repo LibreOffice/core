@@ -487,7 +487,9 @@ static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
                                                      "Jump",
                                                      GTK_RESPONSE_APPLY,
                                                      nullptr);
+    gtk_window_set_default_size(GTK_WINDOW(pDialog), 800, 600);
     GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG (pDialog));
+    GtkWidget* pScrolledWindow = gtk_scrolled_window_new(nullptr, nullptr);
 
     // Build the table.
     GtkTreeStore* pTreeStore = gtk_tree_store_new(6, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
@@ -515,7 +517,8 @@ static void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
                                                                               nullptr);
         gtk_tree_view_append_column(GTK_TREE_VIEW(pTreeView), pColumn);
     }
-    gtk_box_pack_start(GTK_BOX(pContentArea), pTreeView, TRUE, TRUE, 2);
+    gtk_container_add(GTK_CONTAINER(pScrolledWindow), pTreeView);
+    gtk_box_pack_start(GTK_BOX(pContentArea), pScrolledWindow, TRUE, TRUE, 2);
 
     // Show the dialog.
     gtk_widget_show_all(pDialog);
@@ -589,7 +592,9 @@ static void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
                                                      "Jump to state",
                                                      GTK_RESPONSE_OK,
                                                      nullptr);
+    gtk_window_set_default_size(GTK_WINDOW(pDialog), 800, 600);
     GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG (pDialog));
+    GtkWidget* pScrolledWindow = gtk_scrolled_window_new(nullptr, nullptr);
 
     // Build the table.
     GtkTreeStore* pTreeStore = gtk_tree_store_new(5, G_TYPE_STRING, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
@@ -620,7 +625,8 @@ static void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
                                                                               nullptr);
         gtk_tree_view_append_column(GTK_TREE_VIEW(pTreeView), pColumn);
     }
-    gtk_box_pack_start(GTK_BOX(pContentArea), pTreeView, TRUE, TRUE, 2);
+    gtk_container_add(GTK_CONTAINER(pScrolledWindow), pTreeView);
+    gtk_box_pack_start(GTK_BOX(pContentArea), pScrolledWindow, TRUE, TRUE, 2);
 
     // Show the dialog.
     gtk_widget_show_all(pDialog);
