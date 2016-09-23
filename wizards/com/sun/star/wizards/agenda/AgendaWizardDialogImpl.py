@@ -70,7 +70,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
             self.initializePaths()
             # initialize the agenda template
-            self.terminateListener = TerminateListenerProcAdapter(self)
+            self.terminateListener = TerminateListenerProcAdapter(self.queryTermination)
             self.myAgendaDoc = AgendaDocument(
                 self.xMSF, self.agenda, self.resources,
                 self.templateConsts, self.terminateListener)
