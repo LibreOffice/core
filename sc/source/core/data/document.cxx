@@ -4253,32 +4253,32 @@ void ScDocument::ShowRows(SCROW nRow1, SCROW nRow2, SCTAB nTab, bool bShow)
         maTabs[nTab]->ShowRows( nRow1, nRow2, bShow );
 }
 
-void ScDocument::SetRowFlags( SCROW nRow, SCTAB nTab, sal_uInt8 nNewFlags )
+void ScDocument::SetRowFlags( SCROW nRow, SCTAB nTab, CRFlags nNewFlags )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->SetRowFlags( nRow, nNewFlags );
 }
 
-void ScDocument::SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt8 nNewFlags )
+void ScDocument::SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, CRFlags nNewFlags )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->SetRowFlags( nStartRow, nEndRow, nNewFlags );
 }
 
-sal_uInt8 ScDocument::GetColFlags( SCCOL nCol, SCTAB nTab ) const
+CRFlags ScDocument::GetColFlags( SCCOL nCol, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetColFlags( nCol );
     OSL_FAIL("wrong table number");
-    return 0;
+    return CRFlags::NONE;
 }
 
-sal_uInt8 ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
+CRFlags ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetRowFlags( nRow );
     OSL_FAIL("wrong table number");
-    return 0;
+    return CRFlags::NONE;
 }
 
 void ScDocument::GetAllRowBreaks(set<SCROW>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const
@@ -4535,13 +4535,13 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
-        sal_uInt8 nStartFlags = maTabs[nTab]->GetColFlags(nStart);
+        CRFlags nStartFlags = maTabs[nTab]->GetColFlags(nStart);
         sal_uInt16 nStartWidth = maTabs[nTab]->GetOriginalWidth(nStart);
         for (SCCOL nCol = nStart + 1; nCol <= MAXCOL; nCol++)
         {
-            if (((nStartFlags & CR_MANUALBREAK) != (maTabs[nTab]->GetColFlags(nCol) & CR_MANUALBREAK)) ||
+            if (((nStartFlags & CRFlags::ManualBreak) != (maTabs[nTab]->GetColFlags(nCol) & CRFlags::ManualBreak)) ||
                 (nStartWidth != maTabs[nTab]->GetOriginalWidth(nCol)) ||
-                ((nStartFlags & CR_HIDDEN) != (maTabs[nTab]->GetColFlags(nCol) & CR_HIDDEN)) )
+                ((nStartFlags & CRFlags::Hidden) != (maTabs[nTab]->GetColFlags(nCol) & CRFlags::Hidden)) )
                 return nCol;
         }
         return MAXCOL+1;
@@ -4554,7 +4554,7 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
         return 0;
 
-    const ScBitMaskCompressedArray<SCROW, sal_uInt8>* pRowFlagsArray = maTabs[nTab]->GetRowFlagsArray();
+    const ScBitMaskCompressedArray<SCROW, CRFlags>* pRowFlagsArray = maTabs[nTab]->GetRowFlagsArray();
     if (!pRowFlagsArray)
         return 0;
 
@@ -4565,10 +4565,10 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const
     SCROW nFlagsEndRow;
     SCROW nHiddenEndRow;
     SCROW nHeightEndRow;
-    sal_uInt8 nFlags;
+    CRFlags nFlags;
     bool bHidden;
     sal_uInt16 nHeight;
-    sal_uInt8 nStartFlags = nFlags = pRowFlagsArray->GetValue( nStart, nIndex, nFlagsEndRow);
+    CRFlags nStartFlags = nFlags = pRowFlagsArray->GetValue( nStart, nIndex, nFlagsEndRow);
     bool bStartHidden = bHidden = maTabs[nTab]->RowHidden( nStart, nullptr, &nHiddenEndRow);
     sal_uInt16 nStartHeight = nHeight = maTabs[nTab]->GetRowHeight( nStart, nullptr, &nHeightEndRow, false);
     SCROW nRow;
@@ -4581,8 +4581,8 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const
         if (nHeightEndRow < nRow)
             nHeight = maTabs[nTab]->GetRowHeight( nRow, nullptr, &nHeightEndRow, false);
 
-        if (((nStartFlags & CR_MANUALBREAK) != (nFlags & CR_MANUALBREAK)) ||
-            ((nStartFlags & CR_MANUALSIZE) != (nFlags & CR_MANUALSIZE)) ||
+        if (((nStartFlags & CRFlags::ManualBreak) != (nFlags & CRFlags::ManualBreak)) ||
+            ((nStartFlags & CRFlags::ManualSize) != (nFlags & CRFlags::ManualSize)) ||
             (bStartHidden != bHidden) ||
             (nStartHeight != nHeight))
             return nRow;

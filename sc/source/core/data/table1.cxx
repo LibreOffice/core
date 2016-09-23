@@ -167,7 +167,7 @@ struct SetRowHeightRangeFunc : public OptimalHeightsFuncObjBase
 bool SetOptimalHeightsToRows(
     sc::RowHeightContext& rCxt,
     OptimalHeightsFuncObjBase& rFuncObj,
-    ScBitMaskCompressedArray<SCROW, sal_uInt8>* pRowFlags, SCROW nStartRow, SCROW nEndRow )
+    ScBitMaskCompressedArray<SCROW, CRFlags>* pRowFlags, SCROW nStartRow, SCROW nEndRow )
 {
     bool bChanged = false;
     SCROW nRngStart = 0;
@@ -178,21 +178,21 @@ bool SetOptimalHeightsToRows(
     {
         size_t nIndex;
         SCROW nRegionEndRow;
-        sal_uInt8 nRowFlag = pRowFlags->GetValue( i, nIndex, nRegionEndRow );
+        CRFlags nRowFlag = pRowFlags->GetValue( i, nIndex, nRegionEndRow );
         if ( nRegionEndRow > nEndRow )
             nRegionEndRow = nEndRow;
         SCSIZE nMoreRows = nRegionEndRow - i;     // additional equal rows after first
 
-        bool bAutoSize = ((nRowFlag & CR_MANUALSIZE) == 0);
+        bool bAutoSize = !(nRowFlag & CRFlags::ManualSize);
         if (bAutoSize || rCxt.isForceAutoSize())
         {
             if (nExtraHeight)
             {
                 if (bAutoSize)
-                    pRowFlags->SetValue( i, nRegionEndRow, nRowFlag | CR_MANUALSIZE);
+                    pRowFlags->SetValue( i, nRegionEndRow, nRowFlag | CRFlags::ManualSize);
             }
             else if (!bAutoSize)
-                pRowFlags->SetValue( i, nRegionEndRow, nRowFlag & ~CR_MANUALSIZE);
+                pRowFlags->SetValue( i, nRegionEndRow, nRowFlag & ~CRFlags::ManualSize);
 
             for (SCSIZE nInner = i; nInner <= i + nMoreRows; ++nInner)
             {
@@ -293,19 +293,19 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     if (bColInfo)
     {
         pColWidth  = new sal_uInt16[ MAXCOL+1 ];
-        pColFlags  = new sal_uInt8[ MAXCOL+1 ];
+        pColFlags  = new CRFlags[ MAXCOL+1 ];
 
         for (SCCOL i=0; i<=MAXCOL; i++)
         {
             pColWidth[i] = STD_COL_WIDTH;
-            pColFlags[i] = 0;
+            pColFlags[i] = CRFlags::NONE;
         }
     }
 
     if (bRowInfo)
     {
         mpRowHeights.reset(new ScFlatUInt16RowSegments(ScGlobal::nStdRowHeight));
-        pRowFlags  = new ScBitMaskCompressedArray< SCROW, sal_uInt8>( MAXROW, 0);
+        pRowFlags  = new ScBitMaskCompressedArray<SCROW, CRFlags>( MAXROW, CRFlags::NONE);
     }
 
     if ( pDocument->IsDocVisible() )

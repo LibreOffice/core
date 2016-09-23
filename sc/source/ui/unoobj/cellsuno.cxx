@@ -8822,7 +8822,7 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         else if ( pEntry->nWID == SC_WID_UNO_OWIDTH )
         {
             //! momentan immer gesetzt ??!?!
-            bool bOpt = !(rDoc.GetColFlags( nCol, nTab ) & CR_MANUALSIZE);
+            bool bOpt = !(rDoc.GetColFlags( nCol, nTab ) & CRFlags::ManualSize);
             rAny <<= bOpt;
         }
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE )
@@ -8975,7 +8975,7 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         }
         else if ( pEntry->nWID == SC_WID_UNO_OHEIGHT )
         {
-            bool bOpt = !(rDoc.GetRowFlags( nRow, nTab ) & CR_MANUALSIZE);
+            bool bOpt = !(rDoc.GetRowFlags( nRow, nTab ) & CRFlags::ManualSize);
             rAny <<= bOpt;
         }
         else if ( pEntry->nWID == SC_WID_UNO_NEWPAGE )

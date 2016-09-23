@@ -3743,7 +3743,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const OUString& aProperty
     }
     else if ( aPropertyName == SC_UNONAME_OWIDTH )
     {
-        bool bOpt = !(rDoc.GetColFlags( nStartCol, nTab ) & CR_MANUALSIZE);
+        bool bOpt = !(rDoc.GetColFlags( nStartCol, nTab ) & CRFlags::ManualSize);
         aAny <<= bOpt;
     }
     else if ( aPropertyName == SC_UNONAME_NEWPAGE )
@@ -4017,7 +4017,7 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const OUString& aPropertyNam
     }
     else if ( aPropertyName == SC_UNONAME_OHEIGHT )
     {
-        bool bOpt = !(rDoc.GetRowFlags( nStartRow, nTab ) & CR_MANUALSIZE);
+        bool bOpt = !(rDoc.GetRowFlags( nStartRow, nTab ) & CRFlags::ManualSize);
         aAny <<= bOpt;
     }
     else if ( aPropertyName == SC_UNONAME_NEWPAGE )

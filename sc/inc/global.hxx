@@ -119,21 +119,26 @@ namespace sc
 #define PAINT_ALL           ( PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS | PAINT_OBJECTS | PAINT_SIZE )
 
                                     // flags for columns / rows
-                                    // FILTERED always together with HIDDEN
-                                    // FILTERED and MANUALSIZE only valid for rows
-const sal_uInt8   CR_HIDDEN      = 1;
-const sal_uInt8   CR_MANUALBREAK = 8;
-const sal_uInt8   CR_FILTERED    = 16;
-const sal_uInt8   CR_MANUALSIZE  = 32;
-const sal_uInt8   CR_ALL         = (CR_HIDDEN | CR_MANUALBREAK | CR_FILTERED | CR_MANUALSIZE);
+enum class CRFlags : sal_uInt8 {
+    // Filtered always together with Hidden
+    // Filtered and ManualSize only valid for rows
+    NONE        = 0x00,
+    Hidden      = 0x01,
+    ManualBreak = 0x02,
+    Filtered    = 0x04,
+    ManualSize  = 0x08,
+    All         = Hidden | ManualBreak | Filtered | ManualSize
+};
+namespace o3tl {
+    template<> struct typed_flags<CRFlags> : is_typed_flags<CRFlags, 0x0f> {};
+}
 
 enum class ScBreakType {
     NONE   = 0x00,
     Page   = 0x01,
     Manual = 0x02
 };
-namespace o3tl
-{
+namespace o3tl {
     template<> struct typed_flags<ScBreakType> : is_typed_flags<ScBreakType, 0x03> {};
 }
 

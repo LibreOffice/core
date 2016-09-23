@@ -728,7 +728,7 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam* aTestValues, unsigned in
                 int nHeight = sc::TwipsToHMM( rDoc.GetRowHeight(nRow, nTab, false) );
                 if ( bCheckOpt )
                 {
-                    bool bOpt = !(rDoc.GetRowFlags( nRow, nTab ) & CR_MANUALSIZE);
+                    bool bOpt = !(rDoc.GetRowFlags( nRow, nTab ) & CRFlags::ManualSize);
                     CPPUNIT_ASSERT_EQUAL(aTestValues[ index ].pData[ i ].bOptimal, bOpt);
                 }
                 CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);

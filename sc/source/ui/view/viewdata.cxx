@@ -1367,7 +1367,7 @@ void ScViewData::EditGrowY( bool bInitial )
     //  to be clipped before extending to following rows, to avoid obscuring cells for
     //  reference input (next row is likely to be useful in formulas).
     long nAllowedExtra = SC_GROWY_SMALL_EXTRA;
-    if ( nEditEndRow == nEditRow && !( pDoc->GetRowFlags( nEditRow, nTabNo ) & CR_MANUALSIZE ) &&
+    if ( nEditEndRow == nEditRow && !( pDoc->GetRowFlags( nEditRow, nTabNo ) & CRFlags::ManualSize ) &&
             pEngine->GetParagraphCount() <= 1 )
     {
         //  If the (only) paragraph starts with a '=', it's a formula.

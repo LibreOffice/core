@@ -1719,11 +1719,11 @@ public:
     SC_DLLPUBLIC void           ShowCol(SCCOL nCol, SCTAB nTab, bool bShow);
     SC_DLLPUBLIC void           ShowRow(SCROW nRow, SCTAB nTab, bool bShow);
     SC_DLLPUBLIC void           ShowRows(SCROW nRow1, SCROW nRow2, SCTAB nTab, bool bShow);
-    SC_DLLPUBLIC void           SetRowFlags( SCROW nRow, SCTAB nTab, sal_uInt8 nNewFlags );
-    SC_DLLPUBLIC void           SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt8 nNewFlags );
+    SC_DLLPUBLIC void           SetRowFlags( SCROW nRow, SCTAB nTab, CRFlags nNewFlags );
+    SC_DLLPUBLIC void           SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, CRFlags nNewFlags );
 
-    SC_DLLPUBLIC sal_uInt8          GetColFlags( SCCOL nCol, SCTAB nTab ) const;
-    SC_DLLPUBLIC sal_uInt8          GetRowFlags( SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC CRFlags        GetColFlags( SCCOL nCol, SCTAB nTab ) const;
+    SC_DLLPUBLIC CRFlags        GetRowFlags( SCROW nRow, SCTAB nTab ) const;
 
     SC_DLLPUBLIC void           GetAllRowBreaks(std::set<SCROW>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const;
     SC_DLLPUBLIC void           GetAllColBreaks(std::set<SCCOL>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const;

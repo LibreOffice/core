@@ -1858,8 +1858,8 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
 
     // *** Row flags *** ------------------------------------------------------
 
-    sal_uInt8 nRowFlags = GetDoc().GetRowFlags( nScRow, nScTab );
-    bool bUserHeight = ::get_flag< sal_uInt8 >( nRowFlags, CR_MANUALSIZE );
+    CRFlags nRowFlags = GetDoc().GetRowFlags( nScRow, nScTab );
+    bool bUserHeight( nRowFlags & CRFlags::ManualSize );
     bool bHidden = GetDoc().RowHidden(nScRow, nScTab);
     ::set_flag( mnFlags, EXC_ROW_UNSYNCED, bUserHeight );
     ::set_flag( mnFlags, EXC_ROW_HIDDEN, bHidden );

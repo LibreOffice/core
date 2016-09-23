@@ -1949,7 +1949,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                             // no vertical clipping when printing cells with optimal height,
                             // except when font size is from conditional formatting.
                             if ( eType != OUTTYPE_PRINTER ||
-                                    ( mpDoc->GetRowFlags( nCellY, nTab ) & CR_MANUALSIZE ) ||
+                                    ( mpDoc->GetRowFlags( nCellY, nTab ) & CRFlags::ManualSize ) ||
                                     ( aVars.HasCondHeight() ) )
                                 bVClip = true;
                         }
@@ -3031,7 +3031,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         //  except when font size is from conditional formatting.
         //! Allow clipping when vertically merged?
         if ( eType != OUTTYPE_PRINTER ||
-            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
+            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CRFlags::ManualSize ) ||
             ( rParam.mpCondSet && SfxItemState::SET ==
                 rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT) ) )
             bClip = true;
@@ -3243,7 +3243,7 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
         //  except when font size is from conditional formatting.
         //! Allow clipping when vertically merged?
         if ( eType != OUTTYPE_PRINTER ||
-            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
+            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CRFlags::ManualSize ) ||
             ( rParam.mpCondSet && SfxItemState::SET ==
                 rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT) ) )
             bClip = true;
@@ -4006,7 +4006,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         //  except when font size is from conditional formatting.
         //! Allow clipping when vertically merged?
         if ( eType != OUTTYPE_PRINTER ||
-            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
+            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CRFlags::ManualSize ) ||
             ( rParam.mpCondSet && SfxItemState::SET ==
                 rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT) ) )
             bClip = true;
@@ -4352,7 +4352,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         //  except when font size is from conditional formatting.
         //! Allow clipping when vertically merged?
         if ( eType != OUTTYPE_PRINTER ||
-            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
+            ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CRFlags::ManualSize ) ||
             ( rParam.mpCondSet && SfxItemState::SET ==
                 rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT) ) )
             bClip = true;

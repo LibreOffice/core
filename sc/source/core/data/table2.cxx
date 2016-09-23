@@ -159,11 +159,11 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         if (mpRowHeights && pRowFlags)
         {
             mpRowHeights->insertSegment(nStartRow, nSize);
-            sal_uInt8 nNewFlags = pRowFlags->Insert( nStartRow, nSize);
+            CRFlags nNewFlags = pRowFlags->Insert( nStartRow, nSize);
             // only copy manual size flag, clear all others
-            if (nNewFlags && (nNewFlags != CR_MANUALSIZE))
+            if (nNewFlags != CRFlags::NONE && (nNewFlags != CRFlags::ManualSize))
                 pRowFlags->SetValue( nStartRow, nStartRow + nSize - 1,
-                        nNewFlags & CR_MANUALSIZE);
+                        nNewFlags & CRFlags::ManualSize);
         }
 
         if (pOutlineTable)
@@ -522,7 +522,7 @@ void ScTable::CopyToClip(
 
     if (pRowFlags && pTable->pRowFlags && mpRowHeights && pTable->mpRowHeights)
     {
-        pTable->pRowFlags->CopyFromAnded( *pRowFlags, 0, nRow2, CR_MANUALSIZE);
+        pTable->pRowFlags->CopyFromAnded( *pRowFlags, 0, nRow2, CRFlags::ManualSize);
         pTable->CopyRowHeight(*this, 0, nRow2, 0);
     }
 
@@ -679,13 +679,13 @@ void ScTable::CopyFromClip(
                                              pRowFlags && pTable->pRowFlags)
             {
                 CopyRowHeight(*pTable, nRow1, nRow2, -nDy);
-                // Must copy CR_MANUALSIZE bit too, otherwise pRowHeight doesn't make sense
+                // Must copy CRFlags::ManualSize bit too, otherwise pRowHeight doesn't make sense
                 for (SCROW j=nRow1; j<=nRow2; j++)
                 {
-                    if ( pTable->pRowFlags->GetValue(j-nDy) & CR_MANUALSIZE )
-                        pRowFlags->OrValue( j, CR_MANUALSIZE);
+                    if ( pTable->pRowFlags->GetValue(j-nDy) & CRFlags::ManualSize )
+                        pRowFlags->OrValue( j, CRFlags::ManualSize);
                     else
-                        pRowFlags->AndValue( j, sal::static_int_cast<sal_uInt8>(~CR_MANUALSIZE));
+                        pRowFlags->AndValue( j, ~CRFlags::ManualSize);
                 }
             }
 
@@ -2842,9 +2842,9 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, bool bManual )
     if (ValidRow(nStartRow) && ValidRow(nEndRow) && pRowFlags)
     {
         if (bManual)
-            pRowFlags->OrValue( nStartRow, nEndRow, CR_MANUALSIZE);
+            pRowFlags->OrValue( nStartRow, nEndRow, CRFlags::ManualSize);
         else
-            pRowFlags->AndValue( nStartRow, nEndRow, sal::static_int_cast<sal_uInt8>(~CR_MANUALSIZE));
+            pRowFlags->AndValue( nStartRow, nEndRow, ~CRFlags::ManualSize);
     }
     else
     {
@@ -3241,7 +3241,7 @@ bool ScTable::IsDataFiltered(const ScRange& rRange) const
                 rRange.aEnd.Col(), rRange.aEnd.Row());
 }
 
-void ScTable::SetRowFlags( SCROW nRow, sal_uInt8 nNewFlags )
+void ScTable::SetRowFlags( SCROW nRow, CRFlags nNewFlags )
 {
     if (ValidRow(nRow) && pRowFlags)
         pRowFlags->SetValue( nRow, nNewFlags);
@@ -3251,7 +3251,7 @@ void ScTable::SetRowFlags( SCROW nRow, sal_uInt8 nNewFlags )
     }
 }
 
-void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, sal_uInt8 nNewFlags )
+void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, CRFlags nNewFlags )
 {
     if (ValidRow(nStartRow) && ValidRow(nEndRow) && pRowFlags)
         pRowFlags->SetValue( nStartRow, nEndRow, nNewFlags);
@@ -3261,20 +3261,20 @@ void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, sal_uInt8 nNewFlags )
     }
 }
 
-sal_uInt8 ScTable::GetColFlags( SCCOL nCol ) const
+CRFlags ScTable::GetColFlags( SCCOL nCol ) const
 {
     if (ValidCol(nCol) && pColFlags)
         return pColFlags[nCol];
     else
-        return 0;
+        return CRFlags::NONE;
 }
 
-sal_uInt8 ScTable::GetRowFlags( SCROW nRow ) const
+CRFlags ScTable::GetRowFlags( SCROW nRow ) const
 {
     if (ValidRow(nRow) && pRowFlags)
         return pRowFlags->GetValue(nRow);
     else
-        return 0;
+        return CRFlags::NONE;
 }
 
 SCROW ScTable::GetLastFlaggedRow() const
@@ -3282,7 +3282,7 @@ SCROW ScTable::GetLastFlaggedRow() const
     SCROW nLastFound = 0;
     if (pRowFlags)
     {
-        SCROW nRow = pRowFlags->GetLastAnyBitAccess( sal::static_int_cast<sal_uInt8>(CR_ALL) );
+        SCROW nRow = pRowFlags->GetLastAnyBitAccess( CRFlags::All );
         if (ValidRow(nRow))
             nLastFound = nRow;
     }
@@ -3314,7 +3314,7 @@ SCCOL ScTable::GetLastChangedCol() const
 
     SCCOL nLastFound = 0;
     for (SCCOL nCol = 1; nCol <= MAXCOL; nCol++)
-        if ((pColFlags[nCol] & CR_ALL) || (pColWidth[nCol] != STD_COL_WIDTH))
+        if ((pColFlags[nCol] & CRFlags::All) || (pColWidth[nCol] != STD_COL_WIDTH))
             nLastFound = nCol;
 
     return nLastFound;
@@ -3341,7 +3341,6 @@ bool ScTable::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, bool bShow )
 {
     if (pOutlineTable && pColFlags)
     {
-        ScBitMaskCompressedArray< SCCOLROW, sal_uInt8> aArray( MAXCOL, pColFlags, MAXCOLCOUNT);
         return pOutlineTable->GetColArray().ManualAction( nStartCol, nEndCol, bShow, *this, true );
     }
     else

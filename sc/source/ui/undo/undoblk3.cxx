@@ -870,10 +870,10 @@ void ScUndoAutoFormat::Redo()
             // as SC_SIZE_VISOPT
             for (SCROW nRow=nStartY; nRow<=nEndY; nRow++)
             {
-                sal_uInt8 nOld = rDoc.GetRowFlags(nRow,nTab);
+                CRFlags nOld = rDoc.GetRowFlags(nRow,nTab);
                 bool bHidden = rDoc.RowHidden(nRow, nTab);
-                if ( !bHidden && ( nOld & CR_MANUALSIZE ) )
-                    rDoc.SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
+                if ( !bHidden && ( nOld & CRFlags::ManualSize ) )
+                    rDoc.SetRowFlags( nRow, nTab, nOld & ~CRFlags::ManualSize );
             }
 
             rDoc.SetOptimalHeight(aCxt, nStartY, nEndY, nTab);

@@ -1942,7 +1942,7 @@ void ScViewFunc::SetWidthOrHeight(
                     bool bAll = ( eMode==SC_SIZE_OPTIMAL );
                     if (!bAll)
                     {
-                        //  delete CR_MANUALSIZE for all in range,
+                        //  delete CRFlags::ManualSize for all in range,
                         //  then SetOptimalHeight with bShrink = FALSE
                         for (SCROW nRow = nStartNo; nRow <= nEndNo; ++nRow)
                         {
@@ -1953,9 +1953,9 @@ void ScViewFunc::SetWidthOrHeight(
                                 continue;
                             }
 
-                            sal_uInt8 nOld = rDoc.GetRowFlags(nRow, nTab);
-                            if (nOld & CR_MANUALSIZE)
-                                rDoc.SetRowFlags(nRow, nTab, nOld & ~CR_MANUALSIZE);
+                            CRFlags nOld = rDoc.GetRowFlags(nRow, nTab);
+                            if (nOld & CRFlags::ManualSize)
+                                rDoc.SetRowFlags(nRow, nTab, nOld & ~CRFlags::ManualSize);
                         }
                     }
 

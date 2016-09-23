@@ -146,8 +146,8 @@ private:
     sal_uInt16*         pColWidth;
     std::unique_ptr<ScFlatUInt16RowSegments> mpRowHeights;
 
-    sal_uInt8*          pColFlags;
-    ScBitMaskCompressedArray< SCROW, sal_uInt8>*     pRowFlags;
+    CRFlags*            pColFlags;
+    ScBitMaskCompressedArray< SCROW, CRFlags>*     pRowFlags;
     std::unique_ptr<ScFlatBoolColSegments>  mpHiddenCols;
     std::unique_ptr<ScFlatBoolRowSegments>  mpHiddenRows;
     std::unique_ptr<ScFlatBoolColSegments>  mpFilteredCols;
@@ -748,8 +748,8 @@ public:
     void        ShowRows(SCROW nRow1, SCROW nRow2, bool bShow);
     void        DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow);
 
-    void        SetRowFlags( SCROW nRow, sal_uInt8 nNewFlags );
-    void        SetRowFlags( SCROW nStartRow, SCROW nEndRow, sal_uInt8 nNewFlags );
+    void        SetRowFlags( SCROW nRow, CRFlags nNewFlags );
+    void        SetRowFlags( SCROW nStartRow, SCROW nEndRow, CRFlags nNewFlags );
 
                 /// @return  the index of the last row with any set flags (auto-pagebreak is ignored).
     SCROW      GetLastFlaggedRow() const;
@@ -761,10 +761,10 @@ public:
 
     bool       IsDataFiltered(SCCOL nColStart, SCROW nRowStart, SCCOL nColEnd, SCROW nRowEnd) const;
     bool       IsDataFiltered(const ScRange& rRange) const;
-    sal_uInt8       GetColFlags( SCCOL nCol ) const;
-    sal_uInt8       GetRowFlags( SCROW nRow ) const;
+    CRFlags    GetColFlags( SCCOL nCol ) const;
+    CRFlags    GetRowFlags( SCROW nRow ) const;
 
-    const ScBitMaskCompressedArray< SCROW, sal_uInt8> * GetRowFlagsArray() const
+    const ScBitMaskCompressedArray< SCROW, CRFlags> * GetRowFlagsArray() const
                     { return pRowFlags; }
 
     bool        UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, bool bShow );

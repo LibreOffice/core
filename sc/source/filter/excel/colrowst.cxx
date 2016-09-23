@@ -220,7 +220,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     rDoc.SetRowHeightOnly( 0, MAXROW, nScTab, mnDefHeight );
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_UNSYNCED ) )
         // first access to row flags, do not ask for old flags
-        rDoc.SetRowFlags( 0, MAXROW, nScTab, CR_MANUALSIZE );
+        rDoc.SetRowFlags( 0, MAXROW, nScTab, CRFlags::ManualSize );
 
     maRowHeights.build_tree();
     if (!maRowHeights.is_tree_valid())
@@ -295,7 +295,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     if( GetBiff() == EXC_BIFF8 )
     {
         const XclImpAutoFilterData* pFilter = GetFilterManager().GetByTab( nScTab );
-        // #i70026# use IsFiltered() to set the CR_FILTERED flag for active filters only
+        // #i70026# use IsFiltered() to set the CRFlags::Filtered flag for active filters only
         if( pFilter && pFilter->IsActive() && pFilter->IsFiltered() )
         {
             nFirstFilterScRow = pFilter->StartRow();

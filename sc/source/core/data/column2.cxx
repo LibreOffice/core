@@ -942,7 +942,7 @@ void ScColumn::GetOptimalHeight(
                     {
                         //  only calculate the cell height when it's used later (#37928#)
 
-                        if (rCxt.isForceAutoSize() || !(pDocument->GetRowFlags(nRow, nTab) & CR_MANUALSIZE) )
+                        if (rCxt.isForceAutoSize() || !(pDocument->GetRowFlags(nRow, nTab) & CRFlags::ManualSize) )
                         {
                             aOptions.pPattern = pPattern;
                             const ScPatternAttr* pOldPattern = pPattern;

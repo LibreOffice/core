@@ -3474,15 +3474,15 @@ bool ScDocFunc::SetWidthOrHeight(
                 bool bAll = ( eMode==SC_SIZE_OPTIMAL );
                 if (!bAll)
                 {
-                    //  fuer alle eingeblendeten CR_MANUALSIZE loeschen,
+                    //  fuer alle eingeblendeten CRFlags::ManualSize loeschen,
                     //  dann SetOptimalHeight mit bShrink = FALSE
                     for (SCROW nRow=nStartNo; nRow<=nEndNo; nRow++)
                     {
-                        sal_uInt8 nOld = rDoc.GetRowFlags(nRow,nTab);
+                        CRFlags nOld = rDoc.GetRowFlags(nRow,nTab);
                         SCROW nLastRow = -1;
                         bool bHidden = rDoc.RowHidden(nRow, nTab, nullptr, &nLastRow);
-                        if ( !bHidden && ( nOld & CR_MANUALSIZE ) )
-                            rDoc.SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
+                        if ( !bHidden && ( nOld & CRFlags::ManualSize ) )
+                            rDoc.SetRowFlags( nRow, nTab, nOld & ~CRFlags::ManualSize );
                     }
                 }
 
