@@ -65,7 +65,7 @@ public class DesktopTools
                 XComponentLoader.class, oDesktop);
 
         return oCLoader;
-    } // finish getCLoader
+    }
 
     /**
      * Creates an Instance of the Desktop service
@@ -87,7 +87,7 @@ public class DesktopTools
         }
 
         return oInterface;
-    } //finish createDesktop
+    }
 
     /**
      * returns a XEnumeration containing all components containing on the desktop
@@ -234,7 +234,7 @@ public class DesktopTools
         }
 
         return oDoc;
-    } //finish openNewDoc
+    }
 
     /**
      * loads a document of from a given url
@@ -263,7 +263,7 @@ public class DesktopTools
 
         bringWindowToFront(oDoc);
         return oDoc;
-    } //finish openNewDoc
+    }
 
     /**
      * closes a given document
