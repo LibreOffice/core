@@ -203,6 +203,8 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 awt::Size aSize;
                 aGuard.clear();
 
+                bool bBackToLoaded = false;
+
                 sal_Bool bSuccess = sal_False;
                 if ( getCurrentState() == embed::EmbedStates::LOADED )
                 {
@@ -211,6 +213,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                     // try to switch the object to RUNNING state and request the value again
                     try {
                         changeState( embed::EmbedStates::RUNNING );
+                        // the links should be switched back to loaded state to avoid too
+                        // many open MathType instances
+                        bBackToLoaded = true;
                     }
                     catch( const uno::Exception& )
                     {
@@ -228,6 +233,17 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 }
                 catch( const uno::Exception& )
                 {
+                }
+
+                if (bBackToLoaded)
+                {
+                    try
+                    {
+                        changeState(embed::EmbedStates::LOADED);
+                    }
+                    catch( const uno::Exception& )
+                    {
+                    }
                 }
 
                 if ( !bSuccess )
