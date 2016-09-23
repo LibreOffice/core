@@ -618,7 +618,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                             rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,(sal_uInt16)0xFFFF));
                             if ( bBullets )
                             {
-                                NBOTypeMgrBase* pBullets = NBOutlineTypeMgrFact::CreateInstance(eNBOType::BULLETS);
+                                NBOTypeMgrBase* pBullets = NBOutlineTypeMgrFact::CreateInstance(NBOType::Bullets);
                                 if ( pBullets )
                                 {
                                     sal_uInt16 nBulIndex = pBullets->GetNBOIndexForNumRule(*pNumRule,nActNumLvl);
@@ -626,7 +626,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                                 }
                             }else
                             {
-                                NBOTypeMgrBase* pNumbering = NBOutlineTypeMgrFact::CreateInstance(eNBOType::NUMBERING);
+                                NBOTypeMgrBase* pNumbering = NBOutlineTypeMgrFact::CreateInstance(NBOType::Numbering);
                                 if ( pNumbering )
                                 {
                                     sal_uInt16 nBulIndex = pNumbering->GetNBOIndexForNumRule(*pNumRule,nActNumLvl);

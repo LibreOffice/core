@@ -30,15 +30,10 @@ namespace svx { namespace sidebar {
 #define DEFAULT_NUM_VALUSET_COUNT                       8
 #define DEFAULT_NUMBERING_CACHE_FORMAT_VERSION          0x10
 
-typedef sal_uInt16 NBOType;
-namespace eNBOType
+enum class NBOType
 {
-    const NBOType BULLETS = 0x01;
-    const NBOType GRAPHICBULLETS = 0x02;
-    const NBOType NUMBERING = 0x03;
-    const NBOType OUTLINE = 0x04;
-    const NBOType MIXBULLETS = 0x05;
-}
+    Bullets = 1, Numbering, Outline
+};
 
 enum class NBType
 {
@@ -240,48 +235,6 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
         static BulletsTypeMgr& GetInstance();
 };
 
-class SVX_DLLPUBLIC GraphicBulletsTypeMgr: public NBOTypeMgrBase
-{
-    friend class OutlineTypeMgr;
-    friend class NumberingTypeMgr;
-    private:
-        GraphicBulletsTypeMgr(const GraphicBulletsTypeMgr&) = delete;
-    public:
-        typedef std::vector<GrfBulDataRelation*> ListType;
-        ListType aGrfDataLst;
-    public:
-        GraphicBulletsTypeMgr();
-        virtual ~GraphicBulletsTypeMgr() override;
-        virtual void Init() override;
-        virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
-        virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
-        virtual void ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault=false,bool isResetSize=false) override;
-        virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false) override;
-        virtual bool IsCustomized(sal_uInt16 nIndex) override;
-        OUString GetGrfName(sal_uInt16 nIndex);
-        static GraphicBulletsTypeMgr& GetInstance();
-};
-
-class SVX_DLLPUBLIC MixBulletsTypeMgr: public NBOTypeMgrBase
-{
-    friend class OutlineTypeMgr;
-    friend class NumberingTypeMgr;
-    private:
-        MixBulletsTypeMgr(const MixBulletsTypeMgr&) = delete;
-    public:
-        static MixBulletsSettings_Impl* pActualBullets[DEFAULT_BULLET_TYPES];
-        static MixBulletsSettings_Impl* pDefaultActualBullets[DEFAULT_BULLET_TYPES];
-    public:
-        MixBulletsTypeMgr();
-        virtual ~MixBulletsTypeMgr() override {}
-        virtual void Init() override;
-        virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0) override;
-        virtual void RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel) override;
-        virtual void ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt16 mLevel, bool isDefault=false,bool isResetSize=false) override;
-        virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false) override;
-        virtual bool IsCustomized(sal_uInt16 nIndex) override;
-        static MixBulletsTypeMgr& GetInstance();
-};
 
 class SVX_DLLPUBLIC NumberingTypeMgr: public NBOTypeMgrBase
 {

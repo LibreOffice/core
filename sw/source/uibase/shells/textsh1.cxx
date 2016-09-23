@@ -1844,7 +1844,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 {
                     rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX, USHRT_MAX));
                     rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX, USHRT_MAX));
-                    NBOTypeMgrBase* pBullets = NBOutlineTypeMgrFact::CreateInstance(eNBOType::BULLETS);
+                    NBOTypeMgrBase* pBullets = NBOutlineTypeMgrFact::CreateInstance(NBOType::Bullets);
                     if ( pBullets )
                     {
                         const sal_uInt16 nBulIndex = pBullets->GetNBOIndexForNumRule(aSvxRule,nActNumLvl);
@@ -1854,7 +1854,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 {
                     rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX, USHRT_MAX));
                     rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX, USHRT_MAX));
-                    NBOTypeMgrBase* pNumbering = NBOutlineTypeMgrFact::CreateInstance(eNBOType::NUMBERING);
+                    NBOTypeMgrBase* pNumbering = NBOutlineTypeMgrFact::CreateInstance(NBOType::Numbering);
                     if ( pNumbering )
                     {
                         const sal_uInt16 nBulIndex = pNumbering->GetNBOIndexForNumRule(aSvxRule,nActNumLvl);
@@ -1865,7 +1865,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 if ( nWhich == FN_OUTLINE_RULE_INDEX )
                 {
                     rSet.Put(SfxUInt16Item(FN_OUTLINE_RULE_INDEX, USHRT_MAX));
-                    NBOTypeMgrBase* pOutline = NBOutlineTypeMgrFact::CreateInstance(eNBOType::OUTLINE);
+                    NBOTypeMgrBase* pOutline = NBOutlineTypeMgrFact::CreateInstance(NBOType::Outline);
                     if ( pOutline )
                     {
                         const sal_uInt16 nIndex = pOutline->GetNBOIndexForNumRule(aSvxRule,nActNumLvl);

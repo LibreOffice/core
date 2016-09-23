@@ -199,7 +199,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
         // get numbering rule corresponding to <nIdx> and apply the needed number formats to <pNumRule>
         NBOTypeMgrBase* pNumRuleMgr =
             NBOutlineTypeMgrFact::CreateInstance(
-                nSId == FN_SVX_SET_BULLET ? eNBOType::BULLETS : eNBOType::NUMBERING );
+                nSId == FN_SVX_SET_BULLET ? NBOType::Bullets : NBOType::Numbering );
         if ( pNumRuleMgr )
         {
             sal_uInt16 nActNumLvl = (sal_uInt16)0xFFFF;

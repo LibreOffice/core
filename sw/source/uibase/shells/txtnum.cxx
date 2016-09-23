@@ -252,11 +252,11 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
             if ( pItem != nullptr )
             {
                 const sal_uInt16 nChoosenItemIdx = pItem->GetValue();
-                sal_uInt16 nNBOType = svx::sidebar::eNBOType::BULLETS;
+                svx::sidebar::NBOType nNBOType = svx::sidebar::NBOType::Bullets;
                 if ( nSlot == FN_SVX_SET_NUMBER )
-                    nNBOType = svx::sidebar::eNBOType::NUMBERING;
+                    nNBOType = svx::sidebar::NBOType::Numbering;
                 else if ( nSlot == FN_SVX_SET_OUTLINE )
-                    nNBOType = svx::sidebar::eNBOType::OUTLINE;
+                    nNBOType = svx::sidebar::NBOType::Outline;
 
                 svx::sidebar::NBOTypeMgrBase* pNBOTypeMgr = svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( nNBOType );
 
