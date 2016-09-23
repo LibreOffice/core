@@ -31,6 +31,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,liblangtag_data,$(LIBO_SHARE
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,liblangtag_data,$(LIBO_SHARE_FOLDER)/liblangtag/common/supplemental,\
 	data/common/supplemental/likelySubtags.xml \
+	data/common/supplemental/supplementalMetadata.xml \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
