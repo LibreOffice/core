@@ -962,11 +962,13 @@ void Desktop::HandleBootstrapErrors(
     else if ( aBootstrapError == BE_OFFICECONFIG_BROKEN )
     {
         // test restore of registrymodifications
-        static bool bFeatureSecureUserConfig(true);
-        static sal_uInt16 nNumCopies(5);
+        sal_uInt16 nSecureUserConfigNumCopies(0);
         bool bFireOriginalError(true);
 
-        if (bFeatureSecureUserConfig)
+        // read configuration from soffice.ini
+        const bool bSecureUserConfig(comphelper::BackupFileHelper::getSecureUserConfig(nSecureUserConfigNumCopies));
+
+        if (bSecureUserConfig)
         {
             // try to asccess user layer configuration file
             OUString conf("${CONFIGURATION_LAYERS}");
@@ -991,7 +993,7 @@ void Desktop::HandleBootstrapErrors(
 
             if (!aUser.isEmpty())
             {
-                comphelper::BackupFileHelper aBackupFileHelper(aUser, nNumCopies);
+                comphelper::BackupFileHelper aBackupFileHelper(aUser, nSecureUserConfigNumCopies);
 
                 if (aBackupFileHelper.isPopPossible())
                 {
