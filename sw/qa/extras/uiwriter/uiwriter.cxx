@@ -91,6 +91,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/lokhelper.hxx>
 #include <config_features.h>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
@@ -206,6 +207,7 @@ public:
     void testRedlineViewAuthor();
     void testTdf78727();
     void testRedlineTimestamp();
+    void testCursorWindows();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -313,6 +315,7 @@ public:
     CPPUNIT_TEST(testRedlineViewAuthor);
     CPPUNIT_TEST(testTdf78727);
     CPPUNIT_TEST(testRedlineTimestamp);
+    CPPUNIT_TEST(testCursorWindows);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3976,6 +3979,27 @@ void SwUiWriterTest::testRedlineTimestamp()
     sal_uInt16 nSec2 = rTable[1]->GetRedlineData().GetTimeStamp().GetSec();
     // This failed, seconds was always 0.
     CPPUNIT_ASSERT(nSec1 != 0 || nSec2 != 0);
+}
+
+void SwUiWriterTest::testCursorWindows()
+{
+    // Create a new document with one window.
+    SwDoc* pDoc = createDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell1 = pDocShell->GetWrtShell();
+
+    // Create a second view and type something.
+    SfxLokHelper::createView();
+    SwWrtShell* pWrtShell2 = pDocShell->GetWrtShell();
+    OUString aText("foo");
+    pWrtShell2->Insert(aText);
+
+    // Assert that only the cursor of the actual window move, not other cursors.
+    SwShellCursor* pShellCursor1 = pWrtShell1->getShellCursor(false);
+    SwShellCursor* pShellCursor2 = pWrtShell2->getShellCursor(false);
+    // This was 3, not 0 -- cursor of the other window moved.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCursor1->Start()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(aText.getLength(), pShellCursor2->Start()->nContent.GetIndex());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
