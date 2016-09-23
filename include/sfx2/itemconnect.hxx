@@ -21,35 +21,26 @@
 #define INCLUDED_SFX2_ITEMCONNECT_HXX
 
 #include <sal/config.h>
+#include <o3tl/typed_flags_set.hxx>
 #include <sfx2/dllapi.h>
-
-#include <memory>
-
 #include <sfx2/itemwrapper.hxx>
 #include <sfx2/controlwrapper.hxx>
+#include <memory>
+
+
+enum class ItemConnFlags
+{
+/** No special state for the connection. */
+    NONE               = 0x0000,
+/** Hide control(s), if the item is unknown. */
+    HideUnknown        = 0x0001,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ItemConnFlags> : is_typed_flags<ItemConnFlags, 0x0001> {};
+}
 
 namespace sfx {
-
-typedef int ItemConnFlags;
-
-/** No special state for the connection. */
-const ItemConnFlags ITEMCONN_NONE               = 0x0000;
-
-/** Connection is inactive - virtual functions will not be called. */
-const ItemConnFlags ITEMCONN_INACTIVE           = 0x0001;
-
-/** Enable control(s), if the item is known. */
-const ItemConnFlags ITEMCONN_ENABLE_KNOWN       = 0x0010;
-/** Disable control(s), if the item is unknown. */
-const ItemConnFlags ITEMCONN_DISABLE_UNKNOWN    = 0x0020;
-/** Show control(s), if the item is known. */
-const ItemConnFlags ITEMCONN_SHOW_KNOWN         = 0x0040;
-/** Hide control(s), if the item is unknown. */
-const ItemConnFlags ITEMCONN_HIDE_UNKNOWN       = 0x0080;
-
-/** Default value for constructors. */
-const ItemConnFlags ITEMCONN_DEFAULT            = ITEMCONN_NONE;
-
 
 // Base connection classes
 
@@ -180,9 +171,6 @@ class SFX2_DLLPUBLIC ItemConnectionBase
 public:
     virtual             ~ItemConnectionBase();
 
-    /** Returns true if this connection is active. */
-    bool                IsActive() const;
-
     /** Calls the virtual ApplyFlags() function, if connection is active. */
     void                DoApplyFlags( const SfxItemSet* pItemSet );
     /** Calls the virtual Reset() function, if connection is active. */
@@ -191,7 +179,7 @@ public:
     bool                DoFillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet );
 
 protected:
-    explicit            ItemConnectionBase( ItemConnFlags nFlags = ITEMCONN_DEFAULT );
+    explicit            ItemConnectionBase( ItemConnFlags nFlags = ItemConnFlags::NONE );
 
     /** Derived classes implement actions according to current flags here. */
     virtual void        ApplyFlags( const SfxItemSet* pItemSet ) = 0;
@@ -200,8 +188,6 @@ protected:
     /** Derived classes implement filling item sets from controls here. */
     virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) = 0;
 
-    /** Returns whether to enable a control, according to current flags. */
-    TriState            GetEnableState( bool bKnown ) const;
     /** Returns whether to show a control, according to current flags. */
     TriState            GetShowState( bool bKnown ) const;
 
@@ -236,13 +222,13 @@ public:
     /** Receives pointer to a newly created control wrapper.
         @descr  Takes ownership of the control wrapper. */
     explicit            ItemControlConnection( sal_uInt16 nSlot, ControlWrpT* pNewCtrlWrp,
-                            ItemConnFlags nFlags = ITEMCONN_DEFAULT );
+                            ItemConnFlags nFlags = ItemConnFlags::NONE );
 
     /** Convenience constructor. Receives reference to a control directly.
         @descr  May only be used, if ControlWrpT::ControlWrpT( ControlType& )
         constructor exists. */
     explicit            ItemControlConnection( sal_uInt16 nSlot, ControlType& rControl,
-                            ItemConnFlags nFlags = ITEMCONN_DEFAULT );
+                            ItemConnFlags nFlags = ItemConnFlags::NONE );
 
     virtual             ~ItemControlConnection() override;
 
@@ -274,7 +260,7 @@ class SFX2_DLLPUBLIC DummyItemConnection:
 {
 public:
     explicit            DummyItemConnection( sal_uInt16 nSlot, vcl::Window& rWindow,
-                            ItemConnFlags nFlags = ITEMCONN_DEFAULT );
+                            ItemConnFlags nFlags = ItemConnFlags::NONE );
 
 protected:
     virtual void        ApplyFlags( const SfxItemSet* pItemSet ) override;
@@ -309,7 +295,7 @@ public:
     typedef typename ItemControlConnectionType::ControlWrapperType MetricFieldWrapperType;
 
     explicit            MetricConnection( sal_uInt16 nSlot, MetricField& rField,
-                            FieldUnit eItemUnit = FUNIT_NONE, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
+                            FieldUnit eItemUnit = FUNIT_NONE, ItemConnFlags nFlags = ItemConnFlags::NONE );
 };
 
 
@@ -334,7 +320,7 @@ public:
     typedef typename ListBoxWrapperType::MapEntryType               MapEntryType;
 
     explicit            ListBoxConnection( sal_uInt16 nSlot, ListBox& rListBox,
-                            const MapEntryType* pMap = nullptr, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
+                            const MapEntryType* pMap = nullptr, ItemConnFlags nFlags = ItemConnFlags::NONE );
 };
 
 
@@ -359,7 +345,7 @@ public:
     typedef typename ValueSetWrapperType::MapEntryType              MapEntryType;
 
     explicit            ValueSetConnection( sal_uInt16 nSlot, ValueSet& rValueSet,
-                            const MapEntryType* pMap = nullptr, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
+                            const MapEntryType* pMap = nullptr, ItemConnFlags nFlags = ItemConnFlags::NONE );
 };
 
 
@@ -428,7 +414,7 @@ template< typename ItemWrpT, typename ControlWrpT >
 void ItemControlConnection< ItemWrpT, ControlWrpT >::ApplyFlags( const SfxItemSet* pItemSet )
 {
     bool bKnown = ItemWrapperHelper::IsKnownItem( *pItemSet, maItemWrp.GetSlotId() );
-    mxCtrlWrp->ModifyControl( GetEnableState( bKnown ), GetShowState( bKnown ) );
+    mxCtrlWrp->ModifyControl( GetShowState( bKnown ) );
 }
 
 template< typename ItemWrpT, typename ControlWrpT >

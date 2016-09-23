@@ -170,7 +170,7 @@ public:
 
 MarginConnection::MarginConnection( const SfxItemSet& rItemSet,
         MetricField& rMfLeft, MetricField& rMfRight, MetricField& rMfTop, MetricField& rMfBottom ) :
-    ItemControlConnectionType( SID_ATTR_ALIGN_MARGIN, new MarginControlsWrapper( rMfLeft, rMfRight, rMfTop, rMfBottom ), sfx::ITEMCONN_DEFAULT )
+    ItemControlConnectionType( SID_ATTR_ALIGN_MARGIN, new MarginControlsWrapper( rMfLeft, rMfRight, rMfTop, rMfBottom ), ItemConnFlags::NONE )
 {
     mxCtrlWrp->SetDefaultValue( maItemWrp.GetDefaultItem( rItemSet ) );
 }
@@ -255,7 +255,7 @@ public:
 
 ShadowConnection::ShadowConnection( const SfxItemSet& rItemSet,
         ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor ) :
-    ItemControlConnectionType( SID_ATTR_BORDER_SHADOW, new ShadowControlsWrapper( rVsPos, rMfSize, rLbColor ), sfx::ITEMCONN_DEFAULT )
+    ItemControlConnectionType( SID_ATTR_BORDER_SHADOW, new ShadowControlsWrapper( rVsPos, rMfSize, rLbColor ), ItemConnFlags::NONE )
 {
     mxCtrlWrp->SetDefaultValue( maItemWrp.GetDefaultItem( rItemSet ) );
 }
@@ -264,7 +264,7 @@ ShadowConnection::ShadowConnection( const SfxItemSet& rItemSet,
 sfx::ItemConnectionBase* CreateFrameLineConnection( sal_uInt16 nSlot,
         FrameSelector& rFrameSel, FrameBorderType eBorder )
 {
-    return new sfx::ItemControlConnection< LineItemWrapper, FrameSelectorWrapper >( nSlot, new FrameSelectorWrapper( rFrameSel, eBorder ), sfx::ITEMCONN_DEFAULT );
+    return new sfx::ItemControlConnection< LineItemWrapper, FrameSelectorWrapper >( nSlot, new FrameSelectorWrapper( rFrameSel, eBorder ), ItemConnFlags::NONE );
 }
 
 sfx::ItemConnectionBase* CreateMarginConnection( const SfxItemSet& rItemSet,

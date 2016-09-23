@@ -30,9 +30,9 @@ namespace sfx {
 
 namespace {
 
-TriState lclConvertToTriState( bool bKnown, bool bIsKnownFlag, bool bIsUnknownFlag )
+TriState lclConvertToTriState( bool bKnown, bool bIsUnknownFlag )
 {
-    return (bKnown && bIsKnownFlag) ? TRISTATE_TRUE : ((!bKnown && bIsUnknownFlag) ? TRISTATE_FALSE : TRISTATE_INDET);
+    return (!bKnown && bIsUnknownFlag) ? TRISTATE_FALSE : TRISTATE_INDET;
 }
 
 } // namespace
@@ -181,10 +181,10 @@ void MultiControlWrapperHelper::RegisterControlWrapper( ControlWrapperBase& rWra
     mxImpl->maVec.push_back( &rWrapper );
 }
 
-void MultiControlWrapperHelper::ModifyControl( TriState eEnable, TriState eShow )
+void MultiControlWrapperHelper::ModifyControl( TriState eShow )
 {
     for( ControlWrpVec::iterator aIt = mxImpl->maVec.begin(), aEnd = mxImpl->maVec.end(); aIt != aEnd; ++aIt )
-        (*aIt)->ModifyControl( eEnable, eShow );
+        (*aIt)->ModifyControl( eShow );
 }
 
 bool MultiControlWrapperHelper::IsControlDontKnow() const
@@ -214,36 +214,24 @@ ItemConnectionBase::~ItemConnectionBase()
 {
 }
 
-bool ItemConnectionBase::IsActive() const
-{
-    return !(mnFlags & ITEMCONN_INACTIVE);
-}
-
 void ItemConnectionBase::DoApplyFlags( const SfxItemSet* pItemSet )
 {
-    if( IsActive() )
-        ApplyFlags( pItemSet );
+    ApplyFlags( pItemSet );
 }
 
 void ItemConnectionBase::DoReset( const SfxItemSet* pItemSet )
 {
-    if( IsActive() )
-        Reset( pItemSet );
+    Reset( pItemSet );
 }
 
 bool ItemConnectionBase::DoFillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet )
 {
-    return IsActive() && FillItemSet( rDestSet, rOldSet );
-}
-
-TriState ItemConnectionBase::GetEnableState( bool bKnown ) const
-{
-    return lclConvertToTriState( bKnown, (mnFlags & ITEMCONN_ENABLE_KNOWN) != 0, (mnFlags & ITEMCONN_DISABLE_UNKNOWN) != 0 );
+    return FillItemSet( rDestSet, rOldSet );
 }
 
 TriState ItemConnectionBase::GetShowState( bool bKnown ) const
 {
-    return lclConvertToTriState( bKnown, (mnFlags & ITEMCONN_SHOW_KNOWN) != 0, (mnFlags & ITEMCONN_HIDE_UNKNOWN) != 0 );
+    return lclConvertToTriState( bKnown, bool(mnFlags & ItemConnFlags::HideUnknown) );
 }
 
 
@@ -260,7 +248,7 @@ DummyItemConnection::DummyItemConnection( sal_uInt16 nSlot, vcl::Window& rWindow
 void DummyItemConnection::ApplyFlags( const SfxItemSet* pItemSet )
 {
     bool bKnown = ItemWrapperHelper::IsKnownItem( *pItemSet, mnSlot );
-    ModifyControl( GetEnableState( bKnown ), GetShowState( bKnown ) );
+    ModifyControl( GetShowState( bKnown ) );
 }
 
 void DummyItemConnection::Reset( const SfxItemSet* )

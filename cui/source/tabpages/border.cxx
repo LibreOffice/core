@@ -342,10 +342,10 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     // #i43593# - item connection doesn't work for Writer,
     // because the Writer item sets contain these items
     // checkbox "Merge with next paragraph" only visible for Writer dialog format.paragraph
-    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_BORDER_CONNECT, *m_pMergeWithNextCB, sfx::ITEMCONN_DEFAULT ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_BORDER_CONNECT, *m_pMergeWithNextCB, ItemConnFlags::NONE ) );
     m_pMergeWithNextCB->Hide();
     // checkbox "Merge adjacent line styles" only visible for Writer dialog format.table
-    AddItemConnection( new sfx::CheckBoxConnection( SID_SW_COLLAPSING_BORDERS, *m_pMergeAdjacentBordersCB, sfx::ITEMCONN_DEFAULT ) );
+    AddItemConnection( new sfx::CheckBoxConnection( SID_SW_COLLAPSING_BORDERS, *m_pMergeAdjacentBordersCB, ItemConnFlags::NONE ) );
     m_pMergeAdjacentBordersCB->Hide();
 
     if( pDocSh )

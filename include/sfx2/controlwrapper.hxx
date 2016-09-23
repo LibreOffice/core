@@ -148,7 +148,7 @@ public:
 
     /** Derived classes enable, disable, show, or hide control(s).
         @descr  Will do nothing, if the corresponding parameter is TRISTATE_INDET. */
-    virtual void        ModifyControl( TriState eEnable, TriState eShow ) = 0;
+    virtual void        ModifyControl( TriState eShow ) = 0;
 
     /** Derived classes return true if the control is in "don't know" state. */
     virtual bool        IsControlDontKnow() const = 0;
@@ -194,7 +194,7 @@ public:
 
     /** Enables, disables, shows, or hides the control.
         @descr  Does nothing, if the corresponding parameter is TRISTATE_INDET. */
-    virtual void        ModifyControl( TriState eEnable, TriState eShow ) override;
+    virtual void        ModifyControl( TriState eShow ) override;
 
     /** Derived classes return the value the control contains. */
     virtual ValueT      GetControlValue() const = 0;
@@ -374,7 +374,7 @@ public:
     void                RegisterControlWrapper( ControlWrapperBase& rWrapper );
 
     /** Enables, disables, shows, or hides the registered controls. */
-    virtual void        ModifyControl( TriState eEnable, TriState eShow ) override;
+    virtual void        ModifyControl( TriState eShow ) override;
 
     /** Returns true if all registered controls are in "don't know" state. */
     virtual bool        IsControlDontKnow() const override;
@@ -469,10 +469,8 @@ PosT PosValueMapper< PosT, ValueT >::GetPosFromValue( ValueT nValue ) const
 
 
 template< typename ControlT, typename ValueT >
-inline void SingleControlWrapper< ControlT, ValueT >::ModifyControl( TriState eEnable, TriState eShow )
+inline void SingleControlWrapper< ControlT, ValueT >::ModifyControl( TriState eShow )
 {
-    if( eEnable != TRISTATE_INDET )
-        mrControl.Enable( eEnable == TRISTATE_TRUE );
     if( eShow != TRISTATE_INDET )
         mrControl.Show( eShow == TRISTATE_TRUE );
 }
