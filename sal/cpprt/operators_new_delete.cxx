@@ -196,7 +196,7 @@ void* SAL_CALL operator new[] (std::size_t n) throw (std::bad_alloc)
 }
 
 void SAL_CALL operator delete[] (void * p)
-#if !defined _MSC_VER
+#if !defined _MSC_VER || _MSC_VER >= 1900
     throw ()
 #endif
 {
