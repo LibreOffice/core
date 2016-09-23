@@ -570,13 +570,16 @@ void SAL_CALL SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
 void SalGtkFilePicker::updateCurrentFilterFromName(const gchar* filtername)
 {
     OUString aFilterName(filtername, strlen(filtername), RTL_TEXTENCODING_UTF8);
-    FilterList::iterator aEnd = m_pFilterList->end();
-    for (FilterList::iterator aIter = m_pFilterList->begin(); aIter != aEnd; ++aIter)
+    if (m_pFilterList)
     {
-        if (aFilterName == shrinkFilterName( aIter->getTitle()))
+        FilterList::iterator aEnd = m_pFilterList->end();
+        for (FilterList::iterator aIter = m_pFilterList->begin(); aIter != aEnd; ++aIter)
         {
-            m_aCurrentFilter = aIter->getTitle();
-            break;
+            if (aFilterName == shrinkFilterName( aIter->getTitle()))
+            {
+                m_aCurrentFilter = aIter->getTitle();
+                break;
+            }
         }
     }
 }
@@ -788,10 +791,11 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
                         OUString aNewFilter;
                         OUString aOldFilter = getCurrentFilter();
                         bool bChangeFilter = true;
-                        for ( FilterList::iterator aListIter = m_pFilterList->begin();
-                              aListIter != m_pFilterList->end();
-                              ++aListIter
-                        )
+                        if ( m_pFilterList )
+                            for ( FilterList::iterator aListIter = m_pFilterList->begin();
+                                  aListIter != m_pFilterList->end();
+                                  ++aListIter
+                                )
                         {
                             if( lcl_matchFilter( aListIter->getFilter(), aStarDot+sExtension ) )
                             {
@@ -825,47 +829,49 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
             OSL_TRACE( "2: current filter is %s\n",
                 OUStringToOString( sFilterName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-            FilterList::iterator aListIter = ::std::find_if(
-                m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(sFilterName) );
-
-            OUString aFilter;
-            if (aListIter != m_pFilterList->end())
-                aFilter = aListIter->getFilter();
-
-            OSL_TRACE( "turned into %s\n",
-                OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr() );
-
-            nTokenIndex = 0;
-            OUString sToken;
-            //   OUString strExt;
-            do
+            if (m_pFilterList)
             {
-                sToken = aFilter.getToken( 0, '.', nTokenIndex );
+                FilterList::iterator aListIter = ::std::find_if(
+                    m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(sFilterName) );
 
-                if ( sToken.lastIndexOf( ';' ) != -1 )
+                OUString aFilter;
+                if (aListIter != m_pFilterList->end())
+                    aFilter = aListIter->getFilter();
+
+                OSL_TRACE( "turned into %s\n",
+                           OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+                nTokenIndex = 0;
+                OUString sToken;
+                do
                 {
-                    sal_Int32 nZero = 0;
-                    OUString aCurrentToken = sToken.getToken( 0, ';', nZero);
+                    sToken = aFilter.getToken( 0, '.', nTokenIndex );
 
-                    sToken = aCurrentToken;
-                    break;
+                    if ( sToken.lastIndexOf( ';' ) != -1 )
+                    {
+                        sal_Int32 nZero = 0;
+                        OUString aCurrentToken = sToken.getToken( 0, ';', nZero);
+
+                        sToken = aCurrentToken;
+                        break;
+                    }
                 }
-            }
-            while( nTokenIndex >= 0 );
+                while( nTokenIndex >= 0 );
 
-            if( !bExtensionTypedIn && ( sToken != "*" ) )
-            {
-                //if the filename does not already have the auto extension, stick it on
-                OUString sExtension = "." + sToken;
-                OUString &rBase = aSelectedFiles[nIndex];
-                sal_Int32 nExtensionIdx = rBase.getLength() - sExtension.getLength();
-                SAL_INFO(
-                    "vcl.gtk",
-                    "idx are " << rBase.lastIndexOf(sExtension) << " "
+                if( !bExtensionTypedIn && ( sToken != "*" ) )
+                {
+                    //if the filename does not already have the auto extension, stick it on
+                    OUString sExtension = "." + sToken;
+                    OUString &rBase = aSelectedFiles[nIndex];
+                    sal_Int32 nExtensionIdx = rBase.getLength() - sExtension.getLength();
+                    SAL_INFO(
+                        "vcl.gtk",
+                        "idx are " << rBase.lastIndexOf(sExtension) << " "
                         << nExtensionIdx);
 
-                if( rBase.lastIndexOf( sExtension ) != nExtensionIdx )
-                    rBase += sExtension;
+                    if( rBase.lastIndexOf( sExtension ) != nExtensionIdx )
+                        rBase += sExtension;
+                }
             }
 
         }
