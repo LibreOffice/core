@@ -65,8 +65,6 @@ class TerminateListenerProcAdapter( unohelper.Base, XTerminateListener ):
         self.oProcToCall = oProcToCall
 
     def queryTermination(self, TerminateEvent):
-        self.oProcToCall = getattr(self.oProcToCall,"queryTermination")
-
         if callable( self.oProcToCall ):
             self.oProcToCall()
 
