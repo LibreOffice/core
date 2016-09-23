@@ -1559,6 +1559,8 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             bReturn = true;
             }
             break;
+        default:
+            break;
         }
         break;
 
@@ -1610,6 +1612,9 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             bReturn = true;
             break;
+
+        default:
+            break;
         }
         break;
 
@@ -1637,6 +1642,9 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetEditField );
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             bReturn = true;
+            break;
+
+        default:
             break;
         }
         break;
@@ -1701,8 +1709,12 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
             bReturn = true;
             break;
-        }
+        default:
             break;
+        }
+        break;
+    default:
+        break;
     }
 
     // Fill rNativeBoundingRegion and rNativeContentRegion
