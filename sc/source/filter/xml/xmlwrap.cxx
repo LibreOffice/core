@@ -279,7 +279,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     return nReturn;
 }
 
-bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
+bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
 {
     uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
@@ -382,7 +382,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
 
     bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
-    if ((nMode & METADATA) == METADATA && bOasis)
+    if ((nMode & ImportFlags::Metadata) && bOasis)
     {
         // RDF metadata: ODF >= 1.2
         try
@@ -415,7 +415,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
 
     // #i103539#: always read meta.xml for generator
     sal_uInt32 nMetaRetval(0);
-    if ((nMode & METADATA) == METADATA)
+    if (nMode & ImportFlags::Metadata)
     {
         uno::Sequence<uno::Any> aMetaArgs(1);
         uno::Any* pMetaArgs = aMetaArgs.getArray();
@@ -454,7 +454,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
     pStylesArgs[3] <<= xObjectResolver;
 
     sal_uInt32 nSettingsRetval(0);
-    if ((nMode & SETTINGS) == SETTINGS)
+    if (nMode & ImportFlags::Settings)
     {
         //  Settings must be loaded first because of the printer setting,
         //  which is needed in the page styles (paper tray).
@@ -475,7 +475,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
     }
 
     sal_uInt32 nStylesRetval(0);
-    if ((nMode & STYLES) == STYLES)
+    if (nMode & ImportFlags::Styles)
     {
         SAL_INFO( "sc.filter", "styles import start" );
 
@@ -489,7 +489,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
     }
 
     sal_uInt32 nDocRetval(0);
-    if ((nMode & CONTENT) == CONTENT)
+    if (nMode & ImportFlags::Content)
     {
         if (mrDocShell.GetCreateMode() == SfxObjectCreateMode::INTERNAL)
             // We only need to import content for external link cache document.

@@ -44,6 +44,19 @@ class SfxMedium;
 class ScMySharedData;
 class ScDocShell;
 
+enum class ImportFlags {
+    Styles   = 0x01,
+    Content  = 0x02,
+    Metadata = 0x04,
+    Settings = 0x08,
+    All      = Styles | Content | Metadata | Settings
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ImportFlags> : is_typed_flags<ImportFlags, 0x0f> {};
+}
+
+
 class ScXMLImportWrapper
 {
     sc::ImportPostProcessData maPostProcessData;
@@ -73,16 +86,10 @@ class ScXMLImportWrapper
 
 public:
 
-    static const sal_uInt8 STYLES   = 0x01;
-    static const sal_uInt8 CONTENT  = 0x02;
-    static const sal_uInt8 METADATA = 0x04;
-    static const sal_uInt8 SETTINGS = 0x08;
-    static const sal_uInt8 ALL      = STYLES | CONTENT | METADATA | SETTINGS;
-
     ScXMLImportWrapper(
         ScDocShell& rDocSh, SfxMedium* pM, const css::uno::Reference<css::embed::XStorage>& xStor );
 
-    bool Import( sal_uInt8 nMode, ErrCode& rError );
+    bool Import( ImportFlags nMode, ErrCode& rError );
     bool Export(bool bStylesOnly);
 
     const sc::ImportPostProcessData& GetImportPostProcessData() const { return maPostProcessData;}
