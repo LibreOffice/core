@@ -357,6 +357,8 @@ public:
     void AddCondFormatData( sal_uInt32 nIndex );
     void SetCondFormatData( const std::vector<sal_uInt32>& aIndex );
 
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
+
 private:
     std::vector<sal_uInt32> maIndex;
 };
