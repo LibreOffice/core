@@ -129,7 +129,7 @@ static hb_unicode_funcs_t* getUnicodeFuncs()
 CommonSalLayout::CommonSalLayout(WinSalGraphics* WSL, WinFontInstance& rWinFontInstance, const WinFontFace& rWinFontFace)
 :   mhFont((HFONT)GetCurrentObject(WSL->getHDC(), OBJ_FONT)),
     mhDC(WSL->getHDC()),
-    maFontSelData(rWinFontInstance.maFontSelData),
+    mrFontSelData(rWinFontInstance.maFontSelData),
     mpD2DRenderer(nullptr)
 {
     mpHbFont = rWinFontFace.GetHbFont();
@@ -153,7 +153,7 @@ CommonSalLayout::CommonSalLayout(WinSalGraphics* WSL, WinFontInstance& rWinFontI
         hb_face_destroy(pHbFace);
     }
 
-    scaleHbFont(mpHbFont, maFontSelData);
+    scaleHbFont(mpHbFont, mrFontSelData);
 }
 
 void CommonSalLayout::InitFont() const
@@ -163,7 +163,7 @@ void CommonSalLayout::InitFont() const
 
 #elif defined(MACOSX) || defined(IOS)
 CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
-:   maFontSelData(rCoreTextStyle.maFontSelData),
+:   mrFontSelData(rCoreTextStyle.maFontSelData),
     mrCoreTextStyle(rCoreTextStyle)
 {
     mpHbFont = rCoreTextStyle.GetHbFont();
@@ -184,12 +184,12 @@ CommonSalLayout::CommonSalLayout(const CoreTextStyle& rCoreTextStyle)
         hb_face_destroy(pHbFace);
     }
 
-    scaleHbFont(mpHbFont, maFontSelData);
+    scaleHbFont(mpHbFont, mrFontSelData);
 }
 
 #else
 CommonSalLayout::CommonSalLayout(ServerFont& rServerFont)
-:   maFontSelData(rServerFont.GetFontSelData()),
+:   mrFontSelData(rServerFont.GetFontSelData()),
     mrServerFont(rServerFont)
 {
     mpHbFont = rServerFont.GetHbFont();
@@ -203,7 +203,7 @@ CommonSalLayout::CommonSalLayout(ServerFont& rServerFont)
         hb_face_destroy(pHbFace);
     }
 
-    scaleHbFont(mpHbFont, maFontSelData);
+    scaleHbFont(mpHbFont, mrFontSelData);
 }
 #endif
 
