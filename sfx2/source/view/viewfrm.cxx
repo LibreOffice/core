@@ -1175,9 +1175,8 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         return;
 
     // we know only SfxEventHint or simple SfxHint
-    if ( dynamic_cast<const SfxEventHint*>(&rHint) )
+    if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint))
     {
-        const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
         // When the Document is loaded asynchronously, was the Dispatcher
         // set as ReadOnly, to what must be returned when the document itself
         // is not read only, and the loading is finished.
