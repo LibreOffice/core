@@ -67,9 +67,6 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
     OUString     maFollow;    // Will be moved to XMLPropStyle soon!!!!
     bool         mbHidden;
 
-    OUString     maHelpFile;  // Will be removed very soon!!!!
-
-    sal_uInt32   mnHelpId;    // Will be removed very soon!!!!
     sal_uInt16   mnFamily;
 
     bool         mbValid : 1; // Set this to false in CreateAndInsert
