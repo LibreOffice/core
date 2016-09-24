@@ -1006,12 +1006,13 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     bForceOpenGL = !!getenv("SAL_FORCEGL") || officecfg::Office::Common::VCL::ForceOpenGL::get();
 
     bool bRet = false;
+    bool bSupportsVCLOpenGL = supportsVCLOpenGL();
     // always call supportsVCLOpenGL to de-zombie the glxtest child process on X11
-    if (supportsVCLOpenGL() || bForceOpenGL)
+    if (bForceOpenGL)
     {
         bRet = true;
     }
-    else
+    else if (bSupportsVCLOpenGL)
     {
         static bool bEnableGLEnv = !!getenv("SAL_ENABLEGL");
 
