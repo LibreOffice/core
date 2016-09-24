@@ -416,7 +416,7 @@ private:
     ///@{
 
 public:
-    vcl::sg::RootNode maSceneGraphRootNode;
+    std::shared_ptr<vcl::sg::Node> mpSceneGraphRootNode;
 
 protected:
                                 OutputDevice();
@@ -425,7 +425,7 @@ protected:
 
 public:
 
-    vcl::sg::RootNode& getSceneGraphRoot();
+    vcl::sg::Node& getSceneGraphRoot();
 
     bool renderSceneGraph();
 

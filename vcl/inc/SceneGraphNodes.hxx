@@ -15,6 +15,7 @@
 
 #include <glm/glm.hpp>
 #include <basegfx/range/b2drange.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace vcl
 {
@@ -25,7 +26,7 @@ class VCL_DLLPUBLIC ClippingNode : public Node
 {
 public:
     ClippingNode()
-        : Node("ClippingNode", NodeType::CLIPPING)
+        : Node(NodeType::CLIPPING)
     {}
 
     basegfx::B2DRange maClipBox;
@@ -37,7 +38,7 @@ public:
     glm::mat4 maMatrix;
 
     TransformNode(glm::mat4 aMatrix)
-        : Node("TransformNode", NodeType::TRANSFORM)
+        : Node(NodeType::TRANSFORM)
         , maMatrix(aMatrix)
     {}
 };
@@ -53,45 +54,89 @@ class VCL_DLLPUBLIC GeometryNode : public Node
 {
 public:
     GeometryNodeType meGeometryType;
+    bool mbNormalized;
 
     GeometryNode(GeometryNodeType eGeometryType)
-        : Node("GeometryNode", NodeType::GEOMETRY)
+        : Node(NodeType::GEOMETRY)
         , meGeometryType(eGeometryType)
+        , mbNormalized(false)
+    {}
+
+
+protected:
+    void markAsModified()
+    {}
+};
+
+struct GeometryAttributes
+{
+    SalColor maLineColor;
+    SalColor maFillColor;
+
+    GeometryAttributes(SalColor aLineColor = SALCOLOR_NONE, SalColor aFillColor = SALCOLOR_NONE)
+        : maLineColor(aLineColor)
+        , maFillColor(aFillColor)
     {}
 };
 
 class VCL_DLLPUBLIC RectangleNode : public GeometryNode
 {
-public:
+private:
     basegfx::B2DRange maRectangle;
-    SalColor maLineColor;
-    SalColor maFillColor;
-    bool mbNormalized;
+    GeometryAttributes maAttributes;
 
-    RectangleNode(basegfx::B2DRange aRectangle, SalColor aLineColor = SALCOLOR_NONE, SalColor aFillColor = SALCOLOR_NONE)
+public:
+    RectangleNode(const basegfx::B2DRange& rRectangle, const GeometryAttributes& rAttributes)
         : GeometryNode(GeometryNodeType::RECTANGLE)
-        , maRectangle(aRectangle)
-        , maLineColor(aLineColor)
-        , maFillColor(aFillColor)
-        , mbNormalized(false)
+        , maRectangle(rRectangle)
+        , maAttributes(rAttributes)
     {}
+
+    const GeometryAttributes& getAttributes()
+    {
+        return maAttributes;
+    }
+
+    const basegfx::B2DRange& getRectangle()
+    {
+        return maRectangle;
+    }
+
+    void modifyAttributes(GeometryAttributes& rAttributes)
+    {
+        maAttributes = rAttributes;
+        markAsModified();
+    }
 };
 
 class VCL_DLLPUBLIC PolyPolygonNode : public GeometryNode
 {
-public:
+private:
     basegfx::B2DPolyPolygon maPolyPolygon;
-    SalColor maLineColor;
-    SalColor maFillColor;
-    bool mbNormalized;
+    GeometryAttributes maAttributes;
 
-    PolyPolygonNode(basegfx::B2DPolyPolygon aPolyPolygon, SalColor aLineColor = SALCOLOR_NONE, SalColor aFillColor = SALCOLOR_NONE)
+public:
+    PolyPolygonNode(const basegfx::B2DPolyPolygon& rPolyPolygon, const GeometryAttributes& rAttributes)
         : GeometryNode(GeometryNodeType::POLYPOLYGON)
-        , maPolyPolygon(aPolyPolygon)
-        , maLineColor(aLineColor)
-        , maFillColor(aFillColor)
-        , mbNormalized(false)
+        , maPolyPolygon(rPolyPolygon)
+        , maAttributes(rAttributes)
     {}
+
+    const GeometryAttributes& getAttributes()
+    {
+        return maAttributes;
+    }
+
+    const basegfx::B2DPolyPolygon& getPolyPolygon()
+    {
+        return maPolyPolygon;
+    }
+
+    void modifyAttributes(GeometryAttributes& rAttributes)
+    {
+        maAttributes = rAttributes;
+        markAsModified();
+    }
 };
 
 class VCL_DLLPUBLIC BitmapNode : public GeometryNode
@@ -105,6 +150,58 @@ public:
         , maBitmap(aBitmap)
         , maRectangle(aRectangle)
     {}
+};
+
+class SceneGraphFactory
+{
+private:
+    std::vector<std::shared_ptr<Node>> maNodeStack;
+
+public:
+    SceneGraphFactory(const std::shared_ptr<Node>& pRootNode)
+        : maNodeStack({pRootNode})
+    {}
+
+    Node& getCurrent()
+    {
+        return *maNodeStack.back().get();
+    }
+
+    void pushTransform(glm::mat4 aMatrix, const OUString& rName)
+    {
+        auto pTransformNode = std::make_shared<vcl::sg::TransformNode>(aMatrix);
+        pTransformNode->setName(rName);
+        getCurrent().mChildren.push_back(pTransformNode);
+        maNodeStack.push_back(pTransformNode);
+    }
+
+    void pop()
+    {
+        maNodeStack.pop_back();
+    }
+
+    void addRectangle(const basegfx::B2DRange& rRange, SalColor nLineColor, SalColor nFillColor)
+    {
+        GeometryAttributes aAttributes(nLineColor, nFillColor);
+        getCurrent().mChildren.push_back(std::make_shared<RectangleNode>(rRange, aAttributes));
+    }
+
+    void addNormalizedRectangle(const basegfx::B2DRange& rRange, SalColor nLineColor, SalColor nFillColor)
+    {
+        addRectangle(rRange, nLineColor, nFillColor);
+        std::static_pointer_cast<RectangleNode>(getCurrent().mChildren.back())->mbNormalized = true;
+    }
+
+    void addBitmap(Bitmap& rBitmap, const basegfx::B2DRange& rRange)
+    {
+        getCurrent().mChildren.push_back(std::make_shared<BitmapNode>(rBitmap, rRange));
+    }
+
+    void addPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, SalColor nLineColor, SalColor nFillColor)
+    {
+        GeometryAttributes aAttributes(nLineColor, nFillColor);
+        getCurrent().mChildren.push_back(std::make_shared<PolyPolygonNode>(rPolyPolygon, aAttributes));
+    }
 };
 
 }} // end vcl::sg namespace

@@ -236,7 +236,7 @@ void addDrawPolyPolygon(RenderEntry& rRenderEntry,const basegfx::B2DPolyPolygon&
 
 } // end anonymous namespace
 
-SceneGraphRenderer::SceneGraphRenderer(vcl::sg::RootNode& rRootNode, RenderList& rRenderList)
+SceneGraphRenderer::SceneGraphRenderer(vcl::sg::Node& rRootNode, RenderList& rRenderList)
     : mrRootNode(rRootNode)
     , mrRenderList(rRenderList)
 {}
@@ -304,10 +304,13 @@ void SceneGraphRenderer::processBitmapNode(vcl::sg::BitmapNode* pBitmapNode)
 
 void SceneGraphRenderer::processRectangleNode(vcl::sg::RectangleNode* pRectangleNode)
 {
-    float x1 = pRectangleNode->maRectangle.getMinX();
-    float y1 = pRectangleNode->maRectangle.getMinY();
-    float x2 = pRectangleNode->maRectangle.getMaxX();
-    float y2 = pRectangleNode->maRectangle.getMaxY();
+    const vcl::sg::GeometryAttributes& rAttributes = pRectangleNode->getAttributes();
+    const basegfx::B2DRange& rRectangle = pRectangleNode->getRectangle();
+
+    float x1 = rRectangle.getMinX();
+    float y1 = rRectangle.getMinY();
+    float x2 = rRectangle.getMaxX();
+    float y2 = rRectangle.getMaxY();
 
     if (pRectangleNode->mbNormalized)
     {
@@ -321,12 +324,14 @@ void SceneGraphRenderer::processRectangleNode(vcl::sg::RectangleNode* pRectangle
 
     RenderEntry& rRenderEntry = mrRenderList.getEntries().back();
 
-    appendRectangle(rRenderEntry, x1, y1, x2, y2, pRectangleNode->maLineColor, pRectangleNode->maFillColor, 0.0f);
+    appendRectangle(rRenderEntry, x1, y1, x2, y2, rAttributes.maLineColor, rAttributes.maFillColor, 0.0f);
 }
 
 void SceneGraphRenderer::processPolyPolygonNode(vcl::sg::PolyPolygonNode* pPolyPolygonNode)
 {
-    basegfx::B2DPolyPolygon& rPolyPolygon(pPolyPolygonNode->maPolyPolygon);
+    const vcl::sg::GeometryAttributes& rAttributes = pPolyPolygonNode->getAttributes();
+
+    const basegfx::B2DPolyPolygon& rPolyPolygon(pPolyPolygonNode->getPolyPolygon());
     basegfx::B2DRange aBoundingRect(rPolyPolygon.getB2DRange());
 
     float x1 = aBoundingRect.getMinX();
@@ -338,7 +343,7 @@ void SceneGraphRenderer::processPolyPolygonNode(vcl::sg::PolyPolygonNode* pPolyP
 
     RenderEntry& rRenderEntry = mrRenderList.getEntries().back();
 
-    addDrawPolyPolygon(rRenderEntry, rPolyPolygon, 0.0, pPolyPolygonNode->maLineColor, pPolyPolygonNode->maFillColor, true);
+    addDrawPolyPolygon(rRenderEntry, rPolyPolygon, 0.0, rAttributes.maLineColor, rAttributes.maFillColor, true);
 }
 
 void SceneGraphRenderer::runChildren(vcl::sg::Node& rNode)

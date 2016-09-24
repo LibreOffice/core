@@ -425,7 +425,7 @@ public:
                                     sal_uInt8 nTransparency,
                                     const OutputDevice *pOutDev );
 
-    bool RenderSceneGraph(vcl::sg::RootNode& rRootNode)
+    bool RenderSceneGraph(vcl::sg::Node& rRootNode)
     {
         return renderSceneGraph(rRootNode);
     }
@@ -616,7 +616,7 @@ protected:
                                     long nWidth, long nHeight,
                                     sal_uInt8 nTransparency ) = 0;
 
-    virtual bool                renderSceneGraph(vcl::sg::RootNode& /*rRootNode*/)
+    virtual bool                renderSceneGraph(vcl::sg::Node& /*rRootNode*/)
     {
         return false;
     }

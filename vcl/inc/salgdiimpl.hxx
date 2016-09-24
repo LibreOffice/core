@@ -196,7 +196,7 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) = 0;
 
-    virtual bool renderSceneGraph(vcl::sg::RootNode& /*rRootNode*/)
+    virtual bool renderSceneGraph(vcl::sg::Node& /*rRootNode*/)
     {
         return false;
     }

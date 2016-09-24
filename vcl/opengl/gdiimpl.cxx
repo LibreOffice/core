@@ -2208,7 +2208,7 @@ void OpenGLSalGraphicsImpl::doFlush()
     VCL_GL_INFO( "doFlush - end." );
 }
 
-bool OpenGLSalGraphicsImpl::renderSceneGraph(vcl::sg::RootNode& rRootNode)
+bool OpenGLSalGraphicsImpl::renderSceneGraph(vcl::sg::Node& rRootNode)
 {
     SceneGraphRenderer aSceneGraphRenderer(rRootNode, *mpRenderList);
     aSceneGraphRenderer.render(GetWidth(), GetHeight());

@@ -47,7 +47,7 @@ OutputDevice::OutputDevice() :
     maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT ),
     mxSettings( new AllSettings(Application::GetSettings()) ),
-    maSceneGraphRootNode("OutputRoot")
+    mpSceneGraphRootNode(std::make_shared<vcl::sg::Node>(vcl::sg::NodeType::ROOT))
 {
     mpGraphics                      = nullptr;
     mpUnoGraphicsList               = nullptr;
@@ -269,9 +269,9 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
     return mpGraphics->GetGraphicsData();
 }
 
-vcl::sg::RootNode& OutputDevice::getSceneGraphRoot()
+vcl::sg::Node& OutputDevice::getSceneGraphRoot()
 {
-    return maSceneGraphRootNode;
+    return *mpSceneGraphRootNode;
 }
 
 bool OutputDevice::renderSceneGraph()
@@ -282,7 +282,7 @@ bool OutputDevice::renderSceneGraph()
             return false;
     }
 
-    mpGraphics->RenderSceneGraph(maSceneGraphRootNode);
+    mpGraphics->RenderSceneGraph(*mpSceneGraphRootNode);
 }
 
 #if ENABLE_CAIRO_CANVAS

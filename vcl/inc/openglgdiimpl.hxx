@@ -371,7 +371,7 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
 
-    virtual bool renderSceneGraph(vcl::sg::RootNode& rRootNode);
+    virtual bool renderSceneGraph(vcl::sg::Node& rRootNode);
 
     /// queue an idle flush of contents of the back-buffer to the screen
     void flush();

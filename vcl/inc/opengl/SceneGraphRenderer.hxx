@@ -25,7 +25,7 @@
 class SceneGraphRenderer
 {
 private:
-    vcl::sg::RootNode& mrRootNode;
+    vcl::sg::Node& mrRootNode;
     float mfWidth;
     float mfHeight;
     RenderList& mrRenderList;
@@ -42,7 +42,7 @@ private:
 
     void runChildren(vcl::sg::Node& rNode);
 public:
-    SceneGraphRenderer(vcl::sg::RootNode& rRootNode, RenderList& rRenderList);
+    SceneGraphRenderer(vcl::sg::Node& rRootNode, RenderList& rRenderList);
     bool render(float fWidth, float fHeight);
 };
 

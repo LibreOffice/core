@@ -877,7 +877,7 @@ SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
         return static_cast< SalGeometryProvider * >(m_pVDev);
 }
 
-bool X11SalGraphics::renderSceneGraph(vcl::sg::RootNode& rRootNode)
+bool X11SalGraphics::renderSceneGraph(vcl::sg::Node& rRootNode)
 {
     return m_bOpenGL ? mxImpl->renderSceneGraph(rRootNode) : false;
 }

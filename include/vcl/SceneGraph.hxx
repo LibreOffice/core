@@ -39,27 +39,43 @@ public:
 
 class VCL_DLLPUBLIC Node
 {
+    OUString msName;
+
 public:
-    OUString msID;
     NodeType meType;
-    std::vector<std::unique_ptr<Node>> mChildren;
+    std::vector<std::shared_ptr<Node>> mChildren;
     std::unique_ptr<NodePrivate> mPrivate;
 
-    Node(OUString sID, NodeType eType)
-        : msID(sID)
-        , meType(eType)
+    Node(NodeType eType)
+        : meType(eType)
     {}
 
     virtual ~Node()
     {}
-};
 
-class VCL_DLLPUBLIC RootNode : public Node
-{
-public:
-    RootNode(OUString sID)
-        : Node(sID, NodeType::ROOT)
-    {}
+    OUString& getName()
+    {
+        return msName;
+    }
+
+    void setName(const OUString& sName)
+    {
+        msName = sName;
+    }
+
+    std::shared_ptr<Node> findByName(OUString sName)
+    {
+        for (auto& pChild : mChildren)
+        {
+            if (pChild->getName() == sName)
+                return pChild;
+
+            std::shared_ptr<Node> aFoundNode = pChild->findByName(sName);
+            if (aFoundNode)
+                return aFoundNode;
+        }
+        return std::shared_ptr<Node>();
+    }
 };
 
 }} // end vcl::sg namespace
