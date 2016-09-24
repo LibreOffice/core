@@ -160,7 +160,13 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         {
             const ScPatternAttr* pAttr = (bSameDocPool ? rCxt.getSingleCellPattern(nColOffset) :
                     rCxt.getSingleCellPattern(nColOffset)->PutInPool( pDocument, rCxt.getClipDoc()));
-            pAttrArray->SetPatternArea(nRow1, nRow2, pAttr, true);
+
+            ScPatternAttr aNewPattern(*pAttr);
+            sal_uInt16 pItems[2];
+            pItems[0] = ATTR_CONDITIONAL;
+            pItems[1] = 0;
+            aNewPattern.ClearItems(pItems);
+            pAttrArray->SetPatternArea(nRow1, nRow2, &aNewPattern, true);
         }
     }
 

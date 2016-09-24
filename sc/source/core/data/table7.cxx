@@ -64,6 +64,13 @@ void ScTable::CopyOneCellFromClip(
         nColOffset = nColOffset % nSrcColSize;
         assert(nColOffset >= 0);
         aCol[nCol].CopyOneCellFromClip(rCxt, nRow1, nRow2, nColOffset);
+
+        if (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB)
+        {
+            for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+                CopyConditionalFormat(nCol, nRow, nCol, nRow, nCol - aSrcRange.aStart.Col(),
+                        nRow - nSrcRow, pSrcTab);
+        }
     }
 
     if (nCol1 == 0 && nCol2 == MAXCOL && mpRowHeights)
