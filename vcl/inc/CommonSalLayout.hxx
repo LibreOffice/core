@@ -39,7 +39,7 @@
 class CommonSalLayout : public GenericSalLayout
 {
     hb_font_t*              mpHbFont;
-    FontSelectPattern       maFontSelData;
+    const FontSelectPattern& mrFontSelData;
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 #ifdef _WIN32
     HDC   mhDC;
