@@ -190,7 +190,8 @@ ScDocumentPool::ScDocumentPool()
 
     :   SfxItemPool ( OUString("ScDocumentPool"),
                         ATTR_STARTINDEX, ATTR_ENDINDEX,
-                        aItemInfos, nullptr, false/*bLoadRefCounts*/ )
+                        aItemInfos, nullptr, false/*bLoadRefCounts*/ ),
+    mnCurrentMaxKey(0)
 {
     //  latin font from GetDefaultFonts is not used, DEFAULTFONT_LATIN_SPREADSHEET instead
     vcl::Font aStdFont = OutputDevice::GetDefaultFont( DefaultFontType::LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US,
@@ -609,6 +610,12 @@ const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWh
 
     // Else Put must always happen, because it could be another Pool
     const SfxPoolItem& rNew = SfxItemPool::Put( rItem, nWhich );
+    sal_uLong nRef = rNew.GetRefCount();
+    if (nRef == 1)
+    {
+        ++mnCurrentMaxKey;
+        const_cast<ScPatternAttr&>(static_cast<const ScPatternAttr&>(rNew)).SetKey(mnCurrentMaxKey);
+    }
     CheckRef( rNew );
     return rNew;
 }

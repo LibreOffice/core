@@ -87,6 +87,9 @@ public:
     /// Register a name that must not be used as a generated name.
     void RegisterName( sal_Int32 nFamily, const OUString& rName );
 
+    /// Register a name that may only be used through AddNamed
+    void RegisterDefinedName(sal_Int32 nFamily, const OUString& rName);
+
     /// retrieve the registered names (names + families)
     void GetRegisteredNames(
         css::uno::Sequence<sal_Int32>& aFamilies,
