@@ -43,6 +43,8 @@ class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
     static sal_uInt16*  pVersionMap11;
     static sal_uInt16*  pVersionMap12;
 
+    sal_uInt64 mnCurrentMaxKey;
+
 public:
             ScDocumentPool();
 protected:

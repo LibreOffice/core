@@ -103,6 +103,7 @@
 #define SC_UNONAME_CELLVJUS_METHOD  "VertJustifyMethod"
 #define SC_UNONAME_CELLORI          "Orientation"
 #define SC_UNONAME_NUMFMT           "NumberFormat"
+#define SC_UNONAME_FORMATID         "FormatID"
 #define SC_UNONAME_SHADOW           "ShadowFormat"
 #define SC_UNONAME_TBLBORD          "TableBorder"
 #define SC_UNONAME_TBLBORD2         "TableBorder2"

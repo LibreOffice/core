@@ -458,6 +458,13 @@ ScSheetSaveData* ScModelObj::GetSheetSaveData()
     return nullptr;
 }
 
+ScFormatSaveData* ScModelObj::GetFormatSaveData()
+{
+    if (pDocShell)
+        return pDocShell->GetFormatSaveData();
+    return nullptr;
+}
+
 void ScModelObj::RepaintRange( const ScRange& rRange )
 {
     if (pDocShell)

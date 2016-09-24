@@ -254,6 +254,7 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
         {OUString(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, cppu::UnoType<OUString>::get(),        0, 0 },
+        {OUString(SC_UNONAME_FORMATID),  SC_WID_UNO_FORMATID, cppu::UnoType<sal_uInt64>::get(),        0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aCellsPropertySet( aCellsPropertyMap_Impl );
@@ -364,6 +365,7 @@ static const SfxItemPropertySet* lcl_GetRangePropertySet()
         {OUString(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   cppu::UnoType<sal_Int32>::get(), 0, 0 },
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
+        {OUString(SC_UNONAME_FORMATID),  SC_WID_UNO_FORMATID, cppu::UnoType<sal_uInt64>::get(),        0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aRangePropertySet( aRangePropertyMap_Impl );
@@ -478,6 +480,7 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         {OUString(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    cppu::UnoType<sal_Int16>::get(),            0, 0 },
         {OUString(UNO_NAME_EDIT_CHAR_ESCAPEMENT),   EE_CHAR_ESCAPEMENT, cppu::UnoType<sal_Int32>::get(),            0, 0 },
         {OUString(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, cppu::UnoType<OUString>::get(),        0, 0 },
+        {OUString(SC_UNONAME_FORMATID),  SC_WID_UNO_FORMATID, cppu::UnoType<sal_uInt64>::get(),        0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aCellPropertySet( aCellPropertyMap_Impl );
@@ -2619,6 +2622,13 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         aRanges.Format(sRet, ScRefFlags::RANGE_ABS_3D, &pDocShell->GetDocument());
                         rAny <<= sRet;
                     }
+                break;
+                case SC_WID_UNO_FORMATID:
+                    {
+                        const ScPatternAttr* pPattern = GetCurrentAttrsFlat();
+                        rAny <<= pPattern->GetKey();
+                    }
+                break;
             }
     }
 }

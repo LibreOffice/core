@@ -925,6 +925,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
                 const SfxItemSet& rThisSet = pPattern->GetItemSet();
                 if (rState.pItemSet)
                 {
+                    rState.mbValidPatternId = false;
                     if (bDeep)
                         lcl_MergeDeep( *rState.pItemSet, rThisSet );
                     else
@@ -935,6 +936,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
                     // first pattern - copied from parent
                     rState.pItemSet = new SfxItemSet( *rThisSet.GetPool(), rThisSet.GetRanges() );
                     rState.pItemSet->Set( rThisSet, bDeep );
+                    rState.mnPatternId = pPattern->GetKey();
                 }
 
                 rState.pOld2 = rState.pOld1;

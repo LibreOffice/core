@@ -309,6 +309,12 @@ void SvXMLAutoStylePoolP::RegisterName( sal_Int32 nFamily,
     pImpl->RegisterName( nFamily, rName );
 }
 
+void SvXMLAutoStylePoolP::RegisterDefinedName( sal_Int32 nFamily,
+                                         const OUString& rName )
+{
+    pImpl->RegisterDefinedName( nFamily, rName );
+}
+
 void SvXMLAutoStylePoolP::GetRegisteredNames(
     uno::Sequence<sal_Int32>& rFamilies,
     uno::Sequence<OUString>& rNames )
