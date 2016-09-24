@@ -3258,6 +3258,31 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 {
     // Cursor control for ref input dialog
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
+
+#ifdef DBG_UTIL
+
+    if (rKeyCode.IsMod1() && rKeyCode.IsShift())
+    {
+        if (rKeyCode.GetCode() == KEY_F12)
+        {
+            dumpColumnInformationPixel();
+        }
+        else if (rKeyCode.GetCode() == KEY_F11)
+        {
+            dumpGraphicInformation();
+        }
+        else if (rKeyCode.GetCode() == KEY_F10)
+        {
+            dumpColumnInformationHmm();
+        }
+        else if (rKeyCode.GetCode() == KEY_F9)
+        {
+            dumpCellProperties();
+        }
+    }
+
+#endif
+
     if( SC_MOD()->IsRefDialogOpen() )
     {
         if( !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
@@ -3369,29 +3394,6 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         }
 
     }
-#ifdef DBG_UTIL
-
-    if (rKeyCode.IsMod1() && rKeyCode.IsShift())
-    {
-        if (rKeyCode.GetCode() == KEY_F12)
-        {
-            dumpColumnInformationPixel();
-        }
-        else if (rKeyCode.GetCode() == KEY_F11)
-        {
-            dumpGraphicInformation();
-        }
-        else if (rKeyCode.GetCode() == KEY_F10)
-        {
-            dumpColumnInformationHmm();
-        }
-        else if (rKeyCode.GetCode() == KEY_F9)
-        {
-            dumpCellProperties();
-        }
-    }
-
-#endif
 
     Window::KeyInput(rKEvt);
 }
