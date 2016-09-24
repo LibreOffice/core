@@ -441,15 +441,15 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
 
     long nX = rPos.X();
     long nY = rPos.Y();
-    if (nX < 0L)
-        nX = 0L;
+    if (nX < 0)
+        nX = 0;
     else if (nX >= aSize.Width())
-        nX = aSize.Width() - 1L;
+        nX = aSize.Width() - 1;
 
-    if (nY < 0L)
-        nY = 0L;
+    if (nY < 0)
+        nY = 0;
     else if (nY >= aSize.Height())
-        nY = aSize.Height() - 1L;
+        nY = aSize.Height() - 1;
 
     Point aPos = maPosition;
     maPosition.X() = nX - 5;
@@ -765,7 +765,7 @@ void ColorSliderControl::ChangePosition(long nY)
 {
     const long nHeight = GetOutputSizePixel().Height() - 1;
 
-    if (nY < 0L)
+    if (nY < 0)
         nY = 0;
     else if (nY > nHeight)
         nY = nHeight;
