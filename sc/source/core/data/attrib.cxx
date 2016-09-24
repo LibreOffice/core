@@ -31,6 +31,8 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 
+#include <libxml/xmlwriter.h>
+
 #include "attrib.hxx"
 #include "global.hxx"
 #include "editutil.hxx"
@@ -1076,6 +1078,18 @@ void ScCondFormatItem::AddCondFormatData( sal_uInt32 nIndex )
 void ScCondFormatItem::SetCondFormatData( const std::vector<sal_uInt32>& rIndex )
 {
     maIndex = rIndex;
+}
+
+void ScCondFormatItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("condFormatItem"));
+    for (const auto& nItem : maIndex)
+    {
+        std::string aStrVal = std::to_string(nItem);
+        xmlTextWriterStartElement(pWriter, BAD_CAST(aStrVal.c_str()));
+        xmlTextWriterEndElement(pWriter);
+    }
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
