@@ -509,9 +509,7 @@ void SfxItemPool::Delete()
                     for (auto& rItemPtr : *rArrayPtr)
                         if (rItemPtr)
                         {
-#ifdef DBG_UTIL
-                            ReleaseRef(*rItemPtr, rItemPtr->GetRefCount());
-#endif
+                            ReleaseRef(*rItemPtr, rItemPtr->GetRefCount()); // for RefCount check in dtor
                             delete rItemPtr;
                         }
                     rArrayPtr->clear();
@@ -535,9 +533,7 @@ void SfxItemPool::Delete()
             for (auto& rItemPtr : *rArrayPtr)
                 if (rItemPtr)
                 {
-#ifdef DBG_UTIL
-                    ReleaseRef(*rItemPtr, rItemPtr->GetRefCount());
-#endif
+                    ReleaseRef(*rItemPtr, rItemPtr->GetRefCount()); // for RefCount check in dtor
                     delete rItemPtr;
                 }
             rArrayPtr->clear();
