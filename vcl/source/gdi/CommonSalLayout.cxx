@@ -365,12 +365,12 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
         if (bRightToLeft)
             std::reverse(aScriptSubRuns.begin(), aScriptSubRuns.end());
 
-        for (HbScriptRuns::iterator it = aScriptSubRuns.begin(); it != aScriptSubRuns.end(); ++it)
+        for (const auto& aScriptRun : aScriptSubRuns)
         {
-            int nMinRunPos = it->mnMin;
-            int nEndRunPos = it->mnEnd;
+            int nMinRunPos = aScriptRun.mnMin;
+            int nEndRunPos = aScriptRun.mnEnd;
             int nRunLen = nEndRunPos - nMinRunPos;
-            aHbScript = it->maScript;
+            aHbScript = aScriptRun.maScript;
             // hb_language_from_string() accept ISO639-3 language tag except for Chinese.
             LanguageTag &rTag = rArgs.maLanguageTag;
             OString sLanguage = OUStringToOString(rTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
