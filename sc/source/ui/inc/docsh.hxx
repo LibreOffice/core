@@ -107,6 +107,7 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     ScPaintLockData*    pPaintLockData;
     ScOptSolverSave*    pSolverSaveData;
     ScSheetSaveData*    pSheetSaveData;
+    ScFormatSaveData*   mpFormatSaveData;
 
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 #if ENABLE_TELEPATHY
@@ -408,6 +409,7 @@ public:
     const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );
     ScSheetSaveData* GetSheetSaveData();
+    ScFormatSaveData* GetFormatSaveData();
 
     static void ResetKeyBindings( ScOptionsUtil::KeyBindingType eType );
 

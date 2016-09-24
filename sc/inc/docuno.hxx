@@ -66,6 +66,7 @@ class ScTableSheetObj;
 class ScRangeList;
 class ScPrintUIOptions;
 class ScSheetSaveData;
+struct ScFormatSaveData;
 
 class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public vcl::ITiledRenderable,
@@ -132,6 +133,7 @@ public:
     void                    BeforeXMLLoading();
     void                    AfterXMLLoading();
     ScSheetSaveData*        GetSheetSaveData();
+    ScFormatSaveData*       GetFormatSaveData();
 
     void                    RepaintRange( const ScRange& rRange );
     void                    RepaintRange( const ScRangeList& rRange );

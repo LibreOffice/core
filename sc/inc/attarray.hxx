@@ -65,7 +65,11 @@ struct ScMergePatternState
     const ScPatternAttr* pOld1;     ///< existing objects, temporary
     const ScPatternAttr* pOld2;
 
-    ScMergePatternState() : pItemSet(nullptr), pOld1(nullptr), pOld2(nullptr) {}
+    bool mbValidPatternId;
+    sal_uInt64 mnPatternId;
+
+    ScMergePatternState() : pItemSet(nullptr), pOld1(nullptr), pOld2(nullptr),
+                        mbValidPatternId(true), mnPatternId(0) {}
 };
 
 struct ScAttrEntry

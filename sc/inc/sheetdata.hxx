@@ -172,6 +172,11 @@ public:
     void        SetInSupportedSave( bool bSet );
 };
 
+struct ScFormatSaveData
+{
+    std::map<sal_uInt64, OUString> maIDToName;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

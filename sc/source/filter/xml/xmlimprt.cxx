@@ -2835,6 +2835,14 @@ void ScXMLImport::SetStyleToRanges()
                 sal_Int32 nNumberFormat(pStyle->GetNumberFormat());
                 SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);
 
+                css::uno::Any aAny = xProperties->getPropertyValue("FormatID");
+                sal_uInt64 nKey = 0;
+                if ((aAny >>= nKey) && nKey)
+                {
+                    ScFormatSaveData* pFormatSaveData = ScModelObj::getImplementation(GetModel())->GetFormatSaveData();
+                    pFormatSaveData->maIDToName.insert(std::pair<sal_uInt64, OUString>(nKey, sPrevStyleName));
+                }
+
                 // store first cell of first range for each style, once per sheet
                 uno::Sequence<table::CellRangeAddress> aAddresses(xSheetCellRanges->getRangeAddresses());
                 pStyle->ApplyCondFormat(aAddresses);
