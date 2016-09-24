@@ -123,17 +123,6 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         {
             maFollow = rValue;
         }
-        else if( IsXMLToken( rLocalName, XML_HELP_FILE_NAME ) )
-        {
-            maHelpFile = rValue;
-        }
-        else if( IsXMLToken( rLocalName, XML_HELP_ID ) )
-        {
-            sal_Int32 nTmp = rValue.toInt32();
-            mnHelpId =
-                (nTmp < 0L) ? 0U : ( (nTmp > USHRT_MAX) ? USHRT_MAX
-                                                        : (sal_uInt16)nTmp );
-        }
         else if( IsXMLToken( rLocalName, XML_HIDDEN ) )
         {
             mbHidden = rValue.toBoolean();
@@ -149,7 +138,6 @@ SvXMLStyleContext::SvXMLStyleContext(
         sal_uInt16 nFam, bool bDefault ) :
     SvXMLImportContext( rImp, nPrfx, rLName ),
     mbHidden( false ),
-    mnHelpId( UCHAR_MAX ),
     mnFamily( nFam ),
     mbValid( true ),
     mbNew( true ),
