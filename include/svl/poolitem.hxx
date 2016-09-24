@@ -130,7 +130,7 @@ private:
 public:
     inline void              AddRef( sal_uLong n = 1 ) const;
 private:
-    inline sal_uLong         ReleaseRef( sal_uLong n = 1 ) const;
+    inline sal_uLong         ReleaseRef() const;
 
 protected:
                              explicit SfxPoolItem( sal_uInt16 nWhich = 0 );
@@ -197,11 +197,11 @@ inline void SfxPoolItem::AddRef( sal_uLong n ) const
     m_nRefCount += n;
 }
 
-inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
+inline sal_uLong SfxPoolItem::ReleaseRef() const
 {
     DBG_ASSERT(m_nRefCount <= SFX_ITEMS_MAXREF, "ReleaseRef with non-Pool-Item");
-    DBG_ASSERT(m_nRefCount >= n, "ReleaseRef: refcount underflow");
-    m_nRefCount -= n;
+    DBG_ASSERT(m_nRefCount != 0, "ReleaseRef: refcount underflow");
+    m_nRefCount -= 1;
     return m_nRefCount;
 }
 
