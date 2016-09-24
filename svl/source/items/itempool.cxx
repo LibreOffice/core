@@ -508,12 +508,8 @@ void SfxItemPool::Delete()
                 {
                     for (auto& rItemPtr : *rArrayPtr)
                         if (rItemPtr)
-                        {
-#ifdef DBG_UTIL
-                            ReleaseRef(*rItemPtr, rItemPtr->GetRefCount());
-#endif
                             delete rItemPtr;
-                        }
+
                     rArrayPtr->clear();
                     // let pImpl->DeleteItems() delete item arrays in maPoolItems
                 }
@@ -534,12 +530,8 @@ void SfxItemPool::Delete()
         {
             for (auto& rItemPtr : *rArrayPtr)
                 if (rItemPtr)
-                {
-#ifdef DBG_UTIL
-                    ReleaseRef(*rItemPtr, rItemPtr->GetRefCount());
-#endif
                     delete rItemPtr;
-                }
+
             rArrayPtr->clear();
             // let pImpl->DeleteItems() delete item arrays in maPoolItems
         }
