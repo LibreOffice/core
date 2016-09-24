@@ -111,6 +111,7 @@ struct XMLAutoStyleFamily
 
     ParentSetType m_ParentSet;
     std::set<OUString> maNameSet;
+    std::set<OUString> maReservedNameSet;
     sal_uInt32 mnCount;
     sal_uInt32 mnName;
     OUString maStrPrefix;
@@ -155,6 +156,7 @@ public:
     void SetFamilyPropSetMapper( sal_Int32 nFamily,
         const rtl::Reference < SvXMLExportPropertyMapper > & rMapper );
     void RegisterName( sal_Int32 nFamily, const OUString& rName );
+    void RegisterDefinedName( sal_Int32 nFamily, const OUString& rName );
     void GetRegisteredNames(
         css::uno::Sequence<sal_Int32>& aFamilies,
         css::uno::Sequence<OUString>& aNames );

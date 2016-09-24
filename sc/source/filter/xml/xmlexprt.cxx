@@ -1908,6 +1908,17 @@ void ScXMLExport::ExportContent_()
 
 void ScXMLExport::ExportStyles_( bool bUsed )
 {
+    Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
+    if (xSpreadDoc.is())
+    {
+        ScFormatSaveData* pFormatData = ScModelObj::getImplementation(xSpreadDoc)->GetFormatSaveData();
+        auto aAutoStylePool = GetAutoStylePool();
+        for (const auto& rFormatInfo : pFormatData->maIDToName)
+        {
+            aAutoStylePool->RegisterDefinedName(XML_STYLE_FAMILY_TABLE_CELL, rFormatInfo.second);
+        }
+    }
+
     if (!pSharedData)
     {
         SCTAB nTableCount(0);
@@ -1965,6 +1976,10 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                                     const uno::Reference<sheet::XSpreadsheet>& xTable,
                                     sal_Int32 nTable, const OUString* pOldName)
 {
+    css::uno::Any aAny = xProperties->getPropertyValue("FormatID");
+    sal_uInt64 nKey = 0;
+    aAny >>= nKey;
+
     //! pass xCellRanges instead
     uno::Reference<sheet::XSheetCellRanges> xCellRanges( xProperties, uno::UNO_QUERY );
 
@@ -2048,8 +2063,20 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
             else
             {
                 OUString sName;
+                bool bAdded = false;
+                if (nKey)
+                {
+                    Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetModel(), uno::UNO_QUERY );
+                    ScFormatSaveData* pFormatData = ScModelObj::getImplementation(xSpreadDoc)->GetFormatSaveData();
+                    auto itr = pFormatData->maIDToName.find(nKey);
+                    if (itr != pFormatData->maIDToName.end())
+                    {
+                        sName = itr->second;
+                        bAdded = GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, aPropStates);
+                    }
+                }
                 bool bIsAutoStyle(true);
-                if (GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, aPropStates))
+                if (bAdded || GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_CELL, sStyleName, aPropStates))
                 {
                     OUString* pTemp(new OUString(sName));
                     if (!pCellStyles->AddStyleName(pTemp, nIndex))

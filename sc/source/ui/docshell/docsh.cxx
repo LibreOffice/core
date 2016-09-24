@@ -2686,6 +2686,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     pPaintLockData  ( nullptr ),
     pSolverSaveData ( nullptr ),
     pSheetSaveData  ( nullptr ),
+    mpFormatSaveData( nullptr ),
     pModificator    ( nullptr )
 #if ENABLE_TELEPATHY
     , mpCollaboration( new ScCollaboration( this ) )
@@ -2731,6 +2732,7 @@ ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags ) :
     pPaintLockData  ( nullptr ),
     pSolverSaveData ( nullptr ),
     pSheetSaveData  ( nullptr ),
+    mpFormatSaveData( nullptr ),
     pModificator    ( nullptr )
 #if ENABLE_TELEPATHY
     , mpCollaboration( new ScCollaboration( this ) )
@@ -2782,6 +2784,7 @@ ScDocShell::~ScDocShell()
 
     delete pSolverSaveData;
     delete pSheetSaveData;
+    delete mpFormatSaveData;
     delete pOldAutoDBRange;
 
     if (pModificator)
@@ -2960,6 +2963,14 @@ ScSheetSaveData* ScDocShell::GetSheetSaveData()
         pSheetSaveData = new ScSheetSaveData;
 
     return pSheetSaveData;
+}
+
+ScFormatSaveData* ScDocShell::GetFormatSaveData()
+{
+    if (!mpFormatSaveData)
+        mpFormatSaveData = new ScFormatSaveData;
+
+    return mpFormatSaveData;
 }
 
 namespace {
