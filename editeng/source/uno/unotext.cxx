@@ -1224,7 +1224,7 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, co
 {
     do
     {
-        SfxItemSet aSet( *pForwarder->GetPool(), true );
+        SfxItemSet aSet(*pForwarder->GetPool());
 
         if( pMap->nWID == WID_FONTDESC )
         {
