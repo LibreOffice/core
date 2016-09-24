@@ -47,25 +47,11 @@ static const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0
  * For Sfx programmers: an SfxItemSet constructed in this way cannot
  * contain any Items with SlotIds as Which values.
  */
-SfxItemSet::SfxItemSet
-(
-    SfxItemPool&    rPool,       /* Target Pool for the SfxPoolItems which are
-                                    added to this SfxItemSet */
-    bool        bTotalRanges    /* Take over complete pool ranges? */
-)
+SfxItemSet::SfxItemSet(SfxItemPool& rPool)
     : m_pPool( &rPool )
     , m_pParent(nullptr)
     , m_nCount(0)
 {
-//  DBG_ASSERT( bTotalRanges || abs( &bTotalRanges - this ) < 1000,
-//              "please use suitable ranges" );
-#if defined DBG_UTIL && defined SFX_ITEMSET_NO_DEFAULT_CTOR
-    if ( !bTotalRanges )
-        *(int*)0 = 0; // GPF
-#else
-    (void) bTotalRanges; // avoid warnings
-#endif
-
     m_pWhichRanges = const_cast<sal_uInt16*>(m_pPool->GetFrozenIdRanges());
     assert( m_pWhichRanges && "don't create ItemSets with full range before FreezeIdRanges()" );
     if (!m_pWhichRanges)

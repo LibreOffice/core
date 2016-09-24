@@ -64,7 +64,7 @@ protected:
 public:
                                 SfxItemSet( const SfxItemSet& );
 
-                                SfxItemSet( SfxItemPool&, bool bTotalPoolRanges = false );
+                                SfxItemSet( SfxItemPool&);
                                 SfxItemSet( SfxItemPool&, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
                                 SfxItemSet( SfxItemPool&, int nWh1, int nWh2, int nNull, ... );
                                 SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );

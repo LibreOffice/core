@@ -440,7 +440,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     _rpPool->FreezeIdRanges();
 
     // and, finally, the set
-    _rpSet = new SfxItemSet(*_rpPool, true);
+    _rpSet = new SfxItemSet(*_rpPool);
 
     return _rpSet;
 }

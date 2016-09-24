@@ -542,7 +542,7 @@ namespace pcr
         _rpPool->FreezeIdRanges();
 
         // and, finally, the set
-        _rpSet = new SfxItemSet(*_rpPool, true);
+        _rpSet = new SfxItemSet(*_rpPool);
 
         return _rpSet;
     }
