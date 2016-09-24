@@ -220,11 +220,12 @@ public:
         css::ucb::WebDAVHTTPMethod eMethod,
         DAVRequestHeaders & rRequestHeaders );
 
+        bool handleException( const DAVException & e, int errorCount )
+        throw ( DAVException );
+
 private:
     const OUString & getRequestURI() const;
     bool detectRedirectCycle( const OUString& rRedirectURL )
-        throw ( DAVException );
-    bool handleException( const DAVException & e, int errorCount )
         throw ( DAVException );
     void initialize()
         throw ( DAVException );
