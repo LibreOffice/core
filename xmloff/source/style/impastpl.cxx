@@ -244,7 +244,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
             sBuffer.append( OUString::number( rFamilyData.mnName ) );
             msName = sBuffer.makeStringAndClear();
         }
-        while (rFamilyData.maNameSet.find(msName) != rFamilyData.maNameSet.end());
+        while (rFamilyData.maNameSet.find(msName) != rFamilyData.maNameSet.end() || rFamilyData.maReservedNameSet.find(msName) != rFamilyData.maReservedNameSet.end());
     }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -453,6 +453,15 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
     assert(iter != m_FamilySet.end()); // family must be known
     // SAL_DEBUG("SvXMLAutoStylePoolP_Impl::RegisterName: " << nFamily << ", '" << rName << "'");
     (*iter)->maNameSet.insert(rName);
+}
+
+// Adds a name to list
+void SvXMLAutoStylePoolP_Impl::RegisterDefinedName( sal_Int32 nFamily, const OUString& rName )
+{
+    std::unique_ptr<XMLAutoStyleFamily> pTemp(new XMLAutoStyleFamily(nFamily));
+    auto const iter = m_FamilySet.find(pTemp);
+    assert(iter != m_FamilySet.end()); // family must be known
+    (*iter)->maReservedNameSet.insert(rName);
 }
 
 

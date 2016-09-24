@@ -68,27 +68,31 @@ using sc::TwipsToHMM;
 ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet, const OUString& rStyleName )
     :   SfxSetItem  ( ATTR_PATTERN, pItemSet ),
         pName       ( new OUString( rStyleName ) ),
-        pStyle      ( nullptr )
+        pStyle      ( nullptr ),
+        mnKey(0)
 {
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet )
     :   SfxSetItem  ( ATTR_PATTERN, pItemSet ),
         pName       ( nullptr ),
-        pStyle      ( nullptr )
+        pStyle      ( nullptr ),
+        mnKey(0)
 {
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
     :   SfxSetItem  ( ATTR_PATTERN, new SfxItemSet( *pItemPool, ATTR_PATTERN_START, ATTR_PATTERN_END ) ),
         pName       ( nullptr ),
-        pStyle      ( nullptr )
+        pStyle      ( nullptr ),
+        mnKey(0)
 {
 }
 
 ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
     :   SfxSetItem  ( rPatternAttr ),
-        pStyle      ( rPatternAttr.pStyle )
+        pStyle      ( rPatternAttr.pStyle ),
+        mnKey(rPatternAttr.mnKey)
 {
     if (rPatternAttr.pName)
         pName = new OUString(*rPatternAttr.pName);
@@ -1409,6 +1413,16 @@ sal_uInt8 ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
     }
 
     return nRet;
+}
+
+void ScPatternAttr::SetKey(sal_uInt64 nKey)
+{
+    mnKey = nKey;
+}
+
+sal_uInt64 ScPatternAttr::GetKey() const
+{
+    return mnKey;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

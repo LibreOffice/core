@@ -52,6 +52,7 @@ class SC_DLLPUBLIC ScPatternAttr: public SfxSetItem
 {
     OUString*       pName;
     ScStyleSheet*   pStyle;
+    sal_uInt64      mnKey;
 public:
                             ScPatternAttr(SfxItemSet* pItemSet, const OUString& rStyleName);
                             ScPatternAttr(SfxItemSet* pItemSet);
@@ -132,6 +133,9 @@ public:
 
     long                    GetRotateVal( const SfxItemSet* pCondSet ) const;
     sal_uInt8                   GetRotateDir( const SfxItemSet* pCondSet ) const;
+
+    void                    SetKey(sal_uInt64 nKey);
+    sal_uInt64              GetKey() const;
 };
 
 #endif
