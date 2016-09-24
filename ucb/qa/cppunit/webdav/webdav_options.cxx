@@ -9,6 +9,8 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <cppunit/plugin/TestPlugIn.h>
+#include "DAVResourceAccess.hxx"
+#include "DAVException.hxx"
 #include "DAVTypes.hxx"
 
 namespace
