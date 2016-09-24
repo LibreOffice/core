@@ -417,6 +417,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
  */
 
 GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
+    mbInActivateCallback( false ),
     mbMenuBar( bMenuBar ),
     mbNeedsUpdate( false ),
     mbReturnFocusToDocument( false ),
@@ -1049,7 +1050,9 @@ void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
     {
         if ( pSalItem->mpSubMenu != nullptr )
         {
+            pSalItem->mpSubMenu->mbInActivateCallback = true;
             pMenuBar->HandleMenuActivateEvent(pSalItem->mpSubMenu->GetMenu());
+            pSalItem->mpSubMenu->mbInActivateCallback = false;
             pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);
             pSalItem->mpSubMenu->Update();
             pMenuBar->HandleMenuDeActivateEvent(pSalItem->mpSubMenu->GetMenu());
@@ -1077,7 +1080,11 @@ void GtkSalMenu::Activate(const gchar* pCommand)
     GtkSalMenu* pTopLevel = pSalMenu->GetTopLevel();
     Menu* pVclMenu = pSalMenu->GetMenu();
     Menu* pVclSubMenu = pVclMenu->GetPopupMenu(aMenuAndId.second);
+    GtkSalMenu* pSubMenu = pSalMenu->GetItemAtPos(pVclMenu->GetItemPos(aMenuAndId.second))->mpSubMenu;
+
+    pSubMenu->mbInActivateCallback = true;
     pTopLevel->GetMenu()->HandleMenuActivateEvent(pVclSubMenu);
+    pSubMenu->mbInActivateCallback = false;
     pVclSubMenu->UpdateNativeMenu();
 }
 
@@ -1123,19 +1130,57 @@ void GtkSalMenu::CheckItem( unsigned, bool )
 {
 }
 
-void GtkSalMenu::EnableItem( unsigned, bool )
+void GtkSalMenu::EnableItem( unsigned nPos, bool bEnable )
 {
+    SolarMutexGuard aGuard;
+    if ( bUnityMode && !mbInActivateCallback && !mbNeedsUpdate && GetTopLevel()->mbMenuBar && ( nPos < maItems.size() ) )
+    {
+        gchar* pCommand = GetCommandForItem( GetItemAtPos( nPos ) );
+        NativeSetEnableItem( pCommand, bEnable );
+        g_free( pCommand );
+    }
 }
 
 void GtkSalMenu::ShowItem( unsigned nPos, bool bShow )
 {
     SolarMutexGuard aGuard;
     if ( nPos < maItems.size() )
+    {
         maItems[ nPos ]->mbVisible = bShow;
+        if ( bUnityMode && !mbInActivateCallback && !mbNeedsUpdate && GetTopLevel()->mbMenuBar )
+            Update();
+    }
 }
 
-void GtkSalMenu::SetItemText( unsigned, SalMenuItem*, const OUString& )
+void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText )
 {
+    SolarMutexGuard aGuard;
+    if ( bUnityMode && !mbInActivateCallback && !mbNeedsUpdate && GetTopLevel()->mbMenuBar && ( nPos < maItems.size() ) )
+    {
+        gchar* pCommand = GetCommandForItem( static_cast< GtkSalMenuItem* >( pSalMenuItem ) );
+
+        gint nSectionsCount = g_menu_model_get_n_items( mpMenuModel );
+        for ( gint nSection = 0; nSection < nSectionsCount; ++nSection )
+        {
+            gint nItemsCount = g_lo_menu_get_n_items_from_section( G_LO_MENU( mpMenuModel ), nSection );
+            for ( gint nItem = 0; nItem < nItemsCount; ++nItem )
+            {
+                gchar* pCommandFromModel = g_lo_menu_get_command_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItem );
+
+                if ( !g_strcmp0( pCommandFromModel, pCommand ) )
+                {
+                    NativeSetItemText( nSection, nItem, rText );
+                    g_free( pCommandFromModel );
+                    g_free( pCommand );
+                    return;
+                }
+
+                g_free( pCommandFromModel );
+            }
+        }
+
+        g_free( pCommand );
+    }
 }
 
 void GtkSalMenu::SetItemImage( unsigned, SalMenuItem*, const Image& )

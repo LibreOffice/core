@@ -45,6 +45,7 @@ private:
     std::vector< GtkSalMenuItem* >  maItems;
     Idle                            maUpdateMenuBarIdle;
 
+    bool                            mbInActivateCallback;
     bool                            mbMenuBar;
     bool                            mbNeedsUpdate;
     bool                            mbReturnFocusToDocument;

@@ -890,6 +890,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
                                 if ( !bPopupMenu )
                                 {
                                     xMenuItemDispatch->addStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
+                                    // For the menubar, we have to keep status listening to support Ubuntu's HUD.
                                     if ( !m_bHasMenuBar )
                                         xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
                                 }
