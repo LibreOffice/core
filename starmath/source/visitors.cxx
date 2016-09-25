@@ -141,16 +141,6 @@ void SmDefaultingVisitor::Visit( SmRootSymbolNode* pNode )
     DefaultVisit( pNode );
 }
 
-void SmDefaultingVisitor::Visit( SmDynIntegralNode* pNode )
-{
-    DefaultVisit( pNode );
-}
-
-void SmDefaultingVisitor::Visit( SmDynIntegralSymbolNode* pNode )
-{
-    DefaultVisit( pNode );
-}
-
 void SmDefaultingVisitor::Visit( SmRectangleNode* pNode )
 {
     DefaultVisit( pNode );
@@ -393,11 +383,6 @@ void SmDrawingVisitor::Visit( SmRootNode* pNode )
     DrawChildren( pNode );
 }
 
-void SmDrawingVisitor::Visit(SmDynIntegralNode* pNode)
-{
-    DrawChildren( pNode );
-}
-
 void SmDrawingVisitor::Visit( SmVerticalBraceNode* pNode )
 {
     DrawChildren( pNode );
@@ -434,22 +419,6 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     aBar.SetPos( aDrawPos );
 
     mrDev.DrawRect( aBar );
-}
-
-void SmDrawingVisitor::Visit( SmDynIntegralSymbolNode* pNode )
-{
-    if ( pNode->IsPhantom( ) )
-        return;
-
-    // draw integral-sign itself
-    DrawSpecialNode( pNode );
-
-    //! the rest of this may not be needed at all
-
-    // this should be something like:
-    // instead of just drawing the node, take some information about the body.
-    // This is also how SmRootSymbol does it (probably by means of SmRootNode)
-    // NEXT: Check out SmRootNode
 }
 
 void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
@@ -1444,39 +1413,6 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
 }
 
 
-void SmCaretPosGraphBuildingVisitor::Visit( SmDynIntegralNode* pNode )
-{
-    //! To be changed: Integrals don't have args.
-    SmNode  *pBody  = pNode->Body(); //Body of the root
-    assert(pBody);
-
-    SmCaretPosGraphEntry  *left,
-                        *right,
-                        *bodyLeft,
-                        *bodyRight;
-
-    //Get left and save it
-    assert(mpRightMost);
-    left = mpRightMost;
-
-    //Create body left
-    bodyLeft = mpGraph->Add( SmCaretPos( pBody, 0 ), left );
-    left->SetRight( bodyLeft );
-
-    //Create right
-    right = mpGraph->Add( SmCaretPos( pNode, 1 ) );
-
-    //Visit body
-    mpRightMost = bodyLeft;
-    pBody->Accept( this );
-    bodyRight = mpRightMost;
-    bodyRight->SetRight( right );
-    right->SetLeft( bodyRight );
-
-    mpRightMost = right;
-}
-
-
 /** Build SmCaretPosGraph for SmPlaceNode
  * Consider this a single character.
  */
@@ -1620,12 +1556,6 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootSymbolNode* )
 {
     //Do nothing
 }
-
-void SmCaretPosGraphBuildingVisitor::Visit( SmDynIntegralSymbolNode* )
-{
-    //Do nothing
-}
-
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmRectangleNode* )
 {
@@ -1867,20 +1797,6 @@ void SmCloningVisitor::Visit( SmRootNode* pNode )
 void SmCloningVisitor::Visit( SmRootSymbolNode* pNode )
 {
     pResult = new SmRootSymbolNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pResult );
-}
-
-void SmCloningVisitor::Visit( SmDynIntegralNode* pNode )
-{
-    SmDynIntegralNode* pClone = new SmDynIntegralNode( pNode->GetToken( ) );
-    CloneNodeAttr( pNode, pClone );
-    CloneKids( pNode, pClone );
-    pResult = pClone;
-}
-
-void SmCloningVisitor::Visit( SmDynIntegralSymbolNode* pNode )
-{
-    pResult = new SmDynIntegralSymbolNode( pNode->GetToken( ) );
     CloneNodeAttr( pNode, pResult );
 }
 
@@ -2440,17 +2356,6 @@ void SmNodeToTextVisitor::Visit( SmRootNode* pNode )
 }
 
 void SmNodeToTextVisitor::Visit( SmRootSymbolNode* )
-{
-}
-
-void SmNodeToTextVisitor::Visit( SmDynIntegralNode* pNode )
-{
-    SmNode *pBody    = pNode->Body();
-    Append( "intd" );
-    LineToText( pBody );
-}
-
-void SmNodeToTextVisitor::Visit( SmDynIntegralSymbolNode* )
 {
 }
 
