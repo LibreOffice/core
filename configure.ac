@@ -11242,7 +11242,7 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
     if test "x$kde4_incdir" = "xno"; then
         AC_MSG_ERROR([KDE4 headers not found.  Please specify the root of your KDE4 installation by exporting KDE4DIR before running "configure".])
     fi
-    if test "$kde_incdir" = "/usr/include"; then kde_incdir=; fi
+    if test "$kde4_incdir" = "/usr/include"; then kde4_incdir=; fi
 
     dnl Check for KDE4 libraries
     AC_MSG_CHECKING([for KDE4 libraries])
