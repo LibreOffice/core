@@ -55,7 +55,6 @@ namespace
     {
         // check if the class is at reset state
         // using accessors
-        CPPUNIT_ASSERT_EQUAL( false, aDavType.isResourceFound() );
         CPPUNIT_ASSERT_EQUAL( false, aDavType.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavType.isClass2() );
         CPPUNIT_ASSERT_EQUAL( false, aDavType.isClass3() );
@@ -66,6 +65,8 @@ namespace
         CPPUNIT_ASSERT_EQUAL( true, aDavType.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavType.getRedirectedURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavType.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavType.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavType.getHttpResponseStatusText().isEmpty() );
     }
 
     void webdav_opts_test::DAVTypesTest()
@@ -73,22 +74,8 @@ namespace
         //our DAVOptions
         webdav_ucp::DAVOptions aDavOpt;
         DAVTypesCheckInit( aDavOpt );
-        aDavOpt.setResourceFound();
-        //recheck...
-        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.isResourceFound() );
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
-        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.isHeadAllowed() );
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
-        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getAllowedMethods().isEmpty() );
-        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
-        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
-        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
 
-        aDavOpt.setResourceFound( false );
         aDavOpt.setClass1();
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isResourceFound() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
@@ -98,10 +85,11 @@ namespace
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         aDavOpt.setClass1( false );
         aDavOpt.setClass2();
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isResourceFound() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.isClass2() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
@@ -111,10 +99,11 @@ namespace
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         aDavOpt.setClass2( false );
         aDavOpt.setClass3();
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isResourceFound() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.isClass3() );
@@ -124,10 +113,11 @@ namespace
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         aDavOpt.setClass3( false );
 
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isResourceFound() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
@@ -137,13 +127,14 @@ namespace
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         DAVTypesCheckInit( aDavOpt );
         //example of allowed method for a Web resource
         OUString aAllowedMethods = "POST,OPTIONS,GET,HEAD,TRACE";
         aDavOpt.setAllowedMethods( aAllowedMethods );
         // now check...
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isResourceFound() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
@@ -153,12 +144,13 @@ namespace
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         //example of allowed method for a WebDAV resource supporting LOCK
         aAllowedMethods = "OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK";
         aDavOpt.setAllowedMethods( aAllowedMethods );
         // now check...
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isResourceFound() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
@@ -168,11 +160,12 @@ namespace
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         aAllowedMethods.clear();
         aDavOpt.setAllowedMethods( aAllowedMethods );
         aDavOpt.setStaleTime( 12345678 );
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isResourceFound() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
@@ -182,12 +175,31 @@ namespace
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 12345678 ), aDavOpt.getStaleTime() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         aDavOpt.setStaleTime( 0 );
 
+        OUString aHTTPResponseStatusText = "522 Origin Connection Time-out";
+        aDavOpt.setHttpResponseStatusCode( 522 );
+        aDavOpt.setHttpResponseStatusText( aHTTPResponseStatusText );
+        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
+        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
+        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getAllowedMethods().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isLockAllowed() );
+        CPPUNIT_ASSERT_EQUAL( true , aDavOpt.getURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 522 ), aDavOpt.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( aHTTPResponseStatusText, aDavOpt.getHttpResponseStatusText() );
+
+        aDavOpt.setHttpResponseStatusCode( 0 );
+        aHTTPResponseStatusText.clear();
+        aDavOpt.setHttpResponseStatusText( aHTTPResponseStatusText );
+
         OUString aURL = "http://a%20fake%20url/to%20test";
         aDavOpt.setURL( aURL );
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isResourceFound() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
@@ -197,12 +209,13 @@ namespace
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
         CPPUNIT_ASSERT_EQUAL( aURL, aDavOpt.getURL() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getRedirectedURL().isEmpty() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         aURL.clear();
         aDavOpt.setURL( aURL );
         aURL = "http://a%20fake%20url/to%20test/another-url";
         aDavOpt.setRedirectedURL( aURL );
-        CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isResourceFound() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass1() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass2() );
         CPPUNIT_ASSERT_EQUAL( false, aDavOpt.isClass3() );
@@ -212,11 +225,13 @@ namespace
         CPPUNIT_ASSERT_EQUAL( sal_uInt32( 0 ), aDavOpt.getStaleTime() );
         CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getURL().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( aURL, aDavOpt.getRedirectedURL() );
+        CPPUNIT_ASSERT_EQUAL( sal_uInt16( 0 ), aDavOpt.getHttpResponseStatusCode() );
+        CPPUNIT_ASSERT_EQUAL( true, aDavOpt.getHttpResponseStatusText().isEmpty() );
 
         //check the init() function
         aAllowedMethods = "OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,PUT,LOCK,UNLOCK";
         aURL = "http://a%20fake%20url/to%20test/another-url";
-        aDavOpt.setResourceFound();
+        aHTTPResponseStatusText = "404 Not Found";
         aDavOpt.setClass1();
         aDavOpt.setClass2();
         aDavOpt.setClass3();
@@ -226,6 +241,8 @@ namespace
         aDavOpt.setStaleTime( 1234567 );
         aDavOpt.setURL( aURL );
         aDavOpt.setRedirectedURL( aURL );
+        aDavOpt.setHttpResponseStatusCode( 404 );
+        aDavOpt.setHttpResponseStatusText( aHTTPResponseStatusText );
 
         aDavOpt.init();
         DAVTypesCheckInit( aDavOpt );
@@ -258,14 +275,14 @@ namespace
         aDavOpt.setLocked( false );
         CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptTarget );
 
-        aDavOpt.setResourceFound();
-        CPPUNIT_ASSERT_EQUAL( false , aDavOpt == aDavOptTarget );
-        aDavOpt.setResourceFound( false );
-        CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptTarget );
-
         aDavOpt.setStaleTime( 1234567 );
         CPPUNIT_ASSERT_EQUAL( false , aDavOpt == aDavOptTarget );
         aDavOpt.setStaleTime( 0 );
+        CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptTarget );
+
+        aDavOpt.setHttpResponseStatusCode( 404 );
+        CPPUNIT_ASSERT_EQUAL( false , aDavOpt == aDavOptTarget );
+        aDavOpt.setHttpResponseStatusCode( 0 );
         CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptTarget );
 
         aDavOpt.setAllowedMethods( aAllowedMethods );
@@ -276,6 +293,16 @@ namespace
 
         aDavOpt.setURL( aURL );
         CPPUNIT_ASSERT_EQUAL( false , aDavOpt == aDavOptTarget );
+        aURL.clear();
+        aDavOpt.setURL( aURL );
+        CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptTarget );
+
+        aDavOpt.setHttpResponseStatusText( aHTTPResponseStatusText );
+        CPPUNIT_ASSERT_EQUAL( false , aDavOpt == aDavOptTarget );
+        aHTTPResponseStatusText.clear();
+        aDavOpt.setHttpResponseStatusText( aHTTPResponseStatusText );
+        CPPUNIT_ASSERT_EQUAL( true , aDavOpt == aDavOptTarget );
+
     }
 
     void webdav_opts_test::DAVOptsCacheTests()
@@ -292,7 +319,6 @@ namespace
         OUString aRedirectedURL = "http://a%20fake%20url/to%20test/another-url/redirected";
         aDavOpt.setURL( aURL );
         aDavOpt.setRedirectedURL( aRedirectedURL );
-        aDavOpt.setResourceFound();
         aDavOpt.setClass1();
         aDavOpt.setClass2();
         aDavOpt.setClass3();
