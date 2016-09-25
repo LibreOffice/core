@@ -775,53 +775,6 @@ void SmRootNode::CreateTextFromNode(OUString &rText)
 /**************************************************************************/
 
 
-void SmDynIntegralNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
-{
-    SmNode  *pDynIntegralSym = Symbol(),
-           *pBody    = Body();
-    assert(pDynIntegralSym);
-    assert(pBody);
-
-    pBody->Arrange(rDev, rFormat);
-
-    long  nHeight = pBody->GetHeight();
-    pDynIntegralSym->AdaptToY(rDev, nHeight);
-
-    pDynIntegralSym->Arrange(rDev, rFormat);
-
-    Point  aPos = pDynIntegralSym->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, RectVerAlign::Baseline);
-    //! override calculated vertical position
-    aPos.Y()  = pDynIntegralSym->GetTop() + pBody->GetBottom() - pDynIntegralSym->GetBottom();
-    pDynIntegralSym->MoveTo(aPos);
-
-
-    // override its own rectangle with pBody's
-    SmRect::operator = (*pBody);
-    // extends this rectangle with the symbol's one
-    ExtendBy(*pDynIntegralSym, RectCopyMBL::This);
-
-}
-
-
-void SmDynIntegralNode::CreateTextFromNode(OUString &rText)
-{
-
-    rText += "intd ";
-    SmNode *pBody = Body();
-
-    if (pBody->GetNumSubNodes() > 1)
-        rText += "{ ";
-
-    pBody->CreateTextFromNode(rText);
-
-    if (pBody->GetNumSubNodes() > 1)
-        rText += "} ";
-}
-
-
-/**************************************************************************/
-
-
 void SmBinHorNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode *pLeft  = LeftOperand(),
@@ -1663,30 +1616,33 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     assert(pOper);
     assert(pBody);
 
-    //patch pBody->Arrange(rDev,rFormat);
-    //patch long nHeight = pBody->GetHeight();
     SmNode *pSymbol = GetSymbol();
     pSymbol->SetSize(Fraction(CalcSymbolHeight(*pSymbol, rFormat),
                               pSymbol->GetFont().GetFontSize().Height()));
 
     pBody->Arrange(rDev, rFormat);
+    bool bDynamicallySized = false;
+    if (pSymbol->GetToken().eType == TINTD)
+    {
+        long nBodyHeight = pBody->GetHeight();
+        long nFontHeight = pSymbol->GetFont().GetFontSize().Height();
+        if (nFontHeight < nBodyHeight)
+        {
+            pSymbol->SetSize(Fraction(nBodyHeight, nFontHeight));
+            bDynamicallySized = true;
+        }
+    }
     pOper->Arrange(rDev, rFormat);
 
-    //patch pSymbol->AdaptToY(rDev,nHeight);
-    //patch pSymbol->Arrange(rDev, rFormat);
-    //patch Point aPos= pSymbol->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, RectVerAlign::Mid);
-    //patch aPos.Y() = pSymbol->GetTop()+pBody->GetBottom() - pSymbol->GetBottom();
-    //patch pSymbol->MoveTo(aPos);
     long  nOrigHeight = GetFont().GetFontSize().Height(),
           nDist = nOrigHeight
                   * rFormat.GetDistance(DIS_OPERATORSPACE) / 100L;
 
-    Point aPos = pOper->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, /*RectVerAlign::CenterY*/RectVerAlign::Mid);
+    Point aPos = pOper->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, bDynamicallySized ? RectVerAlign::CenterY : RectVerAlign::Mid);
     aPos.X() -= nDist;
     pOper->MoveTo(aPos);
 
     SmRect::operator = (*pBody);
-    //patch ExtendBy(*pSymbol, RectCopyMBL::This);
     ExtendBy(*pOper, RectCopyMBL::This);
 }
 
@@ -2034,23 +1990,6 @@ void SmRootSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
     // some additional length so that the horizontal
     // bar will be positioned above the argument
     SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / 10L);
-}
-
-
-/**************************************************************************/
-
-
-void SmDynIntegralSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
-{
-    static const long nFactor = 12L;
-
-    // The new height equals (1 + nFactor) * oldHeight
-    // nFactor was chosen for keeping the integral sign from becoming too "fat".
-    SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / nFactor);
-
-    // keep the ratio
-    long nCurWidth = GetSize().Width();
-    SmMathSymbolNode::AdaptToX(rDev, nCurWidth + nCurWidth / nFactor);
 }
 
 
@@ -2935,15 +2874,6 @@ void SmRootNode::Accept(SmVisitor* pVisitor) {
 }
 
 void SmRootSymbolNode::Accept(SmVisitor* pVisitor) {
-    pVisitor->Visit(this);
-}
-
-void SmDynIntegralNode::Accept(SmVisitor* pVisitor) {
-    pVisitor->Visit(this);
-}
-
-
-void SmDynIntegralSymbolNode::Accept(SmVisitor* pVisitor) {
     pVisitor->Visit(this);
 }
 

@@ -98,7 +98,7 @@ enum SmNodeType
 /*10*/ NBINDIAGONAL,   NSUBSUP,        NMATRIX,        NPLACE,         NTEXT,
 /*15*/ NSPECIAL,       NGLYPH_SPECIAL, NMATH,          NBLANK,         NERROR,
 /*20*/ NLINE,          NEXPRESSION,    NPOLYLINE,      NROOT,          NROOTSYMBOL,
-/*25*/ NRECTANGLE,  NVERTICAL_BRACE, NMATHIDENT,  NDYNINT, NDYNINTSYMBOL
+/*25*/ NRECTANGLE,  NVERTICAL_BRACE, NMATHIDENT
 };
 
 
@@ -545,29 +545,6 @@ public:
 };
 
 
-/** Dynamic Integral symbol node
- *
- * Node for drawing dynamically sized integral symbols.
- *
- * TODO: It might be created a parent class SmDynamicSizedNode
-        (for both dynamic integrals, roots and other dynamic symbols)
-
- */
-class SmDynIntegralSymbolNode : public SmMathSymbolNode
-{
-
-
-public:
-    explicit SmDynIntegralSymbolNode(const SmToken &rNodeToken)
-    :   SmMathSymbolNode(NDYNINTSYMBOL, rNodeToken)
-    {}
-
-    virtual void AdaptToY(OutputDevice &rDev, sal_uLong nHeight) override;
-
-    void Accept(SmVisitor* pVisitor) override;
-};
-
-
 /** Place node
  *
  * Used to create the <?> command, that denotes place where something can be
@@ -735,33 +712,6 @@ public:
     const SmNode* Argument() const;
     SmRootSymbolNode* Symbol();
     const SmRootSymbolNode* Symbol() const;
-    SmNode* Body();
-    const SmNode* Body() const;
-};
-
-
-/** Dynamic Integral node
- *
- * Used to create Dynamically sized integrals
- *
- * Children:<BR>
- * 0: Symbol (instance of DynIntegralSymbolNode)<BR>
- * 1: Body<BR>
- */
-class SmDynIntegralNode : public SmStructureNode
-{
-public:
-    explicit SmDynIntegralNode(const SmToken &rNodeToken)
-        : SmStructureNode(NDYNINT, rNodeToken, 2)
-    {
-    }
-
-    virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    void CreateTextFromNode(OUString &rText) override;
-    void Accept(SmVisitor* pVisitor) override;
-
-    SmDynIntegralSymbolNode* Symbol();
-    const SmDynIntegralSymbolNode* Symbol() const;
     SmNode* Body();
     const SmNode* Body() const;
 };
@@ -1216,27 +1166,6 @@ inline SmNode* SmRootNode::Body()
 inline const SmNode* SmRootNode::Body() const
 {
     return const_cast< SmRootNode* >( this )->Body();
-}
-
-
-inline SmDynIntegralSymbolNode* SmDynIntegralNode::Symbol()
-{
-    assert( GetNumSubNodes() == 2 );
-    assert( GetSubNode( 0 )->GetType() == NDYNINTSYMBOL );
-    return static_cast< SmDynIntegralSymbolNode* >( GetSubNode( 0 ));
-}
-inline const SmDynIntegralSymbolNode* SmDynIntegralNode::Symbol() const
-{
-    return const_cast< SmDynIntegralNode* >( this )->Symbol();
-}
-inline SmNode* SmDynIntegralNode::Body()
-{
-    assert( GetNumSubNodes() == 2 );
-    return GetSubNode( 1 );
-}
-inline const SmNode* SmDynIntegralNode::Body() const
-{
-    return const_cast< SmDynIntegralNode* >( this )->Body();
 }
 
 
