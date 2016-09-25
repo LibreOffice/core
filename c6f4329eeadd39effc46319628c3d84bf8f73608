@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_84db231b",
+        "filename": "external/unixODBC/inc/odbc/sql.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-09-25T09:29:15Z",
+      "side": 1,
+      "message": "is there a reason why this one is not converted?",
+      "revId": "c6f4329eeadd39effc46319628c3d84bf8f73608",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
