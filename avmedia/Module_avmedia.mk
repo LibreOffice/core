@@ -37,7 +37,7 @@ endif
 
 ifeq ($(OS),MACOSX)
 ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
-ifneq ($(filter 1080 1090 101000 101100,$(MACOSX_SDK_VERSION)),)
+ifneq ($(shell test $(MACOSX_SDK_VERSION) -ge 101200; echo $$?),0)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediaQuickTime \
 ))

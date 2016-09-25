@@ -283,7 +283,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(filter MACOSX,$(OS)),\
 		avmediaMacAVF \
 		$(if $(ENABLE_MACOSX_SANDBOX),,\
-			$(if $(filter 1080 1090 101000 101100,$(MACOSX_SDK_VERSION)),avmediaQuickTime) \
+			$(if $(shell test $(MACOSX_SDK_VERSION) -ge 101200 || echo not),avmediaQuickTime) \
 		) \
 	) \
 	$(call gb_Helper_optional,SCRIPTING, \
