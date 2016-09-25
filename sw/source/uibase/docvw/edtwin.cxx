@@ -2920,10 +2920,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     !(bWasInFooter && eControl == Footer))
                 {
                     rSh.SetShowHeaderFooterSeparator(eControl, !rSh.IsShowHeaderFooterSeparator(eControl));
-                }
 
-                // Repaint everything
-                Invalidate();
+                    // Repaint everything
+                    Invalidate();
+                }
             }
         }
         else
@@ -2934,10 +2934,12 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             rSh.SetShowHeaderFooterSeparator( Footer, eControl == Footer );
 
             if ( !rSh.IsHeaderFooterEdit() )
+            {
                 rSh.ToggleHeaderFooterEdit();
 
-            // Repaint everything
-            rSh.GetWin()->Invalidate();
+                // Repaint everything
+                rSh.GetWin()->Invalidate();
+            }
         }
     }
     else
