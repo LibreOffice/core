@@ -165,17 +165,6 @@ public:
                                      NROOTSYMBOL, pNode->GetType());
     }
 
-    void Visit( SmDynIntegralNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmDynIntegralNode should have type NDYNINT",
-                                     NDYNINT, pNode->GetType());
-        VisitChildren( pNode );
-    }
-
-    void Visit( SmDynIntegralSymbolNode* pNode ) override {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmDynIntegralSymbolNode should have type NDYNINTSYMBOL",
-                                     NDYNINTSYMBOL, pNode->GetType());
-    }
-
     void Visit( SmRectangleNode* pNode ) override {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("SmRectangleNode should have type NRECTANGLE",
                                      NRECTANGLE, pNode->GetType());

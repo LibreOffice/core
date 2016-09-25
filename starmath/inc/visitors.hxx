@@ -47,8 +47,6 @@ public:
     virtual void Visit( SmLineNode* pNode ) = 0;
     virtual void Visit( SmExpressionNode* pNode ) = 0;
     virtual void Visit( SmPolyLineNode* pNode ) = 0;
-    virtual void Visit( SmDynIntegralNode* pNode ) = 0;
-    virtual void Visit( SmDynIntegralSymbolNode* pNode ) = 0;
     virtual void Visit( SmRootNode* pNode ) = 0;
     virtual void Visit( SmRootSymbolNode* pNode ) = 0;
     virtual void Visit( SmRectangleNode* pNode ) = 0;
@@ -94,8 +92,6 @@ public:
     void Visit( SmPolyLineNode* pNode ) override;
     void Visit( SmRootNode* pNode ) override;
     void Visit( SmRootSymbolNode* pNode ) override;
-    void Visit( SmDynIntegralNode* pNode ) override;
-    void Visit( SmDynIntegralSymbolNode* pNode ) override;
     void Visit( SmRectangleNode* pNode ) override;
     void Visit( SmVerticalBraceNode* pNode ) override;
 protected:
@@ -201,8 +197,6 @@ public:
     void Visit( SmPolyLineNode* pNode ) override;
     void Visit( SmRootNode* pNode ) override;
     void Visit( SmRootSymbolNode* pNode ) override;
-    void Visit( SmDynIntegralNode* pNode ) override;
-    void Visit( SmDynIntegralSymbolNode* pNode ) override;
     void Visit( SmRectangleNode* pNode ) override;
     void Visit( SmVerticalBraceNode* pNode ) override;
 private:
@@ -320,8 +314,6 @@ public:
     void Visit( SmPolyLineNode* pNode ) override;
     void Visit( SmRootNode* pNode ) override;
     void Visit( SmRootSymbolNode* pNode ) override;
-    void Visit( SmDynIntegralNode* pNode ) override;
-    void Visit( SmDynIntegralSymbolNode* pNode ) override;
     void Visit( SmRectangleNode* pNode ) override;
     void Visit( SmVerticalBraceNode* pNode ) override;
     SmCaretPosGraph* takeGraph()
@@ -369,8 +361,6 @@ public:
     void Visit( SmPolyLineNode* pNode ) override;
     void Visit( SmRootNode* pNode ) override;
     void Visit( SmRootSymbolNode* pNode ) override;
-    void Visit( SmDynIntegralNode* pNode ) override;
-    void Visit( SmDynIntegralSymbolNode* pNode ) override;
     void Visit( SmRectangleNode* pNode ) override;
     void Visit( SmVerticalBraceNode* pNode ) override;
     /** Clone a pNode */
@@ -443,8 +433,6 @@ public:
     void Visit( SmPolyLineNode* pNode ) override;
     void Visit( SmRootNode* pNode ) override;
     void Visit( SmRootSymbolNode* pNode ) override;
-    void Visit( SmDynIntegralNode* pNode ) override;
-    void Visit( SmDynIntegralSymbolNode* pNode ) override;
     void Visit( SmRectangleNode* pNode ) override;
     void Visit( SmVerticalBraceNode* pNode ) override;
 private:

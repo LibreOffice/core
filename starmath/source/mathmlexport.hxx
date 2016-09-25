@@ -92,7 +92,6 @@ protected:
     void ExportVerticalBrace(const SmVerticalBraceNode *pNode, int nLevel);
     void ExportMatrix(const SmNode *pNode, int nLevel);
     void ExportBlank(const SmNode *pNode, int nLevel);
-    void ExportDynIntegral(const SmDynIntegralNode *pNode, int nLevel);
 
 public:
     SmXMLExport(

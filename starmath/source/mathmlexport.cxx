@@ -811,11 +811,6 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
             AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_NORMAL);
         pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, true, false);
     }
-    else if (pNode->GetType() == NDYNINTSYMBOL)
-    {
-        AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
-        pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MO, true, false);
-    }
     else
     {
         // Export NMATHIDENT and NPLACE symbols as <mi> elements:
@@ -1461,13 +1456,6 @@ void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
     }
 }
 
-void SmXMLExport::ExportDynIntegral(const SmDynIntegralNode *pNode, int nLevel)
-{
-    SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MROW, true, true);
-    ExportNodes(pNode->Symbol(), nLevel+1);
-    ExportNodes(pNode->Body(), nLevel+1);
-}
-
 void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
 {
     if (!pNode)
@@ -1503,6 +1491,14 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
                 }
                 else
                 {
+                    switch (pNode->GetToken().eType)
+                    {
+                        case TINTD:
+                            AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
+                            break;
+                        default:
+                            break;
+                    }
                     //To fully handle generic MathML we need to implement the full
                     //operator dictionary, we will generate MathML with explicit
                     //stretchiness for now.
@@ -1532,7 +1528,6 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
         case NSPECIAL: //NSPECIAL requires some sort of Entity preservation in the XML engine.
         case NMATHIDENT :
         case NPLACE:
-        case NDYNINTSYMBOL:
             ExportMath(pNode, nLevel);
             break;
         case NBINHOR:
@@ -1573,9 +1568,6 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             break;
         case NBLANK:
             ExportBlank(pNode, nLevel);
-            break;
-        case NDYNINT:
-            ExportDynIntegral(static_cast<const SmDynIntegralNode *>(pNode), nLevel);
             break;
        default:
             SAL_WARN("starmath", "Warning: failed to export a node?");
