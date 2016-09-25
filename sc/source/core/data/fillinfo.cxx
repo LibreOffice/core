@@ -637,8 +637,8 @@ void ScDocument::FillInfo(
                         {
                             do
                             {
-                                nThisRow=aThisMarkArr.pData[nIndex].nRow;      // End of range
-                                const bool bThisMarked=aThisMarkArr.pData[nIndex].bMarked;
+                                nThisRow=aThisMarkArr.m_data[nIndex].nRow;      // End of range
+                                const bool bThisMarked=aThisMarkArr.m_data[nIndex].bMarked;
 
                                 do
                                 {
@@ -665,7 +665,7 @@ void ScDocument::FillInfo(
                                 while (nCurRow <= nThisRow && nCurRow <= nRow2);
                                 ++nIndex;
                             }
-                            while ( nIndex < aThisMarkArr.nCount && nThisRow < nRow2 );
+                            while ( nIndex < aThisMarkArr.m_data.size() && nThisRow < nRow2 );
                         }
                     }
                 }
@@ -808,7 +808,7 @@ void ScDocument::FillInfo(
                         ScMarkArray aThisMarkArr(pMarkData->GetMarkArray( nStartX ));
                         SCSIZE nIndex;
                         if ( aThisMarkArr.Search( nStartY, nIndex ) )
-                            bCellMarked=aThisMarkArr.pData[nIndex].bMarked;
+                            bCellMarked=aThisMarkArr.m_data[nIndex].bMarked;
                     }
 
                     pInfo->bMarked = bCellMarked;

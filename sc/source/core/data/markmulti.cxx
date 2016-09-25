@@ -38,9 +38,9 @@ ScMultiSel::ScMultiSel( const ScMultiSel& rMultiSel )
         // correct hint is always aDestEnd as keys come in ascending order
         // Amortized constant time operation as we always give the correct hint
         aDestIter = aMultiSelContainer.emplace_hint( aDestEnd, aSourcePair.first, ScMarkArray() );
-        aSourcePair.second.CopyMarksTo( aDestIter->second );
+        aDestIter->second = aSourcePair.second;
     }
-    rMultiSel.aRowSel.CopyMarksTo( aRowSel );
+    aRowSel = rMultiSel.aRowSel;
 }
 
 ScMultiSel::~ScMultiSel()
@@ -57,16 +57,16 @@ ScMultiSel& ScMultiSel::operator=(const ScMultiSel& rMultiSel)
         // correct hint is always aDestEnd as keys come in ascending order
         // Amortized constant time operation as we always give the correct hint
         aDestIter = aMultiSelContainer.emplace_hint( aDestEnd, aSourcePair.first, ScMarkArray() );
-        aSourcePair.second.CopyMarksTo( aDestIter->second );
+        aDestIter->second = aSourcePair.second;
     }
-    rMultiSel.aRowSel.CopyMarksTo( aRowSel );
+    aRowSel = rMultiSel.aRowSel;
     return *this;
 }
 
 void ScMultiSel::Clear()
 {
     aMultiSelContainer.clear();
-    aRowSel.Reset();
+    aRowSel.clear();
 }
 
 bool ScMultiSel::HasMarks( SCCOL nCol ) const
@@ -163,7 +163,7 @@ bool ScMultiSel::HasEqualRowsMarked( SCCOL nCol1, SCCOL nCol2 ) const
     if ( bCol1Exists || bCol2Exists )
     {
         if ( bCol1Exists && bCol2Exists )
-            return aIter1->second.HasEqualRowsMarked( aIter2->second );
+            return aIter1->second == aIter2->second;
         else if ( bCol1Exists )
             return !aIter1->second.HasMarks();
         else

@@ -21,20 +21,18 @@
 #define INCLUDED_SC_INC_MARKARR_HXX
 
 #include "address.hxx"
-
-#define SC_MARKARRAY_DELTA    4
+#include <vector>
 
 struct ScMarkEntry
 {
     SCROW           nRow;
     bool            bMarked;
+    bool operator ==( const ScMarkEntry &rOther ) const { return bMarked == rOther.bMarked && nRow == rOther.nRow; };
 };
 
 class ScMarkArray
 {
-    SCSIZE          nCount;
-    SCSIZE          nLimit;
-    ScMarkEntry*    pData;
+    std::vector <ScMarkEntry> m_data;
 
 friend class ScMarkArrayIter;
 friend class ScDocument;                // for FillInfo
@@ -43,22 +41,24 @@ public:
             ScMarkArray();
             ScMarkArray( ScMarkArray&& rArray );
             ~ScMarkArray();
-    void    Reset( bool bMarked = false, SCSIZE nNeeded = 1 );
+    bool    operator ==( const ScMarkArray &rOther ) const { return m_data == rOther.m_data; };
+    ScMarkArray& operator =( const ScMarkArray& rOther ) { m_data = rOther.m_data; return *this; };
+
+    void    clear();
     bool    GetMark( SCROW nRow ) const;
     void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked );
     bool    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
     bool    HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
-    bool    HasEqualRowsMarked( const ScMarkArray& rOther ) const;
 
-    bool    HasMarks() const    { return ( nCount > 1 || ( nCount == 1 && pData[0].bMarked ) ); }
-
-    void    CopyMarksTo( ScMarkArray& rDestMarkArray ) const;
-
-    bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
+    bool    HasMarks() const    { return m_data.size() > 1 || ( m_data.size() == 1 && m_data[0].bMarked ); }
 
     /// Including current row, may return -1 if bUp and not found
     SCsROW  GetNextMarked( SCsROW nRow, bool bUp ) const;
     SCROW   GetMarkEnd( SCROW nRow, bool bUp ) const;
+
+private:
+    bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
+
 };
 
 class ScMarkArrayIter                   // iterate over selected range
