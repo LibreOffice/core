@@ -373,7 +373,6 @@ void FormulaBuffer::finalizeImport()
 {
     ISegmentProgressBarRef xFormulaBar = getProgressBar().createSegment( getProgressBar().getFreeLength() );
 
-    const size_t nThreadCount = 1;
     ScDocumentImport& rDoc = getDocImport();
     rDoc.getDoc().SetAutoNameCache(new ScAutoNameCache(&rDoc.getDoc()));
     ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc.getDoc());
@@ -388,42 +387,8 @@ void FormulaBuffer::finalizeImport()
 
     std::vector<SheetItem>::iterator it = aSheetItems.begin(), itEnd = aSheetItems.end();
 
-    if (nThreadCount == 1)
-    {
-        for (; it != itEnd; ++it)
-            processSheetFormulaCells(rDoc, *it, *rDoc.getDoc().GetFormatTable(), getExternalLinks().getLinkInfos());
-    }
-    else
-    {
-        typedef rtl::Reference<WorkerThread> WorkerThreadRef;
-        std::vector<WorkerThreadRef> aThreads;
-        aThreads.reserve(nThreadCount);
-        // TODO: Right now we are spawning multiple threads all at once and block
-        // on them all at once.  Any more clever thread management would require
-        // use of condition variables which our own osl thread framework seems to
-        // lack.
-        while (it != itEnd)
-        {
-            for (size_t i = 0; i < nThreadCount; ++i)
-            {
-                if (it == itEnd)
-                    break;
-
-                WorkerThreadRef xThread(new WorkerThread(rDoc, *it, rDoc.getDoc().CreateFormatTable(), getExternalLinks().getLinkInfos()));
-                ++it;
-                aThreads.push_back(xThread);
-                xThread->launch();
-            }
-
-            for (rtl::Reference<WorkerThread> & xThread : aThreads)
-            {
-                if (xThread.is())
-                    xThread->join();
-            }
-
-            aThreads.clear();
-        }
-    }
+    for (; it != itEnd; ++it)
+        processSheetFormulaCells(rDoc, *it, *rDoc.getDoc().GetFormatTable(), getExternalLinks().getLinkInfos());
 
     rDoc.getDoc().SetAutoNameCache(nullptr);
 
