@@ -221,15 +221,20 @@ private:
     ScDocShell*             pDocShell;
     SfxStyleFamily          eFamily;        // Family
     OUString                aStyleName;
+    SfxStyleSheetBase*      pStyle_cached;
 
-    SfxStyleSheetBase*      GetStyle_Impl();
+    SfxStyleSheetBase*      GetStyle_Impl( bool useCachedValue = false );
     const SfxItemSet*       GetStyleItemSet_Impl( const OUString& rPropName, const SfxItemPropertySimpleEntry*& rpEntry );
-    void                    SetOnePropertyValue(    const OUString& rPropertyName,
-                                                    const SfxItemPropertySimpleEntry* pEntry,
-                                                    const css::uno::Any* pValue )
-                                            throw(css::lang::IllegalArgumentException,
-                                                  css::uno::RuntimeException,
-                                                  std::exception);
+    css::beans::PropertyState getPropertyState_Impl( const OUString& PropertyName )
+                                throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception);
+    css::uno::Any           getPropertyDefault_Impl( const OUString& aPropertyName )
+                                throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
+    css::uno::Any           getPropertyValue_Impl( const OUString& aPropertyName )
+                                throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
+    void                    setPropertyValue_Impl( const OUString& rPropertyName,
+                                                 const SfxItemPropertySimpleEntry* pEntry,
+                                                 const css::uno::Any* pValue )
+                                        throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
 public:
                             ScStyleObj() = delete;
