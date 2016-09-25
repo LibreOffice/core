@@ -1220,29 +1220,35 @@ SwSbxValue SwCalc::Prim()
 
 SwSbxValue  SwCalc::Expr()
 {
-    SwSbxValue left = Term(), right;
+    SwSbxValue left = Term();
     m_nLastLeft = left;
     for(;;)
     {
         switch(m_eCurrOper)
         {
-        case CALC_PLUS:
-            GetToken();
-            left.MakeDouble();
-            ( right = Term() ).MakeDouble();
-            left.Compute( SbxPLUS, right );
-            m_nListPor++;
-            break;
-
-        case CALC_MINUS:
-            GetToken();
-            left.MakeDouble();
-            ( right = Term() ).MakeDouble();
-            left.Compute( SbxMINUS, right );
-            break;
-
-        default:
-            return left;
+            case CALC_PLUS:
+            {
+                GetToken();
+                left.MakeDouble();
+                SwSbxValue right(Term());
+                right.MakeDouble();
+                left.Compute(SbxPLUS, right);
+                m_nListPor++;
+                break;
+            }
+            case CALC_MINUS:
+            {
+                GetToken();
+                left.MakeDouble();
+                SwSbxValue right(Term());
+                right.MakeDouble();
+                left.Compute(SbxMINUS, right);
+                break;
+            }
+            default:
+            {
+                return left;
+            }
         }
     }
 }
