@@ -408,6 +408,51 @@ css::uno::Sequence< OUString > ResourceMenuController::getSupportedServiceNames(
     return { "com.sun.star.frame.PopupMenuController" };
 }
 
+class SaveAsMenuController : public ResourceMenuController
+{
+public:
+    SaveAsMenuController( const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                          const css::uno::Sequence< css::uno::Any >& rArgs );
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
+
+private:
+    virtual void impl_setPopupMenu() override;
+};
+
+SaveAsMenuController::SaveAsMenuController( const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                                            const css::uno::Sequence< css::uno::Any >& rArgs )
+    : ResourceMenuController( rContext, rArgs, false )
+{
+}
+
+void SaveAsMenuController::impl_setPopupMenu()
+{
+    VCLXMenu* pPopupMenu    = VCLXMenu::GetImplementation( m_xPopupMenu );
+    Menu*     pVCLPopupMenu = nullptr;
+
+    SolarMutexGuard aGuard;
+
+    if ( pPopupMenu )
+        pVCLPopupMenu = pPopupMenu->GetMenu();
+
+    if ( !pVCLPopupMenu )
+        return;
+
+    pVCLPopupMenu->InsertItem( ".uno:SaveAs", nullptr );
+    pVCLPopupMenu->InsertItem( ".uno:ExportTo", nullptr );
+    pVCLPopupMenu->InsertItem( ".uno:SaveAsTemplate", nullptr );
+    pVCLPopupMenu->InsertSeparator();
+    pVCLPopupMenu->InsertItem( ".uno:SaveAsRemote", nullptr );
+}
+
+OUString SaveAsMenuController::getImplementationName()
+    throw ( css::uno::RuntimeException, std::exception )
+{
+    return OUString( "com.sun.star.comp.framework.SaveAsMenuController" );
+}
+
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -424,6 +469,14 @@ com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation(
     css::uno::Sequence< css::uno::Any > const & args )
 {
     return cppu::acquire( new ResourceMenuController( context, args, true ) );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_framework_SaveAsMenuController_get_implementation(
+    css::uno::XComponentContext* context,
+    css::uno::Sequence< css::uno::Any > const & args )
+{
+    return cppu::acquire( new SaveAsMenuController( context, args ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

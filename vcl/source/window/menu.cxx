@@ -515,15 +515,21 @@ void Menu::InsertItem( const ResId& rResId )
 
 void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame)
 {
-    OUString aLabel(CommandInfoProvider::Instance().GetPopupLabelForCommand(rCommand, rFrame));
-    OUString aTooltip(CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
-    Image aImage(CommandInfoProvider::Instance().GetImageForCommand(rCommand, /*bLarge=*/ false, rFrame));
-
     sal_uInt16 nItemId = GetItemCount() + 1;
 
-    InsertItem(nItemId, aLabel, aImage);
+    if (rFrame.is())
+    {
+        OUString aLabel(CommandInfoProvider::Instance().GetPopupLabelForCommand(rCommand, rFrame));
+        OUString aTooltip(CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
+        Image aImage(CommandInfoProvider::Instance().GetImageForCommand(rCommand, /*bLarge=*/ false, rFrame));
+
+        InsertItem(nItemId, aLabel, aImage);
+        SetHelpText(nItemId, aTooltip);
+    }
+    else
+        InsertItem(nItemId, OUString());
+
     SetItemCommand(nItemId, rCommand);
-    SetHelpText(nItemId, aTooltip);
 }
 
 
