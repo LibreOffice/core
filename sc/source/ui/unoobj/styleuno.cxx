@@ -430,7 +430,7 @@ ScStyleFamilyObj*ScStyleFamiliesObj::GetObjectByType_Impl(SfxStyleFamily nType) 
         else if ( nType == SfxStyleFamily::Page )
             return new ScStyleFamilyObj( pDocShell, SfxStyleFamily::Page );
     }
-    OSL_FAIL("getStyleFamilyByType: keine DocShell oder falscher Typ");
+    OSL_FAIL("getStyleFamilyByType: no DocShell or wrong SfxStyleFamily");
     return nullptr;
 }
 
@@ -439,7 +439,7 @@ ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByIndex_Impl(sal_uInt32 nIndex) c
     if ( nIndex < SC_STYLE_FAMILY_COUNT )
         return GetObjectByType_Impl(aStyleFamilyTypes[nIndex]);
 
-    return nullptr;    // ungueltiger Index
+    return nullptr;    // invalid index
 }
 
 ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(const OUString& aName) const
@@ -623,7 +623,7 @@ void ScStyleFamilyObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     if ( rHint.GetId() == SFX_HINT_DYING )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // has become invalid
     }
 }
 
@@ -673,7 +673,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
     {
         ScStyleObj* pStyleObj = ScStyleObj::getImplementation( xInterface );
         if ( pStyleObj && pStyleObj->GetFamily() == eFamily &&
-                !pStyleObj->IsInserted() )  // noch nicht eingefuegt?
+                !pStyleObj->IsInserted() )  // not yet inserted?
         {
             OUString aNameStr(ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily ));
 
@@ -683,14 +683,14 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
             //! DocFunc-Funktion??
             //! Undo ?????????????
 
-            if ( !pStylePool->Find( aNameStr, eFamily ) )   // noch nicht vorhanden
+            if ( !pStylePool->Find( aNameStr, eFamily ) )   // not available yet
             {
                 (void)pStylePool->Make( aNameStr, eFamily, SFXSTYLEBIT_USERDEF );
 
                 if ( eFamily == SfxStyleFamily::Para && !rDoc.IsImportingXML() )
                     rDoc.GetPool()->CellStyleCreated( aNameStr, &rDoc );
 
-                pStyleObj->InitDoc( pDocShell, aNameStr );  // Objekt kann benutzt werden
+                pStyleObj->InitDoc( pDocShell, aNameStr );  // object can be used
 
                 if (!rDoc.IsImportingXML())
                     pDocShell->SetDocumentModified();   // verwendet wird der neue Style noch nicht
@@ -850,8 +850,8 @@ uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
         sal_uInt16 nPos = 0;
         while (pStyle)
         {
-            OSL_ENSURE( nPos<nCount, "Anzahl durcheinandergekommen" );
-            if (nPos<nCount)
+            OSL_ENSURE( nPos < nCount, "Count is wrong" );
+            if (nPos < nCount)
                 pAry[nPos++] = ScStyleNameConversion::DisplayToProgrammaticName(
                                     pStyle->GetName(), eFamily );
             pStyle = aIter.Next();
@@ -1012,7 +1012,7 @@ void ScStyleObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     if ( rHint.GetId() == SFX_HINT_DYING )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // has become invalid
     }
 }
 
@@ -1076,12 +1076,12 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
         bool bOk = pStyle->SetParent( aString );
         if (bOk)
         {
-            //  wie bei setPropertyValue
+            //  as by setPropertyValue
 
             ScDocument& rDoc = pDocShell->GetDocument();
             if ( eFamily == SfxStyleFamily::Para )
             {
-                //  Zeilenhoehen anpassen...
+                // update lineheight
 
                 ScopedVclPtrInstance< VirtualDevice > pVDev;
                 Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
@@ -1173,13 +1173,13 @@ const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const OUString& rPropName,
         if ( eFamily == SfxStyleFamily::Page )
         {
             pEntry = lcl_GetHeaderStyleMap()->getByName( rPropName );
-            if ( pEntry )     // only item-wids in header/footer map
+            if ( pEntry )     // only item-WIDs in header/footer map
             {
                 rpResultEntry = pEntry;
                 return &static_cast<const SvxSetItem&>(pStyle->GetItemSet().Get(ATTR_PAGE_HEADERSET)).GetItemSet();
             }
             pEntry = lcl_GetFooterStyleMap()->getByName( rPropName );
-            if ( pEntry )      // only item-wids in header/footer map
+            if ( pEntry )      // only item-WIDs in header/footer map
             {
                 rpResultEntry = pEntry;
                 return &static_cast<const SvxSetItem&>(pStyle->GetItemSet().Get(ATTR_PAGE_FOOTERSET)).GetItemSet();
@@ -1283,8 +1283,8 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aPropertyName 
 
         if ( IsScItemWid( nWhich ) )
         {
-            //  Default ist Default vom ItemPool, nicht vom Standard-Style,
-            //  damit es zu setPropertyToDefault passt
+            //  Default is default from ItemPool, not from Standard-Style,
+            //  so it is the same as in setPropertyToDefault
             SfxItemSet aEmptySet( *pStyleSet->GetPool(), pStyleSet->GetRanges() );
             //  Default-Items mit falscher Slot-ID funktionieren im SfxItemPropertySet3 nicht
             //! Slot-IDs aendern...
@@ -1313,7 +1313,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aPropertyName 
                 case ATTR_PAGE_CHARTS:
                 case ATTR_PAGE_OBJECTS:
                 case ATTR_PAGE_DRAWINGS:
-                    //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
+                    //! define sal_Bool-MID for ScViewObjectModeItem?
                     aAny <<= static_cast<const ScViewObjectModeItem&>(pItemSet->Get(nWhich)).GetValue() == VOBJ_MODE_SHOW;
                     break;
                 case ATTR_PAGE_SCALETO:
@@ -1553,14 +1553,14 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
         if ( eFamily == SfxStyleFamily::Para && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
             throw uno::RuntimeException();
 
-        SfxItemSet& rSet = pStyle->GetItemSet();    // direkt im lebenden Style aendern...
+        SfxItemSet& rSet = pStyle->GetItemSet();    // change directly in active Style
         bool bDone = false;
         if ( eFamily == SfxStyleFamily::Page )
         {
             if(pEntry->nWID == SC_WID_UNO_HEADERSET)
             {
                 const SfxItemPropertySimpleEntry* pHeaderEntry = lcl_GetHeaderStyleMap()->getByName( rPropertyName );
-                if ( pHeaderEntry ) // only item-wids in header/footer map
+                if ( pHeaderEntry ) // only item-WIDs in header/footer map
                 {
                     SvxSetItem aNewHeader( static_cast<const SvxSetItem&>(rSet.Get(ATTR_PAGE_HEADERSET)) );
                     if (pValue)
@@ -1574,7 +1574,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
             else if(pEntry->nWID == SC_WID_UNO_FOOTERSET)
             {
                 const SfxItemPropertySimpleEntry* pFooterEntry = lcl_GetFooterStyleMap()->getByName( rPropertyName );
-                if ( pFooterEntry ) // only item-wids in header/footer map
+                if ( pFooterEntry ) // only item-WIDs in header/footer map
                 {
                     SvxSetItem aNewFooter( static_cast<const SvxSetItem&>(rSet.Get(ATTR_PAGE_FOOTERSET)) );
                     if (pValue)
@@ -1822,14 +1822,13 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
             }
         }
 
-        //! DocFunc-Funktion??
-        //! Undo ?????????????
+        //! DocFunc-??
+        //! Undo ??
 
         ScDocument& rDoc = pDocShell->GetDocument();
         if ( eFamily == SfxStyleFamily::Para )
         {
-            //  Zeilenhoehen anpassen...
-
+            // update lineheight
             ScopedVclPtrInstance< VirtualDevice > pVDev;
             Point aLogic = pVDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
             double nPPTX = aLogic.X() / 1000.0;
@@ -1949,9 +1948,8 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
                         }
                         break;
                     default:
-                        //  Default-Items mit falscher Slot-ID
-                        //  funktionieren im SfxItemPropertySet3 nicht
-                        //! Slot-IDs aendern...
+                        //  Default-Items with wrong Slot-ID don't work in SfxItemPropertySet3
+                        //! change Slot-IDs...
                         if ( pItemSet->GetPool()->GetSlotId(nWhich) == nWhich &&
                              pItemSet->GetItemState(nWhich, false) == SfxItemState::DEFAULT )
                         {
