@@ -151,7 +151,7 @@ static const SmTokenTableEntry aTokenTable[] =
     { "infinity" , TINFINITY, MS_INFINITY, TG::Standalone, 5},
     { "infty" , TINFINITY, MS_INFINITY, TG::Standalone, 5},
     { "int", TINT, MS_INT, TG::Oper, 5},
-    { "intd", TINTD, MS_INT, TG::UnOper, 5},
+    { "intd", TINTD, MS_INT, TG::Oper, 5},
     { "intersection", TINTERSECT, MS_INTERSECT, TG::Product, 0},
     { "ital", TITALIC, '\0', TG::FontAttr, 5},
     { "italic", TITALIC, '\0', TG::FontAttr, 5},
@@ -1600,6 +1600,7 @@ void SmParser::DoOper()
         case TPROD :
         case TCOPROD :
         case TINT :
+        case TINTD :
         case TIINT :
         case TIIINT :
         case TLINT :
@@ -1659,10 +1660,6 @@ void SmParser::DoUnOper()
     {
         case TABS :
         case TSQRT :
-           /* Dynamic integrals are handled as unary operators so we can wrap
-             the symbol together with the body in a upper level node and make
-             proper graphic arrangements */
-        case TINTD:
             NextToken();
             break;
 
@@ -1722,12 +1719,6 @@ void SmParser::DoUnOper()
         pSNode.reset(new SmRootNode(aNodeToken));
         pOper = new SmRootSymbolNode(aNodeToken);
         pSNode->SetSubNodes(pExtra, pOper, pArg);
-    }
-    else if(eType == TINTD)
-    {
-        pSNode.reset(new SmDynIntegralNode(aNodeToken));
-        pOper = new SmDynIntegralSymbolNode(aNodeToken);
-        pSNode->SetSubNodes(pOper, pArg);
     }
     else
     {
