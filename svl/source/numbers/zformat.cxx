@@ -2557,6 +2557,14 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     sal_Int32 k;           // Denominator
 
     bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRAC);
+    if ( !bHideFraction )
+    {
+        while ( sDiv[0] == ' ' )
+        {
+            sDiv.insert( sDenominatorFormat.getLength(), " " );
+            sDiv.remove( 0, 1 );
+        }
+    }
 
     bool bCont = true;
     if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRAC)
