@@ -194,6 +194,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper8<
     bool isFastContext;
     css::uno::Reference< css::xml::sax::XFastParser > mxParser;
     rtl::Reference< SvXMLImportFastNamespaceHandler > maNamespaceHandler;
+    css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastDocumentHandler;
     css::uno::Reference< css::xml::sax::XFastTokenHandler > mxTokenHandler;
     std::unordered_map< sal_Int32, OUString > maNamespaceMap;
     const OUString getNameFromToken( sal_Int32 nToken );

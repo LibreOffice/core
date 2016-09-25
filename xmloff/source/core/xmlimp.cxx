@@ -431,6 +431,7 @@ SvXMLImport::SvXMLImport(
     mnErrorFlags(SvXMLErrorFlags::NO),
     isFastContext( false ),
     maNamespaceHandler( new SvXMLImportFastNamespaceHandler() ),
+    mxFastDocumentHandler( nullptr ),
     mxTokenHandler( new FastTokenHandler() ),
     mbIsFormsSupported( true ),
     mbIsTableShapeSupported( false ),
@@ -439,7 +440,6 @@ SvXMLImport::SvXMLImport(
     SAL_WARN_IF( !xContext.is(), "xmloff.core", "got no service manager" );
     InitCtor_();
     mxParser = xml::sax::FastParser::create( xContext );
-    setFastDocumentHandler( this );
     setNamespaceHandler( maNamespaceHandler.get() );
     setTokenHandler( mxTokenHandler  );
     registerNamespaces();
@@ -478,13 +478,19 @@ sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& r
 void SAL_CALL SvXMLImport::parseStream( const xml::sax::InputSource& aInputSource )
     throw (xml::sax::SAXException, io::IOException, uno::RuntimeException, std::exception)
 {
+    if ( mxFastDocumentHandler.is() )
+        mxParser->setFastDocumentHandler( mxFastDocumentHandler );
+    else
+        mxParser->setFastDocumentHandler( this );
+
     mxParser->parseStream( aInputSource );
+    mxParser->setFastDocumentHandler( nullptr );
 }
 
 void SAL_CALL SvXMLImport::setFastDocumentHandler( const uno::Reference< xml::sax::XFastDocumentHandler >& Handler )
     throw (uno::RuntimeException, std::exception)
 {
-    mxParser->setFastDocumentHandler( Handler );
+    mxFastDocumentHandler = Handler;
 }
 
 void SAL_CALL SvXMLImport::setTokenHandler( const uno::Reference< xml::sax::XFastTokenHandler >& Handler )
