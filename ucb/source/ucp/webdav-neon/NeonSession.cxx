@@ -940,7 +940,6 @@ void NeonSession::OPTIONS( const OUString & inPath,
                 }
             }
         }
-        rOptions.setResourceFound();
         // if applicable, check for lock state:
         if( rOptions.isClass2() || rOptions.isClass3() )
         {
@@ -1841,7 +1840,7 @@ void NeonSession::HandleError( int nError,
 
             sal_uInt16 code = makeStatusCode( aText );
 
-            SAL_WARN( "ucb.ucp.webdav", "Neon returned NE_ERROR, http response status code was: '" << aText << "'" );
+            SAL_WARN( "ucb.ucp.webdav", "Neon returned NE_ERROR, http response status code was: " << code << " '" << aText << "'" );
             if ( code == SC_LOCKED )
             {
                 if ( m_aNeonLockStore.findByUri(
