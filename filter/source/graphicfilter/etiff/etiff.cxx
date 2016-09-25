@@ -172,28 +172,26 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterCo
     mnLatestIfdPos = m_rOStm.Tell();
     m_rOStm.WriteUInt32( 0 );
 
-    Animation   aAnimation;
-    Bitmap      aBmp;
-
     if( mbStatus )
     {
-        if ( rGraphic.IsAnimated() )
+        Animation aAnimation;
+
+        if (rGraphic.IsAnimated())
             aAnimation = rGraphic.GetAnimation();
         else
         {
-            AnimationBitmap aAnimationBitmap( rGraphic.GetBitmap(), Point(), Size() );
-            aAnimation.Insert( aAnimationBitmap );
+            AnimationBitmap aAnimationBitmap(rGraphic.GetBitmap(), Point(), Size());
+            aAnimation.Insert(aAnimationBitmap);
         }
 
-        sal_uInt16 i;
-        for ( i = 0; i < aAnimation.Count(); i++ )
-            mnSumOfAllPictHeight += aAnimation.Get( i ).aBmpEx.GetSizePixel().Height();
+        for (sal_uInt16 i = 0; i < aAnimation.Count(); ++i)
+            mnSumOfAllPictHeight += aAnimation.Get(i).aBmpEx.GetSizePixel().Height();
 
-        for ( i = 0; mbStatus && ( i < aAnimation.Count() ); i++ )
+        for (sal_uInt16 i = 0; mbStatus && i < aAnimation.Count(); ++i)
         {
             mnPalPos = 0;
             const AnimationBitmap& rAnimationBitmap = aAnimation.Get( i );
-            aBmp = rAnimationBitmap.aBmpEx.GetBitmap();
+            Bitmap aBmp = rAnimationBitmap.aBmpEx.GetBitmap();
             mpAcc = aBmp.AcquireReadAccess();
             if ( mpAcc )
             {
