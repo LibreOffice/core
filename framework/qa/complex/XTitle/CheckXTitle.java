@@ -152,8 +152,10 @@ public class CheckXTitle
 
         @descr cycles through default view and print preview
                and asserts that the title doesn't change.
+
+        disabled until the waitUntilDispatcherAvailable can be replaced
     */
-    @Test public void checkTitleNumbers() throws Exception
+    public void checkTitleNumbers() throws Exception
     {
         PropertyValue[] lArgs = new PropertyValue[1];
 
@@ -203,8 +205,10 @@ public class CheckXTitle
         @descr sets frame title. then cycles through default and
                print preview. then closes the window and checks
                for infinite recursion.
+
+        disabled until the waitUntilDispatcherAvailable can be replaced
     */
-    @Test public void setTitleAndCheck() throws Exception
+    public void setTitleAndCheck() throws Exception
     {
         PropertyValue[] lArgs = new PropertyValue[1];
 
