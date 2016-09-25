@@ -976,7 +976,7 @@ OUString SAL_CALL unicode::formatPercent(double dNumber,
     // http://www.unicode.org/cldr/charts/24/by_type/numbers.number_formatting_patterns.html
     // so format using French which has the desired rules
     if (aLangTag.getLanguage() == "es" || aLangTag.getLanguage() == "sl")
-        aLangTag = LanguageTag("fr-FR");
+        aLangTag.reset("fr-FR");
 
     icu::Locale aLocale = LanguageTagIcu::getIcuLocale(aLangTag);
 

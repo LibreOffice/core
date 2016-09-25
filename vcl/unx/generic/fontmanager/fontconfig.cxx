@@ -866,15 +866,14 @@ namespace
         return bIsImpossible;
     }
 
-    LanguageTag getExemplarLangTagForCodePoint(sal_uInt32 currentChar)
+    OUString getExemplarLangTagForCodePoint(sal_uInt32 currentChar)
     {
         int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
         UScriptCode eScript = static_cast<UScriptCode>(script);
         OStringBuffer aBuf(unicode::getExemplarLanguageForUScriptCode(eScript));
-        const char* pScriptCode = uscript_getShortName(eScript);
-        if (pScriptCode)
+        if (const char* pScriptCode = uscript_getShortName(eScript))
             aBuf.append('-').append(pScriptCode);
-        return LanguageTag(OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+        return OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
     }
 
 #if ENABLE_DBUS
@@ -977,7 +976,7 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
             //#i105784#/rhbz#527719  improve selection of fallback font
             if (aLangAttrib.isEmpty())
             {
-                aLangTag = getExemplarLangTagForCodePoint(nCode);
+                aLangTag.reset(getExemplarLangTagForCodePoint(nCode));
                 aLangAttrib = mapToFontConfigLangTag(aLangTag);
             }
         }
@@ -1109,7 +1108,7 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                         //scripts to default to a given language.
                         for (sal_Int32 i = 0; i < nRemainingLen; ++i)
                         {
-                            LanguageTag aOurTag = getExemplarLangTagForCodePoint(pRemainingCodes[i]);
+                            LanguageTag aOurTag(getExemplarLangTagForCodePoint(pRemainingCodes[i]));
                             OString sTag = OUStringToOString(aOurTag.getBcp47(), RTL_TEXTENCODING_UTF8);
                             if (m_aPreviousLangSupportRequests.find(sTag) != m_aPreviousLangSupportRequests.end())
                                 continue;
