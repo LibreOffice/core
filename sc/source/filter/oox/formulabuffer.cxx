@@ -311,32 +311,6 @@ void processSheetFormulaCells(
         applyCellFormulaValues(rDoc, *rItem.mpCellFormulaValues);
 }
 
-class WorkerThread: public salhelper::Thread
-{
-    ScDocumentImport& mrDoc;
-    FormulaBuffer::SheetItem& mrItem;
-    std::unique_ptr<SvNumberFormatter> mpFormatter;
-    const uno::Sequence<sheet::ExternalLinkInfo>& mrExternalLinks;
-
-public:
-    WorkerThread(const WorkerThread&) = delete;
-    const WorkerThread& operator=(const WorkerThread&) = delete;
-
-    WorkerThread(
-        ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem, SvNumberFormatter* pFormatter,
-        const uno::Sequence<sheet::ExternalLinkInfo>& rExternalLinks ) :
-        salhelper::Thread("xlsx-import-formula-buffer-worker-thread"),
-        mrDoc(rDoc), mrItem(rItem), mpFormatter(pFormatter), mrExternalLinks(rExternalLinks) {}
-
-    virtual ~WorkerThread() override {}
-
-protected:
-    virtual void execute() override
-    {
-        processSheetFormulaCells(mrDoc, mrItem, *mpFormatter, mrExternalLinks);
-    }
-};
-
 }
 
 FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
