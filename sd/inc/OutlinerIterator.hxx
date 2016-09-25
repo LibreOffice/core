@@ -81,6 +81,7 @@ public:
         implementation object.
     */
     Iterator (const Iterator& rIterator);
+    Iterator (Iterator&& rIterator);
 
     /** Create a new iterator with the implementation object being the
         provided one.
@@ -97,6 +98,8 @@ public:
             The iterator which to assign from.
     */
     Iterator& operator= (const Iterator& rIterator);
+    Iterator& operator= (Iterator&& rIterator);
+
     /** Return the current position of the iterator.
         @return
             Returns a reference to the current position.  Therefore this

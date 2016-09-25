@@ -73,6 +73,11 @@ Iterator::Iterator (const Iterator& rIterator)
 {
 }
 
+Iterator::Iterator (Iterator&& rIterator)
+    : mxIterator(std::move(rIterator.mxIterator))
+{
+}
+
 Iterator::Iterator (IteratorImplBase* pObject)
     : mxIterator(pObject)
 {
@@ -91,6 +96,12 @@ Iterator& Iterator::operator= (const Iterator& rIterator)
         else
             mxIterator.reset();
     }
+    return *this;
+}
+
+Iterator& Iterator::operator= (Iterator&& rIterator)
+{
+    mxIterator = std::move(rIterator.mxIterator);
     return *this;
 }
 
