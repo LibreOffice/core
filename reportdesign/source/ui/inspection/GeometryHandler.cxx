@@ -213,8 +213,7 @@ OUString GeometryHandler::impl_convertToFormula( const uno::Any& _rControlValue 
     if ( aParser.isValid() )
         return sName;
 
-    aParser = ReportFormula( impl_isDataField(sName) ? ReportFormula::Field : ReportFormula::Expression, sName );
-    return aParser.getCompleteFormula();
+    return ReportFormula(impl_isDataField(sName) ? ReportFormula::Field : ReportFormula::Expression, sName).getCompleteFormula();
 }
 
 GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const & context)
