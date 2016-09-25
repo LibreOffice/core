@@ -66,56 +66,53 @@ bool IteratorPosition::operator== (const IteratorPosition& aPosition) const
 
 Iterator::Iterator()
 {
-    mpIterator = nullptr;
 }
 
 Iterator::Iterator (const Iterator& rIterator)
+    : mxIterator(rIterator.mxIterator ? rIterator.mxIterator->Clone() : nullptr)
 {
-    mpIterator = rIterator.mpIterator ? rIterator.mpIterator->Clone() : nullptr;
 }
 
 Iterator::Iterator (IteratorImplBase* pObject)
+    : mxIterator(pObject)
 {
-    mpIterator = pObject;
 }
 
 Iterator::~Iterator()
 {
-    delete mpIterator;
 }
 
 Iterator& Iterator::operator= (const Iterator& rIterator)
 {
     if (this != &rIterator)
     {
-        delete mpIterator;
-        if (rIterator.mpIterator != nullptr)
-            mpIterator = rIterator.mpIterator->Clone();
+        if (rIterator.mxIterator)
+            mxIterator.reset(rIterator.mxIterator->Clone());
         else
-            mpIterator = nullptr;
+            mxIterator.reset();
     }
     return *this;
 }
 
 const IteratorPosition& Iterator::operator* () const
 {
-    DBG_ASSERT (mpIterator!=nullptr, "::sd::outliner::Iterator::operator* : missing implementation object");
-    return mpIterator->GetPosition();
+    DBG_ASSERT (mxIterator, "::sd::outliner::Iterator::operator* : missing implementation object");
+    return mxIterator->GetPosition();
 }
 
 Iterator& Iterator::operator++ ()
 {
-    if (mpIterator!=nullptr)
-        mpIterator->GotoNextText();
+    if (mxIterator)
+        mxIterator->GotoNextText();
     return *this;
 }
 
 bool Iterator::operator== (const Iterator& rIterator)
 {
-    if (mpIterator == nullptr || rIterator.mpIterator==nullptr)
-        return mpIterator == rIterator.mpIterator;
+    if (!mxIterator || !rIterator.mxIterator)
+        return mxIterator.get() == rIterator.mxIterator.get();
     else
-        return *mpIterator == *rIterator.mpIterator;
+        return *mxIterator == *rIterator.mxIterator;
 }
 
 bool Iterator::operator!= (const Iterator& rIterator)
@@ -125,8 +122,8 @@ bool Iterator::operator!= (const Iterator& rIterator)
 
 void Iterator::Reverse()
 {
-    if (mpIterator != nullptr)
-        mpIterator->Reverse();
+    if (mxIterator)
+        mxIterator->Reverse();
 }
 
 //===== IteratorFactory =======================================================

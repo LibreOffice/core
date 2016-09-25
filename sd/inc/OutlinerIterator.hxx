@@ -135,7 +135,7 @@ public:
 
 private:
     /// The implementation object to which most of the methods are forwarded.
-    IteratorImplBase* mpIterator;
+    std::unique_ptr<IteratorImplBase> mxIterator;
 };
 
 /** This class wraps the <type>Outliner</type> class and represents it as
