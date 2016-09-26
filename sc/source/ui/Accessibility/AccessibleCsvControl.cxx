@@ -865,6 +865,15 @@ ScAccessibleCsvGrid::~ScAccessibleCsvGrid()
     implDispose();
 }
 
+void ScAccessibleCsvGrid::disposing()
+{
+    SolarMutexGuard aGuard;
+    for (XAccessibleSet::iterator aI = maAccessibleChildren.begin(); aI != maAccessibleChildren.end(); ++aI)
+        aI->second->dispose();
+    maAccessibleChildren.clear();
+    ScAccessibleCsvControl::disposing();
+}
+
 // XAccessibleComponent -------------------------------------------------------
 
 Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAtPoint( const css::awt::Point& rPoint )
@@ -882,7 +891,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAtPoint( con
             lcl_GetApiColumn( rGrid.GetColumnFromX( rPoint.X ) ) : 0;
         sal_Int32 nRow = (rPoint.Y >= rGrid.GetHdrHeight()) ?
             (rGrid.GetLineFromY( rPoint.Y ) - rGrid.GetFirstVisLine() + 1) : 0;
-        xRet = implCreateCellObj( nRow, nColumn );
+        xRet = getAccessibleCell(nRow, nColumn);
     }
     return xRet;
 }
@@ -912,13 +921,30 @@ sal_Int32 SAL_CALL ScAccessibleCsvGrid::getAccessibleChildCount() throw( Runtime
     return implGetCellCount();
 }
 
+Reference<XAccessible> ScAccessibleCsvGrid::getAccessibleCell(sal_Int32 nRow, sal_Int32 nColumn)
+{
+    sal_Int32 nIndex = implGetIndex(nRow, nColumn);
+
+    XAccessibleSet::iterator aI = maAccessibleChildren.lower_bound(nIndex);
+    if (aI != maAccessibleChildren.end() && !(maAccessibleChildren.key_comp()(nIndex, aI->first)))
+    {
+        // key already exists
+        return Reference<XAccessible>(aI->second.get());
+    }
+    // key does not exist
+    rtl::Reference<ScAccessibleCsvControl> xNew = implCreateCellObj(nRow, nColumn);
+    maAccessibleChildren.insert(aI, XAccessibleSet::value_type(nIndex, xNew));
+    return Reference<XAccessible>(xNew.get());
+}
+
 Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleChild( sal_Int32 nIndex )
         throw( IndexOutOfBoundsException, RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidIndex( nIndex );
-    return implCreateCellObj( implGetRow( nIndex ), implGetColumn( nIndex ) );
+
+    return getAccessibleCell(implGetRow(nIndex), implGetColumn(nIndex));
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleRelationSet()
@@ -1066,7 +1092,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleCellAt( sal_
     SolarMutexGuard aGuard;
     ensureAlive();
     ensureValidPosition( nRow, nColumn );
-    return implCreateCellObj( nRow, nColumn );
+    return getAccessibleCell(nRow, nColumn);
 }
 
 Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleCaption()
@@ -1235,7 +1261,6 @@ Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvGrid::getImplementationId() throw( 
 void ScAccessibleCsvGrid::SendFocusEvent( bool bFocused )
 {
     ScAccessibleCsvControl::SendFocusEvent( bFocused );
-
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
     aEvent.Source = Reference< XAccessible >( this );
