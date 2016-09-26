@@ -51,7 +51,7 @@
     <TimePM>PM</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Gs-474]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$₲-474]">
     <DateAcceptancePattern>D/M</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>General</FormatCode>
@@ -334,9 +334,23 @@
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
-    <Currency default="true" usedInCompatibleFormatCodes="true">
+    <Currency default="false" usedInCompatibleFormatCodes="false">
       <CurrencyID>PYG</CurrencyID>
       <CurrencySymbol>Gs</CurrencySymbol>
+      <BankSymbol>PYG</BankSymbol>
+      <CurrencyName>Guarani</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false">
+      <CurrencyID>PYG</CurrencyID>
+      <CurrencySymbol>G</CurrencySymbol>
+      <BankSymbol>PYG</BankSymbol>
+      <CurrencyName>Guarani</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>PYG</CurrencyID>
+      <CurrencySymbol>₲</CurrencySymbol>
       <BankSymbol>PYG</BankSymbol>
       <CurrencyName>Guarani</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>

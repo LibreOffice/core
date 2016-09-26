@@ -29,15 +29,29 @@
     </Country>
   </LC_INFO>
   <LC_CTYPE ref="es_AR"/>
-  <LC_FORMAT ref="es_AR" replaceTo="[$G-3C0A]"/>
+  <LC_FORMAT ref="es_AR" replaceTo="[$₲-3C0A]"/>
   <LC_COLLATION ref="en_US"/>
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX ref="es_ES"/>
   <LC_CALENDAR ref="es_AR"/>
   <LC_CURRENCY>
-    <Currency default="true" usedInCompatibleFormatCodes="true">
+    <Currency default="false" usedInCompatibleFormatCodes="false">
       <CurrencyID>PYG</CurrencyID>
       <CurrencySymbol>G</CurrencySymbol>
+      <BankSymbol>PYG</BankSymbol>
+      <CurrencyName>Guarani</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false">
+      <CurrencyID>PYG</CurrencyID>
+      <CurrencySymbol>Gs</CurrencySymbol>
+      <BankSymbol>PYG</BankSymbol>
+      <CurrencyName>Guarani</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>PYG</CurrencyID>
+      <CurrencySymbol>₲</CurrencySymbol>
       <BankSymbol>PYG</BankSymbol>
       <CurrencyName>Guarani</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
