@@ -43,6 +43,17 @@
 
 using namespace com::sun::star;
 
+#ifdef ANDROID
+namespace std
+{
+template <typename T> std::string to_string(const T& rNumber)
+{
+    std::ostringstream aStream;
+    aStream << rNumber;
+    return aStream.str();
+}
+}
+#endif
 
 SfxPoolItem* ScProtectionAttr::CreateDefault() { return new ScProtectionAttr; }
 SfxPoolItem* ScDoubleItem::CreateDefault() { SAL_WARN( "sc", "No ScDoubleItem factory available"); return nullptr; }
