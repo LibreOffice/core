@@ -440,8 +440,8 @@ public:
         break;
         case LOK_CALLBACK_INVALIDATE_TILES:
         {
-            std::string text(pPayload);
-            if (text.find("EMPTY") != std::string::npos)
+            OString text(pPayload);
+            if (text.startsWith("EMPTY"))
             {
                 m_bFullInvalidateTiles = true;
             }
