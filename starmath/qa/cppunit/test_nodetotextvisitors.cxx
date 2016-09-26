@@ -124,6 +124,7 @@ void Test::SimpleUnaryOp()
     parseandparseagain(" 2 { - 1 over 2 } ", "Mixed number with Unary in denominator 1");
     parseandparseagain(" 2 { - 1 } over 2 ", "Mixed number with Unary in denominator 2");
     parseandparseagain(" - 1 + 2 ", "Unary in BinHor");
+    parseandparseagain("100%", "Percent");
 }
 
 void Test::SimpleBinaryOp()
