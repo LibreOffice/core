@@ -23,6 +23,8 @@ public:
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+
     void createContextMenu();
 
     DECL_LINK(ContextMenuSelectHdl, Menu*, void);
