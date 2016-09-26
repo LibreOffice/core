@@ -31,6 +31,7 @@
 #include <comphelper/uno3.hxx>
 #include <vcl/vclptr.hxx>
 #include "AccessibleContextBase.hxx"
+#include <map>
 
 class ScCsvControl;
 namespace utl { class AccessibleStateSetHelper; }
@@ -285,10 +286,16 @@ class ScAccessibleCsvGrid : public ScAccessibleCsvControl, public ScAccessibleCs
 {
 protected:
     typedef css::uno::Reference< css::accessibility::XAccessibleTable > XAccessibleTableRef;
+    typedef std::map< sal_Int32, rtl::Reference<ScAccessibleCsvControl> > XAccessibleSet;
+
+private:
+    XAccessibleSet maAccessibleChildren;
 
 public:
     explicit                    ScAccessibleCsvGrid( ScCsvGrid& rGrid );
     virtual                     ~ScAccessibleCsvGrid() override;
+    using ScAccessibleContextBase::disposing;
+    virtual void SAL_CALL       disposing() override;
 
     // XAccessibleComponent ---------------------------------------------------
 
@@ -512,6 +519,8 @@ private:
     OUString implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const;
     /** Creates a new accessible object of the specified cell. Indexes must be valid. */
     ScAccessibleCsvControl* implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn ) const;
+
+    css::uno::Reference<css::accessibility::XAccessible> getAccessibleCell(sal_Int32 nRow, sal_Int32 nColumn);
 };
 
 /** Accessible class representing a cell of the CSV grid control. */
