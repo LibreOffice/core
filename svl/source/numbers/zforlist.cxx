@@ -3916,6 +3916,15 @@ void SvNumberFormatter::ImpInitCurrencyTable()
 }
 
 
+static void addToCurrencyFormatsList( NfWSStringsDtor& rStrArr, const OUString& rFormat )
+{
+    // Prevent duplicates even over subsequent calls of
+    // GetCurrencyFormatStrings() with the same vector.
+    if (std::find( rStrArr.begin(), rStrArr.end(), rFormat) == rStrArr.end())
+        rStrArr.push_back( rFormat);
+}
+
+
 sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr,
                                                         const NfCurrencyEntry& rCurr,
                                                         bool bBank ) const
@@ -3934,13 +3943,13 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
         OUString format1 = aPositiveBank
                          + ";"
                          + aNegativeBank;
-        rStrArr.push_back(format1);
+        addToCurrencyFormatsList( rStrArr, format1);
 
         OUString format2 = aPositiveBank
                          + ";"
                          + aRed
                          + aNegativeBank;
-        rStrArr.push_back(format2);
+        addToCurrencyFormatsList( rStrArr, format2);
 
         nDefault = rStrArr.size() - 1;
     }
@@ -3988,18 +3997,18 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
 
         if (rCurr.GetDigits())
         {
-            rStrArr.push_back(format1);
+            addToCurrencyFormatsList( rStrArr, format1);
         }
-        rStrArr.push_back(format2);
+        addToCurrencyFormatsList( rStrArr, format2);
         if (rCurr.GetDigits())
         {
-            rStrArr.push_back(format3);
+            addToCurrencyFormatsList( rStrArr, format3);
         }
-        rStrArr.push_back(format4);
+        addToCurrencyFormatsList( rStrArr, format4);
         nDefault = rStrArr.size() - 1;
         if (rCurr.GetDigits())
         {
-            rStrArr.push_back(format5);
+            addToCurrencyFormatsList( rStrArr, format5);
         }
     }
     return nDefault;
