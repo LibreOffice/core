@@ -61,6 +61,27 @@ void TemplateDefaultView::KeyInput( const KeyEvent& rKEvt )
     ThumbnailView::KeyInput(rKEvt);
 }
 
+void TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if ( !rMEvt.IsLeft() )
+    {
+        Control::MouseButtonDown( rMEvt );
+        return;
+    }
+
+    size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
+    ThumbnailViewItem* pItem = ImplGetItem(nPos);
+    TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
+
+    if( pViewItem && rMEvt.GetClicks() == 1 )
+    {
+        maOpenTemplateHdl.Call(pViewItem);
+        return;
+    }
+
+    TemplateLocalView::MouseButtonDown(rMEvt);
+}
+
 void TemplateDefaultView::createContextMenu()
 {
     ScopedVclPtrInstance<PopupMenu> pItemMenu;
