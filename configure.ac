@@ -10975,7 +10975,7 @@ AC_SUBST(RHINO_JAR)
 # platforms there.
 supports_multilib=
 case "$host_cpu" in
-x86_64 | powerpc64 | powerpc64le | s390x | aarch64)
+x86_64 | powerpc64 | powerpc64le | s390x | aarch64 | mips64 | mips64el)
     if test "$SAL_TYPES_SIZEOFLONG" = "8"; then
         supports_multilib="yes"
     fi
