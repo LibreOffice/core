@@ -573,10 +573,10 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
 {
     // pass 1: calculate columns
     SwXMLTableLines_Impl *pLines = new SwXMLTableLines_Impl( rLines );
-    if( !pTableLines )
-        pTableLines = new SwXMLTableLinesCache_Impl();
+    if( !m_pTableLines )
+        m_pTableLines = new SwXMLTableLinesCache_Impl();
 
-    pTableLines->push_back( pLines );
+    m_pTableLines->push_back( pLines );
 
     // pass 2: export column styles
     {
@@ -972,18 +972,18 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
                                     SwXMLTableInfo_Impl& rTableInfo,
                                     sal_uInt32 nHeaderRows )
 {
-    OSL_ENSURE( pTableLines && !pTableLines->empty(),
+    OSL_ENSURE( m_pTableLines && !m_pTableLines->empty(),
             "SwXMLExport::ExportTableLines: table columns infos missing" );
-    if( !pTableLines || pTableLines->empty() )
+    if( !m_pTableLines || m_pTableLines->empty() )
         return;
 
     SwXMLTableLines_Impl* pLines = nullptr;
     size_t nInfoPos;
-    for( nInfoPos=0; nInfoPos < pTableLines->size(); nInfoPos++ )
+    for( nInfoPos=0; nInfoPos < m_pTableLines->size(); nInfoPos++ )
     {
-        if( pTableLines->at( nInfoPos )->GetLines() == &rLines )
+        if( m_pTableLines->at( nInfoPos )->GetLines() == &rLines )
         {
-            pLines = pTableLines->at( nInfoPos );
+            pLines = m_pTableLines->at( nInfoPos );
             break;
         }
     }
@@ -994,14 +994,14 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     if( !pLines )
         return;
 
-    SwXMLTableLinesCache_Impl::iterator it = pTableLines->begin();
+    SwXMLTableLinesCache_Impl::iterator it = m_pTableLines->begin();
     advance( it, nInfoPos );
-    pTableLines->erase( it );
+    m_pTableLines->erase( it );
 
-    if( pTableLines->empty() )
+    if( m_pTableLines->empty() )
     {
-        delete pTableLines ;
-        pTableLines = nullptr;
+        delete m_pTableLines ;
+        m_pTableLines = nullptr;
     }
 
     // pass 2: export columns
@@ -1200,12 +1200,12 @@ void SwXMLTextParagraphExport::exportTable(
 
 void SwXMLExport::DeleteTableLines()
 {
-    if ( pTableLines )
+    if ( m_pTableLines )
     {
-        for (SwXMLTableLines_Impl* p : *pTableLines)
+        for (SwXMLTableLines_Impl* p : *m_pTableLines)
             delete p;
-        pTableLines->clear();
-        delete pTableLines;
+        m_pTableLines->clear();
+        delete m_pTableLines;
     }
 }
 

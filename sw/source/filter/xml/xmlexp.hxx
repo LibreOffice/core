@@ -47,19 +47,19 @@ typedef std::vector< SwXMLTableLines_Impl* > SwXMLTableLinesCache_Impl;
 
 class SwXMLExport : public SvXMLExport
 {
-    SvXMLUnitConverter*         pTwipUnitConv;
-    SvXMLExportItemMapper*      pTableItemMapper;
-    SwXMLTableLinesCache_Impl*  pTableLines;
+    SvXMLUnitConverter*         m_pTwipUnitConverter;
+    SvXMLExportItemMapper*      m_pTableItemMapper;
+    SwXMLTableLinesCache_Impl*  m_pTableLines;
 
-    SvXMLItemMapEntriesRef      xTableItemMap;
-    SvXMLItemMapEntriesRef      xTableRowItemMap;
-    SvXMLItemMapEntriesRef      xTableCellItemMap;
+    SvXMLItemMapEntriesRef      m_xTableItemMap;
+    SvXMLItemMapEntriesRef      m_xTableRowItemMap;
+    SvXMLItemMapEntriesRef      m_xTableCellItemMap;
 
-    bool                    bBlock : 1;         // export text block?
-    bool                    bShowProgress : 1;
-    bool                    bSavedShowChanges : 1;
+    bool                    m_bBlock : 1;         // export text block?
+    bool                    m_bShowProgress : 1;
+    bool                    m_bSavedShowChanges : 1;
 
-    SwDoc*                      doc; // cached for getDoc()
+    SwDoc*                      m_pDoc; // cached for getDoc()
 
     void InitItemExport();
     void FinitItemExport();
@@ -122,11 +122,11 @@ public:
     void ExportTableAutoStyles( const SwTableNode& rTableNd );
     void ExportTable( const SwTableNode& rTableNd );
 
-    SvXMLExportItemMapper& GetTableItemMapper() { return *pTableItemMapper; }
+    SvXMLExportItemMapper& GetTableItemMapper() { return *m_pTableItemMapper; }
 
-    bool IsShowProgress() const { return bShowProgress; }
-    void SetShowProgress( bool b ) { bShowProgress = b; }
-    bool IsBlockMode() const { return bBlock; }
+    bool IsShowProgress() const { return m_bShowProgress; }
+    void SetShowProgress( bool b ) { m_bShowProgress = b; }
+    bool IsBlockMode() const { return m_bBlock; }
 
     // XUnoTunnel
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
@@ -138,7 +138,7 @@ public:
 
 inline const SvXMLUnitConverter& SwXMLExport::GetTwipUnitConverter() const
 {
-    return *pTwipUnitConv;
+    return *m_pTwipUnitConverter;
 }
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLEXP_HXX

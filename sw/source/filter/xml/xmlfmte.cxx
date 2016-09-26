@@ -133,16 +133,16 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
         XMLTokenEnum ePropToken = XML_TABLE_PROPERTIES;
         if( XML_TABLE == eFamily )
         {
-            xItemMap = xTableItemMap;
+            xItemMap = m_xTableItemMap;
         }
         else if( XML_TABLE_ROW == eFamily )
         {
-            xItemMap = xTableRowItemMap;
+            xItemMap = m_xTableRowItemMap;
             ePropToken = XML_TABLE_ROW_PROPERTIES;
         }
         else if( XML_TABLE_CELL == eFamily )
         {
-            xItemMap = xTableCellItemMap;
+            xItemMap = m_xTableCellItemMap;
             ePropToken = XML_TABLE_CELL_PROPERTIES;
         }
 
@@ -219,7 +219,7 @@ void SwXMLExport::ExportAutoStyles_()
                 GetFormExport()->examineForms(xPage);
         }
 
-        GetTextParagraphExport()->collectTextAutoStylesOptimized( bShowProgress );
+        GetTextParagraphExport()->collectTextAutoStylesOptimized( m_bShowProgress );
     }
 
     GetTextParagraphExport()->exportTextAutoStyles();

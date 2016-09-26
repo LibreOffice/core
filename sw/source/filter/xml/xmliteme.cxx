@@ -216,25 +216,25 @@ inline void SwXMLTableItemMapper_Impl::SetAbsWidth( sal_uInt32 nAbs )
 
 void SwXMLExport::InitItemExport()
 {
-    pTwipUnitConv = new SvXMLUnitConverter(getComponentContext(),
+    m_pTwipUnitConverter = new SvXMLUnitConverter(getComponentContext(),
         util::MeasureUnit::TWIP, GetMM100UnitConverter().GetXMLMeasureUnit());
 
-    xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
-    xTableRowItemMap = new SvXMLItemMapEntries( aXMLTableRowItemMap );
-    xTableCellItemMap = new SvXMLItemMapEntries( aXMLTableCellItemMap );
+    m_xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
+    m_xTableRowItemMap = new SvXMLItemMapEntries( aXMLTableRowItemMap );
+    m_xTableCellItemMap = new SvXMLItemMapEntries( aXMLTableCellItemMap );
 
-    pTableItemMapper = new SwXMLTableItemMapper_Impl( xTableItemMap, *this );
+    m_pTableItemMapper = new SwXMLTableItemMapper_Impl( m_xTableItemMap, *this );
 }
 
 void SwXMLExport::FinitItemExport()
 {
-    delete pTableItemMapper;
-    delete pTwipUnitConv;
+    delete m_pTableItemMapper;
+    delete m_pTwipUnitConverter;
 }
 
 void SwXMLExport::ExportTableFormat( const SwFrameFormat& rFormat, sal_uInt32 nAbsWidth )
 {
-    static_cast<SwXMLTableItemMapper_Impl *>(pTableItemMapper)
+    static_cast<SwXMLTableItemMapper_Impl *>(m_pTableItemMapper)
         ->SetAbsWidth( nAbsWidth );
     ExportFormat( rFormat, XML_TABLE );
 }
