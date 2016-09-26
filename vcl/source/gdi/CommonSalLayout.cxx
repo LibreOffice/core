@@ -212,12 +212,12 @@ struct HbScriptRun
 {
     int32_t mnMin;
     int32_t mnEnd;
-    hb_script_t maScript;
+    UScriptCode maScript;
 
     HbScriptRun(int32_t nMin, int32_t nEnd, UScriptCode aScript)
       : mnMin(nMin)
       , mnEnd(nEnd)
-      , maScript(hb_icu_script_to_script(aScript))
+      , maScript(aScript)
     {}
 };
 
@@ -307,6 +307,47 @@ void CommonSalLayout::DrawText(SalGraphics& rSalGraphics) const
     rSalGraphics.DrawSalLayout( *this );
 }
 
+/* https://drafts.csswg.org/css-writing-modes-3/#script-orientations */
+static int GetVerticalFlagsForScript(UScriptCode aScript)
+{
+    int nFlag = GF_NONE;
+
+    switch (aScript)
+    {
+        /* ttb 0° */
+        case USCRIPT_BOPOMOFO:
+        case USCRIPT_EGYPTIAN_HIEROGLYPHS:
+        case USCRIPT_HAN:
+        case USCRIPT_HANGUL:
+        case USCRIPT_HIRAGANA:
+        case USCRIPT_KATAKANA:
+        case USCRIPT_MEROITIC_CURSIVE:
+        case USCRIPT_MEROITIC_HIEROGLYPHS:
+        case USCRIPT_YI:
+            nFlag = GF_ROTL;
+            break;
+#if 0
+        /* ttb 90° */
+        case USCRIPT_MONGOLIAN:
+        case USCRIPT_PHAGS_PA:
+            nFlag = ??;
+            break;
+        /* ttb -90° */
+        case USCRIPT_ORKHON:
+            nFlag = ??;
+            break;
+        /* btt -90° */
+        case USCRIPT_MONGOLIAN:
+            nFlag = ??;
+            break;
+#endif
+        default:
+            break;
+    }
+
+    return nFlag;
+}
+
 bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 {
     hb_script_t aHbScript = HB_SCRIPT_INVALID;
@@ -371,10 +412,18 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             int nMinRunPos = aScriptRun.mnMin;
             int nEndRunPos = aScriptRun.mnEnd;
             int nRunLen = nEndRunPos - nMinRunPos;
-            aHbScript = aScriptRun.maScript;
+            aHbScript = hb_icu_script_to_script(aScriptRun.maScript);
+
             // hb_language_from_string() accept ISO639-3 language tag except for Chinese.
             LanguageTag &rTag = rArgs.maLanguageTag;
             OString sLanguage = OUStringToOString(rTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
+
+            bool bVertical = false;
+            if ((rArgs.mnFlags & SalLayoutFlags::Vertical) &&
+                GetVerticalFlagsForScript(aScriptRun.maScript) == GF_ROTL)
+            {
+                bVertical = true;
+            }
 
             int nHbFlags = HB_BUFFER_FLAGS_DEFAULT;
             if (nMinRunPos == 0)
@@ -387,7 +436,10 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
             hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
 #endif
-            hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
+            if (bVertical)
+                hb_buffer_set_direction(pHbBuffer, HB_DIRECTION_TTB);
+            else
+                hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
             hb_buffer_set_script(pHbBuffer, aHbScript);
             hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
             hb_buffer_set_flags(pHbBuffer, (hb_buffer_flags_t) nHbFlags);
@@ -452,17 +504,35 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 if (bDiacritic)
                     nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
-                int32_t nXOffset =  pHbPositions[i].x_offset >> 6;
-                int32_t nYOffset =  pHbPositions[i].y_offset >> 6;
-                int32_t nXAdvance = pHbPositions[i].x_advance >> 6;
-                int32_t nYAdvance = pHbPositions[i].y_advance >> 6;
+                int32_t nAdvance, nXOffset, nYOffset;
+                if (bVertical)
+                {
+                    int nVertFlag;
+#if 0               /* XXX: does not work as expected for Common script */
+                    UErrorCode error = U_ZERO_ERROR;
+                    nVertFlag = GetVerticalFlagsForScript(uscript_getScript(aChar, &error));
+#else
+                    nVertFlag = GetVerticalFlags(aChar);
+                    if (nVertFlag == GF_ROTR)
+                        nVertFlag = GF_ROTL;
+#endif
+                    nGlyphIndex |= nVertFlag;
+                    nAdvance = -pHbPositions[i].y_advance >> 6;
+                    nXOffset =  pHbPositions[i].y_offset >> 6;
+                    nYOffset = -pHbPositions[i].x_offset >> 6;
+                }
+                else
+                {
+                    nAdvance = pHbPositions[i].x_advance >> 6;
+                    nXOffset = pHbPositions[i].x_offset >> 6;
+                    nYOffset = pHbPositions[i].y_offset >> 6;
+                }
 
                 Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
-                const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nXAdvance, nXOffset);
+                const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nAdvance, nXOffset);
                 AppendGlyph(aGI);
 
-                aCurrPos.X() += nXAdvance;
-                aCurrPos.Y() += nYAdvance;
+                aCurrPos.X() += nAdvance;
             }
 
             hb_buffer_destroy(pHbBuffer);
