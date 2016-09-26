@@ -661,6 +661,9 @@ void Test::testMiscEquivalent()
 
     // tdf#88320
     ParseAndCompare("A_1,B_2", "A_{1},B_2", "Comma between a digit and non-digit delimits subscript");
+
+    //tdf#97164
+    ParseAndCompare("100 %", "100\"%\"", "Percent symbol at the end");
 }
 
 void Test::testParser()
