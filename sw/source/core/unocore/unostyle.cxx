@@ -1177,17 +1177,11 @@ static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
 namespace
 {
     class theSwXStyleUnoTunnelId : public rtl::Static<UnoTunnelIdInit, theSwXStyleUnoTunnelId> {};
-    class theCoreParagraphUnoTunnelId : public rtl::Static<UnoTunnelIdInit, theCoreParagraphUnoTunnelId> {};
 }
 
 const uno::Sequence<sal_Int8>& SwXStyle::getUnoTunnelId()
 {
     return theSwXStyleUnoTunnelId::get().getSeq();
-}
-
-const uno::Sequence<sal_Int8>& sw::ICoreParagraphStyle::getUnoTunnelId()
-{
-    return theCoreParagraphUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXStyle::getSomething(const uno::Sequence<sal_Int8>& rId)
@@ -1198,10 +1192,6 @@ sal_Int64 SAL_CALL SwXStyle::getSomething(const uno::Sequence<sal_Int8>& rId)
     if(0 == memcmp(getUnoTunnelId().getConstArray(), rId.getConstArray(), 16))
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
-    }
-    else if(0 == memcmp(sw::ICoreParagraphStyle::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16))
-    {
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(dynamic_cast<sw::ICoreParagraphStyle*>(this)));
     }
     return 0;
 }
