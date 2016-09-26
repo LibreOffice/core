@@ -88,7 +88,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <sfx2/lokhelper.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
@@ -3408,7 +3409,7 @@ void SwUiWriterTest::testCursorWindows()
     SwWrtShell* pWrtShell1 = pDocShell->GetWrtShell();
 
     // Create a second view and type something.
-    SfxLokHelper::createView();
+    pDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_NEWWINDOW, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
     SwWrtShell* pWrtShell2 = pDocShell->GetWrtShell();
     OUString aText("foo");
     pWrtShell2->Insert(aText);
