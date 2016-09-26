@@ -658,8 +658,16 @@ IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
             pArg[0].Value <<= OUString("private:user");
 
             dispatchURL( ".uno:NewDoc", OUString(), xFrame, aArgs );
-
+            return;
         }
+
+        mpAllRecentThumbnails->Hide();
+        mpLocalView->Show();
+        mpLocalView->reload();
+        mpLocalView->GrabFocus();
+        mpRecentButton->SetActive(false);
+        mpTemplateButton->SetActive(true);
+        mpRecentButton->Invalidate();
     }
 }
 
