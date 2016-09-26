@@ -32,6 +32,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <comphelper/string.hxx>
 #include <cairo.h>
 
 #include <lib/init.hxx>
@@ -100,6 +101,7 @@ public:
     void testTrackChanges();
     void testRedlineCalc();
     void testPaintPartTile();
+    void testWriterCommentInsertCursor();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -131,6 +133,7 @@ public:
     CPPUNIT_TEST(testTrackChanges);
     CPPUNIT_TEST(testRedlineCalc);
     CPPUNIT_TEST(testPaintPartTile);
+    CPPUNIT_TEST(testWriterCommentInsertCursor);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -1484,6 +1487,7 @@ class ViewCallback
 {
 public:
     bool m_bTilesInvalidated;
+    Rectangle m_aOwnCursor;
 
     ViewCallback()
         : m_bTilesInvalidated(false)
@@ -1495,13 +1499,26 @@ public:
         static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
     }
 
-    void callbackImpl(int nType, const char* /*pPayload*/)
+    void callbackImpl(int nType, const char* pPayload)
     {
+        OString aPayload(pPayload);
         switch (nType)
         {
         case LOK_CALLBACK_INVALIDATE_TILES:
         {
             m_bTilesInvalidated = true;
+        }
+        break;
+        case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        {
+            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aPayload));
+            if (OString("EMPTY") == pPayload)
+                return;
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+            m_aOwnCursor.setX(aSeq[0].toInt32());
+            m_aOwnCursor.setY(aSeq[1].toInt32());
+            m_aOwnCursor.setWidth(aSeq[2].toInt32());
+            m_aOwnCursor.setHeight(aSeq[3].toInt32());
         }
         break;
         }
@@ -1552,6 +1569,35 @@ void DesktopLOKTest::testPaintPartTile()
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
+
+void DesktopLOKTest::testWriterCommentInsertCursor()
+{
+    // Load a document and type a character into the body text.
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    ViewCallback aView1;
+    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    Rectangle aBodyCursor = aView1.m_aOwnCursor;
+
+    // Now insert a comment and make sure that the comment's cursor is shown,
+    // not the body text's one.
+    const int nCtrlAltC = KEY_MOD1 + KEY_MOD2 + 512 + 'c' - 'a';
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'c', nCtrlAltC);
+    pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'c', nCtrlAltC);
+    Scheduler::ProcessEventsToIdle();
+    // Wait for SfxBindings to actually update the state, which updated the
+    // cursor as well.
+    osl::Thread::wait(std::chrono::seconds(1));
+    Scheduler::ProcessEventsToIdle();
+    // This failed: the body cursor was shown right after inserting a comment.
+    CPPUNIT_ASSERT(aView1.m_aOwnCursor.getX() > aBodyCursor.getX());
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

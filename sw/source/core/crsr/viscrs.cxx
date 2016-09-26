@@ -59,6 +59,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/string.hxx>
 #include <paintfrm.hxx>
+#include <PostItMgr.hxx>
 
 // Here static members are defined. They will get changed on alteration of the
 // MapMode. This is done so that on ShowCursor the same size does not have to be
@@ -182,7 +183,14 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell* pViewShell)
 
     m_aTextCursor.SetPos( aRect.Pos() );
 
-    if (comphelper::LibreOfficeKit::isActive())
+    bool bPostItActive = false;
+    if (auto pView = dynamic_cast<SwView*>(m_pCursorShell->GetSfxViewShell()))
+    {
+        if (SwPostItMgr* pPostItMgr = pView->GetPostItMgr())
+            bPostItActive = pPostItMgr->GetActiveSidebarWin() != nullptr;
+    }
+
+    if (comphelper::LibreOfficeKit::isActive() && !bPostItActive)
     {
         // notify about page number change (if that happened)
         sal_uInt16 nPage, nVirtPage;
