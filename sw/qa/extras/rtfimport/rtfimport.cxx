@@ -2706,6 +2706,13 @@ DECLARE_RTFIMPORT_TEST(testTdf44986, "tdf44986.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf90697, "tdf90697.rtf")
+{
+    // We want section breaks to be seen as section breaks, not as page breaks,
+    // so this document should have only one page, not three.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
