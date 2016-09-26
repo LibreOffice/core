@@ -944,10 +944,6 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
     double nMin = GetMinValue();
     double nMax = GetMaxValue();
 
-    // this check is for safety
-    if(nMin > nMax)
-        return nullptr;
-
     sal_Int32 nIndex = 0;
     const_iterator itr = begin();
     ++itr;
