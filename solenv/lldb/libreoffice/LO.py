@@ -68,20 +68,6 @@ def rtl_uString_summary(valobj, dict):
 def rtl_OUString_summary(valobj, dict):
     return rtl_uString_summary(valobj.GetChildMemberWithName('pData'), dict)
 
-def UniStringData_summary(valobj, dict):
-    if valobj.TypeIsPointerType():
-        return UniStringData_summary(valobj.Dereference(), dict)
-
-    length = valobj.GetChildMemberWithName('mnLen').GetValueAsUnsigned(0)
-    buffer = valobj.GetChildMemberWithName('maStr')
-
-    buffer_ptr = buffer.AddressOf();
-
-    return sal_unicode_string(buffer_ptr, length)
-
-def String_summary(valobj, dict):
-    return UniStringData_summary(valobj.GetChildMemberWithName('mpData'), dict)
-
 def sal_unicode_string(buffer_ptr, length):
     e = lldb.SBError()
 
@@ -116,7 +102,5 @@ def __lldb_init_module(debugger, dict):
     debugger.HandleCommand("type summary add --skip-pointers --skip-references --python-function LO.rtl_OString_summary rtl::OString")
     debugger.HandleCommand("type summary add --skip-references --python-function LO.rtl_uString_summary rtl_uString")
     debugger.HandleCommand("type summary add --skip-pointers --skip-references --python-function LO.rtl_OUString_summary rtl::OUString")
-    debugger.HandleCommand("type summary add --skip-references --python-function LO.UniStringData_summary UniStringData")
-    debugger.HandleCommand("type summary add --skip-pointers --skip-references --python-function LO.String_summary String")
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
