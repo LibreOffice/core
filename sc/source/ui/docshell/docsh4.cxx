@@ -1303,7 +1303,7 @@ void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
         SCROW nEndRow = rRange.aEnd.Row();
         aDocument.ApplyStyleAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, *pStyleSheet );
         aDocument.ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab );
-        PostPaint( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab, PAINT_GRID );
+        PostPaint( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab, PaintPartFlags::Grid );
     }
 }
 

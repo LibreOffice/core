@@ -256,7 +256,7 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
     if( pDocSh )
     {
         if (!bHeight)
-            pDocSh->PostPaint( aRange, PAINT_GRID );
+            pDocSh->PostPaint( aRange, PaintPartFlags::Grid );
         pDocSh->SetDocumentModified();
     }
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();

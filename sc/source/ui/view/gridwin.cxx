@@ -4926,16 +4926,16 @@ static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uI
     {
         // Only along the edges (The corners are hit twice)
         if ( nEdges & SCE_TOP )
-            pDocSh->PostPaint( nCol1, nRow1, nTab1, nCol2, nRow1, nTab2, PAINT_MARKS );
+            pDocSh->PostPaint( nCol1, nRow1, nTab1, nCol2, nRow1, nTab2, PaintPartFlags::Marks );
         if ( nEdges & SCE_LEFT )
-            pDocSh->PostPaint( nCol1, nRow1, nTab1, nCol1, nRow2, nTab2, PAINT_MARKS );
+            pDocSh->PostPaint( nCol1, nRow1, nTab1, nCol1, nRow2, nTab2, PaintPartFlags::Marks );
         if ( nEdges & SCE_RIGHT )
-            pDocSh->PostPaint( nCol2, nRow1, nTab1, nCol2, nRow2, nTab2, PAINT_MARKS );
+            pDocSh->PostPaint( nCol2, nRow1, nTab1, nCol2, nRow2, nTab2, PaintPartFlags::Marks );
         if ( nEdges & SCE_BOTTOM )
-            pDocSh->PostPaint( nCol1, nRow2, nTab1, nCol2, nRow2, nTab2, PAINT_MARKS );
+            pDocSh->PostPaint( nCol1, nRow2, nTab1, nCol2, nRow2, nTab2, PaintPartFlags::Marks );
     }
     else    // everything in one call
-        pDocSh->PostPaint( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, PAINT_MARKS );
+        pDocSh->PostPaint( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, PaintPartFlags::Marks );
 }
 
 static void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, const ScRange& rNewUn )
@@ -5595,7 +5595,7 @@ bool ScGridWindow::ContinueOnlineSpelling()
                 }
 
                 // Broadcast for re-paint.
-                ScPaintHint aHint(ScRange(nCol, nRow, nTab), PAINT_GRID);
+                ScPaintHint aHint(ScRange(nCol, nRow, nTab), PaintPartFlags::Grid);
                 aHint.SetPrintFlag(false);
                 pDoc->GetDocumentShell()->Broadcast(aHint);
             }

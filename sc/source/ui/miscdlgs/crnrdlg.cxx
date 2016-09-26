@@ -509,7 +509,7 @@ IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, OkBtnHdl, Button*, void)
     // changed ranges need to take effect
     pDoc->CompileColRowNameFormula();
     ScDocShell* pDocShell = pViewData->GetDocShell();
-    pDocShell->PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
+    pDocShell->PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PaintPartFlags::Grid);
     pDocShell->SetDocumentModified();
 
     Close();

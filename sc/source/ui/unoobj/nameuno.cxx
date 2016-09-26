@@ -991,7 +991,7 @@ void ScLabelRangeObj::Modify_Impl( const ScRange* pLabel, const ScRange* pData )
                     rDoc.GetRowNameRangesRef() = xNewList;
 
                 rDoc.CompileColRowNameFormula();
-                pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
+                pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid );
                 pDocShell->SetDocumentModified();
 
                 //! Undo ?!?! (here and from dialog)
@@ -1113,7 +1113,7 @@ void SAL_CALL ScLabelRangesObj::addNew( const table::CellRangeAddress& aLabelAre
                 rDoc.GetRowNameRangesRef() = xNewList;
 
             rDoc.CompileColRowNameFormula();
-            pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
+            pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid );
             pDocShell->SetDocumentModified();
 
             //! Undo ?!?! (here and from dialog)
@@ -1147,7 +1147,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
                     rDoc.GetRowNameRangesRef() = xNewList;
 
                 rDoc.CompileColRowNameFormula();
-                pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
+                pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid );
                 pDocShell->SetDocumentModified();
                 bDone = true;
 

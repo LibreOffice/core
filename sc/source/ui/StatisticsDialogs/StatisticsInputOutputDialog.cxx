@@ -292,7 +292,7 @@ void ScStatisticsInputOutputDialog::CalculateInputAndWriteToOutput()
     ScRange aOutputRange = ApplyOutput(pDocShell);
 
     pUndoManager->LeaveListAction();
-    pDocShell->PostPaint( aOutputRange, PAINT_GRID );
+    pDocShell->PostPaint( aOutputRange, PaintPartFlags::Grid );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

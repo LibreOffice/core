@@ -21,7 +21,7 @@
 
 // ScPaintHint - info what has to be repainted
 
-ScPaintHint::ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint ) :
+ScPaintHint::ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint ) :
     aRange( rRng ),
     nParts( nPaint ),
     bPrint( true )

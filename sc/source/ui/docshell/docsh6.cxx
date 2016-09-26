@@ -136,7 +136,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea )
         ScRange aNew;
         aDocument.GetEmbedded( aNew);
         if (aOld != aNew)
-            PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB,PAINT_GRID);
+            PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB,PaintPartFlags::Grid);
 
         //TODO/LATER: currently not implemented
         //ViewChanged( ASPECT_CONTENT );          // auch im Container anzeigen
@@ -238,7 +238,7 @@ void ScDocShell::LoadStyles( SfxObjectShell &rSource )
 
         //  Paint
 
-    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );
+    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid | PaintPartFlags::Left );
 }
 
 void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellStyles, bool bPageStyles )
@@ -302,7 +302,7 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellS
 
     lcl_AdjustPool( GetStyleSheetPool() );      // adjust SetItems
     UpdateAllRowHeights();
-    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID | PAINT_LEFT );      // Paint
+    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid | PaintPartFlags::Left );      // Paint
 }
 
 void ScDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
@@ -409,7 +409,7 @@ void ScDocShell::ReloadTabLinks()
     {
         //  Paint nur einmal
         PostPaint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB),
-                                    PAINT_GRID | PAINT_TOP | PAINT_LEFT );
+                                    PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left );
 
         SetDocumentModified();
     }

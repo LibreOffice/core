@@ -519,7 +519,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
         MarkDataChanged();
 
         pDocSh->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
-                          PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
+                          PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
 
         aModificator.SetDocumentModified();
 
@@ -2219,7 +2219,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
 
         GetViewData().GetDocShell()->PostPaint(
             ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
-            PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
+            PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
     }
     else        // "no not execute any operations"
         ErrorMessage(STR_MSSG_REPEATDB_0);

@@ -42,36 +42,35 @@
 
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (dynamic_cast<const ScPaintHint*>(&rHint))                    // neu zeichnen
+    if (const ScPaintHint* pPaintHint = dynamic_cast<const ScPaintHint*>(&rHint))                    // neu zeichnen
     {
-        const ScPaintHint* pHint = static_cast<const ScPaintHint*>(&rHint);
-        sal_uInt16 nParts = pHint->GetParts();
+        PaintPartFlags nParts = pPaintHint->GetParts();
         SCTAB nTab = GetViewData().GetTabNo();
-        if (pHint->GetStartTab() <= nTab && pHint->GetEndTab() >= nTab)
+        if (pPaintHint->GetStartTab() <= nTab && pPaintHint->GetEndTab() >= nTab)
         {
-            if (nParts & PAINT_EXTRAS)          // zuerst, falls Tabelle weg ist !!!
+            if (nParts & PaintPartFlags::Extras)          // zuerst, falls Tabelle weg ist !!!
                 if (PaintExtras())
-                    nParts = PAINT_ALL;
+                    nParts = PaintPartFlags::All;
 
             // if the current sheet has pending row height updates (sheet links refreshed),
             // execute them before invalidating the window
             GetViewData().GetDocShell()->UpdatePendingRowHeights( GetViewData().GetTabNo() );
 
-            if (nParts & PAINT_SIZE)
+            if (nParts & PaintPartFlags::Size)
                 RepeatResize();                     //! InvalidateBorder ???
-            if (nParts & PAINT_GRID)
-                PaintArea( pHint->GetStartCol(), pHint->GetStartRow(),
-                           pHint->GetEndCol(), pHint->GetEndRow() );
-            if (nParts & PAINT_MARKS)
-                PaintArea( pHint->GetStartCol(), pHint->GetStartRow(),
-                           pHint->GetEndCol(), pHint->GetEndRow(), SC_UPDATE_MARKS );
-            if (nParts & PAINT_LEFT)
-                PaintLeftArea( pHint->GetStartRow(), pHint->GetEndRow() );
-            if (nParts & PAINT_TOP)
-                PaintTopArea( pHint->GetStartCol(), pHint->GetEndCol() );
+            if (nParts & PaintPartFlags::Grid)
+                PaintArea( pPaintHint->GetStartCol(), pPaintHint->GetStartRow(),
+                           pPaintHint->GetEndCol(), pPaintHint->GetEndRow() );
+            if (nParts & PaintPartFlags::Marks)
+                PaintArea( pPaintHint->GetStartCol(), pPaintHint->GetStartRow(),
+                           pPaintHint->GetEndCol(), pPaintHint->GetEndRow(), SC_UPDATE_MARKS );
+            if (nParts & PaintPartFlags::Left)
+                PaintLeftArea( pPaintHint->GetStartRow(), pPaintHint->GetEndRow() );
+            if (nParts & PaintPartFlags::Top)
+                PaintTopArea( pPaintHint->GetStartCol(), pPaintHint->GetEndCol() );
 
             // #i84689# call UpdateAllOverlays here instead of in ScTabView::PaintArea
-            if (nParts & ( PAINT_LEFT | PAINT_TOP ))    // only if widths or heights changed
+            if (nParts & ( PaintPartFlags::Left | PaintPartFlags::Top ))    // only if widths or heights changed
                 UpdateAllOverlays();
 
             HideNoteMarker();

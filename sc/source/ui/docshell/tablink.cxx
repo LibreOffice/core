@@ -380,7 +380,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     //  Paint (koennen mehrere Tabellen sein)
 
     pImpl->m_pDocSh->PostPaint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB),
-                                PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS );
+                                PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left | PaintPartFlags::Extras );
     aModificator.SetDocumentModified();
 
     if (bNotFound)

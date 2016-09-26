@@ -2409,7 +2409,7 @@ bool ScPrintFunc::UpdatePages()
 
             //  set breaks
             ResetBreaks(nTab);
-            pDocShell->PostPaint(0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID);
+            pDocShell->PostPaint(0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid);
         }
 
     return true;

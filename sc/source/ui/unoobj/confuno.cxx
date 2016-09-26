@@ -351,7 +351,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             SCTAB nTabCount = rDoc.GetTableCount();
             for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                 if ( !pDocShell->AdjustRowHeight( 0, MAXROW, nTab ) )
-                    pDocShell->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PAINT_GRID);
+                    pDocShell->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PaintPartFlags::Grid);
             pDocShell->SetDocumentModified();
         }
     }

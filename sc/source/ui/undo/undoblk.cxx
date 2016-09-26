@@ -207,13 +207,13 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
 
     // Undo for displaced attributes?
 
-    sal_uInt16 nPaint = PAINT_GRID;
+    PaintPartFlags nPaint = PaintPartFlags::Grid;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     switch (eCmd)
     {
         case INS_INSROWS_BEFORE:
         case INS_INSROWS_AFTER:
-            nPaint |= PAINT_LEFT;
+            nPaint |= PaintPartFlags::Left;
             aWorkRange.aEnd.SetRow(MAXROW);
             break;
         case INS_CELLSDOWN:
@@ -224,23 +224,23 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
                 {
                     aWorkRange.aStart.SetCol(0);
                     aWorkRange.aEnd.SetCol(MAXCOL);
-                    nPaint |= PAINT_LEFT;
+                    nPaint |= PaintPartFlags::Left;
                 }
             }
             break;
         case INS_INSCOLS_BEFORE:
         case INS_INSCOLS_AFTER:
-            nPaint |= PAINT_TOP;                // top bar
+            nPaint |= PaintPartFlags::Top;                // top bar
             SAL_FALLTHROUGH;
         case INS_CELLSRIGHT:
             for( i=0; i<nCount; i++ )
             {
                 aWorkRange.aEnd.SetCol(MAXCOL);     // to the far right
                 if ( pDocShell->AdjustRowHeight( aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), pTabs[i]) )
-                {                                   // AdjustDraw does not paint PAINT_TOP,
+                {                                   // AdjustDraw does not paint PaintPartFlags::Top,
                     aWorkRange.aStart.SetCol(0);    // thus solved like this
                     aWorkRange.aEnd.SetRow(MAXROW);
-                    nPaint |= PAINT_LEFT;
+                    nPaint |= PaintPartFlags::Left;
                 }
             }
             break;
@@ -444,11 +444,11 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
     }
 
     // paint
-    sal_uInt16 nPaint = PAINT_GRID;
+    PaintPartFlags nPaint = PaintPartFlags::Grid;
     switch (eCmd)
     {
         case DEL_DELROWS:
-            nPaint |= PAINT_LEFT;
+            nPaint |= PaintPartFlags::Left;
             aWorkRange.aEnd.SetRow(MAXROW);
             break;
         case DEL_CELLSUP:
@@ -459,12 +459,12 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
                 {
                     aWorkRange.aStart.SetCol(0);
                     aWorkRange.aEnd.SetCol(MAXCOL);
-                    nPaint |= PAINT_LEFT;
+                    nPaint |= PaintPartFlags::Left;
                 }
             }
             break;
         case DEL_DELCOLS:
-            nPaint |= PAINT_TOP;                // top bar
+            nPaint |= PaintPartFlags::Top;                // top bar
             SAL_FALLTHROUGH;
         case DEL_CELLSLEFT:
             for( i=0; i<nCount; i++ )
@@ -474,7 +474,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
                 {
                     aWorkRange.aStart.SetCol(0);
                     aWorkRange.aEnd.SetRow(MAXROW);
-                    nPaint |= PAINT_LEFT;
+                    nPaint |= PaintPartFlags::Left;
                 }
             }
             break;
@@ -574,18 +574,18 @@ void ScUndoDeleteMulti::DoChange() const
 {
     SCCOL nStartCol;
     SCROW nStartRow;
-    sal_uInt16 nPaint;
+    PaintPartFlags nPaint;
     if (mbRows)
     {
         nStartCol = 0;
         nStartRow = static_cast<SCROW>(maSpans[0].mnStart);
-        nPaint = PAINT_GRID | PAINT_LEFT;
+        nPaint = PaintPartFlags::Grid | PaintPartFlags::Left;
     }
     else
     {
         nStartCol = static_cast<SCCOL>(maSpans[0].mnStart);
         nStartRow = 0;
-        nPaint = PAINT_GRID | PAINT_TOP;
+        nPaint = PaintPartFlags::Grid | PaintPartFlags::Top;
     }
 
     if (mbRefresh)
@@ -788,7 +788,7 @@ void ScUndoCut::DoChange( const bool bUndo )
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
-/*A*/   pDocShell->PostPaint( aExtendedRange, PAINT_GRID, nExtFlags );
+/*A*/   pDocShell->PostPaint( aExtendedRange, PaintPartFlags::Grid, nExtFlags );
 
     if ( !bUndo )                               //   draw redo after updating row heights
         RedoSdrUndoAction( pDrawUndo );         //! include in ScBlockUndo?
@@ -1006,7 +1006,7 @@ void ScUndoPaste::DoChange(bool bUndo)
         SetChangeTrack();
 
     ScRangeList aDrawRanges(maBlockRanges);
-    sal_uInt16 nPaint = PAINT_GRID;
+    PaintPartFlags nPaint = PaintPartFlags::Grid;
     for (size_t i = 0, n = aDrawRanges.size(); i < n; ++i)
     {
         ScRange& rDrawRange = *aDrawRanges[i];
@@ -1017,7 +1017,7 @@ void ScUndoPaste::DoChange(bool bUndo)
             rDrawRange.aStart.SetRow(0);
             rDrawRange.aEnd.SetCol(MAXCOL);
             rDrawRange.aEnd.SetRow(MAXROW);
-            nPaint |= PAINT_TOP | PAINT_LEFT;
+            nPaint |= PaintPartFlags::Top | PaintPartFlags::Left;
             if (pViewShell)
                 pViewShell->AdjustBlockHeight(false);
         }
@@ -1025,12 +1025,12 @@ void ScUndoPaste::DoChange(bool bUndo)
         {
             if (maBlockRanges[i]->aStart.Row() == 0 && maBlockRanges[i]->aEnd.Row() == MAXROW) // whole column
             {
-                nPaint |= PAINT_TOP;
+                nPaint |= PaintPartFlags::Top;
                 rDrawRange.aEnd.SetCol(MAXCOL);
             }
             if (maBlockRanges[i]->aStart.Col() == 0 && maBlockRanges[i]->aEnd.Col() == MAXCOL) // whole row
             {
-                nPaint |= PAINT_LEFT;
+                nPaint |= PaintPartFlags::Left;
                 rDrawRange.aEnd.SetRow(MAXROW);
             }
             if (pViewShell && pViewShell->AdjustBlockHeight(false))
@@ -1039,7 +1039,7 @@ void ScUndoPaste::DoChange(bool bUndo)
                 rDrawRange.aStart.SetRow(0);
                 rDrawRange.aEnd.SetCol(MAXCOL);
                 rDrawRange.aEnd.SetRow(MAXROW);
-                nPaint |= PAINT_LEFT;
+                nPaint |= PaintPartFlags::Left;
             }
             pDocShell->UpdatePaintExt(nExtFlags, rDrawRange);
         }
@@ -1163,7 +1163,7 @@ void ScUndoDragDrop::SetChangeTrack()
 
 void ScUndoDragDrop::PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const
 {
-    sal_uInt16 nPaint = PAINT_GRID;
+    PaintPartFlags nPaint = PaintPartFlags::Grid;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     ScDocument& rDoc = pDocShell->GetDocument();
 
@@ -1180,7 +1180,7 @@ void ScUndoDragDrop::PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const
             aRange.aStart.SetCol(0);
             aRange.aEnd.SetCol(MAXCOL);
             aRange.aEnd.SetRow(MAXROW);
-            nPaint |= PAINT_LEFT;
+            nPaint |= PaintPartFlags::Left;
         }
     }
 
@@ -1196,12 +1196,12 @@ void ScUndoDragDrop::PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const
     //  column/row info (width/height) included if whole columns/rows were copied
     if ( aSrcRange.aStart.Col() == 0 && aSrcRange.aEnd.Col() == MAXCOL )
     {
-        nPaint |= PAINT_LEFT;
+        nPaint |= PaintPartFlags::Left;
         aRange.aEnd.SetRow(MAXROW);
     }
     if ( aSrcRange.aStart.Row() == 0 && aSrcRange.aEnd.Row() == MAXROW )
     {
-        nPaint |= PAINT_TOP;
+        nPaint |= PaintPartFlags::Top;
         aRange.aEnd.SetCol(MAXCOL);
     }
 
@@ -1458,7 +1458,7 @@ void ScUndoListNames::DoChange( ScDocument* pSrcDoc ) const
 
     rDoc.DeleteAreaTab( aBlockRange, InsertDeleteFlags::ALL );
     pSrcDoc->CopyToDocument(aBlockRange, InsertDeleteFlags::ALL, false, rDoc);
-    pDocShell->PostPaint( aBlockRange, PAINT_GRID );
+    pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -1524,7 +1524,7 @@ void ScUndoConditionalFormat::DoChange(ScDocument* pSrcDoc)
 
     rDoc.DeleteAreaTab( maRange, InsertDeleteFlags::ALL );
     pSrcDoc->CopyToDocument(maRange, InsertDeleteFlags::ALL, false, rDoc);
-    pDocShell->PostPaint( maRange, PAINT_GRID );
+    pDocShell->PostPaint( maRange, PaintPartFlags::Grid );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -1611,9 +1611,9 @@ void ScUndoUseScenario::Undo()
 
     // if visible borders, then paint all
     if (bFrame)
-        pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_EXTRAS );
+        pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid | PaintPartFlags::Extras );
     else
-        pDocShell->PostPaint( aRange, PAINT_GRID | PAINT_EXTRAS );
+        pDocShell->PostPaint( aRange, PaintPartFlags::Grid | PaintPartFlags::Extras );
     pDocShell->PostDataChanged();
     if (pViewShell)
         pViewShell->CellContentChanged();
@@ -1722,7 +1722,7 @@ void ScUndoSelectionStyle::DoChange( const bool bUndo )
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
-/*A*/   pDocShell->PostPaint( aWorkRange, PAINT_GRID | PAINT_EXTRAS, nExtFlags );
+/*A*/   pDocShell->PostPaint( aWorkRange, PaintPartFlags::Grid | PaintPartFlags::Extras, nExtFlags );
 
     ShowTable( aWorkRange.aStart.Tab() );
 }
@@ -1808,7 +1808,7 @@ void ScUndoEnterMatrix::Undo()
 
     rDoc.DeleteAreaTab( aBlockRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE );
     pUndoDoc->CopyToDocument(aBlockRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, rDoc);
-    pDocShell->PostPaint( aBlockRange, PAINT_GRID );
+    pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -1894,7 +1894,7 @@ void ScUndoIndent::Undo()
     aCopyRange.aStart.SetTab(0);
     aCopyRange.aEnd.SetTab(nTabCount-1);
     pUndoDoc->CopyToDocument(aCopyRange, InsertDeleteFlags::ATTRIB, true, rDoc, &aMarkData);
-    pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+    pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndUndo();
 }
@@ -1905,7 +1905,7 @@ void ScUndoIndent::Redo()
 
     ScDocument& rDoc = pDocShell->GetDocument();
     rDoc.ChangeSelectionIndent( bIsIncrement, aMarkData );
-    pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+    pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndRedo();
 }
@@ -1950,7 +1950,7 @@ void ScUndoTransliterate::Undo()
     aCopyRange.aStart.SetTab(0);
     aCopyRange.aEnd.SetTab(nTabCount-1);
     pUndoDoc->CopyToDocument(aCopyRange, InsertDeleteFlags::CONTENTS, true, rDoc, &aMarkData);
-    pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+    pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndUndo();
 }
@@ -1961,7 +1961,7 @@ void ScUndoTransliterate::Redo()
 
     ScDocument& rDoc = pDocShell->GetDocument();
     rDoc.TransliterateText( aMarkData, nTransliterationType );
-    pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+    pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndRedo();
 }
@@ -2011,7 +2011,7 @@ void ScUndoClearItems::Undo()
 
     ScDocument& rDoc = pDocShell->GetDocument();
     pUndoDoc->CopyToDocument(aBlockRange, InsertDeleteFlags::ATTRIB, true, rDoc, &aMarkData);
-    pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+    pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndUndo();
 }
@@ -2022,7 +2022,7 @@ void ScUndoClearItems::Redo()
 
     ScDocument& rDoc = pDocShell->GetDocument();
     rDoc.ClearSelectionItems( pWhich, aMarkData );
-    pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+    pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndRedo();
 }
@@ -2070,7 +2070,7 @@ void ScUndoRemoveBreaks::Undo()
     pUndoDoc->CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::NONE, false, rDoc);
     if (pViewShell)
         pViewShell->UpdatePageBreakData( true );
-    pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
+    pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid );
 
     EndUndo();
 }
@@ -2086,7 +2086,7 @@ void ScUndoRemoveBreaks::Redo()
     rDoc.UpdatePageBreaks(nTab);
     if (pViewShell)
         pViewShell->UpdatePageBreakData( true );
-    pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
+    pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid );
 
     EndRedo();
 }
@@ -2273,7 +2273,7 @@ void ScUndoBorder::Undo()
     ScMarkData aMarkData;
     aMarkData.MarkFromRangeList( *pRanges, false );
     pUndoDoc->CopyToDocument(aBlockRange, InsertDeleteFlags::ATTRIB, true, rDoc, &aMarkData);
-    pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+    pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndUndo();
 }
@@ -2296,7 +2296,7 @@ void ScUndoBorder::Redo()
         rDoc.ApplySelectionFrame( aMark, pOuter, pInner );
     }
     for (size_t i = 0; i < nCount; ++i)
-        pDocShell->PostPaint( *(*pRanges)[i], PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+        pDocShell->PostPaint( *(*pRanges)[i], PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndRedo();
 }

@@ -323,7 +323,7 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const 
 
     pUndoManager->LeaveListAction();
 
-    pDocShell->PostPaint( maInputRange, PAINT_GRID );
+    pDocShell->PostPaint( maInputRange, PaintPartFlags::Grid );
 }
 
 IMPL_LINK_NOARG_TYPED( ScRandomNumberGeneratorDialog, OkClicked, Button*, void )

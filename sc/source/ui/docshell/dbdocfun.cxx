@@ -265,7 +265,7 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
     rDoc.SetDBCollection( new ScDBCollection( rNewColl ) );
     rDoc.CompileHybridFormula();
     pOldColl = nullptr;
-    rDocShell.PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
+    rDocShell.PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PaintPartFlags::Grid);
     aModificator.SetDocumentModified();
     SfxGetpApp()->Broadcast( SfxHint( SC_HINT_DBAREAS_CHANGED ) );
 
@@ -450,7 +450,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
             }
 
             rDocShell.PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
-                                PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
+                                PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
             bDone = true;
         }
         else if (!bApi)     // "Keine Operationen auszufuehren"
@@ -585,14 +585,14 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     if (bPaint)
     {
-        sal_uInt16 nPaint = PAINT_GRID;
+        PaintPartFlags nPaint = PaintPartFlags::Grid;
         SCCOL nStartX = aLocalParam.nCol1;
         SCROW nStartY = aLocalParam.nRow1;
         SCCOL nEndX = aLocalParam.nCol2;
         SCROW nEndY = aLocalParam.nRow2;
         if ( bRepeatQuery )
         {
-            nPaint |= PAINT_LEFT;
+            nPaint |= PaintPartFlags::Left;
             nStartX = 0;
             nEndX = MAXCOL;
         }
@@ -938,12 +938,12 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             nEndY = MAXROW;
         rDocShell.PostPaint(
             ScRange(aLocalParam.nCol1, aLocalParam.nRow1, nDestTab, nEndX, nEndY, nDestTab),
-            PAINT_GRID);
+            PaintPartFlags::Grid);
     }
     else
         rDocShell.PostPaint(
             ScRange(0, rQueryParam.nRow1, nTab, MAXCOL, MAXROW, nTab),
-            PAINT_GRID | PAINT_LEFT);
+            PaintPartFlags::Grid | PaintPartFlags::Left);
     aModificator.SetDocumentModified();
 
     return true;
@@ -1103,7 +1103,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         rDoc.CompileDBFormula();
 
         rDocShell.PostPaint(ScRange(0, 0, nTab, MAXCOL,MAXROW,nTab),
-                            PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
+                            PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
         aModificator.SetDocumentModified();
     }
 }
@@ -1345,7 +1345,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     rDoc.GetDPCollection()->FreeTable(&rDPObj);  // object is deleted here
 
     rDocShell.PostPaintGridAll();   //! only necessary parts
-    rDocShell.PostPaint(aRange, PAINT_GRID);
+    rDocShell.PostPaint(aRange, PaintPartFlags::Grid);
 
     if (bRecord)
     {

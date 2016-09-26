@@ -178,7 +178,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
         }
     }
 
-    pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
+    pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
 
     //! undo/redo document modifications for deleted styles
     //! undo/redo modifications of number formatter

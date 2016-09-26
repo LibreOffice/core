@@ -91,14 +91,14 @@ void ScDocShell::PostDataChanged()
 }
 
 void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
-                            SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, sal_uInt16 nPart,
+                            SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, PaintPartFlags nPart,
                             sal_uInt16 nExtFlags )
 {
     ScRange aRange(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
     PostPaint(aRange, nPart, nExtFlags);
 }
 
-void ScDocShell::PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uInt16 nExtFlags )
+void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sal_uInt16 nExtFlags )
 {
     ScRangeList aPaintRanges;
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
@@ -115,19 +115,17 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uI
 
         if ( pPaintLockData )
         {
-            // #i54081# PAINT_EXTRAS still has to be broadcast because it changes the
+            // #i54081# PaintPartFlags::Extras still has to be broadcast because it changes the
             // current sheet if it's invalid. All other flags added to pPaintLockData.
-            sal_uInt16 nLockPart = nPart & ~PAINT_EXTRAS;
-            if ( nLockPart )
+            PaintPartFlags nLockPart = nPart & ~PaintPartFlags::Extras;
+            if ( nLockPart != PaintPartFlags::NONE )
             {
                 //! nExtFlags ???
                 pPaintLockData->AddRange( ScRange( nCol1, nRow1, nTab1,
                                                    nCol2, nRow2, nTab2 ), nLockPart );
             }
 
-            nPart &= PAINT_EXTRAS;  // for broadcasting
-            if (!nPart)
-                continue;
+            nPart &= PaintPartFlags::Extras;  // for broadcasting
         }
 
         if (nExtFlags & SC_PF_LINES)            // Platz fuer Linien beruecksichtigen
@@ -165,7 +163,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uI
 
     // LOK: we are supposed to update the row / columns headers (and actually
     // the document size too - cell size affects that, obviously)
-    if ((nPart & (PAINT_TOP | PAINT_LEFT)) && comphelper::LibreOfficeKit::isActive())
+    if ((nPart & (PaintPartFlags::Top | PaintPartFlags::Left)) && comphelper::LibreOfficeKit::isActive())
     {
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
         while (pViewShell)
@@ -178,12 +176,12 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uI
 
 void ScDocShell::PostPaintGridAll()
 {
-    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
+    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid );
 }
 
 void ScDocShell::PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, SC_PF_TESTMERGE );
+    PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PaintPartFlags::Grid, SC_PF_TESTMERGE );
 }
 
 void ScDocShell::PostPaintCell( const ScAddress& rPos )
@@ -193,7 +191,7 @@ void ScDocShell::PostPaintCell( const ScAddress& rPos )
 
 void ScDocShell::PostPaintExtras()
 {
-    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS );
+    PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Extras );
 }
 
 void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange )
@@ -250,7 +248,7 @@ void ScDocShell::UnlockPaint_Impl(bool bDoc)
             ScRangeListRef xRangeList = pPaint->GetRangeList();
             if (xRangeList)
             {
-                sal_uInt16 nParts = pPaint->GetParts();
+                PaintPartFlags nParts = pPaint->GetParts();
                 for ( size_t i = 0, nCount = xRangeList->size(); i < nCount; i++ )
                 {
                     //! nExtFlags ???
@@ -561,7 +559,7 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlag
         }
     }
 
-    PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB,PAINT_ALL);
+    PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB,PaintPartFlags::All);
 
     return 0;
 }

@@ -26,13 +26,13 @@
 
 class ScPaintHint : public SfxHint
 {
-    ScRange     aRange;
-    sal_uInt16  nParts;
-    bool        bPrint;     //  flag indicating whether print/preview if affected
+    ScRange         aRange;
+    PaintPartFlags  nParts;
+    bool            bPrint;     //  flag indicating whether print/preview if affected
 
 public:
                     ScPaintHint() = delete;
-                    ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint = PAINT_ALL );
+                    ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint = PaintPartFlags::All );
                     virtual ~ScPaintHint() override;
 
     void            SetPrintFlag(bool bSet) { bPrint = bSet; }
@@ -42,7 +42,7 @@ public:
     SCCOL           GetEndCol() const       { return aRange.aEnd.Col(); }
     SCROW           GetEndRow() const       { return aRange.aEnd.Row(); }
     SCTAB           GetEndTab() const       { return aRange.aEnd.Tab(); }
-    sal_uInt16      GetParts() const        { return nParts; }
+    PaintPartFlags  GetParts() const        { return nParts; }
     bool            GetPrintFlag() const    { return bPrint; }
 };
 

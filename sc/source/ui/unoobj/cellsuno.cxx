@@ -1081,7 +1081,7 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
     }
 
     for (size_t i = 0; i < nCount; ++i )
-        pDocShell->PostPaint( *rRanges[ i ], PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+        pDocShell->PostPaint( *rRanges[ i ], PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     pDocShell->SetDocumentModified();
 }
@@ -1220,7 +1220,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
     }
 
     if (!bHeight)
-        rDocShell.PostPaint( rRange, PAINT_GRID );      // AdjustRowHeight may have painted already
+        rDocShell.PostPaint( rRange, PaintPartFlags::Grid );      // AdjustRowHeight may have painted already
 
     rDocShell.SetDocumentModified();
 
@@ -1321,7 +1321,7 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
     }
 
     if (!bHeight)
-        rDocShell.PostPaint( rRange, PAINT_GRID );      // AdjustRowHeight may have painted already
+        rDocShell.PostPaint( rRange, PaintPartFlags::Grid );      // AdjustRowHeight may have painted already
 
     rDocShell.SetDocumentModified();
 
@@ -1812,7 +1812,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellRangesBase::getImplementationId()
 void ScCellRangesBase::PaintGridRanges_Impl( )
 {
     for (size_t i = 0, nCount = aRanges.size(); i < nCount; ++i)
-        pDocShell->PostPaint( *aRanges[ i ], PAINT_GRID );
+        pDocShell->PostPaint( *aRanges[ i ], PaintPartFlags::Grid );
 }
 
 // XSheetOperation
@@ -2421,7 +2421,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
 
                                 // and repaint
                                 for (size_t i = 0; i < aRanges.size(); ++i)
-                                    pDocShell->PostPaint(*aRanges[i], PAINT_GRID);
+                                    pDocShell->PostPaint(*aRanges[i], PaintPartFlags::Grid);
                                 pDocShell->SetDocumentModified();
                             }
                         }
@@ -7125,7 +7125,7 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks() throw(uno::RuntimeExc
 
         //? UpdatePageBreakData( sal_True );
         pDocSh->SetDocumentModified();
-        pDocSh->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PAINT_GRID);
+        pDocSh->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PaintPartFlags::Grid);
     }
 }
 

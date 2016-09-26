@@ -312,9 +312,9 @@ public:
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
 
     void            PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
-                            SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, sal_uInt16 nPart,
+                            SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, PaintPartFlags nPart,
                             sal_uInt16 nExtFlags = 0 );
-    void            PostPaint( const ScRangeList& rRanges, sal_uInt16 nPart, sal_uInt16 nExtFlags = 0 );
+    void            PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sal_uInt16 nExtFlags = 0 );
 
     void            PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void            PostPaintCell( const ScAddress& rPos );

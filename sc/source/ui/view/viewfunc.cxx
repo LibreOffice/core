@@ -86,7 +86,7 @@ static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDo
     {
         const ScRangeList& rRanges = pCondFmt->GetRange();
 
-        pDocSh->PostPaint( rRanges, PAINT_ALL );
+        pDocSh->PostPaint( rRanges, PaintPartFlags::All );
     }
 }
 
@@ -1072,7 +1072,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     aFuncMark.MarkToMulti();
     pDoc->ApplySelectionPattern( rAttr, aFuncMark );
 
-    pDocSh->PostPaint( aMarkRange, PAINT_GRID, nExt );
+    pDocSh->PostPaint( aMarkRange, PaintPartFlags::Grid, nExt );
     pDocSh->UpdateOle(&GetViewData());
     aModificator.SetDocumentModified();
     CellContentChanged();
@@ -1175,7 +1175,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
 
         pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
                            nEndCol,   nEndRow,   nEndTab,
-                           PAINT_GRID, nExtFlags | SC_PF_TESTMERGE );
+                           PaintPartFlags::Grid, nExtFlags | SC_PF_TESTMERGE );
         pDocSh->UpdateOle(&GetViewData());
         aModificator.SetDocumentModified();
         CellContentChanged();
@@ -1215,7 +1215,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         }
         pOldPat.reset();     // is copied in undo (Pool)
 
-        pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, nExtFlags | SC_PF_TESTMERGE );
+        pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PaintPartFlags::Grid, nExtFlags | SC_PF_TESTMERGE );
         pDocSh->UpdateOle(&GetViewData());
         aModificator.SetDocumentModified();
         CellContentChanged();
@@ -1348,7 +1348,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet )
         rDoc.ApplySelectionStyle( static_cast<ScStyleSheet&>(*pStyleSheet), aFuncMark );
 
         if (!AdjustBlockHeight())
-            rViewData.GetDocShell()->PostPaint( aMarkRange, PAINT_GRID );
+            rViewData.GetDocShell()->PostPaint( aMarkRange, PaintPartFlags::Grid );
 
         aFuncMark.MarkToSimple();
     }
@@ -1411,7 +1411,7 @@ void ScViewFunc::RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
                                 rViewData.GetZoomX(),
                                 rViewData.GetZoomY() );
 
-    pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
+    pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
     aModificator.SetDocumentModified();
 
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
@@ -1437,7 +1437,7 @@ void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
                                 rViewData.GetZoomX(),
                                 rViewData.GetZoomY() );
 
-    pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
+    pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
     aModificator.SetDocumentModified();
 
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
@@ -1707,13 +1707,13 @@ void ScViewFunc::DeleteMulti( bool bRows )
         {
             pDocSh->PostPaint(
                 0, aSpans[0].mnStart, nTab,
-                MAXCOL, MAXROW, nTab, (PAINT_GRID | PAINT_LEFT));
+                MAXCOL, MAXROW, nTab, (PaintPartFlags::Grid | PaintPartFlags::Left));
         }
         else
         {
             pDocSh->PostPaint(
                 static_cast<SCCOL>(aSpans[0].mnStart), 0, nTab,
-                MAXCOL, MAXROW, nTab, (PAINT_GRID | PAINT_TOP));
+                MAXCOL, MAXROW, nTab, (PaintPartFlags::Grid | PaintPartFlags::Top));
         }
     }
 
@@ -2066,7 +2066,7 @@ void ScViewFunc::SetWidthOrHeight(
                 if (nStart > 0)             // go upwards because of Lines and cursor
                     --nStart;
                 pDocSh->PostPaint( static_cast<SCCOL>(nStart), 0, nTab,
-                        MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_TOP );
+                        MAXCOL, MAXROW, nTab, PaintPartFlags::Grid | PaintPartFlags::Top );
             }
             else
             {
@@ -2074,7 +2074,7 @@ void ScViewFunc::SetWidthOrHeight(
                     nStart = 0;
                 if (nStart != 0)
                     --nStart;
-                pDocSh->PostPaint( 0, nStart, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_LEFT );
+                pDocSh->PostPaint( 0, nStart, nTab, MAXCOL, MAXROW, nTab, PaintPartFlags::Grid | PaintPartFlags::Left );
             }
         }
 
@@ -2797,7 +2797,7 @@ void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAt
     SCTAB nEndTab = aMarkRange.aEnd.Tab();
     pDocShell->PostPaint( nStartCol, nStartRow, nStartTab,
         nEndCol,   nEndRow,   nEndTab,
-        PAINT_GRID, nExtFlags | SC_PF_TESTMERGE );
+        PaintPartFlags::Grid, nExtFlags | SC_PF_TESTMERGE );
     ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
     pTabViewShell->AdjustBlockHeight(false, const_cast<ScMarkData*>(&rSel));
 }

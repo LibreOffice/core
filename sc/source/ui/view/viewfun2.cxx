@@ -150,7 +150,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
         }
         if ( bPaint && bChanged )
             pDocSh->PostPaint( 0, nPaintY, nTab, MAXCOL, MAXROW, nTab,
-                                                PAINT_GRID | PAINT_LEFT );
+                                                PaintPartFlags::Grid | PaintPartFlags::Left );
     }
 
     if ( bPaint && bAnyChanged )
@@ -191,7 +191,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
 
     if ( bChanged )
         pDocSh->PostPaint( 0, nStartRow, nTab, MAXCOL, MAXROW, nTab,
-                                            PAINT_GRID | PAINT_LEFT );
+                                            PaintPartFlags::Grid | PaintPartFlags::Left );
 
     return bChanged;
 }
@@ -873,7 +873,7 @@ void ScViewFunc::RemoveManualBreaks()
 
     UpdatePageBreakData( true );
     pDocSh->SetDocumentModified();
-    pDocSh->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
+    pDocSh->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid );
 }
 
 void ScViewFunc::SetPrintZoom(sal_uInt16 nScale)
@@ -1591,7 +1591,7 @@ void ScViewFunc::ConvertFormulaToValue()
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     pDocSh->GetDocFunc().ConvertFormulaToValue(aRange, true);
-    pDocSh->PostPaint(aRange, PAINT_GRID);
+    pDocSh->PostPaint(aRange, PaintPartFlags::Grid);
 }
 
 void ScViewFunc::TransliterateText( sal_Int32 nType )
@@ -1913,7 +1913,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         {
             if ( nCommand == SvxSearchCmd::REPLACE )
             {
-                pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID );
+                pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PaintPartFlags::Grid );
 
                 // jump to next cell if we replaced everything in the cell
                 // where the cursor was positioned (but avoid switching tabs)
@@ -2537,7 +2537,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
         GetViewData().InsertTab(nTab);
     SetTabNo(nTab,true);
     pDocSh->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
-                                PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS );
+                                PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left | PaintPartFlags::Extras );
 
     SfxApplication* pSfxApp = SfxGetpApp();
     pSfxApp->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
@@ -2753,9 +2753,9 @@ void ScViewFunc::MoveTable(
                 pDestViewSh->TabChanged();      // pages on the drawing layer
             }
             pDestShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
-                                    PAINT_GRID | PAINT_TOP | PAINT_LEFT |
-                                    PAINT_EXTRAS | PAINT_SIZE );
-            //  PAINT_SIZE for outline
+                                    PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left |
+                                    PaintPartFlags::Extras | PaintPartFlags::Size );
+            //  PaintPartFlags::Size for outline
         }
         else
         {
@@ -2935,7 +2935,7 @@ void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
         {
             pDocSh->GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( pDocSh, undoTabs, true ) );
         }
-        pDocSh->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS);
+        pDocSh->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Extras);
         pDocSh->SetDocumentModified();
     }
 }
@@ -2983,7 +2983,7 @@ void ScViewFunc::HideTable( const ScMarkData& rMark )
 
         //  Update views
         SfxGetpApp()->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
-        pDocSh->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS);
+        pDocSh->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Extras);
         pDocSh->SetDocumentModified();
     }
 }
@@ -3158,7 +3158,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
         SCTAB nEndTab = aMarkRange.aEnd.Tab();
         pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
                            nEndCol, nEndRow, nEndTab,
-                           PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+                           PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
         pDocSh->UpdateOle( &GetViewData() );
         pDocSh->SetDocumentModified();

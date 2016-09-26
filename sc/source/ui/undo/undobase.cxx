@@ -318,7 +318,7 @@ bool ScBlockUndo::AdjustHeight()
     if (bRet)
         pDocShell->PostPaint( 0,      aBlockRange.aStart.Row(), aBlockRange.aStart.Tab(),
                               MAXCOL, MAXROW,                   aBlockRange.aEnd.Tab(),
-                              PAINT_GRID | PAINT_LEFT );
+                              PaintPartFlags::Grid | PaintPartFlags::Left );
 
     return bRet;
 }
@@ -418,7 +418,7 @@ void ScMultiBlockUndo::AdjustHeight()
         if (bRet)
             pDocShell->PostPaint(
                 0, r.aStart.Row(), r.aStart.Tab(), MAXCOL, MAXROW, r.aEnd.Tab(),
-                PAINT_GRID | PAINT_LEFT);
+                PaintPartFlags::Grid | PaintPartFlags::Left);
     }
 }
 
@@ -552,7 +552,7 @@ void ScDBFuncUndo::EndUndo()
                 // restore AutoFilter buttons
                 pAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
                 rDoc.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
-                pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PAINT_GRID );
+                pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PaintPartFlags::Grid );
             }
         }
     }

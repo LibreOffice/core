@@ -28,14 +28,14 @@ private:
     ScRangeListRef  xRangeList;
     sal_uInt16      nLevel;
     sal_uInt16      nDocLevel;
-    sal_uInt16      nParts;
+    PaintPartFlags  nParts;
     bool            bModified;
 
 public:
                     ScPaintLockData();
                     ~ScPaintLockData();
 
-    void            AddRange( const ScRange& rRange, sal_uInt16 nP );
+    void            AddRange( const ScRange& rRange, PaintPartFlags nP );
 
     void            SetModified()   { bModified = true; }
     void            IncLevel(bool bDoc)
@@ -44,7 +44,7 @@ public:
                         { if (bDoc) --nDocLevel; else --nLevel; }
 
     const ScRangeListRef&   GetRangeList() const            { return xRangeList; }
-    sal_uInt16              GetParts() const                { return nParts; }
+    PaintPartFlags          GetParts() const                { return nParts; }
     sal_uInt16              GetLevel(bool bDoc) const
                                 { return bDoc ? nDocLevel : nLevel; }
     bool                    GetModified() const             { return bModified; }

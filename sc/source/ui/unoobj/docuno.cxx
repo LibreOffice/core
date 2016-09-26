@@ -461,13 +461,13 @@ ScSheetSaveData* ScModelObj::GetSheetSaveData()
 void ScModelObj::RepaintRange( const ScRange& rRange )
 {
     if (pDocShell)
-        pDocShell->PostPaint( rRange, PAINT_GRID );
+        pDocShell->PostPaint( rRange, PaintPartFlags::Grid );
 }
 
 void ScModelObj::RepaintRange( const ScRangeList& rRange )
 {
     if (pDocShell)
-        pDocShell->PostPaint( rRange, PAINT_GRID );
+        pDocShell->PostPaint( rRange, PaintPartFlags::Grid );
 }
 
 void ScModelObj::paintTile( VirtualDevice& rDevice,

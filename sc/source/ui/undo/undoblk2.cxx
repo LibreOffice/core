@@ -105,13 +105,13 @@ void ScUndoWidthOrHeight::Undo()
                                      false, rDoc);
             rDoc.UpdatePageBreaks( *itr );
             pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, *itr,
-                    MAXCOL, MAXROW, *itr, PAINT_GRID | PAINT_TOP );
+                    MAXCOL, MAXROW, *itr, PaintPartFlags::Grid | PaintPartFlags::Top );
         }
         else        // Height
         {
             pUndoDoc->CopyToDocument(0, nStart, *itr, MAXCOL, nEnd, *itr, InsertDeleteFlags::NONE, false, rDoc);
             rDoc.UpdatePageBreaks( *itr );
-            pDocShell->PostPaint( 0, nPaintStart, *itr, MAXCOL, MAXROW, *itr, PAINT_GRID | PAINT_LEFT );
+            pDocShell->PostPaint( 0, nPaintStart, *itr, MAXCOL, MAXROW, *itr, PaintPartFlags::Grid | PaintPartFlags::Left );
         }
     }
 
@@ -155,7 +155,7 @@ void ScUndoWidthOrHeight::Redo()
 
     // paint grid if selection was changed directly at the MarkData
     if (bPaintAll)
-        pDocShell->PostPaint( 0, 0, nStartTab, MAXCOL, MAXROW, nEndTab, PAINT_GRID );
+        pDocShell->PostPaint( 0, 0, nStartTab, MAXCOL, MAXROW, nEndTab, PaintPartFlags::Grid );
 
     EndRedo();
 }

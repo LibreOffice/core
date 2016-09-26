@@ -47,20 +47,20 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
 {
     ScDocument& rDoc = rDocShell.GetDocument();
 
-    sal_uInt16 nParts = PAINT_GRID;
+    PaintPartFlags nParts = PaintPartFlags::Grid;
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
     SCCOL nEndCol = MAXCOL;         // fuer Test auf Merge
     SCROW nEndRow = MAXROW;
     if ( bColumns )
     {
-        nParts |= PAINT_TOP;
+        nParts |= PaintPartFlags::Top;
         nStartCol = static_cast<SCCOL>(nStart);
         nEndCol = static_cast<SCCOL>(nEnd);
     }
     else
     {
-        nParts |= PAINT_LEFT;
+        nParts |= PaintPartFlags::Left;
         nStartRow = nStart;
         nEndRow = nEnd;
     }
@@ -113,13 +113,13 @@ void ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool b
         if (rDoc.IsStreamValid(nTab))
             rDoc.SetStreamValid(nTab, false);
 
-        sal_uInt16 nParts = 0;              // Datenbereich nicht geaendert
+        PaintPartFlags nParts = PaintPartFlags::NONE;   // Datenbereich nicht geaendert
         if ( bColumns )
-            nParts |= PAINT_TOP;
+            nParts |= PaintPartFlags::Top;
         else
-            nParts |= PAINT_LEFT;
+            nParts |= PaintPartFlags::Left;
         if ( bSize )
-            nParts |= PAINT_SIZE;
+            nParts |= PaintPartFlags::Size;
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, nParts );
         rDocShell.SetDocumentModified();
@@ -176,13 +176,13 @@ void ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool
             if (rDoc.IsStreamValid(nTab))
                 rDoc.SetStreamValid(nTab, false);
 
-            sal_uInt16 nParts = 0;              // Datenbereich nicht geaendert
+            PaintPartFlags nParts = PaintPartFlags::NONE;   // Datenbereich nicht geaendert
             if ( bColumns )
-                nParts |= PAINT_TOP;
+                nParts |= PaintPartFlags::Top;
             else
-                nParts |= PAINT_LEFT;
+                nParts |= PaintPartFlags::Left;
             if ( bSize )
-                nParts |= PAINT_SIZE;
+                nParts |= PaintPartFlags::Size;
 
             rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, nParts );
             rDocShell.SetDocumentModified();
@@ -243,7 +243,7 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
             rDoc.SetStreamValid(nTab, false);
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
-                                    PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
+                                    PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size );
         rDocShell.SetDocumentModified();
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
         bSuccess = true;
@@ -309,7 +309,7 @@ void ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
     if (rDoc.IsStreamValid(nTab))
         rDoc.SetStreamValid(nTab, false);
 
-    rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
+    rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size );
     rDocShell.SetDocumentModified();
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 }
@@ -497,7 +497,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         rDoc.SetDrawPageSize(nTab);
         rDoc.UpdatePageBreaks( nTab );
 
-        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT | PAINT_TOP );
+        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
         rDocShell.SetDocumentModified();
         bDone = true;
 
@@ -589,7 +589,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
         rDoc.SetDrawPageSize(nTab);
         rDoc.UpdatePageBreaks( nTab );
 
-        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT | PAINT_TOP );
+        rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
 
         rDocShell.SetDocumentModified();
         bDone = true;

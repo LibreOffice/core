@@ -285,7 +285,7 @@ void ScSamplingDialog::PerformSampling()
     }
 
     pUndoManager->LeaveListAction();
-    pDocShell->PostPaint(aModifiedRange, PAINT_GRID);
+    pDocShell->PostPaint(aModifiedRange, PaintPartFlags::Grid);
 }
 
 IMPL_LINK_NOARG_TYPED( ScSamplingDialog, OkClicked, Button*, void )

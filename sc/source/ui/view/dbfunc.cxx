@@ -378,7 +378,7 @@ void ScDBFunc::ToggleAutoFilter()
                 pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag | ScMF::Auto ) );
             }
             pDocSh->PostPaint(ScRange(aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab),
-                              PAINT_GRID);
+                              PaintPartFlags::Grid);
             bPaint = true;
         }
         else
@@ -430,7 +430,7 @@ void ScDBFunc::HideAutoFilter()
 
     pDBData->SetAutoFilter(false);
 
-    pDocSh->PostPaint(ScRange(nCol1, nRow1, nTab, nCol2, nRow1, nTab), PAINT_GRID );
+    pDocSh->PostPaint(ScRange(nCol1, nRow1, nTab, nCol2, nRow1, nTab), PaintPartFlags::Grid );
     aModificator.SetDocumentModified();
 
     SfxBindings& rBindings = GetViewData().GetBindings();

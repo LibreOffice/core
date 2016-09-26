@@ -2267,7 +2267,7 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uI
 
             SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
             if (pDocSh)
-                pDocSh->Broadcast( ScPaintHint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB), PAINT_GRID ) );
+                pDocSh->Broadcast( ScPaintHint( ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB), PaintPartFlags::Grid ) );
         }
     }
 }

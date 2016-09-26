@@ -133,7 +133,7 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const share
         nFlags |= SC_PF_LINES;
     if (bPaintRows)
         nFlags |= SC_PF_WHOLEROWS;
-    pDocShell->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, nFlags );
+    pDocShell->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PaintPartFlags::Grid, nFlags );
 }
 
 void ScUndoCursorAttr::Undo()

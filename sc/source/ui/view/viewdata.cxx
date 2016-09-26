@@ -1869,7 +1869,7 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
                 SCROW nEndRow = MAXROW;
                 pDoc->ExtendMerge( 0,0, nEndCol,nEndRow, nTabNo, true );
                 if (pDocShell)
-                    pDocShell->PostPaint( ScRange(0,0,nTabNo,MAXCOL,MAXROW,nTabNo), PAINT_GRID );
+                    pDocShell->PostPaint( ScRange(0,0,nTabNo,MAXCOL,MAXROW,nTabNo), PaintPartFlags::Grid );
             }
         }
     }

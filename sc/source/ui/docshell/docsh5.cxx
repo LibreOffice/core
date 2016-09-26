@@ -99,7 +99,7 @@ void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCR
 {
     ScDocShellModificator aModificator( *this );
     aDocument.RemoveFlagsTab( nX1, nY1, nX2, nY1, nTab, ScMF::Auto );
-    PostPaint( nX1, nY1, nTab, nX2, nY1, nTab, PAINT_GRID );
+    PostPaint( nX1, nY1, nTab, nX2, nY1, nTab, PaintPartFlags::Grid );
     // No SetDocumentModified, as the unnamed database range might have to be restored later.
     // The UNO hint is broadcast directly instead, to keep UNO objects in valid state.
     aDocument.BroadcastUno( SfxHint( SFX_HINT_DATACHANGED ) );
@@ -374,7 +374,7 @@ void ScDocShell::CancelAutoDBRange()
                 // restore AutoFilter buttons
                 pOldAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
                 aDocument.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
-                PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PAINT_GRID );
+                PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PaintPartFlags::Grid );
             }
         }
 
@@ -394,7 +394,7 @@ bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
     bool bChange = aDocument.SetOptimalHeight(aCxt, nStartRow,nEndRow, nTab);
 
     if (bChange)
-        PostPaint( 0,nStartRow,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID|PAINT_LEFT );
+        PostPaint( 0,nStartRow,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid|PaintPartFlags::Left );
 
     return bChange;
 }
@@ -617,7 +617,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
     SCROW nPaintStartRow = rParam.nRow;
     SCCOL nPaintEndCol = nPaintStartCol + nColSize - 1;
     SCROW nPaintEndRow = nPaintStartRow + nRowSize - 1;
-    sal_uInt16 nPaintFlags = PAINT_GRID;
+    PaintPartFlags nPaintFlags = PaintPartFlags::Grid;
     if (rParam.bByCol)
         ++nPaintEndRow;
     if (rParam.bByRow)
@@ -627,7 +627,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, bool bRecord )
         nPaintStartCol = 0;
         nPaintEndCol = MAXCOL;
         nPaintEndRow = MAXROW;
-        nPaintFlags |= PAINT_LEFT | PAINT_SIZE;
+        nPaintFlags |= PaintPartFlags::Left | PaintPartFlags::Size;
     }
     if (pDestData)
     {
@@ -712,7 +712,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
                 //  alles painten, weil in anderen Bereichen das aktive Szenario
                 //  geaendert sein kann
                 //! nur, wenn sichtbare Rahmen vorhanden?
-                PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
+                PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid );
                 aModificator.SetDocumentModified();
             }
             else
@@ -820,7 +820,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             aDocument.CopyScenario( nNewTab, nTab, true );  // sal_True - nicht aus Szenario kopieren
 
             if (nFlags & ScScenarioFlags::ShowFrame)
-                PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );  // Rahmen painten
+                PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid );  // Rahmen painten
             PostPaintExtras();                                          // Tabellenreiter
             aModificator.SetDocumentModified();
 

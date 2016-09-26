@@ -366,7 +366,7 @@ void ScUndoDeleteTab::Undo()
     pSfxApp->Broadcast( SfxHint( SC_HINT_DBAREAS_CHANGED ) );
     pSfxApp->Broadcast( SfxHint( SC_HINT_AREALINKS_CHANGED ) );
 
-    pDocShell->PostPaint(0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_ALL );  // incl. extras
+    pDocShell->PostPaint(0,0,0, MAXCOL,MAXROW,MAXTAB, PaintPartFlags::All );  // incl. extras
 
     // not ShowTable due to SetTabNo(..., sal_True):
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -813,7 +813,7 @@ void ScUndoMakeScenario::Undo()
 
     DoSdrUndoAction( pDrawUndo, &rDoc );
 
-    pDocShell->PostPaint(0,0,nDestTab,MAXCOL,MAXROW,MAXTAB, PAINT_ALL);
+    pDocShell->PostPaint(0,0,nDestTab,MAXCOL,MAXROW,MAXTAB, PaintPartFlags::All);
     pDocShell->PostDataChanged();
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -901,7 +901,7 @@ void ScUndoImportTab::DoChange() const
 
     SfxGetpApp()->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
     pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
-                                PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS );
+                                PaintPartFlags::Grid | PaintPartFlags::Top | PaintPartFlags::Left | PaintPartFlags::Extras );
 }
 
 void ScUndoImportTab::Undo()
@@ -1329,7 +1329,7 @@ void ScUndoPrintRange::DoChange(bool bUndo)
 
     ScPrintFunc( pDocShell, pDocShell->GetPrinter(), nTab ).UpdatePages();
 
-    pDocShell->PostPaint( ScRange(0,0,nTab,MAXCOL,MAXROW,nTab), PAINT_GRID );
+    pDocShell->PostPaint( ScRange(0,0,nTab,MAXCOL,MAXROW,nTab), PaintPartFlags::Grid );
 }
 
 void ScUndoPrintRange::Undo()

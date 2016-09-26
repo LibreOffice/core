@@ -170,7 +170,7 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if ( !( (pViewShell) && pViewShell->AdjustRowHeight(
                                 aRange.aStart.Row(), aRange.aEnd.Row() ) ) )
-/*A*/   pDocShell->PostPaint( aRange, PAINT_GRID | PAINT_EXTRAS, nExtFlags );
+/*A*/   pDocShell->PostPaint( aRange, PaintPartFlags::Grid | PaintPartFlags::Extras, nExtFlags );
 
     if (pViewShell)
         pViewShell->CellContentChanged();
@@ -299,7 +299,7 @@ void ScUndoFillTable::DoChange( const bool bUndo )
         SetChangeTrack();
     }
 
-    pDocShell->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_EXTRAS);
+    pDocShell->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Extras);
     pDocShell->PostDataChanged();
 
     //  CellContentChanged comes with the selection
@@ -420,7 +420,7 @@ void ScUndoSelectionAttr::DoChange( const bool bUndo )
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
-/*A*/   pDocShell->PostPaint( aEffRange, PAINT_GRID | PAINT_EXTRAS, nExtFlags );
+/*A*/   pDocShell->PostPaint( aEffRange, PaintPartFlags::Grid | PaintPartFlags::Extras, nExtFlags );
 
     ShowTable( aRange );
 }
@@ -547,7 +547,7 @@ void ScUndoAutoFill::Undo()
         BroadcastChanges( aWorkRange);
 
         rDoc.ExtendMerge( aWorkRange, true );
-        pDocShell->PostPaint( aWorkRange, PAINT_GRID, nExtFlags );
+        pDocShell->PostPaint( aWorkRange, PaintPartFlags::Grid, nExtFlags );
     }
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -609,7 +609,7 @@ void ScUndoAutoFill::Redo()
 
     SetChangeTrack();
 
-    pDocShell->PostPaint( aBlockRange, PAINT_GRID );
+    pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -812,10 +812,10 @@ void ScUndoAutoFormat::Undo()
         pUndoDoc->CopyToDocument( 0, nStartY, 0, MAXCOL, nEndY, nTabCount-1,
                                     InsertDeleteFlags::NONE, false, rDoc, &aMarkData );
         pDocShell->PostPaint( 0, 0, nStartZ, MAXCOL, MAXROW, nEndZ,
-                              PAINT_GRID | PAINT_LEFT | PAINT_TOP, SC_PF_LINES );
+                              PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top, SC_PF_LINES );
     }
     else
-        pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES );
+        pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES );
 
     EndUndo();
 }
@@ -891,10 +891,10 @@ void ScUndoAutoFormat::Redo()
 
         pDocShell->PostPaint( 0,      0,      nStartZ,
                               MAXCOL, MAXROW, nEndZ,
-                              PAINT_GRID | PAINT_LEFT | PAINT_TOP, SC_PF_LINES);
+                              PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top, SC_PF_LINES);
     }
     else
-        pDocShell->PostPaint( aBlockRange, PAINT_GRID, SC_PF_LINES );
+        pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES );
 
     EndRedo();
 }
@@ -1131,7 +1131,7 @@ void ScUndoTabOp::Undo()
     ScDocument& rDoc = pDocShell->GetDocument();
     rDoc.DeleteAreaTab( aRange,InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE );
     pUndoDoc->CopyToDocument( aRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, rDoc );
-    pDocShell->PostPaint( aRange, PAINT_GRID, nExtFlags );
+    pDocShell->PostPaint( aRange, PaintPartFlags::Grid, nExtFlags );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -1318,7 +1318,7 @@ void ScUndoRefConversion::DoChange( ScDocument* pRefDoc)
     aCopyRange.aStart.SetTab(0);
     aCopyRange.aEnd.SetTab(nTabCount-1);
     pRefDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ALL, bMulti, rDoc, &aMarkData );
-    pDocShell->PostPaint( aRange, PAINT_GRID);
+    pDocShell->PostPaint( aRange, PaintPartFlags::Grid);
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -1694,7 +1694,7 @@ void ScUndoUpdateAreaLink::DoChange( const bool bUndo ) const
         aWorkRange.aEnd.SetRow(MAXROW);
 
     if ( !pDocShell->AdjustRowHeight( aWorkRange.aStart.Row(), aWorkRange.aEnd.Row(), aWorkRange.aStart.Tab() ) )
-        pDocShell->PostPaint( aWorkRange, PAINT_GRID );
+        pDocShell->PostPaint( aWorkRange, PaintPartFlags::Grid );
 
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

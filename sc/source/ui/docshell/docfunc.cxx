@@ -125,7 +125,7 @@ static void lcl_PaintAbove( ScDocShell& rDocShell, const ScRange& rRange )
     {
         SCTAB nTab = rRange.aStart.Tab();   //! alle?
         --nRow;
-        rDocShell.PostPaint( ScRange(0,nRow,nTab, MAXCOL,nRow,nTab), PAINT_GRID );
+        rDocShell.PostPaint( ScRange(0,nRow,nTab, MAXCOL,nRow,nTab), PaintPartFlags::Grid );
     }
 }
 
@@ -154,7 +154,7 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
 
     if ( bPaint && bChanged )
         rDocShell.PostPaint(ScRange(0, nStartRow, nTab, MAXCOL, MAXROW, nTab),
-                            PAINT_GRID | PAINT_LEFT);
+                            PaintPartFlags::Grid | PaintPartFlags::Left);
 
     return bChanged;
 }
@@ -634,7 +634,7 @@ bool ScDocFunc::DeleteContents(
     }
 
     if (!AdjustRowHeight( aExtendedRange ))
-        rDocShell.PostPaint( aExtendedRange, PAINT_GRID, nExtFlags );
+        rDocShell.PostPaint( aExtendedRange, PaintPartFlags::Grid, nExtFlags );
     else if (nExtFlags & SC_PF_LINES)
         lcl_PaintAbove( rDocShell, aExtendedRange );    // fuer Linien ueber dem Bereich
 
@@ -703,7 +703,7 @@ bool ScDocFunc::DeleteCell(
     if (!AdjustRowHeight(rPos))
         rDocShell.PostPaint(
             rPos.Col(), rPos.Row(), rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Tab(),
-            PAINT_GRID, nExtFlags);
+            PaintPartFlags::Grid, nExtFlags);
 
     aModificator.SetDocumentModified();
 
@@ -758,7 +758,7 @@ bool ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
     rDoc.TransliterateText( aMultiMark, nType );
 
     if (!AdjustRowHeight( aMarkRange ))
-        rDocShell.PostPaint( aMarkRange, PAINT_GRID );
+        rDocShell.PostPaint( aMarkRange, PaintPartFlags::Grid );
 
     aModificator.SetDocumentModified();
 
@@ -885,7 +885,7 @@ void ScDocFunc::SetValueCells( const ScAddress& rPos, const std::vector<double>&
 
     rDoc.SetValues(rPos, aVals);
 
-    rDocShell.PostPaint(aRange, PAINT_GRID);
+    rDocShell.PostPaint(aRange, PaintPartFlags::Grid);
     aModificator.SetDocumentModified();
 
     // #103934#; notify editline and cell in edit mode
@@ -1362,7 +1362,7 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
         rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content after the change
 
     if (!AdjustRowHeight( aMultiRange ))
-        rDocShell.PostPaint( aMultiRange, PAINT_GRID, nExtFlags );
+        rDocShell.PostPaint( aMultiRange, PaintPartFlags::Grid, nExtFlags );
     else if (nExtFlags & SC_PF_LINES)
         lcl_PaintAbove( rDocShell, aMultiRange );   // fuer Linien ueber dem Bereich
 
@@ -1430,7 +1430,7 @@ bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
     rDoc.ApplySelectionStyle( (ScStyleSheet&)*pStyleSheet, rMark );
 
     if (!AdjustRowHeight( aMultiRange ))
-        rDocShell.PostPaint( aMultiRange, PAINT_GRID );
+        rDocShell.PostPaint( aMultiRange, PaintPartFlags::Grid );
 
     aModificator.SetDocumentModified();
 
@@ -1669,7 +1669,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     SCROW nPaintStartRow = nStartRow;
     SCCOL nPaintEndCol = nEndCol;
     SCROW nPaintEndRow = nEndRow;
-    sal_uInt16 nPaintFlags = PAINT_GRID;
+    PaintPartFlags nPaintFlags = PaintPartFlags::Grid;
     bool bSuccess;
     SCTAB i;
 
@@ -1935,7 +1935,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nPaintStartCol = 0;
             nPaintEndCol = MAXCOL;
             nPaintEndRow = MAXROW;
-            nPaintFlags |= PAINT_LEFT;
+            nPaintFlags |= PaintPartFlags::Left;
             break;
         case INS_CELLSRIGHT:
             bSuccess = rDoc.InsertCol( nStartRow, 0, nEndRow, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, &aFullMark );
@@ -1947,7 +1947,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nPaintStartRow = 0;
             nPaintEndRow = MAXROW;
             nPaintEndCol = MAXCOL;
-            nPaintFlags |= PAINT_TOP;
+            nPaintFlags |= PaintPartFlags::Top;
             break;
         default:
             OSL_FAIL("Falscher Code beim Einfuegen");
@@ -2048,8 +2048,8 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             if (bAdjusted)
             {
                 //  paint only what is not done by AdjustRowHeight
-                if (nPaintFlags & PAINT_TOP)
-                    rDocShell.PostPaint( nPaintStartCol, nPaintStartRow, i, nPaintEndCol, nPaintEndRow, i+nScenarioCount, PAINT_TOP );
+                if (nPaintFlags & PaintPartFlags::Top)
+                    rDocShell.PostPaint( nPaintStartCol, nPaintStartRow, i, nPaintEndCol, nPaintEndRow, i+nScenarioCount, PaintPartFlags::Top );
             }
             else
                 rDocShell.PostPaint( nPaintStartCol, nPaintStartRow, i, nPaintEndCol, nPaintEndRow, i+nScenarioCount, nPaintFlags, nExtFlags );
@@ -2125,7 +2125,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     SCROW nPaintStartRow = nStartRow;
     SCCOL nPaintEndCol = nEndCol;
     SCROW nPaintEndRow = nEndRow;
-    sal_uInt16 nPaintFlags = PAINT_GRID;
+    PaintPartFlags nPaintFlags = PaintPartFlags::Grid;
 
     bool bRecord = true;
     if (bRecord && !rDoc.IsUndoEnabled())
@@ -2410,7 +2410,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nPaintStartCol = 0;
             nPaintEndCol = MAXCOL;
             nPaintEndRow = MAXROW;
-            nPaintFlags |= PAINT_LEFT;
+            nPaintFlags |= PaintPartFlags::Left;
             break;
         case DEL_CELLSLEFT:
             rDoc.DeleteCol( nStartRow, 0, nEndRow, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, nullptr, &aFullMark );
@@ -2421,7 +2421,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             nPaintStartRow = 0;
             nPaintEndRow = MAXROW;
             nPaintEndCol = MAXCOL;
-            nPaintFlags |= PAINT_TOP;
+            nPaintFlags |= PaintPartFlags::Top;
             break;
         default:
             OSL_FAIL("Falscher Code beim Loeschen");
@@ -2576,8 +2576,8 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             //  paint only what is not done by AdjustRowHeight
             if (nExtFlags & SC_PF_LINES)
                 lcl_PaintAbove( rDocShell, ScRange( nPaintStartCol, nPaintStartRow, *itr, nPaintEndCol, nPaintEndRow, *itr+nScenarioCount) );
-            if (nPaintFlags & PAINT_TOP)
-                rDocShell.PostPaint( nPaintStartCol, nPaintStartRow, *itr, nPaintEndCol, nPaintEndRow, *itr+nScenarioCount, PAINT_TOP );
+            if (nPaintFlags & PaintPartFlags::Top)
+                rDocShell.PostPaint( nPaintStartCol, nPaintStartRow, *itr, nPaintEndCol, nPaintEndRow, *itr+nScenarioCount, PaintPartFlags::Top );
         }
     }
 
@@ -2850,21 +2850,21 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         SCROW nPaintStartY = nDestRow;
         SCCOL nPaintEndX = nDestPaintEndCol;
         SCROW nPaintEndY = nDestPaintEndRow;
-        sal_uInt16 nFlags = PAINT_GRID;
+        PaintPartFlags nFlags = PaintPartFlags::Grid;
 
         if ( nStartRow==0 && nEndRow==MAXROW )      // Breiten mitkopiert?
         {
             nPaintEndX = MAXCOL;
             nPaintStartY = 0;
             nPaintEndY = MAXROW;
-            nFlags |= PAINT_TOP;
+            nFlags |= PaintPartFlags::Top;
         }
         if ( bDestHeight || ( nStartCol == 0 && nEndCol == MAXCOL ) )
         {
             nPaintEndY = MAXROW;
             nPaintStartX = 0;
             nPaintEndX = MAXCOL;
-            nFlags |= PAINT_LEFT;
+            nFlags |= PaintPartFlags::Left;
         }
         if ( bScenariosAdded )
         {
@@ -2885,14 +2885,14 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
             nPaintStartY = nStartRow;
             nPaintEndX = nEndCol;
             nPaintEndY = nEndRow;
-            nFlags = PAINT_GRID;
+            nFlags = PaintPartFlags::Grid;
 
             if ( bSourceHeight )
             {
                 nPaintEndY = MAXROW;
                 nPaintStartX = 0;
                 nPaintEndX = MAXCOL;
-                nFlags |= PAINT_LEFT;
+                nFlags |= PaintPartFlags::Left;
             }
             if ( bScenariosAdded )
             {
@@ -3214,7 +3214,7 @@ void ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
         rDocShell.Broadcast( ScTablesHint( SC_TAB_HIDDEN, nTab ) );
 
     SfxGetpApp()->Broadcast( SfxHint( SC_HINT_TABLES_CHANGED ) );
-    rDocShell.PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS);
+    rDocShell.PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PaintPartFlags::Extras);
     aModificator.SetDocumentModified();
 }
 
@@ -3236,7 +3236,7 @@ bool ScDocFunc::SetLayoutRTL( SCTAB nTab, bool bRTL, bool /* bApi */ )
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoLayoutRTL( &rDocShell, nTab, bRTL ) );
     }
 
-    rDocShell.PostPaint( 0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_ALL );
+    rDocShell.PostPaint( 0,0,0,MAXCOL,MAXROW,MAXTAB, PaintPartFlags::All );
     aModificator.SetDocumentModified();
 
     SfxBindings* pBindings = rDocShell.GetViewBindings();
@@ -3564,7 +3564,7 @@ bool ScDocFunc::SetWidthOrHeight(
 
     rDoc.UpdatePageBreaks( nTab );
 
-    rDocShell.PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_ALL);
+    rDocShell.PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::All);
     aModificator.SetDocumentModified();
 
     return bSuccess;
@@ -3609,7 +3609,7 @@ bool ScDocFunc::InsertPageBreak( bool bColumn, const ScAddress& rPos,
 
     if (bColumn)
     {
-        rDocShell.PostPaint( static_cast<SCCOL>(nPos)-1, 0, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID );
+        rDocShell.PostPaint( static_cast<SCCOL>(nPos)-1, 0, nTab, MAXCOL, MAXROW, nTab, PaintPartFlags::Grid );
         if (pBindings)
         {
             pBindings->Invalidate( FID_INS_COLBRK );
@@ -3618,7 +3618,7 @@ bool ScDocFunc::InsertPageBreak( bool bColumn, const ScAddress& rPos,
     }
     else
     {
-        rDocShell.PostPaint( 0, static_cast<SCROW>(nPos)-1, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID );
+        rDocShell.PostPaint( 0, static_cast<SCROW>(nPos)-1, nTab, MAXCOL, MAXROW, nTab, PaintPartFlags::Grid );
         if (pBindings)
         {
             pBindings->Invalidate( FID_INS_ROWBRK );
@@ -3673,7 +3673,7 @@ bool ScDocFunc::RemovePageBreak( bool bColumn, const ScAddress& rPos,
 
     if (bColumn)
     {
-        rDocShell.PostPaint( static_cast<SCCOL>(nPos)-1, 0, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID );
+        rDocShell.PostPaint( static_cast<SCCOL>(nPos)-1, 0, nTab, MAXCOL, MAXROW, nTab, PaintPartFlags::Grid );
         if (pBindings)
         {
             pBindings->Invalidate( FID_INS_COLBRK );
@@ -3682,7 +3682,7 @@ bool ScDocFunc::RemovePageBreak( bool bColumn, const ScAddress& rPos,
     }
     else
     {
-        rDocShell.PostPaint( 0, nPos-1, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID );
+        rDocShell.PostPaint( 0, nPos-1, nTab, MAXCOL, MAXROW, nTab, PaintPartFlags::Grid );
         if (pBindings)
         {
             pBindings->Invalidate( FID_INS_ROWBRK );
@@ -3889,7 +3889,7 @@ void ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, b
 
     rDoc.ClearSelectionItems( pWhich, aMultiMark );
 
-    rDocShell.PostPaint( aMarkRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+    rDocShell.PostPaint( aMarkRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
     aModificator.SetDocumentModified();
 
     //! Bindings-Invalidate etc.?
@@ -3935,7 +3935,7 @@ bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bAp
 
     rDoc.ChangeSelectionIndent( bIncrement, rMark );
 
-    rDocShell.PostPaint( aMarkRange, PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+    rDocShell.PostPaint( aMarkRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
     aModificator.SetDocumentModified();
 
     SfxBindings* pBindings = rDocShell.GetViewBindings();
@@ -4033,7 +4033,7 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
                 SetWidthOrHeight(true, aCols, *itr, SC_SIZE_VISOPT, STD_EXTRA_WIDTH, false, true);
                 SetWidthOrHeight(false, aRows, *itr, SC_SIZE_VISOPT, 0, false, false);
                 rDocShell.PostPaint( 0,0,*itr, MAXCOL,MAXROW,*itr,
-                                PAINT_GRID | PAINT_LEFT | PAINT_TOP );
+                                PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top );
             }
         }
         else
@@ -4045,10 +4045,10 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
                                                     nEndCol, nEndRow, *itr), false );
                 if (bAdj)
                     rDocShell.PostPaint( 0,nStartRow,*itr, MAXCOL,MAXROW,*itr,
-                                        PAINT_GRID | PAINT_LEFT );
+                                        PaintPartFlags::Grid | PaintPartFlags::Left );
                 else
                     rDocShell.PostPaint( nStartCol, nStartRow, *itr,
-                                        nEndCol, nEndRow, *itr, PAINT_GRID );
+                                        nEndCol, nEndRow, *itr, PaintPartFlags::Grid );
             }
         }
 
@@ -4144,7 +4144,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         }
 
         //  Err522 beim Paint von DDE-Formeln werden jetzt beim Interpretieren abgefangen
-        rDocShell.PostPaint( nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab, PAINT_GRID );
+        rDocShell.PostPaint( nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab, PaintPartFlags::Grid );
         aModificator.SetDocumentModified();
 
         bSuccess = true;
@@ -4762,7 +4762,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
 
         if ( !AdjustRowHeight( ScRange( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab ) ) )
             rDocShell.PostPaint( nStartCol, nStartRow, nTab,
-                                 nEndCol, nEndRow, nTab, PAINT_GRID );
+                                 nEndCol, nEndRow, nTab, PaintPartFlags::Grid );
         if (bNeedContents || rOption.mbCenter)
         {
             ScRange aRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab);
@@ -4854,7 +4854,7 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord )
         rDoc.ExtendMerge( aRefresh, true );
 
         if ( !AdjustRowHeight( aExtended ) )
-            rDocShell.PostPaint( aExtended, PAINT_GRID );
+            rDocShell.PostPaint( aExtended, PaintPartFlags::Grid );
     }
 
     if (bRecord)
@@ -5192,7 +5192,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
             }
 
             if (!AdjustRowHeight(ScRange(0,nStartRow,nTab,MAXCOL,nEndRow,nTab)))
-                rDocShell.PostPaint( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab, PAINT_GRID );
+                rDocShell.PostPaint( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab, PaintPartFlags::Grid );
 
             aModificator.SetDocumentModified();
             bDone = true;
@@ -5405,7 +5405,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     }
 
     if(pRepaintRange)
-        rDocShell.PostPaint(*pRepaintRange, PAINT_GRID);
+        rDocShell.PostPaint(*pRepaintRange, PaintPartFlags::Grid);
 
     aModificator.SetDocumentModified();
     SfxGetpApp()->Broadcast(SfxHint(SC_HINT_AREAS_CHANGED));
@@ -5466,7 +5466,7 @@ void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction 
             new sc::UndoFormulaToValue(&rDocShell, *pUndoVals));
     }
 
-    rDocShell.PostPaint(rRange, PAINT_GRID);
+    rDocShell.PostPaint(rRange, PaintPartFlags::Grid);
     rDocShell.PostDataChanged();
     rDoc.BroadcastCells(rRange, SC_HINT_DATACHANGED);
     aModificator.SetDocumentModified();

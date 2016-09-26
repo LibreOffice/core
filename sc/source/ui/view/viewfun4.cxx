@@ -289,7 +289,7 @@ void ScViewFunc::DoRefConversion()
                                     aMarkRange, rMark, pUndoDoc, pRedoDoc, bMulti) );
     }
 
-    pDocSh->PostPaint( aMarkRange, PAINT_GRID );
+    pDocSh->PostPaint( aMarkRange, PaintPartFlags::Grid );
     pDocSh->UpdateOle(&GetViewData());
     pDocSh->SetDocumentModified();
     CellContentChanged();

@@ -109,14 +109,20 @@ namespace sc
 
 
                                     // repaint flags (for messages)
-#define PAINT_GRID          1
-#define PAINT_TOP           2
-#define PAINT_LEFT          4
-#define PAINT_EXTRAS        8
-#define PAINT_MARKS         16
-#define PAINT_OBJECTS       32
-#define PAINT_SIZE          64
-#define PAINT_ALL           ( PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS | PAINT_OBJECTS | PAINT_SIZE )
+enum class PaintPartFlags {
+    NONE          = 0x00,
+    Grid          = 0x01,
+    Top           = 0x02,
+    Left          = 0x04,
+    Extras        = 0x08,
+    Marks         = 0x10,
+    Objects       = 0x20,
+    Size          = 0x40,
+    All           = Grid | Top | Left | Extras | Objects | Size,
+};
+namespace o3tl {
+    template<> struct typed_flags<PaintPartFlags> : is_typed_flags<PaintPartFlags, 0x07f> {};
+}
 
                                     // flags for columns / rows
 enum class CRFlags : sal_uInt8 {

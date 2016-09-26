@@ -133,7 +133,7 @@ void ScViewFunc::CutToClip()
         rMark.MarkToSimple();
 
         if ( !AdjustRowHeight( aRange.aStart.Row(), aRange.aEnd.Row() ) )
-            pDocSh->PostPaint( aRange, PAINT_GRID, nExtFlags );
+            pDocSh->PostPaint( aRange, PaintPartFlags::Grid, nExtFlags );
 
         if ( bRecord )                          // Draw-Undo now available
             pDocSh->GetUndoManager()->AddUndoAction(
@@ -1344,7 +1344,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         {
             pDocSh->PostPaint(
                 ScRange(nClipStartX, nClipStartY, nStartTab, nClipStartX+nClipSizeX, nClipStartY, nStartTab),
-                PAINT_GRID );
+                PaintPartFlags::Grid );
         }
 
     //!     remove block-range on RefUndoDoc !!!
@@ -1403,15 +1403,15 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         pUndoMgr->LeaveListAction();
     }
 
-    sal_uInt16 nPaint = PAINT_GRID;
+    PaintPartFlags nPaint = PaintPartFlags::Grid;
     if (bColInfo)
     {
-        nPaint |= PAINT_TOP;
+        nPaint |= PaintPartFlags::Top;
         nUndoEndCol = MAXCOL;               // just for drawing !
     }
     if (bRowInfo)
     {
-        nPaint |= PAINT_LEFT;
+        nPaint |= PaintPartFlags::Left;
         nUndoEndRow = MAXROW;               // just for drawing !
     }
     pDocSh->PostPaint(
@@ -1562,13 +1562,13 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     }
 
     if (bRowInfo)
-        pDocSh->PostPaint(aMarkedRange.aStart.Col(), aMarkedRange.aStart.Row(), nTab1, MAXCOL, MAXROW, nTab1, PAINT_GRID|PAINT_LEFT);
+        pDocSh->PostPaint(aMarkedRange.aStart.Col(), aMarkedRange.aStart.Row(), nTab1, MAXCOL, MAXROW, nTab1, PaintPartFlags::Grid|PaintPartFlags::Left);
     else
     {
         ScRange aTmp = aMarkedRange;
         aTmp.aStart.SetTab(nTab1);
         aTmp.aEnd.SetTab(nTab1);
-        pDocSh->PostPaint(aTmp, PAINT_GRID);
+        pDocSh->PostPaint(aTmp, PaintPartFlags::Grid);
     }
 
     if (pDoc->IsUndoEnabled())
@@ -1729,10 +1729,10 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
     // Refresh the range that includes all pasted ranges.  We only need to
     // refresh the current sheet.
-    sal_uInt16 nPaint = PAINT_GRID;
+    PaintPartFlags nPaint = PaintPartFlags::Grid;
     bool bRowInfo = (aSrcRange.aStart.Col()==0 &&  aSrcRange.aEnd.Col()==MAXCOL);
     if (bRowInfo)
-        nPaint |= PAINT_LEFT;
+        nPaint |= PaintPartFlags::Left;
     pDocSh->PostPaint(aRanges, nPaint);
 
     if (pDoc->IsUndoEnabled())
@@ -1976,15 +1976,15 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
                                                                 pUndoData );
         pUndoMgr->AddUndoAction( new ScUndoWrapper( pUndo ), true );
 
-        sal_uInt16 nPaint = PAINT_GRID;
+        PaintPartFlags nPaint = PaintPartFlags::Grid;
         if (bColInfo)
         {
-                nPaint |= PAINT_TOP;
+                nPaint |= PaintPartFlags::Top;
                 nUndoEndCol = MAXCOL;                           // just for drawing !
         }
         if (bRowInfo)
         {
-                nPaint |= PAINT_LEFT;
+                nPaint |= PaintPartFlags::Left;
                 nUndoEndRow = MAXROW;                           // just for drawing !
         }
 

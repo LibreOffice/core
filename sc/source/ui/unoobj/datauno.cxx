@@ -2011,7 +2011,7 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
                                      aRange.aStart.Tab(), ScMF::Auto );
             ScRange aPaintRange(aRange.aStart, aRange.aEnd);
             aPaintRange.aEnd.SetRow(aPaintRange.aStart.Row());
-            pDocShell->PostPaint(aPaintRange, PAINT_GRID);
+            pDocShell->PostPaint(aPaintRange, PaintPartFlags::Grid);
         }
         else if (aPropertyName == SC_UNONAME_USEFLTCRT )
         {

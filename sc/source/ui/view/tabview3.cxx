@@ -2171,7 +2171,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     // #i80499# Overlays need updates in a lot of cases, e.g. changing row/column size,
     // or showing/hiding outlines. TODO: selections in inactive windows are vanishing.
     // #i84689# With relative conditional formats, PaintArea may be called often (for each changed cell),
-    // so UpdateAllOverlays was moved to ScTabViewShell::Notify and is called only if PAINT_LEFT/PAINT_TOP
+    // so UpdateAllOverlays was moved to ScTabViewShell::Notify and is called only if PaintPartFlags::Left/PaintPartFlags::Top
     // is set (width or height changed).
 }
 

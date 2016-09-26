@@ -104,7 +104,7 @@ void ScUndoDoOutline::Undo()
 
     pViewShell->UpdateScrollBars();
 
-    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_GRID|PAINT_LEFT|PAINT_TOP);
+    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top);
 
     EndUndo();
 }
@@ -180,7 +180,7 @@ void ScUndoMakeOutline::Undo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
-    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_GRID|PAINT_LEFT|PAINT_TOP|PAINT_SIZE);
+    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
 
     EndUndo();
 }
@@ -198,7 +198,7 @@ void ScUndoMakeOutline::Redo()
     else
         pViewShell->RemoveOutline( bColumns, false );
 
-    pDocShell->PostPaint(0,0,aBlockStart.Tab(),MAXCOL,MAXROW,aBlockEnd.Tab(),PAINT_GRID);
+    pDocShell->PostPaint(0,0,aBlockStart.Tab(),MAXCOL,MAXROW,aBlockEnd.Tab(),PaintPartFlags::Grid);
 
     EndRedo();
 }
@@ -274,7 +274,7 @@ void ScUndoOutlineLevel::Undo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
-    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_GRID|PAINT_LEFT|PAINT_TOP);
+    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top);
 
     EndUndo();
 }
@@ -372,7 +372,7 @@ void ScUndoOutlineBlock::Undo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
-    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_GRID|PAINT_LEFT|PAINT_TOP);
+    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top);
 
     EndUndo();
 }
@@ -461,7 +461,7 @@ void ScUndoRemoveAllOutlines::Undo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
-    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_GRID|PAINT_LEFT|PAINT_TOP|PAINT_SIZE);
+    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
 
     EndUndo();
 }
@@ -551,7 +551,7 @@ void ScUndoAutoOutline::Undo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
-    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_GRID|PAINT_LEFT|PAINT_TOP|PAINT_SIZE);
+    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
 
     EndUndo();
 }
@@ -688,7 +688,7 @@ void ScUndoSubTotals::Undo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
-    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_GRID|PAINT_LEFT|PAINT_TOP|PAINT_SIZE);
+    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
     pDocShell->PostDataChanged();
 
     EndUndo();
@@ -853,11 +853,11 @@ void ScUndoQuery::Undo()
         if (bDoSize)
             nEndY = MAXROW;
         pDocShell->PostPaint( aQueryParam.nDestCol, aQueryParam.nDestRow, aQueryParam.nDestTab,
-                                    nEndX, nEndY, aQueryParam.nDestTab, PAINT_GRID );
+                                    nEndX, nEndY, aQueryParam.nDestTab, PaintPartFlags::Grid );
     }
     else
         pDocShell->PostPaint( 0, aQueryParam.nRow1, nTab, MAXCOL, MAXROW, nTab,
-                                                    PAINT_GRID | PAINT_LEFT );
+                                                    PaintPartFlags::Grid | PaintPartFlags::Left );
     pDocShell->PostDataChanged();
 
     EndUndo();
@@ -942,7 +942,7 @@ void ScUndoAutoFilter::DoChange( bool bUndo )
         else
             rDoc.RemoveFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
 
-        pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PAINT_GRID );
+        pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PaintPartFlags::Grid );
     }
 }
 
@@ -1143,10 +1143,10 @@ void ScUndoImportData::Undo()
         pViewShell->SetTabNo( nTab );
 
     if (bMoveCells)
-        pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
+        pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid );
     else
         pDocShell->PostPaint( aImportParam.nCol1,aImportParam.nRow1,nTab,
-                                nEndCol,nEndRow,nTab, PAINT_GRID );
+                                nEndCol,nEndRow,nTab, PaintPartFlags::Grid );
     pDocShell->PostDataChanged();
 
     EndUndo();
@@ -1212,10 +1212,10 @@ void ScUndoImportData::Redo()
         pViewShell->SetTabNo( nTab );
 
     if (bMoveCells)
-        pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
+        pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid );
     else
         pDocShell->PostPaint( aImportParam.nCol1,aImportParam.nRow1,nTab,
-                                nEndCol,nEndRow,nTab, PAINT_GRID );
+                                nEndCol,nEndRow,nTab, PaintPartFlags::Grid );
     pDocShell->PostDataChanged();
 
     EndRedo();
@@ -1375,7 +1375,7 @@ void ScUndoRepeatDB::Undo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
-    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_GRID|PAINT_LEFT|PAINT_TOP|PAINT_SIZE);
+    pDocShell->PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PaintPartFlags::Grid|PaintPartFlags::Left|PaintPartFlags::Top|PaintPartFlags::Size);
     pDocShell->PostDataChanged();
 
     EndUndo();
@@ -1513,9 +1513,9 @@ void ScUndoDataPilot::Undo()
     }
 
     if (pNewUndoDoc)
-        pDocShell->PostPaint( aNewRange, PAINT_GRID, SC_PF_LINES );
+        pDocShell->PostPaint( aNewRange, PaintPartFlags::Grid, SC_PF_LINES );
     if (pOldUndoDoc)
-        pDocShell->PostPaint( aOldRange, PAINT_GRID, SC_PF_LINES );
+        pDocShell->PostPaint( aOldRange, PaintPartFlags::Grid, SC_PF_LINES );
     pDocShell->PostDataChanged();
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -1631,7 +1631,7 @@ void ScUndoConsolidate::Undo()
         }
 
         pDocShell->PostPaint( 0,aDestArea.nRowStart,nTab, MAXCOL,MAXROW,nTab,
-                                PAINT_GRID | PAINT_LEFT | PAINT_SIZE );
+                                PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Size );
     }
     else
     {
@@ -1658,7 +1658,7 @@ void ScUndoConsolidate::Undo()
                 nEndY = aOldRange.aEnd.Row();
         }
         pDocShell->PostPaint( aDestArea.nColStart, aDestArea.nRowStart, nTab,
-                                    nEndX, nEndY, nTab, PAINT_GRID );
+                                    nEndX, nEndY, nTab, PaintPartFlags::Grid );
     }
 
     // Adjust Database range again
@@ -1939,14 +1939,14 @@ void ScUndoDataForm::DoChange( const bool bUndo )
 
     ScRange aDrawRange( aBlockRange );
     rDoc.ExtendMerge( aDrawRange, true );      // only needed for single sheet (text/rtf etc.)
-    sal_uInt16 nPaint = PAINT_GRID;
+    PaintPartFlags nPaint = PaintPartFlags::Grid;
     if (bPaintAll)
     {
         aDrawRange.aStart.SetCol(0);
         aDrawRange.aStart.SetRow(0);
         aDrawRange.aEnd.SetCol(MAXCOL);
         aDrawRange.aEnd.SetRow(MAXROW);
-        nPaint |= PAINT_TOP | PAINT_LEFT;
+        nPaint |= PaintPartFlags::Top | PaintPartFlags::Left;
 /*A*/   if (pViewShell)
             pViewShell->AdjustBlockHeight(false);
     }
@@ -1954,12 +1954,12 @@ void ScUndoDataForm::DoChange( const bool bUndo )
     {
         if ( aBlockRange.aStart.Row() == 0 && aBlockRange.aEnd.Row() == MAXROW )        // whole column
         {
-            nPaint |= PAINT_TOP;
+            nPaint |= PaintPartFlags::Top;
             aDrawRange.aEnd.SetCol(MAXCOL);
         }
         if ( aBlockRange.aStart.Col() == 0 && aBlockRange.aEnd.Col() == MAXCOL )        // whole row
         {
-            nPaint |= PAINT_LEFT;
+            nPaint |= PaintPartFlags::Left;
             aDrawRange.aEnd.SetRow(MAXROW);
         }
 /*A*/   if ((pViewShell) && pViewShell->AdjustBlockHeight(false))
@@ -1968,7 +1968,7 @@ void ScUndoDataForm::DoChange( const bool bUndo )
             aDrawRange.aStart.SetRow(0);
             aDrawRange.aEnd.SetCol(MAXCOL);
             aDrawRange.aEnd.SetRow(MAXROW);
-            nPaint |= PAINT_LEFT;
+            nPaint |= PaintPartFlags::Left;
         }
         pDocShell->UpdatePaintExt( nExtFlags, aDrawRange );
     }

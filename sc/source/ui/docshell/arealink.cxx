@@ -443,7 +443,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         if ( !pImpl->m_pDocSh->AdjustRowHeight( aDestPos.Row(), nPaintEndY, nDestTab ) )
             pImpl->m_pDocSh->PostPaint(
                 ScRange(aDestPos.Col(), aDestPos.Row(), nDestTab, nPaintEndX, nPaintEndY, nDestTab),
-                PAINT_GRID);
+                PaintPartFlags::Grid);
         aModificator.SetDocumentModified();
     }
     else
