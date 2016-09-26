@@ -43,9 +43,6 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
         const css::uno::Reference < css::beans::XPropertySet >& rPropSet );
 
 protected:
-    virtual void exportStyleContent(
-            const css::uno::Reference< css::style::XStyle > & rStyle ) override;
-
     virtual void _collectTextEmbeddedAutoStyles(
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
     virtual void _exportTextEmbedded(

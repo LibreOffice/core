@@ -207,10 +207,6 @@ public:
 
 
     bool IsValid() const { return 0 != nCondition; }
-
-    sal_uInt32 GetCondition() const { return nCondition; }
-    sal_uInt32 GetSubCondition() const { return nSubCondition; }
-    const OUString& GetApplyStyle() const { return sApplyStyle; }
 };
 
 SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
@@ -279,8 +275,6 @@ public:
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
-
-    virtual void Finish( bool bOverwrite ) override;
 };
 
 
@@ -344,50 +338,6 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
                                                           xAttrList );
 
     return pContext;
-}
-
-void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
-{
-    XMLTextStyleContext::Finish( bOverwrite );
-    if(!pConditions || XML_STYLE_FAMILY_TEXT_PARAGRAPH != GetFamily())
-        return;
-    uno::Reference<style::XStyle> xStyle = GetStyle();
-    if(!xStyle.is())
-        return;
-    uno::Reference<lang::XUnoTunnel> xStyleTunnel(xStyle, uno::UNO_QUERY);
-    if(!xStyleTunnel.is())
-        return;
-    sw::ICoreParagraphStyle* pCoreParagraphStyle(reinterpret_cast<sw::ICoreParagraphStyle*>(
-            xStyleTunnel->getSomething(sw::ICoreParagraphStyle::getUnoTunnelId())));
-    if(!pCoreParagraphStyle)
-        return;
-    SwTextFormatColl* pColl = const_cast<SwTextFormatColl*>(pCoreParagraphStyle->GetFormatColl());
-    OSL_ENSURE( pColl, "Text collection not found" );
-    if( !pColl || RES_CONDTXTFMTCOLL != pColl->Which() )
-        return;
-    SwDoc *pDoc = SwImport::GetDocFromXMLImport(GetImport());
-    const size_t nCount = pConditions->size();
-    OUString sName;
-    for( size_t i = 0; i < nCount; i++ )
-    {
-        const SwXMLConditionContext_Impl *pCond = (*pConditions)[i].get();
-        const OUString aDisplayName(
-            GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
-                pCond->GetApplyStyle() ) );
-        SwStyleNameMapper::FillUIName(aDisplayName,
-                                      sName,
-                                      nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
-                                      true);
-        SwTextFormatColl* pCondColl = pDoc->FindTextFormatCollByName( sName );
-        OSL_ENSURE( pCondColl,
-            "SwXMLItemSetStyleContext_Impl::ConnectConditions: cond coll missing" );
-        if( pCondColl )
-        {
-            SwCollCondition aCond( pCondColl, pCond->GetCondition(),
-                                              pCond->GetSubCondition() );
-            static_cast<SwConditionTextFormatColl*>(pColl)->InsertCondition( aCond );
-        }
-    }
 }
 
 class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext

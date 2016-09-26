@@ -112,13 +112,6 @@ namespace sw
             virtual css::document::XEventsSupplier& GetEventsSupplier() =0;
             virtual ~ICoreFrameStyle() {};
     };
-    class ICoreParagraphStyle
-    {
-        public:
-            static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
-            virtual const SwTextFormatColl* GetFormatColl() =0;
-            virtual ~ICoreParagraphStyle() {};
-    };
 }
 
 // access to all automatic style families
