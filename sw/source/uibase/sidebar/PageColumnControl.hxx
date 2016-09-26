@@ -29,7 +29,7 @@ class PagePropertyPanel;
 class PageColumnControl : public SfxPopupWindow
 {
 public:
-    PageColumnControl( sal_uInt16 nId );
+    explicit PageColumnControl(sal_uInt16 nId);
 
     virtual ~PageColumnControl() override;
     virtual void dispose() override;
