@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_ea2ae9e6",
+        "filename": "extras/source/autocorr/lang/pt/SentenceExceptList.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001380
+      },
+      "writtenOn": "2016-09-26T08:47:58Z",
+      "side": 1,
+      "message": "\"a\u0026#xE7;.\" is UTF-8 for \"aç.\"",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 58
+      },
+      "revId": "29f22b90683e1c94c15dd9ea25f4be2fb555460b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
