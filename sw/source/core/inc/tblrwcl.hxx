@@ -39,8 +39,6 @@ class SwContentNode;
 class SfxPoolItem;
 class SwShareBoxFormats;
 class SwFormatFrameSize;
-struct CpyPara;
-struct InsULPara;
 
 void sw_LineSetHeadCondColl( const SwTableLine* pLine );
 

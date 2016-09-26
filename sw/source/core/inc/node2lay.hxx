@@ -50,7 +50,6 @@ class SwLayoutFrame;
 class SwNode;
 class SwNodes;
 class Point;
-struct SwPosition;
 
 class SwNode2Layout
 {

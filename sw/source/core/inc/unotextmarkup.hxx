@@ -39,7 +39,6 @@ namespace com { namespace sun { namespace star { namespace text {
 
 class SwTextNode;
 class ModelToViewHelper;
-class SfxPoolItem;
 
 /** Implementation of the css::text::XTextMarkup interface
  */

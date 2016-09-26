@@ -32,7 +32,6 @@
 #include <unotext.hxx>
 
 class SwDoc;
-class SwModify;
 class SwFormatFootnote;
 
 typedef ::cppu::WeakImplHelper

@@ -34,9 +34,7 @@
 class SwFieldType;
 class SwDoc;
 class SwFormatField;
-class SwField;
 class SwSetExpField;
-class SwTextAPIObject;
 
 typedef ::cppu::WeakImplHelper
 <   css::beans::XPropertySet

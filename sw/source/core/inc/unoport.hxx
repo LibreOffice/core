@@ -44,7 +44,6 @@
 #include <unobaseclass.hxx>
 #include <IDocumentRedlineAccess.hxx>
 
-class SwFormatField;
 class SwFrameFormat;
 class SwRangeRedline;
 class SwTextRuby;
