@@ -1162,21 +1162,24 @@ void SwTextNode::Update(
         // The cursors of other shells shouldn't be moved, either.
         if (SwDocShell* pDocShell = GetDoc()->GetDocShell())
         {
-            for (SwViewShell& rShell : pDocShell->GetWrtShell()->GetRingContainer())
+            if (pDocShell->GetWrtShell())
             {
-                auto pWrtShell = dynamic_cast<SwWrtShell*>(&rShell);
-                if (!pWrtShell || pWrtShell == pDocShell->GetWrtShell())
-                    continue;
-
-                SwShellCursor* pCursor = pWrtShell->GetCursor_();
-                if (!pCursor)
-                    continue;
-
-                SwIndex& rIndex = const_cast<SwIndex&>(pCursor->Start()->nContent);
-                if (&pCursor->Start()->nNode.GetNode() == this && rIndex.GetIndex() == rPos.GetIndex())
+                for (SwViewShell& rShell : pDocShell->GetWrtShell()->GetRingContainer())
                 {
-                    // The cursor position of this other shell is exactly our insert position.
-                    rIndex.Assign(&aTmpIdxReg, rIndex.GetIndex());
+                    auto pWrtShell = dynamic_cast<SwWrtShell*>(&rShell);
+                    if (!pWrtShell || pWrtShell == pDocShell->GetWrtShell())
+                        continue;
+
+                    SwShellCursor* pCursor = pWrtShell->GetCursor_();
+                    if (!pCursor)
+                        continue;
+
+                    SwIndex& rIndex = const_cast<SwIndex&>(pCursor->Start()->nContent);
+                    if (&pCursor->Start()->nNode.GetNode() == this && rIndex.GetIndex() == rPos.GetIndex())
+                    {
+                        // The cursor position of this other shell is exactly our insert position.
+                        rIndex.Assign(&aTmpIdxReg, rIndex.GetIndex());
+                    }
                 }
             }
         }
