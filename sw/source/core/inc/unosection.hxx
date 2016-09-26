@@ -37,8 +37,6 @@
 
 class SwSectionFormat;
 
-struct SwTextSectionProperties_Impl;
-
 typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
 ,   css::lang::XUnoTunnel

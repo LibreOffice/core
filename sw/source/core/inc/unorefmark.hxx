@@ -31,7 +31,6 @@
 #include <unobaseclass.hxx>
 
 class SwDoc;
-class SwModify;
 class SwFormatRefMark;
 
 typedef ::cppu::WeakImplHelper

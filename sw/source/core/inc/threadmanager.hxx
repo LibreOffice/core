@@ -26,7 +26,6 @@
 #include <rtl/ref.hxx>
 
 #include <deque>
-#include <list>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/util/XJobManager.hpp>
 #include <observablethread.hxx>

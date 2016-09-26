@@ -27,9 +27,7 @@
 class OutputDevice;
 class SwContentFrame;
 class SwPageFrame;
-class SwTextFly;
 class SdrObject;
-class SwTextPaintInfo;
 class SwFormat;
 class TextRanger;
 class SwAnchoredObject;

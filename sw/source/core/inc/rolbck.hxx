@@ -32,7 +32,6 @@ namespace sfx2 {
 
 class SwDoc;
 class SwFormatColl;
-class SwHistoryHint;
 class SwTextAttr;
 class SfxPoolItem;
 class SwUndoSaveSection;

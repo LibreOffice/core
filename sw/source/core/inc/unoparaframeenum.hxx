@@ -32,7 +32,6 @@
 #include <unobaseclass.hxx>
 
 
-class SwDepend;
 class SwNodeIndex;
 class SwPaM;
 class SwFrameFormat;
