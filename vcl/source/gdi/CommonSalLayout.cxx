@@ -381,6 +381,16 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             LanguageTag &rTag = rArgs.maLanguageTag;
             OString sLanguage = OUStringToOString(rTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
 
+            bool bVertical = false;
+            if ((rArgs.mnFlags & SalLayoutFlags::Vertical) &&
+                (aHbScript == HB_SCRIPT_HAN ||
+                 aHbScript == HB_SCRIPT_HANGUL ||
+                 aHbScript == HB_SCRIPT_HIRAGANA ||
+                 aHbScript == HB_SCRIPT_KATAKANA))
+            {
+                bVertical = true;
+            }
+
             int nHbFlags = HB_BUFFER_FLAGS_DEFAULT;
             if (nMinRunPos == 0)
                 nHbFlags |= HB_BUFFER_FLAG_BOT; /* Beginning-of-text */
@@ -392,7 +402,10 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 #if !HB_VERSION_ATLEAST(1, 1, 0)
             hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
 #endif
-            hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
+            if (SAL_UNLIKELY(bVertical))
+              hb_buffer_set_direction(pHbBuffer, HB_DIRECTION_TTB);
+            else
+              hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
             hb_buffer_set_script(pHbBuffer, aHbScript);
             hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
             hb_buffer_set_flags(pHbBuffer, (hb_buffer_flags_t) nHbFlags);
@@ -457,17 +470,31 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 if (bDiacritic)
                     nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
-                int32_t nXOffset =  pHbPositions[i].x_offset >> 6;
-                int32_t nYOffset =  pHbPositions[i].y_offset >> 6;
-                int32_t nXAdvance = pHbPositions[i].x_advance >> 6;
-                int32_t nYAdvance = pHbPositions[i].y_advance >> 6;
+                int32_t nXOffset;
+                int32_t nYOffset;
+                int32_t nXAdvance;
+                Point aNewPos;
 
-                Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
+                if (SAL_UNLIKELY(bVertical))
+                {
+                    nXOffset =  pHbPositions[i].y_offset >> 6;
+                    nYOffset =  pHbPositions[i].x_offset >> 6;
+                    nXAdvance = pHbPositions[i].y_advance >> 6;
+                    nGlyphIndex |= GF_ROTL;
+                    aNewPos = Point(-(aCurrPos.X() + nXOffset), aCurrPos.Y() + nYOffset);
+                }
+                else
+                {
+                    nXOffset =  pHbPositions[i].x_offset >> 6;
+                    nYOffset =  pHbPositions[i].y_offset >> 6;
+                    nXAdvance = pHbPositions[i].x_advance >> 6;
+                    aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
+                }
+
                 const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nXAdvance, nXOffset);
                 AppendGlyph(aGI);
 
                 aCurrPos.X() += nXAdvance;
-                aCurrPos.Y() += nYAdvance;
             }
 
             hb_buffer_destroy(pHbBuffer);
