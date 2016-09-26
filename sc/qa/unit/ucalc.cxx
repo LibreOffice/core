@@ -34,6 +34,7 @@
 #include "dbdata.hxx"
 #include "reftokenhelper.hxx"
 #include "userdat.hxx"
+#include "clipcontext.hxx"
 
 #include "docsh.hxx"
 #include "docfunc.hxx"
@@ -6133,6 +6134,18 @@ void Test::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocu
     ScMarkData aMark;
     aMark.SetMarkArea(rDestRange);
     pDestDoc->CopyFromClip(rDestRange, aMark, InsertDeleteFlags::ALL, nullptr, pClipDoc);
+}
+
+void Test::pasteOneCellFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocument* pClipDoc, InsertDeleteFlags eFlags)
+{
+    ScMarkData aMark;
+    aMark.SetMarkArea(rDestRange);
+    sc::CopyFromClipContext aCxt(*pDestDoc, nullptr, pClipDoc, eFlags, false, false);
+    aCxt.setDestRange(rDestRange.aStart.Col(), rDestRange.aStart.Row(),
+            rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
+    aCxt.setTabRange(rDestRange.aStart.Tab(), rDestRange.aEnd.Tab());
+    pDestDoc->CopyOneCellFromClip(aCxt, rDestRange.aStart.Col(), rDestRange.aStart.Row(),
+            rDestRange.aEnd.Col(), rDestRange.aEnd.Row());
 }
 
 ScUndoPaste* Test::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pUndoDoc)

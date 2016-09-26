@@ -317,7 +317,7 @@ void Test::testCondCopyPasteSingleCell()
     copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), &aClipDoc);
 
     ScRange aTargetRange(4,4,0,4,4,0);
-    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+    pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
 
     ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(4,4,0);
     CPPUNIT_ASSERT(pPastedFormat);
@@ -349,9 +349,8 @@ void Test::testCondCopyPasteSingleCellToRange()
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), &aClipDoc);
-
     ScRange aTargetRange(4,4,0,5,8,0);
-    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+    pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
 
     std::set<sal_uLong> aCondFormatIndices;
     for(SCROW nRow = 4; nRow <= 8; ++nRow)
