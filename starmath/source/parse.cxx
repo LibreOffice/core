@@ -654,7 +654,7 @@ void SmParser::NextToken()
                         m_aCurToken.cMathChar  = '\0';
                         m_aCurToken.nGroup     = TG::NONE;
                         m_aCurToken.nLevel     = 5;
-                        m_aCurToken.aText.clear();
+                        m_aCurToken.aText      ="%";
                         m_aCurToken.nRow       = m_Row;
                         m_aCurToken.nCol       = nTmpStart - m_nColOff;
 
