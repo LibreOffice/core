@@ -323,7 +323,7 @@ public:
 
     void InsertBulkGroupArea( ScBroadcastArea* pArea, const ScRange& rRange );
     void RemoveBulkGroupArea( ScBroadcastArea* pArea );
-    void BulkBroadcastGroupAreas();
+    bool BulkBroadcastGroupAreas();
 
     /// @return: how many removed
     size_t              RemoveBulkArea( const ScBroadcastArea* p );

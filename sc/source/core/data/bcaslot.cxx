@@ -1098,10 +1098,12 @@ void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast()
         if (--nInBulkBroadcast == 0)
         {
             ScBroadcastAreasBulk().swap( aBulkBroadcastAreas);
-            BulkBroadcastGroupAreas();
+            bool bBroadcasted = BulkBroadcastGroupAreas();
             // Trigger the "final" tracking.
             if (pDoc->IsTrackFormulasPending())
                 pDoc->FinalTrackFormulas();
+            else if (bBroadcasted)
+                pDoc->TrackFormulas();
         }
     }
 }
@@ -1125,10 +1127,10 @@ void ScBroadcastAreaSlotMachine::InsertBulkGroupArea( ScBroadcastArea* pArea, co
     pSet->set(rRange, true);
 }
 
-void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
+bool ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
 {
     if (m_BulkGroupAreas.empty())
-        return;
+        return false;
 
     sc::BulkDataHint aHint(*pDoc);
 
@@ -1156,8 +1158,8 @@ void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
     }
 
     m_BulkGroupAreas.clear();
-    if (bBroadcasted)
-        pDoc->TrackFormulas();
+
+    return bBroadcasted;
 }
 
 size_t ScBroadcastAreaSlotMachine::RemoveBulkArea( const ScBroadcastArea* pArea )
