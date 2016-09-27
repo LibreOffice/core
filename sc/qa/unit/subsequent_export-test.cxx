@@ -174,6 +174,8 @@ public:
     void testEscapeCharInNumberFormatXLSX();
     void testNatNumInNumberFormatXLSX();
 
+    void testHiddenRepeatedRowsODS();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testPasswordExport);
@@ -254,6 +256,8 @@ public:
     CPPUNIT_TEST(testTdf88657);
     CPPUNIT_TEST(testEscapeCharInNumberFormatXLSX);
     CPPUNIT_TEST(testNatNumInNumberFormatXLSX);
+
+    CPPUNIT_TEST(testHiddenRepeatedRowsODS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3653,6 +3657,26 @@ void ScExportTest::testNatNumInNumberFormatXLSX()
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", "[DBNum2][$-804]General;[RED][DBNum2][$-804]General");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testHiddenRepeatedRowsODS()
+{
+    ScDocShellRef xDocSh = loadDoc("empty.", FORMAT_ODS);
+    CPPUNIT_ASSERT( xDocSh.Is() );
+
+    {
+        ScDocument& rDoc = xDocSh->GetDocument();
+        rDoc.SetRowHidden(0, 20, 0, true);
+    }
+
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);  // Convert [NatNum5] to [DBNum2] in Chinese
+    ScDocument& rDoc = xDocSh->GetDocument();
+    SCROW nFirstRow = 0;
+    SCROW nLastRow = 0;
+    bool bHidden = rDoc.RowHidden(0, 0, &nFirstRow, &nLastRow);
+    CPPUNIT_ASSERT(bHidden);
+    CPPUNIT_ASSERT_EQUAL((SCROW)0, nFirstRow);
+    CPPUNIT_ASSERT_EQUAL((SCROW)20, nLastRow);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
