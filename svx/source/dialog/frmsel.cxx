@@ -1176,6 +1176,7 @@ void FrameSelector::KeyInput( const KeyEvent& rKEvt )
                         DeselectAllBorders();
                         SelectBorder( eBorder );
                     }
+                    bHandled = true;
                 }
             }
             break;
