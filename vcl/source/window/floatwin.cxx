@@ -628,7 +628,7 @@ void FloatingWindow::ImplCallPopupModeEnd()
 
     // call Handler asynchronously.
     if ( mpImplData && !mnPostId )
-        mnPostId = Application::PostUserEvent( LINK( this, FloatingWindow, ImplEndPopupModeHdl ), mxPrevFocusWin, true );
+        mnPostId = Application::PostUserEvent(LINK(this, FloatingWindow, ImplEndPopupModeHdl));
 }
 
 void FloatingWindow::PopupModeEnd()
