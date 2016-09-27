@@ -50,7 +50,6 @@ private:
     sal_uInt16 nPosInParent;
 
     bool bInExecute : 1;
-
     bool bScrollMenu : 1;
     bool bScrollUp : 1;
     bool bScrollDown : 1;
@@ -67,6 +66,9 @@ private:
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     void InitMenuClipRegion(vcl::RenderContext& rRenderContext);
+
+    void Start();
+    void End();
 
 protected:
     vcl::Region ImplCalcClipRegion( bool bIncludeLogo = true ) const;

@@ -272,13 +272,13 @@ IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, PopupEnd, FloatingWindow*, void)
     Menu* pM = pMenu;
     if ( bInExecute )
     {
+        End();
         if ( pActivePopup )
         {
             //SAL_WARN_IF( pActivePopup->ImplGetWindow(), "vcl", "PopupEnd, obwohl pActivePopup MIT Window!" );
             KillActivePopup(); // should be ok to just remove it
             //pActivePopup->bCanceled = true;
         }
-        bInExecute = false;
         pMenu->bInCallback = true;
         pMenu->Deactivate();
         pMenu->bInCallback = false;
@@ -388,15 +388,44 @@ void MenuFloatingWindow::EnableScrollMenu( bool b )
     InitMenuClipRegion(*this);
 }
 
+void MenuFloatingWindow::Start()
+{
+    if (bInExecute)
+        return;
+    bInExecute = true;
+    if (GetParent())
+        GetParent()->ImplIncModalCount();
+}
+
+void MenuFloatingWindow::End()
+{
+    if (!bInExecute)
+        return;
+
+    if (GetParent() && !GetParent()->IsDisposed())
+        GetParent()->ImplDecModalCount();
+
+    // restore focus
+    VclPtr<vcl::Window> xFocusId(xSaveFocusId);
+    if (xFocusId != nullptr)
+    {
+        xSaveFocusId = nullptr;
+        ImplGetSVData()->maWinData.mbNoDeactivate = false;
+        Window::EndSaveFocus(xFocusId);
+    }
+
+    bInExecute = false;
+}
+
 void MenuFloatingWindow::Execute()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     pSVData->maAppData.mpActivePopupMenu = static_cast<PopupMenu*>(pMenu.get());
 
-    bInExecute = true;
+    Start();
 
-    while ( bInExecute )
+    while (bInExecute)
         Application::Yield();
 
     pSVData->maAppData.mpActivePopupMenu = nullptr;
@@ -404,18 +433,12 @@ void MenuFloatingWindow::Execute()
 
 void MenuFloatingWindow::StopExecute()
 {
-    VclPtr<vcl::Window> xFocusId(xSaveFocusId);
-    // restore focus (could have been restored in Select)
-    if (xFocusId != nullptr)
-    {
-        xSaveFocusId = nullptr;
-        ImplGetSVData()->maWinData.mbNoDeactivate = false;
-    }
-    ImplEndPopupMode(FloatWinPopupEndFlags::NONE, xFocusId);
+    End();
+
+    ImplEndPopupMode(FloatWinPopupEndFlags::NONE, xSaveFocusId);
 
     aHighlightChangedTimer.Stop();
-    bInExecute = false;
-    if ( pActivePopup )
+    if (pActivePopup)
     {
         KillActivePopup();
     }
