@@ -67,8 +67,7 @@ protected:
         SwAttrPool& rPool,
         const sal_Char* pFormatNm,
         SwFrameFormat *pDrvdFrame,
-        sal_uInt16 nFormatWhich = RES_FRMFMT,
-        const sal_uInt16* pWhichRange = nullptr);
+        sal_uInt16 nFormatWhich = RES_FRMFMT);
 
     SwFrameFormat(
         SwAttrPool& rPool,

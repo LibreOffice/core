@@ -859,7 +859,7 @@ const SwNumRule * SwEditShell::SearchNumRule( const bool bNum,
                                               OUString& sListId )
 {
     return GetDoc()->SearchNumRule( *(GetCursor()->Start()),
-                                    false/*bForward*/, bNum, false/*bOutline*/, -1/*nNonEmptyAllowe*/,
+                                    false/*bForward*/, bNum, -1/*nNonEmptyAllowe*/,
                                     sListId );
 }
 

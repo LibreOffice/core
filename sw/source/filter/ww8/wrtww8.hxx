@@ -848,7 +848,7 @@ protected:
 
     /// Find the nearest annotation mark from the current position.
     ///
-    void NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly );
+    void NearestAnnotationMark( sal_Int32& rNearest );
 
     void GetSortedAnnotationMarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_Int32 nLen );
 

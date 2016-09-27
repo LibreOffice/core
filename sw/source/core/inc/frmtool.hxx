@@ -163,8 +163,7 @@ bool IsExtraData( const SwDoc *pDoc );
 
 // #i11760# - method declaration <CalcContent(..)>
 void CalcContent( SwLayoutFrame *pLay,
-                bool bNoColl = false,
-                bool bNoCalcFollow = false );
+                bool bNoColl = false );
 
 // Notify classes memorize the current sizes in their constructor and do
 // the necessary notifications in their destructor if needed

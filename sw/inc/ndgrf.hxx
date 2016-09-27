@@ -127,7 +127,7 @@ public:
 
     /// wrappers for non-const calls at GraphicObject
     void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData, OutputDevice* pFirstFrameOutDev = nullptr)
-    { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, nullptr, GraphicManagerDrawFlags::STANDARD, pFirstFrameOutDev); }
+    { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pFirstFrameOutDev); }
     void StopGraphicAnimation(OutputDevice* pOut, long nExtraData = 0) { maGrfObj.StopAnimation(pOut, nExtraData); }
 
     virtual Size GetTwipSize() const override;

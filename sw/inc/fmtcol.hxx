@@ -67,9 +67,8 @@ protected:
     SwTextFormatColl *mpNextTextFormatColl;
 
     SwTextFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
-                    SwTextFormatColl* pDerFrom = nullptr,
                     sal_uInt16 nFormatWh = RES_TXTFMTCOLL )
-        : SwFormatColl(rPool, pFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
+        : SwFormatColl(rPool, pFormatCollName, aTextFormatCollSetRange, nullptr, nFormatWh)
         , mbStayAssignedToListLevelOfOutlineStyle(false)
         , mbAssignedToOutlineStyle(false)
     {
@@ -138,10 +137,9 @@ class SwGrfFormatColl: public SwFormatColl
 {
     friend class SwDoc;
 protected:
-    SwGrfFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
-                    SwGrfFormatColl* pDerFrom = nullptr )
+    SwGrfFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName )
         : SwFormatColl( rPool, pFormatCollName, aGrfFormatCollSetRange,
-                    pDerFrom, RES_GRFFMTCOLL )
+                    nullptr, RES_GRFFMTCOLL )
     {}
 
     SwGrfFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,

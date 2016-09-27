@@ -90,7 +90,7 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_VALUE,1);
     SbxValue();
-    SbxValue( SbxDataType, void* = nullptr );
+    SbxValue( SbxDataType );
     SbxValue( const SbxValue& );
     SbxValue& operator=( const SbxValue& );
     virtual void Clear() override;

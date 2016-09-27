@@ -5533,8 +5533,7 @@ void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
 
 
 void SvxMSDffManager::ExchangeInShapeOrder( SdrObject*   pOldObject,
-                                            sal_uLong        nTxBx,
-                                            SwFlyFrameFormat* pFly,
+                                            sal_uLong    nTxBx,
                                             SdrObject*   pObject) const
 {
     sal_uInt16 nShpCnt = m_pShapeOrders->size();
@@ -5544,7 +5543,7 @@ void SvxMSDffManager::ExchangeInShapeOrder( SdrObject*   pOldObject,
 
         if( rOrder.pObj == pOldObject )
         {
-            rOrder.pFly      = pFly;
+            rOrder.pFly      = nullptr;
             rOrder.pObj      = pObject;
             rOrder.nTxBxComp = nTxBx;
         }

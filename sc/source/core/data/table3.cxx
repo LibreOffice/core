@@ -1752,7 +1752,7 @@ void ScTable::Sort(
     DestroySortCollator();
 }
 
-void ScTable::Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress )
+void ScTable::Reorder( const sc::ReorderParam& rParam )
 {
     if (rParam.maOrderIndices.empty())
         return;
@@ -1767,10 +1767,10 @@ void ScTable::Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress )
         pArray->ReorderByRow(rParam.maOrderIndices);
         if (pArray->IsUpdateRefs())
             SortReorderByRowRefUpdate(
-                pArray.get(), rParam.maSortRange.aStart.Col(), rParam.maSortRange.aEnd.Col(), pProgress);
+                pArray.get(), rParam.maSortRange.aStart.Col(), rParam.maSortRange.aEnd.Col(), nullptr);
         else
             SortReorderByRow(
-                pArray.get(), rParam.maSortRange.aStart.Col(), rParam.maSortRange.aEnd.Col(), pProgress);
+                pArray.get(), rParam.maSortRange.aStart.Col(), rParam.maSortRange.aEnd.Col(), nullptr);
     }
     else
     {
@@ -1778,7 +1778,7 @@ void ScTable::Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress )
         pArray->SetOrderIndices(rParam.maOrderIndices);
         SortReorderByColumn(
             pArray.get(), rParam.maSortRange.aStart.Row(), rParam.maSortRange.aEnd.Row(),
-            rParam.mbPattern, pProgress);
+            rParam.mbPattern, nullptr);
     }
 }
 

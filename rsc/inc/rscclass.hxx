@@ -115,7 +115,7 @@ public:
 class RscTupel : public RscClass
 {
 public:
-    RscTupel( Atom nId, sal_uInt32 nTypId, RscTop * pSuper );
+    RscTupel( Atom nId, sal_uInt32 nTypId );
     RSCINST         GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
                                  const RSCINST & rInitInst ) override;
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,

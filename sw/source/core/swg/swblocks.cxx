@@ -86,7 +86,7 @@ SwImpBlocks::FileType SwImpBlocks::GetFileType( const OUString& rFile )
     return FileType::None;
 }
 
-SwImpBlocks::SwImpBlocks( const OUString& rFile, bool )
+SwImpBlocks::SwImpBlocks( const OUString& rFile )
     : aFile( rFile ),
     aDateModified( Date::EMPTY ),
     aTimeModified( tools::Time::EMPTY ),

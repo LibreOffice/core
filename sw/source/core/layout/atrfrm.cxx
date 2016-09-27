@@ -2492,9 +2492,8 @@ SwFrameFormat::SwFrameFormat(
     SwAttrPool& rPool,
     const sal_Char* pFormatNm,
     SwFrameFormat *pDrvdFrame,
-    sal_uInt16 nFormatWhich,
-    const sal_uInt16* pWhichRange)
-:   SwFormat(rPool, pFormatNm, (pWhichRange ? pWhichRange : aFrameFormatSetRange), pDrvdFrame, nFormatWhich),
+    sal_uInt16 nFormatWhich)
+:   SwFormat(rPool, pFormatNm, aFrameFormatSetRange, pDrvdFrame, nFormatWhich),
     m_wXObject(),
     maFillAttributes(),
     m_ffList(nullptr),

@@ -122,7 +122,7 @@ protected:
     // checks if forward flow makes sense to prevent infinite moves
     inline bool IsFwdMoveAllowed();
     // #i44049# - method <CalcContent(..)> has to check this property.
-    friend void CalcContent( SwLayoutFrame *pLay, bool bNoColl, bool bNoCalcFollow );
+    friend void CalcContent( SwLayoutFrame *pLay, bool bNoColl );
     bool IsKeepFwdMoveAllowed( bool bIgnoreMyOwnKeepValue = false );    // like above, forward flow for Keep.
 
     /** method to determine overlapping of an object that requests floating

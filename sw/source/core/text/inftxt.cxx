@@ -246,8 +246,8 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
 #endif
 }
 
-void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, SwFont *pNewFnt,
-                   const sal_Int32 nNewIdx, const sal_Int32 nNewLen )
+void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame,
+                   const sal_Int32 nNewIdx )
 {
     m_pKanaComp = nullptr;
     m_nKanaIdx = 0;
@@ -308,12 +308,12 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
     SetSnapToGrid( pNd->GetSwAttrSet().GetParaGrid().GetValue() &&
                    m_pFrame->IsInDocBody() );
 
-    m_pFnt = pNewFnt;
+    m_pFnt = nullptr;
     m_pUnderFnt = nullptr;
     m_pText = &pNd->GetText();
 
     m_nIdx = nNewIdx;
-    m_nLen = nNewLen;
+    m_nLen = COMPLETE_STRING;
     m_bNotEOL = false;
     m_bStopUnderflow = m_bFootnoteInside = m_bOtherThanFootnoteInside = false;
     m_bMulti = m_bFirstMulti = m_bRuby = m_bHanging = m_bScriptSpace =
@@ -361,7 +361,7 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew, const OUString* pTex
 SwTextSizeInfo::SwTextSizeInfo( SwTextFrame *pTextFrame, const sal_Int32 nIndex )
     : m_bOnWin(false)
 {
-    CtorInitTextSizeInfo( pTextFrame->getRootFrame()->GetCurrShell()->GetOut(), pTextFrame, nullptr, nIndex );
+    CtorInitTextSizeInfo( pTextFrame->getRootFrame()->GetCurrShell()->GetOut(), pTextFrame, nIndex );
 }
 
 void SwTextSizeInfo::SelectFont()
@@ -481,7 +481,7 @@ bool SwTextSizeInfo::HasHint_( const SwTextNode* pTextNode, sal_Int32 nPos )
 
 void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const SwRect &rPaint )
 {
-    CtorInitTextSizeInfo( pRenderContext, pFrame );
+    CtorInitTextSizeInfo( pRenderContext, pFrame, 0 );
     aTextFly.CtorInitTextFly( pFrame );
     aPaintRect = rPaint;
     nSpaceIdx = 0;
