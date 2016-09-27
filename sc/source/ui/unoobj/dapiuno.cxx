@@ -2527,12 +2527,27 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
 {
     SolarMutexGuard aGuard;
 
-    Reference< XDataPilotField > xRet;
-    OUString sNewDim;
-
     if( !rItems.hasElements() )
         throw IllegalArgumentException();
 
+    Reference< XMembersAccess > xMembers = GetMembers();
+    if (!xMembers.is())
+    {
+        SAL_WARN("sc.ui", "Cannot access members of the field object.");
+        throw RuntimeException();
+    }
+
+    for (const OUString& aEntryName : rItems)
+    {
+        if (!xMembers->hasByName(aEntryName))
+        {
+            SAL_WARN("sc.ui", "There is no member with that name: " + aEntryName + ".");
+            throw IllegalArgumentException();
+        }
+    }
+
+    Reference< XDataPilotField > xRet;
+    OUString sNewDim;
     ScDPObject* pDPObj = nullptr;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
@@ -2613,25 +2628,9 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
 
         OUString aGroupName = pGroupDimension->CreateGroupName( ScGlobal::GetRscString(STR_PIVOT_GROUP) );
         ScDPSaveGroupItem aGroup( aGroupName );
-        Reference< XMembersAccess > xMembers = GetMembers();
-        if (!xMembers.is())
-        {
-            SAL_WARN("sc.ui", "Cannot access members of the field object.");
-            delete pNewGroupDim;
-            throw RuntimeException();
-        }
-
         for (sal_Int32 nEntry = 0; nEntry < rItems.getLength(); nEntry++)
         {
             OUString aEntryName(rItems[nEntry]);
-
-            if (!xMembers->hasByName(aEntryName))
-            {
-                SAL_WARN("sc.ui", "There is no member with that name: " + aEntryName + ".");
-                delete pNewGroupDim;
-                throw IllegalArgumentException();
-            }
-
             if ( pBaseGroupDim )
             {
                 // for each selected (intermediate) group, add all its items
