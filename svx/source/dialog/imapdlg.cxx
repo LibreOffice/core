@@ -756,6 +756,7 @@ IMPL_LINK_NOARG_TYPED(SvxIMapDlg, UpdateHdl, Idle *, void)
     pOwnData->aUpdateTargetList.clear();
 
     GetBindings().Invalidate( SID_IMAP_EXEC );
+    pIMapWnd->QueueIdleUpdate();
 }
 
 IMPL_LINK_TYPED( SvxIMapDlg, StateHdl, GraphCtrl*, pWnd, void )
@@ -806,6 +807,8 @@ IMPL_LINK_TYPED( SvxIMapDlg, StateHdl, GraphCtrl*, pWnd, void )
         m_pTbxIMapDlg1->CheckItem( mnPolyInsertId, false );
         pWnd->SetPolyEditMode( 0 );
     }
+
+    pIMapWnd->QueueIdleUpdate();
 }
 
 IMPL_LINK_NOARG_TYPED(SvxIMapDlg, MiscHdl, LinkParamNone*, void)
