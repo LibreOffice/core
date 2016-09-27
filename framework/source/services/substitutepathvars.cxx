@@ -1102,6 +1102,13 @@ throw ( RuntimeException )
                 {
                     // Special path variables as they can occur in the middle of a path. Only match if they
                     // describe a whole directory and not only a substring of a directory!
+                    // (Ideally, all substitutions should stick to syntactical
+                    // boundaries within the given URL, like not covering only
+                    // part of a URL path segment; however, at least when saving
+                    // an Impress document, one URL that is passed in is of the
+                    // form <file:///.../share/palette%3Bfile:///.../user/
+                    // config/standard.sob>, re-substituted to
+                    // <$(inst)/share/palette%3B$(user)/config/standard.sob>.)
                     const sal_Unicode* pStr = aURL.getStr();
 
                     if ( nPos > 0 )
