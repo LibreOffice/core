@@ -581,8 +581,8 @@ namespace sw { namespace mark
             ++ppMark)
         {
             ::sw::mark::MarkBase* pMark = dynamic_cast< ::sw::mark::MarkBase* >(ppMark->get());
-            if (!pMark)
-                continue;
+            // correction of non-existent non-MarkBase instances cannot be done
+            assert(pMark);
             // is on position ??
             bool bChangedPos = false;
             if(&pMark->GetMarkPos().nNode.GetNode() == pOldNode)
@@ -627,8 +627,8 @@ namespace sw { namespace mark
             // is on position ??
             bool bChangedPos = false, bChangedOPos = false;
             ::sw::mark::MarkBase* const pMark = dynamic_cast< ::sw::mark::MarkBase* >(ppMark->get());
-            if (!pMark)
-                continue;
+            // correction of non-existent non-MarkBase instances cannot be done
+            assert(pMark);
             if(&pMark->GetMarkPos().nNode.GetNode() == pOldNode)
             {
                 SwPosition aNewPosRel(aNewPos);
