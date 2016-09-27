@@ -3096,15 +3096,9 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
         if (pWin->IsDisposed())
             return 0;
 
-        // Restore focus (could already have been
-        // restored in Select)
         xFocusId = pWin->GetFocusId();
-        if ( xFocusId != nullptr )
-        {
-            pWin->SetFocusId( nullptr );
-            pSVData->maWinData.mbNoDeactivate = false;
-        }
-        pWin->ImplEndPopupMode( FloatWinPopupEndFlags::NONE, xFocusId );
+        assert(xFocusId == nullptr && "Focus should already be restored by MenuFloatingWindow::End");
+        pWin->ImplEndPopupMode(FloatWinPopupEndFlags::NONE, xFocusId);
 
         if ( nSelectedId )  // then clean up .. ( otherwise done by TH )
         {
