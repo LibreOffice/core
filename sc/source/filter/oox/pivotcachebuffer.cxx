@@ -1250,6 +1250,11 @@ sal_Int32 PivotCache::getCacheFieldCount() const
     return static_cast< sal_Int32 >( maFields.size() );
 }
 
+PivotCacheField* PivotCache::getCacheField( sal_Int32 nFieldIdx )
+{
+    return maFields.get( nFieldIdx ).get();
+}
+
 const PivotCacheField* PivotCache::getCacheField( sal_Int32 nFieldIdx ) const
 {
     return maFields.get( nFieldIdx ).get();
