@@ -20,7 +20,6 @@
 #include "Condition.hxx"
 #include "UITools.hxx"
 #include "CondFormat.hxx"
-#include "CondFormat.hrc"
 #include "RptResId.hrc"
 #include "ReportController.hxx"
 #include "ModuleHelper.hxx"

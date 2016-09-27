@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "CondFormat.hrc"
 #include "RptResId.hrc"
 #include "helpids.hrc"
 #include "rptui_slotid.hrc"
@@ -25,7 +24,6 @@ String STR_NUMBERED_CONDITION
 {
     Text [ en-US ] = "Condition $number$";
 };
-
 String STR_COLOR_WHITE
 {
     Text [ en-US ] = "White" ;
@@ -41,91 +39,6 @@ String STR_CHARBACKGROUND
 String STR_TRANSPARENT
 {
     Text [ en-US ] = "No Fill" ;
-};
-
-#define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
-
-ImageList 31000
-{
-    MASKCOLOR;
-    prefix = "sc";
-    IdList = {05500;};
-    IdCount = 1;
-};
-
-ToolBox RID_TB_SORTING
-{
-    Pos = MAP_APPFONT ( 0,0 ) ;
-    ButtonType = BUTTON_SYMBOL;
-    Align = BOXALIGN_TOP;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_FM_SORTUP;
-            Text [ en-US ] = "Sort Ascending" ;
-            Checkable = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FM_SORTDOWN;
-            Text [ en-US ] = "Sort Descending" ;
-            Checkable = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FM_REMOVE_FILTER_SORT;
-            Text [ en-US ] = "Remove sorting" ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ADD_CONTROL_PAIR;
-            Text [ en-US ] = "Insert" ;
-        };
-    };
-};
-
-ImageList IMG_ADDFIELD_DLG_SC
-{
-    MASKCOLOR;
-    FileList =
-    {
-        < "cmd/sc_sortup.png" ;            SID_FM_SORTUP ; > ;
-        < "cmd/sc_sortdown.png" ;          SID_FM_SORTDOWN ; > ;
-        < "cmd/sc_removefiltersort.png" ;  SID_FM_REMOVE_FILTER_SORT ; > ;
-    };
-};
-
-ImageList IMG_ADDFIELD_DLG_LC
-{
-    MASKCOLOR;
-    FileList =
-    {
-        < "cmd/lc_sortup.png" ;            SID_FM_SORTUP ; > ;
-        < "cmd/lc_sortdown.png" ;          SID_FM_SORTDOWN ; > ;
-        < "cmd/lc_removefiltersort.png" ;  SID_FM_REMOVE_FILTER_SORT ; > ;
-    };
-};
-
-FixedLine ADDFIELD_FL_HELP_SEPARATOR
-{
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
-    Size = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
-    Text [ en-US ] = "Help";
-};
-
-FixedText ADDFIELD_HELP_FIELD
-{
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
-    Size = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
-    WordBreak = TRUE;
-    Text [ en-US ] = "Highlight the fields to insert into the selected section of the template, then click Insert or press Enter.";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,7 +18,6 @@
  */
 
 #include "CondFormat.hxx"
-#include "CondFormat.hrc"
 
 #include "uistrings.hrc"
 #include "RptResId.hrc"

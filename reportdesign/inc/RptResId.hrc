@@ -202,7 +202,7 @@
 #define RID_ERR_NO_COMMAND                  (RID_STRING_START + 151)
 #define RID_ERR_NO_OBJECTS                  (RID_STRING_START + 152)
 #define RID_STR_AREA                        (RID_STRING_START + 153)
-#define RID_STR_INSERT                      (RID_STRING_START + 154)
+// free
 #define RID_STR_UNDO_SHRINK                 (RID_STRING_START + 155)
 #define RID_STR_F_COUNTER                   (RID_STRING_START + 156)
 #define RID_STR_F_ACCUMULATION              (RID_STRING_START + 157)
@@ -218,18 +218,8 @@
 #define RID_MENU_REPORT                     ( RID_MENU_START + 0 )
 #define RID_GROUPSROWPOPUPMENU              ( RID_MENU_START + 1 )
 #define RID_MENU_NAVIGATOR                  ( RID_MENU_START + 2 )
-#define RID_TB_SORTING                      ( RID_MENU_START + 3 )
 
-// free
 #define RID_SVXIMGLIST_RPTEXPL              (RID_IMAGELIST_START + 4)
-// free
-#define IMG_ADDFIELD_DLG_SC                 (RID_IMAGELIST_START + 8)
-// free
-#define IMG_ADDFIELD_DLG_LC                 (RID_IMAGELIST_START + 10)
-// free
-
-#define ADDFIELD_FL_HELP_SEPARATOR          (RID_IMAGELIST_START +  12)
-#define ADDFIELD_HELP_FIELD                 (RID_IMAGELIST_START +  13)
 
 // untyped ---------------------------------------------------------------------
 #define RID_STR_BOOL                        (RID_UNTYPED_START +  0 )

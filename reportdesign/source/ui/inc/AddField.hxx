@@ -57,19 +57,20 @@ class  OAddFieldWindow  :public FloatingWindow
     VclPtr<ToolBox>                                                             m_aActions;
 
     VclPtr<OAddFieldWindowListBox>                                              m_pListBox;
-    VclPtr<FixedLine>                                                           m_aFixedLine;
     VclPtr<FixedText>                                                           m_aHelpText;
 
-    VclPtr<PushButton>                                                          m_aInsertButton;
     Link<OAddFieldWindow&,void>                                                 m_aCreateLink;
     OUString                                                                    m_aCommandName;
     OUString                                                                    m_sFilter;
+    sal_uInt16                                                                  m_nSortUpId;
+    sal_uInt16                                                                  m_nSortDownId;
+    sal_uInt16                                                                  m_nRemoveSortId;
+    sal_uInt16                                                                  m_nInsertId;
     sal_Int32                                                                   m_nCommandType;
     bool                                                                        m_bEscapeProcessing;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pChangeListener;
     ::rtl::Reference< comphelper::OContainerListenerAdapter>                    m_pContainerListener;
 
-    DECL_LINK_TYPED( OnClickHdl, Button*, void );
     DECL_LINK_TYPED( OnDoubleClickHdl, SvTreeListBox*, bool );
     DECL_LINK_TYPED( OnSelectHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( OnSortAction, ToolBox*, void );
@@ -82,7 +83,6 @@ public:
 
     virtual ~OAddFieldWindow() override;
     virtual void dispose() override;
-    virtual void Resize() override;
     virtual void GetFocus() override;
     virtual bool PreNotify( NotifyEvent& _rNEvt ) override;
 
@@ -99,7 +99,10 @@ public:
         @param  _eBitmapSet
             <svtools/imgdef.hxx>
     */
-    virtual void setImageList(sal_Int16 _eBitmapSet) override;
+    virtual void setImageList(sal_Int16) override
+    {
+        //to-do, remove
+    }
 
     /** will be called when the controls need to be resized.
     */
