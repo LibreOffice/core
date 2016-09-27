@@ -34,10 +34,10 @@ using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace std;
 
-static const OUString sNode( "node" );
-static const OUString sName( "oor:name" );
-static const OUString sUIName( "UIName" );
-static const OUString sData( "Data" );
+static const char  sNode[] =  "node" ;
+static const char sName[] = "oor:name" ;
+static const char sUIName[] = "UIName" ;
+static const char sData[] = "Data" ;
 
 TypeDetectionImporter::TypeDetectionImporter()
 {
