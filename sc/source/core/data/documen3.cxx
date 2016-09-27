@@ -1408,7 +1408,7 @@ void ScDocument::Reorder( const sc::ReorderParam& rParam )
 
     bool bOldEnableIdle = IsIdleEnabled();
     EnableIdle(false);
-    pTab->Reorder(rParam, nullptr);
+    pTab->Reorder(rParam);
     EnableIdle(bOldEnableIdle);
 }
 

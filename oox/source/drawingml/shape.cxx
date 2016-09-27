@@ -321,14 +321,13 @@ void Shape::addChildren( ::oox::core::XmlFilterBase& rFilterBase,
                          const Theme* pTheme,
                          const Reference< XShapes >& rxShapes,
                          basegfx::B2DHomMatrix& aTransformation,
-                         const awt::Rectangle* pShapeRect,
-                         ShapeIdMap* pShapeMap )
+                         const awt::Rectangle* pShapeRect )
 {
     addChildren(rFilterBase, *this, pTheme, rxShapes,
                 pShapeRect ?
                  *pShapeRect :
                  awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ),
-                pShapeMap, aTransformation);
+                nullptr, aTransformation);
 }
 
 struct ActionLockGuard

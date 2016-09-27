@@ -194,8 +194,8 @@ namespace svx
     }
 
 
-    ControllerFeatures::ControllerFeatures( const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
-        :m_pInvalidationCallback( _pInvalidationCallback )
+    ControllerFeatures::ControllerFeatures( const Reference< XFormController >& _rxController )
+        :m_pInvalidationCallback( nullptr )
     {
         assign( _rxController );
     }

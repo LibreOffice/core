@@ -395,7 +395,7 @@ void VBACompression::write()
 // section 2.4.3
 #if VBA_ENCRYPTION
 
-VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length, SvStream& rEncryptedData, sal_uInt8* pSeed, sal_uInt8 nProjKey)
+VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length, SvStream& rEncryptedData, sal_uInt8 nProjKey)
     :mpData(pData)
     ,mnLength(length)
     ,mrEncryptedData(rEncryptedData)
@@ -404,16 +404,13 @@ VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length, Sv
     ,mnEncryptedByte2(0)
     ,mnProjKey(nProjKey)
     ,mnIgnoredLength(0)
-    ,mnSeed(pSeed ? *pSeed : 0x00)
+    ,mnSeed(0x00)
     ,mnVersionEnc(0)
 {
-    if (!pSeed)
-    {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(0, 255);
-        mnSeed = dis(gen);
-    }
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, 255);
+    mnSeed = dis(gen);
 }
 
 void VBAEncryption::writeSeed()
@@ -915,7 +912,7 @@ void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::contain
     aProtectedStream.WriteUInt32(0x00000000);
     const sal_uInt8* pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
     sal_uInt8 nProjKey = VBAEncryption::calculateProjKey(aProjectID);
-    VBAEncryption aProtectionState(pData, 4, rStrm, nullptr, nProjKey);
+    VBAEncryption aProtectionState(pData, 4, rStrm, nProjKey);
     aProtectionState.write();
     exportString(rStrm, "\"\r\n");
 #else
@@ -928,7 +925,7 @@ void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::contain
     aProtectedStream.Seek(0);
     aProtectedStream.WriteUInt8(0x00);
     pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
-    VBAEncryption aProjectPassword(pData, 1, rStrm, nullptr, nProjKey);
+    VBAEncryption aProjectPassword(pData, 1, rStrm, nProjKey);
     aProjectPassword.write();
     exportString(rStrm, "\"\r\n");
 #else
@@ -941,7 +938,7 @@ void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::contain
     aProtectedStream.Seek(0);
     aProtectedStream.WriteUInt8(0xFF);
     pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
-    VBAEncryption aVisibilityState(pData, 1, rStrm, nullptr, nProjKey);
+    VBAEncryption aVisibilityState(pData, 1, rStrm, nProjKey);
     aVisibilityState.write();
     exportString(rStrm, "\"\r\n\r\n");
 #else

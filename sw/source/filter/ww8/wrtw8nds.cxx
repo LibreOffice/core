@@ -1798,7 +1798,7 @@ sal_Int32 MSWordExportBase::GetNextPos( SwWW8AttrIter* aAttrIter, const SwTextNo
         GetSortedBookmarks( rNode, nAktPos, nNextBookmark - nAktPos );
         NearestBookmark( nNextBookmark, nAktPos, false );
         GetSortedAnnotationMarks( rNode, nAktPos, nNextAnnotationMark - nAktPos );
-        NearestAnnotationMark( nNextAnnotationMark, nAktPos, false );
+        NearestAnnotationMark( nNextAnnotationMark );
     }
     return std::min( nNextPos, std::min( nNextBookmark, nNextAnnotationMark ) );
 }
@@ -1931,7 +1931,7 @@ bool MSWordExportBase::NearestBookmark( sal_Int32& rNearest, const sal_Int32 nAk
     return bHasBookmark;
 }
 
-void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int32 nAktPos, bool bNextPositionOnly )
+void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest )
 {
     bool bHasAnnotationMark = false;
 
@@ -1939,24 +1939,18 @@ void MSWordExportBase::NearestAnnotationMark( sal_Int32& rNearest, const sal_Int
     {
         IMark* pMarkStart = m_rSortedAnnotationMarksStart.front();
         const sal_Int32 nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
-        if( !bNextPositionOnly || (nNext > nAktPos ))
-        {
-            rNearest = nNext;
-            bHasAnnotationMark = true;
-        }
+        rNearest = nNext;
+        bHasAnnotationMark = true;
     }
 
     if ( !m_rSortedAnnotationMarksEnd.empty() )
     {
         IMark* pMarkEnd = m_rSortedAnnotationMarksEnd[0];
         const sal_Int32 nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();
-        if( !bNextPositionOnly || nNext > nAktPos )
-        {
-            if ( !bHasAnnotationMark )
-                rNearest = nNext;
-            else
-                rNearest = std::min( rNearest, nNext );
-        }
+        if ( !bHasAnnotationMark )
+            rNearest = nNext;
+        else
+            rNearest = std::min( rNearest, nNext );
     }
 }
 

@@ -1226,7 +1226,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
                         aListStyleData.pReplaceNumRule =
                             const_cast<SwNumRule *>
                             (SearchNumRule( aPos, false, pCNd->HasNumber(),
-                                            false, 0,
+                                            0,
                                             aListStyleData.sListId, true ));
                     }
 
@@ -1520,7 +1520,6 @@ bool SwDoc::GotoNextNum( SwPosition& rPos, bool bOverUpper,
 const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                                         const bool bForward,
                                         const bool bNum,
-                                        const bool bOutline,
                                         int nNonEmptyAllowed,
                                         OUString& sListId,
                                         const bool bInvestigateStartNode)
@@ -1552,7 +1551,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                 const SwNumRule * pNumRule = pTextNd->GetNumRule();
                 if (pNumRule)
                 {
-                    if ( ( pNumRule->IsOutlineRule() == bOutline ) &&
+                    if ( ( !pNumRule->IsOutlineRule() ) &&
                          ( ( bNum && pNumRule->Get(0).IsEnumeration()) ||
                            ( !bNum && pNumRule->Get(0).IsItemize() ) ) ) // #i22362#, #i29560#
                     {

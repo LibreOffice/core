@@ -610,7 +610,7 @@ void GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const
 }
 
 bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                    long nExtraData, const GraphicAttr* pAttr, GraphicManagerDrawFlags /*nFlags*/,
+                                    long nExtraData,
                                     OutputDevice* pFirstFrameOutDev )
 {
     bool bRet = false;
@@ -619,7 +619,7 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
 
     if( !IsSwappedOut() )
     {
-        const GraphicAttr aAttr( pAttr ? *pAttr : GetAttr() );
+        const GraphicAttr aAttr( GetAttr() );
 
         if( mbAnimated )
         {

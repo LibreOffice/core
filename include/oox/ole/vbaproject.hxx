@@ -175,8 +175,7 @@ private:
     /** Imports the VBA code modules and forms. */
     void                importVba(
                             StorageBase& rVbaPrjStrg,
-                            const GraphicHelper& rGraphicHelper,
-                            bool bDefaultColorBgr );
+                            const GraphicHelper& rGraphicHelper );
 
     /** Attaches VBA macros to objects registered via registerMacroAttacher(). */
     void                attachMacros();

@@ -133,15 +133,12 @@ public:
 class CopyToClipContext : public ClipContextBase
 {
     bool mbKeepScenarioFlags:1;
-    bool mbCloneNotes:1;
 
 public:
-    CopyToClipContext() = delete;
-    CopyToClipContext(ScDocument& rDoc, bool bKeepScenarioFlags, bool bCloneNotes);
+    CopyToClipContext(ScDocument& rDoc, bool bKeepScenarioFlags);
     virtual ~CopyToClipContext() override;
 
     bool isKeepScenarioFlags() const;
-    bool isCloneNotes() const;
 };
 
 class CopyToDocContext : public ClipContextBase

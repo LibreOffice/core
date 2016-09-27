@@ -181,6 +181,7 @@ public:
 
     /** Reads a Unicode character array (may be compressed) and returns the
         string.
+        NUL characters are replaced by question marks (default).
 
         @param nChars
             Number of 8-bit or 16-bit characters to read from the stream.
@@ -188,12 +189,8 @@ public:
         @param bCompressed
             True = Character array is compressed (stored as 8-bit characters).
             False = Character array is not compressed (stored as 16-bit characters).
-
-        @param bAllowNulChars
-            True = NUL characters are inserted into the imported string.
-            False = NUL characters are replaced by question marks (default).
      */
-    OUString     readCompressedUnicodeArray( sal_Int32 nChars, bool bCompressed, bool bAllowNulChars = false );
+    OUString     readCompressedUnicodeArray( sal_Int32 nChars, bool bCompressed );
 
     /** Copies bytes from the current position to the passed output stream.
      */
