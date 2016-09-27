@@ -42,6 +42,8 @@ private:
     bool m_bInitialized;
     long m_nNeededWidth;
 
+    ScopedVclPtr<SystemWindow> m_pSystemWindow;
+
     std::vector<IPrioritable*> m_aSortedChilds;
 
 public:
@@ -59,10 +61,10 @@ public:
 
     virtual void dispose() override
     {
-        if (m_bInitialized && SfxViewFrame::Current())
+        if (m_pSystemWindow)
         {
-            SystemWindow* pSystemWindow = SfxViewFrame::Current()->GetFrame().GetSystemWindow();
-            pSystemWindow->RemoveEventListener(LINK(this, PriorityHBox, WindowEventListener));
+            m_pSystemWindow->RemoveEventListener(LINK(this, PriorityHBox, WindowEventListener));
+            m_pSystemWindow.clear();
         }
         VclHBox::dispose();
     }
@@ -99,14 +101,14 @@ public:
         {
             m_bInitialized = true;
 
-            SystemWindow* pSystemWindow = SfxViewFrame::Current()->GetFrame().GetSystemWindow();
-            if (pSystemWindow)
+            m_pSystemWindow = SfxViewFrame::Current()->GetFrame().GetSystemWindow();
+            if (m_pSystemWindow)
             {
-                pSystemWindow->AddEventListener(LINK(this, PriorityHBox, WindowEventListener));
+                m_pSystemWindow->AddEventListener(LINK(this, PriorityHBox, WindowEventListener));
 
                 CalcNeededWidth();
 
-                long nWidth = pSystemWindow->GetSizePixel().Width();
+                long nWidth = m_pSystemWindow->GetSizePixel().Width();
                 SetSizePixel(Size(nWidth, GetSizePixel().Height()));
             }
         }
