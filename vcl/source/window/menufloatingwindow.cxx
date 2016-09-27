@@ -395,7 +395,6 @@ void MenuFloatingWindow::Execute()
     pSVData->maAppData.mpActivePopupMenu = static_cast<PopupMenu*>(pMenu.get());
 
     bInExecute = true;
-//  bCallingSelect = false;
 
     while ( bInExecute )
         Application::Yield();
@@ -405,19 +404,14 @@ void MenuFloatingWindow::Execute()
 
 void MenuFloatingWindow::StopExecute()
 {
-    VclPtr<vcl::Window> xFocusId;
-    // restore focus
-    // (could have been restored in Select)
-    if ( xSaveFocusId != nullptr )
+    VclPtr<vcl::Window> xFocusId(xSaveFocusId);
+    // restore focus (could have been restored in Select)
+    if (xFocusId != nullptr)
     {
-        xFocusId = xSaveFocusId;
-        if ( xFocusId != nullptr )
-        {
-            xSaveFocusId = nullptr;
-            ImplGetSVData()->maWinData.mbNoDeactivate = false;
-        }
+        xSaveFocusId = nullptr;
+        ImplGetSVData()->maWinData.mbNoDeactivate = false;
     }
-    ImplEndPopupMode( FloatWinPopupEndFlags::NONE, xFocusId );
+    ImplEndPopupMode(FloatWinPopupEndFlags::NONE, xFocusId);
 
     aHighlightChangedTimer.Stop();
     bInExecute = false;
