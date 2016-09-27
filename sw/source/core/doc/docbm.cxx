@@ -589,6 +589,7 @@ namespace sw { namespace mark
             {
                 pMark->SetMarkPos(aNewPos);
                 bChangedPos = true;
+                isSortingNeeded = true;
             }
             bool bChangedOPos = false;
             if (pMark->IsExpanded() &&
@@ -597,6 +598,7 @@ namespace sw { namespace mark
                 // shift the OtherMark to aNewPos
                 pMark->SetOtherMarkPos(aNewPos);
                 bChangedOPos= true;
+                isSortingNeeded = true;
             }
             // illegal selection? collapse the mark and restore sorting later
             isSortingNeeded |= lcl_FixCorrectedMark(bChangedPos, bChangedOPos, pMark);
