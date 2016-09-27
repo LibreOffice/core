@@ -1091,9 +1091,7 @@ throw ( RuntimeException )
             if ( nPos >= 0 )
             {
                 bool bMatch = true;
-                if ( i.eVariable == PREDEFVAR_USERNAME ||
-                     i.eVariable == PREDEFVAR_LANGID ||
-                     i.eVariable == PREDEFVAR_VLANG )
+                if ( !aFixedVarTable[i.eVariable].bAbsPath )
                 {
                     // Special path variables as they can occur in the middle of a path. Only match if they
                     // describe a whole directory and not only a substring of a directory!
