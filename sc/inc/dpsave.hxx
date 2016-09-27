@@ -356,7 +356,7 @@ public:
     void RemoveAllGroupDimensions( const OUString& rSrcDimName, std::vector<OUString>* pDeletedNames = nullptr );
 
     SC_DLLPUBLIC ScDPDimensionSaveData* GetDimensionData(); // create if not there
-    void SetDimensionData( const ScDPDimensionSaveData* pNew ); // copied
+    SC_DLLPUBLIC void SetDimensionData( const ScDPDimensionSaveData* pNew ); // copied
     void BuildAllDimensionMembers(ScDPTableData* pData);
     void SyncAllDimensionMembers(ScDPTableData* pData);
 

@@ -1389,6 +1389,19 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     if (rDoc.GetDPCollection()->GetByName(rDestObj.GetName()))
         rDestObj.SetName(OUString());      // ignore the invalid name, create a new name below
 
+    // Syncronize groups between linked tables
+    {
+        bool bRefFound = false;
+        const ScDPDimensionSaveData* pGroups = nullptr;
+        bRefFound = rDoc.GetDPCollection()->GetReferenceGroups(rDestObj, &pGroups);
+        if (bRefFound)
+        {
+            ScDPSaveData* pSaveData = rDestObj.GetSaveData();
+            if (pSaveData)
+                pSaveData->SetDimensionData(pGroups);
+        }
+    }
+
     if (!rDoc.GetDPCollection()->InsertNewTable(pDestObj.release()))
         // Insertion into collection failed.
         return false;
@@ -1572,25 +1585,34 @@ void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
     if (!pSaveData)
         return;
 
-    std::set<ScDPObject*> aRefs;
-    if (!pDPs->ReloadGroupsInCache(pDPObj, aRefs))
-        return;
-
-    // We allow pDimData being NULL.
-    const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
-    std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
-    for (; it != itEnd; ++it)
+    // Update all linked tables, if this table is part of the cache (ScDPCollection)
+    if (pDPs->HasTable(pDPObj))
     {
-        ScDPObject* pObj = *it;
-        if (pObj != pDPObj)
-        {
-            pSaveData = pObj->GetSaveData();
-            if (pSaveData)
-                pSaveData->SetDimensionData(pDimData);
-        }
+        std::set<ScDPObject*> aRefs;
+        if (!pDPs->ReloadGroupsInCache(pDPObj, aRefs))
+            return;
 
-        // This action is intentionally not undoable since it modifies cache.
-        UpdatePivotTable(*pObj, false, false);
+        // We allow pDimData being NULL.
+        const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
+        std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
+        for (; it != itEnd; ++it)
+        {
+            ScDPObject* pObj = *it;
+            if (pObj != pDPObj)
+            {
+                pSaveData = pObj->GetSaveData();
+                if (pSaveData)
+                    pSaveData->SetDimensionData(pDimData);
+            }
+
+            // This action is intentionally not undoable since it modifies cache.
+            UpdatePivotTable(*pObj, false, false);
+        }
+    }
+    else // Otherwise update only this single table
+    {
+        // This table is under construction so no need for a whole update (UpdatePivotTable()).
+        pDPObj->ReloadGroupTableData();
     }
 }
 

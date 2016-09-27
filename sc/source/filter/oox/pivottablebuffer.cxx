@@ -48,6 +48,9 @@
 #include "dapiuno.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
+#include "dpdimsave.hxx"
+#include "document.hxx"
+#include "documentimport.hxx"
 
 namespace oox {
 namespace xls {
@@ -423,11 +426,12 @@ void PivotTableField::finalizeDateGroupingImport( const Reference< XDataPilotFie
 {
     if( maDPFieldName.isEmpty() )    // prevent endless loops if file format is broken
     {
-        if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
+        if( PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
         {
             if( !pCacheField->isDatabaseField() && pCacheField->hasDateGrouping() && (pCacheField->getGroupBaseField() == nBaseFieldIdx) )
             {
                 maDPFieldName = pCacheField->createDateGroupField( rxBaseDPField );
+                pCacheField->setFinalGroupName(maDPFieldName);
                 OSL_ENSURE( !maDPFieldName.isEmpty(), "PivotTableField::finalizeDateGroupingImport - cannot create date group field" );
             }
         }
@@ -438,7 +442,7 @@ void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotF
 {
     if( maDPFieldName.isEmpty() )    // prevent endless loops if file format is broken
     {
-        if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
+        if( PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
         {
             // data field can have user defined groupname captions, apply them
             // if they do
@@ -448,15 +452,43 @@ void PivotTableField::finalizeParentGroupingImport( const Reference< XDataPilotF
                 if ( aIt->mnType == XML_data  && aIt->msCaption.getLength() )
                     captionList.push_back( IdCaptionPair( aIt->mnCacheItem, aIt->msCaption ) );
             }
-            // #FIXME find another way out of this const nightmare prison
             if ( !captionList.empty() )
-                const_cast<PivotCacheField*>( pCacheField )->applyItemCaptions( captionList );
+                pCacheField->applyItemCaptions( captionList );
+
             maDPFieldName = pCacheField->createParentGroupField( rxBaseDPField, rBaseCacheField, orItemNames );
+            pCacheField->setFinalGroupName(maDPFieldName);
             // on success, try to create nested group fields
             Reference< XDataPilotField > xDPField = mrPivotTable.getDataPilotField( maDPFieldName );
             if( xDPField.is() )
                 mrPivotTable.finalizeParentGroupingImport( xDPField, *pCacheField, orItemNames );
         }
+    }
+}
+
+void PivotTableField::finalizeImportBasedOnCache( const Reference< XDataPilotDescriptor >& rxDPDesc)
+{
+    /*  Process all fields based on source data, other fields (e.g. group
+        fields) are processed based on cache fields.*/
+    Reference< XDataPilotField > xDPField;
+    sal_Int32 nDatabaseIdx = mrPivotTable.getCacheDatabaseIndex( mnFieldIndex );
+    if( (nDatabaseIdx >= 0) && rxDPDesc.is() ) try
+    {
+        // Try to get the source field and its name from passed DataPilot descriptor
+        Reference< XIndexAccess > xDPFieldsIA( rxDPDesc->getDataPilotFields(), UNO_SET_THROW );
+        xDPField.set( xDPFieldsIA->getByIndex( nDatabaseIdx ), UNO_QUERY_THROW );
+        Reference< XNamed > xDPFieldName( xDPField, UNO_QUERY_THROW );
+        maDPFieldName = xDPFieldName->getName();
+        SAL_WARN_IF( maDPFieldName.isEmpty(), "sc.filter", "PivotTableField::finalizeImportBasedOnCache - no field name in source data found" );
+    }
+    catch( Exception& )
+    {
+    }
+
+    // Use group names already generated for another table using the same group field.
+    if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) )
+    {
+        if(!pCacheField->getFinalGroupName().isEmpty())
+            maDPFieldName = pCacheField->getFinalGroupName();
     }
 }
 
@@ -1189,7 +1221,7 @@ void PivotTable::finalizeImport()
                 aDescProp.setProperty( PROP_DrillDownOnDoubleClick, maDefModel.mbEnableDrill );
 
                 // finalize all fields, this finds field names and creates grouping fields
-                maFields.forEachMem( &PivotTableField::finalizeImport, ::boost::cref( mxDPDescriptor ) );
+                finalizeFieldsImport();
 
                 // all row fields
                 for( IndexVector::iterator aIt = maRowFields.begin(), aEnd = maRowFields.end(); aIt != aEnd; ++aIt )
@@ -1249,6 +1281,36 @@ void PivotTable::finalizeImport()
     }
 }
 
+void PivotTable::finalizeFieldsImport()
+{
+    if (maFields.empty())
+        return;
+
+    /* Check whether group fields are already imported for an other table
+       sharing the same groups. */
+    ScDPObject* pDPObj = getDPObject();
+    const ScDocument& rDoc = getDocImport().getDoc();
+    if (rDoc.HasPivotTable())
+    {
+        const ScDPCollection* pDPCollection = rDoc.GetDPCollection();
+        assert(pDPCollection != nullptr);
+        const ScDPDimensionSaveData* pGroups = nullptr;
+        bool bRefFound = pDPCollection->GetReferenceGroups(*pDPObj, &pGroups);
+        // Apply reference groups on this table.
+        if (bRefFound && pGroups && pGroups->HasGroupDimensions()) {
+            ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+            if (pSaveData) {
+                pSaveData->SetDimensionData(pGroups);
+                pDPObj->ReloadGroupTableData();
+                maFields.forEachMem(&PivotTableField::finalizeImportBasedOnCache, ::std::cref(mxDPDescriptor));
+                return;
+            }
+
+        }
+    }
+    maFields.forEachMem(&PivotTableField::finalizeImport, ::std::cref(mxDPDescriptor));
+}
+
 void PivotTable::finalizeDateGroupingImport( const Reference< XDataPilotField >& rxBaseDPField, sal_Int32 nBaseFieldIdx )
 {
     // process all fields, there is no chaining information in the cache fields
@@ -1297,6 +1359,11 @@ Reference< XDataPilotField > PivotTable::getDataLayoutField() const
     {
     }
     return xDPField;
+}
+
+PivotCacheField* PivotTable::getCacheField( sal_Int32 nFieldIdx )
+{
+    return mpPivotCache ? mpPivotCache->getCacheField( nFieldIdx ) : nullptr;
 }
 
 const PivotCacheField* PivotTable::getCacheField( sal_Int32 nFieldIdx ) const

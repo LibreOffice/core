@@ -186,6 +186,8 @@ struct PCFieldGroupModel
     bool                mbDateGroup;        /// True = items are grouped by date ranges or by item names.
     bool                mbAutoStart;        /// True = start value for range groups is calculated from source data.
     bool                mbAutoEnd;          /// True = end value for range groups is calculated from source data.
+    OUString            msFinalGroupName ;  /// Finalized group name of this field used in internal pivot table collaction.
+
 
     explicit            PCFieldGroupModel();
 
@@ -269,6 +271,10 @@ public:
     inline sal_Int32    getParentGroupField() const { return maFieldGroupModel.mnParentField; }
     /** Returns the index of the base field grouping is based on. */
     inline sal_Int32    getGroupBaseField() const { return maFieldGroupModel.mnBaseField; }
+    /** Returns the finalized group name of this field.  */
+    inline const OUString& getFinalGroupName() const { return maFieldGroupModel.msFinalGroupName; }
+    /** Set the finalized group name of this field.  */
+    inline void            setFinalGroupName(const OUString& rFinalGroupName) { maFieldGroupModel.msFinalGroupName = rFinalGroupName; }
 
     /** Returns the shared or group item with the specified index. */
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;
@@ -405,6 +411,7 @@ public:
     /** Returns the number of pivot cache fields. */
     sal_Int32           getCacheFieldCount() const;
     /** Returns the cache field with the specified index. */
+    PivotCacheField* getCacheField( sal_Int32 nFieldIdx );
     const PivotCacheField* getCacheField( sal_Int32 nFieldIdx ) const;
     /** Returns the source column index of the field with the passed index. */
     sal_Int32           getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const;

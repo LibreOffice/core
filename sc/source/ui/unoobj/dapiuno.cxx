@@ -2796,7 +2796,7 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
 
         // apply changes
         pDPObj->SetSaveData( aSaveData );
-        SetDPObject( pDPObj );
+        ScDBDocFunc(*GetDocShell()).RefreshPivotTableGroups(pDPObj);
     }
 
     // return the UNO object of the new dimension, after writing back saved data

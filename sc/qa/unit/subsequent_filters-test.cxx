@@ -178,6 +178,10 @@ public:
     void testPivotTableNamedRangeSourceODS();
     void testPivotTableSharedCacheGroupODS();
     void testGetPivotDataXLS();
+    void testPivotTableSharedGroupXLSX();
+    void testPivotTableSharedDateGroupXLSX();
+    void testPivotTableSharedNestedDateGroupXLSX();
+    void testPivotTableSharedNumGroupXLSX();
 
     void testFormulaDependency();
 
@@ -271,6 +275,10 @@ public:
     CPPUNIT_TEST(testPivotTableNamedRangeSourceODS);
     CPPUNIT_TEST(testPivotTableSharedCacheGroupODS);
     CPPUNIT_TEST(testGetPivotDataXLS);
+    CPPUNIT_TEST(testPivotTableSharedGroupXLSX);
+    CPPUNIT_TEST(testPivotTableSharedDateGroupXLSX);
+    CPPUNIT_TEST(testPivotTableSharedNestedDateGroupXLSX);
+    CPPUNIT_TEST(testPivotTableSharedNumGroupXLSX);
     CPPUNIT_TEST(testRowHeightODS);
     CPPUNIT_TEST(testFormulaDependency);
     CPPUNIT_TEST(testRichTextContentODS);
@@ -2018,6 +2026,148 @@ void ScFiltersTest::testGetPivotDataXLS()
 
     for (SCROW nRow = 2; nRow <= 19; ++nRow)
         CPPUNIT_ASSERT_EQUAL(rDoc.GetValue(ScAddress(4,nRow,1)), rDoc.GetValue(ScAddress(5,nRow,1)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testPivotTableSharedGroupXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table/shared_group.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll();
+
+    // Check whether right group names are imported for both tables
+    // First table
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport1"), rDoc.GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport2"), rDoc.GetString(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport3"), rDoc.GetString(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("16"), rDoc.GetString(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("17"), rDoc.GetString(ScAddress(0,6,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("18"), rDoc.GetString(ScAddress(0,7,0)));
+
+    // Second table
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport1"), rDoc.GetString(ScAddress(0,12,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport2"), rDoc.GetString(ScAddress(0,13,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport3"), rDoc.GetString(ScAddress(0,14,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("16"), rDoc.GetString(ScAddress(0,15,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("17"), rDoc.GetString(ScAddress(0,16,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("18"), rDoc.GetString(ScAddress(0,17,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testPivotTableSharedDateGroupXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table/shared-dategroup.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Check whether right date labels are imported for both tables
+    // First table
+    CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(0,4,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(0,5,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(0,6,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(0,7,1)));
+    // TODO: check why this fails with 2005
+    // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,8,1)));
+
+    // Second table
+    CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(5,4,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(5,5,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(5,6,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(5,7,1)));
+    // TODO: check why this fails with 2005
+    // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(5,8,1)));
+
+    // There should be exactly 2 pivot tables and 1 cache.
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
+
+    ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
+
+    const ScDPCache* pCache = rSheetCaches.getExistingCache(ScRange(0,0,0,9,24,0));
+    CPPUNIT_ASSERT_MESSAGE("Pivot cache is expected for A1:J25 on the first sheet.", pCache);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), pCache->GetFieldCount());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testPivotTableSharedNestedDateGroupXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table/shared-nested-dategroup.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Check whether right date groups are imported for both tables
+    // First table
+    CPPUNIT_ASSERT_EQUAL(OUString("Years"), rDoc.GetString(ScAddress(0,3,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(0,4,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(0,11,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(0,18,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(0,21,1)));
+    // TODO: check why this fails with the empty string
+    //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,32,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Quarters"), rDoc.GetString(ScAddress(1,3,1)));
+
+    // Second table
+    CPPUNIT_ASSERT_EQUAL(OUString("Years"), rDoc.GetString(ScAddress(6,3,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(6,4,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(6,11,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(6,18,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(6,21,1)));
+    // TODO: check why this fails with the empty string
+    //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(6,31,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Quarters"), rDoc.GetString(ScAddress(7,3,1)));
+
+    // There should be exactly 2 pivot tables and 1 cache.
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
+
+    ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
+
+    const ScDPCache* pCache = rSheetCaches.getExistingCache(ScRange(0,0,0,9,24,0));
+    CPPUNIT_ASSERT_MESSAGE("Pivot cache is expected for A1:J25 on the first sheet.", pCache);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), pCache->GetFieldCount());
+    // Two new group field is created
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pCache->GetGroupFieldCount());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testPivotTableSharedNumGroupXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table/shared-numgroup.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Check whether right number groups are imported for both tables
+    // First table
+    CPPUNIT_ASSERT_EQUAL(OUString("32674-47673"), rDoc.GetString(ScAddress(0,4,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("47674-62673"), rDoc.GetString(ScAddress(0,5,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("62674-77673"), rDoc.GetString(ScAddress(0,6,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("77674-92673"), rDoc.GetString(ScAddress(0,7,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("92674-107673"), rDoc.GetString(ScAddress(0,8,1)));
+
+    // Second table
+    CPPUNIT_ASSERT_EQUAL(OUString("32674-47673"), rDoc.GetString(ScAddress(5,4,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("47674-62673"), rDoc.GetString(ScAddress(5,5,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("62674-77673"), rDoc.GetString(ScAddress(5,6,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("77674-92673"), rDoc.GetString(ScAddress(5,7,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("92674-107673"), rDoc.GetString(ScAddress(5,8,1)));
+
+    // There should be exactly 2 pivot tables and 1 cache.
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
+
+    ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
+
+    const ScDPCache* pCache = rSheetCaches.getExistingCache(ScRange(0,0,0,9,24,0));
+    CPPUNIT_ASSERT_MESSAGE("Pivot cache is expected for A1:J25 on the first sheet.", pCache);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), pCache->GetFieldCount());
 
     xDocSh->DoClose();
 }

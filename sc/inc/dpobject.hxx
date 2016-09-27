@@ -365,6 +365,7 @@ public:
 
     sal_uLong ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
     bool ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
+    SC_DLLPUBLIC bool GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDimensionSaveData** pGroups) const;
 
     SC_DLLPUBLIC size_t GetCount() const;
     SC_DLLPUBLIC ScDPObject& operator[](size_t nIndex);
@@ -392,6 +393,7 @@ public:
 
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
+    SC_DLLPUBLIC bool HasTable(const ScDPObject* pDPObj) const;
 
     SC_DLLPUBLIC SheetCaches& GetSheetCaches();
     SC_DLLPUBLIC const SheetCaches& GetSheetCaches() const;
