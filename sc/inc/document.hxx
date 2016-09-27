@@ -470,6 +470,9 @@ private:
 
     std::unique_ptr<sc::IconSetBitmapMap> m_pIconSetBitmapMap;
 
+    bool                mbTrackFormulasPending  : 1;
+    bool                mbFinalTrackFormulas    : 1;
+
 public:
     bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
     void GetCellChangeTrackNote(const ScAddress &cell, OUString &strTrackText, bool &pbLeftEdge);
@@ -1968,6 +1971,10 @@ public:
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );
     void                TrackFormulas( sal_uLong nHintId = SC_HINT_DATACHANGED );
+    void                SetTrackFormulasPending() { mbTrackFormulasPending = true; }
+    bool                IsTrackFormulasPending() const { return mbTrackFormulasPending; }
+    void                FinalTrackFormulas();
+    bool                IsFinalTrackFormulas() const { return mbFinalTrackFormulas; }
     bool                IsInFormulaTree( ScFormulaCell* pCell ) const;
     bool                IsInFormulaTrack( ScFormulaCell* pCell ) const;
     HardRecalcState     GetHardRecalcState() { return eHardRecalcState; }
