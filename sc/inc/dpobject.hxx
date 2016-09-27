@@ -390,7 +390,7 @@ public:
 
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
-    bool HasTable(ScDPObject* pDPObj) const;
+    bool HasTable(const ScDPObject* pDPObj) const;
 
     SC_DLLPUBLIC SheetCaches& GetSheetCaches();
     SC_DLLPUBLIC const SheetCaches& GetSheetCaches() const;

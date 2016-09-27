@@ -3786,7 +3786,7 @@ bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
     return true;
 }
 
-bool ScDPCollection::HasTable(ScDPObject* pDPObj) const
+bool ScDPCollection::HasTable(const ScDPObject* pDPObj) const
 {
     for (const std::unique_ptr<ScDPObject>& aTable : maTables)
     {
