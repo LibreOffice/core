@@ -29,7 +29,7 @@ gb_CppunitTest_PYTHONDEPS ?= $(call gb_Library_get_target,pyuno_wrapper) $(if $(
 
 ifeq ($(strip $(gb_CppunitTest_GDBTRACE)),)
 ifneq ($(strip $(CPPUNITTRACE)),)
-gb_CppunitTest_GDBTRACE := $(CPPUNITTRACE)
+gb_CppunitTest_GDBTRACE := $(subst gdb,gdb -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))",$(CPPUNITTRACE))
 gb_CppunitTest__interactive := $(true)
 endif
 endif
@@ -109,7 +109,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
-		($(gb_CppunitTest_CPPTESTPRECOMMAND) \
+		($(if $(filter gdb,$(CPPUNITTRACE)),,$(gb_CppunitTest_CPPTESTPRECOMMAND)) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(gb_CppunitTest_malloc_check) \
