@@ -52,6 +52,7 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
     bool                bEditMode;
     bool                bSdrMode;
     bool                bAnim;
+    bool                mbInIdleUpdate;
 
                         DECL_LINK_TYPED( UpdateHdl, Idle*, void );
 
@@ -108,6 +109,7 @@ public:
     void                SetGraphSizeLink( const Link<GraphCtrl*,void>& rLink ) { aGraphSizeLink = rLink; }
 
     void                SetUpdateLink( const Link<GraphCtrl*,void>& rLink ) { aUpdateLink = rLink; }
+    void                QueueIdleUpdate();
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 };
