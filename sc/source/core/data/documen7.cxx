@@ -535,6 +535,21 @@ bool ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
     return pCell->GetPreviousTrack() || pFormulaTrack == pCell;
 }
 
+void ScDocument::FinalTrackFormulas()
+{
+    mbTrackFormulasPending = false;
+    mbFinalTrackFormulas = true;
+    {
+        ScBulkBroadcast aBulk( GetBASM());
+        // Collect all pending formula cells in bulk.
+        TrackFormulas();
+    }
+    // A final round not in bulk to track all remaining formula cells and their
+    // dependents that were collected during ScBulkBroadcast dtor.
+    TrackFormulas();
+    mbFinalTrackFormulas = false;
+}
+
 /*
     The first is broadcasted,
     the ones that are created through this are appended to the Track by Notify.
@@ -543,6 +558,11 @@ bool ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
  */
 void ScDocument::TrackFormulas( sal_uInt32 nHintId )
 {
+    if (pBASM->IsInBulkBroadcast() && !IsFinalTrackFormulas() && nHintId == SC_HINT_DATACHANGED)
+    {
+        SetTrackFormulasPending();
+        return;
+    }
 
     if ( pFormulaTrack )
     {

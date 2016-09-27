@@ -1099,6 +1099,9 @@ void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast()
         {
             ScBroadcastAreasBulk().swap( aBulkBroadcastAreas);
             BulkBroadcastGroupAreas();
+            // Trigger the "final" tracking.
+            if (pDoc->IsTrackFormulasPending())
+                pDoc->FinalTrackFormulas();
         }
     }
 }
