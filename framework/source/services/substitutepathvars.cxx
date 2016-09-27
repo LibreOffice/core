@@ -714,13 +714,11 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
     SubstitutePathVariables_BASE(m_aMutex),
     m_xContext( xContext )
 {
-    int i;
-
     SetPredefinedPathVariables();
     m_aImpl.GetSharePointsRules( m_aSubstVarMap );
 
     // Init the predefined/fixed variable to index hash map
-    for ( i = 0; i < PREDEFVAR_COUNT; i++ )
+    for ( int i = 0; i < PREDEFVAR_COUNT; i++ )
     {
         // Store variable name into struct of predefined/fixed variables
         m_aPreDefVars.m_FixedVarNames[i] = OUString::createFromAscii( aFixedVarTable[i].pVarName );
@@ -731,7 +729,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
     }
 
     // Sort predefined/fixed variable to path length
-    for ( i = 0; i < PREDEFVAR_COUNT; i++ )
+    for ( int i = 0; i < PREDEFVAR_COUNT; i++ )
     {
         if (( i != PREDEFVAR_WORKDIRURL ) && ( i != PREDEFVAR_PATH ))
         {
