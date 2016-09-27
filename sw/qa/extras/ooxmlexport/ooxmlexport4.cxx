@@ -1005,6 +1005,32 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92724_continuousBreaksComplex,"tdf92724_continuo
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3), xCursor->getPage());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf90697_continuousBreaksComplex2,"tdf92724_continuousBreaksComplex2.docx")
+{
+// Continuous section breaks with new headers/footers should not immediately switch to a new page style.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+
+    sal_Int16 nPages = xCursor->getPage();
+    while( nPages > 0 )
+    {
+        OUString sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
+        uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
+// Specific case to avoid.  Testing separately (even though redundant).
+// The first header (defined on page 3) ONLY is shown IF the section happens to start on a new page (which it doesn't in this document).
+        CPPUNIT_ASSERT( xHeaderText->getString() != "Third section - First page header. No follow defined" );
+// Same test stated differently: Pages 4 and 5 OUGHT to use "Second section header", but currently don't.  Page 6 does.
+        if( nPages <= 3 )
+            CPPUNIT_ASSERT_EQUAL( xHeaderText->getString(), OUString("First section header") );
+        else
+            CPPUNIT_ASSERT( xHeaderText->getString() == "First section header" || xHeaderText->getString() == "Second section header" );
+
+        xCursor->jumpToPage( --nPages );
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original,"tdf81345.docx")
 {
     //Header wasn't replaced  and columns were missing because no new style was created.
