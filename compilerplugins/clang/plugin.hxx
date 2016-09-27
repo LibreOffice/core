@@ -75,6 +75,8 @@ class Plugin
          which is not allowed to be changed.
         */
         bool isInUnoIncludeFile(SourceLocation spellingLocation) const;
+
+        static void normalizeDotDotInFilePath(std::string&);
     private:
         static void registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault );
         template< typename T > static Plugin* createHelper( const InstantiationData& data );

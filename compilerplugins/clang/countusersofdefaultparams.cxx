@@ -130,6 +130,7 @@ void CountUsersOfDefaultParams::niceName(const FunctionDecl* functionDecl, MyFun
     }
 
     aInfo.sourceLocation = locationToString(functionDecl->getLocation());
+    normalizeDotDotInFilePath(aInfo.sourceLocation);
 }
 
 bool CountUsersOfDefaultParams::VisitCallExpr(const CallExpr * callExpr) {
