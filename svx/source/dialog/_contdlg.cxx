@@ -102,8 +102,8 @@ void SvxContourDlg::SetSuperClass( SvxSuperContourDlg& rSuperClass )
 }
 
 tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
-                                              const Rectangle* pRect,
-                                              const sal_uIntPtr nFlags )
+                                                     const Rectangle* pRect,
+                                                     const sal_uIntPtr nFlags )
 {
     Bitmap  aBmp;
     XOutFlags nContourFlags = XOutFlags::ContourHorz;
@@ -535,6 +535,8 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
 
         m_pContourWnd->SetPipetteMode( bPipette );
     }
+    Invalidate();
+    m_pContourWnd->QueueIdleUpdate();
 }
 
 IMPL_LINK_TYPED( SvxSuperContourDlg, MousePosHdl, GraphCtrl*, pWnd, void )
@@ -589,6 +591,7 @@ IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, UpdateHdl, Idle *, void)
     }
 
     GetBindings().Invalidate( SID_CONTOUR_EXEC );
+    m_pContourWnd->QueueIdleUpdate();
 }
 
 IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, CreateHdl, Idle *, void)
@@ -731,6 +734,9 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow&, rWnd, vo
     m_pTbx1->CheckItem(mnWorkSpaceId, false);
     m_pTbx1->CheckItem(mnSelectId);
     rWnd.SetWorkplaceMode( false );
+
+    m_pContourWnd->QueueIdleUpdate();
+    Invalidate();
 }
 
 IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, MiscHdl, LinkParamNone*, void)
