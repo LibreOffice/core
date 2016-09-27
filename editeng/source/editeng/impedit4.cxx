@@ -1222,18 +1222,18 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
         bUsePortionInfo = true;
     }
 
-    bool bConvertItems = false;
+    bool bConvertMetricOfItems = false;
     MapUnit eSourceUnit = MapUnit(), eDestUnit = MapUnit();
     if (rTextObject.mpImpl->HasMetric())
     {
         eSourceUnit = (MapUnit)rTextObject.mpImpl->GetMetric();
         eDestUnit = (MapUnit)aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
         if ( eSourceUnit != eDestUnit )
-            bConvertItems = true;
+            bConvertMetricOfItems = true;
     }
 
     // Before, paragraph count was of type sal_uInt16 so if nContents exceeded
-    // 0xFFFF this wouldn't had worked anyway, given that nPara is used to
+    // 0xFFFF this wouldn't have worked anyway, given that nPara is used to
     // number paragraphs and is fearlessly incremented.
     sal_Int32 nContents = static_cast<sal_Int32>(rTextObject.mpImpl->GetContents().size());
     SAL_WARN_IF( nContents < 0, "editeng", "ImpEditEngine::InsertTextObject - contents overflow " << nContents);
@@ -1271,7 +1271,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                         // already in the flow
                         DBG_ASSERT( rX.GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute too large!" );
                         EditCharAttrib* pAttr;
-                        if ( !bConvertItems )
+                        if ( !bConvertMetricOfItems )
                             pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *(rX.GetItem()), rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
                         else
                         {
@@ -1307,24 +1307,22 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
         bool bParaAttribs = false;
         if ( bNewContent || ( ( n > 0 ) && ( n < (nContents-1) ) ) )
         {
+            // only style and ParaAttribs when new paragraph, or
+            // completely internal ...
+            bParaAttribs = pC->GetParaAttribs().Count() != 0;
+            if ( GetStyleSheetPool() && pC->GetStyle().getLength() )
             {
-                // only style and ParaAttribs when new paragraph, or
-                // completely internal ...
-                bParaAttribs = pC->GetParaAttribs().Count() != 0;
-                if ( GetStyleSheetPool() && pC->GetStyle().getLength() )
-                {
-                    SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() ));
-                    DBG_ASSERT( pStyle, "InsertBinTextObject - Style not found!" );
-                    SetStyleSheet( nPara, pStyle );
-                }
-                if ( !bConvertItems )
-                    SetParaAttribs( aEditDoc.GetPos( aPaM.GetNode() ), pC->GetParaAttribs() );
-                else
-                {
-                    SfxItemSet aAttribs( GetEmptyItemSet() );
-                    ConvertAndPutItems( aAttribs, pC->GetParaAttribs(), &eSourceUnit, &eDestUnit );
-                    SetParaAttribs( aEditDoc.GetPos( aPaM.GetNode() ), aAttribs );
-                }
+                SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>(GetStyleSheetPool()->Find( pC->GetStyle(), pC->GetFamily() ));
+                DBG_ASSERT( pStyle, "InsertBinTextObject - Style not found!" );
+                SetStyleSheet( nPara, pStyle );
+            }
+            if ( !bConvertMetricOfItems )
+                SetParaAttribs( aEditDoc.GetPos( aPaM.GetNode() ), pC->GetParaAttribs() );
+            else
+            {
+                SfxItemSet aAttribs( GetEmptyItemSet() );
+                ConvertAndPutItems( aAttribs, pC->GetParaAttribs(), &eSourceUnit, &eDestUnit );
+                SetParaAttribs( aEditDoc.GetPos( aPaM.GetNode() ), aAttribs );
             }
             if ( bNewContent && bUsePortionInfo )
             {
