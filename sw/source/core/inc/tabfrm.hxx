@@ -30,7 +30,7 @@ class SwAttrSetChg;
 /// SwTabFrame is one table in the document layout, containing rows (which contain cells).
 class SwTabFrame: public SwLayoutFrame, public SwFlowFrame
 {
-    friend void CalcContent( SwLayoutFrame *pLay, bool bNoColl, bool bNoCalcFollow );
+    friend void CalcContent( SwLayoutFrame *pLay, bool bNoColl );
 
     // does the special treatment for Get_[Next|Prev]Leaf()
     using SwFrame::GetLeaf;

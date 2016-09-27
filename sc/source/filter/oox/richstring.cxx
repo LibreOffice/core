@@ -80,7 +80,7 @@ void RichStringPortion::finalizeImport()
         mxFont = getStyles().getFont( mnFontId );
 }
 
-void RichStringPortion::convert( const Reference< XText >& rxText, const oox::xls::Font* pFont, bool bReplace )
+void RichStringPortion::convert( const Reference< XText >& rxText, bool bReplace )
 {
     if ( mbConverted )
         return;
@@ -99,15 +99,6 @@ void RichStringPortion::convert( const Reference< XText >& rxText, const oox::xl
         {
             PropertySet aPropSet( xRange );
             mxFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
-        }
-
-        /*  Some font attributes cannot be set to cell formatting in Calc but
-            require to use rich formatting, e.g. font escapement. But do not
-            use the passed font if this portion has its own font. */
-        else if( lclNeedsRichTextFormat( pFont ) )
-        {
-            PropertySet aPropSet( xRange );
-            pFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
         }
     }
 
@@ -149,15 +140,12 @@ void RichStringPortion::convert( ScEditEngineDefaulter& rEE, ESelection& rSelect
     rEE.QuickSetAttribs( aItemSet, rSelection );
 }
 
-void RichStringPortion::writeFontProperties( const Reference<XText>& rxText, const oox::xls::Font* pFont ) const
+void RichStringPortion::writeFontProperties( const Reference<XText>& rxText ) const
 {
     PropertySet aPropSet(rxText);
 
     if (mxFont.get())
         mxFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
-
-    if (lclNeedsRichTextFormat(pFont))
-        pFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
 }
 
 void FontPortionModel::read( SequenceInputStream& rStrm )
@@ -390,13 +378,13 @@ void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld ) c
         // It's much faster this way.
         RichStringPortion& rPtn = *maTextPortions.front();
         rxText->setString(rPtn.getText());
-        rPtn.writeFontProperties(rxText, nullptr);
+        rPtn.writeFontProperties(rxText);
         return;
     }
 
     for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
     {
-        (*aIt)->convert( rxText, nullptr, bReplaceOld );
+        (*aIt)->convert( rxText, bReplaceOld );
         bReplaceOld = false;    // do not replace first portion text with following portions
     }
 }

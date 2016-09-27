@@ -131,7 +131,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
 }
 
 sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
-                    bool bCheckPtr, SbxArray* pArgs )
+                    bool bCheckPtr )
 {
     if( !mpDocShell )        // we can't do that without a DocShell!
         return 0;
@@ -208,22 +208,10 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             if( STARBASIC == rMacro.GetScriptType() )
             {
                 nRet += 0 == mpDocShell->CallBasic( rMacro.GetMacName(),
-                                    rMacro.GetLibName(), pArgs ) ? 1 : 0;
+                                    rMacro.GetLibName() ) ? 1 : 0;
             }
             else if( EXTENDED_STYPE == rMacro.GetScriptType() )
             {
-                std::unique_ptr<Sequence<Any> > pUnoArgs;
-
-                if( pArgs )
-                {
-                    pUnoArgs.reset(lcl_docbasic_convertArgs( *pArgs ));
-                }
-
-                if (!pUnoArgs)
-                {
-                    pUnoArgs.reset(new Sequence <Any> (0));
-                }
-
                 Any aRet;
                 Sequence< sal_Int16 > aOutArgsIndex;
                 Sequence< Any > aOutArgs;
@@ -232,7 +220,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                     rMacro.GetMacName(), RTL_TEXTENCODING_UTF8).getStr() );
 
                 nRet += 0 == mpDocShell->CallXScript(
-                    rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
+                    rMacro.GetMacName(), Sequence<Any>(), aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
             }
             // JavaScript calls are ignored
         }

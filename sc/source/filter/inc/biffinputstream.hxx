@@ -128,12 +128,9 @@ public:
         @param rInStream
             The base input stream. Must be seekable. Will be sought to its
             start position.
-
-        @param bContLookup  Automatic CONTINUE lookup on/off.
      */
     explicit            BiffInputStream(
-                            BinaryInputStream& rInStream,
-                            bool bContLookup = true );
+                            BinaryInputStream& rInStream );
 
     // record control ---------------------------------------------------------
 
@@ -222,26 +219,11 @@ public:
 
     // byte strings -----------------------------------------------------------
 
-    /** Reads 8/16 bit string length and character array, and returns the string.
-        @param b16BitLen
-            True = Read 16-bit string length field before the character array.
-            False = Read 8-bit string length field before the character array.
-        @param bAllowNulChars
-            True = NUL characters are inserted into the imported string.
-            False = NUL characters are replaced by question marks (default).
-     */
-    OString      readByteString( bool b16BitLen, bool bAllowNulChars );
-
-    /** Reads 8/16 bit string length and character array, and returns a Unicode string.
-        @param b16BitLen
-            True = Read 16-bit string length field before the character array.
-            False = Read 8-bit string length field before the character array.
+    /** Reads 16 bit string length and character array, and returns a Unicode string.
+        NUL characters are replaced by question marks (default).
         @param eTextEnc  The text encoding used to create the Unicode string.
-        @param bAllowNulChars
-            True = NUL characters are inserted into the imported string.
-            False = NUL characters are replaced by question marks (default).
      */
-    OUString     readByteStringUC( bool b16BitLen, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
+    OUString     readByteStringUC( rtl_TextEncoding eTextEnc );
 
 private:
     /** Initializes all members after base stream has been sought to new record. */
@@ -277,8 +259,6 @@ private:
     sal_Int64           mnCurrRecSize;      /// Helper for record size and position.
     sal_Int64           mnComplRecSize;     /// Size of complete record data (with CONTINUEs).
     bool                mbHasComplRec;      /// True = mnComplRecSize is valid.
-
-    bool                mbCont;             /// True = automatic CONTINUE lookup enabled.
 };
 
 } // namespace xls

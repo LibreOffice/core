@@ -66,7 +66,7 @@ protected:
     bool bInPutMuchBlocks : 1;          // Put serveral block entries
     bool bInfoChanged : 1;              // Whether any info of TextBlock changed
 
-    SwImpBlocks( const OUString&, bool = false );
+    explicit SwImpBlocks( const OUString& );
     virtual ~SwImpBlocks();
 
     enum class FileType {

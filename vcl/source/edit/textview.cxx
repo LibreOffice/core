@@ -314,7 +314,7 @@ void TextView::ImpPaint(vcl::RenderContext& rRenderContext, const Point& rStartP
         }
     }
 
-    mpImpl->mpTextEngine->ImpPaint(&rRenderContext, rStartPos, pPaintArea, nullptr, pSelection);
+    mpImpl->mpTextEngine->ImpPaint(&rRenderContext, rStartPos, pPaintArea, pSelection);
 }
 
 void TextView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)

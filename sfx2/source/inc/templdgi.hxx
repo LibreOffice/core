@@ -283,7 +283,7 @@ protected:
 
 public:
 
-    SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window*, bool );
+    SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window* );
     virtual ~SfxCommonTemplateDialog_Impl() override;
 
     DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );

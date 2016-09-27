@@ -1241,11 +1241,11 @@ void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
     }
 }
 
-UCBStorageStream::UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, const OString* pKey, bool bRepair, Reference< XProgressHandler > const & xProgress )
+UCBStorageStream::UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, bool bRepair, Reference< XProgressHandler > const & xProgress )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorageStream !
-    pImp = new UCBStorageStream_Impl( rName, nMode, this, bDirect, pKey, bRepair, xProgress );
+    pImp = new UCBStorageStream_Impl( rName, nMode, this, bDirect, nullptr, bRepair, xProgress );
     pImp->AddFirstRef();             // use direct refcounting because in header file only a pointer should be used
     StorageBase::m_nMode = pImp->m_nMode;
 }
@@ -2631,7 +2631,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
             OUString aName( pImp->m_aURL );
             aName += "/";
             aName += rEleName;
-            UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect, nullptr, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
+            UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
             pStream->SetError( GetError() );
             pStream->pImp->m_aName = rEleName;
             return pStream;

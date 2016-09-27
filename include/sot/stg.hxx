@@ -221,7 +221,7 @@ friend class UCBStorage;
 protected:
                                 virtual ~UCBStorageStream() override;
 public:
-                                UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, const OString* pKey, bool bRepair, css::uno::Reference< css::ucb::XProgressHandler > const & xProgress );
+                                UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, bool bRepair, css::uno::Reference< css::ucb::XProgressHandler > const & xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
     virtual sal_uLong           Read( void * pData, sal_uLong nSize ) override;

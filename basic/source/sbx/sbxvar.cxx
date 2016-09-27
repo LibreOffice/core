@@ -116,7 +116,7 @@ void SbxEnsureParentVariable::SetParent(SbxObject* p)
     assert(GetParent() == xParent.get());
 }
 
-SbxVariable::SbxVariable( SbxDataType t ) : SbxValue( t, nullptr )
+SbxVariable::SbxVariable( SbxDataType t ) : SbxValue( t )
 {
     pCst = nullptr;
     pParent = nullptr;
