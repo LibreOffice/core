@@ -216,8 +216,6 @@ struct ReSubstUserVarOrder
     }
 };
 
-typedef std::list< ReSubstFixedVarOrder > ReSubstFixedVarOrderVector;
-typedef std::list< ReSubstUserVarOrder > ReSubstUserVarOrderVector;
 typedef ::cppu::WeakComponentImplHelper<
     css::util::XStringSubstitution,
     css::lang::XServiceInfo > SubstitutePathVariables_BASE;
@@ -285,8 +283,8 @@ private:
     SubstituteVariables          m_aSubstVarMap;          // Active rule set map indexed by variable name!
     PredefinedPathVariables      m_aPreDefVars;           // All predefined variables
     SubstitutePathVariables_Impl m_aImpl;                 // Implementation class that access the configuration
-    ReSubstFixedVarOrderVector   m_aReSubstFixedVarOrder; // To speed up resubstitution fixed variables (order for lookup)
-    ReSubstUserVarOrderVector    m_aReSubstUserVarOrder;  // To speed up resubstitution user variables
+    std::list<ReSubstFixedVarOrder> m_aReSubstFixedVarOrder; // To speed up resubstitution fixed variables (order for lookup)
+    std::list<ReSubstUserVarOrder> m_aReSubstUserVarOrder;  // To speed up resubstitution user variables
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 
