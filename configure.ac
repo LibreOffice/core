@@ -7141,7 +7141,8 @@ then
     else
         case "$host_cpu" in
         arm*)
-            my_java_arch=arm
+            AS_IF([test -e "$JAVA_HOME/jre/lib/aarch32/libjawt.so"], [my_java_arch=aarch32], [my_java_arch=arm])
+            JAVA_ARCH=$my_java_arch
             ;;
         i*86)
             my_java_arch=i386
