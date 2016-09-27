@@ -193,6 +193,9 @@ SvStream& WriteRectangle( SvStream& rOStream, const Rectangle& rRect )
 OString Rectangle::toString() const
 {
     std::stringstream ss;
+    // Note that this is not just used for debugging output but the
+    // format is parsed by external code (passed in callbacks to
+    // LibreOfficeKit clients). So don't change.
     ss << getX() << ", " << getY() << ", " << getWidth() << ", " << getHeight();
     return ss.str().c_str();
 }
