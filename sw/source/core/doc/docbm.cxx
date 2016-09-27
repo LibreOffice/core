@@ -270,28 +270,28 @@ namespace
             [&rName] (IDocumentMarkAccess::pMark_t const& rpMark) { return rpMark->GetName() == rName; } );
     }
 
-#if 0
     static void lcl_DebugMarks(IDocumentMarkAccess::container_t vMarks)
     {
-        OSL_TRACE("%d Marks", vMarks.size());
+#if OSL_DEBUG_LEVEL > 0
+        SAL_INFO("sw.core", vMarks.size() << " Marks");
         for(IDocumentMarkAccess::iterator_t ppMark = vMarks.begin();
             ppMark != vMarks.end();
             ppMark++)
         {
             IMark* pMark = ppMark->get();
-            OString sName = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
             const SwPosition* const pStPos = &pMark->GetMarkStart();
             const SwPosition* const pEndPos = &pMark->GetMarkEnd();
-            OSL_TRACE("%s %s %d,%d %d,%d",
-                typeid(*pMark).name(),
-                sName.getStr(),
-                pStPos->nNode.GetIndex(),
-                pStPos->nContent.GetIndex(),
-                pEndPos->nNode.GetIndex(),
+            SAL_INFO("sw.core",
+                typeid(*pMark).name() << " " <<
+                pMark->GetName() << " " <<
+                pStPos->nNode.GetIndex() << "," <<
+                pStPos->nContent.GetIndex() << " " <<
+                pEndPos->nNode.GetIndex() << "," <<
                 pEndPos->nContent.GetIndex());
         }
-    };
 #endif
+        assert(std::is_sorted(vMarks.begin(), vMarks.end(), lcl_MarkOrderingByStart));
+    };
 }
 
 IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
@@ -352,18 +352,17 @@ namespace sw { namespace mark
         const OUString& rName,
         const IDocumentMarkAccess::MarkType eType)
     {
-#if 0
+#if OSL_DEBUG_LEVEL > 0
         {
-            OString sName = OUStringToOString(rName, RTL_TEXTENCODING_UTF8);
             const SwPosition* const pPos1 = rPaM.GetPoint();
             const SwPosition* pPos2 = pPos1;
             if(rPaM.HasMark())
                 pPos2 = rPaM.GetMark();
-            OSL_TRACE("%s %d,%d %d,%d",
-                sName.getStr(),
-                pPos1->nNode.GetIndex(),
-                pPos1->nContent.GetIndex(),
-                pPos2->nNode.GetIndex(),
+            SAL_INFO("sw.core",
+                rName << " " <<
+                pPos1->nNode.GetIndex() << "," <<
+                pPos1->nContent.GetIndex() << " " <<
+                pPos2->nNode.GetIndex() << "," <<
                 pPos2->nContent.GetIndex());
         }
 #endif
@@ -451,15 +450,13 @@ namespace sw { namespace mark
                 break;
         }
         pMarkBase->InitDoc(m_pDoc);
-#if 0
-        OSL_TRACE("--- makeType ---");
-        OSL_TRACE("Marks");
+        SAL_INFO("sw.core", "--- makeType ---");
+        SAL_INFO("sw.core", "Marks");
         lcl_DebugMarks(m_vAllMarks);
-        OSL_TRACE("Bookmarks");
+        SAL_INFO("sw.core", "Bookmarks");
         lcl_DebugMarks(m_vBookmarks);
-        OSL_TRACE("Fieldmarks");
+        SAL_INFO("sw.core", "Fieldmarks");
         lcl_DebugMarks(m_vFieldmarks);
-#endif
 
         return pMark.get();
     }
@@ -571,6 +568,9 @@ namespace sw { namespace mark
         const SwPosition& rNewPos,
         const sal_Int32 nOffset)
     {
+        SAL_INFO("sw.core", "correctMarksAbsolute entry");
+        lcl_DebugMarks(m_vAllMarks);
+
         const SwNode* const pOldNode = &rOldNode.GetNode();
         SwPosition aNewPos(rNewPos);
         aNewPos.nContent += nOffset;
@@ -607,10 +607,9 @@ namespace sw { namespace mark
         // restore sorting if needed
         if(isSortingNeeded)
             sortMarks();
-#if 0
-        OSL_TRACE("correctMarksAbsolute");
+
+        SAL_INFO("sw.core", "correctMarksAbsolute");
         lcl_DebugMarks(m_vAllMarks);
-#endif
     }
 
     void MarkManager::correctMarksRelative(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const sal_Int32 nOffset)
@@ -657,10 +656,9 @@ namespace sw { namespace mark
         // restore sorting if needed
         if(isSortingNeeded)
             sortMarks();
-#if 0
-        OSL_TRACE("correctMarksRelative");
+
+        SAL_INFO("sw.core", "correctMarksRelative");
         lcl_DebugMarks(m_vAllMarks);
-#endif
     }
 
     void MarkManager::deleteMarks(
@@ -832,10 +830,8 @@ namespace sw { namespace mark
             sortMarks();
         }
 
-#if 0
-        OSL_TRACE("deleteMarks");
+        SAL_INFO("sw.core", "deleteMarks");
         lcl_DebugMarks(m_vAllMarks);
-#endif
     }
 
     struct LazyFieldmarkDeleter : public IDocumentMarkAccess::ILazyDeleter
