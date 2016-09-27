@@ -149,6 +149,8 @@ public:
                             const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames );
+    void                finalizeImportBasedOnCache(
+                            const css::uno::Reference< css::sheet::XDataPilotDescriptor >& rxDPDesc);
 
     /** Returns the name of the DataPilot field in the fields collection. */
     inline const OUString& getDPFieldName() const { return maDPFieldName; }
@@ -175,7 +177,7 @@ private:
     PivotTable&         mrPivotTable;       /// The parent pivot table object.
     ItemModelVector     maItems;            /// All items of this field.
     PTFieldModel        maModel;            /// Pivot field settings.
-    OUString     maDPFieldName;      /// Name of the field in DataPilot field collection.
+    OUString            maDPFieldName;      /// Name of the field in DataPilot field collection.
     sal_Int32           mnFieldIndex;       /// Zero-based index of this field.
 };
 
@@ -317,6 +319,8 @@ public:
     PivotTableFilter&   createTableFilter();
     /** Inserts the pivot table into the sheet. */
     void                finalizeImport();
+    /** Finalizes all fields, finds field names and creates grouping fields. */
+    void                finalizeFieldsImport();
     /** Creates all date group fields for the specified cache field after import. */
     void                finalizeDateGroupingImport(
                             const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
@@ -338,6 +342,7 @@ public:
                         getDataLayoutField() const;
 
     /** Returns the cache field with the specified index. */
+    PivotCacheField* getCacheField( sal_Int32 nFieldIdx );
     const PivotCacheField* getCacheField( sal_Int32 nFieldIdx ) const;
     /** Returns the base cache field of the data field item with the specified index. */
     const PivotCacheField* getCacheFieldOfDataField( sal_Int32 nDataItemIdx ) const;
@@ -373,9 +378,10 @@ private:
     PivotTableFilterVector maFilters;       /// All field filters.
     PTDefinitionModel     maDefModel;         /// Global pivot table settings.
     PTLocationModel       maLocationModel;    /// Location settings of the pivot table.
-    const PivotCache*     mpPivotCache;       /// The pivot cache this table is based on.
+    PivotCache*           mpPivotCache;       /// The pivot cache this table is based on.
     css::uno::Reference< css::sheet::XDataPilotDescriptor >
                           mxDPDescriptor;     /// Descriptor of the DataPilot object.
+
 };
 
 class PivotTableBuffer : public WorkbookHelper
