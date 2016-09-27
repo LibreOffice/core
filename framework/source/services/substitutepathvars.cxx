@@ -746,12 +746,11 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
     m_aReSubstFixedVarOrder.sort();
 
     // Sort user variables to path length
-    SubstituteVariables::const_iterator pIter;
-    for ( pIter = m_aSubstVarMap.begin(); pIter != m_aSubstVarMap.end(); ++pIter )
+    for (auto const & i: m_aSubstVarMap)
     {
         ReSubstUserVarOrder aUserOrderVar;
-        aUserOrderVar.aVarName = "$(" + pIter->second.aSubstVariable + ")";
-        aUserOrderVar.nVarValueLength = pIter->second.aSubstVariable.getLength();
+        aUserOrderVar.aVarName = "$(" + i.second.aSubstVariable + ")";
+        aUserOrderVar.nVarValueLength = i.second.aSubstVariable.getLength();
         m_aReSubstUserVarOrder.push_back( aUserOrderVar );
     }
     m_aReSubstUserVarOrder.sort();
@@ -1085,18 +1084,16 @@ throw ( RuntimeException )
     {
         bool bVariableFound = false;
 
-        for (ReSubstFixedVarOrderVector::const_iterator i(
-                 m_aReSubstFixedVarOrder.begin());
-             i != m_aReSubstFixedVarOrder.end(); ++i)
+        for (auto const & i: m_aReSubstFixedVarOrder)
         {
-            OUString aValue = m_aPreDefVars.m_FixedVar[i->eVariable];
+            OUString aValue = m_aPreDefVars.m_FixedVar[i.eVariable];
             sal_Int32 nPos = aURL.indexOf( aValue );
             if ( nPos >= 0 )
             {
                 bool bMatch = true;
-                if ( i->eVariable == PREDEFVAR_USERNAME ||
-                     i->eVariable == PREDEFVAR_LANGID ||
-                     i->eVariable == PREDEFVAR_VLANG )
+                if ( i.eVariable == PREDEFVAR_USERNAME ||
+                     i.eVariable == PREDEFVAR_LANGID ||
+                     i.eVariable == PREDEFVAR_VLANG )
                 {
                     // Special path variables as they can occur in the middle of a path. Only match if they
                     // describe a whole directory and not only a substring of a directory!
@@ -1123,7 +1120,7 @@ throw ( RuntimeException )
                 {
                     aURL = aURL.replaceAt(
                         nPos, aValue.getLength(),
-                        m_aPreDefVars.m_FixedVarNames[i->eVariable]);
+                        m_aPreDefVars.m_FixedVarNames[i.eVariable]);
                     bVariableFound = true; // Resubstitution not finished yet!
                     break;
                 }
@@ -1131,11 +1128,9 @@ throw ( RuntimeException )
         }
 
         // This part can be iterated more than one time as variables can contain variables again!
-        for (ReSubstUserVarOrderVector::const_iterator i(
-                 m_aReSubstUserVarOrder.begin());
-             i != m_aReSubstUserVarOrder.end(); ++i)
+        for (auto const & i: m_aReSubstUserVarOrder)
         {
-            OUString aVarValue = i->aVarName;
+            OUString aVarValue = i.aVarName;
             sal_Int32 nPos = aURL.indexOf( aVarValue );
             if ( nPos >= 0 )
             {
