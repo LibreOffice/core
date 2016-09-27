@@ -241,8 +241,11 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                     {
                         changeState(embed::EmbedStates::LOADED);
                     }
-                    catch( const uno::Exception& )
+                    catch( const uno::Exception& e )
                     {
+                        SAL_WARN(
+                            "embeddedobj.ole",
+                            "ignoring Exception " << e.Message);
                     }
                 }
 
