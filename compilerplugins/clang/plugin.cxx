@@ -55,34 +55,7 @@ bool Plugin::ignoreLocation( SourceLocation loc )
             return true;
         }
         std::string s(bufferName);
-        for (std::string::size_type i = 0;;) {
-            i = s.find("/.", i);
-            if (i == std::string::npos) {
-                break;
-            }
-            if (i + 2 == s.length() || s[i + 2] == '/') {
-                s.erase(i, 2); // [AAA]/.[/CCC] -> [AAA][/CCC]
-            } else if (s[i + 2] == '.'
-                       && (i + 3 == s.length() || s[i + 3] == '/'))
-            {
-                if (i == 0) { // /..[/CCC] -> /..[/CCC]
-                    break;
-                }
-                auto j = s.rfind('/', i - 1);
-                if (j == std::string::npos) {
-                    // BBB/..[/CCC] -> BBB/..[/CCC] (instead of BBB/../CCC ->
-                    // CCC, to avoid wrong ../../CCC -> CCC; relative paths
-                    // shouldn't happen anyway, and even if they did, wouldn't
-                    // match against WORKDIR anyway, as WORKDIR should be
-                    // absolute):
-                    break;
-                }
-                s.erase(j, i + 3 - j); // AAA/BBB/..[/CCC] -> AAA[/CCC]
-                i = j;
-            } else {
-                i += 2;
-            }
-        }
+        normalizeDotDotInFilePath(s);
         if (strncmp(s.c_str(), WORKDIR, strlen(WORKDIR)) == 0) {
             return true;
         }
@@ -91,6 +64,38 @@ bool Plugin::ignoreLocation( SourceLocation loc )
         || strncmp( bufferName, SRCDIR, strlen( SRCDIR )) == 0 )
         return false; // ok
     return true;
+    }
+
+void Plugin::normalizeDotDotInFilePath( std::string & s )
+    {
+    for (std::string::size_type i = 0;;) {
+        i = s.find("/.", i);
+        if (i == std::string::npos) {
+            break;
+        }
+        if (i + 2 == s.length() || s[i + 2] == '/') {
+            s.erase(i, 2); // [AAA]/.[/CCC] -> [AAA][/CCC]
+        } else if (s[i + 2] == '.'
+                   && (i + 3 == s.length() || s[i + 3] == '/'))
+        {
+            if (i == 0) { // /..[/CCC] -> /..[/CCC]
+                break;
+            }
+            auto j = s.rfind('/', i - 1);
+            if (j == std::string::npos) {
+                // BBB/..[/CCC] -> BBB/..[/CCC] (instead of BBB/../CCC ->
+                // CCC, to avoid wrong ../../CCC -> CCC; relative paths
+                // shouldn't happen anyway, and even if they did, wouldn't
+                // match against WORKDIR anyway, as WORKDIR should be
+                // absolute):
+                break;
+            }
+            s.erase(j, i + 3 - j); // AAA/BBB/..[/CCC] -> AAA[/CCC]
+            i = j;
+        } else {
+            i += 2;
+        }
+    }
     }
 
 void Plugin::registerPlugin( Plugin* (*create)( const InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault )

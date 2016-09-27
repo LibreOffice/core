@@ -137,6 +137,7 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
     aInfo.callValue = callValue;
 
     aInfo.sourceLocation = filename.str() + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
+    normalizeDotDotInFilePath(aInfo.sourceLocation);
 
     callSet.insert(aInfo);
 }
