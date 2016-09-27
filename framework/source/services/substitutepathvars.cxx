@@ -1096,7 +1096,8 @@ throw ( RuntimeException )
             if ( nPos >= 0 )
             {
                 bool bMatch = true;
-                if ( i->eVariable == PREDEFVAR_LANGID ||
+                if ( i->eVariable == PREDEFVAR_USERNAME ||
+                     i->eVariable == PREDEFVAR_LANGID ||
                      i->eVariable == PREDEFVAR_VLANG )
                 {
                     // Special path variables as they can occur in the middle of a path. Only match if they
