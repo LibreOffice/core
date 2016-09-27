@@ -403,8 +403,9 @@ void MenuFloatingWindow::Execute()
     pSVData->maAppData.mpActivePopupMenu = nullptr;
 }
 
-void MenuFloatingWindow::StopExecute( VclPtr<vcl::Window> xFocusId )
+void MenuFloatingWindow::StopExecute()
 {
+    VclPtr<vcl::Window> xFocusId;
     // restore focus
     // (could have been restored in Select)
     if ( xSaveFocusId != nullptr )
@@ -461,7 +462,6 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
 void MenuFloatingWindow::EndExecute()
 {
     Menu* pStart = pMenu ? pMenu->ImplGetStartMenu() : nullptr;
-    VclPtr<vcl::Window> xFocusId;
 
     // if started elsewhere, cleanup there as well
     MenuFloatingWindow* pCleanUpFrom = this;
@@ -478,7 +478,7 @@ void MenuFloatingWindow::EndExecute()
     Menu* pM = pMenu;
     sal_uInt16 nItem = nHighlightedItem;
 
-    pCleanUpFrom->StopExecute( xFocusId );
+    pCleanUpFrom->StopExecute();
 
     if ( nItem != ITEMPOS_INVALID && pM )
     {

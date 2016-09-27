@@ -108,7 +108,7 @@ public:
     sal_uInt16 GetScrollerHeight() const   { return nScrollerHeight; }
 
     void Execute();
-    void StopExecute( VclPtr<vcl::Window> xFocusId = nullptr );
+    void StopExecute();
     void EndExecute();
     void EndExecute( sal_uInt16 nSelectId );
 
