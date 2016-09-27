@@ -18,3 +18,24 @@
  #  define LT_GNUC_NULL_TERMINATED		\
  	__attribute__((__sentinel__))
  #else /* !__GNUC__ */
+@@ -220,17 +220,17 @@
+  *
+  * See the GNU C documentation for more details.
+  */
+-#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
++#if defined __GNUC__ && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
+ #define LT_GNUC_DEPRECATED __attribute__((__deprecated__))
+ #else
+ #define LT_GNUC_DEPRECATED
+ #endif
+-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)
++#if defined __GNUC__ && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
+ #define LT_GNUC_DEPRECATED_FOR(f) __attribute__((deprecated("Use " #f " instead")))
+ #else
+ #define LT_GNUC_DEPRECATED_FOR(f) LT_GNUC_DEPRECATED
+ #endif
+-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
++#if defined __GNUC__ && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
+ #define LT_GNUC_BEGIN_IGNORE_DEPRECATIONS	\
+ 	_Pragma ("GCC diagnostic push")		\
+ 	_Pragma ("GCC diagnostic ignored \"-Wdeprecated-declarations\"")
