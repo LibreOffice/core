@@ -270,13 +270,13 @@ IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, PopupEnd, FloatingWindow*, void)
     Menu* pM = pMenu;
     if ( bInExecute )
     {
+        End();
         if ( pActivePopup )
         {
             //DBG_ASSERT( !pActivePopup->ImplGetWindow(), "PopupEnd, obwohl pActivePopup MIT Window!" );
             KillActivePopup(); // should be ok to just remove it
             //pActivePopup->bCanceled = true;
         }
-        bInExecute = false;
         pMenu->bInCallback = true;
         pMenu->Deactivate();
         pMenu->bInCallback = false;
@@ -386,40 +386,57 @@ void MenuFloatingWindow::EnableScrollMenu( bool b )
     InitMenuClipRegion(*this);
 }
 
+void MenuFloatingWindow::Start()
+{
+    if (bInExecute)
+        return;
+    bInExecute = true;
+    if (GetParent())
+        GetParent()->ImplIncModalCount();
+}
+
+void MenuFloatingWindow::End()
+{
+    if (!bInExecute)
+        return;
+
+    if (GetParent() && !GetParent()->IsDisposed())
+        GetParent()->ImplDecModalCount();
+
+    // restore focus
+    VclPtr<vcl::Window> xFocusId(xSaveFocusId);
+    if (xFocusId != nullptr)
+    {
+        xSaveFocusId = nullptr;
+        ImplGetSVData()->maWinData.mbNoDeactivate = false;
+        Window::EndSaveFocus(xFocusId);
+    }
+
+    bInExecute = false;
+}
+
 void MenuFloatingWindow::Execute()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     pSVData->maAppData.mpActivePopupMenu = static_cast<PopupMenu*>(pMenu);
 
-    bInExecute = true;
-//  bCallingSelect = false;
+    Start();
 
-    while ( bInExecute )
+    while (bInExecute)
         Application::Yield();
 
     pSVData->maAppData.mpActivePopupMenu = nullptr;
 }
 
-void MenuFloatingWindow::StopExecute( VclPtr<vcl::Window> xFocusId )
+void MenuFloatingWindow::StopExecute()
 {
-    // restore focus
-    // (could have been restored in Select)
-    if ( xSaveFocusId != nullptr )
-    {
-        Window::EndSaveFocus( xFocusId, false );
-        xFocusId = xSaveFocusId;
-        if ( xFocusId != nullptr )
-        {
-            xSaveFocusId = nullptr;
-            ImplGetSVData()->maWinData.mbNoDeactivate = false;
-        }
-    }
-    ImplEndPopupMode( FloatWinPopupEndFlags::NONE, xFocusId );
+    End();
+
+    ImplEndPopupMode(FloatWinPopupEndFlags::NONE, xSaveFocusId);
 
     aHighlightChangedTimer.Stop();
-    bInExecute = false;
-    if ( pActivePopup )
+    if (pActivePopup)
     {
         KillActivePopup();
     }
@@ -460,7 +477,6 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
 void MenuFloatingWindow::EndExecute()
 {
     Menu* pStart = pMenu ? pMenu->ImplGetStartMenu() : nullptr;
-    VclPtr<vcl::Window> xFocusId;
 
     // if started elsewhere, cleanup there as well
     MenuFloatingWindow* pCleanUpFrom = this;
@@ -477,7 +493,7 @@ void MenuFloatingWindow::EndExecute()
     Menu* pM = pMenu;
     sal_uInt16 nItem = nHighlightedItem;
 
-    pCleanUpFrom->StopExecute( xFocusId );
+    pCleanUpFrom->StopExecute();
 
     if ( nItem != ITEMPOS_INVALID && pM )
     {

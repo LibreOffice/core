@@ -804,8 +804,6 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
     else
     {
         mbPopupModeTearOff = true;
-        if ( xFocusId != nullptr )
-            Window::EndSaveFocus( xFocusId, false );
     }
 
     mbPopupModeCanceled = bool(nFlags & FloatWinPopupEndFlags::Cancel);

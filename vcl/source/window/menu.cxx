@@ -3027,12 +3027,6 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
 
     pWin->SetFocusId( xFocusId );
     pWin->SetOutputSizePixel( aSz );
-    // #102158# menus must never grab the focus, otherwise
-    // they will be closed immediately
-    // from now on focus grabbing is only prohibited automatically if
-    // FloatWinPopupFlags::GrabFocus was set (which is done below), because some
-    // floaters (like floating toolboxes) may grab the focus
-    // pWin->GrabFocus();
     if ( GetItemCount() )
     {
         SalMenu* pMenu = ImplGetSalMenu();
@@ -3082,15 +3076,8 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
     }
     if ( bRealExecute )
     {
-        pW->ImplIncModalCount();
-
         pWin->Execute();
-
-        DBG_ASSERT( ! pW->IsDisposed(), "window for popup died, modal count incorrect !" );
-        if( ! pW->IsDisposed() )
-            pW->ImplDecModalCount();
-
-        if ( pWin->IsDisposed() )
+        if (pWin->IsDisposed())
             return 0;
 
         // Restore focus (could already have been

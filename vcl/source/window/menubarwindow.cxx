@@ -466,8 +466,6 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
             {
                 if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
                 {
-                    // we didn't clean up last time
-                    Window::EndSaveFocus( xSaveFocusId, false );    // clean up
                     xSaveFocusId = nullptr;
                     if( !bNoSaveFocus )
                         xSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
@@ -499,9 +497,10 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         {
             VclPtr<vcl::Window> xTempFocusId = xSaveFocusId;
             xSaveFocusId = nullptr;
-            Window::EndSaveFocus( xTempFocusId, bAllowRestoreFocus );
+            if (bAllowRestoreFocus)
+                Window::EndSaveFocus(xTempFocusId);
             // #105406# restore focus to document if we could not save focus before
-            if( bDefaultToDocument && xTempFocusId == nullptr && bAllowRestoreFocus )
+            if (bDefaultToDocument && xTempFocusId == nullptr && bAllowRestoreFocus)
                 GrabFocusToDocument();
         }
     }
