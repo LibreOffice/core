@@ -1580,34 +1580,33 @@ void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
     if (!pSaveData)
         return;
 
-    // Update all linked tables, if this table is part of the cache (ScDPCollection)
-    if (pDPs->HasTable(pDPObj))
-    {
-        std::set<ScDPObject*> aRefs;
-        if (!pDPs->ReloadGroupsInCache(pDPObj, aRefs))
-            return;
-
-        // We allow pDimData being NULL.
-        const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
-        std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
-        for (; it != itEnd; ++it)
-        {
-            ScDPObject* pObj = *it;
-            if (pObj != pDPObj)
-            {
-                pSaveData = pObj->GetSaveData();
-                if (pSaveData)
-                    pSaveData->SetDimensionData(pDimData);
-            }
-
-            // This action is intentionally not undoable since it modifies cache.
-            UpdatePivotTable(*pObj, false, false);
-        }
-    }
-    else // Otherwise update only this single table
+    if (!pDPs->HasTable(pDPObj))
     {
         // This table is under construction so no need for a whole update (UpdatePivotTable()).
         pDPObj->ReloadGroupTableData();
+        return;
+    }
+
+    // Update all linked tables, if this table is part of the cache (ScDPCollection)
+    std::set<ScDPObject*> aRefs;
+    if (!pDPs->ReloadGroupsInCache(pDPObj, aRefs))
+        return;
+
+    // We allow pDimData being NULL.
+    const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
+    std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScDPObject* pObj = *it;
+        if (pObj != pDPObj)
+        {
+            pSaveData = pObj->GetSaveData();
+            if (pSaveData)
+                pSaveData->SetDimensionData(pDimData);
+        }
+
+        // This action is intentionally not undoable since it modifies cache.
+        UpdatePivotTable(*pObj, false, false);
     }
 }
 
