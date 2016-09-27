@@ -52,6 +52,7 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
         default:
         break;
     }
+    rWin.QueueIdleUpdate();
 }
 
 GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
@@ -124,6 +125,8 @@ void GraphCtrl::SetWinStyle( WinBits nWinBits )
 
     if ( bSdrMode )
         InitSdrModel();
+
+    QueueIdleUpdate();
 }
 
 void GraphCtrl::InitSdrModel()
@@ -203,6 +206,7 @@ void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
 
     Resize();
     Invalidate();
+    QueueIdleUpdate();
 }
 
 void GraphCtrl::Resize()
@@ -282,14 +286,17 @@ void GraphCtrl::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRec
 
 void GraphCtrl::SdrObjChanged( const SdrObject&  )
 {
+    QueueIdleUpdate();
 }
 
 void GraphCtrl::SdrObjCreated( const SdrObject& )
 {
+    QueueIdleUpdate();
 }
 
 void GraphCtrl::MarkListHasChanged()
 {
+    QueueIdleUpdate();
 }
 
 void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
@@ -602,6 +609,8 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
     else
         ReleaseMouse();
+
+    QueueIdleUpdate();
 }
 
 void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
@@ -641,6 +650,8 @@ void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else
         Control::MouseButtonDown( rMEvt );
+
+    QueueIdleUpdate();
 }
 
 void GraphCtrl::MouseMove(const MouseEvent& rMEvt)
@@ -672,6 +683,8 @@ void GraphCtrl::MouseMove(const MouseEvent& rMEvt)
 
         aMousePosLink.Call( this );
     }
+
+    QueueIdleUpdate();
 }
 
 void GraphCtrl::MouseButtonUp(const MouseEvent& rMEvt)
@@ -688,6 +701,8 @@ void GraphCtrl::MouseButtonUp(const MouseEvent& rMEvt)
     }
     else
         Control::MouseButtonUp( rMEvt );
+
+    QueueIdleUpdate();
 }
 
 SdrObject* GraphCtrl::GetSelectedSdrObject() const
@@ -716,6 +731,8 @@ void GraphCtrl::SetEditMode( const bool _bEditMode )
     }
     else
         bEditMode = false;
+
+    QueueIdleUpdate();
 }
 
 void GraphCtrl::SetPolyEditMode( const sal_uInt16 _nPolyEdit )
@@ -727,6 +744,8 @@ void GraphCtrl::SetPolyEditMode( const sal_uInt16 _nPolyEdit )
     }
     else
         nPolyEdit = 0;
+
+    QueueIdleUpdate();
 }
 
 void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
@@ -740,15 +759,22 @@ void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
     }
     else
         eObjKind = OBJ_NONE;
+
+    QueueIdleUpdate();
 }
 
-IMPL_LINK_TYPED( GraphCtrl, UpdateHdl, Idle*, pTimer, void )
+IMPL_LINK_TYPED( GraphCtrl, UpdateHdl, Idle *, , void )
 {
+    mbInIdleUpdate = true;
     aUpdateLink.Call( this );
-
-    pTimer->Start();
+    mbInIdleUpdate = false;
 }
 
+void GraphCtrl::QueueIdleUpdate()
+{
+    if (!mbInIdleUpdate)
+        aUpdateIdle.Start();
+}
 
 css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessible()
 {
