@@ -1260,8 +1260,14 @@ void SwSidebarWin::DeactivatePostIt()
     mpOutliner->CompleteOnlineSpelling();
 
     SetViewState(ViewState::NORMAL);
+    // Make sure this view doesn't emit LOK callbacks during the update, as the
+    // sidebar window's SidebarTextControl doesn't have a valid twip offset
+    // (map mode origin) during that operation.
+    bool bTiledPainting = mrView.getTiledPainting();
+    mrView.setTiledPainting(true);
     // write the visible text back into the SwField
     UpdateData();
+    mrView.setTiledPainting(bTiledPainting);
 
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         GetOutlinerView()->SetBackgroundColor(COL_TRANSPARENT);
