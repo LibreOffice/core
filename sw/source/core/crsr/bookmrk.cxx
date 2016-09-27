@@ -72,23 +72,26 @@ namespace
     {
         io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, nullptr);
 
-        SwPosition rStart = pField->GetMarkStart();
-        SwTextNode const*const pStartTextNode = rStart.nNode.GetNode().GetTextNode();
+        SwPosition start = pField->GetMarkStart();
+        SwTextNode const*const pStartTextNode = start.nNode.GetNode().GetTextNode();
         sal_Unicode ch_start = 0;
-        if( pStartTextNode && ( rStart.nContent.GetIndex() < pStartTextNode->GetText().getLength() ) )
-            ch_start = pStartTextNode->GetText()[rStart.nContent.GetIndex()];
+        if (pStartTextNode && (start.nContent.GetIndex() < pStartTextNode->GetText().getLength()))
+            ch_start = pStartTextNode->GetText()[start.nContent.GetIndex()];
         if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
         {
-            SwPaM aStartPaM(rStart);
+            SwPaM aStartPaM(start);
             io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, OUString(aStartMark));
-            --rStart.nContent;
-            pField->SetMarkStartPos( rStart );
+            --start.nContent; // restore, it was moved by InsertString
+            // do not manipulate via reference directly but call SetMarkStartPos
+            // which works even if start and end pos were the same
+            pField->SetMarkStartPos( start );
         }
 
         SwPosition& rEnd = pField->GetMarkEnd();
         SwTextNode const*const pEndTextNode = rEnd.nNode.GetNode().GetTextNode();
-        const sal_Int32 nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 ) ?
-            rEnd.nContent.GetIndex() : rEnd.nContent.GetIndex() - 1;
+        const sal_Int32 nEndPos = (rEnd == start || rEnd.nContent.GetIndex() == 0)
+            ? rEnd.nContent.GetIndex()
+            : rEnd.nContent.GetIndex() - 1;
         sal_Unicode ch_end = 0;
         if ( pEndTextNode && ( nEndPos < pEndTextNode->GetText().getLength() ) )
             ch_end = pEndTextNode->GetText()[nEndPos];
