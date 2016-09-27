@@ -1508,6 +1508,11 @@ void SfxViewShell::setTiledPainting(bool bTiledPainting)
     pImpl->m_bTiledPainting = bTiledPainting;
 }
 
+bool SfxViewShell::getTiledPainting() const
+{
+    return pImpl->m_bTiledPainting;
+}
+
 int SfxViewShell::getPart() const
 {
     return 0;

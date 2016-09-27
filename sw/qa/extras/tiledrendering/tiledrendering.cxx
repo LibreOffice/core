@@ -75,6 +75,7 @@ public:
     void testCreateViewGraphicSelection();
     void testCreateViewTextSelection();
     void testRedlineColors();
+    void testCommentEndTextEdit();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -114,10 +115,11 @@ public:
     CPPUNIT_TEST(testCreateViewGraphicSelection);
     CPPUNIT_TEST(testCreateViewTextSelection);
     CPPUNIT_TEST(testRedlineColors);
+    CPPUNIT_TEST(testCommentEndTextEdit);
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    SwXTextDocument* createDoc(const char* pName);
+    SwXTextDocument* createDoc(const char* pName = nullptr);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
     Rectangle m_aInvalidation;
@@ -147,7 +149,10 @@ SwTiledRenderingTest::SwTiledRenderingTest()
 
 SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
 {
-    load(DATA_DIRECTORY, pName);
+    if (!pName)
+        loadURL("private:factory/swriter", nullptr);
+    else
+        load(DATA_DIRECTORY, pName);
 
     SwXTextDocument* pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDocument);
@@ -621,6 +626,7 @@ class ViewCallback
 {
 public:
     bool m_bOwnCursorInvalidated;
+    bool m_bOwnCursorAtOrigin;
     Rectangle m_aOwnCursor;
     bool m_bViewCursorInvalidated;
     Rectangle m_aViewCursor;
@@ -635,6 +641,7 @@ public:
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
+          m_bOwnCursorAtOrigin(false),
           m_bViewCursorInvalidated(false),
           m_bOwnSelectionSet(false),
           m_bViewSelectionSet(false),
@@ -673,6 +680,8 @@ public:
             m_aOwnCursor.setY(aSeq[1].toInt32());
             m_aOwnCursor.setWidth(aSeq[2].toInt32());
             m_aOwnCursor.setHeight(aSeq[3].toInt32());
+            if (m_aOwnCursor.getX() == 0 && m_aOwnCursor.getY() == 0)
+                m_bOwnCursorAtOrigin = true;
         }
         break;
         case LOK_CALLBACK_INVALIDATE_VIEW_CURSOR:
@@ -1457,6 +1466,40 @@ void SwTiledRenderingTest::testRedlineColors()
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("authors").size());
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testCommentEndTextEdit()
+{
+    // Create a document, type a character and remember the cursor position.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc();
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Rectangle aBodyCursor = aView1.m_aOwnCursor;
+
+    // Create a comment and type a character there as well.
+    const int nCtrlAltC = KEY_MOD1 + KEY_MOD2 + 512 + 'c' - 'a';
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', nCtrlAltC);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', nCtrlAltC);
+    Scheduler::ProcessEventsToIdle();
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+
+    // End comment text edit by clicking in the body text area, and assert that
+    // no unexpected cursor callbacks are emitted at origin (top left corner of
+    // the document).
+    aView1.m_bOwnCursorAtOrigin = false;
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aBodyCursor.getX(), aBodyCursor.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aBodyCursor.getX(), aBodyCursor.getY(), 1, MOUSE_LEFT, 0);
+    // This failed, the cursor was at 0, 0 at some point during end text edit
+    // of the comment.
+    CPPUNIT_ASSERT(!aView1.m_bOwnCursorAtOrigin);
+
+    mxComponent->dispose();
+    mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
 
