@@ -92,13 +92,9 @@ namespace svx
             @param _rxController
                 The form controller which the helper should be responsible for. Must not
                 be <NULL/>, and must have a valid model (form).
-
-            @param _pInvalidationCallback
-                the callback for invalidating feature states
         */
         ControllerFeatures(
-            const css::uno::Reference< css::form::runtime::XFormController >& _rxController,
-            IControllerFeatureInvalidation* _pInvalidationCallback
+            const css::uno::Reference< css::form::runtime::XFormController >& _rxController
         );
 
         /// dtor

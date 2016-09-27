@@ -747,8 +747,7 @@ static inline void SplitGlyphFlags( const ServerFont& rFont, sal_GlyphId& rGlyph
         rGlyphId = rFont.GetRawGlyphIndex( rGlyphId );
 }
 
-void ServerFont::ApplyGlyphTransform( int nGlyphFlags,
-    FT_Glyph pGlyphFT, bool bForBitmapProcessing ) const
+void ServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_Glyph pGlyphFT ) const
 {
     int nAngle = GetFontSelData().mnOrientation;
     // shortcut most common case
@@ -802,7 +801,7 @@ void ServerFont::ApplyGlyphTransform( int nGlyphFlags,
         FT_Glyph_Transform( pGlyphFT, nullptr, &aVector );
 
         // orthogonal transforms are better handled by bitmap operations
-        if( bStretched || (bForBitmapProcessing && (nAngle % 900) != 0) )
+        if( bStretched )
         {
             // apply non-orthogonal or stretch transformations
             FT_Glyph_Transform( pGlyphFT, &aMatrix, nullptr );
@@ -942,7 +941,7 @@ void ServerFont::InitGlyphData( sal_GlyphId aGlyphId, GlyphData& rGD ) const
     FT_Glyph pGlyphFT;
     FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
 
-    ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
+    ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
     rGD.SetDelta( (pGlyphFT->advance.x + 0x8000) >> 16, -((pGlyphFT->advance.y + 0x8000) >> 16) );
 
     FT_BBox aBbox;
@@ -1285,7 +1284,7 @@ bool ServerFont::GetGlyphOutline( sal_GlyphId aGlyphId,
     tools::PolyPolygon aToolPolyPolygon;
     PolyArgs aPolyArg( aToolPolyPolygon, nMaxPoints );
 
-    /*int nAngle =*/ ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
+    /*int nAngle =*/ ApplyGlyphTransform( nGlyphFlags, pGlyphFT );
 
     FT_Outline_Funcs aFuncs;
     aFuncs.move_to  = &FT_move_to;

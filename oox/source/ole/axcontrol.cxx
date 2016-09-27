@@ -2674,8 +2674,8 @@ void EmbeddedControl::convertFromProperties( const Reference< XControlModel >& r
 }
 
 EmbeddedForm::EmbeddedForm( const Reference< XModel >& rxDocModel,
-        const Reference< XDrawPage >& rxDrawPage, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
-    maControlConv( rxDocModel, rGraphicHelper, bDefaultColorBgr ),
+        const Reference< XDrawPage >& rxDrawPage, const GraphicHelper& rGraphicHelper ) :
+    maControlConv( rxDocModel, rGraphicHelper, true/*bDefaultColorBgr*/ ),
     mxModelFactory( rxDocModel, UNO_QUERY ),
     mxFormsSupp( rxDrawPage, UNO_QUERY )
 {

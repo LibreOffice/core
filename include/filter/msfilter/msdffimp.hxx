@@ -694,7 +694,6 @@ public:
 
     void ExchangeInShapeOrder(SdrObject*    pOldObject,
                               sal_uLong     nTxBx,
-                              SwFlyFrameFormat*  pFly,
                               SdrObject*    pObject) const;
 
     void RemoveFromShapeOrder( SdrObject* pObject ) const;

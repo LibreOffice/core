@@ -171,7 +171,7 @@ struct FactoryInfo
 
         // If you call set-methods - we check for changes of values and mark it.
         // But if you wish to set it without that... you must initialize it!
-        void initInstalled        ( bool               bNewInstalled        ) { bInstalled        = bNewInstalled; }
+        void initInstalled        ()                                       { bInstalled        = true; }
         void initFactory          ( const OUString& sNewFactory          ) { sFactory          = sNewFactory; }
         void initShortName        ( const OUString& sNewShortName        ) { sShortName        = sNewShortName; }
         void initWindowAttributes ( const OUString& sNewWindowAttributes ) { sWindowAttributes = sNewWindowAttributes; }
@@ -724,7 +724,7 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFa
             pInfo = &(m_lFactories[eFactory]);
             pInfo->free();
 
-            pInfo->initInstalled( true     );
+            pInfo->initInstalled();
             pInfo->initFactory  ( sFactoryName );
 
             if (lValues[nPropertyStart+PROPERTYHANDLE_SHORTNAME] >>= sTemp)

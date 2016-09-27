@@ -382,7 +382,7 @@ resource_definition
       {
           if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
                                      rtl::OString( $3 ),
-                                     $4.GetLong(), ULONG_MAX ) )
+                                     $4.GetLong() ) )
               bError = true;
       }
       else if( $4.IsDefinition() )
@@ -397,7 +397,7 @@ resource_definition
           pExpr = new RscExpression( aExpType, '+', $4 );
 
           if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
-                                     rtl::OString( $3 ), pExpr, ULONG_MAX ) )
+                                     rtl::OString( $3 ), pExpr ) )
           {
               bError =true;
           }
@@ -405,8 +405,7 @@ resource_definition
       else if( $4.IsExpression() )
       {
           if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
-                                     rtl::OString( $3 ), $4.aExp.pExp,
-                                     ULONG_MAX ) )
+                                     rtl::OString( $3 ), $4.aExp.pExp ) )
           {
               bError = true;
           }

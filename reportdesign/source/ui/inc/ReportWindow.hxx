@@ -154,10 +154,8 @@ namespace rptui
         void            notifySizeChanged();
 
         /** unmark all objects on the views without the given one.
-        *
-        * @param _pSectionView The view where the objects should not be unmarked.
         */
-        void            unmarkAllObjects(OSectionView* _pSectionView);
+        void            unmarkAllObjects();
 
         /** triggers the property browser with the report component or section
             @param  _xReportComponent

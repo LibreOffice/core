@@ -275,7 +275,7 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
 #define IGNOREANCHOR 1
 #define DONTMAKEFRMS 2
 
-sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, bool bNewFrames )
+sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet )
 {
     // Changing anchors is almost always allowed.
     // Exception: Paragraph and character bound frames must not become
@@ -422,15 +422,12 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
         break;
     }
 
-    if( bNewFrames )
-        rFormat.MakeFrames();
-
     return MAKEFRMS;
 }
 
 static bool
 lcl_SetFlyFrameAttr(SwDoc & rDoc,
-        sal_Int8 (SwDoc::*pSetFlyFrameAnchor)(SwFrameFormat &, SfxItemSet &, bool),
+        sal_Int8 (SwDoc::*pSetFlyFrameAnchor)(SwFrameFormat &, SfxItemSet &),
         SwFrameFormat & rFlyFormat, SfxItemSet & rSet)
 {
     // #i32968# Inserting columns in the frame causes MakeFrameFormat to put two
@@ -442,7 +439,7 @@ lcl_SetFlyFrameAttr(SwDoc & rDoc,
     // if the Fly needs to be created anew, because we e.g change the FlyType.
     sal_Int8 const nMakeFrames =
         (SfxItemState::SET == rSet.GetItemState( RES_ANCHOR, false ))
-             ?  (rDoc.*pSetFlyFrameAnchor)( rFlyFormat, rSet, false )
+             ?  (rDoc.*pSetFlyFrameAnchor)( rFlyFormat, rSet )
              :  DONTMAKEFRMS;
 
     const SfxPoolItem* pItem;
@@ -669,7 +666,7 @@ bool SwDoc::SetFrameFormatToFly( SwFrameFormat& rFormat, SwFrameFormat& rNewForm
                 rFormat.GetAnchor().GetAnchorId() )
         {
             if( pSet )
-                bChgAnchor = MAKEFRMS == SetFlyFrameAnchor( rFormat, *pSet, false );
+                bChgAnchor = MAKEFRMS == SetFlyFrameAnchor( rFormat, *pSet );
             else
             {
                 // Needs to have the FlyFormat range, because we set attributes in it,
@@ -677,7 +674,7 @@ bool SwDoc::SetFrameFormatToFly( SwFrameFormat& rFormat, SwFrameFormat& rNewForm
                 SfxItemSet aFlySet( *rNewFormat.GetAttrSet().GetPool(),
                                     rNewFormat.GetAttrSet().GetRanges() );
                 aFlySet.Put( *pItem );
-                bChgAnchor = MAKEFRMS == SetFlyFrameAnchor( rFormat, aFlySet, false);
+                bChgAnchor = MAKEFRMS == SetFlyFrameAnchor( rFormat, aFlySet);
             }
         }
     }

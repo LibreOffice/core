@@ -2836,7 +2836,7 @@ SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
                 if (pSdrTextObj != pNewObj)
                 {
                     // Objekt in der Z-Order-Liste ersetzen
-                    m_pMSDffManager->ExchangeInShapeOrder(pSdrTextObj, 0,nullptr, pNewObj);
+                    m_pMSDffManager->ExchangeInShapeOrder(pSdrTextObj, 0, pNewObj);
                     // Objekt jetzt noch loeschen
                     SdrObject::Free( pRecord->pObj );
                     // und das neue Objekt merken.

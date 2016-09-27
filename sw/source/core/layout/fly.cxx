@@ -1355,19 +1355,8 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
     ColUnlock();
 }
 
-// OD 14.03.2003 #i11760# - change parameter <bNoColl>: type <bool>;
-//                          default value = false.
-// OD 14.03.2003 #i11760# - add new parameter <bNoCalcFollow> with
-//                          default value = false.
-// OD 11.04.2003 #108824# - new parameter <bNoCalcFollow> was used by method
-//                          <FormatWidthCols(..)> to avoid follow formatting
-//                          for text frames. But, unformatted follows causes
-//                          problems in method <SwContentFrame::WouldFit_(..)>,
-//                          which assumes that the follows are formatted.
-//                          Thus, <bNoCalcFollow> no longer used by <FormatWidthCols(..)>.
 void CalcContent( SwLayoutFrame *pLay,
-                bool bNoColl,
-                bool bNoCalcFollow )
+                bool bNoColl )
 {
     vcl::RenderContext* pRenderContext = pLay->getRootFrame()->GetCurrShell()->GetOut();
     SwSectionFrame* pSect;
@@ -1447,15 +1436,6 @@ void CalcContent( SwLayoutFrame *pLay,
                 {
                     static_cast<SwTabFrame*>(pFrame)->m_bLockBackMove = true;
                 }
-            }
-
-            // OD 14.03.2003 #i11760# - forbid format of follow, if requested.
-            if ( bNoCalcFollow && pFrame->IsTextFrame() )
-                static_cast<SwTextFrame*>(pFrame)->ForbidFollowFormat();
-
-            {
-                SwFrameDeleteGuard aDeleteGuard(pSect);
-                pFrame->Calc(pRenderContext);
             }
 
             // OD 14.03.2003 #i11760# - reset control flag for follow format.

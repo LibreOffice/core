@@ -44,11 +44,6 @@ typedef rtl::Reference< MutableTreeNode > MutableTreeNodeRef;
 typedef std::vector< MutableTreeNodeRef > TreeNodeVector;
 typedef rtl::Reference< MutableTreeDataModel > MutableTreeDataModelRef;
 
-void implThrowIllegalArgumentException() throw( IllegalArgumentException )
-{
-    throw IllegalArgumentException();
-}
-
 class MutableTreeDataModel : public ::cppu::WeakAggImplHelper2< XMutableTreeDataModel, XServiceInfo >,
                              public MutexAndBroadcastHelper
 {
@@ -122,7 +117,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) override;
 
-    static MutableTreeNode* getImplementation( const Reference< XTreeNode >& xNode, bool bThrows ) throw (IllegalArgumentException);
+    static MutableTreeNode* getImplementation( const Reference< XTreeNode >& xNode );
     static Reference< XTreeNode > getReference( MutableTreeNode* pNode )
     {
         return Reference< XTreeNode >( pNode );
@@ -283,13 +278,9 @@ void MutableTreeNode::setParent( MutableTreeNode* pParent )
     mpParent = pParent;
 }
 
-MutableTreeNode* MutableTreeNode::getImplementation( const Reference< XTreeNode >& xNode, bool bThrows ) throw (IllegalArgumentException)
+MutableTreeNode* MutableTreeNode::getImplementation( const Reference< XTreeNode >& xNode )
 {
-    MutableTreeNode* pImpl = dynamic_cast< MutableTreeNode* >( xNode.get() );
-    if( bThrows && !pImpl )
-        implThrowIllegalArgumentException();
-
-    return pImpl;
+    return dynamic_cast< MutableTreeNode* >( xNode.get() );
 }
 
 void MutableTreeNode::broadcast_changes()
@@ -478,7 +469,7 @@ sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNod
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
 
-    MutableTreeNodeRef xImpl( MutableTreeNode::getImplementation( xNode, false ) );
+    MutableTreeNodeRef xImpl( MutableTreeNode::getImplementation( xNode ) );
     if( xImpl.is() )
     {
         sal_Int32 nChildCount = maChildren.size();

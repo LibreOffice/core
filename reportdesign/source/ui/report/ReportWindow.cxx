@@ -288,10 +288,10 @@ void OReportWindow::SelectAll(const sal_uInt16 _nObjectType)
     m_aViewsWindow->SelectAll(_nObjectType);
 }
 
-void OReportWindow::unmarkAllObjects(OSectionView* _pSectionView)
+void OReportWindow::unmarkAllObjects()
 {
 
-    m_aViewsWindow->unmarkAllObjects(_pSectionView);
+    m_aViewsWindow->unmarkAllObjects(nullptr);
 }
 
 void OReportWindow::showProperties(const uno::Reference< report::XSection>& _xReportComponent)

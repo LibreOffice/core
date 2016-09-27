@@ -1883,7 +1883,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
     }
 }
 
-void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange, TextSelection const* pSelection )
+void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pSelection )
 {
     if ( !GetUpdateMode() )
         return;
@@ -1904,7 +1904,6 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
         pSelStart = !bInvers ? &pSelection->GetStart() : &pSelection->GetEnd();
         pSelEnd = bInvers ? &pSelection->GetStart() : &pSelection->GetEnd();
     }
-    SAL_WARN_IF( pPaintRange && !(pPaintRange->GetStart() < pPaintRange->GetEnd()), "vcl", "ImpPaint: Paint-Range?!" );
 
     const StyleSettings& rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
 
@@ -1917,8 +1916,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
             return;
 
         const long nParaHeight = CalcParaHeight( nPara );
-        if ( ( !pPaintArea || ( ( nY + nParaHeight ) > pPaintArea->Top() ) )
-                && ( !pPaintRange || ( ( nPara >= pPaintRange->GetStart().GetPara() ) && ( nPara <= pPaintRange->GetEnd().GetPara() ) ) ) )
+        if ( !pPaintArea || ( ( nY + nParaHeight ) > pPaintArea->Top() ) )
         {
             // for all lines of the paragraph
             sal_Int32 nIndex = 0;
@@ -1926,10 +1924,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
             {
                 Point aTmpPos( rStartPos.X() + rLine.GetStartX(), nY );
 
-                if ( ( !pPaintArea || ( ( nY + mnCharHeight ) > pPaintArea->Top() ) )
-                    && ( !pPaintRange || (
-                        ( TextPaM( nPara, rLine.GetStart() ) < pPaintRange->GetEnd() ) &&
-                        ( TextPaM( nPara, rLine.GetEnd() ) > pPaintRange->GetStart() ) ) ) )
+                if ( !pPaintArea || ( ( nY + mnCharHeight ) > pPaintArea->Top() ) )
                 {
                     // for all Portions of the line
                     nIndex = rLine.GetStart();
@@ -1946,10 +1941,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                         aTmpPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, &rLine, nIndex, nIndex );
 
                         // only print if starting in the visible region
-                        if ( ( ( aTmpPos.X() + nTxtWidth ) >= 0 )
-                            && ( !pPaintRange || (
-                                ( TextPaM( nPara, nIndex ) < pPaintRange->GetEnd() ) &&
-                                    ( TextPaM( nPara, nIndex + pTextPortion->GetLen() ) > pPaintRange->GetStart() ) ) ) )
+                        if ( ( aTmpPos.X() + nTxtWidth ) >= 0 )
                         {
                             switch ( pTextPortion->GetKind() )
                             {
@@ -1966,20 +1958,6 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                         sal_Int32 nTmpIndex = nIndex;
                                         sal_Int32 nEnd = nTmpIndex + pTextPortion->GetLen();
                                         Point aPos = aTmpPos;
-                                        if ( pPaintRange )
-                                        {
-                                            // maybe not print all of it
-                                            if ( ( pPaintRange->GetStart().GetPara() == nPara )
-                                                    && ( nTmpIndex < pPaintRange->GetStart().GetIndex() ) )
-                                            {
-                                                nTmpIndex = pPaintRange->GetStart().GetIndex();
-                                            }
-                                            if ( ( pPaintRange->GetEnd().GetPara() == nPara )
-                                                    && ( nEnd > pPaintRange->GetEnd().GetIndex() ) )
-                                            {
-                                                nEnd = pPaintRange->GetEnd().GetIndex();
-                                            }
-                                        }
 
                                         bool bDone = false;
                                         if ( pSelStart )
@@ -2034,7 +2012,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                     break;
                                 case PORTIONKIND_TAB:
                                     // for HideSelection() only Range, pSelection = 0.
-                                    if ( pSelStart || pPaintRange )
+                                    if ( pSelStart )
                                     {
                                         const Rectangle aTabArea( aTmpPos, Point( aTmpPos.X()+nTxtWidth, aTmpPos.Y()+mnCharHeight-1 ) );
                                         bool bDone = false;

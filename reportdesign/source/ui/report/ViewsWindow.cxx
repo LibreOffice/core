@@ -682,7 +682,7 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles)
     }
 }
 
-void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection, bool _bBoundRects,Rectangle& _rBound,Rectangle& _rResize)
+void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection, Rectangle& _rBound, Rectangle& _rResize)
 {
     bool bOnlyOnce = false;
     TRectangleMap::const_iterator aRectIter = _rSortRectangles.begin();
@@ -739,10 +739,7 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
             }
             else
             {
-                if (_bBoundRects)
-                    _rBound.Union(aRectIter->second.second->GetMarkedObjBoundRect());
-                else
-                    _rBound.Union(aRectIter->second.second->GetMarkedObjRect());
+                _rBound.Union(aRectIter->second.second->GetMarkedObjRect());
             }
         }
     }
@@ -780,7 +777,7 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
 
     Rectangle aBound;
     Rectangle aResize;
-    collectBoundResizeRect(aSortRectangles,_nControlModification,_bAlignAtSection,false,aBound,aResize);
+    collectBoundResizeRect(aSortRectangles,_nControlModification,_bAlignAtSection,aBound,aResize);
 
     bool bMove = true;
 

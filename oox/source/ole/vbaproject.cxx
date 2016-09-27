@@ -174,7 +174,7 @@ void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg, const GraphicHelper
     {
         // load the code modules and forms
         if( isImportVba() )
-            importVba( rVbaPrjStrg, rGraphicHelper, true/*bDefaultColorBgr*/ );
+            importVba( rVbaPrjStrg, rGraphicHelper );
         // copy entire storage into model
         if( isExportVba() )
             copyStorage( rVbaPrjStrg );
@@ -249,10 +249,10 @@ Reference< XNameContainer > const & VbaProject::createDialogLibrary()
     return mxDialogLib;
 }
 
-void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr )
+void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper )
 {
     readVbaModules( rVbaPrjStrg );
-    importModulesAndForms(rVbaPrjStrg, rGraphicHelper, bDefaultColorBgr );
+    importModulesAndForms(rVbaPrjStrg, rGraphicHelper );
 }
 
 void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
