@@ -380,7 +380,7 @@ private:
                                 const SwContentNode& rNode, RndStdIds eRequestId,
                                 const SfxItemSet* pFlyAttrSet,
                                 SwFrameFormat* );
-    sal_Int8 SetFlyFrameAnchor( SwFrameFormat& rFlyFormat, SfxItemSet& rSet, bool bNewFrames );
+    sal_Int8 SetFlyFrameAnchor( SwFrameFormat& rFlyFormat, SfxItemSet& rSet );
 
     typedef SwFormat* (SwDoc:: *FNCopyFormat)( const OUString&, SwFormat*, bool, bool );
     SwFormat* CopyFormat( const SwFormat& rFormat, const SwFormatsBase& rFormatArr,
@@ -1120,8 +1120,6 @@ public:
                            - false: search backward
        \param bNum         - true:  search for enumeration
                            - false: search for itemize
-       \param bOutline     - true:  search for outline numbering rule
-                           - false: search for non-outline numbering rule
        \param nNonEmptyAllowed   number of non-empty paragraphs allowed between
                                  rPos and found paragraph
 
@@ -1136,7 +1134,6 @@ public:
     const SwNumRule * SearchNumRule(const SwPosition & rPos,
                                     const bool bForward,
                                     const bool bNum,
-                                    const bool bOutline,
                                     int nNonEmptyAllowed,
                                     OUString& sListId,
                                     const bool bInvestigateStartNode = false );
@@ -1396,12 +1393,12 @@ public:
 
     const SwFormatINetFormat* FindINetAttr( const OUString& rName ) const;
 
-    // Call into intransparent Basic; expect possible Return String.
+    // Call into Basic; expect possible return String.
     bool ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs = nullptr );
 
-    // Call into intransparent Basic / JavaScript.
+    // Call into Basic / JavaScript.
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
-                        bool bChkPtr = false, SbxArray* pArgs = nullptr );
+                        bool bChkPtr = false );
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or subtracting a given

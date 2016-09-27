@@ -150,7 +150,7 @@ sal_uInt16 SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
 }
 
 sal_uInt16 SvMetaClass::WriteSlots( const OString& rShellName,
-                                sal_uInt16 nCount, SvSlotElementList & rSlotList,
+                                SvSlotElementList & rSlotList,
                                 SvIdlDataBase & rBase,
                                 SvStream & rOutStm )
 {
@@ -158,7 +158,7 @@ sal_uInt16 SvMetaClass::WriteSlots( const OString& rShellName,
     for ( size_t i = 0, n = rSlotList.size(); i < n; ++i )
     {
         SvMetaSlot * pAttr = rSlotList[ i ];
-        nSCount = nSCount + pAttr->WriteSlotMap( rShellName, nCount + nSCount,
+        nSCount = nSCount + pAttr->WriteSlotMap( rShellName, nSCount,
                                         rSlotList, i, rBase,
                                         rOutStm );
     }
@@ -320,7 +320,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm.WriteChar( '{' ) << endl;
 
     // write all attributes
-    WriteSlots( GetName(), 0, aSlotList, rBase, rOutStm );
+    WriteSlots( GetName(), aSlotList, rBase, rOutStm );
     if( nSlotCount )
         Back2Delimiter( rOutStm );
     else

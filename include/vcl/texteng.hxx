@@ -189,7 +189,7 @@ protected:
     bool                IsFormatting() const { return mbIsFormatting; }
     void                UpdateViews( TextView* pCurView = nullptr );
 
-    void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = nullptr, TextSelection const* pSelection = nullptr );
+    void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pSelection = nullptr );
 
     bool                IsFormatted() const { return mbFormatted; }
 

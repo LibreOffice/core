@@ -26,9 +26,8 @@ class SW_DLLPUBLIC SwCharFormat : public SwFormat
     friend class SwDoc;
     friend class SwTextFormatColl;
 
-    SwCharFormat( SwAttrPool& rPool, const sal_Char* pFormatName,
-                SwCharFormat *pDerivedFrom )
-          : SwFormat( rPool, pFormatName, aCharFormatSetRange, pDerivedFrom, RES_CHRFMT )
+    SwCharFormat( SwAttrPool& rPool, const sal_Char* pFormatName )
+          : SwFormat( rPool, pFormatName, aCharFormatSetRange, nullptr, RES_CHRFMT )
     {}
     SwCharFormat( SwAttrPool& rPool, const OUString &rFormatName,
                 SwCharFormat *pDerivedFrom )

@@ -267,7 +267,7 @@ void OScrollWindowHelper::SelectAll(const sal_uInt16 _nObjectType)
 
 void OScrollWindowHelper::unmarkAllObjects()
 {
-    m_aReportWindow->unmarkAllObjects(nullptr);
+    m_aReportWindow->unmarkAllObjects();
 }
 
 sal_Int32 OScrollWindowHelper::getMaxMarkerWidth() const

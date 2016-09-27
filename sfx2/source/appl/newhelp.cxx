@@ -1342,15 +1342,14 @@ void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString
 }
 
 OUString SfxHelpWindow_Impl::buildHelpURL(const OUString& sFactory        ,
-                                                 const OUString& sContent        ,
-                                                 const OUString& sAnchor         ,
-                                                       bool         bUseQuestionMark)
+                                          const OUString& sContent        ,
+                                          const OUString& sAnchor)
 {
     OUStringBuffer sHelpURL(256);
     sHelpURL.append(HELP_URL);
     sHelpURL.append(sFactory);
     sHelpURL.append(sContent);
-    AppendConfigToken(sHelpURL, bUseQuestionMark);
+    AppendConfigToken(sHelpURL, true/*bUseQuestionMark*/);
     if (!sAnchor.isEmpty())
         sHelpURL.append(sAnchor);
     return sHelpURL.makeStringAndClear();
@@ -2800,8 +2799,7 @@ void SfxHelpWindow_Impl::ShowStartPage()
 {
     OUString sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
                                                                 "/start",
-                                                                OUString(),
-                                                                true);
+                                                                OUString());
     loadHelpContent(sHelpURL);
 }
 
@@ -2847,8 +2845,7 @@ IMPL_LINK_NOARG_TYPED(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
 
         sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
                                                     aEntry,
-                                                    aAnchor,
-                                                    true);
+                                                    aAnchor);
     }
 
     loadHelpContent(sHelpURL);

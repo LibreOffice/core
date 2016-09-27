@@ -211,7 +211,7 @@ public:
 
                     RscFile();
                     ~RscFile();
-    void            InsertDependFile( sal_uLong lDepFile, size_t lPos );
+    void            InsertDependFile( sal_uLong lDepFile );
     bool            Depend( sal_uLong lDepend, sal_uLong lFree );
     void            SetIncFlag(){ bIncFile = true; };
     bool            IsIncFile(){  return bIncFile; };
@@ -256,9 +256,9 @@ public:
                          const RscExpression * pExpDec );
 
     RscDefine * NewDef( Index lKey, const OString& rDefName,
-                        sal_Int32 lId, sal_uLong lPos );
+                        sal_Int32 lId );
     RscDefine * NewDef( Index lKey, const OString& rDefName,
-                        RscExpression *, sal_uLong lPos );
+                        RscExpression * );
 
            // deletes all defines defined in this file
     void        DeleteFileContext( Index lKey );

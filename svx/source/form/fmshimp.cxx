@@ -3178,7 +3178,7 @@ void FmXFormShell::CreateExternalView()
             if ( m_xExternalViewController == getActiveController() )
             {
                 Reference< runtime::XFormController > xAsFormController( m_xExternalViewController, UNO_QUERY );
-                ControllerFeatures aHelper( xAsFormController, nullptr );
+                ControllerFeatures aHelper( xAsFormController );
                 (void)aHelper->commitCurrentControl();
             }
 

@@ -120,7 +120,6 @@ public:
     VBAEncryption(const sal_uInt8* pData,
                   const sal_uInt16 nLength,
                   SvStream& rEncryptedData,
-                  sal_uInt8* pSeed,
                   sal_uInt8 nProjKey);
 
     void write();

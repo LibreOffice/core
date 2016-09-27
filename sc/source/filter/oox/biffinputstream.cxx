@@ -151,7 +151,7 @@ void BiffInputRecordBuffer::updateDecoded()
 
 } // namespace prv
 
-BiffInputStream::BiffInputStream( BinaryInputStream& rInStream, bool bContLookup ) :
+BiffInputStream::BiffInputStream( BinaryInputStream& rInStream ) :
     BinaryStreamBase( true ),
     maRecBuffer( rInStream ),
     mnRecHandle( -1 ),
@@ -159,8 +159,7 @@ BiffInputStream::BiffInputStream( BinaryInputStream& rInStream, bool bContLookup
     mnAltContId( BIFF_ID_UNKNOWN ),
     mnCurrRecSize( 0 ),
     mnComplRecSize( 0 ),
-    mbHasComplRec( false ),
-    mbCont( bContLookup )
+    mbHasComplRec( false )
 {
     mbEof = true;   // EOF will be true if stream is not inside a record
 }
@@ -182,7 +181,7 @@ bool BiffInputStream::startNextRecord()
         // ignore record, if identifier and size are zero
         bIsZeroRec = (maRecBuffer.getRecId() == 0) && (maRecBuffer.getRecSize() == 0);
     }
-    while( bValidRec && ((mbCont && isContinueId( maRecBuffer.getRecId() )) || bIsZeroRec) );
+    while( bValidRec && (isContinueId( maRecBuffer.getRecId()) || bIsZeroRec) );
 
     // setup other class members
     setupRecord();
@@ -318,15 +317,10 @@ void BiffInputStream::skip( sal_Int32 nBytes, size_t nAtomSize )
 
 // byte strings ---------------------------------------------------------------
 
-OString BiffInputStream::readByteString( bool b16BitLen, bool bAllowNulChars )
+OUString BiffInputStream::readByteStringUC( rtl_TextEncoding eTextEnc )
 {
-    sal_Int32 nStrLen = b16BitLen ? readuInt16() : readuInt8();
-    return readCharArray( nStrLen, bAllowNulChars );
-}
-
-OUString BiffInputStream::readByteStringUC( bool b16BitLen, rtl_TextEncoding eTextEnc, bool bAllowNulChars )
-{
-    return OStringToOUString( readByteString( b16BitLen, bAllowNulChars ), eTextEnc );
+    sal_Int32 nStrLen = readuInt16();
+    return readCharArrayUC( nStrLen, eTextEnc );
 }
 
 // private --------------------------------------------------------------------
@@ -338,7 +332,7 @@ void BiffInputStream::setupRecord()
     mnRecId = maRecBuffer.getRecId();
     mnAltContId = BIFF_ID_UNKNOWN;
     mnCurrRecSize = mnComplRecSize = maRecBuffer.getRecSize();
-    mbHasComplRec = !mbCont;
+    mbHasComplRec = false;
     mbEof = !isInRecord();
     // enable decoder in new record
     enableDecoder();
@@ -371,7 +365,7 @@ bool BiffInputStream::isContinueId( sal_uInt16 nRecId ) const
 
 bool BiffInputStream::jumpToNextContinue()
 {
-    mbEof = mbEof || !mbCont || !isContinueId( maRecBuffer.getNextRecId() ) || !maRecBuffer.startNextRecord();
+    mbEof = mbEof || !isContinueId( maRecBuffer.getNextRecId() ) || !maRecBuffer.startNextRecord();
     if( !mbEof )
         mnCurrRecSize += maRecBuffer.getRecSize();
     return !mbEof;

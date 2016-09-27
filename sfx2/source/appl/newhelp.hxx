@@ -553,9 +553,8 @@ public:
                                        bool         bSuccess);
 
     static OUString     buildHelpURL(const OUString& sFactory        ,
-                                         const OUString& sContent        ,
-                                         const OUString& sAnchor         ,
-                                               bool         bUseQuestionMark);
+                                     const OUString& sContent        ,
+                                     const OUString& sAnchor);
 
     void                loadHelpContent(const OUString& sHelpURL                ,
                                               bool         bAddToHistory = true);
