@@ -107,6 +107,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 				--with-boost=$(WORKDIR)/UnpackedTarball/boost \
 				boost_cv_lib_iostreams=yes \
 				boost_cv_lib_system=yes \
+				boost_cv_lib_filesystem=yes \
 			) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(if $(verbose),V=1) \
