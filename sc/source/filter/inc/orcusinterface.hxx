@@ -366,6 +366,7 @@ private:
     struct cell_style
     {
         OUString maName;
+        OUString maParentName;
         size_t mnXFId;
         size_t mnBuiltInId;
 

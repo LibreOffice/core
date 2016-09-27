@@ -947,6 +947,7 @@ ScOrcusStyles::xf::xf():
 }
 
 ScOrcusStyles::cell_style::cell_style():
+    maParentName("Default"),
     mnXFId(0),
     mnBuiltInId(0)
 {
@@ -1550,9 +1551,10 @@ void ScOrcusStyles::set_cell_style_builtin(size_t index)
     maCurrentCellStyle.mnBuiltInId = index;
 }
 
-void ScOrcusStyles::set_cell_style_parent_name(const char* /*s*/, size_t /*n*/)
+void ScOrcusStyles::set_cell_style_parent_name(const char* s, size_t n)
 {
-    // place holder
+    OUString aParentName(s, n, RTL_TEXTENCODING_UTF8);
+    maCurrentCellStyle.maParentName = aParentName;
 }
 
 size_t ScOrcusStyles::commit_cell_style()
@@ -1570,6 +1572,7 @@ size_t ScOrcusStyles::commit_cell_style()
 
     ScStyleSheetPool* pPool = mrDoc.GetStyleSheetPool();
     SfxStyleSheetBase& rBase = pPool->Make(maCurrentCellStyle.maName, SfxStyleFamily::Para);
+    rBase.SetParent(maCurrentCellStyle.maParentName);
     SfxItemSet& rSet = rBase.GetItemSet();
 
     xf& rXf = maCellStyleXfs[maCurrentCellStyle.mnXFId];
