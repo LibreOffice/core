@@ -184,6 +184,40 @@ enum PreDefVariable
     PREDEFVAR_COUNT
 };
 
+struct FixedVariable
+{
+    const char*     pVarName;
+    bool            bAbsPath;
+};
+
+// Table with all fixed/predefined variables supported.
+static const FixedVariable aFixedVarTable[PREDEFVAR_COUNT] =
+{
+    { "$(inst)",         true  }, // PREDEFVAR_INST
+    { "$(prog)",         true  }, // PREDEFVAR_PROG
+    { "$(user)",         true  }, // PREDEFVAR_USER
+    { "$(work)",         true  }, // PREDEFVAR_WORK, special variable
+                                  //  (transient)
+    { "$(home)",         true  }, // PREDEFVAR_HOME
+    { "$(temp)",         true  }, // PREDEFVAR_TEMP
+    { "$(path)",         true  }, // PREDEFVAR_PATH
+    { "$(username)",     false }, // PREDEFVAR_USERNAME
+    { "$(langid)",       false }, // PREDEFVAR_LANGID
+    { "$(vlang)",        false }, // PREDEFVAR_VLANG
+    { "$(instpath)",     true  }, // PREDEFVAR_INSTPATH
+    { "$(progpath)",     true  }, // PREDEFVAR_PROGPATH
+    { "$(userpath)",     true  }, // PREDEFVAR_USERPATH
+    { "$(insturl)",      true  }, // PREDEFVAR_INSTURL
+    { "$(progurl)",      true  }, // PREDEFVAR_PROGURL
+    { "$(userurl)",      true  }, // PREDEFVAR_USERURL
+    { "$(workdirurl)",   true  }, // PREDEFVAR_WORKDIRURL, special variable
+                                  //  (transient) and don't use for
+                                  //  resubstitution
+    { "$(baseinsturl)",  true  }, // PREDEFVAR_BASEINSTURL
+    { "$(userdataurl)",  true  }, // PREDEFVAR_USERDATAURL
+    { "$(brandbaseurl)", true  }  // PREDEFVAR_BRANDBASEURL
+};
+
 struct PredefinedPathVariables
 {
     // Predefined variables supported by substitute variables
@@ -288,13 +322,6 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 
-struct FixedVariable
-{
-    const char*     pVarName;
-    PreDefVariable  nEnumValue;
-    bool            bAbsPath;
-};
-
 struct TableEntry
 {
     const char* pOSString;
@@ -337,31 +364,6 @@ static const sal_Int16 aEnvPrioTable[ET_COUNT] =
     2,      // ET_NTDOMAIN
     3,      // ET_OS
     99,     // ET_UNKNOWN
-};
-
-// Table with all fixed/predefined variables supported.
-static const FixedVariable aFixedVarTable[] =
-{
-    { "$(inst)",        PREDEFVAR_INST,         true  },
-    { "$(prog)",        PREDEFVAR_PROG,         true  },
-    { "$(user)",        PREDEFVAR_USER,         true  },
-    { "$(work)",        PREDEFVAR_WORK,         true  },      // Special variable (transient)!
-    { "$(home)",        PREDEFVAR_HOME,         true  },
-    { "$(temp)",        PREDEFVAR_TEMP,         true  },
-    { "$(path)",        PREDEFVAR_PATH,         true  },
-    { "$(username)",    PREDEFVAR_USERNAME,     false },
-    { "$(langid)",      PREDEFVAR_LANGID,       false },
-    { "$(vlang)",       PREDEFVAR_VLANG,        false },
-    { "$(instpath)",    PREDEFVAR_INSTPATH,     true  },
-    { "$(progpath)",    PREDEFVAR_PROGPATH,     true  },
-    { "$(userpath)",    PREDEFVAR_USERPATH,     true  },
-    { "$(insturl)",     PREDEFVAR_INSTURL,      true  },
-    { "$(progurl)",     PREDEFVAR_PROGURL,      true  },
-    { "$(userurl)",     PREDEFVAR_USERURL,      true  },
-    { "$(workdirurl)",  PREDEFVAR_WORKDIRURL,   true  },  // Special variable (transient) and don't use for resubstitution!
-    { "$(baseinsturl)", PREDEFVAR_BASEINSTURL,  true  },
-    { "$(userdataurl)", PREDEFVAR_USERDATAURL,  true  },
-    { "$(brandbaseurl)",PREDEFVAR_BRANDBASEURL, true  }
 };
 
 //      Implementation helper classes
@@ -723,7 +725,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
 
         // Create hash map entry
         m_aPreDefVarMap.insert( VarNameToIndexMap::value_type(
-            m_aPreDefVars.m_FixedVarNames[i], aFixedVarTable[i].nEnumValue ) );
+            m_aPreDefVars.m_FixedVarNames[i], PreDefVariable(i) ) );
     }
 
     // Sort predefined/fixed variable to path length
@@ -736,7 +738,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
             // and it could be possible that it will be resubstituted by itself!!
             // Example: WORK_PATH=c:\test, $(workdirurl)=WORK_PATH => WORK_PATH=$(workdirurl) and this cannot be substituted!
             ReSubstFixedVarOrder aFixedVar;
-            aFixedVar.eVariable       = aFixedVarTable[i].nEnumValue;
+            aFixedVar.eVariable       = PreDefVariable(i);
             aFixedVar.nVarValueLength = m_aPreDefVars.m_FixedVar[(sal_Int32)aFixedVar.eVariable].getLength();
             m_aReSubstFixedVarOrder.push_back( aFixedVar );
         }
