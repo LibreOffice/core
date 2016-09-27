@@ -11928,9 +11928,7 @@ EOF
             echo "configure: Ant test failed" >&5
             cat conftest.java >&5
             cat conftest.xml >&5
-            AC_MSG_WARN([Ant does not work - Some Java projects will not build!])
-            ANT_HOME=""
-            add_warning "Ant does not work - Some Java projects will not build!"
+            AC_MSG_ERROR([Ant does not work - Some Java projects will not build!])
         fi
         rm -f conftest* core core.* *.core
     fi
