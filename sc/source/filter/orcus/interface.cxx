@@ -757,7 +757,7 @@ ScOrcusStyles::font::font():
     mbBold(false),
     mbItalic(false),
     mnSize(10),
-    maColor(COL_WHITE),
+    maColor(COL_BLACK),
     mbHasFontAttr(false),
     mbHasUnderlineAttr(false),
     mbHasStrikeout(false),
@@ -804,7 +804,10 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
         rSet.Put(SvxWeightItem(eWeight, ATTR_FONT_WEIGHT));
 
         rSet.Put( SvxColorItem(maColor, ATTR_FONT_COLOR));
-        rSet.Put( SvxFontItem( FAMILY_DONTKNOW, maName, maName, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
+
+        if(!maName.isEmpty())
+            rSet.Put( SvxFontItem( FAMILY_DONTKNOW, maName, maName, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
+
         rSet.Put( SvxFontHeightItem (translateToInternal(mnSize, orcus::length_unit_t::point), 100, ATTR_FONT_HEIGHT));
     }
 
@@ -1034,11 +1037,13 @@ void ScOrcusStyles::set_font_count(size_t /*n*/)
 void ScOrcusStyles::set_font_bold(bool b)
 {
     maCurrentFont.mbBold = b;
+    maCurrentFont.mbHasFontAttr = true;
 }
 
 void ScOrcusStyles::set_font_italic(bool b)
 {
     maCurrentFont.mbItalic = b;
+    maCurrentFont.mbHasFontAttr = true;
 }
 
 void ScOrcusStyles::set_font_name(const char* s, size_t n)
@@ -1051,6 +1056,7 @@ void ScOrcusStyles::set_font_name(const char* s, size_t n)
 void ScOrcusStyles::set_font_size(double point)
 {
     maCurrentFont.mnSize = point;
+    maCurrentFont.mbHasFontAttr = true;
 }
 
 void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t e)
@@ -1166,6 +1172,7 @@ void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t alpha,
             orcus::spreadsheet::color_elem_t blue)
 {
     maCurrentFont.maColor = Color(alpha, red, green, blue);
+    maCurrentFont.mbHasFontAttr = true;
 }
 
 void ScOrcusStyles::set_strikethrough_style(orcus::spreadsheet::strikethrough_style_t /*s*/)
