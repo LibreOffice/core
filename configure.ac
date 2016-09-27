@@ -7100,6 +7100,13 @@ _ACEOF
 
     # now check if $JAVA_HOME is really valid
     if test "$_os" = "Darwin" -o "$OS_FOR_BUILD" = MACOSX; then
+        case "${JAVA_HOME}" in
+            /Library/Java/JavaVirtualMachines/*)
+                ;;
+            *)
+                AC_MSG_ERROR([JDK in $JAVA_HOME cannot be used in CppUnit tests - install Oracle JDK])
+                ;;
+        esac
         if test ! -f "$JAVA_HOME/lib/jvm.cfg" -a "x$with_jdk_home" = "x"; then
             JAVA_HOME_OK="NO"
         fi
