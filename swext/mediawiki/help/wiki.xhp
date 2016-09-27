@@ -33,7 +33,7 @@
 <bookmark_value>extensions;MediaWiki</bookmark_value>
 </bookmark>
 <paragraph role="heading" id="hd_id5993530" xml-lang="en-US" level="1" l10n="NEW">Wiki Publisher</paragraph>
-<paragraph role="paragraph" id="par_id9647511" xml-lang="en-US" l10n="NEW"><ahelp hid=".">By using the Wiki Publisher you can upload your current Writer text document to a MediaWiki server. After uploading, all Wiki users can read your document on the Wiki.</ahelp></paragraph>
+<paragraph role="paragraph" id="par_id9647511" xml-lang="en-US"><ahelp hid=".">By using the Wiki Publisher you can upload your current Writer text document to a MediaWiki server. After uploading, all wiki users can read your document on the wiki.</ahelp></paragraph>
 <bookmark xml-lang="en-US" branch="hid/vnd.com.sun.star.wiki:send" id="bm_id3159253" localize="false"/>
 <paragraph role="paragraph" id="par_id6468703" xml-lang="en-US" l10n="NEW"><ahelp hid=".">Choose <item type="menuitem">File - Send - To MediaWiki</item> to upload the current Writer document to a MediaWiki server.</ahelp></paragraph>
 <paragraph role="heading" id="hd_id4554582" xml-lang="en-US" level="2" l10n="NEW">System Requirements</paragraph>
@@ -42,11 +42,11 @@
 <paragraph role="paragraph" id="par_id9340495" xml-lang="en-US" l10n="NEW">Java Runtime Environment</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id7387615" xml-lang="en-US" l10n="NEW">A Wiki account on a supported <link href="http://www.mediawiki.org/wiki/MediaWiki">MediaWiki</link> server</paragraph>
+<paragraph role="paragraph" id="par_id7387615" xml-lang="en-US">A wiki account on a supported <link href="http://www.mediawiki.org/wiki/MediaWiki">MediaWiki</link> server</paragraph>
 </listitem>
 </list>
 <paragraph role="heading" id="hd_id8047120" xml-lang="en-US" level="2" l10n="NEW">Installing Wiki Publisher</paragraph>
-<paragraph role="paragraph" id="par_id4277169" xml-lang="en-US" l10n="NEW">Before you use the Wiki Publisher, ensure that %PRODUCTNAME uses a Java Runtime Environment (JRE). To check the status of the JRE, choose <item type="menuitem">Tools - Options - %PRODUCTNAME - Advanced</item>. Ensure that "Use a Java runtime environment" is marked and that a Java runtime folder is selected in the big listbox. If no JRE was activated, then activate a JRE 1.4 or later and restart %PRODUCTNAME.</paragraph>
+<paragraph role="paragraph" id="par_id4277169" xml-lang="en-US">Before you use the Wiki Publisher, ensure that %PRODUCTNAME uses a Java Runtime Environment (JRE). To check the status of the JRE, choose <item type="menuitem">Tools - Options - %PRODUCTNAME - Advanced</item>. Ensure that “Use a Java runtime environment” is checked and that a Java runtime folder is selected in the big listbox. If no JRE was activated, then activate a JRE of version 1.4 or later and restart %PRODUCTNAME.</paragraph>
 <paragraph role="heading" id="hd_id5316019" xml-lang="en-US" level="2" l10n="NEW">To Connect to a Wiki</paragraph>
 <paragraph role="paragraph" id="par_id2381969" xml-lang="en-US" l10n="NEW">Note: You can store your user name and password for all respective dialogs inside %PRODUCTNAME. The password will be stored in a secure way, where access is maintained by a master password. To enable the master password, choose <item type="menuitem">Tools - Options - %PRODUCTNAME - Security</item>.</paragraph>
 <paragraph role="paragraph" id="par_id3751640" xml-lang="en-US" l10n="NEW">Note: If you connect to the web using a proxy server, enter the proxy information to <item type="menuitem">Tools - Options - Internet - Proxy</item>, and restart the software.</paragraph>
@@ -58,30 +58,30 @@
 <paragraph role="paragraph" id="par_id368968" xml-lang="en-US" l10n="NEW">In the <link href="com.sun.wiki-publisher/wikisettings.xhp">Options</link> dialog, click Add.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id6962187" xml-lang="en-US" l10n="NEW">In the <link href="com.sun.wiki-publisher/wikiaccount.xhp">MediaWiki</link> dialog, enter the account information for the Wiki.</paragraph>
+<paragraph role="paragraph" id="par_id6962187" xml-lang="en-US">In the <link href="com.sun.wiki-publisher/wikiaccount.xhp">MediaWiki</link> dialog, enter the account information for the wiki.</paragraph>
 </listitem>
 </list>
 <list type="ordered">
 <listitem>
-<paragraph role="paragraph" id="par_id5328836" xml-lang="en-US" l10n="NEW">In the URL textbox, enter the address of a Wiki that you want to connect to.</paragraph>
+<paragraph role="paragraph" id="par_id5328836" xml-lang="en-US">In the URL text box, enter the address of a wiki that you want to connect to.</paragraph>
 <paragraph role="paragraph" id="par_id389416" xml-lang="en-US" l10n="NEW">You can copy the URL from a web browser and paste it into the textbox.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id5906552" xml-lang="en-US" l10n="NEW">In the Username box, enter your user ID for your Wiki account.</paragraph>
-<paragraph role="paragraph" id="par_id9297158" xml-lang="en-US" l10n="NEW">If the Wiki allows anonymous write access, you can leave the Username and Password boxes empty.</paragraph>
+<paragraph role="paragraph" id="par_id5906552" xml-lang="en-US">In the Username box, enter your user ID for your wiki account.</paragraph>
+<paragraph role="paragraph" id="par_id9297158" xml-lang="en-US">If the wiki allows anonymous write access, you can leave the Username and Password boxes empty.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id8869594" xml-lang="en-US" l10n="NEW">In the Password box, enter the password for your Wiki account, then click OK.</paragraph>
+<paragraph role="paragraph" id="par_id8869594" xml-lang="en-US">In the Password box, enter the password for your wiki account, then click OK.</paragraph>
 </listitem>
 </list>
-<paragraph role="paragraph" id="par_id292062" xml-lang="en-US" l10n="NEW">Optionally enable "Save password" to save the password between sessions. A master password is used to maintain access to all saved passwords. Choose <item type="menuitem">Tools - Options - %PRODUCTNAME - Security</item> to enable the master password. "Save password" is unavailable when the master password is not enabled.</paragraph>
+<paragraph role="paragraph" id="par_id292062" xml-lang="en-US">Optionally enable “Save password” to save the password between sessions. A master password is used to maintain access to all saved passwords. Choose <item type="menuitem">Tools - Options - %PRODUCTNAME - Security</item> to enable the master password. “Save password” is unavailable when the master password is not enabled.</paragraph>
 <paragraph role="heading" id="hd_id7044892" xml-lang="en-US" level="2" l10n="NEW">To Create a New Wiki Page</paragraph>
 <list type="ordered">
 <listitem>
 <paragraph role="paragraph" id="par_id3514206" xml-lang="en-US" l10n="NEW">Open a Writer document.</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id944853" xml-lang="en-US" l10n="NEW">Write the content of the Wiki page. You can use formatting like text formats, headings, footnotes, and more. See the <link href="com.sun.wiki-publisher/wikiformats.xhp">list of supported formats</link>.</paragraph>
+<paragraph role="paragraph" id="par_id944853" xml-lang="en-US">Write the content of the wiki page. You can use formatting such as text formats, headings, footnotes, and more. See the <link href="com.sun.wiki-publisher/wikiformats.xhp">list of supported formats</link>.</paragraph>
 </listitem>
 <listitem>
 <paragraph role="paragraph" id="par_id4566484" xml-lang="en-US" l10n="NEW">Choose <item type="menuitem">File - Send - To MediaWiki</item>.</paragraph>
@@ -90,19 +90,16 @@
 <paragraph role="paragraph" id="par_id228278" xml-lang="en-US" l10n="NEW">In the <link href="com.sun.wiki-publisher/wikisend.xhp">Send to MediaWiki</link> dialog, specify the settings for your entry.</paragraph>
 </listitem>
 </list>
-<paragraph role="paragraph" id="par_id2564165" xml-lang="en-US" l10n="NEW">
-<emph>MediaWiki server</emph>: Select the Wiki.</paragraph>
-<paragraph role="paragraph" id="par_id5566576" xml-lang="en-US" l10n="NEW">
-<emph>Title</emph>: Type the title of your page. Type the title of an existing page to overwrite the page with your current text document. Type a new title to create a new page on the Wiki.</paragraph>
+<paragraph role="paragraph" id="par_id2564165" xml-lang="en-US"><emph>MediaWiki server</emph>: Select the wiki.</paragraph>
+<paragraph role="paragraph" id="par_id5566576" xml-lang="en-US"><emph>Title</emph>: Type the title of your page. Type the title of an existing page to overwrite the page with your current text document. Type a new title to create a new page on the wiki.</paragraph>
 <paragraph role="paragraph" id="par_id9688711" xml-lang="en-US" l10n="NEW">
 <emph>Summary</emph>: Enter an optional short summary of your page.</paragraph>
 <paragraph role="paragraph" id="par_id4123661" xml-lang="en-US" l10n="NEW">
 <emph>This is a minor edit</emph>: Check this box to mark the uploaded page as a minor edit of the already existing page with the same title.</paragraph>
-<paragraph role="paragraph" id="par_id452284" xml-lang="en-US" l10n="NEW">
-<emph>Show in web browser</emph>: Check this box to open your system web browser and show the uploaded Wiki page.</paragraph>
+<paragraph role="paragraph" id="par_id452284" xml-lang="en-US"><emph>Show in web browser</emph>: Check this box to open your system web browser and show the uploaded wiki page.</paragraph>
 <list type="ordered" startwith="5">
 <listitem>
-<paragraph role="paragraph" id="par_id8346812" xml-lang="en-US" l10n="NEW">Click Send.</paragraph>
+<paragraph role="paragraph" id="par_id8346812" xml-lang="en-US">Click <emph>Send</emph>.</paragraph>
 </listitem>
 </list>
 </body>
