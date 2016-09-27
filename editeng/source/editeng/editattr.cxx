@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 
 #include <svl/grabbagitem.hxx>
+#include <libxml/xmlwriter.h>
 #include <editeng/svxfont.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/fontitem.hxx>
@@ -66,6 +67,15 @@ EditCharAttrib::~EditCharAttrib()
 
 void EditCharAttrib::SetFont( SvxFont&, OutputDevice* )
 {
+}
+
+void EditCharAttrib::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("editCharAttrib"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nStart"), "%d", nStart);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nEnd"), "%d", nEnd);
+    pItem->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 

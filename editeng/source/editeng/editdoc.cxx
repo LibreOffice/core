@@ -63,6 +63,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <libxml/xmlwriter.h>
 
 #include <cassert>
 #include <limits>
@@ -1856,6 +1857,16 @@ void ContentNode::DestroyWrongList()
     mpWrongList.reset();
 }
 
+void ContentNode::dumpAsXml(struct _xmlTextWriter* pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("contentNode"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maString"), BAD_CAST(maString.toUtf8().getStr()));
+    aContentAttribs.dumpAsXml(pWriter);
+    aCharAttribList.dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
+
 ContentAttribs::ContentAttribs( SfxItemPool& rPool )
 : pStyle(nullptr)
 , aAttribSet( rPool, EE_PARA_START, EE_CHAR_END )
@@ -1928,6 +1939,13 @@ bool ContentAttribs::HasItem( sal_uInt16 nWhich ) const
         bHasItem = true;
 
     return bHasItem;
+}
+
+void ContentAttribs::dumpAsXml(struct _xmlTextWriter* pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("contentAttribs"));
+    aAttribSet.dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 
@@ -2718,6 +2736,31 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
     }
 }
 
+void EditDoc::dumpAsXml(struct _xmlTextWriter* pWriter) const
+{
+    bool bOwns = false;
+    if (!pWriter)
+    {
+        pWriter = xmlNewTextWriterFilename("editdoc.xml", 0);
+        xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+        bOwns = true;
+    }
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("editDoc"));
+    for (auto const & i : maContents)
+    {
+        i->dumpAsXml(pWriter);
+    }
+    xmlTextWriterEndElement(pWriter);
+
+    if (bOwns)
+    {
+       xmlTextWriterEndDocument(pWriter);
+       xmlFreeTextWriter(pWriter);
+    }
+}
+
+
 namespace {
 
 struct LessByStart : std::binary_function<std::unique_ptr<EditCharAttrib>, std::unique_ptr<EditCharAttrib>, bool>
@@ -3017,6 +3060,14 @@ void CharAttribList::DbgCheckAttribs(CharAttribList const& rAttribs)
 }
 #endif
 
+void CharAttribList::dumpAsXml(struct _xmlTextWriter* pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("charAttribList"));
+    for (auto const & i : aAttribs) {
+        i->dumpAsXml(pWriter);
+    }
+    xmlTextWriterEndElement(pWriter);
+}
 
 EditEngineItemPool::EditEngineItemPool( bool bPersistenRefCounts )
     : SfxItemPool( "EditEngineItemPool", EE_ITEMS_START, EE_ITEMS_END,

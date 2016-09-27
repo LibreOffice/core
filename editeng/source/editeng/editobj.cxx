@@ -458,6 +458,14 @@ void EditTextObject::Dump() const
 
 void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
+    bool bOwns = false;
+    if (!pWriter)
+    {
+        pWriter = xmlNewTextWriterFilename("editTextObject.xml", 0);
+        xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+        bOwns = true;
+    }
+
     xmlTextWriterStartElement(pWriter, BAD_CAST("editTextObject"));
     sal_Int32 nCount = GetParagraphCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
@@ -467,6 +475,12 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
         xmlTextWriterEndElement(pWriter);
     }
     xmlTextWriterEndElement(pWriter);
+
+    if (bOwns)
+    {
+       xmlTextWriterEndDocument(pWriter);
+       xmlFreeTextWriter(pWriter);
+    }
 }
 
 // from SfxItemPoolUser
