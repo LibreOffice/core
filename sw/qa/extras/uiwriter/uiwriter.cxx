@@ -11,6 +11,7 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/style/CaseMap.hpp>
 #include <tools/errcode.hxx>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
@@ -186,6 +187,7 @@ public:
     void testTdf96961();
     void testTdf88453();
     void testTdf88453Table();
+    void testSmallCaps();
     void testTdf98987();
     void testTdf99004();
     void testTdf84695();
@@ -283,6 +285,7 @@ public:
     CPPUNIT_TEST(testTdf96961);
     CPPUNIT_TEST(testTdf88453);
     CPPUNIT_TEST(testTdf88453Table);
+    CPPUNIT_TEST(testSmallCaps);
     CPPUNIT_TEST(testTdf98987);
     CPPUNIT_TEST(testTdf99004);
     CPPUNIT_TEST(testTdf84695);
@@ -3180,6 +3183,23 @@ void SwUiWriterTest::testTdf88453Table()
     // This was 2: layout could not split the large outer table in the document
     // into 3 pages.
     CPPUNIT_ASSERT_EQUAL(3, getPages());
+}
+
+void SwUiWriterTest::testSmallCaps()
+{
+    // Create a document, add some characters and select them.
+    createDoc();
+    SwDoc* pDoc = createDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert("text");
+    pWrtShell->SelAll();
+
+    // Dispatch the command to make them formatted small capitals.
+    lcl_dispatchCommand(mxComponent, ".uno:SmallCaps", {});
+
+    // This was css::style::CaseMap::NONE as the shell didn't handle the command.
+    CPPUNIT_ASSERT_EQUAL(css::style::CaseMap::SMALLCAPS, getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharCaseMap"));
 }
 
 void SwUiWriterTest::testTdf98987()

@@ -1458,6 +1458,12 @@ interface BaseText
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    FN_SET_SMALL_CAPS
+    [
+        ExecMethod = ExecCharAttr ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     SID_ATTR_CHAR_CASEMAP // status(final|play)
     [
         ExecMethod = ExecTextCtrl;

@@ -7787,6 +7787,24 @@ SfxBoolItem SuperScript FN_SET_SUPER_SCRIPT
     GroupId = GID_FORMAT;
 ]
 
+SfxBoolItem SmallCaps FN_SET_SMALL_CAPS
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
 SfxVoidItem SwBrwInsert FN_SBA_BRW_INSERT
 ()
 [
