@@ -1665,6 +1665,11 @@ bool SfxViewShell::isTiledPainting() const
     return pImp->m_bTiledPainting;
 }
 
+bool SfxViewShell::getTiledPainting() const
+{
+    return pImp->m_bTiledPainting;
+}
+
 int SfxViewShell::getPart() const
 {
     return 0;
