@@ -1440,9 +1440,15 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
                 if (pDoc)
                 {
                     if (nRow > nEndRowHidden)
+                    {
                         bPrevHidden = rRowAttr.rowHidden(nTable, nRow, nEndRowHidden);
+                        bHidden = bPrevHidden;
+                    }
                     if (nRow > nEndRowFiltered)
+                    {
                         bPrevFiltered = rRowAttr.rowFiltered(nTable, nRow, nEndRowFiltered);
+                        bFiltered = bPrevFiltered;
+                    }
                 }
 
             }
