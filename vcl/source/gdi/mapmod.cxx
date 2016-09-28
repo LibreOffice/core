@@ -89,6 +89,7 @@ MapMode::MapMode( const MapMode& rMapMode ) : mpImplMapMode( rMapMode.mpImplMapM
 MapMode::MapMode( MapUnit eUnit ) : mpImplMapMode()
 {
     mpImplMapMode->meUnit   = eUnit;
+    mpImplMapMode->mbSimple = false;
 }
 
 MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
