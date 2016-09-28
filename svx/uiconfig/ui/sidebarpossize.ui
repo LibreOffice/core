@@ -54,7 +54,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Enter the value for the horizontal position.</property>
                     <property name="tooltip_text" translatable="yes">Enter the value for the horizontal position.</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -95,7 +94,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Enter the value for the vertical position.</property>
                     <property name="tooltip_text" translatable="yes">Enter the value for the vertical position.</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -137,7 +135,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Enter a width for the selected object.</property>
                     <property name="tooltip_text" translatable="yes">Enter a width for the selected object.</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -179,7 +176,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Enter a height for the selected object.</property>
                     <property name="tooltip_text" translatable="yes">Enter a height for the selected object.</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
@@ -213,7 +209,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Maintain proportions when you resize the selected object.</property>
                 <property name="tooltip_text" translatable="yes">Maintain proportions when you resize the selected object.</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
@@ -278,7 +273,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Select the angle for rotation.</property>
                         <property name="tooltip_text" translatable="yes">Select the angle for rotation.</property>
                         <property name="hexpand">True</property>
                         <property name="adjustment">adjustment1</property>
@@ -323,7 +317,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">Flip the selected object vertically.</property>
                                 <property name="tooltip_text" translatable="yes">Flip the selected object vertically.</property>
                                 <property name="action_name">.uno:FlipVertical</property>
                                 <property name="use_underline">True</property>
@@ -338,7 +331,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">Flip the selected object horizontally.</property>
                                 <property name="tooltip_text" translatable="yes">Flip the selected object horizontally.</property>
                                 <property name="action_name">.uno:FlipHorizontal</property>
                                 <property name="use_underline">True</property>

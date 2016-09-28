@@ -739,7 +739,6 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_markup" translatable="yes">Remove</property>
                             <property name="tooltip_text" translatable="yes">Remove</property>
                           </object>
                           <packing>
@@ -753,7 +752,6 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_markup" translatable="yes">Remove</property>
                             <property name="tooltip_text" translatable="yes">Remove</property>
                           </object>
                           <packing>
@@ -767,7 +765,6 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_markup" translatable="yes">Remove</property>
                             <property name="tooltip_text" translatable="yes">Remove</property>
                           </object>
                           <packing>
@@ -781,7 +778,6 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_markup" translatable="yes">Remove</property>
                             <property name="tooltip_text" translatable="yes">Remove</property>
                           </object>
                           <packing>

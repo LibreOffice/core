@@ -455,7 +455,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Apply</property>
                     <property name="tooltip_text" translatable="yes">Apply</property>
                     <property name="action_name">apply</property>
                     <property name="use_underline">True</property>
@@ -471,7 +470,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Delete</property>
                     <property name="tooltip_text" translatable="yes">Delete</property>
                     <property name="action_name">delete</property>
                     <property name="use_underline">True</property>

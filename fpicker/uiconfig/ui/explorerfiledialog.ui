@@ -75,7 +75,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Connect To Server</property>
                         <property name="tooltip_text" translatable="yes">Connect To Server</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="connect_to_server-atkobject">
@@ -111,7 +110,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Create New Folder</property>
                         <property name="tooltip_text" translatable="yes">Create New Folder</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="new_folder-atkobject">

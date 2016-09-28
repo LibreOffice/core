@@ -187,7 +187,6 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_markup" translatable="yes">Load arrow styles</property>
                             <property name="tooltip_text" translatable="yes">Load arrow styles</property>
                             <property name="halign">center</property>
                             <property name="hexpand">True</property>
@@ -206,7 +205,6 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
-                            <property name="tooltip_markup" translatable="yes">Save arrow styles</property>
                             <property name="tooltip_text" translatable="yes">Save arrow styles</property>
                             <property name="halign">center</property>
                             <property name="hexpand">True</property>

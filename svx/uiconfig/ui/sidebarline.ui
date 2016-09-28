@@ -37,7 +37,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the style of the beginning arrowhead.</property>
                     <property name="tooltip_text" translatable="yes">Select the style of the beginning arrowhead.</property>
                     <property name="hexpand">True</property>
                     <child internal-child="accessible">
@@ -58,7 +57,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the style of the line.</property>
                     <property name="tooltip_text" translatable="yes">Select the style of the line.</property>
                     <property name="hexpand">True</property>
                     <child internal-child="accessible">
@@ -79,7 +77,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the style of the ending arrowhead.</property>
                     <property name="tooltip_text" translatable="yes">Select the style of the ending arrowhead.</property>
                     <property name="margin_right">6</property>
                     <property name="hexpand">True</property>
@@ -130,7 +127,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the width of the line.</property>
                     <property name="tooltip_text" translatable="yes">Select the width of the line.</property>
                     <child>
                       <object class="GtkMenuToolButton" id="setwidth">
@@ -176,7 +172,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the color of the line.</property>
                     <property name="tooltip_text" translatable="yes">Select the color of the line.</property>
                     <child>
                       <object class="GtkMenuToolButton" id="setcolor">
@@ -184,7 +179,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Select the color of the line.</property>
                         <property name="tooltip_text" translatable="yes">Select the color of the line.</property>
                         <property name="margin_left">20</property>
                         <property name="action_name">.uno:XLineColor</property>
@@ -223,7 +217,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Specify the transparency of the line.</property>
                     <property name="tooltip_text" translatable="yes">Specify the transparency of the line.</property>
                     <property name="halign">start</property>
                     <property name="invisible_char">•</property>
@@ -283,7 +276,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Select the style of the edge connections.</property>
                         <property name="tooltip_text" translatable="yes">Select the style of the edge connections.</property>
                         <items>
                           <item translatable="yes">Rounded</item>
@@ -331,7 +323,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Select the style of the line caps.</property>
                         <property name="tooltip_text" translatable="yes">Select the style of the line caps.</property>
                         <items>
                           <item translatable="yes">Flat</item>

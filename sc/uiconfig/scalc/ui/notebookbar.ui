@@ -657,7 +657,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="tooltip_markup" translatable="yes">Specify the borders of the selected cells.</property>
                                 <property name="tooltip_text" translatable="yes">Specify the borders of the selected cells.</property>
                                 <property name="halign">start</property>
                                 <property name="action_name">.uno:SetBorderStyle</property>

@@ -65,7 +65,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Select the speed of Slide Transition.</property>
                 <property name="tooltip_text" translatable="yes">Select the speed of Slide Transition.</property>
                 <property name="hexpand">True</property>
               </object>

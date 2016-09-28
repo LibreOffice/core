@@ -123,7 +123,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Add</property>
                     <property name="tooltip_text" translatable="yes">Add</property>
                     <property name="valign">center</property>
                     <property name="image">image2</property>
@@ -139,7 +138,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Edit Comment</property>
                     <property name="tooltip_text" translatable="yes">Edit Comment</property>
                     <property name="valign">center</property>
                     <property name="image">image3</property>
@@ -155,7 +153,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Remove</property>
                     <property name="tooltip_text" translatable="yes">Remove</property>
                     <property name="valign">center</property>
                     <property name="image">image1</property>

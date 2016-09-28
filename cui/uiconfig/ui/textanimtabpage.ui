@@ -152,7 +152,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">To top</property>
                     <property name="tooltip_text" translatable="yes">To top</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
@@ -174,7 +173,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">To right</property>
                     <property name="tooltip_text" translatable="yes">To right</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
@@ -196,7 +194,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">To left</property>
                     <property name="tooltip_text" translatable="yes">To left</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
@@ -218,7 +215,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">To bottom</property>
                     <property name="tooltip_text" translatable="yes">To bottom</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
