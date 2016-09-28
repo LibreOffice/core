@@ -28,14 +28,15 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 			--disable-shared \
 			--disable-gtk-doc \
 			--with-pic \
-			--with-icu=yes \
+			--with-icu=builtin \
 			--with-freetype=no \
+			--with-fontconfig=no \
 			--with-cairo=no \
 			--with-glib=no \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter LINUX,$(OS)),CXXFLAGS="$(CXXFLAGS) -fvisibility=hidden") \
-		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE)) \
+		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE) lib) \
 	)
 
 # vim: set noet sw=4 ts=4:
