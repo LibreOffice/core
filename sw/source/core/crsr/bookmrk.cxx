@@ -73,11 +73,7 @@ namespace
         io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, nullptr);
 
         SwPosition start = pField->GetMarkStart();
-        SwTextNode const*const pStartTextNode = start.nNode.GetNode().GetTextNode();
-        sal_Unicode ch_start = 0;
-        if (pStartTextNode && (start.nContent.GetIndex() < pStartTextNode->GetText().getLength()))
-            ch_start = pStartTextNode->GetText()[start.nContent.GetIndex()];
-        if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
+        if (aEndMark != CH_TXT_ATR_FORMELEMENT)
         {
             SwPaM aStartPaM(start);
             io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, OUString(aStartMark));
@@ -88,14 +84,7 @@ namespace
         }
 
         SwPosition& rEnd = pField->GetMarkEnd();
-        SwTextNode const*const pEndTextNode = rEnd.nNode.GetNode().GetTextNode();
-        const sal_Int32 nEndPos = (rEnd == start || rEnd.nContent.GetIndex() == 0)
-            ? rEnd.nContent.GetIndex()
-            : rEnd.nContent.GetIndex() - 1;
-        sal_Unicode ch_end = 0;
-        if ( pEndTextNode && ( nEndPos < pEndTextNode->GetText().getLength() ) )
-            ch_end = pEndTextNode->GetText()[nEndPos];
-        if ( aEndMark && ( ch_end != aEndMark ) )
+        if (aEndMark)
         {
             SwPaM aEndPaM(rEnd);
             io_pDoc->getIDocumentContentOperations().InsertString(aEndPaM, OUString(aEndMark));
@@ -118,8 +107,9 @@ namespace
         if( pStartTextNode )
             ch_start = pStartTextNode->GetText()[rStart.nContent.GetIndex()];
 
-        if( ch_start == aStartMark )
+        if (aEndMark != CH_TXT_ATR_FORMELEMENT)
         {
+            assert(ch_start == aStartMark);
             SwPaM aStart(rStart, rStart);
             ++aStart.End()->nContent;
             io_pDoc->getIDocumentContentOperations().DeleteRange(aStart);
@@ -133,13 +123,11 @@ namespace
         sal_Unicode ch_end = 0;
         if ( pEndTextNode )
             ch_end = pEndTextNode->GetText()[nEndPos];
-        if ( ch_end == aEndMark )
-        {
-            SwPaM aEnd(rEnd, rEnd);
-            if (aEnd.Start()->nContent > 0)
-                --aEnd.Start()->nContent;
-            io_pDoc->getIDocumentContentOperations().DeleteRange(aEnd);
-        }
+        assert(ch_end == aEndMark);
+        SwPaM aEnd(rEnd, rEnd);
+        if (aEnd.Start()->nContent > 0)
+            --aEnd.Start()->nContent;
+        io_pDoc->getIDocumentContentOperations().DeleteRange(aEnd);
 
         io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, nullptr);
     };
