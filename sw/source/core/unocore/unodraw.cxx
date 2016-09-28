@@ -2207,18 +2207,15 @@ sal_Bool SwXShape::supportsService(const OUString& rServiceName) throw( uno::Run
 uno::Sequence< OUString > SwXShape::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aSeq;
-    if(xShapeAgg.is())
+    if (xShapeAgg.is())
     {
         uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
         SvxShape* pSvxShape = GetSvxShape();
         if(pSvxShape)
             aSeq = pSvxShape->getSupportedServiceNames();
     }
-    else
-    {
-        aSeq.realloc(1);
-        aSeq.getArray()[0] = "com.sun.star.drawing.Shape";
-    }
+    aSeq.realloc(aSeq.getLength() + 1);
+    aSeq.getArray()[aSeq.getLength() - 1] = "com.sun.star.drawing.Shape";
     return aSeq;
 }
 
