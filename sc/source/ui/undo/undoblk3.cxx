@@ -725,6 +725,8 @@ void ScUndoMerge::DoChange( bool bUndo ) const
 
         if (!bDidPaint)
             ScUndoUtil::PaintMore(pDocShell, aRange);
+
+        rDoc.BroadcastCells(aRange, SC_HINT_DATACHANGED);
     }
 
     ShowTable(aCurRange);
