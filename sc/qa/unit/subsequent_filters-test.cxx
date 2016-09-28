@@ -2070,7 +2070,6 @@ void ScFiltersTest::testPivotTableSharedGroupXLSX()
     ScDocShellRef xDocSh = loadDoc("pivot-table/shared-group-field.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll();
 
     // Check whether right group names are imported for both tables
     // First table
@@ -2088,6 +2087,20 @@ void ScFiltersTest::testPivotTableSharedGroupXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("16"), rDoc.GetString(ScAddress(0,15,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("17"), rDoc.GetString(ScAddress(0,16,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("18"), rDoc.GetString(ScAddress(0,17,0)));
+
+    // There should be exactly 2 pivot tables and 1 cache.
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
+
+    ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
+
+    const ScDPCache* pCache = rSheetCaches.getExistingCache(ScRange(0,0,1,13,18,1));
+    CPPUNIT_ASSERT_MESSAGE("Pivot cache is expected for A1:N19 on the second sheet.", pCache);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), pCache->GetFieldCount());
+
+    // TODO : Look into this and find out why it fails.
+    // CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pCache->GetGroupFieldCount());
 
     xDocSh->DoClose();
 }
