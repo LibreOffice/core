@@ -2067,7 +2067,7 @@ void ScFiltersTest::testGetPivotDataXLS()
 
 void ScFiltersTest::testPivotTableSharedGroupXLSX()
 {
-    ScDocShellRef xDocSh = loadDoc("pivot-table/shared_group.", FORMAT_XLSX);
+    ScDocShellRef xDocSh = loadDoc("pivot-table/shared-group-field.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll();
