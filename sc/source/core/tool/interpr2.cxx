@@ -2333,21 +2333,16 @@ void ScInterpreter::ScMod()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fVal2 = GetDouble(); // Denominator
-        double fVal1 = GetDouble(); // Numerator
-        if (fVal2 == floor(fVal2))  // a pure integral number stored in double
+        double fNum   = GetDouble();   // Numerator
+        if ( fNum == 0.0 )
         {
-            double fResult = fmod(fVal1,fVal2);
-            if ( (fResult != 0.0) &&
-                ((fVal1 > 0.0 && fVal2 < 0.0) || (fVal1 < 0.0 && fVal2 > 0.0)))
-                fResult += fVal2 ;
-            PushDouble( fResult );
+            PushIllegalArgument();
+            return;
         }
-        else
-        {
-            PushDouble( ::rtl::math::approxSub( fVal1,
-                    ::rtl::math::approxFloor(fVal1 / fVal2) * fVal2));
-        }
+        double fDenom = GetDouble();   // Denominator
+        double fRes = ::rtl::math::approxSub( fDenom,
+                ::rtl::math::approxFloor( fDenom / fNum ) * fNum );
+        PushDouble( fRes );
     }
 }
 
