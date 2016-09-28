@@ -189,10 +189,6 @@ void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
     //  Copy Default styles
 
     CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SfxStyleFamily::Para );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_RESULT),       SfxStyleFamily::Para );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_RESULT1),      SfxStyleFamily::Para );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_HEADLINE),     SfxStyleFamily::Para );
-    CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_HEADLINE1),    SfxStyleFamily::Para );
     CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_STANDARD),     SfxStyleFamily::Page );
     CopyStyleFrom( pSrcPool, SCSTR(STR_STYLENAME_REPORT),       SfxStyleFamily::Page );
 }
@@ -270,51 +266,6 @@ void ScStyleSheetPool::CreateStandardStyles()
 //    if ( eCtl == LANGUAGE_THAI )
 //        pSet->Put( SvxFontHeightItem( 300, 100, ATTR_CTL_FONT_HEIGHT ) );   // 15 pt
 
-    // 2. Result
-
-    pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_RESULT ),
-                                    SfxStyleFamily::Para,
-                                    SCSTYLEBIT_STANDARD ) );
-    pSheet->SetParent( aStrStandard );
-    pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_ERG );
-    pSet = &pSheet->GetItemSet();
-    pSet->Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
-    pSet->Put( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
-    pSet->Put( SvxUnderlineItem( LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE ) );
-
-    // 3. Result1
-
-    pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_RESULT1 ),
-                                    SfxStyleFamily::Para,
-                                    SCSTYLEBIT_STANDARD ) );
-
-    pSheet->SetParent( SCSTR( STR_STYLENAME_RESULT ) );
-    pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_ERG1 );
-
-    // 4. headline
-
-    pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_HEADLINE ),
-                                    SfxStyleFamily::Para,
-                                    SCSTYLEBIT_STANDARD ) );
-
-    pSheet->SetParent( aStrStandard );
-    pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_UEB );
-    pSet = &pSheet->GetItemSet();
-    pSet->Put( SvxFontHeightItem( 320, 100, ATTR_FONT_HEIGHT ) ); // 16pt
-    pSet->Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
-    pSet->Put( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
-    pSet->Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
-
-    // 5. Ueberschrift1
-
-    pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_HEADLINE1 ),
-                                    SfxStyleFamily::Para,
-                                    SCSTYLEBIT_STANDARD ) );
-
-    pSheet->SetParent( SCSTR( STR_STYLENAME_HEADLINE ) );
-    pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_UEB1 );
-    pSet = &pSheet->GetItemSet();
-    pSet->Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
 
     // Page format template:
 
