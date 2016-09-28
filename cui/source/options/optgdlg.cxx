@@ -69,6 +69,7 @@
 #include <unotools/searchopt.hxx>
 #include <sal/macros.h>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Setup.hxx>
 #include <comphelper/configuration.hxx>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -1103,6 +1104,16 @@ static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocal
     return aBuf.makeStringAndClear();
 }
 
+namespace
+{
+    //what ui language will be selected by default if the user override of General::UILocale is unset ?
+    LanguageTag GetInstalledLocaleForSystemUILanguage()
+    {
+        css::uno::Sequence<OUString> inst(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
+        return LanguageTag(getInstalledLocaleForSystemUILanguage(inst)).makeFallback();
+    }
+}
+
 OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent,"OptLanguagesPage","cui/ui/optlanguagespage.ui", &rSet)
     , pLangConfig(new LanguageConfig_Impl)
@@ -1137,7 +1148,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
 
     OUString aUILang = m_sSystemDefaultString +
                        " - " +
-                       SvtLanguageTable::GetLanguageString( Application::GetSettings().GetUILanguageTag().getLanguageType(), true );
+                       SvtLanguageTable::GetLanguageString(GetInstalledLocaleForSystemUILanguage().getLanguageType(), true);
 
     m_pUserInterfaceLB->InsertEntry(aUILang);
     m_pUserInterfaceLB->SetEntryData(0, nullptr);
