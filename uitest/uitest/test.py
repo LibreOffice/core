@@ -22,10 +22,14 @@ class UITest(object):
     def __init__(self, xUITest, xContext):
         self._xUITest = xUITest
         self._xContext = xContext
+        self._desktop = None
 
     def get_desktop(self):
-        desktop = self._xContext.ServiceManager.createInstanceWithContext("com.sun.star.frame.Desktop", self._xContext)
-        return desktop
+        if self._desktop:
+            return self._desktop
+
+        self._desktop = self._xContext.ServiceManager.createInstanceWithContext("com.sun.star.frame.Desktop", self._xContext)
+        return self._desktop
 
     def get_frames(self):
         desktop = self.get_desktop()
