@@ -28,7 +28,7 @@
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -69,7 +69,7 @@ createBaseURI(
 struct DocumentMetadataAccess_Impl;
 
 class SFX2_DLLPUBLIC DocumentMetadataAccess :
-    public ::cppu::WeakImplHelper1< css::rdf::XDocumentMetadataAccess>
+    public cppu::WeakImplHelper<css::rdf::XDocumentMetadataAccess>
 {
     DocumentMetadataAccess(const DocumentMetadataAccess&) = delete;
     DocumentMetadataAccess& operator=( const DocumentMetadataAccess& ) = delete;

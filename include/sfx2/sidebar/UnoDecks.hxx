@@ -18,15 +18,14 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 
 /** get the decks
 */
-class SfxUnoDecks : public ::cppu::WeakImplHelper1< css::ui::XDecks >
+class SfxUnoDecks : public cppu::WeakImplHelper<css::ui::XDecks>
 {
 
 public:
