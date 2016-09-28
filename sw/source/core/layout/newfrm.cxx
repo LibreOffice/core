@@ -349,8 +349,6 @@ void FrameFinit()
 
 // RootFrame::Everything that belongs to CurrShell
 
-class SwCurrShells : public std::set<CurrShell*> {};
-
 CurrShell::CurrShell( SwViewShell *pNew )
 {
     OSL_ENSURE( pNew, "insert 0-Shell?" );

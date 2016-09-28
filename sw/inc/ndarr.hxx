@@ -57,7 +57,6 @@ class SwTableFormat;
 class SwTableLine;
 class SwTableLineFormat;
 class SwTableNode;
-class SwTableToTextSaves;
 class SwTextFormatColl;
 class SwTextNode;
 class SwUndoTableToText;
@@ -82,6 +81,9 @@ class SwOutlineNodes : public o3tl::sorted_vector<SwNode*, CompareSwOutlineNodes
 public:
     bool Seek_Entry(SwNode* rP, sal_uInt16* pnPos) const;
 };
+
+struct SwTableToTextSave;
+using SwTableToTextSaves = std::vector<std::unique_ptr<SwTableToTextSave>>;
 
 class SW_DLLPUBLIC SwNodes
     : private BigPtrArray
