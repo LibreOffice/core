@@ -18,7 +18,6 @@
  */
 
 #include "WrapPropertyPanel.hxx"
-#include "PropertyPanel.hrc"
 
 #include <cmdid.h>
 #include <swtypes.hxx>

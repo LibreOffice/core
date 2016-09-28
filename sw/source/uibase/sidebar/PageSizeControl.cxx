@@ -19,7 +19,6 @@
 
 #include "PageSizeControl.hxx"
 #include "PagePropertyPanel.hxx"
-#include "PagePropertyPanel.hrc"
 
 #include <cmdid.h>
 #include <swtypes.hxx>
@@ -34,6 +33,8 @@
 
 #include <vcl/settings.hxx>
 #include <svl/itempool.hxx>
+#include <svl/intitem.hxx>
+#include <editeng/sizeitem.hxx>
 
 namespace
 {

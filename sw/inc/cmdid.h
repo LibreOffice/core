@@ -859,6 +859,7 @@
 #define SID_ATTR_PAGE_FOOTER_LRMARGIN   (FN_SIDEBAR + 8)
 #define SID_ATTR_PAGE_FOOTER_SPACING    (FN_SIDEBAR + 9)
 #define SID_ATTR_PAGE_FOOTER_LAYOUT     (FN_SIDEBAR + 10)
+#define SID_ATTR_PAGE_MARGIN            (FN_SIDEBAR + 11)
 
 //Member IDs for Fill / SetVariable of items
 #define         MID_STYLE       0xe0

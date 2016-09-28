@@ -16,34 +16,31 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <PageMarginPopup.hxx>
+#include "PageMarginControl.hxx"
+#include <svx/pageitem.hxx>
+#include <vcl/toolbox.hxx>
 
-#include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include "PropertyPanel.hrc"
-#include "helpid.h"
+SFX_IMPL_TOOLBOX_CONTROL(PageMarginPopup, SfxVoidItem);
 
-String STR_MARGIN_TOOLTIP_LEFT
+PageMarginPopup::PageMarginPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+    : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
-    Text [ en-US ] = "Left: ";
-};
-String STR_MARGIN_TOOLTIP_RIGHT
+    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
+}
+
+PageMarginPopup::~PageMarginPopup()
 {
-    Text [ en-US ] = ". Right: ";
-};
-String STR_MARGIN_TOOLTIP_INNER
+}
+
+VclPtr<SfxPopupWindow> PageMarginPopup::CreatePopupWindow()
 {
-    Text [ en-US ] = "Inner: ";
-};
-String STR_MARGIN_TOOLTIP_OUTER
-{
-    Text [ en-US ] = ". Outer: ";
-};
-String STR_MARGIN_TOOLTIP_TOP
-{
-    Text [ en-US ] = ". Top: ";
-};
-String STR_MARGIN_TOOLTIP_BOT
-{
-    Text [ en-US ] = ". Bottom: ";
-};
+    VclPtr<sw::sidebar::PageMarginControl> pControl = VclPtr<sw::sidebar::PageMarginControl>::Create(GetSlotId());
+    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoAppFocusClose);
+    SetPopupWindow(pControl);
+
+    return pControl;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

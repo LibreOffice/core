@@ -7471,6 +7471,24 @@ SvxLongLRSpaceItem SwPageLRMargin SID_ATTR_PAGE_LRSPACE
     GroupId = GID_FORMAT;
 ]
 
+SfxVoidItem PageMargin SID_ATTR_PAGE_MARGIN
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
 SfxBoolItem SwPageHeaderItem SID_ATTR_PAGE_HEADER
 
 [
