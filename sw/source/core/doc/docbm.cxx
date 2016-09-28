@@ -270,7 +270,7 @@ namespace
             [&rName] (IDocumentMarkAccess::pMark_t const& rpMark) { return rpMark->GetName() == rName; } );
     }
 
-    static void lcl_DebugMarks(IDocumentMarkAccess::container_t vMarks)
+    void lcl_DebugMarks(IDocumentMarkAccess::container_t vMarks)
     {
 #if OSL_DEBUG_LEVEL > 0
         SAL_INFO("sw.core", vMarks.size() << " Marks");
