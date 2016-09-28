@@ -481,7 +481,7 @@ unsigned int i;
 
     hash->size = (old_size << 1) + 1;
     /* we really should avoid to get there... so print a message to alert of the condition */
-    fprintf(stderr, "resize hash %d -> %d\n", old_size, hash->size);
+    fprintf(stderr, "resize hash %u -> %u\n", old_size, hash->size);
     if(hash->size == old_size)
     {
         hash->flags |= HASH_F_NO_RESIZE;
