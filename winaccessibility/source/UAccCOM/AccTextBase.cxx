@@ -175,7 +175,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
             unsigned long nColor;
             pValue.Value >>= nColor;
             OLECHAR pBuf[64];
-            swprintf( pBuf, L"%08X", nColor );
+            swprintf( pBuf, L"%08lX", nColor );
             pTemp[0]=L'#';
             wcscat( pTemp, pBuf );
 
