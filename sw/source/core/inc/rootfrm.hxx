@@ -24,6 +24,7 @@
 #include <doc.hxx>
 #include <IDocumentTimerAccess.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <set>
 #include <vector>
 
 class SwContentFrame;
@@ -35,8 +36,6 @@ class SwCursor;
 class SwShellCursor;
 class SwTableCursor;
 class SwLayVout;
-class SwDestroyList;
-class SwCurrShells;
 class SwViewOption;
 class SwSelectionList;
 struct SwPosition;
@@ -63,6 +62,11 @@ enum class SwRemoveResult
     Next,
     Prev
 };
+
+using SwCurrShells = std::set<CurrShell*>;
+
+class SwSectionFrame;
+using SwDestroyList = std::set<SwSectionFrame*>;
 
 /// The root element of a Writer document layout.
 class SwRootFrame: public SwLayoutFrame

@@ -30,6 +30,7 @@
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShape.hxx>
 #include "fesh.hxx"
+#include <list>
 #include <vector>
 #include <set>
 #include <o3tl/typed_flags_set.hxx>
@@ -44,7 +45,6 @@ class SwAccessibleContext;
 class SwAccessibleContextMap_Impl;
 class SwAccessibleEventList_Impl;
 class SwAccessibleEventMap_Impl;
-class SwShapeList_Impl;
 class SdrObject;
 namespace accessibility { class AccessibleShape; }
 class SwAccessibleShapeMap_Impl;
@@ -55,6 +55,18 @@ class MapMode;
 class SwAccPreviewData;
 struct PreviewPage;
 namespace vcl { class Window; }
+
+// The shape list is filled if an accessible shape is destroyed. It
+// simply keeps a reference to the accessible shape's XShape. These
+// references are destroyed within the EndAction when firing events.
+// There are two reason for this. First of all, a new accessible shape
+// for the XShape might be created soon. It's then cheaper if the XShape
+// still exists. The other reason are situations where an accessible shape
+// is destroyed within an SwFrameFormat::Modify. In this case, destroying
+// the XShape at the same time (indirectly by destroying the accessible
+// shape) leads to an assert, because a client of the Modify is destroyed
+// within a Modify call.
+using SwShapeList_Impl = std::list<css::uno::Reference<css::drawing::XShape>>;
 
 enum class AccessibleStates
 {

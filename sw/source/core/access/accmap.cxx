@@ -544,23 +544,6 @@ void SwAccessibleEventList_Impl::MoveMissingXAccToEnd()
     OSL_ENSURE(size() == nSize ,"");
 }
 
-// The shape list is filled if an accessible shape is destroyed. It
-// simply keeps a reference to the accessible shape's XShape. These
-// references are destroyed within the EndAction when firing events.
-// There are two reason for this. First of all, a new accessible shape
-// for the XShape might be created soon. It's then cheaper if the XShape
-// still exists. The other reason are situations where an accessible shape
-// is destroyed within an SwFrameFormat::Modify. In this case, destroying
-// the XShape at the same time (indirectly by destroying the accessible
-// shape) leads to an assert, because a client of the Modify is destroyed
-// within a Modify call.
-
-class SwShapeList_Impl: public std::list < uno::Reference < drawing::XShape > >
-{
-public:
-    SwShapeList_Impl() {}
-};
-
 struct SwAccessibleChildFunc
 {
     bool operator()( const SwAccessibleChild& r1,
