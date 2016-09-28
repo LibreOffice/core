@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_b0e77e3f",
+        "filename": "extensions/test/ole/AxTestComponents/Basic.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-09-28T11:23:42Z",
+      "side": 1,
+      "message": "i think \"long\" is wrong type here in the first place, look a couple lines above where data is cast to IDispatch* but long is only 32-bit on 64-bit win32...\n\nbut this is some unused debug code anyway so who cares",
+      "revId": "fa0790039275e2c42c263302a3444ee949eddd9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
