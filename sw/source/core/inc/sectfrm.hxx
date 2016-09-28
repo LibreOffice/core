@@ -161,7 +161,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwSectionFrame)
 };
 
-class SwDestroyList : public std::set<SwSectionFrame*> {};
+using std::set<SwSectionFrame*> = SwDestroyList;
 
 inline const SwSectionFrame *SwSectionFrame::GetFollow() const
 {

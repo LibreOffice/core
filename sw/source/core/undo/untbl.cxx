@@ -81,12 +81,12 @@
 
 typedef std::vector<std::shared_ptr<SfxItemSet> > SfxItemSets;
 
-class SwUndoSaveSections : public std::vector<std::unique_ptr<SwUndoSaveSection>> {};
+using std::vector<std::unique_ptr<SwUndoSaveSection>> = SwUndoSaveSections;
 
-class SwUndoMoves : public std::vector<std::unique_ptr<SwUndoMove>> {};
+using std::vector<std::unique_ptr<SwUndoMove>> = SwUndoMoves;
 
 struct SwTableToTextSave;
-class SwTableToTextSaves : public std::vector<std::unique_ptr<SwTableToTextSave>> {};
+using std::vector<std::unique_ptr<SwTableToTextSave>> = SwTableToTextSaves;
 
 struct UndoTableCpyTable_Entry
 {
@@ -100,7 +100,8 @@ struct UndoTableCpyTable_Entry
     explicit UndoTableCpyTable_Entry( const SwTableBox& rBox );
     ~UndoTableCpyTable_Entry();
 };
-class SwUndoTableCpyTable_Entries : public std::vector<std::unique_ptr<UndoTableCpyTable_Entry>> {};
+
+using std::vector<std::unique_ptr<UndoTableCpyTable_Entry>> = SwUndoTableCpyTable_Entries;
 
 class SaveBox;
 class SaveLine;
