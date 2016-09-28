@@ -57,6 +57,8 @@ using namespace ::com::sun::star;
 
 bool SwTextFrame::IsFootnoteNumFrame_() const
 {
+    if (IsInTab())
+        return false; // tdf#102073 first frame in cell doesn't have mpPrev set
     const SwFootnoteFrame* pFootnote = FindFootnoteFrame()->GetMaster();
     while( pFootnote && !pFootnote->ContainsContent() )
         pFootnote = pFootnote->GetMaster();
