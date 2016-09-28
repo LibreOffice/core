@@ -401,10 +401,10 @@ void writeNode(
 }
 
 // helpers to allow sorting of configmgr::Modifications::Node
-typedef std::pair< const rtl::OUString, configmgr::Modifications::Node > aPairEntry;
+typedef std::pair< const rtl::OUString, configmgr::Modifications::Node > ModNodePairEntry;
 struct PairEntrySorter
 {
-    bool operator() (const aPairEntry* pValue1, const aPairEntry* pValue2) const
+    bool operator() (const ModNodePairEntry* pValue1, const ModNodePairEntry* pValue2) const
     {
         return pValue1->first.compareTo(pValue2->first) < 0;
     }
@@ -472,19 +472,20 @@ void writeModifications(
 
         // copy configmgr::Modifications::Node's to a sortable list. Use pointers
         // to just reference the data instead of copying it
-        std::list< const aPairEntry* > aPairEntryList;
+        std::vector< const ModNodePairEntry* > ModNodePairEntryVector;
+        ModNodePairEntryVector.reserve(modifications.children.size());
 
         for (const auto& rCand : modifications.children)
         {
-            aPairEntryList.push_back(&rCand);
+            ModNodePairEntryVector.push_back(&rCand);
         }
 
         // sort the list
-        aPairEntryList.sort(PairEntrySorter());
+        std::sort(ModNodePairEntryVector.begin(), ModNodePairEntryVector.end(), PairEntrySorter());
 
         // now use the list to write entries in sorted order
         // instead of random as from the unordered map
-        for (const auto & i : aPairEntryList)
+        for (const auto & i : ModNodePairEntryVector)
         {
             writeModifications(
                 components, handle, pathRep, node, i->first,
@@ -637,19 +638,20 @@ void writeModFile(
 
     // copy configmgr::Modifications::Node's to a sortable list. Use pointers
     // to just reference the data instead of copying it
-    std::list< const aPairEntry* > aPairEntryList;
+    std::vector< const ModNodePairEntry* > ModNodePairEntryVector;
+    ModNodePairEntryVector.reserve(data.modifications.getRoot().children.size());
 
     for (const auto& rCand : data.modifications.getRoot().children)
     {
-        aPairEntryList.push_back(&rCand);
+        ModNodePairEntryVector.push_back(&rCand);
     }
 
     // sort the list
-    aPairEntryList.sort(PairEntrySorter());
+    std::sort(ModNodePairEntryVector.begin(), ModNodePairEntryVector.end(), PairEntrySorter());
 
     // now use the list to write entries in sorted order
     // instead of random as from the unordered map
-    for (const auto& j : aPairEntryList)
+    for (const auto& j : ModNodePairEntryVector)
     {
         writeModifications(
             components, tmp, "", rtl::Reference< Node >(), j->first,

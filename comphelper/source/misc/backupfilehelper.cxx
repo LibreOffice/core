@@ -16,6 +16,7 @@
 #include <deque>
 
 typedef std::shared_ptr< osl::File > FileSharedPtr;
+static const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 1024;
 
 namespace
 {
@@ -47,7 +48,7 @@ namespace
 
         if (rCandidate && osl::File::E_None == rCandidate->open(osl_File_OpenFlag_Read))
         {
-            sal_uInt8 aArray[1024];
+            sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
             sal_uInt64 nBytesTransfer(0);
             sal_uInt64 nSize(0);
 
@@ -60,7 +61,7 @@ namespace
 
             while (nSize != 0)
             {
-                const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)1024));
+                const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
 
                 if (osl::File::E_None == rCandidate->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) && nBytesTransfer == nToTransfer)
                 {
@@ -192,20 +193,30 @@ namespace
             return true;
         }
 
-        bool copy_content(oslFileHandle& rTargetHandle)
+        bool copy_content(oslFileHandle& rTargetHandle, bool bInflate)
         {
             if (maFile && osl::File::E_None == maFile->open(osl_File_OpenFlag_Read))
             {
-                sal_uInt8 aArray[1024];
+                sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
                 sal_uInt64 nBytesTransfer(0);
                 sal_uInt64 nSize(getSize());
 
                 // set offset in source file - when this is zero, a new file is to be added
+                const bool bNewFile(0 == getOffset());
                 maFile->setPos(0, sal_Int64(getOffset()));
+
+                if (!bInflate)
+                {
+                    // copy-back, deflate file
+                }
+                else if (bNewFile)
+                {
+                    // new file gets added, inflate initially
+                }
 
                 while (nSize != 0)
                 {
-                    const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)1024));
+                    const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
 
                     if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
                     {
@@ -376,7 +387,7 @@ namespace
                                 // write contents
                                 for (auto& candidateB : maPackedFileEntryVector)
                                 {
-                                    if (!candidateB.copy_content(aHandle))
+                                    if (!candidateB.copy_content(aHandle, true))
                                     {
                                         bRetval = false;
                                         break;
@@ -484,7 +495,7 @@ namespace
                 // already backups there, check if different from last entry
                 PackedFileEntry& aLastEntry = maPackedFileEntryVector.back();
 
-                bRetval = aLastEntry.copy_content(rHandle);
+                bRetval = aLastEntry.copy_content(rHandle, false);
 
                 if (bRetval)
                 {
