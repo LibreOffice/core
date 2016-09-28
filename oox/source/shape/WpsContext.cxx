@@ -40,9 +40,7 @@ WpsContext::WpsContext(ContextHandler2Helper& rParent, uno::Reference<drawing::X
     mpShape->setWps(true);
 }
 
-WpsContext::~WpsContext()
-{
-}
+WpsContext::~WpsContext() = default;
 
 oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs)
 {
