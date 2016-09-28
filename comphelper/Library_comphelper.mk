@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_externals,comphelper,\
     boost_headers \
     icuuc \
     icu_headers \
+    zlib \
 ))
 
 $(eval $(call gb_Library_use_libraries,comphelper,\
