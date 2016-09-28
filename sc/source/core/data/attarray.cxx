@@ -1198,7 +1198,10 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
     SCSIZE nStartIndex;
     SCSIZE nEndIndex;
     Search( nRow1, nStartIndex );
-    Search( nRow2, nEndIndex );
+    if (nRow1 != nRow2)
+        Search( nRow2, nEndIndex );
+    else
+        nEndIndex = nStartIndex;
     bool bFound = false;
 
     for (SCSIZE i=nStartIndex; i<=nEndIndex && !bFound; i++)
