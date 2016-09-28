@@ -26,18 +26,14 @@
 #include "hgzip.h"
 #include "hstream.hxx"
 
-#ifndef local
-#  define local static
-#endif
-
 #define Z_BUFSIZE   (1024 * 4)
 
 #define ALLOC(size) malloc(size)
 #define TRYFREE(p) {if (p) free(p);}
 
-local int get_byte(gz_stream * s);
-local int destroy(gz_stream * s);
-local uLong getLong(gz_stream * s);
+static int get_byte(gz_stream * s);
+static int destroy(gz_stream * s);
+static uLong getLong(gz_stream * s);
 
 /* ===========================================================================
    Opens a gzip (.gz) file for reading or writing. The mode parameter
@@ -99,7 +95,7 @@ gz_stream *gz_open(HStream & _stream)
    for end of file.
    IN assertion: the stream s has been successfully opened for reading.
 */
-local int get_byte(gz_stream * s)
+static int get_byte(gz_stream * s)
 {
     if (s->z_eof)
         return EOF;
@@ -124,7 +120,7 @@ local int get_byte(gz_stream * s)
  * Cleanup then free the given gz_stream. Return a zlib error code.
  * Try freeing in the reverse order of allocations.
  */
-local int destroy(gz_stream * s)
+static int destroy(gz_stream * s)
 {
     int err = Z_OK;
 
@@ -258,7 +254,7 @@ int gz_flush(gz_stream * file, int flush)
 /* ===========================================================================
    Reads a long in LSB order from the given gz_stream. Sets
 */
-local uLong getLong(gz_stream * s)
+static uLong getLong(gz_stream * s)
 {
     uLong x = (unsigned char) get_byte(s);
 
