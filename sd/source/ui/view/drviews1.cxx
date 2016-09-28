@@ -413,6 +413,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             SetAppBackgroundColor( aFillColor );
 
             SwitchPage(nActualPageNum);
+
+            //tdf#102343 re-enable common undo on switch back from master mode
+            mpDrawView->GetModel()->SetDisableTextEditUsesCommonUndoManager(false);
         }
         else
         {
@@ -453,6 +456,12 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
             maTabControl->SetCurPageId(nActualMasterPageNum + 1);
             SwitchPage(nActualMasterPageNum);
+
+            //tdf#102343 changing attributes of textboxes in master typically
+            //changes the stylesheet they are linked to, so if the common
+            //undo manager is in use, those stylesheet changes are thrown
+            //away at present
+            mpDrawView->GetModel()->SetDisableTextEditUsesCommonUndoManager(true);
         }
 
         // If the master view toolbar is to be shown we turn it on after the
