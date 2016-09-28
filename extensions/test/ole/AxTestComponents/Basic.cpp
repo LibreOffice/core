@@ -545,7 +545,7 @@ void CBasic::printArray( LPSAFEARRAY val, BSTR message, VARTYPE type)
         case VT_I4:
         case VT_ERROR:
             hr= SafeArrayGetElement( val, &i, (void*)&data);
-            sprintf( tmp, "%d \n", *(long*)&data);
+            sprintf( tmp, "%ld \n", *(long*)&data);
             break;
         case VT_BSTR:
             hr= SafeArrayGetElement( val, &i, (void*)&data);
@@ -803,15 +803,15 @@ void CBasic::printMulArray( SAFEARRAY* val, VARTYPE type)
                 {
                 case VT_I4:
                     hr= SafeArrayGetElement( val, index, &longVal);
-                    sprintf( tmpBuf, "(%d,%d): %d\n", index[1], index[0], longVal);
+                    sprintf( tmpBuf, "(%ld,%ld): %ld\n", index[1], index[0], longVal);
                     break;
                 case VT_UI1:
                     hr= SafeArrayGetElement( val, index, &longVal);
-                    sprintf( tmpBuf, "(%d,%d): %d\n", index[1], index[0], (unsigned char)longVal);
+                    sprintf( tmpBuf, "(%ld,%ld): %d\n", index[1], index[0], (unsigned char)longVal);
                     break;
                 case VT_VARIANT:
                     hr= SafeArrayGetElement( val, index, &var );
-                    sprintf( tmpBuf, "(%d,%d):  %d (vartype %d)\n",  index[1], index[0], var.byref, var.vt);
+                    sprintf( tmpBuf, "(%ld,%ld):  %d (vartype %d)\n",  index[1], index[0], var.byref, var.vt);
                     break;
                 }
                 strcat( buff,tmpBuf);
@@ -852,16 +852,16 @@ void CBasic::printMulArray( SAFEARRAY* val, VARTYPE type)
                     {
                     case VT_I4:
                         hr= SafeArrayGetElement( val, index, &longVal);
-                        sprintf( tmpBuf, "(%d,%d,%d): %d\n", index[2], index[1], index[0], longVal);
+                        sprintf( tmpBuf, "(%ld,%ld,%ld): %ld\n", index[2], index[1], index[0], longVal);
                         break;
                     case VT_UI1:
                         hr= SafeArrayGetElement( val, index, &longVal);
-                        sprintf( tmpBuf, "(%d,%d,%d): %d\n", index[2], index[1], index[0], (unsigned char)longVal);
+                        sprintf( tmpBuf, "(%ld,%ld,%ld): %d\n", index[2], index[1], index[0], (unsigned char)longVal);
                         break;
 
                     case VT_VARIANT:
                         hr= SafeArrayGetElement( val, index, &var );
-                        sprintf( tmpBuf, "(%d,%d,%d):  %d (vartype %d)\n", index[2],  index[1], index[0], var.byref, var.vt);
+                        sprintf( tmpBuf, "(%ld,%ld,%ld):  %d (vartype %d)\n", index[2],  index[1], index[0], var.byref, var.vt);
                         break;
                     }
                     strcat( buff,tmpBuf);
