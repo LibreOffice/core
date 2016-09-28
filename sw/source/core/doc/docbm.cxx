@@ -291,6 +291,7 @@ namespace
         }
 #endif
         assert(std::is_sorted(vMarks.begin(), vMarks.end(), lcl_MarkOrderingByStart));
+        (void) vMarks;
     };
 }
 

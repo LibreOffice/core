@@ -103,13 +103,12 @@ namespace
 
         const SwPosition& rStart = pField->GetMarkStart();
         SwTextNode const*const pStartTextNode = rStart.nNode.GetNode().GetTextNode();
-        sal_Unicode ch_start = 0;
-        if( pStartTextNode )
-            ch_start = pStartTextNode->GetText()[rStart.nContent.GetIndex()];
-
+        assert(pStartTextNode);
         if (aEndMark != CH_TXT_ATR_FORMELEMENT)
         {
-            assert(ch_start == aStartMark);
+            (void) aStartMark;
+            (void) pStartTextNode;
+            assert(pStartTextNode->GetText()[rStart.nContent.GetIndex()] == aStartMark);
             SwPaM aStart(rStart, rStart);
             ++aStart.End()->nContent;
             io_pDoc->getIDocumentContentOperations().DeleteRange(aStart);
@@ -117,13 +116,12 @@ namespace
 
         const SwPosition& rEnd = pField->GetMarkEnd();
         SwTextNode const*const pEndTextNode = rEnd.nNode.GetNode().GetTextNode();
+        assert(pEndTextNode);
         const sal_Int32 nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 )
                                    ? rEnd.nContent.GetIndex()
                                    : rEnd.nContent.GetIndex() - 1;
-        sal_Unicode ch_end = 0;
-        if ( pEndTextNode )
-            ch_end = pEndTextNode->GetText()[nEndPos];
-        assert(ch_end == aEndMark);
+        assert(pEndTextNode->GetText()[nEndPos] == aEndMark);
+        (void) pStartTextNode;
         SwPaM aEnd(rEnd, rEnd);
         if (aEnd.Start()->nContent > 0)
             --aEnd.Start()->nContent;
