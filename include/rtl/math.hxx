@@ -241,7 +241,7 @@ inline double acosh(double fValue)
 
 
 /** Test equality of two values with an accuracy of the magnitude of the
-    given values scaled by 2^-48 (4 bits roundoff stripped).
+    given values scaled by 2^-52 (sign bit stripped).
 
     @attention
     approxEqual( value!=0.0, 0.0 ) _never_ yields true.
@@ -252,7 +252,7 @@ inline bool approxEqual(double a, double b)
         return true;
     double x = a - b;
     return (x < 0.0 ? -x : x)
-        < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 * 16777216.0)));
+        < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 * 16777216.0 * 16)));
 }
 
 /** Test equality of two values with an accuracy defined by nPrec
