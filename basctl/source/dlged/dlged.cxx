@@ -59,7 +59,6 @@ using namespace ::com::sun::star::io;
 
 static const char aResourceResolverPropName[] = "ResourceResolver";
 static const char aDecorationPropName[] = "Decoration";
-static const char aTitlePropName[] = "Title";
 
 
 // DlgEdHint
@@ -124,7 +123,7 @@ void DlgEditor::ShowDialog()
             if( !bDecoration )
             {
                 xNewDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
-                xNewDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( OUString() ) );
+                xNewDlgModPropSet->setPropertyValue( "Title", makeAny( OUString() ) );
             }
         }
         catch(const UnknownPropertyException& )

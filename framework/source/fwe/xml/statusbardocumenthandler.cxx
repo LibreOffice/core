@@ -86,7 +86,6 @@ static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
 static const char ITEM_DESCRIPTOR_OFFSET[]      = "Offset";
 static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 static const char ITEM_DESCRIPTOR_WIDTH[]       = "Width";
-static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 
 static void ExtractStatusbarItemParameters(
     const Sequence< PropertyValue >& rProp,
@@ -376,7 +375,7 @@ throw(  SAXException, RuntimeException, std::exception )
                             aStatusbarItemProp[2].Name = ITEM_DESCRIPTOR_OFFSET;
                             aStatusbarItemProp[3].Name = ITEM_DESCRIPTOR_STYLE;
                             aStatusbarItemProp[4].Name = ITEM_DESCRIPTOR_WIDTH;
-                            aStatusbarItemProp[5].Name = ITEM_DESCRIPTOR_TYPE;
+                            aStatusbarItemProp[5].Name = "Type";
 
                             aStatusbarItemProp[0].Value <<= aCommandURL;
                             aStatusbarItemProp[1].Value <<= aHelpURL;

@@ -41,17 +41,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_USER_INDEX_ENTRY_TEMPLATE;
 using ::xmloff::token::XML_OUTLINE_LEVEL;
 
-
-const sal_Char sAPI_CreateFromEmbeddedObjects[] = "CreateFromEmbeddedObjects";
-const sal_Char sAPI_CreateFromGraphicObjects[] = "CreateFromGraphicObjects";
-const sal_Char sAPI_CreateFromMarks[] = "CreateFromMarks";
-const sal_Char sAPI_CreateFromTables[] = "CreateFromTables";
-const sal_Char sAPI_CreateFromTextFrames[] = "CreateFromTextFrames";
-const sal_Char sAPI_UseLevelFromSource[] = "UseLevelFromSource";
-const sal_Char sAPI_CreateFromLevelParagraphStyles[] = "CreateFromLevelParagraphStyles";
-const sal_Char sAPI_UserIndexName[] = "UserIndexName";
-
-
 XMLIndexUserSourceContext::XMLIndexUserSourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
@@ -59,14 +48,14 @@ XMLIndexUserSourceContext::XMLIndexUserSourceContext(
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
                                   rPropSet, true),
-        sCreateFromEmbeddedObjects(sAPI_CreateFromEmbeddedObjects),
-        sCreateFromGraphicObjects(sAPI_CreateFromGraphicObjects),
-        sCreateFromMarks(sAPI_CreateFromMarks),
-        sCreateFromTables(sAPI_CreateFromTables),
-        sCreateFromTextFrames(sAPI_CreateFromTextFrames),
-        sUseLevelFromSource(sAPI_UseLevelFromSource),
-        sCreateFromLevelParagraphStyles(sAPI_CreateFromLevelParagraphStyles),
-        sUserIndexName(sAPI_UserIndexName),
+        sCreateFromEmbeddedObjects("CreateFromEmbeddedObjects"),
+        sCreateFromGraphicObjects("CreateFromGraphicObjects"),
+        sCreateFromMarks("CreateFromMarks"),
+        sCreateFromTables("CreateFromTables"),
+        sCreateFromTextFrames("CreateFromTextFrames"),
+        sUseLevelFromSource("UseLevelFromSource"),
+        sCreateFromLevelParagraphStyles("CreateFromLevelParagraphStyles"),
+        sUserIndexName("UserIndexName"),
         bUseObjects(false),
         bUseGraphic(false),
         bUseMarks(false),

@@ -42,7 +42,6 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Grid";
 
 struct StaticGridWrapperPropertyArray_Initializer
 {
@@ -190,7 +189,7 @@ OUString SAL_CALL GridWrapper::getImplementationName()
 
 OUString GridWrapper::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart.Grid");
 }
 
 sal_Bool SAL_CALL GridWrapper::supportsService( const OUString& rServiceName )

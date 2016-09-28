@@ -244,9 +244,8 @@ namespace toolkitform
         */
         void getStringItemVector( const Reference< XPropertySet >& _rxModel, ::std::vector< OUString >& _rVector )
         {
-            static const char FM_PROP_STRINGITEMLIST[] = "StringItemList";
             Sequence< OUString > aListEntries;
-            OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_STRINGITEMLIST ) >>= aListEntries );
+            OSL_VERIFY( _rxModel->getPropertyValue( "StringItemList" ) >>= aListEntries );
             ::std::copy( aListEntries.begin(), aListEntries.end(),
                          ::std::back_insert_iterator< ::std::vector< OUString > >( _rVector ) );
         }
@@ -284,8 +283,7 @@ namespace toolkitform
 
             // Name, Description, Text
             OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_NAME ) >>= Descriptor->Name );
-            static const char FM_PROP_HELPTEXT[] = "HelpText";
-            OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_HELPTEXT ) >>= Descriptor->Description );
+            OSL_VERIFY( xModelProps->getPropertyValue( "HelpText" ) >>= Descriptor->Description );
             Any aText;
             static const char FM_PROP_TEXT[] = "Text";
             static const char FM_PROP_LABEL[] = "Label";
@@ -436,8 +434,7 @@ namespace toolkitform
                 }
 
                 // file select
-                static const char FM_SUN_COMPONENT_FILECONTROL[] = "com.sun.star.form.component.FileControl";
-                if ( xSI->supportsService( FM_SUN_COMPONENT_FILECONTROL ) )
+                if ( xSI->supportsService( "com.sun.star.form.component.FileControl" ) )
                     pEditWidget->FileSelect = true;
 
                 // maximum text length
@@ -539,8 +536,7 @@ namespace toolkitform
                 pRadioWidget->RadioGroup = determineRadioGroupId( xModelProps );
                 try
                 {
-                    static const char FM_PROP_REFVALUE[] = "RefValue";
-                    xModelProps->getPropertyValue( FM_PROP_REFVALUE ) >>= pRadioWidget->OnValue;
+                    xModelProps->getPropertyValue( "RefValue" ) >>= pRadioWidget->OnValue;
                 }
                 catch(...)
                 {
@@ -555,8 +551,7 @@ namespace toolkitform
                 vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< vcl::PDFWriter::ListBoxWidget* >( Descriptor.get() );
 
                 // drop down
-                static const char FM_PROP_DROPDOWN[] = "Dropdown";
-                OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_DROPDOWN ) >>= pListWidget->DropDown );
+                OSL_VERIFY( xModelProps->getPropertyValue( "Dropdown" ) >>= pListWidget->DropDown );
 
                 // multi selection
                 OSL_VERIFY( xModelProps->getPropertyValue("MultiSelection") >>= pListWidget->MultiSelect );

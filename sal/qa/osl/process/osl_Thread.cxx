@@ -1843,8 +1843,7 @@ namespace osl_ThreadData
         void getData_001()
             {
                 char* pc = new char[2];
-                char nData[] = "i";
-                strcpy(pc, nData);
+                strcpy(pc, "i");
                 myThreadData.setData(pc);
 
                 myKeyThread aThread1('c');

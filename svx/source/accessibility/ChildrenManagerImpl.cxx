@@ -657,13 +657,9 @@ void SAL_CALL
         const document::EventObject& rEventObject)
     throw (uno::RuntimeException, std::exception)
 {
-    static const char sShapeInserted[] = "ShapeInserted";
-    static const char sShapeRemoved[] = "ShapeRemoved";
-
-
-    if (rEventObject.EventName == sShapeInserted)
+    if (rEventObject.EventName == "ShapeInserted")
         AddShape (Reference<drawing::XShape>(rEventObject.Source, uno::UNO_QUERY));
-    else if (rEventObject.EventName == sShapeRemoved)
+    else if (rEventObject.EventName == "ShapeRemoved")
         RemoveShape (Reference<drawing::XShape>(rEventObject.Source, uno::UNO_QUERY));
     // else ignore unknown event.
 }

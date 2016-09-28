@@ -63,9 +63,6 @@
 
 namespace {
 
-const char FRAME_PROPNAME_LAYOUTMANAGER[] = "LayoutManager";
-const char HID_BACKINGWINDOW[] = "FWK_HID_BACKINGWINDOW";
-
 /**
     implements the backing component.
 
@@ -411,7 +408,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // create the menu bar for the backing component
     css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-    xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
+    xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
     if (xLayoutManager.is())
     {
         xLayoutManager->lock();
@@ -422,7 +419,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if (pWindow)
     {
         // set help ID for our canvas
-        pWindow->SetHelpId(HID_BACKINGWINDOW);
+        pWindow->SetHelpId("FWK_HID_BACKINGWINDOW");
     }
 
     // inform BackingWindow about frame

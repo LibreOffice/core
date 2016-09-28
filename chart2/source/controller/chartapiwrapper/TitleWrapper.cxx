@@ -126,7 +126,6 @@ WrappedStackedTextProperty::~WrappedStackedTextProperty()
 
 namespace
 {
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Title";
 
 enum
 {
@@ -530,7 +529,7 @@ OUString SAL_CALL TitleWrapper::getImplementationName()
 
 OUString TitleWrapper::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart.Title");
 }
 
 sal_Bool SAL_CALL TitleWrapper::supportsService( const OUString& rServiceName )

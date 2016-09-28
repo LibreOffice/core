@@ -47,14 +47,6 @@ using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 
-const sal_Char sAPI_TextSection[] = "com.sun.star.text.TextSection";
-const sal_Char sAPI_IndexHeaderSection[] = "com.sun.star.text.IndexHeaderSection";
-const sal_Char sAPI_IsProtected[] = "IsProtected";
-const sal_Char sAPI_Condition[] = "Condition";
-const sal_Char sAPI_IsVisible[] = "IsVisible";
-const sal_Char sAPI_IsCurrentlyVisible[] = "IsCurrentlyVisible";
-const sal_Char sAPI_ProtectionKey[] = "ProtectionKey";
-
 enum XMLSectionToken
 {
     XML_TOK_SECTION_XMLID,
@@ -93,13 +85,13 @@ XMLSectionImportContext::XMLSectionImportContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sTextSection(sAPI_TextSection)
-,   sIndexHeaderSection(sAPI_IndexHeaderSection)
-,   sCondition(sAPI_Condition)
-,   sIsVisible(sAPI_IsVisible)
-,   sProtectionKey(sAPI_ProtectionKey)
-,   sIsProtected(sAPI_IsProtected)
-,   sIsCurrentlyVisible(sAPI_IsCurrentlyVisible)
+,   sTextSection("com.sun.star.text.TextSection")
+,   sIndexHeaderSection("com.sun.star.text.IndexHeaderSection")
+,   sCondition("Condition")
+,   sIsVisible("IsVisible")
+,   sProtectionKey("ProtectionKey")
+,   sIsProtected("IsProtected")
+,   sIsCurrentlyVisible("IsCurrentlyVisible")
 ,   bProtect(false)
 ,   bCondOK(false)
 ,   bIsVisible(true)
@@ -199,11 +191,10 @@ void XMLSectionImportContext::StartElement(
                 Reference<XTextRange> xStart =
                     rHelper->GetCursor()->getStart();
 #ifndef DBG_UTIL
-                static const sal_Char sMarker[] = " ";
+                OUString sMarkerString(" ");
 #else
-                static const sal_Char sMarker[] = "X";
+                OUString sMarkerString("X");
 #endif
-                OUString sMarkerString(sMarker);
                 rHelper->InsertString(sMarkerString);
                 rHelper->InsertControlCharacter(
                     ControlCharacter::APPEND_PARAGRAPH );

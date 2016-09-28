@@ -100,11 +100,10 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                             {
                                 nPos = strlen(s_sChanged);
                                 static const char s_sQuote[] = "\"\"";
-                                static const char s_sSingleQuote[] = "\"";
                                 sal_Int32 nIndex = sValue.indexOf(s_sQuote,nPos);
                                 while ( nIndex > -1 )
                                 {
-                                    sValue = sValue.replaceAt(nIndex,2,s_sSingleQuote);
+                                    sValue = sValue.replaceAt(nIndex,2, "\"");
                                     nIndex = sValue.indexOf(s_sQuote,nIndex+2);
                                 }
                                 nLen = sValue.getLength() - 1;

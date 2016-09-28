@@ -607,16 +607,15 @@ OUString SAL_CALL VBAMacroResolver::resolveScriptURLtoVBAMacro( const OUString& 
 
 bool getModifier( char c, sal_uInt16& mod )
 {
-    static const char modifiers[] = "+^%";
-    static const sal_uInt16 KEY_MODS[] = {KEY_SHIFT, KEY_MOD1, KEY_MOD2};
-
-    for ( unsigned int i=0; i<SAL_N_ELEMENTS(KEY_MODS); ++i )
-    {
-        if ( c == modifiers[i] )
-        {
-            mod = mod | KEY_MODS[ i ];
-            return true;
-        }
+    if ( c == '+' ) {
+        mod |= KEY_SHIFT;
+        return true;
+    } else if ( c == '^' ) {
+        mod |= KEY_MOD1;
+        return true;
+    } else if ( c == '%' ) {
+        mod |= KEY_MOD2;
+        return true;
     }
     return false;
 }

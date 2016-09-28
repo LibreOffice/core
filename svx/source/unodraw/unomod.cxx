@@ -691,7 +691,6 @@ void SAL_CALL SvxUnoDrawPagesAccess::remove( const uno::Reference< drawing::XDra
 }
 
 // XServiceInfo
-const char pSvxUnoDrawPagesAccessService[] = "com.sun.star.drawing.DrawPages";
 
 OUString SAL_CALL SvxUnoDrawPagesAccess::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
 {
@@ -705,7 +704,7 @@ sal_Bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& Servic
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNames(  ) throw(uno::RuntimeException, std::exception)
 {
-    OUString aService( pSvxUnoDrawPagesAccessService );
+    OUString aService( "com.sun.star.drawing.DrawPages" );
     uno::Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }

@@ -63,10 +63,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
                     _xComponent->setDataField(ORptFilter::convertFormula(sValue));
                     break;
                 case XML_TOK_SELECT_PAGE:
-                    {
-                        static const char s_sPageNumber[] = "rpt:PageNumber()";
-                        _xComponent->setDataField(s_sPageNumber);
-                    }
+                    _xComponent->setDataField("rpt:PageNumber()");
                     break;
                 default:
                     break;
@@ -74,8 +71,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
         }
         if ( _bPageCount )
         {
-            static const char s_sPageNumber[] = "rpt:PageCount()";
-            _xComponent->setDataField(s_sPageNumber);
+            _xComponent->setDataField("rpt:PageCount()");
         }
     }
     catch(Exception&)

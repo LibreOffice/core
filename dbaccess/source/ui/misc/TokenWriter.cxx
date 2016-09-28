@@ -74,11 +74,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 
-const static char sMyBegComment[]   = "<!-- ";
-const static char sMyEndComment[]   = " -->";
-const static char sFontFamily[]     = "font-family: ";
-const static char sFontSize[]       = "font-size: ";
-
 #define SBA_FORMAT_SELECTION_COUNT  4
 #define CELL_X                      1437
 
@@ -410,8 +405,6 @@ bool ORTFImportExport::Write()
     m_pStream->WriteCharPtr( ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}" )
                 .WriteCharPtr( SAL_NEWLINE_STRING );
 
-    static char const aTRRH[] = "\\trrh-270\\pard\\intbl";
-    static char const aFS[] = "\\fs20\\f0\\cf0\\cb2";
     static char const aCell1[] = "\\clbrdrl\\brdrs\\brdrcf0\\clbrdrt\\brdrs\\brdrcf0\\clbrdrb\\brdrs\\brdrcf0\\clbrdrr\\brdrs\\brdrcf0\\clshdng10000\\clcfpat2\\cellx";
 
     m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH );
@@ -442,7 +435,7 @@ bool ORTFImportExport::Write()
 
         // column description
         m_pStream->WriteChar( '{' ).WriteCharPtr( SAL_NEWLINE_STRING );
-        m_pStream->WriteCharPtr( aTRRH );
+        m_pStream->WriteCharPtr( "\\trrh-270\\pard\\intbl" );
 
         std::unique_ptr<OString[]> pHorzChar(new OString[nCount]);
 
@@ -481,7 +474,7 @@ bool ORTFImportExport::Write()
             if ( bUnderline )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
             if ( bStrikeout )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_STRIKE );
 
-            m_pStream->WriteCharPtr( aFS );
+            m_pStream->WriteCharPtr( "\\fs20\\f0\\cf0\\cb2" );
             m_pStream->WriteChar( ' ' );
             RTFOutFuncs::Out_String(*m_pStream,sColumnName,eDestEnc);
 
@@ -546,7 +539,6 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
         m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
 
         static char const aCell2[] = "\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx";
-        static char const aTRRH[] = "\\trrh-270\\pard\\intbl";
 
         for ( sal_Int32 i=1; i<=_nColumnCount; ++i )
         {
@@ -562,7 +554,7 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
 
         m_pStream->WriteChar( '{' );
-        m_pStream->WriteCharPtr( aTRRH );
+        m_pStream->WriteCharPtr( "\\trrh-270\\pard\\intbl" );
         for ( sal_Int32 i=1; i <= _nColumnCount; ++i )
         {
             m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
@@ -711,15 +703,15 @@ void OHTMLImportExport::WriteBody()
     IncIndent(1);
     m_pStream->WriteCharPtr( "<" ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_style ).WriteCharPtr( " " ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_type ).WriteCharPtr( "=\"text/css\">" );
 
-    m_pStream->WriteCharPtr( sMyBegComment ); OUT_LF();
-    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( " { " ).WriteCharPtr( sFontFamily ).WriteChar( '"' ).WriteCharPtr( OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()).getStr() ).WriteChar( '\"' );
+    m_pStream->WriteCharPtr( "<!-- " ); OUT_LF();
+    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body ).WriteCharPtr( " { " ).WriteCharPtr( "font-family: " ).WriteChar( '"' ).WriteCharPtr( OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()).getStr() ).WriteChar( '\"' );
         // TODO : think about the encoding of the font name
-    m_pStream->WriteCharPtr( "; " ).WriteCharPtr( sFontSize );
+    m_pStream->WriteCharPtr( "; " ).WriteCharPtr( "font-size: " );
     m_pStream->WriteInt32AsString(m_aFont.Height);
     m_pStream->WriteChar( '}' );
 
     OUT_LF();
-    m_pStream->WriteCharPtr( sMyEndComment );
+    m_pStream->WriteCharPtr( " -->" );
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
     OUT_LF();
 

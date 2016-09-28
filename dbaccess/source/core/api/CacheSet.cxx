@@ -157,16 +157,14 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
 
     // set values and column names
     OUStringBuffer aValues(" VALUES ( ");
-    static const char aPara[] = "?,";
     OUString aQuote = getIdentifierQuoteString();
-    static const char aComma[] = ",";
     sal_Int32 i = 1;
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1;
     connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
     for(; aIter != aEnd;++aIter)
     {
-        aSql.append(::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++)) + aComma);
-        aValues.append(aPara);
+        aSql.append(::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++)) + ",");
+        aValues.append("?,");
     }
 
     aSql[aSql.getLength() - 1] = ')';
@@ -227,7 +225,6 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
 
     OUString aColumnName;
 
-    static const char aPara[] = "?,";
     static const char aAnd[] = " AND ";
 
     OUString aQuote  = getIdentifierQuoteString();
@@ -271,7 +268,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
         }
         if(aIter->isModified())
         {
-            _sParameter.append(::dbtools::quoteName( aQuote,aColumnName) + aPara);
+            _sParameter.append(::dbtools::quoteName( aQuote,aColumnName) + "?,");
         }
     }
 }

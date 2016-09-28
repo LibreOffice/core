@@ -25,7 +25,6 @@
 #include "hlmarkwn_def.hxx"
 
 sal_Char const sAnonymous[]    = "anonymous";
-sal_Char const sHTTPScheme[]   = INET_HTTP_SCHEME;
 sal_Char const sFTPScheme[]    = INET_FTP_SCHEME;
 
 /*************************************************************************
@@ -276,7 +275,7 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
     m_pCbAnonymous->Show( bFTP );
 
     //update 'link target in document'-window and opening-button
-    if (rScheme.startsWith(sHTTPScheme) || rScheme.isEmpty())
+    if (rScheme.startsWith(INET_HTTP_SCHEME) || rScheme.isEmpty())
     {
         if ( mbMarkWndOpen )
             ShowMarkWnd ();

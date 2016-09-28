@@ -60,24 +60,7 @@ namespace
 char const sXML_metaStreamName[] = "meta.xml";
 char const sXML_styleStreamName[] = "styles.xml";
 char const sXML_contentStreamName[] = "content.xml";
-char const sXML_oldContentStreamName[] = "Content.xml";
 
-// soffice 6/7
-char const sXML_export_chart_styles_service[] = "com.sun.star.comp.Chart.XMLStylesExporter";
-char const sXML_export_chart_content_service[] = "com.sun.star.comp.Chart.XMLContentExporter";
-
-char const sXML_import_chart_styles_service[] = "com.sun.star.comp.Chart.XMLStylesImporter";
-char const sXML_import_chart_content_service[] = "com.sun.star.comp.Chart.XMLContentImporter";
-char const sXML_import_chart_old_content_service[] = "com.sun.star.office.sax.importer.Chart";
-
-// Oasis
-char const sXML_export_chart_oasis_styles_service[] = "com.sun.star.comp.Chart.XMLOasisStylesExporter";
-char const sXML_export_chart_oasis_content_service[] = "com.sun.star.comp.Chart.XMLOasisContentExporter";
-char const sXML_export_chart_oasis_meta_service[] = "com.sun.star.comp.Chart.XMLOasisMetaExporter";
-
-char const sXML_import_chart_oasis_styles_service[] = "com.sun.star.comp.Chart.XMLOasisStylesImporter";
-char const sXML_import_chart_oasis_content_service[] = "com.sun.star.comp.Chart.XMLOasisContentImporter";
-char const sXML_import_chart_oasis_meta_service[] = "com.sun.star.comp.Chart.XMLOasisMetaImporter";
 
 uno::Reference< embed::XStorage > lcl_getWriteStorage(
     const Sequence< beans::PropertyValue >& rMediaDescriptor,
@@ -384,23 +367,23 @@ sal_Int32 XMLFilter::impl_Import(
         if( bOasis )
             nWarning |= impl_ImportStream(
                 sXML_metaStreamName,
-                sXML_import_chart_oasis_meta_service,
+                "com.sun.star.comp.Chart.XMLOasisMetaImporter",
                 xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
 
         // import styles
         nWarning |= impl_ImportStream(
             sXML_styleStreamName,
             bOasis
-            ? OUString(sXML_import_chart_oasis_styles_service)
-            : OUString(sXML_import_chart_styles_service),
+            ? OUString("com.sun.star.comp.Chart.XMLOasisStylesImporter")
+            : OUString("com.sun.star.comp.Chart.XMLStylesImporter"),
             xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
 
         // import content
         sal_Int32 nContentWarning = impl_ImportStream(
             sXML_contentStreamName,
             bOasis
-            ? OUString(sXML_import_chart_oasis_content_service)
-            : OUString(sXML_import_chart_content_service),
+            ? OUString("com.sun.star.comp.Chart.XMLOasisContentImporter")
+            : OUString("com.sun.star.comp.Chart.XMLContentImporter"),
             xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
         nWarning |= nContentWarning;
 
@@ -408,8 +391,8 @@ sal_Int32 XMLFilter::impl_Import(
         if( nContentWarning != 0 )
         {
             nWarning = impl_ImportStream(
-                sXML_oldContentStreamName,
-                sXML_import_chart_old_content_service,
+                "Content.xml", // old content stream name
+                "com.sun.star.office.sax.importer.Chart",
                 xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
         }
     }
@@ -639,23 +622,23 @@ sal_Int32 XMLFilter::impl_Export(
         if( bOasis )
             nWarning |= impl_ExportStream(
                 sXML_metaStreamName,
-                sXML_export_chart_oasis_meta_service,
+                "com.sun.star.comp.Chart.XMLOasisMetaExporter",
                 xStorage, xSaxWriter, xServiceFactory, aFilterProperties );
 
         // export styles
         nWarning |= impl_ExportStream(
             sXML_styleStreamName,
             bOasis
-            ? OUString(sXML_export_chart_oasis_styles_service)
-            : OUString(sXML_export_chart_styles_service),
+            ? OUString("com.sun.star.comp.Chart.XMLOasisStylesExporter")
+            : OUString("com.sun.star.comp.Chart.XMLStylesExporter"), // soffice 6/7
             xStorage, xSaxWriter, xServiceFactory, aFilterProperties );
 
         // export content
         sal_Int32 nContentWarning = impl_ExportStream(
             sXML_contentStreamName,
             bOasis
-            ? OUString(sXML_export_chart_oasis_content_service)
-            : OUString(sXML_export_chart_content_service),
+            ? OUString("com.sun.star.comp.Chart.XMLOasisContentExporter")
+            : OUString("com.sun.star.comp.Chart.XMLContentExporter"),
             xStorage, xSaxWriter, xServiceFactory, aFilterProperties );
         nWarning |= nContentWarning;
 

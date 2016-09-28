@@ -101,12 +101,6 @@ using namespace css::style;
 #define SEARCHFILENAME_DELIMITER    ((sal_Unicode)'/')
 
 static bool bLastRelative =         false;
-static const sal_Char cNumberingType[] = "NumberingType";
-static const sal_Char cParentNumbering[] = "ParentNumbering";
-static const sal_Char cPrefix[] = "Prefix";
-static const sal_Char cSuffix[] = "Suffix";
-static const sal_Char cBulletChar[] = "BulletChar";
-static const sal_Char cBulletFontName[] = "BulletFontName";
 
 static SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
@@ -114,17 +108,17 @@ static SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValu
     SvxNumSettings_Impl* pNew = new SvxNumSettings_Impl;
     for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
     {
-        if ( pValues[j].Name == cNumberingType )
+        if ( pValues[j].Name == "NumberingType" )
             pValues[j].Value >>= pNew->nNumberType;
-        else if ( pValues[j].Name == cPrefix )
+        else if ( pValues[j].Name == "Prefix" )
             pValues[j].Value >>= pNew->sPrefix;
-        else if ( pValues[j].Name == cSuffix )
+        else if ( pValues[j].Name == "Suffix" )
             pValues[j].Value >>= pNew->sSuffix;
-        else if ( pValues[j].Name == cParentNumbering )
+        else if ( pValues[j].Name == "ParentNumbering" )
             pValues[j].Value >>= pNew->nParentNumbering;
-        else if ( pValues[j].Name == cBulletChar )
+        else if ( pValues[j].Name == "BulletChar" )
             pValues[j].Value >>= pNew->sBulletChar;
-        else if ( pValues[j].Name == cBulletFontName )
+        else if ( pValues[j].Name == "BulletFontName" )
             pValues[j].Value >>= pNew->sBulletFont;
     }
     return pNew;

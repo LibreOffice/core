@@ -111,7 +111,6 @@ namespace sfx2 {
 
 static const char s_content [] = "content.xml";
 static const char s_styles  [] = "styles.xml";
-static const char s_prefix  [] = "id";  // prefix for generated xml:id
 
 static bool isContentFile(OUString const & i_rPath)
 {
@@ -389,7 +388,7 @@ template< typename T >
     std::unordered_map< OUString, T, OUStringHash > & i_rXmlIdMap)
 {
     static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
-    const OUString prefix(s_prefix);
+    static const char prefix[] = "id";  // prefix for generated xml:id
     typename std::unordered_map< OUString, T, OUStringHash >
         ::const_iterator iter;
     OUString id;

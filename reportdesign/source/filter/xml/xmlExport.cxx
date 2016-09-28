@@ -999,10 +999,8 @@ OUString ORptExport::convertFormula(const OUString& _sFormula)
 bool ORptExport::exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const OUString& _sFormula)
 {
     const OUString sFieldData = convertFormula(_sFormula);
-    static const char s_sPageNumber[] = "PageNumber()";
-    static const char s_sPageCount[] = "PageCount()";
-    sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
-    sal_Int32 nPageCountIndex = sFieldData.indexOf(s_sPageCount);
+    sal_Int32 nPageNumberIndex = sFieldData.indexOf("PageNumber()");
+    sal_Int32 nPageCountIndex = sFieldData.indexOf("PageCount()");
     bool bRet = nPageNumberIndex != -1 || nPageCountIndex != -1;
     if ( !bRet )
         AddAttribute(XML_NAMESPACE_REPORT, eName,sFieldData);
@@ -1056,11 +1054,10 @@ void ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinit
                     OUString sExpression  = sField;
                     if ( !sExpression.isEmpty() )
                     {
-                        static const char s_sQuote[] = "\"\"";
                         sal_Int32 nIndex = sExpression.indexOf('"');
                         while ( nIndex > -1 )
                         {
-                            sExpression = sExpression.replaceAt(nIndex,1,s_sQuote);
+                            sExpression = sExpression.replaceAt(nIndex, 1, "\"\"");
                             nIndex = sExpression.indexOf('"',nIndex+2);
                         }
                         OUString sFormula("rpt:HASCHANGED(\"");
@@ -1404,7 +1401,6 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
     {
         OUString sFieldData = _xReportElement->getDataField();
         static const char s_sPageNumber[] = "PageNumber()";
-        static const char s_sPageCount[] = "PageCount()";
         static const char s_sReportPrefix[] = "rpt:";
         sFieldData = sFieldData.copy(strlen(s_sReportPrefix), sFieldData.getLength() - strlen(s_sReportPrefix));
         sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
@@ -1419,12 +1415,11 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
                 {
                     if ( sToken == s_sPageNumber )
                     {
-                        static const char s_sCurrent[] = "current";
-                        AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, s_sCurrent );
+                        AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, "current" );
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_NUMBER, false, false);
                         Characters("1");
                     }
-                    else if ( sToken == s_sPageCount )
+                    else if ( sToken == "PageCount()" )
                     {
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_COUNT, false, false);
                         Characters("1");

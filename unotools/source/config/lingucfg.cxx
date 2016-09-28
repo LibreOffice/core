@@ -785,12 +785,7 @@ bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
 static SvtLinguConfigItem *pCfgItem = nullptr;
 static sal_Int32           nCfgItemRefCount = 0;
 
-static const char aG_SupportedDictionaryFormats[] = "SupportedDictionaryFormats";
 static const char aG_Dictionaries[] = "Dictionaries";
-static const char aG_Locations[] = "Locations";
-static const char aG_Format[] = "Format";
-static const char aG_Locales[] = "Locales";
-static const char aG_DisabledDictionaries[] = "DisabledDictionaries";
 
 SvtLinguConfig::SvtLinguConfig()
 {
@@ -905,7 +900,7 @@ bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
         xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetEntry ), uno::UNO_QUERY_THROW );
-        if (xNA->getByName( aG_SupportedDictionaryFormats ) >>= rFormatList)
+        if (xNA->getByName( "SupportedDictionaryFormats" ) >>= rFormatList)
             bSuccess = true;
         DBG_ASSERT( rFormatList.getLength(), "supported dictionary format list is empty" );
     }
@@ -953,9 +948,9 @@ bool SvtLinguConfig::GetDictionaryEntry(
         uno::Sequence< OUString >  aLocations;
         OUString                   aFormatName;
         uno::Sequence< OUString >  aLocaleNames;
-        bSuccess =  (xNA->getByName( aG_Locations ) >>= aLocations)  &&
-                    (xNA->getByName( aG_Format )    >>= aFormatName) &&
-                    (xNA->getByName( aG_Locales )   >>= aLocaleNames);
+        bSuccess =  (xNA->getByName( "Locations" ) >>= aLocations)  &&
+                    (xNA->getByName( "Format" )    >>= aFormatName) &&
+                    (xNA->getByName( "Locales" )   >>= aLocaleNames);
         DBG_ASSERT( aLocations.getLength(), "Dictionary locations not set" );
         DBG_ASSERT( !aFormatName.isEmpty(), "Dictionary format name not set" );
         DBG_ASSERT( aLocaleNames.getLength(), "No locales set for the dictionary" );
@@ -993,7 +988,7 @@ uno::Sequence< OUString > SvtLinguConfig::GetDisabledDictionaries() const
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
-        xNA->getByName( aG_DisabledDictionaries ) >>= aResult;
+        xNA->getByName( "DisabledDictionaries" ) >>= aResult;
     }
     catch (uno::Exception &)
     {
