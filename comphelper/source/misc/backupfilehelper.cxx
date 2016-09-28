@@ -57,22 +57,23 @@ namespace
             // set offset in source file - should be zero due to crc32 should
             // only be needed to be created for new entries, gets loaded with old
             // ones
-            rCandidate->setPos(0, sal_Int64(nOffset));
-
-            while (nSize != 0)
+            if (osl::File::E_None == rCandidate->setPos(osl_Pos_Absolut, sal_Int64(nOffset)))
             {
-                const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
+                while (nSize != 0)
+                {
+                    const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
 
-                if (osl::File::E_None == rCandidate->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) && nBytesTransfer == nToTransfer)
-                {
-                    // add to crc and reduce size
-                    nCrc32 = rtl_crc32(nCrc32, static_cast<void*>(aArray), static_cast<sal_uInt32>(nBytesTransfer));
-                    nSize -= nToTransfer;
-                }
-                else
-                {
-                    // error - reset to zero again
-                    nSize = nCrc32 = 0;
+                    if (osl::File::E_None == rCandidate->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) && nBytesTransfer == nToTransfer)
+                    {
+                        // add to crc and reduce size
+                        nCrc32 = rtl_crc32(nCrc32, static_cast<void*>(aArray), static_cast<sal_uInt32>(nBytesTransfer));
+                        nSize -= nToTransfer;
+                    }
+                    else
+                    {
+                        // error - reset to zero again
+                        nSize = nCrc32 = 0;
+                    }
                 }
             }
 
@@ -174,7 +175,7 @@ namespace
             aArray[2] = sal_uInt8((mnSize & 0x0000ff00) >> 8);
             aArray[3] = sal_uInt8(mnSize & 0x000000ff);
 
-            if (osl::File::E_None != osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) || 4 != nBaseWritten)
+            if (osl_File_E_None != osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) || 4 != nBaseWritten)
             {
                 return false;
             }
@@ -185,7 +186,7 @@ namespace
             aArray[2] = sal_uInt8((mnCrc32 & 0x0000ff00) >> 8);
             aArray[3] = sal_uInt8(mnCrc32 & 0x000000ff);
 
-            if (osl::File::E_None != osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) || 4 != nBaseWritten)
+            if (osl_File_E_None != osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) || 4 != nBaseWritten)
             {
                 return false;
             }
@@ -200,35 +201,36 @@ namespace
                 sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
                 sal_uInt64 nBytesTransfer(0);
                 sal_uInt64 nSize(getSize());
+                const bool bNewFile(0 == getOffset());
 
                 // set offset in source file - when this is zero, a new file is to be added
-                const bool bNewFile(0 == getOffset());
-                maFile->setPos(0, sal_Int64(getOffset()));
-
-                if (!bInflate)
+                if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
                 {
-                    // copy-back, deflate file
-                }
-                else if (bNewFile)
-                {
-                    // new file gets added, inflate initially
-                }
-
-                while (nSize != 0)
-                {
-                    const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
-
-                    if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
+                    if (!bInflate)
                     {
-                        break;
+                        // copy-back, deflate file
+                    }
+                    else if (bNewFile)
+                    {
+                        // new file gets added, inflate initially
                     }
 
-                    if (osl::File::E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aArray), nToTransfer, &nBytesTransfer) || nBytesTransfer != nToTransfer)
+                    while (nSize != 0)
                     {
-                        break;
-                    }
+                        const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
 
-                    nSize -= nToTransfer;
+                        if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
+                        {
+                            break;
+                        }
+
+                        if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aArray), nToTransfer, &nBytesTransfer) || nBytesTransfer != nToTransfer)
+                        {
+                            break;
+                        }
+
+                        nSize -= nToTransfer;
+                    }
                 }
 
                 maFile->close();
@@ -250,13 +252,13 @@ namespace
     class PackedFile
     {
     private:
-        const OUString&         mrURL;
+        const OUString          maURL;
         PackedFileEntryVector   maPackedFileEntryVector;
         bool                    mbChanged;
 
     public:
         PackedFile(const OUString& rURL)
-        :   mrURL(rURL),
+        :   maURL(rURL),
             maPackedFileEntryVector(),
             mbChanged(false)
         {
@@ -328,7 +330,7 @@ namespace
             if (maPackedFileEntryVector.empty())
             {
                 // on error or no data get rid of pack file
-                osl::File::remove(mrURL);
+                osl::File::remove(maURL);
             }
         }
 
@@ -339,7 +341,7 @@ namespace
             if (maPackedFileEntryVector.empty())
             {
                 // get rid of (now?) empty pack file
-                osl::File::remove(mrURL);
+                osl::File::remove(maURL);
             }
             else if (mbChanged)
             {
@@ -360,7 +362,7 @@ namespace
                     aArray[3] = 'K';
 
                     // write File_ID
-                    if (osl::File::E_None == osl_writeFile(aHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten)
+                    if (osl_File_E_None == osl_writeFile(aHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten)
                     {
                         const sal_uInt32 nSize(maPackedFileEntryVector.size());
                         aArray[0] = sal_uInt8((nSize & 0xff000000) >> 24);
@@ -369,7 +371,7 @@ namespace
                         aArray[3] = sal_uInt8(nSize & 0x000000ff);
 
                         // write number of entries
-                        if (osl::File::E_None == osl_writeFile(aHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten)
+                        if (osl_File_E_None == osl_writeFile(aHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten)
                         {
                             // write headers
                             for (auto& candidateA : maPackedFileEntryVector)
@@ -405,8 +407,8 @@ namespace
                 {
                     // copy over existing file by first deleting original
                     // and moving the temp file to old original
-                    osl::File::remove(mrURL);
-                    osl::File::move(aTempURL, mrURL);
+                    osl::File::remove(maURL);
+                    osl::File::move(aTempURL, maURL);
                 }
 
                 // delete temp file (in all cases - it may be moved already)
