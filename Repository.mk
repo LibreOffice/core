@@ -281,7 +281,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
 	$(if $(filter MACOSX,$(OS)),\
 		avmediaMacAVF \
-		$(if $(ENABLE_MACOSX_SANDBOX),,avmediaQuickTime) \
+		$(if $(ENABLE_MACOSX_SANDBOX),,\
+			$(if $(filter 1080 1090 101000 101100,$(MACOSX_SDK_VERSION)),avmediaQuickTime) \
+		) \
 	) \
 	$(call gb_Helper_optional,SCRIPTING, \
 		basctl \
