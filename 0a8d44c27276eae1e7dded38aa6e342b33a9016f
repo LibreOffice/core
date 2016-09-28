@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5da102_70e7a612",
+        "filename": "sc/res/xml/styles.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001210
+      },
+      "writtenOn": "2016-09-28T14:40:45Z",
+      "side": 1,
+      "message": "Currently, Heading1 is being displayed in the drop-down list along with Default while all other style names are being displayed after you click \"More\". I\u0027ll try to fix this issue after I find out the area in source code that causes this.\n\nBtw, Should the style names be displayed after clicking \"More\" or not?",
+      "range": {
+        "startLine": 6,
+        "startChar": 29,
+        "endLine": 6,
+        "endChar": 37
+      },
+      "revId": "0a8d44c27276eae1e7dded38aa6e342b33a9016f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
