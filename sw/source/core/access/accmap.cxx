@@ -555,11 +555,7 @@ void SwAccessibleEventList_Impl::MoveMissingXAccToEnd()
 // shape) leads to an assert, because a client of the Modify is destroyed
 // within a Modify call.
 
-class SwShapeList_Impl: public std::list < uno::Reference < drawing::XShape > >
-{
-public:
-    SwShapeList_Impl() {}
-};
+using SwShapeList_Impl = std::list < uno::Reference < drawing::XShape > >;
 
 struct SwAccessibleChildFunc
 {

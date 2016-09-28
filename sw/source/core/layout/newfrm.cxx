@@ -349,7 +349,7 @@ void FrameFinit()
 
 // RootFrame::Everything that belongs to CurrShell
 
-class SwCurrShells : public std::set<CurrShell*> {};
+using SwCurrShells = std::set<CurrShell*>;
 
 CurrShell::CurrShell( SwViewShell *pNew )
 {
