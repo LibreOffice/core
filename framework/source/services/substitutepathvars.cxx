@@ -19,26 +19,17 @@
 
 #include <config_folders.h>
 
-#include <helper/networkdomain.hxx>
-
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/configitem.hxx>
-#include <unotools/configmgr.hxx>
 
 #include <unotools/bootstrap.hxx>
-#include <osl/mutex.hxx>
+#include <unotools/configmgr.hxx>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
-#include <osl/socket.hxx>
-#include <osl/process.h>
+#include <osl/thread.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <i18nlangtag/mslangid.hxx>
-#include <tools/link.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/resmgr.hxx>
-#include <tools/wldcrd.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 
@@ -50,14 +41,9 @@
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
 #include <unordered_map>
-#include <string.h>
 
 using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::util;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
-using namespace framework;
 
 namespace {
 
