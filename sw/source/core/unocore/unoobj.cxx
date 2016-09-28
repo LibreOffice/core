@@ -690,10 +690,10 @@ SwUnoCursor& SwXTextCursor::GetCursor()
     { return *m_pImpl->m_pUnoCursor; }
 
 SwPaM const* SwXTextCursor::GetPaM() const
-    { return &(*m_pImpl->m_pUnoCursor); }
+    { return m_pImpl->m_pUnoCursor.get(); }
 
 SwPaM* SwXTextCursor::GetPaM()
-    { return &(*m_pImpl->m_pUnoCursor); }
+    { return m_pImpl->m_pUnoCursor.get(); }
 
 SwDoc const* SwXTextCursor::GetDoc() const
     { return m_pImpl->m_pUnoCursor ? m_pImpl->m_pUnoCursor->GetDoc() : nullptr; }
@@ -726,8 +726,8 @@ SwXTextCursor::~SwXTextCursor()
 void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         const bool bForceExpandHints)
 {
-    auto pUnoCursor = static_cast<SwCursor*>(&(*m_pImpl->m_pUnoCursor));
-    if(pUnoCursor)
+    auto pUnoCursor = static_cast<SwCursor*>(m_pImpl->m_pUnoCursor.get());
+    if (pUnoCursor)
     {
         // Start/EndAction
         SwDoc* pDoc = pUnoCursor->GetDoc();

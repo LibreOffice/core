@@ -144,10 +144,12 @@ namespace sw
                 if(!GetRegisteredIn())
                     m_pCursor.reset();
             };
-            SwUnoCursor& operator*() const
-                { return *m_pCursor.get(); }
-            SwUnoCursor* operator->() const
+            SwUnoCursor* get() const
                 { return m_pCursor.get(); }
+            SwUnoCursor* operator->() const
+                { return get(); }
+            SwUnoCursor& operator*() const
+                { return *get(); }
             UnoCursorPointer& operator=(UnoCursorPointer aOther)
             {
                 if(aOther.m_pCursor)
