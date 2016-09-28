@@ -50,7 +50,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace sw::access;
 
-const sal_Char sServiceName[] = "com.sun.star.table.AccessibleCellView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleCellView";
 
 bool SwAccessibleCell::IsSelected()
@@ -258,7 +257,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = sServiceName;
+    pArray[0] = "com.sun.star.table.AccessibleCellView";
     pArray[1] = sAccessibleServiceName;
     return aRet;
 }

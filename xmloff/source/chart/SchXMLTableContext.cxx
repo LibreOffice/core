@@ -59,7 +59,6 @@ using ::com::sun::star::uno::Reference;
 namespace
 {
 
-const char aLabelPrefix[] = "label ";
 const char aCategoriesRange[] = "categories";
 
 typedef ::std::multimap< OUString, OUString >
@@ -109,7 +108,7 @@ void lcl_fillRangeMapping(
     sal_Int32 nColOffset = ( rTable.bHasHeaderColumn ? 1 : 0 );
 
     const OUString lcl_aCategoriesRange(aCategoriesRange);
-    const OUString lcl_aLabelPrefix(aLabelPrefix);
+    const OUString lcl_aLabelPrefix("label ");
 
     // Fill range mapping
     const size_t nTableRowCount( rTable.aData.size());

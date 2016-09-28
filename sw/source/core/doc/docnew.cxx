@@ -126,13 +126,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 
-const sal_Char sFrameFormatStr[] = "Frameformat";
-const sal_Char sEmptyPageStr[] = "Empty Page";
-const sal_Char sColumnCntStr[] = "Columncontainer";
-const sal_Char sCharFormatStr[] = "Character style";
-const sal_Char sTextCollStr[] = "Paragraph style";
-const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
-
 /*
  * global functions...
  */
@@ -226,12 +219,12 @@ SwDoc::SwDoc()
     m_pDocumentLayoutManager( new ::sw::DocumentLayoutManager( *this ) ),
     m_pDocumentStylePoolManager( new ::sw::DocumentStylePoolManager( *this ) ),
     m_pDocumentExternalDataManager( new ::sw::DocumentExternalDataManager() ),
-    mpDfltFrameFormat( new SwFrameFormat( GetAttrPool(), sFrameFormatStr, nullptr ) ),
-    mpEmptyPageFormat( new SwFrameFormat( GetAttrPool(), sEmptyPageStr, mpDfltFrameFormat ) ),
-    mpColumnContFormat( new SwFrameFormat( GetAttrPool(), sColumnCntStr, mpDfltFrameFormat ) ),
-    mpDfltCharFormat( new SwCharFormat( GetAttrPool(), sCharFormatStr, nullptr ) ),
-    mpDfltTextFormatColl( new SwTextFormatColl( GetAttrPool(), sTextCollStr ) ),
-    mpDfltGrfFormatColl( new SwGrfFormatColl( GetAttrPool(), sGrfCollStr ) ),
+    mpDfltFrameFormat( new SwFrameFormat( GetAttrPool(), "Frameformat", nullptr ) ),
+    mpEmptyPageFormat( new SwFrameFormat( GetAttrPool(), "Empty Page", mpDfltFrameFormat ) ),
+    mpColumnContFormat( new SwFrameFormat( GetAttrPool(), "Columncontainer", mpDfltFrameFormat ) ),
+    mpDfltCharFormat( new SwCharFormat( GetAttrPool(), "Character style", nullptr ) ),
+    mpDfltTextFormatColl( new SwTextFormatColl( GetAttrPool(), "Paragraph style" ) ),
+    mpDfltGrfFormatColl( new SwGrfFormatColl( GetAttrPool(), "Graphikformatvorlage" ) ),
     mpFrameFormatTable( new SwFrameFormats() ),
     mpCharFormatTable( new SwCharFormats() ),
     mpSpzFrameFormatTable( new SwFrameFormats() ),

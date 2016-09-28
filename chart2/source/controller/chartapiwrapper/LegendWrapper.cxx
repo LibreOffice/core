@@ -209,7 +209,6 @@ Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterV
 
 namespace
 {
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Legend";
 
 enum
 {
@@ -439,7 +438,7 @@ OUString SAL_CALL LegendWrapper::getImplementationName()
 
 OUString LegendWrapper::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart.Legend");
 }
 
 sal_Bool SAL_CALL LegendWrapper::supportsService( const OUString& rServiceName )

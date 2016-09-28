@@ -51,7 +51,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 static const char aVndSunStarUNO[] = "vnd.sun.star.UNO:";
-static const char aVndSunStarScript[] = "vnd.sun.star.script:";
 
 SvxMacroTabPage_Impl::SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
     : pAssignPB(nullptr)
@@ -479,7 +478,7 @@ void IconLBoxString::Paint(const Point& aPos, SvTreeListBox& /*aDevice*/, vcl::R
         }
         else
         {
-            aPureMethod = aURL.copy(strlen(aVndSunStarScript));
+            aPureMethod = aURL.copy(strlen("vnd.sun.star.script:"));
             aPureMethod = aPureMethod.copy( 0, aPureMethod.indexOf( '?' ) );
         }
 

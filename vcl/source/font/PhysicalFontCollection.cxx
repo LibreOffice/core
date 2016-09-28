@@ -1138,9 +1138,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
             a korean bitmap font that is not suitable here. Use the font replacement table,
             that automatically leads to the desired "HG Mincho Light J". Same story for
             MS Gothic, there are thai and korean "Gothic" fonts, so we even prefer Andale */
-            static const char aMS_Mincho[] = "msmincho";
-            static const char aMS_Gothic[] = "msgothic";
-            if ((aSearchName != aMS_Mincho) && (aSearchName != aMS_Gothic))
+            if ((aSearchName != "msmincho") && (aSearchName != "msgothic"))
                 // TODO: add heuristic to only throw out the fake ms* fonts
 #endif
             {

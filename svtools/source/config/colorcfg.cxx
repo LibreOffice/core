@@ -52,8 +52,6 @@ static const char g_sIsVisible[] = "/IsVisible";
 namespace svtools
 {
 
-static const sal_Char cColor[] = "/Color";
-static const sal_Char cColorSchemes[] = "ColorSchemes/";
 sal_Int32            nColorRefCount_Impl = 0;
 namespace
 {
@@ -165,7 +163,7 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
         { RTL_CONSTASCII_USTRINGPARAM("/SQLComment"),  false }
     };
     int nIndex = 0;
-    OUString sBase = cColorSchemes
+    OUString sBase = "ColorSchemes/"
                    + utl::wrapConfigurationElementName(rScheme);
     const int nCount = ColorConfigEntryCount;
     for(sal_Int32 i = 0; i < 4 * nCount; i+= 4)
@@ -174,7 +172,7 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
         OUString sBaseName = sBase
                            + OUString(cNames[nPos].cName, cNames[nPos].nLength, cNames[nPos].eEncoding);
         pNames[nIndex] += sBaseName;
-        pNames[nIndex++] += cColor;
+        pNames[nIndex++] += "/Color";
         if(cNames[nPos].bCanBeVisible)
         {
             pNames[nIndex] += sBaseName;

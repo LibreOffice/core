@@ -46,35 +46,23 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_ALPHABETICAL_INDEX_ENTRY_TEMPLATE;
 using ::xmloff::token::XML_OUTLINE_LEVEL;
 
-const sal_Char sAPI_MainEntryCharacterStyleName[] = "MainEntryCharacterStyleName";
-const sal_Char sAPI_UseAlphabeticalSeparators[] = "UseAlphabeticalSeparators";
-const sal_Char sAPI_UseCombinedEntries[] = "UseCombinedEntries";
-const sal_Char sAPI_IsCaseSensitive[] = "IsCaseSensitive";
-const sal_Char sAPI_UseKeyAsEntry[] = "UseKeyAsEntry";
-const sal_Char sAPI_UseUpperCase[] = "UseUpperCase";
-const sal_Char sAPI_UseDash[] = "UseDash";
-const sal_Char sAPI_UsePP[] = "UsePP";
-const sal_Char sAPI_SortAlgorithm[] = "SortAlgorithm";
-const sal_Char sAPI_Locale[] = "Locale";
-
-
 XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet)
 :   XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName, rPropSet, false)
-,   sMainEntryCharacterStyleName(sAPI_MainEntryCharacterStyleName)
-,   sUseAlphabeticalSeparators(sAPI_UseAlphabeticalSeparators)
-,   sUseCombinedEntries(sAPI_UseCombinedEntries)
-,   sIsCaseSensitive(sAPI_IsCaseSensitive)
-,   sUseKeyAsEntry(sAPI_UseKeyAsEntry)
-,   sUseUpperCase(sAPI_UseUpperCase)
-,   sUseDash(sAPI_UseDash)
-,   sUsePP(sAPI_UsePP)
+,   sMainEntryCharacterStyleName("MainEntryCharacterStyleName")
+,   sUseAlphabeticalSeparators("UseAlphabeticalSeparators")
+,   sUseCombinedEntries("UseCombinedEntries")
+,   sIsCaseSensitive("IsCaseSensitive")
+,   sUseKeyAsEntry("UseKeyAsEntry")
+,   sUseUpperCase("UseUpperCase")
+,   sUseDash("UseDash")
+,   sUsePP("UsePP")
 ,   sIsCommaSeparated("IsCommaSeparated")
-,   sSortAlgorithm(sAPI_SortAlgorithm)
-,   sLocale(sAPI_Locale)
+,   sSortAlgorithm("SortAlgorithm")
+,   sLocale("Locale")
 ,   bMainEntryStyleNameOK(false)
 ,   bSeparators(false)
 ,   bCombineEntries(true)

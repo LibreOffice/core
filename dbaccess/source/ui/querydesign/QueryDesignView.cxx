@@ -630,9 +630,6 @@ namespace
 
             OJoinTableView::OTableWindowMap& rTabList = _pView->getTableView()->GetTabWinMap();
 
-            static const char sFieldSeparator[] = ", ";
-            static const char s_sAs[] = " AS ";
-
             aIter = _rFieldList.begin();
             for(;aIter != aEnd;++aIter)
             {
@@ -689,11 +686,11 @@ namespace
                         pEntryField->isNumericOrAggreateFunction()      ||
                         pEntryField->isOtherFunction()))
                     {
-                        aTmpStr.append(s_sAs);
+                        aTmpStr.append(" AS ");
                         aTmpStr.append(::dbtools::quoteName(aQuote, rFieldAlias));
                     }
                     aFieldListStr.append(aTmpStr.makeStringAndClear());
-                    aFieldListStr.append(sFieldSeparator);
+                    aFieldListStr.append(", ");
                 }
             }
             if(!aFieldListStr.isEmpty())

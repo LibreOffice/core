@@ -68,7 +68,6 @@ bool LocalizationMgr::isLibraryLocalized ()
 
 void LocalizationMgr::handleTranslationbar ()
 {
-    static const char aLayoutManagerName[] = "LayoutManager";
     static const char aToolBarResName[] = "private:resource/toolbar/translationbar";
 
     Reference< beans::XPropertySet > xFrameProps
@@ -76,7 +75,7 @@ void LocalizationMgr::handleTranslationbar ()
     if ( xFrameProps.is() )
     {
         Reference< css::frame::XLayoutManager > xLayoutManager;
-        uno::Any a = xFrameProps->getPropertyValue( aLayoutManagerName );
+        uno::Any a = xFrameProps->getPropertyValue( "LayoutManager" );
         a >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
@@ -884,8 +883,6 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
 void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const OUString& aLibName,
     const OUString& aDlgName, const Reference< container::XNameContainer >& xDialogModel )
 {
-    static const char aResourceResolverPropName[] = "ResourceResolver";
-
     // Get library
     Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
@@ -907,7 +904,7 @@ void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument
         }
 
         Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
-        xDlgPSet->setPropertyValue( aResourceResolverPropName, Any(xStringResourceManager) );
+        xDlgPSet->setPropertyValue( "ResourceResolver", Any(xStringResourceManager) );
     }
 }
 

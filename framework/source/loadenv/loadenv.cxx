@@ -726,8 +726,6 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>&, OUStrin
 void LoadEnv::impl_detectTypeAndFilter()
     throw(LoadEnvException, css::uno::RuntimeException, std::exception)
 {
-    static const char TYPEPROP_PREFERREDFILTER[] = "PreferredFilter";
-    static const char FILTERPROP_FLAGS        [] = "Flags";
     static sal_Int32       FILTERFLAG_TEMPLATEPATH  = 16;
 
     // SAFE ->
@@ -799,7 +797,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         try
         {
             ::comphelper::SequenceAsHashMap lTypeProps(xTypeCont->getByName(sType));
-            sFilter = lTypeProps.getUnpackedValueOrDefault(TYPEPROP_PREFERREDFILTER, OUString());
+            sFilter = lTypeProps.getUnpackedValueOrDefault("PreferredFilter", OUString());
             if (!sFilter.isEmpty())
             {
                 // SAFE ->
@@ -828,7 +826,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         try
         {
             ::comphelper::SequenceAsHashMap lFilterProps(xFilterCont->getByName(sFilter));
-            sal_Int32 nFlags         = lFilterProps.getUnpackedValueOrDefault(FILTERPROP_FLAGS, (sal_Int32)0);
+            sal_Int32 nFlags         = lFilterProps.getUnpackedValueOrDefault("Flags", (sal_Int32)0);
                       bIsOwnTemplate = ((nFlags & FILTERFLAG_TEMPLATEPATH) == FILTERFLAG_TEMPLATEPATH);
         }
         catch(const css::container::NoSuchElementException&)
@@ -1657,8 +1655,6 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
 
 void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
-    static const char PACKAGE_SETUP_MODULES[] = "/org.openoffice.Setup/Office/Factories";
-
     // no window -> action not possible
     if (!xWindow.is())
         return;
@@ -1720,7 +1716,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         // get access to the configuration of this office module
         css::uno::Reference< css::container::XNameAccess > xModuleCfg(::comphelper::ConfigurationHelper::openConfig(
                                                                         xContext,
-                                                                        PACKAGE_SETUP_MODULES,
+                                                                        "/org.openoffice.Setup/Office/Factories",
                                                                         ::comphelper::EConfigurationModes::ReadOnly),
                                                                       css::uno::UNO_QUERY_THROW);
 

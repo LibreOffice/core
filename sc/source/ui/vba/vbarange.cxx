@@ -686,17 +686,13 @@ public:
 };
 
 static const char ISVISIBLE[] = "IsVisible";
-static const char POSITION[] = "Position";
 static const char EQUALS[] = "=";
 static const char NOTEQUALS[] = "<>";
 static const char GREATERTHAN[] = ">";
 static const char GREATERTHANEQUALS[] = ">=";
 static const char LESSTHAN[] = "<";
 static const char LESSTHANEQUALS[] = "<=";
-static const char CONTS_HEADER[] = "ContainsHeader";
-static const char INSERTPAGEBREAKS[] = "InsertPageBreaks";
 static const char STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY[] = "The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again";
-static const char STR_ERRORMESSAGE_NOCELLSWEREFOUND[] = "No cells were found";
 static const char CELLSTYLE[] = "CellStyle";
 
 class CellValueSetter : public ValueSetter
@@ -3517,7 +3513,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
     sal_Int32 nIndex =  findSortPropertyIndex( sortDescriptor,  "IsSortColumns" );
     sortDescriptor[ nIndex ].Value <<= bIsSortColumns;
 
-    nIndex =    findSortPropertyIndex( sortDescriptor, CONTS_HEADER );
+    nIndex =    findSortPropertyIndex( sortDescriptor, "ContainsHeader" );
     sortDescriptor[ nIndex ].Value <<= bContainsHeader;
 
     rDoc.SetSortParam( aSortParam, nTab );
@@ -4070,13 +4066,13 @@ ScVbaRange::getHeight() throw (uno::RuntimeException, std::exception)
 awt::Point
 ScVbaRange::getPosition() throw ( uno::RuntimeException )
 {
-        awt::Point aPoint;
+    awt::Point aPoint;
     uno::Reference< beans::XPropertySet > xProps;
     if ( mxRange.is() )
         xProps.set( mxRange, uno::UNO_QUERY_THROW );
     else
         xProps.set( mxRanges, uno::UNO_QUERY_THROW );
-    xProps->getPropertyValue( POSITION ) >>= aPoint;
+    xProps->getPropertyValue( "Position" ) >>= aPoint;
     return aPoint;
 }
 uno::Any SAL_CALL
@@ -4196,10 +4192,9 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
     Cell1 >>= sRangeName;
     if ( Cell1.hasValue() && !Cell2.hasValue() && !sRangeName.isEmpty() )
     {
-        static const char sNamedRanges[] = "NamedRanges";
         uno::Reference< beans::XPropertySet > xPropSet( getCurrentExcelDoc(xContext), uno::UNO_QUERY_THROW );
 
-        uno::Reference< container::XNameAccess > xNamed( xPropSet->getPropertyValue( sNamedRanges ), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNamed( xPropSet->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );
         uno::Reference< sheet::XCellRangeReferrer > xReferrer;
         try
         {
@@ -5478,7 +5473,7 @@ ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const uno::Any& _oValue) throw ( 
     }
     catch (uno::Exception& )
     {
-        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, STR_ERRORMESSAGE_NOCELLSWEREFOUND);
+        DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, "No cells were found");
     }
     return xRange;
 }
@@ -5503,7 +5498,7 @@ ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::
         uno::Reference< sheet::XSubTotalCalculatable> xSub(mxRange, uno::UNO_QUERY_THROW );
         uno::Reference< sheet::XSubTotalDescriptor > xSubDesc = xSub->createSubTotalDescriptor(true);
         uno::Reference< beans::XPropertySet > xSubDescPropertySet( xSubDesc, uno::UNO_QUERY_THROW );
-        xSubDescPropertySet->setPropertyValue(INSERTPAGEBREAKS, uno::makeAny( bAddPageBreaks));
+        xSubDescPropertySet->setPropertyValue("InsertPageBreaks", uno::makeAny( bAddPageBreaks));
         sal_Int32 nLen = _nTotalList.getLength();
         uno::Sequence< sheet::SubTotalColumn > aColumns( nLen );
         for (int i = 0; i < nLen; i++)
@@ -5586,13 +5581,12 @@ ScVbaRange::hasError() throw (uno::RuntimeException, std::exception)
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
     uno::Reference< script::XInvocation > xInvoc( xApplication->WorksheetFunction(), uno::UNO_QUERY_THROW );
 
-    static const char FunctionName[] = "IsError";
     uno::Sequence< uno::Any > Params(1);
     uno::Reference< excel::XRange > aRange( this );
     Params[0] = uno::makeAny( aRange );
     uno::Sequence< sal_Int16 > OutParamIndex;
     uno::Sequence< uno::Any > OutParam;
-    xInvoc->invoke( FunctionName, Params, OutParamIndex, OutParam ) >>= dResult;
+    xInvoc->invoke( "IsError", Params, OutParamIndex, OutParam ) >>= dResult;
     return dResult > 0.0;
 }
 

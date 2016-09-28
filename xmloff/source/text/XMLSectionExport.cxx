@@ -1605,9 +1605,6 @@ void XMLSectionExport::ExportBoolean(
     }
 }
 
-const sal_Char sAPI_FieldMaster_Bibliography[] =
-                                "com.sun.star.text.FieldMaster.Bibliography";
-
 void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
 {
     // first: get field master (via text field supplier)
@@ -1615,7 +1612,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                                                     UNO_QUERY );
     if ( xTextFieldsSupp.is() )
     {
-        const OUString sFieldMaster_Bibliography(sAPI_FieldMaster_Bibliography);
+        const OUString sFieldMaster_Bibliography("com.sun.star.text.FieldMaster.Bibliography");
 
         // get bibliography field master
         Reference<XNameAccess> xMasters =

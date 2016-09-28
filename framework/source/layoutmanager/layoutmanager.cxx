@@ -92,7 +92,6 @@ using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::frame;
 
 static const char STATUS_BAR_ALIAS[] = "private:resource/statusbar/statusbar";
-static const char PROGRESS_BAR_ALIAS[] = "private:resource/progressbar/progressbar";
 
 namespace framework
 {
@@ -2493,7 +2492,7 @@ throw (uno::RuntimeException, std::exception)
 {
     SolarMutexClearableGuard aReadLock;
     bool bStatusBarVisible( isElementVisible( STATUS_BAR_ALIAS ));
-    bool bProgressBarVisible( isElementVisible( PROGRESS_BAR_ALIAS ));
+    bool bProgressBarVisible( isElementVisible( "private:resource/progressbar/progressbar" ));
     bool bVisible( m_bVisible );
     Reference< XUIElement > xStatusBar( m_aStatusBarElement.m_xUIElement );
     Reference< XUIElement > xProgressBar( m_aProgressBarElement.m_xUIElement );

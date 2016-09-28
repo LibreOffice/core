@@ -24,13 +24,8 @@ using namespace ::com::sun::star;
 
 static const char SEPARATOR_STRING[]               = "private:separator";
 
-static const char MERGECOMMAND_ADDAFTER[]          = "AddAfter";
-static const char MERGECOMMAND_ADDBEFORE[]         = "AddBefore";
 static const char MERGECOMMAND_REPLACE[]           = "Replace";
 static const char MERGECOMMAND_REMOVE[]            = "Remove";
-
-static const char MERGEFALLBACK_ADDPATH[]           = "AddPath";
-static const char MERGEFALLBACK_IGNORE[]            = "Ignore";
 
 namespace framework
 {
@@ -282,12 +277,12 @@ bool MenuBarMerger::ProcessMergeOperation(
 {
     sal_uInt16 nModIndex( 0 );
 
-    if ( rMergeCommand == MERGECOMMAND_ADDBEFORE )
+    if ( rMergeCommand == "AddBefore" )
     {
         nModIndex = 0;
         return MergeMenuItems( pMenu, nPos, nModIndex, nItemId, rModuleIdentifier, rAddonMenuItems );
     }
-    else if ( rMergeCommand == MERGECOMMAND_ADDAFTER )
+    else if ( rMergeCommand == "AddAfter" )
     {
         nModIndex = 1;
         return MergeMenuItems( pMenu, nPos, nModIndex, nItemId, rModuleIdentifier, rAddonMenuItems );
@@ -313,13 +308,13 @@ bool MenuBarMerger::ProcessFallbackOperation(
     const OUString&                  rModuleIdentifier,
     const AddonMenuContainer&               rAddonMenuItems )
 {
-    if (( rMergeFallback == MERGEFALLBACK_IGNORE ) ||
+    if (( rMergeFallback == "Ignore" ) ||
         ( rMergeCommand  == MERGECOMMAND_REPLACE ) ||
         ( rMergeCommand  == MERGECOMMAND_REMOVE  ) )
     {
         return true;
     }
-    else if ( rMergeFallback == MERGEFALLBACK_ADDPATH )
+    else if ( rMergeFallback == "AddPath" )
     {
         Menu*            pCurrMenu( aRefPathInfo.pPopupMenu );
         sal_Int32        nLevel( aRefPathInfo.nLevel );

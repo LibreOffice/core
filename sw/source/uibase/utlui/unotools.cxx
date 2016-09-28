@@ -57,7 +57,6 @@
 
 using namespace ::com::sun::star;
 
-const sal_Char cFrameControl[] = "com.sun.star.frame.FrameControl";
 const sal_Char cFactory[] = "private:factory/swriter";
 
 bool SwOneExampleFrame::bShowServiceNotAvailableMessage = true;
@@ -96,7 +95,7 @@ void SwOneExampleFrame::CreateErrorMessage()
     if(SwOneExampleFrame::bShowServiceNotAvailableMessage)
     {
         OUString sInfo(SW_RES(STR_SERVICE_UNAVAILABLE));
-        sInfo += cFrameControl;
+        sInfo += "com.sun.star.frame.FrameControl";
         ScopedVclPtrInstance<InfoBox>(nullptr, sInfo)->Execute();
         SwOneExampleFrame::bShowServiceNotAvailableMessage = false;
     }

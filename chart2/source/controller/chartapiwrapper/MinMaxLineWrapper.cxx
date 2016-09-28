@@ -41,7 +41,6 @@ using ::com::sun::star::uno::Any;
 
 namespace
 {
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.ChartLine";
 
 struct StaticMinMaxLineWrapperDefaults_Initializer
 {
@@ -426,7 +425,7 @@ OUString SAL_CALL MinMaxLineWrapper::getImplementationName()
 
 OUString MinMaxLineWrapper::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart.ChartLine");
 }
 
 sal_Bool SAL_CALL MinMaxLineWrapper::supportsService( const OUString& rServiceName )

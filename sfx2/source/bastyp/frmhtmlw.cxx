@@ -51,7 +51,6 @@ using namespace ::com::sun::star;
 
 static sal_Char const sHTML_SC_yes[] =  "YES";
 static sal_Char const sHTML_SC_no[] =       "NO";
-static sal_Char const sHTML_MIME_text_html[] =  "text/html; charset=";
 
 void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                                   const sal_Char *pIndent,
@@ -89,8 +88,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
 
     if( pCharSet )
     {
-        OUString aContentType(sHTML_MIME_text_html);
-        aContentType += OUString(pCharSet, strlen(pCharSet), RTL_TEXTENCODING_UTF8);
+        OUString aContentType = "text/html; charset=" + OUString(pCharSet, strlen(pCharSet), RTL_TEXTENCODING_UTF8);
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_content_type, aContentType, true,
                  eDestEnc, pNonConvertableChars );
     }

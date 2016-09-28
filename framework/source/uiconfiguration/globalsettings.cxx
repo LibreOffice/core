@@ -39,13 +39,6 @@ using namespace ::com::sun::star;
 
 //  Namespace
 
-static const char GLOBALSETTINGS_ROOT_ACCESS[]              = "/org.openoffice.Office.UI.GlobalSettings/Toolbars";
-
-static const char GLOBALSETTINGS_NODEREF_STATES[]           = "States";
-static const char GLOBALSETTINGS_PROPERTY_LOCKED[]          = "Locked";
-static const char GLOBALSETTINGS_PROPERTY_DOCKED[]          = "Docked";
-static const char GLOBALSETTINGS_PROPERTY_STATESENABLED[]   = "StatesEnabled";
-
 namespace framework
 {
 
@@ -88,10 +81,10 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
 GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
     m_bDisposed( false ),
     m_bConfigRead( false ),
-    m_aNodeRefStates( GLOBALSETTINGS_NODEREF_STATES ),
-    m_aPropStatesEnabled( GLOBALSETTINGS_PROPERTY_STATESENABLED ),
-    m_aPropLocked( GLOBALSETTINGS_PROPERTY_LOCKED ),
-    m_aPropDocked( GLOBALSETTINGS_PROPERTY_DOCKED ),
+    m_aNodeRefStates( "States" ),
+    m_aPropStatesEnabled( "StatesEnabled" ),
+    m_aPropLocked( "Locked" ),
+    m_aPropDocked( "Docked" ),
     m_xContext( rxContext )
 {
 }
@@ -225,7 +218,7 @@ void GlobalSettings_Access::impl_initConfigAccess()
                  css::configuration::theDefaultProvider::get( m_xContext );
 
             aPropValue.Name  = "nodepath";
-            aPropValue.Value = css::uno::makeAny( OUString( GLOBALSETTINGS_ROOT_ACCESS ));
+            aPropValue.Value = css::uno::makeAny(OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars"));
             aArgs[0] = css::uno::makeAny( aPropValue );
             aPropValue.Name = "lazywrite";
             aPropValue.Value = css::uno::makeAny( true );

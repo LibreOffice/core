@@ -81,16 +81,7 @@ namespace framework
 {
 
 static const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
-static const char ITEM_DESCRIPTOR_HELPURL[]    = "HelpURL";
-static const char ITEM_DESCRIPTOR_CONTAINER[]  = "ItemDescriptorContainer";
-static const char ITEM_DESCRIPTOR_LABEL[]      = "Label";
-static const char ITEM_DESCRIPTOR_TYPE[]       = "Type";
 static const char ITEM_DESCRIPTOR_VISIBLE[]    = "IsVisible";
-static const char ITEM_DESCRIPTOR_STYLE[]      = "Style";
-
-static const char MENUPREFIX[]                 = "private:resource/menubar/";
-
-static const char HELPID_PREFIX_TESTTOOL[]     = ".HelpId:";
 
 static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU = 1000;
 
@@ -178,7 +169,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     // set name for testtool, the useful part is after the last '/'
     sal_Int32 idx = rResourceName.lastIndexOf('/');
     idx++; // will become 0 if '/' not found: use full string
-    OString  aHelpIdAsString( HELPID_PREFIX_TESTTOOL );
+    OString  aHelpIdAsString( ".HelpId:" );
     OUString  aToolbarName = rResourceName.copy( idx );
     aHelpIdAsString += OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );
     m_pToolBar->SetHelpId( aHelpIdAsString );
@@ -978,7 +969,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
                     {
                         aProp[i].Value >>= aCommandURL;
-                        if ( aCommandURL.startsWith(MENUPREFIX) )
+                        if ( aCommandURL.startsWith("private:resource/menubar/") )
                         {
                             try
                             {
@@ -999,7 +990,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                     xMenuContainer->getByIndex(0) >>= aProps;
                                     for ( sal_Int32 index=0; index<aProps.getLength(); ++index )
                                     {
-                                        if ( aProps[ index ].Name == ITEM_DESCRIPTOR_CONTAINER )
+                                        if ( aProps[ index ].Name == "ItemDescriptorContainer" )
 
                                         {
                                             aProps[ index ].Value >>= aMenuDesc;
@@ -1013,15 +1004,15 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                             }
                         }
                     }
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_HELPURL )
+                    else if ( aProp[i].Name == "HelpURL" )
                         aProp[i].Value >>= aHelpURL;
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
+                    else if ( aProp[i].Name == "Label" )
                         aProp[i].Value >>= aLabel;
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_TYPE )
+                    else if ( aProp[i].Name == "Type" )
                         aProp[i].Value >>= nType;
                     else if ( aProp[i].Name == ITEM_DESCRIPTOR_VISIBLE )
                         aProp[i].Value >>= bIsVisible;
-                    else if ( aProp[i].Name == ITEM_DESCRIPTOR_STYLE )
+                    else if ( aProp[i].Name == "Style" )
                         aProp[i].Value >>= nStyle;
                 }
 

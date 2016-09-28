@@ -1426,8 +1426,6 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         // Numberings/Bullets in table not visible after save/reload (#i80724#)
         bool bSetListAttrs )
 {
-    static const char s_ParaStyleName[] = "ParaStyleName";
-    static const char s_CharStyleName[] = "CharStyleName";
     static const char s_NumberingRules[] = "NumberingRules";
     static const char s_NumberingIsNumber[] = "NumberingIsNumber";
     static const char s_NumberingLevel[] = "NumberingLevel";
@@ -1435,10 +1433,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     static const char s_NumberingStartValue[] = "NumberingStartValue";
     static const char s_PropNameListId[] = "ListId";
     static const char s_PageDescName[] = "PageDescName";
-    static const char s_ServiceCombinedCharacters[] = "com.sun.star.text.TextField.CombinedCharacters";
-    static const char s_Content[] = "Content";
     static const char s_OutlineLevel[] = "OutlineLevel";
-    static const char s_NumberingStyleName[] = "NumberingStyleName";
 
     const sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
                                      : XML_STYLE_FAMILY_TEXT_TEXT;
@@ -1462,7 +1457,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     if( !sStyleName.isEmpty() )
     {
         sStyleName = rImport.GetStyleDisplayName( nFamily, sStyleName );
-        const OUString rPropName = bPara ? s_ParaStyleName : s_CharStyleName;
+        const OUString rPropName = bPara ? OUString("ParaStyleName") : OUString("CharStyleName");
         const Reference < XNameContainer > & rStyles = (bPara)
             ? m_xImpl->m_xParaStyles
             : m_xImpl->m_xTextStyles;
@@ -1705,7 +1700,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             {
                 uno::Reference<beans::XPropertySet> const xTmp(
                     m_xImpl->m_xServiceFactory->createInstance(
-                        s_ServiceCombinedCharacters), UNO_QUERY);
+                        "com.sun.star.text.TextField.CombinedCharacters"), UNO_QUERY);
                 if( xTmp.is() )
                 {
                     // fix cursor if larger than possible for
@@ -1718,7 +1713,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     }
 
                     // set field value (the combined character string)
-                    xTmp->setPropertyValue(s_Content,
+                    xTmp->setPropertyValue("Content",
                         makeAny(rCursor->getString()));
 
                     // insert the field over it's original text
@@ -1838,7 +1833,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     OUString sEmptyStr;
                     if ( !lcl_HasListStyle( sStyleName,
                                     m_xImpl->m_xParaStyles, GetXMLImport(),
-                                    s_NumberingStyleName,
+                                    "NumberingStyleName",
                                     sEmptyStr ) )
                     {
                         // heading not in a list --> apply outline style
@@ -1868,8 +1863,6 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 void XMLTextImportHelper::FindOutlineStyleName( OUString& rStyleName,
                                                 sal_Int8 nOutlineLevel )
 {
-    static const char s_HeadingStyleName[] = "HeadingStyleName";
-
     // style name empty?
     if( rStyleName.isEmpty() )
     {
@@ -1894,7 +1887,7 @@ void XMLTextImportHelper::FindOutlineStyleName( OUString& rStyleName,
                     >>= aProperties;
                 for( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
                 {
-                    if (aProperties[i].Name == s_HeadingStyleName)
+                    if (aProperties[i].Name == "HeadingStyleName")
                     {
                         OUString aOutlineStyle;
                         aProperties[i].Value >>= aOutlineStyle;
@@ -1932,9 +1925,6 @@ void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel
 
 void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
 {
-    static const char s_NumberingStyleName[] = "NumberingStyleName";
-    static const char s_HeadingStyleName  [] = "HeadingStyleName";
-
     if ((m_xImpl->m_xOutlineStylesCandidates != nullptr || bSetEmptyLevels) &&
          m_xImpl->m_xChapterNumbering.is() &&
          !IsInsertMode())
@@ -2000,7 +1990,7 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
                                     m_xImpl->m_xOutlineStylesCandidates[i][j],
                                     m_xImpl->m_xParaStyles,
                                     GetXMLImport(),
-                                    s_NumberingStyleName,
+                                    "NumberingStyleName",
                                     sOutlineStyleName))
                             {
                                 sChosenStyles[i] =
@@ -2015,7 +2005,7 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
         // Trashed outline numbering in ODF 1.1 text document created by OOo 3.x (#i106218#)
         Sequence < PropertyValue > aProps( 1 );
         PropertyValue *pProps = aProps.getArray();
-        pProps->Name = s_HeadingStyleName;
+        pProps->Name = "HeadingStyleName";
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             // Paragraph style assignments in Outline of template lost from second level on (#i107610#)
@@ -2622,9 +2612,6 @@ void XMLTextImportHelper::ConnectFrameChains(
         const OUString& rNextFrmName,
         const Reference < XPropertySet >& rFrmPropSet )
 {
-    static const char s_ChainNextName[] = "ChainNextName";
-    static const char s_ChainPrevName[] = "ChainPrevName";
-
     if( rFrmName.isEmpty() )
         return;
 
@@ -2635,7 +2622,7 @@ void XMLTextImportHelper::ConnectFrameChains(
         if (m_xImpl->m_xTextFrames.is()
             && m_xImpl->m_xTextFrames->hasByName(sNextFrmName))
         {
-            rFrmPropSet->setPropertyValue(s_ChainNextName,
+            rFrmPropSet->setPropertyValue("ChainNextName",
                 makeAny(sNextFrmName));
         }
         else
@@ -2657,7 +2644,7 @@ void XMLTextImportHelper::ConnectFrameChains(
             {
                 // The previous frame must exist, because it existing than
                 // inserting the entry
-                rFrmPropSet->setPropertyValue(s_ChainPrevName, makeAny(*i));
+                rFrmPropSet->setPropertyValue("ChainPrevName", makeAny(*i));
 
                 i = m_xImpl->m_xPrevFrmNames->erase(i);
                 j = m_xImpl->m_xNextFrmNames->erase(j);

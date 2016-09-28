@@ -45,9 +45,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 
-const sal_Char sAPI_service_footnote[] = "com.sun.star.text.Footnote";
-const sal_Char sAPI_service_endnote[] = "com.sun.star.text.Endnote";
-
 enum XMLFootnoteChildToken {
     XML_TOK_FTN_NOTE_CITATION,
     XML_TOK_FTN_NOTE_BODY
@@ -103,8 +100,8 @@ void XMLFootnoteImportContext::StartElement(
 
         Reference<XInterface> xIfc = xFactory->createInstance(
             bIsEndnote ?
-            OUString(sAPI_service_endnote) :
-            OUString(sAPI_service_footnote) );
+            OUString("com.sun.star.text.Endnote") :
+            OUString("com.sun.star.text.Footnote") );
 
         // attach footnote to document
         Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);

@@ -50,37 +50,18 @@
 
 
 // service names
-static const sal_Char sAPI_textfield_prefix[]   = "com.sun.star.text.TextField.";
 static const sal_Char sAPI_fieldmaster_prefix[] = "com.sun.star.text.FieldMaster.";
-static const sal_Char sAPI_input[]              = "Input";
-static const sal_Char sAPI_input_user[]         = "InputUser";
 static const sal_Char sAPI_get_expression[]     = "GetExpression";
 static const sal_Char sAPI_set_expression[]     = "SetExpression";
 static const sal_Char sAPI_user[]               = "User";
-static const sal_Char sAPI_table_formula[]      = "TableFormula";
 static const sal_Char sAPI_database[]           = "com.sun.star.text.TextField.Database";
-static const sal_Char sAPI_fieldmaster_database[] = "com.sun.star.text.FieldMaster.Database";
 
 // property names
-static const sal_Char sAPI_hint[]               = "Hint";
-static const sal_Char sAPI_help[]               = "Help";
-static const sal_Char sAPI_tooltip[]            = "Tooltip";
 static const sal_Char sAPI_content[]            = "Content";
 static const sal_Char sAPI_sub_type[]           = "SubType";
-static const sal_Char sAPI_is_expression[]      = "IsExpression";
-static const sal_Char sAPI_is_input[]           = "Input";
-static const sal_Char sAPI_is_show_formula[]    = "IsShowFormula";
 static const sal_Char sAPI_number_format[]      = "NumberFormat";
-static const sal_Char sAPI_name[]               = "Name";
-static const sal_Char sAPI_numbering_separator[]    = "NumberingSeparator";
-static const sal_Char sAPI_chapter_numbering_level[]= "ChapterNumberingLevel";
-static const sal_Char sAPI_value[]              = "Value";
 static const sal_Char sAPI_is_visible[]         = "IsVisible";
-static const sal_Char sAPI_data_column_name[]   = "DataColumnName";
-static const sal_Char sAPI_is_data_base_format[]    = "DataBaseFormat";
 static const sal_Char sAPI_current_presentation[]   = "CurrentPresentation";
-static const sal_Char sAPI_sequence_value[]     = "SequenceValue";
-static const sal_Char sAPI_is_fixed_language[] = "IsFixedLanguage";
 
 
 using namespace ::com::sun::star;
@@ -105,11 +86,11 @@ XMLVarFieldImportContext::XMLVarFieldImportContext(
     bool bPresentation) :
         XMLTextFieldImportContext(rImport, rHlp, pServiceName, nPrfx, rLocalName),
         sPropertyContent(sAPI_content),
-        sPropertyHint(sAPI_hint),
-        sPropertyHelp(sAPI_help),
-        sPropertyTooltip(sAPI_tooltip),
+        sPropertyHint("Hint"),
+        sPropertyHelp("Help"),
+        sPropertyTooltip("Tooltip"),
         sPropertyIsVisible(sAPI_is_visible),
-        sPropertyIsDisplayFormula(sAPI_is_show_formula),
+        sPropertyIsDisplayFormula("IsShowFormula"),
         sPropertyCurrentPresentation(sAPI_current_presentation),
         aValueHelper(rImport, rHlp, bType, bStyle, bValue, false),
         bDisplayFormula(false),
@@ -306,7 +287,7 @@ void XMLSetVarFieldImportContext::EndElement()
         {
             // create field/Service
             Reference<XPropertySet> xPropSet;
-            if (CreateField(xPropSet, sAPI_textfield_prefix + GetServiceName()))
+            if (CreateField(xPropSet, "com.sun.star.text.TextField." + GetServiceName()))
             {
                 Reference<XDependentTextField> xDepTextField(xPropSet, UNO_QUERY);
                 if (xDepTextField.is())
@@ -366,7 +347,7 @@ XMLSequenceFieldImportContext::XMLSequenceFieldImportContext(
                                     false, false, false, true),
 
         sPropertyNumberFormat(sAPI_number_format),
-        sPropertySequenceValue(sAPI_sequence_value),
+        sPropertySequenceValue("SequenceValue"),
         sNumFormat(OUString('1')),
         sNumFormatSync(GetXMLToken(XML_FALSE)),
         bRefNameOK(false)
@@ -467,7 +448,7 @@ XMLVariableInputFieldImportContext::XMLVariableInputFieldImportContext(
                                     true, true, true,
                                     true),
         sPropertySubType(sAPI_sub_type),
-        sPropertyIsInput(sAPI_is_input)
+        sPropertyIsInput("Input")
 {
 }
 
@@ -512,7 +493,7 @@ XMLUserFieldImportContext::XMLUserFieldImportContext(
 XMLUserFieldInputImportContext::XMLUserFieldInputImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
     const OUString& rLocalName) :
-        XMLVarFieldImportContext(rImport, rHlp, sAPI_input_user,
+        XMLVarFieldImportContext(rImport, rHlp, "InputUser",
                                  nPrfx, rLocalName,
                                  // description, style
                                  false, false,
@@ -598,7 +579,7 @@ void XMLExpressionFieldImportContext::PrepareField(
 XMLTextInputFieldImportContext::XMLTextInputFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx, const OUString& sLocalName) :
-        XMLVarFieldImportContext(rImport, rHlp, sAPI_input,
+        XMLVarFieldImportContext(rImport, rHlp, "Input",
                                  nPrfx, sLocalName,
                                  // description
                                  false, false,
@@ -628,7 +609,7 @@ XMLTableFormulaImportContext::XMLTableFormulaImportContext(
     XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx,
     const OUString& rLocalName) :
-        XMLTextFieldImportContext(rImport, rHlp, sAPI_table_formula,
+        XMLTextFieldImportContext(rImport, rHlp, "TableFormula",
                                   nPrfx, rLocalName),
         sPropertyIsShowFormula("IsShowFormula"),
         sPropertyCurrentPresentation(
@@ -755,9 +736,9 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         // bug?? which properties for userfield/userfieldmaster
         sPropertySubType(sAPI_sub_type),
-        sPropertyNumberingLevel(sAPI_chapter_numbering_level),
-        sPropertyNumberingSeparator(sAPI_numbering_separator),
-        sPropertyIsExpression(sAPI_is_expression),
+        sPropertyNumberingLevel("ChapterNumberingLevel"),
+        sPropertyNumberingSeparator("NumberingSeparator"),
+        sPropertyIsExpression("IsExpression"),
         aValueHelper(rImport, rHlp, true, false, true, false),
         nNumLevel(-1), cSeparationChar('.')
 {
@@ -963,7 +944,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
                 xMaster = xTmp;
 
                 // set name
-                xMaster->setPropertyValue(sAPI_name, Any(sName));
+                xMaster->setPropertyValue("Name", Any(sName));
 
                 if (eVarType != VarTypeUserField) {
                     // set subtype for setexp field
@@ -995,8 +976,8 @@ XMLDatabaseDisplayImportContext::XMLDatabaseDisplayImportContext(
     const OUString& rLocalName) :
         XMLDatabaseFieldImportContext(rImport, rHlp, sAPI_database,
                                       nPrfx, rLocalName, false),
-        sPropertyColumnName(sAPI_data_column_name),
-        sPropertyDatabaseFormat(sAPI_is_data_base_format),
+        sPropertyColumnName("DataColumnName"),
+        sPropertyDatabaseFormat("DataBaseFormat"),
         sPropertyCurrentPresentation(sAPI_current_presentation),
         sPropertyIsVisible(sAPI_is_visible),
         aValueHelper(rImport, rHlp, false, true, false, false),
@@ -1054,7 +1035,7 @@ void XMLDatabaseDisplayImportContext::EndElement()
 
         // create and prepare field master first
         if (CreateField(xMaster,
-                        sAPI_fieldmaster_database))
+                        "com.sun.star.text.FieldMaster.Database"))
         {
             Any aAny;
             xMaster->setPropertyValue(sPropertyColumnName, Any(sColumnName));
@@ -1144,9 +1125,9 @@ XMLValueImportHelper::XMLValueImportHelper(
     XMLTextImportHelper& rHlp,
     bool bType, bool bStyle, bool bValue, bool bFormula) :
         sPropertyContent(sAPI_content),
-        sPropertyValue(sAPI_value),
+        sPropertyValue("Value"),
         sPropertyNumberFormat(sAPI_number_format),
-        sPropertyIsFixedLanguage(sAPI_is_fixed_language),
+        sPropertyIsFixedLanguage("IsFixedLanguage"),
 
         rImport(rImprt),
         rHelper(rHlp),

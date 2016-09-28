@@ -38,7 +38,6 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Area";
 
 struct StaticAreaWrapperPropertyArray_Initializer
 {
@@ -185,7 +184,7 @@ OUString SAL_CALL AreaWrapper::getImplementationName()
 
 OUString AreaWrapper::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart.Area");
 }
 
 sal_Bool SAL_CALL AreaWrapper::supportsService( const OUString& rServiceName )

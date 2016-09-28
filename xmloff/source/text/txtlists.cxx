@@ -407,7 +407,6 @@ XMLTextListsHelper::MakeNumRule(
     bool* o_pRestartNumbering,
     bool* io_pSetDefaults)
 {
-    static const char s_NumberingRules[] = "NumberingRules";
     uno::Reference<container::XIndexReplace> xNumRules(i_rNumRule);
     if ( !i_StyleName.isEmpty() && i_StyleName != i_ParentStyleName )
     {
@@ -424,7 +423,7 @@ XMLTextListsHelper::MakeNumRule(
 
             uno::Reference< beans::XPropertySet > xPropSet( xStyle,
                 uno::UNO_QUERY );
-            any = xPropSet->getPropertyValue(s_NumberingRules);
+            any = xPropSet->getPropertyValue("NumberingRules");
             any >>= xNumRules;
         }
         else

@@ -34,12 +34,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const char OPERATOR[] = "Operator";
-static const char FORMULA1[] = "Formula1";
-static const char FORMULA2[] = "Formula2";
-static const char STYLENAME[] = "StyleName";
-static const char sStyleNamePrefix[] = "Excel_CondFormat";
-
 void SAL_CALL
 ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
@@ -176,20 +170,20 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
         else
             aValue = uno::makeAny( ScVbaFormatCondition::retrieveAPIOperator(_aOperator) );
 
-        beans::PropertyValue aProperty( OPERATOR, 0, aValue, beans::PropertyState_DIRECT_VALUE );
+        beans::PropertyValue aProperty( "Operator", 0, aValue, beans::PropertyState_DIRECT_VALUE );
         aPropertyValueVector.push_back( aProperty );
 
         if ( _aFormula1.hasValue() )
         {
-            beans::PropertyValue aProp( FORMULA1, 0, uno::makeAny( getA1Formula( _aFormula1 ) ), beans::PropertyState_DIRECT_VALUE );
+            beans::PropertyValue aProp( "Formula1", 0, uno::makeAny( getA1Formula( _aFormula1 ) ), beans::PropertyState_DIRECT_VALUE );
             aPropertyValueVector.push_back( aProp );
         }
         if ( _aFormula2.hasValue() )
         {
-            beans::PropertyValue aProp( FORMULA2, 0, uno::makeAny( getA1Formula( _aFormula2 ) ), beans::PropertyState_DIRECT_VALUE );
+            beans::PropertyValue aProp( "Formula2", 0, uno::makeAny( getA1Formula( _aFormula2 ) ), beans::PropertyState_DIRECT_VALUE );
             aPropertyValueVector.push_back( aProp );
         }
-        aProperty.Name = STYLENAME;
+        aProperty.Name = "StyleName";
         aProperty.Value = uno::makeAny( sStyleName );
 
         mxSheetConditionalEntries->addNew(comphelper::containerToSequence(aPropertyValueVector));
@@ -247,7 +241,7 @@ ScVbaFormatConditions::getStyleName()
     if ( !pStyles )
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, OUString() );
     uno::Sequence< OUString > sCellStyleNames = pStyles->getStyleNames();
-    return ContainerUtilities::getUniqueName(sCellStyleNames, sStyleNamePrefix, "_");
+    return ContainerUtilities::getUniqueName(sCellStyleNames, "Excel_CondFormat", "_");
 }
 
 void

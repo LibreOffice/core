@@ -150,15 +150,12 @@ namespace sfx2
     void lcl_ReadFilterClass( const OConfigurationNode& _rClassesNode, const OUString& _rLogicalClassName,
         FilterClass& /* [out] */ _rClass )
     {
-        static const char sDisplaNameNodeName[] = "DisplayName";
-        static const char sSubFiltersNodeName[] = "Filters";
-
             // the description node for the current class
         OConfigurationNode aClassDesc = _rClassesNode.openNode( _rLogicalClassName );
 
         // the values
-        aClassDesc.getNodeValue( sDisplaNameNodeName ) >>= _rClass.sDisplayName;
-        aClassDesc.getNodeValue( sSubFiltersNodeName ) >>= _rClass.aSubFilters;
+        aClassDesc.getNodeValue( "DisplayName" ) >>= _rClass.sDisplayName;
+        aClassDesc.getNodeValue( "Filters" ) >>= _rClass.aSubFilters;
     }
 
 
@@ -1154,12 +1151,9 @@ namespace sfx2
                                   const OUString& _rExtension,
                                   bool _bForOpen, FileDialogHelper_Impl& _rFileDlgImpl )
     {
-        static const char sAllFilter[] = "(*.*)";
-        static const char sOpenBracket[] = " (";
-        static const char sCloseBracket[] = ")";
         OUString sRet = _rDisplayText;
 
-        if ( sRet.indexOf( sAllFilter ) == -1 )
+        if ( sRet.indexOf( "(*.*)" ) == -1 )
         {
             OUString sExt = _rExtension;
             if ( !_bForOpen )
@@ -1167,9 +1161,9 @@ namespace sfx2
                 // show '*' in extensions only when opening a document
                 sExt = sExt.replaceAll("*", "");
             }
-            sRet += sOpenBracket;
+            sRet += " (";
             sRet += sExt;
-            sRet += sCloseBracket;
+            sRet += ")";
         }
         _rFileDlgImpl.addFilterPair( _rDisplayText, sRet );
         return sRet;

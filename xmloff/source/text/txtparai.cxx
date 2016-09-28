@@ -1202,12 +1202,6 @@ void XMLIndexMarkImportContext_Impl::ProcessAttribute(
     }
 }
 
-static const sal_Char sAPI_com_sun_star_text_ContentIndexMark[] =
-        "com.sun.star.text.ContentIndexMark";
-static const sal_Char sAPI_com_sun_star_text_UserIndexMark[] =
-        "com.sun.star.text.UserIndexMark";
-static const sal_Char sAPI_com_sun_star_text_DocumentIndexMark[] =
-        "com.sun.star.text.DocumentIndexMark";
 
 void XMLIndexMarkImportContext_Impl::GetServiceName(
     OUString& sServiceName,
@@ -1219,9 +1213,7 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
         case XML_TOK_TEXT_TOC_MARK_START:
         case XML_TOK_TEXT_TOC_MARK_END:
         {
-            OUString sTmp(
-                sAPI_com_sun_star_text_ContentIndexMark);
-            sServiceName = sTmp;
+            sServiceName = "com.sun.star.text.ContentIndexMark";
             break;
         }
 
@@ -1229,9 +1221,7 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
         case XML_TOK_TEXT_USER_INDEX_MARK_START:
         case XML_TOK_TEXT_USER_INDEX_MARK_END:
         {
-            OUString sTmp(
-                sAPI_com_sun_star_text_UserIndexMark);
-            sServiceName = sTmp;
+            sServiceName = "com.sun.star.text.UserIndexMark";
             break;
         }
 
@@ -1239,9 +1229,7 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
         case XML_TOK_TEXT_ALPHA_INDEX_MARK_START:
         case XML_TOK_TEXT_ALPHA_INDEX_MARK_END:
         {
-            OUString sTmp(
-                sAPI_com_sun_star_text_DocumentIndexMark);
-            sServiceName = sTmp;
+            sServiceName = "com.sun.star.text.DocumentIndexMark";
             break;
         }
 

@@ -129,7 +129,6 @@ static char const sViewOnly[] = "ViewOnly";
 static char const sDontEdit[] = "DontEdit";
 static char const sSilent[] = "Silent";
 static char const sJumpMark[] = "JumpMark";
-static char const sFileName[] = "FileName";
 static char const sSalvagedFile[] = "SalvagedFile";
 static char const sStatusInd[] = "StatusIndicator";
 static char const sModel[] = "Model";
@@ -137,7 +136,6 @@ static char const sFrame[] = "Frame";
 static char const sViewData[] = "ViewData";
 static char const sFilterData[] = "FilterData";
 static char const sSelectionOnly[] = "SelectionOnly";
-static char const sFilterFlags[] = "FilterFlags";
 static char const sMacroExecMode[] = "MacroExecutionMode";
 static char const sUpdateDocMode[] = "UpdateDocMode";
 static char const sMinimized[] = "Minimized";
@@ -690,7 +688,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                     rSet.Put( stringList );
                 }
             }
-            else if ( aName == sFileName )
+            else if ( aName == "FileName" )
             {
                 OUString sVal;
                 bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());
@@ -762,7 +760,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 if (bOK)
                     rSet.Put( SfxStringItem( SID_CHARSET, sVal ) );
             }
-            else if ( aName == sFilterFlags )
+            else if ( aName == "FilterFlags" )
             {
                 OUString sVal;
                 bool bOK = ((rProp.Value >>= sVal) && !sVal.isEmpty());

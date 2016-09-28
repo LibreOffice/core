@@ -41,12 +41,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
-const sal_Char sAPI_DDECommandFile[] = "DDECommandFile";
-const sal_Char sAPI_DDECommandType[] = "DDECommandType";
-const sal_Char sAPI_DDECommandElement[] = "DDECommandElement";
-const sal_Char sAPI_IsAutomaticUpdate[] = "IsAutomaticUpdate";
-
-
 XMLSectionSourceDDEImportContext::XMLSectionSourceDDEImportContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
@@ -54,10 +48,10 @@ XMLSectionSourceDDEImportContext::XMLSectionSourceDDEImportContext(
     Reference<XPropertySet> & rSectPropSet) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         rSectionPropertySet(rSectPropSet),
-        sDdeCommandFile(sAPI_DDECommandFile),
-        sDdeCommandType(sAPI_DDECommandType),
-       sDdeCommandElement(sAPI_DDECommandElement),
-        sIsAutomaticUpdate(sAPI_IsAutomaticUpdate)
+        sDdeCommandFile("DDECommandFile"),
+        sDdeCommandType("DDECommandType"),
+        sDdeCommandElement("DDECommandElement"),
+        sIsAutomaticUpdate("IsAutomaticUpdate")
 {
 }
 

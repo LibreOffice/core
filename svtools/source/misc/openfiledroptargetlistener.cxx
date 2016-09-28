@@ -33,9 +33,6 @@
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 
-// Create a new task or recycle an existing one
-const char SPECIALTARGET_DEFAULT[] = "_default";
-
 OpenFileDropTargetListener::OpenFileDropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext,
                                         const css::uno::Reference< css::frame::XFrame >&          xFrame  )
         : m_xContext      ( xContext                      )
@@ -209,7 +206,8 @@ void OpenFileDropTargetListener::implts_OpenFile( const OUString& rFilePath )
         xParser->parseStrict(aURL);
 
         css::uno::Reference < css::frame::XDispatchProvider > xProvider( xTargetFrame, css::uno::UNO_QUERY );
-        css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, SPECIALTARGET_DEFAULT, 0 );
+        // Create a new task or recycle an existing one
+        css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, "_default", 0 );
         if ( xDispatcher.is() )
             xDispatcher->dispatch( aURL, css::uno::Sequence < css::beans::PropertyValue >() );
     }

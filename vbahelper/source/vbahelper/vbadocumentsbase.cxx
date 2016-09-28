@@ -55,9 +55,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const char aSpreadsheetDocument[] = "com.sun.star.sheet.SpreadsheetDocument";
-static const char aTextDocument[] = "com.sun.star.text.TextDocument";
-
 typedef  std::unordered_map< OUString,
                              sal_Int32, OUStringHash > NameIndexHash;
 
@@ -131,8 +128,8 @@ public:
         {
             uno::Reference< lang::XServiceInfo > xServiceInfo( xEnum->nextElement(), uno::UNO_QUERY );
             if ( xServiceInfo.is()
-                && (  ( xServiceInfo->supportsService( aSpreadsheetDocument ) && meDocType == VbaDocumentsBase::EXCEL_DOCUMENT )
-                || ( xServiceInfo->supportsService( aTextDocument ) && meDocType == VbaDocumentsBase::WORD_DOCUMENT ) ) )
+                && (  ( xServiceInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) && meDocType == VbaDocumentsBase::EXCEL_DOCUMENT )
+                || ( xServiceInfo->supportsService( "com.sun.star.text.TextDocument" ) && meDocType == VbaDocumentsBase::WORD_DOCUMENT ) ) )
             {
                 uno::Reference< frame::XModel > xModel( xServiceInfo, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
                 m_documents.push_back( xModel );
