@@ -32,7 +32,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <sfx2/ctrlitem.hxx>
@@ -45,7 +45,7 @@ class SfxDispatcher;
 typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
     SfxStatusDispatcher_Impl_ListenerContainer;
 
-class SfxStatusDispatcher   :   public ::cppu::WeakImplHelper1< css::frame::XNotifyingDispatch >
+class SfxStatusDispatcher   :   public cppu::WeakImplHelper<css::frame::XNotifyingDispatch>
 {
     ::osl::Mutex        aMutex;
     SfxStatusDispatcher_Impl_ListenerContainer  aListeners;
@@ -70,7 +70,7 @@ public:
 
 class SfxSlotServer;
 class SfxDispatchController_Impl;
-class SfxOfficeDispatch : public ::cppu::ImplInheritanceHelper1< SfxStatusDispatcher, css::lang::XUnoTunnel >
+class SfxOfficeDispatch : public cppu::ImplInheritanceHelper<SfxStatusDispatcher, css::lang::XUnoTunnel>
 {
 friend class SfxDispatchController_Impl;
     std::unique_ptr<SfxDispatchController_Impl>  pImpl;

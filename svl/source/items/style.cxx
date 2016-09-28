@@ -929,7 +929,7 @@ SfxStyleSheetBase* SfxStyleSheetPool::Create( const OUString& rName,
 }
 
 SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske )
-: ::cppu::ImplInheritanceHelper2< SfxStyleSheet, css::style::XStyle, css::lang::XUnoTunnel >( _rName, _rPool, _eFamily, _nMaske )
+: cppu::ImplInheritanceHelper<SfxStyleSheet, css::style::XStyle, css::lang::XUnoTunnel>(_rName, _rPool, _eFamily, _nMaske)
 {
 }
 

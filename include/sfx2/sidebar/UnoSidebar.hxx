@@ -18,8 +18,7 @@
 
 #include <com/sun/star/awt/XWindow2.hpp>
 
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
@@ -29,7 +28,7 @@
 
 /** get the sidebar for a given frame
 */
-class SfxUnoSidebar : public ::cppu::WeakImplHelper1< css::ui::XSidebarProvider >
+class SfxUnoSidebar : public cppu::WeakImplHelper<css::ui::XSidebarProvider>
 {
 
 private:

@@ -22,12 +22,12 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 namespace
 {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef cppu::WeakComponentImplHelper <
         css::accessibility::XAccessible
         > AccessibleInterfaceBase;
 }

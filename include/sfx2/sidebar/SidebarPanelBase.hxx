@@ -22,7 +22,7 @@
 #include <vcl/EnumContext.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/frame/XController.hpp>
@@ -42,7 +42,7 @@ namespace sfx2 { namespace sidebar {
 namespace
 {
 
-typedef cppu::WeakComponentImplHelper5<css::ui::XContextChangeEventListener,
+typedef cppu::WeakComponentImplHelper<css::ui::XContextChangeEventListener,
                                        css::ui::XUIElement,
                                        css::ui::XToolPanel,
                                        css::ui::XSidebarPanel,

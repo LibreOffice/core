@@ -44,7 +44,7 @@
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/interfacecontainer2.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <osl/diagnose.hxx>
 #include <osl/mutex.hxx>
