@@ -234,11 +234,16 @@ sub collapse_lib_to_module($)
                 my @empty;
                 $digraph{$name}{deps} = \@empty;
                 $digraph{$name}{target} = $result->{target};
-        $digraph{$name}{merged} = $result->{merged};
+                $digraph{$name}{merged} = $result->{merged};
             }
         }
         for my $dep (@{$result->{deps}}) {
-            $dep = $l2m->{$dep};
+            my $newdep;
+            $newdep = $l2m->{$dep};
+
+            die "Mis-named */Library_*.mk file - should match rules: '$dep'" if (!defined $newdep);
+            $dep = $newdep;
+
             # ignore: two libraries from the same module depend on each other
             next if ($name eq $dep);
             if (exists($digraph{$name}))
@@ -257,7 +262,7 @@ sub collapse_lib_to_module($)
                 push @deps, $dep;
                 $digraph{$name}{deps} = \@deps;
                 $digraph{$name}{target} = $result->{target};
-        $digraph{$name}{merged} = $result->{merged};
+                $digraph{$name}{merged} = $result->{merged};
             }
         }
     }
@@ -299,7 +304,7 @@ sub annotate_mergelibs($)
     for my $name (keys %{$tree}) {
     if (defined $merged_libs{$name}) {
         $tree->{$name}->{merged} = 1;
-        print STDERR "mark $name as merged\n";
+#        print STDERR "mark $name as merged\n";
     }
     }
 }
