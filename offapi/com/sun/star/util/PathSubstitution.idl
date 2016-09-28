@@ -35,10 +35,7 @@ module com {  module sun {  module star {  module  util {
         Path variables are not case sensitive and are always provided as a UCB-compliant URLs
         (for example: "file:///c:/temp" or "file:///usr/install"). This is mandatory to support an
         optional remote file system.<br>
-        A user defined list of path variables is supported. This list is stored in the Office
-        configuration file (org/openoffice/Office/Substitution.xml). Please have a look at the
-        schema definition file which configuration structure this file uses.<br>
-        There is also a set of variables that have pre-defined values:
+        There is a set of variables that have pre-defined values:
     </p>
     <dl>
     <dt>\$(inst)</dt>
