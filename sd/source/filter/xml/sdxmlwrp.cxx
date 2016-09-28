@@ -78,11 +78,6 @@ using namespace comphelper;
 
 #define SD_XML_READERROR 1234
 
-char const sXML_metaStreamName[] = "meta.xml";
-char const sXML_styleStreamName[] = "styles.xml";
-char const sXML_contentStreamName[] = "content.xml";
-char const sXML_settingsStreamName[] = "settings.xml";
-
 char const sXML_export_impress_meta_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisMetaExporter";
 char const sXML_export_impress_styles_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisStylesExporter";
 char const sXML_export_impress_content_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisContentExporter";
@@ -918,18 +913,18 @@ bool SdXMLFilter::Export()
 
             XML_SERVICEMAP aServices[5]; sal_uInt16 i = 0;
             aServices[i  ].mpService = pServiceNames->mpStyles;
-            aServices[i++].mpStream  = sXML_styleStreamName;
+            aServices[i++].mpStream  = "styles.xml";
 
             aServices[i  ].mpService = pServiceNames->mpContent;
-            aServices[i++].mpStream  = sXML_contentStreamName;
+            aServices[i++].mpStream  = "content.xml";
 
             aServices[i  ].mpService = pServiceNames->mpSettings;
-            aServices[i++].mpStream  = sXML_settingsStreamName;
+            aServices[i++].mpStream  = "settings.xml";
 
             if( mrDocShell.GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
             {
                 aServices[i  ].mpService = pServiceNames->mpMeta;
-                aServices[i++].mpStream  = sXML_metaStreamName;
+                aServices[i++].mpStream  = "meta.xml";
             };
 
             aServices[i].mpService = nullptr;

@@ -71,11 +71,6 @@ using namespace com::sun::star;
 #define HTML_DFLT_APPLET_WIDTH ((MM50*5)/2)
 #define HTML_DFLT_APPLET_HEIGHT ((MM50*5)/2)
 
-namespace {
-
-static char const sHTML_O_Hidden_False[] = "FALSE";
-
-}
 
 const sal_uLong HTML_FRMOPTS_EMBED_ALL      =
     HTML_FRMOPT_ALT |
@@ -370,7 +365,7 @@ void SwHTMLParser::InsertEmbed()
                         OOO_STRING_SW_HTML_O_Hidden))
             {
                 bHidden = !rOption.GetString().equalsIgnoreAsciiCase(
-                                sHTML_O_Hidden_False);
+                                "FALSE");
             }
             break;
         }

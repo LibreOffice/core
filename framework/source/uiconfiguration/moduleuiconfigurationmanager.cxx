@@ -233,8 +233,7 @@ static const char* UIELEMENTTYPENAMES[] =
 };
 
 static const char       RESOURCEURL_PREFIX[] = "private:resource/";
-static const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
-static const char       RESOURCEURL_CUSTOM_ELEMENT[] = "custom_";
+static const sal_Int32  RESOURCEURL_PREFIX_SIZE = strlen(RESOURCEURL_PREFIX);
 
 sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 {
@@ -280,7 +279,7 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
     UIElementDataHashMap& rUserElements = m_aUIElements[LAYER_USERDEFINED][nElementType].aElementsHashMap;
     UIElementDataHashMap::const_iterator pUserIter = rUserElements.begin();
 
-    OUString aCustomUrlPrefix( RESOURCEURL_CUSTOM_ELEMENT );
+    OUString aCustomUrlPrefix( "custom_" );
     while ( pUserIter != rUserElements.end() )
     {
         sal_Int32 nIndex = pUserIter->second.aResourceURL.indexOf( aCustomUrlPrefix, RESOURCEURL_PREFIX_SIZE );

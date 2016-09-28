@@ -2156,10 +2156,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
         bool bAutoStyles, bool bIsProgress,
         bool bPrvChrIsSpc )
 {
-    static const char sMeta[] = "InContentMetadata";
     static const char sFieldMarkName[] = "__FieldMark_";
-    static const char sAnnotation[] = "Annotation";
-    static const char sAnnotationEnd[] = "AnnotationEnd";
 
     bool bPrevCharIsSpace = bPrvChrIsSpc;
 
@@ -2188,12 +2185,12 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 exportTextField( xTxtRange, bAutoStyles, bIsProgress );
                 bPrevCharIsSpace = false;
             }
-            else if ( sType == sAnnotation )
+            else if ( sType == "Annotation" )
             {
                 exportTextField( xTxtRange, bAutoStyles, bIsProgress );
                 bPrevCharIsSpace = false;
             }
-            else if ( sType == sAnnotationEnd )
+            else if ( sType == "AnnotationEnd" )
             {
                 if (!bAutoStyles)
                 {
@@ -2258,7 +2255,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             {
                 exportRuby(xPropSet, bAutoStyles);
             }
-            else if (sType == sMeta)
+            else if (sType == "InContentMetadata")
             {
                 exportMeta(xPropSet, bAutoStyles, bIsProgress);
             }
@@ -3708,8 +3705,6 @@ void XMLTextParagraphExport::exportMeta(
     const Reference<XPropertySet> & i_xPortion,
     bool i_bAutoStyles, bool i_isProgress)
 {
-    static const char sMeta[] = "InContentMetadata";
-
     bool doExport(!i_bAutoStyles); // do not export element if autostyles
     // check version >= 1.2
     switch (GetExport().getDefaultVersion()) {
@@ -3719,7 +3714,7 @@ void XMLTextParagraphExport::exportMeta(
     }
 
     const Reference< XTextContent > xTextContent(
-            i_xPortion->getPropertyValue(sMeta), UNO_QUERY_THROW);
+            i_xPortion->getPropertyValue("InContentMetadata"), UNO_QUERY_THROW);
     const Reference< XEnumerationAccess > xEA( xTextContent, UNO_QUERY_THROW );
     const Reference< XEnumeration > xTextEnum( xEA->createEnumeration() );
 

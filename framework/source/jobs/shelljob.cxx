@@ -39,20 +39,6 @@
 
 namespace framework{
 
-/** address job configuration inside argument set provided on method execute(). */
-static const char PROP_JOBCONFIG[] = "JobConfig";
-
-/** address job configuration property "Command". */
-static const char PROP_COMMAND[] = "Command";
-
-/** address job configuration property "Arguments". */
-static const char PROP_ARGUMENTS[] = "Arguments";
-
-/** address job configuration property "DeactivateJobIfDone". */
-static const char PROP_DEACTIVATEJOBIFDONE[] = "DeactivateJobIfDone";
-
-/** address job configuration property "CheckExitCode". */
-static const char PROP_CHECKEXITCODE[] = "CheckExitCode";
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(ShellJob                   ,
                                    ::cppu::OWeakObject        ,
@@ -84,12 +70,13 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
           css::uno::RuntimeException, std::exception         )
 {
     ::comphelper::SequenceAsHashMap lArgs  (lJobArguments);
-    ::comphelper::SequenceAsHashMap lOwnCfg(lArgs.getUnpackedValueOrDefault(PROP_JOBCONFIG, css::uno::Sequence< css::beans::NamedValue >()));
+    /** address job configuration inside argument set provided on method execute(). */
+    ::comphelper::SequenceAsHashMap lOwnCfg(lArgs.getUnpackedValueOrDefault("JobConfig", css::uno::Sequence< css::beans::NamedValue >()));
 
-    const OUString                       sCommand                   = lOwnCfg.getUnpackedValueOrDefault(PROP_COMMAND                  , OUString());
-    const css::uno::Sequence< OUString > lCommandArguments          = lOwnCfg.getUnpackedValueOrDefault(PROP_ARGUMENTS                , css::uno::Sequence< OUString >());
-    const bool                            bDeactivateJobIfDone       = lOwnCfg.getUnpackedValueOrDefault(PROP_DEACTIVATEJOBIFDONE      , true );
-    const bool                            bCheckExitCode             = lOwnCfg.getUnpackedValueOrDefault(PROP_CHECKEXITCODE            , true );
+    const OUString                       sCommand               = lOwnCfg.getUnpackedValueOrDefault("Command"             , OUString());
+    const css::uno::Sequence< OUString > lCommandArguments      = lOwnCfg.getUnpackedValueOrDefault("Arguments"           , css::uno::Sequence< OUString >());
+    const bool                           bDeactivateJobIfDone   = lOwnCfg.getUnpackedValueOrDefault("DeactivateJobIfDone" , true );
+    const bool                           bCheckExitCode         = lOwnCfg.getUnpackedValueOrDefault("CheckExitCode"       , true );
 
     // replace all might existing place holder.
     OUString sRealCommand = impl_substituteCommandVariables(sCommand);

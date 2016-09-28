@@ -150,9 +150,6 @@ Reference< XCloneable > SAL_CALL SvxUnoNumberingRules::createClone(  ) throw (Ru
     return new SvxUnoNumberingRules(maRule);
 }
 
-// XServiceInfo
-const char pSvxUnoNumberingRulesService[] = "com.sun.star.text.NumberingRules";
-
 OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     return OUString( "SvxUnoNumberingRules" );
@@ -165,7 +162,7 @@ sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& Service
 
 Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
-    OUString aService( pSvxUnoNumberingRulesService );
+    OUString aService( "com.sun.star.text.NumberingRules" );
     Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }

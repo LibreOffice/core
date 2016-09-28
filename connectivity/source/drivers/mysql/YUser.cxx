@@ -119,15 +119,6 @@ void OMySQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_I
 
     if ( xRes.is() )
     {
-        static const char sSELECT   [] = "SELECT";
-        static const char sINSERT   [] = "INSERT";
-        static const char sUPDATE   [] = "UPDATE";
-        static const char sDELETE   [] = "DELETE";
-        static const char sREAD     [] = "READ";
-        static const char sCREATE   [] = "CREATE";
-        static const char sALTER    [] = "ALTER";
-        static const char sREFERENCE[] = "REFERENCES";
-        static const char sDROP     [] = "DROP";
         static const char sYes      [] = "YES";
 
         nRightsWithGrant = nRights = 0;
@@ -142,55 +133,55 @@ void OMySQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_I
             if (!m_Name.equalsIgnoreAsciiCase(sGrantee))
                 continue;
 
-            if (sPrivilege.equalsIgnoreAsciiCase(sSELECT))
+            if (sPrivilege.equalsIgnoreAsciiCase("SELECT"))
             {
                 nRights |= Privilege::SELECT;
                 if ( sGrantable.equalsIgnoreAsciiCase(sYes) )
                     nRightsWithGrant |= Privilege::SELECT;
             }
-            else if (sPrivilege.equalsIgnoreAsciiCase(sINSERT))
+            else if (sPrivilege.equalsIgnoreAsciiCase("INSERT"))
             {
                 nRights |= Privilege::INSERT;
                 if ( sGrantable.equalsIgnoreAsciiCase(sYes) )
                     nRightsWithGrant |= Privilege::INSERT;
             }
-            else if (sPrivilege.equalsIgnoreAsciiCase(sUPDATE))
+            else if (sPrivilege.equalsIgnoreAsciiCase("UPDATE"))
             {
                 nRights |= Privilege::UPDATE;
                 if ( sGrantable.equalsIgnoreAsciiCase(sYes) )
                     nRightsWithGrant |= Privilege::UPDATE;
             }
-            else if (sPrivilege.equalsIgnoreAsciiCase(sDELETE))
+            else if (sPrivilege.equalsIgnoreAsciiCase("DELETE"))
             {
                 nRights |= Privilege::DELETE;
                 if ( sGrantable.equalsIgnoreAsciiCase(sYes) )
                     nRightsWithGrant |= Privilege::DELETE;
             }
-            else if (sPrivilege.equalsIgnoreAsciiCase(sREAD))
+            else if (sPrivilege.equalsIgnoreAsciiCase("READ"))
             {
                 nRights |= Privilege::READ;
                 if ( sGrantable.equalsIgnoreAsciiCase(sYes) )
                     nRightsWithGrant |= Privilege::READ;
             }
-            else if (sPrivilege.equalsIgnoreAsciiCase(sCREATE))
+            else if (sPrivilege.equalsIgnoreAsciiCase("CREATE"))
             {
                 nRights |= Privilege::CREATE;
                 if ( sGrantable.equalsIgnoreAsciiCase(sYes) )
                     nRightsWithGrant |= Privilege::CREATE;
             }
-            else if (sPrivilege.equalsIgnoreAsciiCase(sALTER))
+            else if (sPrivilege.equalsIgnoreAsciiCase("ALTER"))
             {
                 nRights |= Privilege::ALTER;
                 if ( sGrantable.equalsIgnoreAsciiCase(sYes) )
                     nRightsWithGrant |= Privilege::ALTER;
             }
-            else if (sPrivilege.equalsIgnoreAsciiCase(sREFERENCE))
+            else if (sPrivilege.equalsIgnoreAsciiCase("REFERENCES"))
             {
                 nRights |= Privilege::REFERENCE;
                 if ( sGrantable.equalsIgnoreAsciiCase(sYes) )
                     nRightsWithGrant |= Privilege::REFERENCE;
             }
-            else if (sPrivilege.equalsIgnoreAsciiCase(sDROP))
+            else if (sPrivilege.equalsIgnoreAsciiCase("DROP"))
             {
                 nRights |= Privilege::DROP;
                 if ( sGrantable.equalsIgnoreAsciiCase(sYes) )

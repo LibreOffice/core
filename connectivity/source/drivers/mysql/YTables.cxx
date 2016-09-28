@@ -51,14 +51,10 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
     OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,_rName,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
 
-    static const char s_sTableTypeView[] = "VIEW";
-    static const char s_sTableTypeTable[] = "TABLE";
-    static const char s_sAll[] = "%";
-
     Sequence< OUString > sTableTypes(3);
-    sTableTypes[0] = s_sTableTypeView;
-    sTableTypes[1] = s_sTableTypeTable;
-    sTableTypes[2] = s_sAll;    // just to be sure to include anything else ....
+    sTableTypes[0] = "VIEW";
+    sTableTypes[1] = "TABLE";
+    sTableTypes[2] = "%";    // just to be sure to include anything else ....
 
     Any aCatalog;
     if ( !sCatalog.isEmpty() )
@@ -180,8 +176,7 @@ OUString OTables::adjustSQL(const OUString& _sSql)
 void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
     const Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
-    static const char s_sCreatePattern[] = "(M,D)";
-    const OUString aSql = adjustSQL(::dbtools::createSqlCreateTableStatement(descriptor,xConnection,this,s_sCreatePattern));
+    const OUString aSql = adjustSQL(::dbtools::createSqlCreateTableStatement(descriptor,xConnection, this, "(M,D)"));
     Reference< XStatement > xStmt = xConnection->createStatement(  );
     if ( xStmt.is() )
     {

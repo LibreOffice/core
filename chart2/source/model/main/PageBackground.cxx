@@ -39,8 +39,6 @@ using ::com::sun::star::beans::Property;
 namespace
 {
 
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.PageBackground";
-
 struct StaticPageBackgroundDefaults_Initializer
 {
     ::chart::tPropertyValueMap* operator()()
@@ -230,7 +228,7 @@ OUString SAL_CALL PageBackground::getImplementationName()
 
 OUString PageBackground::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart2.PageBackground");
 }
 
 sal_Bool SAL_CALL PageBackground::supportsService( const OUString& rServiceName )

@@ -814,8 +814,6 @@ namespace accessibility
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
 
-        static const char sActionDesc1[] = "Check";
-        static const char sActionDesc2[] = "UnCheck";
         // sal_Bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
         SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
         SvButtonState state = getListBox()->GetCheckButtonState( pEntry );
@@ -825,9 +823,9 @@ namespace accessibility
             if(getAccessibleRole() == AccessibleRole::CHECK_BOX)
             {
                 if ( state == SvButtonState::Checked )
-                    return OUString(sActionDesc2);
+                    return OUString("UnCheck");
                 else if (state == SvButtonState::Unchecked)
-                    return OUString(sActionDesc1);
+                    return OUString("Check");
             }
             else
             {

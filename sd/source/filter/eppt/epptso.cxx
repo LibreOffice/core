@@ -3033,12 +3033,8 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
 {
     try
     {
-        static const char sModel[] = "Model";
-        static const char sWidth[] = "Width";
-        static const char sHeight[] = "Height";
-
         uno::Reference< table::XTable > xTable;
-        if ( mXPropSet->getPropertyValue( sModel ) >>= xTable )
+        if ( mXPropSet->getPropertyValue( "Model" ) >>= xTable )
         {
             uno::Reference< table::XColumnRowRange > xColumnRowRange( xTable, uno::UNO_QUERY_THROW );
             uno::Reference< container::XIndexAccess > xColumns( xColumnRowRange->getColumns(), uno::UNO_QUERY_THROW );
@@ -3055,7 +3051,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
             {
                 uno::Reference< beans::XPropertySet > xPropSet( xColumns->getByIndex( x ), uno::UNO_QUERY_THROW );
                 awt::Size aS( 0, 0 );
-                xPropSet->getPropertyValue( sWidth ) >>= aS.Width;
+                xPropSet->getPropertyValue( "Width" ) >>= aS.Width;
                 awt::Size aM( MapSize( aS ) );
                 aColumns.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aM.Width ) );
                 nPosition += aM.Width;
@@ -3068,7 +3064,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
             {
                 uno::Reference< beans::XPropertySet > xPropSet( xRows->getByIndex( y ), uno::UNO_QUERY_THROW );
                 awt::Size aS( 0, 0 );
-                xPropSet->getPropertyValue( sHeight ) >>= aS.Height;
+                xPropSet->getPropertyValue( "Height" ) >>= aS.Height;
                 awt::Size aM( MapSize( aS ) );
                 aRows.push_back( std::pair< sal_Int32, sal_Int32 >( nPosition, aM.Height ) );
                 nPosition += aM.Height;
@@ -3174,11 +3170,6 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 }
             }
 
-            static const char sTopBorder[] = "TopBorder";
-            static const char sBottomBorder[] = "BottomBorder";
-            static const char sLeftBorder[] = "LeftBorder";
-            static const char sRightBorder[] = "RightBorder";
-
             // creating horz lines
             for( sal_Int32 nLine = 0; nLine < ( xRows->getCount() + 1 ); nLine++ )
             {
@@ -3196,7 +3187,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                         {
                             uno::Reference< beans::XPropertySet > xPropSet2( xCell, uno::UNO_QUERY_THROW );
                             table::BorderLine aBorderLine;
-                            if ( xPropSet2->getPropertyValue( sTopBorder ) >>= aBorderLine )
+                            if ( xPropSet2->getPropertyValue( "TopBorder" ) >>= aBorderLine )
                                 aCellBorder.maCellBorder = aBorderLine;
                             sal_Int32 nRight  = GetCellRight( nColumn, maRect,aColumns,xCell );
                             bTop = ImplCreateCellBorder( &aCellBorder, aCellBorder.mnPos,
@@ -3222,7 +3213,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                                     uno::Reference< table::XMergeableCell > xCellOwn( xCellRange->getCellByPosition( nColumn, nRow - 1 ), uno::UNO_QUERY_THROW );
                                     uno::Reference< beans::XPropertySet > xPropSet2( xCellOwn, uno::UNO_QUERY_THROW );
                                     table::BorderLine aBorderLine;
-                                    if ( xPropSet2->getPropertyValue( sBottomBorder ) >>= aBorderLine )
+                                    if ( xPropSet2->getPropertyValue( "BottomBorder" ) >>= aBorderLine )
                                         aCellBorder.maCellBorder = aBorderLine;
                                     ImplCreateCellBorder( &aCellBorder, aCellBorder.mnPos,
                                         nBottom, nRight, nBottom);
@@ -3253,7 +3244,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                         {
                             uno::Reference< beans::XPropertySet > xCellSet( xCell, uno::UNO_QUERY_THROW );
                             table::BorderLine aBorderLine;
-                            if ( xCellSet->getPropertyValue( sLeftBorder ) >>= aBorderLine )
+                            if ( xCellSet->getPropertyValue( "LeftBorder" ) >>= aBorderLine )
                                 aCellBorder.maCellBorder = aBorderLine;
                             sal_Int32 nBottom = GetCellBottom( nRow, maRect, aRows,xCell );
                             bLeft = ImplCreateCellBorder( &aCellBorder, aColumns[nLine].first, aCellBorder.mnPos,
@@ -3275,7 +3266,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                                     uno::Reference< table::XMergeableCell > xCellOwn( xCellRange->getCellByPosition( nColumn - 1, nRow ), uno::UNO_QUERY_THROW );
                                     uno::Reference< beans::XPropertySet > xCellSet( xCellOwn, uno::UNO_QUERY_THROW );
                                     table::BorderLine aBorderLine;
-                                    if ( xCellSet->getPropertyValue( sRightBorder ) >>= aBorderLine )
+                                    if ( xCellSet->getPropertyValue( "RightBorder" ) >>= aBorderLine )
                                         aCellBorder.maCellBorder = aBorderLine;
                                     ImplCreateCellBorder( &aCellBorder, nRight, aCellBorder.mnPos,
                                         nRight,  nBottom );

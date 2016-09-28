@@ -26,9 +26,7 @@ void HelpSearch::query(OUString const &queryStr, bool captionOnly,
     lucene::index::IndexReader *reader = lucene::index::IndexReader::open(d_indexDir.getStr());
     lucene::search::IndexSearcher searcher(reader);
 
-    TCHAR captionField[] = L"caption";
-    TCHAR contentField[] = L"content";
-    TCHAR *field = captionOnly ? captionField : contentField;
+    const TCHAR* field = captionOnly ? L"caption" : L"content";
 
     bool isWildcard = queryStr[queryStr.getLength() - 1] == L'*';
     std::vector<TCHAR> aQueryStr(OUStringToTCHARVec(queryStr));

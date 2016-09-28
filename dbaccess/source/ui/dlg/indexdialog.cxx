@@ -37,12 +37,6 @@
 #include <connectivity/dbtools.hxx>
 #include <osl/diagnose.h>
 
-const char INDEX_NEW_CMD[] = ".index:createNew";
-const char INDEX_DROP_CMD[] = ".index:dropCurrent";
-const char INDEX_RENAME_CMD[] = ".index:renameCurrent";
-const char INDEX_SAVE_CMD[] = ".index:saveCurrent";
-const char INDEX_RESET_CMD[] = ".index:resetCurrent";
-
 namespace dbaui
 {
 
@@ -175,11 +169,11 @@ namespace dbaui
     {
         get(m_pActions, "ACTIONS");
 
-        mnNewCmdId = m_pActions->GetItemId(INDEX_NEW_CMD);
-        mnDropCmdId = m_pActions->GetItemId(INDEX_DROP_CMD);
-        mnRenameCmdId = m_pActions->GetItemId(INDEX_RENAME_CMD);
-        mnSaveCmdId = m_pActions->GetItemId(INDEX_SAVE_CMD);
-        mnResetCmdId = m_pActions->GetItemId(INDEX_RESET_CMD);
+        mnNewCmdId = m_pActions->GetItemId(".index:createNew");
+        mnDropCmdId = m_pActions->GetItemId(".index:dropCurrent");
+        mnRenameCmdId = m_pActions->GetItemId(".index:renameCurrent");
+        mnSaveCmdId = m_pActions->GetItemId(".index:saveCurrent");
+        mnResetCmdId = m_pActions->GetItemId(".index:resetCurrent");
 
         maScNewCmdImg = m_pActions->GetItemImage(mnNewCmdId);
         maScDropCmdImg = m_pActions->GetItemImage(mnDropCmdId);

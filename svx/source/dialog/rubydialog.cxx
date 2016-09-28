@@ -60,12 +60,9 @@ namespace
 
 static const sal_Char cRubyBaseText[] = "RubyBaseText";
 static const sal_Char cRubyText[] = "RubyText";
-static const sal_Char cCharacterStyles[] = "CharacterStyles";
 static const sal_Char cRubyAdjust[] = "RubyAdjust";
 static const sal_Char cRubyIsAbove[] = "RubyIsAbove";
-static const sal_Char cDisplayName[] = "DisplayName";
 static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
-static const sal_Char cRubies[] = "Rubies";
 
 } // end anonymous namespace
 
@@ -346,13 +343,13 @@ void SvxRubyDialog::Activate()
                 try
                 {
                     Reference<XNameAccess> xFam = xSupplier->getStyleFamilies();
-                    Any aChar = xFam->getByName(cCharacterStyles);
+                    Any aChar = xFam->getByName("CharacterStyles");
                     Reference<XNameContainer> xChar;
                     aChar >>= xChar;
                     Reference<XIndexAccess> xCharIdx(xChar, UNO_QUERY);
                     if (xCharIdx.is())
                     {
-                        OUString sUIName(cDisplayName);
+                        OUString sUIName("DisplayName");
                         for (sal_Int32 nStyle = 0; nStyle < xCharIdx->getCount(); nStyle++)
                         {
                             Any aStyle = xCharIdx->getByIndex(nStyle);
@@ -512,7 +509,7 @@ void SvxRubyDialog::Update()
     if (nPosition > -1)
         m_pPositionLB->SelectEntryPos(nPosition ? 1 : 0);
     if (!nLen || (bCharStyleEqual && sCharStyleName.isEmpty()))
-        sCharStyleName = cRubies;
+        sCharStyleName = "Rubies";
     if (!sCharStyleName.isEmpty())
     {
         for (sal_Int32 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)

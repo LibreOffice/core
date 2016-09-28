@@ -261,14 +261,12 @@ namespace
     {
         OUString sComposedName;
 
-        static const char s_sTableTypeView[] = "VIEW";
-        static const char s_sTableTypeTable[] = "TABLE";
         static const char s_sWildcard[] = "%" ;
 
         // we want all catalogues, all schemas, all tables
         Sequence< OUString > sTableTypes(3);
-        sTableTypes[0] = s_sTableTypeView;
-        sTableTypes[1] = s_sTableTypeTable;
+        sTableTypes[0] = "VIEW";
+        sTableTypes[1] = "TABLE";
         sTableTypes[2] = s_sWildcard;   // just to be sure to include anything else ....
 
         if ( _rxDBMeta.is() )

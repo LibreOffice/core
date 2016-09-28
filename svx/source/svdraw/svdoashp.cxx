@@ -3147,29 +3147,24 @@ sdr::contact::ViewContact* SdrObjCustomShape::CreateObjectSpecificViewContact()
 bool SdrObjCustomShape::doConstructOrthogonal(const OUString& rName)
 {
     bool bRetval(false);
-    static const char Imps_sNameASOrtho_quadrat[] = "quadrat";
-    static const char Imps_sNameASOrtho_round_quadrat[] = "round-quadrat";
-    static const char Imps_sNameASOrtho_circle[] = "circle";
-    static const char Imps_sNameASOrtho_circle_pie[] = "circle-pie";
-    static const char Imps_sNameASOrtho_ring[] = "ring";
 
-    if(rName.equalsIgnoreAsciiCase(Imps_sNameASOrtho_quadrat))
+    if(rName.equalsIgnoreAsciiCase("quadrat"))
     {
         bRetval = true;
     }
-    else if(rName.equalsIgnoreAsciiCase(Imps_sNameASOrtho_round_quadrat))
+    else if(rName.equalsIgnoreAsciiCase("round-quadrat"))
     {
         bRetval = true;
     }
-    else if(rName.equalsIgnoreAsciiCase(Imps_sNameASOrtho_circle))
+    else if(rName.equalsIgnoreAsciiCase("circle"))
     {
         bRetval = true;
     }
-    else if(rName.equalsIgnoreAsciiCase(Imps_sNameASOrtho_circle_pie))
+    else if(rName.equalsIgnoreAsciiCase("circle-pie"))
     {
         bRetval = true;
     }
-    else if(rName.equalsIgnoreAsciiCase(Imps_sNameASOrtho_ring))
+    else if(rName.equalsIgnoreAsciiCase("ring"))
     {
         bRetval = true;
     }

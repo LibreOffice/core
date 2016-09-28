@@ -843,13 +843,8 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
     const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
         ESCHER_LineEnd& reLineEnd, sal_Int32& rnArrowLength, sal_Int32& rnArrowWidth )
 {
-    static const char sLineStart    [] = "LineStart";
-    static const char sLineStartName[] = "LineStartName";
-    static const char sLineEnd      [] = "LineEnd";
-    static const char sLineEndName  [] = "LineEndName";
-
-    const OUString sLine      ( bLineStart ? OUString(sLineStart) : OUString(sLineEnd) );
-    const OUString sLineName  ( bLineStart ? OUString(sLineStartName) : OUString(sLineEndName) );
+    const OUString sLine      ( bLineStart ? OUString("LineStart") : OUString("LineEnd") );
+    const OUString sLineName  ( bLineStart ? OUString("LineStartName") : OUString("LineEndName") );
 
     bool bIsArrow = false;
 
@@ -1908,9 +1903,6 @@ bool EscherPropertyContainer::CreatePolygonProperties(
           css::awt::Rectangle& rGeoRect,
     tools::Polygon* pPolygon )
 {
-    static const char sPolyPolygonBezier [] = "PolyPolygonBezier";
-    static const char sPolyPolygon       [] = "PolyPolygon";
-
     bool    bRetValue = true;
     bool    bLine = ( nFlags & ESCHER_CREATEPOLYGON_LINE ) != 0;
 
@@ -1922,7 +1914,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
     {
         css::uno::Any aAny;
         bRetValue = EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                        ( bBezier ) ? OUString(sPolyPolygonBezier) : OUString(sPolyPolygon), true );
+                        ( bBezier ) ? OUString("PolyPolygonBezier") : OUString("PolyPolygon"), true );
         if ( bRetValue )
         {
             aPolyPolygon = GetPolyPolygon( aAny );
@@ -2205,13 +2197,6 @@ bool EscherPropertyContainer::CreateConnectorProperties(
     EscherSolverContainer& rSolverContainer, css::awt::Rectangle& rGeoRect,
             sal_uInt16& rShapeType, sal_uInt16& rShapeFlags )
 {
-    static const char sEdgeKind            [] = "EdgeKind";
-    static const char sEdgeStartPoint      [] = "EdgeStartPoint";
-    static const char sEdgeEndPoint        [] = "EdgeEndPoint";
-    static const char sEdgeStartConnection [] = "EdgeStartConnection";
-    static const char sEdgeEndConnection   [] = "EdgeEndConnection";
-    static const char sEdgePath            [] = "PolyPolygonBezier";
-
     bool bRetValue = false;
     rShapeType = rShapeFlags = 0;
 
@@ -2223,14 +2208,14 @@ bool EscherPropertyContainer::CreateConnectorProperties(
         css::uno::Any aAny( rXShape->queryInterface( cppu::UnoType<css::beans::XPropertySet>::get()));
         if ( aAny >>= aXPropSet )
         {
-            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeKind, true ) )
+            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "EdgeKind", true ) )
             {
                 css::drawing::ConnectorType eCt;
                 aAny >>= eCt;
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeStartPoint ) )
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "EdgeStartPoint" ) )
                 {
                     aStartPoint = *o3tl::doAccess<css::awt::Point>(aAny);
-                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeEndPoint ) )
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "EdgeEndPoint" ) )
                     {
                         aEndPoint = *o3tl::doAccess<css::awt::Point>(aAny);
 
@@ -2256,9 +2241,9 @@ bool EscherPropertyContainer::CreateConnectorProperties(
                         sal_uInt32 nAdjustValue1, nAdjustValue2, nAdjustValue3;
                         nAdjustValue1 = nAdjustValue2 = nAdjustValue3 = 0x2a30;
 
-                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeStartConnection ) )
+                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "EdgeStartConnection" ) )
                             aAny >>= aShapeA;
-                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeEndConnection ) )
+                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "EdgeEndConnection" ) )
                             aAny >>= aShapeB;
                         rSolverContainer.AddConnector( rXShape, aStartPoint, aShapeA, aEndPoint, aShapeB );
                         switch ( eCt )
@@ -2274,7 +2259,7 @@ bool EscherPropertyContainer::CreateConnectorProperties(
 
                             case css::drawing::ConnectorType_STANDARD :// Connector 2->5
                                 {
-                                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgePath ) )
+                                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, "PolyPolygonBezier" ) )
                                     {
                                         tools::PolyPolygon aPolyPolygon = GetPolyPolygon( aAny );
                                         tools::Polygon aPoly;

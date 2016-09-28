@@ -53,7 +53,6 @@ namespace fpf = ::framework::pattern::frame;
 
 const char URL_CLOSEDOC[] = ".uno:CloseDoc";
 const char URL_CLOSEWIN[] = ".uno:CloseWin";
-const char URL_CLOSEFRAME[] = ".uno:CloseFrame";
 
 CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponentContext >& rxContext ,
                                  const css::uno::Reference< css::frame::XFrame >&          xFrame ,
@@ -170,7 +169,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
         m_eOperation = E_CLOSE_DOC;
     else if ( aURL.Complete == URL_CLOSEWIN )
         m_eOperation = E_CLOSE_WIN;
-    else if ( aURL.Complete == URL_CLOSEFRAME )
+    else if ( aURL.Complete == ".uno:CloseFrame" )
         m_eOperation = E_CLOSE_FRAME;
     else
     {

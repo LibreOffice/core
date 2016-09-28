@@ -61,7 +61,6 @@ using namespace css::uno;
 namespace
 {
     const static char gsReadOnlyCommandName[] = ".uno:EditDoc";
-    const static char gsHideSidebarCommandName[] = ".uno:Sidebar";
     const static sal_Int32 gnWidthCloseThreshold (70);
     const static sal_Int32 gnWidthOpenThreshold (40);
 }
@@ -1017,7 +1016,7 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
 
         case MID_HIDE_SIDEBAR:
         {
-            const util::URL aURL (Tools::GetURL(gsHideSidebarCommandName));
+            const util::URL aURL (Tools::GetURL(".uno:Sidebar"));
             Reference<frame::XDispatch> xDispatch (Tools::GetDispatch(mxFrame, aURL));
             if (xDispatch.is())
                     xDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());

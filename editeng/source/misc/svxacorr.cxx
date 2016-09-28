@@ -96,9 +96,6 @@ static const sal_Char
     /* also at these ends - Brackets and all kinds of begin characters */
     sImplEndSkipChars[] = "\"\')]}\x83\x84\x89\x91\x92\x93\x94";
 
-// These characters are allowed in words: (for FnCapitalStartSentence)
-static const sal_Char sImplWordChars[] = "-'";
-
 OUString EncryptBlockName_Imp(const OUString& rName);
 
 static inline bool IsWordDelim( const sal_Unicode c )
@@ -833,7 +830,7 @@ bool SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
         }
         else if (pWordStt && !rCC.isDigit(aText, pStr - pStart))
         {
-            if( lcl_IsInAsciiArr( sImplWordChars, *pStr ) &&
+            if( lcl_IsInAsciiArr( "-'", *pStr ) && // These characters are allowed in words
                 pWordStt - 1 == pStr &&
                 // Installation at beginning of paragraph. Replaced < by <= (#i38971#)
                 (pStart + 1) <= pStr &&

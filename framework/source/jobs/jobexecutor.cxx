@@ -249,10 +249,6 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
 
 void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception)
 {
-    const char EVENT_ON_NEW[] = "OnNew";                            // Doc UI  event
-    const char EVENT_ON_LOAD[] = "OnLoad";                          // Doc UI  event
-    const char EVENT_ON_CREATE[] = "OnCreate";                      // Doc API event
-    const char EVENT_ON_LOAD_FINISHED[] = "OnLoadFinished";         // Doc API event
     OUString EVENT_ON_DOCUMENT_OPENED("onDocumentOpened");   // Job UI  event : OnNew    or OnLoad
     OUString EVENT_ON_DOCUMENT_ADDED("onDocumentAdded");     // Job API event : OnCreate or OnLoadFinished
 
@@ -277,8 +273,8 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
 
     // Special feature: If the events "OnNew" or "OnLoad" occurs - we generate our own event "onDocumentOpened".
     if (
-        (aEvent.EventName == EVENT_ON_NEW) ||
-        (aEvent.EventName == EVENT_ON_LOAD)
+        (aEvent.EventName == "OnNew") ||
+        (aEvent.EventName == "OnLoad")
        )
     {
         if (std::find(m_lEvents.begin(), m_lEvents.end(), EVENT_ON_DOCUMENT_OPENED) != m_lEvents.end())
@@ -287,8 +283,8 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
 
     // Special feature: If the events "OnCreate" or "OnLoadFinished" occurs - we generate our own event "onDocumentAdded".
     if (
-        (aEvent.EventName == EVENT_ON_CREATE) ||
-        (aEvent.EventName == EVENT_ON_LOAD_FINISHED)
+        (aEvent.EventName == "OnCreate") ||
+        (aEvent.EventName == "OnLoadFinished")
        )
     {
         if (std::find(m_lEvents.begin(), m_lEvents.end(), EVENT_ON_DOCUMENT_ADDED) != m_lEvents.end())

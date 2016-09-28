@@ -76,9 +76,6 @@ void SfxStylesInfo_Impl::setModel(const css::uno::Reference< css::frame::XModel 
     m_xDoc = xModel;
 }
 
-static const char CMDURL_SPART [] = ".uno:StyleApply?Style:string=";
-static const char CMDURL_FPART2[] = "&FamilyName:string=";
-
 static const char CMDURL_STYLEPROT_ONLY[] = ".uno:StyleApply?";
 static const char CMDURL_SPART_ONLY    [] = "Style:string=";
 static const char CMDURL_FPART_ONLY    [] = "FamilyName:string=";
@@ -87,12 +84,10 @@ static const char STYLEPROP_UINAME[] = "DisplayName";
 
 OUString SfxStylesInfo_Impl::generateCommand(const OUString& sFamily, const OUString& sStyle)
 {
-    OUStringBuffer sCommand(1024);
-    sCommand.append(CMDURL_SPART );
-    sCommand.append(sStyle       );
-    sCommand.append(CMDURL_FPART2);
-    sCommand.append(sFamily      );
-    return sCommand.makeStringAndClear();
+    return ".uno:StyleApply?Style:string="
+           + sStyle
+           + "&FamilyName:string="
+           + sFamily;
 }
 
 bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
@@ -206,8 +201,6 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
 
 ::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& sFamily)
 {
-    static const char PROP_UINAME[] = "DisplayName";
-
     css::uno::Sequence< OUString > lStyleNames;
     css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameAccess > xFamilies = xModel->getStyleFamilies();
@@ -238,7 +231,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
             xStyleSet->getByName(aStyleInfo.sStyle) >>= xStyle;
             if (!xStyle.is())
                 continue;
-            xStyle->getPropertyValue(PROP_UINAME) >>= aStyleInfo.sLabel;
+            xStyle->getPropertyValue("DisplayName") >>= aStyleInfo.sLabel;
         }
         catch(const css::uno::RuntimeException&)
             { throw; }

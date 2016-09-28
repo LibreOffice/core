@@ -474,8 +474,7 @@ namespace xmloff
 
         OUString lcl_findFreeControlId( const MapPropertySet2Map& _rAllPagesControlIds )
         {
-            static const char sControlIdBase[] = "control";
-            OUString sControlId = sControlIdBase;
+            OUString sControlId = "control";
 
             size_t nKnownControlCount = ::std::accumulate( _rAllPagesControlIds.begin(), _rAllPagesControlIds.end(), (size_t)0, AccumulateSize() );
             sControlId += OUString::number( (sal_Int32)nKnownControlCount + 1 );

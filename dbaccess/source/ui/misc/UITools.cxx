@@ -436,8 +436,6 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
     // Information for a single SQL type
     if(xRs.is())
     {
-        static const char aB1[] = " [ ";
-        static const char aB2[] = " ]";
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;
@@ -620,11 +618,11 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
             if ( !aName.isEmpty() )
             {
                 pInfo->aUIName = aName;
-                pInfo->aUIName += aB1;
+                pInfo->aUIName += " [ ";
             }
             pInfo->aUIName += pInfo->aTypeName;
             if ( !aName.isEmpty() )
-                pInfo->aUIName += aB2;
+                pInfo->aUIName += " ]";
             // Now that we have the type info, save it in the multimap
             _rTypeInfoMap.insert(OTypeInfoMap::value_type(pInfo->nType,pInfo));
         }

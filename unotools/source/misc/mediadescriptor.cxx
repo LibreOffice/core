@@ -335,8 +335,6 @@ MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::PropertyV
 
 bool MediaDescriptor::isStreamReadOnly() const
 {
-    static const char CONTENTSCHEME_FILE[] = "file";
-    static const char CONTENTPROP_ISREADONLY[] = "IsReadOnly";
     static bool READONLY_FALLBACK = false;
 
     bool bReadOnly = READONLY_FALLBACK;
@@ -373,14 +371,14 @@ bool MediaDescriptor::isStreamReadOnly() const
             if (xId.is())
                 aScheme = xId->getContentProviderScheme();
 
-            if (aScheme.equalsIgnoreAsciiCase(CONTENTSCHEME_FILE))
+            if (aScheme.equalsIgnoreAsciiCase("file"))
                 bReadOnly = true;
             else
             {
                 ::ucbhelper::Content aContent(xContent,
                                               utl::UCBContentHelper::getDefaultCommandEnvironment(),
                                               comphelper::getProcessComponentContext());
-                aContent.getPropertyValue(CONTENTPROP_ISREADONLY) >>= bReadOnly;
+                aContent.getPropertyValue("IsReadOnly") >>= bReadOnly;
             }
         }
     }

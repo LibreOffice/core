@@ -83,8 +83,8 @@ inline bool IsScriptTypeMatchingToLanguage( SvtScriptType nScriptType, LanguageT
 
 inline void RetrieveTypeNameFromResourceURL( const OUString& aResourceURL, OUString& aType, OUString& aName )
 {
-    const sal_Int32 RESOURCEURL_PREFIX_SIZE = 17;
-    const char      RESOURCEURL_PREFIX[] = "private:resource/";
+    static const char      RESOURCEURL_PREFIX[] = "private:resource/";
+    static const sal_Int32 RESOURCEURL_PREFIX_SIZE = strlen(RESOURCEURL_PREFIX);
 
     if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))

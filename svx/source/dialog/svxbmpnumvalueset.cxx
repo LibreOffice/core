@@ -64,13 +64,6 @@ using namespace com::sun::star::text;
 using namespace com::sun::star::container;
 using namespace com::sun::star::style;
 
-static const sal_Char cNumberingType[] = "NumberingType";
-static const sal_Char cValue[] = "Value";
-static const sal_Char cParentNumbering[] = "ParentNumbering";
-static const sal_Char cPrefix[] = "Prefix";
-static const sal_Char cSuffix[] = "Suffix";
-static const sal_Char cBulletChar[] = "BulletChar";
-static const sal_Char cBulletFontName[] = "BulletFontName";
 
 // The selection of bullets from the star symbol
 static const sal_Unicode aBulletTypes[] =
@@ -200,7 +193,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         aOrgRect.TopLeft(), aRectSize,
                         *pVDev );
     // Now comes the text
-    const OUString sValue(cValue);
+    const OUString sValue("Value");
     if( NumberingPageType::SINGLENUM == ePageType ||
            NumberingPageType::BULLET == ePageType )
     {
@@ -280,17 +273,17 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     aParentNumberings[i] = 0;
                     for(sal_Int32 nProperty = 0; nProperty < aLevel.getLength() - 1; nProperty++)
                     {
-                        if ( pValues[nProperty].Name == cNumberingType )
+                        if ( pValues[nProperty].Name == "NumberingType" )
                             pValues[nProperty].Value >>= aNumberingTypes[i];
-                        else if ( pValues[nProperty].Name == cBulletFontName )
+                        else if ( pValues[nProperty].Name == "BulletFontName" )
                             pValues[nProperty].Value >>= sFontNames[i];
-                        else if ( pValues[nProperty].Name == cBulletChar )
+                        else if ( pValues[nProperty].Name == "BulletChar" )
                             pValues[nProperty].Value >>= sBulletChars[i];
-                        else if ( pValues[nProperty].Name == cPrefix )
+                        else if ( pValues[nProperty].Name == "Prefix" )
                             pValues[nProperty].Value >>= sPrefixes[i];
-                        else if ( pValues[nProperty].Name == cSuffix )
+                        else if ( pValues[nProperty].Name == "Suffix" )
                             pValues[nProperty].Value >>= sSuffixes[i];
-                        else if ( pValues[nProperty].Name == cParentNumbering )
+                        else if ( pValues[nProperty].Name == "ParentNumbering" )
                             pValues[nProperty].Value >>= aParentNumberings[i];
                     }
                     Sequence< PropertyValue > aProperties(2);

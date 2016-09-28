@@ -319,11 +319,10 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException, std::exception)
 
             if ( !sTitle.equals( sName ) )
             {
-                static const char sDot[] = ".";
                 // starts with title
                 if ( sName.startsWith( sTitle ) )
                     // extension starts immediately after
-                    if ( sName.match( sDot, sTitle.getLength() ) )
+                    if ( sName.match( ".", sTitle.getLength() ) )
                         sTitle = sName;
             }
         }

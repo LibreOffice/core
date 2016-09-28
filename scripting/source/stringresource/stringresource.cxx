@@ -2130,9 +2130,6 @@ void implWriteStringWithEncoding( const OUString& aStr,
 bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocaleItem,
     const Reference< io::XOutputStream >& xOutputStream, const OUString& aComment )
 {
-    static const char aAssignmentStr[] = "=";
-    static const char aLineFeedStr[] = "\n";
-
     if( !xOutputStream.is() || pLocaleItem == nullptr )
         return false;
 
@@ -2146,7 +2143,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
     xTextOutputStream->setEncoding( aEncodingStr );
 
     xTextOutputStream->writeString( aComment );
-    xTextOutputStream->writeString( aLineFeedStr );
+    xTextOutputStream->writeString( "\n" );
 
     const IdToStringMap& rHashMap = pLocaleItem->m_aIdToStringMap;
     if( !rHashMap.empty() )
@@ -2189,7 +2186,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
                 if( !( it == rHashMap.end() ) )
                 {
                     implWriteStringWithEncoding( aResourceID, xTextOutputStream, true );
-                    xTextOutputStream->writeString( aAssignmentStr );
+                    xTextOutputStream->writeString( "=" );
                     OUString aValStr = (*it).second;
                     implWriteStringWithEncoding( aValStr, xTextOutputStream, false );
                 }

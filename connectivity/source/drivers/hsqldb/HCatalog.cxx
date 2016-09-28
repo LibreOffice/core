@@ -52,12 +52,10 @@ void OHCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TStrin
 void OHCatalog::refreshTables()
 {
     TStringVector aVector;
-    static const char s_sTableTypeView[] = "VIEW";
-    static const char s_sTableTypeTable[] = "TABLE";
 
     Sequence< OUString > sTableTypes(2);
-    sTableTypes[0] = s_sTableTypeView;
-    sTableTypes[1] = s_sTableTypeTable;
+    sTableTypes[0] = "VIEW";
+    sTableTypes[1] = "TABLE";
 
     refreshObjects(sTableTypes,aVector);
 

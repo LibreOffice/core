@@ -35,12 +35,10 @@ using css::beans::PropertyValue;
 
 
 static const char sAPI_ServiceName[] = "com.sun.star.container.XNameReplace";
-static const char sAPI_SvDetachedEventDescriptor[] = "SvDetachedEventDescriptor";
 static const char sEventType[] = "EventType";
 static const char sMacroName[] = "MacroName";
 static const char sLibrary[] = "Library";
 static const char sStarBasic[] = "StarBasic";
-static const char sJavaScript[] = "JavaScript";
 static const char sScript[] = "Script";
 static const char sNone[] = "None";
 
@@ -165,7 +163,7 @@ void getMacroFromAny(
                 eType = STARBASIC;
                 bTypeOK = true;
             }
-            else if (sTmp == sJavaScript)
+            else if (sTmp == "JavaScript")
             {
                 eType = JAVASCRIPT;
                 bTypeOK = true;
@@ -414,7 +412,7 @@ void SvEventDescriptor::getByName(
 SvDetachedEventDescriptor::SvDetachedEventDescriptor(
     const SvEventDescription* pSupportedMacroItems) :
     SvBaseEventDescriptor(pSupportedMacroItems),
-    sImplName(sAPI_SvDetachedEventDescriptor)
+    sImplName("SvDetachedEventDescriptor")
 {
     // allocate aMacros
     aMacros = new SvxMacro*[mnMacroItems];

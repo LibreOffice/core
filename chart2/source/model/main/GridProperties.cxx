@@ -37,8 +37,6 @@ using ::com::sun::star::beans::Property;
 namespace
 {
 
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.GridProperties";
-
 enum
 {
     PROP_GRID_SHOW
@@ -250,7 +248,7 @@ OUString SAL_CALL GridProperties::getImplementationName()
 
 OUString GridProperties::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart2.GridProperties");
 }
 
 sal_Bool SAL_CALL GridProperties::supportsService( const OUString& rServiceName )

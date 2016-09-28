@@ -99,11 +99,9 @@ CustomToolBarImportHelper::getCfgManager()
 uno::Any
 CustomToolBarImportHelper::createCommandFromMacro( const OUString& sCmd )
 {
-//"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
-    static const char scheme[] = "vnd.sun.star.script:";
-    static const char part2 [] = "?language=Basic&location=document";
+    //"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
     // create script url
-    OUString scriptURL = scheme + sCmd + part2;
+    OUString scriptURL = "vnd.sun.star.script:" + sCmd + "?language=Basic&location=document";
     return uno::makeAny( scriptURL );
 }
 

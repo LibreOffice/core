@@ -54,9 +54,6 @@ static const StatisticCalculation lclCalcDefinitions[] =
     { 0,                         nullptr }
 };
 
-static const char strWildcardRange[] = "%RANGE%";
-static const char strWildcardNumber[] = "%NUMBER%";
-
 }
 
 ScDescriptiveStatisticsDialog::ScDescriptiveStatisticsDialog(
@@ -105,7 +102,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
         else
             aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
 
-        aTemplate.applyNumber(strWildcardNumber, pIterator->index() + 1);
+        aTemplate.applyNumber("%NUMBER%", pIterator->index() + 1);
         aOutput.writeBoldString(aTemplate.getTemplate());
         aOutput.nextColumn();
     }
@@ -131,7 +128,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
         for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != nullptr; i++)
         {
             aTemplate.setTemplate(lclCalcDefinitions[i].aFormula);
-            aTemplate.applyRange(strWildcardRange, pIterator->get(), b3DAddress);
+            aTemplate.applyRange("%RANGE%", pIterator->get(), b3DAddress);
             aOutput.writeFormula(aTemplate.getTemplate());
             aOutput.nextRow();
         }

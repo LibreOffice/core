@@ -58,8 +58,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.Axis";
-
 enum
 {
     PROP_AXIS_SHOW,
@@ -657,7 +655,7 @@ OUString SAL_CALL Axis::getImplementationName()
 
 OUString Axis::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart2.Axis");
 }
 
 sal_Bool SAL_CALL Axis::supportsService( const OUString& rServiceName )

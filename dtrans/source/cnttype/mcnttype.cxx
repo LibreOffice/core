@@ -25,10 +25,8 @@ using namespace com::sun::star::container;
 using namespace std;
 using namespace osl;
 
-const char TSPECIALS[] =  "()<>@,;:\\\"/[]?=";
 const char TOKEN[] = "!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~.";
 const char SPACE[] = " ";
-const char SEMICOLON[] = ";";
 
 CMimeContentType::CMimeContentType( const OUString& aCntType )
 {
@@ -279,12 +277,12 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
     {
         if ( bAfterQuoteSign && (
             (m_nxtSym == SPACE) ||
-            (m_nxtSym == SEMICOLON))
+            (m_nxtSym == ";"))
            )
         {
             break;
         }
-        else if ( isInRange( m_nxtSym, OUStringLiteral(TOKEN) + TSPECIALS + SPACE ) )
+        else if ( isInRange( m_nxtSym, OUStringLiteral(TOKEN) + "()<>@,;:\\\"/[]?=" + SPACE ) )
         {
             pvalue += m_nxtSym;
             if ( m_nxtSym == "\"" )

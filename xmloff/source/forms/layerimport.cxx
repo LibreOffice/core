@@ -506,7 +506,6 @@ void OFormLayerXMLImport_Impl::documentDone( )
         &&  FormCellBindingHelper::isCellBindingAllowed( rImport.GetModel() )
         )
     {
-        static const char s_sIndex[] = ":index";
         ::std::vector< ModelStringPair >::const_iterator aEnd = m_aCellValueBindings.end();
         for (   ::std::vector< ModelStringPair >::const_iterator aCellBindings = m_aCellValueBindings.begin();
                 aCellBindings != aEnd;
@@ -522,7 +521,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
                     // There are special bindings for listboxes. See
                     // OListAndComboImport::doRegisterCellValueBinding for a comment on this HACK.
                     OUString sBoundCellAddress( aCellBindings->second );
-                    sal_Int32 nIndicator = sBoundCellAddress.lastIndexOf( s_sIndex );
+                    sal_Int32 nIndicator = sBoundCellAddress.lastIndexOf( ":index" );
 
                     bool bUseIndexBinding = false;
                     if ( nIndicator != -1 )

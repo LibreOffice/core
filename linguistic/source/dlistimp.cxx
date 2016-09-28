@@ -790,16 +790,13 @@ static void AddInternal(
     if (rDic.is())
     {
         //! TL TODO: word iterator should be used to break up the text
-        static const char aDefWordDelim[] =
-                "!\"#$%&'()*+,-/:;<=>?[]\\_^`{|}~\t \n";
-        OUString aDelim(aDefWordDelim);
+        OUString aDelim("!\"#$%&'()*+,-/:;<=>?[]\\_^`{|}~\t \n");
         OSL_ENSURE(aDelim.indexOf(static_cast<sal_Unicode>('.')) == -1,
             "ensure no '.'");
 
         OUString      aToken;
         sal_Int32 nPos = 0;
-        while (-1 !=
-                    (nPos = lcl_GetToken( aToken, rNew, nPos, aDelim )))
+        while (-1 != (nPos = lcl_GetToken( aToken, rNew, nPos, aDelim )))
         {
             if( !aToken.isEmpty()  &&  !IsNumeric( aToken ) )
             {

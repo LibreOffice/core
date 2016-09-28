@@ -26,25 +26,10 @@ namespace framework
 {
 namespace {
 
-static const char MERGE_STATUSBAR_URL[]         = "URL";
-static const char MERGE_STATUSBAR_TITLE[]       = "Title";
-static const char MERGE_STATUSBAR_CONTEXT[]     = "Context";
-static const char MERGE_STATUSBAR_ALIGN[]       = "Alignment";
-static const char MERGE_STATUSBAR_AUTOSIZE[]    = "AutoSize";
-static const char MERGE_STATUSBAR_OWNERDRAW[]   = "OwnerDraw";
-static const char MERGE_STATUSBAR_WIDTH[]       = "Width";
-
-static const char STATUSBAR_ALIGN_CENTER[]      = "center";
-static const char STATUSBAR_ALIGN_RIGHT[]       = "right";
-
 static const char MERGECOMMAND_ADDAFTER[]       = "AddAfter";
 static const char MERGECOMMAND_ADDBEFORE[]      = "AddBefore";
 static const char MERGECOMMAND_REPLACE[]        = "Replace";
 static const char MERGECOMMAND_REMOVE[]         = "Remove";
-
-static const char MERGEFALLBACK_ADDLAST[]       = "AddLast";
-static const char MERGEFALLBACK_ADDFIRST[]      = "AddFirst";
-static const char MERGEFALLBACK_IGNORE[]        = "Ignore";
 
 void lcl_ConvertSequenceToValues(
     const Sequence< PropertyValue > &rSequence,
@@ -58,19 +43,19 @@ void lcl_ConvertSequenceToValues(
     for ( sal_Int32 i = 0; i < rSequence.getLength(); i++ )
     {
         aPropVal = rSequence[i];
-        if ( aPropVal.Name == MERGE_STATUSBAR_URL )
+        if ( aPropVal.Name == "URL" )
             aPropVal.Value >>= rItem.aCommandURL;
-        else if ( aPropVal.Name == MERGE_STATUSBAR_TITLE )
+        else if ( aPropVal.Name == "Title" )
             aPropVal.Value >>= rItem.aLabel;
-        else if ( aPropVal.Name == MERGE_STATUSBAR_CONTEXT )
+        else if ( aPropVal.Name == "Context" )
             aPropVal.Value >>= rItem.aContext;
-        else if ( aPropVal.Name == MERGE_STATUSBAR_ALIGN )
+        else if ( aPropVal.Name == "Alignment" )
             aPropVal.Value >>= sAlignment;
-        else if ( aPropVal.Name == MERGE_STATUSBAR_AUTOSIZE )
+        else if ( aPropVal.Name == "AutoSize" )
             aPropVal.Value >>= bAutoSize;
-        else if ( aPropVal.Name == MERGE_STATUSBAR_OWNERDRAW )
+        else if ( aPropVal.Name == "OwnerDraw" )
             aPropVal.Value >>= bOwnerDraw;
-        else if ( aPropVal.Name == MERGE_STATUSBAR_WIDTH )
+        else if ( aPropVal.Name == "Width" )
         {
             sal_Int32 aWidth = 0;
             aPropVal.Value >>= aWidth;
@@ -83,9 +68,9 @@ void lcl_ConvertSequenceToValues(
         nItemBits |= StatusBarItemBits::AutoSize;
     if ( bOwnerDraw )
         nItemBits |= StatusBarItemBits::UserDraw;
-    if ( sAlignment == STATUSBAR_ALIGN_CENTER )
+    if ( sAlignment == "center" )
         nItemBits |= StatusBarItemBits::Center;
-    else if ( sAlignment == STATUSBAR_ALIGN_RIGHT )
+    else if ( sAlignment == "right" )
         nItemBits |= StatusBarItemBits::Right;
     else
         // if unset, defaults to left alignment
@@ -233,7 +218,7 @@ bool StatusbarMerger::ProcessMergeFallback(
     const AddonStatusbarItemContainer& rItems )
 {
     // fallback IGNORE or REPLACE/REMOVE item not found
-    if (( rMergeFallback == MERGEFALLBACK_IGNORE ) ||
+    if (( rMergeFallback == "Ignore" ) ||
             ( rMergeCommand == MERGECOMMAND_REPLACE ) ||
             ( rMergeCommand == MERGECOMMAND_REMOVE  ) )
     {
@@ -242,9 +227,9 @@ bool StatusbarMerger::ProcessMergeFallback(
     else if (( rMergeCommand == MERGECOMMAND_ADDBEFORE ) ||
              ( rMergeCommand == MERGECOMMAND_ADDAFTER ) )
     {
-        if ( rMergeFallback == MERGEFALLBACK_ADDFIRST )
+        if ( rMergeFallback == "AddFirst" )
             return lcl_MergeItems( pStatusbar, 0, 0, rItemId, rModuleIdentifier, rItems );
-        else if ( rMergeFallback == MERGEFALLBACK_ADDLAST )
+        else if ( rMergeFallback == "AddLast" )
             return lcl_MergeItems( pStatusbar, STATUSBAR_APPEND, 0, rItemId, rModuleIdentifier, rItems );
     }
 

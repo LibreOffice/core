@@ -15,8 +15,6 @@
 
 #include "CovarianceDialog.hxx"
 
-static const char strCovarianceTemplate[] = "=COVAR(%VAR1%; %VAR2%)";
-
 ScCovarianceDialog::ScCovarianceDialog(
                         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                         vcl::Window* pParent, ScViewData* pViewData ) :
@@ -42,7 +40,7 @@ const OUString ScCovarianceDialog::getLabel()
 
 const OUString ScCovarianceDialog::getTemplate()
 {
-    return OUString(strCovarianceTemplate);
+    return OUString("=COVAR(%VAR1%; %VAR2%)");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

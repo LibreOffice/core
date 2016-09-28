@@ -86,9 +86,6 @@ namespace comp_DialogModelProvider
 namespace dlgprov
 {
 
-
-static const char aResourceResolverPropName[] = "ResourceResolver";
-
     Reference< resource::XStringResourceManager > lcl_getStringResourceManager(const Reference< XComponentContext >& i_xContext,const OUString& i_sURL)
     {
         INetURLObject aInetObj( i_sURL );
@@ -153,7 +150,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
             Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
             Any aStringResourceManagerAny;
             aStringResourceManagerAny <<= xStringResourceManager;
-            xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
+            xDlgPSet->setPropertyValue( "ResourceResolver", aStringResourceManagerAny );
         }
 
         return xDialogModel;
@@ -614,7 +611,6 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
 
 
     static const char aDecorationPropName[] = "Decoration";
-    static const char aTitlePropName[] = "Title";
 
     Reference < XControl > DialogProviderImpl::createDialogImpl(
         const OUString& URL, const Reference< XInterface >& xHandler,
@@ -664,7 +660,7 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
                         if( !bDecoration )
                         {
                             xDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
-                            xDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( OUString() ) );
+                            xDlgModPropSet->setPropertyValue( "Title", makeAny( OUString() ) );
                         }
                     }
                     catch( UnknownPropertyException& )

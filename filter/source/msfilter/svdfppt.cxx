@@ -7327,9 +7327,8 @@ void CreateTableRows( const Reference< XTableRows >& xTableRows, const std::set<
         else
             nHeight = nTableBottom - nLastPosition;
 
-        static const char sWidth[] = "Height";
         Reference< XPropertySet > xPropSet( xTableRows->getByIndex( n ), UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( sWidth, Any( nHeight ) );
+        xPropSet->setPropertyValue( "Height", Any( nHeight ) );
     }
 }
 
@@ -7351,9 +7350,8 @@ void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const 
         else
             nWidth = nTableRight - nLastPosition;
 
-        static const char sWidth[] = "Width";
         Reference< XPropertySet > xPropSet( xTableColumns->getByIndex( n ), UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( sWidth, Any( nWidth ) );
+        xPropSet->setPropertyValue( "Width", Any( nWidth ) );
     }
 }
 
@@ -7386,33 +7384,26 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         const sal_Int32 nRightDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
         const sal_Int32 nUpperDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
         const sal_Int32 nLowerDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
-        static const char sTopBorder[] = "TextUpperDistance";
-        static const char sBottomBorder[] = "TextLowerDistance";
-        static const char sLeftBorder[] = "TextLeftDistance";
-        static const char sRightBorder[] = "TextRightDistance";
-        xPropSet->setPropertyValue( sTopBorder, Any( nUpperDist ) );
-        xPropSet->setPropertyValue( sRightBorder, Any( nRightDist ) );
-        xPropSet->setPropertyValue( sLeftBorder, Any( nLeftDist ) );
-        xPropSet->setPropertyValue( sBottomBorder, Any( nLowerDist ) );
+        xPropSet->setPropertyValue( "TextUpperDistance", Any( nUpperDist ) );
+        xPropSet->setPropertyValue( "TextRightDistance", Any( nRightDist ) );
+        xPropSet->setPropertyValue( "TextLeftDistance", Any( nLeftDist ) );
+        xPropSet->setPropertyValue( "TextLowerDistance", Any( nLowerDist ) );
 
-        static const char  sTextVerticalAdjust[] = "TextVerticalAdjust";
         const SdrTextVertAdjust eTextVertAdjust(static_cast<const SdrTextVertAdjustItem&>(pObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST)).GetValue());
         drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
         if ( eTextVertAdjust == SDRTEXTVERTADJUST_CENTER )
             eVA = drawing::TextVerticalAdjust_CENTER;
         else if ( eTextVertAdjust == SDRTEXTVERTADJUST_BOTTOM )
             eVA = drawing::TextVerticalAdjust_BOTTOM;
-        xPropSet->setPropertyValue( sTextVerticalAdjust, Any( eVA ) );
+        xPropSet->setPropertyValue( "TextVerticalAdjust", Any( eVA ) );
 
         //set textHorizontalAdjust and TextWritingMode attr
         const sal_Int32 eHA(static_cast<const SdrTextHorzAdjustItem&>(pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
         const SvxFrameDirection eDirection = (const SvxFrameDirection)(static_cast<const SvxFrameDirectionItem&>(pObj->GetMergedItem(EE_PARA_WRITINGDIR)).GetValue());
-        static const char  sHorizontalAdjust[] = "TextHorizontalAdjust";
-        static const char  sWritingMode[] = "TextWritingMode";
-        xPropSet->setPropertyValue(  sHorizontalAdjust , Any( eHA ) );
+        xPropSet->setPropertyValue(  "TextHorizontalAdjust" , Any( eHA ) );
         if ( eDirection == FRMDIR_VERT_TOP_RIGHT )
         {//vertical writing
-            xPropSet->setPropertyValue(  sWritingMode , Any( css::text::WritingMode_TB_RL ) );
+            xPropSet->setPropertyValue(  "TextWritingMode" , Any( css::text::WritingMode_TB_RL ) );
         }
         SfxItemSet aSet( pObj->GetMergedItemSet() );
         drawing::FillStyle eFillStyle(static_cast<const XFillStyleItem&>(pObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue());
@@ -7421,11 +7412,10 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         {
             case drawing::FillStyle_SOLID :
                 {
-                    static const char sFillColor[] = "FillColor";
                     eFS = css::drawing::FillStyle_SOLID;
                     Color aFillColor( static_cast<const XFillColorItem&>(pObj->GetMergedItem( XATTR_FILLCOLOR )).GetColorValue() );
                     sal_Int32 nFillColor( aFillColor.GetColor() );
-                    xPropSet->setPropertyValue( sFillColor, Any( nFillColor ) );
+                    xPropSet->setPropertyValue( "FillColor", Any( nFillColor ) );
                 }
                 break;
             case drawing::FillStyle_GRADIENT :
@@ -7445,8 +7435,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     aGradient.EndIntensity = aXGradient.GetEndIntens();
                     aGradient.StepCount = aXGradient.GetSteps();
 
-                    static const char sFillGradient[] = "FillGradient";
-                    xPropSet->setPropertyValue( sFillGradient, Any( aGradient ) );
+                    xPropSet->setPropertyValue( "FillGradient", Any( aGradient ) );
                 }
                 break;
             case drawing::FillStyle_HATCH :
@@ -7480,13 +7469,11 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
             break;
 
         }
-        static const char sFillStyle[] = "FillStyle";
-        xPropSet->setPropertyValue( sFillStyle, Any( eFS ) );
+        xPropSet->setPropertyValue( "FillStyle", Any( eFS ) );
         if ( eFillStyle != drawing::FillStyle_NONE )
         {
             sal_Int16 nFillTransparence( static_cast<const XFillTransparenceItem&>(pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ) ).GetValue() );
-            static const char sFillTransparence[] = "FillTransparence";
-            xPropSet->setPropertyValue( sFillTransparence, Any( nFillTransparence ) );
+            xPropSet->setPropertyValue( "FillTransparence", Any( nFillTransparence ) );
         }
     }
     catch( const Exception& )
@@ -7525,13 +7512,6 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
         std::vector< sal_Int32 >::const_iterator aIter( vPositions.begin() );
         while( aIter != vPositions.end() )
         {
-            static const char sTopBorder[] = "TopBorder";
-            static const char sBottomBorder[] = "BottomBorder";
-            static const char sLeftBorder[] = "LeftBorder";
-            static const char sRightBorder[] = "RightBorder";
-            static const char sDiagonalTLBR[] = "DiagonalTLBR";
-            static const char sDiagonalBLTR[] = "DiagonalBLTR";
-
             sal_Int32 nPosition = *aIter & 0xffffff;
             sal_Int32 nFlags = *aIter &~0xffffff;
             sal_Int32 nRow = nPosition / nColumns;
@@ -7540,17 +7520,17 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
             Reference< XPropertySet > xPropSet( xCell, UNO_QUERY_THROW );
 
             if ( nFlags & LinePositionLeft )
-                xPropSet->setPropertyValue( sLeftBorder, Any( aBorderLine ) );
+                xPropSet->setPropertyValue( "LeftBorder", Any( aBorderLine ) );
             if ( nFlags & LinePositionTop )
-                xPropSet->setPropertyValue( sTopBorder, Any( aBorderLine ) );
+                xPropSet->setPropertyValue( "TopBorder", Any( aBorderLine ) );
             if ( nFlags & LinePositionRight )
-                xPropSet->setPropertyValue( sRightBorder, Any( aBorderLine ) );
+                xPropSet->setPropertyValue( "RightBorder", Any( aBorderLine ) );
             if ( nFlags & LinePositionBottom )
-                xPropSet->setPropertyValue( sBottomBorder, Any( aBorderLine ) );
+                xPropSet->setPropertyValue( "BottomBorder", Any( aBorderLine ) );
             if ( nFlags & LinePositionTLBR )
-                xPropSet->setPropertyValue( sDiagonalTLBR, Any( true ) );
+                xPropSet->setPropertyValue( "DiagonalTLBR", Any( true ) );
             if ( nFlags & LinePositionBLTR )
-                xPropSet->setPropertyValue( sDiagonalBLTR, Any( true ) );
+                xPropSet->setPropertyValue( "DiagonalBLTR", Any( true ) );
             ++aIter;
         }
     }

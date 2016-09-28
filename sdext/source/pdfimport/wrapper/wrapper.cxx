@@ -685,29 +685,20 @@ void Parser::readFont()
 
 uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
 {
-    static const char aJpegMarker[] = "JPEG";
-    static const char aPbmMarker[]  = "PBM";
-    static const char aPpmMarker[]  = "PPM";
-    static const char aPngMarker[]  = "PNG";
-    static const char aJpegFile[]   = "DUMMY.JPEG";
-    static const char aPbmFile[]    = "DUMMY.PBM";
-    static const char aPpmFile[]    = "DUMMY.PPM";
-    static const char aPngFile[]    = "DUMMY.PNG";
-
     OString aToken = readNextToken();
     const sal_Int32 nImageSize( readInt32() );
 
     OUString           aFileName;
-    if( aToken == aPngMarker )
-        aFileName = aPngFile;
-    else if( aToken == aJpegMarker )
-        aFileName = aJpegFile;
-    else if( aToken == aPbmMarker )
-        aFileName = aPbmFile;
+    if( aToken == "PNG" )
+        aFileName = "DUMMY.PNG";
+    else if( aToken == "JPEG" )
+        aFileName = "DUMMY.JPEG";
+    else if( aToken == "PBM" )
+        aFileName = "DUMMY.PBM";
     else
     {
-        SAL_WARN_IF(aToken != aPpmMarker,"sdext.pdfimport","Invalid bitmap format");
-        aFileName = aPpmFile;
+        SAL_WARN_IF(aToken != "PPM","sdext.pdfimport","Invalid bitmap format");
+        aFileName = "DUMMY.PPM";
     }
 
     uno::Sequence<sal_Int8> aDataSequence(nImageSize);

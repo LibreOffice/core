@@ -218,9 +218,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         bool bNew = sPersistentName.isEmpty();
         if ( bNew )
         {
-            static const char sBaseName[] = "Obj";
-
-            sPersistentName = sBaseName + OUString::number(rDefinitions.size() + 1);
+            sPersistentName = "Obj" + OUString::number(rDefinitions.size() + 1);
             Reference<XNameAccess> xElements(getContainerStorage(),UNO_QUERY);
             if ( xElements.is() )
                 sPersistentName = ::dbtools::createUniqueName(xElements,sPersistentName);

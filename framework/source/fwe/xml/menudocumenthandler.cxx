@@ -79,10 +79,6 @@ static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 
-// special popup menus (filled during runtime) must be saved as an empty popup menu or menuitem!!!
-static const char ADDDIRECT_CMD[]               = ".uno:AddDirect";
-static const char AUTOPILOTMENU_CMD[]           = ".uno:AutoPilotMenu";
-
 //  using namespaces
 
 using namespace ::com::sun::star::uno;
@@ -819,8 +815,9 @@ throw ( SAXException, RuntimeException )
             ExtractMenuParameters( aProps, aCommandURL, aLabel, aHelpURL, xSubMenu, nType, nItemBits );
             if ( xSubMenu.is() )
             {
-                if ( aCommandURL == ADDDIRECT_CMD ||
-                    aCommandURL == AUTOPILOTMENU_CMD )
+                // special popup menus (filled during runtime) must be saved as an empty popup menu or menuitem!!!
+                if ( aCommandURL == ".uno:AddDirect" ||
+                    aCommandURL == ".uno:AutoPilotMenu" )
                 {
                     WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
                     bSeparator = false;

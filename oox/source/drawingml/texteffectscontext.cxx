@@ -98,8 +98,6 @@ OUString lclGetGrabBagName(sal_uInt32 aId)
     return aGrabBagNameMap[aId];
 }
 
-const char constAttributesSequenceName[] = "attributes";
-
 }
 
 using namespace oox::core;
@@ -131,7 +129,7 @@ void TextEffectsContext::pushAttributeToGrabBag (sal_Int32 aAttributeId, const O
 
 void TextEffectsContext::processAttributes(const AttributeList& rAttribs)
 {
-    mpGrabBagStack->push(constAttributesSequenceName);
+    mpGrabBagStack->push("attributes");
     switch(mnCurrentElement)
     {
         case OOX_TOKEN(w14, glow):

@@ -61,38 +61,20 @@ using namespace ::xmloff::token;
 #define NSPREFIX "ooo:"
 
 // ooo xml elements
-static const char    aOOOElemMetaSlides[] = NSPREFIX "meta_slides";
-static const char    aOOOElemMetaSlide[] = NSPREFIX "meta_slide";
 static const char    aOOOElemTextField[] = NSPREFIX "text_field";
 
-// ooo xml attributes for meta_slides
-static const char    aOOOAttrNumberOfSlides[] = NSPREFIX "number-of-slides";
-static const char    aOOOAttrStartSlideNumber[] = NSPREFIX "start-slide-number";
-static const char    aOOOAttrNumberingType[] = NSPREFIX "page-numbering-type";
-static const char    aOOOAttrUsePositionedChars[] = NSPREFIX "use-positioned-chars";
 
 // ooo xml attributes for meta_slide
 static const char    aOOOAttrSlide[] = NSPREFIX "slide";
 static const char    aOOOAttrMaster[] = NSPREFIX "master";
 static const char    aOOOAttrBackgroundVisibility[] = NSPREFIX "background-visibility";
 static const char    aOOOAttrMasterObjectsVisibility[] = NSPREFIX "master-objects-visibility";
-static const char    aOOOAttrPageNumberVisibility[] = NSPREFIX "page-number-visibility";
-static const char    aOOOAttrDateTimeVisibility[] = NSPREFIX "date-time-visibility";
-static const char    aOOOAttrFooterVisibility[] = NSPREFIX "footer-visibility";
 static const OUString aOOOAttrDateTimeField = NSPREFIX "date-time-field";
 static const char    aOOOAttrFooterField[] = NSPREFIX "footer-field";
-static const char    aOOOAttrHeaderField[] = NSPREFIX "header-field";
 static const char    aOOOAttrHasTransition[] = NSPREFIX "has-transition";
-static const char    aOOOAttrIdList[] = NSPREFIX "id-list";
 
 // ooo xml attributes for pages and shapes
 static const char    aOOOAttrName[] = NSPREFIX "name";
-
-// ooo xml attributes for date_time_field
-static const char    aOOOAttrDateTimeFormat[] = NSPREFIX "date-time-format";
-
-// ooo xml attributes for Placeholder Shapes
-static const char    aOOOAttrTextAdjust[] = NSPREFIX "text-adjust";
 
 static const char    constSvgNamespace[] = "http://www.w3.org/2000/svg";
 
@@ -292,7 +274,7 @@ public:
 
         OUString sDateTimeFormat = sDateFormat + " " + sTimeFormat;
 
-        pSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrDateTimeFormat, sDateTimeFormat );
+        pSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "date-time-format", sDateTimeFormat );
         SvXMLElementExport aExp( *pSVGExport, XML_NAMESPACE_NONE, "g", true, true );
     }
     virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const override
@@ -923,13 +905,13 @@ void SVGFilter::implGenerateMetaData()
         // we wrap all meta presentation info into a svg:defs element
         SvXMLElementExport aDefsElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", true, true );
 
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aOOOElemMetaSlides );
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrNumberOfSlides, OUString::number( nCount ) );
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrStartSlideNumber, OUString::number( mnVisiblePage ) );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", NSPREFIX "meta_slides" );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "number-of-slides", OUString::number( nCount ) );
+        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "start-slide-number", OUString::number( mnVisiblePage ) );
 
         if( mpSVGExport->IsUsePositionedCharacters() )
         {
-            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrUsePositionedChars, "true" );
+            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "use-positioned-chars", "true" );
         }
 
         // Add a (global) Page Numbering Type attribute for the document
@@ -970,13 +952,13 @@ void SVGFilter::implGenerateMetaData()
                     break;
             }
             if( !sNumberingType.isEmpty() )
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrNumberingType, sNumberingType );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "page-numbering-type", sNumberingType );
         }
 
 
         {
             SvXMLElementExport    aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
-            const OUString                aId( aOOOElemMetaSlide );
+            const OUString                aId( NSPREFIX "meta_slide" );
             const OUString                aElemTextFieldId( aOOOElemTextField );
             std::vector< TextField* >     aFieldSet;
 
@@ -1036,7 +1018,7 @@ void SVGFilter::implGenerateMetaData()
                             bPageNumberVisibility = bPageNumberVisibility && ( nPageNumberingType != css::style::NumberingType::NUMBER_NONE );
                             if( bPageNumberVisibility ) // visibility default value: 'hidden'
                             {
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrPageNumberVisibility, "visible" );
+                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "page-number-visibility", "visible" );
                             }
 
                             // Date/Time Field
@@ -1063,7 +1045,7 @@ void SVGFilter::implGenerateMetaData()
                             }
                             else
                             {
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrDateTimeVisibility, "hidden" );
+                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "date-time-visibility", "hidden" );
                             }
 
                             // Footer Field
@@ -1079,7 +1061,7 @@ void SVGFilter::implGenerateMetaData()
                             }
                             else
                             {
-                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrFooterVisibility, "hidden" );
+                                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "footer-visibility", "hidden" );
                             }
                         }
                         else
@@ -1213,7 +1195,7 @@ void SVGFilter::implExportTextShapeIndex()
             if( !rPageId.isEmpty() && !sTextShapeIdList.isEmpty() )
             {
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, rPageId  );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrIdList, sTextShapeIdList );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "id-list", sTextShapeIdList );
                 SvXMLElementExport aGElem( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
             }
         }
@@ -1767,7 +1749,7 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape, bool bMaste
                                 default:
                                     break;
                             }
-                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrTextAdjust, sTextAdjust );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, NSPREFIX "text-adjust", sTextAdjust );
                         }
                     }
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", aShapeClass );
@@ -2156,7 +2138,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
             }
             bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
 
-            static const OUString aHeaderId( aOOOAttrHeaderField );
+            static const OUString aHeaderId( NSPREFIX "header-field" );
             static const OUString aFooterId( aOOOAttrFooterField );
             static const OUString aDateTimeId( aOOOAttrDateTimeField );
             static const OUString aVariableDateTimeId( aOOOAttrDateTimeField + "-variable" );

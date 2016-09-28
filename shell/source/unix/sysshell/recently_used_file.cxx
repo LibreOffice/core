@@ -30,10 +30,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-const OUStringLiteral RECENTLY_USED_FILE_NAME(".recently-used");
 const char SLASH[] = "/";
 
-namespace /* private */ {
+namespace {
 
 inline void ensure_final_slash(/*inout*/ OUString& path)
 {
@@ -58,7 +57,7 @@ recently_used_file::recently_used_file() :
 
         OUString rufn = homedir;
         ensure_final_slash(rufn);
-        rufn += RECENTLY_USED_FILE_NAME;
+        rufn += ".recently-used";
 
         OString tmp =
             OUStringToOString(rufn, osl_getThreadTextEncoding());

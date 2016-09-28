@@ -221,12 +221,11 @@ namespace
 {
     void appendOneKeyColumnClause( const OUString &tblName, const OUString &colName, const connectivity::ORowSetValue &_rValue, OUStringBuffer &o_buf )
     {
-        static const char s_sDot[] = ".";
         OUString fullName;
         if (tblName.isEmpty())
             fullName = colName;
         else
-            fullName = tblName + s_sDot + colName;
+            fullName = tblName + "." + colName;
         if ( _rValue.isNull() )
         {
             o_buf.append(fullName + " IS NULL ");
@@ -627,9 +626,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
 
     // set values and column names
     OUStringBuffer aValues(" VALUES ( ");
-    static const char aPara[] = "?,";
     OUString aQuote = getIdentifierQuoteString();
-    static const char aComma[] = ",";
 
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
@@ -644,8 +641,8 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
             {
                 bRefetch = ::std::find(m_aFilterColumns.begin(),m_aFilterColumns.end(),aIter->second.sRealName) == m_aFilterColumns.end();
             }
-            aSql.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + aComma);
-            aValues.append(aPara);
+            aSql.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + ",");
+            aValues.append("?,");
             bModified = true;
         }
     }

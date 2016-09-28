@@ -74,14 +74,9 @@
 
 using namespace css;
 
-static const char MODULEPROP_SHORTNAME  [] = "ooSetupFactoryShortName";
-static const char MODULEPROP_UINAME     [] = "ooSetupFactoryUIName";
-static const char CMDPROP_UINAME        [] = "Name";
-
 static const char FOLDERNAME_UICONFIG   [] = "Configurations2";
 
 static const char MEDIATYPE_PROPNAME    [] = "MediaType";
-static const char MEDIATYPE_UICONFIG    [] = "application/vnd.sun.xml.ui.configuration";
 
 static const sal_uInt16 KEYCODE_ARRAY[] =
 {
@@ -884,8 +879,8 @@ void SfxAcceleratorConfigPage::InitAccCfg()
                  frame::ModuleManager::create(m_xContext);
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
         comphelper::SequenceAsHashMap lModuleProps(xModuleManager->getByName(m_sModuleLongName));
-        m_sModuleShortName = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_SHORTNAME, OUString());
-        m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_UINAME   , OUString());
+        m_sModuleShortName = lModuleProps.getUnpackedValueOrDefault("ooSetupFactoryShortName", OUString());
+        m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault("ooSetupFactoryUIName", OUString());
 
         // get global accelerator configuration
         m_xGlobal = css::ui::GlobalAcceleratorConfiguration::create(m_xContext);
@@ -1357,7 +1352,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
             OUString sMediaType;
             xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
             if (sMediaType.isEmpty())
-                xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, uno::makeAny(OUString(MEDIATYPE_UICONFIG)));
+                xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, uno::makeAny(OUString("application/vnd.sun.xml.ui.configuration")));
 
             uno::Reference<ui::XUIConfigurationManager2> xCfgMgr2 = ui::UIConfigurationManager::create(m_xContext);
             xCfgMgr2->setStorage(xUIConfig);
@@ -1522,7 +1517,7 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
         if (xModuleConf.is())
         {
             ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
-            OUString sLabel = lProps.getUnpackedValueOrDefault(CMDPROP_UINAME, OUString());
+            OUString sLabel = lProps.getUnpackedValueOrDefault("Name", OUString());
             if (!sLabel.isEmpty())
                 return sLabel;
         }

@@ -220,12 +220,10 @@ namespace pcr
             if ( (eType == TypeClass_STRING || eType == TypeClass_SEQUENCE) &&
                     lcl_isLanguageDependentProperty( _rPropertyName ) )
             {
-                static const char s_sResourceResolverPropName[] = "ResourceResolver";
-
                 Reference< resource::XStringResourceResolver > xStringResourceResolver;
                 try
                 {
-                    xStringResourceResolver.set( _xComponent->getPropertyValue( s_sResourceResolverPropName ),UNO_QUERY);
+                    xStringResourceResolver.set( _xComponent->getPropertyValue( "ResourceResolver" ),UNO_QUERY);
                     if( xStringResourceResolver.is() &&
                         xStringResourceResolver->getLocales().getLength() > 0 )
                     {
@@ -373,7 +371,6 @@ namespace pcr
                     else if( eType == TypeClass_SEQUENCE )
                     {
                         static const char aDot[] = ".";
-                        static const char aEsc[] = "&";
 
                         // Put strings into resource using new ids
                         Sequence< OUString > aNewStrings;
@@ -456,9 +453,7 @@ namespace pcr
                             OUString aStr = pNewStrings[i];
                             xStringResourceManager->setString( aPureIdStr, aStr );
 
-                            OUString aIdStr = aEsc;
-                            aIdStr += aPureIdStr;
-                            pNewIdStrings[i] = aIdStr;
+                            pNewIdStrings[i] = "&" + aPureIdStr;
                         }
                         aValue <<= aNewIdStrings;
 

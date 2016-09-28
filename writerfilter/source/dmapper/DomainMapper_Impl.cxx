@@ -1348,10 +1348,9 @@ void DomainMapper_Impl::appendTextContent(
 
 void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const OLEHandlerPtr& pOLEHandler )
 {
-    static const char sEmbeddedService[] = "com.sun.star.text.TextEmbeddedObject";
     try
     {
-        uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
+        uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xOLEProperties(xOLE, uno::UNO_QUERY_THROW);
 
         OUString aCLSID = pOLEHandler->getCLSID(m_xComponentContext);
@@ -1419,10 +1418,9 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
     val.getAny() >>= formula;
     if( formula.is() )
     {
-        static const char sEmbeddedService[] = "com.sun.star.text.TextEmbeddedObject";
         try
         {
-            uno::Reference< text::XTextContent > xStarMath( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
+            uno::Reference< text::XTextContent > xStarMath( m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xStarMathProperties(xStarMath, uno::UNO_QUERY_THROW);
 
             xStarMathProperties->setPropertyValue(getPropertyName( PROP_EMBEDDED_OBJECT ),
@@ -1470,8 +1468,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
                 xCursor->gotoEnd( true );
             //the paragraph after this new section is already inserted
             xCursor->goLeft(1, true);
-            static const char sSectionService[] = "com.sun.star.text.TextSection";
-            uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance(sSectionService), uno::UNO_QUERY_THROW );
+            uno::Reference< text::XTextContent > xSection( m_xTextFactory->createInstance("com.sun.star.text.TextSection"), uno::UNO_QUERY_THROW );
             xSection->attach( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW) );
             xRet.set(xSection, uno::UNO_QUERY );
         }
@@ -4629,10 +4626,9 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
     {
         if( aBookmarkIter != m_aBookmarkMap.end() )
         {
-            static const char sBookmarkService[] = "com.sun.star.text.Bookmark";
             if (m_xTextFactory.is())
             {
-                uno::Reference< text::XTextContent > xBookmark( m_xTextFactory->createInstance( sBookmarkService ), uno::UNO_QUERY_THROW );
+                uno::Reference< text::XTextContent > xBookmark( m_xTextFactory->createInstance( "com.sun.star.text.Bookmark" ), uno::UNO_QUERY_THROW );
                 uno::Reference< text::XTextCursor > xCursor;
                 uno::Reference< text::XText > xText = aBookmarkIter->second.m_xTextRange->getText();
                 if( aBookmarkIter->second.m_bIsStartOfText && !bIsAfterDummyPara)

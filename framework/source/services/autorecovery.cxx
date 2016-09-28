@@ -1007,52 +1007,20 @@ static const char CFG_ENTRY_SESSIONDATA[] = "SessionData";
 static const char CFG_ENTRY_AUTOSAVE_ENABLED[] = "AutoSave/Enabled";
 static const char CFG_ENTRY_AUTOSAVE_TIMEINTERVALL[] = "AutoSave/TimeIntervall"; //sic!
 
-static const char CFG_ENTRY_USERAUTOSAVE_ENABLED[] = "AutoSave/UserAutoSaveEnabled";
-
-static const char CFG_PATH_AUTOSAVE[] = "AutoSave";
-static const char CFG_ENTRY_MINSPACE_DOCSAVE[] = "MinSpaceDocSave";
-static const char CFG_ENTRY_MINSPACE_CONFIGSAVE[] = "MinSpaceConfigSave";
-
-static const char CFG_PACKAGE_MODULES[] = "org.openoffice.Setup/Office/Factories";
-static const char CFG_ENTRY_REALDEFAULTFILTER[] = "ooSetupFactoryActualFilter";
-
 static const char CFG_ENTRY_PROP_TEMPURL[] = "TempURL";
 static const char CFG_ENTRY_PROP_ORIGINALURL[] = "OriginalURL";
 static const char CFG_ENTRY_PROP_TEMPLATEURL[] = "TemplateURL";
-static const char CFG_ENTRY_PROP_FACTORYURL[] = "FactoryURL";
 static const char CFG_ENTRY_PROP_MODULE[] = "Module";
 static const char CFG_ENTRY_PROP_DOCUMENTSTATE[] = "DocumentState";
 static const char CFG_ENTRY_PROP_FILTER[] = "Filter";
 static const char CFG_ENTRY_PROP_TITLE[] = "Title";
-static const char CFG_ENTRY_PROP_ID[] = "ID";
 static const char CFG_ENTRY_PROP_VIEWNAMES[] = "ViewNames";
 
-static const char FILTER_PROP_TYPE[] = "Type";
-static const char TYPE_PROP_EXTENSIONS[] = "Extensions";
-
-// setup.xcu
-static const char CFG_ENTRY_PROP_EMPTYDOCUMENTURL[] = "ooSetupFactoryEmptyDocumentURL";
-static const char CFG_ENTRY_PROP_FACTORYSERVICE[] = "ooSetupFactoryDocumentService";
-
-static const char EVENT_ON_NEW[] = "OnNew";
-static const char EVENT_ON_LOAD[] = "OnLoad";
-static const char EVENT_ON_UNLOAD[] = "OnUnload";
-static const char EVENT_ON_MODIFYCHANGED[] = "OnModifyChanged";
-static const char EVENT_ON_SAVE[] = "OnSave";
-static const char EVENT_ON_SAVEAS[] = "OnSaveAs";
-static const char EVENT_ON_SAVETO[] = "OnCopyTo";
-static const char EVENT_ON_SAVEDONE[] = "OnSaveDone";
-static const char EVENT_ON_SAVEASDONE[] = "OnSaveAsDone";
-static const char EVENT_ON_SAVETODONE[] = "OnCopyToDone";
-static const char EVENT_ON_SAVEFAILED[] = "OnSaveFailed";
-static const char EVENT_ON_SAVEASFAILED[] = "OnSaveAsFailed";
-static const char EVENT_ON_SAVETOFAILED[] = "OnCopyToFailed";
 
 static const char RECOVERY_ITEM_BASE_IDENTIFIER[] = "recovery_item_";
 
 static const char CMD_PROTOCOL[] = "vnd.sun.star.autorecovery:";
 
-static const char CMD_DO_AUTO_SAVE[] = "/doAutoSave";    // force AutoSave ignoring the AutoSave timer
 static const char CMD_DO_PREPARE_EMERGENCY_SAVE[] = "/doPrepareEmergencySave";    // prepare the office for the following EmergencySave step (hide windows etcpp.)
 static const char CMD_DO_EMERGENCY_SAVE[] = "/doEmergencySave";    // do EmergencySave on crash
 static const char CMD_DO_RECOVERY[] = "/doAutoRecovery";    // recover all crashed documents
@@ -1061,16 +1029,6 @@ static const char CMD_DO_ENTRY_CLEANUP[] = "/doEntryCleanUp";    // remove the s
 static const char CMD_DO_SESSION_SAVE[] = "/doSessionSave";    // save all open documents if e.g. a window manager closes an user session
 static const char CMD_DO_SESSION_QUIET_QUIT[] = "/doSessionQuietQuit";    // let the current session be quietly closed ( the saving should be done using doSessionSave previously ) if e.g. a window manager closes an user session
 static const char CMD_DO_SESSION_RESTORE[] = "/doSessionRestore";    // restore a saved user session from disc
-static const char CMD_DO_DISABLE_RECOVERY[] = "/disableRecovery";    // disable recovery and auto save (!) temp. for this office session
-static const char CMD_DO_SET_AUTOSAVE_STATE[] = "/setAutoSaveState";    // disable/enable auto save (not crash save) for this office session
-
-static const char REFERRER_USER[] = "private:user";
-
-static const char PROP_DISPATCH_ASYNCHRON[] = "DispatchAsynchron";
-static const char PROP_PROGRESS[] = "StatusIndicator";
-static const char PROP_SAVEPATH[] = "SavePath";
-static const char PROP_ENTRY_ID[] = "EntryID";
-static const char PROP_AUTOSAVE_STATE[] = "AutoSaveState";
 
 static const char OPERATION_START[] = "start";
 static const char OPERATION_STOP[] = "stop";
@@ -1210,9 +1168,9 @@ DispatchParams::DispatchParams()
 DispatchParams::DispatchParams(const ::comphelper::SequenceAsHashMap&             lArgs ,
                                const css::uno::Reference< css::uno::XInterface >& xOwner)
 {
-    m_nWorkingEntryID         = lArgs.getUnpackedValueOrDefault(PROP_ENTRY_ID, (sal_Int32)-1                                       );
-    m_xProgress               = lArgs.getUnpackedValueOrDefault(PROP_PROGRESS, css::uno::Reference< css::task::XStatusIndicator >());
-    m_sSavePath               = lArgs.getUnpackedValueOrDefault(PROP_SAVEPATH, OUString()                                   );
+    m_nWorkingEntryID         = lArgs.getUnpackedValueOrDefault("EntryID", (sal_Int32)-1                                       );
+    m_xProgress               = lArgs.getUnpackedValueOrDefault("StatusIndicator", css::uno::Reference< css::task::XStatusIndicator >());
+    m_sSavePath               = lArgs.getUnpackedValueOrDefault("SavePath", OUString()                                   );
     m_xHoldRefForAsyncOpAlive = xOwner;
 };
 
@@ -1325,7 +1283,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     // independent from the configuration entry.
     if ((eNewJob & AutoRecovery::E_SET_AUTOSAVE_STATE) == AutoRecovery::E_SET_AUTOSAVE_STATE)
     {
-        bool bOn = lArgs.getUnpackedValueOrDefault(PROP_AUTOSAVE_STATE, true);
+        bool bOn = lArgs.getUnpackedValueOrDefault("AutoSaveState", true);
         if (bOn)
         {
             // don't enable AutoSave hardly !
@@ -1347,7 +1305,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
 
     m_eJob |= eNewJob;
 
-    bAsync = lArgs.getUnpackedValueOrDefault(PROP_DISPATCH_ASYNCHRON, false);
+    bAsync = lArgs.getUnpackedValueOrDefault("DispatchAsynchron", false);
     aParams = DispatchParams(lArgs, static_cast< css::frame::XDispatch* >(this));
 
     // Hold this instance alive till the asynchronous operation will be finished.
@@ -1564,14 +1522,14 @@ void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEv
 
     // new document => put it into the internal list
     if (
-        (aEvent.EventName == EVENT_ON_NEW) ||
-        (aEvent.EventName == EVENT_ON_LOAD)
+        (aEvent.EventName == "OnNew") ||
+        (aEvent.EventName == "OnLoad")
        )
     {
         implts_registerDocument(xDocument);
     }
     // document modified => set its modify state new (means modified against the original file!)
-    else if ( aEvent.EventName == EVENT_ON_MODIFYCHANGED )
+    else if ( aEvent.EventName == "OnModifyChanged" )
     {
         implts_updateModifiedState(xDocument);
     }
@@ -1581,17 +1539,17 @@ void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEv
        for the moment, till this other save requests will be finished.
      */
     else if (
-        (aEvent.EventName == EVENT_ON_SAVE) ||
-        (aEvent.EventName == EVENT_ON_SAVEAS) ||
-        (aEvent.EventName == EVENT_ON_SAVETO)
+        (aEvent.EventName == "OnSave") ||
+        (aEvent.EventName == "OnSaveAs") ||
+        (aEvent.EventName == "OnCopyTo")
        )
     {
         implts_updateDocumentUsedForSavingState(xDocument, SAVE_IN_PROGRESS);
     }
     // document saved => remove tmp. files - but hold config entries alive!
     else if (
-        (aEvent.EventName == EVENT_ON_SAVEDONE) ||
-        (aEvent.EventName == EVENT_ON_SAVEASDONE)
+        (aEvent.EventName == "OnSaveDone") ||
+        (aEvent.EventName == "OnSaveAsDone")
        )
     {
         implts_markDocumentAsSaved(xDocument);
@@ -1602,7 +1560,7 @@ void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEv
        Don't remove temp. files or change the modified state of the document!
        It was not really saved to the original file...
     */
-    else if ( aEvent.EventName == EVENT_ON_SAVETODONE )
+    else if ( aEvent.EventName == "OnCopyToDone" )
     {
         implts_updateDocumentUsedForSavingState(xDocument, SAVE_FINISHED);
     }
@@ -1611,15 +1569,15 @@ void SAL_CALL AutoRecovery::documentEventOccured(const css::document::DocumentEv
     // But we can reset the state "used for other save requests". Otherwhise
     // these documents will never be saved!
     else if (
-        (aEvent.EventName == EVENT_ON_SAVEFAILED) ||
-        (aEvent.EventName == EVENT_ON_SAVEASFAILED) ||
-        (aEvent.EventName == EVENT_ON_SAVETOFAILED)
+        (aEvent.EventName == "OnSaveFailed") ||
+        (aEvent.EventName == "OnSaveAsFailed") ||
+        (aEvent.EventName == "OnCopyToFailed")
        )
     {
         implts_updateDocumentUsedForSavingState(xDocument, SAVE_FINISHED);
     }
     // document closed => remove temp. files and configuration entries
-    else if ( aEvent.EventName == EVENT_ON_UNLOAD )
+    else if ( aEvent.EventName == "OnUnload" )
     {
         implts_deregisterDocument(xDocument); // sal_True => stop listening for disposing() !
     }
@@ -1740,17 +1698,17 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
 
     try
     {
-        OUString sCFG_PATH_AUTOSAVE(CFG_PATH_AUTOSAVE);
+        OUString sCFG_PATH_AUTOSAVE("AutoSave");
         ::comphelper::ConfigurationHelper::readDirectKey(m_xContext,
                                                          sCFG_PACKAGE_RECOVERY,
                                                          sCFG_PATH_AUTOSAVE,
-                                                         CFG_ENTRY_MINSPACE_DOCSAVE,
+                                                         "MinSpaceDocSave",
                                                          ::comphelper::EConfigurationModes::Standard) >>= nMinSpaceDocSave;
 
         ::comphelper::ConfigurationHelper::readDirectKey(m_xContext,
                                                          sCFG_PACKAGE_RECOVERY,
                                                          sCFG_PATH_AUTOSAVE,
-                                                         CFG_ENTRY_MINSPACE_CONFIGSAVE,
+                                                         "MinSpaceConfigSave",
                                                          ::comphelper::EConfigurationModes::Standard) >>= nMinSpaceConfigSave;
     }
     catch(const css::uno::Exception&)
@@ -1781,7 +1739,7 @@ void AutoRecovery::implts_readAutoSaveConfig()
 
     // UserAutoSave [bool]
     bool bUserEnabled = false;
-    xCommonRegistry->getByHierarchicalName(CFG_ENTRY_USERAUTOSAVE_ENABLED) >>= bUserEnabled;
+    xCommonRegistry->getByHierarchicalName("AutoSave/UserAutoSaveEnabled") >>= bUserEnabled;
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -1922,7 +1880,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         if (! xCFG.is())
         {
             // open module config on demand and cache the update access
-            xCFG.set( ::comphelper::ConfigurationHelper::openConfig(m_xContext, CFG_PACKAGE_MODULES,
+            xCFG.set( ::comphelper::ConfigurationHelper::openConfig(m_xContext, "org.openoffice.Setup/Office/Factories",
                            ::comphelper::EConfigurationModes::Standard),
                       css::uno::UNO_QUERY_THROW);
 
@@ -1936,7 +1894,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
             xCFG->getByName(rInfo.AppModule),
             css::uno::UNO_QUERY_THROW);
 
-        xModuleProps->getByName(CFG_ENTRY_REALDEFAULTFILTER) >>= rInfo.DefaultFilter;
+        xModuleProps->getByName("ooSetupFactoryActualFilter") >>= rInfo.DefaultFilter;
 
         css::uno::Reference< css::container::XNameAccess > xFilterCFG(
                 m_xContext->getServiceManager()->createInstanceWithContext(
@@ -1945,10 +1903,10 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
                 m_xContext->getServiceManager()->createInstanceWithContext(
                     "com.sun.star.document.TypeDetection", m_xContext), css::uno::UNO_QUERY_THROW);
 
-        ::comphelper::SequenceAsHashMap       lFilterProps        (xFilterCFG->getByName(rInfo.DefaultFilter));
-        OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(FILTER_PROP_TYPE, OUString());
-        ::comphelper::SequenceAsHashMap       lTypeProps          (xTypeCFG->getByName(sTypeRegistration));
-        css::uno::Sequence< OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(TYPE_PROP_EXTENSIONS, css::uno::Sequence< OUString >());
+        ::comphelper::SequenceAsHashMap  lFilterProps        (xFilterCFG->getByName(rInfo.DefaultFilter));
+        OUString                         sTypeRegistration = lFilterProps.getUnpackedValueOrDefault("Type", OUString());
+        ::comphelper::SequenceAsHashMap  lTypeProps          (xTypeCFG->getByName(sTypeRegistration));
+        css::uno::Sequence< OUString >   lExtensions       = lTypeProps.getUnpackedValueOrDefault("Extensions", css::uno::Sequence< OUString >());
         if (lExtensions.getLength())
         {
             rInfo.Extension = "." + lExtensions[0];
@@ -1976,8 +1934,8 @@ void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo
         rInfo.AppModule = xManager->identify(rInfo.Document);
 
     ::comphelper::SequenceAsHashMap lModuleDescription(xManager->getByName(rInfo.AppModule));
-    lModuleDescription[OUString(CFG_ENTRY_PROP_EMPTYDOCUMENTURL)] >>= rInfo.FactoryURL;
-    lModuleDescription[OUString(CFG_ENTRY_PROP_FACTORYSERVICE)] >>= rInfo.FactoryService;
+    lModuleDescription[OUString("ooSetupFactoryEmptyDocumentURL")] >>= rInfo.FactoryURL;
+    lModuleDescription[OUString("ooSetupFactoryDocumentService")] >>= rInfo.FactoryService;
 }
 
 void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i_rInfo )
@@ -3223,7 +3181,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         utl::MediaDescriptor lDescriptor;
 
         // it's an UI feature - so the "USER" itself must be set as referer
-        lDescriptor[utl::MediaDescriptor::PROP_REFERRER()] <<= OUString(REFERRER_USER);
+        lDescriptor[utl::MediaDescriptor::PROP_REFERRER()] <<= OUString("private:user");
         lDescriptor[utl::MediaDescriptor::PROP_SALVAGEDFILE()] <<= OUString();
 
         // recovered documents are loaded hidden, and shown all at once, later
@@ -3584,7 +3542,7 @@ OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
     else if ((eJob & AutoRecovery::E_ENTRY_CLEANUP) == AutoRecovery::E_ENTRY_CLEANUP)
         sFeature.append(CMD_DO_ENTRY_CLEANUP);
     else if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
-        sFeature.append(CMD_DO_AUTO_SAVE);
+        sFeature.append("/doAutoSave");  // force AutoSave ignoring the AutoSave timer
     else if ( eJob != AutoRecovery::E_NO_JOB )
         SAL_INFO("fwk", "AutoRecovery::implst_getJobDescription(): Invalid job identifier detected.");
 
@@ -3611,9 +3569,9 @@ sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
             return AutoRecovery::E_SESSION_QUIET_QUIT;
         else if ( aURL.Path == CMD_DO_SESSION_RESTORE )
             return AutoRecovery::E_SESSION_RESTORE;
-        else if ( aURL.Path == CMD_DO_DISABLE_RECOVERY )
+        else if ( aURL.Path == "/disableRecovery" ) // disable recovery and auto save (!) temp. for this office session
             return AutoRecovery::E_DISABLE_AUTORECOVERY;
-        else if ( aURL.Path == CMD_DO_SET_AUTOSAVE_STATE )
+        else if ( aURL.Path == "/setAutoSaveState" ) // disable/enable auto save (not crash save) for this office session
             return AutoRecovery::E_SET_AUTOSAVE_STATE;
     }
 
@@ -3633,9 +3591,9 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
     {
         // pack rInfo for transport via UNO
         ::comphelper::NamedValueCollection aInfo;
-        aInfo.put( OUString(CFG_ENTRY_PROP_ID), pInfo->ID );
+        aInfo.put( OUString("ID"), pInfo->ID );
         aInfo.put( OUString(CFG_ENTRY_PROP_ORIGINALURL), pInfo->OrgURL );
-        aInfo.put( OUString(CFG_ENTRY_PROP_FACTORYURL), pInfo->FactoryURL );
+        aInfo.put( OUString("FactoryURL"), pInfo->FactoryURL );
         aInfo.put( OUString(CFG_ENTRY_PROP_TEMPLATEURL), pInfo->TemplateURL );
         aInfo.put( OUString(CFG_ENTRY_PROP_TEMPURL), pInfo->OldTempURL.isEmpty() ? pInfo->NewTempURL : pInfo->OldTempURL );
         aInfo.put( OUString(CFG_ENTRY_PROP_MODULE), pInfo->AppModule);

@@ -536,9 +536,7 @@ namespace dlgprov
 
     void DialogUnoScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
     {
-        static const char sUnoURLScheme[] = "vnd.sun.star.UNO:";
-
-        OUString aMethodName = aScriptEvent.ScriptCode.copy( strlen(sUnoURLScheme) );
+        OUString aMethodName = aScriptEvent.ScriptCode.copy( strlen("vnd.sun.star.UNO:") );
 
         const Any* pArguments = aScriptEvent.Arguments.getConstArray();
         Any aEventObject = pArguments[0];

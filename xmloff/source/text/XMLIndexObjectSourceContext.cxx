@@ -46,12 +46,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_OBJECT_INDEX_ENTRY_TEMPLATE;
 using ::xmloff::token::XML_TOKEN_INVALID;
 
-const sal_Char sAPI_CreateFromStarCalc[] = "CreateFromStarCalc";
-const sal_Char sAPI_CreateFromStarChart[] = "CreateFromStarChart";
-const sal_Char sAPI_CreateFromStarDraw[] = "CreateFromStarDraw";
-const sal_Char sAPI_CreateFromStarMath[] = "CreateFromStarMath";
-const sal_Char sAPI_CreateFromOtherEmbeddedObjects[] = "CreateFromOtherEmbeddedObjects";
-
 
 XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
     SvXMLImport& rImport,
@@ -60,11 +54,11 @@ XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
                                   rPropSet, false),
-        sCreateFromStarCalc(sAPI_CreateFromStarCalc),
-        sCreateFromStarChart(sAPI_CreateFromStarChart),
-        sCreateFromStarDraw(sAPI_CreateFromStarDraw),
-        sCreateFromStarMath(sAPI_CreateFromStarMath),
-        sCreateFromOtherEmbeddedObjects(sAPI_CreateFromOtherEmbeddedObjects),
+        sCreateFromStarCalc("CreateFromStarCalc"),
+        sCreateFromStarChart("CreateFromStarChart"),
+        sCreateFromStarDraw("CreateFromStarDraw"),
+        sCreateFromStarMath("CreateFromStarMath"),
+        sCreateFromOtherEmbeddedObjects("CreateFromOtherEmbeddedObjects"),
         bUseCalc(false),
         bUseChart(false),
         bUseDraw(false),

@@ -49,24 +49,6 @@ using namespace ::com::sun::star::frame;
 //  Namespace
 
 static const char CONFIGURATION_ROOT_ACCESS[]           = "/org.openoffice.Office.UI.";
-static const char CONFIGURATION_CMD_ELEMENT_ACCESS[]    = "/UserInterface/Commands";
-static const char CONFIGURATION_POP_ELEMENT_ACCESS[]    = "/UserInterface/Popups";
-static const char CONFIGURATION_PROPERTY_LABEL[]        = "Label";
-static const char CONFIGURATION_PROPERTY_CONTEXT_LABEL[] = "ContextLabel";
-static const char CONFIGURATION_PROPERTY_POPUP_LABEL[]   = "PopupLabel";
-static const char CONFIGURATION_PROPERTY_TOOLTIP_LABEL[] = "TooltipLabel";
-static const char CONFIGURATION_PROPERTY_TARGET_URL[]    = "TargetURL";
-static const char CONFIGURATION_PROPERTY_IS_EXPERIMENTAL[] = "IsExperimental";
-
-// Property names of the resulting Property Set
-static const char PROPSET_LABEL[]                       = "Label";
-static const char PROPSET_NAME[]                        = "Name";
-static const char PROPSET_POPUP[]                       = "Popup";
-static const char PROPSET_POPUPLABEL[]                  = "PopupLabel";
-static const char PROPSET_TOOLTIPLABEL[]                = "TooltipLabel";
-static const char PROPSET_TARGETURL[]                   = "TargetURL";
-static const char PROPSET_IS_EXPERIMENTAL[]             = "IsExperimental";
-static const char PROPSET_PROPERTIES[]                  = "Properties";
 
 // Special resource URLs to retrieve additional information
 static const char PRIVATE_RESOURCE_URL[]                = "private:";
@@ -190,20 +172,18 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
     m_aConfigCmdAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS ),
-    m_aPropUILabel( CONFIGURATION_PROPERTY_LABEL ),
-    m_aPropUIContextLabel( CONFIGURATION_PROPERTY_CONTEXT_LABEL ),
-    m_aPropUIPopupLabel( CONFIGURATION_PROPERTY_POPUP_LABEL ),
-    m_aPropUITooltipLabel( CONFIGURATION_PROPERTY_TOOLTIP_LABEL ),
-    m_aPropUITargetURL( CONFIGURATION_PROPERTY_TARGET_URL ),
-    m_aPropUIIsExperimental( CONFIGURATION_PROPERTY_IS_EXPERIMENTAL ),
-    m_aPropLabel( PROPSET_LABEL ),
-    m_aPropName( PROPSET_NAME ),
-    m_aPropPopup( PROPSET_POPUP ),
-    m_aPropPopupLabel( PROPSET_POPUPLABEL ),
-    m_aPropTooltipLabel( PROPSET_TOOLTIPLABEL ),
-    m_aPropTargetURL( PROPSET_TARGETURL ),
-    m_aPropIsExperimental( PROPSET_IS_EXPERIMENTAL ),
-    m_aPropProperties( PROPSET_PROPERTIES ),
+    m_aPropUILabel( "Label" ),
+    m_aPropUIContextLabel( "ContextLabel" ),
+    m_aPropUIPopupLabel( "PopupLabel" ),
+    m_aPropUITooltipLabel( "TooltipLabel" ),
+    m_aPropUITargetURL( "TargetURL" ),
+    m_aPropLabel( "Label" ),
+    m_aPropName( "Name" ),
+    m_aPropPopup( "Popup" ),
+    m_aPropPopupLabel( "PopupLabel" ),
+    m_aPropTooltipLabel( "TooltipLabel" ),
+    m_aPropTargetURL( "TargetURL" ),
+    m_aPropProperties( "Properties" ),
     m_aPrivateResourceURL( PRIVATE_RESOURCE_URL ),
     m_xGenericUICommands( rGenericUICommands ),
     m_bConfigAccessInitialized( false ),
@@ -211,13 +191,11 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aM
     m_bGenericDataRetrieved( false )
 {
     // Create configuration hierarchical access name
-    m_aConfigCmdAccess += aModuleName
-                       +  CONFIGURATION_CMD_ELEMENT_ACCESS;
+    m_aConfigCmdAccess += aModuleName + "/UserInterface/Commands";
 
     m_xConfigProvider = theDefaultProvider::get( rxContext );
 
-    m_aConfigPopupAccess += aModuleName
-                         +  CONFIGURATION_POP_ELEMENT_ACCESS;
+    m_aConfigPopupAccess += aModuleName + "/UserInterface/Popups";
 }
 
 ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()

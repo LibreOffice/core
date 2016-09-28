@@ -172,7 +172,6 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     if ( m_aJoinedKeyColumns.empty() )
         throw SQLException();
     // list all columns that should be set
-    static const char s_sPara[] = " = ?";
     OUString aQuote  = getIdentifierQuoteString();
 
     ::std::map< OUString,bool > aResultSetChanged;
@@ -205,7 +204,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
             OUStringBuffer& rPart = aSql[aIter->second.sTableName];
             if ( !rPart.isEmpty() )
                 rPart.append(", ");
-            rPart.append(sQuotedColumnName + s_sPara);
+            rPart.append(sQuotedColumnName + " = ?");
         }
     }
 
@@ -214,9 +213,6 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
 
     if( aKeyConditions.empty() )
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_CONDITION_FOR_PK ), StandardSQLState::GENERAL_ERROR, m_xConnection );
-
-    static const char s_sUPDATE[] = "UPDATE ";
-    static const char s_sSET[] = " SET ";
 
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
 
@@ -229,8 +225,8 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
             m_bResultSetChanged = m_bResultSetChanged || aResultSetChanged[aSqlIter->first];
             OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
-            OUStringBuffer sSql(s_sUPDATE + ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) +
-                                       s_sSET + aSqlIter->second.toString());
+            OUStringBuffer sSql("UPDATE " + ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) +
+                                       " SET " + aSqlIter->second.toString());
             OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
             if ( !rCondition.isEmpty() )
                 sSql.append(" WHERE " + rCondition.toString() );
@@ -283,8 +279,6 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_VALUE_CHANGED ), StandardSQLState::GENERAL_ERROR, m_xConnection );
 
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-    static const char s_sINSERT[] = "INSERT INTO ";
-    static const char s_sVALUES[] = ") VALUES ( ";
     TSQLStatements::iterator aSqlIter = aSql.begin();
     TSQLStatements::iterator aSqlEnd  = aSql.end();
     for(;aSqlIter != aSqlEnd ; ++aSqlIter)
@@ -295,8 +289,8 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
             OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::EComposeRule::InDataManipulation);
             OUString sComposedTableName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
-            OUString sSql(s_sINSERT + sComposedTableName + " ( " + aSqlIter->second.toString() +
-                                 s_sVALUES + aParameter[aSqlIter->first].toString() + " )");
+            OUString sSql("INSERT INTO " + sComposedTableName + " ( " + aSqlIter->second.toString() +
+                                 ") VALUES ( " + aParameter[aSqlIter->first].toString() + " )");
 
             OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
             if ( !rCondition.isEmpty() )

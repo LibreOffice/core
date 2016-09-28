@@ -44,17 +44,6 @@ using namespace ::com::sun::star::uno;
 namespace {
 
 const char TITLE[] = "Title";
-const char TARGET_DIR_URL[] = "TargetDirURL";
-const char DESCRIPTION[] = "TypeDescription";
-const char TARGET_URL[] = "TargetURL";
-
-//  These strings are used to find impress templates in the tree of
-//  template files.  Should probably be determined dynamically.
-const char IMPRESS_BIN_TEMPLATE[] = "application/vnd.stardivision.impress";
-const char IMPRESS_XML_TEMPLATE[] = MIMETYPE_VND_SUN_XML_IMPRESS_ASCII;
-// The following id comes from the bugdoc in #i2764#.
-const char IMPRESS_XML_TEMPLATE_B[] = "Impress 2.0";
-const char IMPRESS_XML_TEMPLATE_OASIS[] = MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII;
 
 class FolderDescriptor
 {
@@ -211,8 +200,8 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning()
         //  its URL, and its content type.
         Sequence<OUString> aProps (3);
         aProps[0] = TITLE;
-        aProps[1] = TARGET_URL;
-        aProps[2] = DESCRIPTION;
+        aProps[1] = "TargetURL";
+        aProps[2] = "TypeDescription";
 
         //  Create a cursor to iterate over the templates in this folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
@@ -246,11 +235,14 @@ TemplateScanner::State TemplateScanner::ScanEntry()
                 //  Check whether the entry is an impress template.  If so
                 //  add a new entry to the resulting list (which is created
                 //  first if necessary).
+                //  These strings are used to find impress templates in the tree of
+                //  template files.  Should probably be determined dynamically.
                 if (    (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII)
-                    ||  (sContentType == IMPRESS_XML_TEMPLATE_OASIS)
-                    ||  (sContentType == IMPRESS_BIN_TEMPLATE)
-                    ||  (sContentType == IMPRESS_XML_TEMPLATE)
-                    ||  (sContentType == IMPRESS_XML_TEMPLATE_B))
+                    ||  (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII)
+                    ||  (sContentType == "application/vnd.stardivision.impress")
+                    ||  (sContentType == MIMETYPE_VND_SUN_XML_IMPRESS_ASCII)
+                        // The following id comes from the bugdoc in #i2764#.
+                    ||  (sContentType == "Impress 2.0"))
                 {
                     OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(
                         STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, sTitle );
@@ -298,7 +290,7 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning()
         //  Define the list of properties we are interested in.
         Sequence<OUString> aProps (2);
         aProps[0] = TITLE;
-        aProps[1] = TARGET_DIR_URL;
+        aProps[1] = "TargetDirURL";
 
         //  Create an cursor to iterate over the template folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_ONLY;

@@ -277,8 +277,7 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
 {
     bool bValue = false;
     m_xUpdateAccess->getByName( "AutoCheckEnabled" ) >>= bValue;
-    OUStringLiteral sPath("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/AutoCheckEnabled");
-    beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(sPath);
+    beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/AutoCheckEnabled");
     bool bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
 
     m_pAutoCheckCheckBox->Check(bValue);

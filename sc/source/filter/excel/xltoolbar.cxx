@@ -148,7 +148,6 @@ bool ScCTB::ImportMenuTB( ScCTBWrapper& rWrapper, const css::uno::Reference< css
 bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
 
-    static const char sToolbarPrefix[] = "private:resource/toolbar/custom_";
     bool bRes = false;
     try
     {
@@ -163,7 +162,7 @@ bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelp
         // set UI name for toolbar
         xProps->setPropertyValue("UIName", uno::makeAny( name.getString() ) );
 
-        OUString sToolBarName = sToolbarPrefix + name.getString();
+        OUString sToolBarName = "private:resource/toolbar/custom_" + name.getString();
         for ( std::vector< ScTBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
         {
             if ( !it->ImportToolBarControl( rWrapper, xIndexContainer, helper, IsMenuToolbar() ) )

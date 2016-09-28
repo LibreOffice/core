@@ -1515,8 +1515,7 @@ void XMLConfigItemTContext_Impl::EndElement()
             GetTransformer().GetPropertySet();
         if( rPropSet.is() )
         {
-            const sal_Char sRedlineProtectionKey[] = "RedlineProtectionKey";
-            OUString aPropName(sRedlineProtectionKey);
+            OUString aPropName("RedlineProtectionKey");
             Reference< XPropertySetInfo > xPropSetInfo(
                         rPropSet->getPropertySetInfo() );
             if( xPropSetInfo.is() &&
@@ -1570,8 +1569,7 @@ void XMLTrackedChangesOASISTContext_Impl::StartElement(
         GetTransformer().GetPropertySet();
     if( rPropSet.is() )
     {
-        const sal_Char sRedlineProtectionKey[] = "RedlineProtectionKey";
-        OUString aPropName(sRedlineProtectionKey);
+        OUString aPropName("RedlineProtectionKey");
         Reference< XPropertySetInfo > xPropSetInfo(
                     rPropSet->getPropertySetInfo() );
         if( xPropSetInfo.is() &&

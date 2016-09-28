@@ -59,9 +59,6 @@ namespace chart
 namespace
 {
 
-// note: in xmloff this name is used to indicate usage of own data
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.InternalDataProvider";
-
 static const char lcl_aCategoriesRangeName[] = "categories";
 static const char lcl_aCategoriesLevelRangeNamePrefix[] = "categoriesL "; //L <-> level
 static const char lcl_aCategoriesPointRangeNamePrefix[] = "categoriesP "; //P <-> point
@@ -1551,7 +1548,8 @@ OUString SAL_CALL InternalDataProvider::getImplementationName()
 
 OUString InternalDataProvider::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    // note: in xmloff this name is used to indicate usage of own data
+    return OUString("com.sun.star.comp.chart.InternalDataProvider");
 }
 
 sal_Bool SAL_CALL InternalDataProvider::supportsService( const OUString& rServiceName )

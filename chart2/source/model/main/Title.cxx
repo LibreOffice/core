@@ -47,8 +47,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.Title";
-
 enum
 {
     PROP_TITLE_PARA_ADJUST,
@@ -393,7 +391,7 @@ OUString SAL_CALL Title::getImplementationName()
 
 OUString Title::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart2.Title");
 }
 
 sal_Bool SAL_CALL Title::supportsService( const OUString& rServiceName )

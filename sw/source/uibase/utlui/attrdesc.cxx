@@ -67,8 +67,6 @@ void SwAttrSet::GetPresentation(
         MapUnit ePresMetric,
         OUString &rText ) const
 {
-    static sal_Char const sComma[] = ", ";
-
     rText.clear();
     OUString aStr;
     if( Count() )
@@ -82,7 +80,7 @@ void SwAttrSet::GetPresentation(
                                                  ePresMetric, aStr,
                                                  &rInt );
             if( rText.getLength() && aStr.getLength() )
-                rText += sComma;
+                rText += ", ";
             rText += aStr;
             if( aIter.IsAtEnd() )
                 break;

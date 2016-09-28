@@ -27,10 +27,6 @@ using ::com::sun::star::uno::RuntimeException;
 
 using namespace ::com::sun::star;
 
-namespace
-{
-static const char lcl_aServiceName[] = "com.sun.star.comp.chart.DataSource";
-}  // anonymous namespace
 
 namespace chart
 {
@@ -74,7 +70,7 @@ OUString SAL_CALL DataSource::getImplementationName()
 
 OUString DataSource::getImplementationName_Static()
 {
-    return OUString(lcl_aServiceName);
+    return OUString("com.sun.star.comp.chart.DataSource");
 }
 
 sal_Bool SAL_CALL DataSource::supportsService( const OUString& rServiceName )
