@@ -21,6 +21,10 @@
 
 #include <svx/tbxctl.hxx>
 #include <vcl/button.hxx>
+#include <svx/pageitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <svl/intitem.hxx>
+#include <editeng/sizeitem.hxx>
 
 namespace sw { namespace sidebar {
 

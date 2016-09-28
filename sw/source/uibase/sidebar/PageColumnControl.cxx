@@ -19,7 +19,6 @@
 
 #include "PageColumnControl.hxx"
 #include "PagePropertyPanel.hxx"
-#include "PagePropertyPanel.hrc"
 
 #include <cmdid.h>
 #include <swtypes.hxx>

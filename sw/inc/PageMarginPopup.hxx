@@ -16,34 +16,26 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef INCLUDED_SW_INC_PAGEMARGINPOPUP_HXX
+#define INCLUDED_SW_INC_PAGEMARGINPOPUP_HXX
 
-#include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include "PropertyPanel.hrc"
-#include "helpid.h"
+#include <sfx2/tbxctrl.hxx>
+#include <swdllapi.h>
+#include <vcl/vclenum.hxx>
+#include <functional>
 
-String STR_MARGIN_TOOLTIP_LEFT
+class SW_DLLPUBLIC PageMarginPopup : public SfxToolBoxControl
 {
-    Text [ en-US ] = "Left: ";
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    PageMarginPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
+    virtual ~PageMarginPopup() override;
+
+    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };
-String STR_MARGIN_TOOLTIP_RIGHT
-{
-    Text [ en-US ] = ". Right: ";
-};
-String STR_MARGIN_TOOLTIP_INNER
-{
-    Text [ en-US ] = "Inner: ";
-};
-String STR_MARGIN_TOOLTIP_OUTER
-{
-    Text [ en-US ] = ". Outer: ";
-};
-String STR_MARGIN_TOOLTIP_TOP
-{
-    Text [ en-US ] = ". Top: ";
-};
-String STR_MARGIN_TOOLTIP_BOT
-{
-    Text [ en-US ] = ". Bottom: ";
-};
+
+#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

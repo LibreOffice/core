@@ -39,11 +39,6 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_fontwork.png</property>
   </object>
-  <object class="GtkImage" id="FormatColumnsImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_formatcolumns.png</property>
-  </object>
   <object class="GtkImage" id="GalleryImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -2806,18 +2801,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-BigToolBox" id="columnbox">
+                  <object class="sfxlo-BigToolBox" id="sizebox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <property name="show_arrow">False</property>
                     <child>
-                      <object class="GtkMenuToolButton" id="Columns">
+                      <object class="GtkMenuToolButton" id="Size">
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="is_important">True</property>
-                        <property name="action_name">.uno:PageColumnType</property>
+                        <property name="action_name">.uno:AttributePageSize</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -2833,18 +2828,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-BigToolBox" id="sizebox">
+                  <object class="sfxlo-BigToolBox" id="columnbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <property name="show_arrow">False</property>
                     <child>
-                      <object class="GtkMenuToolButton" id="Size">
+                      <object class="GtkMenuToolButton" id="Columns">
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="is_important">True</property>
-                        <property name="action_name">.uno:AttributePageSize</property>
+                        <property name="action_name">.uno:PageColumnType</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -2883,31 +2878,29 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSeparator" id="separator21">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="vcllo-SmallButton" id="FormatColumns">
+                  <object class="sfxlo-BigToolBox" id="marginbox">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="action_name">.uno:FormatColumns</property>
-                    <property name="image">FormatColumnsImg</property>
-                    <property name="relief">none</property>
-                    <property name="image_position">top</property>
-                    <property name="always_show_image">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="show_arrow">False</property>
+                    <child>
+                      <object class="GtkMenuToolButton" id="Margin">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="is_important">True</property>
+                        <property name="action_name">.uno:PageMargin</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>

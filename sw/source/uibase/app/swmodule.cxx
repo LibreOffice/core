@@ -111,6 +111,7 @@
 #include <svx/rubydialog.hxx>
 #include <svtools/colorcfg.hxx>
 #include <PageSizePopup.hxx>
+#include <PageMarginPopup.hxx>
 #include <PageOrientationPopup.hxx>
 #include <PageColumnPopup.hxx>
 
@@ -294,6 +295,7 @@ void SwDLL::RegisterControls()
     svx::TextUnderlinePopup::RegisterControl(SID_ATTR_CHAR_UNDERLINE, pMod);
     svx::ParaULSpacingControl::RegisterControl(SID_ATTR_PARA_ULSPACE, pMod);
     svx::ParaLRSpacingControl::RegisterControl(SID_ATTR_PARA_LRSPACE, pMod);
+    PageMarginPopup::RegisterControl(SID_ATTR_PAGE_MARGIN, pMod);
     PageOrientationPopup::RegisterControl(SID_ATTR_PAGE_ORIENTATION, pMod);
     PageColumnPopup::RegisterControl(SID_ATTR_PAGE_COLUMN, pMod);
     PageSizePopup::RegisterControl(SID_ATTR_PAGE_SIZE, pMod);

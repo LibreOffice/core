@@ -49,35 +49,9 @@ namespace svx { namespace sidebar {
 
 namespace sw { namespace sidebar {
 
-    class PagePropertyPanel
-        : public PanelLayout,
-          public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+    class PagePropertyPanel : public PanelLayout
     {
     public:
-        // interface of ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
-        virtual void NotifyItemUpdate(
-            const sal_uInt16 nSId,
-            const SfxItemState eState,
-            const SfxPoolItem* pState,
-            const bool bIsEnabled) override;
-
-        SfxBindings* GetBindings() const
-        {
-            return mpBindings;
-        }
-
-        VclPtr< svx::sidebar::PopupControl> CreatePageMarginControl( svx::sidebar::PopupContainer* pParent );
-        void ExecuteMarginLRChange(
-            const long nPageLeftMargin,
-            const long nPageRightMargin );
-        void ExecuteMarginULChange(
-            const long nPageTopMargin,
-            const long nPageBottomMargin );
-        void ExecutePageLayoutChange( const bool bMirrored );
-        void ClosePageMarginPopup();
-
-        void StartUndo();
-        void EndUndo();
 
         PagePropertyPanel(
             vcl::Window* pParent,
@@ -86,66 +60,6 @@ namespace sw { namespace sidebar {
     private:
         virtual ~PagePropertyPanel() override;
         virtual void dispose() override;
-
-        SfxBindings* mpBindings;
-
-        // toolboxes - on click open corresponding popup
-        VclPtr<ToolBox>                mpToolBoxMargin;
-
-        Image*                  maImgSize;
-        Image*                  maImgSize_L;
-        Image                   mImgNarrow;
-        Image                   mImgNormal;
-        Image                   mImgWide;
-        Image                   mImgMirrored;
-        Image                   mImgMarginCustom;
-        Image                   mImgNarrow_L;
-        Image                   mImgNormal_L;
-        Image                   mImgWide_L;
-        Image                   mImgMirrored_L;
-        Image                   mImgMarginCustom_L;
-
-        // item keeping the following page style attributes:
-        // - page orientation
-        // - page usage - only left, only right, both, mirrored
-        // item also hold the numbering type for the page style which should
-        // be kept stable.
-        std::unique_ptr<SvxPageItem> mpPageItem;
-
-        // item keeping the page style's left and right margins
-        std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
-        // item keeping the page style's top and bottom margins
-        std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
-
-        // item keeping the page style's page size
-        std::unique_ptr<SvxSizeItem> mpPageSizeItem;
-
-        FieldUnit           meFUnit;
-        MapUnit             meUnit;
-
-        // controller items
-        ::sfx2::sidebar::ControllerItem m_aSwPagePgULControl;
-        ::sfx2::sidebar::ControllerItem m_aSwPagePgLRControl;
-        ::sfx2::sidebar::ControllerItem m_aSwPagePgSizeControl;
-        ::sfx2::sidebar::ControllerItem m_aSwPagePgMetricControl;
-
-        // popups
-        svx::sidebar::Popup maMarginPopup;
-
-        const css::uno::Reference< css::document::XUndoManager > mxUndoManager;
-
-        bool mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify;
-
-        // handler for popup toolboxes to show the popups
-        DECL_LINK_TYPED(ClickMarginHdl, ToolBox*, void);
-
-        void Initialize();
-
-        void MetricState( SfxItemState eState, const SfxPoolItem* pState );
-
-        // helper to adjust popup toolbox' images
-        void ChangeMarginImage();
-
     };
 
 } } // end of namespace ::sw::sidebar

@@ -522,6 +522,11 @@ interface BaseTextEditView
         StateMethod = StateTabWin ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_ATTR_PAGE_MARGIN
+    [
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 
     SID_THESAURUS // status(final|play)
     [
