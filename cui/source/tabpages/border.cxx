@@ -140,7 +140,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     //tdf#99963, we need height-for-width support here, but for now we can
     //bodge it
     Size aPrefSize(m_pRemoveAdjcentCellBordersCB->get_preferred_size());
-    Size aSize(m_pRemoveAdjcentCellBordersCB->CalcMinimumSize(36*approximate_char_width()));
+    Size aSize(m_pRemoveAdjcentCellBordersCB->CalcMinimumSize(20*approximate_char_width()));
     if (aPrefSize.Width() > aSize.Width())
     {
         m_pRemoveAdjcentCellBordersCB->set_width_request(aSize.Width());
