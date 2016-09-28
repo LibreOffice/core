@@ -40,7 +40,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Horizontal Alignment</property>
                 <property name="tooltip_text" translatable="yes">Horizontal Alignment</property>
                 <property name="halign">start</property>
                 <property name="show_arrow">False</property>
@@ -276,7 +275,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Indents from the left edge.</property>
                     <property name="tooltip_text" translatable="yes">Indents from the left edge.</property>
                     <property name="invisible_char">•</property>
                     <accessibility>
@@ -314,7 +312,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Joins the selected cells into one.</property>
                     <property name="tooltip_text" translatable="yes">Joins the selected cells into one.</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
@@ -334,7 +331,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Wrap texts automatically.</property>
                     <property name="tooltip_text" translatable="yes">Wrap texts automatically.</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
@@ -385,7 +381,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Select the angle for rotation.</property>
                 <property name="tooltip_text" translatable="yes">Select the angle for rotation.</property>
                 <accessibility>
                   <relation type="labelled-by" target="orientationlabel"/>

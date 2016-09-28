@@ -129,7 +129,6 @@
                       <object class="svxlo-SvxRectCtl" id="CTL_RECT">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_markup" translatable="yes">Rotation point</property>
                         <property name="tooltip_text" translatable="yes">Rotation point</property>
                         <property name="halign">center</property>
                       </object>
@@ -253,7 +252,6 @@
                       <object class="svxlo-DialControl" id="CTL_ANGLE">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_markup" translatable="yes">Rotation Angle</property>
                         <property name="tooltip_text" translatable="yes">Rotation Angle</property>
                         <property name="halign">center</property>
                       </object>

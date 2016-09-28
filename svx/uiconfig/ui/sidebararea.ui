@@ -37,7 +37,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Fill:</property>
                 <property name="tooltip_text" translatable="yes">Fill:</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Fill:</property>
@@ -64,7 +63,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Select the color to apply.</property>
                         <property name="tooltip_text" translatable="yes">Select the color to apply.</property>
                         <property name="action_name">.uno:FillColor</property>
                         <property name="use_underline">True</property>
@@ -85,7 +83,6 @@
                   <object class="svxlo-SvxFillAttrBox" id="fillattr">
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the effect to apply.</property>
                     <property name="tooltip_text" translatable="yes">Select the effect to apply.</property>
                     <accessibility>
                       <relation type="labelled-by" target="filllabel"/>
@@ -107,7 +104,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Fill gradient from.</property>
                     <property name="tooltip_text" translatable="yes">Fill gradient from.</property>
                   </object>
                   <packing>
@@ -129,7 +125,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Select the fill type to apply.</property>
                 <property name="tooltip_text" translatable="yes">Select the fill type to apply.</property>
                 <property name="entry_text_column">0</property>
                 <property name="id_column">1</property>
@@ -154,7 +149,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Fill gradient to.</property>
                 <property name="tooltip_text" translatable="yes">Fill gradient to.</property>
               </object>
               <packing>
@@ -172,7 +166,6 @@
                   <object class="GtkComboBoxText" id="gradientstyle">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_markup" translatable="yes">Select the gradient style.</property>
                     <property name="tooltip_text" translatable="yes">Select the gradient style.</property>
                     <items>
                       <item translatable="yes">Linear</item>
@@ -218,7 +211,6 @@
             <child>
               <object class="GtkSpinButton" id="gradangle:0degrees">
                 <property name="can_focus">True</property>
-                <property name="tooltip_markup" translatable="yes">Select the gradient angle.</property>
                 <property name="tooltip_text" translatable="yes">Select the gradient angle.</property>
                 <property name="adjustment">adjustment2</property>
                 <child internal-child="accessible">
@@ -239,7 +231,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Transparency</property>
                 <property name="tooltip_text" translatable="yes">Transparency</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Transparency:</property>
@@ -257,7 +248,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Select the type of transparency to apply.</property>
                 <property name="tooltip_text" translatable="yes">Select the type of transparency to apply.</property>
                 <items>
                   <item translatable="yes">None</item>
@@ -292,7 +282,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Specify the variation of gradient transparency.</property>
                     <property name="tooltip_text" translatable="yes">Specify the variation of gradient transparency.</property>
                     <property name="hexpand">True</property>
                     <property name="action_name">.uno:sidebargradient</property>
@@ -330,7 +319,6 @@
               <object class="GtkScale" id="transparencyslider">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip_markup" translatable="yes">Specify 0% for fully opaque through 100% for fully transparent.</property>
                 <property name="tooltip_text" translatable="yes">Specify 0% for fully opaque through 100% for fully transparent.</property>
                 <property name="hexpand">True</property>
                 <property name="round_digits">1</property>
@@ -348,7 +336,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Specify 0% for fully opaque through 100% for fully transparent.</property>
                 <property name="tooltip_text" translatable="yes">Specify 0% for fully opaque through 100% for fully transparent.</property>
                 <property name="max_length">100</property>
                 <property name="invisible_char">•</property>

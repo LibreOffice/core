@@ -58,7 +58,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Specify the luminance of the graphic.</property>
                 <property name="tooltip_text" translatable="yes">Specify the luminance of the graphic.</property>
                 <property name="invisible_char">•</property>
                 <property name="adjustment">plusminus100adjustment</property>
@@ -96,7 +95,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
                 <property name="tooltip_text" translatable="yes">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
                 <property name="invisible_char">•</property>
                 <property name="adjustment">plusminus100adjustment</property>
@@ -166,7 +164,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="tooltip_text" translatable="yes">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="invisible_char">•</property>
                 <property name="adjustment">0to100adjustment</property>
@@ -209,7 +206,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Red</property>
                     <property name="tooltip_text" translatable="yes">Red</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">plusminus100adjustment</property>
@@ -256,7 +252,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Green</property>
                     <property name="tooltip_text" translatable="yes">Green</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">plusminus100adjustment</property>
@@ -304,7 +299,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Blue</property>
                     <property name="tooltip_text" translatable="yes">Blue</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">plusminus100adjustment</property>
@@ -351,7 +345,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Specify the gamma value that affects the brightness of the midtone values.</property>
                     <property name="tooltip_text" translatable="yes">Specify the gamma value that affects the brightness of the midtone values.</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">gammaadjustment</property>

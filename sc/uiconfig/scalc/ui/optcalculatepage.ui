@@ -49,7 +49,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_markup" translatable="yes">Disable case sensitivity for interoperability with Microsoft Excel</property>
+                    <property name="tooltip_text" translatable="yes">Disable case sensitivity for interoperability with Microsoft Excel</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -82,7 +82,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_markup" translatable="yes">Enable this for interoperability with Microsoft Excel</property>
+                    <property name="tooltip_text" translatable="yes">Enable this for interoperability with Microsoft Excel</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -99,7 +99,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_markup" translatable="yes">Enable wildcards for interoperability with Microsoft Excel</property>
+                    <property name="tooltip_text" translatable="yes">Enable wildcards for interoperability with Microsoft Excel</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
@@ -373,7 +373,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_markup" translatable="yes">Value 0 corresponds to 12/30/1899</property>
+                    <property name="tooltip_text" translatable="yes">Value 0 corresponds to 12/30/1899</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
@@ -391,7 +391,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_markup" translatable="yes">Value 0 corresponds to 01/01/1900</property>
+                    <property name="tooltip_text" translatable="yes">Value 0 corresponds to 01/01/1900</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -408,7 +408,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_markup" translatable="yes">0 corresponds to 01/01/1904</property>
+                    <property name="tooltip_text" translatable="yes">0 corresponds to 01/01/1904</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>

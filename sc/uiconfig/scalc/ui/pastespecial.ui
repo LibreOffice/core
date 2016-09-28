@@ -95,7 +95,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Values Only</property>
                 <property name="tooltip_text" translatable="yes">Values Only</property>
                 <property name="image">img_paste_values_only</property>
               </object>
@@ -111,7 +110,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Values &amp; Formats</property>
                 <property name="tooltip_text" translatable="yes">Values &amp; Formats</property>
                 <property name="image">img_paste_values_formats</property>
               </object>
@@ -127,7 +125,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Transpose</property>
                 <property name="tooltip_text" translatable="yes">Transpose</property>
                 <property name="image">img_paste_transpose</property>
               </object>

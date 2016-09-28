@@ -35,7 +35,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Select a category of contents.</property>
                 <property name="tooltip_text" translatable="yes">Select a category of contents.</property>
                 <property name="hexpand">True</property>
                 <items>
@@ -148,7 +147,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Enter the number of decimal places that you want to display.</property>
                     <property name="tooltip_text" translatable="yes">Enter the number of decimal places that you want to display.</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment1</property>
@@ -183,7 +181,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Enter the number of places for the denominator that you want to display.</property>
                     <property name="tooltip_text" translatable="yes">Enter the number of places for the denominator that you want to display.</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment2</property>
@@ -232,7 +229,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Enter the maximum number of zeroes to display before the decimal point.</property>
                     <property name="tooltip_text" translatable="yes">Enter the maximum number of zeroes to display before the decimal point.</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment1</property>
@@ -271,7 +267,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="has_tooltip">True</property>
-            <property name="tooltip_markup" translatable="yes">Changes the font color of negative numbers to red.</property>
             <property name="tooltip_text" translatable="yes">Changes the font color of negative numbers to red.</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
@@ -291,7 +286,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="has_tooltip">True</property>
-            <property name="tooltip_markup" translatable="yes">Inserts a separator between thousands.</property>
             <property name="tooltip_text" translatable="yes">Inserts a separator between thousands.</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
@@ -311,7 +305,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="has_tooltip">True</property>
-            <property name="tooltip_markup" translatable="yes">Ensures that exponent is a multiple of 3.</property>
             <property name="tooltip_text" translatable="yes">Ensures that exponent is a multiple of 3.</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>

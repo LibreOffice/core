@@ -5,7 +5,7 @@
   <object class="GtkImage" id="imageIB_RANGE">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="tooltip_markup" translatable="yes">Select data range</property>
+    <property name="tooltip_text" translatable="yes">Select data range</property>
     <property name="pixbuf">chart2/res/selectrange.png</property>
   </object>
   <object class="GtkBox" id="tp_RangeChooser">
@@ -76,7 +76,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_markup" translatable="yes">Select data range</property>
+                <property name="tooltip_text" translatable="yes">Select data range</property>
                 <property name="image">imageIB_RANGE</property>
               </object>
               <packing>
