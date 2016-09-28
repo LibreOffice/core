@@ -731,7 +731,17 @@ void SwPostItMgr::LayoutPostIts()
                         bool bTop = mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y())).Y() >= (pPage->mPageRect.Top()+aSidebarheight);
                         if ( bBottom && bTop )
                         {
+                            // When tiled rendering, make sure that only the
+                            // view that has the comment focus emits callbacks,
+                            // so the editing view jumps to the comment, but
+                            // not the others.
+                            bool bTiledPainting = mpView->getTiledPainting();
+                            if (!bTiledPainting)
+                                // No focus -> disable callbacks.
+                                mpView->setTiledPainting(!(*i)->HasChildPathFocus());
                             (*i)->ShowNote();
+                            if (!bTiledPainting)
+                                mpView->setTiledPainting(bTiledPainting);
                         }
                         else
                         {
