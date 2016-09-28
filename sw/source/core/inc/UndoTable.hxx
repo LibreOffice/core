@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 
+#include <ndarr.hxx>
 #include <undobj.hxx>
 #include <set>
 #include <swtypes.hxx>
@@ -32,11 +33,8 @@ class SfxItemSet;
 struct SwSaveRowSpan;
 class SaveTable;
 class SwDDEFieldType;
-class SwUndoSaveSections;
-class SwUndoMoves;
 class SwUndoDelete;
 class SwSelBoxes;
-class SwTableToTextSaves;
 class SwTable;
 class SwTableBox;
 class SwStartNode;
@@ -162,6 +160,8 @@ public:
     void SaveBoxContent( const SwTableBox& rBox );
 };
 
+using SwUndoSaveSections = std::vector<std::unique_ptr<SwUndoSaveSection>>;
+
 class SwUndoTableNdsChg : public SwUndo
 {
     SaveTable* pSaveTable;
@@ -216,6 +216,9 @@ public:
         nRelDiff = (sal_uInt16)nRelDif;
     }
 };
+
+class SwUndoMove;
+using SwUndoMoves = std::vector<std::unique_ptr<SwUndoMove>>;
 
 class SwUndoTableMerge : public SwUndo, private SwUndRng
 {
@@ -272,7 +275,8 @@ public:
     void SetBox( const SwTableBox& rBox );
 };
 
-class SwUndoTableCpyTable_Entries;
+struct UndoTableCpyTable_Entry;
+using SwUndoTableCpyTable_Entries = std::vector<std::unique_ptr<UndoTableCpyTable_Entry>>;
 
 class SwUndoTableCpyTable : public SwUndo
 {
