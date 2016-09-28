@@ -14,9 +14,10 @@
 #include <comphelper/backupfilehelper.hxx>
 #include <rtl/crc.h>
 #include <deque>
+#include <zlib.h>
 
 typedef std::shared_ptr< osl::File > FileSharedPtr;
-static const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 1024;
+static const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 16384;
 
 namespace
 {
@@ -86,38 +87,246 @@ namespace
 
 namespace
 {
-    struct PackedFileEntry
+    class PackedFileEntry
     {
     private:
-        sal_uInt32          mnSize;     // size in bytes
-        sal_uInt32          mnOffset;   // offset in File (zero identifies new file)
-        sal_uInt32          mnCrc32;    // checksum
-        FileSharedPtr       maFile;     // file where to find the data (at offset)
+        sal_uInt32          mnFullFileSize; // size in bytes of unpacked original file
+        sal_uInt32          mnPackFileSize; // size in bytes in file backup package (smaller if compressed, same if not)
+        sal_uInt32          mnOffset;       // offset in File (zero identifies new file)
+        sal_uInt32          mnCrc32;        // checksum
+        FileSharedPtr       maFile;         // file where to find the data (at offset)
+        bool                mbDoCompress;   // flag if this file is scheduled to be compredded when written
+
+        bool copy_content_straight(oslFileHandle& rTargetHandle)
+        {
+            if (maFile && osl::File::E_None == maFile->open(osl_File_OpenFlag_Read))
+            {
+                sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
+                sal_uInt64 nBytesTransfer(0);
+                sal_uInt64 nSize(getFullFileSize());
+
+                // set offset in source file - when this is zero, a new file is to be added
+                if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
+                {
+                    while (nSize != 0)
+                    {
+                        const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
+
+                        if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
+                        {
+                            break;
+                        }
+
+                        if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aArray), nToTransfer, &nBytesTransfer) || nBytesTransfer != nToTransfer)
+                        {
+                            break;
+                        }
+
+                        nSize -= nToTransfer;
+                    }
+                }
+
+                maFile->close();
+                return (0 == nSize);
+            }
+
+            return false;
+        }
+
+        bool copy_content_compress(oslFileHandle& rTargetHandle)
+        {
+            if (maFile && osl::File::E_None == maFile->open(osl_File_OpenFlag_Read))
+            {
+                sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
+                sal_uInt8 aBuffer[BACKUP_FILE_HELPER_BLOCK_SIZE];
+                sal_uInt64 nBytesTransfer(0);
+                sal_uInt64 nSize(getFullFileSize());
+                std::unique_ptr< z_stream > zstream(new z_stream);
+                memset(zstream.get(), 0, sizeof(*zstream));
+
+                if (Z_OK == deflateInit(zstream.get(), Z_BEST_COMPRESSION))
+                {
+                    // set offset in source file - when this is zero, a new file is to be added
+                    if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
+                    {
+                        bool bOkay(true);
+
+                        while (bOkay && nSize != 0)
+                        {
+                            const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
+
+                            if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
+                            {
+                                break;
+                            }
+
+                            zstream->avail_in = nToTransfer;
+                            zstream->next_in = reinterpret_cast<unsigned char*>(aArray);
+
+                            do {
+                                zstream->avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
+                                zstream->next_out = reinterpret_cast<unsigned char*>(aBuffer);
+#if !defined Z_PREFIX
+                                const sal_Int64 nRetval(deflate(zstream.get(), nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
+#else
+                                const sal_Int64 nRetval(z_deflate(zstream.get(), nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
+#endif
+                                if (Z_STREAM_ERROR == nRetval)
+                                {
+                                    bOkay = false;
+                                }
+                                else
+                                {
+                                    const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream->avail_out);
+
+                                    if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
+                                    {
+                                        bOkay = false;
+                                    }
+                                }
+                            } while (bOkay && 0 == zstream->avail_out);
+
+                            if (!bOkay)
+                            {
+                                break;
+                            }
+
+                            nSize -= nToTransfer;
+                        }
+
+#if !defined Z_PREFIX
+                        deflateEnd(zstream.get());
+#else
+                        z_deflateEnd(zstream.get());
+#endif
+                    }
+                }
+
+                maFile->close();
+
+                // get compressed size and add to entry
+                if (mnFullFileSize == mnPackFileSize && mnFullFileSize == zstream->total_in)
+                {
+                    mnPackFileSize = zstream->total_out;
+                }
+
+                return (0 == nSize);
+            }
+
+            return false;
+        }
+
+        bool copy_content_uncompress(oslFileHandle& rTargetHandle)
+        {
+            if (maFile && osl::File::E_None == maFile->open(osl_File_OpenFlag_Read))
+            {
+                sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
+                sal_uInt8 aBuffer[BACKUP_FILE_HELPER_BLOCK_SIZE];
+                sal_uInt64 nBytesTransfer(0);
+                sal_uInt64 nSize(getPackFileSize());
+                std::unique_ptr< z_stream > zstream(new z_stream);
+                memset(zstream.get(), 0, sizeof(*zstream));
+
+                if (Z_OK == inflateInit(zstream.get()))
+                {
+                    // set offset in source file - when this is zero, a new file is to be added
+                    if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
+                    {
+                        bool bOkay(true);
+
+                        while (bOkay && nSize != 0)
+                        {
+                            const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
+
+                            if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
+                            {
+                                break;
+                            }
+
+                            zstream->avail_in = nToTransfer;
+                            zstream->next_in = reinterpret_cast<unsigned char*>(aArray);
+
+                            do {
+                                zstream->avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
+                                zstream->next_out = reinterpret_cast<unsigned char*>(aBuffer);
+#if !defined Z_PREFIX
+                                const sal_Int64 nRetval(inflate(zstream.get(), Z_NO_FLUSH));
+#else
+                                const sal_Int64 nRetval(z_inflate(zstream.get(), Z_NO_FLUSH));
+#endif
+                                if (Z_STREAM_ERROR == nRetval)
+                                {
+                                    bOkay = false;
+                                }
+                                else
+                                {
+                                    const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream->avail_out);
+
+                                    if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
+                                    {
+                                        bOkay = false;
+                                    }
+                                }
+                            } while (bOkay && 0 == zstream->avail_out);
+
+                            if (!bOkay)
+                            {
+                                break;
+                            }
+
+                            nSize -= nToTransfer;
+                        }
+
+#if !defined Z_PREFIX
+                        deflateEnd(zstream.get());
+#else
+                        z_deflateEnd(zstream.get());
+#endif
+                    }
+                }
+
+                maFile->close();
+                return (0 == nSize);
+            }
+
+            return false;
+        }
+
 
     public:
         PackedFileEntry(
-            sal_uInt32 nSize,
+            sal_uInt32 nFullFileSize,
             sal_uInt32 nOffset,
             sal_uInt32 nCrc32,
-            FileSharedPtr& rFile)
-        :   mnSize(nSize),
+            FileSharedPtr& rFile,
+            bool bDoCompress)
+        :   mnFullFileSize(nFullFileSize),
+            mnPackFileSize(nFullFileSize),
             mnOffset(nOffset),
             mnCrc32(nCrc32),
-            maFile(rFile)
+            maFile(rFile),
+            mbDoCompress(bDoCompress)
         {
         }
 
         PackedFileEntry()
-        :   mnSize(0),
+        :   mnFullFileSize(0),
+            mnPackFileSize(0),
             mnOffset(0),
             mnCrc32(0),
-            maFile()
+            maFile(),
+            mbDoCompress(false)
         {
         }
 
-        sal_uInt32 getSize() const
+        sal_uInt32 getFullFileSize() const
         {
-            return  mnSize;
+            return  mnFullFileSize;
+        }
+
+        sal_uInt32 getPackFileSize() const
+        {
+            return  mnPackFileSize;
         }
 
         sal_uInt32 getOffset() const
@@ -142,10 +351,10 @@ namespace
                 sal_uInt8 aArray[4];
                 sal_uInt64 nBaseRead(0);
 
-                // read and compute entry size
+                // read and compute full file size
                 if (osl::File::E_None == maFile->read(static_cast<void*>(aArray), 4, nBaseRead) && 4 == nBaseRead)
                 {
-                    mnSize = (sal_uInt32(aArray[0]) << 24) + (sal_uInt32(aArray[1]) << 16) + (sal_uInt32(aArray[2]) << 8) + sal_uInt32(aArray[3]);
+                    mnFullFileSize = (sal_uInt32(aArray[0]) << 24) + (sal_uInt32(aArray[1]) << 16) + (sal_uInt32(aArray[2]) << 8) + sal_uInt32(aArray[3]);
                 }
                 else
                 {
@@ -156,6 +365,20 @@ namespace
                 if (osl::File::E_None == maFile->read(static_cast<void*>(aArray), 4, nBaseRead) && 4 == nBaseRead)
                 {
                     mnCrc32 = (sal_uInt32(aArray[0]) << 24) + (sal_uInt32(aArray[1]) << 16) + (sal_uInt32(aArray[2]) << 8) + sal_uInt32(aArray[3]);
+                }
+                else
+                {
+                    return false;
+                }
+
+                // read and compute packed size
+                if (osl::File::E_None == maFile->read(static_cast<void*>(aArray), 4, nBaseRead) && 4 == nBaseRead)
+                {
+                    mnPackFileSize = (sal_uInt32(aArray[0]) << 24) + (sal_uInt32(aArray[1]) << 16) + (sal_uInt32(aArray[2]) << 8) + sal_uInt32(aArray[3]);
+                }
+                else
+                {
+                    return false;
                 }
 
                 return true;
@@ -169,18 +392,18 @@ namespace
             sal_uInt8 aArray[4];
             sal_uInt64 nBaseWritten(0);
 
-            // write size
-            aArray[0] = sal_uInt8((mnSize & 0xff000000) >> 24);
-            aArray[1] = sal_uInt8((mnSize & 0x00ff0000) >> 16);
-            aArray[2] = sal_uInt8((mnSize & 0x0000ff00) >> 8);
-            aArray[3] = sal_uInt8(mnSize & 0x000000ff);
+            // write full file size
+            aArray[0] = sal_uInt8((mnFullFileSize & 0xff000000) >> 24);
+            aArray[1] = sal_uInt8((mnFullFileSize & 0x00ff0000) >> 16);
+            aArray[2] = sal_uInt8((mnFullFileSize & 0x0000ff00) >> 8);
+            aArray[3] = sal_uInt8(mnFullFileSize & 0x000000ff);
 
             if (osl_File_E_None != osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) || 4 != nBaseWritten)
             {
                 return false;
             }
 
-            // for each entry, write crc32
+            // write crc32
             aArray[0] = sal_uInt8((mnCrc32 & 0xff000000) >> 24);
             aArray[1] = sal_uInt8((mnCrc32 & 0x00ff0000) >> 16);
             aArray[2] = sal_uInt8((mnCrc32 & 0x0000ff00) >> 8);
@@ -191,55 +414,51 @@ namespace
                 return false;
             }
 
+            // write packed file size
+            aArray[0] = sal_uInt8((mnPackFileSize & 0xff000000) >> 24);
+            aArray[1] = sal_uInt8((mnPackFileSize & 0x00ff0000) >> 16);
+            aArray[2] = sal_uInt8((mnPackFileSize & 0x0000ff00) >> 8);
+            aArray[3] = sal_uInt8(mnPackFileSize & 0x000000ff);
+
+            if (osl_File_E_None != osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) || 4 != nBaseWritten)
+            {
+                return false;
+            }
+
             return true;
         }
 
-        bool copy_content(oslFileHandle& rTargetHandle, bool bInflate)
+        bool copy_content(oslFileHandle& rTargetHandle, bool bUncompress)
         {
-            if (maFile && osl::File::E_None == maFile->open(osl_File_OpenFlag_Read))
+            if (bUncompress)
             {
-                sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
-                sal_uInt64 nBytesTransfer(0);
-                sal_uInt64 nSize(getSize());
-                const bool bNewFile(0 == getOffset());
-
-                // set offset in source file - when this is zero, a new file is to be added
-                if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
+                if (getFullFileSize() == getPackFileSize())
                 {
-                    if (!bInflate)
-                    {
-                        // copy-back, deflate file
-                    }
-                    else if (bNewFile)
-                    {
-                        // new file gets added, inflate initially
-                    }
-
-                    while (nSize != 0)
-                    {
-                        const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
-
-                        if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
-                        {
-                            break;
-                        }
-
-                        if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aArray), nToTransfer, &nBytesTransfer) || nBytesTransfer != nToTransfer)
-                        {
-                            break;
-                        }
-
-                        nSize -= nToTransfer;
-                    }
+                    // not compressed, just copy
+                    return copy_content_straight(rTargetHandle);
                 }
-
-                maFile->close();
-
-                return (0 == nSize);
+                else
+                {
+                    // compressed, need to uncompress on copy
+                    return copy_content_uncompress(rTargetHandle);
+                }
+            }
+            else if (0 == getOffset())
+            {
+                if (mbDoCompress)
+                {
+                    // compressed wanted, need to compress on copy
+                    return copy_content_compress(rTargetHandle);
+                }
+                else
+                {
+                    // not compressed, straight copy
+                    return copy_content_straight(rTargetHandle);
+                }
             }
             else
             {
-                return false;
+                return copy_content_straight(rTargetHandle);
             }
         }
     };
@@ -288,13 +507,13 @@ namespace
                                 // if there are entries (and less than max), read them
                                 if (nEntries >= 1 && nEntries <= 10)
                                 {
-                                    // offset in souce file starts with 8Byte for header+numEntries and
-                                    // 8byte for each entry (size and crc32)
-                                    sal_uInt32 nOffset(8 + (8 * nEntries));
+                                    // offset in souce file starts with 8 Byte for header + numEntries and
+                                    // 12 byte for each entry (size, crc32 and PackedSize)
+                                    sal_uInt32 nOffset(8 + (12 * nEntries));
 
                                     for (sal_uInt32 a(0); a < nEntries; a++)
                                     {
-                                        // create new entry, read header (size and crc) and
+                                        // create new entry, read header (size, crc and PackedSize),
                                         // set offset and source file
                                         PackedFileEntry aEntry;
 
@@ -304,7 +523,7 @@ namespace
                                             maPackedFileEntryVector.push_back(aEntry);
 
                                             // increase offset for next entry
-                                            nOffset += aEntry.getSize();
+                                            nOffset += aEntry.getPackFileSize();
                                         }
                                         else
                                         {
@@ -373,24 +592,56 @@ namespace
                         // write number of entries
                         if (osl_File_E_None == osl_writeFile(aHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten)
                         {
-                            // write headers
-                            for (auto& candidateA : maPackedFileEntryVector)
+                            if (bRetval)
                             {
-                                if (!candidateA.write_header(aHandle))
+                                // write placeholder for headers. Due to the fact that
+                                // PackFileSize for newly added files gets set during
+                                // writing the content entry, write headers after content
+                                // is written. To do so, write placeholders here. We know
+                                // the number of entries to write
+                                const sal_uInt32 nWriteSize(3 * maPackedFileEntryVector.size());
+                                aArray[0] = aArray[1] = aArray[2] = aArray[3] = 0;
+
+                                for (sal_uInt32 a(0); bRetval && a < nWriteSize; a++)
                                 {
-                                    // error
-                                    bRetval = false;
-                                    break;
+                                    if (osl_File_E_None != osl_writeFile(aHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) || 4 != nBaseWritten)
+                                    {
+                                        bRetval = false;
+                                    }
                                 }
                             }
 
                             if (bRetval)
                             {
-                                // write contents
-                                for (auto& candidateB : maPackedFileEntryVector)
+                                // write contents - this may adapt PackFileSize for new
+                                // files
+                                for (auto& candidate : maPackedFileEntryVector)
                                 {
-                                    if (!candidateB.copy_content(aHandle, true))
+                                    if (!candidate.copy_content(aHandle, false))
                                     {
+                                        bRetval = false;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (bRetval)
+                            {
+                                // seek back to header start (at position 8)
+                                if (osl_File_E_None != osl_setFilePos(aHandle, osl_Pos_Absolut, sal_Int64(8)))
+                                {
+                                    bRetval = false;
+                                }
+                            }
+
+                            if (bRetval)
+                            {
+                                // write headers
+                                for (auto& candidate : maPackedFileEntryVector)
+                                {
+                                    if (!candidate.write_header(aHandle))
+                                    {
+                                        // error
                                         bRetval = false;
                                         break;
                                     }
@@ -442,7 +693,7 @@ namespace
                 // already backups there, check if different from last entry
                 const PackedFileEntry& aLastEntry = maPackedFileEntryVector.back();
 
-                if (aLastEntry.getSize() != static_cast<sal_uInt32>(nFileSize))
+                if (aLastEntry.getFullFileSize() != static_cast<sal_uInt32>(nFileSize))
                 {
                     // different size, different file
                     bNeedToAdd = true;
@@ -475,12 +726,17 @@ namespace
 
                 // create a file entry for a new file. Offset is set to 0 to mark
                 // the entry as new file entry
+                // the compress flag decides if entries should be compressed when
+                // they get written to the target package
+                static bool bUseCompression(true);
+
                 maPackedFileEntryVector.push_back(
                     PackedFileEntry(
                         static_cast< sal_uInt32 >(nFileSize),
                         0,
                         nCrc32,
-                        rFileCandidate));
+                        rFileCandidate,
+                        bUseCompression));
 
                 mbChanged = true;
             }
@@ -497,7 +753,10 @@ namespace
                 // already backups there, check if different from last entry
                 PackedFileEntry& aLastEntry = maPackedFileEntryVector.back();
 
-                bRetval = aLastEntry.copy_content(rHandle, false);
+                // here the uncompress flag has to be determined, true
+                // means to add the file compressed, false means to add it
+                // uncompressed
+                bRetval = aLastEntry.copy_content(rHandle, true);
 
                 if (bRetval)
                 {
