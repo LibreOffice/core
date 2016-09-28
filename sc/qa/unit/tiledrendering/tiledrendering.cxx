@@ -64,6 +64,7 @@ public:
     void testUndoShells();
     void testCreateViewGraphicSelection();
     void testTextEditViews();
+    void testTextEditViewInvalidations();
     void testGraphicInvalidate();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
@@ -80,6 +81,7 @@ public:
     CPPUNIT_TEST(testUndoShells);
     CPPUNIT_TEST(testCreateViewGraphicSelection);
     CPPUNIT_TEST(testTextEditViews);
+    CPPUNIT_TEST(testTextEditViewInvalidations);
     CPPUNIT_TEST(testGraphicInvalidate);
     CPPUNIT_TEST_SUITE_END();
 
@@ -386,6 +388,7 @@ public:
     bool m_bGraphicSelection;
     bool m_bGraphicViewSelection;
     bool m_bFullInvalidateTiles;
+    bool m_bInvalidateTiles;
     bool m_bViewLock;
 
     ViewCallback()
@@ -395,6 +398,7 @@ public:
           m_bGraphicSelection(false),
           m_bGraphicViewSelection(false),
           m_bFullInvalidateTiles(false),
+          m_bInvalidateTiles(false),
           m_bViewLock(false)
     {
     }
@@ -447,6 +451,10 @@ public:
             if (text.startsWith("EMPTY"))
             {
                 m_bFullInvalidateTiles = true;
+            }
+            else
+            {
+                m_bInvalidateTiles = true;
             }
         }
         }
@@ -685,6 +693,56 @@ void ScTiledRenderingTest::testTextEditViews()
 
     // check that text edit view in view #1 has not be killed
     CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
+
+    mxComponent->dispose();
+    mxComponent.clear();
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testTextEditViewInvalidations()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    // view #1
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    CPPUNIT_ASSERT(!lcl_hasEditView(*pViewData));
+
+    // view #2
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // text edit a cell in view #1
+    SfxLokHelper::setView(nView1);
+    aView2.m_bInvalidateTiles = false;
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(lcl_hasEditView(*pViewData));
+    CPPUNIT_ASSERT(aView2.m_bInvalidateTiles);
+
+    // view #3
+    SfxLokHelper::createView();
+    ViewCallback aView3;
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView3);
+
+    // text edit a cell in view #1
+    SfxLokHelper::setView(nView1);
+    aView3.m_bInvalidateTiles = false;
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'y', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'y', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView3.m_bInvalidateTiles);
 
     mxComponent->dispose();
     mxComponent.clear();

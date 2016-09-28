@@ -11,8 +11,10 @@
 #define INCLUDED_SFX2_LOKHELPER_HXX
 
 #include <sfx2/dllapi.h>
+#include <sfx2/viewsh.hxx>
 #include <cstddef>
 #include <rtl/string.hxx>
+#include <comphelper/lok.hxx>
 
 class SfxViewShell;
 
@@ -31,7 +33,9 @@ public:
     static std::size_t getViewsCount();
     /// Get viewIds of all existing views.
     static bool getViewIds(int* pArray, size_t nSize);
-
+    /// Iterate over any view shell, except pThisViewShell, passing it to the f function.
+    template<typename ViewShellType, typename FunctionType>
+    static void forEachOtherView(ViewShellType* pThisViewShell, FunctionType f);
     /// Invoke the LOK callback of all views except pThisView, with a payload of rKey-rPayload.
     static void notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload);
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
@@ -39,6 +43,21 @@ public:
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
     static void notifyInvalidation(SfxViewShell* pThisView, const OString& rPayload);
 };
+
+template<typename ViewShellType, typename FunctionType>
+void SfxLokHelper::forEachOtherView(ViewShellType* pThisViewShell, FunctionType f)
+{
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ViewShellType* pOtherViewShell = dynamic_cast<ViewShellType*>(pViewShell);
+        if (pOtherViewShell != nullptr && pOtherViewShell != pThisViewShell)
+        {
+            f(pOtherViewShell);
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
 
 #endif
 

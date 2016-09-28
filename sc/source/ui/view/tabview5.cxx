@@ -25,6 +25,7 @@
 #include <svx/svdoutl.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/objsh.hxx>
 
 #include "tabview.hxx"
@@ -53,7 +54,6 @@
 #include <comphelper/lok.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-
 
 using namespace com::sun::star;
 
@@ -158,6 +158,24 @@ ScTabView::~ScTabView()
 
     DELETEZ(pDrawOld);
     DELETEZ(pDrawActual);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScTabViewShell* pThisViewShell = GetViewData().GetViewShell();
+
+        auto lRemoveEditView =
+                [pThisViewShell] (ScTabViewShell* pOtherViewShell)
+                {
+                    ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
+                    for (int k = 0; k < 4; ++k)
+                    {
+                        if (rOtherViewData.HasEditView((ScSplitPos)(k)))
+                            pThisViewShell->RemoveEditViewFromOtherView(pOtherViewShell, (ScSplitPos)(k));
+                    }
+                };
+
+        SfxLokHelper::forEachOtherView(pThisViewShell, lRemoveEditView);
+    }
 
     aViewData.KillEditView();           // solange GridWin's noch existieren
 

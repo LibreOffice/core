@@ -20,6 +20,7 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svx/algitem.hxx>
@@ -75,6 +76,22 @@ using namespace com::sun::star;
 
 static bool bMoveArea = false;                  // Member?
 sal_uInt16 nEditAdjust = SVX_ADJUST_LEFT;       // Member!
+
+namespace {
+
+void lcl_LOKRemoveEditView(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
+{
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        auto lRemoveEditView =
+                [pTabViewShell, eWhich] (ScTabViewShell* pOtherViewShell)
+                { pOtherViewShell->RemoveEditViewFromOtherView(pTabViewShell, eWhich); };
+
+        SfxLokHelper::forEachOtherView(pTabViewShell, lRemoveEditView);
+    }
+}
+
+} // anonymous namespace
 
 ScViewDataTable::ScViewDataTable() :
                 eZoomType( SvxZoomType::PERCENT ),
@@ -958,12 +975,18 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     {
         //  if the view is already there don't call anything that changes the cursor position
         if (bEditActive[eWhich])
+        {
             bWasThere = true;
+        }
         else
+        {
+            lcl_LOKRemoveEditView(GetViewShell(), eWhich);
             pEditView[eWhich]->SetEditEngine(pNewEngine);
+        }
 
         if (pEditView[eWhich]->GetWindow() != pWin)
         {
+            lcl_LOKRemoveEditView(GetViewShell(), eWhich);
             pEditView[eWhich]->SetWindow(pWin);
             OSL_FAIL("EditView Window has changed");
         }
@@ -1133,6 +1156,23 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     pEditView[eWhich]->Invalidate();            //  needed?
     //  needed, wenn position changed
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScTabViewShell* pThisViewShell = GetViewShell();
+        SCTAB nThisTabNo = GetTabNo();
+        auto lAddEditView =
+                [pThisViewShell, nThisTabNo, eWhich] (ScTabViewShell* pOtherViewShell)
+                {
+                    ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
+                    SCTAB nOtherTabNo = rOtherViewData.GetTabNo();
+                    if (nThisTabNo == nOtherTabNo)
+                        pOtherViewShell->AddEditViewToOtherView(pThisViewShell, eWhich);
+                };
+
+        SfxLokHelper::forEachOtherView(pThisViewShell, lAddEditView);
+    }
+
 }
 
 IMPL_LINK_TYPED( ScViewData, EditEngineHdl, EditStatus&, rStatus, void )
@@ -1422,6 +1462,7 @@ void ScViewData::ResetEditView()
         {
             if (bEditActive[i])
             {
+                lcl_LOKRemoveEditView(GetViewShell(), (ScSplitPos)(i));
                 pEngine = pEditView[i]->GetEditEngine();
                 pEngine->RemoveView(pEditView[i]);
                 pEditView[i]->SetOutputArea( Rectangle() );
