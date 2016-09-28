@@ -117,11 +117,12 @@ namespace
         const SwPosition& rEnd = pField->GetMarkEnd();
         SwTextNode const*const pEndTextNode = rEnd.nNode.GetNode().GetTextNode();
         assert(pEndTextNode);
-        const sal_Int32 nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 )
+        const sal_Int32 nEndPos = (rEnd == rStart)
                                    ? rEnd.nContent.GetIndex()
                                    : rEnd.nContent.GetIndex() - 1;
         assert(pEndTextNode->GetText()[nEndPos] == aEndMark);
-        (void) pStartTextNode;
+        (void) pEndTextNode;
+        (void) nEndPos;
         SwPaM aEnd(rEnd, rEnd);
         if (aEnd.Start()->nContent > 0)
             --aEnd.Start()->nContent;
