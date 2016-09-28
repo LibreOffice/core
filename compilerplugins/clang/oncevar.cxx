@@ -9,9 +9,10 @@
 
 #include <string>
 #include <iostream>
-#include <map>
+#include <unordered_map>
 
 #include "plugin.hxx"
+#include "check.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 // Idea from tml.
@@ -27,21 +28,41 @@ class OnceVar:
     public RecursiveASTVisitor<OnceVar>, public loplugin::Plugin
 {
 public:
-    explicit OnceVar(InstantiationData const & data): Plugin(data), mbChecking(false) {}
+    explicit OnceVar(InstantiationData const & data): Plugin(data) {}
 
     virtual void run() override {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        for (auto it = maVarUsesMap.cbegin(); it != maVarUsesMap.cend(); ++it)
+        {
+            if (it->second == 1)
+            {
+                report(DiagnosticsEngine::Warning,
+                        "OUString var used only once, should be inlined",
+                       it->first)
+                    << maVarDeclSourceRangeMap[it->first];
+                report(DiagnosticsEngine::Note,
+                       "to this spot",
+                       maVarUseSourceRangeMap[it->first].getBegin())
+                    << maVarUseSourceRangeMap[it->first];
+            }
+        }
     }
 
-    bool TraverseFunctionDecl( FunctionDecl* stmt );
     bool VisitDeclRefExpr( const DeclRefExpr* );
 
 private:
-    bool mbChecking;
-    std::map<SourceLocation,int> maVarUsesMap;
-    std::map<SourceLocation,SourceRange> maVarDeclSourceRangeMap;
-    std::map<SourceLocation,SourceRange> maVarUseSourceRangeMap;
     StringRef getFilename(SourceLocation loc);
+
+    struct SourceLocationHash
+    {
+        size_t operator()( SourceLocation const & sl ) const
+        {
+            return sl.getRawEncoding();
+        }
+    };
+    std::unordered_map<SourceLocation, int, SourceLocationHash> maVarUsesMap;
+    std::unordered_map<SourceLocation, SourceRange, SourceLocationHash> maVarDeclSourceRangeMap;
+    std::unordered_map<SourceLocation, SourceRange, SourceLocationHash> maVarUseSourceRangeMap;
 };
 
 StringRef OnceVar::getFilename(SourceLocation loc)
@@ -51,59 +72,17 @@ StringRef OnceVar::getFilename(SourceLocation loc)
     return name;
 }
 
-bool OnceVar::TraverseFunctionDecl(FunctionDecl * decl)
-{
-    if (ignoreLocation(decl)) {
-        return true;
-    }
-    if (!decl->hasBody()) {
-        return true;
-    }
-    if ( decl != decl->getCanonicalDecl() ) {
-        return true;
-    }
-
-    // some places, it makes the code worse
-    StringRef aFileName = getFilename(decl->getLocStart());
-    if (aFileName.startswith(SRCDIR "/sal/qa/osl/module/osl_Module.cxx")) {
-        return true;
-    }
-
-    maVarUsesMap.clear();
-    maVarDeclSourceRangeMap.clear();
-    mbChecking = true;
-    TraverseStmt(decl->getBody());
-    mbChecking = false;
-    for (auto it = maVarUsesMap.cbegin(); it != maVarUsesMap.cend(); ++it)
-    {
-        if (it->second == 1)
-        {
-            report(DiagnosticsEngine::Warning,
-                    "OUString var used only once, should be inlined",
-                   it->first)
-                << maVarDeclSourceRangeMap[it->first];
-            report(DiagnosticsEngine::Note,
-                   "to this spot",
-                   maVarUseSourceRangeMap[it->first].getBegin())
-                << maVarUseSourceRangeMap[it->first];
-        }
-    }
-    return true;
-}
-
 bool OnceVar::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 {
-    if (!mbChecking)
+    if (ignoreLocation(declRefExpr)) {
         return true;
+    }
     const Decl* decl = declRefExpr->getDecl();
     if (!isa<VarDecl>(decl) || isa<ParmVarDecl>(decl)) {
         return true;
     }
     const VarDecl * varDecl = dyn_cast<VarDecl>(decl)->getCanonicalDecl();
-    if (!varDecl->hasInit() || varDecl->hasGlobalStorage()) {
-        return true;
-    }
-    if (varDecl->getType().getUnqualifiedType().getAsString().find("OUString") == std::string::npos) {
+    if (!varDecl->hasInit()) {
         return true;
     }
     const CXXConstructExpr* constructExpr = dyn_cast<CXXConstructExpr>(varDecl->getInit());
@@ -122,8 +101,11 @@ bool OnceVar::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     // and
     //      foo(&xxx);
     // where we cannot inline the declaration.
-    if (isa<MemberExpr>(parentStmt(declRefExpr))
-        || isa<UnaryOperator>(parentStmt(declRefExpr))) {
+    auto const tc = loplugin::TypeCheck(varDecl->getType());
+    if (tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+        && (isa<MemberExpr>(parentStmt(declRefExpr))
+            || isa<UnaryOperator>(parentStmt(declRefExpr))))
+    {
         maVarUsesMap[loc] = 2;
         return true;
     }

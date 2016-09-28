@@ -20,10 +20,6 @@ const OUStringLiteral vcl::IconThemeInfo::HIGH_CONTRAST_ID("hicontrast");
 
 namespace {
 
-static const OUStringLiteral HIGH_CONTRAST_DISPLAY_NAME("High Contrast");
-static const OUStringLiteral TANGO_TESTING_ID("tango_testing");
-static const OUStringLiteral TANGO_TESTING_DISPLAY_NAME("Tango Testing");
-
 OUString
 filename_from_url(const OUString& url)
 {
@@ -122,10 +118,10 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
 
     // special cases
     if (themeId.equalsIgnoreAsciiCase(HIGH_CONTRAST_ID)) {
-        return HIGH_CONTRAST_DISPLAY_NAME;
+        return "High Contrast";
     }
-    else if (themeId.equalsIgnoreAsciiCase(TANGO_TESTING_ID)) {
-        return TANGO_TESTING_DISPLAY_NAME;
+    else if (themeId.equalsIgnoreAsciiCase("tango_testing")) {
+        return "Tango Testing";
     }
 
     // make the first letter uppercase
