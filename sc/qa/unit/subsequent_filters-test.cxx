@@ -200,6 +200,7 @@ public:
     void testPivotTableNamedRangeSourceODS();
     void testPivotTableSharedCacheGroupODS();
     void testGetPivotDataXLS();
+    void testPivotTableSharedGroupXLSX();
 
     void testFormulaDependency();
 
@@ -305,6 +306,7 @@ public:
     CPPUNIT_TEST(testPivotTableNamedRangeSourceODS);
     CPPUNIT_TEST(testPivotTableSharedCacheGroupODS);
     CPPUNIT_TEST(testGetPivotDataXLS);
+    CPPUNIT_TEST(testPivotTableSharedGroupXLSX);
     CPPUNIT_TEST(testRowHeightODS);
     CPPUNIT_TEST(testFormulaDependency);
     CPPUNIT_TEST(testRichTextContentODS);
@@ -2059,6 +2061,33 @@ void ScFiltersTest::testGetPivotDataXLS()
 
     for (SCROW nRow = 2; nRow <= 19; ++nRow)
         CPPUNIT_ASSERT_EQUAL(rDoc.GetValue(ScAddress(4,nRow,1)), rDoc.GetValue(ScAddress(5,nRow,1)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testPivotTableSharedGroupXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table/shared_group.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll();
+
+    // Check whether right group names are imported for both tables
+    // First table
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport1"), rDoc.GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport2"), rDoc.GetString(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport3"), rDoc.GetString(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("16"), rDoc.GetString(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("17"), rDoc.GetString(ScAddress(0,6,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("18"), rDoc.GetString(ScAddress(0,7,0)));
+
+    // Second table
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport1"), rDoc.GetString(ScAddress(0,12,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport2"), rDoc.GetString(ScAddress(0,13,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("Csoport3"), rDoc.GetString(ScAddress(0,14,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("16"), rDoc.GetString(ScAddress(0,15,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("17"), rDoc.GetString(ScAddress(0,16,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("18"), rDoc.GetString(ScAddress(0,17,0)));
 
     xDocSh->DoClose();
 }
