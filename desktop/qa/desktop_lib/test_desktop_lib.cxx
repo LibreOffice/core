@@ -1572,19 +1572,24 @@ void DesktopLOKTest::testPaintPartTile()
 
 void DesktopLOKTest::testWriterCommentInsertCursor()
 {
-    // Load a document and type a character into the body text.
+    // Load a document and type a character into the body text of the second view.
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     ViewCallback aView1;
     pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
+    pDocument->m_pDocumentClass->createView(pDocument);
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    ViewCallback aView2;
+    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'x', 0);
     Scheduler::ProcessEventsToIdle();
-    Rectangle aBodyCursor = aView1.m_aOwnCursor;
+    Rectangle aBodyCursor = aView2.m_aOwnCursor;
 
     // Now insert a comment and make sure that the comment's cursor is shown,
     // not the body text's one.
+    aView1.m_aOwnCursor.SetEmpty();
     const int nCtrlAltC = KEY_MOD1 + KEY_MOD2 + 512 + 'c' - 'a';
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'c', nCtrlAltC);
     pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 'c', nCtrlAltC);
@@ -1594,7 +1599,13 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     osl::Thread::wait(std::chrono::seconds(1));
     Scheduler::ProcessEventsToIdle();
     // This failed: the body cursor was shown right after inserting a comment.
-    CPPUNIT_ASSERT(aView1.m_aOwnCursor.getX() > aBodyCursor.getX());
+    CPPUNIT_ASSERT(aView2.m_aOwnCursor.getX() > aBodyCursor.getX());
+    // This failed, the first view's cursor also jumped when the second view
+    // inserted the comment.
+    CPPUNIT_ASSERT(aView1.m_aOwnCursor.IsEmpty());
+
+    mxComponent->dispose();
+    mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
 }
 
