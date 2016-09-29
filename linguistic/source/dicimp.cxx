@@ -36,6 +36,7 @@
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
@@ -368,61 +369,6 @@ static OString formatForSave(const uno::Reference< XDictionaryEntry > &xEntry,
    return aStr.makeStringAndClear();
 }
 
-struct TmpDictionary
-{
-    OUString maURL, maTmpURL;
-    uno::Reference< ucb::XSimpleFileAccess3 > mxAccess;
-
-    void cleanTmpFile()
-    {
-        try
-        {
-            if (mxAccess.is())
-            {
-                mxAccess->kill(maTmpURL);
-            }
-        }
-        catch (const uno::Exception &) { }
-    }
-    explicit TmpDictionary(const OUString &rURL)
-        : maURL( rURL )
-    {
-        maTmpURL = maURL + ".tmp";
-    }
-    ~TmpDictionary()
-    {
-        cleanTmpFile();
-    }
-
-    uno::Reference< io::XStream > openTmpFile()
-    {
-        uno::Reference< io::XStream > xStream;
-
-        try
-        {
-            mxAccess = ucb::SimpleFileAccess::create(
-                        comphelper::getProcessComponentContext());
-            xStream = mxAccess->openFileReadWrite(maTmpURL);
-        } catch (const uno::Exception &) { }
-
-        return xStream;
-    }
-
-    sal_uLong renameTmpToURL()
-    {
-        try
-        {
-            mxAccess->move(maTmpURL, maURL);
-        }
-        catch (const uno::Exception &)
-        {
-            SAL_WARN( "linguistic", "failed to overwrite dict" );
-            return static_cast< sal_uLong >(-1);
-        }
-        return 0;
-    }
-};
-
 sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
 {
     MutexGuard aGuard( GetLinguMutex() );
@@ -431,15 +377,22 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
         return 0;
     DBG_ASSERT(!INetURLObject( rURL ).HasError(), "lng : invalid URL");
 
-    // lifecycle manage the .tmp file
-    TmpDictionary aTmpDictionary(rURL);
-    uno::Reference< io::XStream > xStream = aTmpDictionary.openTmpFile();
+    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
+    // get XOutputStream stream
+    uno::Reference<io::XStream> xStream;
+    try
+    {
+        xStream = io::TempFile::create(xContext);
+    }
+    catch (const uno::Exception &)
+    {
+        DBG_ASSERT( 0, "failed to get input stream" );
+    }
     if (!xStream.is())
         return static_cast< sal_uLong >(-1);
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
-
 
     // Always write as the latest version, i.e. DIC_VERSION_7
 
@@ -475,16 +428,26 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
         OString aOutStr = formatForSave(aEntrie, eEnc);
         pStream->WriteLine (aOutStr);
         if (0 != (nErr = pStream->GetError()))
-            break;
+            return nErr;
     }
 
-    pStream.reset(); // fdo#66420 close streams so Win32 can move the file
-    xStream.clear();
-    nErr = aTmpDictionary.renameTmpToURL();
-
-    //If we are migrating from an older version, then on first successful
-    //write, we're now converted to the latest version, i.e. DIC_VERSION_7
-    nDicVersion = DIC_VERSION_7;
+    try
+    {
+        pStream.reset();
+        uno::Reference< ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(xContext));
+        Reference<io::XInputStream> xInputStream(xStream, UNO_QUERY_THROW);
+        uno::Reference<io::XSeekable> xSeek(xInputStream, UNO_QUERY_THROW);
+        xSeek->seek(0);
+        xAccess->writeFile(rURL, xInputStream);
+        //If we are migrating from an older version, then on first successful
+        //write, we're now converted to the latest version, i.e. DIC_VERSION_7
+        nDicVersion = DIC_VERSION_7;
+    }
+    catch (const uno::Exception &)
+    {
+        DBG_ASSERT( 0, "failed to write stream" );
+        return static_cast< sal_uLong >(-1);
+    }
 
     return nErr;
 }
