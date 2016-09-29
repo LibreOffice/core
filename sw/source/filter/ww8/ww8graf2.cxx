@@ -683,7 +683,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     {
                         if (pOurNewObject != pObject)
                         {
-                            m_pMSDffManager->ExchangeInShapeOrder( pObject, 0, nullptr,
+                            m_pMSDffManager->ExchangeInShapeOrder( pObject, 0,
                                 pOurNewObject );
 
                             // delete and destroy old SdrGrafObj from page

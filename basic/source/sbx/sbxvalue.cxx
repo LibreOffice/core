@@ -36,52 +36,15 @@ SbxValue::SbxValue() : SbxBase()
     aData.eType = SbxEMPTY;
 }
 
-SbxValue::SbxValue( SbxDataType t, void* p ) : SbxBase()
+SbxValue::SbxValue( SbxDataType t ) : SbxBase()
 {
     int n = t & 0x0FFF;
-    if( p )
-        n |= SbxBYREF;
+
     if( n == SbxVARIANT )
         n = SbxEMPTY;
     else
         SetFlag( SbxFlagBits::Fixed );
-    if( p )
-    {
-        switch( t & 0x0FFF )
-        {
-            case SbxINTEGER:    n |= SbxBYREF; aData.pInteger = static_cast<sal_Int16*>(p); break;
-            case SbxSALUINT64:  n |= SbxBYREF; aData.puInt64 = static_cast<sal_uInt64*>(p); break;
-            case SbxSALINT64:
-            case SbxCURRENCY:   n |= SbxBYREF; aData.pnInt64 = static_cast<sal_Int64*>(p); break;
-            case SbxLONG:       n |= SbxBYREF; aData.pLong = static_cast<sal_Int32*>(p); break;
-            case SbxSINGLE:     n |= SbxBYREF; aData.pSingle = static_cast<float*>(p); break;
-            case SbxDATE:
-            case SbxDOUBLE:     n |= SbxBYREF; aData.pDouble = static_cast<double*>(p); break;
-            case SbxSTRING:     n |= SbxBYREF; aData.pOUString = static_cast<OUString*>(p); break;
-            case SbxERROR:
-            case SbxUSHORT:
-            case SbxBOOL:       n |= SbxBYREF; aData.pUShort = static_cast<sal_uInt16*>(p); break;
-            case SbxULONG:      n |= SbxBYREF; aData.pULong = static_cast<sal_uInt32*>(p); break;
-            case SbxCHAR:       n |= SbxBYREF; aData.pChar = static_cast<sal_Unicode*>(p); break;
-            case SbxBYTE:       n |= SbxBYREF; aData.pByte = static_cast<sal_uInt8*>(p); break;
-            case SbxINT:        n |= SbxBYREF; aData.pInt = static_cast<int*>(p); break;
-            case SbxOBJECT:
-                aData.pObj = static_cast<SbxBase*>(p);
-                if( p )
-                    aData.pObj->AddFirstRef();
-                break;
-            case SbxDECIMAL:
-                aData.pDecimal = static_cast<SbxDecimal*>(p);
-                if( p )
-                    aData.pDecimal->addRef();
-                break;
-            default:
-                SAL_WARN( "basic", "Improper pointer argument" );
-                n = SbxNULL;
-        }
-    }
-    else
-        memset( &aData, 0, sizeof( SbxValues ) );
+    memset( &aData, 0, sizeof( SbxValues ) );
     aData.eType = SbxDataType( n );
 }
 

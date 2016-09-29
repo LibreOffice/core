@@ -58,12 +58,11 @@ public:
     /** Converts the portion and replaces or appends to the passed XText. */
     void                convert(
                             const css::uno::Reference< css::text::XText >& rxText,
-                            const oox::xls::Font* pFont, bool bReplace );
+                            bool bReplace );
     void                convert( ScEditEngineDefaulter& rEE, ESelection& rSelection, const oox::xls::Font* pFont );
 
     void                writeFontProperties(
-        const css::uno::Reference< css::text::XText >& rxText,
-        const oox::xls::Font* pFont ) const;
+                            const css::uno::Reference< css::text::XText >& rxText ) const;
 
 private:
     OUString            maText;         /// Portion text.

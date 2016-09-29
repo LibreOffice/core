@@ -675,7 +675,7 @@ namespace SfxTemplate
 
 // Constructor
 
-SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window* pW, bool )
+SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window* pW )
     : pBindings(pB)
     , pWindow(pW)
     , pModule(nullptr)
@@ -2223,7 +2223,7 @@ static OUString lcl_GetLabel(uno::Any& rAny)
 }
 
 SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow)
-    : SfxCommonTemplateDialog_Impl(pB, pDlgWindow, true)
+    : SfxCommonTemplateDialog_Impl(pB, pDlgWindow)
     , m_pFloat(pDlgWindow)
     , m_aActionTbL(VclPtrInstance<DropToolBox_Impl>(pDlgWindow, this))
     , m_aActionTbR(VclPtrInstance<ToolBox>(pDlgWindow))
