@@ -24,6 +24,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <uitest/uiobject.hxx>
 
 SvSimpleTableContainer::SvSimpleTableContainer(vcl::Window* pParent, WinBits nBits)
     : Control(pParent, nBits)
@@ -48,6 +49,11 @@ VCL_BUILDER_FACTORY_ARGS(SvSimpleTableContainer,
 void SvSimpleTableContainer::SetTable(SvSimpleTable* pTable)
 {
     m_pTable = pTable;
+}
+
+SvSimpleTable* SvSimpleTableContainer::GetTable()
+{
+    return m_pTable.get();
 }
 
 bool SvSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
@@ -82,6 +88,11 @@ void SvSimpleTableContainer::GetFocus()
     Control::GetFocus();
     if (m_pTable)
         m_pTable->GrabFocus();
+}
+
+FactoryFunction SvSimpleTableContainer::GetUITestFactory() const
+{
+    return SimpleTableUIObject::createFromContainer;
 }
 
 // SvSimpleTable ------------------------------------------------------------

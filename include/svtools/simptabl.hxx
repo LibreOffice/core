@@ -40,10 +40,13 @@ public:
     virtual void dispose() override;
 
     void SetTable(SvSimpleTable* pTable);
+    SvSimpleTable* GetTable();
 
     virtual void Resize() override;
 
     virtual void GetFocus() override;
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 class SVT_DLLPUBLIC SvSimpleTable : public SvHeaderTabListBox

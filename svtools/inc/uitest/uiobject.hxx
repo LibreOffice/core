@@ -11,6 +11,7 @@
 
 class SvTreeListBox;
 class SvTreeListEntry;
+class SvSimpleTable;
 
 class TreeListUIObject : public WindowUIObject
 {
@@ -59,6 +60,22 @@ private:
     VclPtr<SvTreeListBox> mxTreeList;
 
     SvTreeListEntry* mpEntry;
+};
+
+class SimpleTableUIObject : public TreeListUIObject
+{
+public:
+    SimpleTableUIObject(VclPtr<SvSimpleTable> xTable);
+
+    virtual StringMap get_state() override;
+
+    static std::unique_ptr<UIObject> createFromContainer(vcl::Window* pWindow);
+
+protected:
+    virtual OUString get_type() const override;
+
+private:
+    VclPtr<SvSimpleTable> mxTable;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

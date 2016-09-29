@@ -10,6 +10,7 @@
 #include "uitest/uiobject.hxx"
 
 #include <svtools/treelistbox.hxx>
+#include <svtools/simptabl.hxx>
 
 TreeListUIObject::TreeListUIObject(VclPtr<SvTreeListBox> xTreeList):
     WindowUIObject(xTreeList),
@@ -138,6 +139,33 @@ std::set<OUString> TreeListEntryUIObject::get_children() const
 OUString TreeListEntryUIObject::get_type() const
 {
     return OUString("TreeListEntry");
+}
+
+SimpleTableUIObject::SimpleTableUIObject(VclPtr<SvSimpleTable> xTable):
+    TreeListUIObject(xTable),
+    mxTable(xTable)
+{
+}
+
+StringMap SimpleTableUIObject::get_state()
+{
+    StringMap aMap = TreeListUIObject::get_state();
+
+    aMap["ColumnCount"] = OUString::number(mxTable->TabCount());
+
+    return aMap;
+}
+
+OUString SimpleTableUIObject::UIObject::get_type() const
+{
+    return OUString("SimpleTable");
+}
+
+std::unique_ptr<UIObject> SimpleTableUIObject::createFromContainer(vcl::Window* pWindow)
+{
+    SvSimpleTableContainer* pTableContainer = dynamic_cast<SvSimpleTableContainer*>(pWindow);
+    assert(pTableContainer);
+    return std::unique_ptr<UIObject>(new SimpleTableUIObject(pTableContainer->GetTable()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
