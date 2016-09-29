@@ -11,6 +11,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <SidebarWin.hxx>
 #include <view.hxx>
@@ -57,7 +58,7 @@ void SidebarScrollBar::LogicInvalidate(const Rectangle* pRectangle)
 
     OString sRectangle = aRectangle.toString();
     SwWrtShell& rWrtShell = m_rView.GetWrtShell();
-    rWrtShell.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    SfxLokHelper::notifyInvalidation(rWrtShell.GetSfxViewShell(), sRectangle);
 }
 
 void SidebarScrollBar::MouseButtonUp(const MouseEvent& /*rMouseEvent*/)

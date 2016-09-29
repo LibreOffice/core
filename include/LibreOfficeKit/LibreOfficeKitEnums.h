@@ -63,6 +63,12 @@ typedef enum
      * @see lok::Office::setDocumentPassword().
      */
     LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY = (1ULL << 1),
+
+    /**
+     * Request to have the part number as an 5th value in the
+     * LOK_CALLBACK_INVALIDATE_TILES payload.
+     */
+    LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK = (1ULL << 2),
 }
 LibreOfficeKitOptionalFeatures;
 
@@ -84,6 +90,8 @@ typedef enum
      * Rectangle format: "x, y, width, height", where all numbers are document
      * coordinates, in twips. When all tiles are supposed to be dropped, the
      * format is the "EMPTY" string.
+     *
+     * @see LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK.
      */
     LOK_CALLBACK_INVALIDATE_TILES,
     /**

@@ -31,6 +31,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <svx/svdview.hxx>
 #include "tabvwsh.hxx"
@@ -1154,7 +1155,7 @@ void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
     }
 
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    SfxLokHelper::notifyInvalidation(pViewShell, sRectangle);
 }
 
 void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)

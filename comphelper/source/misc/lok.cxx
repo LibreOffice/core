@@ -17,7 +17,7 @@ namespace LibreOfficeKit
 
 static bool g_bActive(false);
 
-static bool g_bViewCallback(true);
+static bool g_bPartInInvalidation(false);
 
 void setActive(bool bActive)
 {
@@ -29,14 +29,14 @@ bool isActive()
     return g_bActive;
 }
 
-void setViewCallback(bool bViewCallback)
+void setPartInInvalidation(bool bPartInInvalidation)
 {
-    g_bViewCallback = bViewCallback;
+    g_bPartInInvalidation = bPartInInvalidation;
 }
 
-bool isViewCallback()
+bool isPartInInvalidation()
 {
-    return g_bViewCallback;
+    return g_bPartInInvalidation;
 }
 
 static bool g_bLocalRendering(false);
