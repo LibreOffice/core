@@ -381,7 +381,7 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent)
 }
 
 bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
-    short nMinMov, SdrPageView* pPV, const Rectangle& rLogRect, SdrObject* pPreparedFactoryObject)
+    short nMinMov, const Rectangle& rLogRect, SdrObject* pPreparedFactoryObject)
 {
     bool bRet=false;
     UnmarkAllObj();
@@ -389,14 +389,8 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
 
     ImpClearConnectMarker();
 
-    if (pPV!=nullptr)
-    {
-        pCreatePV=pPV;
-    }
-    else
-    {
-        pCreatePV = GetSdrPageView();
-    }
+    pCreatePV = GetSdrPageView();
+
     if (pCreatePV!=nullptr)
     { // otherwise no side registered!
         OUString aLay(maActualLayer);
@@ -519,7 +513,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
 
 bool SdrCreateView::BegCreateObj(const Point& rPnt, OutputDevice* pOut, short nMinMov)
 {
-    return ImpBegCreateObj(nAktInvent,nAktIdent,rPnt,pOut,nMinMov,nullptr,Rectangle(), nullptr);
+    return ImpBegCreateObj(nAktInvent,nAktIdent,rPnt,pOut,nMinMov,Rectangle(), nullptr);
 }
 
 bool SdrCreateView::BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov, SdrObject* pPreparedFactoryObject)
@@ -533,13 +527,13 @@ bool SdrCreateView::BegCreatePreparedObject(const Point& rPnt, sal_Int16 nMinMov
         nIdent = pPreparedFactoryObject->GetObjIdentifier();
     }
 
-    return ImpBegCreateObj(nInvent, nIdent, rPnt, nullptr, nMinMov, nullptr, Rectangle(), pPreparedFactoryObject);
+    return ImpBegCreateObj(nInvent, nIdent, rPnt, nullptr, nMinMov, Rectangle(), pPreparedFactoryObject);
 }
 
 bool SdrCreateView::BegCreateCaptionObj(const Point& rPnt, const Size& rObjSiz,
     OutputDevice* pOut, short nMinMov)
 {
-    return ImpBegCreateObj(SdrInventor,OBJ_CAPTION,rPnt,pOut,nMinMov,nullptr,
+    return ImpBegCreateObj(SdrInventor,OBJ_CAPTION,rPnt,pOut,nMinMov,
         Rectangle(rPnt,Size(rObjSiz.Width()+1,rObjSiz.Height()+1)), nullptr);
 }
 

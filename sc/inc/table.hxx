@@ -844,7 +844,7 @@ public:
         const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
         ScProgress* pProgress, sc::ReorderParam* pUndo );
 
-    void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );
+    void Reorder( const sc::ReorderParam& rParam );
 
     bool ValidQuery(
         SCROW nRow, const ScQueryParam& rQueryParam, ScRefCellValue* pCell = nullptr,

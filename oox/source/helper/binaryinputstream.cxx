@@ -95,12 +95,12 @@ OUString BinaryInputStream::readUnicodeArray( sal_Int32 nChars, bool bAllowNulCh
     return aStringBuffer.makeStringAndClear();
 }
 
-OUString BinaryInputStream::readCompressedUnicodeArray( sal_Int32 nChars, bool bCompressed, bool bAllowNulChars )
+OUString BinaryInputStream::readCompressedUnicodeArray( sal_Int32 nChars, bool bCompressed )
 {
     return bCompressed ?
          // ISO-8859-1 maps all byte values 0xHH to the same Unicode code point U+00HH
-        readCharArrayUC( nChars, RTL_TEXTENCODING_ISO_8859_1, bAllowNulChars ) :
-        readUnicodeArray( nChars, bAllowNulChars );
+        readCharArrayUC( nChars, RTL_TEXTENCODING_ISO_8859_1 ) :
+        readUnicodeArray( nChars );
 }
 
 void BinaryInputStream::copyToStream( BinaryOutputStream& rOutStrm )

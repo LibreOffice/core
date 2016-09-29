@@ -198,7 +198,7 @@ private:
     void                    GarbageCollect( long );
     void                    ReleaseFromGarbageCollect();
 
-    void                    ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
+    void                    ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* ) const;
     void                    ApplyGSUB( const FontSelectPattern& );
 
     ServerFontLayoutEngine* GetLayoutEngine();

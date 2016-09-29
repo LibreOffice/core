@@ -185,7 +185,7 @@ bool SlideShow::StartPreview( ViewShellBase& rBase,
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
     if( xSlideShow.is() )
-        return xSlideShow->startPreview( xDrawPage, xAnimationNode, nullptr );
+        return xSlideShow->startPreview( xDrawPage, xAnimationNode );
 
     return false;
 }
@@ -882,7 +882,7 @@ void SAL_CALL SlideShow::disposing()
     mpDoc = nullptr;
 }
 
-bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode, vcl::Window* pParent )
+bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Reference< XAnimationNode >& xAnimationNode )
 {
     Sequence< PropertyValue > aArguments(4);
 
@@ -895,12 +895,8 @@ bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Ref
     aArguments[2].Name = "AnimationNode";
     aArguments[2].Value <<= xAnimationNode;
 
-    Reference< XWindow > xParentWindow;
-    if( pParent )
-        xParentWindow = VCLUnoHelper::GetInterface( pParent );
-
     aArguments[3].Name = "ParentWindow";
-    aArguments[3].Value <<= xParentWindow;
+    aArguments[3].Value <<= Reference< XWindow >();
 
     startWithArguments( aArguments );
 

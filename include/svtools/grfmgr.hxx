@@ -469,8 +469,6 @@ public:
                                 const Point& rPt,
                                 const Size& rSz,
                                 long nExtraData = 0L,
-                                const GraphicAttr* pAttr = nullptr,
-                                GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD,
                                 OutputDevice* pFirstFrameOutDev = nullptr
                             );
 
