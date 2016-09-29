@@ -76,6 +76,7 @@ public:
     void testCreateViewTextSelection();
     void testRedlineColors();
     void testCommentEndTextEdit();
+    void testCursorPosition();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -116,6 +117,7 @@ public:
     CPPUNIT_TEST(testCreateViewTextSelection);
     CPPUNIT_TEST(testRedlineColors);
     CPPUNIT_TEST(testCommentEndTextEdit);
+    CPPUNIT_TEST(testCursorPosition);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1497,6 +1499,30 @@ void SwTiledRenderingTest::testCommentEndTextEdit()
     // This failed, the cursor was at 0, 0 at some point during end text edit
     // of the comment.
     CPPUNIT_ASSERT(!aView1.m_bOwnCursorAtOrigin);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testCursorPosition()
+{
+    // Load a document and register a callback, should get an own cursor.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc();
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // Crete a second view, so the first view gets a collaborative cursor.
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering({});
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    // Make sure the two are exactly the same.
+    // This failed, own cursor was at '1418, 1418', collaborative cursor was at
+    // '1425, 1425', due to pixel alignment.
+    CPPUNIT_ASSERT_EQUAL(aView1.m_aOwnCursor.toString(), aView1.m_aViewCursor.toString());
 
     mxComponent->dispose();
     mxComponent.clear();

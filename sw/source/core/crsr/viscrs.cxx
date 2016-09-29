@@ -170,10 +170,14 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell* pViewShell)
         }
     }
 
-    if( aRect.Height() )
+    if( aRect.Height())
     {
         ::SwCalcPixStatics( m_pCursorShell->GetOut() );
-        ::SwAlignRect( aRect, static_cast<SwViewShell const *>(m_pCursorShell), m_pCursorShell->GetOut() );
+
+        // Disable pixel alignment when tiled rendering, so that twip values of
+        // the cursor don't depend on statics.
+        if (!comphelper::LibreOfficeKit::isActive())
+            ::SwAlignRect( aRect, static_cast<SwViewShell const *>(m_pCursorShell), m_pCursorShell->GetOut() );
     }
     if( !m_pCursorShell->IsOverwriteCursor() || m_bIsDragCursor ||
         m_pCursorShell->IsSelection() )
