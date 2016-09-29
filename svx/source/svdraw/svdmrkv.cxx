@@ -228,7 +228,7 @@ void SdrMarkView::ModelHasChanged()
         }
 
         if(SfxViewShell* pViewShell = GetSfxViewShell())
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sSelection.getStr());
+            SfxLokHelper::notifyInvalidation(pViewShell, sSelection);
     }
 }
 

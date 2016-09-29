@@ -1039,7 +1039,8 @@ payloadToRectangle (LOKDocView* pDocView, const char* pPayload)
 {
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     GdkRectangle aRet;
-    gchar** ppCoordinates = g_strsplit(pPayload, ", ", 4);
+    // x, y, width, height, part number.
+    gchar** ppCoordinates = g_strsplit(pPayload, ", ", 5);
     gchar** ppCoordinate = ppCoordinates;
 
     aRet.width = aRet.height = aRet.x = aRet.y = 0;
@@ -2622,6 +2623,8 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
                      priv->m_aLOPath);
         return FALSE;
     }
+    priv->m_nLOKFeatures |= LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK;
+    priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
 
     return TRUE;
 }

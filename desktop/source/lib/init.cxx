@@ -326,15 +326,42 @@ static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
 
 namespace {
 
-Rectangle lcl_ParseRect(const std::string& payload)
+/// Represents an invalidated rectangle inside a given document part.
+struct RectangleAndPart
 {
-    std::istringstream iss(payload);
-    long left, top, right, bottom;
-    char comma;
-    iss >> left >> comma >> top >> comma >> right >> comma >> bottom;
-    Rectangle rc(left, top, left + right, top + bottom);
-    return rc;
-}
+    Rectangle m_aRectangle;
+    int m_nPart;
+
+    RectangleAndPart()
+        : m_nPart(-1)
+    {
+    }
+
+    OString toString() const
+    {
+        std::stringstream ss;
+        ss << m_aRectangle.toString().getStr();
+        if (m_nPart != -1)
+            ss << ", " << m_nPart;
+        return ss.str().c_str();
+    }
+
+    static RectangleAndPart Create(const std::string& rPayload)
+    {
+        std::istringstream aStream(rPayload);
+        long nLeft, nTop, nRight, nBottom;
+        long nPart = -1;
+        char nComma;
+        if (comphelper::LibreOfficeKit::isPartInInvalidation())
+            aStream >> nLeft >> nComma >> nTop >> nComma >> nRight >> nComma >> nBottom >> nComma >> nPart;
+        else
+            aStream >> nLeft >> nComma >> nTop >> nComma >> nRight >> nComma >> nBottom;
+        RectangleAndPart aRet;
+        aRet.m_aRectangle = Rectangle(nLeft, nTop, nLeft + nRight, nTop + nBottom);
+        aRet.m_nPart = nPart;
+        return aRet;
+    }
+};
 
 bool lcl_isViewCallbackType(const int type)
 {
@@ -700,7 +727,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
 
             case LOK_CALLBACK_INVALIDATE_TILES:
             {
-                Rectangle rcNew = lcl_ParseRect(payload);
+                RectangleAndPart rcNew = RectangleAndPart::Create(payload);
                 //SAL_WARN("lok", "New: " << rcNew.toString());
                 const auto rcOrig = rcNew;
 
@@ -708,15 +735,17 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                     [type, &rcNew] (const queue_type::value_type& elem) {
                         if (elem.first == type)
                         {
-                            const Rectangle rcOld = lcl_ParseRect(elem.second);
+                            const RectangleAndPart rcOld = RectangleAndPart::Create(elem.second);
+                            if (rcOld.m_nPart != rcNew.m_nPart)
+                                return false;
                             //SAL_WARN("lok", "#" << i << " Old: " << rcOld.toString());
-                            const Rectangle rcOverlap = rcNew.GetIntersection(rcOld);
+                            const Rectangle rcOverlap = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
                             //SAL_WARN("lok", "#" << i << " Overlap: " << rcOverlap.toString());
                             bool bOverlap = (rcOverlap.GetWidth() > 0 && rcOverlap.GetHeight() > 0);
                             if (bOverlap)
                             {
                                 //SAL_WARN("lok", rcOld.toString() << " U " << rcNew.toString());
-                                rcNew.Union(rcOld);
+                                rcNew.m_aRectangle.Union(rcOld.m_aRectangle);
                             }
                             return bOverlap;
                         }
@@ -727,7 +756,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                     }
                 );
 
-                if (rcNew != rcOrig)
+                if (rcNew.m_aRectangle != rcOrig.m_aRectangle)
                 {
                     SAL_WARN("lok", "Replacing: " << rcOrig.toString() << " by " << rcNew.toString());
                     payload = rcNew.toString().getStr();
@@ -2442,6 +2471,8 @@ static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t const feature
 {
     LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     pLib->mOptionalFeatures = features;
+    if (features & LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK)
+        comphelper::LibreOfficeKit::setPartInInvalidation(true);
 }
 
 static void lo_setDocumentPassword(LibreOfficeKit* pThis,

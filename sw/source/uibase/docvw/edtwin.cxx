@@ -71,6 +71,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>
@@ -6406,7 +6407,7 @@ void SwEditWin::LogicInvalidate(const Rectangle* pRectangle)
     else
         sRectangle = pRectangle->toString();
 
-    m_rView.libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    SfxLokHelper::notifyInvalidation(&m_rView, sRectangle);
 }
 
 void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)

@@ -50,6 +50,7 @@
 #include <editeng/flditem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <uitool.hxx>
 #include <view.hxx>
@@ -213,7 +214,7 @@ void SidebarTextControl::LogicInvalidate(const Rectangle* pRectangle)
 
     OString sRectangle = aRectangle.toString();
     SwWrtShell& rWrtShell = mrDocView.GetWrtShell();
-    rWrtShell.GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    SfxLokHelper::notifyInvalidation(rWrtShell.GetSfxViewShell(), sRectangle);
 }
 
 void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )

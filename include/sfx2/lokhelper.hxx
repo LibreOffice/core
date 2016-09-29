@@ -36,6 +36,8 @@ public:
     static void notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload);
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
     static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell* pOtherView, int nType, const OString& rKey, const OString& rPayload);
+    /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
+    static void notifyInvalidation(SfxViewShell* pThisView, const OString& rPayload);
 };
 
 #endif

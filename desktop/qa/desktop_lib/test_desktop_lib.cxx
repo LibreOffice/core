@@ -33,6 +33,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <cairo.h>
 
 #include <lib/init.hxx>
@@ -97,6 +98,7 @@ public:
     void testContextMenuWriter();
     void testContextMenuImpress();
     void testNotificationCompression();
+    void testPartInInvalidation();
     void testRedlineWriter();
     void testTrackChanges();
     void testRedlineCalc();
@@ -129,6 +131,7 @@ public:
     CPPUNIT_TEST(testContextMenuWriter);
     CPPUNIT_TEST(testContextMenuImpress);
     CPPUNIT_TEST(testNotificationCompression);
+    CPPUNIT_TEST(testPartInInvalidation);
     CPPUNIT_TEST(testRedlineWriter);
     CPPUNIT_TEST(testTrackChanges);
     CPPUNIT_TEST(testRedlineCalc);
@@ -1425,6 +1428,77 @@ void DesktopLOKTest::testNotificationCompression()
 
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_SET_PART, (int)std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string("1"), std::get<1>(notifs[i++]));
+}
+
+void DesktopLOKTest::testPartInInvalidation()
+{
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    // No part in invalidation: merge.
+    {
+        std::vector<std::tuple<int, std::string>> notifs;
+        std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10");
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10");
+
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
+
+        CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[0]));
+        CPPUNIT_ASSERT_EQUAL(std::string("10, 10, 30, 10"), std::get<1>(notifs[0]));
+    }
+    // No part in invalidation: don't merge.
+    {
+        std::vector<std::tuple<int, std::string>> notifs;
+        std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10");
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "40, 10, 20, 10");
+
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
+    }
+
+    // Part in invalidation, intersection and parts match -> merge.
+    {
+        comphelper::LibreOfficeKit::setPartInInvalidation(true);
+        comphelper::ScopeGuard aGuard([]()
+        {
+            comphelper::LibreOfficeKit::setPartInInvalidation(false);
+        });
+
+        std::vector<std::tuple<int, std::string>> notifs;
+        std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0");
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 0");
+
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
+    }
+    // Part in invalidation, intersection and parts don't match -> don't merge.
+    {
+        comphelper::LibreOfficeKit::setPartInInvalidation(true);
+        comphelper::ScopeGuard aGuard([]()
+        {
+            comphelper::LibreOfficeKit::setPartInInvalidation(false);
+        });
+
+        std::vector<std::tuple<int, std::string>> notifs;
+        std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
+
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "10, 10, 20, 10, 0");
+        handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "20, 10, 20, 10, 1");
+
+        Scheduler::ProcessEventsToIdle();
+
+        // This failed as RectangleAndPart::Create() always assumed no part in
+        // payload, so this was merged -> it was 1.
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
+    }
 }
 
 void DesktopLOKTest::testRedlineWriter()
