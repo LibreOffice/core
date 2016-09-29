@@ -615,6 +615,12 @@ DECLARE_WW8IMPORT_TEST(testTdf59896, "tdf59896.doc")
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf102334, "tdf102334.doc")
+{
+    // This was false, i.e. the first run wasn't hidden, when it should have been
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getRun(getParagraph(7), 1), "CharHidden"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
