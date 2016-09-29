@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a629dbe_9730c409",
+        "filename": "drawinglayer/source/processor2d/vclhelperbufferdevice.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-09-29T13:58:54Z",
+      "side": 1,
+      "message": "ROP_OVERPAINT -\u003e RasterOp::OverPaint in current master",
+      "range": {
+        "startLine": 199,
+        "startChar": 33,
+        "endLine": 199,
+        "endChar": 46
+      },
+      "revId": "4b7ef6273f858e8ae649aa1dba7f0c4fc2b1d5c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
