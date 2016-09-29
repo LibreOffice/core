@@ -372,6 +372,15 @@ Region::Region(const vcl::Region& rRegion)
 {
 }
 
+Region::Region(vcl::Region&& rRegion)
+:   mpB2DPolyPolygon(std::move(rRegion.mpB2DPolyPolygon)),
+    mpPolyPolygon(std::move(rRegion.mpPolyPolygon)),
+    mpRegionBand(std::move(rRegion.mpRegionBand)),
+    mbIsNull(rRegion.mbIsNull)
+{
+    rRegion.mbIsNull = true;
+}
+
 Region::~Region()
 {
 }
@@ -1450,6 +1459,17 @@ Region& vcl::Region::operator=( const vcl::Region& rRegion )
     mpPolyPolygon = rRegion.mpPolyPolygon;
     mpRegionBand = rRegion.mpRegionBand;
     mbIsNull = rRegion.mbIsNull;
+
+    return *this;
+}
+
+Region& vcl::Region::operator=( vcl::Region&& rRegion )
+{
+    mpB2DPolyPolygon = std::move(rRegion.mpB2DPolyPolygon);
+    mpPolyPolygon = std::move(rRegion.mpPolyPolygon);
+    mpRegionBand = std::move(rRegion.mpRegionBand);
+    mbIsNull = rRegion.mbIsNull;
+    rRegion.mbIsNull = true;
 
     return *this;
 }
