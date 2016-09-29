@@ -2952,7 +2952,10 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
         }
 
         if (pDimData)
+        {
+            (itCache->second)->ClearGroupFields();
             pDimData->WriteToCache(*itCache->second);
+        }
 
         return itCache->second.get();
     }
