@@ -240,8 +240,10 @@ namespace
     {
         return (pExtendCandidate &&
                 !pExtendCandidate->bConsumedByField &&
-                //potentially more, but lets keep it simple
-                (isPARATR_LIST(rAttr.Which()) || (isCHRATR(rAttr.Which()) && rAttr.Which() != RES_CHRATR_FONT && rAttr.Which() != RES_CHRATR_FONTSIZE)) &&
+                //if we bring character attributes into the fold we need to both
+                //a) consider RES_CHRATR_FONTSIZE and RES_CHRATR_FONT wrt Word's CJK/CTL variants
+                //b) consider crossing table cell boundaries (tdf#102334)
+                isPARATR_LIST(rAttr.Which()) &&
                 *(pExtendCandidate->pAttr) == rAttr);
     }
 }
