@@ -70,7 +70,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
             com.sun.star.text.XTextDocument xDoc =UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class,
                                       xComponent);
 
-            String infoMsg = "All context menus of the created document frame contains now a 'Help' entry with the submenus 'Content', 'Help Agent' and 'Tips'.\n\nPress 'Return' in the shell to remove the context menu interceptor and finish the example!";
+            String infoMsg = "All context menus of the created document frame contains now a 'Help' entry with the submenus 'Content', 'Help on Help' and 'Tips'.\n\nPress 'Return' in the shell to remove the context menu interceptor and finish the example!";
             xDoc.getText().setString(infoMsg);
 
             // ensure that the document content is optimal visible
@@ -101,7 +101,7 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
                         com.sun.star.ui.XContextMenuInterceptor.class, aContextMenuInterceptor );
                     xContextMenuInterception.registerContextMenuInterceptor( xContextMenuInterceptor );
 
-                    System.out.println( "\n ... all context menus of the created document frame contains now a 'Help' entry with the\n     submenus 'Content', 'Help Agent' and 'Tips'.\n\nPress 'Return' to remove the context menu interceptor and finish the example!");
+                    System.out.println( "\n ... all context menus of the created document frame contains now a 'Help' entry with the\n     submenus 'Content', 'Help on Help' and 'Tips'.\n\nPress 'Return' to remove the context menu interceptor and finish the example!");
 
                     java.io.BufferedReader reader
                         = new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
@@ -196,14 +196,14 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
                 // insert menu entry to sub menu
                 xSubMenuContainer.insertByIndex( 0, xMenuEntry );
 
-                // intialize help/help agent
+                // intialize help/help on help
                 xMenuEntry = UnoRuntime.queryInterface(
                                  com.sun.star.beans.XPropertySet.class,
                                      xMenuElementFactory.createInstance(
                                          "com.sun.star.ui.ActionTrigger" ));
-                xMenuEntry.setPropertyValue( "Text", "Help Agent" );
-                xMenuEntry.setPropertyValue( "CommandURL", "slot:5962" );
-                xMenuEntry.setPropertyValue( "HelpURL", "5962" );
+                xMenuEntry.setPropertyValue("Text", "Help on Help");
+                xMenuEntry.setPropertyValue("CommandURL", "slot:5400");
+                xMenuEntry.setPropertyValue("HelpURL", "5400");
 
                 // insert menu entry to sub menu
                 xSubMenuContainer.insertByIndex( 1, xMenuEntry );
