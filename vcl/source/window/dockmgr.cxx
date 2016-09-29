@@ -454,6 +454,13 @@ Rectangle DockingManager::GetPosSizePixel( const vcl::Window *pWindow )
 #define POPUP_DRAGHEIGHT    (POPUP_DRAGGRIP+POPUP_DRAGBORDER+POPUP_DRAGBORDER)
 #define POPUP_DRAGWIDTH     20
 
+enum class TearOffStyle
+{
+    Grip,
+    Title,
+    None
+};
+
 class ImplPopupFloatWin : public FloatingWindow
 {
 private:
@@ -463,12 +470,11 @@ private:
     bool                        mbTrackingEnabled;
     Point                       maDelta;
     Point                       maTearOffPosition;
-    bool                        mbGripAtBottom;
-    bool                        mbHasGrip;
+    TearOffStyle                meTearOffStyle;
     void                        ImplSetBorder();
 
 public:
-    ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
+    ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, TearOffStyle eStyle );
     virtual ~ImplPopupFloatWin() override;
     virtual void dispose() override;
 
@@ -484,12 +490,11 @@ public:
     Point               GetToolboxPosition() const;
     Point               GetTearOffPosition() const;
     void                DrawGrip(vcl::RenderContext& rRenderContext);
+    void                DrawTitle(vcl::RenderContext& rRenderContext);
     void                DrawBorder(vcl::RenderContext& rRenderContext);
-
-    bool                hasGrip() const { return mbHasGrip; }
 };
 
-ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip ) :
+ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWrapper* pDockingWin, TearOffStyle eStyle ) :
     FloatingWindow( pParent, WB_NOBORDER | WB_SYSTEMWINDOW | WB_NOSHADOW)
 {
     mpWindowImpl->mbToolbarFloatingWindow = true;   // indicate window type, required for accessibility
@@ -498,8 +503,7 @@ ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWra
     mbHighlight = false;
     mbMoving = false;
     mbTrackingEnabled = false;
-    mbGripAtBottom = true;
-    mbHasGrip = bHasGrip;
+    meTearOffStyle = eStyle;
 
     ImplSetBorder();
 }
@@ -533,8 +537,10 @@ void ImplPopupFloatWin::ImplSetBorder()
     // by setting those members the method SetOutputSizePixel() can
     //  be used to set the proper window size
     mpWindowImpl->mnTopBorder     = 1;
-    if( hasGrip() )
+    if( meTearOffStyle == TearOffStyle::Grip )
         mpWindowImpl->mnTopBorder += POPUP_DRAGHEIGHT+2;
+    else if( meTearOffStyle == TearOffStyle::Title )
+        mpWindowImpl->mnTopBorder += GetSettings().GetStyleSettings().GetTitleHeight()+2;
     mpWindowImpl->mnBottomBorder  = 1;
     mpWindowImpl->mnLeftBorder    = 1;
     mpWindowImpl->mnRightBorder   = 1;
@@ -548,24 +554,23 @@ void ImplPopupFloatWin::Resize()
 
 Rectangle ImplPopupFloatWin::GetDragRect() const
 {
-    Rectangle aRect;
-    if( hasGrip() )
+    if( meTearOffStyle == TearOffStyle::Grip )
     {
-        aRect = Rectangle( 1,1, GetOutputSizePixel().Width()-1, 2+POPUP_DRAGHEIGHT );
-        if( mbGripAtBottom )
-        {
-            int height = GetOutputSizePixel().Height();
-            aRect.Top() = height - 3 - POPUP_DRAGHEIGHT;
-            aRect.Bottom() = aRect.Top() + 1 + POPUP_DRAGHEIGHT;
-        }
+        return Rectangle( 1, GetOutputSizePixel().Height() - 3 - POPUP_DRAGHEIGHT,
+                           GetOutputSizePixel().Width() - 1, GetOutputSizePixel().Height() - 1 );
     }
-    return aRect;
+    else if( meTearOffStyle == TearOffStyle::Title )
+    {
+        return Rectangle( 1, 1, GetOutputSizePixel().Width() - 1, GetSettings().GetStyleSettings().GetTitleHeight() + 2 );
+    }
+
+    return Rectangle();
 }
 
 Point ImplPopupFloatWin::GetToolboxPosition() const
 {
     // return inner position where a toolbox could be placed
-    Point aPt( 1, 1 + ((mbGripAtBottom || !hasGrip()) ? 0 : GetDragRect().getHeight()) );    // grip + border
+    Point aPt( 1, 1 + ( meTearOffStyle != TearOffStyle::Title ? 0 : GetDragRect().getHeight()) );    // grip + border
 
     return aPt;
 }
@@ -691,13 +696,33 @@ void ImplPopupFloatWin::DrawGrip(vcl::RenderContext& rRenderContext)
         rRenderContext.SetFillColor();
 }
 
+void ImplPopupFloatWin::DrawTitle(vcl::RenderContext &rRenderContext)
+{
+    Rectangle aRect(GetDragRect());
+    aRect.Left()  += 2;
+    aRect.Right() -= 2;
+
+    DrawTextFlags nTextStyle = DrawTextFlags::Left | DrawTextFlags::VCenter | DrawTextFlags::EndEllipsis | DrawTextFlags::Clip;
+    rRenderContext.SetTextColor(GetSettings().GetStyleSettings().GetButtonTextColor());
+    SetPointFont(rRenderContext, GetSettings().GetStyleSettings().GetTitleFont());
+    rRenderContext.DrawText(aRect, GetText(), nTextStyle);
+}
+
 void ImplPopupFloatWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     Rectangle aRect(Point(), GetOutputSizePixel());
-    rRenderContext.DrawWallpaper(aRect, Wallpaper(rRenderContext.GetSettings().GetStyleSettings().GetFaceGradientColor()));
-    DrawBorder(rRenderContext);
-    if (hasGrip())
+
+    if (meTearOffStyle == TearOffStyle::Grip)
+    {
+        rRenderContext.DrawWallpaper(aRect, Wallpaper(rRenderContext.GetSettings().GetStyleSettings().GetFaceGradientColor()));
         DrawGrip(rRenderContext);
+    }
+    else if ( meTearOffStyle == TearOffStyle::Title )
+    {
+        rRenderContext.DrawWallpaper(aRect, Wallpaper(rRenderContext.GetSettings().GetStyleSettings().GetFaceColor()));
+        DrawTitle(rRenderContext);
+    }
+    DrawBorder(rRenderContext);
 }
 
 void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
@@ -1085,7 +1110,15 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
         mpOldBorderWin = nullptr;  // no border window found
 
     // the new parent for popup mode
-    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, this, bool(nFlags & FloatWinPopupFlags::AllowTearOff) );
+    TearOffStyle eStyle = TearOffStyle::None;
+    if ( nFlags & FloatWinPopupFlags::AllowTearOff )
+    {
+        if ( dynamic_cast< ToolBox* >( GetWindow() ) )
+            eStyle = TearOffStyle::Grip;
+        else
+            eStyle = TearOffStyle::Title;
+    }
+    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, this, eStyle );
 
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
     pWin->SetText( GetWindow()->GetText() );
