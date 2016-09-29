@@ -46,6 +46,30 @@
       "revId": "0a8d44c27276eae1e7dded38aa6e342b33a9016f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a629dbe_17a3d49f",
+        "filename": "sc/res/xml/styles.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001210
+      },
+      "writtenOn": "2016-09-29T04:17:49Z",
+      "side": 1,
+      "message": "Who decides what styles would be displayed Outside \"More\" and what would be displayed after clicking. And we don\u0027t want to hard code the placement of styles because that would break if the user tries to modify/add some new styles themselves. I think we need a policy on this.",
+      "parentUuid": "9a629dbe_f7866012",
+      "range": {
+        "startLine": 6,
+        "startChar": 29,
+        "endLine": 6,
+        "endChar": 37
+      },
+      "revId": "0a8d44c27276eae1e7dded38aa6e342b33a9016f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
