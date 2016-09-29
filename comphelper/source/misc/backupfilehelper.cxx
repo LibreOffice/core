@@ -167,9 +167,9 @@ namespace
                                 zstream->avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
                                 zstream->next_out = reinterpret_cast<unsigned char*>(aBuffer);
 #if !defined Z_PREFIX
-                                const sal_uInt64 nRetval(deflate(zstream.get(), nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
+                                const sal_Int64 nRetval(deflate(zstream.get(), nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
 #else
-                                const sal_uInt64 nRetval(z_deflate(zstream.get(), nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
+                                const sal_Int64 nRetval(z_deflate(zstream.get(), nSize == nToTransfer ? Z_FINISH : Z_NO_FLUSH));
 #endif
                                 if (Z_STREAM_ERROR == nRetval)
                                 {
@@ -250,9 +250,9 @@ namespace
                                 zstream->avail_out = BACKUP_FILE_HELPER_BLOCK_SIZE;
                                 zstream->next_out = reinterpret_cast<unsigned char*>(aBuffer);
 #if !defined Z_PREFIX
-                                const sal_uInt64 nRetval(inflate(zstream.get(), Z_NO_FLUSH));
+                                const sal_Int64 nRetval(inflate(zstream.get(), Z_NO_FLUSH));
 #else
-                                const sal_uInt64 nRetval(z_inflate(zstream.get(), Z_NO_FLUSH));
+                                const sal_Int64 nRetval(z_inflate(zstream.get(), Z_NO_FLUSH));
 #endif
                                 if (Z_STREAM_ERROR == nRetval)
                                 {
