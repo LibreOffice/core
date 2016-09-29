@@ -81,14 +81,14 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
                 // insert menu entry to sub menu
                 xSubMenuContainer.insertByIndex( 0, xMenuEntry );
 
-                // intialize help/help agent
-                // entry "Help Agent"
+                // intialize help/help on help
+                // entry "Help on Help"
                 xMenuEntry = UnoRuntime.queryInterface(
                         XPropertySet.class,
                         xMenuElementFactory.createInstance("com.sun.star.ui.ActionTrigger" ));
-                xMenuEntry.setPropertyValue( "Text", "Help Agent" );
-                xMenuEntry.setPropertyValue( "CommandURL", "slot:5962" );
-                xMenuEntry.setPropertyValue( "HelpURL", "5962" );
+                xMenuEntry.setPropertyValue("Text", "Help on Help");
+                xMenuEntry.setPropertyValue("CommandURL", "slot:5400");
+                xMenuEntry.setPropertyValue("HelpURL", "5400");
 
                 // insert menu entry to sub menu
                 xSubMenuContainer.insertByIndex( 1, xMenuEntry );
