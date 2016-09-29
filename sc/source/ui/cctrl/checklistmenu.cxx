@@ -877,7 +877,7 @@ void ScCheckListMenuWindow::CancelButton::Click()
 ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc) :
     ScMenuFloatingWindow(pParent, pDoc),
     maEdSearch(VclPtr<ScSearchEdit>::Create(this)),
-    maChecks(VclPtr<ScCheckListBox>::Create(this,  WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT) ),
+    maChecks(VclPtr<ScCheckListBox>::Create(this)),
     maChkToggleAll(VclPtr<TriStateBox>::Create(this, 0)),
     maBtnSelectSingle(VclPtr<ImageButton>::Create(this, 0)),
     maBtnUnselectSingle(VclPtr<ImageButton>::Create(this, 0)),
@@ -905,9 +905,6 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
 
     maEdSearch->SetTabStopsContainer( &maTabStops );
     maChecks->SetTabStopsContainer( &maTabStops );
-
-    // Enable type-ahead search in the check list box.
-    maChecks->SetStyle(maChecks->GetStyle() | WB_QUICK_SEARCH);
 }
 
 ScCheckListMenuWindow::~ScCheckListMenuWindow()
@@ -1829,6 +1826,15 @@ void ScSearchEdit::MouseButtonDown(const MouseEvent& rMEvt)
     Edit::MouseButtonDown( rMEvt );
     if ( mpTabStops && rMEvt.IsLeft() && rMEvt.GetClicks() >= 1 )
         mpTabStops->SetTabStop( this );
+}
+
+void ScCheckListMenuWindow::setHasDates(bool bHasDates)
+{
+    // WB_QUICK_SEARCH Enables type-ahead search in the check list box.
+    if (bHasDates)
+        maChecks->SetStyle(WB_QUICK_SEARCH | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT);
+    else
+        maChecks->SetStyle(WB_QUICK_SEARCH | WB_HASBUTTONS);
 }
 
 void ScCheckListMenuWindow::initMembers()

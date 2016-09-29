@@ -325,6 +325,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
     void setMemberSize(size_t n);
+    void setHasDates(bool bHasDates);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
     void addMember(const OUString& rName, bool bVisible);
     void initMembers();

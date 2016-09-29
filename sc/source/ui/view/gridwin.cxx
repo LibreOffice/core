@@ -714,6 +714,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     std::vector<ScTypedStrData> aStrings;
     pDoc->GetFilterEntries(nCol, nRow, nTab, aStrings, bHasDates);
 
+    mpAutoFilterPopup->setHasDates(bHasDates);
     mpAutoFilterPopup->setMemberSize(aStrings.size());
     std::vector<ScTypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
     for (; it != itEnd; ++it)
