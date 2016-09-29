@@ -104,6 +104,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	) > $@
 
 # for release-builds (building installers) adjust values in openoffice.lst.in
+# Added 'SecureUserConfig' flags to enable and safe three registrymodifications.xcu versions
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,soffice) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
@@ -118,6 +119,8 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'ProgressTextBaseline=145' \
 		&& echo 'ProgressTextColor=255,255,255' \
 		&& echo 'URE_BOOTSTRAP=$${ORIGIN}/$(call gb_Helper_get_rcfile,fundamental)' \
+		&& echo 'SecureUserConfig=true' \
+		&& echo 'SecureUserConfigNumCopies=3' \
 	) > $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,uno) :

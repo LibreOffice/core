@@ -21,10 +21,23 @@ namespace comphelper
 {
     /** Helper class to backup/restore a single file
      *
+     *  This is a general class to manage backups/restore of the file
+     *  given by the URL. The container holding the backups is created
+     *  aside the original file, e.g for 'test.txt' a container
+     *  called '.test.pack' will be used. If it was not yet backed-up
+     *  this container file will be created at the 1st backup and deleted
+     *  when the last gets removed. The container holds a stack with a
+     *  maximum given number (in the constructor) of copies, these are by
+     *  default compressed, but don't have to be (see tryPush).
+     *
+     *  Due to being on a low system level here, no UNO API and not much
+     *  other tooling can be used, as a consequence for the container a
+     *  own simple format is used and e.g. the zip lib directly.
+     *
      *  You need to hand over the URL of the file to look at and
      *  a maximum number of allowed copies. That number is internally
-     *  limited to a max of 10 (see implementation). The number of
-     *  allowed copies is limited to [1..max].
+     *  limited to a absolute max of 10 (see implementation). The number
+     *  of allowed copies is limited to [1..max].
      *
      *  Calling tryPush() will check if there is no backup yet or if
      *  there is one that the file has changed. If yes, a new copy is
@@ -102,10 +115,14 @@ namespace comphelper
          *  Also may cleanup older backups when NumBackups given in the
          *  constructor has changed.
          *
+         *  @param  bCompress
+         *          Defines if the new backup will be compressed when
+         *          added. Default is true
+         *
          *  @return bool
          *          returns true if a new backup was actually created
          */
-        bool tryPush();
+        bool tryPush(bool bCompress = true);
 
         /** finds out if a restore is possible
          *
