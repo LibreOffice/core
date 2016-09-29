@@ -127,14 +127,15 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
 #if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
     sal_Int32 nMin = std::min(nStr1Len, nStr2Len);
-    sal_Int32 nRet = strncmp(pStr1, pStr2, nMin);
+    sal_Int32 nRet = memcmp(pStr1, pStr2, nMin);
     return nRet == 0 ? nStr1Len - nStr2Len : nRet;
 #else
     if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
         sal_Int32 nMin = std::min(nStr1Len, nStr2Len);
-        sal_Int32 nRet = wcsncmp(reinterpret_cast<wchar_t const *>(pStr1), reinterpret_cast<wchar_t const *>(pStr2), nMin);
+        sal_Int32 nRet = wmemcmp(reinterpret_cast<wchar_t const *>(pStr1),
+                reinterpret_cast<wchar_t const *>(pStr2), nMin);
         return nRet == 0 ? nStr1Len - nStr2Len : nRet;
     }
     else
@@ -170,7 +171,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompare_WithLength )( const IMPL_R
 #if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
     sal_Int32 nMin = std::min(std::min(nStr1Len, nStr2Len), nShortenedLength);
-    sal_Int32 nRet = strncmp(pStr1, pStr2, nMin);
+    sal_Int32 nRet = memcmp(pStr1, pStr2, nMin);
     if (nRet == 0 && nShortenedLength > std::min(nStr1Len, nStr2Len))
         return nStr1Len - nStr2Len;
     return nRet;
@@ -179,7 +180,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompare_WithLength )( const IMPL_R
     {
         // take advantage of builtin optimisations
         sal_Int32 nMin = std::min(std::min(nStr1Len, nStr2Len), nShortenedLength);
-        sal_Int32 nRet = wcsncmp(reinterpret_cast<wchar_t const *>(pStr1), reinterpret_cast<wchar_t const *>(pStr2), nMin);
+        sal_Int32 nRet = wmemcmp(reinterpret_cast<wchar_t const *>(pStr1), reinterpret_cast<wchar_t const *>(pStr2), nMin);
         if (nRet == 0 && nShortenedLength > std::min(nStr1Len, nStr2Len))
             return nStr1Len - nStr2Len;
         return nRet;
