@@ -387,7 +387,7 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     }
     catch (const uno::Exception &)
     {
-        DBG_ASSERT( 0, "failed to get input stream" );
+        DBG_ASSERT( false, "failed to get input stream" );
     }
     if (!xStream.is())
         return static_cast< sal_uLong >(-1);
@@ -445,7 +445,7 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     }
     catch (const uno::Exception &)
     {
-        DBG_ASSERT( 0, "failed to write stream" );
+        DBG_ASSERT( false, "failed to write stream" );
         return static_cast< sal_uLong >(-1);
     }
 
