@@ -156,7 +156,7 @@ StringMap SimpleTableUIObject::get_state()
     return aMap;
 }
 
-OUString SimpleTableUIObject::UIObject::get_type() const
+OUString SimpleTableUIObject::get_type() const
 {
     return OUString("SimpleTable");
 }
