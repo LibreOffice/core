@@ -174,15 +174,9 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterCo
 
     if( mbStatus )
     {
-        Animation aAnimation;
-
-        if (rGraphic.IsAnimated())
-            aAnimation = rGraphic.GetAnimation();
-        else
-        {
-            AnimationBitmap aAnimationBitmap(rGraphic.GetBitmap(), Point(), Size());
-            aAnimation.Insert(aAnimationBitmap);
-        }
+        Animation aAnimation = rGraphic.IsAnimated() ? rGraphic.GetAnimation() : Animation();
+        if (!rGraphic.IsAnimated())
+            aAnimation.Insert(AnimationBitmap(rGraphic.GetBitmap(), Point(), Size()));
 
         for (size_t i = 0; i < aAnimation.Count(); ++i)
             mnSumOfAllPictHeight += aAnimation.Get(i).aBmpEx.GetSizePixel().Height();
