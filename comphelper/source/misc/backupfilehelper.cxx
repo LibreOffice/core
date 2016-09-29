@@ -103,7 +103,7 @@ namespace
             {
                 sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
                 sal_uInt64 nBytesTransfer(0);
-                sal_uInt64 nSize(getFullFileSize());
+                sal_uInt64 nSize(getPackFileSize());
 
                 // set offset in source file - when this is zero, a new file is to be added
                 if (osl::File::E_None == maFile->setPos(osl_Pos_Absolut, sal_Int64(getOffset())))
@@ -140,7 +140,7 @@ namespace
                 sal_uInt8 aArray[BACKUP_FILE_HELPER_BLOCK_SIZE];
                 sal_uInt8 aBuffer[BACKUP_FILE_HELPER_BLOCK_SIZE];
                 sal_uInt64 nBytesTransfer(0);
-                sal_uInt64 nSize(getFullFileSize());
+                sal_uInt64 nSize(getPackFileSize());
                 std::unique_ptr< z_stream > zstream(new z_stream);
                 memset(zstream.get(), 0, sizeof(*zstream));
 
@@ -294,21 +294,22 @@ namespace
 
 
     public:
+        // create new, uncompressed entry
         PackedFileEntry(
             sal_uInt32 nFullFileSize,
-            sal_uInt32 nOffset,
             sal_uInt32 nCrc32,
             FileSharedPtr& rFile,
             bool bDoCompress)
         :   mnFullFileSize(nFullFileSize),
             mnPackFileSize(nFullFileSize),
-            mnOffset(nOffset),
+            mnOffset(0),
             mnCrc32(nCrc32),
             maFile(rFile),
             mbDoCompress(bDoCompress)
         {
         }
 
+        // create entry to be loaded as header (read_header)
         PackedFileEntry()
         :   mnFullFileSize(0),
             mnPackFileSize(0),
@@ -669,7 +670,7 @@ namespace
             return bRetval;
         }
 
-        bool tryPush(FileSharedPtr& rFileCandidate)
+        bool tryPush(FileSharedPtr& rFileCandidate, bool bCompress)
         {
             sal_uInt64 nFileSize(0);
 
@@ -724,19 +725,14 @@ namespace
                     nCrc32 = createCrc32(rFileCandidate, 0);
                 }
 
-                // create a file entry for a new file. Offset is set to 0 to mark
-                // the entry as new file entry
-                // the compress flag decides if entries should be compressed when
-                // they get written to the target package
-                static bool bUseCompression(true);
-
+                // create a file entry for a new file. Offset is set automatically
+                // to 0 to mark the entry as new file entry
                 maPackedFileEntryVector.push_back(
                     PackedFileEntry(
                         static_cast< sal_uInt32 >(nFileSize),
-                        0,
                         nCrc32,
                         rFileCandidate,
-                        bUseCompression));
+                        bCompress));
 
                 mbChanged = true;
             }
@@ -837,14 +833,14 @@ namespace comphelper
         return OUString(maBase + "/." + maName + ".pack");
     }
 
-    bool BackupFileHelper::tryPush()
+    bool BackupFileHelper::tryPush(bool bCompress)
     {
         if (splitBaseURL() && baseFileExists())
         {
             PackedFile aPackedFile(getName());
             FileSharedPtr aBaseFile(new osl::File(mrBaseURL));
 
-            if (aPackedFile.tryPush(aBaseFile))
+            if (aPackedFile.tryPush(aBaseFile, bCompress))
             {
                 // reduce to allowed number and flush
                 aPackedFile.tryReduceToNumBackups(mnNumBackups);
