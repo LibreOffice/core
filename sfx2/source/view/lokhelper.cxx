@@ -17,6 +17,8 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include <shellimpl.hxx>
 
@@ -134,6 +136,16 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
 
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
+}
+
+void SfxLokHelper::notifyInvalidation(SfxViewShell* pThisView, const OString& rPayload)
+{
+    std::stringstream ss;
+    ss << rPayload.getStr();
+    if (comphelper::LibreOfficeKit::isPartInInvalidation())
+        ss << ", " << pThisView->getPart();
+    OString aPayload = ss.str().c_str();
+    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aPayload.getStr());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

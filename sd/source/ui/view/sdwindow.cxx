@@ -44,6 +44,7 @@
 #include <vcl/settings.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
 
 namespace sd {
 
@@ -1008,7 +1009,7 @@ void Window::LogicInvalidate(const Rectangle* pRectangle)
         sRectangle = aRectangle.toString();
     }
     SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
-    rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    SfxLokHelper::notifyInvalidation(&rSfxViewShell, sRectangle);
 }
 
 FactoryFunction Window::GetUITestFactory() const

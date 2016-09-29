@@ -43,10 +43,10 @@ COMPHELPER_DLLPUBLIC bool isActive();
 COMPHELPER_DLLPUBLIC void setLocalRendering(bool bLocalRendering = true);
 COMPHELPER_DLLPUBLIC bool isLocalRendering();
 
-/// Check whether clients register a callback for each view.
-COMPHELPER_DLLPUBLIC bool isViewCallback();
-/// Set whether clients register a callback for each view.
-COMPHELPER_DLLPUBLIC void setViewCallback(bool bViewCallback);
+/// Check whether clients want a part number in an invalidation payload.
+COMPHELPER_DLLPUBLIC bool isPartInInvalidation();
+/// Set whether clients want a part number in an invalidation payload.
+COMPHELPER_DLLPUBLIC void setPartInInvalidation(bool bPartInInvalidation);
 
 // Status indicator handling. Even if in theory there could be several status indicators active at
 // the same time, in practice there is only one at a time, so we don't handle any identification of

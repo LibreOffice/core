@@ -65,6 +65,7 @@
 #include <formula/FormulaCompiler.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/lokhelper.hxx>
 
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
 
@@ -340,13 +341,13 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
                     // Only invalidate if spreadsheet extended to the right
                     if (aNewColArea.getWidth())
                     {
-                        aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewColArea.toString().getStr());
+                        SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewColArea.toString());
                     }
 
                     // Only invalidate if spreadsheet extended to the bottom
                     if (aNewRowArea.getHeight())
                     {
-                        aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewRowArea.toString().getStr());
+                        SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewRowArea.toString());
                     }
                 }
             }
