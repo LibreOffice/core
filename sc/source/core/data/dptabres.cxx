@@ -965,8 +965,7 @@ OUString ScDPResultMember::GetDisplayName( bool bLocaleIndependent ) const
     if (!pDPMember)
         return OUString();
 
-    ScDPItemData aItem;
-    pDPMember->FillItemData(aItem);
+    ScDPItemData aItem(pDPMember->FillItemData());
     if (aParentDimData.mpParentDim)
     {
         long nDim = aParentDimData.mpParentDim->GetDimension();
@@ -976,13 +975,12 @@ OUString ScDPResultMember::GetDisplayName( bool bLocaleIndependent ) const
     return aItem.GetString();
 }
 
-void ScDPResultMember::FillItemData( ScDPItemData& rData ) const
+ScDPItemData ScDPResultMember::FillItemData() const
 {
-    const ScDPMember*   pMemberDesc = GetDPMember();
+    const ScDPMember* pMemberDesc = GetDPMember();
     if (pMemberDesc)
-        pMemberDesc->FillItemData( rData );
-    else
-        rData.SetString( ScGlobal::GetRscString(STR_PIVOT_TOTAL) );     // root member
+        return pMemberDesc->FillItemData();
+    return ScDPItemData(ScGlobal::GetRscString(STR_PIVOT_TOTAL));     // root member
 }
 
 bool ScDPResultMember::IsNamedItem( SCROW nIndex ) const
@@ -1322,8 +1320,7 @@ void ScDPResultMember::FillMemberResults(
     }
     else
     {
-        ScDPItemData aItemData;
-        FillItemData( aItemData );
+        ScDPItemData aItemData(FillItemData());
         if (aParentDimData.mpParentDim)
         {
             long nDim = aParentDimData.mpParentDim->GetDimension();
@@ -2694,8 +2691,7 @@ bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
     {
         // need to check all previous groups
         //TODO: get array of groups (or indexes) before loop?
-        ScDPItemData aMemberData;
-        rMember.FillItemData( aMemberData );
+        ScDPItemData aMemberData(rMember.FillItemData());
 
         const std::vector<ScDPInitState::Member>& rMemStates = rInitState.GetMembers();
         std::vector<ScDPInitState::Member>::const_iterator it = rMemStates.begin(), itEnd = rMemStates.end();
@@ -2714,8 +2710,7 @@ bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
         // -> look for other groups using the same base
 
         //TODO: get array of groups (or indexes) before loop?
-        ScDPItemData aMemberData;
-        rMember.FillItemData( aMemberData );
+        ScDPItemData aMemberData(rMember.FillItemData());
         const std::vector<ScDPInitState::Member>& rMemStates = rInitState.GetMembers();
         std::vector<ScDPInitState::Member>::const_iterator it = rMemStates.begin(), itEnd = rMemStates.end();
         for (; it != itEnd && bInclude; ++it)
@@ -3510,8 +3505,7 @@ void ScDPResultDimension::FillVisibilityData(ScDPResultVisibilityData& rData) co
         ScDPResultMember* pMember = *itr;
         if (pMember->IsValid())
         {
-            ScDPItemData aItem;
-            pMember->FillItemData(aItem);
+            ScDPItemData aItem(pMember->FillItemData());
             rData.addVisibleMember(GetName(), aItem);
             pMember->FillVisibilityData(rData);
         }

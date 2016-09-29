@@ -463,8 +463,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
                 sal_Int32 nIndex = pMembers->GetIndexFromName( rFilter.MatchValueName );
                 if ( nIndex >= 0 )
                 {
-                    ScDPItemData aItem;
-                    pMembers->getByIndex(nIndex)->FillItemData( aItem );
+                    ScDPItemData aItem(pMembers->getByIndex(nIndex)->FillItemData());
                     aFilterCriteria.push_back( ScDPFilteredCache::Criterion() );
                     aFilterCriteria.back().mnFieldIndex = nCol;
                     aFilterCriteria.back().mpFilter.reset(
@@ -737,8 +736,7 @@ void ScDPSource::FilterCacheByPageDimensions()
             ScDPMember* pMem = pMems->getByIndex(j);
             if (pMem->isVisible())
             {
-                ScDPItemData aData;
-                pMem->FillItemData(aData);
+                ScDPItemData aData(pMem->FillItemData());
                 pGrpFilter->addMatchItem(aData);
             }
         }
@@ -1450,8 +1448,7 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
                 ScDPMember* pMember = pMembers->getByIndex(i);
                 if (aSelectedPage.equals(pMember->GetNameStr( false)))
                 {
-                    pSelectedData = new ScDPItemData();
-                    pMember->FillItemData( *pSelectedData );
+                    pSelectedData = new ScDPItemData(pMember->FillItemData());
                 }
             }
         }
@@ -2582,12 +2579,12 @@ sal_Int32 ScDPMember::Compare( const ScDPMember& rOther ) const
    return pSource->GetData()->Compare( pSource->GetSourceDim(nDim),mnDataId,rOther.GetItemDataId());
 }
 
-void ScDPMember::FillItemData( ScDPItemData& rData ) const
+ScDPItemData ScDPMember::FillItemData() const
 {
     //TODO: handle date hierarchy...
 
     const ScDPItemData* pData = GetItemData();
-    rData = (pData ? *pData : ScDPItemData());
+    return (pData ? *pData : ScDPItemData());
 }
 
 const OUString* ScDPMember::GetLayoutName() const

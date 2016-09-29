@@ -368,7 +368,7 @@ public:
     OUString GetName() const;
     OUString GetDisplayName( bool bLocaleIndependent ) const;
 
-    void                FillItemData( ScDPItemData& rData ) const;
+    ScDPItemData FillItemData() const;
     bool IsValid() const;
     bool IsVisible() const;
     long                GetSize(long nMeasure) const;

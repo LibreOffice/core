@@ -741,7 +741,7 @@ public:
     ScDPMember& operator=(const ScDPMember&) = delete;
 
     OUString GetNameStr( bool bLocaleIndependent ) const;
-    void                    FillItemData( ScDPItemData& rData ) const;
+    ScDPItemData FillItemData() const;
     const ScDPItemData*  GetItemData() const;
     SCROW GetItemDataId() const { return mnDataId; }
     bool IsNamedItem(SCROW nIndex) const;
