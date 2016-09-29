@@ -94,6 +94,11 @@ namespace sw { namespace sidebar {
 
 PageMarginControl::PageMarginControl( sal_uInt16 nId )
     : SfxPopupWindow( nId, "PageMarginControl", "modules/swriter/ui/pagemargincontrol.ui" )
+    , m_nPageLeftMargin(0)
+    , m_nPageRightMargin(0)
+    , m_nPageTopMargin(0)
+    , m_nPageBottomMargin(0)
+    , m_bMirrored(false)
     , m_eUnit( lcl_GetUnit() )
     , m_bUserCustomValuesAvailable( false )
     , m_nUserCustomPageLeftMargin( 0 )
