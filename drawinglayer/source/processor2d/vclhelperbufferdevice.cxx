@@ -196,6 +196,7 @@ namespace
         {
             // reused, reset some values
             pRetval->SetMapMode();
+            pRetval->SetRasterOp(RasterOp::OverPaint);
         }
 
         // remember allocated buffer
