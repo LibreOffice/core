@@ -970,8 +970,7 @@ public:
     explicit            EmbeddedForm(
                             const css::uno::Reference< css::frame::XModel >& rxDocModel,
                             const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
-                            const GraphicHelper& rGraphicHelper,
-                            bool bDefaultColorBgr = true );
+                            const GraphicHelper& rGraphicHelper );
 
     /** Converts the passed control and inserts the control model into the form.
         @return  The API control model, if conversion was successful. */

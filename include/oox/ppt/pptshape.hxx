@@ -65,7 +65,6 @@ public:
             const oox::drawingml::Theme* pTheme,
             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
             basegfx::B2DHomMatrix& aTransformation,
-            const css::awt::Rectangle* pShapeRect = nullptr,
             ::oox::drawingml::ShapeIdMap* pShapeMap = nullptr );
 
     virtual void applyShapeReference( const oox::drawingml::Shape& rReferencedShape, bool bUseText = true ) override;

@@ -35,13 +35,24 @@ for callInfo, callValues in callDict.iteritems():
     callValue = next(iter(callValues))
     if "unknown" in callValue:
         continue
+    sourceLoc = callInfo[4]
+    functionSig = callInfo[0] + " " + callInfo[1]
+
     # try and ignore setter methods
     if ("," not in nameAndParams) and (("::set" in nameAndParams) or ("::Set" in nameAndParams)):
         continue
-    v0 = callInfo[4]
-    v1 = callInfo[0] + " " + callInfo[1]
+    # ignore code that follows a common pattern
+    if sourceLoc.startswith("sw/inc/swatrset.hxx"): continue
+    if sourceLoc.startswith("sw/inc/format.hxx"): continue
+    # template generated code
+    if sourceLoc.startswith("include/sax/fshelper.hxx"): continue
+    # debug code
+    if sourceLoc.startswith("include/oox/dump"): continue
+    # part of our binary API
+    if sourceLoc.startswith("include/LibreOfficeKit"): continue
+
     v2 = callInfo[3] + " " + callInfo[2] + " " + callValue
-    tmp1list.append((v0,v1,v2))
+    tmp1list.append((sourceLoc, functionSig, v2))
 
 # sort results by filename:lineno
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):

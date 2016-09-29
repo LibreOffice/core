@@ -832,8 +832,8 @@ ERRTYPE RscSysDepend::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     return aError;
 }
 
-RscTupel::RscTupel( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper )
-    : RscClass( nId, nTypeId, pSuper )
+RscTupel::RscTupel( Atom nId, sal_uInt32 nTypeId )
+    : RscClass( nId, nTypeId, nullptr )
 {
 }
 

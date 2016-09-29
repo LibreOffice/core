@@ -61,7 +61,7 @@ private:
 
 protected:
     bool ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const Point& rPnt, OutputDevice* pOut,
-        sal_Int16 nMinMov, SdrPageView* pPV, const Rectangle& rLogRect, SdrObject* pPreparedFactoryObject);
+        sal_Int16 nMinMov, const Rectangle& rLogRect, SdrObject* pPreparedFactoryObject);
 
     void ShowCreateObj(/*OutputDevice* pOut, bool bFull*/);
     void HideCreateObj(/*OutputDevice* pOut, bool bFull*/);
