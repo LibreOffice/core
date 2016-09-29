@@ -91,7 +91,7 @@ namespace rptui
         */
         TSectionsMap::iterator getIteratorAtPos(sal_uInt16 _nPos);
         void collectRectangles(TRectangleMap& _rMap);
-        static void collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection,bool _bBoundRects,Rectangle& _rBound,Rectangle& _rResize);
+        static void collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection,Rectangle& _rBound,Rectangle& _rResize);
         void impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Point& _rStartPoint,bool _bSet);
 
         OViewsWindow(OViewsWindow&) = delete;

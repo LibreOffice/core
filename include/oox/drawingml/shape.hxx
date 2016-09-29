@@ -184,8 +184,7 @@ public:
                             const Theme* pTheme,
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             basegfx::B2DHomMatrix& aTransformation,
-                            const css::awt::Rectangle* pShapeRect = nullptr,
-                            ShapeIdMap* pShapeMap = nullptr );
+                            const css::awt::Rectangle* pShapeRect = nullptr );
 
     void                setXShape( const css::uno::Reference< css::drawing::XShape >& rXShape )
                             { mxShape = rXShape; };

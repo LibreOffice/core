@@ -328,19 +328,14 @@ bool CopyFromClipContext::isDateCell( const ScColumn& rCol, SCROW nRow ) const
 }
 
 CopyToClipContext::CopyToClipContext(
-    ScDocument& rDoc, bool bKeepScenarioFlags, bool bCloneNotes) :
-    ClipContextBase(rDoc), mbKeepScenarioFlags(bKeepScenarioFlags), mbCloneNotes(bCloneNotes) {}
+    ScDocument& rDoc, bool bKeepScenarioFlags) :
+    ClipContextBase(rDoc), mbKeepScenarioFlags(bKeepScenarioFlags) {}
 
 CopyToClipContext::~CopyToClipContext() {}
 
 bool CopyToClipContext::isKeepScenarioFlags() const
 {
     return mbKeepScenarioFlags;
-}
-
-bool CopyToClipContext::isCloneNotes() const
-{
-    return mbCloneNotes;
 }
 
 CopyToDocContext::CopyToDocContext(ScDocument& rDoc) :

@@ -2183,7 +2183,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
 
     pClipDoc->ResetClip(this, pMarks);
 
-    sc::CopyToClipContext aCxt(*pClipDoc, bKeepScenarioFlags, true/*bCloneNoteCaptions*/);
+    sc::CopyToClipContext aCxt(*pClipDoc, bKeepScenarioFlags);
     CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks);
 
     for (SCTAB i = 0; i < nEndTab; ++i)
@@ -2285,7 +2285,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         rClipParam.maRanges.Append(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
         pClipDoc->ResetClip( this, nTab );
 
-        sc::CopyToClipContext aCxt(*pClipDoc, false, true);
+        sc::CopyToClipContext aCxt(*pClipDoc, false);
         if (nTab < static_cast<SCTAB>(maTabs.size()) && nTab < static_cast<SCTAB>(pClipDoc->maTabs.size()))
             if (maTabs[nTab] && pClipDoc->maTabs[nTab])
                 maTabs[nTab]->CopyToClip(aCxt, nCol1, nRow1, nCol2, nRow2, pClipDoc->maTabs[nTab]);

@@ -386,13 +386,13 @@ void IncludeParser( RscFileInst * pFileInst )
                 {
                     lKey = pTypCon->aFileTab.NewIncFile( aYYSType.string,
                                                          aYYSType.string );
-                    pFName->InsertDependFile( lKey, ULONG_MAX );
+                    pFName->InsertDependFile( lKey );
                 }
                 else if( INCLUDE_STRING == nToken )
                 {
                     lKey = pTypCon->aFileTab.NewIncFile( aYYSType.string,
                                                          OString() );
-                    pFName->InsertDependFile( lKey, ULONG_MAX );
+                    pFName->InsertDependFile( lKey );
                 }
             }
         }

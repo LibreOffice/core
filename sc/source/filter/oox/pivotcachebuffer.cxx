@@ -235,7 +235,7 @@ void PivotCacheItem::readIndex( SequenceInputStream& rStrm )
 
 void PivotCacheItem::readString( BiffInputStream& rStrm, const WorkbookHelper& rHelper )
 {
-    maValue <<= rStrm.readByteStringUC( true, rHelper.getTextEncoding() );
+    maValue <<= rStrm.readByteStringUC( rHelper.getTextEncoding() );
     mnType = XML_s;
 }
 
@@ -634,7 +634,7 @@ void PivotCacheField::importPCDField( BiffInputStream& rStrm )
     maFieldGroupModel.mnBaseField    = rStrm.readuInt16();
     rStrm.skip( 2 );    // number of unique items (either shared or group)
     rStrm >> nGroupItems >> nBaseItems >> nSharedItems;
-    maFieldModel.maName = rStrm.readByteStringUC( true, getTextEncoding() );
+    maFieldModel.maName = rStrm.readByteStringUC( getTextEncoding() );
 
     maFieldModel.mbServerField          = getFlag( nFlags, BIFF_PCDFIELD_SERVERFIELD );
     maFieldModel.mbUniqueList           = !getFlag( nFlags, BIFF_PCDFIELD_NOUNIQUEITEMS );

@@ -287,15 +287,13 @@ bool SfxSingleRecordReader::FindHeader_Impl(sal_uInt16 nTypes, sal_uInt16 nTag)
  * @param nRecordType  sub class record type
  * @param pStream      Stream to write the record to
  * @param nContentTag  Content type
- * @param nContentVer  Content version
  *
  * Internal method for sub classes
  */
 SfxMultiFixRecordWriter::SfxMultiFixRecordWriter(sal_uInt8  nRecordType,
                                                  SvStream*  pStream,
-                                                 sal_uInt16 nContentTag,
-                                                 sal_uInt8  nContentVer)
-    :  SfxSingleRecordWriter( nRecordType, pStream, nContentTag, nContentVer )
+                                                 sal_uInt16 nContentTag)
+    :  SfxSingleRecordWriter( nRecordType, pStream, nContentTag, 0 )
     , _nContentStartPos(0)
     , _nContentCount(0)
 {
@@ -339,7 +337,7 @@ sal_uInt32 SfxMultiFixRecordWriter::Close()
 SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(sal_uInt8  nRecordType,
                                                  SvStream*  pStream,
                                                  sal_uInt16 nRecordTag)
-:   SfxMultiFixRecordWriter( nRecordType, pStream, nRecordTag, 0 ),
+:   SfxMultiFixRecordWriter( nRecordType, pStream, nRecordTag ),
     _nContentVer( 0 )
 {
 }
@@ -361,8 +359,7 @@ SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(sal_uInt8  nRecordType,
  */
 SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(SvStream*  pStream,
                                                  sal_uInt16 nRecordTag)
-:   SfxMultiFixRecordWriter( SFX_REC_TYPE_VARSIZE,
-                             pStream, nRecordTag, 0 ),
+:   SfxMultiFixRecordWriter( SFX_REC_TYPE_VARSIZE, pStream, nRecordTag ),
     _nContentVer( 0 )
 {
 }
