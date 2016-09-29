@@ -22,6 +22,30 @@
       "revId": "0a8d44c27276eae1e7dded38aa6e342b33a9016f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a629dbe_f7866012",
+        "filename": "sc/res/xml/styles.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-09-29T00:38:34Z",
+      "side": 1,
+      "message": "We would need atleast a few entries to be displayed by default without having to open \"More\" as presently the style control is only visible in the sidebar and users shouldnt have to switch to the styles and formatting tab to assign these styles. It would be useful if this functioned similar to writer, where some default styles are shown along with all applied styles.\n\nYes it is fine that clicking the More entries links to the styles and formatting deck of the sidebar, so users can see all of the cell styles. Or was a misunderstanding the question.",
+      "parentUuid": "ba5da102_70e7a612",
+      "range": {
+        "startLine": 6,
+        "startChar": 29,
+        "endLine": 6,
+        "endChar": 37
+      },
+      "revId": "0a8d44c27276eae1e7dded38aa6e342b33a9016f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
