@@ -17,6 +17,11 @@ class DialogNotExecutedException(Exception):
     def __str__(self):
         return "Dialog not executed for: " + self.command
 
+class DialogNotClosedException(Exception):
+
+    def __str__(self):
+        return "Dialog was not closed"
+
 class UITest(object):
 
     def __init__(self, xUITest, xContext):
@@ -104,6 +109,18 @@ class UITest(object):
         print("failure doc in start center")
 
         # report a failure here
+
+    def close_dialog_through_button(self, button):
+        with EventListener(self._xContext, "DialogClosed" ) as event:
+            button.executeAction("CLICK", tuple())
+            time_ = 0
+            while time_ < 30:
+                if event.executed:
+                    time.sleep(DEFAULT_SLEEP)
+                    return
+                time_ += DEFAULT_SLEEP
+                time.sleep(DEFAULT_SLEEP)
+        raise DialogNotClosedException()
 
     def close_doc(self):
         with EventListener(self._xContext, ["DialogExecute", "OnViewClosed"] ) as event:
