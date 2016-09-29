@@ -19,9 +19,11 @@ namespace {
 class Test: public CppUnit::TestFixture {
 private:
     void testStartsWithIgnoreAsciiCase();
+    void testCompareTo();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testStartsWithIgnoreAsciiCase);
+    CPPUNIT_TEST(testCompareTo);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -83,6 +85,24 @@ void Test::testStartsWithIgnoreAsciiCase() {
             !OString("foo").startsWithIgnoreAsciiCase("foobar", &r));
         CPPUNIT_ASSERT_EQUAL(OString("other"), r);
     }
+}
+
+void Test::testCompareTo()
+{
+    // test that embedded NUL does not stop the compare
+    sal_Char str1[2] = { '\0', 'x' };
+    sal_Char str2[2] = { '\0', 'y' };
+
+    OString s1(str1, 2);
+    OString s2(str2, 2);
+    CPPUNIT_ASSERT(s1.compareTo(s1) == 0);
+    CPPUNIT_ASSERT(s2.compareTo(s2) == 0);
+    CPPUNIT_ASSERT(s1.compareTo(s2) < 0);
+    CPPUNIT_ASSERT(s2.compareTo(s1) > 0);
+    CPPUNIT_ASSERT(s1.compareTo(OString(s2 + "y")) < 0);
+    CPPUNIT_ASSERT(s2.compareTo(OString(s1 + "x")) > 0);
+    CPPUNIT_ASSERT(OString(s1 + "x").compareTo(s2) < 0);
+    CPPUNIT_ASSERT(OString(s2 + "y").compareTo(s1) > 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
