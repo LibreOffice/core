@@ -20,7 +20,7 @@ class SimpleImpressTest(UITestCase):
 
         xTemplateDlg = self.xUITest.getTopFocusWindow()
         xCancelBtn = xTemplateDlg.getChild("cancel")
-        xCancelBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
 
@@ -35,10 +35,9 @@ class SimpleImpressTest(UITestCase):
 
         xTemplateDlg = self.xUITest.getTopFocusWindow()
         xCancelBtn = xTemplateDlg.getChild("cancel")
-        xCancelBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
-        print(xImpressDoc.getChildren())
 
         xEditWin = xImpressDoc.getChild("impress_win")
 
@@ -52,10 +51,9 @@ class SimpleImpressTest(UITestCase):
 
         xTemplateDlg = self.xUITest.getTopFocusWindow()
         xCancelBtn = xTemplateDlg.getChild("cancel")
-        xCancelBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
-        print(xImpressDoc.getChildren())
 
         xEditWin = xImpressDoc.getChild("impress_win")
 
@@ -67,7 +65,7 @@ class SimpleImpressTest(UITestCase):
 
         xTemplateDlg = self.xUITest.getTopFocusWindow()
         xCancelBtn = xTemplateDlg.getChild("cancel")
-        xCancelBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         xImpressDoc = self.xUITest.getTopFocusWindow()
         print(xImpressDoc.getChildren())
