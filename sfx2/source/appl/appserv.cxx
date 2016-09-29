@@ -698,178 +698,103 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             uno::Reference< uno::XComponentContext > xContext =
                     ::comphelper::getProcessComponentContext();
 
-            Reference<XDesktop2> xDesktop = Desktop::create( xContext );
-            Reference<XFrame> xFrame = xDesktop->getActiveFrame();
+            // Get information about current frame and module
+            Reference<XFrame> xCurrentFrame;
+            vcl::EnumContext::Application eCurrentApp = vcl::EnumContext::Application::Application_None;
+            OUString aCurrentMode;
 
-            const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
-            vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
-
-            OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
-            aPath.append( lcl_getAppName(eApp) );
-
-            const utl::OConfigurationTreeRoot aAppNode(
-                                                xContext,
-                                                aPath.makeStringAndClear(),
-                                                true);
-            if ( !aAppNode.isValid() )
+            SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+            if( pViewFrame )
             {
-                bDone = true;
-                break;
-            }
+                xCurrentFrame = pViewFrame->GetFrame().GetFrameInterface();
 
-            OUString aCurrentMode = comphelper::getString( aAppNode.getNodeValue( "Active" ) );
+                const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
+                eCurrentApp = vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xCurrentFrame ) );
 
-            if ( aCurrentMode.compareTo( aNewName ) == 0 )
-            {
-                bDone = true;
-                break;
-            }
+                OUStringBuffer aPath("org.openoffice.Office.UI.ToolbarMode/Applications/");
+                aPath.append( lcl_getAppName( eCurrentApp ) );
 
-            aAppNode.setNodeValue( "Active", makeAny( aNewName ) );
-            aAppNode.commit();
-
-            Reference<css::beans::XPropertySet> xPropSet( xFrame, UNO_QUERY );
-            Reference<css::frame::XLayoutManager> xLayoutManager;
-            if ( xPropSet.is() )
-            {
-                try
-                {
-                    Any aValue = xPropSet->getPropertyValue( "LayoutManager" );
-                    aValue >>= xLayoutManager;
-                }
-                catch ( const css::uno::RuntimeException& )
-                {
-                    throw;
-                }
-                catch ( css::uno::Exception& )
-                {
-                }
-            }
-
-            if ( xLayoutManager.is() )
-            {
-                css::uno::Sequence<OUString> aMandatoryToolbars;
-                css::uno::Sequence<OUString> aUserToolbars;
-                std::vector<OUString> aBackupList;
-                OUString aSidebarMode;
-                bool bCorrectMode = true;
-
-                aPath = OUStringBuffer("org.openoffice.Office.UI.ToolbarMode/Applications/");
-                aPath.append( lcl_getAppName(eApp) );
-                aPath.append( "/Modes" );
-
-                // Read mode settings
-                const utl::OConfigurationTreeRoot aModesNode(
-                                        xContext,
-                                        aPath.makeStringAndClear(),
-                                        true);
-                if ( !aModesNode.isValid() )
+                const utl::OConfigurationTreeRoot aAppNode(
+                                                    xContext,
+                                                    aPath.makeStringAndClear(),
+                                                    true);
+                if ( !aAppNode.isValid() )
                 {
                     bDone = true;
                     break;
                 }
 
-                const Sequence<OUString> aModeNodeNames( aModesNode.getNodeNames() );
-                const sal_Int32 nCount( aModeNodeNames.getLength() );
+                aCurrentMode = comphelper::getString( aAppNode.getNodeValue( "Active" ) );
 
-                for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
+                if ( aCurrentMode.compareTo( aNewName ) == 0 )
                 {
-                    const utl::OConfigurationNode aModeNode( aModesNode.openNode( aModeNodeNames[nReadIndex] ) );
-                    if ( !aModeNode.isValid() )
-                        continue;
+                    bDone = true;
+                    break;
+                }
 
-                    OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
+                // Save new toolar mode for a current module
+                aAppNode.setNodeValue( "Active", makeAny( aNewName ) );
+                aAppNode.commit();
+            }
 
-                    if ( aCommandArg.compareTo( aNewName ) == 0 )
+            // Apply settings for all frames
+            pViewFrame = SfxViewFrame::GetFirst();
+            while( pViewFrame )
+            {
+                Reference<XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
+
+                // We want to change mode only for a current app module, ignore other apps
+                const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
+                vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
+                if ( eApp != eCurrentApp )
+                {
+                    pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
+                    continue;
+                }
+
+                Reference<css::beans::XPropertySet> xPropSet( xFrame, UNO_QUERY );
+                Reference<css::frame::XLayoutManager> xLayoutManager;
+                if ( xPropSet.is() )
+                {
+                    try
                     {
-                        aMandatoryToolbars = aModeNode.getNodeValue( "Toolbars" ).get< uno::Sequence<OUString> >();
-                        aUserToolbars = aModeNode.getNodeValue( "UserToolbars" ).get< uno::Sequence<OUString> >();
-                        aSidebarMode = comphelper::getString( aModeNode.getNodeValue( "Sidebar" ) );
-                        break;
+                        Any aValue = xPropSet->getPropertyValue( "LayoutManager" );
+                        aValue >>= xLayoutManager;
+                    }
+                    catch ( const css::uno::RuntimeException& )
+                    {
+                        throw;
+                    }
+                    catch ( css::uno::Exception& )
+                    {
                     }
                 }
 
-                if ( bCorrectMode )
+                if ( xLayoutManager.is() )
                 {
-                    // Backup visible toolbar list and hide all toolbars
-                    Sequence<Reference<XUIElement>> aUIElements = xLayoutManager->getElements();
-                    for ( sal_Int32 i = 0; i < aUIElements.getLength(); i++ )
-                    {
-                        Reference< XUIElement > xUIElement( aUIElements[i] );
-                        Reference< XPropertySet > xPropertySet( aUIElements[i], UNO_QUERY );
-                        if ( xPropertySet.is() && xUIElement.is() )
-                        {
-                            try
-                            {
-                                OUString aResName;
-                                sal_Int16 nType( -1 );
-                                xPropertySet->getPropertyValue( "Type" ) >>= nType;
-                                xPropertySet->getPropertyValue( "ResourceURL" ) >>= aResName;
+                    css::uno::Sequence<OUString> aMandatoryToolbars;
+                    css::uno::Sequence<OUString> aUserToolbars;
+                    std::vector<OUString> aBackupList;
+                    OUString aSidebarMode;
+                    bool bCorrectMode = true;
 
-                                if (( nType == css::ui::UIElementType::TOOLBAR ) &&
-                                    !aResName.isEmpty() )
-                                {
-                                    if ( xLayoutManager->isElementVisible( aResName ) )
-                                        aBackupList.push_back( aResName );
-                                    xLayoutManager->hideElement( aResName );
-                                }
-                            }
-                            catch ( const Exception& )
-                            {
-                            }
-                        }
+                    OUStringBuffer aPath = OUStringBuffer( "org.openoffice.Office.UI.ToolbarMode/Applications/" );
+                    aPath.append( lcl_getAppName( eApp ) );
+                    aPath.append( "/Modes" );
+
+                    // Read mode settings
+                    const utl::OConfigurationTreeRoot aModesNode(
+                                            xContext,
+                                            aPath.makeStringAndClear(),
+                                            true);
+                    if ( !aModesNode.isValid() )
+                    {
+                        bDone = true;
+                        break;
                     }
 
-                    // Show toolbars
-                    for ( OUString& rName : aMandatoryToolbars )
-                    {
-                        xLayoutManager->createElement( rName );
-                        xLayoutManager->showElement( rName );
-                    }
-
-                    for ( OUString& rName : aUserToolbars )
-                    {
-                        xLayoutManager->createElement( rName );
-                        xLayoutManager->showElement( rName );
-                    }
-
-                    // Sidebar
-                    if ( SfxViewFrame::Current() )
-                        SfxViewFrame::Current()->ShowChildWindow( SID_SIDEBAR );
-
-                    sfx2::sidebar::SidebarController* pSidebar =
-                            sfx2::sidebar::SidebarController::GetSidebarControllerForFrame( xFrame );
-                    if ( pSidebar )
-                    {
-                        if ( aSidebarMode.compareTo( "Arrow" ) == 0 )
-                        {
-                            pSidebar->FadeOut();
-                        }
-                        else if ( aSidebarMode.compareTo( "Tabs" ) == 0 )
-                        {
-                            pSidebar->FadeIn();
-                            pSidebar->RequestOpenDeck();
-                            pSidebar->RequestCloseDeck();
-                        }
-                        else if ( aSidebarMode.compareTo( "Opened" ) == 0 )
-                        {
-                            pSidebar->FadeIn();
-                            pSidebar->RequestOpenDeck();
-                        }
-                    }
-
-                    // Show/Hide the Notebookbar
-                    SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
-                    if ( pCurrentShell )
-                    {
-                        const SfxPoolItem *pItem;
-                        pCurrentShell->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, pItem);
-                    }
-
-                    // Save settings
-                    css::uno::Sequence<OUString> aBackup( aBackupList.size() );
-                    for ( size_t i = 0; i < aBackupList.size(); ++i )
-                        aBackup[i] = aBackupList[i];
+                    const Sequence<OUString> aModeNodeNames( aModesNode.getNodeNames() );
+                    const sal_Int32 nCount( aModeNodeNames.getLength() );
 
                     for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
                     {
@@ -879,14 +804,116 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                         OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
 
-                        if ( aCommandArg.compareTo( aCurrentMode ) == 0 )
+                        if ( aCommandArg.compareTo( aNewName ) == 0 )
                         {
-                            aModeNode.setNodeValue( "UserToolbars", makeAny( aBackup ) );
+                            aMandatoryToolbars = aModeNode.getNodeValue( "Toolbars" ).get< uno::Sequence<OUString> >();
+                            aUserToolbars = aModeNode.getNodeValue( "UserToolbars" ).get< uno::Sequence<OUString> >();
+                            aSidebarMode = comphelper::getString( aModeNode.getNodeValue( "Sidebar" ) );
                             break;
                         }
                     }
-                    aModesNode.commit();
+
+                    if ( bCorrectMode )
+                    {
+                        // Backup visible toolbar list and hide all toolbars
+                        Sequence<Reference<XUIElement>> aUIElements = xLayoutManager->getElements();
+                        for ( sal_Int32 i = 0; i < aUIElements.getLength(); i++ )
+                        {
+                            Reference< XUIElement > xUIElement( aUIElements[i] );
+                            Reference< XPropertySet > xPropertySet( aUIElements[i], UNO_QUERY );
+                            if ( xPropertySet.is() && xUIElement.is() )
+                            {
+                                try
+                                {
+                                    OUString aResName;
+                                    sal_Int16 nType( -1 );
+                                    xPropertySet->getPropertyValue( "Type" ) >>= nType;
+                                    xPropertySet->getPropertyValue( "ResourceURL" ) >>= aResName;
+
+                                    if (( nType == css::ui::UIElementType::TOOLBAR ) &&
+                                        !aResName.isEmpty() )
+                                    {
+                                        if ( xLayoutManager->isElementVisible( aResName ) )
+                                        {
+                                            aBackupList.push_back( aResName );
+                                        }
+                                        xLayoutManager->hideElement( aResName );
+                                    }
+                                }
+                                catch ( const Exception& )
+                                {
+                                }
+                            }
+                        }
+
+                        // Show toolbars
+                        for ( OUString& rName : aMandatoryToolbars )
+                        {
+                            xLayoutManager->createElement( rName );
+                            xLayoutManager->showElement( rName );
+                        }
+
+                        for ( OUString& rName : aUserToolbars )
+                        {
+                            xLayoutManager->createElement( rName );
+                            xLayoutManager->showElement( rName );
+                        }
+
+                        // Sidebar
+                        pViewFrame->ShowChildWindow( SID_SIDEBAR );
+
+                        sfx2::sidebar::SidebarController* pSidebar =
+                                sfx2::sidebar::SidebarController::GetSidebarControllerForFrame( xFrame );
+                        if ( pSidebar )
+                        {
+                            if ( aSidebarMode.compareTo( "Arrow" ) == 0 )
+                            {
+                                pSidebar->FadeOut();
+                            }
+                            else if ( aSidebarMode.compareTo( "Tabs" ) == 0 )
+                            {
+                                pSidebar->FadeIn();
+                                pSidebar->RequestOpenDeck();
+                                pSidebar->RequestCloseDeck();
+                            }
+                            else if ( aSidebarMode.compareTo( "Opened" ) == 0 )
+                            {
+                                pSidebar->FadeIn();
+                                pSidebar->RequestOpenDeck();
+                            }
+                        }
+
+                        // Show/Hide the Notebookbar
+                        const SfxPoolItem* pItem;
+                        pViewFrame->GetDispatcher()->QueryState( SID_NOTEBOOKBAR, pItem );
+
+                        // Save settings
+                        if ( pViewFrame == SfxViewFrame::Current() )
+                        {
+                            css::uno::Sequence<OUString> aBackup( aBackupList.size() );
+                            for ( size_t i = 0; i < aBackupList.size(); ++i )
+                                aBackup[i] = aBackupList[i];
+
+                            for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
+                            {
+                                const utl::OConfigurationNode aModeNode( aModesNode.openNode( aModeNodeNames[nReadIndex] ) );
+                                if ( !aModeNode.isValid() )
+                                    continue;
+
+                                OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
+
+                                if ( aCommandArg.compareTo( aCurrentMode ) == 0 )
+                                {
+                                    aModeNode.setNodeValue( "UserToolbars", makeAny( aBackup ) );
+                                    break;
+                                }
+                            }
+                            aModesNode.commit();
+                        }
+                    }
                 }
+
+                pViewFrame = SfxViewFrame::GetNext(*pViewFrame);
             }
 
             bDone = true;
