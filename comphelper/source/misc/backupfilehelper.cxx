@@ -112,12 +112,12 @@ namespace
                     {
                         const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
 
-                        if (osl::File::E_None != maFile->read(reinterpret_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
+                        if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
                         {
                             break;
                         }
 
-                        if (osl_File_E_None != osl_writeFile(rTargetHandle, reinterpret_cast<const void*>(aArray), nToTransfer, &nBytesTransfer) || nBytesTransfer != nToTransfer)
+                        if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aArray), nToTransfer, &nBytesTransfer) || nBytesTransfer != nToTransfer)
                         {
                             break;
                         }
@@ -155,7 +155,7 @@ namespace
                         {
                             const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
 
-                            if (osl::File::E_None != maFile->read(reinterpret_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
+                            if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
                             {
                                 break;
                             }
@@ -179,7 +179,7 @@ namespace
                                 {
                                     const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream->avail_out);
 
-                                    if (osl_File_E_None != osl_writeFile(rTargetHandle, reinterpret_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
+                                    if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
                                     {
                                         bOkay = false;
                                     }
@@ -238,7 +238,7 @@ namespace
                         {
                             const sal_uInt64 nToTransfer(std::min(nSize, (sal_uInt64)BACKUP_FILE_HELPER_BLOCK_SIZE));
 
-                            if (osl::File::E_None != maFile->read(reinterpret_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
+                            if (osl::File::E_None != maFile->read(static_cast<void*>(aArray), nToTransfer, nBytesTransfer) || nBytesTransfer != nToTransfer)
                             {
                                 break;
                             }
@@ -262,7 +262,7 @@ namespace
                                 {
                                     const sal_uInt64 nAvailable(BACKUP_FILE_HELPER_BLOCK_SIZE - zstream->avail_out);
 
-                                    if (osl_File_E_None != osl_writeFile(rTargetHandle, reinterpret_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
+                                    if (osl_File_E_None != osl_writeFile(rTargetHandle, static_cast<const void*>(aBuffer), nAvailable, &nBytesTransfer) || nBytesTransfer != nAvailable)
                                     {
                                         bOkay = false;
                                     }
