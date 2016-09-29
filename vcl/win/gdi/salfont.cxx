@@ -87,7 +87,7 @@ private:
 protected:
     OUString OptimizeURL( const OUString& rURL ) const;
 
-    enum{ MAGIC = 0x12349876 }; // change if fontattrcache format changes
+    enum{ MAGIC = 0x12346789 }; // change if fontattrcache format changes
 
 public:
             ImplFontAttrCache(const OUString& rCacheFileName,
@@ -139,8 +139,8 @@ ImplFontAttrCache::ImplFontAttrCache( const OUString& rFileNameURL, const OUStri
         aCacheFile.ReadInt16(n);
         aDFA.SetSymbolFlag(n != 0);
 
-        OUString styleName;
-        aCacheFile.ReadByteStringLine( styleName, RTL_TEXTENCODING_UTF8 );
+        OUString const styleName = read_uInt16_lenPrefixed_uInt8s_ToOUString(
+                aCacheFile, RTL_TEXTENCODING_UTF8);
         aDFA.SetStyleName( styleName );
 
         aFontAttributes[ aFontFileURL ] = aDFA;
