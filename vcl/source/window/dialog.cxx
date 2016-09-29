@@ -580,7 +580,6 @@ void Dialog::dispose()
     mpPrevExecuteDlg.clear();
     mpActionArea.clear();
     mpContentArea.clear();
-    SystemWindow::dispose();
 
     css::uno::Reference< css::uno::XComponentContext > xContext(
             comphelper::getProcessComponentContext() );
@@ -588,6 +587,8 @@ void Dialog::dispose()
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogClosed";
     xEventBroadcaster->documentEventOccured(aObject);
+
+    SystemWindow::dispose();
 }
 
 IMPL_LINK_NOARG_TYPED(Dialog, ImplAsyncCloseHdl, void*, void)
