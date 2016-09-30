@@ -78,6 +78,7 @@ void TextParagraph::insertAt(
         }
 
         sal_Int32 nCharHeight = 0;
+        Reference < XTextRange > xCurStart = xAt->getEnd();
         if ( maRuns.empty() )
         {
             PropertySet aPropSet( xAt );
@@ -101,6 +102,8 @@ void TextParagraph::insertAt(
                 nParagraphSize += nLen;
             }
         }
+        // select range from start to end
+        xAt->gotoRange( xCurStart, false );
         xAt->gotoEnd( true );
 
         PropertyMap aioBulletList;
