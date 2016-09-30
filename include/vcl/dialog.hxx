@@ -100,6 +100,11 @@ public:
     virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void PostPaint(vcl::RenderContext& rRenderContext) override;
 
+    // ensureRepaint - triggers Application::Yield until the dialog is
+    // completely repainted. Sometimes needed for dialogs showing progress
+    // during actions
+    void ensureRepaint();
+
     // Screenshot interface
     virtual std::vector<OString> getAllPageUIXMLDescriptions() const;
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription);
