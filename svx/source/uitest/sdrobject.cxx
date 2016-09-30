@@ -72,9 +72,29 @@ void SdrUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "RESIZE")
     {
-        Point aPos;
-        Fraction aFracX;
-        Fraction aFracY;
+        auto itrNX = rParameters.find("X");
+        if (itrNX == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter X");
+
+        auto itrNY = rParameters.find("Y");
+        if (itrNY == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter Y");
+
+        long nX = itrNX->second.toInt32();
+        long nY = itrNY->second.toInt32();
+        Point aPos(nX, nY);
+
+        auto itrFracX = rParameters.find("FRAC_X");
+        if (itrFracX == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter FRAC_X");
+        double nFracX = itrFracX->second.toDouble();
+        Fraction aFracX(nFracX);
+
+        auto itrFracY = rParameters.find("FRAC_Y");
+        if (itrFracY == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter FRAC_Y");
+        double nFracY = itrFracY->second.toDouble();
+        Fraction aFracY(nFracY);
         bool bRelative = true;
         pObj->Resize(aPos, aFracX, aFracY, bRelative);
     }

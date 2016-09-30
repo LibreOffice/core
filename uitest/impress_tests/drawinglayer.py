@@ -33,3 +33,22 @@ class ImpressDrawinglayerTest(UITestCase):
         time.sleep(10)
 
         self.ui_test.close_doc()
+
+    def test_resize_object(self):
+        self.ui_test.create_doc_in_start_center("impress")
+
+        xTemplateDlg = self.xUITest.getTopFocusWindow()
+        xCancelBtn = xTemplateDlg.getChild("cancel")
+        self.ui_test.close_dialog_through_button(xCancelBtn)
+
+        xImpressDoc = self.xUITest.getTopFocusWindow()
+
+        xEditWin = xImpressDoc.getChild("impress_win")
+
+        xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
+        print(get_state_as_dict(xDrawinglayerObject))
+        xDrawinglayerObject.executeAction("RESIZE", mkPropertyValues({"X": "500", "Y":"4000", "FRAC_X": "0.5", "FRAC_Y": "0.5"}))
+
+        time.sleep(5)
+
+        self.ui_test.close_doc()
