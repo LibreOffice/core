@@ -397,11 +397,11 @@ bool ScRangeList::UpdateReference(
         {
             if(nDx < 0)
             {
-                DeleteArea(nCol1+nDx, nRow1, nTab1, nCol1-1, nRow2, nTab2);
+                bChanged = DeleteArea(nCol1+nDx, nRow1, nTab1, nCol1-1, nRow2, nTab2);
             }
             if(nDy < 0)
             {
-                DeleteArea(nCol1, nRow1+nDy, nTab1, nCol2, nRow1-1, nTab2);
+                bChanged = DeleteArea(nCol1, nRow1+nDy, nTab1, nCol2, nRow1-1, nTab2);
             }
             SAL_WARN_IF(nDx < 0 && nDy < 0, "sc", "nDx and nDy are negative, check why");
         }
@@ -939,9 +939,10 @@ bool handleFourRanges( const ScRange& rDelRange, ScRange* p, std::vector<ScRange
 
 }
 
-void ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+bool ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2 )
 {
+    bool bChanged = false;
     ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
     for(size_t i = 0; i < maRanges.size();)
     {
@@ -949,6 +950,7 @@ void ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         {
             ScRange* pRange = Remove(i);
             delete pRange;
+            bChanged = true;
         }
         else
             ++i;
@@ -974,12 +976,18 @@ void ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         // r.aStart.X() <= p.aStart.X() && r.aEnd.X() >= p.aEnd.X()
         // && ( r.aStart.Y() <= p.aStart.Y() || r.aEnd.Y() >= r.aEnd.Y() )
         if(handleOneRange( aRange, *itr ))
+        {
+            bChanged = true;
             continue;
+        }
 
         // getting two ranges
         // r.aStart.X()
         else if(handleTwoRanges( aRange, *itr, aNewRanges ))
+        {
+            bChanged = true;
             continue;
+        }
 
         // getting 3 ranges
         // r.aStart.X() > p.aStart.X() && r.aEnd.X() >= p.aEnd.X()
@@ -988,16 +996,24 @@ void ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         // r.aStart.X() <= p.aStart.X() && r.aEnd.X() < p.aEnd.X()
         // && r.aStart.Y() > p.aStart.Y() && r.aEnd.Y() < p.aEnd.Y()
         else if(handleThreeRanges( aRange, *itr, aNewRanges ))
+        {
+            bChanged = true;
             continue;
+        }
 
         // getting 4 ranges
         // r.aStart.X() > p.aStart.X() && r.aEnd().X() < p.aEnd.X()
         // && r.aStart.Y() > p.aStart.Y() && r.aEnd().Y() < p.aEnd.Y()
         else if(handleFourRanges( aRange, *itr, aNewRanges ))
+        {
+            bChanged = true;
             continue;
+        }
     }
     for(vector<ScRange>::iterator itr = aNewRanges.begin(); itr != aNewRanges.end(); ++itr)
         Join( *itr);
+
+    return bChanged;
 }
 
 const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
