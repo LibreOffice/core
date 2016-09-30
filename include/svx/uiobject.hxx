@@ -7,44 +7,31 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_SVX_UIOBJECT_HXX
+#define INCLUDED_SVX_UIOBJECT_HXX
+
+#include <svx/svxdllapi.h>
+
 #include <vcl/uitest/uiobject.hxx>
 
-namespace sd {
-
-class Window;
-class DrawViewShell;
-
-}
-
 class SdrObject;
-class SdrPageView;
 
-class ImpressWindowUIObject : public WindowUIObject
+class SVX_DLLPUBLIC SdrUIObject : public UIObject
 {
 public:
 
-    ImpressWindowUIObject(VclPtr<sd::Window> xWindow);
+    virtual ~SdrUIObject() override;
 
     virtual StringMap get_state() override;
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
 
-    virtual std::unique_ptr<UIObject> get_child(const OUString& rID) override;
+    virtual OUString get_type() const override;
 
-    virtual std::set<OUString> get_children() const override;
-
-    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
-
-protected:
-
-    virtual OUString get_name() const override;
-
-private:
-
-    VclPtr<sd::Window> mxWindow;
-
-    SdrPageView* getPageView();
+    virtual SdrObject* get_object() = 0;
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
