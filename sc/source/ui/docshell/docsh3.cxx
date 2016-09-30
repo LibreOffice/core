@@ -126,6 +126,8 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
             }
 
             nPart &= PaintPartFlags::Extras;  // for broadcasting
+            if (nPart == PaintPartFlags::NONE)
+                continue;
         }
 
         if (nExtFlags & SC_PF_LINES)            // Platz fuer Linien beruecksichtigen
