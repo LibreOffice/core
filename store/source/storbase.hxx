@@ -34,6 +34,7 @@
 
 #include "store/types.h"
 
+#include <memory>
 #include <stddef.h>
 #include <string.h>
 #include <utility>
@@ -74,52 +75,6 @@ inline sal_uInt16 ntohs (sal_uInt16 n) { return n; }
 inline sal_uInt32 htonl (sal_uInt32 h) { return h; }
 inline sal_uInt32 ntohl (sal_uInt32 n) { return n; }
 #endif /* OSL_BIGENDIAN */
-
-/*========================================================================
- *
- * SharedCount.
- *
- *======================================================================*/
-class SharedCount
-{
-    long * m_pCount;
-
-public:
-    SharedCount()
-        : m_pCount(new long)
-    {
-        (*m_pCount) = 1;
-    }
-
-    ~SharedCount()
-    {
-        long new_count = --(*m_pCount);
-        if (new_count == 0)
-            delete m_pCount;
-    }
-
-    void swap (SharedCount & rhs) // nothrow
-    {
-        std::swap(m_pCount, rhs.m_pCount);
-    }
-
-    SharedCount (SharedCount const & rhs) // nothrow
-        : m_pCount (rhs.m_pCount)
-    {
-        ++(*m_pCount);
-    }
-    SharedCount & operator= (SharedCount const & rhs) // nothrow
-    {
-        SharedCount tmp(rhs);
-        swap(tmp);
-        return *this;
-    }
-
-    bool operator== (long count) const
-    {
-        return *m_pCount == count;
-    }
-};
 
 /*========================================================================
  *
@@ -416,6 +371,17 @@ struct PageData
         virtual void deallocate_Impl (void * pPage) = 0;
     };
 
+    class Deallocate {
+    public:
+        explicit Deallocate(rtl::Reference<Allocator> const & allocator):
+            allocator_(allocator) {};
+
+        void operator ()(void * page) const { allocator_->deallocate(page); }
+
+    private:
+        rtl::Reference<Allocator> allocator_;
+    };
+
     static void* operator new (size_t, void * p) { return p; }
     static void  operator delete (void * , void *) {}
 
@@ -479,73 +445,6 @@ struct PageData
 
 /*========================================================================
  *
- * PageHolder.
- *
- *======================================================================*/
-class PageHolder
-{
-    SharedCount m_refcount;
-    PageData  * m_pagedata;
-
-    typedef rtl::Reference< PageData::Allocator > allocator_type;
-    allocator_type m_allocator;
-
-public:
-    explicit PageHolder (PageData * pagedata = nullptr, allocator_type const & allocator = allocator_type())
-        : m_refcount (),
-          m_pagedata (pagedata),
-          m_allocator(allocator)
-    {
-        OSL_ENSURE((m_pagedata == nullptr) || m_allocator.is(), "store::PageHolder::ctor(): pagedata w/o allocator.");
-    }
-
-    ~PageHolder()
-    {
-        if ((m_refcount == 1) && (m_pagedata != nullptr))
-        {
-            // free pagedata.
-            OSL_ENSURE(m_allocator.is(), "store::PageHolder::dtor(): pagedata w/o allocator.");
-            m_allocator->deallocate (m_pagedata);
-        }
-    }
-
-    void swap (PageHolder & rhs) // nothrow
-    {
-        m_refcount.swap(rhs.m_refcount);
-        std::swap(m_pagedata,  rhs.m_pagedata);
-        std::swap(m_allocator, rhs.m_allocator);
-    }
-
-    PageHolder (PageHolder const & rhs) // nothrow
-        : m_refcount (rhs.m_refcount),
-          m_pagedata (rhs.m_pagedata),
-          m_allocator(rhs.m_allocator)
-    {}
-
-    PageHolder & operator= (PageHolder const & rhs) // nothrow
-    {
-        PageHolder tmp (rhs);
-        swap(tmp);
-        return *this;
-    }
-
-    PageData * get() { return m_pagedata; }
-    PageData const * get() const { return m_pagedata; }
-
-    PageData * operator->()
-    {
-        OSL_PRECOND(m_pagedata != nullptr, "store::PageHolder::operator->(): Null pointer");
-        return m_pagedata;
-    }
-    PageData const * operator->() const
-    {
-        OSL_PRECOND(m_pagedata != nullptr, "store::PageHolder::operator->(): Null pointer");
-        return m_pagedata;
-    }
-};
-
-/*========================================================================
- *
  * PageHolderObject.
  *
  *======================================================================*/
@@ -554,7 +453,7 @@ class PageHolderObject
 {
     /** Representation.
      */
-    PageHolder m_xPage;
+    std::shared_ptr<PageData> m_xPage;
 
     /** Checked cast.
      */
@@ -581,13 +480,13 @@ public:
     {
         if ((m_xPage.get() == 0) && rxAllocator.is())
         {
-            PageHolder tmp (rxAllocator->construct<T>(), rxAllocator);
+            std::shared_ptr<PageData> tmp (rxAllocator->construct<T>(), PageData::Deallocate(rxAllocator));
             m_xPage.swap (tmp);
         }
         return (m_xPage.get() != 0);
     }
 
-    explicit PageHolderObject (PageHolder const & rxPage = PageHolder())
+    explicit PageHolderObject (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>())
         : m_xPage (rxPage)
     {}
 
@@ -612,8 +511,8 @@ public:
         return (m_xPage.get() != 0);
     }
 
-    PageHolder & get() { return m_xPage; }
-    PageHolder const & get() const { return m_xPage; }
+    std::shared_ptr<PageData> & get() { return m_xPage; }
+    std::shared_ptr<PageData> const & get() const { return m_xPage; }
 
     T * operator->()
     {
@@ -641,7 +540,7 @@ public:
         return (*pImpl);
     }
 
-    static storeError guard (PageHolder & rxPage, sal_uInt32 nAddr)
+    static storeError guard (std::shared_ptr<PageData> & rxPage, sal_uInt32 nAddr)
     {
         PageData * pHead = rxPage.get();
         if (!pHead)
@@ -654,7 +553,7 @@ public:
 
         return store_E_None;
     }
-    static storeError verify (PageHolder const & rxPage, sal_uInt32 nAddr)
+    static storeError verify (std::shared_ptr<PageData> const & rxPage, sal_uInt32 nAddr)
     {
         PageData const * pHead = rxPage.get();
         if (!pHead)
@@ -704,12 +603,12 @@ public:
 protected:
     /** Representation.
      */
-    PageHolder m_xPage;
+    std::shared_ptr<PageData> m_xPage;
     bool       m_bDirty;
 
     /** Construction.
      */
-    explicit OStorePageObject (PageHolder const & rxPage = PageHolder())
+    explicit OStorePageObject (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>())
         : m_xPage (rxPage), m_bDirty (false)
     {}
 
@@ -730,7 +629,7 @@ public:
         if (!rxAllocator.is())
             return store_E_InvalidAccess;
 
-        PageHolder tmp (rxAllocator->construct<U>(), rxAllocator);
+        std::shared_ptr<PageData> tmp (rxAllocator->construct<U>(), PageData::Deallocate(rxAllocator));
         if (!tmp.get())
             return store_E_OutOfMemory;
 
@@ -738,7 +637,7 @@ public:
         return store_E_None;
     }
 
-    PageHolder & get() { return m_xPage; }
+    std::shared_ptr<PageData> & get() { return m_xPage; }
 
     virtual storeError guard  (sal_uInt32 nAddr) = 0;
     virtual storeError verify (sal_uInt32 nAddr) const = 0;

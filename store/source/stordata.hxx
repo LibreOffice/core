@@ -22,6 +22,8 @@
 
 #include "sal/config.h"
 
+#include <memory>
+
 #include "sal/types.h"
 #include "sal/macros.h"
 #include "rtl/string.h"
@@ -106,7 +108,7 @@ class OStoreDataPageObject : public store::OStorePageObject
 public:
     /** Construction.
     */
-    explicit OStoreDataPageObject (PageHolder const & rxPage = PageHolder())
+    explicit OStoreDataPageObject (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>())
         : OStorePageObject (rxPage)
     {}
 
@@ -216,7 +218,7 @@ class OStoreIndirectionPageObject : public store::OStorePageObject
 public:
     /** Construction.
     */
-    explicit OStoreIndirectionPageObject (PageHolder const & rxPage = PageHolder())
+    explicit OStoreIndirectionPageObject (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>())
         : OStorePageObject (rxPage)
     {}
 
@@ -641,7 +643,7 @@ class OStoreDirectoryPageObject : public store::OStorePageObject
 public:
     /** Construction.
     */
-    explicit OStoreDirectoryPageObject (PageHolder const & rxPage = PageHolder())
+    explicit OStoreDirectoryPageObject (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>())
         : OStorePageObject (rxPage)
     {}
 

@@ -31,6 +31,7 @@
 #include "object.hxx"
 #include "storbase.hxx"
 
+#include <memory>
 #include <stddef.h>
 
 using namespace store;
@@ -41,7 +42,7 @@ namespace store {
 struct Entry
 {
     // Representation
-    PageHolder m_xPage;
+    std::shared_ptr<PageData> m_xPage;
     sal_uInt32 m_nOffset;
     Entry *    m_pNext;
 
@@ -50,7 +51,7 @@ struct Entry
     static void   operator delete (void *, void *) {}
 
     // Construction
-    explicit Entry (PageHolder const & rxPage = PageHolder(), sal_uInt32 nOffset = STORE_PAGE_NULL)
+    explicit Entry (std::shared_ptr<PageData> const & rxPage = std::shared_ptr<PageData>(), sal_uInt32 nOffset = STORE_PAGE_NULL)
         : m_xPage(rxPage), m_nOffset(nOffset), m_pNext(nullptr)
     {}
 
@@ -70,7 +71,7 @@ class EntryCache
 public:
     static EntryCache & get();
 
-    Entry * create (PageHolder const & rxPage, sal_uInt32 nOffset);
+    Entry * create (std::shared_ptr<PageData> const & rxPage, sal_uInt32 nOffset);
 
     void destroy (Entry * entry);
 
@@ -109,7 +110,7 @@ EntryCache::~EntryCache()
     m_entry_cache = nullptr;
 }
 
-Entry * EntryCache::create (PageHolder const & rxPage, sal_uInt32 nOffset)
+Entry * EntryCache::create (std::shared_ptr<PageData> const & rxPage, sal_uInt32 nOffset)
 {
     void * pAddr = rtl_cache_alloc (m_entry_cache);
     if (pAddr != nullptr)
@@ -285,7 +286,7 @@ Entry * PageCache::lookup_Impl (Entry * entry, sal_uInt32 nOffset)
     return entry;
 }
 
-storeError PageCache::lookupPageAt (PageHolder & rxPage, sal_uInt32 nOffset)
+storeError PageCache::lookupPageAt (std::shared_ptr<PageData> & rxPage, sal_uInt32 nOffset)
 {
     OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::lookupPageAt(): invalid Offset");
     if (nOffset == STORE_PAGE_NULL)
@@ -308,7 +309,7 @@ storeError PageCache::lookupPageAt (PageHolder & rxPage, sal_uInt32 nOffset)
     return store_E_NotExists;
 }
 
-storeError PageCache::insertPageAt (PageHolder const & rxPage, sal_uInt32 nOffset)
+storeError PageCache::insertPageAt (std::shared_ptr<PageData> const & rxPage, sal_uInt32 nOffset)
 {
     // [SECURITY:ValInput]
     PageData const * pagedata = rxPage.get();
@@ -340,7 +341,7 @@ storeError PageCache::insertPageAt (PageHolder const & rxPage, sal_uInt32 nOffse
     return store_E_OutOfMemory;
 }
 
-storeError PageCache::updatePageAt (PageHolder const & rxPage, sal_uInt32 nOffset)
+storeError PageCache::updatePageAt (std::shared_ptr<PageData> const & rxPage, sal_uInt32 nOffset)
 {
     // [SECURITY:ValInput]
     PageData const * pagedata = rxPage.get();

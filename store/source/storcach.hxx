@@ -20,6 +20,10 @@
 #ifndef INCLUDED_STORE_SOURCE_STORCACH_HXX
 #define INCLUDED_STORE_SOURCE_STORCACH_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include "sal/types.h"
 #include "rtl/ref.hxx"
 
@@ -77,19 +81,19 @@ public:
     /** load.
      */
     storeError lookupPageAt (
-        PageHolder & rxPage,
+        std::shared_ptr<PageData> & rxPage,
         sal_uInt32   nOffset);
 
     /** insert.
      */
     storeError insertPageAt (
-        PageHolder const & rxPage,
+        std::shared_ptr<PageData> const & rxPage,
         sal_uInt32         nOffset);
 
     /** update, or insert.
      */
     storeError updatePageAt (
-        PageHolder const & rxPage,
+        std::shared_ptr<PageData> const & rxPage,
         sal_uInt32         nOffset);
 
     /** remove (invalidate).
