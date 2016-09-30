@@ -1114,19 +1114,19 @@ throw ( css::beans::UnknownPropertyException,
             ApplyProperties_( m_aFollowPageStyle );
     }
 
-    if( pLastContext && m_sFirstPageStyleName.isEmpty() )
-        m_sFirstPageStyleName =  pLastContext->GetPageStyleName( /*bFirst=*/true );
+    // FirstPageStyle may only be inherited if it will not be used or re-linked to a different follow
+    if( !m_bTitlePage && pLastContext && m_sFirstPageStyleName.isEmpty()  )
+        m_sFirstPageStyleName = pLastContext->GetPageStyleName( /*bFirst=*/true );
     else
     {
         HandleMarginsHeaderFooter( /*bFirst=*/true, rDM_Impl );
         GetPageStyle( xPageStyles, xTextFactory, /*bFirst=*/true );
         if( rDM_Impl.IsNewDoc() && m_aFirstPageStyle.is() )
             ApplyProperties_( m_aFirstPageStyle );
-    }
 
-    GetPageStyle( xPageStyles, xTextFactory, /*bFirst=*/true );
-    // Chain m_aFollowPageStyle to be after m_aFirstPageStyle
-    m_aFirstPageStyle->setPropertyValue( "FollowStyle", uno::makeAny(m_sFollowPageStyleName) );
+        // Chain m_aFollowPageStyle to be after m_aFirstPageStyle
+        m_aFirstPageStyle->setPropertyValue( "FollowStyle", uno::makeAny(m_sFollowPageStyleName) );
+    }
 }
 
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
