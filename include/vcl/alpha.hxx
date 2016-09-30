@@ -33,13 +33,12 @@ public:
 
                 AlphaMask();
                 AlphaMask( const Bitmap& rBitmap );
-                AlphaMask( const AlphaMask& rAlphaMask ) = default;
-                AlphaMask( AlphaMask&& rAlphaMask ) = default;
+                AlphaMask( const AlphaMask& rAlphaMask );
                 AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency = nullptr );
+    virtual     ~AlphaMask() override;
 
     AlphaMask&  operator=( const Bitmap& rBitmap );
-    AlphaMask&  operator=( const AlphaMask& rAlphaMask ) = default;
-    AlphaMask&  operator=( AlphaMask&& rAlphaMask ) = default;
+    AlphaMask&  operator=( const AlphaMask& rAlphaMask ) { return static_cast<AlphaMask&>( Bitmap::operator=( rAlphaMask ) ); }
     bool        operator!() const { return Bitmap::operator!(); }
     bool        operator==( const AlphaMask& rAlphaMask ) const { return Bitmap::operator==( rAlphaMask ); }
     bool        operator!=( const AlphaMask& rAlphaMask ) const { return Bitmap::operator!=( rAlphaMask ); }
