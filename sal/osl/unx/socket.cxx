@@ -2161,7 +2161,7 @@ sal_Int32 SAL_CALL osl_getSocketOption(oslSocket pSocket,
         return -1;
     }
 
-    return BufferLen;
+    return nOptLen;
 }
 
 sal_Bool SAL_CALL osl_setSocketOption(oslSocket pSocket,
