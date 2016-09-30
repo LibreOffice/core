@@ -1926,7 +1926,7 @@ private:
         {}
         void SetEditView(EditView* pOtherEditView) { mpOtherEditView = pOtherEditView; }
         void SetWindow(ScGridWindow* pWindow) { mpWindow = pWindow; }
-        bool operator() (EditView* pView)
+        bool operator() (const EditView* pView) const
         {
             return ( pView != nullptr
                   && pView->GetWindow() == mpWindow
@@ -1958,7 +1958,7 @@ private:
                     maSameEditViewChecker.SetEditView(mpOtherEditView);
                     for (int i = 0; i < 4; ++i)
                     {
-                        (this->*fHandler)(mpGridWin[i]);
+                        (this->*fHandler)(mpGridWin[i].get());
                     }
                 }
             }
