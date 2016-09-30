@@ -1451,11 +1451,10 @@ SdrUndoPageList::~SdrUndoPageList()
 }
 
 
-SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg, bool bSoleOwnerOfFillBitmapProps)
+SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
     : SdrUndoPageList(rNewPg)
     , pUndoGroup(nullptr)
     , mbHasFillBitmap(false)
-    , mbSoleOwnerOfFillBitmapProps(bSoleOwnerOfFillBitmapProps)
 {
     bItsMine = true;
 
@@ -1565,10 +1564,10 @@ void SdrUndoDelPage::clearFillBitmap()
 {
     if (mrPage.IsMasterPage())
     {
-        if (mbSoleOwnerOfFillBitmapProps)
+        SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
+        assert(bool(pStyleSheet)); // who took away my stylesheet?
+        if (pStyleSheet->GetListenerCount() == 1)
         {
-            SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
-            assert(bool(pStyleSheet)); // who took away my stylesheet?
             SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
             rItemSet.ClearItem(XATTR_FILLBITMAP);
             if (mbHasFillBitmap)
@@ -1588,10 +1587,10 @@ void SdrUndoDelPage::restoreFillBitmap()
 {
     if (mrPage.IsMasterPage())
     {
-        if (mbSoleOwnerOfFillBitmapProps)
+        SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
+        assert(bool(pStyleSheet)); // who took away my stylesheet?
+        if (pStyleSheet->GetListenerCount() == 1)
         {
-            SfxStyleSheet* const pStyleSheet = mrPage.getSdrPageProperties().GetStyleSheet();
-            assert(bool(pStyleSheet)); // who took away my stylesheet?
             SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
             rItemSet.Put(*mpFillBitmapItem);
             if (mbHasFillBitmap)
@@ -1853,9 +1852,9 @@ SdrUndoAction* SdrUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLaye
 }
 
 // page
-SdrUndoAction*  SdrUndoFactory::CreateUndoDeletePage(SdrPage& rPage, bool bSoleOwnerOfFillBitmapProps)
+SdrUndoAction*  SdrUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
 {
-    return new SdrUndoDelPage(rPage, bSoleOwnerOfFillBitmapProps);
+    return new SdrUndoDelPage(rPage);
 }
 
 SdrUndoAction* SdrUndoFactory::CreateUndoNewPage(SdrPage& rPage)
