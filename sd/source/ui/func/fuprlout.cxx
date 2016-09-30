@@ -137,12 +137,6 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         }
     }
 
-    assert(!aSelectedPages.empty() && "no selected page");
-    OUString aOldLayoutName(aSelectedPages.back()->GetLayoutName());
-    sal_Int32 nPos = aOldLayoutName.indexOf(SD_LT_SEPARATOR);
-    if (nPos != -1)
-        aOldLayoutName = aOldLayoutName.copy(0, nPos);
-
     bool bMasterPage = bOnMaster;
     bool bCheckMasters = false;
 
@@ -155,7 +149,15 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_LOAD, bLoad));
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_MASTER_PAGE, bMasterPage ) );
     aSet.Put( SfxBoolItem( ATTR_PRESLAYOUT_CHECK_MASTERS, bCheckMasters ) );
-    aSet.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, aOldLayoutName));
+
+    if (!aSelectedPages.empty())
+    {
+        OUString aOldLayoutName(aSelectedPages.back()->GetLayoutName());
+        sal_Int32 nPos = aOldLayoutName.indexOf(SD_LT_SEPARATOR);
+        if (nPos != -1)
+            aOldLayoutName = aOldLayoutName.copy(0, nPos);
+        aSet.Put(SfxStringItem(ATTR_PRESLAYOUT_NAME, aOldLayoutName));
+    }
 
     const SfxItemSet *pArgs = rReq.GetArgs ();
 
@@ -238,7 +240,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(false);
 
         // if the master page was visible, show it again
-        if (!bError)
+        if (!bError && !aSelectedPages.empty())
         {
             if (bOnMaster)
             {
