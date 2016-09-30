@@ -49,11 +49,11 @@ void TestCharacterClassification::testTitleCase()
         //basic example
         OUString sTest("Some text");
         OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), aLocale);
-        CPPUNIT_ASSERT_MESSAGE("Should be title", sTitleCase == "Some Text");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", OUString("Some Text"), sTitleCase);
         OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), aLocale);
-        CPPUNIT_ASSERT_MESSAGE("Should be upper", sUpperCase == "SOME TEXT");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", OUString("SOME TEXT"), sUpperCase);
         OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), aLocale);
-        CPPUNIT_ASSERT_MESSAGE("Should be lower ", sLowerCase == "some text");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower ", OUString("some text"), sLowerCase);
     }
 
     {
