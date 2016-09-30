@@ -25,6 +25,7 @@
 
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <libxml/xmlwriter.h>
 
 #include <iterator>
 
@@ -94,6 +95,15 @@ void Paragraph::SetParaIsNumberingRestart( bool bParaIsNumberingRestart )
     mbParaIsNumberingRestart = bParaIsNumberingRestart;
     if( !mbParaIsNumberingRestart )
         mnNumberingStartValue = -1;
+}
+
+void Paragraph::dumpAsXml(struct _xmlTextWriter* pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("paragraph"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nDepth"), "%" SAL_PRIdINT32, (sal_Int32)nDepth);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mnNumberingStartValue"), "%" SAL_PRIdINT32, (sal_Int32)mnNumberingStartValue);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mbParaIsNumberingRestart"), "%" SAL_PRIdINT32, (sal_Int32)mbParaIsNumberingRestart);
+    xmlTextWriterEndElement(pWriter);
 }
 
 void ParagraphList::Clear()
@@ -252,6 +262,14 @@ sal_Int32 ParagraphList::GetAbsPos( Paragraph* pParent ) const
     }
 
     return EE_PARA_NOT_FOUND;
+}
+
+void ParagraphList::dumpAsXml(struct _xmlTextWriter* pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("paragraphList"));
+    for (const Paragraph* pParagraph : maEntries)
+        pParagraph->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

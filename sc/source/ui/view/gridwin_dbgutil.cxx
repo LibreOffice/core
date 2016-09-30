@@ -74,6 +74,8 @@ void ScGridWindow::dumpCellProperties()
 
     OString aOutputFile("dump.xml");
     xmlTextWriterPtr writer = xmlNewTextWriterFilename( aOutputFile.getStr(), 0 );
+    xmlTextWriterSetIndent(writer,1);
+    xmlTextWriterSetIndentString(writer, BAD_CAST("  "));
 
     xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
 

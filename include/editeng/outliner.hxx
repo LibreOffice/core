@@ -148,7 +148,7 @@ private:
     void                SetText( const OUString& rText ) { aBulText = rText; aBulSize.Width() = -1; }
     void                Invalidate() { aBulSize.Width() = -1; }
     void                SetDepth( sal_Int16 nNewDepth ) { nDepth = nNewDepth; aBulSize.Width() = -1; }
-    const OUString& GetText() const { return aBulText; }
+    const OUString&     GetText() const { return aBulText; }
 
                         Paragraph( sal_Int16 nDepth );
                         Paragraph( const Paragraph& ) = delete;
@@ -166,6 +166,8 @@ private:
     void                SetFlag( ParaFlag nFlag ) { nFlags |= nFlag; }
     void                RemoveFlag( ParaFlag nFlag ) { nFlags &= ~nFlag; }
     bool                HasFlag( ParaFlag nFlag ) const { return bool(nFlags & nFlag); }
+public:
+    void                dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 struct ParaRange
@@ -678,6 +680,8 @@ public:
 
                     Outliner( SfxItemPool* pPool, OutlinerMode nOutlinerMode );
     virtual         ~Outliner() override;
+
+    void            dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
     void            Init( OutlinerMode nOutlinerMode );
     OutlinerMode    GetMode() const { return nOutlinerMode; }
