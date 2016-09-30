@@ -79,6 +79,12 @@ namespace canvas
                     mpWrappee = nullptr;
             }
 
+            VCLObject( VCLObject&& rOrig )
+                : mpWrappee(rOrig.mpWrappee)
+            {
+                rOrig.mpWrappee = nullptr;
+            }
+
             // This object has value semantics, thus, forward copy
             // to wrappee
             VCLObject( const Wrappee& rOrig ) :
@@ -104,14 +110,20 @@ namespace canvas
                 return *this;
             }
 
+            VCLObject& operator=( VCLObject&& rhs )
+            {
+                std::swap(mpWrappee, rhs.mpWrappee);
+
+                return *this;
+            }
+
             ~VCLObject()
             {
                 // This here is the whole purpose of the template:
                 // protecting object deletion with the solar mutex
                 SolarMutexGuard aGuard;
 
-                if( mpWrappee )
-                    delete mpWrappee;
+                delete mpWrappee;
             }
 
             Wrappee*        operator->() { return mpWrappee; }
