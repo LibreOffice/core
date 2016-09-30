@@ -25,6 +25,7 @@
 #include <osl/time.h>
 #include <osl/interlck.h>
 #include <rtl/tencinfo.h>
+#include <errno.h>
 
 /*
     Thread-data structure hidden behind oslThread:
@@ -94,6 +95,25 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
 
     if(pThreadImpl->m_hThread == 0)
     {
+        switch (errno)
+        {
+            case EAGAIN:
+                fprintf(stderr, "_beginthreadex errno EAGAIN\n");
+            break;
+            case EINVAL:
+                fprintf(stderr, "_beginthreadex errno EINVAL\n");
+            break;
+            case EACCES:
+                fprintf(stderr, "_beginthreadex errno EACCES\n");
+            break;
+            case ENOMEM:
+                fprintf(stderr, "_beginthreadex undocumented errno ENOMEM - this means not enough VM for stack\n");
+            break;
+            default:
+                fprintf(stderr, "_beginthreadex unexpected errno %d\n", errno);
+            break;
+        }
+
         /* create failed */
         free(pThreadImpl);
         return 0;
