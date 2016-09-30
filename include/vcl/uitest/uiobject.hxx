@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_VCL_UITEST_UIOBJECT_HXX
+#define INCLUDED_VCL_UITEST_UIOBJECT_HXX
+
 #include <rtl/ustring.hxx>
 #include <map>
 #include <memory>
@@ -354,5 +357,7 @@ protected:
 
     virtual OUString get_name() const override;
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
