@@ -384,14 +384,24 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         draw( QStyle::CE_ToolBar, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
     }
-    else if ( (type == ControlType::Toolbar) && (part == ControlPart::ThumbVert) )
+    else if ( (type == ControlType::Toolbar)
+            && (part == ControlPart::ThumbVert || part == ControlPart::ThumbHorz) )
     {   // reduce paint area only to the handle area
-        const int width = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
-        QRect rect( 0, 0, width, widgetRect.height());
-        localClipRegion = new QRegion(widgetRect.x(), widgetRect.y(), width, widgetRect.height());
-
+        const int handleExtend = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
+        QRect rect;
         QStyleOption option;
-        option.state = QStyle::State_Horizontal;
+
+        if (part == ControlPart::ThumbVert)
+        {
+            rect = QRect( 0, 0, handleExtend, widgetRect.height());
+            localClipRegion = new QRegion(widgetRect.x(), widgetRect.y(), handleExtend, widgetRect.height());
+            option.state = QStyle::State_Horizontal;
+        }
+        else
+        {
+            rect = QRect( 0, 0, widgetRect.width(), handleExtend);
+            localClipRegion = new QRegion(widgetRect.x(), widgetRect.y(), widgetRect.width(), handleExtend);
+        }
 
         draw( QStyle::PE_IndicatorToolBarHandle, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value), rect );
@@ -435,6 +445,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                       vclStateValue2StateFlag(nControlState, value) );
                 break;
             default:
+                returnVal = false;
                 break;
         }
     }
@@ -896,6 +907,23 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             else if( part == ControlPart::ThumbVert )
             {
                 contentRect = QRect(boundingRect.left(), boundingRect.top(), boundingRect.width(), w);
+                boundingRect = contentRect;
+                retVal = true;
+            }
+            break;
+        }
+        case ControlType::Toolbar:
+        {
+            const int nWorH = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
+            if( part == ControlPart::ThumbHorz )
+            {
+                contentRect = QRect(boundingRect.left(), boundingRect.top(), boundingRect.width(), nWorH );
+                boundingRect = contentRect;
+                retVal = true;
+            }
+            else if( part == ControlPart::ThumbVert )
+            {
+                contentRect = QRect(boundingRect.left(), boundingRect.top(), nWorH, boundingRect.height() );
                 boundingRect = contentRect;
                 retVal = true;
             }
