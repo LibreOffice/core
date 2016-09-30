@@ -613,10 +613,8 @@ public:
         return (m_xPage.get() != 0);
     }
 
-#if 1  /* EXP */
     PageHolder & get() { return m_xPage; }
     PageHolder const & get() const { return m_xPage; }
-#endif /* EXP */
 
     T * operator->()
     {
