@@ -18,44 +18,36 @@
  */
 
 #include "undoback.hxx"
-
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
-
-#include <com/sun/star/drawing/FillStyle.hpp>
-
-#include <o3tl/make_unique.hxx>
-
 #include <svl/itemset.hxx>
 
-#include <svx/xfillit0.hxx>
 
 SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
     SdDrawDocument& rDoc,
     SdPage& rPage,
-    const SfxItemSet& rItemSet)
+    const SfxItemSet& rItenSet)
 :   SdUndoAction(&rDoc),
     mrPage(rPage),
-    mpItemSet(o3tl::make_unique<SfxItemSet>(rItemSet)),
-    mbHasFillBitmap(false)
+    mpItemSet(new SfxItemSet(rItenSet))
 {
     OUString aString( SdResId( STR_UNDO_CHANGE_PAGEFORMAT ) );
     SetComment( aString );
-    saveFillBitmap(*mpItemSet);
+}
+
+SdBackgroundObjUndoAction::~SdBackgroundObjUndoAction()
+{
+    delete mpItemSet;
 }
 
 void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
 {
-    std::unique_ptr<SfxItemSet> pNew = o3tl::make_unique<SfxItemSet>(mrPage.getSdrPageProperties().GetItemSet());
+    SfxItemSet* pNew = new SfxItemSet(mrPage.getSdrPageProperties().GetItemSet());
     mrPage.getSdrPageProperties().ClearItem();
-    if (bool(mpFillBitmapItem))
-        restoreFillBitmap(*mpItemSet);
-    mpFillBitmapItem.reset();
-    mbHasFillBitmap = false;
     mrPage.getSdrPageProperties().PutItemSet(*mpItemSet);
-    mpItemSet = std::move(pNew);
-    saveFillBitmap(*mpItemSet);
+    delete mpItemSet;
+    mpItemSet = pNew;
 
     // tell the page that it's visualization has changed
     mrPage.ActionChanged();
@@ -73,33 +65,7 @@ void SdBackgroundObjUndoAction::Redo()
 
 SdUndoAction* SdBackgroundObjUndoAction::Clone() const
 {
-    std::unique_ptr<SdBackgroundObjUndoAction> pCopy = o3tl::make_unique<SdBackgroundObjUndoAction>(*mpDoc, mrPage, *mpItemSet);
-    if (mpFillBitmapItem)
-        pCopy->mpFillBitmapItem.reset(mpFillBitmapItem->Clone());
-    pCopy->mbHasFillBitmap = mbHasFillBitmap;
-    return pCopy.release();
-}
-
-void SdBackgroundObjUndoAction::saveFillBitmap(SfxItemSet &rItemSet)
-{
-    const SfxPoolItem *pItem = nullptr;
-    if (rItemSet.GetItemState(XATTR_FILLBITMAP, false, &pItem) == SfxItemState::SET)
-        mpFillBitmapItem.reset(pItem->Clone());
-    if (bool(mpFillBitmapItem))
-    {
-        if (rItemSet.GetItemState(XATTR_FILLSTYLE, false, &pItem) == SfxItemState::SET)
-            mbHasFillBitmap = static_cast<const XFillStyleItem*>(pItem)->GetValue() == css::drawing::FillStyle_BITMAP;
-        rItemSet.ClearItem(XATTR_FILLBITMAP);
-        if (mbHasFillBitmap)
-            rItemSet.ClearItem(XATTR_FILLSTYLE);
-    }
-}
-
-void SdBackgroundObjUndoAction::restoreFillBitmap(SfxItemSet &rItemSet)
-{
-    rItemSet.Put(*mpFillBitmapItem);
-    if (mbHasFillBitmap)
-        rItemSet.Put(XFillStyleItem(css::drawing::FillStyle_BITMAP));
+    return new SdBackgroundObjUndoAction(*mpDoc, mrPage, *mpItemSet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

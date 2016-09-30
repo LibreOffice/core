@@ -792,17 +792,8 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                  aTest == aMPLayout &&
                  eKind == pTest->GetPageKind() )
             {
-                if (bUndo)
-                {
-                    bool bSoleOwnerOfStyleSheet = true;
-                    if (pRefPage->IsMasterPage())
-                    {
-                        const SfxStyleSheet* pRefSheet = pRefPage->getSdrPageProperties().GetStyleSheet();
-                        const SfxStyleSheet* pTestSheet = pTest->getSdrPageProperties().GetStyleSheet();
-                        bSoleOwnerOfStyleSheet = pRefSheet != pTestSheet;
-                    }
-                    AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pRefPage, bSoleOwnerOfStyleSheet));
-                }
+                if( bUndo )
+                    AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pRefPage));
 
                 RemoveMasterPage(nPage);
 
@@ -1241,7 +1232,6 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
         {
             // Do not delete master pages that have their precious flag set
             bool bDeleteMaster = !pMaster->IsPrecious();
-            bool bSoleOwnerOfStyleSheet = true;
             OUString aLayoutName = pMaster->GetLayoutName();
 
             if(bOnlyDuplicatePages )
@@ -1256,10 +1246,6 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
                     {
                         // duplicate page found -> remove it
                         bDeleteMaster = true;
-
-                        const SfxStyleSheet* pRefSheet = pMaster->getSdrPageProperties().GetStyleSheet();
-                        const SfxStyleSheet* pTestSheet = pMPg->getSdrPageProperties().GetStyleSheet();
-                        bSoleOwnerOfStyleSheet = pRefSheet != pTestSheet;
                     }
                 }
             }
@@ -1293,7 +1279,7 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
                     delete pNotesMaster;
 
                 if( bUndo )
-                    AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pMaster, bSoleOwnerOfStyleSheet));
+                    AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pMaster));
 
                 RemoveMasterPage( pMaster->GetPageNum() );
 
