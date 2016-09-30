@@ -24,6 +24,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -33,7 +34,8 @@ namespace svt
 {
 class PopupWindowControllerImpl;
 
-class SVT_DLLPUBLIC PopupWindowController : public svt::ToolboxController, public css::lang::XServiceInfo
+class SVT_DLLPUBLIC PopupWindowController : public cppu::ImplInheritanceHelper< svt::ToolboxController,
+                                                                                css::lang::XServiceInfo >
 {
 public:
     PopupWindowController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -42,11 +44,6 @@ public:
     virtual ~PopupWindowController() override;
 
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) = 0;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL acquire() throw () override;
-    virtual void SAL_CALL release() throw () override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override = 0;

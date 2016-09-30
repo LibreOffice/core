@@ -18,7 +18,6 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/toolbox.hxx>
@@ -121,34 +120,13 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&, rWin
 PopupWindowController::PopupWindowController( const Reference< uno::XComponentContext >& rxContext,
                                               const Reference< frame::XFrame >& xFrame,
                                               const OUString& aCommandURL )
-: svt::ToolboxController( rxContext, xFrame, aCommandURL )
+: ImplInheritanceHelper( rxContext, xFrame, aCommandURL )
 , mxImpl( new PopupWindowControllerImpl() )
 {
 }
 
 PopupWindowController::~PopupWindowController()
 {
-}
-
-// XInterface
-Any SAL_CALL PopupWindowController::queryInterface( const Type& aType )
-throw (RuntimeException, std::exception)
-{
-    Any a( ToolboxController::queryInterface( aType ) );
-    if ( a.hasValue() )
-        return a;
-
-    return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ));
-}
-
-void SAL_CALL PopupWindowController::acquire() throw ()
-{
-    ToolboxController::acquire();
-}
-
-void SAL_CALL PopupWindowController::release() throw ()
-{
-    ToolboxController::release();
 }
 
 // XServiceInfo
