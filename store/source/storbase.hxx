@@ -84,42 +84,18 @@ class SharedCount
 {
     long * m_pCount;
 
-    class Allocator
-    {
-        rtl_cache_type * m_cache;
-
-    public:
-        static Allocator & get();
-
-        long * alloc()
-        {
-            return static_cast<long*>(rtl_cache_alloc (m_cache));
-        }
-        void free (long * pCount)
-        {
-            rtl_cache_free (m_cache, pCount);
-        }
-
-    protected:
-        Allocator();
-        ~Allocator();
-    };
-
 public:
     SharedCount()
-        : m_pCount(Allocator::get().alloc())
+        : m_pCount(new long)
     {
-        if (m_pCount != nullptr) (*m_pCount) = 1;
+        (*m_pCount) = 1;
     }
 
     ~SharedCount()
     {
-        if (m_pCount != nullptr)
-        {
-            long new_count = --(*m_pCount);
-            if (new_count == 0)
-                Allocator::get().free(m_pCount);
-        }
+        long new_count = --(*m_pCount);
+        if (new_count == 0)
+            delete m_pCount;
     }
 
     void swap (SharedCount & rhs) // nothrow
@@ -130,7 +106,7 @@ public:
     SharedCount (SharedCount const & rhs) // nothrow
         : m_pCount (rhs.m_pCount)
     {
-        if (m_pCount != nullptr) ++(*m_pCount);
+        ++(*m_pCount);
     }
     SharedCount & operator= (SharedCount const & rhs) // nothrow
     {
@@ -141,7 +117,7 @@ public:
 
     bool operator== (long count) const
     {
-        return (m_pCount != nullptr) && (*m_pCount == count);
+        return *m_pCount == count;
     }
 };
 

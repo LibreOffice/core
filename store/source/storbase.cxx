@@ -33,39 +33,6 @@ using namespace store;
 
 /*========================================================================
  *
- * SharedCount::Allocator.
- *
- *======================================================================*/
-SharedCount::Allocator &
-SharedCount::Allocator::get()
-{
-    static Allocator g_aSharedCountAllocator;
-    return g_aSharedCountAllocator;
-}
-
-SharedCount::Allocator::Allocator()
-{
-    m_cache = rtl_cache_create (
-        "store_shared_count_cache",
-        sizeof(long),
-        0, // objalign
-        nullptr, // constructor
-        nullptr, // destructor
-        nullptr, // reclaim
-        nullptr, // userarg
-        nullptr, // default source
-        0  // flags
-        );
-}
-
-SharedCount::Allocator::~Allocator()
-{
-    rtl_cache_destroy (m_cache);
-    m_cache = nullptr;
-}
-
-/*========================================================================
- *
  * PageData::Allocator_Impl (default allocator).
  *
  *======================================================================*/
