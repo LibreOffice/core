@@ -33,20 +33,11 @@ AlphaMask::AlphaMask( const Bitmap& rBitmap ) :
         Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
 }
 
-AlphaMask::AlphaMask( const AlphaMask& rAlphaMask ) :
-    Bitmap( rAlphaMask )
-{
-}
-
 AlphaMask::AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency ) :
     Bitmap( rSizePixel, 8, &Bitmap::GetGreyPalette( 256 ) )
 {
     if( pEraseTransparency )
         Bitmap::Erase( Color( *pEraseTransparency, *pEraseTransparency, *pEraseTransparency ) );
-}
-
-AlphaMask::~AlphaMask()
-{
 }
 
 AlphaMask& AlphaMask::operator=( const Bitmap& rBitmap )
