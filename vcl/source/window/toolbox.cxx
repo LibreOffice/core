@@ -148,28 +148,34 @@ static ImplTBDragMgr* ImplGetTBDragMgr()
     return pSVData->maCtrlData.mpTBDragMgr;
 }
 
-int ToolBox::ImplGetDragWidth( ToolBox* pThis )
+int ToolBox::ImplGetDragWidth( const vcl::RenderContext& rRenderContext, bool bHorz )
 {
     int nWidth = TB_DRAGWIDTH;
-    if( pThis->IsNativeControlSupported( ControlType::Toolbar, ControlPart::Entire ) )
+    if( rRenderContext.IsNativeControlSupported( ControlType::Toolbar, ControlPart::Entire ) )
     {
 
         ImplControlValue aControlValue;
         Point aPoint;
         Rectangle aContent, aBound;
-        Rectangle aArea( aPoint, pThis->GetOutputSizePixel() );
+        Rectangle aArea( aPoint, rRenderContext.GetOutputSizePixel() );
 
-        if ( pThis->GetNativeControlRegion(ControlType::Toolbar, pThis->mbHorz ? ControlPart::ThumbVert : ControlPart::ThumbHorz,
+        if ( rRenderContext.GetNativeControlRegion(ControlType::Toolbar,
+                bHorz ? ControlPart::ThumbVert : ControlPart::ThumbHorz,
                 aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
-            nWidth = pThis->mbHorz ? aContent.GetWidth() : aContent.GetHeight();
+            nWidth = bHorz ? aContent.GetWidth() : aContent.GetHeight();
         }
     }
 
     // increase the hit area of the drag handle according to DPI scale factor
-    nWidth *= pThis->GetDPIScaleFactor();
+    nWidth *= rRenderContext.GetDPIScaleFactor();
 
     return nWidth;
+}
+
+int ToolBox::ImplGetDragWidth( ToolBox* pThis )
+{
+    return ToolBox::ImplGetDragWidth( *pThis, pThis->mbHorz );
 }
 
 ButtonType determineButtonType( ImplToolItem* pItem, ButtonType defaultType )
@@ -263,6 +269,60 @@ static void ImplCheckUpdate(ToolBox* pThis)
         pThis->Update();
 }
 
+void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext,
+        const Rectangle &aDragArea, int nDragWidth, WindowAlign eAlign, bool bHorz)
+{
+    bool bNativeOk = false;
+    const ControlPart ePart = bHorz ? ControlPart::ThumbVert : ControlPart::ThumbHorz;
+    const Size aSz( rRenderContext.GetOutputSizePixel() );
+    if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ePart))
+    {
+        ToolbarValue aToolbarValue;
+        aToolbarValue.maGripRect = aDragArea;
+
+        Point aPt;
+        Rectangle aCtrlRegion(aPt, aSz);
+        ControlState nState = ControlState::ENABLED;
+
+        bNativeOk = rRenderContext.DrawNativeControl( ControlType::Toolbar, ePart,
+                                        aCtrlRegion, nState, aToolbarValue, OUString() );
+    }
+
+    if( bNativeOk )
+        return;
+
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+    rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
+
+    float fScaleFactor = rRenderContext.GetDPIScaleFactor();
+
+    if (eAlign == WindowAlign::Top || eAlign == WindowAlign::Bottom)
+    {
+        int height = (int) (0.6 * aSz.Height() + 0.5);
+        int i = (aSz.Height() - height) / 2;
+        height += i;
+        while (i <= height)
+        {
+            int x = nDragWidth / 2;
+            rRenderContext.DrawEllipse(Rectangle(Point(x, i), Size(2 * fScaleFactor, 2 * fScaleFactor)));
+            i += 4 * fScaleFactor;
+        }
+    }
+    else
+    {
+        int width = (int) (0.6 * aSz.Width() + 0.5);
+        int i = (aSz.Width() - width) / 2;
+        width += i;
+        while (i <= width)
+        {
+            int y = nDragWidth / 2;
+            rRenderContext.DrawEllipse(Rectangle(Point(i, y), Size(2 * fScaleFactor, 2 * fScaleFactor)));
+            i += 4 * fScaleFactor;
+        }
+    }
+}
+
 void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper(this);
@@ -270,55 +330,8 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
     {
         // execute pending paint requests
         ImplCheckUpdate(this);
-
-        bool bNativeOk = false;
-        if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, mbHorz ? ControlPart::ThumbHorz : ControlPart::ThumbVert))
-        {
-            ToolbarValue aToolbarValue;
-            aToolbarValue.maGripRect = pWrapper->GetDragArea();
-
-            Point aPt;
-            Rectangle aCtrlRegion(aPt, GetOutputSizePixel());
-            ControlState nState = ControlState::ENABLED;
-
-            bNativeOk = rRenderContext.DrawNativeControl( ControlType::Toolbar, mbHorz ? ControlPart::ThumbVert : ControlPart::ThumbHorz,
-                                            aCtrlRegion, nState, aToolbarValue, OUString() );
-        }
-
-        if( bNativeOk )
-            return;
-
-        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-        rRenderContext.SetFillColor(rStyleSettings.GetShadowColor());
-
-        Size aSz(GetOutputSizePixel());
-        float fScaleFactor = rRenderContext.GetDPIScaleFactor();
-
-        if (meAlign == WindowAlign::Top || meAlign == WindowAlign::Bottom)
-        {
-            int height = (int) (0.6 * aSz.Height() + 0.5);
-            int i = (aSz.Height() - height) / 2;
-            height += i;
-            while (i <= height)
-            {
-                int x = ImplGetDragWidth(this) / 2;
-                rRenderContext.DrawEllipse(Rectangle(Point(x, i), Size(2 * fScaleFactor, 2 * fScaleFactor)));
-                i += 4 * fScaleFactor;
-            }
-        }
-        else
-        {
-            int width = (int) (0.6 * aSz.Width() + 0.5);
-            int i = (aSz.Width() - width) / 2;
-            width += i;
-            while (i <= width)
-            {
-                int y = ImplGetDragWidth(this) / 2;
-                rRenderContext.DrawEllipse(Rectangle(Point(i, y), Size(2 * fScaleFactor, 2 * fScaleFactor)));
-                i += 4 * fScaleFactor;
-            }
-        }
+        ImplDrawGrip( rRenderContext, pWrapper->GetDragArea(),
+                      ImplGetDragWidth(this), meAlign, mbHorz );
     }
 }
 

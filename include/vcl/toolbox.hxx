@@ -223,9 +223,14 @@ public:
     SAL_DLLPRIVATE void            ImplDisableFlatButtons();
 
     static SAL_DLLPRIVATE int ImplGetDragWidth( ToolBox* pThis );
+    static SAL_DLLPRIVATE int ImplGetDragWidth( const vcl::RenderContext& rRenderContext,
+                                                bool bHorz );
     static SAL_DLLPRIVATE void ImplUpdateDragArea( ToolBox *pThis );
     static SAL_DLLPRIVATE void ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
                                                long& rRight, long& rBottom, const ToolBox *pThis );
+    static SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext,
+                                            const Rectangle &aDragArea, int nDragWidth,
+                                            WindowAlign eAlign, bool bHorz);
 
     SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void ImplDrawGradientBackground(vcl::RenderContext& rRenderContext, ImplDockingWindowWrapper *pWrapper);
