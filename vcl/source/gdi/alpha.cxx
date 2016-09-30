@@ -38,6 +38,11 @@ AlphaMask::AlphaMask( const AlphaMask& rAlphaMask ) :
 {
 }
 
+AlphaMask::AlphaMask( AlphaMask&& rAlphaMask ) :
+    Bitmap( std::move(rAlphaMask) )
+{
+}
+
 AlphaMask::AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency ) :
     Bitmap( rSizePixel, 8, &Bitmap::GetGreyPalette( 256 ) )
 {
