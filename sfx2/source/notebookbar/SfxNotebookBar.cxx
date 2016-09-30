@@ -252,8 +252,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
     if (IsActive())
     {
-        RemoveListeners(pSysWindow);
-
         const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
         vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
         OUString sFile = lcl_getNotebookbarFileName( eApp );
@@ -275,6 +273,8 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
         if ( ( !sFile.isEmpty() && bChangedFile ) || !pSysWindow->GetNotebookBar()->IsVisible() )
         {
+            RemoveListeners(pSysWindow);
+
             OUStringBuffer aBuf(rUIFile);
             aBuf.append( sFile );
 
