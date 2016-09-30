@@ -38,9 +38,9 @@ class SmParser
     int             m_nCurError;
     sal_Int32       m_nBufferIndex,
                     m_nTokenIndex;
-    sal_Int32       m_Row,
+    sal_Int32       m_nRow,
                     m_nColOff;
-    bool            bImportSymNames,
+    bool            m_bImportSymNames,
                     m_bExportSymNames;
 
     // map of used symbols (used to reduce file size by exporting only actually used symbols)
@@ -105,8 +105,8 @@ public:
 
     const OUString & GetText() const { return m_aBufferString; };
 
-    bool        IsImportSymbolNames() const        { return bImportSymNames; }
-    void        SetImportSymbolNames(bool bVal)    { bImportSymNames = bVal; }
+    bool        IsImportSymbolNames() const        { return m_bImportSymNames; }
+    void        SetImportSymbolNames(bool bVal)    { m_bImportSymNames = bVal; }
     bool        IsExportSymbolNames() const        { return m_bExportSymNames; }
     void        SetExportSymbolNames(bool bVal)    { m_bExportSymNames = bVal; }
 
