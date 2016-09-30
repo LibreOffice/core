@@ -415,7 +415,7 @@ void SmParser::NextToken()
                 '\n' == m_aBufferString[ nRealStart ] )
         {
             // keep data needed for tokens row and col entry up to date
-            ++m_Row;
+            ++m_nRow;
             m_nBufferIndex = m_nColOff = nRealStart + 1;
             bCont = true;
         }
@@ -437,7 +437,7 @@ void SmParser::NextToken()
     // set index of current token
     m_nTokenIndex = m_nBufferIndex;
 
-    m_aCurToken.nRow   = m_Row;
+    m_aCurToken.nRow   = m_nRow;
     m_aCurToken.nCol   = nRealStart - m_nColOff + 1;
 
     bool bHandled = true;
@@ -476,7 +476,7 @@ void SmParser::NextToken()
         m_aCurToken.nGroup     = TG::NONE;
         m_aCurToken.nLevel     = 5;
         m_aCurToken.aText     = aRes.DequotedNameOrString;
-        m_aCurToken.nRow       = m_Row;
+        m_aCurToken.nRow       = m_nRow;
         m_aCurToken.nCol       = nRealStart - m_nColOff + 2;
     }
     else if (aRes.TokenType & KParseType::IDENTNAME)
@@ -656,7 +656,7 @@ void SmParser::NextToken()
                         m_aCurToken.nGroup     = TG::NONE;
                         m_aCurToken.nLevel     = 5;
                         m_aCurToken.aText      ="%";
-                        m_aCurToken.nRow       = m_Row;
+                        m_aCurToken.nRow       = m_nRow;
                         m_aCurToken.nCol       = nTmpStart - m_nColOff;
 
                         if (aTmpRes.TokenType & KParseType::IDENTNAME)
@@ -2299,9 +2299,9 @@ SmParser::SmParser()
     : m_nCurError( 0 )
     , m_nBufferIndex( 0 )
     , m_nTokenIndex( 0 )
-    , m_Row( 0 )
+    , m_nRow( 0 )
     , m_nColOff( 0 )
-    , bImportSymNames( false )
+    , m_bImportSymNames( false )
     , m_bExportSymNames( false )
     , m_aDotLoc( LanguageTag::convertToLocale( LANGUAGE_ENGLISH_US ) )
 {
@@ -2314,7 +2314,7 @@ SmTableNode *SmParser::Parse(const OUString &rBuffer)
     m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex  = 0;
     m_nTokenIndex   = 0;
-    m_Row           = 1;
+    m_nRow          = 1;
     m_nColOff       = 0;
     m_nCurError     = -1;
 
@@ -2331,7 +2331,7 @@ SmNode *SmParser::ParseExpression(const OUString &rBuffer)
     m_aBufferString = convertLineEnd(rBuffer, LINEEND_LF);
     m_nBufferIndex  = 0;
     m_nTokenIndex   = 0;
-    m_Row           = 1;
+    m_nRow          = 1;
     m_nColOff       = 0;
     m_nCurError     = -1;
 
