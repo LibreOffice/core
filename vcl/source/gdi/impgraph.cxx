@@ -97,7 +97,6 @@ Size GraphicReader::GetPreviewSize() const
 ImpGraphic::ImpGraphic() :
         meType          ( GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
-        mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
         mbSwapUnderway  ( false ),
         mbDummyContext  ( false )
@@ -110,7 +109,6 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         mpSwapFile      ( rImpGraphic.mpSwapFile ),
         meType          ( rImpGraphic.meType ),
         mnSizeBytes     ( rImpGraphic.mnSizeBytes ),
-        mnRefCount      ( 1UL ),
         mbSwapOut       ( rImpGraphic.mbSwapOut ),
         mbSwapUnderway  ( false ),
         mbDummyContext  ( rImpGraphic.mbDummyContext )
@@ -132,7 +130,6 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         maEx            ( rBitmap ),
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
-        mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
         mbSwapUnderway  ( false ),
         mbDummyContext  ( false )
@@ -143,7 +140,6 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         maEx            ( rBitmapEx ),
         meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
-        mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
         mbSwapUnderway  ( false ),
         mbDummyContext  ( false )
@@ -153,7 +149,6 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
 ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
 :   meType( rSvgDataPtr.get() ? GraphicType::Bitmap : GraphicType::NONE ),
     mnSizeBytes( 0UL ),
-    mnRefCount( 1UL ),
     mbSwapOut( false ),
     mbSwapUnderway( false ),
     mbDummyContext  ( false ),
@@ -166,7 +161,6 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         mpAnimation     ( o3tl::make_unique<Animation>( rAnimation ) ),
         meType          ( GraphicType::Bitmap ),
         mnSizeBytes     ( 0UL ),
-        mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
         mbSwapUnderway  ( false ),
         mbDummyContext  ( false )
@@ -177,7 +171,6 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         maMetaFile      ( rMtf ),
         meType          ( GraphicType::GdiMetafile ),
         mnSizeBytes     ( 0UL ),
-        mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
         mbSwapUnderway  ( false ),
         mbDummyContext  ( false )
