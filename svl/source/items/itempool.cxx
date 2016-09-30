@@ -20,6 +20,7 @@
 #include <svl/itempool.hxx>
 
 #include <string.h>
+#include <libxml/xmlwriter.h>
 
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -992,5 +993,16 @@ void SfxItemPool::SetFileFormatVersion( sal_uInt16 nFileFormatVersion )
 }
 
 const SfxItemPool* SfxItemPool::pStoringPool_ = nullptr;
+
+void SfxItemPool::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxItemPool"));
+    for (auto const & rArrayPtr : pImpl->maPoolItems)
+        if (rArrayPtr)
+            for (auto const & rItem : *rArrayPtr)
+                if (rItem)
+                    rItem->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

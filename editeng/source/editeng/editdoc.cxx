@@ -1651,7 +1651,7 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyl
     GetCharAttribs().GetDefFont() = rFontFromStyle;
     // ... then iron out the hard paragraph formatting...
     CreateFont( GetCharAttribs().GetDefFont(),
-        GetContentAttribs().GetItems(), pS == nullptr );
+                GetContentAttribs().GetItems(), pS == nullptr );
 }
 
 void ContentNode::SetStyleSheet( SfxStyleSheet* pS, bool bRecalcFont )
@@ -1944,6 +1944,7 @@ bool ContentAttribs::HasItem( sal_uInt16 nWhich ) const
 void ContentAttribs::dumpAsXml(struct _xmlTextWriter* pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("contentAttribs"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("style"), "%s", pStyle->GetName().toUtf8().getStr());
     aAttribSet.dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }
@@ -2742,6 +2743,8 @@ void EditDoc::dumpAsXml(struct _xmlTextWriter* pWriter) const
     if (!pWriter)
     {
         pWriter = xmlNewTextWriterFilename("editdoc.xml", 0);
+        xmlTextWriterSetIndent(pWriter,1);
+        xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
         xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }

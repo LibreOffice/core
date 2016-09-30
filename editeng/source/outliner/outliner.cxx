@@ -51,6 +51,7 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/brushitem.hxx>
 #include <svl/itempool.hxx>
+#include <libxml/xmlwriter.h>
 
 // calculate if it's RTL or not
 #include <unicode/ubidi.h>
@@ -675,19 +676,19 @@ OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, 
 void Outliner::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-        if (pPara)
-        {
-            pEditEngine->SetStyleSheet( nPara, pStyle );
-            pPara->nFlags |= ParaFlag::SETBULLETTEXT;
-            ImplCheckNumBulletItem(  nPara );
-        }
+    if (pPara)
+    {
+        pEditEngine->SetStyleSheet( nPara, pStyle );
+        pPara->nFlags |= ParaFlag::SETBULLETTEXT;
+        ImplCheckNumBulletItem(  nPara );
+    }
 }
 
 void Outliner::ImplCheckNumBulletItem( sal_Int32 nPara )
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-        if (pPara)
-            pPara->aBulSize.Width() = -1;
+    if (pPara)
+        pPara->aBulSize.Width() = -1;
 }
 
 void Outliner::ImplSetLevelDependendStyleSheet( sal_Int32 nPara )
@@ -2191,6 +2192,29 @@ OverflowingText *Outliner::GetOverflowingText() const
 void Outliner::ClearOverflowingParaNum()
 {
     pEditEngine->ClearOverflowingParaNum();
+}
+
+void Outliner::dumpAsXml(struct _xmlTextWriter* pWriter) const
+{
+    bool bOwns = false;
+    if (!pWriter)
+    {
+        pWriter = xmlNewTextWriterFilename("outliner.xml", 0);
+        xmlTextWriterSetIndent(pWriter,1);
+        xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
+        xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
+        bOwns = true;
+    }
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("outliner"));
+    pParaList->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+
+    if (bOwns)
+    {
+       xmlTextWriterEndDocument(pWriter);
+       xmlFreeTextWriter(pWriter);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1096,12 +1096,16 @@ void SdDrawDocument::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (!pWriter)
     {
         pWriter = xmlNewTextWriterFilename("model.xml", 0);
+        xmlTextWriterSetIndent(pWriter,1);
+        xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
         xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
     xmlTextWriterStartElement(pWriter, BAD_CAST("sdDrawDocument"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
+    if (mpOutliner)
+        mpOutliner->dumpAsXml(pWriter);
     FmFormModel::dumpAsXml(pWriter);
     if (GetUndoManager())
         GetUndoManager()->dumpAsXml(pWriter);
