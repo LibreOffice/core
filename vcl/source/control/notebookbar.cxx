@@ -99,17 +99,6 @@ void NotebookBar::SetIconClickHdl(Link<NotebookBar*, void> aHdl)
         m_pContextContainer->SetIconClickHdl(aHdl);
 }
 
-void NotebookBar::StateChanged(StateChangedType nType)
-{
-    if (nType == StateChangedType::Visible)
-    {
-        // visibility changed, update the container
-        GetParent()->Resize();
-    }
-
-    Control::StateChanged(nType);
-}
-
 void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
         throw (css::uno::RuntimeException, std::exception)
 {

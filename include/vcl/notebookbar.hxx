@@ -30,8 +30,6 @@ public:
 
     void SetIconClickHdl(Link<NotebookBar*, void> aHdl);
 
-    virtual void StateChanged(StateChangedType nType) override;
-
     const css::uno::Reference<css::ui::XContextChangeEventListener>& getContextChangeEventListener() const { return m_pEventListener; }
 private:
     css::uno::Reference<css::ui::XContextChangeEventListener> m_pEventListener;
