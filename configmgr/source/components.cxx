@@ -613,8 +613,6 @@ Components::Components(
 
 Components::~Components()
 {
-    SAL_WARN("configmgr", "################# Components::~Components() #####################");
-
     // get flag if _exit was already called which is a sign to not to secure user config
     const bool bExitWasCalled(comphelper::BackupFileHelper::getExitWasCalled());
 

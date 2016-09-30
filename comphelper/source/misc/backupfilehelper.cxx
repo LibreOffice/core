@@ -669,7 +669,7 @@ namespace
             return bRetval;
         }
 
-        bool tryPush(FileSharedPtr& rFileCandidate)
+        bool tryPush(FileSharedPtr& rFileCandidate, bool bCompress)
         {
             sal_uInt64 nFileSize(0);
 
@@ -726,17 +726,13 @@ namespace
 
                 // create a file entry for a new file. Offset is set to 0 to mark
                 // the entry as new file entry
-                // the compress flag decides if entries should be compressed when
-                // they get written to the target package
-                static bool bUseCompression(true);
-
                 maPackedFileEntryVector.push_back(
                     PackedFileEntry(
                         static_cast< sal_uInt32 >(nFileSize),
                         0,
                         nCrc32,
                         rFileCandidate,
-                        bUseCompression));
+                        bCompress));
 
                 mbChanged = true;
             }
@@ -837,14 +833,14 @@ namespace comphelper
         return OUString(maBase + "/." + maName + ".pack");
     }
 
-    bool BackupFileHelper::tryPush()
+    bool BackupFileHelper::tryPush(bool bCompress)
     {
         if (splitBaseURL() && baseFileExists())
         {
             PackedFile aPackedFile(getName());
             FileSharedPtr aBaseFile(new osl::File(mrBaseURL));
 
-            if (aPackedFile.tryPush(aBaseFile))
+            if (aPackedFile.tryPush(aBaseFile, bCompress))
             {
                 // reduce to allowed number and flush
                 aPackedFile.tryReduceToNumBackups(mnNumBackups);
