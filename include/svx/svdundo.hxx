@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <memory>
 #include <vector>
 
 #include <svl/solar.hrc>
@@ -34,7 +33,6 @@
 #include <svx/svxdllapi.h>
 
 class SfxItemSet;
-class SfxPoolItem;
 class SfxStyleSheet;
 class SdrView;
 class SdrPageView;
@@ -586,12 +584,9 @@ class SVX_DLLPUBLIC SdrUndoDelPage : public SdrUndoPageList
     // When deleting a MasterPage, we remember all relations of the
     // Character Page with the MasterPage in this UndoGroup.
     SdrUndoGroup*               pUndoGroup;
-    std::unique_ptr<SfxPoolItem> mpFillBitmapItem;
-    bool mbHasFillBitmap;
-    bool mbSoleOwnerOfFillBitmapProps;
 
 public:
-    SdrUndoDelPage(SdrPage& rNewPg, bool bSoleOwnerOfFillBitmapProps);
+    SdrUndoDelPage(SdrPage& rNewPg);
     virtual ~SdrUndoDelPage();
 
     virtual void Undo() override;
@@ -602,11 +597,6 @@ public:
 
     virtual void SdrRepeat(SdrView& rView) override;
     virtual bool CanSdrRepeat(SdrView& rView) const override;
-
-private:
-    void queryFillBitmap(const SfxItemSet &rItemSet);
-    void clearFillBitmap();
-    void restoreFillBitmap();
 };
 
 /**
@@ -763,7 +753,7 @@ public:
     virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNeuPos1);
 
     // Page
-    virtual SdrUndoAction* CreateUndoDeletePage(SdrPage& rPage, bool bSoleOwnerOfFillBitmapProps = true);
+    virtual SdrUndoAction* CreateUndoDeletePage(SdrPage& rPage);
     virtual SdrUndoAction* CreateUndoNewPage(SdrPage& rPage);
     virtual SdrUndoAction* CreateUndoCopyPage(SdrPage& rPage);
     virtual SdrUndoAction* CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1);
