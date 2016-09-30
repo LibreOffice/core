@@ -331,7 +331,6 @@ struct OStorePageLink
  * PageData.
  *
  *======================================================================*/
-typedef struct PageData OStorePageData; // backward compat.
 struct PageData
 {
     typedef OStorePageGuard      G;
@@ -678,7 +677,7 @@ class OStorePageBIOS;
 
 class OStorePageObject
 {
-    typedef OStorePageData       page;
+    typedef PageData       page;
 
 public:
     /** Allocation.

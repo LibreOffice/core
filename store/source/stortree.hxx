@@ -100,9 +100,9 @@ struct OStoreBTreeEntry
  *======================================================================*/
 #define STORE_MAGIC_BTREENODE sal_uInt32(0x58190322)
 
-struct OStoreBTreeNodeData : public store::OStorePageData
+struct OStoreBTreeNodeData : public store::PageData
 {
-    typedef OStorePageData      base;
+    typedef PageData      base;
     typedef OStoreBTreeNodeData self;
 
     typedef OStorePageGuard     G;

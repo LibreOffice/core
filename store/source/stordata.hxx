@@ -39,9 +39,9 @@ namespace store
  *======================================================================*/
 #define STORE_MAGIC_DATAPAGE sal_uInt32(0x94190310)
 
-struct OStoreDataPageData : public store::OStorePageData
+struct OStoreDataPageData : public store::PageData
 {
-    typedef OStorePageData       base;
+    typedef PageData       base;
     typedef OStoreDataPageData   self;
 
     typedef OStorePageDescriptor D;
@@ -123,9 +123,9 @@ public:
  *======================================================================*/
 #define STORE_MAGIC_INDIRECTPAGE sal_uInt32(0x89191107)
 
-struct OStoreIndirectionPageData : public store::OStorePageData
+struct OStoreIndirectionPageData : public store::PageData
 {
-    typedef OStorePageData            base;
+    typedef PageData            base;
     typedef OStoreIndirectionPageData self;
 
     typedef OStorePageGuard           G;
@@ -519,9 +519,9 @@ struct OStoreDirectoryDataBlock
  *======================================================================*/
 #define STORE_MAGIC_DIRECTORYPAGE sal_uInt32(0x62190120)
 
-struct OStoreDirectoryPageData : public store::OStorePageData
+struct OStoreDirectoryPageData : public store::PageData
 {
-    typedef OStorePageData           base;
+    typedef PageData           base;
     typedef OStoreDirectoryPageData  self;
 
     typedef OStorePageDescriptor     D;

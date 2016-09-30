@@ -39,7 +39,7 @@ using namespace store;
  * OStoreBTreeNodeData.
  */
 OStoreBTreeNodeData::OStoreBTreeNodeData (sal_uInt16 nPageSize)
-    : OStorePageData (nPageSize)
+    : PageData (nPageSize)
 {
     base::m_aGuard.m_nMagic = store::htonl(self::theTypeId);
     base::m_aDescr.m_nUsed  = store::htons(self::thePageSize); // usageCount(0)
