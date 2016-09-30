@@ -100,15 +100,51 @@ void SdrUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "CROP")
     {
-        Point aPos;
-        Fraction aFracX;
-        Fraction aFracY;
+        auto itrNX = rParameters.find("X");
+        if (itrNX == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter X");
+
+        auto itrNY = rParameters.find("Y");
+        if (itrNY == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter Y");
+
+        long nX = itrNX->second.toInt32();
+        long nY = itrNY->second.toInt32();
+        Point aPos(nX, nY);
+
+        auto itrFracX = rParameters.find("FRAC_X");
+        if (itrFracX == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter FRAC_X");
+        double nFracX = itrFracX->second.toDouble();
+        Fraction aFracX(nFracX);
+
+        auto itrFracY = rParameters.find("FRAC_Y");
+        if (itrFracY == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter FRAC_Y");
+        double nFracY = itrFracY->second.toDouble();
+        Fraction aFracY(nFracY);
+
         pObj->Crop(aPos, aFracX, aFracY);
     }
-    else if (rAction == "Rotate")
+    else if (rAction == "ROTATE")
     {
-        Point aPos;
-        double nAngle = 0;
+        auto itrNX = rParameters.find("X");
+        if (itrNX == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter X");
+
+        auto itrNY = rParameters.find("Y");
+        if (itrNY == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter Y");
+
+        long nX = itrNX->second.toInt32();
+        long nY = itrNY->second.toInt32();
+        Point aPos(nX, nY);
+
+        auto itrAngle = rParameters.find("ANGLE");
+        if (itrAngle  == rParameters.end())
+            throw css::uno::RuntimeException("missing parameter ANGLE");
+
+        double nAngle = itrAngle->second.toDouble();
         pObj->Rotate(aPos, nAngle, 0, 0);
     }
     else if (rAction == "Mirror")
