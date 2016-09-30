@@ -971,25 +971,8 @@ DECLARE_OOXMLIMPORT_TEST(testN780853, "n780853.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testN780843, "n780843.docx")
 {
-    /*
-     * The problem was that wrong footer was picked.
-     *
-     * oParas = ThisComponent.Text.createEnumeration
-     * oPara = oParas.nextElement
-     * oPara = oParas.nextElement
-     * oPara = oParas.nextElement
-     * sStyle = oPara.PageStyleName
-     * oStyle = ThisComponent.StyleFamilies.PageStyles.getByName(sStyle)
-     * xray oStyle.FooterText.String ' was "hidden footer"
-     */
-    uno::Reference< text::XTextRange > xPara = getParagraph(3);
+    uno::Reference< text::XTextRange > xPara = getParagraph(1);
     OUString aStyleName = getProperty<OUString>(xPara, "PageStyleName");
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(aStyleName), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xFooter = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "FooterText");
-    CPPUNIT_ASSERT_EQUAL(OUString("shown footer"), xFooter->getString());
-
-    xPara = getParagraph(1);
-    aStyleName = getProperty<OUString>(xPara, "PageStyleName");
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), aStyleName);
 
     //tdf64372 this document should only have one page break (2 pages, not 3)
@@ -998,6 +981,39 @@ DECLARE_OOXMLIMPORT_TEST(testN780843, "n780843.docx")
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+}
+
+DECLARE_OOXMLIMPORT_TEST(testN780843b, "n780843b.docx")
+{
+    // Same document as testN780843 except there is more text before the continuous break. Now the opposite footer results should happen.
+    uno::Reference< text::XTextRange > xPara = getParagraph(3);
+    OUString aStyleName = getProperty<OUString>(xPara, "PageStyleName");
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(aStyleName), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xFooterText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "FooterText");
+    CPPUNIT_ASSERT_EQUAL( OUString("hidden footer"), xFooterText->getString() );
+}
+
+DECLARE_OOXMLIMPORT_TEST(testInheritFirstHeader,"inheritFirstHeader.docx")
+{
+// First page headers always link to last used first header, never to a follow header
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+
+    xCursor->jumpToLastPage();
+    OUString sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
+    CPPUNIT_ASSERT_EQUAL( OUString("Last Header"), xHeaderText->getString() );
+
+    xCursor->jumpToPreviousPage();
+    sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
+    xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
+    CPPUNIT_ASSERT_EQUAL( OUString("First Header"), xHeaderText->getString() );
+
+    xCursor->jumpToPreviousPage();
+    sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
+    xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
+    CPPUNIT_ASSERT_EQUAL( OUString("Follow Header"), xHeaderText->getString() );
 }
 
 DECLARE_OOXMLIMPORT_TEST(testShadow, "imgshadow.docx")
