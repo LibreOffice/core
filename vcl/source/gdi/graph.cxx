@@ -33,7 +33,10 @@
 
 using namespace ::com::sun::star;
 
-static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
+namespace
+{
+
+void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
                              vcl::Font* pFont, const Bitmap* pBitmap, const BitmapEx* pBitmapEx,
                              const Point& rDestPt, const Size& rDestSize )
 {
@@ -178,110 +181,86 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     pOutDev->Pop();
 }
 
+} // end anonymous namespace
+
 Graphic::Graphic()
+    : mpImpGraphic(new ImpGraphic)
 {
-    mpImpGraphic = new ImpGraphic;
 }
 
-Graphic::Graphic( const Graphic& rGraphic ) :
-SvDataCopyStream()
+Graphic::Graphic( const Graphic& rGraphic )
+    : SvDataCopyStream()
 {
-    if( rGraphic.IsAnimated() )
-        mpImpGraphic = new ImpGraphic( *rGraphic.mpImpGraphic );
+    if (rGraphic.IsAnimated())
+        mpImpGraphic.reset(new ImpGraphic(*rGraphic.mpImpGraphic));
     else
-    {
         mpImpGraphic = rGraphic.mpImpGraphic;
-        mpImpGraphic->mnRefCount++;
-    }
 }
 
-Graphic::Graphic( const Bitmap& rBmp )
+Graphic::Graphic(const Bitmap& rBitmap)
+    : mpImpGraphic(new ImpGraphic(rBitmap))
 {
-    mpImpGraphic = new ImpGraphic( rBmp );
 }
 
-Graphic::Graphic( const BitmapEx& rBmpEx )
+Graphic::Graphic(const BitmapEx& rBitmapEx)
+    : mpImpGraphic(new ImpGraphic(rBitmapEx))
 {
-    mpImpGraphic = new ImpGraphic( rBmpEx );
 }
 
 Graphic::Graphic(const SvgDataPtr& rSvgDataPtr)
+    : mpImpGraphic(new ImpGraphic(rSvgDataPtr))
 {
-    mpImpGraphic = new ImpGraphic(rSvgDataPtr);
 }
 
-Graphic::Graphic( const Animation& rAnimation )
+Graphic::Graphic(const Animation& rAnimation)
+    : mpImpGraphic(new ImpGraphic(rAnimation))
 {
-    mpImpGraphic = new ImpGraphic( rAnimation );
 }
 
-Graphic::Graphic( const GDIMetaFile& rMtf )
+Graphic::Graphic(const GDIMetaFile& rMetaFile)
+    : mpImpGraphic(new ImpGraphic(rMetaFile))
 {
-    mpImpGraphic = new ImpGraphic( rMtf );
 }
 
-Graphic::Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic )
+Graphic::Graphic(const css::uno::Reference<css::graphic::XGraphic>& rxGraphic)
 {
-    uno::Reference< lang::XUnoTunnel >      xTunnel( rxGraphic, uno::UNO_QUERY );
-    const ::Graphic*                        pGraphic = ( xTunnel.is() ?
-                                                         reinterpret_cast< ::Graphic* >( xTunnel->getSomething( getUnoTunnelId() ) ) :
-                                                          nullptr );
+    uno::Reference< lang::XUnoTunnel > xTunnel(rxGraphic, uno::UNO_QUERY);
+    const Graphic* pGraphic = (xTunnel.is() ? reinterpret_cast<Graphic*>(xTunnel->getSomething(getUnoTunnelId()))
+                                            : nullptr);
 
-    if( pGraphic )
+    if (pGraphic)
     {
-        if( pGraphic->IsAnimated() )
-            mpImpGraphic = new ImpGraphic( *pGraphic->mpImpGraphic );
+        if (pGraphic->IsAnimated())
+            mpImpGraphic.reset(new ImpGraphic(*pGraphic->mpImpGraphic));
         else
-        {
             mpImpGraphic = pGraphic->mpImpGraphic;
-            mpImpGraphic->mnRefCount++;
-        }
     }
     else
-        mpImpGraphic = new ImpGraphic;
+    {
+        mpImpGraphic.reset(new ImpGraphic);
+    }
 }
 
 Graphic::~Graphic()
 {
-    if( mpImpGraphic->mnRefCount == 1UL )
-        delete mpImpGraphic;
-    else
-        mpImpGraphic->mnRefCount--;
 }
 
 void Graphic::ImplTestRefCount()
 {
-    if( mpImpGraphic->mnRefCount > 1UL )
+    if (!mpImpGraphic.unique())
     {
-        mpImpGraphic->mnRefCount--;
-        mpImpGraphic = new ImpGraphic( *mpImpGraphic );
+        mpImpGraphic.reset(new ImpGraphic(*mpImpGraphic));
     }
 }
 
-Graphic& Graphic::operator=( const Graphic& rGraphic )
+Graphic& Graphic::operator=(const Graphic& rGraphic)
 {
-    if( &rGraphic != this )
+    if (&rGraphic != this)
     {
-        if( rGraphic.IsAnimated() )
-        {
-            if( mpImpGraphic->mnRefCount == 1UL )
-                delete mpImpGraphic;
-            else
-                mpImpGraphic->mnRefCount--;
-
-            mpImpGraphic = new ImpGraphic( *rGraphic.mpImpGraphic );
-        }
+        if (rGraphic.IsAnimated())
+            mpImpGraphic.reset(new ImpGraphic(*rGraphic.mpImpGraphic));
         else
-        {
-            rGraphic.mpImpGraphic->mnRefCount++;
-
-            if( mpImpGraphic->mnRefCount == 1UL )
-                delete mpImpGraphic;
-            else
-                mpImpGraphic->mnRefCount--;
-
             mpImpGraphic = rGraphic.mpImpGraphic;
-        }
     }
 
     return *this;
@@ -289,17 +268,17 @@ Graphic& Graphic::operator=( const Graphic& rGraphic )
 
 bool Graphic::operator==( const Graphic& rGraphic ) const
 {
-    return( *mpImpGraphic == *rGraphic.mpImpGraphic );
+    return *mpImpGraphic == *rGraphic.mpImpGraphic;
 }
 
 bool Graphic::operator!=( const Graphic& rGraphic ) const
 {
-    return( *mpImpGraphic != *rGraphic.mpImpGraphic );
+    return *mpImpGraphic != *rGraphic.mpImpGraphic;
 }
 
 bool Graphic::operator!() const
 {
-    return( GraphicType::NONE == mpImpGraphic->ImplGetType() );
+    return mpImpGraphic->ImplGetType() == GraphicType::NONE;
 }
 
 void Graphic::Clear()
