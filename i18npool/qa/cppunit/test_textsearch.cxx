@@ -72,11 +72,11 @@ void TestTextSearch::testICU()
     pRegexMatcher->reset( aSource );
 
     CPPUNIT_ASSERT( pRegexMatcher->find( 0, nErr ) );
-    CPPUNIT_ASSERT( nErr == U_ZERO_ERROR );
-    CPPUNIT_ASSERT( pRegexMatcher->start( nErr ) == 4 );
-    CPPUNIT_ASSERT( nErr == U_ZERO_ERROR );
-    CPPUNIT_ASSERT( pRegexMatcher->end( nErr ) == 5 );
-    CPPUNIT_ASSERT( nErr == U_ZERO_ERROR );
+    CPPUNIT_ASSERT_EQUAL( U_ZERO_ERROR, nErr );
+    CPPUNIT_ASSERT_EQUAL( static_cast<int32_t>(4), pRegexMatcher->start( nErr ) );
+    CPPUNIT_ASSERT_EQUAL( U_ZERO_ERROR, nErr );
+    CPPUNIT_ASSERT_EQUAL( static_cast<int32_t>(5), pRegexMatcher->end( nErr ) );
+    CPPUNIT_ASSERT_EQUAL( U_ZERO_ERROR, nErr );
 
     delete pRegexMatcher;
 
@@ -90,11 +90,11 @@ void TestTextSearch::testICU()
     pRegexMatcher->reset( aSource2 );
 
     CPPUNIT_ASSERT( pRegexMatcher->find( 0, nErr ) );
-    CPPUNIT_ASSERT( nErr == U_ZERO_ERROR );
-    CPPUNIT_ASSERT( pRegexMatcher->start( nErr ) == 0 );
-    CPPUNIT_ASSERT( nErr == U_ZERO_ERROR );
-    CPPUNIT_ASSERT( pRegexMatcher->end( nErr ) == 1 );
-    CPPUNIT_ASSERT( nErr == U_ZERO_ERROR );
+    CPPUNIT_ASSERT_EQUAL( U_ZERO_ERROR, nErr );
+    CPPUNIT_ASSERT_EQUAL( static_cast<int32_t>(0), pRegexMatcher->start( nErr ) );
+    CPPUNIT_ASSERT_EQUAL( U_ZERO_ERROR, nErr );
+    CPPUNIT_ASSERT_EQUAL( static_cast<int32_t>(1), pRegexMatcher->end( nErr ) );
+    CPPUNIT_ASSERT_EQUAL( U_ZERO_ERROR, nErr );
     delete pRegexMatcher;
 }
 
@@ -118,21 +118,21 @@ void TestTextSearch::testSearches()
     // search forward
     aRes = m_xSearch->searchForward( str, startPos, endPos );
     CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
-    CPPUNIT_ASSERT( aRes.startOffset[0] == fStartRes );
-    CPPUNIT_ASSERT( aRes.endOffset[0] == fEndRes );
+    CPPUNIT_ASSERT_EQUAL( fStartRes, aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( fEndRes, aRes.endOffset[0] );
 
     // search backwards
     aRes = m_xSearch->searchBackward( str, endPos, startPos );
     CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
-    CPPUNIT_ASSERT( aRes.startOffset[0] == bStartRes );
-    CPPUNIT_ASSERT( aRes.endOffset[0] == bEndRes );
+    CPPUNIT_ASSERT_EQUAL( bStartRes, aRes.startOffset[0] );
+    CPPUNIT_ASSERT_EQUAL( bEndRes, aRes.endOffset[0] );
 
     aOptions.transliterateFlags = ::css::i18n::TransliterationModules::TransliterationModules_IGNORE_CASE
                                 | ::css::i18n::TransliterationModules::TransliterationModules_IGNORE_WIDTH;
     aOptions.searchString = "([^ ]*)[ ]*([^ ]*)";
     m_xSearch->setOptions(aOptions);
     aRes = m_xSearch->searchForward("11 22 33", 2, 7);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 3);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 2) && (aRes.endOffset[0] == 5));
     CPPUNIT_ASSERT((aRes.startOffset[1] == 2) && (aRes.endOffset[1] == 2));
     CPPUNIT_ASSERT((aRes.startOffset[2] == 3) && (aRes.endOffset[2] == 5));
@@ -155,44 +155,44 @@ void TestTextSearch::testWildcardSearch()
     m_xSearch2->setOptions2( aOptions );
     // match first "a", [0,1)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 1));
     // match last "a", (5,4]
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 5) && (aRes.endOffset[0] == 4));
 
     aOptions.searchString = "a?";
     m_xSearch2->setOptions2( aOptions );
     // match "ab", [0,2)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 2));
     // match "ac", (4,2]
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 4) && (aRes.endOffset[0] == 2));
 
     aOptions.searchString = "a*c";
     m_xSearch2->setOptions2( aOptions );
     // match "abac", [0,4) XXX NOTE: first match forward
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 4));
     // match "ac", (4,2] XXX NOTE: first match backward, not greedy
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 4) && (aRes.endOffset[0] == 2));
 
     aOptions.searchString = "b*a";
     m_xSearch2->setOptions2( aOptions );
     // match "ba", [1,3) XXX NOTE: first match forward, not greedy
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 1) && (aRes.endOffset[0] == 3));
     // match "baca", (5,1] XXX NOTE: first match backward
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 5) && (aRes.endOffset[0] == 1));
 
     aText = "ab?ca";
@@ -201,11 +201,11 @@ void TestTextSearch::testWildcardSearch()
     m_xSearch2->setOptions2( aOptions );
     // match "b?c", [1,4)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 1) && (aRes.endOffset[0] == 4));
     // match "b?c", (4,1]
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 4) && (aRes.endOffset[0] == 1));
 
     aText = "ab*ca";
@@ -214,42 +214,42 @@ void TestTextSearch::testWildcardSearch()
     m_xSearch2->setOptions2( aOptions );
     // match "b?c", [1,4)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 1) && (aRes.endOffset[0] == 4));
     // match "b?c", (4,1]
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 4) && (aRes.endOffset[0] == 1));
 
     aOptions.searchString = "ca?";
     m_xSearch2->setOptions2( aOptions );
     // no match
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aRes.subRegExpressions);
     // no match
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aRes.subRegExpressions);
 
     aOptions.searchString = "ca*";
     m_xSearch2->setOptions2( aOptions );
     // match "ca", [3,5)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 3) && (aRes.endOffset[0] == 5));
     // match "ca", (5,3]
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 5) && (aRes.endOffset[0] == 3));
 
     aOptions.searchString = "*ca*";
     m_xSearch2->setOptions2( aOptions );
     // match "abaca", [0,5)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 5));
     // match "abaca", (5,0]
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 5) && (aRes.endOffset[0] == 0));
 
     aText = "123123";
@@ -257,22 +257,22 @@ void TestTextSearch::testWildcardSearch()
     m_xSearch2->setOptions2( aOptions );
     // match first "123", [0,3)
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 3));
     // match "123123", (6,0]    Yes this looks odd, but it is as searching "?2*" forward.
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 6) && (aRes.endOffset[0] == 0));
 
     aOptions.searchFlag |= util::SearchFlags::WILD_MATCH_SELECTION;
     m_xSearch2->setOptions2( aOptions );
     // match "123123", [0,6) with greedy '*'
     aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 0) && (aRes.endOffset[0] == 6));
     // match "123123", (6,0]
     aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
-    CPPUNIT_ASSERT(aRes.subRegExpressions == 1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT((aRes.startOffset[0] == 6) && (aRes.endOffset[0] == 0));
 }
 
