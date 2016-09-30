@@ -987,7 +987,8 @@ DECLARE_OOXMLIMPORT_TEST(testN780843, "n780843.docx")
     OUString aStyleName = getProperty<OUString>(xPara, "PageStyleName");
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(aStyleName), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFooter = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "FooterText");
-    CPPUNIT_ASSERT_EQUAL(OUString("shown footer"), xFooter->getString());
+// This test worked on this particular document, but not on generic documents. It is an impossible requirement. Removing it (see n780843b)
+//    CPPUNIT_ASSERT_EQUAL(OUString("shown footer"), xFooter->getString());
 
     xPara = getParagraph(1);
     aStyleName = getProperty<OUString>(xPara, "PageStyleName");
@@ -999,6 +1000,16 @@ DECLARE_OOXMLIMPORT_TEST(testN780843, "n780843.docx")
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+}
+
+DECLARE_OOXMLIMPORT_TEST(testN780843b, "n780843b.docx")
+{
+    // Same document as testN780843 except there is more text before the continuous break. Now the opposite footer results should happen.
+    uno::Reference< text::XTextRange > xPara = getParagraph(3);
+    OUString aStyleName = getProperty<OUString>(xPara, "PageStyleName");
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(aStyleName), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xFooterText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "FooterText");
+    CPPUNIT_ASSERT_EQUAL( OUString("hidden footer"), xFooterText->getString() );
 }
 
 DECLARE_OOXMLIMPORT_TEST(testShadow, "imgshadow.docx")
