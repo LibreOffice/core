@@ -569,11 +569,14 @@ void Desktop::Init()
             SetBootstrapError( BE_OFFICECONFIG_BROKEN, e.Message );
         }
 
+        // test code for ProfileSafeMode to allow testing the fail
+        // of loading the office configuration initially. To use,
+        // either set to true and compile, or set a breakpoint
+        // in debugger and change the local bool
         static bool bTryHardOfficeconfigBroken(false);
 
         if (bTryHardOfficeconfigBroken)
         {
-            SAL_WARN("configmgr", "################# Desktop::Init() #####################");
             SetBootstrapError(BE_OFFICECONFIG_BROKEN, OUString());
         }
     }
