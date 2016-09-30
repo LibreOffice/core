@@ -576,8 +576,6 @@ void ImplPopupFloatWin::DrawGrip(vcl::RenderContext& rRenderContext)
 
 void ImplPopupFloatWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    Rectangle aRect(Point(), GetOutputSizePixel());
-    rRenderContext.DrawWallpaper(aRect, Wallpaper(rRenderContext.GetSettings().GetStyleSettings().GetFaceGradientColor()));
     DrawBorder(rRenderContext);
     if (hasGrip())
         DrawGrip(rRenderContext);
