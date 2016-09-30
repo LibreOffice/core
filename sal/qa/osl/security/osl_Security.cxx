@@ -370,17 +370,18 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     sal_Char PathA[_MAX_PATH];
     if (RegOpenKey(HKEY_CURRENT_USER,  "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",  &hRegKey) == ERROR_SUCCESS)
     {
-        LONG lRet, lSize = sizeof(PathA);
+        LONG lRet;
+        DWORD lSize = sizeof(PathA);
         DWORD Type;
 
-        lRet = RegQueryValueEx(hRegKey, "AppData", NULL, &Type, ( unsigned char * )PathA, ( unsigned long * )&lSize);
+        lRet = RegQueryValueEx(hRegKey, "AppData", nullptr, &Type, reinterpret_cast<unsigned char *>(PathA), &lSize);
         if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _access( PathA, 0 ) == 0 ) )
         {
             CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
                                     ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( PathA ), strConfigDirectory ) );
         }
 
-        lRet = RegQueryValueEx(hRegKey, "Personal", NULL, &Type, ( unsigned char * )PathA, ( unsigned long * )&lSize);
+        lRet = RegQueryValueEx(hRegKey, "Personal", nullptr, &Type, reinterpret_cast<unsigned char *>(PathA), &lSize);
         if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _access( PathA, 0 ) == 0 ) )
         {
             CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
@@ -398,19 +399,19 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     DWORD dwSidBufferSize = INITIAL_SIZE;
     DWORD cchDomainName = 0;
     DWORD dwDomainBufferSize = INITIAL_SIZE;
-    WCHAR * wszDomainName = NULL;
+    WCHAR * wszDomainName = nullptr;
     SID_NAME_USE eSidType;
     DWORD dwErrorCode = 0;
 
-    LPCWSTR wszAccName = ( LPWSTR ) strUserName.getStr( );
+    LPCWSTR wszAccName = strUserName.getStr( );
 
     // Create buffers for the SID and the domain name.
-    PSID pSid = (PSID) new BYTE[dwSidBufferSize];
-    CPPUNIT_ASSERT_MESSAGE("# creating SID buffer failed.\n", pSid!= NULL );
+    PSID pSid = static_cast<PSID>(new BYTE[dwSidBufferSize]);
+    CPPUNIT_ASSERT_MESSAGE("# creating SID buffer failed.\n", pSid!= nullptr );
     memset( pSid, 0, dwSidBufferSize);
 
     wszDomainName = new WCHAR[dwDomainBufferSize];
-    CPPUNIT_ASSERT_MESSAGE("# creating Domain name buffer failed.\n", wszDomainName != NULL );
+    CPPUNIT_ASSERT_MESSAGE("# creating Domain name buffer failed.\n", wszDomainName != nullptr );
     memset(wszDomainName, 0, dwDomainBufferSize*sizeof(WCHAR));
 
     // Obtain the SID for the account name passed.
@@ -420,7 +421,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         cbSid = dwSidBufferSize;
         cchDomainName = dwDomainBufferSize;
         if (LookupAccountNameW(
-                           NULL,            // Computer name. NULL for the local computer
+                           nullptr,            // Computer name. NULL for the local computer
                            wszAccName,
                            pSid,          // Pointer to the SID buffer. Use NULL to get the size needed,
                            &cbSid,          // Size of the SID buffer needed.
@@ -443,8 +444,8 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
                 // Reallocate memory for the SID buffer.
                 wprintf(L"# The SID buffer was too small. It will be reallocated.\n");
                 FreeSid( pSid);
-                pSid = (PSID) new BYTE[cbSid];
-                CPPUNIT_ASSERT_MESSAGE("# re-creating SID buffer failed.\n",  pSid!= NULL );
+                pSid = static_cast<PSID>(new BYTE[cbSid]);
+                CPPUNIT_ASSERT_MESSAGE("# re-creating SID buffer failed.\n",  pSid!= nullptr );
                 memset( pSid, 0, cbSid);
                 dwSidBufferSize = cbSid;
             }
@@ -454,7 +455,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
                 wprintf(L"# The domain name buffer was too small. It will be reallocated.\n");
                 delete [] wszDomainName;
                 wszDomainName = new WCHAR[cchDomainName];
-                CPPUNIT_ASSERT_MESSAGE("# re-creating domain name buffer failed.\n", wszDomainName!= NULL );
+                CPPUNIT_ASSERT_MESSAGE("# re-creating domain name buffer failed.\n", wszDomainName!= nullptr );
                 memset(wszDomainName, 0, cchDomainName*sizeof(WCHAR));
                 dwDomainBufferSize = cchDomainName;
             }
@@ -481,7 +482,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     dwSubAuthorities=std::min((int) *GetSidSubAuthorityCount(pSid), 5);
 
     /* buffer length: S-SID_REVISION- + identifierauthority- + subauthorities- + NULL */
-    Ident=(sal_Char * )malloc(88*sizeof(sal_Char));
+    Ident=static_cast<sal_Char *>(malloc(88*sizeof(sal_Char)));
 
     /* prepare S-SID_REVISION- */
     dwSidSize=wsprintf(Ident, TEXT("S-%lu-"), dwSidRev);
@@ -518,7 +519,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     strUserID = ::rtl::OUString::createFromAscii( Ident );
 
     free(Ident);
-    delete [] reinterpret_cast<BYTE*>(pSid);
+    delete [] static_cast<BYTE*>(pSid);
     delete [] wszDomainName;
 
     /// check if logged in user is administrator:
@@ -535,14 +536,14 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         &AdministratorsGroup);
     if(b)
     {
-        if (!CheckTokenMembership( NULL, AdministratorsGroup, &b))
+        if (!CheckTokenMembership( nullptr, AdministratorsGroup, &b))
         {
              b = FALSE;
         }
         FreeSid(AdministratorsGroup);
     }
 
-    isAdmin = ( sal_Bool )b;
+    isAdmin = b;
 
 #endif
 

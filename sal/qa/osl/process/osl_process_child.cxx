@@ -58,7 +58,7 @@ void wait_for_seconds(char* time)
 void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
 {
     LPCWSTR strW = reinterpret_cast<LPCWSTR>(_strW);
-    WideCharToMultiByte(CP_ACP, 0, strW, -1, strA, size, NULL, NULL);
+    WideCharToMultiByte(CP_ACP, 0, strW, -1, strA, size, nullptr, nullptr);
 }
 
     void dump_env(char* file_path)

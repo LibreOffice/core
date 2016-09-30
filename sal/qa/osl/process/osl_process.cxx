@@ -39,7 +39,7 @@
 
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/valgrind.h>
-#else
+#elif !defined _WIN32
 #define RUNNING_ON_VALGRIND false
 #endif
 
@@ -94,6 +94,8 @@ inline ::rtl::OUString getExecutablePath()
 //rtl::OUString CWD = getExecutablePath();
 
 typedef std::vector<OString> string_container_t;
+
+#if !defined _WIN32
 
 class exclude : public std::unary_function<OString, bool>
 {
@@ -154,27 +156,13 @@ namespace
     }
 }
 
-#ifdef _WIN32
-    void read_parent_environment(string_container_t* env_container)
-    {
-        LPTSTR env = reinterpret_cast<LPTSTR>(GetEnvironmentStrings());
-        LPTSTR p   = env;
-
-        while (size_t l = _tcslen(p))
-        {
-            env_container->push_back(OString(p));
-            p += l + 1;
-        }
-        FreeEnvironmentStrings(env);
-        tidy_container(*env_container);
-    }
-#else
     void read_parent_environment(string_container_t* env_container)
     {
         for (int i = 0; nullptr != environ[i]; i++)
             env_container->push_back(OString(environ[i]));
         tidy_container(*env_container);
     }
+
 #endif
 
 class Test_osl_executeProcess : public CppUnit::TestFixture
@@ -221,6 +209,8 @@ public:
 
         return temp_file_path;
     }
+
+#if !defined _WIN32
 
     void read_child_environment(string_container_t* env_container)
     {
@@ -418,6 +408,8 @@ public:
             compare_merged_environments(different_child_env_vars)
         );
     }
+
+#endif
 
     void osl_execProc_test_batch()
     {

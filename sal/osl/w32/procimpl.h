@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_PROCIMPL_H_
-#define _OSL_PROCIMPL_H_
+#ifndef INCLUDED_SAL_OSL_W32_PROCIMPL_H
+#define INCLUDED_SAL_OSL_W32_PROCIMPL_H
 
 #include <osl/process.h>
 

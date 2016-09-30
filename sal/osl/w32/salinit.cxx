@@ -20,14 +20,13 @@
 #include "sal/config.h"
 
 #include "system.h"
+#include <time.h>
+
 #include <osl/process.h>
 #include <sal/main.h>
 #include <sal/types.h>
 
 extern "C" {
-
-//From time.c
-void sal_initGlobalTimer();
 
 // Prototypes for initialization and deinitialization of SAL library
 
@@ -45,7 +44,7 @@ void sal_detail_initialize(int argc, char ** argv)
     // SetSearchPathMode(
     //   BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE | BASE_SEARCH_PATH_PERMANENT);
     HMODULE h = GetModuleHandleW(L"kernel32.dll");
-    if (h != 0) {
+    if (h != nullptr) {
         FARPROC p;
 #ifndef _WIN64
         p = GetProcAddress(h, "SetProcessDEPPolicy");
@@ -54,11 +53,11 @@ void sal_detail_initialize(int argc, char ** argv)
         }
 #endif
         p = GetProcAddress(h, "SetDllDirectoryW");
-        if (p != 0) {
+        if (p != nullptr) {
             reinterpret_cast< BOOL (WINAPI *)(LPCWSTR) >(p)(L"");
         }
         p = GetProcAddress(h, "SetSearchPathMode");
-        if (p != 0) {
+        if (p != nullptr) {
             reinterpret_cast< BOOL (WINAPI *)(DWORD) >(p)(0x8001);
         }
     }

@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 #include "system.h"
+
+#include <filetime.h>
+#include <time.h>
 
 #include <osl/diagnose.h>
 #include <osl/time.h>
 #include <sys/timeb.h>
-
-extern sal_Bool TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime);
-
-extern BOOL FileTimeToTimeValue( const FILETIME *cpFTime, TimeValue *pTimeVal );
 
 // osl_getSystemTime
 
@@ -40,7 +40,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
     static HMODULE hModule = NULL;
     static GetSystemTimePreciseAsFileTime_PROC pGetSystemTimePreciseAsFileTime = NULL;
 
-    OSL_ASSERT(pTimeVal != 0);
+    OSL_ASSERT(pTimeVal != NULL);
 
     if ( !hModule )
     {

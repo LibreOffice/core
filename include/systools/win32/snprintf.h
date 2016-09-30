@@ -49,8 +49,8 @@
 #   endif
 
 
-#ifndef _SNPRINTF_DLLIMPORT
-#define _SNPRINTF_DLLIMPORT __declspec( dllimport )
+#ifndef LO_SNPRINTF_DLLIMPORT
+#define LO_SNPRINTF_DLLIMPORT __declspec( dllimport )
 #endif
 
 #ifdef __cplusplus
@@ -73,10 +73,10 @@ extern "C" {
 #if _MSC_VER < 1900
 
 /* UNICODE version */
-_SNPRINTF_DLLIMPORT int __cdecl snwprintf( wchar_t *buffer, size_t count, const wchar_t *format, ... );
+LO_SNPRINTF_DLLIMPORT int __cdecl snwprintf( wchar_t *buffer, size_t count, const wchar_t *format, ... );
 
 /* SBCS and MBCS version */
-_SNPRINTF_DLLIMPORT int __cdecl snprintf( char *buffer, size_t count, const char *format, ... );
+LO_SNPRINTF_DLLIMPORT int __cdecl snprintf( char *buffer, size_t count, const char *format, ... );
 
 #endif
 

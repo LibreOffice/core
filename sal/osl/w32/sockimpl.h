@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_SOCKETIMPL_H_
-#define _OSL_SOCKETIMPL_H_
+#ifndef INCLUDED_SAL_OSL_W32_SOCKIMPL_H
+#define INCLUDED_SAL_OSL_W32_SOCKIMPL_H
 
 #include <osl/socket.h>
 #include <osl/interlck.h>
@@ -44,8 +44,8 @@ struct oslSocketAddrImpl
     oslInterlockedCount m_nRefCount;
 };
 
-oslSocket __osl_createSocketImpl(SOCKET Socket);
-void __osl_destroySocketImpl(oslSocket pImpl);
+oslSocket osl_createSocketImpl_(SOCKET Socket);
+void osl_destroySocketImpl_(oslSocket pImpl);
 
 /*****************************************************************************/
 /* oslSocketDialupImpl */

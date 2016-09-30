@@ -35,7 +35,7 @@
 /* Declarations based on USERENV.H for Windows 2000 Beta 2 */
 #define PI_NOUI         0x00000001   // Prevents displaying of messages
 
-typedef struct _PROFILEINFOW {
+typedef struct {
   DWORD    dwSize;          // Must be set to sizeof(PROFILEINFO)
   DWORD    dwFlags;         // See flags above
   LPWSTR   lpUserName;      // User name (required)
@@ -548,7 +548,7 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
             if (fLoadUserProfile && fUnloadUserProfile)
             {
-                rtl_uString     *buffer = 0;
+                rtl_uString     *buffer = NULL;
                 PROFILEINFOW    pi;
 
                 getUserNameImpl(Security, &buffer, sal_False);
@@ -743,7 +743,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
 
                    if (SUCCEEDED(pSHGetMalloc(&pMalloc)))
                 {
-                       pMalloc->lpVtbl->Free(pMalloc, pidl);
+                       pMalloc->lpVtbl->Free(pMalloc, (void *) pidl);
                     pMalloc->lpVtbl->Release(pMalloc);
                 }
             }
@@ -782,7 +782,7 @@ static BOOL Privilege(LPTSTR strPrivilege, BOOL bEnable)
     /*
         enable or disable the privilege
     */
-    if (!AdjustTokenPrivileges(hToken, FALSE, &tp, 0, (PTOKEN_PRIVILEGES)NULL, 0))
+    if (!AdjustTokenPrivileges(hToken, FALSE, &tp, 0, (PTOKEN_PRIVILEGES)NULL, NULL))
         return FALSE;
 
     if (!CloseHandle(hToken))

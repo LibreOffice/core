@@ -52,7 +52,7 @@ bool onInitSignal()
     HMODULE hFaultRep = LoadLibrary( "faultrep.dll" );
     if ( hFaultRep )
     {
-        pfn_ADDEREXCLUDEDAPPLICATIONW pfn = (pfn_ADDEREXCLUDEDAPPLICATIONW)GetProcAddress( hFaultRep, "AddERExcludedApplicationW" );
+        pfn_ADDEREXCLUDEDAPPLICATIONW pfn = reinterpret_cast<pfn_ADDEREXCLUDEDAPPLICATIONW>(GetProcAddress( hFaultRep, "AddERExcludedApplicationW" ));
         if ( pfn )
             pfn( L"SOFFICE.EXE" );
         FreeLibrary( hFaultRep );

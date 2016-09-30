@@ -27,6 +27,8 @@
 #endif
 #include <wchar.h>
 
+#include <nlsupport.h>
+
 #include <osl/mutex.h>
 #include <osl/nlsupport.h>
 #include <osl/diagnose.h>
@@ -209,7 +211,7 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
  * imp_getProcessLocale
  *****************************************************************************/
 
-void _imp_getProcessLocale( rtl_Locale ** ppLocale )
+void imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
     WCHAR langCode[ELP_LANGUAGE_FIELD_LENGTH];
     WCHAR ctryCode[ELP_COUNTRY_FIELD_LENGTH];

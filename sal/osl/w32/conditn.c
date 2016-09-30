@@ -35,10 +35,10 @@ oslCondition SAL_CALL osl_createCondition(void)
 {
     oslCondition Condition;
 
-    Condition= (oslCondition)CreateEvent(0,         /* no security */
+    Condition= (oslCondition)CreateEvent(NULL,          /* no security */
                                          sal_True,      /* manual reset */
                                          sal_False,     /* initial state not signaled */
-                                         0);        /* automatic name */
+                                         NULL);         /* automatic name */
 
     return Condition;
 

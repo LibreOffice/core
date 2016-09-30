@@ -36,10 +36,11 @@
 
 #include "rtllifecycle.h"
 
+#include <thread.h>
+
 // externals
 
 extern DWORD            g_dwTLSTextEncodingIndex;
-extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
 extern CRITICAL_SECTION g_ThreadKeyListCS;
 extern oslMutex         g_Mutex;
 extern oslMutex         g_CurrentDirectoryMutex;
@@ -69,8 +70,8 @@ _pRawDllMain()
 
 */
 
-static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved );
-BOOL (WINAPI *_pRawDllMain)(HINSTANCE, DWORD, LPVOID) = _RawDllMain;
+static BOOL WINAPI RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved );
+BOOL (WINAPI *_pRawDllMain)(HINSTANCE, DWORD, LPVOID) = RawDllMain;
 
 #endif
 
@@ -139,7 +140,7 @@ __main (void)
 static void do_startup( void )
 {
 #else
-static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
+static BOOL WINAPI RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
     (void)hinstDLL; /* avoid warnings */
     (void)lpvReserved; /* avoid warnings */
@@ -322,7 +323,7 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
             break;
 
         case DLL_THREAD_DETACH:
-            _osl_callThreadKeyCallbackOnThreadDetach( );
+            osl_callThreadKeyCallbackOnThreadDetach( );
             break;
     }
 

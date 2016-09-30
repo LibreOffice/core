@@ -23,6 +23,7 @@
 
 #include "osl/file.h"
 
+#include <file-impl.hxx>
 #include "file_error.h"
 #include "file_url.h"
 #include "path_helper.hxx"
@@ -36,11 +37,9 @@
 #ifdef __MINGW32__
 #define STACK_ALLOC(p, t, n) (p) = reinterpret_cast<t*>(_alloca((n)*sizeof(t)));
 #else
-#define STACK_ALLOC(p, t, n) __try {(p) = reinterpret_cast<t*>(_alloca((n)*sizeof(t)));} \
-                             __except(EXCEPTION_EXECUTE_HANDLER) {(p) = 0;}
+#define STACK_ALLOC(p, t, n) __try {(p) = static_cast<t*>(_alloca((n)*sizeof(t)));} \
+                             __except(EXCEPTION_EXECUTE_HANDLER) {(p) = nullptr;}
 #endif
-
-extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle(HANDLE hFile, sal_uInt32 uFlags);
 
 // Temp file functions
 
@@ -48,8 +47,8 @@ static oslFileError osl_setup_base_directory_impl_(
     rtl_uString*  pustrDirectoryURL,
     rtl_uString** ppustr_base_dir)
 {
-    rtl_uString* dir_url = 0;
-    rtl_uString* dir     = 0;
+    rtl_uString* dir_url = nullptr;
+    rtl_uString* dir     = nullptr;
     oslFileError error   = osl_File_E_None;
 
     if (pustrDirectoryURL)
@@ -59,7 +58,7 @@ static oslFileError osl_setup_base_directory_impl_(
 
     if (osl_File_E_None == error)
     {
-        error = _osl_getSystemPathFromFileURL(dir_url, &dir, sal_False);
+        error = osl_getSystemPathFromFileURL_(dir_url, &dir, false);
         rtl_uString_release(dir_url);
     }
 
@@ -81,9 +80,9 @@ static oslFileError osl_setup_createTempFile_impl_(
 {
     oslFileError osl_error;
 
-    OSL_PRECOND(((0 != pHandle) || (0 != ppustrTempFileURL)), "Invalid parameter!");
+    OSL_PRECOND(((nullptr != pHandle) || (nullptr != ppustrTempFileURL)), "Invalid parameter!");
 
-    if ((0 == pHandle) && (0 == ppustrTempFileURL))
+    if ((nullptr == pHandle) && (nullptr == ppustrTempFileURL))
     {
         osl_error = osl_File_E_INVAL;
     }
@@ -92,7 +91,7 @@ static oslFileError osl_setup_createTempFile_impl_(
         osl_error = osl_setup_base_directory_impl_(
             pustrDirectoryURL, ppustr_base_dir);
 
-        *b_delete_on_close = (sal_Bool)(0 == ppustrTempFileURL);
+        *b_delete_on_close = nullptr == ppustrTempFileURL;
     }
 
     return osl_error;
@@ -115,8 +114,8 @@ static oslFileError osl_win32_GetTempFileName_impl_(
     return osl_error;
 }
 
-static sal_Bool osl_win32_CreateFile_impl_(
-    LPCWSTR file_name, sal_Bool b_delete_on_close, oslFileHandle* p_handle)
+static bool osl_win32_CreateFile_impl_(
+    LPCWSTR file_name, bool b_delete_on_close, oslFileHandle* p_handle)
 {
     DWORD  flags = FILE_ATTRIBUTE_NORMAL;
     HANDLE hFile;
@@ -130,22 +129,22 @@ static sal_Bool osl_win32_CreateFile_impl_(
         file_name,
         GENERIC_READ | GENERIC_WRITE,
         0,
-        NULL,
+        nullptr,
         TRUNCATE_EXISTING,
         flags,
-        NULL);
+        nullptr);
 
     // @@@ ERROR HANDLING @@@
     if (IsValidHandle(hFile))
         *p_handle = osl_createFileHandleFromOSHandle(hFile, osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
 
-    return (sal_Bool)IsValidHandle(hFile);
+    return IsValidHandle(hFile);
 }
 
 static oslFileError osl_createTempFile_impl_(
     rtl_uString*   base_directory,
     LPWSTR         tmp_name,
-    sal_Bool       b_delete_on_close,
+    bool           b_delete_on_close,
     oslFileHandle* pHandle,
     rtl_uString**  ppustrTempFileURL)
 {
@@ -157,15 +156,15 @@ static oslFileError osl_createTempFile_impl_(
 
         /*  if file could not be opened try again */
 
-        if ((osl_File_E_None != osl_error) || (0 == pHandle) ||
+        if ((osl_File_E_None != osl_error) || (nullptr == pHandle) ||
             osl_win32_CreateFile_impl_(tmp_name, b_delete_on_close, pHandle))
             break;
 
-    } while(1); // try until success
+    } while(true); // try until success
 
     if ((osl_File_E_None == osl_error) && !b_delete_on_close)
     {
-        rtl_uString* pustr = 0;
+        rtl_uString* pustr = nullptr;
         rtl_uString_newFromStr(&pustr, reinterpret_cast<const sal_Unicode*>(tmp_name));
         osl_getFileURLFromSystemPath(pustr, ppustrTempFileURL);
         rtl_uString_release(pustr);
@@ -179,7 +178,7 @@ oslFileError SAL_CALL osl_createTempFile(
     oslFileHandle* pHandle,
     rtl_uString**  ppustrTempFileURL)
 {
-    rtl_uString*    base_directory = 0;
+    rtl_uString*    base_directory = nullptr;
     LPWSTR          tmp_name;
     sal_Bool        b_delete_on_close;
     oslFileError    osl_error;
@@ -235,7 +234,7 @@ oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
     }
     else if ( nLength )
     {
-        rtl_uString *ustrTempPath = NULL;
+        rtl_uString *ustrTempPath = nullptr;
 
         if ( '\\' == lpBuffer[nLength-1] )
             lpBuffer[nLength-1] = 0;
