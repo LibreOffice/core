@@ -863,14 +863,8 @@ bool Dialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
     return true;
 }
 
-Bitmap Dialog::createScreenshot()
+void Dialog::ensureRepaint()
 {
-    // same prerequisites as in Execute()
-    setDeferredProperties();
-    ImplAdjustNWFSizes();
-    Show();
-    ToTop();
-
     // ensure repaint
     Invalidate();
     mbPaintComplete = false;
@@ -879,6 +873,16 @@ Bitmap Dialog::createScreenshot()
     {
         Application::Yield();
     }
+}
+
+Bitmap Dialog::createScreenshot()
+{
+    // same prerequisites as in Execute()
+    setDeferredProperties();
+    ImplAdjustNWFSizes();
+    Show();
+    ToTop();
+    ensureRepaint();
 
     return GetBitmap(Point(), GetOutputSizePixel());
 }

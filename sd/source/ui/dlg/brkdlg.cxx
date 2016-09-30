@@ -145,8 +145,13 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit, bool )
         m_pFiInsInfo->SetText(info);
     }
 
-    Application::Reschedule();
-    return bCancel;
+    // make sure dialog gets painted, it is intended to
+    // show the progress to the user. Also necessary to
+    // provide a clickable cancel button
+    ensureRepaint();
+
+    // return okay-value (-> !cancel)
+    return !bCancel;
 }
 
 /**
