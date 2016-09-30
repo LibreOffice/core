@@ -28,6 +28,8 @@
 #include "descriptor.hxx"
 #include "transformer.hxx"
 
+#include <vcl/graph.hxx>
+
 namespace unographic {
 
 class Graphic : public css::graphic::XGraphic,
@@ -78,7 +80,7 @@ protected:
 
 private:
 
-    ::Graphic* mpGraphic;
+    ::Graphic maGraphic;
 };
 
 }
