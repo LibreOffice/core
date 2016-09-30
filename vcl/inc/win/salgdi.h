@@ -222,7 +222,6 @@ private:
     COLORREF                mnTextColor;        // TextColor
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
-    ImplFontAttrCache*      mpFontAttrCache;    // Cache font attributes from files in so/share/fonts
     bool                    mbFontKernInit;     // FALSE: FontKerns must be queried
     KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
     sal_uIntPtr             mnFontKernPairCount;// Number of Kerning Pairs of the current Font

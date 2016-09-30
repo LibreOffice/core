@@ -613,7 +613,6 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     mhDefFont(0),
     mhDefPal(0),
     mpStdClipRgnData(NULL),
-    mpFontAttrCache(NULL),
     mbFontKernInit(false),
     mpFontKernPairs(NULL),
     mnFontKernPairCount(0),

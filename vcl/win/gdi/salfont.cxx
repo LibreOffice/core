@@ -73,146 +73,6 @@ inline int IntTimes256FromFixed(FIXED f)
 static bool bImplSalCourierScalable = false;
 static bool bImplSalCourierNew = false;
 
-// TODO: also support temporary TTC font files
-typedef std::map< OUString, FontAttributes > FontAttrMap;
-
-class ImplFontAttrCache
-{
-private:
-    FontAttrMap     aFontAttributes;
-    OUString        aCacheFileName;
-    OUString        aBaseURL;
-    bool        bModified;
-
-protected:
-    OUString OptimizeURL( const OUString& rURL ) const;
-
-    enum{ MAGIC = 0x12346789 }; // change if fontattrcache format changes
-
-public:
-            ImplFontAttrCache(const OUString& rCacheFileName,
-                              const OUString& rBaseURL);
-            ~ImplFontAttrCache();
-
-    FontAttributes  GetFontAttr( const OUString& rFontFileName ) const;
-    void                   AddFontAttr( const OUString& rFontFileName, const FontAttributes& );
-};
-
-ImplFontAttrCache::ImplFontAttrCache( const OUString& rFileNameURL, const OUString& rBaseURL ) : aBaseURL( rBaseURL )
-{
-    bModified = FALSE;
-    aBaseURL = aBaseURL.toAsciiLowerCase();    // Windows only, no problem...
-
-    // open the cache file
-    osl::FileBase::getSystemPathFromFileURL( rFileNameURL, aCacheFileName );
-    SvFileStream aCacheFile( aCacheFileName, StreamMode::READ );
-    if( !aCacheFile.IsOpen() )
-        return;
-
-    // check the cache version
-    sal_uInt32 nCacheMagic;
-    aCacheFile.ReadUInt32(nCacheMagic);
-    if( nCacheMagic != ImplFontAttrCache::MAGIC )
-        return;  // ignore cache and rewrite if no match
-
-    // read the cache entries from the file
-    OUString aFontFileURL;
-    FontAttributes aDFA;
-    for(;;)
-    {
-        aFontFileURL = read_uInt16_lenPrefixed_uInt8s_ToOUString(aCacheFile, RTL_TEXTENCODING_UTF8);
-        if( aFontFileURL.isEmpty() )
-            break;
-        aDFA.SetFamilyName(read_uInt16_lenPrefixed_uInt8s_ToOUString(aCacheFile, RTL_TEXTENCODING_UTF8));
-
-        short n;
-        aCacheFile.ReadInt16(n);
-        aDFA.SetWeight(static_cast<FontWeight>(n));
-        aCacheFile.ReadInt16(n);
-        aDFA.SetItalic(static_cast<FontItalic>(n));
-        aCacheFile.ReadInt16(n);
-        aDFA.SetPitch(static_cast<FontPitch>(n));
-        aCacheFile.ReadInt16(n);
-        aDFA.SetWidthType(static_cast<FontWidth>(n));
-        aCacheFile.ReadInt16(n);
-        aDFA.SetFamilyType(static_cast<FontFamily>(n));
-        aCacheFile.ReadInt16(n);
-        aDFA.SetSymbolFlag(n != 0);
-
-        OUString const styleName = read_uInt16_lenPrefixed_uInt8s_ToOUString(
-                aCacheFile, RTL_TEXTENCODING_UTF8);
-        aDFA.SetStyleName( styleName );
-
-        aFontAttributes[ aFontFileURL ] = aDFA;
-    }
-}
-
-ImplFontAttrCache::~ImplFontAttrCache()
-{
-    if ( bModified )
-    {
-        SvFileStream aCacheFile( aCacheFileName, StreamMode::WRITE|StreamMode::TRUNC );
-        if ( aCacheFile.IsWritable() )
-        {
-            sal_uInt32 nCacheMagic = ImplFontAttrCache::MAGIC;
-            aCacheFile.WriteUInt32( nCacheMagic );
-
-            // write the cache entries to the file
-            FontAttrMap::const_iterator aIter = aFontAttributes.begin();
-            while ( aIter != aFontAttributes.end() )
-            {
-                const OUString rFontFileURL( (*aIter).first );
-                const FontAttributes& rDFA( (*aIter).second );
-                write_uInt16_lenPrefixed_uInt8s_FromOUString(aCacheFile, rFontFileURL, RTL_TEXTENCODING_UTF8);
-                write_uInt16_lenPrefixed_uInt8s_FromOUString(aCacheFile, rDFA.GetFamilyName(), RTL_TEXTENCODING_UTF8);
-
-                aCacheFile.WriteInt16(rDFA.GetWeight());
-                aCacheFile.WriteInt16(rDFA.GetItalic());
-                aCacheFile.WriteInt16(rDFA.GetPitch());
-                aCacheFile.WriteInt16(rDFA.GetWidthType());
-                aCacheFile.WriteInt16(rDFA.GetFamilyType());
-                aCacheFile.WriteInt16(rDFA.IsSymbolFont());
-
-                write_uInt16_lenPrefixed_uInt8s_FromOUString(aCacheFile, rDFA.GetStyleName(), RTL_TEXTENCODING_UTF8);
-
-                ++aIter;
-            }
-            // EOF Marker
-            write_uInt16_lenPrefixed_uInt8s_FromOString(aCacheFile, OString());
-        }
-    }
-}
-
-OUString ImplFontAttrCache::OptimizeURL( const OUString& rURL ) const
-{
-    OUString aOptimizedFontFileURL( rURL.toAsciiLowerCase() );
-    if ( aOptimizedFontFileURL.startsWith( aBaseURL ) )
-        aOptimizedFontFileURL = aOptimizedFontFileURL.copy( aBaseURL.getLength() );
-    return aOptimizedFontFileURL;
-}
-
-FontAttributes ImplFontAttrCache::GetFontAttr( const OUString& rFontFileName ) const
-{
-    FontAttributes aDFA;
-    FontAttrMap::const_iterator it = aFontAttributes.find( OptimizeURL( rFontFileName ) );
-    if( it != aFontAttributes.end() )
-    {
-        aDFA = it->second;
-    }
-    return aDFA;
-}
-
-void ImplFontAttrCache::AddFontAttr( const OUString& rFontFileName, const FontAttributes& rDFA )
-{
-    SAL_WARN_IF(rFontFileName.isEmpty() || rDFA.GetFamilyName().isEmpty(),
-        "vcl.gdi", "ImplFontNameCache::AddFontName - invalid data!");
-    if ( !rFontFileName.isEmpty() && !rDFA.GetFamilyName().isEmpty() )
-    {
-        aFontAttributes.insert( FontAttrMap::value_type( OptimizeURL( rFontFileName ), rDFA ) );
-        bModified = TRUE;
-    }
-}
-
 // raw font data with a scoped lifetime
 class RawFontData
 {
@@ -1856,16 +1716,10 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     aDFA.SetQuality( 1000 );
     aDFA.SetBuiltInFontFlag( true );
 
-    // Search Font Name in Cache
-    if( rFontName.isEmpty() && mpFontAttrCache )
-        aDFA = mpFontAttrCache->GetFontAttr( rFontFileURL );
-
     // Retrieve font name from font resource
     if( aDFA.GetFamilyName().isEmpty() )
     {
         ImplGetFontAttrFromFile( rFontFileURL, aDFA );
-        if( mpFontAttrCache && !aDFA.GetFamilyName().isEmpty() )
-            mpFontAttrCache->AddFontAttr( rFontFileURL, aDFA );
     }
 
     if ( aDFA.GetFamilyName().isEmpty() )
@@ -1926,16 +1780,6 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
             osl::DirectoryItem aDirItem;
             OUString aEmptyString;
 
-            OUString aBootStrap;
-            rtl::Bootstrap::get( OUString("BRAND_BASE_DIR"), aBootStrap );
-            aBootStrap += "/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap" );
-            rtl::Bootstrap aBootstrap( aBootStrap );
-            OUString aUserPath;
-            aBootstrap.getFrom( OUString( "UserInstallation" ), aUserPath );
-            aUserPath += "/user/config/fontnames.dat";
-            OUString aBaseURL = aPath.copy( 0, aPath.lastIndexOf('/')+1 );
-            mpFontAttrCache = new ImplFontAttrCache( aUserPath, aBaseURL );
-
             while( aFontDir.getNextItem( aDirItem, 10 ) == osl::FileBase::E_None )
             {
                 osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
@@ -1943,9 +1787,6 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
                 if ( rcOSL == osl::FileBase::E_None )
                     AddTempDevFont( pFontCollection, aFileStatus.getFileURL(), aEmptyString );
             }
-
-            delete mpFontAttrCache; // destructor rewrites the cache file if needed
-            mpFontAttrCache = NULL;
         }
     }
 
