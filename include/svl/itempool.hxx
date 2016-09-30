@@ -206,6 +206,8 @@ public:
 
     static const SfxItemPool*       GetStoringPool();
 
+    void                            dumpAsXml(struct _xmlTextWriter* pWriter) const;
+
 private:
     const SfxItemPool&              operator=(const SfxItemPool &) = delete;
 

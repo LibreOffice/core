@@ -1269,6 +1269,8 @@ void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (!pWriter)
     {
         pWriter = xmlNewTextWriterFilename("undo.xml", 0);
+        xmlTextWriterSetIndent(pWriter,1);
+        xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
         xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }

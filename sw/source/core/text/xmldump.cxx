@@ -216,6 +216,8 @@ namespace
     xmlTextWriterPtr lcl_createDefaultWriter()
     {
         xmlTextWriterPtr writer = xmlNewTextWriterFilename( "layout.xml", 0 );
+        xmlTextWriterSetIndent(writer,1);
+        xmlTextWriterSetIndentString(writer, BAD_CAST("  "));
         xmlTextWriterStartDocument( writer, nullptr, nullptr, nullptr );
         return writer;
     }

@@ -462,6 +462,8 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (!pWriter)
     {
         pWriter = xmlNewTextWriterFilename("editTextObject.xml", 0);
+        xmlTextWriterSetIndent(pWriter,1);
+        xmlTextWriterSetIndentString(pWriter, BAD_CAST("  "));
         xmlTextWriterStartDocument(pWriter, nullptr, nullptr, nullptr);
         bOwns = true;
     }
@@ -470,9 +472,7 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     sal_Int32 nCount = GetParagraphCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("paragraph"));
         mpImpl->aContents[i]->dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
     }
     xmlTextWriterEndElement(pWriter);
 
