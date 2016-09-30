@@ -533,12 +533,12 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const Recta
         bool bNativeOk = false;
         if( ImplIsFloatingMode() && rRenderContext.IsNativeControlSupported( ControlType::Toolbar, ControlPart::Entire) )
             bNativeOk = ImplDrawNativeBackground(rRenderContext, aPaintRegion);
-        const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
         if (!bNativeOk)
         {
+            const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
+            const bool isHeader = GetAlign() == WindowAlign::Top && !rSetting.GetPersonaHeader().IsEmpty();
             const bool isFooter = GetAlign() == WindowAlign::Bottom && !rSetting.GetPersonaFooter().IsEmpty();
-            if (!IsBackground() ||
-                ((GetAlign() == WindowAlign::Top && !rSetting.GetPersonaHeader().IsEmpty() ) || isFooter))
+            if (!IsBackground() || isHeader || isFooter)
             {
                 if (!IsInPaint())
                     ImplDrawTransparentBackground(rRenderContext, aPaintRegion);
