@@ -993,55 +993,58 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                     if (bOtherEditMode && rOtherViewData.GetRefTabNo() == nTab)
                     {
                         EditView* pOtherEditView = rOtherViewData.GetEditView(eOtherWhich);
-                        Point aOtherScrPos = rOtherViewData.GetScrPos( nX1, nY1, eOtherWhich );
-                        if ( bLayoutRTL )
+                        if (pOtherEditView)
                         {
-                            long nEndPixel = pViewData->GetScrPos( nX2+1, maVisibleRange.mnRow1, eWhich ).X();
-                            aOtherScrPos.X() = nEndPixel + 1;
+                            // TODO: implement the RTL layout case
+                            //Point aOtherScrPos = rOtherViewData.GetScrPos( nX1, nY1, eOtherWhich );
+                            //if ( bLayoutRTL )
+                            //{
+                            //    long nEndPixel = rOtherViewData.GetScrPos( nX2+1, maVisibleRange.mnRow1, eWhich ).X();
+                            //    aOtherScrPos.X() = nEndPixel + 1;
+                            //}
+
+                            long nScreenX = aOutputData.nScrX;
+                            long nScreenY = aOutputData.nScrY;
+                            long nScreenW = aOutputData.GetScrW();
+                            long nScreenH = aOutputData.GetScrH();
+
+                            rDevice.SetLineColor();
+                            rDevice.SetFillColor(pOtherEditView->GetBackgroundColor());
+                            Point aStart = rOtherViewData.GetScrPos( nCol1, nRow1, eOtherWhich );
+                            Point aEnd = rOtherViewData.GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
+
+                            // don't overwrite grid
+                            long nLayoutSign = bLayoutRTL ? -1 : 1;
+                            aEnd.X() -= 2 * nLayoutSign;
+                            aEnd.Y() -= 2;
+
+                            Rectangle aBackground(aStart, aEnd);
+
+                            aBackground += Point(nScreenX, nScreenY);
+                            rDevice.SetMapMode(aDrawMode);
+
+
+                            // paint the background
+                            rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
+
+                            if (bIsTiledRendering)
+                            {
+                                auto aOrigin = aOriginalMode.GetOrigin();
+                                aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
+                                aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
+                                static const double twipFactor = 15 * 1.76388889; // 26.45833335
+                                aOrigin = Point(aOrigin.getX() * twipFactor,
+                                                aOrigin.getY() * twipFactor);
+                                MapMode aNew = rDevice.GetMapMode();
+                                aNew.SetOrigin(aOrigin);
+                                rDevice.SetMapMode(aNew);
+                            }
+
+                            pOtherEditView->Paint(rDevice.PixelToLogic(Rectangle(Point(nScreenX, nScreenY), Size(nScreenW, nScreenH))), &rDevice);
+                            rDevice.SetMapMode(MAP_PIXEL);
                         }
-
-                        long nScreenX = aOutputData.nScrX;
-                        long nScreenY = aOutputData.nScrY;
-                        long nScreenW = aOutputData.GetScrW();
-                        long nScreenH = aOutputData.GetScrH();
-
-                        rDevice.SetLineColor();
-                        rDevice.SetFillColor(pEditView->GetBackgroundColor());
-                        Point aStart = rOtherViewData.GetScrPos( nCol1, nRow1, eOtherWhich );
-                        Point aEnd = rOtherViewData.GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
-
-                        // don't overwrite grid
-                        long nLayoutSign = bLayoutRTL ? -1 : 1;
-                        aEnd.X() -= 2 * nLayoutSign;
-                        aEnd.Y() -= 2;
-
-                        Rectangle aBackground(aStart, aEnd);
-
-                        aBackground += Point(nScreenX, nScreenY);
-                        rDevice.SetMapMode(aDrawMode);
-
-
-                        // paint the background
-                        rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
-
-                        if (bIsTiledRendering)
-                        {
-                            auto aOrigin = aOriginalMode.GetOrigin();
-                            aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
-                            aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
-                            static const double twipFactor = 15 * 1.76388889; // 26.45833335
-                            aOrigin = Point(aOrigin.getX() * twipFactor,
-                                            aOrigin.getY() * twipFactor);
-                            MapMode aNew = rDevice.GetMapMode();
-                            aNew.SetOrigin(aOrigin);
-                            rDevice.SetMapMode(aNew);
-                        }
-
-                        pOtherEditView->Paint(rDevice.PixelToLogic(Rectangle(Point(nScreenX, nScreenY), Size(nScreenW, nScreenH))), &rDevice);
-                        rDevice.SetMapMode(MAP_PIXEL);
                     }
-
-                 }
+                }
             }
 
             pViewShell = SfxViewShell::GetNext(*pViewShell);
