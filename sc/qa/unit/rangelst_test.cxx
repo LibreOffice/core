@@ -47,6 +47,7 @@ public:
     void testGetIntersectedRange();
 
     void testUpdateReference_DeleteRow();
+    void testUpdateReference_DeleteLastRow();
     void testUpdateReference_DeleteCol();
 
     void testInsertRow();
@@ -441,6 +442,13 @@ void Test::testUpdateReference_DeleteRow()
     ScRangeList aList2(ScRange(2,2,0,2,2,0));
     aList2.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,3,0,MAXCOL,MAXROW,0), 0, -1, 0);
     CPPUNIT_ASSERT(aList2.empty());
+}
+
+void Test::testUpdateReference_DeleteLastRow()
+{
+    ScRangeList aList(ScRange(1,1,0,4,4,0));
+    bool bUpdated = aList.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,4,0,MAXCOL,4,0), 0, -1, 0);
+    CPPUNIT_ASSERT(bUpdated);
 }
 
 void Test::testUpdateReference_DeleteCol()
