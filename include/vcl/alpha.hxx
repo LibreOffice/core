@@ -34,10 +34,12 @@ public:
                 AlphaMask();
                 AlphaMask( const Bitmap& rBitmap );
                 AlphaMask( const AlphaMask& rAlphaMask ) = default;
+                AlphaMask( AlphaMask&& rAlphaMask ) = default;
                 AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency = nullptr );
 
     AlphaMask&  operator=( const Bitmap& rBitmap );
     AlphaMask&  operator=( const AlphaMask& rAlphaMask ) = default;
+    AlphaMask&  operator=( AlphaMask&& rAlphaMask ) = default;
     bool        operator!() const { return Bitmap::operator!(); }
     bool        operator==( const AlphaMask& rAlphaMask ) const { return Bitmap::operator==( rAlphaMask ); }
     bool        operator!=( const AlphaMask& rAlphaMask ) const { return Bitmap::operator!=( rAlphaMask ); }
