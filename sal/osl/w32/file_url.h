@@ -70,13 +70,13 @@ DWORD GetCaseCorrectPathName (
     BOOL bCheckExistence
 );
 
-oslFileError _osl_getSystemPathFromFileURL (
+oslFileError osl_getSystemPathFromFileURL_ (
     rtl_uString *  strURL,
     rtl_uString ** pustrPath,
     sal_Bool       bAllowRelative
 );
 
-oslFileError _osl_getFileURLFromSystemPath (
+oslFileError osl_getFileURLFromSystemPath_ (
     rtl_uString *  strPath,
     rtl_uString ** pstrURL
 );

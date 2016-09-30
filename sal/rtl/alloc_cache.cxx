@@ -1370,10 +1370,10 @@ rtl_cache_wsupdate_init()
 
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     g_cache_list.m_update_done = 0;
-    g_cache_list.m_update_cond = CreateEvent (0, TRUE, FALSE, 0);
+    g_cache_list.m_update_cond = CreateEvent (nullptr, TRUE, FALSE, nullptr);
 
     g_cache_list.m_update_thread =
-        CreateThread (NULL, 0, rtl_cache_wsupdate_all, (LPVOID)(10), 0, &dwThreadId);
+        CreateThread (nullptr, 0, rtl_cache_wsupdate_all, reinterpret_cast<LPVOID>(10), 0, &dwThreadId);
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 }
 

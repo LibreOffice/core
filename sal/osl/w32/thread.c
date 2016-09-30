@@ -18,6 +18,7 @@
  */
 
 #include "system.h"
+#include <thread.h>
 
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -29,7 +30,7 @@
 /*
     Thread-data structure hidden behind oslThread:
 */
-typedef struct _osl_TThreadImpl
+typedef struct
 {
     HANDLE              m_hThread;      /* OS-handle used for all thread-functions */
     unsigned            m_ThreadId;     /* identifier for this thread */
@@ -50,7 +51,7 @@ static unsigned __stdcall oslWorkerWrapperFunction(void* pData)
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)pData;
 
     /* Initialize COM - Multi Threaded Apartment (MTA) for all threads */
-    CoInitializeEx(0, COINIT_MULTITHREADED); /* spawned by oslCreateThread */
+    CoInitializeEx(NULL, COINIT_MULTITHREADED); /* spawned by oslCreateThread */
 
     /* call worker-function with data */
 
@@ -75,9 +76,9 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
 
     OSL_ASSERT(pThreadImpl);
 
-    if ( pThreadImpl == 0 )
+    if ( pThreadImpl == NULL )
     {
-        return 0;
+        return NULL;
     }
 
     pThreadImpl->m_WorkerFunction= pWorker;
@@ -92,11 +93,11 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
                                nFlags,                      /* start thread immediately or suspended */
                                &pThreadImpl->m_ThreadId);
 
-    if(pThreadImpl->m_hThread == 0)
+    if(pThreadImpl->m_hThread == NULL)
     {
         /* create failed */
         free(pThreadImpl);
-        return 0;
+        return NULL;
     }
 
     return (oslThread)pThreadImpl;
@@ -140,7 +141,7 @@ void SAL_CALL osl_destroyThread(oslThread Thread)
 {
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
-    if (Thread == 0) /* valid ptr? */
+    if (Thread == NULL) /* valid ptr? */
     {
         /* thread already destroyed or not created */
         return;
@@ -242,7 +243,7 @@ oslThreadPriority SAL_CALL osl_getThreadPriority(const oslThread Thread)
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
     /* invalid arguments ?*/
-    if(pThreadImpl==0 || pThreadImpl->m_hThread==0)
+    if(pThreadImpl==NULL || pThreadImpl->m_hThread==NULL)
     {
         return osl_Thread_PriorityUnknown;
     }
@@ -298,7 +299,7 @@ sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
     /* invalid arguments ?*/
-    if(pThreadImpl==0 || pThreadImpl->m_hThread==0)
+    if(pThreadImpl==NULL || pThreadImpl->m_hThread==NULL)
     {
         return sal_False;
     }
@@ -314,7 +315,7 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
     /* invalid arguments?*/
-    if(pThreadImpl==0 || pThreadImpl->m_hThread==0)
+    if(pThreadImpl==NULL || pThreadImpl->m_hThread==NULL)
     {
         /* assume thread is not running */
         return;
@@ -344,7 +345,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
     /* invalid arguments?*/
-    if (pThreadImpl==0 || pThreadImpl->m_hThread==0)
+    if (pThreadImpl==NULL || pThreadImpl->m_hThread==NULL)
     {
         /* assume thread is not running */
         return;
@@ -363,7 +364,7 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
     osl_yieldThread();
 
     /* invalid arguments?*/
-    if (pThreadImpl==0 || pThreadImpl->m_hThread==0)
+    if (pThreadImpl==NULL || pThreadImpl->m_hThread==NULL)
     {
         /* assume thread is not running */
         return sal_False;
@@ -405,11 +406,11 @@ void SAL_CALL osl_setThreadName(char const * name) {
 #endif
 }
 
-typedef struct _TLS
+typedef struct TLS_
 {
     DWORD                           dwIndex;
     oslThreadKeyCallbackFunction    pfnCallback;
-    struct _TLS                     *pNext, *pPrev;
+    struct TLS_                     *pNext, *pPrev;
 } TLS, *PTLS;
 
 static  PTLS        g_pThreadKeyList = NULL;
@@ -422,7 +423,7 @@ static void AddKeyToList( PTLS pTls )
         EnterCriticalSection( &g_ThreadKeyListCS );
 
         pTls->pNext = g_pThreadKeyList;
-        pTls->pPrev = 0;
+        pTls->pPrev = NULL;
 
         if ( g_pThreadKeyList )
             g_pThreadKeyList->pPrev = pTls;
@@ -452,7 +453,7 @@ static void RemoveKeyFromList( PTLS pTls )
     }
 }
 
-void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach(void)
+void SAL_CALL osl_callThreadKeyCallbackOnThreadDetach(void)
 {
     PTLS    pTls;
 
@@ -486,7 +487,7 @@ oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback
         if ( (DWORD)-1 == (pTls->dwIndex = TlsAlloc()) )
         {
             rtl_freeMemory( pTls );
-            pTls = 0;
+            pTls = NULL;
         }
         else
             AddKeyToList( pTls );
@@ -500,7 +501,7 @@ oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback
 /*****************************************************************************/
 void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
 {
-    if (Key != 0)
+    if (Key != NULL)
     {
         PTLS    pTls = (PTLS)Key;
 
@@ -515,7 +516,7 @@ void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)
 /*****************************************************************************/
 void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
 {
-    if (Key != 0)
+    if (Key != NULL)
     {
         PTLS    pTls = (PTLS)Key;
 
@@ -530,7 +531,7 @@ void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 {
-    if (Key != 0)
+    if (Key != NULL)
     {
         PTLS    pTls = (PTLS)Key;
         void*   pOldData = NULL;

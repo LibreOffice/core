@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define _SNPRINTF_DLLIMPORT __declspec( dllexport )
+#define LO_SNPRINTF_DLLIMPORT __declspec( dllexport )
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -94,7 +94,7 @@ static _TCHAR *GetLastBufferChar( _TCHAR *buffer, size_t count )
 
 /* Implementation of snprintf following the ISO/IEC 9899:1999 (ISO C99) standard */
 
-_SNPRINTF_DLLIMPORT int __cdecl vsntprintf( _TCHAR *buffer, size_t count, const _TCHAR *format, va_list list )
+LO_SNPRINTF_DLLIMPORT int __cdecl vsntprintf( _TCHAR *buffer, size_t count, const _TCHAR *format, va_list list )
 {
     int     retval;
 
@@ -132,7 +132,7 @@ _SNPRINTF_DLLIMPORT int __cdecl vsntprintf( _TCHAR *buffer, size_t count, const 
 
 /* Implementation of snprintf following the ISO/IEC 9899:1999 (ISO C99) standard */
 
-_SNPRINTF_DLLIMPORT int __cdecl sntprintf( _TCHAR *buffer, size_t count, const _TCHAR *format, ... )
+LO_SNPRINTF_DLLIMPORT int __cdecl sntprintf( _TCHAR *buffer, size_t count, const _TCHAR *format, ... )
 {
     va_list list;
     int     retval;

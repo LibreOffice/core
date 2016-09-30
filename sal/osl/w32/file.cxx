@@ -23,6 +23,7 @@
 
 #include "osl/file.hxx"
 
+#include <file-impl.hxx>
 #include "file_url.h"
 #include "file_error.h"
 
@@ -119,7 +120,7 @@ struct FileHandle_Impl
         sal_Sequence ** ppSequence,
         sal_uInt64 *    pBytesRead);
 
-    oslFileError writeSequence_Impl (
+    static oslFileError writeSequence_Impl (
         sal_Sequence ** ppSequence,
         SIZE_T *        pnOffset,
         const void *    pBuffer,
@@ -134,8 +135,8 @@ struct FileHandle_Impl
         rtl_cache_type * m_cache;
         SIZE_T           m_bufsiz;
 
-        Allocator (Allocator const &);
-        Allocator & operator= (Allocator const &);
+        Allocator (Allocator const &) = delete;
+        Allocator & operator= (Allocator const &) = delete;
 
     public:
         static Allocator & get();
@@ -168,42 +169,45 @@ FileHandle_Impl::Allocator::get()
 }
 
 FileHandle_Impl::Allocator::Allocator()
-    : m_cache  (0),
+    : m_cache  (nullptr),
       m_bufsiz (0)
 {
     SIZE_T const pagesize = FileHandle_Impl::getpagesize();
     m_cache = rtl_cache_create (
-        "osl_file_buffer_cache", pagesize, 0, 0, 0, 0, 0, 0, 0);
-    if (0 != m_cache)
+        "osl_file_buffer_cache", pagesize, 0, nullptr, nullptr, nullptr,
+        nullptr, nullptr, 0);
+    if (nullptr != m_cache)
         m_bufsiz = pagesize;
 }
 
 FileHandle_Impl::Allocator::~Allocator()
 {
-    rtl_cache_destroy(m_cache), m_cache = 0;
+    rtl_cache_destroy(m_cache);
+    m_cache = nullptr;
 }
 
 void FileHandle_Impl::Allocator::allocate (sal_uInt8 ** ppBuffer, SIZE_T * pnSize)
 {
-    OSL_PRECOND((0 != ppBuffer) && (0 != pnSize), "FileHandle_Impl::Allocator::allocate(): contract violation");
-    *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache)), *pnSize = m_bufsiz;
+    OSL_PRECOND((nullptr != ppBuffer) && (nullptr != pnSize), "FileHandle_Impl::Allocator::allocate(): contract violation");
+    *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache));
+    *pnSize = m_bufsiz;
 }
 
 void FileHandle_Impl::Allocator::deallocate (sal_uInt8 * pBuffer)
 {
-    if (0 != pBuffer)
+    if (nullptr != pBuffer)
         rtl_cache_free (m_cache, pBuffer);
 }
 
 FileHandle_Impl::Guard::Guard(LPCRITICAL_SECTION pMutex)
     : m_mutex (pMutex)
 {
-    OSL_PRECOND (m_mutex != 0, "FileHandle_Impl::Guard::Guard(): null pointer.");
+    OSL_PRECOND (m_mutex != nullptr, "FileHandle_Impl::Guard::Guard(): null pointer.");
     ::EnterCriticalSection (m_mutex);
 }
 FileHandle_Impl::Guard::~Guard()
 {
-    OSL_PRECOND (m_mutex != 0, "FileHandle_Impl::Guard::~Guard(): null pointer.");
+    OSL_PRECOND (m_mutex != nullptr, "FileHandle_Impl::Guard::~Guard(): null pointer.");
     ::LeaveCriticalSection (m_mutex);
 }
 
@@ -216,17 +220,18 @@ FileHandle_Impl::FileHandle_Impl(HANDLE hFile)
       m_bufptr  (-1),
       m_buflen  (0),
       m_bufsiz  (0),
-      m_buffer  (0)
+      m_buffer  (nullptr)
 {
     ::InitializeCriticalSection (&m_mutex);
     Allocator::get().allocate (&m_buffer, &m_bufsiz);
-    if (m_buffer != 0)
+    if (m_buffer != nullptr)
         memset (m_buffer, 0, m_bufsiz);
 }
 
 FileHandle_Impl::~FileHandle_Impl()
 {
-    Allocator::get().deallocate (m_buffer), m_buffer = 0;
+    Allocator::get().deallocate (m_buffer);
+    m_buffer = nullptr;
     ::DeleteCriticalSection (&m_mutex);
 }
 
@@ -267,7 +272,7 @@ sal_uInt64 FileHandle_Impl::getSize() const
 oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
 {
     LARGE_INTEGER nDstPos; nDstPos.QuadPart = sal::static_int_cast< LONGLONG >(uSize);
-    if (!::SetFilePointerEx(m_hFile, nDstPos, 0, FILE_BEGIN))
+    if (!::SetFilePointerEx(m_hFile, nDstPos, nullptr, FILE_BEGIN))
         return oslTranslateFileError( GetLastError() );
 
     if (!::SetEndOfFile(m_hFile))
@@ -275,7 +280,7 @@ oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
     m_size = uSize;
 
     nDstPos.QuadPart = m_offset;
-    if (!::SetFilePointerEx(m_hFile, nDstPos, 0, FILE_BEGIN))
+    if (!::SetFilePointerEx(m_hFile, nDstPos, nullptr, FILE_BEGIN))
         return oslTranslateFileError( GetLastError() );
 
     return osl_File_E_None;
@@ -298,13 +303,13 @@ oslFileError FileHandle_Impl::readAt (
     if (nOffset != m_offset)
     {
         LARGE_INTEGER liOffset; liOffset.QuadPart = nOffset;
-        if (!::SetFilePointerEx(m_hFile, liOffset, 0, FILE_BEGIN))
+        if (!::SetFilePointerEx(m_hFile, liOffset, nullptr, FILE_BEGIN))
             return oslTranslateFileError( GetLastError() );
         m_offset = nOffset;
     }
 
     DWORD dwDone = 0;
-    if (!::ReadFile(m_hFile, pBuffer, nBytesRequested, &dwDone, 0))
+    if (!::ReadFile(m_hFile, pBuffer, nBytesRequested, &dwDone, nullptr))
         return oslTranslateFileError( GetLastError() );
     m_offset += dwDone;
 
@@ -329,13 +334,13 @@ oslFileError FileHandle_Impl::writeAt (
     if (nOffset != m_offset)
     {
         LARGE_INTEGER liOffset; liOffset.QuadPart = nOffset;
-        if (!::SetFilePointerEx (m_hFile, liOffset, 0, FILE_BEGIN))
+        if (!::SetFilePointerEx (m_hFile, liOffset, nullptr, FILE_BEGIN))
             return oslTranslateFileError( GetLastError() );
         m_offset = nOffset;
     }
 
     DWORD dwDone = 0;
-    if (!::WriteFile(m_hFile, pBuffer, nBytesToWrite, &dwDone, 0))
+    if (!::WriteFile(m_hFile, pBuffer, nBytesToWrite, &dwDone, nullptr))
         return oslTranslateFileError( GetLastError() );
     m_offset += dwDone;
 
@@ -360,12 +365,12 @@ oslFileError FileHandle_Impl::readFileAt (
     {
         // not seekable (pipe)
         DWORD dwDone = 0;
-        if (!::ReadFile(m_hFile, pBuffer, nBytesRequested, &dwDone, 0))
+        if (!::ReadFile(m_hFile, pBuffer, nBytesRequested, &dwDone, nullptr))
             return oslTranslateFileError( GetLastError() );
         *pBytesRead = dwDone;
         return osl_File_E_None;
     }
-    else if (0 == m_buffer)
+    else if (nullptr == m_buffer)
     {
         // not buffered
         return readAt (nOffset, pBuffer, nBytesRequested, pBytesRead);
@@ -384,7 +389,8 @@ oslFileError FileHandle_Impl::readFileAt (
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = -1, m_buflen = 0;
+                m_bufptr = -1;
+                m_buflen = 0;
 
                 if (nBytesRequested >= m_bufsiz)
                 {
@@ -394,7 +400,8 @@ oslFileError FileHandle_Impl::readFileAt (
                     if (result != osl_File_E_None)
                         return result;
 
-                    nBytesRequested -= sal::static_int_cast< DWORD >(uDone), *pBytesRead += uDone;
+                    nBytesRequested -= sal::static_int_cast< DWORD >(uDone);
+                    *pBytesRead += uDone;
                     return osl_File_E_None;
                 }
 
@@ -403,7 +410,8 @@ oslFileError FileHandle_Impl::readFileAt (
                 result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = bufptr, m_buflen = sal::static_int_cast< SIZE_T >(uDone);
+                m_bufptr = bufptr;
+                m_buflen = sal::static_int_cast< SIZE_T >(uDone);
             }
             if (bufpos >= m_buflen)
             {
@@ -413,7 +421,9 @@ oslFileError FileHandle_Impl::readFileAt (
 
             SIZE_T const bytes = std::min(m_buflen - bufpos, (SIZE_T) nBytesRequested);
             memcpy (&(buffer[*pBytesRead]), &(m_buffer[bufpos]), bytes);
-            nBytesRequested -= bytes, *pBytesRead += bytes, nOffset += bytes;
+            nBytesRequested -= bytes;
+            *pBytesRead += bytes;
+            nOffset += bytes;
         }
         return osl_File_E_None;
     }
@@ -434,12 +444,12 @@ oslFileError FileHandle_Impl::writeFileAt (
     {
         // not seekable (pipe)
         DWORD dwDone = 0;
-        if (!::WriteFile(m_hFile, pBuffer, nBytesToWrite, &dwDone, 0))
+        if (!::WriteFile(m_hFile, pBuffer, nBytesToWrite, &dwDone, nullptr))
             return oslTranslateFileError( GetLastError() );
         *pBytesWritten = dwDone;
         return osl_File_E_None;
     }
-    else if (0 == m_buffer)
+    else if (nullptr == m_buffer)
     {
         // not buffered
         return writeAt(nOffset, pBuffer, nBytesToWrite, pBytesWritten);
@@ -457,7 +467,8 @@ oslFileError FileHandle_Impl::writeFileAt (
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = -1, m_buflen = 0;
+                m_bufptr = -1;
+                m_buflen = 0;
 
                 if (nBytesToWrite >= m_bufsiz)
                 {
@@ -469,7 +480,8 @@ oslFileError FileHandle_Impl::writeFileAt (
                     if (uDone != nBytesToWrite)
                         return osl_File_E_IO;
 
-                    nBytesToWrite -= sal::static_int_cast< DWORD >(uDone), *pBytesWritten += uDone;
+                    nBytesToWrite -= sal::static_int_cast< DWORD >(uDone);
+                    *pBytesWritten += uDone;
                     return osl_File_E_None;
                 }
 
@@ -478,12 +490,15 @@ oslFileError FileHandle_Impl::writeFileAt (
                 result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = bufptr, m_buflen = sal::static_int_cast< SIZE_T >(uDone);
+                m_bufptr = bufptr;
+                m_buflen = sal::static_int_cast< SIZE_T >(uDone);
             }
 
             SIZE_T const bytes = std::min(m_bufsiz - bufpos, (SIZE_T) nBytesToWrite);
             memcpy (&(m_buffer[bufpos]), &(buffer[*pBytesWritten]), bytes);
-            nBytesToWrite -= bytes, *pBytesWritten += bytes, nOffset += bytes;
+            nBytesToWrite -= bytes;
+            *pBytesWritten += bytes;
+            nOffset += bytes;
 
             m_buflen = std::max(m_buflen, bufpos + bytes);
             m_state |= STATE_MODIFIED;
@@ -513,7 +528,8 @@ oslFileError FileHandle_Impl::readLineAt (
         if (result != osl_File_E_None)
             return result;
 
-        m_bufptr = bufptr, m_buflen = sal::static_int_cast< SIZE_T >(uDone);
+        m_bufptr = bufptr;
+        m_buflen = sal::static_int_cast< SIZE_T >(uDone);
     }
 
     static int const LINE_STATE_BEGIN = 0;
@@ -535,7 +551,8 @@ oslFileError FileHandle_Impl::readLineAt (
                     ppSequence, &dstpos, &(m_buffer[bufpos]), curpos - bufpos);
                 if (result != osl_File_E_None)
                     return result;
-                *pBytesRead += curpos - bufpos, nOffset += curpos - bufpos;
+                *pBytesRead += curpos - bufpos;
+                nOffset += curpos - bufpos;
             }
 
             bufptr = nOffset / m_bufsiz * m_bufsiz;
@@ -546,10 +563,12 @@ oslFileError FileHandle_Impl::readLineAt (
                 result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
                 if (result != osl_File_E_None)
                     return result;
-                m_bufptr = bufptr, m_buflen = sal::static_int_cast< SIZE_T >(uDone);
+                m_bufptr = bufptr;
+                m_buflen = sal::static_int_cast< SIZE_T >(uDone);
             }
 
-            bufpos = sal::static_int_cast< SIZE_T >(nOffset - m_bufptr), curpos = bufpos;
+            bufpos = sal::static_int_cast< SIZE_T >(nOffset - m_bufptr);
+            curpos = bufpos;
             if (bufpos >= m_buflen)
                 break;
         }
@@ -585,20 +604,22 @@ oslFileError FileHandle_Impl::readLineAt (
             if (state != LINE_STATE_BEGIN)
             {
                 /* store (and eat) the newline char */
-                m_buffer[curpos] = 0x0A, curpos++;
+                m_buffer[curpos] = 0x0A;
+                curpos++;
 
                 /* flush buffer to sequence */
                 result = writeSequence_Impl (
                     ppSequence, &dstpos, &(m_buffer[bufpos]), curpos - bufpos - 1);
                 if (result != osl_File_E_None)
                     return result;
-                *pBytesRead += curpos - bufpos, nOffset += curpos - bufpos;
+                *pBytesRead += curpos - bufpos;
+                nOffset += curpos - bufpos;
             }
             break;
         }
     }
 
-    result = writeSequence_Impl (ppSequence, &dstpos, 0, 0);
+    result = writeSequence_Impl (ppSequence, &dstpos, nullptr, 0);
     if (result != osl_File_E_None)
         return result;
     if (0 < dstpos)
@@ -625,12 +646,13 @@ oslFileError FileHandle_Impl::writeSequence_Impl (
         /* resize sequence */
         rtl_byte_sequence_realloc(ppSequence, nElements);
     }
-    if (*ppSequence != 0)
+    if (*ppSequence != nullptr)
     {
         /* fill sequence */
-        memcpy(&((*ppSequence)->elements[*pnOffset]), pBuffer, nBytes), *pnOffset += nBytes;
+        memcpy(&((*ppSequence)->elements[*pnOffset]), pBuffer, nBytes);
+        *pnOffset += nBytes;
     }
-    return (*ppSequence != 0) ? osl_File_E_None : osl_File_E_NOMEM;
+    return (*ppSequence != nullptr) ? osl_File_E_None : osl_File_E_NOMEM;
 }
 
 oslFileError FileHandle_Impl::syncFile()
@@ -657,14 +679,14 @@ SAL_CALL osl_createFileHandleFromOSHandle (
     sal_uInt32 uFlags)
 {
     if ( !IsValidHandle(hFile) )
-        return 0; // EINVAL
+        return nullptr; // EINVAL
 
     FileHandle_Impl * pImpl = new FileHandle_Impl(hFile);
-    if (pImpl == 0)
+    if (pImpl == nullptr)
     {
         // cleanup and fail
         (void) ::CloseHandle(hFile);
-        return 0; // ENOMEM
+        return nullptr; // ENOMEM
     }
 
     /* check for regular file */
@@ -688,7 +710,7 @@ SAL_CALL osl_createFileHandleFromOSHandle (
         !((uFlags & osl_File_OpenFlag_Read) || (uFlags & osl_File_OpenFlag_Write)),
         "sal.osl",
         "osl_createFileHandleFromOSHandle(): missing read/write access flags");
-    return (oslFileHandle)pImpl;
+    return static_cast<oslFileHandle>(pImpl);
 }
 
 oslFileError
@@ -697,8 +719,8 @@ SAL_CALL osl_openFile(
     oslFileHandle * pHandle,
     sal_uInt32      uFlags )
 {
-    rtl_uString * strSysPath = 0;
-    oslFileError result = _osl_getSystemPathFromFileURL( strPath, &strSysPath, sal_False );
+    rtl_uString * strSysPath = nullptr;
+    oslFileError result = osl_getSystemPathFromFileURL_( strPath, &strSysPath, false );
     if (result != osl_File_E_None)
         return result;
 
@@ -719,7 +741,7 @@ SAL_CALL osl_openFile(
 
     HANDLE hFile = CreateFileW(
         rtl_uString_getStr( strSysPath ),
-        dwAccess, dwShare, NULL, dwCreation, dwAttributes, NULL );
+        dwAccess, dwShare, nullptr, dwCreation, dwAttributes, nullptr );
 
     // @@@ ERROR HANDLING @@@
     if ( !IsValidHandle( hFile ) )
@@ -735,7 +757,7 @@ oslFileError
 SAL_CALL osl_syncFile(oslFileHandle Handle)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile))
         return osl_File_E_INVAL;
 
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
@@ -754,7 +776,7 @@ oslFileError
 SAL_CALL osl_closeFile(oslFileHandle Handle)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile))
         return osl_File_E_INVAL;
 
     ::EnterCriticalSection (&(pImpl->m_mutex));
@@ -799,16 +821,16 @@ SAL_CALL osl_mapFile(
     };
 
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == ppAddr))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile) || (nullptr == ppAddr))
         return osl_File_E_INVAL;
-    *ppAddr = 0;
+    *ppAddr = nullptr;
 
     static SIZE_T const nLimit = std::numeric_limits< SIZE_T >::max();
     if (uLength > nLimit)
         return osl_File_E_OVERFLOW;
     SIZE_T const nLength = sal::static_int_cast< SIZE_T >(uLength);
 
-    FileMapping aMap( ::CreateFileMapping (pImpl->m_hFile, NULL, SEC_COMMIT | PAGE_READONLY, 0, 0, NULL) );
+    FileMapping aMap( ::CreateFileMapping (pImpl->m_hFile, nullptr, SEC_COMMIT | PAGE_READONLY, 0, 0, nullptr) );
     if (!IsValidHandle(aMap.m_handle))
         return oslTranslateFileError( GetLastError() );
 
@@ -816,7 +838,7 @@ SAL_CALL osl_mapFile(
     DWORD const dwOffsetLo = sal::static_int_cast<DWORD>(uOffset & 0xFFFFFFFF);
 
     *ppAddr = ::MapViewOfFile( aMap.m_handle, FILE_MAP_READ, dwOffsetHi, dwOffsetLo, nLength );
-    if (0 == *ppAddr)
+    if (nullptr == *ppAddr)
         return oslTranslateFileError( GetLastError() );
 
     if (uFlags & osl_File_MapFlag_RandomAccess)
@@ -830,7 +852,7 @@ SAL_CALL osl_mapFile(
          * Pagein, touching first byte of each memory page.
          * Note: volatile disables optimizing the loop away.
          */
-        BYTE * pData (reinterpret_cast<BYTE*>(*ppAddr));
+        BYTE * pData (static_cast<BYTE*>(*ppAddr));
         SIZE_T nSize (nLength);
 
         volatile BYTE c = 0;
@@ -851,7 +873,7 @@ SAL_CALL osl_mapFile(
 oslFileError
 SAL_CALL osl_unmapFile(void* pAddr, sal_uInt64 /* uLength */)
 {
-    if (0 == pAddr)
+    if (nullptr == pAddr)
         return osl_File_E_INVAL;
 
     if (!::UnmapViewOfFile (pAddr))
@@ -872,7 +894,7 @@ SAL_CALL osl_readLine(
     sal_Sequence ** ppSequence)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == ppSequence))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile) || (nullptr == ppSequence))
         return osl_File_E_INVAL;
     sal_uInt64 uBytesRead = 0;
 
@@ -893,7 +915,7 @@ SAL_CALL osl_readFile(
     sal_uInt64 *  pBytesRead)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pBuffer) || (0 == pBytesRead))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile) || (nullptr == pBuffer) || (nullptr == pBytesRead))
         return osl_File_E_INVAL;
 
     // read at current filepos; filepos += *pBytesRead;
@@ -914,7 +936,7 @@ SAL_CALL osl_writeFile(
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pBuffer) || (0 == pBytesWritten))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile) || (nullptr == pBuffer) || (nullptr == pBytesWritten))
         return osl_File_E_INVAL;
 
     // write at current filepos; filepos += *pBytesWritten;
@@ -936,7 +958,7 @@ SAL_CALL osl_readFileAt(
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pBuffer) || (0 == pBytesRead))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile) || (nullptr == pBuffer) || (nullptr == pBytesRead))
         return osl_File_E_INVAL;
     if (0 == (pImpl->m_state & FileHandle_Impl::STATE_SEEKABLE))
         return osl_File_E_SPIPE;
@@ -961,7 +983,7 @@ SAL_CALL osl_writeFileAt(
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pBuffer) || (0 == pBytesWritten))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile) || (nullptr == pBuffer) || (nullptr == pBytesWritten))
         return osl_File_E_INVAL;
     if (0 == (pImpl->m_state & FileHandle_Impl::STATE_SEEKABLE))
         return osl_File_E_SPIPE;
@@ -981,7 +1003,7 @@ SAL_CALL osl_isEndOfFile (oslFileHandle Handle, sal_Bool *pIsEOF)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pIsEOF))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile) || (nullptr == pIsEOF))
         return osl_File_E_INVAL;
 
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
@@ -993,7 +1015,7 @@ oslFileError
 SAL_CALL osl_getFilePos(oslFileHandle Handle, sal_uInt64 *pPos)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pPos))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile) || (nullptr == pPos))
         return osl_File_E_INVAL;
 
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
@@ -1005,7 +1027,7 @@ oslFileError
 SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffset)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile))
         return osl_File_E_INVAL;
 
     static sal_Int64 const g_limit_longlong = std::numeric_limits< LONGLONG >::max();
@@ -1049,7 +1071,7 @@ SAL_CALL osl_getFileSize (oslFileHandle Handle, sal_uInt64 *pSize)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile) || (0 == pSize))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile) || (nullptr == pSize))
         return osl_File_E_INVAL;
 
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
@@ -1062,7 +1084,7 @@ SAL_CALL osl_setFileSize (oslFileHandle Handle, sal_uInt64 uSize)
 {
     FileHandle_Impl * pImpl = static_cast<FileHandle_Impl*>(Handle);
 
-    if ((0 == pImpl) || !IsValidHandle(pImpl->m_hFile))
+    if ((nullptr == pImpl) || !IsValidHandle(pImpl->m_hFile))
         return osl_File_E_INVAL;
     if (0 == (pImpl->m_state & FileHandle_Impl::STATE_WRITEABLE))
         return osl_File_E_BADF;
@@ -1075,7 +1097,8 @@ SAL_CALL osl_setFileSize (oslFileHandle Handle, sal_uInt64 uSize)
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
         return result;
-    pImpl->m_bufptr = -1, pImpl->m_buflen = 0;
+    pImpl->m_bufptr = -1;
+    pImpl->m_buflen = 0;
 
     return pImpl->setSize (uSize);
 }
@@ -1084,8 +1107,8 @@ SAL_CALL osl_setFileSize (oslFileHandle Handle, sal_uInt64 uSize)
 
 oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
 {
-    rtl_uString *strSysPath = NULL;
-    oslFileError    error = _osl_getSystemPathFromFileURL( strPath, &strSysPath, sal_False );
+    rtl_uString *strSysPath = nullptr;
+    oslFileError    error = osl_getSystemPathFromFileURL_( strPath, &strSysPath, false );
 
     if ( osl_File_E_None == error )
     {
@@ -1101,11 +1124,11 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
 
 oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPath )
 {
-    rtl_uString *strSysPath = NULL, *strSysDestPath = NULL;
-    oslFileError    error = _osl_getSystemPathFromFileURL( strPath, &strSysPath, sal_False );
+    rtl_uString *strSysPath = nullptr, *strSysDestPath = nullptr;
+    oslFileError    error = osl_getSystemPathFromFileURL_( strPath, &strSysPath, false );
 
     if ( osl_File_E_None == error )
-        error = _osl_getSystemPathFromFileURL( strDestPath, &strSysDestPath, sal_False );
+        error = osl_getSystemPathFromFileURL_( strDestPath, &strSysDestPath, false );
 
     if ( osl_File_E_None == error )
     {
@@ -1128,11 +1151,11 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPa
 
 oslFileError SAL_CALL osl_moveFile( rtl_uString* strPath, rtl_uString *strDestPath )
 {
-    rtl_uString *strSysPath = NULL, *strSysDestPath = NULL;
-    oslFileError    error = _osl_getSystemPathFromFileURL( strPath, &strSysPath, sal_False );
+    rtl_uString *strSysPath = nullptr, *strSysDestPath = nullptr;
+    oslFileError    error = osl_getSystemPathFromFileURL_( strPath, &strSysPath, false );
 
     if ( osl_File_E_None == error )
-        error = _osl_getSystemPathFromFileURL( strDestPath, &strSysDestPath, sal_False );
+        error = osl_getSystemPathFromFileURL_( strDestPath, &strSysDestPath, false );
 
     if ( osl_File_E_None == error )
     {

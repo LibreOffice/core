@@ -64,7 +64,7 @@ struct oslPipeImpl {
 /* osl_create/destroy-PipeImpl */
 /*****************************************************************************/
 
-oslPipe __osl_createPipeImpl(void)
+oslPipe osl_createPipeImpl(void)
 {
     oslPipe pPipe;
 
@@ -83,7 +83,7 @@ oslPipe __osl_createPipeImpl(void)
     return pPipe;
 }
 
-void __osl_destroyPipeImpl(oslPipe pPipe)
+void osl_destroyPipeImpl(oslPipe pPipe)
 {
     if (pPipe != NULL)
     {
@@ -160,7 +160,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     rtl_uString_newConcat(&name, temp, strPipeName);
 
     /* alloc memory */
-    pPipe= __osl_createPipeImpl();
+    pPipe= osl_createPipeImpl();
     osl_atomic_increment(&(pPipe->m_Reference));
 
     /* build system pipe name */
@@ -245,7 +245,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     }
 
     /* if we reach here something went wrong */
-    __osl_destroyPipeImpl(pPipe);
+    osl_destroyPipeImpl(pPipe);
 
     return NULL;
 }
@@ -259,7 +259,7 @@ void SAL_CALL osl_releasePipe( oslPipe pPipe )
 {
 //      OSL_ASSERT( pPipe );
 
-    if( 0 == pPipe )
+    if( NULL == pPipe )
         return;
 
     if( 0 == osl_atomic_decrement( &(pPipe->m_Reference) ) )
@@ -267,7 +267,7 @@ void SAL_CALL osl_releasePipe( oslPipe pPipe )
         if( ! pPipe->m_bClosed )
             osl_closePipe( pPipe );
 
-        __osl_destroyPipeImpl( pPipe );
+        osl_destroyPipeImpl( pPipe );
     }
 }
 
@@ -331,16 +331,16 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
                         break;                  // Everything's fine !!!
                     default:
                         // Something went wrong
-                        return 0;
+                        return NULL;
                     }
                 }
                 break;
             default:                    // All other error say that somethings going wrong.
-                return 0;
+                return NULL;
         }
     }
 
-    pAcceptedPipe = __osl_createPipeImpl();
+    pAcceptedPipe = osl_createPipeImpl();
     OSL_ASSERT(pAcceptedPipe);
 
     osl_atomic_increment(&(pAcceptedPipe->m_Reference));

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_SECURITYIMPL_H_
-#define _OSL_SECURITYIMPL_H_
+#ifndef INCLUDED_SAL_OSL_W32_SECIMPL_H
+#define INCLUDED_SAL_OSL_W32_SECIMPL_H
 
 #include <winnetwk.h>
 
@@ -30,7 +30,7 @@
 extern "C" {
 #endif
 
-typedef struct _oslSecurityImpl {
+typedef struct {
     HANDLE m_hProfile;
     HANDLE m_hToken;
     sal_Unicode   m_User[USER_BUFFER_SIZE];
