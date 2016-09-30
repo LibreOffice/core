@@ -474,6 +474,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/form/stringlistresource \
     svx/source/form/typemap \
     svx/source/form/xfm_addcondition \
+    svx/source/uitest/sdrobject \
 ))
 
 $(eval $(call gb_SdiTarget_SdiTarget,svx/sdi/svxslots,svx/sdi/svx))
