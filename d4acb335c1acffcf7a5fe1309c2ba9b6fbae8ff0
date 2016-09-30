@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a629dbe_9aa0e9a7",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-09-30T15:58:54Z",
+      "side": 1,
+      "message": "If you remove it, do it -- don\u0027t use in-line version control instead of git. :-) The reason for the removal should go to the commit message.",
+      "revId": "d4acb335c1acffcf7a5fe1309c2ba9b6fbae8ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
