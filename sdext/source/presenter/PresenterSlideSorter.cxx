@@ -771,7 +771,7 @@ geometry::RealRectangle2D PresenterSlideSorter::PlaceScrollBars (
                         }
                     else
                         {
-                            // if its not RTL place vertical scroll bar at right border.
+                            // if it's not RTL place vertical scroll bar at right border.
                             mpVerticalScrollBar->SetPosSize(geometry::RealRectangle2D(
                                                                                       rUpperBox.X2 - mpVerticalScrollBar->GetSize(),
                                                                                       rUpperBox.Y1,

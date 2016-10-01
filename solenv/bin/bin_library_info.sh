@@ -14,8 +14,8 @@ in git.
 
 syntax: bin_library_info.sh -m|--module <top_level_module> -l|--location <TARFILE_LOCATION> -s|--srcdir <SRCDIR> -b <BUILDDIR> -r|--tarfile <LIBRARY_TARFILE> [ -m|--mode verify|name ]
 
-the default mode is 'name' which just print the assocaited binary tarfile name.
-in 'verify' mode the programe print the name if the assocaited binary tarfile exist
+the default mode is 'name' which just print the associated binary tarfile name.
+in 'verify' mode the programe print the name if the associated binary tarfile exist
 and print nothing and return an error code if the file does not exist
 
 Note: --location --builddir and --srcdir are optional if they are already in the env in the form of TARFILE_LOCATION and BUILDDIR SRCDIR respectively
