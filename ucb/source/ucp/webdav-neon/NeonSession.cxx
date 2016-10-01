@@ -849,7 +849,7 @@ void NeonSession::OPTIONS( const OUString & inPath,
 
     SAL_INFO( "ucb.ucp.webdav", "OPTIONS - relative URL <" << inPath << ">" );
 
-    rOptions.reset();
+    rOptions.init();
 
     Init( rEnv );
     int theRetVal;
