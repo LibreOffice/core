@@ -865,7 +865,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetTableStyleUINameArray()
     return *m_pTableStyleUINameArray;
 }
 
-/// retuns an empty array because Cell Names aren't translated
+/// returns an empty array because Cell Names aren't translated
 const std::vector<OUString>& SwStyleNameMapper::GetCellStyleUINameArray()
 {
     if (!m_pCellStyleUINameArray)
@@ -969,7 +969,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetTableStyleProgNameArray()
     return *m_pTableStyleProgNameArray;
 }
 
-/// retuns an empty array because Cell Names aren't translated
+/// returns an empty array because Cell Names aren't translated
 const std::vector<OUString>& SwStyleNameMapper::GetCellStyleProgNameArray()
 {
     if (!m_pCellStyleProgNameArray)
