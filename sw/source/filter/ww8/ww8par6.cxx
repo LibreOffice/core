@@ -1021,7 +1021,7 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
 
     // 2pages in 1sheet hackery ?
     // #i31806# but only swap if 2page in 1sheet is enabled.
-    // its not clear if dmOrientPage is the correct member to
+    // it's not clear if dmOrientPage is the correct member to
     // decide on this.
     if(mrReader.m_pWDop->doptypography.f2on1 &&
             aNewSection.maSep.dmOrientPage == 2)
@@ -2557,7 +2557,7 @@ void SwWW8ImplReader::StopApo()
                 SwFormatFrameSize( m_pSFlyPara->eHeightFix, nW, m_pSFlyPara->nHeight ) );
         }
         /*
-        Word set *no* width meaning its an automatic width. The
+        Word set *no* width meaning it's an automatic width. The
         SwFlyPara reader will have already set a fallback width of the
         printable regions width, so we should reuse it. Despite the related
         problems with layout addressed with a hack in WW8FlyPara's constructor

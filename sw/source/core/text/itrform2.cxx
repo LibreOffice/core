@@ -301,7 +301,7 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
         }
 
         // i#112181 - Prevent footnote anchor being wrapped to next line
-        // without preceeding word
+        // without preceding word
         rInf.SetOtherThanFootnoteInside( rInf.IsOtherThanFootnoteInside() || !pPor->IsFootnotePortion() );
     }
     else
