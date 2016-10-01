@@ -792,7 +792,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
     {
         FmFilterItem& rFilterItem = dynamic_cast<FmFilterItem&>(*pData);
 
-        // if its the last condition remove the parent
+        // if it's the last condition remove the parent
         if (rItems.size() == 1)
             Remove(rFilterItem.GetParent());
         else
@@ -1631,7 +1631,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
 
             ScopedVclPtrInstance<PopupMenu> aContextMenu(SVX_RES(RID_FM_FILTER_MENU));
 
-            // every condition could be deleted except the first one if its the only one
+            // every condition could be deleted except the first one if it's the only one
             aContextMenu->EnableItem( SID_FM_DELETE, !aSelectList.empty() );
 
 
