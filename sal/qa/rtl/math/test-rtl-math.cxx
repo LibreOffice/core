@@ -205,6 +205,28 @@ public:
         CPPUNIT_ASSERT_EQUAL( OUString("9.00719925474099E+015"), aRes);
     }
 
+    void test_approx() {
+        // (2^53)-1 , (2^53)-3
+        CPPUNIT_ASSERT_EQUAL( false, rtl::math::approxEqual( 9007199254740991.0, 9007199254740989.0));
+        // (2^53)-1 , (2^53)-2
+        CPPUNIT_ASSERT_EQUAL( false, rtl::math::approxEqual( 9007199254740991.0, 9007199254740990.0));
+        // Note: the following are internally represented as 900719925474099.12
+        // and 900719925474098.88 and the difference is 0.25 ...
+        CPPUNIT_ASSERT_EQUAL( true, rtl::math::approxEqual( 900719925474099.1, 900719925474098.9));
+        CPPUNIT_ASSERT_EQUAL( true, rtl::math::approxEqual( 72.944444444444443, 72.9444444444444));
+        CPPUNIT_ASSERT_EQUAL( true, rtl::math::approxEqual( 359650.27322404372, 359650.27322404401));
+        CPPUNIT_ASSERT_EQUAL( true, rtl::math::approxEqual( 5.3590326375710063e+238, 5.3590326375710109e+238));
+        CPPUNIT_ASSERT_EQUAL( true, rtl::math::approxEqual( 7.4124095894894475e+158, 7.4124095894894514e+158));
+        CPPUNIT_ASSERT_EQUAL( true, rtl::math::approxEqual( 1.2905754687023132e+79, 1.2905754687023098e+79));
+        CPPUNIT_ASSERT_EQUAL( true, rtl::math::approxEqual( 3.5612905090455637e+38, 3.5612905090455599e+38));
+        // 0.3 - 0.2 - 0.1 == 0.0
+        CPPUNIT_ASSERT_EQUAL( 0.0, rtl::math::approxSub( rtl::math::approxSub( 0.3, 0.2), 0.1));
+        // ((2^53)-1) - ((2^53)-2) == 1.0
+        CPPUNIT_ASSERT_EQUAL( 1.0, rtl::math::approxSub( 9007199254740991.0, 9007199254740990.0));
+        // (3^31) - ((3^31)-1) == 1.0
+        CPPUNIT_ASSERT_EQUAL( 1.0, rtl::math::approxSub( 617673396283947.0, 617673396283946.0));
+    }
+
     void test_erf() {
         double x, res;
         x =  0.0;
@@ -298,6 +320,7 @@ public:
     CPPUNIT_TEST(test_erfc);
     CPPUNIT_TEST(test_expm1);
     CPPUNIT_TEST(test_log1p);
+    CPPUNIT_TEST(test_approx);
     CPPUNIT_TEST_SUITE_END();
 };
 
