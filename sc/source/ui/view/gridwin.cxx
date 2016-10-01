@@ -5515,9 +5515,7 @@ bool ScGridWindow::ContinueOnlineSpelling()
     ScHorizontalCellIterator aIter(
         pDoc, nTab, maVisibleRange.mnCol1, mpSpellCheckCxt->maPos.mnRow, maVisibleRange.mnCol2, maVisibleRange.mnRow2);
 
-    ScRangeList aPivotRanges;
-    if (pDPs)
-        aPivotRanges = pDPs->GetAllTableRanges(nTab);
+    ScRangeList aPivotRanges = pDPs ? pDPs->GetAllTableRanges(nTab) : ScRangeList();
 
     SCCOL nCol;
     SCROW nRow;

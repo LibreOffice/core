@@ -74,12 +74,9 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
 
     SCTAB inTab = mInputRange.aStart.Tab();
 
-    ScRangeList aRangeList;
-
-    if (mGroupedBy == BY_COLUMN)
-        aRangeList = MakeColumnRangeList(inTab, mInputRange.aStart, mInputRange.aEnd);
-    else
-        aRangeList = MakeRowRangeList(inTab, mInputRange.aStart, mInputRange.aEnd);
+    ScRangeList aRangeList = (mGroupedBy == BY_COLUMN) ?
+        MakeColumnRangeList(inTab, mInputRange.aStart, mInputRange.aEnd) :
+        MakeRowRangeList(inTab, mInputRange.aStart, mInputRange.aEnd);
 
     // labels
     output.writeString(getLabel());
