@@ -239,20 +239,11 @@ inline double acosh(double fValue)
     return rtl_math_acosh(fValue);
 }
 
-
-/** Test equality of two values with an accuracy of the magnitude of the
-    given values scaled by 2^-48 (4 bits roundoff stripped).
-
-    @attention
-    approxEqual( value!=0.0, 0.0 ) _never_ yields true.
+/** A wrapper around rtl_math_approxEqual.
  */
 inline bool approxEqual(double a, double b)
 {
-    if ( a == b )
-        return true;
-    double x = a - b;
-    return (x < 0.0 ? -x : x)
-        < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 * 16777216.0)));
+    return rtl_math_approxEqual( a, b );
 }
 
 /** Test equality of two values with an accuracy defined by nPrec
@@ -268,6 +259,7 @@ inline bool approxEqual(double a, double b, sal_Int16 nPrec)
     return (x < 0.0 ? -x : x)
         < ((a < 0.0 ? -a : a) * (1.0 / (pow(static_cast<double>(2.0), nPrec))));
 }
+
 /** Add two values.
 
     If signs differ and the absolute values are equal according to approxEqual()
