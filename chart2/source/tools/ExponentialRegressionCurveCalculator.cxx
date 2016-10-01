@@ -171,7 +171,7 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
         if ( m_fSign < 0.0 )
             nCharMin += 2;
         if ( fIntercept == 0.0 || ( !bHasSlope && m_fLogIntercept != 0.0 ) )
-            nCharMin += 3; // " + " special case where equation is writen exp( a + b x )
+            nCharMin += 3; // " + " special case where equation is written exp( a + b x )
         if ( ( bHasIntercept || fIntercept == 0.0 || ( !bHasSlope && m_fLogIntercept != 0.0 ) ) &&
                bHasLogSlope )
             nValueLength = ( *pFormulaMaxWidth - nCharMin ) / 2;
