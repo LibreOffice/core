@@ -339,7 +339,8 @@ void TestBreakIterator::testWordBoundaries()
             {
                 CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aDoublePositions));
                 nPos = m_xBreak->nextWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
-                CPPUNIT_ASSERT_EQUAL(aDoublePositions[i++], nPos);
+                CPPUNIT_ASSERT_EQUAL(aDoublePositions[i], nPos);
+                ++i;
             }
             while (nPos < aTest.getLength());
             nPos = aTest.getLength();
@@ -347,7 +348,8 @@ void TestBreakIterator::testWordBoundaries()
             do
             {
                 nPos = m_xBreak->previousWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
-                CPPUNIT_ASSERT_EQUAL(aDoublePositions[--i], nPos);
+                --i;
+                CPPUNIT_ASSERT_EQUAL(aDoublePositions[i], nPos);
             }
             while (nPos > 0);
         }
