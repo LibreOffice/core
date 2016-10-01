@@ -42,7 +42,7 @@ namespace filter{
                 </ul>
                 uses this schema.
 
-    @attention  This class is not threadsafe implemented. Because its not necessary.
+    @attention  This class is not threadsafe implemented. Because it's not necessary.
                 But you have to make sure, that ist not used as such :-)
  */
 class QueryTokenizer : public std::unordered_map< OUString                    ,

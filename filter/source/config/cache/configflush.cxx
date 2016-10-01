@@ -61,7 +61,7 @@ void SAL_CALL ConfigFlush::refresh()
     // notify listener outside the lock!
     // The used listener helper lives if we live
     // and is threadsafe by itself.
-    // Further its not a good idea to hold the own lock
+    // Further it's not a good idea to hold the own lock
     // if an outside object is called :-)
     css::lang::EventObject             aSource    (static_cast< css::util::XRefreshable* >(this));
     ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(cppu::UnoType<css::util::XRefreshListener>::get());
