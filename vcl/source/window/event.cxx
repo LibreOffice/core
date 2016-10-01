@@ -359,7 +359,7 @@ void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
 
 static MouseEvent ImplTranslateMouseEvent( const MouseEvent& rE, vcl::Window* pSource, vcl::Window* pDest )
 {
-    // the mouse event occured in a different window, we need to translate the coordinates of
+    // the mouse event occurred in a different window, we need to translate the coordinates of
     // the mouse cursor within that (source) window to the coordinates the mouse cursor would
     // be in the destination window
     Point aPos = pSource->OutputToScreenPixel( rE.GetPosPixel() );
@@ -390,7 +390,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
                 }
                 else
                 {
-                    // the mouse event occured in a different window, we need to translate the coordinates of
+                    // the mouse event occurred in a different window, we need to translate the coordinates of
                     // the mouse cursor within that window to the coordinates the mouse cursor would be in the
                     // current window
                     vcl::Window* pSource = rNEvt.GetWindow();

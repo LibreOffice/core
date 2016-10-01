@@ -72,9 +72,9 @@ class DocumentPreview(object):
     which is not part of the global frame tree.
 
     Attention:
-    a) This frame wont be destroyed by the office. It must be closed by you!
+    a) This frame won't be destroyed by the office. It must be closed by you!
        Do so - please call XCloseable::close().
-    b) The container window is part of the frame. Dont hold it alive - nor try to kill it.
+    b) The container window is part of the frame. Don't hold it alive - nor try to kill it.
        It will be destroyed inside close().
     '''
 
