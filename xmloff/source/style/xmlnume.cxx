@@ -408,7 +408,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
             switch( eImageVertOrient )
             {
-            case VertOrientation::BOTTOM:   // yes, its OK: BOTTOM means that the baseline
+            case VertOrientation::BOTTOM:   // yes, it's OK: BOTTOM means that the baseline
                                     // hits the frame at its topmost position
             case VertOrientation::LINE_TOP:
             case VertOrientation::CHAR_TOP:
@@ -419,7 +419,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
             case VertOrientation::CHAR_CENTER:
                 eValue = XML_MIDDLE;
                 break;
-            case VertOrientation::TOP:      // yes, its OK: TOP means that the baseline
+            case VertOrientation::TOP:      // yes, it's OK: TOP means that the baseline
                                     // hits the frame at its bottommost position
             case VertOrientation::LINE_BOTTOM:
             case VertOrientation::CHAR_BOTTOM:
