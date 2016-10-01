@@ -65,6 +65,7 @@ GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
             bEditMode       ( false ),
             bSdrMode        ( false ),
             bAnim           ( false ),
+            mbInIdleUpdate  ( false ),
             pModel          ( nullptr ),
             pView           ( nullptr )
 {
