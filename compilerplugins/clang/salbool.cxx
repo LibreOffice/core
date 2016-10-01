@@ -294,7 +294,7 @@ bool SalBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
                     SourceLocation argLoc;
                     if (compat::isMacroArgExpansion(
                             compiler, expr->getLocStart(), &argLoc)
-                        //TODO: check its the complete (first) arg to the macro
+                        //TODO: check it's the complete (first) arg to the macro
                         && (Lexer::getImmediateMacroName(
                                 argLoc, compiler.getSourceManager(),
                                 compiler.getLangOpts())
