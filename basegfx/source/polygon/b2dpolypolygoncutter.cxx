@@ -540,7 +540,7 @@ namespace basegfx
                             const sal_uInt32 nCandCount(aCandidate.count());
 
                             // If it's not a bezier curve, at least three points would be needed to have a
-                            // topological relevant (not empty) polygon. Since its not known here if trivial
+                            // topological relevant (not empty) polygon. Since it's not known here if trivial
                             // edges (dead ends) will be kept or sorted out, add non-bezier polygons with
                             // more than one point.
                             // For bezier curves, the minimum for defining an area is also one.
