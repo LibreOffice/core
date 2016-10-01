@@ -138,7 +138,7 @@ published service UnoControlFixedTextModel
 
     //-------------------------------------------------------------------------
 
-    /** supresses automatic accelerator assignment on this control.
+    /** suppresses automatic accelerator assignment on this control.
 
         @since OOo 2.4
      */
