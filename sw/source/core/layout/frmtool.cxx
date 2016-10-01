@@ -387,7 +387,7 @@ SwFrameNotify::~SwFrameNotify()
 
             // This could be optimized. Basically the fly frame only has to
             // be invalidated, if the first line of pFrame (if pFrame is a content
-            // frame, for other frame types its the print area) has changed its
+            // frame, for other frame types it's the print area) has changed its
             // size and pFrame was responsible for the current width of pFly. On
             // the other hand, this is only rarely used and re-calculation of
             // the fly frame does not cause too much trouble. So we keep it this
