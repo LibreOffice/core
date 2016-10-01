@@ -237,7 +237,7 @@ void SfxObjectShell::UpdateTime_Impl(
     tools::Time        nAddTime    (0)         ;   // Value to add on aOldTime
 
     // Safe impossible cases!
-    // User has changed time to the past between last editing and now ... its not possible!!!
+    // User has changed time to the past between last editing and now ... it's not possible!!!
     DBG_ASSERT( !(aNow.GetDate()<pImpl->nTime.GetDate()), "Timestamp of last change is in the past ?!..." );
 
     // Do the follow only, if user has NOT changed time to the past.

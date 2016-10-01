@@ -644,7 +644,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // We try to convert it to a file URL. If its possible
                 // we put the system path to the item set and let vcl work with it.
                 // No ucb or thread will be necessary then. In case it couldnt be
-                // converted its not an URL nor a system path. Then we can't accept
+                // converted it's not an URL nor a system path. Then we can't accept
                 // this parameter and have to throw an exception.
                 const OUString& sSystemPath(sTemp);
                 OUString sFileURL;
