@@ -648,7 +648,7 @@ bool SwWrtShell::GotoNextTOXBase( const OUString* pName )
 
 bool SwWrtShell::GotoTable( const OUString& rName )
 {
-   SwPosition aPos = *GetCursor()->GetPoint();
+    SwPosition aPos = *GetCursor()->GetPoint();
     bool bRet = SwCursorShell::GotoTable(rName);
     if (bRet)
         m_aNavigationMgr.addEntry(aPos);
