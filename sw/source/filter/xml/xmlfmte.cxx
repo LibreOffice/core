@@ -67,7 +67,7 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
         AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, eFamily );
 
 #if OSL_DEBUG_LEVEL > 0
-    // style:parent-style-name="..." (if its not the default only)
+    // style:parent-style-name="..." (if it's not the default only)
     const SwFormat* pParent = rFormat.DerivedFrom();
     // Only adopt parent name, if it's not the default
     OSL_ENSURE( !pParent || pParent->IsDefault(), "unexpected parent" );
