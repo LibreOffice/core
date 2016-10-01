@@ -30,7 +30,7 @@ namespace framework{
     @short      initialize an empty container
     @descr      The container will be empty then - special features (e.g. the async quit mechanism) are disabled.
 
-    @threadsafe not necessary - its not a singleton
+    @threadsafe not necessary - it's not a singleton
  *****************************************************************************************************************/
 FrameContainer::FrameContainer()
 /*DEPRECATEME
@@ -44,7 +44,7 @@ FrameContainer::FrameContainer()
     @short      deinitialize may a filled container
     @descr      Special features (if the currently are running) will be disabled and we free all used other resources.
 
-    @threadsafe not necessary - its not a singleton
+    @threadsafe not necessary - it's not a singleton
  *****************************************************************************************************************/
 FrameContainer::~FrameContainer()
 {
@@ -124,7 +124,7 @@ void FrameContainer::clear()
     // Clear the container ...
     m_aContainer.clear();
     // ... and don't forget to reset the active frame.
-    // Its an reference to a valid container-item.
+    // It's a reference to a valid container-item.
     // But no container item => no active frame!
     m_xActiveFrame.clear();
 }

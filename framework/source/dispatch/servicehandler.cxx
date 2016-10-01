@@ -50,7 +50,7 @@ DEFINE_INIT_SERVICE(ServiceHandler,
 
 /**
     @short      standard ctor
-    @descr      This initializes a new instance of ths class with needed information for work.
+    @descr      This initializes a new instance of the class with needed information for work.
 
     @param      xFactory
                 reference to uno servicemanager for creation of new services
