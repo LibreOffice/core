@@ -80,7 +80,7 @@ IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, ModifyHdl, Edit&, void)
         nEntries++;
     }
 
-    // allow to add new bookmark only if one name provided and its not taken
+    // allow to add new bookmark only if one name provided and it's not taken
     m_pInsertBtn->Enable(nEntries == 1 && nSelectedEntries == 0);
 
     // allow to delete only if all bookmarks are recognized
