@@ -33,7 +33,7 @@ java_sql_Array::~java_sql_Array()
 
 jclass java_sql_Array::getMyClass() const
 {
-    // the class must be fetched once, therefore its static
+    // the class must be fetched once, therefore it's static
     if( !theClass )
         theClass = findMyClass("java/sql/Array");
 
