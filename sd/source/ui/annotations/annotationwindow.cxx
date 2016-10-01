@@ -298,6 +298,7 @@ void AnnotationWindow::dispose()
     mpMeta.disposeAndClear();
     delete mpOutlinerView;
     delete mpOutliner;
+    mpOutliner = nullptr;
     mpVScrollbar.disposeAndClear();
     mpTextWindow.disposeAndClear();
     FloatingWindow::dispose();
@@ -613,6 +614,9 @@ void AnnotationWindow::SetColor()
 
 void AnnotationWindow::Deactivate()
 {
+    if (!mpOutliner) //in dispose
+        return;
+
     Reference< XAnnotation > xAnnotation( mxAnnotation );
 
     // write changed text back to annotation
