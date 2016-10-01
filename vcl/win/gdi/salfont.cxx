@@ -177,7 +177,7 @@ static Unicode2LangType aLangFromCodeChart[]= {
 //  {0x1200, 0x139F, LANGUAGE_AMHARIC_ETHIOPIA},    // Ethiopic
 //  {0x1200, 0x139F, LANGUAGE_TIGRIGNA_ETHIOPIA},   // Ethiopic
     {0x13A0, 0x13FF, LANGUAGE_CHEROKEE_UNITED_STATES}, // Cherokee
-//  {0x1400, 0x167F, LANGUAGE_CANADIAN_ABORIGINAL}, // Canadian Aboriginial Syllabics
+//  {0x1400, 0x167F, LANGUAGE_CANADIAN_ABORIGINAL}, // Canadian Aboriginal Syllabics
 //  {0x1680, 0x169F, LANGUAGE_OGHAM},               // Ogham
 //  {0x16A0, 0x16F0, LANGUAGE_RUNIC},               // Runic
 //  {0x1700, 0x171F, LANGUAGE_TAGALOG},             // Tagalog

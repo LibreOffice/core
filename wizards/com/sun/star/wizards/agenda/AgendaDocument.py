@@ -667,7 +667,7 @@ class ItemsTable(object):
             it means this is the end of the table, so we end here.
             (because after getting the cellName above,
             I call the goRight method.
-            If it did not go right, it means its the last cell.
+            If it did not go right, it means it's the last cell.
             '''
 
         if cellName == cursor.RangeName:

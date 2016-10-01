@@ -341,7 +341,7 @@ class WWD_Events(WWD_Startup):
             self.setEnabled(self.btnBackgrounds, True)
 
     '''
-    invoked when the BackgorundsDialog is "OKed".
+    invoked when the BackgroundsDialog is "OKed".
     '''
 
     def setBackground(self, background):
@@ -903,7 +903,7 @@ class WWD_Events(WWD_Startup):
 
             '''
             Here i go through each file, and validate it.
-            If its ok, I add it to the ListModel/ConfigSet
+            If it's ok, I add it to the ListModel/ConfigSet
             '''
 
             for i in range(0, len(self.files)):
