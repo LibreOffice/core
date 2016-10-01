@@ -1251,7 +1251,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_SD_NUMBERINGRULES_NAME:
                 {
                     // this property is not exported in the style:properties element
-                    // because its an XIndexAccess and not a string.
+                    // because it's an XIndexAccess and not a string.
                     // This will be handled in SvXMLAutoStylePoolP::exportStyleAttributes
                     // This is suboptimal
                     if( !mbIsInAutoStyles )

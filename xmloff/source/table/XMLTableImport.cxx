@@ -208,7 +208,7 @@ XMLTableImport::XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLP
     }
     catch(const Exception&)
     {
-        SAL_WARN("xmloff.table", "Error while checking avaiable service names");
+        SAL_WARN("xmloff.table", "Error while checking available service names");
     }
 
     if (bWriter)

@@ -25,7 +25,7 @@
       -pre-compile-test:         called before javac compilation of JUnit tests
       -post-compile-test:        called after javac compilation of JUnit tests
       -pre-compile-test-single:  called before javac compilation of single JUnit test
-      -post-compile-test-single: called after javac compilation of single JUunit test
+      -post-compile-test-single: called after javac compilation of single JUnit test
       -pre-jar:                  called before JAR building
       -post-jar:                 called after JAR building
       -post-clean:               called after cleaning build products

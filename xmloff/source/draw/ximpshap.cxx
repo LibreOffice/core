@@ -250,7 +250,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
 
 void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    // get the glue points container for this shape if its not already there
+    // get the glue points container for this shape if it's not already there
     if( !mxGluePoints.is() )
     {
         uno::Reference< drawing::XGluePointsSupplier > xSupplier( mxShape, uno::UNO_QUERY );
