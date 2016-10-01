@@ -59,6 +59,10 @@ void SfxItemDisruptor_Impl::LaunchDeleteOnIdle()
 SfxItemDisruptor_Impl::~SfxItemDisruptor_Impl()
 {
     m_Idle.Stop();
+
+    // reset RefCount (was set to SFX_ITEMS_SPECIAL before!)
+    pItem->SetRefCount( 0 );
+
     delete pItem;
 }
 
