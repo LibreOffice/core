@@ -69,18 +69,6 @@ SwPosition::SwPosition( SwContentNode & rNode, const sal_Int32 nOffset )
 {
 }
 
-SwPosition::SwPosition( const SwPosition & rPos )
-    : nNode( rPos.nNode ), nContent( rPos.nContent )
-{
-}
-
-SwPosition &SwPosition::operator=(const SwPosition &rPos)
-{
-    nNode = rPos.nNode;
-    nContent = rPos.nContent;
-    return *this;
-}
-
 bool SwPosition::operator<(const SwPosition &rPos) const
 {
     if( nNode < rPos.nNode )

@@ -58,9 +58,6 @@ struct SW_DLLPUBLIC SwPosition
     explicit SwPosition( const SwNode& rNode );
     explicit SwPosition( SwContentNode& rNode, const sal_Int32 nOffset = 0 );
 
-    SwPosition( const SwPosition & );
-    SwPosition &operator=(const SwPosition &);
-
     /**
        Returns the document this position is in.
 
