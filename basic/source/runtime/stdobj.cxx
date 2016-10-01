@@ -604,6 +604,7 @@ static Methods aMethods[] = {
   { "Expression",   SbxVARIANT, 0,nullptr,0 },
   { "Value",        SbxVARIANT, 0,nullptr,0 },
 { "Tab",            SbxSTRING,    1 | FUNCTION_, RTLNAME(Tab),0             },
+  { "Count",        SbxLONG, 0,nullptr,0 },
 { "Tan",            SbxDOUBLE,    1 | FUNCTION_, RTLNAME(Tan),0             },
   { "number",       SbxDOUBLE, 0,nullptr,0 },
 { "Time",           SbxVARIANT,       LFUNCTION_,RTLNAME(Time),0            },
