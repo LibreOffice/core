@@ -613,7 +613,7 @@ class WWD_Startup(WWD_General):
     '''
     Disables/enables the docUpDown buttons (step 2)
     according to the currently selected document
-    (no doc selected - both disbaled, last doc selected,
+    (no doc selected - both disabled, last doc selected,
     down disabled and so on...)
     '''
 

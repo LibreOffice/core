@@ -95,7 +95,7 @@ SAL_DLLPUBLIC oslSignalAction SAL_CALL osl_raiseSignal(
 
     @return
     sal_True if previous state of error reporting was enabled<br>
-    sal_False if previous state of error reporting was disbaled<br>
+    sal_False if previous state of error reporting was disabled<br>
 */
 
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_setErrorReporting(

@@ -732,7 +732,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     break;
                 }
 
-                // Save new toolar mode for a current module
+                // Save new toolbar mode for a current module
                 aAppNode.setNodeValue( "Active", makeAny( aNewName ) );
                 aAppNode.commit();
             }

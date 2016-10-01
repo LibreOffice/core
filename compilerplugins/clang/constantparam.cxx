@@ -188,7 +188,7 @@ bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
         return true;
     }
     functionDecl = functionDecl->getCanonicalDecl();
-    // method overrides don't always specify the same default params (althogh they probably should)
+    // method overrides don't always specify the same default params (although they probably should)
     // so we need to work our way up to the root method
     while (isa<CXXMethodDecl>(functionDecl)) {
         const CXXMethodDecl* methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);

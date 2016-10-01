@@ -78,7 +78,7 @@ void test::oustring::Compare::compareToIgnoreAsciiCase()
 void test::oustring::Compare::compareTo()
 {
     // test that embedded NUL does not stop the compare
-    // this sort of thing is how we assing shape ids in oox
+    // this sort of thing is how we assign shape ids in oox
     sal_Unicode str1[2] = { '\0', 'x' };
     sal_Unicode str2[2] = { '\0', 'y' };
 

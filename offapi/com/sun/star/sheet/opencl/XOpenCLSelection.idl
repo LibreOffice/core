@@ -38,7 +38,7 @@ interface XOpenCLSelection : com::sun::star::uno::XInterface
     void enableAutomaticDeviceSelection( [in] boolean force );
 
     /**
-     * Disbales automatic OpenCL Device Selection
+     * Disables automatic OpenCL Device Selection
      */
     void disableAutomaticDeviceSelection();
 
