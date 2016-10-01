@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a629dbe_bdd76722",
+        "filename": "wizards/com/sun/star/wizards/web/TOCPreview.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-01T20:08:35Z",
+      "side": 1,
+      "message": "instantiation",
+      "revId": "400fb375a5130dcfe4d3ef3e96bc01483f95ec16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
