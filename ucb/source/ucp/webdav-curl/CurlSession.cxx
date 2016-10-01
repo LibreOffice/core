@@ -1106,7 +1106,7 @@ auto CurlSession::OPTIONS(OUString const& rURIReference,
 {
     SAL_INFO("ucb.ucp.webdav.curl", "OPTIONS: " << rURIReference);
 
-    rOptions.reset();
+    rOptions.init();
 
     ::std::vector<OUString> const headerNames{ "allow", "dav" };
     DAVResource result;

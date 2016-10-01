@@ -91,13 +91,13 @@ namespace http_dav_ucp
 
         virtual ~DAVOptions();
 
-        bool isResourceFound() const { return m_isResourceFound; };
+        bool isResourceFound() { return m_isResourceFound; };
         void setResourceFound( bool ResourceFound = true ) { m_isResourceFound = ResourceFound; };
 
-        bool isClass1() const { return m_isClass1; };
+        bool isClass1() { return m_isClass1; };
         void setClass1( bool Class1 = true ) { m_isClass1 = Class1; };
 
-        bool isClass2() const { return m_isClass2; };
+        bool isClass2() { return m_isClass2; };
         void setClass2( bool Class2 = true ) { m_isClass2 = Class2; };
 
         bool isClass3() { return m_isClass3; };
@@ -109,20 +109,20 @@ namespace http_dav_ucp
         sal_uInt32  getStaleTime() const { return m_nStaleTime ; };
         void setStaleTime( const sal_uInt32 nStaleTime ) { m_nStaleTime = nStaleTime; };
 
-        OUString & getURL() { return m_sURL; };
-        void setURL( OUString & sURL ) { m_sURL = sURL; };
+        const OUString & getURL() { return m_sURL; };
+        void setURL( const OUString & sURL ) { m_sURL = sURL; };
 
-        OUString & getRedirectedURL() { return m_sRedirectedURL; };
-        void setRedirectedURL( OUString & sRedirectedURL ) { m_sRedirectedURL = sRedirectedURL; };
+        const OUString & getRedirectedURL() { return m_sRedirectedURL; };
+        void setRedirectedURL( const OUString & sRedirectedURL ) { m_sRedirectedURL = sRedirectedURL; };
 
-        void  setAllowedMethods( OUString & aAllowedMethods ) { m_aAllowedMethods = aAllowedMethods; } ;
-        OUString & getAllowedMethods() { return m_aAllowedMethods; } ;
-        bool isLockAllowed() const { return ( m_aAllowedMethods.indexOf( "LOCK" ) != -1 ); };
+        void  setAllowedMethods( const OUString & aAllowedMethods ) { m_aAllowedMethods = aAllowedMethods; } ;
+        const OUString & getAllowedMethods() { return m_aAllowedMethods; } ;
+        bool isLockAllowed() { return ( m_aAllowedMethods.indexOf( "LOCK" ) != -1 ); };
 
         void setLocked( bool locked = true ) { m_isLocked = locked; } ;
-        bool isLocked() const { return m_isLocked; };
+        bool isLocked() { return m_isLocked; };
 
-        void reset() {
+        void init() {
             m_isResourceFound = false;
             m_isClass1 = false;
             m_isClass2 = false;
