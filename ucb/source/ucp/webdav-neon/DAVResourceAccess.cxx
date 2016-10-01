@@ -1262,7 +1262,7 @@ bool DAVResourceAccess::handleException( const DAVException & e, int errorCount 
         switch( e.getStatus() )
         {
             // the HTTP server side response status codes that can be retried
-            case SC_BAD_GATEWAY:        // retry, can be an eccessive load
+            case SC_BAD_GATEWAY:        // retry, can be an excessive load
             case SC_GATEWAY_TIMEOUT:    // retry, may be we get lucky
             case SC_SERVICE_UNAVAILABLE: // retry, the service may become available
             case SC_INSUFFICIENT_STORAGE: // space may be freed, retry

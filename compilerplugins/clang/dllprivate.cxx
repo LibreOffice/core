@@ -58,9 +58,9 @@ public:
 
 private:
     void run() override {
-        // DISABLE_DYNLOADING makes SAL_DLLPUBLIC_{EXPORT,IMPORT,TEMPLAT} expand
+        // DISABLE_DYNLOADING makes SAL_DLLPUBLIC_{EXPORT,IMPORT,TEMPLATE} expand
         // to visibility("hidden") attributes, which would cause bogus warnings
-        // here (e.g., in UBSan builds that explicitly define DISBALE_DYNLOADING
+        // here (e.g., in UBSan builds that explicitly define DISABLE_DYNLOADING
         // in jurt/source/pipe/staticsalhack.cxx); alternatively, change
         // include/sal/types.h to make those SAL_DLLPUBLIC_* expand to nothing
         // for DISABLE_DYNLOADING:

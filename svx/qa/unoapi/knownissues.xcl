@@ -19,19 +19,19 @@
 ### i85263 ###
 svx.SvxShape::com::sun::star::drawing::TextProperties::TextWritingMode
 svx.SvxShapeConnector::com::sun::star::drawing::TextProperties::TextWritingMode
-# -> disbaled in svx.sce
+# -> disabled in svx.sce
 
 ### i46736 ###
 svx.AccessibleImageBullet
-# -> disbaled in svx.sce
+# -> disabled in svx.sce
 
-### i85501 ### 
+### i85501 ###
 svx.SvxGraphCtrlAccessibleContext
-# -> disbaled in svx.sce
+# -> disabled in svx.sce
 
 ### i85539 ###
 svx.AccessiblePresentationShape
-# -> disbaled in svx.sce
+# -> disabled in svx.sce
 
 ### i85476 ###
 svx.SvxUnoText::com::sun::star::text::XTextRangeMover
@@ -92,11 +92,11 @@ svx.SvxUnoTextRange::com::sun::star::beans::XPropertySet
 
 ### i90294 ###
 svx.GraphicExporter
-# -> disbaled in svx.sce
+# -> disabled in svx.sce
 
 ### i98339 ###
 svx.AccessibleControlShape
-# -> disbaled in svx.sce
+# -> disabled in svx.sce
 
 ### i111114 ###
 svx.AccessiblePresentationOLEShape::com::sun::star::accessibility::XAccessibleComponent

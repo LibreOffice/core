@@ -1941,7 +1941,7 @@ IMPL_LINK_NOARG_TYPED(Desktop, OpenClients_Impl, void*, void)
         // ALSO:
         //
         // Multiple clients may request simultaneous connections.
-        // When this server closes down it attempts to recreate the pipe (in RequestHander::Disable()).
+        // When this server closes down it attempts to recreate the pipe (in RequestHandler::Disable()).
         // It's possible that the client has a pending connection request.
         // When the IPC thread is not running, this connection locks (because maPipe.accept()) is never called
         RequestHandler::SetReady();
