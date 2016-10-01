@@ -1022,6 +1022,7 @@ bool SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(
 {
     return GetMacroSecurityLevel() == 0 || uri.isEmpty()
         || uri.startsWithIgnoreAsciiCase("private:")
+        || uri.startsWithIgnoreAsciiCase("file://")
         || isTrustedLocationUri(uri);
 }
 
