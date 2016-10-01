@@ -2705,14 +2705,6 @@ SalColormap::SalColormap( sal_uInt16 nDepth )
     }
 }
 
-SalColormap::~SalColormap()
-{
-#ifdef DBG_UTIL
-    m_hColormap      = None;
-    m_pDisplay       = nullptr;
-#endif
-}
-
 void SalColormap::GetPalette()
 {
     Pixel i;

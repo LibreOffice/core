@@ -120,7 +120,6 @@ public:
                  SalX11Screen       nXScreen );
     SalColormap( sal_uInt16         nDepth );
     SalColormap();
-    ~SalColormap();
 
     inline  Colormap            GetXColormap() const { return m_hColormap; }
     inline  const SalDisplay*   GetDisplay() const { return m_pDisplay; }
