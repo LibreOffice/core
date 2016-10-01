@@ -130,7 +130,7 @@ interface XAcceleratorConfiguration
         @throws ::com::sun::star::lang::IllegalArgumentException
                 if the key event isn't a valid one. Commands can be
                 checked only, if they are empty. Because every URL schema can be used
-                by commands in general, so its not possible to validate it.
+                by commands in general, so it's not possible to validate it.
      */
     void setKeyEvent( [in] com::sun::star::awt::KeyEvent aKeyEvent,
                       [in] string                        sCommand )
@@ -193,7 +193,7 @@ interface XAcceleratorConfiguration
         This internal selection can't be influenced from outside.
         </p>
 
-        @attention  Because its not defined, that any command (e.g. configured inside a menu)
+        @attention  Because it's not defined, that any command (e.g. configured inside a menu)
                     must have an accelerator - we can't reject the call if at least one command
                     does not occur inside this configuration set ...
                     We handle it more gracefully - and return an empty item instead of throwing

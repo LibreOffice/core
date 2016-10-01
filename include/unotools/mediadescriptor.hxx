@@ -287,7 +287,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         /** @short  tries to open a stream by using the given URL.
 
             @descr  First it tries to open the content in r/w mode (if its
-                    allowed to do so). Only in case its not allowed or it failed
+                    allowed to do so). Only in case it's not allowed or it failed
                     the stream will be tried to open in readonly mode.
 
                     The MediaDescriptor itself is changed inside this method.
