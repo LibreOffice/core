@@ -64,6 +64,7 @@ bool DAVOptions::operator==( const DAVOptions& rOpts ) const
         m_isClass2 == rOpts.m_isClass2 &&
         m_isClass3 == rOpts.m_isClass3 &&
         m_isLocked == rOpts.m_isLocked &&
+        m_isHeadAllowed == rOpts.m_isHeadAllowed &&
         m_aAllowedMethods == rOpts.m_aAllowedMethods &&
         m_nStaleTime == rOpts.m_nStaleTime &&
         m_sURL == rOpts.m_sURL &&

@@ -945,7 +945,7 @@ auto CurlSession::OPTIONS(OUString const& rURIReference,
 {
     SAL_INFO("ucb.ucp.webdav.curl", "OPTIONS: " << rURIReference);
 
-    rOptions.reset();
+    rOptions.init();
 
     ::std::scoped_lock const g(m_Mutex);
 
