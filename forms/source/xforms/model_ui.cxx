@@ -609,7 +609,7 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
     if( xNode->getNodeName() == sName )
         return xNode;
 
-    // refuse to change name if its an attribute, and the name is already used
+    // refuse to change name if it's an attribute, and the name is already used
     if( xNode->getNodeType() == NodeType_ATTRIBUTE_NODE
         && xNode->getParentNode().is()
         && Reference<XElement>(xNode->getParentNode(), UNO_QUERY_THROW)->hasAttribute( sName ) )

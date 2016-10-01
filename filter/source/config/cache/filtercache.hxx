@@ -256,7 +256,7 @@ class FilterCache : public BaseLock
 
         /** @short  standard ctor
 
-            @descr  Its not allowed to do anything here ...
+            @descr  It's not allowed to do anything here...
                     especially is forbidden to start operations,
                     which needs a FilterCache instance too!
                     Why? Because this FilterCache instance will be
@@ -288,10 +288,10 @@ class FilterCache : public BaseLock
                     If the new data are needed immediately inside the original container,
                     the method takeOver() can be used to copy all changes back.
                     The may be following notifications of the configuration will be superfluous then.
-                    But they can't be stopped ...
+                    But they can't be stopped...
 
                     All internal structures will be copied here. But the internal used
-                    configuration (update) access wont be copied. The cloned instance contains
+                    configuration (update) access won't be copied. The cloned instance contains
                     a different one.
          */
         std::unique_ptr<FilterCache> clone() const;
@@ -663,7 +663,7 @@ class FilterCache : public BaseLock
 
             @attention  Because this function might opens a new configuration
                         read access for reading one key value only, it should
-                        be used in rare cases only. Its an easy way ... but an
+                        be used in rare cases only. It's an easy way... but an
                         expensive one.
 
             @param      sDirectKey
@@ -747,7 +747,7 @@ class FilterCache : public BaseLock
 
         /** @short  read the specified container item from the given configuration set.
 
-            @descr  Its not added to any internal structures here. That must be done
+            @descr  It's not added to any internal structures here. That must be done
                     outside this method.
 
             @param  xSet

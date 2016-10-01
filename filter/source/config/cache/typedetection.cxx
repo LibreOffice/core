@@ -885,7 +885,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     // step over all possible types for this URL.
     // solutions:
     // a) no types                                => no detection
-    // b) deep detection not allowed              => return first valid type of list (because its the preferred or the first valid one)
+    // b) deep detection not allowed              => return first valid type of list (because it's the preferred or the first valid one)
     //    or(!) match by URLPattern               => in such case a deep detection will be suppressed!
     // c) type has no detect service              => safe the first occurred type without a detect service
     //                                               as "last chance"(!). It will be used outside of this method

@@ -425,7 +425,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
     // It hold a reference to us ... and call our container interface directly.
     // be aware of some direct callbacks if it will be created :-)
 
-    /* Note: Its not allowed to return NULL. Because an empty enumeration
+    /* Note: It's not allowed to return NULL. Because an empty enumeration
              transport the same information but make no trouble outside.
              Further its easier to work directly with the return value
              instaed of checking of NULL returns! */
@@ -484,7 +484,7 @@ void SAL_CALL BaseContainer::flush()
     // notify listener outside the lock!
     // The used listener helper lives if we live
     // and is threadsafe by itself.
-    // Further its not a good idea to hold the own lock
+    // Further it's not a good idea to hold the own lock
     // if an outside object is called :-)
     css::lang::EventObject             aSource    (static_cast< css::util::XFlushable* >(this));
     ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(cppu::UnoType<css::util::XFlushListener>::get());
