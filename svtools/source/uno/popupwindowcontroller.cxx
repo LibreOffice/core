@@ -24,7 +24,6 @@
 #include <vcl/svapp.hxx>
 
 #include <svtools/popupwindowcontroller.hxx>
-#include <svtools/toolbarmenu.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::uno;
@@ -92,10 +91,6 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&, rWin
             if( mpToolBox )
                 mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_OPEN, static_cast<void*>(mpPopupWindow) );
             mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_GETFOCUS );
-
-            svtools::ToolbarMenu* pToolbarMenu = dynamic_cast< svtools::ToolbarMenu* >( mpPopupWindow.get() );
-            if( pToolbarMenu )
-                pToolbarMenu->highlightFirstEntry();
             break;
         }
         break;
@@ -135,23 +130,11 @@ sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& Servic
     return cppu::supportsService(this, ServiceName);
 }
 
-// XInitialization
-void SAL_CALL PopupWindowController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
-{
-    svt::ToolboxController::initialize( aArguments );
-    if( !m_aCommandURL.isEmpty() )
-        addStatusListener( m_aCommandURL );
-}
-
 // XComponent
 void SAL_CALL PopupWindowController::dispose() throw (RuntimeException, std::exception)
 {
-    if( !m_aCommandURL.isEmpty() )
-        removeStatusListener( m_aCommandURL );
-
     svt::ToolboxController::dispose();
 }
-
 
 // XStatusListener
 void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEvent& rEvent ) throw ( RuntimeException, std::exception )
@@ -161,11 +144,6 @@ void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEve
 }
 
 // XToolbarController
-void SAL_CALL PopupWindowController::execute( sal_Int16 KeyModifier ) throw (RuntimeException, std::exception)
-{
-    svt::ToolboxController::execute( KeyModifier );
-}
-
 Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() throw (RuntimeException, std::exception)
 {
     VclPtr< ToolBox > pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
@@ -183,12 +161,6 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
                                                            FloatWinPopupFlags::NoMouseUpClose );
         }
     }
-    return Reference< awt::XWindow >();
-}
-
-Reference< awt::XWindow > SAL_CALL PopupWindowController::createItemWindow( const Reference< awt::XWindow >& /*Parent*/ )
-    throw (RuntimeException, std::exception)
-{
     return Reference< awt::XWindow >();
 }
 
