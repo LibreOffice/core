@@ -404,6 +404,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
             &rWindow,
             pFrameView,
             bIsCenterPane);
+        pViewShell->GetContentWindow()->set_id("slidesorter");
     }
 
     return pViewShell;
