@@ -1578,29 +1578,64 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
         if (rNode.type != sc::element_type_formula)
             return;
 
-        cout << "  -- formula block" << endl;
+        cout << "  * formula block" << endl;
         sc::formula_block::const_iterator it = sc::formula_block::begin(*rNode.data);
         sc::formula_block::const_iterator itEnd = sc::formula_block::end(*rNode.data);
 
         for (; it != itEnd; ++it)
         {
-            const ScFormulaCell& rCell = **it;
-            if (!rCell.IsShared())
+            const ScFormulaCell* pCell = *it;
+            if (!pCell->IsShared())
             {
-                cout << "  + row " << rCell.aPos.Row() << " not shared" << endl;
+                cout << "    * row " << pCell->aPos.Row() << " not shared" << endl;
+                printResult(pCell);
                 continue;
             }
 
-            if (rCell.GetSharedTopRow() != rCell.aPos.Row())
+            if (pCell->GetSharedTopRow() != pCell->aPos.Row())
             {
-                cout << "  + row " << rCell.aPos.Row() << " shared with top row " << rCell.GetSharedTopRow() << " with length " << rCell.GetSharedLength() << endl;
+                cout << "    * row " << pCell->aPos.Row() << " shared with top row "
+                    << pCell->GetSharedTopRow() << " with length " << pCell->GetSharedLength()
+                    << endl;
                 continue;
             }
 
-            SCROW nLen = rCell.GetSharedLength();
-            cout << "  * group: start=" << rCell.aPos.Row() << ", length=" << nLen << endl;
-            std::advance(it, nLen-1);
+            SCROW nLen = pCell->GetSharedLength();
+            cout << "    * group: start=" << pCell->aPos.Row() << ", length=" << nLen << endl;
+            printResult(pCell);
+
+            if (nLen > 1)
+            {
+                for (SCROW i = 0; i < nLen-1; ++i, ++it)
+                {
+                    pCell = *it;
+                    printResult(pCell);
+                }
+            }
         }
+    }
+
+    void printResult(const ScFormulaCell* pCell) const
+    {
+        sc::FormulaResultValue aRes = pCell->GetResult();
+        cout << "    * result: ";
+        switch (aRes.meType)
+        {
+            case sc::FormulaResultValue::Value:
+                cout << aRes.mfValue << " (type: value)";
+                break;
+            case sc::FormulaResultValue::String:
+                cout << aRes.maString.getString() << " (type: string)";
+                break;
+            case sc::FormulaResultValue::Error:
+                cout << "error (" << static_cast<int>(aRes.mnError) << ")";
+                break;
+            case sc::FormulaResultValue::Invalid:
+                cout << "invalid";
+                break;
+        }
+
+        cout << endl;
     }
 };
 
@@ -1608,7 +1643,7 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
 
 void ScColumn::DumpFormulaGroups() const
 {
-    cout << "-- formula groups" << endl;
+    cout << "-- table: " << nTab << "; column: " << nCol << endl;
     std::for_each(maCells.begin(), maCells.end(), FormulaGroupDumper());
     cout << "--" << endl;
 }
