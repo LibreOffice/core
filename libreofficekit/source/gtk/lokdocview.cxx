@@ -3179,6 +3179,26 @@ lok_doc_view_set_visible_area (LOKDocView* pDocView, GdkRectangle* pVisibleArea)
     priv->m_bVisibleAreaSet = true;
 }
 
+namespace {
+// This used to be rtl::math::approxEqual() but since that isn't inline anymore
+// in rtl/math.hxx and was moved into libuno_sal as rtl_math_approxEqual() to
+// cater for representable integer cases and we don't want to link against
+// libuno_sal, we'll have to have an own implementation. The special large
+// integer cases seems not be needed here.
+inline bool lok_approxEqual(double a, double b)
+{
+    static const double e48 = 1.0 / (16777216.0 * 16777216.0);
+    // XXX loplugin:fpcomparison complains about floating-point comparison for
+    // a==b, though we actually want this here.
+    if (!(a<b) && !(a>b))
+        return true;
+    if (a == 0.0 || b == 0.0)
+        return false;
+    const double d = fabs(a - b);
+    return (d < fabs(a) * e48 && d < fabs(b) * e48);
+}
+}
+
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
 {
@@ -3192,7 +3212,7 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
     fZoom = fZoom < MIN_ZOOM ? MIN_ZOOM : fZoom;
     fZoom = fZoom > MAX_ZOOM ? MAX_ZOOM : fZoom;
 
-    if (rtl::math::approxEqual(fZoom, priv->m_fZoom))
+    if (lok_approxEqual(fZoom, priv->m_fZoom))
         return;
 
     priv->m_fZoom = fZoom;
