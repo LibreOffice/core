@@ -395,10 +395,10 @@ void Window::dispose()
     remove_from_all_size_groups();
 
     // clear mnemonic labels
-    std::vector<VclPtr<FixedText> > aMnemonicLabels(list_mnemonic_labels());
-    for (auto aI = aMnemonicLabels.begin(); aI != aMnemonicLabels.end(); ++aI)
+    for (auto aI = mpWindowImpl->m_aMnemonicLabels.begin(); aI != mpWindowImpl->m_aMnemonicLabels.end(); )
     {
-        remove_mnemonic_label(*aI);
+        (*aI)->set_mnemonic_widget(nullptr);
+        aI = mpWindowImpl->m_aMnemonicLabels.erase(aI);
     }
 
     // hide window in order to trigger the Paint-Handling
