@@ -1030,37 +1030,43 @@ SwSbxValue SwCalc::Term()
     }
 }
 
-extern "C" typedef double (*pfCalc)( double );
+SwSbxValue SwCalc::StdFunc(pfCalc pFnc, bool bChkTrig)
+{
+    SwSbxValue nErg;
+    GetToken();
+    double nVal = Prim().GetDouble();
+    if( !bChkTrig || ( nVal > -1 && nVal < 1 ) )
+        nErg.PutDouble( (*pFnc)( nVal ) );
+    else
+        m_eError = CALC_OVERFLOW;
+    return nErg;
+}
 
 SwSbxValue SwCalc::Prim()
 {
     SwSbxValue nErg;
 
-    pfCalc pFnc = nullptr;
-
-    bool bChkTrig = false, bChkPow = false;
+    bool bChkPow = false;
 
     switch (m_eCurrOper)
     {
         case CALC_SIN:
-            pFnc = &sin;
+            nErg = StdFunc(&sin, false);
             break;
         case CALC_COS:
-            pFnc = &cos;
+            nErg = StdFunc(&cos, false);
             break;
         case CALC_TAN:
-            pFnc = &tan;
+            nErg = StdFunc(&tan, false);
             break;
         case CALC_ATAN:
-            pFnc = &atan;
+            nErg = StdFunc(&atan, false);
             break;
         case CALC_ASIN:
-            pFnc = &asin;
-            bChkTrig = true;
+            nErg = StdFunc(&asin, true);
             break;
         case CALC_ACOS:
-            pFnc = &acos;
-            bChkTrig = true;
+            nErg = StdFunc(&acos, true);
             break;
         case CALC_NOT:
         {
@@ -1183,16 +1189,6 @@ SwSbxValue SwCalc::Prim()
         default:
             m_eError = CALC_SYNTAX;
             break;
-    }
-
-    if( pFnc )
-    {
-        GetToken();
-        double nVal = Prim().GetDouble();
-        if( !bChkTrig || ( nVal > -1 && nVal < 1 ) )
-            nErg.PutDouble( (*pFnc)( nVal ) );
-        else
-            m_eError = CALC_OVERFLOW;
     }
 
     if( bChkPow && m_eCurrOper == CALC_POW )

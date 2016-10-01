@@ -148,6 +148,8 @@ void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTableSize );
 struct CalcOp;
 CalcOp* FindOperator( const OUString& rSearch );
 
+extern "C" typedef double (*pfCalc)(double);
+
 class SwCalc
 {
     SwHash*     m_aVarTable[ TBLSZ ];
@@ -173,6 +175,7 @@ class SwCalc
     SwSbxValue  Expr();
     SwSbxValue  Term();
     SwSbxValue  Prim();
+    SwSbxValue  StdFunc(pfCalc pFnc, bool bChkTrig);
 
     static OUString  GetColumnName( const OUString& rName );
     OUString  GetDBName( const OUString& rName );
