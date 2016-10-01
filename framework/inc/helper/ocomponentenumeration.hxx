@@ -35,7 +35,7 @@ namespace framework{
 
 /*-************************************************************************************************************
     @short          implement a helper for a oneway enumeration of components
-    @descr          You can step during this list only for one time! Its a snapshot.
+    @descr          You can step during this list only for one time! It's a snapshot.
                     Don't forget to release the reference. You are the owner of an instance of this implementation.
                     You can't use this as a baseclass. Please use it as a dynamical object for return.
 
@@ -121,7 +121,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper< css::container::X
         /*-****************************************************************************************************
             @short      standard destructor
             @descr      This method destruct an instance of this class and clear some member.
-                        We make it protected, because its not supported to use this class as normal instance!
+                        We make it protected, because it's not supported to use this class as normal instance!
                         You must create it dynamical in memory and use a pointer.
         *//*-*****************************************************************************************************/
 
