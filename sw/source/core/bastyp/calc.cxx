@@ -1042,36 +1042,34 @@ SwSbxValue SwCalc::StdFunc(pfCalc pFnc, bool bChkTrig)
     return nErg;
 }
 
-SwSbxValue SwCalc::Prim()
+SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
 {
-    SwSbxValue nErg;
-
-    bool bChkPow = false;
+    rChkPow = false;
 
     switch (m_eCurrOper)
     {
         case CALC_SIN:
-            nErg = StdFunc(&sin, false);
+            return StdFunc(&sin, false);
             break;
         case CALC_COS:
-            nErg = StdFunc(&cos, false);
+            return StdFunc(&cos, false);
             break;
         case CALC_TAN:
-            nErg = StdFunc(&tan, false);
+            return StdFunc(&tan, false);
             break;
         case CALC_ATAN:
-            nErg = StdFunc(&atan, false);
+            return StdFunc(&atan, false);
             break;
         case CALC_ASIN:
-            nErg = StdFunc(&asin, true);
+            return StdFunc(&asin, true);
             break;
         case CALC_ACOS:
-            nErg = StdFunc(&acos, true);
+            return StdFunc(&acos, true);
             break;
         case CALC_NOT:
         {
             GetToken();
-            nErg = Prim();
+            SwSbxValue nErg = Prim();
             if( SbxSTRING == nErg.GetType() )
             {
                 nErg.PutBool( nErg.GetOUString().isEmpty() );
@@ -1092,10 +1090,12 @@ SwSbxValue SwCalc::Prim()
                 //!! computes a binary NOT
                 nErg.Compute( SbxNOT, nErg );
             }
+            return nErg;
             break;
         }
         case CALC_NUMBER:
         {
+            SwSbxValue nErg;
             if( GetToken() == CALC_PHD )
             {
                 double aTmp = m_nNumberValue.GetDouble();
@@ -1110,12 +1110,14 @@ SwSbxValue SwCalc::Prim()
             else
             {
                 nErg = m_nNumberValue;
-                bChkPow = true;
+                rChkPow = true;
             }
+            return nErg;
             break;
         }
         case CALC_NAME:
         {
+            SwSbxValue nErg;
             switch(SwCalcOper eOper = GetToken())
             {
                 case CALC_ASSIGN:
@@ -1132,19 +1134,24 @@ SwSbxValue SwCalc::Prim()
                     if (nErg.IsVoidValue() && (eOper == CALC_LP))
                         m_eError = CALC_SYNTAX;
                     else
-                        bChkPow = true;
+                        rChkPow = true;
                     break;
             }
+            return nErg;
             break;
         }
         case CALC_MINUS:
+        {
+            SwSbxValue nErg;
             GetToken();
             nErg.PutDouble( -(Prim().GetDouble()) );
+            return nErg;
             break;
+        }
         case CALC_LP:
         {
             GetToken();
-            nErg = Expr();
+            SwSbxValue nErg = Expr();
             if( m_eCurrOper != CALC_RP )
             {
                 m_eError = CALC_BRACK;
@@ -1152,46 +1159,64 @@ SwSbxValue SwCalc::Prim()
             else
             {
                 GetToken();
-                bChkPow = true; // in order for =(7)^2 to work
+                rChkPow = true; // in order for =(7)^2 to work
             }
+            return nErg;
             break;
         }
         case CALC_MEAN:
         {
             m_nListPor = 1;
             GetToken();
-            nErg = Expr();
+            SwSbxValue nErg = Expr();
             double aTmp = nErg.GetDouble();
             aTmp /= m_nListPor;
             nErg.PutDouble( aTmp );
+            return nErg;
             break;
         }
         case CALC_SQRT:
         {
             GetToken();
-            nErg = Prim();
+            SwSbxValue nErg = Prim();
             if( nErg.GetDouble() < 0 )
                 m_eError = CALC_OVERFLOW;
             else
                 nErg.PutDouble( sqrt( nErg.GetDouble() ));
+            return nErg;
             break;
         }
         case CALC_SUM:
         case CALC_DATE:
         case CALC_MIN:
         case CALC_MAX:
+        {
             GetToken();
-            nErg = Expr();
+            SwSbxValue nErg = Expr();
+            return nErg;
             break;
+        }
         case CALC_ENDCALC:
+        {
+            SwSbxValue nErg;
             nErg.Clear();
+            return nErg;
             break;
+        }
         default:
             m_eError = CALC_SYNTAX;
             break;
     }
 
-    if( bChkPow && m_eCurrOper == CALC_POW )
+    return SwSbxValue();
+}
+
+SwSbxValue SwCalc::Prim()
+{
+    bool bChkPow;
+    SwSbxValue nErg = PrimFunc(bChkPow);
+
+    if (bChkPow && m_eCurrOper == CALC_POW)
     {
         double dleft = nErg.GetDouble();
         GetToken();

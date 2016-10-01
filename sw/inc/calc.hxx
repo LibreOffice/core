@@ -174,6 +174,7 @@ class SwCalc
     SwCalcOper  GetToken();
     SwSbxValue  Expr();
     SwSbxValue  Term();
+    SwSbxValue  PrimFunc(bool &rChkPow);
     SwSbxValue  Prim();
     SwSbxValue  StdFunc(pfCalc pFnc, bool bChkTrig);
 
