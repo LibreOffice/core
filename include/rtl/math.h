@@ -422,6 +422,14 @@ SAL_DLLPUBLIC double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THR
   */
 SAL_DLLPUBLIC double SAL_CALL rtl_math_approxValue(double fValue) SAL_THROW_EXTERN_C();
 
+/** Test equality of two values with an accuracy of the magnitude of the
+    given values scaled by 2^-48 (4 bits roundoff stripped).
+
+    @attention
+    approxEqual( value!=0.0, 0.0 ) _never_ yields true.
+ */
+SAL_DLLPUBLIC bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C();
+
 /** Returns more accurate e^x-1 for x near 0 than calculating directly.
 
     expm1 is part of the C99 standard, but not provided by some compilers.
