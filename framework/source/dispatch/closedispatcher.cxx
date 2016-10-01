@@ -103,7 +103,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
 {
     if (nCommandGroup == css::frame::CommandGroup::VIEW)
     {
-        /* Attention: Don't add .uno:CloseFrame here. Because its not really
+        /* Attention: Don't add .uno:CloseFrame here. Because it's not really
                       a configurable feature ... and further it does not have
                       a valid UIName entry inside the GenericCommands.xcu ... */
         css::uno::Sequence< css::frame::DispatchInformation > lViewInfos(1);
@@ -329,7 +329,7 @@ IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
             FrameListAnalyzer aCheck2(xDesktop, xCloseFrame, FrameListAnalyzer::E_ALL);
 
             // c1) there is as minimum 1 frame open, which is visible and contains a document
-            //     different from our one. And its not the help!
+            //     different from our one. And it's not the help!
             //     => close our frame only - nothing else.
             if (!aCheck2.m_lOtherVisibleFrames.empty())
                 bCloseFrame = true;

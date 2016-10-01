@@ -122,7 +122,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
 
         case css::frame::FrameAction_COMPONENT_REATTACHED :
             {
-                // nothing todo here, because its not allowed to change position and size
+                // nothing todo here, because it's not allowed to change position and size
                 // of an already existing frame!
             }
             break;
