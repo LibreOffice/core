@@ -801,7 +801,7 @@ public:
     //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const override;
 
-    /// In MS Word, the font underline setting of the paragraph end position wont affect the formatting of numbering, so we ignore it
+    /// In MS Word, the font underline setting of the paragraph end position won't affect the formatting of numbering, so we ignore it
     static bool IsIgnoredCharFormatForNumbering(const sal_uInt16 nWhich);
 };
 

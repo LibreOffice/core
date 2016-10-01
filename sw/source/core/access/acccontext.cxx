@@ -1058,7 +1058,7 @@ void SwAccessibleContext::Dispose(bool bRecursive, bool bCanSkipInvisible)
         pAcc->FireAccessibleEvent( aEvent );
     }
 
-    // set defunc state (its not required to broadcast a state changed
+    // set defunc state (it's not required to broadcast a state changed
     // event if the object is disposed afterwards)
     {
         osl::MutexGuard aDefuncStateGuard( m_Mutex );

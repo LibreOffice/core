@@ -282,7 +282,7 @@ class CheckTable(unittest.TestCase):
         xTable.getCellByPosition(1, 0).String = 'Cell 1 0'
         xTable.getCellByPosition(2, 0).String = 'Cell 2 0'
         self._check_table(xTable)  # ... to ensure the rest was untouched
-        # check disconnected table excepts, but doesnt crash
+        # check disconnected table excepts, but doesn't crash
         xTable2 = xDoc.createInstance("com.sun.star.text.TextTable")
         xTable2.initialize(3, 3)
         with self.assertRaises(Exception):
