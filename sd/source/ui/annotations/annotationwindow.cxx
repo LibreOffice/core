@@ -287,6 +287,7 @@ void AnnotationWindow::dispose()
     mpMeta.disposeAndClear();
     delete mpOutlinerView;
     delete mpOutliner;
+    mpOutliner = nullptr;
     mpVScrollbar.disposeAndClear();
     mpTextWindow.disposeAndClear();
     FloatingWindow::dispose();
@@ -597,6 +598,9 @@ void AnnotationWindow::Deactivate()
     //tdf#99388 and tdf#99712, don't deactivate if we lose focus because of our
     //own popup
     if (mrManager.getPopupMenuActive())
+        return;
+
+    if (!mpOutliner) //in dispose
         return;
 
     Reference< XAnnotation > xAnnotation( mxAnnotation );
