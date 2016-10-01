@@ -149,6 +149,27 @@ struct UStringTraits
     }
 };
 
+/** If value (passed as absolute value) is an integer representable as double,
+    which we handle explicitly at some places.
+ */
+bool isRepresentableInteger(double fAbsValue)
+{
+    const sal_Int64 kMaxInt = (static_cast<sal_Int64>(1) << 53) - 1;
+    if (fAbsValue <= static_cast<double>(kMaxInt))
+    {
+        sal_Int64 nInt = static_cast<sal_Int64>(fAbsValue);
+        // Check the integer range again because double comparison may yield
+        // true within the precision range.
+        // XXX loplugin:fpcomparison complains about floating-point comparison
+        // for static_cast<double>(nInt) == fAbsValue, though we actually want
+        // this here.
+        double fInt;
+        return (nInt <= kMaxInt &&
+                (!((fInt = static_cast<double>(nInt)) < fAbsValue) && !(fInt > fAbsValue)));
+    }
+    return false;
+}
+
 // Solaris C++ 5.2 compiler has problems when "StringT ** pResult" is
 // "typename T::String ** pResult" instead:
 template< typename T, typename StringT >
@@ -1062,6 +1083,24 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
         return fOrigValue;
 
     return bSign ? -fValue : fValue;
+}
+
+bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
+{
+    static const double e48 = 1.0 / (16777216.0 * 16777216.0);
+    static const double e44 = e48 * 16.0;
+    // XXX loplugin:fpcomparison complains about floating-point comparison for
+    // a==b, though we actually want this here.
+    if (!(a<b) && !(a>b))
+        return true;
+    if (a == 0.0 || b == 0.0)
+        return false;
+    const double d = fabs(a - b);
+    if (d > ((a = fabs(a)) * e44) || d > ((b = fabs(b)) * e44))
+        return false;
+    if (isRepresentableInteger(d) && isRepresentableInteger(a) && isRepresentableInteger(b))
+        return false;   // special case for representable integers.
+    return (d < a * e48 && d < b * e48);
 }
 
 double SAL_CALL rtl_math_expm1( double fValue ) SAL_THROW_EXTERN_C()
