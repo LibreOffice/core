@@ -31,7 +31,7 @@ from ..common.UCB import UCB
 # while other change according to user choices)
 # I divide this tasks to two: all necessary
 # static files, which should not regularly update are copied upon
-# instanciation.
+# instaniiation.
 # The TOC is generated in refresh(...);
 
 class TOCPreview:

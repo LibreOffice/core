@@ -108,7 +108,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                 SfxItemState eState = rSet.GetItemState( pEntry->nWhichId, true,
                                                          &pItem );
 
-                // if its not set, try the pool
+                // if it's not set, try the pool
                 if (SfxItemState::SET != eState && SfxItemPool::IsWhich(pEntry->nWhichId))
                     pItem = &rSet.GetPool()->GetDefaultItem(pEntry->nWhichId);
 
