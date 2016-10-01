@@ -1169,7 +1169,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
 
 /** Returns the position of the given SdrObject in the Presentation order.
  *  This function returns -1 if the SdrObject is not in the Presentation order
- *  or if its the path-object.
+ *  or if it's the path-object.
  */
 sal_Int32 EffectMigration::GetPresentationOrder( SvxShape* pShape )
 {

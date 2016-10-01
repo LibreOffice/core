@@ -63,7 +63,7 @@ void capitalise() {
                     UnoRuntime.queryInterface(XText.class, xTextRange.getText());
                 xWordCursor = (XWordCursor)
                     UnoRuntime.queryInterface(XWordCursor.class, xText.createTextCursorByRange(xTextRange));
-                // move the Word cursor to the start of the word if its not
+                // move the Word cursor to the start of the word if it's not
                 // already there
                 if(!xWordCursor.isStartOfWord()) {
                     xWordCursor.gotoStartOfWord(false);

@@ -95,7 +95,7 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                 else
                 {
                     //If we can't convert to the dest encoding, or if
-                    //its an uncommon multibyte sequence which most
+                    //it's an uncommon multibyte sequence which most
                     //readers won't be able to handle correctly, then
                     //If we can't convert to the dest encoding, then
                     //export as unicode

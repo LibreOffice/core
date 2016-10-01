@@ -68,7 +68,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         SwTwips mnLastTopOfLine;
 
         // for to-paragraph and to-character anchored objects:
-        // Layout frame vertical position is orient at - typically its the upper
+        // Layout frame vertical position is orient at - typically it's the upper
         // of the anchor frame, but it could also by the upper of a follow or
         // a following layout frame in the text flow.
         const SwLayoutFrame* mpVertPosOrientFrame;
