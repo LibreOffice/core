@@ -210,7 +210,7 @@ public:
      * Because it opens the specified configuration package, reads the key and
      * closes the configuration again.
      *
-     * So its not very useful to use this method for reading multiple keys at the same time.
+     * So it's not very useful to use this method for reading multiple keys at the same time.
      * (Excepting these keys exists inside different configuration packages ...))
      */
     static css::uno::Any readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
@@ -226,7 +226,7 @@ public:
      * Because it opens the specified configuration package, writes the key, flush
      * all changes and closes the configuration again.
      *
-     * So its not very useful to use this method for writing multiple keys at the same time.
+     * So it's not very useful to use this method for writing multiple keys at the same time.
      * (Excepting these keys exists inside different configuration packages ...))
      */
     static void writeDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,

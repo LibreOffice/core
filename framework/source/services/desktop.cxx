@@ -1519,7 +1519,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropert
     @seealso    method getCurrentComponent();
 
     @param      "xFrame", reference to valid frame in hierarchy. Method is not defined for invalid values.
-                But we don't check these. Its an IMPL-method and caller must use it right!
+                But we don't check these. It's an IMPL-method and caller must use it right!
     @return     A reference to found component.
 
     @onerror    A null reference is returned.

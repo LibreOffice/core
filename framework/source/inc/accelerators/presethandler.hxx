@@ -132,7 +132,7 @@ class PresetHandler
                     working storage of the user layer. */
         std::vector<OUString> m_lTargets;
 
-        /** @short  its the current office locale and will be used
+        /** @short  it's the current office locale and will be used
                     to handle localized presets.
 
             @descr  Default is "x-no-translate" which disable any
