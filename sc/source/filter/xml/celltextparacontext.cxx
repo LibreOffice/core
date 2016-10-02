@@ -94,9 +94,9 @@ void ScXMLCellTextParaContext::PushFieldTitle(const OUString& rStyleName)
 }
 
 void ScXMLCellTextParaContext::PushFieldURL(
-    const OUString& rURL, const OUString& rRep, const OUString& rStyleName)
+    const OUString& rURL, const OUString& rRep, const OUString& rStyleName, const OUString& rTargetFrame)
 {
-    mrParentCxt.PushParagraphFieldURL(rURL, rRep, rStyleName);
+    mrParentCxt.PushParagraphFieldURL(rURL, rRep, rStyleName, rTargetFrame);
 }
 
 ScXMLCellTextSpanContext::ScXMLCellTextSpanContext(
@@ -325,6 +325,9 @@ void ScXMLCellFieldURLContext::StartElement(const uno::Reference<xml::sax::XAttr
             case XML_TOK_CELL_TEXT_URL_ATTR_TYPE:
                 // Ignored for now.
             break;
+            case XML_TOK_CELL_TEXT_URL_TARGET_FRAME:
+                maTargetFrame = rAttrValue;
+            break;
             default:
                 ;
         }
@@ -333,7 +336,7 @@ void ScXMLCellFieldURLContext::StartElement(const uno::Reference<xml::sax::XAttr
 
 void ScXMLCellFieldURLContext::EndElement()
 {
-    mrParentCxt.PushFieldURL(maURL, maRep, maStyleName);
+    mrParentCxt.PushFieldURL(maURL, maRep, maStyleName, maTargetFrame);
 }
 
 void ScXMLCellFieldURLContext::Characters(const OUString& rChars)
