@@ -617,8 +617,8 @@ ERRTYPE RscCompiler::Link()
             }
             catch (RscIoError&)
             {
-                OString sMsg("Error with paths:\n");
-                sMsg += "temporary rc file: " + aRcTmp + "\n"
+                OString sMsg = "Error with paths:\n"
+                        "temporary rc file: " + aRcTmp + "\n"
                         "temporary ilst file: " + aSysListTmp + "\n"
                         "ilst file: " + aSysList + "\n";
                 pTC->pEH->FatalError(ERR_OPENFILE, RscId(), sMsg.getStr());
