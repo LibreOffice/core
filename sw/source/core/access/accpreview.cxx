@@ -71,10 +71,7 @@ OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription() throw (css::un
 
 OUString SAL_CALL SwAccessiblePreview::getAccessibleName() throw (css::uno::RuntimeException, std::exception)
 {
-    OUString sLclName = SwAccessibleDocumentBase::getAccessibleName();
-    sLclName += " ";
-    sLclName += GetResource( STR_ACCESS_PREVIEW_DOC_SUFFIX );
-    return sLclName;
+    return SwAccessibleDocumentBase::getAccessibleName() + " " + GetResource( STR_ACCESS_PREVIEW_DOC_SUFFIX );
 }
 
 void SwAccessiblePreview::InvalidateFocus_()
