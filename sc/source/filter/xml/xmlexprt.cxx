@@ -3007,9 +3007,13 @@ void writeContent(
             {
                 // <text:a xlink:href="url" xlink:type="simple">value</text:a>
 
-                OUString aURL = static_cast<const SvxURLField*>(pField)->GetURL();
+                const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);
+                OUString aURL = pURLField->GetURL();
                 rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, rExport.GetRelativeReference(aURL));
                 rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, "simple");
+                OUString aTargetFrame = pURLField->GetTargetFrame();
+                if (!aTargetFrame.isEmpty())
+                    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, aTargetFrame);
 
                 OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_TEXT, GetXMLToken(XML_A));
