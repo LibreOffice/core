@@ -219,6 +219,7 @@ public:
     void testSharedFormulaBIFF5();
     void testSharedFormulaXLSB();
     void testSharedFormulaXLS();
+    void testSharedFormulaColumnLabelsODS();
     void testExternalRefCacheXLSX();
     void testExternalRefCacheODS();
     void testHybridSharedStringODS();
@@ -329,6 +330,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaBIFF5);
     CPPUNIT_TEST(testSharedFormulaXLSB);
     CPPUNIT_TEST(testSharedFormulaXLS);
+    CPPUNIT_TEST(testSharedFormulaColumnLabelsODS);
     CPPUNIT_TEST(testExternalRefCacheXLSX);
     CPPUNIT_TEST(testExternalRefCacheODS);
     CPPUNIT_TEST(testHybridSharedStringODS);
@@ -3318,6 +3320,44 @@ void ScFiltersTest::testSharedFormulaXLS()
 
         xDocSh->DoClose();
     }
+}
+
+void ScFiltersTest::testSharedFormulaColumnLabelsODS()
+{
+    ScDocShellRef xDocSh = loadDoc("shared-formula/column-labels.", FORMAT_ODS);
+
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll();
+
+    // Cells C2, D2 and E2 all should contain formula groups of length 5.
+    for (SCCOL i = 2; i <= 4; ++i)
+    {
+        const ScFormulaCell* pCell = rDoc.GetFormulaCell(ScAddress(i,1,0));
+        CPPUNIT_ASSERT(pCell);
+        CPPUNIT_ASSERT(pCell->IsShared());
+        CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pCell->GetSharedLength());
+    }
+
+    CPPUNIT_ASSERT_EQUAL( 5.0, rDoc.GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(15.0, rDoc.GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, rDoc.GetValue(ScAddress(2,3,0)));
+    CPPUNIT_ASSERT_EQUAL(28.0, rDoc.GetValue(ScAddress(2,4,0)));
+    CPPUNIT_ASSERT_EQUAL(48.0, rDoc.GetValue(ScAddress(2,5,0)));
+
+    CPPUNIT_ASSERT_EQUAL(  0.0, rDoc.GetValue(ScAddress(3,1,0)));
+    CPPUNIT_ASSERT_EQUAL( 50.0, rDoc.GetValue(ScAddress(3,2,0)));
+    CPPUNIT_ASSERT_EQUAL(144.0, rDoc.GetValue(ScAddress(3,3,0)));
+    CPPUNIT_ASSERT_EQUAL(147.0, rDoc.GetValue(ScAddress(3,4,0)));
+    CPPUNIT_ASSERT_EQUAL(320.0, rDoc.GetValue(ScAddress(3,5,0)));
+
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(ScAddress(4,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(ScAddress(4,2,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(ScAddress(4,3,0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(ScAddress(4,4,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, rDoc.GetValue(ScAddress(4,5,0)));
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testExternalRefCacheXLSX()
