@@ -21,7 +21,7 @@
 
 struct FixedTexture
 {
-    ImplOpenGLTexture* mpTexture;
+    std::shared_ptr<ImplOpenGLTexture> mpTexture;
     int mnFreeSlots;
     std::vector<bool> maAllocatedSlots;
 
@@ -42,7 +42,6 @@ struct FixedTexture
     ~FixedTexture()
     {
         mpTexture->ResetSlotDeallocateCallback();
-        mpTexture->DecreaseRefCount(-1);
     }
 
     void allocateSlot(int nSlot)
