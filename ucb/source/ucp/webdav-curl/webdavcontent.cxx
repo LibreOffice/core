@@ -2163,7 +2163,15 @@ uno::Any Content::open(
 
                     removeCachedPropertyNames( xResAccess->getURL() );
                     // check if the resource was present on the server
-                    if( aStaticDAVOptionsCache.isResourceFound( aTargetURL ) )
+                    // first update it, if necessary
+                    // if the open is called directly, without the default open sequence,
+                    // e.g. the one used when opening a file looking for properties
+                    // first this call will have no effect, since OPTIONS would have already been called
+                    // as a consequence of getPropertyValues()
+                    DAVOptions aDAVOptions;
+                    getResourceOptions( xEnv, aDAVOptions, xResAccess );
+
+                    if( aDAVOptions.isResourceFound() )
                     {
                         uno::Reference< io::XInputStream > xIn
                             = xResAccess->GET( aHeaders, aResource, xEnv );
