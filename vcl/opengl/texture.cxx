@@ -40,7 +40,6 @@ SAL_CONSTEXPR GLenum constInternalFormat = GL_RGBA8;
 
 // texture with allocated size
 ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) :
-    mnRefCount( 1 ),
     mnTexture( 0 ),
     mnWidth( nWidth ),
     mnHeight( nHeight ),
@@ -73,7 +72,6 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
 
 // texture with content retrieved from FBO
 ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) :
-    mnRefCount( 1 ),
     mnTexture( 0 ),
     mnWidth( nWidth ),
     mnHeight( nHeight ),
@@ -106,7 +104,6 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
 
 // texture from buffer data
 ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData ) :
-    mnRefCount( 1 ),
     mnTexture( 0 ),
     mnWidth( nWidth ),
     mnHeight( nHeight ),
@@ -224,7 +221,6 @@ bool ImplOpenGLTexture::InitializeSlotMechanism(int nInitialSlotSize)
 
 void ImplOpenGLTexture::IncreaseRefCount(int nSlotNumber)
 {
-    mnRefCount++;
     if (mpSlotReferences && nSlotNumber >= 0)
     {
         if (nSlotNumber >= int(mpSlotReferences->size()))
@@ -248,23 +244,18 @@ void ImplOpenGLTexture::DecreaseRefCount(int nSlotNumber)
             mFunctSlotDeallocateCallback(nSlotNumber);
         }
     }
-
-    mnRefCount--;
-    if (mnRefCount <= 0)
-        delete this;
 }
-
 
 OpenGLTexture::OpenGLTexture() :
     maRect( 0, 0, 0, 0 ),
-    mpImpl(nullptr),
+    mpImpl(),
     mnSlotNumber(-1)
 {
 }
 
-OpenGLTexture::OpenGLTexture(ImplOpenGLTexture* pImpl, Rectangle aRectangle, int nSlotNumber)
+OpenGLTexture::OpenGLTexture(const std::shared_ptr<ImplOpenGLTexture>& rpImpl, Rectangle aRectangle, int nSlotNumber)
     : maRect(aRectangle)
-    , mpImpl(pImpl)
+    , mpImpl(rpImpl)
     , mnSlotNumber(nSlotNumber)
 {
     if (mpImpl)
@@ -273,23 +264,24 @@ OpenGLTexture::OpenGLTexture(ImplOpenGLTexture* pImpl, Rectangle aRectangle, int
 
 OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, bool bAllocate )
     : maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+    , mpImpl(new ImplOpenGLTexture(nWidth, nHeight, bAllocate))
     , mnSlotNumber(-1)
 {
-    mpImpl = new ImplOpenGLTexture( nWidth, nHeight, bAllocate );
 }
 
 OpenGLTexture::OpenGLTexture( int nX, int nY, int nWidth, int nHeight )
     : maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+    , mpImpl(new ImplOpenGLTexture(nX, nY, nWidth, nHeight))
     , mnSlotNumber(-1)
 {
-    mpImpl = new ImplOpenGLTexture( nX, nY, nWidth, nHeight );
 }
 
 OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData )
     : maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+    , mpImpl(new ImplOpenGLTexture(nWidth, nHeight, nFormat, nType, pData))
     , mnSlotNumber(-1)
 {
-    mpImpl = new ImplOpenGLTexture( nWidth, nHeight, nFormat, nType, pData );
+
 }
 
 OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture )
@@ -322,12 +314,12 @@ OpenGLTexture::~OpenGLTexture()
 
 bool OpenGLTexture::IsUnique() const
 {
-    return mpImpl == nullptr || mpImpl->IsUnique();
+    return mpImpl || mpImpl.unique();
 }
 
 GLuint OpenGLTexture::Id() const
 {
-    if( mpImpl )
+    if (mpImpl)
         return mpImpl->mnTexture;
     return 0;
 }
@@ -572,7 +564,7 @@ OpenGLTexture::operator bool() const
     return IsValid();
 }
 
-OpenGLTexture&  OpenGLTexture::operator=( const OpenGLTexture& rTexture )
+OpenGLTexture& OpenGLTexture::operator=( const OpenGLTexture& rTexture )
 {
     if (rTexture.mpImpl)
     {
