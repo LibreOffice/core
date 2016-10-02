@@ -54,10 +54,8 @@ sal_Bool SwAccessiblePreview::supportsService( const OUString& rServiceName )
 Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
     throw( RuntimeException, std::exception )
 {
-    Sequence<OUString> aSeq( 2 );
-    aSeq[0] = "com.sun.star.text.AccessibleTextDocumentPageView";
-    aSeq[1] = sAccessibleServiceName;
-    return aSeq;
+    return {"com.sun.star.text.AccessibleTextDocumentPageView",
+            sAccessibleServiceName};
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
