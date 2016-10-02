@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a629dbe_9d62a315",
+        "filename": "sw/source/uibase/app/docsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2016-10-02T21:38:23Z",
+      "side": 0,
+      "message": "Doesn\u0027t GetItemState() set pItem here?\nIf it returns SfxItemState::SET, then pItem isn\u0027t nullptr anymore.\nJust how pArgs (pointing to a local variable) may be null...",
+      "range": {
+        "startLine": 1311,
+        "startChar": 86,
+        "endLine": 1311,
+        "endChar": 92
+      },
+      "revId": "9563c13247dec8fdad8bf4e5748e3495f1a5f843",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
