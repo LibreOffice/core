@@ -279,7 +279,7 @@ SbMethod* MacroChooser::GetMacro()
 void MacroChooser::DeleteMacro()
 {
     SbMethod* pMethod = GetMacro();
-    DBG_ASSERT( pMethod, "DeleteMacro: Kein Macro !" );
+    DBG_ASSERT( pMethod, "DeleteMacro: No Macro!" );
     if ( pMethod && QueryDelMacro( pMethod->GetName(), this ) )
     {
         if (SfxDispatcher* pDispatcher = GetDispatcher())
@@ -363,14 +363,18 @@ SbMethod* MacroChooser::CreateMacro()
         else if ( !pBasic->GetModules().empty() )
             pModule = pBasic->GetModules().front();
 
+        // tdf#96717. Save macro name before closure of basicmacrodialog.ui. The closure of the dialog box
+        // comes to the call of NewObjectDialog::NewObjectDialog in moduldl2.cxx (opening of
+        // modules/BasicIDE/ui/newlibdialog.ui), resulting of calling to createModImpl below.
+        OUString aSubName = m_pMacroNameEdit->GetText();
+
         if ( !pModule )
         {
             pModule = createModImpl( static_cast<vcl::Window*>( this ),
                 aDocument, *m_pBasicBox, aLibName, aModName, false );
         }
 
-        OUString aSubName = m_pMacroNameEdit->GetText();
-        DBG_ASSERT( !pModule || !pModule->FindMethod( aSubName, SbxClassType::Method ), "Macro existiert schon!" );
+         DBG_ASSERT( !pModule || !pModule->FindMethod( aSubName, SbxClassType::Method ), "Macro already exists!" );
         pMethod = pModule ? basctl::CreateMacro( pModule, aSubName ) : nullptr;
     }
 
@@ -509,7 +513,7 @@ IMPL_LINK_TYPED( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
             SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Get( iMeth ));
             if( pMethod->IsHidden() )
                 continue;
-            DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
+            DBG_ASSERT( pMethod, "Method not found! (NULL)" );
             sal_uInt16 nStart, nEnd;
             pMethod->GetLineRange( nStart, nEnd );
             aMacros.insert( map< sal_uInt16, SbMethod*>::value_type( nStart, pMethod ) );
