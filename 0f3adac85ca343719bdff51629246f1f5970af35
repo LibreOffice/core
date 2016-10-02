@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a629dbe_1d269316",
+        "filename": "vcl/source/window/window.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-02T10:56:36Z",
+      "side": 1,
+      "message": "faster to clear each element of the vector as you go, and then clear the whole vector in one shot, avoids constantly memcopying the elements as you remove the front one",
+      "revId": "0f3adac85ca343719bdff51629246f1f5970af35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
