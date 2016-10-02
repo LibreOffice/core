@@ -267,7 +267,8 @@ static OUString getAbsoluteURL(const char* pURL)
     if (!aWorkingDir.endsWith("/"))
         aWorkingDir += "/";
 
-    try {
+    try
+    {
         return rtl::Uri::convertRelToAbs(aWorkingDir, aURL);
     }
     catch (const rtl::MalformedUriException &)
