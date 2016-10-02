@@ -1302,15 +1302,7 @@ void SwDocShell::SetChangeRecording( bool bActivate )
 
 void SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
 {
-    const SfxAllItemSet aSet( GetPool() );
-    const SfxItemSet*   pArgs = &aSet;
-    const SfxPoolItem*  pItem = nullptr;
-
     IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
-    Sequence< sal_Int8 > aPasswd = rIDRA.GetRedlinePassword();
-    if (pArgs && SfxItemState::SET == pArgs->GetItemState( FN_REDLINE_PROTECT, false, &pItem )
-        && static_cast<const SfxBoolItem*>(pItem)->GetValue() == (aPasswd.getLength() > 0))
-        return;
 
     if (!rNewPassword.isEmpty())
     {
