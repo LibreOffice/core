@@ -5351,10 +5351,8 @@ bool ScCompiler::HandleColRowName()
             {
                 ScSingleRefData aRefData;
                 aRefData.InitAddress( aRange.aStart );
-                if ( bColName )
-                    aRefData.SetColRel( true );
-                else
-                    aRefData.SetRowRel( true );
+                aRefData.SetColRel( true );
+                aRefData.SetRowRel( true );
                 aRefData.SetAddress(aRange.aStart, aPos);
                 pNew->AddSingleReference( aRefData );
             }
@@ -5362,16 +5360,10 @@ bool ScCompiler::HandleColRowName()
             {
                 ScComplexRefData aRefData;
                 aRefData.InitRange( aRange );
-                if ( bColName )
-                {
-                    aRefData.Ref1.SetColRel( true );
-                    aRefData.Ref2.SetColRel( true );
-                }
-                else
-                {
-                    aRefData.Ref1.SetRowRel( true );
-                    aRefData.Ref2.SetRowRel( true );
-                }
+                aRefData.Ref1.SetColRel( true );
+                aRefData.Ref2.SetColRel( true );
+                aRefData.Ref1.SetRowRel( true );
+                aRefData.Ref2.SetRowRel( true );
                 aRefData.SetRange(aRange, aPos);
                 if ( bInList )
                     pNew->AddDoubleReference( aRefData );
