@@ -972,7 +972,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             pCrsr->Show();
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    // paint in-place editing on other views
+    if (bIsTiledRendering)
     {
         ScTabViewShell* pThisViewShell = pViewData->GetViewShell();
         SfxViewShell* pViewShell = SfxViewShell::GetFirst();
@@ -999,14 +1000,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                         EditView* pOtherEditView = rOtherViewData.GetEditView(eOtherWhich);
                         if (pOtherEditView)
                         {
-                            // TODO: implement the RTL layout case
-                            //Point aOtherScrPos = rOtherViewData.GetScrPos( nX1, nY1, eOtherWhich );
-                            //if ( bLayoutRTL )
-                            //{
-                            //    long nEndPixel = rOtherViewData.GetScrPos( nX2+1, maVisibleRange.mnRow1, eWhich ).X();
-                            //    aOtherScrPos.X() = nEndPixel + 1;
-                            //}
-
                             long nScreenX = aOutputData.nScrX;
                             long nScreenY = aOutputData.nScrY;
                             long nScreenW = aOutputData.GetScrW();
@@ -1024,27 +1017,25 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
                             Rectangle aBackground(aStart, aEnd);
 
-                            aBackground += Point(nScreenX, nScreenY);
+                            // Need to draw the background in absolute coords.
+                            auto aOrigin = aOriginalMode.GetOrigin();
+                            aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScreenX);
+                            aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScreenY);
+                            aBackground += aOrigin;
                             rDevice.SetMapMode(aDrawMode);
 
+                            static const double twipFactor = 15 * 1.76388889; // 26.45833335
+                            aOrigin = Point(aOrigin.getX() * twipFactor,
+                                            aOrigin.getY() * twipFactor);
+                            MapMode aNew = rDevice.GetMapMode();
+                            aNew.SetOrigin(aOrigin);
+                            rDevice.SetMapMode(aNew);
 
                             // paint the background
                             rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
 
-                            if (bIsTiledRendering)
-                            {
-                                auto aOrigin = aOriginalMode.GetOrigin();
-                                aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
-                                aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
-                                static const double twipFactor = 15 * 1.76388889; // 26.45833335
-                                aOrigin = Point(aOrigin.getX() * twipFactor,
-                                                aOrigin.getY() * twipFactor);
-                                MapMode aNew = rDevice.GetMapMode();
-                                aNew.SetOrigin(aOrigin);
-                                rDevice.SetMapMode(aNew);
-                            }
-
-                            pOtherEditView->Paint(rDevice.PixelToLogic(Rectangle(Point(nScreenX, nScreenY), Size(nScreenW, nScreenH))), &rDevice);
+                            Rectangle aEditRect(Point(nScreenX, nScreenY), Size(nScreenW, nScreenH));
+                            pOtherEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
                             rDevice.SetMapMode(MAP_PIXEL);
                         }
                     }
