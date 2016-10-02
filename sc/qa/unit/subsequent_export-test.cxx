@@ -57,6 +57,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/flditem.hxx>
 #include <formula/grammar.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>
@@ -175,6 +176,7 @@ public:
     void testNatNumInNumberFormatXLSX();
 
     void testHiddenRepeatedRowsODS();
+    void testHyperlinkTargetFrameODS();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -258,6 +260,7 @@ public:
     CPPUNIT_TEST(testNatNumInNumberFormatXLSX);
 
     CPPUNIT_TEST(testHiddenRepeatedRowsODS);
+    CPPUNIT_TEST(testHyperlinkTargetFrameODS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3677,6 +3680,29 @@ void ScExportTest::testHiddenRepeatedRowsODS()
     CPPUNIT_ASSERT(bHidden);
     CPPUNIT_ASSERT_EQUAL((SCROW)0, nFirstRow);
     CPPUNIT_ASSERT_EQUAL((SCROW)20, nLastRow);
+}
+
+void ScExportTest::testHyperlinkTargetFrameODS()
+{
+    ScDocShellRef xDocSh = loadDoc("hyperlink_frame.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    const EditTextObject* pEditText = rDoc.GetEditText(ScAddress(2, 5, 0));
+    CPPUNIT_ASSERT(pEditText);
+
+    const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
+    CPPUNIT_ASSERT_MESSAGE("Failed to get the URL data.", pData && pData->GetClassId() == text::textfield::Type::URL);
+
+    const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
+    OUString aTargetFrame = pURLData->GetTargetFrame();
+    CPPUNIT_ASSERT_EQUAL(OUString("_blank"), aTargetFrame);
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "content.xml", FORMAT_ODS);
+    CPPUNIT_ASSERT(pDoc);
+    OUString aTargetFrameExport = getXPath(pDoc,
+            "/office:document-content/office:body/office:spreadsheet/table:table/table:table-row[2]/table:table-cell[2]/text:p/text:a", "target-frame-name");
+    CPPUNIT_ASSERT_EQUAL(OUString("_blank"), aTargetFrameExport);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
