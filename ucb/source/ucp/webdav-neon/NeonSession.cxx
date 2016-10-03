@@ -1256,6 +1256,31 @@ NeonSession::GET( const OUString & inPath,
     return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
 
+void NeonSession::GET0( const OUString & inPath,
+                  const std::vector< OUString > & inHeaderNames,
+                  DAVResource & ioResource,
+                  const DAVRequestEnvironment & rEnv )
+    throw ( std::exception )
+{
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+    SAL_INFO( "ucb.ucp.webdav", "GET - relative URL <" << inPath << ">" );
+
+    Init( rEnv );
+
+    ioResource.uri = inPath;
+    ioResource.properties.clear();
+
+    rtl::Reference< NeonInputStream > xInputStream( new NeonInputStream );
+    NeonRequestContext aCtx( xInputStream, inHeaderNames, ioResource );
+    int theRetVal = GET0( m_pHttpSession,
+                         OUStringToOString(
+                             inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
+                         true,
+                         &aCtx );
+
+    HandleError( theRetVal, inPath, rEnv );
+}
+
 void NeonSession::GET( const OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
                        const std::vector< OUString > & inHeaderNames,
@@ -2000,6 +2025,42 @@ int NeonSession::GET( ne_session * sess,
 
     if ( dc != nullptr )
         ne_decompress_destroy(dc);
+
+    ne_request_destroy( req );
+    return ret;
+}
+
+int NeonSession::GET0( ne_session * sess,
+                       const char * uri,
+                       bool getheaders,
+                       void * userdata )
+{
+    //struct get_context ctx;
+    ne_request * req = ne_request_create( sess, "GET", uri );
+    int ret;
+
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        ret = ne_request_dispatch( req );
+    }
+
+    if ( getheaders )
+    {
+        void *cursor = nullptr;
+        const char *name, *value;
+        while ( ( cursor = ne_response_header_iterate(
+                               req, cursor, &name, &value ) ) != nullptr )
+        {
+            char buffer[8192];
+
+            SAL_INFO( "ucb.ucp.webdav", "GET - received header: " << name << ": " << value );
+            ne_snprintf(buffer, sizeof buffer, "%s: %s", name, value);
+            runResponseHeaderHandler(userdata, buffer);
+        }
+    }
+
+    if ( ret == NE_OK && ne_get_status( req )->klass != 2 )
+        ret = NE_ERROR;
 
     ne_request_destroy( req );
     return ret;

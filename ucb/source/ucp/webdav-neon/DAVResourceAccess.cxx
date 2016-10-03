@@ -497,7 +497,8 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
 }
 
 
-uno::Reference< io::XInputStream > DAVResourceAccess::GET(
+// used as HEAD substitute when HEAD is not implemented on server
+void DAVResourceAccess::GET0(
     DAVRequestHeaders &rRequestHeaders,
     const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
@@ -519,14 +520,14 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
                                    ucb::WebDAVHTTPMethod_GET,
                                    rRequestHeaders );
 
-            xStream = m_xSession->GET( getRequestURI(),
-                                       rHeaderNames,
-                                       rResource,
-                                       DAVRequestEnvironment(
-                                           getRequestURI(),
-                                           new DAVAuthListener_Impl(
-                                               xEnv, m_aURL ),
-                                           rRequestHeaders, xEnv ) );
+            m_xSession->GET0( getRequestURI(),
+                              rHeaderNames,
+                              rResource,
+                              DAVRequestEnvironment(
+                                  getRequestURI(),
+                                  new DAVAuthListener_Impl(
+                                      xEnv, m_aURL ),
+                                  rRequestHeaders, xEnv ) );
         }
         catch ( const DAVException & e )
         {
@@ -537,8 +538,6 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
         }
     }
     while ( bRetry );
-
-    return xStream;
 }
 
 
