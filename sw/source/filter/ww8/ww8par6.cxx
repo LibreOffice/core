@@ -2148,12 +2148,8 @@ WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStack)
 
 void WW8DupProperties::Insert(const SwPosition &rPos)
 {
-    const SfxItemSet *pSet=&aChrSet;
-    for(int i=0;i<2;i++)
+    for (const SfxItemSet* pSet : {&aChrSet, &aParSet})
     {
-        if (i==1)
-            pSet = &aParSet;
-
         if( pSet->Count() )
         {
             SfxItemIter aIter( *pSet );
