@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.net.URL;
+import java.net.URLClassLoader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -181,14 +182,14 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
     public void edit(final XScriptContext context, ScriptMetaData entry) {
         if (entry != null) {
             try {
-                ClassLoader cl = null;
+                URLClassLoader cl = null;
 
                 try {
                     cl = ClassLoaderFactory.getURLClassLoader(entry);
                 } catch (Exception ignore) { // TODO re-examine error handling
                 }
 
-                final ClassLoader theCl = cl;
+                final URLClassLoader theCl = cl;
                 final URL url = entry.getSourceURL();
                 SwingInvocation.invoke(
                 new Runnable() {
