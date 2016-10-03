@@ -660,7 +660,7 @@
                                 <property name="tooltip_text" translatable="yes">Specify the borders of the selected cells.</property>
                                 <property name="halign">start</property>
                                 <property name="action_name">.uno:SetBorderStyle</property>
-                                <property name="label">toolbutton1</property>
+                                <property name="label" translatable="no">toolbutton1</property>
                                 <property name="use_underline">True</property>
                               </object>
                               <packing>
