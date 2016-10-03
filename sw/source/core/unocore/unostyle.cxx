@@ -303,7 +303,7 @@ protected:
 
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 public:
-    SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam = SfxStyleFamily::Para, bool bConditional = false);
+    SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam, bool bConditional = false);
     SwXStyle(SfxStyleSheetBasePool* pPool, SfxStyleFamily eFamily, SwDoc* pDoc, const OUString& rStyleName);
     virtual ~SwXStyle() override;
 

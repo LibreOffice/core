@@ -57,7 +57,7 @@ private:
 class WW8Glossary
 {
 public:
-    WW8Glossary( tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVersion, SotStorage *pStg=nullptr);
+    WW8Glossary( tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVersion, SotStorage *pStg);
     bool Load( SwTextBlocks &rBlocks, bool bSaveRelFile );
     ~WW8Glossary()                  { delete pGlossary; }
     WW8GlossaryFib *GetFib()        { return pGlossary; }

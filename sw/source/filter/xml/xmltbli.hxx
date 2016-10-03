@@ -159,7 +159,7 @@ public:
 
     void InsertCell( const OUString& rStyleName,
                      sal_uInt32 nRowSpan, sal_uInt32 nColSpan,
-                     const SwStartNode *pStNd=nullptr,
+                     const SwStartNode *pStNd,
                      const OUString & i_rXmlId = OUString(),
                      SwXMLTableContext *pTable=nullptr,
                      bool bIsProtected = false,

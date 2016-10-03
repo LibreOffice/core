@@ -44,7 +44,7 @@ class PasswordDialog : public ModalDialog
 
 public:
     PasswordDialog( vcl::Window* pParent, css::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, const OUString& aDocURL,
-            bool bOpenToModify = false, bool bIsSimplePasswordRequest = false );
+            bool bOpenToModify, bool bIsSimplePasswordRequest );
     virtual ~PasswordDialog() override;
     virtual void dispose() override;
 

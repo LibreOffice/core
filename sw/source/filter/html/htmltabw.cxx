@@ -84,7 +84,7 @@ class SwHTMLWrtTable : public SwWriteTable
 
 public:
     SwHTMLWrtTable( const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
-                    bool bRel, sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0,
+                    bool bRel, sal_uInt16 nLeftSub, sal_uInt16 nRightSub=0,
                     sal_uInt16 nNumOfRowsToRepeat = 0 );
     explicit SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo );
 

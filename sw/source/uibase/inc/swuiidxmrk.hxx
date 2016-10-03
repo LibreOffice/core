@@ -156,12 +156,12 @@ class SwIndexMarkFloatDlg : public SfxModelessDialog
 {
     SwIndexMarkPane m_aContent;
     virtual void    Activate() override;
-    public:
-        SwIndexMarkFloatDlg(       SfxBindings* pBindings,
-                                   SfxChildWindow* pChild,
-                                   vcl::Window *pParent,
-                                   SfxChildWinInfo* pInfo,
-                                   bool bNew=true);
+public:
+    SwIndexMarkFloatDlg( SfxBindings* pBindings,
+                         SfxChildWindow* pChild,
+                         vcl::Window *pParent,
+                         SfxChildWinInfo* pInfo,
+                         bool bNew);
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
@@ -220,10 +220,9 @@ class SwAuthorMarkPane
 
     void InitControls();
     void Activate();
-public:
 
-    SwAuthorMarkPane( Dialog &rDialog,
-                       bool bNew=true);
+public:
+    SwAuthorMarkPane( Dialog &rDialog, bool bNew);
 
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
@@ -232,12 +231,12 @@ class SwAuthMarkFloatDlg : public SfxModelessDialog
 {
     SwAuthorMarkPane m_aContent;
     virtual void    Activate() override;
-    public:
-        SwAuthMarkFloatDlg(        SfxBindings* pBindings,
-                                   SfxChildWindow* pChild,
-                                   vcl::Window *pParent,
-                                   SfxChildWinInfo* pInfo,
-                                   bool bNew=true);
+public:
+    SwAuthMarkFloatDlg( SfxBindings* pBindings,
+                        SfxChildWindow* pChild,
+                        vcl::Window *pParent,
+                        SfxChildWinInfo* pInfo,
+                        bool bNew);
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 

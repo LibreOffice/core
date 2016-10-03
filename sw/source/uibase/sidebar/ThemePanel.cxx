@@ -66,7 +66,7 @@ public:
         , mnTintShade()
     {}
 
-    ColorVariable(long nIndex, sal_Int16 nTintShade = 0)
+    ColorVariable(long nIndex, sal_Int16 nTintShade)
         : mnIndex(nIndex)
         , maColor()
         , mnTintShade(nTintShade)

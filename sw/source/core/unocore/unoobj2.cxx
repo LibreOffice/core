@@ -689,7 +689,7 @@ public:
     ::sw::mark::IMark * m_pMark;
 
     Impl(   SwDoc & rDoc, const enum RangePosition eRange,
-            SwFrameFormat *const pTableFormat = nullptr,
+            SwFrameFormat *const pTableFormat,
             const uno::Reference< text::XText > & xParent = nullptr)
         : SwClient()
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
@@ -1606,7 +1606,7 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL nextElement() throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-    SwXParaFrameEnumerationImpl(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat = nullptr);
+    SwXParaFrameEnumerationImpl(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat);
     virtual void SAL_CALL release() throw () override
     {
         SolarMutexGuard g;

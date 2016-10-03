@@ -52,7 +52,7 @@ class SwFrameDlg : public SfxTabDialog
 public:
     SwFrameDlg(   SfxViewFrame *pFrame, vcl::Window *pParent,
                 const SfxItemSet& rCoreSet,
-                bool bNewFrame  = false,
+                bool bNewFrame,
                 const OUString& sResType = OUString("FrameDialog"),
                 bool bFormat     = false,
                 const OString& sDefPage = OString(),

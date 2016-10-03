@@ -36,7 +36,7 @@ class SAL_WARN_UNUSED ImplPolygon  : public ImplPolygonData
 {
 public:
                     ImplPolygon( sal_uInt16 nInitSize, bool bFlags = false );
-                    ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const sal_uInt8* pInitFlags = nullptr );
+                    ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const sal_uInt8* pInitFlags );
                     ImplPolygon( const ImplPolygon& rImplPoly );
                     ~ImplPolygon();
 

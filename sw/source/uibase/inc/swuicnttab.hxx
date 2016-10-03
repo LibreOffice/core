@@ -99,7 +99,7 @@ class SwMultiTOXTabDialog : public SfxTabDialog
 public:
     SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet& rSet,
                         SwWrtShell &rShell,
-                        SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
+                        SwTOXBase* pCurTOX, sal_uInt16 nToxType,
                         bool bGlobal = false);
     virtual ~SwMultiTOXTabDialog() override;
     virtual void        dispose() override;

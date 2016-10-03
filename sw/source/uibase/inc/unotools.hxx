@@ -97,8 +97,8 @@ class SW_DLLPUBLIC SwOneExampleFrame
 
 public:
     SwOneExampleFrame(vcl::Window& rWin,
-                    sal_uInt32 nStyleFlags = EX_SHOW_ONLINE_LAYOUT,
-                    const Link<SwOneExampleFrame&,void>* pInitalizedLink = nullptr,
+                    sal_uInt32 nStyleFlags,
+                    const Link<SwOneExampleFrame&,void>* pInitalizedLink,
                     const OUString* pURL = nullptr);
     ~SwOneExampleFrame();
 

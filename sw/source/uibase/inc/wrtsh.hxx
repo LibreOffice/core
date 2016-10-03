@@ -179,8 +179,8 @@ public:
     bool    SelNearestWrd();
     bool    SelWrd      (const Point * = nullptr );
     // #i32329# Enhanced selection
-    void    SelSentence (const Point * = nullptr );
-    void    SelPara     (const Point * = nullptr );
+    void    SelSentence (const Point *);
+    void    SelPara     (const Point *);
     long    SelAll();
 
     // basecursortravelling
@@ -422,7 +422,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     // execute the predefined actions.
     void ClickToField( const SwField& rField );
     void ClickToINetAttr( const SwFormatINetFormat& rItem, sal_uInt16 nFilter = URLLOAD_NOFILTER );
-    bool ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter = URLLOAD_NOFILTER );
+    bool ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter );
     inline bool IsInClickToEdit() const ;
 
     // if a URL-Button is selected, return its URL; otherwise an empty string
@@ -444,7 +444,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     // ctor, the first one is a kind of a controlled copy ctor for more views of a document
     SwWrtShell( SwWrtShell&, vcl::Window *pWin, SwView &rShell);
     SwWrtShell( SwDoc& rDoc, vcl::Window *pWin, SwView &rShell,
-                const SwViewOption *pViewOpt = nullptr);
+                const SwViewOption *pViewOpt);
     virtual ~SwWrtShell() override;
 
     bool TryRemoveIndent(); // #i23725#
@@ -565,27 +565,27 @@ private:
     using SwCursorShell::SetCursor;
     SAL_DLLPRIVATE long  SetCursor(const Point *, bool bProp=false );
 
-    SAL_DLLPRIVATE long  SetCursorKillSel(const Point *, bool bProp=false );
+    SAL_DLLPRIVATE long  SetCursorKillSel(const Point *, bool bProp );
 
-    SAL_DLLPRIVATE long  BeginDrag(const Point *, bool bProp=false );
-    SAL_DLLPRIVATE long  DefaultDrag(const Point *, bool bProp=false );
-    SAL_DLLPRIVATE long  DefaultEndDrag(const Point *, bool bProp=false );
+    SAL_DLLPRIVATE long  BeginDrag(const Point *, bool bProp );
+    SAL_DLLPRIVATE long  DefaultDrag(const Point *, bool bProp );
+    SAL_DLLPRIVATE long  DefaultEndDrag(const Point *, bool bProp );
 
-    SAL_DLLPRIVATE long  ExtSelWrd(const Point *, bool bProp=false );
-    SAL_DLLPRIVATE long  ExtSelLn(const Point *, bool bProp=false );
+    SAL_DLLPRIVATE long  ExtSelWrd(const Point *, bool bProp );
+    SAL_DLLPRIVATE long  ExtSelLn(const Point *, bool bProp );
 
-    SAL_DLLPRIVATE long  BeginFrameDrag(const Point *, bool bProp=false );
+    SAL_DLLPRIVATE long  BeginFrameDrag(const Point *, bool bProp );
 
     // after SSize/Move of a frame update; Point is destination.
-    SAL_DLLPRIVATE long  UpdateLayoutFrame(const Point *, bool bProp=false );
+    SAL_DLLPRIVATE long  UpdateLayoutFrame(const Point *, bool bProp );
 
     SAL_DLLPRIVATE void  SttLeaveSelect();
     SAL_DLLPRIVATE void  AddLeaveSelect();
-    SAL_DLLPRIVATE long  Ignore(const Point *, bool bProp=false );
+    SAL_DLLPRIVATE long  Ignore(const Point *, bool bProp );
 
     SAL_DLLPRIVATE void  LeaveExtSel() { m_bSelWrd = m_bSelLn = false;}
 
-    SAL_DLLPRIVATE bool  GoStart(bool KeepArea, bool * = nullptr,
+    SAL_DLLPRIVATE bool  GoStart(bool KeepArea, bool *,
             bool bSelect = false, bool bDontMoveRegion = false);
     SAL_DLLPRIVATE bool  GoEnd(bool KeepArea = false, bool * = nullptr);
 

@@ -120,9 +120,9 @@ public:
                             ImplBorderWindow( vcl::Window* pParent,
                                               SystemParentData* pParentData,
                                               WinBits nStyle,
-                                              BorderWindowStyle nTypeStyle = BorderWindowStyle::NONE );
+                                              BorderWindowStyle nTypeStyle );
                             ImplBorderWindow( vcl::Window* pParent, WinBits nStyle,
-                                              BorderWindowStyle nTypeStyle = BorderWindowStyle::NONE );
+                                              BorderWindowStyle nTypeStyle );
     virtual                 ~ImplBorderWindow() override;
     virtual void            dispose() override;
 
