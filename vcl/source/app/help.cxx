@@ -383,7 +383,6 @@ void HelpTextWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle&
     bool bNativeOK = false;
     if (rRenderContext.IsNativeControlSupported(ControlType::Tooltip, ControlPart::Entire))
     {
-        // #i46472# workaround gcc3.3 temporary problem
         Rectangle aCtrlRegion(Point(0, 0), GetOutputSizePixel());
         ImplControlValue aControlValue;
         bNativeOK = rRenderContext.DrawNativeControl(ControlType::Tooltip, ControlPart::Entire, aCtrlRegion,
