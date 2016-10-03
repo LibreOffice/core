@@ -123,6 +123,14 @@ public:
          const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
+    // used as HEAD substitute when HEAD is not implemented on server
+    virtual void
+    GET0( const OUString & inPath,
+          const std::vector< OUString > & inHeaderNames,
+          DAVResource & ioResource,
+          const DAVRequestEnvironment & rEnv )
+         throw( std::exception ) = 0;
+
     virtual void
     GET( const OUString & inPath,
          css::uno::Reference< css::io::XOutputStream >& o,

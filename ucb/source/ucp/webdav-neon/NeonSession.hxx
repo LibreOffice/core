@@ -141,6 +141,13 @@ public:
         throw ( std::exception ) override;
 
     virtual void
+    GET0( const OUString & inPath,
+         const std::vector< OUString > & inHeaderNames,
+         DAVResource & ioResource,
+         const DAVRequestEnvironment & rEnv )
+        throw( std::exception ) override;
+
+    virtual void
     GET( const OUString & inPath,
          css::uno::Reference< css::io::XOutputStream > & ioOutputStream,
          const std::vector< OUString > & inHeaderNames,
@@ -250,6 +257,13 @@ private:
                     ne_block_reader reader,
                     bool getheaders,
                     void * userdata );
+
+    // low level GET implementation, used by public GET implementations
+    // used as a HEAD substitute when head is not available
+    static int GET0( ne_session * sess,
+                     const char * uri,
+                     bool getheaders,
+                     void * userdata );
 
     // Buffer-based PUT implementation. Neon only has file descriptor-
     // based API.
