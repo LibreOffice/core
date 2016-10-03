@@ -1922,7 +1922,6 @@ private:
     public:
         SameEditViewChecker()
             : mpOtherEditView(nullptr)
-            , mpWindow(nullptr)
         {}
         void SetEditView(EditView* pOtherEditView) { mpOtherEditView = pOtherEditView; }
         void SetWindow(ScGridWindow* pWindow) { mpWindow = pWindow; }
@@ -1937,7 +1936,7 @@ private:
 
     private:
         EditView* mpOtherEditView;
-        ScGridWindow* mpWindow;
+        VclPtr<ScGridWindow> mpWindow;
     };
 
 private:
