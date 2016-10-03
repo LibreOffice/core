@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_96736cb4",
+        "filename": "vcl/source/window/window.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-03T06:15:18Z",
+      "side": 1,
+      "message": "you probably need an \u0027auto \u0026\u0027 here\n\nat least, I\u0027m guessing thats what it is, based on the crash on the build bot",
+      "revId": "4ea3e327cfe4e127d4454c6cf0f047c818ff1113",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
