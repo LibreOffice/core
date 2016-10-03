@@ -329,7 +329,7 @@ public:
     void CopyText( SwTextNode * const pDest,
                const SwIndex &rStart,
                const sal_Int32 nLen,
-               const bool bForceCopyOfAllAttrs = false );
+               const bool bForceCopyOfAllAttrs );
     void CopyText( SwTextNode * const pDest,
                const SwIndex &rDestStart,
                const SwIndex &rStart,
@@ -689,7 +689,7 @@ public:
                             const bool bWithSpacesForLevel = false,
                             const bool bWithFootnote = true ) const;
     bool GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
-                           sal_Int32 nIdx, sal_Int32 nLen = -1,
+                           sal_Int32 nIdx, sal_Int32 nLen,
                            bool bWithNum = false, bool bWithFootnote = true,
                            bool bReplaceTabsWithSpaces = false ) const;
 

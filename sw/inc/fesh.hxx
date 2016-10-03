@@ -250,7 +250,7 @@ public:
 
     using SwEditShell::Insert;
 
-    SwFEShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = nullptr );
+    SwFEShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt );
     SwFEShell( SwEditShell& rShell, vcl::Window *pWin );
     virtual ~SwFEShell() override;
 
@@ -419,7 +419,7 @@ public:
     const SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType, bool bIgnoreTextBoxes = false) const;
 
     std::vector<SwFrameFormat const*> GetFlyFrameFormats(
-            FlyCntType eType, bool bIgnoreTextBoxes = false);
+            FlyCntType eType, bool bIgnoreTextBoxes);
 
     /// If a fly is selected, it draws cursor into the first ContentFrame.
     const SwFrameFormat* SelFlyGrabCursor();
@@ -471,7 +471,7 @@ public:
 
     /// Jump to named Fly (graphic/OLE).
     bool GotoFly( const OUString& rName, FlyCntType eType,
-                  bool bSelFrame = true );
+                  bool bSelFrame );
 
     /// Position is a graphic with URL?
     const SwFrameFormat* IsURLGrfAtPos( const Point& rPt, OUString* pURL = nullptr,
@@ -570,7 +570,7 @@ public:
     void Insert(const OUString& rGrfName,
                 const OUString& rFltName,
                 const Graphic* pGraphic,
-                const SfxItemSet* pFlyAttrSet = nullptr );
+                const SfxItemSet* pFlyAttrSet );
 
     /// Insertion of a drawing object which have to be already inserted in the DrawModel.
     void InsertDrawObj( SdrObject& rDrawObj,
@@ -645,7 +645,7 @@ public:
                                       @return error via enum. */
 
     /// Split cell vertically or horizontally.
-    bool SplitTab( bool bVert, sal_uInt16 nCnt = 1, bool bSameHeight = false );
+    bool SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight = false );
     bool Sort(const SwSortOptions&);    //Sortieren.
 
     void SetRowHeight( const SwFormatFrameSize &rSz );
@@ -686,7 +686,7 @@ public:
                           const Point &rPt );
 
     /// pEnd will be used during MouseMove
-    bool SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag = false );
+    bool SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag );
 
     void GetTabRows( SwTabCols &rToFill ) const;
     void SetTabRows( const SwTabCols &rNew, bool bCurColOnly );
@@ -698,7 +698,7 @@ public:
     void UnProtectCells();  ///< Refers to table selection.
     void UnProtectTables();   ///< Unprotect all tables in selection.
     bool HasTableAnyProtection( const OUString* pTableName,
-                              bool* pFullTableProtection = nullptr );
+                              bool* pFullTableProtection );
     bool CanUnProtectCells() const;
 
     sal_uInt16 GetRowsToRepeat() const;

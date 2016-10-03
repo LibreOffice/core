@@ -199,7 +199,7 @@ protected:
 
     inline SwCacheObj *Get();
 
-    inline SwCacheAccess( SwCache &rCache, const void *pOwner, bool bSeek = true );
+    inline SwCacheAccess( SwCache &rCache, const void *pOwner, bool bSeek );
     inline SwCacheAccess( SwCache &rCache, const void *pOwner, const sal_uInt16 nIndex );
 
 public:

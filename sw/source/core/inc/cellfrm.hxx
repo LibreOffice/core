@@ -40,7 +40,7 @@ protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 
 public:
-    SwCellFrame( const SwTableBox &, SwFrame*, bool bInsertContent = true );
+    SwCellFrame( const SwTableBox &, SwFrame*, bool bInsertContent );
 
     virtual bool GetCursorOfst( SwPosition *, Point&, SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
     virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,

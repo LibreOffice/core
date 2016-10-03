@@ -28,7 +28,7 @@ class SwWrtShell;
 class SwGotoPageDlg : public ModalDialog
 {
 public:
-    SwGotoPageDlg(vcl::Window *parent = nullptr, SfxBindings* _pBindings = nullptr);
+    SwGotoPageDlg(vcl::Window *parent, SfxBindings* _pBindings = nullptr);
 
     virtual ~SwGotoPageDlg() override;
     virtual void dispose() override;

@@ -606,7 +606,7 @@ public:
      ( Start < Pos < End ) !!!
      (Required for Writers.) */
     SwPosFlyFrames GetAllFlyFormats( const SwPaM*,
-                        bool bDrawAlso = false,
+                        bool bDrawAlso,
                         bool bAsCharAlso = false ) const;
 
     // Because swrtf.cxx and define private public here now.
@@ -633,7 +633,7 @@ public:
                                  bool bCalledFromShell = false );
     SwFlyFrameFormat* MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                                 const SwSelBoxes* pSelBoxes,
-                                SwFrameFormat *pParent = nullptr );
+                                SwFrameFormat *pParent );
 
     //UUUU Helper that checks for unique items for DrawingLayer items of type NameOrIndex
     // and evtl. corrects that items to ensure unique names for that type. This call may
@@ -845,7 +845,7 @@ public:
     SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType, bool bIgnoreTextBoxes = false );
     std::vector<SwFrameFormat const*> GetFlyFrameFormats(
             FlyCntType eType,
-            bool bIgnoreTextBoxes = false);
+            bool bIgnoreTextBoxes);
 
     // Copy formats in own arrays and return them.
     SwFrameFormat  *CopyFrameFormat ( const SwFrameFormat& );
@@ -905,7 +905,7 @@ public:
     SwPageDesc& GetPageDesc(size_t const i) { return *m_PageDescs[i]; }
     SwPageDesc* FindPageDesc(const OUString& rName, size_t* pPos = nullptr) const;
     // Just searches the pointer in the m_PageDescs vector!
-    bool        ContainsPageDesc(const SwPageDesc *pDesc, size_t* pPos = nullptr) const;
+    bool        ContainsPageDesc(const SwPageDesc *pDesc, size_t* pPos) const;
 
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFormatId, -HlpId can be prevented. */
@@ -952,7 +952,7 @@ public:
                                             bool bExpand = false );
     void              InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                             const SwTOXBase& rTOX,
-                                            const SfxItemSet* pSet = nullptr );
+                                            const SfxItemSet* pSet );
     static SwTOXBase* GetCurTOX( const SwPosition& rPos );
     static const SwAttrSet& GetTOXBaseAttrSet(const SwTOXBase& rTOX);
 
@@ -1210,7 +1210,7 @@ public:
 
     // Split / concatenate boxes in table.
     bool SplitTable( const SwSelBoxes& rBoxes, bool bVert,
-                       sal_uInt16 nCnt = 1, bool bSameHeight = false );
+                       sal_uInt16 nCnt, bool bSameHeight = false );
 
     // @return enum TableMergeErr.
     sal_uInt16 MergeTable( SwPaM& rPam );
@@ -1277,11 +1277,11 @@ public:
     bool UnProtectTables( const SwPaM& rPam );
     bool HasTableAnyProtection( const SwPosition* pPos,
                               const OUString* pTableName,
-                              bool* pFullTableProtection = nullptr );
+                              bool* pFullTableProtection );
 
     // Split table at baseline position, i.e. create a new table.
     bool SplitTable( const SwPosition& rPos, sal_uInt16 eMode,
-                        bool bCalcNewSize = false );
+                        bool bCalcNewSize );
 
     /** And vice versa: rPos must be in the table that remains. The flag indicates
      whether the current table is merged with the one before or behind it. */
@@ -1333,7 +1333,7 @@ public:
     // insert section (the ODF kind of section, not the nodesarray kind)
     SwSection * InsertSwSection(SwPaM const& rRange, SwSectionData &,
             SwTOXBase const*const pTOXBase,
-            SfxItemSet const*const pAttr = nullptr, bool const bUpdate = true);
+            SfxItemSet const*const pAttr, bool const bUpdate = true);
     static sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
                                 const SwNode** ppSttNd = nullptr );
     static SwSection* GetCurrSection( const SwPosition& rPos );
@@ -1397,7 +1397,7 @@ public:
     const SwFormatINetFormat* FindINetAttr( const OUString& rName ) const;
 
     // Call into intransparent Basic; expect possible Return String.
-    bool ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs = nullptr );
+    bool ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );
 
     // Call into intransparent Basic / JavaScript.
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
@@ -1406,8 +1406,7 @@ public:
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or subtracting a given
      offset or set it "to" this position (bModulus = true). */
-    void MoveLeftMargin( const SwPaM& rPam, bool bRight,
-                        bool bModulus = true );
+    void MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus );
 
     // Query NumberFormatter.
     inline       SvNumberFormatter* GetNumberFormatter( bool bCreate = true );
@@ -1625,7 +1624,7 @@ public:
 
     SfxObjectShell* CreateCopy(bool bCallInitNew, bool bEmpty) const;
     SwNodeIndex AppendDoc(const SwDoc& rSource, sal_uInt16 nStartPageNumber,
-                 bool bDeletePrevious, int physicalPageOffset = 0,
+                 bool bDeletePrevious, int physicalPageOffset,
                  const sal_uLong nDocNo = 1);
 
     /**

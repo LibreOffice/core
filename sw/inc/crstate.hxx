@@ -41,7 +41,7 @@ struct SwFillCursorPos
     sal_uInt16 nColumnCnt;      ///< number of necessary column breaks
     sal_Int16  eOrient;      ///< paragraph alignment
     SwFillMode eMode;       ///< desired fill-up rule
-    SwFillCursorPos( SwFillMode eMd = FILL_TAB ) :
+    SwFillCursorPos( SwFillMode eMd ) :
         nParaCnt( 0 ), nTabCnt( 0 ), nSpaceCnt( 0 ), nColumnCnt( 0 ),
         eOrient( css::text::HoriOrientation::NONE ), eMode( eMd )
     {}

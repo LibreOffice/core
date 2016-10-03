@@ -166,7 +166,7 @@ public:
         @return     true if there is a Redo action, false if none
     */
     virtual bool GetFirstRedoInfo(OUString *const o_pStr,
-                                  SwUndoId *const o_pId = nullptr,
+                                  SwUndoId *const o_pId,
                                   const SwView* pView = nullptr) const = 0;
 
     /** Get comments of Redo actions.

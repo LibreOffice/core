@@ -77,7 +77,7 @@ protected:
     }
 
     SwTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
-                    SwTextFormatColl* pDerFrom = nullptr,
+                    SwTextFormatColl* pDerFrom,
                     sal_uInt16 nFormatWh = RES_TXTFMTCOLL )
         : SwFormatColl(rPool, rFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
         , mbStayAssignedToListLevelOfOutlineStyle(false)
@@ -145,7 +145,7 @@ protected:
     {}
 
     SwGrfFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
-                    SwGrfFormatColl* pDerFrom = nullptr )
+                    SwGrfFormatColl* pDerFrom )
         : SwFormatColl( rPool, rFormatCollName, aGrfFormatCollSetRange,
                     pDerFrom, RES_GRFFMTCOLL )
     {}
@@ -183,7 +183,7 @@ class SW_DLLPUBLIC SwCollCondition : public SwClient
 public:
 
     SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
-                    sal_uLong nSubCond = 0 );
+                    sal_uLong nSubCond );
     SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
                     const OUString& rSubExp );
     virtual ~SwCollCondition() override;
@@ -217,7 +217,7 @@ protected:
     SwFormatCollConditions m_CondColls;
 
     SwConditionTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
-                            SwTextFormatColl* pDerFrom = nullptr )
+                            SwTextFormatColl* pDerFrom )
         : SwTextFormatColl( rPool, rFormatCollName, pDerFrom, RES_CONDTXTFMTCOLL )
     {}
 

@@ -42,7 +42,7 @@ class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
 
 public:
     SwDDEFieldType( const OUString& rName, const OUString& rCmd,
-                    SfxLinkUpdateMode = SfxLinkUpdateMode::ONCALL );
+                    SfxLinkUpdateMode );
     virtual ~SwDDEFieldType() override;
 
     const OUString& GetExpansion() const               { return aExpansion; }

@@ -49,7 +49,7 @@ namespace sw { namespace mark
             SaveBookmark(
                 const ::sw::mark::IMark& rBkmk,
                 const SwNodeIndex& rMvPos,
-                const SwIndex* pIdx =nullptr);
+                const SwIndex* pIdx);
             void SetInDoc(SwDoc* pDoc,
                 const SwNodeIndex&,
                 const SwIndex* pIdx =nullptr);

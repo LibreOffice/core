@@ -220,7 +220,7 @@ private:
 protected:
 
     SwXFieldmark(bool isReplacementObject,
-            ::sw::mark::IMark* pBkm = nullptr, SwDoc* pDoc = nullptr);
+            ::sw::mark::IMark* pBkm, SwDoc* pDoc = nullptr);
 
 public:
 

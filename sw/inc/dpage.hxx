@@ -34,7 +34,7 @@ class SwDPage : public FmFormPage, public SdrObjUserCall
     SwDoc*                  pDoc;
 
 public:
-    explicit SwDPage(SwDrawModel& rNewModel, bool bMasterPage=false);
+    explicit SwDPage(SwDrawModel& rNewModel, bool bMasterPage);
     virtual ~SwDPage() override;
 
     virtual SwDPage* Clone() const override;

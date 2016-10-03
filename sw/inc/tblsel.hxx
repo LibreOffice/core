@@ -200,7 +200,7 @@ class FndLine_
     FndLine_& operator=(FndLine_ const&) = delete;
 
 public:
-    FndLine_(SwTableLine* pL, FndBox_* pFB=nullptr) : pLine(pL), pUpper(pFB) {}
+    FndLine_(SwTableLine* pL, FndBox_* pFB) : pLine(pL), pUpper(pFB) {}
     const FndBoxes_t&   GetBoxes() const    { return m_Boxes; }
         FndBoxes_t&     GetBoxes()          { return m_Boxes; }
     const SwTableLine*  GetLine() const     { return pLine; }

@@ -401,7 +401,7 @@ private:
     double m_fValue;
 
 protected:
-    SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat = 0, sal_uInt16 nLang = LANGUAGE_SYSTEM, const double fVal = 0.0 );
+    SwValueField( SwValueFieldType* pFieldType, sal_uInt32 nFormat, sal_uInt16 nLang = LANGUAGE_SYSTEM, const double fVal = 0.0 );
     SwValueField( const SwValueField& rField );
 
 public:
@@ -427,7 +427,7 @@ private:
     OUString m_sFormula;
 
 protected:
-    SwFormulaField( SwValueFieldType* pFieldType, sal_uInt32 nFormat = 0, const double fVal = 0.0 );
+    SwFormulaField( SwValueFieldType* pFieldType, sal_uInt32 nFormat, const double fVal = 0.0 );
     SwFormulaField( const SwFormulaField& rField );
 
 public:

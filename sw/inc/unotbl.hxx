@@ -91,7 +91,7 @@ protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
-    SwXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, size_t nPos = NOTFOUND);
+    SwXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, size_t nPos);
     SwXCell(SwFrameFormat* pTableFormat, const SwStartNode& rStartNode); // XML import interface
 
 

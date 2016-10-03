@@ -151,7 +151,7 @@ class SW_DLLPUBLIC SwPageNumberField : public SwField
     sal_uInt16 m_nMaxPage;
 
 public:
-    SwPageNumberField(SwPageNumberFieldType*, sal_uInt16 nSub = PG_RANDOM,
+    SwPageNumberField(SwPageNumberFieldType*, sal_uInt16 nSub,
                       sal_uInt32 nFormat = 0, short nOff = 0,
                       sal_uInt16 const nPageNumber = 0,
                       sal_uInt16 const nMaxPage = 0);
@@ -187,7 +187,7 @@ class SwAuthorField : public SwField
     OUString aContent;
 
 public:
-    SwAuthorField(SwAuthorFieldType*, sal_uInt32 nFormat = 0);
+    SwAuthorField(SwAuthorFieldType*, sal_uInt32 nFormat);
 
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
@@ -214,7 +214,7 @@ class SW_DLLPUBLIC SwFileNameField : public SwField
     OUString aContent;
 
 public:
-    SwFileNameField(SwFileNameFieldType*, sal_uInt32 nFormat = 0);
+    SwFileNameField(SwFileNameFieldType*, sal_uInt32 nFormat);
 
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
@@ -239,7 +239,7 @@ public:
 class SW_DLLPUBLIC SwTemplNameField : public SwField
 {
 public:
-    SwTemplNameField(SwTemplNameFieldType*, sal_uInt32 nFormat = 0);
+    SwTemplNameField(SwTemplNameFieldType*, sal_uInt32 nFormat);
 
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
@@ -267,7 +267,7 @@ class SW_DLLPUBLIC SwDocStatField : public SwField
 
 public:
     SwDocStatField( SwDocStatFieldType*,
-                    sal_uInt16 nSubType = 0, sal_uInt32 nFormat = 0);
+                    sal_uInt16 nSubType, sal_uInt32 nFormat = 0);
 
     void ChangeExpansion( const SwFrame* pFrame );
 
@@ -535,7 +535,7 @@ class SwExtUserField : public SwField
     sal_uInt16  nType;
 
 public:
-    SwExtUserField(SwExtUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat=0);
+    SwExtUserField(SwExtUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFormat);
 
     virtual OUString    Expand() const override;
     virtual SwField*    Copy() const override;
@@ -569,7 +569,7 @@ class SwRefPageSetField : public SwField
     bool    bOn;
 
 public:
-    SwRefPageSetField( SwRefPageSetFieldType*, short nOff = 0,
+    SwRefPageSetField( SwRefPageSetFieldType*, short nOff,
                         bool bOn = true );
 
     virtual OUString    Expand() const override;
@@ -676,7 +676,7 @@ class SwScriptField : public SwField
 
 public:
     SwScriptField( SwScriptFieldType*, const OUString& rType,
-                   const OUString& rCode, bool bURL=false );
+                   const OUString& rCode, bool bURL );
 
     virtual OUString        GetDescription() const override;
 

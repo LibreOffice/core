@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 
 public:
     SwGetExpField( SwGetExpFieldType*, const OUString& rFormel,
-                   sal_uInt16 nSubType = nsSwGetSetExpType::GSE_EXPR, sal_uLong nFormat = 0);
+                   sal_uInt16 nSubType, sal_uLong nFormat = 0);
 
     virtual void                SetValue( const double& rVal ) override;
     virtual void                SetLanguage(sal_uInt16 nLng) override;
@@ -316,7 +316,7 @@ public:
         SwInputFieldType* pFieldType,
         const OUString& rContent,
         const OUString& rPrompt,
-        sal_uInt16 nSubType = 0,
+        sal_uInt16 nSubType,
         sal_uLong nFormat = 0,
         bool bIsFormField = true );
     virtual ~SwInputField() override;
@@ -400,7 +400,7 @@ class SwTableField : public SwValueField, public SwTableFormula
 
 public:
     SwTableField( SwTableFieldType*, const OUString& rFormel,
-                sal_uInt16 nSubType = 0, sal_uLong nFormat = 0);
+                sal_uInt16 nSubType, sal_uLong nFormat = 0);
 
     virtual void        SetValue( const double& rVal ) override;
     virtual sal_uInt16  GetSubType() const override;

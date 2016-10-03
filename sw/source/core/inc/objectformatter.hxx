@@ -73,7 +73,7 @@ class SwObjectFormatter
 
     protected:
         SwObjectFormatter( const SwPageFrame& _rPageFrame,
-                           SwLayAction* _pLayAction = nullptr,
+                           SwLayAction* _pLayAction,
                            const bool _bCollectPgNumOfAnchors = false );
 
         static SwObjectFormatter* CreateObjFormatter( SwFrame& _rAnchorFrame,

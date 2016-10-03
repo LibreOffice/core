@@ -86,7 +86,7 @@ class SwUndoMoveNum : public SwUndo, private SwUndRng
     long nOffset;
 
 public:
-    SwUndoMoveNum( const SwPaM& rPam, long nOffset, bool bIsOutlMv = false );
+    SwUndoMoveNum( const SwPaM& rPam, long nOffset, bool bIsOutlMv );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;

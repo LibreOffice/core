@@ -339,7 +339,7 @@ protected:
         delete[] pData;
     }
 
-    int FindLCS( int *pLcs1, int *pLcs2, int nStt1 = 0,
+    int FindLCS( int *pLcs1, int *pLcs2, int nStt1,
                     int nEnd1 = 0, int nStt2 = 0, int nEnd2 = 0 );
 
 public:

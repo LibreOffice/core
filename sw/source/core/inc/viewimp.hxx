@@ -170,7 +170,7 @@ public:
     void   PaintLayer( const SdrLayerID _nLayerID,
                        SwPrintData const*const pPrintData,
                        const SwRect& _rRect,
-                       const Color* _pPageBackgrdColor = nullptr,
+                       const Color* _pPageBackgrdColor,
                        const bool _bIsPageRightToLeft = false,
                        sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr );
 
@@ -247,7 +247,7 @@ public:
     void InvalidateAccessibleCursorPosition( const SwFrame *pFrame );
 
     /// Invalidate editable state for all accessible frames
-    void InvalidateAccessibleEditableState( bool bAllShells = true,
+    void InvalidateAccessibleEditableState( bool bAllShells,
                                                const SwFrame *pFrame=nullptr );
 
     /// Invalidate frame's relation set (for chained frames)

@@ -161,7 +161,7 @@ private:
     SwXTextField(SwFormatField& rFormat, SwDoc & rDoc);
 
     /// descriptor
-    SwXTextField(SwServiceType nServiceId, SwDoc* pDoc=nullptr);
+    SwXTextField(SwServiceType nServiceId, SwDoc* pDoc);
 
 public:
     SwServiceType GetServiceId() const;

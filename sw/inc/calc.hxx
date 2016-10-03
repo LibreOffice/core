@@ -136,7 +136,7 @@ struct SwCalcExp : public SwHash
     const SwFieldType* pFieldType;
 
     SwCalcExp( const OUString& rStr, const SwSbxValue& rVal,
-                const SwFieldType* pFieldType = nullptr );
+                const SwFieldType* pFieldType );
 };
 
 SwHash* Find( const OUString& rSrch, SwHash* const * ppTable,
