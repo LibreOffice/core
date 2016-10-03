@@ -1365,6 +1365,8 @@ void Desktop::DoExecute()
 
 int Desktop::Main()
 {
+    SAL_WARN( "desktop.app", "Main()" );
+
     pExecGlobals = new ExecuteGlobals();
 
     // Remember current context object
@@ -1409,13 +1411,14 @@ int Desktop::Main()
 
     // Startup screen
     OpenSplashScreen();
+    SAL_WARN( "desktop.app", "splash screen is here" );
 
     SetSplashScreenProgress(10);
 
     userinstall::Status inst_fin = userinstall::finalize();
     if (inst_fin != userinstall::EXISTED && inst_fin != userinstall::CREATED)
     {
-        SAL_WARN( "desktop.app", "userinstall failed");
+        SAL_WARN( "desktop.app", "userinstall does not exist nor created" );
         if ( inst_fin == userinstall::ERROR_NO_SPACE )
             HandleBootstrapErrors(
                 BE_USERINSTALL_NOTENOUGHDISKSPACE, OUString() );
@@ -1616,6 +1619,8 @@ int Desktop::Main()
 
     if ( !pExecGlobals->bRestartRequested )
     {
+        SAL_WARN( "desktop.app", "there’s no request for restart" );
+
         Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
         bool bTerminateRequested = false;
 
@@ -1714,7 +1719,8 @@ int Desktop::Main()
         if (xDesktop.is())
             xDesktop->terminate();
     }
-    // CAUTION: you do not necessarily get here e.g. on the Mac.
+
+    // you do not necessarily get here e.g. on the Mac
     // please put all deinitialization code into doShutdown
     return doShutdown();
 }
@@ -2556,6 +2562,8 @@ void Desktop::OpenSplashScreen()
 
 void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
 {
+    SAL_WARN( "desktop.app", "SetSplashScreenProgress( " << iProgress << " )" );
+
     if(m_rSplashScreen.is())
     {
         m_rSplashScreen->setValue(iProgress);
@@ -2590,12 +2598,14 @@ IMPL_STATIC_LINK(Desktop, AsyncInitFirstRun, Timer *, /*unused*/, void)
     }
     catch(const css::uno::Exception&)
     {
-        SAL_WARN( "desktop.app", "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor ..." );
+        SAL_WARN( "desktop.app", "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor" );
     }
 }
 
 void Desktop::ShowBackingComponent(Desktop * progress)
 {
+    SAL_WARN( "desktop.app", "on ShowBackingComponent" );
+
     if (GetCommandLineArgs().IsNoDefault())
     {
         return;
@@ -2617,17 +2627,20 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
         // otherwise documents loaded into this frame will later on miss functionality depending on the style.
         VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-        SAL_WARN_IF( !pContainerWindow, "desktop.app", "Desktop::Main: no implementation access to the frame's container window!" );
+        SAL_WARN_IF( !pContainerWindow, "desktop.app", "no implementation for container window of frame" );
         pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
         if (progress != nullptr)
         {
             progress->SetSplashScreenProgress(75);
         }
 
-        Reference< XController > xStartModule = StartModule::createWithParentWindow( xContext, xContainerWindow);
-        // Attention: You MUST(!) call setComponent() before you call attachFrame().
-        // Because the backing component set the property "IsBackingMode" of the frame
-        // to true inside attachFrame(). But setComponent() reset this state everytimes ...
+        SAL_WARN( "desktop.app", "going to create StartModule" );
+        Reference< XController > xStartModule = StartModule::createWithParentWindow( xContext, xContainerWindow );
+        SAL_WARN( "desktop.app", "StartModule is here" );
+
+        // Note: always use setComponent() before you use attachFrame()
+        // Because the backing component sets the property "IsBackingMode" of the frame
+        // to true inside attachFrame(). But setComponent() reset this state everytime
         xBackingFrame->setComponent(Reference< XWindow >(xStartModule, UNO_QUERY), xStartModule);
         if (progress != nullptr)
         {
@@ -2640,6 +2653,8 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         }
         xContainerWindow->setVisible(true);
     }
+
+    SAL_WARN( "desktop.app", "off ShowBackingComponent" );
 }
 
 

@@ -182,6 +182,8 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     , m_pParserState(new ParserState)
     , m_xFrame(rFrame)
 {
+    SAL_WARN( "vcl.window", "creation of VclBuilder with uidir \"" << sUIDir << "\" & uifile \"" << sUIFile << "\" & id \"" << sID << "\"" );
+
     m_bToplevelHasDeferredInit = pParent &&
         ((pParent->IsSystemWindow() && static_cast<SystemWindow*>(pParent)->isDeferredInit()) ||
          (pParent->IsDockingWindow() && static_cast<DockingWindow*>(pParent)->isDeferredInit()));
@@ -202,12 +204,13 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     try
     {
         xmlreader::XmlReader reader(sUri);
+        SAL_WARN( "vcl.window", "read xml file \"" << sUri << "\" @ creation of VclBuilder" );
 
         handleChild(pParent, reader);
     }
     catch (const css::uno::Exception &rExcept)
     {
-        SAL_WARN("vcl.layout", "Unable to read .ui file: " << rExcept.Message);
+        SAL_WARN( "vcl.window", "can’t read .ui file: " << rExcept.Message );
         throw;
     }
 
@@ -217,7 +220,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     {
         FixedText *pOne = get<FixedText>(aI->m_sID);
         vcl::Window *pOther = get<vcl::Window>(aI->m_sValue);
-        SAL_WARN_IF(!pOne || !pOther, "vcl", "missing either source " << aI->m_sID << " or target " << aI->m_sValue << " member of Mnemonic Widget Mapping");
+        SAL_WARN_IF( !pOne || !pOther, "vcl", "either id " << aI->m_sID << " or value " << aI->m_sValue << " member of Mnemonic Widget is not here" );
         if (pOne && pOther)
             pOne->set_mnemonic_widget(pOther);
     }
@@ -247,7 +250,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
                 pSource->SetAccessibleRelationMemberOf(pTarget);
             else
             {
-                SAL_INFO("vcl.layout", "unhandled a11y relation :" << rType.getStr());
+                SAL_INFO( "vcl", "unhandled a11y relation \"" << rType.getStr() << "\"" );
             }
         }
     }
@@ -456,10 +459,11 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     {
         MenuButton *pTarget = get<MenuButton>(aI->m_sID);
         PopupMenu *pMenu = get_menu(aI->m_sValue);
-        SAL_WARN_IF(!pTarget || !pMenu,
-            "vcl", "missing elements of button/menu");
-        if (!pTarget || !pMenu)
+        if ( !pTarget || !pMenu )
+        {
+            SAL_WARN( "vcl", "where are my elements of button/menu ?" );
             continue;
+        }
         pTarget->SetPopupMenu(pMenu);
     }
 

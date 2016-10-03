@@ -75,7 +75,9 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     mbInitControls( false ),
     mnHideExternalLinks( 0 )
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" );
+    SAL_WARN( "sfx2.dialog", "in constructor of BackingWindow" );
+
+    m_pUIBuilder = new VclBuilder( this, getUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" );
 
     get(mpOpenButton, "open_all");
     get(mpRemoteButton, "open_remote");
@@ -146,7 +148,7 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e.Message );
+        SAL_WARN( "sfx2.dialog", "BackingWindow caught an exception ( " << e.Message << " )" );
     }
 
     // fdo#34392: we do the layout dynamically, the layout depends on the font,

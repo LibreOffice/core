@@ -169,6 +169,8 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 
 int ImplSVMain()
 {
+    SAL_WARN( "vcl.app", "on ImplSVMain()" );
+
     // The 'real' SVMain()
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -181,9 +183,11 @@ int ImplSVMain()
     if( bInit )
     {
         // call application main
+        SAL_WARN( "vcl.app", "invoke of application’s Main() @ ImplSVMain" );
         pSVData->maAppData.mbInAppMain = true;
         nReturn = pSVData->mpApp->Main();
         pSVData->maAppData.mbInAppMain = false;
+        SAL_WARN( "vcl.app", "application’s Main() done @ ImplSVMain" );
     }
 
     if( pSVData->mxDisplayConnection.is() )
@@ -211,6 +215,7 @@ int ImplSVMain()
 #endif
     DeInitVCL();
 
+    SAL_WARN( "vcl.app", "off ImplSVMain() with *" << nReturn << "* in return" );
     return nReturn;
 }
 
@@ -270,6 +275,8 @@ static bool isInitVCL()
 
 bool InitVCL()
 {
+	SAL_WARN( "vcl.app", "on InitVCL()" );
+
     if( pExceptionHandler != nullptr )
         return false;
 
@@ -278,6 +285,7 @@ bool InitVCL()
     if( !ImplGetSVData()->mpApp )
     {
         pOwnSvApp = new Application();
+        SAL_WARN( "vcl.app", "create application okay @ InitVCL" );
     }
     InitSalMain();
 
@@ -289,7 +297,10 @@ bool InitVCL()
     // Initialize Sal
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
+    {
+        SAL_WARN( "vcl.app", "off InitVCL() with *false* in return" );
         return false;
+    }
 
     // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
     css::uno::setCurrentContext(
@@ -297,20 +308,23 @@ bool InitVCL()
 
     // Initialize application instance (should be done after initialization of VCL SAL part)
     if( pSVData->mpApp )
+    {
         // call init to initialize application class
         // soffice/sfx implementation creates the global service manager
         pSVData->mpApp->Init();
+    }
 
     pSVData->mpDefInst->AfterAppInit();
 
     // Fetch AppFileName and make it absolute before the workdir changes...
-    OUString aExeFileName;
-    osl_getExecutableFile( &aExeFileName.pData );
+    OUString aAppFileName;
+    osl_getExecutableFile( &aAppFileName.pData );
 
     // convert path to native file format
     OUString aNativeFileName;
-    osl::FileBase::getSystemPathFromFileURL( aExeFileName, aNativeFileName );
+    osl::FileBase::getSystemPathFromFileURL( aAppFileName, aNativeFileName );
     pSVData->maAppData.mpAppFileName = new OUString( aNativeFileName );
+    SAL_WARN( "vcl.app", "native AppFileName is \"" << aNativeFileName << "\"" );
 
     // Initialize global data
     pSVData->maGDIData.mpScreenFontList     = new PhysicalFontCollection;
@@ -329,6 +343,7 @@ bool InitVCL()
     DebugEventInjector::getCreate();
 #endif
 
+	SAL_WARN( "vcl.app", "off InitVCL() with *true* in return" );
     return true;
 }
 
