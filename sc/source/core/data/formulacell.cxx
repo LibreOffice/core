@@ -1292,7 +1292,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
     // pCode may not deleted for queries, but must be empty
     pCode->Clear();
 
-    bool bSkipCompile = false;
+    bool bDoCompile = true;
 
     if ( !mxGroup && aFormulaNmsp.isEmpty() ) // optimization
     {
@@ -1328,7 +1328,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
                 if (bSubTotal)
                     pDocument->AddSubTotalCell(this);
 
-                bSkipCompile = true;
+                bDoCompile = false;
                 pCode = pPreviousCell->pCode;
                 if (pPreviousCell->mbIsExtRef)
                     pDocument->GetExternalRefManager()->insertRefCellFromTemplate( pPreviousCell, this );
@@ -1339,7 +1339,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
         }
     }
 
-    if (!bSkipCompile)
+    if (bDoCompile)
     {
         ScTokenArray* pCodeOld = pCode;
         pCode = aComp.CompileString( aFormula, aFormulaNmsp );
