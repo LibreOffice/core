@@ -128,46 +128,47 @@ void ImplHandleControlAccelerator( vcl::Window* pWindow, bool bShow )
     }
 }
 
+namespace
+{
+    void processChildren(vcl::Window *pParent, bool bShowAccel)
+    {
+        // go through its children
+        vcl::Window* pChild = firstLogicalChildOfParent(pParent);
+        while (pChild)
+        {
+            if (pChild->GetType() == WINDOW_TABCONTROL)
+            {
+                // find currently shown tab page
+                TabControl* pTabControl = static_cast<TabControl*>(pChild);
+                TabPage* pTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
+                processChildren(pTabPage, bShowAccel);
+            }
+            else if (pChild->GetType() == WINDOW_TABPAGE)
+            {
+                // bare tabpage without tabcontrol parent (options dialog)
+                processChildren(pChild, bShowAccel);
+            }
+            else if ((pChild->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL)
+            {
+                // special controls that manage their children outside of widget layout
+                processChildren(pChild, bShowAccel);
+            }
+            else
+            {
+                ImplHandleControlAccelerator(pChild, bShowAccel);
+            }
+            pChild = nextLogicalChildOfParent(pParent, pChild);
+        }
+    }
+}
+
 bool Accelerator::ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, vcl::Window *pWindow)
 {
     if (rCEvent.GetCommand() == CommandEventId::ModKeyChange)
     {
         const CommandModKeyData *pCData = rCEvent.GetModKeyData();
-        const bool bShowAccel =  pCData && pCData->IsMod2();
-
-        vcl::Window *pGetChild = firstLogicalChildOfParent(pWindow);
-        while (pGetChild)
-        {
-            if (pGetChild->GetType() == WINDOW_TABCONTROL)
-            {
-                // find currently shown tab page
-                TabControl* pTabControl = static_cast<TabControl*>( pGetChild );
-                TabPage* pTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
-                vcl::Window* pTabPageChild = firstLogicalChildOfParent( pTabPage );
-
-                // and go through its children
-                while ( pTabPageChild )
-                {
-                    ImplHandleControlAccelerator(pTabPageChild, bShowAccel);
-                    pTabPageChild = nextLogicalChildOfParent(pTabPage, pTabPageChild);
-                }
-            }
-            else if (pGetChild->GetType() == WINDOW_TABPAGE)
-            {
-                // bare tabpage without tabcontrol parent (options dialog)
-                vcl::Window* pTabPageChild = firstLogicalChildOfParent( pGetChild );
-
-                // and go through its children
-                while ( pTabPageChild )
-                {
-                    ImplHandleControlAccelerator(pTabPageChild, bShowAccel);
-                    pTabPageChild = nextLogicalChildOfParent(pGetChild, pTabPageChild);
-                }
-            }
-
-            ImplHandleControlAccelerator( pGetChild, bShowAccel );
-            pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);
-        }
+        const bool bShowAccel = pCData && pCData->IsMod2();
+        processChildren(pWindow, bShowAccel);
         return true;
     }
     return false;
