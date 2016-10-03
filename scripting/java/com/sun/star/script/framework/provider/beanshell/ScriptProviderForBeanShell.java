@@ -50,6 +50,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 
 import java.net.URL;
+import java.net.URLClassLoader;
 
 import java.util.StringTokenizer;
 
@@ -182,7 +183,7 @@ class ScriptImpl implements XScript {
         aOutParamIndex[0] = new short[0];
         aOutParam[0] = new Object[0];
 
-        ClassLoader cl = null;
+        URLClassLoader cl = null;
         URL sourceUrl = null;
 
         try {

@@ -45,6 +45,7 @@ import com.sun.star.script.provider.XScript;
 import com.sun.star.uno.XComponentContext;
 
 import java.net.URL;
+import java.net.URLClassLoader;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ImporterTopLevel;
@@ -181,7 +182,7 @@ class ScriptImpl implements XScript {
         aOutParamIndex[0] = new short[0];
         aOutParam[0] = new Object[0];
 
-        ClassLoader cl = null;
+        URLClassLoader cl = null;
 
         try {
             cl = ClassLoaderFactory.getURLClassLoader(metaData);
