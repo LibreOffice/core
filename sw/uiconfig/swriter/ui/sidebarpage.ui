@@ -56,7 +56,7 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Size</property>
                 <property name="action_name">.uno:AttributePageSize</property>
-                <property name="label">toolbutton3</property>
+                <property name="label" translatable="no">toolbutton3</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -84,7 +84,7 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Columns</property>
                 <property name="action_name">.uno:PageColumnType</property>
-                <property name="label">toolbutton4</property>
+                <property name="label" translatable="no">toolbutton4</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -111,7 +111,7 @@
                 <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Margin</property>
                 <property name="action_name">.uno:PageMargin</property>
-                <property name="label">toolbutton2</property>
+                <property name="label" translatable="no">toolbutton2</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
