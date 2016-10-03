@@ -523,7 +523,7 @@ bool SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
     else if ( MouseNotifyEvent::LOSEFOCUS == nType )
     {
         // don't handle before our Select() is called
-        if ( !HasFocus() && !HasChildPathFocus() )
+        if (!HasFocus() && !HasChildPathFocus() && !IsChild(rNEvt.GetWindow()))
             SetText( GetSavedValue() );
     }
     return ComboBox::PreNotify( rNEvt );
