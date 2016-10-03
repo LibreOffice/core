@@ -866,9 +866,6 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
     mpSubMenu( nullptr ),
     mpMenuItem( nil )
 {
-    // Delete mnemonics
-    OUString aText = pItemData->aText.replaceAll("~", "");
-
     if (pItemData->eType == MenuItemType::SEPARATOR)
     {
         mpMenuItem = [NSMenuItem separatorItem];
@@ -880,7 +877,9 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
     {
         mpMenuItem = [[SalNSMenuItem alloc] initWithMenuItem: this];
         [mpMenuItem setEnabled: YES];
-        NSString* pString = CreateNSString( aText );
+
+        // peel mnemonics because on mac there are no such things for menu items
+        NSString* pString = CreateNSString( pItemData->aText.replaceAll( "~", "" ) );
         if (pString)
         {
             [mpMenuItem setTitle: pString];
