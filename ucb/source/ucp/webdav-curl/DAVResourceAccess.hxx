@@ -125,12 +125,13 @@ public:
          DAVResource & rResource,
          const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
+    /// used as HEAD substitute when HEAD is not implemented on server
     /// @throws DAVException
-    css::uno::Reference< css::io::XInputStream >
-    GET( DAVRequestHeaders & rRequestHeaders,
-         const std::vector< OUString > & rHeaderNames, // empty == 'all'
-         DAVResource & rResource,
-         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
+    void
+    GET0( DAVRequestHeaders & rRequestHeaders,
+          const std::vector< OUString > & rHeaderNames, // empty == 'all'
+          DAVResource & rResource,
+          const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws DAVException
     void
