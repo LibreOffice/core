@@ -1851,7 +1851,6 @@ bool SwTextNode::SetAttr(
 
     // teil die Sets auf (fuer Selektion in Nodes)
     const SfxItemSet* pSet = &rSet;
-    SfxItemSet aTextSet( *rSet.GetPool(), RES_TXTATR_BEGIN, RES_TXTATR_END-1 );
 
     // gesamter Bereich
     if ( !nStt && (nEnd == m_Text.getLength()) &&
@@ -1874,6 +1873,7 @@ bool SwTextNode::SetAttr(
 
         if( !bHasCharFormats )
         {
+            SfxItemSet aTextSet( *rSet.GetPool(), RES_TXTATR_BEGIN, RES_TXTATR_END-1 );
             aTextSet.Put( rSet );
             // If there are any character attributes in rSet,
             // we want to set them at the paragraph:
