@@ -39,6 +39,7 @@ SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const css::uno
 SfxBluetoothModel::SendMailResult SfxBluetoothModel::Send( const css::uno::Reference< css::frame::XFrame >& /*xFrame*/ )
 {
 #ifndef LINUX
+    (void) this; // avoid loplugin:staticmethods
     return SEND_MAIL_ERROR;
 #else
     char bthsend[300];
