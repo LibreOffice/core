@@ -233,7 +233,7 @@ bool DocumentSettings::LoadList( XPropertyListType t, const OUString &rInPath,
 
     sal_Int32 nSlash = rInPath.lastIndexOf('/');
     OUString aPath, aName;
-    if (nSlash < -1)
+    if (nSlash < 0)
         aName = rInPath;
     else {
         aName = rInPath.copy( nSlash + 1 );
