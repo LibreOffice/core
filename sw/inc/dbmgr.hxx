@@ -162,7 +162,23 @@ struct SwMergeDescriptor
      * @defgroup file Mail merge as File settings
      * @addtogroup file
      * @{ */
-    OUString                                            sPath;
+
+    /**
+     * Basename incl. the path for the generated files.
+     *
+     * The final filename will be created by concating a number to prevent
+     * overwriting an existing file and the extension based on the filter
+     * settings.
+     */
+    OUString                                            sPrefix;
+    /**
+     * Use the sPrefix as the target filename also overwriting an existing
+     * target file.
+     *
+     * Just used for the internal mail merge dialogs as mail merge never
+     * overwrites existing files (see SwDBManager::ExecuteFormLetter).
+     */
+    bool                                                bPrefixIsFilename;
     /** @} */
 
     /**
@@ -206,6 +222,7 @@ struct SwMergeDescriptor
         rSh(rShell),
         rDescriptor(rDesc),
         bCreateSingleFile( false ),
+        bPrefixIsFilename( false ),
         bSendAsHTML( true ),
         bSendAsAttachment( false ),
         bPrintAsync( false ),
