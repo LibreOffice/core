@@ -38,8 +38,8 @@ class SmParser
     int             m_nCurError;
     sal_Int32       m_nBufferIndex,
                     m_nTokenIndex;
-    sal_Int32       m_nRow,
-                    m_nColOff;
+    sal_Int32       m_nRow,    // 1-based
+                    m_nColOff; // 0-based
     bool            m_bImportSymNames,
                     m_bExportSymNames;
 

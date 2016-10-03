@@ -114,8 +114,8 @@ struct SmToken
     sal_uInt16      nLevel;
 
     // token position
-    sal_Int32      nRow;
-    sal_Int32      nCol;
+    sal_Int32      nRow; // 1-based
+    sal_Int32      nCol; // 1-based
 
     SmToken();
     SmToken(SmTokenType eTokenType,
