@@ -138,31 +138,31 @@ bool Accelerator::ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, vcl::W
         vcl::Window *pGetChild = firstLogicalChildOfParent(pWindow);
         while (pGetChild)
         {
-            if ( pGetChild->GetType() == WINDOW_TABCONTROL )
+            if (pGetChild->GetType() == WINDOW_TABCONTROL)
             {
-                 // find currently shown tab page
-                 TabControl* pTabControl = static_cast<TabControl*>( pGetChild );
-                 TabPage* pTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
-                 vcl::Window* pTabPageChild = firstLogicalChildOfParent( pTabPage );
+                // find currently shown tab page
+                TabControl* pTabControl = static_cast<TabControl*>( pGetChild );
+                TabPage* pTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
+                vcl::Window* pTabPageChild = firstLogicalChildOfParent( pTabPage );
 
-                 // and go through its children
-                 while ( pTabPageChild )
-                 {
-                     ImplHandleControlAccelerator(pTabPageChild, bShowAccel);
-                     pTabPageChild = nextLogicalChildOfParent(pTabPage, pTabPageChild);
-                 }
+                // and go through its children
+                while ( pTabPageChild )
+                {
+                    ImplHandleControlAccelerator(pTabPageChild, bShowAccel);
+                    pTabPageChild = nextLogicalChildOfParent(pTabPage, pTabPageChild);
+                }
             }
-            else if ( pGetChild->GetType() == WINDOW_TABPAGE )
+            else if (pGetChild->GetType() == WINDOW_TABPAGE)
             {
-                 // bare tabpage without tabcontrol parent (options dialog)
-                 vcl::Window* pTabPageChild = firstLogicalChildOfParent( pGetChild );
+                // bare tabpage without tabcontrol parent (options dialog)
+                vcl::Window* pTabPageChild = firstLogicalChildOfParent( pGetChild );
 
-                 // and go through its children
-                 while ( pTabPageChild )
-                 {
-                     ImplHandleControlAccelerator(pTabPageChild, bShowAccel);
-                     pTabPageChild = nextLogicalChildOfParent(pGetChild, pTabPageChild);
-                 }
+                // and go through its children
+                while ( pTabPageChild )
+                {
+                    ImplHandleControlAccelerator(pTabPageChild, bShowAccel);
+                    pTabPageChild = nextLogicalChildOfParent(pGetChild, pTabPageChild);
+                }
             }
 
             ImplHandleControlAccelerator( pGetChild, bShowAccel );
