@@ -524,7 +524,7 @@ public:
     public:
         WW8Fkp (ww::WordVersion eVersion, SvStream* pFKPStrm,
             SvStream* pDataStrm, long _nFilePos, long nItemSiz, ePLCFT ePl,
-            WW8_FC nStartFc = -1);
+            WW8_FC nStartFc);
         void Reset(WW8_FC nPos);
         long GetFilePos() const { return nFilePos; }
         sal_uInt8 GetIdx() const { return mnIdx; }
@@ -681,7 +681,7 @@ private:
 
 public:
     WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion, WW8_CP nStartCp,
-    long nFcRef, long nLenRef, long nFcText, long nLenText, long nStruc = 0);
+                    long nFcRef, long nLenRef, long nFcText, long nLenText, long nStruc);
     virtual ~WW8PLCFx_SubDoc() override;
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx( sal_uLong nIdx ) override;

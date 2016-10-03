@@ -65,7 +65,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     void            Init();
 
 public:
-    SwInsFootNoteDlg(vcl::Window * pParent, SwWrtShell &rSh, bool bEd = false);
+    SwInsFootNoteDlg(vcl::Window * pParent, SwWrtShell &rSh, bool bEd);
     virtual ~SwInsFootNoteDlg() override;
     virtual void dispose() override;
 

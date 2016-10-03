@@ -59,7 +59,7 @@ class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
     void* pMisc;
 
 public:
-    SwPtrItem( const sal_uInt16 nId = FN_PARAM_GRF_DIALOG, void* pPtr = nullptr);
+    SwPtrItem( const sal_uInt16 nId, void* pPtr = nullptr);
     SwPtrItem( const SwPtrItem& rItem );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -100,7 +100,7 @@ class SW_DLLPUBLIC SwPaMItem : public SfxPoolItem
     SwPaM* m_pPaM;
 
 public:
-    SwPaMItem( const sal_uInt16 nId = FN_PARAM_PAM, SwPaM* pPaM = nullptr);
+    SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM = nullptr);
     SwPaMItem( const SwPaMItem& rItem );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

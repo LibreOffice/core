@@ -66,7 +66,7 @@ namespace DOM
     public:
         CElementListImpl(::rtl::Reference<CElement> const& pElement,
                 ::osl::Mutex & rMutex,
-                OUString const& rName, OUString const*const pURI = nullptr);
+                OUString const& rName, OUString const*const pURI);
 
         void registerListener(CElement & rElement);
 

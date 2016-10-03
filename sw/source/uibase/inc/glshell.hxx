@@ -37,7 +37,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    SwGlosDocShell( bool bNewShow = true);
+    SwGlosDocShell( bool bNewShow);
     virtual ~SwGlosDocShell() override;
 
     void            Execute( SfxRequest& );

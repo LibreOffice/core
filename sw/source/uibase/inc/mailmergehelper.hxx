@@ -76,7 +76,7 @@ class SW_DLLPUBLIC SwAddressPreview : public vcl::Window
     DECL_LINK_TYPED(ScrollHdl, ScrollBar*,void);
 
 public:
-    SwAddressPreview(vcl::Window* pParent, WinBits nStyle=WB_BORDER);
+    SwAddressPreview(vcl::Window* pParent, WinBits nStyle);
     virtual ~SwAddressPreview() override;
     virtual void dispose() override;
 

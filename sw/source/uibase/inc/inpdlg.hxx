@@ -52,7 +52,7 @@ class SwFieldInputDlg: public SvxStandardDialog
     DECL_LINK_TYPED(NextHdl, Button*, void);
 public:
     SwFieldInputDlg(  vcl::Window *pParent, SwWrtShell &rSh,
-                    SwField* pField, bool bNextButton = false );
+                    SwField* pField, bool bNextButton );
     virtual ~SwFieldInputDlg() override;
     virtual void dispose() override;
 };

@@ -288,7 +288,7 @@ public:
 
     bool bBottomBorder;                 // Is there a line after the row?
 
-    explicit HTMLTableRow( sal_uInt16 nCells=0 );    // cells of the row are empty
+    explicit HTMLTableRow( sal_uInt16 nCells );    // cells of the row are empty
 
     ~HTMLTableRow();
 

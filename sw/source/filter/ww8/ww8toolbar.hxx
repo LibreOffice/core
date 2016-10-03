@@ -163,7 +163,7 @@ class SwCTBWrapper : public Tcg255SubStruct
     SwCTBWrapper& operator = ( const SwCTBWrapper&) = delete;
 
 public:
-    explicit SwCTBWrapper( bool bReadId = true );
+    explicit SwCTBWrapper( bool bReadId );
     virtual ~SwCTBWrapper() override;
     void InsertDropIndex( sal_Int32 aIndex ) { dropDownMenuIndices.push_back( aIndex ); }
     SwTBC* GetTBCAtOffset( sal_uInt32 nStreamOffset );
@@ -207,7 +207,7 @@ class PlfMcd : public Tcg255SubStruct
     PlfMcd& operator = ( const PlfMcd&) = delete;
 
 public:
-    explicit PlfMcd( bool bReadId = true );
+    explicit PlfMcd( bool bReadId );
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;
@@ -238,7 +238,7 @@ class PlfAcd: public Tcg255SubStruct
     PlfAcd& operator = ( const PlfAcd&) = delete;
 
 public:
-    explicit PlfAcd( bool bReadId = true );
+    explicit PlfAcd( bool bReadId );
     virtual ~PlfAcd() override;
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
@@ -275,7 +275,7 @@ class PlfKme : public Tcg255SubStruct
     PlfKme& operator = ( const PlfKme&) = delete;
 
 public:
-    explicit PlfKme( bool bReadId = true );
+    explicit PlfKme( bool bReadId );
     virtual ~PlfKme() override;
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
@@ -316,7 +316,7 @@ class TcgSttbf : public Tcg255SubStruct
     TcgSttbf& operator = ( const TcgSttbf&) = delete;
 
 public:
-    explicit TcgSttbf( bool bReadId = true );
+    explicit TcgSttbf( bool bReadId );
     virtual ~TcgSttbf() override {}
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
@@ -366,7 +366,7 @@ class MacroNames : public Tcg255SubStruct
     MacroNames& operator = ( const MacroNames&) = delete;
 
 public:
-    explicit MacroNames( bool bReadId = true );
+    explicit MacroNames( bool bReadId );
     virtual ~MacroNames() override;
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
