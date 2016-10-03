@@ -2762,7 +2762,6 @@ Size RadioButton::ImplGetRadioImageSize() const
     if( IsNativeControlSupported( ControlType::Radiobutton, ControlPart::Entire ) )
     {
         ImplControlValue aControlValue;
-        // #i45896# workaround gcc3.3 temporary problem
         Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
         ControlState     nState = ControlState::DEFAULT|ControlState::ENABLED;
         Rectangle aBoundingRgn, aContentRgn;
@@ -3647,7 +3646,6 @@ Size CheckBox::ImplGetCheckImageSize() const
     if( IsNativeControlSupported( ControlType::Checkbox, ControlPart::Entire ) )
     {
         ImplControlValue aControlValue;
-        // #i45896# workaround gcc3.3 temporary problem
         Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
         ControlState     nState = ControlState::DEFAULT|ControlState::ENABLED;
         Rectangle aBoundingRgn, aContentRgn;
