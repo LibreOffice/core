@@ -841,7 +841,7 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
         aLastSection = maSegments.back();
 
     //Here
-    sal_uInt16 nLIdx = ( ( mrReader.m_pWwFib->lid & 0xff ) == 0x9 ) ? 1 : 0;
+    sal_uInt16 nLIdx = ( ( mrReader.m_pWwFib->m_lid & 0xff ) == 0x9 ) ? 1 : 0;
 
     //BEGIN read section values
     wwSection aNewSection(*mrReader.m_pPaM->GetPoint());
@@ -1620,7 +1620,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
     do{             // block for quick exit
         if( nSp45 != 0 /* || nSp28 != 0 */ )
             break;                      // bGrafApo only automatic for height
-        if( pIo->m_pWwFib->fComplex )
+        if( pIo->m_pWwFib->m_fComplex )
             break;                      // (*pPap)++ does not work for FastSave
                                         // -> for FastSave, no test for graphics APO
         SvStream* pIoStrm = pIo->m_pStrm;

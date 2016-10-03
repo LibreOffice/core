@@ -40,10 +40,10 @@ WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVer
     refStrm->SetEndian(SvStreamEndian::LITTLE);
     WW8Fib aWwFib(*refStrm, nVersion);
 
-    if (aWwFib.nFibBack >= 0x6A)   //Word97
+    if (aWwFib.m_nFibBack >= 0x6A)   //Word97
     {
         xTableStream = pStg->OpenSotStream(OUString::createFromAscii(
-            aWwFib.fWhichTableStm ? SL::a1Table : SL::a0Table), StreamMode::STD_READ);
+            aWwFib.m_fWhichTableStm ? SL::a1Table : SL::a0Table), StreamMode::STD_READ);
 
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
         {
@@ -197,10 +197,10 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
         std::vector<ww::bytes> aData;
 
         rtl_TextEncoding eStructCharSet =
-            WW8Fib::GetFIBCharset(pGlossary->chseTables, pGlossary->lid);
+            WW8Fib::GetFIBCharset(pGlossary->m_chseTables, pGlossary->m_lid);
 
-        WW8ReadSTTBF(true, *xTableStream, pGlossary->fcSttbfglsy,
-            pGlossary->lcbSttbfglsy, 0, eStructCharSet, aStrings, &aData );
+        WW8ReadSTTBF(true, *xTableStream, pGlossary->m_fcSttbfglsy,
+            pGlossary->m_lcbSttbfglsy, 0, eStructCharSet, aStrings, &aData );
 
         rStrm->Seek(0);
 
@@ -222,7 +222,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
                 aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(),
                     0);
                 std::unique_ptr<SwWW8ImplReader> xRdr(new SwWW8ImplReader(
-                    pGlossary->nVersion, xStg, &rStrm, *pD, rBlocks.GetBaseURL(),
+                    pGlossary->m_nVersion, xStg, &rStrm, *pD, rBlocks.GetBaseURL(),
                     true, false, *aPamo.GetPoint()));
                 xRdr->LoadDoc(this);
                 bRet = MakeEntries(pD, rBlocks, bSaveRelFile, aStrings, aData);
@@ -239,10 +239,10 @@ sal_uInt32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
                                              const WW8Fib &rFib)
 {
     sal_uInt32 nGlossaryFibOffset = 0;
-    if ( rFib.fDot ) // it's a template
+    if ( rFib.m_fDot ) // it's a template
     {
-        if ( rFib.pnNext  )
-            nGlossaryFibOffset = ( rFib.pnNext * 512 );
+        if ( rFib.m_pnNext  )
+            nGlossaryFibOffset = ( rFib.m_pnNext * 512 );
     }
     return nGlossaryFibOffset;
 }

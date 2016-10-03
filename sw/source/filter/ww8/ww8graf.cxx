@@ -2401,7 +2401,7 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTable
 
     if ( m_bVer8 )
     {
-        const sal_uInt16 nWWVersion = m_pWwFib->nProduct & 0xE000;
+        const sal_uInt16 nWWVersion = m_pWwFib->m_nProduct & 0xE000;
         switch ( nWWVersion )
         {
             case 0x0000: // version 8 aka Microsoft Word 97

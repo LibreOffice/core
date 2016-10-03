@@ -643,7 +643,7 @@ void WW8AttributeOutput::StartStyles()
         m_rWW8Export.pTableStrm->WriteChar( (char)0 );        // Address
         ++nCurPos;
     }
-    rFib.fcStshfOrig = rFib.fcStshf = nCurPos;
+    rFib.m_fcStshfOrig = rFib.m_fcStshf = nCurPos;
     m_nStyleCountPos = nCurPos + 2;     // Anzahl wird nachgetragen
 
     static sal_uInt8 aStShi[] = {
@@ -659,7 +659,7 @@ void WW8AttributeOutput::EndStyles( sal_uInt16 nNumberOfStyles )
 {
     WW8Fib& rFib = *m_rWW8Export.pFib;
 
-    rFib.lcbStshfOrig = rFib.lcbStshf = m_rWW8Export.pTableStrm->Tell() - rFib.fcStshf;
+    rFib.m_lcbStshfOrig = rFib.m_lcbStshf = m_rWW8Export.pTableStrm->Tell() - rFib.m_fcStshf;
     SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, m_nStyleCountPos, nNumberOfStyles );
 }
 
@@ -902,7 +902,7 @@ std::vector< const wwFont* > wwFontHelper::AsVector() const
 
 void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
 {
-    rFib.fcSttbfffn = pTableStream->Tell();
+    rFib.m_fcSttbfffn = pTableStream->Tell();
     /*
      * Reserve some space to fill in the len after we know how big it is
      */
@@ -923,8 +923,8 @@ void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
     /*
      * Write the position and len in the FIB
      */
-    rFib.lcbSttbfffn = pTableStream->Tell() - rFib.fcSttbfffn;
-    SwWW8Writer::WriteLong( *pTableStream, rFib.fcSttbfffn, maFonts.size());
+    rFib.m_lcbSttbfffn = pTableStream->Tell() - rFib.m_fcSttbfffn;
+    SwWW8Writer::WriteLong( *pTableStream, rFib.m_fcSttbfffn, maFonts.size());
 }
 
 void wwFontHelper::WriteFontTable( DocxAttributeOutput& rAttrOutput )
@@ -1797,8 +1797,8 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
 
             rWrt.WriteStringAsPara( OUString() ); // CR ans Ende ( sonst mault WW )
         }
-        rWrt.m_pFieldHdFt->Finish( nCpEnd, rWrt.pFib->ccpText + rWrt.pFib->ccpFootnote );
-        rWrt.pFib->ccpHdr = nCpEnd - nCpStart;
+        rWrt.m_pFieldHdFt->Finish( nCpEnd, rWrt.pFib->m_ccpText + rWrt.pFib->m_ccpFootnote );
+        rWrt.pFib->m_ccpHdr = nCpEnd - nCpStart;
     }
     else
     {
@@ -1806,7 +1806,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
         pTextPos = nullptr;
     }
 
-    return rWrt.pFib->ccpHdr != 0;
+    return rWrt.pFib->m_ccpHdr != 0;
 }
 
 void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
@@ -1847,19 +1847,19 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
         UInt32ToSVBT32( rSectionAttribute->m_nSepxFcPos, aSed.fcSepx );
         rWrt.pTableStrm->WriteBytes(&aSed, sizeof(aSed));
     }
-    rWrt.pFib->fcPlcfsed = nFcStart;
-    rWrt.pFib->lcbPlcfsed = rWrt.pTableStrm->Tell() - nFcStart;
+    rWrt.pFib->m_fcPlcfsed = nFcStart;
+    rWrt.pFib->m_lcbPlcfsed = rWrt.pTableStrm->Tell() - nFcStart;
 }
 
 void WW8_WrPlcSepx::WritePlcHdd( WW8Export& rWrt ) const
 {
     // Don't write out the PlcfHdd if ccpHdd is 0: it's a validation failure case.
-    if( rWrt.pFib->ccpHdr != 0 && pTextPos && pTextPos->Count() )
+    if( rWrt.pFib->m_ccpHdr != 0 && pTextPos && pTextPos->Count() )
     {
-        rWrt.pFib->fcPlcfhdd = rWrt.pTableStrm->Tell();
+        rWrt.pFib->m_fcPlcfhdd = rWrt.pTableStrm->Tell();
         pTextPos->Write( *rWrt.pTableStrm );             // Plc0
-        rWrt.pFib->lcbPlcfhdd = rWrt.pTableStrm->Tell() -
-                                rWrt.pFib->fcPlcfhdd;
+        rWrt.pFib->m_lcbPlcfhdd = rWrt.pTableStrm->Tell() -
+                                rWrt.pFib->m_fcPlcfhdd;
     }
 }
 
@@ -2209,20 +2209,20 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                             false);
                 }
 
-                rFib.fcGrpStAtnOwners = nFcStart;
+                rFib.m_fcGrpStAtnOwners = nFcStart;
                 nFcStart = rWrt.pTableStrm->Tell();
-                rFib.lcbGrpStAtnOwners = nFcStart - rFib.fcGrpStAtnOwners;
+                rFib.m_lcbGrpStAtnOwners = nFcStart - rFib.m_fcGrpStAtnOwners;
 
                 // Commented text ranges
                 if( aRangeStartPos.size() > 0 )
                 {
                     // Commented text ranges starting positions (Plcfbkf.aCP)
-                    rFib.fcPlcfAtnbkf = nFcStart;
+                    rFib.m_fcPlcfAtnbkf = nFcStart;
                     for ( i = 0; i < aRangeStartPos.size(); ++i )
                     {
                         SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeStartPos[i].first );
                     }
-                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.ccpText + 1);
+                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.m_ccpText + 1);
 
                     // Commented text ranges additional information (Plcfbkf.aFBKF)
                     for ( i = 0; i < aRangeStartPos.size(); ++i )
@@ -2232,21 +2232,21 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     }
 
                     nFcStart = rWrt.pTableStrm->Tell();
-                    rFib.lcbPlcfAtnbkf = nFcStart - rFib.fcPlcfAtnbkf;
+                    rFib.m_lcbPlcfAtnbkf = nFcStart - rFib.m_fcPlcfAtnbkf;
 
                     // Commented text ranges ending positions (PlcfBkl.aCP)
-                    rFib.fcPlcfAtnbkl = nFcStart;
+                    rFib.m_fcPlcfAtnbkl = nFcStart;
                     for ( i = 0; i < aRangeEndPos.size(); ++i )
                     {
                         SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeEndPos[i].first );
                     }
-                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.ccpText + 1);
+                    SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.m_ccpText + 1);
 
                     nFcStart = rWrt.pTableStrm->Tell();
-                    rFib.lcbPlcfAtnbkl = nFcStart - rFib.fcPlcfAtnbkl;
+                    rFib.m_lcbPlcfAtnbkl = nFcStart - rFib.m_fcPlcfAtnbkl;
 
                     // Commented text ranges as bookmarks (SttbfAtnBkmk)
-                    rFib.fcSttbfAtnbkmk = nFcStart;
+                    rFib.m_fcSttbfAtnbkmk = nFcStart;
                     SwWW8Writer::WriteShort( *rWrt.pTableStrm, (sal_Int16)(sal_uInt16)0xFFFF ); // SttbfAtnBkmk.fExtend
                     SwWW8Writer::WriteShort( *rWrt.pTableStrm, aRangeStartPos.size() ); // SttbfAtnBkmk.cData
                     SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0xA );                   // SttbfAtnBkmk.cbExtra
@@ -2261,7 +2261,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     }
 
                     nFcStart = rWrt.pTableStrm->Tell();
-                    rFib.lcbSttbfAtnbkmk = nFcStart - rFib.fcSttbfAtnbkmk;
+                    rFib.m_lcbSttbfAtnbkmk = nFcStart - rFib.m_fcSttbfAtnbkmk;
                 }
 
                 // Write the extended >= Word XP ATRD records
@@ -2278,11 +2278,11 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     SwWW8Writer::WriteLong( *rWrt.pTableStrm, 0 );
                 }
 
-                rFib.fcAtrdExtra = nFcStart;
+                rFib.m_fcAtrdExtra = nFcStart;
                 nFcStart = rWrt.pTableStrm->Tell();
-                rFib.lcbAtrdExtra = nFcStart - rFib.fcAtrdExtra;
-                rFib.fcHplxsdr = 0x01010002;  //WTF, but apparently necessary
-                rFib.lcbHplxsdr = 0;
+                rFib.m_lcbAtrdExtra = nFcStart - rFib.m_fcAtrdExtra;
+                rFib.m_fcHplxsdr = 0x01010002;  //WTF, but apparently necessary
+                rFib.m_lcbHplxsdr = 0;
             }
             break;
         case TXT_TXTBOX:
@@ -2356,8 +2356,8 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 
         // n+1-th CP-Pos according to the manual
         SwWW8Writer::WriteLong( *rWrt.pTableStrm,
-                rFib.ccpText + rFib.ccpFootnote + rFib.ccpHdr + rFib.ccpEdn +
-                rFib.ccpTxbx + rFib.ccpHdrTxbx + 1 );
+                rFib.m_ccpText + rFib.m_ccpFootnote + rFib.m_ccpHdr + rFib.m_ccpEdn +
+                rFib.m_ccpTxbx + rFib.m_ccpHdrTxbx + 1 );
 
         if ( TXT_ATN == nTTyp )
         {

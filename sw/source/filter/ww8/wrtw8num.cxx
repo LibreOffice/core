@@ -137,11 +137,11 @@ void WW8Export::WriteNumbering()
         return; // no numbering is used
 
     // list formats - LSTF
-    pFib->fcPlcfLst = pTableStrm->Tell();
+    pFib->m_fcPlcfLst = pTableStrm->Tell();
     SwWW8Writer::WriteShort( *pTableStrm, m_pUsedNumTable->size() );
     NumberingDefinitions();
     // set len to FIB
-    pFib->lcbPlcfLst = pTableStrm->Tell() - pFib->fcPlcfLst;
+    pFib->m_lcbPlcfLst = pTableStrm->Tell() - pFib->m_fcPlcfLst;
 
     // list formats - LVLF
     AbstractNumberingDefinitions();
@@ -551,7 +551,7 @@ void WW8Export::OutOverrideListTab()
     sal_uInt16 nCount = m_pUsedNumTable->size();
     sal_uInt16 n;
 
-    pFib->fcPlfLfo = pTableStrm->Tell();
+    pFib->m_fcPlfLfo = pTableStrm->Tell();
     SwWW8Writer::WriteLong( *pTableStrm, nCount );
 
     for( n = 0; n < nCount; ++n )
@@ -563,7 +563,7 @@ void WW8Export::OutOverrideListTab()
         SwWW8Writer::WriteLong( *pTableStrm, -1 );  // no overwrite
 
     // set len to FIB
-    pFib->lcbPlfLfo = pTableStrm->Tell() - pFib->fcPlfLfo;
+    pFib->m_lcbPlfLfo = pTableStrm->Tell() - pFib->m_fcPlfLfo;
 }
 
 void WW8Export::OutListNamesTab()
@@ -574,7 +574,7 @@ void WW8Export::OutListNamesTab()
     // write the "list format override" - LFO
     sal_uInt16 nNms = 0, nCount = m_pUsedNumTable->size();
 
-    pFib->fcSttbListNames = pTableStrm->Tell();
+    pFib->m_fcSttbListNames = pTableStrm->Tell();
     SwWW8Writer::WriteShort( *pTableStrm, -1 );
     SwWW8Writer::WriteLong( *pTableStrm, nCount );
 
@@ -590,9 +590,9 @@ void WW8Export::OutListNamesTab()
             SwWW8Writer::WriteString16(*pTableStrm, sNm, false);
     }
 
-    SwWW8Writer::WriteLong( *pTableStrm, pFib->fcSttbListNames + 2, nNms );
+    SwWW8Writer::WriteLong( *pTableStrm, pFib->m_fcSttbListNames + 2, nNms );
     // set len to FIB
-    pFib->lcbSttbListNames = pTableStrm->Tell() - pFib->fcSttbListNames;
+    pFib->m_lcbSttbListNames = pTableStrm->Tell() - pFib->m_fcSttbListNames;
 }
 
 void MSWordExportBase::SubstituteBullet( OUString& rNumStr,

@@ -699,7 +699,7 @@ void WW8Export::MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
 
 void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
 {
-    if (8 > rWrt.pFib->nVersion)    // Cannot export drawobject in vers 7-
+    if (8 > rWrt.pFib->m_nVersion)    // Cannot export drawobject in vers 7-
         return;
 
     sal_uInt32 nFcStart = rWrt.pTableStrm->Tell();
@@ -716,8 +716,8 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
         for (aIter = maDrawObjs.begin(); aIter < aEnd; ++aIter)
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, aIter->mnCp - nCpOffs);
 
-        SwWW8Writer::WriteLong(*rWrt.pTableStrm, rFib.ccpText + rFib.ccpFootnote +
-            rFib.ccpHdr + rFib.ccpEdn + rFib.ccpTxbx + rFib.ccpHdrTxbx + 1);
+        SwWW8Writer::WriteLong(*rWrt.pTableStrm, rFib.m_ccpText + rFib.m_ccpFootnote +
+            rFib.m_ccpHdr + rFib.m_ccpEdn + rFib.m_ccpTxbx + rFib.m_ccpHdrTxbx + 1);
 
         for (aIter = maDrawObjs.begin(); aIter < aEnd; ++aIter)
         {
@@ -899,8 +899,8 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
 void MainTextPlcDrawObj::RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
     sal_uInt32 nLen) const
 {
-    rFib.fcPlcfspaMom = nStart;
-    rFib.lcbPlcfspaMom = nLen;
+    rFib.m_fcPlcfspaMom = nStart;
+    rFib.m_lcbPlcfspaMom = nLen;
 }
 
 WW8_CP MainTextPlcDrawObj::GetCpOffset(const WW8Fib &) const
@@ -911,13 +911,13 @@ WW8_CP MainTextPlcDrawObj::GetCpOffset(const WW8Fib &) const
 void HdFtPlcDrawObj::RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
     sal_uInt32 nLen) const
 {
-    rFib.fcPlcfspaHdr = nStart;
-    rFib.lcbPlcfspaHdr = nLen;
+    rFib.m_fcPlcfspaHdr = nStart;
+    rFib.m_lcbPlcfspaHdr = nLen;
 }
 
 WW8_CP HdFtPlcDrawObj::GetCpOffset(const WW8Fib &rFib) const
 {
-    return rFib.ccpText + rFib.ccpFootnote;
+    return rFib.m_ccpText + rFib.m_ccpFootnote;
 }
 
 DrawObj& DrawObj::operator=(const DrawObj& rOther)
@@ -967,18 +967,18 @@ void DrawObj::SetShapeDetails(sal_uInt32 nId, sal_Int32 nThick)
 bool WW8_WrPlcTextBoxes::WriteText( WW8Export& rWrt )
 {
     rWrt.m_bInWriteEscher = true;
-    WW8_CP& rccp=TXT_TXTBOX == nTyp ? rWrt.pFib->ccpTxbx : rWrt.pFib->ccpHdrTxbx;
+    WW8_CP& rccp=TXT_TXTBOX == nTyp ? rWrt.pFib->m_ccpTxbx : rWrt.pFib->m_ccpHdrTxbx;
 
     bool bRet = WriteGenericText( rWrt, nTyp, rccp );
 
     WW8_CP nCP = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     WW8Fib& rFib = *rWrt.pFib;
-    WW8_CP nMyOffset = rFib.ccpText + rFib.ccpFootnote + rFib.ccpHdr + rFib.ccpAtn
-                            + rFib.ccpEdn;
+    WW8_CP nMyOffset = rFib.m_ccpText + rFib.m_ccpFootnote + rFib.m_ccpHdr + rFib.m_ccpAtn
+                            + rFib.m_ccpEdn;
     if( TXT_TXTBOX == nTyp )
         rWrt.m_pFieldTextBxs->Finish( nCP, nMyOffset );
     else
-        rWrt.m_pFieldHFTextBxs->Finish( nCP, nMyOffset + rFib.ccpTxbx );
+        rWrt.m_pFieldHFTextBxs->Finish( nCP, nMyOffset + rFib.m_ccpTxbx );
     rWrt.m_bInWriteEscher = false;
     return bRet;
 }
@@ -1523,8 +1523,8 @@ void WW8Export::WriteEscher()
         m_pEscher->WritePictures();
         m_pEscher->FinishEscher();
 
-        pFib->fcDggInfo = nStart;
-        pFib->lcbDggInfo = pTableStrm->Tell() - nStart;
+        pFib->m_fcDggInfo = nStart;
+        pFib->m_lcbDggInfo = pTableStrm->Tell() - nStart;
         delete m_pEscher;
         m_pEscher = nullptr;
     }
