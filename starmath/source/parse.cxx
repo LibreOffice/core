@@ -339,7 +339,7 @@ bool IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
 
 void SmParser::Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText )
 {
-    OSL_ENSURE( nPos + nLen <= m_aBufferString.getLength(), "argument mismatch" );
+    assert( nPos + nLen <= m_aBufferString.getLength() );
 
     m_aBufferString = m_aBufferString.replaceAt( nPos, nLen, rText );
     sal_Int32 nChg = rText.getLength() - nLen;
