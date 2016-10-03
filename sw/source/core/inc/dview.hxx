@@ -79,7 +79,7 @@ protected:
     virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const override;
 
 public:
-    SwDrawView( SwViewShellImp &rI, SdrModel *pMd, OutputDevice* pOutDev=nullptr );
+    SwDrawView( SwViewShellImp &rI, SdrModel *pMd, OutputDevice* pOutDev );
 
     // from base class
     virtual SdrObject*   GetMaxToTopObj(SdrObject* pObj) const override;

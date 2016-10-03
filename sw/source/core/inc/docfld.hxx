@@ -74,7 +74,7 @@ public:
 
     SetGetExpField( const SwPosition& rPos );
 
-    SetGetExpField( const SwFlyFrameFormat& rFlyFormat, const SwPosition* pPos = nullptr );
+    SetGetExpField( const SwFlyFrameFormat& rFlyFormat, const SwPosition* pPos );
 
     bool operator==( const SetGetExpField& rField ) const;
     bool operator<( const SetGetExpField& rField ) const;
@@ -110,7 +110,7 @@ public:
 struct HashStr : public SwHash
 {
     OUString aSetStr;
-    HashStr( const OUString& rName, const OUString& rText, HashStr* = nullptr );
+    HashStr( const OUString& rName, const OUString& rText, HashStr* );
 };
 
 struct SwCalcFieldType : public SwHash

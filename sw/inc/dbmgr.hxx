@@ -399,7 +399,7 @@ public:
      */
     static OUString            LoadAndRegisterDataSource(const DBConnURITypes type, const css::uno::Any &rUnoURI,
                                                          const css::uno::Reference < css::beans::XPropertySet > *pSettings,
-                                                         const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir = nullptr,
+                                                         const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir,
                                                          SwDocShell* pDocShell = nullptr);
     /**
      Loads a data source from file and registers it.
@@ -407,7 +407,7 @@ public:
      Convenience function, which calls GetDBunoURI and has just one mandatory parameter.
      In case of success it returns the registered name, otherwise an empty string.
      */
-    static OUString            LoadAndRegisterDataSource(const OUString& rURI, const OUString *pPrefix, const OUString *pDestDir = nullptr,
+    static OUString            LoadAndRegisterDataSource(const OUString& rURI, const OUString *pPrefix, const OUString *pDestDir,
                                                          const css::uno::Reference < css::beans::XPropertySet > *pSettings = nullptr);
 
     /// Load the embedded data source of the document and also register it.

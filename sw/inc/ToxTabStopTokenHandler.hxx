@@ -73,7 +73,7 @@ public:
     */
     DefaultToxTabStopTokenHandler(sal_uInt32 indexOfSectionNode, const SwPageDesc& defaultPageDescription,
             bool tabPositionIsRelativeToParagraphIndent,
-            TabStopReferencePolicy referencePolicy = TABSTOPS_RELATIVE_TO_PAGE);
+            TabStopReferencePolicy referencePolicy);
 
     /** Handle a tab stop token.
      *

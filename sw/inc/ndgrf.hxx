@@ -56,16 +56,16 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
                const OUString& rGrfName, const OUString& rFltName,
                const Graphic* pGraphic,
                SwGrfFormatColl* pGrfColl,
-               SwAttrSet* pAutoAttr = nullptr );
+               SwAttrSet* pAutoAttr );
     ///< Ctor for reading (SW/G) without graphics.
     SwGrfNode( const SwNodeIndex& rWhere,
                const OUString& rGrfName, const OUString& rFltName,
                SwGrfFormatColl* pGrfColl,
-               SwAttrSet* pAutoAttr = nullptr );
+               SwAttrSet* pAutoAttr );
     SwGrfNode( const SwNodeIndex& rWhere,
                const GraphicObject& rGrfObj,
                SwGrfFormatColl* pGrfColl,
-               SwAttrSet* pAutoAttr = nullptr );
+               SwAttrSet* pAutoAttr );
 
     void InsertLink( const OUString& rGrfName, const OUString& rFltName );
     bool ImportGraphic( SvStream& rStrm );
@@ -126,9 +126,9 @@ public:
     void SetGraphic(const Graphic& rGraphic, const OUString& rLink);
 
     /// wrappers for non-const calls at GraphicObject
-    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData, OutputDevice* pFirstFrameOutDev = nullptr)
+    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData, OutputDevice* pFirstFrameOutDev)
     { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pFirstFrameOutDev); }
-    void StopGraphicAnimation(OutputDevice* pOut, long nExtraData = 0) { maGrfObj.StopAnimation(pOut, nExtraData); }
+    void StopGraphicAnimation(OutputDevice* pOut, long nExtraData) { maGrfObj.StopAnimation(pOut, nExtraData); }
 
     virtual Size GetTwipSize() const override;
     void SetTwipSize( const Size& rSz );

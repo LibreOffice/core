@@ -128,7 +128,7 @@ private:
 public:
     SwShellCursor( const SwCursorShell& rCursorSh, const SwPosition &rPos );
     SwShellCursor( const SwCursorShell& rCursorSh, const SwPosition &rPos,
-                    const Point& rPtPos, SwPaM* pRing = nullptr );
+                    const Point& rPtPos, SwPaM* pRing );
     // note: *intentionally* links the new shell cursor into the old one's Ring
     SwShellCursor( SwShellCursor& );
     virtual ~SwShellCursor() override;

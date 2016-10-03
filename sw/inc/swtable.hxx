@@ -399,9 +399,9 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
 
 public:
 
-    SwTableBox( SwTableBoxFormat*, sal_uInt16 nLines, SwTableLine *pUp = nullptr );
-    SwTableBox( SwTableBoxFormat*, const SwStartNode&, SwTableLine *pUp = nullptr );
-    SwTableBox( SwTableBoxFormat*, const SwNodeIndex&, SwTableLine *pUp = nullptr );
+    SwTableBox( SwTableBoxFormat*, sal_uInt16 nLines, SwTableLine *pUp );
+    SwTableBox( SwTableBoxFormat*, const SwStartNode&, SwTableLine *pUp );
+    SwTableBox( SwTableBoxFormat*, const SwNodeIndex&, SwTableLine *pUp );
     virtual ~SwTableBox() override;
 
           SwTableLines &GetTabLines() { return m_aLines; }

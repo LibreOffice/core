@@ -200,7 +200,7 @@ public:
 class SwRotatedPortion : public SwMultiPortion
 {
 public:
-    SwRotatedPortion( sal_Int32 nEnd, sal_uInt8 nDir = 1 )
+    SwRotatedPortion( sal_Int32 nEnd, sal_uInt8 nDir )
         : SwMultiPortion( nEnd ) { SetDirection( nDir ); }
     SwRotatedPortion( const SwMultiCreator& rCreate, sal_Int32 nEnd,
                       bool bRTL );

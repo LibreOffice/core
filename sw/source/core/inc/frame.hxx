@@ -646,7 +646,7 @@ public:
     void ImplInvalidateLineNum();
 
     inline void InvalidateNextPos( bool bNoFootnote = false );
-    void ImplInvalidateNextPos( bool bNoFootnote = false );
+    void ImplInvalidateNextPos( bool bNoFootnote );
 
     /** method to invalidate printing area of next frame
         #i11859#

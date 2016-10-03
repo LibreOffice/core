@@ -175,7 +175,7 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
 
 public:
     SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
-                          SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
+                          SfxStyleFamily eFam, sal_uInt16 n );
     virtual ~SwStyleSheetIterator() override;
 
     virtual sal_uInt16 Count() override;
@@ -201,7 +201,7 @@ class SwDocStyleSheetPool : public SfxStyleSheetBasePool
     using SfxStyleSheetBasePool::Find;
 
 public:
-    SwDocStyleSheetPool( SwDoc&, bool bOrganizer = false );
+    SwDocStyleSheetPool( SwDoc&, bool bOrganizer );
 
     virtual SfxStyleSheetBase& Make(const OUString&, SfxStyleFamily,
             sal_uInt16 nMask = SFXSTYLEBIT_ALL) override;

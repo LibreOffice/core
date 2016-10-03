@@ -49,7 +49,7 @@ class SwAutoCompleteWord
 
     void DocumentDying(const SwDoc& rDoc);
 public:
-    SwAutoCompleteWord( sal_uInt16 nWords = 500, sal_uInt16 nMWrdLen = 10 );
+    SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen = 10 );
     ~SwAutoCompleteWord();
 
     bool InsertWord( const OUString& rWord, SwDoc& rDoc );

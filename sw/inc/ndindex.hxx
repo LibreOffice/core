@@ -140,7 +140,7 @@ public:
     SwNodeRange( const SwNodeRange &rRange )
         : aStart( rRange.aStart ), aEnd( rRange.aEnd ) {};
 
-    SwNodeRange( SwNodes& rNds, sal_uLong nSttIdx = 0, sal_uLong nEndIdx = 0 )
+    SwNodeRange( SwNodes& rNds, sal_uLong nSttIdx, sal_uLong nEndIdx = 0 )
         : aStart( rNds, nSttIdx ), aEnd( rNds, nEndIdx ) {};
 
     SwNodeRange( const SwNodeIndex& rS, long nSttDiff, const SwNodeIndex& rE, long nEndDiff = 0 )

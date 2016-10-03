@@ -248,7 +248,7 @@ public:
     static SwTableNode* InsertTable( const SwNodeIndex& rNdIdx,
                         sal_uInt16 nBoxes, SwTextFormatColl* pContentTextColl,
                         sal_uInt16 nLines, sal_uInt16 nRepeat,
-                        SwTextFormatColl* pHeadlineTextColl = nullptr,
+                        SwTextFormatColl* pHeadlineTextColl,
                         const SwAttrSet * pAttrSet = nullptr);
 
     /// Create balanced table from selected range.

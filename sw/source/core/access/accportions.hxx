@@ -93,7 +93,7 @@ class SwAccessiblePortionData : public SwPortionHandler
 
 public:
     SwAccessiblePortionData( const SwTextNode* pTextNd,
-                             const SwViewOption* pViewOpt = nullptr );
+                             const SwViewOption* pViewOpt );
     virtual ~SwAccessiblePortionData() override;
 
     // SwPortionHandler methods

@@ -531,7 +531,7 @@ public:
     void ChgNumRuleFormats( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.
-    void SetNumRuleStart( bool bFlag, SwPaM* pCursor = nullptr );
+    void SetNumRuleStart( bool bFlag, SwPaM* pCursor );
     bool IsNumRuleStart( SwPaM* pPaM = nullptr ) const;
     void SetNodeNumStart( sal_uInt16 nStt );
 
@@ -550,7 +550,7 @@ public:
      Reset UndoHistory at Save, SaveAs, Create ??? */
     void DoUndo( bool bOn = true );
     bool DoesUndo() const;
-    void DoGroupUndo( bool bUn = true );
+    void DoGroupUndo( bool bUn );
     bool DoesGroupUndo() const;
     void DelAllUndoObj();
 
@@ -660,13 +660,13 @@ public:
      including styles. */
     sal_uInt16 MakeGlossary( SwTextBlocks& rToFill, const OUString& rName,
                          const OUString& rShortName, bool bSaveRelFile,
-                         const OUString* pOnlyText=nullptr );
+                         const OUString* pOnlyText );
 
     /// Save complete content of doc as glossary.
     sal_uInt16 SaveGlossaryDoc( SwTextBlocks& rGlossary, const OUString& rName,
                             const OUString& rShortName,
                             bool bSaveRelFile,
-                            bool bOnlyText = false );
+                            bool bOnlyText );
 
     // Linguistics...
     /// Save selections.
@@ -937,7 +937,7 @@ public:
     sal_uInt16 GetScalingOfSelectedText() const;
 
     /// Ctor/Dtor.
-    SwEditShell( SwDoc&, vcl::Window*, const SwViewOption *pOpt = nullptr );
+    SwEditShell( SwDoc&, vcl::Window*, const SwViewOption *pOpt );
 
     /// Copy-Constructor in disguise.
     SwEditShell( SwEditShell&, vcl::Window* );

@@ -505,7 +505,7 @@ public:
 
     SwWriter( const css::uno::Reference < css::embed::XStorage >&, SwDoc& );
 
-    SwWriter( SfxMedium&, SwCursorShell &, bool bWriteAll = false );
+    SwWriter( SfxMedium&, SwCursorShell &, bool bWriteAll );
     SwWriter( SfxMedium&, SwDoc & );
 };
 

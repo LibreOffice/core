@@ -294,9 +294,9 @@ public:
                             bool bSetInReadOnly ) const override;
     virtual bool UnitDown(SwPaM *, const SwTwips nOffset,
                             bool bSetInReadOnly ) const override;
-    bool UnitUp_(SwPaM *, const SwTwips nOffset = 0,
+    bool UnitUp_(SwPaM *, const SwTwips nOffset,
                             bool bSetInReadOnly = false ) const;
-    bool UnitDown_(SwPaM *, const SwTwips nOffset = 0,
+    bool UnitDown_(SwPaM *, const SwTwips nOffset,
                             bool bSetInReadOnly = false ) const;
 
     /**

@@ -38,7 +38,7 @@ class SwScriptIterator
     bool bForward;
 
 public:
-    SwScriptIterator( const OUString& rStr, sal_Int32 nStart = 0,
+    SwScriptIterator( const OUString& rStr, sal_Int32 nStart,
                       bool bFrwrd = true );
 
     bool Next();
@@ -63,7 +63,7 @@ class SwTextAttrIterator
 
 public:
     SwTextAttrIterator( const SwTextNode& rTextNd, sal_uInt16 nWhichId,
-                        sal_Int32 nStart = 0 );
+                        sal_Int32 nStart );
 
     bool Next();
 
@@ -74,7 +74,7 @@ public:
 class SwLanguageIterator : public SwTextAttrIterator
 {
 public:
-    SwLanguageIterator( const SwTextNode& rTextNode, sal_Int32 nStart = 0 )
+    SwLanguageIterator( const SwTextNode& rTextNode, sal_Int32 nStart )
         : SwTextAttrIterator( rTextNode, RES_CHRATR_LANGUAGE, nStart )
     {}
 

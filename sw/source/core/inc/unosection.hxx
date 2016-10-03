@@ -57,7 +57,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    SwXTextSection(SwSectionFormat *const pFormat, const bool bIndexHeader = false);
+    SwXTextSection(SwSectionFormat *const pFormat, const bool bIndexHeader);
 
     virtual ~SwXTextSection() override;
 

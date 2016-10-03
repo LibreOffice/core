@@ -59,7 +59,7 @@ class SwUndoRedlineDelete : public SwUndoRedline
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
-    SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUserId = UNDO_EMPTY );
+    SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUserId );
 
     bool CanGrouping( const SwUndoRedlineDelete& rPrev );
 

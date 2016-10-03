@@ -117,7 +117,7 @@ struct SwContentAtPos
     OUString sStr;
     const SwTextAttr* pFndTextAttr;
 
-    SwContentAtPos( int eGetAtPos = 0xffff )
+    SwContentAtPos( int eGetAtPos )
         : eContentAtPos( (IsAttrAtPos)eGetAtPos )
     {
         aFnd.pField = nullptr;
@@ -289,7 +289,7 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
-    SwCursorShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt = nullptr );
+    SwCursorShell( SwDoc& rDoc, vcl::Window *pWin, const SwViewOption *pOpt );
     // disguised copy constructor
     SwCursorShell( SwCursorShell& rShell, vcl::Window *pWin );
     virtual ~SwCursorShell() override;
@@ -374,7 +374,7 @@ public:
                 bool& bCancel,
                 FindRanges eRng,
                 const css::util::SearchOptions2* pSearchOpt,
-                const SfxItemSet* rReplSet = nullptr );
+                const SfxItemSet* rReplSet );
 
     //  Position the Cursor
     //  return values:
@@ -640,8 +640,7 @@ public:
     bool GotoHeaderText();       ///< jump from the content to the header
     bool GotoFooterText();       ///< jump from the content to the footer
     // jump to the header/footer of the given or current PageDesc
-    bool SetCursorInHdFt( size_t nDescNo,
-                        bool bInHeader = true );
+    bool SetCursorInHdFt( size_t nDescNo, bool bInHeader );
     // is point of cursor in header/footer. pbInHeader return true if it is
     // in a headerframe otherwise in a footerframe
     bool IsInHeaderFooter( bool* pbInHeader = nullptr ) const;
@@ -663,7 +662,7 @@ public:
     bool SelectNxtPrvHyperlink( bool bNext );
 
     bool GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
-                            sal_uInt16 nSeqNo = 0 );
+                            sal_uInt16 nSeqNo );
 
     // get the nth character from the start or end of the  current selection
     sal_Unicode GetChar( bool bEnd = true, long nOffset = 0 );

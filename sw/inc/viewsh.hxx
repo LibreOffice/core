@@ -206,7 +206,7 @@ public:
     inline void StartAction();
            void ImplStartAction();
     inline void EndAction( const bool bIdleEnd = false );
-           void ImplEndAction( const bool bIdleEnd = false );
+           void ImplEndAction( const bool bIdleEnd );
     sal_uInt16 ActionCount() const { return mnStartAction; }
     bool ActionPend() const { return mnStartAction != 0; }
     bool IsInEndAction() const { return mbInEndAction; }
@@ -543,10 +543,10 @@ public:
 
     SwAccessibleMap* GetAccessibleMap();
 
-    SwViewShell( SwViewShell&, vcl::Window *pWin = nullptr, OutputDevice *pOut = nullptr,
+    SwViewShell( SwViewShell&, vcl::Window *pWin, OutputDevice *pOut = nullptr,
                 long nFlags = 0 );
     SwViewShell( SwDoc& rDoc, vcl::Window *pWin,
-               const SwViewOption *pOpt = nullptr, OutputDevice *pOut = nullptr,
+               const SwViewOption *pOpt, OutputDevice *pOut = nullptr,
                long nFlags = 0 );
     virtual ~SwViewShell() override;
 
