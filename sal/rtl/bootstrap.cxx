@@ -470,7 +470,7 @@ bool Bootstrap_Impl::getValue(
 #endif
 #ifdef IOS
     if (key == "APP_DATA_DIR") {
-        const char *app_data_dir = [[[[NSBundle mainBundle] bundlePath] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding] UTF8String];
+        const char *app_data_dir = [[[[NSBundle mainBundle] bundlePath] stringByAddingPercentEncodingWithAllowedCharacters: [NSCharacterSet URLPathAllowedCharacterSet]] UTF8String];
         rtl_uString_assign(
             value, rtl::OUString(app_data_dir, strlen(app_data_dir), RTL_TEXTENCODING_UTF8).pData);
         return true;
