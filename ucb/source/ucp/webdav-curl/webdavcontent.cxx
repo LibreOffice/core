@@ -115,10 +115,7 @@ void lcl_sendPartialGETRequest( bool &bError,
     }
     try
     {
-        uno::Reference< io::XInputStream > xIn = xResAccess->GET( aPartialGet,
-                                                                  aHeaderNames,
-                                                                  aResource,
-                                                                  xEnv );
+        xResAccess->GET0( aPartialGet, aHeaderNames, aResource, xEnv );
         bError = false;
 
         if ( bIsRequestSize )
@@ -1462,7 +1459,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         removeCachedPropertyNames( xResAccess->getURL() );
                         // test if HEAD allowed, if not, throw, will be catched immediately
                         if ( !aStaticDAVOptionsCache.isHeadAllowed( xResAccess->getURL() ) )
-                            throw DAVException( DAVException::DAV_HTTP_ERROR, "405 Not Implemented" );
+                            throw DAVException( DAVException::DAV_HTTP_ERROR, "405 Not Implemented", 405 );
 
                         xResAccess->HEAD( aHeaderNames, resource, xEnv );
                         m_bDidGetOrHead = true;
@@ -4056,10 +4053,10 @@ bool Content::isResourceAvailable( const css::uno::Reference< css::ucb::XCommand
                         OUString( "Range" ),
                         OUString( "bytes=0-0" )));
 
-                rResAccess->GET( aPartialGet,
-                                 aHeaderNames,
-                                 aResource,
-                                 xEnv );
+                rResAccess->GET0( aPartialGet,
+                                  aHeaderNames,
+                                  aResource,
+                                  xEnv );
                 return true;
             }
             catch (...)
