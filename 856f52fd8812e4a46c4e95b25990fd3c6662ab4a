@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a629dbe_7d2cefab",
+        "filename": "sc/source/core/data/attarray.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-10-03T15:47:01Z",
+      "side": 1,
+      "message": "Why create the object on the heap instead of the stack?",
+      "revId": "856f52fd8812e4a46c4e95b25990fd3c6662ab4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
