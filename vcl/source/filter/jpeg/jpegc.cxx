@@ -36,6 +36,7 @@ extern "C" {
 #include <JpegReader.hxx>
 #include <JpegWriter.hxx>
 #include <memory>
+#include <vcl/bitmapaccess.hxx>
 
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable to __declspec(align()) aligned warning */
@@ -68,16 +69,8 @@ extern "C" void outputMessage (j_common_ptr cinfo)
 void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                Size const & previewSize )
 {
-    jpeg_decompress_struct          cinfo;
-    ErrorManagerStruct              jerr;
-    JPEGCreateBitmapParam           aCreateBitmapParam;
-    unsigned char *                 pDIB;
-    unsigned char *                 pTmp;
-    long                            nWidth;
-    long                            nHeight;
-    long                            nAlignedWidth;
-    JSAMPLE*                        aRangeLimit;
-    std::unique_ptr<unsigned char[]> pScanLineBuffer;
+    jpeg_decompress_struct cinfo;
+    ErrorManagerStruct jerr;
 
     if ( setjmp( jerr.setjmp_buffer ) )
     {
@@ -151,72 +144,114 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
 
     jpeg_start_decompress( &cinfo );
 
-    nWidth = cinfo.output_width;
-    nHeight = cinfo.output_height;
+    long nWidth = cinfo.output_width;
+    long nHeight = cinfo.output_height;
+
+    bool bGray = (cinfo.output_components == 1);
+
+    JPEGCreateBitmapParam aCreateBitmapParam;
+
     aCreateBitmapParam.nWidth = nWidth;
     aCreateBitmapParam.nHeight = nHeight;
 
     aCreateBitmapParam.density_unit = cinfo.density_unit;
     aCreateBitmapParam.X_density = cinfo.X_density;
     aCreateBitmapParam.Y_density = cinfo.Y_density;
-    aCreateBitmapParam.bGray = long(cinfo.output_components == 1);
-    pDIB = pJPEGReader->CreateBitmap(aCreateBitmapParam);
-    nAlignedWidth = aCreateBitmapParam.nAlignedWidth;
-    aRangeLimit = cinfo.sample_range_limit;
+    aCreateBitmapParam.bGray = bGray;
 
-    long nScanLineBufferComponents = 0;
-    if ( cinfo.out_color_space == JCS_CMYK )
+    bool bBitmapCreated = pJPEGReader->CreateBitmap(aCreateBitmapParam);
+
+    if (bBitmapCreated)
     {
-        nScanLineBufferComponents = cinfo.output_width * 4;
-        pScanLineBuffer.reset(new unsigned char[nScanLineBufferComponents]);
-    }
+        Bitmap::ScopedWriteAccess pAccess(pJPEGReader->GetBitmap());
 
-    if( pDIB )
-    {
-        if( aCreateBitmapParam.bTopDown )
+        if (pAccess)
         {
-            pTmp = pDIB;
-        }
-        else
-        {
-            pTmp = pDIB + ( nHeight - 1 ) * nAlignedWidth;
-            nAlignedWidth = -nAlignedWidth;
-        }
+            JSAMPLE* aRangeLimit = cinfo.sample_range_limit;
 
-        for ( *pLines = 0; *pLines < nHeight; (*pLines)++ )
-        {
-            if (pScanLineBuffer)
-            { // in other words cinfo.out_color_space == JCS_CMYK
-                int i;
-                int j;
-                unsigned char *pSLB = pScanLineBuffer.get();
-                jpeg_read_scanlines( &cinfo, reinterpret_cast<JSAMPARRAY>(&pSLB), 1 );
-                // convert CMYK to RGB
-                for( i=0, j=0; i < nScanLineBufferComponents; i+=4, j+=3 )
+            std::vector<sal_uInt8> pScanLineBuffer(nWidth * (bGray ? 1 : 3));
+            std::vector<sal_uInt8> pCYMKBuffer;
+
+            if (cinfo.out_color_space == JCS_CMYK)
+            {
+                pCYMKBuffer.resize(nWidth * 4);
+            }
+
+            const ScanlineFormat nFormat = pAccess->GetScanlineFormat();
+
+            bool bTopDown = true;
+
+            if (( bGray && nFormat == ScanlineFormat::N8BitPal) ||
+                (!bGray && nFormat == ScanlineFormat::N24BitTcRgb))
+            {
+                bTopDown = pAccess->IsTopDown();
+            }
+
+            std::unique_ptr<BitmapColor[]> pCols;
+
+            if (bGray)
+            {
+                pCols.reset(new BitmapColor[256]);
+
+                for (sal_uInt16 n = 0; n < 256; n++)
                 {
-                    int color_C = 255 - pScanLineBuffer[i+0];
-                    int color_M = 255 - pScanLineBuffer[i+1];
-                    int color_Y = 255 - pScanLineBuffer[i+2];
-                    int color_K = 255 - pScanLineBuffer[i+3];
-                    pTmp[j+0] = aRangeLimit[ 255L - ( color_C + color_K ) ];
-                    pTmp[j+1] = aRangeLimit[ 255L - ( color_M + color_K ) ];
-                    pTmp[j+2] = aRangeLimit[ 255L - ( color_Y + color_K ) ];
+                    const sal_uInt8 cGray = n;
+                    pCols[n] = pAccess->GetBestMatchingColor(BitmapColor(cGray, cGray, cGray));
                 }
             }
-            else
+
+            for (*pLines = 0; *pLines < nHeight; (*pLines)++)
             {
-                jpeg_read_scanlines( &cinfo, reinterpret_cast<JSAMPARRAY>(&pTmp), 1 );
+                size_t yIndex = *pLines;
+
+                if (cinfo.out_color_space == JCS_CMYK)
+                {
+                    sal_uInt8* p = pCYMKBuffer.data();
+                    jpeg_read_scanlines(&cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
+
+                    // convert CMYK to RGB
+                    for (int cmyk = 0, rgb = 0; cmyk < nWidth * 4; cmyk += 4, rgb += 3)
+                    {
+                        int color_C = 255 - pCYMKBuffer[cmyk + 0];
+                        int color_M = 255 - pCYMKBuffer[cmyk + 1];
+                        int color_Y = 255 - pCYMKBuffer[cmyk + 2];
+                        int color_K = 255 - pCYMKBuffer[cmyk + 3];
+
+                        pScanLineBuffer[rgb + 0] = aRangeLimit[255L - (color_C + color_K)];
+                        pScanLineBuffer[rgb + 1] = aRangeLimit[255L - (color_M + color_K)];
+                        pScanLineBuffer[rgb + 2] = aRangeLimit[255L - (color_Y + color_K)];
+                    }
+                }
+                else
+                {
+                    sal_uInt8* p = pScanLineBuffer.data();
+                    jpeg_read_scanlines(&cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
+                }
+
+                if (!bTopDown)
+                    yIndex = nHeight - 1 - yIndex;
+
+                if (bGray)
+                {
+                    for (long x = 0; x < nWidth; ++x)
+                    {
+                        sal_uInt8 nColorGray = pScanLineBuffer[x];
+                        pAccess->SetPixel(yIndex, x, pCols[nColorGray]);
+                    }
+                }
+                else
+                {
+                    pAccess->CopyScanline(yIndex, pScanLineBuffer.data(), ScanlineFormat::N24BitTcRgb, nWidth * 3);
+                }
+
+                /* PENDING ??? */
+                if (cinfo.err->msg_code == 113)
+                    break;
             }
-
-            /* PENDING ??? */
-            if ( cinfo.err->msg_code == 113 )
-                break;
-
-            pTmp += nAlignedWidth;
         }
     }
 
-    if ( pDIB )
+    if (bBitmapCreated)
     {
         jpeg_finish_decompress( &cinfo );
     }
@@ -224,8 +259,6 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     {
         jpeg_abort_decompress( &cinfo );
     }
-
-    pScanLineBuffer.reset();
 
     jpeg_destroy_decompress( &cinfo );
 }

@@ -39,34 +39,33 @@ struct JPEGCreateBitmapParam
     unsigned long density_unit;
     unsigned long X_density;
     unsigned long Y_density;
-    long     bGray;
 
-    long     nAlignedWidth;  // these members will be filled by the
-    bool     bTopDown;      // CreateBitmap method in svtools
+    bool bGray;
+    bool bTopDown;      // CreateBitmap method in svtools
 };
 
 class JPEGReader : public GraphicReader
 {
     SvStream&           mrStream;
-    Bitmap              maBmp;
-    Bitmap              maBmp1;
-    BitmapWriteAccess*  mpAcc;
-    BitmapWriteAccess*  mpAcc1;
-    unsigned char *     mpBuffer;
+    Bitmap              maBitmap;
+    Bitmap              maIncompleteAlpha;
+
     long                mnLastPos;
     long                mnFormerPos;
     long                mnLastLines;
     bool                mbSetLogSize;
 
-    Graphic CreateIntermediateGraphic( const Bitmap& rBitmap, long nLines );
-    void    FillBitmap();
+    Graphic CreateIntermediateGraphic(long nLines);
 
 public:
             JPEGReader( SvStream& rStream, void* pCallData, bool bSetLogSize );
     virtual ~JPEGReader() override;
 
-    ReadState   Read( Graphic& rGraphic );
-    unsigned char * CreateBitmap( JPEGCreateBitmapParam& param );
+    ReadState Read(Graphic& rGraphic);
+
+    bool CreateBitmap(JPEGCreateBitmapParam& param);
+
+    Bitmap& GetBitmap() { return maBitmap; }
 };
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGREADER_HXX
