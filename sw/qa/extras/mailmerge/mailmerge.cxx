@@ -138,29 +138,29 @@ public:
         uno::Reference< task::XJob > xJob( getMultiServiceFactory()->createInstance( "com.sun.star.text.MailMerge" ), uno::UNO_QUERY_THROW );
         mxJob.set( xJob );
 
-        std::vector< beans::NamedValue > args;
+        mMMargs.reserve( 15 );
 
-        args.push_back( beans::NamedValue( OUString( UNO_NAME_OUTPUT_TYPE ), uno::Any( file ? text::MailMergeType::FILE : text::MailMergeType::SHELL ) ) );
-        args.push_back( beans::NamedValue( OUString( UNO_NAME_DOCUMENT_URL ), uno::Any(
+        mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_OUTPUT_TYPE ), uno::Any( file ? text::MailMergeType::FILE : text::MailMergeType::SHELL ) ) );
+        mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_DOCUMENT_URL ), uno::Any(
                                          ( OUString( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename)) ) ) ) );
-        args.push_back( beans::NamedValue( OUString( UNO_NAME_DATA_SOURCE_NAME ), uno::Any( aDBName ) ) );
-        args.push_back( beans::NamedValue( OUString( UNO_NAME_OUTPUT_URL ), uno::Any( aWorkDir ) ) );
-        args.push_back( beans::NamedValue( OUString( UNO_NAME_FILE_NAME_PREFIX ), uno::Any( aPrefix )) );
+        mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_DATA_SOURCE_NAME ), uno::Any( aDBName ) ) );
+        mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_OUTPUT_URL ), uno::Any( aWorkDir ) ) );
+        mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_FILE_NAME_PREFIX ), uno::Any( aPrefix )) );
 
         if (bPrefixIsColumn)
-            args.push_back( beans::NamedValue( OUString( UNO_NAME_FILE_NAME_FROM_COLUMN ), uno::Any( true ) ) );
+            mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_FILE_NAME_FROM_COLUMN ), uno::Any( true ) ) );
 
         if (tablename)
         {
-            args.push_back( beans::NamedValue( OUString( UNO_NAME_DAD_COMMAND_TYPE ), uno::Any( sdb::CommandType::TABLE ) ) );
-            args.push_back( beans::NamedValue( OUString( UNO_NAME_DAD_COMMAND ), uno::Any( OUString::createFromAscii(tablename) ) ) );
+            mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_DAD_COMMAND_TYPE ), uno::Any( sdb::CommandType::TABLE ) ) );
+            mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_DAD_COMMAND ), uno::Any( OUString::createFromAscii(tablename) ) ) );
         }
 
         if (nDataSets > 0)
         {
             uno::Reference< sdbc::XRowSet > xCurResultSet = getXResultFromDataset( tablename, aDBName );
             uno::Reference< sdbcx::XRowLocate > xCurRowLocate( xCurResultSet, uno::UNO_QUERY );
-            args.push_back( beans::NamedValue( OUString( UNO_NAME_RESULT_SET ), uno::Any( xCurResultSet ) ) );
+            mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_RESULT_SET ), uno::Any( xCurResultSet ) ) );
             std::vector< uno::Any > vResult;
             vResult.reserve( nDataSets );
             sal_Int32 i;
@@ -168,20 +168,20 @@ public:
             {
                 vResult.push_back( uno::Any( xCurRowLocate->getBookmark() ) );
             }
-            args.push_back( beans::NamedValue( OUString( UNO_NAME_SELECTION ), uno::Any( comphelper::containerToSequence(vResult) ) ) );
+            mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_SELECTION ), uno::Any( comphelper::containerToSequence(vResult) ) ) );
         }
 
-        mSeqMailMergeArgs = comphelper::containerToSequence( args );
     }
 
     void executeMailMerge()
     {
-        uno::Any res = mxJob->execute( mSeqMailMergeArgs );
+        uno::Sequence< beans::NamedValue > aSeqMailMergeArgs = comphelper::containerToSequence( mMMargs );
+        uno::Any res = mxJob->execute( aSeqMailMergeArgs );
 
-        const beans::NamedValue *pArguments = mSeqMailMergeArgs.getConstArray();
+        const beans::NamedValue *pArguments = aSeqMailMergeArgs.getConstArray();
         bool bOk = true;
         bool bMMFilenameFromColumn = false;
-        sal_Int32 nArgs = mSeqMailMergeArgs.getLength();
+        sal_Int32 nArgs = aSeqMailMergeArgs.getLength();
 
         for (sal_Int32 i = 0; i < nArgs; ++i) {
             const OUString &rName  = pArguments[i].Name;
@@ -189,9 +189,9 @@ public:
 
             // all error checking was already done by the MM job execution
             if (rName == UNO_NAME_OUTPUT_URL)
-                bOk &= rValue >>= mailMergeOutputURL;
+                bOk &= rValue >>= msMailMergeOutputURL;
             else if (rName == UNO_NAME_FILE_NAME_PREFIX)
-                bOk &= rValue >>= mailMergeOutputPrefix;
+                bOk &= rValue >>= msMailMergeOutputPrefix;
             else if (rName == UNO_NAME_OUTPUT_TYPE)
                 bOk &= rValue >>= mnCurOutputType;
             else if (rName == UNO_NAME_FILE_NAME_FROM_COLUMN)
@@ -227,8 +227,8 @@ public:
         if (mnCurOutputType != text::MailMergeType::FILE)
             return nullptr;
 
-        OUString name = mailMergeOutputPrefix + OUString::number( 0 ) + ".odt";
-        return parseExportInternal( mailMergeOutputURL + "/" + name, rStreamName );
+        OUString name = msMailMergeOutputPrefix + OUString::number( 0 ) + ".odt";
+        return parseExportInternal( msMailMergeOutputURL + "/" + name, rStreamName );
     }
 
     void loadMailMergeDocument( const OUString &filename )
@@ -239,7 +239,7 @@ public:
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         std::cout << filename << ",";
         mnStartTime = osl_getGlobalTimer();
-        mxComponent = loadFromDesktop(mailMergeOutputURL + "/" + filename, "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(msMailMergeOutputURL + "/" + filename, "com.sun.star.text.TextDocument");
         CPPUNIT_ASSERT( mxComponent.is());
         OString name2 = OUStringToOString( filename, RTL_TEXTENCODING_UTF8 );
         discardDumpedLayout();
@@ -252,7 +252,7 @@ public:
     */
     void loadMailMergeDocument( int number )
     {
-        OUString name = mailMergeOutputPrefix + OUString::number( number ) + ".odt";
+        OUString name = msMailMergeOutputPrefix + OUString::number( number ) + ".odt";
         loadMailMergeDocument( name );
     }
 
@@ -261,9 +261,9 @@ protected:
     int documentStartPageNumber( int document ) const;
 
     uno::Reference< css::task::XJob > mxJob;
-    uno::Sequence< beans::NamedValue > mSeqMailMergeArgs;
-    OUString mailMergeOutputURL;
-    OUString mailMergeOutputPrefix;
+    std::vector< beans::NamedValue > mMMargs;
+    OUString msMailMergeOutputURL;
+    OUString msMailMergeOutputPrefix;
     sal_Int16 mnCurOutputType;
     uno::Reference< lang::XComponent > mxMMComponent;
     const char* maMMtestFilename;
