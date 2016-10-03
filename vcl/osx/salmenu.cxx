@@ -866,9 +866,6 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
     mpSubMenu( nullptr ),
     mpMenuItem( nil )
 {
-    // Delete mnemonics
-    OUString aText = pItemData->aText.replaceAll("~", "");
-
     if (pItemData->eType == MenuItemType::SEPARATOR)
     {
         mpMenuItem = [NSMenuItem separatorItem];
@@ -878,9 +875,12 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
     }
     else
     {
+        // delete mnemonics
+        OUString aTextNoTildae = pItemData->aText.replaceAll( "~", "" );
+
         mpMenuItem = [[SalNSMenuItem alloc] initWithMenuItem: this];
         [mpMenuItem setEnabled: YES];
-        NSString* pString = CreateNSString( aText );
+        NSString* pString = CreateNSString( aTextNoTildae );
         if (pString)
         {
             [mpMenuItem setTitle: pString];
