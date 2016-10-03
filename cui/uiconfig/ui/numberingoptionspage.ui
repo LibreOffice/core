@@ -744,4 +744,24 @@
       </packing>
     </child>
   </object>
+  <object class="GtkSizeGroup">
+    <widgets>
+      <widget name="label4"/>
+      <widget name="charstyleft"/>
+      <widget name="sublevelsft"/>
+      <widget name="startatft"/>
+      <widget name="bitmapft"/>
+      <widget name="widthft"/>
+      <widget name="heightft"/>
+      <widget name="orientft"/>
+      <widget name="colorft"/>
+      <widget name="relsizeft"/>
+      <widget name="numalignft"/>
+      <widget name="bulletft"/>
+      <widget name="alignment4"/>
+      <widget name="alignment3"/>
+      <widget name="separator"/>
+      <widget name="label2"/>
+    </widgets>
+  </object>
 </interface>
