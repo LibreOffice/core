@@ -484,7 +484,7 @@ short SwWW8ImplReader::GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat,
 
     sal_uLong nFormatIdx =
         sw::ms::MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri,
-                GetFib().lid);
+                GetFib().m_lid);
     short nNumFormatType = css::util::NumberFormat::UNDEFINED;
     if (nFormatIdx)
         nNumFormatType = pFormatter->GetType(nFormatIdx);

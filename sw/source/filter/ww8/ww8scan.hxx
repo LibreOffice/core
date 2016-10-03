@@ -1082,7 +1082,7 @@ public:
 class WW8Fib
 {
 private:
-    sal_Unicode nNumDecimalSep;
+    sal_Unicode m_nNumDecimalSep;
 
 public:
     /**
@@ -1093,17 +1093,17 @@ public:
         7 == "only WinWord 95"
         8 == "WinWord 97 or newer"
     */
-    sal_uInt8 nVersion;
+    sal_uInt8 m_nVersion;
     /*
         error status
     */
-    sal_uLong nFibError;
+    sal_uLong m_nFibError;
     /*
         data read from FIB by Ctor
         (corresponds only approximately to the real structure
         of the Winword-FIB)
     */
-    sal_uInt16 wIdent;      // 0x0 int magic number
+    sal_uInt16 m_wIdent;      // 0x0 int magic number
     /*
         File Information Block (FIB) values:
         WinWord 1.0 = 33
@@ -1117,20 +1117,20 @@ public:
         Word 2003 = 268
         Word 2007 = 274
     */
-    sal_uInt16 nFib;        // 0x2 FIB version written
-    sal_uInt16 nProduct;    // 0x4 product version written by
-    sal_Int16 lid;          // 0x6 language stamp---localized version;
-    WW8_PN pnNext;          // 0x8
+    sal_uInt16 m_nFib;        // 0x2 FIB version written
+    sal_uInt16 m_nProduct;    // 0x4 product version written by
+    sal_Int16 m_lid;          // 0x6 language stamp---localized version;
+    WW8_PN m_pnNext;          // 0x8
 
-    bool fDot :1;     // 0xa 0001
-    bool fGlsy :1;
-    bool fComplex :1; // 0004 when 1, file is in complex, fast-saved format.
-    bool fHasPic :1;  // 0008 file contains 1 or more pictures
-    sal_uInt16 cQuickSaves :4; // 00F0 count of times file was quicksaved
-    bool fEncrypted :1; //0100 1 if file is encrypted, 0 if not
-    bool fWhichTableStm :1; //0200 When 0, this fib refers to the table stream
-    bool fReadOnlyRecommended :1;
-    bool fWriteReservation :1;
+    bool m_fDot :1;     // 0xa 0001
+    bool m_fGlsy :1;
+    bool m_fComplex :1; // 0004 when 1, file is in complex, fast-saved format.
+    bool m_fHasPic :1;  // 0008 file contains 1 or more pictures
+    sal_uInt16 m_cQuickSaves :4; // 00F0 count of times file was quicksaved
+    bool m_fEncrypted :1; //0100 1 if file is encrypted, 0 if not
+    bool m_fWhichTableStm :1; //0200 When 0, this fib refers to the table stream
+    bool m_fReadOnlyRecommended :1;
+    bool m_fWriteReservation :1;
                                                     // named "0Table", when 1, this fib refers to the
                                                     // table stream named "1Table". Normally, a file
                                                     // will have only one table stream, but under unusual
@@ -1138,375 +1138,375 @@ public:
                                                     // both names. In that case, this flag must be used
                                                     // to decide which table stream is valid.
 
-    bool fExtChar :1; // 1000 =1, when using extended character set in file
-    bool fFarEast :1; // 4000 =1, probably, when far-East language variants of Word is used to create a file #i90932#
+    bool m_fExtChar :1; // 1000 =1, when using extended character set in file
+    bool m_fFarEast :1; // 4000 =1, probably, when far-East language variants of Word is used to create a file #i90932#
 
-    bool fObfuscated :1; // 8000=1. specifies whether the document is obfuscated using XOR obfuscation. otherwise this bit MUST be ignored.
+    bool m_fObfuscated :1; // 8000=1. specifies whether the document is obfuscated using XOR obfuscation. otherwise this bit MUST be ignored.
 
-    sal_uInt16 nFibBack;    // 0xc
-    sal_uInt16 nHash;       // 0xe  file encrypted hash
-    sal_uInt16 nKey;        // 0x10  file encrypted key
-    sal_uInt8 envr;         // 0x12 environment in which file was created
+    sal_uInt16 m_nFibBack;    // 0xc
+    sal_uInt16 m_nHash;       // 0xe  file encrypted hash
+    sal_uInt16 m_nKey;        // 0x10  file encrypted key
+    sal_uInt8 m_envr;         // 0x12 environment in which file was created
                                     //      0 created by Win Word / 1 created by Mac Word
-    bool fMac              :1;          // 0x13 when 1, this file was last saved in the Mac environment
-    bool fEmptySpecial     :1;
-    bool fLoadOverridePage :1;
-    bool fFuturesavedUndo  :1;
-    bool fWord97Saved      :1;
-    bool fWord2000Saved    :1;
+    bool m_fMac              :1;          // 0x13 when 1, this file was last saved in the Mac environment
+    bool m_fEmptySpecial     :1;
+    bool m_fLoadOverridePage :1;
+    bool m_fFuturesavedUndo  :1;
+    bool m_fWord97Saved      :1;
+    bool m_fWord2000Saved    :1;
     sal_uInt8 :2;
 
-    sal_uInt16 chse;        // 0x14 default extended character set id for text in document stream. (overidden by chp.chse)
+    sal_uInt16 m_chse;        // 0x14 default extended character set id for text in document stream. (overidden by chp.chse)
                         //      0 = ANSI  / 256 Macintosh character set.
-    sal_uInt16 chseTables;  // 0x16 default extended character set id for text in
+    sal_uInt16 m_chseTables;  // 0x16 default extended character set id for text in
                         //      internal data structures: 0 = ANSI, 256 = Macintosh
-    WW8_FC fcMin;           // 0x18 file offset of first character of text
-    WW8_FC fcMac;           // 0x1c file offset of last character of text + 1
+    WW8_FC m_fcMin;           // 0x18 file offset of first character of text
+    WW8_FC m_fcMac;           // 0x1c file offset of last character of text + 1
 
     // start of WW8 section
-    sal_uInt16 csw;             // Count of fields in the array of "shorts"
+    sal_uInt16 m_csw;             // Count of fields in the array of "shorts"
 
     // marker: "rgsw" Beginning of the array of shorts
-    sal_uInt16 wMagicCreated;   // unique number Identifying the File's creator
+    sal_uInt16 m_wMagicCreated;   // unique number Identifying the File's creator
                                 // 0x6A62 is the creator ID for Word and is reserved.
                                 // Other creators should choose a different value.
-    sal_uInt16 wMagicRevised;   // identifies the File's last modifier
-    sal_uInt16 wMagicCreatedPrivate; // private data
-    sal_uInt16 wMagicRevisedPrivate; // private data
+    sal_uInt16 m_wMagicRevised;   // identifies the File's last modifier
+    sal_uInt16 m_wMagicCreatedPrivate; // private data
+    sal_uInt16 m_wMagicRevisedPrivate; // private data
 
-    sal_Int16  lidFE; // Language id if document was written by Far East version
+    sal_Int16  m_lidFE; // Language id if document was written by Far East version
                       // of Word (i.e. FIB.fFarEast is on)
-    sal_uInt16 clw; // Number of fields in the array of longs
+    sal_uInt16 m_clw; // Number of fields in the array of longs
 
     // end of WW8 section
 
     // Marker: "rglw" Beginning of the array of longs
-    WW8_FC cbMac;           // 0x20 file offset of last byte written to file + 1.
+    WW8_FC m_cbMac;           // 0x20 file offset of last byte written to file + 1.
 
     // WW8_FC u4[4];        // 0x24
-    WW8_CP ccpText;         // 0x34 length of main document text stream
-    WW8_CP ccpFootnote;          // 0x38 length of footnote subdocument text stream
-    WW8_CP ccpHdr;          // 0x3c length of header subdocument text stream
-    WW8_CP ccpMcr;          // 0x40 length of macro subdocument text stream
-    WW8_CP ccpAtn;          // 0x44 length of annotation subdocument text stream
-    WW8_CP ccpEdn;          // 0x48 length of endnote subdocument text stream
-    WW8_CP ccpTxbx;         // 0x4c length of textbox subdocument text stream
-    WW8_CP ccpHdrTxbx;      // 0x50 length of header textbox subdocument text stream
+    WW8_CP m_ccpText;         // 0x34 length of main document text stream
+    WW8_CP m_ccpFootnote;          // 0x38 length of footnote subdocument text stream
+    WW8_CP m_ccpHdr;          // 0x3c length of header subdocument text stream
+    WW8_CP m_ccpMcr;          // 0x40 length of macro subdocument text stream
+    WW8_CP m_ccpAtn;          // 0x44 length of annotation subdocument text stream
+    WW8_CP m_ccpEdn;          // 0x48 length of endnote subdocument text stream
+    WW8_CP m_ccpTxbx;         // 0x4c length of textbox subdocument text stream
+    WW8_CP m_ccpHdrTxbx;      // 0x50 length of header textbox subdocument text stream
 
     // start of WW8 section
-    sal_Int32  pnFbpChpFirst; // when there was insufficient memory for Word to expand
+    sal_Int32  m_pnFbpChpFirst; // when there was insufficient memory for Word to expand
                               // the PLCFbte at save time, the PLCFbte is written
                               // to the file in a linked list of 512-byte pieces
                               // starting with this pn.
-    sal_Int32  pnFbpPapFirst; // when there was insufficient memory for Word to expand
+    sal_Int32  m_pnFbpPapFirst; // when there was insufficient memory for Word to expand
                               // the PLCFbte at save time, the PLCFbte is written to
                               // the file in a linked list of 512-byte pieces
                               // starting with this pn
 
-    sal_Int32  pnFbpLvcFirst; // when there was insufficient memory for Word to expand
+    sal_Int32  m_pnFbpLvcFirst; // when there was insufficient memory for Word to expand
                               // the PLCFbte at save time, the PLCFbte is written to
                               // the file in a linked list of 512-byte pieces
                               // starting with this pn
-    sal_Int32  pnLvcFirst; // the page number of the lowest numbered page in the
+    sal_Int32  m_pnLvcFirst; // the page number of the lowest numbered page in the
                            // document that records LVC FKP information
-    sal_Int32  cpnBteLvc;  // count of LVC FKPs recorded in file. In non-complex
+    sal_Int32  m_cpnBteLvc;  // count of LVC FKPs recorded in file. In non-complex
                            // files if the number of entries in the PLCFbtePapx is
                            // less than this, the PLCFbtePapx is incomplete.
-    sal_Int32  fcIslandFirst;   // ?
-    sal_Int32  fcIslandLim;     // ?
-    sal_uInt16 cfclcb; // Number of fields in the array of FC/LCB pairs.
+    sal_Int32  m_fcIslandFirst;   // ?
+    sal_Int32  m_fcIslandLim;     // ?
+    sal_uInt16 m_cfclcb; // Number of fields in the array of FC/LCB pairs.
 
     // end of WW8 section
 
     // Marker: "rgfclcb" Beginning of array of FC/LCB pairs.
-    WW8_FC fcStshfOrig;     // file offset of original allocation for STSH in table
+    WW8_FC m_fcStshfOrig;     // file offset of original allocation for STSH in table
                                                 // stream. During fast save Word will attempt to reuse
                                                 // this allocation if STSH is small enough to fit.
-    sal_Int32 lcbStshfOrig; // 0x5c count of bytes of original STSH allocation
-    WW8_FC fcStshf;         // 0x60 file offset of STSH in file.
-    sal_Int32 lcbStshf;     // 0x64 count of bytes of current STSH allocation
-    WW8_FC fcPlcffndRef;    // 0x68 file offset of footnote reference PLCF.
-    sal_Int32 lcbPlcffndRef;    // 0x6c count of bytes of footnote reference PLCF
+    sal_Int32 m_lcbStshfOrig; // 0x5c count of bytes of original STSH allocation
+    WW8_FC m_fcStshf;         // 0x60 file offset of STSH in file.
+    sal_Int32 m_lcbStshf;     // 0x64 count of bytes of current STSH allocation
+    WW8_FC m_fcPlcffndRef;    // 0x68 file offset of footnote reference PLCF.
+    sal_Int32 m_lcbPlcffndRef;    // 0x6c count of bytes of footnote reference PLCF
                         //      == 0 if no footnotes defined in document.
 
-    WW8_FC fcPlcffndText;    // 0x70 file offset of footnote text PLCF.
-    sal_Int32 lcbPlcffndText;    // 0x74 count of bytes of footnote text PLCF.
+    WW8_FC m_fcPlcffndText;    // 0x70 file offset of footnote text PLCF.
+    sal_Int32 m_lcbPlcffndText;    // 0x74 count of bytes of footnote text PLCF.
                         //      == 0 if no footnotes defined in document
 
-    WW8_FC fcPlcfandRef;    // 0x78 file offset of annotation reference PLCF.
-    sal_Int32 lcbPlcfandRef;    // 0x7c count of bytes of annotation reference PLCF.
+    WW8_FC m_fcPlcfandRef;    // 0x78 file offset of annotation reference PLCF.
+    sal_Int32 m_lcbPlcfandRef;    // 0x7c count of bytes of annotation reference PLCF.
 
-    WW8_FC fcPlcfandText;    // 0x80 file offset of annotation text PLCF.
-    sal_Int32 lcbPlcfandText;    // 0x84 count of bytes of the annotation text PLCF
+    WW8_FC m_fcPlcfandText;    // 0x80 file offset of annotation text PLCF.
+    sal_Int32 m_lcbPlcfandText;    // 0x84 count of bytes of the annotation text PLCF
 
-    WW8_FC fcPlcfsed;       // 8x88 file offset of section descriptor PLCF.
-    sal_Int32 lcbPlcfsed;   // 0x8c count of bytes of section descriptor PLCF.
+    WW8_FC m_fcPlcfsed;       // 8x88 file offset of section descriptor PLCF.
+    sal_Int32 m_lcbPlcfsed;   // 0x8c count of bytes of section descriptor PLCF.
 
-    WW8_FC fcPlcfpad;       // 0x90 file offset of paragraph descriptor PLCF
-    sal_Int32 lcbPlcfpad;   // 0x94 count of bytes of paragraph descriptor PLCF.
+    WW8_FC m_fcPlcfpad;       // 0x90 file offset of paragraph descriptor PLCF
+    sal_Int32 m_lcbPlcfpad;   // 0x94 count of bytes of paragraph descriptor PLCF.
                         // ==0 if file was never viewed in Outline view.
                         // Should not be written by third party creators
 
-    WW8_FC fcPlcfphe;       // 0x98 file offset of PLCF of paragraph heights.
-    sal_Int32 lcbPlcfphe;   // 0x9c count of bytes of paragraph height PLCF.
+    WW8_FC m_fcPlcfphe;       // 0x98 file offset of PLCF of paragraph heights.
+    sal_Int32 m_lcbPlcfphe;   // 0x9c count of bytes of paragraph height PLCF.
                         // ==0 when file is non-complex.
 
-    WW8_FC fcSttbfglsy;     // 0xa0 file offset of glossary string table.
-    sal_Int32 lcbSttbfglsy; // 0xa4 count of bytes of glossary string table.
+    WW8_FC m_fcSttbfglsy;     // 0xa0 file offset of glossary string table.
+    sal_Int32 m_lcbSttbfglsy; // 0xa4 count of bytes of glossary string table.
                         //      == 0 for non-glossary documents.
                         //      !=0 for glossary documents.
 
-    WW8_FC fcPlcfglsy;      // 0xa8 file offset of glossary PLCF.
-    sal_Int32 lcbPlcfglsy;  // 0xac count of bytes of glossary PLCF.
+    WW8_FC m_fcPlcfglsy;      // 0xa8 file offset of glossary PLCF.
+    sal_Int32 m_lcbPlcfglsy;  // 0xac count of bytes of glossary PLCF.
                         //      == 0 for non-glossary documents.
                         //      !=0 for glossary documents.
 
-    WW8_FC fcPlcfhdd;       // 0xb0 byte offset of header PLCF.
-    sal_Int32 lcbPlcfhdd;   // 0xb4 count of bytes of header PLCF.
+    WW8_FC m_fcPlcfhdd;       // 0xb0 byte offset of header PLCF.
+    sal_Int32 m_lcbPlcfhdd;   // 0xb4 count of bytes of header PLCF.
                         //      == 0 if document contains no headers
 
-    WW8_FC fcPlcfbteChpx;   // 0xb8 file offset of character property bin table.PLCF.
-    sal_Int32 lcbPlcfbteChpx;// 0xbc count of bytes of character property bin table PLCF.
+    WW8_FC m_fcPlcfbteChpx;   // 0xb8 file offset of character property bin table.PLCF.
+    sal_Int32 m_lcbPlcfbteChpx;// 0xbc count of bytes of character property bin table PLCF.
 
-    WW8_FC fcPlcfbtePapx;   // 0xc0 file offset of paragraph property bin table.PLCF.
-    sal_Int32 lcbPlcfbtePapx;// 0xc4 count of bytes of paragraph  property bin table PLCF.
+    WW8_FC m_fcPlcfbtePapx;   // 0xc0 file offset of paragraph property bin table.PLCF.
+    sal_Int32 m_lcbPlcfbtePapx;// 0xc4 count of bytes of paragraph  property bin table PLCF.
 
-    WW8_FC fcPlcfsea;       // 0xc8 file offset of PLCF reserved for private use. The SEA is 6 bytes long.
-    sal_Int32 lcbPlcfsea;   // 0xcc count of bytes of private use PLCF.
+    WW8_FC m_fcPlcfsea;       // 0xc8 file offset of PLCF reserved for private use. The SEA is 6 bytes long.
+    sal_Int32 m_lcbPlcfsea;   // 0xcc count of bytes of private use PLCF.
 
-    WW8_FC fcSttbfffn;      // 0xd0 file offset of font information STTBF. See the FFN file structure definition.
-    sal_Int32 lcbSttbfffn;  // 0xd4 count of bytes in sttbfffn.
+    WW8_FC m_fcSttbfffn;      // 0xd0 file offset of font information STTBF. See the FFN file structure definition.
+    sal_Int32 m_lcbSttbfffn;  // 0xd4 count of bytes in sttbfffn.
 
-    WW8_FC fcPlcffldMom;    // 0xd8 offset in doc stream to the PLCF of field positions in the main document.
-    sal_Int32 lcbPlcffldMom;    // 0xdc
+    WW8_FC m_fcPlcffldMom;    // 0xd8 offset in doc stream to the PLCF of field positions in the main document.
+    sal_Int32 m_lcbPlcffldMom;    // 0xdc
 
-    WW8_FC fcPlcffldHdr;    // 0xe0 offset in doc stream to the PLCF of field positions in the header subdocument.
-    sal_Int32 lcbPlcffldHdr;    // 0xe4
+    WW8_FC m_fcPlcffldHdr;    // 0xe0 offset in doc stream to the PLCF of field positions in the header subdocument.
+    sal_Int32 m_lcbPlcffldHdr;    // 0xe4
 
-    WW8_FC fcPlcffldFootnote;    // 0xe8 offset in doc stream to the PLCF of field positions in the footnote subdocument.
-    sal_Int32 lcbPlcffldFootnote;    // 0xec
+    WW8_FC m_fcPlcffldFootnote;    // 0xe8 offset in doc stream to the PLCF of field positions in the footnote subdocument.
+    sal_Int32 m_lcbPlcffldFootnote;    // 0xec
 
-    WW8_FC fcPlcffldAtn;    // 0xf0 offset in doc stream to the PLCF of field positions in the annotation subdocument.
-    sal_Int32 lcbPlcffldAtn;    // 0xf4
+    WW8_FC m_fcPlcffldAtn;    // 0xf0 offset in doc stream to the PLCF of field positions in the annotation subdocument.
+    sal_Int32 m_lcbPlcffldAtn;    // 0xf4
 
-    WW8_FC fcPlcffldMcr;    // 0xf8 offset in doc stream to the PLCF of field positions in the macro subdocument.
-    sal_Int32 lcbPlcffldMcr;    // 9xfc
+    WW8_FC m_fcPlcffldMcr;    // 0xf8 offset in doc stream to the PLCF of field positions in the macro subdocument.
+    sal_Int32 m_lcbPlcffldMcr;    // 9xfc
 
-    WW8_FC fcSttbfbkmk; // 0x100 offset in document stream of the STTBF that records bookmark names in the main document
-    sal_Int32 lcbSttbfbkmk; // 0x104
+    WW8_FC m_fcSttbfbkmk; // 0x100 offset in document stream of the STTBF that records bookmark names in the main document
+    sal_Int32 m_lcbSttbfbkmk; // 0x104
 
-    WW8_FC fcPlcfbkf;   // 0x108 offset in document stream of the PLCF that records the beginning CP offsets of bookmarks in the main document. See BKF
-    sal_Int32 lcbPlcfbkf;   // 0x10c
+    WW8_FC m_fcPlcfbkf;   // 0x108 offset in document stream of the PLCF that records the beginning CP offsets of bookmarks in the main document. See BKF
+    sal_Int32 m_lcbPlcfbkf;   // 0x10c
 
-    WW8_FC fcPlcfbkl;   // 0x110 offset in document stream of the PLCF that records the ending CP offsets of bookmarks recorded in the main document. See the BKL structure definition.
-    sal_Int32 lcbPlcfbkl;   // 0x114 sal_Int32
+    WW8_FC m_fcPlcfbkl;   // 0x110 offset in document stream of the PLCF that records the ending CP offsets of bookmarks recorded in the main document. See the BKL structure definition.
+    sal_Int32 m_lcbPlcfbkl;   // 0x114 sal_Int32
 
-    WW8_FC fcCmds;      // 0x118 FC
-    sal_uInt32 lcbCmds;      // 0x11c
+    WW8_FC m_fcCmds;      // 0x118 FC
+    sal_uInt32 m_lcbCmds;      // 0x11c
 
-    WW8_FC fcPlcfmcr;       // 0x120 FC
-    sal_Int32 lcbPlcfmcr;       // 0x124
+    WW8_FC m_fcPlcfmcr;       // 0x120 FC
+    sal_Int32 m_lcbPlcfmcr;       // 0x124
 
-    WW8_FC fcSttbfmcr;  // 0x128 FC
-    sal_Int32 lcbSttbfmcr;  // 0x12c
+    WW8_FC m_fcSttbfmcr;  // 0x128 FC
+    sal_Int32 m_lcbSttbfmcr;  // 0x12c
 
-    WW8_FC fcPrDrvr;        // 0x130 file offset of the printer driver information (names of drivers, port etc...)
-    sal_Int32 lcbPrDrvr;        // 0x134 count of bytes of the printer driver information (names of drivers, port etc...)
+    WW8_FC m_fcPrDrvr;        // 0x130 file offset of the printer driver information (names of drivers, port etc...)
+    sal_Int32 m_lcbPrDrvr;        // 0x134 count of bytes of the printer driver information (names of drivers, port etc...)
 
-    WW8_FC fcPrEnvPort; // 0x138 file offset of the print environment in portrait mode.
-    sal_Int32 lcbPrEnvPort; // 0x13c count of bytes of the print environment in portrait mode.
+    WW8_FC m_fcPrEnvPort; // 0x138 file offset of the print environment in portrait mode.
+    sal_Int32 m_lcbPrEnvPort; // 0x13c count of bytes of the print environment in portrait mode.
 
-    WW8_FC fcPrEnvLand; // 0x140 file offset of the print environment in landscape mode.
-    sal_Int32 lcbPrEnvLand; // 0x144 count of bytes of the print environment in landscape mode.
+    WW8_FC m_fcPrEnvLand; // 0x140 file offset of the print environment in landscape mode.
+    sal_Int32 m_lcbPrEnvLand; // 0x144 count of bytes of the print environment in landscape mode.
 
-    WW8_FC fcWss;       // 0x148 file offset of Window Save State data structure. See WSS.
-    sal_Int32 lcbWss;       // 0x14c count of bytes of WSS. ==0 if unable to store the window state.
+    WW8_FC m_fcWss;       // 0x148 file offset of Window Save State data structure. See WSS.
+    sal_Int32 m_lcbWss;       // 0x14c count of bytes of WSS. ==0 if unable to store the window state.
 
-    WW8_FC fcDop;       // 0x150 file offset of document property data structure.
-    sal_uInt32 lcbDop;       // 0x154 count of bytes of document properties.
+    WW8_FC m_fcDop;       // 0x150 file offset of document property data structure.
+    sal_uInt32 m_lcbDop;       // 0x154 count of bytes of document properties.
         // cbDOP is 84 when nFib < 103
 
-    WW8_FC fcSttbfAssoc;    // 0x158 offset to STTBF of associated strings. See STTBFASSOC.
-    sal_Int32 lcbSttbfAssoc; // 0x15C
+    WW8_FC m_fcSttbfAssoc;    // 0x158 offset to STTBF of associated strings. See STTBFASSOC.
+    sal_Int32 m_lcbSttbfAssoc; // 0x15C
 
-    WW8_FC fcClx;           // 0x160 file  offset of beginning of information for complex files.
-    sal_Int32 lcbClx;       // 0x164 count of bytes of complex file information. 0 if file is non-complex.
+    WW8_FC m_fcClx;           // 0x160 file  offset of beginning of information for complex files.
+    sal_Int32 m_lcbClx;       // 0x164 count of bytes of complex file information. 0 if file is non-complex.
 
-    WW8_FC fcPlcfpgdFootnote;    // 0x168 file offset of page descriptor PLCF for footnote subdocument.
-    sal_Int32 lcbPlcfpgdFootnote;    // 0x16C count of bytes of page descriptor PLCF for footnote subdocument.
+    WW8_FC m_fcPlcfpgdFootnote;    // 0x168 file offset of page descriptor PLCF for footnote subdocument.
+    sal_Int32 m_lcbPlcfpgdFootnote;    // 0x16C count of bytes of page descriptor PLCF for footnote subdocument.
                         //  ==0 if document has not been paginated. The length of the PGD is 8 bytes.
 
-    WW8_FC fcAutosaveSource;    // 0x170 file offset of the name of the original file.
-    sal_Int32 lcbAutosaveSource;    // 0x174 count of bytes of the name of the original file.
+    WW8_FC m_fcAutosaveSource;    // 0x170 file offset of the name of the original file.
+    sal_Int32 m_lcbAutosaveSource;    // 0x174 count of bytes of the name of the original file.
 
-    WW8_FC fcGrpStAtnOwners;    // 0x178 group of strings recording the names of the owners of annotations
-    sal_Int32 lcbGrpStAtnOwners;    // 0x17C count of bytes of the group of strings
+    WW8_FC m_fcGrpStAtnOwners;    // 0x178 group of strings recording the names of the owners of annotations
+    sal_Int32 m_lcbGrpStAtnOwners;    // 0x17C count of bytes of the group of strings
 
-    WW8_FC fcSttbfAtnbkmk;  // 0x180 file offset of the sttbf that records names of bookmarks in the annotation subdocument
-    sal_Int32 lcbSttbfAtnbkmk;  // 0x184 length in bytes of the sttbf that records names of bookmarks in the annotation subdocument
+    WW8_FC m_fcSttbfAtnbkmk;  // 0x180 file offset of the sttbf that records names of bookmarks in the annotation subdocument
+    sal_Int32 m_lcbSttbfAtnbkmk;  // 0x184 length in bytes of the sttbf that records names of bookmarks in the annotation subdocument
 
     // end of WW67 section
 
-    WW8_FC fcPlcfdoaMom;    // 0x192 file offset of the  FDOA (drawn object) PLCF for main document.
+    WW8_FC m_fcPlcfdoaMom;    // 0x192 file offset of the  FDOA (drawn object) PLCF for main document.
                         //  ==0 if document has no drawn objects. The length of the FDOA is 6 bytes.
                         // unused starting from Ver8
-    sal_Int32 lcbPlcfdoaMom;    // 0x196 length in bytes of the FDOA PLCF of the main document
+    sal_Int32 m_lcbPlcfdoaMom;    // 0x196 length in bytes of the FDOA PLCF of the main document
                                                 // unused starting from Ver8
-    WW8_FC fcPlcfdoaHdr;    // 0x19A file offset of the  FDOA (drawn object) PLCF for the header document.
+    WW8_FC m_fcPlcfdoaHdr;    // 0x19A file offset of the  FDOA (drawn object) PLCF for the header document.
                         //  ==0 if document has no drawn objects. The length of the FDOA is 6 bytes.
                         // unused starting from Ver8
-    sal_Int32 lcbPlcfdoaHdr;    // 0x19E length in bytes of the FDOA PLCF of the header document
+    sal_Int32 m_lcbPlcfdoaHdr;    // 0x19E length in bytes of the FDOA PLCF of the header document
                                                 // unused starting from Ver8
 
-    WW8_FC fcPlcfspaMom;        // offset in table stream of the FSPA PLCF for main document.
+    WW8_FC m_fcPlcfspaMom;        // offset in table stream of the FSPA PLCF for main document.
                                                 // == 0 if document has no office art objects
                                                         // was empty reserve in Ver67
-    sal_Int32 lcbPlcfspaMom;        // length in bytes of the FSPA PLCF of the main document
+    sal_Int32 m_lcbPlcfspaMom;        // length in bytes of the FSPA PLCF of the main document
                                                         // was empty reserve in Ver67
-    WW8_FC fcPlcfspaHdr;        // offset in table stream of the FSPA PLCF for header document.
+    WW8_FC m_fcPlcfspaHdr;        // offset in table stream of the FSPA PLCF for header document.
                                                 // == 0 if document has no office art objects
                                                         // was empty reserve in Ver67
-    sal_Int32 lcbPlcfspaHdr;        // length in bytes of the FSPA PLCF of the header document
+    sal_Int32 m_lcbPlcfspaHdr;        // length in bytes of the FSPA PLCF of the header document
                                                         // was empty reserve in Ver67
 
-    WW8_FC fcPlcfAtnbkf;    // 0x1B2 file offset of BKF (bookmark first) PLCF of the annotation subdocument
-    sal_Int32 lcbPlcfAtnbkf;    // 0x1B6 length in bytes of BKF (bookmark first) PLCF of the annotation subdocument
+    WW8_FC m_fcPlcfAtnbkf;    // 0x1B2 file offset of BKF (bookmark first) PLCF of the annotation subdocument
+    sal_Int32 m_lcbPlcfAtnbkf;    // 0x1B6 length in bytes of BKF (bookmark first) PLCF of the annotation subdocument
 
-    WW8_FC fcPlcfAtnbkl;    // 0x1BA file offset of BKL (bookmark last) PLCF of the annotation subdocument
-    sal_Int32 lcbPlcfAtnbkl;    // 0x1BE length in bytes of BKL (bookmark first) PLCF of the annotation subdocument
+    WW8_FC m_fcPlcfAtnbkl;    // 0x1BA file offset of BKL (bookmark last) PLCF of the annotation subdocument
+    sal_Int32 m_lcbPlcfAtnbkl;    // 0x1BE length in bytes of BKL (bookmark first) PLCF of the annotation subdocument
 
-    WW8_FC fcPms;       // 0x1C2 file offset of PMS (Print Merge State) information block
-    sal_Int32 lcbPMS;       // 0x1C6 length in bytes of PMS
+    WW8_FC m_fcPms;       // 0x1C2 file offset of PMS (Print Merge State) information block
+    sal_Int32 m_lcbPMS;       // 0x1C6 length in bytes of PMS
 
-    WW8_FC fcFormFieldSttbf;  // 0x1CA file offset of form field Sttbf which contains strings used in form field dropdown controls
-    sal_Int32 lcbFormFieldSttbf;  // 0x1CE length in bytes of form field Sttbf
+    WW8_FC m_fcFormFieldSttbf;  // 0x1CA file offset of form field Sttbf which contains strings used in form field dropdown controls
+    sal_Int32 m_lcbFormFieldSttbf;  // 0x1CE length in bytes of form field Sttbf
 
-    WW8_FC fcPlcfendRef;    // 0x1D2 file offset of PLCFendRef which points to endnote references in the main document stream
-    sal_Int32 lcbPlcfendRef;    // 0x1D6
+    WW8_FC m_fcPlcfendRef;    // 0x1D2 file offset of PLCFendRef which points to endnote references in the main document stream
+    sal_Int32 m_lcbPlcfendRef;    // 0x1D6
 
-    WW8_FC fcPlcfendText;    // 0x1DA file offset of PLCFendRef which points to endnote text  in the endnote document
+    WW8_FC m_fcPlcfendText;    // 0x1DA file offset of PLCFendRef which points to endnote text  in the endnote document
                         //       stream which corresponds with the PLCFendRef
-    sal_Int32 lcbPlcfendText;    // 0x1DE
+    sal_Int32 m_lcbPlcfendText;    // 0x1DE
 
-    WW8_FC fcPlcffldEdn;    // 0x1E2 offset to PLCF of field positions in the endnote subdoc
-    sal_Int32 lcbPlcffldEdn;    // 0x1E6
+    WW8_FC m_fcPlcffldEdn;    // 0x1E2 offset to PLCF of field positions in the endnote subdoc
+    sal_Int32 m_lcbPlcffldEdn;    // 0x1E6
 
-    WW8_FC  fcPlcfpgdEdn;   // 0x1EA offset to PLCF of page boundaries in the endnote subdoc.
-    sal_Int32 lcbPlcfpgdEdn;        // 0x1EE
+    WW8_FC  m_fcPlcfpgdEdn;   // 0x1EA offset to PLCF of page boundaries in the endnote subdoc.
+    sal_Int32 m_lcbPlcfpgdEdn;        // 0x1EE
 
-    WW8_FC fcDggInfo;           // offset in table stream of the office art object table data.
+    WW8_FC m_fcDggInfo;           // offset in table stream of the office art object table data.
                                                 // The format of office art object table data is found in a separate document.
                                                         // was empty reserve in Ver67
-    sal_Int32 lcbDggInfo;           // length in bytes of the office art object table data
+    sal_Int32 m_lcbDggInfo;           // length in bytes of the office art object table data
                                                         // was empty reserve in Ver67
 
-    WW8_FC fcSttbfRMark;        // 0x1fa offset to STTBF that records the author abbreviations...
-    sal_Int32 lcbSttbfRMark;        // 0x1fe
-    WW8_FC fcSttbfCaption;  // 0x202 offset to STTBF that records caption titles...
-    sal_Int32 lcbSttbfCaption;  // 0x206
-    WW8_FC fcSttbAutoCaption;   // offset in table stream to the STTBF that records the object names and
+    WW8_FC m_fcSttbfRMark;        // 0x1fa offset to STTBF that records the author abbreviations...
+    sal_Int32 m_lcbSttbfRMark;        // 0x1fe
+    WW8_FC m_fcSttbfCaption;  // 0x202 offset to STTBF that records caption titles...
+    sal_Int32 m_lcbSttbfCaption;  // 0x206
+    WW8_FC m_fcSttbAutoCaption;   // offset in table stream to the STTBF that records the object names and
                                                         // indices into the caption STTBF for objects which get auto captions.
-    sal_Int32 lcbSttbAutoCaption;   // 0x20e
+    sal_Int32 m_lcbSttbAutoCaption;   // 0x20e
 
-    WW8_FC fcPlcfwkb;       // 0x212 offset to PLCF that describes the boundaries of contributing documents...
-    sal_Int32 lcbPlcfwkb;       // 0x216
+    WW8_FC m_fcPlcfwkb;       // 0x212 offset to PLCF that describes the boundaries of contributing documents...
+    sal_Int32 m_lcbPlcfwkb;       // 0x216
 
-    WW8_FC fcPlcfspl;       // offset in table stream of PLCF (of SPLS structures) that records spell check state
+    WW8_FC m_fcPlcfspl;       // offset in table stream of PLCF (of SPLS structures) that records spell check state
                                                         // was empty reserve in Ver67
-    sal_Int32 lcbPlcfspl;                   // was empty reserve in Ver67
+    sal_Int32 m_lcbPlcfspl;                   // was empty reserve in Ver67
 
-    WW8_FC fcPlcftxbxText;   // 0x222 ...PLCF of beginning CP in the text box subdoc
-    sal_Int32 lcbPlcftxbxText;   // 0x226
-    WW8_FC fcPlcffldTxbx;   // 0x22a ...PLCF of field boundaries recorded in the textbox subdoc.
-    sal_Int32 lcbPlcffldTxbx;   // 0x22e
-    WW8_FC fcPlcfHdrtxbxText;// 0x232 ...PLCF of beginning CP in the header text box subdoc
-    sal_Int32 lcbPlcfHdrtxbxText;// 0x236
-    WW8_FC fcPlcffldHdrTxbx;// 0x23a ...PLCF of field boundaries recorded in the header textbox subdoc.
-    sal_Int32 lcbPlcffldHdrTxbx;// 0x23e
-    WW8_FC fcStwUser;
-    sal_uInt32 lcbStwUser;
-    WW8_FC fcSttbttmbd;
-    sal_uInt32 lcbSttbttmbd;
+    WW8_FC m_fcPlcftxbxText;   // 0x222 ...PLCF of beginning CP in the text box subdoc
+    sal_Int32 m_lcbPlcftxbxText;   // 0x226
+    WW8_FC m_fcPlcffldTxbx;   // 0x22a ...PLCF of field boundaries recorded in the textbox subdoc.
+    sal_Int32 m_lcbPlcffldTxbx;   // 0x22e
+    WW8_FC m_fcPlcfHdrtxbxText;// 0x232 ...PLCF of beginning CP in the header text box subdoc
+    sal_Int32 m_lcbPlcfHdrtxbxText;// 0x236
+    WW8_FC m_fcPlcffldHdrTxbx;// 0x23a ...PLCF of field boundaries recorded in the header textbox subdoc.
+    sal_Int32 m_lcbPlcffldHdrTxbx;// 0x23e
+    WW8_FC m_fcStwUser;
+    sal_uInt32 m_lcbStwUser;
+    WW8_FC m_fcSttbttmbd;
+    sal_uInt32 m_lcbSttbttmbd;
 
-    WW8_FC fcSttbFnm;       // 0x02da offset in the table stream of masters subdocument names
-    sal_Int32 lcbSttbFnm;       // 0x02de length
+    WW8_FC m_fcSttbFnm;       // 0x02da offset in the table stream of masters subdocument names
+    sal_Int32 m_lcbSttbFnm;       // 0x02de length
 
     /*
         special list handling for WW8
     */
-    WW8_FC fcPlcfLst;       // 0x02e2 offset in the table stream of list format information.
-    sal_Int32 lcbPlcfLst;       // 0x02e6 length
-    WW8_FC fcPlfLfo;        // 0x02ea offset in the table stream of list format override information.
-    sal_Int32 lcbPlfLfo;        // 0x02ee length
+    WW8_FC m_fcPlcfLst;       // 0x02e2 offset in the table stream of list format information.
+    sal_Int32 m_lcbPlcfLst;       // 0x02e6 length
+    WW8_FC m_fcPlfLfo;        // 0x02ea offset in the table stream of list format override information.
+    sal_Int32 m_lcbPlfLfo;        // 0x02ee length
     /*
         special Break handling for text-box-stories in WW8
     */
-    WW8_FC fcPlcftxbxBkd;   // 0x02f2 PLCF for TextBox-Break-descriptors in the Maintext
-    sal_Int32 lcbPlcftxbxBkd;   // 0x02f6
-    WW8_FC fcPlcfHdrtxbxBkd;// 0x02fa PLCF for TextBox-Break-descriptors in the Header-/Footer- area
-    sal_Int32 lcbPlcfHdrtxbxBkd;// 0x02fe
+    WW8_FC m_fcPlcftxbxBkd;   // 0x02f2 PLCF for TextBox-Break-descriptors in the Maintext
+    sal_Int32 m_lcbPlcftxbxBkd;   // 0x02f6
+    WW8_FC m_fcPlcfHdrtxbxBkd;// 0x02fa PLCF for TextBox-Break-descriptors in the Header-/Footer- area
+    sal_Int32 m_lcbPlcfHdrtxbxBkd;// 0x02fe
 
     // 0x302 - 372 == ignore
     /*
         ListNames (skip to here!)
     */
-    WW8_FC fcSttbListNames;// 0x0372 PLCF for Listname Table
-    sal_Int32 lcbSttbListNames;// 0x0376
+    WW8_FC m_fcSttbListNames;// 0x0372 PLCF for Listname Table
+    sal_Int32 m_lcbSttbListNames;// 0x0376
 
-    WW8_FC fcPlcfTch;
-    sal_Int32 lcbPlcfTch;
+    WW8_FC m_fcPlcfTch;
+    sal_Int32 m_lcbPlcfTch;
 
     // 0x38A - 41A == ignore
-    WW8_FC fcAtrdExtra;
-    sal_uInt32 lcbAtrdExtra;
+    WW8_FC m_fcAtrdExtra;
+    sal_uInt32 m_lcbAtrdExtra;
 
     // 0x422 - 0x429 == ignore
 
     /// 0x42a smart-tag bookmark string table offset.
-    WW8_FC fcSttbfBkmkFactoid;
+    WW8_FC m_fcSttbfBkmkFactoid;
     /// 0x42e smart-tag bookmark string table length.
-    sal_uInt32 lcbSttbfBkmkFactoid;
+    sal_uInt32 m_lcbSttbfBkmkFactoid;
     /// 0x432 smart-tag bookmark starts offset.
-    WW8_FC fcPlcfBkfFactoid;
+    WW8_FC m_fcPlcfBkfFactoid;
     /// 0x436 smart-tag bookmark ends length.
-    sal_uInt32 lcbPlcfBkfFactoid;
+    sal_uInt32 m_lcbPlcfBkfFactoid;
 
     // 0x43a - 0x441 == ignore
 
     /// 0x442 smart-tag bookmark ends offset.
-    WW8_FC fcPlcfBklFactoid;
+    WW8_FC m_fcPlcfBklFactoid;
     /// 0x446 smart-tag bookmark ends length.
-    sal_uInt32 lcbPlcfBklFactoid;
+    sal_uInt32 m_lcbPlcfBklFactoid;
     /// 0x44a smart tag data offset.
-    WW8_FC fcFactoidData;
+    WW8_FC m_fcFactoidData;
     /// 0x44e smart tag data length.
-    sal_uInt32 lcbFactoidData;
+    sal_uInt32 m_lcbFactoidData;
 
     // 0x452 - 0x4b9 == ignore
 
     /// 0x4ba Plcffactoid offset.
-    WW8_FC fcPlcffactoid;
+    WW8_FC m_fcPlcffactoid;
     /// 0x4be Plcffactoid offset.
-    sal_uInt32 lcbPlcffactoid;
+    sal_uInt32 m_lcbPlcffactoid;
 
     // 0x4bf - 0x4d4 == ignore
 
-    WW8_FC fcHplxsdr;    //bizarrely, word xp seems to require this set to shows dates from AtrdExtra
-    sal_uInt32 lcbHplxsdr;
+    WW8_FC m_fcHplxsdr;    //bizarrely, word xp seems to require this set to shows dates from AtrdExtra
+    sal_uInt32 m_lcbHplxsdr;
 
     /*
         general variables that were used for Ver67 and Ver8,
         even though they had different sizes in the corresponding files:
     */
-    sal_Int32 pnChpFirst;
-    sal_Int32 pnPapFirst;
-    sal_Int32 cpnBteChp;
-    sal_Int32 cpnBtePap;
+    sal_Int32 m_pnChpFirst;
+    sal_Int32 m_pnPapFirst;
+    sal_Int32 m_cpnBteChp;
+    sal_Int32 m_cpnBtePap;
     /*
         The actual nFib, moved here because some readers assumed
         they couldn't read any format with nFib > some constant
     */
-    sal_uInt16 nFib_actual; // 0x05bc #i56856#
+    sal_uInt16 m_nFib_actual; // 0x05bc #i56856#
     /*
         now we only need a Ctor
     */
@@ -1519,7 +1519,7 @@ public:
     static rtl_TextEncoding GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale);
     ww::WordVersion GetFIBVersion() const;
     bool GetBaseCp(ManTypes nType, WW8_CP * cp) const;
-    sal_Unicode getNumDecimalSep() const { return nNumDecimalSep;}
+    sal_Unicode getNumDecimalSep() const { return m_nNumDecimalSep;}
 };
 
 class WW8Style

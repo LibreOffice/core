@@ -1144,10 +1144,10 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 {
 
     // LST und LFO gibts erst ab WW8
-    if(    ( 8 > rFib.nVersion )
-            || ( rFib.fcPlcfLst == rFib.fcPlfLfo )
-            || ( rFib.lcbPlcfLst < 2 )
-            || ( rFib.lcbPlfLfo < 2) ) return; // offensichtlich keine Listen da
+    if(    ( 8 > rFib.m_nVersion )
+            || ( rFib.m_fcPlcfLst == rFib.m_fcPlfLfo )
+            || ( rFib.m_lcbPlcfLst < 2 )
+            || ( rFib.m_lcbPlfLfo < 2) ) return; // offensichtlich keine Listen da
 
     // Arrays anlegen
     bool bLVLOk = true;
@@ -1156,12 +1156,12 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
     // 1. PLCF LST auslesen und die Listen Vorlagen im Writer anlegen
 
-    bool bOk = checkSeek(rSt, rFib.fcPlcfLst);
+    bool bOk = checkSeek(rSt, rFib.m_fcPlcfLst);
 
     if (!bOk)
         return;
 
-    sal_uInt32 nRemainingPlcfLst = rFib.lcbPlcfLst;
+    sal_uInt32 nRemainingPlcfLst = rFib.m_lcbPlcfLst;
 
     sal_uInt16 nListCount(0);
     rSt.ReadUInt16( nListCount );
@@ -1278,7 +1278,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
     // 2. PLF LFO auslesen und speichern
 
-    bOk = checkSeek(rSt, rFib.fcPlfLfo);
+    bOk = checkSeek(rSt, rFib.m_fcPlfLfo);
 
     if (!bOk)
         return;
