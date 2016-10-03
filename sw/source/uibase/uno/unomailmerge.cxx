@@ -741,7 +741,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                 aPath += aCurFileNamePrefix;
             }
 
-            aMergeDesc.sPath = aPath;
+            aMergeDesc.sPrefix = aPath;
             aMergeDesc.sSaveToFilter = m_sSaveFilter;
             aMergeDesc.sSaveToFilterOptions = m_sSaveFilterOptions;
             aMergeDesc.aSaveToFilterData = m_aSaveFilterData;
