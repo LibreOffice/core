@@ -3294,6 +3294,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf99140, "tdf99140.docx")
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTableProperties, "HoriOrient"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf100830, "tdf100830.docx")
+{
+    // FillTransparence wasn't imported, this was 0.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(50), getProperty<sal_Int16>(getShape(1), "FillTransparence"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

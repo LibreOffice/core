@@ -205,6 +205,7 @@ void BlipFillProperties::assignUsed( const BlipFillProperties& rSourceProps )
     maDuotoneColors[0].assignIfUsed( rSourceProps.maDuotoneColors[0] );
     maDuotoneColors[1].assignIfUsed( rSourceProps.maDuotoneColors[1] );
     maEffect.assignUsed( rSourceProps.maEffect );
+    moAlphaModFix.assignIfUsed(rSourceProps.moAlphaModFix);
 }
 
 void FillProperties::assignUsed( const FillProperties& rSourceProps )
@@ -652,6 +653,9 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             }
                         }
                     }
+
+                    if (maBlipProps.moAlphaModFix.has())
+                        rPropMap.setProperty(ShapeProperty::FillTransparency, static_cast<sal_Int16>(maBlipProps.moAlphaModFix.get() / PER_PERCENT));
                 }
             break;
 
