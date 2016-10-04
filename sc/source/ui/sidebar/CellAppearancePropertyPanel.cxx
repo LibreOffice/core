@@ -171,10 +171,9 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox
     if (aCommand == UNO_LINESTYLE)
     {
         if (!mxCellLineStylePopup)
-            mxCellLineStylePopup = VclPtr<CellLineStylePopup>::Create(pToolBox, GetBindings()->GetDispatcher());
+            mxCellLineStylePopup = VclPtr<CellLineStylePopup>::Create(GetBindings()->GetDispatcher());
         mxCellLineStylePopup->SetLineStyleSelect(mnOut, mnIn, mnDis);
-        mxCellLineStylePopup->StartPopupMode(pToolBox, FloatWinPopupFlags::Down |
-                                                       FloatWinPopupFlags::NoAppFocusClose);
+        mxCellLineStylePopup->StartPopupMode(pToolBox, FloatWinPopupFlags::GrabFocus);
     }
 }
 

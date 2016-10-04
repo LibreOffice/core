@@ -23,10 +23,10 @@
 
 namespace sc { namespace sidebar {
 
-CellLineStyleValueSet::CellLineStyleValueSet( vcl::Window* pParent, const ResId& rResId)
-:   ValueSet( pParent, rResId ),
-    pVDev(nullptr),
-    nSelItem(0)
+CellLineStyleValueSet::CellLineStyleValueSet(vcl::Window* pParent)
+    : ValueSet(pParent, WB_TABSTOP)
+    , pVDev(nullptr)
+    , nSelItem(0)
 {
     SetColCount();
     SetLineCount( 9);
@@ -41,6 +41,11 @@ void CellLineStyleValueSet::dispose()
 {
     pVDev.disposeAndClear();
     ValueSet::dispose();
+}
+
+Size CellLineStyleValueSet::GetOptimalSize() const
+{
+    return LogicToPixel(Size(80, 12 * 9), MAP_APPFONT);
 }
 
 void CellLineStyleValueSet::SetUnit(const OUString* str)
@@ -85,9 +90,6 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     aSize.Height() = nRectHeight*3/5;
     aFont.SetFontSize( aSize );
 
-    long  nTLX = aBLPos.X() + 5,  nTLY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
-    long  nTRX = aBLPos.X() + nRectWidth * 7 / 9 - 15, nTRY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
-
     if( nSelItem ==  nItemId )
     {
         Color aBackColor(50,107,197);
@@ -104,13 +106,16 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
 
     //draw text
-    if(nSelItem ==  nItemId )
+    if (nSelItem ==  nItemId )
         aFont.SetColor(COL_WHITE);
     else
         aFont.SetColor(GetSettings().GetStyleSettings().GetFieldTextColor()); //high contrast
 
     pDev->SetFont(aFont);
-    Point aStart(aBLPos.X() + nRectWidth * 7 / 9 - 5 , aBLPos.Y() + nRectHeight/6);
+    long nTextWidth = pDev->GetTextWidth(maStrUnit[nItemId - 1]);
+    long nTLX = aBLPos.X() + 5,  nTLY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
+    long nTRX = aBLPos.X() + nRectWidth - nTextWidth - 15, nTRY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
+    Point aStart(aBLPos.X() + nRectWidth - nTextWidth - 5 , aBLPos.Y() + nRectHeight/6);
     pDev->DrawText(aStart, maStrUnit[nItemId - 1]); //can't set DrawTextFlags::EndEllipsis here, or the text will disappear
 
     //draw line

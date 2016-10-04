@@ -20,6 +20,7 @@
 #define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLECONTROL_HXX
 
 #include <vcl/button.hxx>
+#include <vcl/floatwin.hxx>
 #include "CellLineStyleValueSet.hxx"
 
 class SfxDispatcher;
@@ -27,16 +28,13 @@ class SfxDispatcher;
 namespace sc { namespace sidebar {
 
 class CellAppearancePropertyPanel;
-class CellLineStyleControl : public Control
+
+class CellLineStylePopup : public FloatingWindow
 {
-private:
     SfxDispatcher*                     mpDispatcher;
-    VclPtr<FloatingWindow>             mxFloatParent;
     VclPtr<PushButton>                 maPushButtonMoreOptions;
     VclPtr<CellLineStyleValueSet>      maCellLineStyleValueSet;
     OUString                           maStr[CELL_LINE_STYLE_ENTRIES];
-
-    bool                               mbVSfocus : 1;
 
     void Initialize();
     void SetAllNoSel();
@@ -44,13 +42,12 @@ private:
     DECL_LINK(VSSelectHdl, ValueSet*, void);
     DECL_LINK(PBClickHdl, Button*, void);
 
-public:
-    CellLineStyleControl(FloatingWindow* pParent, SfxDispatcher* pDispatcher);
-    virtual ~CellLineStyleControl() override;
-    virtual void dispose() override;
 
-    void GetFocus() override;
+public:
+    CellLineStylePopup(SfxDispatcher* pDispatcher);
     void SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis);
+    virtual ~CellLineStylePopup() override;
+    virtual void dispose() override;
 };
 
 } } // end of namespace svx::sidebar

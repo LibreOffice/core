@@ -24,12 +24,10 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/floatwin.hxx>
 #include "CellBorderStyleControl.hxx"
-#include "CellLineStyleControl.hxx"
 #include <memory>
 
 class FixedText;
 namespace sc { namespace sidebar {
-    class CellLineStyleControl;
     class CellBorderUpdater;
 }}
 class ToolBox;
@@ -58,30 +56,7 @@ public:
     }
 };
 
-class CellLineStylePopup : public FloatingWindow
-{
-    VclPtr<CellLineStyleControl> m_xControl;
-public:
-    CellLineStylePopup(vcl::Window* pParent, SfxDispatcher* pDispatcher)
-        : FloatingWindow(pParent, WB_BORDER | WB_SYSTEMWINDOW)
-        , m_xControl(VclPtr<CellLineStyleControl>::Create(this, pDispatcher))
-    {
-        SetSizePixel(m_xControl->GetOutputSizePixel());
-    }
-    void SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis)
-    {
-        m_xControl->SetLineStyleSelect(out, in, dis);
-    }
-    virtual ~CellLineStylePopup() override
-    {
-        disposeOnce();
-    }
-    virtual void dispose() override
-    {
-        m_xControl.disposeAndClear();
-        FloatingWindow::dispose();
-    }
-};
+class CellLineStylePopup;
 
 class CellAppearancePropertyPanel
 :   public PanelLayout,
@@ -89,7 +64,7 @@ class CellAppearancePropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 private:
-    friend class CellLineStyleControl;
+    friend class CellLineStylePopup;
     friend class CellBorderStyleControl;
 
 public:

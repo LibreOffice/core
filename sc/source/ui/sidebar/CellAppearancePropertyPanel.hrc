@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//line style page
-#define VS_STYLE        1
-#define PB_OPTIONS      2
-
 //line border page
 #define TB_BORDER1              1
 #define TB_BORDER2              2
