@@ -1301,7 +1301,8 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
         ScFormulaCell *pPreviousCell = pDocument->GetFormulaCell( aPreviousCell );
         if( pPreviousCell )
         {
-            // Now try to convert to a string quickly ...
+            // Build formula string using the tokens from the previous cell,
+            // but use the current cell position.
             ScCompiler aBackComp( rCxt, aPos, *(pPreviousCell->pCode) );
             OUStringBuffer aShouldBeBuf;
             aBackComp.CreateStringFromTokenArray( aShouldBeBuf );
