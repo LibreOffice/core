@@ -580,8 +580,6 @@ namespace o3tl
     template<> struct typed_flags<OutlinerMode> : is_typed_flags<OutlinerMode, 0x000f> {};
 }
 
-#define OUTLINERMODE_USERMASK       (OutlinerMode)0x00FF
-
 class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 {
     friend class OutlinerView;
@@ -657,7 +655,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView );
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 nFirstPage, sal_Int32 nPages );
 
-    OutlinerMode ImplGetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
+    OutlinerMode ImplGetOutlinerMode() const { return nOutlinerMode; }
     void        ImplCheckDepth( sal_Int16& rnDepth ) const;
 
 protected:
@@ -963,7 +961,7 @@ public:
     // this is needed for StarOffice Api
     void            SetLevelDependendStyleSheet( sal_Int32 nPara );
 
-    OutlinerMode    GetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
+    OutlinerMode    GetOutlinerMode() const { return nOutlinerMode; }
 
     // spell and return a sentence
     bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
