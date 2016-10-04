@@ -18,6 +18,8 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ResetAttributes"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:TextAttributes"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
