@@ -45,7 +45,6 @@ class XFillBitmapItem;
 
 namespace svx { namespace sidebar {
 
-class PopupContainer;
 class AreaTransparencyGradientControl;
 
 class AreaPropertyPanel : public AreaPropertyPanelBase

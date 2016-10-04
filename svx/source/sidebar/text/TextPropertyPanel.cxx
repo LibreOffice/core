@@ -27,8 +27,6 @@
 #include <svtools/unitconv.hxx>
 
 #include <vcl/toolbox.hxx>
-#include <svx/sidebar/PopupContainer.hxx>
-
 
 using namespace css;
 using namespace css::uno;

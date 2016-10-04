@@ -23,8 +23,6 @@
 
 #include "PagePropertyPanel.hxx"
 
-#include <svx/sidebar/PopupContainer.hxx>
-
 #include <swtypes.hxx>
 #include <cmdid.h>
 

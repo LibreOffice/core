@@ -33,7 +33,6 @@
 #include <editeng/lineitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <svx/sidebar/PopupContainer.hxx>
 #include "CellLineStyleControl.hxx"
 #include "CellBorderUpdater.hxx"
 #include "CellBorderStyleControl.hxx"

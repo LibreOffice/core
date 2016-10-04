@@ -437,7 +437,6 @@
 #include <svx/sdasitm.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
-#include <svx/sidebar/PopupContainer.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdetc.hxx>

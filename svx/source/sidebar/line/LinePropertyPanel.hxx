@@ -55,8 +55,6 @@ namespace svx
 namespace sidebar
 {
 
-class PopupContainer;
-
 class LinePropertyPanel : public LinePropertyPanelBase,
                           public sfx2::sidebar::IContextChangeReceiver,
                           public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface

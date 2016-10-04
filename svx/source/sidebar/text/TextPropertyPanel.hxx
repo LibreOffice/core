@@ -35,8 +35,6 @@ class ToolBox;
 
 namespace svx { namespace sidebar {
 
-class PopupContainer;
-
 class TextPropertyPanel
     : public PanelLayout,
       public ::sfx2::sidebar::IContextChangeReceiver,

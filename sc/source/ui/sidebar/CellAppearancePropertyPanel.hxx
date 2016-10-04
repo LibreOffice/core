@@ -28,9 +28,6 @@
 #include <memory>
 
 class FixedText;
-namespace svx { namespace sidebar {
-    class PopupContainer;
-}}
 namespace sc { namespace sidebar {
     class CellLineStyleControl;
     class CellBorderUpdater;
