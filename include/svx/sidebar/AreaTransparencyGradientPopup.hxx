@@ -19,26 +19,24 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREATRANSPARENCYGRADIENTPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREATRANSPARENCYGRADIENTPOPUP_HXX
 
-#include "svx/sidebar/Popup.hxx"
-
-#include <functional>
-
+#include <vcl/floatwin.hxx>
 
 class XFillFloatTransparenceItem;
 
-
 namespace svx { namespace sidebar {
 
-class AreaTransparencyGradientPopup
-    : public Popup
-{
-public:
-    AreaTransparencyGradientPopup (
-        vcl::Window* pParent,
-        ::std::function<Control*(PopupContainer*)> const& rControlCreator);
-    virtual ~AreaTransparencyGradientPopup() override;
+class AreaTransparencyGradientControl;
+class AreaPropertyPanelBase;
 
+class AreaTransparencyGradientPopup : public FloatingWindow
+{
+private:
+    VclPtr<AreaTransparencyGradientControl> m_xControl;
+public:
+    AreaTransparencyGradientPopup(vcl::Window* pParent, AreaPropertyPanelBase& rPanel);
+    virtual ~AreaTransparencyGradientPopup() override;
     void Rearrange (XFillFloatTransparenceItem* pItem);
+    virtual void dispose() override;
 };
 
 } } // end of namespace svx::sidebar

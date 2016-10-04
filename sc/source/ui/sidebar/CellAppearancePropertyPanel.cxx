@@ -35,10 +35,8 @@
 #include <vcl/settings.hxx>
 #include <svx/sidebar/PopupContainer.hxx>
 #include "CellLineStyleControl.hxx"
-#include "CellLineStylePopup.hxx"
 #include "CellBorderUpdater.hxx"
 #include "CellBorderStyleControl.hxx"
-#include "CellBorderStylePopup.hxx"
 
 using namespace css;
 using namespace css::uno;
@@ -49,32 +47,6 @@ const char UNO_LINESTYLE[] = ".uno:LineStyle";
 // namespace open
 
 namespace sc { namespace sidebar {
-
-Control* CellAppearancePropertyPanel::CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent)
-{
-    return VclPtr<CellLineStyleControl>::Create(pParent, *this);
-}
-
-void CellAppearancePropertyPanel::EndCellLineStylePopupMode()
-{
-    if(mpCellLineStylePopup.get())
-    {
-        mpCellLineStylePopup->Hide();
-    }
-}
-
-Control* CellAppearancePropertyPanel::CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent)
-{
-    return VclPtr<CellBorderStyleControl>::Create(pParent, *this);
-}
-
-void CellAppearancePropertyPanel::EndCellBorderStylePopupMode()
-{
-    if(mpCellBorderStylePopup.get())
-    {
-        mpCellBorderStylePopup->Hide();
-    }
-}
 
 CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     vcl::Window* pParent,
@@ -121,8 +93,8 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     mbTLBR(false),
     mbBLTR(false),
 
-    mpCellLineStylePopup(),
-    mpCellBorderStylePopup(),
+    mxCellLineStylePopup(),
+    mxCellBorderStylePopup(),
 
     maContext(),
     mpBindings(pBindings)
@@ -148,6 +120,8 @@ void CellAppearancePropertyPanel::dispose()
     mpTBLineStyle.clear();
     mpTBLineColor.clear();
 
+    mxCellBorderStylePopup.disposeAndClear();
+    mxCellLineStylePopup.disposeAndClear();
     maLineStyleControl.dispose();
     maBorderOuterControl.dispose();
     maBorderInnerControl.dispose();
@@ -182,21 +156,12 @@ IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, p
 {
     const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
 
-    if(aCommand == UNO_SETBORDERSTYLE)
+    if (aCommand == UNO_SETBORDERSTYLE)
     {
-        // create popup on demand
-        if(!mpCellBorderStylePopup.get())
-        {
-            mpCellBorderStylePopup.reset(
-                new CellBorderStylePopup(
-                    this,
-                    [this] (svx::sidebar::PopupContainer* pParent) { return this->CreateCellBorderStylePopupControl(pParent); } ));
-        }
-
-        if(mpCellBorderStylePopup.get())
-        {
-            mpCellBorderStylePopup->Show(*pToolBox);
-        }
+        if (!mxCellBorderStylePopup)
+            mxCellBorderStylePopup = VclPtr<CellBorderStylePopup>::Create(pToolBox, GetBindings()->GetDispatcher());
+        mxCellBorderStylePopup->StartPopupMode(pToolBox, FloatWinPopupFlags::Down |
+                                                         FloatWinPopupFlags::NoAppFocusClose);
     }
 }
 
@@ -204,22 +169,13 @@ IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pT
 {
     const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
 
-    if(aCommand == UNO_LINESTYLE)
+    if (aCommand == UNO_LINESTYLE)
     {
-        // create popup on demand
-        if(!mpCellLineStylePopup.get())
-        {
-            mpCellLineStylePopup.reset(
-                new CellLineStylePopup(
-                    this,
-                    [this] (svx::sidebar::PopupContainer* pParent) { return this->CreateCellLineStylePopupControl(pParent); } ));
-        }
-
-        if(mpCellLineStylePopup.get())
-        {
-            mpCellLineStylePopup->SetLineStyleSelect(mnOut, mnIn, mnDis);
-            mpCellLineStylePopup->Show(*pToolBox);
-        }
+        if (!mxCellLineStylePopup)
+            mxCellLineStylePopup = VclPtr<CellLineStylePopup>::Create(pToolBox, GetBindings()->GetDispatcher());
+        mxCellLineStylePopup->SetLineStyleSelect(mnOut, mnIn, mnDis);
+        mxCellLineStylePopup->StartPopupMode(pToolBox, FloatWinPopupFlags::Down |
+                                                       FloatWinPopupFlags::NoAppFocusClose);
     }
 }
 

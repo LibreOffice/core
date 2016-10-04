@@ -33,9 +33,10 @@
 
 namespace sc { namespace sidebar {
 
-CellLineStyleControl::CellLineStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel)
+CellLineStyleControl::CellLineStyleControl(FloatingWindow* pParent, SfxDispatcher* pDispatcher)
 :   Control(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_LINESTYLE)),
-    mrCellAppearancePropertyPanel(rPanel),
+    mpDispatcher(pDispatcher),
+    mxFloatParent(pParent),
     maPushButtonMoreOptions(VclPtr<PushButton>::Create(this, ScResId(PB_OPTIONS))),
     maCellLineStyleValueSet(VclPtr<sc::sidebar::CellLineStyleValueSet>::Create(this, ScResId(VS_STYLE))),
     mbVSfocus(true)
@@ -53,6 +54,7 @@ void CellLineStyleControl::dispose()
 {
     maPushButtonMoreOptions.disposeAndClear();
     maCellLineStyleValueSet.disposeAndClear();
+    mxFloatParent.clear();
     Control::dispose();
 }
 
@@ -176,23 +178,19 @@ IMPL_LINK_TYPED(CellLineStyleControl, VSSelectHdl, ValueSet*, pControl, void)
         editeng::SvxBorderLine aTmp;
         aTmp.GuessLinesWidths(nStyle, n1, n2, n3);
         aLineItem.SetLine( &aTmp );
-        mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->ExecuteList(
+        mpDispatcher->ExecuteList(
             SID_FRAME_LINESTYLE, SfxCallMode::RECORD, { &aLineItem });
         SetAllNoSel();
-        mrCellAppearancePropertyPanel.EndCellLineStylePopupMode();
+        mxFloatParent->EndPopupMode();
     }
 }
 
 IMPL_LINK_TYPED(CellLineStyleControl, PBClickHdl, Button *, pPBtn, void)
 {
-    if(pPBtn == maPushButtonMoreOptions.get())
+    if (pPBtn == maPushButtonMoreOptions.get())
     {
-        if(mrCellAppearancePropertyPanel.GetBindings())
-        {
-            mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_CELL_FORMAT_BORDER, SfxCallMode::ASYNCHRON);
-        }
-
-        mrCellAppearancePropertyPanel.EndCellLineStylePopupMode();
+        mpDispatcher->Execute(SID_CELL_FORMAT_BORDER, SfxCallMode::ASYNCHRON);
+        mxFloatParent->EndPopupMode();
     }
 }
 

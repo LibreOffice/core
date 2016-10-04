@@ -95,7 +95,6 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       maImgRadial(SVX_RES(IMG_RADIAL)),
       maImgSquare(SVX_RES(IMG_SQUARE)),
       maImgLinear(SVX_RES(IMG_LINEAR)),
-      maTrGrPopup(this, [this] (PopupContainer *const pContainer) { return this->CreateTransparencyGradientControl(pContainer); }),
       mpFloatTransparenceItem(),
       mpTransparanceItem(),
       mxFrame(rxFrame),
@@ -126,6 +125,7 @@ AreaPropertyPanelBase::~AreaPropertyPanelBase()
 
 void AreaPropertyPanelBase::dispose()
 {
+    mxTrGrPopup.disposeAndClear();
     mpColorTextFT.clear();
     mpLbFillType.clear();
     mpLbFillAttr.clear();
@@ -495,11 +495,6 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ChangeGradientAngle, Edit&, void)
     SelectFillAttrHdl_Impl();
 }
 
-VclPtr<Control> AreaPropertyPanelBase::CreateTransparencyGradientControl (PopupContainer* pParent)
-{
-    return VclPtrInstance<AreaTransparencyGradientControl>(pParent, *this);
-}
-
 void AreaPropertyPanelBase::DataChanged(
     const DataChangedEvent& /*rEvent*/)
 {
@@ -675,9 +670,9 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
                 SetTransparency(nValue);
             }
 
-            if(!bZeroValue)
+            if (!bZeroValue && mxTrGrPopup)
             {
-                maTrGrPopup.Hide();
+                mxTrGrPopup->EndPopupMode();
             }
         }
 
@@ -1327,9 +1322,12 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ModifyTransSliderHdl, Slider*, void
 
 IMPL_LINK_TYPED( AreaPropertyPanelBase, ClickTrGrHdl_Impl, ToolBox*, pToolBox, void )
 {
-    maTrGrPopup.Rearrange(mpFloatTransparenceItem.get());
+    if (!mxTrGrPopup)
+        mxTrGrPopup = VclPtr<AreaTransparencyGradientPopup>::Create(pToolBox, *this);
+    mxTrGrPopup->Rearrange(mpFloatTransparenceItem.get());
     OSL_ASSERT( pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SIDEBARGRADIENT);
-    maTrGrPopup.Show(*pToolBox);
+    mxTrGrPopup->StartPopupMode(pToolBox, FloatWinPopupFlags::Down |
+                                          FloatWinPopupFlags::NoAppFocusClose);
 }
 
 IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, void)

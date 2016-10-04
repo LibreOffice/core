@@ -22,14 +22,16 @@
 #include <vcl/button.hxx>
 #include "CellLineStyleValueSet.hxx"
 
+class SfxDispatcher;
+
 namespace sc { namespace sidebar {
 
 class CellAppearancePropertyPanel;
-
 class CellLineStyleControl : public Control
 {
 private:
-    CellAppearancePropertyPanel&       mrCellAppearancePropertyPanel;
+    SfxDispatcher*                     mpDispatcher;
+    VclPtr<FloatingWindow>             mxFloatParent;
     VclPtr<PushButton>                 maPushButtonMoreOptions;
     VclPtr<CellLineStyleValueSet>      maCellLineStyleValueSet;
     OUString                           maStr[CELL_LINE_STYLE_ENTRIES];
@@ -43,7 +45,7 @@ private:
     DECL_LINK_TYPED(PBClickHdl, Button*, void);
 
 public:
-    CellLineStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel);
+    CellLineStyleControl(FloatingWindow* pParent, SfxDispatcher* pDispatcher);
     virtual ~CellLineStyleControl() override;
     virtual void dispose() override;
 

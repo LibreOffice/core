@@ -22,6 +22,9 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
+#include <vcl/floatwin.hxx>
+#include "CellBorderStyleControl.hxx"
+#include "CellLineStyleControl.hxx"
 #include <memory>
 
 class FixedText;
@@ -29,8 +32,6 @@ namespace svx { namespace sidebar {
     class PopupContainer;
 }}
 namespace sc { namespace sidebar {
-    class CellLineStylePopup;
-    class CellBorderStylePopup;
     class CellLineStyleControl;
     class CellBorderUpdater;
 }}
@@ -38,6 +39,52 @@ class ToolBox;
 class CheckBox;
 
 namespace sc { namespace sidebar {
+
+class CellBorderStylePopup : public FloatingWindow
+{
+    VclPtr<Control> m_xControl;
+public:
+    CellBorderStylePopup(vcl::Window* pParent, SfxDispatcher* pDispatcher)
+        : FloatingWindow(pParent, WB_BORDER | WB_SYSTEMWINDOW)
+        , m_xControl(VclPtr<CellBorderStyleControl>::Create(this, pDispatcher))
+    {
+        SetSizePixel(m_xControl->GetOutputSizePixel());
+    }
+    virtual ~CellBorderStylePopup() override
+    {
+        disposeOnce();
+    }
+    virtual void dispose() override
+    {
+        m_xControl.disposeAndClear();
+        FloatingWindow::dispose();
+    }
+};
+
+class CellLineStylePopup : public FloatingWindow
+{
+    VclPtr<CellLineStyleControl> m_xControl;
+public:
+    CellLineStylePopup(vcl::Window* pParent, SfxDispatcher* pDispatcher)
+        : FloatingWindow(pParent, WB_BORDER | WB_SYSTEMWINDOW)
+        , m_xControl(VclPtr<CellLineStyleControl>::Create(this, pDispatcher))
+    {
+        SetSizePixel(m_xControl->GetOutputSizePixel());
+    }
+    void SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis)
+    {
+        m_xControl->SetLineStyleSelect(out, in, dis);
+    }
+    virtual ~CellLineStylePopup() override
+    {
+        disposeOnce();
+    }
+    virtual void dispose() override
+    {
+        m_xControl.disposeAndClear();
+        FloatingWindow::dispose();
+    }
+};
 
 class CellAppearancePropertyPanel
 :   public PanelLayout,
@@ -131,22 +178,14 @@ private:
     bool                                    mbBLTR : 1;
 
     // popups
-    std::unique_ptr< CellLineStylePopup > mpCellLineStylePopup;
-    std::unique_ptr< CellBorderStylePopup > mpCellBorderStylePopup;
+    VclPtr<CellLineStylePopup>              mxCellLineStylePopup;
+    VclPtr<CellBorderStylePopup>            mxCellBorderStylePopup;
 
     vcl::EnumContext                        maContext;
     SfxBindings*                            mpBindings;
 
     DECL_LINK_TYPED(TbxCellBorderSelectHdl, ToolBox*, void);
     DECL_LINK_TYPED(TbxLineStyleSelectHdl, ToolBox*, void);
-
-    // for CellLineStyle popup
-    Control* CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent);
-    void EndCellLineStylePopupMode();
-
-    // for CellBorderStyle popup
-    Control* CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent);
-    void EndCellBorderStylePopupMode();
 
     void Initialize();
     void SetStyleIcon();

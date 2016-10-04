@@ -14,7 +14,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/document/XUndoManager.hpp>
 
-#include <svx/sidebar/Popup.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
 #include <sfx2/sidebar/ControllerItem.hxx>

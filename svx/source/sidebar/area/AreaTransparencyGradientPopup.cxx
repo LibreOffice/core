@@ -21,29 +21,28 @@
 
 namespace svx { namespace sidebar {
 
-AreaTransparencyGradientPopup::AreaTransparencyGradientPopup (
-    vcl::Window* pParent,
-    const ::std::function<Control* (PopupContainer*)>& rControlCreator)
-    : Popup(
-        pParent,
-        rControlCreator,
-        OUString( "Transparency and Gradient"))
+AreaTransparencyGradientPopup::AreaTransparencyGradientPopup(vcl::Window* pParent, AreaPropertyPanelBase& rPanel)
+    : FloatingWindow(pParent, WB_BORDER | WB_SYSTEMWINDOW)
+    , m_xControl(VclPtr<AreaTransparencyGradientControl>::Create(this, rPanel))
 {
 }
 
 AreaTransparencyGradientPopup::~AreaTransparencyGradientPopup()
 {
+    disposeOnce();
 }
 
-void AreaTransparencyGradientPopup::Rearrange (XFillFloatTransparenceItem* pItem)
+void AreaTransparencyGradientPopup::Rearrange(XFillFloatTransparenceItem* pItem)
 {
-    ProvideContainerAndControl();
-
-    AreaTransparencyGradientControl* pControl = dynamic_cast<AreaTransparencyGradientControl*>(mxControl.get());
-    if (pControl != nullptr)
-        pControl->Rearrange(pItem);
+    m_xControl->Rearrange(pItem);
+    SetSizePixel(m_xControl->GetOutputSizePixel());
 }
 
+void AreaTransparencyGradientPopup::dispose()
+{
+    m_xControl.disposeAndClear();
+    FloatingWindow::dispose();
+}
 
 } } // end of namespace svx::sidebar
 

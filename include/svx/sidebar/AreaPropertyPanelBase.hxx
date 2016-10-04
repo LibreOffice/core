@@ -152,7 +152,7 @@ protected:
     Image                                               maImgSquare;
     Image                                               maImgLinear;
 
-    AreaTransparencyGradientPopup maTrGrPopup;
+    VclPtr<AreaTransparencyGradientPopup>           mxTrGrPopup;
 
     std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
     std::unique_ptr< SfxUInt16Item >                mpTransparanceItem;
@@ -170,7 +170,6 @@ protected:
     DECL_LINK_TYPED(ClickImportBitmapHdl, Button*, void);
 
     // for transparency gradient
-    VclPtr<Control> CreateTransparencyGradientControl (PopupContainer* pParent);
     DECL_LINK_TYPED( ClickTrGrHdl_Impl, ToolBox*, void );
 
     void Initialize();

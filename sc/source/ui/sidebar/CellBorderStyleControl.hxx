@@ -20,17 +20,19 @@
 #define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLBORDERSTYLECONTROL_HXX
 
 #include <vcl/button.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/floatwin.hxx>
+#include <vcl/toolbox.hxx>
+
+class SfxDispatcher;
 
 namespace sc { namespace sidebar {
-
-class CellAppearancePropertyPanel;
 
 class CellBorderStyleControl : public Control
 {
 private:
-    CellAppearancePropertyPanel&    mrCellAppearancePropertyPanel;
+    SfxDispatcher*                  mpDispatcher;
+    VclPtr<FloatingWindow>          mxFloatParent;
     VclPtr<ToolBox>                 maTBBorder1;
     VclPtr<ToolBox>                 maTBBorder2;
     VclPtr<ToolBox>                 maTBBorder3;
@@ -45,7 +47,7 @@ private:
     DECL_LINK_TYPED(TB3SelectHdl, ToolBox *, void);
 
 public:
-    CellBorderStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel);
+    CellBorderStyleControl(FloatingWindow* pParent, SfxDispatcher* pDispatcher);
     virtual ~CellBorderStyleControl() override;
     virtual void dispose() override;
 };
