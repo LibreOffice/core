@@ -382,6 +382,8 @@ public:
 
     bool IsActive() const { return bIsActive; }
     OUString GetFormula(ScAddress& rAddress);
+    bool    UseSubTotal(ScRangeList* pRangeList);
+    const   OUString DoAutoSum();
 
     // ugly hack to call Define Names from Manage Names
     void    SwitchBetweenRefDialogs(SfxModelessDialog* pDialog);
