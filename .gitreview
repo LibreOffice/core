@@ -1,7 +1,7 @@
-[gerrit]
+[gerrit]:
 host=logerrit
 port=29418
 project=core
 defaultremote=logerrit
-defaultbranch=libreoffice-5-1
+defaultbranch=libreoffice-5-1-6
 
