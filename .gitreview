@@ -1,4 +1,4 @@
-[gerrit]:
+[gerrit]
 host=logerrit
 port=29418
 project=core
