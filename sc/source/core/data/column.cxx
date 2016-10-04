@@ -552,11 +552,8 @@ void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet* rStyle )
 {
     const ScPatternAttr* pPattern = pAttrArray->GetPattern(nRow);
     std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pPattern));
-    if (pNewPattern)
-    {
-        pNewPattern->SetStyleSheet(const_cast<ScStyleSheet*>(rStyle));
-        pAttrArray->SetPattern(nRow, pNewPattern.get(), true);
-    }
+    pNewPattern->SetStyleSheet(const_cast<ScStyleSheet*>(rStyle));
+    pAttrArray->SetPattern(nRow, pNewPattern.get(), true);
 }
 
 void ScColumn::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle )
