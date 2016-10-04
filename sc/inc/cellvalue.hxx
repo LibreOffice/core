@@ -110,14 +110,11 @@ struct SC_DLLPUBLIC ScRefCellValue
     ScRefCellValue( const svl::SharedString* pString );
     ScRefCellValue( const EditTextObject* pEditText );
     ScRefCellValue( ScFormulaCell* pFormula );
-    ScRefCellValue( const ScRefCellValue& r );
 
     /**
      * Take cell value from specified position in specified document.
      */
     ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos );
-
-    ~ScRefCellValue();
 
     void clear();
 
@@ -153,8 +150,6 @@ struct SC_DLLPUBLIC ScRefCellValue
     bool hasEmptyValue();
 
     bool equalsWithoutFormat( const ScRefCellValue& r ) const;
-
-    ScRefCellValue& operator= ( const ScRefCellValue& r );
 };
 
 #endif
