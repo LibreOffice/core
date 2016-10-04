@@ -1098,11 +1098,13 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     bool bCheckSingleFile_ = rMergeDescriptor.bCreateSingleFile;
     if( bMT_EMAIL )
     {
+        assert( !rMergeDescriptor.bPrefixIsFilename );
         assert( bMT_EMAIL && !bCheckSingleFile_ );
         bCheckSingleFile_ = false;
     }
     else if( bMT_SHELL || bMT_PRINTER )
     {
+        assert( !rMergeDescriptor.bPrefixIsFilename );
         assert( (bMT_SHELL || bMT_PRINTER) && bCheckSingleFile_ );
         bCheckSingleFile_ = true;
     }
@@ -1318,7 +1320,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         // create a new temporary file name - only done once in case of bCreateSingleFile
         if( bNeedsTempFiles && ( !bWorkDocInitialized || !bCreateSingleFile ))
         {
-            OUString sPath = rMergeDescriptor.sPath;
+            OUString sPrefix = rMergeDescriptor.sPrefix;
             OUString sLeading;
 
             //#i97667# if the name is from a database field then it will be used _as is_
@@ -1331,14 +1333,14 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             }
             else
             {
-                INetURLObject aEntry( sPath );
+                INetURLObject aEntry( sPrefix );
                 sLeading = aEntry.GetBase();
                 aEntry.removeSegment();
-                sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
+                sPrefix = aEntry.GetMainURL( INetURLObject::NO_DECODE );
             }
 
             OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
-            aTempFile.reset( new utl::TempFile(sLeading, sColumnData.isEmpty(), &sExt, &sPath, true) );
+            aTempFile.reset( new utl::TempFile(sLeading, sColumnData.isEmpty(), &sExt, &sPrefix, true) );
             if( !aTempFile->IsValid() )
             {
                 ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
@@ -1559,11 +1561,11 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             // save merged document
             assert( aTempFile.get() );
             INetURLObject aTempFileURL;
-            if( rMergeDescriptor.sPath.isEmpty() )
+            if( rMergeDescriptor.sPrefix.isEmpty() || !rMergeDescriptor.bPrefixIsFilename )
                 aTempFileURL.SetURL( aTempFile->GetURL() );
             else
             {
-                aTempFileURL.SetURL( rMergeDescriptor.sPath );
+                aTempFileURL.SetURL( rMergeDescriptor.sPrefix );
                 // remove the unneeded temporary file
                 aTempFile->EnableKillingFile();
             }
@@ -2863,7 +2865,8 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), rSh, aDescriptor );
         aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
         aMergeDesc.bCreateSingleFile = pImpl->pMergeDialog->IsSaveSingleDoc();
-        aMergeDesc.sPath = pImpl->pMergeDialog->GetTargetURL();
+        aMergeDesc.bPrefixIsFilename = aMergeDesc.bCreateSingleFile;
+        aMergeDesc.sPrefix = pImpl->pMergeDialog->GetTargetURL();
         if( !aMergeDesc.bCreateSingleFile && pImpl->pMergeDialog->IsGenerateFromDataBase() )
         {
             aMergeDesc.sDBcolumn = pImpl->pMergeDialog->GetColumnName();
