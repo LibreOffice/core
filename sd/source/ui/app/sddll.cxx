@@ -237,7 +237,6 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxTableToolBoxControl::RegisterControl(SID_INSERT_TABLE, pMod );
     SvxFrameLineStyleToolBoxControl::RegisterControl(SID_FRAME_LINESTYLE, pMod );
     SvxColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
-    SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
 
     EmojiPopup::RegisterControl(SID_EMOJI_CONTROL, pMod );

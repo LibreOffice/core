@@ -30,6 +30,7 @@
 #include <vcl/vclptr.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include <svl/style.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/borderhelper.hxx>
@@ -115,7 +116,6 @@ using namespace ::com::sun::star::lang;
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxStyleToolBoxControl, SfxTemplateItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontNameToolBoxControl, SvxFontItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxFrameToolBoxControl, SvxBoxItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxCurrencyToolBoxControl, SfxBoolItem );
@@ -1600,7 +1600,7 @@ Color BorderColorStatus::GetColor()
 
 
 SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
-    SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
+    SfxPopupWindow( nId, rFrame, pParentWindow, WB_STDPOPUP | WB_OWNERDRAWDECORATION | WB_CLOSEABLE | WB_MOVEABLE ),
     aFrameSet   ( VclPtr<SvxFrmValueSet_Impl>::Create(this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
     bParagraphMode(false)
 {
@@ -2898,40 +2898,61 @@ void SvxColorToolBoxControl::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod
 
 // class SvxFrameToolBoxControl --------------------------------------------
 
-SvxFrameToolBoxControl::SvxFrameToolBoxControl(
-    sal_uInt16      nSlotId,
-    sal_uInt16      nId,
-    ToolBox&    rTbx )
-    :   SfxToolBoxControl( nSlotId, nId, rTbx )
+class SvxFrameToolBoxControl : public svt::PopupWindowController
 {
-    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+public:
+    explicit SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext );
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
+
+private:
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
+    using svt::ToolboxController::createPopupWindow;
+};
+
+SvxFrameToolBoxControl::SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext )
+    : svt::PopupWindowController( rContext, nullptr, OUString() )
+{
 }
 
-VclPtr<SfxPopupWindow> SvxFrameToolBoxControl::CreatePopupWindow()
+void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
-    VclPtr<SvxFrameWindow_Impl> pFrameWin = VclPtr<SvxFrameWindow_Impl>::Create(
-                                        GetSlotId(), m_xFrame, &GetToolBox() );
-
-    pFrameWin->StartPopupMode( &GetToolBox(),
-                               FloatWinPopupFlags::GrabFocus |
-                               FloatWinPopupFlags::AllowTearOff |
-                               FloatWinPopupFlags::NoAppFocusClose );
-    pFrameWin->StartSelection();
-    SetPopupWindow( pFrameWin );
-
-    return pFrameWin;
+    svt::PopupWindowController::initialize( rArguments );
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
 }
 
-void SvxFrameToolBoxControl::StateChanged(
-    sal_uInt16, SfxItemState eState, const SfxPoolItem*  )
+VclPtr<vcl::Window> SvxFrameToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    sal_uInt16                  nId     = GetId();
-    ToolBox&                rTbx    = GetToolBox();
+    return VclPtr<SvxFrameWindow_Impl>::Create( 0, m_xFrame, pParent );
+}
 
-    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
-    rTbx.SetItemState( nId, (SfxItemState::DONTCARE == eState)
-                            ? TRISTATE_INDET
-                            : TRISTATE_FALSE );
+OUString SvxFrameToolBoxControl::getImplementationName()
+    throw ( css::uno::RuntimeException, std::exception )
+{
+    return OUString( "com.sun.star.comp.svx.FrameToolBoxControl" );
+}
+
+css::uno::Sequence< OUString > SvxFrameToolBoxControl::getSupportedServiceNames()
+    throw ( css::uno::RuntimeException, std::exception )
+{
+    return { "com.sun.star.frame.ToolbarController" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_svx_FrameToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire( new SvxFrameToolBoxControl( rContext ) );
 }
 
 SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(

@@ -40,6 +40,10 @@
   <implementation name="com.sun.star.comp.svx.FontworkCharacterSpacingController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.FrameToolBoxControl"
+    constructor="com_sun_star_comp_svx_FrameToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="com.sun.star.comp.Svx.GraphicExportHelper"
       constructor="com_sun_star_comp_Svx_GraphicExportHelper_get_implementation">
     <service name="com.sun.star.document.BinaryStreamResolver"/>

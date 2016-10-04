@@ -254,17 +254,6 @@ public:
     void setColorSelectFunction(const ColorSelectFunction& aColorSelectFunction);
 };
 
-class SVX_DLLPUBLIC SvxFrameToolBoxControl : public SfxToolBoxControl
-{
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    SvxFrameToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
-
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
-                              const SfxPoolItem* pState) override;
-};
-
 class SVX_DLLPUBLIC SvxFrameLineStyleToolBoxControl : public SfxToolBoxControl
 {
 public:
