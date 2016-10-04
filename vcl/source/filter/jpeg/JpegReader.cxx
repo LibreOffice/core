@@ -32,13 +32,6 @@
 
 #define JPEG_MIN_READ 512
 #define BUFFER_SIZE  4096
-namespace {
-    // Arbitrary maximal size (512M) of a bitmap after it has been decoded.
-    // It is used to prevent excessive swapping due to large buffers in
-    // virtual memory.
-    // May have to be tuned if it turns out to be too large or too small.
-    static const sal_uInt64 MAX_BITMAP_BYTE_SIZE = sal_uInt64(512 * 1024 * 1024);
-}
 
 /* Expanded data source object for stdio input */
 
@@ -207,14 +200,6 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
 
     if (nSize > SAL_MAX_INT32 / (bGray?1:3))
         return false;
-
-    // Check if the bitmap is atypically large.
-    if (nSize*(bGray?1:3) > MAX_BITMAP_BYTE_SIZE)
-    {
-        // Do not try to acquire resources for the large bitmap or to
-        // read the bitmap into memory.
-        return false;
-    }
 
     if( bGray )
     {
