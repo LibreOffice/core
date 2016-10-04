@@ -21,11 +21,8 @@
 #define INCLUDED_SC_INC_COMPRESSEDARRAY_HXX
 
 #include <cstddef>
+#include <vector>
 #include <algorithm>
-
-#include "scdllapi.h"
-
-const size_t nScCompressedArrayDelta = 4;
 
 /** Compressed array of row (or column) entries, e.g. heights, flags, ...
 
@@ -47,22 +44,23 @@ const size_t nScCompressedArrayDelta = 4;
 
 template< typename A, typename D > class ScCompressedArray
 {
-public:
+protected:
     struct DataEntry
     {
         A   nEnd;           // start is end of previous entry + 1
         D   aValue;
             DataEntry() {}  //! uninitialized
+            DataEntry(A end, D value) : nEnd(end), aValue(value) {}
     };
 
+    std::vector <DataEntry>     m_data;
+    A                           nMaxAccess;
+
+public:
     /** Construct with nMaxAccess=MAXROW, for example. */
-                                ScCompressedArray( A nMaxAccess,
-                                        const D& rValue,
-                                        size_t nDelta = nScCompressedArrayDelta );
+                                ScCompressedArray( A nMaxAccess, const D& rValue );
     /** Construct from a plain array of D */
-                                ScCompressedArray( A nMaxAccess,
-                                        const D* pDataArray, size_t nDataCount );
-    virtual                     ~ScCompressedArray();
+                                ScCompressedArray( A nMaxAccess, const D* pDataArray, size_t nDataCount );
     void                        Resize( size_t nNewSize );
     void                        Reset( const D& rValue );
     void                        SetValue( A nPos, const D& rValue );
@@ -72,8 +70,8 @@ public:
     /** Get value for a row, and it's region end row */
     const D&                    GetValue( A nPos, size_t& nIndex, A& nEnd ) const;
 
-    /** Get next value and it's region end row. If nIndex<nCount, nIndex is
-        incremented first. If the resulting nIndex>=nCount, the value of the
+    /** Get next value and it's region end row. If nIndex < the array size, nIndex is
+        incremented first. If the resulting nIndex >= the array size, the value of the
         last entry is returned again. */
     const D&                    GetNextValue( size_t& nIndex, A& nEnd ) const;
 
@@ -84,19 +82,11 @@ public:
     void                        Remove( A nStart, size_t nCount );
 
     /** Copy rArray.nStart+nSourceDy to this.nStart */
-    void                        CopyFrom( const ScCompressedArray& rArray,
-                                    A nStart, A nEnd );
+    void                        CopyFrom( const ScCompressedArray& rArray, A nStart, A nEnd );
 
     // methods public for the coupled array sum methods
     /** Obtain index into entries for nPos */
-    SC_DLLPUBLIC size_t                      Search( A nPos ) const;
-
-protected:
-    size_t                      nCount;
-    size_t                      nLimit;
-    size_t                      nDelta;
-    DataEntry*                  pData;
-    A                           nMaxAccess;
+    size_t                      Search( A nPos ) const;
 };
 
 template< typename A, typename D >
@@ -104,12 +94,10 @@ void ScCompressedArray<A,D>::Reset( const D& rValue )
 {
     // Create a temporary copy in case we got a reference passed that points to
     // a part of the array to be reallocated.
-    D aTmpVal( rValue);
-    delete[] pData;
-    nCount = nLimit = 1;
-    pData = new DataEntry[1];
-    pData[0].aValue = aTmpVal;
-    pData[0].nEnd = nMaxAccess;
+    D aTmpVal(rValue);
+    m_data.resize(1);
+    m_data[0].aValue = aTmpVal;
+    m_data[0].nEnd = nMaxAccess;
 }
 
 template< typename A, typename D >
@@ -122,25 +110,25 @@ template< typename A, typename D >
 const D& ScCompressedArray<A,D>::GetValue( A nPos ) const
 {
     size_t nIndex = Search( nPos);
-    return pData[nIndex].aValue;
+    return m_data[nIndex].aValue;
 }
 
 template< typename A, typename D >
 const D& ScCompressedArray<A,D>::GetValue( A nPos, size_t& nIndex, A& nEnd ) const
 {
     nIndex = Search( nPos);
-    nEnd = pData[nIndex].nEnd;
-    return pData[nIndex].aValue;
+    nEnd = m_data[nIndex].nEnd;
+    return m_data[nIndex].aValue;
 }
 
 template< typename A, typename D >
 const D& ScCompressedArray<A,D>::GetNextValue( size_t& nIndex, A& nEnd ) const
 {
-    if (nIndex < nCount)
+    if (nIndex < m_data.size())
         ++nIndex;
-    size_t nEntry = (nIndex < nCount ? nIndex : nCount-1);
-    nEnd = pData[nEntry].nEnd;
-    return pData[nEntry].aValue;
+    size_t nEntry = std::min( nIndex, m_data.size()-1 );
+    nEnd = m_data[nEntry].nEnd;
+    return m_data[nEntry].aValue;
 }
 
 //  ScBitMaskCompressedArray
@@ -150,15 +138,11 @@ const D& ScCompressedArray<A,D>::GetNextValue( size_t& nIndex, A& nEnd ) const
 template< typename A, typename D > class ScBitMaskCompressedArray : public ScCompressedArray<A,D>
 {
 public:
-                                ScBitMaskCompressedArray( A nMaxAccessP,
-                                        const D& rValue,
-                                        size_t nDeltaP = nScCompressedArrayDelta )
-                                    : ScCompressedArray<A,D>( nMaxAccessP, rValue, nDeltaP)
+                                ScBitMaskCompressedArray( A nMaxAccessP, const D& rValue )
+                                    : ScCompressedArray<A,D>( nMaxAccessP, rValue )
                                     {}
-                                ScBitMaskCompressedArray( A nMaxAccessP,
-                                        const D* pDataArray, size_t nDataCount )
-                                    : ScCompressedArray<A,D>( nMaxAccessP,
-                                            pDataArray, nDataCount)
+                                ScBitMaskCompressedArray( A nMaxAccessP, const D* pDataArray, size_t nDataCount )
+                                    : ScCompressedArray<A,D>( nMaxAccessP, pDataArray, nDataCount)
                                     {}
     void                        AndValue( A nPos, const D& rValueToAnd );
     void                        OrValue( A nPos, const D& rValueToOr );
