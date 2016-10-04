@@ -47,29 +47,6 @@ static const OpCode eOpCodeTable[] = {      //  order as for enum ScSubTotalFunc
         ocVar,
         ocVarP };
 
-void ScReferenceList::AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab )
-{
-    ScReferenceEntry* pOldData = pData;
-    pData = new ScReferenceEntry[ nFullSize+1 ];
-    if (pOldData)
-    {
-        memcpy( pData, pOldData, nCount * sizeof(ScReferenceEntry) );
-        delete[] pOldData;
-    }
-    while (nCount < nFullSize)
-    {
-        pData[nCount].nCol = SC_CONS_NOTFOUND;
-        pData[nCount].nRow = SC_CONS_NOTFOUND;
-        pData[nCount].nTab = SC_CONS_NOTFOUND;
-        ++nCount;
-    }
-    pData[nCount].nCol = nCol;
-    pData[nCount].nRow = nRow;
-    pData[nCount].nTab = nTab;
-    ++nCount;
-    nFullSize = nCount;
-}
-
 template< typename T >
 static void lcl_AddString( ::std::vector<OUString>& rData, T& nCount, const OUString& rInsert )
 {
@@ -116,9 +93,6 @@ void ScConsData::DeleteData()
     {
         for (SCSIZE i=0; i<nColCount; i++)
         {
-            for (SCSIZE j=0; j<nRowCount; j++)
-                if (ppUsed[i][j])
-                    ppRefs[i][j].Clear();
             delete[] ppRefs[i];
         }
         delete[] ppRefs;
@@ -128,7 +102,7 @@ void ScConsData::DeleteData()
     DELETEARR( ppCount, nColCount );
     DELETEARR( ppSum,   nColCount );
     DELETEARR( ppSumSqr,nColCount );
-    DELETEARR( ppUsed,  nColCount );                // only after ppRefs !!!
+    DELETEARR( ppUsed,  nColCount );
     DELETEARR( ppTitlePos, nRowCount );
     ::std::vector<OUString>().swap( maColHeaders);
     ::std::vector<OUString>().swap( maRowHeaders);
@@ -281,17 +255,12 @@ void ScConsData::AddName( const OUString& rName )
 
             SCSIZE nMax = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
-                if (ppUsed[nArrX][nArrY])
-                    nMax = std::max( nMax, ppRefs[nArrX][nArrY].GetCount() );
+                nMax = std::max( nMax, ppRefs[nArrX][nArrY].size() );
 
             for (nArrX=0; nArrX<nColCount; nArrX++)
             {
-                if (!ppUsed[nArrX][nArrY])
-                {
-                    ppUsed[nArrX][nArrY] = true;
-                    ppRefs[nArrX][nArrY].Init();
-                }
-                ppRefs[nArrX][nArrY].SetFullSize(nMax);
+                ppUsed[nArrX][nArrY] = true;
+                ppRefs[nArrX][nArrY].resize( nMax, { SC_CONS_NOTFOUND, SC_CONS_NOTFOUND, SC_CONS_NOTFOUND });
             }
 
             //  store positions
@@ -564,14 +533,8 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
                 {
                     if (bReference)
                     {
-                        if (ppUsed[nArrX][nArrY])
-                            ppRefs[nArrX][nArrY].AddEntry( nCol, nRow, nTab );
-                        else
-                        {
-                            ppUsed[nArrX][nArrY] = true;
-                            ppRefs[nArrX][nArrY].Init();
-                            ppRefs[nArrX][nArrY].AddEntry( nCol, nRow, nTab );
-                        }
+                        ppUsed[nArrX][nArrY] = true;
+                        ppRefs[nArrX][nArrY].push_back( { nCol, nRow, nTab } );
                     }
                     else
                     {
@@ -608,8 +571,7 @@ SCROW ScConsData::GetInsertCount() const
         {
             SCSIZE nNeeded = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
-                if (ppUsed[nArrX][nArrY])
-                    nNeeded = std::max( nNeeded, ppRefs[nArrX][nArrY].GetCount() );
+                nNeeded = std::max( nNeeded, ppRefs[nArrX][nArrY].size() );
 
             nInsert += nNeeded;
         }
@@ -687,8 +649,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
         {
             SCSIZE nNeeded = 0;
             for (nArrX=0; nArrX<nColCount; nArrX++)
-                if (ppUsed[nArrX][nArrY])
-                    nNeeded = std::max( nNeeded, ppRefs[nArrX][nArrY].GetCount() );
+                nNeeded = std::max( nNeeded, ppRefs[nArrX][nArrY].size() );
 
             if (nNeeded)
             {
@@ -697,13 +658,12 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 for (nArrX=0; nArrX<nColCount; nArrX++)
                     if (ppUsed[nArrX][nArrY])
                     {
-                        ScReferenceList& rList = ppRefs[nArrX][nArrY];
-                        SCSIZE nCount = rList.GetCount();
+                        SCSIZE nCount = ppRefs[nArrX][nArrY].size();
                         if (nCount)
                         {
                             for (SCSIZE nPos=0; nPos<nCount; nPos++)
                             {
-                                ScReferenceEntry aRef = rList.GetEntry(nPos);
+                                ScReferenceEntry aRef = ppRefs[nArrX][nArrY][nPos];
                                 if (aRef.nTab != SC_CONS_NOTFOUND)
                                 {
                                     // insert reference (absolute, 3d)
