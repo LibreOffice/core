@@ -37,6 +37,7 @@
 #include <set>
 #include <vector>
 #include <string.h>
+#include <stdlib.h>
 
 #include <lingutil.hxx>
 
@@ -53,57 +54,13 @@ OString Win_AddLongPathPrefix( const OString &rPathName )
 }
 #endif //defined(WNT)
 
-// build list of old style dictionaries (not as extensions) to use.
-// User installed dictionaries (the ones residing in the user paths)
-// will get precedence over system installed ones for the same language.
-std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicType )
+#ifdef SYSTEM_DICTS
+// find old style dictionaries in system directories
+void GetOldStyleDicsInDir(
+    OUString aSystemDir, OUString aFormatName,
+    OUString aSystemSuffix, OUString aSystemPrefix,
+    std::vector< SvtLinguConfigDictionaryEntry >& aRes )
 {
-    std::vector< SvtLinguConfigDictionaryEntry > aRes;
-
-    if (!pDicType)
-        return aRes;
-
-    OUString aFormatName;
-    OUString aDicExtension;
-#ifdef SYSTEM_DICTS
-    OUString aSystemDir;
-    OUString aSystemPrefix;
-    OUString aSystemSuffix;
-#endif
-    if (strcmp( pDicType, "DICT" ) == 0)
-    {
-        aFormatName     = "DICT_SPELL";
-        aDicExtension   = ".dic";
-#ifdef SYSTEM_DICTS
-        aSystemDir      = DICT_SYSTEM_DIR;
-        aSystemSuffix   = aDicExtension;
-#endif
-    }
-    else if (strcmp( pDicType, "HYPH" ) == 0)
-    {
-        aFormatName     = "DICT_HYPH";
-        aDicExtension   = ".dic";
-#ifdef SYSTEM_DICTS
-        aSystemDir      = HYPH_SYSTEM_DIR;
-        aSystemPrefix   = "hyph_";
-        aSystemSuffix   = aDicExtension;
-#endif
-    }
-    else if (strcmp( pDicType, "THES" ) == 0)
-    {
-        aFormatName     = "DICT_THES";
-        aDicExtension   = ".dat";
-#ifdef SYSTEM_DICTS
-        aSystemDir      = THES_SYSTEM_DIR;
-        aSystemPrefix   = "th_";
-        aSystemSuffix   = "_v2.dat";
-#endif
-    }
-
-    if (aFormatName.isEmpty() || aDicExtension.isEmpty())
-        return aRes;
-
-#ifdef SYSTEM_DICTS
     osl::Directory aSystemDicts(aSystemDir);
     if (aSystemDicts.open() == osl::FileBase::E_None)
     {
@@ -168,6 +125,76 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
                     aRes.push_back( aDicEntry );
                 }
             }
+        }
+    }
+}
+#endif
+
+// build list of old style dictionaries (not as extensions) to use.
+// User installed dictionaries (the ones residing in the user paths)
+// will get precedence over system installed ones for the same language.
+std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicType )
+{
+    std::vector< SvtLinguConfigDictionaryEntry > aRes;
+
+    if (!pDicType)
+        return aRes;
+
+    OUString aFormatName;
+    OUString aDicExtension;
+#ifdef SYSTEM_DICTS
+    OUString aSystemDir;
+    OUString aSystemPrefix;
+    OUString aSystemSuffix;
+    OUString aShareDir;
+#endif
+    if (strcmp( pDicType, "DICT" ) == 0)
+    {
+        aFormatName     = "DICT_SPELL";
+        aDicExtension   = ".dic";
+#ifdef SYSTEM_DICTS
+        aSystemDir      = DICT_SYSTEM_DIR;
+        aSystemSuffix   = aDicExtension;
+        aShareDir       = "hunspell";
+#endif
+    }
+    else if (strcmp( pDicType, "HYPH" ) == 0)
+    {
+        aFormatName     = "DICT_HYPH";
+        aDicExtension   = ".dic";
+#ifdef SYSTEM_DICTS
+        aSystemDir      = HYPH_SYSTEM_DIR;
+        aSystemPrefix   = "hyph_";
+        aSystemSuffix   = aDicExtension;
+        aShareDir       = "hyphen";
+#endif
+    }
+    else if (strcmp( pDicType, "THES" ) == 0)
+    {
+        aFormatName     = "DICT_THES";
+        aDicExtension   = ".dat";
+#ifdef SYSTEM_DICTS
+        aSystemDir      = THES_SYSTEM_DIR;
+        aSystemPrefix   = "th_";
+        aSystemSuffix   = "_v2.dat";
+        aShareDir       = "mythes";
+#endif
+    }
+
+    if (aFormatName.isEmpty() || aDicExtension.isEmpty())
+        return aRes;
+
+#ifdef SYSTEM_DICTS
+    GetOldStyleDicsInDir(aSystemDir, aFormatName, aSystemSuffix, aSystemPrefix, aRes);
+
+    char* pXDGDataDirs = getenv("XDG_DATA_DIRS");
+    if (pXDGDataDirs)
+    {
+        for ( char* pDir = strtok(pXDGDataDirs, ":");  pDir;  pDir = strtok(NULL, ":") )
+        {
+            OUString aShare(pDir, strlen(pDir), osl_getThreadTextEncoding());
+            OUString aDir = "file://" + aShare + "/" + aShareDir;
+            GetOldStyleDicsInDir(aDir, aFormatName, aSystemSuffix, aSystemPrefix, aRes);
         }
     }
 #endif
