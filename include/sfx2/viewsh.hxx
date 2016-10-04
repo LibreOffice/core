@@ -331,12 +331,6 @@ public:
     void setTiledSearching(bool bTiledSearching);
     /// Are we doing tiled searching?
     bool isTiledSearching() const;
-    /// Set if we are doing tiled painting.
-    void setTiledPainting(bool bTiledPainting);
-    /// Are we doing tiled painting?
-    bool isTiledPainting() const;
-    /// Get if we are doing tiled painting.
-    bool getTiledPainting() const;
     /// See lok::Document::getPart().
     virtual int getPart() const;
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;

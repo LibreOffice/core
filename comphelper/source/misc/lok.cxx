@@ -19,6 +19,8 @@ static bool g_bActive(false);
 
 static bool g_bPartInInvalidation(false);
 
+static bool g_bTiledPainting(false);
+
 void setActive(bool bActive)
 {
     g_bActive = bActive;
@@ -37,6 +39,16 @@ void setPartInInvalidation(bool bPartInInvalidation)
 bool isPartInInvalidation()
 {
     return g_bPartInInvalidation;
+}
+
+void setTiledPainting(bool bTiledPainting)
+{
+    g_bTiledPainting = bTiledPainting;
+}
+
+bool isTiledPainting()
+{
+    return g_bTiledPainting;
 }
 
 static bool g_bLocalRendering(false);
