@@ -40,23 +40,22 @@ public:
     ~PopupWindowControllerImpl();
 
     void SetPopupWindow( vcl::Window* pPopupWindow, ToolBox* pToolBox );
+    void SetFloatingWindow();
     DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 
 private:
-    VclPtr<vcl::Window> mpPopupWindow;
+    VclPtr<vcl::Window> mpPopupWindow, mpFloatingWindow;
     VclPtr<ToolBox>     mpToolBox;
 };
 
 PopupWindowControllerImpl::PopupWindowControllerImpl()
-: mpPopupWindow( nullptr )
-, mpToolBox( nullptr )
 {
 }
 
 PopupWindowControllerImpl::~PopupWindowControllerImpl()
 {
-    if( mpPopupWindow )
-        SetPopupWindow(nullptr,nullptr);
+    SetPopupWindow(nullptr,nullptr);
+    SetFloatingWindow();
 }
 
 void PopupWindowControllerImpl::SetPopupWindow( vcl::Window* pPopupWindow, ToolBox* pToolBox )
@@ -75,15 +74,53 @@ void PopupWindowControllerImpl::SetPopupWindow( vcl::Window* pPopupWindow, ToolB
     }
 }
 
+void PopupWindowControllerImpl::SetFloatingWindow()
+{
+    if( mpFloatingWindow )
+    {
+        mpFloatingWindow->RemoveEventListener( LINK( this, PopupWindowControllerImpl, WindowEventListener ) );
+        mpFloatingWindow.disposeAndClear();
+    }
+    mpFloatingWindow = mpPopupWindow;
+    mpPopupWindow.clear();
+}
+
 IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&, rWindowEvent, void )
 {
     switch( rWindowEvent.GetId() )
     {
-    case VCLEVENT_WINDOW_CLOSE:
     case VCLEVENT_WINDOW_ENDPOPUPMODE:
+    {
+        EndPopupModeData* pData = static_cast< EndPopupModeData* >( rWindowEvent.GetData() );
+        if( pData && pData->mbTearoff )
+        {
+            vcl::Window::GetDockingManager()->SetFloatingMode( mpPopupWindow.get(), true );
+            vcl::Window::GetDockingManager()->SetPosSizePixel( mpPopupWindow.get(),
+                                                               pData->maFloatingPos.X(),
+                                                               pData->maFloatingPos.Y(),
+                                                               0, 0,
+                                                               PosSizeFlags::Pos );
+            SetFloatingWindow();
+            mpFloatingWindow->Show( true, ShowFlags::NoFocusChange | ShowFlags::NoActivate );
+        }
         SetPopupWindow(nullptr,nullptr);
         break;
-
+    }
+    case VCLEVENT_WINDOW_PREPARETOGGLEFLOATING:
+    {
+        if ( mpFloatingWindow && rWindowEvent.GetWindow() == mpFloatingWindow.get() )
+        {
+            bool* pData = static_cast< bool* >( rWindowEvent.GetData() );
+            *pData = false;
+        }
+        break;
+    }
+    case VCLEVENT_WINDOW_CLOSE:
+    {
+        SetPopupWindow(nullptr,nullptr);
+        SetFloatingWindow();
+        break;
+    }
     case VCLEVENT_WINDOW_SHOW:
     {
         if( mpPopupWindow )
@@ -133,6 +170,7 @@ sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& Servic
 // XComponent
 void SAL_CALL PopupWindowController::dispose() throw (RuntimeException, std::exception)
 {
+    mxImpl.reset();
     svt::ToolboxController::dispose();
 }
 
@@ -153,12 +191,22 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
         vcl::Window* pWin = createPopupWindow( pItemWindow ? pItemWindow : pToolBox );
         if( pWin )
         {
+            FloatWinPopupFlags eFloatFlags = FloatWinPopupFlags::GrabFocus |
+                                             FloatWinPopupFlags::AllMouseButtonClose |
+                                             FloatWinPopupFlags::NoMouseUpClose;
+
+            WinBits nWinBits;
+            if ( pWin->GetType() == WINDOW_DOCKINGWINDOW )
+                nWinBits = static_cast< DockingWindow* >( pWin )->GetFloatStyle();
+            else
+                nWinBits = pWin->GetStyle();
+
+            if ( nWinBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) )
+                eFloatFlags |= FloatWinPopupFlags::AllowTearOff;
+
             pWin->EnableDocking();
             mxImpl->SetPopupWindow(pWin,pToolBox);
-            vcl::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin,
-                                                           FloatWinPopupFlags::GrabFocus |
-                                                           FloatWinPopupFlags::AllMouseButtonClose |
-                                                           FloatWinPopupFlags::NoMouseUpClose );
+            vcl::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin, eFloatFlags );
         }
     }
     return Reference< awt::XWindow >();
