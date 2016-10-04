@@ -227,7 +227,6 @@ merge cppu::PropertySetMixinImpl with cppu::PropertySetMixin
 merge dbaccess::IPropertyContainer with dbaccess::OColumn
 merge dbaccess::IRefreshListener with dbaccess::OConnection
 merge dbaccess::OColumnWrapper with dbaccess::OTableColumnDescriptorWrapper
-merge dbaccess::StorageInputStream with dbaccess::StorageXMLInputStream
 merge dbaui::IEntryFilter with dbaui::(anonymous namespace)::FilterByEntryDataId
 merge dbaui::IUpdateHelper with dbaui::OParameterUpdateHelper
 merge dbaui::OSplitterView with dbaui::OApplicationDetailView
