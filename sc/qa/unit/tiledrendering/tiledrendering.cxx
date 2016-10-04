@@ -66,6 +66,7 @@ public:
     void testTextEditViews();
     void testTextEditViewInvalidations();
     void testGraphicInvalidate();
+    void testAutoSum();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -83,6 +84,7 @@ public:
     CPPUNIT_TEST(testTextEditViews);
     CPPUNIT_TEST(testTextEditViewInvalidations);
     CPPUNIT_TEST(testGraphicInvalidate);
+    CPPUNIT_TEST(testAutoSum);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -390,6 +392,7 @@ public:
     bool m_bFullInvalidateTiles;
     bool m_bInvalidateTiles;
     bool m_bViewLock;
+    OString m_sCellFormula;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
@@ -456,6 +459,11 @@ public:
             {
                 m_bInvalidateTiles = true;
             }
+        }
+        break;
+        case LOK_CALLBACK_CELL_FORMULA:
+        {
+            m_sCellFormula = pPayload;
         }
         }
     }
@@ -820,6 +828,24 @@ void ScTiledRenderingTest::testGraphicInvalidate()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
+void ScTiledRenderingTest::testAutoSum()
+{
+     // Load a document
+    comphelper::LibreOfficeKit::setActive();
+    createDoc("small.ods");
+
+    ViewCallback aView;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+    comphelper::dispatchCommand(".uno:AutoSum", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView.m_sCellFormula.startsWith("=SUM("));
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTiledRenderingTest);
