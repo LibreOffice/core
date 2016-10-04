@@ -154,6 +154,7 @@ struct UStringTraits
  */
 bool isRepresentableInteger(double fAbsValue)
 {
+    assert(fAbsValue >= 0.0);
     const sal_Int64 kMaxInt = (static_cast<sal_Int64>(1) << 53) - 1;
     if (fAbsValue <= static_cast<double>(kMaxInt))
     {
