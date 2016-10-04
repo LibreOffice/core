@@ -674,6 +674,8 @@ namespace sw { namespace mark
 
         // boolean indicating, if at least one mark has been moved while collecting marks for deletion
         bool bMarksMoved = false;
+        // have marks in the range been skipped instead of deleted
+        bool bMarksSkipDeletion = false;
 
         // copy all bookmarks in the move area to a vector storing all position data as offset
         // reassignment is performed after the move
@@ -747,6 +749,10 @@ namespace sw { namespace mark
                         pSaveBkmk->push_back( SaveBookmark( *pMark, rStt, pSttIdx ) );
                     }
                     vMarksToDelete.push_back(ppMark);
+                }
+                else
+                {
+                    bMarksSkipDeletion = true;
                 }
             }
             else if ( bIsPosInRange != bIsOtherPosInRange )
@@ -826,7 +832,9 @@ namespace sw { namespace mark
             }
         } // scope to kill vDelay
 
-        if ( bIsSortingNeeded )
+        // also need to sort if both marks were moved and not-deleted because
+        // the not-deleted marks could be in wrong order vs. the moved ones
+        if (bIsSortingNeeded || (bMarksMoved && bMarksSkipDeletion))
         {
             sortMarks();
         }
