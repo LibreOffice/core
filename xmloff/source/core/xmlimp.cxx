@@ -736,7 +736,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     SvXMLImportContextRef xContext;
     if(!maContexts.empty())
     {
-        xContext.set(maContexts.back()->CreateChildContext(nPrefix, aLocalName, xAttrList));
+        xContext.set(maContexts.top()->CreateChildContext(nPrefix, aLocalName, xAttrList));
         SAL_WARN_IF( !xContext.is() || (xContext->GetPrefix() != nPrefix), "xmloff.core",
                 "SvXMLImport::startElement: created context has wrong prefix" );
     }
@@ -767,7 +767,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     xContext->StartElement( xAttrList );
 
     // Push context on stack.
-    maContexts.push_back( xContext );
+    maContexts.push(xContext);
 }
 
 void SAL_CALL SvXMLImport::endElement( const OUString&
@@ -787,8 +787,8 @@ rName
 
     {
         // Get topmost context and remove it from the stack.
-        SvXMLImportContextRef xContext = maContexts.back();
-        maContexts.pop_back();
+        SvXMLImportContextRef xContext = maContexts.top();
+        maContexts.pop();
 
 #ifdef DBG_UTIL
         // Non product only: check if endElement call matches startELement call.
@@ -819,11 +819,11 @@ void SAL_CALL SvXMLImport::characters( const OUString& rChars )
 {
     if ( !maFastContexts.empty() )
     {
-        maFastContexts.back()->characters( rChars );
+        maFastContexts.top()->characters( rChars );
     }
     else if( !maContexts.empty() )
     {
-        maContexts.back()->Characters( rChars );
+        maContexts.top()->Characters( rChars );
     }
 }
 
@@ -831,7 +831,7 @@ void SvXMLImport::Characters( const OUString& rChars )
 {
     if( !maContexts.empty() )
     {
-        maContexts.back()->Characters( rChars );
+        maContexts.top()->Characters( rChars );
     }
 }
 
@@ -861,7 +861,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     uno::Reference<XFastContextHandler> xContext;
     if (!maFastContexts.empty())
     {
-        uno::Reference< XFastContextHandler > pHandler = maFastContexts.back();
+        uno::Reference<XFastContextHandler> pHandler = maFastContexts.top();
         xContext = pHandler->createFastChildContext( Element, Attribs );
     }
     else
@@ -884,11 +884,11 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
         SvXMLImportContext *pContext = dynamic_cast<SvXMLImportContext*>( xContext.get() );
         if( pContext && pRewindMap )
             pContext->PutRewindMap(std::move(pRewindMap));
-        maContexts.push_back( pContext );
+        maContexts.push(pContext);
     }
 
     // Push context on stack.
-    maFastContexts.push_back( xContext );
+    maFastContexts.push(xContext);
 }
 
 void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rPrefix, const OUString & rLocalName,
@@ -898,7 +898,7 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rPrefix, const 
     uno::Reference<XFastContextHandler> xContext;
     if (!maFastContexts.empty())
     {
-        uno::Reference< XFastContextHandler > pHandler = maFastContexts.back();
+        uno::Reference<XFastContextHandler> pHandler = maFastContexts.top();
         xContext = pHandler->createUnknownChildContext( rPrefix, rLocalName, Attribs );
     }
     else
@@ -908,7 +908,7 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rPrefix, const 
         xContext.set( new SvXMLImportContext( *this ) );
 
     xContext->startUnknownElement( rPrefix, rLocalName, Attribs );
-    maFastContexts.push_back( xContext );
+    maFastContexts.push(xContext);
 }
 
 void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
@@ -916,12 +916,12 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
 {
     if (!maFastContexts.empty())
     {
-        uno::Reference< XFastContextHandler > xContext = maFastContexts.back();
-        maFastContexts.pop_back();
+        uno::Reference<XFastContextHandler> xContext = maFastContexts.top();
+        maFastContexts.pop();
         isFastContext = true;
         xContext->endFastElement( Element );
-        if ( isFastContext )
-            maContexts.pop_back();
+        if (isFastContext)
+            maContexts.pop();
 
         xContext = nullptr;
     }
@@ -932,8 +932,8 @@ void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OU
 {
     if (!maFastContexts.empty())
     {
-        uno::Reference< XFastContextHandler > xContext = maFastContexts.back();
-        maFastContexts.pop_back();
+        uno::Reference<XFastContextHandler> xContext = maFastContexts.top();
+        maFastContexts.pop();
         xContext->endUnknownElement( rPrefix, rLocalName );
         xContext = nullptr;
     }
