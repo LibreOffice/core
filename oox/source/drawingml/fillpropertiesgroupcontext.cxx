@@ -190,6 +190,9 @@ ContextHandlerRef BlipContext::onCreateContext(
             mrBlipProps.moBrightness = rAttribs.getInteger( XML_bright );
             mrBlipProps.moContrast = rAttribs.getInteger( XML_contrast );
         break;
+        case A_TOKEN( alphaModFix ):
+            mrBlipProps.moAlphaModFix = rAttribs.getInteger(XML_amt);
+        break;
     }
     return nullptr;
 }
