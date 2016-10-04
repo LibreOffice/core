@@ -734,12 +734,9 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     // If there are contexts already, call a CreateChildContext at the topmost
     // context. Otherwise, create a default context.
     SvXMLImportContextRef xContext;
-    sal_uInt16 nCount = maContexts.size();
-    if( nCount > 0 )
+    if(!maContexts.empty())
     {
-        xContext.set(maContexts[nCount - 1]->CreateChildContext( nPrefix,
-                                                                 aLocalName,
-                                                                 xAttrList ));
+        xContext.set(maContexts.back()->CreateChildContext(nPrefix, aLocalName, xAttrList));
         SAL_WARN_IF( !xContext.is() || (xContext->GetPrefix() != nPrefix), "xmloff.core",
                 "SvXMLImport::startElement: created context has wrong prefix" );
     }
@@ -780,8 +777,7 @@ rName
 )
     throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
-    auto const nCount = maContexts.size();
-    if (nCount == 0)
+    if (maContexts.empty())
     {
         SAL_WARN("xmloff.core", "SvXMLImport::endElement: no context left");
         return;
@@ -863,10 +859,9 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
 {
     //Namespace handling is unnecessary. It is done by the fastparser itself.
     uno::Reference<XFastContextHandler> xContext;
-    sal_uInt16 nCount = maFastContexts.size();
-    if( nCount > 0 )
+    if (!maFastContexts.empty())
     {
-        uno::Reference< XFastContextHandler > pHandler = maFastContexts[nCount - 1];
+        uno::Reference< XFastContextHandler > pHandler = maFastContexts.back();
         xContext = pHandler->createFastChildContext( Element, Attribs );
     }
     else
@@ -901,10 +896,9 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rPrefix, const 
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     uno::Reference<XFastContextHandler> xContext;
-    sal_uInt16 nCount = maFastContexts.size();
-    if( nCount > 0 )
+    if (!maFastContexts.empty())
     {
-        uno::Reference< XFastContextHandler > pHandler = maFastContexts[nCount - 1];
+        uno::Reference< XFastContextHandler > pHandler = maFastContexts.back();
         xContext = pHandler->createUnknownChildContext( rPrefix, rLocalName, Attribs );
     }
     else
@@ -920,8 +914,7 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rPrefix, const 
 void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    sal_uInt16 nCount = maFastContexts.size();
-    if( nCount > 0 )
+    if (!maFastContexts.empty())
     {
         uno::Reference< XFastContextHandler > xContext = maFastContexts.back();
         maFastContexts.pop_back();
@@ -937,8 +930,7 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
 void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OUString & rLocalName)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    sal_uInt16 nCount = maFastContexts.size();
-    if( nCount > 0 )
+    if (!maFastContexts.empty())
     {
         uno::Reference< XFastContextHandler > xContext = maFastContexts.back();
         maFastContexts.pop_back();
