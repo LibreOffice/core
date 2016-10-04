@@ -25,6 +25,8 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 
+#include <tools/urlobj.hxx>
+
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
 #include <swdtflvr.hxx>
@@ -145,7 +147,8 @@ public:
                                          ( OUString( m_directories.getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename)) ) ) ) );
         mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_DATA_SOURCE_NAME ), uno::Any( aDBName ) ) );
         mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_OUTPUT_URL ), uno::Any( aWorkDir ) ) );
-        mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_FILE_NAME_PREFIX ), uno::Any( aPrefix )) );
+        if (file)
+            mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_FILE_NAME_PREFIX ), uno::Any( aPrefix )) );
 
         if (bPrefixIsColumn)
             mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_FILE_NAME_FROM_COLUMN ), uno::Any( true ) ) );
@@ -173,7 +176,7 @@ public:
 
     }
 
-    void executeMailMerge()
+    void executeMailMerge( bool bDontLoadResult = false )
     {
         uno::Sequence< beans::NamedValue > aSeqMailMergeArgs = comphelper::containerToSequence( mMMargs );
         uno::Any res = mxJob->execute( aSeqMailMergeArgs );
@@ -196,6 +199,8 @@ public:
                 bOk &= rValue >>= mnCurOutputType;
             else if (rName == UNO_NAME_FILE_NAME_FROM_COLUMN)
                 bOk &= rValue >>= bMMFilenameFromColumn;
+            else if (rName == UNO_NAME_DOCUMENT_URL)
+                bOk &= rValue >>= msMailMergeDocumentURL;
         }
 
         CPPUNIT_ASSERT(bOk);
@@ -214,7 +219,7 @@ public:
         else
         {
             CPPUNIT_ASSERT(res == true);
-            if( !bMMFilenameFromColumn )
+            if( !bMMFilenameFromColumn && !bDontLoadResult )
                 loadMailMergeDocument( 0 );
         }
     }
@@ -252,7 +257,17 @@ public:
     */
     void loadMailMergeDocument( int number )
     {
-        OUString name = msMailMergeOutputPrefix + OUString::number( number ) + ".odt";
+        OUString name;
+        if (!msMailMergeOutputPrefix.isEmpty())
+            name = msMailMergeOutputPrefix;
+        else
+        {
+            INetURLObject aURLObj;
+            aURLObj.SetSmartProtocol( INetProtocol::File );
+            aURLObj.SetSmartURL( msMailMergeDocumentURL );
+            name = aURLObj.GetBase();
+        }
+        name += OUString::number( number ) + ".odt";
         loadMailMergeDocument( name );
     }
 
@@ -262,6 +277,7 @@ protected:
 
     uno::Reference< css::task::XJob > mxJob;
     std::vector< beans::NamedValue > mMMargs;
+    OUString msMailMergeDocumentURL;
     OUString msMailMergeOutputURL;
     OUString msMailMergeOutputPrefix;
     sal_Int16 mnCurOutputType;
@@ -601,6 +617,28 @@ DECLARE_FILE_MAILMERGE_TEST_COLUMN(testDirMailMerge, "simple-mail-merge.odt", "1
         CPPUNIT_ASSERT_EQUAL( OUString( "lastname" + OUString::number( doc )), getRun( getParagraph( 2 ), 1 )->getString());
         CPPUNIT_ASSERT_EQUAL( OUString( "Another fixed text." ), getRun( getParagraph( 3 ), 1 )->getString());
     }
+}
+
+DECLARE_FILE_MAILMERGE_TEST(testTdf102010, "empty.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    // Create "correct" automatic filename for non-user-supplied-prefix
+    for (auto aNamedValueIter = mMMargs.begin(); aNamedValueIter != mMMargs.end();)
+    {
+        if ( aNamedValueIter->Name == UNO_NAME_FILE_NAME_PREFIX )
+            aNamedValueIter = mMMargs.erase( aNamedValueIter );
+        else
+        {
+            std::cout << aNamedValueIter->Name << ": " << aNamedValueIter->Value << std::endl;
+            ++aNamedValueIter;
+        }
+    }
+    mMMargs.push_back( beans::NamedValue( OUString( UNO_NAME_SAVE_AS_SINGLE_FILE ), uno::Any( true ) ) );
+
+    // Generate correct mail merge result filename
+    executeMailMerge();
+    // Don't overwrite previous result
+    executeMailMerge( true );
+    loadMailMergeDocument( 1 );
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
