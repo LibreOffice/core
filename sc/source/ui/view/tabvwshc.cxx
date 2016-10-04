@@ -24,6 +24,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/editview.hxx>
+#include <inputhdl.hxx>
 
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -540,6 +541,158 @@ void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
     const ScGridWindow* pWin = GetViewData().GetActiveWin();
     if (pWin)
         pWin->updateLibreOfficeKitCellCursor(pOtherShell);
+}
+
+bool ScTabViewShell::UseSubTotal(ScRangeList* pRangeList)
+{
+    bool bSubTotal = false;
+    ScDocument* pDoc = GetViewData().GetDocument();
+    size_t nRangeCount (pRangeList->size());
+    size_t nRangeIndex (0);
+    while (!bSubTotal && nRangeIndex < nRangeCount)
+    {
+        const ScRange* pRange = (*pRangeList)[nRangeIndex];
+        if( pRange )
+        {
+            SCTAB nTabEnd(pRange->aEnd.Tab());
+            SCTAB nTab(pRange->aStart.Tab());
+            while (!bSubTotal && nTab <= nTabEnd)
+            {
+                SCROW nRowEnd(pRange->aEnd.Row());
+                SCROW nRow(pRange->aStart.Row());
+                while (!bSubTotal && nRow <= nRowEnd)
+                {
+                    if (pDoc->RowFiltered(nRow, nTab))
+                        bSubTotal = true;
+                    else
+                        ++nRow;
+                }
+                ++nTab;
+            }
+        }
+        ++nRangeIndex;
+    }
+
+    const ScDBCollection::NamedDBs& rDBs = pDoc->GetDBCollection()->getNamedDBs();
+    ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
+    for (; !bSubTotal && itr != itrEnd; ++itr)
+    {
+        const ScDBData& rDB = **itr;
+        if (!rDB.HasAutoFilter())
+            continue;
+
+        nRangeIndex = 0;
+        while (!bSubTotal && nRangeIndex < nRangeCount)
+        {
+            const ScRange* pRange = (*pRangeList)[nRangeIndex];
+            if( pRange )
+            {
+                ScRange aDBArea;
+                rDB.GetArea(aDBArea);
+                if (aDBArea.Intersects(*pRange))
+                    bSubTotal = true;
+            }
+            ++nRangeIndex;
+        }
+    }
+    return bSubTotal;
+}
+
+const OUString ScTabViewShell::DoAutoSum()
+{
+    OUString aFormula;
+    ScModule* pScMod = SC_MOD();
+    const ScMarkData& rMark = GetViewData().GetMarkData();
+    if ( rMark.IsMarked() || rMark.IsMultiMarked() )
+    {
+        ScRangeList aMarkRangeList;
+        rMark.FillRangeListWithMarks( &aMarkRangeList, false );
+        ScDocument* pDoc = GetViewData().GetDocument();
+
+        // check if one of the marked ranges is empty
+        bool bEmpty = false;
+        const size_t nCount = aMarkRangeList.size();
+        for ( size_t i = 0; i < nCount; ++i )
+        {
+            const ScRange aRange( *aMarkRangeList[i] );
+            if ( pDoc->IsBlockEmpty( aRange.aStart.Tab(),
+                 aRange.aStart.Col(), aRange.aStart.Row(),
+                 aRange.aEnd.Col(), aRange.aEnd.Row() ) )
+            {
+                bEmpty = true;
+                break;
+            }
+        }
+
+        if ( bEmpty )
+        {
+            ScRangeList aRangeList;
+            const bool bDataFound = GetAutoSumArea( aRangeList );
+            if ( bDataFound )
+            {
+                ScAddress aAddr = aRangeList.back()->aEnd;
+                aAddr.IncRow();
+                const bool bSubTotal( UseSubTotal( &aRangeList ) );
+                EnterAutoSum( aRangeList, bSubTotal, aAddr );
+            }
+        }
+        else
+        {
+            const bool bSubTotal( UseSubTotal( &aMarkRangeList ) );
+            for ( size_t i = 0; i < nCount; ++i )
+            {
+                const ScRange aRange( *aMarkRangeList[i] );
+                const bool bSetCursor = ( i == nCount - 1 );
+                const bool bContinue = ( i != 0 );
+                if ( !AutoSum( aRange, bSubTotal, bSetCursor, bContinue ) )
+                {
+                    MarkRange( aRange, false );
+                    SetCursor( aRange.aEnd.Col(), aRange.aEnd.Row() );
+                    const ScRangeList aRangeList;
+                    ScAddress aAddr = aRange.aEnd;
+                    aAddr.IncRow();
+                    aFormula = GetAutoSumFormula( aRangeList, bSubTotal, aAddr );
+                    break;
+                }
+            }
+        }
+    }
+    else // Only insert into input row
+    {
+        ScRangeList aRangeList;
+        const bool bDataFound = GetAutoSumArea( aRangeList );
+        const bool bSubTotal( UseSubTotal( &aRangeList ) );
+        ScAddress aAddr = GetViewData().GetCurPos();
+        aFormula = GetAutoSumFormula( aRangeList, bSubTotal, aAddr );
+
+        if ( bDataFound && pScMod->IsEditMode() )
+        {
+            ScInputHandler* pHdl = pScMod->GetInputHdl( this );
+            if ( pHdl )
+            {
+                pHdl->InitRangeFinder( aFormula );
+
+                //! SetSelection at the InputHandler?
+                //! Set bSelIsRef?
+                const sal_Int32 nOpen = aFormula.indexOf('(');
+                const sal_Int32 nLen = aFormula.getLength();
+                if ( nOpen != -1 && nLen > nOpen )
+                {
+                    sal_uInt8 nAdd(1);
+                    if (bSubTotal)
+                        nAdd = 3;
+                    ESelection aSel(0,nOpen+nAdd,0,nLen-1);
+                    EditView* pTableView = pHdl->GetTableView();
+                    if (pTableView)
+                        pTableView->SetSelection(aSel);
+                    EditView* pTopView = pHdl->GetTopView();
+                    if (pTopView)
+                        pTopView->SetSelection(aSel);
+                }
+            }
+        }
+    }
+    return aFormula;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
