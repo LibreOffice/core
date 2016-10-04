@@ -697,6 +697,7 @@ LIBO_UDK_5.2 { # symbols available in >= LibO 5.2
 
 LIBO_UDK_5.3 { # symbols available in >= LibO 5.3
     global:
+        rtl_math_approxEqual;
         rtl_uString_newConcatUtf16L;
         rtl_uString_newReplaceAllAsciiLUtf16L;
         rtl_uString_newReplaceAllUtf16LAsciiL;
@@ -704,7 +705,6 @@ LIBO_UDK_5.3 { # symbols available in >= LibO 5.3
         rtl_uString_newReplaceFirstAsciiLUtf16L;
         rtl_uString_newReplaceFirstUtf16LAsciiL;
         rtl_uString_newReplaceFirstUtf16LUtf16L;
-        rtl_math_approxEqual;
 } LIBO_UDK_5.2;
 
 PRIVATE_1.0 {

@@ -427,6 +427,8 @@ SAL_DLLPUBLIC double SAL_CALL rtl_math_approxValue(double fValue) SAL_THROW_EXTE
 
     @attention
     approxEqual( value!=0.0, 0.0 ) _never_ yields true.
+
+    @since LibreOffice 5.3
  */
 SAL_DLLPUBLIC bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C();
 
