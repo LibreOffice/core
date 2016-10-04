@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FUOLTEXT_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FUOLTEXT_HXX
 
-#include "fuoutl.hxx"
+#include "fupoor.hxx"
 
 class SdDrawDocument;
 class SfxRequest;
@@ -31,16 +31,20 @@ namespace sd {
 
 class View;
 class ViewShell;
+class OutlineView;
+class OutlineViewShell;
 
 /**
  * text functions in outline mode
  */
 class FuOutlineText
-    : public FuOutline
+    : public FuPoor
 {
 public:
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+
+    virtual bool Command(const CommandEvent& rCEvt) override;
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
@@ -51,9 +55,6 @@ public:
     virtual void DoCopy() override;
     virtual void DoPaste() override;
     virtual void DoPasteUnformatted() override;
-
-    virtual void Activate() override;           // Function aktivieren
-    virtual void Deactivate() override;         // Function deaktivieren
 
     /** Call this method when the text in the outliner (may) has changed.
         It will invalidate some slots of the view frame and update the
@@ -69,6 +70,8 @@ protected:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
+    OutlineViewShell* pOutlineViewShell;
+    OutlineView* pOutlineView;
 };
 
 } // end of namespace sd

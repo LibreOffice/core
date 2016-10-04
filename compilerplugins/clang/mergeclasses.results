@@ -290,7 +290,6 @@ merge sc::opencl::SumOfProduct with sc::opencl::OpSumProduct
 merge sc::opencl::XNPV with sc::opencl::OpXNPV
 merge sd::BroadcastHelperOwner with sd::DrawController
 merge sd::ClientInfo with sd::ClientInfoInternal
-merge sd::FuOutline with sd::FuOutlineText
 merge sd::IBluetoothSocket with sd::BufferedStreamSocket
 merge sd::ICustomAnimationListController with sd::CustomAnimationPane
 merge sd::sidebar::IDisposable with sd::sidebar::PanelBase

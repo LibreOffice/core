@@ -289,7 +289,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/func/fuoaprms \
 	sd/source/ui/func/fuolbull \
 	sd/source/ui/func/fuoltext \
-	sd/source/ui/func/fuoutl \
 	sd/source/ui/func/fupage \
 	sd/source/ui/func/fuparagr \
 	sd/source/ui/func/fupoor \
