@@ -19,6 +19,7 @@
 
 #include "storagexmlstream.hxx"
 
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -128,10 +129,14 @@ namespace dbaccess
     StorageXMLInputStream::StorageXMLInputStream( const Reference<XComponentContext>& i_rContext,
                                                   const Reference< XStorage >& i_rParentStorage,
                                                   const OUString& i_rStreamName )
-        :StorageInputStream( i_rParentStorage, i_rStreamName )
-        ,m_pData( new StorageXMLInputStream_Data )
     {
-        m_pData->xParser.set( Parser::create(i_rContext) );
+        ENSURE_OR_THROW( i_rParentStorage.is(), "illegal stream" );
+
+        const Reference< css::io::XStream > xStream(
+            i_rParentStorage->openStreamElement( i_rStreamName, css::embed::ElementModes::READ ), UNO_QUERY_THROW );
+        m_xInputStream.set( xStream->getInputStream(), css::uno::UNO_SET_THROW );
+
+        m_xParser.set( Parser::create(i_rContext) );
     }
 
     void StorageXMLInputStream::import( const Reference< XDocumentHandler >& i_rHandler )
@@ -139,10 +144,10 @@ namespace dbaccess
         ENSURE_OR_THROW( i_rHandler.is(), "illegal document handler (NULL)" );
 
         InputSource aInputSource;
-        aInputSource.aInputStream = getInputStream();
+        aInputSource.aInputStream = m_xInputStream;
 
-        m_pData->xParser->setDocumentHandler( i_rHandler );
-        m_pData->xParser->parseStream( aInputSource );
+        m_xParser->setDocumentHandler( i_rHandler );
+        m_xParser->parseStream( aInputSource );
     }
 
     StorageXMLInputStream::~StorageXMLInputStream()

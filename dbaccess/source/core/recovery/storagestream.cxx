@@ -60,21 +60,6 @@ namespace dbaccess
         // (legitimately) do not call this method here.
     }
 
-    // StorageInputStream
-    StorageInputStream::StorageInputStream( const Reference< XStorage >& i_rParentStorage,
-                                            const OUString& i_rStreamName
-                                          )
-    {
-        ENSURE_OR_THROW( i_rParentStorage.is(), "illegal stream" );
-
-        const Reference< XStream > xStream(
-            i_rParentStorage->openStreamElement( i_rStreamName, ElementModes::READ ), UNO_QUERY_THROW );
-        m_xInputStream.set( xStream->getInputStream(), UNO_SET_THROW );
-    }
-
-    StorageInputStream::~StorageInputStream()
-    {
-    }
 
 } // namespace dbaccess
 
