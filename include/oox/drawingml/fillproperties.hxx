@@ -121,6 +121,7 @@ struct BlipFillProperties
     Color                 maDuotoneColors[2];     /// Duotone Colors
 
     ArtisticEffectProperties maEffect;          /// Artistic effect, not supported by core.
+    OptValue<sal_Int32> moAlphaModFix; ///< Alpha Modulate Fixed Effect.
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const BlipFillProperties& rSourceProps );
