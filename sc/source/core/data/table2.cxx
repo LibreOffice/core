@@ -2485,7 +2485,7 @@ void ScTable::RemoveCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex
     }
 }
 
-void ScTable::ApplyStyle( SCCOL nCol, SCROW nRow, const ScStyleSheet& rStyle )
+void ScTable::ApplyStyle( SCCOL nCol, SCROW nRow, const ScStyleSheet* rStyle )
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].ApplyStyle( nRow, rStyle );

@@ -464,7 +464,7 @@ public:
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, short nNewType );
 
-    void        ApplyStyle( SCROW nRow, const ScStyleSheet& rStyle );
+    void        ApplyStyle( SCROW nRow, const ScStyleSheet* rStyle );
     void        ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle );
     void        ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark);
     void        ApplySelectionLineStyle( const ScMarkData& rMark,

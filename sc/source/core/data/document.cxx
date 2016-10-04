@@ -4750,7 +4750,7 @@ void ScDocument::ApplyStyle( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScStyleSh
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
-            maTabs[nTab]->ApplyStyle( nCol, nRow, rStyle );
+            maTabs[nTab]->ApplyStyle( nCol, nRow, &rStyle );
 }
 
 void ScDocument::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow,

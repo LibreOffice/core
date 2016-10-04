@@ -548,13 +548,13 @@ void ScColumn::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
     pAttrArray->RemoveCondFormat( nStartRow, nEndRow, nIndex );
 }
 
-void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet& rStyle )
+void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet* rStyle )
 {
     const ScPatternAttr* pPattern = pAttrArray->GetPattern(nRow);
     std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pPattern));
     if (pNewPattern)
     {
-        pNewPattern->SetStyleSheet(const_cast<ScStyleSheet*>(&rStyle));
+        pNewPattern->SetStyleSheet(const_cast<ScStyleSheet*>(rStyle));
         pAttrArray->SetPattern(nRow, pNewPattern.get(), true);
     }
 }

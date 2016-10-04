@@ -673,7 +673,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     // Transfer template too
                     //TODO: Merge ApplyPattern to AttrArray ??
                     if ( pStyleSheet )
-                        aCol[nCol].ApplyStyle( static_cast<SCROW>(nRow), *pStyleSheet );
+                        aCol[nCol].ApplyStyle( static_cast<SCROW>(nRow), pStyleSheet );
 
                     //  Use ApplyPattern instead of SetPattern to keep old MergeFlags
                     if ( pNewPattern )

@@ -687,7 +687,7 @@ bool ScTable::ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW&
                                         rSearchItem.GetReplaceString(), SfxStyleFamily::Para ));
 
         if (pReplaceStyle)
-            ApplyStyle( rCol, rRow, *pReplaceStyle );
+            ApplyStyle( rCol, rRow, pReplaceStyle );
         else
         {
             OSL_FAIL("pReplaceStyle==0");

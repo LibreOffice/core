@@ -2094,7 +2094,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             aOutString += ScGlobal::GetRscString( nStrId );
                         }
                         SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, aOutString );
-                        ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, *pStyle );
+                        ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle );
 
                         ++nRow;
                         ++nEndRow;
@@ -2148,7 +2148,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             SetFormulaCell(nResCols[nResult], iEntry->nDestRow, pCell);
             if ( nResCols[nResult] != nGroupCol[iEntry->nGroupNo] )
             {
-                ApplyStyle( nResCols[nResult], iEntry->nDestRow, *pStyle );
+                ApplyStyle( nResCols[nResult], iEntry->nDestRow, pStyle );
 
                 lcl_RemoveNumberFormat( this, nResCols[nResult], iEntry->nDestRow );
             }
