@@ -70,28 +70,32 @@ public:
         myfile.close();
     }
 
+    bool shouldVisitTemplateInstantiations () const { return true; }
+
     bool VisitVarDecl(const VarDecl *);
     bool VisitFieldDecl(const FieldDecl *);
     bool VisitCXXConstructExpr( const CXXConstructExpr* var );
     bool VisitCXXRecordDecl( const CXXRecordDecl* decl);
-    bool VisitFunctionDecl( const FunctionDecl* decl);
-    bool VisitCallExpr(const CallExpr* decl);
 };
 
 bool startsWith(const std::string& rStr, const char* pSubStr) {
     return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
 }
 
-void addToInstantiatedSet(const std::string& s)
+bool ignoreClass(StringRef s)
 {
     // ignore stuff in the standard library, and UNO stuff we can't touch.
     if (startsWith(s, "rtl::") || startsWith(s, "sal::") || startsWith(s, "com::sun::")
         || startsWith(s, "std::") || startsWith(s, "boost::")
         || s == "OString" || s == "OUString" || s == "bad_alloc")
     {
-        return;
+        return true;
     }
-    instantiatedSet.insert(s);
+    // ignore instantiations of pointers and arrays
+    if (s.endswith("*") || s.endswith("]")) {
+        return true;
+    }
+    return false;
 }
 
 // check for implicit construction
@@ -100,7 +104,9 @@ bool MergeClasses::VisitVarDecl( const VarDecl* pVarDecl )
     if (ignoreLocation(pVarDecl)) {
         return true;
     }
-    addToInstantiatedSet(pVarDecl->getType().getAsString());
+    std::string s = pVarDecl->getType().getAsString();
+    if (!ignoreClass(s))
+        instantiatedSet.insert(s);
     return true;
 }
 
@@ -110,7 +116,9 @@ bool MergeClasses::VisitFieldDecl( const FieldDecl* pFieldDecl )
     if (ignoreLocation(pFieldDecl)) {
         return true;
     }
-    addToInstantiatedSet(pFieldDecl->getType().getAsString());
+    std::string s = pFieldDecl->getType().getAsString();
+    if (!ignoreClass(s))
+        instantiatedSet.insert(s);
     return true;
 }
 
@@ -126,7 +134,8 @@ bool MergeClasses::VisitCXXConstructExpr( const CXXConstructExpr* pCXXConstructE
     const CXXConstructorDecl* pCXXConstructorDecl = pCXXConstructExpr->getConstructor();
     const CXXRecordDecl* pParentCXXRecordDecl = pCXXConstructorDecl->getParent();
     std::string s = pParentCXXRecordDecl->getQualifiedNameAsString();
-    addToInstantiatedSet(s);
+    if (!ignoreClass(s))
+        instantiatedSet.insert(s);
     return true;
 }
 
@@ -135,62 +144,25 @@ bool MergeClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     if (ignoreLocation(decl)) {
         return true;
     }
-    if (decl->hasDefinition())
+    if (decl->isThisDeclarationADefinition())
     {
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(decl->getCanonicalDecl()->getLocStart());
         std::string filename = compiler.getSourceManager().getFilename(spellingLocation);
         filename = filename.substr(strlen(SRCDIR));
-        definitionMap.insert( std::pair<std::string,std::string>(decl->getQualifiedNameAsString(), filename) );
+        std::string s = decl->getQualifiedNameAsString();
+        if (ignoreClass(s))
+            return true;
+        definitionMap.insert( std::pair<std::string,std::string>(s, filename) );
         for (auto it = decl->bases_begin(); it != decl->bases_end(); ++it)
         {
             const CXXBaseSpecifier spec = *it;
             // need to look through typedefs, hence the getUnqualifiedDesugaredType
             QualType baseType = spec.getType().getDesugaredType(compiler.getASTContext());
-            childToParentClassSet.insert( std::pair<std::string,std::string>(decl->getQualifiedNameAsString(),  baseType.getAsString()) );
+            childToParentClassSet.insert( std::pair<std::string,std::string>(s, baseType.getAsString()) );
         }
     }
     return true;
 }
-
-bool MergeClasses::VisitFunctionDecl(const FunctionDecl* decl)
-{
-    if (ignoreLocation(decl)) {
-        return true;
-    }
-    return true;
-}
-
-bool startswith(const std::string& s, const std::string& prefix)
-{
-    return s.rfind(prefix,0) == 0;
-}
-
-bool endswith(const std::string& s, const std::string& suffix)
-{
-    return s.rfind(suffix) == (s.size()-suffix.size());
-}
-
-bool MergeClasses::VisitCallExpr(const CallExpr* decl)
-{
-    if (ignoreLocation(decl)) {
-        return true;
-    }
-    // VclPtr<T>::Create using a forwarding constructor, so we need to handle it differently in order
-    // to pick up the instantiation via it.
-    if (decl->getCalleeDecl() && isa<CXXMethodDecl>(decl->getCalleeDecl()))
-    {
-        const CXXMethodDecl * pMethod = dyn_cast<CXXMethodDecl>(decl->getCalleeDecl());
-        std::string s = pMethod->getQualifiedNameAsString();
-        if (startswith(s, "VclPtr<") && endswith(s, ">::Create"))
-        {
-            const ClassTemplateSpecializationDecl *pTemplateDecl = dyn_cast<ClassTemplateSpecializationDecl>(pMethod->getParent());
-            QualType windowType = pTemplateDecl->getTemplateArgs()[0].getAsType();
-            instantiatedSet.insert(windowType.getAsString());
-        }
-    }
-    return true;
-}
-
 
 loplugin::Plugin::Registration< MergeClasses > X("mergeclasses", false);
 
