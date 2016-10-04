@@ -31,6 +31,7 @@
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/popupwindowcontroller.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <svl/style.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/borderhelper.hxx>
@@ -247,12 +248,11 @@ void SvxFrmValueSet_Impl::MouseButtonUp( const MouseEvent& rMEvt )
     ValueSet::MouseButtonUp(rMEvt);
 }
 
-class SvxFrameWindow_Impl : public SfxPopupWindow
+class SvxFrameWindow_Impl : public svtools::ToolbarPopup
 {
-    using FloatingWindow::StateChanged;
-
 private:
     VclPtr<SvxFrmValueSet_Impl> aFrameSet;
+    rtl::Reference< svt::ToolboxController > mpController;
     ImageList                   aImgList;
     bool                        bParagraphMode;
 
@@ -263,14 +263,11 @@ protected:
     virtual void    GetFocus() override;
 
 public:
-    SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
+    SvxFrameWindow_Impl( const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, svt::ToolboxController* pController );
     virtual ~SvxFrameWindow_Impl() override;
     virtual void dispose() override;
 
-    void            StartSelection();
-
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState ) override;
+    virtual void    statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
@@ -1599,12 +1596,12 @@ Color BorderColorStatus::GetColor()
 }
 
 
-SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
-    SfxPopupWindow( nId, rFrame, pParentWindow, WB_STDPOPUP | WB_OWNERDRAWDECORATION | WB_CLOSEABLE | WB_MOVEABLE ),
+SvxFrameWindow_Impl::SvxFrameWindow_Impl (const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, svt::ToolboxController* pController ) :
+    ToolbarPopup( rFrame, pParentWindow, WB_STDPOPUP | WB_MOVEABLE | WB_CLOSEABLE ),
     aFrameSet   ( VclPtr<SvxFrmValueSet_Impl>::Create(this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
+    mpController( pController ),
     bParagraphMode(false)
 {
-    BindListener();
     AddStatusListener(".uno:BorderReducedMode");
     aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
@@ -1656,20 +1653,23 @@ SvxFrameWindow_Impl::~SvxFrameWindow_Impl()
 
 void SvxFrameWindow_Impl::dispose()
 {
-    UnbindListener();
+    mpController.clear();
     aFrameSet.disposeAndClear();
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 void SvxFrameWindow_Impl::GetFocus()
 {
     if (aFrameSet)
+    {
         aFrameSet->GrabFocus();
+        aFrameSet->StartSelection();
+    }
 }
 
 void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    SfxPopupWindow::DataChanged( rDCEvt );
+    ToolbarPopup::DataChanged( rDCEvt );
 
     if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
     {
@@ -1805,9 +1805,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         aFrameSet->SetNoSelection();
     }
 
-    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                 ".uno:SetBorderStyle",
-                                 aArgs );
+    mpController->dispatchCommand( ".uno:SetBorderStyle", aArgs );
 }
 
 void SvxFrameWindow_Impl::Resize()
@@ -1816,16 +1814,15 @@ void SvxFrameWindow_Impl::Resize()
     aFrameSet->SetPosSizePixel(Point(2,2), Size(aSize.Width() - 4, aSize.Height() - 4));
 }
 
-void SvxFrameWindow_Impl::StateChanged(
-    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+    throw ( css::uno::RuntimeException )
 {
-    if ( pState && nSID == SID_BORDER_REDUCED_MODE)
+    if ( rEvent.FeatureURL.Complete == ".uno:BorderReducedMode" )
     {
-        const SfxBoolItem* pItem = dynamic_cast<const SfxBoolItem*>( pState  );
-
-        if ( pItem )
+        bool bValue;
+        if ( rEvent.State >>= bValue )
         {
-            bParagraphMode = pItem->GetValue();
+            bParagraphMode = bValue;
             //initial calls mustn't insert or remove elements
             if(aFrameSet->GetItemCount())
             {
@@ -1852,12 +1849,6 @@ void SvxFrameWindow_Impl::StateChanged(
             }
         }
     }
-    SfxPopupWindow::StateChanged( nSID, eState, pState );
-}
-
-void SvxFrameWindow_Impl::StartSelection()
-{
-    aFrameSet->StartSelection();
 }
 
 static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
@@ -2932,7 +2923,7 @@ void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any
 
 VclPtr<vcl::Window> SvxFrameToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<SvxFrameWindow_Impl>::Create( 0, m_xFrame, pParent );
+    return VclPtr<SvxFrameWindow_Impl>::Create( m_xFrame, pParent, this );
 }
 
 OUString SvxFrameToolBoxControl::getImplementationName()
