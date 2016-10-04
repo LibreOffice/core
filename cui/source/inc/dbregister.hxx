@@ -51,7 +51,6 @@ namespace svx
         sal_uLong               m_nOldCount;
         bool                m_bModified;
 
-#ifdef INCLUDED_CUI_SOURCE_INC_DBREGISTER_HXX
         DECL_LINK_TYPED( NewHdl, Button*, void );
         DECL_LINK_TYPED( EditHdl, Button*, void );
         DECL_LINK_TYPED( DeleteHdl, Button*, void );
@@ -81,8 +80,6 @@ namespace svx
                 The entry to remove if the entry will be changed
         */
         void openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry* _pEntry = nullptr);
-
-#endif
 
     public:
         DbRegistrationOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
