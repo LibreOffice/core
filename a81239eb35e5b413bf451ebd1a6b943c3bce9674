@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_d90ef7e4",
+        "filename": "basctl/source/basicide/macrodlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-10-04T05:51:10Z",
+      "side": 1,
+      "message": "Why this change, I cannot understand the difference ?",
+      "revId": "a81239eb35e5b413bf451ebd1a6b943c3bce9674",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
