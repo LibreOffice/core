@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <set>
-#include <stack>
+#include <o3tl/stack.hxx>
 
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
@@ -86,8 +86,8 @@ class XMLErrors;
 class StyleMap;
 enum class SvXMLErrorFlags;
 
-typedef std::stack<SvXMLImportContextRef> SvXMLImportContexts_Impl;
-typedef std::stack<css::uno::Reference<css::xml::sax::XFastContextHandler>>
+typedef o3tl::stack<SvXMLImportContextRef> SvXMLImportContexts_Impl;
+typedef o3tl::stack<css::uno::Reference<css::xml::sax::XFastContextHandler>>
             FastSvXMLImportContexts_Impl;
 
 namespace xmloff {
