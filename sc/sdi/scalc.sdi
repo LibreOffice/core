@@ -6632,3 +6632,21 @@ SfxUInt16Item NumberFormatType SID_NUMBER_TYPE_FORMAT
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
+
+
+SfxVoidItem AutoSum SID_AUTO_SUM
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INTERN;
+]

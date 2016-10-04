@@ -268,7 +268,6 @@ protected:
     virtual void    SetText( const OUString& rString ) override;
     virtual OUString  GetText() const override;
 
-    static bool UseSubTotal( ScRangeList* pRangeList );
     bool IsPointerAtResizePos();
 
 private:
