@@ -50,7 +50,7 @@ const char UNO_LINESTYLE[] = ".uno:LineStyle";
 
 namespace sc { namespace sidebar {
 
-svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent)
+Control* CellAppearancePropertyPanel::CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent)
 {
     return VclPtr<CellLineStyleControl>::Create(pParent, *this);
 }
@@ -63,7 +63,7 @@ void CellAppearancePropertyPanel::EndCellLineStylePopupMode()
     }
 }
 
-svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent)
+Control* CellAppearancePropertyPanel::CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent)
 {
     return VclPtr<CellBorderStyleControl>::Create(pParent, *this);
 }

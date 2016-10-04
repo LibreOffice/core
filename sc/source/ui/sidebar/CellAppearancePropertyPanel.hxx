@@ -26,7 +26,6 @@
 
 class FixedText;
 namespace svx { namespace sidebar {
-    class PopupControl;
     class PopupContainer;
 }}
 namespace sc { namespace sidebar {
@@ -142,11 +141,11 @@ private:
     DECL_LINK_TYPED(TbxLineStyleSelectHdl, ToolBox*, void);
 
     // for CellLineStyle popup
-    svx::sidebar::PopupControl* CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent);
+    Control* CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent);
     void EndCellLineStylePopupMode();
 
     // for CellBorderStyle popup
-    svx::sidebar::PopupControl* CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent);
+    Control* CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent);
     void EndCellBorderStylePopupMode();
 
     void Initialize();

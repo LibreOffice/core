@@ -34,7 +34,7 @@
 namespace sc { namespace sidebar {
 
 CellLineStyleControl::CellLineStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel)
-:   svx::sidebar::PopupControl(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_LINESTYLE)),
+:   Control(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_LINESTYLE)),
     mrCellAppearancePropertyPanel(rPanel),
     maPushButtonMoreOptions(VclPtr<PushButton>::Create(this, ScResId(PB_OPTIONS))),
     maCellLineStyleValueSet(VclPtr<sc::sidebar::CellLineStyleValueSet>::Create(this, ScResId(VS_STYLE))),
@@ -53,7 +53,7 @@ void CellLineStyleControl::dispose()
 {
     maPushButtonMoreOptions.disposeAndClear();
     maCellLineStyleValueSet.disposeAndClear();
-    svx::sidebar::PopupControl::dispose();
+    Control::dispose();
 }
 
 void CellLineStyleControl::Initialize()

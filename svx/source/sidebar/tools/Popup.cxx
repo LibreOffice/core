@@ -18,7 +18,6 @@
  */
 #include "svx/sidebar/Popup.hxx"
 #include "svx/sidebar/PopupContainer.hxx"
-#include "svx/sidebar/PopupControl.hxx"
 
 #include <vcl/toolbox.hxx>
 
@@ -27,7 +26,7 @@ namespace svx { namespace sidebar {
 
 Popup::Popup (
     vcl::Window* pParent,
-    const ::std::function<PopupControl* (PopupContainer*)>& rControlCreator,
+    const ::std::function<Control* (PopupContainer*)>& rControlCreator,
     const ::rtl::OUString& rsAccessibleName)
     : mxControl(),
       mpParent(pParent),

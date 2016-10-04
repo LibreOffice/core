@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEMARGINCONTROL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEMARGINCONTROL_HXX
 
-#include <svx/sidebar/PopupControl.hxx>
-
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/rulritem.hxx>

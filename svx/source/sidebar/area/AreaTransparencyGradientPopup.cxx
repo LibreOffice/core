@@ -23,7 +23,7 @@ namespace svx { namespace sidebar {
 
 AreaTransparencyGradientPopup::AreaTransparencyGradientPopup (
     vcl::Window* pParent,
-    const ::std::function<PopupControl* (PopupContainer*)>& rControlCreator)
+    const ::std::function<Control* (PopupContainer*)>& rControlCreator)
     : Popup(
         pParent,
         rControlCreator,

@@ -206,7 +206,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/possize/SidebarDialControl \
     svx/source/sidebar/shapes/DefaultShapesPanel \
     svx/source/sidebar/shapes/ShapesUtil \
-    svx/source/sidebar/tools/PopupControl \
     svx/source/sidebar/tools/PopupContainer \
     svx/source/sidebar/tools/Popup \
     svx/source/sidebar/tools/ValueSetWithTextControl \

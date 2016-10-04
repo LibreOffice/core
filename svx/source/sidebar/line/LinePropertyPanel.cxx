@@ -46,7 +46,6 @@
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
 #include "svx/sidebar/PopupContainer.hxx"
-#include "svx/sidebar/PopupControl.hxx"
 
 using namespace css;
 using namespace css::uno;

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLECONTROL_HXX
 #define INCLUDED_SC_SOURCE_UI_SIDEBAR_CELLLINESTYLECONTROL_HXX
 
-#include <svx/sidebar/PopupControl.hxx>
 #include <vcl/button.hxx>
 #include "CellLineStyleValueSet.hxx"
 
@@ -27,7 +26,7 @@ namespace sc { namespace sidebar {
 
 class CellAppearancePropertyPanel;
 
-class CellLineStyleControl : public svx::sidebar::PopupControl
+class CellLineStyleControl : public Control
 {
 private:
     CellAppearancePropertyPanel&       mrCellAppearancePropertyPanel;

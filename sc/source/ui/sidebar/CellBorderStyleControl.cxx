@@ -43,7 +43,7 @@ namespace sc { namespace sidebar {
 #define FRM_VALID_ALL       0xff
 
 CellBorderStyleControl::CellBorderStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel)
-:   svx::sidebar::PopupControl(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_BORDERSTYLE)),
+:   Control(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_BORDERSTYLE)),
     mrCellAppearancePropertyPanel(rPanel),
     maTBBorder1(VclPtr<ToolBox>::Create(this, ScResId(TB_BORDER1))),
     maTBBorder2(VclPtr<ToolBox>::Create(this, ScResId(TB_BORDER2))),
@@ -69,7 +69,7 @@ void CellBorderStyleControl::dispose()
     maTBBorder3.disposeAndClear();
     maFL1.disposeAndClear();
     maFL2.disposeAndClear();
-    svx::sidebar::PopupControl::dispose();
+    Control::dispose();
 }
 
 void CellBorderStyleControl::Initialize()

@@ -35,7 +35,6 @@ class ToolBox;
 
 namespace svx { namespace sidebar {
 
-class PopupControl;
 class PopupContainer;
 
 class TextPropertyPanel

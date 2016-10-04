@@ -495,7 +495,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ChangeGradientAngle, Edit&, void)
     SelectFillAttrHdl_Impl();
 }
 
-VclPtr<PopupControl> AreaPropertyPanelBase::CreateTransparencyGradientControl (PopupContainer* pParent)
+VclPtr<Control> AreaPropertyPanelBase::CreateTransparencyGradientControl (PopupContainer* pParent)
 {
     return VclPtrInstance<AreaTransparencyGradientControl>(pParent, *this);
 }

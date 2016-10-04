@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGESIZECONTROL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGESIZECONTROL_HXX
 
-#include <svx/sidebar/PopupControl.hxx>
-
 #include <i18nutil/paper.hxx>
 
 #include <vcl/button.hxx>

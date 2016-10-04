@@ -52,7 +52,7 @@ namespace svx { namespace sidebar {
 AreaTransparencyGradientControl::AreaTransparencyGradientControl (
     vcl::Window* pParent,
     AreaPropertyPanelBase& rPanel)
-    : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_AREAPAGE_TRGR)),
+    : Control( pParent,SVX_RES(RID_POPUPPANEL_AREAPAGE_TRGR)),
       maFtTrgrCenterX(VclPtr<FixedText>::Create(this, SVX_RES(FT_TRGR_CENTER_X))),
       maMtrTrgrCenterX(VclPtr<MetricField>::Create(this, SVX_RES(MTR_TRGR_CENTER_X))),
       maFtTrgrCenterY(VclPtr<FixedText>::Create(this, SVX_RES(FT_TRGR_CENTER_Y))),
@@ -119,7 +119,7 @@ void AreaTransparencyGradientControl::dispose()
     maMtrTrgrEndValue.disposeAndClear();
     maFtTrgrBorder.disposeAndClear();
     maMtrTrgrBorder.disposeAndClear();
-    PopupControl::dispose();
+    Control::dispose();
 }
 
 void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGradientItem)

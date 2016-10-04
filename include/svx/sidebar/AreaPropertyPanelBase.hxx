@@ -170,7 +170,7 @@ protected:
     DECL_LINK_TYPED(ClickImportBitmapHdl, Button*, void);
 
     // for transparency gradient
-    VclPtr<PopupControl> CreateTransparencyGradientControl (PopupContainer* pParent);
+    VclPtr<Control> CreateTransparencyGradientControl (PopupContainer* pParent);
     DECL_LINK_TYPED( ClickTrGrHdl_Impl, ToolBox*, void );
 
     void Initialize();

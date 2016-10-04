@@ -27,10 +27,6 @@
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 
-namespace svx { namespace sidebar {
-    class PopupControl;
-} }
-
 #include <i18nutil/paper.hxx>
 
 #include <svx/pageitem.hxx>

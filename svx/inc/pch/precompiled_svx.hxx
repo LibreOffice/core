@@ -439,7 +439,6 @@
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
 #include <svx/sidebar/Popup.hxx>
 #include <svx/sidebar/PopupContainer.hxx>
-#include <svx/sidebar/PopupControl.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdetc.hxx>

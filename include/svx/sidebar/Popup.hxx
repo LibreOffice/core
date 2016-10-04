@@ -24,7 +24,6 @@
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 #include <svx/sidebar/PopupContainer.hxx>
-#include <svx/sidebar/PopupControl.hxx>
 
 #include <functional>
 
@@ -33,7 +32,7 @@ class ToolBox;
 
 namespace svx { namespace sidebar {
 
-/** A wrapper around a PopupContainer and a PopupControl object.
+/** A wrapper around a PopupContainer and a Control object.
     Usually used as drop down for a toolbox.  Use Show() to start
     drop down mode and Hide() to end it.
 */
@@ -43,15 +42,15 @@ public:
     /** Create a Popup wrapper object.
         @param pParent
             Parent window of the PopupContainer, which in turn is the
-            parent of the PopupControl.
+            parent of the Control.
         @param rControlCreator
-            A functor that is called to create the PopupControl object
+            A functor that is called to create the Control object
             (usually an instance of a class derived from
-            PopupControl).
+            Control).
     */
     Popup (
         vcl::Window* pParent,
-        const ::std::function<PopupControl*(PopupContainer*)>& rControlCreator,
+        const ::std::function<Control*(PopupContainer*)>& rControlCreator,
         const ::rtl::OUString& rsAccessibleName);
     virtual ~Popup();
 
@@ -73,9 +72,9 @@ public:
     void dispose();
 
 protected:
-    VclPtr<PopupControl> mxControl;
+    VclPtr<Control> mxControl;
 
-    /** Make sure that both PopupContainer and PopupControl objects
+    /** Make sure that both PopupContainer and Control objects
         exist.  Calls the maControlCreator functor if necessary.
     */
     void ProvideContainerAndControl();
@@ -87,7 +86,7 @@ protected:
 
 private:
     VclPtr<vcl::Window> mpParent;
-    ::std::function<VclPtr<PopupControl>(PopupContainer*)> maControlCreator;
+    ::std::function<VclPtr<Control>(PopupContainer*)> maControlCreator;
     ::std::function<void()> maPopupModeEndCallback;
     const ::rtl::OUString msAccessibleName;
     VclPtr<PopupContainer> mxContainer;
