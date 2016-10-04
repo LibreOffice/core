@@ -1842,7 +1842,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     // TODO clean up SwViewShell's approach to output devices (the many of
     // them - mpBufferedOut, mpOut, mpWin, ...)
     OutputDevice *pSaveOut = mpOut;
-    GetSfxViewShell()->setTiledPainting(true);
+    comphelper::LibreOfficeKit::setTiledPainting(true);
     mpOut = &rDevice;
 
     // resizes the virtual device so to contain the entries context
@@ -1895,7 +1895,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
     // SwViewShell's output device tear down
     mpOut = pSaveOut;
-    GetSfxViewShell()->setTiledPainting(false);
+    comphelper::LibreOfficeKit::setTiledPainting(false);
 }
 
 void SwViewShell::SetBrowseBorder( const Size& rNew )

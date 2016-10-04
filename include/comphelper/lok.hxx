@@ -48,6 +48,11 @@ COMPHELPER_DLLPUBLIC bool isPartInInvalidation();
 /// Set whether clients want a part number in an invalidation payload.
 COMPHELPER_DLLPUBLIC void setPartInInvalidation(bool bPartInInvalidation);
 
+/// Check if we are doing tiled painting.
+COMPHELPER_DLLPUBLIC bool isTiledPainting();
+/// Set if we are doing tiled painting.
+COMPHELPER_DLLPUBLIC void setTiledPainting(bool bTiledPainting);
+
 // Status indicator handling. Even if in theory there could be several status indicators active at
 // the same time, in practice there is only one at a time, so we don't handle any identification of
 // status indicator in this API.
