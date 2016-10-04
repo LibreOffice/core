@@ -23,6 +23,8 @@
   <menu:menuitem menu:id=".uno:IncrementLevel"/>
   <menu:menuitem menu:id=".uno:DecrementLevel"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ResetAttributes"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
   <menu:menuitem menu:id=".uno:ParagraphDialog"/>
   <menu:menuitem menu:id=".uno:OutlineBullet"/>

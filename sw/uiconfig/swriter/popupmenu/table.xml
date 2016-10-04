@@ -18,6 +18,8 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:ResetAttributes"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:NumberingStart"/>
   <menu:menuitem menu:id=".uno:ContinueNumbering"/>
   <menu:menuitem menu:id=".uno:IncrementLevel"/>
