@@ -2225,15 +2225,18 @@ uno::Reference< drawing::XShape >
         //set whole text shape properties
         PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
 
-        //set position matrix
-        //the matrix needs to be set at the end behind autogrow and such position influencing properties
-        try
+        if (rATransformation.hasValue())
         {
-            xProp->setPropertyValue( "Transformation", rATransformation );
-        }
-        catch( const uno::Exception& e )
-        {
-            ASSERT_EXCEPTION( e );
+            //set position matrix
+            //the matrix needs to be set at the end behind autogrow and such position influencing properties
+            try
+            {
+                xProp->setPropertyValue( "Transformation", rATransformation );
+            }
+            catch( const uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
         }
     }
     return xShape;
