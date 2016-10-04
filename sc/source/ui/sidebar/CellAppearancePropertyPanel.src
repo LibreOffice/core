@@ -94,10 +94,6 @@ Control RID_POPUPPANEL_APPEARANCE_CELL_LINESTYLE
         TabStop = TRUE;
         Text [ en-US ] = "~More Options...";
     };
-    Bitmap  BMP_UNDERLINE_MORE
-    {
-        File = "sidebar/morebutton.png";
-    };
 };
 
 // cell border style popup

@@ -20,7 +20,6 @@
 //line style page
 #define VS_STYLE        1
 #define PB_OPTIONS      2
-#define BMP_UNDERLINE_MORE      3
 
 //line border page
 #define TB_BORDER1              1
