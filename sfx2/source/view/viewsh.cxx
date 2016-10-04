@@ -255,7 +255,6 @@ SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 ,   m_pLibreOfficeKitViewCallback(nullptr)
 ,   m_pLibreOfficeKitViewData(nullptr)
 ,   m_bTiledSearching(false)
-,   m_bTiledPainting(false)
 ,   m_nViewShellId(SfxViewShell_Impl::m_nLastViewShellId++)
 {}
 
@@ -1473,7 +1472,7 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
 
 void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
 {
-    if (pImpl->m_bTiledPainting)
+    if (comphelper::LibreOfficeKit::isTiledPainting())
         return;
 
     if (pImpl->m_bTiledSearching)
@@ -1501,16 +1500,6 @@ void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const
 void SfxViewShell::setTiledSearching(bool bTiledSearching)
 {
     pImpl->m_bTiledSearching = bTiledSearching;
-}
-
-void SfxViewShell::setTiledPainting(bool bTiledPainting)
-{
-    pImpl->m_bTiledPainting = bTiledPainting;
-}
-
-bool SfxViewShell::getTiledPainting() const
-{
-    return pImpl->m_bTiledPainting;
 }
 
 int SfxViewShell::getPart() const

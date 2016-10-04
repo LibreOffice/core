@@ -77,6 +77,7 @@ public:
     void testRedlineColors();
     void testCommentEndTextEdit();
     void testCursorPosition();
+    void testPaintCallbacks();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -118,6 +119,7 @@ public:
     CPPUNIT_TEST(testRedlineColors);
     CPPUNIT_TEST(testCommentEndTextEdit);
     CPPUNIT_TEST(testCursorPosition);
+    CPPUNIT_TEST(testPaintCallbacks);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -640,6 +642,8 @@ public:
     bool m_bGraphicViewSelection;
     bool m_bGraphicSelection;
     bool m_bViewLock;
+    /// Set if any callback was invoked.
+    bool m_bCalled;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
@@ -651,7 +655,8 @@ public:
           m_bViewCursorVisible(false),
           m_bGraphicViewSelection(false),
           m_bGraphicSelection(false),
-          m_bViewLock(false)
+          m_bViewLock(false),
+          m_bCalled(false)
     {
     }
 
@@ -663,6 +668,7 @@ public:
     void callbackImpl(int nType, const char* pPayload)
     {
         OString aPayload(pPayload);
+        m_bCalled = true;
         switch (nType)
         {
         case LOK_CALLBACK_INVALIDATE_TILES:
@@ -1523,6 +1529,35 @@ void SwTiledRenderingTest::testCursorPosition()
     // This failed, own cursor was at '1418, 1418', collaborative cursor was at
     // '1425, 1425', due to pixel alignment.
     CPPUNIT_ASSERT_EQUAL(aView1.m_aOwnCursor.toString(), aView1.m_aViewCursor.toString());
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testPaintCallbacks()
+{
+    // Test that paintTile() never results in callbacks, which can cause a
+    // paint <-> invalidate loop.
+
+    // Load a document and register a callback for the first view.
+    comphelper::LibreOfficeKit::setActive();
+    SwXTextDocument* pXTextDocument = createDoc();
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    // Create a second view and paint a tile on that second view.
+    SfxLokHelper::createView();
+    int nCanvasWidth = 256;
+    int nCanvasHeight = 256;
+    std::vector<unsigned char> aBuffer(nCanvasWidth * nCanvasHeight * 4);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(), aBuffer.data());
+    // Make sure that painting a tile in the second view doesn't invoke
+    // callbacks on the first view.
+    aView1.m_bCalled = false;
+    pXTextDocument->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
+    CPPUNIT_ASSERT(!aView1.m_bCalled);
 
     mxComponent->dispose();
     mxComponent.clear();
