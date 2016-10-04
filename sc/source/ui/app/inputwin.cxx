@@ -292,65 +292,6 @@ void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
     }
 }
 
-bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList)
-{
-    bool bSubTotal = false;
-    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
-    if ( pViewSh )
-    {
-        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
-        size_t nRangeCount (pRangeList->size());
-        size_t nRangeIndex (0);
-        while (!bSubTotal && nRangeIndex < nRangeCount)
-        {
-            const ScRange* pRange = (*pRangeList)[nRangeIndex];
-            if( pRange )
-            {
-                SCTAB nTabEnd(pRange->aEnd.Tab());
-                SCTAB nTab(pRange->aStart.Tab());
-                while (!bSubTotal && nTab <= nTabEnd)
-                {
-                    SCROW nRowEnd(pRange->aEnd.Row());
-                    SCROW nRow(pRange->aStart.Row());
-                    while (!bSubTotal && nRow <= nRowEnd)
-                    {
-                        if (pDoc->RowFiltered(nRow, nTab))
-                            bSubTotal = true;
-                        else
-                            ++nRow;
-                    }
-                    ++nTab;
-                }
-            }
-            ++nRangeIndex;
-        }
-
-        const ScDBCollection::NamedDBs& rDBs = pDoc->GetDBCollection()->getNamedDBs();
-        ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
-        for (; !bSubTotal && itr != itrEnd; ++itr)
-        {
-            const ScDBData& rDB = **itr;
-            if (!rDB.HasAutoFilter())
-                continue;
-
-            nRangeIndex = 0;
-            while (!bSubTotal && nRangeIndex < nRangeCount)
-            {
-                const ScRange* pRange = (*pRangeList)[nRangeIndex];
-                if( pRange )
-                {
-                    ScRange aDBArea;
-                    rDB.GetArea(aDBArea);
-                    if (aDBArea.Intersects(*pRange))
-                        bSubTotal = true;
-                }
-                ++nRangeIndex;
-            }
-        }
-    }
-    return bSubTotal;
-}
-
 void ScInputWindow::Select()
 {
     ScModule* pScMod = SC_MOD();
@@ -390,98 +331,10 @@ void ScInputWindow::Select()
                 ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
                 if ( pViewSh )
                 {
-                    const ScMarkData& rMark = pViewSh->GetViewData().GetMarkData();
-                    if ( rMark.IsMarked() || rMark.IsMultiMarked() )
+                    const OUString aFormula = pViewSh->DoAutoSum();
+                    if (!aFormula.isEmpty())
                     {
-                        ScRangeList aMarkRangeList;
-                        rMark.FillRangeListWithMarks( &aMarkRangeList, false );
-                        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
-
-                        // check if one of the marked ranges is empty
-                        bool bEmpty = false;
-                        const size_t nCount = aMarkRangeList.size();
-                        for ( size_t i = 0; i < nCount; ++i )
-                        {
-                            const ScRange aRange( *aMarkRangeList[i] );
-                            if ( pDoc->IsBlockEmpty( aRange.aStart.Tab(),
-                                    aRange.aStart.Col(), aRange.aStart.Row(),
-                                    aRange.aEnd.Col(), aRange.aEnd.Row() ) )
-                            {
-                                bEmpty = true;
-                                break;
-                            }
-                        }
-
-                        if ( bEmpty )
-                        {
-                            ScRangeList aRangeList;
-                            const bool bDataFound = pViewSh->GetAutoSumArea( aRangeList );
-                            if ( bDataFound )
-                            {
-                                ScAddress aAddr = aRangeList.back()->aEnd;
-                                aAddr.IncRow();
-                                const bool bSubTotal( UseSubTotal( &aRangeList ) );
-                                pViewSh->EnterAutoSum( aRangeList, bSubTotal, aAddr );
-                            }
-                        }
-                        else
-                        {
-                            const bool bSubTotal( UseSubTotal( &aMarkRangeList ) );
-                            for ( size_t i = 0; i < nCount; ++i )
-                            {
-                                const ScRange aRange( *aMarkRangeList[i] );
-                                const bool bSetCursor = ( i == nCount - 1 );
-                                const bool bContinue = ( i != 0 );
-                                if ( !pViewSh->AutoSum( aRange, bSubTotal, bSetCursor, bContinue ) )
-                                {
-                                    pViewSh->MarkRange( aRange, false );
-                                    pViewSh->SetCursor( aRange.aEnd.Col(), aRange.aEnd.Row() );
-                                    const ScRangeList aRangeList;
-                                    ScAddress aAddr = aRange.aEnd;
-                                    aAddr.IncRow();
-                                    const OUString aFormula = pViewSh->GetAutoSumFormula(
-                                        aRangeList, bSubTotal, aAddr );
-                                    SetFuncString( aFormula );
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else // Only insert into input row
-                    {
-                        ScRangeList aRangeList;
-                        const bool bDataFound = pViewSh->GetAutoSumArea( aRangeList );
-                        const bool bSubTotal( UseSubTotal( &aRangeList ) );
-                        ScAddress aAddr = pViewSh->GetViewData().GetCurPos();
-                        const OUString aFormula = pViewSh->GetAutoSumFormula( aRangeList, bSubTotal, aAddr );
                         SetFuncString( aFormula );
-
-                        if ( bDataFound && pScMod->IsEditMode() )
-                        {
-                            ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
-                            if ( pHdl )
-                            {
-                                pHdl->InitRangeFinder( aFormula );
-
-                                //! SetSelection at the InputHandler?
-                                //! Set bSelIsRef?
-                                const sal_Int32 nOpen = aFormula.indexOf('(');
-                                const sal_Int32 nLen = aFormula.getLength();
-                                if ( nOpen != -1 && nLen > nOpen )
-                                {
-                                    sal_uInt8 nAdd(1);
-                                    if (bSubTotal)
-                                        nAdd = 3;
-                                    ESelection aSel(0,nOpen+nAdd,0,nLen-1);
-                                    EditView* pTableView = pHdl->GetTableView();
-                                    if (pTableView)
-                                        pTableView->SetSelection(aSel);
-                                    EditView* pTopView = pHdl->GetTopView();
-                                    if (pTopView)
-                                        pTopView->SetSelection(aSel);
-                                }
-                            }
-                        }
                     }
                 }
             }

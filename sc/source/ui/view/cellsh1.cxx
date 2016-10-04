@@ -44,6 +44,7 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/builderfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <editeng/editview.hxx>
 
 #include "cellsh.hxx"
 #include "sc.hrc"
@@ -2532,6 +2533,38 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
 
                 ExecuteExternalSource( aFile, aFilter, aOptions, aSource, nRefresh, rReq );
+            }
+            break;
+
+        case SID_AUTO_SUM:
+            {
+                const OUString aFormula = pTabViewShell->DoAutoSum();
+                if (!aFormula.isEmpty())
+                {
+                    ScInputHandler* pHdl = pScMod->GetInputHdl(pTabViewShell);
+                    if (pHdl)
+                    {
+                        if (!pScMod->IsEditMode())
+                        {
+                            pScMod->SetInputMode(SC_INPUT_TABLE);
+                        }
+
+                        EditView *pEditView=pHdl->GetActiveView();
+                        if (pEditView)
+                        {
+                            ESelection aTextSel = pEditView->GetSelection();
+                            aTextSel.nStartPos = 0;
+                            aTextSel.nEndPos = EE_TEXTPOS_ALL;
+                            pHdl->DataChanging();
+                            pEditView->SetSelection(aTextSel);
+                            pEditView->InsertText(aFormula);
+                            aTextSel.nStartPos = aFormula.getLength() - 1;
+                            aTextSel.nEndPos = aFormula.getLength() - 1;
+                            pEditView->SetSelection(aTextSel);
+                            pHdl->DataChanged();
+                        }
+                    }
+                }
             }
             break;
 

@@ -265,7 +265,9 @@ public:
     virtual void    MouseMove( const MouseEvent& rMEvt ) override;
 
 protected:
-    static bool UseSubTotal( ScRangeList* pRangeList );
+    virtual void    SetText( const OUString& rString ) override;
+    virtual OUString  GetText() const override;
+
     bool IsPointerAtResizePos();
 
 private:
