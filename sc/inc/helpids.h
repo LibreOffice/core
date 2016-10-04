@@ -223,8 +223,6 @@
 // sidebar -----------------------------------------
 
 // CellAppearancePropertyPanel -----------------------------------------
-#define HID_PROPERTYPANEL_SC_STYLE_VS                           "SC_HID_PROPERTYPANEL_SC_STYLE_VS"
-#define HID_PROPERTYPANEL_SC_STYLE_PB                           "SC_HID_PROPERTYPANEL_SC_STYLE_PB"
 #define HID_PROPERTYPANEL_SC_BORDER1_TBX                        "SC_HID_PROPERTYPANEL_SC_BORDER1_TBX"
 #define HID_PROPERTYPANEL_SC_BORDER_TBI_NONE                    "SC_HID_PROPERTYPANEL_SC_BORDER_TBI_NONE"
 #define HID_PROPERTYPANEL_SC_BORDER_TBI_ALL                     "SC_HID_PROPERTYPANEL_SC_BORDER_TBI_ALL"
