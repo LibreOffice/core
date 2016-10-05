@@ -45,7 +45,7 @@ void CellLineStyleValueSet::dispose()
 
 Size CellLineStyleValueSet::GetOptimalSize() const
 {
-    return LogicToPixel(Size(80, 12 * 9), MAP_APPFONT);
+    return LogicToPixel(Size(80, 12 * 9), MapUnit::MapAppFont);
 }
 
 void CellLineStyleValueSet::SetUnit(const OUString* str)
