@@ -1260,11 +1260,6 @@ void ODBExport::ExportAutoStyles_()
     }
 }
 
-void ODBExport::ExportStyles_(bool bUsed)
-{
-    SvXMLExport::ExportStyles_(bUsed);
-}
-
 void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
     Reference<XQueryDefinitionsSupplier> xSup(getDataSource(),UNO_QUERY);

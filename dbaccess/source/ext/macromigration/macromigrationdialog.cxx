@@ -257,21 +257,6 @@ namespace dbmm
         return true;
     }
 
-    bool MacroMigrationDialog::leaveState( WizardState _nState )
-    {
-        return MacroMigrationDialog_Base::leaveState( _nState );
-    }
-
-    MacroMigrationDialog::WizardState MacroMigrationDialog::determineNextState( WizardState _nCurrentState ) const
-    {
-        return MacroMigrationDialog_Base::determineNextState( _nCurrentState );
-    }
-
-    bool MacroMigrationDialog::onFinish()
-    {
-        return MacroMigrationDialog_Base::onFinish();
-    }
-
     IMPL_LINK_NOARG( MacroMigrationDialog, OnStartMigration, void*, void )
     {
         // prevent closing

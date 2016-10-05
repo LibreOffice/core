@@ -159,7 +159,6 @@ class ODBExport : public SvXMLExport
                             ODBExport() = delete;
 protected:
 
-    virtual void                    ExportStyles_( bool bUsed ) override;
     virtual void                    ExportAutoStyles_() override;
     virtual void                    ExportContent_() override;
     virtual void                    ExportMasterStyles_() override;

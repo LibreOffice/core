@@ -2281,31 +2281,6 @@ void OApplicationController::onDeleteEntry()
     executeChecked(nId,Sequence<PropertyValue>());
 }
 
-void OApplicationController::executeUnChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue>& aArgs)
-{
-    OGenericUnoController::executeUnChecked( _nCommandId, aArgs );
-}
-
-void OApplicationController::executeChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue>& aArgs)
-{
-    OGenericUnoController::executeChecked( _nCommandId, aArgs );
-}
-
-bool OApplicationController::isCommandEnabled(sal_uInt16 _nCommandId) const
-{
-    return OGenericUnoController::isCommandEnabled( _nCommandId );
-}
-
-bool OApplicationController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const
-{
-    return OGenericUnoController::isCommandEnabled( _rCompleteCommandURL );
-}
-
-Reference< XController > OApplicationController::getXController() throw( RuntimeException )
-{
-    return OGenericUnoController::getXController();
-}
-
 VclPtr<PopupMenu> OApplicationController::getContextMenu( Control& /*_rControl*/ ) const
 {
     return VclPtr<PopupMenu>::Create( ModuleRes( RID_MENU_APP_EDIT ) );

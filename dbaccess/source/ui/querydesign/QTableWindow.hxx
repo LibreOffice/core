@@ -50,7 +50,6 @@ namespace dbaui
         virtual OUString     GetName() const override { return GetWinName(); }
 
     protected:
-        virtual void    KeyInput( const KeyEvent& rEvt ) override;
 
         virtual void    OnEntryDoubleClicked(SvTreeListEntry* pEntry) override;
             // is called from DoubleClickHdl of the ListBox

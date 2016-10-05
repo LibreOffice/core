@@ -1849,11 +1849,6 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
     }
 }
 
-void OSelectionBrowseBox::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
-{
-    EditBrowseBox::ArrangeControls(nX, nY);
-}
-
 bool OSelectionBrowseBox::Save()
 {
     bool bRet = true;

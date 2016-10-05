@@ -261,7 +261,6 @@ namespace dbaui
         virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel ) override;
 
         // BrowseBox overridables
-        virtual void    CursorMoved() override;
         virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt ) override;
         virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt ) override;
         virtual void    MouseButtonDown( const BrowserMouseEvent& rMEvt) override;

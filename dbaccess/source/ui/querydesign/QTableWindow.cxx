@@ -184,9 +184,4 @@ bool OQueryTableWindow::ExistsAVisitedConn() const
     return static_cast<const OQueryTableView*>(getTableView())->ExistsAVisitedConn(this);
 }
 
-void OQueryTableWindow::KeyInput( const KeyEvent& rEvt )
-{
-    OTableWindow::KeyInput( rEvt );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

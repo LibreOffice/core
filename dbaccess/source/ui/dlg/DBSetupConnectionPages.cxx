@@ -722,11 +722,6 @@ using namespace ::com::sun::star;
 
     }
 
-    void OSpreadSheetConnectionPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
-    {
-        OConnectionTabPageSetup::implInitControls(_rSet, _bSaveValue);
-    }
-
     bool OSpreadSheetConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);

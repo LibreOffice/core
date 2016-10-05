@@ -48,11 +48,8 @@ namespace dbaui
     protected:
         VclPtr<CheckBox> m_pPasswordrequired;
 
-    protected:
-        virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-
     };
 
     // OTextConnectionPage

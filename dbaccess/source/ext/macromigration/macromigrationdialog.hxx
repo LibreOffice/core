@@ -50,9 +50,6 @@ namespace dbmm
         // OWizardMachine overridables
         virtual void            enterState( WizardState _nState ) override;
         virtual bool            prepareLeaveCurrentState( CommitPageReason _eReason ) override;
-        virtual bool            leaveState( WizardState _nState ) override;
-        virtual WizardState     determineNextState( WizardState _nCurrentState ) const override;
-        virtual bool            onFinish() override;
 
         // Dialog overridables
         virtual bool    Close() override;

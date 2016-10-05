@@ -192,7 +192,6 @@ namespace dbaui
         virtual void                MouseButtonUp( const BrowserMouseEvent& rEvt ) override;
         virtual void                KeyInput( const KeyEvent& rEvt ) override;
         virtual void                Command(const CommandEvent& rEvt) override;
-        virtual void                ArrangeControls(sal_uInt16& nX, sal_uInt16 nY) override;
 
         virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol) override;
         virtual void                InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) override;

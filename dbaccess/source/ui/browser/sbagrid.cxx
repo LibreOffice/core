@@ -925,11 +925,6 @@ void SbaGridControl::Select()
         m_pMasterListener->SelectionChanged();
 }
 
-void SbaGridControl::CursorMoved()
-{
-    FmGridControl::CursorMoved();
-}
-
 void SbaGridControl::ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus /*= sal_True*/ )
 {
     FmGridControl::ActivateCell(nRow, nCol, bSetCellFocus);

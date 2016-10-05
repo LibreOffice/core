@@ -94,8 +94,6 @@ ODBTable::~ODBTable()
 {
 }
 
-IMPLEMENT_FORWARD_REFCOUNT(ODBTable,OTable_Base)
-
 OColumn* ODBTable::createColumn(const OUString& _rName) const
 {
     OColumn* pReturn = nullptr;

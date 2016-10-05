@@ -110,11 +110,6 @@ void SAL_CALL WrappedResultSet::deleteRow(const ORowSetRow& /*_rDeleteRow*/ ,con
     m_xUpd->deleteRow();
 }
 
-void WrappedResultSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
-{
-    OCacheSet::fillValueRow(_rRow,_nPosition);
-}
-
 void WrappedResultSet::updateColumn(sal_Int32 nPos, const Reference< XRowUpdate >& _xParameter, const ORowSetValue& _rValue)
 {
     if(_rValue.isBound() && _rValue.isModified())

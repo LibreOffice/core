@@ -365,11 +365,6 @@ Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo() th
     return xInfo;
 }
 
-void SAL_CALL OQueryController::setFastPropertyValue_NoBroadcast( sal_Int32 i_nHandle, const Any& i_rValue ) throw ( Exception, std::exception )
-{
-    OPropertyContainer::setFastPropertyValue_NoBroadcast( i_nHandle, i_rValue );
-}
-
 void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i_nHandle ) const
 {
     switch ( i_nHandle )

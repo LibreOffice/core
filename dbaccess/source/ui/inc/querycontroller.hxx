@@ -191,10 +191,6 @@ namespace dbaui
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // OPropertySetHelper
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                    sal_Int32 nHandle,
-                                    const css::uno::Any& rValue
-                                ) throw (css::uno::Exception, std::exception ) override;
         virtual void SAL_CALL getFastPropertyValue(
                                     css::uno::Any& rValue,
                                     sal_Int32 nHandle
