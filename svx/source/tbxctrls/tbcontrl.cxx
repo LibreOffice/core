@@ -105,8 +105,6 @@
 // don't make more than 15 entries visible at once
 #define MAX_STYLES_ENTRIES          15
 
-static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
-
 // namespaces
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -256,10 +254,11 @@ private:
     ImageList                   aImgList;
     bool                        bParagraphMode;
 
+    void InitImageList();
+    void CalcSizeValueSet();
     DECL_LINK( SelectHdl, ValueSet*, void );
 
 protected:
-    virtual void    Resize() override;
     virtual void    GetFocus() override;
 
 public:
@@ -1603,18 +1602,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl (const Reference< XFrame >& rFrame, vcl
     bParagraphMode(false)
 {
     AddStatusListener(".uno:BorderReducedMode");
-    aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
-
-    if( pParentWindow->GetDPIScaleFactor() > 1 )
-    {
-        for (short i = 0; i < aImgList.GetImageCount(); i++)
-        {
-            OUString rImageName = aImgList.GetImageName(i);
-            BitmapEx b = aImgList.GetImage(rImageName).GetBitmapEx();
-            b.Scale(pParentWindow->GetDPIScaleFactor(), pParentWindow->GetDPIScaleFactor());
-            aImgList.ReplaceImage(rImageName, Image(b));
-        }
-    }
+    InitImageList();
 
     /*
      *  1       2        3         4
@@ -1637,8 +1625,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl (const Reference< XFrame >& rFrame, vcl
 
     aFrameSet->SetColCount( 4 );
     aFrameSet->SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
-
-    lcl_CalcSizeValueSet( *this, *aFrameSet.get(), Size( 20 * pParentWindow->GetDPIScaleFactor(), 20 * pParentWindow->GetDPIScaleFactor() ));
+    CalcSizeValueSet();
 
     SetHelpId( HID_POPUP_FRAME );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME) );
@@ -1673,7 +1660,7 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
     {
-        aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
+        InitImageList();
 
         sal_uInt16  nNumOfItems = aFrameSet->GetItemCount();
 
@@ -1808,12 +1795,6 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     mpController->dispatchCommand( ".uno:SetBorderStyle", aArgs );
 }
 
-void SvxFrameWindow_Impl::Resize()
-{
-    const Size aSize(this->GetOutputSizePixel());
-    aFrameSet->SetPosSizePixel(Point(2,2), Size(aSize.Width() - 4, aSize.Height() - 4));
-}
-
 void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
     throw ( css::uno::RuntimeException )
 {
@@ -1844,9 +1825,35 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
 
                 if ( bResize )
                 {
-                    lcl_CalcSizeValueSet( *this, *aFrameSet.get(), Size( 20, 20 ));
+                    CalcSizeValueSet();
                 }
             }
+        }
+    }
+}
+
+void SvxFrameWindow_Impl::CalcSizeValueSet()
+{
+    Size aItemSize( 20 * GetParent()->GetDPIScaleFactor(), 20 * GetParent()->GetDPIScaleFactor() );
+    Size aSize = aFrameSet->CalcWindowSizePixel( aItemSize );
+    aFrameSet->SetPosSizePixel( Point( 2, 2 ), aSize );
+    aSize.Width()  += 4;
+    aSize.Height() += 4;
+    SetOutputSizePixel( aSize );
+}
+
+void SvxFrameWindow_Impl::InitImageList()
+{
+    aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
+
+    if( GetParent()->GetDPIScaleFactor() > 1 )
+    {
+        for (short i = 0; i < aImgList.GetImageCount(); i++)
+        {
+            OUString rImageName = aImgList.GetImageName(i);
+            BitmapEx b = aImgList.GetImage(rImageName).GetBitmapEx();
+            b.Scale(GetParent()->GetDPIScaleFactor(), GetParent()->GetDPIScaleFactor());
+            aImgList.ReplaceImage(rImageName, Image(b));
         }
     }
 }
@@ -3074,14 +3081,6 @@ void SvxCurrencyToolBoxControl::Select( sal_uInt16 nSelectModifier )
     }
     else
         SfxToolBoxControl::Select( nSelectModifier );
-}
-
-static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
-{
-    Size aSize = rValueSet.CalcWindowSizePixel( aItemSize );
-    aSize.Width()  += 4;
-    aSize.Height() += 4;
-    rWin.SetOutputSizePixel( aSize );
 }
 
 Reference< css::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
