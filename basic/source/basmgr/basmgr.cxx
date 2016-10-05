@@ -599,12 +599,12 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
             // No libs? Maybe an 5.2 document already loaded
             for (auto const& rpBasLibInfo : mpImpl->aLibs)
             {
-                StarBASIC* pLib = rpBasLibInfo->GetLib();
+                StarBASIC* pLib = rpBasLibInfo->GetLib().get();
                 if( !pLib )
                 {
                     bool bLoaded = ImpLoadLibrary( rpBasLibInfo.get(), nullptr );
                     if( bLoaded )
-                        pLib = rpBasLibInfo->GetLib();
+                        pLib = rpBasLibInfo->GetLib().get();
                 }
                 if( pLib )
                 {
@@ -973,7 +973,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
                     pLibInfo->SetPassword( aPassword );
                 }
                 xBasicStream->SetCryptMaskKey(OString());
-                CheckModules( pLibInfo->GetLib(), pLibInfo->IsReference() );
+                CheckModules( pLibInfo->GetLib().get(), pLibInfo->IsReference() );
             }
             return bLoaded;
         }
@@ -1013,7 +1013,7 @@ bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) con
     {
         if( nullptr != dynamic_cast<const StarBASIC*>( &xNew ) )
         {
-            StarBASIC* pNew = static_cast<StarBASIC*>(static_cast<SbxBase*>(xNew));
+            StarBASIC* pNew = static_cast<StarBASIC*>(xNew.get());
             // Use the Parent of the old BASICs
             if( rOldBasic.Is() )
             {
@@ -1050,7 +1050,7 @@ void BasicManager::CheckModules( StarBASIC* pLib, bool bReference )
 
     for ( const auto& pModule: pLib->GetModules() )
     {
-        DBG_ASSERT( pModule, "Module not received!" );
+        DBG_ASSERT( pModule.get(), "Module not received!" );
         if ( !pModule->IsCompiled() && !StarBASIC::GetErrorCode() )
         {
             pModule->Compile();
@@ -1212,7 +1212,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
     }
     if ((*itLibInfo)->GetLib().Is())
     {
-        GetStdLib()->Remove( (*itLibInfo)->GetLib() );
+        GetStdLib()->Remove( (*itLibInfo)->GetLib().get() );
     }
     mpImpl->aLibs.erase(itLibInfo);
     return true;    // Remove was successful, del unimportant
@@ -1228,7 +1228,7 @@ StarBASIC* BasicManager::GetLib( sal_uInt16 nLib ) const
     DBG_ASSERT( nLib < mpImpl->aLibs.size(), "Lib does not exist!" );
     if ( nLib < mpImpl->aLibs.size() )
     {
-        return mpImpl->aLibs[nLib]->GetLib();
+        return mpImpl->aLibs[nLib]->GetLib().get();
     }
     return nullptr;
 }
@@ -1245,7 +1245,7 @@ StarBASIC* BasicManager::GetLib( const OUString& rName ) const
     {
         if (rpLib->GetLibName().equalsIgnoreAsciiCase(rName)) // Check if available...
         {
-            return rpLib->GetLib();
+            return rpLib->GetLib().get();
         }
     }
     return nullptr;
@@ -1331,7 +1331,7 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName )
     pLibInfo->SetLib( pNew );
     pLibInfo->SetLibName( rLibName );
     pLibInfo->GetLib()->SetName( rLibName );
-    return pLibInfo->GetLib();
+    return pLibInfo->GetLib().get();
 }
 
 // For XML import/export:
@@ -1395,7 +1395,7 @@ BasicLibInfo* BasicManager::FindLibInfo( StarBASIC* pBasic )
 {
     for (auto const& rpLib : mpImpl->aLibs)
     {
-        if (rpLib->GetLib() == pBasic)
+        if (rpLib->GetLib().get() == pBasic)
         {
             return rpLib.get();
         }
@@ -1443,7 +1443,7 @@ uno::Any BasicManager::SetGlobalUNOConstant( const OUString& rName, const uno::A
 
     SbxObjectRef xUnoObj = GetSbUnoObject( rName, _rValue );
     xUnoObj->SetFlag( SbxFlagBits::DontStore );
-    pStandardLib->Insert( xUnoObj );
+    pStandardLib->Insert( xUnoObj.get() );
 
     return aOldValue;
 }
@@ -1992,7 +1992,7 @@ void DialogContainer_Impl::insertByName( const OUString& aName, const uno::Any& 
     uno::Reference< script::XStarBasicDialogInfo > xMod;
     aElement >>= xMod;
     SbxObjectRef xDialog = implCreateDialog( xMod->getData() );
-    mpLib->Insert( xDialog );
+    mpLib->Insert( xDialog.get() );
 }
 
 void DialogContainer_Impl::removeByName( const OUString& Name )

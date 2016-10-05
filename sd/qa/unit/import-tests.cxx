@@ -237,7 +237,7 @@ void SdImportTest::testDocumentLayout()
 
         sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ), aFilesToCompare[i].nFormat );
         if( aFilesToCompare[i].nExportType >= 0 )
-            xDocShRef = saveAndReload( xDocShRef, aFilesToCompare[i].nExportType );
+            xDocShRef = saveAndReload( xDocShRef.get(), aFilesToCompare[i].nExportType );
         compareWithShapesDump( xDocShRef,
                 m_directories.getPathFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump ),
                 i == nUpdateMe );

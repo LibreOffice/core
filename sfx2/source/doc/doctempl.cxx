@@ -975,7 +975,7 @@ bool SfxDocumentTemplates::InsertDir
 
     if ( xTemplates->addGroup( rText ) )
     {
-        RegionData_Impl* pNewRegion = new RegionData_Impl( pImp, rText );
+        RegionData_Impl* pNewRegion = new RegionData_Impl( pImp.get(), rText );
 
         if ( ! pImp->InsertRegion( pNewRegion, nRegion ) )
         {

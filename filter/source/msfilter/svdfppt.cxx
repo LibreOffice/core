@@ -1901,7 +1901,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                     tools::SvRef<SotStorage> xTarget = SotStorage::OpenOLEStorage( pOe->pShell->GetStorage(), aNm, StreamMode::READWRITE );
                                     if ( xObjStor.Is() && xTarget.Is() )
                                     {
-                                        xObjStor->CopyTo( xTarget );
+                                        xObjStor->CopyTo( xTarget.get() );
                                         if( !xTarget->GetError() )
                                             xTarget->Commit();
                                     }
@@ -2034,7 +2034,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                         for ( i = 0; i < aList.size(); i++ )    // copy all entries
                                         {
                                             const SvStorageInfo& rInfo = aList[ i ];
-                                            if ( !xSource->CopyTo( rInfo.GetName(), xMacros, rInfo.GetName() ) )
+                                            if ( !xSource->CopyTo( rInfo.GetName(), xMacros.get(), rInfo.GetName() ) )
                                                 bCopied = false;
                                         }
                                         if ( i && bCopied )

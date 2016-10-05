@@ -702,7 +702,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
                 {
                     // is this a MathType Storage?
                     MathType aEquation( maText );
-                    bSuccess = aEquation.Parse( aStorage );
+                    bSuccess = aEquation.Parse( aStorage.get() );
                     if ( bSuccess )
                         Parse();
                 }

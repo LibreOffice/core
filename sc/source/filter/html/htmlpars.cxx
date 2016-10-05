@@ -283,7 +283,7 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL 
 
             xValues = new SvKeyValueIterator;
             xValues->Append( SvKeyValue( OUString( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
-            pAttributes = xValues;
+            pAttributes = xValues.get();
         }
     }
 
@@ -2865,7 +2865,7 @@ sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
 
             xValues = new SvKeyValueIterator;
             xValues->Append( SvKeyValue( OUString( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
-            pAttributes = xValues;
+            pAttributes = xValues.get();
         }
     }
 

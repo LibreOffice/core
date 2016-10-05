@@ -1162,7 +1162,7 @@ bool OSelectionBrowseBox::SaveModified()
                     bAppendRow = true;
             }
         }
-        if(!bError && Controller())
+        if( !bError && Controller().Is() )
             Controller()->ClearModified();
 
         RowModified(GetCurRow(), GetCurColumnId());

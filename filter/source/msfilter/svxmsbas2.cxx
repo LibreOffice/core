@@ -47,7 +47,7 @@ ErrCode SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
 #endif
             tools::SvRef<SotStorage> xSrc = SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName, StreamMode::STD_READ );
             tools::SvRef<SotStorage> xDst = xRoot->OpenSotStorage( rStorageName, StreamMode::READWRITE | StreamMode::TRUNC );
-            xSrc->CopyTo( xDst );
+            xSrc->CopyTo( xDst.get() );
             xDst->Commit();
             ErrCode nError = xDst->GetError();
             if ( nError == ERRCODE_NONE )

@@ -222,7 +222,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
                 aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(),
                     0);
                 std::unique_ptr<SwWW8ImplReader> xRdr(new SwWW8ImplReader(
-                    pGlossary->m_nVersion, xStg, &rStrm, *pD, rBlocks.GetBaseURL(),
+                    pGlossary->m_nVersion, xStg.get(), &rStrm, *pD, rBlocks.GetBaseURL(),
                     true, false, *aPamo.GetPoint()));
                 xRdr->LoadDoc(this);
                 bRet = MakeEntries(pD, rBlocks, bSaveRelFile, aStrings, aData);

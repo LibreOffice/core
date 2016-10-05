@@ -105,7 +105,7 @@ protected:
                     {
                         if( !xObj.Is() )
                             GetRealObject_();
-                        return xObj;
+                        return xObj.get();
                     }
 
 public:
@@ -120,7 +120,7 @@ public:
     sal_uInt16          GetObjType() const { return nObjType; }
 
     void            SetObj( SvLinkSource * pObj );
-    SvLinkSource*   GetObj() const  { return xObj; }
+    SvLinkSource*   GetObj() const  { return xObj.get(); }
 
     void            SetLinkSourceName( const OUString & rName );
     const OUString& GetLinkSourceName() const { return aLinkName;}

@@ -98,7 +98,8 @@ public:
 
     T & operator *()  const { assert(pObj != nullptr); return *pObj; }
 
-    operator T *()    const { return pObj; }
+    bool operator ==(const SvRef<T> &rhs) const { return pObj == rhs.pObj; }
+    bool operator !=(const SvRef<T> &rhs) const { return !(*this == rhs); }
 
 protected:
     T * pObj;
@@ -203,7 +204,7 @@ public:
 
     ~SvCompatWeakBase() { _xHdl->ResetWeakBase(); }
 
-    SvCompatWeakHdl<T>* GetHdl() { return _xHdl; }
+    SvCompatWeakHdl<T>* GetHdl() { return _xHdl.get(); }
 };
 
 /** We only have one weak reference in LO, in include/sfx2/frame.hxx, class SfxFrameWeak.

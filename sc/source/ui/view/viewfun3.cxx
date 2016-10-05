@@ -274,7 +274,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
                 if ( ScGlobal::xDrawClipDocShellRef.Is() )
                 {
-                    SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef );
+                    SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef.get() );
                     pTransferObj->SetDrawPersist( aPersistRef );// keep persist for ole objects alive
 
                 }
@@ -383,7 +383,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
 
                 if ( ScGlobal::xDrawClipDocShellRef.Is() )
                 {
-                    SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef );
+                    SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef.get() );
                     pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
                 }
 
@@ -921,7 +921,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             aTransShellRef = new ScDocShell;        // DocShell needs a Ref immediately
             aTransShellRef->DoInitNew();
         }
-        ScDrawLayer::SetGlobalDrawPersist(aTransShellRef);
+        ScDrawLayer::SetGlobalDrawPersist( aTransShellRef.get() );
 
         xTransClip.reset( new ScDocument( SCDOCMODE_CLIP ));
         pClipDoc->TransposeClip( xTransClip.get(), nFlags, bAsLink );

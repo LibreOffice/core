@@ -6792,7 +6792,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                 if( ERRCODE_NONE == GraphicConverter::Import( rStm, aGraphic ) && aGraphic.GetType() != GraphicType::NONE )
                 {
                     const GDIMetaFile& rMtf = aGraphic.GetGDIMetaFile();
-                    MakeContentStream( rDest, rMtf );
+                    MakeContentStream( rDest.get(), rMtf );
                     bMtfRead = true;
                 }
                 // set behind the data
@@ -6805,7 +6805,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
 
     if( !bMtfRead && pMtf )
     {
-        MakeContentStream( rDest, *pMtf );
+        MakeContentStream( rDest.get(), *pMtf );
         return true;
     }
 
@@ -6947,7 +6947,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
         {
             SfxFilterMatcher aMatch( sStarName );
             tools::SvRef<SotStorage> xStorage = new SotStorage( false, *xMemStream );
-            rSrcStg.CopyTo( xStorage );
+            rSrcStg.CopyTo( xStorage.get() );
             xStorage->Commit();
             xStorage.Clear();
             OUString aType = SfxFilter::GetTypeFromStorage( rSrcStg );
@@ -7146,7 +7146,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             if ( xObjStor.Is() )
             {
                 tools::SvRef<SotStorage> xSrcStor = rSrcStorage->OpenSotStorage( rStorageName, StreamMode::READ );
-                xSrcStor->CopyTo( xObjStor );
+                xSrcStor->CopyTo( xObjStor.get() );
 
                 if( !xObjStor->GetError() )
                     xObjStor->Commit();

@@ -40,7 +40,7 @@ void SvIdlParser::ReadSvIdl( const OUString & rPath )
         Read( SvHash_module() );
         tools::SvRef<SvMetaModule> aModule = new SvMetaModule;
         ReadModuleHeader(*aModule);
-        rBase.GetModuleList().push_back( aModule );
+        rBase.GetModuleList().push_back( aModule.get() );
     }
 }
 
@@ -119,7 +119,7 @@ void SvIdlParser::ReadModuleElement( SvMetaModule& rModule )
             if( xSlot->Test( rInStm ) )
             {
                 // announce globally
-                rBase.AppendSlot( xSlot );
+                rBase.AppendSlot( xSlot.get() );
             }
         }
     }
@@ -192,7 +192,7 @@ void SvIdlParser::ReadStruct()
         if( !rBase.FindId( xAttr->aSlotId.getString(), &n ) )
             throw SvParseException( rInStm, "no value for identifier <" + xAttr->aSlotId.getString() + "> " );
         xAttr->aSlotId.SetValue(n);
-        xStruct->GetAttrList().push_back( xAttr );
+        xStruct->GetAttrList().push_back( xAttr.get() );
         if( !ReadIfDelimiter() )
             break;
         if( rInStm.GetToken().IsChar() && rInStm.GetToken().GetChar() == '}')
@@ -201,7 +201,7 @@ void SvIdlParser::ReadStruct()
     Read( '}' );
     ReadDelimiter();
     // announce globally
-    rBase.GetTypeList().push_back( xStruct );
+    rBase.GetTypeList().push_back( xStruct.get() );
 }
 
 void SvIdlParser::ReadItem()
@@ -211,7 +211,7 @@ void SvIdlParser::ReadItem()
     xItem->SetRef( ReadKnownType() );
     xItem->SetName( ReadIdentifier() );
     // announce globally
-    rBase.GetTypeList().push_back( xItem );
+    rBase.GetTypeList().push_back( xItem.get() );
 }
 
 void SvIdlParser::ReadEnum()
@@ -229,7 +229,7 @@ void SvIdlParser::ReadEnum()
     }
     Read( '}' );
     // announce globally
-    rBase.GetTypeList().push_back( xEnum );
+    rBase.GetTypeList().push_back( xEnum.get() );
 }
 
 static OString getCommonSubPrefix(const OString &rA, const OString &rB)
@@ -258,7 +258,7 @@ void SvIdlParser::ReadEnumValue( SvMetaTypeEnum& rEnum )
     {
         rEnum.aPrefix = getCommonSubPrefix(rEnum.aPrefix, aEnumVal->GetName());
     }
-    rEnum.aEnumValueList.push_back( aEnumVal );
+    rEnum.aEnumValueList.push_back( aEnumVal.get() );
 }
 
 void SvIdlParser::ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMetaTypeType )
@@ -284,9 +284,9 @@ void SvIdlParser::ReadInterfaceOrShell( SvMetaModule& rModule, MetaTypeType aMet
         }
         Read( '}' );
     }
-    rModule.aClassList.push_back( aClass );
+    rModule.aClassList.push_back( aClass.get() );
     // announce globally
-    rBase.GetClassList().push_back( aClass );
+    rBase.GetClassList().push_back( aClass.get() );
 }
 
 void SvIdlParser::ReadInterfaceOrShellEntry(SvMetaClass& rClass)
@@ -327,7 +327,7 @@ void SvIdlParser::ReadInterfaceOrShellEntry(SvMetaClass& rClass)
         {
             if( !xAttr->GetSlotId().IsSet() )
                 xAttr->SetSlotId( SvIdentifier(rBase.GetUniqueId()) );
-            rClass.aAttrList.push_back( xAttr );
+            rClass.aAttrList.push_back( xAttr.get() );
         }
     }
 }
@@ -488,7 +488,7 @@ void SvIdlParser::ReadInterfaceOrShellMethod( SvMetaAttribute& rAttr )
             xParamAttr->aType = ReadKnownType();
             xParamAttr->SetName( ReadIdentifier() );
             ReadSlotId(xParamAttr->aSlotId);
-            rAttr.aType->GetAttrList().push_back( xParamAttr );
+            rAttr.aType->GetAttrList().push_back( xParamAttr.get() );
             if (!ReadIfDelimiter())
                 break;
         }

@@ -199,7 +199,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
         for (SCTAB i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
             pDoc->MarkScenario( i, nTab, aMarks, false, ScScenarioFlags::ShowFrame );
         ScRangeListRef xRanges = new ScRangeList;
-        aMarks.FillRangeListWithMarks( xRanges, false );
+        aMarks.FillRangeListWithMarks( xRanges.get(), false );
 
         bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
         long nLayoutSign = bLayoutRTL ? -1 : 1;

@@ -950,7 +950,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
             //  bei mehreren Tabellen Ranges kopieren
             //! sollte eigentlich schon in ScMarkData::FillRangeListWithMarks passieren?
             if ( nTabs > 1 )
-                rMark.ExtendRangeListTables( xRanges );
+                rMark.ExtendRangeListTables( xRanges.get() );
 
             pObj = new ScCellRangesObj( pDocSh, *xRanges );
         }

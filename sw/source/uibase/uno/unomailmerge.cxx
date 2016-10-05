@@ -599,7 +599,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         aCurSelection = aTranslated;
     }
 
-    SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh, false);
+    SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh.get(), false);
     SwView *pView = pFrame ? dynamic_cast<SwView*>( pFrame->GetViewShell()  ) : nullptr;
     if (!pView)
         throw RuntimeException();
@@ -803,9 +803,9 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     OSL_ENSURE( !pOldSrc || pOldSrc == this, "Ooops... different event source already set." );
     pMgr->SetMailMergeEvtSrc( this );   // launch events for listeners
 
-    SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), xCurDocSh));
+    SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), xCurDocSh.get()));
     bool bSucc = pMgr->Merge( aMergeDesc );
-    SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), xCurDocSh));
+    SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), xCurDocSh.get()));
 
     pMgr->SetMailMergeEvtSrc( pOldSrc );
 

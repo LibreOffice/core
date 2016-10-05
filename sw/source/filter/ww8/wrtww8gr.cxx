@@ -332,7 +332,7 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
     {
         tools::SvRef<SotStorage> xOleDst = xObjStg->OpenSotStorage( rOleId );
         if ( xOleDst.Is() )
-            xObjSrc->CopyTo( xOleDst );
+            xObjSrc->CopyTo( xOleDst.get() );
 
         if ( !xOleDst->GetError( ) )
         {

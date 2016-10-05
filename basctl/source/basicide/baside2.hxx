@@ -344,9 +344,9 @@ public:
     virtual void    SetReadOnly (bool bReadOnly) override;
     virtual bool    IsReadOnly() override;
 
-    StarBASIC*      GetBasic() { XModule(); return m_xBasic; }
+    StarBASIC*      GetBasic() { XModule(); return m_xBasic.get(); }
 
-    SbModule*       GetSbModule() { return m_xModule; }
+    SbModule*       GetSbModule() { return m_xModule.get(); }
     void            SetSbModule( SbModule* pModule ) { m_xModule = pModule; }
     OUString        GetSbModuleName();
 

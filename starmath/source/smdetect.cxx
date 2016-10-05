@@ -76,7 +76,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             if ( aStorage->IsStream("Equation Native") )
             {
                 sal_uInt8 nVersion;
-                if ( GetMathTypeVersion( aStorage, nVersion ) && nVersion <=3 )
+                if ( GetMathTypeVersion( aStorage.get(), nVersion ) && nVersion <=3 )
                     return OUString("math_MathType_3x");
             }
         }
