@@ -37,17 +37,9 @@
 #define TEXT_HEIGHT         8
 #define MBOX_HEIGHT         12
 
-
 //about popup panel
 #define POPUPPANEL_MARGIN_VERTICAL      7
 #define POPUPPANEL_MARGIN_HORIZONTAL    7
-
-#define OFFSET_X        1
-#define OFFSET_Y        1
-
-//new
-#define POPUPPANEL_MARGIN_SMALL     2
-
 
 #endif
 
