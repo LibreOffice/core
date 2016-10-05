@@ -101,8 +101,6 @@ namespace toolkit
         virtual void SAL_CALL setHighlightTextColor( ::sal_Int32 _highlighttextcolor ) throw (css::uno::RuntimeException, std::exception) override;
         virtual ::sal_Int32 SAL_CALL getInactiveTabColor() throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL setInactiveTabColor( ::sal_Int32 _inactivetabcolor ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getInfoTextColor() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setInfoTextColor( ::sal_Int32 _infotextcolor ) throw (css::uno::RuntimeException, std::exception) override;
         virtual ::sal_Int32 SAL_CALL getLabelTextColor() throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL setLabelTextColor( ::sal_Int32 _labeltextcolor ) throw (css::uno::RuntimeException, std::exception) override;
         virtual ::sal_Int32 SAL_CALL getLightColor() throw (css::uno::RuntimeException, std::exception) override;
@@ -152,8 +150,6 @@ namespace toolkit
         virtual void SAL_CALL setGroupFont( const css::awt::FontDescriptor& _groupfont ) throw (css::uno::RuntimeException, std::exception) override;
         virtual css::awt::FontDescriptor SAL_CALL getLabelFont() throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL setLabelFont( const css::awt::FontDescriptor& _labelfont ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::awt::FontDescriptor SAL_CALL getInfoFont() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setInfoFont( const css::awt::FontDescriptor& _infofont ) throw (css::uno::RuntimeException, std::exception) override;
         virtual css::awt::FontDescriptor SAL_CALL getRadioCheckFont() throw (css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL setRadioCheckFont( const css::awt::FontDescriptor& _radiocheckfont ) throw (css::uno::RuntimeException, std::exception) override;
         virtual css::awt::FontDescriptor SAL_CALL getPushButtonFont() throw (css::uno::RuntimeException, std::exception) override;

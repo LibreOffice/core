@@ -121,9 +121,6 @@ interface XStyleSettings
     /// specifies the color of inactive tabs of a tab control
     [attribute] ::com::sun::star::util::Color InactiveTabColor;
 
-    /// specifies the text color of dialog elements displaying some info text
-    [attribute] ::com::sun::star::util::Color InfoTextColor;
-
     /// specifies the text color of label elements in dialogs
     [attribute] ::com::sun::star::util::Color LabelTextColor;
 
@@ -199,9 +196,6 @@ interface XStyleSettings
 
     /// specifies the font for label controls
     [attribute] FontDescriptor  LabelFont;
-
-    /// specifies the font of dialog elements displaying some info text
-    [attribute] FontDescriptor  InfoFont;
 
     /// specifies the font of radio buttons and check boxes
     [attribute] FontDescriptor  RadioCheckFont;
