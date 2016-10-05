@@ -2429,7 +2429,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
     {
         // document already loaded.
 
-        SfxObjectShell* p = itr->second.maShell;
+        SfxObjectShell* p = itr->second.maShell.get();
         itr->second.maLastAccess = tools::Time( tools::Time::SYSTEM );
         return &static_cast<ScDocShell*>(p)->GetDocument();
     }
@@ -2440,7 +2440,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
     {
         //document is unsaved document
 
-        SfxObjectShell* p = itr->second.maShell;
+        SfxObjectShell* p = itr->second.maShell.get();
         itr->second.maLastAccess = tools::Time( tools::Time::SYSTEM );
         return &static_cast<ScDocShell*>(p)->GetDocument();
     }

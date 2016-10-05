@@ -52,7 +52,7 @@ void ParseTest::setUp()
 
 void ParseTest::tearDown()
 {
-    if (mxDocShell)
+    if (mxDocShell.Is())
         mxDocShell->DoClose();
     BootstrapFixture::tearDown();
 }

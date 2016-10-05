@@ -243,7 +243,7 @@ SwSection::~SwSection()
 
         if (CONTENT_SECTION != m_Data.GetType())
         {
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink );
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink.get() );
         }
 
         if (m_RefObj.Is())
@@ -559,7 +559,7 @@ OUString SwSection::GetLinkFileName() const
                 OUString sFilter;
                 if (m_RefLink->GetLinkManager() &&
                     sfx2::LinkManager::GetDisplayNames(
-                        m_RefLink, nullptr, &sTmp, &sRange, &sFilter ))
+                        m_RefLink.get(), nullptr, &sTmp, &sRange, &sFilter ))
                 {
                     sTmp += OUStringLiteral1(sfx2::cTokenSeparator) + sFilter
                         + OUStringLiteral1(sfx2::cTokenSeparator) + sRange;
@@ -1509,7 +1509,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     }
     else
     {
-        pFormat->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink );
+        pFormat->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink.get() );
     }
 
     SwIntrnlSectRefLink *const pLnk =
@@ -1574,7 +1574,7 @@ void SwSection::BreakLink()
         OSL_ENSURE(pFormat, "SwSection::BreakLink: no format?");
         if (pFormat)
         {
-            pFormat->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink );
+            pFormat->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink.get() );
         }
         m_RefLink.Clear();
     }

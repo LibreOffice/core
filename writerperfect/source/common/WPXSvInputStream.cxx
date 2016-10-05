@@ -735,7 +735,7 @@ librevenge::RVNGInputStream *WPXSvInputStreamImpl::createWPXStream(const tools::
 {
     if (rxStorage.Is())
     {
-        Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper(rxStorage));
+        Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper(rxStorage.get()));
         return new WPXSvInputStream(xContents);
     }
     return nullptr;

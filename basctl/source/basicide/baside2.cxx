@@ -285,7 +285,7 @@ void ModulWindow::CheckCompileBasic()
 
             if ( bDone )
             {
-                GetBreakPoints().SetBreakPointsInBasic( m_xModule );
+                GetBreakPoints().SetBreakPointsInBasic( m_xModule.get() );
             }
 
             GetShell()->GetViewFrame()->GetWindow().LeaveWait();
@@ -1280,7 +1280,7 @@ void ModulWindow::BasicStarted()
         if ( rList.size() )
         {
             rList.ResetHitCount();
-            rList.SetBreakPointsInBasic( m_xModule );
+            rList.SetBreakPointsInBasic( m_xModule.get() );
             for ( sal_uInt16 nMethod = 0; nMethod < m_xModule->GetMethods()->Count(); nMethod++ )
             {
                 SbMethod* pMethod = static_cast<SbMethod*>(m_xModule->GetMethods()->Get( nMethod ));
@@ -1400,7 +1400,7 @@ void ModulWindow::UpdateModule ()
     OUString const aModule = getTextEngineText(*GetEditEngine());
 
     // update module in basic
-    assert(m_xModule);
+    assert(m_xModule.Is());
 
     // update module in module window
     SetModule(aModule);

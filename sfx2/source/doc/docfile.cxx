@@ -3185,7 +3185,7 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
         }
     }
 
-    return pImpl->xAttributes;
+    return pImpl->xAttributes.get();
 }
 
 css::uno::Reference< css::io::XInputStream >  SfxMedium::GetInputStream()

@@ -874,7 +874,7 @@ std::size_t XclTxo::GetLen() const
 XclObjOle::XclObjOle( XclExpObjectManager& rObjMgr, const SdrObject& rObj ) :
     XclObj( rObjMgr, EXC_OBJTYPE_PICTURE ),
     rOleObj( rObj ),
-    pRootStorage( rObjMgr.GetRoot().GetRootStorage() )
+    pRootStorage( rObjMgr.GetRoot().GetRootStorage().get() )
 {
 }
 

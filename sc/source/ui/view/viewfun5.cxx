@@ -491,7 +491,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
             ScDocShellRef aDragShellRef( new ScDocShell );
             aDragShellRef->DoInitNew();
-            std::unique_ptr<FmFormModel> pModel(new FmFormModel( aPath, nullptr, aDragShellRef ));
+            std::unique_ptr<FmFormModel> pModel(new FmFormModel( aPath, nullptr, aDragShellRef.get() ));
 
             pModel->GetItemPool().FreezeIdRanges();
             xStm->Seek(0);

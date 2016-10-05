@@ -44,7 +44,7 @@ RTLFUNC(Err)
 
     if( SbiRuntime::isVBAEnabled() )
     {
-        rPar.Get( 0 )->PutObject( SbxErrObject::getErrObject() );
+        rPar.Get( 0 )->PutObject( SbxErrObject::getErrObject().get() );
     }
     else
     {

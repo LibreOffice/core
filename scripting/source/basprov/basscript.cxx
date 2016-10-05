@@ -163,7 +163,7 @@ namespace basprov
 
         Any aReturn;
 
-        if ( m_xMethod )
+        if ( m_xMethod.Is() )
         {
             // check if compiled
             SbModule* pModule = static_cast< SbModule* >( m_xMethod->GetParent() );
@@ -206,8 +206,8 @@ namespace basprov
                 for ( sal_Int32 i = 0; i < nParamsCount; ++i )
                 {
                     SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
-                    unoToSbxValue( static_cast< SbxVariable* >( xSbxVar ), pParams[i] );
-                    xSbxParams->Put( xSbxVar, static_cast< sal_uInt16 >( i ) + 1 );
+                    unoToSbxValue( xSbxVar.get(), pParams[i] );
+                    xSbxParams->Put( xSbxVar.get(), static_cast< sal_uInt16 >( i ) + 1 );
 
                     // Enable passing by ref
                     if ( xSbxVar->GetType() != SbxVARIANT )
@@ -215,7 +215,7 @@ namespace basprov
                  }
             }
             if ( xSbxParams.Is() )
-                m_xMethod->SetParameters( xSbxParams );
+                m_xMethod->SetParameters( xSbxParams.get() );
 
             // call method
             SbxVariableRef xReturn = new SbxVariable;
@@ -229,11 +229,11 @@ namespace basprov
             if ( m_caller.getLength() && m_caller[ 0 ].hasValue()  )
             {
                 SbxVariableRef xCallerVar = new SbxVariable( SbxVARIANT );
-                unoToSbxValue( static_cast< SbxVariable* >( xCallerVar ), m_caller[ 0 ] );
-                nErr = m_xMethod->Call( xReturn, xCallerVar );
+                unoToSbxValue( xCallerVar.get(), m_caller[ 0 ] );
+                nErr = m_xMethod->Call( xReturn.get(), xCallerVar.get() );
             }
             else
-                nErr = m_xMethod->Call( xReturn );
+                nErr = m_xMethod->Call( xReturn.get() );
 
             if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
                 m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", aOldThisComponent );
@@ -259,7 +259,7 @@ namespace basprov
                             if ( pVar )
                             {
                                 SbxVariableRef xVar = pVar;
-                                aOutParamMap.insert( OutParamMap::value_type( n - 1, sbxToUnoValue( xVar ) ) );
+                                aOutParamMap.insert( OutParamMap::value_type( n - 1, sbxToUnoValue( xVar.get() ) ) );
                             }
                         }
                     }
@@ -277,7 +277,7 @@ namespace basprov
             }
 
             // get return value
-            aReturn = sbxToUnoValue( xReturn );
+            aReturn = sbxToUnoValue( xReturn.get() );
 
             // reset parameters
             m_xMethod->SetParameters( nullptr );

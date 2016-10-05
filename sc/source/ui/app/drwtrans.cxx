@@ -435,7 +435,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
                 //TODO/LATER: needs new Format, because now single OLE and "this" are different
                 InitDocShell();         // set aDocShellRef
 
-                SfxObjectShell* pEmbObj = aDocShellRef;
+                SfxObjectShell* pEmbObj = aDocShellRef.get();
                 bOK = SetObject( pEmbObj, SCDRAWTRANS_TYPE_DOCUMENT, rFlavor );
             }
         }

@@ -39,7 +39,7 @@ SvMetaAttribute::SvMetaAttribute( SvMetaType * pType )
 
 SvMetaType * SvMetaAttribute::GetType() const
 {
-    if( aType.Is() || !GetRef() ) return aType;
+    if( aType.Is() || !GetRef() ) return aType.get();
     return static_cast<SvMetaAttribute *>(GetRef())->GetType();
 }
 
@@ -208,7 +208,7 @@ void SvMetaType::ReadContextSvIdl( SvIdlDataBase & rBase,
     if( xAttr->ReadSvIdl( rBase, rInStm ) )
     {
         if( xAttr->Test( rInStm ) )
-            GetAttrList().push_back( xAttr );
+            GetAttrList().push_back( xAttr.get() );
     }
 }
 

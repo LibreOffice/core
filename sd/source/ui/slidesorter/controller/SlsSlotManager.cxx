@@ -358,7 +358,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
             SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
             if( pTransferClip )
             {
-                SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell();
+                SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell().get();
 
                 DrawDocShell* pDocShell = dynamic_cast<DrawDocShell*>(pTransferDocShell);
                 if (pDocShell && pDocShell->GetDoc()->GetPageCount() > 1)
@@ -698,14 +698,14 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
         || rSet.GetItemState(SID_PASTE_SPECIAL)  == SfxItemState::DEFAULT)
     {
         // no own clipboard data?
-        if ( !pTransferClip || !pTransferClip->GetDocShell() )
+        if ( !pTransferClip || !pTransferClip->GetDocShell().Is() )
         {
             rSet.DisableItem(SID_PASTE);
             rSet.DisableItem(SID_PASTE_SPECIAL);
         }
         else
         {
-            SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell();
+            SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell().get();
 
             if( !pTransferDocShell || static_cast<DrawDocShell*>(pTransferDocShell)->GetDoc()->GetPageCount() <= 1 )
             {

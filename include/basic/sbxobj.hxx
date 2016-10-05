@@ -74,9 +74,9 @@ public:
     virtual void Remove( SbxVariable* );
 
     // Direct access on arrays
-    SbxArray* GetMethods()      { return pMethods;  }
-    SbxArray* GetProperties()   { return pProps;    }
-    SbxArray* GetObjects()      { return pObjs;     }
+    SbxArray* GetMethods()      { return pMethods.get(); }
+    SbxArray* GetProperties()   { return pProps.get(); }
+    SbxArray* GetObjects()      { return pObjs.get(); }
     // Debugging
     void Dump( SvStream&, bool bDumpAll );
 };

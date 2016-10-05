@@ -340,7 +340,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
         if ( pCell )
             pDocument->LockTable( rPos.Tab() );
         SbxVariableRef refRes = new SbxVariable;
-        ErrCode eRet = pDocSh->CallBasic( aMacroStr.makeStringAndClear(), aBasicStr, refPar, refRes );
+        ErrCode eRet = pDocSh->CallBasic( aMacroStr.makeStringAndClear(), aBasicStr, refPar.get(), refRes.get() );
         if ( pCell )
             pDocument->UnlockTable( rPos.Tab() );
 

@@ -88,7 +88,7 @@ inline SvStringHashEntry * SvHash_##Name()                   \
 {                                                            \
     if( !GetIdlApp().pGlobalNames )                          \
         GetIdlApp().pGlobalNames = new SvGlobalHashNames();  \
-    return GetIdlApp().pGlobalNames->MM_##Name;              \
+    return GetIdlApp().pGlobalNames->MM_##Name.get();      \
 }
 
 HASH_INLINE(module)

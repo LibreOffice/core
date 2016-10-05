@@ -76,7 +76,7 @@ sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDesc
                         SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
                         OUString aText = pDocShell->GetText();
                         MathType aEquation(aText);
-                        bSuccess = aEquation.Parse(aStorage);
+                        bSuccess = aEquation.Parse(aStorage.get());
                         if (bSuccess)
                         {
                             pDocShell->SetText(aText);

@@ -222,8 +222,8 @@ FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
 
 FreetypeFontInfo::~FreetypeFontInfo()
 {
-    if( mxFontCharMap )
-        mxFontCharMap = nullptr;
+    if( mxFontCharMap.Is() )
+        mxFontCharMap.Clear();
     delete mpChar2Glyph;
     delete mpGlyph2Char;
 #if ENABLE_GRAPHITE
@@ -979,7 +979,7 @@ const FontCharMapRef ServerFont::GetFontCharMap() const
 const FontCharMapRef& FreetypeFontInfo::GetFontCharMap()
 {
     // check if the charmap is already cached
-    if( mxFontCharMap )
+    if( mxFontCharMap.Is() )
         return mxFontCharMap;
 
     // get the charmap and cache it

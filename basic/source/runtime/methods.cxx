@@ -185,13 +185,13 @@ RTLFUNC(CreateObject)
 
     OUString aClass( rPar.Get( 1 )->GetOUString() );
     SbxObjectRef p = SbxBase::CreateObject( aClass );
-    if( !p )
+    if( !p.Is() )
         StarBASIC::Error( ERRCODE_BASIC_CANNOT_LOAD );
     else
     {
         // Convenience: enter BASIC as parent
         p->SetParent( pBasic );
-        rPar.Get( 0 )->PutObject( p );
+        rPar.Get( 0 )->PutObject( p.get() );
     }
 }
 
@@ -633,8 +633,8 @@ RTLFUNC(MkDir)
                 SbxArrayRef pPar = new SbxArray();
                 SbxVariableRef pResult = new SbxVariable();
                 SbxVariableRef pParam = new SbxVariable();
-                pPar->Insert( pResult, pPar->Count() );
-                pPar->Insert( pParam, pPar->Count() );
+                pPar->Insert( pResult.get(), pPar->Count() );
+                pPar->Insert( pParam.get(), pPar->Count() );
                 SbRtl_CurDir( pBasic, *pPar, bWrite );
 
                 rtl::OUString sCurPathURL;
@@ -1461,7 +1461,7 @@ RTLFUNC(RTL)
     (void)pBasic;
     (void)bWrite;
 
-    rPar.Get( 0 )->PutObject( pBasic->getRTL() );
+    rPar.Get( 0 )->PutObject( pBasic->getRTL().get() );
 }
 
 RTLFUNC(RTrim)
@@ -4474,8 +4474,8 @@ RTLFUNC(LoadPicture)
         Graphic aGraphic(aBmp);
 
         SbxObjectRef xRef = new SbStdPicture;
-        static_cast<SbStdPicture*>(static_cast<SbxObject*>(xRef))->SetGraphic( aGraphic );
-        rPar.Get(0)->PutObject( xRef );
+        static_cast<SbStdPicture*>(xRef.get())->SetGraphic( aGraphic );
+        rPar.Get(0)->PutObject( xRef.get() );
     }
 }
 

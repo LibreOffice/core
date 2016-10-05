@@ -947,7 +947,7 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
             {
                 rMark.MarkToMulti();
                 ScRangeListRef pList( new ScRangeList );
-                rMark.FillRangeListWithMarks( pList, false );
+                rMark.FillRangeListWithMarks( pList.get(), false );
                 for (size_t i = 0, n = pList->size(); i < n; ++i)
                 {
                     ScRange* pR = (*pList)[i];

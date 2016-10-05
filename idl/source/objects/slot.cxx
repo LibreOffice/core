@@ -110,12 +110,12 @@ OString SvMetaSlot::GetMangleName() const
 /** reference disbandment **/
 SvMetaType * SvMetaSlot::GetSlotType() const
 {
-    if( aSlotType.Is() || !GetRef() ) return aSlotType;
+    if( aSlotType.Is() || !GetRef() ) return aSlotType.get();
     return static_cast<SvMetaSlot *>(GetRef())->GetSlotType();
 }
 SvMetaAttribute * SvMetaSlot::GetMethod() const
 {
-    if( aMethod.Is() || !GetRef() ) return aMethod;
+    if( aMethod.Is() || !GetRef() ) return aMethod.get();
     return static_cast<SvMetaSlot *>(GetRef())->GetMethod();
 }
 const OString& SvMetaSlot::GetGroupId() const
@@ -510,7 +510,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
             xEnumSlot->SetEnumValue(enumValue);
 
             if ( !pFirstEnumSlot || xEnumSlot->GetSlotId().GetValue() < pFirstEnumSlot->GetSlotId().GetValue() )
-                pFirstEnumSlot = xEnumSlot;
+                pFirstEnumSlot = xEnumSlot.get();
 
             // insert the created slave as well
             xEnumSlot->Insert( rList, rPrefix, rBase);

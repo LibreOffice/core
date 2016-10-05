@@ -277,7 +277,7 @@ void ScSelectionTransferObj::CreateCellData()
                 aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
                 aDragShellRef->DoInitNew();
             }
-            ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
+            ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
 
             ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
             // bApi = sal_True -> no error messages
@@ -300,7 +300,7 @@ void ScSelectionTransferObj::CreateCellData()
                 // SetDragHandlePos is not used - there is no mouse position
                 //? pTransferObj->SetVisibleTab( nTab );
 
-                SfxObjectShellRef aPersistRef( aDragShellRef );
+                SfxObjectShellRef aPersistRef( aDragShellRef.get() );
                 pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
 
                 pTransferObj->SetDragSource( pDocSh, aNewMark );
@@ -336,7 +336,7 @@ void ScSelectionTransferObj::CreateDrawData()
                 aDragShellRef->DoInitNew();
             }
 
-            ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
+            ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
             SdrModel* pModel = pDrawView->GetMarkedObjModel();
             ScDrawLayer::SetGlobalDrawPersist(nullptr);
 
@@ -351,7 +351,7 @@ void ScSelectionTransferObj::CreateDrawData()
             ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
             uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-            SfxObjectShellRef aPersistRef( aDragShellRef );
+            SfxObjectShellRef aPersistRef( aDragShellRef.get() );
             pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
             pTransferObj->SetDragSource( pDrawView );       // copies selection
 

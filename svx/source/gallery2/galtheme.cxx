@@ -574,7 +574,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
                     const OUString        aStmName( GetSvDrawStreamNameFromURL( pEntry->aURL ) );
                     tools::SvRef<SotStorageStream>  pIStm = aSvDrawStorageRef->OpenSotStream( aStmName, StreamMode::READ );
 
-                    if( pIStm && !pIStm->GetError() )
+                    if( pIStm.Is() && !pIStm->GetError() )
                     {
                         pIStm->SetBufferSize( 16384 );
 
@@ -657,7 +657,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
         try
         {
             tools::SvRef<SotStorage> aTempStorageRef( new SotStorage( false, aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::STD_READWRITE ) );
-            aSvDrawStorageRef->CopyTo( aTempStorageRef );
+            aSvDrawStorageRef->CopyTo( aTempStorageRef.get() );
             nStorErr = aSvDrawStorageRef->GetError();
         }
         catch (const css::ucb::ContentCreationException& e)

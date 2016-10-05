@@ -121,7 +121,7 @@ public:
                                 : aRef->GetName();
                         }
 
-    SvMetaReference *   GetRef() const { return aRef; }
+    SvMetaReference *   GetRef() const { return aRef.get(); }
     void                SetRef( SvMetaReference * pRef  )
                         { aRef = pRef; }
 };
