@@ -88,13 +88,18 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 SC_SIMPLE_SERVICE_INFO( ScHeaderFooterContentObj, "ScHeaderFooterContentObj", "com.sun.star.sheet.HeaderFooterContent" )
 SC_SIMPLE_SERVICE_INFO( ScHeaderFooterTextObj, "ScHeaderFooterTextObj", "stardiv.one.Text.Text" )
 
-ScHeaderFooterContentObj::ScHeaderFooterContentObj( const EditTextObject* pLeft,
-                                                    const EditTextObject* pCenter,
-                                                    const EditTextObject* pRight ) :
-    mxLeftText(new ScHeaderFooterTextObj(this, SC_HDFT_LEFT, pLeft)),
-    mxCenterText(new ScHeaderFooterTextObj(this, SC_HDFT_CENTER, pCenter)),
-    mxRightText(new ScHeaderFooterTextObj(this, SC_HDFT_RIGHT, pRight))
+ScHeaderFooterContentObj::ScHeaderFooterContentObj()
 {
+}
+
+void ScHeaderFooterContentObj::Init(  const EditTextObject* pLeft,
+                                      const EditTextObject* pCenter,
+                                      const EditTextObject* pRight )
+{
+    uno::Reference<css::sheet::XHeaderFooterContent> xThis(this);
+    mxLeftText = rtl::Reference<ScHeaderFooterTextObj>(new ScHeaderFooterTextObj(xThis, SC_HDFT_LEFT, pLeft));
+    mxCenterText = rtl::Reference<ScHeaderFooterTextObj>(new ScHeaderFooterTextObj(xThis, SC_HDFT_CENTER, pCenter));
+    mxRightText = rtl::Reference<ScHeaderFooterTextObj>(new ScHeaderFooterTextObj(xThis, SC_HDFT_RIGHT, pRight));
 }
 
 ScHeaderFooterContentObj::~ScHeaderFooterContentObj() {}
@@ -175,9 +180,9 @@ rtl::Reference<ScHeaderFooterContentObj> ScHeaderFooterContentObj::getImplementa
 }
 
 ScHeaderFooterTextData::ScHeaderFooterTextData(
-    rtl::Reference<ScHeaderFooterContentObj> const & rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
+    uno::WeakReference<sheet::XHeaderFooterContent> xContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
     mpTextObj(pTextObj ? pTextObj->Clone() : nullptr),
-    rContentObj( rContent ),
+    xContentObj( xContent ),
     nPart( nP ),
     pEditEngine( nullptr ),
     pForwarder( nullptr ),
@@ -253,8 +258,8 @@ void ScHeaderFooterTextData::UpdateData(EditEngine& rEditEngine)
 }
 
 ScHeaderFooterTextObj::ScHeaderFooterTextObj(
-    rtl::Reference<ScHeaderFooterContentObj> const & rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
-    aTextData(rContent, nP, pTextObj)
+    uno::WeakReference<sheet::XHeaderFooterContent> xContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
+    aTextData(xContent, nP, pTextObj)
 {
     //  ScHeaderFooterTextData acquires rContent
     //  pUnoText is created on demand (getString/setString work without it)
@@ -321,15 +326,20 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException
     OUString aRet;
     const EditTextObject* pData;
 
+    uno::Reference<css::sheet::XHeaderFooterContent> xContentObj = aTextData.GetContentObj();
+    if (!xContentObj.is())
+        throw css::uno::RuntimeException("");
+
+    rtl::Reference<ScHeaderFooterContentObj> pContentObj = ScHeaderFooterContentObj::getImplementation(xContentObj);
+
     sal_uInt16 nPart = aTextData.GetPart();
-    rtl::Reference<ScHeaderFooterContentObj> rContentObj = aTextData.GetContentObj();
 
     if (nPart == SC_HDFT_LEFT)
-        pData = rContentObj->GetLeftEditObject();
+        pData = pContentObj->GetLeftEditObject();
     else if (nPart == SC_HDFT_CENTER)
-        pData = rContentObj->GetCenterEditObject();
+        pData = pContentObj->GetCenterEditObject();
     else
-        pData = rContentObj->GetRightEditObject();
+        pData = pContentObj->GetRightEditObject();
     if (pData)
     {
         // for pure text, no font info is needed in pool defaults
