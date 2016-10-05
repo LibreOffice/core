@@ -113,16 +113,17 @@ static OUString lcl_getNotebookbarFileName( vcl::EnumContext::Application eApp )
     return OUString();
 }
 
-static const utl::OConfigurationNode lcl_getCurrentImplConfigNode( const Reference<css::frame::XFrame>& xFrame )
+static const utl::OConfigurationNode lcl_getCurrentImplConfigNode( const Reference<css::frame::XFrame>& xFrame,
+                                                                   utl::OConfigurationTreeRoot& aNotebookbarNode )
 {
     const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
 
     OUStringBuffer aPath("org.openoffice.Office.UI.Notebookbar/");
 
-    const utl::OConfigurationTreeRoot aNotebookbarNode(
+    aNotebookbarNode = utl::OConfigurationTreeRoot(
                                         ::comphelper::getProcessComponentContext(),
                                         aPath.makeStringAndClear(),
-                                        false);
+                                        true);
     if ( !aNotebookbarNode.isValid() )
         return utl::OConfigurationNode();
 
@@ -283,7 +284,8 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             pSysWindow->GetNotebookBar()->Show();
             pSysWindow->GetNotebookBar()->SetIconClickHdl(LINK(nullptr, SfxNotebookBar, OpenNotebookbarPopupMenu));
 
-            const utl::OConfigurationNode aModeNode( lcl_getCurrentImplConfigNode( xFrame ) );
+            utl::OConfigurationTreeRoot aRoot;
+            const utl::OConfigurationNode aModeNode( lcl_getCurrentImplConfigNode( xFrame, aRoot ) );
             SfxNotebookBar::ShowMenubar( comphelper::getBOOL( aModeNode.getNodeValue( "HasMenubar" ) ) );
 
             SfxViewFrame* pView = SfxViewFrame::Current();
@@ -385,12 +387,25 @@ void SfxNotebookBar::ToggleMenubar()
             const Reference<frame::XLayoutManager>& xLayoutManager =
                                                     lcl_getLayoutManager(xFrame);
 
+            bool bShow = true;
             if (xLayoutManager.is() && xLayoutManager->getElement(MENUBAR_STR).is())
             {
                 if (xLayoutManager->isElementVisible(MENUBAR_STR))
+                {
                     SfxNotebookBar::ShowMenubar(false);
+                    bShow = false;
+                }
                 else
                     SfxNotebookBar::ShowMenubar(true);
+            }
+
+            // Save menubar settings
+            if (IsActive())
+            {
+                utl::OConfigurationTreeRoot aRoot;
+                utl::OConfigurationNode aModeNode( lcl_getCurrentImplConfigNode( xFrame, aRoot ) );
+                aModeNode.setNodeValue( "HasMenubar", toAny<bool>( bShow ) );
+                aRoot.commit();
             }
         }
     }
