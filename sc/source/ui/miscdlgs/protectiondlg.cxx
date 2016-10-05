@@ -65,11 +65,6 @@ void ScTableProtectionDlg::dispose()
     ModalDialog::dispose();
 }
 
-short ScTableProtectionDlg::Execute()
-{
-    return ModalDialog::Execute();
-}
-
 void ScTableProtectionDlg::SetDialogData(const ScTableProtection& rData)
 {
     for (sal_uInt16 i = 0; i < nOptionCount; ++i)

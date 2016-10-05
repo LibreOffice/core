@@ -32,7 +32,6 @@ public:
     ScTextImportOptionsDlg(vcl::Window* pParent);
     virtual ~ScTextImportOptionsDlg() override;
     virtual void dispose() override;
-    virtual short Execute() override;
 
     LanguageType getLanguageType() const;
     bool isDateConversionSet() const;

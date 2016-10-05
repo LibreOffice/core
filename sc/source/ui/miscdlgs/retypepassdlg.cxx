@@ -343,11 +343,6 @@ void ScRetypePassInputDlg::dispose()
     ModalDialog::dispose();
 }
 
-short ScRetypePassInputDlg::Execute()
-{
-    return ModalDialog::Execute();
-}
-
 bool ScRetypePassInputDlg::IsRemovePassword() const
 {
     return m_pBtnRemovePassword->IsChecked();

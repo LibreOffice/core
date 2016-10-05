@@ -78,11 +78,6 @@ void ScLinkedAreaDlg::dispose()
     ModalDialog::dispose();
 }
 
-short ScLinkedAreaDlg::Execute()
-{
-    return ModalDialog::Execute();
-}
-
 #define FILTERNAME_HTML  "HTML (StarCalc)"
 #define FILTERNAME_QUERY "calc_HTML_WebQuery"
 

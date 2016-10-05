@@ -40,8 +40,6 @@ public:
     virtual ~ScTableProtectionDlg() override;
     virtual void dispose() override;
 
-    virtual short Execute() override;
-
     void SetDialogData(const ScTableProtection& rData);
 
     void WriteData(ScTableProtection& rData) const;

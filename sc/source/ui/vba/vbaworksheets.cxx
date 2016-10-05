@@ -462,12 +462,6 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
     return  ScVbaWorksheets_BASE::Item( Index, Index2 );
 }
 
-uno::Any
-ScVbaWorksheets::getItemByStringIndex( const OUString& sIndex ) throw (uno::RuntimeException)
-{
-    return ScVbaWorksheets_BASE::getItemByStringIndex( sIndex );
-}
-
 OUString
 ScVbaWorksheets::getServiceImplName()
 {

@@ -735,11 +735,6 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
     return pEntry;
 }
 
-bool ScAcceptChgDlg::PreNotify( NotifyEvent& rNEvt )
-{
-    return SfxModelessDialog::PreNotify(rNEvt);
-}
-
 void ScAcceptChgDlg::UpdateView()
 {
     SvTreeListEntry* pParent=nullptr;

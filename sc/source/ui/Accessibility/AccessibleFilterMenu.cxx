@@ -122,11 +122,6 @@ sal_Int32 ScAccessibleFilterMenu::getBackground()
 
 // XAccessibleContext
 
-OUString ScAccessibleFilterMenu::getAccessibleName() throw (RuntimeException, std::exception)
-{
-    return ScAccessibleContextBase::getAccessibleName();
-}
-
 sal_Int32 ScAccessibleFilterMenu::getAccessibleChildCount()
     throw (RuntimeException, std::exception)
 {

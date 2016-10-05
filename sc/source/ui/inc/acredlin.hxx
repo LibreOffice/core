@@ -167,8 +167,6 @@ public:
 
     void            ReInit(ScViewData* ptrViewData);
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-
     void            Initialize (SfxChildWinInfo* pInfo);
     virtual void    FillInfo(SfxChildWinInfo&) const override;
 

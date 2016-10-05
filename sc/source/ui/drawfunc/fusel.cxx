@@ -79,11 +79,6 @@ FuSelection::~FuSelection()
 {
 }
 
-sal_uInt8 FuSelection::Command(const CommandEvent& rCEvt)
-{
-    return FuDraw::Command( rCEvt );
-}
-
 /*************************************************************************
 |*
 |* MouseButtonDown-event
@@ -570,31 +565,6 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     }
 
     return bReturn;
-}
-
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
-void FuSelection::Activate()
-{
-    FuDraw::Activate();
-}
-
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
-
-void FuSelection::Deactivate()
-{
-    /**************************************************************************
-    * Hide Cursor
-    **************************************************************************/
-    FuDraw::Deactivate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

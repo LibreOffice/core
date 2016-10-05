@@ -36,10 +36,6 @@ public:
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual sal_uInt8 Command(const CommandEvent& rCEvt) override;
-
-    virtual void Activate() override;
-    virtual void Deactivate() override;
 
     void    ActivateNoteHandles(SdrObject* pObj);
 

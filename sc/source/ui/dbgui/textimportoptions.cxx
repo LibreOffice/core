@@ -52,11 +52,6 @@ void ScTextImportOptionsDlg::dispose()
 }
 
 
-short ScTextImportOptionsDlg::Execute()
-{
-    return ModalDialog::Execute();
-}
-
 LanguageType ScTextImportOptionsDlg::getLanguageType() const
 {
     if (m_pRbAutomatic->IsChecked())

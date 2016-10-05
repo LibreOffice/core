@@ -72,9 +72,6 @@ public:
 
     /// XAccessibleContext
 
-    virtual OUString SAL_CALL getAccessibleName()
-        throw (css::uno::RuntimeException, std::exception) override;
-
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
         throw (css::uno::RuntimeException, std::exception) override;
 

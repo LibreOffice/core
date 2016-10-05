@@ -105,8 +105,6 @@ public:
     virtual ~ScRetypePassInputDlg() override;
     virtual void dispose() override;
 
-    virtual short Execute() override;
-
     bool IsRemovePassword() const;
     OUString GetNewPassword() const;
 

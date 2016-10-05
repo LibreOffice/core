@@ -677,16 +677,6 @@ void ScInputWindow::SetFormulaMode( bool bSet )
     aTextWindow.SetFormulaMode(bSet);
 }
 
-void ScInputWindow::SetText( const OUString& rString )
-{
-    ToolBox::SetText(rString);
-}
-
-OUString ScInputWindow::GetText() const
-{
-    return ToolBox::GetText();
-}
-
 bool ScInputWindow::IsInputActive()
 {
     return aTextWindow.IsInputActive();

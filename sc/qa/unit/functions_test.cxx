@@ -23,8 +23,6 @@ public:
 
     virtual void setUp() override;
 
-    virtual void tearDown() override;
-
     virtual bool load(
         const OUString &rFilter,
         const OUString &rURL,
@@ -57,11 +55,6 @@ void FunctionsTest::setUp()
     m_xCalcComponent =
         getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
-}
-
-void FunctionsTest::tearDown()
-{
-    ScBootstrapFixture::tearDown();
 }
 
 bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
