@@ -58,12 +58,12 @@ DdeData& DdeData::operator = ( const DdeData& )
     return *this;
 }
 
-DdeData::operator long() const
+long DdeData::getSize() const
 {
     return 0L;
 }
 
-DdeData::operator const void*() const
+void const * DdeData::getData() const
 {
   return nullptr;
 }

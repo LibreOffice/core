@@ -90,12 +90,12 @@ void DdeData::SetFormat(SotClipboardFormatId nFmt)
     pImp->nFmt = nFmt;
 }
 
-DdeData::operator const void*() const
+void const * DdeData::getData() const
 {
     return pImp->pData;
 }
 
-DdeData::operator long() const
+long DdeData::getSize() const
 {
     return pImp->nData;
 }

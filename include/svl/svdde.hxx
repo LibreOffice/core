@@ -67,8 +67,8 @@ public:
                     DdeData( const DdeData& );
                     ~DdeData();
 
-    operator const  void*() const;
-    operator        long() const;
+    void const *    getData() const;
+    long            getSize() const;
 
     SotClipboardFormatId GetFormat() const;
 

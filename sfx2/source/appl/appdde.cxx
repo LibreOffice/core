@@ -540,7 +540,7 @@ DdeData* SfxDdeDocTopic_Impl::Get(SotClipboardFormatId nFormat)
 bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
 {
     aSeq = css::uno::Sequence< sal_Int8 >(
-                            (sal_Int8*)(const void*)*pData, (long)*pData );
+                            (sal_Int8*)pData->getData(), pData->getSize() );
     bool bRet;
     if( aSeq.getLength() )
     {
