@@ -1325,8 +1325,7 @@ IMPL_LINK( AreaPropertyPanelBase, ClickTrGrHdl_Impl, ToolBox*, pToolBox, void )
         mxTrGrPopup = VclPtr<AreaTransparencyGradientPopup>::Create(pToolBox, *this);
     mxTrGrPopup->Rearrange(mpFloatTransparenceItem.get());
     OSL_ASSERT( pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SIDEBARGRADIENT);
-    mxTrGrPopup->StartPopupMode(pToolBox, FloatWinPopupFlags::Down |
-                                          FloatWinPopupFlags::NoAppFocusClose);
+    mxTrGrPopup->StartPopupMode(pToolBox, FloatWinPopupFlags::Down);
 }
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, void)

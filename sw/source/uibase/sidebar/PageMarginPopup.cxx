@@ -36,7 +36,7 @@ PageMarginPopup::~PageMarginPopup()
 VclPtr<SfxPopupWindow> PageMarginPopup::CreatePopupWindow()
 {
     VclPtr<sw::sidebar::PageMarginControl> pControl = VclPtr<sw::sidebar::PageMarginControl>::Create(GetSlotId());
-    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoAppFocusClose);
+    pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
     SetPopupWindow(pControl);
 
     return pControl;
