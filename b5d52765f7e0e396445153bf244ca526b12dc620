@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_5c5575c4",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-05T12:56:24Z",
+      "side": 1,
+      "message": "Inserting [NatNum#] should only be done if nNatNum is not 0. Or did I miss something?",
+      "revId": "b5d52765f7e0e396445153bf244ca526b12dc620",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
