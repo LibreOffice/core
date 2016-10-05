@@ -3409,7 +3409,7 @@ void ScFiltersTest::testSharedFormulaColumnLabelsODS()
     {
         const ScFormulaCell* pCell = rDoc.GetFormulaCell(ScAddress(i,1,0));
         CPPUNIT_ASSERT(pCell);
-        CPPUNIT_ASSERT(pCell->IsShared());
+        CPPUNIT_ASSERT(pCell->IsSharedTop());
         CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), pCell->GetSharedLength());
     }
 
