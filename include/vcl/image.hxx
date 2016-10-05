@@ -35,7 +35,6 @@ struct ImplImage;
 struct ImplImageList;
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }
 
-#define IMAGE_STDBTN_COLOR          Color( 0xC0, 0xC0, 0xC0 )
 #define IMAGELIST_IMAGE_NOTFOUND    ((sal_uInt16)0xFFFF)
 
 class VCL_DLLPUBLIC Image
