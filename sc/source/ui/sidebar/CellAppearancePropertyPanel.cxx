@@ -156,8 +156,7 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBo
     {
         if (!mxCellBorderStylePopup)
             mxCellBorderStylePopup = VclPtr<CellBorderStylePopup>::Create(GetBindings()->GetDispatcher());
-        mxCellBorderStylePopup->StartPopupMode(pToolBox, FloatWinPopupFlags::Down |
-                                                         FloatWinPopupFlags::NoAppFocusClose);
+        mxCellBorderStylePopup->StartPopupMode(pToolBox, FloatWinPopupFlags::GrabFocus);
     }
 }
 
