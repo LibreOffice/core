@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_fca9e1e0",
+        "filename": "sc/source/core/data/markarr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001390
+      },
+      "writtenOn": "2016-10-05T11:42:41Z",
+      "side": 1,
+      "message": "Indeed, this occurs in several files.\nMy plan was to first convert a couple of home-grown list/vector implementations into equivalent stl containers. That would prepare the code for the next step: evaluate the effectiveness of the chosen container and algorithms.",
+      "parentUuid": "7a77a97e_7c48715c",
+      "revId": "7fe6709361aa568f07b05e96e1a5e1bca244c890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_9c738db4",
         "filename": "sc/source/core/data/markarr.cxx",
         "patchSetId": 1
@@ -64,6 +82,24 @@
       "writtenOn": "2016-10-05T11:06:29Z",
       "side": 1,
       "message": "that syntax won\u0027t work on MSVC2013, you probably be using emplace() anyhow",
+      "revId": "7fe6709361aa568f07b05e96e1a5e1bca244c890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_1caf7de4",
+        "filename": "sc/source/core/data/markarr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1001390
+      },
+      "writtenOn": "2016-10-05T11:42:41Z",
+      "side": 1,
+      "message": "Good to know, thanks.",
+      "parentUuid": "7a77a97e_fc72c1ac",
       "revId": "7fe6709361aa568f07b05e96e1a5e1bca244c890",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
