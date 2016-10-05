@@ -1356,12 +1356,6 @@ void ToolbarMenu::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 }
 
 
-void ToolbarMenu::RequestHelp( const HelpEvent& rHEvt )
-{
-    ToolbarPopup::RequestHelp( rHEvt );
-}
-
-
 void ToolbarMenu::StateChanged( StateChangedType nType )
 {
     ToolbarPopup::StateChanged( nType );

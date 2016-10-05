@@ -343,7 +343,6 @@ private:
 
 public:
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     XMLImportTest() : BootstrapFixture(true, false) {}
     void parse();
@@ -388,11 +387,6 @@ void XMLImportTest::setUp()
     xInit->initialize( namespaceArgs );
 
     m_sDirPath = m_directories.getPathFromSrc( "/sax/qa/data/" );
-}
-
-void XMLImportTest::tearDown()
-{
-    test::BootstrapFixture::tearDown();
 }
 
 void XMLImportTest::parse()

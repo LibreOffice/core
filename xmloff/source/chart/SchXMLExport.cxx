@@ -3549,11 +3549,6 @@ sal_uInt32 SchXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     return SvXMLExport::exportDoc( eClass );
 }
 
-void SchXMLExport::ExportStyles_( bool bUsed )
-{
-    SvXMLExport::ExportStyles_( bUsed );
-}
-
 void SchXMLExport::ExportMasterStyles_()
 {
     // not available in chart

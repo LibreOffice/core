@@ -320,11 +320,6 @@ namespace cmis
 
     XTYPEPROVIDER_COMMON_IMPL( RepoContent );
 
-    uno::Any SAL_CALL RepoContent::queryInterface( const uno::Type & rType ) throw ( uno::RuntimeException, std::exception )
-    {
-        return ContentImplHelper::queryInterface(rType);
-    }
-
     OUString SAL_CALL RepoContent::getImplementationName() throw( uno::RuntimeException, std::exception )
     {
        return OUString("com.sun.star.comp.CmisRepoContent");

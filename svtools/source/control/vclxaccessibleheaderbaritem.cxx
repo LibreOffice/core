@@ -101,14 +101,6 @@ IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleHeaderBarItem, OAccessibleExtendedC
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleHeaderBarItem, OAccessibleExtendedComponentHelper, VCLXAccessibleHeaderBarItem_BASE )
 
 
-// XComponent
-
-
-void VCLXAccessibleHeaderBarItem::disposing()
-{
-    OAccessibleExtendedComponentHelper::disposing();
-}
-
 // XServiceInfo
 OUString VCLXAccessibleHeaderBarItem::getImplementationName() throw (RuntimeException, std::exception)
 {

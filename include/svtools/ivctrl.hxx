@@ -209,7 +209,6 @@ protected:
     virtual void        GetFocus() override;
     virtual void        LoseFocus() override;
     void                ClickIcon();
-    virtual void        StateChanged( StateChangedType nType ) override;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
     static void         DrawEntryImage(

@@ -188,9 +188,8 @@ public:
     virtual bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) override;
 
     virtual void                    SetNoSelection() override;
-    using SvListView::SelectAll;
+    using SvTabListBox::SelectAll;
     virtual void                    SelectAll() override;
-    virtual void                    SelectAll( bool bSelect, bool bPaint = true ) override;
     virtual void                    SelectRow( long _nRow, bool _bSelect = true, bool bExpand = true ) override;
     virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true ) override;
     virtual sal_Int32               GetSelectedRowCount() const override;

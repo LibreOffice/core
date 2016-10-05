@@ -161,8 +161,6 @@ public:
     void            DoOutstandingInvalidations();
     void            Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
     void            Invalidate( const Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
-    void            Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE ) override
-                    { Control::Invalidate( rRegion, nFlags ); }
 
 protected:
     void            StartRowDividerDrag( const Point& _rStartPos );
