@@ -290,9 +290,9 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
 
                     // execute the method
                     SbxVariableRef retValRef = new SbxVariable;
-                    nErr = pBasMgr->ExecuteMacro( aQualifiedMethod, aArgs, retValRef );
+                    nErr = pBasMgr->ExecuteMacro( aQualifiedMethod, aArgs, retValRef.get() );
                     if ( nErr == ERRCODE_NONE )
-                        rRetval = sbxToUnoValue( retValRef );
+                        rRetval = sbxToUnoValue( retValRef.get() );
                 }
 
                 if ( bSetGlobalThisComponent )

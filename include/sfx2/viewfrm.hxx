@@ -120,8 +120,7 @@ public:
 
     SfxProgress*            GetProgress() const;
 
-    SfxObjectShell*         GetObjectShell() const
-                            { return m_xObjSh; }
+    SfxObjectShell*         GetObjectShell() const { return m_xObjSh.get(); }
 
     void                    LockAdjustPosSizePixel()
                             { m_nAdjustPosPixelLock++; }

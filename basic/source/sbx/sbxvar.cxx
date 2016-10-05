@@ -148,7 +148,7 @@ SfxBroadcaster& SbxVariable::GetBroadcaster()
 
 SbxArray* SbxVariable::GetParameters() const
 {
-    return mpPar;
+    return mpPar.get();
 }
 
 
@@ -199,7 +199,7 @@ void SbxVariable::Broadcast( sal_uInt32 nHintId )
 
 SbxInfo* SbxVariable::GetInfo()
 {
-    if( !pInfo )
+    if( !pInfo.Is() )
     {
         Broadcast( SBX_HINT_INFOWANTED );
         if( pInfo.Is() )
@@ -207,7 +207,7 @@ SbxInfo* SbxVariable::GetInfo()
             SetModified( true );
         }
     }
-    return pInfo;
+    return pInfo.get();
 }
 
 void SbxVariable::SetInfo( SbxInfo* p )
@@ -239,7 +239,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     // Request parameter-information (not for objects)
     const_cast<SbxVariable*>(this)->GetInfo();
     // Append nothing, if it is a simple property (no empty brackets)
-    if (!pInfo || (pInfo->m_Params.empty() && GetClass() == SbxClassType::Property))
+    if (!pInfo.Is() || (pInfo->m_Params.empty() && GetClass() == SbxClassType::Property))
     {
         return maName;
     }

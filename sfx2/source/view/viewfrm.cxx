@@ -1701,7 +1701,7 @@ void SfxViewFrame::SetQuietMode_Impl( bool bOn )
 
 SfxObjectShell* SfxViewFrame::GetObjectShell()
 {
-    return m_xObjSh;
+    return m_xObjSh.get();
 }
 
 const Size& SfxViewFrame::GetMargin_Impl() const
@@ -2330,8 +2330,8 @@ void SfxViewFrame::SetModalMode( bool bModal )
     m_pImpl->bModal = bModal;
     if ( m_xObjSh.Is() )
     {
-        for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( m_xObjSh );
-              !bModal && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, m_xObjSh ) )
+        for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( m_xObjSh.get() );
+              !bModal && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, m_xObjSh.get() ) )
             bModal = pFrame->m_pImpl->bModal;
         m_xObjSh->SetModalMode_Impl( bModal );
     }

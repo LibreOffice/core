@@ -232,7 +232,7 @@ StarBASIC* lclGetDocBasicForModule( SbModule* pModule )
 
 SbxObject* StarBASIC::getVBAGlobals( )
 {
-    if ( !pVBAGlobals )
+    if ( !pVBAGlobals.Is() )
     {
         Any aThisDoc;
         if ( GetUNOConstant("ThisComponent", aThisDoc) )
@@ -253,7 +253,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
         const OUString aVBAHook("VBAGlobals");
         pVBAGlobals = static_cast<SbUnoObject*>(Find( aVBAHook , SbxClassType::DontCare ));
     }
-    return pVBAGlobals;
+    return pVBAGlobals.get();
 }
 
 //  i#i68894#
@@ -641,7 +641,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     ResetFlag( SbxFlagBits::GlobalSearch );
 
     // Copy the methods from original class module
-    SbxArray* pClassMethods = pClassModule->GetMethods();
+    SbxArray* pClassMethods = pClassModule->GetMethods().get();
     sal_uInt32 nMethodCount = pClassMethods->Count32();
     sal_uInt32 i;
     for( i = 0 ; i < nMethodCount ; i++ )
@@ -1098,11 +1098,12 @@ void StarBASIC::Insert( SbxVariable* pVar )
 
 void StarBASIC::Remove( SbxVariable* pVar )
 {
-    if( dynamic_cast<const SbModule*>(pVar) != nullptr)
+    SbModule* pModule = dynamic_cast<SbModule*>(pVar);
+    if( pModule )
     {
         // #87540 Can be last reference!
-        SbxVariableRef xVar = pVar;
-        pModules.erase(std::remove(pModules.begin(), pModules.end(), pVar));
+        SbModuleRef xVar = pModule;
+        pModules.erase(std::remove(pModules.begin(), pModules.end(), xVar));
         pVar->SetParent( nullptr );
         EndListening( pVar->GetBroadcaster() );
     }
@@ -1290,12 +1291,12 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
         {
             if( rName.equalsIgnoreAsciiCase( RTLNAME ) )
             {
-                pRes = pRtl;
+                pRes = pRtl.get();
             }
         }
         if( !pRes )
         {
-            pRes = static_cast<SbiStdObject*>(static_cast<SbxObject*>(pRtl))->Find( rName, t );
+            pRes = static_cast<SbiStdObject*>(pRtl.get())->Find( rName, t );
         }
         if( pRes )
         {
@@ -2106,12 +2107,12 @@ void BasicCollection::Notify( SfxBroadcaster& rCst, const SfxHint& rHint )
             if( pVar->GetHashCode() == nAddHash
                   && aVarName.equalsIgnoreAsciiCase( pAddStr ) )
             {
-                pVar->SetInfo( xAddInfo );
+                pVar->SetInfo( xAddInfo.get() );
             }
             else if( pVar->GetHashCode() == nItemHash
                   && aVarName.equalsIgnoreAsciiCase( pItemStr ) )
             {
-                pVar->SetInfo( xItemInfo );
+                pVar->SetInfo( xItemInfo.get() );
             }
         }
     }
@@ -2219,7 +2220,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
             }
         }
         pNewItem->SetFlag( SbxFlagBits::ReadWrite );
-        xItemArray->Insert32( pNewItem, nNextIndex );
+        xItemArray->Insert32( pNewItem.get(), nNextIndex );
     }
     else
     {

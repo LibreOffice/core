@@ -104,7 +104,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
             eBiff = eBookBiff;
         }
 
-        pBookStrm = xStrgStrm;
+        pBookStrm = xStrgStrm.get();
     }
 
     // no "Book" or "Workbook" stream found, try plain input stream from medium (even for BIFF5+)

@@ -215,8 +215,8 @@ RTLFUNC(CallByName)
             // Call method
             SbxVariableRef refVar = rPar.Get(0);
             if( xArray.Is() )
-                pMeth->SetParameters( xArray );
-            pMeth->Call( refVar );
+                pMeth->SetParameters( xArray.get() );
+            pMeth->Call( refVar.get() );
             pMeth->SetParameters( nullptr );
         }
         break;

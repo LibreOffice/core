@@ -158,7 +158,8 @@ void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
         getAddressConverter().convertToCellRangeList( aRangeList, aRefs, getSheetIndex(), true );
         if (!aRangeList.empty())
         {
-            ScRangeList* pRangeList = aProt.maRangeList = new ScRangeList;
+            aProt.maRangeList = new ScRangeList;
+            ScRangeList* pRangeList = aProt.maRangeList.get();
             for (::std::vector< css::table::CellRangeAddress >::const_iterator itr( aRangeList.begin()), end( aRangeList.end()); itr != end; ++itr)
             {
                 ScRange aRange;

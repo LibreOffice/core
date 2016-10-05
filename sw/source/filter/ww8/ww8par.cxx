@@ -4902,7 +4902,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
         {
             xTableStream->SetEndian(SvStreamEndian::LITTLE);
-            WW8Customizations aGblCustomisations( xTableStream, aWwFib );
+            WW8Customizations aGblCustomisations( xTableStream.get(), aWwFib );
             aGblCustomisations.Import( m_pDocShell );
         }
     }
@@ -6168,7 +6168,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rURL
 sal_uLong WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize )
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
-    OSL_ENSURE( pStg, "Where is my Storage?" );
+    OSL_ENSURE( pStg.get(), "Where is my Storage?" );
     rRef = pStg->OpenSotStream( "WordDocument", StreamMode::READ | StreamMode::SHARE_DENYALL);
 
     if( rRef.Is() )
@@ -6215,7 +6215,7 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, co
         else if ( sFltName=="CWW7" )
             nVersion = 7;
 
-        if( pStg )
+        if( pStg.Is() )
         {
             nRet = OpenMainStream( refStrm, nOldBuffSize );
             pIn = &refStrm;
@@ -6229,7 +6229,7 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, co
 
     if( !nRet )
     {
-        std::unique_ptr<SwWW8ImplReader> pRdr(new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
+        std::unique_ptr<SwWW8ImplReader> pRdr(new SwWW8ImplReader(nVersion, pStg.get(), pIn, rDoc,
             rBaseURL, bNew, bSkipImages, *rPaM.GetPoint()));
         if (bNew)
         {
@@ -6283,7 +6283,7 @@ bool WW8Reader::ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const
     tools::SvRef<SotStorageStream> refStrm;
     if (!pThis->OpenMainStream(refStrm, nOldBuffSize))
     {
-        WW8Glossary aGloss( refStrm, 8, pStg );
+        WW8Glossary aGloss( refStrm, 8, pStg.get() );
         bRet = aGloss.Load( rBlocks, bSaveRelFiles );
     }
     return bRet;

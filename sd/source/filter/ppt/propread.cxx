@@ -553,7 +553,7 @@ PropRead::PropRead( SotStorage& rStorage, const OUString& rName ) :
     if ( rStorage.IsStream( rName ) )
     {
         mpSvStream = rStorage.OpenSotStream( rName, StreamMode::STD_READ );
-        if ( mpSvStream )
+        if ( mpSvStream.Is() )
         {
             mpSvStream->SetEndian( SvStreamEndian::LITTLE );
             memset( mApplicationCLSID, 0, 16 );
@@ -604,7 +604,7 @@ void PropRead::Read()
                 nCurrent = mpSvStream->Tell();
                 mpSvStream->Seek( nSectionOfs );
                 Section aSection( pSectCLSID );
-                aSection.Read( mpSvStream );
+                aSection.Read( mpSvStream.get() );
                 AddSection( aSection );
                 mpSvStream->Seek( nCurrent );
             }

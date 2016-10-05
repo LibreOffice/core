@@ -655,8 +655,8 @@ void SvxShowCharSet::OutputIndex( int nNewIndex )
 
 void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew )
 {
-    if (mxFontCharMap == nullptr)
-        RecalculateFont(*this);
+    if ( !mxFontCharMap.Is() )
+        RecalculateFont( *this );
 
     // get next available char of current font
     sal_UCS4 cNext = mxFontCharMap->GetNextChar( (cNew > 0) ? cNew - 1 : cNew );
@@ -1621,7 +1621,7 @@ void SubsetMap::InitList()
 
 void SubsetMap::ApplyCharMap( const FontCharMapRef& rxFontCharMap )
 {
-    if( !rxFontCharMap )
+    if( !rxFontCharMap.Is() )
         return;
 
     // remove subsets that are not matched in any range

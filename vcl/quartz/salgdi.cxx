@@ -61,7 +61,7 @@ CoreTextFontFace::CoreTextFontFace( const CoreTextFontFace& rSrc )
   , mbHasOs2Table( rSrc.mbHasOs2Table )
   , mbCmapEncodingRead( rSrc.mbCmapEncodingRead )
 {
-    if( rSrc.mxCharMap )
+    if( rSrc.mxCharMap.Is() )
         mxCharMap = rSrc.mxCharMap;
 }
 
@@ -77,7 +77,7 @@ CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, sal_IntPtr nFont
 
 CoreTextFontFace::~CoreTextFontFace()
 {
-    if( mxCharMap )
+    if( mxCharMap.Is() )
     {
         mxCharMap = nullptr;
     }
@@ -93,7 +93,7 @@ static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 const FontCharMapRef CoreTextFontFace::GetFontCharMap() const
 {
     // return the cached charmap
-    if( mxCharMap )
+    if( mxCharMap.Is() )
         return mxCharMap;
 
     // set the default charmap
@@ -741,7 +741,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
         }
 
         FontCharMapRef xFCMap = mpFontData->GetFontCharMap();
-        SAL_WARN_IF( !xFCMap || !xFCMap->GetCharCount(), "vcl", "no charmap" );
+        SAL_WARN_IF( !xFCMap.Is() || !xFCMap->GetCharCount(), "vcl", "no charmap" );
 
         // get unicode<->glyph encoding
         // TODO? avoid sft mapping by using the xFCMap itself

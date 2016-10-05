@@ -531,12 +531,12 @@ bool PPTWriter::ImplCreateDocumentSummaryInformation()
             {
                 aThumbSeq = *o3tl::doAccess<uno::Sequence<sal_Int8>>(mAny);
             }
-            sfx2::SaveOlePropertySet( xDocProps, mrStg,
+            sfx2::SaveOlePropertySet( xDocProps, mrStg.get(),
                     &aThumbSeq, &aGuidSeq, &aHyperSeq);
         }
         else
         {
-            sfx2::SaveOlePropertySet( xDocProps, mrStg,
+            sfx2::SaveOlePropertySet( xDocProps, mrStg.get(),
                     nullptr, &aGuidSeq, &aHyperSeq );
         }
     }
@@ -1268,7 +1268,7 @@ void PPTWriter::ImplWriteOLE( )
                         OUString aPersistStream( SVEXT_PERSIST_STREAM );
                         SvMemoryStream aStream;
                         tools::SvRef<SotStorage> xCleanStorage( new SotStorage( false, aStream ) );
-                        xTempStorage->CopyTo( xCleanStorage );
+                        xTempStorage->CopyTo( xCleanStorage.get() );
                         // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
                         tools::SvRef<SotStorageStream> xStm = xCleanStorage->OpenSotStream( aPersistStream );

@@ -1395,9 +1395,9 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     xLockBytes->SetSynchronMode();
     Reference< XActiveDataControl > xSink;
     if ( eOpenMode & StreamMode::WRITE )
-        xSink = static_cast<XActiveDataControl*>(new UcbStreamer_Impl( xLockBytes ));
+        xSink = static_cast<XActiveDataControl*>(new UcbStreamer_Impl( xLockBytes.get() ));
     else
-        xSink = static_cast<XActiveDataControl*>(new UcbDataSink_Impl( xLockBytes ));
+        xSink = static_cast<XActiveDataControl*>(new UcbDataSink_Impl( xLockBytes.get() ));
 
     if ( rProps.getLength() )
     {

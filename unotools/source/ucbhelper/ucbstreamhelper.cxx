@@ -122,7 +122,7 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
                                                     eOpenMode, xInteractionHandler );
         if ( xLockBytes.Is() )
         {
-            pStream = new SvStream( xLockBytes );
+            pStream = new SvStream( xLockBytes.get() );
             pStream->SetBufferSize( 4096 );
             pStream->SetError( xLockBytes->GetError() );
         }
@@ -164,13 +164,14 @@ SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode e
     return lcl_CreateStream( rFileName, eOpenMode, xIHScoped,!bFileExists );
 }
 
+
 SvStream* UcbStreamHelper::CreateStream( const Reference < XInputStream >& xStream )
 {
     SvStream* pStream = nullptr;
     UcbLockBytesRef xLockBytes = UcbLockBytes::CreateInputLockBytes( xStream );
     if ( xLockBytes.Is() )
     {
-        pStream = new SvStream( xLockBytes );
+        pStream = new SvStream( xLockBytes.get() );
         pStream->SetBufferSize( 4096 );
         pStream->SetError( xLockBytes->GetError() );
     }
@@ -186,7 +187,7 @@ SvStream* UcbStreamHelper::CreateStream( const Reference < XStream >& xStream )
         UcbLockBytesRef xLockBytes = UcbLockBytes::CreateLockBytes( xStream );
         if ( xLockBytes.Is() )
         {
-            pStream = new SvStream( xLockBytes );
+            pStream = new SvStream( xLockBytes.get() );
             pStream->SetBufferSize( 4096 );
             pStream->SetError( xLockBytes->GetError() );
         }
@@ -206,7 +207,7 @@ SvStream* UcbStreamHelper::CreateStream( const Reference < XInputStream >& xStre
         if ( !bCloseStream )
             xLockBytes->setDontClose_Impl();
 
-        pStream = new SvStream( xLockBytes );
+        pStream = new SvStream( xLockBytes.get() );
         pStream->SetBufferSize( 4096 );
         pStream->SetError( xLockBytes->GetError() );
     }
@@ -225,7 +226,7 @@ SvStream* UcbStreamHelper::CreateStream( const Reference < XStream >& xStream, b
             if ( !bCloseStream )
                 xLockBytes->setDontClose_Impl();
 
-            pStream = new SvStream( xLockBytes );
+            pStream = new SvStream( xLockBytes.get() );
             pStream->SetBufferSize( 4096 );
             pStream->SetError( xLockBytes->GetError() );
         }

@@ -1103,7 +1103,7 @@ bool XclExpXmlStream::exportDocument()
         {
             SvMemoryStream aVbaStream(4096, 4096);
             tools::SvRef<SotStorage> pVBAStorage(new SotStorage(aVbaStream));
-            aExport.exportVBA(pVBAStorage);
+            aExport.exportVBA( pVBAStorage.get() );
             aVbaStream.Seek(0);
             css::uno::Reference<css::io::XInputStream> xVBAStream(
                     new utl::OInputStreamWrapper(aVbaStream));

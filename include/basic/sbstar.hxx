@@ -116,7 +116,7 @@ public:
     virtual bool Call( const OUString&, SbxArray* = nullptr ) override;
 
     SbModules&      GetModules() { return pModules; }
-    SbxObject*      GetRtl()     { return pRtl;     }
+    SbxObject*      GetRtl()     { return pRtl.get();     }
     SbModule*       FindModule( const OUString& );
     // Run init code of all modules (including the inserted Doc-Basics)
     void            InitAllModules( StarBASIC* pBasicNotToInit = nullptr );

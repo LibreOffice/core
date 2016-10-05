@@ -141,7 +141,7 @@ void SdExportTest::testN821567()
     OUString bgImage;
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/n821567.pptx"), PPTX );
 
-    xDocShRef = saveAndReload( xDocShRef, ODP );
+    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
     uno::Reference< drawing::XDrawPagesSupplier > xDoc(
         xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
     CPPUNIT_ASSERT_MESSAGE( "not exactly one page", xDoc->getDrawPages()->getCount() == 1 );
@@ -185,7 +185,7 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
 void SdExportTest::testTransparentBackground()
 {
    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/transparent_background.odp"), ODP);
-    xDocShRef = saveAndReload( xDocShRef, ODP );
+    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
@@ -206,7 +206,7 @@ void SdExportTest::testMediaEmbedding()
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"), ODP);
 
 #if HAVE_FEATURE_GLTF
-    xDocShRef = saveAndReload( xDocShRef, ODP );
+    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
 #endif
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
@@ -236,7 +236,7 @@ void SdExportTest::testMediaEmbedding()
 void SdExportTest::testFdo84043()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/fdo84043.odp"), ODP);
-    xDocShRef = saveAndReload( xDocShRef, ODP );
+    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
 
     // the bug was duplicate attributes, causing crash in a build with asserts
     const SdrPage *pPage = GetPage( 1, xDocShRef );
@@ -356,7 +356,7 @@ void SdExportTest::testTdf80020()
         uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("Test Style"), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
-        xDocShRef = saveAndReload( xDocShRef, ODP );
+        xDocShRef = saveAndReload( xDocShRef.get(), ODP );
     }
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
@@ -516,7 +516,7 @@ void SdExportTest::testTdf62176()
     CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), xParagraph->getString());
 
     //Saving and Reloading the file
-    xDocShRef = saveAndReload(xDocShRef, ODP);
+    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
     uno::Reference<drawing::XDrawPage> xPage2( getPage(0, xDocShRef ) );
     //there should be only *one* shape
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xPage2->getCount());
@@ -542,7 +542,7 @@ void SdExportTest::testEmbeddedPdf()
 {
 #if HAVE_FEATURE_PDFIMPORT
     sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/embedded-pdf.odp"), ODP);
-    xShell = saveAndReload(xShell, ODP);
+    xShell = saveAndReload( xShell.get(), ODP );
     uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     OUString aReplacementGraphicURL;

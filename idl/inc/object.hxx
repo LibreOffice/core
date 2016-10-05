@@ -43,7 +43,7 @@ public:
     void            SetClass( SvMetaClass * pClass )
                     { xClass = pClass; }
     SvMetaClass *   GetClass() const
-                    { return xClass; }
+                    { return xClass.get(); }
 };
 
 

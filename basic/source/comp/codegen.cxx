@@ -158,7 +158,7 @@ void SbiCodeGen::Save()
                 const OUString& rIfaceName = pParser->aIfaceVector[i];
                 SbxVariable* pIfaceVar = new SbxVariable( SbxVARIANT );
                 pIfaceVar->SetName( rIfaceName );
-                SbxArray* pIfaces = rMod.pClassData->mxIfaces;
+                SbxArray* pIfaces = rMod.pClassData->mxIfaces.get();
                 pIfaces->Insert( pIfaceVar, pIfaces->Count() );
             }
         }

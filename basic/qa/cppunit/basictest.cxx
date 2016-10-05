@@ -78,7 +78,7 @@ SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rAr
     SbxVariableRef pReturn = nullptr;
     if ( !Compile() )
         return pReturn;
-    SbMethod* pMeth = mpMod ? static_cast<SbMethod*>(mpMod->Find( "doUnitTest",  SbxClassType::Method )) : nullptr;
+    SbMethod* pMeth = mpMod.Is() ? static_cast<SbMethod*>(mpMod->Find( "doUnitTest",  SbxClassType::Method )) : nullptr;
     if ( pMeth )
     {
         if ( rArgs.getLength() )
@@ -90,7 +90,7 @@ SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rAr
                 unoToSbxValue( pVar, rArgs[ i ] );
                 aArgs->Put(  pVar, i + 1 );
             }
-            pMeth->SetParameters( aArgs );
+            pMeth->SetParameters( aArgs.get() );
         }
         pReturn = new SbxMethod( *static_cast<SbxMethod*>(pMeth));
     }
@@ -105,7 +105,7 @@ SbxVariableRef MacroSnippet::Run()
 
 bool MacroSnippet::Compile()
 {
-    CPPUNIT_ASSERT_MESSAGE("module is NULL", mpMod != nullptr );
+    CPPUNIT_ASSERT_MESSAGE("module is NULL", mpMod.get() != nullptr );
     mpMod->Compile();
     return !mbError;
 }

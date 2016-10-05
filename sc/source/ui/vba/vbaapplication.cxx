@@ -460,12 +460,12 @@ ScVbaApplication::wait( double time ) throw (uno::RuntimeException, std::excepti
     SbxArrayRef aArgs = new SbxArray;
     SbxVariableRef aRef = new SbxVariable;
     aRef->PutDouble( time );
-    aArgs->Put(  aRef, 1 );
+    aArgs->Put(  aRef.get(), 1 );
     SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( "WaitUntil", SbxClassType::Method ));
 
     if ( pMeth )
     {
-        pMeth->SetParameters( aArgs );
+        pMeth->SetParameters( aArgs.get() );
         SbxVariableRef refTemp = pMeth;
         // forces a broadcast
         SbxVariableRef pNew = new  SbxMethod( *static_cast<SbxMethod*>(pMeth));
@@ -1268,7 +1268,7 @@ ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeExcep
         // forces a broadcast
         SbxVariableRef pNew = new  SbxMethod( *static_cast<SbxMethod*>(pMeth));
                 OSL_TRACE("pNew has type %d and string value %s", pNew->GetType(), OUStringToOString( pNew->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
-        aRet = sbxToUnoValue( pNew );
+        aRet = sbxToUnoValue( pNew.get() );
     }
     return aRet;
 }
