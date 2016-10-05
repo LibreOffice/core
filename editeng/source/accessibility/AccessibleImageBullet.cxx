@@ -99,12 +99,6 @@ namespace accessibility
         }
     }
 
-    uno::Any SAL_CALL AccessibleImageBullet::queryInterface (const uno::Type & rType) throw (uno::RuntimeException, std::exception)
-    {
-
-        return AccessibleImageBulletInterfaceBase::queryInterface(rType);
-    }
-
     uno::Reference< XAccessibleContext > SAL_CALL AccessibleImageBullet::getAccessibleContext(  ) throw (uno::RuntimeException, std::exception)
     {
 

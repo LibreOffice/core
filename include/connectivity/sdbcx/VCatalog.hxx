@@ -105,7 +105,6 @@ namespace connectivity
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XInterface
-            void SAL_CALL acquire() throw() override;
             void SAL_CALL release() throw() override;
             // XTablesSupplier
             virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) throw(css::uno::RuntimeException, std::exception) override;
