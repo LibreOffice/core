@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_bc512911",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001390
+      },
+      "writtenOn": "2016-10-05T10:36:42Z",
+      "side": 1,
+      "message": "If pDataArray contains a lot of the identical consecutive values, the size of the vector will be a lot less than nDataCount. It is certainly an upper bound, so m_data.reserve(nDataCount) will definitely allocate enough, but possibly(quite a lot) too much.",
+      "parentUuid": "7a77a97e_fc2481b0",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_3c37d9e4",
         "filename": "sc/source/core/data/compressedarray.cxx",
         "patchSetId": 1
@@ -64,6 +82,24 @@
       "writtenOn": "2016-10-05T10:21:17Z",
       "side": 1,
       "message": "this should be \n   if ( newLimit \u003c\u003d m_data_size() )\nor you are going to trim existing data :-(",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_dc56e505",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001390
+      },
+      "writtenOn": "2016-10-05T10:36:42Z",
+      "side": 1,
+      "message": "If I understand it correctly, vector.reserve() never changes it\u0027s data, so trimming is not possible.",
+      "parentUuid": "7a77a97e_5c3495dd",
       "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
