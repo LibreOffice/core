@@ -202,6 +202,7 @@ public:
     void testGetPivotDataXLS();
     void testPivotTableSharedGroupXLSX();
     void testPivotTableSharedDateGroupXLSX();
+    void testPivotTableSharedNumGroupXLSX();
 
     void testFormulaDependency();
 
@@ -310,6 +311,7 @@ public:
     CPPUNIT_TEST(testGetPivotDataXLS);
     CPPUNIT_TEST(testPivotTableSharedGroupXLSX);
     CPPUNIT_TEST(testPivotTableSharedDateGroupXLSX);
+    CPPUNIT_TEST(testPivotTableSharedNumGroupXLSX);
     CPPUNIT_TEST(testRowHeightODS);
     CPPUNIT_TEST(testFormulaDependency);
     CPPUNIT_TEST(testRichTextContentODS);
@@ -2131,6 +2133,41 @@ void ScFiltersTest::testPivotTableSharedDateGroupXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("2004"), rDoc.GetString(ScAddress(5,7,1)));
     // TODO: check why this fails with 2005
     // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(5,8,1)));
+
+    // There should be exactly 2 pivot tables and 1 cache.
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
+
+    ScDPCollection::SheetCaches& rSheetCaches = pDPs->GetSheetCaches();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rSheetCaches.size());
+
+    const ScDPCache* pCache = rSheetCaches.getExistingCache(ScRange(0,0,0,9,24,0));
+    CPPUNIT_ASSERT_MESSAGE("Pivot cache is expected for A1:J25 on the first sheet.", pCache);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(10), pCache->GetFieldCount());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testPivotTableSharedNumGroupXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("pivot-table/shared-numgroup.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Check whether right number groups are imported for both tables
+    // First table
+    CPPUNIT_ASSERT_EQUAL(OUString("32674-47673"), rDoc.GetString(ScAddress(0,4,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("47674-62673"), rDoc.GetString(ScAddress(0,5,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("62674-77673"), rDoc.GetString(ScAddress(0,6,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("77674-92673"), rDoc.GetString(ScAddress(0,7,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("92674-107673"), rDoc.GetString(ScAddress(0,8,1)));
+
+    // Second table
+    CPPUNIT_ASSERT_EQUAL(OUString("32674-47673"), rDoc.GetString(ScAddress(5,4,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("47674-62673"), rDoc.GetString(ScAddress(5,5,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("62674-77673"), rDoc.GetString(ScAddress(5,6,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("77674-92673"), rDoc.GetString(ScAddress(5,7,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("92674-107673"), rDoc.GetString(ScAddress(5,8,1)));
 
     // There should be exactly 2 pivot tables and 1 cache.
     ScDPCollection* pDPs = rDoc.GetDPCollection();
