@@ -1907,7 +1907,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     // Foreground
     aStyleSettings.SetRadioCheckTextColor( aFore );
     aStyleSettings.SetLabelTextColor( aFore );
-    aStyleSettings.SetInfoTextColor( aFore );
     aStyleSettings.SetDialogTextColor( aFore );
     aStyleSettings.SetGroupTextColor( aFore );
 
@@ -1957,7 +1956,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetMenuFont( aFont ); // will be changed according to pMenuBar
     aStyleSettings.SetToolFont( aFont ); // will be changed according to pToolBar
     aStyleSettings.SetLabelFont( aFont );
-    aStyleSettings.SetInfoFont( aFont );
     aStyleSettings.SetRadioCheckFont( aFont );
     aStyleSettings.SetPushButtonFont( aFont );
     aStyleSettings.SetFieldFont( aFont );

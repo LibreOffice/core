@@ -2655,7 +2655,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetRadioCheckTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
     aStyleSettings.SetGroupTextColor( aStyleSettings.GetRadioCheckTextColor() );
     aStyleSettings.SetLabelTextColor( aStyleSettings.GetRadioCheckTextColor() );
-    aStyleSettings.SetInfoTextColor( aStyleSettings.GetRadioCheckTextColor() );
     aStyleSettings.SetWindowColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOW ) ) );
     aStyleSettings.SetActiveTabColor( aStyleSettings.GetWindowColor() );
     aStyleSettings.SetWindowTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
@@ -2785,7 +2784,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetFieldFont( aAppFont );
     if ( aAppFont.GetWeight() > WEIGHT_NORMAL )
         aAppFont.SetWeight( WEIGHT_NORMAL );
-    aStyleSettings.SetInfoFont( aAppFont );
     aStyleSettings.SetToolFont( aAppFont );
     aStyleSettings.SetTabFont( aAppFont );
 

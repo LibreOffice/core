@@ -211,9 +211,6 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
     aFont = aStyleSettings.GetLabelFont();
     aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetLabelFont( aFont );
-    aFont = aStyleSettings.GetInfoFont();
-    aFont.SetFontHeight( defFontheight );
-    aStyleSettings.SetInfoFont( aFont );
     aFont = aStyleSettings.GetRadioCheckFont();
     aFont.SetFontHeight( defFontheight );
     aStyleSettings.SetRadioCheckFont( aFont );

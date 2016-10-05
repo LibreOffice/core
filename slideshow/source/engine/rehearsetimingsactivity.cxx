@@ -144,7 +144,7 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     maElapsedTime( rContext.mrEventQueue.getTimer() ),
     maViews(),
     maSpriteRectangle(),
-    maFont( Application::GetSettings().GetStyleSettings().GetInfoFont() ),
+    maFont( Application::GetSettings().GetStyleSettings().GetLabelFont() ),
     mpWakeUpEvent(),
     mpMouseHandler(),
     maSpriteSizePixel(),

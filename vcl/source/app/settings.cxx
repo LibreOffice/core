@@ -114,7 +114,6 @@ struct ImplStyleData
     Color                           maHighlightColor;
     Color                           maHighlightLinkColor;
     Color                           maHighlightTextColor;
-    Color                           maInfoTextColor;
     Color                           maLabelTextColor;
     Color                           maLightBorderColor;
     Color                           maLightColor;
@@ -148,7 +147,6 @@ struct ImplStyleData
     vcl::Font                       maMenuFont;
     vcl::Font                       maToolFont;
     vcl::Font                       maLabelFont;
-    vcl::Font                       maInfoFont;
     vcl::Font                       maRadioCheckFont;
     vcl::Font                       maPushButtonFont;
     vcl::Font                       maFieldFont;
@@ -586,7 +584,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maHighlightColor( rData.maHighlightColor ),
     maHighlightLinkColor( rData.maHighlightLinkColor ),
     maHighlightTextColor( rData.maHighlightTextColor ),
-    maInfoTextColor( rData.maInfoTextColor ),
     maLabelTextColor( rData.maLabelTextColor ),
     maLightBorderColor( rData.maLightBorderColor ),
     maLightColor( rData.maLightColor ),
@@ -620,7 +617,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maMenuFont( rData.maMenuFont ),
     maToolFont( rData.maToolFont ),
     maLabelFont( rData.maLabelFont ),
-    maInfoFont( rData.maInfoFont ),
     maRadioCheckFont( rData.maRadioCheckFont ),
     maPushButtonFont( rData.maPushButtonFont ),
     maFieldFont( rData.maFieldFont ),
@@ -692,7 +688,6 @@ void ImplStyleData::SetStandardStyles()
     maToolFont                  = aStdFont;
     maGroupFont                 = aStdFont;
     maLabelFont                 = aStdFont;
-    maInfoFont                  = aStdFont;
     maRadioCheckFont            = aStdFont;
     maPushButtonFont            = aStdFont;
     maFieldFont                 = aStdFont;
@@ -713,7 +708,6 @@ void ImplStyleData::SetStandardStyles()
     maRadioCheckTextColor       = Color( COL_BLACK );
     maGroupTextColor            = Color( COL_BLACK );
     maLabelTextColor            = Color( COL_BLACK );
-    maInfoTextColor             = Color( COL_BLACK );
     maWindowColor               = Color( COL_WHITE );
     maWindowTextColor           = Color( COL_BLACK );
     maDialogColor               = Color( COL_LIGHTGRAY );
@@ -920,19 +914,6 @@ const Color&
 StyleSettings::GetLabelTextColor() const
 {
     return mxData->maLabelTextColor;
-}
-
-void
-StyleSettings::SetInfoTextColor( const Color& rColor )
-{
-    CopyData();
-    mxData->maInfoTextColor = rColor;
-}
-
-const Color&
-StyleSettings::GetInfoTextColor() const
-{
-    return mxData->maInfoTextColor;
 }
 
 void
@@ -1659,19 +1640,6 @@ StyleSettings::GetLabelFont() const
 }
 
 void
-StyleSettings::SetInfoFont( const vcl::Font& rFont )
-{
-    CopyData();
-    mxData->maInfoFont = rFont;
-}
-
-const vcl::Font&
-StyleSettings::GetInfoFont() const
-{
-    return mxData->maInfoFont;
-}
-
-void
 StyleSettings::SetRadioCheckFont( const vcl::Font& rFont )
 {
     CopyData();
@@ -2312,7 +2280,6 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maRadioCheckTextColor     == rSet.mxData->maRadioCheckTextColor)      &&
          (mxData->maGroupTextColor          == rSet.mxData->maGroupTextColor)           &&
          (mxData->maLabelTextColor          == rSet.mxData->maLabelTextColor)           &&
-         (mxData->maInfoTextColor           == rSet.mxData->maInfoTextColor)            &&
          (mxData->maWindowColor             == rSet.mxData->maWindowColor)              &&
          (mxData->maWindowTextColor         == rSet.mxData->maWindowTextColor)          &&
          (mxData->maDialogColor             == rSet.mxData->maDialogColor)              &&
@@ -2357,7 +2324,6 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maToolFont                == rSet.mxData->maToolFont)                 &&
          (mxData->maGroupFont               == rSet.mxData->maGroupFont)                &&
          (mxData->maLabelFont               == rSet.mxData->maLabelFont)                &&
-         (mxData->maInfoFont                == rSet.mxData->maInfoFont)                 &&
          (mxData->maRadioCheckFont          == rSet.mxData->maRadioCheckFont)           &&
          (mxData->maPushButtonFont          == rSet.mxData->maPushButtonFont)           &&
          (mxData->maFieldFont               == rSet.mxData->maFieldFont)                &&

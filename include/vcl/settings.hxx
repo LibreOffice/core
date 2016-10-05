@@ -283,9 +283,6 @@ public:
     void                            SetLabelTextColor( const Color& rColor );
     const Color&                    GetLabelTextColor() const;
 
-    void                            SetInfoTextColor( const Color& rColor );
-    const Color&                    GetInfoTextColor() const;
-
     void                            SetWindowColor( const Color& rColor );
     const Color&                    GetWindowColor() const;
 
@@ -456,9 +453,6 @@ public:
 
     void                            SetLabelFont( const vcl::Font& rFont );
     const vcl::Font&                GetLabelFont() const;
-
-    void                            SetInfoFont( const vcl::Font& rFont );
-    const vcl::Font&                GetInfoFont() const;
 
     void                            SetRadioCheckFont( const vcl::Font& rFont );
     const vcl::Font&                GetRadioCheckFont() const;

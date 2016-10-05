@@ -520,15 +520,12 @@ namespace toolkit
 
     ::sal_Int32 SAL_CALL WindowStyleSettings::getInfoTextColor() throw (RuntimeException, std::exception)
     {
-        StyleMethodGuard aGuard( *m_pData );
-        return lcl_getStyleColor( *m_pData, &StyleSettings::GetInfoTextColor );
+        return getLabelTextColor();
     }
 
 
-    void SAL_CALL WindowStyleSettings::setInfoTextColor( ::sal_Int32 _infotextcolor ) throw (RuntimeException, std::exception)
+    void SAL_CALL WindowStyleSettings::setInfoTextColor( ::sal_Int32 /*_infotextcolor*/ ) throw (RuntimeException, std::exception)
     {
-        StyleMethodGuard aGuard( *m_pData );
-        lcl_setStyleColor( *m_pData, &StyleSettings::SetInfoTextColor, _infotextcolor );
     }
 
 
@@ -888,15 +885,12 @@ namespace toolkit
 
     FontDescriptor SAL_CALL WindowStyleSettings::getInfoFont() throw (RuntimeException, std::exception)
     {
-        StyleMethodGuard aGuard( *m_pData );
-        return lcl_getStyleFont( *m_pData, &StyleSettings::GetInfoFont );
+        return getLabelFont();
     }
 
 
-    void SAL_CALL WindowStyleSettings::setInfoFont( const FontDescriptor& _infofont ) throw (RuntimeException, std::exception)
+    void SAL_CALL WindowStyleSettings::setInfoFont( const FontDescriptor& /*_infofont*/ ) throw (RuntimeException, std::exception)
     {
-        StyleMethodGuard aGuard( *m_pData );
-        lcl_setStyleFont( *m_pData, &StyleSettings::SetInfoFont, &StyleSettings::GetInfoFont, _infofont );
     }
 
 

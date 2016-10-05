@@ -3933,7 +3933,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetRadioCheckTextColor( aTextColor );
     aStyleSet.SetGroupTextColor( aTextColor );
     aStyleSet.SetLabelTextColor( aTextColor );
-    aStyleSet.SetInfoTextColor( aTextColor );
     aStyleSet.SetTabTextColor( aTextColor );
     aStyleSet.SetTabRolloverTextColor( aTextColor );
     aStyleSet.SetTabHighlightTextColor( aTextColor );
@@ -4134,7 +4133,6 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuFont( aFont );
     aStyleSet.SetToolFont( aFont );
     aStyleSet.SetLabelFont( aFont );
-    aStyleSet.SetInfoFont( aFont );
     aStyleSet.SetRadioCheckFont( aFont );
     aStyleSet.SetPushButtonFont( aFont );
     aStyleSet.SetFieldFont( aFont );

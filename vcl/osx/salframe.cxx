@@ -1183,7 +1183,6 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     vcl::Font aLabelFont( getFont( [NSFont labelFontOfSize: 0], nDPIY, aAppFont ) );
     aStyleSettings.SetLabelFont( aLabelFont );
-    aStyleSettings.SetInfoFont( aLabelFont );
     aStyleSettings.SetRadioCheckFont( aLabelFont );
     aStyleSettings.SetFieldFont( aLabelFont );
     aStyleSettings.SetGroupFont( aLabelFont );

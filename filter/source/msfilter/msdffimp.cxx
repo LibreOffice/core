@@ -3414,7 +3414,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                 case mso_syscolorInactiveCaption :      aColor = rStyleSettings.GetDeactiveColor(); break;
                 case mso_syscolorInactiveCaptionText :  aColor = rStyleSettings.GetDeactiveColor(); break;
                 case mso_syscolorInfoBackground :       aColor = rStyleSettings.GetFaceColor(); break;
-                case mso_syscolorInfoText :             aColor = rStyleSettings.GetInfoTextColor(); break;
+                case mso_syscolorInfoText :             aColor = rStyleSettings.GetLabelTextColor(); break;
                 case mso_syscolorMenuText :             aColor = rStyleSettings.GetMenuTextColor(); break;
                 case mso_syscolorScrollbar :            aColor = rStyleSettings.GetFaceColor(); break;
                 case mso_syscolorWindow :               aColor = rStyleSettings.GetWindowColor(); break;
