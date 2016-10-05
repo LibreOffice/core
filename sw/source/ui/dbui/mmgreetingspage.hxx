@@ -24,7 +24,6 @@
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
-#include <svtools/stdctrl.hxx>
 #include <mailmergehelper.hxx>
 #include <svtools/svmedit.hxx>
 

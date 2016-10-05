@@ -24,7 +24,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/morebtn.hxx>
-#include <svtools/stdctrl.hxx>
 #include "global.hxx"
 #include "address.hxx"
 #include "anyrefdg.hxx"

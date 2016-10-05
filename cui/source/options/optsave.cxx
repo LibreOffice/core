@@ -37,7 +37,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <sfx2/docfilt.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/fixed.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/optionsdlg.hxx>

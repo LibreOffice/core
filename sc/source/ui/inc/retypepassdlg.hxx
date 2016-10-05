@@ -27,7 +27,6 @@
 #include <vcl/layout.hxx>
 #include <vcl/scrbar.hxx>
 #include <svx/checklbx.hxx>
-#include <svtools/stdctrl.hxx>
 
 #include "tabprotection.hxx"
 

@@ -30,7 +30,6 @@
 #include <svl/zforlist.hxx>
 
 #include <svtools/headbar.hxx>
-#include <svtools/stdctrl.hxx>
 #include <svtools/svmedit.hxx>
 
 #include <unotools/syslocale.hxx>

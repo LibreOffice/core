@@ -27,7 +27,6 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <svtools/simptabl.hxx>
-#include <svtools/stdctrl.hxx>
 #include <unotools/securityoptions.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>

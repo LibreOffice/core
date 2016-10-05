@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_ENVELP_ENVFMT_HXX
 #define INCLUDED_SW_SOURCE_UI_ENVELP_ENVFMT_HXX
 
-#include <svtools/stdctrl.hxx>
 #include <vcl/field.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/group.hxx>

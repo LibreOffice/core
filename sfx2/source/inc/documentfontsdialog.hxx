@@ -20,9 +20,7 @@
 #define INCLUDED_SFX2_SOURCE_INC_DOCUMENTFONTSDIALOG_HXX
 
 #include <sfx2/tabdlg.hxx>
-
 #include <vcl/fixed.hxx>
-#include <svtools/stdctrl.hxx>
 
 /**
  Tab page for document font settings in the document properties dialog.

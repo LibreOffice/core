@@ -24,7 +24,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/group.hxx>
-#include <svtools/stdctrl.hxx>
 #include "editfield.hxx"
 
 class ScDocOptions;

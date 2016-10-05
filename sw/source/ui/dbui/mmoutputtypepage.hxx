@@ -21,7 +21,6 @@
 
 #include <svtools/wizardmachine.hxx>
 #include <vcl/button.hxx>
-#include <svtools/stdctrl.hxx>
 #include <mailmergehelper.hxx>
 class SwMailMergeWizard;
 

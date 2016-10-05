@@ -27,7 +27,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/edit.hxx>
-#include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <vcl/idle.hxx>
 

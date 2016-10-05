@@ -25,7 +25,6 @@
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
-#include <svtools/stdctrl.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/childwin.hxx>
@@ -204,9 +203,9 @@ private:
     SfxBindings&        rBindings;      // must be first member
 
     ImageList           aCmdImageList;  // must be before aTbxCmd
-    VclPtr<FixedInfo>        aFtCol;
+    VclPtr<FixedText>        aFtCol;
     VclPtr<ColumnEdit>       aEdCol;
-    VclPtr<FixedInfo>        aFtRow;
+    VclPtr<FixedText>        aFtRow;
     VclPtr<RowEdit>          aEdRow;
     VclPtr<CommandToolBox>   aTbxCmd;
     VclPtr<ScContentTree>    aLbEntries;

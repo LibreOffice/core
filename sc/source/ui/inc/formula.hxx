@@ -22,7 +22,6 @@
 
 #include "anyrefdg.hxx"
 #include "global.hxx"
-#include <svtools/stdctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
 #include <svtools/svmedit.hxx>

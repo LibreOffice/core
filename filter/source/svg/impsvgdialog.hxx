@@ -25,7 +25,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <svtools/stdctrl.hxx>
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>

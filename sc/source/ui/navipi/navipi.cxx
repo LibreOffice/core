@@ -538,9 +538,9 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
         Window( pParent, ScResId(RID_SCDLG_NAVIGATOR) ),
         rBindings   ( *pB ),                                // is used in CommandToolBox ctor
         aCmdImageList( ScResId( IL_CMD ) ),
-        aFtCol      ( VclPtr<FixedInfo>::Create( this, ScResId( FT_COL ) ) ),
+        aFtCol      ( VclPtr<FixedText>::Create( this, ScResId( FT_COL ) ) ),
         aEdCol      ( VclPtr<ColumnEdit>::Create( this, ScResId( ED_COL ) ) ),
-        aFtRow      ( VclPtr<FixedInfo>::Create( this, ScResId( FT_ROW ) ) ),
+        aFtRow      ( VclPtr<FixedText>::Create( this, ScResId( FT_ROW ) ) ),
         aEdRow      ( VclPtr<RowEdit>::Create( this, ScResId( ED_ROW ) ) ),
         aTbxCmd     ( VclPtr<CommandToolBox>::Create( this, ScResId( TBX_CMD ) ) ),
         aLbEntries  ( VclPtr<ScContentTree>::Create( this, ScResId( LB_ENTRIES ) ) ),

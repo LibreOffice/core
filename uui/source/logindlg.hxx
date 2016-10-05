@@ -20,7 +20,6 @@
 #ifndef INCLUDED_UUI_SOURCE_LOGINDLG_HXX
 #define INCLUDED_UUI_SOURCE_LOGINDLG_HXX
 
-#include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>

@@ -28,7 +28,6 @@
 #include <vector>
 
 class FixedImage;
-class FixedInfo;
 class Control;
 class LocaleDataWrapper;
 

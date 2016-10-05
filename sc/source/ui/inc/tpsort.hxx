@@ -26,7 +26,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/stdctrl.hxx>
 #include <svx/langbox.hxx>
 
 #include "sortkeydlg.hxx"

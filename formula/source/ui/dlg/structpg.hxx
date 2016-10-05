@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FORMULA_SOURCE_UI_DLG_STRUCTPG_HXX
 #define INCLUDED_FORMULA_SOURCE_UI_DLG_STRUCTPG_HXX
 
-#include <svtools/stdctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
 #include <svtools/svmedit.hxx>

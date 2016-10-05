@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sal/macros.h>
 
+#include <vcl/fixed.hxx>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/security/NoPasswordException.hpp>
 

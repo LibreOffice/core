@@ -22,7 +22,6 @@
 #include <mailconfigpage.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <svtools/svmedit.hxx>
-#include <svtools/stdctrl.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include <mmconfigitem.hxx>

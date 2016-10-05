@@ -22,8 +22,8 @@
 #include <sfx2/basedlgs.hxx>
 
 #include <vcl/button.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/field.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vector>
 

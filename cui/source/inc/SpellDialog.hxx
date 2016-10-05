@@ -23,7 +23,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/group.hxx>

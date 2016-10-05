@@ -24,7 +24,6 @@
 #include <vcl/group.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/stdctrl.hxx>
 #include <svtools/svtabbx.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <unotools/configitem.hxx>

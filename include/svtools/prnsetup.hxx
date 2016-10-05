@@ -28,7 +28,6 @@
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/timer.hxx>
-#include <svtools/stdctrl.hxx>
 
 class Printer;
 class QueueInfo;

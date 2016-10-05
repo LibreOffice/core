@@ -18,7 +18,6 @@
  */
 
 #include <unotools/securityoptions.hxx>
-#include <svtools/stdctrl.hxx>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include "securityoptions.hxx"

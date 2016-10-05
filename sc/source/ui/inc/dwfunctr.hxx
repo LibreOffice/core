@@ -22,7 +22,6 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/dockwin.hxx>
 #include <svl/lstner.hxx>
-#include <svtools/stdctrl.hxx>
 
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>

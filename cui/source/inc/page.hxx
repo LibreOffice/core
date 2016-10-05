@@ -24,7 +24,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/stdctrl.hxx>
 #include <svx/pagectrl.hxx>
 #include <svx/papersizelistbox.hxx>
 #include <svx/frmdirlbox.hxx>

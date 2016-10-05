@@ -19,7 +19,6 @@
 
 #include <swtypes.hxx>
 #include <mailmergehelper.hxx>
-#include <svtools/stdctrl.hxx>
 #include <mmconfigitem.hxx>
 #include <docsh.hxx>
 #include <sfx2/filedlghelper.hxx>

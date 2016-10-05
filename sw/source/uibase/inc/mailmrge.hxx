@@ -27,7 +27,6 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
-#include <svtools/stdctrl.hxx>
 
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/uno/Sequence.h>

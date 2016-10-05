@@ -20,7 +20,6 @@
 #define INCLUDED_CUI_SOURCE_INC_CHARDLG_HXX
 
 #include <svtools/ctrlbox.hxx>
-#include <svtools/stdctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/fntctrl.hxx>
 #include <svx/checklbx.hxx>

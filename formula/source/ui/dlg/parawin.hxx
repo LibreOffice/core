@@ -20,9 +20,9 @@
 #ifndef INCLUDED_FORMULA_SOURCE_UI_DLG_PARAWIN_HXX
 #define INCLUDED_FORMULA_SOURCE_UI_DLG_PARAWIN_HXX
 
-#include <svtools/stdctrl.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>

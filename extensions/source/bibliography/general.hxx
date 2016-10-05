@@ -24,7 +24,6 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/form/XBoundComponent.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
-#include <svtools/stdctrl.hxx>
 
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>

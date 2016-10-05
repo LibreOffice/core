@@ -34,7 +34,6 @@
 
 #include <sfx2/childwin.hxx>
 #include "toxe.hxx"
-#include <svtools/stdctrl.hxx>
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 
 class SwWrtShell;

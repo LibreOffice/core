@@ -24,7 +24,6 @@
 #include <vcl/fixed.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/field.hxx>
-#include <svtools/stdctrl.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XWordCursor.hpp>

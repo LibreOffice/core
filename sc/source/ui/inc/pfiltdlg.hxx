@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX
 
 #include <vcl/morebtn.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>

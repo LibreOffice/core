@@ -21,7 +21,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/ctrl.hxx>
-#include <svtools/stdctrl.hxx>
 #include <svx/langbox.hxx>
 
 struct ScSortKeyItem : public VclBuilderContainer

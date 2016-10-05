@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <svtools/stdctrl.hxx>
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>

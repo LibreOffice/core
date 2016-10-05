@@ -24,7 +24,6 @@
 #include <vcl/menu.hxx>
 
 #include <vcl/button.hxx>
-#include <svtools/stdctrl.hxx>
 
 #include <vcl/fixed.hxx>
 

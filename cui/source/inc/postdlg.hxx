@@ -23,7 +23,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/group.hxx>
 #include <vcl/layout.hxx>
-#include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svtools/svmedit.hxx>
 

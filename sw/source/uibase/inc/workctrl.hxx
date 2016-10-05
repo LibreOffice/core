@@ -21,7 +21,6 @@
 
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/toolbox.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
 
 class PopupMenu;

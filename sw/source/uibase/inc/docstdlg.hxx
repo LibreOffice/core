@@ -22,7 +22,6 @@
 #include <sfx2/tabdlg.hxx>
 
 #include <vcl/fixed.hxx>
-#include <svtools/stdctrl.hxx>
 
 #include "docstat.hxx"
 

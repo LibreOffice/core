@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TABPAGES_HXX
 
 #include <vcl/group.hxx>
-#include <svtools/stdctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 
 class ScTabPageProtection : public SfxTabPage

@@ -21,7 +21,6 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
 
 #include <svl/lstner.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/toolbox.hxx>
 #include <comphelper/stl_types.hxx>
 #include <vcl/dialog.hxx>

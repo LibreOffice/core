@@ -24,7 +24,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <svtools/simptabl.hxx>
-#include <svtools/stdctrl.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <documentsignaturehelper.hxx>

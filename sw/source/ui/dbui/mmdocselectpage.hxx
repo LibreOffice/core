@@ -23,7 +23,6 @@
 #include <mailmergehelper.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
-#include <svtools/stdctrl.hxx>
 class SwMailMergeWizard;
 
 class SwMailMergeDocSelectPage : public svt::OWizardPage

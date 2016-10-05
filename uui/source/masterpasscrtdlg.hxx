@@ -21,7 +21,6 @@
 #define INCLUDED_UUI_SOURCE_MASTERPASSCRTDLG_HXX
 
 #include <com/sun/star/task/PasswordRequestMode.hpp>
-#include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>

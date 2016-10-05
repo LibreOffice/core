@@ -30,7 +30,6 @@
 #include <vcl/layout.hxx>
 #include <vcl/idle.hxx>
 
-#include <svtools/stdctrl.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svl/stritem.hxx>

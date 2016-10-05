@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_SRCHDLG_HXX
 #define INCLUDED_SVX_SRCHDLG_HXX
 
-#include <svtools/stdctrl.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>

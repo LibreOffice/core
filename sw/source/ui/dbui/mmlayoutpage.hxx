@@ -22,7 +22,6 @@
 #include <svtools/wizardmachine.hxx>
 #include <mailmergehelper.hxx>
 #include <vcl/button.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/field.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>

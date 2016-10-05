@@ -24,7 +24,6 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>

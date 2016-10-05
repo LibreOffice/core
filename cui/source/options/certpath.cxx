@@ -11,7 +11,6 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.h>
-#include <svtools/stdctrl.hxx>
 #include "svtools/treelistentry.hxx"
 #include <unotools/securityoptions.hxx>
 #include <cuires.hrc>

@@ -20,7 +20,6 @@
 #define INCLUDED_CUI_SOURCE_INC_BACKGRND_HXX
 
 #include <vcl/group.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/graph.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/dlgctrl.hxx>

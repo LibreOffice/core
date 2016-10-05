@@ -21,7 +21,6 @@
 #include <svtools/wizardmachine.hxx>
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
-#include <svtools/stdctrl.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>

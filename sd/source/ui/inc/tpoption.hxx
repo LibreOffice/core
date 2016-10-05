@@ -25,7 +25,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
-#include <svtools/stdctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/optgrid.hxx>
 

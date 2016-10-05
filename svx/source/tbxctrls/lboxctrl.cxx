@@ -31,7 +31,6 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
-#include <svtools/stdctrl.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <svx/dialmgr.hxx>
