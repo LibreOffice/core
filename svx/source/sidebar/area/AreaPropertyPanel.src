@@ -195,10 +195,6 @@ Control RID_POPUPPANEL_AREAPAGE_TRGR
             {
                 Identifier = TBI_LEFT ;
                 Text = "Rotate Left" ;
-                ItemBitmap = Bitmap
-                {
-        //          File = "symphony/rotate_left.png" ;
-                };
             };
         };
     };
@@ -216,10 +212,6 @@ Control RID_POPUPPANEL_AREAPAGE_TRGR
             {
                 Identifier = TBI_RIGHT ;
                 Text = "Rotate Right" ;
-                ItemBitmap = Bitmap
-                {
-        //          File = "symphony/rotate_right.png" ;
-                };
             };
         };
     };
