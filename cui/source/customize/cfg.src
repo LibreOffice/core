@@ -106,10 +106,6 @@ String RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION
     Text [ en-US ] = "To add a command to a menu, select the category and then the command. You can also drag the command to the Commands list of the Menus tab page in the Customize dialog.";
 };
 
-#ifndef IMAGE_STDBTN_COLOR
-#define IMAGE_STDBTN_COLOR Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
-#endif
-
 // Strings ---------------------------------------------------------------
 String RID_SVXSTR_IMPORT_ICON_ERROR
 {
