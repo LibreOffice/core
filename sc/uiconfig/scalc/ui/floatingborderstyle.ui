@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkWindow" id="FloatingBorderStyle">
+    <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border_width">4</property>
+    <property name="resizable">False</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">popup-menu</property>
+    <property name="skip_pager_hint">True</property>
+    <property name="deletable">False</property>
+    <child>
+      <object class="GtkGrid">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="orientation">vertical</property>
+        <property name="row_spacing">6</property>
+        <child>
+          <object class="GtkToolbar" id="border1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="toolbar_style">icons</property>
+            <child>
+              <object class="GtkToolButton" id="none">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">No Border</property>
+                <property name="action_name">none</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_Empty_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="all">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">All Borders</property>
+                <property name="action_name">all</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_All_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="outside">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Outside Borders</property>
+                <property name="action_name">outside</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_FourBorders_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="thickbox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Thick Box Border</property>
+                <property name="action_name">thickbox</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_FourBorders_Thick_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolbar" id="border3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="toolbar_style">icons</property>
+            <child>
+              <object class="GtkToolButton" id="thickbottom">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Thick Bottom Border</property>
+                <property name="action_name">thickbottom</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_Bottom_Thick_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="doublebottom">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Double Bottom Border</property>
+                <property name="action_name">doublebottom</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_Bottom_Double_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="topthickbottom">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Top and Thick Bottom Borders</property>
+                <property name="action_name">topthickbottom</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_TopThin_BottomThick_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="topdoublebottom">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Top and Double Bottom Borders</property>
+                <property name="action_name">topdoublebottom</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_TopSingle_BottomDouble_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolbar" id="border2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="toolbar_style">icons</property>
+            <child>
+              <object class="GtkToolButton" id="left">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Left Border</property>
+                <property name="action_name">left</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_Left_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="right">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Right Border</property>
+                <property name="action_name">right</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_Right_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="top">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Top Border</property>
+                <property name="action_name">top</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_Top_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="bottom">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Bottom Border</property>
+                <property name="action_name">bottom</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_Bottom_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="diagup">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Diagonal Up Border</property>
+                <property name="action_name">diagup</property>
+                <property name="use_underline">True</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_RightDiagonal_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="diagdown">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Diagonal Down Border</property>
+                <property name="action_name">diagdown</property>
+                <property name="use_underline">True</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_LeftDiagonal_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="topbottom">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Top and Bottom Borders</property>
+                <property name="action_name">topbottom</property>
+                <property name="use_underline">True</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_TopAndBottom_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="leftright">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Left and Right Borders</property>
+                <property name="action_name">leftright</property>
+                <property name="use_underline">True</property>
+                <property name="icon_name">sc/res/sidebar/CellBorder_LeftAndRight_18x18.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

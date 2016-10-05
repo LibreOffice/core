@@ -23,39 +23,16 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/floatwin.hxx>
-#include "CellBorderStyleControl.hxx"
 #include <memory>
 
-class FixedText;
 namespace sc { namespace sidebar {
     class CellBorderUpdater;
 }}
 class ToolBox;
-class CheckBox;
 
 namespace sc { namespace sidebar {
 
-class CellBorderStylePopup : public FloatingWindow
-{
-    VclPtr<Control> m_xControl;
-public:
-    CellBorderStylePopup(vcl::Window* pParent, SfxDispatcher* pDispatcher)
-        : FloatingWindow(pParent, WB_BORDER | WB_SYSTEMWINDOW)
-        , m_xControl(VclPtr<CellBorderStyleControl>::Create(this, pDispatcher))
-    {
-        SetSizePixel(m_xControl->GetOutputSizePixel());
-    }
-    virtual ~CellBorderStylePopup() override
-    {
-        disposeOnce();
-    }
-    virtual void dispose() override
-    {
-        m_xControl.disposeAndClear();
-        FloatingWindow::dispose();
-    }
-};
-
+class CellBorderStylePopup;
 class CellLineStylePopup;
 
 class CellAppearancePropertyPanel
@@ -65,7 +42,7 @@ class CellAppearancePropertyPanel
 {
 private:
     friend class CellLineStylePopup;
-    friend class CellBorderStyleControl;
+    friend class CellBorderStylePopup;
 
 public:
     static VclPtr<vcl::Window> Create(

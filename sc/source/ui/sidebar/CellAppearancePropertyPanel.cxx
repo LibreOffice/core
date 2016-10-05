@@ -21,7 +21,6 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "CellAppearancePropertyPanel.hxx"
-#include <CellAppearancePropertyPanel.hrc>
 #include "sc.hrc"
 #include "scresid.hxx"
 #include <sfx2/bindings.hxx>
@@ -91,10 +90,8 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     mbInnerBorder(false),
     mbTLBR(false),
     mbBLTR(false),
-
     mxCellLineStylePopup(),
     mxCellBorderStylePopup(),
-
     maContext(),
     mpBindings(pBindings)
 {
@@ -158,7 +155,7 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBo
     if (aCommand == UNO_SETBORDERSTYLE)
     {
         if (!mxCellBorderStylePopup)
-            mxCellBorderStylePopup = VclPtr<CellBorderStylePopup>::Create(pToolBox, GetBindings()->GetDispatcher());
+            mxCellBorderStylePopup = VclPtr<CellBorderStylePopup>::Create(GetBindings()->GetDispatcher());
         mxCellBorderStylePopup->StartPopupMode(pToolBox, FloatWinPopupFlags::Down |
                                                          FloatWinPopupFlags::NoAppFocusClose);
     }

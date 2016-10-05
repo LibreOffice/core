@@ -1088,12 +1088,9 @@
 
 #define RID_SCDLG_COND_FORMAT_MANAGER   (SC_DIALOGS_START + 159)
 
-// defines for CellAppearancePropertyPanel
-#define RID_POPUPPANEL_APPEARANCE_CELL_BORDERSTYLE (SC_DIALOGS_START + 163)
+#define WID_CONDFRMT_REF                (SC_DIALOGS_START + 163)
 
-#define WID_CONDFRMT_REF                (SC_DIALOGS_START + 164)
-
-#define SC_DIALOGS_END                  (RID_POPUPPANEL_APPEARANCE_CELL_BORDERSTYLE + 1)
+#define SC_DIALOGS_END                  (WID_CONDFRMT_REF + 1)
 
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }

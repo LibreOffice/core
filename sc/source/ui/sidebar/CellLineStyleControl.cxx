@@ -20,7 +20,6 @@
 #include "CellLineStyleControl.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
-#include <CellAppearancePropertyPanel.hrc>
 #include "CellLineStyleValueSet.hxx"
 #include <vcl/i18nhelp.hxx>
 #include <vcl/settings.hxx>

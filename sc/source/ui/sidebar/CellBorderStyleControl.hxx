@@ -28,17 +28,13 @@ class SfxDispatcher;
 
 namespace sc { namespace sidebar {
 
-class CellBorderStyleControl : public Control
+class CellBorderStylePopup : public FloatingWindow
 {
 private:
     SfxDispatcher*                  mpDispatcher;
-    VclPtr<FloatingWindow>          mxFloatParent;
     VclPtr<ToolBox>                 maTBBorder1;
     VclPtr<ToolBox>                 maTBBorder2;
     VclPtr<ToolBox>                 maTBBorder3;
-    VclPtr<FixedLine>               maFL1;
-    VclPtr<FixedLine>               maFL2;
-    Image*                          mpImageList;
 
     void Initialize();
 
@@ -47,8 +43,8 @@ private:
     DECL_LINK(TB3SelectHdl, ToolBox *, void);
 
 public:
-    CellBorderStyleControl(FloatingWindow* pParent, SfxDispatcher* pDispatcher);
-    virtual ~CellBorderStyleControl() override;
+    CellBorderStylePopup(SfxDispatcher* pDispatcher);
+    virtual ~CellBorderStylePopup() override;
     virtual void dispose() override;
 };
 
