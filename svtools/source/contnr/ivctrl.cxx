@@ -325,12 +325,6 @@ void SvtIconChoiceCtrl::InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry )
     _pImpl->InvalidateEntry( pEntry );
 }
 
-void SvtIconChoiceCtrl::StateChanged( StateChangedType nType )
-{
-    Control::StateChanged( nType );
-}
-
-
 void SvtIconChoiceCtrl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) ||

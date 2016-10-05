@@ -97,11 +97,6 @@ sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-void SvxHyperURLBox::Modify()
-{
-    SvtURLBox::Modify();
-}
-
 //# Hyperlink-Dialog: Tabpages-Baseclass                                 #
 
 SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( vcl::Window *pParent,

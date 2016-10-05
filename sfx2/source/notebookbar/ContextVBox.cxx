@@ -42,11 +42,6 @@ public:
         disposeOnce();
     }
 
-    virtual void dispose() override
-    {
-        VclVBox::dispose();
-    }
-
     void SetContext( vcl::EnumContext::Context eContext ) override
     {
         for (int nChild = 0; nChild < GetChildCount(); ++nChild)

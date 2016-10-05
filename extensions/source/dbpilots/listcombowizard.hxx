@@ -134,9 +134,6 @@ namespace dbp
         DECL_LINK( OnFieldSelected, ListBox&, void );
         DECL_LINK( OnTableDoubleClicked, ListBox&, void );
 
-        // TabPage overridables
-        virtual void ActivatePage() override;
-
         // OWizardPage overridables
         virtual void        initializePage() override;
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;

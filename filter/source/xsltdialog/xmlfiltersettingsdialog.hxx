@@ -76,8 +76,6 @@ public:
     void addFilterEntry( const filter_info_impl* pInfo );
 
     void changeEntry( const filter_info_impl* pInfo );
-
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 };
 
 
