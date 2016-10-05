@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_1c685dba",
+        "filename": "sc/inc/markarr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-05T11:06:29Z",
+      "side": 1,
+      "message": "if this is really performance sensitive, then perhaps splitting the two arrays: std::vector\u003cSCROW\u003e and std::vector\u003cbool\u003e is warranted?\n\nBut if this stuff is no longer showing up on your profile after your changes, then not warranted",
+      "revId": "7fe6709361aa568f07b05e96e1a5e1bca244c890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_7c48715c",
+        "filename": "sc/source/core/data/markarr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-05T11:06:29Z",
+      "side": 1,
+      "message": "oh boy, this is just begging to be replaced with std::binary_search, but maybe some other time",
+      "revId": "7fe6709361aa568f07b05e96e1a5e1bca244c890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_9c738db4",
+        "filename": "sc/source/core/data/markarr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-05T11:06:29Z",
+      "side": 1,
+      "message": "is this safe? what happens if the vector needs to copy, then it could be trying to copy from a memory location that is freed?",
+      "revId": "7fe6709361aa568f07b05e96e1a5e1bca244c890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_fc72c1ac",
+        "filename": "sc/source/core/data/markarr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-05T11:06:29Z",
+      "side": 1,
+      "message": "that syntax won\u0027t work on MSVC2013, you probably be using emplace() anyhow",
+      "revId": "7fe6709361aa568f07b05e96e1a5e1bca244c890",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
