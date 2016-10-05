@@ -569,9 +569,6 @@ namespace sw { namespace mark
         const SwPosition& rNewPos,
         const sal_Int32 nOffset)
     {
-        SAL_INFO("sw.core", "correctMarksAbsolute entry");
-        lcl_DebugMarks(m_vAllMarks);
-
         const SwNode* const pOldNode = &rOldNode.GetNode();
         SwPosition aNewPos(rNewPos);
         aNewPos.nContent += nOffset;
