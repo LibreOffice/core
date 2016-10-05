@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_1c3a1dce",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-05T10:21:17Z",
+      "side": 1,
+      "message": "unnecessary, has a default constructor",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_fc2481b0",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-05T10:21:17Z",
+      "side": 1,
+      "message": "should probably call \n  m_data.reserve(nDataCount)\nhere to reduce re-sizing?",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_3c37d9e4",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-05T10:21:17Z",
+      "side": 1,
+      "message": "with a reserve() call, shrink_to_fit should no longer be necessary?",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_5c3495dd",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-05T10:21:17Z",
+      "side": 1,
+      "message": "this should be \n   if ( newLimit \u003c\u003d m_data_size() )\nor you are going to trim existing data :-(",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_7c3151ec",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-10-05T10:21:17Z",
+      "side": 1,
+      "message": "m_data.back().nEnd \u003d nMaxAccess;",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
