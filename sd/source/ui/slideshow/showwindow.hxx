@@ -68,8 +68,6 @@ public:
 
     void            RestartShow( sal_Int32 nPageIndexToRestart );
 
-    virtual void    Move() override;
-    virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
 
     virtual void    KeyInput(const KeyEvent& rKEvt) override;

@@ -64,11 +64,6 @@ void ClientView::InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect)
     CompleteRedraw(&rWin, vcl::Region(rRect));
 }
 
-void ClientView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector )
-{
-    DrawView::CompleteRedraw(pOutDev, rReg, pRedirector);
-}
-
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

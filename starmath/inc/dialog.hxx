@@ -238,10 +238,7 @@ public:
     virtual void dispose() override;
 
     void ReadFrom(const SmFormat &rFormat);
-    void WriteTo (SmFormat &rFormat) /*const*/;
-
-    // Window
-    virtual void    DataChanged( const DataChangedEvent &rEvt ) override;
+    void WriteTo (SmFormat &rFormat);
 };
 
 

@@ -128,8 +128,6 @@ public:
     void            InsertURLButton(const OUString& rURL, const OUString& rText, const OUString& rTarget,
                                     const Point* pPos);
 
-    virtual void    SetUIUnit(FieldUnit eUnit) override;
-
     void            SelectionHasChanged();
     void            ModelHasChanged();
     virtual void    Activate(bool bIsMDIActivate) override;

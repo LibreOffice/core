@@ -601,15 +601,6 @@ void DrawViewShell::UpdateVRuler()
 }
 
 /**
- * Set metric
- */
-
-void DrawViewShell::SetUIUnit(FieldUnit eUnit)
-{
-    ViewShell::SetUIUnit(eUnit);
-}
-
-/**
  * Refresh TabControl on splitter change
  */
 

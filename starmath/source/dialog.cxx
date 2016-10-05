@@ -941,11 +941,6 @@ void SmDistanceDialog::dispose()
     ModalDialog::dispose();
 }
 
-void SmDistanceDialog::DataChanged( const DataChangedEvent &rEvt )
-{
-    ModalDialog::DataChanged( rEvt );
-}
-
 void SmDistanceDialog::ReadFrom(const SmFormat &rFormat)
 {
     Categories[0]->SetValue(0, rFormat.GetDistance(DIS_HORIZONTAL));

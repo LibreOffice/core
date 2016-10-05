@@ -70,12 +70,6 @@ StringMap ElementSelectorUIObject::get_state()
     return aMap;
 }
 
-void ElementSelectorUIObject::execute(const OUString& rAction,
-        const StringMap& rParameters)
-{
-    WindowUIObject::execute(rAction, rParameters);
-}
-
 std::unique_ptr<UIObject> ElementSelectorUIObject::get_child(const OUString& rID)
 {
     size_t nID = rID.toInt32();

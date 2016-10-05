@@ -95,7 +95,6 @@ public:
 protected:
     virtual bool    Close() override;
     virtual void    Resize() override;
-    virtual void    FillInfo( SfxChildWinInfo& ) const override;
 
 private:
     VclPtr<SdDisplay>      m_pCtlDisplay;

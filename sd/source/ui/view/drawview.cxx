@@ -500,16 +500,6 @@ void DrawView::PresPaint(const vcl::Region& rRegion)
 }
 
 /**
- * Decides if an object could get marked (eg. unreleased animation objects
- * in slide show).
- */
-
-bool DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
-{
-    return FmFormView::IsObjMarkable(pObj, pPV);
-}
-
-/**
  * Make passed region visible (scrolling if necessary)
  */
 

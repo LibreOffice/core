@@ -98,7 +98,6 @@ public:
     virtual Printer*        GetDocumentPrinter() override;
     virtual void            OnDocumentPrinterChanged(Printer* pNewPrinter) override;
     virtual SfxStyleSheetBasePool* GetStyleSheetPool() override;
-    virtual Size            GetFirstPageSize() override;
     virtual void            FillClass(SvGlobalName* pClassName, SotClipboardFormatId* pFormat, OUString* pAppName, OUString* pFullTypeName, OUString* pShortTypeName, sal_Int32 nFileFormat, bool bTemplate = false ) const override;
     virtual void            SetModified( bool = true ) override;
     virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( const SfxItemSet &rSet ) override;

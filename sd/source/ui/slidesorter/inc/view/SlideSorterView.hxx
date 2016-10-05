@@ -208,9 +208,6 @@ public:
 
     virtual void DragFinished (sal_Int8 nDropAction) override;
 
-protected:
-    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) override;
-
 private:
     SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;

@@ -38,8 +38,6 @@ public:
         OutputDevice* pOutDev);
     virtual ~ClientView() override;
 
-    virtual void CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
-
     /* if the view should not do a Invalidate() on the windows, you have to
        override the following two methods and do something different */
     virtual void InvalidateOneWin(vcl::Window& rWin) override;

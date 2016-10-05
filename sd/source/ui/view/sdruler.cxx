@@ -119,11 +119,6 @@ void Ruler::MouseButtonDown(const MouseEvent& rMEvt)
         SvxRuler::MouseButtonDown(rMEvt);
 }
 
-void Ruler::MouseButtonUp(const MouseEvent& rMEvt)
-{
-    SvxRuler::MouseButtonUp(rMEvt);
-}
-
 void Ruler::SetNullOffset(const Point& rOffset)
 {
     long nOffset;

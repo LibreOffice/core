@@ -744,11 +744,6 @@ void SlideSorterView::DragFinished (sal_Int8 nDropAction)
     View::DragFinished(nDropAction);
 }
 
-void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
-{
-    ::sd::View::Notify(rBroadcaster, rHint);
-}
-
 void SlideSorterView::UpdatePageUnderMouse ()
 {
     VclPtr<ScrollBar> pVScrollBar (mrSlideSorter.GetVerticalScrollBar());

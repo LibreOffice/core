@@ -44,7 +44,6 @@ public:
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     virtual void Activate() override;
-    virtual void Deactivate() override;
 
     virtual void SelectionHasChanged() override;
 

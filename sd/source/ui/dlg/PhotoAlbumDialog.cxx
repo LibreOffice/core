@@ -807,11 +807,6 @@ Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OU
     return xGraphic;
 }
 
-short SdPhotoAlbumDialog::Execute()
-{
-    return ModalDialog::Execute();
-}
-
 void SdPhotoAlbumDialog::EnableDisableButtons()
 {
     pRemoveBtn->Enable(pImagesLst->GetSelectEntryCount() > 0);

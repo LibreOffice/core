@@ -88,7 +88,6 @@ public:
     virtual void            GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr = false ) const;
     virtual bool            SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);
     virtual void            MarkListHasChanged() override;
-    virtual void            ModelHasChanged() override;
     void                    SelectAll();
     void                    DoCut(vcl::Window* pWindow=nullptr);
     void                    DoCopy(vcl::Window* pWindow=nullptr);
@@ -177,12 +176,6 @@ public:
                           const sal_uInt16 nType );
 
     virtual void onAccessibilityOptionsChanged() override;
-
-    virtual SdrModel*   GetMarkedObjModel() const override;
-    virtual bool Paste(
-        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions) override;
-
-    using SdrExchangeView::Paste;
 
     /** returns true if we have an undo manager and there is an open list undo action */
     bool isRecordingUndo() const;

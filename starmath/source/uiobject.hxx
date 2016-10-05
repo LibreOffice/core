@@ -46,9 +46,6 @@ public:
 
     virtual StringMap get_state() override;
 
-    virtual void execute(const OUString& rAction,
-            const StringMap& rParameters) override;
-
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID) override;

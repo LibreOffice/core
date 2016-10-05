@@ -56,11 +56,6 @@ FuConstruct::FuConstruct (
 {
 }
 
-void FuConstruct::DoExecute( SfxRequest& rReq )
-{
-    FuDraw::DoExecute( rReq );
-}
-
 bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);

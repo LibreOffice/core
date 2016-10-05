@@ -280,23 +280,12 @@ void ShowWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& 
     }
 }
 
-void ShowWindow::GetFocus()
-{
-    // base class
-    Window::GetFocus();
-}
-
 void ShowWindow::LoseFocus()
 {
     Window::LoseFocus();
 
     if( SHOWWINDOWMODE_PREVIEW == meShowWindowMode)
         TerminateShow();
-}
-
-void ShowWindow::Move()
-{
-    ::sd::Window::Move();
 }
 
 void ShowWindow::SetEndMode()

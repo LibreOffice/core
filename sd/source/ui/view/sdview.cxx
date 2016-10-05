@@ -608,12 +608,6 @@ void View::SelectAll()
     }
 }
 
-void View::ModelHasChanged()
-{
-    // First, notify SdrView
-    FmFormView::ModelHasChanged();
-}
-
 bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 {
     // forward to SdrView

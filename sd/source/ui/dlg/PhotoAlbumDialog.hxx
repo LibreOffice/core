@@ -48,8 +48,6 @@ public:
     virtual ~SdPhotoAlbumDialog() override;
     virtual void dispose() override;
 
-    virtual short Execute() override;
-
 private:
     static OUString sDirUrl;
     VclPtr<CancelButton>   pCancelBtn;

@@ -50,7 +50,6 @@ public:
     void    BlockPageOrderChangedHint(bool bBlock);
 
     bool    SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false) override;
-    virtual bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const override;
 
     virtual void MakeVisible(const Rectangle& rRect, vcl::Window& rWin) override;
     virtual void HideSdrPage() override; // SdrPageView* pPV);

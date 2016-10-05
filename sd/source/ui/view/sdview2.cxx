@@ -933,17 +933,6 @@ void ImplProcessObjectList(SdrObject* pObj, SdrObjectVector& rVector )
     }
 }
 
-SdrModel* View::GetMarkedObjModel() const
-{
-    return FmFormView::GetMarkedObjModel();
-}
-
-bool View::Paste(
-    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions)
-{
-    return FmFormView::Paste(rMod, rPos, pLst, nOptions);
-}
-
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,8 +33,6 @@ class FuConstruct
 {
 public:
 
-    virtual void DoExecute( SfxRequest& rReq ) override;
-
     // Mouse- & Key-Events
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual bool MouseMove(const MouseEvent& rMEvt) override;

@@ -1140,11 +1140,6 @@ void FuSelection::Activate()
     FuDraw::Activate();
 }
 
-void FuSelection::Deactivate()
-{
-    FuDraw::Deactivate();
-}
-
 void FuSelection::SelectionHasChanged()
 {
     bSelectionChanged = true;

@@ -699,11 +699,6 @@ bool AnimationWindow::Close()
     }
 }
 
-void AnimationWindow::FillInfo( SfxChildWinInfo& rInfo ) const
-{
-    SfxDockingWindow::FillInfo( rInfo ) ;
-}
-
 void AnimationWindow::AddObj (::sd::View& rView )
 {
     // finish text entry mode to ensure that bitmap is identical with object

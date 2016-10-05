@@ -62,7 +62,6 @@ public:
     virtual bool        HasFollowSupport() const override;
     virtual bool        HasParentSupport() const override;
     virtual bool        HasClearParentSupport() const override;
-    virtual bool        SetName(const OUString& rNewName, bool bReindexNow = true) override;
     virtual void        SetHelpId( const OUString& r, sal_uLong nId ) override;
 
     void        AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems = true);

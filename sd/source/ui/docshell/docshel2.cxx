@@ -179,11 +179,6 @@ FrameView* DrawDocShell::GetFrameView()
     return pFrameView;
 }
 
-Size DrawDocShell::GetFirstPageSize()
-{
-    return SfxObjectShell::GetFirstPageSize();
-}
-
 /**
  * Creates a bitmap of an arbitrary page
  */
