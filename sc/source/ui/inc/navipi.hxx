@@ -165,21 +165,6 @@ private:
     void    ExecuteRow();
 };
 
-//  class ScDocListBox
-
-class ScDocListBox : public ListBox
-{
-public:
-            ScDocListBox( ScNavigatorDlg* pParent, const ResId& rResId );
-            virtual ~ScDocListBox() override;
-
-protected:
-    virtual void    Select() override;
-
-private:
-    ScNavigatorDlg& rDlg;
-};
-
 //  class CommandToolBox
 
 class CommandToolBox : public ToolBox
@@ -212,7 +197,6 @@ friend class ScNavigatorControllerItem;
 friend class ScNavigatorDialogWrapper;
 friend class ColumnEdit;
 friend class RowEdit;
-friend class ScDocListBox;
 friend class CommandToolBox;
 friend class ScContentTree;
 
@@ -227,7 +211,7 @@ private:
     VclPtr<CommandToolBox>   aTbxCmd;
     VclPtr<ScContentTree>    aLbEntries;
     VclPtr<ScScenarioWindow> aWndScenarios;
-    VclPtr<ScDocListBox>     aLbDocuments;
+    VclPtr<ListBox>          aLbDocuments;
 
     Idle            aContentIdle;
 
@@ -257,7 +241,8 @@ private:
 
     ScNavigatorControllerItem** ppBoundItems;
 
-    DECL_LINK( TimeHdl, Idle*, void );
+    DECL_LINK(TimeHdl, Idle*, void);
+    DECL_LINK(DocumentSelectHdl, ListBox&, void);
 
     void    DoResize();
 

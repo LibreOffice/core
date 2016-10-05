@@ -290,24 +290,12 @@ void RowEdit::ExecuteRow()
         rDlg.SetCurrentCell( nCol-1, nRow-1 );
 }
 
-//  class ScDocListBox
-
-ScDocListBox::ScDocListBox( ScNavigatorDlg* pParent, const ResId& rResId )
-    :   ListBox ( pParent, rResId ),
-        rDlg    ( *pParent )
-{
-}
-
-ScDocListBox::~ScDocListBox()
-{
-}
-
-void ScDocListBox::Select()
+IMPL_LINK(ScNavigatorDlg, DocumentSelectHdl, ListBox&, rListBox, void)
 {
     ScNavigatorDlg::ReleaseFocus();
 
-    OUString aDocName = GetSelectEntry();
-    rDlg.aLbEntries->SelectDoc( aDocName );
+    OUString aDocName = rListBox.GetSelectEntry();
+    aLbEntries->SelectDoc(aDocName);
 }
 
 //  class CommandToolBox
@@ -557,7 +545,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
         aTbxCmd     ( VclPtr<CommandToolBox>::Create( this, ScResId( TBX_CMD ) ) ),
         aLbEntries  ( VclPtr<ScContentTree>::Create( this, ScResId( LB_ENTRIES ) ) ),
         aWndScenarios( VclPtr<ScScenarioWindow>::Create( this,ScResId( STR_QHLP_SCEN_LISTBOX), ScResId(STR_QHLP_SCEN_COMMENT)) ),
-        aLbDocuments( VclPtr<ScDocListBox>::Create( this, ScResId( LB_DOCUMENTS ) ) ),
+        aLbDocuments( VclPtr<ListBox>::Create( this, ScResId( LB_DOCUMENTS ) ) ),
         aStrDragMode ( ScResId( STR_DRAGMODE ) ),
         aStrDisplay  ( ScResId( STR_DISPLAY ) ),
         aStrActiveWin( ScResId( STR_ACTIVEWIN ) ),
@@ -579,6 +567,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
     //  eListMode is set from outside, Root further below
 
     aLbDocuments->SetDropDownLineCount(9);
+    aLbDocuments->SetSelectHdl(LINK(this, ScNavigatorDlg, DocumentSelectHdl));
     aStrActive    = " ("
                   + OUString( ScResId( STR_ACTIVE ) )
                   + ")";                                      // " (active)"
