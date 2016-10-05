@@ -42,14 +42,11 @@
 #define POPUPPANEL_MARGIN_VERTICAL      7
 #define POPUPPANEL_MARGIN_HORIZONTAL    7
 
-#define POPUP_BORDER_WIDTH      2
-#define POPUP_BORDER_HEIGHT     3
 #define OFFSET_X        1
 #define OFFSET_Y        1
 
 //new
 #define POPUPPANEL_MARGIN_SMALL     2
-#define POPUPPANEL_MARGIN_LARGE     5
 
 
 #endif

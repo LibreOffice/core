@@ -19,7 +19,6 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <LinePropertyPanel.hxx>
-#include <LinePropertyPanel.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <sfx2/objsh.hxx>
