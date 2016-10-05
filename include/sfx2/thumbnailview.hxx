@@ -244,8 +244,6 @@ protected:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
-
     virtual void Command( const CommandEvent& rCEvt ) override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;

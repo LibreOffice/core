@@ -84,7 +84,6 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvent ) override;
     virtual void    Command( const CommandEvent& rCEvt ) override;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
 

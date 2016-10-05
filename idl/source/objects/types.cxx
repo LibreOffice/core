@@ -97,12 +97,6 @@ bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
     return bOk;
 }
 
-void SvMetaAttribute::ReadAttributesSvIdl( SvIdlDataBase & rBase,
-                                             SvTokenStream & rInStm )
-{
-    SvMetaReference::ReadAttributesSvIdl( rBase, rInStm );
-}
-
 sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray )
 {
     SvMetaType * pType = GetType();

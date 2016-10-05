@@ -53,8 +53,6 @@ protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
 
-    virtual void        Modify() override;
-
 public:
     SvxHyperURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::File );
 

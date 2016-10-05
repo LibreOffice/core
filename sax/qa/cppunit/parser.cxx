@@ -50,7 +50,6 @@ class ParserTest: public test::BootstrapFixture
 
 public:
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     void parse();
 
@@ -68,11 +67,6 @@ void ParserTest::setUp()
     mxTokenHandler.set( new DummyTokenHandler() );
     mxParser.set( new sax_fastparser::FastSaxParser() );
     mxParser->setTokenHandler( mxTokenHandler.get() );
-}
-
-void ParserTest::tearDown()
-{
-    test::BootstrapFixture::tearDown();
 }
 
 uno::Reference< io::XInputStream > ParserTest::createStream(const OString& sInput)

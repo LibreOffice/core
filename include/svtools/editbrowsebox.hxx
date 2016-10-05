@@ -607,16 +607,6 @@ namespace svt
         virtual void DeactivateCell(bool bUpdate = true);
         // Children ---------------------------------------------------------------
 
-        /** Creates the accessible object of a data table cell.
-        @param nRow
-            The row index of the cell.
-        @param nColumnId
-            The column ID of the cell.
-        @return
-            The XAccessible interface of the specified cell. */
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-        CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnPos ) override;
-
         /** @return  The count of additional controls of the control area. */
         virtual sal_Int32 GetAccessibleControlCount() const override;
 
@@ -627,14 +617,6 @@ namespace svt
                 The XAccessible interface of the specified control. */
         virtual css::uno::Reference< css::accessibility::XAccessible >
         CreateAccessibleControl( sal_Int32 nIndex ) override;
-
-        /** Creates the accessible object of a column header.
-            @param nColumnId
-                The column ID of the header.
-            @return
-                The XAccessible interface of the specified column header. */
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-        CreateAccessibleRowHeader( sal_Int32 _nRow ) override;
 
         /** Sets focus to current cell of the data table. */
         virtual void GrabTableFocus() override;

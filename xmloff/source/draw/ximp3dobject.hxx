@@ -69,7 +69,6 @@ public:
     virtual ~SdXML3DCubeObjectShapeContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
 };
 
 // dr3d:3dsphere context
@@ -90,7 +89,6 @@ public:
     virtual ~SdXML3DSphereObjectShapeContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
 };
 
 // polygonbased context
@@ -109,7 +107,6 @@ public:
     virtual ~SdXML3DPolygonBasedShapeContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
 };
 
 // dr3d:3dlathe context
@@ -125,7 +122,6 @@ public:
     virtual ~SdXML3DLatheObjectShapeContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
 };
 
 // dr3d:3dextrude context
@@ -141,7 +137,6 @@ public:
     virtual ~SdXML3DExtrudeObjectShapeContext() override;
 
     virtual void StartElement(const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DOBJECT_HXX

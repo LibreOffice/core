@@ -61,11 +61,6 @@ OCatalog::~OCatalog()
     delete m_pUsers;
 }
 
-void SAL_CALL OCatalog::acquire() throw()
-{
-    OCatalog_BASE::acquire();
-}
-
 void SAL_CALL OCatalog::release() throw()
 {
     release_ChildImpl();

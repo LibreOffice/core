@@ -53,9 +53,6 @@ namespace accessibility
 
         virtual ~AccessibleImageBullet  () override;
 
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface (const css::uno::Type & rType) throw (css::uno::RuntimeException, std::exception) override;
-
         // XAccessible
         virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) override;
 

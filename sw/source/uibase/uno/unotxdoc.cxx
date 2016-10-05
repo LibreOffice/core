@@ -349,11 +349,6 @@ void SAL_CALL SwXTextDocument::release()throw()
     SfxBaseModel::release();
 }
 
-Reference< XAdapter > SwXTextDocument::queryAdapter(  ) throw(RuntimeException, std::exception)
-{
-    return SfxBaseModel::queryAdapter();
-}
-
 Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes() throw(RuntimeException, std::exception)
 {
     Sequence< uno::Type > aBaseTypes = SfxBaseModel::getTypes();
