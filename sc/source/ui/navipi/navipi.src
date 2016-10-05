@@ -159,41 +159,6 @@ Window RID_SCDLG_NAVIGATOR
             };
         };
     };
-    String STR_DRAGMODE
-    {
-        Text [ en-US ] = "Drag Mode" ;
-    };
-    String STR_DISPLAY
-    {
-        Text [ en-US ] = "Display" ;
-    };
-    String STR_ACTIVE
-    {
-        Text [ en-US ] = "active" ;
-    };
-    String STR_NOTACTIVE
-    {
-        Text [ en-US ] = "inactive" ;
-    };
-    String STR_HIDDEN
-    {
-        Text [ en-US ] = "hidden" ;
-    };
-    String STR_ACTIVEWIN
-    {
-        Text [ en-US ] = "Active Window" ;
-    };
-
-    String STR_QHLP_SCEN_LISTBOX
-    {
-        Text [ en-US ] = "Scenario Name";
-    };
-
-    String STR_QHLP_SCEN_COMMENT
-    {
-        Text [ en-US ] = "Comment";
-    };
-
 };
 
 ImageList RID_IMAGELIST_NAVCONT
@@ -296,6 +261,46 @@ String SCSTR_CONTENT_AREALINK
 String SCSTR_CONTENT_DRAWING
 {
     Text [ en-US ] = "Drawing objects";
+};
+
+String SCSTR_DRAGMODE
+{
+    Text [ en-US ] = "Drag Mode" ;
+};
+
+String SCSTR_DISPLAY
+{
+    Text [ en-US ] = "Display" ;
+};
+
+String SCSTR_ACTIVE
+{
+    Text [ en-US ] = "active" ;
+};
+
+String SCSTR_NOTACTIVE
+{
+    Text [ en-US ] = "inactive" ;
+};
+
+String SCSTR_HIDDEN
+{
+    Text [ en-US ] = "hidden" ;
+};
+
+String SCSTR_ACTIVEWIN
+{
+    Text [ en-US ] = "Active Window" ;
+};
+
+String SCSTR_QHLP_SCEN_LISTBOX
+{
+    Text [ en-US ] = "Scenario Name";
+};
+
+String SCSTR_QHLP_SCEN_COMMENT
+{
+    Text [ en-US ] = "Comment";
 };
 
  // PopupMenu -------------------------------------------------------------

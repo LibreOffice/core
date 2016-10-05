@@ -25,15 +25,7 @@
 #define LB_DOCUMENTS            5
 #define LB_ENTRIES              6
 #define TBX_CMD                 7
-#define STR_DRAGMODE            8
-#define STR_DISPLAY             9
-#define STR_ACTIVE              10
-#define STR_NOTACTIVE           11
-#define STR_HIDDEN              12
-#define STR_ACTIVEWIN           13
-#define STR_QHLP_SCEN_LISTBOX   15
-#define STR_QHLP_SCEN_COMMENT   16
-#define IL_CMD                  17
+#define IL_CMD                  8
 
 #define IID_AREAS       1
 #define IID_DBAREAS     2

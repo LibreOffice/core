@@ -544,11 +544,11 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
         aEdRow      ( VclPtr<RowEdit>::Create( this, ScResId( ED_ROW ) ) ),
         aTbxCmd     ( VclPtr<CommandToolBox>::Create( this, ScResId( TBX_CMD ) ) ),
         aLbEntries  ( VclPtr<ScContentTree>::Create( this, ScResId( LB_ENTRIES ) ) ),
-        aWndScenarios( VclPtr<ScScenarioWindow>::Create( this,ScResId( STR_QHLP_SCEN_LISTBOX), ScResId(STR_QHLP_SCEN_COMMENT)) ),
+        aWndScenarios( VclPtr<ScScenarioWindow>::Create( this,ScResId( SCSTR_QHLP_SCEN_LISTBOX), ScResId(SCSTR_QHLP_SCEN_COMMENT)) ),
         aLbDocuments( VclPtr<ListBox>::Create( this, ScResId( LB_DOCUMENTS ) ) ),
-        aStrDragMode ( ScResId( STR_DRAGMODE ) ),
-        aStrDisplay  ( ScResId( STR_DISPLAY ) ),
-        aStrActiveWin( ScResId( STR_ACTIVEWIN ) ),
+        aStrDragMode ( ScResId( SCSTR_DRAGMODE ) ),
+        aStrDisplay  ( ScResId( SCSTR_DISPLAY ) ),
+        aStrActiveWin( ScResId( SCSTR_ACTIVEWIN ) ),
         pContextWin ( pCW ),
         pMarkArea   ( nullptr ),
         pViewData   ( nullptr ),
@@ -569,13 +569,13 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
     aLbDocuments->SetDropDownLineCount(9);
     aLbDocuments->SetSelectHdl(LINK(this, ScNavigatorDlg, DocumentSelectHdl));
     aStrActive    = " ("
-                  + OUString( ScResId( STR_ACTIVE ) )
+                  + OUString( ScResId( SCSTR_ACTIVE ) )
                   + ")";                                      // " (active)"
     aStrNotActive = " ("
-                  + OUString( ScResId( STR_NOTACTIVE ) )
+                  + OUString( ScResId( SCSTR_NOTACTIVE ) )
                   + ")";                                   // " (not active)"
     aStrHidden    = " ("
-                  + OUString( ScResId( STR_HIDDEN ) )
+                  + OUString( ScResId( SCSTR_HIDDEN ) )
                   + ")";                                      // " (hidden)"
 
     aTitleBase = GetText();

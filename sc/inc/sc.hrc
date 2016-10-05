@@ -924,6 +924,15 @@
 #define SCSTR_CONTENT_NOTE      (STR_START + 256)
 #define SCSTR_CONTENT_AREALINK  (STR_START + 257)
 #define SCSTR_CONTENT_DRAWING   (STR_START + 258)
+#define SCSTR_DRAGMODE          (STR_START + 259)
+#define SCSTR_DISPLAY           (STR_START + 260)
+#define SCSTR_ACTIVE            (STR_START + 261)
+#define SCSTR_NOTACTIVE         (STR_START + 262)
+#define SCSTR_HIDDEN            (STR_START + 263)
+#define SCSTR_ACTIVEWIN         (STR_START + 264)
+#define SCSTR_QHLP_SCEN_LISTBOX (STR_START + 265)
+#define SCSTR_QHLP_SCEN_COMMENT (STR_START + 266)
+
 //  some space for extensions
 
 // input, quickhelp strings (HelpText now using HelpId from help)
