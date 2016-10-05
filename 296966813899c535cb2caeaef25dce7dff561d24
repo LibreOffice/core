@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_bc9f69b3",
+        "filename": "sc/qa/unit/data/functions/fods/binom.inv.fods",
+        "patchSetId": 6
+      },
+      "lineNbr": 3144,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-05T11:50:06Z",
+      "side": 1,
+      "message": "Please work in en-US locale when editing function test documents. For older documents this still will introduce a change from cs-CZ formatting and separators once, but after that will keep changes to a much lower noise. (Raal creates new document in en-US locale so we\u0027ll already have less diff for those). Also, using a recent master will keep automatic style names identical if possible, so generate much less noise.",
+      "range": {
+        "startLine": 3144,
+        "startChar": 14,
+        "endLine": 3144,
+        "endChar": 18
+      },
+      "revId": "296966813899c535cb2caeaef25dce7dff561d24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_dca4250a",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-05T11:50:06Z",
+      "side": 1,
+      "message": "Just widening the constraint isn\u0027t enough, Alpha 0 and 1 also need some special handling which is not covered by the current algorithm, see https://lists.oasis-open.org/archives/office-comment/201608/msg00003.html\n\nFor example, \u003dCRITBINOM(111, 0.5, 0) should return 0 but currently returns 16, \u003dCRITBINOM(111, 0.5, 1) should return 111 but returns 97,",
+      "revId": "296966813899c535cb2caeaef25dce7dff561d24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
