@@ -631,6 +631,15 @@ DECLARE_ODFIMPORT_TEST(testBnc800714, "bnc800714.fodt")
     CPPUNIT_ASSERT(getProperty<bool>(getParagraph(2), "ParaKeepTogether"));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf103025, "tdf103025.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-01"), parseDump("/root/page[1]/header/tab[2]/row[2]/cell[3]/txt/Special", "rText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-01"), parseDump("/root/page[2]/header/tab[2]/row[2]/cell[3]/txt/Special", "rText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-02"), parseDump("/root/page[3]/header/tab[2]/row[2]/cell[3]/txt/Special", "rText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-03"), parseDump("/root/page[4]/header/tab[2]/row[2]/cell[3]/txt/Special", "rText"));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-03"), parseDump("/root/page[5]/header/tab[2]/row[2]/cell[3]/txt/Special", "rText"));
+}
+
 DECLARE_ODFIMPORT_TEST(testTdf76322_columnBreakInHeader, "tdf76322_columnBreakInHeader.docx")
 {
 // column breaks were ignored. First line should start in column 2
