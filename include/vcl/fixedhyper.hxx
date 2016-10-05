@@ -62,7 +62,7 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
     public:
         /** ctors
 
-            With ResId or WinBits.
+            With WinBits.
         */
         FixedHyperlink( vcl::Window* pParent, WinBits nWinStyle = 0 );
 

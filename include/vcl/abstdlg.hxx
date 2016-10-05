@@ -25,7 +25,6 @@
 #include <vector>
 
 namespace vcl { class Window; }
-class ResId;
 class Dialog;
 class Bitmap;
 
@@ -80,9 +79,8 @@ class VCL_DLLPUBLIC VclAbstractDialogFactory
 public:
     virtual             ~VclAbstractDialogFactory();    // needed for export of vtable
     static VclAbstractDialogFactory* Create();
-    // nDialogId was previously a ResId without ResMgr; the ResourceId is now
-    // an implementation detail of the factory
-    virtual VclAbstractDialog* CreateVclDialog( vcl::Window* pParent, sal_uInt32 nResId ) = 0;
+    // The Id is an implementation detail of the factory
+    virtual VclAbstractDialog* CreateVclDialog(vcl::Window* pParent, sal_uInt32 nId) = 0;
 
     // creates instance of PasswordToOpenModifyDialog from cui
     virtual AbstractPasswordToOpenModifyDialog* CreatePasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify ) = 0;
