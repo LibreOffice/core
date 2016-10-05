@@ -2727,12 +2727,6 @@ VCLXTabPage::~VCLXTabPage()
 {
 }
 
-css::uno::Any SAL_CALL VCLXTabPage::queryInterface(const css::uno::Type & rType )
-throw(css::uno::RuntimeException, std::exception)
-{
-    return VCLXContainer::queryInterface( rType );
-}
-
 // css::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXTabPage )
     VCLXContainer::getTypes()
@@ -6535,12 +6529,6 @@ void VCLXFrame::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 
 VCLXFrame::~VCLXFrame()
 {
-}
-
-css::uno::Any SAL_CALL VCLXFrame::queryInterface(const css::uno::Type & rType )
-throw(css::uno::RuntimeException, std::exception)
-{
-    return VCLXContainer::queryInterface( rType );
 }
 
 // css::lang::XTypeProvider

@@ -376,11 +376,6 @@ void PPTShape::addShape(
     }
 }
 
-void PPTShape::applyShapeReference( const oox::drawingml::Shape& rReferencedShape, bool bUseText )
-{
-    Shape::applyShapeReference( rReferencedShape, bUseText );
-}
-
 namespace
 {
     bool ShapeLocationIsMaster(oox::drawingml::Shape *pInShape)
