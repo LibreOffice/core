@@ -43,8 +43,6 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( OEditModel );
 
 protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
-
     void enableFormattedWriteFake() { m_bWritingFormattedFake = true; }
     void disableFormattedWriteFake() { m_bWritingFormattedFake = false; }
     bool lastReadWasFormattedFake() const { return (getLastReadVersion() & PF_FAKE_FORMATTED_FIELD) != 0; }
@@ -102,8 +100,6 @@ protected:
     virtual void            onDisconnectedDbColumn() override;
 
     virtual bool            approveDbColumnType( sal_Int32 _nColumnType ) override;
-
-    virtual void            resetNoBroadcast() override;
 
 protected:
     virtual sal_uInt16 getPersistenceFlags() const override;

@@ -59,12 +59,6 @@ css::uno::Sequence<OUString> SAL_CALL OCurrencyControl::getSupportedServiceNames
 
 // OCurrencyModel
 
-Sequence<Type> OCurrencyModel::_getTypes()
-{
-    return OEditBaseModel::_getTypes();
-}
-
-
 void OCurrencyModel::implConstruct()
 {
     if (m_xAggregateSet.is())

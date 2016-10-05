@@ -371,16 +371,6 @@ void OFormattedModel::describeAggregateProperties( Sequence< Property >& _rAggre
     // arbitrary formatted control
 }
 
-void OFormattedModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
-{
-    OEditBaseModel::getFastPropertyValue(rValue, nHandle);
-}
-
-void OFormattedModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( css::uno::Exception, std::exception)
-{
-    OEditBaseModel::setFastPropertyValue_NoBroadcast(nHandle, rValue);
-}
-
 void OFormattedModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 {
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)

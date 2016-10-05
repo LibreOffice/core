@@ -56,12 +56,6 @@ css::uno::Sequence<OUString> OPatternControl::getSupportedServiceNames() throw(s
 // OPatternModel
 
 
-Sequence<Type> OPatternModel::_getTypes()
-{
-    return OEditBaseModel::_getTypes();
-}
-
-
 OPatternModel::OPatternModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_SUN_CONTROL_PATTERNFIELD, false, false )
                                     // use the old control name for compytibility reasons

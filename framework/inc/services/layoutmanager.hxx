@@ -250,9 +250,6 @@ namespace framework
 
             virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
                                                                                                                 const css::uno::Any&  aValue          ) throw( css::uno::Exception, std::exception                 ) override;
-            using cppu::OPropertySetHelper::getFastPropertyValue;
-            virtual void                                                SAL_CALL getFastPropertyValue( css::uno::Any&    aValue          ,
-                                                                                                    sal_Int32                    nHandle         ) const override;
             virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
             virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (css::uno::RuntimeException, std::exception) override;
 

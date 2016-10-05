@@ -265,12 +265,6 @@ void SAL_CALL OEditControl::createPeer( const Reference< XToolkit>& _rxToolkit, 
 }
 
 
-Sequence<Type> OEditModel::_getTypes()
-{
-    return OEditBaseModel::_getTypes();
-}
-
-
 OEditModel::OEditModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, true, true )
     ,m_bMaxTextLenModified(false)
@@ -642,12 +636,6 @@ bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
         return false;
 
     return OEditBaseModel::approveDbColumnType( _nColumnType );
-}
-
-
-void OEditModel::resetNoBroadcast()
-{
-    OEditBaseModel::resetNoBroadcast();
 }
 
 

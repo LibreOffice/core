@@ -61,27 +61,6 @@ ORadioButtonControl::ORadioButtonControl(const Reference<XComponentContext>& _rx
 }
 
 
-void SAL_CALL ORadioButtonControl::createPeer(const Reference<css::awt::XToolkit>& _rxToolkit, const Reference<css::awt::XWindowPeer>& _rxParent) throw (RuntimeException, std::exception)
-{
-    OBoundControl::createPeer(_rxToolkit, _rxParent);
-
-    // switch off the auto-toggle, we do this ourself ....
-    // (formerly this switch-off was done in the toolkit - but the correct place is here ...)
-//  Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
-//  if (xVclWindowPeer.is())
-//      xVclWindowPeer->setProperty(OUString("AutoToggle"), ::cppu::bool2any(sal_False));
-    // new order: do _not_ switch off the auto toggle because:
-    // * today, it is not necessary anymore to handle the toggling ourself (everything works fine without it)
-    // * without auto toggle, the AccessibleEvents as fired by the radio buttons are
-    //     a. newly checked button: "unchecked"->"checked"
-    //     b. previously checked button: "checked"->"unchecked"
-    //   This is deadly for AT-tools, which then get the "unchecked" event _immediately_ after the "checked" event,
-    //   and only read the latter. This makes radio buttons pretty unusable in form documents.
-    //   So we switched AutoToggle _on_, again, because then VCL can handle the notifications, and will send
-    //   them in the proper order.
-}
-
-
 ORadioButtonModel::ORadioButtonModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON )
                     // use the old control name for compytibility reasons

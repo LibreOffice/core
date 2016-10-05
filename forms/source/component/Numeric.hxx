@@ -31,8 +31,6 @@ class ONumericModel
 {
 private:
     css::uno::Any          m_aSaveValue;
-protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( ONumericModel );

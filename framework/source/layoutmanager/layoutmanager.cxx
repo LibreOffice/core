@@ -3145,11 +3145,6 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       n
     }
 }
 
-void SAL_CALL LayoutManager::getFastPropertyValue( uno::Any& aValue, sal_Int32 nHandle ) const
-{
-    LayoutManager_PBase::getFastPropertyValue( aValue, nHandle );
-}
-
 namespace detail
 {
     class InfoHelperBuilder

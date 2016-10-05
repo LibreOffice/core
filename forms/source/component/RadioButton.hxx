@@ -83,10 +83,6 @@ public:
     { return OUString("com.sun.star.form.ORadioButtonControl"); }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
-
-protected:
-    // XControl
-    virtual void SAL_CALL createPeer(const css::uno::Reference<css::awt::XToolkit>& Toolkit, const css::uno::Reference<css::awt::XWindowPeer>& Parent) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 
