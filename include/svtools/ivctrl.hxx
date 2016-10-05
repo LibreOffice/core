@@ -185,7 +185,7 @@ public:
 #define WB_ALIGN_TOP            WB_TOP
 #define WB_ALIGN_LEFT           WB_LEFT
 #define WB_NOCOLUMNHEADER       WB_CENTER
-#define WB_HIGHLIGHTFRAME       WB_INFO
+#define WB_HIGHLIGHTFRAME       WB_IGNORETAB
 #define WB_NOASYNCSELECTHDL     WB_NOLABEL
 
 class MnemonicGenerator;

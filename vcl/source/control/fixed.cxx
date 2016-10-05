@@ -37,7 +37,7 @@
                                  WB_LEFT | WB_CENTER | WB_RIGHT |   \
                                  WB_TOP | WB_VCENTER | WB_BOTTOM |  \
                                  WB_WORDBREAK | WB_NOLABEL |        \
-                                 WB_INFO | WB_PATHELLIPSIS)
+                                 WB_PATHELLIPSIS)
 #define FIXEDLINE_VIEW_STYLE    (WB_3DLOOK | WB_NOLABEL)
 #define FIXEDBITMAP_VIEW_STYLE  (WB_3DLOOK |                        \
                                  WB_LEFT | WB_CENTER | WB_RIGHT |   \
@@ -96,12 +96,12 @@ WinBits FixedText::ImplInitStyle( WinBits nStyle )
 
 const vcl::Font& FixedText::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
-    return ( GetStyle() & WB_INFO ) ? _rStyle.GetInfoFont() : _rStyle.GetLabelFont();
+    return _rStyle.GetLabelFont();
 }
 
 const Color& FixedText::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
-    return ( GetStyle() & WB_INFO ) ? _rStyle.GetInfoTextColor() : _rStyle.GetLabelTextColor();
+    return _rStyle.GetLabelTextColor();
 }
 
 FixedText::FixedText( vcl::Window* pParent, WinBits nStyle )

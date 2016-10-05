@@ -96,7 +96,7 @@ static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
             return true;
         //This is the legacy pre-layout logic which we retain
         //until we can be sure we can remove it
-        if ( pWindow->GetStyle() & (WB_INFO | WB_NOLABEL) )
+        if (pWindow->GetStyle() & WB_NOLABEL)
             return false;
         vcl::Window* pNextWindow = pWindow->GetWindow( GetWindowType::Next );
         if ( !pNextWindow )

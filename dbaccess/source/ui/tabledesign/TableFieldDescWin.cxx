@@ -49,7 +49,7 @@ OTableFieldDescWin::OTableFieldDescWin( vcl::Window* pParent)
     , m_eChildFocus(NONE)
 {
     // Header
-    m_pHeader = VclPtr<FixedText>::Create( this, WB_CENTER | WB_INFO );
+    m_pHeader = VclPtr<FixedText>::Create( this, WB_CENTER );
     m_pHeader->SetText( OUString(ModuleRes(STR_TAB_PROPERTIES)) );
     m_pHeader->Show();
 
