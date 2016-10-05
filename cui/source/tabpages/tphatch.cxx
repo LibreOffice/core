@@ -349,12 +349,12 @@ VclPtr<SfxTabPage> SvxHatchTabPage::Create( vcl::Window* pWindow,
 }
 
 
-IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxHatchTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
 }
 
-IMPL_LINK_NOARG_TYPED( SvxHatchTabPage, ToggleHatchBackgroundColor_Impl, CheckBox&, void )
+IMPL_LINK_NOARG( SvxHatchTabPage, ToggleHatchBackgroundColor_Impl, CheckBox&, void )
 {
     if(m_pCbBackgroundColor->IsChecked())
         m_pLbBackgroundColor->Enable();
@@ -364,7 +364,7 @@ IMPL_LINK_NOARG_TYPED( SvxHatchTabPage, ToggleHatchBackgroundColor_Impl, CheckBo
     ModifiedBackgroundHdl_Impl(*m_pLbBackgroundColor);
 }
 
-IMPL_LINK_NOARG_TYPED( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, ListBox&, void )
+IMPL_LINK_NOARG( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, ListBox&, void )
 {
     Color aColor(COL_TRANSPARENT);
     if(m_pCbBackgroundColor->IsChecked())
@@ -379,12 +379,12 @@ IMPL_LINK_NOARG_TYPED( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, ListBox&, vo
     m_pCtlPreview->Invalidate();
 }
 
-IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedEditHdl_Impl, Edit&, rEdit, void )
+IMPL_LINK( SvxHatchTabPage, ModifiedEditHdl_Impl, Edit&, rEdit, void )
 {
     ModifiedHdl_Impl(&rEdit);
 }
 
-IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
+IMPL_LINK( SvxHatchTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
 {
     ModifiedHdl_Impl(rSlider);
 }
@@ -407,7 +407,7 @@ void SvxHatchTabPage::ModifiedHdl_Impl( void* p )
     m_pCtlPreview->Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ChangeHatchHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl, ValueSet*, void)
 {
     ChangeHatchHdl_Impl();
 }
@@ -471,7 +471,7 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
     m_pHatchLB->SaveValue();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 {
     OUString aNewName( SVX_RES( RID_SVXSTR_HATCH ) );
     OUString aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
@@ -540,7 +540,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_uInt16 nId = m_pHatchLB->GetSelectItemId();
     size_t nPos = m_pHatchLB->GetSelectItemPos();
@@ -572,7 +572,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_pHatchLB->GetSelectItemId();
     size_t nPos = m_pHatchLB->GetSelectItemPos();
@@ -598,7 +598,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, v
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
 {
     sal_uInt16 nId = m_pHatchLB->GetSelectItemId();
     size_t nPos = m_pHatchLB->GetSelectItemPos();

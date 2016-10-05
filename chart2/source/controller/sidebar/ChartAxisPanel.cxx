@@ -358,7 +358,7 @@ void ChartAxisPanel::SelectionInvalid()
 {
 }
 
-IMPL_LINK_TYPED(ChartAxisPanel, CheckBoxHdl, Button*, pButton, void)
+IMPL_LINK(ChartAxisPanel, CheckBoxHdl, Button*, pButton, void)
 {
     CheckBox* pCheckbox = static_cast<CheckBox*>(pButton);
     OUString aCID = getCID(mxModel);
@@ -373,7 +373,7 @@ IMPL_LINK_TYPED(ChartAxisPanel, CheckBoxHdl, Button*, pButton, void)
         setReverse(mxModel, aCID, bChecked);
 }
 
-IMPL_LINK_NOARG_TYPED(ChartAxisPanel, ListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(ChartAxisPanel, ListBoxHdl, ListBox&, void)
 {
     OUString aCID = getCID(mxModel);
     sal_Int32 nPos = mpLBLabelPos->GetSelectEntryPos();
@@ -381,7 +381,7 @@ IMPL_LINK_NOARG_TYPED(ChartAxisPanel, ListBoxHdl, ListBox&, void)
     setLabelPosition(mxModel, aCID, nPos);
 }
 
-IMPL_LINK_TYPED(ChartAxisPanel, TextRotationHdl, Edit&, rMetricField, void)
+IMPL_LINK(ChartAxisPanel, TextRotationHdl, Edit&, rMetricField, void)
 {
     OUString aCID = getCID(mxModel);
     double nVal = static_cast<NumericField&>(rMetricField).GetValue();

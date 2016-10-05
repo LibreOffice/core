@@ -138,12 +138,12 @@ private:
     static sal_uInt16           GetDragTypeSdResId( NavigatorDragType eDT, bool bImage );
     NavDocInfo*                 GetDocInfo();
 
-                                DECL_LINK_TYPED( SelectToolboxHdl, ToolBox *, void );
-                                DECL_LINK_TYPED( DropdownClickToolBoxHdl, ToolBox *, void );
-                                DECL_LINK_TYPED( ClickObjectHdl, SvTreeListBox*, bool );
-                                DECL_LINK_TYPED( SelectDocumentHdl, ListBox&, void );
-                                DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );
-                                DECL_LINK_TYPED( ShapeFilterCallback, Menu *, bool );
+                                DECL_LINK( SelectToolboxHdl, ToolBox *, void );
+                                DECL_LINK( DropdownClickToolBoxHdl, ToolBox *, void );
+                                DECL_LINK( ClickObjectHdl, SvTreeListBox*, bool );
+                                DECL_LINK( SelectDocumentHdl, ListBox&, void );
+                                DECL_LINK( MenuSelectHdl, Menu *, bool );
+                                DECL_LINK( ShapeFilterCallback, Menu *, bool );
 
     virtual void                DataChanged( const DataChangedEvent& rDCEvt ) override;
     void                        SetDragImage();

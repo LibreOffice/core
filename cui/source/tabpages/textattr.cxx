@@ -579,7 +579,7 @@ void SvxTextAttrPage::PointChanged( vcl::Window*, RectPoint eRP )
     to be moved to a valid and adjacent position.  This position depends on
     the current anchor position and the text writing direction.
 */
-IMPL_LINK_NOARG_TYPED(SvxTextAttrPage, ClickFullWidthHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl, Button*, void)
 {
     if( m_pTsbFullWidth->GetState() == TRISTATE_TRUE )
     {
@@ -636,7 +636,7 @@ IMPL_LINK_NOARG_TYPED(SvxTextAttrPage, ClickFullWidthHdl_Impl, Button*, void)
 |*
 \************************************************************************/
 
-IMPL_LINK_TYPED(SvxTextAttrPage, ClickHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SvxTextAttrPage, ClickHdl_Impl, Button*, pButton, void)
 {
     if (pButton == m_pTsbAutoGrowSize)
     {

@@ -218,11 +218,11 @@ void SwEnvFormatPage::dispose()
 }
 
 
-IMPL_LINK_TYPED( SwEnvFormatPage, LoseFocusHdl, Control&, rControl, void )
+IMPL_LINK( SwEnvFormatPage, LoseFocusHdl, Control&, rControl, void )
 {
     ModifyHdl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK_TYPED( SwEnvFormatPage, ModifyHdl, SpinField&, rEdit, void )
+IMPL_LINK( SwEnvFormatPage, ModifyHdl, SpinField&, rEdit, void )
 {
     long lWVal = static_cast< long >(GetFieldVal(*m_pSizeWidthField ));
     long lHVal = static_cast< long >(GetFieldVal(*m_pSizeHeightField));
@@ -257,7 +257,7 @@ IMPL_LINK_TYPED( SwEnvFormatPage, ModifyHdl, SpinField&, rEdit, void )
     }
 }
 
-IMPL_LINK_TYPED( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )
+IMPL_LINK( SwEnvFormatPage, EditHdl, MenuButton *, pButton, void )
 {
     SwWrtShell* pSh = GetParentSwEnvDlg()->pSh;
     OSL_ENSURE(pSh, "Shell missing");
@@ -383,7 +383,7 @@ SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl* pColl, bool bSende
     return pAddrSet;
 }
 
-IMPL_LINK_NOARG_TYPED(SwEnvFormatPage, FormatHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl, ListBox&, void)
 {
     long lWidth;
     long lHeight;

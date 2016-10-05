@@ -459,7 +459,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG_TYPED( OHyperlinkControl, OnHyperlinkClicked, void*, void )
+    IMPL_LINK_NOARG( OHyperlinkControl, OnHyperlinkClicked, void*, void )
     {
         ActionEvent aEvent( *this, OUString( "clicked" ) );
         m_aActionListeners.forEach< XActionListener >(
@@ -941,7 +941,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG_TYPED( OComboboxControl, OnEntrySelected, ComboBox&, void )
+    IMPL_LINK_NOARG( OComboboxControl, OnEntrySelected, ComboBox&, void )
     {
         if ( !getTypedControlWindow()->IsTravelSelect() )
             // fire a commit
@@ -1299,7 +1299,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG_TYPED( DropDownEditControl, ReturnHdl, FloatingWindow*, void)
+    IMPL_LINK_NOARG( DropDownEditControl, ReturnHdl, FloatingWindow*, void)
     {
         OUString aStr = m_pFloatingEdit->getEdit().GetText();
         OUString aStr2 = GetText();
@@ -1313,7 +1313,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG_TYPED( DropDownEditControl, DropDownHdl, Button*, void )
+    IMPL_LINK_NOARG( DropDownEditControl, DropDownHdl, Button*, void )
     {
         ShowDropDown(!m_bDropdown);
     }

@@ -77,7 +77,7 @@ void VCLXMenu::ImplCreateMenu( bool bPopup )
     mpMenu->AddEventListener( LINK( this, VCLXMenu, MenuEventListener ) );
 }
 
-IMPL_LINK_TYPED( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
+IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
 {
     DBG_ASSERT( rMenuEvent.GetMenu() && mpMenu, "Menu???" );
 

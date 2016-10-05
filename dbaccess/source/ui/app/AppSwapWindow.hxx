@@ -37,8 +37,8 @@ namespace dbaui
 
         void ImplInitSettings();
 
-        DECL_LINK_TYPED( OnContainerSelectHdl, SvtIconChoiceCtrl*, void );
-        DECL_LINK_TYPED( ChangeToLastSelected, void*, void );
+        DECL_LINK( OnContainerSelectHdl, SvtIconChoiceCtrl*, void );
+        DECL_LINK( ChangeToLastSelected, void*, void );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
     public:

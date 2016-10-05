@@ -262,12 +262,12 @@ void ScRetypePassDlg::CheckHashStatus()
     mpBtnOk->Disable();
 }
 
-IMPL_LINK_NOARG_TYPED(ScRetypePassDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(ScRetypePassDlg, OKHdl, Button*, void)
 {
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_TYPED( ScRetypePassDlg, RetypeBtnHdl, Button*, pBtn, void )
+IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, Button*, pBtn, void )
 {
     ScPassHashProtectable* pProtected = nullptr;
     if (pBtn == mpBtnRetypeDoc)
@@ -413,12 +413,12 @@ void ScRetypePassInputDlg::CheckPasswordInput()
     m_pBtnOk->Enable(bPassGood);
 }
 
-IMPL_LINK_NOARG_TYPED(ScRetypePassInputDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(ScRetypePassInputDlg, OKHdl, Button*, void)
 {
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_TYPED( ScRetypePassInputDlg, RadioBtnHdl, Button*, pBtn, void )
+IMPL_LINK( ScRetypePassInputDlg, RadioBtnHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnRetypePassword)
     {
@@ -434,12 +434,12 @@ IMPL_LINK_TYPED( ScRetypePassInputDlg, RadioBtnHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScRetypePassInputDlg, CheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(ScRetypePassInputDlg, CheckBoxHdl, Button*, void)
 {
     CheckPasswordInput();
 }
 
-IMPL_LINK_NOARG_TYPED(ScRetypePassInputDlg, PasswordModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScRetypePassInputDlg, PasswordModifyHdl, Edit&, void)
 {
     CheckPasswordInput();
 }

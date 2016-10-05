@@ -453,7 +453,7 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
     return getColumn( sField );
 }
 
-IMPL_LINK_TYPED( DlgFilterCrit, PredicateLoseFocus, Control&, rControl, void )
+IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Control&, rControl, void )
 {
     Edit* _pField = static_cast<Edit*>(&rControl);
     // retrieve the field affected
@@ -644,7 +644,7 @@ void DlgFilterCrit::EnableLines()
         m_pET_WHEREVALUE3->Disable();
 }
 
-IMPL_LINK_TYPED( DlgFilterCrit, ListSelectHdl, ListBox&, rListBox, void )
+IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox&, rListBox, void )
 {
     OUString aName;
     ListBox* pComp;
@@ -701,7 +701,7 @@ IMPL_LINK_TYPED( DlgFilterCrit, ListSelectHdl, ListBox&, rListBox, void )
     EnableLines();
 }
 
-IMPL_LINK_NOARG_TYPED( DlgFilterCrit, ListSelectCompHdl, ListBox&, void )
+IMPL_LINK_NOARG( DlgFilterCrit, ListSelectCompHdl, ListBox&, void )
 {
     EnableLines();
 }

@@ -174,7 +174,7 @@ namespace abp
     }
 
 
-    IMPL_LINK_NOARG_TYPED( OAddressBookSourcePilot, OnCancelClicked, Button*, void )
+    IMPL_LINK_NOARG( OAddressBookSourcePilot, OnCancelClicked, Button*, void )
     {
         // do cleanups
         implCleanup();

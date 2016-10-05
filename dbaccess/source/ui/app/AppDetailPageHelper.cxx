@@ -128,7 +128,7 @@ namespace
     // class OPreviewWindow
     class OTablePreviewWindow : public vcl::Window
     {
-        DECL_LINK_TYPED(OnDisableInput, void*, void);
+        DECL_LINK(OnDisableInput, void*, void);
         void ImplInitSettings();
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
@@ -147,7 +147,7 @@ namespace
             PostUserEvent( LINK( this, OTablePreviewWindow, OnDisableInput), nullptr, true );
         return bRet;
     }
-    IMPL_LINK_NOARG_TYPED(OTablePreviewWindow, OnDisableInput, void*, void)
+    IMPL_LINK_NOARG(OTablePreviewWindow, OnDisableInput, void*, void)
     {
         EnableInput(false);
     }
@@ -888,33 +888,33 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const OUString& _r
     }
 }
 
-IMPL_LINK_TYPED(OAppDetailPageHelper, OnEntryEnterKey, DBTreeListBox*, _pTree, void )
+IMPL_LINK(OAppDetailPageHelper, OnEntryEnterKey, DBTreeListBox*, _pTree, void )
 {
     OnEntryDoubleClick(_pTree);
 }
-IMPL_LINK_TYPED(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree, bool)
+IMPL_LINK(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree, bool)
 {
     OSL_ENSURE( _pTree, "OAppDetailPageHelper, OnEntryDoubleClick: invalid callback!" );
     bool bHandled = ( _pTree != nullptr ) && getBorderWin().getView()->getAppController().onEntryDoubleClick( *_pTree );
     return bHandled;
 }
 
-IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnEntrySelChange, LinkParamNone*, void)
+IMPL_LINK_NOARG(OAppDetailPageHelper, OnEntrySelChange, LinkParamNone*, void)
 {
     getBorderWin().getView()->getAppController().onSelectionChanged();
 }
 
-IMPL_LINK_NOARG_TYPED( OAppDetailPageHelper, OnCopyEntry, LinkParamNone*, void )
+IMPL_LINK_NOARG( OAppDetailPageHelper, OnCopyEntry, LinkParamNone*, void )
 {
     getBorderWin().getView()->getAppController().onCopyEntry();
 }
 
-IMPL_LINK_NOARG_TYPED( OAppDetailPageHelper, OnPasteEntry, LinkParamNone*, void )
+IMPL_LINK_NOARG( OAppDetailPageHelper, OnPasteEntry, LinkParamNone*, void )
 {
     getBorderWin().getView()->getAppController().onPasteEntry();
 }
 
-IMPL_LINK_NOARG_TYPED( OAppDetailPageHelper, OnDeleteEntry, LinkParamNone*, void )
+IMPL_LINK_NOARG( OAppDetailPageHelper, OnDeleteEntry, LinkParamNone*, void )
 {
     getBorderWin().getView()->getAppController().onDeleteEntry();
 }
@@ -1136,7 +1136,7 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
     }
 }
 
-IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
+IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
 {
     m_aTBPreview->EndSelection();
 

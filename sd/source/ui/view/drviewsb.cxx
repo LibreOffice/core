@@ -138,7 +138,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
     return bSuccess;
 }
 
-IMPL_LINK_TYPED( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool )
+IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool )
 {
     OUString aNewName;
     rDialog.GetName( aNewName );

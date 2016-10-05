@@ -68,7 +68,7 @@ private:
     long mnTableWidth;
     long mnTableHeight;
 
-    DECL_LINK_TYPED( SelectHdl, Button*, void );
+    DECL_LINK( SelectHdl, Button*, void );
 
 public:
                             TableWindow( sal_uInt16                 nSlotId,
@@ -94,7 +94,7 @@ const long TableWindow::TABLE_CELLS_HORIZ = 10;
 const long TableWindow::TABLE_CELLS_VERT = 15;
 
 
-IMPL_LINK_NOARG_TYPED(TableWindow, SelectHdl, Button*, void)
+IMPL_LINK_NOARG(TableWindow, SelectHdl, Button*, void)
 {
     CloseAndShowTableDialog();
 }

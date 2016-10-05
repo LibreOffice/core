@@ -50,8 +50,8 @@ namespace dbaui
         Link<void*,void>            m_aControlModificationLink;
         ::svt::ControlDependencyManager
                                     m_aControlDependencies;
-        DECL_LINK_TYPED(RadioToggleHdl, RadioButton&, void);
-        DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
+        DECL_LINK(RadioToggleHdl, RadioButton&, void);
+        DECL_LINK(EditModifyHdl, Edit&, void);
 
     public:
         MySQLNativeSettings( vcl::Window& _rParent, const Link<void*,void>& _rControlModificationLink );

@@ -99,15 +99,15 @@ private:
     void SelectionChanged();
 
     // Handler:
-    DECL_LINK_TYPED( OkBtnHdl, Button*, void );
-    DECL_LINK_TYPED( CancelBtnHdl, Button*, void );
-    DECL_LINK_TYPED( AddBtnHdl, Button*, void );
-    DECL_LINK_TYPED( RemoveBtnHdl, Button*, void );
-    DECL_LINK_TYPED( EdModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( EdModifyCheckBoxHdl, CheckBox&, void );
-    DECL_LINK_TYPED( AssignGetFocusHdl, Control&, void );
-    DECL_LINK_TYPED( SelectionChangedHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( ScopeChangedHdl, ListBox&, void );
+    DECL_LINK( OkBtnHdl, Button*, void );
+    DECL_LINK( CancelBtnHdl, Button*, void );
+    DECL_LINK( AddBtnHdl, Button*, void );
+    DECL_LINK( RemoveBtnHdl, Button*, void );
+    DECL_LINK( EdModifyHdl, Edit&, void );
+    DECL_LINK( EdModifyCheckBoxHdl, CheckBox&, void );
+    DECL_LINK( AssignGetFocusHdl, Control&, void );
+    DECL_LINK( SelectionChangedHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK( ScopeChangedHdl, ListBox&, void );
 
 protected:
     virtual void    RefInputDone( bool bForced = false ) override;

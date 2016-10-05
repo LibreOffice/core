@@ -154,7 +154,7 @@ void WebConnectionInfoDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED( WebConnectionInfoDialog, HeaderBarClickedHdl, SvSimpleTable*, pTable, void )
+IMPL_LINK( WebConnectionInfoDialog, HeaderBarClickedHdl, SvSimpleTable*, pTable, void )
 {
     m_pPasswordsLB->Resort( nullptr == pTable );
 }
@@ -205,7 +205,7 @@ void WebConnectionInfoDialog::FillPasswordList()
 }
 
 
-IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, RemovePasswordHdl, Button*, void)
+IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl, Button*, void)
 {
     try
     {
@@ -235,7 +235,7 @@ IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, RemovePasswordHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, RemoveAllPasswordsHdl, Button*, void)
+IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl, Button*, void)
 {
     try
     {
@@ -257,7 +257,7 @@ IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, RemoveAllPasswordsHdl, Button*, v
 }
 
 
-IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, ChangePasswordHdl, Button*, void)
+IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl, Button*, void)
 {
     try
     {
@@ -293,7 +293,7 @@ IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, ChangePasswordHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, EntrySelectedHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();
     if ( !pEntry )

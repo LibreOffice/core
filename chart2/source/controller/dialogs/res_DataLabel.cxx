@@ -182,7 +182,7 @@ void DataLabelResources::SetNumberFormatter( SvNumberFormatter* pFormatter )
     m_pNumberFormatter = pFormatter;
 }
 
-IMPL_LINK_TYPED( DataLabelResources, NumberFormatDialogHdl, Button *, pButton, void )
+IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, Button *, pButton, void )
 {
     if( !m_pPool || !m_pNumberFormatter )
     {
@@ -230,7 +230,7 @@ IMPL_LINK_TYPED( DataLabelResources, NumberFormatDialogHdl, Button *, pButton, v
     }
 }
 
-IMPL_LINK_TYPED( DataLabelResources, CheckHdl, Button*, pBox, void )
+IMPL_LINK( DataLabelResources, CheckHdl, Button*, pBox, void )
 {
     if( pBox )
         static_cast<CheckBox*>(pBox)->EnableTriState( false );

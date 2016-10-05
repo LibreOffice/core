@@ -73,7 +73,7 @@ class SW_DLLPUBLIC SwAddressPreview : public vcl::Window
     virtual void StateChanged( StateChangedType nStateChange ) override;
     void UpdateScrollBar();
 
-    DECL_LINK_TYPED(ScrollHdl, ScrollBar*,void);
+    DECL_LINK(ScrollHdl, ScrollBar*,void);
 
 public:
     SwAddressPreview(vcl::Window* pParent, WinBits nStyle);

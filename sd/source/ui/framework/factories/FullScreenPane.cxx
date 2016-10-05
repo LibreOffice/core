@@ -173,7 +173,7 @@ void SAL_CALL FullScreenPane::setAccessible (
     }
 }
 
-IMPL_LINK_TYPED(FullScreenPane, WindowEventHandler, VclWindowEvent&, rEvent, void)
+IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {

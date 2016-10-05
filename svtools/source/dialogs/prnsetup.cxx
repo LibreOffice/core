@@ -281,7 +281,7 @@ void PrinterSetupDialog::ImplSetInfo()
 }
 
 
-IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplStatusHdl, Timer *, void)
+IMPL_LINK_NOARG(PrinterSetupDialog, ImplStatusHdl, Timer *, void)
 {
     QueueInfo aInfo;
     ImplPrnDlgUpdateQueueInfo(m_pLbName, aInfo);
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplStatusHdl, Timer *, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplPropertiesHdl, Button*, void)
+IMPL_LINK_NOARG(PrinterSetupDialog, ImplPropertiesHdl, Button*, void)
 {
     if ( !mpTempPrinter )
         mpTempPrinter = VclPtr<Printer>::Create( mpPrinter->GetJobSetup() );
@@ -297,7 +297,7 @@ IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplPropertiesHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(PrinterSetupDialog, ImplChangePrinterHdl, ListBox&, void)
+IMPL_LINK_NOARG(PrinterSetupDialog, ImplChangePrinterHdl, ListBox&, void)
 {
     mpTempPrinter = ImplPrnDlgListBoxSelect(m_pLbName, m_pBtnProperties,
                                              mpPrinter, mpTempPrinter );

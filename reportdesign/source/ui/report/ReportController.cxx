@@ -1725,12 +1725,12 @@ void OReportController::impl_initialize( )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( OReportController, OnOpenHelpAgent, void*, void )
+IMPL_LINK_NOARG( OReportController, OnOpenHelpAgent, void*, void )
 {
     doOpenHelpAgent();
 }
 
-IMPL_LINK_TYPED( OReportController, OnCreateHdl, OAddFieldWindow& ,_rAddFieldDlg, void)
+IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow& ,_rAddFieldDlg, void)
 {
     WaitObject aObj( getDesignView() );
     uno::Sequence< beans::PropertyValue > aArgs = _rAddFieldDlg.getSelectedFieldDescriptors();
@@ -2317,7 +2317,7 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
     }
 }
 
-IMPL_LINK_NOARG_TYPED(OReportController, OnClipboardChanged, TransferableDataHelper*, void)
+IMPL_LINK_NOARG(OReportController, OnClipboardChanged, TransferableDataHelper*, void)
 {
     OnInvalidateClipboard();
 }
@@ -2567,7 +2567,7 @@ sal_Int32 OReportController::getGroupPosition(const uno::Reference< report::XGro
 }
 
 
-IMPL_LINK_TYPED( OReportController, EventLstHdl, VclWindowEvent&, _rEvent, void )
+IMPL_LINK( OReportController, EventLstHdl, VclWindowEvent&, _rEvent, void )
 {
     if ( _rEvent.GetId() == VCLEVENT_WINDOW_CLOSE )
     {
@@ -3120,7 +3120,7 @@ void OReportController::createNewFunction(const uno::Any& _aValue)
     xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(xFunction));
 }
 
-IMPL_LINK_NOARG_TYPED( OReportController, OnExecuteReport, void*, void )
+IMPL_LINK_NOARG( OReportController, OnExecuteReport, void*, void )
 {
     executeReport();
 }

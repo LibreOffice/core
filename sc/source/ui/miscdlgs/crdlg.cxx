@@ -56,7 +56,7 @@ void ScColOrRowDlg::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(ScColOrRowDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(ScColOrRowDlg, OkHdl, Button*, void)
 {
     EndDialog( m_pBtnCols->IsChecked() ? SCRET_COLS : SCRET_ROWS );
 }

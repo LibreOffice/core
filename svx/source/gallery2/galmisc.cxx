@@ -76,7 +76,7 @@ BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
     return aBmpEx;
 }
 
-IMPL_STATIC_LINK_TYPED(
+IMPL_STATIC_LINK(
     SgaUserDataFactory, MakeUserData, SdrObjUserDataCreatorParams, aParams, SdrObjUserData* )
 {
     if ( aParams.nInventor == IV_IMAPINFO && aParams.nObjIdentifier == ID_IMAPINFO )

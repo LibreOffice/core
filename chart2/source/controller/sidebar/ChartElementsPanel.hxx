@@ -112,8 +112,8 @@ private:
 
     void setTitleVisible(TitleHelper::eTitleType eTitle, bool bVisible);
 
-    DECL_LINK_TYPED(CheckBoxHdl, Button*, void);
-    DECL_LINK_TYPED(LegendPosHdl, ListBox&, void);
+    DECL_LINK(CheckBoxHdl, Button*, void);
+    DECL_LINK(LegendPosHdl, ListBox&, void);
 };
 
 } } // end of namespace ::chart::sidebar

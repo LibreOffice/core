@@ -130,7 +130,7 @@ SmFontPickListBox::SmFontPickListBox (vcl::Window* pParent, WinBits nBits) :
     SetSelectHdl(LINK(this, SmFontPickListBox, SelectHdl));
 }
 
-IMPL_LINK_NOARG_TYPED( SmFontPickListBox, SelectHdl, ListBox&, void )
+IMPL_LINK_NOARG( SmFontPickListBox, SelectHdl, ListBox&, void )
 {
     OUString aString;
 

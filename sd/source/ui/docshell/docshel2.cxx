@@ -411,7 +411,7 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
     return bCanUseNewName;
 }
 
-IMPL_LINK_TYPED( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool )
+IMPL_LINK( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool )
 {
     OUString aNewName;
     rDialog.GetName( aNewName );

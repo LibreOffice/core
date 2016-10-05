@@ -85,9 +85,9 @@ private:
 
     void FillDesignPreviewControl();
 
-    DECL_LINK_TYPED(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
-    DECL_LINK_TYPED(implValueSetHdl, ValueSet*, void);
-    DECL_LINK_TYPED(implCheckBoxHdl, Button*, void);
+    DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
+    DECL_LINK(implValueSetHdl, ValueSet*, void);
+    DECL_LINK(implCheckBoxHdl, Button*, void);
 
 private:
     ViewShellBase& mrBase;

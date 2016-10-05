@@ -81,7 +81,7 @@ void ScAutoStyleList::AddInitial( const ScRange& rRange, const OUString& rStyle1
     aInitIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(ScAutoStyleList, InitHdl, Idle *, void)
+IMPL_LINK_NOARG(ScAutoStyleList, InitHdl, Idle *, void)
 {
     std::vector<ScAutoStyleInitData>::iterator iter;
     for (iter = aInitials.begin(); iter != aInitials.end(); ++iter)
@@ -184,7 +184,7 @@ void ScAutoStyleList::StartTimer( sal_uLong nNow )      // Sekunden
     nTimerStart = nNow;
 }
 
-IMPL_LINK_NOARG_TYPED(ScAutoStyleList, TimerHdl, Timer *, void)
+IMPL_LINK_NOARG(ScAutoStyleList, TimerHdl, Timer *, void)
 {
     sal_uLong nNow = TimeNow();
     AdjustEntries(aTimer.GetTimeout());             // eingestellte Wartezeit

@@ -35,7 +35,7 @@
 
 class ScDrawObjFactory
 {
-    DECL_STATIC_LINK_TYPED( ScDrawObjFactory, MakeUserData, SdrObjUserDataCreatorParams, SdrObjUserData* );
+    DECL_STATIC_LINK( ScDrawObjFactory, MakeUserData, SdrObjUserDataCreatorParams, SdrObjUserData* );
 public:
     ScDrawObjFactory();
    ~ScDrawObjFactory();

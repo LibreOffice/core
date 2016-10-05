@@ -644,7 +644,7 @@ void Window::ImplPostPaint()
         mpWindowImpl->mpFrameData->maPaintIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
+IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Idle *, void)
 {
     // save paint events until layout is done
     if (IsSystemWindow() && static_cast<const SystemWindow*>(this)->hasPendingLayout())
@@ -665,7 +665,7 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(Window, ImplHandleResizeTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl, Idle *, void)
 {
     if( mpWindowImpl->mbReallyVisible )
     {

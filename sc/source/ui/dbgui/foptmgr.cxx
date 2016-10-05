@@ -209,7 +209,7 @@ bool ScFilterOptionsMgr::VerifyPosStr( const OUString& rPosStr ) const
 
 // Handler:
 
-IMPL_LINK_TYPED( ScFilterOptionsMgr, LbAreaSelHdl, ListBox&, rLb, void )
+IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox&, rLb, void )
 {
     if ( &rLb == pLbCopyArea )
     {
@@ -223,7 +223,7 @@ IMPL_LINK_TYPED( ScFilterOptionsMgr, LbAreaSelHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK_TYPED( ScFilterOptionsMgr, EdAreaModifyHdl, Edit&, rEd, void )
+IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit&, rEd, void )
 {
     if ( &rEd == pEdCopyArea )
     {
@@ -249,7 +249,7 @@ IMPL_LINK_TYPED( ScFilterOptionsMgr, EdAreaModifyHdl, Edit&, rEd, void )
     }
 }
 
-IMPL_LINK_TYPED( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox&, rBox, void )
+IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox&, rBox, void )
 {
     if ( &rBox == pBtnCopyResult )
     {

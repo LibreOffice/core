@@ -56,8 +56,8 @@ private:
 
     void            Init();
 
-    DECL_LINK_TYPED( CancelBtnHdl, Button*, void );
-    DECL_LINK_TYPED( OkBtnHdl, Button*, void );
+    DECL_LINK( CancelBtnHdl, Button*, void );
+    DECL_LINK( OkBtnHdl, Button*, void );
 
 protected:
 

@@ -55,12 +55,12 @@ private:
     SwWrtShell*             pSh;
     sfx2::FileDialogHelper* pFileDlg;
 
-    DECL_LINK_TYPED(OKHdl, Button*, void);
-    DECL_LINK_TYPED(PrevHdl, Button*, void);
-    DECL_LINK_TYPED(NextHdl, Button*, void);
-    DECL_LINK_TYPED(RadioButtonHdl, Button*, void);
-    DECL_LINK_TYPED(InsertFileHdl, Button *, void);
-    DECL_LINK_TYPED(DlgClosedHdl, sfx2::FileDialogHelper *, void);
+    DECL_LINK(OKHdl, Button*, void);
+    DECL_LINK(PrevHdl, Button*, void);
+    DECL_LINK(NextHdl, Button*, void);
+    DECL_LINK(RadioButtonHdl, Button*, void);
+    DECL_LINK(InsertFileHdl, Button *, void);
+    DECL_LINK(DlgClosedHdl, sfx2::FileDialogHelper *, void);
 
     virtual void    Apply() override;
 

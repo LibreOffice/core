@@ -160,7 +160,7 @@ long VclAbstractDialog2_Impl::GetResult()
     return m_pDlg->GetResult();
 }
 
-IMPL_LINK_TYPED( VclAbstractDialog2_Impl, EndDialogHdl, Dialog&, rDlg, void )
+IMPL_LINK( VclAbstractDialog2_Impl, EndDialogHdl, Dialog&, rDlg, void )
 {
     if ( &rDlg != m_pDlg )
     {
@@ -590,7 +590,7 @@ void AbstractSvxNameDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
 }
-IMPL_LINK_NOARG_TYPED(AbstractSvxNameDialog_Impl, CheckNameHdl, SvxNameDialog&, bool)
+IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameHdl, SvxNameDialog&, bool)
 {
     return aCheckNameHdl.Call(*this);
 }
@@ -614,7 +614,7 @@ void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxObj
     }
 }
 
-IMPL_LINK_NOARG_TYPED(AbstractSvxObjectNameDialog_Impl, CheckNameHdl, SvxObjectNameDialog&, bool)
+IMPL_LINK_NOARG(AbstractSvxObjectNameDialog_Impl, CheckNameHdl, SvxObjectNameDialog&, bool)
 {
     return aCheckNameHdl.Call(*this);
 }
@@ -771,11 +771,11 @@ void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link<AbstractSvxPostItDialo
     else
         pDlg->SetPrevHdl( Link<SvxPostItDialog&,void>() );
 }
-IMPL_LINK_NOARG_TYPED(AbstractSvxPostItDialog_Impl, NextHdl, SvxPostItDialog&, void)
+IMPL_LINK_NOARG(AbstractSvxPostItDialog_Impl, NextHdl, SvxPostItDialog&, void)
 {
     aNextHdl.Call(*this);
 }
-IMPL_LINK_NOARG_TYPED(AbstractSvxPostItDialog_Impl, PrevHdl, SvxPostItDialog&, void)
+IMPL_LINK_NOARG(AbstractSvxPostItDialog_Impl, PrevHdl, SvxPostItDialog&, void)
 {
     aPrevHdl.Call(*this);
 }

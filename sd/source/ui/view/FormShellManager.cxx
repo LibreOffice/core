@@ -183,7 +183,7 @@ void FormShellManager::UnregisterAtCenterPane()
     mpSubShellFactory.reset();
 }
 
-IMPL_LINK_NOARG_TYPED(FormShellManager, FormControlActivated, LinkParamNone*, void)
+IMPL_LINK_NOARG(FormShellManager, FormControlActivated, LinkParamNone*, void)
 {
     // The form shell has been activated.  To give it priority in reacting to
     // slot calls the form shell is moved to the top of the object bar shell
@@ -198,7 +198,7 @@ IMPL_LINK_NOARG_TYPED(FormShellManager, FormControlActivated, LinkParamNone*, vo
     }
 }
 
-IMPL_LINK_TYPED(FormShellManager, ConfigurationUpdateHandler, sd::tools::EventMultiplexerEvent&, rEvent, void)
+IMPL_LINK(FormShellManager, ConfigurationUpdateHandler, sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {
@@ -223,7 +223,7 @@ IMPL_LINK_TYPED(FormShellManager, ConfigurationUpdateHandler, sd::tools::EventMu
     }
 }
 
-IMPL_LINK_TYPED(FormShellManager, WindowEventHandler, VclWindowEvent&, rEvent, void)
+IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {

@@ -225,7 +225,7 @@ void PageFooterPanel::NotifyItemUpdate(
     }
 }
 
-IMPL_LINK_NOARG_TYPED( PageFooterPanel, FooterToggleHdl, Button*, void )
+IMPL_LINK_NOARG( PageFooterPanel, FooterToggleHdl, Button*, void )
 {
     bool IsChecked = mpFooterToggle->IsChecked();
     mpFooterItem->SetValue(IsChecked);
@@ -233,7 +233,7 @@ IMPL_LINK_NOARG_TYPED( PageFooterPanel, FooterToggleHdl, Button*, void )
     UpdateFooterCheck();
 }
 
-IMPL_LINK_NOARG_TYPED( PageFooterPanel, FooterLRMarginHdl, ListBox&, void )
+IMPL_LINK_NOARG( PageFooterPanel, FooterLRMarginHdl, ListBox&, void )
 {
     sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpFooterMarginPresetLB->GetSelectEntryData());
     mpFooterLRMarginItem->SetLeft(nVal);
@@ -242,7 +242,7 @@ IMPL_LINK_NOARG_TYPED( PageFooterPanel, FooterLRMarginHdl, ListBox&, void )
                                                  SfxCallMode::RECORD, { mpFooterLRMarginItem.get() } );
 }
 
-IMPL_LINK_NOARG_TYPED( PageFooterPanel, FooterSpacingHdl, ListBox&, void )
+IMPL_LINK_NOARG( PageFooterPanel, FooterSpacingHdl, ListBox&, void )
 {
     sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpFooterSpacingLB->GetSelectEntryData());
     mpFooterSpacingItem->SetUpper(nVal);
@@ -250,7 +250,7 @@ IMPL_LINK_NOARG_TYPED( PageFooterPanel, FooterSpacingHdl, ListBox&, void )
                                                  SfxCallMode::RECORD, { mpFooterSpacingItem.get() } );
 
 }
-IMPL_LINK_NOARG_TYPED( PageFooterPanel, FooterLayoutHdl, ListBox&, void )
+IMPL_LINK_NOARG( PageFooterPanel, FooterLayoutHdl, ListBox&, void )
 {
     sal_uInt16 nVal = mpFooterLayoutLB->GetSelectEntryPos();
     mpFooterLayoutItem->SetValue(nVal);

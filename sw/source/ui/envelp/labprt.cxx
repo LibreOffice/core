@@ -79,7 +79,7 @@ void SwLabPrtPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_TYPED( SwLabPrtPage, CountHdl, Button *, pButton, void )
+IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton, void )
 {
     if (pButton == m_pPrtSetup)
     {

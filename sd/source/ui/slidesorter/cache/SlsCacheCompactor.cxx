@@ -132,7 +132,7 @@ CacheCompactor::CacheCompactor(
 
 }
 
-IMPL_LINK_NOARG_TYPED(CacheCompactor, CompactionCallback, Timer *, void)
+IMPL_LINK_NOARG(CacheCompactor, CompactionCallback, Timer *, void)
 {
     mbIsCompactionRunning = true;
 

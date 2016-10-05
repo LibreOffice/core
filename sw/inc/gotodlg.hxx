@@ -40,7 +40,7 @@ private:
     SwView*    GetCreateView() const;
     sal_uInt16 GetPageInfo();
 
-    DECL_LINK_TYPED( PageModifiedHdl, Edit&, void );
+    DECL_LINK( PageModifiedHdl, Edit&, void );
 
     VclPtr<Edit> mpMtrPageCtrl;
     VclPtr<FixedText> mpPageNumberLbl;

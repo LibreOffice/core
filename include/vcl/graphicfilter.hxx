@@ -232,7 +232,7 @@ private:
     sal_uLong           ImplSetError( sal_uLong nError, const SvStream* pStm = nullptr );
     sal_uInt16      ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
 
-                    DECL_LINK_TYPED( FilterCallback, ConvertData&, bool );
+                    DECL_LINK( FilterCallback, ConvertData&, bool );
 
 protected:
 

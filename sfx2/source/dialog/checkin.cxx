@@ -43,7 +43,7 @@ bool SfxCheckinDialog::IsMajor( )
     return m_pMajorCB->IsChecked( );
 }
 
-IMPL_LINK_NOARG_TYPED( SfxCheckinDialog, OKHdl, Button*, void )
+IMPL_LINK_NOARG( SfxCheckinDialog, OKHdl, Button*, void )
 {
     EndDialog( RET_OK );
 }

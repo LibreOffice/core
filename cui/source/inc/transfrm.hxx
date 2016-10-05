@@ -124,16 +124,16 @@ private:
     RectPoint          meRP;
 
 
-    DECL_LINK_TYPED( ChangePosProtectHdl, Button*, void );
-    DECL_LINK_TYPED( ChangeSizeProtectHdl, Button*, void );
+    DECL_LINK( ChangePosProtectHdl, Button*, void );
+    DECL_LINK( ChangeSizeProtectHdl, Button*, void );
 
     void SetMinMaxPosition();
     void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
 
-    DECL_LINK_TYPED( ChangeWidthHdl, Edit&, void );
-    DECL_LINK_TYPED( ChangeHeightHdl, Edit&, void );
-    DECL_LINK_TYPED( ClickSizeProtectHdl, Button*, void );
-    DECL_LINK_TYPED( ClickAutoHdl, Button*, void );
+    DECL_LINK( ChangeWidthHdl, Edit&, void );
+    DECL_LINK( ChangeHeightHdl, Edit&, void );
+    DECL_LINK( ClickSizeProtectHdl, Button*, void );
+    DECL_LINK( ClickAutoHdl, Button*, void );
 
 public:
     SvxPositionSizeTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );

@@ -45,12 +45,12 @@ class SwLabPage : public SfxTabPage
     VclPtr<ListBox>          m_pHiddenSortTypeBox;
     VclPtr<FixedText>        m_pFormatInfo;
 
-    DECL_LINK_TYPED(AddrHdl, Button*, void);
-    DECL_LINK_TYPED(DatabaseHdl, ListBox&, void );
-    DECL_LINK_TYPED(FieldHdl, Button *, void);
-    DECL_LINK_TYPED(PageHdl, Button *, void);
-    DECL_LINK_TYPED(MakeHdl, ListBox&, void);
-    DECL_LINK_TYPED(TypeHdl, ListBox&, void);
+    DECL_LINK(AddrHdl, Button*, void);
+    DECL_LINK(DatabaseHdl, ListBox&, void );
+    DECL_LINK(FieldHdl, Button *, void);
+    DECL_LINK(PageHdl, Button *, void);
+    DECL_LINK(MakeHdl, ListBox&, void);
+    DECL_LINK(TypeHdl, ListBox&, void);
 
     void DisplayFormat  ();
     SwLabRec* GetSelectedEntryPos();
@@ -93,9 +93,9 @@ class SwVisitingCardPage : public SfxTabPage
     SwOneExampleFrame*  pExampleFrame;
     css::uno::Reference< css::text::XAutoTextContainer2 > m_xAutoText;
 
-    DECL_LINK_TYPED( AutoTextSelectTreeListBoxHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( AutoTextSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( FrameControlInitializedHdl, SwOneExampleFrame&, void );
+    DECL_LINK( AutoTextSelectTreeListBoxHdl, SvTreeListBox*, void );
+    DECL_LINK( AutoTextSelectHdl, ListBox&, void );
+    DECL_LINK( FrameControlInitializedHdl, SwOneExampleFrame&, void );
 
     void            InitFrameControl();
     void            UpdateFields();

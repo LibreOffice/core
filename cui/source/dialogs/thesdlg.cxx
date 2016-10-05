@@ -92,7 +92,7 @@ void LookUpComboBox::Modify()
     m_aModifyIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED( LookUpComboBox, ModifyTimer_Hdl, Idle *, void )
+IMPL_LINK_NOARG( LookUpComboBox, ModifyTimer_Hdl, Idle *, void )
 {
     m_pDialog->LookUp( GetText() );
     m_aModifyIdle.Stop();
@@ -336,7 +336,7 @@ void SvxThesaurusDialog::LookUp( const OUString &rText )
     LookUp_Impl();
 }
 
-IMPL_LINK_TYPED( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn, void )
+IMPL_LINK( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn, void )
 {
     if (pBtn && aLookUpHistory.size() >= 2)
     {
@@ -347,7 +347,7 @@ IMPL_LINK_TYPED( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn, void )
     }
 }
 
-IMPL_LINK_TYPED( SvxThesaurusDialog, LanguageHdl_Impl, ListBox&, rLB, void )
+IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, ListBox&, rLB, void )
 {
     OUString aLangText( rLB.GetSelectEntry() );
     LanguageType nLang = SvtLanguageTable::GetLanguageType( aLangText );
@@ -377,7 +377,7 @@ void SvxThesaurusDialog::LookUp_Impl()
     m_pLeftBtn->Enable( aLookUpHistory.size() > 1 );
 }
 
-IMPL_LINK_TYPED( SvxThesaurusDialog, WordSelectHdl_Impl, ComboBox&, rBox, void )
+IMPL_LINK( SvxThesaurusDialog, WordSelectHdl_Impl, ComboBox&, rBox, void )
 {
     if (!m_pWordCB->IsTravelSelect())  // act only upon return key and not when traveling with cursor keys
     {
@@ -389,7 +389,7 @@ IMPL_LINK_TYPED( SvxThesaurusDialog, WordSelectHdl_Impl, ComboBox&, rBox, void )
     }
 }
 
-IMPL_LINK_TYPED( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvTreeListBox *, pBox, void )
+IMPL_LINK( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvTreeListBox *, pBox, void )
 {
     SvTreeListEntry *pEntry = pBox ? pBox->GetCurEntry() : nullptr;
     if (pEntry)
@@ -405,7 +405,7 @@ IMPL_LINK_TYPED( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvTreeListBox *
     }
 }
 
-IMPL_LINK_TYPED( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvTreeListBox*, pBox, bool )
+IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvTreeListBox*, pBox, bool )
 {
     SvTreeListEntry *pEntry = pBox ? pBox->GetCurEntry() : nullptr;
     if (pEntry)
@@ -429,7 +429,7 @@ IMPL_LINK_TYPED( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvTreeList
     return false;
 }
 
-IMPL_STATIC_LINK_TYPED( SvxThesaurusDialog, SelectFirstHdl_Impl, void *, p, void )
+IMPL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, void *, p, void )
 {
     SvxCheckListBox* pBox = static_cast<SvxCheckListBox*>(p);
     if (pBox && pBox->GetEntryCount() >= 2)
@@ -534,7 +534,7 @@ void SvxThesaurusDialog::dispose()
     SvxStandardDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, void )
+IMPL_LINK_NOARG( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, void )
 {
     EndDialog(RET_OK);
 }

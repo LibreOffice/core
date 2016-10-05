@@ -76,7 +76,7 @@ namespace accessibility
         AccessibleOutlineEditSource( const AccessibleOutlineEditSource& ) = delete;
         AccessibleOutlineEditSource& operator=( const AccessibleOutlineEditSource& ) = delete;
 
-        DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
+        DECL_LINK( NotifyHdl, EENotify&, void );
 
         SdrView&                        mrView;
         const vcl::Window& mrWindow;

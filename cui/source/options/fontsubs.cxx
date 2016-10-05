@@ -253,19 +253,19 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
     m_pFontHeightLB->SaveValue();
 }
 
-IMPL_LINK_TYPED(SvxFontSubstTabPage, ClickHdl, Button*, pButton, void)
+IMPL_LINK(SvxFontSubstTabPage, ClickHdl, Button*, pButton, void)
 {
     SelectHdl(pButton);
 }
-IMPL_LINK_TYPED(SvxFontSubstTabPage, TreeListBoxSelectHdl, SvTreeListBox*, pButton, void)
+IMPL_LINK(SvxFontSubstTabPage, TreeListBoxSelectHdl, SvTreeListBox*, pButton, void)
 {
     SelectHdl(pButton);
 }
-IMPL_LINK_TYPED(SvxFontSubstTabPage, SelectComboBoxHdl, ComboBox&, rBox, void)
+IMPL_LINK(SvxFontSubstTabPage, SelectComboBoxHdl, ComboBox&, rBox, void)
 {
     SelectHdl(&rBox);
 }
-IMPL_LINK_TYPED(SvxFontSubstTabPage, SelectEditHdl, Edit&, rBox, void)
+IMPL_LINK(SvxFontSubstTabPage, SelectEditHdl, Edit&, rBox, void)
 {
     SelectHdl(&rBox);
 }
@@ -344,7 +344,7 @@ void SvxFontSubstTabPage::SelectHdl(vcl::Window* pWin)
 }
 
 
-IMPL_LINK_TYPED(SvxFontSubstTabPage, NonPropFontsHdl, Button*, pBox, void)
+IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, Button*, pBox, void)
 {
     OUString sFontName = m_pFontNameLB->GetSelectEntry();
     bool bNonPropOnly = static_cast<CheckBox*>(pBox)->IsChecked();

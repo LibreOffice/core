@@ -468,7 +468,7 @@ void ScPrintAreasDlg::Impl_FillLists()
 
 // Handler:
 
-IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_BtnHdl, Button*, pBtn, void )
+IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, Button*, pBtn, void )
 {
     if ( pBtnOk == pBtn )
     {
@@ -516,7 +516,7 @@ IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_BtnHdl, Button*, pBtn, void )
         Close();
 }
 
-IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_GetFocusHdl, Control&, rCtrl, void )
+IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control&, rCtrl, void )
 {
     if ( &rCtrl ==static_cast<Control *>(pEdPrintArea) ||
          &rCtrl ==static_cast<Control *>(pEdRepeatRow) ||
@@ -538,7 +538,7 @@ IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_GetFocusHdl, Control&, rCtrl, void )
     }
 }
 
-IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_SelectHdl, ListBox&, rLb, void )
+IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox&, rLb, void )
 {
     ListBox* pLb = &rLb;
     const sal_Int32 nSelPos = pLb->GetSelectEntryPos();
@@ -573,7 +573,7 @@ IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_SelectHdl, ListBox&, rLb, void )
         pEd->SetText( *static_cast< OUString* >( pLb->GetEntryData( nSelPos ) ) );
 }
 
-IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_ModifyHdl, Edit&, rEd, void )
+IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, Edit&, rEd, void )
 {
     ListBox* pLb = nullptr;
 

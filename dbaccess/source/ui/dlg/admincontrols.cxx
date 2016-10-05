@@ -169,12 +169,12 @@ namespace dbaui
 #endif
     }
 
-    IMPL_LINK_TYPED(MySQLNativeSettings, RadioToggleHdl, RadioButton&, rRadioButton, void)
+    IMPL_LINK(MySQLNativeSettings, RadioToggleHdl, RadioButton&, rRadioButton, void)
     {
         m_aControlModificationLink.Call(&rRadioButton);
     }
 
-    IMPL_LINK_TYPED(MySQLNativeSettings, EditModifyHdl, Edit&, rEdit, void)
+    IMPL_LINK(MySQLNativeSettings, EditModifyHdl, Edit&, rEdit, void)
     {
         m_aControlModificationLink.Call(&rEdit);
     }

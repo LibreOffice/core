@@ -243,7 +243,7 @@ private:
 
 protected:
 
-    DECL_LINK_TYPED( ScrollHdl, Timer *, void );
+    DECL_LINK( ScrollHdl, Timer *, void );
 
 public:
                     Calendar( vcl::Window* pParent, WinBits nWinStyle = 0 );
@@ -344,9 +344,9 @@ private:
     bool                mbToday;
     bool                mbNone;
 
-                        DECL_DLLPRIVATE_LINK_TYPED( ImplSelectHdl, Calendar*, void );
-                        DECL_DLLPRIVATE_LINK_TYPED( ImplClickHdl, Button*, void );
-                        DECL_DLLPRIVATE_LINK_TYPED( ImplPopupModeEndHdl, FloatingWindow*, void );
+                        DECL_DLLPRIVATE_LINK( ImplSelectHdl, Calendar*, void );
+                        DECL_DLLPRIVATE_LINK( ImplClickHdl, Button*, void );
+                        DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, FloatingWindow*, void );
 
 public:
                         CalendarField( vcl::Window* pParent, WinBits nWinStyle );

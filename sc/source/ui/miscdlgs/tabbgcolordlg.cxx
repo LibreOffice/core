@@ -114,7 +114,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
 }
 
 ///    Handler, called when color selection is changed
-IMPL_LINK_NOARG_TYPED(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
 {
     sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectItemId();
     Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : Color( COL_AUTO );
@@ -123,7 +123,7 @@ IMPL_LINK_NOARG_TYPED(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, vo
 }
 
 //    Handler, called when the OK button is pushed
-IMPL_LINK_NOARG_TYPED(ScTabBgColorDlg, TabBgColorOKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorOKHdl_Impl, Button*, void)
 {
     sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectItemId();
     Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : Color( COL_AUTO );

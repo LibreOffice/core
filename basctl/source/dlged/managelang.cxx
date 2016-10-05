@@ -144,7 +144,7 @@ void ManageLanguageDialog::ClearLanguageBox()
     m_pLanguageLB->Clear();
 }
 
-IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, AddHdl, Button*, void)
+IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl, Button*, void)
 {
     ScopedVclPtrInstance< SetDefaultLanguageDialog > aDlg( this, m_xLocalizationMgr );
     if ( RET_OK == aDlg->Execute() )
@@ -168,7 +168,7 @@ IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, AddHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, DeleteHdl, Button*, void)
+IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl, Button*, void)
 {
     ScopedVclPtrInstance< MessageDialog > aQBox(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelangdialog.ui");
     if ( aQBox->Execute() == RET_OK )
@@ -197,7 +197,7 @@ IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, DeleteHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, MakeDefHdl, Button*, void)
+IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl, Button*, void)
 {
     const sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();
     LanguageEntry* pSelectEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData( nPos ));
@@ -214,7 +214,7 @@ IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, MakeDefHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl, ListBox&, void)
 {
     const sal_Int32 nCount = m_pLanguageLB->GetEntryCount();
     bool bEmpty = ( !nCount ||

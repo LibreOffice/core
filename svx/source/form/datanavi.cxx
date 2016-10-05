@@ -389,12 +389,12 @@ namespace svxform
         TabPage::dispose();
     }
 
-    IMPL_LINK_NOARG_TYPED(XFormsPage, TbxSelectHdl, ToolBox *, void)
+    IMPL_LINK_NOARG(XFormsPage, TbxSelectHdl, ToolBox *, void)
     {
         DoToolBoxAction( m_pToolBox->GetCurItemId() );
     }
 
-    IMPL_LINK_NOARG_TYPED(XFormsPage, ItemSelectHdl, SvTreeListBox*, void)
+    IMPL_LINK_NOARG(XFormsPage, ItemSelectHdl, SvTreeListBox*, void)
     {
         EnableMenuItems( nullptr );
     }
@@ -1451,7 +1451,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_TYPED( DataNavigatorWindow, ModelSelectListBoxHdl, ListBox&, rBox, void )
+    IMPL_LINK( DataNavigatorWindow, ModelSelectListBoxHdl, ListBox&, rBox, void )
     {
         ModelSelectHdl(&rBox);
     }
@@ -1468,7 +1468,7 @@ namespace svxform
         }
     }
 
-    IMPL_LINK_TYPED( DataNavigatorWindow, MenuSelectHdl, MenuButton *, pBtn, void )
+    IMPL_LINK( DataNavigatorWindow, MenuSelectHdl, MenuButton *, pBtn, void )
     {
         bool bIsDocModified = false;
         Reference< css::xforms::XFormsUIHelper1 > xUIHelper;
@@ -1770,7 +1770,7 @@ namespace svxform
         return m_pTabCtrl->GetPagePos(nId) >= 3;
     }
 
-    IMPL_LINK_TYPED( DataNavigatorWindow, MenuActivateHdl, MenuButton *, pBtn, void )
+    IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, MenuButton *, pBtn, void )
     {
         Menu* pMenu = pBtn->GetPopupMenu();
 
@@ -1794,7 +1794,7 @@ namespace svxform
         }
     }
 
-    IMPL_LINK_NOARG_TYPED(DataNavigatorWindow, ActivatePageHdl, TabControl*, void)
+    IMPL_LINK_NOARG(DataNavigatorWindow, ActivatePageHdl, TabControl*, void)
     {
         sal_uInt16 nId = 0;
         XFormsPage* pPage = GetCurrentPage( nId );
@@ -1806,7 +1806,7 @@ namespace svxform
         }
     }
 
-    IMPL_LINK_NOARG_TYPED(DataNavigatorWindow, UpdateHdl, Timer *, void)
+    IMPL_LINK_NOARG(DataNavigatorWindow, UpdateHdl, Timer *, void)
     {
         ModelSelectHdl( nullptr );
     }
@@ -2336,7 +2336,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_TYPED( AddDataItemDialog, CheckHdl, Button *, pButton, void )
+    IMPL_LINK( AddDataItemDialog, CheckHdl, Button *, pButton, void )
     {
         CheckBox* pBox = static_cast<CheckBox*>(pButton);
         // Condition buttons are only enable if their check box is checked
@@ -2370,7 +2370,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_TYPED( AddDataItemDialog, ConditionHdl, Button *, pButton, void )
+    IMPL_LINK( AddDataItemDialog, ConditionHdl, Button *, pButton, void )
     {
         PushButton* pBtn = static_cast<PushButton*>(pButton);
         OUString sTemp, sPropName;
@@ -2449,7 +2449,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG_TYPED(AddDataItemDialog, OKHdl, Button*, void)
+    IMPL_LINK_NOARG(AddDataItemDialog, OKHdl, Button*, void)
     {
         bool bIsHandleBinding = ( DITBinding == m_eItemType );
         bool bIsHandleText = ( DITText == m_eItemType );
@@ -2813,7 +2813,7 @@ namespace svxform
         ModalDialog::dispose();
     }
 
-    IMPL_LINK_NOARG_TYPED(AddConditionDialog, EditHdl, Button*, void)
+    IMPL_LINK_NOARG(AddConditionDialog, EditHdl, Button*, void)
     {
         Reference< XNameContainer > xNameContnr;
         try
@@ -2837,7 +2837,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG_TYPED(AddConditionDialog, OKHdl, Button*, void)
+    IMPL_LINK_NOARG(AddConditionDialog, OKHdl, Button*, void)
     {
 /*!!!
         try
@@ -2854,13 +2854,13 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG_TYPED(AddConditionDialog, ModifyHdl, Edit&, void)
+    IMPL_LINK_NOARG(AddConditionDialog, ModifyHdl, Edit&, void)
     {
         m_aResultIdle.Start();
     }
 
 
-    IMPL_LINK_NOARG_TYPED(AddConditionDialog, ResultHdl, Idle *, void)
+    IMPL_LINK_NOARG(AddConditionDialog, ResultHdl, Idle *, void)
     {
         OUString sCondition = comphelper::string::strip(m_pConditionED->GetText(), ' ');
         OUString sResult;
@@ -2936,7 +2936,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG_TYPED( NamespaceItemDialog, SelectHdl, SvTreeListBox *, void)
+    IMPL_LINK_NOARG( NamespaceItemDialog, SelectHdl, SvTreeListBox *, void)
     {
         bool bEnable = ( m_pNamespacesList->FirstSelected() != nullptr );
         m_pEditNamespaceBtn->Enable( bEnable );
@@ -2944,7 +2944,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_TYPED( NamespaceItemDialog, ClickHdl, Button *, pButton, void )
+    IMPL_LINK( NamespaceItemDialog, ClickHdl, Button *, pButton, void )
     {
         PushButton* pBtn = static_cast<PushButton*>(pButton);
         if ( m_pAddNamespaceBtn == pBtn )
@@ -2994,7 +2994,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG_TYPED(NamespaceItemDialog, OKHdl, Button*, void)
+    IMPL_LINK_NOARG(NamespaceItemDialog, OKHdl, Button*, void)
     {
         try
         {
@@ -3084,7 +3084,7 @@ namespace svxform
         ModalDialog::dispose();
     }
 
-    IMPL_LINK_NOARG_TYPED(ManageNamespaceDialog, OKHdl, Button*, void)
+    IMPL_LINK_NOARG(ManageNamespaceDialog, OKHdl, Button*, void)
     {
         OUString sPrefix = m_pPrefixED->GetText();
 
@@ -3152,7 +3152,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG_TYPED(AddSubmissionDialog, RefHdl, Button*, void)
+    IMPL_LINK_NOARG(AddSubmissionDialog, RefHdl, Button*, void)
     {
         ScopedVclPtrInstance< AddConditionDialog > aDlg(this, PN_BINDING_EXPR, m_xTempBinding );
         aDlg->SetCondition( m_pRefED->GetText() );
@@ -3161,7 +3161,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG_TYPED(AddSubmissionDialog, OKHdl, Button*, void)
+    IMPL_LINK_NOARG(AddSubmissionDialog, OKHdl, Button*, void)
     {
         OUString sName(m_pNameED->GetText());
         if(sName.isEmpty()) {
@@ -3392,7 +3392,7 @@ namespace svxform
         ModalDialog::dispose();
     }
 
-    IMPL_LINK_NOARG_TYPED(AddInstanceDialog, FilePickerHdl, Button*, void)
+    IMPL_LINK_NOARG(AddInstanceDialog, FilePickerHdl, Button*, void)
     {
         ::sfx2::FileDialogHelper aDlg(
             css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );

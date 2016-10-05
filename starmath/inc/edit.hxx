@@ -58,9 +58,9 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     virtual void KeyInput(const KeyEvent& rKEvt) override;
     virtual void Command(const CommandEvent& rCEvt) override;
 
-    DECL_LINK_TYPED(MenuSelectHdl, Menu *, bool);
-    DECL_LINK_TYPED(ModifyTimerHdl, Idle *, void);
-    DECL_LINK_TYPED(CursorMoveTimerHdl, Idle *, void);
+    DECL_LINK(MenuSelectHdl, Menu *, bool);
+    DECL_LINK(ModifyTimerHdl, Idle *, void);
+    DECL_LINK(CursorMoveTimerHdl, Idle *, void);
 
     virtual void DataChanged( const DataChangedEvent& ) override;
     virtual void Resize() override;
@@ -72,8 +72,8 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
 
-    DECL_LINK_TYPED(EditStatusHdl, EditStatus&, void);
-    DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
+    DECL_LINK(EditStatusHdl, EditStatus&, void);
+    DECL_LINK(ScrollHdl, ScrollBar*, void);
 
     void CreateEditView();
     Rectangle AdjustScrollBars();

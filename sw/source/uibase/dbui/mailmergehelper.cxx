@@ -225,7 +225,7 @@ void SwAddressPreview::Resize()
     positionScrollBar();
 }
 
-IMPL_LINK_NOARG_TYPED(SwAddressPreview, ScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(SwAddressPreview, ScrollHdl, ScrollBar*, void)
 {
     Invalidate();
 }

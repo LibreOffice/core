@@ -476,7 +476,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     return DND_ACTION_NONE;
 }
 
-IMPL_LINK_NOARG_TYPED(SwEditWin, DDHandler, Timer *, void)
+IMPL_LINK_NOARG(SwEditWin, DDHandler, Timer *, void)
 {
     g_bDDTimerStarted = false;
     m_aTimer.Stop();

@@ -3203,7 +3203,7 @@ void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-IMPL_LINK_TYPED(ScExternalRefManager, TimeOutHdl, Timer*, pTimer, void)
+IMPL_LINK(ScExternalRefManager, TimeOutHdl, Timer*, pTimer, void)
 {
     if (pTimer == &maSrcDocTimer)
         purgeStaleSrcDocument(SRCDOC_LIFE_SPAN);

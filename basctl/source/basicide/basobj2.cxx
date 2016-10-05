@@ -209,10 +209,10 @@ namespace
     class MacroExecution
     {
     public:
-        DECL_STATIC_LINK_TYPED( MacroExecution, ExecuteMacroEvent, void*, void );
+        DECL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, void*, void );
     };
 
-    IMPL_STATIC_LINK_TYPED( MacroExecution, ExecuteMacroEvent, void*, p, void )
+    IMPL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, void*, p, void )
     {
         MacroExecutionData* i_pData = static_cast<MacroExecutionData*>(p);
         ENSURE_OR_RETURN_VOID( i_pData, "wrong MacroExecutionData" );

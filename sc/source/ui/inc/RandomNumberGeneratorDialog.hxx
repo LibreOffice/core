@@ -70,17 +70,17 @@ private:
 
     void SelectGeneratorAndGenerateNumbers();
 
-    DECL_LINK_TYPED( OkClicked,        Button*, void );
-    DECL_LINK_TYPED( CloseClicked,     Button*, void );
-    DECL_LINK_TYPED( ApplyClicked,     Button*, void );
-    DECL_LINK_TYPED( GetFocusHandler,  Control&, void );
-    DECL_LINK_TYPED( LoseFocusHandler, Control&, void );
+    DECL_LINK( OkClicked,        Button*, void );
+    DECL_LINK( CloseClicked,     Button*, void );
+    DECL_LINK( ApplyClicked,     Button*, void );
+    DECL_LINK( GetFocusHandler,  Control&, void );
+    DECL_LINK( LoseFocusHandler, Control&, void );
 
-    DECL_LINK_TYPED( InputRangeModified, Edit&, void );
-    DECL_LINK_TYPED( Parameter1ValueModified, Edit&, void );
-    DECL_LINK_TYPED( Parameter2ValueModified, Edit&, void );
-    DECL_LINK_TYPED( DistributionChanged, ListBox&, void );
-    DECL_LINK_TYPED( CheckChanged, CheckBox&, void );
+    DECL_LINK( InputRangeModified, Edit&, void );
+    DECL_LINK( Parameter1ValueModified, Edit&, void );
+    DECL_LINK( Parameter2ValueModified, Edit&, void );
+    DECL_LINK( DistributionChanged, ListBox&, void );
+    DECL_LINK( CheckChanged, CheckBox&, void );
 
 };
 

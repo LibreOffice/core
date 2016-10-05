@@ -90,9 +90,9 @@ class SwEnvPage : public SfxTabPage
     SwWrtShell*   pSh;
     OUString      sActDBName;
 
-    DECL_LINK_TYPED( DatabaseHdl, ListBox&, void );
-    DECL_LINK_TYPED(FieldHdl, Button*, void );
-    DECL_LINK_TYPED(SenderHdl, Button*, void );
+    DECL_LINK( DatabaseHdl, ListBox&, void );
+    DECL_LINK(FieldHdl, Button*, void );
+    DECL_LINK(SenderHdl, Button*, void );
 
     void InitDatabaseBox();
 

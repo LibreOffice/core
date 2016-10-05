@@ -327,16 +327,16 @@ namespace dbaui
         void        impl_checkForCannotSelectUnfiltered( const ::dbtools::SQLExceptionInfo& _rError );
 
         // time to check the CUT/COPY/PASTE-slot-states
-        DECL_LINK_TYPED( OnInvalidateClipboard, Timer*, void );
-        DECL_LINK_TYPED( OnClipboardChanged, TransferableDataHelper*, void );
+        DECL_LINK( OnInvalidateClipboard, Timer*, void );
+        DECL_LINK( OnClipboardChanged, TransferableDataHelper*, void );
 
         // search callbacks
-        DECL_LINK_TYPED(OnSearchContextRequest, FmSearchContext&, sal_uInt32);
-        DECL_LINK_TYPED(OnFoundData, FmFoundRecordInformation&, void);
-        DECL_LINK_TYPED(OnCanceledNotFound, FmFoundRecordInformation&, void);
+        DECL_LINK(OnSearchContextRequest, FmSearchContext&, sal_uInt32);
+        DECL_LINK(OnFoundData, FmFoundRecordInformation&, void);
+        DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation&, void);
 
-        DECL_LINK_TYPED( OnAsyncGetCellFocus, void*, void );
-        DECL_LINK_TYPED( OnAsyncDisplayError, void*, void );
+        DECL_LINK( OnAsyncGetCellFocus, void*, void );
+        DECL_LINK( OnAsyncDisplayError, void*, void );
     };
 }
 

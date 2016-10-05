@@ -30,7 +30,7 @@ public:
 
 private:
 
-    DECL_LINK_TYPED(ClickHdl, Button*, void);
+    DECL_LINK(ClickHdl, Button*, void);
 
 private:
 

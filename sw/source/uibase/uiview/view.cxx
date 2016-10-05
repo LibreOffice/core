@@ -203,7 +203,7 @@ void SwView::GotFocus() const
 // called by the FormShell when a form control is focused. This is
 // a request to put the form shell on the top of the dispatcher stack
 
-IMPL_LINK_NOARG_TYPED(SwView, FormControlActivated, LinkParamNone*, void)
+IMPL_LINK_NOARG(SwView, FormControlActivated, LinkParamNone*, void)
 {
     // if a form control has been activated, and the form shell is not on the top
     // of the dispatcher stack, then we need to activate it
@@ -466,7 +466,7 @@ extern "C"
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwView, AttrChangedNotify, SwCursorShell*, void)
+IMPL_LINK_NOARG(SwView, AttrChangedNotify, SwCursorShell*, void)
 {
      if ( GetEditWin().IsChainMode() )
         GetEditWin().SetChainMode( false );
@@ -512,7 +512,7 @@ IMPL_LINK_NOARG_TYPED(SwView, AttrChangedNotify, SwCursorShell*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwView, TimeoutHdl, Timer *, void)
+IMPL_LINK_NOARG(SwView, TimeoutHdl, Timer *, void)
 {
     if( m_pWrtShell->BasicActionPend() || g_bNoInterrupt )
     {

@@ -315,7 +315,7 @@ short DigitalSignaturesDialog::Execute()
     return Dialog::Execute();
 }
 
-IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, SignatureHighlightHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureHighlightHdl, SvTreeListBox*, void)
 {
     bool bSel = m_pSignaturesLB->FirstSelected();
     m_pViewBtn->Enable( bSel );
@@ -323,25 +323,25 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, SignatureHighlightHdl, SvTreeList
         m_pRemoveBtn->Enable( bSel );
 }
 
-IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
 {
     maSignatureManager.write();
 
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, SignatureSelectHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureSelectHdl, SvTreeListBox*, bool)
 {
     ImplShowSignaturesDetails();
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, ViewButtonHdl, Button*, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, ViewButtonHdl, Button*, void)
 {
     ImplShowSignaturesDetails();
 }
 
-IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
 {
     if( ! canAdd())
         return;
@@ -382,7 +382,7 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
 {
     if (!canRemove())
         return;
@@ -407,7 +407,7 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, StartVerifySignatureHdl, LinkParamNone*, bool)
+IMPL_LINK_NOARG(DigitalSignaturesDialog, StartVerifySignatureHdl, LinkParamNone*, bool)
 {
     return mbVerifySignatures;
 }

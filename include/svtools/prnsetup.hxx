@@ -50,9 +50,9 @@ private:
 
     SVT_DLLPRIVATE void         ImplSetInfo();
 
-                    DECL_DLLPRIVATE_LINK_TYPED( ImplPropertiesHdl, Button*, void );
-                    DECL_DLLPRIVATE_LINK_TYPED( ImplChangePrinterHdl, ListBox&, void );
-                    DECL_DLLPRIVATE_LINK_TYPED( ImplStatusHdl, Timer*, void );
+                    DECL_DLLPRIVATE_LINK( ImplPropertiesHdl, Button*, void );
+                    DECL_DLLPRIVATE_LINK( ImplChangePrinterHdl, ListBox&, void );
+                    DECL_DLLPRIVATE_LINK( ImplStatusHdl, Timer*, void );
 
 public:
                     PrinterSetupDialog( vcl::Window* pWindow );

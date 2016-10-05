@@ -351,9 +351,9 @@ private:
     SVT_DLLPRIVATE void            ImplPrePaint(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( sal_uInt16 nItemCount );
 
-    DECL_DLLPRIVATE_LINK_TYPED(ImplClickHdl, Button*, void);
+    DECL_DLLPRIVATE_LINK(ImplClickHdl, Button*, void);
 
-    DECL_DLLPRIVATE_LINK_TYPED(ImplAddClickHandler, Button*, void);
+    DECL_DLLPRIVATE_LINK(ImplAddClickHandler, Button*, void);
 
     ImplTabBarItem* seek( size_t i );
     ImplTabBarItem* prev();

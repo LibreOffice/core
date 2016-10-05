@@ -51,11 +51,11 @@ private:
 
     SfxObjectShellRef   aSourceRef;
 
-    DECL_LINK_TYPED(FileHdl, ComboBox&, void);
-    DECL_LINK_TYPED(BrowseHdl, Button*, void);
-    DECL_LINK_TYPED(RangeHdl, ListBox&, void);
-    DECL_LINK_TYPED(ReloadHdl, Button*, void);
-    DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
+    DECL_LINK(FileHdl, ComboBox&, void);
+    DECL_LINK(BrowseHdl, Button*, void);
+    DECL_LINK(RangeHdl, ListBox&, void);
+    DECL_LINK(ReloadHdl, Button*, void);
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
 
     void                UpdateSourceRanges();
     void                UpdateEnable();

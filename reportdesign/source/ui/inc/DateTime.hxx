@@ -70,7 +70,7 @@ class ODateTimeDialog : public ModalDialog
     */
     sal_Int32 getFormatKey(bool _bDate) const;
 
-    DECL_LINK_TYPED( CBClickHdl, Button*, void );
+    DECL_LINK( CBClickHdl, Button*, void );
     ODateTimeDialog(const ODateTimeDialog&) = delete;
     void operator =(const ODateTimeDialog&) = delete;
 

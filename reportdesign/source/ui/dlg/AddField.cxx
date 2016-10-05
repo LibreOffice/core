@@ -443,12 +443,12 @@ void OAddFieldWindow::_elementReplaced( const container::ContainerEvent& /*_rEve
 {
 }
 
-IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnSelectHdl, SvTreeListBox*, void )
+IMPL_LINK_NOARG( OAddFieldWindow, OnSelectHdl, SvTreeListBox*, void )
 {
     m_aActions->EnableItem(m_nInsertId, ( m_pListBox.get() && m_pListBox->GetSelectionCount() > 0 ));
 }
 
-IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnDoubleClickHdl, SvTreeListBox*, bool )
+IMPL_LINK_NOARG( OAddFieldWindow, OnDoubleClickHdl, SvTreeListBox*, bool )
 {
     m_aCreateLink.Call(*this);
 
@@ -464,7 +464,7 @@ void OAddFieldWindow::resizeControls(const Size& _rDiff)
     }
 }
 
-IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnSortAction, ToolBox*, void )
+IMPL_LINK_NOARG( OAddFieldWindow, OnSortAction, ToolBox*, void )
 {
     const sal_uInt16 nCurItem = m_aActions->GetCurItemId();
     if (nCurItem == m_nInsertId)

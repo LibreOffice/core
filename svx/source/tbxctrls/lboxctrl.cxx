@@ -153,7 +153,7 @@ void SvxListBoxControl::StateChanged(
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxListBoxControl, PopupModeEndHdl, FloatingWindow*, void)
+IMPL_LINK_NOARG(SvxListBoxControl, PopupModeEndHdl, FloatingWindow*, void)
 {
     if( pPopupWin && FloatWinPopupFlags::NONE == pPopupWin->GetPopupModeFlags()  &&
         pPopupWin->IsUserSelected() )
@@ -189,7 +189,7 @@ void SvxListBoxControl::Impl_SetInfo( sal_Int32 nCount )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxListBoxControl, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxListBoxControl, SelectHdl, ListBox&, void)
 {
     if (pPopupWin)
     {

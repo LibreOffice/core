@@ -69,7 +69,7 @@ public:
     virtual ~AboutDialog() override;
     virtual void dispose() override;
 
-    DECL_LINK_TYPED( HandleClick, Button*, void );
+    DECL_LINK( HandleClick, Button*, void );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_ABOUT_HXX

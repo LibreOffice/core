@@ -113,8 +113,8 @@ namespace dbp
         virtual bool        canAdvance() const override;
 
     protected:
-        DECL_LINK_TYPED( OnTableDoubleClicked, ListBox&, void );
-        DECL_LINK_TYPED( OnTableSelected, ListBox&, void );
+        DECL_LINK( OnTableDoubleClicked, ListBox&, void );
+        DECL_LINK( OnTableSelected, ListBox&, void );
     };
 
     class OContentFieldSelection : public OLCPage
@@ -131,8 +131,8 @@ namespace dbp
         virtual void dispose() override;
 
     protected:
-        DECL_LINK_TYPED( OnFieldSelected, ListBox&, void );
-        DECL_LINK_TYPED( OnTableDoubleClicked, ListBox&, void );
+        DECL_LINK( OnFieldSelected, ListBox&, void );
+        DECL_LINK( OnTableDoubleClicked, ListBox&, void );
 
         // TabPage overridables
         virtual void ActivatePage() override;
@@ -167,8 +167,8 @@ namespace dbp
     private:
         void implCheckFinish();
 
-        DECL_LINK_TYPED(OnSelectionModified, Edit&, void);
-        DECL_LINK_TYPED(OnSelectionModifiedCombBox, ComboBox&, void);
+        DECL_LINK(OnSelectionModified, Edit&, void);
+        DECL_LINK(OnSelectionModifiedCombBox, ComboBox&, void);
     };
 
     class OComboDBFieldPage : public ODBFieldPage

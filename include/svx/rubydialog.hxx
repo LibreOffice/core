@@ -116,16 +116,16 @@ class SvxRubyDialog : public SfxModelessDialog
 
     SfxBindings*        pBindings;
 
-    DECL_LINK_TYPED(ApplyHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(CloseHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(StylistHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(ScrollHdl_Impl, ScrollBar*, void);
-    DECL_LINK_TYPED(PositionHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED(AdjustHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED(CharStyleHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED(EditModifyHdl_Impl, Edit&, void);
-    DECL_LINK_TYPED(EditScrollHdl_Impl, sal_Int32, bool);
-    DECL_LINK_TYPED(EditJumpHdl_Impl, sal_Int32, void);
+    DECL_LINK(ApplyHdl_Impl, Button*, void);
+    DECL_LINK(CloseHdl_Impl, Button*, void);
+    DECL_LINK(StylistHdl_Impl, Button*, void);
+    DECL_LINK(ScrollHdl_Impl, ScrollBar*, void);
+    DECL_LINK(PositionHdl_Impl, ListBox&, void);
+    DECL_LINK(AdjustHdl_Impl, ListBox&, void);
+    DECL_LINK(CharStyleHdl_Impl, ListBox&, void);
+    DECL_LINK(EditModifyHdl_Impl, Edit&, void);
+    DECL_LINK(EditScrollHdl_Impl, sal_Int32, bool);
+    DECL_LINK(EditJumpHdl_Impl, sal_Int32, void);
 
     void                SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight);
     void                GetRubyText();

@@ -25,7 +25,7 @@ public:
 
     void createContextMenu();
 
-    DECL_LINK_TYPED(ContextMenuSelectHdl, Menu*, void);
+    DECL_LINK(ContextMenuSelectHdl, Menu*, void);
 protected:
     long    mnItemMaxSize;
     long    mnTextHeight;

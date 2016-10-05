@@ -90,9 +90,9 @@ private:
     sal_uInt16  GetFieldSelPos  ( SCCOL nField );
 
     // Handler:
-    DECL_LINK_TYPED( LbSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( ValModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
+    DECL_LINK( LbSelectHdl, ListBox&, void );
+    DECL_LINK( ValModifyHdl, Edit&, void );
+    DECL_LINK( CheckBoxHdl, Button*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_PFILTDLG_HXX

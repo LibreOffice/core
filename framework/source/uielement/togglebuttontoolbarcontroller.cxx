@@ -259,7 +259,7 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
     }
 }
 
-IMPL_LINK_TYPED( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu, bool )
+IMPL_LINK( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu, bool )
 {
     SolarMutexGuard aGuard;
 

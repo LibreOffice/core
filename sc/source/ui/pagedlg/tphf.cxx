@@ -147,7 +147,7 @@ void ScHFPage::DeactivatePage()
 
 // Handler:
 
-IMPL_LINK_NOARG_TYPED(ScHFPage, TurnOnHdl, Button*, void)
+IMPL_LINK_NOARG(ScHFPage, TurnOnHdl, Button*, void)
 {
     SvxHFPage::TurnOnHdl( m_pTurnOnBox );
 
@@ -157,7 +157,7 @@ IMPL_LINK_NOARG_TYPED(ScHFPage, TurnOnHdl, Button*, void)
         m_pBtnEdit->Disable();
 }
 
-IMPL_LINK_NOARG_TYPED(ScHFPage, BtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScHFPage, BtnHdl, Button*, void)
 {
     // When the Edit-Dialog is directly called from the Button's Click-Handler,
     // the GrabFocus from the Edit-Dialog under OS/2 doesn't work.(Bug #41805#).
@@ -166,7 +166,7 @@ IMPL_LINK_NOARG_TYPED(ScHFPage, BtnHdl, Button*, void)
     Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ), nullptr, true );
 }
 
-IMPL_LINK_NOARG_TYPED(ScHFPage, HFEditHdl, void*, void)
+IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
 {
     SfxViewShell*   pViewSh = SfxViewShell::Current();
 

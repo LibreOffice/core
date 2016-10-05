@@ -380,7 +380,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK_TYPED( IndexFieldsControl, OnListEntrySelected, DbaMouseDownListBoxController&, rController, void )
+    IMPL_LINK( IndexFieldsControl, OnListEntrySelected, DbaMouseDownListBoxController&, rController, void )
     {
         ListBoxControl& rListBox = rController.GetListBox();
         if (!rListBox.IsTravelSelect())

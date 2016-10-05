@@ -85,7 +85,7 @@ public:
     virtual void    StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
     virtual long    GetResult() override;
 private:
-    DECL_LINK_TYPED( EndDialogHdl, Dialog&, void );
+    DECL_LINK( EndDialogHdl, Dialog&, void );
 };
 
 class CuiVclAbstractDialog_Impl : public VclAbstractDialog
@@ -309,7 +309,7 @@ class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
     virtual void    SetText( const OUString& rStr ) override ;
 private:
     Link<AbstractSvxNameDialog&,bool> aCheckNameHdl;
-    DECL_LINK_TYPED(CheckNameHdl, SvxNameDialog&, bool);
+    DECL_LINK(CheckNameHdl, SvxNameDialog&, bool);
 };
 
 class SvxObjectNameDialog;
@@ -323,7 +323,7 @@ class AbstractSvxObjectNameDialog_Impl :public AbstractSvxObjectNameDialog
 
 private:
     Link<AbstractSvxObjectNameDialog&,bool> aCheckNameHdl;
-    DECL_LINK_TYPED(CheckNameHdl, SvxObjectNameDialog&, bool);
+    DECL_LINK(CheckNameHdl, SvxObjectNameDialog&, bool);
 };
 
 class AbstractSvxObjectTitleDescDialog_Impl :public AbstractSvxObjectTitleDescDialog
@@ -430,8 +430,8 @@ class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
 private:
     Link<AbstractSvxPostItDialog&,void> aNextHdl;
     Link<AbstractSvxPostItDialog&,void> aPrevHdl;
-    DECL_LINK_TYPED(NextHdl, SvxPostItDialog&, void);
-    DECL_LINK_TYPED(PrevHdl, SvxPostItDialog&, void);
+    DECL_LINK(NextHdl, SvxPostItDialog&, void);
+    DECL_LINK(PrevHdl, SvxPostItDialog&, void);
 };
 
 class PasswordToOpenModifyDialog;

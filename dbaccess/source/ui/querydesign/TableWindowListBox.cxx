@@ -167,7 +167,7 @@ bool OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
     return true;
 }
 
-IMPL_LINK_NOARG_TYPED( OTableWindowListBox, ScrollUpHdl, Timer*, void )
+IMPL_LINK_NOARG( OTableWindowListBox, ScrollUpHdl, Timer*, void )
 {
     SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
     if( !pEntry )
@@ -181,7 +181,7 @@ IMPL_LINK_NOARG_TYPED( OTableWindowListBox, ScrollUpHdl, Timer*, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( OTableWindowListBox, ScrollDownHdl, Timer*, void )
+IMPL_LINK_NOARG( OTableWindowListBox, ScrollDownHdl, Timer*, void )
 {
     SvTreeListEntry* pEntry = GetEntry( m_aMousePos );
     if( !pEntry )
@@ -275,13 +275,13 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     return nDND_Action;
 }
 
-IMPL_LINK_NOARG_TYPED( OTableWindowListBox, LookForUiHdl, void*, void )
+IMPL_LINK_NOARG( OTableWindowListBox, LookForUiHdl, void*, void )
 {
     m_nUiEvent = nullptr;
     m_pTabWin->getTableView()->lookForUiActivities();
 }
 
-IMPL_LINK_NOARG_TYPED( OTableWindowListBox, DropHdl, void*, void )
+IMPL_LINK_NOARG( OTableWindowListBox, DropHdl, void*, void )
 {
     // create the connection
     m_nDropEvent = nullptr;
@@ -342,7 +342,7 @@ void OTableWindowListBox::GetFocus()
     SvTreeListBox::GetFocus();
 }
 
-IMPL_LINK_NOARG_TYPED( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, bool )
+IMPL_LINK_NOARG( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, bool )
 {
     // tell my parent
     vcl::Window* pParent = Window::GetParent();

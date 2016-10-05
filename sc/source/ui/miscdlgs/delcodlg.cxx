@@ -150,7 +150,7 @@ void ScDeleteContentsDlg::DisableObjects()
     aBtnDelObjects->Disable();
 }
 
-IMPL_LINK_NOARG_TYPED(ScDeleteContentsDlg, DelAllHdl, Button*, void)
+IMPL_LINK_NOARG(ScDeleteContentsDlg, DelAllHdl, Button*, void)
 {
     DisableChecks( aBtnDelAll->IsChecked() );
 }

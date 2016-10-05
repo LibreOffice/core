@@ -217,7 +217,7 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
 }
 
 
-IMPL_STATIC_LINK_TYPED(
+IMPL_STATIC_LINK(
     DialogWindow, NotifyUndoActionHdl, SdrUndoAction *, pUndoAction, void )
 {
     // #i120515# pUndoAction needs to be deleted, this hand over is an ownership

@@ -291,14 +291,14 @@ void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, s
     mrAreaPropertyPanel.setFillFloatTransparence(aGradientItem);
 }
 
-IMPL_LINK_NOARG_TYPED(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl, Edit&, void)
 {
     sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
     sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);
     ExecuteValueModify( nStartCol, nEndCol );
 }
 
-IMPL_LINK_NOARG_TYPED(AreaTransparencyGradientControl, Left_Click45_Impl, ToolBox *, void)
+IMPL_LINK_NOARG(AreaTransparencyGradientControl, Left_Click45_Impl, ToolBox *, void)
 {
     sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
     sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);
@@ -310,7 +310,7 @@ IMPL_LINK_NOARG_TYPED(AreaTransparencyGradientControl, Left_Click45_Impl, ToolBo
     ExecuteValueModify( nStartCol, nEndCol );
 }
 
-IMPL_LINK_NOARG_TYPED(AreaTransparencyGradientControl, Right_Click45_Impl, ToolBox *, void)
+IMPL_LINK_NOARG(AreaTransparencyGradientControl, Right_Click45_Impl, ToolBox *, void)
 {
     sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
     sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue->GetValue() * 255) / 100);

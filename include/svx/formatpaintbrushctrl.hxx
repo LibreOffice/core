@@ -46,7 +46,7 @@ public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) override;
 private:
-    DECL_LINK_TYPED( WaitDoubleClickHdl, Timer*, void );
+    DECL_LINK( WaitDoubleClickHdl, Timer*, void );
     void impl_executePaintBrush();
 
 private:

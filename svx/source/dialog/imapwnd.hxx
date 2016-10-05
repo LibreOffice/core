@@ -87,7 +87,7 @@ class IMapWindow : public GraphCtrl, public DropTargetHelper
     css::uno::Reference< css::frame::XFrame >
                         mxDocumentFrame;
 
-                        DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
+                        DECL_LINK( MenuSelectHdl, Menu*, bool );
 
 protected:
 

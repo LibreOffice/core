@@ -486,7 +486,7 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SmElementsControl, ScrollHdl, ScrollBar*, void )
+IMPL_LINK_NOARG( SmElementsControl, ScrollHdl, ScrollBar*, void )
 {
     DoScroll(mxScroll->GetDelta());
 }
@@ -760,7 +760,7 @@ void SmElementsDockingWindow::EndDocking( const Rectangle& rReactangle, bool bFl
     mpElementsControl->setVerticalMode(bVertical);
 }
 
-IMPL_LINK_TYPED(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElement, void)
+IMPL_LINK(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElement, void)
 {
     SmViewShell* pViewSh = GetView();
 
@@ -772,7 +772,7 @@ IMPL_LINK_TYPED(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElemen
     }
 }
 
-IMPL_LINK_TYPED( SmElementsDockingWindow, ElementSelectedHandle, ListBox&, rList, void)
+IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, ListBox&, rList, void)
 {
     for (sal_uInt16 aCurrentCategory : aCategories)
     {

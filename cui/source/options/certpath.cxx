@@ -115,7 +115,7 @@ CertPathDialog::CertPathDialog(vcl::Window* pParent)
         AddCertPath("$MOZILLA_CERTIFICATE_FOLDER", OUString(pEnv, strlen(pEnv), osl_getThreadTextEncoding()));
 }
 
-IMPL_LINK_NOARG_TYPED(CertPathDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl, Button*, void)
 {
     try
     {
@@ -161,7 +161,7 @@ void CertPathDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED( CertPathDialog, CheckHdl_Impl, SvTreeListBox*, pList, void )
+IMPL_LINK( CertPathDialog, CheckHdl_Impl, SvTreeListBox*, pList, void )
 {
     SvTreeListEntry* pEntry = pList ? m_pCertPathList->GetEntry(m_pCertPathList->GetCurMousePoint())
                                 : m_pCertPathList->FirstSelected();
@@ -213,7 +213,7 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
     HandleCheckEntry(pEntry);
 }
 
-IMPL_LINK_NOARG_TYPED(CertPathDialog, AddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl, Button*, void)
 {
     try
     {

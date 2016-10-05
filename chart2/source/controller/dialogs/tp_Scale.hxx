@@ -99,9 +99,9 @@ private:
 
     void EnableControls();
 
-    DECL_LINK_TYPED( SelectAxisTypeHdl, ListBox&, void );
-    DECL_LINK_TYPED( EnableValueHdl, Button*, void );
-    DECL_STATIC_LINK_TYPED( ScaleTabPage, FmtFieldModifiedHdl, Edit&, void);
+    DECL_LINK( SelectAxisTypeHdl, ListBox&, void );
+    DECL_LINK( EnableValueHdl, Button*, void );
+    DECL_STATIC_LINK( ScaleTabPage, FmtFieldModifiedHdl, Edit&, void);
 
     /** shows a warning window due to an invalid input.
 

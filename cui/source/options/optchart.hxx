@@ -43,11 +43,11 @@ private:
     SvxChartColorTableItem* pColorConfig;
     XColorListRef           pColorList;
 
-    DECL_LINK_TYPED( ResetToDefaults, Button *, void );
-    DECL_LINK_TYPED( AddChartColor, Button *, void );
-    DECL_LINK_TYPED( RemoveChartColor, Button *, void );
-    DECL_LINK_TYPED( ListClickedHdl, ListBox&, void );
-    DECL_LINK_TYPED(BoxClickedHdl, ValueSet*, void);
+    DECL_LINK( ResetToDefaults, Button *, void );
+    DECL_LINK( AddChartColor, Button *, void );
+    DECL_LINK( RemoveChartColor, Button *, void );
+    DECL_LINK( ListClickedHdl, ListBox&, void );
+    DECL_LINK(BoxClickedHdl, ValueSet*, void);
 
     void FillColorBox();
     long GetColorIndex( const Color& rCol );

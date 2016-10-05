@@ -101,7 +101,7 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
     void init();
 
 protected:
-        DECL_LINK_TYPED(FormatHdl_Impl, Idle *, void);
+        DECL_LINK(FormatHdl_Impl, Idle *, void);
 
 public:
     SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);

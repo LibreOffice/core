@@ -53,13 +53,13 @@ private:
 
     sal_uInt16 GetInsertPosition() const;
 
-    DECL_LINK_TYPED(OKHdl, Button*, void);
-    DECL_LINK_TYPED(EditHdl, Button*, void);
-    DECL_LINK_TYPED(RestartNumberingHdl, Button*, void);
-    DECL_LINK_TYPED(SetPageNumberHdl, Button*, void);
-    DECL_LINK_TYPED(UpHdl, SpinField&, void);
-    DECL_LINK_TYPED(DownHdl, SpinField&, void);
-    DECL_LINK_TYPED(StartPageHdl, Button*, void);
+    DECL_LINK(OKHdl, Button*, void);
+    DECL_LINK(EditHdl, Button*, void);
+    DECL_LINK(RestartNumberingHdl, Button*, void);
+    DECL_LINK(SetPageNumberHdl, Button*, void);
+    DECL_LINK(UpHdl, SpinField&, void);
+    DECL_LINK(DownHdl, SpinField&, void);
+    DECL_LINK(StartPageHdl, Button*, void);
 public:
     SwTitlePageDlg( vcl::Window *pParent );
     virtual ~SwTitlePageDlg() override;

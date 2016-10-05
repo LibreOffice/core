@@ -1385,7 +1385,7 @@ void SlideshowImpl::endPresentation()
         mnEndShowEvent = Application::PostUserEvent( LINK(this, SlideshowImpl, endPresentationHdl) );
 }
 
-IMPL_LINK_NOARG_TYPED(SlideshowImpl, endPresentationHdl, void*, void)
+IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl, void*, void)
 {
     mnEndShowEvent = nullptr;
 
@@ -1692,7 +1692,7 @@ void SlideshowImpl::startUpdateTimer()
     This is used to unfreeze user input that was disabled after
     slide change to skip input that was buffered during slide
     transition preparation */
-IMPL_LINK_NOARG_TYPED(SlideshowImpl, ReadyForNextInputHdl, Timer *, void)
+IMPL_LINK_NOARG(SlideshowImpl, ReadyForNextInputHdl, Timer *, void)
 {
     mbInputFreeze = false;
 }
@@ -1701,7 +1701,7 @@ IMPL_LINK_NOARG_TYPED(SlideshowImpl, ReadyForNextInputHdl, Timer *, void)
     and not by using the timer, I will personally punish this
     person seriously, even if this person is me.
 */
-IMPL_LINK_NOARG_TYPED(SlideshowImpl, updateHdl, Timer *, void)
+IMPL_LINK_NOARG(SlideshowImpl, updateHdl, Timer *, void)
 {
     updateSlideShow();
 }
@@ -1888,7 +1888,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
     return bRet;
 }
 
-IMPL_LINK_TYPED( SlideshowImpl, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void )
+IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void )
 {
     if( !mxShow.is() || mbInputFreeze )
         return;
@@ -1974,7 +1974,7 @@ void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SlideshowImpl, ContextMenuHdl, void*, void)
+IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
 {
     mnContextMenuEvent = nullptr;
 
@@ -2107,7 +2107,7 @@ IMPL_LINK_NOARG_TYPED(SlideshowImpl, ContextMenuHdl, void*, void)
         resume();
 }
 
-IMPL_LINK_TYPED( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
+IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
 {
     if( pMenu )
     {
@@ -2549,7 +2549,7 @@ void SAL_CALL SlideshowImpl::deactivate() throw (RuntimeException, std::exceptio
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SlideshowImpl, deactivateHdl, Timer *, void)
+IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl, Timer *, void)
 {
     if( mbActive && mxShow.is() )
     {

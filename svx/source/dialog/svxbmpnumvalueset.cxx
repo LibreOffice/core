@@ -520,7 +520,7 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxBmpNumValueSet, FormatHdl_Impl, Idle *, void)
+IMPL_LINK_NOARG(SvxBmpNumValueSet, FormatHdl_Impl, Idle *, void)
 {
     // only when a graphics was not there, it needs to be formatted
     if (bGrfNotFound)

@@ -498,7 +498,7 @@ void SvxBitmapTabPage::CalculateBitmapPresetSize()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
 {
     std::unique_ptr<GraphicObject> pGraphicObject;
     size_t nPos = m_pBitmapLB->GetSelectItemPos();
@@ -550,7 +550,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
     m_pCtlBitmapPreview->Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_pBitmapLB->GetSelectItemId();
     size_t nPos = m_pBitmapLB->GetSelectItemPos();
@@ -593,7 +593,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_pBitmapLB->GetSelectItemId();
     size_t nPos = m_pBitmapLB->GetSelectItemPos();
@@ -616,7 +616,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxBitmapTabPage, ModifyBitmapSizeHdl, Edit&, void )
+IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapSizeHdl, Edit&, void )
 {
     if( m_pTsbScale->GetState() != TRISTATE_TRUE && static_cast<BitmapStyle>(m_pBitmapStyleLB->GetSelectEntryPos()) != TILED )
     {
@@ -637,12 +637,12 @@ IMPL_LINK_NOARG_TYPED( SvxBitmapTabPage, ModifyBitmapSizeHdl, Edit&, void )
     m_pCtlBitmapPreview->Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxBitmapTabPage, ClickScaleHdl, Button*, void )
+IMPL_LINK_NOARG( SvxBitmapTabPage, ClickScaleHdl, Button*, void )
 {
     ModifyBitmapStyleHdl( *m_pBitmapStyleLB );
 }
 
-IMPL_LINK_NOARG_TYPED( SvxBitmapTabPage, ModifyBitmapStyleHdl, ListBox&, void )
+IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, ListBox&, void )
 {
     BitmapStyle eStylePos = (BitmapStyle)m_pBitmapStyleLB->GetSelectEntryPos();
     bool bIsStretched( eStylePos == STRETCHED );
@@ -716,7 +716,7 @@ IMPL_LINK_NOARG_TYPED( SvxBitmapTabPage, ModifyBitmapStyleHdl, ListBox&, void )
     m_pCtlBitmapPreview->Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyBitmapPositionHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapPositionHdl, ListBox&, void)
 {
     if(m_pPositionLB->IsEnabled())
         m_rXFSet.Put( XFillBmpPosItem( static_cast< RectPoint >( m_pPositionLB->GetSelectEntryPos() ) ) );
@@ -725,7 +725,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyBitmapPositionHdl, ListBox&, void)
     m_pCtlBitmapPreview->Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyPositionOffsetHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyPositionOffsetHdl, Edit&, void)
 {
     if(m_pPositionOffX->IsEnabled())
         m_rXFSet.Put( XFillBmpPosOffsetXItem( m_pPositionOffX->GetValue() ) );
@@ -737,7 +737,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyPositionOffsetHdl, Edit&, void)
     m_pCtlBitmapPreview->Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyTileOffsetHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyTileOffsetHdl, Edit&, void)
 {
     sal_uInt16 nTileXOff = 0;
     sal_uInt16 nTileYOff = 0;
@@ -755,7 +755,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ModifyTileOffsetHdl, Edit&, void)
     m_pCtlBitmapPreview->Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickImportHdl, Button*, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
 {
     ResMgr& rMgr = CUI_MGR();
     SvxOpenGraphicDialog aDlg( OUString("Import") );

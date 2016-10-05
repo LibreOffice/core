@@ -324,7 +324,7 @@ void CustomAnimationPane::removeListener()
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-IMPL_LINK_TYPED(CustomAnimationPane,EventMultiplexerListener,
+IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
     tools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
@@ -2048,24 +2048,24 @@ double CustomAnimationPane::getDuration()
 }
 
 /// this link is called when the property box is modified by the user
-IMPL_LINK_NOARG_TYPED(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
 {
     onChangeProperty();
 }
 
-IMPL_LINK_NOARG_TYPED(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
 {
     animationChange();
 }
 
-IMPL_LINK_NOARG_TYPED(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
+IMPL_LINK_NOARG(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
 {
     //FIXME: first effect only? what if there is more?
     CustomAnimationEffectPtr pEffect = maListSelection.front();
     fillAnimationLB( pEffect->hasText() );
 }
 
-IMPL_LINK_NOARG_TYPED(CustomAnimationPane, DurationModifiedHdl, Edit&, void)
+IMPL_LINK_NOARG(CustomAnimationPane, DurationModifiedHdl, Edit&, void)
 {
     if(!(mpCBXDuration->GetText()).isEmpty() )
     {
@@ -2137,11 +2137,11 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
 }
 
 
-IMPL_LINK_TYPED( CustomAnimationPane, implClickHdl, Button*, pBtn, void )
+IMPL_LINK( CustomAnimationPane, implClickHdl, Button*, pBtn, void )
 {
     implControlHdl(pBtn);
 }
-IMPL_LINK_TYPED( CustomAnimationPane, implControlListBoxHdl, ListBox&, rListBox, void )
+IMPL_LINK( CustomAnimationPane, implControlListBoxHdl, ListBox&, rListBox, void )
 {
     implControlHdl(&rListBox);
 }
@@ -2170,7 +2170,7 @@ void CustomAnimationPane::implControlHdl(Control* pControl )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(CustomAnimationPane, lateInitCallback, Timer *, void)
+IMPL_LINK_NOARG(CustomAnimationPane, lateInitCallback, Timer *, void)
 {
     // Call getPresets() to initiate the (expensive) construction of the
     // presets list.

@@ -850,7 +850,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
     }
 }
 
-IMPL_LINK_TYPED( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog&, rDlg, void )
+IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog&, rDlg, void )
 {
     SwWrtShell* pSh = GetShellPtr();
 
@@ -897,7 +897,7 @@ IMPL_LINK_TYPED( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog&, rDlg, vo
     }
 }
 
-IMPL_LINK_TYPED( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog&, rDlg, void )
+IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog&, rDlg, void )
 {
     SwWrtShell* pSh = GetShellPtr();
 

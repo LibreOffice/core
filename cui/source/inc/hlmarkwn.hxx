@@ -86,9 +86,9 @@ protected:
 
     virtual void Move () override;
 
-    DECL_LINK_TYPED( ClickApplyHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( DoubleClickApplyHdl_Impl, SvTreeListBox*, bool );
-    DECL_LINK_TYPED( ClickCloseHdl_Impl, Button*, void );
+    DECL_LINK( ClickApplyHdl_Impl, Button*, void );
+    DECL_LINK( DoubleClickApplyHdl_Impl, SvTreeListBox*, bool );
+    DECL_LINK( ClickCloseHdl_Impl, Button*, void );
 
 public:
     SvxHlinkDlgMarkWnd (SvxHyperlinkTabPageBase *pParent);

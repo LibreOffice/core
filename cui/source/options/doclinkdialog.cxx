@@ -103,7 +103,7 @@ namespace svx
     }
 
 
-    IMPL_LINK_NOARG_TYPED(ODocumentLinkDialog, OnOk, Button*, void)
+    IMPL_LINK_NOARG(ODocumentLinkDialog, OnOk, Button*, void)
     {
         // get the current URL
         OUString sURL = m_pURL->GetText();
@@ -160,7 +160,7 @@ namespace svx
     }
 
 
-    IMPL_LINK_NOARG_TYPED(ODocumentLinkDialog, OnBrowseFile, Button*, void)
+    IMPL_LINK_NOARG(ODocumentLinkDialog, OnBrowseFile, Button*, void)
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
@@ -204,7 +204,7 @@ namespace svx
     }
 
 
-    IMPL_LINK_NOARG_TYPED(ODocumentLinkDialog, OnTextModified, Edit&, void)
+    IMPL_LINK_NOARG(ODocumentLinkDialog, OnTextModified, Edit&, void)
     {
         validate( );
     }

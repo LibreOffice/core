@@ -185,7 +185,7 @@ void ScSimpleRefDlg::RefInputDone( bool bForced)
 
 // Handler:
 
-IMPL_LINK_NOARG_TYPED(ScSimpleRefDlg, OkBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl, Button*, void)
 {
     bAutoReOpen=false;
     OUString aResult=m_pEdAssign->GetText();
@@ -195,7 +195,7 @@ IMPL_LINK_NOARG_TYPED(ScSimpleRefDlg, OkBtnHdl, Button*, void)
     aUnoLink.Call( aResult );
 }
 
-IMPL_LINK_NOARG_TYPED(ScSimpleRefDlg, CancelBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl, Button*, void)
 {
     bAutoReOpen=false;
     OUString aResult=m_pEdAssign->GetText();

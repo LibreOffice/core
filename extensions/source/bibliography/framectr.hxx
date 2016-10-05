@@ -70,7 +70,7 @@ friend class BibFrameCtrl_Impl;
     BibDataManager*             pDatMan;
     HdlBibModul                 pBibMod;
 
-    DECL_LINK_TYPED( DisposeHdl, void*, void );
+    DECL_LINK( DisposeHdl, void*, void );
 
     static bool                 SaveModified(const css::uno::Reference< css::form::runtime::XFormController>& xController);
 public:

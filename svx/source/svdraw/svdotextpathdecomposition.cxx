@@ -169,7 +169,7 @@ namespace
         SdrOutliner&                                mrOutliner;
         ::std::vector< impPathTextPortion >         maPathTextPortions;
 
-        DECL_LINK_TYPED(decompositionPathTextPrimitive, DrawPortionInfo*, void );
+        DECL_LINK(decompositionPathTextPrimitive, DrawPortionInfo*, void );
 
     public:
         explicit impTextBreakupHandler(SdrOutliner& rOutliner)
@@ -193,7 +193,7 @@ namespace
         }
     };
 
-    IMPL_LINK_TYPED(impTextBreakupHandler, decompositionPathTextPrimitive, DrawPortionInfo*, pInfo, void)
+    IMPL_LINK(impTextBreakupHandler, decompositionPathTextPrimitive, DrawPortionInfo*, pInfo, void)
     {
         maPathTextPortions.push_back(impPathTextPortion(*pInfo));
     }

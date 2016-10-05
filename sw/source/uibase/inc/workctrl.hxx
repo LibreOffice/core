@@ -68,7 +68,7 @@ public:
                                               SfxItemState eState,
                                               const SfxPoolItem* pState ) override;
 
-    DECL_STATIC_LINK_TYPED(SwTbxAutoTextCtrl, PopupHdl, Menu*, bool);
+    DECL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, Menu*, bool);
 };
 
 class SwScrollNaviPopup;
@@ -103,7 +103,7 @@ class SwScrollNaviPopup : public SfxPopupWindow
     using Window::GetQuickHelpText;
 
 protected:
-        DECL_LINK_TYPED(SelectHdl, ToolBox*, void);
+        DECL_LINK(SelectHdl, ToolBox*, void);
         virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 public:

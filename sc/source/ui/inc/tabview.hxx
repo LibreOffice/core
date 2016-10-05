@@ -167,14 +167,14 @@ private:
     void            DoAddWin( ScGridWindow* pWin );
 
     void            InitScrollBar( ScrollBar& rScrollBar, long nMaxVal );
-    DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void );
-    DECL_LINK_TYPED(EndScrollHdl, ScrollBar*, void );
+    DECL_LINK(ScrollHdl, ScrollBar*, void );
+    DECL_LINK(EndScrollHdl, ScrollBar*, void );
 
-    DECL_LINK_TYPED(SplitHdl, Splitter*, void);
+    DECL_LINK(SplitHdl, Splitter*, void);
     void            DoHSplit(long nSplitPos);
     void            DoVSplit(long nSplitPos);
 
-    DECL_LINK_TYPED( TimerHdl, Timer*, void );
+    DECL_LINK( TimerHdl, Timer*, void );
 
     void            UpdateVarZoom();
 
@@ -240,7 +240,7 @@ public:
     void            RemoveHintWindow();
     void            TestHintWindow();
 
-    DECL_LINK_TYPED( TabBarResize, ::TabBar*, void );
+    DECL_LINK( TabBarResize, ::TabBar*, void );
     /** Sets an absolute tab bar width (in pixels). */
     void            SetTabBarWidth( long nNewWidth );
     /** Sets a relative tab bar width.

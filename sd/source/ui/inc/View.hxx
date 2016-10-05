@@ -236,8 +236,8 @@ public:
     SdrObject* GetSelectedSingleObject(SdPage* pPage);
 
 protected:
-    DECL_LINK_TYPED( OnParagraphInsertedHdl, ::Outliner *, void );
-    DECL_LINK_TYPED( OnParagraphRemovingHdl, ::Outliner *, void );
+    DECL_LINK( OnParagraphInsertedHdl, ::Outliner *, void );
+    DECL_LINK( OnParagraphRemovingHdl, ::Outliner *, void );
 
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfo ) override;
     virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfo ) override;
@@ -257,9 +257,9 @@ protected:
     sal_uInt16              mnLockRedrawSmph;
     bool                    mbIsDropAllowed;
 
-                            DECL_LINK_TYPED( DropErrorHdl, Idle*, void );
-                            DECL_LINK_TYPED( DropInsertFileHdl, Idle*, void );
-                            DECL_LINK_TYPED( ExecuteNavigatorDrop, void*, void );
+                            DECL_LINK( DropErrorHdl, Idle*, void );
+                            DECL_LINK( DropInsertFileHdl, Idle*, void );
+                            DECL_LINK( ExecuteNavigatorDrop, void*, void );
 
     void ImplClearDrawDropMarker();
 

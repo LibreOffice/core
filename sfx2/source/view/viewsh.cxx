@@ -138,7 +138,7 @@ private:
     uno::Reference< datatransfer::clipboard::XClipboardNotifier > m_xClpbrdNtfr;
     uno::Reference< lang::XComponent > m_xCtrl;
 
-    DECL_STATIC_LINK_TYPED( SfxClipboardChangeListener, AsyncExecuteHdl_Impl, void*, void );
+    DECL_STATIC_LINK( SfxClipboardChangeListener, AsyncExecuteHdl_Impl, void*, void );
 };
 
 SfxClipboardChangeListener::SfxClipboardChangeListener( SfxViewShell* pView, const uno::Reference< datatransfer::clipboard::XClipboardNotifier >& xClpbrdNtfr )
@@ -173,7 +173,7 @@ void SfxClipboardChangeListener::ChangedContents()
     }
 }
 
-IMPL_STATIC_LINK_TYPED( SfxClipboardChangeListener, AsyncExecuteHdl_Impl, void*, p, void )
+IMPL_STATIC_LINK( SfxClipboardChangeListener, AsyncExecuteHdl_Impl, void*, p, void )
 {
     AsyncExecuteInfo* pAsyncExecuteInfo = static_cast<AsyncExecuteInfo*>(p);
     if ( pAsyncExecuteInfo )

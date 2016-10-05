@@ -130,7 +130,7 @@ public:
     static void                     LockBroadcast();
     static void                     UnlockBroadcast();
 
-    DECL_LINK_TYPED( DataChangedEventListener, VclSimpleEvent&, void );
+    DECL_LINK( DataChangedEventListener, VclSimpleEvent&, void );
 };
 
 uno::Sequence< OUString> ExtendedColorConfig_Impl::GetPropertyNames(const OUString& rScheme)
@@ -526,7 +526,7 @@ void ExtendedColorConfig_Impl::UnlockBroadcast()
     m_bLockBroadcast = false;
 }
 
-IMPL_LINK_TYPED( ExtendedColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, void )
+IMPL_LINK( ExtendedColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, void )
 {
     if ( rEvent.GetId() == VCLEVENT_APPLICATION_DATACHANGED )
     {

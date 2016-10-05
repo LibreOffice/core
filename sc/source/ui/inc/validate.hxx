@@ -92,8 +92,8 @@ private:
     void                        SetFirstFormula( const OUString& rFmlaStr );
     void                        SetSecondFormula( const OUString& rFmlaStr );
 
-                                DECL_LINK_TYPED(SelectHdl, ListBox&, void);
-                                DECL_LINK_TYPED(CheckHdl, Button*, void);
+                                DECL_LINK(SelectHdl, ListBox&, void);
+                                DECL_LINK(CheckHdl, Button*, void);
 
     VclPtr<ListBox>                    m_pLbAllow;
     VclPtr<CheckBox>                   m_pCbAllow;      /// Allow blank cells.
@@ -116,8 +116,8 @@ private:
     OUString                    maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 
-    DECL_LINK_TYPED( EditSetFocusHdl, Control&, void );
-    DECL_LINK_TYPED( KillFocusHdl, Control&, void );
+    DECL_LINK( EditSetFocusHdl, Control&, void );
+    DECL_LINK( KillFocusHdl, Control&, void );
     void    OnClick( Button *pBtn );
     VclPtr<formula::RefEdit>           m_pRefEdit;
 public:
@@ -282,8 +282,8 @@ private:
     void    Init();
 
     // Handler ------------------------
-    DECL_LINK_TYPED(SelectActionHdl, ListBox&, void);
-    DECL_LINK_TYPED(ClickSearchHdl, Button*, void);
+    DECL_LINK(SelectActionHdl, ListBox&, void);
+    DECL_LINK(ClickSearchHdl, Button*, void);
 
 public:
             ScTPValidationError( vcl::Window* pParent, const SfxItemSet& rArgSet );

@@ -114,9 +114,9 @@ public:
     void parseList( const OString& rList );
     static OString processCommand( const OString& rCommand );
 
-    DECL_LINK_TYPED( ListHdl, Button*, void );
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
-    DECL_STATIC_LINK_TYPED( MyWin, QuitHdl, Button*, void );
+    DECL_LINK( ListHdl, Button*, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_STATIC_LINK( MyWin, QuitHdl, Button*, void );
 };
 
 void Main()
@@ -245,17 +245,17 @@ OString MyWin::processCommand( const OString& rCommand )
     return aAnswer.makeStringAndClear();
 }
 
-IMPL_LINK_NOARG_TYPED( MyWin, ListHdl, Button*, void)
+IMPL_LINK_NOARG( MyWin, ListHdl, Button*, void)
 {
     parseList( processCommand( "list" ) );
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED( MyWin, QuitHdl, Button*, void)
+IMPL_STATIC_LINK_NOARG( MyWin, QuitHdl, Button*, void)
 {
     processCommand( "quit" );
 }
 
-IMPL_LINK_NOARG_TYPED( MyWin, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG( MyWin, SelectHdl, ListBox&, void)
 {
     OUString aEntry = m_aSvpBitmaps->GetSelectEntry();
     sal_Int32 nPos = aEntry.indexOf( ": " );

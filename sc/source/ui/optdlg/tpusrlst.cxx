@@ -451,7 +451,7 @@ void ScTpUserLists::RemoveList( size_t nList )
 
 // Handler:
 
-IMPL_LINK_TYPED( ScTpUserLists, LbSelectHdl, ListBox&, rLb, void )
+IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox&, rLb, void )
 {
     if ( &rLb == mpLbLists )
     {
@@ -472,7 +472,7 @@ IMPL_LINK_TYPED( ScTpUserLists, LbSelectHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
+IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
 {
     if ( pBtn == mpBtnNew || pBtn == mpBtnDiscard )
     {
@@ -701,7 +701,7 @@ IMPL_LINK_TYPED( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_TYPED( ScTpUserLists, EdEntriesModHdl, Edit&, rEd, void )
+IMPL_LINK( ScTpUserLists, EdEntriesModHdl, Edit&, rEd, void )
 {
     if ( &rEd != mpEdEntries )
         return;

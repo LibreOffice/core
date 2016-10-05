@@ -235,7 +235,7 @@ SvBaseLink::~SvBaseLink()
     delete pImplData;
 }
 
-IMPL_LINK_TYPED( SvBaseLink, EndEditHdl, const OUString&, _rNewName, void )
+IMPL_LINK( SvBaseLink, EndEditHdl, const OUString&, _rNewName, void )
 {
     OUString sNewName = _rNewName;
     if ( !ExecuteEdit( sNewName ) )

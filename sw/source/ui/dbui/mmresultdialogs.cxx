@@ -120,7 +120,7 @@ static OUString lcl_GetColumnValueOf(const OUString& rColumn, Reference < contai
 
 class SwSaveWarningBox_Impl : public SwMessageAndEditDialog
 {
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void);
+    DECL_LINK( ModifyHdl, Edit&, void);
 public:
     SwSaveWarningBox_Impl(vcl::Window* pParent, const OUString& rFileName);
 
@@ -133,7 +133,7 @@ public:
 class SwSendQueryBox_Impl : public SwMessageAndEditDialog
 {
     bool            bIsEmptyAllowed;
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void);
+    DECL_LINK( ModifyHdl, Edit&, void);
 public:
     SwSendQueryBox_Impl(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription);
@@ -170,7 +170,7 @@ SwSaveWarningBox_Impl::SwSaveWarningBox_Impl(vcl::Window* pParent, const OUStrin
     ModifyHdl(*m_pEdit);
 }
 
-IMPL_LINK_TYPED( SwSaveWarningBox_Impl, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, Edit&, rEdit, void)
 {
     m_pOKPB->Enable(!rEdit.GetText().isEmpty());
 }
@@ -185,7 +185,7 @@ SwSendQueryBox_Impl::SwSendQueryBox_Impl(vcl::Window* pParent, const OUString& r
     ModifyHdl(*m_pEdit);
 }
 
-IMPL_LINK_TYPED( SwSendQueryBox_Impl, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, Edit&, rEdit, void)
 {
     m_pOKPB->Enable(bIsEmptyAllowed  || !rEdit.GetText().isEmpty());
 }
@@ -472,7 +472,7 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     }
 }
 
-IMPL_LINK_TYPED(SwMMResultSaveDialog, DocumentSelectionHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMMResultSaveDialog, DocumentSelectionHdl_Impl, Button*, pButton, void)
 {
     bool bEnableFromTo = pButton == m_pFromRB;
     m_pFromNF->Enable(bEnableFromTo);
@@ -480,7 +480,7 @@ IMPL_LINK_TYPED(SwMMResultSaveDialog, DocumentSelectionHdl_Impl, Button*, pButto
     m_pToNF->Enable(bEnableFromTo);
 }
 
-IMPL_LINK_TYPED(SwMMResultPrintDialog, DocumentSelectionHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMMResultPrintDialog, DocumentSelectionHdl_Impl, Button*, pButton, void)
 {
     bool bEnableFromTo = pButton == m_pFromRB;
     m_pFromNF->Enable(bEnableFromTo);
@@ -488,7 +488,7 @@ IMPL_LINK_TYPED(SwMMResultPrintDialog, DocumentSelectionHdl_Impl, Button*, pButt
     m_pToNF->Enable(bEnableFromTo);
 }
 
-IMPL_LINK_TYPED(SwMMResultEmailDialog, DocumentSelectionHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMMResultEmailDialog, DocumentSelectionHdl_Impl, Button*, pButton, void)
 {
     bool bEnableFromTo = pButton == m_pFromRB;
     m_pFromNF->Enable(bEnableFromTo);
@@ -496,7 +496,7 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, DocumentSelectionHdl_Impl, Button*, pButt
     m_pToNF->Enable(bEnableFromTo);
 }
 
-IMPL_LINK_TYPED(SwMMResultEmailDialog, CopyToHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMMResultEmailDialog, CopyToHdl_Impl, Button*, pButton, void)
 {
     ScopedVclPtrInstance< SwCopyToDialog > pDlg(pButton);
     pDlg->SetCC(m_sCC );
@@ -508,7 +508,7 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, CopyToHdl_Impl, Button*, pButton, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwMMResultSaveDialog, SaveCancelHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveCancelHdl_Impl, Button*, void)
 {
     m_bCancelSaving = true;
 }
@@ -568,7 +568,7 @@ void endDialog(Button* pButton)
 
 } // anonymous namespace
 
-IMPL_LINK_TYPED(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
@@ -760,7 +760,7 @@ IMPL_LINK_TYPED(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void
     endDialog(pButton);
 }
 
-IMPL_LINK_TYPED(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, void)
+IMPL_LINK(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, void)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
@@ -796,7 +796,7 @@ IMPL_LINK_TYPED(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, vo
     xConfigItem->SetSelectedPrinter(rBox.GetSelectEntry());
 }
 
-IMPL_LINK_TYPED(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
@@ -855,7 +855,7 @@ IMPL_LINK_TYPED(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
     endDialog(pButton);
 }
 
-IMPL_LINK_TYPED(SwMMResultPrintDialog, PrinterSetupHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMMResultPrintDialog, PrinterSetupHdl_Impl, Button*, pButton, void)
 {
     if( !m_pTempPrinter )
         PrinterChangeHdl_Impl(*m_pPrinterLB);
@@ -863,7 +863,7 @@ IMPL_LINK_TYPED(SwMMResultPrintDialog, PrinterSetupHdl_Impl, Button*, pButton, v
         m_pTempPrinter->Setup(pButton);
 }
 
-IMPL_LINK_TYPED(SwMMResultEmailDialog, SendTypeHdl_Impl, ListBox&, rBox, void)
+IMPL_LINK(SwMMResultEmailDialog, SendTypeHdl_Impl, ListBox&, rBox, void)
 {
     sal_uLong nDocType = reinterpret_cast<sal_uLong>(rBox.GetSelectEntryData());
     bool bEnable = MM_DOCTYPE_HTML != nDocType && MM_DOCTYPE_TEXT != nDocType;
@@ -888,7 +888,7 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendTypeHdl_Impl, ListBox&, rBox, void)
     }
 }
 
-IMPL_LINK_TYPED(SwMMResultEmailDialog, SendAsHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMMResultEmailDialog, SendAsHdl_Impl, Button*, pButton, void)
 {
     VclPtr<SwMailBodyDialog> pDlg = VclPtr<SwMailBodyDialog>::Create(pButton);
     pDlg->SetBody(m_sBody);
@@ -899,7 +899,7 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendAsHdl_Impl, Button*, pButton, void)
 }
 
 // Send documents as e-mail
-IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();

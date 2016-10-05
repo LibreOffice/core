@@ -31,7 +31,7 @@ class SwTOXMgr;
 // insert mark for index entry
 class SwMultiTOXMarkDlg : public SvxStandardDialog
 {
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
     VclPtr<FixedText>         m_pTextFT;
     VclPtr<ListBox>           m_pTOXLB;
 

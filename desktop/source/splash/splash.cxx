@@ -72,7 +72,7 @@ private:
 
     VclPtr<SplashScreenWindow> pWindow;
 
-    DECL_LINK_TYPED( AppEventListenerHdl, VclSimpleEvent&, void );
+    DECL_LINK( AppEventListenerHdl, VclSimpleEvent&, void );
     virtual ~SplashScreen() override;
     void loadConfig();
     void updateStatus();
@@ -364,7 +364,7 @@ void SplashScreen::updateStatus()
 }
 
 // internal private methods
-IMPL_LINK_TYPED( SplashScreen, AppEventListenerHdl, VclSimpleEvent&, inEvent, void )
+IMPL_LINK( SplashScreen, AppEventListenerHdl, VclSimpleEvent&, inEvent, void )
 {
     if (static_cast<VclWindowEvent&>(inEvent).GetWindow() == pWindow)
     {

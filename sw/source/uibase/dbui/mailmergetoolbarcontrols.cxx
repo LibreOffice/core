@@ -41,7 +41,7 @@ class MMCurrentEntryController : public svt::ToolboxController, public lang::XSe
 {
     VclPtr<Edit> m_pCurrentEdit;
 
-    DECL_LINK_TYPED(CurrentEditUpdatedHdl, Edit&, void);
+    DECL_LINK(CurrentEditUpdatedHdl, Edit&, void);
 
 public:
     explicit MMCurrentEntryController(const uno::Reference<uno::XComponentContext>& rContext)
@@ -106,7 +106,7 @@ class MMExcludeEntryController : public svt::ToolboxController, public lang::XSe
 {
     VclPtr<CheckBox> m_pExcludeCheckbox;
 
-    DECL_STATIC_LINK_TYPED(MMExcludeEntryController, ExcludeHdl, CheckBox&, void);
+    DECL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, CheckBox&, void);
 
 public:
     explicit MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
@@ -191,7 +191,7 @@ uno::Reference<awt::XWindow> MMCurrentEntryController::createItemWindow(const un
     return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pCurrentEdit));
 }
 
-IMPL_LINK_TYPED(MMCurrentEntryController, CurrentEditUpdatedHdl, Edit&, rEdit, void)
+IMPL_LINK(MMCurrentEntryController, CurrentEditUpdatedHdl, Edit&, rEdit, void)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
@@ -262,7 +262,7 @@ uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const un
     return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pExcludeCheckbox));
 }
 
-IMPL_STATIC_LINK_TYPED(MMExcludeEntryController, ExcludeHdl, CheckBox&, rCheckbox, void)
+IMPL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, CheckBox&, rCheckbox, void)
 {
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem;

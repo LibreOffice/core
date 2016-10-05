@@ -242,7 +242,7 @@ DeactivateRC ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK_TYPED( ScTpContentOptions, SelLbObjHdl, ListBox&, rLb, void )
+IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox&, rLb, void )
 {
     const sal_Int32 nSelPos = rLb.GetSelectEntryPos();
     ScVObjMode  eMode   = ScVObjMode(nSelPos);
@@ -256,7 +256,7 @@ IMPL_LINK_TYPED( ScTpContentOptions, SelLbObjHdl, ListBox&, rLb, void )
     pLocalOptions->SetObjMode( eType, eMode );
 }
 
-IMPL_LINK_TYPED( ScTpContentOptions, CBHdl, Button*, pBtn, void )
+IMPL_LINK( ScTpContentOptions, CBHdl, Button*, pBtn, void )
 {
     ScViewOption eOption = VOPT_FORMULAS;
     bool         bChecked = static_cast<CheckBox*>(pBtn)->IsChecked();
@@ -356,7 +356,7 @@ void ScTpContentOptions::InitGridOpt()
         pColorLB->SelectEntryPos( pColorLB->InsertEntry( aCol, aName ) );
 }
 
-IMPL_LINK_TYPED( ScTpContentOptions, GridHdl, ListBox&, rLb, void )
+IMPL_LINK( ScTpContentOptions, GridHdl, ListBox&, rLb, void )
 {
     sal_Int32   nSelPos = rLb.GetSelectEntryPos();
     bool    bGrid = ( nSelPos <= 1 );
@@ -678,7 +678,7 @@ DeactivateRC ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK_NOARG_TYPED(ScTpLayoutOptions, MetricHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl, ListBox&, void)
 {
     const sal_Int32 nMPos = m_pUnitLB->GetSelectEntryPos();
     if(nMPos != LISTBOX_ENTRY_NOTFOUND)
@@ -691,7 +691,7 @@ IMPL_LINK_NOARG_TYPED(ScTpLayoutOptions, MetricHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_TYPED( ScTpLayoutOptions, AlignHdl, Button*, pBox, void )
+IMPL_LINK( ScTpLayoutOptions, AlignHdl, Button*, pBox, void )
 {
     m_pAlignLB->Enable(static_cast<CheckBox*>(pBox)->IsChecked());
 }

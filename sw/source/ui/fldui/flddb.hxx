@@ -54,11 +54,11 @@ class SwFieldDBPage : public SwFieldPage
     sal_uInt16          m_nOldSubType;
     Link<ListBox&,void> m_aOldNumSelectHdl;
 
-    DECL_LINK_TYPED( TypeListBoxHdl, ListBox&, void );
-    DECL_LINK_TYPED( NumSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( TreeSelectHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( AddDBHdl, Button*, void );
+    DECL_LINK( TypeListBoxHdl, ListBox&, void );
+    DECL_LINK( NumSelectHdl, ListBox&, void );
+    DECL_LINK( TreeSelectHdl, SvTreeListBox*, void );
+    DECL_LINK( ModifyHdl, Edit&, void );
+    DECL_LINK( AddDBHdl, Button*, void );
     void TypeHdl(ListBox*);
 
     void                CheckInsert();

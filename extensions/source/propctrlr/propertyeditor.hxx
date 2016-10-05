@@ -135,8 +135,8 @@ namespace pcr
         void    setHelpLineLimits( OBrowserPage& _rPage, const void* );
 
     protected:
-        DECL_LINK_TYPED(OnPageDeactivate, TabControl*, bool);
-        DECL_LINK_TYPED(OnPageActivate, TabControl*, void);
+        DECL_LINK(OnPageDeactivate, TabControl*, bool);
+        DECL_LINK(OnPageActivate, TabControl*, void);
     };
 
 

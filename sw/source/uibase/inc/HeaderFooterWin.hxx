@@ -50,7 +50,7 @@ public:
     void SetReadonly( bool bReadonly ) override;
 
 private:
-    DECL_LINK_TYPED( FadeHandler, Timer *, void );
+    DECL_LINK( FadeHandler, Timer *, void );
 };
 
 #endif

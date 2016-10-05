@@ -103,7 +103,7 @@ namespace dbaui
 
         bool                    m_bTrackingInitiallyMoved;
 
-        DECL_LINK_TYPED(OnDragScrollTimer, Idle*, void);
+        DECL_LINK(OnDragScrollTimer, Idle*, void);
 
     protected:
         VclPtr<OTableWindow>               m_pLastFocusTabWin;
@@ -126,7 +126,7 @@ namespace dbaui
         // own methods
         ScrollBar& GetHScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetHScrollBar(); }
         ScrollBar& GetVScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetVScrollBar(); }
-        DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
+        DECL_LINK( ScrollHdl, ScrollBar*, void );
 
         void DrawConnections(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
         void InvalidateConnections();

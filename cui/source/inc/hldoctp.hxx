@@ -41,15 +41,15 @@ private:
 
     bool                mbMarkWndOpen;
 
-    DECL_LINK_TYPED (ClickFileopenHdl_Impl, Button*, void );
-    DECL_LINK_TYPED (ClickTargetHdl_Impl  , Button*, void );
+    DECL_LINK (ClickFileopenHdl_Impl, Button*, void );
+    DECL_LINK (ClickTargetHdl_Impl  , Button*, void );
 
-    DECL_LINK_TYPED (ModifiedPathHdl_Impl  , Edit&, void ); ///< Contents of combobox "Path" modified
-    DECL_LINK_TYPED (ModifiedTargetHdl_Impl, Edit&, void ); ///< Contents of editfield "Target" modified
+    DECL_LINK (ModifiedPathHdl_Impl  , Edit&, void ); ///< Contents of combobox "Path" modified
+    DECL_LINK (ModifiedTargetHdl_Impl, Edit&, void ); ///< Contents of editfield "Target" modified
 
-    DECL_LINK_TYPED( LostFocusPathHdl_Impl, Control&, void ); ///< Combobox "path" lost its focus
+    DECL_LINK( LostFocusPathHdl_Impl, Control&, void ); ///< Combobox "path" lost its focus
 
-    DECL_LINK_TYPED( TimeoutHdl_Impl, Timer *, void ); ///< Handler for timer -timeout
+    DECL_LINK( TimeoutHdl_Impl, Timer *, void ); ///< Handler for timer -timeout
 
     enum EPathType { Type_Unknown, Type_Invalid,
                      Type_ExistsFile, Type_File,

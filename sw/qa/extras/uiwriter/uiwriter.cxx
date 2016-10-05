@@ -3222,7 +3222,7 @@ class IdleTask
     public:
     bool GetFlag();
     IdleTask();
-    DECL_LINK_TYPED( FlipFlag, Idle *, void );
+    DECL_LINK( FlipFlag, Idle *, void );
     ~IdleTask() {}
     private:
     bool flag;
@@ -3248,7 +3248,7 @@ bool IdleTask::GetFlag()
 }
 
 //Callback function of IdleTask Class
-IMPL_LINK_TYPED(IdleTask, FlipFlag, Idle*, , void)
+IMPL_LINK(IdleTask, FlipFlag, Idle*, , void)
 {
     //setting the flag to make sure that low priority idle task has been dispatched
     this->flag = true;

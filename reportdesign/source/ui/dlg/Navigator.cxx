@@ -182,8 +182,8 @@ public:
     virtual ~NavigatorTree() override;
     virtual void dispose() override;
 
-    DECL_LINK_TYPED(OnEntrySelDesel, SvTreeListBox*, void);
-    DECL_LINK_TYPED( OnDropActionTimer, Timer*, void );
+    DECL_LINK(OnEntrySelDesel, SvTreeListBox*, void);
+    DECL_LINK( OnDropActionTimer, Timer*, void );
 
     virtual void _selectionChanged( const lang::EventObject& aEvent ) throw (uno::RuntimeException) override;
 
@@ -422,7 +422,7 @@ void NavigatorTree::StartDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(NavigatorTree, OnDropActionTimer, Timer *, void)
+IMPL_LINK_NOARG(NavigatorTree, OnDropActionTimer, Timer *, void)
 {
     if (--m_nTimerCounter > 0)
         return;
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG_TYPED(NavigatorTree, OnDropActionTimer, Timer *, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(NavigatorTree, OnEntrySelDesel, SvTreeListBox*, void)
+IMPL_LINK_NOARG(NavigatorTree, OnEntrySelDesel, SvTreeListBox*, void)
 {
     if ( !m_pSelectionListener->locked() )
     {

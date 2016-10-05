@@ -343,7 +343,7 @@ static OUString lcl_GetDBAreaRange( ScDocument* pDoc, const OUString& rDBName )
     return aRet;
 }
 
-IMPL_LINK_NOARG_TYPED(ScContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
 {
     ScContentId nType;
     sal_uLong nChild;
@@ -1439,7 +1439,7 @@ void ScContentTree::DoDrag()
     delete pDocLoader;              // falls Dokument zum Draggen geladen wurde
 }
 
-IMPL_LINK_NOARG_TYPED(ScContentTree, ExecDragHdl, void*, void)
+IMPL_LINK_NOARG(ScContentTree, ExecDragHdl, void*, void)
 {
     //  als Link, damit asynchron ohne ImpMouseMoveMsg auf dem Stack auch der
     //  Navigator geloescht werden darf

@@ -257,7 +257,7 @@ void SmGraphicWindow::RepaintViewShellDoc()
         pDoc->Repaint();
 }
 
-IMPL_LINK_NOARG_TYPED(SmGraphicWindow, CaretBlinkTimerHdl, Timer *, void)
+IMPL_LINK_NOARG(SmGraphicWindow, CaretBlinkTimerHdl, Timer *, void)
 {
     if (IsCursorVisible())
         SetIsCursorVisible(false);
@@ -780,7 +780,7 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
     SfxDockingWindow::StateChanged( nStateChange );
 }
 
-IMPL_LINK_NOARG_TYPED( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
+IMPL_LINK_NOARG( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, void )
 {
     // We want to have the focus in the edit window once Math has been opened
     // to allow for immediate typing.
@@ -2009,7 +2009,7 @@ void SmViewShell::Activate( bool bIsMDIActivate )
     }
 }
 
-IMPL_LINK_TYPED( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
+IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
     assert(_pFileDlg && "SmViewShell::DialogClosedHdl(): no file dialog");
     assert(pImpl->pDocInserter && "ScDocShell::DialogClosedHdl(): no document inserter");

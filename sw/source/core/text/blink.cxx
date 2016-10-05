@@ -55,7 +55,7 @@ SwBlink::~SwBlink( )
  * Toggle visibility flag
  * Determine the repaint rectangle and invalidate them in their OleShells.
  */
-IMPL_LINK_NOARG_TYPED(SwBlink, Blinker, Timer *, void)
+IMPL_LINK_NOARG(SwBlink, Blinker, Timer *, void)
 {
     bVisible = !bVisible;
     if( bVisible )

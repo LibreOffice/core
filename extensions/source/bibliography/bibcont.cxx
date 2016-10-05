@@ -160,7 +160,7 @@ void BibBookContainer::Split()
 {
     aIdle.Start();
 }
-IMPL_LINK_NOARG_TYPED( BibBookContainer, SplitHdl, Idle*, void)
+IMPL_LINK_NOARG( BibBookContainer, SplitHdl, Idle*, void)
 {
     long nSize= GetItemSize( TOP_WINDOW);
     BibConfig* pConfig = BibModul::GetConfig();

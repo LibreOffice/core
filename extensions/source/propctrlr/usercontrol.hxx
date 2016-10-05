@@ -152,7 +152,7 @@ namespace pcr
         ::sal_Int16 SAL_CALL getControlType() throw (css::uno::RuntimeException) override;
 
     private:
-        DECL_LINK_TYPED( OnCustomConvert, MetricFormatter&, void );
+        DECL_LINK( OnCustomConvert, MetricFormatter&, void );
     };
 
 

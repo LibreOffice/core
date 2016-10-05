@@ -129,7 +129,7 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     m_pRepeatHeaderNF->SetMax( nMax );
 }
 
-IMPL_LINK_NOARG_TYPED(SwInsTableDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, Button*, void)
 {
     EndDialog(RET_OK);
 }
@@ -156,7 +156,7 @@ void SwInsTableDlg::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED( SwInsTableDlg, ModifyName, Edit&, rEdit, void )
+IMPL_LINK( SwInsTableDlg, ModifyName, Edit&, rEdit, void )
 {
     OUString sTableName = rEdit.GetText();
     if (sTableName.indexOf(' ') != -1)
@@ -168,7 +168,7 @@ IMPL_LINK_TYPED( SwInsTableDlg, ModifyName, Edit&, rEdit, void )
     m_pInsertBtn->Enable(pShell->GetTableStyle( sTableName ) == nullptr);
 }
 
-IMPL_LINK_TYPED( SwInsTableDlg, ModifyRowCol, Edit&, rEdit, void )
+IMPL_LINK( SwInsTableDlg, ModifyRowCol, Edit&, rEdit, void )
 {
     if(&rEdit == m_pColNF)
     {
@@ -196,7 +196,7 @@ IMPL_LINK_TYPED( SwInsTableDlg, ModifyRowCol, Edit&, rEdit, void )
             m_pRepeatHeaderNF->SetValue( ( nEnteredValRepeatHeaderNF < nMax )? nEnteredValRepeatHeaderNF : nMax );
     }
 }
-IMPL_LINK_TYPED( SwInsTableDlg, AutoFormatHdl, Button*, pButton, void )
+IMPL_LINK( SwInsTableDlg, AutoFormatHdl, Button*, pButton, void )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -207,18 +207,18 @@ IMPL_LINK_TYPED( SwInsTableDlg, AutoFormatHdl, Button*, pButton, void )
         pDlg->FillAutoFormatOfIndex( pTAutoFormat );
 }
 
-IMPL_LINK_NOARG_TYPED(SwInsTableDlg, CheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsTableDlg, CheckBoxHdl, Button*, void)
 {
     m_pRepeatHeaderCB->Enable(m_pHeaderCB->IsChecked());
     ReapeatHeaderCheckBoxHdl();
 }
 
-IMPL_LINK_NOARG_TYPED(SwInsTableDlg, ReapeatHeaderCheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsTableDlg, ReapeatHeaderCheckBoxHdl, Button*, void)
 {
     m_pRepeatGroup->Enable(m_pHeaderCB->IsChecked() && m_pRepeatHeaderCB->IsChecked());
 }
 
-IMPL_LINK_NOARG_TYPED(SwInsTableDlg, ModifyRepeatHeaderNF_Hdl, Edit&, void)
+IMPL_LINK_NOARG(SwInsTableDlg, ModifyRepeatHeaderNF_Hdl, Edit&, void)
 {
     nEnteredValRepeatHeaderNF = m_pRepeatHeaderNF->GetValue();
 }

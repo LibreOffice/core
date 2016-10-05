@@ -625,7 +625,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
 /**
  * Increase timer for selection
  */
-IMPL_LINK_NOARG_TYPED(SwEditWin, TimerHandler, Timer *, void)
+IMPL_LINK_NOARG(SwEditWin, TimerHandler, Timer *, void)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
     Point aModPt( m_aMovePos );
@@ -5907,12 +5907,12 @@ static SfxShell* lcl_GetTextShellFromDispatcher( SwView& rView )
     return pShell;
 }
 
-IMPL_LINK_NOARG_TYPED(SwEditWin, KeyInputFlushHandler, Timer *, void)
+IMPL_LINK_NOARG(SwEditWin, KeyInputFlushHandler, Timer *, void)
 {
     FlushInBuffer();
 }
 
-IMPL_LINK_NOARG_TYPED(SwEditWin, KeyInputTimerHandler, Timer *, void)
+IMPL_LINK_NOARG(SwEditWin, KeyInputTimerHandler, Timer *, void)
 {
     m_bTableInsDelMode = false;
 }
@@ -5934,7 +5934,7 @@ void SwEditWin::StopQuickHelp()
         m_pQuickHlpData->Stop( m_rView.GetWrtShell() );
 }
 
-IMPL_LINK_NOARG_TYPED(SwEditWin, TemplateTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(SwEditWin, TemplateTimerHdl, Idle *, void)
 {
     SetApplyTemplate(SwApplyTemplate());
 }

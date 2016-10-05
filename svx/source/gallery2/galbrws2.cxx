@@ -74,7 +74,7 @@ struct DispatchInfo
     css::uno::Reference< css::frame::XDispatch >    Dispatch;
 };
 
-IMPL_STATIC_LINK_TYPED( GalleryBrowser2, AsyncDispatch_Impl, void*, p, void )
+IMPL_STATIC_LINK( GalleryBrowser2, AsyncDispatch_Impl, void*, p, void )
 {
     DispatchInfo* pDispatchInfo = static_cast<DispatchInfo*>(p);
     if ( pDispatchInfo && pDispatchInfo->Dispatch.is() )
@@ -122,8 +122,8 @@ private:
     static void Execute( const CommandInfo &rCmdInfo,
                   const css::uno::Sequence< css::beans::PropertyValue > &rArguments );
 
-    DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
-    DECL_LINK_TYPED( BackgroundMenuSelectHdl, Menu*, bool );
+    DECL_LINK( MenuSelectHdl, Menu*, bool );
+    DECL_LINK( BackgroundMenuSelectHdl, Menu*, bool );
 public:
     GalleryThemePopup( const GalleryTheme* pTheme,
                        sal_uIntPtr nObjectPos,
@@ -318,7 +318,7 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
     mpPopupMenu->Execute( pWindow, aPos );
 }
 
-IMPL_LINK_TYPED( GalleryThemePopup, MenuSelectHdl, Menu*, pMenu, bool )
+IMPL_LINK( GalleryThemePopup, MenuSelectHdl, Menu*, pMenu, bool )
 {
     if( !pMenu )
         return false;
@@ -343,7 +343,7 @@ IMPL_LINK_TYPED( GalleryThemePopup, MenuSelectHdl, Menu*, pMenu, bool )
     return false;
 }
 
-IMPL_LINK_TYPED( GalleryThemePopup, BackgroundMenuSelectHdl, Menu*, pMenu, bool )
+IMPL_LINK( GalleryThemePopup, BackgroundMenuSelectHdl, Menu*, pMenu, bool )
 {
     if( !pMenu )
         return false;
@@ -1287,17 +1287,17 @@ OUString GalleryBrowser2::GetFilterName() const
 }
 
 
-IMPL_LINK_NOARG_TYPED(GalleryBrowser2, SelectObjectValueSetHdl, ValueSet*, void)
+IMPL_LINK_NOARG(GalleryBrowser2, SelectObjectValueSetHdl, ValueSet*, void)
 {
     ImplUpdateInfoBar();
 }
 
-IMPL_LINK_NOARG_TYPED(GalleryBrowser2, SelectObjectHdl, GalleryListView*, void)
+IMPL_LINK_NOARG(GalleryBrowser2, SelectObjectHdl, GalleryListView*, void)
 {
     ImplUpdateInfoBar();
 }
 
-IMPL_LINK_TYPED( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox, void )
+IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox, void )
 {
     if( pBox->GetCurItemId() == TBX_ID_ICON )
         SetMode( GALLERYBROWSERMODE_ICON );
@@ -1305,7 +1305,7 @@ IMPL_LINK_TYPED( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox, void )
         SetMode( GALLERYBROWSERMODE_LIST );
 }
 
-IMPL_LINK_NOARG_TYPED(GalleryBrowser2, MiscHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl, LinkParamNone*, void)
 {
     maViewBox->SetOutStyle( maMiscOptions.GetToolboxStyle() );
 

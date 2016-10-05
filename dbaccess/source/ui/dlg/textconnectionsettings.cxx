@@ -67,7 +67,7 @@ namespace dbaui
         return ModalDialog::Execute();
     }
 
-    IMPL_LINK_NOARG_TYPED( TextConnectionSettingsDialog, OnOK, Button*, void )
+    IMPL_LINK_NOARG( TextConnectionSettingsDialog, OnOK, Button*, void )
     {
         if ( m_pTextConnectionHelper->prepareLeave() )
         {

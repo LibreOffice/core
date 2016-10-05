@@ -803,7 +803,7 @@ short SfxTabDialog::Ok()
     return bModified ? RET_OK : RET_CANCEL;
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTabDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(SfxTabDialog, CancelHdl, Button*, void)
 {
     EndDialog( RET_USER_CANCEL );
 }
@@ -837,7 +837,7 @@ void SfxTabDialog::RefreshInputSet()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxTabDialog, OkHdl, Button*, void)
+IMPL_LINK_NOARG(SfxTabDialog, OkHdl, Button*, void)
 
 /*  [Description]
 
@@ -914,7 +914,7 @@ bool SfxTabDialog::PrepareLeaveCurrentPage()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxTabDialog, UserHdl, Button*, void)
+IMPL_LINK_NOARG(SfxTabDialog, UserHdl, Button*, void)
 
 /*  [Description]
 
@@ -938,7 +938,7 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, UserHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxTabDialog, ResetHdl, Button*, void)
+IMPL_LINK_NOARG(SfxTabDialog, ResetHdl, Button*, void)
 
 /*  [Description]
 
@@ -956,7 +956,7 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, ResetHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxTabDialog, BaseFmtHdl, Button*, void)
+IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl, Button*, void)
 
 /*  [Description]
 
@@ -1032,7 +1032,7 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, BaseFmtHdl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
+IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 
 /*  [Description]
 
@@ -1132,7 +1132,7 @@ IMPL_LINK_TYPED( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 }
 
 
-IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
+IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
 
 /*  [Description]
 

@@ -581,7 +581,7 @@ void ScTPValidationValue::RemoveRefDlg()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScTPValidationValue, EditSetFocusHdl, Control&, void)
+IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl, Control&, void)
 {
     const sal_Int32 nPos = m_pLbAllow->GetSelectEntryPos();
 
@@ -591,7 +591,7 @@ IMPL_LINK_NOARG_TYPED(ScTPValidationValue, EditSetFocusHdl, Control&, void)
     }
 }
 
-IMPL_LINK_TYPED( ScTPValidationValue, KillFocusHdl, Control&, rControl, void )
+IMPL_LINK( ScTPValidationValue, KillFocusHdl, Control&, rControl, void )
 {
     vcl::Window* pWnd = static_cast<vcl::Window*>(&rControl);
     if( pWnd == m_pRefEdit || pWnd == m_pBtnRef )
@@ -603,7 +603,7 @@ IMPL_LINK_TYPED( ScTPValidationValue, KillFocusHdl, Control&, rControl, void )
                 }
 }
 
-IMPL_LINK_NOARG_TYPED(ScTPValidationValue, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, ListBox&, void)
 {
     const sal_Int32 nLbPos = m_pLbAllow->GetSelectEntryPos();
     bool bEnable = (nLbPos != SC_VALIDDLG_ALLOW_ANY);
@@ -665,7 +665,7 @@ IMPL_LINK_NOARG_TYPED(ScTPValidationValue, SelectHdl, ListBox&, void)
     m_pBtnRef->Show( bRange );  // cell range picker
 }
 
-IMPL_LINK_NOARG_TYPED(ScTPValidationValue, CheckHdl, Button*, void)
+IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, Button*, void)
 {
     m_pCbSort->Enable( m_pCbShow->IsChecked() );
 }
@@ -830,7 +830,7 @@ bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )
     return true;
 }
 
-IMPL_LINK_NOARG_TYPED(ScTPValidationError, SelectActionHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl, ListBox&, void)
 {
     ScValidErrorStyle eStyle = (ScValidErrorStyle) m_pLbAction->GetSelectEntryPos();
     bool bMacro = ( eStyle == SC_VALERR_MACRO );
@@ -840,7 +840,7 @@ IMPL_LINK_NOARG_TYPED(ScTPValidationError, SelectActionHdl, ListBox&, void)
     m_pEdError->Enable( !bMacro );
 }
 
-IMPL_LINK_NOARG_TYPED(ScTPValidationError, ClickSearchHdl, Button*, void)
+IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl, Button*, void)
 {
     // Use static SfxApplication method to bring up selector dialog for
     // choosing a script

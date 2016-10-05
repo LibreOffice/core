@@ -45,7 +45,7 @@ public:
     virtual ~LookUpComboBox() override;
     virtual void dispose() override;
 
-    DECL_LINK_TYPED( ModifyTimer_Hdl, Idle *, void );
+    DECL_LINK( ModifyTimer_Hdl, Idle *, void );
 
     void init(SvxThesaurusDialog *pDialog);
 
@@ -142,14 +142,14 @@ public:
     const OUString&         getErrStr() const { return m_aErrStr; }
 
     // Handler
-    DECL_LINK_TYPED( ReplaceBtnHdl_Impl, Button *, void );
-    DECL_LINK_TYPED( LeftBtnHdl_Impl, Button *, void );
-    DECL_LINK_TYPED( LanguageHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( WordSelectHdl_Impl, ComboBox&, void );
-    DECL_LINK_TYPED( AlternativesSelectHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( AlternativesDoubleClickHdl_Impl, SvTreeListBox*, bool );
+    DECL_LINK( ReplaceBtnHdl_Impl, Button *, void );
+    DECL_LINK( LeftBtnHdl_Impl, Button *, void );
+    DECL_LINK( LanguageHdl_Impl, ListBox&, void );
+    DECL_LINK( WordSelectHdl_Impl, ComboBox&, void );
+    DECL_LINK( AlternativesSelectHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK( AlternativesDoubleClickHdl_Impl, SvTreeListBox*, bool );
 
-    DECL_STATIC_LINK_TYPED( SvxThesaurusDialog, SelectFirstHdl_Impl, void*, void );
+    DECL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, void*, void );
 
     css::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > >
             queryMeanings_Impl( OUString& rTerm, const css::lang::Locale& rLocale, const css::beans::PropertyValues& rProperties ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException);

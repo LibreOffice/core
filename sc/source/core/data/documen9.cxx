@@ -230,7 +230,7 @@ bool ScDocument::IsChart( const SdrObject* pObject )
     return false;
 }
 
-IMPL_LINK_TYPED( ScDocument, GetUserDefinedColor, sal_uInt16, nColorIndex, Color* )
+IMPL_LINK( ScDocument, GetUserDefinedColor, sal_uInt16, nColorIndex, Color* )
 {
     return const_cast<Color*>(&(GetColorList()->GetColor(nColorIndex)->GetColor()));
 }

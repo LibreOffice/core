@@ -52,8 +52,8 @@ namespace dbaui
         VclPtr<PushButton>         m_pTestConnection;
 
         // called when the test connection button was clicked
-        DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
-        DECL_LINK_TYPED(OnEditModified, Edit&, void);
+        DECL_LINK(OnTestJavaClickHdl, Button*, void);
+        DECL_LINK(OnEditModified, Edit&, void);
 
     public:
         virtual ~OConnectionTabPage() override;

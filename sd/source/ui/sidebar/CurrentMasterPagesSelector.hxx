@@ -71,7 +71,7 @@ private:
 
     virtual void LateInit() override;
 
-    DECL_LINK_TYPED(EventMultiplexerListener,sd::tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerListener,sd::tools::EventMultiplexerEvent&, void);
 };
 
 } } // end of namespace sd::sidebar

@@ -348,7 +348,7 @@ void SlideBackground::removeListener()
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
+IMPL_LINK(SlideBackground, EventMultiplexerListener,
                 tools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
@@ -769,7 +769,7 @@ void SlideBackground::NotifyItemUpdate(
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SlideBackground, FillStyleModifyHdl, ListBox&, void)
+IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 {
     const eFillStyle nPos = (eFillStyle)mpFillStyle->GetSelectEntryPos();
     Update();
@@ -818,7 +818,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillStyleModifyHdl, ListBox&, void)
     mpFillStyle->Selected();
 }
 
-IMPL_LINK_NOARG_TYPED(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
+IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 {
     Paper ePaper =  mpPaperSizeBox->GetSelection();
     Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, (MapUnit)(meUnit)));
@@ -831,7 +831,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get() });
 }
 
-IMPL_LINK_NOARG_TYPED(SlideBackground, FillColorHdl, ListBox&, void)
+IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ListBox&, void)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpFillStyle->GetSelectEntryPos();
     switch(eXFS)
@@ -857,7 +857,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillColorHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SlideBackground, FillBackgroundHdl, ListBox&, void)
+IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, ListBox&, void)
 {
     const eFillStyle nFillPos = (eFillStyle)mpFillStyle->GetSelectEntryPos();
     SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -904,7 +904,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillBackgroundHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SlideBackground, AssignMasterPage, ListBox&, void)
+IMPL_LINK_NOARG(SlideBackground, AssignMasterPage, ListBox&, void)
 {
     ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
     SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
@@ -923,19 +923,19 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, AssignMasterPage, ListBox&, void)
     pDoc->SetMasterPage(nSelectedPage, aLayoutName, pDoc, false, false);
 }
 
-IMPL_LINK_NOARG_TYPED(SlideBackground, CloseMasterHdl, Button*, void)
+IMPL_LINK_NOARG(SlideBackground, CloseMasterHdl, Button*, void)
 {
     GetBindings()->GetDispatcher()->Execute( SID_CLOSE_MASTER_VIEW, SfxCallMode::RECORD );
 }
 
-IMPL_LINK_NOARG_TYPED(SlideBackground, DspBackground, Button*, void)
+IMPL_LINK_NOARG(SlideBackground, DspBackground, Button*, void)
 {
     bool IsChecked = mpDspMasterBackground->IsChecked();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_BACKGROUND, IsChecked);
     GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_BACKGROUND, SfxCallMode::RECORD, { &aBoolItem });
 }
 
-IMPL_LINK_NOARG_TYPED(SlideBackground, DspObjects, Button*, void)
+IMPL_LINK_NOARG(SlideBackground, DspObjects, Button*, void)
 {
     bool IsChecked = mpDspMasterObjects->IsChecked();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_OBJECTS,IsChecked);

@@ -144,8 +144,8 @@ private:
 
     bool            mbHandoutMode;
 
-    DECL_LINK_TYPED( UpdateOnClickHdl, Button*, void );
-    DECL_LINK_TYPED( LanguageChangeHdl, ListBox&, void );
+    DECL_LINK( UpdateOnClickHdl, Button*, void );
+    DECL_LINK( LanguageChangeHdl, ListBox&, void );
 
     void FillFormatList(int eFormat);
     void GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet );
@@ -253,7 +253,7 @@ void HeaderFooterDialog::dispose()
     TabDialog::dispose();
 }
 
-IMPL_LINK_TYPED( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
+IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 {
     const sal_uInt16 nId = pTabCtrl->GetCurPageId();
     TabPage* pTabPage = pTabCtrl->GetTabPage( nId );
@@ -262,17 +262,17 @@ IMPL_LINK_TYPED( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl, vo
     maPBApply->Enable( mpCurrentPage != nullptr );
 }
 
-IMPL_LINK_NOARG_TYPED(HeaderFooterDialog, ClickApplyToAllHdl, Button*, void)
+IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyToAllHdl, Button*, void)
 {
     ApplyToAll();
 }
 
-IMPL_LINK_NOARG_TYPED(HeaderFooterDialog, ClickApplyHdl, Button*, void)
+IMPL_LINK_NOARG(HeaderFooterDialog, ClickApplyHdl, Button*, void)
 {
     Apply();
 }
 
-IMPL_LINK_NOARG_TYPED(HeaderFooterDialog, ClickCancelHdl, Button*, void)
+IMPL_LINK_NOARG(HeaderFooterDialog, ClickCancelHdl, Button*, void)
 {
     Cancel();
 }
@@ -475,7 +475,7 @@ void HeaderFooterTabPage::dispose()
     TabPage::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(HeaderFooterTabPage, LanguageChangeHdl, ListBox&, void)
+IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl, ListBox&, void)
 {
     FillFormatList( (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetSelectEntryData()) );
 }
@@ -579,7 +579,7 @@ void HeaderFooterTabPage::update()
     mpCTPreview->update( aSettings );
 }
 
-IMPL_LINK_NOARG_TYPED(HeaderFooterTabPage, UpdateOnClickHdl, Button*, void)
+IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl, Button*, void)
 {
     update();
 }

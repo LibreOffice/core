@@ -340,7 +340,7 @@ void Animation::ImplRestartTimer( sal_uLong nTimeout )
     maTimer.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(Animation, ImplTimeoutHdl, Timer *, void)
+IMPL_LINK_NOARG(Animation, ImplTimeoutHdl, Timer *, void)
 {
     const size_t nAnimCount = maList.size();
     std::vector< AInfo* > aAInfoList;

@@ -444,7 +444,7 @@ void ViewOverlayManager::UpdateTags()
         mnUpdateTagsEvent = Application::PostUserEvent( LINK( this, ViewOverlayManager, UpdateTagsHdl ) );
 }
 
-IMPL_LINK_NOARG_TYPED(ViewOverlayManager, UpdateTagsHdl, void*, void)
+IMPL_LINK_NOARG(ViewOverlayManager, UpdateTagsHdl, void*, void)
 {
     OSL_TRACE("ViewOverlayManager::UpdateTagsHdl");
 
@@ -501,7 +501,7 @@ bool ViewOverlayManager::DisposeTags()
     return false;
 }
 
-IMPL_LINK_TYPED(ViewOverlayManager,EventMultiplexerListener,
+IMPL_LINK(ViewOverlayManager,EventMultiplexerListener,
     tools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)

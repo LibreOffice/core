@@ -797,7 +797,7 @@ bool OApplicationController::isTableFormat()  const
     return OTableCopyHelper::isTableFormat(getViewClipboard());
 }
 
-IMPL_LINK_NOARG_TYPED( OApplicationController, OnAsyncDrop, void*, void )
+IMPL_LINK_NOARG( OApplicationController, OnAsyncDrop, void*, void )
 {
     m_nAsyncDrop = nullptr;
     SolarMutexGuard aSolarGuard;

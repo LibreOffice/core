@@ -57,9 +57,9 @@ class SwMMResultSaveDialog : public SfxModalDialog
 
     bool                   m_bCancelSaving;
 
-    DECL_LINK_TYPED(SaveOutputHdl_Impl, Button* , void);
-    DECL_LINK_TYPED(SaveCancelHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(DocumentSelectionHdl_Impl, Button*, void);
+    DECL_LINK(SaveOutputHdl_Impl, Button* , void);
+    DECL_LINK(SaveCancelHdl_Impl, Button*, void);
+    DECL_LINK(DocumentSelectionHdl_Impl, Button*, void);
 
 public:
     SwMMResultSaveDialog();
@@ -86,10 +86,10 @@ class SwMMResultPrintDialog : public SfxModalDialog
 
     VclPtr<Printer>        m_pTempPrinter;
 
-    DECL_LINK_TYPED(PrinterChangeHdl_Impl, ListBox&,void );
-    DECL_LINK_TYPED(PrintHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(PrinterSetupHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(DocumentSelectionHdl_Impl, Button*, void);
+    DECL_LINK(PrinterChangeHdl_Impl, ListBox&,void );
+    DECL_LINK(PrintHdl_Impl, Button*, void);
+    DECL_LINK(PrinterSetupHdl_Impl, Button*, void );
+    DECL_LINK(DocumentSelectionHdl_Impl, Button*, void);
 
     void FillInPrinterSettings();
 
@@ -135,11 +135,11 @@ class SwMMResultEmailDialog : public SfxModalDialog
 
     OUString        m_sBody;
 
-    DECL_LINK_TYPED(CopyToHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(SendTypeHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED(SendAsHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(SendDocumentsHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(DocumentSelectionHdl_Impl, Button*, void);
+    DECL_LINK(CopyToHdl_Impl, Button*, void);
+    DECL_LINK(SendTypeHdl_Impl, ListBox&, void);
+    DECL_LINK(SendAsHdl_Impl, Button*, void);
+    DECL_LINK(SendDocumentsHdl_Impl, Button*, void);
+    DECL_LINK(DocumentSelectionHdl_Impl, Button*, void);
 
     void FillInEmailSettings();
 
@@ -198,11 +198,11 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     sal_Int32               m_nSendCount;
     sal_Int32               m_nErrorCount;
 
-    DECL_LINK_TYPED( StopHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( CloseHdl_Impl, Button* , void);
-    DECL_STATIC_LINK_TYPED( SwSendMailDialog, StartSendMails, void*, void );
-    DECL_STATIC_LINK_TYPED( SwSendMailDialog, StopSendMails, void*, void );
-    DECL_LINK_TYPED( RemoveThis, Idle*, void );
+    DECL_LINK( StopHdl_Impl, Button*, void );
+    DECL_LINK( CloseHdl_Impl, Button* , void);
+    DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, void*, void );
+    DECL_STATIC_LINK( SwSendMailDialog, StopSendMails, void*, void );
+    DECL_LINK( RemoveThis, Idle*, void );
 
     void        IterateMails();
     void        SendMails();

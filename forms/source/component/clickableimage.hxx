@@ -77,7 +77,7 @@ namespace frm
         css::uno::Reference< css::form::submission::XSubmission >
                                                 m_xSubmissionDelegate;
 
-        DECL_LINK_TYPED( DownloadDoneLink, void*, void );
+        DECL_LINK( DownloadDoneLink, void*, void );
 
         inline ImageProducer* GetImageProducer() { return m_pProducer; }
 
@@ -153,7 +153,7 @@ namespace frm
         // to be called from within the cloning-ctor of your derived class
         void implInitializeImageURL( );
 
-        DECL_LINK_TYPED( OnImageImportDone, ::Graphic*, void );
+        DECL_LINK( OnImageImportDone, ::Graphic*, void );
     };
 
     class ImageModelMethodGuard : public ::osl::MutexGuard

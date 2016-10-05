@@ -430,7 +430,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG_TYPED(RoadmapWizard, OnRoadmapItemSelected, LinkParamNone*, void)
+    IMPL_LINK_NOARG(RoadmapWizard, OnRoadmapItemSelected, LinkParamNone*, void)
     {
 
         RoadmapTypes::ItemId nCurItemId = m_pImpl->pRoadmap->GetCurrentRoadmapItemID();

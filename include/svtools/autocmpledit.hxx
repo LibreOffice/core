@@ -23,7 +23,7 @@ private:
     std::vector< OUString > m_aMatching;
     std::vector< OUString >::size_type m_nCurrent;
 
-    DECL_DLLPRIVATE_LINK_TYPED(AutoCompleteHdl_Impl, Edit&, void);
+    DECL_DLLPRIVATE_LINK(AutoCompleteHdl_Impl, Edit&, void);
     bool Match( const OUString& rText );
     bool PreNotify( NotifyEvent& rNEvt ) override;
 

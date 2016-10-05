@@ -160,7 +160,7 @@ void FuncPage::UpdateFunctionList()
     if(IsVisible()) SelHdl(*m_pLbFunction);
 }
 
-IMPL_LINK_TYPED( FuncPage, SelHdl, ListBox&, rLb, void )
+IMPL_LINK( FuncPage, SelHdl, ListBox&, rLb, void )
 {
     if(&rLb==m_pLbFunction)
     {
@@ -180,7 +180,7 @@ IMPL_LINK_TYPED( FuncPage, SelHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(FuncPage, DblClkHdl, ListBox&, void)
+IMPL_LINK_NOARG(FuncPage, DblClkHdl, ListBox&, void)
 {
     aDoubleClickLink.Call(*this);
 }

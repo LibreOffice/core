@@ -362,7 +362,7 @@ void SidebarTextControl::MouseButtonUp( const MouseEvent& rMEvt )
         GetTextView()->MouseButtonUp( rMEvt );
 }
 
-IMPL_LINK_TYPED( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void )
+IMPL_LINK( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void )
 {
     if ( rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG )
     {

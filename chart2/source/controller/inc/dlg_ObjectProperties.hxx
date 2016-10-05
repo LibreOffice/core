@@ -122,7 +122,7 @@ private:
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) override;
 
     Link<Button*,void> m_aOriginalOKClickHdl;
-    DECL_LINK_TYPED( OKPressed, Button*, void );
+    DECL_LINK( OKPressed, Button*, void );
 
 public:
     SchAttribTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr,

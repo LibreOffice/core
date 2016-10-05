@@ -551,7 +551,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     return nX;
 }
 
-IMPL_LINK_TYPED(DbGridControl::NavigationBar, OnClick, Button *, pButton, void )
+IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton, void )
 {
     DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
 
@@ -2894,7 +2894,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(DbGridControl, OnDelete, void*, void)
+IMPL_LINK_NOARG(DbGridControl, OnDelete, void*, void)
 {
     m_nDeleteEvent = nullptr;
     DeleteSelectedRows();
@@ -3498,7 +3498,7 @@ void DbGridControl::implAdjustInSolarThread(bool _bRows)
     }
 }
 
-IMPL_LINK_TYPED(DbGridControl, OnAsyncAdjust, void*, pAdjustWhat, void)
+IMPL_LINK(DbGridControl, OnAsyncAdjust, void*, pAdjustWhat, void)
 {
     m_nAsynAdjustEvent = nullptr;
 

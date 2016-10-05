@@ -540,7 +540,7 @@ namespace dbaui
         updateToolbox();
     }
 
-    IMPL_LINK_NOARG_TYPED( DbaIndexDialog, OnIndexAction, ToolBox*, void )
+    IMPL_LINK_NOARG( DbaIndexDialog, OnIndexAction, ToolBox*, void )
     {
         sal_uInt16 nClicked = m_pActions->GetCurItemId();
         if (nClicked == mnNewCmdId)
@@ -555,7 +555,7 @@ namespace dbaui
             OnResetIndex();
     }
 
-    IMPL_LINK_NOARG_TYPED( DbaIndexDialog, OnCloseDialog, Button*, void )
+    IMPL_LINK_NOARG( DbaIndexDialog, OnCloseDialog, Button*, void )
     {
         if (m_pIndexList->IsEditingActive())
         {
@@ -601,14 +601,14 @@ namespace dbaui
         EndDialog(RET_OK);
     }
 
-    IMPL_LINK_TYPED( DbaIndexDialog, OnEditIndexAgain, void*, p, void )
+    IMPL_LINK( DbaIndexDialog, OnEditIndexAgain, void*, p, void )
     {
         SvTreeListEntry* _pEntry = static_cast<SvTreeListEntry*>(p);
         m_bEditAgain = false;
         m_pIndexList->EditEntry(_pEntry);
     }
 
-    IMPL_LINK_TYPED( DbaIndexDialog, OnEntryEdited, SvTreeListEntry*, _pEntry, bool )
+    IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvTreeListEntry*, _pEntry, bool )
     {
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
 
@@ -729,11 +729,11 @@ namespace dbaui
         return true;
     }
 
-    IMPL_LINK_NOARG_TYPED( DbaIndexDialog, OnModifiedClick, Button*, void )
+    IMPL_LINK_NOARG( DbaIndexDialog, OnModifiedClick, Button*, void )
     {
         OnModified(*m_pFields);
     }
-    IMPL_LINK_NOARG_TYPED( DbaIndexDialog, OnModified, IndexFieldsControl&, void )
+    IMPL_LINK_NOARG( DbaIndexDialog, OnModified, IndexFieldsControl&, void )
     {
         OSL_ENSURE(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
@@ -771,7 +771,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK_NOARG_TYPED( DbaIndexDialog, OnIndexSelected, DbaIndexList&, void )
+    IMPL_LINK_NOARG( DbaIndexDialog, OnIndexSelected, DbaIndexList&, void )
     {
         m_pIndexList->EndSelection();
 

@@ -716,12 +716,12 @@ void ClientBox::DoScroll( long nDelta )
     m_aScrollBar->SetPosPixel( aNewSBPt );
 }
 
-IMPL_LINK_TYPED( ClientBox, ScrollHdl, ScrollBar*, pScrBar, void )
+IMPL_LINK( ClientBox, ScrollHdl, ScrollBar*, pScrBar, void )
 {
     DoScroll( pScrBar->GetDelta() );
 }
 
-IMPL_LINK_NOARG_TYPED( ClientBox, DeauthoriseHdl, Button*, void )
+IMPL_LINK_NOARG( ClientBox, DeauthoriseHdl, Button*, void )
 {
     long aSelected = GetActiveEntryIndex();
     if ( aSelected < 0 )

@@ -100,9 +100,9 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
 
     virtual OUString GetExpressionString() override;
     void Init(ScCondFormatDlg* pDialogParent);
-    DECL_LINK_TYPED( StyleSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( ConditionTypeSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( OnEdChanged, Edit&, void );
+    DECL_LINK( StyleSelectHdl, ListBox&, void );
+    DECL_LINK( ConditionTypeSelectHdl, ListBox&, void );
+    DECL_LINK( OnEdChanged, Edit&, void );
 
     // Searches the lookup table for the entry position, given condition mode
     static sal_Int32 ConditionModeToEntryPos( ScConditionMode eMode );
@@ -142,7 +142,7 @@ class ScFormulaFrmtEntry : public ScCondFrmtEntry
     virtual OUString GetExpressionString() override;
     void Init(ScCondFormatDlg* pDialogParent);
 
-    DECL_LINK_TYPED( StyleSelectHdl, ListBox&, void );
+    DECL_LINK( StyleSelectHdl, ListBox&, void );
 
 public:
     ScFormulaFrmtEntry( vcl::Window* pParent, ScDocument* PDoc, ScCondFormatDlg* pDialogParent, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = nullptr );
@@ -176,7 +176,7 @@ class ScColorScale2FrmtEntry : public ScCondFrmtEntry
     virtual OUString GetExpressionString() override;
     void Init();
 
-    DECL_LINK_TYPED( EntryTypeHdl, ListBox&, void );
+    DECL_LINK( EntryTypeHdl, ListBox&, void );
 public:
     ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = nullptr );
     virtual ~ScColorScale2FrmtEntry() override;
@@ -211,7 +211,7 @@ class ScColorScale3FrmtEntry : public ScCondFrmtEntry
     virtual OUString GetExpressionString() override;
     void Init();
 
-    DECL_LINK_TYPED( EntryTypeHdl, ListBox&, void );
+    DECL_LINK( EntryTypeHdl, ListBox&, void );
 public:
     ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = nullptr );
     virtual ~ScColorScale3FrmtEntry() override;
@@ -242,8 +242,8 @@ class ScDataBarFrmtEntry : public ScCondFrmtEntry
     virtual OUString GetExpressionString() override;
     void Init();
 
-    DECL_LINK_TYPED( OptionBtnHdl, Button*, void );
-    DECL_LINK_TYPED( DataBarTypeSelectHdl, ListBox&, void );
+    DECL_LINK( OptionBtnHdl, Button*, void );
+    DECL_LINK( DataBarTypeSelectHdl, ListBox&, void );
 public:
     ScDataBarFrmtEntry( vcl::Window* pParemt, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat = nullptr );
     virtual ~ScDataBarFrmtEntry() override;
@@ -274,7 +274,7 @@ protected:
 private:
     void Init();
 
-    DECL_LINK_TYPED( StyleSelectHdl, ListBox&, void );
+    DECL_LINK( StyleSelectHdl, ListBox&, void );
 
     VclPtr<ListBox> maLbDateEntry;
     VclPtr<FixedText> maFtStyle;
@@ -299,7 +299,7 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
 
     void Init();
 
-    DECL_LINK_TYPED( IconSetTypeHdl, ListBox&, void );
+    DECL_LINK( IconSetTypeHdl, ListBox&, void );
 
 public:
     ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat = nullptr );

@@ -134,7 +134,7 @@ private:
     void            UpdateFormulaMode();
     static void     InvalidateAttribs();
     void            ImplCreateEditEngine();
-    DECL_LINK_TYPED( DelayTimer, Timer*, void );
+    DECL_LINK( DelayTimer, Timer*, void );
     void            GetColData();
     void            UseColData();
     void            NextAutoEntry( bool bBack );
@@ -156,9 +156,9 @@ private:
     void            SkipClosingPar();
     bool            GetFuncName( OUString& aStart, OUString& aResult );  // fdo75264
     void            ShowArgumentsTip( OUString& rSelText );
-    DECL_LINK_TYPED( ModifyHdl, LinkParamNone*, void );
-    DECL_LINK_TYPED( ShowHideTipVisibleParentListener, VclWindowEvent&, void );
-    DECL_LINK_TYPED( ShowHideTipVisibleSecParentListener, VclWindowEvent&, void );
+    DECL_LINK( ModifyHdl, LinkParamNone*, void );
+    DECL_LINK( ShowHideTipVisibleParentListener, VclWindowEvent&, void );
+    DECL_LINK( ShowHideTipVisibleSecParentListener, VclWindowEvent&, void );
 
 public:
     ScInputHandler(const ScInputHandler&) = delete;

@@ -122,7 +122,7 @@ protected:
 public:
     SwAccessibleDocument( SwAccessibleMap* pInitMap );
 
-    DECL_LINK_TYPED( WindowChildEventListener, VclWindowEvent&, void );
+    DECL_LINK( WindowChildEventListener, VclWindowEvent&, void );
 
     // XServiceInfo
 

@@ -799,7 +799,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
     return nRet;
 }
 
-IMPL_LINK_TYPED( View, ExecuteNavigatorDrop, void*, p, void )
+IMPL_LINK( View, ExecuteNavigatorDrop, void*, p, void )
 {
     SdNavigatorDropEvent*                   pSdNavigatorDropEvent = static_cast<SdNavigatorDropEvent*>(p);
     TransferableDataHelper                  aDataHelper( pSdNavigatorDropEvent->maDropEvent.Transferable );

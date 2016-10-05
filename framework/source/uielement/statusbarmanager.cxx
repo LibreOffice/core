@@ -644,7 +644,7 @@ void StatusBarManager::MouseButtonUp( const MouseEvent& rMEvt )
     MouseButton(rMEvt,&frame::XStatusbarController::mouseButtonUp);
 }
 
-IMPL_LINK_NOARG_TYPED(StatusBarManager, Click, StatusBar*, void)
+IMPL_LINK_NOARG(StatusBarManager, Click, StatusBar*, void)
 {
     SolarMutexGuard g;
 
@@ -665,7 +665,7 @@ IMPL_LINK_NOARG_TYPED(StatusBarManager, Click, StatusBar*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(StatusBarManager, DoubleClick, StatusBar*, void)
+IMPL_LINK_NOARG(StatusBarManager, DoubleClick, StatusBar*, void)
 {
     SolarMutexGuard g;
 

@@ -146,15 +146,15 @@ void TitlesAndObjectsTabPage::commitToModel()
 }
 
 
-IMPL_LINK_NOARG_TYPED(TitlesAndObjectsTabPage, ChangeCheckBoxHdl, CheckBox&, void)
+IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeCheckBoxHdl, CheckBox&, void)
 {
     ChangeHdl(nullptr);
 }
-IMPL_LINK_NOARG_TYPED(TitlesAndObjectsTabPage, ChangeEditHdl, Edit&, void)
+IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeEditHdl, Edit&, void)
 {
     ChangeHdl(nullptr);
 }
-IMPL_LINK_NOARG_TYPED(TitlesAndObjectsTabPage, ChangeHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeHdl, LinkParamNone*, void)
 {
     if( m_bCommitToModel )
         commitToModel();

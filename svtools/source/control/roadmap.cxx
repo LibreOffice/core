@@ -635,7 +635,7 @@ bool ORoadmap::PreNotify(NotifyEvent& _rNEvt)
     return Window::PreNotify( _rNEvt );
 }
 
-IMPL_LINK_TYPED(ORoadmap, ImplClickHdl, HyperLabel*, CurHyperLabel, void)
+IMPL_LINK(ORoadmap, ImplClickHdl, HyperLabel*, CurHyperLabel, void)
 {
    SelectRoadmapItemByID( CurHyperLabel->GetID() );
 }

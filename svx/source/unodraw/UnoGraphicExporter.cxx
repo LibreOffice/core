@@ -160,7 +160,7 @@ namespace {
 
         VclPtr<VirtualDevice> CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const;
 
-        DECL_LINK_TYPED( CalcFieldValueHdl, EditFieldInfo*, void );
+        DECL_LINK( CalcFieldValueHdl, EditFieldInfo*, void );
 
         void ParseSettings( const Sequence< PropertyValue >& aDescriptor, ExportSettings& rSettings );
         bool GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, bool bVectorType );
@@ -337,7 +337,7 @@ GraphicExporter::~GraphicExporter()
 {
 }
 
-IMPL_LINK_TYPED(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
+IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 {
     if( pInfo )
     {

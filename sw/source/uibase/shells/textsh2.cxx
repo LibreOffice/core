@@ -230,7 +230,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     }
 }
 
-IMPL_LINK_TYPED( SwBaseShell, InsertDBTextHdl, void*, p, void )
+IMPL_LINK( SwBaseShell, InsertDBTextHdl, void*, p, void )
 {
     DBTextStruct_Impl* pDBStruct = static_cast<DBTextStruct_Impl*>(p);
     if( pDBStruct )

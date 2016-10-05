@@ -162,7 +162,7 @@ OUString AbstractTabDialog_Impl::GetText() const
     return pDlg->GetText();
 }
 
-IMPL_LINK_NOARG_TYPED(AbstractApplyTabDialog_Impl, ApplyHdl, Button*, void)
+IMPL_LINK_NOARG(AbstractApplyTabDialog_Impl, ApplyHdl, Button*, void)
 {
     if (pDlg->Apply())
         m_aHandler.Call(nullptr);
@@ -605,7 +605,7 @@ long AbstractMailMergeWizard_Impl::GetResult()
     return pDlg->GetResult();
 }
 
-IMPL_LINK_TYPED( AbstractMailMergeWizard_Impl, EndDialogHdl, Dialog&, rDialog, void )
+IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, Dialog&, rDialog, void )
 {
     OSL_ENSURE( &rDialog == pDlg, "wrong dialog passed to EndDialogHdl!" );
     (void) rDialog; // unused in non-debug

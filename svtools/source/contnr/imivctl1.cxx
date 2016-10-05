@@ -64,9 +64,9 @@ class IcnViewEdit_Impl : public MultiLineEdit
     bool            bGrabFocus;
 
     void            CallCallBackHdl_Impl();
-                    DECL_LINK_TYPED(Timeout_Impl, Idle *, void);
-                    DECL_LINK_TYPED( ReturnHdl_Impl, Accelerator&, void );
-                    DECL_LINK_TYPED( EscapeHdl_Impl, Accelerator&, void );
+                    DECL_LINK(Timeout_Impl, Idle *, void);
+                    DECL_LINK( ReturnHdl_Impl, Accelerator&, void );
+                    DECL_LINK( EscapeHdl_Impl, Accelerator&, void );
 
 public:
 
@@ -240,7 +240,7 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
     }
 }
 
-IMPL_LINK_TYPED( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar, void )
+IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar, void )
 {
     StopEntryEditing();
     // arrow up: delta=-1; arrow down: delta=+1
@@ -248,7 +248,7 @@ IMPL_LINK_TYPED( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar
     bEndScrollInvalidate = true;
 }
 
-IMPL_LINK_TYPED( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar, void )
+IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar, void )
 {
     StopEntryEditing();
     // arrow left: delta=-1; arrow right: delta=+1
@@ -2654,18 +2654,18 @@ void SvxIconChoiceCtrl_Impl::ClearSelectedRectList()
     aSelectedRectList.clear();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Idle *, void)
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Idle *, void)
 {
     aAutoArrangeIdle.Stop();
     Arrange( IsAutoArrange(), 0, 0 );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, Idle *, void)
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, Idle *, void)
 {
     aVisRectChangedIdle.Stop();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, Idle *, void)
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, Idle *, void)
 {
     aDocRectChangedIdle.Stop();
 }
@@ -2678,7 +2678,7 @@ bool SvxIconChoiceCtrl_Impl::IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Po
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Idle *, void)
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Idle *, void)
 {
     SvxIconChoiceCtrlEntry* pEntry = GetCurEntry();
     if( bEntryEditingEnabled && pEntry &&
@@ -2857,7 +2857,7 @@ bool SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos 
 }
 
 
-IMPL_LINK_TYPED(SvxIconChoiceCtrl_Impl, UserEventHdl, void*, nId, void )
+IMPL_LINK(SvxIconChoiceCtrl_Impl, UserEventHdl, void*, nId, void )
 {
     if( nId == EVENTID_ADJUST_SCROLLBARS )
     {
@@ -2923,7 +2923,7 @@ void SvxIconChoiceCtrl_Impl::EditEntry( SvxIconChoiceCtrlEntry* pEntry )
         LINK( this, SvxIconChoiceCtrl_Impl, TextEditEndedHdl ) );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, TextEditEndedHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, TextEditEndedHdl, LinkParamNone*, void)
 {
     DBG_ASSERT(pEdit,"TextEditEnded: pEdit not set");
     if( !pEdit )
@@ -3079,19 +3079,19 @@ void IcnViewEdit_Impl::CallCallBackHdl_Impl()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(IcnViewEdit_Impl, Timeout_Impl, Idle *, void)
+IMPL_LINK_NOARG(IcnViewEdit_Impl, Timeout_Impl, Idle *, void)
 {
     CallCallBackHdl_Impl();
 }
 
-IMPL_LINK_NOARG_TYPED( IcnViewEdit_Impl, ReturnHdl_Impl, Accelerator&, void )
+IMPL_LINK_NOARG( IcnViewEdit_Impl, ReturnHdl_Impl, Accelerator&, void )
 {
     bCanceled = false;
     bGrabFocus = true;
     CallCallBackHdl_Impl();
 }
 
-IMPL_LINK_NOARG_TYPED( IcnViewEdit_Impl, EscapeHdl_Impl, Accelerator&, void )
+IMPL_LINK_NOARG( IcnViewEdit_Impl, EscapeHdl_Impl, Accelerator&, void )
 {
     bCanceled = true;
     bGrabFocus = true;
@@ -3499,7 +3499,7 @@ void SvxIconChoiceCtrl_Impl::CallSelectHandler( SvxIconChoiceCtrlEntry* )
         aCallSelectHdlIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, CallSelectHdlHdl, Idle *, void)
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, CallSelectHdlHdl, Idle *, void)
 {
     pHdlEntry = nullptr;
     pView->ClickIcon();

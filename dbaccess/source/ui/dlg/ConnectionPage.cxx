@@ -287,7 +287,7 @@ namespace dbaui
 
         return bChangedSomething;
     }
-    IMPL_LINK_NOARG_TYPED(OConnectionTabPage, OnTestJavaClickHdl, Button*, void)
+    IMPL_LINK_NOARG(OConnectionTabPage, OnTestJavaClickHdl, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bSuccess = false;
@@ -320,7 +320,7 @@ namespace dbaui
         m_pTestConnection->Enable(bEnableTestConnection);
         return true;
     }
-    IMPL_LINK_TYPED(OConnectionTabPage, OnEditModified, Edit&, _rEdit, void)
+    IMPL_LINK(OConnectionTabPage, OnEditModified, Edit&, _rEdit, void)
     {
         if ( &_rEdit == m_pJavaDriver )
             m_pTestJavaDriver->Enable( !m_pJavaDriver->GetText().trim().isEmpty() );

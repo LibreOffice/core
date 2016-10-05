@@ -144,7 +144,7 @@ void TemplateSearchView::createContextMenu( const bool bIsDefault)
     Invalidate();
 }
 
-IMPL_LINK_TYPED(TemplateSearchView, ContextMenuSelectHdl, Menu*, pMenu, bool)
+IMPL_LINK(TemplateSearchView, ContextMenuSelectHdl, Menu*, pMenu, bool)
 {
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
 

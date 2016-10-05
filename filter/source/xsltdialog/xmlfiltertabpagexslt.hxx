@@ -40,7 +40,7 @@ public:
     void FillInfo( filter_info_impl* pInfo );
     void SetInfo(const filter_info_impl* pInfo);
 
-    DECL_LINK_TYPED( ClickBrowseHdl_Impl, Button *, void );
+    DECL_LINK( ClickBrowseHdl_Impl, Button *, void );
 
 
     VclPtr<Edit>            m_pEDDocType;

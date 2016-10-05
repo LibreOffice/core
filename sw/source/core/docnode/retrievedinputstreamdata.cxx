@@ -122,7 +122,7 @@ bool SwRetrievedInputStreamDataManager::PopData( const tDataKey nDataKey,
     #i73788#
     Note: This method has to be run in the main thread.
 */
-IMPL_LINK_TYPED( SwRetrievedInputStreamDataManager,
+IMPL_LINK( SwRetrievedInputStreamDataManager,
            LinkedInputStreamReady,
            void*, p, void )
 {

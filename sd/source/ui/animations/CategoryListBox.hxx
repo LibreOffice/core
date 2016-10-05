@@ -35,7 +35,7 @@ public:
 
     void                InsertCategory( const OUString& rStr );
 
-    DECL_LINK_TYPED(implDoubleClickHdl, ListBox&, void);
+    DECL_LINK(implDoubleClickHdl, ListBox&, void);
 
 private:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;

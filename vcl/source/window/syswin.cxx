@@ -1110,7 +1110,7 @@ void SystemWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
     VclContainer::setLayoutAllocation(rBox, aPos, aSize);
 }
 
-IMPL_LINK_NOARG_TYPED( SystemWindow, ImplHandleLayoutTimerHdl, Idle*, void )
+IMPL_LINK_NOARG( SystemWindow, ImplHandleLayoutTimerHdl, Idle*, void )
 {
     if (!isLayoutEnabled())
     {

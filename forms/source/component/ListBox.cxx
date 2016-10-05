@@ -1976,7 +1976,7 @@ namespace frm
     }
 
 
-    IMPL_LINK_NOARG_TYPED(OListBoxControl, OnTimeout, Idle*, void)
+    IMPL_LINK_NOARG(OListBoxControl, OnTimeout, Idle*, void)
     {
         m_aChangeListeners.notifyEach( &XChangeListener::changed, EventObject( *this ) );
     }

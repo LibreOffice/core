@@ -735,7 +735,7 @@ void SvtFileDialog::Init_Impl
     Resize();
 }
 
-IMPL_LINK_NOARG_TYPED( SvtFileDialog, NewFolderHdl_Impl, Button*, void)
+IMPL_LINK_NOARG( SvtFileDialog, NewFolderHdl_Impl, Button*, void)
 {
     _pFileView->EndInplaceEditing();
 
@@ -830,7 +830,7 @@ sal_uInt16 SvtFileDialog::adjustFilter( const OUString& _rFilter )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvtFileDialog, CancelHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvtFileDialog, CancelHdl_Impl, Button*, void)
 {
     if ( m_pCurrentAsyncAction.is() )
     {
@@ -844,11 +844,11 @@ IMPL_LINK_NOARG_TYPED(SvtFileDialog, CancelHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( SvtFileDialog, OpenClickHdl_Impl, Button*, pVoid, void )
+IMPL_LINK( SvtFileDialog, OpenClickHdl_Impl, Button*, pVoid, void )
 {
     OpenHdl_Impl(pVoid);
 }
-IMPL_LINK_TYPED( SvtFileDialog, OpenUrlHdl_Impl, SvtURLBox*, pVoid, void )
+IMPL_LINK( SvtFileDialog, OpenUrlHdl_Impl, SvtURLBox*, pVoid, void )
 {
     OpenHdl_Impl(pVoid);
 }
@@ -1153,7 +1153,7 @@ void SvtFileDialog::EnableAutocompletion( bool _bEnable )
 }
 
 
-IMPL_LINK_NOARG_TYPED( SvtFileDialog, FilterSelectHdl_Impl, ListBox&, void )
+IMPL_LINK_NOARG( SvtFileDialog, FilterSelectHdl_Impl, ListBox&, void )
 {
     OUString sSelectedFilterDisplayName;
     SvtFileDialogFilter_Impl* pSelectedFilter = _pImp->GetSelectedFilterEntry( sSelectedFilterDisplayName );
@@ -1225,33 +1225,33 @@ IMPL_LINK_NOARG_TYPED( SvtFileDialog, FilterSelectHdl_Impl, ListBox&, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*, void)
+IMPL_LINK_NOARG(SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*, void)
 {
     // filter the view again
     ExecuteFilter();
 }
 
-IMPL_LINK_NOARG_TYPED( SvtFileDialog, FileNameGetFocusHdl_Impl, Control&, void )
+IMPL_LINK_NOARG( SvtFileDialog, FileNameGetFocusHdl_Impl, Control&, void )
 {
     _pFileView->SetNoSelection();
     _pFileView->Update();
 }
 
 
-IMPL_LINK_NOARG_TYPED( SvtFileDialog, FileNameModifiedHdl_Impl, Edit&, void )
+IMPL_LINK_NOARG( SvtFileDialog, FileNameModifiedHdl_Impl, Edit&, void )
 {
     FileNameGetFocusHdl_Impl( *_pImp->_pEdFileName );
 }
 
 
-IMPL_LINK_NOARG_TYPED( SvtFileDialog, URLBoxModifiedHdl_Impl, SvtURLBox*, void )
+IMPL_LINK_NOARG( SvtFileDialog, URLBoxModifiedHdl_Impl, SvtURLBox*, void )
 {
     OUString aPath = _pImp->_pEdCurrentPath->GetURL();
     OpenURL_Impl(aPath);
 }
 
 
-IMPL_LINK_NOARG_TYPED( SvtFileDialog, ConnectToServerPressed_Hdl, Button*, void )
+IMPL_LINK_NOARG( SvtFileDialog, ConnectToServerPressed_Hdl, Button*, void )
 {
     _pFileView->EndInplaceEditing();
 
@@ -1274,7 +1274,7 @@ IMPL_LINK_NOARG_TYPED( SvtFileDialog, ConnectToServerPressed_Hdl, Button*, void 
 }
 
 
-IMPL_LINK_NOARG_TYPED ( SvtFileDialog, AddPlacePressed_Hdl, Button*, void )
+IMPL_LINK_NOARG ( SvtFileDialog, AddPlacePressed_Hdl, Button*, void )
 {
     // Maybe open the PlacesDialog would have been a better idea
     // there is an ux choice to make we did not make...
@@ -1286,7 +1286,7 @@ IMPL_LINK_NOARG_TYPED ( SvtFileDialog, AddPlacePressed_Hdl, Button*, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED ( SvtFileDialog, RemovePlacePressed_Hdl, Button*, void )
+IMPL_LINK_NOARG ( SvtFileDialog, RemovePlacePressed_Hdl, Button*, void )
 {
     _pImp->_pPlaces->RemoveSelectedPlace();
 }
@@ -1429,7 +1429,7 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
 }
 
 
-IMPL_LINK_TYPED( SvtFileDialog, SelectHdl_Impl, SvTreeListBox*, pBox, void )
+IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 {
     SvTreeListEntry* pEntry = pBox->FirstSelected();
     assert( pEntry && "SelectHandler without selected entry" );
@@ -1480,7 +1480,7 @@ IMPL_LINK_TYPED( SvtFileDialog, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvtFileDialog, DblClickHdl_Impl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(SvtFileDialog, DblClickHdl_Impl, SvTreeListBox*, bool)
 {
     _pImp->_bDoubleClick = true;
     OpenHdl_Impl( nullptr );
@@ -1490,13 +1490,13 @@ IMPL_LINK_NOARG_TYPED(SvtFileDialog, DblClickHdl_Impl, SvTreeListBox*, bool)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvtFileDialog, EntrySelectHdl_Impl, ComboBox&, void)
+IMPL_LINK_NOARG(SvtFileDialog, EntrySelectHdl_Impl, ComboBox&, void)
 {
     FileSelect();
 }
 
 
-IMPL_LINK_TYPED( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView, void )
+IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView, void )
 {
     OUString sCurrentFolder( pView->GetViewURL() );
     // check if we can create new folders
@@ -1517,7 +1517,7 @@ IMPL_LINK_TYPED( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvtFileDialog, AutoExtensionHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvtFileDialog, AutoExtensionHdl_Impl, Button*, void)
 {
     if ( _pFileNotifier )
         _pFileNotifier->notify( CTRL_STATE_CHANGED,
@@ -1528,7 +1528,7 @@ IMPL_LINK_NOARG_TYPED(SvtFileDialog, AutoExtensionHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( SvtFileDialog, ClickHdl_Impl, Button*, pCheckBox, void )
+IMPL_LINK( SvtFileDialog, ClickHdl_Impl, Button*, pCheckBox, void )
 {
     if ( ! _pFileNotifier )
         return;
@@ -1553,7 +1553,7 @@ IMPL_LINK_TYPED( SvtFileDialog, ClickHdl_Impl, Button*, pCheckBox, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvtFileDialog, PlayButtonHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvtFileDialog, PlayButtonHdl_Impl, Button*, void)
 {
     if ( _pFileNotifier )
         _pFileNotifier->notify( CTRL_STATE_CHANGED,
@@ -2726,7 +2726,7 @@ void SvtFileDialog::initDefaultPlaces( )
     _pImp->_pPlaces->IsUpdated();
 }
 
-IMPL_LINK_NOARG_TYPED( SvtFileDialog, Split_Hdl, Splitter*, void )
+IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl, Splitter*, void )
 {
     sal_Int32 nSplitPos = _pSplitter->GetSplitPosPixel();
 
@@ -2776,7 +2776,7 @@ void QueryFolderNameDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(QueryFolderNameDialog, OKHdl, Button*, void)
+IMPL_LINK_NOARG(QueryFolderNameDialog, OKHdl, Button*, void)
 {
     // trim the strings
     m_pNameEdit->SetText(comphelper::string::strip(m_pNameEdit->GetText(), ' '));
@@ -2784,7 +2784,7 @@ IMPL_LINK_NOARG_TYPED(QueryFolderNameDialog, OKHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(QueryFolderNameDialog, NameHdl, Edit&, void)
+IMPL_LINK_NOARG(QueryFolderNameDialog, NameHdl, Edit&, void)
 {
     // trim the strings
     OUString aName = comphelper::string::strip(m_pNameEdit->GetText(), ' ');

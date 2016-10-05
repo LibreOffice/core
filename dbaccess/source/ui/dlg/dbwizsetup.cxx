@@ -274,7 +274,7 @@ void ODbTypeWizDialogSetup::dispose()
     svt::RoadmapWizard::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage&, void)
+IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage&, void)
 {
     activateDatabasePath();
 }
@@ -571,7 +571,7 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
     return pPage;
 }
 
-IMPL_LINK_TYPED(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage const *, _pConnectionPageSetup, void)
+IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage const *, _pConnectionPageSetup, void)
 {
     m_bIsConnectable = _pConnectionPageSetup->GetRoadmapStateValue( );
     enableState(PAGE_DBSETUPWIZARD_FINAL, m_bIsConnectable);
@@ -583,7 +583,7 @@ IMPL_LINK_TYPED(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPa
     enableButtons( WizardButtonFlags::NEXT, m_bIsConnectable  && (getCurrentState() != PAGE_DBSETUPWIZARD_FINAL));
 }
 
-IMPL_LINK_TYPED(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLIntroPageSetup, void)
+IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLIntroPageSetup, void)
 {
     OUString sURLPrefix;
     switch( _pMySQLIntroPageSetup->getMySQLMode() )
@@ -601,17 +601,17 @@ IMPL_LINK_TYPED(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMy
     activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), true);
 }
 
-IMPL_LINK_NOARG_TYPED(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard&, void)
+IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard&, void)
 {
     activateDatabasePath();
 }
 
-IMPL_LINK_NOARG_TYPED(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWizard&, void)
+IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWizard&, void)
 {
     enableButtons( WizardButtonFlags::FINISH, !m_pGeneralPage->GetSelectedDocument().sURL.isEmpty() );
 }
 
-IMPL_LINK_NOARG_TYPED(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPageWizard&, void)
+IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPageWizard&, void)
 {
     if ( prepareLeaveCurrentState( eFinish ) )
         onFinish();
@@ -892,7 +892,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
         private:
-            DECL_LINK_TYPED( OnOpenDocument, void*, void );
+            DECL_LINK( OnOpenDocument, void*, void );
         };
 
         AsyncLoader::AsyncLoader( const Reference< XComponentContext >& _rxORB, const OUString& _rURL )
@@ -926,7 +926,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             m_aAsyncCaller.Call();
         }
 
-        IMPL_LINK_NOARG_TYPED( AsyncLoader, OnOpenDocument, void*, void )
+        IMPL_LINK_NOARG( AsyncLoader, OnOpenDocument, void*, void )
         {
             try
             {

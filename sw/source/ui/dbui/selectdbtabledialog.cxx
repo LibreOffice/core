@@ -156,7 +156,7 @@ void SwSelectDBTableDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED(SwSelectDBTableDialog, PreviewHdl, Button*, pButton, void)
+IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, Button*, pButton, void)
 {
     SvTreeListEntry* pEntry = m_pTable->FirstSelected();
     if(pEntry)

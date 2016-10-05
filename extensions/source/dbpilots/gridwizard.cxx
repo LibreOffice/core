@@ -391,7 +391,7 @@ namespace dbp
     }
 
 
-    IMPL_LINK_TYPED(OGridFieldsSelection, OnEntryDoubleClicked, ListBox&, _rList, void)
+    IMPL_LINK(OGridFieldsSelection, OnEntryDoubleClicked, ListBox&, _rList, void)
     {
         PushButton* pSimulateButton = m_pExistFields == &_rList ? m_pSelectOne : m_pDeselectOne;
         if (pSimulateButton->IsEnabled())
@@ -401,13 +401,13 @@ namespace dbp
     }
 
 
-    IMPL_LINK_NOARG_TYPED(OGridFieldsSelection, OnEntrySelected, ListBox&, void)
+    IMPL_LINK_NOARG(OGridFieldsSelection, OnEntrySelected, ListBox&, void)
     {
         implCheckButtons();
     }
 
 
-    IMPL_LINK_TYPED(OGridFieldsSelection, OnMoveOneEntry, Button*, _pButton, void)
+    IMPL_LINK(OGridFieldsSelection, OnMoveOneEntry, Button*, _pButton, void)
     {
         bool bMoveRight = (m_pSelectOne == _pButton);
         ListBox& rMoveTo = bMoveRight ? *m_pSelFields : *m_pExistFields;
@@ -461,7 +461,7 @@ namespace dbp
     }
 
 
-    IMPL_LINK_TYPED(OGridFieldsSelection, OnMoveAllEntries, Button*, _pButton, void)
+    IMPL_LINK(OGridFieldsSelection, OnMoveAllEntries, Button*, _pButton, void)
     {
         bool bMoveRight = (m_pSelectAll == _pButton);
         m_pExistFields->Clear();

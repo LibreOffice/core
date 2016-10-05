@@ -211,7 +211,7 @@ private:
     */
     VclPtr<vcl::Window> mpCloseIndicator;
 
-    DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
+    DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
     /** Make maRequestedContext the current context.
     */
     void UpdateConfigurations();
@@ -241,7 +241,7 @@ private:
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
     VclPtr<PopupMenu> CreatePopupMenu (
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
-    DECL_LINK_TYPED(OnMenuItemSelected, Menu*, bool);
+    DECL_LINK(OnMenuItemSelected, Menu*, bool);
     void BroadcastPropertyChange();
 
     /** The close of the deck changes the width of the child window.

@@ -2108,7 +2108,7 @@ bool SvxConfigPage::FillItemSet( SfxItemSet* )
     return result;
 }
 
-IMPL_LINK_NOARG_TYPED( SvxConfigPage, SelectSaveInLocation, ListBox&, void )
+IMPL_LINK_NOARG( SvxConfigPage, SelectSaveInLocation, ListBox&, void )
 {
     pCurrentSaveInData = static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData(
             m_pSaveInListBox->GetSelectEntryPos()));
@@ -2344,7 +2344,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
     return pNewEntry;
 }
 
-IMPL_LINK_NOARG_TYPED( SvxConfigPage, AsyncInfoMsg, void*, void )
+IMPL_LINK_NOARG( SvxConfigPage, AsyncInfoMsg, void*, void )
 {
     // Asynchronous msg because of D&D
     ScopedVclPtrInstance<MessageDialog>(this,
@@ -2352,7 +2352,7 @@ IMPL_LINK_NOARG_TYPED( SvxConfigPage, AsyncInfoMsg, void*, void )
         VclMessageType::Info)->Execute();
 }
 
-IMPL_LINK_TYPED( SvxConfigPage, MoveHdl, Button *, pButton, void )
+IMPL_LINK( SvxConfigPage, MoveHdl, Button *, pButton, void )
 {
     MoveEntry(pButton == m_pMoveUpButton);
 }
@@ -2516,7 +2516,7 @@ void SvxMenuConfigPage::dispose()
     SvxConfigPage::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, SelectMenuEntry, SvTreeListBox *, void )
+IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenuEntry, SvTreeListBox *, void )
 {
     UpdateButtonStates();
 }
@@ -2633,7 +2633,7 @@ short SvxMenuConfigPage::QueryReset()
     return qbox->Execute();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, SelectMenu, ListBox&, void )
+IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
 {
     m_pContentsListBox->Clear();
 
@@ -2663,7 +2663,7 @@ IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, SelectMenu, ListBox&, void )
     UpdateButtonStates();
 }
 
-IMPL_LINK_TYPED( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
+IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
 {
     OString sIdent = pButton->GetCurItemIdent();
 
@@ -2710,7 +2710,7 @@ IMPL_LINK_TYPED( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
     }
 }
 
-IMPL_LINK_TYPED( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
+IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
 {
     OString sIdent = pButton->GetCurItemIdent();
     if (sIdent == "addsubmenu")
@@ -2769,12 +2769,12 @@ IMPL_LINK_TYPED( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void 
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
+IMPL_LINK_NOARG( SvxMenuConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
 {
     AddFunction();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, NewMenuHdl, Button *, void )
+IMPL_LINK_NOARG( SvxMenuConfigPage, NewMenuHdl, Button *, void )
 {
     VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog(
         nullptr, GetSaveInData()->GetEntries(), nullptr, true );
@@ -2787,7 +2787,7 @@ IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, NewMenuHdl, Button *, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, AddCommandsHdl, Button *, void )
+IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandsHdl, Button *, void )
 {
     if ( m_pSelectorDlg == nullptr )
     {
@@ -2809,7 +2809,7 @@ IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, AddCommandsHdl, Button *, void )
     m_pSelectorDlg->Execute();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, AddSeparatorHdl, Button *, void )
+IMPL_LINK_NOARG( SvxMenuConfigPage, AddSeparatorHdl, Button *, void )
 {
     SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
     pNewEntryData->SetUserDefined();
@@ -2821,7 +2821,7 @@ IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, AddSeparatorHdl, Button *, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, DeleteCommandHdl, Button *, void )
+IMPL_LINK_NOARG( SvxMenuConfigPage, DeleteCommandHdl, Button *, void )
 {
     DeleteSelectedContent();
     if ( GetSaveInData()->IsModified() )
@@ -2938,7 +2938,7 @@ void SvxMainMenuOrganizerDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxMainMenuOrganizerDialog, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxMainMenuOrganizerDialog, ModifyHdl, Edit&, void)
 {
     // if the Edit control is empty do not change the name
     if (m_pMenuNameEdit->GetText().isEmpty())
@@ -2954,7 +2954,7 @@ IMPL_LINK_NOARG_TYPED(SvxMainMenuOrganizerDialog, ModifyHdl, Edit&, void)
     m_pMenuListBox->SetEntryText( pNewMenuEntry, pNewEntryData->GetName() );
 }
 
-IMPL_LINK_NOARG_TYPED( SvxMainMenuOrganizerDialog, SelectHdl, SvTreeListBox*, void )
+IMPL_LINK_NOARG( SvxMainMenuOrganizerDialog, SelectHdl, SvTreeListBox*, void )
 {
     UpdateButtonStates();
 }
@@ -2970,7 +2970,7 @@ void SvxMainMenuOrganizerDialog::UpdateButtonStates()
     m_pMoveDownButton->Enable( selection != last );
 }
 
-IMPL_LINK_TYPED( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton, void )
+IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton, void )
 {
     SvTreeListEntry *pSourceEntry = m_pMenuListBox->FirstSelected();
     SvTreeListEntry *pTargetEntry = nullptr;
@@ -3305,7 +3305,7 @@ void SvxToolbarConfigPage::DeleteSelectedContent()
     }
 }
 
-IMPL_LINK_TYPED( SvxToolbarConfigPage, MoveHdl, Button *, pButton, void )
+IMPL_LINK( SvxToolbarConfigPage, MoveHdl, Button *, pButton, void )
 {
     MoveEntry(pButton == m_pMoveUpButton);
 }
@@ -3325,7 +3325,7 @@ void SvxToolbarConfigPage::MoveEntry( bool bMoveUp )
     }
 }
 
-IMPL_LINK_TYPED( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, void )
+IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, void )
 {
     sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
 
@@ -3370,7 +3370,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, 
     }
 }
 
-IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
+IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
 {
     bool bNeedsApply = false;
 
@@ -4453,7 +4453,7 @@ void ToolbarSaveInData::LoadToolbar(
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbarEntry, SvTreeListBox *, void )
+IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbarEntry, SvTreeListBox *, void )
 {
     UpdateButtonStates();
 }
@@ -4514,7 +4514,7 @@ short SvxToolbarConfigPage::QueryReset()
     return qbox->Execute();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
+IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
 {
     m_pContentsListBox->Clear();
 
@@ -4594,7 +4594,7 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     UpdateButtonStates();
 }
 
-IMPL_LINK_TYPED( SvxToolbarConfigPage, StyleChangeHdl, Button*, pButton, void )
+IMPL_LINK( SvxToolbarConfigPage, StyleChangeHdl, Button*, pButton, void )
 {
     sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
 
@@ -4626,7 +4626,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, StyleChangeHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, NewToolbarHdl, Button *, void )
+IMPL_LINK_NOARG( SvxToolbarConfigPage, NewToolbarHdl, Button *, void )
 {
     OUString prefix = CUI_RES( RID_SVXSTR_NEW_TOOLBAR );
 
@@ -4684,7 +4684,7 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, NewToolbarHdl, Button *, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
+IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
 {
     if ( m_pSelectorDlg == nullptr )
     {
@@ -4704,7 +4704,7 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
     m_pSelectorDlg->Execute();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddSeparatorHdl, Button *, void )
+IMPL_LINK_NOARG( SvxToolbarConfigPage, AddSeparatorHdl, Button *, void )
 {
     // get currently selected toolbar
     SvxConfigEntry* pToolbar = GetTopLevelSelection();
@@ -4722,12 +4722,12 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddSeparatorHdl, Button *, void )
     UpdateButtonStates();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, DeleteCommandHdl, Button *, void )
+IMPL_LINK_NOARG( SvxToolbarConfigPage, DeleteCommandHdl, Button *, void )
 {
     DeleteSelectedContent();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, ResetTopLevelHdl, Button *, void )
+IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetTopLevelHdl, Button *, void )
 {
     sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
 
@@ -4748,7 +4748,7 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, ResetTopLevelHdl, Button *, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
+IMPL_LINK_NOARG( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
 {
     AddFunction();
 }
@@ -5231,7 +5231,7 @@ uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
     return result;
 }
 
-IMPL_LINK_TYPED( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox, void )
+IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox, void )
 {
     (void)pToolBox;
 
@@ -5261,7 +5261,7 @@ IMPL_LINK_TYPED( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxIconSelectorDialog, ImportHdl, Button *, void)
+IMPL_LINK_NOARG( SvxIconSelectorDialog, ImportHdl, Button *, void)
 {
     sfx2::FileDialogHelper aImportDialog(
         css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
@@ -5287,7 +5287,7 @@ IMPL_LINK_NOARG_TYPED( SvxIconSelectorDialog, ImportHdl, Button *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxIconSelectorDialog, DeleteHdl, Button *, void )
+IMPL_LINK_NOARG( SvxIconSelectorDialog, DeleteHdl, Button *, void )
 {
     OUString message = CUI_RES( RID_SVXSTR_DELETE_ICON_CONFIRM );
     if (ScopedVclPtrInstance<WarningBox>(this, WinBits(WB_OK_CANCEL), message)->Execute() == RET_OK)

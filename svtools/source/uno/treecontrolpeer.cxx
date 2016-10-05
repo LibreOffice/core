@@ -94,9 +94,9 @@ public:
     virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& ) override;
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) override;
 
-    DECL_LINK_TYPED(OnSelectionChangeHdl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(OnExpandingHdl, SvTreeListBox*, bool);
-    DECL_LINK_TYPED(OnExpandedHdl, SvTreeListBox*, void);
+    DECL_LINK(OnSelectionChangeHdl, SvTreeListBox*, void);
+    DECL_LINK(OnExpandingHdl, SvTreeListBox*, bool);
+    DECL_LINK(OnExpandedHdl, SvTreeListBox*, void);
 
 private:
     rtl::Reference< TreeControlPeer > mxPeer;
@@ -1429,14 +1429,14 @@ void UnoTreeListBoxImpl::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(UnoTreeListBoxImpl, OnSelectionChangeHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnSelectionChangeHdl, SvTreeListBox*, void)
 {
     if( mxPeer.is() )
         mxPeer->onSelectionChanged();
 }
 
 
-IMPL_LINK_NOARG_TYPED(UnoTreeListBoxImpl, OnExpandingHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandingHdl, SvTreeListBox*, bool)
 {
     UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( GetHdlEntry() );
 
@@ -1448,7 +1448,7 @@ IMPL_LINK_NOARG_TYPED(UnoTreeListBoxImpl, OnExpandingHdl, SvTreeListBox*, bool)
 }
 
 
-IMPL_LINK_NOARG_TYPED(UnoTreeListBoxImpl, OnExpandedHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandedHdl, SvTreeListBox*, void)
 {
     UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( GetHdlEntry() );
     if( pEntry && mxPeer.is() )

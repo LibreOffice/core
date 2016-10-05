@@ -561,13 +561,13 @@ bool SvxHlinkDlgMarkWnd::SelectEntry(const OUString& aStrMark)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl, SvTreeListBox*, bool)
 {
     ClickApplyHdl_Impl(nullptr);
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = mpLbTree->GetCurEntry();
 
@@ -588,7 +588,7 @@ IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, Button*, void)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = mpLbTree->GetCurEntry();
     if ( pEntry )

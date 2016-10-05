@@ -150,26 +150,26 @@ private:
     bool mbEnableDrawingLayerFillStyles : 1;
 
     void                Init_Impl();
-    DECL_LINK_TYPED(    LayoutHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED(    PaperBinHdl_Impl, Control&, void);
-    DECL_LINK_TYPED(    SwapOrientation_Impl, Button*, void );
+    DECL_LINK(    LayoutHdl_Impl, ListBox&, void);
+    DECL_LINK(    PaperBinHdl_Impl, Control&, void);
+    DECL_LINK(    SwapOrientation_Impl, Button*, void );
     void                SwapFirstValues_Impl( bool bSet );
-    DECL_LINK_TYPED(    BorderModify_Impl, Edit&, void);
+    DECL_LINK(    BorderModify_Impl, Edit&, void);
     void                InitHeadFoot_Impl( const SfxItemSet& rSet );
-    DECL_LINK_TYPED(    CenterHdl_Impl, Button*, void);
+    DECL_LINK(    CenterHdl_Impl, Button*, void);
     void                UpdateExample_Impl( bool bResetbackground = false );
 
-    DECL_LINK_TYPED(    PaperSizeSelect_Impl, ListBox&, void );
-    DECL_LINK_TYPED(    PaperSizeModify_Impl, Edit&, void);
+    DECL_LINK(    PaperSizeSelect_Impl, ListBox&, void );
+    DECL_LINK(    PaperSizeModify_Impl, Edit&, void);
 
-    DECL_LINK_TYPED(    FrameDirectionModify_Impl, ListBox&, void );
+    DECL_LINK(    FrameDirectionModify_Impl, ListBox&, void );
 
     void                ResetBackground_Impl( const SfxItemSet& rSet );
 
-    DECL_LINK_TYPED(    RangeHdl_Impl, Control&, void );
+    DECL_LINK(    RangeHdl_Impl, Control&, void );
     void                CalcMargin_Impl();
 
-    DECL_LINK_TYPED(    RegisterModify, Button*, void );
+    DECL_LINK(    RegisterModify, Button*, void );
 
     // page direction
     /** Disables vertical page direction entries in the text flow listbox. */

@@ -255,13 +255,13 @@ void ScMoveTableDlg::InitDocListBox()
 
 // Handler:
 
-IMPL_LINK_TYPED( ScMoveTableDlg, CheckBtnHdl, RadioButton&, rBtn, void )
+IMPL_LINK( ScMoveTableDlg, CheckBtnHdl, RadioButton&, rBtn, void )
 {
     if (&rBtn == pBtnCopy)
         ResetRenameInput();
 }
 
-IMPL_LINK_NOARG_TYPED(ScMoveTableDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl, Button*, void)
 {
     const sal_Int32 nDocSel  = pLbDoc->GetSelectEntryPos();
     const sal_Int32 nDocLast = pLbDoc->GetEntryCount()-1;
@@ -294,7 +294,7 @@ IMPL_LINK_NOARG_TYPED(ScMoveTableDlg, OkHdl, Button*, void)
     EndDialog( RET_OK );
 }
 
-IMPL_LINK_TYPED( ScMoveTableDlg, SelHdl, ListBox&, rLb, void )
+IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox&, rLb, void )
 {
     if ( &rLb == pLbDoc )
     {
@@ -319,7 +319,7 @@ IMPL_LINK_TYPED( ScMoveTableDlg, SelHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK_TYPED( ScMoveTableDlg, CheckNameHdl, Edit&, rEdt, void )
+IMPL_LINK( ScMoveTableDlg, CheckNameHdl, Edit&, rEdt, void )
 {
     if ( &rEdt == pEdTabName )
     {

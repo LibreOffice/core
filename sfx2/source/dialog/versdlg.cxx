@@ -374,13 +374,13 @@ void SfxVersionDialog::Open_Impl()
     Close();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxVersionDialog, DClickHdl_Impl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(SfxVersionDialog, DClickHdl_Impl, SvTreeListBox*, bool)
 {
     Open_Impl();
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(SfxVersionDialog, SelectHdl_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SfxVersionDialog, SelectHdl_Impl, SvTreeListBox*, void)
 {
     bool bEnable = ( m_pVersionBox->FirstSelected() != nullptr );
     SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
@@ -394,7 +394,7 @@ IMPL_LINK_NOARG_TYPED(SfxVersionDialog, SelectHdl_Impl, SvTreeListBox*, void)
     m_pCompareButton->Enable(bEnable && eState >= SfxItemState::DEFAULT);
 }
 
-IMPL_LINK_TYPED( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton, void )
+IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton, void )
 {
     SfxObjectShell *pObjShell = pViewFrame->GetObjectShell();
     SvTreeListEntry *pEntry = m_pVersionBox->FirstSelected();
@@ -520,7 +520,7 @@ void SfxViewVersionDialog_Impl::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED(SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton, void)
+IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton, void)
 {
     assert(pButton == m_pOKButton);
     (void)pButton;

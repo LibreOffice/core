@@ -79,7 +79,7 @@ private:
     bool                    bUseCache : 1;  // for Graphics Links!
     bool                    bWasLastEditOK : 1;
 
-    DECL_LINK_TYPED( EndEditHdl, const OUString&, void );
+    DECL_LINK( EndEditHdl, const OUString&, void );
 
     bool                    ExecuteEdit( const OUString& _rNewName );
 

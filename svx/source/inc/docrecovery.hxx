@@ -394,7 +394,7 @@ class SaveDialog : public Dialog
         virtual ~SaveDialog() override;
         virtual void dispose() override;
 
-        DECL_LINK_TYPED(OKButtonHdl, Button*, void);
+        DECL_LINK(OKButtonHdl, Button*, void);
 };
 
 class SaveProgressDialog : public ModalDialog
@@ -538,8 +538,8 @@ class RecoveryDialog : public Dialog
     // helper
     private:
         /** @short TODO */
-        DECL_LINK_TYPED(NextButtonHdl, Button*, void);
-        DECL_LINK_TYPED(CancelButtonHdl, Button*, void);
+        DECL_LINK(NextButtonHdl, Button*, void);
+        DECL_LINK(CancelButtonHdl, Button*, void);
 
 
         /** @short TODO */
@@ -593,15 +593,15 @@ class BrokenRecoveryDialog : public ModalDialog
 
 
         /** @short TODO */
-        DECL_LINK_TYPED(SaveButtonHdl, Button*, void);
+        DECL_LINK(SaveButtonHdl, Button*, void);
 
 
         /** @short TODO */
-        DECL_LINK_TYPED(OkButtonHdl, Button*, void);
+        DECL_LINK(OkButtonHdl, Button*, void);
 
 
         /** @short TODO */
-        DECL_LINK_TYPED(CancelButtonHdl, Button*, void);
+        DECL_LINK(CancelButtonHdl, Button*, void);
 
 
         /** @short TODO */

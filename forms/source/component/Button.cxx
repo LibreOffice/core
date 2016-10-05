@@ -424,7 +424,7 @@ void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( css:
 }
 
 
-IMPL_LINK_NOARG_TYPED(OButtonControl, OnClick, void*, void)
+IMPL_LINK_NOARG(OButtonControl, OnClick, void*, void)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     m_nClickEvent = nullptr;

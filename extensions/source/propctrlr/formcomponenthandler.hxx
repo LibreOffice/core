@@ -430,7 +430,7 @@ namespace pcr
         OUString impl_getDocumentURL_nothrow() const;
 
     private:
-        DECL_LINK_TYPED( OnDesignerClosed, SQLCommandDesigner&, void );
+        DECL_LINK( OnDesignerClosed, SQLCommandDesigner&, void );
 
     private:
         FormComponentPropertyHandler( const FormComponentPropertyHandler& ) = delete;

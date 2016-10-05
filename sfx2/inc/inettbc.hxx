@@ -34,8 +34,8 @@ private:
     SvtURLBox*              GetURLBox() const;
     void                    OpenURL( const OUString& rName, bool bNew ) const;
 
-    DECL_LINK_TYPED(        OpenHdl, SvtURLBox*, void );
-    DECL_LINK_TYPED(        SelectHdl, ComboBox&, void );
+    DECL_LINK(        OpenHdl, SvtURLBox*, void );
+    DECL_LINK(        SelectHdl, ComboBox&, void );
 
     struct ExecuteInfo
     {
@@ -44,7 +44,7 @@ private:
         css::uno::Sequence< css::beans::PropertyValue >  aArgs;
     };
 
-    DECL_STATIC_LINK_TYPED( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, void*, void );
+    DECL_STATIC_LINK( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, void*, void );
 
 public:
 

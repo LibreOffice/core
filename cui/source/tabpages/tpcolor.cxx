@@ -341,7 +341,7 @@ VclPtr<SfxTabPage> SvxColorTabPage::Create( vcl::Window* pWindow,
 }
 
 // is called when the content of the MtrFields is changed for color values
-IMPL_LINK_TYPED(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
+IMPL_LINK(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
 {
     if (eCM == ColorModel::RGB)
     {
@@ -374,7 +374,7 @@ IMPL_LINK_TYPED(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
 {
     OUString aNewName( SVX_RES( RID_SVXSTR_COLOR ) );
     OUString aDesc( CUI_RES( RID_SVXSTR_DESC_COLOR ) );
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
     UpdateModified();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
 {
     std::unique_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParentDialog() ));
 
@@ -465,7 +465,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_uInt16 nId = m_pValSetColorList->GetSelectItemId();
     size_t nPos = m_pValSetColorList->GetSelectItemPos();
@@ -497,7 +497,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectPaletteLBHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, ListBox&, void)
 {
     m_pValSetColorList->Clear();
     sal_Int32 nPos = m_pSelectPalette->GetSelectEntryPos();
@@ -531,7 +531,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectPaletteLBHdl, ListBox&, void)
     m_pValSetColorList->Resize();
 }
 
-IMPL_LINK_TYPED(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
+IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
 {
     sal_Int32 nPos = pValSet->GetSelectItemId();
     if( nPos != 0 )
@@ -579,7 +579,7 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
         break;
     }
 }
-IMPL_LINK_TYPED(SvxColorTabPage, SelectColorModeHdl_Impl, RadioButton&, rRadioButton, void)
+IMPL_LINK(SvxColorTabPage, SelectColorModeHdl_Impl, RadioButton&, rRadioButton, void)
 {
     if( &rRadioButton == m_pRbRGB )
         eCM = ColorModel::RGB;

@@ -38,7 +38,7 @@ private:
     VclPtr<chart::ChartWindow> mxChartWindow;
     std::vector<std::unique_ptr<OUString>> maCommands;
 
-    DECL_LINK_TYPED(PostCommand, void*, void);
+    DECL_LINK(PostCommand, void*, void);
 };
 
 class ChartWindowUIObject : public WindowUIObject

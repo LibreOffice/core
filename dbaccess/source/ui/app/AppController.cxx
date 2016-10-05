@@ -1879,14 +1879,14 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     return xRet;
 }
 
-IMPL_LINK_TYPED( OApplicationController, OnSelectContainer, void*, _pType, void )
+IMPL_LINK( OApplicationController, OnSelectContainer, void*, _pType, void )
 {
     ElementType eType = (ElementType)reinterpret_cast< sal_IntPtr >( _pType );
     if (getContainer())
         getContainer()->selectContainer(eType);
 }
 
-IMPL_LINK_TYPED( OApplicationController, OnCreateWithPilot, void*, _pType, void )
+IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType, void )
 {
     ElementType eType = (ElementType)reinterpret_cast< sal_IntPtr >( _pType );
     newElementWithPilot( eType );
@@ -2233,7 +2233,7 @@ void OApplicationController::showPreviewFor(const ElementType _eType,const OUStr
     }
 }
 
-IMPL_LINK_NOARG_TYPED(OApplicationController, OnClipboardChanged, TransferableDataHelper*, void)
+IMPL_LINK_NOARG(OApplicationController, OnClipboardChanged, TransferableDataHelper*, void)
 {
     OnInvalidateClipboard();
 }

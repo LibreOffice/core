@@ -113,7 +113,7 @@ void CellLineStyleControl::SetAllNoSel()
     maCellLineStyleValueSet->StartSelection();
 }
 
-IMPL_LINK_TYPED(CellLineStyleControl, VSSelectHdl, ValueSet*, pControl, void)
+IMPL_LINK(CellLineStyleControl, VSSelectHdl, ValueSet*, pControl, void)
 {
     if(pControl == maCellLineStyleValueSet.get())
     {
@@ -185,7 +185,7 @@ IMPL_LINK_TYPED(CellLineStyleControl, VSSelectHdl, ValueSet*, pControl, void)
     }
 }
 
-IMPL_LINK_TYPED(CellLineStyleControl, PBClickHdl, Button *, pPBtn, void)
+IMPL_LINK(CellLineStyleControl, PBClickHdl, Button *, pPBtn, void)
 {
     if (pPBtn == maPushButtonMoreOptions.get())
     {

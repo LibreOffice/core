@@ -194,7 +194,7 @@ public:
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    DECL_LINK_TYPED( ToolBoxDropdownClickHdl, ToolBox*, void );
+    DECL_LINK( ToolBoxDropdownClickHdl, ToolBox*, void );
 
 protected:
     virtual void    Select() override;
@@ -257,7 +257,7 @@ private:
 
     ScNavigatorControllerItem** ppBoundItems;
 
-    DECL_LINK_TYPED( TimeHdl, Idle*, void );
+    DECL_LINK( TimeHdl, Idle*, void );
 
     void    DoResize();
 

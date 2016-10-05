@@ -102,7 +102,7 @@ private:
     Link<FloatingWindow*,void> maPopupModeEndHdl;
 
     SAL_DLLPRIVATE void    ImplCallPopupModeEnd();
-    DECL_DLLPRIVATE_LINK_TYPED(  ImplEndPopupModeHdl, void*, void );
+    DECL_DLLPRIVATE_LINK(  ImplEndPopupModeHdl, void*, void );
     virtual void setPosSizeOnContainee(Size aSize, Window &rBox) override;
 
                            FloatingWindow (const FloatingWindow &) = delete;

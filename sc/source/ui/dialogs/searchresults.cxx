@@ -126,7 +126,7 @@ bool SearchResultsDlg::Close()
     return ModelessDialog::Close();
 }
 
-IMPL_LINK_NOARG_TYPED( SearchResultsDlg, ListSelectHdl, SvTreeListBox*, void )
+IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl, SvTreeListBox*, void )
 {
     if (!mpDoc)
         return;

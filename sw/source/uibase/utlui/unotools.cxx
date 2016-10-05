@@ -194,7 +194,7 @@ static void disableScrollBars(uno::Reference< beans::XPropertySet > const & xVie
     }
 }
 
-IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
+IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
 {
     if(!_xControl.is())
         return;
@@ -484,7 +484,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
     aPop->Execute( aTopWindow.get(), rPt );
 }
 
-IMPL_LINK_TYPED(SwOneExampleFrame, PopupHdl, Menu*, pMenu, bool )
+IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu, bool )
 {
     sal_uInt16 nId = pMenu->GetCurItemId();
     if ((nId > ITEM_ZOOM) &&

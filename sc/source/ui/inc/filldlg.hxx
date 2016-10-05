@@ -101,8 +101,8 @@ private:
     bool CheckIncrementVal();
     bool CheckEndVal();
 
-    DECL_LINK_TYPED( OKHdl, Button*, void );
-    DECL_LINK_TYPED( DisableHdl, Button*, void );
+    DECL_LINK( OKHdl, Button*, void );
+    DECL_LINK( DisableHdl, Button*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FILLDLG_HXX

@@ -133,10 +133,10 @@ private:
     void                Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp );
     bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
 
-    DECL_LINK_TYPED( UpdateHdl_Impl, Idle *, void );
-    DECL_LINK_TYPED( FontModifyEditHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( FontModifyListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( FontModifyComboBoxHdl_Impl, ComboBox&, void );
+    DECL_LINK( UpdateHdl_Impl, Idle *, void );
+    DECL_LINK( FontModifyEditHdl_Impl, Edit&, void );
+    DECL_LINK( FontModifyListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK( FontModifyComboBoxHdl_Impl, ComboBox&, void );
     void FontModifyHdl_Impl(void*);
 
 public:
@@ -222,11 +222,11 @@ private:
     bool                FillItemSetColor_Impl( SfxItemSet& rSet );
 
     void SelectHdl_Impl(ListBox*);
-    DECL_LINK_TYPED(SelectListBoxHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED(CbClickHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(TristClickHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(UpdatePreview_Impl, ListBox&, void);
-    DECL_LINK_TYPED(ColorBoxSelectHdl_Impl, ListBox&, void);
+    DECL_LINK(SelectListBoxHdl_Impl, ListBox&, void);
+    DECL_LINK(CbClickHdl_Impl, Button*, void);
+    DECL_LINK(TristClickHdl_Impl, Button*, void);
+    DECL_LINK(UpdatePreview_Impl, ListBox&, void);
+    DECL_LINK(ColorBoxSelectHdl_Impl, ListBox&, void);
 
 public:
     virtual ~SvxCharEffectsPage() override;
@@ -297,15 +297,15 @@ private:
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
     void                SetEscapement_Impl( SvxEscapement nEsc );
 
-    DECL_LINK_TYPED(    PositionHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(    RotationHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(    FontModifyHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED(    AutoPositionHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(    FitToLineHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(    KerningSelectHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED(    KerningModifyHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED(    LoseFocusHdl_Impl, Control&, void );
-    DECL_LINK_TYPED(    ScaleWidthModifyHdl_Impl, Edit&, void );
+    DECL_LINK(    PositionHdl_Impl, Button*, void );
+    DECL_LINK(    RotationHdl_Impl, Button*, void );
+    DECL_LINK(    FontModifyHdl_Impl, Edit&, void );
+    DECL_LINK(    AutoPositionHdl_Impl, Button*, void );
+    DECL_LINK(    FitToLineHdl_Impl, Button*, void );
+    DECL_LINK(    KerningSelectHdl_Impl, ListBox&, void );
+    DECL_LINK(    KerningModifyHdl_Impl, Edit&, void );
+    DECL_LINK(    LoseFocusHdl_Impl, Control&, void );
+    DECL_LINK(    ScaleWidthModifyHdl_Impl, Edit&, void );
 
 public:
     virtual ~SvxCharPositionPage() override;
@@ -350,8 +350,8 @@ private:
     void                SelectCharacter( ListBox* pBox );
     void                SetBracket( sal_Unicode cBracket, bool bStart );
 
-    DECL_LINK_TYPED(TwoLinesHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(CharacterMapHdl_Impl, ListBox&, void );
+    DECL_LINK(TwoLinesHdl_Impl, Button*, void);
+    DECL_LINK(CharacterMapHdl_Impl, ListBox&, void );
 
 public:
     virtual ~SvxCharTwoLinesPage() override;

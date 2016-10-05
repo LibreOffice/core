@@ -74,14 +74,14 @@ class SvxEditModulesDlg : public ModalDialog
 
     SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
-    DECL_LINK_TYPED( SelectHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( UpDownHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( BackHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( LangSelectListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( BoxCheckButtonHdl_Impl2, SvLBoxButtonData*, void );
-    DECL_LINK_TYPED( BoxCheckButtonHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( OpenURLHdl_Impl, FixedHyperlink&, void );
+    DECL_LINK( SelectHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK( UpDownHdl_Impl, Button*, void );
+    DECL_LINK( ClickHdl_Impl, Button*, void );
+    DECL_LINK( BackHdl_Impl, Button*, void );
+    DECL_LINK( LangSelectListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK( BoxCheckButtonHdl_Impl2, SvLBoxButtonData*, void );
+    DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK( OpenURLHdl_Impl, FixedHyperlink&, void );
     void LangSelectHdl_Impl(ListBox*);
 
 public:
@@ -138,12 +138,12 @@ private:
     void    AddDicBoxEntry( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
     static sal_uLong GetDicUserData( const css::uno::Reference< css::linguistic2::XDictionary > &rxDic, sal_uInt16 nIdx );
 
-    DECL_LINK_TYPED( SelectHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( ClickHdl_Impl, Button *, void );
-    DECL_LINK_TYPED( BoxDoubleClickHdl_Impl, SvTreeListBox*, bool );
-    DECL_LINK_TYPED( BoxCheckButtonHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( PostDblClickHdl_Impl, void *, void);
-    DECL_LINK_TYPED( OpenURLHdl_Impl, FixedHyperlink&, void );
+    DECL_LINK( SelectHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK( ClickHdl_Impl, Button *, void );
+    DECL_LINK( BoxDoubleClickHdl_Impl, SvTreeListBox*, bool );
+    DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK( PostDblClickHdl_Impl, void *, void);
+    DECL_LINK( OpenURLHdl_Impl, FixedHyperlink&, void );
 
     void                UpdateModulesBox_Impl();
     void                UpdateDicBox_Impl();

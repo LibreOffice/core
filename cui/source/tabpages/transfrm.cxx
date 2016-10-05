@@ -1178,7 +1178,7 @@ DeactivateRC SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangePosProtectHdl, Button*, void)
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangePosProtectHdl, Button*, void)
 {
     // #106572# Remember user's last choice
     m_pTsbSizeProtect->SetState( m_pTsbPosProtect->GetState() == TRISTATE_TRUE ?  TRISTATE_TRUE : mnProtectSizeState );
@@ -1219,7 +1219,7 @@ void SvxPositionSizeTabPage::UpdateControlStates()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeSizeProtectHdl, Button*, void)
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeSizeProtectHdl, Button*, void)
 {
     if( m_pTsbSizeProtect->IsEnabled() )
     {
@@ -1547,7 +1547,7 @@ void SvxPositionSizeTabPage::DisableProtect()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeWidthHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeWidthHdl, Edit&, void)
 {
     if( m_pCbxScale->IsChecked() && m_pCbxScale->IsEnabled() )
     {
@@ -1569,7 +1569,7 @@ IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeWidthHdl, Edit&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeHeightHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl, Edit&, void)
 {
     if( m_pCbxScale->IsChecked() && m_pCbxScale->IsEnabled() )
     {
@@ -1591,13 +1591,13 @@ IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ChangeHeightHdl, Edit&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ClickSizeProtectHdl, Button*, void)
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickSizeProtectHdl, Button*, void)
 {
     UpdateControlStates();
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPositionSizeTabPage, ClickAutoHdl, Button*, void)
+IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl, Button*, void)
 {
     if( m_pCbxScale->IsChecked() )
     {

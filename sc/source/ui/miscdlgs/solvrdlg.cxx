@@ -199,7 +199,7 @@ bool ScSolverDlg::CheckTargetValue( const OUString& rStrVal )
 
 // Handler:
 
-IMPL_LINK_TYPED( ScSolverDlg, BtnHdl, Button*, pBtn, void )
+IMPL_LINK( ScSolverDlg, BtnHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnOk)
     {
@@ -255,7 +255,7 @@ IMPL_LINK_TYPED( ScSolverDlg, BtnHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_TYPED( ScSolverDlg, GetFocusHdl, Control&, rCtrl, void )
+IMPL_LINK( ScSolverDlg, GetFocusHdl, Control&, rCtrl, void )
 {
     Edit* pEdit = nullptr;
     pEdActive = nullptr;
@@ -271,7 +271,7 @@ IMPL_LINK_TYPED( ScSolverDlg, GetFocusHdl, Control&, rCtrl, void )
         pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
 }
 
-IMPL_LINK_NOARG_TYPED(ScSolverDlg, LoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(ScSolverDlg, LoseFocusHdl, Control&, void)
 {
     bDlgLostFocus = !IsActive();
 }

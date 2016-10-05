@@ -128,7 +128,7 @@ void GraphicPropertyPanel::Initialize()
 }
 
 
-IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ModifyBrightnessHdl, Edit&, void )
+IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyBrightnessHdl, Edit&, void )
 {
     const sal_Int16 nBright = mpMtrBrightness->GetValue();
     const SfxInt16Item aBrightItem( SID_ATTR_GRAF_LUMINANCE, nBright );
@@ -137,7 +137,7 @@ IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ModifyBrightnessHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ModifyContrastHdl, Edit&, void )
+IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyContrastHdl, Edit&, void )
 {
     const sal_Int16 nContrast = mpMtrContrast->GetValue();
     const SfxInt16Item aContrastItem( SID_ATTR_GRAF_CONTRAST, nContrast );
@@ -146,7 +146,7 @@ IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ModifyContrastHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ModifyTransHdl, Edit&, void )
+IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyTransHdl, Edit&, void )
 {
     const sal_Int16 nTrans = mpMtrTrans->GetValue();
     const SfxInt16Item aTransItem( SID_ATTR_GRAF_TRANSPARENCE, nTrans );
@@ -155,7 +155,7 @@ IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ModifyTransHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ClickColorModeHdl, ListBox&, void )
+IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl, ListBox&, void )
 {
     const sal_Int16 nTrans = mpLBColorMode->GetSelectEntryPos();
     const SfxInt16Item aTransItem( SID_ATTR_GRAF_MODE, nTrans );
@@ -164,7 +164,7 @@ IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, ClickColorModeHdl, ListBox&, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, RedHdl, Edit&, void )
+IMPL_LINK_NOARG( GraphicPropertyPanel, RedHdl, Edit&, void )
 {
     const sal_Int16 nRed = mpMtrRed->GetValue();
     const SfxInt16Item aRedItem( SID_ATTR_GRAF_RED, nRed );
@@ -173,7 +173,7 @@ IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, RedHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, GreenHdl, Edit&, void )
+IMPL_LINK_NOARG( GraphicPropertyPanel, GreenHdl, Edit&, void )
 {
     const sal_Int16 nGreen = mpMtrGreen->GetValue();
     const SfxInt16Item aGreenItem( SID_ATTR_GRAF_GREEN, nGreen );
@@ -182,7 +182,7 @@ IMPL_LINK_NOARG_TYPED( GraphicPropertyPanel, GreenHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(GraphicPropertyPanel, BlueHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicPropertyPanel, BlueHdl, Edit&, void)
 {
     const sal_Int16 nBlue = mpMtrBlue->GetValue();
     const SfxInt16Item aBlueItem( SID_ATTR_GRAF_BLUE, nBlue );
@@ -191,7 +191,7 @@ IMPL_LINK_NOARG_TYPED(GraphicPropertyPanel, BlueHdl, Edit&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(GraphicPropertyPanel, GammaHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicPropertyPanel, GammaHdl, Edit&, void)
 {
     const sal_Int32 nGamma = mpMtrGamma->GetValue();
     const SfxInt32Item nGammaItem( SID_ATTR_GRAF_GAMMA, nGamma );

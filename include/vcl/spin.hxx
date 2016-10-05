@@ -48,7 +48,7 @@ private:
     SAL_DLLPRIVATE Rectangle* ImplFindPartRect( const Point& rPt );
     using Window::ImplInit;
     SAL_DLLPRIVATE void       ImplInit( vcl::Window* pParent, WinBits nStyle );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplTimeout, Timer*, void );
+    DECL_DLLPRIVATE_LINK( ImplTimeout, Timer*, void );
 
 public:
     explicit        SpinButton( vcl::Window* pParent, WinBits nStyle );

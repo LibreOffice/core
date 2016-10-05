@@ -332,14 +332,14 @@ const vcl::KeyCode* Application::GetReservedKeyCode( sal_uLong i )
         return &ImplReservedKeys::get()->first[i].mKeyCode;
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplEndAllPopupsMsg, void*, void )
+IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplEndAllPopupsMsg, void*, void )
 {
     ImplSVData* pSVData = ImplGetSVData();
     while (pSVData->maWinData.mpFirstFloat)
         pSVData->maWinData.mpFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel);
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplEndAllDialogsMsg, void*, void )
+IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplEndAllDialogsMsg, void*, void )
 {
     vcl::Window* pAppWindow = Application::GetFirstTopLevelWindow();
     while (pAppWindow)
@@ -411,7 +411,7 @@ namespace
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ImplSVAppData, VclEventTestingHdl, Idle *, void)
+IMPL_LINK_NOARG(ImplSVAppData, VclEventTestingHdl, Idle *, void)
 {
     if (Application::AnyInput())
     {
@@ -423,7 +423,7 @@ IMPL_LINK_NOARG_TYPED(ImplSVAppData, VclEventTestingHdl, Idle *, void)
     }
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplVclEventTestingHdl, void*, void )
+IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplVclEventTestingHdl, void*, void )
 {
     ImplSVData* pSVData = ImplGetSVData();
     SAL_INFO("vcl.eventtesting", "EventTestLimit is " << pSVData->maAppData.mnEventTestLimit);
@@ -446,7 +446,7 @@ IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplVclEventTestingHdl, void*, void
     }
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplPrepareExitMsg, void*, void )
+IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplPrepareExitMsg, void*, void )
 {
     //now close top level frames
     (void)GetpApp()->QueryExit();
@@ -575,7 +575,7 @@ void Application::ReAcquireSolarMutex(sal_uLong const nReleased)
 #endif
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplQuitMsg, void*, void )
+IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplQuitMsg, void*, void )
 {
     ImplGetSVData()->maAppData.mbAppQuit = true;
 }
@@ -960,7 +960,7 @@ ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, 
 }
 
 
-IMPL_STATIC_LINK_TYPED( Application, PostEventHandler, void*, pCallData, void )
+IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData, void )
 {
     const SolarMutexGuard aGuard;
     ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );

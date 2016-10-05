@@ -388,8 +388,8 @@ private:
     Idle            maLoseFocusIdle;
     bool            mbPostEvt;
 
-                    DECL_LINK_TYPED( ImplEndEditHdl, void*, void );
-                    DECL_LINK_TYPED( ImplEndTimerHdl, Idle*, void );
+                    DECL_LINK( ImplEndEditHdl, void*, void );
+                    DECL_LINK( ImplEndTimerHdl, Idle*, void );
 
 public:
                     TabBarEdit( TabBar* pParent, WinBits nWinStyle = 0 );
@@ -451,7 +451,7 @@ void TabBarEdit::LoseFocus()
     Edit::LoseFocus();
 }
 
-IMPL_LINK_TYPED( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
+IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
 {
     ResetPostEvent();
     maLoseFocusIdle.Stop();
@@ -468,7 +468,7 @@ IMPL_LINK_TYPED( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
         GetParent()->EndEditMode( pCancel != nullptr );
 }
 
-IMPL_LINK_NOARG_TYPED(TabBarEdit, ImplEndTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl, Idle *, void)
 {
     if ( HasFocus() )
         return;
@@ -907,7 +907,7 @@ void TabBar::ImplShowPage( sal_uInt16 nPos )
     }
 }
 
-IMPL_LINK_TYPED( TabBar, ImplClickHdl, Button*, pButton, void )
+IMPL_LINK( TabBar, ImplClickHdl, Button*, pButton, void )
 {
     ImplTabButton* pBtn = static_cast<ImplTabButton*>(pButton);
     EndEditMode();
@@ -944,7 +944,7 @@ IMPL_LINK_TYPED( TabBar, ImplClickHdl, Button*, pButton, void )
         SetFirstPageId(GetPageId(nNewPos));
 }
 
-IMPL_LINK_NOARG_TYPED(TabBar, ImplAddClickHandler, Button*, void)
+IMPL_LINK_NOARG(TabBar, ImplAddClickHandler, Button*, void)
 {
     AddTabClick();
 }

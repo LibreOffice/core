@@ -176,7 +176,7 @@ void DBTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
         SvTreeListBox::MouseButtonDown(rMEvt);
 }
 
-IMPL_LINK_TYPED(DBTreeListBox, OnResetEntry, void*, p, void)
+IMPL_LINK(DBTreeListBox, OnResetEntry, void*, p, void)
 {
     SvTreeListEntry* pEntry = static_cast<SvTreeListEntry*>(p);
     // set the flag which allows if the entry can be expanded
@@ -395,12 +395,12 @@ void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,bool _bUp)
     }
 }
 
-IMPL_LINK_NOARG_TYPED( DBTreeListBox, ScrollUpHdl, LinkParamNone*, void )
+IMPL_LINK_NOARG( DBTreeListBox, ScrollUpHdl, LinkParamNone*, void )
 {
     scrollWindow(this,m_aMousePos,true);
 }
 
-IMPL_LINK_NOARG_TYPED( DBTreeListBox, ScrollDownHdl, LinkParamNone*, void )
+IMPL_LINK_NOARG( DBTreeListBox, ScrollDownHdl, LinkParamNone*, void )
 {
     scrollWindow(this,m_aMousePos,false);
 }
@@ -638,7 +638,7 @@ void DBTreeListBox::ExecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
         m_pContextMenuProvider->getCommandController().executeChecked( _nSelectedPopupEntry, Sequence< PropertyValue >() );
 }
 
-IMPL_LINK_NOARG_TYPED(DBTreeListBox, OnTimeOut, Timer*, void)
+IMPL_LINK_NOARG(DBTreeListBox, OnTimeOut, Timer*, void)
 {
     implStopSelectionTimer();
 

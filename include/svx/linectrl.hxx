@@ -90,7 +90,7 @@ private:
     css::uno::Reference< css::frame::XFrame > mxFrame;
 
 
-    DECL_LINK_TYPED( SelectHdl, ValueSet*, void );
+    DECL_LINK( SelectHdl, ValueSet*, void );
     void            FillValueSet();
     void            SetSize();
     void            implInit();

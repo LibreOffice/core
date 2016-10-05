@@ -74,7 +74,7 @@ private:
     OUString            maCommand;
     Reference< XFrame > mxFrame;
 
-                    DECL_LINK_TYPED(ImplModifyHdl, Idle *, void);
+                    DECL_LINK(ImplModifyHdl, Idle *, void);
 
 protected:
 
@@ -130,7 +130,7 @@ void ImplGrafMetricField::Modify()
     maIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(ImplGrafMetricField, ImplModifyHdl, Idle *, void)
+IMPL_LINK_NOARG(ImplGrafMetricField, ImplModifyHdl, Idle *, void)
 {
     const sal_Int64 nVal = GetValue();
 

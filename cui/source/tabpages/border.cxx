@@ -799,7 +799,7 @@ void SvxBorderTabPage::HideShadowControls()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
 {
     const svx::FrameBorderState SHOW = svx::FrameBorderState::Show;
     const svx::FrameBorderState HIDE = svx::FrameBorderState::Hide;
@@ -870,7 +870,7 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
 {
     bool bEnable = m_pWndShadows->GetSelectItemId() > 1;
     m_pFtShadowSize->Enable(bEnable);
@@ -880,7 +880,7 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
 }
 
 
-IMPL_LINK_TYPED( SvxBorderTabPage, SelColHdl_Impl, ListBox&, rLb, void )
+IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox&, rLb, void )
 {
     ColorListBox* pColLb = static_cast<ColorListBox*>(&rLb);
 
@@ -891,7 +891,7 @@ IMPL_LINK_TYPED( SvxBorderTabPage, SelColHdl_Impl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
 {
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 m_pLineWidthMF->GetValue( ),
@@ -904,7 +904,7 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
 }
 
 
-IMPL_LINK_TYPED( SvxBorderTabPage, SelStyleHdl_Impl, ListBox&, rLb, void )
+IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox&, rLb, void )
 {
     if (&rLb == m_pLbLineStyle)
     {
@@ -1116,7 +1116,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
+IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
 {
     if(!mbUseMarginItem && m_pLeftMF->IsVisible())
     {
@@ -1193,7 +1193,7 @@ IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
 }
 
 
-IMPL_LINK_TYPED( SvxBorderTabPage, ModifyDistanceHdl_Impl, Edit&, rField, void)
+IMPL_LINK( SvxBorderTabPage, ModifyDistanceHdl_Impl, Edit&, rField, void)
 {
     if ( mbSync )
     {
@@ -1209,12 +1209,12 @@ IMPL_LINK_TYPED( SvxBorderTabPage, ModifyDistanceHdl_Impl, Edit&, rField, void)
     }
 }
 
-IMPL_LINK_TYPED( SvxBorderTabPage, SyncHdl_Impl, Button*, pBox, void)
+IMPL_LINK( SvxBorderTabPage, SyncHdl_Impl, Button*, pBox, void)
 {
     mbSync = static_cast<CheckBox*>(pBox)->IsChecked();
 }
 
-IMPL_LINK_TYPED( SvxBorderTabPage, RemoveAdjacentCellBorderHdl_Impl, Button*, pBox, void)
+IMPL_LINK( SvxBorderTabPage, RemoveAdjacentCellBorderHdl_Impl, Button*, pBox, void)
 {
     mbRemoveAdjacentCellBorders = static_cast<CheckBox*>(pBox)->IsChecked();
 }

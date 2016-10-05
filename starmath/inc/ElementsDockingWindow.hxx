@@ -125,7 +125,7 @@ public:
 
     Size GetOptimalSize() const override;
 
-    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
+    DECL_LINK( ScrollHdl, ScrollBar*, void );
     void DoScroll(long nDelta);
 
     void SetSelectHdl(const Link<SmElement&,void>& rLink) { maSelectHdlLink = rLink; }
@@ -143,8 +143,8 @@ class SmElementsDockingWindow : public SfxDockingWindow
     virtual void Resize() override;
     SmViewShell* GetView();
 
-    DECL_LINK_TYPED(SelectClickHandler, SmElement&, void);
-    DECL_LINK_TYPED(ElementSelectedHandle, ListBox&, void);
+    DECL_LINK(SelectClickHandler, SmElement&, void);
+    DECL_LINK(ElementSelectedHandle, ListBox&, void);
 
 public:
 

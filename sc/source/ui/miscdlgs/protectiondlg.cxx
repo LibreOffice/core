@@ -120,7 +120,7 @@ void ScTableProtectionDlg::EnableOptionalWidgets(bool bEnable)
     m_pOptionsListBox->Invalidate();
 }
 
-IMPL_LINK_TYPED( ScTableProtectionDlg, CheckBoxHdl, Button*, pBtn, void )
+IMPL_LINK( ScTableProtectionDlg, CheckBoxHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnProtect)
     {
@@ -130,12 +130,12 @@ IMPL_LINK_TYPED( ScTableProtectionDlg, CheckBoxHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScTableProtectionDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(ScTableProtectionDlg, OKHdl, Button*, void)
 {
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED(ScTableProtectionDlg, PasswordModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScTableProtectionDlg, PasswordModifyHdl, Edit&, void)
 {
     OUString aPass1 = m_pPassword1Edit->GetText();
     OUString aPass2 = m_pPassword2Edit->GetText();

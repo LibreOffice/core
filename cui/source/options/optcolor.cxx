@@ -843,10 +843,10 @@ class ColorConfigCtrl_Impl : public VclVBox
     EditableColorConfig*            pColorConfig;
     EditableExtendedColorConfig*    pExtColorConfig;
 
-    DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
-    DECL_LINK_TYPED(ClickHdl, Button*, void);
-    DECL_LINK_TYPED(ColorHdl, ListBox&, void);
-    DECL_LINK_TYPED(ControlFocusHdl, Control&, void);
+    DECL_LINK(ScrollHdl, ScrollBar*, void);
+    DECL_LINK(ClickHdl, Button*, void);
+    DECL_LINK(ColorHdl, ListBox&, void);
+    DECL_LINK(ControlFocusHdl, Control&, void);
 
     virtual bool PreNotify (NotifyEvent& rNEvt) override;
     virtual void Command (CommandEvent const& rCEvt) override;
@@ -947,7 +947,7 @@ void ColorConfigCtrl_Impl::Update ()
     m_pScrollWindow->Update(pColorConfig, pExtColorConfig);
 }
 
-IMPL_LINK_TYPED(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar, void)
+IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar, void)
 {
     m_pScrollWindow->ScrollHdl(*pScrollBar);
 }
@@ -998,19 +998,19 @@ void ColorConfigCtrl_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-IMPL_LINK_TYPED(ColorConfigCtrl_Impl, ClickHdl, Button*, pBox, void)
+IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, Button*, pBox, void)
 {
     DBG_ASSERT(pColorConfig, "Configuration not set");
     m_pScrollWindow->ClickHdl(pColorConfig, static_cast<CheckBox*>(pBox));
 }
 
 // a color list has changed
-IMPL_LINK_TYPED(ColorConfigCtrl_Impl, ColorHdl, ListBox&, rBox, void)
+IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ListBox&, rBox, void)
 {
     DBG_ASSERT(pColorConfig, "Configuration not set" );
     m_pScrollWindow->ColorHdl(pColorConfig, pExtColorConfig, static_cast<ColorListBox*>(&rBox));
 }
-IMPL_LINK_TYPED(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
+IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
 {
     // determine whether a control is completely visible
     // and make it visible
@@ -1171,14 +1171,14 @@ void SvxColorOptionsTabPage::UpdateColorConfig()
     m_pColorConfigCT->Update();
 }
 
-IMPL_LINK_TYPED(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, ListBox&, rBox, void)
+IMPL_LINK(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, ListBox&, rBox, void)
 {
     pColorConfig->LoadScheme(rBox.GetSelectEntry());
     pExtColorConfig->LoadScheme(rBox.GetSelectEntry());
     UpdateColorConfig();
 }
 
-IMPL_LINK_TYPED(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, void )
+IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, void )
 {
     if (m_pSaveSchemePB == pButton)
     {
@@ -1222,7 +1222,7 @@ IMPL_LINK_TYPED(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, vo
     m_pDeleteSchemePB->Enable( m_pColorSchemeLB->GetEntryCount() > 1 );
 }
 
-IMPL_LINK_TYPED(SvxColorOptionsTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog&, rDialog, bool )
+IMPL_LINK(SvxColorOptionsTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog&, rDialog, bool )
 {
     OUString sName;
     rDialog.GetName(sName);

@@ -134,7 +134,7 @@ public:
     virtual void    Command( const CommandEvent& rEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent& rEvt ) override;
     virtual void    MouseMove( const MouseEvent& rEvt ) override;
-                    DECL_LINK_TYPED( RepeatedMouseMove, Timer *, void );
+                    DECL_LINK( RepeatedMouseMove, Timer *, void );
 
     virtual void    MouseButtonUp( const MouseEvent& rEvt ) override;
     virtual void    KeyInput( const KeyEvent& rEvt ) override;

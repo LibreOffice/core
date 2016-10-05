@@ -467,7 +467,7 @@ extern "C" void basicide_macro_organizer(sal_Int16);
 
 #endif
 
-IMPL_LINK_TYPED( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic, bool )
+IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic, bool )
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) pStarBasic;

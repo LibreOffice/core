@@ -929,7 +929,7 @@ void ScPreview::StaticInvalidate()
     rBindings.Invalidate(SID_ATTR_ZOOMSLIDER);
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED( ScPreview, InvalidateHdl, void*, void )
+IMPL_STATIC_LINK_NOARG( ScPreview, InvalidateHdl, void*, void )
 {
     StaticInvalidate();
 }

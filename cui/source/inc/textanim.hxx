@@ -65,11 +65,11 @@ private:
     FieldUnit           eFUnit;
     MapUnit             eUnit;
 
-    DECL_LINK_TYPED( SelectEffectHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ClickEndlessHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickAutoHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickPixelHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickDirectionHdl_Impl, Button*, void );
+    DECL_LINK( SelectEffectHdl_Impl, ListBox&, void );
+    DECL_LINK( ClickEndlessHdl_Impl, Button*, void );
+    DECL_LINK( ClickAutoHdl_Impl, Button*, void );
+    DECL_LINK( ClickPixelHdl_Impl, Button*, void );
+    DECL_LINK( ClickDirectionHdl_Impl, Button*, void );
 
     void                SelectDirection( SdrTextAniDirection nValue );
     sal_uInt16              GetSelectedDirection();

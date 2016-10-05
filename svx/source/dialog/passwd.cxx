@@ -23,7 +23,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-IMPL_LINK_NOARG_TYPED(SvxPasswordDialog, ButtonHdl, Button*, void)
+IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl, Button*, void)
 {
     bool bOK = true;
     short nRet = RET_OK;
@@ -50,7 +50,7 @@ IMPL_LINK_NOARG_TYPED(SvxPasswordDialog, ButtonHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPasswordDialog, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl, Edit&, void)
 {
     if ( !bEmpty )
     {

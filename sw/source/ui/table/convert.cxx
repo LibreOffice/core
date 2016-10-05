@@ -197,7 +197,7 @@ void SwConvertTableDlg::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED( SwConvertTableDlg, AutoFormatHdl, Button*, pButton, void )
+IMPL_LINK( SwConvertTableDlg, AutoFormatHdl, Button*, pButton, void )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -208,7 +208,7 @@ IMPL_LINK_TYPED( SwConvertTableDlg, AutoFormatHdl, Button*, pButton, void )
         pDlg->FillAutoFormatOfIndex( pTAutoFormat );
 }
 
-IMPL_LINK_TYPED( SwConvertTableDlg, BtnHdl, Button*, pButton, void )
+IMPL_LINK( SwConvertTableDlg, BtnHdl, Button*, pButton, void )
 {
     if( pButton == mpTabBtn )
         mpKeepColumn->SetState( mpKeepColumn->GetSavedValue() );
@@ -222,13 +222,13 @@ IMPL_LINK_TYPED( SwConvertTableDlg, BtnHdl, Button*, pButton, void )
     mpOtherEd->Enable( mpOtherBtn->IsChecked() );
 }
 
-IMPL_LINK_NOARG_TYPED(SwConvertTableDlg, CheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(SwConvertTableDlg, CheckBoxHdl, Button*, void)
 {
     mpRepeatHeaderCB->Enable(mpHeaderCB->IsChecked());
     ReapeatHeaderCheckBoxHdl();
 }
 
-IMPL_LINK_NOARG_TYPED(SwConvertTableDlg, ReapeatHeaderCheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(SwConvertTableDlg, ReapeatHeaderCheckBoxHdl, Button*, void)
 {
     bool bEnable = mpHeaderCB->IsChecked() && mpRepeatHeaderCB->IsChecked();
     mpRepeatRows->Enable(bEnable);

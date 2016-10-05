@@ -280,7 +280,7 @@ VclPtr<SfxTabPage> SvxLineEndDefTabPage::Create( vcl::Window* pWindow, const Sfx
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl, ListBox&, void)
 {
     if( pLineEndList->Count() > 0 )
     {
@@ -311,7 +311,7 @@ void SvxLineEndDefTabPage::ChangePreviewHdl_Impl()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickModifyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbLineEnds->GetSelectEntryPos();
 
@@ -389,7 +389,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickModifyHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
 {
     if( pPolyObj )
     {
@@ -497,7 +497,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbLineEnds->GetSelectEntryPos();
 
@@ -531,7 +531,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickLoadHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl, Button*, void)
 {
     sal_uInt16 nReturn = RET_YES;
 
@@ -612,7 +612,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickLoadHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickSaveHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE );
     OUString aStrFilterType( "*.soe" );

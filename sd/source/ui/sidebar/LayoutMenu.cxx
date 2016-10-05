@@ -369,7 +369,7 @@ int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
     return nRowCount;
 }
 
-IMPL_LINK_NOARG_TYPED(LayoutMenu, ClickHandler, ValueSet*, void)
+IMPL_LINK_NOARG(LayoutMenu, ClickHandler, ValueSet*, void)
 {
     AssignLayoutToSelectedSlides( GetSelectedAutoLayout() );
 }
@@ -637,12 +637,12 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(LayoutMenu, StateChangeHandler, const OUString&, void)
+IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler, const OUString&, void)
 {
     InvalidateContent();
 }
 
-IMPL_LINK_TYPED(LayoutMenu, OnMenuItemSelected, Menu*, pMenu, bool)
+IMPL_LINK(LayoutMenu, OnMenuItemSelected, Menu*, pMenu, bool)
 {
     if (pMenu == nullptr)
     {
@@ -706,7 +706,7 @@ void LayoutMenu::UpdateSelection()
         SetNoSelection();
 }
 
-IMPL_LINK_TYPED(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
+IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {
@@ -738,7 +738,7 @@ IMPL_LINK_TYPED(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiple
     }
 }
 
-IMPL_LINK_TYPED(LayoutMenu, WindowEventHandler, VclWindowEvent&, rEvent, void)
+IMPL_LINK(LayoutMenu, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {

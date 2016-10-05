@@ -147,7 +147,7 @@ void CellBorderStyleControl::Initialize()
     maTBBorder3->SetSelectHdl ( LINK(this, CellBorderStyleControl, TB3SelectHdl) );
 }
 
-IMPL_LINK_TYPED(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox, void)
+IMPL_LINK(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox, void)
 {
     sal_uInt16 nId = pToolBox->GetCurItemId();
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
@@ -206,7 +206,7 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox, void)
     mxFloatParent->EndPopupMode();
 }
 
-IMPL_LINK_TYPED(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox, void)
+IMPL_LINK(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox, void)
 {
     sal_uInt16 nId = pToolBox->GetCurItemId();
 
@@ -293,7 +293,7 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox, void)
     mxFloatParent->EndPopupMode();
 }
 
-IMPL_LINK_TYPED(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox, void)
+IMPL_LINK(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox, void)
 {
     sal_uInt16 nId = pToolBox->GetCurItemId();
 

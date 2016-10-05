@@ -168,7 +168,7 @@ public:
     FloatingWindow *mpButtonWin;
     AutoTimer       maBounce;
     int             mnBounceX, mnBounceY;
-    DECL_LINK_TYPED(BounceTimerCb, Timer*, void);
+    DECL_LINK(BounceTimerCb, Timer*, void);
 #endif
 
     bool MouseButtonDown(const MouseEvent& rMEvt);
@@ -1511,7 +1511,7 @@ public:
 };
 
 #if FIXME_BOUNCE_BUTTON
-IMPL_LINK_NOARG_TYPED(DemoRenderer,BounceTimerCb,Timer*,void)
+IMPL_LINK_NOARG(DemoRenderer,BounceTimerCb,Timer*,void)
 {
     mpButton->Check(mnBounceX>0);
     mpButton->SetPressed(mnBounceY>0);
@@ -1823,7 +1823,7 @@ class DemoWidgets : public WorkWindow
     VclPtr<ComboBox> mpGLCombo;
     VclPtr<PushButton> mpGLButton;
 
-    DECL_LINK_TYPED(GLTestClick, Button*, void);
+    DECL_LINK(GLTestClick, Button*, void);
 
 public:
     DemoWidgets() :
@@ -1923,7 +1923,7 @@ public:
     static void leave() { OpenGLZone::leave(); }
 };
 
-IMPL_LINK_NOARG_TYPED(DemoWidgets, GLTestClick, Button*, void)
+IMPL_LINK_NOARG(DemoWidgets, GLTestClick, Button*, void)
 {
     sal_Int32 nSelected = mpGLCombo->GetSelectEntryPos();
 

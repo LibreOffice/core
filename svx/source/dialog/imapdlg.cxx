@@ -343,7 +343,7 @@ void SvxIMapDlg::KeyInput( const KeyEvent& rKEvt )
 
 // Click-handler for ToolBox
 
-IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
+IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
 {
     sal_uInt16 nNewItemId = pTbx->GetCurItemId();
 
@@ -595,7 +595,7 @@ void SvxIMapDlg::SetActiveTool( sal_uInt16 nId )
     m_pTbxIMapDlg1->CheckItem( mnPolyEditId, bEditMode );
 }
 
-IMPL_LINK_TYPED( SvxIMapDlg, InfoHdl, IMapWindow&, rWnd, void )
+IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow&, rWnd, void )
 {
     OUString            aStr;
     const NotifyInfo&   rInfo = rWnd.GetInfo();
@@ -661,7 +661,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, InfoHdl, IMapWindow&, rWnd, void )
     }
 }
 
-IMPL_LINK_TYPED( SvxIMapDlg, MousePosHdl, GraphCtrl*, pWnd, void )
+IMPL_LINK( SvxIMapDlg, MousePosHdl, GraphCtrl*, pWnd, void )
 {
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
@@ -674,7 +674,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, MousePosHdl, GraphCtrl*, pWnd, void )
     m_pStbStatus->SetItemText( 2, aStr );
 }
 
-IMPL_LINK_TYPED( SvxIMapDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
+IMPL_LINK( SvxIMapDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
 {
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
@@ -688,11 +688,11 @@ IMPL_LINK_TYPED( SvxIMapDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxIMapDlg, URLModifyComboBoxHdl, ComboBox&, void)
+IMPL_LINK_NOARG(SvxIMapDlg, URLModifyComboBoxHdl, ComboBox&, void)
 {
     URLModifyHdl(*m_pURLBox);
 }
-IMPL_LINK_NOARG_TYPED(SvxIMapDlg, URLModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxIMapDlg, URLModifyHdl, Edit&, void)
 {
     NotifyInfo  aNewInfo;
 
@@ -703,7 +703,7 @@ IMPL_LINK_NOARG_TYPED(SvxIMapDlg, URLModifyHdl, Edit&, void)
     pIMapWnd->ReplaceActualIMapInfo( aNewInfo );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIMapDlg, URLLoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl, Control&, void)
 {
     NotifyInfo        aNewInfo;
     const OUString    aURLText( m_pURLBox->GetText() );
@@ -729,7 +729,7 @@ IMPL_LINK_NOARG_TYPED(SvxIMapDlg, URLLoseFocusHdl, Control&, void)
     pIMapWnd->ReplaceActualIMapInfo( aNewInfo );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIMapDlg, UpdateHdl, Idle *, void)
+IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl, Idle *, void)
 {
     pOwnData->aIdle.Stop();
 
@@ -759,7 +759,7 @@ IMPL_LINK_NOARG_TYPED(SvxIMapDlg, UpdateHdl, Idle *, void)
     pIMapWnd->QueueIdleUpdate();
 }
 
-IMPL_LINK_TYPED( SvxIMapDlg, StateHdl, GraphCtrl*, pWnd, void )
+IMPL_LINK( SvxIMapDlg, StateHdl, GraphCtrl*, pWnd, void )
 {
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrModel*     pModel = pWnd->GetSdrModel();
@@ -811,7 +811,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, StateHdl, GraphCtrl*, pWnd, void )
     pIMapWnd->QueueIdleUpdate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIMapDlg, MiscHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(SvxIMapDlg, MiscHdl, LinkParamNone*, void)
 {
     if (m_pTbxIMapDlg1)
     {

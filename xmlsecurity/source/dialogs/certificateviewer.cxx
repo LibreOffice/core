@@ -317,7 +317,7 @@ void CertificateViewerDetailsTP::ActivatePage()
 {
 }
 
-IMPL_LINK_NOARG_TYPED(CertificateViewerDetailsTP, ElementSelectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry*    pEntry = m_pElementsLB->FirstSelected();
     OUString        aElementText;
@@ -425,7 +425,7 @@ void CertificateViewerCertPathTP::ActivatePage()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(CertificateViewerCertPathTP, ViewCertHdl, Button*, void)
+IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl, Button*, void)
 {
     SvTreeListEntry* pEntry = mpCertPathLB->FirstSelected();
     if( pEntry )
@@ -438,7 +438,7 @@ IMPL_LINK_NOARG_TYPED(CertificateViewerCertPathTP, ViewCertHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(CertificateViewerCertPathTP, CertSelectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl, SvTreeListBox*, void)
 {
     OUString sStatus;
     SvTreeListEntry* pEntry = mpCertPathLB->FirstSelected();

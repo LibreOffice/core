@@ -1496,7 +1496,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 }
 
 
-IMPL_LINK_TYPED( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox, bool )
+IMPL_LINK( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox, bool )
 {
     if (pBox == m_pLinguModulesCLB)
     {
@@ -1514,20 +1514,20 @@ IMPL_LINK_TYPED( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox,
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLinguTabPage, PostDblClickHdl_Impl, void*, void)
+IMPL_LINK_NOARG(SvxLinguTabPage, PostDblClickHdl_Impl, void*, void)
 {
     ClickHdl_Impl(m_pLinguModulesEditPB);
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLinguTabPage, OpenURLHdl_Impl, FixedHyperlink&, void)
+IMPL_LINK_NOARG(SvxLinguTabPage, OpenURLHdl_Impl, FixedHyperlink&, void)
 {
     OUString sURL( m_pMoreDictsLink->GetURL() );
     lcl_OpenURL( sURL );
 }
 
 
-IMPL_LINK_TYPED( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox, void )
+IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox, void )
 {
     if (pBox == m_pLinguModulesCLB)
     {
@@ -1556,7 +1556,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox,
 }
 
 
-IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
+IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
 {
     if (m_pLinguModulesEditPB == pBtn)
     {
@@ -1734,7 +1734,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
 }
 
 
-IMPL_LINK_TYPED( SvxLinguTabPage, SelectHdl_Impl, SvTreeListBox*, pBox, void )
+IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 {
     if (m_pLinguModulesCLB == pBox)
     {
@@ -1913,7 +1913,7 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
     return pEntry;
 }
 
-IMPL_LINK_TYPED( SvxEditModulesDlg, SelectHdl_Impl, SvTreeListBox*, pBox, void )
+IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 {
     if (m_pModulesCLB == pBox)
     {
@@ -1947,11 +1947,11 @@ IMPL_LINK_TYPED( SvxEditModulesDlg, SelectHdl_Impl, SvTreeListBox*, pBox, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxEditModulesDlg, BoxCheckButtonHdl_Impl2, SvLBoxButtonData*, void )
+IMPL_LINK_NOARG( SvxEditModulesDlg, BoxCheckButtonHdl_Impl2, SvLBoxButtonData*, void )
 {
     BoxCheckButtonHdl_Impl(nullptr);
 }
-IMPL_LINK_NOARG_TYPED( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, void )
+IMPL_LINK_NOARG( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, void )
 {
     SvTreeListEntry *pCurEntry = m_pModulesCLB->GetCurEntry();
     if (pCurEntry)
@@ -1979,7 +1979,7 @@ IMPL_LINK_NOARG_TYPED( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox 
     }
 }
 
-IMPL_LINK_TYPED( SvxEditModulesDlg, LangSelectListBoxHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxEditModulesDlg, LangSelectListBoxHdl_Impl, ListBox&, rBox, void )
 {
     LangSelectHdl_Impl(&rBox);
 }
@@ -2238,7 +2238,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox* pBox)
     aLastLocale = aCurLocale;
 }
 
-IMPL_LINK_TYPED( SvxEditModulesDlg, UpDownHdl_Impl, Button *, pBtn, void )
+IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, Button *, pBtn, void )
 {
     bool bUp = m_pPrioUpPB == pBtn;
     sal_uLong  nCurPos = m_pModulesCLB->GetSelectEntryPos();
@@ -2266,21 +2266,21 @@ IMPL_LINK_TYPED( SvxEditModulesDlg, UpDownHdl_Impl, Button *, pBtn, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxEditModulesDlg, ClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxEditModulesDlg, ClickHdl_Impl, Button*, void)
 {
     // store language config
     LangSelectHdl_Impl(m_pLanguageLB);
     EndDialog( RET_OK );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxEditModulesDlg, BackHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxEditModulesDlg, BackHdl_Impl, Button*, void)
 {
     rLinguData = *pDefaultLinguData;
     LangSelectHdl_Impl(nullptr);
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxEditModulesDlg, OpenURLHdl_Impl, FixedHyperlink&, void)
+IMPL_LINK_NOARG(SvxEditModulesDlg, OpenURLHdl_Impl, FixedHyperlink&, void)
 {
     OUString sURL( m_pMoreDictsLink->GetURL() );
     lcl_OpenURL( sURL );

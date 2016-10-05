@@ -471,14 +471,14 @@ namespace pcr
     }
 
 
-    IMPL_LINK_TYPED( OBrowserLine, OnButtonClicked, Button*, _pButton, void )
+    IMPL_LINK( OBrowserLine, OnButtonClicked, Button*, _pButton, void )
     {
         if ( m_pClickListener )
             m_pClickListener->buttonClicked( this, _pButton == m_pBrowseButton );
     }
 
 
-    IMPL_LINK_NOARG_TYPED( OBrowserLine, OnButtonFocus, Control&, void )
+    IMPL_LINK_NOARG( OBrowserLine, OnButtonFocus, Control&, void )
     {
         if ( m_xControl.is() )
         {

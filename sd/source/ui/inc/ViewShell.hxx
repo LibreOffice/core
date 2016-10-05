@@ -505,8 +505,8 @@ protected:
     void ImpSidUndo(bool bDrawViewShell, SfxRequest& rReq);
     void ImpSidRedo(bool bDrawViewShell, SfxRequest& rReq);
 
-    DECL_LINK_TYPED( HScrollHdl, ScrollBar *, void );
-    DECL_LINK_TYPED( VScrollHdl, ScrollBar *, void );
+    DECL_LINK( HScrollHdl, ScrollBar *, void );
+    DECL_LINK( VScrollHdl, ScrollBar *, void );
 
     // virtual scroll handler, here, derivative classes can add themselves here
     virtual void VirtHScrollHdl(ScrollBar* pHScroll);

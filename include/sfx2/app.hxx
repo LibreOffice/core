@@ -118,7 +118,7 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
 {
     std::unique_ptr<SfxAppData_Impl>            pImpl;
 
-    DECL_DLLPRIVATE_LINK_TYPED( GlobalBasicErrorHdl_Impl, StarBASIC*, bool );
+    DECL_DLLPRIVATE_LINK( GlobalBasicErrorHdl_Impl, StarBASIC*, bool );
 
     void                        Deinitialize();
 

@@ -106,7 +106,7 @@ void QueueProcessor::SetPreviewSize (
     mbDoSuperSampling = bDoSuperSampling;
 }
 
-IMPL_LINK_NOARG_TYPED(QueueProcessor, ProcessRequestHdl, Timer *, void)
+IMPL_LINK_NOARG(QueueProcessor, ProcessRequestHdl, Timer *, void)
 {
     ProcessRequests();
 }

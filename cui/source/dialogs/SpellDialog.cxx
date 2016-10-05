@@ -438,7 +438,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
 /* Initialize, asynchronous to prevent virtual calls
    from a constructor
  */
-IMPL_LINK_NOARG_TYPED( SpellDialog, InitHdl, void*, void)
+IMPL_LINK_NOARG( SpellDialog, InitHdl, void*, void)
 {
     m_pToolbar->Disable();
     SetUpdateMode( false );
@@ -469,7 +469,7 @@ IMPL_LINK_NOARG_TYPED( SpellDialog, InitHdl, void*, void)
 };
 
 
-IMPL_LINK_TYPED( SpellDialog, ExtClickHdl, Button *, pBtn, void )
+IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn, void )
 {
     if (m_pOptionsPB == pBtn)
         StartSpellOptDlg_Impl();
@@ -501,7 +501,7 @@ IMPL_LINK_TYPED( SpellDialog, ExtClickHdl, Button *, pBtn, void )
     }
 }
 
-IMPL_LINK_TYPED( SpellDialog, CheckGrammarHdl, Button*, pBox, void )
+IMPL_LINK( SpellDialog, CheckGrammarHdl, Button*, pBox, void )
 {
     rParent.SetGrammarChecking( static_cast<CheckBox*>(pBox)->IsChecked() );
     Impl_Restore(true);
@@ -565,12 +565,12 @@ OUString SpellDialog::getReplacementString() const
 }
 
 
-IMPL_LINK_NOARG_TYPED(SpellDialog, DoubleClickChangeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SpellDialog, DoubleClickChangeHdl, ListBox&, void)
 {
     ChangeHdl(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED(SpellDialog, ChangeHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, ChangeHdl, Button*, void)
 {
     if(m_pSentenceED->IsUndoEditMode())
     {
@@ -590,7 +590,7 @@ IMPL_LINK_NOARG_TYPED(SpellDialog, ChangeHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SpellDialog, ChangeAllHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl, Button*, void)
 {
     m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
     OUString aString = getReplacementString();
@@ -620,7 +620,7 @@ IMPL_LINK_NOARG_TYPED(SpellDialog, ChangeAllHdl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( SpellDialog, IgnoreAllHdl, Button *, pButton, void )
+IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton, void )
 {
     m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
     // add word to IgnoreAll list
@@ -667,7 +667,7 @@ IMPL_LINK_TYPED( SpellDialog, IgnoreAllHdl, Button *, pButton, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SpellDialog, UndoHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, UndoHdl, Button*, void)
 {
     m_pSentenceED->Undo();
     if(!m_pSentenceED->GetUndoActionCount())
@@ -675,7 +675,7 @@ IMPL_LINK_NOARG_TYPED(SpellDialog, UndoHdl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
+IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
 {
     switch(rAction.GetId())
     {
@@ -732,7 +732,7 @@ void SpellDialog::Impl_Restore(bool bUseSavedSentence)
     m_pIgnorePB->SetText(m_sIgnoreOnceST);
 }
 
-IMPL_LINK_NOARG_TYPED(SpellDialog, IgnoreHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, IgnoreHdl, Button*, void)
 {
     if (m_sResumeST.equals(m_pIgnorePB->GetText()))
     {
@@ -776,7 +776,7 @@ LanguageType SpellDialog::GetSelectedLang_Impl() const
 }
 
 
-IMPL_LINK_TYPED(SpellDialog, LanguageSelectHdl, ListBox&, rBox, void)
+IMPL_LINK(SpellDialog, LanguageSelectHdl, ListBox&, rBox, void)
 {
     //If selected language changes, then add->list should be regenerated to
     //match
@@ -886,13 +886,13 @@ int SpellDialog::InitUserDicts()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SpellDialog, AddToDictClickHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, AddToDictClickHdl, Button*, void)
 {
     AddToDictionaryExecute(1, m_pAddToDictMB->GetPopupMenu());
 }
 
 
-IMPL_LINK_TYPED(SpellDialog, AddToDictSelectHdl, MenuButton*, pButton, void )
+IMPL_LINK(SpellDialog, AddToDictSelectHdl, MenuButton*, pButton, void )
 {
     AddToDictionaryExecute(pButton->GetCurItemId(), pButton->GetPopupMenu());
 }
@@ -946,7 +946,7 @@ void SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
 }
 
 
-IMPL_LINK_TYPED(SpellDialog, ModifyHdl, Edit&, rEd, void)
+IMPL_LINK(SpellDialog, ModifyHdl, Edit&, rEd, void)
 {
     if (m_pSentenceED == &rEd)
     {
@@ -971,7 +971,7 @@ IMPL_LINK_TYPED(SpellDialog, ModifyHdl, Edit&, rEd, void)
 };
 
 
-IMPL_LINK_NOARG_TYPED(SpellDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(SpellDialog, CancelHdl, Button*, void)
 {
     //apply changes and ignored text parts first - if there are any
     rParent.ApplyChangedSentence(m_pSentenceED->CreateSpellPortions(), false);
@@ -1550,7 +1550,7 @@ void SentenceEditWindow_Impl::Init(VclPtr<ToolBox> &rToolbar)
     m_xToolbar->SetSelectHdl(LINK(this,SentenceEditWindow_Impl,ToolbarHdl));
 }
 
-IMPL_LINK_NOARG_TYPED(SentenceEditWindow_Impl, ToolbarHdl, ToolBox *, void)
+IMPL_LINK_NOARG(SentenceEditWindow_Impl, ToolbarHdl, ToolBox *, void)
 {
     const sal_uInt16 nCurItemId = m_xToolbar->GetCurItemId();
     if (nCurItemId == m_xToolbar->GetItemId("paste"))
@@ -2053,7 +2053,7 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
     pSpellDialog->m_pChangePB->Enable();
 }
 
-IMPL_LINK_TYPED( SpellDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
+IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
 {
     OUString sURL=rHyperlink.GetURL();
     OUString sTitle=GetText();

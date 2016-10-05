@@ -212,8 +212,8 @@ public:
     const SwWrtShell*   GetActiveWrtShell() {return m_pActiveShell;}
     SwWrtShell*         GetHiddenWrtShell() {return m_pHiddenShell;}
 
-    DECL_LINK_TYPED( ContentDoubleClickHdl, SvTreeListBox*, bool );
-    DECL_LINK_TYPED( TimerUpdate, Timer *, void );
+    DECL_LINK( ContentDoubleClickHdl, SvTreeListBox*, bool );
+    DECL_LINK( TimerUpdate, Timer *, void );
 
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) override;
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) override;
@@ -269,7 +269,7 @@ private:
     void        InsertRegion( const SwGlblDocContent* _pContent,
                               const css::uno::Sequence< OUString >& _rFiles );
 
-    DECL_LINK_TYPED(  DialogClosedHdl, sfx2::FileDialogHelper*, void );
+    DECL_LINK(  DialogClosedHdl, sfx2::FileDialogHelper*, void );
 
     using SvTreeListBox::DoubleClickHdl;
     using SvTreeListBox::ExecuteDrop;
@@ -312,9 +312,9 @@ protected:
 
     void            Clear();
 
-    DECL_LINK_TYPED( PopupHdl, Menu*, bool );
-    DECL_LINK_TYPED( Timeout, Timer*, void );
-    DECL_LINK_TYPED( DoubleClickHdl, SvTreeListBox*, bool );
+    DECL_LINK( PopupHdl, Menu*, bool );
+    DECL_LINK( Timeout, Timer*, void );
+    DECL_LINK( DoubleClickHdl, SvTreeListBox*, bool );
 
     SwNavigationPI* GetParentWindow();
 
@@ -324,7 +324,7 @@ protected:
 
     static const SfxObjectShell*    GetShowShell() {return pShowShell;}
     static void     SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
-    DECL_STATIC_LINK_TYPED(SwGlobalTree, ShowFrameHdl, void*, void);
+    DECL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, void*, void);
 
     virtual VclPtr<PopupMenu> CreateContextMenu() override;
     virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;

@@ -89,7 +89,7 @@ public:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     explicit SfxEventAsyncer_Impl(const SfxEventHint& rHint);
     virtual ~SfxEventAsyncer_Impl() override;
-    DECL_LINK_TYPED( IdleHdl, Idle*, void );
+    DECL_LINK( IdleHdl, Idle*, void );
 };
 
 
@@ -121,7 +121,7 @@ SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
 }
 
 
-IMPL_LINK_TYPED(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle, void)
+IMPL_LINK(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle, void)
 {
     SfxObjectShellRef xRef( aHint.GetObjShell() );
     pAsyncIdle->Stop();

@@ -218,7 +218,7 @@ void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
 }
 
 
-IMPL_LINK_TYPED(PageSizeControl, ImplSizeHdl, ValueSet*, pControl, void)
+IMPL_LINK(PageSizeControl, ImplSizeHdl, ValueSet*, pControl, void)
 {
     mpSizeValueSet->SetNoSelection();
     if ( pControl == mpSizeValueSet )
@@ -231,7 +231,7 @@ IMPL_LINK_TYPED(PageSizeControl, ImplSizeHdl, ValueSet*, pControl, void)
     EndPopupMode();
 }
 
-IMPL_LINK_NOARG_TYPED(PageSizeControl, MoreButtonClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(PageSizeControl, MoreButtonClickHdl_Impl, Button*, void)
 {
     if ( SfxViewFrame::Current() )
         SfxViewFrame::Current()->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SfxCallMode::ASYNCHRON );

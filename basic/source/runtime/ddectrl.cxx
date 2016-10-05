@@ -67,7 +67,7 @@ SbError SbiDdeControl::GetLastErr( DdeConnection* pConv )
     return nDdeErrMap[ 2 * (nErr - DDE_FIRSTERR) + 1 ];
 }
 
-IMPL_LINK_TYPED( SbiDdeControl, Data, const DdeData*, pData, void )
+IMPL_LINK( SbiDdeControl, Data, const DdeData*, pData, void )
 {
     aData = OUString::createFromAscii( static_cast<const char*>(static_cast<const void*>(*pData)) );
 }

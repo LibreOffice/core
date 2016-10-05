@@ -228,7 +228,7 @@ void SvxHyperlinkMailTp::RemoveImproperProtocol(const OUString& aProperScheme)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, Edit&, void)
 {
     OUString aScheme = GetSchemeFromURL( m_pCbbReceiver->GetText() );
     if(!aScheme.isEmpty())
@@ -241,7 +241,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl, Edit&, void)
 |*
 |************************************************************************/
 
-IMPL_STATIC_LINK_NOARG_TYPED(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, Button*, void)
+IMPL_STATIC_LINK_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, Button*, void)
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if( pViewFrame )

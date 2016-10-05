@@ -170,7 +170,7 @@ void GraphicFilterDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(GraphicFilterDialog, ImplPreviewTimeoutHdl, Timer *, void)
+IMPL_LINK_NOARG(GraphicFilterDialog, ImplPreviewTimeoutHdl, Timer *, void)
 {
     maTimer.Stop();
     mpPreview->SetPreview(GetFilteredGraphic(mpPreview->GetScaledOriginal(),
@@ -178,7 +178,7 @@ IMPL_LINK_NOARG_TYPED(GraphicFilterDialog, ImplPreviewTimeoutHdl, Timer *, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(GraphicFilterDialog, ImplModifyHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl, LinkParamNone*, void)
 {
     if (bIsBitmap)
     {
@@ -212,13 +212,13 @@ GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& r
 }
 
 
-IMPL_LINK_NOARG_TYPED(GraphicFilterMosaic, CheckBoxModifyHdl, CheckBox&, void)
+IMPL_LINK_NOARG(GraphicFilterMosaic, CheckBoxModifyHdl, CheckBox&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
 
 
-IMPL_LINK_NOARG_TYPED(GraphicFilterMosaic, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicFilterMosaic, EditModifyHdl, Edit&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
@@ -288,7 +288,7 @@ GraphicFilterSmooth::GraphicFilterSmooth( vcl::Window* pParent, const Graphic& r
 }
 
 
-IMPL_LINK_NOARG_TYPED(GraphicFilterSmooth, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicFilterSmooth, EditModifyHdl, Edit&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
@@ -351,13 +351,13 @@ GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphi
 }
 
 
-IMPL_LINK_NOARG_TYPED(GraphicFilterSolarize, CheckBoxModifyHdl, CheckBox&, void)
+IMPL_LINK_NOARG(GraphicFilterSolarize, CheckBoxModifyHdl, CheckBox&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
 
 
-IMPL_LINK_NOARG_TYPED(GraphicFilterSolarize, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicFilterSolarize, EditModifyHdl, Edit&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
@@ -421,7 +421,7 @@ GraphicFilterSepia::GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGr
     mpMtrSepia->SetModifyHdl( LINK(this, GraphicFilterSepia, EditModifyHdl) );
 }
 
-IMPL_LINK_NOARG_TYPED(GraphicFilterSepia, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicFilterSepia, EditModifyHdl, Edit&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
@@ -476,7 +476,7 @@ GraphicFilterPoster::GraphicFilterPoster(vcl::Window* pParent, const Graphic& rG
 }
 
 
-IMPL_LINK_NOARG_TYPED(GraphicFilterPoster, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicFilterPoster, EditModifyHdl, Edit&, void)
 {
     GetModifyHdl().Call(nullptr);
 }

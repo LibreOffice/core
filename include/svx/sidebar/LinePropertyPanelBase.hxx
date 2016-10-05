@@ -160,13 +160,13 @@ private:
 
     void Initialize();
 
-    DECL_LINK_TYPED(ChangeLineStyleHdl, ListBox&, void);
-    DECL_LINK_TYPED(ToolboxWidthSelectHdl, ToolBox*, void);
-    DECL_LINK_TYPED(ChangeTransparentHdl, Edit&, void );
-    DECL_LINK_TYPED(ChangeStartHdl, ListBox&, void);
-    DECL_LINK_TYPED(ChangeEndHdl, ListBox&, void);
-    DECL_LINK_TYPED(ChangeEdgeStyleHdl, ListBox&, void);
-    DECL_LINK_TYPED(ChangeCapStyleHdl, ListBox&, void);
+    DECL_LINK(ChangeLineStyleHdl, ListBox&, void);
+    DECL_LINK(ToolboxWidthSelectHdl, ToolBox*, void);
+    DECL_LINK(ChangeTransparentHdl, Edit&, void );
+    DECL_LINK(ChangeStartHdl, ListBox&, void);
+    DECL_LINK(ChangeEndHdl, ListBox&, void);
+    DECL_LINK(ChangeEdgeStyleHdl, ListBox&, void);
+    DECL_LINK(ChangeCapStyleHdl, ListBox&, void);
 };
 
 } } // end of namespace svx::sidebar

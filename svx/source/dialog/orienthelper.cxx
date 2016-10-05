@@ -48,7 +48,7 @@ struct OrientationHelper_Impl
 
     void                ShowDependentWindows();
 
-    DECL_LINK_TYPED( ClickHdl, Button*, void );
+    DECL_LINK( ClickHdl, Button*, void );
 };
 
 
@@ -97,7 +97,7 @@ void OrientationHelper_Impl::ShowDependentWindows()
         aIt->first->Show( mbVisible );
 }
 
-IMPL_LINK_NOARG_TYPED(OrientationHelper_Impl, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(OrientationHelper_Impl, ClickHdl, Button*, void)
 {
     EnableDependentWindows();
 }

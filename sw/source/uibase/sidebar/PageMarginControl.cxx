@@ -362,7 +362,7 @@ void PageMarginControl::FillHelpText( const bool bUserCustomValuesAvailable )
     m_pLast->SetQuickHelpText( aHelpText );
 }
 
-IMPL_LINK_TYPED( PageMarginControl, SelectMarginHdl, Button*, pControl, void )
+IMPL_LINK( PageMarginControl, SelectMarginHdl, Button*, pControl, void )
 {
     bool bMirrored = false;
     bool bApplyNewPageMargins = true;
@@ -478,7 +478,7 @@ void PageMarginControl::ExecutePageLayoutChange( const bool bMirrored )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( PageMarginControl, ModifyLRMarginHdl, Edit&, void )
+IMPL_LINK_NOARG( PageMarginControl, ModifyLRMarginHdl, Edit&, void )
 {
     m_nPageLeftMargin = GetCoreValue( *m_pLeftMarginEdit.get(), m_eUnit );
     m_nPageRightMargin = GetCoreValue( *m_pRightMarginEdit.get(), m_eUnit );
@@ -487,7 +487,7 @@ IMPL_LINK_NOARG_TYPED( PageMarginControl, ModifyLRMarginHdl, Edit&, void )
     m_bCustomValuesUsed = true;
 }
 
-IMPL_LINK_NOARG_TYPED( PageMarginControl, ModifyULMarginHdl, Edit&, void )
+IMPL_LINK_NOARG( PageMarginControl, ModifyULMarginHdl, Edit&, void )
 {
     m_nPageTopMargin = GetCoreValue( *m_pTopMarginEdit.get(), m_eUnit );
     m_nPageBottomMargin = GetCoreValue( *m_pBottomMarginEdit.get(), m_eUnit );

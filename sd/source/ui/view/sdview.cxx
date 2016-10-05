@@ -1083,7 +1083,7 @@ void View::onAccessibilityOptionsChanged()
     }
 }
 
-IMPL_LINK_TYPED( View, OnParagraphInsertedHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner *, pOutliner, void )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
     SdrObject* pObj = GetTextEditObject();
@@ -1099,7 +1099,7 @@ IMPL_LINK_TYPED( View, OnParagraphInsertedHdl, ::Outliner *, pOutliner, void )
 /**
  * Handler for the deletion of the pages (paragraphs).
  */
-IMPL_LINK_TYPED( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner, void )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
     SdrObject* pObj = GetTextEditObject();

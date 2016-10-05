@@ -92,7 +92,7 @@ protected:
 
 private:
     void RepaintViewShellDoc();
-    DECL_LINK_TYPED(CaretBlinkTimerHdl, Timer *, void);
+    DECL_LINK(CaretBlinkTimerHdl, Timer *, void);
     void CaretBlinkInit();
     void CaretBlinkStart();
     void CaretBlinkStop();
@@ -171,7 +171,7 @@ class SmCmdBoxWindow : public SfxDockingWindow
 
     Timer               aInitialFocusTimer;
 
-    DECL_LINK_TYPED(InitialFocusTimerHdl, Timer *, void);
+    DECL_LINK(InitialFocusTimerHdl, Timer *, void);
 
 protected:
 
@@ -232,7 +232,7 @@ class SmViewShell: public SfxViewShell
 
     bool bPasteState;
 
-    DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     /** Used to determine whether insertions using SID_INSERTSYMBOL and SID_INSERTCOMMAND

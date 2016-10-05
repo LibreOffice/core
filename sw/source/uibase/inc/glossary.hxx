@@ -125,17 +125,17 @@ class SwGlossaryDlg : public SvxStandardDialog
     void EnableShortName(bool bOn = true);
     void ShowPreview();
 
-    DECL_LINK_TYPED( NameModify, Edit&, void );
-    DECL_LINK_TYPED( NameDoubleClick, SvTreeListBox*, bool );
-    DECL_LINK_TYPED( GrpSelect, SvTreeListBox *, void );
-    DECL_LINK_TYPED( MenuHdl, Menu *, bool );
-    DECL_LINK_TYPED( EnableHdl, Menu *, bool );
-    DECL_LINK_TYPED( BibHdl, Button *, void );
-    DECL_LINK_TYPED( EditHdl, MenuButton *, void );
-    DECL_LINK_TYPED( InsertHdl, Button *, void );
-    DECL_LINK_TYPED( PathHdl, Button *, void );
-    DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
-    DECL_LINK_TYPED( PreviewLoadedHdl, SwOneExampleFrame&, void );
+    DECL_LINK( NameModify, Edit&, void );
+    DECL_LINK( NameDoubleClick, SvTreeListBox*, bool );
+    DECL_LINK( GrpSelect, SvTreeListBox *, void );
+    DECL_LINK( MenuHdl, Menu *, bool );
+    DECL_LINK( EnableHdl, Menu *, bool );
+    DECL_LINK( BibHdl, Button *, void );
+    DECL_LINK( EditHdl, MenuButton *, void );
+    DECL_LINK( InsertHdl, Button *, void );
+    DECL_LINK( PathHdl, Button *, void );
+    DECL_LINK( CheckBoxHdl, Button*, void );
+    DECL_LINK( PreviewLoadedHdl, SwOneExampleFrame&, void );
 
     virtual void    Apply() override;
     void            Init();

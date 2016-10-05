@@ -254,7 +254,7 @@ void TemplateLocalView::createContextMenu(const bool bIsDefault)
     Invalidate();
 }
 
-IMPL_LINK_TYPED(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
+IMPL_LINK(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
 {
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
 

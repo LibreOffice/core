@@ -485,15 +485,15 @@ void ThemePanel::dispose()
     PanelLayout::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(ThemePanel, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(ThemePanel, ClickHdl, Button*, void)
 {
     DoubleClickHdl();
 }
-IMPL_LINK_NOARG_TYPED(ThemePanel, DoubleClickValueSetHdl, ValueSet*, void)
+IMPL_LINK_NOARG(ThemePanel, DoubleClickValueSetHdl, ValueSet*, void)
 {
     DoubleClickHdl();
 }
-IMPL_LINK_NOARG_TYPED(ThemePanel, DoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(ThemePanel, DoubleClickHdl, ListBox&, void)
 {
     DoubleClickHdl();
 }

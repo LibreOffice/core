@@ -319,22 +319,22 @@ void ScNameDefDlg::SetActive()
     RefInputDone();
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDefDlg, CancelBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScNameDefDlg, CancelBtnHdl, Button*, void)
 {
     CancelPushed();
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDefDlg, AddBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScNameDefDlg, AddBtnHdl, Button*, void)
 {
     AddPushed();
 };
 
-IMPL_LINK_NOARG_TYPED(ScNameDefDlg, NameModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScNameDefDlg, NameModifyHdl, Edit&, void)
 {
     IsNameValid();
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDefDlg, AssignGetFocusHdl, Control&, void)
+IMPL_LINK_NOARG(ScNameDefDlg, AssignGetFocusHdl, Control&, void)
 {
     IsNameValid();
 }

@@ -313,7 +313,7 @@ public:
     void Set2ndPos(const Point& rPnt);
 
     // the link called by the color handles
-    DECL_LINK_TYPED(ColorChangeHdl, SdrHdlColor*, void);
+    DECL_LINK(ColorChangeHdl, SdrHdlColor*, void);
 
     // transformation call, create gradient from this handle
     void FromIAOToItem(SdrObject* pObj, bool bSetItemOnObject, bool bUndo);

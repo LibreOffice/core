@@ -38,7 +38,7 @@ namespace vcl
         long                    m_nReturn;
         bool                    m_bTimeout;
 
-        DECL_DLLPRIVATE_LINK_TYPED( worker, void*, void );
+        DECL_DLLPRIVATE_LINK( worker, void*, void );
 
     public:
         SolarThreadExecutor();

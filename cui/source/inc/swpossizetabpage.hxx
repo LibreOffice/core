@@ -100,14 +100,14 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     bool    m_bIsInRightToLeft;
 
 
-    DECL_LINK_TYPED(RangeModifyHdl, Control&, void);
-    DECL_LINK_TYPED(RangeModifyClickHdl, Button*, void);
-    DECL_LINK_TYPED(AnchorTypeHdl, Button*, void);
-    DECL_LINK_TYPED( PosHdl, ListBox&, void );
-    DECL_LINK_TYPED( RelHdl, ListBox&, void );
-    DECL_LINK_TYPED(MirrorHdl, Button*, void);
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
-    DECL_LINK_TYPED(ProtectHdl, Button*, void);
+    DECL_LINK(RangeModifyHdl, Control&, void);
+    DECL_LINK(RangeModifyClickHdl, Button*, void);
+    DECL_LINK(AnchorTypeHdl, Button*, void);
+    DECL_LINK( PosHdl, ListBox&, void );
+    DECL_LINK( RelHdl, ListBox&, void );
+    DECL_LINK(MirrorHdl, Button*, void);
+    DECL_LINK( ModifyHdl, Edit&, void );
+    DECL_LINK(ProtectHdl, Button*, void);
 
     void            InitPos(short nAnchorType, sal_uInt16 nH, sal_uInt16 nHRel,
                             sal_uInt16 nV,  sal_uInt16 nVRel,

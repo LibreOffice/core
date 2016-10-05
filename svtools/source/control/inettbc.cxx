@@ -106,7 +106,7 @@ class SvtMatchContext_Impl: public salhelper::Thread
     css::uno::Reference< css::ucb::XCommandProcessor > processor_;
     sal_Int32 commandId_;
 
-    DECL_LINK_TYPED(                Select_Impl, void*, void );
+    DECL_LINK(                Select_Impl, void*, void );
 
     virtual                         ~SvtMatchContext_Impl() override;
     virtual void                    execute() override;
@@ -207,7 +207,7 @@ void SvtMatchContext_Impl::execute( )
 // Cancellable does not discard the information gained so far, it
 // inserts all collected completions into the listbox.
 
-IMPL_LINK_NOARG_TYPED( SvtMatchContext_Impl, Select_Impl, void*, void )
+IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl, void*, void )
 {
     // avoid recursion through cancel button
     {
@@ -1093,7 +1093,7 @@ bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
     return ComboBox::PreNotify( rNEvt );
 }
 
-IMPL_LINK_NOARG_TYPED(SvtURLBox, AutoCompleteHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvtURLBox, AutoCompleteHdl_Impl, Edit&, void)
 {
     TryAutoComplete();
 }

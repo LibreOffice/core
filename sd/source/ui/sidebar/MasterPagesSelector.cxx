@@ -169,7 +169,7 @@ ResId MasterPagesSelector::GetContextMenuResId() const
     return SdResId(RID_TASKPANE_MASTERPAGESSELECTOR_POPUP);
 }
 
-IMPL_LINK_NOARG_TYPED(MasterPagesSelector, ClickHandler, ValueSet*, void)
+IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler, ValueSet*, void)
 {
     // We use the framework to assign the clicked-on master page because we
     // so use the same mechanism as the context menu does (where we do not
@@ -177,7 +177,7 @@ IMPL_LINK_NOARG_TYPED(MasterPagesSelector, ClickHandler, ValueSet*, void)
     ExecuteCommand(mnDefaultClickAction);
 }
 
-IMPL_LINK_TYPED(MasterPagesSelector, RightClickHandler, const MouseEvent&, rEvent, void)
+IMPL_LINK(MasterPagesSelector, RightClickHandler, const MouseEvent&, rEvent, void)
 {
     // Here we only prepare the display of the context menu: the item under
     // the mouse is selected.  The actual display of the context menu is
@@ -248,7 +248,7 @@ void MasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
         rMenu.EnableItem(SID_TP_SHOW_LARGE_PREVIEW, false);
 }
 
-IMPL_LINK_TYPED(MasterPagesSelector, OnMenuItemSelected, Menu*, pMenu, bool)
+IMPL_LINK(MasterPagesSelector, OnMenuItemSelected, Menu*, pMenu, bool)
 {
     if (pMenu == nullptr)
     {
@@ -328,7 +328,7 @@ void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
     }
 }
 
-IMPL_LINK_TYPED(MasterPagesSelector, ContainerChangeListener, MasterPageContainerChangeEvent&, rEvent, void)
+IMPL_LINK(MasterPagesSelector, ContainerChangeListener, MasterPageContainerChangeEvent&, rEvent, void)
 {
     NotifyContainerChangeEvent(rEvent);
 }

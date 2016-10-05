@@ -322,17 +322,17 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties(Dialog* pDialog, bool bCreat
     Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ), pDialog, true );
 }
 
-IMPL_LINK_TYPED( GalleryBrowser1, EndNewThemePropertiesDlgHdl, Dialog&, rDialog, void )
+IMPL_LINK( GalleryBrowser1, EndNewThemePropertiesDlgHdl, Dialog&, rDialog, void )
 {
     ImplEndGalleryThemeProperties(&rDialog, true);
 }
 
-IMPL_LINK_TYPED( GalleryBrowser1, EndThemePropertiesDlgHdl, Dialog&, rDialog, void )
+IMPL_LINK( GalleryBrowser1, EndThemePropertiesDlgHdl, Dialog&, rDialog, void )
 {
     ImplEndGalleryThemeProperties(&rDialog, false);
 }
 
-IMPL_LINK_TYPED( GalleryBrowser1, DestroyThemePropertiesDlgHdl, void*, p, void )
+IMPL_LINK( GalleryBrowser1, DestroyThemePropertiesDlgHdl, void*, p, void )
 {
     VclAbstractDialog2* pDialog = static_cast<VclAbstractDialog2*>(p);
     delete pDialog;
@@ -574,7 +574,7 @@ bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
     return bRet;
 }
 
-IMPL_LINK_NOARG_TYPED(GalleryBrowser1, ShowContextMenuHdl, void*, void)
+IMPL_LINK_NOARG(GalleryBrowser1, ShowContextMenuHdl, void*, void)
 {
     ::std::vector< sal_uInt16 > aExecVector;
     ImplGetExecuteVector(aExecVector);
@@ -601,19 +601,19 @@ IMPL_LINK_NOARG_TYPED(GalleryBrowser1, ShowContextMenuHdl, void*, void)
     }
 }
 
-IMPL_LINK_TYPED( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu, bool )
+IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu, bool )
 {
     ImplExecute( pMenu->GetCurItemId() );
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(GalleryBrowser1, SelectThemeHdl, ListBox&, void)
+IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl, ListBox&, void)
 {
     if (maThemeSlectionHandler)
         maThemeSlectionHandler();
 }
 
-IMPL_LINK_NOARG_TYPED(GalleryBrowser1, ClickNewThemeHdl, Button*, void)
+IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl, Button*, void)
 {
     OUString  aNewTheme( GAL_RESSTR(RID_SVXSTR_GALLERY_NEWTHEME) );
     OUString  aName( aNewTheme );

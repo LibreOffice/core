@@ -186,16 +186,16 @@ private:
     // ItemSet used to remember set 2d attributes
     SfxItemSet*         mpRemember2DAttributes;
 
-    DECL_LINK_TYPED( ClickViewTypeHdl, Button*, void );
-    DECL_LINK_TYPED( ClickUpdateHdl, Button*, void );
-    DECL_LINK_TYPED( ClickAssignHdl, Button*, void );
-    DECL_LINK_TYPED( ClickHdl, Button*, void );
-    DECL_LINK_TYPED( ClickColorHdl, Button*, void );
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
+    DECL_LINK( ClickViewTypeHdl, Button*, void );
+    DECL_LINK( ClickUpdateHdl, Button*, void );
+    DECL_LINK( ClickAssignHdl, Button*, void );
+    DECL_LINK( ClickHdl, Button*, void );
+    DECL_LINK( ClickColorHdl, Button*, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK( ModifyHdl, Edit&, void );
     void ClickLight(PushButton &rBtn);
 
-    DECL_LINK_TYPED( ChangeSelectionCallbackHdl, SvxLightCtl3D*, void );
+    DECL_LINK( ChangeSelectionCallbackHdl, SvxLightCtl3D*, void );
 
     SVX_DLLPRIVATE void         Construct();
     SVX_DLLPRIVATE void         Reset();

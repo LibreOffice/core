@@ -387,11 +387,11 @@ const sal_uInt16* SwTextGridPage::GetRanges()
     return aPageRg;
 }
 
-IMPL_LINK_TYPED(SwTextGridPage, CharorLineLoseFocusdHdl, Control&, rControl, void)
+IMPL_LINK(SwTextGridPage, CharorLineLoseFocusdHdl, Control&, rControl, void)
 {
     CharorLineChangedHdl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK_TYPED(SwTextGridPage, CharorLineChangedHdl, SpinField&, rField, void)
+IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField&, rField, void)
 {
     //if in squared mode
     if ( m_bSquaredMode )
@@ -437,11 +437,11 @@ IMPL_LINK_TYPED(SwTextGridPage, CharorLineChangedHdl, SpinField&, rField, void)
     GridModifyHdl(*m_pColorLB);
 }
 
-IMPL_LINK_TYPED(SwTextGridPage, TextSizeLoseFocusHdl, Control&, rControl, void)
+IMPL_LINK(SwTextGridPage, TextSizeLoseFocusHdl, Control&, rControl, void)
 {
     TextSizeChangedHdl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK_TYPED(SwTextGridPage, TextSizeChangedHdl, SpinField&, rField, void)
+IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField&, rField, void)
 {
     //if in squared mode
     if( m_bSquaredMode )
@@ -492,7 +492,7 @@ IMPL_LINK_TYPED(SwTextGridPage, TextSizeChangedHdl, SpinField&, rField, void)
     GridModifyHdl(*m_pColorLB);
 }
 
-IMPL_LINK_TYPED(SwTextGridPage, GridTypeHdl, Button*, pButton, void)
+IMPL_LINK(SwTextGridPage, GridTypeHdl, Button*, pButton, void)
 {
     bool bEnable = m_pNoGridRB.get() != pButton;
     m_pLayoutFL->Enable(bEnable);
@@ -518,18 +518,18 @@ IMPL_LINK_TYPED(SwTextGridPage, GridTypeHdl, Button*, pButton, void)
     GridModifyHdl(*m_pColorLB);
 }
 
-IMPL_LINK_NOARG_TYPED(SwTextGridPage, DisplayGridHdl, Button*, void)
+IMPL_LINK_NOARG(SwTextGridPage, DisplayGridHdl, Button*, void)
 {
     bool bChecked = m_pDisplayCB->IsChecked();
     m_pPrintCB->Enable(bChecked);
     m_pPrintCB->Check(bChecked);
 }
 
-IMPL_LINK_NOARG_TYPED(SwTextGridPage, GridModifyClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwTextGridPage, GridModifyClickHdl, Button*, void)
 {
     GridModifyHdl(*m_pColorLB);
 }
-IMPL_LINK_NOARG_TYPED(SwTextGridPage, GridModifyHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwTextGridPage, GridModifyHdl, ListBox&, void)
 {
     const SfxItemSet& rOldSet = GetItemSet();
     SfxItemSet aSet(rOldSet);

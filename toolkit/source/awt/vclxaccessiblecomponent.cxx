@@ -111,7 +111,7 @@ uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames() th
     return aNames;
 }
 
-IMPL_LINK_TYPED( VCLXAccessibleComponent, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     /* Ignore VCLEVENT_WINDOW_ENDPOPUPMODE, because the UNO accessibility wrapper
      * might have been destroyed by the previous VCLEventListener (if no AT tool
@@ -127,7 +127,7 @@ IMPL_LINK_TYPED( VCLXAccessibleComponent, WindowEventListener, VclWindowEvent&, 
     }
 }
 
-IMPL_LINK_TYPED( VCLXAccessibleComponent, WindowChildEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclWindowEvent&, rEvent, void )
 {
     if ( m_xVCLXWindow.is() /* #i68079# */ )
     {

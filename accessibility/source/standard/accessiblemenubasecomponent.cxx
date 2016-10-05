@@ -529,7 +529,7 @@ bool OAccessibleMenuBaseComponent::IsPopupMenuOpen()
 }
 
 
-IMPL_LINK_TYPED( OAccessibleMenuBaseComponent, MenuEventListener, VclMenuEvent&, rEvent, void )
+IMPL_LINK( OAccessibleMenuBaseComponent, MenuEventListener, VclMenuEvent&, rEvent, void )
 {
     OSL_ENSURE( rEvent.GetMenu(), "OAccessibleMenuBaseComponent - Menu?" );
     ProcessMenuEvent( rEvent );

@@ -252,12 +252,12 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet* rSet )
     m_pQuickLaunchCB->SaveValue();
 }
 
-IMPL_LINK_NOARG_TYPED(OfaMemoryOptionsPage, GraphicCacheLoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(OfaMemoryOptionsPage, GraphicCacheLoseFocusHdl, Control&, void)
 {
     GraphicCacheConfigHdl(*m_pNfGraphicCache);
 }
 
-IMPL_LINK_NOARG_TYPED(OfaMemoryOptionsPage, GraphicCacheConfigHdl, SpinField&, void)
+IMPL_LINK_NOARG(OfaMemoryOptionsPage, GraphicCacheConfigHdl, SpinField&, void)
 {
     sal_Int32 n = GetNfGraphicCacheVal();
     SetNfGraphicObjectCacheMax( n );

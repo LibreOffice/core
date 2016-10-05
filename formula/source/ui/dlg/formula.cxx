@@ -124,16 +124,16 @@ public:
     const FormulaHelper& GetFormulaHelper() const { return m_aFormulaHelper;}
     uno::Reference< sheet::XFormulaOpCodeMapper > const & GetFormulaOpCodeMapper() const;
 
-    DECL_LINK_TYPED( ModifyHdl, ParaWin&, void );
-    DECL_LINK_TYPED( FxHdl, ParaWin&, void );
+    DECL_LINK( ModifyHdl, ParaWin&, void );
+    DECL_LINK( FxHdl, ParaWin&, void );
 
-    DECL_LINK_TYPED( MatrixHdl, Button*, void );
-    DECL_LINK_TYPED( FormulaHdl, Edit&, void);
-    DECL_LINK_TYPED( FormulaCursorHdl, EditBox&, void );
-    DECL_LINK_TYPED( BtnHdl, Button*, void );
-    DECL_LINK_TYPED( DblClkHdl, FuncPage&, void );
-    DECL_LINK_TYPED( FuncSelHdl, FuncPage&, void );
-    DECL_LINK_TYPED( StructSelHdl, StructPage&, void );
+    DECL_LINK( MatrixHdl, Button*, void );
+    DECL_LINK( FormulaHdl, Edit&, void);
+    DECL_LINK( FormulaCursorHdl, EditBox&, void );
+    DECL_LINK( BtnHdl, Button*, void );
+    DECL_LINK( DblClkHdl, FuncPage&, void );
+    DECL_LINK( FuncSelHdl, FuncPage&, void );
+    DECL_LINK( StructSelHdl, StructPage&, void );
 public:
     mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
     uno::Sequence< sheet::FormulaToken >                    m_aTokenList;
@@ -1009,7 +1009,7 @@ void FormulaDlg_Impl::DoEnter(bool bOk)
 }
 
 
-IMPL_LINK_TYPED( FormulaDlg_Impl, BtnHdl, Button*, pBtn, void )
+IMPL_LINK( FormulaDlg_Impl, BtnHdl, Button*, pBtn, void )
 {
     if ( pBtn == m_pBtnCancel )
     {
@@ -1056,7 +1056,7 @@ IMPL_LINK_TYPED( FormulaDlg_Impl, BtnHdl, Button*, pBtn, void )
 
 // Handler for Listboxes
 
-IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, DblClkHdl, FuncPage&, void)
+IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl, FuncPage&, void)
 {
     sal_Int32 nFunc = pFuncPage->GetFunction();
 
@@ -1240,7 +1240,7 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
     }
 }
 
-IMPL_LINK_TYPED( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
+IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
 {
     if(&rPtr==pParaWin)
     {
@@ -1274,7 +1274,7 @@ IMPL_LINK_TYPED( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
     }
 }
 
-IMPL_LINK_TYPED( FormulaDlg_Impl, ModifyHdl, ParaWin&, rPtr, void )
+IMPL_LINK( FormulaDlg_Impl, ModifyHdl, ParaWin&, rPtr, void )
 {
     if(&rPtr==pParaWin)
     {
@@ -1286,7 +1286,7 @@ IMPL_LINK_TYPED( FormulaDlg_Impl, ModifyHdl, ParaWin&, rPtr, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FormulaHdl, Edit&, void)
+IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl, Edit&, void)
 {
 
     FormEditData* pData = m_pHelper->getFormEditData();
@@ -1350,7 +1350,7 @@ IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FormulaHdl, Edit&, void)
     bEditFlag=false;
 }
 
-IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FormulaCursorHdl, EditBox&, void)
+IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaCursorHdl, EditBox&, void)
 {
     FormEditData* pData = m_pHelper->getFormEditData();
     if (!pData) return;
@@ -1587,20 +1587,20 @@ bool FormulaDlg_Impl::CheckMatrix(OUString& aFormula)
     m_pTabCtrl->SetCurPageId(TP_STRUCT);
     return bMatrix;
 }
-IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, StructSelHdl, StructPage&, void)
+IMPL_LINK_NOARG(FormulaDlg_Impl, StructSelHdl, StructPage&, void)
 {
     bStructUpdate=false;
     if(pStructPage->IsVisible())
         m_pBtnForward->Enable(false); //@New
     bStructUpdate=true;
 }
-IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, MatrixHdl, Button*, void)
+IMPL_LINK_NOARG(FormulaDlg_Impl, MatrixHdl, Button*, void)
 {
     bUserMatrixFlag=true;
     UpdateValues(true);
 }
 
-IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FuncSelHdl, FuncPage&, void)
+IMPL_LINK_NOARG(FormulaDlg_Impl, FuncSelHdl, FuncPage&, void)
 {
     if (   (pFuncPage->GetFunctionEntryCount() > 0)
         && (pFuncPage->GetFunction() != LISTBOX_ENTRY_NOTFOUND) )
@@ -1878,7 +1878,7 @@ void FormulaDlg::SetEdSelection()
     m_pImpl->SetEdSelection();
 }
 
-IMPL_LINK_NOARG_TYPED(FormulaDlg, UpdateFocusHdl, Idle *, void)
+IMPL_LINK_NOARG(FormulaDlg, UpdateFocusHdl, Idle *, void)
 {
     FormEditData* pData = m_pImpl->m_pHelper->getFormEditData();
     if (!pData)

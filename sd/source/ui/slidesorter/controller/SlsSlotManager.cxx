@@ -913,7 +913,7 @@ void SlotManager::RenameSlide()
     }
 }
 
-IMPL_LINK_TYPED(SlotManager, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool)
+IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool)
 {
     OUString aNewName;
     rDialog.GetName( aNewName );

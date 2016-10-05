@@ -28,7 +28,7 @@
 using namespace css;
 
 
-IMPL_LINK_NOARG_TYPED(UnknownAuthDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl, Button*, void)
 {
     if ( m_pOptionButtonAccept->IsChecked() )
     {
@@ -40,7 +40,7 @@ IMPL_LINK_NOARG_TYPED(UnknownAuthDialog, OKHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(UnknownAuthDialog, ViewCertHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl, Button*, void)
 {
     uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures(
         css::security::DocumentDigitalSignatures::createDefault(m_xContext) );

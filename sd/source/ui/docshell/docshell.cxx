@@ -438,7 +438,7 @@ void DrawDocShell::SetModified( bool bSet /* = true */ )
  */
 // ExecuteSpellPopup now handled by DrawDocShell. This is necessary
 // to get hands on the outliner and the text object.
-IMPL_LINK_TYPED(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void)
+IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void)
 {
     SdrObject* pObj = nullptr;
     SdrOutliner* pOutl = nullptr;

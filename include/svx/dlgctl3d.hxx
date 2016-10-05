@@ -173,10 +173,10 @@ public:
 
 protected:
 
-    DECL_LINK_TYPED( InternalInteractiveChange, Svx3DLightControl*, void);
-    DECL_LINK_TYPED( InternalSelectionChange, Svx3DLightControl*, void);
-    DECL_LINK_TYPED( ScrollBarMove, ScrollBar*, void);
-    DECL_LINK_TYPED( ButtonPress, Button*, void);
+    DECL_LINK( InternalInteractiveChange, Svx3DLightControl*, void);
+    DECL_LINK( InternalSelectionChange, Svx3DLightControl*, void);
+    DECL_LINK( ScrollBarMove, ScrollBar*, void);
+    DECL_LINK( ButtonPress, Button*, void);
 
     // initialize local parameters
     void Init();

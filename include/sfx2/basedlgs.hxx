@@ -106,7 +106,7 @@ public:
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 
-    DECL_LINK_TYPED(TimerHdl, Idle *, void);
+    DECL_LINK(TimerHdl, Idle *, void);
 
 };
 
@@ -146,7 +146,7 @@ public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
     void                    Initialize (SfxChildWinInfo* pInfo);
 
-    DECL_LINK_TYPED(TimerHdl, Idle *, void);
+    DECL_LINK(TimerHdl, Idle *, void);
 
 };
 
@@ -186,7 +186,7 @@ protected:
     VclPtr<CancelButton>  pCancelBtn;
     VclPtr<HelpButton>    pHelpBtn;
 
-    DECL_DLLPRIVATE_LINK_TYPED(OKHdl_Impl, Button*, void);
+    DECL_DLLPRIVATE_LINK(OKHdl_Impl, Button*, void);
 
 private:
     std::unique_ptr<SingleTabDlgImpl>   pImpl;

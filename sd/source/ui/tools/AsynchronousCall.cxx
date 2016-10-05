@@ -44,7 +44,7 @@ void AsynchronousCall::Post (const AsynchronousFunction& rFunction)
     maTimer.Start();
 }
 
-IMPL_LINK_TYPED(AsynchronousCall,TimerCallback,Timer*,pTimer,void)
+IMPL_LINK(AsynchronousCall,TimerCallback,Timer*,pTimer,void)
 {
     if (pTimer == &maTimer)
     {

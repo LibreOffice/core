@@ -216,7 +216,7 @@ void SvxHyperlinkInternetTp::SetInitFocus()
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, Edit&, void)
 {
     OUString aScheme = GetSchemeFromURL( m_pCbbTarget->GetText() );
     if( !aScheme.isEmpty() )
@@ -233,7 +233,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, Edit&, voi
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, void)
 {
     RefreshMarkWindow();
 }
@@ -244,7 +244,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, void)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl, Edit&, void)
 {
     OUString aStrLogin ( m_pEdLogin->GetText() );
     if ( aStrLogin.equalsIgnoreAsciiCase( sAnonymous ) )
@@ -331,7 +331,7 @@ INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, Button*, void)
 {
     OUString aScheme = GetSchemeFromButtons();
     SetScheme(aScheme);
@@ -343,7 +343,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, Button*,
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, Button*, void)
 {
     // disable login-editfields if checked
     if ( m_pCbAnonymous->IsChecked() )
@@ -371,7 +371,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, Button*, v
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, Control&, void)
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, Control&, void)
 {
     RefreshMarkWindow();
 }

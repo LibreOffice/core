@@ -112,11 +112,11 @@ private:
     const OUString GetHatchingSetOrDefault();
     const OUString GetBitmapSetOrDefault();
 
-    DECL_LINK_TYPED( ModifyColumnCountHdl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyNumberingHdl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyLayoutHdl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyFillStyleHdl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyFillColorHdl, ListBox&, void );
+    DECL_LINK( ModifyColumnCountHdl, ListBox&, void );
+    DECL_LINK( ModifyNumberingHdl, ListBox&, void );
+    DECL_LINK( ModifyLayoutHdl, ListBox&, void );
+    DECL_LINK( ModifyFillStyleHdl, ListBox&, void );
+    DECL_LINK( ModifyFillColorHdl, ListBox&, void );
 };
 
 } } //end of namespace sw::sidebar

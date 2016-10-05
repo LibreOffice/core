@@ -901,7 +901,7 @@ SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( bool /* bC
     return nullptr;
 }
 
-IMPL_LINK_TYPED(ScAccessibleTextData, NotifyHdl, EENotify&, aNotify, void)
+IMPL_LINK(ScAccessibleTextData, NotifyHdl, EENotify&, aNotify, void)
 {
     ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &aNotify );
 
@@ -1006,7 +1006,7 @@ SvxEditViewForwarder* ScAccessibleEditObjectTextData::GetEditViewForwarder( bool
     return mpEditViewForwarder;
 }
 
-IMPL_LINK_TYPED(ScAccessibleEditObjectTextData, NotifyHdl, EENotify&, rNotify, void)
+IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify&, rNotify, void)
 {
     ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &rNotify );
 

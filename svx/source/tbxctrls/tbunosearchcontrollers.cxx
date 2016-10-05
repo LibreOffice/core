@@ -495,7 +495,7 @@ void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::Featur
     textfieldChanged();
 }
 
-IMPL_LINK_NOARG_TYPED(FindTextToolbarController, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl, Edit&, void)
 {
     textfieldChanged();
 }

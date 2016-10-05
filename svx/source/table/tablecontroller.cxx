@@ -2730,7 +2730,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxTableController, UpdateHdl, void*, void)
+IMPL_LINK_NOARG(SvxTableController, UpdateHdl, void*, void)
 {
     mnUpdateEvent = nullptr;
 

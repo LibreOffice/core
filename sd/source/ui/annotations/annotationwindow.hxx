@@ -91,7 +91,7 @@ class AnnotationWindow : public FloatingWindow
         basegfx::B2DPolygon     maPopupTriangle;
 
     protected:
-        DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
+        DECL_LINK(ScrollHdl, ScrollBar*, void);
 
     public:
         AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent );

@@ -74,7 +74,7 @@ namespace dbaui
         bool    checkTestConnection() override;
 
     private:
-        DECL_LINK_TYPED(ImplGetExtensionHdl, OTextConnectionHelper*, void);
+        DECL_LINK(ImplGetExtensionHdl, OTextConnectionHelper*, void);
     };
 
     // OLDAPConnectionPageSetup
@@ -152,7 +152,7 @@ namespace dbaui
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
         virtual void callModifiedHdl(void* pControl = nullptr) override;
 
-        DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
+        DECL_LINK(OnTestJavaClickHdl, Button*, void);
         VclPtr<FixedText>          m_pHeaderText;
         VclPtr<FixedText>          m_pFTHelpText;
         VclPtr<FixedText>          m_pFTDatabasename;
@@ -188,8 +188,8 @@ namespace dbaui
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
 
-        DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
-        DECL_LINK_TYPED(OnEditModified, Edit&, void);
+        DECL_LINK(OnTestJavaClickHdl, Button*, void);
+        DECL_LINK(OnEditModified, Edit&, void);
         VclPtr<FixedText>          m_pFTDriverClass;
         VclPtr<Edit>               m_pETDriverClass;
         VclPtr<PushButton>         m_pPBTestJavaDriver;
@@ -226,7 +226,7 @@ namespace dbaui
         VclPtr<RadioButton>         m_pNATIVEDatabase;
         Link<OMySQLIntroPageSetup *, void> maClickHdl;
 
-        DECL_LINK_TYPED(OnSetupModeSelected, RadioButton&, void);
+        DECL_LINK(OnSetupModeSelected, RadioButton&, void);
 
     };
 
@@ -277,7 +277,7 @@ namespace dbaui
         bool IsTableWizardToBeStarted();
         void enableTableWizardCheckBox( bool _bSupportsTableCreation);
 
-        DECL_LINK_TYPED(OnOpenSelected, Button*, void);
+        DECL_LINK(OnOpenSelected, Button*, void);
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;

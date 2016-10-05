@@ -64,10 +64,10 @@ public:
     virtual bool    Close() override;
 
 protected:
-    DECL_LINK_TYPED( ListDblClickHdl, ListBox&, void );
+    DECL_LINK( ListDblClickHdl, ListBox&, void );
 #ifdef HAVE_ODBC_ADMINISTRATION
-    DECL_LINK_TYPED(ManageClickHdl, Button*, void);
-    DECL_LINK_TYPED( ManageProcessFinished, void*, void );
+    DECL_LINK(ManageClickHdl, Button*, void);
+    DECL_LINK( ManageProcessFinished, void*, void );
 #endif
     void fillListBox(const StringBag& _rDatasources);
 };

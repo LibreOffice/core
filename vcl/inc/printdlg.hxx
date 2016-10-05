@@ -231,16 +231,16 @@ namespace vcl
         virtual void Command( const CommandEvent& ) override;
         virtual void DataChanged( const DataChangedEvent& ) override;
 
-        DECL_LINK_TYPED( SelectHdl, ListBox&, void );
-        DECL_LINK_TYPED( ClickHdl, Button*, void );
-        DECL_LINK_TYPED( ToggleHdl, CheckBox&, void );
-        DECL_LINK_TYPED( ToggleRadioHdl, RadioButton&, void );
-        DECL_LINK_TYPED( ModifyHdl, Edit&, void );
+        DECL_LINK( SelectHdl, ListBox&, void );
+        DECL_LINK( ClickHdl, Button*, void );
+        DECL_LINK( ToggleHdl, CheckBox&, void );
+        DECL_LINK( ToggleRadioHdl, RadioButton&, void );
+        DECL_LINK( ModifyHdl, Edit&, void );
 
-        DECL_LINK_TYPED( UIOption_CheckHdl, CheckBox&, void );
-        DECL_LINK_TYPED( UIOption_RadioHdl, RadioButton&, void );
-        DECL_LINK_TYPED( UIOption_SelectHdl, ListBox&, void );
-        DECL_LINK_TYPED( UIOption_ModifyHdl, Edit&, void );
+        DECL_LINK( UIOption_CheckHdl, CheckBox&, void );
+        DECL_LINK( UIOption_RadioHdl, RadioButton&, void );
+        DECL_LINK( UIOption_SelectHdl, ListBox&, void );
+        DECL_LINK( UIOption_ModifyHdl, Edit&, void );
 
     public:
         PrintDialog( vcl::Window*, const std::shared_ptr< PrinterController >& );
@@ -266,7 +266,7 @@ namespace vcl
         sal_Int32           mnCur;
         sal_Int32           mnMax;
 
-        DECL_LINK_TYPED( ClickHdl, Button*, void );
+        DECL_LINK( ClickHdl, Button*, void );
 
     public:
         PrintProgressDialog(vcl::Window* i_pParent, int i_nMax);

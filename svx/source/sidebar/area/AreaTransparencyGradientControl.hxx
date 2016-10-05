@@ -66,9 +66,9 @@ private:
     Image               maRotRight;
 
     AreaPropertyPanelBase& mrAreaPropertyPanel;
-    DECL_LINK_TYPED( ModifiedTrgrHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( Left_Click45_Impl, ToolBox*, void );
-    DECL_LINK_TYPED( Right_Click45_Impl, ToolBox*, void );
+    DECL_LINK( ModifiedTrgrHdl_Impl, Edit&, void );
+    DECL_LINK( Left_Click45_Impl, ToolBox*, void );
+    DECL_LINK( Right_Click45_Impl, ToolBox*, void );
 };
 
 

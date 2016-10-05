@@ -23,7 +23,7 @@
 
 SwObjectFactory aSwObjectFactory;
 
-IMPL_STATIC_LINK_TYPED(
+IMPL_STATIC_LINK(
     SwObjectFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
 {
     if ( aParams.nInventor == SWGInventor )

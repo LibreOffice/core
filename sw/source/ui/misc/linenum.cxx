@@ -193,7 +193,7 @@ void SwLineNumberingDlg::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SwLineNumberingDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl, Button*, void)
 {
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
@@ -255,7 +255,7 @@ IMPL_LINK_NOARG_TYPED(SwLineNumberingDlg, OKHdl, Button*, void)
 }
 
 // modify
-IMPL_LINK_NOARG_TYPED(SwLineNumberingDlg, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl, Edit&, void)
 {
     bool bEnable = m_pNumberingOnCB->IsChecked() && !m_pDivisorED->GetText().isEmpty();
 
@@ -265,7 +265,7 @@ IMPL_LINK_NOARG_TYPED(SwLineNumberingDlg, ModifyHdl, Edit&, void)
 }
 
 // On/Off
-IMPL_LINK_NOARG_TYPED(SwLineNumberingDlg, LineOnOffHdl, Button*, void)
+IMPL_LINK_NOARG(SwLineNumberingDlg, LineOnOffHdl, Button*, void)
 {
     bool bEnable = m_pNumberingOnCB->IsChecked();
     m_pBodyContent->Enable(bEnable);

@@ -717,7 +717,7 @@ void OCopyTableWizard::dispose()
     WizardDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(OCopyTableWizard, ImplPrevHdl, Button*, void)
+IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl, Button*, void)
 {
     m_ePressed = WIZARD_PREV;
     if ( GetCurLevel() )
@@ -734,7 +734,7 @@ IMPL_LINK_NOARG_TYPED(OCopyTableWizard, ImplPrevHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(OCopyTableWizard, ImplNextHdl, Button*, void)
+IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl, Button*, void)
 {
     m_ePressed = WIZARD_NEXT;
     if ( GetCurLevel() < MAX_PAGES )
@@ -834,7 +834,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
     return bRet;
 }
 
-IMPL_LINK_NOARG_TYPED(OCopyTableWizard, ImplOKHdl, Button*, void)
+IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, Button*, void)
 {
     m_ePressed = WIZARD_FINISH;
     bool bFinish = DeactivatePage();
@@ -937,7 +937,7 @@ void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rS
         pSettingsPage->setCreatePrimaryKey( _bDoCreate, _rSuggestedName );
 }
 
-IMPL_LINK_NOARG_TYPED(OCopyTableWizard, ImplActivateHdl, WizardDialog*, void)
+IMPL_LINK_NOARG(OCopyTableWizard, ImplActivateHdl, WizardDialog*, void)
 {
     OWizardPage* pCurrent = static_cast<OWizardPage*>(GetPage(GetCurLevel()));
     if(pCurrent)

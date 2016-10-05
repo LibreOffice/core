@@ -680,7 +680,7 @@ bool SwView::PageDownCursor(bool bSelect)
 
 // Handler of the scrollbars
 
-IMPL_LINK_TYPED( SwView, ScrollHdl, ScrollBar *, p, void )
+IMPL_LINK( SwView, ScrollHdl, ScrollBar *, p, void )
 {
     SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if ( GetWrtShell().ActionPend() )
@@ -752,7 +752,7 @@ IMPL_LINK_TYPED( SwView, ScrollHdl, ScrollBar *, p, void )
 
 // Handler of the scrollbars
 
-IMPL_LINK_TYPED( SwView, EndScrollHdl, ScrollBar *, p, void )
+IMPL_LINK( SwView, EndScrollHdl, ScrollBar *, p, void )
 {
     SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if ( !GetWrtShell().ActionPend() )

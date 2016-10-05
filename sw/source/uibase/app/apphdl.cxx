@@ -385,11 +385,11 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
     AbstractMailMergeWizard* m_pWizard;     // always owner
     bool                     m_bDestroyMMToolbarOnCancel;
 
-    DECL_LINK_TYPED( EndDialogHdl, Dialog&, void );
-    DECL_LINK_TYPED( DestroyDialogHdl, void*, void );
-    DECL_STATIC_LINK_TYPED( SwMailMergeWizardExecutor, DestroyWizardHdl, void*, void );
-    DECL_LINK_TYPED( CancelHdl, void*, void );
-    DECL_LINK_TYPED( CloseFrameHdl, void*, void );
+    DECL_LINK( EndDialogHdl, Dialog&, void );
+    DECL_LINK( DestroyDialogHdl, void*, void );
+    DECL_STATIC_LINK( SwMailMergeWizardExecutor, DestroyWizardHdl, void*, void );
+    DECL_LINK( CancelHdl, void*, void );
+    DECL_LINK( CloseFrameHdl, void*, void );
 
     void ExecutionFinished();
     void ExecuteWizard();
@@ -494,7 +494,7 @@ void SwMailMergeWizardExecutor::ExecuteWizard()
         LINK( this, SwMailMergeWizardExecutor, EndDialogHdl ) );
 }
 
-IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
+IMPL_LINK_NOARG( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
 {
     long nRet = m_pWizard->GetResult();
     sal_uInt16 nRestartPage = m_pWizard->GetRestartPage();
@@ -609,7 +609,7 @@ IMPL_LINK_NOARG_TYPED( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
     } // switch
 }
 
-IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, DestroyDialogHdl, void*, void)
+IMPL_LINK_NOARG(SwMailMergeWizardExecutor, DestroyDialogHdl, void*, void)
 {
     delete m_pWizard;
     m_pWizard = nullptr;
@@ -617,12 +617,12 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, DestroyDialogHdl, void*, void)
     release();
 }
 
-IMPL_STATIC_LINK_TYPED(SwMailMergeWizardExecutor, DestroyWizardHdl, void*, pDialog, void )
+IMPL_STATIC_LINK(SwMailMergeWizardExecutor, DestroyWizardHdl, void*, pDialog, void )
 {
     delete static_cast<AbstractMailMergeWizard*>(pDialog);
 }
 
-IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
+IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CancelHdl, void*, void)
 {
     std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->GetMailMergeConfigItem();
     if (xMMConfig)
@@ -658,7 +658,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
     release();
 }
 
-IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CloseFrameHdl, void*, void)
+IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CloseFrameHdl, void*, void)
 {
     if ( m_pView2Close )
     {

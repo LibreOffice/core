@@ -74,15 +74,15 @@ class SwAddressListDialog : public SfxModalDialog
 
     void DetectTablesAndQueries(SvTreeListEntry* pSelect, bool bWidthDialog);
 
-    DECL_LINK_TYPED(FilterHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(LoadHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(CreateHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(ListBoxSelectHdl_Impl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(EditHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(TableSelectHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
+    DECL_LINK(FilterHdl_Impl, Button*, void);
+    DECL_LINK(LoadHdl_Impl, Button*, void);
+    DECL_LINK(CreateHdl_Impl, Button*, void);
+    DECL_LINK(ListBoxSelectHdl_Impl, SvTreeListBox*, void);
+    DECL_LINK(EditHdl_Impl, Button*, void);
+    DECL_LINK(TableSelectHdl_Impl, Button*, void);
+    DECL_LINK(OKHdl_Impl, Button*, void);
 
-    DECL_LINK_TYPED(StaticListBoxSelectHdl_Impl, void*, void);
+    DECL_LINK(StaticListBoxSelectHdl_Impl, void*, void);
 
 public:
     SwAddressListDialog(SwMailMergeAddressBlockPage* pParent);

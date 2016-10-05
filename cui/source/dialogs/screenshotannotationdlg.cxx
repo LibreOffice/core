@@ -70,10 +70,10 @@ public:
 
 private:
     // Handler for click on save
-    DECL_LINK_TYPED(saveButtonHandler, Button*, void);
+    DECL_LINK(saveButtonHandler, Button*, void);
 
     // Handler for clicks on picture frame
-    DECL_LINK_TYPED(pictureFrameListener, VclWindowEvent&, void);
+    DECL_LINK(pictureFrameListener, VclWindowEvent&, void);
 
     // helper methods
     void CollectChildren(
@@ -241,7 +241,7 @@ ScreenshotAnnotationDlg_Impl::~ScreenshotAnnotationDlg_Impl()
     mpVirtualBufferDevice.disposeAndClear();
 }
 
-IMPL_LINK_TYPED(ScreenshotAnnotationDlg_Impl, saveButtonHandler, Button*, pButton, void)
+IMPL_LINK(ScreenshotAnnotationDlg_Impl, saveButtonHandler, Button*, pButton, void)
 {
     (void)pButton;
 
@@ -482,7 +482,7 @@ void ScreenshotAnnotationDlg_Impl::RepaintPictureElement()
     }
 }
 
-IMPL_LINK_TYPED(ScreenshotAnnotationDlg_Impl, pictureFrameListener, VclWindowEvent&, rEvent, void)
+IMPL_LINK(ScreenshotAnnotationDlg_Impl, pictureFrameListener, VclWindowEvent&, rEvent, void)
 {
     // event in picture frame
     bool bRepaint(false);

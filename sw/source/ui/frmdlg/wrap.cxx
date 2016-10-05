@@ -587,11 +587,11 @@ DeactivateRC SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 }
 
 // range check
-IMPL_LINK_TYPED( SwWrapTabPage, RangeLoseFocusHdl, Control&, rControl, void )
+IMPL_LINK( SwWrapTabPage, RangeLoseFocusHdl, Control&, rControl, void )
 {
     RangeModifyHdl( static_cast<SpinField&>(rControl) );
 }
-IMPL_LINK_TYPED( SwWrapTabPage, RangeModifyHdl, SpinField&, rSpin, void )
+IMPL_LINK( SwWrapTabPage, RangeModifyHdl, SpinField&, rSpin, void )
 {
     MetricField& rEdit = static_cast<MetricField&>(rSpin);
     sal_Int64 nValue = rEdit.GetValue();
@@ -616,7 +616,7 @@ IMPL_LINK_TYPED( SwWrapTabPage, RangeModifyHdl, SpinField&, rSpin, void )
     }
 }
 
-IMPL_LINK_TYPED( SwWrapTabPage, WrapTypeHdl, Button *, pBtn, void )
+IMPL_LINK( SwWrapTabPage, WrapTypeHdl, Button *, pBtn, void )
 {
     bool bWrapThrough = (pBtn == m_pWrapThroughRB);
     m_pWrapTransparentCB->Enable( bWrapThrough && !m_bHtmlMode );
@@ -630,7 +630,7 @@ IMPL_LINK_TYPED( SwWrapTabPage, WrapTypeHdl, Button *, pBtn, void )
     ContourHdl(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED(SwWrapTabPage, ContourHdl, Button*, void)
+IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl, Button*, void)
 {
     bool bEnable = !(m_pWrapOutlineCB->IsChecked() && m_pWrapOutlineCB->IsEnabled());
 

@@ -117,15 +117,15 @@ private:
 
     MapUnit meUnit;
 
-    DECL_LINK_TYPED(FillBackgroundHdl, ListBox&, void);
-    DECL_LINK_TYPED(FillStyleModifyHdl, ListBox&, void);
-    DECL_LINK_TYPED(PaperSizeModifyHdl, ListBox&, void);
-    DECL_LINK_TYPED(FillColorHdl, ListBox&, void);
-    DECL_LINK_TYPED(AssignMasterPage, ListBox&, void);
-    DECL_LINK_TYPED(DspBackground, Button*, void);
-    DECL_LINK_TYPED(DspObjects, Button*, void);
-    DECL_LINK_TYPED(CloseMasterHdl, Button*, void);
-    DECL_LINK_TYPED(EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
+    DECL_LINK(FillBackgroundHdl, ListBox&, void);
+    DECL_LINK(FillStyleModifyHdl, ListBox&, void);
+    DECL_LINK(PaperSizeModifyHdl, ListBox&, void);
+    DECL_LINK(FillColorHdl, ListBox&, void);
+    DECL_LINK(AssignMasterPage, ListBox&, void);
+    DECL_LINK(DspBackground, Button*, void);
+    DECL_LINK(DspObjects, Button*, void);
+    DECL_LINK(CloseMasterHdl, Button*, void);
+    DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
 
     void Initialize();
     void Update();

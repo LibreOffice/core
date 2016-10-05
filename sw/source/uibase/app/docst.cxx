@@ -541,7 +541,7 @@ public:
         , m_bModified(bModified)
     {
     }
-    DECL_LINK_TYPED( ApplyHdl, LinkParamNone*, void );
+    DECL_LINK( ApplyHdl, LinkParamNone*, void );
     void apply()
     {
         ApplyHdl(nullptr);
@@ -559,7 +559,7 @@ private:
     bool m_bModified;
 };
 
-IMPL_LINK_NOARG_TYPED(ApplyStyle, ApplyHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
 {
     SwWrtShell* pWrtShell = m_rDocSh.GetWrtShell();
     SwDoc* pDoc = m_rDocSh.GetDoc();

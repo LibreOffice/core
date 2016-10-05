@@ -85,11 +85,11 @@ namespace dbaui
         virtual void _disposing( const css::lang::EventObject& _rSource ) override;
 
     protected:
-        DECL_LINK_TYPED( OnExecute, Button*, void );
-        DECL_LINK_TYPED( OnClose, void*, void );
-        DECL_LINK_TYPED( OnCloseClick, Button*, void );
-        DECL_LINK_TYPED( OnListEntrySelected, ListBox&, void );
-        DECL_LINK_TYPED( OnStatementModified, Edit&, void );
+        DECL_LINK( OnExecute, Button*, void );
+        DECL_LINK( OnClose, void*, void );
+        DECL_LINK( OnCloseClick, Button*, void );
+        DECL_LINK( OnListEntrySelected, ListBox&, void );
+        DECL_LINK( OnStatementModified, Edit&, void );
 
     private:
         /// adds a statement to the statement history

@@ -119,10 +119,10 @@ namespace dbaui
 
         virtual void CellModified() override;
 
-        DECL_LINK_TYPED( AsynchDeactivate, void*, void );
+        DECL_LINK( AsynchDeactivate, void*, void );
     private:
 
-        DECL_LINK_TYPED( AsynchActivate, void*, void );
+        DECL_LINK( AsynchActivate, void*, void );
 
     };
 
@@ -199,12 +199,12 @@ namespace dbaui
         return EditBrowseBox::PreNotify(rNEvt);
     }
 
-    IMPL_LINK_NOARG_TYPED(ORelationControl, AsynchActivate, void*, void)
+    IMPL_LINK_NOARG(ORelationControl, AsynchActivate, void*, void)
     {
         ActivateCell();
     }
 
-    IMPL_LINK_NOARG_TYPED(ORelationControl, AsynchDeactivate, void*, void)
+    IMPL_LINK_NOARG(ORelationControl, AsynchDeactivate, void*, void)
     {
         DeactivateCell();
     }
@@ -514,7 +514,7 @@ namespace dbaui
         m_pLeftTable->GrabFocus();
     }
 
-    IMPL_LINK_TYPED( OTableListBoxControl, OnTableChanged, ListBox&, rListBox, void )
+    IMPL_LINK( OTableListBoxControl, OnTableChanged, ListBox&, rListBox, void )
     {
         OUString strSelected(rListBox.GetSelectEntry());
         OTableWindow* pLeft     = nullptr;

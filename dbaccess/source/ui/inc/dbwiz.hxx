@@ -106,7 +106,7 @@ protected:
     };
 
 private:
-    DECL_LINK_TYPED(OnTypeSelected, OGeneralPage&, void);
+    DECL_LINK(OnTypeSelected, OGeneralPage&, void);
 };
 
 }   // namespace dbaui

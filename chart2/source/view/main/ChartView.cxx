@@ -3145,7 +3145,7 @@ void ChartView::setViewDirty()
     m_bViewDirty = true;
 }
 
-IMPL_LINK_NOARG_TYPED(ChartView, UpdateTimeBased, Timer *, void)
+IMPL_LINK_NOARG(ChartView, UpdateTimeBased, Timer *, void)
 {
     setViewDirty();
     update();

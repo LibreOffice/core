@@ -41,7 +41,7 @@ namespace accessibility
         }
     }
 
-    IMPL_LINK_TYPED( ListBoxAccessibleBase, WindowEventListener, VclWindowEvent&, rEvent, void )
+    IMPL_LINK( ListBoxAccessibleBase, WindowEventListener, VclWindowEvent&, rEvent, void )
     {
         OSL_ENSURE( rEvent.GetWindow() , "ListBoxAccessibleBase::WindowEventListener: no event window!" );
         OSL_ENSURE( rEvent.GetWindow() == m_pWindow, "ListBoxAccessibleBase::WindowEventListener: where did this come from?" );

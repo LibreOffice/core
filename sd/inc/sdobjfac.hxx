@@ -29,7 +29,7 @@ class SdObjectFactory
 public:
     SdObjectFactory() {}
 
-    DECL_STATIC_LINK_TYPED( SdObjectFactory, MakeUserData, SdrObjUserDataCreatorParams, SdrObjUserData* );
+    DECL_STATIC_LINK( SdObjectFactory, MakeUserData, SdrObjUserDataCreatorParams, SdrObjUserData* );
 };
 
 extern SdObjectFactory aSdObjectFactory;

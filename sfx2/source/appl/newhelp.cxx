@@ -720,18 +720,18 @@ void IndexTabPage_Impl::ClearIndex()
     m_pIndexCB->Clear();
 }
 
-IMPL_LINK_NOARG_TYPED(IndexTabPage_Impl, OpenHdl, Button*, void)
+IMPL_LINK_NOARG(IndexTabPage_Impl, OpenHdl, Button*, void)
 {
     m_pIndexCB->GetDoubleClickHdl().Call(*m_pIndexCB);
 }
 
-IMPL_LINK_TYPED( IndexTabPage_Impl, IdleHdl, Idle*, pIdle, void )
+IMPL_LINK( IndexTabPage_Impl, IdleHdl, Idle*, pIdle, void )
 {
     if ( &aFactoryIdle == pIdle )
         InitializeIndex();
 }
 
-IMPL_LINK_TYPED( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer, void)
+IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer, void)
 {
     if(&aKeywordTimer == pTimer && !sKeyword.isEmpty())
         aKeywordLink.Call(*this);
@@ -1016,12 +1016,12 @@ void SearchTabPage_Impl::RememberSearchText( const OUString& rSearchText )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(SearchTabPage_Impl, ClickHdl, Button*, void)
 {
     SearchHdl(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
 {
     OUString aSearchText = comphelper::string::strip(m_pSearchED->GetText(), ' ');
     if ( !aSearchText.isEmpty() )
@@ -1058,12 +1058,12 @@ IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, OpenHdl, Button*, void)
+IMPL_LINK_NOARG(SearchTabPage_Impl, OpenHdl, Button*, void)
 {
     m_pResultsLB->GetDoubleClickHdl().Call(*m_pResultsLB);
 }
 
-IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl, Edit&, void)
 {
     OUString aSearchText = comphelper::string::strip(m_pSearchED->GetText(), ' ');
     m_pSearchBtn->Enable(!aSearchText.isEmpty());
@@ -1302,7 +1302,7 @@ void BookmarksTabPage_Impl::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(BookmarksTabPage_Impl, OpenHdl, Button*, void)
+IMPL_LINK_NOARG(BookmarksTabPage_Impl, OpenHdl, Button*, void)
 {
     m_pBookmarksBox->GetDoubleClickHdl().Call(*m_pBookmarksBox);
 }
@@ -1544,19 +1544,19 @@ HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage( sal_uInt16& rCurId )
     return pPage;
 }
 
-IMPL_LINK_TYPED( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl, void )
+IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl, void )
 {
     sal_uInt16 nId = 0;
     TabPage* pPage = GetCurrentPage( nId );
     pTabCtrl->SetTabPage( nId, pPage );
 }
 
-IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl, ListBox&, void)
 {
     aIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, InitHdl, Idle *, void)
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl, Idle *, void)
 {
     bIsInitDone = true;
     Initialize();
@@ -1566,7 +1566,7 @@ IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, InitHdl, Idle *, void)
     aIdle.SetPriority( SchedulerPriority::LOWEST );
 }
 
-IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, SelectFactoryHdl, Idle *, void)
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl, Idle *, void)
 {
     OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetSelectEntryData());
     if ( pFactory )
@@ -1576,7 +1576,7 @@ IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, SelectFactoryHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl&, void)
+IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl&, void)
 {
     // keyword found on index?
     bool bIndex = pIPage->HasKeyword();
@@ -1598,7 +1598,7 @@ IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl&, v
         pParentWin->ShowStartPage();
 }
 
-IMPL_LINK_TYPED(SfxHelpIndexWindow_Impl, IndexTabPageDoubleClickHdl, ComboBox&, rBox, void)
+IMPL_LINK(SfxHelpIndexWindow_Impl, IndexTabPageDoubleClickHdl, ComboBox&, rBox, void)
 {
     aPageDoubleClickLink.Call(&rBox);
 }
@@ -1689,12 +1689,12 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link<Control*,bool>& rLin
     aPageDoubleClickLink = rLink;
 }
 
-IMPL_LINK_TYPED(SfxHelpIndexWindow_Impl, ContentTabPageDoubleClickHdl, SvTreeListBox*, p, bool)
+IMPL_LINK(SfxHelpIndexWindow_Impl, ContentTabPageDoubleClickHdl, SvTreeListBox*, p, bool)
 {
     return aPageDoubleClickLink.Call(p);
 }
 
-IMPL_LINK_TYPED(SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl, ListBox&, r, void)
+IMPL_LINK(SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl, ListBox&, r, void)
 {
     aPageDoubleClickLink.Call(&r);
 }
@@ -2154,7 +2154,7 @@ bool SfxHelpTextWindow_Impl::isHandledKey( const vcl::KeyCode& _rKeyCode )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxHelpTextWindow_Impl, SelectHdl, Idle *, void)
+IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl, Idle *, void)
 {
     try
     {
@@ -2192,7 +2192,7 @@ IMPL_LINK_NOARG_TYPED(SfxHelpTextWindow_Impl, SelectHdl, Idle *, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED( SfxHelpTextWindow_Impl, NotifyHdl, LinkParamNone*, void )
+IMPL_LINK_NOARG( SfxHelpTextWindow_Impl, NotifyHdl, LinkParamNone*, void )
 {
     InitToolBoxImages();
     Resize();
@@ -2200,7 +2200,7 @@ IMPL_LINK_NOARG_TYPED( SfxHelpTextWindow_Impl, NotifyHdl, LinkParamNone*, void )
 }
 
 
-IMPL_LINK_TYPED( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog&, rDlg, void )
+IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog&, rDlg, void )
 {
     FindHdl(&rDlg);
 }
@@ -2283,13 +2283,13 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
 }
 
 
-IMPL_LINK_NOARG_TYPED( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, void )
+IMPL_LINK_NOARG( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, void )
 {
     pSrchDlg.clear();
 }
 
 
-IMPL_LINK_TYPED( SfxHelpTextWindow_Impl, CheckHdl, Button*, pButton, void )
+IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, Button*, pButton, void )
 {
     CheckBox* pBox = static_cast<CheckBox*>(pButton);
     if ( xConfiguration.is() )
@@ -2804,7 +2804,7 @@ void SfxHelpWindow_Impl::ShowStartPage()
 }
 
 
-IMPL_LINK_TYPED( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox, void )
+IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox, void )
 {
     if ( pToolBox )
     {
@@ -2814,7 +2814,7 @@ IMPL_LINK_TYPED( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
+IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
 {
     pIndexWin->SelectExecutableEntry();
     OUString aEntry = pIndexWin->GetSelectEntry();
@@ -2854,7 +2854,7 @@ IMPL_LINK_NOARG_TYPED(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
 }
 
 
-IMPL_LINK_TYPED( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin, void )
+IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin, void )
 {
     if ( sTitle.isEmpty() )
         sTitle = GetParent()->GetText();
@@ -2871,7 +2871,7 @@ IMPL_LINK_TYPED( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* 
 }
 
 
-IMPL_LINK_TYPED( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl&, rListener, void )
+IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl&, rListener, void )
 {
     SetFactory( rListener.GetFactory() );
 }

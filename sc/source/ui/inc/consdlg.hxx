@@ -91,11 +91,11 @@ private:
     void FillAreaLists      ();
     bool VerifyEdit         ( formula::RefEdit* pEd );
 
-    DECL_LINK_TYPED( OkHdl,    Button*, void );
-    DECL_LINK_TYPED( ClickHdl, Button*, void );
-    DECL_LINK_TYPED( GetFocusHdl, Control&, void );
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
+    DECL_LINK( OkHdl,    Button*, void );
+    DECL_LINK( ClickHdl, Button*, void );
+    DECL_LINK( GetFocusHdl, Control&, void );
+    DECL_LINK( ModifyHdl, Edit&, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
 
     static ScSubTotalFunc  LbPosToFunc( sal_Int32 nPos );
     static sal_Int32      FuncToLbPos( ScSubTotalFunc eFunc );

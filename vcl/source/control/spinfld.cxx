@@ -962,7 +962,7 @@ Size SpinField::CalcSize(sal_Int32 nChars) const
     return aSz;
 }
 
-IMPL_LINK_TYPED( SpinField, ImplTimeout, Timer*, pTimer, void )
+IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer, void )
 {
     if ( pTimer->GetTimeout() == GetSettings().GetMouseSettings().GetButtonStartRepeat() )
     {

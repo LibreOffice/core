@@ -88,13 +88,13 @@ friend class SfxTabDialogUIObject;
     bool                m_bItemsReset;
     bool                m_bStandardPushed;
 
-    DECL_DLLPRIVATE_LINK_TYPED(ActivatePageHdl, TabControl*, void );
-    DECL_DLLPRIVATE_LINK_TYPED(DeactivatePageHdl, TabControl*, bool );
-    DECL_DLLPRIVATE_LINK_TYPED(OkHdl, Button*, void);
-    DECL_DLLPRIVATE_LINK_TYPED(ResetHdl, Button*, void);
-    DECL_DLLPRIVATE_LINK_TYPED(BaseFmtHdl, Button*, void);
-    DECL_DLLPRIVATE_LINK_TYPED(UserHdl, Button*, void);
-    DECL_DLLPRIVATE_LINK_TYPED(CancelHdl, Button*, void);
+    DECL_DLLPRIVATE_LINK(ActivatePageHdl, TabControl*, void );
+    DECL_DLLPRIVATE_LINK(DeactivatePageHdl, TabControl*, bool );
+    DECL_DLLPRIVATE_LINK(OkHdl, Button*, void);
+    DECL_DLLPRIVATE_LINK(ResetHdl, Button*, void);
+    DECL_DLLPRIVATE_LINK(BaseFmtHdl, Button*, void);
+    DECL_DLLPRIVATE_LINK(UserHdl, Button*, void);
+    DECL_DLLPRIVATE_LINK(CancelHdl, Button*, void);
     SAL_DLLPRIVATE void Init_Impl(bool bFmtFlag);
 
 protected:

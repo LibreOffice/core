@@ -473,7 +473,7 @@ VclPtr<SfxTabPage> SvxShadowTabPage::Create( vcl::Window* pWindow,
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ClickShadowHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl, Button*, void)
 {
     if( m_pTsbShowShadow->GetState() == TRISTATE_FALSE )
     {
@@ -489,11 +489,11 @@ IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ClickShadowHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, SelectShadowHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxShadowTabPage, SelectShadowHdl_Impl, ListBox&, void)
 {
     ModifyShadowHdl_Impl(*m_pMtrTransparent);
 }
-IMPL_LINK_NOARG_TYPED(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
 {
     if( m_pTsbShowShadow->GetState() == TRISTATE_TRUE )
         m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );

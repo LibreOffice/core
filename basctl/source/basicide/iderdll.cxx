@@ -170,7 +170,7 @@ void ExtraData::SetSearchItem (const SvxSearchItem& rItem)
     pSearchItem.reset(static_cast<SvxSearchItem*>(rItem.Clone()));
 }
 
-IMPL_STATIC_LINK_TYPED(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic, sal_uInt16)
+IMPL_STATIC_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic, sal_uInt16)
 {
     sal_uInt16 nRet = 0;
     if (Shell* pShell = GetShell())

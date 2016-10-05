@@ -106,7 +106,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
 }
 
 
-IMPL_LINK_TYPED( SvxModifyControl, OnTimer, Idle *, pTimer, void )
+IMPL_LINK( SvxModifyControl, OnTimer, Idle *, pTimer, void )
 {
     if (pTimer == nullptr)
         return;

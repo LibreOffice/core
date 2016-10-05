@@ -67,10 +67,10 @@ private:
 
     ScDocument* mpDoc;
 
-    DECL_LINK_TYPED(RemoveBtnHdl, Button*, void);
-    DECL_LINK_TYPED(EditBtnClickHdl, Button*, void);
-    DECL_LINK_TYPED(AddBtnHdl, Button*, void);
-    DECL_LINK_TYPED(EditBtnHdl, SvTreeListBox*, bool);
+    DECL_LINK(RemoveBtnHdl, Button*, void);
+    DECL_LINK(EditBtnClickHdl, Button*, void);
+    DECL_LINK(AddBtnHdl, Button*, void);
+    DECL_LINK(EditBtnHdl, SvTreeListBox*, bool);
 
     bool mbModified;
 };

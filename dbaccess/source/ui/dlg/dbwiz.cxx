@@ -107,7 +107,7 @@ void ODbTypeWizDialog::dispose()
     svt::OWizardMachine::dispose();
 }
 
-IMPL_LINK_TYPED(ODbTypeWizDialog, OnTypeSelected, OGeneralPage&, _rTabPage, void)
+IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage&, _rTabPage, void)
 {
     m_eType = _rTabPage.GetSelectedType();
     const bool bURLRequired = m_pCollection->isConnectionUrlRequired(m_eType);

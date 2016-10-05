@@ -309,7 +309,7 @@ private:
                                 bool                bEnlarge
                             ) const;
 
-                            DECL_LINK_TYPED( ImplAutoSwapOutHdl, Timer*, void );
+                            DECL_LINK( ImplAutoSwapOutHdl, Timer*, void );
 
     // restart SwapOut timer; this is like touching in a cache to reset to the full timeout value
     void SVT_DLLPRIVATE     restartSwapOutTimer() const;

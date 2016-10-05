@@ -259,7 +259,7 @@ namespace dbp
     }
 
 
-    IMPL_LINK_TYPED( ORadioSelectionPage, OnMoveEntry, Button*, _pButton, void )
+    IMPL_LINK( ORadioSelectionPage, OnMoveEntry, Button*, _pButton, void )
     {
         bool bMoveLeft = (m_pMoveLeft == _pButton);
         if (bMoveLeft)
@@ -283,13 +283,13 @@ namespace dbp
     }
 
 
-    IMPL_LINK_NOARG_TYPED( ORadioSelectionPage, OnEntrySelected, ListBox&, void )
+    IMPL_LINK_NOARG( ORadioSelectionPage, OnEntrySelected, ListBox&, void )
     {
         implCheckMoveButtons();
     }
 
 
-    IMPL_LINK_NOARG_TYPED( ORadioSelectionPage, OnNameModified, Edit&, void )
+    IMPL_LINK_NOARG( ORadioSelectionPage, OnNameModified, Edit&, void )
     {
         implCheckMoveButtons();
     }
@@ -401,7 +401,7 @@ namespace dbp
         OGBWPage::dispose();
     }
 
-    IMPL_LINK_NOARG_TYPED( OOptionValuesPage, OnOptionSelected, ListBox&, void )
+    IMPL_LINK_NOARG( OOptionValuesPage, OnOptionSelected, ListBox&, void )
     {
         implTraveledOptions();
     }

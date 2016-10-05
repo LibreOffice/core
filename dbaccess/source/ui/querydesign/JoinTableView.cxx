@@ -200,7 +200,7 @@ void OJoinTableView::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_LINK_TYPED( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar, void )
+IMPL_LINK( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar, void )
 {
     // move all windows
     ScrollPane( pScrollBar->GetDelta(), (pScrollBar == &GetHScrollBar()), false );
@@ -1073,7 +1073,7 @@ void OJoinTableView::ScrollWhileDragging()
     ShowTracking( m_aDragRect, ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
 }
 
-IMPL_LINK_NOARG_TYPED(OJoinTableView, OnDragScrollTimer, Idle *, void)
+IMPL_LINK_NOARG(OJoinTableView, OnDragScrollTimer, Idle *, void)
 {
     ScrollWhileDragging();
 }

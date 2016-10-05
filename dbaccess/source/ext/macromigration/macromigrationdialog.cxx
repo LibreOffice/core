@@ -272,7 +272,7 @@ namespace dbmm
         return MacroMigrationDialog_Base::onFinish();
     }
 
-    IMPL_LINK_NOARG_TYPED( MacroMigrationDialog, OnStartMigration, void*, void )
+    IMPL_LINK_NOARG( MacroMigrationDialog, OnStartMigration, void*, void )
     {
         // prevent closing
         m_pData->bMigrationIsRunning = true;

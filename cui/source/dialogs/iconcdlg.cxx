@@ -334,7 +334,7 @@ void IconChoiceDialog::ShowPage(sal_uInt16 nId)
 | select a page
 |
 \**********************************************************************/
-IMPL_LINK_NOARG_TYPED(IconChoiceDialog , ChosePageHdl_Impl, SvtIconChoiceCtrl*, void)
+IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl, SvtIconChoiceCtrl*, void)
 {
     SvxIconChoiceCtrlEntry *pEntry = m_pIconCtrl->GetSelectedEntry();
     if ( !pEntry )
@@ -354,7 +354,7 @@ IMPL_LINK_NOARG_TYPED(IconChoiceDialog , ChosePageHdl_Impl, SvtIconChoiceCtrl*, 
 |
 \**********************************************************************/
 
-IMPL_LINK_NOARG_TYPED(IconChoiceDialog, OkHdl, Button*, void)
+IMPL_LINK_NOARG(IconChoiceDialog, OkHdl, Button*, void)
 {
     bInOK = true;
 
@@ -366,7 +366,7 @@ IMPL_LINK_NOARG_TYPED(IconChoiceDialog, OkHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(IconChoiceDialog, ApplyHdl, Button*, void)
+IMPL_LINK_NOARG(IconChoiceDialog, ApplyHdl, Button*, void)
 {
     bInOK = true;
 
@@ -377,7 +377,7 @@ IMPL_LINK_NOARG_TYPED(IconChoiceDialog, ApplyHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(IconChoiceDialog, ResetHdl, Button*, void)
+IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl, Button*, void)
 {
     ResetPageImpl ();
 
@@ -388,7 +388,7 @@ IMPL_LINK_NOARG_TYPED(IconChoiceDialog, ResetHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(IconChoiceDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(IconChoiceDialog, CancelHdl, Button*, void)
 {
     Close();
 }

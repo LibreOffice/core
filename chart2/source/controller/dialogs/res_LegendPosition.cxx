@@ -165,7 +165,7 @@ void LegendPositionResources::writeToModel( const css::uno::Reference< frame::XM
     }
 }
 
-IMPL_LINK_NOARG_TYPED(LegendPositionResources, PositionEnableHdl, CheckBox&, void)
+IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl, CheckBox&, void)
 {
     bool bEnable = m_pCbxShow == nullptr || m_pCbxShow->IsChecked();
 
@@ -225,7 +225,7 @@ void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
     rOutAttrs.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, m_pCbxShow == nullptr || m_pCbxShow->IsChecked()) );
 }
 
-IMPL_LINK_TYPED( LegendPositionResources, PositionChangeHdl, RadioButton&, rRadio, void )
+IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton&, rRadio, void )
 {
     //for each radio click there are coming two change events
     //first uncheck of previous button -> ignore that call

@@ -470,7 +470,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     }
 }
 
-IMPL_LINK_TYPED( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
+IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
     bPastePossible = ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) || pDataHelper->HasFormat( SotClipboardFormatId::RTF ) );
 

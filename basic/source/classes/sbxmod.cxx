@@ -456,10 +456,10 @@ public:
         uno::Reference< frame::XDesktop2 > xDeskTop = frame::Desktop::create( comphelper::getProcessComponentContext() );
         xDeskTop->terminate();
     }
-    DECL_STATIC_LINK_TYPED( AsyncQuitHandler, OnAsyncQuit, void*, void );
+    DECL_STATIC_LINK( AsyncQuitHandler, OnAsyncQuit, void*, void );
 };
 
-IMPL_STATIC_LINK_NOARG_TYPED( AsyncQuitHandler, OnAsyncQuit, void*, void )
+IMPL_STATIC_LINK_NOARG( AsyncQuitHandler, OnAsyncQuit, void*, void )
 {
     QuitApplication();
 }
@@ -1732,11 +1732,11 @@ public:
         // restore error handler
         StarBASIC::SetGlobalErrorHdl(mErrHandler);
     }
-    DECL_LINK_TYPED( BasicErrorHdl, StarBASIC *, bool );
+    DECL_LINK( BasicErrorHdl, StarBASIC *, bool );
     bool HasError() { return mbError; }
 };
 
-IMPL_LINK_TYPED( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
+IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
 {
     mbError = true;
     return false;

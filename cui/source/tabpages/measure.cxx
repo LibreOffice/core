@@ -612,7 +612,7 @@ void SvxMeasurePage::PointChanged( vcl::Window* pWindow, RectPoint /*eRP*/ )
     ChangeAttrHdl_Impl( pWindow );
 }
 
-IMPL_LINK_TYPED( SvxMeasurePage, ClickAutoPosHdl_Impl, Button*, p, void )
+IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, Button*, p, void )
 {
     if( m_pTsbAutoPosH->GetState() == TRISTATE_TRUE )
     {
@@ -659,15 +659,15 @@ IMPL_LINK_TYPED( SvxMeasurePage, ClickAutoPosHdl_Impl, Button*, p, void )
     ChangeAttrHdl_Impl( p );
 }
 
-IMPL_LINK_TYPED( SvxMeasurePage, ChangeAttrClickHdl_Impl, Button*, p, void )
+IMPL_LINK( SvxMeasurePage, ChangeAttrClickHdl_Impl, Button*, p, void )
 {
     ChangeAttrHdl_Impl(p);
 }
-IMPL_LINK_TYPED( SvxMeasurePage, ChangeAttrListBoxHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxMeasurePage, ChangeAttrListBoxHdl_Impl, ListBox&, rBox, void )
 {
     ChangeAttrHdl_Impl(&rBox);
 }
-IMPL_LINK_TYPED( SvxMeasurePage, ChangeAttrEditHdl_Impl, Edit&, rBox, void )
+IMPL_LINK( SvxMeasurePage, ChangeAttrEditHdl_Impl, Edit&, rBox, void )
 {
     ChangeAttrHdl_Impl(&rBox);
 }

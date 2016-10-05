@@ -102,19 +102,19 @@ namespace dbaui
         _rReadonly = !_rValid || (pReadonly && pReadonly->GetValue());
     }
 
-    IMPL_LINK_TYPED(OGenericAdministrationPage, OnControlModified, void*, pCtrl, void)
+    IMPL_LINK(OGenericAdministrationPage, OnControlModified, void*, pCtrl, void)
     {
         callModifiedHdl(pCtrl);
     }
-    IMPL_LINK_TYPED(OGenericAdministrationPage, OnControlModifiedClick, Button*, pCtrl, void)
+    IMPL_LINK(OGenericAdministrationPage, OnControlModifiedClick, Button*, pCtrl, void)
     {
         callModifiedHdl(pCtrl);
     }
-    IMPL_LINK_TYPED(OGenericAdministrationPage, ControlModifiedCheckBoxHdl, CheckBox&, rCtrl, void)
+    IMPL_LINK(OGenericAdministrationPage, ControlModifiedCheckBoxHdl, CheckBox&, rCtrl, void)
     {
         callModifiedHdl(&rCtrl);
     }
-    IMPL_LINK_TYPED(OGenericAdministrationPage, OnControlEditModifyHdl, Edit&, rCtrl, void)
+    IMPL_LINK(OGenericAdministrationPage, OnControlEditModifyHdl, Edit&, rCtrl, void)
     {
         callModifiedHdl(&rCtrl);
     }
@@ -229,7 +229,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK_NOARG_TYPED(OGenericAdministrationPage, OnTestConnectionClickHdl, Button*, void)
+    IMPL_LINK_NOARG(OGenericAdministrationPage, OnTestConnectionClickHdl, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bSuccess = false;

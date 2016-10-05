@@ -246,7 +246,7 @@ class SwHTMLTableLayout
 
     void Resize_( sal_uInt16 nAbsAvail, bool bRecalc );
 
-    DECL_LINK_TYPED( DelayedResize_Impl, Timer*, void );
+    DECL_LINK( DelayedResize_Impl, Timer*, void );
 
     static sal_uInt16 GetBrowseWidthByVisArea( const SwDoc& rDoc );
 public:

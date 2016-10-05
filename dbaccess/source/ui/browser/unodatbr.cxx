@@ -2146,7 +2146,7 @@ SvTreeListEntry* SbaTableQueryBrowser::implAppendEntry( SvTreeListEntry* _pParen
     return pNewEntry;
 }
 
-IMPL_LINK_TYPED(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent, bool)
+IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent, bool)
 {
     if (_pParent->HasChildren())
         // nothing to do...
@@ -2479,7 +2479,7 @@ bool SbaTableQueryBrowser::implSelect(const OUString& _rDataSourceName, const OU
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(SbaTableQueryBrowser, OnSelectionChange, LinkParamNone*, void)
+IMPL_LINK_NOARG(SbaTableQueryBrowser, OnSelectionChange, LinkParamNone*, void)
 {
     implSelect( m_pTreeView->getListBox().FirstSelected() );
 }
@@ -3344,7 +3344,7 @@ bool SbaTableQueryBrowser::ensureConnection( SvTreeListEntry* _pDSEntry, void* p
     return _rConnection.is();
 }
 
-IMPL_LINK_TYPED( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData&, _rSortData, sal_Int32 )
+IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData&, _rSortData, sal_Int32 )
 {
     const SvTreeListEntry* pLHS = static_cast<const SvTreeListEntry*>(_rSortData.pLeft);
     const SvTreeListEntry* pRHS = static_cast<const SvTreeListEntry*>(_rSortData.pRight);

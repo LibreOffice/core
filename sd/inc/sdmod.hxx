@@ -78,7 +78,7 @@ class SdModule : public SfxModule, public SfxListener
 {
 public:
                             SFX_DECL_INTERFACE(SD_IF_SDAPP)
-                            DECL_LINK_TYPED( CalcFieldValueHdl, EditFieldInfo*, void );
+                            DECL_LINK( CalcFieldValueHdl, EditFieldInfo*, void );
 
 private:
     /// SfxInterface initializer.
@@ -174,7 +174,7 @@ private:
         @VclSimpleEvent *
             a pointer to a VCLSimpleEvent (see vcl/vclevent.hxx )
     */
-    DECL_STATIC_LINK_TYPED( SdModule, EventListenerHdl, VclSimpleEvent&, void );
+    DECL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent&, void );
 
 };
 

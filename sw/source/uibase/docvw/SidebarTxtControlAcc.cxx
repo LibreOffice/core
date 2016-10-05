@@ -55,7 +55,7 @@ class SidebarTextEditSource : public SvxEditSource,
         virtual void UpdateData() override;
 
         virtual SfxBroadcaster& GetBroadcaster() const override;
-        DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
+        DECL_LINK( NotifyHdl, EENotify&, void );
 
     private:
         SidebarTextControl& mrSidebarTextControl;
@@ -113,7 +113,7 @@ SfxBroadcaster& SidebarTextEditSource::GetBroadcaster() const
     return *( const_cast< SidebarTextEditSource* > (this) );
 }
 
-IMPL_LINK_TYPED(SidebarTextEditSource, NotifyHdl, EENotify&, rNotify, void)
+IMPL_LINK(SidebarTextEditSource, NotifyHdl, EENotify&, rNotify, void)
 {
     std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( &rNotify ) );
 

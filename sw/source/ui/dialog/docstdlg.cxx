@@ -140,7 +140,7 @@ void SwDocStatPage::Update()
     SetData(aDocStat);
 }
 
-IMPL_LINK_NOARG_TYPED(SwDocStatPage, UpdateHdl, Button*, void)
+IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl, Button*, void)
 {
     Update();
     SwDocShell* pDocShell = static_cast<SwDocShell*>( SfxObjectShell::Current());

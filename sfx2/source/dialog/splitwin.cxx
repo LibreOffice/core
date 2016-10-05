@@ -934,7 +934,7 @@ void SfxSplitWindow::Command( const CommandEvent& rCEvt )
 }
 
 
-IMPL_LINK_TYPED( SfxSplitWindow, TimerHdl, Timer*, pTimer, void)
+IMPL_LINK( SfxSplitWindow, TimerHdl, Timer*, pTimer, void)
 {
     if ( pTimer )
         pTimer->Stop();

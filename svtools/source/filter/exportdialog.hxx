@@ -138,15 +138,15 @@ private:
                         mxPage;
 
 
-                        DECL_LINK_TYPED( UpdateHdl, Button*, void );
-                        DECL_LINK_TYPED( SelectListBoxHdl, ListBox&, void );
-                        DECL_LINK_TYPED( SelectHdl, Edit&, void );
-                        DECL_LINK_TYPED( UpdateHdlMtfSizeX, Edit&, void );
-                        DECL_LINK_TYPED( UpdateHdlMtfSizeY, Edit&, void );
-                        DECL_LINK_TYPED( UpdateHdlNfResolution, Edit&, void );
-                        DECL_LINK_TYPED( SbCompressionUpdateHdl, Slider*, void );
+                        DECL_LINK( UpdateHdl, Button*, void );
+                        DECL_LINK( SelectListBoxHdl, ListBox&, void );
+                        DECL_LINK( SelectHdl, Edit&, void );
+                        DECL_LINK( UpdateHdlMtfSizeX, Edit&, void );
+                        DECL_LINK( UpdateHdlMtfSizeY, Edit&, void );
+                        DECL_LINK( UpdateHdlNfResolution, Edit&, void );
+                        DECL_LINK( SbCompressionUpdateHdl, Slider*, void );
 
-                        DECL_LINK_TYPED( OK, Button*, void );
+                        DECL_LINK( OK, Button*, void );
 
                         void setupSizeControls();
                         void createFilterOptions();

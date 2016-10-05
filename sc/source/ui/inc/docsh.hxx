@@ -341,7 +341,7 @@ public:
     void            LockDocument();
     void            UnlockDocument();
 
-    DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
 
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool() override;
 
@@ -399,7 +399,7 @@ public:
     static OUString   GetDifFilterName();
     static bool       HasAutomaticTableName( const OUString& rFilter );
 
-    DECL_LINK_TYPED( RefreshDBDataHdl, Timer*, void );
+    DECL_LINK( RefreshDBDataHdl, Timer*, void );
 
     void            BeforeXMLLoading();
     void            AfterXMLLoading(bool bRet);

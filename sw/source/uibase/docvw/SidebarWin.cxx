@@ -1360,7 +1360,7 @@ void SwSidebarWin::SwitchToPostIt(sal_uInt16 aDirection)
         pPostIt->GrabFocus();
 }
 
-IMPL_LINK_TYPED( SwSidebarWin, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( SwSidebarWin, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     if ( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
     {
@@ -1417,18 +1417,18 @@ void SwSidebarWin::Delete()
     }
 }
 
-IMPL_LINK_TYPED(SwSidebarWin, ScrollHdl, ScrollBar*, pScroll, void)
+IMPL_LINK(SwSidebarWin, ScrollHdl, ScrollBar*, pScroll, void)
 {
     long nDiff = GetOutlinerView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
     GetOutlinerView()->Scroll( 0, nDiff );
 }
 
-IMPL_LINK_NOARG_TYPED(SwSidebarWin, ModifyHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(SwSidebarWin, ModifyHdl, LinkParamNone*, void)
 {
     mrView.GetDocShell()->SetModified();
 }
 
-IMPL_LINK_NOARG_TYPED(SwSidebarWin, DeleteHdl, void*, void)
+IMPL_LINK_NOARG(SwSidebarWin, DeleteHdl, void*, void)
 {
     mnEventId = nullptr;
     Delete();

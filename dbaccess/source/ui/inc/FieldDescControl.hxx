@@ -114,14 +114,14 @@ namespace dbaui
 
         OFieldDescription*      pActFieldDescr;
 
-        DECL_LINK_TYPED( OnScroll, ScrollBar*, void);
+        DECL_LINK( OnScroll, ScrollBar*, void);
 
-        DECL_LINK_TYPED( FormatClickHdl, Button *, void );
-        DECL_LINK_TYPED( ChangeHdl, ListBox&, void );
+        DECL_LINK( FormatClickHdl, Button *, void );
+        DECL_LINK( ChangeHdl, ListBox&, void );
 
         // used by ActivatePropertyField
-        DECL_LINK_TYPED( OnControlFocusLost, Control&, void );
-        DECL_LINK_TYPED( OnControlFocusGot, Control&, void );
+        DECL_LINK( OnControlFocusLost, Control&, void );
+        DECL_LINK( OnControlFocusGot, Control&, void );
 
         void                UpdateFormatSample(OFieldDescription* pFieldDescr);
         void                ArrangeAggregates();

@@ -91,8 +91,8 @@ namespace dbaui
         ::dbtools::OPredicateInputController    m_aPredicateInput;
 
         static void     SelectField( ListBox& rBox, const OUString& rField );
-        DECL_LINK_TYPED( ListSelectHdl, ListBox&, void );
-        DECL_LINK_TYPED( ListSelectCompHdl, ListBox&, void );
+        DECL_LINK( ListSelectHdl, ListBox&, void );
+        DECL_LINK( ListSelectCompHdl, ListBox&, void );
 
         void            SetLine( sal_uInt16 nIdx,const css::beans::PropertyValue& _rItem,bool _bOr );
         void            EnableLines();
@@ -118,7 +118,7 @@ namespace dbaui
         void            BuildWherePart();
 
     protected:
-        DECL_LINK_TYPED( PredicateLoseFocus, Control&, void );
+        DECL_LINK( PredicateLoseFocus, Control&, void );
     };
 
 }

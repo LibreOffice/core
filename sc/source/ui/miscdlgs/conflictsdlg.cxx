@@ -538,7 +538,7 @@ void ScConflictsDlg::HandleListBoxSelection( bool bSelectHandle )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScConflictsDlg, SelectHandle, SvTreeListBox*, void)
+IMPL_LINK_NOARG(ScConflictsDlg, SelectHandle, SvTreeListBox*, void)
 {
     if ( mbInSelectHdl || mbInDeselectHdl )
     {
@@ -551,7 +551,7 @@ IMPL_LINK_NOARG_TYPED(ScConflictsDlg, SelectHandle, SvTreeListBox*, void)
     mbInSelectHdl = false;
 }
 
-IMPL_LINK_NOARG_TYPED(ScConflictsDlg, DeselectHandle, SvTreeListBox*, void)
+IMPL_LINK_NOARG(ScConflictsDlg, DeselectHandle, SvTreeListBox*, void)
 {
     if ( mbInDeselectHdl || mbInSelectHdl )
     {
@@ -563,7 +563,7 @@ IMPL_LINK_NOARG_TYPED(ScConflictsDlg, DeselectHandle, SvTreeListBox*, void)
     mbInDeselectHdl = false;
 }
 
-IMPL_LINK_NOARG_TYPED(ScConflictsDlg, UpdateSelectionHdl, Idle *, void)
+IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl, Idle *, void)
 {
     if ( !mpViewData || !mpOwnDoc )
     {
@@ -650,22 +650,22 @@ void ScConflictsDlg::KeepAllHandler( bool bMine )
     EndDialog( RET_OK );
 }
 
-IMPL_LINK_NOARG_TYPED(ScConflictsDlg, KeepMineHandle, Button*, void)
+IMPL_LINK_NOARG(ScConflictsDlg, KeepMineHandle, Button*, void)
 {
     KeepHandler( true );
 }
 
-IMPL_LINK_NOARG_TYPED(ScConflictsDlg, KeepOtherHandle, Button*, void)
+IMPL_LINK_NOARG(ScConflictsDlg, KeepOtherHandle, Button*, void)
 {
     KeepHandler( false );
 }
 
-IMPL_LINK_NOARG_TYPED(ScConflictsDlg, KeepAllMineHandle, Button*, void)
+IMPL_LINK_NOARG(ScConflictsDlg, KeepAllMineHandle, Button*, void)
 {
     KeepAllHandler( true );
 }
 
-IMPL_LINK_NOARG_TYPED(ScConflictsDlg, KeepAllOthersHandle, Button*, void)
+IMPL_LINK_NOARG(ScConflictsDlg, KeepAllOthersHandle, Button*, void)
 {
     KeepAllHandler( false );
 }

@@ -185,7 +185,7 @@ using namespace ::com::sun::star::linguistic2;
 
 namespace sd {
 
-IMPL_LINK_TYPED( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
+IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
     mbPastePossible = ( pDataHelper->GetFormatCount() != 0 );
 

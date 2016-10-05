@@ -702,7 +702,7 @@ void SwWrtShell::LeaveSelFrameMode()
 
 // Description: execute framebound macro
 
-IMPL_LINK_TYPED( SwWrtShell, ExecFlyMac, const SwFlyFrameFormat*, pFlyFormat, void )
+IMPL_LINK( SwWrtShell, ExecFlyMac, const SwFlyFrameFormat*, pFlyFormat, void )
 {
     const SwFrameFormat *pFormat = pFlyFormat ? static_cast<const SwFrameFormat*>(pFlyFormat) : GetFlyFrameFormat();
     OSL_ENSURE(pFormat, "no frame format");

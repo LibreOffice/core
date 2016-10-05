@@ -168,7 +168,7 @@ class SwSidebarWin : public vcl::Window
             return mbReadonly;
         }
 
-        DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
+        DECL_LINK( WindowEventListener, VclWindowEvent&, void );
         inline bool IsMouseOverSidebarWin() const { return mbMouseOver; }
 
         void SetLanguage(const SvxLanguageItem& rNewItem);
@@ -196,9 +196,9 @@ class SwSidebarWin : public vcl::Window
         void        SetSizePixel( const Size& rNewSize ) override;
         SfxItemSet  DefaultItem();
 
-        DECL_LINK_TYPED(ModifyHdl, LinkParamNone*, void);
-        DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
-        DECL_LINK_TYPED(DeleteHdl, void*, void);
+        DECL_LINK(ModifyHdl, LinkParamNone*, void);
+        DECL_LINK(ScrollHdl, ScrollBar*, void);
+        DECL_LINK(DeleteHdl, void*, void);
 
         inline SwView& DocView() { return mrView;}
         inline SwPostItMgr& Mgr() { return mrMgr; }

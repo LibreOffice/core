@@ -529,7 +529,7 @@ void DataSourceTabPage::updateControlState()
     isValid();
 }
 
-IMPL_LINK_NOARG_TYPED(DataSourceTabPage, SeriesSelectionChangedHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(DataSourceTabPage, SeriesSelectionChangedHdl, SvTreeListBox*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     if( m_pLB_SERIES->FirstSelected())
@@ -540,7 +540,7 @@ IMPL_LINK_NOARG_TYPED(DataSourceTabPage, SeriesSelectionChangedHdl, SvTreeListBo
     updateControlState();
 }
 
-IMPL_LINK_NOARG_TYPED(DataSourceTabPage, RoleSelectionChangedHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl, SvTreeListBox*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     SvTreeListEntry * pEntry = m_pLB_ROLE->FirstSelected();
@@ -564,7 +564,7 @@ IMPL_LINK_NOARG_TYPED(DataSourceTabPage, RoleSelectionChangedHdl, SvTreeListBox*
     }
 }
 
-IMPL_LINK_NOARG_TYPED(DataSourceTabPage, MainRangeButtonClickedHdl, Button*, void)
+IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl, Button*, void)
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == nullptr );
     m_pCurrentRangeChoosingField = m_pEDT_RANGE;
@@ -605,7 +605,7 @@ IMPL_LINK_NOARG_TYPED(DataSourceTabPage, MainRangeButtonClickedHdl, Button*, voi
         m_pCurrentRangeChoosingField = nullptr;
 }
 
-IMPL_LINK_NOARG_TYPED(DataSourceTabPage, CategoriesRangeButtonClickedHdl, Button*, void)
+IMPL_LINK_NOARG(DataSourceTabPage, CategoriesRangeButtonClickedHdl, Button*, void)
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == nullptr );
     m_pCurrentRangeChoosingField = m_pEDT_CATEGORIES;
@@ -619,7 +619,7 @@ IMPL_LINK_NOARG_TYPED(DataSourceTabPage, CategoriesRangeButtonClickedHdl, Button
         m_rDialogModel.getCategoriesRange(), aStr, *this );
 }
 
-IMPL_LINK_NOARG_TYPED(DataSourceTabPage, AddButtonClickedHdl, Button*, void)
+IMPL_LINK_NOARG(DataSourceTabPage, AddButtonClickedHdl, Button*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
@@ -657,7 +657,7 @@ IMPL_LINK_NOARG_TYPED(DataSourceTabPage, AddButtonClickedHdl, Button*, void)
     SeriesSelectionChangedHdl( nullptr );
 }
 
-IMPL_LINK_NOARG_TYPED(DataSourceTabPage, RemoveButtonClickedHdl, Button*, void)
+IMPL_LINK_NOARG(DataSourceTabPage, RemoveButtonClickedHdl, Button*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
@@ -699,7 +699,7 @@ IMPL_LINK_NOARG_TYPED(DataSourceTabPage, RemoveButtonClickedHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(DataSourceTabPage, UpButtonClickedHdl, Button*, void)
+IMPL_LINK_NOARG(DataSourceTabPage, UpButtonClickedHdl, Button*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
@@ -714,7 +714,7 @@ IMPL_LINK_NOARG_TYPED(DataSourceTabPage, UpButtonClickedHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(DataSourceTabPage, DownButtonClickedHdl, Button*, void)
+IMPL_LINK_NOARG(DataSourceTabPage, DownButtonClickedHdl, Button*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
@@ -729,7 +729,7 @@ IMPL_LINK_NOARG_TYPED(DataSourceTabPage, DownButtonClickedHdl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED( DataSourceTabPage, RangeModifiedHdl, Edit&, rEdit, void )
+IMPL_LINK( DataSourceTabPage, RangeModifiedHdl, Edit&, rEdit, void )
 {
     // note: isValid sets the color of the edit field
     if( isRangeFieldContentValid( rEdit ))
@@ -747,7 +747,7 @@ IMPL_LINK_TYPED( DataSourceTabPage, RangeModifiedHdl, Edit&, rEdit, void )
     isValid();
 }
 
-IMPL_LINK_TYPED( DataSourceTabPage, RangeUpdateDataHdl, Edit&, rEdit, void )
+IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit&, rEdit, void )
 {
     // note: isValid sets the color of the edit field
     if( isRangeFieldContentValid( rEdit ))

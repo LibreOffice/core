@@ -176,7 +176,7 @@ private:
     void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 
-    DECL_LINK_TYPED(EventMultiplexerCallback, tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerCallback, tools::EventMultiplexerEvent&, void);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

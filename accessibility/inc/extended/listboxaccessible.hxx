@@ -68,7 +68,7 @@ namespace accessibility
         void disposing();
 
     private:
-        DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
+        DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 
     private:
         ListBoxAccessibleBase( const ListBoxAccessibleBase& ) = delete;

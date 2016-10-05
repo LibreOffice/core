@@ -298,7 +298,7 @@ void SchAxisLabelTabPage::SetComplexCategories( bool bComplexCategories )
 
 // event handling routines
 
-IMPL_LINK_NOARG_TYPED(SchAxisLabelTabPage, ToggleShowLabel, Button*, void)
+IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel, Button*, void)
 {
     bool bEnable = ( m_pCbShowDescription->GetState() != TRISTATE_FALSE );
 

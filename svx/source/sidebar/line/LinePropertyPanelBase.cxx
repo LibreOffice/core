@@ -537,7 +537,7 @@ void LinePropertyPanelBase::updateLineCap(bool bDisabled, bool bSetOrDefault,
     mpLBCapStyle->SetNoSelection();
 }
 
-IMPL_LINK_NOARG_TYPED(LinePropertyPanelBase, ChangeLineStyleHdl, ListBox&, void)
+IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeLineStyleHdl, ListBox&, void)
 {
     const sal_Int32 nPos(mpLBStyle->GetSelectEntryPos());
 
@@ -575,7 +575,7 @@ IMPL_LINK_NOARG_TYPED(LinePropertyPanelBase, ChangeLineStyleHdl, ListBox&, void)
     ActivateControls();
 }
 
-IMPL_LINK_NOARG_TYPED(LinePropertyPanelBase, ChangeStartHdl, ListBox&, void)
+IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeStartHdl, ListBox&, void)
 {
     sal_Int32  nPos = mpLBStart->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBStart->IsValueChangedFromSaved() )
@@ -589,7 +589,7 @@ IMPL_LINK_NOARG_TYPED(LinePropertyPanelBase, ChangeStartHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(LinePropertyPanelBase, ChangeEndHdl, ListBox&, void)
+IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEndHdl, ListBox&, void)
 {
     sal_Int32  nPos = mpLBEnd->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBEnd->IsValueChangedFromSaved() )
@@ -603,7 +603,7 @@ IMPL_LINK_NOARG_TYPED(LinePropertyPanelBase, ChangeEndHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(LinePropertyPanelBase, ChangeEdgeStyleHdl, ListBox&, void)
+IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeEdgeStyleHdl, ListBox&, void)
 {
     const sal_Int32 nPos(mpLBEdgeStyle->GetSelectEntryPos());
 
@@ -639,7 +639,7 @@ IMPL_LINK_NOARG_TYPED(LinePropertyPanelBase, ChangeEdgeStyleHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(LinePropertyPanelBase, ChangeCapStyleHdl, ListBox&, void)
+IMPL_LINK_NOARG(LinePropertyPanelBase, ChangeCapStyleHdl, ListBox&, void)
 {
     const sal_Int32 nPos(mpLBCapStyle->GetSelectEntryPos());
 
@@ -670,7 +670,7 @@ IMPL_LINK_NOARG_TYPED(LinePropertyPanelBase, ChangeCapStyleHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_TYPED(LinePropertyPanelBase, ToolboxWidthSelectHdl,ToolBox*, pToolBox, void)
+IMPL_LINK(LinePropertyPanelBase, ToolboxWidthSelectHdl,ToolBox*, pToolBox, void)
 {
     if (pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SELECTWIDTH)
     {
@@ -679,7 +679,7 @@ IMPL_LINK_TYPED(LinePropertyPanelBase, ToolboxWidthSelectHdl,ToolBox*, pToolBox,
     }
 }
 
-IMPL_LINK_NOARG_TYPED( LinePropertyPanelBase, ChangeTransparentHdl, Edit&, void )
+IMPL_LINK_NOARG( LinePropertyPanelBase, ChangeTransparentHdl, Edit&, void )
 {
     sal_uInt16 nVal = (sal_uInt16)mpMFTransparent->GetValue();
     XLineTransparenceItem aItem( nVal );

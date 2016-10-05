@@ -166,8 +166,8 @@ namespace framework
             virtual void SAL_CALL addLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (css::uno::RuntimeException, std::exception) override;
             virtual void SAL_CALL removeLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (css::uno::RuntimeException, std::exception) override;
 
-            DECL_LINK_TYPED( MenuBarClose, void *, void);
-            DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
+            DECL_LINK( MenuBarClose, void *, void);
+            DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 
             //  called from ToolbarLayoutManager
             void requestLayout();
@@ -179,7 +179,7 @@ namespace framework
                     const css::uno::Reference< css::uno::XComponentContext > &rComponentContext );
 
         protected:
-            DECL_LINK_TYPED(AsyncLayoutHdl, Timer *, void);
+            DECL_LINK(AsyncLayoutHdl, Timer *, void);
 
         private:
 

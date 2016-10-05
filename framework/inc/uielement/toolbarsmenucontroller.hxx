@@ -80,7 +80,7 @@ namespace framework
                 css::uno::Sequence< css::beans::PropertyValue >  aArgs;
             };
 
-            DECL_STATIC_LINK_TYPED( ToolbarsMenuController, ExecuteHdl_Impl, void*, void );
+            DECL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, void*, void );
 
         private:
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );

@@ -174,7 +174,7 @@ void ScTemporaryChartLock::AlsoLockThisChart( const Reference< frame::XModel >& 
         mapScChartLockGuard->AlsoLockThisChart( xModel );
 }
 
-IMPL_LINK_NOARG_TYPED(ScTemporaryChartLock, TimeoutHdl, Timer *, void)
+IMPL_LINK_NOARG(ScTemporaryChartLock, TimeoutHdl, Timer *, void)
 {
     mapScChartLockGuard.reset();
 }

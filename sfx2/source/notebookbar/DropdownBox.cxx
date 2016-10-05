@@ -132,7 +132,7 @@ void DropdownBox::ShowContent()
     }
 }
 
-IMPL_LINK_TYPED(DropdownBox, PBClickHdl, Button*, /*pButton*/, void)
+IMPL_LINK(DropdownBox, PBClickHdl, Button*, /*pButton*/, void)
 {
     if (m_pPopup)
         m_pPopup.disposeAndClear();

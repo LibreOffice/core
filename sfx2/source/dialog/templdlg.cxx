@@ -283,7 +283,7 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-IMPL_LINK_NOARG_TYPED(DropListBox_Impl, OnAsyncExecuteDrop, void*, void)
+IMPL_LINK_NOARG(DropListBox_Impl, OnAsyncExecuteDrop, void*, void)
 {
     pDialog->ActionSelect( SID_STYLE_NEW_BY_EXAMPLE );
 }
@@ -1436,7 +1436,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
      EnableNew( bCanNew );
 }
 
-IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, TimeOut, Idle *, void )
+IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, TimeOut, Idle *, void )
 {
     if(!bDontUpdate)
     {
@@ -1685,7 +1685,7 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
     }
 }
 
-IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox&, rBox, void )
+IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox&, rBox, void )
 {
     if (SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString() == rBox.GetSelectEntry())
     {
@@ -1851,7 +1851,7 @@ SfxObjectShell* SfxCommonTemplateDialog_Impl::SaveSelection()
     return pDocShell;
 }
 
-IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, DropHdl, StyleTreeListBox_Impl&, rBox, bool )
+IMPL_LINK( SfxCommonTemplateDialog_Impl, DropHdl, StyleTreeListBox_Impl&, rBox, bool )
 {
     bDontUpdate = true;
     const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
@@ -2056,14 +2056,14 @@ void SfxCommonTemplateDialog_Impl::ResetFocus()
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, TreeListApplyHdl, SvTreeListBox *, bool )
+IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, TreeListApplyHdl, SvTreeListBox *, bool )
 {
     ApplyHdl(nullptr);
     return false;
 }
 
 // Double-click on a style sheet in the ListBox is applied.
-IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, ApplyHdl, LinkParamNone*, void )
+IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, ApplyHdl, LinkParamNone*, void )
 {
     // only if that region is allowed
     if ( IsInitialized() && nullptr != pFamilyState[nActFamily-1] &&
@@ -2078,7 +2078,7 @@ IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, ApplyHdl, LinkParamNone*, v
     ResetFocus();
 }
 
-IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, PreviewHdl, Button*, void)
+IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, PreviewHdl, Button*, void)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
     officecfg::Office::Common::StylesAndFormatting::Preview::set( aPreviewCheckbox->IsChecked(), batch );
@@ -2103,7 +2103,7 @@ IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, PreviewHdl, Button*, void)
 }
 
 // Selection of a template during the Watercan-Status
-IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox, void )
+IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox, void )
 {
     // Trigger Help PI, if this is permitted of call handlers and field
     if( !pListBox || pListBox->IsSelected( pListBox->GetHdlEntry() ) )
@@ -2146,7 +2146,7 @@ IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pL
     }
 }
 
-IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool )
+IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool )
 {
     nLastItemId = pMenu->GetCurItemId();
     Application::PostUserEvent(
@@ -2154,7 +2154,7 @@ IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool
     return true;
 }
 
-IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectAsyncHdl, void*, void )
+IMPL_LINK_NOARG( SfxCommonTemplateDialog_Impl, MenuSelectAsyncHdl, void*, void )
 {
     switch(nLastItemId) {
     case ID_NEW: NewHdl(); break;
@@ -2492,13 +2492,13 @@ bool SfxTemplateDialog_Impl::IsCheckedItem(sal_uInt16 nMesId)
     }
 }
 
-IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox, void )
+IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox, void )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
     FamilySelect(nEntry);
 }
 
-IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRSelect, ToolBox *, pBox, void )
+IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRSelect, ToolBox *, pBox, void )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
     if(nEntry != SID_STYLE_NEW_BY_EXAMPLE ||
@@ -2506,7 +2506,7 @@ IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRSelect, ToolBox *, pBox, void )
         ActionSelect(nEntry);
 }
 
-IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
+IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
     if(nEntry == SID_STYLE_NEW_BY_EXAMPLE &&
@@ -2557,7 +2557,7 @@ IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
     }
 }
 
-IMPL_LINK_TYPED( SfxTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool)
+IMPL_LINK( SfxTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool)
 {
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
     ActionSelect(nMenuId);

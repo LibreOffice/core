@@ -1741,7 +1741,7 @@ void SwHTMLTableLayout::Resize_( sal_uInt16 nAbsAvail, bool bRecalc )
         pRoot->EndAllAction( true );    //True per VirDev (browsing is calmer)
 }
 
-IMPL_LINK_NOARG_TYPED( SwHTMLTableLayout, DelayedResize_Impl, Timer*, void )
+IMPL_LINK_NOARG( SwHTMLTableLayout, DelayedResize_Impl, Timer*, void )
 {
     m_aResizeTimer.Stop();
     Resize_( m_nDelayedResizeAbsAvail, m_bDelayedResizeRecalc );

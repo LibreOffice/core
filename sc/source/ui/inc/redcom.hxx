@@ -34,8 +34,8 @@ private:
     OUString        aComment;
     AbstractSvxPostItDialog* pDlg;
 
-    DECL_LINK_TYPED( PrevHdl, AbstractSvxPostItDialog&, void );
-    DECL_LINK_TYPED( NextHdl, AbstractSvxPostItDialog&, void );
+    DECL_LINK( PrevHdl, AbstractSvxPostItDialog&, void );
+    DECL_LINK( NextHdl, AbstractSvxPostItDialog&, void );
 
 protected:
 

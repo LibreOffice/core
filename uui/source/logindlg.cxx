@@ -151,7 +151,7 @@ void LoginDialog::SetRequest()
     m_pRequestInfo->SetText(aRequest);
 }
 
-IMPL_LINK_NOARG_TYPED(LoginDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(LoginDialog, OKHdl_Impl, Button*, void)
 {
     // trim the strings
     m_pNameED->SetText(comphelper::string::strip(m_pNameED->GetText(), ' '));
@@ -159,7 +159,7 @@ IMPL_LINK_NOARG_TYPED(LoginDialog, OKHdl_Impl, Button*, void)
     EndDialog( RET_OK );
 }
 
-IMPL_LINK_NOARG_TYPED(LoginDialog, PathHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(LoginDialog, PathHdl_Impl, Button*, void)
 {
     try
     {
@@ -181,7 +181,7 @@ IMPL_LINK_NOARG_TYPED(LoginDialog, PathHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(LoginDialog, UseSysCredsHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl, Button*, void)
 {
     EnableUseSysCredsControls_Impl( m_pUseSysCredsCB->IsChecked() );
 }

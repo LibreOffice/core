@@ -107,9 +107,9 @@ private:
     Link<LinkParamNone*,bool>   maStartVerifySignatureHdl;
 
 private:
-    DECL_LINK_TYPED( SignatureCreationResultListener, XMLSignatureCreationResult&, void );
-    DECL_LINK_TYPED( SignatureVerifyResultListener, XMLSignatureVerifyResult&, void );
-    DECL_LINK_TYPED( StartVerifySignatureElement, LinkParamNone*, void );
+    DECL_LINK( SignatureCreationResultListener, XMLSignatureCreationResult&, void );
+    DECL_LINK( SignatureVerifyResultListener, XMLSignatureVerifyResult&, void );
+    DECL_LINK( StartVerifySignatureElement, LinkParamNone*, void );
 
     XMLSignatureHelper(const XMLSignatureHelper&) = delete;
 

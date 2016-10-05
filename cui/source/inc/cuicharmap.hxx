@@ -83,15 +83,15 @@ private:
     const SubsetMap* pSubsetMap;
     enum class Radix : sal_Int16 {decimal = 10, hexadecimal=16};
 
-    DECL_LINK_TYPED(OKHdl, Button*, void);
-    DECL_LINK_TYPED(FontSelectHdl, ListBox&, void);
-    DECL_LINK_TYPED(SubsetSelectHdl, ListBox&, void);
-    DECL_LINK_TYPED(CharDoubleClickHdl, SvxShowCharSet*,void);
-    DECL_LINK_TYPED(CharSelectHdl, SvxShowCharSet*, void);
-    DECL_LINK_TYPED(CharHighlightHdl, SvxShowCharSet*, void);
-    DECL_LINK_TYPED(CharPreSelectHdl, SvxShowCharSet*, void);
-    DECL_LINK_TYPED(DecimalCodeChangeHdl, Edit&, void);
-    DECL_LINK_TYPED(HexCodeChangeHdl, Edit&, void);
+    DECL_LINK(OKHdl, Button*, void);
+    DECL_LINK(FontSelectHdl, ListBox&, void);
+    DECL_LINK(SubsetSelectHdl, ListBox&, void);
+    DECL_LINK(CharDoubleClickHdl, SvxShowCharSet*,void);
+    DECL_LINK(CharSelectHdl, SvxShowCharSet*, void);
+    DECL_LINK(CharHighlightHdl, SvxShowCharSet*, void);
+    DECL_LINK(CharPreSelectHdl, SvxShowCharSet*, void);
+    DECL_LINK(DecimalCodeChangeHdl, Edit&, void);
+    DECL_LINK(HexCodeChangeHdl, Edit&, void);
 
     static void fillAllSubsets(ListBox &rListBox);
     void selectCharByCode(Radix radix);

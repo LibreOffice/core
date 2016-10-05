@@ -135,7 +135,7 @@ public:
     void            EndDragging( bool bOK = true );
     void            HideDragRect() { if ( mbShowDragRect ) mpDragBox->HideTracking(); }
     void            UpdateDragRect();
-    DECL_LINK_TYPED( SelectHdl, Accelerator&, void );
+    DECL_LINK( SelectHdl, Accelerator&, void );
 };
 
 
@@ -1322,7 +1322,7 @@ void ImplTBDragMgr::UpdateDragRect()
     mpDragBox->ShowTracking( maRect );
 }
 
-IMPL_LINK_TYPED( ImplTBDragMgr, SelectHdl, Accelerator&, rAccel, void )
+IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator&, rAccel, void )
 {
     if ( rAccel.GetCurItemId() == KEY_ESCAPE )
         EndDragging( false );
@@ -2719,7 +2719,7 @@ void ToolBox::ImplFormat( bool bResize )
     mbFormat = false;
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
+IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
 {
     if (mnCurPos != TOOLBOX_ITEM_NOTFOUND &&
         (mpData->m_aItems[ mnCurPos ].mnBits & ToolBoxItemBits::DROPDOWN))
@@ -2745,7 +2745,7 @@ IMPL_LINK_NOARG_TYPED(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBox, ImplUpdateHdl, Idle *, void)
+IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl, Idle *, void)
 {
 
     if( mbFormat && mpData )

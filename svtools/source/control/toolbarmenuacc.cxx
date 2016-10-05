@@ -56,7 +56,7 @@ ToolbarMenuAcc::~ToolbarMenuAcc()
 }
 
 
-IMPL_LINK_TYPED( ToolbarMenuAcc, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( ToolbarMenuAcc, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     /* Ignore VCLEVENT_WINDOW_ENDPOPUPMODE, because the UNO accessibility wrapper
      * might have been destroyed by the previous VCLEventListener (if no AT tool

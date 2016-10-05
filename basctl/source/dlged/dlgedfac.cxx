@@ -43,7 +43,7 @@ DlgEdFactory::~DlgEdFactory()
 }
 
 
-IMPL_LINK_TYPED( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
+IMPL_LINK( DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
 {
     static bool bNeedsInit = true;
     static uno::Reference< lang::XMultiServiceFactory > xDialogSFact;

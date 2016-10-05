@@ -62,7 +62,7 @@ namespace pcr
 
         void SetModifyHdl( const Link<ListBox&,void>& _rLink ) { aModifyHdl = _rLink;; }
     private:
-        DECL_LINK_TYPED(OnSelect, ListBox&, void);
+        DECL_LINK(OnSelect, ListBox&, void);
         Link<ListBox&,void> aModifyHdl;
     };
 
@@ -196,7 +196,7 @@ namespace pcr
         virtual void SAL_CALL disposing() override;
 
     protected:
-        DECL_LINK_TYPED( OnHyperlinkClicked, void*, void );
+        DECL_LINK( OnHyperlinkClicked, void*, void );
     };
 
 
@@ -335,7 +335,7 @@ namespace pcr
         virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     protected:
-        DECL_LINK_TYPED( OnEntrySelected, ComboBox&, void );
+        DECL_LINK( OnEntrySelected, ComboBox&, void );
     };
 
 
@@ -387,8 +387,8 @@ namespace pcr
         long            FindPos(long nSinglePos);
 
     private:
-        DECL_LINK_TYPED( ReturnHdl, FloatingWindow*, void );
-        DECL_LINK_TYPED( DropDownHdl, Button*, void );
+        DECL_LINK( ReturnHdl, FloatingWindow*, void );
+        DECL_LINK( DropDownHdl, Button*, void );
 
         void ShowDropDown( bool bShow );
     };

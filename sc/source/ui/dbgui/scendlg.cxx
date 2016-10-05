@@ -162,7 +162,7 @@ void ScNewScenarioDlg::SetScenarioData(const OUString& rName, const OUString& rC
     m_pCbProtect->Check   ( (nFlags & ScScenarioFlags::Protected) != ScScenarioFlags::NONE );
 }
 
-IMPL_LINK_NOARG_TYPED(ScNewScenarioDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl, Button*, void)
 {
     OUString      aName = comphelper::string::strip(m_pEdName->GetText(), ' ');
     ScDocument* pDoc    = static_cast<ScTabViewShell*>(SfxViewShell::Current())->GetViewData().GetDocument();
@@ -185,7 +185,7 @@ IMPL_LINK_NOARG_TYPED(ScNewScenarioDlg, OkHdl, Button*, void)
     //! beim Editieren testen, ob eine andere Tabelle den Namen hat!
 }
 
-IMPL_LINK_TYPED( ScNewScenarioDlg, EnableHdl, Button*, pBox, void )
+IMPL_LINK( ScNewScenarioDlg, EnableHdl, Button*, pBox, void )
 {
     if (pBox == m_pCbShowFrame)
         m_pLbColor->Enable( m_pCbShowFrame->IsChecked() );

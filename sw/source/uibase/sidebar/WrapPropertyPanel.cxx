@@ -211,14 +211,14 @@ void WrapPropertyPanel::UpdateSpacingLB()
     mpSpacingLB->SelectEntry(aCustomEntry);
 }
 
-IMPL_LINK_NOARG_TYPED(WrapPropertyPanel, EditContourHdl, Button*, void)
+IMPL_LINK_NOARG(WrapPropertyPanel, EditContourHdl, Button*, void)
 {
     SfxBoolItem aItem(SID_CONTOUR_DLG, true);
     mpBindings->GetDispatcher()->ExecuteList(SID_CONTOUR_DLG,
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG_TYPED(WrapPropertyPanel, EnableContourHdl, Button*, void)
+IMPL_LINK_NOARG(WrapPropertyPanel, EnableContourHdl, Button*, void)
 {
     bool IsContour = mpEnableContour->IsChecked();
     SfxBoolItem aItem(FN_FRAME_WRAP_CONTOUR, IsContour);
@@ -226,7 +226,7 @@ IMPL_LINK_NOARG_TYPED(WrapPropertyPanel, EnableContourHdl, Button*, void)
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_TYPED(WrapPropertyPanel, SpacingLBHdl, ListBox&, rBox, void)
+IMPL_LINK(WrapPropertyPanel, SpacingLBHdl, ListBox&, rBox, void)
 {
     sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(rBox.GetSelectEntryData());
 
@@ -240,7 +240,7 @@ IMPL_LINK_TYPED(WrapPropertyPanel, SpacingLBHdl, ListBox&, rBox, void)
             SfxCallMode::RECORD, { &aULItem });
 }
 
-IMPL_LINK_NOARG_TYPED(WrapPropertyPanel, WrapTypeHdl, Button*, void)
+IMPL_LINK_NOARG(WrapPropertyPanel, WrapTypeHdl, Button*, void)
 {
     sal_uInt16 nSlot = 0;
     if ( mpRBWrapLeft->IsChecked() )

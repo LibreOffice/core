@@ -37,8 +37,8 @@ private:
     /// Return filter according to the currently selected tab page.
     FILTER_CATEGORY getCurrentFilter();
 
-    DECL_LINK_TYPED(ActivatePageHdl, TabControl*, void);
-    DECL_STATIC_LINK_TYPED(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, void);
+    DECL_LINK(ActivatePageHdl, TabControl*, void);
+    DECL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, void);
 
     VclPtr<TabControl>   mpTabControl;
     VclPtr<EmojiView>    mpEmojiView;

@@ -520,8 +520,8 @@ protected:
     void selectionChanged();
     void columnChanged();
 
-    DECL_LINK_TYPED(OnQueryGridSlotState, DbGridControlNavigationBarState, int);
-    DECL_LINK_TYPED(OnExecuteGridSlot, DbGridControlNavigationBarState, bool);
+    DECL_LINK(OnQueryGridSlotState, DbGridControlNavigationBarState, int);
+    DECL_LINK(OnExecuteGridSlot, DbGridControlNavigationBarState, bool);
 };
 
 

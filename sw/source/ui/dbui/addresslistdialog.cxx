@@ -288,7 +288,7 @@ void SwAddressListDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SwAddressListDialog, FilterHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -341,7 +341,7 @@ IMPL_LINK_NOARG_TYPED(SwAddressListDialog, FilterHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwAddressListDialog, LoadHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl, Button*, void)
 {
     SwView* pView = m_pAddressPage->GetWizard()->GetSwView();
 
@@ -354,7 +354,7 @@ IMPL_LINK_NOARG_TYPED(SwAddressListDialog, LoadHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED(SwAddressListDialog, CreateHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, Button*, pButton, void)
 {
     OUString sInputURL;
     VclPtr<SwCreateAddressListDialog> pDlg(
@@ -432,7 +432,7 @@ IMPL_LINK_TYPED(SwAddressListDialog, CreateHdl_Impl, Button*, pButton, void)
     }
 }
 
-IMPL_LINK_TYPED(SwAddressListDialog, EditHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwAddressListDialog, EditHdl_Impl, Button*, pButton, void)
 {
     SvTreeListEntry* pEntry = m_pListLB->FirstSelected();
     AddressUserData_Impl* pUserData = pEntry ? static_cast<AddressUserData_Impl*>(pEntry->GetUserData()) : nullptr;
@@ -463,14 +463,14 @@ IMPL_LINK_TYPED(SwAddressListDialog, EditHdl_Impl, Button*, pButton, void)
     }
 };
 
-IMPL_LINK_NOARG_TYPED(SwAddressListDialog, ListBoxSelectHdl_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
     Application::PostUserEvent( LINK( this, SwAddressListDialog,
                                       StaticListBoxSelectHdl_Impl ), pSelect, true );
 }
 
-IMPL_LINK_TYPED(SwAddressListDialog, StaticListBoxSelectHdl_Impl, void*, p, void)
+IMPL_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, void*, p, void)
 {
     SvTreeListEntry* pSelect = static_cast<SvTreeListEntry*>(p);
     //prevent nested calls of the select handler
@@ -623,7 +623,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
     }
 }
 
-IMPL_LINK_TYPED(SwAddressListDialog, TableSelectHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, Button*, pButton, void)
 {
     EnterWait();
     SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
@@ -642,7 +642,7 @@ IMPL_LINK_TYPED(SwAddressListDialog, TableSelectHdl_Impl, Button*, pButton, void
     LeaveWait();
 }
 
-IMPL_LINK_NOARG_TYPED(SwAddressListDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwAddressListDialog, OKHdl_Impl, Button*, void)
 {
     EndDialog(RET_OK);
 }

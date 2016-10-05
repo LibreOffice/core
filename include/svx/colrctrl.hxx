@@ -56,7 +56,7 @@ protected:
     // DragSourceHelper
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPtPixel ) override;
 
-                    DECL_LINK_TYPED(ExecDragHdl, void*, void);
+                    DECL_LINK(ExecDragHdl, void*, void);
 
 public:
     SvxColorValueSet_docking( vcl::Window* pParent );
@@ -86,7 +86,7 @@ private:
 
     void                FillValueSet();
     void                SetSize();
-       DECL_LINK_TYPED( SelectHdl, ValueSet*, void );
+       DECL_LINK( SelectHdl, ValueSet*, void );
 
     /** This function is called when the window gets the focus.  It grabs
         the focus to the color value set so that it can be controlled with

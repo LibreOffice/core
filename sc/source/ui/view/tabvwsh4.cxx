@@ -983,7 +983,7 @@ void ScTabViewShell::SetFormShellAtTop( bool bSet )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScTabViewShell, FormControlActivated, LinkParamNone*, void)
+IMPL_LINK_NOARG(ScTabViewShell, FormControlActivated, LinkParamNone*, void)
 {
     // a form control got the focus, so the form shell has to be on top
     SetFormShellAtTop( true );
@@ -1082,7 +1082,7 @@ void ScTabViewShell::StopEditShell()
 
 // close handler to ensure function of dialog:
 
-IMPL_LINK_NOARG_TYPED(ScTabViewShell, SimpleRefClose, const OUString*, void)
+IMPL_LINK_NOARG(ScTabViewShell, SimpleRefClose, const OUString*, void)
 {
     SfxInPlaceClient* pClient = GetIPClient();
     if ( pClient && pClient->IsObjectInPlaceActive() )
@@ -1112,21 +1112,21 @@ static ScTabViewObj* lcl_GetViewObj( ScTabViewShell& rShell )
     return pRet;
 }
 
-IMPL_LINK_TYPED( ScTabViewShell, SimpleRefDone, const OUString&, aResult, void )
+IMPL_LINK( ScTabViewShell, SimpleRefDone, const OUString&, aResult, void )
 {
     ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
     if ( pImpObj )
         pImpObj->RangeSelDone( aResult );
 }
 
-IMPL_LINK_TYPED( ScTabViewShell, SimpleRefAborted, const OUString&, rResult, void )
+IMPL_LINK( ScTabViewShell, SimpleRefAborted, const OUString&, rResult, void )
 {
     ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
     if ( pImpObj )
         pImpObj->RangeSelAborted( rResult );
 }
 
-IMPL_LINK_TYPED( ScTabViewShell, SimpleRefChange, const OUString&, rResult, void )
+IMPL_LINK( ScTabViewShell, SimpleRefChange, const OUString&, rResult, void )
 {
     ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
     if ( pImpObj )

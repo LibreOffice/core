@@ -75,12 +75,12 @@ void SwCustomizeAddressListDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl, ListBox&, void)
 {
     UpdateButtons();
 }
 
-IMPL_LINK_TYPED(SwCustomizeAddressListDialog, AddRenameHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, Button*, pButton, void)
 {
     bool bRename = pButton == m_pRenamePB;
     sal_Int32 nPos = m_pFieldsLB->GetSelectEntryPos();
@@ -125,7 +125,7 @@ IMPL_LINK_TYPED(SwCustomizeAddressListDialog, AddRenameHdl_Impl, Button*, pButto
     UpdateButtons();
 }
 
-IMPL_LINK_NOARG_TYPED(SwCustomizeAddressListDialog, DeleteHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pFieldsLB->GetSelectEntryPos();
     m_pFieldsLB->RemoveEntry(m_pFieldsLB->GetSelectEntryPos());
@@ -141,7 +141,7 @@ IMPL_LINK_NOARG_TYPED(SwCustomizeAddressListDialog, DeleteHdl_Impl, Button*, voi
     UpdateButtons();
 }
 
-IMPL_LINK_TYPED(SwCustomizeAddressListDialog, UpDownHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, Button*, pButton, void)
 {
     sal_Int32 nPos;
     sal_Int32 nOldPos = nPos = m_pFieldsLB->GetSelectEntryPos();
@@ -203,7 +203,7 @@ void SwAddRenameEntryDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit&, rEdit, void)
+IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit&, rEdit, void)
 {
     OUString sEntry = rEdit.GetText();
     bool bFound = sEntry.isEmpty();

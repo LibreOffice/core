@@ -359,7 +359,7 @@ void ImplWheelWindow::MouseButtonUp( const MouseEvent& rMEvt )
         FloatingWindow::MouseButtonUp( rMEvt );
 }
 
-IMPL_LINK_NOARG_TYPED(ImplWheelWindow, ImplScrollHdl, Timer *, void)
+IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl, Timer *, void)
 {
     if ( mnActDeltaX || mnActDeltaY )
     {

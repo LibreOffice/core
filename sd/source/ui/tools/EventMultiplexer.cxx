@@ -148,7 +148,7 @@ private:
     void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 
-    DECL_LINK_TYPED(SlideSorterSelectionChangeListener, LinkParamNone*, void);
+    DECL_LINK(SlideSorterSelectionChangeListener, LinkParamNone*, void);
 };
 
 const char aCurrentPagePropertyName[] = "CurrentPage";
@@ -694,7 +694,7 @@ void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEv
     }
 }
 
-IMPL_LINK_NOARG_TYPED(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener, LinkParamNone*, void)
+IMPL_LINK_NOARG(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener, LinkParamNone*, void)
 {
     CallListeners(EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION);
 }

@@ -313,7 +313,7 @@ void AxisPositionsTabPage::SupportAxisPositioning( bool bSupportAxisPositioning 
     m_bSupportAxisPositioning = bSupportAxisPositioning;
 }
 
-IMPL_LINK_NOARG_TYPED(AxisPositionsTabPage, CrossesAtSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl, ListBox&, void)
 {
     sal_Int32 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
     m_pED_CrossesAt->Show( (2==nPos) && !m_bCrossingAxisIsCategoryAxis );
@@ -327,7 +327,7 @@ IMPL_LINK_NOARG_TYPED(AxisPositionsTabPage, CrossesAtSelectHdl, ListBox&, void)
     PlaceLabelsSelectHdl( *m_pLB_PlaceLabels );
 }
 
-IMPL_LINK_NOARG_TYPED(AxisPositionsTabPage, PlaceLabelsSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(AxisPositionsTabPage, PlaceLabelsSelectHdl, ListBox&, void)
 {
     sal_Int32 nLabelPos = m_pLB_PlaceLabels->GetSelectEntryPos();
 

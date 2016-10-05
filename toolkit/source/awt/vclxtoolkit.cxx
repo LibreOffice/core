@@ -195,9 +195,9 @@ class VCLXToolkit : public VCLXToolkitMutexHelper,
     bool m_bEventListener;
     bool m_bKeyListener;
 
-    DECL_LINK_TYPED(eventListenerHandler, ::VclSimpleEvent&, void);
+    DECL_LINK(eventListenerHandler, ::VclSimpleEvent&, void);
 
-    DECL_LINK_TYPED(keyListenerHandler, ::VclWindowEvent&, bool);
+    DECL_LINK(keyListenerHandler, ::VclWindowEvent&, bool);
 
     void callTopWindowListeners(
         ::VclSimpleEvent const * pEvent,
@@ -1751,7 +1751,7 @@ void SAL_CALL VCLXToolkit::fireFocusLost(
 }
 
 
-IMPL_LINK_TYPED(VCLXToolkit, eventListenerHandler, ::VclSimpleEvent&, rEvent, void)
+IMPL_LINK(VCLXToolkit, eventListenerHandler, ::VclSimpleEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {
@@ -1792,7 +1792,7 @@ IMPL_LINK_TYPED(VCLXToolkit, eventListenerHandler, ::VclSimpleEvent&, rEvent, vo
     }
 }
 
-IMPL_LINK_TYPED(VCLXToolkit, keyListenerHandler, ::VclWindowEvent&, rEvent, bool)
+IMPL_LINK(VCLXToolkit, keyListenerHandler, ::VclWindowEvent&, rEvent, bool)
 {
     switch (rEvent.GetId())
     {

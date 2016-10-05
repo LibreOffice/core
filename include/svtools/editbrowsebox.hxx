@@ -249,7 +249,7 @@ namespace svt
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
-        DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+        DECL_LINK(ModifyHdl, Edit&, void);
     };
 
 
@@ -269,7 +269,7 @@ namespace svt
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
-        DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+        DECL_LINK(ModifyHdl, Edit&, void);
     };
 
 
@@ -302,7 +302,7 @@ namespace svt
         CheckBox&   GetBox() {return *pBox;};
 
     private:
-        DECL_LINK_TYPED( OnClick, Button*, void );
+        DECL_LINK( OnClick, Button*, void );
     };
 
 
@@ -321,7 +321,7 @@ namespace svt
     protected:
         virtual bool WantMouseEvent() const override;
     private:
-        DECL_LINK_TYPED(ModifyHdl, LinkParamNone*, void);
+        DECL_LINK(ModifyHdl, LinkParamNone*, void);
     };
 
 
@@ -354,7 +354,7 @@ namespace svt
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
-        DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+        DECL_LINK(ModifyHdl, Edit&, void);
     };
 
 
@@ -388,7 +388,7 @@ namespace svt
     protected:
         virtual bool MoveAllowed(const KeyEvent& rEvt) const override;
     private:
-        DECL_LINK_TYPED(ListBoxSelectHdl, ListBox&, void);
+        DECL_LINK(ListBoxSelectHdl, ListBox&, void);
     };
 
 
@@ -659,10 +659,10 @@ namespace svt
         SVT_DLLPRIVATE void implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, bool _bUp);
         SVT_DLLPRIVATE void impl_construct();
 
-        DECL_DLLPRIVATE_LINK_TYPED( ModifyHdl, LinkParamNone*, void );
-        DECL_DLLPRIVATE_LINK_TYPED( StartEditHdl, void*, void );
-        DECL_DLLPRIVATE_LINK_TYPED( EndEditHdl, void*, void );
-        DECL_DLLPRIVATE_LINK_TYPED( CellModifiedHdl, void*, void );
+        DECL_DLLPRIVATE_LINK( ModifyHdl, LinkParamNone*, void );
+        DECL_DLLPRIVATE_LINK( StartEditHdl, void*, void );
+        DECL_DLLPRIVATE_LINK( EndEditHdl, void*, void );
+        DECL_DLLPRIVATE_LINK( CellModifiedHdl, void*, void );
     };
 
 

@@ -76,11 +76,11 @@ private:
 public:
     explicit MyWindow( vcl::Window *pParent );
 
-        DECL_LINK_TYPED(CountHdl, PushButton*, void);
-        DECL_LINK_TYPED(TextHdl, PushButton*, void);
-        DECL_LINK_TYPED(BlaHdl, PushButton*, void);
-        DECL_LINK_TYPED(TabHdl, PushButton*, void);
-        DECL_LINK_TYPED(ViewHdl, PushButton*, void);
+        DECL_LINK(CountHdl, PushButton*, void);
+        DECL_LINK(TextHdl, PushButton*, void);
+        DECL_LINK(BlaHdl, PushButton*, void);
+        DECL_LINK(TabHdl, PushButton*, void);
+        DECL_LINK(ViewHdl, PushButton*, void);
 };
 
 class ScTestListener : public XSelectionChangeListener, public UsrObject
@@ -1501,7 +1501,7 @@ void lcl_Pivot( FixedText& aTimeText )  // 30
     }
 }
 
-IMPL_LINK_NOARG_TYPED(MyWindow, CountHdl, PushButton*, void)
+IMPL_LINK_NOARG(MyWindow, CountHdl, PushButton*, void)
 {
 
     long nCount = aCountField.GetValue();
@@ -1608,7 +1608,7 @@ IMPL_LINK_NOARG_TYPED(MyWindow, CountHdl, PushButton*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(MyWindow, TextHdl, PushButton*, void)
+IMPL_LINK_NOARG(MyWindow, TextHdl, PushButton*, void)
 {
     sal_uInt16 nCol = (sal_uInt16)aColField.GetValue();
     sal_uInt16 nRow = (sal_uInt16)aRowField.GetValue();
@@ -1653,7 +1653,7 @@ IMPL_LINK_NOARG_TYPED(MyWindow, TextHdl, PushButton*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(MyWindow, BlaHdl, PushButton*, void)
+IMPL_LINK_NOARG(MyWindow, BlaHdl, PushButton*, void)
 {
     aTimeText.SetText("...");
 
@@ -1723,7 +1723,7 @@ IMPL_LINK_NOARG_TYPED(MyWindow, BlaHdl, PushButton*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(MyWindow, TabHdl, PushButton*, void)
+IMPL_LINK_NOARG(MyWindow, TabHdl, PushButton*, void)
 {
     String aResult;
 
@@ -1812,7 +1812,7 @@ void lcl_FillCells(XCellCollectionRef xColl)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(MyWindow, ViewHdl, PushButton*, void)
+IMPL_LINK_NOARG(MyWindow, ViewHdl, PushButton*, void)
 {
     XSpreadsheetDocumentRef xDoc = lcl_GetDocument();           // calc model
     XInterfaceRef xInt = lcl_GetView();

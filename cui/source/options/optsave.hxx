@@ -59,9 +59,9 @@ private:
 
     std::unique_ptr<SvxSaveTabPage_Impl>    pImpl;
 
-    DECL_LINK_TYPED( AutoClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( FilterHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED(ODFVersionHdl_Impl, ListBox&, void );
+    DECL_LINK( AutoClickHdl_Impl, Button*, void );
+    DECL_LINK( FilterHdl_Impl, ListBox&, void );
+    DECL_LINK(ODFVersionHdl_Impl, ListBox&, void );
 
     void    DetectHiddenControls();
 

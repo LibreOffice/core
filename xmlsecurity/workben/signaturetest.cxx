@@ -123,9 +123,9 @@ private:
     FixedLine   maHintLine;
     FixedText   maHintText;
 
-    DECL_LINK_TYPED(  CryptoCheckBoxHdl, CheckBox*, void );
-    DECL_LINK_TYPED(  DigitalSignaturesWithServiceHdl, Button*, void );
-    DECL_LINK_TYPED(  VerifyDigitalSignaturesHdl, Button*, void );
+    DECL_LINK(  CryptoCheckBoxHdl, CheckBox*, void );
+    DECL_LINK(  DigitalSignaturesWithServiceHdl, Button*, void );
+    DECL_LINK(  VerifyDigitalSignaturesHdl, Button*, void );
 
 public:
                 MyWin( vcl::Window* pParent, WinBits nWinStyle );
@@ -251,7 +251,7 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
 
 }
 
-IMPL_LINK_NOARG_TYPED(MyWin, CryptoCheckBoxHdl, CheckBox*, void)
+IMPL_LINK_NOARG(MyWin, CryptoCheckBoxHdl, CheckBox*, void)
 {
     if ( maCryptoCheckBox.IsChecked() )
     {
@@ -265,7 +265,7 @@ IMPL_LINK_NOARG_TYPED(MyWin, CryptoCheckBoxHdl, CheckBox*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(MyWin, DigitalSignaturesWithServiceHdl, Button*, void)
+IMPL_LINK_NOARG(MyWin, DigitalSignaturesWithServiceHdl, Button*, void)
 {
     OUString aDocFileName = maEditDOCFileName.GetText();
     uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
@@ -276,7 +276,7 @@ IMPL_LINK_NOARG_TYPED(MyWin, DigitalSignaturesWithServiceHdl, Button*, void)
     xD->signDocumentContent( xStore, NULL );
 }
 
-IMPL_LINK_NOARG_TYPED(MyWin, VerifyDigitalSignaturesHdl, Button*, void)
+IMPL_LINK_NOARG(MyWin, VerifyDigitalSignaturesHdl, Button*, void)
 {
     OUString aDocFileName = maEditDOCFileName.GetText();
     uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(

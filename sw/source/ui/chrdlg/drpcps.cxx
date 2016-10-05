@@ -679,7 +679,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
     bModified = false;
 }
 
-IMPL_LINK_NOARG_TYPED(SwDropCapsPage, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl, Button*, void)
 {
     bool bChecked = m_pDropCapsBox->IsChecked();
 
@@ -707,7 +707,7 @@ IMPL_LINK_NOARG_TYPED(SwDropCapsPage, ClickHdl, Button*, void)
     bModified = true;
 }
 
-IMPL_LINK_NOARG_TYPED(SwDropCapsPage, WholeWordHdl, Button*, void)
+IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl, Button*, void)
 {
     m_pDropCapsField->Enable( !m_pWholeWordCB->IsChecked() );
     m_pSwitchText->Enable(!m_pWholeWordCB->IsChecked());
@@ -717,7 +717,7 @@ IMPL_LINK_NOARG_TYPED(SwDropCapsPage, WholeWordHdl, Button*, void)
     bModified = true;
 }
 
-IMPL_LINK_TYPED( SwDropCapsPage, ModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit&, rEdit, void )
 {
     OUString sPreview;
 
@@ -766,7 +766,7 @@ IMPL_LINK_TYPED( SwDropCapsPage, ModifyHdl, Edit&, rEdit, void )
     bModified = true;
 }
 
-IMPL_LINK_NOARG_TYPED(SwDropCapsPage, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwDropCapsPage, SelectHdl, ListBox&, void)
 {
     m_pPict->UpdatePaintSettings();
     bModified = true;

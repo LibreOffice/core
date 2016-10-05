@@ -65,9 +65,9 @@ private:
     OUString         m_aSelectLockedCells;
     OUString         m_aSelectUnlockedCells;
 
-    DECL_LINK_TYPED( OKHdl, Button*, void );
-    DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
-    DECL_LINK_TYPED( PasswordModifyHdl, Edit&, void );
+    DECL_LINK( OKHdl, Button*, void );
+    DECL_LINK( CheckBoxHdl, Button*, void );
+    DECL_LINK( PasswordModifyHdl, Edit&, void );
 };
 
 #endif

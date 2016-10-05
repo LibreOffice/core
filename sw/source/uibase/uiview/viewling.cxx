@@ -605,10 +605,10 @@ struct ExecuteInfo
 class AsyncExecute
 {
 public:
-    DECL_STATIC_LINK_TYPED( AsyncExecute, ExecuteHdl_Impl, void*, void );
+    DECL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, void*, void );
 };
 
-IMPL_STATIC_LINK_TYPED( AsyncExecute, ExecuteHdl_Impl, void*, p, void )
+IMPL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, void*, p, void )
 {
     ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
     SolarMutexReleaser aReleaser;
@@ -834,7 +834,7 @@ private:
     VclPtr<ListBox> aListBox;
     IFieldmark *pFieldmark;
 
-    DECL_LINK_TYPED( MyListBoxHandler, ListBox&, void );
+    DECL_LINK( MyListBoxHandler, ListBox&, void );
 
 public:
     SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM );
@@ -897,7 +897,7 @@ void SwFieldDialog::dispose()
     FloatingWindow::dispose();
 }
 
-IMPL_LINK_TYPED( SwFieldDialog, MyListBoxHandler, ListBox&, rBox, void )
+IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox&, rBox, void )
 {
     if ( !rBox.IsTravelSelect() )
     {
@@ -915,7 +915,7 @@ IMPL_LINK_TYPED( SwFieldDialog, MyListBoxHandler, ListBox&, rBox, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwView, FieldPopupModeEndHdl, FloatingWindow*, void)
+IMPL_LINK_NOARG(SwView, FieldPopupModeEndHdl, FloatingWindow*, void)
 {
     m_pFieldPopup.disposeAndClear();
 }

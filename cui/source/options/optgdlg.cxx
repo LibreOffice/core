@@ -406,7 +406,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_pCollectUsageInfo->SaveValue();
 }
 
-IMPL_LINK_NOARG_TYPED( OfaMiscTabPage, TwoFigureHdl, Edit&, void )
+IMPL_LINK_NOARG( OfaMiscTabPage, TwoFigureHdl, Edit&, void )
 {
     OUString aOutput( m_aStrDateInfo );
     OUString aStr( m_pYearValueField->GetText() );
@@ -425,11 +425,11 @@ IMPL_LINK_NOARG_TYPED( OfaMiscTabPage, TwoFigureHdl, Edit&, void )
     m_pToYearFT->SetText( aOutput );
 }
 
-IMPL_LINK_TYPED( OfaMiscTabPage, TwoFigureConfigFocusHdl, Control&, rControl, void )
+IMPL_LINK( OfaMiscTabPage, TwoFigureConfigFocusHdl, Control&, rControl, void )
 {
     TwoFigureConfigHdl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK_TYPED( OfaMiscTabPage, TwoFigureConfigHdl, SpinField&, rEd, void )
+IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, SpinField&, rEd, void )
 {
     sal_Int64 nNum = m_pYearValueField->GetValue();
     OUString aOutput(OUString::number(nNum));
@@ -727,7 +727,7 @@ void OfaViewTabPage::dispose()
 }
 
 #if defined( UNX )
-IMPL_LINK_NOARG_TYPED( OfaViewTabPage, OnAntialiasingToggled, CheckBox&, void )
+IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, CheckBox&, void )
 {
     bool bAAEnabled = m_pFontAntiAliasing->IsChecked();
 
@@ -1717,7 +1717,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     }
 }
 
-IMPL_LINK_TYPED(  OfaLanguagesTabPage, SupportHdl, Button*, pButton, void )
+IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, Button*, pButton, void )
 {
     CheckBox* pBox = static_cast<CheckBox*>(pButton);
     DBG_ASSERT( pBox, "OfaLanguagesTabPage::SupportHdl(): pBox invalid" );
@@ -1756,7 +1756,7 @@ namespace
     }
 }
 
-IMPL_LINK_TYPED( OfaLanguagesTabPage, LocaleSettingHdl, ListBox&, rListBox, void )
+IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, ListBox&, rListBox, void )
 {
     SvxLanguageBox* pBox = static_cast<SvxLanguageBox*>(&rListBox);
     LanguageType eLang = pBox->GetSelectLanguage();
@@ -1805,7 +1805,7 @@ IMPL_LINK_TYPED( OfaLanguagesTabPage, LocaleSettingHdl, ListBox&, rListBox, void
     m_pDatePatternsED->SetText( aDatePatternsString);
 }
 
-IMPL_LINK_TYPED( OfaLanguagesTabPage, DatePatternsHdl, Edit&, rEd, void )
+IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit&, rEd, void )
 {
     const OUString aPatterns( rEd.GetText());
     OUStringBuffer aBuf( aPatterns);

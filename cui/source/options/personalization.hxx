@@ -63,16 +63,16 @@ public:
 
 private:
     /// Handle the Persona selection
-    DECL_LINK_TYPED( SelectPersona, Button*, void );
+    DECL_LINK( SelectPersona, Button*, void );
 
     /// When 'own' is chosen, but the Persona is not chosen yet.
-    DECL_LINK_TYPED( ForceSelect, Button*, void );
+    DECL_LINK( ForceSelect, Button*, void );
 
     /// Handle the default Persona selection
-    DECL_LINK_TYPED( DefaultPersona, Button*, void );
+    DECL_LINK( DefaultPersona, Button*, void );
 
     /// Handle the Personas installed through extensions selection
-    DECL_LINK_TYPED( SelectInstalledPersona, ListBox&, void );
+    DECL_LINK( SelectInstalledPersona, ListBox&, void );
 };
 
 /** Dialog that will allow the user to choose a Persona to use. */
@@ -107,10 +107,10 @@ public:
 
 private:
     /// Handle the Search button
-    DECL_LINK_TYPED( SearchPersonas, Button*, void );
-    DECL_LINK_TYPED( SelectPersona, Button*, void );
-    DECL_LINK_TYPED( ActionOK, Button*, void );
-    DECL_LINK_TYPED( ActionCancel, Button*, void );
+    DECL_LINK( SearchPersonas, Button*, void );
+    DECL_LINK( SelectPersona, Button*, void );
+    DECL_LINK( ActionOK, Button*, void );
+    DECL_LINK( ActionCancel, Button*, void );
 };
 
 class SearchAndParseThread: public salhelper::Thread

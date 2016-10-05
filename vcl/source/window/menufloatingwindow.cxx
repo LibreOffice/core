@@ -266,7 +266,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
     }
 }
 
-IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, PopupEnd, FloatingWindow*, void)
+IMPL_LINK_NOARG(MenuFloatingWindow, PopupEnd, FloatingWindow*, void)
 {
     // "this" will be deleted before the end of this method!
     Menu* pM = pMenu;
@@ -293,12 +293,12 @@ IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, PopupEnd, FloatingWindow*, void)
         pM->pStartedFrom = nullptr;
 }
 
-IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, AutoScroll, Timer *, void)
+IMPL_LINK_NOARG(MenuFloatingWindow, AutoScroll, Timer *, void)
 {
     ImplScroll( GetPointerPosPixel() );
 }
 
-IMPL_LINK_TYPED( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
+IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
 {
     if( ! pMenu )
         return;
@@ -359,7 +359,7 @@ IMPL_LINK_TYPED( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, SubmenuClose, Timer *, void)
+IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose, Timer *, void)
 {
     if( pMenu && pMenu->pStartedFrom )
     {
@@ -369,7 +369,7 @@ IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, SubmenuClose, Timer *, void)
     }
 }
 
-IMPL_LINK_TYPED( MenuFloatingWindow, ShowHideListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( MenuFloatingWindow, ShowHideListener, VclWindowEvent&, rEvent, void )
 {
     if( ! pMenu )
         return;

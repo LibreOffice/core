@@ -613,7 +613,7 @@ void DrawViewShell::SetUIUnit(FieldUnit eUnit)
  * Refresh TabControl on splitter change
  */
 
-IMPL_LINK_TYPED( DrawViewShell, TabSplitHdl, TabBar *, pTab, void )
+IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab, void )
 {
     const long int nMax = maViewSize.Width() - maScrBarWH.Width()
         - maTabControl->GetPosPixel().X() ;

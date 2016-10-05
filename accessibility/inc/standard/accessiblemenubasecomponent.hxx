@@ -110,7 +110,7 @@ protected:
     virtual void            Click();
     virtual bool            IsPopupMenuOpen();
 
-    DECL_LINK_TYPED( MenuEventListener, VclMenuEvent&, void );
+    DECL_LINK( MenuEventListener, VclMenuEvent&, void );
 
     void                    ProcessMenuEvent( const VclMenuEvent& rVclMenuEvent );
 

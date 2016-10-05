@@ -793,7 +793,7 @@ void AnnotationManagerImpl::UpdateTags( bool bSynchron )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(AnnotationManagerImpl, UpdateTagsHdl, void*, void)
+IMPL_LINK_NOARG(AnnotationManagerImpl, UpdateTagsHdl, void*, void)
 {
     mnUpdateTagsEvent  = nullptr;
     DisposeTags();
@@ -880,7 +880,7 @@ void AnnotationManagerImpl::removeListener()
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-IMPL_LINK_TYPED(AnnotationManagerImpl,EventMultiplexerListener,
+IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     tools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)

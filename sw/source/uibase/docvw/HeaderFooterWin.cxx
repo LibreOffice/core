@@ -501,7 +501,7 @@ void SwHeaderFooterWin::Select()
     ExecuteCommand(GetCurItemId());
 }
 
-IMPL_LINK_NOARG_TYPED(SwHeaderFooterWin, FadeHandler, Timer *, void)
+IMPL_LINK_NOARG(SwHeaderFooterWin, FadeHandler, Timer *, void)
 {
     if (m_bIsAppearing && m_nFadeRate > 0)
         m_nFadeRate -= 25;

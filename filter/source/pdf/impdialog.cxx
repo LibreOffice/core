@@ -307,7 +307,7 @@ ImpPDFTabGeneralPage* ImpPDFTabDialog::getGeneralPage() const
 }
 
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(ImpPDFTabDialog, CancelHdl, Button*, void)
 {
     EndDialog();
 }
@@ -775,18 +775,18 @@ VclPtr<SfxTabPage> ImpPDFTabGeneralPage::Create( vcl::Window* pParent,
 }
 
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleAllHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAllHdl, RadioButton&, void)
 {
     EnableExportNotesPages();
 }
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, TogglePagesHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePagesHdl, RadioButton&, void)
 {
     TogglePagesHdl();
     EnableExportNotesPages();
 }
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleSelectionHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleSelectionHdl, RadioButton&, void)
 {
     EnableExportNotesPages();
 }
@@ -807,29 +807,29 @@ void ImpPDFTabGeneralPage::EnableExportNotesPages()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, CheckBox&, void)
 {
     mpFormsFrame->Enable(mpCbExportFormFields->IsChecked());
 }
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl, CheckBox&, void)
 {
     mpCbExportOnlyNotesPages->Enable(mpCbExportNotesPages->IsChecked());
 }
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleCompressionHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl, RadioButton&, void)
 {
     mpQualityFrame->Enable(mpRbJPEGCompression->IsChecked());
 }
 
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, CheckBox&, void)
 {
     mpCoReduceImageResolution->Enable( mpCbReduceImageResolution->IsChecked() );
 }
 
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleWatermarkHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl, CheckBox&, void)
 {
     mpEdWatermark->Enable( mpCbWatermark->IsChecked() );
     mpFtWatermark->Enable (mpCbWatermark->IsChecked() );
@@ -838,7 +838,7 @@ IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleWatermarkHdl, CheckBox&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleAddStreamHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, CheckBox&, void)
 {
     if( mpCbAddStream->IsVisible() )
     {
@@ -860,7 +860,7 @@ IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleAddStreamHdl, CheckBox&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, CheckBox&, void)
 {
     // set the security page status (and its controls as well)
     ImpPDFTabSecurityPage* pSecPage = mpaParent ? mpaParent->getSecurityPage() : nullptr;
@@ -1077,7 +1077,7 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
 }
 
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, RadioButton&, void)
 {
     ToggleRbPgLyContinueFacingHdl();
 }
@@ -1089,7 +1089,7 @@ void ImpPDFTabOpnFtrPage::ToggleRbPgLyContinueFacingHdl()
 }
 
 
-IMPL_LINK_NOARG_TYPED( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, RadioButton&, void )
+IMPL_LINK_NOARG( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, RadioButton&, void )
 {
     mpNumZoom->Enable( mpRbMagnZoom->IsChecked() );
 }
@@ -1141,7 +1141,7 @@ void ImpPDFTabViewerPage::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, RadioButton&, void )
+IMPL_LINK_NOARG( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, RadioButton&, void )
 {
     m_pNumBookmarkLevels->Enable( m_pRbVisibleBookmarkLevels->IsChecked() );
 }
@@ -1357,7 +1357,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
 }
 
 
-IMPL_LINK_NOARG_TYPED(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, Button*, void)
+IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, Button*, void)
 {
     ScopedVclPtrInstance< SfxPasswordDialog > aPwdDialog( this, &msUserPwdTitle );
     aPwdDialog->SetMinLen( 0 );
@@ -1598,7 +1598,7 @@ void ImpPDFTabLinksPage::ImplPDFALinkControl( bool bEnableLaunch )
 
 
 /// Reset the memory of Launch action present when PDF/A-1 was requested
-IMPL_LINK_NOARG_TYPED(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, Button*, void)
+IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, Button*, void)
 {
     mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
     mbOpnLnksLaunchUserState = m_pRbOpnLnksLaunch->IsChecked();
@@ -1607,7 +1607,7 @@ IMPL_LINK_NOARG_TYPED(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, Button*, voi
 
 
 /// Reset the memory of a launch action present when PDF/A-1 was requested
-IMPL_LINK_NOARG_TYPED(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, Button*, void)
+IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, Button*, void)
 {
     mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
     mbOpnLnksLaunchUserState = m_pRbOpnLnksLaunch->IsChecked();
@@ -1704,7 +1704,7 @@ void ImplErrorDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(ImplErrorDialog, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl, ListBox&, void)
 {
     OUString* pStr = static_cast<OUString*>(m_pErrors->GetSelectEntryData());
     m_pExplanation->SetText( pStr ? *pStr : OUString() );
@@ -1751,7 +1751,7 @@ void ImpPDFTabSigningPage::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, void )
+IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, void )
 {
 
     Reference< security::XDocumentDigitalSignatures > xSigner(
@@ -1793,7 +1793,7 @@ IMPL_LINK_NOARG_TYPED( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, v
 }
 
 
-IMPL_LINK_NOARG_TYPED( ImpPDFTabSigningPage, ClickmaPbSignCertClear, Button*, void )
+IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertClear, Button*, void )
 {
     mpEdSignCert->SetText("");
     maSignCertificate.clear();

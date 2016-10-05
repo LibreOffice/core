@@ -160,7 +160,7 @@ void SwChartLockController_Helper::LockUnlockAllCharts( bool bLock )
     bIsLocked = bLock;
 }
 
-IMPL_LINK_NOARG_TYPED( SwChartLockController_Helper, DoUnlockAllCharts, Timer *, void )
+IMPL_LINK_NOARG( SwChartLockController_Helper, DoUnlockAllCharts, Timer *, void )
 {
     UnlockAllCharts();
 }

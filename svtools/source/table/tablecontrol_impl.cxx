@@ -2379,7 +2379,7 @@ namespace svt { namespace table
     }
 
 
-    IMPL_LINK_NOARG_TYPED( TableControl_Impl, OnUpdateScrollbars, void*, void )
+    IMPL_LINK_NOARG( TableControl_Impl, OnUpdateScrollbars, void*, void )
     {
         // TODO: can't we simply use lcl_updateScrollbar here, so the scrollbars ranges are updated, instead of
         // doing a complete re-layout?
@@ -2387,7 +2387,7 @@ namespace svt { namespace table
     }
 
 
-    IMPL_LINK_TYPED( TableControl_Impl, OnScroll, ScrollBar*, _pScrollbar, void )
+    IMPL_LINK( TableControl_Impl, OnScroll, ScrollBar*, _pScrollbar, void )
     {
         DBG_ASSERT( ( _pScrollbar == m_pVScroll ) || ( _pScrollbar == m_pHScroll ),
             "TableControl_Impl::OnScroll: where did this come from?" );

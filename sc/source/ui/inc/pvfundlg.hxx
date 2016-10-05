@@ -74,8 +74,8 @@ private:
     /** Searches for a listbox entry, starts search at specified position. */
     sal_Int32 FindBaseItemPos( const OUString& rEntry, sal_Int32 nStartPos ) const;
 
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( DblClickHdl, ListBox&, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK( DblClickHdl, ListBox&, void );
 
 private:
     VclPtr<ScDPFunctionListBox> mpLbFunc;
@@ -111,9 +111,9 @@ public:
 private:
     void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
-    DECL_LINK_TYPED( DblClickHdl, ListBox&, void );
-    DECL_LINK_TYPED( RadioClickHdl, Button*, void );
-    DECL_LINK_TYPED( ClickHdl, Button*, void );
+    DECL_LINK( DblClickHdl, ListBox&, void );
+    DECL_LINK( RadioClickHdl, Button*, void );
+    DECL_LINK( ClickHdl, Button*, void );
 
 private:
     VclPtr<RadioButton>         mpRbNone;
@@ -151,9 +151,9 @@ private:
     /** Searches for a listbox entry, starts search at specified position. */
     sal_Int32 FindListBoxEntry( const ListBox& rLBox, const OUString& rEntry, sal_Int32 nStartPos ) const;
 
-    DECL_LINK_TYPED( RadioClickHdl, Button*, void );
-    DECL_LINK_TYPED( CheckHdl, Button*, void );
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
+    DECL_LINK( RadioClickHdl, Button*, void );
+    DECL_LINK( CheckHdl, Button*, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
 
 private:
     VclPtr<ListBox>            m_pLbSortBy;
@@ -202,7 +202,7 @@ public:
     OUString GetDimensionName() const;
 
 private:
-    DECL_LINK_TYPED( DblClickHdl, ListBox&, void );
+    DECL_LINK( DblClickHdl, ListBox&, void );
 
 private:
     VclPtr<ListBox>            mpLbDims;

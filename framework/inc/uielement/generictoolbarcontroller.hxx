@@ -50,7 +50,7 @@ class GenericToolbarController : public svt::ToolboxController
         // XStatusListener
         virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
-        DECL_STATIC_LINK_TYPED( GenericToolbarController, ExecuteHdl_Impl, void*, void );
+        DECL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, void*, void );
 
         struct ExecuteInfo
         {

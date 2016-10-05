@@ -77,7 +77,7 @@ namespace framework
             // XEventListener
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
 
-            DECL_STATIC_LINK_TYPED( NewMenuController, ExecuteHdl_Impl, void*, void );
+            DECL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, void*, void );
 
         private:
             virtual void impl_setPopupMenu() override;

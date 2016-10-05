@@ -127,7 +127,7 @@ Color GetUnderlineColor()
 
 }
 
-IMPL_LINK_TYPED(TextUnderlineControl, PBClickHdl, Button*, pButton, void)
+IMPL_LINK(TextUnderlineControl, PBClickHdl, Button*, pButton, void)
 {
     if(pButton == maMoreOptions)
     {

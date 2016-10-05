@@ -92,11 +92,11 @@ private:
         ::std::vector<OUString>
                         aParaArray;
 
-        DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void);
-        DECL_LINK_TYPED( ModifyHdl, ArgInput&, void );
-        DECL_LINK_TYPED( GetEdFocusHdl, ArgInput&, void );
-        DECL_LINK_TYPED( GetFxFocusHdl, ArgInput&, void );
-        DECL_LINK_TYPED( GetFxHdl, ArgInput&, void );
+        DECL_LINK( ScrollHdl, ScrollBar*, void);
+        DECL_LINK( ModifyHdl, ArgInput&, void );
+        DECL_LINK( GetEdFocusHdl, ArgInput&, void );
+        DECL_LINK( GetFxFocusHdl, ArgInput&, void );
+        DECL_LINK( GetFxHdl, ArgInput&, void );
 
 protected:
 

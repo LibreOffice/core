@@ -255,7 +255,7 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     return pData;
 }
 
-IMPL_LINK_NOARG_TYPED( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
+IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
 {
     //check that min < max
     bool bWarn = false;
@@ -308,7 +308,7 @@ IMPL_LINK_NOARG_TYPED( ScDataBarSettingsDlg, OkBtnHdl, Button*, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( ScDataBarSettingsDlg, TypeSelectHdl, ListBox&, void )
+IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl, ListBox&, void )
 {
     sal_Int32 nSelectMin = mpLbTypeMin->GetSelectEntryPos();
     if( nSelectMin <= COLORSCALE_MAX)
@@ -341,7 +341,7 @@ IMPL_LINK_NOARG_TYPED( ScDataBarSettingsDlg, TypeSelectHdl, ListBox&, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( ScDataBarSettingsDlg, PosSelectHdl, ListBox&, void )
+IMPL_LINK_NOARG( ScDataBarSettingsDlg, PosSelectHdl, ListBox&, void )
 {
     sal_Int32 axisPos = mpLbAxisPos->GetSelectEntryPos();
     if(axisPos != 2 && axisPos != 1) // disable if axis vertical position is automatic

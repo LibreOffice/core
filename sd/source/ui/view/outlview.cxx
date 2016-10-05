@@ -358,7 +358,7 @@ Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
 /**
  * Handler for inserting pages (paragraphs)
  */
-IMPL_LINK_TYPED( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner, void )
 {
     // we get calls to this handler during binary insert of drag and drop contents but
     // we ignore it here and handle it later in OnEndPasteOrDrop()
@@ -498,7 +498,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 /**
  * Handler for deleting pages (paragraphs)
  */
-IMPL_LINK_TYPED( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner, void )
 {
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::ParagraphRemovingHdl(), model change without undo?!" );
 
@@ -555,7 +555,7 @@ IMPL_LINK_TYPED( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner, voi
  * Handler for changing the indentation depth of paragraphs (requires inserting
  * or deleting of pages in some cases)
  */
-IMPL_LINK_TYPED( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner, void )
 {
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::DepthChangedHdl(), no undo for model change?!" );
 
@@ -769,7 +769,7 @@ IMPL_LINK_TYPED( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner, void )
 /**
  * Handler for StatusEvents
  */
-IMPL_LINK_NOARG_TYPED(OutlineView, StatusEventHdl, EditStatus&, void)
+IMPL_LINK_NOARG(OutlineView, StatusEventHdl, EditStatus&, void)
 {
     ::sd::Window*   pWin = mrOutlineViewShell.GetActiveWindow();
     OutlinerView*   pOutlinerView = GetViewByWindow(pWin);
@@ -791,14 +791,14 @@ IMPL_LINK_NOARG_TYPED(OutlineView, StatusEventHdl, EditStatus&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(OutlineView, BeginDropHdl, EditView*, void)
+IMPL_LINK_NOARG(OutlineView, BeginDropHdl, EditView*, void)
 {
     DBG_ASSERT(maDragAndDropModelGuard.get() == nullptr, "sd::OutlineView::BeginDropHdl(), prior drag operation not finished correctly!" );
 
     maDragAndDropModelGuard.reset( new OutlineViewModelChangeGuard( *this ) );
 }
 
-IMPL_LINK_NOARG_TYPED(OutlineView, EndDropHdl, EditView*, void)
+IMPL_LINK_NOARG(OutlineView, EndDropHdl, EditView*, void)
 {
     maDragAndDropModelGuard.reset(nullptr);
 }
@@ -806,7 +806,7 @@ IMPL_LINK_NOARG_TYPED(OutlineView, EndDropHdl, EditView*, void)
 /**
  * Handler for the start of a paragraph movement
  */
-IMPL_LINK_TYPED( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner, void )
 {
     OutlineViewPageChangesGuard aGuard(this);
 
@@ -847,7 +847,7 @@ IMPL_LINK_TYPED( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner, void )
 /**
  * Handler for the end of a paragraph movement
  */
-IMPL_LINK_TYPED( OutlineView, EndMovingHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner, void )
 {
     OutlineViewPageChangesGuard aGuard(this);
 
@@ -1161,7 +1161,7 @@ void OutlineView::FillOutliner()
 /**
  * Handler for deleting of level 0 paragraphs (pages): Warning
  */
-IMPL_LINK_NOARG_TYPED(OutlineView, RemovingPagesHdl, OutlinerView*, bool)
+IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl, OutlinerView*, bool)
 {
     sal_Int32 nNumOfPages = mrOutliner.GetSelPageCount();
 
@@ -1184,7 +1184,7 @@ IMPL_LINK_NOARG_TYPED(OutlineView, RemovingPagesHdl, OutlinerView*, bool)
 /**
  * Handler for indenting level 0 paragraphs (pages): Warning
  */
-IMPL_LINK_TYPED( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView, bool )
+IMPL_LINK( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView, bool )
 {
     return RemovingPagesHdl(pOutlinerView);
 }
@@ -1418,12 +1418,12 @@ void OutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(OutlineView, AppEventListenerHdl, VclSimpleEvent&, void)
+IMPL_LINK_NOARG(OutlineView, AppEventListenerHdl, VclSimpleEvent&, void)
 {
     onUpdateStyleSettings(false);
 }
 
-IMPL_LINK_TYPED(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
+IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {
@@ -1592,7 +1592,7 @@ void OutlineView::TryToMergeUndoActions()
     }
 }
 
-IMPL_LINK_TYPED(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
+IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
 {
     if( !pInfo )
         return;

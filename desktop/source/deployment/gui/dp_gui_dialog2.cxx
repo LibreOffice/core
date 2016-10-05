@@ -128,11 +128,11 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     MENU_COMMAND    ShowPopupMenu( const Point &rPos, const long nPos );
 
 
-    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
+    DECL_LINK( ScrollHdl, ScrollBar*, void );
 
-    DECL_LINK_TYPED( HandleOptionsBtn, Button*, void );
-    DECL_LINK_TYPED( HandleEnableBtn, Button*, void );
-    DECL_LINK_TYPED( HandleRemoveBtn, Button*, void );
+    DECL_LINK( HandleOptionsBtn, Button*, void );
+    DECL_LINK( HandleEnableBtn, Button*, void );
+    DECL_LINK( HandleRemoveBtn, Button*, void );
 
 public:
     explicit ExtBoxWithBtns_Impl(vcl::Window* pParent);
@@ -466,7 +466,7 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
 }
 
 
-IMPL_LINK_TYPED( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar, void )
+IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar, void )
 {
     long nDelta = pScrBar->GetDelta();
 
@@ -482,7 +482,7 @@ IMPL_LINK_TYPED( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(ExtBoxWithBtns_Impl, HandleOptionsBtn, Button*, void)
+IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleOptionsBtn, Button*, void)
 {
     const sal_Int32 nActive = getSelIndex();
 
@@ -501,7 +501,7 @@ IMPL_LINK_NOARG_TYPED(ExtBoxWithBtns_Impl, HandleOptionsBtn, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(ExtBoxWithBtns_Impl, HandleEnableBtn, Button*, void)
+IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleEnableBtn, Button*, void)
 {
     const sal_Int32 nActive = getSelIndex();
 
@@ -520,7 +520,7 @@ IMPL_LINK_NOARG_TYPED(ExtBoxWithBtns_Impl, HandleEnableBtn, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(ExtBoxWithBtns_Impl, HandleRemoveBtn, Button*, void)
+IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleRemoveBtn, Button*, void)
 {
     const sal_Int32 nActive = getSelIndex();
 
@@ -932,7 +932,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 }
 
 
-IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleCancelBtn, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleCancelBtn, Button*, void)
 {
     if ( m_xAbortChannel.is() )
     {
@@ -947,13 +947,13 @@ IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleCancelBtn, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleCloseBtn, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn, Button*, void)
 {
     Close();
 }
 
 
-IMPL_LINK_TYPED( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
+IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     bool bLockInterface = (bool) _bLockInterface;
@@ -1032,7 +1032,7 @@ void ExtMgrDialog::updatePackageInfo( const uno::Reference< deployment::XPackage
 }
 
 
-IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleAddBtn, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleAddBtn, Button*, void)
 {
     setBusy( true );
 
@@ -1046,7 +1046,7 @@ IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleAddBtn, Button*, void)
     setBusy( false );
 }
 
-IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleExtTypeCbx, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx, Button*, void)
 {
     // re-creates the list of packages with addEntry selecting the packages
     prepareChecking();
@@ -1054,7 +1054,7 @@ IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleExtTypeCbx, Button*, void)
     checkEntries();
 }
 
-IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleUpdateBtn, Button*, void)
+IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn, Button*, void)
 {
 #if ENABLE_EXTENSION_UPDATE
     m_pManager->checkUpdates( false, true );
@@ -1062,13 +1062,13 @@ IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleUpdateBtn, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( ExtMgrDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
+IMPL_LINK( ExtMgrDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
 {
     openWebBrowser( rHyperlink.GetURL(), GetText() );
 }
 
 
-IMPL_LINK_NOARG_TYPED(ExtMgrDialog, TimeOutHdl, Idle *, void)
+IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Idle *, void)
 {
     if ( m_bStopProgress )
     {
@@ -1140,7 +1140,7 @@ bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
         return true;
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED(ExtMgrDialog, Restart, void*, void)
+IMPL_STATIC_LINK_NOARG(ExtMgrDialog, Restart, void*, void)
 {
     SolarMutexGuard aGuard;
     ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
@@ -1264,7 +1264,7 @@ void UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPac
 }
 
 
-IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, HandleCancelBtn, Button*, void)
+IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCancelBtn, Button*, void)
 {
     if ( m_xAbortChannel.is() )
     {
@@ -1280,7 +1280,7 @@ IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, HandleCancelBtn, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( UpdateRequiredDialog, startProgress, void*, _bLockInterface, void )
+IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface, void )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     bool bLockInterface = (bool) _bLockInterface;
@@ -1367,7 +1367,7 @@ void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::
 }
 
 
-IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, HandleUpdateBtn, Button*, void)
+IMPL_LINK_NOARG(UpdateRequiredDialog, HandleUpdateBtn, Button*, void)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -1386,7 +1386,7 @@ IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, HandleUpdateBtn, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, HandleCloseBtn, Button*, void)
+IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn, Button*, void)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1402,13 +1402,13 @@ IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, HandleCloseBtn, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( UpdateRequiredDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
+IMPL_LINK( UpdateRequiredDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
 {
     openWebBrowser( rHyperlink.GetURL(), GetText() );
 }
 
 
-IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, TimeOutHdl, Idle *, void)
+IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl, Idle *, void)
 {
     if ( m_bStopProgress )
     {

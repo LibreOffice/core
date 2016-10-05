@@ -91,7 +91,7 @@ protected:
     void                ImpInitScrollBars();
     void                ImpSetScrollBarRanges();
     void                ImpSetHScrollBarThumbPos();
-    DECL_LINK_TYPED(    ScrollHdl, ScrollBar*, void );
+    DECL_LINK(    ScrollHdl, ScrollBar*, void );
 
 public:
                 ImpVclMEdit( VclMultiLineEdit* pVclMultiLineEdit, WinBits nWinStyle );
@@ -317,7 +317,7 @@ void ImpVclMEdit::ImpSetHScrollBarThumbPos()
 
 }
 
-IMPL_LINK_TYPED( ImpVclMEdit, ScrollHdl, ScrollBar*, pCurScrollBar, void )
+IMPL_LINK( ImpVclMEdit, ScrollHdl, ScrollBar*, pCurScrollBar, void )
 {
     long nDiffX = 0, nDiffY = 0;
 
@@ -1086,7 +1086,7 @@ void VclMultiLineEdit::CaretChanged()
     CallEventListeners(VCLEVENT_EDIT_CARETCHANGED);
 }
 
-IMPL_LINK_NOARG_TYPED(VclMultiLineEdit, ImpUpdateDataHdl, Timer *, void)
+IMPL_LINK_NOARG(VclMultiLineEdit, ImpUpdateDataHdl, Timer *, void)
 {
     UpdateData();
 }

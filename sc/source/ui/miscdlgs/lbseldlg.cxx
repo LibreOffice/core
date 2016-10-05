@@ -58,7 +58,7 @@ OUString ScSelEntryDlg::GetSelectEntry() const
     return m_pLb->GetSelectEntry();
 }
 
-IMPL_LINK_NOARG_TYPED(ScSelEntryDlg, DblClkHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScSelEntryDlg, DblClkHdl, ListBox&, void)
 {
     EndDialog( RET_OK );
 }

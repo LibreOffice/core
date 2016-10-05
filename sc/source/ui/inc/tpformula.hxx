@@ -53,9 +53,9 @@ private:
     bool IsValidSeparator(const OUString& rSep) const;
     bool IsValidSeparatorSet() const;
 
-    DECL_LINK_TYPED( ButtonHdl, Button*, void );
-    DECL_LINK_TYPED( SepModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( SepEditOnFocusHdl, Control&, void );
+    DECL_LINK( ButtonHdl, Button*, void );
+    DECL_LINK( SepModifyHdl, Edit&, void );
+    DECL_LINK( SepEditOnFocusHdl, Control&, void );
 
 private:
     VclPtr<ListBox>     mpLbFormulaSyntax;

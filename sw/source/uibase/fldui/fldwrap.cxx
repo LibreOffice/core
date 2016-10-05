@@ -46,7 +46,7 @@ SwChildWinWrapper::SwChildWinWrapper(vcl::Window *pParentWindow, sal_uInt16 nId)
     m_aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
 }
 
-IMPL_LINK_NOARG_TYPED(SwChildWinWrapper, UpdateHdl, Timer *, void)
+IMPL_LINK_NOARG(SwChildWinWrapper, UpdateHdl, Timer *, void)
 {
     GetWindow()->Activate();    // update dialog
 }

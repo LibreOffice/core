@@ -989,12 +989,12 @@ bool TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
     return bRet;
 }
 
-IMPL_LINK_NOARG_TYPED(TabControl, ImplListBoxSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(TabControl, ImplListBoxSelectHdl, ListBox&, void)
 {
     SelectTabPage( GetPageId( mpTabCtrlData->mpListBox->GetSelectEntryPos() ) );
 }
 
-IMPL_LINK_TYPED( TabControl, ImplWindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( TabControl, ImplWindowEventListener, VclWindowEvent&, rEvent, void )
 {
     if ( rEvent.GetId() == VCLEVENT_WINDOW_KEYINPUT )
     {

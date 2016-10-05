@@ -154,7 +154,7 @@ void ScRTFParser::ColAdjust()
     }
 }
 
-IMPL_LINK_TYPED( ScRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
+IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
 {
     switch ( rInfo.eState )
     {

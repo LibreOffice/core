@@ -339,7 +339,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
     m_pDescFt->SetText( pStyle->GetDescription( eUnit ) );
 }
 
-IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, ListBox&, void )
+IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, ListBox&, void )
 {
     OUString aTemplName(m_pFollowLb->GetSelectEntry());
     OUString aEditTemplName(m_pNameRo->GetText());
@@ -349,7 +349,7 @@ IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl, ListBox
         m_pEditStyleBtn->Disable();
 }
 
-IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditStyleHdl_Impl, Button*, void )
+IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleHdl_Impl, Button*, void )
 {
     OUString aTemplName(m_pFollowLb->GetSelectEntry());
     if (Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily() ))
@@ -357,7 +357,7 @@ IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditStyleHdl_Impl, Button*, void
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl, ListBox&, void )
+IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl, ListBox&, void )
 {
     sal_Int32 linkSelectPos = m_pBaseLb->GetSelectEntryPos();
     if ( linkSelectPos == 0 )
@@ -366,7 +366,7 @@ IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl, Lis
         m_pEditLinkStyleBtn->Enable();
 }
 
-IMPL_LINK_NOARG_TYPED( SfxManageStyleSheetPage, EditLinkStyleHdl_Impl, Button*, void )
+IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleHdl_Impl, Button*, void )
 {
     OUString aTemplName(m_pBaseLb->GetSelectEntry());
     if (aTemplName != SfxResId(STR_NONE))
@@ -408,7 +408,7 @@ bool SfxManageStyleSheetPage::Execute_Impl(
 
 }
 
-IMPL_LINK_TYPED( SfxManageStyleSheetPage, GetFocusHdl, Control&, rControl, void )
+IMPL_LINK( SfxManageStyleSheetPage, GetFocusHdl, Control&, rControl, void )
 
 /*  [Description]
 
@@ -420,7 +420,7 @@ IMPL_LINK_TYPED( SfxManageStyleSheetPage, GetFocusHdl, Control&, rControl, void 
     aBuf = comphelper::string::stripStart(pEdit->GetText(), ' ');
 }
 
-IMPL_LINK_TYPED( SfxManageStyleSheetPage, LoseFocusHdl, Control&, rControl, void )
+IMPL_LINK( SfxManageStyleSheetPage, LoseFocusHdl, Control&, rControl, void )
 
 /*  [Description]
 

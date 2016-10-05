@@ -506,7 +506,7 @@ void FocusManager::HandleKeyEvent (
     }
 }
 
-IMPL_LINK_TYPED(FocusManager, WindowEventListener, VclWindowEvent&, rWindowEvent, void)
+IMPL_LINK(FocusManager, WindowEventListener, VclWindowEvent&, rWindowEvent, void)
 {
     vcl::Window* pSource = rWindowEvent.GetWindow();
     if (pSource == nullptr)
@@ -535,7 +535,7 @@ IMPL_LINK_TYPED(FocusManager, WindowEventListener, VclWindowEvent&, rWindowEvent
     }
 }
 
-IMPL_LINK_TYPED(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
+IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
 {
     vcl::Window* pSource = rEvent.GetWindow();
     if (pSource == nullptr)

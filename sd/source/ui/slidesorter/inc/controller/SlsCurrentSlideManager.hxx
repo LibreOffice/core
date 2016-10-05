@@ -107,7 +107,7 @@ private:
     */
     void AcquireCurrentSlide (const sal_Int32 nSlideIndex);
 
-    DECL_LINK_TYPED(SwitchPageCallback, Timer*, void);
+    DECL_LINK(SwitchPageCallback, Timer*, void);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

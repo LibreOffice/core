@@ -578,7 +578,7 @@ void Clipboard::DragFinished (sal_Int8 nDropAction)
     }
 }
 
-IMPL_LINK_TYPED(Clipboard, ProcessDragFinished, void*, pUserData, void)
+IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData, void)
 {
     const sal_Int8 nDropAction (static_cast<sal_Int8>(reinterpret_cast<sal_IntPtr>(pUserData)));
 

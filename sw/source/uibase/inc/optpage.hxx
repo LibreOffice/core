@@ -60,7 +60,7 @@ class SwContentOptPage : public SfxTabPage
     VclPtr<FixedText>  m_pMetricLabel;
     VclPtr<ListBox>    m_pMetricLB;
 
-    DECL_LINK_TYPED(VertRulerHdl, Button*, void);
+    DECL_LINK(VertRulerHdl, Button*, void);
 public:
     SwContentOptPage( vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwContentOptPage() override;
@@ -105,8 +105,8 @@ class SwAddPrinterTabPage : public SfxTabPage
     bool bAttrModified;
     bool bPreview;
 
-    DECL_LINK_TYPED(AutoClickHdl, Button*, void);
-    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
+    DECL_LINK(AutoClickHdl, Button*, void);
+    DECL_LINK(SelectHdl, ListBox&, void);
 
 public:
     SwAddPrinterTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
@@ -172,10 +172,10 @@ class SwStdFontTabPage : public SfxTabPage
     OUString m_sScriptAsian;
     OUString m_sScriptComplex;
 
-    DECL_LINK_TYPED(StandardHdl, Button*, void );
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void );
-    DECL_LINK_TYPED(ModifyHeightHdl, Edit&, void );
-    DECL_LINK_TYPED(LoseFocusHdl, Control&, void );
+    DECL_LINK(StandardHdl, Button*, void );
+    DECL_LINK(ModifyHdl, Edit&, void );
+    DECL_LINK(ModifyHeightHdl, Edit&, void );
+    DECL_LINK(LoseFocusHdl, Control&, void );
 
     SwStdFontTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwStdFontTabPage() override;
@@ -218,7 +218,7 @@ class SwTableOptionsTabPage : public SfxTabPage
     SwWrtShell* m_pWrtShell;
     bool        m_bHTMLMode;
 
-    DECL_LINK_TYPED(CheckBoxHdl, Button*, void);
+    DECL_LINK(CheckBoxHdl, Button*, void);
 
 public:
     SwTableOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
@@ -339,9 +339,9 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     OUString             sAuthor;
     OUString             sNone;
 
-    DECL_LINK_TYPED(AttribHdl, ListBox&, void);
-    DECL_LINK_TYPED(ChangedMaskPrevHdl, ListBox&, void);
-    DECL_LINK_TYPED(ColorHdl, ListBox&, void);
+    DECL_LINK(AttribHdl, ListBox&, void);
+    DECL_LINK(ChangedMaskPrevHdl, ListBox&, void);
+    DECL_LINK(ColorHdl, ListBox&, void);
 
     static void InitFontStyle(SvxFontPrevWindow& rExampleWin);
 
@@ -387,7 +387,7 @@ private:
     bool bAttrModified;
 
     void Init();
-    DECL_LINK_TYPED(AutoClickHdl, Button*, void);
+    DECL_LINK(AutoClickHdl, Button*, void);
 };
 #endif // DBG_UTIL
 
@@ -402,8 +402,8 @@ class SwCompareOptionsTabPage : public SfxTabPage
     VclPtr<NumericField> m_pLenNF;
     VclPtr<CheckBox>     m_pStoreRsidCB;
 
-    DECL_LINK_TYPED(ComparisonHdl, Button*, void);
-    DECL_LINK_TYPED(IgnoreHdl, Button*, void);
+    DECL_LINK(ComparisonHdl, Button*, void);
+    DECL_LINK(IgnoreHdl, Button*, void);
 
 public:
     SwCompareOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

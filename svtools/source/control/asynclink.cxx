@@ -63,7 +63,7 @@ AsynchronLink::~AsynchronLink()
     delete _pMutex;
 }
 
-IMPL_LINK_NOARG_TYPED( AsynchronLink, HandleCall_Idle, Idle*, void )
+IMPL_LINK_NOARG( AsynchronLink, HandleCall_Idle, Idle*, void )
 {
     if( _pMutex ) _pMutex->acquire();
     _nEventId = nullptr;
@@ -71,7 +71,7 @@ IMPL_LINK_NOARG_TYPED( AsynchronLink, HandleCall_Idle, Idle*, void )
     Call_Impl( _pArg );
 }
 
-IMPL_LINK_NOARG_TYPED( AsynchronLink, HandleCall_PostUserEvent, void*, void )
+IMPL_LINK_NOARG( AsynchronLink, HandleCall_PostUserEvent, void*, void )
 {
     HandleCall_Idle(nullptr);
 }

@@ -44,9 +44,9 @@ public:
     virtual void ActivatePage() override;
 
 private:
-    DECL_LINK_TYPED( SelectSchemeHdl, ListBox&, void );
-    DECL_LINK_TYPED( SelectShading, CheckBox&, void );
-    DECL_LINK_TYPED( SelectRoundedEdgeOrObjectLines, CheckBox&, void );
+    DECL_LINK( SelectSchemeHdl, ListBox&, void );
+    DECL_LINK( SelectShading, CheckBox&, void );
+    DECL_LINK( SelectRoundedEdgeOrObjectLines, CheckBox&, void );
 
     void initControlsFromModel();
     void applyShadeModeToModel();

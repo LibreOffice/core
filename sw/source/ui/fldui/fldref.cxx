@@ -129,7 +129,7 @@ void SwFieldRefPage::dispose()
     SwFieldPage::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldRefPage, ModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl_Impl, Edit&, void)
 {
     OUString sFilter = comphelper::string::strip(m_pFilterED->GetText(), ' ');
     UpdateSubType(sFilter);
@@ -299,7 +299,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldRefPage, TypeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
 {
     // save old ListBoxPos
     const sal_Int32 nOld = GetTypeSel();
@@ -438,11 +438,11 @@ IMPL_LINK_NOARG_TYPED(SwFieldRefPage, TypeHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldRefPage, SubTypeTreeListBoxHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwFieldRefPage, SubTypeTreeListBoxHdl, SvTreeListBox*, void)
 {
     SubTypeHdl();
 }
-IMPL_LINK_NOARG_TYPED(SwFieldRefPage, SubTypeListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwFieldRefPage, SubTypeListBoxHdl, ListBox&, void)
 {
     SubTypeHdl();
 }
@@ -827,7 +827,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
 }
 
 // Modify
-IMPL_LINK_NOARG_TYPED(SwFieldRefPage, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwFieldRefPage, ModifyHdl, Edit&, void)
 {
     OUString aName(m_pNameED->GetText());
     const bool bEmptyName = aName.isEmpty();

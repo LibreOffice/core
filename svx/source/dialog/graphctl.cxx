@@ -764,7 +764,7 @@ void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
     QueueIdleUpdate();
 }
 
-IMPL_LINK_TYPED( GraphCtrl, UpdateHdl, Idle *, , void )
+IMPL_LINK( GraphCtrl, UpdateHdl, Idle *, , void )
 {
     mbInIdleUpdate = true;
     aUpdateLink.Call( this );

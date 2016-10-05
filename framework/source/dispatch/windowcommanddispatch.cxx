@@ -92,7 +92,7 @@ void WindowCommandDispatch::impl_stopListening()
     }
 }
 
-IMPL_LINK_TYPED(WindowCommandDispatch, impl_notifyCommand, VclWindowEvent&, rEvent, void)
+IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, VclWindowEvent&, rEvent, void)
 {
     if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)
     {

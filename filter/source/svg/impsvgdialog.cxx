@@ -119,7 +119,7 @@ Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
 }
 
 
-IMPL_LINK_TYPED( ImpSVGDialog, OnToggleCheckbox, CheckBox&, rBox, void )
+IMPL_LINK( ImpSVGDialog, OnToggleCheckbox, CheckBox&, rBox, void )
 {
     if( &rBox == maCBTinyProfile.get() )
     {

@@ -272,8 +272,8 @@ protected:
     void Insert(FmFilterData* pItem, sal_uLong nPos);
     void Remove(FmFilterData* pItem);
 
-    DECL_LINK_TYPED(OnRemove, void*, void);
-    DECL_LINK_TYPED(OnDropActionTimer, Timer*, void);
+    DECL_LINK(OnRemove, void*, void);
+    DECL_LINK(OnDropActionTimer, Timer*, void);
 
 private:
     /** returns the first form item and the selected FilterItems in the vector

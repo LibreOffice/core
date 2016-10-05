@@ -977,20 +977,20 @@ void ExportDialog::dispose()
 |* stores values set in the ini-file
 |*
 \************************************************************************/
-IMPL_LINK_NOARG_TYPED(ExportDialog, SelectHdl, Edit&, void)
+IMPL_LINK_NOARG(ExportDialog, SelectHdl, Edit&, void)
 {
     updateControls();
 }
-IMPL_LINK_NOARG_TYPED(ExportDialog, SelectListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(ExportDialog, SelectListBoxHdl, ListBox&, void)
 {
     updateControls();
 }
-IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdl, Button*, void)
+IMPL_LINK_NOARG(ExportDialog, UpdateHdl, Button*, void)
 {
     updateControls();
 }
 
-IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
+IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
 {
     double fRatio = static_cast< double >( maOriginalSize.Height ) / maOriginalSize.Width;
 
@@ -1022,7 +1022,7 @@ IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
     updateControls();
 }
 
-IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
+IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
 {
     double fRatio = static_cast< double >( maOriginalSize.Width ) / maOriginalSize.Height;
 
@@ -1054,7 +1054,7 @@ IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
     updateControls();
 }
 
-IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlNfResolution, Edit&, void)
+IMPL_LINK_NOARG(ExportDialog, UpdateHdlNfResolution, Edit&, void)
 {
     sal_Int32 nResolution = mpNfResolution->GetValue();
     if ( mpLbResolution->GetSelectEntryPos() == 0 )      // pixels / cm
@@ -1067,13 +1067,13 @@ IMPL_LINK_NOARG_TYPED(ExportDialog, UpdateHdlNfResolution, Edit&, void)
     updateControls();
 }
 
-IMPL_LINK_NOARG_TYPED(ExportDialog, SbCompressionUpdateHdl, Slider*, void)
+IMPL_LINK_NOARG(ExportDialog, SbCompressionUpdateHdl, Slider*, void)
 {
     mpNfCompression->SetValue( mpSbCompression->GetThumbPos() );
     updateControls();
 }
 
-IMPL_LINK_NOARG_TYPED(ExportDialog, OK, Button*, void)
+IMPL_LINK_NOARG(ExportDialog, OK, Button*, void)
 {
     // writing config parameter
 

@@ -194,7 +194,7 @@ namespace dbaui
 
         return nullptr != pTransfer;
     }
-    IMPL_LINK_NOARG_TYPED(SbaTableQueryBrowser, OnCopyEntry, LinkParamNone*, void)
+    IMPL_LINK_NOARG(SbaTableQueryBrowser, OnCopyEntry, LinkParamNone*, void)
     {
         SvTreeListEntry* pSelected = m_pTreeView->getListBox().FirstSelected();
         if( isEntryCopyAllowed( pSelected ) )
@@ -215,7 +215,7 @@ namespace dbaui
         if (pTransfer)
             pTransfer->CopyToClipboard(getView());
     }
-    IMPL_LINK_NOARG_TYPED( SbaTableQueryBrowser, OnAsyncDrop, void*, void )
+    IMPL_LINK_NOARG( SbaTableQueryBrowser, OnAsyncDrop, void*, void )
     {
         m_nAsyncDrop = nullptr;
         SolarMutexGuard aSolarGuard;

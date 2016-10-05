@@ -91,9 +91,9 @@ private:
 
     bool m_bCustomValuesUsed;
 
-    DECL_LINK_TYPED( SelectMarginHdl, Button*, void );
-    DECL_LINK_TYPED( ModifyLRMarginHdl, Edit&, void );
-    DECL_LINK_TYPED( ModifyULMarginHdl, Edit&, void );
+    DECL_LINK( SelectMarginHdl, Button*, void );
+    DECL_LINK( ModifyLRMarginHdl, Edit&, void );
+    DECL_LINK( ModifyULMarginHdl, Edit&, void );
 
     static void ExecuteMarginLRChange(
         const long nPageLeftMargin,

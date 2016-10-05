@@ -99,12 +99,12 @@ InsertObjectDialog_Impl::InsertObjectDialog_Impl(vcl::Window * pParent, const OU
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, DoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvInsertOleDlg, DoubleClickHdl, ListBox&, void)
 {
     EndDialog( RET_OK );
 }
 
-IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, BrowseHdl, Button*, void)
+IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl, Button*, void)
 {
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
@@ -132,7 +132,7 @@ IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, BrowseHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, RadioHdl, Button*, void)
+IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl, Button*, void)
 {
     if ( m_pRbNewObject->IsChecked() )
     {
@@ -600,7 +600,7 @@ short SfxInsertFloatingFrameDialog::Execute()
 }
 
 
-IMPL_LINK_TYPED( SfxInsertFloatingFrameDialog, CheckHdl, Button*, pButton, void )
+IMPL_LINK( SfxInsertFloatingFrameDialog, CheckHdl, Button*, pButton, void )
 {
     CheckBox* pCB = static_cast<CheckBox*>(pButton);
     if ( pCB == m_pCBMarginWidthDefault )
@@ -621,7 +621,7 @@ IMPL_LINK_TYPED( SfxInsertFloatingFrameDialog, CheckHdl, Button*, pButton, void 
 }
 
 
-IMPL_LINK_NOARG_TYPED( SfxInsertFloatingFrameDialog, OpenHdl, Button*, void)
+IMPL_LINK_NOARG( SfxInsertFloatingFrameDialog, OpenHdl, Button*, void)
 {
     // create the file dialog
     sfx2::FileDialogHelper aFileDlg(

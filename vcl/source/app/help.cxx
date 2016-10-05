@@ -448,7 +448,7 @@ void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
     maShowTimer.Start();
 }
 
-IMPL_LINK_TYPED( HelpTextWindow, TimerHdl, Timer*, pTimer, void)
+IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer, void)
 {
     if ( pTimer == &maShowTimer )
     {

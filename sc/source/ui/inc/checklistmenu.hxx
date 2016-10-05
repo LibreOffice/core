@@ -165,7 +165,7 @@ private:
         VclPtr<ScMenuFloatingWindow>   mpSubMenu;
         size_t                  mnMenuPos;
 
-        DECL_LINK_TYPED( TimeoutHdl, Timer*, void );
+        DECL_LINK( TimeoutHdl, Timer*, void );
 
         SubMenuItemData(ScMenuFloatingWindow* pParent);
         void reset();
@@ -392,10 +392,10 @@ private:
     void selectCurrentMemberOnly(bool bSet);
     void updateMemberParents( SvTreeListEntry* pLeaf, size_t nIdx );
 
-    DECL_LINK_TYPED( ButtonHdl, Button*, void );
-    DECL_LINK_TYPED( TriStateHdl, Button*, void );
-    DECL_LINK_TYPED( CheckHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( EdModifyHdl, Edit&, void );
+    DECL_LINK( ButtonHdl, Button*, void );
+    DECL_LINK( TriStateHdl, Button*, void );
+    DECL_LINK( CheckHdl, SvTreeListBox*, void );
+    DECL_LINK( EdModifyHdl, Edit&, void );
 
 private:
     VclPtr<ScSearchEdit>   maEdSearch;

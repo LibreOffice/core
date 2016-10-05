@@ -509,7 +509,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
 }
 
 
-IMPL_LINK_TYPED( SvxSaveTabPage, AutoClickHdl_Impl, Button*, pBox, void )
+IMPL_LINK( SvxSaveTabPage, AutoClickHdl_Impl, Button*, pBox, void )
 {
     if ( pBox == aAutoSaveCB )
     {
@@ -553,7 +553,7 @@ static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties)
     return sName;
 }
 
-IMPL_LINK_TYPED( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
 {
     const sal_Int32 nCurPos = aDocTypeLB->GetSelectEntryPos();
 
@@ -616,7 +616,7 @@ IMPL_LINK_TYPED( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
     ODFVersionHdl_Impl( *aSaveAsLB );
 };
 
-IMPL_LINK_NOARG_TYPED(SvxSaveTabPage, ODFVersionHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxSaveTabPage, ODFVersionHdl_Impl, ListBox&, void)
 {
     sal_IntPtr nVersion = sal_IntPtr( aODFVersionLB->GetSelectEntryData() );
     bool bShown = SvtSaveOptions::ODFDefaultVersion( nVersion ) != SvtSaveOptions::ODFVER_LATEST;

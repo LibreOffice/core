@@ -53,7 +53,7 @@ namespace rptui
         VclPtr<Edit>       m_pSubEdit;
         VclPtr<PushButton> m_pFormula;
 
-        DECL_LINK_TYPED( OnFormula,   Button*, void );
+        DECL_LINK( OnFormula,   Button*, void );
     public:
         ConditionField(Condition* pParent, Edit* pSubEdit, PushButton *pFormula);
         void GrabFocus() { m_pSubEdit->GrabFocus(); }
@@ -100,9 +100,9 @@ namespace rptui
 
         ConditionalExpressions          m_aConditionalExpressions;
 
-        DECL_LINK_TYPED( OnFormatAction, ToolBox*, void );
-        DECL_LINK_TYPED( DropdownClick, ToolBox*, void );
-        DECL_LINK_TYPED( OnConditionAction, Button*, void );
+        DECL_LINK( OnFormatAction, ToolBox*, void );
+        DECL_LINK( DropdownClick, ToolBox*, void );
+        DECL_LINK( OnConditionAction, Button*, void );
 
     public:
         Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController );
@@ -167,8 +167,8 @@ namespace rptui
         void    impl_setCondition( const OUString& _rConditionFormula );
 
     private:
-        DECL_LINK_TYPED( OnTypeSelected, ListBox&, void );
-        DECL_LINK_TYPED( OnOperationSelected, ListBox&, void );
+        DECL_LINK( OnTypeSelected, ListBox&, void );
+        DECL_LINK( OnOperationSelected, ListBox&, void );
     };
 
 

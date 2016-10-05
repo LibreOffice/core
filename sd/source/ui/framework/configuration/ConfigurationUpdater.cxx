@@ -364,7 +364,7 @@ void ConfigurationUpdater::SetUpdateBeingProcessed (bool bValue)
     mbUpdateBeingProcessed = bValue;
 }
 
-IMPL_LINK_NOARG_TYPED(ConfigurationUpdater, TimeoutHandler, Timer *, void)
+IMPL_LINK_NOARG(ConfigurationUpdater, TimeoutHandler, Timer *, void)
 {
     OSL_TRACE("configuration update timer");
     if ( ! mbUpdateBeingProcessed

@@ -340,12 +340,12 @@ void ErrorBarResources::UpdateControlStates()
     }
 }
 
-IMPL_LINK_NOARG_TYPED( ErrorBarResources, CategoryChosen2, ListBox&, void )
+IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen2, ListBox&, void )
 {
    CategoryChosen(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED( ErrorBarResources, CategoryChosen, Button*, void )
+IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen, Button*, void )
 {
     m_bErrorKindUnique = true;
     SvxChartKindError eOldError = m_eErrorKind;
@@ -403,13 +403,13 @@ IMPL_LINK_NOARG_TYPED( ErrorBarResources, CategoryChosen, Button*, void )
     UpdateControlStates();
 }
 
-IMPL_LINK_NOARG_TYPED(ErrorBarResources, SynchronizePosAndNeg, CheckBox&, void)
+IMPL_LINK_NOARG(ErrorBarResources, SynchronizePosAndNeg, CheckBox&, void)
 {
     UpdateControlStates();
     PosValueChanged( *m_pMfPositive );
 }
 
-IMPL_LINK_NOARG_TYPED(ErrorBarResources, PosValueChanged, Edit&, void)
+IMPL_LINK_NOARG(ErrorBarResources, PosValueChanged, Edit&, void)
 {
     if( m_pCbSyncPosNeg->IsChecked())
     {
@@ -423,7 +423,7 @@ IMPL_LINK_NOARG_TYPED(ErrorBarResources, PosValueChanged, Edit&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ErrorBarResources, IndicatorChanged, Button*, void)
+IMPL_LINK_NOARG(ErrorBarResources, IndicatorChanged, Button*, void)
 {
     m_bIndicatorUnique = true;
     if( m_pRbBoth->IsChecked())
@@ -438,7 +438,7 @@ IMPL_LINK_NOARG_TYPED(ErrorBarResources, IndicatorChanged, Button*, void)
     UpdateControlStates();
 }
 
-IMPL_LINK_TYPED( ErrorBarResources, ChooseRange, Button*, pButton, void )
+IMPL_LINK( ErrorBarResources, ChooseRange, Button*, pButton, void )
 {
     OSL_ASSERT( m_apRangeSelectionHelper.get());
     if( ! m_apRangeSelectionHelper.get())
@@ -470,7 +470,7 @@ IMPL_LINK_TYPED( ErrorBarResources, ChooseRange, Button*, pButton, void )
         m_pCurrentRangeChoosingField = nullptr;
 }
 
-IMPL_LINK_TYPED( ErrorBarResources, RangeChanged, Edit&, rEdit, void )
+IMPL_LINK( ErrorBarResources, RangeChanged, Edit&, rEdit, void )
 {
     if( &rEdit == m_pEdRangePositive )
     {

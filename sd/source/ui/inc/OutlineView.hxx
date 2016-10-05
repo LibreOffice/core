@@ -95,17 +95,17 @@ public:
     void Paint (const Rectangle& rRect, ::sd::Window* pWin);
 
                     // Callbacks fuer LINKs
-    DECL_LINK_TYPED( ParagraphInsertedHdl, ::Outliner *, void );
-    DECL_LINK_TYPED( ParagraphRemovingHdl, ::Outliner *, void );
-    DECL_LINK_TYPED( DepthChangedHdl, ::Outliner *, void );
-    DECL_LINK_TYPED( StatusEventHdl, EditStatus&, void );
-    DECL_LINK_TYPED( BeginMovingHdl, ::Outliner *, void );
-    DECL_LINK_TYPED( EndMovingHdl, ::Outliner *, void );
-    DECL_LINK_TYPED( RemovingPagesHdl, OutlinerView *, bool );
-    DECL_LINK_TYPED( IndentingPagesHdl, OutlinerView *, bool );
-    DECL_LINK_TYPED( BeginDropHdl, EditView*, void );
-    DECL_LINK_TYPED( EndDropHdl, EditView*, void );
-    DECL_LINK_TYPED( PaintingFirstLineHdl, PaintFirstLineInfo*, void );
+    DECL_LINK( ParagraphInsertedHdl, ::Outliner *, void );
+    DECL_LINK( ParagraphRemovingHdl, ::Outliner *, void );
+    DECL_LINK( DepthChangedHdl, ::Outliner *, void );
+    DECL_LINK( StatusEventHdl, EditStatus&, void );
+    DECL_LINK( BeginMovingHdl, ::Outliner *, void );
+    DECL_LINK( EndMovingHdl, ::Outliner *, void );
+    DECL_LINK( RemovingPagesHdl, OutlinerView *, bool );
+    DECL_LINK( IndentingPagesHdl, OutlinerView *, bool );
+    DECL_LINK( BeginDropHdl, EditView*, void );
+    DECL_LINK( EndDropHdl, EditView*, void );
+    DECL_LINK( PaintingFirstLineHdl, PaintFirstLineInfo*, void );
 
     sal_uLong         GetPaperWidth() { return mnPaperWidth;}
 
@@ -198,9 +198,9 @@ private:
     /** this link is called from the vcl application when the stylesettings
         change. Its only purpose is to call onUpdateStyleSettings() then.
     */
-    DECL_LINK_TYPED( AppEventListenerHdl, VclSimpleEvent&, void );
+    DECL_LINK( AppEventListenerHdl, VclSimpleEvent&, void );
 
-    DECL_LINK_TYPED(EventMultiplexerListener, sd::tools::EventMultiplexerEvent&, void);
+    DECL_LINK(EventMultiplexerListener, sd::tools::EventMultiplexerEvent&, void);
 
     /** holds a model guard during drag and drop between BeginMovingHdl and EndMovingHdl */
     std::unique_ptr< OutlineViewModelChangeGuard > maDragAndDropModelGuard;

@@ -141,12 +141,12 @@ struct ImplSVAppData
     Idle*               mpEventTestingIdle;
     int                 mnEventTestLimit;
 
-    DECL_STATIC_LINK_TYPED(ImplSVAppData, ImplQuitMsg, void*, void);
-    DECL_STATIC_LINK_TYPED(ImplSVAppData, ImplPrepareExitMsg, void*, void);
-    DECL_STATIC_LINK_TYPED(ImplSVAppData, ImplEndAllDialogsMsg, void*, void);
-    DECL_STATIC_LINK_TYPED(ImplSVAppData, ImplEndAllPopupsMsg, void*, void);
-    DECL_STATIC_LINK_TYPED(ImplSVAppData, ImplVclEventTestingHdl, void*, void);
-    DECL_LINK_TYPED(VclEventTestingHdl, Idle*, void);
+    DECL_STATIC_LINK(ImplSVAppData, ImplQuitMsg, void*, void);
+    DECL_STATIC_LINK(ImplSVAppData, ImplPrepareExitMsg, void*, void);
+    DECL_STATIC_LINK(ImplSVAppData, ImplEndAllDialogsMsg, void*, void);
+    DECL_STATIC_LINK(ImplSVAppData, ImplEndAllPopupsMsg, void*, void);
+    DECL_STATIC_LINK(ImplSVAppData, ImplVclEventTestingHdl, void*, void);
+    DECL_LINK(VclEventTestingHdl, Idle*, void);
 };
 
 struct ImplSVGDIData

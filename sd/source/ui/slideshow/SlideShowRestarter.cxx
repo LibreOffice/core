@@ -77,7 +77,7 @@ void SlideShowRestarter::Restart (bool bForce)
         LINK(this, SlideShowRestarter, EndPresentation));
 }
 
-IMPL_LINK_NOARG_TYPED(SlideShowRestarter, EndPresentation, void*, void)
+IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation, void*, void)
 {
     mnEventId = nullptr;
     if (mpSlideShow.is())

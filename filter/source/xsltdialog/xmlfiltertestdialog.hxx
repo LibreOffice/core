@@ -44,7 +44,7 @@ public:
     void updateCurrentDocumentButtonState( css::uno::Reference< css::lang::XComponent > * pRef = nullptr );
 
 private:
-    DECL_LINK_TYPED(ClickHdl_Impl, Button *, void );
+    DECL_LINK(ClickHdl_Impl, Button *, void );
 
     void onExportBrowse();
     void onExportCurrentDocument();

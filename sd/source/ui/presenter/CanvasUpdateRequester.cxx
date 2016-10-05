@@ -87,7 +87,7 @@ void CanvasUpdateRequester::RequestUpdate (const bool bUpdateAll)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(CanvasUpdateRequester, Callback, void*, void)
+IMPL_LINK_NOARG(CanvasUpdateRequester, Callback, void*, void)
 {
     mnUserEventId = nullptr;
     if (mxCanvas.is())

@@ -35,7 +35,7 @@ private:
     Link<SvxPresetListBox*,void> maRenameHdl;
     Link<SvxPresetListBox*,void> maDeleteHdl;
 
-    DECL_LINK_TYPED( OnMenuItemSelected, Menu*, bool );
+    DECL_LINK( OnMenuItemSelected, Menu*, bool );
 
     template< typename ListType, typename EntryType >
     void FillPresetListBoxImpl(ListType& pList, sal_uInt32 nStartIndex);

@@ -49,7 +49,7 @@ private:
     // "name" fields
     unsigned nShortNameField;
 
-    DECL_LINK_TYPED( ModifyHdl_Impl, Edit&, void );
+    DECL_LINK( ModifyHdl_Impl, Edit&, void );
 
     bool                GetData_Impl();
     void                SetData_Impl();

@@ -101,12 +101,12 @@ void SdPhotoAlbumDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, CancelHdl, Button*, void)
 {
     Close();
 }
 
-IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 {
     if (pImagesLst->GetEntryCount() == 0)
     {
@@ -500,7 +500,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, FileHdl, Button*, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILEOPEN_PREVIEW,
@@ -541,7 +541,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, FileHdl, Button*, void)
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, UpHdl, Button*, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl, Button*, void)
 {
     if (pImagesLst->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND
         && pImagesLst->GetSelectEntryPos() != 0)
@@ -572,7 +572,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, UpHdl, Button*, void)
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, DownHdl, Button*, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl, Button*, void)
 {
     const sal_Int32 nActPos = pImagesLst->GetSelectEntryPos();
     if (!pImagesLst->GetEntry(nActPos + 1).isEmpty())
@@ -600,7 +600,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, DownHdl, Button*, void)
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, RemoveHdl, Button*, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, RemoveHdl, Button*, void)
 {
     pImagesLst->RemoveEntry( pImagesLst->GetSelectEntryPos() );
     pImg->SetImage(Image());
@@ -608,7 +608,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, RemoveHdl, Button*, void)
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
 {
     OUString* pData = static_cast<OUString*>(pImagesLst->GetSelectEntryData());
     OUString sImgUrl = pData ? OUString(*pData) : "";
@@ -667,7 +667,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
     EnableDisableButtons();
 }
 
-IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, TypeSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SdPhotoAlbumDialog, TypeSelectHdl, ListBox&, void)
 {
     // Enable "Fill Slide" only for one image
     // If we want to have it for other images too, we need to implement the actual cropping.

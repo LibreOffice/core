@@ -241,7 +241,7 @@ void OFieldDescControl::Init()
     ::dbaui::setEvalDateFormatForFormatter(xFormatter);
 }
 
-IMPL_LINK_TYPED(OFieldDescControl, OnScroll, ScrollBar*, /*pBar*/, void)
+IMPL_LINK(OFieldDescControl, OnScroll, ScrollBar*, /*pBar*/, void)
 {
     ScrollAllAggregates();
 }
@@ -525,7 +525,7 @@ void OFieldDescControl::SetControlText( sal_uInt16 nControlId, const OUString& r
     }
 }
 
-IMPL_LINK_NOARG_TYPED( OFieldDescControl, FormatClickHdl, Button *, void )
+IMPL_LINK_NOARG( OFieldDescControl, FormatClickHdl, Button *, void )
 {
     // Create temporary Column, which is used for data exchange with Dialog
     if( !pActFieldDescr )
@@ -565,7 +565,7 @@ void OFieldDescControl::SetModified(bool /*bModified*/)
 {
 }
 
-IMPL_LINK_TYPED( OFieldDescControl, ChangeHdl, ListBox&, rListBox, void )
+IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox&, rListBox, void )
 {
     if ( !pActFieldDescr )
         return;
@@ -1380,7 +1380,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     SetReadOnly( bRead );
 }
 
-IMPL_LINK_TYPED(OFieldDescControl, OnControlFocusGot, Control&, rControl, void )
+IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control&, rControl, void )
 {
     OUString strHelpText;
     OPropNumericEditCtrl* pNumeric = dynamic_cast< OPropNumericEditCtrl* >( &rControl );
@@ -1420,7 +1420,7 @@ IMPL_LINK_TYPED(OFieldDescControl, OnControlFocusGot, Control&, rControl, void )
     m_pActFocusWindow = &rControl;
 }
 
-IMPL_LINK_TYPED(OFieldDescControl, OnControlFocusLost, Control&, rControl, void )
+IMPL_LINK(OFieldDescControl, OnControlFocusLost, Control&, rControl, void )
 {
     if ((&rControl == pLength) || (&rControl == pTextLen) || (&rControl == pScale))
     {

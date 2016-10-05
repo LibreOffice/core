@@ -56,9 +56,9 @@ private:
 
     sal_uInt16              GetSelectedEntryPos() const;
 
-    DECL_LINK_TYPED(ViewButtonHdl, Button*, void);
-    DECL_LINK_TYPED(CertificateHighlightHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED(CertificateSelectHdl, SvTreeListBox*, bool );
+    DECL_LINK(ViewButtonHdl, Button*, void);
+    DECL_LINK(CertificateHighlightHdl, SvTreeListBox*, void );
+    DECL_LINK(CertificateSelectHdl, SvTreeListBox*, bool );
 
     void ImplShowCertificateDetails();
     void ImplInitialize();

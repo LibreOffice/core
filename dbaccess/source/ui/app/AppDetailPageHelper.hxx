@@ -149,16 +149,16 @@ namespace dbaui
         */
         DBTreeListBox* createSimpleTree( const OString& _sHelpId, const Image& _rImage);
 
-        DECL_LINK_TYPED( OnEntryDoubleClick,    SvTreeListBox*, bool );
-        DECL_LINK_TYPED( OnEntryEnterKey,       DBTreeListBox*, void );
-        DECL_LINK_TYPED( OnEntrySelChange,      LinkParamNone*, void );
+        DECL_LINK( OnEntryDoubleClick,    SvTreeListBox*, bool );
+        DECL_LINK( OnEntryEnterKey,       DBTreeListBox*, void );
+        DECL_LINK( OnEntrySelChange,      LinkParamNone*, void );
 
-        DECL_LINK_TYPED( OnCopyEntry,           LinkParamNone*, void );
-        DECL_LINK_TYPED( OnPasteEntry,          LinkParamNone*, void );
-        DECL_LINK_TYPED( OnDeleteEntry,         LinkParamNone*, void );
+        DECL_LINK( OnCopyEntry,           LinkParamNone*, void );
+        DECL_LINK( OnPasteEntry,          LinkParamNone*, void );
+        DECL_LINK( OnDeleteEntry,         LinkParamNone*, void );
 
         // click a TB slot
-        DECL_LINK_TYPED(OnDropdownClickHdl, ToolBox*, void);
+        DECL_LINK(OnDropdownClickHdl, ToolBox*, void);
 
         inline OAppBorderWindow& getBorderWin() const { return m_rBorderWin; }
         void ImplInitSettings();

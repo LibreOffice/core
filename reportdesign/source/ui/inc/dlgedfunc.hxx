@@ -53,7 +53,7 @@ protected:
     bool            m_bUiActive;
     bool            m_bShowPropertyBrowser;
 
-    DECL_LINK_TYPED( ScrollTimeout, Timer *, void );
+    DECL_LINK( ScrollTimeout, Timer *, void );
     void    ForceScroll( const Point& rPos );
     /** checks that no other object is overlapped.
     *

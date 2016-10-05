@@ -2172,7 +2172,7 @@ void Menu::ImplCallHighlight(sal_uInt16 nItem)
         nSelectedId = 0;
 }
 
-IMPL_LINK_NOARG_TYPED(Menu, ImplCallSelect, void*, void)
+IMPL_LINK_NOARG(Menu, ImplCallSelect, void*, void)
 {
     nEventId = nullptr;
     Select();

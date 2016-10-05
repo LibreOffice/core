@@ -859,7 +859,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
     }
 }
 
-IMPL_LINK_TYPED(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
+IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
     if (rEvent.GetWindow() == mpParentWindow)
     {
@@ -993,7 +993,7 @@ VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
     return pMenu;
 }
 
-IMPL_LINK_TYPED(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
+IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
 {
     if (pMenu == nullptr)
     {

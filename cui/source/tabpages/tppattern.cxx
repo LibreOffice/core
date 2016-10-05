@@ -314,7 +314,7 @@ VclPtr<SfxTabPage> SvxPatternTabPage::Create( vcl::Window* pWindow,
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
 {
     std::unique_ptr<GraphicObject> pGraphicObject;
     size_t nPos = m_pPatternLB->GetSelectItemPos();
@@ -420,7 +420,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
 {
 
     OUString aNewName( SVX_RES( RID_SVXSTR_PATTERN_UNTITLED ) );
@@ -525,7 +525,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
 /******************************************************************************/
 
 
-IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_uInt16 nId = m_pPatternLB->GetSelectItemId();
     size_t nPos = m_pPatternLB->GetSelectItemPos();
@@ -551,7 +551,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
+IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 {
     size_t nPos = m_pPatternLB->GetSelectItemPos();
     sal_Int32 nId = m_pPatternLB->GetSelectItemId();
@@ -609,7 +609,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*,
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
+IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_pPatternLB->GetSelectItemId();
     size_t nPos = m_pPatternLB->GetSelectItemPos();
@@ -641,7 +641,7 @@ IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*,
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxPatternTabPage, ChangeColorHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxPatternTabPage, ChangeColorHdl_Impl, ListBox&, void)
 {
     ChangeColor_Impl();
 }

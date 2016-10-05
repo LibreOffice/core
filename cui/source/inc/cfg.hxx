@@ -354,8 +354,8 @@ private:
     bool                                bInitialised;
     SaveInData*                         pCurrentSaveInData;
 
-    DECL_LINK_TYPED(  SelectSaveInLocation, ListBox&, void );
-    DECL_LINK_TYPED( AsyncInfoMsg, void*, void );
+    DECL_LINK(  SelectSaveInLocation, ListBox&, void );
+    DECL_LINK( AsyncInfoMsg, void*, void );
 
 protected:
 
@@ -402,7 +402,7 @@ protected:
 
     SvxConfigPage( vcl::Window*, const SfxItemSet& );
 
-    DECL_LINK_TYPED( MoveHdl, Button *, void );
+    DECL_LINK( MoveHdl, Button *, void );
 
     virtual SaveInData* CreateSaveInData(
         const css::uno::Reference< css::ui::XUIConfigurationManager >&,
@@ -477,15 +477,15 @@ class SvxMenuConfigPage : public SvxConfigPage
 {
 private:
     bool m_bIsMenuBar;
-    DECL_LINK_TYPED( SelectMenu, ListBox&, void );
-    DECL_LINK_TYPED( SelectMenuEntry, SvTreeListBox *, void );
-    DECL_LINK_TYPED( NewMenuHdl, Button *, void );
-    DECL_LINK_TYPED( MenuSelectHdl, MenuButton *, void );
-    DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
-    DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
-    DECL_LINK_TYPED( AddSeparatorHdl, Button *, void );
-    DECL_LINK_TYPED( DeleteCommandHdl, Button *, void );
-    DECL_LINK_TYPED( AddFunctionHdl, SvxScriptSelectorDialog&, void );
+    DECL_LINK( SelectMenu, ListBox&, void );
+    DECL_LINK( SelectMenuEntry, SvTreeListBox *, void );
+    DECL_LINK( NewMenuHdl, Button *, void );
+    DECL_LINK( MenuSelectHdl, MenuButton *, void );
+    DECL_LINK( EntrySelectHdl, MenuButton *, void );
+    DECL_LINK( AddCommandsHdl, Button *, void );
+    DECL_LINK( AddSeparatorHdl, Button *, void );
+    DECL_LINK( DeleteCommandHdl, Button *, void );
+    DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog&, void );
 
     void            Init() override;
     void            UpdateButtonStates() override;
@@ -521,9 +521,9 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
 
     void UpdateButtonStates();
 
-    DECL_LINK_TYPED( MoveHdl, Button *, void );
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( SelectHdl, SvTreeListBox*, void );
+    DECL_LINK( MoveHdl, Button *, void );
+    DECL_LINK( ModifyHdl, Edit&, void );
+    DECL_LINK( SelectHdl, SvTreeListBox*, void );
 
 public:
     SvxMainMenuOrganizerDialog (
@@ -571,18 +571,18 @@ class SvxToolbarConfigPage : public SvxConfigPage
 {
 private:
 
-    DECL_LINK_TYPED( SelectToolbar, ListBox&, void );
-    DECL_LINK_TYPED( SelectToolbarEntry, SvTreeListBox*, void );
-    DECL_LINK_TYPED( ToolbarSelectHdl, MenuButton *, void );
-    DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
-    DECL_LINK_TYPED( StyleChangeHdl, Button *, void );
-    DECL_LINK_TYPED( NewToolbarHdl, Button *, void );
-    DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
-    DECL_LINK_TYPED( AddSeparatorHdl, Button *, void );
-    DECL_LINK_TYPED( DeleteCommandHdl, Button *, void );
-    DECL_LINK_TYPED( ResetTopLevelHdl, Button *, void );
-    DECL_LINK_TYPED( AddFunctionHdl, SvxScriptSelectorDialog&, void );
-    DECL_LINK_TYPED( MoveHdl, Button *, void );
+    DECL_LINK( SelectToolbar, ListBox&, void );
+    DECL_LINK( SelectToolbarEntry, SvTreeListBox*, void );
+    DECL_LINK( ToolbarSelectHdl, MenuButton *, void );
+    DECL_LINK( EntrySelectHdl, MenuButton *, void );
+    DECL_LINK( StyleChangeHdl, Button *, void );
+    DECL_LINK( NewToolbarHdl, Button *, void );
+    DECL_LINK( AddCommandsHdl, Button *, void );
+    DECL_LINK( AddSeparatorHdl, Button *, void );
+    DECL_LINK( DeleteCommandHdl, Button *, void );
+    DECL_LINK( ResetTopLevelHdl, Button *, void );
+    DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog&, void );
+    DECL_LINK( MoveHdl, Button *, void );
 
     void            UpdateButtonStates() override;
     short           QueryReset() override;
@@ -727,9 +727,9 @@ public:
     css::uno::Reference< css::graphic::XGraphic >
         GetSelectedIcon();
 
-    DECL_LINK_TYPED( SelectHdl, ToolBox *, void );
-    DECL_LINK_TYPED( ImportHdl, Button *, void );
-    DECL_LINK_TYPED( DeleteHdl, Button *, void );
+    DECL_LINK( SelectHdl, ToolBox *, void );
+    DECL_LINK( ImportHdl, Button *, void );
+    DECL_LINK( DeleteHdl, Button *, void );
 };
 
 class SvxIconReplacementDialog : public MessBox

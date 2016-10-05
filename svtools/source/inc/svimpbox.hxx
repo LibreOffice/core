@@ -148,9 +148,9 @@ private:
 
     std::vector< short > aContextBmpWidthVector;
 
-    DECL_LINK_TYPED(EditTimerCall, Idle *, void);
+    DECL_LINK(EditTimerCall, Idle *, void);
 
-    DECL_LINK_TYPED( BeginDragHdl, Idle*, void );
+    DECL_LINK( BeginDragHdl, Idle*, void );
 
     void                InvalidateEntriesFrom( long nY ) const;
     bool                IsLineVisible( long nY ) const;
@@ -159,9 +159,9 @@ private:
     void                DrawNet(vcl::RenderContext& rRenderContext);
 
     // ScrollBar-Handler
-    DECL_LINK_TYPED( ScrollUpDownHdl, ScrollBar*, void );
-    DECL_LINK_TYPED( ScrollLeftRightHdl, ScrollBar*, void );
-    DECL_LINK_TYPED( EndScrollHdl, ScrollBar*, void );
+    DECL_LINK( ScrollUpDownHdl, ScrollBar*, void );
+    DECL_LINK( ScrollLeftRightHdl, ScrollBar*, void );
+    DECL_LINK( EndScrollHdl, ScrollBar*, void );
 
     void                SetNodeBmpYOffset( const Image& );
     void                SetNodeBmpTabDistance();
@@ -242,7 +242,7 @@ protected:
     void                ShowVerSBar();
     void                StopUserEvent();
 
-    DECL_LINK_TYPED( MyUserEvent,  void*, void);
+    DECL_LINK( MyUserEvent,  void*, void);
 
 public:
     SvImpLBox( SvTreeListBox* pView, SvTreeList*, WinBits nWinStyle );

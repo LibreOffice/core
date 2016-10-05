@@ -62,7 +62,7 @@ private: //member
 
     VclPtr<CheckBox>    m_pCBIncludeHiddenCells;
 
-    DECL_LINK_TYPED(EnableHdl, Button*, void );
+    DECL_LINK(EnableHdl, Button*, void );
 
     sal_Int32   m_nAllSeriesAxisIndex;
 

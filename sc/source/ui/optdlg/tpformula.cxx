@@ -196,7 +196,7 @@ bool ScTpFormulaOptions::IsValidSeparatorSet() const
     return true;
 }
 
-IMPL_LINK_TYPED( ScTpFormulaOptions, ButtonHdl, Button*, pBtn, void )
+IMPL_LINK( ScTpFormulaOptions, ButtonHdl, Button*, pBtn, void )
 {
     if (pBtn == mpBtnSepReset)
         ResetSeparators();
@@ -208,7 +208,7 @@ IMPL_LINK_TYPED( ScTpFormulaOptions, ButtonHdl, Button*, pBtn, void )
         LaunchCustomCalcSettings();
 }
 
-IMPL_LINK_TYPED( ScTpFormulaOptions, SepModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( ScTpFormulaOptions, SepModifyHdl, Edit&, rEdit, void )
 {
     OUString aStr = rEdit.GetText();
     if (aStr.getLength() > 1)
@@ -226,7 +226,7 @@ IMPL_LINK_TYPED( ScTpFormulaOptions, SepModifyHdl, Edit&, rEdit, void )
     OnFocusSeparatorInput(&rEdit);
 }
 
-IMPL_LINK_TYPED( ScTpFormulaOptions, SepEditOnFocusHdl, Control&, rControl, void )
+IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, Control&, rControl, void )
 {
     OnFocusSeparatorInput(static_cast<Edit*>(&rControl));
 }

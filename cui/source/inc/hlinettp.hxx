@@ -46,13 +46,13 @@ private:
 
     bool                mbMarkWndOpen;
 
-    DECL_LINK_TYPED( Click_SmartProtocol_Impl  , Button*, void ); ///< Radiobutton clicked: Type HTTP or FTP
-    DECL_LINK_TYPED( ClickAnonymousHdl_Impl    , Button*, void ); ///< Checkbox : Anonymous User
-    DECL_LINK_TYPED( ModifiedLoginHdl_Impl     , Edit&,   void ); ///< Contents of editfield "Login" modified
-    DECL_LINK_TYPED( LostFocusTargetHdl_Impl,    Control&, void ); ///< Combobox "Target" lost its focus
-    DECL_LINK_TYPED( ModifiedTargetHdl_Impl    , Edit&, void );    ///< Contents of editfield "Target" modified
+    DECL_LINK( Click_SmartProtocol_Impl  , Button*, void ); ///< Radiobutton clicked: Type HTTP or FTP
+    DECL_LINK( ClickAnonymousHdl_Impl    , Button*, void ); ///< Checkbox : Anonymous User
+    DECL_LINK( ModifiedLoginHdl_Impl     , Edit&,   void ); ///< Contents of editfield "Login" modified
+    DECL_LINK( LostFocusTargetHdl_Impl,    Control&, void ); ///< Combobox "Target" lost its focus
+    DECL_LINK( ModifiedTargetHdl_Impl    , Edit&, void );    ///< Contents of editfield "Target" modified
 
-    DECL_LINK_TYPED( TimeoutHdl_Impl,             Timer *, void); ///< Handler for timer -timeout
+    DECL_LINK( TimeoutHdl_Impl,             Timer *, void); ///< Handler for timer -timeout
 
 
     void    SetScheme(const OUString& rScheme);

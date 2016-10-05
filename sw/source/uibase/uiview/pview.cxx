@@ -1420,7 +1420,7 @@ void SwPagePreview::SetVisArea( const Rectangle &rRect )
     m_pViewWin->Invalidate();
 }
 
-IMPL_LINK_TYPED( SwPagePreview, ScrollHdl, ScrollBar *, p, void )
+IMPL_LINK( SwPagePreview, ScrollHdl, ScrollBar *, p, void )
 {
     SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if(!GetViewShell())
@@ -1453,7 +1453,7 @@ IMPL_LINK_TYPED( SwPagePreview, ScrollHdl, ScrollBar *, p, void )
         EndScrollHdl( pScrollbar );
 }
 
-IMPL_LINK_TYPED( SwPagePreview, EndScrollHdl, ScrollBar *, p, void )
+IMPL_LINK( SwPagePreview, EndScrollHdl, ScrollBar *, p, void )
 {
     SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if(!GetViewShell())

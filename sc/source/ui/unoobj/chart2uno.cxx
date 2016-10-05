@@ -2916,7 +2916,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     }
 }
 
-IMPL_LINK_TYPED( ScChart2DataSequence, ValueListenerHdl, const SfxHint&, rHint, void )
+IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, const SfxHint&, rHint, void )
 {
     if ( m_pDocument && (rHint.GetId() & SC_HINT_DATACHANGED) )
     {

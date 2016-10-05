@@ -71,9 +71,9 @@ class  OAddFieldWindow  :public FloatingWindow
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pChangeListener;
     ::rtl::Reference< comphelper::OContainerListenerAdapter>                    m_pContainerListener;
 
-    DECL_LINK_TYPED( OnDoubleClickHdl, SvTreeListBox*, bool );
-    DECL_LINK_TYPED( OnSelectHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( OnSortAction, ToolBox*, void );
+    DECL_LINK( OnDoubleClickHdl, SvTreeListBox*, bool );
+    DECL_LINK( OnSelectHdl, SvTreeListBox*, void );
+    DECL_LINK( OnSortAction, ToolBox*, void );
 
     OAddFieldWindow(const OAddFieldWindow&) = delete;
     void operator =(const OAddFieldWindow&) = delete;

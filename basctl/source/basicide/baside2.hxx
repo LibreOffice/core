@@ -88,7 +88,7 @@ private:
     SyntaxHighlighter   aHighlighter;
     Idle                aSyntaxIdle;
     std::set<sal_uInt16>       aSyntaxLineTable;
-    DECL_LINK_TYPED(SyntaxTimerHdl, Idle *, void);
+    DECL_LINK(SyntaxTimerHdl, Idle *, void);
 
     // progress bar
     class ProgressInfo;
@@ -233,10 +233,10 @@ protected:
     virtual void    Resize() override;
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
 
-    DECL_LINK_TYPED( ButtonHdl, Button *, void );
-    DECL_LINK_TYPED(TreeListHdl, SvTreeListBox*, void);
-    DECL_LINK_TYPED( implEndDragHdl, HeaderBar *, void );
-    DECL_LINK_TYPED( EditAccHdl, Accelerator&, void );
+    DECL_LINK( ButtonHdl, Button *, void );
+    DECL_LINK(TreeListHdl, SvTreeListBox*, void);
+    DECL_LINK( implEndDragHdl, HeaderBar *, void );
+    DECL_LINK( EditAccHdl, Accelerator&, void );
 
 
 public:
@@ -281,7 +281,7 @@ private:
 
 protected:
     virtual void        Resize() override;
-    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
+    DECL_LINK( ScrollHdl, ScrollBar*, void );
 
 public:
     explicit ComplexEditorWindow( ModulWindow* pParent );
@@ -494,8 +494,8 @@ public:
     virtual void dispose() override;
     void InsertSelectedEntry(); //insert the selected entry
 
-    DECL_LINK_TYPED(ImplDoubleClickHdl, ListBox&, void);
-    DECL_LINK_TYPED(ImplSelectHdl, ListBox&, void);
+    DECL_LINK(ImplDoubleClickHdl, ListBox&, void);
+    DECL_LINK(ImplSelectHdl, ListBox&, void);
 
 protected:
     virtual void KeyInput( const KeyEvent& rKeyEvt ) override;

@@ -108,9 +108,9 @@ private:
     void UpdateMarginBox();
     void ExecuteMarginLRChange( const long nPageLeftMargin, const long nPageRightMargin );
     void ExecuteMarginULChange( const long nPageTopMargin, const long  nPageBottomMargin);
-    DECL_LINK_TYPED(PaperFormatModifyHdl, ListBox&, void);
-    DECL_LINK_TYPED(PaperSizeModifyHdl, Edit&, void);
-    DECL_LINK_TYPED(PaperModifyMarginHdl, ListBox&, void );
+    DECL_LINK(PaperFormatModifyHdl, ListBox&, void);
+    DECL_LINK(PaperSizeModifyHdl, Edit&, void);
+    DECL_LINK(PaperModifyMarginHdl, ListBox&, void );
 };
 
 } } //end of namespace sw::sidebar

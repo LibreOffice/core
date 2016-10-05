@@ -67,7 +67,7 @@ namespace frm
         RichTextEngine& operator=( const RichTextEngine& ) = delete;
 
     private:
-        DECL_LINK_TYPED( EditEngineStatusChanged, EditStatus&, void );
+        DECL_LINK( EditEngineStatusChanged, EditStatus&, void );
     };
 
 

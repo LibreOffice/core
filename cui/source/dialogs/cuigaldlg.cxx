@@ -225,13 +225,13 @@ void SearchProgress::Terminate()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SearchProgress, ClickCancelBtn, Button*, void)
+IMPL_LINK_NOARG(SearchProgress, ClickCancelBtn, Button*, void)
 {
     Terminate();
 }
 
 
-IMPL_LINK_NOARG_TYPED(SearchProgress, CleanUpHdl, void*, void)
+IMPL_LINK_NOARG(SearchProgress, CleanUpHdl, void*, void)
 {
     if (maSearchThread.is())
         maSearchThread->join();
@@ -354,13 +354,13 @@ void TakeProgress::Terminate()
 }
 
 
-IMPL_LINK_NOARG_TYPED(TakeProgress, ClickCancelBtn, Button*, void)
+IMPL_LINK_NOARG(TakeProgress, ClickCancelBtn, Button*, void)
 {
     Terminate();
 }
 
 
-IMPL_LINK_NOARG_TYPED(TakeProgress, CleanUpHdl, void*, void)
+IMPL_LINK_NOARG(TakeProgress, CleanUpHdl, void*, void)
 {
     if (maTakeThread.is())
         maTakeThread->join();
@@ -472,14 +472,14 @@ short ActualizeProgress::Execute()
 }
 
 
-IMPL_LINK_NOARG_TYPED(ActualizeProgress, ClickCancelBtn, Button*, void)
+IMPL_LINK_NOARG(ActualizeProgress, ClickCancelBtn, Button*, void)
 {
     pTheme->AbortActualize();
     EndDialog( RET_OK );
 }
 
 
-IMPL_LINK_TYPED( ActualizeProgress, TimeoutHdl, Idle*, _pTimer, void)
+IMPL_LINK( ActualizeProgress, TimeoutHdl, Idle*, _pTimer, void)
 {
     if ( _pTimer )
     {
@@ -492,7 +492,7 @@ IMPL_LINK_TYPED( ActualizeProgress, TimeoutHdl, Idle*, _pTimer, void)
 }
 
 
-IMPL_LINK_TYPED( ActualizeProgress, ActualizeHdl, const INetURLObject&, rURL, void )
+IMPL_LINK( ActualizeProgress, ActualizeHdl, const INetURLObject&, rURL, void )
 {
     for( long i = 0; i < 128; i++ )
         Application::Reschedule();
@@ -558,7 +558,7 @@ void GalleryIdDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(GalleryIdDialog, ClickOkHdl, Button*, void)
+IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, Button*, void)
 {
     Gallery*    pGal = pThm->GetParent();
     const sal_uLong nId = GetId();
@@ -972,7 +972,7 @@ void TPGalleryThemeProperties::FillFilterList()
 }
 
 
-IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, SelectFileTypeHdl, ComboBox&, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl, ComboBox&, void)
 {
     OUString aText( m_pCbbFileType->GetText() );
 
@@ -1001,7 +1001,7 @@ void TPGalleryThemeProperties::SearchFiles()
 }
 
 
-IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickSearchHdl, Button*, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, Button*, void)
 {
     if( bInputAllowed )
     {
@@ -1053,7 +1053,7 @@ void TPGalleryThemeProperties::TakeFiles()
 }
 
 
-IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickPreviewHdl, Button*, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl, Button*, void)
 {
     if ( bInputAllowed )
     {
@@ -1100,7 +1100,7 @@ void TPGalleryThemeProperties::DoPreview()
 }
 
 
-IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickTakeHdl, Button*, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl, Button*, void)
 {
     if( bInputAllowed )
     {
@@ -1124,7 +1124,7 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickTakeHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickTakeAllHdl, Button*, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeAllHdl, Button*, void)
 {
     if( bInputAllowed )
     {
@@ -1135,7 +1135,7 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, ClickTakeAllHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, SelectFoundHdl, ListBox&, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl, ListBox&, void)
 {
     if( bInputAllowed )
     {
@@ -1165,7 +1165,7 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, SelectFoundHdl, ListBox&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, DClickFoundHdl, ListBox&, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl, ListBox&, void)
 {
     if( bInputAllowed )
     {
@@ -1177,14 +1177,14 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, DClickFoundHdl, ListBox&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, PreviewTimerHdl, Timer *, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, PreviewTimerHdl, Timer *, void)
 {
     aPreviewTimer.Stop();
     DoPreview();
 }
 
 
-IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, EndSearchProgressHdl, Dialog&, void)
+IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl, Dialog&, void)
 {
   if( !aFoundList.empty() )
   {
@@ -1203,7 +1203,7 @@ IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, EndSearchProgressHdl, Dialog&, v
 }
 
 
-IMPL_LINK_TYPED( TPGalleryThemeProperties, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvt, void )
+IMPL_LINK( TPGalleryThemeProperties, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvt, void )
 {
     DBG_ASSERT( xFolderPicker.is(), "TPGalleryThemeProperties::DialogClosedHdl(): no folder picker" );
 

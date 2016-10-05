@@ -83,7 +83,7 @@ static long nTabs[] =
 #define LB_MACROS_ITEMPOS    2
 
 
-IMPL_LINK_TYPED( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
+IMPL_LINK( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
     DBG_ASSERT( pBar == maHeaderBar.get(), "*MacroEventListBox::HeaderEndDrag_Impl: something is wrong here..." );
     (void)pBar;
@@ -567,7 +567,7 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
 }
 
 // select event handler on the listbox
-IMPL_LINK_NOARG_TYPED( SvxMacroTabPage_, SelectEvent_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG( SvxMacroTabPage_, SelectEvent_Impl, SvTreeListBox*, void)
 {
     SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry*           pE = rListBox.FirstSelected();
@@ -583,12 +583,12 @@ IMPL_LINK_NOARG_TYPED( SvxMacroTabPage_, SelectEvent_Impl, SvTreeListBox*, void)
     EnableButtons();
 }
 
-IMPL_LINK_TYPED( SvxMacroTabPage_, AssignDeleteHdl_Impl, Button*, pBtn, void )
+IMPL_LINK( SvxMacroTabPage_, AssignDeleteHdl_Impl, Button*, pBtn, void )
 {
     GenericHandler_Impl( this, static_cast<PushButton*>(pBtn) );
 }
 
-IMPL_LINK_NOARG_TYPED( SvxMacroTabPage_, DoubleClickHdl_Impl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG( SvxMacroTabPage_, DoubleClickHdl_Impl, SvTreeListBox*, bool)
 {
     return GenericHandler_Impl( this, nullptr );
 }
@@ -850,7 +850,7 @@ SvxMacroAssignDlg::SvxMacroAssignDlg( vcl::Window* pParent, const Reference< fra
 }
 
 
-IMPL_LINK_NOARG_TYPED(AssignComponentDialog, ButtonHandler, Button*, void)
+IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler, Button*, void)
 {
     OUString aMethodName = mpMethodEdit->GetText();
     maURL.clear();
@@ -890,7 +890,7 @@ void AssignComponentDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, void )
+IMPL_LINK_NOARG( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, void )
 {
     GetTabPage()->FillItemSet( nullptr );
     EndDialog( RET_OK );

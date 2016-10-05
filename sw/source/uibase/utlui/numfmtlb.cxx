@@ -358,7 +358,7 @@ sal_uLong NumFormatListBox::GetFormat() const
     return reinterpret_cast<sal_uLong>(GetEntryData(nPos));
 }
 
-IMPL_LINK_TYPED( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
+IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
 {
     const sal_Int32 nPos = rBox.GetSelectEntryPos();
     OUString sDefine(SW_RES( STR_DEFINE_NUMBERFORMAT ));

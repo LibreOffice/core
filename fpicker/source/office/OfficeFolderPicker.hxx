@@ -46,7 +46,7 @@ private:
                             m_xListener;
 
     void                            prepareExecute( );
-    DECL_LINK_TYPED(                DialogClosedHdl, Dialog&, void );
+    DECL_LINK(                DialogClosedHdl, Dialog&, void );
 
 public:
                                     SvtFolderPicker();

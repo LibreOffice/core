@@ -517,14 +517,14 @@ void SlideSorterController::HandleModelChange()
     }
 }
 
-IMPL_LINK_TYPED(SlideSorterController, ApplicationEventHandler, VclSimpleEvent&, rEvent, void)
+IMPL_LINK(SlideSorterController, ApplicationEventHandler, VclSimpleEvent&, rEvent, void)
 {
     auto windowEvent = dynamic_cast<VclWindowEvent *>(&rEvent);
     if (windowEvent != nullptr) {
         WindowEventHandler(*windowEvent);
     }
 }
-IMPL_LINK_TYPED(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, void)
+IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
         vcl::Window* pWindow = rEvent.GetWindow();
         sd::Window *pActiveWindow (mrSlideSorter.GetContentWindow());

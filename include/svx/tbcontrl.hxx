@@ -169,7 +169,7 @@ public:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
 
-    DECL_LINK_TYPED( VisibilityNotification, SvxStyleBox_Impl&, void );
+    DECL_LINK( VisibilityNotification, SvxStyleBox_Impl&, void );
 protected:
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments)
@@ -236,7 +236,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
     BorderColorStatus maBorderColorStatus;
     bool bSidebarType;
     ColorSelectFunction maColorSelectFunction;
-    DECL_LINK_TYPED(SelectedHdl, const Color&, void);
+    DECL_LINK(SelectedHdl, const Color&, void);
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxColorToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);

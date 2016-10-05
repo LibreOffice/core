@@ -595,7 +595,7 @@ void ScChartListenerCollection::StartTimer()
     aIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(ScChartListenerCollection, TimerHdl, Idle *, void)
+IMPL_LINK_NOARG(ScChartListenerCollection, TimerHdl, Idle *, void)
 {
     if ( Application::AnyInput( VclInputFlags::KEYBOARD ) )
     {

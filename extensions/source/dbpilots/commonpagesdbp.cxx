@@ -193,7 +193,7 @@ namespace dbp
     }
 
 
-    IMPL_LINK_NOARG_TYPED( OTableSelectionPage, OnSearchClicked, Button*, void )
+    IMPL_LINK_NOARG( OTableSelectionPage, OnSearchClicked, Button*, void )
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
@@ -217,14 +217,14 @@ namespace dbp
         }
     }
 
-    IMPL_LINK_TYPED( OTableSelectionPage, OnListboxDoubleClicked, ListBox&, _rBox, void )
+    IMPL_LINK( OTableSelectionPage, OnListboxDoubleClicked, ListBox&, _rBox, void )
     {
         if (_rBox.GetSelectEntryCount())
             getDialog()->travelNext();
     }
 
 
-    IMPL_LINK_TYPED( OTableSelectionPage, OnListboxSelection, ListBox&, _rBox, void )
+    IMPL_LINK( OTableSelectionPage, OnListboxSelection, ListBox&, _rBox, void )
     {
         if (m_pDatasource == &_rBox)
         {   // new data source selected
@@ -408,7 +408,7 @@ namespace dbp
         implEnableWindows();
     }
 
-    IMPL_LINK_NOARG_TYPED( OMaybeListSelectionPage, OnRadioSelected, Button*, void )
+    IMPL_LINK_NOARG( OMaybeListSelectionPage, OnRadioSelected, Button*, void )
     {
         implEnableWindows();
     }

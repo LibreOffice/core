@@ -98,7 +98,7 @@ void ScDataPilotSourceTypeDlg::AppendNamedRange(const OUString& rName)
     }
 }
 
-IMPL_LINK_TYPED( ScDataPilotSourceTypeDlg, RadioClickHdl, Button*, pBtn, void )
+IMPL_LINK( ScDataPilotSourceTypeDlg, RadioClickHdl, Button*, pBtn, void )
 {
     m_pLbNamedRange->Enable(pBtn == m_pBtnNamedRange);
 }

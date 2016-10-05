@@ -324,13 +324,13 @@ void ParaLineSpacingControl::SelectEntryPos(sal_Int32 nPos)
     UpdateMetricFields();
 }
 
-IMPL_LINK_NOARG_TYPED(ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox&, void)
 {
     UpdateMetricFields();
     ExecuteLineSpace();
 }
 
-IMPL_LINK_NOARG_TYPED( ParaLineSpacingControl, LineSPDistAtHdl_Impl, Edit&, void )
+IMPL_LINK_NOARG( ParaLineSpacingControl, LineSPDistAtHdl_Impl, Edit&, void )
 {
     ExecuteLineSpace();
 }
@@ -416,7 +416,7 @@ void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_In
     }
 }
 
-IMPL_LINK_TYPED(ParaLineSpacingControl, PredefinedValuesHandler, Button*, pControl, void)
+IMPL_LINK(ParaLineSpacingControl, PredefinedValuesHandler, Button*, pControl, void)
 {
     if (pControl == mpSpacing1Button)
     {

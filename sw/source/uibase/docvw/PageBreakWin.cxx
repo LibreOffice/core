@@ -430,14 +430,14 @@ void SwPageBreakWin::Fade( bool bFadeIn )
         m_aFadeTimer.Start( );
 }
 
-IMPL_LINK_NOARG_TYPED(SwPageBreakWin, HideHandler, Menu *, bool)
+IMPL_LINK_NOARG(SwPageBreakWin, HideHandler, Menu *, bool)
 {
     Fade( false );
 
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(SwPageBreakWin, FadeHandler, Timer *, void)
+IMPL_LINK_NOARG(SwPageBreakWin, FadeHandler, Timer *, void)
 {
     const int TICKS_BEFORE_WE_APPEAR = 10;
     if ( m_bIsAppearing && m_nDelayAppearing < TICKS_BEFORE_WE_APPEAR )

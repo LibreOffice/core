@@ -677,7 +677,7 @@ sal_Int32 SvxLanguageComboBox::ImplGetSavedValue() const
 }
 
 
-IMPL_LINK_NOARG_TYPED( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
+IMPL_LINK_NOARG( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
 {
     EditedAndValid eOldState = meEditedAndValid;
     OUString aStr( vcl::I18nHelper::filterFormattingChars( GetText()));

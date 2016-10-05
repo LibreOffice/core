@@ -73,7 +73,7 @@ SvxSplitTableDlg::~SvxSplitTableDlg()
     m_pDialog.disposeAndClear();
 }
 
-IMPL_LINK_TYPED( SvxSplitTableDlg, ClickHdl, Button *, pButton, void )
+IMPL_LINK( SvxSplitTableDlg, ClickHdl, Button *, pButton, void )
 {
     const bool bIsVert =  pButton == m_pVertBox ;
     long nMax = bIsVert ? mnMaxVertical : mnMaxHorizontal;

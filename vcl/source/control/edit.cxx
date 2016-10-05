@@ -2389,7 +2389,7 @@ void Edit::UpdateData()
     maUpdateDataHdl.Call( *this );
 }
 
-IMPL_LINK_NOARG_TYPED(Edit, ImplUpdateDataHdl, Timer *, void)
+IMPL_LINK_NOARG(Edit, ImplUpdateDataHdl, Timer *, void)
 {
     UpdateData();
 }

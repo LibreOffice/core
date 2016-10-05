@@ -279,7 +279,7 @@ private:
     static Any                      implSafeGetPagePropSet( const OUString & sPropertyName,
                                                                 const Reference< XPropertySet > & rxPropSet,
                                                                 const Reference< XPropertySetInfo > & rxPropSetInfo );
-    DECL_LINK_TYPED( CalcFieldHdl, EditFieldInfo*, void );
+    DECL_LINK( CalcFieldHdl, EditFieldInfo*, void );
 
     static bool isStreamGZip(const css::uno::Reference<css::io::XInputStream>& xInput);
     static bool isStreamSvg(const css::uno::Reference<css::io::XInputStream>& xInput);

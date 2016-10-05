@@ -106,7 +106,7 @@ void TimerBasedTaskExecution::SetSelf (
         mpSelf = rpSelf;
 }
 
-IMPL_LINK_NOARG_TYPED(TimerBasedTaskExecution, TimerCallback, Timer *, void)
+IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback, Timer *, void)
 {
     if (mpTask.get() != nullptr)
     {

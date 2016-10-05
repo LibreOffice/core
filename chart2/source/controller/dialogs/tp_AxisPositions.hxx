@@ -50,8 +50,8 @@ public:
     void SupportAxisPositioning( bool bSupportAxisPositioning );
 
 private: //methods:
-    DECL_LINK_TYPED( CrossesAtSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( PlaceLabelsSelectHdl, ListBox&, void );
+    DECL_LINK( CrossesAtSelectHdl, ListBox&, void );
+    DECL_LINK( PlaceLabelsSelectHdl, ListBox&, void );
 
 private: //member:
     VclPtr<VclFrame>       m_pFL_AxisLine;

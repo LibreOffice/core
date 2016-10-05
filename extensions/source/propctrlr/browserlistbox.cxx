@@ -839,7 +839,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK_TYPED(OBrowserListBox, ScrollHdl, ScrollBar*, _pScrollBar, void )
+    IMPL_LINK(OBrowserListBox, ScrollHdl, ScrollBar*, _pScrollBar, void )
     {
         DBG_ASSERT(_pScrollBar == m_aVScroll.get(), "OBrowserListBox::ScrollHdl: where does this come from?");
         (void)_pScrollBar;

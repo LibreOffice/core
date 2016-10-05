@@ -1534,7 +1534,7 @@ void VclFrame::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
-IMPL_LINK_TYPED(VclFrame, WindowEventListener, VclWindowEvent&, rEvent, void)
+IMPL_LINK(VclFrame, WindowEventListener, VclWindowEvent&, rEvent, void)
 {
     if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)
         designate_label(nullptr);
@@ -1791,7 +1791,7 @@ void VclExpander::StateChanged(StateChangedType nType)
     }
 }
 
-IMPL_LINK_TYPED( VclExpander, ClickHdl, CheckBox&, rBtn, void )
+IMPL_LINK( VclExpander, ClickHdl, CheckBox&, rBtn, void )
 {
     vcl::Window *pChild = get_child();
     if (pChild)
@@ -1827,7 +1827,7 @@ void VclScrolledWindow::dispose()
     VclBin::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(VclScrolledWindow, ScrollBarHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl, ScrollBar*, void)
 {
     vcl::Window *pChild = get_child();
     if (!pChild)
@@ -2232,7 +2232,7 @@ void MessageDialog::response(short nResponseId)
     EndDialog(nResponseId);
 }
 
-IMPL_LINK_TYPED(MessageDialog, ButtonHdl, Button *, pButton, void)
+IMPL_LINK(MessageDialog, ButtonHdl, Button *, pButton, void)
 {
     response(get_response(pButton));
 }

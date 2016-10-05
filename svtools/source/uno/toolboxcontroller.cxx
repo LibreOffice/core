@@ -759,7 +759,7 @@ throw( css::uno::Exception, std::exception)
 }
 
 
-IMPL_STATIC_LINK_TYPED( ToolboxController, ExecuteHdl_Impl, void*, p, void )
+IMPL_STATIC_LINK( ToolboxController, ExecuteHdl_Impl, void*, p, void )
 {
     DispatchInfo* pDispatchInfo = static_cast<DispatchInfo*>(p);
     pDispatchInfo->mxDispatch->dispatch( pDispatchInfo->maURL, pDispatchInfo->maArgs );

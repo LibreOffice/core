@@ -128,7 +128,7 @@ namespace frm
     }
 
 
-    IMPL_LINK_TYPED( RichTextEngine, EditEngineStatusChanged, EditStatus&, _rStatus, void )
+    IMPL_LINK( RichTextEngine, EditEngineStatusChanged, EditStatus&, _rStatus, void )
     {
         for ( ::std::vector< IEngineStatusListener* >::const_iterator aLoop = m_aStatusListeners.begin();
               aLoop != m_aStatusListeners.end();

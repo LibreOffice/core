@@ -96,10 +96,10 @@ namespace sw { namespace sidebar {
         void UpdateEditContour();
         void UpdateSpacingLB();
 
-        DECL_LINK_TYPED(WrapTypeHdl, Button*, void);
-        DECL_LINK_TYPED(EnableContourHdl, Button*, void);
-        DECL_LINK_TYPED(EditContourHdl, Button*, void);
-        DECL_LINK_TYPED(SpacingLBHdl, ListBox&, void);
+        DECL_LINK(WrapTypeHdl, Button*, void);
+        DECL_LINK(EnableContourHdl, Button*, void);
+        DECL_LINK(EditContourHdl, Button*, void);
+        DECL_LINK(SpacingLBHdl, ListBox&, void);
     };
 
 } } // end of namespace ::sw::sidebar

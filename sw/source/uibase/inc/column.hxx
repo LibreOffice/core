@@ -60,8 +60,8 @@ class SwColumnDlg : public SfxModalDialog
     bool                bSelSectionChanged : 1;
     bool                bFrameChanged : 1;
 
-    DECL_LINK_TYPED(ObjectListBoxHdl, ListBox&, void);
-    DECL_LINK_TYPED(OkHdl, Button*, void);
+    DECL_LINK(ObjectListBoxHdl, ListBox&, void);
+    DECL_LINK(OkHdl, Button*, void);
     void ObjectHdl(ListBox*);
 
 public:
@@ -135,17 +135,17 @@ class SwColumnPage : public SfxTabPage
     bool            m_bLockUpdate;
 
     // Handler
-    DECL_LINK_TYPED( ColModify, Edit&, void );
+    DECL_LINK( ColModify, Edit&, void );
     void ColModify(NumericField*);
-    DECL_LINK_TYPED( GapModify, Edit&, void );
-    DECL_LINK_TYPED( EdModify, Edit&, void );
-    DECL_LINK_TYPED( AutoWidthHdl, Button *, void );
-    DECL_LINK_TYPED( SetDefaultsHdl, ValueSet *, void );
+    DECL_LINK( GapModify, Edit&, void );
+    DECL_LINK( EdModify, Edit&, void );
+    DECL_LINK( AutoWidthHdl, Button *, void );
+    DECL_LINK( SetDefaultsHdl, ValueSet *, void );
 
-    DECL_LINK_TYPED( Up, Button *, void );
-    DECL_LINK_TYPED( Down, Button *, void );
-    DECL_LINK_TYPED( UpdateColMgr, Edit&, void );
-    DECL_LINK_TYPED( UpdateColMgrListBox, ListBox&, void );
+    DECL_LINK( Up, Button *, void );
+    DECL_LINK( Down, Button *, void );
+    DECL_LINK( UpdateColMgr, Edit&, void );
+    DECL_LINK( UpdateColMgrListBox, ListBox&, void );
     void Timeout();
 
     void            Update(MetricField *pInteractiveField);

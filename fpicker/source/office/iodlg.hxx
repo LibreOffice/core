@@ -83,21 +83,21 @@ private:
     css::uno::Reference < css::uno::XComponentContext >
                                 m_context;
 
-    DECL_LINK_TYPED(            FilterSelectHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED(            FilterSelectTimerHdl_Impl, Timer*, void );
-    DECL_LINK_TYPED(            NewFolderHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(            OpenUrlHdl_Impl, SvtURLBox*, void );
-    DECL_LINK_TYPED(            OpenClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(            CancelHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(            FileNameGetFocusHdl_Impl, Control&, void );
-    DECL_LINK_TYPED(            FileNameModifiedHdl_Impl, Edit&, void );
+    DECL_LINK(            FilterSelectHdl_Impl, ListBox&, void );
+    DECL_LINK(            FilterSelectTimerHdl_Impl, Timer*, void );
+    DECL_LINK(            NewFolderHdl_Impl, Button*, void );
+    DECL_LINK(            OpenUrlHdl_Impl, SvtURLBox*, void );
+    DECL_LINK(            OpenClickHdl_Impl, Button*, void );
+    DECL_LINK(            CancelHdl_Impl, Button*, void );
+    DECL_LINK(            FileNameGetFocusHdl_Impl, Control&, void );
+    DECL_LINK(            FileNameModifiedHdl_Impl, Edit&, void );
 
-    DECL_LINK_TYPED(            URLBoxModifiedHdl_Impl, SvtURLBox*, void );
-    DECL_LINK_TYPED(            ConnectToServerPressed_Hdl, Button*, void );
+    DECL_LINK(            URLBoxModifiedHdl_Impl, SvtURLBox*, void );
+    DECL_LINK(            ConnectToServerPressed_Hdl, Button*, void );
 
-    DECL_LINK_TYPED(            AddPlacePressed_Hdl, Button*, void );
-    DECL_LINK_TYPED(            RemovePlacePressed_Hdl, Button*, void );
-    DECL_LINK_TYPED(            Split_Hdl, Splitter*, void );
+    DECL_LINK(            AddPlacePressed_Hdl, Button*, void );
+    DECL_LINK(            RemovePlacePressed_Hdl, Button*, void );
+    DECL_LINK(            Split_Hdl, Splitter*, void );
 
     void                        OpenHdl_Impl(void* pVoid);
     void                        Init_Impl( PickerFlags nBits );
@@ -119,13 +119,13 @@ private:
     void                        OpenMultiSelection_Impl();
     void                        AddControls_Impl( );
 
-    DECL_LINK_TYPED( SelectHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( DblClickHdl_Impl, SvTreeListBox*, bool);
-    DECL_LINK_TYPED( EntrySelectHdl_Impl, ComboBox&, void);
-    DECL_LINK_TYPED( OpenDoneHdl_Impl, SvtFileView*, void );
-    DECL_LINK_TYPED( AutoExtensionHdl_Impl, Button*, void);
-    DECL_LINK_TYPED( ClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( PlayButtonHdl_Impl, Button*, void);
+    DECL_LINK( SelectHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK( DblClickHdl_Impl, SvTreeListBox*, bool);
+    DECL_LINK( EntrySelectHdl_Impl, ComboBox&, void);
+    DECL_LINK( OpenDoneHdl_Impl, SvtFileView*, void );
+    DECL_LINK( AutoExtensionHdl_Impl, Button*, void);
+    DECL_LINK( ClickHdl_Impl, Button*, void );
+    DECL_LINK( PlayButtonHdl_Impl, Button*, void);
 
 
     // removes a filter with wildcards from the path and returns it

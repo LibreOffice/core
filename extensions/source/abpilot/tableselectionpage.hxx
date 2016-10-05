@@ -49,8 +49,8 @@ namespace abp
         virtual bool        canAdvance() const override;
 
     private:
-        DECL_LINK_TYPED( OnTableSelected, ListBox&, void );
-        DECL_LINK_TYPED( OnTableDoubleClicked, ListBox&, void );
+        DECL_LINK( OnTableSelected, ListBox&, void );
+        DECL_LINK( OnTableDoubleClicked, ListBox&, void );
     };
 
 

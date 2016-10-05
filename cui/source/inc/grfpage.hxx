@@ -95,13 +95,13 @@ class SvxGrfCropPage : public SfxTabPage
     virtual ~SvxGrfCropPage() override;
     virtual void dispose() override;
 
-    DECL_LINK_TYPED( ZoomHdl, Edit&, void );
-    DECL_LINK_TYPED( SizeHdl, Edit&, void );
-    DECL_LINK_TYPED( CropHdl, SpinField&, void );
-    DECL_LINK_TYPED( CropLoseFocusHdl, Control&, void );
-    DECL_LINK_TYPED( CropModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( OrigSizeHdl, Button*, void );
-    DECL_LINK_TYPED( Timeout, Timer *, void );
+    DECL_LINK( ZoomHdl, Edit&, void );
+    DECL_LINK( SizeHdl, Edit&, void );
+    DECL_LINK( CropHdl, SpinField&, void );
+    DECL_LINK( CropLoseFocusHdl, Control&, void );
+    DECL_LINK( CropModifyHdl, Edit&, void );
+    DECL_LINK( OrigSizeHdl, Button*, void );
+    DECL_LINK( Timeout, Timer *, void );
 
     void            CalcZoom();
     void            CalcMinMaxBorder();

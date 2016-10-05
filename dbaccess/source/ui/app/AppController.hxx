@@ -537,10 +537,10 @@ namespace dbaui
                                 getCurrentSelection( Control& _rControl ) const override;
 
         void OnInvalidateClipboard();
-        DECL_LINK_TYPED( OnClipboardChanged, TransferableDataHelper*, void );
-        DECL_LINK_TYPED( OnAsyncDrop, void*, void );
-        DECL_LINK_TYPED( OnCreateWithPilot, void*, void );
-        DECL_LINK_TYPED( OnSelectContainer, void*, void );
+        DECL_LINK( OnClipboardChanged, TransferableDataHelper*, void );
+        DECL_LINK( OnAsyncDrop, void*, void );
+        DECL_LINK( OnCreateWithPilot, void*, void );
+        DECL_LINK( OnSelectContainer, void*, void );
         void OnFirstControllerConnected();
 
     protected:

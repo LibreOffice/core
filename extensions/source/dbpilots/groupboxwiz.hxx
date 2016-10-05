@@ -99,9 +99,9 @@ namespace dbp
         virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool        canAdvance() const override;
 
-        DECL_LINK_TYPED( OnMoveEntry, Button*, void );
-        DECL_LINK_TYPED( OnEntrySelected, ListBox&, void );
-        DECL_LINK_TYPED( OnNameModified, Edit&, void );
+        DECL_LINK( OnMoveEntry, Button*, void );
+        DECL_LINK( OnEntrySelected, ListBox&, void );
+        DECL_LINK( OnNameModified, Edit&, void );
 
         void implCheckMoveButtons();
     };
@@ -151,7 +151,7 @@ namespace dbp
 
         void implTraveledOptions();
 
-        DECL_LINK_TYPED( OnOptionSelected, ListBox&, void );
+        DECL_LINK( OnOptionSelected, ListBox&, void );
     };
 
     class OOptionDBFieldPage : public ODBFieldPage

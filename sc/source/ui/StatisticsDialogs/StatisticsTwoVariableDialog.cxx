@@ -207,13 +207,13 @@ void ScStatisticsTwoVariableDialog::SetReference( const ScRange& rReferenceRange
         mpButtonOk->Disable();
 }
 
-IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, OkClicked, Button*, void )
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, OkClicked, Button*, void )
 {
     CalculateInputAndWriteToOutput();
     Close();
 }
 
-IMPL_LINK_TYPED( ScStatisticsTwoVariableDialog, GetFocusHandler, Control&, rCtrl, void )
+IMPL_LINK( ScStatisticsTwoVariableDialog, GetFocusHandler, Control&, rCtrl, void )
 {
     mpActiveEdit = nullptr;
     if(      &rCtrl == mpVariable1RangeEdit
@@ -236,12 +236,12 @@ IMPL_LINK_TYPED( ScStatisticsTwoVariableDialog, GetFocusHandler, Control&, rCtrl
         mpActiveEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
 }
 
-IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, LoseFocusHandler, Control&, void )
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, LoseFocusHandler, Control&, void )
 {
     mDialogLostFocus = !IsActive();
 }
 
-IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, GroupByChanged, RadioButton&, void )
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, GroupByChanged, RadioButton&, void )
 {
     if (mpGroupByColumnsRadio->IsChecked())
         mGroupedBy = BY_COLUMN;
@@ -249,7 +249,7 @@ IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, GroupByChanged, RadioButto
         mGroupedBy = BY_ROW;
 }
 
-IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, RefInputModifyHandler, Edit&, void )
+IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, Edit&, void )
 {
     if ( mpActiveEdit )
     {

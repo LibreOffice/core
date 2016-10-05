@@ -45,10 +45,10 @@ private:
     OUString       m_aNeverChecked;
     OUString       m_aLastCheckedTemplate;
 
-    DECL_LINK_TYPED(FileDialogHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(CheckNowHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(AutoCheckHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(ExtrasCheckHdl_Impl, Button*, void);
+    DECL_LINK(FileDialogHdl_Impl, Button*, void);
+    DECL_LINK(CheckNowHdl_Impl, Button*, void);
+    DECL_LINK(AutoCheckHdl_Impl, Button*, void);
+    DECL_LINK(ExtrasCheckHdl_Impl, Button*, void);
 
     css::uno::Reference< css::container::XNameReplace > m_xUpdateAccess;
     css::uno::Reference<css::configuration::XReadWriteAccess> m_xReadWriteAccess;

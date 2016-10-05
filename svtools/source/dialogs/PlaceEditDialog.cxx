@@ -247,7 +247,7 @@ void PlaceEditDialog::UpdateLabel( )
     }
 }
 
-IMPL_LINK_TYPED( PlaceEditDialog, OKHdl, Button*, /*pBtn*/, void)
+IMPL_LINK( PlaceEditDialog, OKHdl, Button*, /*pBtn*/, void)
 {
     if ( m_xCurrentDetails.get() )
     {
@@ -282,13 +282,13 @@ IMPL_LINK_TYPED( PlaceEditDialog, OKHdl, Button*, /*pBtn*/, void)
     }
 }
 
-IMPL_LINK_TYPED( PlaceEditDialog, DelHdl, Button*, /*pButton*/, void)
+IMPL_LINK( PlaceEditDialog, DelHdl, Button*, /*pButton*/, void)
 {
     // ReUsing existing symbols...
     EndDialog( RET_NO );
 }
 
-IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditHdl, DetailsContainer*, void )
+IMPL_LINK_NOARG( PlaceEditDialog, EditHdl, DetailsContainer*, void )
 {
     UpdateLabel( );
 
@@ -297,18 +297,18 @@ IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditHdl, DetailsContainer*, void )
     m_pBTOk->Enable( !sName.isEmpty( ) && !sUrl.isEmpty( ) );
 }
 
-IMPL_LINK_NOARG_TYPED( PlaceEditDialog, ModifyHdl, Edit&, void )
+IMPL_LINK_NOARG( PlaceEditDialog, ModifyHdl, Edit&, void )
 {
     EditHdl(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditLabelHdl, Edit&, void )
+IMPL_LINK_NOARG( PlaceEditDialog, EditLabelHdl, Edit&, void )
 {
     bLabelChanged = true;
     EditHdl(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditUsernameHdl, Edit&, void )
+IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl, Edit&, void )
 {
     for ( std::vector< std::shared_ptr< DetailsContainer > >::iterator it = m_aDetailsContainers.begin( );
             it != m_aDetailsContainers.end( ); ++it )
@@ -320,7 +320,7 @@ IMPL_LINK_NOARG_TYPED( PlaceEditDialog, EditUsernameHdl, Edit&, void )
     EditHdl(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED( PlaceEditDialog, SelectTypeHdl, ListBox&, void )
+IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl, ListBox&, void )
 {
     if ( m_pLBServerType->GetSelectEntry() == "--------------------" )
     {

@@ -96,20 +96,20 @@ private:
 
     void Initialize(SdDrawDocument* pDoc);
 
-    DECL_LINK_TYPED( ApplyToAllButtonClicked, Button*, void );
-    DECL_LINK_TYPED( PlayButtonClicked, Button*, void );
-    DECL_LINK_TYPED( AutoPreviewClicked, Button*, void );
+    DECL_LINK( ApplyToAllButtonClicked, Button*, void );
+    DECL_LINK( PlayButtonClicked, Button*, void );
+    DECL_LINK( AutoPreviewClicked, Button*, void );
 
-    DECL_LINK_TYPED( TransitionSelected, ValueSet *, void );
-    DECL_LINK_TYPED( AdvanceSlideRadioButtonToggled, RadioButton&, void );
-    DECL_LINK_TYPED( AdvanceTimeModified, Edit&, void );
-    DECL_LINK_TYPED( VariantListBoxSelected, ListBox&, void );
-    DECL_LINK_TYPED( DurationModifiedHdl, Edit&, void );
-    DECL_LINK_TYPED( DurationLoseFocusHdl, Control&, void );
-    DECL_LINK_TYPED( SoundListBoxSelected, ListBox&, void );
-    DECL_LINK_TYPED( LoopSoundBoxChecked, Button*, void );
-    DECL_LINK_TYPED( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
-    DECL_LINK_TYPED(LateInitCallback, Timer *, void);
+    DECL_LINK( TransitionSelected, ValueSet *, void );
+    DECL_LINK( AdvanceSlideRadioButtonToggled, RadioButton&, void );
+    DECL_LINK( AdvanceTimeModified, Edit&, void );
+    DECL_LINK( VariantListBoxSelected, ListBox&, void );
+    DECL_LINK( DurationModifiedHdl, Edit&, void );
+    DECL_LINK( DurationLoseFocusHdl, Control&, void );
+    DECL_LINK( SoundListBoxSelected, ListBox&, void );
+    DECL_LINK( LoopSoundBoxChecked, Button*, void );
+    DECL_LINK( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
+    DECL_LINK(LateInitCallback, Timer *, void);
 
     ViewShellBase &   mrBase;
     SdDrawDocument *  mpDrawDoc;

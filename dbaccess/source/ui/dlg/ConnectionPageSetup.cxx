@@ -176,7 +176,7 @@ namespace dbaui
         return !m_pConnectionURL->IsVisible() || !m_pConnectionURL->GetTextNoPrefix().isEmpty();
     }
 
-    IMPL_LINK_NOARG_TYPED(OConnectionTabPageSetup, OnEditModified, Edit&, void)
+    IMPL_LINK_NOARG(OConnectionTabPageSetup, OnEditModified, Edit&, void)
     {
         SetRoadmapStateValue(checkTestConnection());
         callModifiedHdl();

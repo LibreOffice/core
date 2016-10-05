@@ -45,8 +45,8 @@ public:
 private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 
-    DECL_STATIC_LINK_TYPED( XMLFilterTabDialog, ActivatePageHdl, TabControl*, void );
-    DECL_LINK_TYPED(OkHdl, Button*, void);
+    DECL_STATIC_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl*, void );
+    DECL_LINK(OkHdl, Button*, void);
 
     ResMgr& mrResMgr;
 

@@ -51,7 +51,7 @@ SelectionEngine::~SelectionEngine()
     aWTimer.Stop();
 }
 
-IMPL_LINK_NOARG_TYPED(SelectionEngine, ImpWatchDog, Timer *, void)
+IMPL_LINK_NOARG(SelectionEngine, ImpWatchDog, Timer *, void)
 {
     if ( !aArea.IsInside( aLastMove.GetPosPixel() ) )
         SelMouseMove( aLastMove );

@@ -380,9 +380,9 @@ protected:
     void                ImplCheckScrollBars();
     void                ImplInitScrollBars();
 
-    DECL_LINK_TYPED(    ScrollBarHdl, ScrollBar*, void );
-    DECL_LINK_TYPED(    LBWindowScrolled, ImplListBoxWindow*, void );
-    DECL_LINK_TYPED(    MRUChanged, LinkParamNone*, void );
+    DECL_LINK(    ScrollBarHdl, ScrollBar*, void );
+    DECL_LINK(    LBWindowScrolled, ImplListBoxWindow*, void );
+    DECL_LINK(    MRUChanged, LinkParamNone*, void );
 
 public:
                     ImplListBox( vcl::Window* pParent, WinBits nWinStyle );

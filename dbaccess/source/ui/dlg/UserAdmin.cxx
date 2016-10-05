@@ -57,8 +57,8 @@ class OPasswordDialog : public ModalDialog
     VclPtr<Edit>     m_pEDPasswordRepeat;
     VclPtr<OKButton> m_pOKBtn;
 
-    DECL_LINK_TYPED( OKHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ModifiedHdl, Edit&, void );
+    DECL_LINK( OKHdl_Impl, Button*, void );
+    DECL_LINK( ModifiedHdl, Edit&, void );
 
 public:
     OPasswordDialog( vcl::Window* pParent,const OUString& _sUserName);
@@ -95,7 +95,7 @@ OPasswordDialog::OPasswordDialog(vcl::Window* _pParent,const OUString& _sUserNam
     m_pEDOldPassword->SetModifyHdl( LINK( this, OPasswordDialog, ModifiedHdl ) );
 }
 
-IMPL_LINK_NOARG_TYPED(OPasswordDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl, Button*, void)
 {
     if( m_pEDPassword->GetText() == m_pEDPasswordRepeat->GetText() )
         EndDialog( RET_OK );
@@ -110,7 +110,7 @@ IMPL_LINK_NOARG_TYPED(OPasswordDialog, OKHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED( OPasswordDialog, ModifiedHdl, Edit&, rEdit, void )
+IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit&, rEdit, void )
 {
     m_pOKBtn->Enable(!rEdit.GetText().isEmpty());
 }
@@ -205,7 +205,7 @@ VclPtr<SfxTabPage> OUserAdmin::Create( vcl::Window* pParent, const SfxItemSet* _
     return VclPtr<OUserAdmin>::Create( pParent, *_rAttrSet );
 }
 
-IMPL_LINK_TYPED( OUserAdmin, UserHdl, Button *, pButton, void )
+IMPL_LINK( OUserAdmin, UserHdl, Button *, pButton, void )
 {
     try
     {
@@ -274,7 +274,7 @@ IMPL_LINK_TYPED( OUserAdmin, UserHdl, Button *, pButton, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( OUserAdmin, ListDblClickHdl, ListBox&, void )
+IMPL_LINK_NOARG( OUserAdmin, ListDblClickHdl, ListBox&, void )
 {
     m_TableCtrl->setUserName(GetUser());
     m_TableCtrl->UpdateTables();

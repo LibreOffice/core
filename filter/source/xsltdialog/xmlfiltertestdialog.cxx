@@ -655,7 +655,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
     }
 }
 
-IMPL_LINK_TYPED(XMLFilterTestDialog, ClickHdl_Impl, Button *, pButton, void )
+IMPL_LINK(XMLFilterTestDialog, ClickHdl_Impl, Button *, pButton, void )
 {
     if (m_pPBExportBrowse == pButton)
     {

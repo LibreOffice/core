@@ -217,7 +217,7 @@ void PageFormatPanel::NotifyItemUpdate(
     }
 }
 
-IMPL_LINK_NOARG_TYPED(PageFormatPanel, PaperFormatModifyHdl, ListBox&, void)
+IMPL_LINK_NOARG(PageFormatPanel, PaperFormatModifyHdl, ListBox&, void)
 {
     Paper ePaper = mpPaperSizeBox->GetSelection();
     Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, (MapUnit)(meUnit)));
@@ -230,14 +230,14 @@ IMPL_LINK_NOARG_TYPED(PageFormatPanel, PaperFormatModifyHdl, ListBox&, void)
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get() });
 }
 
-IMPL_LINK_NOARG_TYPED(PageFormatPanel, PaperSizeModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(PageFormatPanel, PaperSizeModifyHdl, Edit&, void)
 {
     Size aSize( GetCoreValue( *mpPaperWidth, meUnit ), GetCoreValue( *mpPaperHeight, meUnit));
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem });
 }
 
-IMPL_LINK_NOARG_TYPED(PageFormatPanel, PaperModifyMarginHdl, ListBox&, void)
+IMPL_LINK_NOARG(PageFormatPanel, PaperModifyMarginHdl, ListBox&, void)
 {
     bool bMirrored = false;
     bool bApplyNewPageMargins = true;

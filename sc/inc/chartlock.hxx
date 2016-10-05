@@ -63,7 +63,7 @@ private:
     Timer                               maTimer;
     std::unique_ptr< ScChartLockGuard >   mapScChartLockGuard;
 
-    DECL_LINK_TYPED(TimeoutHdl, Timer *, void);
+    DECL_LINK(TimeoutHdl, Timer *, void);
 
     ScTemporaryChartLock( const ScTemporaryChartLock& ) = delete;
 };

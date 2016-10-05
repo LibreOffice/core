@@ -131,7 +131,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, bool /*bNew*/ ) 
 }
 
 
-IMPL_STATIC_LINK_TYPED( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, void*, p, void )
+IMPL_STATIC_LINK( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, void*, p, void )
 {
     ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
     try
@@ -157,7 +157,7 @@ VclPtr<vcl::Window> SfxURLToolBoxControl_Impl::CreateItemWindow( vcl::Window* pP
     return pURLBox.get();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxURLToolBoxControl_Impl, SelectHdl, ComboBox&, void)
+IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, SelectHdl, ComboBox&, void)
 {
     SvtURLBox* pURLBox = GetURLBox();
     OUString aName( pURLBox->GetURL() );
@@ -166,7 +166,7 @@ IMPL_LINK_NOARG_TYPED(SfxURLToolBoxControl_Impl, SelectHdl, ComboBox&, void)
         OpenURL( aName, false );
 }
 
-IMPL_LINK_NOARG_TYPED(SfxURLToolBoxControl_Impl, OpenHdl, SvtURLBox*, void)
+IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl, SvtURLBox*, void)
 {
     SvtURLBox* pURLBox = GetURLBox();
     OpenURL( pURLBox->GetURL(), pURLBox->IsCtrlOpen() );

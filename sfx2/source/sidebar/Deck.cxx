@@ -296,7 +296,7 @@ void Deck::PrintWindowSubTree(vcl::Window* pRoot, int nIndentation)
         PrintWindowSubTree(pRoot->GetChild(nIndex), nIndentation + 1);
 }
 
-IMPL_LINK_NOARG_TYPED(Deck, HandleVerticalScrollBarChange, ScrollBar*, void)
+IMPL_LINK_NOARG(Deck, HandleVerticalScrollBarChange, ScrollBar*, void)
 {
     const sal_Int32 nYOffset (-mpVerticalScrollBar->GetThumbPos());
     mpScrollContainer->SetPosPixel(Point(mpScrollContainer->GetPosPixel().X(),

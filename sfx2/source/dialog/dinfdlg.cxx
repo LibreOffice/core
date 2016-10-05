@@ -828,7 +828,7 @@ void SfxDocumentPage::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxDocumentPage, DeleteHdl, Button*, void)
+IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl, Button*, void)
 {
     OUString aName;
     if ( bEnableUseUserData && m_pUseUserDataCB->IsChecked() )
@@ -845,7 +845,7 @@ IMPL_LINK_NOARG_TYPED(SfxDocumentPage, DeleteHdl, Button*, void)
     bHandleDelete = true;
 }
 
-IMPL_LINK_NOARG_TYPED(SfxDocumentPage, SignatureHdl, Button*, void)
+IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl, Button*, void)
 {
     SfxObjectShell* pDoc = SfxObjectShell::Current();
     if( pDoc )
@@ -856,7 +856,7 @@ IMPL_LINK_NOARG_TYPED(SfxDocumentPage, SignatureHdl, Button*, void)
     }
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED(SfxDocumentPage, ChangePassHdl, Button*, void)
+IMPL_STATIC_LINK_NOARG(SfxDocumentPage, ChangePassHdl, Button*, void)
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
     do
@@ -1377,7 +1377,7 @@ CustomPropertiesEditButton::CustomPropertiesEditButton(vcl::Window* pParent, Win
     SetClickHdl( LINK( this, CustomPropertiesEditButton, ClickHdl ));
 }
 
-IMPL_LINK_NOARG_TYPED(CustomPropertiesEditButton, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(CustomPropertiesEditButton, ClickHdl, Button*, void)
 {
     VclPtrInstance< DurationDialog_Impl > pDurationDlg( this, m_pLine->m_aDurationField->GetDuration() );
     if ( RET_OK == pDurationDlg->Execute() )
@@ -1525,7 +1525,7 @@ void CustomPropertiesWindow::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_STATIC_LINK_TYPED(
+IMPL_STATIC_LINK(
     CustomPropertiesWindow, TypeHdl, ListBox&, rListBox, void )
 {
     CustomPropertiesTypeBox* pBox = static_cast<CustomPropertiesTypeBox*>(&rListBox);
@@ -1553,7 +1553,7 @@ IMPL_STATIC_LINK_TYPED(
     }
 }
 
-IMPL_LINK_TYPED( CustomPropertiesWindow, RemoveHdl, Button*, pBtn, void )
+IMPL_LINK( CustomPropertiesWindow, RemoveHdl, Button*, pBtn, void )
 {
     CustomPropertiesRemoveButton* pButton = static_cast<CustomPropertiesRemoveButton*>(pBtn);
     CustomPropertyLine* pLine = pButton->GetLine();
@@ -1589,7 +1589,7 @@ IMPL_LINK_TYPED( CustomPropertiesWindow, RemoveHdl, Button*, pBtn, void )
     m_aRemovedHdl.Call(nullptr);
 }
 
-IMPL_LINK_TYPED( CustomPropertiesWindow, EditLoseFocusHdl, Control&, rControl, void )
+IMPL_LINK( CustomPropertiesWindow, EditLoseFocusHdl, Control&, rControl, void )
 {
     CustomPropertiesEdit* pEdit = static_cast<CustomPropertiesEdit*>(&rControl);
     CustomPropertyLine* pLine = pEdit->GetLine();
@@ -1602,18 +1602,18 @@ IMPL_LINK_TYPED( CustomPropertiesWindow, EditLoseFocusHdl, Control&, rControl, v
         pLine->m_bTypeLostFocus = false;
 }
 
-IMPL_LINK_TYPED( CustomPropertiesWindow, BoxLoseFocusHdl, Control&, rControl, void )
+IMPL_LINK( CustomPropertiesWindow, BoxLoseFocusHdl, Control&, rControl, void )
 {
     m_pCurrentLine = static_cast<CustomPropertiesTypeBox*>(&rControl)->GetLine();
     m_aBoxLoseFocusIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(CustomPropertiesWindow, EditTimeoutHdl, Idle *, void)
+IMPL_LINK_NOARG(CustomPropertiesWindow, EditTimeoutHdl, Idle *, void)
 {
     ValidateLine( m_pCurrentLine, false );
 }
 
-IMPL_LINK_NOARG_TYPED(CustomPropertiesWindow, BoxTimeoutHdl, Idle *, void)
+IMPL_LINK_NOARG(CustomPropertiesWindow, BoxTimeoutHdl, Idle *, void)
 {
     ValidateLine( m_pCurrentLine, true );
 }
@@ -2148,7 +2148,7 @@ void CustomPropertiesControl::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_LINK_TYPED( CustomPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar, void )
+IMPL_LINK( CustomPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar, void )
 {
     sal_Int32 nOffset = m_pPropertiesWin->GetLineHeight();
     nOffset *= ( m_nThumbPos - pScrollBar->GetThumbPos() );
@@ -2156,7 +2156,7 @@ IMPL_LINK_TYPED( CustomPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar, voi
     m_pPropertiesWin->DoScroll( nOffset );
 }
 
-IMPL_LINK_NOARG_TYPED(CustomPropertiesControl, RemovedHdl, void*, void)
+IMPL_LINK_NOARG(CustomPropertiesControl, RemovedHdl, void*, void)
 {
     long nLineCount = m_pPropertiesWin->GetVisibleLineCount();
     m_pVertScroll->SetRangeMax(nLineCount + 1);
@@ -2193,7 +2193,7 @@ void SfxCustomPropertiesPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxCustomPropertiesPage, AddHdl, Button*, void)
+IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl, Button*, void)
 {
     Any aAny;
     m_pPropertiesCtrl->AddLine( OUString(), aAny, true );
@@ -2607,7 +2607,7 @@ void CmisPropertiesControl::ClearAllLines()
    m_pPropertiesWin.ClearAllLines();
 }
 
-IMPL_LINK_TYPED( CmisPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar, void )
+IMPL_LINK( CmisPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar, void )
 {
     sal_Int32 nOffset = m_pPropertiesWin.GetItemHeight();
     nOffset *= ( pScrollBar->GetThumbPos() );

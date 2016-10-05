@@ -396,11 +396,11 @@ VclPtr<SfxTabPage> SvxConnectionPage::Create( vcl::Window* pWindow,
     return VclPtr<SvxConnectionPage>::Create( pWindow, *rAttrs );
 }
 
-IMPL_LINK_TYPED( SvxConnectionPage, ChangeAttrListBoxHdl_Impl, ListBox&, r, void )
+IMPL_LINK( SvxConnectionPage, ChangeAttrListBoxHdl_Impl, ListBox&, r, void )
 {
     ChangeAttrHdl_Impl(&r);
 }
-IMPL_LINK_TYPED( SvxConnectionPage, ChangeAttrEditHdl_Impl, Edit&, r, void )
+IMPL_LINK( SvxConnectionPage, ChangeAttrEditHdl_Impl, Edit&, r, void )
 {
     ChangeAttrHdl_Impl(&r);
 }

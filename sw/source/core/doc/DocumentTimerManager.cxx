@@ -79,7 +79,7 @@ void DocumentTimerManager::StartBackgroundJobs()
         maIdle.Start();
 }
 
-IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Idle*, pIdle, void )
+IMPL_LINK( DocumentTimerManager, DoIdleJobs, Idle*, pIdle, void )
 {
 #ifdef TIMELOG
     static ::rtl::Logfile* pModLogFile = 0;

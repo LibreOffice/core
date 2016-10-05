@@ -381,7 +381,7 @@ void CommandToolBox::Click()
 {
 }
 
-IMPL_LINK_NOARG_TYPED(CommandToolBox, ToolBoxDropdownClickHdl, ToolBox *, void)
+IMPL_LINK_NOARG(CommandToolBox, ToolBoxDropdownClickHdl, ToolBox *, void)
 {
     // the popup menue of the drop modus has to be called in the
     // click (button down) and not in the select (button up)
@@ -886,7 +886,7 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-IMPL_LINK_TYPED( ScNavigatorDlg, TimeHdl, Idle*, pIdle, void )
+IMPL_LINK( ScNavigatorDlg, TimeHdl, Idle*, pIdle, void )
 {
     if ( pIdle != &aContentIdle )
         return;

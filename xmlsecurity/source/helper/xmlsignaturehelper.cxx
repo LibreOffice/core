@@ -350,21 +350,21 @@ uno::Reference< css::xml::crypto::XSecurityEnvironment > XMLSignatureHelper::Get
     return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironment()): uno::Reference< css::xml::crypto::XSecurityEnvironment >());
 }
 
-IMPL_LINK_TYPED( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult&, rResult, void )
+IMPL_LINK( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult&, rResult, void )
 {
     maCreationResults.insert( maCreationResults.begin() + maCreationResults.size(), rResult );
     if ( rResult.nSignatureCreationResult != css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
         mbError = true;
 }
 
-IMPL_LINK_TYPED( XMLSignatureHelper, SignatureVerifyResultListener, XMLSignatureVerifyResult&, rResult, void )
+IMPL_LINK( XMLSignatureHelper, SignatureVerifyResultListener, XMLSignatureVerifyResult&, rResult, void )
 {
     maVerifyResults.insert( maVerifyResults.begin() + maVerifyResults.size(), rResult );
     if ( rResult.nSignatureVerifyResult != css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
         mbError = true;
 }
 
-IMPL_LINK_NOARG_TYPED( XMLSignatureHelper, StartVerifySignatureElement, LinkParamNone*, void )
+IMPL_LINK_NOARG( XMLSignatureHelper, StartVerifySignatureElement, LinkParamNone*, void )
 {
     if ( !maStartVerifySignatureHdl.IsSet() || maStartVerifySignatureHdl.Call(nullptr) )
     {

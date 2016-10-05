@@ -347,19 +347,19 @@ void ScSolverOptionsDialog::EditOption()
     }
 }
 
-IMPL_LINK_TYPED( ScSolverOptionsDialog, ButtonHdl, Button*, pBtn, void )
+IMPL_LINK( ScSolverOptionsDialog, ButtonHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnEdit)
         EditOption();
 }
 
-IMPL_LINK_NOARG_TYPED(ScSolverOptionsDialog, SettingsDoubleClickHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsDoubleClickHdl, SvTreeListBox*, bool)
 {
     EditOption();
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(ScSolverOptionsDialog, EngineSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl, ListBox&, void)
 {
     const sal_Int32 nSelectPos = m_pLbEngine->GetSelectEntryPos();
     if ( nSelectPos < maImplNames.getLength() )
@@ -374,7 +374,7 @@ IMPL_LINK_NOARG_TYPED(ScSolverOptionsDialog, EngineSelectHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScSolverOptionsDialog, SettingsSelHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl, SvTreeListBox*, void)
 {
     bool bCheckbox = false;
 

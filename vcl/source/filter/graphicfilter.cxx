@@ -2164,7 +2164,7 @@ const Link<ConvertData&,bool> GraphicFilter::GetFilterCallback() const
     return aLink;
 }
 
-IMPL_LINK_TYPED( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
+IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
 {
     bool bRet = false;
 

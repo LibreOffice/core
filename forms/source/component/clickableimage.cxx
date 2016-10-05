@@ -819,7 +819,7 @@ namespace frm
     }
 
 
-    IMPL_LINK_NOARG_TYPED( OClickableImageBaseModel, DownloadDoneLink, void*, void )
+    IMPL_LINK_NOARG( OClickableImageBaseModel, DownloadDoneLink, void*, void )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         DownloadDone();
@@ -848,7 +848,7 @@ namespace frm
         }
     }
 
-    IMPL_LINK_TYPED( OClickableImageBaseModel, OnImageImportDone, Graphic*, i_pGraphic, void )
+    IMPL_LINK( OClickableImageBaseModel, OnImageImportDone, Graphic*, i_pGraphic, void )
     {
         const Reference< XGraphic > xGraphic( i_pGraphic != nullptr ? Graphic(i_pGraphic->GetBitmapEx()).GetXGraphic() : nullptr );
         if ( !xGraphic.is() )

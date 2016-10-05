@@ -108,7 +108,7 @@ namespace
     }
 }
 
-IMPL_STATIC_LINK_TYPED(
+IMPL_STATIC_LINK(
     FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject*)
 {
     SdrObject* pNewObj = nullptr;

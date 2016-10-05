@@ -119,7 +119,7 @@ void WizardDialog::queue_resize(StateChangedType /*eReason*/)
     maWizardLayoutIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED( WizardDialog, ImplHandleWizardLayoutTimerHdl, Idle*, void )
+IMPL_LINK_NOARG( WizardDialog, ImplHandleWizardLayoutTimerHdl, Idle*, void )
 {
     ImplPosCtrls();
     ImplPosTabPage();

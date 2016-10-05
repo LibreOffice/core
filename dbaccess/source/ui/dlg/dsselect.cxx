@@ -84,7 +84,7 @@ void ODatasourceSelectDialog::dispose()
 }
 
 
-IMPL_LINK_TYPED( ODatasourceSelectDialog, ListDblClickHdl, ListBox&, rListBox, void )
+IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox&, rListBox, void )
 {
     if (rListBox.GetSelectEntryCount())
         EndDialog(RET_OK);
@@ -101,7 +101,7 @@ bool ODatasourceSelectDialog::Close()
 }
 
 #ifdef HAVE_ODBC_ADMINISTRATION
-IMPL_LINK_NOARG_TYPED(ODatasourceSelectDialog, ManageClickHdl, Button*, void)
+IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl, Button*, void)
 {
     if ( !m_pODBCManagement.get() )
         m_pODBCManagement.reset( new OOdbcManagement( LINK( this, ODatasourceSelectDialog, ManageProcessFinished ) ) );
@@ -122,7 +122,7 @@ IMPL_LINK_NOARG_TYPED(ODatasourceSelectDialog, ManageClickHdl, Button*, void)
     SAL_WARN_IF( !m_pODBCManagement->isRunning(), "dbaccess.ui", "ODatasourceSelectDialog::ManageClickHdl: success, but not running - you were *fast*!" );
 }
 
-IMPL_LINK_NOARG_TYPED( ODatasourceSelectDialog, ManageProcessFinished, void*, void )
+IMPL_LINK_NOARG( ODatasourceSelectDialog, ManageProcessFinished, void*, void )
 {
     StringBag aOdbcDatasources;
     OOdbcEnumeration aEnumeration;

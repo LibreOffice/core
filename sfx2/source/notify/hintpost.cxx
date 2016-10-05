@@ -39,7 +39,7 @@ void SfxHintPoster::Post( SfxRequest* pHintToPost )
     AddFirstRef();
 }
 
-IMPL_LINK_TYPED( SfxHintPoster, DoEvent_Impl, void *, pPostedHint, void )
+IMPL_LINK( SfxHintPoster, DoEvent_Impl, void *, pPostedHint, void )
 {
     m_Link.Call( static_cast<SfxRequest*>(pPostedHint) );
     ReleaseRef();

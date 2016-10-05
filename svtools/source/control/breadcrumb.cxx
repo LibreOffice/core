@@ -282,7 +282,7 @@ bool Breadcrumb::showField( unsigned int nIndex, unsigned int nWidthMax )
     return true;
 }
 
-IMPL_LINK_TYPED( Breadcrumb, ClickLinkHdl, FixedHyperlink&, rLink, void )
+IMPL_LINK( Breadcrumb, ClickLinkHdl, FixedHyperlink&, rLink, void )
 {
     m_sClickedURL = rLink.GetURL();
     m_aClickHdl.Call( this );

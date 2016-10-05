@@ -404,7 +404,7 @@ void ScPreviewShell::UpdateScrollBars()
     }
 }
 
-IMPL_LINK_TYPED( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
+IMPL_LINK( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
 {
     long nPos           = pScroll->GetThumbPos();
     long nDelta         = pScroll->GetDelta();
@@ -475,7 +475,7 @@ IMPL_LINK_TYPED( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScPreviewShell, CloseHdl, SystemWindow&, void)
+IMPL_LINK_NOARG(ScPreviewShell, CloseHdl, SystemWindow&, void)
 {
     ExitPreview();
 }

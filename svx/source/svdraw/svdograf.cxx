@@ -1289,7 +1289,7 @@ void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
     }
 }
 
-IMPL_LINK_TYPED( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
+IMPL_LINK( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
 {
     SvStream* pRet = GRFMGR_AUTOSWAPSTREAM_NONE;
 

@@ -206,10 +206,10 @@ private:
     SAL_DLLPRIVATE bool            ImplHasExternalMenubutton();
     SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem* pItem );
 
-    DECL_DLLPRIVATE_LINK_TYPED(    ImplCallExecuteCustomMenu, void*, void );
-    DECL_DLLPRIVATE_LINK_TYPED(    ImplUpdateHdl, Idle*, void );
-    DECL_DLLPRIVATE_LINK_TYPED(    ImplCustomMenuListener, VclMenuEvent&, void );
-    DECL_DLLPRIVATE_LINK_TYPED(    ImplDropdownLongClickHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK(    ImplCallExecuteCustomMenu, void*, void );
+    DECL_DLLPRIVATE_LINK(    ImplUpdateHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK(    ImplCustomMenuListener, VclMenuEvent&, void );
+    DECL_DLLPRIVATE_LINK(    ImplDropdownLongClickHdl, Timer*, void );
 
                                    ToolBox (const ToolBox &) = delete;
                           ToolBox& operator= (const ToolBox &) = delete;

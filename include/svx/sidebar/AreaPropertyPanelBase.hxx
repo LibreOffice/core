@@ -160,16 +160,16 @@ protected:
 
     sfx2::sidebar::SidebarController* mpSidebarController;
 
-    DECL_LINK_TYPED(SelectFillTypeHdl, ListBox&, void );
-    DECL_LINK_TYPED(SelectFillAttrHdl, ListBox&, void );
-    DECL_LINK_TYPED(ChangeGradientAngle, Edit&, void);
-    DECL_LINK_TYPED(ChangeTrgrTypeHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED(ModifyTransparentHdl_Impl, Edit&, void);
-    DECL_LINK_TYPED(ModifyTransSliderHdl, Slider*, void);
-    DECL_LINK_TYPED(ClickImportBitmapHdl, Button*, void);
+    DECL_LINK(SelectFillTypeHdl, ListBox&, void );
+    DECL_LINK(SelectFillAttrHdl, ListBox&, void );
+    DECL_LINK(ChangeGradientAngle, Edit&, void);
+    DECL_LINK(ChangeTrgrTypeHdl_Impl, ListBox&, void);
+    DECL_LINK(ModifyTransparentHdl_Impl, Edit&, void);
+    DECL_LINK(ModifyTransSliderHdl, Slider*, void);
+    DECL_LINK(ClickImportBitmapHdl, Button*, void);
 
     // for transparency gradient
-    DECL_LINK_TYPED( ClickTrGrHdl_Impl, ToolBox*, void );
+    DECL_LINK( ClickTrGrHdl_Impl, ToolBox*, void );
 
     void Initialize();
     void Update();

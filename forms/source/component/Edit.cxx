@@ -247,7 +247,7 @@ void OEditControl::keyReleased(const css::awt::KeyEvent& /*e*/) throw ( css::uno
 }
 
 
-IMPL_LINK_NOARG_TYPED(OEditControl, OnKeyPressed, void*, void)
+IMPL_LINK_NOARG(OEditControl, OnKeyPressed, void*, void)
 {
     m_nKeyEvent = nullptr;
 

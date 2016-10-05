@@ -85,7 +85,7 @@ using namespace ::com::sun::star;
         OConnectionTabPageSetup::dispose();
     }
 
-    IMPL_LINK_NOARG_TYPED(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, void)
+    IMPL_LINK_NOARG(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, void)
     {
         SetRoadmapStateValue(!m_pTextConnectionHelper->GetExtension().isEmpty() && OConnectionTabPageSetup::checkTestConnection());
         callModifiedHdl();
@@ -269,7 +269,7 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::dispose();
     }
 
-    IMPL_LINK_NOARG_TYPED(OMySQLIntroPageSetup, OnSetupModeSelected, RadioButton&, void)
+    IMPL_LINK_NOARG(OMySQLIntroPageSetup, OnSetupModeSelected, RadioButton&, void)
     {
         maClickHdl.Call( this );
     }
@@ -532,7 +532,7 @@ using namespace ::com::sun::star;
         SetRoadmapStateValue(bRoadmapState);
     }
 
-    IMPL_LINK_NOARG_TYPED(OGeneralSpecialJDBCConnectionPageSetup, OnTestJavaClickHdl, Button*, void)
+    IMPL_LINK_NOARG(OGeneralSpecialJDBCConnectionPageSetup, OnTestJavaClickHdl, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
 
@@ -654,7 +654,7 @@ using namespace ::com::sun::star;
         return bEnableTestConnection;
     }
 
-    IMPL_LINK_NOARG_TYPED(OJDBCConnectionPageSetup, OnTestJavaClickHdl, Button*, void)
+    IMPL_LINK_NOARG(OJDBCConnectionPageSetup, OnTestJavaClickHdl, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         bool bSuccess = false;
@@ -678,7 +678,7 @@ using namespace ::com::sun::star;
         aMsg->Execute();
     }
 
-    IMPL_LINK_TYPED(OJDBCConnectionPageSetup, OnEditModified, Edit&, _rEdit, void)
+    IMPL_LINK(OJDBCConnectionPageSetup, OnEditModified, Edit&, _rEdit, void)
     {
         if ( &_rEdit == m_pETDriverClass )
             m_pPBTestJavaDriver->Enable( !m_pETDriverClass->GetText().isEmpty() );
@@ -899,7 +899,7 @@ using namespace ::com::sun::star;
         return true;
     }
 
-    IMPL_LINK_TYPED(OFinalDBPageSetup, OnOpenSelected, Button*, _pBox, void)
+    IMPL_LINK(OFinalDBPageSetup, OnOpenSelected, Button*, _pBox, void)
     {
         m_pCBStartTableWizard->Enable( _pBox->IsEnabled() && static_cast<CheckBox*>(_pBox)->IsChecked() );
         callModifiedHdl();

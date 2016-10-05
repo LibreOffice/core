@@ -1178,7 +1178,7 @@ void ExtensionBox_Impl::DoScroll( long nDelta )
 }
 
 
-IMPL_LINK_TYPED( ExtensionBox_Impl, ScrollHdl, ScrollBar*, pScrBar, void )
+IMPL_LINK( ExtensionBox_Impl, ScrollHdl, ScrollBar*, pScrBar, void )
 {
     DoScroll( pScrBar->GetDelta() );
 }

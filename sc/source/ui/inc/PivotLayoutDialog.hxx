@@ -86,14 +86,14 @@ private:
     ScAddress::Details  maAddressDetails;
     bool                mbDialogLostFocus;
 
-    DECL_LINK_TYPED(CancelClicked,       Button*, void);
-    DECL_LINK_TYPED(OKClicked,           Button*, void);
-    DECL_LINK_TYPED(GetFocusHandler,     Control&, void);
-    DECL_LINK_TYPED(LoseFocusHandler,    Control&, void);
-    DECL_LINK_TYPED(ToggleSource,        RadioButton&, void);
-    DECL_LINK_TYPED(ToggleDestination,   RadioButton&, void);
-    DECL_LINK_TYPED(SourceListSelected,  ListBox&, void);
-    DECL_LINK_TYPED(SourceEditModified,  Edit&, void);
+    DECL_LINK(CancelClicked,       Button*, void);
+    DECL_LINK(OKClicked,           Button*, void);
+    DECL_LINK(GetFocusHandler,     Control&, void);
+    DECL_LINK(LoseFocusHandler,    Control&, void);
+    DECL_LINK(ToggleSource,        RadioButton&, void);
+    DECL_LINK(ToggleDestination,   RadioButton&, void);
+    DECL_LINK(SourceListSelected,  ListBox&, void);
+    DECL_LINK(SourceEditModified,  Edit&, void);
     void ToggleSource();
     void ToggleDestination();
     virtual bool Close() override;

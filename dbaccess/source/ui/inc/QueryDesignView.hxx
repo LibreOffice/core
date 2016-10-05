@@ -150,7 +150,7 @@ namespace dbaui
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect) override;
-        DECL_LINK_TYPED( SplitHdl, Splitter*, void );
+        DECL_LINK( SplitHdl, Splitter*, void );
 
     private:
         using OJoinDesignView::SaveTabWinUIConfig;

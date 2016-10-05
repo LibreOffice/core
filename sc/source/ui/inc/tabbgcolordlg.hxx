@@ -62,8 +62,8 @@ private:
 
     void            FillColorValueSets_Impl();
 
-    DECL_LINK_TYPED(TabBgColorDblClickHdl_Impl, ValueSet*, void);
-    DECL_LINK_TYPED(TabBgColorOKHdl_Impl, Button*, void);
+    DECL_LINK(TabBgColorDblClickHdl_Impl, ValueSet*, void);
+    DECL_LINK(TabBgColorOKHdl_Impl, Button*, void);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TABBGCOLORDLG_HXX

@@ -224,7 +224,7 @@ void ShapeController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:ParagraphDialog",           COMMAND_ID_PARAGRAPH_DIALOG,            CommandGroup::EDIT );
 }
 
-IMPL_LINK_TYPED( ShapeController, CheckNameHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
+IMPL_LINK( ShapeController, CheckNameHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
 {
     OUString aName;
     rDialog.GetName( aName );

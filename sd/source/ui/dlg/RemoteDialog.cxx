@@ -43,7 +43,7 @@ void RemoteDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(RemoteDialog, HandleConnectButton, Button*, void)
+IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton, Button*, void)
 {
 //     setBusy( true );
     // Fixme: Try and connect
@@ -62,11 +62,11 @@ IMPL_LINK_NOARG_TYPED(RemoteDialog, HandleConnectButton, Button*, void)
 #endif
 }
 
-IMPL_LINK_NOARG_TYPED( RemoteDialog, CloseClickHdl, Button*, void )
+IMPL_LINK_NOARG( RemoteDialog, CloseClickHdl, Button*, void )
 {
     CloseHdl(*this);
 }
-IMPL_LINK_NOARG_TYPED( RemoteDialog, CloseHdl, SystemWindow&, void )
+IMPL_LINK_NOARG( RemoteDialog, CloseHdl, SystemWindow&, void )
 {
 #ifdef ENABLE_SDREMOTE
     RemoteServer::restoreDiscoverable();

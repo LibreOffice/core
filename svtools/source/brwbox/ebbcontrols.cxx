@@ -70,7 +70,7 @@ namespace svt
         GetComboBox().SetModifyHdl( LINK(this, ComboBoxCellController, ModifyHdl) );
     }
 
-    IMPL_LINK_NOARG_TYPED(ComboBoxCellController, ModifyHdl, Edit&, void)
+    IMPL_LINK_NOARG(ComboBoxCellController, ModifyHdl, Edit&, void)
     {
         callModifyHdl();
     }
@@ -208,7 +208,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG_TYPED(ListBoxCellController, ListBoxSelectHdl, ListBox&, void)
+    IMPL_LINK_NOARG(ListBoxCellController, ListBoxSelectHdl, ListBox&, void)
     {
         callModifyHdl();
     }
@@ -252,7 +252,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG_TYPED(CheckBoxControl, OnClick, Button*, void)
+    IMPL_LINK_NOARG(CheckBoxControl, OnClick, Button*, void)
     {
         m_aClickLink.Call(pBox);
         m_aModifyLink.Call(nullptr);
@@ -351,7 +351,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG_TYPED(CheckBoxCellController, ModifyHdl, LinkParamNone*, void)
+    IMPL_LINK_NOARG(CheckBoxCellController, ModifyHdl, LinkParamNone*, void)
     {
         callModifyHdl();
     }
@@ -441,7 +441,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG_TYPED(EditCellController, ModifyHdl, Edit&, void)
+    IMPL_LINK_NOARG(EditCellController, ModifyHdl, Edit&, void)
     {
         callModifyHdl();
     }
@@ -497,7 +497,7 @@ namespace svt
         return GetSpinWindow().IsModified();
     }
 
-    IMPL_LINK_NOARG_TYPED(SpinCellController, ModifyHdl, Edit&, void)
+    IMPL_LINK_NOARG(SpinCellController, ModifyHdl, Edit&, void)
     {
         callModifyHdl();
     }

@@ -248,7 +248,7 @@ bool OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
     return bUnloaded;
 }
 
-IMPL_LINK_NOARG_TYPED(OLEObjCache, UnloadCheckHdl, Timer*, void)
+IMPL_LINK_NOARG(OLEObjCache, UnloadCheckHdl, Timer*, void)
 {
     UnloadOnDemand();
 }

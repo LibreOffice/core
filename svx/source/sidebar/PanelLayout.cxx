@@ -74,7 +74,7 @@ void PanelLayout::queue_resize(StateChangedType /*eReason*/)
     m_aPanelLayoutIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED( PanelLayout, ImplHandlePanelLayoutTimerHdl, Idle*, void )
+IMPL_LINK_NOARG( PanelLayout, ImplHandlePanelLayoutTimerHdl, Idle*, void )
 {
     vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
     assert(pChild);

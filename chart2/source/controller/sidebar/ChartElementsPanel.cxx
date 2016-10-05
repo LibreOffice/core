@@ -534,7 +534,7 @@ void ChartElementsPanel::updateModel(
     xBroadcasterNew->addModifyListener(mxListener);
 }
 
-IMPL_LINK_TYPED(ChartElementsPanel, CheckBoxHdl, Button*, pButton, void)
+IMPL_LINK(ChartElementsPanel, CheckBoxHdl, Button*, pButton, void)
 {
     CheckBox* pCheckBox = static_cast<CheckBox*>(pButton);
     bool bChecked = pCheckBox->IsChecked();
@@ -577,7 +577,7 @@ IMPL_LINK_TYPED(ChartElementsPanel, CheckBoxHdl, Button*, pButton, void)
         setGridVisible(mxModel, GridType::HOR_MINOR, bChecked);
 }
 
-IMPL_LINK_NOARG_TYPED(ChartElementsPanel, LegendPosHdl, ListBox&, void)
+IMPL_LINK_NOARG(ChartElementsPanel, LegendPosHdl, ListBox&, void)
 {
     sal_Int32 nPos = mpLBLegendPosition->GetSelectEntryPos();
     setLegendPos(mxModel, nPos);

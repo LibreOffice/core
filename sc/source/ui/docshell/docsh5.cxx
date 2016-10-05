@@ -996,7 +996,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
     return true;
 }
 
-IMPL_LINK_TYPED( ScDocShell, RefreshDBDataHdl, Timer*, pRefreshTimer, void )
+IMPL_LINK( ScDocShell, RefreshDBDataHdl, Timer*, pRefreshTimer, void )
 {
     ScDBDocFunc aFunc(*this);
 

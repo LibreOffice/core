@@ -489,7 +489,7 @@ public:
     SC_DLLPUBLIC sal_uLong          GetCellCount() const;       // all cells
     SC_DLLPUBLIC sal_uLong          GetFormulaGroupCount() const;       // all cells
     sal_uLong           GetCodeCount() const;       // RPN-Code in formulas
-    DECL_LINK_TYPED( GetUserDefinedColor, sal_uInt16, Color* );
+    DECL_LINK( GetUserDefinedColor, sal_uInt16, Color* );
                                                                 // number formatter
 public:
     SC_DLLPUBLIC                ScDocument( ScDocumentMode eMode = SCDOCMODE_DOCUMENT,
@@ -2022,7 +2022,7 @@ private:
                                         SCCOLROW nEndCol, SCCOLROW* pTranslate,
                                         ScProgress* pProgress, sal_uLong nProAdd );
 
-    DECL_LINK_TYPED(TrackTimeHdl, Idle *, void);
+    DECL_LINK(TrackTimeHdl, Idle *, void);
 
     static ScRecursionHelper*   CreateRecursionHelperInstance();
 

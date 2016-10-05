@@ -37,7 +37,7 @@ namespace svxform
         m_nEventId = nullptr;
     }
 
-    IMPL_LINK_TYPED( DelayedEvent, OnCall, void*, _pArg, void )
+    IMPL_LINK( DelayedEvent, OnCall, void*, _pArg, void )
     {
         m_nEventId = nullptr;
         m_aHandler.Call( _pArg );

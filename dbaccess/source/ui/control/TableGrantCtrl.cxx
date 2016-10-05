@@ -162,13 +162,13 @@ bool OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
     return EditBrowseBox::PreNotify(rNEvt);
 }
 
-IMPL_LINK_NOARG_TYPED(OTableGrantControl, AsynchActivate, void*, void)
+IMPL_LINK_NOARG(OTableGrantControl, AsynchActivate, void*, void)
 {
     m_nDeactivateEvent = nullptr;
     ActivateCell();
 }
 
-IMPL_LINK_NOARG_TYPED(OTableGrantControl, AsynchDeactivate, void*, void)
+IMPL_LINK_NOARG(OTableGrantControl, AsynchDeactivate, void*, void)
 {
     m_nDeactivateEvent = nullptr;
     DeactivateCell();

@@ -46,7 +46,7 @@ public:
     void ShowContent();
 
 private:
-    DECL_LINK_TYPED(PBClickHdl, Button*, void);
+    DECL_LINK(PBClickHdl, Button*, void);
 };
 
 #endif

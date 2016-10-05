@@ -69,8 +69,8 @@ namespace dbaui
         void checkImageList();
 
     protected:
-        DECL_LINK_TYPED(ConfigOptionsChanged, LinkParamNone*, void);
-        DECL_LINK_TYPED(SettingsChanged, VclSimpleEvent&, void );
+        DECL_LINK(ConfigOptionsChanged, LinkParamNone*, void);
+        DECL_LINK(SettingsChanged, VclSimpleEvent&, void );
     };
 }
 #endif // INCLUDED_DBACCESS_TOOLBOXHELPER_HXX

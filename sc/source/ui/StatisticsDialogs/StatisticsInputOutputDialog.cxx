@@ -194,13 +194,13 @@ void ScStatisticsInputOutputDialog::SetReference( const ScRange& rReferenceRange
         mpButtonOk->Disable();
 }
 
-IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, OkClicked, Button*, void )
+IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, OkClicked, Button*, void )
 {
     CalculateInputAndWriteToOutput();
     Close();
 }
 
-IMPL_LINK_TYPED( ScStatisticsInputOutputDialog, GetFocusHandler, Control&, rCtrl, void )
+IMPL_LINK( ScStatisticsInputOutputDialog, GetFocusHandler, Control&, rCtrl, void )
 {
     mpActiveEdit = nullptr;
 
@@ -213,12 +213,12 @@ IMPL_LINK_TYPED( ScStatisticsInputOutputDialog, GetFocusHandler, Control&, rCtrl
         mpActiveEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
 }
 
-IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, LoseFocusHandler, Control&, void )
+IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, LoseFocusHandler, Control&, void )
 {
     mDialogLostFocus = !IsActive();
 }
 
-IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, GroupByChanged, RadioButton&, void )
+IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, GroupByChanged, RadioButton&, void )
 {
     if (mpGroupByColumnsRadio->IsChecked())
         mGroupedBy = BY_COLUMN;
@@ -226,7 +226,7 @@ IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, GroupByChanged, RadioButto
         mGroupedBy = BY_ROW;
 }
 
-IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, RefInputModifyHandler, Edit&, void )
+IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, Edit&, void )
 {
     if ( mpActiveEdit )
     {

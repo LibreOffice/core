@@ -1364,7 +1364,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
 /**
  * Handler for Dragging
  */
-IMPL_LINK_NOARG_TYPED(SdPageObjsTLB, ExecDragHdl, void*, void)
+IMPL_LINK_NOARG(SdPageObjsTLB, ExecDragHdl, void*, void)
 {
     // as link, then it is allowed to asynchronous, without ImpMouseMoveMsg on
     // the stack, delete the Navigator

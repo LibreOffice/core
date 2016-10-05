@@ -215,7 +215,7 @@ void SwChangeDBDlg::UpdateFields()
     pSh->EndAllAction();
 }
 
-IMPL_LINK_NOARG_TYPED(SwChangeDBDlg, ButtonHdl, Button*, void)
+IMPL_LINK_NOARG(SwChangeDBDlg, ButtonHdl, Button*, void)
 {
     OUString sTableName;
     OUString sColumnName;
@@ -229,7 +229,7 @@ IMPL_LINK_NOARG_TYPED(SwChangeDBDlg, ButtonHdl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED(SwChangeDBDlg, TreeSelectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pEntry = m_pAvailDBTLB->GetCurEntry();
 
@@ -256,7 +256,7 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwChangeDBDlg, AddDBHdl, Button*, void)
+IMPL_LINK_NOARG(SwChangeDBDlg, AddDBHdl, Button*, void)
 {
     const OUString sNewDB = SwDBManager::LoadAndRegisterDataSource();
     if (!sNewDB.isEmpty())

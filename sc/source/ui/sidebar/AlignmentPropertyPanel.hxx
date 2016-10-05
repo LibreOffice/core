@@ -95,12 +95,12 @@ private:
     vcl::EnumContext                            maContext;
     SfxBindings*                                mpBindings;
 
-    DECL_LINK_TYPED( MFLeftIndentMdyHdl, Edit&, void );
-    DECL_LINK_TYPED( CBOXMergnCellClkHdl, Button*, void );
-    DECL_LINK_TYPED( CBOXWrapTextClkHdl, Button*, void );
-    DECL_LINK_TYPED( AngleModifiedHdl, Edit&, void );
-    DECL_LINK_TYPED( ClickStackHdl, Button*, void );
-    DECL_LINK_TYPED( ReferenceEdgeHdl, Button*, void );
+    DECL_LINK( MFLeftIndentMdyHdl, Edit&, void );
+    DECL_LINK( CBOXMergnCellClkHdl, Button*, void );
+    DECL_LINK( CBOXWrapTextClkHdl, Button*, void );
+    DECL_LINK( AngleModifiedHdl, Edit&, void );
+    DECL_LINK( ClickStackHdl, Button*, void );
+    DECL_LINK( ReferenceEdgeHdl, Button*, void );
 
     void Initialize();
     static void FormatDegrees(double& dTmp);

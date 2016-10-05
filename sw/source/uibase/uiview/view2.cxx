@@ -2452,7 +2452,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
 #endif
 }
 
-IMPL_LINK_TYPED( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
+IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
     if ( ERRCODE_NONE != _pFileDlg->GetError() )
         return;

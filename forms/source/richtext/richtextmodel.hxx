@@ -168,7 +168,7 @@ namespace frm
         */
         void    impl_smlock_setEngineText( const OUString& _rText );
 
-        DECL_LINK_TYPED( OnEngineContentModified, LinkParamNone*, void );
+        DECL_LINK( OnEngineContentModified, LinkParamNone*, void );
 
         static  css::uno::Sequence< sal_Int8 > getEditEngineTunnelId();
 

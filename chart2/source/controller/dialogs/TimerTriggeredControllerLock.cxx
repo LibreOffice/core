@@ -45,7 +45,7 @@ void TimerTriggeredControllerLock::startTimer()
         m_apControllerLockGuard.reset( new  ControllerLockGuardUNO(m_xModel) );
     m_aTimer.Start();
 }
-IMPL_LINK_NOARG_TYPED(TimerTriggeredControllerLock, TimerTimeout, Timer *, void)
+IMPL_LINK_NOARG(TimerTriggeredControllerLock, TimerTimeout, Timer *, void)
 {
     m_apControllerLockGuard.reset();
 }

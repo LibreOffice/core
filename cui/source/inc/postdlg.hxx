@@ -94,10 +94,10 @@ private:
     Link<SvxPostItDialog&,void>  aPrevHdlLink;
     Link<SvxPostItDialog&,void>  aNextHdlLink;
 
-    DECL_LINK_TYPED(Stamp, Button*, void);
-    DECL_LINK_TYPED(OKHdl, Button*, void);
-    DECL_LINK_TYPED(PrevHdl, Button*, void);
-    DECL_LINK_TYPED(NextHdl, Button*, void);
+    DECL_LINK(Stamp, Button*, void);
+    DECL_LINK(OKHdl, Button*, void);
+    DECL_LINK(PrevHdl, Button*, void);
+    DECL_LINK(NextHdl, Button*, void);
 };
 
 #endif

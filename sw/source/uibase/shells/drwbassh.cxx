@@ -587,7 +587,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
 // Checks whether a given name is allowed for a group shape
 
-IMPL_LINK_TYPED( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameDialog&, rNameDialog, bool )
+IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameDialog&, rNameDialog, bool )
 {
     SwWrtShell          &rSh = GetShell();
     SdrView *pSdrView = rSh.GetDrawView();
@@ -747,7 +747,7 @@ bool SwDrawBaseShell::Disable(SfxItemSet& rSet, sal_uInt16 nWhich)
 
 // Validate of drawing positions
 
-IMPL_LINK_TYPED(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValidation, void )
+IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValidation, void )
 {
     SwWrtShell *pSh = &GetShell();
     rValidation.nMinHeight = MINFLY;

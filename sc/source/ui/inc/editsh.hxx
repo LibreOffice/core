@@ -46,7 +46,7 @@ private:
     const SvxURLField* GetURLField();
     ScInputHandler* GetMyInputHdl();
 
-    DECL_LINK_TYPED( ClipboardChanged, TransferableDataHelper*, void );
+    DECL_LINK( ClipboardChanged, TransferableDataHelper*, void );
 
 public:
     SFX_DECL_INTERFACE(SCID_EDIT_SHELL)

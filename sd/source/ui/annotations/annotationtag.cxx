@@ -610,7 +610,7 @@ void AnnotationTag::ClosePopup()
     }
 }
 
-IMPL_LINK_TYPED(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
+IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
         vcl::Window* pWindow = rEvent.GetWindow();
 
@@ -672,7 +672,7 @@ IMPL_LINK_TYPED(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void
         }
 }
 
-IMPL_LINK_NOARG_TYPED(AnnotationTag, ClosePopupHdl, void*, void)
+IMPL_LINK_NOARG(AnnotationTag, ClosePopupHdl, void*, void)
 {
     mnClosePopupEvent = nullptr;
     ClosePopup();

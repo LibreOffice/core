@@ -257,13 +257,13 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
     m_pSlider->SetThumbPos(nCurrentRow-nStartRow-1);
 }
 
-IMPL_LINK_TYPED( ScDataFormDlg, Impl_DataModifyHdl, Edit&, rEdit, void)
+IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, Edit&, rEdit, void)
 {
     if ( rEdit.IsModified() )
         m_pBtnRestore->Enable();
 }
 
-IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_NewHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, Button*, void)
 {
     ScViewData& rViewData = pTabViewShell->GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_NewHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_PrevHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl, Button*, void)
 {
     if (pDoc)
     {
@@ -308,7 +308,7 @@ IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_PrevHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_NextHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_NextHdl, Button*, void)
 {
     if (pDoc)
     {
@@ -320,7 +320,7 @@ IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_NextHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_RestoreHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl, Button*, void)
 {
     if (pDoc)
     {
@@ -328,7 +328,7 @@ IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_RestoreHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_DeleteHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl, Button*, void)
 {
     ScViewData& rViewData = pTabViewShell->GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
@@ -347,12 +347,12 @@ IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_DeleteHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_CloseHdl, Button*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_CloseHdl, Button*, void)
 {
     EndDialog( );
 }
 
-IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_ScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_ScrollHdl, ScrollBar*, void)
 {
     long nOffset = m_pSlider->GetThumbPos();
     nCurrentRow = nStartRow + nOffset + 1;

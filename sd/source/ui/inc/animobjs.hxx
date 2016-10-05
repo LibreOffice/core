@@ -133,16 +133,16 @@ private:
 
     ScopeLock       maPlayLock;
 
-    DECL_LINK_TYPED( ClickFirstHdl, Button*, void );
-    DECL_LINK_TYPED( ClickStopHdl, Button*, void );
-    DECL_LINK_TYPED( ClickPlayHdl, Button*, void );
-    DECL_LINK_TYPED( ClickLastHdl, Button*, void );
-    DECL_LINK_TYPED( ClickGetObjectHdl, Button*, void );
-    DECL_LINK_TYPED( ClickRemoveBitmapHdl, Button*, void );
-    DECL_LINK_TYPED( ClickRbtHdl, Button*, void );
-    DECL_LINK_TYPED( ClickCreateGroupHdl, Button*, void );
-    DECL_LINK_TYPED( ModifyBitmapHdl, Edit&, void );
-    DECL_LINK_TYPED( ModifyTimeHdl, Edit&, void );
+    DECL_LINK( ClickFirstHdl, Button*, void );
+    DECL_LINK( ClickStopHdl, Button*, void );
+    DECL_LINK( ClickPlayHdl, Button*, void );
+    DECL_LINK( ClickLastHdl, Button*, void );
+    DECL_LINK( ClickGetObjectHdl, Button*, void );
+    DECL_LINK( ClickRemoveBitmapHdl, Button*, void );
+    DECL_LINK( ClickRbtHdl, Button*, void );
+    DECL_LINK( ClickCreateGroupHdl, Button*, void );
+    DECL_LINK( ModifyBitmapHdl, Edit&, void );
+    DECL_LINK( ModifyTimeHdl, Edit&, void );
 
     void            UpdateControl(bool bDisableCtrls = false);
     void            ResetAttrs();

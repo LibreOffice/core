@@ -80,13 +80,13 @@ class Desktop : public Application
         virtual void            OverrideSystemSettings( AllSettings& rSettings ) override;
         virtual void            AppEvent( const ApplicationEvent& rAppEvent ) override;
 
-        DECL_LINK_TYPED( OpenClients_Impl, void*, void );
+        DECL_LINK( OpenClients_Impl, void*, void );
 
         static void             OpenClients();
         static void             OpenDefault();
         static void             CheckOpenCLCompute(const css::uno::Reference<css::frame::XDesktop2> &);
 
-        DECL_STATIC_LINK_TYPED( Desktop, EnableAcceptors_Impl, void*, void);
+        DECL_STATIC_LINK( Desktop, EnableAcceptors_Impl, void*, void);
 
         static void             HandleAppEvent( const ApplicationEvent& rAppEvent );
         static ResMgr*          GetDesktopResManager();
@@ -147,8 +147,8 @@ class Desktop : public Application
         void                    OpenSplashScreen();
         void                    CloseSplashScreen();
 
-        DECL_STATIC_LINK_TYPED( Desktop, ImplInitFilterHdl, ::ConvertData&, bool );
-        DECL_STATIC_LINK_TYPED( Desktop, AsyncInitFirstRun, Timer*, void );
+        DECL_STATIC_LINK( Desktop, ImplInitFilterHdl, ::ConvertData&, bool );
+        DECL_STATIC_LINK( Desktop, AsyncInitFirstRun, Timer*, void );
         /** checks if the office is run the first time
             <p>If so, <method>DoFirstRunInitializations</method> is called (asynchronously and delayed) and the
             respective flag in the configuration is reset.</p>

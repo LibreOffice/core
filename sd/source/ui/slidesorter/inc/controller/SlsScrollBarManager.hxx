@@ -238,9 +238,9 @@ private:
     void CalcAutoScrollOffset (const Point& rMouseWindowPosition);
     bool RepeatAutoScroll();
 
-    DECL_LINK_TYPED(HorizontalScrollBarHandler, ScrollBar*, void);
-    DECL_LINK_TYPED(VerticalScrollBarHandler, ScrollBar*, void);
-    DECL_LINK_TYPED(AutoScrollTimeoutHandler, Timer *, void);
+    DECL_LINK(HorizontalScrollBarHandler, ScrollBar*, void);
+    DECL_LINK(VerticalScrollBarHandler, ScrollBar*, void);
+    DECL_LINK(AutoScrollTimeoutHandler, Timer *, void);
 
     void PlaceHorizontalScrollBar (const Rectangle& aArea);
     void PlaceVerticalScrollBar (const Rectangle& aArea);

@@ -42,7 +42,7 @@ private:
     QuickHelpFlags      mnStyle;
 
 private:
-    DECL_LINK_TYPED( TimerHdl, Timer*, void );
+    DECL_LINK( TimerHdl, Timer*, void );
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) override;
     virtual void RequestHelp( const HelpEvent& rHEvt ) override;

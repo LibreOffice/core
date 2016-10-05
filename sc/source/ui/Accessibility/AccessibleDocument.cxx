@@ -1480,7 +1480,7 @@ void SAL_CALL ScAccessibleDocument::disposing( const lang::EventObject& /* Sourc
 
     //=====  SfxListener  =====================================================
 
-IMPL_LINK_TYPED( ScAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEvent, void )
 {
     OSL_ENSURE( rEvent.GetWindow(), "Window???" );
     switch ( rEvent.GetId() )

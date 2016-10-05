@@ -157,7 +157,7 @@ namespace dbaui
         m_pParam->GrabFocus();
     }
 
-    IMPL_LINK_NOARG_TYPED(OParameterDialog, OnValueLoseFocusHdl, Control&, void)
+    IMPL_LINK_NOARG(OParameterDialog, OnValueLoseFocusHdl, Control&, void)
     {
         OnValueLoseFocus();
     }
@@ -213,7 +213,7 @@ namespace dbaui
         return false;
     }
 
-    IMPL_LINK_TYPED(OParameterDialog, OnButtonClicked, Button*, pButton, void)
+    IMPL_LINK(OParameterDialog, OnButtonClicked, Button*, pButton, void)
     {
         if (m_pCancelBtn == pButton)
         {
@@ -287,7 +287,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK_NOARG_TYPED(OParameterDialog, OnEntryListBoxSelected, ListBox&, void)
+    IMPL_LINK_NOARG(OParameterDialog, OnEntryListBoxSelected, ListBox&, void)
     {
         OnEntrySelected();
     }
@@ -329,7 +329,7 @@ namespace dbaui
         return false;
     }
 
-    IMPL_LINK_NOARG_TYPED(OParameterDialog, OnVisitedTimeout, Timer*, void)
+    IMPL_LINK_NOARG(OParameterDialog, OnVisitedTimeout, Timer*, void)
     {
         OSL_ENSURE(m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnVisitedTimeout : invalid call !");
 
@@ -375,7 +375,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK_NOARG_TYPED(OParameterDialog, OnValueModified, Edit&, void)
+    IMPL_LINK_NOARG(OParameterDialog, OnValueModified, Edit&, void)
     {
         // mark the currently selected entry as dirty
         OSL_ENSURE(static_cast<size_t>(m_nCurrentlySelected) < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");

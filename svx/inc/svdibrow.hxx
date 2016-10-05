@@ -102,9 +102,9 @@ class SdrItemBrowser: public FloatingWindow {
     SdrView* pView;
     bool bDirty;
     static vcl::Window* ImpGetViewWin(SdrView& rView);
-    DECL_LINK_TYPED(IdleHdl, Idle *, void);
-    DECL_LINK_TYPED(ChangedHdl, SdrItemBrowserControl&, void);
-    DECL_LINK_TYPED(SetDirtyHdl, SdrItemBrowserControl&, void);
+    DECL_LINK(IdleHdl, Idle *, void);
+    DECL_LINK(ChangedHdl, SdrItemBrowserControl&, void);
+    DECL_LINK(SetDirtyHdl, SdrItemBrowserControl&, void);
 public:
     SdrItemBrowser(SdrView& rView);
     virtual ~SdrItemBrowser() override;

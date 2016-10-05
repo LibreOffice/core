@@ -66,7 +66,7 @@ private:
 
     void populateShapes();
     void Initialize();
-    DECL_LINK_TYPED( ShapeSelectHdl, ValueSet*, void );
+    DECL_LINK( ShapeSelectHdl, ValueSet*, void );
 };
 
 

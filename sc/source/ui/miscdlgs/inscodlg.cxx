@@ -303,7 +303,7 @@ void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
     }
 }
 
-IMPL_LINK_TYPED( ScInsertContentsDlg, ShortCutHdl, Button*, pBtn, void )
+IMPL_LINK( ScInsertContentsDlg, ShortCutHdl, Button*, pBtn, void )
 {
     if ( pBtn == mpBtnShortCutPasteValuesOnly )
     {
@@ -332,12 +332,12 @@ IMPL_LINK_TYPED( ScInsertContentsDlg, ShortCutHdl, Button*, pBtn, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(ScInsertContentsDlg, InsAllHdl, Button*, void)
+IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl, Button*, void)
 {
     DisableChecks( mpBtnInsAll->IsChecked() );
 }
 
-IMPL_LINK_NOARG_TYPED(ScInsertContentsDlg, LinkBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScInsertContentsDlg, LinkBtnHdl, Button*, void)
 {
     TestModes();
 }

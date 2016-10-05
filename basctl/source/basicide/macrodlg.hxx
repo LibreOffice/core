@@ -67,11 +67,11 @@ private:
 
     Mode                    nMode;
 
-    DECL_LINK_TYPED( MacroSelectHdl, SvTreeListBox *, void );
-    DECL_LINK_TYPED( MacroDoubleClickHdl, SvTreeListBox*, bool );
-    DECL_LINK_TYPED( BasicSelectHdl, SvTreeListBox *, void );
-    DECL_LINK_TYPED( EditModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( ButtonHdl, Button *, void );
+    DECL_LINK( MacroSelectHdl, SvTreeListBox *, void );
+    DECL_LINK( MacroDoubleClickHdl, SvTreeListBox*, bool );
+    DECL_LINK( BasicSelectHdl, SvTreeListBox *, void );
+    DECL_LINK( EditModifyHdl, Edit&, void );
+    DECL_LINK( ButtonHdl, Button *, void );
 
     void                CheckButtons();
     void                SaveSetCurEntry( SvTreeListBox& rBox, SvTreeListEntry* pEntry );

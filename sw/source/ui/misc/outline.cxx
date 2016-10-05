@@ -63,9 +63,9 @@ class SwNumNamesDlg : public ModalDialog
     VclPtr<ListBox>  m_pFormBox;
     VclPtr<OKButton> m_pOKBtn;
 
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( DoubleClickHdl, ListBox&, void );
+    DECL_LINK( ModifyHdl, Edit&, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK( DoubleClickHdl, ListBox&, void );
 
 public:
     explicit SwNumNamesDlg(vcl::Window *pParent);
@@ -91,7 +91,7 @@ void SwNumNamesDlg::dispose()
 
 
 // remember selected entry
-IMPL_LINK_TYPED( SwNumNamesDlg, SelectHdl, ListBox&, rBox, void )
+IMPL_LINK( SwNumNamesDlg, SelectHdl, ListBox&, rBox, void )
 {
     m_pFormEdit->SetText(rBox.GetSelectEntry());
     m_pFormEdit->SetSelection(Selection(0, SELECTION_MAX));
@@ -119,13 +119,13 @@ void SwNumNamesDlg::SetUserNames(const OUString *pList[])
 }
 
 // unlock OK-Button when text is in Edit
-IMPL_LINK_TYPED( SwNumNamesDlg, ModifyHdl, Edit&, rBox, void )
+IMPL_LINK( SwNumNamesDlg, ModifyHdl, Edit&, rBox, void )
 {
     m_pOKBtn->Enable(!rBox.GetText().isEmpty());
 }
 
 // DoubleClickHdl
-IMPL_LINK_NOARG_TYPED(SwNumNamesDlg, DoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwNumNamesDlg, DoubleClickHdl, ListBox&, void)
 {
     EndDialog(RET_OK);
 }
@@ -225,14 +225,14 @@ void SwOutlineTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwOutlineTabDialog, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(SwOutlineTabDialog, CancelHdl, Button*, void)
 {
     if (!bModified)
         rWrtSh.ResetModified();
     EndDialog();
 }
 
-IMPL_LINK_TYPED( SwOutlineTabDialog, FormHdl, Button *, pBtn, void )
+IMPL_LINK( SwOutlineTabDialog, FormHdl, Button *, pBtn, void )
 {
     PopupMenu *pFormMenu = get_menu("form");
     // fill PopupMenu
@@ -254,7 +254,7 @@ IMPL_LINK_TYPED( SwOutlineTabDialog, FormHdl, Button *, pBtn, void )
     pFormMenu->Execute(pBtn, Rectangle(Point(0,0), pBtn->GetSizePixel()), PopupMenuFlags::ExecuteDown);
 }
 
-IMPL_LINK_TYPED( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
+IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
 {
     sal_uInt8 nLevelNo = 0;
     OString sIdent = pMenu->GetCurItemIdent();
@@ -562,7 +562,7 @@ void    SwOutlineSettingsTabPage::Update()
     SetModified();
 }
 
-IMPL_LINK_TYPED( SwOutlineSettingsTabPage, LevelHdl, ListBox&, rBox, void )
+IMPL_LINK( SwOutlineSettingsTabPage, LevelHdl, ListBox&, rBox, void )
 {
     nActLevel = 0;
     if(rBox.IsEntryPosSelected( MAXLEVEL ))
@@ -582,7 +582,7 @@ IMPL_LINK_TYPED( SwOutlineSettingsTabPage, LevelHdl, ListBox&, rBox, void )
     Update();
 }
 
-IMPL_LINK_TYPED( SwOutlineSettingsTabPage, ToggleComplete, Edit&, rEdit, void )
+IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, Edit&, rEdit, void )
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -599,7 +599,7 @@ IMPL_LINK_TYPED( SwOutlineSettingsTabPage, ToggleComplete, Edit&, rEdit, void )
     SetModified();
 }
 
-IMPL_LINK_TYPED( SwOutlineSettingsTabPage, CollSelect, ListBox&, rBox, void )
+IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox&, rBox, void )
 {
     sal_uInt8 i;
 
@@ -641,13 +641,13 @@ IMPL_LINK_TYPED( SwOutlineSettingsTabPage, CollSelect, ListBox&, rBox, void )
     SetModified();
 }
 
-IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, CollSelectGetFocus, Control&, void)
+IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CollSelectGetFocus, Control&, void)
 {
     for( sal_uInt8 i = 0; i < MAXLEVEL; ++i)
         aSaveCollNames[i] =  pCollNames[i];
 }
 
-IMPL_LINK_TYPED( SwOutlineSettingsTabPage, NumberSelect, ListBox&, rBox, void )
+IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, ListBox&, rBox, void )
 {
     sal_uInt16 nMask = 1;
     sal_Int16 nNumberType = static_cast<SwNumberingTypeListBox&>(rBox).GetSelectedNumberingType();
@@ -665,7 +665,7 @@ IMPL_LINK_TYPED( SwOutlineSettingsTabPage, NumberSelect, ListBox&, rBox, void )
     SetModified();
 }
 
-IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, DelimModify, Edit&, void)
+IMPL_LINK_NOARG(SwOutlineSettingsTabPage, DelimModify, Edit&, void)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -682,7 +682,7 @@ IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, DelimModify, Edit&, void)
     SetModified();
 }
 
-IMPL_LINK_TYPED( SwOutlineSettingsTabPage, StartModified, Edit&, rEdit, void )
+IMPL_LINK( SwOutlineSettingsTabPage, StartModified, Edit&, rEdit, void )
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -698,7 +698,7 @@ IMPL_LINK_TYPED( SwOutlineSettingsTabPage, StartModified, Edit&, rEdit, void )
     SetModified();
 }
 
-IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, CharFormatHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFormatHdl, ListBox&, void)
 {
     OUString sEntry = m_pCharFormatLB->GetSelectEntry();
     sal_uInt16 nMask = 1;

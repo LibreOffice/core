@@ -1762,13 +1762,13 @@ DeactivateRC SwFramePage::DeactivatePage(SfxItemSet * _pSet)
 }
 
 // swap left/right with inside/outside
-IMPL_LINK_NOARG_TYPED(SwFramePage, MirrorHdl, Button*, void)
+IMPL_LINK_NOARG(SwFramePage, MirrorHdl, Button*, void)
 {
     RndStdIds eId = GetAnchor();
     InitPos( eId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);
 }
 
-IMPL_LINK_TYPED( SwFramePage, RelSizeClickHdl, Button *, p, void )
+IMPL_LINK( SwFramePage, RelSizeClickHdl, Button *, p, void )
 {
     CheckBox* pBtn = static_cast<CheckBox*>(p);
     if (pBtn == m_pRelWidthCB)
@@ -1795,11 +1795,11 @@ IMPL_LINK_TYPED( SwFramePage, RelSizeClickHdl, Button *, p, void )
 }
 
 // range check
-IMPL_LINK_NOARG_TYPED(SwFramePage, RangeModifyClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwFramePage, RangeModifyClickHdl, Button*, void)
 {
     RangeModifyHdl();
 }
-IMPL_LINK_NOARG_TYPED(SwFramePage, RangeModifyLoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(SwFramePage, RangeModifyLoseFocusHdl, Control&, void)
 {
     RangeModifyHdl();
 }
@@ -1922,7 +1922,7 @@ void SwFramePage::RangeModifyHdl()
         m_pAtVertPosED->SetValue(m_pAtVertPosED->Normalize(aVal.nVPos), FUNIT_TWIP);
 }
 
-IMPL_LINK_NOARG_TYPED(SwFramePage, AnchorTypeHdl, Button*, void)
+IMPL_LINK_NOARG(SwFramePage, AnchorTypeHdl, Button*, void)
 {
     m_pMirrorPagesCB->Enable(!m_pAnchorAsCharRB->IsChecked());
 
@@ -1949,7 +1949,7 @@ IMPL_LINK_NOARG_TYPED(SwFramePage, AnchorTypeHdl, Button*, void)
             && FLY_AS_CHAR == eId) );
 }
 
-IMPL_LINK_TYPED( SwFramePage, PosHdl, ListBox&, rLB, void )
+IMPL_LINK( SwFramePage, PosHdl, ListBox&, rLB, void )
 {
     bool bHori = &rLB == m_pHorizontalDLB;
     ListBox *pRelLB = bHori ? m_pHoriRelationLB : m_pVertRelationLB;
@@ -2051,7 +2051,7 @@ IMPL_LINK_TYPED( SwFramePage, PosHdl, ListBox&, rLB, void )
 }
 
 //  horizontal Pos
-IMPL_LINK_TYPED( SwFramePage, RelHdl, ListBox&, rLB, void )
+IMPL_LINK( SwFramePage, RelHdl, ListBox&, rLB, void )
 {
     bool bHori = &rLB == m_pHoriRelationLB;
 
@@ -2080,7 +2080,7 @@ IMPL_LINK_TYPED( SwFramePage, RelHdl, ListBox&, rLB, void )
     RangeModifyHdl();
 }
 
-IMPL_LINK_NOARG_TYPED(SwFramePage, RealSizeHdl, Button*, void)
+IMPL_LINK_NOARG(SwFramePage, RealSizeHdl, Button*, void)
 {
     m_aWidthED.SetUserValue( m_aWidthED. NormalizePercent(m_aGrfSize.Width() ), FUNIT_TWIP);
     m_aHeightED.SetUserValue(m_aHeightED.NormalizePercent(m_aGrfSize.Height()), FUNIT_TWIP);
@@ -2088,19 +2088,19 @@ IMPL_LINK_NOARG_TYPED(SwFramePage, RealSizeHdl, Button*, void)
     UpdateExample();
 }
 
-IMPL_LINK_NOARG_TYPED(SwFramePage, AutoWidthClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwFramePage, AutoWidthClickHdl, Button*, void)
 {
     if( !IsInGraficMode() )
         HandleAutoCB( m_pAutoWidthCB->IsChecked(), *m_pWidthFT, *m_pWidthAutoFT, *m_aWidthED.get() );
 }
 
-IMPL_LINK_NOARG_TYPED(SwFramePage, AutoHeightClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwFramePage, AutoHeightClickHdl, Button*, void)
 {
     if( !IsInGraficMode() )
         HandleAutoCB( m_pAutoHeightCB->IsChecked(), *m_pHeightFT, *m_pHeightAutoFT, *m_aWidthED.get() );
 }
 
-IMPL_LINK_TYPED( SwFramePage, ModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( SwFramePage, ModifyHdl, Edit&, rEdit, void )
 {
     SwTwips nWidth  = static_cast< SwTwips >(m_aWidthED.DenormalizePercent(m_aWidthED.GetValue(FUNIT_TWIP)));
     SwTwips nHeight = static_cast< SwTwips >(m_aHeightED.DenormalizePercent(m_aHeightED.GetValue(FUNIT_TWIP)));
@@ -2568,7 +2568,7 @@ DeactivateRC SwGrfExtPage::DeactivatePage(SfxItemSet *_pSet)
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK_NOARG_TYPED(SwGrfExtPage, BrowseHdl, Button*, void)
+IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, Button*, void)
 {
     if(!pGrfDlg)
     {
@@ -2613,7 +2613,7 @@ IMPL_LINK_NOARG_TYPED(SwGrfExtPage, BrowseHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwGrfExtPage, MirrorHdl, Button*, void)
+IMPL_LINK_NOARG(SwGrfExtPage, MirrorHdl, Button*, void)
 {
     bool bEnable = m_pMirrorHorzBox->IsChecked();
 
@@ -2838,7 +2838,7 @@ VclPtr<SfxTabPage> SwFrameURLPage::Create(vcl::Window *pParent, const SfxItemSet
     return VclPtr<SwFrameURLPage>::Create( pParent, *rSet );
 }
 
-IMPL_LINK_NOARG_TYPED(SwFrameURLPage, InsertFileHdl, Button*, void)
+IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, Button*, void)
 {
     FileDialogHelper aDlgHelper( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
     uno::Reference < ui::dialogs::XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
@@ -3188,7 +3188,7 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
     return bRet;
 }
 
-IMPL_LINK_NOARG_TYPED(SwFrameAddPage, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwFrameAddPage, EditModifyHdl, Edit&, void)
 {
     bool bEnable = !m_pNameED->GetText().isEmpty();
     m_pAltNameED->Enable(bEnable);
@@ -3204,7 +3204,7 @@ void SwFrameAddPage::SetFormatUsed(bool bFormatUsed)
     }
 }
 
-IMPL_LINK_TYPED(SwFrameAddPage, ChainModifyHdl, ListBox&, rBox, void)
+IMPL_LINK(SwFrameAddPage, ChainModifyHdl, ListBox&, rBox, void)
 {
     OUString sCurrentPrevChain, sCurrentNextChain;
     if(m_pPrevLB->GetSelectEntryPos())

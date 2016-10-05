@@ -41,8 +41,8 @@ class SwRenameXNamedDlg : public ModalDialog
     css::uno::Reference< css::container::XNameAccess >   xSecondAccess;
     css::uno::Reference< css::container::XNameAccess >   xThirdAccess;
 
-    DECL_LINK_TYPED(OkHdl, Button*, void);
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+    DECL_LINK(OkHdl, Button*, void);
+    DECL_LINK(ModifyHdl, Edit&, void);
 
 public:
     SwRenameXNamedDlg( vcl::Window* pParent,

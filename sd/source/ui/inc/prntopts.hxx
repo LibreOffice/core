@@ -52,8 +52,8 @@ private:
     VclPtr<CheckBox>            m_pCbxBack;
     VclPtr<CheckBox>            m_pCbxPaperbin;
 
-    DECL_LINK_TYPED( ClickCheckboxHdl, Button*, void );
-    DECL_LINK_TYPED( ClickBookletHdl, Button*, void );
+    DECL_LINK( ClickCheckboxHdl, Button*, void );
+    DECL_LINK( ClickBookletHdl, Button*, void );
 
     void updateControls();
 

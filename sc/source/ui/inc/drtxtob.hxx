@@ -38,7 +38,7 @@ class ScDrawTextObjectBar : public SfxShell
     rtl::Reference<TransferableClipboardListener> mxClipEvtLstnr;
     bool                bPastePossible;
 
-    DECL_LINK_TYPED( ClipboardChanged, TransferableDataHelper*, void );
+    DECL_LINK( ClipboardChanged, TransferableDataHelper*, void );
 
 public:
     SFX_DECL_INTERFACE(SCID_DRAW_TEXT_SHELL)

@@ -171,7 +171,7 @@ public:
     virtual ~SwDocShell() override;
 
     /// OLE 2.0-notification.
-    DECL_LINK_TYPED( Ole2ModifiedHdl, bool, void );
+    DECL_LINK( Ole2ModifiedHdl, bool, void );
 
     /// OLE-stuff.
     virtual void      SetVisArea( const Rectangle &rRect ) override;

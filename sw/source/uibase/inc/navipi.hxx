@@ -100,18 +100,18 @@ class SwNavigationPI : public vcl::Window,
     void FillBox();
     void MakeMark();
 
-    DECL_LINK_TYPED( DocListBoxSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( ToolBoxSelectHdl, ToolBox *, void );
-    DECL_LINK_TYPED( ToolBoxClickHdl, ToolBox *, void );
-    DECL_LINK_TYPED( ToolBoxDropdownClickHdl, ToolBox*, void );
-    DECL_LINK_TYPED( EditAction, NumEditAction&, void );
-    DECL_LINK_TYPED( EditGetFocus, Control&, void );
-    DECL_LINK_TYPED( DoneLink, SfxPoolItem *, void );
-    DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );
-    DECL_LINK_TYPED( ChangePageHdl, Idle*, void );
-    DECL_LINK_TYPED( PageEditModifyHdl, SpinField&, void );
-    DECL_LINK_TYPED( PopupModeEndHdl, FloatingWindow*, void );
-    DECL_LINK_TYPED( ClosePopupWindow, SfxPopupWindow *, void );
+    DECL_LINK( DocListBoxSelectHdl, ListBox&, void );
+    DECL_LINK( ToolBoxSelectHdl, ToolBox *, void );
+    DECL_LINK( ToolBoxClickHdl, ToolBox *, void );
+    DECL_LINK( ToolBoxDropdownClickHdl, ToolBox*, void );
+    DECL_LINK( EditAction, NumEditAction&, void );
+    DECL_LINK( EditGetFocus, Control&, void );
+    DECL_LINK( DoneLink, SfxPoolItem *, void );
+    DECL_LINK( MenuSelectHdl, Menu *, bool );
+    DECL_LINK( ChangePageHdl, Idle*, void );
+    DECL_LINK( PageEditModifyHdl, SpinField&, void );
+    DECL_LINK( PopupModeEndHdl, FloatingWindow*, void );
+    DECL_LINK( ClosePopupWindow, SfxPopupWindow *, void );
     void UsePage();
 
     void InitImageList();

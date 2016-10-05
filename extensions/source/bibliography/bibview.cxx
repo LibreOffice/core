@@ -175,7 +175,7 @@ namespace bib
         mpBibView->Resize();
     }
 
-    IMPL_LINK_NOARG_TYPED( BibView, CallMappingHdl, void*, void)
+    IMPL_LINK_NOARG( BibView, CallMappingHdl, void*, void)
     {
         m_pDatMan->CreateMappingDialog( this );
     }

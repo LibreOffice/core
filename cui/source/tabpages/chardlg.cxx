@@ -1164,21 +1164,21 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharNamePage, UpdateHdl_Impl, Idle *, void)
+IMPL_LINK_NOARG(SvxCharNamePage, UpdateHdl_Impl, Idle *, void)
 {
     UpdatePreview_Impl();
 }
 
 
-IMPL_LINK_TYPED( SvxCharNamePage, FontModifyComboBoxHdl_Impl, ComboBox&, rBox, void )
+IMPL_LINK( SvxCharNamePage, FontModifyComboBoxHdl_Impl, ComboBox&, rBox, void )
 {
     FontModifyHdl_Impl(&rBox);
 }
-IMPL_LINK_TYPED( SvxCharNamePage, FontModifyListBoxHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxCharNamePage, FontModifyListBoxHdl_Impl, ListBox&, rBox, void )
 {
     FontModifyHdl_Impl(&rBox);
 }
-IMPL_LINK_TYPED( SvxCharNamePage, FontModifyEditHdl_Impl, Edit&, rBox, void )
+IMPL_LINK( SvxCharNamePage, FontModifyEditHdl_Impl, Edit&, rBox, void )
 {
     FontModifyHdl_Impl(&rBox);
 }
@@ -1692,7 +1692,7 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
 }
 
 
-IMPL_LINK_TYPED( SvxCharEffectsPage, SelectListBoxHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxCharEffectsPage, SelectListBoxHdl_Impl, ListBox&, rBox, void )
 {
     SelectHdl_Impl(&rBox);
 }
@@ -1728,7 +1728,7 @@ void SvxCharEffectsPage::SelectHdl_Impl( ListBox* pBox )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharEffectsPage, UpdatePreview_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxCharEffectsPage, UpdatePreview_Impl, ListBox&, void)
 {
     bool bEnable = ( ( m_pUnderlineLB->GetSelectEntryPos() > 0 ) ||
                      ( m_pOverlineLB->GetSelectEntryPos()  > 0 ) ||
@@ -1739,19 +1739,19 @@ IMPL_LINK_NOARG_TYPED(SvxCharEffectsPage, UpdatePreview_Impl, ListBox&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharEffectsPage, CbClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxCharEffectsPage, CbClickHdl_Impl, Button*, void)
 {
     UpdatePreview_Impl();
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharEffectsPage, TristClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxCharEffectsPage, TristClickHdl_Impl, Button*, void)
 {
     UpdatePreview_Impl();
 }
 
 
-IMPL_LINK_TYPED( SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ListBox&, rListBox, void )
 {
     ColorListBox* pBox = static_cast<ColorListBox*>(&rListBox);
     SvxFont& rFont = GetPreviewFont();
@@ -2762,7 +2762,7 @@ void SvxCharPositionPage::SetEscapement_Impl( SvxEscapement nEsc )
 }
 
 
-IMPL_LINK_TYPED( SvxCharPositionPage, PositionHdl_Impl, Button*, pBtn, void )
+IMPL_LINK( SvxCharPositionPage, PositionHdl_Impl, Button*, pBtn, void )
 {
     SvxEscapement nEsc = SvxEscapement::Off;   // also when pBtn == NULL
 
@@ -2775,7 +2775,7 @@ IMPL_LINK_TYPED( SvxCharPositionPage, PositionHdl_Impl, Button*, pBtn, void )
 }
 
 
-IMPL_LINK_TYPED( SvxCharPositionPage, RotationHdl_Impl, Button*, pBtn, void )
+IMPL_LINK( SvxCharPositionPage, RotationHdl_Impl, Button*, pBtn, void )
 {
     bool bEnable = false;
     if (m_p90degRB == pBtn  || m_p270degRB == pBtn)
@@ -2786,7 +2786,7 @@ IMPL_LINK_TYPED( SvxCharPositionPage, RotationHdl_Impl, Button*, pBtn, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, FontModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxCharPositionPage, FontModifyHdl_Impl, Edit&, void)
 {
     sal_uInt8 nEscProp = (sal_uInt8)m_pFontSizeMF->GetValue();
     short nEsc  = (short)m_pHighLowMF->GetValue();
@@ -2795,7 +2795,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, FontModifyHdl_Impl, Edit&, void)
 }
 
 
-IMPL_LINK_TYPED( SvxCharPositionPage, AutoPositionHdl_Impl, Button*, pBox, void )
+IMPL_LINK( SvxCharPositionPage, AutoPositionHdl_Impl, Button*, pBox, void )
 {
     if ( static_cast<CheckBox*>(pBox)->IsChecked() )
     {
@@ -2809,7 +2809,7 @@ IMPL_LINK_TYPED( SvxCharPositionPage, AutoPositionHdl_Impl, Button*, pBox, void 
 }
 
 
-IMPL_LINK_TYPED( SvxCharPositionPage, FitToLineHdl_Impl, Button*, pBox, void )
+IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, Button*, pBox, void )
 {
     if (m_pFitToLineCB == pBox)
     {
@@ -2823,7 +2823,7 @@ IMPL_LINK_TYPED( SvxCharPositionPage, FitToLineHdl_Impl, Button*, pBox, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, KerningModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl, Edit&, void)
 {
     long nVal = static_cast<long>(m_pKerningMF->GetValue());
     nVal = LogicToLogic( nVal, MAP_POINT, MAP_TWIP );
@@ -2840,7 +2840,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, KerningModifyHdl_Impl, Edit&, void)
 }
 
 
-IMPL_LINK_TYPED( SvxCharPositionPage, LoseFocusHdl_Impl, Control&, rControl, void )
+IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, Control&, rControl, void )
 {
     MetricField* pField = static_cast<MetricField*>(&rControl);
     bool bHigh = m_pHighPosBtn->IsChecked();
@@ -2864,7 +2864,7 @@ IMPL_LINK_TYPED( SvxCharPositionPage, LoseFocusHdl_Impl, Control&, rControl, voi
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, ScaleWidthModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxCharPositionPage, ScaleWidthModifyHdl_Impl, Edit&, void)
 {
     m_pPreviewWin->SetFontWidthScale( sal_uInt16( m_pScaleWidthMF->GetValue() ) );
 }
@@ -3374,7 +3374,7 @@ void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, bool bStart )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharTwoLinesPage, TwoLinesHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxCharTwoLinesPage, TwoLinesHdl_Impl, Button*, void)
 {
     bool bChecked = m_pTwoLinesBtn->IsChecked();
     m_pEnclosingFrame->Enable( bChecked );
@@ -3383,7 +3383,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharTwoLinesPage, TwoLinesHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox&, rBox, void )
 {
     sal_Int32 nPos = rBox.GetSelectEntryPos();
     if ( CHRDLG_ENCLOSE_SPECIAL_CHAR == reinterpret_cast<sal_uLong>(rBox.GetEntryData( nPos )) )

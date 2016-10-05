@@ -300,7 +300,7 @@ Color SwCommentRuler::GetFadedColor(const Color &rHighColor, const Color &rLowCo
     return aColor;
 }
 
-IMPL_LINK_NOARG_TYPED(SwCommentRuler, FadeHandler, Timer *, void)
+IMPL_LINK_NOARG(SwCommentRuler, FadeHandler, Timer *, void)
 {
     const int nStep = 25;
     if ( mbIsHighlighted && mnFadeRate < 100 )

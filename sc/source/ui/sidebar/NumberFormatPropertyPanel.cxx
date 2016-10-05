@@ -104,7 +104,7 @@ void NumberFormatPropertyPanel::Initialize()
     mpBtnEngineering->SetClickHdl( LINK(this, NumberFormatPropertyPanel, NumFormatValueClickHdl) );
 }
 
-IMPL_LINK_TYPED( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox&, rBox, void )
+IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox&, rBox, void )
 {
     const sal_Int32 nVal = rBox.GetSelectEntryPos();
     if( nVal != mnCategorySelected )
@@ -116,11 +116,11 @@ IMPL_LINK_TYPED( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox&, rBox, 
     }
 }
 
-IMPL_LINK_NOARG_TYPED( NumberFormatPropertyPanel, NumFormatValueClickHdl, Button*, void )
+IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueClickHdl, Button*, void )
 {
     NumFormatValueHdl(*mpEdDecimals);
 }
-IMPL_LINK_NOARG_TYPED( NumberFormatPropertyPanel, NumFormatValueHdl, Edit&, void )
+IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl, Edit&, void )
 {
     OUString    aFormat;
     OUString    sBreak = ",";

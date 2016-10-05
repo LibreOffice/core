@@ -50,9 +50,9 @@ class SwFieldDokPage : public SwFieldPage
     sal_Int32               nOldSel;
     sal_uLong               nOldFormat;
 
-    DECL_LINK_TYPED(TypeHdl, ListBox&, void);
-    DECL_LINK_TYPED(FormatHdl, ListBox&, void);
-    DECL_LINK_TYPED(SubTypeHdl, ListBox&, void);
+    DECL_LINK(TypeHdl, ListBox&, void);
+    DECL_LINK(FormatHdl, ListBox&, void);
+    DECL_LINK(SubTypeHdl, ListBox&, void);
 
     void                AddSubType(sal_uInt16 nTypeId);
     sal_Int32           FillFormatLB(sal_uInt16 nTypeId);

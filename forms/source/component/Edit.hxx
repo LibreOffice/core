@@ -168,7 +168,7 @@ public:
     virtual void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& _rxToolkit, const css::uno::Reference< css::awt::XWindowPeer >& _rxParent ) throw ( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    DECL_LINK_TYPED( OnKeyPressed, void*, void );
+    DECL_LINK( OnKeyPressed, void*, void );
 };
 
 }

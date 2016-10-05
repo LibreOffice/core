@@ -412,7 +412,7 @@ private:
     SfxItemSet*             _pOptions;
     bool                    _bHelpDisabled;
 
-    DECL_LINK_TYPED( Execute, Button*, void );
+    DECL_LINK( Execute, Button*, void );
 
 public:
             SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent );
@@ -433,7 +433,7 @@ SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSe
 {
 }
 
-IMPL_LINK_NOARG_TYPED(SfxDialogExecutor_Impl, Execute, Button*, void)
+IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute, Button*, void)
 {
     // Options noted locally
     if ( !_pOptions )

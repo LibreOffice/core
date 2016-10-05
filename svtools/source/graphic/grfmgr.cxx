@@ -1057,7 +1057,7 @@ void GraphicObject::SetSwapState()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(GraphicObject, ImplAutoSwapOutHdl, Timer *, void)
+IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl, Timer *, void)
 {
     if( !IsSwappedOut() )
     {

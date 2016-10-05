@@ -84,7 +84,7 @@ void SwEnvPrtPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SwEnvPrtPage, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl, Button*, void)
 {
     if (m_pBottomButton->IsChecked())
     {
@@ -108,7 +108,7 @@ IMPL_LINK_NOARG_TYPED(SwEnvPrtPage, ClickHdl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED( SwEnvPrtPage, ButtonHdl, Button *, pBtn, void )
+IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn, void )
 {
     if (pBtn == m_pPrtSetup)
     {
@@ -125,7 +125,7 @@ IMPL_LINK_TYPED( SwEnvPrtPage, ButtonHdl, Button *, pBtn, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwEnvPrtPage, AlignHdl, ToolBox *, void)
+IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl, ToolBox *, void)
 {
     if (m_pAlignBox->GetCurItemId())
     {

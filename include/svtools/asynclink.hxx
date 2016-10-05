@@ -40,8 +40,8 @@ class SVT_DLLPUBLIC AsynchronLink
     void*            _pArg;
     ::osl::Mutex*    _pMutex;
 
-    DECL_DLLPRIVATE_LINK_TYPED( HandleCall_Idle, Idle*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( HandleCall_PostUserEvent, void*, void );
+    DECL_DLLPRIVATE_LINK( HandleCall_Idle, Idle*, void );
+    DECL_DLLPRIVATE_LINK( HandleCall_PostUserEvent, void*, void );
     SVT_DLLPRIVATE void Call_Impl( void* pArg );
 
 public:

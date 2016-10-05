@@ -696,7 +696,7 @@ protected:
 protected:
     void SetList(const css::uno::Any& rItems, bool bComboBox);
     void CreateControl(vcl::Window* pParent, const css::uno::Reference< css::beans::XPropertySet >& xModel);
-    DECL_LINK_TYPED( OnClick, VclPtr<CheckBox>, void );
+    DECL_LINK( OnClick, VclPtr<CheckBox>, void );
 };
 
 
@@ -801,7 +801,7 @@ protected:
     virtual void onFocusLost( const css::awt::FocusEvent& _rEvent );
 
 private:
-    DECL_LINK_TYPED( OnWindowEvent, VclWindowEvent&, void );
+    DECL_LINK( OnWindowEvent, VclWindowEvent&, void );
 };
 
 
@@ -1014,7 +1014,7 @@ public:
 protected:
     virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) override;
 
-    DECL_LINK_TYPED( OnDoubleClick, ListBox&, void );
+    DECL_LINK( OnDoubleClick, ListBox&, void );
 };
 
 
@@ -1107,7 +1107,7 @@ public:
     virtual sal_Int16 SAL_CALL getMaxTextLen() throw(css::uno::RuntimeException, std::exception) override;
 
 protected:
-    DECL_LINK_TYPED( OnCommit, DbFilterField&, void );
+    DECL_LINK( OnCommit, DbFilterField&, void );
 };
 
 #endif // INCLUDED_SVX_SOURCE_INC_GRIDCELL_HXX

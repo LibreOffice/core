@@ -64,7 +64,7 @@ private:
     css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
     ImplSVEvent * mnUserEventId;
     bool mbUpdateFlag;
-    DECL_LINK_TYPED(Callback, void*, void);
+    DECL_LINK(Callback, void*, void);
 };
 
 } } // end of namespace ::sd::presenter

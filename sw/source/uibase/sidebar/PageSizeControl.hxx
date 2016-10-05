@@ -58,8 +58,8 @@ private:
 
     static void ExecuteSizeChange( const Paper ePaper );
 
-    DECL_LINK_TYPED(ImplSizeHdl, ::ValueSet*, void);
-    DECL_LINK_TYPED(MoreButtonClickHdl_Impl, Button*, void);
+    DECL_LINK(ImplSizeHdl, ::ValueSet*, void);
+    DECL_LINK(MoreButtonClickHdl_Impl, Button*, void);
 };
 
 } } // end of namespace sw::sidebar

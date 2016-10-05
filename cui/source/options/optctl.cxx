@@ -24,7 +24,7 @@
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 
-IMPL_LINK_NOARG_TYPED(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, Button*, void)
+IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl, Button*, void)
 {
     bool bIsSequenceChecking = m_pSequenceCheckingCB->IsChecked();
     m_pRestrictedCB->Enable( bIsSequenceChecking );

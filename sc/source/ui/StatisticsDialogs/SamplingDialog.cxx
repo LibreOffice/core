@@ -288,13 +288,13 @@ void ScSamplingDialog::PerformSampling()
     pDocShell->PostPaint(aModifiedRange, PaintPartFlags::Grid);
 }
 
-IMPL_LINK_NOARG_TYPED( ScSamplingDialog, OkClicked, Button*, void )
+IMPL_LINK_NOARG( ScSamplingDialog, OkClicked, Button*, void )
 {
     PerformSampling();
     Close();
 }
 
-IMPL_LINK_TYPED( ScSamplingDialog, GetFocusHandler, Control&, rCtrl, void )
+IMPL_LINK( ScSamplingDialog, GetFocusHandler, Control&, rCtrl, void )
 {
     mpActiveEdit = nullptr;
 
@@ -307,19 +307,19 @@ IMPL_LINK_TYPED( ScSamplingDialog, GetFocusHandler, Control&, rCtrl, void )
         mpActiveEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
 }
 
-IMPL_LINK_NOARG_TYPED(ScSamplingDialog, LoseFocusHandler, Control&, void)
+IMPL_LINK_NOARG(ScSamplingDialog, LoseFocusHandler, Control&, void)
 {
     mDialogLostFocus = !IsActive();
 }
 
-IMPL_LINK_NOARG_TYPED(ScSamplingDialog, SamplingSizeValueModified, Edit&, void)
+IMPL_LINK_NOARG(ScSamplingDialog, SamplingSizeValueModified, Edit&, void)
 {
     sal_Int64 aPopulationSize = mInputRange.aEnd.Row() - mInputRange.aStart.Row() + 1;
     if (mpSampleSize->GetValue() > aPopulationSize)
         mpSampleSize->SetValue(aPopulationSize);
 }
 
-IMPL_LINK_NOARG_TYPED(ScSamplingDialog, ToggleSamplingMethod, RadioButton&, void)
+IMPL_LINK_NOARG(ScSamplingDialog, ToggleSamplingMethod, RadioButton&, void)
 {
     ToggleSamplingMethod();
 }
@@ -338,7 +338,7 @@ void ScSamplingDialog::ToggleSamplingMethod()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScSamplingDialog, RefInputModifyHandler, Edit&, void)
+IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler, Edit&, void)
 {
     if ( mpActiveEdit )
     {

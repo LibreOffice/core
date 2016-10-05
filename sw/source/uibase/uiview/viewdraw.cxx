@@ -714,7 +714,7 @@ bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
 }
 
 //#i87414# mod
-IMPL_LINK_TYPED(SwView, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void)
+IMPL_LINK(SwView, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void)
 {
     if (rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG)
         GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);

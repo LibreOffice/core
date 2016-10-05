@@ -73,7 +73,7 @@ private:
     friend class Thread;
     friend class UpdateCommandEnv;
 
-    DECL_LINK_TYPED(cancelHandler, Button*, void);
+    DECL_LINK(cancelHandler, Button*, void);
 
     //signals in the dialog that we have finished.
     void updateDone();

@@ -65,11 +65,11 @@ namespace dbaui
         Image               m_aImgUp;
         Image               m_aImgDown;
 
-        DECL_LINK_TYPED( ButtonClickHdl, Button *, void );
-        DECL_LINK_TYPED( RightButtonClickHdl, Button *, void );
-        DECL_LINK_TYPED( AllNoneClickHdl, Button *, void );
-        DECL_LINK_TYPED( TableListClickHdl, SvTreeListBox*, void );
-        DECL_LINK_TYPED( TableListRightSelectHdl, SvTreeListBox*, void );
+        DECL_LINK( ButtonClickHdl, Button *, void );
+        DECL_LINK( RightButtonClickHdl, Button *, void );
+        DECL_LINK( AllNoneClickHdl, Button *, void );
+        DECL_LINK( TableListClickHdl, SvTreeListBox*, void );
+        DECL_LINK( TableListRightSelectHdl, SvTreeListBox*, void );
 
     public:
         virtual void            Reset ( ) override;

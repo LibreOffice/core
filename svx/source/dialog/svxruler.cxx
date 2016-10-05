@@ -3346,14 +3346,14 @@ void SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
 }
 
 
-IMPL_LINK_TYPED( SvxRuler, MenuSelect, Menu *, pMenu, bool )
+IMPL_LINK( SvxRuler, MenuSelect, Menu *, pMenu, bool )
 {
     /* Handler of the context menus for switching the unit of measurement */
     SetUnit(FieldUnit(pMenu->GetCurItemId()));
     return false;
 }
 
-IMPL_LINK_TYPED( SvxRuler, TabMenuSelect, Menu *, pMenu, bool )
+IMPL_LINK( SvxRuler, TabMenuSelect, Menu *, pMenu, bool )
 {
     /* Handler of the tab menu for setting the type */
     if(mxTabStopItem.get() && mxTabStopItem->Count() > mxRulerImpl->nIdx)

@@ -1470,7 +1470,7 @@ void GL3DBarChart::processAutoFly(sal_uInt32 nId, sal_uInt32 nColor)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(GL3DBarChart, UpdateTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(GL3DBarChart, UpdateTimerHdl, Idle *, void)
 {
     updateScreenText();
     maIdle.Start();

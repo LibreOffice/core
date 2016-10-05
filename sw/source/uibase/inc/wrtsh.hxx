@@ -242,7 +242,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool    GotoPage( sal_uInt16 nPage, bool bRecord );
 
     // setting the cursor; remember the old position for turning back
-    DECL_LINK_TYPED( ExecFlyMac, const SwFlyFrameFormat*, void );
+    DECL_LINK( ExecFlyMac, const SwFlyFrameFormat*, void );
 
     bool    PageCursor(SwTwips lOffset, bool bSelect);
 
@@ -439,7 +439,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyleSet, SwPaM* pPaM = nullptr );
 
     // link for inserting ranges via Drag&Drop/Clipboard
-    DECL_LINK_TYPED( InsertRegionDialog, void*, void );
+    DECL_LINK( InsertRegionDialog, void*, void );
 
     // ctor, the first one is a kind of a controlled copy ctor for more views of a document
     SwWrtShell( SwWrtShell&, vcl::Window *pWin, SwView &rShell);

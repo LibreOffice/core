@@ -37,8 +37,8 @@ private:
     VclPtr<OKButton> m_pOKBtn;
 
 
-    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(EditHdl_Impl, Edit&, void);
+    DECL_LINK(OKHdl_Impl, Button*, void);
+    DECL_LINK(EditHdl_Impl, Edit&, void);
 
 public:
     MasterPasswordCreateDialog( vcl::Window* pParent, ResMgr * pResMgr );

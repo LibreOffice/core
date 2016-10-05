@@ -1259,7 +1259,7 @@ GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject& rObj )
     return pRet;
 }
 
-IMPL_LINK_TYPED( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer, void )
+IMPL_LINK( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer, void )
 {
     pTimer->Stop();
 

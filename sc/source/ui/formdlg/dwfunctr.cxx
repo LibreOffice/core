@@ -604,7 +604,7 @@ void ScFunctionWin::DoEnter()
 #*
 #************************************************************************/
 
-IMPL_LINK_TYPED( ScFunctionWin, SelHdl, ListBox&, rLb, void )
+IMPL_LINK( ScFunctionWin, SelHdl, ListBox&, rLb, void )
 {
     if ( &rLb == aCatBox.get() )
     {
@@ -633,11 +633,11 @@ IMPL_LINK_TYPED( ScFunctionWin, SelHdl, ListBox&, rLb, void )
 #*
 #************************************************************************/
 
-IMPL_LINK_NOARG_TYPED( ScFunctionWin, SetSelectionClickHdl, Button*, void )
+IMPL_LINK_NOARG( ScFunctionWin, SetSelectionClickHdl, Button*, void )
 {
     DoEnter();          // Uebernimmt die Eingabe
 }
-IMPL_LINK_NOARG_TYPED( ScFunctionWin, SetSelectionHdl, ListBox&, void )
+IMPL_LINK_NOARG( ScFunctionWin, SetSelectionHdl, ListBox&, void )
 {
     DoEnter();          // Uebernimmt die Eingabe
 }
@@ -657,7 +657,7 @@ IMPL_LINK_NOARG_TYPED( ScFunctionWin, SetSelectionHdl, ListBox&, void )
 #*
 #************************************************************************/
 
-IMPL_LINK_TYPED( ScFunctionWin, SetSplitHdl, ScPrivatSplit&, rCtrl, void )
+IMPL_LINK( ScFunctionWin, SetSplitHdl, ScPrivatSplit&, rCtrl, void )
 {
     if (&rCtrl == aPrivatSplit.get())
     {
@@ -675,7 +675,7 @@ IMPL_LINK_TYPED( ScFunctionWin, SetSplitHdl, ScPrivatSplit&, rCtrl, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScFunctionWin, TimerHdl, Idle *, void)
+IMPL_LINK_NOARG(ScFunctionWin, TimerHdl, Idle *, void)
 {
     OUString aString("ww");
     Size aTxtSize( aFiFuncDesc->GetTextWidth(aString), aFiFuncDesc->GetTextHeight() );

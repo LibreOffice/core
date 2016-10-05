@@ -108,21 +108,21 @@ class SwIndexMarkPane
     void            InsertMark();
     void            UpdateMark();
 
-    DECL_LINK_TYPED( InsertHdl, Button *, void );
-    DECL_LINK_TYPED( CloseHdl, Button*, void );
-    DECL_LINK_TYPED( SyncSelectionHdl, Button*, void );
-    DECL_LINK_TYPED( DelHdl, Button*, void );
-    DECL_LINK_TYPED( NextHdl, Button*, void );
-    DECL_LINK_TYPED( NextSameHdl, Button*, void );
-    DECL_LINK_TYPED( PrevHdl, Button*, void );
-    DECL_LINK_TYPED( PrevSameHdl, Button*, void );
-    DECL_LINK_TYPED( ModifyListBoxHdl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyEditHdl, Edit&, void );
+    DECL_LINK( InsertHdl, Button *, void );
+    DECL_LINK( CloseHdl, Button*, void );
+    DECL_LINK( SyncSelectionHdl, Button*, void );
+    DECL_LINK( DelHdl, Button*, void );
+    DECL_LINK( NextHdl, Button*, void );
+    DECL_LINK( NextSameHdl, Button*, void );
+    DECL_LINK( PrevHdl, Button*, void );
+    DECL_LINK( PrevSameHdl, Button*, void );
+    DECL_LINK( ModifyListBoxHdl, ListBox&, void );
+    DECL_LINK( ModifyEditHdl, Edit&, void );
     void ModifyHdl(Control*);
-    DECL_LINK_TYPED( KeyDCBModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( NewUserIdxHdl, Button*, void );
-    DECL_LINK_TYPED( SearchTypeHdl, Button*, void );
-    DECL_LINK_TYPED( PhoneticEDModifyHdl, Edit&, void );
+    DECL_LINK( KeyDCBModifyHdl, Edit&, void );
+    DECL_LINK( NewUserIdxHdl, Button*, void );
+    DECL_LINK( SearchTypeHdl, Button*, void );
+    DECL_LINK( PhoneticEDModifyHdl, Edit&, void );
 
     //this method updates the values from 'nLangForPhoneticReading' and 'bIsPhoneticReadingEnabled'
     //it needs to be called ones if this dialog is opened to create a new entry (in InitControls),
@@ -210,13 +210,13 @@ class SwAuthorMarkPane
 
     css::uno::Reference< css::container::XNameAccess >    xBibAccess;
 
-    DECL_LINK_TYPED(InsertHdl, Button*, void);
-    DECL_LINK_TYPED(CloseHdl, Button*, void);
-    DECL_LINK_TYPED(CreateEntryHdl, Button*, void);
-    DECL_LINK_TYPED(CompEntryHdl, ListBox&, void);
-    DECL_LINK_TYPED(ChangeSourceHdl, Button*, void);
-    DECL_LINK_TYPED(IsEntryAllowedHdl, Edit*, bool);
-    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
+    DECL_LINK(InsertHdl, Button*, void);
+    DECL_LINK(CloseHdl, Button*, void);
+    DECL_LINK(CreateEntryHdl, Button*, void);
+    DECL_LINK(CompEntryHdl, ListBox&, void);
+    DECL_LINK(ChangeSourceHdl, Button*, void);
+    DECL_LINK(IsEntryAllowedHdl, Edit*, bool);
+    DECL_LINK(EditModifyHdl, Edit&, void);
 
     void InitControls();
     void Activate();

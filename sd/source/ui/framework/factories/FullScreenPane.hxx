@@ -71,7 +71,7 @@ public:
         const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible)
         throw (css::uno::RuntimeException, std::exception) override;
 
-    DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
+    DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
 
 protected:
     virtual css::uno::Reference<css::rendering::XCanvas>

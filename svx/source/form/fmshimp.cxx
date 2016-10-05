@@ -991,7 +991,7 @@ void FmXFormShell::LockSlotInvalidation(bool bLock)
 }
 
 
-IMPL_LINK_NOARG_TYPED(FmXFormShell, OnInvalidateSlots, void*,void)
+IMPL_LINK_NOARG(FmXFormShell, OnInvalidateSlots, void*,void)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2178,7 +2178,7 @@ void FmXFormShell::ShowSelectionProperties( bool bShow )
 }
 
 
-IMPL_LINK_TYPED(FmXFormShell, OnFoundData, FmFoundRecordInformation&, rfriWhere, void)
+IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation&, rfriWhere, void)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2260,7 +2260,7 @@ IMPL_LINK_TYPED(FmXFormShell, OnFoundData, FmFoundRecordInformation&, rfriWhere,
 }
 
 
-IMPL_LINK_TYPED(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation&, rfriWhere, void)
+IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation&, rfriWhere, void)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2289,7 +2289,7 @@ IMPL_LINK_TYPED(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation&, rfr
 }
 
 
-IMPL_LINK_TYPED(FmXFormShell, OnSearchContextRequest, FmSearchContext&, rfmscContextInfo, sal_uInt32)
+IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext&, rfmscContextInfo, sal_uInt32)
 {
     if ( impl_checkDisposed() )
         return 0;
@@ -2657,7 +2657,7 @@ void FmXFormShell::selectionChanged(const lang::EventObject& rEvent) throw(css::
 }
 
 
-IMPL_LINK_NOARG_TYPED(FmXFormShell, OnTimeOut, Timer*, void)
+IMPL_LINK_NOARG(FmXFormShell, OnTimeOut, Timer*, void)
 {
     if ( impl_checkDisposed() )
         return;
@@ -3588,7 +3588,7 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, bool _bDeactivate
 }
 
 
-IMPL_LINK_NOARG_TYPED( FmXFormShell, OnFirstTimeActivation, void*, void )
+IMPL_LINK_NOARG( FmXFormShell, OnFirstTimeActivation, void*, void )
 {
     if ( impl_checkDisposed() )
         return;
@@ -3608,7 +3608,7 @@ IMPL_LINK_NOARG_TYPED( FmXFormShell, OnFirstTimeActivation, void*, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( FmXFormShell, OnFormsCreated, FmFormPageImpl&, void )
+IMPL_LINK_NOARG( FmXFormShell, OnFormsCreated, FmFormPageImpl&, void )
 {
     UpdateForms( true );
 }
@@ -3751,7 +3751,7 @@ void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels
 }
 
 
-IMPL_LINK_NOARG_TYPED( FmXFormShell, OnLoadForms, void*, void )
+IMPL_LINK_NOARG( FmXFormShell, OnLoadForms, void*, void )
 {
     FmLoadAction aAction = m_aLoadingPages.front();
     m_aLoadingPages.pop();

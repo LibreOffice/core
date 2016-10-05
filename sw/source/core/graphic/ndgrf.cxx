@@ -955,7 +955,7 @@ SwContentNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     return pGrfNd;
 }
 
-IMPL_LINK_TYPED( SwGrfNode, SwapGraphic, const GraphicObject*, pGrfObj, SvStream* )
+IMPL_LINK( SwGrfNode, SwapGraphic, const GraphicObject*, pGrfObj, SvStream* )
 {
     SvStream* pRet;
 

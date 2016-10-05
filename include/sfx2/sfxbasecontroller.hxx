@@ -194,7 +194,7 @@ private:
     SAL_DLLPRIVATE SfxViewFrame& GetViewFrame_Impl() const;
     SAL_DLLPRIVATE void ShowInfoBars( );
 
-    DECL_LINK_TYPED( CheckOutHandler, Button*, void );
+    DECL_LINK( CheckOutHandler, Button*, void );
 
     IMPL_SfxBaseController_DataContainer*   m_pData ;
 

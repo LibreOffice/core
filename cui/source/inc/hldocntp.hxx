@@ -39,7 +39,7 @@ private:
     bool                ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const;
     void                FillDocumentList ();
 
-    DECL_LINK_TYPED (ClickNewHdl_Impl, Button*, void );
+    DECL_LINK (ClickNewHdl_Impl, Button*, void );
 
 protected:
     void FillDlgFields(const OUString& rStrURL) override;

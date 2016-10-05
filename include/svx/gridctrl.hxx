@@ -219,7 +219,7 @@ public:
         virtual void StateChanged( StateChangedType nType ) override;
 
     private:
-        DECL_LINK_TYPED(OnClick, Button*, void);
+        DECL_LINK(OnClick, Button*, void);
 
         void PositionDataSource(sal_Int32 nRecord);
     };
@@ -589,9 +589,9 @@ protected:
 
 protected:
     void ImplInitWindow( const InitWindowFacet _eInitWhat );
-    DECL_LINK_TYPED(OnDelete, void*, void);
+    DECL_LINK(OnDelete, void*, void);
 
-    DECL_LINK_TYPED(OnAsyncAdjust, void*, void);
+    DECL_LINK(OnAsyncAdjust, void*, void);
         // if the param is != NULL, AdjustRows will be called, else AdjustDataSource
 
 private:

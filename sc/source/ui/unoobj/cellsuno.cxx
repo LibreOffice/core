@@ -2803,7 +2803,7 @@ void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< 
     OSL_FAIL("not implemented");
 }
 
-IMPL_LINK_TYPED( ScCellRangesBase, ValueListenerHdl, const SfxHint&, rHint, void )
+IMPL_LINK( ScCellRangesBase, ValueListenerHdl, const SfxHint&, rHint, void )
 {
     if ( pDocShell && (rHint.GetId() & SC_HINT_DATACHANGED))
     {

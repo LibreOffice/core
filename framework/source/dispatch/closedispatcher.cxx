@@ -249,7 +249,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
                 - decide then, if we must close this frame only, establish the backing mode
                   or shutdown the whole application.
 */
-IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
+IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
 {
     try
     {

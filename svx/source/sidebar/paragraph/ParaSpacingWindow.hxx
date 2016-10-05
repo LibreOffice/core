@@ -51,7 +51,7 @@ private:
 
     MapUnit m_eUnit;
 
-    DECL_LINK_TYPED(ModifySpacingHdl, Edit&, void);
+    DECL_LINK(ModifySpacingHdl, Edit&, void);
 };
 
 class ParaLRSpacingWindow : public VclVBox,
@@ -75,7 +75,7 @@ private:
 
     vcl::EnumContext m_aContext;
 
-    DECL_LINK_TYPED(ModifySpacingHdl, Edit&, void);
+    DECL_LINK(ModifySpacingHdl, Edit&, void);
 };
 
 }

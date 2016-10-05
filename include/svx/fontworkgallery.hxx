@@ -68,8 +68,8 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 
     SdrView*            mpSdrView;
 
-    DECL_LINK_TYPED( DoubleClickFavoriteHdl, ValueSet*, void );
-    DECL_LINK_TYPED( ClickOKHdl, Button*, void );
+    DECL_LINK( DoubleClickFavoriteHdl, ValueSet*, void );
+    DECL_LINK( ClickOKHdl, Button*, void );
 
     SdrObject**         mppSdrObject;
     SdrModel*           mpDestModel;

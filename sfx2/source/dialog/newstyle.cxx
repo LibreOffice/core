@@ -28,11 +28,11 @@
 
 // PRIVATE METHODES ------------------------------------------------------
 
-IMPL_LINK_NOARG_TYPED( SfxNewStyleDlg, OKClickHdl, Button*, void )
+IMPL_LINK_NOARG( SfxNewStyleDlg, OKClickHdl, Button*, void )
 {
     OKHdl(*m_pColBox);
 }
-IMPL_LINK_NOARG_TYPED( SfxNewStyleDlg, OKHdl, ComboBox&, void )
+IMPL_LINK_NOARG( SfxNewStyleDlg, OKHdl, ComboBox&, void )
 {
     const OUString aName( m_pColBox->GetText() );
     SfxStyleSheetBase* pStyle = rPool.Find( aName, rPool.GetSearchFamily() );
@@ -51,7 +51,7 @@ IMPL_LINK_NOARG_TYPED( SfxNewStyleDlg, OKHdl, ComboBox&, void )
         EndDialog( RET_OK );
 }
 
-IMPL_LINK_TYPED( SfxNewStyleDlg, ModifyHdl, Edit&, rBox, void )
+IMPL_LINK( SfxNewStyleDlg, ModifyHdl, Edit&, rBox, void )
 {
     m_pOKBtn->Enable( !rBox.GetText().replaceAll(" ", "").isEmpty() );
 }

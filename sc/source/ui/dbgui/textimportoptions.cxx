@@ -88,12 +88,12 @@ void ScTextImportOptionsDlg::init()
     m_pLbCustomLang->Disable();
 }
 
-IMPL_LINK_NOARG_TYPED(ScTextImportOptionsDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(ScTextImportOptionsDlg, OKHdl, Button*, void)
 {
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_TYPED( ScTextImportOptionsDlg, RadioHdl, Button*, pBtn, void )
+IMPL_LINK( ScTextImportOptionsDlg, RadioHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pRbAutomatic)
     {

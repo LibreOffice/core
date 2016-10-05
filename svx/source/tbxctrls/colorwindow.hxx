@@ -54,10 +54,10 @@ private:
 
     std::function<void(const OUString&, const Color&)> maColorSelectFunction;
 
-    DECL_LINK_TYPED( SelectHdl, ValueSet*, void );
-    DECL_LINK_TYPED( SelectPaletteHdl, ListBox&, void);
-    DECL_LINK_TYPED( AutoColorClickHdl, Button*, void );
-    DECL_LINK_TYPED( OpenPickerClickHdl, Button*, void );
+    DECL_LINK( SelectHdl, ValueSet*, void );
+    DECL_LINK( SelectPaletteHdl, ListBox&, void);
+    DECL_LINK( AutoColorClickHdl, Button*, void );
+    DECL_LINK( OpenPickerClickHdl, Button*, void );
 
 protected:
     virtual void    Resize() override;

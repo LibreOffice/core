@@ -135,7 +135,7 @@ void SwTbxAutoTextCtrl::StateChanged( sal_uInt16,
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
 }
 
-IMPL_STATIC_LINK_TYPED(SwTbxAutoTextCtrl, PopupHdl, Menu*, pMenu, bool)
+IMPL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, Menu*, pMenu, bool)
 {
     sal_uInt16 nId = pMenu->GetCurItemId();
 
@@ -306,7 +306,7 @@ void SwScrollNaviPopup::ApplyImageList()
     }
 }
 
-IMPL_LINK_TYPED(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet, void)
+IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet, void)
 {
     sal_uInt16 nSet = pSet->GetCurItemId();
     if( nSet != NID_PREV && nSet != NID_NEXT )

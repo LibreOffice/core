@@ -260,8 +260,8 @@ namespace svxform
         OUString                    m_sInstanceURL;
         bool                        m_bLinkOnce;
 
-        DECL_LINK_TYPED(TbxSelectHdl, ToolBox *, void);
-        DECL_LINK_TYPED(ItemSelectHdl, SvTreeListBox*, void);
+        DECL_LINK(TbxSelectHdl, ToolBox *, void);
+        DECL_LINK(ItemSelectHdl, SvTreeListBox*, void);
 
         void                        AddChildren( SvTreeListEntry* _pParent,
                                                  const ImageList& _rImgLst,
@@ -334,11 +334,11 @@ namespace svxform
         XFrame_ref                  m_xFrame;
         XFrameModel_ref             m_xFrameModel;
 
-        DECL_LINK_TYPED(            ModelSelectListBoxHdl, ListBox&, void );
-        DECL_LINK_TYPED(            MenuSelectHdl, MenuButton *, void );
-        DECL_LINK_TYPED(            MenuActivateHdl, MenuButton *, void );
-        DECL_LINK_TYPED(            ActivatePageHdl, TabControl*, void);
-        DECL_LINK_TYPED(            UpdateHdl, Timer *, void);
+        DECL_LINK(            ModelSelectListBoxHdl, ListBox&, void );
+        DECL_LINK(            MenuSelectHdl, MenuButton *, void );
+        DECL_LINK(            MenuActivateHdl, MenuButton *, void );
+        DECL_LINK(            ActivatePageHdl, TabControl*, void);
+        DECL_LINK(            UpdateHdl, Timer *, void);
         void ModelSelectHdl(ListBox*);
         XFormsPage*                 GetCurrentPage( sal_uInt16& rCurId );
         void                        LoadModels();
@@ -445,9 +445,9 @@ namespace svxform
         OUString            m_sFL_Binding;
         OUString            m_sFT_BindingExp;
 
-        DECL_LINK_TYPED(    CheckHdl, Button*, void );
-        DECL_LINK_TYPED(    ConditionHdl, Button*, void );
-        DECL_LINK_TYPED(    OKHdl, Button*, void);
+        DECL_LINK(    CheckHdl, Button*, void );
+        DECL_LINK(    ConditionHdl, Button*, void );
+        DECL_LINK(    OKHdl, Button*, void);
 
         void                InitDialog();
         void                InitFromNode();
@@ -477,10 +477,10 @@ namespace svxform
         XFormsUIHelper1_ref     m_xUIHelper;
         XPropertySet_ref        m_xBinding;
 
-        DECL_LINK_TYPED(ModifyHdl, Edit&, void);
-        DECL_LINK_TYPED(ResultHdl, Idle *, void);
-        DECL_LINK_TYPED(EditHdl, Button*, void);
-        DECL_LINK_TYPED(OKHdl, Button*, void);
+        DECL_LINK(ModifyHdl, Edit&, void);
+        DECL_LINK(ResultHdl, Idle *, void);
+        DECL_LINK(EditHdl, Button*, void);
+        DECL_LINK(OKHdl, Button*, void);
 
     public:
         AddConditionDialog(vcl::Window* pParent,
@@ -514,9 +514,9 @@ namespace svxform
 
         XNameContainer_ref& m_rNamespaces;
 
-        DECL_LINK_TYPED(    SelectHdl, SvTreeListBox*, void );
-        DECL_LINK_TYPED(    ClickHdl, Button*, void );
-        DECL_LINK_TYPED(    OKHdl, Button*, void);
+        DECL_LINK(    SelectHdl, SvTreeListBox*, void );
+        DECL_LINK(    ClickHdl, Button*, void );
+        DECL_LINK(    OKHdl, Button*, void);
 
         void                LoadNamespaces();
 
@@ -536,7 +536,7 @@ namespace svxform
 
         VclPtr<AddConditionDialog> m_pConditionDlg;
 
-        DECL_LINK_TYPED(OKHdl, Button*, void);
+        DECL_LINK(OKHdl, Button*, void);
 
     public:
         ManageNamespaceDialog(vcl::Window* pParent, AddConditionDialog* _pCondDlg, bool bIsEdit);
@@ -577,8 +577,8 @@ namespace svxform
         XPropertySet_ref    m_xTempBinding;
         XPropertySet_ref    m_xCreatedBinding;
 
-        DECL_LINK_TYPED(RefHdl, Button*, void);
-        DECL_LINK_TYPED(OKHdl, Button*, void);
+        DECL_LINK(RefHdl, Button*, void);
+        DECL_LINK(OKHdl, Button*, void);
 
         void                FillAllBoxes();
 
@@ -622,7 +622,7 @@ namespace svxform
 
         OUString                m_sAllFilterName;
 
-        DECL_LINK_TYPED(FilePickerHdl, Button*, void);
+        DECL_LINK(FilePickerHdl, Button*, void);
 
     public:
         AddInstanceDialog( vcl::Window* pParent, bool _bEdit );

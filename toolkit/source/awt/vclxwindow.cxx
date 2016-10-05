@@ -188,7 +188,7 @@ public:
     ~VCLXWindowImpl();
 
 private:
-    DECL_LINK_TYPED( OnProcessCallbacks, void*, void );
+    DECL_LINK( OnProcessCallbacks, void*, void );
 };
 
 
@@ -271,7 +271,7 @@ void VCLXWindowImpl::callBackAsync( const VCLXWindow::Callback& i_callback )
 }
 
 
-IMPL_LINK_NOARG_TYPED(VCLXWindowImpl, OnProcessCallbacks, void*, void)
+IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks, void*, void)
 {
     const Reference< uno::XInterface > xKeepAlive( mrAntiImpl );
 
@@ -401,7 +401,7 @@ void VCLXWindow::notifyWindowRemoved( vcl::Window& _rWindow )
     }
 }
 
-IMPL_LINK_TYPED( VCLXWindow, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( VCLXWindow, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     if ( mpImpl->mnListenerLockLevel )
         return;

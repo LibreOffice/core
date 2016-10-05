@@ -70,11 +70,11 @@ private:
         m_xContext;
 
     /// handles actions of the toolbox
-    DECL_LINK_TYPED( ToolboxHdl, ToolBox*, void );
+    DECL_LINK( ToolboxHdl, ToolBox*, void );
     /// is called, if the cursor of the table has moved
-    DECL_LINK_TYPED( BrowserCursorMovedHdl, DataBrowser*, void);
+    DECL_LINK( BrowserCursorMovedHdl, DataBrowser*, void);
     /// this is called if MiscOptions change, esp. High-Contrast mode
-    DECL_LINK_TYPED( MiscHdl, LinkParamNone*, void );
+    DECL_LINK( MiscHdl, LinkParamNone*, void );
 
     void UpdateData();
     /// moved and resizes the series name control etc. to fit the dimensions of the edit browsebox

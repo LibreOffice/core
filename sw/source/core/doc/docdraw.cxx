@@ -521,7 +521,7 @@ void SwDoc::SetCalcFieldValueHdl(Outliner* pOutliner)
 }
 
 /// Recognise fields/URLs in the Outliner and set how they are displayed.
-IMPL_LINK_TYPED(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
+IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 {
     if (!pInfo)
         return;

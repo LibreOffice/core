@@ -279,7 +279,7 @@ void SwCaptionDialog::Apply()
     our_aSepTextSave = m_pSepEdit->GetText();
 }
 
-IMPL_LINK_TYPED( SwCaptionDialog, OptionHdl, Button*, pButton, void )
+IMPL_LINK( SwCaptionDialog, OptionHdl, Button*, pButton, void )
 {
     OUString sFieldTypeName = m_pCategoryBox->GetText();
     if(sFieldTypeName == m_sNone)
@@ -301,16 +301,16 @@ IMPL_LINK_TYPED( SwCaptionDialog, OptionHdl, Button*, pButton, void )
     DrawSample();
 }
 
-IMPL_LINK_NOARG_TYPED(SwCaptionDialog, SelectListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwCaptionDialog, SelectListBoxHdl, ListBox&, void)
 {
     DrawSample();
 }
-IMPL_LINK_NOARG_TYPED(SwCaptionDialog, SelectHdl, ComboBox&, void)
+IMPL_LINK_NOARG(SwCaptionDialog, SelectHdl, ComboBox&, void)
 {
     DrawSample();
 }
 
-IMPL_LINK_NOARG_TYPED(SwCaptionDialog, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl, Edit&, void)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     OUString sFieldTypeName = m_pCategoryBox->GetText();
@@ -332,7 +332,7 @@ IMPL_LINK_NOARG_TYPED(SwCaptionDialog, ModifyHdl, Edit&, void)
     DrawSample();
 }
 
-IMPL_LINK_NOARG_TYPED(SwCaptionDialog, CaptionHdl, Button*, void)
+IMPL_LINK_NOARG(SwCaptionDialog, CaptionHdl, Button*, void)
 {
     SfxItemSet  aSet( rView.GetDocShell()->GetDoc()->GetAttrPool() );
     ScopedVclPtrInstance< SwCaptionOptDlg > aDlg( this, aSet );

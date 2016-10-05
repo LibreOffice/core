@@ -181,8 +181,8 @@ private:
     vcl::EnumContext                        maContext;
     SfxBindings*                            mpBindings;
 
-    DECL_LINK_TYPED(TbxCellBorderSelectHdl, ToolBox*, void);
-    DECL_LINK_TYPED(TbxLineStyleSelectHdl, ToolBox*, void);
+    DECL_LINK(TbxCellBorderSelectHdl, ToolBox*, void);
+    DECL_LINK(TbxLineStyleSelectHdl, ToolBox*, void);
 
     void Initialize();
     void SetStyleIcon();

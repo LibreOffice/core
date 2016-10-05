@@ -662,12 +662,12 @@ void ScXMLSourceDlg::RefEditModified()
     mpBtnOk->Enable(bHasLink);
 }
 
-IMPL_LINK_TYPED(ScXMLSourceDlg, GetFocusHdl, Control&, rCtrl, void)
+IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control&, rCtrl, void)
 {
     HandleGetFocus(&rCtrl);
 }
 
-IMPL_LINK_TYPED(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn, void)
+IMPL_LINK(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnSelectSource)
         SelectSourceFile();
@@ -677,12 +677,12 @@ IMPL_LINK_TYPED(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn, void)
         CancelPressed();
 }
 
-IMPL_LINK_NOARG_TYPED(ScXMLSourceDlg, TreeItemSelectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(ScXMLSourceDlg, TreeItemSelectHdl, SvTreeListBox*, void)
 {
     TreeItemSelected();
 }
 
-IMPL_LINK_NOARG_TYPED(ScXMLSourceDlg, RefModifiedHdl, Edit&, void)
+IMPL_LINK_NOARG(ScXMLSourceDlg, RefModifiedHdl, Edit&, void)
 {
     RefEditModified();
 }

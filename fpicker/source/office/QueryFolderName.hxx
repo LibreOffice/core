@@ -32,8 +32,8 @@ private:
     VclPtr<VclFrame> m_pNameLine;
     VclPtr<OKButton> m_pOKBtn;
 
-    DECL_LINK_TYPED( OKHdl, Button*, void );
-    DECL_LINK_TYPED( NameHdl, Edit&, void );
+    DECL_LINK( OKHdl, Button*, void );
+    DECL_LINK( NameHdl, Edit&, void );
 
 public:
     QueryFolderNameDialog(vcl::Window* _pParent, const OUString& rTitle,

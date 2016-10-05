@@ -35,9 +35,9 @@ private:
     VclPtr<FixedText>           m_pFtSubject;
     VclPtr<Edit>                m_pEdSubject;
 
-    DECL_STATIC_LINK_TYPED(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, Button*, void);
+    DECL_STATIC_LINK(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, Button*, void);
         ///< Button : Address book
-    DECL_LINK_TYPED (ModifiedReceiverHdl_Impl, Edit&, void ); ///< Combobox "receiver" modified
+    DECL_LINK (ModifiedReceiverHdl_Impl, Edit&, void ); ///< Combobox "receiver" modified
 
     void    SetScheme(const OUString& rScheme);
     void    RemoveImproperProtocol(const OUString& aProperScheme);

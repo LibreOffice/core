@@ -278,7 +278,7 @@ void RecentlyUsedMasterPages::SendEvent()
     }
 }
 
-IMPL_LINK_TYPED(RecentlyUsedMasterPages, MasterPageChangeListener,
+IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
     MasterPageObserverEvent&, rEvent, void)
 {
     switch (rEvent.meType)
@@ -298,7 +298,7 @@ IMPL_LINK_TYPED(RecentlyUsedMasterPages, MasterPageChangeListener,
     }
 }
 
-IMPL_LINK_TYPED(RecentlyUsedMasterPages, MasterPageContainerChangeListener,
+IMPL_LINK(RecentlyUsedMasterPages, MasterPageContainerChangeListener,
     MasterPageContainerChangeEvent&, rEvent, void)
 {
     switch (rEvent.meEventType)

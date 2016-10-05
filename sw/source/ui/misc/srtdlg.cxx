@@ -367,14 +367,14 @@ void SwSortDlg::Apply()
         ScopedVclPtrInstance<MessageDialog>(this->GetParent(), SW_RES(STR_SRTERR), VclMessageType::Info)->Execute();
 }
 
-IMPL_LINK_TYPED( SwSortDlg, DelimHdl, Button*, pButton, void )
+IMPL_LINK( SwSortDlg, DelimHdl, Button*, pButton, void )
 {
     bool bEnable = pButton == m_pDelimFreeRB && m_pDelimFreeRB->IsEnabled();
     m_pDelimEdt->Enable( bEnable );
     m_pDelimPB->Enable( bEnable );
 }
 
-IMPL_LINK_NOARG_TYPED(SwSortDlg, DelimCharHdl, Button*, void)
+IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl, Button*, void)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG_TYPED(SwSortDlg, DelimCharHdl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED( SwSortDlg, CheckHdl, Button*, pControl, void )
+IMPL_LINK( SwSortDlg, CheckHdl, Button*, pControl, void )
 {
     if( pControl == m_pRowRB.get())
     {
@@ -422,7 +422,7 @@ IMPL_LINK_TYPED( SwSortDlg, CheckHdl, Button*, pControl, void )
         static_cast<CheckBox *>(pControl)->Check();
 }
 
-IMPL_LINK_TYPED( SwSortDlg, LanguageListBoxHdl, ListBox&, rLBox, void )
+IMPL_LINK( SwSortDlg, LanguageListBoxHdl, ListBox&, rLBox, void )
 {
     LanguageHdl(&rLBox);
 }

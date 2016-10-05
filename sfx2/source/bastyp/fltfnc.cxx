@@ -816,7 +816,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4FilterName( const O
     return nullptr;
 }
 
-IMPL_LINK_TYPED( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString, bool )
+IMPL_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString, bool )
 {
     std::shared_ptr<const SfxFilter> pFilter = GetFilter4Extension( *pString );
     if (pFilter && !pFilter->GetWildcard().Matches( OUString() ) &&

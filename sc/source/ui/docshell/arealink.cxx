@@ -477,12 +477,12 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     return bCanDo;
 }
 
-IMPL_LINK_NOARG_TYPED(ScAreaLink, RefreshHdl, Timer *, void)
+IMPL_LINK_NOARG(ScAreaLink, RefreshHdl, Timer *, void)
 {
     Refresh( aFileName, aFilterName, aSourceArea, GetRefreshDelay() );
 }
 
-IMPL_LINK_NOARG_TYPED(ScAreaLink, AreaEndEditHdl, Dialog&, void)
+IMPL_LINK_NOARG(ScAreaLink, AreaEndEditHdl, Dialog&, void)
 {
     //  #i76514# can't use link argument to access the dialog,
     //  because it's the ScLinkedAreaDlg, not AbstractScLinkedAreaDlg

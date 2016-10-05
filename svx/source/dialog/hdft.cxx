@@ -494,7 +494,7 @@ void SvxHFPage::InitHandler()
     m_pBackgroundBtn->SetClickHdl(LINK(this,SvxHFPage, BackgroundHdl));
 }
 
-IMPL_LINK_TYPED( SvxHFPage, TurnOnHdl, Button *, pButton, void )
+IMPL_LINK( SvxHFPage, TurnOnHdl, Button *, pButton, void )
 {
     CheckBox* pBox = static_cast<CheckBox*>(pButton);
     if ( m_pTurnOnBox->IsChecked() )
@@ -559,22 +559,22 @@ IMPL_LINK_TYPED( SvxHFPage, TurnOnHdl, Button *, pButton, void )
     UpdateExample();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxHFPage, DistModify, Edit&, void)
+IMPL_LINK_NOARG(SvxHFPage, DistModify, Edit&, void)
 {
     UpdateExample();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxHFPage, HeightModify, Edit&, void)
+IMPL_LINK_NOARG(SvxHFPage, HeightModify, Edit&, void)
 {
     UpdateExample();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxHFPage, BorderModify, Edit&, void)
+IMPL_LINK_NOARG(SvxHFPage, BorderModify, Edit&, void)
 {
     UpdateExample();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxHFPage, BackgroundHdl, Button*, void)
+IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, Button*, void)
 {
     if(!pBBSet)
     {
@@ -1050,7 +1050,7 @@ DeactivateRC SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK_NOARG_TYPED(SvxHFPage, RangeFocusHdl, Control&, void)
+IMPL_LINK_NOARG(SvxHFPage, RangeFocusHdl, Control&, void)
 {
     RangeHdl();
 }

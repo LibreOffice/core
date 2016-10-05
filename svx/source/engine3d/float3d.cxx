@@ -2210,7 +2210,7 @@ void Svx3DWin::Resize()
     SfxDockingWindow::Resize();
 }
 
-IMPL_LINK_NOARG_TYPED(Svx3DWin, ClickUpdateHdl, Button*, void)
+IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl, Button*, void)
 {
     bUpdate = !m_pBtnUpdate->IsChecked();
     m_pBtnUpdate->Check( bUpdate );
@@ -2232,7 +2232,7 @@ IMPL_LINK_NOARG_TYPED(Svx3DWin, ClickUpdateHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(Svx3DWin, ClickAssignHdl, Button*, void)
+IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl, Button*, void)
 {
     SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
     if (pDispatcher != nullptr)
@@ -2244,7 +2244,7 @@ IMPL_LINK_NOARG_TYPED(Svx3DWin, ClickAssignHdl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( Svx3DWin, ClickViewTypeHdl, Button*, pBtn, void )
+IMPL_LINK( Svx3DWin, ClickViewTypeHdl, Button*, pBtn, void )
 {
 
     if( pBtn )
@@ -2352,7 +2352,7 @@ IMPL_LINK_TYPED( Svx3DWin, ClickViewTypeHdl, Button*, pBtn, void )
 }
 
 
-IMPL_LINK_TYPED( Svx3DWin, ClickHdl, Button *, pButton, void )
+IMPL_LINK( Svx3DWin, ClickHdl, Button *, pButton, void )
 {
     PushButton* pBtn = static_cast<PushButton*>(pButton);
     if( pBtn )
@@ -2510,7 +2510,7 @@ IMPL_LINK_TYPED( Svx3DWin, ClickHdl, Button *, pButton, void )
 }
 
 
-IMPL_LINK_TYPED( Svx3DWin, ClickColorHdl, Button *, pBtn, void)
+IMPL_LINK( Svx3DWin, ClickColorHdl, Button *, pBtn, void)
 {
     SvColorDialog aColorDlg( this );
     ColorLB* pLb;
@@ -2538,7 +2538,7 @@ IMPL_LINK_TYPED( Svx3DWin, ClickColorHdl, Button *, pBtn, void)
 }
 
 
-IMPL_LINK_TYPED( Svx3DWin, SelectHdl, ListBox&, rListBox, void )
+IMPL_LINK( Svx3DWin, SelectHdl, ListBox&, rListBox, void )
 {
     bool bUpdatePreview = false;
 
@@ -2635,7 +2635,7 @@ IMPL_LINK_TYPED( Svx3DWin, SelectHdl, ListBox&, rListBox, void )
 }
 
 
-IMPL_LINK_TYPED( Svx3DWin, ModifyHdl, Edit&, rField, void )
+IMPL_LINK( Svx3DWin, ModifyHdl, Edit&, rField, void )
 {
     bool bUpdatePreview = false;
 
@@ -2689,7 +2689,7 @@ void Svx3DWin::ClickLight(PushButton& rBtn)
 }
 
 
-IMPL_LINK_NOARG_TYPED(Svx3DWin, ChangeSelectionCallbackHdl, SvxLightCtl3D*, void)
+IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl, SvxLightCtl3D*, void)
 {
     const sal_uInt32 nLight(m_pCtlLightPreview->GetSvx3DLightControl().GetSelectedLight());
     PushButton* pBtn = nullptr;

@@ -60,7 +60,7 @@ namespace pcr
         css::awt::Size getMinimumSize();
 
     protected:
-        DECL_LINK_TYPED(OnPageActivation, LinkParamNone*, void);
+        DECL_LINK(OnPageActivation, LinkParamNone*, void);
     };
 
 

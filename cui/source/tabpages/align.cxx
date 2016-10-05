@@ -417,12 +417,12 @@ bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 n
     return eMethodOld != eMethodNew;
 }
 
-IMPL_LINK_NOARG_TYPED(AlignmentTabPage, UpdateEnableClickHdl, Button*, void)
+IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableClickHdl, Button*, void)
 {
     UpdateEnableControls();
 }
 
-IMPL_LINK_NOARG_TYPED(AlignmentTabPage, UpdateEnableHdl, ListBox&, void)
+IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableHdl, ListBox&, void)
 {
     UpdateEnableControls();
 }

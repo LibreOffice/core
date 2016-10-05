@@ -266,9 +266,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SAL_DLLPRIVATE bool          IsTextTool() const;
 
-    DECL_DLLPRIVATE_LINK_TYPED( TimeoutHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( TimeoutHdl, Timer*, void );
 
-    DECL_DLLPRIVATE_LINK_TYPED( FieldPopupModeEndHdl, FloatingWindow*, void );
+    DECL_DLLPRIVATE_LINK( FieldPopupModeEndHdl, FloatingWindow*, void );
 
     inline long                  GetXScroll() const;
     inline long                  GetYScroll() const;
@@ -289,10 +289,10 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE long          PhyPageDown();
 
     SAL_DLLPRIVATE void           CreateScrollbar( bool bHori );
-    DECL_DLLPRIVATE_LINK_TYPED(  ScrollHdl, ScrollBar*, void );
-    DECL_DLLPRIVATE_LINK_TYPED(  EndScrollHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK(  ScrollHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK(  EndScrollHdl, ScrollBar*, void );
     SAL_DLLPRIVATE bool          UpdateScrollbars();
-    DECL_DLLPRIVATE_LINK_TYPED( WindowChildEventListener, VclWindowEvent&, void );
+    DECL_DLLPRIVATE_LINK( WindowChildEventListener, VclWindowEvent&, void );
     SAL_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );
 
     // linguistics functions
@@ -429,7 +429,7 @@ public:
     void                ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
     void            ExecSmartTagPopup( const Point& rPt );
 
-    DECL_LINK_TYPED( OnlineSpellCallback, SpellCallbackInfo&, void );
+    DECL_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );
     bool            ExecDrwTextSpellPopup(const Point& rPt);
 
     void            SetTabColFromDocPos( const Point &rPt ) { m_aTabColFromDocPos = rPt; }
@@ -452,7 +452,7 @@ public:
 
     static sal_uInt16   GetMoveType();
     static void     SetMoveType(sal_uInt16 nSet);
-    DECL_LINK_TYPED( MoveNavigationHdl, void*, void );
+    DECL_LINK( MoveNavigationHdl, void*, void );
     static void     SetActMark(sal_Int32 nSet);
 
     bool            HandleWheelCommands( const CommandEvent& );
@@ -499,7 +499,7 @@ public:
     void            ExecDraw(SfxRequest&);
     void            ExecTabWin(SfxRequest&);
     void            ExecuteStatusLine(SfxRequest&);
-    DECL_LINK_TYPED( ExecRulerClick, Ruler *, void );
+    DECL_LINK( ExecRulerClick, Ruler *, void );
     void            ExecSearch(SfxRequest&);
     void            ExecViewOptions(SfxRequest &);
 
@@ -538,10 +538,10 @@ public:
     void            StateTabWin(SfxItemSet&);
 
     // attributes have changed
-    DECL_LINK_TYPED( AttrChangedNotify, SwCursorShell*, void );
+    DECL_LINK( AttrChangedNotify, SwCursorShell*, void );
 
     // form control has been activated
-    DECL_LINK_TYPED( FormControlActivated, LinkParamNone*, void );
+    DECL_LINK( FormControlActivated, LinkParamNone*, void );
 
     // edit links
     void            EditLinkDlg();
@@ -586,7 +586,7 @@ public:
 
     void ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem );
     long InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVersion );
-    DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper *, void );
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper *, void );
 
     // status methods for clipboard.
     // Status changes now notified from the clipboard.

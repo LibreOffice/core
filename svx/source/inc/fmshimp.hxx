@@ -465,12 +465,12 @@ public:
     SAL_DLLPRIVATE bool    HasControlFocus() const;
 
 private:
-    DECL_DLLPRIVATE_LINK_TYPED(OnFoundData, FmFoundRecordInformation&, void);
-    DECL_DLLPRIVATE_LINK_TYPED(OnCanceledNotFound, FmFoundRecordInformation&, void);
-    DECL_DLLPRIVATE_LINK_TYPED(OnSearchContextRequest, FmSearchContext&, sal_uInt32);
-    DECL_DLLPRIVATE_LINK_TYPED(OnTimeOut, Timer*, void);
-    DECL_DLLPRIVATE_LINK_TYPED(OnFirstTimeActivation, void*, void);
-    DECL_DLLPRIVATE_LINK_TYPED(OnFormsCreated, FmFormPageImpl&, void);
+    DECL_DLLPRIVATE_LINK(OnFoundData, FmFoundRecordInformation&, void);
+    DECL_DLLPRIVATE_LINK(OnCanceledNotFound, FmFoundRecordInformation&, void);
+    DECL_DLLPRIVATE_LINK(OnSearchContextRequest, FmSearchContext&, sal_uInt32);
+    DECL_DLLPRIVATE_LINK(OnTimeOut, Timer*, void);
+    DECL_DLLPRIVATE_LINK(OnFirstTimeActivation, void*, void);
+    DECL_DLLPRIVATE_LINK(OnFormsCreated, FmFormPageImpl&, void);
 
     SAL_DLLPRIVATE void LoopGrids(LoopGridsSync nSync, LoopGridsFlags nWhat = LoopGridsFlags::NONE);
 
@@ -481,7 +481,7 @@ private:
     // (asynchron) invalidiert
     SAL_DLLPRIVATE void    LockSlotInvalidation(bool bLock);
 
-    DECL_DLLPRIVATE_LINK_TYPED(OnInvalidateSlots, void*, void);
+    DECL_DLLPRIVATE_LINK(OnInvalidateSlots, void*, void);
 
     SAL_DLLPRIVATE void    CloseExternalFormViewer();
         // closes the task-local beamer displaying a grid view for a form
@@ -531,7 +531,7 @@ public:
     SAL_DLLPRIVATE bool    IsFormSlotEnabled( sal_Int32 _nSlot, css::form::runtime::FeatureState* _pCompleteState );
 
 protected:
-    DECL_DLLPRIVATE_LINK_TYPED( OnLoadForms, void*, void );
+    DECL_DLLPRIVATE_LINK( OnLoadForms, void*, void );
 };
 
 

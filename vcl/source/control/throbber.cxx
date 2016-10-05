@@ -227,7 +227,7 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
     return aImageURLs;
 }
 
-IMPL_LINK_NOARG_TYPED(Throbber, TimeOutHdl, Timer *, void)
+IMPL_LINK_NOARG(Throbber, TimeOutHdl, Timer *, void)
 {
     SolarMutexGuard aGuard;
     if ( maImageList.empty() )

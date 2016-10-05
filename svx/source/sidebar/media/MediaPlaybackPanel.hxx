@@ -70,10 +70,10 @@ private:
                                     const SfxItemState eState,
                                     const SfxPoolItem* pState,
                                     const bool bIsEnabled) override;
-    DECL_LINK_TYPED(PlayToolBoxSelectHdl, ToolBox*, void);
-    DECL_LINK_TYPED(VolumeSlideHdl, Slider*, void);
-    DECL_LINK_TYPED(SeekHdl, Slider*, void);
-    DECL_LINK_TYPED(TimeoutHdl, Idle*, void);
+    DECL_LINK(PlayToolBoxSelectHdl, ToolBox*, void);
+    DECL_LINK(VolumeSlideHdl, Slider*, void);
+    DECL_LINK(SeekHdl, Slider*, void);
+    DECL_LINK(TimeoutHdl, Idle*, void);
 };
 
 

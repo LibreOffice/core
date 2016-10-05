@@ -64,11 +64,11 @@ protected:
     ControllerContainer maControllers;
     bool mbAreHandlersRegistered;
 
-    DECL_LINK_TYPED(DropDownClickHandler, ToolBox*, void);
-    DECL_LINK_TYPED(ClickHandler, ToolBox*, void);
-    DECL_LINK_TYPED(DoubleClickHandler, ToolBox*, void);
-    DECL_LINK_TYPED(SelectHandler, ToolBox*, void);
-    DECL_LINK_TYPED(ChangedIconSizeHandler, LinkParamNone*, void );
+    DECL_LINK(DropDownClickHandler, ToolBox*, void);
+    DECL_LINK(ClickHandler, ToolBox*, void);
+    DECL_LINK(DoubleClickHandler, ToolBox*, void);
+    DECL_LINK(SelectHandler, ToolBox*, void);
+    DECL_LINK(ChangedIconSizeHandler, LinkParamNone*, void );
 
     css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId(const sal_uInt16 nItemId) const;
 

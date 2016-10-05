@@ -1416,7 +1416,7 @@ uno::Reference< ui::XUIElement > LayoutManager::implts_createDockingWindow( cons
     return xUIElement;
 }
 
-IMPL_LINK_TYPED( LayoutManager, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( LayoutManager, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     vcl::Window* pWindow = rEvent.GetWindow();
     if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
@@ -2610,7 +2610,7 @@ bool LayoutManager::implts_resetMenuBar()
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(LayoutManager, MenuBarClose, void*, void)
+IMPL_LINK_NOARG(LayoutManager, MenuBarClose, void*, void)
 {
     SolarMutexClearableGuard aReadLock;
     uno::Reference< frame::XDispatchProvider >   xProvider(m_xFrame, uno::UNO_QUERY);
@@ -2753,7 +2753,7 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) thr
     }
 }
 
-IMPL_LINK_NOARG_TYPED(LayoutManager, AsyncLayoutHdl, Timer *, void)
+IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl, Timer *, void)
 {
     SolarMutexClearableGuard aReadLock;
     m_aAsyncLayoutTimer.Stop();

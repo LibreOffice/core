@@ -312,7 +312,7 @@ void SdModifyFieldDlg::FillControls()
     m_pLbFormat->SaveValue();
 }
 
-IMPL_LINK_NOARG_TYPED(SdModifyFieldDlg, LanguageChangeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SdModifyFieldDlg, LanguageChangeHdl, ListBox&, void)
 {
     FillFormatList();
 }

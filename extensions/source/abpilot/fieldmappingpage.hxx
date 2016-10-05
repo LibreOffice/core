@@ -45,7 +45,7 @@ namespace abp
         virtual void        ActivatePage() override;
 
     private:
-        DECL_LINK_TYPED( OnInvokeDialog, Button*, void );
+        DECL_LINK( OnInvokeDialog, Button*, void );
 
         void implUpdateHint();
     };

@@ -112,7 +112,7 @@ bool MacroSnippet::Compile()
 
 bool MacroSnippet::HasError() { return mbError; }
 
-IMPL_LINK_TYPED( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
+IMPL_LINK( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
 {
     fprintf(stderr,"(%d:%d)\n",
             StarBASIC::GetLine(), StarBASIC::GetCol1());

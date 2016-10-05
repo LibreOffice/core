@@ -70,12 +70,12 @@ class SwAutoFormatDlg : public SfxModalDialog
     void Init( const SwTableAutoFormat* pSelFormat );
     void UpdateChecks( const SwTableAutoFormat&, bool bEnableBtn );
 
-    DECL_LINK_TYPED( CheckHdl, Button*, void );
-    DECL_LINK_TYPED(OkHdl, Button*, void);
-    DECL_LINK_TYPED( AddHdl, Button*, void );
-    DECL_LINK_TYPED( RemoveHdl, Button*, void );
-    DECL_LINK_TYPED( RenameHdl, Button*, void );
-    DECL_LINK_TYPED( SelFormatHdl, ListBox&, void );
+    DECL_LINK( CheckHdl, Button*, void );
+    DECL_LINK(OkHdl, Button*, void);
+    DECL_LINK( AddHdl, Button*, void );
+    DECL_LINK( RemoveHdl, Button*, void );
+    DECL_LINK( RenameHdl, Button*, void );
+    DECL_LINK( SelFormatHdl, ListBox&, void );
 
 public:
     SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,

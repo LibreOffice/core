@@ -59,18 +59,18 @@ void SwBreakDlg::Apply()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwBreakDlg, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwBreakDlg, ClickHdl, Button*, void)
 {
     CheckEnable();
 }
 
-IMPL_LINK_NOARG_TYPED(SwBreakDlg, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwBreakDlg, SelectHdl, ListBox&, void)
 {
     CheckEnable();
 }
 
 // Handler for Change Page Number
-IMPL_LINK_TYPED( SwBreakDlg, PageNumHdl, Button*, pBox, void )
+IMPL_LINK( SwBreakDlg, PageNumHdl, Button*, pBox, void )
 {
     if(static_cast<CheckBox*>(pBox)->IsChecked())
         m_pPageNumEdit->SetValue(1);
@@ -79,7 +79,7 @@ IMPL_LINK_TYPED( SwBreakDlg, PageNumHdl, Button*, pBox, void )
 }
 
 // By changing the Page number the checkbox is checked.
-IMPL_LINK_NOARG_TYPED(SwBreakDlg, PageNumModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwBreakDlg, PageNumModifyHdl, Edit&, void)
 {
     m_pPageNumBox->Check();
 }
@@ -89,7 +89,7 @@ IMPL_LINK_NOARG_TYPED(SwBreakDlg, PageNumModifyHdl, Edit&, void)
  * checks whether pagenumber nPage is a legal pagenumber (left pages with even
  * numbers etc. for a page template with alternating pages)
  */
-IMPL_LINK_NOARG_TYPED(SwBreakDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(SwBreakDlg, OkHdl, Button*, void)
 {
     if(m_pPageNumBox->IsChecked()) {
         // In case of differing page descriptions, test validity

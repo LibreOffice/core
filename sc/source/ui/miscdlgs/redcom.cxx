@@ -149,7 +149,7 @@ void ScRedComDialog::SelectCell()
     }
 }
 
-IMPL_LINK_TYPED(ScRedComDialog, PrevHdl, AbstractSvxPostItDialog&, rDlgP, void )
+IMPL_LINK(ScRedComDialog, PrevHdl, AbstractSvxPostItDialog&, rDlgP, void )
 {
     if (pDocShell!=nullptr && rDlgP.GetNote() != aComment )
         pDocShell->SetChangeComment( pChangeAction, rDlgP.GetNote());
@@ -158,7 +158,7 @@ IMPL_LINK_TYPED(ScRedComDialog, PrevHdl, AbstractSvxPostItDialog&, rDlgP, void )
     SelectCell();
 }
 
-IMPL_LINK_TYPED(ScRedComDialog, NextHdl, AbstractSvxPostItDialog&, rDlgP, void )
+IMPL_LINK(ScRedComDialog, NextHdl, AbstractSvxPostItDialog&, rDlgP, void )
 {
     if ( pDocShell!=nullptr && rDlgP.GetNote() != aComment )
         pDocShell->SetChangeComment( pChangeAction, rDlgP.GetNote());

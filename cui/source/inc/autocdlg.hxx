@@ -49,7 +49,7 @@ class OfaAutoCorrDlg : public SfxTabDialog
     sal_uInt16 m_nReplacePageId;
     sal_uInt16 m_nExceptionsPageId;
 
-    DECL_LINK_TYPED(SelectLanguageHdl, ListBox&, void);
+    DECL_LINK(SelectLanguageHdl, ListBox&, void);
 public:
 
     OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet *pSet);
@@ -160,9 +160,9 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 
     SvLBoxButtonData*   pCheckButtonData;
 
-        DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
-        DECL_LINK_TYPED(EditHdl, Button*, void);
-        DECL_LINK_TYPED(DoubleClickEditHdl, SvTreeListBox*, bool);
+        DECL_LINK(SelectHdl, SvTreeListBox*, void);
+        DECL_LINK(EditHdl, Button*, void);
+        DECL_LINK(DoubleClickEditHdl, SvTreeListBox*, bool);
         SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
 
@@ -263,10 +263,10 @@ private:
         bool bReplaceEditChanged:1;
         bool bSWriter:1;
 
-        DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
-        DECL_LINK_TYPED(NewDelButtonHdl, Button*, void);
-        DECL_LINK_TYPED(NewDelActionHdl, AutoCorrEdit&, bool);
-        DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+        DECL_LINK(SelectHdl, SvTreeListBox*, void);
+        DECL_LINK(NewDelButtonHdl, Button*, void);
+        DECL_LINK(NewDelActionHdl, AutoCorrEdit&, bool);
+        DECL_LINK(ModifyHdl, Edit&, void);
         bool NewDelHdl(void*);
 
         void RefillReplaceBox(  bool bFromReset,
@@ -323,10 +323,10 @@ private:
     CollatorWrapper* pCompareClass;
     LanguageType    eLang;
 
-    DECL_LINK_TYPED(NewDelButtonHdl, Button*, void);
-    DECL_LINK_TYPED(NewDelActionHdl, AutoCorrEdit&, bool);
-    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+    DECL_LINK(NewDelButtonHdl, Button*, void);
+    DECL_LINK(NewDelActionHdl, AutoCorrEdit&, bool);
+    DECL_LINK(SelectHdl, ListBox&, void);
+    DECL_LINK(ModifyHdl, Edit&, void);
     bool NewDelHdl(void*);
                     /// Box filled with new language
     void            RefillReplaceBoxes(bool bFromReset,
@@ -393,8 +393,8 @@ private:
     sal_UCS4    cStartQuote;
     sal_UCS4    cEndQuote;
 
-    DECL_LINK_TYPED( QuoteHdl, Button*, void );
-    DECL_LINK_TYPED( StdQuoteHdl, Button*, void );
+    DECL_LINK( QuoteHdl, Button*, void );
+    DECL_LINK( StdQuoteHdl, Button*, void );
 
     OUString            ChangeStringExt_Impl( sal_UCS4 );
 
@@ -451,7 +451,7 @@ private:
     editeng::SortedAutoCompleteStrings* m_pAutoCompleteList;
     sal_uInt16      m_nAutoCmpltListCnt;
 
-    DECL_LINK_TYPED( CheckHdl, CheckBox&, void );
+    DECL_LINK( CheckHdl, CheckBox&, void );
 
                         OfaAutoCompleteTabPage( vcl::Window* pParent,
                                                 const SfxItemSet& rSet );
@@ -466,7 +466,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& ) override;
 
     void CopyToClipboard() const;
-    DECL_LINK_TYPED(DeleteHdl, Button*, void);
+    DECL_LINK(DeleteHdl, Button*, void);
 };
 
 // class OfaSmartTagOptionsTabPage ---------------------------------------------
@@ -502,21 +502,21 @@ private:
         Enables/disables all controls in the tab page (except from the
         check box.
     */
-    DECL_LINK_TYPED(CheckHdl, CheckBox&, void);
+    DECL_LINK(CheckHdl, CheckBox&, void);
 
     /** Handler for the push button
 
         Calls the displayPropertyPage function of the smart tag recognizer
         associated with the currently selected smart tag type.
     */
-    DECL_LINK_TYPED(ClickHdl, Button*, void);
+    DECL_LINK(ClickHdl, Button*, void);
 
     /** Handler for the list box
 
         Enables/disables the properties push button if selection in the
         smart tag types list box changes.
     */
-    DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
+    DECL_LINK(SelectHdl, SvTreeListBox*, void);
 
 public:
     /// construction via Create()

@@ -3094,7 +3094,7 @@ void DbFilterField::UpdateFromField(const Reference< XColumn >& /*_rxField*/, co
 }
 
 
-IMPL_LINK_NOARG_TYPED(DbFilterField, OnClick, VclPtr<CheckBox>, void)
+IMPL_LINK_NOARG(DbFilterField, OnClick, VclPtr<CheckBox>, void)
 {
     TriState eState = static_cast<CheckBoxControl*>(m_pWindow.get())->GetBox().GetState();
     OUString aText;
@@ -3376,7 +3376,7 @@ void SAL_CALL FmXGridCell::removePaintListener( const Reference< awt::XPaintList
 }
 
 
-IMPL_LINK_TYPED( FmXGridCell, OnWindowEvent, VclWindowEvent&, _rEvent, void )
+IMPL_LINK( FmXGridCell, OnWindowEvent, VclWindowEvent&, _rEvent, void )
 {
     ENSURE_OR_THROW( _rEvent.GetWindow(), "illegal window" );
     onWindowEvent( _rEvent.GetId(), *_rEvent.GetWindow(), _rEvent.GetData() );
@@ -4311,7 +4311,7 @@ void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Wind
 }
 
 
-IMPL_LINK_NOARG_TYPED(FmXListBoxCell, OnDoubleClick, ListBox&, void)
+IMPL_LINK_NOARG(FmXListBoxCell, OnDoubleClick, ListBox&, void)
 {
     if (m_pBox)
     {
@@ -4673,7 +4673,7 @@ void SAL_CALL FmXFilterCell::setMaxTextLen( sal_Int16 /*nLen*/ ) throw( RuntimeE
 }
 
 
-IMPL_LINK_NOARG_TYPED(FmXFilterCell, OnCommit, DbFilterField&, void)
+IMPL_LINK_NOARG(FmXFilterCell, OnCommit, DbFilterField&, void)
 {
     ::comphelper::OInterfaceIteratorHelper2 aIt( m_aTextListeners );
     css::awt::TextEvent aEvt;

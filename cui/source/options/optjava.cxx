@@ -238,7 +238,7 @@ void SvxJavaOptionsPage::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, EnableHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl, Button*, void)
 {
     bool bEnable = m_pJavaEnableCB->IsChecked();
     m_pJavaBox->Enable(bEnable);
@@ -246,7 +246,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, EnableHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( SvxJavaOptionsPage, CheckHdl_Impl, SvTreeListBox*, pList, void )
+IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvTreeListBox*, pList, void )
 {
     SvTreeListEntry* pEntry = pList ? m_pJavaList->GetEntry( m_pJavaList->GetCurMousePoint() )
                                 : m_pJavaList->FirstSelected();
@@ -255,7 +255,7 @@ IMPL_LINK_TYPED( SvxJavaOptionsPage, CheckHdl_Impl, SvTreeListBox*, pList, void 
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, SelectHdl_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl, SvTreeListBox*, void)
 {
     // set installation directory info
     SvTreeListEntry* pEntry = m_pJavaList->FirstSelected();
@@ -269,7 +269,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, SelectHdl_Impl, SvTreeListBox*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, AddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl, Button*, void)
 {
     try
     {
@@ -293,7 +293,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, AddHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
 {
 #if HAVE_FEATURE_JAVA
     Sequence< OUString > aParameterList;
@@ -345,7 +345,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
 {
 #if HAVE_FEATURE_JAVA
     OUString sClassPath;
@@ -390,13 +390,13 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ResetHdl_Impl, Idle *, void)
+IMPL_LINK_NOARG(SvxJavaOptionsPage, ResetHdl_Impl, Idle *, void)
 {
     LoadJREs();
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, StartFolderPickerHdl, void*, void)
+IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl, void*, void)
 {
     try
     {
@@ -413,7 +413,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, StartFolderPickerHdl, void*, void)
 }
 
 
-IMPL_LINK_TYPED( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
+IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
 {
     if ( RET_OK == pEvt->DialogResult )
     {
@@ -424,7 +424,7 @@ IMPL_LINK_TYPED( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt, 
 }
 
 
-IMPL_LINK_NOARG_TYPED( SvxJavaOptionsPage, ExpertConfigHdl_Impl, Button*, void )
+IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl, Button*, void )
 {
     ScopedVclPtrInstance< CuiAboutConfigTabPage > pExpertConfigDlg(this);
     pExpertConfigDlg->Reset();//initialize and reset function
@@ -824,14 +824,14 @@ void SvxJavaParameterDlg::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, ModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl, Edit&, void)
 {
     OUString sParam = comphelper::string::strip(m_pParameterEdit->GetText(), ' ');
     m_pAssignBtn->Enable(!sParam.isEmpty());
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, AssignHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl, Button*, void)
 {
     OUString sParam = comphelper::string::strip(m_pParameterEdit->GetText(), ' ');
     if (!sParam.isEmpty())
@@ -847,26 +847,26 @@ IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, AssignHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, EditHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, EditHdl_Impl, Button*, void)
 {
     EditParameter();
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, SelectHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, SelectHdl_Impl, ListBox&, void)
 {
     EnableEditButton();
     EnableRemoveButton();
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, DblClickHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl, ListBox&, void)
 {
     EditParameter();
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, RemoveHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaParameterDlg, RemoveHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -996,7 +996,7 @@ void SvxJavaClassPathDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
 {
     sfx2::FileDialogHelper aDlg( TemplateDescription::FILEOPEN_SIMPLE );
     aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
@@ -1031,7 +1031,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
 {
     Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
@@ -1066,7 +1066,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, RemoveHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, RemoveHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pPathList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -1085,7 +1085,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, RemoveHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, SelectHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxJavaClassPathDlg, SelectHdl_Impl, ListBox&, void)
 {
     EnableRemoveButton();
 }

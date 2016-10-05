@@ -102,7 +102,7 @@ public:
 private:
     void processQueue();
 
-    DECL_STATIC_LINK_TYPED(MissingPluginInstaller, launchUi, void*, void);
+    DECL_STATIC_LINK(MissingPluginInstaller, launchUi, void*, void);
 
     osl::Mutex mutex_;
     std::set<OString> reported_;
@@ -235,7 +235,7 @@ void MissingPluginInstaller::processQueue() {
 }
 
 
-IMPL_STATIC_LINK_TYPED(MissingPluginInstaller, launchUi, void *, p, void)
+IMPL_STATIC_LINK(MissingPluginInstaller, launchUi, void *, p, void)
 {
     MissingPluginInstallerThread* thread = static_cast<MissingPluginInstallerThread*>(p);
     rtl::Reference<MissingPluginInstallerThread> ref(thread, SAL_NO_ACQUIRE);

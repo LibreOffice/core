@@ -662,7 +662,7 @@ void FileDialogHelper_Impl::updateVersions()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(FileDialogHelper_Impl, TimeOutHdl_Impl, Idle *, void)
+IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl, Idle *, void)
 {
     if ( !mbHasPreview )
         return;
@@ -1178,7 +1178,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     }
 }
 
-IMPL_LINK_NOARG_TYPED( FileDialogHelper_Impl, InitControls, void*, void )
+IMPL_LINK_NOARG( FileDialogHelper_Impl, InitControls, void*, void )
 {
     mnPostUserEventId = nullptr;
     enablePasswordBox( true );
@@ -2312,7 +2312,7 @@ void FileDialogHelper::SetContext( Context _eNewContext )
     mpImpl->SetContext( _eNewContext );
 }
 
-IMPL_LINK_NOARG_TYPED(FileDialogHelper, ExecuteSystemFilePicker, void*, void)
+IMPL_LINK_NOARG(FileDialogHelper, ExecuteSystemFilePicker, void*, void)
 {
     m_nError = mpImpl->execute();
     m_aDialogClosedLink.Call( this );

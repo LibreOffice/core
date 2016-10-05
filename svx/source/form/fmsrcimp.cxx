@@ -976,7 +976,7 @@ void FmSearchEngine::OnSearchTerminated()
 }
 
 
-IMPL_LINK_TYPED(FmSearchEngine, OnNewRecordCount, sal_Int32, theCounter, void)
+IMPL_LINK(FmSearchEngine, OnNewRecordCount, sal_Int32, theCounter, void)
 {
     if (!m_aProgressHandler.IsSet())
         return;

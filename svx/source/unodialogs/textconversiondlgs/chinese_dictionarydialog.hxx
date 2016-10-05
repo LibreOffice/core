@@ -83,7 +83,7 @@ private:
     OUString getPropertyTypeName( sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/ ) const;
     OUString makeTabString( const DictionaryEntry& rEntry ) const;
 
-    DECL_LINK_TYPED( CompareHdl, const SvSortData&, sal_Int32 );
+    DECL_LINK( CompareHdl, const SvSortData&, sal_Int32 );
     sal_Int32 ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry* pRight );
     SvLBoxItem* getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16 nColumn ) const;
 
@@ -117,14 +117,14 @@ public:
     virtual short   Execute() override;
 
 private:
-    DECL_LINK_TYPED( DirectionHdl, Button*, void );
-    DECL_LINK_TYPED( EditFieldsHdl, Edit&, void );
-    DECL_LINK_TYPED( EditFieldsListBoxHdl, ListBox&, void );
-    DECL_LINK_TYPED( MappingSelectHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( AddHdl, Button*, void );
-    DECL_LINK_TYPED( ModifyHdl, Button*, void );
-    DECL_LINK_TYPED( DeleteHdl, Button*, void );
-    DECL_LINK_TYPED( HeaderBarClick, HeaderBar*, void );
+    DECL_LINK( DirectionHdl, Button*, void );
+    DECL_LINK( EditFieldsHdl, Edit&, void );
+    DECL_LINK( EditFieldsListBoxHdl, ListBox&, void );
+    DECL_LINK( MappingSelectHdl, SvTreeListBox*, void );
+    DECL_LINK( AddHdl, Button*, void );
+    DECL_LINK( ModifyHdl, Button*, void );
+    DECL_LINK( DeleteHdl, Button*, void );
+    DECL_LINK( HeaderBarClick, HeaderBar*, void );
 
     void initDictionaryControl(DictionaryList *pList,
         const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary);

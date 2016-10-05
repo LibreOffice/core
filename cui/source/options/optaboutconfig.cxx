@@ -562,18 +562,18 @@ void CuiAboutConfigValueDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, ResetBtnHdl_Impl, Button*, void )
+IMPL_LINK_NOARG( CuiAboutConfigTabPage, ResetBtnHdl_Impl, Button*, void )
 {
     Reset();
 }
 
-IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, DoubleClickHdl_Impl, SvTreeListBox*, bool )
+IMPL_LINK_NOARG( CuiAboutConfigTabPage, DoubleClickHdl_Impl, SvTreeListBox*, bool )
 {
     StandardHdl_Impl(nullptr);
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
+IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
 {
     SvTreeListEntry* pEntry = m_pPrefBox->GetHdlEntry();
     if(pEntry == nullptr)
@@ -808,7 +808,7 @@ IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, SearchHdl_Impl, Button*, void)
+IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl, Button*, void)
 {
     m_pPrefBox->Clear();
     m_pPrefBox->SetUpdateMode( false );
@@ -905,7 +905,7 @@ void CuiAboutConfigTabPage::InsertEntry( SvTreeListEntry *pEntry)
     m_pPrefBox->Expand( pParentEntry );
 }
 
-IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, ExpandingHdl_Impl, SvTreeListBox*, bool )
+IMPL_LINK_NOARG( CuiAboutConfigTabPage, ExpandingHdl_Impl, SvTreeListBox*, bool )
 {
     SvTreeListEntry* pEntry = m_pPrefBox->GetHdlEntry();
 

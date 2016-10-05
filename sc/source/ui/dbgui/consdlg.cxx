@@ -345,7 +345,7 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 
 // Handler:
 
-IMPL_LINK_TYPED( ScConsolidateDlg, GetFocusHdl, Control&, rControl, void )
+IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control&, rControl, void )
 {
     if ( &rControl ==static_cast<Control*>(pEdDataArea) ||
          &rControl ==static_cast<Control*>(pEdDestArea))
@@ -362,7 +362,7 @@ IMPL_LINK_TYPED( ScConsolidateDlg, GetFocusHdl, Control&, rControl, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScConsolidateDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl, Button*, void)
 {
     const sal_Int32 nDataAreaCount = pLbConsAreas->GetEntryCount();
 
@@ -419,7 +419,7 @@ IMPL_LINK_NOARG_TYPED(ScConsolidateDlg, OkHdl, Button*, void)
         Close(); // no area defined -> Cancel
 }
 
-IMPL_LINK_TYPED( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
+IMPL_LINK( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
 {
     if ( pBtn == pBtnCancel )
         Close();
@@ -483,7 +483,7 @@ IMPL_LINK_TYPED( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_TYPED( ScConsolidateDlg, SelectHdl, ListBox&, rLb, void )
+IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox&, rLb, void )
 {
     if ( &rLb == pLbConsAreas )
     {
@@ -524,7 +524,7 @@ IMPL_LINK_TYPED( ScConsolidateDlg, SelectHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK_TYPED( ScConsolidateDlg, ModifyHdl, Edit&, rEd, void )
+IMPL_LINK( ScConsolidateDlg, ModifyHdl, Edit&, rEd, void )
 {
     if ( &rEd == pEdDataArea )
     {

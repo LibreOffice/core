@@ -266,7 +266,7 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
 
 }
 
-IMPL_LINK_NOARG_TYPED(ODesignView, MarkTimeout, Idle *, void)
+IMPL_LINK_NOARG(ODesignView, MarkTimeout, Idle *, void)
 {
     if ( m_pPropWin && m_pPropWin->IsVisible() )
     {
@@ -399,7 +399,7 @@ void ODesignView::ImplInitSettings()
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }
 
-IMPL_LINK_NOARG_TYPED( ODesignView, SplitHdl, SplitWindow*, void )
+IMPL_LINK_NOARG( ODesignView, SplitHdl, SplitWindow*, void )
 {
     const Size aOutputSize = GetOutputSizePixel();
     const long nTest = aOutputSize.Width() * m_aSplitWin->GetItemSize(TASKPANE_ID) / 100;

@@ -78,7 +78,7 @@ class AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEventListener>
                                       const css::uno::Reference< css::frame::XDispatch >& xDispatch,
                                       const css::util::URL& rURL);
 
-        DECL_LINK_TYPED(impl_ts_asyncCallback, LinkParamNone*, void);
+        DECL_LINK(impl_ts_asyncCallback, LinkParamNone*, void);
 };
 
 
@@ -456,7 +456,7 @@ void AsyncAccelExec::execAsync()
     m_aAsyncCallback.Post();
 }
 
-IMPL_LINK_NOARG_TYPED(AsyncAccelExec, impl_ts_asyncCallback, LinkParamNone*, void)
+IMPL_LINK_NOARG(AsyncAccelExec, impl_ts_asyncCallback, LinkParamNone*, void)
 {
     if (m_xDispatch.is())
     {

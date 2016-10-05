@@ -99,8 +99,8 @@ public:
 
     void DoScroll();
 
-    DECL_LINK_TYPED(NotifyHdl, EENotify&, void);
-    DECL_LINK_TYPED(ModifyHdl, LinkParamNone*, void);
+    DECL_LINK(NotifyHdl, EENotify&, void);
+    DECL_LINK(ModifyHdl, LinkParamNone*, void);
 
 protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
@@ -215,8 +215,8 @@ private:
     VclPtr<ScrollBar> maScrollbar;
     long            mnVertOffset;
 
-    DECL_LINK_TYPED( ClickHdl, Button*, void );
-    DECL_LINK_TYPED( Impl_ScrollHdl, ScrollBar*, void );
+    DECL_LINK( ClickHdl, Button*, void );
+    DECL_LINK( Impl_ScrollHdl, ScrollBar*, void );
 };
 
 class ScInputWindow : public ToolBox                        // Parent toolbox

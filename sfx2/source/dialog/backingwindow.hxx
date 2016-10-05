@@ -100,12 +100,12 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
                      const css::uno::Reference<css::frame::XDispatchProvider >& i_xProv = css::uno::Reference<css::frame::XDispatchProvider>(),
                      const css::uno::Sequence<css::beans::PropertyValue >& = css::uno::Sequence<css::beans::PropertyValue>());
 
-    DECL_LINK_TYPED(ClickHdl, Button*, void);
-    DECL_LINK_TYPED(MenuSelectHdl, MenuButton*, void);
-    DECL_LINK_TYPED(ExtLinkClickHdl, Button*, void);
-    DECL_LINK_TYPED(CreateContextMenuHdl, ThumbnailViewItem*, void);
-    DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK_TYPED(EditTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK(ClickHdl, Button*, void);
+    DECL_LINK(MenuSelectHdl, MenuButton*, void);
+    DECL_LINK(ExtLinkClickHdl, Button*, void);
+    DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
+    DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK(EditTemplateHdl, ThumbnailViewItem*, void);
 
     void initControls();
 

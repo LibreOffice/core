@@ -37,7 +37,7 @@ private:
 
     OUString maSuccessMsg;
 
-    DECL_LINK_TYPED(BtnHdl, Button*, void);
+    DECL_LINK(BtnHdl, Button*, void);
 };
 
 #endif

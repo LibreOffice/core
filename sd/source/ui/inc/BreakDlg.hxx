@@ -71,9 +71,9 @@ private:
     SvdProgressInfo *pProgrInfo;
     SfxProgress     *mpProgress;
 
-    DECL_LINK_TYPED( CancelButtonHdl, Button*, void );
-    DECL_LINK_TYPED( UpDate, void*, bool );
-    DECL_LINK_TYPED( InitialUpdate, Idle*, void );
+    DECL_LINK( CancelButtonHdl, Button*, void );
+    DECL_LINK( UpDate, void*, bool );
+    DECL_LINK( InitialUpdate, Idle*, void );
 };
 
 } // end of namespace sd

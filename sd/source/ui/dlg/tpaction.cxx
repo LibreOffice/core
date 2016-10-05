@@ -466,12 +466,12 @@ void SdTPAction::OpenFileDialog()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdTPAction, ClickSearchHdl, Button*, void)
+IMPL_LINK_NOARG(SdTPAction, ClickSearchHdl, Button*, void)
 {
     OpenFileDialog();
 }
 
-IMPL_LINK_NOARG_TYPED(SdTPAction, ClickActionHdl, ListBox&, void)
+IMPL_LINK_NOARG(SdTPAction, ClickActionHdl, ListBox&, void)
 {
     presentation::ClickAction eCA = GetActualClickAction();
 
@@ -643,12 +643,12 @@ IMPL_LINK_NOARG_TYPED(SdTPAction, ClickActionHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdTPAction, SelectTreeHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SdTPAction, SelectTreeHdl, SvTreeListBox*, void)
 {
     m_pEdtBookmark->SetText( m_pLbTree->GetSelectEntry() );
 }
 
-IMPL_LINK_NOARG_TYPED(SdTPAction, CheckFileHdl, Control&, void)
+IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, Control&, void)
 {
     OUString aFile( GetEditText() );
 

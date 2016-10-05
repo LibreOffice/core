@@ -140,7 +140,7 @@ sal_Int16 ScAnalysisOfVarianceDialog::GetUndoNameId()
     return STR_ANALYSIS_OF_VARIANCE_UNDO_NAME;
 }
 
-IMPL_LINK_NOARG_TYPED( ScAnalysisOfVarianceDialog, FactorChanged, RadioButton&, void )
+IMPL_LINK_NOARG( ScAnalysisOfVarianceDialog, FactorChanged, RadioButton&, void )
 {
     FactorChanged();
 }

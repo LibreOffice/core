@@ -161,7 +161,7 @@ void impl_FillURLList( sfx2::FileDialogHelper* _pFileDlg, std::vector<OUString>&
     }
 }
 
-IMPL_LINK_NOARG_TYPED(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void)
+IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void)
 {
     DBG_ASSERT( m_pFileDlg, "DocumentInserter::DialogClosedHdl(): no file dialog" );
 

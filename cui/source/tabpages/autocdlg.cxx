@@ -174,7 +174,7 @@ static bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
     return false;
 }
 
-IMPL_LINK_TYPED(OfaAutoCorrDlg, SelectLanguageHdl, ListBox&, rBox, void)
+IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox&, rBox, void)
 {
     sal_Int32 nPos = rBox.GetSelectEntryPos();
     void* pVoid = rBox.GetEntryData(nPos);
@@ -715,18 +715,18 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     m_pCheckLB->SetUpdateMode(true);
 }
 
-IMPL_LINK_TYPED(OfaSwAutoFmtOptionsPage, SelectHdl, SvTreeListBox*, pBox, void)
+IMPL_LINK(OfaSwAutoFmtOptionsPage, SelectHdl, SvTreeListBox*, pBox, void)
 {
     m_pEditPB->Enable(nullptr != pBox->FirstSelected()->GetUserData());
 }
 
-IMPL_LINK_NOARG_TYPED(OfaSwAutoFmtOptionsPage, DoubleClickEditHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, DoubleClickEditHdl, SvTreeListBox*, bool)
 {
     EditHdl(nullptr);
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(OfaSwAutoFmtOptionsPage, EditHdl, Button*, void)
+IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, Button*, void)
 {
     sal_uLong nSelEntryPos = m_pCheckLB->GetSelectEntryPos();
     if( nSelEntryPos == REPLACE_BULLETS ||
@@ -1119,7 +1119,7 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
     }
 }
 
-IMPL_LINK_TYPED(OfaAutocorrReplacePage, SelectHdl, SvTreeListBox*, pBox, void)
+IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTreeListBox*, pBox, void)
 {
     if(!bFirstSelect || !bHasSelectionText)
     {
@@ -1209,12 +1209,12 @@ void OfaAutocorrReplacePage::DeleteEntry(const OUString& sShort, const OUString&
     rDeletedArray.push_back(aDeletedString);
 }
 
-IMPL_LINK_TYPED(OfaAutocorrReplacePage, NewDelButtonHdl, Button*, pBtn, void)
+IMPL_LINK(OfaAutocorrReplacePage, NewDelButtonHdl, Button*, pBtn, void)
 {
     NewDelHdl(pBtn);
 }
 
-IMPL_LINK_TYPED(OfaAutocorrReplacePage, NewDelActionHdl, AutoCorrEdit&, rEdit, bool)
+IMPL_LINK(OfaAutocorrReplacePage, NewDelActionHdl, AutoCorrEdit&, rEdit, bool)
 {
     return NewDelHdl(&rEdit);
 }
@@ -1288,7 +1288,7 @@ bool OfaAutocorrReplacePage::NewDelHdl(void* pBtn)
     return true;
 }
 
-IMPL_LINK_TYPED(OfaAutocorrReplacePage, ModifyHdl, Edit&, rEdt, void)
+IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit&, rEdt, void)
 {
     SvTreeListEntry* pFirstSel = m_pReplaceTLB->FirstSelected();
     bool bShort = &rEdt == m_pShortED;
@@ -1659,12 +1659,12 @@ void OfaAutocorrExceptPage::Reset( const SfxItemSet* )
     m_pAutoCapsCB->SaveValue();
 }
 
-IMPL_LINK_TYPED(OfaAutocorrExceptPage, NewDelButtonHdl, Button*, pBtn, void)
+IMPL_LINK(OfaAutocorrExceptPage, NewDelButtonHdl, Button*, pBtn, void)
 {
     NewDelHdl(pBtn);
 }
 
-IMPL_LINK_TYPED(OfaAutocorrExceptPage, NewDelActionHdl, AutoCorrEdit&, rEdit, bool)
+IMPL_LINK(OfaAutocorrExceptPage, NewDelActionHdl, AutoCorrEdit&, rEdit, bool)
 {
     return NewDelHdl(&rEdit);
 }
@@ -1696,7 +1696,7 @@ bool OfaAutocorrExceptPage::NewDelHdl(void* pBtn)
     return false;
 }
 
-IMPL_LINK_TYPED(OfaAutocorrExceptPage, SelectHdl, ListBox&, rBox, void)
+IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox&, rBox, void)
 {
     if (&rBox == m_pAbbrevLB)
     {
@@ -1712,7 +1712,7 @@ IMPL_LINK_TYPED(OfaAutocorrExceptPage, SelectHdl, ListBox&, rBox, void)
     }
 }
 
-IMPL_LINK_TYPED(OfaAutocorrExceptPage, ModifyHdl, Edit&, rEdt, void)
+IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, Edit&, rEdt, void)
 {
 //  sal_Bool bSame = pEdt->GetText() == ->GetSelectEntry();
     const OUString& sEntry = rEdt.GetText();
@@ -2050,7 +2050,7 @@ void OfaQuoteTabPage::Reset( const SfxItemSet* )
 #define DBL_END         3
 
 
-IMPL_LINK_TYPED( OfaQuoteTabPage, QuoteHdl, Button*, pBtn, void )
+IMPL_LINK( OfaQuoteTabPage, QuoteHdl, Button*, pBtn, void )
 {
     sal_uInt16 nMode = SGL_START;
     if (pBtn == m_pSglEndQuotePB)
@@ -2122,7 +2122,7 @@ IMPL_LINK_TYPED( OfaQuoteTabPage, QuoteHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_TYPED( OfaQuoteTabPage, StdQuoteHdl, Button*, pBtn, void )
+IMPL_LINK( OfaQuoteTabPage, StdQuoteHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pDblStandardPB)
     {
@@ -2357,7 +2357,7 @@ void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
     static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage( false );
 }
 
-IMPL_LINK_NOARG_TYPED(OfaAutoCompleteTabPage, DeleteHdl, Button*, void)
+IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl, Button*, void)
 {
     sal_Int32 nSelCnt =
         (m_pAutoCompleteList) ? m_pLBEntries->GetSelectEntryCount() : 0;
@@ -2371,7 +2371,7 @@ IMPL_LINK_NOARG_TYPED(OfaAutoCompleteTabPage, DeleteHdl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED( OfaAutoCompleteTabPage, CheckHdl, CheckBox&, rBox, void )
+IMPL_LINK( OfaAutoCompleteTabPage, CheckHdl, CheckBox&, rBox, void )
 {
     bool bEnable = rBox.IsChecked();
     if (&rBox == m_pCBActiv)
@@ -2577,7 +2577,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 
 /** Handler for the push button
 */
-IMPL_LINK_NOARG_TYPED(OfaSmartTagOptionsTabPage, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl, Button*, void)
 {
     const sal_uLong nPos = m_pSmartTagTypesLB->GetSelectEntryPos();
     const SvTreeListEntry* pEntry = m_pSmartTagTypesLB->GetEntry(nPos);
@@ -2592,7 +2592,7 @@ IMPL_LINK_NOARG_TYPED(OfaSmartTagOptionsTabPage, ClickHdl, Button*, void)
 
 /** Handler for the check box
 */
-IMPL_LINK_NOARG_TYPED(OfaSmartTagOptionsTabPage, CheckHdl, CheckBox&, void)
+IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, CheckHdl, CheckBox&, void)
 {
     const bool bEnable = m_pMainCB->IsChecked();
     m_pSmartTagTypesLB->Enable( bEnable );
@@ -2609,7 +2609,7 @@ IMPL_LINK_NOARG_TYPED(OfaSmartTagOptionsTabPage, CheckHdl, CheckBox&, void)
 
 /** Handler for the list box
 */
-IMPL_LINK_NOARG_TYPED(OfaSmartTagOptionsTabPage, SelectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl, SvTreeListBox*, void)
 {
     if ( m_pSmartTagTypesLB->GetEntryCount() < 1 )
         return;

@@ -1120,12 +1120,12 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
 }
 
 
-IMPL_LINK_TYPED( SvxSearchDialog, LBSelectHdl_Impl, ListBox&, rCtrl, void )
+IMPL_LINK( SvxSearchDialog, LBSelectHdl_Impl, ListBox&, rCtrl, void )
 {
     ClickHdl_Impl(&rCtrl);
 }
 
-IMPL_LINK_TYPED( SvxSearchDialog, FlagHdl_Impl, Button *, pCtrl, void )
+IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Button *, pCtrl, void )
 {
     ClickHdl_Impl(pCtrl);
 }
@@ -1267,7 +1267,7 @@ void SvxSearchDialog::ClickHdl_Impl(void* pCtrl)
 }
 
 
-IMPL_LINK_TYPED( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
+IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
 {
     bool bInclusive = ( m_pLayoutBtn->GetText() == aLayoutStr );
 
@@ -1447,7 +1447,7 @@ IMPL_LINK_TYPED( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
 }
 
 
-IMPL_LINK_TYPED( SvxSearchDialog, ModifyHdl_Impl, Edit&, rEd, void )
+IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, Edit&, rEd, void )
 {
     if ( !bSet )
         SetModifyFlag_Impl( &rEd );
@@ -1489,7 +1489,7 @@ IMPL_LINK_TYPED( SvxSearchDialog, ModifyHdl_Impl, Edit&, rEd, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxSearchDialog, TemplateHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, Button*, void)
 {
     if ( pImpl->bSaveToModule )
         SaveToModule_Impl();
@@ -1897,7 +1897,7 @@ void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
 }
 
 
-IMPL_LINK_TYPED( SvxSearchDialog, FocusHdl_Impl, Control&, rControl, void )
+IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control&, rControl, void )
 {
     sal_Int32 nTxtLen = m_pSearchAttrText->GetText().getLength();
     Control* pCtrl = &rControl;
@@ -1956,13 +1956,13 @@ IMPL_LINK_TYPED( SvxSearchDialog, FocusHdl_Impl, Control&, rControl, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxSearchDialog, LoseFocusHdl_Impl, Control&, void)
+IMPL_LINK_NOARG(SvxSearchDialog, LoseFocusHdl_Impl, Control&, void)
 {
     SaveToModule_Impl();
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxSearchDialog, FormatHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
 {
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
@@ -2053,7 +2053,7 @@ IMPL_LINK_NOARG_TYPED(SvxSearchDialog, FormatHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxSearchDialog, NoFormatHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl, Button*, void)
 {
     SvtModuleOptions::EFactory eFactory = getModule(rBindings);
     bool bWriterApp =
@@ -2095,7 +2095,7 @@ IMPL_LINK_NOARG_TYPED(SvxSearchDialog, NoFormatHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxSearchDialog, AttributeHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl, Button*, void)
 {
     if ( !pSearchList || !pImpl->pRanges )
         return;
@@ -2111,7 +2111,7 @@ IMPL_LINK_NOARG_TYPED(SvxSearchDialog, AttributeHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer, void )
+IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer, void )
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
 

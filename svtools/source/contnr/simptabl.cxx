@@ -399,7 +399,7 @@ void SvSimpleTable::Command( const CommandEvent& rCEvt )
     SvHeaderTabListBox::Command(rCEvt);
 }
 
-IMPL_LINK_TYPED( SvSimpleTable, StartDragHdl, HeaderBar*, pCtr, void)
+IMPL_LINK( SvSimpleTable, StartDragHdl, HeaderBar*, pCtr, void)
 {
     if(pCtr==aHeaderBar.get())
     {
@@ -407,7 +407,7 @@ IMPL_LINK_TYPED( SvSimpleTable, StartDragHdl, HeaderBar*, pCtr, void)
     }
 }
 
-IMPL_LINK_TYPED( SvSimpleTable, DragHdl, HeaderBar*, pCtr, void)
+IMPL_LINK( SvSimpleTable, DragHdl, HeaderBar*, pCtr, void)
 {
     if(pCtr==aHeaderBar.get())
     {
@@ -415,7 +415,7 @@ IMPL_LINK_TYPED( SvSimpleTable, DragHdl, HeaderBar*, pCtr, void)
     }
 }
 
-IMPL_LINK_TYPED( SvSimpleTable, EndDragHdl, HeaderBar*, pCtr, void)
+IMPL_LINK( SvSimpleTable, EndDragHdl, HeaderBar*, pCtr, void)
 {
     if(pCtr==aHeaderBar.get())
     {
@@ -423,7 +423,7 @@ IMPL_LINK_TYPED( SvSimpleTable, EndDragHdl, HeaderBar*, pCtr, void)
     }
 }
 
-IMPL_LINK_TYPED( SvSimpleTable, HeaderBarClick, HeaderBar*, pCtr, void)
+IMPL_LINK( SvSimpleTable, HeaderBarClick, HeaderBar*, pCtr, void)
 {
     if(pCtr==aHeaderBar.get())
     {
@@ -473,7 +473,7 @@ sal_Int32 SvSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRig
     return nCompare;
 }
 
-IMPL_LINK_TYPED( SvSimpleTable, CompareHdl, const SvSortData&, rData, sal_Int32)
+IMPL_LINK( SvSimpleTable, CompareHdl, const SvSortData&, rData, sal_Int32)
 {
     SvTreeListEntry* pLeft = const_cast<SvTreeListEntry*>(rData.pLeft);
     SvTreeListEntry* pRight = const_cast<SvTreeListEntry*>(rData.pRight);

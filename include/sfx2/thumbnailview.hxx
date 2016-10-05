@@ -289,7 +289,7 @@ protected:
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
     SFX2_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SFX2_DLLPRIVATE bool         ImplHasAccessibleListeners();
-    DECL_DLLPRIVATE_LINK_TYPED( ImplScrollHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar*, void );
 
 protected:
 

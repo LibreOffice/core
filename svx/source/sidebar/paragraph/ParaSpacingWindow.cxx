@@ -89,7 +89,7 @@ void ParaULSpacingWindow::SetValue(const SvxULSpaceItem* pItem)
     m_pBelowSpacing->SetValue(nVal, FUNIT_100TH_MM);
 }
 
-IMPL_LINK_NOARG_TYPED(ParaULSpacingWindow, ModifySpacingHdl, Edit&, void)
+IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, Edit&, void)
 {
     SfxDispatcher* pDisp = SfxViewFrame::Current()->GetBindings().GetDispatcher();
     if(pDisp)
@@ -250,7 +250,7 @@ void ParaLRSpacingWindow::SetUnit(FieldUnit eUnit)
     m_eUnit = rPool.GetMetric(nWhich);
 }
 
-IMPL_LINK_NOARG_TYPED(ParaLRSpacingWindow, ModifySpacingHdl, Edit&, void)
+IMPL_LINK_NOARG(ParaLRSpacingWindow, ModifySpacingHdl, Edit&, void)
 {
     SfxDispatcher* pDisp = SfxViewFrame::Current()->GetBindings().GetDispatcher();
     if(pDisp)

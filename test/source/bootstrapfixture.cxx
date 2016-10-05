@@ -212,7 +212,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
 #endif
 }
 
-IMPL_STATIC_LINK_TYPED(
+IMPL_STATIC_LINK(
         test::BootstrapFixture, ImplInitFilterHdl, ConvertData&, rData, bool)
 {
     return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( rData );

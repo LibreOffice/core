@@ -1965,7 +1965,7 @@ void SwPostItMgr::SetActiveSidebarWin( SwSidebarWin* p)
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SwPostItMgr, CalcHdl, void*, void )
+IMPL_LINK_NOARG( SwPostItMgr, CalcHdl, void*, void )
 {
     mnEventId = nullptr;
     if ( mbLayouting )

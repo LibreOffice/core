@@ -71,7 +71,7 @@ ScNoteMarker::~ScNoteMarker()
     delete pModel;
 }
 
-IMPL_LINK_NOARG_TYPED(ScNoteMarker, TimeHdl, Timer *, void)
+IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
 {
     if (!bVisible)
     {

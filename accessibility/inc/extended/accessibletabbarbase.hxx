@@ -40,7 +40,7 @@ public:
     virtual             ~AccessibleTabBarBase() override;
 
 protected:
-    DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
+    DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 
     virtual void        ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 

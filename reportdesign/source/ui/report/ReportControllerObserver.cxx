@@ -80,7 +80,7 @@ public:
     }
 
 
-    IMPL_LINK_TYPED(OXReportControllerObserver, SettingsChanged, VclSimpleEvent&, _rEvt, void)
+    IMPL_LINK(OXReportControllerObserver, SettingsChanged, VclSimpleEvent&, _rEvt, void)
     {
             sal_Int32 nEvent = _rEvt.GetId();
 

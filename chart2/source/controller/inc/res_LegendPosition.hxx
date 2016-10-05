@@ -48,8 +48,8 @@ public:
 
     void SetChangeHdl( const Link<LinkParamNone*,void>& rLink );
 
-    DECL_LINK_TYPED( PositionEnableHdl, CheckBox&, void );
-    DECL_LINK_TYPED( PositionChangeHdl, RadioButton&, void );
+    DECL_LINK( PositionEnableHdl, CheckBox&, void );
+    DECL_LINK( PositionChangeHdl, RadioButton&, void );
 
 private:
     void impl_setRadioButtonToggleHdl();

@@ -410,7 +410,7 @@ protected:
     void lockRebuilds();
     void unlockRebuilds();
 
-    DECL_LINK_TYPED(onTimerHdl, Timer *, void);
+    DECL_LINK(onTimerHdl, Timer *, void);
 
     virtual void implRebuild() override;
 

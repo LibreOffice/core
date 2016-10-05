@@ -76,8 +76,8 @@ protected:
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
     SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
 
-    DECL_DLLPRIVATE_LINK_TYPED( ImplListBoxSelectHdl, ListBox&, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplWindowEventListener, VclWindowEvent&, void );
+    DECL_DLLPRIVATE_LINK( ImplListBoxSelectHdl, ListBox&, void );
+    DECL_DLLPRIVATE_LINK( ImplWindowEventListener, VclWindowEvent&, void );
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );

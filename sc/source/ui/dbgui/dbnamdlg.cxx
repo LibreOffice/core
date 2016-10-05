@@ -388,7 +388,7 @@ bool ScDbNameDlg::IsRefInputMode() const
 
 // Handler:
 
-IMPL_LINK_NOARG_TYPED(ScDbNameDlg, OkBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl, Button*, void)
 {
     AddBtnHdl( nullptr );
 
@@ -404,12 +404,12 @@ IMPL_LINK_NOARG_TYPED(ScDbNameDlg, OkBtnHdl, Button*, void)
     Close();
 }
 
-IMPL_LINK_NOARG_TYPED(ScDbNameDlg, CancelBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScDbNameDlg, CancelBtnHdl, Button*, void)
 {
     Close();
 }
 
-IMPL_LINK_NOARG_TYPED(ScDbNameDlg, AddBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, Button*, void)
 {
     OUString  aNewName = comphelper::string::strip(m_pEdName->GetText(), ' ');
     OUString  aNewArea = m_pEdAssign->GetText();
@@ -508,7 +508,7 @@ public:
 
 }
 
-IMPL_LINK_NOARG_TYPED(ScDbNameDlg, RemoveBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl, Button*, void)
 {
     OUString aStrEntry = m_pEdName->GetText();
     ScDBCollection::NamedDBs& rDBs = aLocalDbCol.getNamedDBs();
@@ -559,7 +559,7 @@ IMPL_LINK_NOARG_TYPED(ScDbNameDlg, RemoveBtnHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScDbNameDlg, NameModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, Edit&, void)
 {
     OUString  theName     = m_pEdName->GetText();
     bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
@@ -622,7 +622,7 @@ IMPL_LINK_NOARG_TYPED(ScDbNameDlg, NameModifyHdl, Edit&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScDbNameDlg, AssModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl, Edit&, void)
 {
     //  hier parsen fuer Save() etc.
 

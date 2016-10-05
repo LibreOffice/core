@@ -102,7 +102,7 @@ void PageColumnControl::ExecuteColumnChange( const sal_uInt16 nColumnType )
             SfxCallMode::RECORD, { mpPageColumnTypeItem.get() });
 }
 
-IMPL_LINK_TYPED( PageColumnControl, ColumnButtonClickHdl_Impl, Button*, pButton, void )
+IMPL_LINK( PageColumnControl, ColumnButtonClickHdl_Impl, Button*, pButton, void )
 {
     if ( pButton == m_pOneColumn.get() )
         ExecuteColumnChange( 1 );
@@ -118,7 +118,7 @@ IMPL_LINK_TYPED( PageColumnControl, ColumnButtonClickHdl_Impl, Button*, pButton,
     EndPopupMode();
 }
 
-IMPL_LINK_NOARG_TYPED( PageColumnControl, MoreButtonClickHdl_Impl, Button*, void )
+IMPL_LINK_NOARG( PageColumnControl, MoreButtonClickHdl_Impl, Button*, void )
 {
     if ( SfxViewFrame::Current() )
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SfxCallMode::ASYNCHRON );

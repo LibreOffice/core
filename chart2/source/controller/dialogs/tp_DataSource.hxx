@@ -73,16 +73,16 @@ protected:
 
     virtual void        initializePage() override;
 
-    DECL_LINK_TYPED( SeriesSelectionChangedHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( RoleSelectionChangedHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( MainRangeButtonClickedHdl, Button*, void );
-    DECL_LINK_TYPED( CategoriesRangeButtonClickedHdl, Button*, void );
-    DECL_LINK_TYPED( AddButtonClickedHdl, Button*, void );
-    DECL_LINK_TYPED( RemoveButtonClickedHdl, Button*, void );
-    DECL_LINK_TYPED( RangeModifiedHdl, Edit&, void );
-    DECL_LINK_TYPED( RangeUpdateDataHdl, Edit&, void );
-    DECL_LINK_TYPED( UpButtonClickedHdl, Button*, void );
-    DECL_LINK_TYPED( DownButtonClickedHdl, Button*, void );
+    DECL_LINK( SeriesSelectionChangedHdl, SvTreeListBox*, void );
+    DECL_LINK( RoleSelectionChangedHdl, SvTreeListBox*, void );
+    DECL_LINK( MainRangeButtonClickedHdl, Button*, void );
+    DECL_LINK( CategoriesRangeButtonClickedHdl, Button*, void );
+    DECL_LINK( AddButtonClickedHdl, Button*, void );
+    DECL_LINK( RemoveButtonClickedHdl, Button*, void );
+    DECL_LINK( RangeModifiedHdl, Edit&, void );
+    DECL_LINK( RangeUpdateDataHdl, Edit&, void );
+    DECL_LINK( UpButtonClickedHdl, Button*, void );
+    DECL_LINK( DownButtonClickedHdl, Button*, void );
 
     // ____ RangeSelectionListenerParent ____
     virtual void listeningFinished( const OUString & rNewRange ) override;

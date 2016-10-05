@@ -846,17 +846,17 @@ void Slider::SetLinkedField(VclPtr<NumericField> const & pField)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(Slider, LinkedFieldSpinnerHdl, SpinField&, void)
+IMPL_LINK_NOARG(Slider, LinkedFieldSpinnerHdl, SpinField&, void)
 {
     if (mpLinkedField)
         SetThumbPos(mpLinkedField->GetValue());
 }
-IMPL_LINK_NOARG_TYPED(Slider, LinkedFieldLoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(Slider, LinkedFieldLoseFocusHdl, Control&, void)
 {
     if (mpLinkedField)
         SetThumbPos(mpLinkedField->GetValue());
 }
-IMPL_LINK_NOARG_TYPED(Slider, LinkedFieldModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(Slider, LinkedFieldModifyHdl, Edit&, void)
 {
     if (mpLinkedField)
         SetThumbPos(mpLinkedField->GetValue());

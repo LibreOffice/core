@@ -138,7 +138,7 @@ void UnoDataBrowserView::dispose()
     ODataView::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED( UnoDataBrowserView, SplitHdl, Splitter*, void )
+IMPL_LINK_NOARG( UnoDataBrowserView, SplitHdl, Splitter*, void )
 {
     long nYPos = m_pSplitter->GetPosPixel().Y();
     m_pSplitter->SetPosPixel( Point( m_pSplitter->GetSplitPosPixel(), nYPos ) );

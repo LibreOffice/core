@@ -145,8 +145,8 @@ namespace sfx2
                                                       std::vector<OUString>&                   rpURLList,
                                                       const std::shared_ptr<const SfxFilter>&  pFilter  );
 
-        DECL_LINK_TYPED( TimeOutHdl_Impl, Idle *, void);
-        DECL_LINK_TYPED( InitControls, void*, void );
+        DECL_LINK( TimeOutHdl_Impl, Idle *, void);
+        DECL_LINK( InitControls, void*, void );
 
     public:
         // XFilePickerListener methods

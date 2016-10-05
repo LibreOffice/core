@@ -178,7 +178,7 @@ class OFormattedModel
         using OBoundControl::disposing;
 
     private:
-        DECL_LINK_TYPED( OnKeyPressed, void*, void );
+        DECL_LINK( OnKeyPressed, void*, void );
     };
 }
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELD_HXX

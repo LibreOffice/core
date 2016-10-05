@@ -479,7 +479,7 @@ void AccFrameSelector::NotifyFocusListeners(bool bGetFocus)
 }
 
 
-IMPL_LINK_TYPED( AccFrameSelector, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( AccFrameSelector, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     vcl::Window* pWindow = rEvent.GetWindow();
     DBG_ASSERT( pWindow, "AccFrameSelector::WindowEventListener: no window!" );

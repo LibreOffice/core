@@ -255,7 +255,7 @@ void MediaControl::setState( const MediaItem& rItem )
     }
 }
 
-IMPL_LINK_TYPED( MediaControl, implTimeHdl, Slider*, p, void )
+IMPL_LINK( MediaControl, implTimeHdl, Slider*, p, void )
 {
     mbLocked = true;
     maIdle.Stop();
@@ -263,7 +263,7 @@ IMPL_LINK_TYPED( MediaControl, implTimeHdl, Slider*, p, void )
 }
 
 
-IMPL_LINK_TYPED( MediaControl, implTimeEndHdl, Slider*, p, void )
+IMPL_LINK( MediaControl, implTimeEndHdl, Slider*, p, void )
 {
     MediaItem aExecItem;
 
@@ -275,7 +275,7 @@ IMPL_LINK_TYPED( MediaControl, implTimeEndHdl, Slider*, p, void )
 }
 
 
-IMPL_LINK_TYPED( MediaControl, implVolumeHdl, Slider*, p, void )
+IMPL_LINK( MediaControl, implVolumeHdl, Slider*, p, void )
 {
     MediaItem aExecItem;
 
@@ -285,7 +285,7 @@ IMPL_LINK_TYPED( MediaControl, implVolumeHdl, Slider*, p, void )
 }
 
 
-IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
+IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p, void )
 {
     if( p )
     {
@@ -321,7 +321,7 @@ IMPL_LINK_TYPED( MediaControl, implSelectHdl, ToolBox*, p, void )
 }
 
 
-IMPL_LINK_TYPED( MediaControl, implZoomSelectHdl, ListBox&, p, void )
+IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox&, p, void )
 {
     MediaItem aExecItem;
     css::media::ZoomLevel eLevel;
@@ -343,7 +343,7 @@ IMPL_LINK_TYPED( MediaControl, implZoomSelectHdl, ListBox&, p, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(MediaControl, implTimeoutHdl, Idle *, void)
+IMPL_LINK_NOARG(MediaControl, implTimeoutHdl, Idle *, void)
 {
     update();
 }

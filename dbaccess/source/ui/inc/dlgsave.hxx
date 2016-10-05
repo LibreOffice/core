@@ -73,8 +73,8 @@ namespace dbaui
         OUString getCatalog() const;
         OUString getSchema() const;
     private:
-        DECL_LINK_TYPED(ButtonClickHdl, Button *, void);
-        DECL_LINK_TYPED(EditModifyHdl,  Edit&, void);
+        DECL_LINK(ButtonClickHdl, Button *, void);
+        DECL_LINK(EditModifyHdl,  Edit&, void);
 
         void implInitOnlyTitle(const OUString& _rLabel);
         void implInit();

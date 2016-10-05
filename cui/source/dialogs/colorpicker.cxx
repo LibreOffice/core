@@ -882,10 +882,10 @@ public:
 
     void update_color(UpdateFlags n = UpdateFlags::All);
 
-    DECL_LINK_TYPED(ColorFieldControlModifydl, ColorFieldControl&, void);
-    DECL_LINK_TYPED(ColorSliderControlModifyHdl, ColorSliderControl&, void);
-    DECL_LINK_TYPED(ColorModifyEditHdl, Edit&, void);
-    DECL_LINK_TYPED(ModeModifyHdl, RadioButton&, void);
+    DECL_LINK(ColorFieldControlModifydl, ColorFieldControl&, void);
+    DECL_LINK(ColorSliderControlModifyHdl, ColorSliderControl&, void);
+    DECL_LINK(ColorModifyEditHdl, Edit&, void);
+    DECL_LINK(ModeModifyHdl, RadioButton&, void);
 
     sal_Int32 GetColor() const;
 
@@ -1173,7 +1173,7 @@ void ColorPickerDialog::update_color( UpdateFlags n )
     mpColorPreview->SetColor(aColor);
 }
 
-IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldControl&, void)
+IMPL_LINK_NOARG(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldControl&, void)
 {
     double x = mpColorField->GetX();
     double y = mpColorField->GetY();
@@ -1209,7 +1209,7 @@ IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldCo
     update_color(UpdateFlags::All & ~(UpdateFlags::ColorChooser));
 }
 
-IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSliderControl&, void)
+IMPL_LINK_NOARG(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSliderControl&, void)
 {
     double dValue = mpColorSlider->GetValue();
     switch (meMode)
@@ -1237,7 +1237,7 @@ IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSlide
     update_color(UpdateFlags::All & ~(UpdateFlags::ColorSlider));
 }
 
-IMPL_LINK_TYPED(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
+IMPL_LINK(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
 {
     UpdateFlags n = UpdateFlags::NONE;
 
@@ -1316,7 +1316,7 @@ IMPL_LINK_TYPED(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
         update_color(n);
 }
 
-IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ModeModifyHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ColorPickerDialog, ModeModifyHdl, RadioButton&, void)
 {
     ColorMode eMode = HUE;
 

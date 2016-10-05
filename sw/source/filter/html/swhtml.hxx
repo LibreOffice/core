@@ -491,7 +491,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SwViewShell *CallEndAction( bool bChkAction = false, bool bChkPtr = true );
     SwViewShell *CheckActionViewShell();
 
-    DECL_LINK_TYPED( AsyncCallback, void*, void );
+    DECL_LINK( AsyncCallback, void*, void );
 
     // Attribute am Dok setzen
     void SetAttr_( bool bChkEnd, bool bBeforeTable, HTMLAttrs *pPostIts );

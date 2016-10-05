@@ -1262,7 +1262,7 @@ void SbaXDataBrowserController::frameAction(const css::frame::FrameActionEvent& 
         }
 }
 
-IMPL_LINK_NOARG_TYPED( SbaXDataBrowserController, OnAsyncDisplayError, void*, void )
+IMPL_LINK_NOARG( SbaXDataBrowserController, OnAsyncDisplayError, void*, void )
 {
     if ( m_aCurrentError.isValid() )
     {
@@ -2272,13 +2272,13 @@ void SbaXDataBrowserController::CellDeactivated()
     OnInvalidateClipboard( nullptr );
 }
 
-IMPL_LINK_NOARG_TYPED(SbaXDataBrowserController, OnClipboardChanged, TransferableDataHelper*, void)
+IMPL_LINK_NOARG(SbaXDataBrowserController, OnClipboardChanged, TransferableDataHelper*, void)
 {
     SolarMutexGuard aGuard;
     OnInvalidateClipboard( nullptr );
 }
 
-IMPL_LINK_TYPED(SbaXDataBrowserController, OnInvalidateClipboard, Timer*, _pTimer, void)
+IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, Timer*, _pTimer, void)
 {
     InvalidateFeature(ID_BROWSER_CUT);
     InvalidateFeature(ID_BROWSER_COPY);
@@ -2315,7 +2315,7 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField() const
     return xEmptyReturn;
 }
 
-IMPL_LINK_TYPED(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext&, rContext, sal_uInt32)
+IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext&, rContext, sal_uInt32)
 {
     Reference< css::container::XIndexAccess >  xPeerContainer(getBrowserView()->getGridControl(), UNO_QUERY);
 
@@ -2361,7 +2361,7 @@ IMPL_LINK_TYPED(SbaXDataBrowserController, OnSearchContextRequest, FmSearchConte
     return rContext.arrFields.size();
 }
 
-IMPL_LINK_TYPED(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation&, rInfo, void)
+IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation&, rInfo, void)
 {
     Reference< css::sdbcx::XRowLocate >  xCursor(getRowSet(), UNO_QUERY);
     OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnFoundData : xCursor is empty");
@@ -2396,7 +2396,7 @@ IMPL_LINK_TYPED(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation
     xGrid->setCurrentColumnPosition(nViewPos);
 }
 
-IMPL_LINK_TYPED(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformation&, rInfo, void)
+IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformation&, rInfo, void)
 {
     Reference< css::sdbcx::XRowLocate >  xCursor(getRowSet(), UNO_QUERY);
 
@@ -2426,7 +2426,7 @@ IMPL_LINK_TYPED(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInfo
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, void)
+IMPL_LINK_NOARG(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, void)
 {
     SbaGridControl* pVclGrid = getBrowserView() ? getBrowserView()->getVclControl() : nullptr;
     // if we have a controller, but the window for the controller doesn't have the focus, we correct this

@@ -298,8 +298,8 @@ private:
     {
     }
 
-    DECL_LINK_TYPED( CallBackWriteRc, const NameNode&, void );
-    DECL_LINK_TYPED( CallBackWriteSrc, const NameNode&, void );
+    DECL_LINK( CallBackWriteRc, const NameNode&, void );
+    DECL_LINK( CallBackWriteSrc, const NameNode&, void );
 
     void WriteRc( RscTop * pCl, ObjNode * pRoot )
     {
@@ -316,7 +316,7 @@ public:
     void WriteRcFile( RscWriteRc & rMem, FILE * fOutput );
 };
 
-IMPL_LINK_TYPED( RscEnumerateObj, CallBackWriteRc, const NameNode&, rNode, void )
+IMPL_LINK( RscEnumerateObj, CallBackWriteRc, const NameNode&, rNode, void )
 {
     const ObjNode& rObjNode = static_cast<const ObjNode&>(rNode);
     RscWriteRc     aMem( pTypCont->GetByteOrder() );
@@ -330,7 +330,7 @@ IMPL_LINK_TYPED( RscEnumerateObj, CallBackWriteRc, const NameNode&, rNode, void 
     WriteRcFile( aMem, fOutput );
 }
 
-IMPL_LINK_TYPED( RscEnumerateObj, CallBackWriteSrc, const NameNode&, rNode, void )
+IMPL_LINK( RscEnumerateObj, CallBackWriteSrc, const NameNode&, rNode, void )
 {
     const ObjNode& rObjNode = static_cast<const ObjNode&>(rNode);
     if( rObjNode.GetFileKey() == lFileKey )
@@ -391,8 +391,8 @@ class RscEnumerateRef
 private:
     RscTop *        pRoot;
 
-    DECL_LINK_TYPED( CallBackWriteRc, const NameNode&, void );
-    DECL_LINK_TYPED( CallBackWriteSrc, const NameNode&, void );
+    DECL_LINK( CallBackWriteRc, const NameNode&, void );
+    DECL_LINK( CallBackWriteSrc, const NameNode&, void );
 public:
     RscEnumerateObj aEnumObj;
 
@@ -416,13 +416,13 @@ public:
         }
 };
 
-IMPL_LINK_TYPED( RscEnumerateRef, CallBackWriteRc, const NameNode&, rNode, void )
+IMPL_LINK( RscEnumerateRef, CallBackWriteRc, const NameNode&, rNode, void )
 {
     const RscTop& rRef = static_cast<const RscTop&>(rNode);
     aEnumObj.WriteRc( const_cast<RscTop*>(&rRef), rRef.GetObjNode() );
 }
 
-IMPL_LINK_TYPED( RscEnumerateRef, CallBackWriteSrc, const NameNode&, rNode, void )
+IMPL_LINK( RscEnumerateRef, CallBackWriteSrc, const NameNode&, rNode, void )
 {
     const RscTop& rRef = static_cast<const RscTop&>(rNode);
     aEnumObj.WriteSrc( const_cast<RscTop*>(&rRef), rRef.GetObjNode() );
@@ -473,7 +473,7 @@ void RscTypCont::WriteSrc( FILE * fOutput, RscFileTab::Index nFileKey )
 class RscDel
 {
     sal_uLong lFileKey;
-    DECL_LINK_TYPED( Delete, const NameNode&, void );
+    DECL_LINK( Delete, const NameNode&, void );
 public:
     RscDel( RscTop * pRoot, sal_uLong lKey );
 };
@@ -485,7 +485,7 @@ inline RscDel::RscDel( RscTop * pRoot, sal_uLong lKey )
     pRoot->EnumNodes( LINK( this, RscDel, Delete ) );
 }
 
-IMPL_LINK_TYPED( RscDel, Delete, const NameNode&, r, void )
+IMPL_LINK( RscDel, Delete, const NameNode&, r, void )
 {
     RscTop* pNode = const_cast<RscTop*>(static_cast<const RscTop*>(&r));
     if( pNode->GetObjNode() )

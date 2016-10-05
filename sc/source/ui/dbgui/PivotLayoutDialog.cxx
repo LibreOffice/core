@@ -662,18 +662,18 @@ bool ScPivotLayoutDialog::Close()
     return DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
 }
 
-IMPL_LINK_NOARG_TYPED( ScPivotLayoutDialog, OKClicked, Button*, void )
+IMPL_LINK_NOARG( ScPivotLayoutDialog, OKClicked, Button*, void )
 {
     ApplyChanges();
     Close();
 }
 
-IMPL_LINK_NOARG_TYPED( ScPivotLayoutDialog, CancelClicked, Button*, void )
+IMPL_LINK_NOARG( ScPivotLayoutDialog, CancelClicked, Button*, void )
 {
     Close();
 }
 
-IMPL_LINK_TYPED(ScPivotLayoutDialog, GetFocusHandler, Control&, rCtrl, void)
+IMPL_LINK(ScPivotLayoutDialog, GetFocusHandler, Control&, rCtrl, void)
 {
     mpActiveEdit = nullptr;
 
@@ -692,22 +692,22 @@ IMPL_LINK_TYPED(ScPivotLayoutDialog, GetFocusHandler, Control&, rCtrl, void)
         mpActiveEdit->SetSelection(Selection(0, SELECTION_MAX));
 }
 
-IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, LoseFocusHandler, Control&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, LoseFocusHandler, Control&, void)
 {
     mbDialogLostFocus = !IsActive();
 }
 
-IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, SourceListSelected, ListBox&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceListSelected, ListBox&, void)
 {
     UpdateSourceRange();
 }
 
-IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, SourceEditModified, Edit&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceEditModified, Edit&, void)
 {
     UpdateSourceRange();
 }
 
-IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, ToggleSource, RadioButton&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleSource, RadioButton&, void)
 {
     ToggleSource();
 }
@@ -722,7 +722,7 @@ void ScPivotLayoutDialog::ToggleSource()
     UpdateSourceRange();
 }
 
-IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, ToggleDestination, RadioButton&, void)
+IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleDestination, RadioButton&, void)
 {
     ToggleDestination();
 }

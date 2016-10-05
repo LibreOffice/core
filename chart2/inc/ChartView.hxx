@@ -229,7 +229,7 @@ private: //methods
 
     css::awt::Rectangle impl_createDiagramAndContent( const CreateShapeParam2D& rParam, const css::awt::Size& rPageSize );
 
-    DECL_LINK_TYPED( UpdateTimeBased, Timer*, void );
+    DECL_LINK( UpdateTimeBased, Timer*, void );
 
 private: //member
     ::osl::Mutex m_aMutex;

@@ -561,7 +561,7 @@ bool FloatingWindow::ImplIsFloatPopupModeWindow( const vcl::Window* pWindow )
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(FloatingWindow, ImplEndPopupModeHdl, void*, void)
+IMPL_LINK_NOARG(FloatingWindow, ImplEndPopupModeHdl, void*, void)
 {
     VclPtr<FloatingWindow> pThis(this);
     mnPostId            = nullptr;

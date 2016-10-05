@@ -891,7 +891,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPageDescPage, LayoutHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl, ListBox&, void)
 {
     // switch inside outside
     const sal_uInt16 nPos = PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() );
@@ -914,7 +914,7 @@ IMPL_LINK_NOARG_TYPED(SvxPageDescPage, LayoutHdl_Impl, ListBox&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
 {
     if ( m_pPaperTrayBox->GetEntryCount() > 1 )
         // already filled
@@ -946,7 +946,7 @@ IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
 }
 
 
-IMPL_LINK_TYPED( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
 {
     PaperSizeListBox& rListBox = static_cast<PaperSizeListBox&>( rBox );
     Paper ePaper = rListBox.GetSelection();
@@ -1016,7 +1016,7 @@ IMPL_LINK_TYPED( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperSizeModify_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl, Edit&, void)
 {
     sal_uInt16 nWhich = GetWhich( SID_ATTR_LRSPACE );
     MapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWhich );
@@ -1029,7 +1029,7 @@ IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperSizeModify_Impl, Edit&, void)
 }
 
 
-IMPL_LINK_TYPED( SvxPageDescPage, SwapOrientation_Impl, Button *, pBtn, void )
+IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, Button *, pBtn, void )
 {
     if (
         (!bLandscape && pBtn == m_pLandscapeBtn) ||
@@ -1123,7 +1123,7 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPageDescPage, BorderModify_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, BorderModify_Impl, Edit&, void)
 {
     if ( !bBorderModified )
         bBorderModified = true;
@@ -1470,7 +1470,7 @@ DeactivateRC SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPageDescPage, RangeHdl_Impl, Control&, void)
+IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl, Control&, void)
 {
     // example window
     long nHHeight = m_pBspWin->GetHdHeight();
@@ -1579,7 +1579,7 @@ void SvxPageDescPage::CalcMargin_Impl()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPageDescPage, CenterHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxPageDescPage, CenterHdl_Impl, Button*, void)
 {
     m_pBspWin->SetHorz( m_pHorzBox->IsChecked() );
     m_pBspWin->SetVert( m_pVertBox->IsChecked() );
@@ -1601,7 +1601,7 @@ void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
 }
 
 
-IMPL_LINK_TYPED( SvxPageDescPage, RegisterModify, Button*, pBox, void )
+IMPL_LINK( SvxPageDescPage, RegisterModify, Button*, pBox, void )
 {
     bool bEnable = false;
     if(static_cast<CheckBox*>(pBox)->IsChecked())
@@ -1627,7 +1627,7 @@ void SvxPageDescPage::DisableVerticalPageDir()
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxPageDescPage, FrameDirectionModify_Impl, ListBox&, void)
+IMPL_LINK_NOARG( SvxPageDescPage, FrameDirectionModify_Impl, ListBox&, void)
 {
     m_pBspWin->SetFrameDirection( (sal_uInt32) m_pTextFlowBox->GetSelectEntryValue() );
     m_pBspWin->Invalidate();

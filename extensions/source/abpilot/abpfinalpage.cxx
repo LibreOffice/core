@@ -211,13 +211,13 @@ namespace abp
     }
 
 
-    IMPL_LINK_NOARG_TYPED( FinalPage, OnNameModified, Edit&, void )
+    IMPL_LINK_NOARG( FinalPage, OnNameModified, Edit&, void )
     {
         implCheckName();
     }
 
 
-    IMPL_LINK_NOARG_TYPED(FinalPage, OnRegister, Button*, void)
+    IMPL_LINK_NOARG(FinalPage, OnRegister, Button*, void)
     {
         bool bEnable = m_pRegisterName->IsChecked();
         m_pNameLabel->Enable(bEnable);
@@ -225,7 +225,7 @@ namespace abp
         implCheckName();
     }
 
-    IMPL_LINK_NOARG_TYPED(FinalPage, OnEmbed, Button*, void)
+    IMPL_LINK_NOARG(FinalPage, OnEmbed, Button*, void)
     {
         bool bEmbed = m_pEmbed->IsChecked();
         m_pLocationLabel->Enable(!bEmbed);

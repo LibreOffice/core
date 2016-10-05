@@ -202,7 +202,7 @@ namespace accessibility
         }
     }
 
-    IMPL_LINK_TYPED(AccessibleOutlineEditSource, NotifyHdl, EENotify&, rNotify, void)
+    IMPL_LINK(AccessibleOutlineEditSource, NotifyHdl, EENotify&, rNotify, void)
     {
         ::std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( &rNotify) );
 

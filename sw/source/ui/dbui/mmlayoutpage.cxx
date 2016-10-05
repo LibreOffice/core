@@ -620,7 +620,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     OSL_ENSURE(nullptr == rShell.GetTableFormat(), "What to do with a table here?");
 }
 
-IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExampleFrame&, void)
+IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExampleFrame&, void)
 {
     m_pExampleContainerWIN->Show();
 
@@ -660,7 +660,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExample
     m_pTopMF->SetMax(rPageSize.GetHeight() - DEFAULT_TOP_DISTANCE);
 }
 
-IMPL_LINK_TYPED(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox&, rBox, void)
+IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox&, rBox, void)
 {
     if(m_pExampleWrtShell)
     {
@@ -682,11 +682,11 @@ IMPL_LINK_TYPED(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox&, rBox, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, ChangeAddressLoseFocusHdl_Impl, Control&, void)
+IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressLoseFocusHdl_Impl, Control&, void)
 {
     ChangeAddressHdl_Impl(*m_pLeftMF);
 }
-IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, SpinField&, void)
+IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, SpinField&, void)
 {
     if(m_pExampleWrtShell && m_pAddressBlockFormat)
     {
@@ -706,7 +706,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, SpinField&, 
     }
 }
 
-IMPL_LINK_TYPED(SwMailMergeLayoutPage, GreetingsHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, Button*, pButton, void)
 {
     bool bDown = pButton == m_pDownPB;
     bool bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
@@ -719,7 +719,7 @@ IMPL_LINK_TYPED(SwMailMergeLayoutPage, GreetingsHdl_Impl, Button*, pButton, void
     }
 }
 
-IMPL_LINK_TYPED(SwMailMergeLayoutPage, AlignToTextHdl_Impl, Button*, pBox, void)
+IMPL_LINK(SwMailMergeLayoutPage, AlignToTextHdl_Impl, Button*, pBox, void)
 {
     bool bCheck = static_cast<CheckBox*>(pBox)->IsChecked() && pBox->IsEnabled();
     m_pLeftFT->Enable(!bCheck);

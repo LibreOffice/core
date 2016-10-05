@@ -250,7 +250,7 @@ void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
     MasterPagesSelector::ProcessPopupMenu(rMenu);
 }
 
-IMPL_LINK_TYPED(CurrentMasterPagesSelector,EventMultiplexerListener,
+IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
     sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)

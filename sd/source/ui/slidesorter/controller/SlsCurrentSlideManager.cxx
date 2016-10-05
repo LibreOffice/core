@@ -236,7 +236,7 @@ void CurrentSlideManager::HandleModelChange()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(CurrentSlideManager, SwitchPageCallback, Timer *, void)
+IMPL_LINK_NOARG(CurrentSlideManager, SwitchPageCallback, Timer *, void)
 {
     if (mpCurrentSlide)
     {

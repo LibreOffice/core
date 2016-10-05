@@ -311,19 +311,19 @@ namespace frm
     }
 
 
-    IMPL_LINK_NOARG_TYPED( RichTextControlImpl, OnInvalidateAllAttributes, LinkParamNone*, void )
+    IMPL_LINK_NOARG( RichTextControlImpl, OnInvalidateAllAttributes, LinkParamNone*, void )
     {
         updateAllAttributes();
     }
 
 
-    IMPL_LINK_TYPED( RichTextControlImpl, OnHScroll, ScrollBar*, _pScrollbar, void )
+    IMPL_LINK( RichTextControlImpl, OnHScroll, ScrollBar*, _pScrollbar, void )
     {
         m_pView->Scroll( -_pScrollbar->GetDelta(), 0, ScrollRangeCheck::PaperWidthTextSize );
     }
 
 
-    IMPL_LINK_TYPED( RichTextControlImpl, OnVScroll, ScrollBar*, _pScrollbar, void )
+    IMPL_LINK( RichTextControlImpl, OnVScroll, ScrollBar*, _pScrollbar, void )
     {
         m_pView->Scroll( 0, -_pScrollbar->GetDelta(), ScrollRangeCheck::PaperWidthTextSize );
     }

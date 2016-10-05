@@ -106,7 +106,7 @@ protected:
     void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
-    DECL_LINK_TYPED( HighlightHdl, ValueSet*, void );
+    DECL_LINK( HighlightHdl, ValueSet*, void );
 
     void initStatusListener();
 

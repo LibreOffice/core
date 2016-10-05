@@ -133,7 +133,7 @@ void AlignmentPropertyPanel::Initialize()
     mpMtrAngle->SetDropDownLineCount(mpMtrAngle->GetEntryCount());
 }
 
-IMPL_LINK_TYPED( AlignmentPropertyPanel, ReferenceEdgeHdl, Button*, pControl, void )
+IMPL_LINK( AlignmentPropertyPanel, ReferenceEdgeHdl, Button*, pControl, void )
 {
     SvxRotateMode eMode;
     if(pControl == mpRefEdgeBottom)
@@ -147,7 +147,7 @@ IMPL_LINK_TYPED( AlignmentPropertyPanel, ReferenceEdgeHdl, Button*, pControl, vo
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG_TYPED( AlignmentPropertyPanel, AngleModifiedHdl, Edit&, void )
+IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl, Edit&, void )
 {
     OUString sTmp = mpMtrAngle->GetText();
     if (sTmp.isEmpty())
@@ -184,14 +184,14 @@ IMPL_LINK_NOARG_TYPED( AlignmentPropertyPanel, AngleModifiedHdl, Edit&, void )
     GetBindings()->GetDispatcher()->ExecuteList(
         SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, { &aAngleItem });
 }
-IMPL_LINK_NOARG_TYPED( AlignmentPropertyPanel, ClickStackHdl, Button*, void )
+IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl, Button*, void )
 {
     bool bVertical = mpCBStacked->IsChecked();
     SfxBoolItem  aStackItem( SID_ATTR_ALIGN_STACKED, bVertical );
     GetBindings()->GetDispatcher()->ExecuteList(
         SID_ATTR_ALIGN_STACKED, SfxCallMode::RECORD, { &aStackItem });
 }
-IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, MFLeftIndentMdyHdl, Edit&, void)
+IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl, Edit&, void)
 {
     mpCBXWrapText->EnableTriState(false);
     sal_uInt16 nVal = (sal_uInt16)mpMFLeftIndent->GetValue();
@@ -201,7 +201,7 @@ IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, MFLeftIndentMdyHdl, Edit&, void)
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, CBOXMergnCellClkHdl, Button*, void)
+IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXMergnCellClkHdl, Button*, void)
 {
     bool bState = mpCBXMergeCell->IsChecked();
 
@@ -216,7 +216,7 @@ IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, CBOXMergnCellClkHdl, Button*, void
     //modified end
 }
 
-IMPL_LINK_NOARG_TYPED(AlignmentPropertyPanel, CBOXWrapTextClkHdl, Button*, void)
+IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXWrapTextClkHdl, Button*, void)
 {
     bool bState = mpCBXWrapText->IsChecked();
     SfxBoolItem aItem( SID_ATTR_ALIGN_LINEBREAK , bState);

@@ -47,7 +47,7 @@ void ScSubTotalDlg::dispose()
     SfxTabDialog::dispose();
 }
 
-IMPL_LINK_TYPED( ScSubTotalDlg, RemoveHdl, Button *, pBtn, void )
+IMPL_LINK( ScSubTotalDlg, RemoveHdl, Button *, pBtn, void )
 {
     if (pBtn == m_pBtnRemove)
     {

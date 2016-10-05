@@ -626,7 +626,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
     }
 }
-IMPL_LINK_NOARG_TYPED( BibFrameController_Impl, DisposeHdl, void*, void )
+IMPL_LINK_NOARG( BibFrameController_Impl, DisposeHdl, void*, void )
 {
     xFrame->dispose();
 };

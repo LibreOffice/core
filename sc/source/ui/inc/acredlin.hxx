@@ -95,21 +95,21 @@ private:
     void            Init();
     void            InitFilter();
 
-    DECL_LINK_TYPED( FilterHandle, SvxTPFilter*, void );
-    DECL_LINK_TYPED( RefHandle, SvxTPFilter*, void );
-    DECL_LINK_TYPED( RejectHandle, SvxTPView*, void );
-    DECL_LINK_TYPED( AcceptHandle, SvxTPView*, void );
-    DECL_LINK_TYPED( RejectAllHandle, SvxTPView*, void );
-    DECL_LINK_TYPED( AcceptAllHandle, SvxTPView*, void );
-    DECL_LINK_TYPED( ExpandingHandle, SvTreeListBox*, bool );
-    DECL_LINK_TYPED( SelectHandle, SvTreeListBox*, void );
-    DECL_LINK_TYPED( RefInfoHandle, const OUString*, void );
+    DECL_LINK( FilterHandle, SvxTPFilter*, void );
+    DECL_LINK( RefHandle, SvxTPFilter*, void );
+    DECL_LINK( RejectHandle, SvxTPView*, void );
+    DECL_LINK( AcceptHandle, SvxTPView*, void );
+    DECL_LINK( RejectAllHandle, SvxTPView*, void );
+    DECL_LINK( AcceptAllHandle, SvxTPView*, void );
+    DECL_LINK( ExpandingHandle, SvTreeListBox*, bool );
+    DECL_LINK( SelectHandle, SvTreeListBox*, void );
+    DECL_LINK( RefInfoHandle, const OUString*, void );
 
-    DECL_LINK_TYPED( UpdateSelectionHdl, Idle*, void );
-    DECL_LINK_TYPED( ChgTrackModHdl, ScChangeTrack&, void );
-    DECL_LINK_TYPED( CommandHdl, SvSimpleTable*, void );
-    DECL_LINK_TYPED( ReOpenTimerHdl, Idle*, void );
-    DECL_LINK_TYPED( ColCompareHdl, const SvSortData*, sal_Int32 );
+    DECL_LINK( UpdateSelectionHdl, Idle*, void );
+    DECL_LINK( ChgTrackModHdl, ScChangeTrack&, void );
+    DECL_LINK( CommandHdl, SvSimpleTable*, void );
+    DECL_LINK( ReOpenTimerHdl, Idle*, void );
+    DECL_LINK( ColCompareHdl, const SvSortData*, sal_Int32 );
 
 protected:
 

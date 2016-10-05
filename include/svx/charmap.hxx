@@ -121,7 +121,7 @@ private:
     void            InitSettings(vcl::RenderContext& rRenderContext);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
-    DECL_LINK_TYPED(VscrollHdl, ScrollBar*, void);
+    DECL_LINK(VscrollHdl, ScrollBar*, void);
 
     void            init();
     Rectangle       getGridRectangle(const Point &rPointUL, const Size &rOutputSize);

@@ -568,7 +568,7 @@ void FillControl::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
 
@@ -743,7 +743,7 @@ IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
     const XFillStyleItem aXFillStyleItem(eXFS);

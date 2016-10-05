@@ -41,7 +41,7 @@ namespace dbaui
         OUString                                m_strCurrentLeft;
         OUString                                m_strCurrentRight;
     private:
-        DECL_LINK_TYPED( OnTableChanged, ListBox&, void );
+        DECL_LINK( OnTableChanged, ListBox&, void );
     public:
         OTableListBoxControl(VclBuilderContainer* _pParent,
                              const OJoinTableView::OTableWindowMap* _pTableMap,

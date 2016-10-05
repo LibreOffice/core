@@ -152,7 +152,7 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     }
 }
 
-IMPL_LINK_NOARG_TYPED( ORelationDialog, OKClickHdl, Button*, void )
+IMPL_LINK_NOARG( ORelationDialog, OKClickHdl, Button*, void )
 {
     // RadioButtons auslesen
     sal_uInt16 nAttrib = 0;

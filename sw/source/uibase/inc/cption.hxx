@@ -93,11 +93,11 @@ class SwCaptionDialog : public SvxStandardDialog
 
     css::uno::Reference< css::container::XNameAccess >    xNameAccess;
 
-    DECL_LINK_TYPED(SelectHdl, ComboBox&, void);
-    DECL_LINK_TYPED(SelectListBoxHdl, ListBox&, void);
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
-    DECL_LINK_TYPED(OptionHdl, Button *, void);
-    DECL_LINK_TYPED(CaptionHdl, Button *, void);
+    DECL_LINK(SelectHdl, ComboBox&, void);
+    DECL_LINK(SelectListBoxHdl, ListBox&, void);
+    DECL_LINK(ModifyHdl, Edit&, void);
+    DECL_LINK(OptionHdl, Button *, void);
+    DECL_LINK(CaptionHdl, Button *, void);
 
     virtual void Apply() override;
 

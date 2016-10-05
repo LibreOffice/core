@@ -591,7 +591,7 @@ void Dialog::dispose()
     SystemWindow::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(Dialog, ImplAsyncCloseHdl, void*, void)
+IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl, void*, void)
 {
     Close();
 }

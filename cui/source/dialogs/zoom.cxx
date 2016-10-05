@@ -308,7 +308,7 @@ void SvxZoomDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED(SvxZoomDialog, UserHdl, Button *, pButton, void)
+IMPL_LINK(SvxZoomDialog, UserHdl, Button *, pButton, void)
 {
     mbModified = true;
 
@@ -323,7 +323,7 @@ IMPL_LINK_TYPED(SvxZoomDialog, UserHdl, Button *, pButton, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxZoomDialog, SpinHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl, Edit&, void)
 {
     if (!m_pUserBtn->IsChecked())
         return;
@@ -331,7 +331,7 @@ IMPL_LINK_NOARG_TYPED(SvxZoomDialog, SpinHdl, Edit&, void)
     mbModified = true;
 }
 
-IMPL_LINK_TYPED(SvxZoomDialog, ViewLayoutUserHdl, Button*, pButton, void)
+IMPL_LINK(SvxZoomDialog, ViewLayoutUserHdl, Button*, pButton, void)
 {
     mbModified = true;
 
@@ -358,7 +358,7 @@ IMPL_LINK_TYPED(SvxZoomDialog, ViewLayoutUserHdl, Button*, pButton, void)
     }
 }
 
-IMPL_LINK_TYPED(SvxZoomDialog, ViewLayoutSpinHdl, Edit&, rEdit, void)
+IMPL_LINK(SvxZoomDialog, ViewLayoutSpinHdl, Edit&, rEdit, void)
 {
     if (&rEdit == m_pColumnsEdit && !m_pColumnsBtn->IsChecked())
         return;
@@ -376,7 +376,7 @@ IMPL_LINK_TYPED(SvxZoomDialog, ViewLayoutSpinHdl, Edit&, rEdit, void)
     mbModified = true;
 }
 
-IMPL_LINK_TYPED(SvxZoomDialog, ViewLayoutCheckHdl, Button*, pCheckBox, void)
+IMPL_LINK(SvxZoomDialog, ViewLayoutCheckHdl, Button*, pCheckBox, void)
 {
     if (pCheckBox == m_pBookModeChk && !m_pColumnsBtn->IsChecked())
         return;
@@ -384,7 +384,7 @@ IMPL_LINK_TYPED(SvxZoomDialog, ViewLayoutCheckHdl, Button*, pCheckBox, void)
     mbModified = true;
 }
 
-IMPL_LINK_TYPED(SvxZoomDialog, OKHdl, Button*, pButton, void)
+IMPL_LINK(SvxZoomDialog, OKHdl, Button*, pButton, void)
 {
     if (mbModified || m_pOKBtn != pButton)
     {

@@ -38,7 +38,7 @@ private:
     VclPtr<RadioButton>    m_pBtnCols;
     VclPtr<OKButton>       m_pBtnOk;
 
-    DECL_LINK_TYPED(OkHdl, Button*, void);
+    DECL_LINK(OkHdl, Button*, void);
 };
 
 #endif

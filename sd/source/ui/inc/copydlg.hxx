@@ -69,9 +69,9 @@ private:
     Fraction            maUIScale;
     ::sd::View*         mpView;
 
-    DECL_LINK_TYPED( SelectColorHdl, ListBox&, void );
-    DECL_LINK_TYPED( SetViewData, Button*, void );
-    DECL_LINK_TYPED( SetDefault, Button*, void );
+    DECL_LINK( SelectColorHdl, ListBox&, void );
+    DECL_LINK( SetViewData, Button*, void );
+    DECL_LINK( SetDefault, Button*, void );
 };
 
 } // end of namespace sd

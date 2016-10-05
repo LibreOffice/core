@@ -91,17 +91,17 @@ private:
 private:
     SAL_DLLPRIVATE void    ImplInitListBoxData();
 
-    DECL_DLLPRIVATE_LINK_TYPED( ImplSelectHdl, LinkParamNone*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplScrollHdl, ImplListBox*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplCancelHdl, LinkParamNone*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplDoubleClickHdl, ImplListBoxWindow*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplPopupModeEndHdl, FloatingWindow*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplSelectionChangedHdl, sal_Int32, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplUserDrawHdl, UserDrawEvent*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplFocusHdl, sal_Int32, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplListItemSelectHdl, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK( ImplSelectHdl, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK( ImplScrollHdl, ImplListBox*, void );
+    DECL_DLLPRIVATE_LINK( ImplCancelHdl, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK( ImplDoubleClickHdl, ImplListBoxWindow*, void );
+    DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, FloatingWindow*, void );
+    DECL_DLLPRIVATE_LINK( ImplSelectionChangedHdl, sal_Int32, void );
+    DECL_DLLPRIVATE_LINK( ImplUserDrawHdl, UserDrawEvent*, void );
+    DECL_DLLPRIVATE_LINK( ImplFocusHdl, sal_Int32, void );
+    DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl, LinkParamNone*, void );
 
-    DECL_DLLPRIVATE_LINK_TYPED( ImplClickBtnHdl, void*, void );
+    DECL_DLLPRIVATE_LINK( ImplClickBtnHdl, void*, void );
 
 protected:
     using Window::ImplInit;

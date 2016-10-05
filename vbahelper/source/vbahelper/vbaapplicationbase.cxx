@@ -112,10 +112,10 @@ public:
         m_aTimer.Start();
     }
 
-    DECL_LINK_TYPED( MacroCallHdl, Timer*, void );
+    DECL_LINK( MacroCallHdl, Timer*, void );
 };
 
-IMPL_LINK_NOARG_TYPED(VbaTimer, MacroCallHdl, Timer *, void)
+IMPL_LINK_NOARG(VbaTimer, MacroCallHdl, Timer *, void)
 {
     if ( m_aTimerInfo.second.second == 0 || GetNow() < m_aTimerInfo.second.second )
     {

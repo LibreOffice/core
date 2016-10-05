@@ -79,12 +79,12 @@ void AuthFallbackDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED ( AuthFallbackDlg,  OKHdl, Button *, void)
+IMPL_LINK_NOARG ( AuthFallbackDlg,  OKHdl, Button *, void)
 {
     EndDialog( RET_OK );
 }
 
-IMPL_LINK_NOARG_TYPED ( AuthFallbackDlg,  CancelHdl, Button *, void)
+IMPL_LINK_NOARG ( AuthFallbackDlg,  CancelHdl, Button *, void)
 {
     EndDialog();
 }

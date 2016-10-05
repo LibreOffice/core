@@ -194,10 +194,10 @@ public:
     */
     virtual OutputDevice* GetDocumentRefDev() override;
 
-    DECL_LINK_TYPED( RenameSlideHdl, AbstractSvxNameDialog&, bool );
+    DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog&, bool );
 
     // ExecuteSpellPopup now handled by DrawDocShell
-    DECL_LINK_TYPED( OnlineSpellCallback, SpellCallbackInfo&, void );
+    DECL_LINK( OnlineSpellCallback, SpellCallbackInfo&, void );
 
     void                    ClearUndoBuffer();
 

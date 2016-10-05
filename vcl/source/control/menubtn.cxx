@@ -91,7 +91,7 @@ void MenuButton::dispose()
     PushButton::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(MenuButton, ImplMenuTimeoutHdl, Timer *, void)
+IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl, Timer *, void)
 {
     // See if Button Tracking is still active, as it could've been cancelled earlier
     if ( IsTracking() )

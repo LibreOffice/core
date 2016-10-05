@@ -589,7 +589,7 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
     m_pIndentAtMF->SetUnit( eMetric );
 }
 
-IMPL_LINK_NOARG_TYPED(SwNumPositionTabPage, EditModifyHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwNumPositionTabPage, EditModifyHdl, ListBox&, void)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -614,7 +614,7 @@ IMPL_LINK_NOARG_TYPED(SwNumPositionTabPage, EditModifyHdl, ListBox&, void)
     SetModified();
 }
 
-IMPL_LINK_TYPED( SwNumPositionTabPage, LevelHdl, ListBox&, rBox, void )
+IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox&, rBox, void )
 {
     sal_uInt16 nSaveNumLvl = nActNumLvl;
     nActNumLvl = 0;
@@ -659,11 +659,11 @@ IMPL_LINK_TYPED( SwNumPositionTabPage, LevelHdl, ListBox&, rBox, void )
     InitControls();
 }
 
-IMPL_LINK_TYPED( SwNumPositionTabPage, DistanceLoseFocusHdl, Control&, rControl, void )
+IMPL_LINK( SwNumPositionTabPage, DistanceLoseFocusHdl, Control&, rControl, void )
 {
     DistanceHdl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK_TYPED( SwNumPositionTabPage, DistanceHdl, SpinField&, rSpin, void )
+IMPL_LINK( SwNumPositionTabPage, DistanceHdl, SpinField&, rSpin, void )
 {
     if(bInInintControl)
         return;
@@ -722,7 +722,7 @@ IMPL_LINK_TYPED( SwNumPositionTabPage, DistanceHdl, SpinField&, rSpin, void )
         m_pDistBorderMF->SetText(aEmptyOUStr);
 }
 
-IMPL_LINK_TYPED( SwNumPositionTabPage, RelativeHdl, Button *, pBox, void )
+IMPL_LINK( SwNumPositionTabPage, RelativeHdl, Button *, pBox, void )
 {
     bool bOn = static_cast<CheckBox*>(pBox)->IsChecked();
     bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 && USHRT_MAX != nActNumLvl;
@@ -760,7 +760,7 @@ IMPL_LINK_TYPED( SwNumPositionTabPage, RelativeHdl, Button *, pBox, void )
     bLastRelative = bOn;
 }
 
-IMPL_LINK_NOARG_TYPED(SwNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox&, void)
 {
     // determine value to be set at the chosen list levels
     SvxNumberFormat::LabelFollowedBy eLabelFollowedBy = SvxNumberFormat::LISTTAB;
@@ -819,11 +819,11 @@ IMPL_LINK_NOARG_TYPED(SwNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox&, v
     SetModified();
 }
 
-IMPL_LINK_TYPED( SwNumPositionTabPage, ListtabPosFocusHdl_Impl, Control&, rControl, void )
+IMPL_LINK( SwNumPositionTabPage, ListtabPosFocusHdl_Impl, Control&, rControl, void )
 {
     ListtabPosHdl_Impl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK_TYPED( SwNumPositionTabPage, ListtabPosHdl_Impl, SpinField&, rSpin, void )
+IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, SpinField&, rSpin, void )
 {
     MetricField& rField = static_cast<MetricField&>(rSpin);
     // determine value to be set at the chosen list levels
@@ -845,11 +845,11 @@ IMPL_LINK_TYPED( SwNumPositionTabPage, ListtabPosHdl_Impl, SpinField&, rSpin, vo
     SetModified();
 }
 
-IMPL_LINK_TYPED( SwNumPositionTabPage, AlignAtFocusHdl_Impl, Control&, rControl, void )
+IMPL_LINK( SwNumPositionTabPage, AlignAtFocusHdl_Impl, Control&, rControl, void )
 {
     AlignAtHdl_Impl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK_TYPED( SwNumPositionTabPage, AlignAtHdl_Impl, SpinField&, rSpin, void )
+IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, SpinField&, rSpin, void )
 {
     MetricField& rField = static_cast<MetricField&>(rSpin);
     // determine value to be set at the chosen list levels
@@ -872,11 +872,11 @@ IMPL_LINK_TYPED( SwNumPositionTabPage, AlignAtHdl_Impl, SpinField&, rSpin, void 
     SetModified();
 }
 
-IMPL_LINK_TYPED( SwNumPositionTabPage, IndentAtFocusHdl_Impl, Control&, rControl, void )
+IMPL_LINK( SwNumPositionTabPage, IndentAtFocusHdl_Impl, Control&, rControl, void )
 {
     IndentAtHdl_Impl(static_cast<SpinField&>(rControl));
 }
-IMPL_LINK_TYPED( SwNumPositionTabPage, IndentAtHdl_Impl, SpinField&, rSpin, void )
+IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, SpinField&, rSpin, void )
 {
     MetricField& rField = static_cast<MetricField&>(rSpin);
     // determine value to be set at the chosen list levels
@@ -902,7 +902,7 @@ IMPL_LINK_TYPED( SwNumPositionTabPage, IndentAtHdl_Impl, SpinField&, rSpin, void
     SetModified();
 }
 
-IMPL_LINK_NOARG_TYPED(SwNumPositionTabPage, StandardHdl, Button*, void)
+IMPL_LINK_NOARG(SwNumPositionTabPage, StandardHdl, Button*, void)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -1027,7 +1027,7 @@ short  SwSvxNumBulletTabDialog::Ok()
     return nRet;
 }
 
-IMPL_LINK_NOARG_TYPED(SwSvxNumBulletTabDialog, RemoveNumberingHdl, Button*, void)
+IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, RemoveNumberingHdl, Button*, void)
 {
     EndDialog(RET_USER);
 }

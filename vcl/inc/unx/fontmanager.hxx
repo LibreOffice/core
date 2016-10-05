@@ -322,7 +322,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     Timer m_aFontInstallerTimer;
 
 #if ENABLE_DBUS
-    DECL_LINK_TYPED( autoInstallFontLangSupport, Timer*, void );
+    DECL_LINK( autoInstallFontLangSupport, Timer*, void );
 #endif
     PrintFontManager();
     ~PrintFontManager();

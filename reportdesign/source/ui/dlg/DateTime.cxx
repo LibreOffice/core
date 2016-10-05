@@ -205,7 +205,7 @@ OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,con
     return xPreviewer->convertNumberToPreviewString(sFormat,nValue,m_nLocale,true);
 }
 
-IMPL_LINK_TYPED( ODateTimeDialog, CBClickHdl, Button*, _pBox, void )
+IMPL_LINK( ODateTimeDialog, CBClickHdl, Button*, _pBox, void )
 {
     if ( _pBox == m_pDate || _pBox == m_pTime)
     {

@@ -43,7 +43,7 @@ DlgEdFactory::~DlgEdFactory()
 }
 
 
-IMPL_STATIC_LINK_TYPED(
+IMPL_STATIC_LINK(
     DlgEdFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )
 {
     SdrObject* pNewObj = nullptr;

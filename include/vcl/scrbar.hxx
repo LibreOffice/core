@@ -84,7 +84,7 @@ private:
     SAL_DLLPRIVATE bool         ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags);
     SAL_DLLPRIVATE void         ImplDragThumb( const Point& rMousePos );
     SAL_DLLPRIVATE Size         getCurrentCalcSize() const;
-    DECL_DLLPRIVATE_LINK_TYPED( ImplAutoTimerHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( ImplAutoTimerHdl, Timer*, void );
 
 public:
     explicit        ScrollBar( vcl::Window* pParent, WinBits nStyle = WB_VERT );

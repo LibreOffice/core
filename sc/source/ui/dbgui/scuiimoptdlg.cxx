@@ -310,7 +310,7 @@ OString ScImportOptionsDlg::GetScreenshotId() const
     return (m_bIsAsciiImport) ? GetHelpId() : GetHelpId() + "?config=NonTextImport";
 }
 
-IMPL_LINK_TYPED( ScImportOptionsDlg, FixedWidthHdl, Button*, pCheckBox, void )
+IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, Button*, pCheckBox, void )
 {
     if (pCheckBox == m_pCbFixed)
     {
@@ -324,7 +324,7 @@ IMPL_LINK_TYPED( ScImportOptionsDlg, FixedWidthHdl, Button*, pCheckBox, void )
     }
 }
 
-IMPL_LINK_TYPED( ScImportOptionsDlg, DoubleClickHdl, ListBox&, rLb, void )
+IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox&, rLb, void )
 {
     if (&rLb == m_pLbCharset)
     {

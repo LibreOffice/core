@@ -27,7 +27,7 @@
 namespace basctl
 {
 
-IMPL_LINK_TYPED( DlgEdFunc, ScrollTimeout, Timer *, pTimer, void )
+IMPL_LINK( DlgEdFunc, ScrollTimeout, Timer *, pTimer, void )
 {
     (void)pTimer;
     vcl::Window& rWindow = rParent.GetWindow();

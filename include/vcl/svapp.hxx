@@ -1400,7 +1400,7 @@ public:
     static void setDeInitHook(Link<LinkParamNone*,void> const & hook);
 
 private:
-    DECL_STATIC_LINK_TYPED( Application, PostEventHandler, void*, void );
+    DECL_STATIC_LINK( Application, PostEventHandler, void*, void );
 };
 
 

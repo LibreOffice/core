@@ -25,7 +25,7 @@
 
 // NameClashDialog ---------------------------------------------------------
 
-IMPL_LINK_TYPED( NameClashDialog, ButtonHdl_Impl, Button *, pBtn, void )
+IMPL_LINK( NameClashDialog, ButtonHdl_Impl, Button *, pBtn, void )
 {
     long nRet = (long) ABORT;
     if ( m_pBtnRename == pBtn )

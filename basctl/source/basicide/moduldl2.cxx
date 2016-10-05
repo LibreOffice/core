@@ -353,7 +353,7 @@ bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
 }
 
 // NewObjectDialog
-IMPL_LINK_NOARG_TYPED(NewObjectDialog, OkButtonHandler, Button*, void)
+IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler, Button*, void)
 {
     if (IsValidSbxName(m_pEdit->GetText()))
         EndDialog(1);
@@ -435,7 +435,7 @@ sal_Int32 GotoLineDialog::GetLineNumber() const
     return m_pEdit->GetText().toInt32();
 }
 
-IMPL_LINK_NOARG_TYPED(GotoLineDialog, OkButtonHandler, Button*, void)
+IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler, Button*, void)
 {
     if ( GetLineNumber() )
         EndDialog(1);
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG_TYPED(GotoLineDialog, OkButtonHandler, Button*, void)
 }
 
 // ExportDialog
-IMPL_LINK_NOARG_TYPED(ExportDialog, OkButtonHandler, Button*, void)
+IMPL_LINK_NOARG(ExportDialog, OkButtonHandler, Button*, void)
 {
     mbExportAsPackage = m_pExportAsPackageButton->IsChecked();
     EndDialog(1);
@@ -607,19 +607,19 @@ void LibPage::DeactivatePage()
 {
 }
 
-IMPL_LINK_TYPED( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox, void )
+IMPL_LINK( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox, void )
 {
     if ( pBox->IsSelected( pBox->GetHdlEntry() ) )
         CheckButtons();
 }
 
-IMPL_LINK_NOARG_TYPED( LibPage, BasicSelectHdl, ListBox&, void )
+IMPL_LINK_NOARG( LibPage, BasicSelectHdl, ListBox&, void )
 {
     SetCurLib();
     CheckButtons();
 }
 
-IMPL_LINK_TYPED( LibPage, ButtonHdl, Button *, pButton, void )
+IMPL_LINK( LibPage, ButtonHdl, Button *, pButton, void )
 {
     if (pButton == m_pEditButton)
     {
@@ -707,7 +707,7 @@ IMPL_LINK_TYPED( LibPage, ButtonHdl, Button *, pButton, void )
     CheckButtons();
 }
 
-IMPL_LINK_TYPED( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg, bool )
+IMPL_LINK( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg, bool )
 {
     bool bRet = false;
 

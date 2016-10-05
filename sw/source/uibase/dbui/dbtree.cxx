@@ -378,7 +378,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
     }
 }
 
-IMPL_LINK_TYPED( SwDBTreeList, DBCompare, const SvSortData&, rData, sal_Int32 )
+IMPL_LINK( SwDBTreeList, DBCompare, const SvSortData&, rData, sal_Int32 )
 {
     SvTreeListEntry* pRight = const_cast<SvTreeListEntry*>(rData.pRight);
 

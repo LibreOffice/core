@@ -73,8 +73,8 @@ protected:
     virtual void select() override;
     virtual void deselect() override;
 
-    DECL_LINK_TYPED( WindowEventHandler, VclWindowEvent&, void );
-    DECL_LINK_TYPED( ClosePopupHdl, void*, void );
+    DECL_LINK( WindowEventHandler, VclWindowEvent&, void );
+    DECL_LINK( ClosePopupHdl, void*, void );
 
 private:
     AnnotationManagerImpl& mrManager;

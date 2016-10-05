@@ -612,7 +612,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
     }
 }
 
-IMPL_LINK_TYPED( ScDrawShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
+IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
 {
     OUString aName;
     rDialog.GetName( aName );

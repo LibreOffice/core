@@ -123,7 +123,7 @@ void SvxPresetListBox::FillPresetListBox(XPatternList& pList, sal_uInt32 nStartI
     FillPresetListBoxImpl< XPatternList, XBitmapEntry >( pList, nStartIndex );
 }
 
-IMPL_LINK_TYPED(SvxPresetListBox, OnMenuItemSelected, Menu*, pMenu, bool)
+IMPL_LINK(SvxPresetListBox, OnMenuItemSelected, Menu*, pMenu, bool)
 {
     if( pMenu == nullptr )
     {

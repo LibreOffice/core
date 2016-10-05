@@ -159,7 +159,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
-    DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
+    DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 
 private:
     EventListenerVector mxEventListeners;

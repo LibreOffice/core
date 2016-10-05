@@ -43,9 +43,9 @@ private:
     css::uno::Reference< css::frame::XModel > m_xModel;
 
 public:
-    DECL_LINK_TYPED(OkClickHdl, Button*, void);
-    DECL_LINK_TYPED(TemplateNameEditHdl, Edit&, void);
-    DECL_LINK_TYPED(SelectCategoryHdl, ListBox&, void);
+    DECL_LINK(OkClickHdl, Button*, void);
+    DECL_LINK(TemplateNameEditHdl, Edit&, void);
+    DECL_LINK(SelectCategoryHdl, ListBox&, void);
 
     void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
 

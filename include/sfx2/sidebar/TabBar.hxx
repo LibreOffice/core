@@ -97,7 +97,7 @@ private:
     class Item
     {
     public:
-        DECL_LINK_TYPED(HandleClick, Button*, void);
+        DECL_LINK(HandleClick, Button*, void);
         VclPtr<RadioButton> mpButton;
         OUString msDeckId;
         ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
@@ -115,7 +115,7 @@ private:
     void Layout();
     void UpdateButtonIcons();
 
-    DECL_LINK_TYPED(OnToolboxClicked, Button*, void);
+    DECL_LINK(OnToolboxClicked, Button*, void);
 
     SidebarController* pParentSidebarController;
 

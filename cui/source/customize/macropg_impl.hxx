@@ -45,7 +45,7 @@ private:
 
     OUString maURL;
 
-    DECL_LINK_TYPED(ButtonHandler, Button*, void);
+    DECL_LINK(ButtonHandler, Button*, void);
 
 public:
     AssignComponentDialog( vcl::Window * pParent, const OUString& rURL );

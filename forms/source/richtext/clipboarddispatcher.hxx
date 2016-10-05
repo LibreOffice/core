@@ -82,7 +82,7 @@ namespace frm
         virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify ) override;
 
     private:
-        DECL_LINK_TYPED( OnClipboardChanged, TransferableDataHelper*, void );
+        DECL_LINK( OnClipboardChanged, TransferableDataHelper*, void );
     };
 
 

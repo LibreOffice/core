@@ -119,7 +119,7 @@ void ScShareDocumentDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(ScShareDocumentDlg, ToggleHandle, CheckBox&, void)
+IMPL_LINK_NOARG(ScShareDocumentDlg, ToggleHandle, CheckBox&, void)
 {
     m_pFtWarning->Enable( m_pCbShare->IsChecked() );
 }

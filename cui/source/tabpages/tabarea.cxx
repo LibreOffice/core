@@ -247,7 +247,7 @@ short SvxAreaTabDialog::Ok()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxAreaTabDialog, CancelHdlImpl, Button*, void)
+IMPL_LINK_NOARG(SvxAreaTabDialog, CancelHdlImpl, Button*, void)
 {
     SavePalettes();
 

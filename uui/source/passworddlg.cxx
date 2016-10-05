@@ -102,7 +102,7 @@ void PasswordDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(PasswordDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl, Button*, void)
 {
     bool bEDPasswdValid = m_pEDPassword->GetText().getLength() >= nMinLen;
     bool bPasswdMismatch = m_pEDConfirmPassword->GetText() != m_pEDPassword->GetText();

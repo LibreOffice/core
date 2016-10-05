@@ -178,7 +178,7 @@ long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
 // ResetToDefaults
 
 
-IMPL_LINK_NOARG_TYPED(SvxDefaultColorOptPage, ResetToDefaults, Button*, void)
+IMPL_LINK_NOARG(SvxDefaultColorOptPage, ResetToDefaults, Button*, void)
 {
     if( pColorConfig )
     {
@@ -195,7 +195,7 @@ IMPL_LINK_NOARG_TYPED(SvxDefaultColorOptPage, ResetToDefaults, Button*, void)
 // AddChartColor
 
 
-IMPL_LINK_NOARG_TYPED(SvxDefaultColorOptPage, AddChartColor, Button*, void)
+IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor, Button*, void)
 {
     if( pColorConfig )
     {
@@ -214,7 +214,7 @@ IMPL_LINK_NOARG_TYPED(SvxDefaultColorOptPage, AddChartColor, Button*, void)
 // RemoveChartColor
 
 
-IMPL_LINK_TYPED( SvxDefaultColorOptPage, RemoveChartColor, Button*, pButton, void )
+IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, Button*, pButton, void )
 {
     sal_Int32 nIndex = m_pLbChartColors->GetSelectEntryPos();
 
@@ -245,7 +245,7 @@ IMPL_LINK_TYPED( SvxDefaultColorOptPage, RemoveChartColor, Button*, pButton, voi
     }
 }
 
-IMPL_LINK_TYPED( SvxDefaultColorOptPage, ListClickedHdl, ListBox&, _rBox, void )
+IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ListBox&, _rBox, void )
 {
     Color aCol = static_cast<ColorLB&>(_rBox).GetSelectEntryColor();
 
@@ -257,7 +257,7 @@ IMPL_LINK_TYPED( SvxDefaultColorOptPage, ListClickedHdl, ListBox&, _rBox, void )
         m_pValSetColorBox->SelectItem( nIndex + 1 );       // ValueSet is 1-based
 }
 
-IMPL_LINK_NOARG_TYPED(SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, void)
 {
     sal_Int32 nIdx = m_pLbChartColors->GetSelectEntryPos();
     if( nIdx != LISTBOX_ENTRY_NOTFOUND )

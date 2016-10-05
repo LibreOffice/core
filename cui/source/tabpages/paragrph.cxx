@@ -161,7 +161,7 @@ sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
 
 }
 
-IMPL_LINK_NOARG_TYPED(SvxStdParagraphTabPage, ELRLoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl, Control&, void)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -781,7 +781,7 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
     LineDistHdl_Impl( *m_pLineDist );
 }
 
-IMPL_LINK_TYPED( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void )
 {
     switch( rBox.GetSelectEntryPos() )
     {
@@ -848,7 +848,7 @@ IMPL_LINK_TYPED( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox&, rBox, void 
     UpdateExample_Impl();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxStdParagraphTabPage, ModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxStdParagraphTabPage, ModifyHdl_Impl, Edit&, void)
 {
     UpdateExample_Impl();
 }
@@ -925,7 +925,7 @@ void SvxStdParagraphTabPage::EnableContextualMode()
     m_pContextualCB->Show();
 }
 
-IMPL_LINK_TYPED( SvxStdParagraphTabPage, AutoHdl_Impl, Button*, pBox, void )
+IMPL_LINK( SvxStdParagraphTabPage, AutoHdl_Impl, Button*, pBox, void )
 {
     bool bEnable = !static_cast<CheckBox*>(pBox)->IsChecked();
     m_pFLineLabel->Enable(bEnable);
@@ -1293,7 +1293,7 @@ void SvxParaAlignTabPage::ChangesApplied()
     m_pExpandCB->SaveValue();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxParaAlignTabPage, AlignHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, Button*, void)
 {
     bool bJustify = m_pJustify->IsChecked();
     m_pLastLineFT->Enable(bJustify);
@@ -1303,7 +1303,7 @@ IMPL_LINK_NOARG_TYPED(SvxParaAlignTabPage, AlignHdl_Impl, Button*, void)
     UpdateExample_Impl();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxParaAlignTabPage, LastLineHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl, ListBox&, void)
 {
     //fdo#41350 only enable 'Expand last word' if last line is also justified
     bool bLastLineIsBlock = m_pLastLineLB->GetSelectEntryPos() == 2;
@@ -1311,7 +1311,7 @@ IMPL_LINK_NOARG_TYPED(SvxParaAlignTabPage, LastLineHdl_Impl, ListBox&, void)
     UpdateExample_Impl();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox&, void)
 {
     SvxFrameDirection eDir = m_pTextDirectionLB->GetSelectEntryValue();
     switch ( eDir )
@@ -2000,7 +2000,7 @@ void SvxExtParagraphTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, PageBreakHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, PageBreakHdl_Impl, Button*, void)
 {
     switch ( m_pPageBreakBox->GetState() )
     {
@@ -2041,14 +2041,14 @@ IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, PageBreakHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, KeepTogetherHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, KeepTogetherHdl_Impl, Button*, void)
 {
     bool bEnable = m_pKeepTogetherBox->GetState() == TRISTATE_FALSE;
     m_pWidowBox->Enable(bEnable);
     m_pOrphanBox->Enable(bEnable);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, WidowHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, WidowHdl_Impl, Button*, void)
 {
     switch ( m_pWidowBox->GetState() )
     {
@@ -2070,7 +2070,7 @@ IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, WidowHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, OrphanHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, OrphanHdl_Impl, Button*, void)
 {
     switch( m_pOrphanBox->GetState() )
     {
@@ -2092,7 +2092,7 @@ IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, OrphanHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, HyphenClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, HyphenClickHdl_Impl, Button*, void)
 {
 
     bool bEnable = m_pHyphenBox->GetState() == TRISTATE_TRUE;
@@ -2105,7 +2105,7 @@ IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, HyphenClickHdl_Impl, Button*, void
     m_pHyphenBox->SetState( bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, Button*, void)
 {
     bool bEnable = false;
     if ( m_pApplyCollBtn->GetState() == TRISTATE_TRUE &&
@@ -2126,7 +2126,7 @@ IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, Button*, v
     }
 }
 
-IMPL_LINK_TYPED( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox&, rListBox, void )
 {
     if ( 0 == rListBox.GetSelectEntryPos() )
     {
@@ -2152,7 +2152,7 @@ IMPL_LINK_TYPED( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox&, rListBo
     }
 }
 
-IMPL_LINK_TYPED( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox&, rListBox, void )
 {
     //column break or break break after
     sal_Int32 nBreakPos = m_pBreakPositionLB->GetSelectEntryPos();
@@ -2281,7 +2281,7 @@ void SvxAsianTabPage::ChangesApplied()
     m_pHangingPunctCB->SaveValue();
     m_pScriptSpaceCB->SaveValue();
 }
-IMPL_STATIC_LINK_TYPED( SvxAsianTabPage, ClickHdl_Impl, Button*, pBox, void )
+IMPL_STATIC_LINK( SvxAsianTabPage, ClickHdl_Impl, Button*, pBox, void )
 {
     static_cast<CheckBox*>(pBox)->EnableTriState( false );
 }

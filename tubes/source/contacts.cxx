@@ -31,11 +31,11 @@ class TubeContacts : public ModelessDialog
     VclPtr<ListBox>                mpList;
     Collaboration*          mpCollaboration;
 
-    DECL_LINK_TYPED( BtnDemoHdl, Button*, void );
-    DECL_LINK_TYPED( BtnConnectHdl, Button*, void );
-    DECL_LINK_TYPED( BtnGroupHdl, Button*, void );
-    DECL_LINK_TYPED( BtnInviteHdl, Button*, void );
-    DECL_LINK_TYPED( BtnListenHdl, Button*, void );
+    DECL_LINK( BtnDemoHdl, Button*, void );
+    DECL_LINK( BtnConnectHdl, Button*, void );
+    DECL_LINK( BtnGroupHdl, Button*, void );
+    DECL_LINK( BtnInviteHdl, Button*, void );
+    DECL_LINK( BtnListenHdl, Button*, void );
 
     AccountContactPairV maACs;
 
@@ -186,27 +186,27 @@ public:
     }
 };
 
-IMPL_LINK_NOARG_TYPED( TubeContacts, BtnDemoHdl, Button*, void )
+IMPL_LINK_NOARG( TubeContacts, BtnDemoHdl, Button*, void )
 {
     StartDemoSession();
 }
 
-IMPL_LINK_NOARG_TYPED( TubeContacts, BtnConnectHdl, Button*, void )
+IMPL_LINK_NOARG( TubeContacts, BtnConnectHdl, Button*, void )
 {
     StartBuddySession();
 }
 
-IMPL_LINK_NOARG_TYPED( TubeContacts, BtnGroupHdl, Button*, void )
+IMPL_LINK_NOARG( TubeContacts, BtnGroupHdl, Button*, void )
 {
     StartGroupSession();
 }
 
-IMPL_LINK_NOARG_TYPED( TubeContacts, BtnInviteHdl, Button*, void )
+IMPL_LINK_NOARG( TubeContacts, BtnInviteHdl, Button*, void )
 {
     Invite();
 }
 
-IMPL_LINK_NOARG_TYPED( TubeContacts, BtnListenHdl, Button*, void )
+IMPL_LINK_NOARG( TubeContacts, BtnListenHdl, Button*, void )
 {
     Listen();
 }

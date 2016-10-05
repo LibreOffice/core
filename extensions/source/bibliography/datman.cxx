@@ -236,8 +236,8 @@ class MappingDialog_Impl : public ModalDialog
     bool        bModified;
 
 
-    DECL_LINK_TYPED(OkHdl, Button*, void);
-    DECL_LINK_TYPED(ListBoxSelectHdl, ListBox&, void);
+    DECL_LINK(OkHdl, Button*, void);
+    DECL_LINK(ListBoxSelectHdl, ListBox&, void);
 
 public:
     MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pDatMan);
@@ -422,7 +422,7 @@ void MappingDialog_Impl::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED(MappingDialog_Impl, ListBoxSelectHdl, ListBox&, rListBox, void)
+IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, ListBox&, rListBox, void)
 {
     const sal_Int32 nEntryPos = rListBox.GetSelectEntryPos();
     if(0 < nEntryPos)
@@ -436,7 +436,7 @@ IMPL_LINK_TYPED(MappingDialog_Impl, ListBoxSelectHdl, ListBox&, rListBox, void)
     SetModified();
 }
 
-IMPL_LINK_NOARG_TYPED(MappingDialog_Impl, OkHdl, Button*, void)
+IMPL_LINK_NOARG(MappingDialog_Impl, OkHdl, Button*, void)
 {
     if(bModified)
     {
@@ -473,7 +473,7 @@ class DBChangeDialog_Impl : public ModalDialog
 
     BibDataManager* pDatMan;
 
-    DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
+    DECL_LINK(DoubleClickHdl, ListBox&, void);
 public:
     DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* pMan );
     virtual ~DBChangeDialog_Impl() override;
@@ -512,7 +512,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* p
     }
 }
 
-IMPL_LINK_NOARG_TYPED(DBChangeDialog_Impl, DoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(DBChangeDialog_Impl, DoubleClickHdl, ListBox&, void)
 {
     EndDialog(RET_OK);
 }

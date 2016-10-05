@@ -153,18 +153,18 @@ ScConditionalFormat* ScCondFormatManagerDlg::GetCondFormatSelected()
     return m_pCtrlManager->GetSelection();
 }
 
-IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, RemoveBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScCondFormatManagerDlg, RemoveBtnHdl, Button*, void)
 {
     m_pCtrlManager->DeleteSelection();
     mbModified = true;
 }
 
-IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, EditBtnClickHdl, Button*, void)
+IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnClickHdl, Button*, void)
 {
     mbModified = true;
     EditBtnHdl(nullptr);
 }
-IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, EditBtnHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl, SvTreeListBox*, bool)
 {
     ScConditionalFormat* pFormat = m_pCtrlManager->GetSelection();
 
@@ -177,7 +177,7 @@ IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, EditBtnHdl, SvTreeListBox*, bool)
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, AddBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl, Button*, void)
 {
     mbModified = true;
     EndDialog( DLG_RET_ADD );

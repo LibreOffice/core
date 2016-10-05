@@ -79,7 +79,7 @@ void DataStreamDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(DataStreamDlg, BrowseHdl, Button*, void)
+IMPL_LINK_NOARG(DataStreamDlg, BrowseHdl, Button*, void)
 {
     sfx2::FileDialogHelper aFileDialog(0);
     if ( aFileDialog.Execute() != ERRCODE_NONE )
@@ -89,15 +89,15 @@ IMPL_LINK_NOARG_TYPED(DataStreamDlg, BrowseHdl, Button*, void)
     UpdateEnable();
 }
 
-IMPL_LINK_NOARG_TYPED(DataStreamDlg, UpdateClickHdl, Button*, void)
+IMPL_LINK_NOARG(DataStreamDlg, UpdateClickHdl, Button*, void)
 {
     UpdateEnable();
 }
-IMPL_LINK_NOARG_TYPED(DataStreamDlg, UpdateComboBoxHdl, ComboBox&, void)
+IMPL_LINK_NOARG(DataStreamDlg, UpdateComboBoxHdl, ComboBox&, void)
 {
     UpdateEnable();
 }
-IMPL_LINK_NOARG_TYPED(DataStreamDlg, UpdateHdl, Edit&, void)
+IMPL_LINK_NOARG(DataStreamDlg, UpdateHdl, Edit&, void)
 {
     UpdateEnable();
 }

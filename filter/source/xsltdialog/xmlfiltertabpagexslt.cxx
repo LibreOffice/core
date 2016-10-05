@@ -151,7 +151,7 @@ OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox* rURLBox )
     return aURL;
 }
 
-IMPL_LINK_TYPED ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, Button *, pButton, void )
+IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, Button *, pButton, void )
 {
     SvtURLBox* pURLBox;
 

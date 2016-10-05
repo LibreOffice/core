@@ -277,7 +277,7 @@ void OSaveAsDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED(OSaveAsDlg, ButtonClickHdl, Button *, pButton, void)
+IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton, void)
 {
     if (pButton == m_pImpl->m_pPB_OK) {
         m_pImpl->m_aName = m_pImpl->m_pTitle->GetText();
@@ -304,7 +304,7 @@ IMPL_LINK_TYPED(OSaveAsDlg, ButtonClickHdl, Button *, pButton, void)
     }
 }
 
-IMPL_LINK_TYPED(OSaveAsDlg, EditModifyHdl, Edit&, rEdit, void )
+IMPL_LINK(OSaveAsDlg, EditModifyHdl, Edit&, rEdit, void )
 {
     if (&rEdit == m_pImpl->m_pTitle)
         m_pImpl->m_pPB_OK->Enable(!m_pImpl->m_pTitle->GetText().isEmpty());

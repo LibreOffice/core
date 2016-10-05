@@ -877,7 +877,7 @@ void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
     NewActEntry( pActEntry ); // New free flying pActEntry
 }
 
-IMPL_LINK_TYPED( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo&, rInfo, void )
+IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo&, rInfo, void )
 {
     switch ( rInfo.eState )
     {
@@ -3210,7 +3210,7 @@ void ScHTMLQueryParser::ParseStyle(const OUString&) {}
 
 #endif
 
-IMPL_LINK_TYPED( ScHTMLQueryParser, HTMLImportHdl, ImportInfo&, rInfo, void )
+IMPL_LINK( ScHTMLQueryParser, HTMLImportHdl, ImportInfo&, rInfo, void )
 {
     switch( rInfo.eState )
     {

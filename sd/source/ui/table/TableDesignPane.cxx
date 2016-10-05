@@ -156,7 +156,7 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
         return nullptr;
 }
 
-IMPL_LINK_NOARG_TYPED(TableDesignWidget, implValueSetHdl, ValueSet*, void)
+IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl, ValueSet*, void)
 {
     mbStyleSelected = true;
     if( !mbModal )
@@ -213,7 +213,7 @@ void TableDesignWidget::ApplyStyle()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(TableDesignWidget, implCheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(TableDesignWidget, implCheckBoxHdl, Button*, void)
 {
     mbOptionsChanged = true;
 
@@ -437,7 +437,7 @@ void TableDesignWidget::removeListener()
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-IMPL_LINK_TYPED(TableDesignWidget,EventMultiplexerListener,
+IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
     tools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)

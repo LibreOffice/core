@@ -603,7 +603,7 @@ void SaneDlg::InitFields()
     }
 }
 
-IMPL_LINK_TYPED( SaneDlg, ClickBtnHdl, Button*, pButton, void )
+IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton, void )
 {
     if( mrSane.IsOpen() )
     {
@@ -677,7 +677,7 @@ IMPL_LINK_TYPED( SaneDlg, ClickBtnHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK_TYPED( SaneDlg, SelectHdl, ListBox&, rListBox, void )
+IMPL_LINK( SaneDlg, SelectHdl, ListBox&, rListBox, void )
 {
     if( &rListBox == mpDeviceBox && Sane::IsSane() && Sane::CountDevices() )
     {
@@ -707,7 +707,7 @@ IMPL_LINK_TYPED( SaneDlg, SelectHdl, ListBox&, rListBox, void )
     }
 }
 
-IMPL_LINK_TYPED( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox, void )
+IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox, void )
 {
     if( pBox == mpOptionBox && Sane::IsSane() )
     {
@@ -775,7 +775,7 @@ IMPL_LINK_TYPED( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox, void )
     }
 }
 
-IMPL_LINK_TYPED( SaneDlg, ModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( SaneDlg, ModifyHdl, Edit&, rEdit, void )
 {
     if( mrSane.IsOpen() )
     {
@@ -867,7 +867,7 @@ IMPL_LINK_TYPED( SaneDlg, ModifyHdl, Edit&, rEdit, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SaneDlg, ReloadSaneOptionsHdl, Sane&, void )
+IMPL_LINK_NOARG( SaneDlg, ReloadSaneOptionsHdl, Sane&, void )
 {
     mnCurrentOption = -1;
     mnCurrentElement = 0;

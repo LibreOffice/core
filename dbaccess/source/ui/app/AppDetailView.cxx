@@ -430,7 +430,7 @@ void OTasksWindow::setHelpText(sal_uInt16 _nId)
 
 }
 
-IMPL_LINK_NOARG_TYPED(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pEntry = m_aCreation->GetHdlEntry();
     if ( pEntry )

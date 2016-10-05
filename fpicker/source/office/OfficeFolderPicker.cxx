@@ -96,7 +96,7 @@ void SvtFolderPicker::prepareExecute()
     }
 }
 
-IMPL_LINK_TYPED( SvtFolderPicker, DialogClosedHdl, Dialog&, rDlg, void )
+IMPL_LINK( SvtFolderPicker, DialogClosedHdl, Dialog&, rDlg, void )
 {
     if ( m_xListener.is() )
     {

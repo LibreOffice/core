@@ -1717,7 +1717,7 @@ static void ImplActivateFloatingWindows( vcl::Window* pWindow, bool bActive )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(vcl::Window, ImplAsyncFocusHdl, void*, void)
+IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl, void*, void)
 {
     ImplGetWindowImpl()->mpFrameData->mnFocusId = nullptr;
 

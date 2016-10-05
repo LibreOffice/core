@@ -91,7 +91,7 @@ namespace dbaui
 
     private:
         void    impl_initBooleanSettings();
-        DECL_LINK_TYPED(BooleanComparisonSelectHdl, ListBox&, void);
+        DECL_LINK(BooleanComparisonSelectHdl, ListBox&, void);
     };
 
     // GeneratedValuesPage

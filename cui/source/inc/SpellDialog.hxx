@@ -74,7 +74,7 @@ private:
 
     inline SpellDialog* GetSpellDialog() const;
 
-    DECL_LINK_TYPED(ToolbarHdl, ToolBox*, void);
+    DECL_LINK(ToolbarHdl, ToolBox*, void);
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
@@ -179,23 +179,23 @@ private:
     css::uno::Reference<
         css::linguistic2::XSpellChecker1 >     xSpell;
 
-    DECL_LINK_TYPED(ChangeHdl, Button*, void);
-    DECL_LINK_TYPED(DoubleClickChangeHdl, ListBox&, void);
-    DECL_LINK_TYPED(ChangeAllHdl, Button*, void);
-    DECL_LINK_TYPED( IgnoreAllHdl, Button*, void );
-    DECL_LINK_TYPED(IgnoreHdl, Button*, void);
-    DECL_LINK_TYPED( CheckGrammarHdl, Button*, void );
-    DECL_LINK_TYPED( ExtClickHdl, Button*, void );
-    DECL_LINK_TYPED(CancelHdl, Button*, void);
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void);
-    DECL_LINK_TYPED(UndoHdl, Button*, void);
-    DECL_LINK_TYPED( AddToDictSelectHdl, MenuButton*, void );
-    DECL_LINK_TYPED( AddToDictClickHdl, Button*, void );
-    DECL_LINK_TYPED( LanguageSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( DialogUndoHdl, SpellUndoAction_Impl&, void );
-    DECL_LINK_TYPED( HandleHyperlink, FixedHyperlink&, void );
+    DECL_LINK(ChangeHdl, Button*, void);
+    DECL_LINK(DoubleClickChangeHdl, ListBox&, void);
+    DECL_LINK(ChangeAllHdl, Button*, void);
+    DECL_LINK( IgnoreAllHdl, Button*, void );
+    DECL_LINK(IgnoreHdl, Button*, void);
+    DECL_LINK( CheckGrammarHdl, Button*, void );
+    DECL_LINK( ExtClickHdl, Button*, void );
+    DECL_LINK(CancelHdl, Button*, void);
+    DECL_LINK( ModifyHdl, Edit&, void);
+    DECL_LINK(UndoHdl, Button*, void);
+    DECL_LINK( AddToDictSelectHdl, MenuButton*, void );
+    DECL_LINK( AddToDictClickHdl, Button*, void );
+    DECL_LINK( LanguageSelectHdl, ListBox&, void );
+    DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl&, void );
+    DECL_LINK( HandleHyperlink, FixedHyperlink&, void );
 
-    DECL_LINK_TYPED( InitHdl, void*, void );
+    DECL_LINK( InitHdl, void*, void );
 
     void            AddToDictionaryExecute( sal_uInt16 ItemId, PopupMenu *pMenu );
     void            StartSpellOptDlg_Impl();

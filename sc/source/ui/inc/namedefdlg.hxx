@@ -64,10 +64,10 @@ private:
     bool IsNameValid();
     bool IsFormulaValid();
 
-    DECL_LINK_TYPED( CancelBtnHdl, Button*, void );
-    DECL_LINK_TYPED( AddBtnHdl, Button*, void );
-    DECL_LINK_TYPED( NameModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( AssignGetFocusHdl, Control&, void );
+    DECL_LINK( CancelBtnHdl, Button*, void );
+    DECL_LINK( AddBtnHdl, Button*, void );
+    DECL_LINK( NameModifyHdl, Edit&, void );
+    DECL_LINK( AssignGetFocusHdl, Control&, void );
 
 protected:
     virtual void    RefInputDone( bool bForced = false ) override;

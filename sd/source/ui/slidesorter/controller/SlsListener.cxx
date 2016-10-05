@@ -344,7 +344,7 @@ void Listener::Notify (
     }
 }
 
-IMPL_LINK_TYPED(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
+IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
     {

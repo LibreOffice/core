@@ -94,13 +94,13 @@ namespace
         // BlockText (see there)
         basegfx::B2DRange                                           maClipRange;
 
-        DECL_LINK_TYPED(decomposeContourTextPrimitive, DrawPortionInfo*, void);
-        DECL_LINK_TYPED(decomposeBlockTextPrimitive, DrawPortionInfo*, void);
-        DECL_LINK_TYPED(decomposeStretchTextPrimitive, DrawPortionInfo*, void);
+        DECL_LINK(decomposeContourTextPrimitive, DrawPortionInfo*, void);
+        DECL_LINK(decomposeBlockTextPrimitive, DrawPortionInfo*, void);
+        DECL_LINK(decomposeStretchTextPrimitive, DrawPortionInfo*, void);
 
-        DECL_LINK_TYPED(decomposeContourBulletPrimitive, DrawBulletInfo*, void);
-        DECL_LINK_TYPED(decomposeBlockBulletPrimitive, DrawBulletInfo*, void);
-        DECL_LINK_TYPED(decomposeStretchBulletPrimitive, DrawBulletInfo*, void);
+        DECL_LINK(decomposeContourBulletPrimitive, DrawBulletInfo*, void);
+        DECL_LINK(decomposeBlockBulletPrimitive, DrawBulletInfo*, void);
+        DECL_LINK(decomposeStretchBulletPrimitive, DrawBulletInfo*, void);
 
         static bool impIsUnderlineAbove(const vcl::Font& rFont);
         void impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo);
@@ -563,7 +563,7 @@ namespace
         maTextPortionPrimitives.push_back(pNewPrimitive);
     }
 
-    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeContourTextPrimitive, DrawPortionInfo*, pInfo, void)
+    IMPL_LINK(impTextBreakupHandler, decomposeContourTextPrimitive, DrawPortionInfo*, pInfo, void)
     {
         // for contour text, ignore (clip away) all portions which are below
         // the visible area given by maScale
@@ -573,7 +573,7 @@ namespace
         }
     }
 
-    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeBlockTextPrimitive, DrawPortionInfo*, pInfo, void)
+    IMPL_LINK(impTextBreakupHandler, decomposeBlockTextPrimitive, DrawPortionInfo*, pInfo, void)
     {
         if(pInfo)
         {
@@ -618,7 +618,7 @@ namespace
         }
     }
 
-    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeStretchTextPrimitive, DrawPortionInfo*, pInfo, void)
+    IMPL_LINK(impTextBreakupHandler, decomposeStretchTextPrimitive, DrawPortionInfo*, pInfo, void)
     {
         if(pInfo)
         {
@@ -626,7 +626,7 @@ namespace
         }
     }
 
-    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeContourBulletPrimitive, DrawBulletInfo*, pInfo, void)
+    IMPL_LINK(impTextBreakupHandler, decomposeContourBulletPrimitive, DrawBulletInfo*, pInfo, void)
     {
         if(pInfo)
         {
@@ -634,7 +634,7 @@ namespace
         }
     }
 
-    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeBlockBulletPrimitive, DrawBulletInfo*, pInfo, void)
+    IMPL_LINK(impTextBreakupHandler, decomposeBlockBulletPrimitive, DrawBulletInfo*, pInfo, void)
     {
         if(pInfo)
         {
@@ -642,7 +642,7 @@ namespace
         }
     }
 
-    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeStretchBulletPrimitive, DrawBulletInfo*, pInfo, void)
+    IMPL_LINK(impTextBreakupHandler, decomposeStretchBulletPrimitive, DrawBulletInfo*, pInfo, void)
     {
         if(pInfo)
         {

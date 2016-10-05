@@ -95,7 +95,7 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
-    DECL_LINK_TYPED( DialogEventHdl, VclWindowEvent&, void );
+    DECL_LINK( DialogEventHdl, VclWindowEvent&, void );
 
 protected:
     // ____ OComponentHelper ____

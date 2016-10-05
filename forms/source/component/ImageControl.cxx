@@ -657,7 +657,7 @@ void SAL_CALL OImageControlModel::startProduction(  ) throw (RuntimeException, s
 }
 
 
-IMPL_LINK_TYPED( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic, void )
+IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic, void )
 {
     const Reference< XGraphic > xGraphic( i_pGraphic != nullptr ? Image( i_pGraphic->GetBitmapEx() ).GetXGraphic() : nullptr );
     m_bExternalGraphic = false;

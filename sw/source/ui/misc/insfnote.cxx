@@ -81,24 +81,24 @@ void SwInsFootNoteDlg::Apply()
     bFootnote = m_pFootnoteBtn->IsChecked();
 }
 
-IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberCharHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberCharHdl, Button*, void)
 {
     m_pNumberCharEdit->GrabFocus();
     m_pOkBtn->Enable( !m_pNumberCharEdit->GetText().isEmpty() || bExtCharAvailable );
 }
 
-IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberEditHdl, Edit&, void)
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberEditHdl, Edit&, void)
 {
     m_pNumberCharBtn->Check();
     m_pOkBtn->Enable( !m_pNumberCharEdit->GetText().isEmpty() );
 }
 
-IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberAutoBtnHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberAutoBtnHdl, Button*, void)
 {
     m_pOkBtn->Enable();
 }
 
-IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberExtCharHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl, Button*, void)
 {
     m_pNumberCharBtn->Check();
 
@@ -137,7 +137,7 @@ IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberExtCharHdl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn, void )
+IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn, void )
 {
     Apply();
 

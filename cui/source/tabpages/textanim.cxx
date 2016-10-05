@@ -480,7 +480,7 @@ VclPtr<SfxTabPage> SvxTextAnimationPage::Create( vcl::Window* pWindow,
     return VclPtr<SvxTextAnimationPage>::Create( pWindow, *rAttrs );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, SelectEffectHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, ListBox&, void)
 {
     sal_Int32 nPos = m_pLbEffect->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -537,7 +537,7 @@ IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, SelectEffectHdl_Impl, ListBox&, void
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, ClickEndlessHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl, Button*, void)
 {
 
     if( eAniKind != SDRTEXTANI_SLIDE )
@@ -556,7 +556,7 @@ IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, ClickEndlessHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, ClickAutoHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl, Button*, void)
 {
     TriState eState = m_pTsbAuto->GetState();
     if( eState != TRISTATE_FALSE )
@@ -571,7 +571,7 @@ IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, ClickAutoHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, ClickPixelHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl, Button*, void)
 {
     TriState eState = m_pTsbPixel->GetState();
     if( eState == TRISTATE_TRUE )
@@ -608,7 +608,7 @@ IMPL_LINK_NOARG_TYPED(SvxTextAnimationPage, ClickPixelHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED( SvxTextAnimationPage, ClickDirectionHdl_Impl, Button *, pBtn, void )
+IMPL_LINK( SvxTextAnimationPage, ClickDirectionHdl_Impl, Button *, pBtn, void )
 {
     m_pBtnUp->Check( pBtn == m_pBtnUp );
     m_pBtnLeft->Check( pBtn == m_pBtnLeft );

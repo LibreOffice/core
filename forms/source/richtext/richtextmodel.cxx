@@ -537,7 +537,7 @@ namespace frm
     }
 
 
-    IMPL_LINK_NOARG_TYPED( ORichTextModel, OnEngineContentModified, LinkParamNone*, void )
+    IMPL_LINK_NOARG( ORichTextModel, OnEngineContentModified, LinkParamNone*, void )
     {
         if ( !m_bSettingEngineText )
         {

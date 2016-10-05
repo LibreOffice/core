@@ -669,7 +669,7 @@ void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxShowCharSet, VscrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, ScrollBar*, void)
 {
     if( nSelectedIndex < FirstInView() )
     {

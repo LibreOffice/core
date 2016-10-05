@@ -144,7 +144,7 @@ namespace dbaui
             css::uno::Sequence< css::beans::PropertyValue >   aArgs;
         };
         ::std::queue< DispatchArgs >    m_aDispatchArgs;
-        DECL_LINK_TYPED( OnDispatchEvent, void*, void );
+        DECL_LINK( OnDispatchEvent, void*, void );
 
         // for dynamic states of our 4 dispatchable URLs
         enum DispatchType
@@ -300,7 +300,7 @@ namespace dbaui
 
         SvNumberFormatter* GetDatasourceFormatter();
 
-        DECL_LINK_TYPED(AsynchDropEvent, void*, void);
+        DECL_LINK(AsynchDropEvent, void*, void);
 
     private:
         bool IsReadOnlyDB() const;

@@ -50,9 +50,9 @@ private:
     bool            mbInMove;
     ImplSVEvent *   mnLastUserEvent;
 
-    DECL_LINK_TYPED(DockingHdl, void *, void);
-    DECL_LINK_TYPED(DockTimerHdl, Idle *, void);
-    DECL_LINK_TYPED(EndDockTimerHdl, Idle *, void);
+    DECL_LINK(DockingHdl, void *, void);
+    DECL_LINK(DockTimerHdl, Idle *, void);
+    DECL_LINK(EndDockTimerHdl, Idle *, void);
 public:
     ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
                       ImplDockingWindowWrapper* pDockingWin );
@@ -107,7 +107,7 @@ void ImplDockFloatWin2::dispose()
     FloatingWindow::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl, Idle *, void)
 {
     SAL_WARN_IF( !mpDockWin->IsFloatingMode(), "vcl", "docktimer called but not floating" );
 
@@ -133,7 +133,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockTimerHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, EndDockTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(ImplDockFloatWin2, EndDockTimerHdl, Idle *, void)
 {
     SAL_WARN_IF( !mpDockWin->IsFloatingMode(), "vcl", "enddocktimer called but not floating" );
 
@@ -150,7 +150,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, EndDockTimerHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockingHdl, void*, void)
+IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl, void*, void)
 {
     // called during move of a floating window
     mnLastUserEvent = nullptr;
@@ -1131,7 +1131,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
+IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
 {
     GetWindow()->Show( false, ShowFlags::NoFocusChange );
 

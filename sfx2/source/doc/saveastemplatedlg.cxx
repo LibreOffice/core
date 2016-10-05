@@ -76,7 +76,7 @@ void SfxSaveAsTemplateDialog::setDocumentModel(const uno::Reference<frame::XMode
     m_xModel = rModel;
 }
 
-IMPL_LINK_NOARG_TYPED(SfxSaveAsTemplateDialog, OkClickHdl, Button*, void)
+IMPL_LINK_NOARG(SfxSaveAsTemplateDialog, OkClickHdl, Button*, void)
 {
     ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, OUString(), VclMessageType::Question, VCL_BUTTONS_YES_NO);
 
@@ -99,13 +99,13 @@ IMPL_LINK_NOARG_TYPED(SfxSaveAsTemplateDialog, OkClickHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SfxSaveAsTemplateDialog, TemplateNameEditHdl, Edit&, void)
+IMPL_LINK_NOARG(SfxSaveAsTemplateDialog, TemplateNameEditHdl, Edit&, void)
 {
     msTemplateName = comphelper::string::strip(mpTemplateNameEdit->GetText(), ' ');
     SelectCategoryHdl(*mpLBCategory);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxSaveAsTemplateDialog, SelectCategoryHdl, ListBox&, void)
+IMPL_LINK_NOARG(SfxSaveAsTemplateDialog, SelectCategoryHdl, ListBox&, void)
 {
     if(mpLBCategory->GetSelectEntryPos() == 0)
     {

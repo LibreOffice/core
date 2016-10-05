@@ -1436,7 +1436,7 @@ void SfxBindings::UpdateControllers_Impl
     }
 }
 
-IMPL_LINK_TYPED( SfxBindings, NextJob, Timer *, pTimer, void )
+IMPL_LINK( SfxBindings, NextJob, Timer *, pTimer, void )
 {
     NextJob_Impl(pTimer);
 }

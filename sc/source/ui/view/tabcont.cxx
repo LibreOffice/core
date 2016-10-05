@@ -84,7 +84,7 @@ ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
     SetScrollAreaContextHdl( LINK( this, ScTabControl, ShowPageList ) );
 }
 
-IMPL_LINK_TYPED(ScTabControl, ShowPageList, const CommandEvent &, rEvent, void)
+IMPL_LINK(ScTabControl, ShowPageList, const CommandEvent &, rEvent, void)
 {
     ScopedVclPtrInstance<PopupMenu> aPopup;
 

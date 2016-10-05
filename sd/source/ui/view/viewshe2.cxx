@@ -134,7 +134,7 @@ void ViewShell::UpdateScrollBars()
 /**
  * Handling for horizontal Scrollbars
  */
-IMPL_LINK_TYPED(ViewShell, HScrollHdl, ScrollBar *, pHScroll, void )
+IMPL_LINK(ViewShell, HScrollHdl, ScrollBar *, pHScroll, void )
 {
     VirtHScrollHdl(pHScroll);
 }
@@ -188,7 +188,7 @@ void ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 /**
  * handling for vertical Scrollbars
  */
-IMPL_LINK_TYPED(ViewShell, VScrollHdl, ScrollBar *, pVScroll, void )
+IMPL_LINK(ViewShell, VScrollHdl, ScrollBar *, pVScroll, void )
 {
     VirtVScrollHdl(pVScroll);
 }

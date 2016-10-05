@@ -122,14 +122,14 @@ private:
     void UpdateLook();
     sal_uInt32 fillAnimationLB( bool bHasText );
 
-    DECL_LINK_TYPED( implControlListBoxHdl, ListBox&, void );
-    DECL_LINK_TYPED( implClickHdl, Button*, void );
-    DECL_LINK_TYPED( implPropertyHdl, LinkParamNone*, void );
-    DECL_LINK_TYPED( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
-    DECL_LINK_TYPED( lateInitCallback, Timer *, void );
-    DECL_LINK_TYPED( DurationModifiedHdl, Edit&, void );
-    DECL_LINK_TYPED( UpdateAnimationLB, ListBox&, void );
-    DECL_LINK_TYPED( AnimationSelectHdl, ListBox&, void );
+    DECL_LINK( implControlListBoxHdl, ListBox&, void );
+    DECL_LINK( implClickHdl, Button*, void );
+    DECL_LINK( implPropertyHdl, LinkParamNone*, void );
+    DECL_LINK( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
+    DECL_LINK( lateInitCallback, Timer *, void );
+    DECL_LINK( DurationModifiedHdl, Edit&, void );
+    DECL_LINK( UpdateAnimationLB, ListBox&, void );
+    DECL_LINK( AnimationSelectHdl, ListBox&, void );
     void implControlHdl(Control*);
 
 private:

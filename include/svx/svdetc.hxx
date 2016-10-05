@@ -184,7 +184,7 @@ class OLEObjCache
 
     void UnloadOnDemand();
     static bool UnloadObj( SdrOle2Obj* pObj );
-    DECL_LINK_TYPED( UnloadCheckHdl, Timer*, void );
+    DECL_LINK( UnloadCheckHdl, Timer*, void );
 
 public:
     OLEObjCache();

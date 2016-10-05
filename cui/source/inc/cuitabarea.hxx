@@ -94,7 +94,7 @@ private:
 
 protected:
     virtual short       Ok() override;
-    DECL_LINK_TYPED( CancelHdlImpl, Button*, void );
+    DECL_LINK( CancelHdlImpl, Button*, void );
     void                SavePalettes();
 
 public:
@@ -156,12 +156,12 @@ class SvxTransparenceTabPage : public SvxTabPage
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
-    DECL_LINK_TYPED(ClickTransOffHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(ClickTransLinearHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(ClickTransGradientHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(ModifyTransparentHdl_Impl, Edit&, void);
-    DECL_LINK_TYPED(ModifiedTrgrEditHdl_Impl, Edit&, void);
-    DECL_LINK_TYPED(ModifiedTrgrListBoxHdl_Impl, ListBox&, void);
+    DECL_LINK(ClickTransOffHdl_Impl, Button*, void );
+    DECL_LINK(ClickTransLinearHdl_Impl, Button*, void );
+    DECL_LINK(ClickTransGradientHdl_Impl, Button*, void );
+    DECL_LINK(ModifyTransparentHdl_Impl, Edit&, void);
+    DECL_LINK(ModifiedTrgrEditHdl_Impl, Edit&, void);
+    DECL_LINK(ModifiedTrgrListBoxHdl_Impl, ListBox&, void);
     void ModifiedTrgrHdl_Impl(void*);
 
     void ActivateLinear(bool bActivate);
@@ -239,15 +239,15 @@ private:
 
     MapUnit             m_ePoolUnit;
 
-    DECL_LINK_TYPED(SelectDialogTypeHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED( ModifyColorHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyGradientHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyHatchingHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyBitmapHdl_Impl, ListBox&, void );
+    DECL_LINK(SelectDialogTypeHdl_Impl, ListBox&, void);
+    DECL_LINK( ModifyColorHdl_Impl, ListBox&, void );
+    DECL_LINK( ModifyGradientHdl_Impl, ListBox&, void );
+    DECL_LINK( ModifyHatchingHdl_Impl, ListBox&, void );
+    DECL_LINK( ModifyBitmapHdl_Impl, ListBox&, void );
 
-    DECL_LINK_TYPED( ModifyTileHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( ModifyTileClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickScaleHdl_Impl, Button*, void );
+    DECL_LINK( ModifyTileHdl_Impl, Edit&, void );
+    DECL_LINK( ModifyTileClickHdl_Impl, Button*, void );
+    DECL_LINK( ClickScaleHdl_Impl, Button*, void );
     void ClickInvisibleHdl_Impl();
     void ClickHatchingHdl_Impl();
     void ClickGradientHdl_Impl();
@@ -318,9 +318,9 @@ private:
     SfxItemSet&         m_rXFSet;
     MapUnit             m_ePoolUnit;
 
-    DECL_LINK_TYPED( ClickShadowHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ModifyShadowHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( SelectShadowHdl_Impl, ListBox&, void );
+    DECL_LINK( ClickShadowHdl_Impl, Button*, void );
+    DECL_LINK( ModifyShadowHdl_Impl, Edit&, void );
+    DECL_LINK( SelectShadowHdl_Impl, ListBox&, void );
 
 public:
     SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
@@ -389,16 +389,16 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
-    DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ChangeGradientHdl, ValueSet*, void );
+    DECL_LINK( ClickAddHdl_Impl, Button*, void );
+    DECL_LINK( ClickModifyHdl_Impl, Button*, void );
+    DECL_LINK( ChangeGradientHdl, ValueSet*, void );
     void ChangeGradientHdl_Impl();
-    DECL_LINK_TYPED( ClickRenameHdl_Impl, SvxPresetListBox*, void );
-    DECL_LINK_TYPED( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
-    DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ChangeAutoStepHdl_Impl, CheckBox&, void );
-    DECL_LINK_TYPED( ModifiedSliderHdl_Impl, Slider*, void );
+    DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
+    DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
+    DECL_LINK( ModifiedEditHdl_Impl, Edit&, void );
+    DECL_LINK( ModifiedListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK( ChangeAutoStepHdl_Impl, CheckBox&, void );
+    DECL_LINK( ModifiedSliderHdl_Impl, Slider*, void );
     void ModifiedHdl_Impl(void*);
 
     void SetControlState_Impl( css::awt::GradientStyle eXGS );
@@ -470,18 +470,18 @@ private:
 
     MapUnit             m_ePoolUnit;
 
-    DECL_LINK_TYPED( ChangeHatchHdl, ValueSet*, void );
+    DECL_LINK( ChangeHatchHdl, ValueSet*, void );
     void ChangeHatchHdl_Impl();
-    DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ToggleHatchBackgroundColor_Impl, CheckBox&, void );
-    DECL_LINK_TYPED( ModifiedBackgroundHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ModifiedSliderHdl_Impl, Slider*, void );
+    DECL_LINK( ModifiedEditHdl_Impl, Edit&, void );
+    DECL_LINK( ModifiedListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK( ToggleHatchBackgroundColor_Impl, CheckBox&, void );
+    DECL_LINK( ModifiedBackgroundHdl_Impl, ListBox&, void );
+    DECL_LINK( ModifiedSliderHdl_Impl, Slider*, void );
     void ModifiedHdl_Impl(void*);
-    DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickRenameHdl_Impl, SvxPresetListBox*, void );
-    DECL_LINK_TYPED( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
+    DECL_LINK( ClickAddHdl_Impl, Button*, void );
+    DECL_LINK( ClickModifyHdl_Impl, Button*, void );
+    DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
+    DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
 
     sal_Int32 SearchHatchList(const OUString& rHatchName);
 
@@ -568,16 +568,16 @@ private:
     sal_Int64                  nFilledHeightPercent;
     sal_Int64                  nZoomedWidthPercent;
     sal_Int64                  nZoomedHeightPercent;
-    DECL_LINK_TYPED( ModifyBitmapHdl, ValueSet*, void );
-    DECL_LINK_TYPED( ClickScaleHdl, Button*, void );
-    DECL_LINK_TYPED( ModifyBitmapStyleHdl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyBitmapSizeHdl, Edit&, void );
-    DECL_LINK_TYPED( ModifyBitmapPositionHdl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyPositionOffsetHdl, Edit&, void );
-    DECL_LINK_TYPED( ModifyTileOffsetHdl, Edit&, void );
-    DECL_LINK_TYPED( ClickRenameHdl, SvxPresetListBox*, void );
-    DECL_LINK_TYPED( ClickDeleteHdl, SvxPresetListBox*, void );
-    DECL_LINK_TYPED( ClickImportHdl, Button*, void );
+    DECL_LINK( ModifyBitmapHdl, ValueSet*, void );
+    DECL_LINK( ClickScaleHdl, Button*, void );
+    DECL_LINK( ModifyBitmapStyleHdl, ListBox&, void );
+    DECL_LINK( ModifyBitmapSizeHdl, Edit&, void );
+    DECL_LINK( ModifyBitmapPositionHdl, ListBox&, void );
+    DECL_LINK( ModifyPositionOffsetHdl, Edit&, void );
+    DECL_LINK( ModifyTileOffsetHdl, Edit&, void );
+    DECL_LINK( ClickRenameHdl, SvxPresetListBox*, void );
+    DECL_LINK( ClickDeleteHdl, SvxPresetListBox*, void );
+    DECL_LINK( ClickImportHdl, Button*, void );
     void ClickBitmapHdl_Impl();
     void CalculateBitmapPresetSize();
     sal_Int32 SearchBitmapList(const OUString& rBitmapName);
@@ -646,12 +646,12 @@ private:
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
 
-    DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ChangePatternHdl_Impl, ValueSet*, void );
-    DECL_LINK_TYPED( ChangeColorHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ClickRenameHdl_Impl, SvxPresetListBox*, void );
-    DECL_LINK_TYPED( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
+    DECL_LINK( ClickAddHdl_Impl, Button*, void );
+    DECL_LINK( ClickModifyHdl_Impl, Button*, void );
+    DECL_LINK( ChangePatternHdl_Impl, ValueSet*, void );
+    DECL_LINK( ChangeColorHdl_Impl, ListBox&, void );
+    DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );
+    DECL_LINK( ClickDeleteHdl_Impl, SvxPresetListBox*, void );
 
 public:
     SvxPatternTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
@@ -766,19 +766,19 @@ private:
     void ImpColorCountChanged();
     void FillPaletteLB();
 
-    DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickWorkOnHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
+    DECL_LINK( ClickAddHdl_Impl, Button*, void );
+    DECL_LINK( ClickWorkOnHdl_Impl, Button*, void );
+    DECL_LINK( ClickDeleteHdl_Impl, Button*, void );
 
-    DECL_LINK_TYPED( SelectPaletteLBHdl, ListBox&, void );
-    DECL_LINK_TYPED( SelectValSetHdl_Impl, ValueSet*, void );
-    DECL_LINK_TYPED( SelectColorModeHdl_Impl, RadioButton&, void );
+    DECL_LINK( SelectPaletteLBHdl, ListBox&, void );
+    DECL_LINK( SelectValSetHdl_Impl, ValueSet*, void );
+    DECL_LINK( SelectColorModeHdl_Impl, RadioButton&, void );
     void ChangeColor(const Color &rNewColor);
     void SetColorModel(ColorModel eModel);
     void ChangeColorModel();
     void UpdateColorValues();
     static sal_Int32 SearchColorList(OUString const & aColorName);
-    DECL_LINK_TYPED( ModifiedHdl_Impl, Edit&, void );
+    DECL_LINK( ModifiedHdl_Impl, Edit&, void );
 
     void UpdateModified();
     css::uno::Reference< css::uno::XComponentContext > m_context;

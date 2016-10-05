@@ -166,13 +166,13 @@ protected:
 
 private:
 
-    DECL_LINK_TYPED( DelayedPaste, void*, void );
-    DECL_LINK_TYPED( CBChangeHdl, ComboBox&, void);
+    DECL_LINK( DelayedPaste, void*, void );
+    DECL_LINK( CBChangeHdl, ComboBox&, void);
 
     void InsertRows( long nRow );
 
 public:
-    DECL_LINK_TYPED( DelayedDelete, void*, void );
+    DECL_LINK( DelayedDelete, void*, void );
 
 };
 
@@ -411,7 +411,7 @@ void OFieldExpressionControl::lateInit()
 }
 
 
-IMPL_LINK_NOARG_TYPED( OFieldExpressionControl, CBChangeHdl, ComboBox&, void )
+IMPL_LINK_NOARG( OFieldExpressionControl, CBChangeHdl, ComboBox&, void )
 {
 
     SaveModified();
@@ -846,7 +846,7 @@ void OFieldExpressionControl::paste()
     }
 }
 
-IMPL_LINK_NOARG_TYPED( OFieldExpressionControl, DelayedPaste, void*, void )
+IMPL_LINK_NOARG( OFieldExpressionControl, DelayedPaste, void*, void )
 {
     m_nPasteEvent = nullptr;
 
@@ -857,7 +857,7 @@ IMPL_LINK_NOARG_TYPED( OFieldExpressionControl, DelayedPaste, void*, void )
     GoToRow( nPastePosition );
 }
 
-IMPL_LINK_NOARG_TYPED( OFieldExpressionControl, DelayedDelete, void*, void )
+IMPL_LINK_NOARG( OFieldExpressionControl, DelayedDelete, void*, void )
 {
     m_nDeleteEvent = nullptr;
     DeleteRows();
@@ -1092,7 +1092,7 @@ sal_Int32 OGroupsSortingDialog::getColumnDataType(const OUString& _sColumnName)
     return nDataType;
 }
 
-IMPL_LINK_TYPED(OGroupsSortingDialog, OnControlFocusGot, Control&, rControl, void )
+IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control&, rControl, void )
 {
     if ( m_pFieldExpression && m_pFieldExpression->getExpressionControl() )
     {
@@ -1114,7 +1114,7 @@ IMPL_LINK_TYPED(OGroupsSortingDialog, OnControlFocusGot, Control&, rControl, voi
     }
 }
 
-IMPL_LINK_TYPED(OGroupsSortingDialog, OnControlFocusLost, Control&, rControl, void )
+IMPL_LINK(OGroupsSortingDialog, OnControlFocusLost, Control&, rControl, void )
 {
     if (m_pFieldExpression && &rControl == m_pGroupIntervalEd)
     {
@@ -1123,7 +1123,7 @@ IMPL_LINK_TYPED(OGroupsSortingDialog, OnControlFocusLost, Control&, rControl, vo
     }
 }
 
-IMPL_LINK_NOARG_TYPED( OGroupsSortingDialog, OnFormatAction, ToolBox*, void )
+IMPL_LINK_NOARG( OGroupsSortingDialog, OnFormatAction, ToolBox*, void )
 {
 
     sal_uInt16 nCommand = m_pToolBox->GetCurItemId();
@@ -1165,7 +1165,7 @@ IMPL_LINK_NOARG_TYPED( OGroupsSortingDialog, OnFormatAction, ToolBox*, void )
     }
 }
 
-IMPL_LINK_TYPED( OGroupsSortingDialog, LBChangeHdl, ListBox&, rListBox, void )
+IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox&, rListBox, void )
 {
     if ( rListBox.IsValueChangedFromSaved() )
     {

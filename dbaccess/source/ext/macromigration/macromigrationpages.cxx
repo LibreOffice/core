@@ -112,7 +112,7 @@ namespace dbmm
         m_pStartMigration->Show(!m_pSaveAsLocation->GetText().isEmpty());
     }
 
-    IMPL_LINK_NOARG_TYPED( SaveDBDocPage, OnLocationModified, Edit&, void )
+    IMPL_LINK_NOARG( SaveDBDocPage, OnLocationModified, Edit&, void )
     {
         impl_updateLocationDependentItems();
     }

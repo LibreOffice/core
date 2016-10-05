@@ -93,7 +93,7 @@ TrendlineResources::TrendlineResources( vcl::Window * pParent, const SfxItemSet&
 TrendlineResources::~TrendlineResources()
 {}
 
-IMPL_LINK_TYPED( TrendlineResources, SelectTrendLine, Button *, pRadioButton, void )
+IMPL_LINK( TrendlineResources, SelectTrendLine, Button *, pRadioButton, void )
 {
     if( pRadioButton == m_pRB_Linear )
         m_eTrendLineType = SvxChartRegress::Linear;
@@ -348,7 +348,7 @@ void TrendlineResources::UpdateControlStates()
     m_pEE_YName->Enable( !bMovingAverage && m_pCB_ShowEquation->IsChecked() );
 }
 
-IMPL_LINK_TYPED( TrendlineResources, ChangeValue, Edit&, rNumericField, void)
+IMPL_LINK( TrendlineResources, ChangeValue, Edit&, rNumericField, void)
 {
     if( &rNumericField == m_pNF_Degree )
     {
@@ -388,7 +388,7 @@ void TrendlineResources::SetNbPoints( sal_Int32 nNbPoints )
     UpdateControlStates();
 }
 
-IMPL_LINK_TYPED( TrendlineResources, ShowEquation, CheckBox&, rCheckBox, void)
+IMPL_LINK( TrendlineResources, ShowEquation, CheckBox&, rCheckBox, void)
 {
     if( &rCheckBox == m_pCB_ShowEquation )
     {

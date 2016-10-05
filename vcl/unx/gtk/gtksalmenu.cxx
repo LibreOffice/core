@@ -439,7 +439,7 @@ GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     maUpdateMenuBarIdle.SetDebugName("Native Gtk Menu Update Idle");
 }
 
-IMPL_LINK_NOARG_TYPED(GtkSalMenu, MenuBarHierarchyChangeHandler, Idle *, void)
+IMPL_LINK_NOARG(GtkSalMenu, MenuBarHierarchyChangeHandler, Idle *, void)
 {
     SAL_WARN_IF(!mpFrame, "vcl.gtk", "MenuBar layout changed, but no frame for some reason!");
     if (!mpFrame)

@@ -138,7 +138,7 @@ void SvxConfigFunctionListBox::MouseMove( const MouseEvent& rMEvt )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxConfigFunctionListBox, TimerHdl, Timer *, void)
+IMPL_LINK_NOARG(SvxConfigFunctionListBox, TimerHdl, Timer *, void)
 {
     aTimer.Stop();
     Point aMousePos = GetPointerPosPixel();
@@ -967,7 +967,7 @@ void SvxScriptSelectorDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED( SvxScriptSelectorDialog, SelectHdl, SvTreeListBox*, pCtrl, void )
+IMPL_LINK( SvxScriptSelectorDialog, SelectHdl, SvTreeListBox*, pCtrl, void )
 {
     if (pCtrl == m_pCategories)
     {
@@ -980,7 +980,7 @@ IMPL_LINK_TYPED( SvxScriptSelectorDialog, SelectHdl, SvTreeListBox*, pCtrl, void
     UpdateUI();
 }
 
-IMPL_LINK_NOARG_TYPED( SvxScriptSelectorDialog, FunctionDoubleClickHdl, SvTreeListBox*, bool )
+IMPL_LINK_NOARG( SvxScriptSelectorDialog, FunctionDoubleClickHdl, SvTreeListBox*, bool )
 {
     if (m_pOKButton->IsEnabled())
         ClickHdl(m_pOKButton);
@@ -1008,7 +1008,7 @@ SvxScriptSelectorDialog::UpdateUI()
     }
 }
 
-IMPL_LINK_TYPED( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
+IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
 {
     if (pButton == m_pCancelButton)
     {

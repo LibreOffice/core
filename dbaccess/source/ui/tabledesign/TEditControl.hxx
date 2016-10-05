@@ -78,7 +78,7 @@ namespace dbaui
             void Stop();
 
         protected:
-            DECL_LINK_TYPED(OnInvalidate, Timer*, void);
+            DECL_LINK(OnInvalidate, Timer*, void);
         };
 
         friend class OTableEditorCtrl::ClipboardInvalidator;
@@ -171,11 +171,11 @@ namespace dbaui
         virtual void paste() override;
 
     private:
-        DECL_LINK_TYPED( DelayedCut, void*, void );
-        DECL_LINK_TYPED( DelayedPaste, void*, void );
-        DECL_LINK_TYPED( DelayedDelete, void*, void );
-        DECL_LINK_TYPED( DelayedInsNewRows, void*, void );
-        DECL_LINK_TYPED( InvalidateFieldType, void*, void );
+        DECL_LINK( DelayedCut, void*, void );
+        DECL_LINK( DelayedPaste, void*, void );
+        DECL_LINK( DelayedDelete, void*, void );
+        DECL_LINK( DelayedInsNewRows, void*, void );
+        DECL_LINK( InvalidateFieldType, void*, void );
 
         void InitCellController();
         sal_Int32 HasFieldName( const OUString& rFieldName );

@@ -145,13 +145,13 @@ class SfxNewFileDialog_Impl
     SfxObjectShellLock xDocShell;
     VclPtr<SfxNewFileDialog> pAntiImpl;
 
-    DECL_LINK_TYPED( Update, Idle *, void );
+    DECL_LINK( Update, Idle *, void );
 
-    DECL_LINK_TYPED(RegionSelect, ListBox&, void);
-    DECL_LINK_TYPED(TemplateSelect, ListBox&, void);
-    DECL_LINK_TYPED(DoubleClick, ListBox&, void);
-    DECL_LINK_TYPED(Expand, VclExpander&, void);
-    DECL_LINK_TYPED(LoadFile, Button*, void);
+    DECL_LINK(RegionSelect, ListBox&, void);
+    DECL_LINK(TemplateSelect, ListBox&, void);
+    DECL_LINK(DoubleClick, ListBox&, void);
+    DECL_LINK(Expand, VclExpander&, void);
+    DECL_LINK(LoadFile, Button*, void);
     sal_uInt16  GetSelectedTemplatePos() const;
 
 public:
@@ -169,7 +169,7 @@ public:
     void             SetTemplateFlags(SfxTemplateFlags nSet);
 };
 
-IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle*, void)
+IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update, Idle*, void)
 {
     if (xDocShell.Is())
     {
@@ -235,7 +235,7 @@ IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle*, void)
     }
 }
 
-IMPL_LINK_TYPED( SfxNewFileDialog_Impl, RegionSelect, ListBox&, rBox, void )
+IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox&, rBox, void )
 {
     if (xDocShell.Is() && xDocShell->GetProgress())
         return;
@@ -259,12 +259,12 @@ IMPL_LINK_TYPED( SfxNewFileDialog_Impl, RegionSelect, ListBox&, rBox, void )
     TemplateSelect(*m_pTemplateLb);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Expand, VclExpander&, void)
+IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Expand, VclExpander&, void)
 {
     TemplateSelect(*m_pTemplateLb);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, TemplateSelect, ListBox&, void)
+IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect, ListBox&, void)
 {
     // Still loading
     if ( xDocShell && xDocShell->GetProgress() )
@@ -277,14 +277,14 @@ IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, TemplateSelect, ListBox&, void)
     aPrevIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED( SfxNewFileDialog_Impl, DoubleClick, ListBox&, void )
+IMPL_LINK_NOARG( SfxNewFileDialog_Impl, DoubleClick, ListBox&, void )
 {
     // Still loading
     if ( !xDocShell.Is() || !xDocShell->GetProgress() )
         pAntiImpl->EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, LoadFile, Button*, void)
+IMPL_LINK_NOARG(SfxNewFileDialog_Impl, LoadFile, Button*, void)
 {
     pAntiImpl->EndDialog(RET_TEMPLATE_LOAD);
 }

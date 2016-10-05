@@ -157,7 +157,7 @@ private:
     bool mbInitialized;
 
     void Construct (DrawDocShell* pDocSh);
-    DECL_LINK_TYPED( ClipboardChanged, TransferableDataHelper*, void );
+    DECL_LINK( ClipboardChanged, TransferableDataHelper*, void );
 };
 
 } // end of namespace sd

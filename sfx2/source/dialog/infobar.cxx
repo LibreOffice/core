@@ -256,7 +256,7 @@ void SfxInfoBarWindow::Resize()
     m_pMessage->SetPosSizePixel(aMessagePosition, aMessageSize);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxInfoBarWindow, CloseHandler, Button*, void)
+IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler, Button*, void)
 {
     static_cast<SfxInfoBarContainerWindow*>(GetParent())->removeInfoBar(this);
 }

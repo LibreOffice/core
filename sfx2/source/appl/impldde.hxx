@@ -44,8 +44,8 @@ class SvDDEObject : public SvLinkSource
 
 
     static bool ImplHasOtherFormat( DdeTransaction& );
-    DECL_LINK_TYPED( ImplGetDDEData, const DdeData*, void );
-    DECL_LINK_TYPED( ImplDoneDDEData, bool, void );
+    DECL_LINK( ImplGetDDEData, const DdeData*, void );
+    DECL_LINK( ImplDoneDDEData, bool, void );
 
 protected:
     virtual ~SvDDEObject() override;

@@ -192,7 +192,7 @@ void ParaPropertyPanel::initial()
 }
 
 // for Paragraph Indent
-IMPL_LINK_NOARG_TYPED( ParaPropertyPanel, ModifyIndentHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, Edit&, void)
 {
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
     aMargin.SetTextLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) );
@@ -203,7 +203,7 @@ IMPL_LINK_NOARG_TYPED( ParaPropertyPanel, ModifyIndentHdl_Impl, Edit&, void)
         SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
 }
 
-IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl, void)
+IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl, void)
 {
     const OUString aCommand(pControl->GetItemCommand(pControl->GetCurItemId()));
 
@@ -283,7 +283,7 @@ IMPL_LINK_TYPED(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pCont
 }
 
 // for Paragraph Spacing
-IMPL_LINK_NOARG_TYPED( ParaPropertyPanel, ULSpaceHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl, Edit&, void)
 {
     SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
     aMargin.SetUpper( (sal_uInt16)GetCoreValue( *mpTopDist, m_eULSpaceUnit ) );

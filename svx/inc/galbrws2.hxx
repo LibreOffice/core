@@ -126,10 +126,10 @@ private:
     // SfxListener
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-                        DECL_LINK_TYPED( SelectObjectHdl, GalleryListView*, void );
-                        DECL_LINK_TYPED( SelectObjectValueSetHdl, ValueSet*, void );
-                        DECL_LINK_TYPED( SelectTbxHdl, ToolBox*, void );
-                        DECL_LINK_TYPED( MiscHdl, LinkParamNone*, void );
+                        DECL_LINK( SelectObjectHdl, GalleryListView*, void );
+                        DECL_LINK( SelectObjectValueSetHdl, ValueSet*, void );
+                        DECL_LINK( SelectTbxHdl, ToolBox*, void );
+                        DECL_LINK( MiscHdl, LinkParamNone*, void );
 
 private:
 
@@ -172,7 +172,7 @@ public:
                    const css::uno::Reference< css::frame::XDispatch > &rxDispatch,
                    const css::util::URL &rURL );
 
-    DECL_STATIC_LINK_TYPED( GalleryBrowser2, AsyncDispatch_Impl, void*, void );
+    DECL_STATIC_LINK( GalleryBrowser2, AsyncDispatch_Impl, void*, void );
 };
 
 #endif

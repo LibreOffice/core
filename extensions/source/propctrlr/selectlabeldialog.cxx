@@ -240,7 +240,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK_TYPED(OSelectLabelDialog, OnEntrySelected, SvTreeListBox*, pLB, void)
+    IMPL_LINK(OSelectLabelDialog, OnEntrySelected, SvTreeListBox*, pLB, void)
     {
         DBG_ASSERT(pLB == m_pControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
         (void)pLB;
@@ -256,7 +256,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK_TYPED(OSelectLabelDialog, OnNoAssignmentClicked, Button*, pButton, void)
+    IMPL_LINK(OSelectLabelDialog, OnNoAssignmentClicked, Button*, pButton, void)
     {
         DBG_ASSERT(pButton == m_pNoAssignment, "OSelectLabelDialog::OnNoAssignmentClicked : where did this come from ?");
         (void)pButton;

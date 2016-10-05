@@ -1753,25 +1753,25 @@ SfxItemSet Outliner::GetParaAttribs( sal_Int32 nPara )
     return pEditEngine->GetParaAttribs( nPara );
 }
 
-IMPL_LINK_TYPED( Outliner, ParaVisibleStateChangedHdl, Paragraph&, rPara, void )
+IMPL_LINK( Outliner, ParaVisibleStateChangedHdl, Paragraph&, rPara, void )
 {
     sal_Int32 nPara = pParaList->GetAbsPos( &rPara );
     pEditEngine->ShowParagraph( nPara, rPara.IsVisible() );
 }
 
-IMPL_LINK_NOARG_TYPED(Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo&, void)
+IMPL_LINK_NOARG(Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo&, void)
 {
     if( !IsInUndo() )
         aBeginMovingHdl.Call( this );
 }
 
-IMPL_LINK_TYPED( Outliner, BeginPasteOrDropHdl, PasteOrDropInfos&, rInfos, void )
+IMPL_LINK( Outliner, BeginPasteOrDropHdl, PasteOrDropInfos&, rInfos, void )
 {
     UndoActionStart( EDITUNDO_DRAGANDDROP );
     maBeginPasteOrDropHdl.Call(&rInfos);
 }
 
-IMPL_LINK_TYPED( Outliner, EndPasteOrDropHdl, PasteOrDropInfos&, rInfos, void )
+IMPL_LINK( Outliner, EndPasteOrDropHdl, PasteOrDropInfos&, rInfos, void )
 {
     bPasting = false;
     ImpTextPasted( rInfos.nStartPara, rInfos.nEndPara - rInfos.nStartPara + 1 );
@@ -1779,7 +1779,7 @@ IMPL_LINK_TYPED( Outliner, EndPasteOrDropHdl, PasteOrDropInfos&, rInfos, void )
     UndoActionEnd( EDITUNDO_DRAGANDDROP );
 }
 
-IMPL_LINK_TYPED( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo&, rInfos, void )
+IMPL_LINK( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo&, rInfos, void )
 {
     pParaList->MoveParagraphs( rInfos.nStartPara, rInfos.nDestPara, rInfos.nEndPara - rInfos.nStartPara + 1 );
     sal_Int32 nChangesStart = std::min( rInfos.nStartPara, rInfos.nDestPara );
@@ -1985,7 +1985,7 @@ void Outliner::ImplBlockInsertionCallbacks( bool b )
     }
 }
 
-IMPL_LINK_TYPED( Outliner, EditEngineNotifyHdl, EENotify&, rNotify, void )
+IMPL_LINK( Outliner, EditEngineNotifyHdl, EENotify&, rNotify, void )
 {
     if ( !nBlockInsCallback )
         pEditEngine->aOutlinerNotifyHdl.Call( rNotify );

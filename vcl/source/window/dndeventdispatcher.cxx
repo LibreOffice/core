@@ -68,7 +68,7 @@ vcl::Window* DNDEventDispatcher::findTopLevelWindow(Point location)
     return pChildWindow;
 }
 
-IMPL_LINK_TYPED(DNDEventDispatcher, WindowEventListener, VclWindowEvent&, rEvent, void)
+IMPL_LINK(DNDEventDispatcher, WindowEventListener, VclWindowEvent&, rEvent, void)
 {
     if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)
     {

@@ -151,13 +151,13 @@ void SvInplaceEdit2::Hide()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvInplaceEdit2, ReturnHdl_Impl, Accelerator&, void)
+IMPL_LINK_NOARG(SvInplaceEdit2, ReturnHdl_Impl, Accelerator&, void)
 {
     bCanceled = false;
     CallCallBackHdl_Impl();
 }
 
-IMPL_LINK_NOARG_TYPED(SvInplaceEdit2, EscapeHdl_Impl, Accelerator&, void)
+IMPL_LINK_NOARG(SvInplaceEdit2, EscapeHdl_Impl, Accelerator&, void)
 {
     bCanceled = true;
     CallCallBackHdl_Impl();
@@ -205,7 +205,7 @@ void SvInplaceEdit2::LoseFocus()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvInplaceEdit2, Timeout_Impl, Idle *, void)
+IMPL_LINK_NOARG(SvInplaceEdit2, Timeout_Impl, Idle *, void)
 {
     CallCallBackHdl_Impl();
 }
@@ -423,7 +423,7 @@ bool SvTreeListBox::IsEntryMnemonicsEnabled() const
     return mpImpl->m_bEntryMnemonicsEnabled;
 }
 
-IMPL_LINK_TYPED( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry, SvTreeListEntry* )
+IMPL_LINK( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry, SvTreeListEntry* )
 {
     return CloneEntry(pEntry);
 }
@@ -943,7 +943,7 @@ void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
         rSel );
 }
 
-IMPL_LINK_NOARG_TYPED(SvTreeListBox, TextEditEndedHdl_Impl, SvInplaceEdit2&, void)
+IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl, SvInplaceEdit2&, void)
 {
     if ( nImpFlags & SvTreeListBoxFlags::EDTEND_CALLED ) // avoid nesting
         return;
@@ -1313,7 +1313,7 @@ void SvTreeListBox::RemoveBoxFromDDList_Impl( const SvTreeListBox& rB )
     SortLBoxes::get().erase( nVal );
 }
 
-IMPL_LINK_TYPED( SvTreeListBox, DragFinishHdl_Impl, sal_Int8, nAction, void )
+IMPL_LINK( SvTreeListBox, DragFinishHdl_Impl, sal_Int8, nAction, void )
 {
     sal_uLong nVal = reinterpret_cast<sal_uLong>(this);
     std::set<sal_uLong> &rSortLBoxes = SortLBoxes::get();
@@ -1711,7 +1711,7 @@ const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry 
     return pItem->GetBitmap1( );
 }
 
-IMPL_LINK_TYPED( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData, void )
+IMPL_LINK( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData, void )
 {
     pHdlEntry = pData->GetActEntry();
     CheckButtonHdl();
@@ -3497,7 +3497,7 @@ void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         Control::RequestHelp( rHEvt );
 }
 
-IMPL_LINK_TYPED( SvTreeListBox, DefaultCompare, const SvSortData&, rData, sal_Int32 )
+IMPL_LINK( SvTreeListBox, DefaultCompare, const SvSortData&, rData, sal_Int32 )
 {
     const SvTreeListEntry* pLeft = rData.pLeft;
     const SvTreeListEntry* pRight = rData.pRight;

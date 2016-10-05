@@ -173,9 +173,9 @@ namespace frm
         virtual void EditEngineStatusChanged( const EditStatus& _rStatus ) override;
 
     private:
-        DECL_LINK_TYPED( OnInvalidateAllAttributes, LinkParamNone*, void );
-        DECL_LINK_TYPED( OnHScroll, ScrollBar*, void );
-        DECL_LINK_TYPED( OnVScroll, ScrollBar*, void );
+        DECL_LINK( OnInvalidateAllAttributes, LinkParamNone*, void );
+        DECL_LINK( OnHScroll, ScrollBar*, void );
+        DECL_LINK( OnVScroll, ScrollBar*, void );
     };
 
 

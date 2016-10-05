@@ -202,7 +202,7 @@ public:
 
     const Reference< XCommandEnvironment >& GetCommandEnvironment() const { return mxCmdEnv; }
 
-    DECL_LINK_TYPED(ResetQuickSearch_Impl, Timer *, void);
+    DECL_LINK(ResetQuickSearch_Impl, Timer *, void);
 
     virtual VclPtr<PopupMenu> CreateContextMenu() override;
     virtual void        ExecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) override;
@@ -405,7 +405,7 @@ public:
     void                    onTimeout();
 
 protected:
-    DECL_LINK_TYPED( SelectionMultiplexer, SvTreeListBox*, void );
+    DECL_LINK( SelectionMultiplexer, SvTreeListBox*, void );
 
     // IEnumerationResultHandler overridables
     virtual void        enumerationDone( ::svt::EnumerationResult eResult ) override;
@@ -554,7 +554,7 @@ void ViewTabListBox_Impl::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer *, void)
+IMPL_LINK_NOARG(ViewTabListBox_Impl, ResetQuickSearch_Impl, Timer *, void)
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -1258,7 +1258,7 @@ void SvtFileView::EndInplaceEditing()
     return mpImpl->EndEditing();
 }
 
-IMPL_LINK_TYPED( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar, void )
+IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar, void )
 {
     DBG_ASSERT( pBar, "no headerbar" );
     sal_uInt16 nItemID = pBar->GetCurItemId();
@@ -1300,7 +1300,7 @@ IMPL_LINK_TYPED( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar, void )
 }
 
 
-IMPL_LINK_TYPED( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
+IMPL_LINK( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
     if ( !pBar->IsItemMode() )
     {
@@ -1717,7 +1717,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 }
 
 
-IMPL_LINK_TYPED( SvtFileView_Impl, SelectionMultiplexer, SvTreeListBox*, _pSource, void )
+IMPL_LINK( SvtFileView_Impl, SelectionMultiplexer, SvTreeListBox*, _pSource, void )
 {
     if (!mnSuspendSelectCallback)
         m_aSelectHandler.Call( _pSource );

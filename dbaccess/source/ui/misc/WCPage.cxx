@@ -122,7 +122,7 @@ void OCopyTable::dispose()
     OWizardPage::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED( OCopyTable, AppendDataClickHdl, Button*, void )
+IMPL_LINK_NOARG( OCopyTable, AppendDataClickHdl, Button*, void )
 {
     SetAppendDataRadio();
 }
@@ -136,7 +136,7 @@ void OCopyTable::SetAppendDataRadio()
     m_pParent->setOperation(CopyTableOperation::AppendData);
 }
 
-IMPL_LINK_TYPED( OCopyTable, RadioChangeHdl, Button*, pButton, void )
+IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton, void )
 {
     m_pParent->EnableNextButton(pButton != m_pRB_View);
     bool bKey = m_bPKeyAllowed && pButton != m_pRB_View;
@@ -154,7 +154,7 @@ IMPL_LINK_TYPED( OCopyTable, RadioChangeHdl, Button*, pButton, void )
         m_pParent->setOperation( CopyTableOperation::CreateAsView );
 }
 
-IMPL_LINK_NOARG_TYPED( OCopyTable, KeyClickHdl, Button*, void )
+IMPL_LINK_NOARG( OCopyTable, KeyClickHdl, Button*, void )
 {
     m_pEdKeyName->Enable(m_pCB_PrimaryColumn->IsChecked());
     m_pFT_KeyName->Enable(m_pCB_PrimaryColumn->IsChecked());

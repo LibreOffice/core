@@ -236,29 +236,29 @@ SwTitlePageDlg::SwTitlePageDlg( vcl::Window *pParent ) :
     m_pPagePropertiesPB->SetClickHdl(LINK(this, SwTitlePageDlg, EditHdl));
 }
 
-IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, UpHdl, SpinField&, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, UpHdl, SpinField&, void)
 {
     if (m_pPageCountNF->GetValue() == 2)
         FillList();
 }
 
-IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, DownHdl, SpinField&, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, DownHdl, SpinField&, void)
 {
     if (m_pPageCountNF->GetValue() == 1)
         FillList();
 }
 
-IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, RestartNumberingHdl, Button*, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, RestartNumberingHdl, Button*, void)
 {
     m_pRestartNumberingNF->Enable(m_pRestartNumberingCB->IsChecked());
 }
 
-IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, SetPageNumberHdl, Button*, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, SetPageNumberHdl, Button*, void)
 {
     m_pSetPageNumberNF->Enable(m_pSetPageNumberCB->IsChecked());
 }
 
-IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, StartPageHdl, Button*, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl, Button*, void)
 {
     m_pPageStartNF->Enable(m_pPageStartRB->IsChecked());
 }
@@ -286,14 +286,14 @@ void SwTitlePageDlg::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, EditHdl, Button*, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, Button*, void)
 {
     SwView& rView = mpSh->GetView();
     rView.GetDocShell()->FormatPage(m_pPagePropertiesLB->GetSelectEntry(), "page", *mpSh);
     rView.InvalidateRulerPos();
 }
 
-IMPL_LINK_NOARG_TYPED(SwTitlePageDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SwTitlePageDlg, OKHdl, Button*, void)
 {
     lcl_PushCursor(mpSh);
 

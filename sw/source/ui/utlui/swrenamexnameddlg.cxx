@@ -86,7 +86,7 @@ void SwRenameXNamedDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SwRenameXNamedDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(SwRenameXNamedDlg, OkHdl, Button*, void)
 {
     try
     {
@@ -99,7 +99,7 @@ IMPL_LINK_NOARG_TYPED(SwRenameXNamedDlg, OkHdl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_TYPED(SwRenameXNamedDlg, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, Edit&, rEdit, void)
 {
     OUString sTmp(rEdit.GetText());
 

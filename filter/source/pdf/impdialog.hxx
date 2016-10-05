@@ -58,7 +58,7 @@ private:
     VclPtr<ListBox>             m_pErrors;
     VclPtr<FixedText>           m_pExplanation;
 
-    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
+    DECL_LINK(SelectHdl, ListBox&, void);
 
 public:
     explicit                    ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& );
@@ -81,7 +81,7 @@ private:
 
     Any                         maSelection;
 
-    DECL_LINK_TYPED(CancelHdl, Button*, void);
+    DECL_LINK(CancelHdl, Button*, void);
 
     sal_uInt16                  mnSigningPageId;
     sal_uInt16                  mnSecurityPageId;
@@ -236,21 +236,21 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     VclPtr<ImpPDFTabDialog>     mpaParent;
 
-    DECL_LINK_TYPED( ToggleAllHdl, RadioButton&, void );
-    DECL_LINK_TYPED( TogglePagesHdl, RadioButton&, void );
-    DECL_LINK_TYPED( ToggleSelectionHdl, RadioButton&, void );
-    DECL_LINK_TYPED( ToggleCompressionHdl, RadioButton&, void );
-    DECL_LINK_TYPED( ToggleReduceImageResolutionHdl, CheckBox&, void );
-    DECL_LINK_TYPED( ToggleWatermarkHdl, CheckBox&, void );
-    DECL_LINK_TYPED( ToggleAddStreamHdl, CheckBox&, void );
-    DECL_LINK_TYPED( ToggleExportFormFieldsHdl, CheckBox&, void );
-    DECL_LINK_TYPED( ToggleExportNotesPagesHdl, CheckBox&, void );
+    DECL_LINK( ToggleAllHdl, RadioButton&, void );
+    DECL_LINK( TogglePagesHdl, RadioButton&, void );
+    DECL_LINK( ToggleSelectionHdl, RadioButton&, void );
+    DECL_LINK( ToggleCompressionHdl, RadioButton&, void );
+    DECL_LINK( ToggleReduceImageResolutionHdl, CheckBox&, void );
+    DECL_LINK( ToggleWatermarkHdl, CheckBox&, void );
+    DECL_LINK( ToggleAddStreamHdl, CheckBox&, void );
+    DECL_LINK( ToggleExportFormFieldsHdl, CheckBox&, void );
+    DECL_LINK( ToggleExportNotesPagesHdl, CheckBox&, void );
 
     void                        TogglePagesHdl();
     void                        EnableExportNotesPages();
 
 public:
-    DECL_LINK_TYPED( ToggleExportPDFAHdl, CheckBox&, void );
+    DECL_LINK( ToggleExportPDFAHdl, CheckBox&, void );
 
                                 ImpPDFTabGeneralPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual                     ~ImpPDFTabGeneralPage() override;
@@ -286,8 +286,8 @@ class ImpPDFTabOpnFtrPage : public SfxTabPage
 
     bool                        mbUseCTLFont;
 
-    DECL_LINK_TYPED( ToggleRbPgLyContinueFacingHdl, RadioButton&, void );
-    DECL_LINK_TYPED( ToggleRbMagnHdl, RadioButton&, void );
+    DECL_LINK( ToggleRbPgLyContinueFacingHdl, RadioButton&, void );
+    DECL_LINK( ToggleRbMagnHdl, RadioButton&, void );
 
     void                        ToggleRbPgLyContinueFacingHdl();
 
@@ -322,7 +322,7 @@ class ImpPDFTabViewerPage : public SfxTabPage
     VclPtr<RadioButton>         m_pRbVisibleBookmarkLevels;
     VclPtr<NumericField>        m_pNumBookmarkLevels;
 
-    DECL_LINK_TYPED( ToggleRbBookmarksHdl, RadioButton&, void );
+    DECL_LINK( ToggleRbBookmarksHdl, RadioButton&, void );
 
 public:
                                 ImpPDFTabViewerPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -374,7 +374,7 @@ class ImpPDFTabSecurityPage : public SfxTabPage
 
     css::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;
 
-    DECL_LINK_TYPED( ClickmaPbSetPwdHdl, Button*, void );
+    DECL_LINK( ClickmaPbSetPwdHdl, Button*, void );
 
     void                        enablePermissionControls();
 
@@ -406,8 +406,8 @@ class ImpPDFTabLinksPage : public SfxTabPage
     VclPtr<RadioButton>         m_pRbOpnLnksBrowser;
     bool                        mbOpnLnksBrowserUserState;
 
-    DECL_LINK_TYPED( ClickRbOpnLnksDefaultHdl, Button*, void );
-    DECL_LINK_TYPED( ClickRbOpnLnksBrowserHdl, Button*, void );
+    DECL_LINK( ClickRbOpnLnksDefaultHdl, Button*, void );
+    DECL_LINK( ClickRbOpnLnksBrowserHdl, Button*, void );
 
 public:
                                 ImpPDFTabLinksPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -435,8 +435,8 @@ class ImpPDFTabSigningPage : public SfxTabPage
     VclPtr<ListBox>             mpLBSignTSA;
     css::uno::Reference< css::security::XCertificate > maSignCertificate;
 
-    DECL_LINK_TYPED( ClickmaPbSignCertSelect, Button*, void );
-    DECL_LINK_TYPED( ClickmaPbSignCertClear, Button*, void );
+    DECL_LINK( ClickmaPbSignCertSelect, Button*, void );
+    DECL_LINK( ClickmaPbSignCertClear, Button*, void );
 
 public:
                                 ImpPDFTabSigningPage( vcl::Window* pParent, const SfxItemSet& rSet );

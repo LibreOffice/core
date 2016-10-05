@@ -229,14 +229,14 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 }
 
 
-IMPL_LINK_NOARG_TYPED(FontWorkGalleryDialog, ClickOKHdl, Button*, void)
+IMPL_LINK_NOARG(FontWorkGalleryDialog, ClickOKHdl, Button*, void)
 {
     insertSelectedFontwork();
     EndDialog( RET_OK );
 }
 
 
-IMPL_LINK_NOARG_TYPED(FontWorkGalleryDialog, DoubleClickFavoriteHdl, ValueSet*, void)
+IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl, ValueSet*, void)
 {
     insertSelectedFontwork();
     EndDialog( RET_OK );
@@ -261,7 +261,7 @@ private:
 
     const OUString msFontworkAlignment;
 
-    DECL_LINK_TYPED( SelectHdl, ToolbarMenu*, void );
+    DECL_LINK( SelectHdl, ToolbarMenu*, void );
 
     void    implSetAlignment( int nAlignmentMode, bool bEnabled );
 };
@@ -317,7 +317,7 @@ void FontworkAlignmentWindow::statusChanged( const css::frame::FeatureStateEvent
     }
 }
 
-IMPL_LINK_NOARG_TYPED(FontworkAlignmentWindow, SelectHdl, ToolbarMenu*, void)
+IMPL_LINK_NOARG(FontworkAlignmentWindow, SelectHdl, ToolbarMenu*, void)
 {
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -422,7 +422,7 @@ private:
     const OUString msFontworkCharacterSpacing;
     const OUString msFontworkKernCharacterPairs;
 
-    DECL_LINK_TYPED( SelectHdl, ToolbarMenu*, void );
+    DECL_LINK( SelectHdl, ToolbarMenu*, void );
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
     void    implSetKernCharacterPairs( bool bKernOnOff, bool bEnabled );
@@ -516,7 +516,7 @@ void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureSta
 }
 
 
-IMPL_LINK_NOARG_TYPED(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, void)
+IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, void)
 {
     if ( IsInPopupMode() )
         EndPopupMode();

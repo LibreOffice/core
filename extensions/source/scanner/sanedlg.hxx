@@ -80,11 +80,11 @@ private:
 
     bool            doScan;
 
-    DECL_LINK_TYPED( ClickBtnHdl, Button*, void );
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( ReloadSaneOptionsHdl, Sane&, void );
-    DECL_LINK_TYPED( OptionsBoxSelectHdl, SvTreeListBox*, void );
+    DECL_LINK( ClickBtnHdl, Button*, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK( ModifyHdl, Edit&, void );
+    DECL_LINK( ReloadSaneOptionsHdl, Sane&, void );
+    DECL_LINK( OptionsBoxSelectHdl, SvTreeListBox*, void );
 
     void SaveState();
     bool LoadState();

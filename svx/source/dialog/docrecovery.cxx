@@ -672,7 +672,7 @@ void SaveDialog::dispose()
     Dialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SaveDialog, OKButtonHdl, Button*, void)
+IMPL_LINK_NOARG(SaveDialog, OKButtonHdl, Button*, void)
 {
     // start crash-save with progress
     ScopedVclPtrInstance< SaveProgressDialog > pProgress(this, m_pCore);
@@ -1146,7 +1146,7 @@ void RecoveryDialog::end()
     m_bWaitForCore = false;
 }
 
-IMPL_LINK_NOARG_TYPED(RecoveryDialog, NextButtonHdl, Button*, void)
+IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl, Button*, void)
 {
     switch (m_eRecoveryState)
     {
@@ -1166,7 +1166,7 @@ IMPL_LINK_NOARG_TYPED(RecoveryDialog, NextButtonHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(RecoveryDialog, CancelButtonHdl, Button*, void)
+IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl, Button*, void)
 {
     switch (m_eRecoveryState)
     {
@@ -1306,7 +1306,7 @@ const OUString& BrokenRecoveryDialog::getSaveDirURL()
 }
 
 
-IMPL_LINK_NOARG_TYPED(BrokenRecoveryDialog, OkButtonHdl, Button*, void)
+IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl, Button*, void)
 {
     OUString sPhysicalPath = comphelper::string::strip(m_pSaveDirED->GetText(), ' ');
     OUString sURL;
@@ -1319,13 +1319,13 @@ IMPL_LINK_NOARG_TYPED(BrokenRecoveryDialog, OkButtonHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(BrokenRecoveryDialog, CancelButtonHdl, Button*, void)
+IMPL_LINK_NOARG(BrokenRecoveryDialog, CancelButtonHdl, Button*, void)
 {
     EndDialog();
 }
 
 
-IMPL_LINK_NOARG_TYPED(BrokenRecoveryDialog, SaveButtonHdl, Button*, void)
+IMPL_LINK_NOARG(BrokenRecoveryDialog, SaveButtonHdl, Button*, void)
 {
     impl_askForSavePath();
 }

@@ -163,7 +163,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     void DeleteRemoved();
 
 
-    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
+    DECL_LINK( ScrollHdl, ScrollBar*, void );
 
     void Init();
 public:

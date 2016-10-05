@@ -1282,12 +1282,12 @@ void ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )(
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBarManager, Click, ToolBox *, void)
+IMPL_LINK_NOARG(ToolBarManager, Click, ToolBox *, void)
 {
     HandleClick(&XToolbarController::click);
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBarManager, DropdownClick, ToolBox *, void)
+IMPL_LINK_NOARG(ToolBarManager, DropdownClick, ToolBox *, void)
 {
     SolarMutexGuard g;
 
@@ -1309,7 +1309,7 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager, DropdownClick, ToolBox *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBarManager, DoubleClick, ToolBox *, void)
+IMPL_LINK_NOARG(ToolBarManager, DoubleClick, ToolBox *, void)
 {
     HandleClick(&XToolbarController::doubleClick);
 }
@@ -1524,7 +1524,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     return pMenu;
 }
 
-IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
+IMPL_LINK( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
 {
     SolarMutexGuard g;
 
@@ -1563,7 +1563,7 @@ IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
     }
 }
 
-IMPL_LINK_TYPED( ToolBarManager, MenuButton, ToolBox*, pToolBar, void )
+IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar, void )
 {
     SolarMutexGuard g;
 
@@ -1575,7 +1575,7 @@ IMPL_LINK_TYPED( ToolBarManager, MenuButton, ToolBox*, pToolBar, void )
     ImplClearPopupMenu( pToolBar );
  }
 
-IMPL_LINK_TYPED( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
+IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
 {
     // We have to hold a reference to ourself as it is possible that we will be disposed and
     // our refcount could be zero (destruction) otherwise.
@@ -1755,7 +1755,7 @@ IMPL_LINK_TYPED( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
     return true;
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBarManager, Select, ToolBox *, void)
+IMPL_LINK_NOARG(ToolBarManager, Select, ToolBox *, void)
 {
     if ( m_bDisposed )
         return;
@@ -1773,7 +1773,7 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager, Select, ToolBox *, void)
     }
 }
 
-IMPL_LINK_TYPED( ToolBarManager, StateChanged, StateChangedType const *, pStateChangedType, void )
+IMPL_LINK( ToolBarManager, StateChanged, StateChangedType const *, pStateChangedType, void )
 {
     if ( m_bDisposed )
         return;
@@ -1795,7 +1795,7 @@ IMPL_LINK_TYPED( ToolBarManager, StateChanged, StateChangedType const *, pStateC
     }
 }
 
-IMPL_LINK_TYPED( ToolBarManager, DataChanged, DataChangedEvent const *, pDataChangedEvent, void )
+IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent const *, pDataChangedEvent, void )
 {
     if ((( pDataChangedEvent->GetType() == DataChangedEventType::SETTINGS )   ||
         (  pDataChangedEvent->GetType() == DataChangedEventType::DISPLAY  ))  &&
@@ -1825,12 +1825,12 @@ IMPL_LINK_TYPED( ToolBarManager, DataChanged, DataChangedEvent const *, pDataCha
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBarManager, MiscOptionsChanged, LinkParamNone*, void)
+IMPL_LINK_NOARG(ToolBarManager, MiscOptionsChanged, LinkParamNone*, void)
 {
     CheckAndUpdateImages();
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBarManager, AsyncUpdateControllersHdl, Timer *, void)
+IMPL_LINK_NOARG(ToolBarManager, AsyncUpdateControllersHdl, Timer *, void)
 {
     // The guard must be in its own context as the we can get destroyed when our
     // own xInterface reference get destroyed!
@@ -1846,7 +1846,7 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager, AsyncUpdateControllersHdl, Timer *, void)
     UpdateControllers();
 }
 
-IMPL_STATIC_LINK_TYPED( ToolBarManager, ExecuteHdl_Impl, void*, p, void )
+IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, void*, p, void )
 {
     ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
     try

@@ -84,9 +84,9 @@ private:
     vcl::EnumContext                        maContext;
     SfxBindings*                            mpBindings;
 
-    DECL_LINK_TYPED(NumFormatSelectHdl, ListBox&, void);
-    DECL_LINK_TYPED(NumFormatValueHdl, Edit&, void);
-    DECL_LINK_TYPED(NumFormatValueClickHdl, Button*, void);
+    DECL_LINK(NumFormatSelectHdl, ListBox&, void);
+    DECL_LINK(NumFormatValueHdl, Edit&, void);
+    DECL_LINK(NumFormatValueClickHdl, Button*, void);
 
     void Initialize();
     void DisableControls();

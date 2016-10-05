@@ -221,7 +221,7 @@ void SvtFilePicker::prepareExecute()
 }
 
 
-IMPL_LINK_TYPED( SvtFilePicker, DialogClosedHdl, Dialog&, rDlg, void )
+IMPL_LINK( SvtFilePicker, DialogClosedHdl, Dialog&, rDlg, void )
 {
     if ( m_xDlgClosedListener.is() )
     {

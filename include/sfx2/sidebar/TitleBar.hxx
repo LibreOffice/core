@@ -70,7 +70,7 @@ private:
     sidebar::Paint maBackgroundPaint;
 
     void PaintTitle(vcl::RenderContext& rRenderContext, const Rectangle& rTitleBox);
-    DECL_LINK_TYPED(SelectionHandler, ToolBox*, void);
+    DECL_LINK(SelectionHandler, ToolBox*, void);
 };
 
 } } // end of namespace sfx2::sidebar

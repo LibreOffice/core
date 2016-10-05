@@ -202,7 +202,7 @@ bool ThreadManager::StartThread( const tThreadData& rThreadData )
     return bThreadStarted;
 }
 
-IMPL_LINK_NOARG_TYPED(ThreadManager, TryToStartNewThread, Idle *, void)
+IMPL_LINK_NOARG(ThreadManager, TryToStartNewThread, Idle *, void)
 {
     osl::MutexGuard aGuard(maMutex);
 

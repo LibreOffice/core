@@ -297,7 +297,7 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
     return pEntry;
 }
 
-IMPL_LINK_TYPED(ScConditionFrmtEntry, OnEdChanged, Edit&, rEdit, void)
+IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit&, rEdit, void)
 {
     OUString aFormula = rEdit.GetText();
 
@@ -543,7 +543,7 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
 
 }
 
-IMPL_LINK_NOARG_TYPED(ScConditionFrmtEntry, StyleSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl, ListBox&, void)
 {
     mbIsInStyleCreate = true;
     StyleSelect( *maLbStyle.get(), mpDoc, *maWdPreview.get() );
@@ -599,7 +599,7 @@ void ScFormulaFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
     maLbStyle->SetSelectHdl( LINK( this, ScFormulaFrmtEntry, StyleSelectHdl ) );
 }
 
-IMPL_LINK_NOARG_TYPED(ScFormulaFrmtEntry, StyleSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScFormulaFrmtEntry, StyleSelectHdl, ListBox&, void)
 {
     StyleSelect( *maLbStyle.get(), mpDoc, *maWdPreview.get() );
 }
@@ -875,7 +875,7 @@ void ScColorScale2FrmtEntry::SetInactive()
     Deselect();
 }
 
-IMPL_LINK_TYPED( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
+IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
 {
     Edit* pEd = nullptr;
     if (&rBox == maLbEntryTypeMin.get())
@@ -1067,7 +1067,7 @@ void ScColorScale3FrmtEntry::SetInactive()
     Deselect();
 }
 
-IMPL_LINK_TYPED( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
+IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
 {
     Edit* pEd = nullptr;
     if(&rBox == maLbEntryTypeMin.get())
@@ -1093,7 +1093,7 @@ IMPL_LINK_TYPED( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
         pEd->Disable();
 }
 
-IMPL_LINK_NOARG_TYPED( ScConditionFrmtEntry, ConditionTypeSelectHdl, ListBox&, void )
+IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl, ListBox&, void )
 {
     sal_Int32 nSelectPos = maLbCondType->GetSelectEntryPos();
     ScConditionMode eMode = EntryPosToConditionMode(nSelectPos);
@@ -1259,7 +1259,7 @@ void ScDataBarFrmtEntry::SetInactive()
     Deselect();
 }
 
-IMPL_LINK_NOARG_TYPED( ScDataBarFrmtEntry, DataBarTypeSelectHdl, ListBox&, void )
+IMPL_LINK_NOARG( ScDataBarFrmtEntry, DataBarTypeSelectHdl, ListBox&, void )
 {
     sal_Int32 nSelectPos = maLbDataBarMinType->GetSelectEntryPos();
     if(nSelectPos <= COLORSCALE_MAX)
@@ -1274,7 +1274,7 @@ IMPL_LINK_NOARG_TYPED( ScDataBarFrmtEntry, DataBarTypeSelectHdl, ListBox&, void 
         maEdDataBarMax->Enable();
 }
 
-IMPL_LINK_NOARG_TYPED( ScDataBarFrmtEntry, OptionBtnHdl, Button*, void )
+IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl, Button*, void )
 {
     SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), *maLbDataBarMinType.get(), *maEdDataBarMin.get(), mpDoc, maPos, true);
     SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *maLbDataBarMaxType.get(), *maEdDataBarMax.get(), mpDoc, maPos, true);
@@ -1385,7 +1385,7 @@ OUString ScDateFrmtEntry::GetExpressionString()
     return ScCondFormatHelper::GetExpression(DATE, 0);
 }
 
-IMPL_LINK_NOARG_TYPED( ScDateFrmtEntry, StyleSelectHdl, ListBox&, void )
+IMPL_LINK_NOARG( ScDateFrmtEntry, StyleSelectHdl, ListBox&, void )
 {
     mbIsInStyleCreate = true;
     StyleSelect( *maLbStyle.get(), mpDoc, *maWdPreview.get() );
@@ -1562,7 +1562,7 @@ void ScIconSetFrmtEntry::Init()
     maLbIconSetType->SetSelectHdl( LINK( this, ScIconSetFrmtEntry, IconSetTypeHdl ) );
 }
 
-IMPL_LINK_NOARG_TYPED( ScIconSetFrmtEntry, IconSetTypeHdl, ListBox&, void )
+IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl, ListBox&, void )
 {
     ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
 

@@ -231,7 +231,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     return nChars < 0;
 }
 
-IMPL_LINK_TYPED( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pTimer, void )
+IMPL_LINK( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pTimer, void )
 {
     (void)pTimer;
     if (IncrementalDocStatCalculate(32000))

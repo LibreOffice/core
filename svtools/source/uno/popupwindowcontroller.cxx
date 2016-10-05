@@ -42,7 +42,7 @@ public:
     ~PopupWindowControllerImpl();
 
     void SetPopupWindow( vcl::Window* pPopupWindow, ToolBox* pToolBox );
-    DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
+    DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 
 private:
     VclPtr<vcl::Window> mpPopupWindow;
@@ -77,7 +77,7 @@ void PopupWindowControllerImpl::SetPopupWindow( vcl::Window* pPopupWindow, ToolB
     }
 }
 
-IMPL_LINK_TYPED( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&, rWindowEvent, void )
+IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&, rWindowEvent, void )
 {
     switch( rWindowEvent.GetId() )
     {

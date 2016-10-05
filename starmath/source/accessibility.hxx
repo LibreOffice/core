@@ -181,7 +181,7 @@ class SmTextForwarder :     /* analog to SvxEditEngineForwarder */
     SmEditAccessible &  rEditAcc;
     SmEditSource &      rEditSource;
 
-    DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
+    DECL_LINK( NotifyHdl, EENotify&, void );
 
     SmTextForwarder( const SmTextForwarder & ) = delete;
     SmTextForwarder & operator = ( const SmTextForwarder & ) = delete;

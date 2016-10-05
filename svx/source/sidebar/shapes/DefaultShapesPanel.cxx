@@ -106,7 +106,7 @@ void DefaultShapesPanel::dispose()
     PanelLayout::dispose();
 }
 
-IMPL_LINK_TYPED(DefaultShapesPanel, ShapeSelectHdl, ValueSet*, rValueSet, void)
+IMPL_LINK(DefaultShapesPanel, ShapeSelectHdl, ValueSet*, rValueSet, void)
 {
     for(auto& aSetMap : mpShapesSetMap)
     {

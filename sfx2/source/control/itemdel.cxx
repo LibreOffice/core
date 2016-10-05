@@ -30,7 +30,7 @@ class SfxItemDisruptor_Impl
     Idle m_Idle;
 
 private:
-    DECL_LINK_TYPED( Delete, Idle*, void );
+    DECL_LINK( Delete, Idle*, void );
 
 public:
     explicit SfxItemDisruptor_Impl(SfxPoolItem *pItemToDesrupt);
@@ -66,7 +66,7 @@ SfxItemDisruptor_Impl::~SfxItemDisruptor_Impl()
     delete pItem;
 }
 
-IMPL_LINK_NOARG_TYPED(SfxItemDisruptor_Impl, Delete, Idle*, void)
+IMPL_LINK_NOARG(SfxItemDisruptor_Impl, Delete, Idle*, void)
 {
     delete this;
 }

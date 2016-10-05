@@ -33,7 +33,7 @@ class SwFootNoteOptionDlg :public SfxTabDialog
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
-    DECL_LINK_TYPED( OkHdl, Button *, void );
+    DECL_LINK( OkHdl, Button *, void );
 
 public:
     SwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh );

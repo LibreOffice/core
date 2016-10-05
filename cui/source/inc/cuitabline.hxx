@@ -60,7 +60,7 @@ private:
 
 protected:
     virtual short       Ok() override;
-    DECL_LINK_TYPED( CancelHdlImpl, Button*, void );
+    DECL_LINK( CancelHdlImpl, Button*, void );
     void                SavePalettes();
 
 public:
@@ -168,29 +168,29 @@ private:
     sal_Int32           m_nActLineWidth;
 
     // handler for gallery popup menu button + size
-    DECL_LINK_TYPED( GraphicHdl_Impl, MenuButton *, void );
-    DECL_LINK_TYPED( MenuCreateHdl_Impl, MenuButton *, void );
-    DECL_LINK_TYPED( SizeHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( RatioHdl_Impl, Button*, void );
+    DECL_LINK( GraphicHdl_Impl, MenuButton *, void );
+    DECL_LINK( MenuCreateHdl_Impl, MenuButton *, void );
+    DECL_LINK( SizeHdl_Impl, Edit&, void );
+    DECL_LINK( RatioHdl_Impl, Button*, void );
 
-    DECL_LINK_TYPED( ClickInvisibleHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ChangeStartClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ChangeStartListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ChangeStartModifyHdl_Impl, Edit&, void );
+    DECL_LINK( ClickInvisibleHdl_Impl, ListBox&, void );
+    DECL_LINK( ChangeStartClickHdl_Impl, Button*, void );
+    DECL_LINK( ChangeStartListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK( ChangeStartModifyHdl_Impl, Edit&, void );
     void ChangeStartHdl_Impl(void*);
-    DECL_LINK_TYPED( ChangeEndListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ChangeEndModifyHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( ChangeEndClickHdl_Impl, Button*, void );
+    DECL_LINK( ChangeEndListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK( ChangeEndModifyHdl_Impl, Edit&, void );
+    DECL_LINK( ChangeEndClickHdl_Impl, Button*, void );
     void ChangeEndHdl_Impl(void*);
-    DECL_LINK_TYPED( ChangePreviewListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ChangePreviewModifyHdl_Impl, Edit&, void );
+    DECL_LINK( ChangePreviewListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK( ChangePreviewModifyHdl_Impl, Edit&, void );
     void ChangePreviewHdl_Impl(void*);
-    DECL_LINK_TYPED( ChangeTransparentHdl_Impl, Edit&, void );
+    DECL_LINK( ChangeTransparentHdl_Impl, Edit&, void );
 
-    DECL_LINK_TYPED( ChangeEdgeStyleHdl_Impl, ListBox&, void );
+    DECL_LINK( ChangeEdgeStyleHdl_Impl, ListBox&, void );
 
     // LineCaps
-    DECL_LINK_TYPED( ChangeCapStyleHdl_Impl, ListBox&, void );
+    DECL_LINK( ChangeCapStyleHdl_Impl, ListBox&, void );
 
     void FillXLSet_Impl();
 
@@ -285,18 +285,18 @@ private:
     void FillDash_Impl();
     void FillDialog_Impl();
 
-    DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( SelectLinestyleListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK( ClickAddHdl_Impl, Button*, void );
+    DECL_LINK( ClickModifyHdl_Impl, Button*, void );
+    DECL_LINK( ClickDeleteHdl_Impl, Button*, void );
+    DECL_LINK( SelectLinestyleListBoxHdl_Impl, ListBox&, void );
     void SelectLinestyleHdl_Impl(ListBox*);
-    DECL_LINK_TYPED( ChangePreviewHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( ChangeNumber1Hdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( ChangeNumber2Hdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ChangeMetricHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( SelectTypeListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK( ChangePreviewHdl_Impl, Edit&, void );
+    DECL_LINK( ChangeNumber1Hdl_Impl, Edit&, void );
+    DECL_LINK( ChangeNumber2Hdl_Impl, Edit&, void );
+    DECL_LINK( ClickLoadHdl_Impl, Button*, void );
+    DECL_LINK( ClickSaveHdl_Impl, Button*, void );
+    DECL_LINK( ChangeMetricHdl_Impl, Button*, void );
+    DECL_LINK( SelectTypeListBoxHdl_Impl, ListBox&, void );
     void SelectTypeHdl_Impl(ListBox*);
 
     void CheckChanges_Impl();
@@ -361,12 +361,12 @@ private:
     sal_uInt16          nDlgType;
     sal_Int32*          pPosLineEndLb;
 
-    DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( SelectLineEndHdl_Impl, ListBox&, void );
+    DECL_LINK( ClickAddHdl_Impl, Button*, void );
+    DECL_LINK( ClickModifyHdl_Impl, Button*, void );
+    DECL_LINK( ClickDeleteHdl_Impl, Button*, void );
+    DECL_LINK( ClickLoadHdl_Impl, Button*, void );
+    DECL_LINK( ClickSaveHdl_Impl, Button*, void );
+    DECL_LINK( SelectLineEndHdl_Impl, ListBox&, void );
     void ChangePreviewHdl_Impl();
 
     void CheckChanges_Impl();

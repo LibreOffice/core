@@ -228,7 +228,7 @@ void PageHeaderPanel::NotifyItemUpdate(
     }
 }
 
-IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderToggleHdl, Button*, void )
+IMPL_LINK_NOARG( PageHeaderPanel, HeaderToggleHdl, Button*, void )
 {
     bool IsChecked = mpHeaderToggle->IsChecked();
     mpHeaderItem->SetValue(IsChecked);
@@ -236,7 +236,7 @@ IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderToggleHdl, Button*, void )
     UpdateHeaderCheck();
 }
 
-IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderLRMarginHdl, ListBox&, void )
+IMPL_LINK_NOARG( PageHeaderPanel, HeaderLRMarginHdl, ListBox&, void )
 {
     sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpHeaderMarginPresetLB->GetSelectEntryData());
     mpHeaderLRMarginItem->SetLeft(nVal);
@@ -245,14 +245,14 @@ IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderLRMarginHdl, ListBox&, void )
                                                  SfxCallMode::RECORD, { mpHeaderLRMarginItem.get() } );
 }
 
-IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderSpacingHdl, ListBox&, void )
+IMPL_LINK_NOARG( PageHeaderPanel, HeaderSpacingHdl, ListBox&, void )
 {
     sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpHeaderSpacingLB->GetSelectEntryData());
     mpHeaderSpacingItem->SetLower(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER_SPACING,
                                                  SfxCallMode::RECORD, { mpHeaderSpacingItem.get() } );
 }
-IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderLayoutHdl, ListBox&, void )
+IMPL_LINK_NOARG( PageHeaderPanel, HeaderLayoutHdl, ListBox&, void )
 {
     sal_uInt16 nVal = mpHeaderLayoutLB->GetSelectEntryPos();
     mpHeaderLayoutItem->SetValue(nVal);

@@ -69,9 +69,9 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     css::uno::Sequence< sal_Int8 > m_aIconMetaFile;
     OUString m_aIconMediaType;
 
-    DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
-    DECL_LINK_TYPED(BrowseHdl, Button*, void);
-    DECL_LINK_TYPED(RadioHdl, Button*, void);
+    DECL_LINK(DoubleClickHdl, ListBox&, void);
+    DECL_LINK(BrowseHdl, Button*, void);
+    DECL_LINK(RadioHdl, Button*, void);
     void SelectDefault();
     ListBox& GetObjectTypes()
         { return *m_pLbObjecttype; }
@@ -115,8 +115,8 @@ private:
     VclPtr<NumericField> m_pNMMarginHeight;
     VclPtr<CheckBox> m_pCBMarginHeightDefault;
 
-    DECL_LINK_TYPED(OpenHdl, Button*, void );
-    DECL_LINK_TYPED(CheckHdl, Button*, void );
+    DECL_LINK(OpenHdl, Button*, void );
+    DECL_LINK(CheckHdl, Button*, void );
 
     void Init();
 

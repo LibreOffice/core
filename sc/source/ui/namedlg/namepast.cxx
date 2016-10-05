@@ -79,7 +79,7 @@ void ScNamePasteDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED( ScNamePasteDlg, ButtonHdl, Button *, pButton, void )
+IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton, void )
 {
     if( pButton == m_pBtnPasteAll )
     {

@@ -1059,18 +1059,18 @@ void SfxAcceleratorConfigPage::ResetConfig()
     m_pEntriesBox->Clear();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, Load, Button*, void)
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Load, Button*, void)
 {
     // ask for filename, where we should load the new config data from
     StartFileDialog( 0, aLoadAccelConfigStr );
 }
 
-IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, Save, Button*, void)
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Save, Button*, void)
 {
     StartFileDialog( WB_SAVEAS, aSaveAccelConfigStr );
 }
 
-IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, Default, Button*, void)
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default, Button*, void)
 {
     uno::Reference<form::XReset> xReset(m_xAct, uno::UNO_QUERY);
     if (xReset.is())
@@ -1084,7 +1084,7 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, Default, Button*, void)
     m_pEntriesBox->Select(m_pEntriesBox->GetEntry(nullptr, 0));
 }
 
-IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, ChangeHdl, Button*, void)
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl, Button*, void)
 {
     sal_uLong nPos = SvTreeList::GetRelPos( m_pEntriesBox->FirstSelected() );
     TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(nullptr, nPos)->GetUserData());
@@ -1100,7 +1100,7 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, ChangeHdl, Button*, void)
     m_pFunctionBox->GetSelectHdl().Call( m_pFunctionBox );
 }
 
-IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, RemoveHdl, Button*, void)
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl, Button*, void)
 {
     // get selected entry
     sal_uLong nPos = SvTreeList::GetRelPos( m_pEntriesBox->FirstSelected() );
@@ -1114,7 +1114,7 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, RemoveHdl, Button*, void)
     m_pFunctionBox->GetSelectHdl().Call( m_pFunctionBox );
 }
 
-IMPL_LINK_TYPED( SfxAcceleratorConfigPage, SelectHdl, SvTreeListBox*, pListBox, void )
+IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, SvTreeListBox*, pListBox, void )
 {
     // disable help
     Help::ShowBalloon( this, Point(), Rectangle(), OUString() );
@@ -1200,7 +1200,7 @@ IMPL_LINK_TYPED( SfxAcceleratorConfigPage, SelectHdl, SvTreeListBox*, pListBox, 
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, RadioHdl, Button*, void)
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl, Button*, void)
 {
     uno::Reference<ui::XAcceleratorConfiguration> xOld = m_xAct;
 
@@ -1233,7 +1233,7 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, RadioHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void)
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void)
 {
     assert(m_pFileDlg);
 
@@ -1317,7 +1317,7 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void)
+IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void)
 {
     assert(m_pFileDlg);
 

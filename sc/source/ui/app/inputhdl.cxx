@@ -855,13 +855,13 @@ void ScInputHandler::GetFormulaData()
     }
 }
 
-IMPL_LINK_TYPED( ScInputHandler, ShowHideTipVisibleParentListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( ScInputHandler, ShowHideTipVisibleParentListener, VclWindowEvent&, rEvent, void )
 {
     if( rEvent.GetId() == VCLEVENT_OBJECT_DYING || rEvent.GetId() == VCLEVENT_WINDOW_HIDE )
         HideTip();
 }
 
-IMPL_LINK_TYPED( ScInputHandler, ShowHideTipVisibleSecParentListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( ScInputHandler, ShowHideTipVisibleSecParentListener, VclWindowEvent&, rEvent, void )
 {
     if( rEvent.GetId() == VCLEVENT_OBJECT_DYING || rEvent.GetId() == VCLEVENT_WINDOW_HIDE )
         HideTipBelow();
@@ -2229,7 +2229,7 @@ void ScInputHandler::SyncViews( EditView* pSourceView )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScInputHandler, ModifyHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(ScInputHandler, ModifyHdl, LinkParamNone*, void)
 {
     if ( !bInOwnChange && ( eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE ) &&
          pEngine && pEngine->GetUpdateMode() && pInputWin )
@@ -3770,7 +3770,7 @@ void ScInputHandler::ResetDelayTimer()
     }
 }
 
-IMPL_LINK_TYPED( ScInputHandler, DelayTimer, Timer*, pTimer, void )
+IMPL_LINK( ScInputHandler, DelayTimer, Timer*, pTimer, void )
 {
     if ( pTimer == pDelayTimer )
     {

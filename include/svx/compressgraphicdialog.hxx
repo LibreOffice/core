@@ -63,17 +63,17 @@ private:
 
     void Initialize();
 
-    DECL_LINK_TYPED( EndSlideHdl, Slider*, void );
-    DECL_LINK_TYPED( NewInterpolationModifiedHdl, ListBox&, void );
-    DECL_LINK_TYPED( NewQualityModifiedHdl, Edit&, void );
-    DECL_LINK_TYPED( NewCompressionModifiedHdl, Edit&, void );
-    DECL_LINK_TYPED( NewWidthModifiedHdl, Edit&, void );
-    DECL_LINK_TYPED( NewHeightModifiedHdl, Edit&, void );
-    DECL_LINK_TYPED( ResolutionModifiedHdl, Edit&, void );
-    DECL_LINK_TYPED( ToggleCompressionRB, RadioButton&, void );
-    DECL_LINK_TYPED( ToggleReduceResolutionRB, CheckBox&, void );
+    DECL_LINK( EndSlideHdl, Slider*, void );
+    DECL_LINK( NewInterpolationModifiedHdl, ListBox&, void );
+    DECL_LINK( NewQualityModifiedHdl, Edit&, void );
+    DECL_LINK( NewCompressionModifiedHdl, Edit&, void );
+    DECL_LINK( NewWidthModifiedHdl, Edit&, void );
+    DECL_LINK( NewHeightModifiedHdl, Edit&, void );
+    DECL_LINK( ResolutionModifiedHdl, Edit&, void );
+    DECL_LINK( ToggleCompressionRB, RadioButton&, void );
+    DECL_LINK( ToggleReduceResolutionRB, CheckBox&, void );
 
-    DECL_LINK_TYPED( CalculateClickHdl, Button*, void );
+    DECL_LINK( CalculateClickHdl, Button*, void );
 
     void Update();
     void UpdateNewWidthMF();

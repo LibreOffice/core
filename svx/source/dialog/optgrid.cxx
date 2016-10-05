@@ -309,7 +309,7 @@ DeactivateRC SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK_TYPED( SvxGridTabPage, ChangeDrawHdl_Impl, Edit&, rField, void )
+IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, Edit&, rField, void )
 {
     bAttrModified = true;
     if( pCbxSynchronize->IsChecked() )
@@ -322,7 +322,7 @@ IMPL_LINK_TYPED( SvxGridTabPage, ChangeDrawHdl_Impl, Edit&, rField, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxGridTabPage, ClickRotateHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl, Button*, void)
 {
     if( pCbxRotate->IsChecked() )
         pMtrFldAngle->Enable();
@@ -331,7 +331,7 @@ IMPL_LINK_NOARG_TYPED(SvxGridTabPage, ClickRotateHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( SvxGridTabPage, ChangeDivisionHdl_Impl, Edit&, rField, void )
+IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, Edit&, rField, void )
 {
     bAttrModified = true;
     if( pCbxSynchronize->IsChecked() )
@@ -344,7 +344,7 @@ IMPL_LINK_TYPED( SvxGridTabPage, ChangeDivisionHdl_Impl, Edit&, rField, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxGridTabPage, ChangeGridsnapHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxGridTabPage, ChangeGridsnapHdl_Impl, Button*, void)
 {
     bAttrModified = true;
 }

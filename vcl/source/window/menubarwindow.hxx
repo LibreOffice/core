@@ -99,9 +99,9 @@ private:
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-    DECL_LINK_TYPED( CloseHdl, ToolBox*, void );
-    DECL_LINK_TYPED( ToolboxEventHdl, VclWindowEvent&, void );
-    DECL_LINK_TYPED( ShowHideListener, VclWindowEvent&, void );
+    DECL_LINK( CloseHdl, ToolBox*, void );
+    DECL_LINK( ToolboxEventHdl, VclWindowEvent&, void );
+    DECL_LINK( ShowHideListener, VclWindowEvent&, void );
 
     void            StateChanged( StateChangedType nType ) override;
     void            DataChanged( const DataChangedEvent& rDCEvt ) override;

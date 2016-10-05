@@ -159,7 +159,7 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
     rFont.SetWeight((nIndex & 0x2) ? WEIGHT_BOLD : WEIGHT_NORMAL);
 }
 
-IMPL_LINK_NOARG_TYPED( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, void )
+IMPL_LINK_NOARG( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, void )
 {
     m_pZoom->Enable(m_pSizeZoomed->IsChecked());
 }
@@ -299,13 +299,13 @@ void SmShowFont::SetFont(const vcl::Font& rFont)
     Invalidate();
 }
 
-IMPL_LINK_TYPED( SmFontDialog, FontSelectHdl, ComboBox&, rComboBox, void )
+IMPL_LINK( SmFontDialog, FontSelectHdl, ComboBox&, rComboBox, void )
 {
     maFont.SetFamilyName(rComboBox.GetText());
     m_pShowFont->SetFont(maFont);
 }
 
-IMPL_LINK_TYPED( SmFontDialog, FontModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( SmFontDialog, FontModifyHdl, Edit&, rEdit, void )
 {
     ComboBox& rComboBox = static_cast<ComboBox&>(rEdit);
     // if font is available in list then use it
@@ -316,7 +316,7 @@ IMPL_LINK_TYPED( SmFontDialog, FontModifyHdl, Edit&, rEdit, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SmFontDialog, AttrChangeHdl, Button*, void )
+IMPL_LINK_NOARG( SmFontDialog, AttrChangeHdl, Button*, void )
 {
     if (m_pBoldCheckBox->IsChecked())
         maFont.SetWeight(FontWeight(WEIGHT_BOLD));
@@ -421,7 +421,7 @@ public:
     }
 };
 
-IMPL_LINK_NOARG_TYPED( SmFontSizeDialog, DefaultButtonClickHdl, Button *, void )
+IMPL_LINK_NOARG( SmFontSizeDialog, DefaultButtonClickHdl, Button *, void )
 {
     if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
     {
@@ -495,7 +495,7 @@ void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
     rFormat.RequestApplyChanges();
 }
 
-IMPL_LINK_TYPED( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu, bool )
+IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu, bool )
 {
     SmFontPickListBox *pActiveListBox;
 
@@ -523,7 +523,7 @@ IMPL_LINK_TYPED( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu, bool )
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED( SmFontTypeDialog, DefaultButtonClickHdl, Button *, void )
+IMPL_LINK_NOARG( SmFontTypeDialog, DefaultButtonClickHdl, Button *, void )
 {
     if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
     {
@@ -692,7 +692,7 @@ SmCategoryDesc::~SmCategoryDesc()
 
 /**************************************************************************/
 
-IMPL_LINK_TYPED( SmDistanceDialog, GetFocusHdl, Control&, rControl, void )
+IMPL_LINK( SmDistanceDialog, GetFocusHdl, Control&, rControl, void )
 {
     if (Categories[nActiveCategory])
     {
@@ -712,14 +712,14 @@ IMPL_LINK_TYPED( SmDistanceDialog, GetFocusHdl, Control&, rControl, void )
     }
 }
 
-IMPL_LINK_TYPED( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu, bool )
+IMPL_LINK( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu, bool )
 {
     SetCategory(pMenu->GetCurItemId() - 1);
     return false;
 }
 
 
-IMPL_LINK_NOARG_TYPED( SmDistanceDialog, DefaultButtonClickHdl, Button *, void )
+IMPL_LINK_NOARG( SmDistanceDialog, DefaultButtonClickHdl, Button *, void )
 {
     if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
     {
@@ -730,7 +730,7 @@ IMPL_LINK_NOARG_TYPED( SmDistanceDialog, DefaultButtonClickHdl, Button *, void )
     }
 }
 
-IMPL_LINK_TYPED( SmDistanceDialog, CheckBoxClickHdl, Button *, pCheckBox, void )
+IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, Button *, pCheckBox, void )
 {
     if (pCheckBox == m_pCheckBox1)
     {
@@ -1018,7 +1018,7 @@ void SmDistanceDialog::WriteTo(SmFormat &rFormat) /*const*/
     rFormat.RequestApplyChanges();
 }
 
-IMPL_LINK_NOARG_TYPED( SmAlignDialog, DefaultButtonClickHdl, Button *, void )
+IMPL_LINK_NOARG( SmAlignDialog, DefaultButtonClickHdl, Button *, void )
 {
     if (ScopedVclPtrInstance<SaveDefaultsQuery>(this)->Execute() == RET_YES)
     {
@@ -1351,7 +1351,7 @@ void SmShowSymbolSetWindow::Resize()
     calccols();
 }
 
-IMPL_LINK_TYPED( SmShowSymbolSetWindow, ScrollHdl, ScrollBar*, /*pScrollBar*/, void)
+IMPL_LINK( SmShowSymbolSetWindow, ScrollHdl, ScrollBar*, /*pScrollBar*/, void)
 {
     Invalidate();
 }
@@ -1445,18 +1445,18 @@ void SmSymbolDialog::FillSymbolSets()
 }
 
 
-IMPL_LINK_NOARG_TYPED( SmSymbolDialog, SymbolSetChangeHdl, ListBox&, void )
+IMPL_LINK_NOARG( SmSymbolDialog, SymbolSetChangeHdl, ListBox&, void )
 {
     SelectSymbolSet(m_pSymbolSets->GetSelectEntry());
 }
 
 
-IMPL_LINK_NOARG_TYPED( SmSymbolDialog, SymbolChangeHdl, SmShowSymbolSetWindow&, void )
+IMPL_LINK_NOARG( SmSymbolDialog, SymbolChangeHdl, SmShowSymbolSetWindow&, void )
 {
     SelectSymbol(m_pSymbolSetDisplay->GetSelectSymbol());
 }
 
-IMPL_LINK_NOARG_TYPED(SmSymbolDialog, EditClickHdl, Button*, void)
+IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, Button*, void)
 {
     ScopedVclPtrInstance<SmSymDefineDialog> pDialog(this, pFontListDev, rSymbolMgr);
 
@@ -1497,11 +1497,11 @@ IMPL_LINK_NOARG_TYPED(SmSymbolDialog, EditClickHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED( SmSymbolDialog, SymbolDblClickHdl2, SmShowSymbolSetWindow&, void )
+IMPL_LINK_NOARG( SmSymbolDialog, SymbolDblClickHdl2, SmShowSymbolSetWindow&, void )
 {
     SymbolDblClickHdl();
 }
-IMPL_LINK_NOARG_TYPED( SmSymbolDialog, SymbolDblClickHdl, SmShowSymbol&, void )
+IMPL_LINK_NOARG( SmSymbolDialog, SymbolDblClickHdl, SmShowSymbol&, void )
 {
     SymbolDblClickHdl();
 }
@@ -1512,7 +1512,7 @@ void SmSymbolDialog::SymbolDblClickHdl()
 }
 
 
-IMPL_LINK_NOARG_TYPED( SmSymbolDialog, GetClickHdl, Button*, void )
+IMPL_LINK_NOARG( SmSymbolDialog, GetClickHdl, Button*, void )
 {
     const SmSym *pSym = GetSymbol();
     if (pSym)
@@ -1773,7 +1773,7 @@ SmSym * SmSymDefineDialog::GetSymbol(const ComboBox &rComboBox)
 }
 
 
-IMPL_LINK_TYPED( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox&, rComboBox, void )
+IMPL_LINK( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox&, rComboBox, void )
 {
     (void) rComboBox;
     assert(&rComboBox == pOldSymbols && "Sm : wrong argument");
@@ -1781,7 +1781,7 @@ IMPL_LINK_TYPED( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox&, rComboBox, vo
 }
 
 
-IMPL_LINK_TYPED( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox&, rComboBox, void )
+IMPL_LINK( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox&, rComboBox, void )
 {
     (void) rComboBox;
     assert(&rComboBox == pOldSymbolSets && "Sm : wrong argument");
@@ -1789,7 +1789,7 @@ IMPL_LINK_TYPED( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox&, rComboBox,
 }
 
 
-IMPL_LINK_TYPED( SmSymDefineDialog, ModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( SmSymDefineDialog, ModifyHdl, Edit&, rEdit, void )
 {
     ComboBox& rComboBox = static_cast<ComboBox&>(rEdit);
     // remember cursor position for later restoring of it
@@ -1816,7 +1816,7 @@ IMPL_LINK_TYPED( SmSymDefineDialog, ModifyHdl, Edit&, rEdit, void )
     UpdateButtons();
 }
 
-IMPL_LINK_TYPED( SmSymDefineDialog, FontChangeHdl, ListBox&, rListBox, void )
+IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox&, rListBox, void )
 {
     (void) rListBox;
     assert(&rListBox == pFonts && "Sm : wrong argument");
@@ -1825,7 +1825,7 @@ IMPL_LINK_TYPED( SmSymDefineDialog, FontChangeHdl, ListBox&, rListBox, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( SmSymDefineDialog, SubsetChangeHdl, ListBox&, void )
+IMPL_LINK_NOARG( SmSymDefineDialog, SubsetChangeHdl, ListBox&, void )
 {
     sal_Int32 nPos = pFontsSubsetLB->GetSelectEntryPos();
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
@@ -1839,7 +1839,7 @@ IMPL_LINK_NOARG_TYPED( SmSymDefineDialog, SubsetChangeHdl, ListBox&, void )
 }
 
 
-IMPL_LINK_TYPED( SmSymDefineDialog, StyleChangeHdl, ComboBox&, rComboBox, void )
+IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox&, rComboBox, void )
 {
     (void) rComboBox;
     assert(&rComboBox == pStyles && "Sm : falsches Argument");
@@ -1848,7 +1848,7 @@ IMPL_LINK_TYPED( SmSymDefineDialog, StyleChangeHdl, ComboBox&, rComboBox, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void)
+IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void)
 {
    sal_UCS4 cChar = pCharsetDisplay->GetSelectCharacter();
 
@@ -1876,7 +1876,7 @@ IMPL_LINK_NOARG_TYPED(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void
 }
 
 
-IMPL_LINK_TYPED( SmSymDefineDialog, AddClickHdl, Button *, pButton, void )
+IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, pButton, void )
 {
     (void) pButton;
     assert(pButton == pAddBtn && "Sm : wrong argument");
@@ -1903,7 +1903,7 @@ IMPL_LINK_TYPED( SmSymDefineDialog, AddClickHdl, Button *, pButton, void )
 }
 
 
-IMPL_LINK_TYPED( SmSymDefineDialog, ChangeClickHdl, Button *, pButton, void )
+IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, pButton, void )
 {
     (void) pButton;
     assert(pButton == pChangeBtn && "Sm : wrong argument");
@@ -1940,7 +1940,7 @@ IMPL_LINK_TYPED( SmSymDefineDialog, ChangeClickHdl, Button *, pButton, void )
 }
 
 
-IMPL_LINK_TYPED( SmSymDefineDialog, DeleteClickHdl, Button *, pButton, void )
+IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, pButton, void )
 {
     (void) pButton;
     assert(pButton == pDeleteBtn && "Sm : wrong argument");

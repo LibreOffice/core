@@ -45,9 +45,9 @@ class SwChangeDBDlg: public SvxStandardDialog
 
     SwWrtShell      *pSh;
 
-    DECL_LINK_TYPED(TreeSelectHdl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(ButtonHdl, Button*, void);
-    DECL_LINK_TYPED(AddDBHdl, Button*, void);
+    DECL_LINK(TreeSelectHdl, SvTreeListBox*, void);
+    DECL_LINK(ButtonHdl, Button*, void);
+    DECL_LINK(AddDBHdl, Button*, void);
 
     virtual void    Apply() override;
     void            UpdateFields();

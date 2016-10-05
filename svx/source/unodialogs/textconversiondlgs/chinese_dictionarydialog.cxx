@@ -289,7 +289,7 @@ void DictionaryList::sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ )
 }
 
 
-IMPL_LINK_TYPED( DictionaryList, CompareHdl, const SvSortData&, rData, sal_Int32 )
+IMPL_LINK( DictionaryList, CompareHdl, const SvSortData&, rData, sal_Int32 )
 {
     SvTreeListEntry* pLeft = const_cast<SvTreeListEntry*>(rData.pLeft);
     SvTreeListEntry* pRight = const_cast<SvTreeListEntry*>(rData.pRight);
@@ -585,7 +585,7 @@ void ChineseDictionaryDialog::setDirectionAndTextConversionOptions( bool bDirect
     updateAfterDirectionChange();
 }
 
-IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, DirectionHdl, Button*, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, DirectionHdl, Button*, void)
 {
     updateAfterDirectionChange();
 }
@@ -610,15 +610,15 @@ void ChineseDictionaryDialog::updateAfterDirectionChange()
     updateButtons();
 }
 
-IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, EditFieldsListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, EditFieldsListBoxHdl, ListBox&, void)
 {
     updateButtons();
 }
-IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, EditFieldsHdl, Edit&, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, EditFieldsHdl, Edit&, void)
 {
     updateButtons();
 }
-IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, MappingSelectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, MappingSelectHdl, SvTreeListBox*, void)
 {
     DictionaryEntry* pE = getActiveDictionary().getFirstSelectedEntry();
     if(pE)
@@ -704,7 +704,7 @@ void ChineseDictionaryDialog::updateButtons()
     m_pPB_Modify->Enable( bModify );
 }
 
-IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, AddHdl, Button*, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, AddHdl, Button*, void)
 {
     if( !isEditFieldsHaveContent() )
         return;
@@ -722,7 +722,7 @@ IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, AddHdl, Button*, void)
     updateButtons();
 }
 
-IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, ModifyHdl, Button*, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl, Button*, void)
 {
     OUString aTerm( m_pED_Term->GetText() );
     OUString aMapping( m_pED_Mapping->GetText() );
@@ -754,7 +754,7 @@ IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, ModifyHdl, Button*, void)
     updateButtons();
 }
 
-IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, DeleteHdl, Button*, void)
+IMPL_LINK_NOARG(ChineseDictionaryDialog, DeleteHdl, Button*, void)
 {
     DictionaryList& rActive  = getActiveDictionary();
     DictionaryList& rReverse = getReverseDictionary();
@@ -811,7 +811,7 @@ short ChineseDictionaryDialog::Execute()
     return nRet;
 }
 
-IMPL_LINK_TYPED(ChineseDictionaryDialog, HeaderBarClick, HeaderBar*, pHeaderBar, void)
+IMPL_LINK(ChineseDictionaryDialog, HeaderBarClick, HeaderBar*, pHeaderBar, void)
 {
     sal_uInt16 nId = pHeaderBar->GetCurItemId();
     HeaderBarItemBits nBits = pHeaderBar->GetItemBits(nId);

@@ -159,11 +159,11 @@ public:
         }
     }
 
-    DECL_LINK_TYPED( DestroyedLink, VclWindowEvent&, void );
+    DECL_LINK( DestroyedLink, VclWindowEvent&, void );
 };
 
 
-IMPL_LINK_TYPED( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent&, rEvent, void )
+IMPL_LINK( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent&, rEvent, void )
 {
     if( rEvent.GetId() == VCLEVENT_OBJECT_DYING )
         m_pFocusWindow = nullptr;

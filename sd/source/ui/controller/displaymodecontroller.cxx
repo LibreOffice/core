@@ -58,8 +58,8 @@ public:
     virtual void dispose() override;
 
 protected:
-    DECL_LINK_TYPED( SelectToolbarMenuHdl, ToolbarMenu*, void );
-    DECL_LINK_TYPED( SelectValueSetHdl, ValueSet*, void );
+    DECL_LINK( SelectToolbarMenuHdl, ToolbarMenu*, void );
+    DECL_LINK( SelectValueSetHdl, ValueSet*, void );
     void SelectHdl(void*);
 
 private:
@@ -192,11 +192,11 @@ void DisplayModeToolbarMenu::dispose()
     svtools::ToolbarMenu::dispose();
 }
 
-IMPL_LINK_TYPED( DisplayModeToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void )
+IMPL_LINK( DisplayModeToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void )
 {
     SelectHdl(pControl);
 }
-IMPL_LINK_TYPED( DisplayModeToolbarMenu, SelectToolbarMenuHdl, ToolbarMenu *, pControl, void )
+IMPL_LINK( DisplayModeToolbarMenu, SelectToolbarMenuHdl, ToolbarMenu *, pControl, void )
 {
     SelectHdl(pControl);
 }

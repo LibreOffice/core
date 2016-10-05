@@ -98,8 +98,8 @@ class ScContentTree : public SvTreeListBox
 
     ScDocument* GetSourceDocument();
 
-    DECL_LINK_TYPED( ContentDoubleClickHdl, SvTreeListBox*, bool );
-    DECL_LINK_TYPED( ExecDragHdl, void*, void );
+    DECL_LINK( ContentDoubleClickHdl, SvTreeListBox*, bool );
+    DECL_LINK( ExecDragHdl, void*, void );
 public:
     SvTreeListEntry* pTmpEntry;
 

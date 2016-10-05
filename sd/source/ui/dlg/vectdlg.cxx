@@ -260,19 +260,19 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
     rMtf.AddAction( new MetaRectAction( aRect ) );
 }
 
-IMPL_LINK_TYPED( SdVectorizeDlg, ProgressHdl, long, nData, void )
+IMPL_LINK( SdVectorizeDlg, ProgressHdl, long, nData, void )
 {
     m_pPrgs->SetValue( (sal_uInt16)nData );
 }
 
-IMPL_LINK_NOARG_TYPED(SdVectorizeDlg, ClickPreviewHdl, Button*, void)
+IMPL_LINK_NOARG(SdVectorizeDlg, ClickPreviewHdl, Button*, void)
 {
     Calculate( aBmp, aMtf );
     m_pMtfWin->SetGraphic( aMtf );
     m_pBtnPreview->Disable();
 }
 
-IMPL_LINK_NOARG_TYPED(SdVectorizeDlg, ClickOKHdl, Button*, void)
+IMPL_LINK_NOARG(SdVectorizeDlg, ClickOKHdl, Button*, void)
 {
     if( m_pBtnPreview->IsEnabled() )
         Calculate( aBmp, aMtf );
@@ -281,7 +281,7 @@ IMPL_LINK_NOARG_TYPED(SdVectorizeDlg, ClickOKHdl, Button*, void)
     EndDialog( RET_OK );
 }
 
-IMPL_LINK_TYPED( SdVectorizeDlg, ToggleHdl, CheckBox&, rCb, void )
+IMPL_LINK( SdVectorizeDlg, ToggleHdl, CheckBox&, rCb, void )
 {
     if( rCb.IsChecked() )
     {
@@ -297,7 +297,7 @@ IMPL_LINK_TYPED( SdVectorizeDlg, ToggleHdl, CheckBox&, rCb, void )
     m_pBtnPreview->Enable();
 }
 
-IMPL_LINK_NOARG_TYPED(SdVectorizeDlg, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SdVectorizeDlg, ModifyHdl, Edit&, void)
 {
     m_pBtnPreview->Enable();
 }

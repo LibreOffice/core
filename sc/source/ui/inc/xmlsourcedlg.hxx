@@ -94,10 +94,10 @@ private:
     void CancelPressed();
     void RefEditModified();
 
-    DECL_LINK_TYPED(GetFocusHdl, Control&, void);
-    DECL_LINK_TYPED(BtnPressedHdl, Button*, void);
-    DECL_LINK_TYPED(TreeItemSelectHdl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(RefModifiedHdl, Edit&, void);
+    DECL_LINK(GetFocusHdl, Control&, void);
+    DECL_LINK(BtnPressedHdl, Button*, void);
+    DECL_LINK(TreeItemSelectHdl, SvTreeListBox*, void);
+    DECL_LINK(RefModifiedHdl, Edit&, void);
 };
 
 #endif

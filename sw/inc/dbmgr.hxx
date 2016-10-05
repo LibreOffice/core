@@ -246,7 +246,7 @@ friend class SwConnectionDisposedListener_Impl;
     SAL_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, bool bCreate);
     SAL_DLLPRIVATE SwDSParam*          FindDSConnection(const OUString& rSource, bool bCreate);
 
-    DECL_DLLPRIVATE_LINK_TYPED( PrtCancelHdl, Button *, void );
+    DECL_DLLPRIVATE_LINK( PrtCancelHdl, Button *, void );
 
     /// Insert data record as text into document.
     SAL_DLLPRIVATE void ImportFromConnection( SwWrtShell* pSh);

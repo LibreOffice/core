@@ -136,10 +136,10 @@ public:
     }
 
 private:
-    DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
+    DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 };
 
-IMPL_LINK_TYPED( PriorityHBox, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( PriorityHBox, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     if (rEvent.GetId() == VCLEVENT_WINDOW_RESIZE)
     {

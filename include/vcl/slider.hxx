@@ -56,9 +56,9 @@ private:
     Link<Slider*,void>   maSlideHdl;
     Link<Slider*,void>   maEndSlideHdl;
 
-    DECL_LINK_TYPED(LinkedFieldModifyHdl, Edit&, void);
-    DECL_LINK_TYPED(LinkedFieldLoseFocusHdl, Control&, void);
-    DECL_LINK_TYPED(LinkedFieldSpinnerHdl, SpinField&, void);
+    DECL_LINK(LinkedFieldModifyHdl, Edit&, void);
+    DECL_LINK(LinkedFieldLoseFocusHdl, Control&, void);
+    DECL_LINK(LinkedFieldSpinnerHdl, SpinField&, void);
 
     using Control::ImplInitSettings;
     using Window::ImplInit;

@@ -422,8 +422,8 @@ namespace dbaui
         void ImplBroadcastFeatureState(const OUString& _rFeature, const css::uno::Reference< css::frame::XStatusListener > & xListener, bool _bIgnoreCache);
 
         // link methods
-        DECL_LINK_TYPED(OnAsyncInvalidateAll, void*, void);
-        DECL_LINK_TYPED(OnAsyncCloseTask, void*, void);
+        DECL_LINK(OnAsyncInvalidateAll, void*, void);
+        DECL_LINK(OnAsyncCloseTask, void*, void);
 
     public:
         const css::uno::Reference< css::uno::XComponentContext >& getORB() const { return m_xContext; }

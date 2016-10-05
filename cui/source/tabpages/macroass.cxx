@@ -274,7 +274,7 @@ bool SfxMacroTabPage::IsReadOnly() const
     return mpImpl->bReadOnly;
 }
 
-IMPL_LINK_NOARG_TYPED( SfxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG( SfxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
 {
     SvHeaderTabListBox&     rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry*            pE = rListBox.FirstSelected();
@@ -290,7 +290,7 @@ IMPL_LINK_NOARG_TYPED( SfxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
     EnableButtons();
 }
 
-IMPL_LINK_NOARG_TYPED( SfxMacroTabPage, SelectGroup_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG( SfxMacroTabPage, SelectGroup_Impl, SvTreeListBox*, void)
 {
     mpImpl->pGroupLB->GroupSelected();
     const OUString sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
@@ -302,17 +302,17 @@ IMPL_LINK_NOARG_TYPED( SfxMacroTabPage, SelectGroup_Impl, SvTreeListBox*, void)
     EnableButtons();
 }
 
-IMPL_LINK_NOARG_TYPED( SfxMacroTabPage, SelectMacro_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG( SfxMacroTabPage, SelectMacro_Impl, SvTreeListBox*, void)
 {
     EnableButtons();
 }
 
-IMPL_LINK_TYPED( SfxMacroTabPage, AssignDeleteClickHdl_Impl, Button*, pBtn, void )
+IMPL_LINK( SfxMacroTabPage, AssignDeleteClickHdl_Impl, Button*, pBtn, void )
 {
     AssignDeleteHdl(pBtn);
 }
 
-IMPL_LINK_TYPED( SfxMacroTabPage, AssignDeleteHdl_Impl, SvTreeListBox*, pBtn, bool )
+IMPL_LINK( SfxMacroTabPage, AssignDeleteHdl_Impl, SvTreeListBox*, pBtn, bool )
 {
     return AssignDeleteHdl(pBtn);
 }
@@ -363,7 +363,7 @@ bool SfxMacroTabPage::AssignDeleteHdl(Control* pBtn)
     return false;
 }
 
-IMPL_LINK_TYPED( SfxMacroTabPage, TimeOut_Impl, Idle*,, void )
+IMPL_LINK( SfxMacroTabPage, TimeOut_Impl, Idle*,, void )
 {
     // FillMacroList() can take a long time -> show wait cursor and disable input
     SfxTabDialog* pTabDlg = GetTabDialog();

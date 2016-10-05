@@ -1511,11 +1511,11 @@ VclPtr<SfxTabPage> SvxLineTabPage::Create( vcl::Window* pWindow,
 }
 
 
-IMPL_LINK_TYPED( SvxLineTabPage, ChangePreviewListBoxHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxLineTabPage, ChangePreviewListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     ChangePreviewHdl_Impl(&rListBox);
 }
-IMPL_LINK_TYPED( SvxLineTabPage, ChangePreviewModifyHdl_Impl, Edit&, rEdit, void )
+IMPL_LINK( SvxLineTabPage, ChangePreviewModifyHdl_Impl, Edit&, rEdit, void )
 {
     ChangePreviewHdl_Impl(&rEdit);
 }
@@ -1579,15 +1579,15 @@ void SvxLineTabPage::ChangePreviewHdl_Impl(void * pCntrl )
 }
 
 
-IMPL_LINK_TYPED( SvxLineTabPage, ChangeStartClickHdl_Impl, Button*, p, void )
+IMPL_LINK( SvxLineTabPage, ChangeStartClickHdl_Impl, Button*, p, void )
 {
     ChangeStartHdl_Impl(p);
 }
-IMPL_LINK_TYPED( SvxLineTabPage, ChangeStartListBoxHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxLineTabPage, ChangeStartListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     ChangeStartHdl_Impl(&rListBox);
 }
-IMPL_LINK_TYPED( SvxLineTabPage, ChangeStartModifyHdl_Impl, Edit&, rEdit, void )
+IMPL_LINK( SvxLineTabPage, ChangeStartModifyHdl_Impl, Edit&, rEdit, void )
 {
     ChangeStartHdl_Impl(&rEdit);
 }
@@ -1607,7 +1607,7 @@ void SvxLineTabPage::ChangeStartHdl_Impl( void * p )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ChangeEdgeStyleHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxLineTabPage, ChangeEdgeStyleHdl_Impl, ListBox&, void)
 {
     ChangePreviewHdl_Impl( nullptr );
 }
@@ -1615,13 +1615,13 @@ IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ChangeEdgeStyleHdl_Impl, ListBox&, void)
 
 // fdo#43209
 
-IMPL_LINK_NOARG_TYPED( SvxLineTabPage, ChangeCapStyleHdl_Impl, ListBox&, void )
+IMPL_LINK_NOARG( SvxLineTabPage, ChangeCapStyleHdl_Impl, ListBox&, void )
 {
     ChangePreviewHdl_Impl( nullptr );
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ClickInvisibleHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl, ListBox&, void)
 {
     if( m_pLbLineStyle->GetSelectEntryPos() == 0 ) // invisible
     {
@@ -1654,15 +1654,15 @@ IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ClickInvisibleHdl_Impl, ListBox&, void)
 }
 
 
-IMPL_LINK_TYPED( SvxLineTabPage, ChangeEndClickHdl_Impl, Button*, p, void )
+IMPL_LINK( SvxLineTabPage, ChangeEndClickHdl_Impl, Button*, p, void )
 {
     ChangeEndHdl_Impl(p);
 }
-IMPL_LINK_TYPED( SvxLineTabPage, ChangeEndListBoxHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxLineTabPage, ChangeEndListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     ChangeEndHdl_Impl(&rListBox);
 }
-IMPL_LINK_TYPED( SvxLineTabPage, ChangeEndModifyHdl_Impl, Edit&, rEdit, void )
+IMPL_LINK( SvxLineTabPage, ChangeEndModifyHdl_Impl, Edit&, rEdit, void )
 {
     ChangeEndHdl_Impl(&rEdit);
 }
@@ -1682,7 +1682,7 @@ void SvxLineTabPage::ChangeEndHdl_Impl( void * p )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineTabPage, ChangeTransparentHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl, Edit&, void)
 {
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
     XLineTransparenceItem aItem( nVal );
@@ -1713,19 +1713,19 @@ void SvxLineTabPage::FillUserData()
 // #58425# Symbols on a list (e.g. StarChart)
 // Handler for the symbol selection's popup menu (NumMenueButton)
 // The following link originates from SvxNumOptionsTabPage
-IMPL_LINK_TYPED( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton, void )
+IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton, void )
 {
     InitSymbols(pButton);
 }
 
 // #58425# Symbols on a list (e.g. StarChart)
 // Handler for menu button
-IMPL_LINK_TYPED( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
+IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
 {
     SymbolSelected(pButton);
 }
 
-IMPL_LINK_TYPED( SvxLineTabPage, SizeHdl_Impl, Edit&, rField, void)
+IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, Edit&, rField, void)
 {
     m_bNewSize = true;
     bool bWidth = &rField == m_pSymbolWidthMF;
@@ -1771,7 +1771,7 @@ IMPL_LINK_TYPED( SvxLineTabPage, SizeHdl_Impl, Edit&, rField, void)
     m_pCtlPreview->ResizeSymbol(m_aSymbolSize);
     m_aSymbolLastSize=m_aSymbolSize;
 }
-IMPL_LINK_TYPED( SvxLineTabPage, RatioHdl_Impl, Button*, pBox, void )
+IMPL_LINK( SvxLineTabPage, RatioHdl_Impl, Button*, pBox, void )
 {
     if (static_cast<CheckBox*>(pBox)->IsChecked())
     {

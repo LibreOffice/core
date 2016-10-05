@@ -314,9 +314,9 @@ namespace rptui
             ,const css::uno::Sequence< css::beans::PropertyValue >& _aArgs);
 
         void OnInvalidateClipboard();
-        DECL_LINK_TYPED( OnClipboardChanged, TransferableDataHelper*, void );
-        DECL_LINK_TYPED( OnExecuteReport, void*, void );
-        DECL_LINK_TYPED( OnOpenHelpAgent, void*, void );
+        DECL_LINK( OnClipboardChanged, TransferableDataHelper*, void );
+        DECL_LINK( OnExecuteReport, void*, void );
+        DECL_LINK( OnOpenHelpAgent, void*, void );
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures() override;
         // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
@@ -335,8 +335,8 @@ namespace rptui
         OReportController(const OReportController&) = delete;
         OReportController& operator=(const OReportController&) = delete;
 
-        DECL_LINK_TYPED( EventLstHdl, VclWindowEvent&, void );
-        DECL_LINK_TYPED( OnCreateHdl, OAddFieldWindow&, void);
+        DECL_LINK( EventLstHdl, VclWindowEvent&, void );
+        DECL_LINK( OnCreateHdl, OAddFieldWindow&, void);
 
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )

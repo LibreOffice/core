@@ -63,10 +63,10 @@ private:
     void                FillLanguageBox();
     void                ClearLanguageBox();
 
-    DECL_LINK_TYPED(AddHdl, Button*, void);
-    DECL_LINK_TYPED(DeleteHdl, Button*, void);
-    DECL_LINK_TYPED(MakeDefHdl, Button*, void);
-    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
+    DECL_LINK(AddHdl, Button*, void);
+    DECL_LINK(DeleteHdl, Button*, void);
+    DECL_LINK(MakeDefHdl, Button*, void);
+    DECL_LINK(SelectHdl, ListBox&, void);
 
 public:
     ManageLanguageDialog( vcl::Window* pParent, std::shared_ptr<LocalizationMgr> const & _pLMgr );

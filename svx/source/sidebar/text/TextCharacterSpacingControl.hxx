@@ -58,9 +58,9 @@ private:
     void Initialize();
     void ExecuteCharacterSpacing(long nValue, bool bClose = true);
 
-    DECL_LINK_TYPED(PredefinedValuesHdl, Button*, void);
-    DECL_LINK_TYPED(KerningSelectHdl, ListBox&, void);
-    DECL_LINK_TYPED(KerningModifyHdl, Edit&, void);
+    DECL_LINK(PredefinedValuesHdl, Button*, void);
+    DECL_LINK(KerningSelectHdl, ListBox&, void);
+    DECL_LINK(KerningModifyHdl, Edit&, void);
 
     MapUnit GetCoreMetric() const;
 };

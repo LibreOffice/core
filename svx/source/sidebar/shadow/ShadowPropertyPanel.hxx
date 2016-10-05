@@ -84,11 +84,11 @@ private:
     void InsertAngleValues();
     void SetTransparencyValue(long);
     void UpdateControls();
-    DECL_LINK_TYPED(ClickShadowHdl, Button*, void);
-    DECL_LINK_TYPED(ModifyShadowColorHdl, ListBox&, void);
-    DECL_LINK_TYPED(ModifyShadowTransMetricHdl, Edit&, void);
-    DECL_LINK_TYPED(ModifyShadowDistanceHdl, Edit&, void);
-    DECL_LINK_TYPED(ModifyShadowTransSliderHdl, Slider*, void);
+    DECL_LINK(ClickShadowHdl, Button*, void);
+    DECL_LINK(ModifyShadowColorHdl, ListBox&, void);
+    DECL_LINK(ModifyShadowTransMetricHdl, Edit&, void);
+    DECL_LINK(ModifyShadowDistanceHdl, Edit&, void);
+    DECL_LINK(ModifyShadowTransSliderHdl, Slider*, void);
 };
 }
 }

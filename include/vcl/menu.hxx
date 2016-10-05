@@ -183,7 +183,7 @@ protected:
     SAL_DLLPRIVATE void ImplSelect();
     SAL_DLLPRIVATE void ImplCallHighlight( sal_uInt16 nHighlightItem );
     SAL_DLLPRIVATE void ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos );
-    DECL_DLLPRIVATE_LINK_TYPED(ImplCallSelect, void*, void );
+    DECL_DLLPRIVATE_LINK(ImplCallSelect, void*, void );
 
     SAL_DLLPRIVATE void ImplFillLayoutData() const;
     SAL_DLLPRIVATE SalMenu* ImplGetSalMenu() { return mpSalMenu; }

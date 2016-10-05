@@ -275,7 +275,7 @@ sal_uInt16 SwFieldDBPage::GetGroup()
     return GRP_DB;
 }
 
-IMPL_LINK_TYPED( SwFieldDBPage, TypeListBoxHdl, ListBox&, rBox, void )
+IMPL_LINK( SwFieldDBPage, TypeListBoxHdl, ListBox&, rBox, void )
 {
     TypeHdl(&rBox);
 }
@@ -400,7 +400,7 @@ void SwFieldDBPage::TypeHdl( ListBox* pBox )
     }
 }
 
-IMPL_LINK_TYPED( SwFieldDBPage, NumSelectHdl, ListBox&, rLB, void )
+IMPL_LINK( SwFieldDBPage, NumSelectHdl, ListBox&, rLB, void )
 {
     m_pNewFormatRB->Check();
     m_aOldNumSelectHdl.Call(rLB);
@@ -435,7 +435,7 @@ void SwFieldDBPage::CheckInsert()
     EnableInsert(bInsert);
 }
 
-IMPL_LINK_TYPED( SwFieldDBPage, TreeSelectHdl, SvTreeListBox *, pBox, void )
+IMPL_LINK( SwFieldDBPage, TreeSelectHdl, SvTreeListBox *, pBox, void )
 {
     SvTreeListEntry* pEntry = pBox->GetCurEntry();
     if (pEntry)
@@ -475,7 +475,7 @@ IMPL_LINK_TYPED( SwFieldDBPage, TreeSelectHdl, SvTreeListBox *, pBox, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldDBPage, AddDBHdl, Button*, void)
+IMPL_LINK_NOARG(SwFieldDBPage, AddDBHdl, Button*, void)
 {
     OUString sNewDB = SwDBManager::LoadAndRegisterDataSource();
     if(!sNewDB.isEmpty())
@@ -485,7 +485,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldDBPage, AddDBHdl, Button*, void)
 }
 
 // Modify
-IMPL_LINK_NOARG_TYPED(SwFieldDBPage, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwFieldDBPage, ModifyHdl, Edit&, void)
 {
     CheckInsert();
 }

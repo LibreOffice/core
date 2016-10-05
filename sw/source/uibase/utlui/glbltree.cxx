@@ -767,7 +767,7 @@ void    SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
     }
 }
 
-IMPL_LINK_TYPED( SwGlobalTree, PopupHdl, Menu* , pMenu, bool)
+IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu, bool)
 {
     ExecuteContextMenuAction( pMenu->GetCurItemId());
     return true;
@@ -1005,7 +1005,7 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         delete pContCopy;
 }
 
-IMPL_LINK_NOARG_TYPED(SwGlobalTree, Timeout, Timer *, void)
+IMPL_LINK_NOARG(SwGlobalTree, Timeout, Timer *, void)
 {
     if(!IsDisposed() && !HasFocus() && Update( false ))
         Display();
@@ -1193,7 +1193,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SwGlobalTree, DoubleClickHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl, SvTreeListBox*, bool)
 {
     SvTreeListEntry* pEntry = GetCurEntry();
     SwGlblDocContent* pCont = static_cast<SwGlblDocContent*>(pEntry->GetUserData());
@@ -1212,7 +1212,7 @@ SwNavigationPI* SwGlobalTree::GetParentWindow()
     return static_cast<SwNavigationPI*>(Window::GetParent());
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED(SwGlobalTree, ShowFrameHdl, void*, void)
+IMPL_STATIC_LINK_NOARG(SwGlobalTree, ShowFrameHdl, void*, void)
 {
     const SfxObjectShell* pShell = SwGlobalTree::GetShowShell();
     SfxViewFrame* pFirst = pShell ? SfxViewFrame::GetFirst(pShell) : nullptr;
@@ -1354,7 +1354,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
     }
 }
 
-IMPL_LINK_TYPED( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
+IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
     if ( ERRCODE_NONE != _pFileDlg->GetError() )
         return;

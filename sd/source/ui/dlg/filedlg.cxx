@@ -58,8 +58,8 @@ private:
 
     void CheckSelectionState();
 
-    DECL_LINK_TYPED( PlayMusicHdl, void *, void );
-    DECL_LINK_TYPED( IsMusicStoppedHdl, Idle *, void );
+    DECL_LINK( PlayMusicHdl, void *, void );
+    DECL_LINK( IsMusicStoppedHdl, Idle *, void );
 
 public:
     explicit SdFileDialog_Imp();
@@ -93,7 +93,7 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdFileDialog_Imp, PlayMusicHdl, void*, void)
+IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
 {
     maUpdateIdle.Stop();
     mnPlaySoundEvent = nullptr;
@@ -156,7 +156,7 @@ IMPL_LINK_NOARG_TYPED(SdFileDialog_Imp, PlayMusicHdl, void*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdFileDialog_Imp, IsMusicStoppedHdl, Idle *, void)
+IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl, Idle *, void)
 {
     SolarMutexGuard aGuard;
 

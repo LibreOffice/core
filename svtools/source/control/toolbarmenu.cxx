@@ -398,7 +398,7 @@ ToolbarMenuEntry* ToolbarMenu_Impl::implGetEntry( int nEntry ) const
 }
 
 
-IMPL_LINK_NOARG_TYPED( ToolbarMenu, HighlightHdl, ValueSet*, void )
+IMPL_LINK_NOARG( ToolbarMenu, HighlightHdl, ValueSet*, void )
 {
     mpImpl->notifyHighlightedEntry();
 }

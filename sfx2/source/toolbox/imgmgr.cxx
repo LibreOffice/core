@@ -62,8 +62,8 @@ public:
     Image                   GetImage( sal_uInt16 nId, bool bBig );
     void                    SetSymbolsSize_Impl( sal_Int16 );
 
-    DECL_LINK_TYPED( OptionsChanged_Impl, LinkParamNone*, void );
-    DECL_LINK_TYPED( SettingsChanged_Impl, VclSimpleEvent&, void );
+    DECL_LINK( OptionsChanged_Impl, LinkParamNone*, void );
+    DECL_LINK( SettingsChanged_Impl, VclSimpleEvent&, void );
 
     explicit SfxImageManager_Impl(SfxModule& rModule);
     ~SfxImageManager_Impl();
@@ -194,13 +194,13 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxImageManager_Impl, OptionsChanged_Impl, LinkParamNone*, void)
+IMPL_LINK_NOARG(SfxImageManager_Impl, OptionsChanged_Impl, LinkParamNone*, void)
 {
     SetSymbolsSize_Impl( m_aOpt.GetCurrentSymbolsSize() );
 }
 
 
-IMPL_LINK_TYPED( SfxImageManager_Impl, SettingsChanged_Impl, VclSimpleEvent&, rEvent, void)
+IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, VclSimpleEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {

@@ -245,7 +245,7 @@ namespace abp
     }
 
 
-    IMPL_LINK_NOARG_TYPED( TypeSelectionPage, OnTypeSelected, Button*, void )
+    IMPL_LINK_NOARG( TypeSelectionPage, OnTypeSelected, Button*, void )
     {
         getDialog()->typeSelectionChanged( getSelectedType() );
         updateDialogTravelUI();

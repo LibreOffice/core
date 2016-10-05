@@ -99,7 +99,7 @@ public:
 
     void createContextMenu(const bool bIsDefault );
 
-    DECL_LINK_TYPED(ContextMenuSelectHdl, Menu*, bool);
+    DECL_LINK(ContextMenuSelectHdl, Menu*, bool);
 
     TemplateContainerItem* getRegion(OUString const & sStr);
 

@@ -399,12 +399,12 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     return true;
 }
 
-IMPL_LINK_NOARG_TYPED(ScTableLink, RefreshHdl, Timer *, void)
+IMPL_LINK_NOARG(ScTableLink, RefreshHdl, Timer *, void)
 {
     Refresh( aFileName, aFilterName, nullptr, GetRefreshDelay() );
 }
 
-IMPL_LINK_TYPED( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink&, rLink, void )
+IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink&, rLink, void )
 {
     pImpl->m_aEndEditLink.Call( rLink );
     bInEdit = false;

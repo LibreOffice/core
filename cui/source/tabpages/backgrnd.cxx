@@ -1133,7 +1133,7 @@ SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
 // Handler
 
 /** Handler, called when color selection is changed */
-IMPL_LINK_NOARG_TYPED(SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, void)
 {
     sal_uInt16 nItemId = m_pBackgroundColorSet->GetSelectItemId();
     Color aColor = nItemId ? ( m_pBackgroundColorSet->GetItemColor( nItemId ) ) : Color( COL_TRANSPARENT );
@@ -1141,7 +1141,7 @@ IMPL_LINK_NOARG_TYPED(SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, 
     m_pPreviewWin1->NotifyChange( aBgdColor );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxBackgroundTabPage, SelectHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl, ListBox&, void)
 {
     if ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) )
     {
@@ -1153,7 +1153,7 @@ IMPL_LINK_NOARG_TYPED(SvxBackgroundTabPage, SelectHdl_Impl, ListBox&, void)
     }
 }
 
-IMPL_LINK_TYPED( SvxBackgroundTabPage, FileClickHdl_Impl, Button*, pBox, void )
+IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, Button*, pBox, void )
 {
     if (m_pBtnLink == pBox)
     {
@@ -1199,7 +1199,7 @@ IMPL_LINK_TYPED( SvxBackgroundTabPage, FileClickHdl_Impl, Button*, pBox, void )
     }
 }
 
-IMPL_LINK_TYPED( SvxBackgroundTabPage, RadioClickHdl_Impl, Button*, pBtn, void )
+IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnPosition)
     {
@@ -1219,7 +1219,7 @@ IMPL_LINK_TYPED( SvxBackgroundTabPage, RadioClickHdl_Impl, Button*, pBtn, void )
 /** Handler, called by pressing the browse button.
     Create graphic/insert dialog, set path and start.
 */
-IMPL_LINK_NOARG_TYPED(SvxBackgroundTabPage, BrowseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, Button*, void)
 {
     if ( pPageImpl->pLoadIdle->IsActive() )
         return;
@@ -1255,7 +1255,7 @@ IMPL_LINK_NOARG_TYPED(SvxBackgroundTabPage, BrowseHdl_Impl, Button*, void)
     Graphic is only loaded, if it's
     different to the current graphic.
 */
-IMPL_LINK_TYPED( SvxBackgroundTabPage, LoadIdleHdl_Impl, Idle* , pIdle, void )
+IMPL_LINK( SvxBackgroundTabPage, LoadIdleHdl_Impl, Idle* , pIdle, void )
 {
     if ( pIdle == pPageImpl->pLoadIdle )
     {
@@ -1314,7 +1314,7 @@ void SvxBackgroundTabPage::ShowTblControl()
     m_pAsGrid->Show();
 }
 
-IMPL_LINK_TYPED( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox&, rBox, void )
 {
     sal_Int32 nSelPos = rBox.GetSelectEntryPos();
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)

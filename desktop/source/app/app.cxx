@@ -1757,7 +1757,7 @@ int Desktop::doShutdown()
     return EXIT_SUCCESS;
 }
 
-IMPL_STATIC_LINK_TYPED( Desktop, ImplInitFilterHdl, ::ConvertData&, rData, bool )
+IMPL_STATIC_LINK( Desktop, ImplInitFilterHdl, ::ConvertData&, rData, bool )
 {
     return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( rData );
 }
@@ -1908,7 +1908,7 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
 }
 
 
-IMPL_STATIC_LINK_TYPED(Desktop, AsyncInitFirstRun, Timer *, /*unused*/, void)
+IMPL_STATIC_LINK(Desktop, AsyncInitFirstRun, Timer *, /*unused*/, void)
 {
     DoFirstRunInitializations();
 }
@@ -1928,7 +1928,7 @@ class ExitTimer : public Timer
     }
 };
 
-IMPL_LINK_NOARG_TYPED(Desktop, OpenClients_Impl, void*, void)
+IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
 {
     try {
         // #i114963#
@@ -1965,7 +1965,7 @@ IMPL_LINK_NOARG_TYPED(Desktop, OpenClients_Impl, void*, void)
 }
 
 // enable acceptors
-IMPL_STATIC_LINK_NOARG_TYPED(Desktop, EnableAcceptors_Impl, void*, void)
+IMPL_STATIC_LINK_NOARG(Desktop, EnableAcceptors_Impl, void*, void)
 {
     enableAcceptors();
 }

@@ -248,7 +248,7 @@ void SwEnvPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_TYPED( SwEnvPage, DatabaseHdl, ListBox&, rListBox, void )
+IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox&, rListBox, void )
 {
     SwWait aWait( *pSh->GetView().GetDocShell(), true );
 
@@ -266,7 +266,7 @@ IMPL_LINK_TYPED( SwEnvPage, DatabaseHdl, ListBox&, rListBox, void )
                                        m_pTableLB->GetSelectEntry());
 }
 
-IMPL_LINK_NOARG_TYPED(SwEnvPage, FieldHdl, Button*, void)
+IMPL_LINK_NOARG(SwEnvPage, FieldHdl, Button*, void)
 {
     OUString aStr("<" + m_pDatabaseLB->GetSelectEntry() + "." +
                   m_pTableLB->GetSelectEntry() + "." +
@@ -278,7 +278,7 @@ IMPL_LINK_NOARG_TYPED(SwEnvPage, FieldHdl, Button*, void)
     m_pAddrEdit->SetSelection(aSel);
 }
 
-IMPL_LINK_NOARG_TYPED(SwEnvPage, SenderHdl, Button*, void)
+IMPL_LINK_NOARG(SwEnvPage, SenderHdl, Button*, void)
 {
     const bool bEnable = m_pSenderBox->IsChecked();
     GetParentSwEnvDlg()->aEnvItem.bSend = bEnable;

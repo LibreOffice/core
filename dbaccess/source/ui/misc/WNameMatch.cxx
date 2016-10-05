@@ -200,7 +200,7 @@ bool OWizNameMatching::LeavePage()
 
 OUString OWizNameMatching::GetTitle() const { return ModuleRes(STR_WIZ_NAME_MATCHING_TITEL); }
 
-IMPL_LINK_TYPED( OWizNameMatching, ButtonClickHdl, Button *, pButton, void )
+IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton, void )
 {
     SvTreeListEntry* pEntry = m_pCTRL_LEFT->FirstSelected();
     if ( pEntry )
@@ -227,7 +227,7 @@ IMPL_LINK_TYPED( OWizNameMatching, ButtonClickHdl, Button *, pButton, void )
     }
 }
 
-IMPL_LINK_TYPED( OWizNameMatching, RightButtonClickHdl, Button *, pButton, void )
+IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton, void )
 {
     SvTreeListEntry* pEntry = m_pCTRL_RIGHT->FirstSelected();
     if ( pEntry )
@@ -250,7 +250,7 @@ IMPL_LINK_TYPED( OWizNameMatching, RightButtonClickHdl, Button *, pButton, void 
     }
 }
 
-IMPL_LINK_NOARG_TYPED( OWizNameMatching, TableListClickHdl, SvTreeListBox*, void )
+IMPL_LINK_NOARG( OWizNameMatching, TableListClickHdl, SvTreeListBox*, void )
 {
     SvTreeListEntry* pEntry = m_pCTRL_LEFT->FirstSelected();
     if(pEntry)
@@ -282,7 +282,7 @@ IMPL_LINK_NOARG_TYPED( OWizNameMatching, TableListClickHdl, SvTreeListBox*, void
     }
 }
 
-IMPL_LINK_NOARG_TYPED( OWizNameMatching, TableListRightSelectHdl, SvTreeListBox*, void )
+IMPL_LINK_NOARG( OWizNameMatching, TableListRightSelectHdl, SvTreeListBox*, void )
 {
     SvTreeListEntry* pEntry = m_pCTRL_RIGHT->FirstSelected();
     if(pEntry)
@@ -314,7 +314,7 @@ IMPL_LINK_NOARG_TYPED( OWizNameMatching, TableListRightSelectHdl, SvTreeListBox*
     }
 }
 
-IMPL_LINK_TYPED( OWizNameMatching, AllNoneClickHdl, Button *, pButton, void )
+IMPL_LINK( OWizNameMatching, AllNoneClickHdl, Button *, pButton, void )
 {
     bool bAll = pButton == m_pAll;
     SvTreeListEntry* pEntry = m_pCTRL_LEFT->First();

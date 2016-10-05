@@ -209,7 +209,7 @@ VclPtr<SfxTabPage> SdPrintOptions::Create( vcl::Window* pWindow,
     return VclPtr<SdPrintOptions>::Create( pWindow, *rOutAttrs );
 }
 
-IMPL_LINK_TYPED( SdPrintOptions, ClickCheckboxHdl, Button*, pCbx, void )
+IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, Button*, pCbx, void )
 {
     // there must be at least one of them checked
     if( !m_pCbxDraw->IsChecked() && !m_pCbxNotes->IsChecked() && !m_pCbxOutline->IsChecked() && !m_pCbxHandout->IsChecked() )
@@ -218,7 +218,7 @@ IMPL_LINK_TYPED( SdPrintOptions, ClickCheckboxHdl, Button*, pCbx, void )
     updateControls();
 }
 
-IMPL_LINK_NOARG_TYPED(SdPrintOptions, ClickBookletHdl, Button*, void)
+IMPL_LINK_NOARG(SdPrintOptions, ClickBookletHdl, Button*, void)
 {
     updateControls();
 }

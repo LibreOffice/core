@@ -34,7 +34,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
-IMPL_STATIC_LINK_NOARG_TYPED(SwWordCountFloatDlg, CloseHdl, Button*, void)
+IMPL_STATIC_LINK_NOARG(SwWordCountFloatDlg, CloseHdl, Button*, void)
 {
     SfxViewFrame* pVFrame = ::GetActiveView()->GetViewFrame();
     if (pVFrame != nullptr)

@@ -105,7 +105,7 @@ void OTableBorderWindow::Resize()
                         Size(nOutputWidth, nOutputHeight-nSplitPos-nSplitterHeight) );
 }
 
-IMPL_LINK_TYPED( OTableBorderWindow, SplitHdl, Splitter*, pSplit, void )
+IMPL_LINK( OTableBorderWindow, SplitHdl, Splitter*, pSplit, void )
 {
     if(pSplit == m_aHorzSplitter.get())
     {

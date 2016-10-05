@@ -214,8 +214,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     long GetLeftMin() const;
     long GetRightMax() const;
 
-    DECL_LINK_TYPED( TabMenuSelect, Menu *, bool );
-    DECL_LINK_TYPED( MenuSelect, Menu *, bool );
+    DECL_LINK( TabMenuSelect, Menu *, bool );
+    DECL_LINK( MenuSelect, Menu *, bool );
     void PrepareProportional_Impl(RulerType);
 
     enum class UpdateType

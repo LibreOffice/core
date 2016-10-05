@@ -164,7 +164,7 @@ namespace dbaui
             m_pAdminDialog->enableConfirmSettings( !getURLNoPrefix().isEmpty() );
     }
 
-    IMPL_LINK_NOARG_TYPED(OConnectionHelper, OnBrowseConnections, Button*, void)
+    IMPL_LINK_NOARG(OConnectionHelper, OnBrowseConnections, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
@@ -337,7 +337,7 @@ namespace dbaui
         checkTestConnection();
     }
 
-    IMPL_LINK_NOARG_TYPED(OConnectionHelper, OnCreateDatabase, Button*, void)
+    IMPL_LINK_NOARG(OConnectionHelper, OnCreateDatabase, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);

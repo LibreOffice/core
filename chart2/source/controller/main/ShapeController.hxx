@@ -58,7 +58,7 @@ protected:
     virtual void describeSupportedFeatures() override;
 
 private:
-    DECL_LINK_TYPED( CheckNameHdl, AbstractSvxObjectNameDialog&, bool);
+    DECL_LINK( CheckNameHdl, AbstractSvxObjectNameDialog&, bool);
 
     void executeDispatch_FormatLine();
     void executeDispatch_FormatArea();

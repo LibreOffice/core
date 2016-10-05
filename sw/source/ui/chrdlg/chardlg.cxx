@@ -300,7 +300,7 @@ VclPtr<SfxTabPage> SwCharURLPage::Create(  vcl::Window* pParent,
     return VclPtr<SwCharURLPage>::Create( pParent, *rAttrSet );
 }
 
-IMPL_LINK_NOARG_TYPED(SwCharURLPage, InsertFileHdl, Button*, void)
+IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, Button*, void)
 {
     FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE );
     if( aDlgHelper.Execute() == ERRCODE_NONE )
@@ -310,7 +310,7 @@ IMPL_LINK_NOARG_TYPED(SwCharURLPage, InsertFileHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwCharURLPage, EventHdl, Button*, void)
+IMPL_LINK_NOARG(SwCharURLPage, EventHdl, Button*, void)
 {
     bModified |= SwMacroAssignDlg::INetFormatDlg( this,
                     ::GetActiveView()->GetWrtShell(), pINetItem );

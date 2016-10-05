@@ -31,7 +31,7 @@
 #include <cmdid.h>
 #include <table.hrc>
 
-IMPL_LINK_NOARG_TYPED(SwTableWidthDlg, LoseFocusHdl, Edit&, void)
+IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl, Edit&, void)
 {
     sal_uInt16 nId = (sal_uInt16)m_pColNF->GetValue()-1;
     const SwTwips lWidth = rFnc.GetColWidth(nId);

@@ -702,7 +702,7 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
     }
 }
 
-IMPL_LINK_TYPED( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
+IMPL_LINK( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )
 {
     bPastePossible = pDataHelper->GetFormatCount() != 0 &&
                      ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) ||

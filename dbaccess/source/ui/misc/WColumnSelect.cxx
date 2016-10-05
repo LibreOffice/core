@@ -183,7 +183,7 @@ bool OWizColumnSelect::LeavePage()
         return true;
 }
 
-IMPL_LINK_TYPED( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
+IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
 {
     ListBox *pLeft = nullptr;
     ListBox *pRight = nullptr;
@@ -246,7 +246,7 @@ IMPL_LINK_TYPED( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
         m_pOrgColumnNames->SelectEntryPos(0);
 }
 
-IMPL_LINK_TYPED( OWizColumnSelect, ListDoubleClickHdl, ListBox&, rListBox, void )
+IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox&, rListBox, void )
 {
     ListBox *pLeft,*pRight;
     if(&rListBox == m_pOrgColumnNames)

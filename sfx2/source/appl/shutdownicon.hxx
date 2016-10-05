@@ -114,7 +114,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         void SetVeto( bool bVeto )  { m_bVeto = bVeto;}
 
         void                    StartFileDialog();
-        DECL_LINK_TYPED(DialogClosedHdl_Impl, sfx2::FileDialogHelper*, void);
+        DECL_LINK(DialogClosedHdl_Impl, sfx2::FileDialogHelper*, void);
 
         static bool IsQuickstarterInstalled();
 

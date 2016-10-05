@@ -181,7 +181,7 @@ protected:
     virtual void    actionPerformed_Impl( bool bNotifyListener, const css::awt::MouseEvent& _rEvt ) override;
 
 private:
-    DECL_LINK_TYPED( OnClick, void*, void );
+    DECL_LINK( OnClick, void*, void );
 
     /// to be called whenever the feature URL represented by our model has potentially changed
     void        modelFeatureUrlPotentiallyChanged( );

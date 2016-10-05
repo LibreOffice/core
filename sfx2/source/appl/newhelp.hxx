@@ -137,9 +137,9 @@ private:
     void                InitializeIndex();
     void                ClearIndex();
 
-    DECL_LINK_TYPED(OpenHdl, Button*, void);
-    DECL_LINK_TYPED(IdleHdl, Idle*, void);
-    DECL_LINK_TYPED(TimeoutHdl, Timer*, void);
+    DECL_LINK(OpenHdl, Button*, void);
+    DECL_LINK(IdleHdl, Idle*, void);
+    DECL_LINK(TimeoutHdl, Timer*, void);
 
 public:
     IndexTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
@@ -214,10 +214,10 @@ private:
     void                ClearSearchResults();
     void                RememberSearchText( const OUString& rSearchText );
 
-    DECL_LINK_TYPED(SearchHdl, LinkParamNone*, void);
-    DECL_LINK_TYPED(ClickHdl, Button*, void);
-    DECL_LINK_TYPED(OpenHdl, Button*, void);
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+    DECL_LINK(SearchHdl, LinkParamNone*, void);
+    DECL_LINK(ClickHdl, Button*, void);
+    DECL_LINK(OpenHdl, Button*, void);
+    DECL_LINK(ModifyHdl, Edit&, void);
 
 public:
     SearchTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
@@ -259,7 +259,7 @@ private:
     VclPtr<BookmarksBox_Impl>  m_pBookmarksBox;
     VclPtr<PushButton>         m_pBookmarksPB;
 
-    DECL_LINK_TYPED(OpenHdl, Button*, void);
+    DECL_LINK(OpenHdl, Button*, void);
 
 public:
     BookmarksTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
@@ -312,14 +312,14 @@ private:
     inline SearchTabPage_Impl*      GetSearchPage();
     inline BookmarksTabPage_Impl*   GetBookmarksPage();
 
-    DECL_LINK_TYPED(ActivatePageHdl, TabControl*, void );
-    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
-    DECL_LINK_TYPED(InitHdl, Idle *, void);
-    DECL_LINK_TYPED(SelectFactoryHdl, Idle *, void);
-    DECL_LINK_TYPED(KeywordHdl, IndexTabPage_Impl&, void);
-    DECL_LINK_TYPED(ContentTabPageDoubleClickHdl, SvTreeListBox*, bool);
-    DECL_LINK_TYPED(TabPageDoubleClickHdl, ListBox&, void);
-    DECL_LINK_TYPED(IndexTabPageDoubleClickHdl, ComboBox&, void);
+    DECL_LINK(ActivatePageHdl, TabControl*, void );
+    DECL_LINK(SelectHdl, ListBox&, void);
+    DECL_LINK(InitHdl, Idle *, void);
+    DECL_LINK(SelectFactoryHdl, Idle *, void);
+    DECL_LINK(KeywordHdl, IndexTabPage_Impl&, void);
+    DECL_LINK(ContentTabPageDoubleClickHdl, SvTreeListBox*, bool);
+    DECL_LINK(TabPageDoubleClickHdl, ListBox&, void);
+    DECL_LINK(IndexTabPageDoubleClickHdl, ComboBox&, void);
 
 public:
     explicit SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
@@ -453,11 +453,11 @@ private:
                             getCursor() const;
     bool                    isHandledKey( const vcl::KeyCode& _rKeyCode );
 
-    DECL_LINK_TYPED(        SelectHdl, Idle *, void);
-    DECL_LINK_TYPED(        NotifyHdl, LinkParamNone*, void );
-    DECL_LINK_TYPED(        FindHdl, sfx2::SearchDialog&, void );
-    DECL_LINK_TYPED(        CloseHdl, sfx2::SearchDialog*, void );
-    DECL_LINK_TYPED(        CheckHdl, Button*, void );
+    DECL_LINK(        SelectHdl, Idle *, void);
+    DECL_LINK(        NotifyHdl, LinkParamNone*, void );
+    DECL_LINK(        FindHdl, sfx2::SearchDialog&, void );
+    DECL_LINK(        CloseHdl, sfx2::SearchDialog*, void );
+    DECL_LINK(        CheckHdl, Button*, void );
     void                    FindHdl(sfx2::SearchDialog*);
 
 public:
@@ -521,10 +521,10 @@ friend class SfxHelpIndexWindow_Impl;
     void                SaveConfig();
     void                ShowStartPage();
 
-    DECL_LINK_TYPED(    SelectHdl, ToolBox*, void );
-    DECL_LINK_TYPED(    OpenHdl, Control*, bool );
-    DECL_LINK_TYPED(    SelectFactoryHdl, SfxHelpIndexWindow_Impl*, void );
-    DECL_LINK_TYPED(    ChangeHdl, HelpListener_Impl&, void );
+    DECL_LINK(    SelectHdl, ToolBox*, void );
+    DECL_LINK(    OpenHdl, Control*, bool );
+    DECL_LINK(    SelectFactoryHdl, SfxHelpIndexWindow_Impl*, void );
+    DECL_LINK(    ChangeHdl, HelpListener_Impl&, void );
 
 public:
     SfxHelpWindow_Impl( const css::uno::Reference < css::frame::XFrame2 >& rFrame,

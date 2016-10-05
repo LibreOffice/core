@@ -205,7 +205,7 @@ void SwFieldDokPage::Reset(const SfxItemSet* )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldDokPage, TypeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, ListBox&, void)
 {
     // save old ListBoxPos
     const sal_Int32 nOld = GetTypeSel();
@@ -458,7 +458,7 @@ void SwFieldDokPage::AddSubType(sal_uInt16 nTypeId)
     m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldDokPage, SubTypeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwFieldDokPage, SubTypeHdl, ListBox&, void)
 {
     sal_Int32 nPos = m_pSelectionLB->GetSelectEntryPos();
     if(nPos == LISTBOX_ENTRY_NOTFOUND)
@@ -525,7 +525,7 @@ sal_Int32 SwFieldDokPage::FillFormatLB(sal_uInt16 nTypeId)
     return nSize;
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldDokPage, FormatHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwFieldDokPage, FormatHdl, ListBox&, void)
 {
     sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 

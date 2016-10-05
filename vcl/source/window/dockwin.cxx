@@ -67,8 +67,8 @@ private:
     bool            mbInMove;
     ImplSVEvent *   mnLastUserEvent;
 
-    DECL_LINK_TYPED(DockingHdl, void *, void);
-    DECL_LINK_TYPED(DockTimerHdl, Idle *, void);
+    DECL_LINK(DockingHdl, void *, void);
+    DECL_LINK(DockTimerHdl, Idle *, void);
 public:
     ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
                       DockingWindow* pDockingWin );
@@ -125,7 +125,7 @@ void ImplDockFloatWin::dispose()
     FloatingWindow::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(ImplDockFloatWin, DockTimerHdl, Idle *, void)
 {
     SAL_WARN_IF( !mpDockWin->IsFloatingMode(), "vcl", "docktimer called but not floating" );
 
@@ -152,7 +152,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockTimerHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockingHdl, void*, void)
+IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl, void*, void)
 {
     PointerState aState = mpDockWin->GetParent()->GetPointerState();
 
@@ -1117,7 +1117,7 @@ void DockingWindow::queue_resize(StateChangedType eReason)
     vcl::Window::queue_resize(eReason);
 }
 
-IMPL_LINK_NOARG_TYPED(DockingWindow, ImplHandleLayoutTimerHdl, Idle*, void)
+IMPL_LINK_NOARG(DockingWindow, ImplHandleLayoutTimerHdl, Idle*, void)
 {
     if (!isLayoutEnabled())
     {

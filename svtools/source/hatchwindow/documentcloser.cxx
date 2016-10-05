@@ -77,7 +77,7 @@ class MainThreadFrameCloserRequest
         : m_xFrame( xFrame )
         {}
 
-        DECL_STATIC_LINK_TYPED( MainThreadFrameCloserRequest, worker, void*, void );
+        DECL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, void );
 
         static void Start( MainThreadFrameCloserRequest* pRequest );
 };
@@ -98,7 +98,7 @@ void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTReque
 }
 
 
-IMPL_STATIC_LINK_TYPED( MainThreadFrameCloserRequest, worker, void*, p, void )
+IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, p, void )
 {
     MainThreadFrameCloserRequest* pMTRequest = static_cast<MainThreadFrameCloserRequest*>(p);
     if ( pMTRequest )

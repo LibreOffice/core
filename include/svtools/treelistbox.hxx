@@ -270,10 +270,10 @@ protected:
 private:
     void SetBaseModel(SvTreeList* pNewModel);
 
-    DECL_DLLPRIVATE_LINK_TYPED( CheckButtonClick, SvLBoxButtonData *, void );
-    DECL_DLLPRIVATE_LINK_TYPED( TextEditEndedHdl_Impl, SvInplaceEdit2&, void );
+    DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData *, void );
+    DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, SvInplaceEdit2&, void );
     // Handler that is called by TreeList to clone an Entry
-    DECL_DLLPRIVATE_LINK_TYPED( CloneHdl_Impl, SvTreeListEntry*, SvTreeListEntry* );
+    DECL_DLLPRIVATE_LINK( CloneHdl_Impl, SvTreeListEntry*, SvTreeListEntry* );
 
     // Handler and methods for Drag - finished handler.
     // The Handle retrieved by GetDragFinishedHdl can be set on the
@@ -283,7 +283,7 @@ private:
     // called for a deleted object.
     SVT_DLLPRIVATE static void AddBoxToDDList_Impl( const SvTreeListBox& rB );
     SVT_DLLPRIVATE static void RemoveBoxFromDDList_Impl( const SvTreeListBox& rB );
-    DECL_DLLPRIVATE_LINK_TYPED( DragFinishHdl_Impl, sal_Int8, void );
+    DECL_DLLPRIVATE_LINK( DragFinishHdl_Impl, sal_Int8, void );
 
 protected:
 
@@ -751,7 +751,7 @@ public:
     // A Parent's Children are turned into Children of the Parent which comes next in hierarchy
     void            RemoveParentKeepChildren( SvTreeListEntry* pParent );
 
-    DECL_LINK_TYPED( DefaultCompare, const SvSortData&, sal_Int32 );
+    DECL_LINK( DefaultCompare, const SvSortData&, sal_Int32 );
     virtual void    ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,
                         SvTreeListEntry* pEntry2, sal_uLong nPos ) override;
 
@@ -797,9 +797,9 @@ class SvInplaceEdit2
     bool          bAlreadyInCallBack;
 
     void        CallCallBackHdl_Impl();
-    DECL_LINK_TYPED( Timeout_Impl, Idle *, void );
-    DECL_LINK_TYPED( ReturnHdl_Impl, Accelerator&, void );
-    DECL_LINK_TYPED( EscapeHdl_Impl, Accelerator&, void );
+    DECL_LINK( Timeout_Impl, Idle *, void );
+    DECL_LINK( ReturnHdl_Impl, Accelerator&, void );
+    DECL_LINK( EscapeHdl_Impl, Accelerator&, void );
 
 public:
                 SvInplaceEdit2( vcl::Window* pParent, const Point& rPos, const Size& rSize,

@@ -55,8 +55,8 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK_TYPED( Dim3DLookCheckHdl, CheckBox&, void );
-    DECL_LINK_TYPED( SelectSchemeHdl, ListBox&, void );
+    DECL_LINK( Dim3DLookCheckHdl, CheckBox&, void );
+    DECL_LINK( SelectSchemeHdl, ListBox&, void );
 
 private:
     VclPtr<CheckBox> m_pCB_3DLook;
@@ -104,13 +104,13 @@ void Dim3DLookResourceGroup::fillParameter( ChartTypeParameter& rParameter )
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Unknown;
 }
 
-IMPL_LINK_NOARG_TYPED(Dim3DLookResourceGroup, Dim3DLookCheckHdl, CheckBox&, void)
+IMPL_LINK_NOARG(Dim3DLookResourceGroup, Dim3DLookCheckHdl, CheckBox&, void)
 {
     if(m_pChangeListener)
         m_pChangeListener->stateChanged(this);
 }
 
-IMPL_LINK_NOARG_TYPED(Dim3DLookResourceGroup, SelectSchemeHdl, ListBox&, void)
+IMPL_LINK_NOARG(Dim3DLookResourceGroup, SelectSchemeHdl, ListBox&, void)
 {
     if(m_pChangeListener)
         m_pChangeListener->stateChanged(this);
@@ -127,7 +127,7 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK_TYPED( SortByXValuesCheckHdl, CheckBox&, void );
+    DECL_LINK( SortByXValuesCheckHdl, CheckBox&, void );
 
 private:
     VclPtr<CheckBox> m_pCB_XValueSorting;
@@ -155,7 +155,7 @@ void SortByXValuesResourceGroup::fillParameter( ChartTypeParameter& rParameter )
     rParameter.bSortByXValues = m_pCB_XValueSorting->IsChecked();
 }
 
-IMPL_LINK_NOARG_TYPED(SortByXValuesResourceGroup, SortByXValuesCheckHdl, CheckBox&, void)
+IMPL_LINK_NOARG(SortByXValuesResourceGroup, SortByXValuesCheckHdl, CheckBox&, void)
 {
     if(m_pChangeListener)
         m_pChangeListener->stateChanged(this);
@@ -172,8 +172,8 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK_TYPED( StackingChangeHdl, RadioButton&, void );
-    DECL_LINK_TYPED( StackingEnableHdl, CheckBox&, void );
+    DECL_LINK( StackingChangeHdl, RadioButton&, void );
+    DECL_LINK( StackingEnableHdl, CheckBox&, void );
 
 private:
     VclPtr<CheckBox>    m_pCB_Stacked;
@@ -250,7 +250,7 @@ void StackingResourceGroup::fillParameter( ChartTypeParameter& rParameter )
     else if(m_pRB_Stack_Z->IsChecked())
         rParameter.eStackMode = GlobalStackMode_STACK_Z;
 }
-IMPL_LINK_TYPED( StackingResourceGroup, StackingChangeHdl, RadioButton&, rRadio, void )
+IMPL_LINK( StackingResourceGroup, StackingChangeHdl, RadioButton&, rRadio, void )
 {
     //for each radio click there are coming two change events
     //first uncheck of previous button -> ignore that call
@@ -258,7 +258,7 @@ IMPL_LINK_TYPED( StackingResourceGroup, StackingChangeHdl, RadioButton&, rRadio,
     if( m_pChangeListener && rRadio.IsChecked() )
         m_pChangeListener->stateChanged(this);
 }
-IMPL_LINK_NOARG_TYPED(StackingResourceGroup, StackingEnableHdl, CheckBox&, void)
+IMPL_LINK_NOARG(StackingResourceGroup, StackingEnableHdl, CheckBox&, void)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
@@ -274,7 +274,7 @@ public:
     void fillParameter( ChartTypeParameter& rParam );
 
 private:
-    DECL_LINK_TYPED( SettingChangedHdl, CheckBox&, void );
+    DECL_LINK( SettingChangedHdl, CheckBox&, void );
 private:
     VclPtr<CheckBox> m_pCB_RoundedEdge;
 };
@@ -300,7 +300,7 @@ void GL3DResourceGroup::fillParameter( ChartTypeParameter& rParam )
     rParam.mbRoundedEdge = m_pCB_RoundedEdge->IsChecked();
 }
 
-IMPL_LINK_NOARG_TYPED( GL3DResourceGroup, SettingChangedHdl, CheckBox&, void )
+IMPL_LINK_NOARG( GL3DResourceGroup, SettingChangedHdl, CheckBox&, void )
 {
     if (m_pChangeListener)
         m_pChangeListener->stateChanged(this);
@@ -319,7 +319,7 @@ public:
     virtual void StateChanged( StateChangedType nType ) override;
 
 private:
-    DECL_LINK_TYPED( SplineTypeListBoxHdl, ListBox&, void );
+    DECL_LINK( SplineTypeListBoxHdl, ListBox&, void );
 
 private:
     VclPtr<ListBox>      m_pLB_Spline_Type;
@@ -392,7 +392,7 @@ void SplinePropertiesDialog::fillParameter( ChartTypeParameter& rParameter, bool
     rParameter.nCurveResolution = static_cast< sal_Int32 >( m_pMF_SplineResolution->GetValue());
     rParameter.nSplineOrder = static_cast< sal_Int32 >( m_pMF_SplineOrder->GetValue());
 }
-IMPL_LINK_NOARG_TYPED(SplinePropertiesDialog, SplineTypeListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl, ListBox&, void)
 {
     m_pFT_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
     m_pMF_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
@@ -491,9 +491,9 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK_TYPED( LineTypeChangeHdl, ListBox&, void );
-    DECL_LINK_TYPED( SplineDetailsDialogHdl, Button*, void );
-    DECL_LINK_TYPED( SteppedDetailsDialogHdl, Button*, void );
+    DECL_LINK( LineTypeChangeHdl, ListBox&, void );
+    DECL_LINK( SplineDetailsDialogHdl, Button*, void );
+    DECL_LINK( SteppedDetailsDialogHdl, Button*, void );
     SplinePropertiesDialog& getSplinePropertiesDialog();
     SteppedPropertiesDialog& getSteppedPropertiesDialog();
 
@@ -584,12 +584,12 @@ void SplineResourceGroup::fillParameter( ChartTypeParameter& rParameter )
             break;
     }
 }
-IMPL_LINK_NOARG_TYPED(SplineResourceGroup, LineTypeChangeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SplineResourceGroup, LineTypeChangeHdl, ListBox&, void)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
 }
-IMPL_LINK_NOARG_TYPED(SplineResourceGroup, SplineDetailsDialogHdl, Button*, void)
+IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl, Button*, void)
 {
 
     ChartTypeParameter aOldParameter;
@@ -609,7 +609,7 @@ IMPL_LINK_NOARG_TYPED(SplineResourceGroup, SplineDetailsDialogHdl, Button*, void
         getSplinePropertiesDialog().fillControls( aOldParameter );
     }
 }
-IMPL_LINK_NOARG_TYPED(SplineResourceGroup, SteppedDetailsDialogHdl, Button*, void)
+IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl, Button*, void)
 {
 
     ChartTypeParameter aOldParameter;
@@ -641,7 +641,7 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK_TYPED( GeometryChangeHdl, ListBox&, void );
+    DECL_LINK( GeometryChangeHdl, ListBox&, void );
 
 private:
     BarGeometryResources m_aGeometryResources;
@@ -673,7 +673,7 @@ void GeometryResourceGroup::fillParameter( ChartTypeParameter& rParameter )
         rParameter.nGeometry3D = m_aGeometryResources.GetSelectEntryPos();
 }
 
-IMPL_LINK_NOARG_TYPED(GeometryResourceGroup, GeometryChangeHdl, ListBox&, void)
+IMPL_LINK_NOARG(GeometryResourceGroup, GeometryChangeHdl, ListBox&, void)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
@@ -872,7 +872,7 @@ ChartTypeDialogController* ChartTypeTabPage::getSelectedMainType()
         pTypeController = m_aChartTypeDialogControllerList[nM];
     return pTypeController;
 }
-IMPL_LINK_NOARG_TYPED(ChartTypeTabPage, SelectSubTypeHdl, ValueSet*, void)
+IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl, ValueSet*, void)
 {
     if( m_pCurrentMainType )
     {
@@ -884,7 +884,7 @@ IMPL_LINK_NOARG_TYPED(ChartTypeTabPage, SelectSubTypeHdl, ValueSet*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ChartTypeTabPage, SelectMainTypeHdl, ListBox&, void)
+IMPL_LINK_NOARG(ChartTypeTabPage, SelectMainTypeHdl, ListBox&, void)
 {
     selectMainType();
 }

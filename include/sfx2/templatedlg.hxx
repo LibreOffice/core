@@ -62,31 +62,31 @@ protected:
 
     void fillFolderComboBox();
 
-    DECL_LINK_TYPED(TBXDropdownHdl, ToolBox*, void);
+    DECL_LINK(TBXDropdownHdl, ToolBox*, void);
 
-    DECL_LINK_TYPED(SelectApplicationHdl, ListBox&, void);
-    DECL_LINK_TYPED(SelectRegionHdl, ListBox&, void);
+    DECL_LINK(SelectApplicationHdl, ListBox&, void);
+    DECL_LINK(SelectRegionHdl, ListBox&, void);
 
-    DECL_LINK_TYPED(OkClickHdl, Button*, void);
-    DECL_LINK_TYPED(MoveClickHdl, Button*, void);
-    DECL_LINK_TYPED(ExportClickHdl, Button*, void);
-    DECL_LINK_TYPED(ImportClickHdl, Button*, void);
-    DECL_STATIC_LINK_TYPED(SfxTemplateManagerDlg, LinkClickHdl, Button*, void);
+    DECL_LINK(OkClickHdl, Button*, void);
+    DECL_LINK(MoveClickHdl, Button*, void);
+    DECL_LINK(ExportClickHdl, Button*, void);
+    DECL_LINK(ImportClickHdl, Button*, void);
+    DECL_STATIC_LINK(SfxTemplateManagerDlg, LinkClickHdl, Button*, void);
 
-    DECL_LINK_TYPED(TVItemStateHdl, const ThumbnailViewItem*, void);
+    DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
 
-    DECL_LINK_TYPED(MenuSelectHdl, Menu*, bool);
-    DECL_LINK_TYPED(DefaultTemplateMenuSelectHdl, Menu*, bool);
+    DECL_LINK(MenuSelectHdl, Menu*, bool);
+    DECL_LINK(DefaultTemplateMenuSelectHdl, Menu*, bool);
 
-    DECL_LINK_TYPED(OpenRegionHdl, void*, void);
-    DECL_LINK_TYPED(CreateContextMenuHdl, ThumbnailViewItem*, void);
-    DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK_TYPED(EditTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK_TYPED(DeleteTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK_TYPED(DefaultTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK(OpenRegionHdl, void*, void);
+    DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
+    DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK(EditTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK(DeleteTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK(DefaultTemplateHdl, ThumbnailViewItem*, void);
 
-    DECL_LINK_TYPED(SearchUpdateHdl, Edit&, void);
-    DECL_LINK_TYPED(GetFocusHdl, Control&, void);
+    DECL_LINK(SearchUpdateHdl, Edit&, void);
+    DECL_LINK(GetFocusHdl, Control&, void);
 
     void OnTemplateImportCategory(const OUString& sCategory);
     static void OnTemplateLink ();
@@ -159,8 +159,8 @@ private:
     bool       mbIsNewCategory;
 
 public:
-    DECL_LINK_TYPED(NewCategoryEditHdl, Edit&, void);
-    DECL_LINK_TYPED(SelectCategoryHdl, ListBox&, void);
+    DECL_LINK(NewCategoryEditHdl, Edit&, void);
+    DECL_LINK(SelectCategoryHdl, ListBox&, void);
 
     void SetCategoryLBEntries(std::vector<OUString> names);
 
@@ -202,8 +202,8 @@ public:
     inline bool IsStartWithTemplate() const { return mpCBXHideDlg->IsChecked(); };
 
 private:
-    DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
-    DECL_LINK_TYPED(OkClickHdl, Button*, void);
+    DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK(OkClickHdl, Button*, void);
 
     OUString   msTemplatePath;
 };

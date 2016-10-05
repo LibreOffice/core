@@ -319,22 +319,22 @@ VclPtr<SfxTabPage> SvxGradientTabPage::Create( vcl::Window* pWindow,
 }
 
 
-IMPL_LINK_TYPED( SvxGradientTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxGradientTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     ModifiedHdl_Impl(&rListBox);
 }
 
-IMPL_LINK_TYPED( SvxGradientTabPage, ModifiedEditHdl_Impl, Edit&, rBox, void )
+IMPL_LINK( SvxGradientTabPage, ModifiedEditHdl_Impl, Edit&, rBox, void )
 {
     ModifiedHdl_Impl(&rBox);
 }
 
-IMPL_LINK_TYPED( SvxGradientTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
+IMPL_LINK( SvxGradientTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
 {
     ModifiedHdl_Impl(rSlider);
 }
 
-IMPL_LINK_NOARG_TYPED( SvxGradientTabPage, ChangeAutoStepHdl_Impl, CheckBox&, void )
+IMPL_LINK_NOARG( SvxGradientTabPage, ChangeAutoStepHdl_Impl, CheckBox&, void )
 {
     if(m_pCbIncrement->IsChecked())
     {
@@ -389,7 +389,7 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void* pControl )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
 {
     OUString aNewName( SVX_RES( RID_SVXSTR_GRADIENT ) );
     OUString aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
@@ -466,7 +466,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_uInt16 nId = m_pGradientLB->GetSelectItemId();
     size_t nPos = m_pGradientLB->GetSelectItemPos();
@@ -496,7 +496,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_pGradientLB->GetSelectItemId();
     size_t nPos = m_pGradientLB->GetSelectItemPos();
@@ -525,7 +525,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*
         m_pBtnModify->Disable();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_pGradientLB->GetSelectItemId();
     size_t nPos = m_pGradientLB->GetSelectItemPos();
@@ -568,7 +568,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ChangeGradientHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl, ValueSet*, void)
 {
     ChangeGradientHdl_Impl();
 }

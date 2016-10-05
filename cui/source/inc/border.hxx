@@ -118,15 +118,15 @@ private:
     std::set<sal_Int16> maUsedBorderStyles;
 
     // Handler
-    DECL_LINK_TYPED( SelStyleHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( SelColHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( SelPreHdl_Impl, ValueSet*, void );
-    DECL_LINK_TYPED( SelSdwHdl_Impl, ValueSet*, void );
-    DECL_LINK_TYPED( LinesChanged_Impl, LinkParamNone*, void );
-    DECL_LINK_TYPED( ModifyDistanceHdl_Impl, Edit&, void);
-    DECL_LINK_TYPED( ModifyWidthHdl_Impl, Edit&, void);
-    DECL_LINK_TYPED( SyncHdl_Impl, Button*, void);
-    DECL_LINK_TYPED( RemoveAdjacentCellBorderHdl_Impl, Button*, void);
+    DECL_LINK( SelStyleHdl_Impl, ListBox&, void );
+    DECL_LINK( SelColHdl_Impl, ListBox&, void );
+    DECL_LINK( SelPreHdl_Impl, ValueSet*, void );
+    DECL_LINK( SelSdwHdl_Impl, ValueSet*, void );
+    DECL_LINK( LinesChanged_Impl, LinkParamNone*, void );
+    DECL_LINK( ModifyDistanceHdl_Impl, Edit&, void);
+    DECL_LINK( ModifyWidthHdl_Impl, Edit&, void);
+    DECL_LINK( SyncHdl_Impl, Button*, void);
+    DECL_LINK( RemoveAdjacentCellBorderHdl_Impl, Button*, void);
 
     sal_uInt16              GetPresetImageId( sal_uInt16 nValueSetIdx ) const;
     sal_uInt16              GetPresetStringId( sal_uInt16 nValueSetIdx ) const;

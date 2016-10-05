@@ -238,7 +238,7 @@ void ScrollBarManager::UpdateScrollBars(bool bUseScrolling)
     }
 }
 
-IMPL_LINK_TYPED(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar, void)
+IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar, void)
 {
     if (pScrollBar!=nullptr
         && pScrollBar==mpVerticalScrollBar.get()
@@ -253,7 +253,7 @@ IMPL_LINK_TYPED(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollB
     }
 }
 
-IMPL_LINK_TYPED(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar, void)
+IMPL_LINK(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar, void)
 {
     if (pScrollBar!=nullptr
         && pScrollBar==mpHorizontalScrollBar.get()
@@ -533,7 +533,7 @@ void ScrollBarManager::clearAutoScrollFunctor()
     maAutoScrollFunctor = ::std::function<void ()>();
 }
 
-IMPL_LINK_NOARG_TYPED(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, void)
+IMPL_LINK_NOARG(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, void)
 {
     RepeatAutoScroll();
 }

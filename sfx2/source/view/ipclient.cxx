@@ -123,7 +123,7 @@ public:
     virtual ~SfxInPlaceClient_Impl() override;
 
     void SizeHasChanged();
-    DECL_LINK_TYPED(TimerHdl, Timer *, void);
+    DECL_LINK(TimerHdl, Timer *, void);
     uno::Reference < frame::XFrame > GetFrame() const;
 
     // XEmbeddedClient
@@ -591,7 +591,7 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxInPlaceClient_Impl, TimerHdl, Timer *, void)
+IMPL_LINK_NOARG(SfxInPlaceClient_Impl, TimerHdl, Timer *, void)
 {
     if ( m_pClient && m_xObject.is() )
     {

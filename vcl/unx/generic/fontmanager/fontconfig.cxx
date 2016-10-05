@@ -887,7 +887,7 @@ namespace
 }
 
 #if ENABLE_DBUS
-IMPL_LINK_NOARG_TYPED(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
+IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
 {
     guint xid = get_xid_for_dbus();
 

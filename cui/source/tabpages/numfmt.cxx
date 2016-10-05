@@ -1195,7 +1195,7 @@ void SvxNumberFormatTabPage::UpdateDecimalsDenominatorEditBox()
 #*
 #************************************************************************/
 
-IMPL_LINK_TYPED( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvTreeListBox*, pLb, bool )
+IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvTreeListBox*, pLb, bool )
 {
     if (pLb == m_pLbFormat)
     {
@@ -1229,15 +1229,15 @@ IMPL_LINK_TYPED( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvTreeListBox*, pL
 #*
 #************************************************************************/
 
-IMPL_LINK_TYPED( SvxNumberFormatTabPage, SelFormatClickHdl_Impl, Button*, pLb, void )
+IMPL_LINK( SvxNumberFormatTabPage, SelFormatClickHdl_Impl, Button*, pLb, void )
 {
     SelFormatHdl_Impl(pLb);
 }
-IMPL_LINK_TYPED( SvxNumberFormatTabPage, SelFormatTreeListBoxHdl_Impl, SvTreeListBox*, pLb, void )
+IMPL_LINK( SvxNumberFormatTabPage, SelFormatTreeListBoxHdl_Impl, SvTreeListBox*, pLb, void )
 {
     SelFormatHdl_Impl(pLb);
 }
-IMPL_LINK_TYPED( SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl, ListBox&, rLb, void )
+IMPL_LINK( SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl, ListBox&, rLb, void )
 {
     SelFormatHdl_Impl(&rLb);
 }
@@ -1361,7 +1361,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
 #*
 #************************************************************************/
 
-IMPL_LINK_TYPED( SvxNumberFormatTabPage, ClickHdl_Impl, Button*, pIB, void)
+IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, Button*, pIB, void)
 {
     Click_Impl(static_cast<PushButton*>(pIB));
 }
@@ -1539,7 +1539,7 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
 #*
 #************************************************************************/
 
-IMPL_LINK_TYPED( SvxNumberFormatTabPage, EditModifyHdl_Impl, Edit&, rEdit, void )
+IMPL_LINK( SvxNumberFormatTabPage, EditModifyHdl_Impl, Edit&, rEdit, void )
 {
     EditHdl_Impl(&rEdit);
 }
@@ -1610,11 +1610,11 @@ void SvxNumberFormatTabPage::EditHdl_Impl( Edit* pEdFormat )
 #*
 #************************************************************************/
 
-IMPL_LINK_TYPED( SvxNumberFormatTabPage, OptClickHdl_Impl, Button*, pOptCtrl, void )
+IMPL_LINK( SvxNumberFormatTabPage, OptClickHdl_Impl, Button*, pOptCtrl, void )
 {
     OptHdl_Impl(pOptCtrl);
 }
-IMPL_LINK_TYPED( SvxNumberFormatTabPage, OptEditHdl_Impl, Edit&, rEdit, void )
+IMPL_LINK( SvxNumberFormatTabPage, OptEditHdl_Impl, Edit&, rEdit, void )
 {
     OptHdl_Impl(&rEdit);
 }
@@ -1669,7 +1669,7 @@ void SvxNumberFormatTabPage::OptHdl_Impl( void* pOptCtrl )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxNumberFormatTabPage, TimeHdl_Impl, Timer *, void)
+IMPL_LINK_NOARG(SvxNumberFormatTabPage, TimeHdl_Impl, Timer *, void)
 {
     pLastActivWindow=nullptr;
 }
@@ -1686,7 +1686,7 @@ IMPL_LINK_NOARG_TYPED(SvxNumberFormatTabPage, TimeHdl_Impl, Timer *, void)
 #*
 #************************************************************************/
 
-IMPL_LINK_TYPED( SvxNumberFormatTabPage, LostFocusHdl_Impl, Control&, rControl, void)
+IMPL_LINK( SvxNumberFormatTabPage, LostFocusHdl_Impl, Control&, rControl, void)
 {
     Edit* pEd = static_cast<Edit*>(&rControl);
     if (pEd == m_pEdComment)

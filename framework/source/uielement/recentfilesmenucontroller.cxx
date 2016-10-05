@@ -99,7 +99,7 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception ) override;
 
-    DECL_STATIC_LINK_TYPED( RecentFilesMenuController, ExecuteHdl_Impl, void*, void );
+    DECL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, void*, void );
 
 private:
     virtual void impl_setPopupMenu() override;
@@ -438,7 +438,7 @@ throw( RuntimeException, std::exception )
     }
 }
 
-IMPL_STATIC_LINK_TYPED( RecentFilesMenuController, ExecuteHdl_Impl, void*, p, void )
+IMPL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, void*, p, void )
 {
     LoadRecentFile* pLoadRecentFile = static_cast<LoadRecentFile*>(p);
     try

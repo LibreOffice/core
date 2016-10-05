@@ -69,7 +69,7 @@ private:
     SfxDispatcher* mpDispatcher;
     sal_Int32 mnCurrentSlideNumber;
 
-    DECL_LINK_TYPED(EndPresentation, void*, void);
+    DECL_LINK(EndPresentation, void*, void);
 
     /** Restart the presentation on the slide last shown before the restart
         was initiated.

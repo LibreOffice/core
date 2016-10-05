@@ -883,27 +883,27 @@ sal_uInt16 SwRedlineAcceptDlg::GetRedlinePos( const SvTreeListEntry& rEntry ) co
                                     rEntry.GetUserData())->pData)->pData );
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, AcceptHdl, SvxTPView*, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptHdl, SvxTPView*, void)
 {
     CallAcceptReject( true, true );
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, AcceptAllHdl, SvxTPView*, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptAllHdl, SvxTPView*, void)
 {
     CallAcceptReject( false, true );
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, RejectHdl, SvxTPView*, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, RejectHdl, SvxTPView*, void)
 {
     CallAcceptReject( true, false );
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, RejectAllHdl, SvxTPView*, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, RejectAllHdl, SvxTPView*, void)
 {
     CallAcceptReject( false, false );
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, UndoHdl, SvxTPView*, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, UndoHdl, SvxTPView*, void)
 {
     SwView * pView = ::GetActiveView();
     pView->GetViewFrame()->GetDispatcher()->
@@ -913,7 +913,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, UndoHdl, SvxTPView*, void)
     Activate();
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, FilterChangedHdl, SvxTPFilter*, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, FilterChangedHdl, SvxTPFilter*, void)
 {
     SvxTPFilter *pFilterTP = m_aTabPagesCTRL->GetFilterPage();
 
@@ -925,24 +925,24 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, FilterChangedHdl, SvxTPFilter*, void)
     Init();
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, DeselectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, DeselectHdl, SvTreeListBox*, void)
 {
     // avoid flickering of buttons:
     m_aDeselectTimer.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, SelectHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, SelectHdl, SvTreeListBox*, void)
 {
     SelectTimerHdl(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, SelectTimerHdl, Timer *, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, SelectTimerHdl, Timer *, void)
 {
     m_aDeselectTimer.Stop();
     m_aSelectTimer.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     m_aSelectTimer.Stop();
@@ -1009,7 +1009,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
     m_pTPView->EnableRejectAll( bEnable && !m_bOnlyFormatedRedlines );
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
 {
     const CommandEvent aCEvt(m_pTable->GetCommandEvent());
 

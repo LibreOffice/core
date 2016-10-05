@@ -91,7 +91,7 @@ class XIMStatusWindow : public StatusWindow
     void layout();
     bool checkLastParent() const;
 
-    DECL_LINK_TYPED( DelayedShowHdl, void*, void );
+    DECL_LINK( DelayedShowHdl, void*, void );
 public:
     explicit XIMStatusWindow( bool bOn );
     virtual ~XIMStatusWindow() override;
@@ -257,7 +257,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(XIMStatusWindow, DelayedShowHdl, void*, void)
+IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl, void*, void)
 {
     m_nDelayedEvent = nullptr;
     const SystemEnvData* pData = GetSystemData();
@@ -304,7 +304,7 @@ class IIIMPStatusWindow : public StatusWindow
     bool                    m_bShow;
     bool                    m_bOn;
 
-    DECL_LINK_TYPED( SelectHdl, MenuButton*, void );
+    DECL_LINK( SelectHdl, MenuButton*, void );
 
     void show();
 
@@ -458,7 +458,7 @@ void IIIMPStatusWindow::GetFocus()
     }
 }
 
-IMPL_LINK_TYPED( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn, void )
+IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn, void )
 {
     if( pBtn == m_aStatusBtn )
     {

@@ -41,7 +41,7 @@ private:
     std::unique_ptr< ControllerLockGuardUNO > m_apControllerLockGuard;
     AutoTimer       m_aTimer;
 
-    DECL_LINK_TYPED( TimerTimeout, Timer*, void );
+    DECL_LINK( TimerTimeout, Timer*, void );
 };
 
 } //namespace chart

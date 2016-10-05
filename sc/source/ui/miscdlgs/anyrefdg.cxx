@@ -338,7 +338,7 @@ void ScFormulaReferenceHelper::Init()
     }
 }
 
-IMPL_LINK_TYPED( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator&, rSelAccel, void )
+IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator&, rSelAccel, void )
 {
     switch ( rSelAccel.GetCurKeyCode().GetCode() )
     {
@@ -938,7 +938,7 @@ void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton*
     m_aHelper.ToggleCollapsed( pEdit, pButton );
 }
 
-IMPL_LINK_NOARG_TYPED(ScRefHandler, UpdateFocusHdl, Idle *, void)
+IMPL_LINK_NOARG(ScRefHandler, UpdateFocusHdl, Idle *, void)
 {
     if (pActiveWin)
     {

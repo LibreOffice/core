@@ -2225,12 +2225,12 @@ void ImplListBox::Resize()
     ImplCheckScrollBars();
 }
 
-IMPL_LINK_NOARG_TYPED(ImplListBox, MRUChanged, LinkParamNone*, void)
+IMPL_LINK_NOARG(ImplListBox, MRUChanged, LinkParamNone*, void)
 {
     CompatStateChanged( StateChangedType::Data );
 }
 
-IMPL_LINK_NOARG_TYPED(ImplListBox, LBWindowScrolled, ImplListBoxWindow*, void)
+IMPL_LINK_NOARG(ImplListBox, LBWindowScrolled, ImplListBoxWindow*, void)
 {
     long nSet = GetTopEntry();
     if( nSet > mpVScrollBar->GetRangeMax() )
@@ -2242,7 +2242,7 @@ IMPL_LINK_NOARG_TYPED(ImplListBox, LBWindowScrolled, ImplListBoxWindow*, void)
     maScrollHdl.Call( this );
 }
 
-IMPL_LINK_TYPED( ImplListBox, ScrollBarHdl, ScrollBar*, pSB, void )
+IMPL_LINK( ImplListBox, ScrollBarHdl, ScrollBar*, pSB, void )
 {
     sal_uInt16 nPos = (sal_uInt16) pSB->GetThumbPos();
     if( pSB == mpVScrollBar )

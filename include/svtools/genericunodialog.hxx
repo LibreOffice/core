@@ -138,7 +138,7 @@ namespace svt
         virtual void implInitialize(const css::uno::Any& _rValue);
 
     private:
-        DECL_LINK_TYPED( OnDialogDying, VclWindowEvent&, void );
+        DECL_LINK( OnDialogDying, VclWindowEvent&, void );
 
         /** ensures that m_pDialog is not <NULL/>
 

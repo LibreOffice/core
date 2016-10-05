@@ -704,7 +704,7 @@ void IMapWindow::DoPropertyDialog()
     }
 }
 
-IMPL_LINK_TYPED( IMapWindow, MenuSelectHdl, Menu*, pMenu, bool )
+IMPL_LINK( IMapWindow, MenuSelectHdl, Menu*, pMenu, bool )
 {
     if (!pMenu)
         return false;

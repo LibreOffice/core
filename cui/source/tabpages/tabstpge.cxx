@@ -461,7 +461,7 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
     pFillBtn->Check();
 }
 
-IMPL_LINK_TYPED( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn, void )
+IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn, void )
 {
     // Add a new one and select it
     // Get the value from the display
@@ -516,7 +516,7 @@ IMPL_LINK_TYPED( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn, void )
     m_pTabBox->SetSelection(Selection(0, m_pTabBox->GetText().getLength()));
 }
 
-IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, DelHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue() );
 
@@ -556,7 +556,7 @@ IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, DelHdl_Impl, Button*, void)
     bCheck = true;
 }
 
-IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, DelAllHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl, Button*, void)
 {
     if ( aNewTabs.Count() )
     {
@@ -568,7 +568,7 @@ IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, DelAllHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, Button *, pBox, void )
+IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, Button *, pBox, void )
 {
     bCheck = true;
     SvxTabAdjust eAdj;
@@ -600,7 +600,7 @@ IMPL_LINK_TYPED( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, Button *, pBox, void
     }
 }
 
-IMPL_LINK_TYPED( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, Button *, pBox, void )
+IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, Button *, pBox, void )
 {
     bCheck = true;
     sal_uInt8 cFill = ' ';
@@ -628,7 +628,7 @@ IMPL_LINK_TYPED( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, Button *, pBox, voi
     }
 }
 
-IMPL_LINK_TYPED( SvxTabulatorTabPage, GetFillCharHdl_Impl, Control&, rControl, void )
+IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Control&, rControl, void )
 {
     OUString aChar( static_cast<Edit&>(rControl).GetText() );
 
@@ -643,7 +643,7 @@ IMPL_LINK_TYPED( SvxTabulatorTabPage, GetFillCharHdl_Impl, Control&, rControl, v
     }
 }
 
-IMPL_LINK_TYPED( SvxTabulatorTabPage, GetDezCharHdl_Impl, Control&, rControl, void )
+IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Control&, rControl, void )
 {
     OUString aChar( static_cast<Edit*>(&rControl)->GetText() );
     if ( !aChar.isEmpty() && ( aChar[0] >= ' '))
@@ -657,7 +657,7 @@ IMPL_LINK_TYPED( SvxTabulatorTabPage, GetDezCharHdl_Impl, Control&, rControl, vo
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, SelectHdl_Impl, ComboBox&, void)
+IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl, ComboBox&, void)
 {
     sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
@@ -668,7 +668,7 @@ IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, SelectHdl_Impl, ComboBox&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, ModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl, Edit&, void)
 {
     sal_Int32 nPos = m_pTabBox->GetValuePos( m_pTabBox->GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )

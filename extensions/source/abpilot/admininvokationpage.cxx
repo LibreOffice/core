@@ -82,7 +82,7 @@ namespace abp
     }
 
     // davido: Do we need it?
-    IMPL_LINK_NOARG_TYPED( AdminDialogInvokationPage, OnInvokeAdminDialog, Button*, void )
+    IMPL_LINK_NOARG( AdminDialogInvokationPage, OnInvokeAdminDialog, Button*, void )
     {
         OAdminDialogInvokation aInvokation( getORB(), getDialog()->getDataSource().getDataSource(), getDialog() );
         if ( aInvokation.invokeAdministration() )

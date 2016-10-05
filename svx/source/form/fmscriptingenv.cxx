@@ -134,7 +134,7 @@ namespace svxform
         void    impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSynchronousResult );
 
     private:
-        DECL_LINK_TYPED( OnAsyncScriptEvent, void*, void );
+        DECL_LINK( OnAsyncScriptEvent, void*, void );
     };
 
     class FormScriptingEnvironment:
@@ -876,7 +876,7 @@ namespace svxform
         }
     };
 
-    IMPL_LINK_TYPED( FormScriptListener, OnAsyncScriptEvent, void*, p, void )
+    IMPL_LINK( FormScriptListener, OnAsyncScriptEvent, void*, p, void )
     {
         ScriptEvent* _pEvent = static_cast<ScriptEvent*>(p);
         OSL_PRECOND( _pEvent != nullptr, "FormScriptListener::OnAsyncScriptEvent: invalid event!" );

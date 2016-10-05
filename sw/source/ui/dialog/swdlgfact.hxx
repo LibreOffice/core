@@ -131,7 +131,7 @@ public:
         : AbstractTabDialog_Impl(p)
     {
     }
-    DECL_LINK_TYPED(ApplyHdl, Button*, void);
+    DECL_LINK(ApplyHdl, Button*, void);
 private:
     Link<LinkParamNone*,void> m_aHandler;
     virtual void                SetApplyHdl( const Link<LinkParamNone*,void>& rLink ) override;
@@ -347,7 +347,7 @@ class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
     VclPtr<SwMailMergeWizard> pDlg;
     Link<Dialog&,void>        aEndDlgHdl;
 
-    DECL_LINK_TYPED( EndDialogHdl, Dialog&, void );
+    DECL_LINK( EndDialogHdl, Dialog&, void );
 public:
     explicit AbstractMailMergeWizard_Impl( SwMailMergeWizard* p )
      : pDlg(p)

@@ -308,7 +308,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
     LanguageHdl(*m_pLanguageLB);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxAsianLayoutPage, LanguageHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl, ListBox&, void)
 {
     //set current value
     LanguageType eSelectLanguage = m_pLanguageLB->GetSelectLanguage();
@@ -371,7 +371,7 @@ IMPL_LINK_NOARG_TYPED(SvxAsianLayoutPage, LanguageHdl, ListBox&, void)
     m_pEndED->SetText(sEnd);
 }
 
-IMPL_LINK_TYPED(SvxAsianLayoutPage, ChangeStandardHdl, Button*, pBox, void)
+IMPL_LINK(SvxAsianLayoutPage, ChangeStandardHdl, Button*, pBox, void)
 {
     bool bCheck = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pStartED->Enable(!bCheck);
@@ -382,7 +382,7 @@ IMPL_LINK_TYPED(SvxAsianLayoutPage, ChangeStandardHdl, Button*, pBox, void)
     ModifyHdl(*m_pStartED);
 }
 
-IMPL_LINK_TYPED(SvxAsianLayoutPage, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit&, rEdit, void)
 {
     LanguageType eSelectLanguage = m_pLanguageLB->GetSelectLanguage();
     Locale aLocale( LanguageTag::convertToLocale( eSelectLanguage ));

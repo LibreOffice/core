@@ -215,7 +215,7 @@ OUString CertificateChooser::GetDescription()
     return m_pDescriptionED->GetText();
 }
 
-IMPL_LINK_NOARG_TYPED(CertificateChooser, CertificateHighlightHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(CertificateChooser, CertificateHighlightHdl, SvTreeListBox*, void)
 {
     bool bEnable = GetSelectedCertificate().is();
     m_pViewBtn->Enable( bEnable );
@@ -223,13 +223,13 @@ IMPL_LINK_NOARG_TYPED(CertificateChooser, CertificateHighlightHdl, SvTreeListBox
     m_pDescriptionED->Enable(bEnable);
 }
 
-IMPL_LINK_NOARG_TYPED(CertificateChooser, CertificateSelectHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(CertificateChooser, CertificateSelectHdl, SvTreeListBox*, bool)
 {
     EndDialog( RET_OK );
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(CertificateChooser, ViewButtonHdl, Button*, void)
+IMPL_LINK_NOARG(CertificateChooser, ViewButtonHdl, Button*, void)
 {
     ImplShowCertificateDetails();
 }

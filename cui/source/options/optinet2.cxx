@@ -527,7 +527,7 @@ void SvxProxyTabPage::EnableControls_Impl(bool bEnable)
 }
 
 
-IMPL_LINK_TYPED( SvxProxyTabPage, ProxyHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox&, rBox, void )
 {
     sal_Int32 nPos = rBox.GetSelectEntryPos();
 
@@ -541,7 +541,7 @@ IMPL_LINK_TYPED( SvxProxyTabPage, ProxyHdl_Impl, ListBox&, rBox, void )
 }
 
 
-IMPL_STATIC_LINK_TYPED( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, rControl, void )
+IMPL_STATIC_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, rControl, void )
 {
     Edit* pEdit = static_cast<Edit*>(&rControl);
     OUString aValue = pEdit->GetText();
@@ -630,14 +630,14 @@ void SvxSecurityTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, SecurityOptionsHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl, Button*, void)
 {
     if ( !mpSecOptDlg )
         mpSecOptDlg = VclPtr<svx::SecurityOptionsDialog>::Create( this, mpSecOptions );
     mpSecOptDlg->Execute();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
 {
     try
     {
@@ -690,7 +690,7 @@ IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, SavePasswordHdl, Button*, void)
     }
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED(SvxSecurityTabPage, MasterPasswordHdl, Button*, void)
+IMPL_STATIC_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl, Button*, void)
 {
     try
     {
@@ -704,7 +704,7 @@ IMPL_STATIC_LINK_NOARG_TYPED(SvxSecurityTabPage, MasterPasswordHdl, Button*, voi
     {}
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, MasterPasswordCBHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl, Button*, void)
 {
     try
     {
@@ -746,7 +746,7 @@ IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, MasterPasswordCBHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, ShowPasswordsHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl, Button*, void)
 {
     try
     {
@@ -763,7 +763,7 @@ IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, ShowPasswordsHdl, Button*, void)
     {}
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, CertPathPBHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl, Button*, void)
 {
     if (!mpCertPathDlg)
         mpCertPathDlg = VclPtr<CertPathDialog>::Create(this);
@@ -778,7 +778,7 @@ IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, CertPathPBHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, TSAURLsPBHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl, Button*, void)
 {
     // Unlike the mpCertPathDlg, we *don't* keep the same dialog object around between
     // invocations. Seems clearer to my little brain that way.
@@ -788,7 +788,7 @@ IMPL_LINK_NOARG_TYPED(SvxSecurityTabPage, TSAURLsPBHdl, Button*, void)
     pTSAURLsDlg->Execute();
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
+IMPL_STATIC_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
 {
     try
     {
@@ -1026,7 +1026,7 @@ void SvxEMailTabPage::Reset( const SfxItemSet* )
 
 /* -------------------------------------------------------------------------*/
 
-IMPL_LINK_TYPED(  SvxEMailTabPage, FileDialogHdl_Impl, Button*, pButton, void )
+IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, Button*, pButton, void )
 {
     if (m_pMailerURLPB == pButton && !pImpl->bROProgram)
     {

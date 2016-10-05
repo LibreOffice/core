@@ -670,7 +670,7 @@ VclPtr<SfxTabPage> SvxAreaTabPage::Create( vcl::Window* pWindow,
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, SelectDialogTypeHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxAreaTabPage, SelectDialogTypeHdl_Impl, ListBox&, void)
 {
     switch( (drawing::FillStyle)m_pTypeLB->GetSelectEntryPos() )
     {
@@ -715,7 +715,7 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyColorHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl, ListBox&, void)
 {
     const SfxPoolItem* pPoolItem = nullptr;
     sal_Int32 _nPos = m_pLbColor->GetSelectEntryPos();
@@ -755,7 +755,7 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyGradientHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl, ListBox&, void)
 {
     const SfxPoolItem* pPoolItem = nullptr;
     sal_Int32 _nPos = m_pLbGradient->GetSelectEntryPos();
@@ -800,7 +800,7 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
     ModifyHatchingHdl_Impl( *m_pLbHatching );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchingHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl, ListBox&, void)
 {
     // fill Hatch ItemSet
     const SfxPoolItem* pPoolItem = nullptr;
@@ -855,7 +855,7 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyBitmapHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl, ListBox&, void)
 {
     const SfxPoolItem* pPoolItem = nullptr;
     sal_Int32 _nPos = m_pLbBitmap->GetSelectEntryPos();

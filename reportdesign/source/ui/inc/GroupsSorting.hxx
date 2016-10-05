@@ -82,10 +82,10 @@ class OGroupsSortingDialog :    public FloatingWindow
     css::uno::Reference< css::container::XNameAccess >    m_xColumns;
     bool                                                  m_bReadOnly;
 private:
-    DECL_LINK_TYPED( OnControlFocusLost, Control&, void );
-    DECL_LINK_TYPED( OnControlFocusGot, Control&, void );
-    DECL_LINK_TYPED( LBChangeHdl, ListBox&, void );
-    DECL_LINK_TYPED( OnFormatAction, ToolBox*, void );
+    DECL_LINK( OnControlFocusLost, Control&, void );
+    DECL_LINK( OnControlFocusGot, Control&, void );
+    DECL_LINK( LBChangeHdl, ListBox&, void );
+    DECL_LINK( OnFormatAction, ToolBox*, void );
 
     /** returns the groups
         @return the groups which now have to check which one changes

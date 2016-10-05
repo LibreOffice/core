@@ -330,7 +330,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG_TYPED( OTimeDurationControl, OnCustomConvert, MetricFormatter&, void )
+    IMPL_LINK_NOARG( OTimeDurationControl, OnCustomConvert, MetricFormatter&, void )
     {
         long nMultiplier = 1;
         if ( getTypedControlWindow()->GetCurUnitText().equalsIgnoreAsciiCase( "ms" ) )

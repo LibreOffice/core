@@ -54,7 +54,7 @@ public:
     SfxBroadcaster& GetBroadcaster() const { return maBroadcaster; }
 
     virtual void                UpdateData() = 0;
-    DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
+    DECL_LINK( NotifyHdl, EENotify&, void );
 
 private:
     mutable SfxBroadcaster maBroadcaster;
@@ -119,7 +119,7 @@ public:
 
     virtual void                UpdateData() override {  }
 
-    DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
+    DECL_LINK( NotifyHdl, EENotify&, void );
 protected:
     ScEditObjectViewForwarder* mpViewForwarder;
     ScEditViewForwarder*       mpEditViewForwarder;

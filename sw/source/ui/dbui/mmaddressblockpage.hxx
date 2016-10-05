@@ -65,13 +65,13 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
 
     VclPtr<SwMailMergeWizard>  m_pWizard;
 
-    DECL_LINK_TYPED(AddressListHdl_Impl, Button *, void);
-    DECL_LINK_TYPED(SettingsHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(AssignHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(AddressBlockHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(InsertDataHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(AddressBlockSelectHdl_Impl, LinkParamNone*, void);
-    DECL_LINK_TYPED(HideParagraphsHdl_Impl, Button*, void);
+    DECL_LINK(AddressListHdl_Impl, Button *, void);
+    DECL_LINK(SettingsHdl_Impl, Button*, void);
+    DECL_LINK(AssignHdl_Impl, Button*, void);
+    DECL_LINK(AddressBlockHdl_Impl, Button*, void);
+    DECL_LINK(InsertDataHdl_Impl, Button*, void);
+    DECL_LINK(AddressBlockSelectHdl_Impl, LinkParamNone*, void);
+    DECL_LINK(HideParagraphsHdl_Impl, Button*, void);
 
     void                EnableAddressBlock(bool bAll, bool bSelective);
 
@@ -101,9 +101,9 @@ class SwSelectAddressBlockDialog : public SfxModalDialog
     css::uno::Sequence< OUString>    m_aAddressBlocks;
     SwMailMergeConfigItem& m_rConfig;
 
-    DECL_LINK_TYPED(NewCustomizeHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(DeleteHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(IncludeHdl_Impl, Button*, void);
+    DECL_LINK(NewCustomizeHdl_Impl, Button*, void);
+    DECL_LINK(DeleteHdl_Impl, Button*, void);
+    DECL_LINK(IncludeHdl_Impl, Button*, void);
 
     using Window::SetSettings;
 
@@ -228,13 +228,13 @@ private:
     SwMailMergeConfigItem&  m_rConfigItem;
     DialogType              m_eType;
 
-    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(ListBoxSelectHdl_Impl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(EditModifyHdl_Impl, Edit&, void);
-    DECL_LINK_TYPED(ImageButtonHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(SelectionChangedHdl_Impl, AddressMultiLineEdit&, void);
-    DECL_LINK_TYPED(FieldChangeHdl_Impl, Edit&, void);
-    DECL_LINK_TYPED(FieldChangeComboBoxHdl_Impl, ComboBox&, void);
+    DECL_LINK(OKHdl_Impl, Button*, void);
+    DECL_LINK(ListBoxSelectHdl_Impl, SvTreeListBox*, void);
+    DECL_LINK(EditModifyHdl_Impl, Edit&, void);
+    DECL_LINK(ImageButtonHdl_Impl, Button*, void);
+    DECL_LINK(SelectionChangedHdl_Impl, AddressMultiLineEdit&, void);
+    DECL_LINK(FieldChangeHdl_Impl, Edit&, void);
+    DECL_LINK(FieldChangeComboBoxHdl_Impl, ComboBox&, void);
 
     bool            HasItem_Impl(sal_Int32 nUserData);
     sal_Int32       GetSelectedItem_Impl();
@@ -266,8 +266,8 @@ class SwAssignFieldsDialog : public SfxModalDialog
     SwMailMergeConfigItem&  m_rConfigItem;
 
     css::uno::Sequence< OUString > CreateAssignments();
-    DECL_LINK_TYPED(OkHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(AssignmentModifyHdl_Impl, LinkParamNone*, void);
+    DECL_LINK(OkHdl_Impl, Button*, void);
+    DECL_LINK(AssignmentModifyHdl_Impl, LinkParamNone*, void);
 
 public:
     SwAssignFieldsDialog(vcl::Window* pParent,

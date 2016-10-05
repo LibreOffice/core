@@ -308,7 +308,7 @@ namespace rptui
         impl_ensureConditionVisible( nNewConditionIndex );
     }
 
-    IMPL_LINK_TYPED( ConditionalFormattingDialog, OnScroll, ScrollBar*, /*_pNotInterestedIn*/, void )
+    IMPL_LINK( ConditionalFormattingDialog, OnScroll, ScrollBar*, /*_pNotInterestedIn*/, void )
     {
         size_t nFirstCondIndex( impl_getFirstVisibleConditionIndex() );
         size_t nFocusCondIndex = impl_getFocusedConditionIndex( nFirstCondIndex );

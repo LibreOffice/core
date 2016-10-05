@@ -35,7 +35,7 @@ SdObjectFactory aSdObjectFactory;
 |*
 \************************************************************************/
 
-IMPL_STATIC_LINK_TYPED( SdObjectFactory, MakeUserData, SdrObjUserDataCreatorParams, aParams, SdrObjUserData* )
+IMPL_STATIC_LINK( SdObjectFactory, MakeUserData, SdrObjUserDataCreatorParams, aParams, SdrObjUserData* )
 {
     if ( aParams.nInventor == SdUDInventor )
     {

@@ -57,8 +57,8 @@ private:
     Image m_aIMGCus;
     Image m_aIMGCusGray;
 
-    DECL_LINK_TYPED(VSSelectHdl, ValueSet*, void);
-    DECL_LINK_TYPED(MFModifyHdl, Edit&, void);
+    DECL_LINK(VSSelectHdl, ValueSet*, void);
+    DECL_LINK(MFModifyHdl, Edit&, void);
 };
 
 } } // end of namespace svx::sidebar

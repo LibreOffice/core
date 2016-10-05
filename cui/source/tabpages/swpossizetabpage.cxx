@@ -1146,11 +1146,11 @@ short SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
    return nRet;
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, RangeModifyClickHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyClickHdl, Button*, void)
 {
     RangeModifyHdl(*m_pWidthMF);
 }
-IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
 {
     if(m_bPositioningDisabled)
         return;
@@ -1228,7 +1228,7 @@ IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
         m_pVertByMF->SetValue(m_pVertByMF->Normalize(aVal.nVPos), FUNIT_TWIP);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, AnchorTypeHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl, Button*, void)
 {
     m_pHoriMirrorCB->Enable(!m_pAsCharRB->IsChecked() && !m_bIsMultiSelection);
 
@@ -1248,13 +1248,13 @@ IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, AnchorTypeHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, MirrorHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, MirrorHdl, Button*, void)
 {
     short nId = GetAnchorType();
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
 }
 
-IMPL_LINK_TYPED( SvxSwPosSizeTabPage, RelHdl, ListBox&, rLB, void )
+IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox&, rLB, void )
 {
     bool bHori = &rLB == m_pHoriToLB;
 
@@ -1283,7 +1283,7 @@ IMPL_LINK_TYPED( SvxSwPosSizeTabPage, RelHdl, ListBox&, rLB, void )
     RangeModifyHdl(*m_pWidthMF);
 }
 
-IMPL_LINK_TYPED( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
+IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
 {
     bool bHori = &rLB == m_pHoriLB;
     ListBox *pRelLB = bHori ? m_pHoriToLB : m_pVertToLB;
@@ -1385,7 +1385,7 @@ IMPL_LINK_TYPED( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
     }
 }
 
-IMPL_LINK_TYPED( SvxSwPosSizeTabPage, ModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit&, rEdit, void )
 {
     sal_Int64 nWidth = m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_TWIP));
     sal_Int64 nHeight = m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FUNIT_TWIP));
@@ -1406,7 +1406,7 @@ IMPL_LINK_TYPED( SvxSwPosSizeTabPage, ModifyHdl, Edit&, rEdit, void )
     UpdateExample();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, ProtectHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl, Button*, void)
 {
     m_pSizeCB->Enable(m_pPositionCB->IsEnabled() && !m_pPositionCB->IsChecked());
 }

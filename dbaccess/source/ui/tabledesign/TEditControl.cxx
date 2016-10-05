@@ -92,7 +92,7 @@ void OTableEditorCtrl::ClipboardInvalidator::Stop()
     m_aInvalidateTimer.Stop();
 }
 
-IMPL_LINK_NOARG_TYPED(OTableEditorCtrl::ClipboardInvalidator, OnInvalidate, Timer *, void)
+IMPL_LINK_NOARG(OTableEditorCtrl::ClipboardInvalidator, OnInvalidate, Timer *, void)
 {
     m_pOwner->GetView()->getController().InvalidateFeature(SID_CUT);
     m_pOwner->GetView()->getController().InvalidateFeature(SID_COPY);
@@ -623,7 +623,7 @@ bool OTableEditorCtrl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
     return true;
 }
 
-IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, InvalidateFieldType, void*, void )
+IMPL_LINK_NOARG( OTableEditorCtrl, InvalidateFieldType, void*, void )
 {
     nInvalidateTypeEvent = nullptr;
     Invalidate( GetFieldRectPixel(nOldDataPos, FIELD_TYPE) );
@@ -1431,13 +1431,13 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
 
 }
 
-IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedCut, void*, void )
+IMPL_LINK_NOARG( OTableEditorCtrl, DelayedCut, void*, void )
 {
     nCutEvent = nullptr;
     OTableRowView::cut();
 }
 
-IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedPaste, void*, void )
+IMPL_LINK_NOARG( OTableEditorCtrl, DelayedPaste, void*, void )
 {
     nPasteEvent = nullptr;
 
@@ -1463,13 +1463,13 @@ IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedPaste, void*, void )
     GoToRow( nPastePosition );
 }
 
-IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedDelete, void*, void )
+IMPL_LINK_NOARG( OTableEditorCtrl, DelayedDelete, void*, void )
 {
     nDeleteEvent = nullptr;
     DeleteRows();
 }
 
-IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedInsNewRows, void*, void )
+IMPL_LINK_NOARG( OTableEditorCtrl, DelayedInsNewRows, void*, void )
 {
     nInsNewRowsEvent = nullptr;
     sal_Int32 nPastePosition = GetView()->getController().getFirstEmptyRowPosition();

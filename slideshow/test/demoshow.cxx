@@ -390,7 +390,7 @@ public:
 
 private:
     void init();
-    DECL_LINK_TYPED( updateHdl, Timer*, void );
+    DECL_LINK( updateHdl, Timer*, void );
 
     ChildWindow                                maLeftChild;
     ChildWindow                                maRightTopChild;
@@ -463,7 +463,7 @@ void DemoWindow::init()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(DemoWindow, updateHdl, Timer*, void)
+IMPL_LINK_NOARG(DemoWindow, updateHdl, Timer*, void)
 {
     init();
 

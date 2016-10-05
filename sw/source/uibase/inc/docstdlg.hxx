@@ -40,7 +40,7 @@ protected:
     virtual bool    FillItemSet(      SfxItemSet *rSet) override;
     virtual void    Reset      (const SfxItemSet *rSet) override;
 
-    DECL_LINK_TYPED(UpdateHdl, Button*, void);
+    DECL_LINK(UpdateHdl, Button*, void);
 
 private:
     VclPtr<FixedText>      m_pPageNo;

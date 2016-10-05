@@ -101,7 +101,7 @@ void SwVisitingCardPage::InitFrameControl()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwVisitingCardPage, FrameControlInitializedHdl, SwOneExampleFrame&, void)
+IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl, SwOneExampleFrame&, void)
 {
     SvTreeListEntry* pSel = m_pAutoTextLB->FirstSelected();
     OUString sEntry;
@@ -132,12 +132,12 @@ IMPL_LINK_NOARG_TYPED(SwVisitingCardPage, FrameControlInitializedHdl, SwOneExamp
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SwVisitingCardPage, AutoTextSelectTreeListBoxHdl, SvTreeListBox*, void )
+IMPL_LINK_NOARG( SwVisitingCardPage, AutoTextSelectTreeListBoxHdl, SvTreeListBox*, void )
 {
     if(m_xAutoText.is() && pExampleFrame->IsInitialized())
         pExampleFrame->ClearDocument();
 }
-IMPL_LINK_TYPED( SwVisitingCardPage, AutoTextSelectHdl, ListBox&, rBox, void )
+IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, ListBox&, rBox, void )
 {
     if(m_xAutoText.is())
     {

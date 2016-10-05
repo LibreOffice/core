@@ -78,7 +78,7 @@ namespace dbaui
         void Init(const TTableConnectionData::value_type& _pConnectionData);
 
     private:
-        DECL_LINK_TYPED( OKClickHdl, Button*, void );
+        DECL_LINK( OKClickHdl, Button*, void );
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDLG_HXX

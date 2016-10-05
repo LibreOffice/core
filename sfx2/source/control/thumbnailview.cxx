@@ -493,7 +493,7 @@ bool ThumbnailView::ImplHasAccessibleListeners()
     return( pAcc && pAcc->HasAccessibleListeners() );
 }
 
-IMPL_LINK_TYPED( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar, void )
+IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar, void )
 {
     if ( pScrollBar->GetDelta() )
     {

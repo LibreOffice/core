@@ -63,13 +63,13 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
     std::vector<std::pair<sw::mark::IMark*, OUString>> aTableBookmarks;
     sal_Int32                           m_nLastBookmarksCount;
 
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
-    DECL_LINK_TYPED(InsertHdl, Button*, void);
-    DECL_LINK_TYPED(DeleteHdl, Button*, void);
-    DECL_LINK_TYPED(RenameHdl, Button*, void);
-    DECL_LINK_TYPED(GotoHdl, Button*, void);
-    DECL_LINK_TYPED(SelectionChangedHdl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(DoubleClickHdl, SvTreeListBox*, bool);
+    DECL_LINK(ModifyHdl, Edit&, void);
+    DECL_LINK(InsertHdl, Button*, void);
+    DECL_LINK(DeleteHdl, Button*, void);
+    DECL_LINK(RenameHdl, Button*, void);
+    DECL_LINK(GotoHdl, Button*, void);
+    DECL_LINK(SelectionChangedHdl, SvTreeListBox*, void);
+    DECL_LINK(DoubleClickHdl, SvTreeListBox*, bool);
 
     // Fill table with bookmarks
     void PopulateTable();

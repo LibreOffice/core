@@ -157,23 +157,23 @@ protected:
 
 private:
     // Handler for the Controls
-    DECL_LINK_TYPED( OnClickedFieldRadios, Button*, void );
-    DECL_LINK_TYPED(OnClickedSearchAgain, Button *, void);
-    DECL_LINK_TYPED( OnClickedSpecialSettings, Button*, void );
+    DECL_LINK( OnClickedFieldRadios, Button*, void );
+    DECL_LINK(OnClickedSearchAgain, Button *, void);
+    DECL_LINK( OnClickedSpecialSettings, Button*, void );
 
-    DECL_LINK_TYPED(OnSearchTextModified, Edit&, void);
+    DECL_LINK(OnSearchTextModified, Edit&, void);
 
-    DECL_LINK_TYPED( OnPositionSelected, ListBox&, void );
-    DECL_LINK_TYPED( OnFieldSelected, ListBox&, void );
+    DECL_LINK( OnPositionSelected, ListBox&, void );
+    DECL_LINK( OnFieldSelected, ListBox&, void );
 
-    DECL_LINK_TYPED( OnFocusGrabbed, Control&, void );
-    DECL_LINK_TYPED( OnCheckBoxToggled, CheckBox&, void );
+    DECL_LINK( OnFocusGrabbed, Control&, void );
+    DECL_LINK( OnCheckBoxToggled, CheckBox&, void );
 
-    DECL_LINK_TYPED( OnContextSelection, ListBox&, void );
+    DECL_LINK( OnContextSelection, ListBox&, void );
 
-    DECL_LINK_TYPED( OnSearchProgress, const FmSearchProgress*, void );
+    DECL_LINK( OnSearchProgress, const FmSearchProgress*, void );
 
-    DECL_LINK_TYPED( OnDelayedPaint, Timer*, void ); ///< see EnableSearchUI
+    DECL_LINK( OnDelayedPaint, Timer*, void ); ///< see EnableSearchUI
 
     void initCommon( const css::uno::Reference< css::sdbc::XResultSet >& _rxCursor );
 };

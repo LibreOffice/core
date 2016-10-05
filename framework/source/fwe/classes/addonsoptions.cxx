@@ -275,7 +275,7 @@ class AddonsOptions_Impl : public ConfigItem
         Sequence< OUString > GetPropertyNamesImages( const OUString& aPropertyRootNode ) const;
         bool                 CreateImageFromSequence( Image& rImage, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
 
-        DECL_LINK_TYPED(NotifyEvent, void*, void);
+        DECL_LINK(NotifyEvent, void*, void);
 
         virtual void ImplCommit() override;
 
@@ -1615,7 +1615,7 @@ Mutex& AddonsOptions::GetOwnStaticMutex()
     return *pMutex;
 }
 
-IMPL_LINK_NOARG_TYPED(AddonsOptions_Impl, NotifyEvent, void*, void)
+IMPL_LINK_NOARG(AddonsOptions_Impl, NotifyEvent, void*, void)
 {
     MutexGuard aGuard(AddonsOptions::GetOwnStaticMutex());
     ReadConfigurationData();

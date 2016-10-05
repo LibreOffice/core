@@ -323,7 +323,7 @@ void PosSizePropertyPanel::HandleContextChange(
 }
 
 
-IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
@@ -345,7 +345,7 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeWidthHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
 {
     if( mpCbxScale->IsChecked() &&
         mpCbxScale->IsEnabled() )
@@ -367,19 +367,19 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangeHeightHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
 {
     executePosX();
 }
 
 
-IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
 {
     executePosY();
 }
 
 
-IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ClickAutoHdl, Button*, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, Button*, void )
 {
     if ( mpCbxScale->IsChecked() )
     {
@@ -393,7 +393,7 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, ClickAutoHdl, Button*, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
 {
     OUString sTmp = mpMtrAngle->GetText();
     if (sTmp.isEmpty())
@@ -438,7 +438,7 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, AngleModifiedHdl, Edit&, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, RotationHdl, DialControl*, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl*, void )
 {
     sal_Int32 nTmp = mpDial->GetRotation();
 
@@ -453,7 +453,7 @@ IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, RotationHdl, DialControl*, void )
 }
 
 
-IMPL_LINK_TYPED( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox, void )
+IMPL_LINK( PosSizePropertyPanel, FlipHdl, ToolBox*, pBox, void )
 {
     const OUString aCommand(pBox->GetItemCommand(pBox->GetCurItemId()));
 

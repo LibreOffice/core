@@ -263,7 +263,7 @@ void SvxHpLinkDlg::Move()
 }
 
 /// Click on OK button
-IMPL_LINK_NOARG_TYPED(SvxHpLinkDlg, ClickOkHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHpLinkDlg, ClickOkHdl_Impl, Button*, void)
 {
     Apply();
     Close();
@@ -275,7 +275,7 @@ IMPL_LINK_NOARG_TYPED(SvxHpLinkDlg, ClickOkHdl_Impl, Button*, void)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxHpLinkDlg, ClickApplyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl, Button*, void)
 {
     Apply();
 }
@@ -286,7 +286,7 @@ IMPL_LINK_NOARG_TYPED(SvxHpLinkDlg, ClickApplyHdl_Impl, Button*, void)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxHpLinkDlg, ClickCloseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxHpLinkDlg, ClickCloseHdl_Impl, Button*, void)
 {
     Close();
 }

@@ -43,7 +43,7 @@ namespace dbaui
         VclPtr<FixedText>           m_pHeaderText;
 
         // called when the test connection button was clicked
-        DECL_LINK_TYPED(OnEditModified, Edit&, void);
+        DECL_LINK(OnEditModified, Edit&, void);
 
     public:
         virtual ~OConnectionTabPageSetup() override;

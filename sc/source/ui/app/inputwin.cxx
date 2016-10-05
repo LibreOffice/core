@@ -1034,7 +1034,7 @@ void ScInputBarGroup::DecrementVerticalSize()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScInputBarGroup, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl, Button*, void)
 {
     vcl::Window* w = GetParent();
     ScInputWindow* pParent;
@@ -1112,7 +1112,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, void)
 {
     maTextWnd->DoScroll();
 }
@@ -1632,7 +1632,7 @@ void ScTextWnd::UpdateAutoCorrFlag()
     }
 }
 
-IMPL_LINK_TYPED(ScTextWnd, NotifyHdl, EENotify&, rNotify, void)
+IMPL_LINK(ScTextWnd, NotifyHdl, EENotify&, rNotify, void)
 {
     // need to process EE_NOTIFY_TEXTVIEWSCROLLED here
     // sometimes we don't seem to get EE_NOTIFY_TEXTVIEWSCROLLED e.g. when
@@ -1644,7 +1644,7 @@ IMPL_LINK_TYPED(ScTextWnd, NotifyHdl, EENotify&, rNotify, void)
         SetScrollBarRange();
 }
 
-IMPL_LINK_NOARG_TYPED(ScTextWnd, ModifyHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(ScTextWnd, ModifyHdl, LinkParamNone*, void)
 {
     if (pEditView && !bInputMode)
     {

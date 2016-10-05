@@ -181,8 +181,8 @@ private:
     Link<SeriesHeaderEdit*,void> m_aChangeLink;
 
     void notifyChanges();
-    DECL_LINK_TYPED( SeriesNameChanged, Edit&, void );
-    DECL_LINK_TYPED( SeriesNameEdited, Edit&, void );
+    DECL_LINK( SeriesNameChanged, Edit&, void );
+    DECL_LINK( SeriesNameEdited, Edit&, void );
 
     static Image GetChartTypeImage(
         const Reference< chart2::XChartType > & xChartType,
@@ -321,12 +321,12 @@ void SeriesHeader::SetEditChangedHdl( const Link<SeriesHeaderEdit*,void> & rLink
     m_aChangeLink = rLink;
 }
 
-IMPL_LINK_NOARG_TYPED(SeriesHeader, SeriesNameChanged, Edit&, void)
+IMPL_LINK_NOARG(SeriesHeader, SeriesNameChanged, Edit&, void)
 {
     notifyChanges();
 }
 
-IMPL_LINK_NOARG_TYPED(SeriesHeader, SeriesNameEdited, Edit&, void)
+IMPL_LINK_NOARG(SeriesHeader, SeriesNameEdited, Edit&, void)
 {
     m_bSeriesNameChangePending = true;
 }
@@ -1285,7 +1285,7 @@ void DataBrowser::ImplAdjustHeaderControls()
     }
 }
 
-IMPL_LINK_TYPED( DataBrowser, SeriesHeaderGotFocus, Control&, rControl, void )
+IMPL_LINK( DataBrowser, SeriesHeaderGotFocus, Control&, rControl, void )
 {
     impl::SeriesHeaderEdit* pEdit = static_cast<impl::SeriesHeaderEdit*>(&rControl);
     pEdit->SetShowWarningBox( !m_bDataValid );
@@ -1300,7 +1300,7 @@ IMPL_LINK_TYPED( DataBrowser, SeriesHeaderGotFocus, Control&, rControl, void )
     }
 }
 
-IMPL_LINK_TYPED( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit, void )
+IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit, void )
 {
     if( pEdit )
     {

@@ -542,7 +542,7 @@ void SvxRubyDialog::GetCurrentText(OUString& rBase, OUString& rRuby)
     rRuby = aEditArr[nCurrentEdit * 2 + 1]->GetText();
 }
 
-IMPL_LINK_TYPED(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll, void)
+IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll, void)
 {
     long nPos = pScroll->GetThumbPos();
     if (GetLastPos() != nPos)
@@ -557,7 +557,7 @@ IMPL_LINK_TYPED(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll, void)
     m_pPreviewWin->Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxRubyDialog, ApplyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl, Button*, void)
 {
     const Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     if (!aRubyValues.getLength())
@@ -585,12 +585,12 @@ IMPL_LINK_NOARG_TYPED(SvxRubyDialog, ApplyHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxRubyDialog, CloseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxRubyDialog, CloseHdl_Impl, Button*, void)
 {
     Close();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxRubyDialog, StylistHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl, Button*, void)
 {
     std::unique_ptr<SfxPoolItem> pState;
     SfxItemState eState = pBindings->QueryState(SID_STYLE_DESIGNER, pState);
@@ -601,7 +601,7 @@ IMPL_LINK_NOARG_TYPED(SvxRubyDialog, StylistHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)
+IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)
 {
     AssertOneEntry();
     sal_Int16 nAdjust = rBox.GetSelectEntryPos();
@@ -620,7 +620,7 @@ IMPL_LINK_TYPED(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)
     m_pPreviewWin->Invalidate();
 }
 
-IMPL_LINK_TYPED(SvxRubyDialog, PositionHdl_Impl, ListBox&, rBox, void)
+IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox&, rBox, void)
 {
     AssertOneEntry();
     bool bAbove = !rBox.GetSelectEntryPos();
@@ -639,7 +639,7 @@ IMPL_LINK_TYPED(SvxRubyDialog, PositionHdl_Impl, ListBox&, rBox, void)
     m_pPreviewWin->Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxRubyDialog, CharStyleHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl, ListBox&, void)
 {
     AssertOneEntry();
     OUString sStyleName;
@@ -661,7 +661,7 @@ IMPL_LINK_NOARG_TYPED(SvxRubyDialog, CharStyleHdl_Impl, ListBox&, void)
     }
 }
 
-IMPL_LINK_TYPED(SvxRubyDialog, EditModifyHdl_Impl, Edit&, rEdit, void)
+IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit&, rEdit, void)
 {
     for (sal_uInt16 i = 0; i < 8; i++)
     {
@@ -674,7 +674,7 @@ IMPL_LINK_TYPED(SvxRubyDialog, EditModifyHdl_Impl, Edit&, rEdit, void)
     m_pPreviewWin->Invalidate();
 }
 
-IMPL_LINK_TYPED(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32, nParam, bool)
+IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32, nParam, bool)
 {
     bool bRet = false;
     if (m_pScrollSB->IsEnabled())
@@ -702,7 +702,7 @@ IMPL_LINK_TYPED(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32, nParam, bool)
     return bRet;
 }
 
-IMPL_LINK_TYPED(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32, nParam, void)
+IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32, nParam, void)
 {
     sal_uInt16 nIndex = USHRT_MAX;
     for (sal_uInt16 i = 0; i < 8; i++)

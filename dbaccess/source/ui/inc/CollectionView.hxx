@@ -44,10 +44,10 @@ namespace dbaui
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         bool                   m_bCreateForm;
 
-        DECL_LINK_TYPED(Up_Click, Button*, void);
-        DECL_LINK_TYPED(NewFolder_Click, Button*, void);
-        DECL_LINK_TYPED(Save_Click, Button*, void);
-        DECL_LINK_TYPED(Dbl_Click_FileView, SvTreeListBox*, bool);
+        DECL_LINK(Up_Click, Button*, void);
+        DECL_LINK(NewFolder_Click, Button*, void);
+        DECL_LINK(Save_Click, Button*, void);
+        DECL_LINK(Dbl_Click_FileView, SvTreeListBox*, bool);
 
         /// sets the fixedtext to the right content
         void initCurrentPath();

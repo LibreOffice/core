@@ -204,7 +204,7 @@ private:
     */
     void CreateTargetStack (ShellStack& rStack) const;
 
-    DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
+    DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
 
 #if OSL_DEBUG_LEVEL >= 2
     void DumpShellStack (const ShellStack& rStack);
@@ -982,7 +982,7 @@ void ViewShellManager::Implementation::CreateTargetStack (ShellStack& rStack) co
     }
 }
 
-IMPL_LINK_TYPED(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent&, rEvent, void)
+IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
         vcl::Window* pEventWindow = rEvent.GetWindow();
 

@@ -85,10 +85,10 @@ class SwWrapTabPage: public SfxTabPage
     virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    DECL_LINK_TYPED( RangeModifyHdl, SpinField&, void );
-    DECL_LINK_TYPED( RangeLoseFocusHdl, Control&, void );
-    DECL_LINK_TYPED( WrapTypeHdl, Button *, void );
-    DECL_LINK_TYPED( ContourHdl, Button *, void);
+    DECL_LINK( RangeModifyHdl, SpinField&, void );
+    DECL_LINK( RangeLoseFocusHdl, Control&, void );
+    DECL_LINK( WrapTypeHdl, Button *, void );
+    DECL_LINK( ContourHdl, Button *, void);
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

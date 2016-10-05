@@ -86,7 +86,7 @@ namespace dbaui
 
         bool isNewField() const { return GetCurRow() >= (sal_Int32)m_aFields.size(); }
 
-        DECL_LINK_TYPED( OnListEntrySelected, DbaMouseDownListBoxController&, void );
+        DECL_LINK( OnListEntrySelected, DbaMouseDownListBoxController&, void );
 
     private:
         using ::svt::EditBrowseBox::Init;

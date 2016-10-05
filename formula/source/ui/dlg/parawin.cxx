@@ -548,7 +548,7 @@ void ParaWin::FxClick()
 }
 
 
-IMPL_LINK_TYPED( ParaWin, GetFxHdl, ArgInput&, rPtr, void )
+IMPL_LINK( ParaWin, GetFxHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
@@ -569,7 +569,7 @@ IMPL_LINK_TYPED( ParaWin, GetFxHdl, ArgInput&, rPtr, void )
     }
 }
 
-IMPL_LINK_TYPED( ParaWin, GetFxFocusHdl, ArgInput&, rPtr, void )
+IMPL_LINK( ParaWin, GetFxFocusHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
@@ -591,7 +591,7 @@ IMPL_LINK_TYPED( ParaWin, GetFxFocusHdl, ArgInput&, rPtr, void )
 }
 
 
-IMPL_LINK_TYPED( ParaWin, GetEdFocusHdl, ArgInput&, rPtr, void )
+IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
@@ -615,12 +615,12 @@ IMPL_LINK_TYPED( ParaWin, GetEdFocusHdl, ArgInput&, rPtr, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(ParaWin, ScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(ParaWin, ScrollHdl, ScrollBar*, void)
 {
     SliderMoved();
 }
 
-IMPL_LINK_TYPED( ParaWin, ModifyHdl, ArgInput&, rPtr, void )
+IMPL_LINK( ParaWin, ModifyHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;

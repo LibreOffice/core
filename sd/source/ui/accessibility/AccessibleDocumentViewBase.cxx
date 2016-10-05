@@ -159,7 +159,7 @@ void AccessibleDocumentViewBase::Init()
         SetState(AccessibleStateType::EDITABLE);
 }
 
-IMPL_LINK_TYPED(AccessibleDocumentViewBase, WindowChildEventListener,
+IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
     VclWindowEvent&, rEvent, void)
 {
         //      DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );

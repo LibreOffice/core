@@ -211,7 +211,7 @@ void Animator::RequestNextFrame ()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(Animator, TimeoutHandler, Idle *, void)
+IMPL_LINK_NOARG(Animator, TimeoutHandler, Idle *, void)
 {
     if (mbIsDisposed)
         return;

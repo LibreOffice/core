@@ -667,7 +667,7 @@ bool ScFilterDlg::IsRefInputMode() const
 
 // Handler:
 
-IMPL_LINK_TYPED( ScFilterDlg, EndDlgHdl, Button*, pBtn, void )
+IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn, void )
 {
     if ( pBtn == pBtnOk )
     {
@@ -702,7 +702,7 @@ IMPL_LINK_TYPED( ScFilterDlg, EndDlgHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScFilterDlg, MoreExpandedHdl, VclExpander&, void)
+IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl, VclExpander&, void)
 {
     if ( pExpander->get_expanded() )
         pTimer->Start();
@@ -715,7 +715,7 @@ IMPL_LINK_NOARG_TYPED(ScFilterDlg, MoreExpandedHdl, VclExpander&, void)
     }
 }
 
-IMPL_LINK_TYPED( ScFilterDlg, TimeOutHdl, Timer*, _pTimer, void )
+IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer, void )
 {
     // Check if RefInputMode is still true every 50ms
 
@@ -726,7 +726,7 @@ IMPL_LINK_TYPED( ScFilterDlg, TimeOutHdl, Timer*, _pTimer, void )
         pTimer->Start();
 }
 
-IMPL_LINK_TYPED( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
+IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
 {
     /*
      * Handle enable/disable logic depending on which ListBox was selected
@@ -978,7 +978,7 @@ IMPL_LINK_TYPED( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK_TYPED( ScFilterDlg, CheckBoxHdl, Button*, pBox, void )
+IMPL_LINK( ScFilterDlg, CheckBoxHdl, Button*, pBox, void )
 {
     //  Column headers:
     //      Field list: Columnxx <-> column header string
@@ -1014,7 +1014,7 @@ IMPL_LINK_TYPED( ScFilterDlg, CheckBoxHdl, Button*, pBox, void )
     }
 }
 
-IMPL_LINK_TYPED( ScFilterDlg, ValModifyHdl, Edit&, rEd, void )
+IMPL_LINK( ScFilterDlg, ValModifyHdl, Edit&, rEd, void )
 {
     size_t nOffset = GetSliderPos();
     size_t i = 0;
@@ -1097,7 +1097,7 @@ IMPL_LINK_TYPED( ScFilterDlg, ValModifyHdl, Edit&, rEd, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScFilterDlg, ScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(ScFilterDlg, ScrollHdl, ScrollBar*, void)
 {
     SliderMoved();
 }

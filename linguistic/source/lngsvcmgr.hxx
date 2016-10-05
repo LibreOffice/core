@@ -138,7 +138,7 @@ class LngSvcMgr :
 
     void UpdateAll();
     void stopListening();
-    DECL_LINK_TYPED( updateAndBroadcast, Idle*, void );
+    DECL_LINK( updateAndBroadcast, Idle*, void );
 
 public:
     LngSvcMgr();

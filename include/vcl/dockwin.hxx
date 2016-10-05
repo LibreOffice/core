@@ -109,7 +109,7 @@ private:
                     mbStartDockingEnabled:1,
                     mbLocked:1;
 
-                    DECL_LINK_TYPED( PopupModeEnd, FloatingWindow*, void );
+                    DECL_LINK( PopupModeEnd, FloatingWindow*, void );
     void            ImplEnableStartDocking()  { mbStartDockingEnabled = true; }
     bool            ImplStartDockingEnabled() { return mbStartDockingEnabled; }
 
@@ -245,7 +245,7 @@ private:
 
     SAL_DLLPRIVATE void    ImplInitDockingWindowData();
     SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);
-    DECL_DLLPRIVATE_LINK_TYPED( ImplHandleLayoutTimerHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, Idle*, void );
 
                            DockingWindow (const DockingWindow &) = delete;
                            DockingWindow & operator= (const DockingWindow &) = delete;

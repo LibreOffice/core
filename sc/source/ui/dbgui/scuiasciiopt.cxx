@@ -665,7 +665,7 @@ void ScImportAsciiDlg::UpdateVertical()
         mpDatStream->SetStreamCharSet(meCharSet);
 }
 
-IMPL_LINK_TYPED( ScImportAsciiDlg, RbSepFixHdl, Button*, pButton, void )
+IMPL_LINK( ScImportAsciiDlg, RbSepFixHdl, Button*, pButton, void )
 {
     OSL_ENSURE( pButton, "ScImportAsciiDlg::RbSepFixHdl - missing sender" );
 
@@ -682,15 +682,15 @@ IMPL_LINK_TYPED( ScImportAsciiDlg, RbSepFixHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK_TYPED( ScImportAsciiDlg, SeparatorClickHdl, Button*, pCtrl, void )
+IMPL_LINK( ScImportAsciiDlg, SeparatorClickHdl, Button*, pCtrl, void )
 {
     SeparatorHdl(pCtrl);
 }
-IMPL_LINK_TYPED( ScImportAsciiDlg, SeparatorComboBoxHdl, ComboBox&, rCtrl, void )
+IMPL_LINK( ScImportAsciiDlg, SeparatorComboBoxHdl, ComboBox&, rCtrl, void )
 {
     SeparatorHdl(&rCtrl);
 }
-IMPL_LINK_TYPED( ScImportAsciiDlg, SeparatorEditHdl, Edit&, rEdit, void )
+IMPL_LINK( ScImportAsciiDlg, SeparatorEditHdl, Edit&, rEdit, void )
 {
     SeparatorHdl(&rEdit);
 }
@@ -718,7 +718,7 @@ void ScImportAsciiDlg::SeparatorHdl( Control* pCtrl )
     mpTableBox->Execute( CSVCMD_NEWCELLTEXTS );
 }
 
-IMPL_LINK_TYPED( ScImportAsciiDlg, CharSetHdl, ListBox&, rListBox, void )
+IMPL_LINK( ScImportAsciiDlg, CharSetHdl, ListBox&, rListBox, void )
 {
     SvxTextEncodingBox* pCharSetBox = static_cast<SvxTextEncodingBox*>(&rListBox);
     if( (pCharSetBox == pLbCharSet) && (pCharSetBox->GetSelectEntryCount() == 1) )
@@ -735,19 +735,19 @@ IMPL_LINK_TYPED( ScImportAsciiDlg, CharSetHdl, ListBox&, rListBox, void )
     }
 }
 
-IMPL_LINK_TYPED( ScImportAsciiDlg, FirstRowHdl, Edit&, rEdit, void )
+IMPL_LINK( ScImportAsciiDlg, FirstRowHdl, Edit&, rEdit, void )
 {
     NumericField& rNumField = static_cast<NumericField&>(rEdit);
     mpTableBox->Execute( CSVCMD_SETFIRSTIMPORTLINE, sal::static_int_cast<sal_Int32>( rNumField.GetValue() - 1 ) );
 }
 
-IMPL_LINK_TYPED( ScImportAsciiDlg, LbColTypeHdl, ListBox&, rListBox, void )
+IMPL_LINK( ScImportAsciiDlg, LbColTypeHdl, ListBox&, rListBox, void )
 {
     if( &rListBox == pLbType )
         mpTableBox->Execute( CSVCMD_SETCOLUMNTYPE, rListBox.GetSelectEntryPos() );
 }
 
-IMPL_LINK_NOARG_TYPED(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
+IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
 {
     sal_Int32 nBaseLine = mpTableBox->GetFirstVisLine();
     sal_Int32 nRead = mpTableBox->GetVisLineCount();
@@ -772,7 +772,7 @@ IMPL_LINK_NOARG_TYPED(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
     mpTableBox->SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep);
 }
 
-IMPL_LINK_TYPED( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox&, rTableBox, void )
+IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox&, rTableBox, void )
 {
     sal_Int32 nType = rTableBox.GetSelColumnType();
     sal_Int32 nTypeCount = pLbType->GetEntryCount();

@@ -213,7 +213,7 @@ void SwCondCollPage::Reset(const SfxItemSet *)
 
 }
 
-IMPL_LINK_TYPED( SwCondCollPage, OnOffHdl, Button*, pBox, void )
+IMPL_LINK( SwCondCollPage, OnOffHdl, Button*, pBox, void )
 {
     const bool bEnable = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pContextFT->Enable( bEnable );
@@ -228,16 +228,16 @@ IMPL_LINK_TYPED( SwCondCollPage, OnOffHdl, Button*, pBox, void )
         SelectHdl(nullptr);
 }
 
-IMPL_LINK_TYPED( SwCondCollPage, AssignRemoveClickHdl, Button*, pBtn, void)
+IMPL_LINK( SwCondCollPage, AssignRemoveClickHdl, Button*, pBtn, void)
 {
     AssignRemove(pBtn);
 }
-IMPL_LINK_TYPED( SwCondCollPage, AssignRemoveTreeListBoxHdl, SvTreeListBox*, pBtn, bool)
+IMPL_LINK( SwCondCollPage, AssignRemoveTreeListBoxHdl, SvTreeListBox*, pBtn, bool)
 {
     AssignRemove(pBtn);
     return false;
 }
-IMPL_LINK_TYPED( SwCondCollPage, AssignRemoveHdl, ListBox&, rBox, void)
+IMPL_LINK( SwCondCollPage, AssignRemoveHdl, ListBox&, rBox, void)
 {
     AssignRemove(&rBox);
 }
@@ -268,11 +268,11 @@ void SwCondCollPage::AssignRemove(void* pBtn)
     m_pTbLinks->SetUpdateMode(true);
 }
 
-IMPL_LINK_TYPED( SwCondCollPage, SelectTreeListBoxHdl, SvTreeListBox*, pBox, void)
+IMPL_LINK( SwCondCollPage, SelectTreeListBoxHdl, SvTreeListBox*, pBox, void)
 {
     SelectHdl(pBox);
 }
-IMPL_LINK_TYPED( SwCondCollPage, SelectListBoxHdl, ListBox&, rBox, void)
+IMPL_LINK( SwCondCollPage, SelectListBoxHdl, ListBox&, rBox, void)
 {
     SelectHdl(&rBox);
 }

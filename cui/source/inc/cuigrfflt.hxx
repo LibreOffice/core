@@ -73,8 +73,8 @@ private:
     Size            maSizePixel;
     bool            bIsBitmap;
 
-    DECL_LINK_TYPED( ImplPreviewTimeoutHdl, Timer *, void );
-    DECL_LINK_TYPED( ImplModifyHdl, LinkParamNone*, void);
+    DECL_LINK( ImplPreviewTimeoutHdl, Timer *, void );
+    DECL_LINK( ImplModifyHdl, LinkParamNone*, void);
 
 protected:
     VclPtr<GraphicPreviewWindow>  mpPreview;
@@ -95,7 +95,7 @@ class GraphicFilterSmooth : public GraphicFilterDialog
 {
 private:
     VclPtr<NumericField>   mpMtrRadius;
-    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
+    DECL_LINK(EditModifyHdl, Edit&, void);
 
 public:
 
@@ -113,8 +113,8 @@ private:
     VclPtr<MetricField>    mpMtrWidth;
     VclPtr<MetricField>    mpMtrHeight;
     VclPtr<CheckBox>       mpCbxEdges;
-    DECL_LINK_TYPED(CheckBoxModifyHdl, CheckBox&, void);
-    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
+    DECL_LINK(CheckBoxModifyHdl, CheckBox&, void);
+    DECL_LINK(EditModifyHdl, Edit&, void);
 public:
 
     GraphicFilterMosaic(vcl::Window* pParent, const Graphic& rGraphic,
@@ -133,8 +133,8 @@ class GraphicFilterSolarize : public GraphicFilterDialog
 private:
     VclPtr<MetricField>    mpMtrThreshold;
     VclPtr<CheckBox>       mpCbxInvert;
-    DECL_LINK_TYPED(CheckBoxModifyHdl, CheckBox&, void);
-    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
+    DECL_LINK(CheckBoxModifyHdl, CheckBox&, void);
+    DECL_LINK(EditModifyHdl, Edit&, void);
 
 public:
 
@@ -152,7 +152,7 @@ class GraphicFilterSepia : public GraphicFilterDialog
 {
 private:
     VclPtr<MetricField>    mpMtrSepia;
-    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
+    DECL_LINK(EditModifyHdl, Edit&, void);
 public:
     GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGraphic,
                         sal_uInt16 nSepiaPercent );
@@ -169,7 +169,7 @@ class GraphicFilterPoster : public GraphicFilterDialog
 {
 private:
     VclPtr<NumericField>   mpNumPoster;
-    DECL_LINK_TYPED(EditModifyHdl, Edit&, void);
+    DECL_LINK(EditModifyHdl, Edit&, void);
 public:
     GraphicFilterPoster( vcl::Window* pParent, const Graphic& rGraphic,
                          sal_uInt16 nPosterColorCount );

@@ -116,13 +116,13 @@ class ScAppCfg : public ScAppOptions
     ScLinkConfigItem    aMiscItem;
     ScLinkConfigItem    aCompatItem;
 
-    DECL_LINK_TYPED( LayoutCommitHdl, ScLinkConfigItem&, void );
-    DECL_LINK_TYPED( InputCommitHdl, ScLinkConfigItem&, void );
-    DECL_LINK_TYPED( RevisionCommitHdl, ScLinkConfigItem&, void );
-    DECL_LINK_TYPED( ContentCommitHdl, ScLinkConfigItem&, void );
-    DECL_LINK_TYPED( SortListCommitHdl, ScLinkConfigItem&, void );
-    DECL_LINK_TYPED( MiscCommitHdl, ScLinkConfigItem&, void );
-    DECL_LINK_TYPED( CompatCommitHdl, ScLinkConfigItem&, void );
+    DECL_LINK( LayoutCommitHdl, ScLinkConfigItem&, void );
+    DECL_LINK( InputCommitHdl, ScLinkConfigItem&, void );
+    DECL_LINK( RevisionCommitHdl, ScLinkConfigItem&, void );
+    DECL_LINK( ContentCommitHdl, ScLinkConfigItem&, void );
+    DECL_LINK( SortListCommitHdl, ScLinkConfigItem&, void );
+    DECL_LINK( MiscCommitHdl, ScLinkConfigItem&, void );
+    DECL_LINK( CompatCommitHdl, ScLinkConfigItem&, void );
 
     static css::uno::Sequence<OUString> GetLayoutPropertyNames();
     static css::uno::Sequence<OUString> GetInputPropertyNames();

@@ -1298,7 +1298,7 @@ void Calendar::ImplEndTracking( bool bCancel )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( Calendar, ScrollHdl, Timer*, void )
+IMPL_LINK_NOARG( Calendar, ScrollHdl, Timer*, void )
 {
     bool bPrevIn = (mnDragScrollHitTest & CALENDAR_HITTEST_PREV) != 0;
     bool bNextIn = (mnDragScrollHitTest & CALENDAR_HITTEST_NEXT) != 0;
@@ -2175,7 +2175,7 @@ void CalendarField::dispose()
     DateField::dispose();
 }
 
-IMPL_LINK_TYPED( CalendarField, ImplSelectHdl, Calendar*, pCalendar, void )
+IMPL_LINK( CalendarField, ImplSelectHdl, Calendar*, pCalendar, void )
 {
     if ( !pCalendar->IsTravelSelect() )
     {
@@ -2192,7 +2192,7 @@ IMPL_LINK_TYPED( CalendarField, ImplSelectHdl, Calendar*, pCalendar, void )
     }
 }
 
-IMPL_LINK_TYPED( CalendarField, ImplClickHdl, Button*, pButton, void )
+IMPL_LINK( CalendarField, ImplClickHdl, Button*, pButton, void )
 {
     PushButton* pBtn = static_cast<PushButton*>(pButton);
     mpFloatWin->EndPopupMode();
@@ -2220,7 +2220,7 @@ IMPL_LINK_TYPED( CalendarField, ImplClickHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(CalendarField, ImplPopupModeEndHdl, FloatingWindow*, void)
+IMPL_LINK_NOARG(CalendarField, ImplPopupModeEndHdl, FloatingWindow*, void)
 {
     EndDropDown();
     GrabFocus();

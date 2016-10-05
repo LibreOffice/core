@@ -51,16 +51,16 @@ namespace svx
         sal_uLong               m_nOldCount;
         bool                m_bModified;
 
-        DECL_LINK_TYPED( NewHdl, Button*, void );
-        DECL_LINK_TYPED( EditHdl, Button*, void );
-        DECL_LINK_TYPED( DeleteHdl, Button*, void );
-        DECL_LINK_TYPED( PathBoxDoubleClickHdl, SvTreeListBox*, bool);
+        DECL_LINK( NewHdl, Button*, void );
+        DECL_LINK( EditHdl, Button*, void );
+        DECL_LINK( DeleteHdl, Button*, void );
+        DECL_LINK( PathBoxDoubleClickHdl, SvTreeListBox*, bool);
 
-        DECL_LINK_TYPED( PathSelect_Impl, SvTreeListBox*, void);
+        DECL_LINK( PathSelect_Impl, SvTreeListBox*, void);
 
-        DECL_LINK_TYPED( HeaderSelect_Impl, HeaderBar *, void );
-        DECL_LINK_TYPED( HeaderEndDrag_Impl, HeaderBar *, void );
-        DECL_LINK_TYPED( NameValidator, const OUString&, bool);
+        DECL_LINK( HeaderSelect_Impl, HeaderBar *, void );
+        DECL_LINK( HeaderEndDrag_Impl, HeaderBar *, void );
+        DECL_LINK( NameValidator, const OUString&, bool);
 
 
         /** inserts a new entry in the tablistbox

@@ -195,7 +195,7 @@ void ThreeD_SceneGeometry_TabPage::applyAnglesToModel()
     m_bAngleChangePending = false;
 }
 
-IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, AngleEdited, Edit&, void)
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, AngleEdited, Edit&, void)
 {
     m_nXRotation = m_pMFXRotation->GetValue();
     m_nYRotation = m_pMFYRotation->GetValue();
@@ -203,7 +203,7 @@ IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, AngleEdited, Edit&, void)
     m_bAngleChangePending = true;
 }
 
-IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, AngleChanged, Edit&, void)
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, AngleChanged, Edit&, void)
 {
     applyAnglesToModel();
 }
@@ -229,23 +229,23 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
     m_bPerspectiveChangePending = false;
 }
 
-IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, PerspectiveEdited, Edit&, void)
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveEdited, Edit&, void)
 {
     m_bPerspectiveChangePending = true;
 }
 
-IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, PerspectiveChanged, Edit&, void)
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveChanged, Edit&, void)
 {
     applyPerspectiveToModel();
 }
 
-IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, PerspectiveToggled, CheckBox&, void)
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveToggled, CheckBox&, void)
 {
     m_pMFPerspective->Enable( m_pCbxPerspective->IsChecked() );
     applyPerspectiveToModel();
 }
 
-IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, CheckBox&, void)
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, CheckBox&, void)
 {
     ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
 

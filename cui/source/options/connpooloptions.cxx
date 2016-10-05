@@ -409,7 +409,7 @@ namespace offapp
     }
 
 
-    IMPL_LINK_TYPED( ConnectionPoolOptionsPage, OnDriverRowChanged, const DriverPooling*, pDriverPos, void )
+    IMPL_LINK( ConnectionPoolOptionsPage, OnDriverRowChanged, const DriverPooling*, pDriverPos, void )
     {
         bool bValidRow = (nullptr != pDriverPos);
         m_pDriverPoolingEnabled->Enable(bValidRow && m_pEnablePooling->IsChecked());
@@ -441,7 +441,7 @@ namespace offapp
     }
 
 
-    IMPL_LINK_TYPED( ConnectionPoolOptionsPage, OnEnabledDisabled, Button*, _pCheckBox, void )
+    IMPL_LINK( ConnectionPoolOptionsPage, OnEnabledDisabled, Button*, _pCheckBox, void )
     {
         bool bGloballyEnabled = m_pEnablePooling->IsChecked();
         bool bLocalDriverChanged = m_pDriverPoolingEnabled == _pCheckBox;

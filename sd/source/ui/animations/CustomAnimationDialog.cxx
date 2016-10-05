@@ -110,7 +110,7 @@ public:
 private:
     std::map< sal_uInt16, OUString > maPropertyValues;
     VclPtr<ListBox> mpControl;
-    DECL_LINK_TYPED(OnSelect, ListBox&, void);
+    DECL_LINK(OnSelect, ListBox&, void);
     Link<LinkParamNone*,void> maModifyLink;
 };
 
@@ -125,7 +125,7 @@ PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pPare
     setValue( rValue, aPresetId );
 }
 
-IMPL_LINK_NOARG_TYPED(PresetPropertyBox, OnSelect, ListBox&, void)
+IMPL_LINK_NOARG(PresetPropertyBox, OnSelect, ListBox&, void)
 {
     maModifyLink.Call(nullptr);
 }
@@ -192,7 +192,7 @@ public:
 
 private:
     VclPtr<ColorListBox> mpControl;
-    DECL_LINK_TYPED(OnSelect, ListBox&, void);
+    DECL_LINK(OnSelect, ListBox&, void);
     Link<LinkParamNone*,void> maModifyLink;
 };
 
@@ -227,7 +227,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ColorPropertyBox, OnSelect, ListBox&, void)
+IMPL_LINK_NOARG(ColorPropertyBox, OnSelect, ListBox&, void)
 {
     maModifyLink.Call(nullptr);
 }
@@ -273,7 +273,7 @@ public:
 private:
     VclPtr<FontNameBox>         mpControl;
     Link<LinkParamNone*,void>   maModifyHdl;
-    DECL_LINK_TYPED(ControlSelectHdl, ComboBox&, void);
+    DECL_LINK(ControlSelectHdl, ComboBox&, void);
 };
 
 FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
@@ -308,7 +308,7 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, 
     setValue( rValue, aPresetId );
 }
 
-IMPL_LINK_NOARG_TYPED(FontPropertyBox, ControlSelectHdl, ComboBox&, void)
+IMPL_LINK_NOARG(FontPropertyBox, ControlSelectHdl, ComboBox&, void)
 {
     maModifyHdl.Call(nullptr);
 }
@@ -431,10 +431,10 @@ public:
 
     virtual Control* getControl() override;
 
-    DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
+    DECL_LINK( implMenuSelectHdl, MenuButton*, void );
 
 private:
-    DECL_LINK_TYPED( EditModifyHdl, Edit&, void );
+    DECL_LINK( EditModifyHdl, Edit&, void );
     VclPtr<DropdownMenuBox> mpControl;
     VclPtr<PopupMenu> mpMenu;
     VclPtr<MetricField> mpMetric;
@@ -464,12 +464,12 @@ CharHeightPropertyBox::~CharHeightPropertyBox()
     mpControl.disposeAndClear();
 }
 
-IMPL_LINK_NOARG_TYPED( CharHeightPropertyBox, EditModifyHdl, Edit&, void )
+IMPL_LINK_NOARG( CharHeightPropertyBox, EditModifyHdl, Edit&, void )
 {
     maModifyHdl.Call(nullptr);
 }
 
-IMPL_LINK_TYPED( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
+IMPL_LINK( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
     long nValue = 100;
     switch( pPb->GetCurItemId() )
@@ -514,8 +514,8 @@ public:
 
     virtual Control* getControl() override;
 
-    DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
-    DECL_LINK_TYPED( implModifyHdl, Edit&, void );
+    DECL_LINK( implMenuSelectHdl, MenuButton*, void );
+    DECL_LINK( implModifyHdl, Edit&, void );
 
     void updateMenu();
 
@@ -566,13 +566,13 @@ void TransparencyPropertyBox::updateMenu()
         mpMenu->CheckItem( i, nValue == i );
 }
 
-IMPL_LINK_NOARG_TYPED(TransparencyPropertyBox, implModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(TransparencyPropertyBox, implModifyHdl, Edit&, void)
 {
     updateMenu();
     maModifyHdl.Call(nullptr);
 }
 
-IMPL_LINK_TYPED( TransparencyPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
+IMPL_LINK( TransparencyPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
     if( pPb->GetCurItemId() != mpMetric->GetValue() )
     {
@@ -614,8 +614,8 @@ public:
 
     virtual Control* getControl() override;
 
-    DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
-    DECL_LINK_TYPED( implModifyHdl, Edit&, void );
+    DECL_LINK( implMenuSelectHdl, MenuButton*, void );
+    DECL_LINK( implModifyHdl, Edit&, void );
 
     void updateMenu();
 
@@ -668,13 +668,13 @@ void RotationPropertyBox::updateMenu()
     mpMenu->CheckItem( CM_COUNTERCLOCKWISE, !bDirection );
 }
 
-IMPL_LINK_NOARG_TYPED(RotationPropertyBox, implModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(RotationPropertyBox, implModifyHdl, Edit&, void)
 {
     updateMenu();
     maModifyHdl.Call(nullptr);
 }
 
-IMPL_LINK_TYPED( RotationPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
+IMPL_LINK( RotationPropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
     sal_Int64 nValue = mpMetric->GetValue();
     bool bDirection = nValue >= 0;
@@ -735,8 +735,8 @@ public:
 
     virtual Control* getControl() override;
 
-    DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
-    DECL_LINK_TYPED( implModifyHdl, Edit&, void );
+    DECL_LINK( implMenuSelectHdl, MenuButton*, void );
+    DECL_LINK( implModifyHdl, Edit&, void );
 
     void updateMenu();
 
@@ -788,13 +788,13 @@ void ScalePropertyBox::updateMenu()
     mpMenu->CheckItem( CM_BOTH, mnDirection == 3 );
 }
 
-IMPL_LINK_NOARG_TYPED(ScalePropertyBox, implModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScalePropertyBox, implModifyHdl, Edit&, void)
 {
     updateMenu();
     maModifyHdl.Call(nullptr);
 }
 
-IMPL_LINK_TYPED( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
+IMPL_LINK( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
     sal_Int64 nValue = mpMetric->GetValue();
 
@@ -894,7 +894,7 @@ public:
 
     virtual Control* getControl() override;
 
-    DECL_LINK_TYPED( implMenuSelectHdl, MenuButton*, void );
+    DECL_LINK( implMenuSelectHdl, MenuButton*, void );
 
     void update();
 
@@ -946,7 +946,7 @@ void FontStylePropertyBox::update()
     mpEdit->Invalidate();
 }
 
-IMPL_LINK_TYPED( FontStylePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
+IMPL_LINK( FontStylePropertyBox, implMenuSelectHdl, MenuButton*, pPb, void )
 {
     switch( pPb->GetCurItemId() )
     {
@@ -1010,8 +1010,8 @@ public:
     virtual void dispose() override;
 
     void update( STLPropertySet* pSet );
-    DECL_LINK_TYPED( implSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( implClickHdl, Button*, void );
+    DECL_LINK( implSelectHdl, ListBox&, void );
+    DECL_LINK( implClickHdl, Button*, void );
     void implHdl(Control*);
 
 private:
@@ -1321,11 +1321,11 @@ void CustomAnimationEffectTabPage::updateControlStates()
     mpPBSoundPreview->Enable( nPos >= 2 );
 }
 
-IMPL_LINK_TYPED( CustomAnimationEffectTabPage, implClickHdl, Button*, pBtn, void )
+IMPL_LINK( CustomAnimationEffectTabPage, implClickHdl, Button*, pBtn, void )
 {
     implHdl(pBtn);
 }
-IMPL_LINK_TYPED( CustomAnimationEffectTabPage, implSelectHdl, ListBox&, rListBox, void )
+IMPL_LINK( CustomAnimationEffectTabPage, implSelectHdl, ListBox&, rListBox, void )
 {
     implHdl(&rListBox);
 }
@@ -1615,9 +1615,9 @@ public:
 
     void update( STLPropertySet* pSet );
 
-    DECL_LINK_TYPED( implControlHdl, ListBox&, void );
-    DECL_LINK_TYPED( implClickHdl, Button*, void );
-    DECL_LINK_TYPED( DurationModifiedHdl, Edit&, void );
+    DECL_LINK( implControlHdl, ListBox&, void );
+    DECL_LINK( implClickHdl, Button*, void );
+    DECL_LINK( DurationModifiedHdl, Edit&, void );
     void implHdl(Control*);
 
 private:
@@ -1824,17 +1824,17 @@ void CustomAnimationDurationTabPage::dispose()
     TabPage::dispose();
 }
 
-IMPL_LINK_TYPED( CustomAnimationDurationTabPage, implClickHdl, Button*, pBtn, void )
+IMPL_LINK( CustomAnimationDurationTabPage, implClickHdl, Button*, pBtn, void )
 {
     implHdl(pBtn);
 }
 
-IMPL_LINK_TYPED( CustomAnimationDurationTabPage, implControlHdl, ListBox&, rListBox, void )
+IMPL_LINK( CustomAnimationDurationTabPage, implControlHdl, ListBox&, rListBox, void )
 {
     implHdl(&rListBox);
 }
 
-IMPL_LINK_NOARG_TYPED(CustomAnimationDurationTabPage, DurationModifiedHdl, Edit&, void)
+IMPL_LINK_NOARG(CustomAnimationDurationTabPage, DurationModifiedHdl, Edit&, void)
 {
     if(!(mpCBXDuration->GetText()).isEmpty() )
     {
@@ -2012,7 +2012,7 @@ public:
     void update( STLPropertySet* pSet );
 
     void updateControlStates();
-    DECL_LINK_TYPED(implSelectHdl, ListBox&, void);
+    DECL_LINK(implSelectHdl, ListBox&, void);
 
 private:
     VclPtr<FixedText>   maFTGroupText;
@@ -2196,7 +2196,7 @@ void CustomAnimationTextAnimTabPage::updateControlStates()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(CustomAnimationTextAnimTabPage, implSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(CustomAnimationTextAnimTabPage, implSelectHdl, ListBox&, void)
 {
     updateControlStates();
 }

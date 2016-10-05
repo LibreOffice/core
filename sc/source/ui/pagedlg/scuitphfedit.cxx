@@ -154,7 +154,7 @@ ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
 
 }
 
-IMPL_LINK_NOARG_TYPED( ScHFEditPage, ObjectSelectHdl, ScEditWindow&, void )
+IMPL_LINK_NOARG( ScHFEditPage, ObjectSelectHdl, ScEditWindow&, void )
 {
     m_pBtnText->GrabFocus();
 }
@@ -755,7 +755,7 @@ void ScHFEditPage::ClearTextAreas()
 
 // Handler:
 
-IMPL_LINK_TYPED( ScHFEditPage, ListHdl_Impl, ListBox&, rList, void )
+IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox&, rList, void )
 {
     if ( &rList == m_pLbDefined )
     {
@@ -775,7 +775,7 @@ IMPL_LINK_TYPED( ScHFEditPage, ListHdl_Impl, ListBox&, rList, void )
     }
 }
 
-IMPL_LINK_TYPED( ScHFEditPage, ClickHdl, Button*, pBtn, void )
+IMPL_LINK( ScHFEditPage, ClickHdl, Button*, pBtn, void )
 {
     if (!m_pEditFocus)
         return;
@@ -805,7 +805,7 @@ IMPL_LINK_TYPED( ScHFEditPage, ClickHdl, Button*, pBtn, void )
     m_pEditFocus->GrabFocus();
 }
 
-IMPL_LINK_TYPED( ScHFEditPage, MenuHdl, ScExtIButton&, rBtn, void )
+IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton&, rBtn, void )
 {
     if (!m_pEditFocus)
         return;

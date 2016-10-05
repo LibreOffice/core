@@ -60,8 +60,8 @@ private:
     sal_Int32           mnLastPosHatch;
     sal_Int32           mnLastPosBitmap;
 
-    DECL_LINK_TYPED(SelectFillTypeHdl, ListBox&, void);
-    DECL_LINK_TYPED(SelectFillAttrHdl, ListBox&, void);
+    DECL_LINK(SelectFillTypeHdl, ListBox&, void);
+    DECL_LINK(SelectFillAttrHdl, ListBox&, void);
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();

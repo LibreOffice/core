@@ -1316,7 +1316,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SfxViewFrame, SwitchReadOnlyHandler, Button*, void)
+IMPL_LINK_NOARG(SfxViewFrame, SwitchReadOnlyHandler, Button*, void)
 {
     GetDispatcher()->Execute(SID_EDITDOC);
 }

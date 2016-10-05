@@ -618,11 +618,11 @@ private:
 
     /** @short  callback of our internal timer.
      */
-    DECL_LINK_TYPED(implts_timerExpired, Timer*, void);
+    DECL_LINK(implts_timerExpired, Timer*, void);
 
     /** @short  makes our dispatch() method asynchronous!
      */
-    DECL_LINK_TYPED(implts_asyncDispatch, LinkParamNone*, void);
+    DECL_LINK(implts_asyncDispatch, LinkParamNone*, void);
 
     /** @short  implements the dispatch real. */
     void implts_dispatch(const DispatchParams& aParams);
@@ -2286,7 +2286,7 @@ void AutoRecovery::implts_stopTimer()
     m_aTimer.Stop();
 }
 
-IMPL_LINK_NOARG_TYPED(AutoRecovery, implts_timerExpired, Timer *, void)
+IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
 {
     try
     {
@@ -2380,7 +2380,7 @@ IMPL_LINK_NOARG_TYPED(AutoRecovery, implts_timerExpired, Timer *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(AutoRecovery, implts_asyncDispatch, LinkParamNone*, void)
+IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch, LinkParamNone*, void)
 {
     DispatchParams aParams;
     /* SAFE */ {

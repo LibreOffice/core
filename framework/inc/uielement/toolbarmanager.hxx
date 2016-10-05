@@ -114,21 +114,21 @@ class ToolBarManager : public ToolbarManager_Base
         };
 
     protected:
-        DECL_LINK_TYPED( Command, CommandEvent const *, void );
+        DECL_LINK( Command, CommandEvent const *, void );
         PopupMenu * GetToolBarCustomMenu(ToolBox* pToolBar);
-        DECL_LINK_TYPED(Click, ToolBox *, void);
-        DECL_LINK_TYPED(DropdownClick, ToolBox *, void);
-        DECL_LINK_TYPED(DoubleClick, ToolBox *, void);
-        DECL_LINK_TYPED(Select, ToolBox *, void);
-        DECL_LINK_TYPED( StateChanged, StateChangedType const *, void );
-        DECL_LINK_TYPED( DataChanged, DataChangedEvent const *, void );
-        DECL_LINK_TYPED( MiscOptionsChanged, LinkParamNone*, void );
+        DECL_LINK(Click, ToolBox *, void);
+        DECL_LINK(DropdownClick, ToolBox *, void);
+        DECL_LINK(DoubleClick, ToolBox *, void);
+        DECL_LINK(Select, ToolBox *, void);
+        DECL_LINK( StateChanged, StateChangedType const *, void );
+        DECL_LINK( DataChanged, DataChangedEvent const *, void );
+        DECL_LINK( MiscOptionsChanged, LinkParamNone*, void );
 
-        DECL_LINK_TYPED( MenuButton, ToolBox *, void );
-        DECL_LINK_TYPED( MenuSelect, Menu *, bool );
+        DECL_LINK( MenuButton, ToolBox *, void );
+        DECL_LINK( MenuSelect, Menu *, bool );
         void MenuDeactivated();
-        DECL_LINK_TYPED(AsyncUpdateControllersHdl, Timer *, void);
-        DECL_STATIC_LINK_TYPED( ToolBarManager, ExecuteHdl_Impl, void*, void );
+        DECL_LINK(AsyncUpdateControllersHdl, Timer *, void);
+        DECL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, void*, void );
 
         virtual bool MenuItemAllowed( sal_uInt16 ) const;
 

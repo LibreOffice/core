@@ -108,7 +108,7 @@ void SwMailMergeDocSelectPage::dispose()
     svt::OWizardPage::dispose();
 }
 
-IMPL_LINK_TYPED(SwMailMergeDocSelectPage, DocSelectHdl, Button*, pButton, void)
+IMPL_LINK(SwMailMergeDocSelectPage, DocSelectHdl, Button*, pButton, void)
 {
     m_pRecentDocLB->Enable(m_pRecentDocRB == pButton);
 
@@ -116,7 +116,7 @@ IMPL_LINK_TYPED(SwMailMergeDocSelectPage, DocSelectHdl, Button*, pButton, void)
     m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_OUTPUTTYPETPAGE));
 }
 
-IMPL_LINK_TYPED(SwMailMergeDocSelectPage, FileSelectHdl, Button*, pButton, void)
+IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, Button*, pButton, void)
 {
     bool bTemplate = m_pBrowseTemplatePB == pButton;
 

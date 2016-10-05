@@ -86,7 +86,7 @@ private:
         drviews2.cxx.
     */
     void RenameSlide();
-    DECL_LINK_TYPED(RenameSlideHdl, AbstractSvxNameDialog&, bool);
+    DECL_LINK(RenameSlideHdl, AbstractSvxNameDialog&, bool);
     bool RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUString& rName);
 
     /** Handle SID_INSERTPAGE slot calls.

@@ -193,7 +193,7 @@ void SvxSearchAttributeDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxSearchAttributeDialog, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, Button*, void)
 {
     SearchAttrItem aInvalidItem;
     aInvalidItem.pItem = reinterpret_cast<SfxPoolItem*>(-1);

@@ -166,17 +166,17 @@ void SvxPostItDialog::EnableTravel(bool bNext, bool bPrev)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPostItDialog, PrevHdl, Button*, void)
+IMPL_LINK_NOARG(SvxPostItDialog, PrevHdl, Button*, void)
 {
     aPrevHdlLink.Call( *this );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxPostItDialog, NextHdl, Button*, void)
+IMPL_LINK_NOARG(SvxPostItDialog, NextHdl, Button*, void)
 {
     aNextHdlLink.Call( *this );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxPostItDialog, Stamp, Button*, void)
+IMPL_LINK_NOARG(SvxPostItDialog, Stamp, Button*, void)
 {
     Date aDate( Date::SYSTEM );
     tools::Time aTime( tools::Time::SYSTEM );
@@ -199,7 +199,7 @@ IMPL_LINK_NOARG_TYPED(SvxPostItDialog, Stamp, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPostItDialog, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SvxPostItDialog, OKHdl, Button*, void)
 {
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     pOutSet = new SfxItemSet( rSet );

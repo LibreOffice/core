@@ -33,7 +33,7 @@ class MasterPasswordDialog : public ModalDialog
     VclPtr<Edit>     m_pEDMasterPassword;
     VclPtr<OKButton> m_pOKBtn;
 
-    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
+    DECL_LINK(OKHdl_Impl, Button*, void);
 
 public:
     MasterPasswordDialog( vcl::Window* pParent, css::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );

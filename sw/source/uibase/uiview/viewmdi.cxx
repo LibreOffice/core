@@ -258,7 +258,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
 
 // Scrollbar - Handler
 
-IMPL_LINK_TYPED( SwView, WindowChildEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( SwView, WindowChildEventListener, VclWindowEvent&, rEvent, void )
 {
     OSL_ENSURE( rEvent.GetWindow(), "Window???" );
     vcl::Window* pChildWin = static_cast< vcl::Window* >( rEvent.GetData() );
@@ -304,7 +304,7 @@ void SwView::CreateScrollbar( bool bHori )
         ppScrollbar->ExtendedShow();
 }
 
-IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )
+IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
 {
     bool* pbNext = static_cast<bool*>(p);
     if ( !pbNext )
@@ -518,7 +518,7 @@ int SwView::KillVRuler()
     return 1;
 }
 
-IMPL_LINK_TYPED( SwView, ExecRulerClick, Ruler *, pRuler, void )
+IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler, void )
 {
     OUString sDefPage;
     switch( pRuler->GetClickType() )

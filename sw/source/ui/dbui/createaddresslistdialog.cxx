@@ -60,9 +60,9 @@ class SwAddressControl_Impl : public Control
 
     bool                            m_bNoDataSet;
 
-    DECL_LINK_TYPED(ScrollHdl_Impl, ScrollBar*, void);
-    DECL_LINK_TYPED(GotFocusHdl_Impl, Control&, void);
-    DECL_LINK_TYPED(EditModifyHdl_Impl, Edit&, void);
+    DECL_LINK(ScrollHdl_Impl, ScrollBar*, void);
+    DECL_LINK(GotFocusHdl_Impl, Control&, void);
+    DECL_LINK(EditModifyHdl_Impl, Edit&, void);
 
     void                MakeVisible(const Rectangle& aRect);
 
@@ -260,13 +260,13 @@ void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
     }
 }
 
-IMPL_LINK_TYPED(SwAddressControl_Impl, ScrollHdl_Impl, ScrollBar*, pScroll, void)
+IMPL_LINK(SwAddressControl_Impl, ScrollHdl_Impl, ScrollBar*, pScroll, void)
 {
     long nThumb = pScroll->GetThumbPos();
     m_pWindow->SetPosPixel(Point(0, - (m_nLineHeight * nThumb)));
 }
 
-IMPL_LINK_TYPED(SwAddressControl_Impl, GotFocusHdl_Impl, Control&, rControl, void)
+IMPL_LINK(SwAddressControl_Impl, GotFocusHdl_Impl, Control&, rControl, void)
 {
     Edit* pEdit = static_cast<Edit*>(&rControl);
     if(GetFocusFlags::Tab & pEdit->GetGetFocusFlags())
@@ -298,7 +298,7 @@ void SwAddressControl_Impl::MakeVisible(const Rectangle & rRect)
 }
 
 // copy data changes into database
-IMPL_LINK_TYPED(SwAddressControl_Impl, EditModifyHdl_Impl, Edit&, rEdit, void)
+IMPL_LINK(SwAddressControl_Impl, EditModifyHdl_Impl, Edit&, rEdit, void)
 {
     //get the data element number of the current set
     sal_Int32 nIndex = m_aEditLines[&rEdit];
@@ -515,7 +515,7 @@ void SwCreateAddressListDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, NewHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwCreateAddressListDialog, NewHdl_Impl, Button*, void)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
     std::vector<OUString> aNewData;
@@ -530,7 +530,7 @@ IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, NewHdl_Impl, Button*, void)
     UpdateButtons();
 }
 
-IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, DeleteHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwCreateAddressListDialog, DeleteHdl_Impl, Button*, void)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
     if(m_pCSVData->aDBData.size() > 1)
@@ -551,7 +551,7 @@ IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, DeleteHdl_Impl, Button*, void)
     UpdateButtons();
 }
 
-IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, FindHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl, Button*, void)
 {
     if(!m_pFindDlg)
     {
@@ -569,7 +569,7 @@ IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, FindHdl_Impl, Button*, void)
         m_pFindDlg->Show(!m_pFindDlg->IsVisible());
 }
 
-IMPL_LINK_TYPED(SwCreateAddressListDialog, CustomizeHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, Button*, pButton, void)
 {
     VclPtrInstance< SwCustomizeAddressListDialog > pDlg(pButton, *m_pCSVData);
     if(RET_OK == pDlg->Execute())
@@ -618,7 +618,7 @@ void lcl_WriteValues(const std::vector<OUString> *pFields, SvStream* pStream)
 
 }
 
-IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
 {
     if(m_sURL.isEmpty())
     {
@@ -658,7 +658,7 @@ IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED(SwCreateAddressListDialog, DBCursorHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwCreateAddressListDialog, DBCursorHdl_Impl, Button*, pButton, void)
 {
     sal_uInt32 nValue = static_cast< sal_uInt32 >(m_pSetNoNF->GetValue());
 
@@ -683,7 +683,7 @@ IMPL_LINK_TYPED(SwCreateAddressListDialog, DBCursorHdl_Impl, Button*, pButton, v
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, DBNumCursorHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SwCreateAddressListDialog, DBNumCursorHdl_Impl, Edit&, void)
 {
     m_pAddressControl->SetCurrentDataSet( static_cast< sal_uInt32 >(m_pSetNoNF->GetValue() - 1) );
     UpdateButtons();
@@ -776,7 +776,7 @@ void SwFindEntryDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SwFindEntryDialog, FindHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwFindEntryDialog, FindHdl_Impl, Button*, void)
 {
     sal_Int32 nColumn = -1;
     if(m_pFindOnlyCB->IsChecked())
@@ -785,12 +785,12 @@ IMPL_LINK_NOARG_TYPED(SwFindEntryDialog, FindHdl_Impl, Button*, void)
         m_pParent->Find(m_pFindED->GetText(), nColumn);
 }
 
-IMPL_LINK_NOARG_TYPED(SwFindEntryDialog, FindEnableHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SwFindEntryDialog, FindEnableHdl_Impl, Edit&, void)
 {
     m_pFindPB->Enable(!m_pFindED->GetText().isEmpty());
 }
 
-IMPL_LINK_NOARG_TYPED(SwFindEntryDialog, CloseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwFindEntryDialog, CloseHdl_Impl, Button*, void)
 {
     Show(false);
 }

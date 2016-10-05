@@ -328,7 +328,7 @@ void AccessibleDialogWindow::SortChildren()
 }
 
 
-IMPL_LINK_TYPED( AccessibleDialogWindow, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( AccessibleDialogWindow, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     DBG_ASSERT(rEvent.GetWindow(), "AccessibleDialogWindow::WindowEventListener: no window!");
     if (!rEvent.GetWindow()->IsAccessibilityEventsSuppressed() || rEvent.GetId() == VCLEVENT_OBJECT_DYING)

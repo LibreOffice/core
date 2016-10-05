@@ -134,7 +134,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK_TYPED(SpecialSettingsPage, BooleanComparisonSelectHdl, ListBox&, rControl, void)
+    IMPL_LINK(SpecialSettingsPage, BooleanComparisonSelectHdl, ListBox&, rControl, void)
     {
         callModifiedHdl(&rControl);
     }

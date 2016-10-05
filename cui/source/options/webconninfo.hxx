@@ -50,11 +50,11 @@ namespace svx
         VclPtr<PushButton>    m_pChangeBtn;
         sal_Int32      m_nPos;
 
-        DECL_LINK_TYPED( HeaderBarClickedHdl, SvSimpleTable*, void );
-        DECL_LINK_TYPED( RemovePasswordHdl, Button*, void );
-        DECL_LINK_TYPED( RemoveAllPasswordsHdl, Button*, void );
-        DECL_LINK_TYPED( ChangePasswordHdl, Button*, void );
-        DECL_LINK_TYPED( EntrySelectedHdl, SvTreeListBox*, void );
+        DECL_LINK( HeaderBarClickedHdl, SvSimpleTable*, void );
+        DECL_LINK( RemovePasswordHdl, Button*, void );
+        DECL_LINK( RemoveAllPasswordsHdl, Button*, void );
+        DECL_LINK( ChangePasswordHdl, Button*, void );
+        DECL_LINK( EntrySelectedHdl, SvTreeListBox*, void );
 
         void FillPasswordList();
 

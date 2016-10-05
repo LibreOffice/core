@@ -39,9 +39,9 @@ private:
     VclPtr<MessageDialog> aQueryOverwriteBox;
     SfxStyleSheetBasePool&  rPool;
 
-    DECL_DLLPRIVATE_LINK_TYPED( OKHdl, ComboBox&, void );
-    DECL_DLLPRIVATE_LINK_TYPED( OKClickHdl, Button *, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ModifyHdl, Edit&, void );
+    DECL_DLLPRIVATE_LINK( OKHdl, ComboBox&, void );
+    DECL_DLLPRIVATE_LINK( OKClickHdl, Button *, void );
+    DECL_DLLPRIVATE_LINK( ModifyHdl, Edit&, void );
 
 public:
     SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& );

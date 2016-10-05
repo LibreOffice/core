@@ -1829,7 +1829,7 @@ static void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScModule, IdleHandler, Timer *, void)
+IMPL_LINK_NOARG(ScModule, IdleHandler, Timer *, void)
 {
     if ( Application::AnyInput( VclInputFlags::MOUSE | VclInputFlags::KEYBOARD ) )
     {
@@ -1900,7 +1900,7 @@ IMPL_LINK_NOARG_TYPED(ScModule, IdleHandler, Timer *, void)
     aIdleTimer.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(ScModule, SpellTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(ScModule, SpellTimerHdl, Idle *, void)
 {
     if ( Application::AnyInput( VclInputFlags::KEYBOARD ) )
     {
@@ -2126,7 +2126,7 @@ VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
     return pRet;
 }
 
-IMPL_LINK_TYPED( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
+IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
 {
     //TODO: Merge with ScFieldEditEngine!
     if (!pInfo)

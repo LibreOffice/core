@@ -224,19 +224,19 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG_TYPED( TabOrderDialog, MoveUpClickHdl, Button*, void )
+    IMPL_LINK_NOARG( TabOrderDialog, MoveUpClickHdl, Button*, void )
     {
         m_pLB_Controls->MoveSelection( -1 );
     }
 
 
-    IMPL_LINK_NOARG_TYPED( TabOrderDialog, MoveDownClickHdl, Button*, void )
+    IMPL_LINK_NOARG( TabOrderDialog, MoveDownClickHdl, Button*, void )
     {
         m_pLB_Controls->MoveSelection( 1 );
     }
 
 
-    IMPL_LINK_NOARG_TYPED( TabOrderDialog, AutoOrderClickHdl, Button*, void )
+    IMPL_LINK_NOARG( TabOrderDialog, AutoOrderClickHdl, Button*, void )
     {
         try
         {
@@ -258,7 +258,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG_TYPED( TabOrderDialog, OKClickHdl, Button*, void )
+    IMPL_LINK_NOARG( TabOrderDialog, OKClickHdl, Button*, void )
     {
         sal_uLong nEntryCount = m_pLB_Controls->GetEntryCount();
         Sequence< Reference< XControlModel > > aSortedControlModelSeq( nEntryCount );

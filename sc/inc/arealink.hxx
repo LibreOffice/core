@@ -74,8 +74,8 @@ public:
     const OUString& GetSource() const       { return aSourceArea;   }
     const ScRange&  GetDestArea() const     { return aDestArea;     }
 
-    DECL_LINK_TYPED( RefreshHdl, Timer*, void );
-    DECL_LINK_TYPED( AreaEndEditHdl, Dialog&, void );
+    DECL_LINK( RefreshHdl, Timer*, void );
+    DECL_LINK( AreaEndEditHdl, Dialog&, void );
 };
 
 #endif

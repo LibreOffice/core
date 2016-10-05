@@ -84,9 +84,9 @@ namespace pcr
         virtual short   Execute() override;
 
     private:
-        DECL_LINK_TYPED( OnSuggest,    Button*, void );
-        DECL_LINK_TYPED( OnFieldChanged, FieldLinkRow&, void );
-        DECL_LINK_TYPED( OnInitialize, void*, void);
+        DECL_LINK( OnSuggest,    Button*, void );
+        DECL_LINK( OnFieldChanged, FieldLinkRow&, void );
+        DECL_LINK( OnInitialize, void*, void);
 
         void        updateOkButton();
         void        initializeFieldLists();

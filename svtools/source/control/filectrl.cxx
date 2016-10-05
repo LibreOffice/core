@@ -172,7 +172,7 @@ void FileControl::Resize()
 }
 
 
-IMPL_LINK_NOARG_TYPED(FileControl, ButtonHdl, Button*, void)
+IMPL_LINK_NOARG(FileControl, ButtonHdl, Button*, void)
 {
     ImplBrowseFile( );
 }

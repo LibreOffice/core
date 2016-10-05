@@ -323,9 +323,9 @@ private:
     static OUString GetToolBarResourceName (const OUString& rsBaseName);
     bool CheckPlugInMode (const OUString& rsName) const;
 
-    DECL_LINK_TYPED(UpdateCallback, void *, void);
-    DECL_LINK_TYPED(EventMultiplexerCallback, sd::tools::EventMultiplexerEvent&, void);
-    DECL_LINK_TYPED(SetValidCallback, void*, void);
+    DECL_LINK(UpdateCallback, void *, void);
+    DECL_LINK(EventMultiplexerCallback, sd::tools::EventMultiplexerEvent&, void);
+    DECL_LINK(SetValidCallback, void*, void);
 };
 
 //===== ToolBarManager ========================================================
@@ -847,7 +847,7 @@ void ToolBarManager::Implementation::Update (
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBarManager::Implementation, UpdateCallback, void*, void)
+IMPL_LINK_NOARG(ToolBarManager::Implementation, UpdateCallback, void*, void)
 {
     mnPendingUpdateCall = nullptr;
     if (mnLockCount == 0)
@@ -861,7 +861,7 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager::Implementation, UpdateCallback, void*, voi
     }
 }
 
-IMPL_LINK_TYPED(ToolBarManager::Implementation,EventMultiplexerCallback,
+IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
     sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
     SolarMutexGuard g;
@@ -883,7 +883,7 @@ IMPL_LINK_TYPED(ToolBarManager::Implementation,EventMultiplexerCallback,
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBarManager::Implementation, SetValidCallback, void*, void)
+IMPL_LINK_NOARG(ToolBarManager::Implementation, SetValidCallback, void*, void)
 {
     mnPendingSetValidCall = nullptr;
     SetValid(true);

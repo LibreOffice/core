@@ -189,16 +189,16 @@ private:
     bool    FindTimeout( sal_Int32& rTimeout );
     void    ShowError( bool bCondition, formula::RefEdit* pFocus );
 
-    DECL_LINK_TYPED( BtnHdl, Button*, void );
-    DECL_LINK_TYPED( DelBtnHdl, Button*, void );
-    DECL_LINK_TYPED( GetFocusHdl, Control&, void );
-    DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
-    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void);
-    DECL_LINK_TYPED( CursorUpHdl, ScCursorRefEdit&, void );
-    DECL_LINK_TYPED( CursorDownHdl, ScCursorRefEdit&, void );
-    DECL_LINK_TYPED( CondModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( TargetModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
+    DECL_LINK( BtnHdl, Button*, void );
+    DECL_LINK( DelBtnHdl, Button*, void );
+    DECL_LINK( GetFocusHdl, Control&, void );
+    DECL_LINK( LoseFocusHdl, Control&, void );
+    DECL_LINK( ScrollHdl, ScrollBar*, void);
+    DECL_LINK( CursorUpHdl, ScCursorRefEdit&, void );
+    DECL_LINK( CursorDownHdl, ScCursorRefEdit&, void );
+    DECL_LINK( CondModifyHdl, Edit&, void );
+    DECL_LINK( TargetModifyHdl, Edit&, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
 };
 
 class ScSolverProgressDialog : public ModelessDialog
@@ -230,7 +230,7 @@ class ScSolverSuccessDialog : public ModalDialog
     VclPtr<PushButton> m_pBtnOk;
     VclPtr<PushButton> m_pBtnCancel;
 
-    DECL_LINK_TYPED(ClickHdl, Button*, void);
+    DECL_LINK(ClickHdl, Button*, void);
 
 public:
     ScSolverSuccessDialog( vcl::Window* pParent, const OUString& rSolution );

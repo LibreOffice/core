@@ -375,7 +375,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     return DND_ACTION_LINK;
 }
 
-IMPL_LINK_NOARG_TYPED( FmGridHeader, OnAsyncExecuteDrop, void*, void )
+IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
 {
     OUString             sCommand, sFieldName,sURL;
     sal_Int32                   nCommandType = CommandType::COMMAND;

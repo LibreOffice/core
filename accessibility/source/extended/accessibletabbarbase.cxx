@@ -43,7 +43,7 @@ AccessibleTabBarBase::~AccessibleTabBarBase()
     DELETEZ( m_pExternalLock );
 }
 
-IMPL_LINK_TYPED( AccessibleTabBarBase, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( AccessibleTabBarBase, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     vcl::Window* pEventWindow = rEvent.GetWindow();
     OSL_ENSURE( pEventWindow, "AccessibleTabBarBase::WindowEventListener: no window!" );

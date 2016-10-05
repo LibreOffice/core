@@ -92,7 +92,7 @@ friend class SvxConfigGroupListBox;
     SvxGroupInfoArr_Impl            aArr;
     SvTreeListEntry*                    m_pDraggingEntry;
 
-    DECL_LINK_TYPED(TimerHdl, Timer *, void);
+    DECL_LINK(TimerHdl, Timer *, void);
     virtual void                    MouseMove( const MouseEvent& rMEvt ) override;
 
 public:
@@ -187,9 +187,9 @@ class SvxScriptSelectorDialog : public ModalDialog
     bool                                   m_bShowSlots;
     Link<SvxScriptSelectorDialog&,void>    m_aAddHdl;
 
-    DECL_LINK_TYPED( ClickHdl, Button *, void );
-    DECL_LINK_TYPED( SelectHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( FunctionDoubleClickHdl, SvTreeListBox*, bool );
+    DECL_LINK( ClickHdl, Button *, void );
+    DECL_LINK( SelectHdl, SvTreeListBox*, void );
+    DECL_LINK( FunctionDoubleClickHdl, SvTreeListBox*, bool );
 
     void                            UpdateUI();
 

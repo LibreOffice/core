@@ -149,7 +149,7 @@ void BreakPointDialog::CheckButtons()
     }
 }
 
-IMPL_LINK_TYPED( BreakPointDialog, CheckBoxHdl, Button *, pButton, void )
+IMPL_LINK( BreakPointDialog, CheckBoxHdl, Button *, pButton, void )
 {
     ::CheckBox * pChkBx = static_cast<::CheckBox*>(pButton);
     BreakPoint* pBrk = GetSelectedBreakPoint();
@@ -157,7 +157,7 @@ IMPL_LINK_TYPED( BreakPointDialog, CheckBoxHdl, Button *, pButton, void )
         pBrk->bEnabled = pChkBx->IsChecked();
 }
 
-IMPL_LINK_TYPED( BreakPointDialog, ComboBoxHighlightHdl, ComboBox&, rBox, void )
+IMPL_LINK( BreakPointDialog, ComboBoxHighlightHdl, ComboBox&, rBox, void )
 {
     m_pNewButton->Disable();
     m_pOKButton->Enable();
@@ -170,7 +170,7 @@ IMPL_LINK_TYPED( BreakPointDialog, ComboBoxHighlightHdl, ComboBox&, rBox, void )
 }
 
 
-IMPL_LINK_TYPED( BreakPointDialog, EditModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( BreakPointDialog, EditModifyHdl, Edit&, rEdit, void )
 {
     if (&rEdit == m_pComboBox)
         CheckButtons();
@@ -183,7 +183,7 @@ IMPL_LINK_TYPED( BreakPointDialog, EditModifyHdl, Edit&, rEdit, void )
 }
 
 
-IMPL_LINK_TYPED( BreakPointDialog, ButtonHdl, Button *, pButton, void )
+IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton, void )
 {
     if (pButton == m_pOKButton)
     {

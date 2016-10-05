@@ -299,13 +299,13 @@ void SwFieldPage::RestorePos(ListBox* pLst1)
 }
 
 // Insert new fields
-IMPL_LINK_TYPED( SwFieldPage, TreeListBoxInsertHdl, SvTreeListBox*, pBtn, bool )
+IMPL_LINK( SwFieldPage, TreeListBoxInsertHdl, SvTreeListBox*, pBtn, bool )
 {
     InsertHdl(pBtn);
     return false;
 }
 
-IMPL_LINK_TYPED( SwFieldPage, ListBoxInsertHdl, ListBox&, rBox, void )
+IMPL_LINK( SwFieldPage, ListBoxInsertHdl, ListBox&, rBox, void )
 {
     InsertHdl(&rBox);
 }
@@ -345,7 +345,7 @@ void SwFieldPage::EnableInsert(bool bEnable)
     m_bInsert = bEnable;
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldPage, NumFormatHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwFieldPage, NumFormatHdl, ListBox&, void)
 {
     InsertHdl(nullptr);
 }

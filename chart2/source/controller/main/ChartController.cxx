@@ -1454,7 +1454,7 @@ void SAL_CALL ChartController::modified(
     //todo? update menu states ?
 }
 
-IMPL_LINK_TYPED( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction, void )
+IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction, void )
 {
     ENSURE_OR_RETURN_VOID( pUndoAction, "invalid Undo action" );
 

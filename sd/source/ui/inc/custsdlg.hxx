@@ -51,9 +51,9 @@ private:
 
     void            CheckState();
 
-    DECL_LINK_TYPED( ClickButtonHdl, Button*, void );
-    DECL_LINK_TYPED( SelectListBoxHdl, ListBox&, void );
-    DECL_LINK_TYPED( StartShowHdl, Button*, void );
+    DECL_LINK( ClickButtonHdl, Button*, void );
+    DECL_LINK( SelectListBoxHdl, ListBox&, void );
+    DECL_LINK( StartShowHdl, Button*, void );
     void SelectHdl(void*);
 
 public:
@@ -84,11 +84,11 @@ private:
     void            CheckState();
     void            CheckCustomShow();
 
-    DECL_LINK_TYPED( ClickButtonHdl, Button*, void );
-    DECL_LINK_TYPED( ClickButtonEditHdl, Edit&, void );
-    DECL_LINK_TYPED( ClickButtonHdl3, SvTreeListBox*, void );
-    DECL_LINK_TYPED( ClickButtonHdl4, ListBox&, void );
-    DECL_LINK_TYPED( OKHdl, Button*, void );
+    DECL_LINK( ClickButtonHdl, Button*, void );
+    DECL_LINK( ClickButtonEditHdl, Edit&, void );
+    DECL_LINK( ClickButtonHdl3, SvTreeListBox*, void );
+    DECL_LINK( ClickButtonHdl4, ListBox&, void );
+    DECL_LINK( OKHdl, Button*, void );
     void ClickButtonHdl2(void*);
 
 public:

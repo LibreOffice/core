@@ -277,7 +277,7 @@ void CalculateItemSize(long rTableSize, long& rItemNameSize, long& rItemRangeSiz
 
 }
 
-IMPL_LINK_NOARG_TYPED(ScRangeManagerTable, HeaderEndDragHdl, HeaderBar*, void)
+IMPL_LINK_NOARG(ScRangeManagerTable, HeaderEndDragHdl, HeaderBar*, void)
 {
     HeaderBar& rHeaderBar = GetTheHeaderBar();
 
@@ -300,7 +300,7 @@ IMPL_LINK_NOARG_TYPED(ScRangeManagerTable, HeaderEndDragHdl, HeaderBar*, void)
     SetTab(2, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width() );
 }
 
-IMPL_LINK_NOARG_TYPED(ScRangeManagerTable, ScrollHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(ScRangeManagerTable, ScrollHdl, SvTreeListBox*, void)
 {
     CheckForFormulaString();
 }

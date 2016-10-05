@@ -279,7 +279,7 @@ void SwAutoFormatDlg::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
 
 // Handler:
 
-IMPL_LINK_TYPED( SwAutoFormatDlg, CheckHdl, Button *, pBtn, void )
+IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn, void )
 {
     SwTableAutoFormat* pData  = &(*pTableTable)[nIndex];
     bool bCheck = static_cast<CheckBox*>(pBtn)->IsChecked(), bDataChgd = true;
@@ -309,7 +309,7 @@ IMPL_LINK_TYPED( SwAutoFormatDlg, CheckHdl, Button *, pBtn, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, AddHdl, Button*, void)
+IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl, Button*, void)
 {
     bool bOk = false, bFormatInserted = false;
     while( !bOk )
@@ -367,7 +367,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, AddHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RemoveHdl, Button*, void)
+IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl, Button*, void)
 {
     OUString aMessage = aStrDelMsg;
     aMessage += "\n\n";
@@ -402,7 +402,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RemoveHdl, Button*, void)
     SelFormatHdl( *m_pLbFormat );
 }
 
-IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RenameHdl, Button*, void)
+IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, Button*, void)
 {
     bool bOk = false;
     while( !bOk )
@@ -465,7 +465,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RenameHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, SelFormatHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, ListBox&, void)
 {
     bool bBtnEnable = false;
     sal_uInt8 nSelPos = (sal_uInt8) m_pLbFormat->GetSelectEntryPos(), nOldIdx = nIndex;
@@ -497,7 +497,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, SelFormatHdl, ListBox&, void)
     m_pBtnRename->Enable( bBtnEnable );
 }
 
-IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(SwAutoFormatDlg, OkHdl, Button*, void)
 {
     if( bSetAutoFormat )
         pShell->SetTableStyle((*pTableTable)[nIndex]);

@@ -164,7 +164,7 @@ void TitleBar::PaintFocus(vcl::RenderContext& rRenderContext, const Rectangle& r
     rRenderContext.Pop();
 }
 
-IMPL_LINK_TYPED(TitleBar, SelectionHandler, ToolBox*, pToolBox, void)
+IMPL_LINK(TitleBar, SelectionHandler, ToolBox*, pToolBox, void)
 {
     (void)pToolBox;
     OSL_ASSERT(maToolBox.get()==pToolBox);

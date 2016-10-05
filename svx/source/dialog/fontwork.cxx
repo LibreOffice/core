@@ -631,7 +631,7 @@ void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectStyleHdl_Impl, ToolBox *, void)
+IMPL_LINK_NOARG(SvxFontWorkDialog, SelectStyleHdl_Impl, ToolBox *, void)
 {
     sal_uInt16 nId = m_pTbxStyle->GetCurItemId();
 
@@ -661,7 +661,7 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectStyleHdl_Impl, ToolBox *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectAdjustHdl_Impl, ToolBox *, void)
+IMPL_LINK_NOARG(SvxFontWorkDialog, SelectAdjustHdl_Impl, ToolBox *, void)
 {
     sal_uInt16 nId = m_pTbxAdjust->GetCurItemId();
 
@@ -690,7 +690,7 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectAdjustHdl_Impl, ToolBox *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectShadowHdl_Impl, ToolBox *, void)
+IMPL_LINK_NOARG(SvxFontWorkDialog, SelectShadowHdl_Impl, ToolBox *, void)
 {
     sal_uInt16 nId = m_pTbxShadow->GetCurItemId();
 
@@ -732,12 +732,12 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, SelectShadowHdl_Impl, ToolBox *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, ModifyInputHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxFontWorkDialog, ModifyInputHdl_Impl, Edit&, void)
 {
     aInputIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, InputTimoutHdl_Impl, Idle *, void)
+IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl, Idle *, void)
 {
     // Possibly set the Metric system again. This should be done with a
     // listen, this is however not possible at the moment due to compatibility
@@ -791,7 +791,7 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, InputTimoutHdl_Impl, Idle *, void)
             { &aDistItem, &aStartItem, &aShadowXItem, &aShadowYItem });
 }
 
-IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, ColorSelectHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxFontWorkDialog, ColorSelectHdl_Impl, ListBox&, void)
 {
     XFormTextShadowColorItem aItem( "", m_pShadowColorLB->GetSelectEntryColor() );
     GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_SHDWCOLOR,

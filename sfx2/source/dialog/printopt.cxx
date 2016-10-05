@@ -271,7 +271,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, Button*, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, Button*, void )
 {
     const bool bReduceTransparency = m_pReduceTransparencyCB->IsChecked();
 
@@ -281,7 +281,7 @@ IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHd
     m_pTransparencyCB->Enable( !bReduceTransparency );
 }
 
-IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, Button*, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, Button*, void )
 {
     const bool bEnable = m_pReduceGradientsCB->IsChecked();
 
@@ -292,7 +292,7 @@ IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, 
     ToggleReduceGradientsStripesRBHdl(*m_pReduceGradientsStripesRB);
 }
 
-IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, Button*, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, Button*, void )
 {
     const bool bEnable = m_pReduceBitmapsCB->IsChecked();
 
@@ -305,21 +305,21 @@ IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, Bu
     ToggleReduceBitmapsResolutionRBHdl(*m_pReduceBitmapsResolutionRB);
 }
 
-IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, RadioButton&, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, RadioButton&, void )
 {
     const bool bEnable = m_pReduceGradientsCB->IsChecked() && m_pReduceGradientsStripesRB->IsChecked();
 
     m_pReduceGradientsStepCountNF->Enable( bEnable );
 }
 
-IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, RadioButton&, void )
+IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, RadioButton&, void )
 {
     const bool bEnable = m_pReduceBitmapsCB->IsChecked() && m_pReduceBitmapsResolutionRB->IsChecked();
 
     m_pReduceBitmapsResolutionLB->Enable( bEnable );
 }
 
-IMPL_LINK_TYPED( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton&, rButton, void )
+IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton&, rButton, void )
 {
     if( rButton.IsChecked() )
     {
@@ -330,7 +330,7 @@ IMPL_LINK_TYPED( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioBu
         ImplSaveControls( &maPrinterOptions );
 }
 
-IMPL_LINK_TYPED( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton&, rButton, void )
+IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton&, rButton, void )
 {
     if( rButton.IsChecked() )
     {

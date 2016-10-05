@@ -699,7 +699,7 @@ void GridWindow::ChangeMode(int nType)
     Invalidate();
 }
 
-IMPL_LINK_TYPED( GridDialog, ClickButtonHdl, Button*, pButton, void )
+IMPL_LINK( GridDialog, ClickButtonHdl, Button*, pButton, void )
 {
     if (pButton == m_pResetButton)
     {

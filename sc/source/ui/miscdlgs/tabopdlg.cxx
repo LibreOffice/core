@@ -244,7 +244,7 @@ static bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCurTab,
 
 // Handler:
 
-IMPL_LINK_TYPED( ScTabOpDlg, BtnHdl, Button*, pBtn, void )
+IMPL_LINK( ScTabOpDlg, BtnHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnOk)
     {
@@ -322,7 +322,7 @@ IMPL_LINK_TYPED( ScTabOpDlg, BtnHdl, Button*, pBtn, void )
         Close();
 }
 
-IMPL_LINK_TYPED( ScTabOpDlg, GetFocusHdl, Control&, rCtrl, void )
+IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control&, rCtrl, void )
 {
     if( (&rCtrl == static_cast<Control*>(m_pEdFormulaRange)) || (&rCtrl == static_cast<Control*>(m_pRBFormulaRange)) )
         pEdActive = m_pEdFormulaRange;
@@ -337,7 +337,7 @@ IMPL_LINK_TYPED( ScTabOpDlg, GetFocusHdl, Control&, rCtrl, void )
         pEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
 }
 
-IMPL_LINK_NOARG_TYPED(ScTabOpDlg, LoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(ScTabOpDlg, LoseFocusHdl, Control&, void)
 {
     bDlgLostFocus = !IsActive();
 }

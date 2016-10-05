@@ -506,7 +506,7 @@ short OrganizeDialog::Execute()
     return TabDialog::Execute();
 }
 
-IMPL_LINK_TYPED( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
+IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 {
     sal_uInt16 nId = pTabCtrl->GetCurPageId();
 
@@ -679,7 +679,7 @@ void ObjectPage::CheckButtons()
         m_pDelButton->Disable();
 }
 
-IMPL_LINK_TYPED( ObjectPage, BasicBoxHighlightHdl, SvTreeListBox*, pBox, void )
+IMPL_LINK( ObjectPage, BasicBoxHighlightHdl, SvTreeListBox*, pBox, void )
 {
     if ( !pBox->IsSelected( pBox->GetHdlEntry() ) )
         return;
@@ -687,7 +687,7 @@ IMPL_LINK_TYPED( ObjectPage, BasicBoxHighlightHdl, SvTreeListBox*, pBox, void )
     CheckButtons();
 }
 
-IMPL_LINK_TYPED( ObjectPage, ButtonHdl, Button *, pButton, void )
+IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton, void )
 {
     if (pButton == m_pEditButton)
     {

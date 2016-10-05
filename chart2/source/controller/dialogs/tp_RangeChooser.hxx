@@ -69,11 +69,11 @@ protected: //methods
     bool isValid();
     void setDirty();
 
-    DECL_LINK_TYPED( ChooseRangeHdl, Button*, void );
-    DECL_LINK_TYPED( ControlChangedHdl, Edit&, void );
-    DECL_LINK_TYPED( ControlChangedCheckBoxHdl, CheckBox&, void );
-    DECL_LINK_TYPED( ControlChangedRadioHdl, RadioButton&, void );
-    DECL_LINK_TYPED( ControlEditedHdl, Edit&, void );
+    DECL_LINK( ChooseRangeHdl, Button*, void );
+    DECL_LINK( ControlChangedHdl, Edit&, void );
+    DECL_LINK( ControlChangedCheckBoxHdl, CheckBox&, void );
+    DECL_LINK( ControlChangedRadioHdl, RadioButton&, void );
+    DECL_LINK( ControlEditedHdl, Edit&, void );
 
 protected: //member
 

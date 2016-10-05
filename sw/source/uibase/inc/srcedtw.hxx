@@ -92,7 +92,7 @@ private:
     using OutputDevice::SetFont;
     void            SetFont();
 
-    DECL_LINK_TYPED( SyntaxTimerHdl, Idle *, void );
+    DECL_LINK( SyntaxTimerHdl, Idle *, void );
 
     using Window::Notify;
     using Window::Invalidate;
@@ -109,7 +109,7 @@ protected:
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
+    DECL_LINK(ScrollHdl, ScrollBar*, void);
 
 public:
                     SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView );

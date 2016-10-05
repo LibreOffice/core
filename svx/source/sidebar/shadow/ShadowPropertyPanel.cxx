@@ -142,7 +142,7 @@ void ShadowPropertyPanel::Initialize()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ClickShadowHdl, Button*, void)
+IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, Button*, void)
 {
     if( mpShowShadow->GetState() == TRISTATE_FALSE )
     {
@@ -158,14 +158,14 @@ IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ClickShadowHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowColorHdl, ListBox&, void)
+IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowColorHdl, ListBox&, void)
 {
     XColorItem aItem(makeSdrShadowColorItem(mpLBShadowColor->GetSelectEntryColor()));
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_COLOR,
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowTransMetricHdl, Edit&, void)
+IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransMetricHdl, Edit&, void)
 {
     sal_uInt16 nVal = mpShadowTransMetric->GetValue();
     SetTransparencyValue(nVal);
@@ -174,7 +174,7 @@ IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowTransMetricHdl, Edit&, vo
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowTransSliderHdl, Slider*, void)
+IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransSliderHdl, Slider*, void)
 {
     sal_uInt16 nVal = mpShadowTransSlider->GetThumbPos();
     SetTransparencyValue(nVal);
@@ -183,7 +183,7 @@ IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowTransSliderHdl, Slider*, 
             SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowDistanceHdl, Edit&, void)
+IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowDistanceHdl, Edit&, void)
 {
     OUString sAngle = mpShadowAngle->GetText();
     nXY = mpShadowDistance->GetValue(FUNIT_100TH_MM);

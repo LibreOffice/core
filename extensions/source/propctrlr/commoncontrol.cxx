@@ -94,17 +94,17 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG_TYPED( CommonBehaviourControlHelper, EditModifiedHdl, Edit&, void )
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, EditModifiedHdl, Edit&, void )
     {
         setModified();
     }
 
-    IMPL_LINK_NOARG_TYPED( CommonBehaviourControlHelper, ModifiedHdl, ListBox&, void )
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, ModifiedHdl, ListBox&, void )
     {
         setModified();
     }
 
-    IMPL_LINK_NOARG_TYPED( CommonBehaviourControlHelper, GetFocusHdl, Control&, void )
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, GetFocusHdl, Control&, void )
     {
         try
         {
@@ -118,7 +118,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG_TYPED( CommonBehaviourControlHelper, LoseFocusHdl, Control&, void )
+    IMPL_LINK_NOARG( CommonBehaviourControlHelper, LoseFocusHdl, Control&, void )
     {
         // TODO/UNOize: should this be outside the default control's implementations? If somebody
         // has an own control implementation, which does *not* do this - would this be allowed?

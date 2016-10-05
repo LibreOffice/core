@@ -80,9 +80,9 @@ private:
     sal_Int32           m_nNbPoints;
 
     void UpdateControlStates();
-    DECL_LINK_TYPED( SelectTrendLine, Button*, void );
-    DECL_LINK_TYPED( ChangeValue, Edit&, void);
-    DECL_LINK_TYPED( ShowEquation, CheckBox&, void);
+    DECL_LINK( SelectTrendLine, Button*, void );
+    DECL_LINK( ChangeValue, Edit&, void);
+    DECL_LINK( ShowEquation, CheckBox&, void);
 };
 
 } //  namespace chart

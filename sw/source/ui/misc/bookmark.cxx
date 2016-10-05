@@ -43,7 +43,7 @@ const char BookmarkTable::cSeparator(';');
 const OUString BookmarkTable::sDefaultBookmarkName("Bookmark");
 
 // callback to modify EditBox
-IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwInsertBookmarkDlg, ModifyHdl, Edit&, void)
 {
     ValidateBookmarks();
     m_pBookmarksBox->SelectAll(false);
@@ -90,7 +90,7 @@ IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, ModifyHdl, Edit&, void)
 }
 
 // callback to delete a text mark
-IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, DeleteHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl, Button*, void)
 {
     if (!ValidateBookmarks())
         return;
@@ -124,18 +124,18 @@ IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, DeleteHdl, Button*, void)
 }
 
 // callback to a goto button
-IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, GotoHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsertBookmarkDlg, GotoHdl, Button*, void)
 {
     GotoSelectedBookmark();
 }
 
-IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, DoubleClickHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(SwInsertBookmarkDlg, DoubleClickHdl, SvTreeListBox*, bool)
 {
     GotoSelectedBookmark();
     return true;
 }
 
-IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, SelectionChangedHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, SvTreeListBox*, void)
 {
     if (!ValidateBookmarks())
         return;
@@ -171,7 +171,7 @@ IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, SelectionChangedHdl, SvTreeListBox*, 
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, RenameHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, Button*, void)
 {
     if (!ValidateBookmarks())
         return;
@@ -205,7 +205,7 @@ IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, RenameHdl, Button*, void)
 }
 
 // callback to a insert button. Inserts a new text mark to the current position.
-IMPL_LINK_NOARG_TYPED(SwInsertBookmarkDlg, InsertHdl, Button*, void)
+IMPL_LINK_NOARG(SwInsertBookmarkDlg, InsertHdl, Button*, void)
 {
     OUString sBookmark = m_pEditBox->GetText();
     rSh.SetBookmark(vcl::KeyCode(), sBookmark, OUString());

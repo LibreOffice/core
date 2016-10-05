@@ -821,7 +821,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 }
 
 // OnlineSpelling in the background
-IMPL_LINK_NOARG_TYPED(SdDrawDocument, OnlineSpellingHdl, Idle *, void)
+IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl, Idle *, void)
 {
     if (mpOnlineSpellingList!=nullptr
         && ( !mbOnlineSpell || mpOnlineSpellingList->hasMore()))
@@ -953,7 +953,7 @@ void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* /*pPage*/)
 }
 
 // Callback for ExecuteSpellPopup()
-IMPL_LINK_TYPED(SdDrawDocument, OnlineSpellEventHdl, EditStatus&, rEditStat, void)
+IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus&, rEditStat, void)
 {
     EditStatusFlags nStat = rEditStat.GetStatusWord();
     mbHasOnlineSpellErrors = bool(nStat & EditStatusFlags::WRONGWORDCHANGED);

@@ -545,7 +545,7 @@ ScAppCfg::ScAppCfg() :
     }
     aCompatItem.SetCommitLink( LINK(this, ScAppCfg, CompatCommitHdl) );
 }
- IMPL_LINK_NOARG_TYPED(ScAppCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
+ IMPL_LINK_NOARG(ScAppCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetLayoutPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -578,7 +578,7 @@ ScAppCfg::ScAppCfg() :
     aLayoutItem.PutProperties(aNames, aValues);
 }
 
-IMPL_LINK_NOARG_TYPED(ScAppCfg, InputCommitHdl, ScLinkConfigItem&, void)
+IMPL_LINK_NOARG(ScAppCfg, InputCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetInputPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -602,7 +602,7 @@ IMPL_LINK_NOARG_TYPED(ScAppCfg, InputCommitHdl, ScLinkConfigItem&, void)
     aInputItem.PutProperties(aNames, aValues);
 }
 
-IMPL_LINK_NOARG_TYPED(ScAppCfg, RevisionCommitHdl, ScLinkConfigItem&, void)
+IMPL_LINK_NOARG(ScAppCfg, RevisionCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetRevisionPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -629,7 +629,7 @@ IMPL_LINK_NOARG_TYPED(ScAppCfg, RevisionCommitHdl, ScLinkConfigItem&, void)
     aRevisionItem.PutProperties(aNames, aValues);
 }
 
-IMPL_LINK_NOARG_TYPED(ScAppCfg, ContentCommitHdl, ScLinkConfigItem&, void)
+IMPL_LINK_NOARG(ScAppCfg, ContentCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetContentPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -647,7 +647,7 @@ IMPL_LINK_NOARG_TYPED(ScAppCfg, ContentCommitHdl, ScLinkConfigItem&, void)
     aContentItem.PutProperties(aNames, aValues);
 }
 
-IMPL_LINK_NOARG_TYPED(ScAppCfg, SortListCommitHdl, ScLinkConfigItem&, void)
+IMPL_LINK_NOARG(ScAppCfg, SortListCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetSortListPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -665,7 +665,7 @@ IMPL_LINK_NOARG_TYPED(ScAppCfg, SortListCommitHdl, ScLinkConfigItem&, void)
     aSortListItem.PutProperties(aNames, aValues);
 }
 
-IMPL_LINK_NOARG_TYPED(ScAppCfg, MiscCommitHdl, ScLinkConfigItem&, void)
+IMPL_LINK_NOARG(ScAppCfg, MiscCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetMiscPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -689,7 +689,7 @@ IMPL_LINK_NOARG_TYPED(ScAppCfg, MiscCommitHdl, ScLinkConfigItem&, void)
     aMiscItem.PutProperties(aNames, aValues);
 }
 
-IMPL_LINK_NOARG_TYPED(ScAppCfg, CompatCommitHdl, ScLinkConfigItem&, void)
+IMPL_LINK_NOARG(ScAppCfg, CompatCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetCompatPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

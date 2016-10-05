@@ -249,7 +249,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG_TYPED(EditBrowseBox, StartEditHdl, void*, void)
+    IMPL_LINK_NOARG(EditBrowseBox, StartEditHdl, void*, void)
     {
         nStartEvent = nullptr;
         if (IsEditing())
@@ -1069,7 +1069,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG_TYPED(EditBrowseBox, EndEditHdl, void*, void)
+    IMPL_LINK_NOARG(EditBrowseBox, EndEditHdl, void*, void)
     {
         nEndEvent = nullptr;
 
@@ -1079,7 +1079,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG_TYPED(EditBrowseBox, ModifyHdl, LinkParamNone*, void)
+    IMPL_LINK_NOARG(EditBrowseBox, ModifyHdl, LinkParamNone*, void)
     {
         if (nCellModifiedEvent)
             Application::RemoveUserEvent(nCellModifiedEvent);
@@ -1087,7 +1087,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG_TYPED(EditBrowseBox, CellModifiedHdl, void*, void)
+    IMPL_LINK_NOARG(EditBrowseBox, CellModifiedHdl, void*, void)
     {
         nCellModifiedEvent = nullptr;
         CellModified();

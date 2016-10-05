@@ -45,7 +45,7 @@ private:
     void                FillFormatList();
     void                FillControls();
 
-    DECL_LINK_TYPED( LanguageChangeHdl, ListBox&, void );
+    DECL_LINK( LanguageChangeHdl, ListBox&, void );
 
 public:
     SdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet );

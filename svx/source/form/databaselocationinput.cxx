@@ -70,7 +70,7 @@ namespace svx
         void     impl_onLocationModified();
         OUString impl_getCurrentURL() const;
 
-        DECL_LINK_TYPED( OnControlAction, VclWindowEvent&, void );
+        DECL_LINK( OnControlAction, VclWindowEvent&, void );
 
     private:
         const Reference<XComponentContext>      m_xContext;
@@ -196,7 +196,7 @@ namespace svx
     }
 
 
-    IMPL_LINK_TYPED( DatabaseLocationInputController_Impl, OnControlAction, VclWindowEvent&, _rEvent, void )
+    IMPL_LINK( DatabaseLocationInputController_Impl, OnControlAction, VclWindowEvent&, _rEvent, void )
     {
         if  (   ( _rEvent.GetWindow() == &m_rBrowseButton )
             &&  ( _rEvent.GetId() == VCLEVENT_BUTTON_CLICK )

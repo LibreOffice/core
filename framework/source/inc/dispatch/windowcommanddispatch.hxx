@@ -102,7 +102,7 @@ class WindowCommandDispatch
 
         /** @short  callback from VCL to notify new commands
          */
-        DECL_LINK_TYPED( impl_notifyCommand, VclWindowEvent&, void );
+        DECL_LINK( impl_notifyCommand, VclWindowEvent&, void );
 
         /** @short  dispatch right command URLs into our frame context.
 

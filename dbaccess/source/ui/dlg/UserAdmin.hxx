@@ -55,8 +55,8 @@ protected:
     OUString            m_UserName;
 
     // methods
-    DECL_LINK_TYPED( ListDblClickHdl, ListBox&, void );
-    DECL_LINK_TYPED( UserHdl,   Button *, void );
+    DECL_LINK( ListDblClickHdl, ListBox&, void );
+    DECL_LINK( UserHdl,   Button *, void );
 
     void        FillUserNames();
 

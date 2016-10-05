@@ -37,7 +37,7 @@ class SvxEventConfigPage : public SvxMacroTabPage_
 
     bool            bAppConfig;
 
-    DECL_LINK_TYPED(      SelectHdl_Impl, ListBox&, void );
+    DECL_LINK(      SelectHdl_Impl, ListBox&, void );
 
     SvxEventConfigPage (const SvxEventConfigPage &) = delete;
     SvxEventConfigPage & operator= (const SvxEventConfigPage &) = delete;

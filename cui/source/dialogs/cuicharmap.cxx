@@ -392,7 +392,7 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharacterMap, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SvxCharacterMap, OKHdl, Button*, void)
 {
     OUString aStr = m_pShowText->GetText();
 
@@ -419,7 +419,7 @@ void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharacterMap, FontSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
 {
     const sal_Int32 nPos = m_pFontLB->GetSelectEntryPos();
     const sal_uInt16 nFont = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFontLB->GetEntryData( nPos ));
@@ -471,7 +471,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, FontSelectHdl, ListBox&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
 {
     const sal_Int32 nPos = m_pSubsetLB->GetSelectEntryPos();
     const Subset* pSubset = static_cast<const Subset*> (m_pSubsetLB->GetEntryData(nPos));
@@ -484,7 +484,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
+IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
 {
     if (bOne)
     {
@@ -495,7 +495,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
+IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
 {
     if ( !bOne )
     {
@@ -526,7 +526,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
+IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
 {
     OUString aText;
     OUString aHexText;
@@ -593,17 +593,17 @@ void SvxCharacterMap::selectCharByCode(Radix radix)
         SetChar(cChar);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxCharacterMap, DecimalCodeChangeHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, DecimalCodeChangeHdl, Edit&, void)
 {
     selectCharByCode(Radix::decimal);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxCharacterMap, HexCodeChangeHdl, Edit&, void)
+IMPL_LINK_NOARG(SvxCharacterMap, HexCodeChangeHdl, Edit&, void)
 {
     selectCharByCode(Radix::hexadecimal);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, void)
+IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, void)
 {
     // adjust subset selection
     if( pSubsetMap )

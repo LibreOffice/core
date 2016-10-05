@@ -456,7 +456,7 @@ void MacroChooser::CheckButtons()
 }
 
 
-IMPL_LINK_NOARG_TYPED(MacroChooser, MacroDoubleClickHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl, SvTreeListBox*, bool)
 {
     StoreMacroDescription();
     if (nMode == Recording)
@@ -470,7 +470,7 @@ IMPL_LINK_NOARG_TYPED(MacroChooser, MacroDoubleClickHdl, SvTreeListBox*, bool)
     return false;
 }
 
-IMPL_LINK_TYPED( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox, void )
+IMPL_LINK( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox, void )
 {
     // Is also called if deselected!
     // Two function calls in every SelectHdl because
@@ -483,7 +483,7 @@ IMPL_LINK_TYPED( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox, void )
     }
 }
 
-IMPL_LINK_TYPED( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
+IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
 {
     // Is also called if deselected!
     // Two function calls in every SelectHdl because
@@ -533,7 +533,7 @@ IMPL_LINK_TYPED( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( MacroChooser, EditModifyHdl, Edit&, void )
+IMPL_LINK_NOARG( MacroChooser, EditModifyHdl, Edit&, void )
 {
     // select the module in which the macro is put at Neu (new),
     // if BasicManager or Lib is selecting
@@ -590,7 +590,7 @@ IMPL_LINK_NOARG_TYPED( MacroChooser, EditModifyHdl, Edit&, void )
 }
 
 
-IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
+IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton, void )
 {
     // apart from New/Record the Description is done by LoseFocus
     if (pButton == m_pRunButton)

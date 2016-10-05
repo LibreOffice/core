@@ -123,7 +123,7 @@ void XMLFilterSettingsDialog::dispose()
     ModelessDialog::dispose();
 }
 
-IMPL_LINK_TYPED(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void )
+IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void )
 {
     m_bIsClosable = false;
 
@@ -159,12 +159,12 @@ IMPL_LINK_TYPED(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void 
     m_bIsClosable = true;
 }
 
-IMPL_LINK_NOARG_TYPED(XMLFilterSettingsDialog, SelectionChangedHdl_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(XMLFilterSettingsDialog, SelectionChangedHdl_Impl, SvTreeListBox*, void)
 {
     updateStates();
 }
 
-IMPL_LINK_NOARG_TYPED(XMLFilterSettingsDialog, DoubleClickHdl_Impl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(XMLFilterSettingsDialog, DoubleClickHdl_Impl, SvTreeListBox*, bool)
 {
     onEdit();
     return false;
@@ -1436,12 +1436,12 @@ void XMLFilterListBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle
     SvTabListBox::Paint(rRenderContext, rRect);
 }
 
-IMPL_LINK_NOARG_TYPED( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTreeListBox*, void )
+IMPL_LINK_NOARG( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTreeListBox*, void )
 {
     m_pHeaderBar->SetOffset( -GetXOffset() );
 }
 
-IMPL_LINK_TYPED( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
+IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
     if ( pBar && !pBar->GetCurItemId() )
         return;

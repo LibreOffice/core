@@ -342,11 +342,11 @@ sal_uInt16 ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
 
 // Handler:
 
-IMPL_LINK_TYPED( ScTpSubTotalGroup, SelectTreeListBoxHdl, SvTreeListBox*, pLb, void )
+IMPL_LINK( ScTpSubTotalGroup, SelectTreeListBoxHdl, SvTreeListBox*, pLb, void )
 {
     SelectHdl(pLb);
 }
-IMPL_LINK_TYPED( ScTpSubTotalGroup, SelectListBoxHdl, ListBox&, rLb, void )
+IMPL_LINK( ScTpSubTotalGroup, SelectListBoxHdl, ListBox&, rLb, void )
 {
     SelectHdl(&rLb);
 }
@@ -375,7 +375,7 @@ void ScTpSubTotalGroup::SelectHdl(void *pLb)
     }
 }
 
-IMPL_LINK_TYPED( ScTpSubTotalGroup, CheckHdl, SvTreeListBox*, pLb, void )
+IMPL_LINK( ScTpSubTotalGroup, CheckHdl, SvTreeListBox*, pLb, void )
 {
     if ( pLb == mpLbColumns )
     {
@@ -570,7 +570,7 @@ void ScTpSubTotalOptions::FillUserSortListBox()
 
 // Handler:
 
-IMPL_LINK_TYPED( ScTpSubTotalOptions, CheckHdl, Button*, pBox, void )
+IMPL_LINK( ScTpSubTotalOptions, CheckHdl, Button*, pBox, void )
 {
     if ( pBox == pBtnSort )
     {

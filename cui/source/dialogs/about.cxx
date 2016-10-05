@@ -109,7 +109,7 @@ void AboutDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED( AboutDialog, HandleClick, Button*, pButton, void )
+IMPL_LINK( AboutDialog, HandleClick, Button*, pButton, void )
 {
     OUString sURL = "";
 

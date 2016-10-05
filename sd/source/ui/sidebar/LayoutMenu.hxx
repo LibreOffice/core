@@ -187,11 +187,11 @@ private:
 
     /** When clicked then set the current page of the view in the center pane.
     */
-    DECL_LINK_TYPED(ClickHandler, ValueSet*, void);
-    DECL_LINK_TYPED(StateChangeHandler, const OUString&, void);
-    DECL_LINK_TYPED(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
-    DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
-    DECL_LINK_TYPED(OnMenuItemSelected, Menu*, bool);
+    DECL_LINK(ClickHandler, ValueSet*, void);
+    DECL_LINK(StateChangeHandler, const OUString&, void);
+    DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
+    DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
+    DECL_LINK(OnMenuItemSelected, Menu*, bool);
 };
 
 } } // end of namespace ::sd::toolpanel

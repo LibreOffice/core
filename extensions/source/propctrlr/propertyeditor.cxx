@@ -505,13 +505,13 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG_TYPED(OPropertyEditor, OnPageActivate, TabControl*, void)
+    IMPL_LINK_NOARG(OPropertyEditor, OnPageActivate, TabControl*, void)
     {
         m_aPageActivationHandler.Call(nullptr);
     }
 
 
-    IMPL_LINK_NOARG_TYPED(OPropertyEditor, OnPageDeactivate, TabControl *, bool)
+    IMPL_LINK_NOARG(OPropertyEditor, OnPageDeactivate, TabControl *, bool)
     {
         // commit the data on the current (to-be-deactivated) tab page
         // (79404)

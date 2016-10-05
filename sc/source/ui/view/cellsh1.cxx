@@ -2908,7 +2908,7 @@ void ScCellShell::ExecuteFillSingleEdit()
     SC_MOD()->SetInputMode(SC_INPUT_TABLE, &aInit);
 }
 
-IMPL_LINK_NOARG_TYPED(ScCellShell, DialogClosed, Dialog&, void)
+IMPL_LINK_NOARG(ScCellShell, DialogClosed, Dialog&, void)
 {
     assert(pImpl->m_pLinkedDlg && "ScCellShell::DialogClosed(): invalid request");
     assert(pImpl->m_pRequest && "ScCellShell::DialogClosed(): invalid request");

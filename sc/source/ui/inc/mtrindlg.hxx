@@ -49,8 +49,8 @@ private:
     long            nDefaultValue;
     long            nCurrentValue;
 
-    DECL_LINK_TYPED(SetDefValHdl, Button*, void);
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+    DECL_LINK(SetDefValHdl, Button*, void);
+    DECL_LINK(ModifyHdl, Edit&, void);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_MTRINDLG_HXX

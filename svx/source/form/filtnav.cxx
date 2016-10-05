@@ -1212,7 +1212,7 @@ bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rN
 }
 
 
-IMPL_LINK_TYPED( FmFilterNavigator, OnRemove, void*, p, void )
+IMPL_LINK( FmFilterNavigator, OnRemove, void*, p, void )
 {
     SvTreeListEntry* pEntry = static_cast<SvTreeListEntry*>(p);
     // now remove the entry
@@ -1220,7 +1220,7 @@ IMPL_LINK_TYPED( FmFilterNavigator, OnRemove, void*, p, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(FmFilterNavigator, OnDropActionTimer, Timer *, void)
+IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer, Timer *, void)
 {
     if (--m_aTimerCounter > 0)
         return;

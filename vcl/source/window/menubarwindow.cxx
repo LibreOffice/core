@@ -222,7 +222,7 @@ Size MenuBarWindow::MinCloseButtonSize()
     return aCloseBtn->getMinSize();
 }
 
-IMPL_LINK_NOARG_TYPED(MenuBarWindow, CloseHdl, ToolBox *, void)
+IMPL_LINK_NOARG(MenuBarWindow, CloseHdl, ToolBox *, void)
 {
     if( ! pMenu )
         return;
@@ -248,7 +248,7 @@ IMPL_LINK_NOARG_TYPED(MenuBarWindow, CloseHdl, ToolBox *, void)
     }
 }
 
-IMPL_LINK_TYPED( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
+IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
 {
     if( ! pMenu )
         return;
@@ -271,7 +271,7 @@ IMPL_LINK_TYPED( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
     }
 }
 
-IMPL_LINK_TYPED( MenuBarWindow, ShowHideListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( MenuBarWindow, ShowHideListener, VclWindowEvent&, rEvent, void )
 {
     if( ! pMenu )
         return;

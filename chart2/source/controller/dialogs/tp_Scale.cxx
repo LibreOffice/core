@@ -157,7 +157,7 @@ void ScaleTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_STATIC_LINK_TYPED(
+IMPL_STATIC_LINK(
     ScaleTabPage, FmtFieldModifiedHdl, Edit&, rEdit, void )
 {
     FormattedField& rFmtField = static_cast<FormattedField&>(rEdit);
@@ -217,7 +217,7 @@ void ScaleTabPage::EnableControls()
     EnableValueHdl(m_pCbx_AutoTimeResolution);
 }
 
-IMPL_LINK_TYPED( ScaleTabPage, EnableValueHdl, Button *, pButton, void )
+IMPL_LINK( ScaleTabPage, EnableValueHdl, Button *, pButton, void )
 {
     CheckBox * pCbx = static_cast<CheckBox*>(pButton);
     bool bEnable = pCbx && !pCbx->IsChecked() && pCbx->IsEnabled();
@@ -257,7 +257,7 @@ enum AxisTypeListBoxEntry
     TYPE_DATE=2
 };
 
-IMPL_LINK_NOARG_TYPED(ScaleTabPage, SelectAxisTypeHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl, ListBox&, void)
 {
     const sal_Int32 nPos = m_pLB_AxisType->GetSelectEntryPos();
     if( nPos==TYPE_DATE )

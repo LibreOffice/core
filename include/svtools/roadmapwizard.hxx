@@ -206,7 +206,7 @@ namespace svt
         void    updateRoadmapItemLabel( WizardState _nState );
 
     private:
-        DECL_DLLPRIVATE_LINK_TYPED( OnRoadmapItemSelected, LinkParamNone*, void );
+        DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, LinkParamNone*, void );
 
         /** updates the roadmap control to show the given path, as far as possible
             (modulo conflicts with other paths)

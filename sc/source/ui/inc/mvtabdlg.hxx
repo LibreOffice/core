@@ -75,10 +75,10 @@ private:
 
     void    Init            ();
     void    InitDocListBox  ();
-    DECL_LINK_TYPED( OkHdl, Button*, void );
-    DECL_LINK_TYPED( SelHdl, ListBox&, void );
-    DECL_LINK_TYPED( CheckBtnHdl, RadioButton&, void );
-    DECL_LINK_TYPED( CheckNameHdl, Edit&, void );
+    DECL_LINK( OkHdl, Button*, void );
+    DECL_LINK( SelHdl, ListBox&, void );
+    DECL_LINK( CheckBtnHdl, RadioButton&, void );
+    DECL_LINK( CheckNameHdl, Edit&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_MVTABDLG_HXX

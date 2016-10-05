@@ -56,11 +56,11 @@ namespace toolkit
         {
         }
 
-        DECL_LINK_TYPED( OnWindowEvent, VclWindowEvent&, void );
+        DECL_LINK( OnWindowEvent, VclWindowEvent&, void );
     };
 
 
-    IMPL_LINK_TYPED( WindowStyleSettings_Data, OnWindowEvent, VclWindowEvent&, rEvent, void )
+    IMPL_LINK( WindowStyleSettings_Data, OnWindowEvent, VclWindowEvent&, rEvent, void )
     {
         if ( rEvent.GetId() != VCLEVENT_WINDOW_DATACHANGED )
             return;

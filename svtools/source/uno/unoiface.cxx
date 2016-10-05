@@ -721,7 +721,7 @@ sal_Int16 VCLXFileControl::getMaxTextLen() throw(css::uno::RuntimeException, std
 }
 
 
-IMPL_LINK_NOARG_TYPED(VCLXFileControl, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(VCLXFileControl, ModifyHdl, Edit&, void)
 {
     ModifyHdl();
 }

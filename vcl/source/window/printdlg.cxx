@@ -1520,7 +1520,7 @@ void PrintDialog::updateNup()
     preparePreview( true, true );
 }
 
-IMPL_LINK_TYPED( PrintDialog, SelectHdl, ListBox&, rBox, void )
+IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
 {
     if(  &rBox == maJobPage.mpPrinters )
     {
@@ -1557,17 +1557,17 @@ IMPL_LINK_TYPED( PrintDialog, SelectHdl, ListBox&, rBox, void )
     }
 }
 
-IMPL_LINK_TYPED( PrintDialog, ToggleRadioHdl, RadioButton&, rButton, void )
+IMPL_LINK( PrintDialog, ToggleRadioHdl, RadioButton&, rButton, void )
 {
     ClickHdl(static_cast<Button*>(&rButton));
 }
 
-IMPL_LINK_TYPED( PrintDialog, ToggleHdl, CheckBox&, rButton, void )
+IMPL_LINK( PrintDialog, ToggleHdl, CheckBox&, rButton, void )
 {
     ClickHdl(&rButton);
 }
 
-IMPL_LINK_TYPED( PrintDialog, ClickHdl, Button*, pButton, void )
+IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton, void )
 {
     if( pButton == mpOKButton || pButton == mpCancelButton )
     {
@@ -1656,7 +1656,7 @@ IMPL_LINK_TYPED( PrintDialog, ClickHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK_TYPED( PrintDialog, ModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( PrintDialog, ModifyHdl, Edit&, rEdit, void )
 {
     checkControlDependencies();
     if( &rEdit == maNUpPage.mpNupRowsEdt || &rEdit == maNUpPage.mpNupColEdt ||
@@ -1758,7 +1758,7 @@ void PrintDialog::makeEnabled( vcl::Window* i_pWindow )
     }
 }
 
-IMPL_LINK_TYPED( PrintDialog, UIOption_CheckHdl, CheckBox&, i_rBox, void )
+IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox&, i_rBox, void )
 {
     PropertyValue* pVal = getValueForWindow( &i_rBox );
     if( pVal )
@@ -1775,7 +1775,7 @@ IMPL_LINK_TYPED( PrintDialog, UIOption_CheckHdl, CheckBox&, i_rBox, void )
     }
 }
 
-IMPL_LINK_TYPED( PrintDialog, UIOption_RadioHdl, RadioButton&, i_rBtn, void )
+IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton&, i_rBtn, void )
 {
     // this handler gets called for all radiobuttons that get unchecked, too
     // however we only want one notificaction for the new value (that is for
@@ -1803,7 +1803,7 @@ IMPL_LINK_TYPED( PrintDialog, UIOption_RadioHdl, RadioButton&, i_rBtn, void )
     }
 }
 
-IMPL_LINK_TYPED( PrintDialog, UIOption_SelectHdl, ListBox&, i_rBox, void )
+IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox&, i_rBox, void )
 {
     PropertyValue* pVal = getValueForWindow( &i_rBox );
     if( pVal )
@@ -1828,7 +1828,7 @@ IMPL_LINK_TYPED( PrintDialog, UIOption_SelectHdl, ListBox&, i_rBox, void )
     }
 }
 
-IMPL_LINK_TYPED( PrintDialog, UIOption_ModifyHdl, Edit&, i_rBox, void )
+IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit&, i_rBox, void )
 {
     PropertyValue* pVal = getValueForWindow( &i_rBox );
     if( pVal )
@@ -1935,7 +1935,7 @@ void PrintProgressDialog::dispose()
     ModelessDialog::dispose();
 }
 
-IMPL_LINK_TYPED( PrintProgressDialog, ClickHdl, Button*, pButton, void )
+IMPL_LINK( PrintProgressDialog, ClickHdl, Button*, pButton, void )
 {
     if( pButton == mpButton )
         mbCanceled = true;

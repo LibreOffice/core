@@ -149,13 +149,13 @@ private:
     void                KeepHandler( bool bMine );
     void                KeepAllHandler( bool bMine );
 
-    DECL_LINK_TYPED( SelectHandle, SvTreeListBox*, void );
-    DECL_LINK_TYPED( DeselectHandle, SvTreeListBox*, void );
-    DECL_LINK_TYPED( UpdateSelectionHdl, Idle*, void );
-    DECL_LINK_TYPED( KeepMineHandle, Button*, void );
-    DECL_LINK_TYPED( KeepOtherHandle, Button*, void );
-    DECL_LINK_TYPED( KeepAllMineHandle, Button*, void );
-    DECL_LINK_TYPED( KeepAllOthersHandle, Button*, void );
+    DECL_LINK( SelectHandle, SvTreeListBox*, void );
+    DECL_LINK( DeselectHandle, SvTreeListBox*, void );
+    DECL_LINK( UpdateSelectionHdl, Idle*, void );
+    DECL_LINK( KeepMineHandle, Button*, void );
+    DECL_LINK( KeepOtherHandle, Button*, void );
+    DECL_LINK( KeepAllMineHandle, Button*, void );
+    DECL_LINK( KeepAllOthersHandle, Button*, void );
 
 public:
                         ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList );

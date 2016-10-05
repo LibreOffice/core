@@ -79,10 +79,10 @@ namespace rptui
         bool setReportSectionTitle(const css::uno::Reference< css::report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t< css::uno::Reference< css::report::XSection> , OReportHelper> _pGetSection, const ::std::mem_fun_t<bool, OReportHelper>& _pIsSectionOn);
         void ImplInitSettings();
 
-        DECL_LINK_TYPED(Collapsed, OColorListener&, void);
-        DECL_LINK_TYPED(StartSplitHdl, Splitter*, void);
-        DECL_LINK_TYPED(SplitHdl, Splitter*, void);
-        DECL_LINK_TYPED(EndSplitHdl, Splitter*, void);
+        DECL_LINK(Collapsed, OColorListener&, void);
+        DECL_LINK(StartSplitHdl, Splitter*, void);
+        DECL_LINK(SplitHdl, Splitter*, void);
+        DECL_LINK(EndSplitHdl, Splitter*, void);
 
 
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;

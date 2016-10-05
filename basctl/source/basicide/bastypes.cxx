@@ -90,7 +90,7 @@ void BaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
 }
 
 
-IMPL_LINK_TYPED( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void )
+IMPL_LINK( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void )
 {
     DoScroll( pCurScrollBar );
 }
@@ -426,20 +426,20 @@ ExtendedEdit::ExtendedEdit( vcl::Window* pParent, IDEResId nRes ) :
     Control::SetLoseFocusHdl( LINK( this, ExtendedEdit, ImplLoseFocusHdl ) );
 }
 
-IMPL_LINK_NOARG_TYPED(ExtendedEdit, ImplGetFocusHdl, Control&, void)
+IMPL_LINK_NOARG(ExtendedEdit, ImplGetFocusHdl, Control&, void)
 {
     Application::InsertAccel( &aAcc );
     aLoseFocusHdl.Call( this );
 }
 
 
-IMPL_LINK_NOARG_TYPED(ExtendedEdit, ImplLoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(ExtendedEdit, ImplLoseFocusHdl, Control&, void)
 {
     Application::RemoveAccel( &aAcc );
 }
 
 
-IMPL_LINK_TYPED( ExtendedEdit, EditAccHdl, Accelerator&, rAcc, void )
+IMPL_LINK( ExtendedEdit, EditAccHdl, Accelerator&, rAcc, void )
 {
     aAccHdl.Call( rAcc );
 }

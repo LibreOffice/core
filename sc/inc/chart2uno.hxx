@@ -362,7 +362,7 @@ private:
 
     // Implementation
     void    RefChanged();
-    DECL_LINK_TYPED( ValueListenerHdl, const SfxHint&, void );
+    DECL_LINK( ValueListenerHdl, const SfxHint&, void );
 
 private:
     class ExternalRefListener : public ScExternalRefManager::LinkListener

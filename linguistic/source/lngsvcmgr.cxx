@@ -496,7 +496,7 @@ void LngSvcMgr::modified(const lang::EventObject&)
 //needs to be run in the main thread because
 //utl::ConfigChangeListener_Impl::changesOccurred grabs the SolarMutex and we
 //get notified that an extension was added from an extension manager thread
-IMPL_LINK_NOARG_TYPED(LngSvcMgr, updateAndBroadcast, Idle *, void)
+IMPL_LINK_NOARG(LngSvcMgr, updateAndBroadcast, Idle *, void)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 

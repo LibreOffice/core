@@ -2136,7 +2136,7 @@ OUString SVGFilter::implGetInterfaceName( const Reference< XInterface >& rxIf )
 }
 
 
-IMPL_LINK_TYPED( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
+IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
 {
     bool bFieldProcessed = false;
     if( pInfo && mbPresentation )

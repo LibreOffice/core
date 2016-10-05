@@ -47,9 +47,9 @@ class SwEnvPrtPage : public SfxTabPage
 
     VclPtr<Printer>     pPrt;
 
-    DECL_LINK_TYPED(ClickHdl, Button*, void);
-    DECL_LINK_TYPED(AlignHdl, ToolBox *, void);
-    DECL_LINK_TYPED(ButtonHdl, Button *, void );
+    DECL_LINK(ClickHdl, Button*, void);
+    DECL_LINK(AlignHdl, ToolBox *, void);
+    DECL_LINK(ButtonHdl, Button *, void );
 
     SwEnvDlg* GetParentSwEnvDlg() {return static_cast<SwEnvDlg*>( GetParentDialog());}
 

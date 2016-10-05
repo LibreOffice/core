@@ -58,7 +58,7 @@ void InputDialog::SetEntryText( OUString const & sStr)
     m_pEntry->SetCursorAtLast();
 }
 
-IMPL_LINK_TYPED(InputDialog,ClickHdl, Button*, pButton, void)
+IMPL_LINK(InputDialog,ClickHdl, Button*, pButton, void)
 {
     EndDialog(pButton == m_pOK ? RET_OK : RET_CANCEL);
 }

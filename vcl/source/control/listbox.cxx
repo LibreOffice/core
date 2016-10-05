@@ -211,7 +211,7 @@ void ListBox::ImplLoadRes( const ResId& rResId )
         SelectEntryPos( nSelPos );
 }
 
-IMPL_LINK_NOARG_TYPED(ListBox, ImplSelectHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(ListBox, ImplSelectHdl, LinkParamNone*, void)
 {
     bool bPopup = IsInDropDown();
     if( IsDropDownBox() )
@@ -236,28 +236,28 @@ IMPL_LINK_NOARG_TYPED(ListBox, ImplSelectHdl, LinkParamNone*, void)
         Select();
 }
 
-IMPL_LINK_TYPED( ListBox, ImplFocusHdl, sal_Int32, nPos, void )
+IMPL_LINK( ListBox, ImplFocusHdl, sal_Int32, nPos, void )
 {
     CallEventListeners( VCLEVENT_LISTBOX_FOCUS, reinterpret_cast<void*>(nPos) );
 }
 
-IMPL_LINK_NOARG_TYPED( ListBox, ImplListItemSelectHdl, LinkParamNone*, void )
+IMPL_LINK_NOARG( ListBox, ImplListItemSelectHdl, LinkParamNone*, void )
 {
     CallEventListeners( VCLEVENT_DROPDOWN_SELECT );
 }
 
-IMPL_LINK_NOARG_TYPED(ListBox, ImplScrollHdl, ImplListBox*, void)
+IMPL_LINK_NOARG(ListBox, ImplScrollHdl, ImplListBox*, void)
 {
     CallEventListeners( VCLEVENT_LISTBOX_SCROLLED );
 }
 
-IMPL_LINK_NOARG_TYPED(ListBox, ImplCancelHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(ListBox, ImplCancelHdl, LinkParamNone*, void)
 {
     if( IsInDropDown() )
         mpFloatWin->EndPopupMode();
 }
 
-IMPL_LINK_TYPED( ListBox, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
+IMPL_LINK( ListBox, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
 {
     if ( !mpImplLB->IsTrackingSelect() )
     {
@@ -286,12 +286,12 @@ IMPL_LINK_TYPED( ListBox, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ListBox, ImplDoubleClickHdl, ImplListBoxWindow*, void)
+IMPL_LINK_NOARG(ListBox, ImplDoubleClickHdl, ImplListBoxWindow*, void)
 {
     DoubleClick();
 }
 
-IMPL_LINK_NOARG_TYPED(ListBox, ImplClickBtnHdl, void*, void)
+IMPL_LINK_NOARG(ListBox, ImplClickBtnHdl, void*, void)
 {
     if( !mpFloatWin->IsInPopupMode() )
     {
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG_TYPED(ListBox, ImplClickBtnHdl, void*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ListBox, ImplPopupModeEndHdl, FloatingWindow*, void)
+IMPL_LINK_NOARG(ListBox, ImplPopupModeEndHdl, FloatingWindow*, void)
 {
     if( mpFloatWin->IsPopupModeCanceled() )
     {
@@ -1365,7 +1365,7 @@ void ListBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines 
     }
 }
 
-IMPL_LINK_TYPED( ListBox, ImplUserDrawHdl, UserDrawEvent*, pEvent, void )
+IMPL_LINK( ListBox, ImplUserDrawHdl, UserDrawEvent*, pEvent, void )
 {
     UserDraw( *pEvent );
 }

@@ -78,7 +78,7 @@ namespace abp
         virtual bool        canAdvance() const override;
 
     private:
-        DECL_LINK_TYPED( OnTypeSelected, Button*, void );
+        DECL_LINK( OnTypeSelected, Button*, void );
 
         void                selectType( AddressSourceType _eType );
     };

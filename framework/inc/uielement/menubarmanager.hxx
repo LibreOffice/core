@@ -127,7 +127,7 @@ class MenuBarManager : public css::frame::XStatusListener                ,
         // XSystemDependentMenuPeer
         virtual css::uno::Any SAL_CALL getMenuHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw (css::uno::RuntimeException, std::exception) override;
 
-        DECL_LINK_TYPED( Select, Menu *, bool );
+        DECL_LINK( Select, Menu *, bool );
 
         Menu*   GetMenuBar() const { return m_pVCLMenu; }
 
@@ -152,9 +152,9 @@ class MenuBarManager : public css::frame::XStatusListener                ,
         void GetPopupController( PopupControllerCache& rPopupController );
 
     protected:
-        DECL_LINK_TYPED( Activate, Menu *, bool );
-        DECL_LINK_TYPED( Deactivate, Menu *, bool );
-        DECL_LINK_TYPED( AsyncSettingsHdl, Timer *, void );
+        DECL_LINK( Activate, Menu *, bool );
+        DECL_LINK( Deactivate, Menu *, bool );
+        DECL_LINK( AsyncSettingsHdl, Timer *, void );
 
         void RemoveListener();
         void RequestImages();

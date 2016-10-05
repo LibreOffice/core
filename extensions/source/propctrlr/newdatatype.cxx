@@ -77,7 +77,7 @@ namespace pcr
         ModalDialog::dispose();
     }
 
-    IMPL_LINK_NOARG_TYPED( NewDataTypeDialog, OnNameModified, Edit&, void )
+    IMPL_LINK_NOARG( NewDataTypeDialog, OnNameModified, Edit&, void )
     {
         OUString sCurrentName = GetName();
         bool bNameIsOK = ( !sCurrentName.isEmpty() )

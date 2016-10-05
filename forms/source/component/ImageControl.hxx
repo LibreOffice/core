@@ -136,7 +136,7 @@ protected:
     */
     bool    impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator );
 
-    DECL_LINK_TYPED( OnImageImportDone, ::Graphic*, void );
+    DECL_LINK( OnImageImportDone, ::Graphic*, void );
 };
 
 typedef ::cppu::ImplHelper2 <   css::awt::XMouseListener

@@ -77,9 +77,9 @@ private:
     void Init();
 
     // Handler:
-    DECL_LINK_TYPED( EdAreaModifyHdl,     Edit&, void );
-    DECL_LINK_TYPED( LbAreaSelHdl,        ListBox&, void );
-    DECL_LINK_TYPED( BtnCopyResultHdl,    CheckBox&, void );
+    DECL_LINK( EdAreaModifyHdl,     Edit&, void );
+    DECL_LINK( LbAreaSelHdl,        ListBox&, void );
+    DECL_LINK( BtnCopyResultHdl,    CheckBox&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FOPTMGR_HXX

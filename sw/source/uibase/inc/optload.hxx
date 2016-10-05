@@ -59,8 +59,8 @@ private:
     sal_uInt16       m_nLastTab;
     sal_Int32        m_nOldLinkMode;
 
-    DECL_LINK_TYPED(MetricHdl, ListBox&, void);
-    DECL_LINK_TYPED(StandardizedPageCountCheckHdl, Button*, void);
+    DECL_LINK(MetricHdl, ListBox&, void);
+    DECL_LINK(StandardizedPageCountCheckHdl, Button*, void);
 
 public:
     SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet);
@@ -153,12 +153,12 @@ private:
     SwFieldMgr* pMgr;
     bool bHTMLMode;
 
-    DECL_LINK_TYPED(SelectHdl, ComboBox&, void);
-    DECL_LINK_TYPED(SelectListBoxHdl, ListBox&, void);
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
-    DECL_LINK_TYPED( OrderHdl, ListBox&, void );
-    DECL_LINK_TYPED(ShowEntryHdl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(SaveEntryHdl, SvTreeListBox*, void);
+    DECL_LINK(SelectHdl, ComboBox&, void);
+    DECL_LINK(SelectListBoxHdl, ListBox&, void);
+    DECL_LINK(ModifyHdl, Edit&, void);
+    DECL_LINK( OrderHdl, ListBox&, void );
+    DECL_LINK(ShowEntryHdl, SvTreeListBox*, void);
+    DECL_LINK(SaveEntryHdl, SvTreeListBox*, void);
 
     void DelUserData();
     void SetOptions(const sal_uLong nPos, const SwCapObjType eType, const SvGlobalName *pOleId = nullptr);

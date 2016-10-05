@@ -118,7 +118,7 @@ void SAL_CALL ShellStackGuard::disposing (
         }
 }
 
-IMPL_LINK_TYPED(ShellStackGuard, TimeoutHandler, Idle*, pIdle, void)
+IMPL_LINK(ShellStackGuard, TimeoutHandler, Idle*, pIdle, void)
 {
 #ifdef DEBUG
     OSL_ASSERT(pIdle==&maPrinterPollingIdle);

@@ -125,8 +125,8 @@ class SwNewGlosNameDlg : public ModalDialog
     VclPtr<Edit>        m_pOldShort;
 
 protected:
-    DECL_LINK_TYPED( Modify, Edit&, void );
-    DECL_LINK_TYPED(Rename, Button*, void);
+    DECL_LINK( Modify, Edit&, void );
+    DECL_LINK(Rename, Button*, void);
 
 public:
     SwNewGlosNameDlg( vcl::Window* pParent,
@@ -274,7 +274,7 @@ void SwGlossaryDlg::dispose()
 }
 
 // select new group
-IMPL_LINK_TYPED( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox, void )
+IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox, void )
 {
     SvTreeListEntry* pEntry = pBox->FirstSelected();
     if(!pEntry)
@@ -372,7 +372,7 @@ SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const OUString& rBlock,
     return nullptr;
 }
 
-IMPL_LINK_TYPED( SwGlossaryDlg, NameModify, Edit&, rEdit, void )
+IMPL_LINK( SwGlossaryDlg, NameModify, Edit&, rEdit, void )
 {
     const OUString aName(m_pNameED->GetText());
     bool bNameED = &rEdit == m_pNameED;
@@ -411,7 +411,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, NameModify, Edit&, rEdit, void )
     }
 }
 
-IMPL_LINK_TYPED( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox, bool )
+IMPL_LINK( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox, bool )
 {
     SvTreeListEntry* pEntry = pBox->FirstSelected();
     if(pBox->GetParent(pEntry) && !bIsDocReadOnly)
@@ -419,7 +419,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox, bool )
     return false;
 }
 
-IMPL_LINK_TYPED( SwGlossaryDlg, EnableHdl, Menu *, pMn, bool )
+IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn, bool )
 {
     SvTreeListEntry* pEntry = m_pCategoryBox->FirstSelected();
 
@@ -441,7 +441,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, EnableHdl, Menu *, pMn, bool )
     return true;
 }
 
-IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
+IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
 {
     OString sItemIdent(pMn->GetCurItemIdent());
 
@@ -613,7 +613,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
 }
 
 // dialog manage regions
-IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, BibHdl, Button*, void)
+IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl, Button*, void)
 {
     SwGlossaries* pGloss = ::GetGlossaries();
     if( pGloss->IsGlosPathErr() )
@@ -782,7 +782,7 @@ void SwGlossaryDlg::Init()
     m_pInsertTipCB->SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
 }
 
-IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, EditHdl, MenuButton *, void)
+IMPL_LINK_NOARG(SwGlossaryDlg, EditHdl, MenuButton *, void)
 {
 // EndDialog must not be called in MenuHdl
     if (m_pEditBtn->GetCurItemIdent() == "edit")
@@ -794,7 +794,7 @@ IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, EditHdl, MenuButton *, void)
 }
 
 // KeyInput for ShortName - Edits without Spaces
-IMPL_LINK_TYPED( SwNewGlosNameDlg, Modify, Edit&, rBox, void )
+IMPL_LINK( SwNewGlosNameDlg, Modify, Edit&, rBox, void )
 {
     OUString aName(m_pNewName->GetText());
     SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParent());
@@ -807,7 +807,7 @@ IMPL_LINK_TYPED( SwNewGlosNameDlg, Modify, Edit&, rBox, void )
     m_pOk->Enable(bEnable);
 }
 
-IMPL_LINK_NOARG_TYPED(SwNewGlosNameDlg, Rename, Button*, void)
+IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename, Button*, void)
 {
     SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParent());
     OUString sNew = GetAppCharClass().uppercase(m_pNewShort->GetText());
@@ -821,7 +821,7 @@ IMPL_LINK_NOARG_TYPED(SwNewGlosNameDlg, Rename, Button*, void)
         EndDialog(RET_OK);
 }
 
-IMPL_LINK_TYPED( SwGlossaryDlg, CheckBoxHdl, Button *, pBox, void )
+IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, Button *, pBox, void )
 {
     SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
     bool bCheck = static_cast<CheckBox*>(pBox)->IsChecked();
@@ -1035,7 +1035,7 @@ OUString SwGlossaryDlg::GetCurrGrpName() const
     return OUString();
 }
 
-IMPL_LINK_TYPED( SwGlossaryDlg, PathHdl, Button *, pBtn, void )
+IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn, void )
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
@@ -1058,7 +1058,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, PathHdl, Button *, pBtn, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, InsertHdl, Button*, void)
+IMPL_LINK_NOARG(SwGlossaryDlg, InsertHdl, Button*, void)
 {
     EndDialog(RET_OK);
 }
@@ -1076,7 +1076,7 @@ void SwGlossaryDlg::ShowPreview()
     ShowAutoText(::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
 };
 
-IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, PreviewLoadedHdl, SwOneExampleFrame&, void)
+IMPL_LINK_NOARG(SwGlossaryDlg, PreviewLoadedHdl, SwOneExampleFrame&, void)
 {
     ResumeShowAutoText();
 }

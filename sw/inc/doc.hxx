@@ -422,7 +422,7 @@ private:
 
     // CharTimer calls this method.
     void DoUpdateAllCharts();
-    DECL_LINK_TYPED( DoUpdateModifiedOLE, Idle *, void );
+    DECL_LINK( DoUpdateModifiedOLE, Idle *, void );
 
 public:
     SwFormat *MakeCharFormat_(const OUString &, SwFormat *, bool, bool );
@@ -533,7 +533,7 @@ public:
     IDocumentState & getIDocumentState();
 
     // IDocumentDrawModelAccess
-    DECL_LINK_TYPED( AddDrawUndo, SdrUndoAction *, void );
+    DECL_LINK( AddDrawUndo, SdrUndoAction *, void );
     IDocumentDrawModelAccess const & getIDocumentDrawModelAccess() const;
     IDocumentDrawModelAccess & getIDocumentDrawModelAccess();
 
@@ -578,7 +578,7 @@ public:
     const OUString& getDocAccTitle() const { return msDocAccTitle; }
 
     // INextInterface here
-    DECL_LINK_TYPED(CalcFieldValueHdl, EditFieldInfo*, void);
+    DECL_LINK(CalcFieldValueHdl, EditFieldInfo*, void);
 
     // OLE ???
     bool IsOLEPrtNotifyPending() const  { return mbOLEPrtNotifyPending; }

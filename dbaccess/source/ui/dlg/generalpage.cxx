@@ -404,7 +404,7 @@ namespace dbaui
         OGenericAdministrationPage::Reset(_rCoreAttrs);
     }
 
-    IMPL_LINK_TYPED( OGeneralPageWizard, OnEmbeddedDBTypeSelected, ListBox&, _rBox, void )
+    IMPL_LINK( OGeneralPageWizard, OnEmbeddedDBTypeSelected, ListBox&, _rBox, void )
     {
         // get the type from the entry data
         const sal_Int32 nSelected = _rBox.GetSelectEntryPos();
@@ -424,7 +424,7 @@ namespace dbaui
         return;
     }
 
-    IMPL_LINK_TYPED( OGeneralPage, OnDatasourceTypeSelected, ListBox&, _rBox, void )
+    IMPL_LINK( OGeneralPage, OnDatasourceTypeSelected, ListBox&, _rBox, void )
     {
         // get the type from the entry data
         const sal_Int32 nSelected = _rBox.GetSelectEntryPos();
@@ -695,25 +695,25 @@ namespace dbaui
         return aDocument;
     }
 
-    IMPL_LINK_NOARG_TYPED( OGeneralPageWizard, OnCreateDatabaseModeSelected, Button*, void )
+    IMPL_LINK_NOARG( OGeneralPageWizard, OnCreateDatabaseModeSelected, Button*, void )
     {
         m_aCreationModeHandler.Call( *this );
 
         OnEmbeddedDBTypeSelected( *m_pEmbeddedDBType );
     }
 
-    IMPL_LINK_NOARG_TYPED( OGeneralPageWizard, OnSetupModeSelected, Button*, void )
+    IMPL_LINK_NOARG( OGeneralPageWizard, OnSetupModeSelected, Button*, void )
     {
         m_aCreationModeHandler.Call( *this );
         OnDatasourceTypeSelected(*m_pDatasourceType);
     }
 
-    IMPL_LINK_NOARG_TYPED( OGeneralPageWizard, OnDocumentSelected, ListBox&, void )
+    IMPL_LINK_NOARG( OGeneralPageWizard, OnDocumentSelected, ListBox&, void )
     {
         m_aDocumentSelectionHandler.Call( *this );
     }
 
-    IMPL_LINK_NOARG_TYPED( OGeneralPageWizard, OnOpenDocument, Button*, void )
+    IMPL_LINK_NOARG( OGeneralPageWizard, OnOpenDocument, Button*, void )
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,

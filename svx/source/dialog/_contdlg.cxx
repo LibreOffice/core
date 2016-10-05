@@ -433,7 +433,7 @@ bool SvxSuperContourDlg::IsRedoPossible() const
 
 // Click handler for ToolBox
 
-IMPL_LINK_TYPED( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
+IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
 {
     sal_uInt16 nNewItemId = pTbx->GetCurItemId();
 
@@ -539,7 +539,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
     m_pContourWnd->QueueIdleUpdate();
 }
 
-IMPL_LINK_TYPED( SvxSuperContourDlg, MousePosHdl, GraphCtrl*, pWnd, void )
+IMPL_LINK( SvxSuperContourDlg, MousePosHdl, GraphCtrl*, pWnd, void )
 {
     OUString aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
@@ -554,7 +554,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, MousePosHdl, GraphCtrl*, pWnd, void )
     m_pStbStatus->SetItemText( 2, aStr );
 }
 
-IMPL_LINK_TYPED( SvxSuperContourDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
+IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
 {
     OUString aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
@@ -569,7 +569,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
     m_pStbStatus->SetItemText( 3, aStr );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, UpdateHdl, Idle *, void)
+IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl, Idle *, void)
 {
     aUpdateIdle.Stop();
 
@@ -594,7 +594,7 @@ IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, UpdateHdl, Idle *, void)
     m_pContourWnd->QueueIdleUpdate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, CreateHdl, Idle *, void)
+IMPL_LINK_NOARG(SvxSuperContourDlg, CreateHdl, Idle *, void)
 {
     aCreateIdle.Stop();
 
@@ -607,7 +607,7 @@ IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, CreateHdl, Idle *, void)
     LeaveWait();
 }
 
-IMPL_LINK_TYPED( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
+IMPL_LINK( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
 {
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrView*      pView = pWnd->GetSdrView();
@@ -662,7 +662,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
     }
 }
 
-IMPL_LINK_TYPED( SvxSuperContourDlg, PipetteHdl, ContourWindow&, rWnd, void )
+IMPL_LINK( SvxSuperContourDlg, PipetteHdl, ContourWindow&, rWnd, void )
 {
     const Color& rOldLineColor = m_pStbStatus->GetLineColor();
     const Color& rOldFillColor = m_pStbStatus->GetFillColor();
@@ -684,7 +684,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, PipetteHdl, ContourWindow&, rWnd, void )
     m_pStbStatus->SetFillColor( rOldFillColor );
 }
 
-IMPL_LINK_TYPED( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
+IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 {
     if ( rWnd.IsClickValid() )
     {
@@ -729,7 +729,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void
     m_pStbStatus->Invalidate();
 }
 
-IMPL_LINK_TYPED( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow&, rWnd, void )
+IMPL_LINK( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow&, rWnd, void )
 {
     m_pTbx1->CheckItem(mnWorkSpaceId, false);
     m_pTbx1->CheckItem(mnSelectId);
@@ -739,7 +739,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow&, rWnd, vo
     Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, MiscHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(SvxSuperContourDlg, MiscHdl, LinkParamNone*, void)
 {
     SvtMiscOptions aMiscOptions;
     m_pTbx1->SetOutStyle( aMiscOptions.GetToolboxStyle() );

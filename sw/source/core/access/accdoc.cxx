@@ -385,7 +385,7 @@ void SwAccessibleDocument::Dispose(bool bRecursive, bool bCanSkipInvisible)
     SwAccessibleContext::Dispose(bRecursive, bCanSkipInvisible);
 }
 
-IMPL_LINK_TYPED( SwAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEvent, void )
 {
     OSL_ENSURE( rEvent.GetWindow(), "Window???" );
     switch ( rEvent.GetId() )

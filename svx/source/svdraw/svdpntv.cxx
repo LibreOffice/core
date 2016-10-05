@@ -275,7 +275,7 @@ void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , sal_
     InvalidateAllWin();
 }
 
-IMPL_LINK_NOARG_TYPED(SdrPaintView, ImpComeBackHdl, Idle *, void)
+IMPL_LINK_NOARG(SdrPaintView, ImpComeBackHdl, Idle *, void)
 {
     if (mbSomeObjChgdFlag) {
         mbSomeObjChgdFlag=false;

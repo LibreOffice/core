@@ -263,7 +263,7 @@ sd::DrawDocShell* SdNavigatorWin::GetDrawDocShell( const SdDrawDocument* pDoc )
     return pDocShell;
 }
 
-IMPL_LINK_NOARG_TYPED(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
+IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
 {
     sal_uInt16 nId = maToolbox->GetCurItemId();
     PageJump ePage = PAGE_NONE;
@@ -285,7 +285,7 @@ IMPL_LINK_NOARG_TYPED(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
     }
 }
 
-IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
+IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
 {
     sal_uInt16 nId = maToolbox->GetCurItemId();
 
@@ -358,7 +358,7 @@ IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
 {
     if( !mbDocImported || maLbDocs->GetSelectEntryPos() != 0 )
     {
@@ -395,7 +395,7 @@ IMPL_LINK_NOARG_TYPED(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(SdNavigatorWin, SelectDocumentHdl, ListBox&, void)
+IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl, ListBox&, void)
 {
     OUString aStrLb = maLbDocs->GetSelectEntry();
     long   nPos = maLbDocs->GetSelectEntryPos();
@@ -441,7 +441,7 @@ IMPL_LINK_NOARG_TYPED(SdNavigatorWin, SelectDocumentHdl, ListBox&, void)
  * Set DrageType and set image accordingly to it.
  * If the handler is called with NULL, the default (URL) is set.
  */
-IMPL_LINK_TYPED( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu, bool )
+IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu, bool )
 {
     sal_uInt16 nMenuId;
     if( pMenu )
@@ -472,7 +472,7 @@ IMPL_LINK_TYPED( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu, bool )
     return false;
 }
 
-IMPL_LINK_TYPED( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu, bool )
+IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu, bool )
 {
     if (pMenu != nullptr)
     {

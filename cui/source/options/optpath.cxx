@@ -387,7 +387,7 @@ void SvxPathTabPage::FillUserData()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathSelect_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl, SvTreeListBox*, void)
 {
     sal_uInt16 nSelCount = 0;
     SvTreeListEntry* pEntry = pPathBox->FirstSelected();
@@ -408,7 +408,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathSelect_Impl, SvTreeListBox*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPathTabPage, StandardHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = pPathBox->FirstSelected();
     while ( pEntry )
@@ -536,13 +536,13 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxPathTabPage, DoubleClickPathHdl_Impl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(SvxPathTabPage, DoubleClickPathHdl_Impl, SvTreeListBox*, bool)
 {
     PathHdl_Impl(nullptr);
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, Button*, void)
 {
     SvTreeListEntry* pEntry = pPathBox->GetCurEntry();
     sal_uInt16 nPos = ( pEntry != nullptr ) ? static_cast<PathUserData_Impl*>(pEntry->GetUserData())->nRealId : 0;
@@ -666,7 +666,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar, void )
+IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar, void )
 {
     if (!pBar || pBar->GetCurItemId() != ITEMID_TYPE)
         return;
@@ -693,7 +693,7 @@ IMPL_LINK_TYPED( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar, void )
 }
 
 
-IMPL_LINK_TYPED( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
+IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
     if (!pBar || !pBar->GetCurItemId())
         return;
@@ -721,7 +721,7 @@ IMPL_LINK_TYPED( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
     }
 }
 
-IMPL_LINK_TYPED( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
+IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt, void )
 {
     if (RET_OK == pEvt->DialogResult)
     {

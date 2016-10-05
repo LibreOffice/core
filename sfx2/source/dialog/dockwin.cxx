@@ -1725,7 +1725,7 @@ void SfxDockingWindow::Move()
         pImpl->aMoveIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxDockingWindow, TimerHdl, Idle *, void)
+IMPL_LINK_NOARG(SfxDockingWindow, TimerHdl, Idle *, void)
 {
     pImpl->aMoveIdle.Stop();
     if ( IsReallyVisible() && IsFloatingMode() )

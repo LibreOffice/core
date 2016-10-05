@@ -358,12 +358,12 @@ void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
 
 // Handler:
 
-IMPL_LINK_NOARG_TYPED(ScTablePage, PageDirHdl, Button*, void)
+IMPL_LINK_NOARG(ScTablePage, PageDirHdl, Button*, void)
 {
     ShowImage();
 }
 
-IMPL_LINK_TYPED( ScTablePage, PageNoHdl, Button*, pBtn, void )
+IMPL_LINK( ScTablePage, PageNoHdl, Button*, pBtn, void )
 {
     if ( m_pBtnPageNo->IsChecked() )
     {
@@ -375,7 +375,7 @@ IMPL_LINK_TYPED( ScTablePage, PageNoHdl, Button*, pBtn, void )
         m_pEdPageNo->Disable();
 }
 
-IMPL_LINK_NOARG_TYPED(ScTablePage, ScaleHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScTablePage, ScaleHdl, ListBox&, void)
 {
     // controls for Box "Reduce/enlarge"
     m_pBxScaleAll->Show(m_pLbScaleMode->GetSelectEntryPos() == SC_TPTABLE_SCALE_PERCENT);

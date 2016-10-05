@@ -94,7 +94,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK_NOARG_TYPED(OCommonBehaviourTabPage, CharsetSelectHdl, ListBox&, void)
+    IMPL_LINK_NOARG(OCommonBehaviourTabPage, CharsetSelectHdl, ListBox&, void)
     {
         callModifiedHdl();
     }
@@ -248,7 +248,7 @@ namespace dbaui
         return bChangedSomething;
     }
 
-    IMPL_LINK_TYPED( ODbaseDetailsPage, OnButtonClicked, Button*, pButton, void )
+    IMPL_LINK( ODbaseDetailsPage, OnButtonClicked, Button*, pButton, void )
     {
         if (m_pIndexes == pButton)
         {
@@ -519,7 +519,7 @@ namespace dbaui
             m_pEDDriverClass->SetModifyFlag();
         }
     }
-    IMPL_LINK_NOARG_TYPED(OGeneralSpecialJDBCDetailsPage, OnTestJavaClickHdl, Button*, void)
+    IMPL_LINK_NOARG(OGeneralSpecialJDBCDetailsPage, OnTestJavaClickHdl, Button*, void)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         OSL_ENSURE(m_bUseClass,"Who called me?");
@@ -705,7 +705,7 @@ namespace dbaui
         fillBool(*_rSet,m_pCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
         return bChangedSomething;
     }
-    IMPL_LINK_TYPED( OLDAPDetailsPage, OnCheckBoxClick, Button*, pCheckBox, void )
+    IMPL_LINK( OLDAPDetailsPage, OnCheckBoxClick, Button*, pCheckBox, void )
     {
         callModifiedHdl();
         if ( pCheckBox == m_pCBUseSSL)

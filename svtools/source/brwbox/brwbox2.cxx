@@ -1285,7 +1285,7 @@ sal_uInt16 BrowseBox::FrozenColCount() const
 }
 
 
-IMPL_LINK_TYPED(BrowseBox, ScrollHdl, ScrollBar*, pBar, void)
+IMPL_LINK(BrowseBox, ScrollHdl, ScrollBar*, pBar, void)
 {
 
     if ( pBar->GetDelta() == 0 )
@@ -1304,7 +1304,7 @@ IMPL_LINK_TYPED(BrowseBox, ScrollHdl, ScrollBar*, pBar, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(BrowseBox, EndScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(BrowseBox, EndScrollHdl, ScrollBar*, void)
 {
 
     if ( getDataWindow()->bNoScrollBack )
@@ -1315,7 +1315,7 @@ IMPL_LINK_NOARG_TYPED(BrowseBox, EndScrollHdl, ScrollBar*, void)
 }
 
 
-IMPL_LINK_TYPED( BrowseBox, StartDragHdl, HeaderBar*, pBar, void )
+IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar, void )
 {
     pBar->SetDragSize( pDataWin->GetOutputSizePixel().Height() );
 }

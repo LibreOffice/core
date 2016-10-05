@@ -549,14 +549,14 @@ void ScGridWindow::ClickExtern()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScGridWindow, PopupModeEndHdl, FloatingWindow*, void)
+IMPL_LINK_NOARG(ScGridWindow, PopupModeEndHdl, FloatingWindow*, void)
 {
     if (mpFilterBox)
         mpFilterBox->SetCancelled();     // cancel select
     GrabFocus();
 }
 
-IMPL_LINK_TYPED( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo&, rInfo, void )
+IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo&, rInfo, void )
 {
     if( rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG )
         pViewData->GetDispatcher().Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
@@ -5484,10 +5484,10 @@ struct SpellCheckStatus
 
     SpellCheckStatus() : mbModified(false) {};
 
-    DECL_LINK_TYPED( EventHdl, EditStatus&, void );
+    DECL_LINK( EventHdl, EditStatus&, void );
 };
 
-IMPL_LINK_TYPED(SpellCheckStatus, EventHdl, EditStatus&, rStatus, void)
+IMPL_LINK(SpellCheckStatus, EventHdl, EditStatus&, rStatus, void)
 {
     EditStatusFlags nStatus = rStatus.GetStatusWord();
     if (nStatus & EditStatusFlags::WRONGWORDCHANGED)

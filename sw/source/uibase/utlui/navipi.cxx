@@ -140,7 +140,7 @@ static void lcl_UnSelectFrame(SwWrtShell *pSh)
 
 // Select the document view
 
-IMPL_LINK_TYPED( SwNavigationPI, DocListBoxSelectHdl, ListBox&, rBox, void )
+IMPL_LINK( SwNavigationPI, DocListBoxSelectHdl, ListBox&, rBox, void )
 {
     int nEntryIdx = rBox.GetSelectEntryPos();
     SwView *pView ;
@@ -209,7 +209,7 @@ void SwNavigationPI::UsePage()
 
 // Select handler of the toolboxes
 
-IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
+IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
 {
     const sal_uInt16 nCurrItemId = pBox->GetCurItemId();
     SwView *pView = GetCreateView();
@@ -347,7 +347,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
 
 // Click handler of the toolboxes
 
-IMPL_LINK_TYPED( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox, void )
+IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox, void )
 {
     const sal_uInt16 nCurrItemId = pBox->GetCurItemId();
     switch (nCurrItemId)
@@ -361,7 +361,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox, void )
     }
 }
 
-IMPL_LINK_TYPED( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
+IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
 {
     const sal_uInt16 nCurrItemId = pBox->GetCurItemId();
     switch (nCurrItemId)
@@ -467,7 +467,7 @@ void  SwNavHelpToolBox::RequestHelp( const HelpEvent& rHEvt )
 // Action-Handler Edit:
 // Switches to the page if the structure view is not turned on.
 
-IMPL_LINK_TYPED( SwNavigationPI, EditAction, NumEditAction&, rEdit, void )
+IMPL_LINK( SwNavigationPI, EditAction, NumEditAction&, rEdit, void )
 {
     SwView *pView = GetCreateView();
     if (pView)
@@ -482,7 +482,7 @@ IMPL_LINK_TYPED( SwNavigationPI, EditAction, NumEditAction&, rEdit, void )
 
 // If the page can be set here, the maximum is set.
 
-IMPL_LINK_TYPED( SwNavigationPI, EditGetFocus, Control&, rControl, void )
+IMPL_LINK( SwNavigationPI, EditGetFocus, Control&, rControl, void )
 {
     NumEditAction* pEdit = static_cast<NumEditAction*>(&rControl);
     SwView *pView = GetCreateView();
@@ -894,7 +894,7 @@ void SwNavigationPI::SetPopupWindow( SfxPopupWindow* pWindow )
     m_pPopupWindow->SetDeleteLink_Impl( LINK( this, SwNavigationPI, ClosePopupWindow ));
 }
 
-IMPL_LINK_NOARG_TYPED(SwNavigationPI, PopupModeEndHdl, FloatingWindow*, void)
+IMPL_LINK_NOARG(SwNavigationPI, PopupModeEndHdl, FloatingWindow*, void)
 {
     if ( m_pPopupWindow->IsVisible() )
     {
@@ -912,7 +912,7 @@ IMPL_LINK_NOARG_TYPED(SwNavigationPI, PopupModeEndHdl, FloatingWindow*, void)
     }
 }
 
-IMPL_LINK_TYPED( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow, void )
+IMPL_LINK( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow, void )
 {
     if ( pWindow == m_pFloatingWindow )
         m_pFloatingWindow = nullptr;
@@ -998,7 +998,7 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
     }
 }
 
-IMPL_LINK_TYPED( SwNavigationPI, MenuSelectHdl, Menu *, pMenu, bool )
+IMPL_LINK( SwNavigationPI, MenuSelectHdl, Menu *, pMenu, bool )
 {
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
     if(nMenuId != USHRT_MAX)
@@ -1079,7 +1079,7 @@ void SwNavigationPI::UpdateListBox()
     m_aDocListBox->SetUpdateMode(true);
 }
 
-IMPL_LINK_TYPED(SwNavigationPI, DoneLink, SfxPoolItem *, pItem, void)
+IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem, void)
 {
     const SfxViewFrameItem* pFrameItem = dynamic_cast<SfxViewFrameItem*>( pItem  );
     if( pFrameItem )
@@ -1251,7 +1251,7 @@ bool    SwNavigationPI::IsGlobalDoc() const
     return bRet;
 }
 
-IMPL_LINK_NOARG_TYPED(SwNavigationPI, ChangePageHdl, Idle *, void)
+IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Idle *, void)
 {
     if (!IsDisposed())
     {
@@ -1260,7 +1260,7 @@ IMPL_LINK_NOARG_TYPED(SwNavigationPI, ChangePageHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwNavigationPI, PageEditModifyHdl, SpinField&, void)
+IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl, SpinField&, void)
 {
     if(m_aPageChgIdle.IsActive())
         m_aPageChgIdle.Stop();

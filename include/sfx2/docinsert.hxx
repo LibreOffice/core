@@ -49,7 +49,7 @@ private:
     SfxItemSet*             m_pItemSet;
     std::vector<OUString>   m_pURLList;
 
-    DECL_LINK_TYPED(DialogClosedHdl, sfx2::FileDialogHelper*, void);
+    DECL_LINK(DialogClosedHdl, sfx2::FileDialogHelper*, void);
 
 public:
     DocumentInserter(const OUString& rFactory,

@@ -58,7 +58,7 @@ class ClassificationCategoriesController : public ClassificationCategoriesContro
     rtl::Reference<comphelper::ConfigurationListener> m_xListener;
     ClassificationPropertyListener m_aPropertyListener;
 
-    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
+    DECL_LINK(SelectHdl, ListBox&, void);
 
 public:
     explicit ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
@@ -170,7 +170,7 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
     return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pClassification));
 }
 
-IMPL_LINK_TYPED(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, void)
+IMPL_LINK(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, void)
 {
     OUString aEntry = rCategory.GetSelectEntry();
 

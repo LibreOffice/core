@@ -93,7 +93,7 @@ Sequence< PropertyValue > ImpSWFDialog::GetFilterData()
 
 
 /// This is called whenever the user toggles one of the checkboxes
-IMPL_LINK_TYPED( ImpSWFDialog, OnToggleCheckbox, CheckBox&, rBox, void )
+IMPL_LINK( ImpSWFDialog, OnToggleCheckbox, CheckBox&, rBox, void )
 {
     if (&rBox == mpCheckExportAll)
     {

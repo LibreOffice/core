@@ -419,7 +419,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 }
 
 
-IMPL_LINK_TYPED( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox&, rListBox, void )
 {
     if (&rListBox == m_pLB_ANSATZ)
     {
@@ -427,7 +427,7 @@ IMPL_LINK_TYPED( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox&, rListBox, vo
     }
 }
 
-IMPL_LINK_TYPED( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox&, rListBox, void )
 {
     if (&rListBox == m_pLB_ANSATZ_REL)
     {
@@ -435,7 +435,7 @@ IMPL_LINK_TYPED( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox&, rListBox,
     }
 }
 
-IMPL_LINK_TYPED( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton, void )
+IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton, void )
 {
     if (pButton == m_pCB_LAENGE)
     {
@@ -453,7 +453,7 @@ IMPL_LINK_TYPED( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCaptionTabPage, SelectCaptTypeHdl_Impl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxCaptionTabPage, SelectCaptTypeHdl_Impl, ValueSet*, void)
 {
     SetupType_Impl( (SdrCaptionType) m_pCT_CAPTTYPE->GetSelectItemId() );
 }

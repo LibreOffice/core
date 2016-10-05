@@ -52,7 +52,7 @@ private:
     void ExecuteMarginLRChange(const long nPageLeftMargin, const long nPageRightMargin);
     void ExecuteOrientationChange(const bool bLandscape);
 
-    DECL_LINK_TYPED(ImplOrientationHdl, Button*, void);
+    DECL_LINK(ImplOrientationHdl, Button*, void);
 };
 
 } } // end of namespace sw::sidebar

@@ -97,7 +97,7 @@ protected:
                                           OUString& aStrIntName, OUString& aStrFrame,
                                           SvxLinkInsertMode& eMode );
 
-    DECL_LINK_TYPED (ClickScriptHdl_Impl, Button*, void ); ///< Button : Script
+    DECL_LINK (ClickScriptHdl_Impl, Button*, void ); ///< Button : Script
 
     static OUString GetSchemeFromURL( const OUString& rStrURL );
 

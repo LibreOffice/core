@@ -62,7 +62,7 @@ const sal_uInt16 SvxTransparenceTabPage::pTransparenceRanges[] =
 |*
 \************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ClickTransOffHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransOffHdl_Impl, Button*, void)
 {
     // disable all other controls
     ActivateLinear(false);
@@ -77,7 +77,7 @@ IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ClickTransOffHdl_Impl, Button*, vo
     InvalidatePreview( false );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, Button*, void)
 {
     // enable linear, disable other
     ActivateLinear(true);
@@ -88,7 +88,7 @@ IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, Button*,
     ModifyTransparentHdl_Impl (*m_pMtrTransparent);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, Button*, void)
 {
     // enable gradient, disable other
     ActivateLinear(false);
@@ -131,7 +131,7 @@ void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
     m_pMtrTransparent->Enable(bActivate);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, Edit&, void)
 {
     sal_uInt16 nPos = (sal_uInt16)m_pMtrTransparent->GetValue();
     XFillTransparenceItem aItem(nPos);
@@ -141,12 +141,12 @@ IMPL_LINK_NOARG_TYPED(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, Edit&, 
     InvalidatePreview();
 }
 
-IMPL_LINK_TYPED(SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl, ListBox&, rListBox, void)
+IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrListBoxHdl_Impl, ListBox&, rListBox, void)
 {
     ModifiedTrgrHdl_Impl(&rListBox);
 }
 
-IMPL_LINK_TYPED(SvxTransparenceTabPage, ModifiedTrgrEditHdl_Impl, Edit&, rBox, void)
+IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrEditHdl_Impl, Edit&, rBox, void)
 {
     ModifiedTrgrHdl_Impl(&rBox);
 }

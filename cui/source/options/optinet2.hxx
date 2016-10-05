@@ -86,8 +86,8 @@ private:
     void ReadConfigDefaults_Impl();
     void RestoreConfigDefaults_Impl();
 
-    DECL_LINK_TYPED( ProxyHdl_Impl, ListBox&, void );
-    DECL_STATIC_LINK_TYPED( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, void );
+    DECL_LINK( ProxyHdl_Impl, ListBox&, void );
+    DECL_STATIC_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, void );
 
 public:
     SvxProxyTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -133,14 +133,14 @@ private:
 
     OUString            m_sPasswordStoringDeactivateStr;
 
-    DECL_LINK_TYPED(SecurityOptionsHdl, Button*, void);
-    DECL_LINK_TYPED(SavePasswordHdl, Button*, void);
-    DECL_STATIC_LINK_TYPED(SvxSecurityTabPage, MasterPasswordHdl, Button*, void);
-    DECL_LINK_TYPED(MasterPasswordCBHdl, Button*, void);
-    DECL_LINK_TYPED(ShowPasswordsHdl, Button*, void);
-    DECL_STATIC_LINK_TYPED(SvxSecurityTabPage, MacroSecPBHdl, Button*, void );
-    DECL_LINK_TYPED(CertPathPBHdl, Button*, void );
-    DECL_LINK_TYPED(TSAURLsPBHdl, Button*, void );
+    DECL_LINK(SecurityOptionsHdl, Button*, void);
+    DECL_LINK(SavePasswordHdl, Button*, void);
+    DECL_STATIC_LINK(SvxSecurityTabPage, MasterPasswordHdl, Button*, void);
+    DECL_LINK(MasterPasswordCBHdl, Button*, void);
+    DECL_LINK(ShowPasswordsHdl, Button*, void);
+    DECL_STATIC_LINK(SvxSecurityTabPage, MacroSecPBHdl, Button*, void );
+    DECL_LINK(CertPathPBHdl, Button*, void );
+    DECL_LINK(TSAURLsPBHdl, Button*, void );
 
     void                InitControls();
 
@@ -173,7 +173,7 @@ class SvxEMailTabPage : public SfxTabPage
 
     std::unique_ptr<SvxEMailTabPage_Impl> pImpl;
 
-    DECL_LINK_TYPED(  FileDialogHdl_Impl, Button*, void );
+    DECL_LINK(  FileDialogHdl_Impl, Button*, void );
 
 public:
     SvxEMailTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

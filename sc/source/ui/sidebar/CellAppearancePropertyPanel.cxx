@@ -151,7 +151,7 @@ void CellAppearancePropertyPanel::Initialize()
     mpTBLineColor->Disable();
 }
 
-IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBox, void)
+IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBox, void)
 {
     const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
 
@@ -164,7 +164,7 @@ IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, p
     }
 }
 
-IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox, void)
+IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox, void)
 {
     const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
 

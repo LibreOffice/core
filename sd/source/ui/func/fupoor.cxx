@@ -175,7 +175,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 /**
  * timer handler for window scrolling
  */
-IMPL_LINK_NOARG_TYPED(FuPoor, ScrollHdl, Timer *, void)
+IMPL_LINK_NOARG(FuPoor, ScrollHdl, Timer *, void)
 {
     Point aPnt(mpWindow->GetPointerPosPixel());
 
@@ -948,7 +948,7 @@ void FuPoor::DoPasteUnformatted()
 /**
  * Timer handler for Drag&Drop
  */
-IMPL_LINK_NOARG_TYPED(FuPoor, DragHdl, Timer *, void)
+IMPL_LINK_NOARG(FuPoor, DragHdl, Timer *, void)
 {
     if( mpView )
     {
@@ -973,7 +973,7 @@ bool FuPoor::Command(const CommandEvent& rCEvt)
 /**
  * Timer handler for window scrolling
  */
-IMPL_LINK_NOARG_TYPED(FuPoor, DelayHdl, Timer *, void)
+IMPL_LINK_NOARG(FuPoor, DelayHdl, Timer *, void)
 {
     aDelayToScrollTimer.Stop ();
     bScrollable = true;

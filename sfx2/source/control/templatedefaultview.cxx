@@ -73,7 +73,7 @@ void TemplateDefaultView::createContextMenu()
     Invalidate();
 }
 
-IMPL_LINK_TYPED(TemplateDefaultView, ContextMenuSelectHdl, Menu*, pMenu, void)
+IMPL_LINK(TemplateDefaultView, ContextMenuSelectHdl, Menu*, pMenu, void)
 {
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
 

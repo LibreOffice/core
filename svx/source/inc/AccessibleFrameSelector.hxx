@@ -101,7 +101,7 @@ public:
     void    NotifyAccessibleEvent( const sal_Int16 _nEventId, const css::uno::Any& _rOldValue, const css::uno::Any& _rNewValue );
 
 protected:
-    DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
+    DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 
     void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 

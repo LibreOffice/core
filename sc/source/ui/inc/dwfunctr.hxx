@@ -65,11 +65,11 @@ private:
     void            SetMyHeightLeRi(Size &aNewSize);
     void            UseSplitterInitPos();
 
-                    DECL_LINK_TYPED( SetSelectionHdl, ListBox&, void );
-                    DECL_LINK_TYPED( SetSelectionClickHdl, Button*, void );
-                    DECL_LINK_TYPED( SelHdl, ListBox&, void );
-                    DECL_LINK_TYPED( SetSplitHdl, ScPrivatSplit&, void );
-                    DECL_LINK_TYPED( TimerHdl, Idle*, void );
+                    DECL_LINK( SetSelectionHdl, ListBox&, void );
+                    DECL_LINK( SetSelectionClickHdl, Button*, void );
+                    DECL_LINK( SelHdl, ListBox&, void );
+                    DECL_LINK( SetSplitHdl, ScPrivatSplit&, void );
+                    DECL_LINK( TimerHdl, Idle*, void );
 
 protected:
 

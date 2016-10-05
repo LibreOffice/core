@@ -174,7 +174,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     }
 }
 
-IMPL_LINK_TYPED( SwWrtShell, InsertRegionDialog, void*, p, void )
+IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
 {
     SwSectionData* pSect = static_cast<SwSectionData*>(p);
     std::unique_ptr<SwSectionData> xSectionData(pSect);

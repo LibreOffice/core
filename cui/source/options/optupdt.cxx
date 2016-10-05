@@ -336,7 +336,7 @@ void SvxOnlineUpdateTabPage::FillUserData()
 {
 }
 
-IMPL_LINK_TYPED( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, Button*, pBox, void )
+IMPL_LINK( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, Button*, pBox, void )
 {
     bool bEnabled = static_cast<CheckBox*>(pBox)->IsChecked();
     beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName("/org.openoffice.Office.Jobs/Jobs/org.openoffice.Office.Jobs:Job['UpdateCheck']/Arguments/CheckInterval");
@@ -346,12 +346,12 @@ IMPL_LINK_TYPED( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, Button*, pBox, void 
     m_pEveryMonthButton->Enable(bEnabled && !bReadOnly);
 }
 
-IMPL_LINK_TYPED( SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl, Button*, , void )
+IMPL_LINK( SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl, Button*, , void )
 {
     UpdateUserAgent();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxOnlineUpdateTabPage, FileDialogHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl, Button*, void)
 {
     uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < ui::dialogs::XFolderPicker2 >  xFolderPicker = ui::dialogs::FolderPicker::create(xContext);
@@ -371,7 +371,7 @@ IMPL_LINK_NOARG_TYPED(SvxOnlineUpdateTabPage, FileDialogHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, Button*, void)
 {
     uno::Reference < uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
 

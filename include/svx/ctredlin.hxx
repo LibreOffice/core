@@ -193,13 +193,13 @@ private:
     VclPtr<Edit>           m_pEdComment;
     bool                   bModified;
 
-    DECL_LINK_TYPED( SelDateHdl, ListBox&, void );
-    DECL_LINK_TYPED( RowEnableHdl, Button*, void );
-    DECL_LINK_TYPED( TimeHdl, Button*, void );
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( ModifyListBoxHdl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyDate, Edit&, void );
-    DECL_LINK_TYPED( RefHandle, Button*, void );
+    DECL_LINK( SelDateHdl, ListBox&, void );
+    DECL_LINK( RowEnableHdl, Button*, void );
+    DECL_LINK( TimeHdl, Button*, void );
+    DECL_LINK( ModifyHdl, Edit&, void );
+    DECL_LINK( ModifyListBoxHdl, ListBox&, void );
+    DECL_LINK( ModifyDate, Edit&, void );
+    DECL_LINK( RefHandle, Button*, void );
 
 protected:
 
@@ -294,7 +294,7 @@ private:
     bool bEnableRejectAll;
     bool bEnableUndo;
 
-    DECL_LINK_TYPED( PbClickHdl, Button*, void );
+    DECL_LINK( PbClickHdl, Button*, void );
 
 public:
     SvxTPView(vcl::Window * pParent, VclBuilderContainer *pTopLevel);

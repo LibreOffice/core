@@ -129,7 +129,7 @@ void SvxNewDictionaryDialog::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
 {
 
   // add extension for personal dictionaries
@@ -200,7 +200,7 @@ IMPL_LINK_NOARG_TYPED(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxNewDictionaryDialog, ModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxNewDictionaryDialog, ModifyHdl_Impl, Edit&, void)
 {
     if ( !pNameEdit->GetText().isEmpty() )
         pOKBtn->Enable();
@@ -421,7 +421,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox&, void)
 {
     sal_Int32 nPos = pAllDictsLB->GetSelectEntryPos();
 
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG_TYPED(SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox&, voi
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, void)
 {
     sal_Int32 nDicPos = pAllDictsLB->GetSelectEntryPos();
     sal_Int32 nLang = pLangLB->GetSelectLanguage();
@@ -547,7 +547,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 }
 
 
-IMPL_LINK_TYPED(SvxEditDictionaryDialog, SelectHdl, SvTreeListBox*, pBox, void)
+IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTreeListBox*, pBox, void)
 {
     if(!bDoNothing)
     {
@@ -572,12 +572,12 @@ IMPL_LINK_TYPED(SvxEditDictionaryDialog, SelectHdl, SvTreeListBox*, pBox, void)
 };
 
 
-IMPL_LINK_TYPED(SvxEditDictionaryDialog, NewDelButtonHdl, Button*, pBtn, void)
+IMPL_LINK(SvxEditDictionaryDialog, NewDelButtonHdl, Button*, pBtn, void)
 {
     NewDelHdl(static_cast<PushButton*>(pBtn));
 }
 
-IMPL_LINK_TYPED(SvxEditDictionaryDialog, NewDelActionHdl, SvxDictEdit&, rDictEdit, bool)
+IMPL_LINK(SvxEditDictionaryDialog, NewDelActionHdl, SvxDictEdit&, rDictEdit, bool)
 {
     return NewDelHdl(&rDictEdit);
 }
@@ -677,7 +677,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(void* pBtn)
 }
 
 
-IMPL_LINK_TYPED(SvxEditDictionaryDialog, ModifyHdl, Edit&, rEdt, void)
+IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit&, rEdt, void)
 {
     OUString rEntry = rEdt.GetText();
 

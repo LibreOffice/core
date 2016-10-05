@@ -147,16 +147,16 @@ private:
     OUString m_sModuleShortName;
     OUString m_sModuleUIName;
 
-    DECL_LINK_TYPED(ChangeHdl, Button *, void);
-    DECL_LINK_TYPED(RemoveHdl, Button *, void);
-    DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED(Save, Button *, void);
-    DECL_LINK_TYPED(Load, Button *, void);
-    DECL_LINK_TYPED(Default, Button *, void);
-    DECL_LINK_TYPED(RadioHdl, Button *, void);
+    DECL_LINK(ChangeHdl, Button *, void);
+    DECL_LINK(RemoveHdl, Button *, void);
+    DECL_LINK(SelectHdl, SvTreeListBox*, void );
+    DECL_LINK(Save, Button *, void);
+    DECL_LINK(Load, Button *, void);
+    DECL_LINK(Default, Button *, void);
+    DECL_LINK(RadioHdl, Button *, void);
 
-    DECL_LINK_TYPED(LoadHdl, sfx2::FileDialogHelper *, void);
-    DECL_LINK_TYPED(SaveHdl, sfx2::FileDialogHelper *, void);
+    DECL_LINK(LoadHdl, sfx2::FileDialogHelper *, void);
+    DECL_LINK(SaveHdl, sfx2::FileDialogHelper *, void);
 
     OUString                    GetLabel4Command(const OUString& rCommand);
     void                        InitAccCfg();

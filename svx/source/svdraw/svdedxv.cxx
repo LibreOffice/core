@@ -552,7 +552,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     return pOutlView;
 }
 
-IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerStatusEventHdl, EditStatus&, rEditStat, void)
+IMPL_LINK(SdrObjEditView,ImpOutlinerStatusEventHdl, EditStatus&, rEditStat, void)
 {
     if(pTextEditOutliner )
     {
@@ -626,7 +626,7 @@ void SdrObjEditView::ImpChainingEventHdl()
 
 }
 
-IMPL_LINK_NOARG_TYPED(SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl, LinkParamNone*, void)
 {
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( GetTextEditObject());
     if (!pTextObj)
@@ -659,7 +659,7 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCu
 }
 
 
-IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,void)
+IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,void)
 {
     bool bOk=false;
     OUString& rStr=pFI->GetRepresentation();
@@ -693,7 +693,7 @@ IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,v
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdrObjEditView, EndTextEditHdl, SdrUndoManager*, void)
+IMPL_LINK_NOARG(SdrObjEditView, EndTextEditHdl, SdrUndoManager*, void)
 {
     SdrEndTextEdit();
 }
@@ -2092,12 +2092,12 @@ void SdrObjEditView::MarkListHasChanged()
     }
 }
 
-IMPL_LINK_TYPED( SdrObjEditView, EndPasteOrDropHdl, PasteOrDropInfos*, pInfo, void )
+IMPL_LINK( SdrObjEditView, EndPasteOrDropHdl, PasteOrDropInfos*, pInfo, void )
 {
     OnEndPasteOrDrop( pInfo );
 }
 
-IMPL_LINK_TYPED( SdrObjEditView, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfo, void )
+IMPL_LINK( SdrObjEditView, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfo, void )
 {
     OnBeginPasteOrDrop( pInfo );
 }

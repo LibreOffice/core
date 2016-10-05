@@ -218,7 +218,7 @@ DeactivateRC ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 
 // Handler:
 
-IMPL_LINK_TYPED( ScTpCalcOptions, RadioClickHdl, Button*, pBtn, void )
+IMPL_LINK( ScTpCalcOptions, RadioClickHdl, Button*, pBtn, void )
 {
     if (pBtn == m_pBtnDateStd)
     {
@@ -234,7 +234,7 @@ IMPL_LINK_TYPED( ScTpCalcOptions, RadioClickHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_TYPED( ScTpCalcOptions, CheckClickHdl, Button*, p, void )
+IMPL_LINK( ScTpCalcOptions, CheckClickHdl, Button*, p, void )
 {
     CheckBox* pBtn = static_cast<CheckBox*>(p);
     if (pBtn == m_pBtnGeneralPrec)

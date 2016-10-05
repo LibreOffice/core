@@ -63,7 +63,7 @@ void ScSortWarningDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED( ScSortWarningDlg, BtnHdl, Button*, pBtn, void )
+IMPL_LINK( ScSortWarningDlg, BtnHdl, Button*, pBtn, void )
 {
     if ( pBtn == aBtnExtSort )
     {

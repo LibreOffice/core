@@ -159,11 +159,11 @@ private:
         css::xml::dom::XNode > const & aUpdateInfo);
     bool showDescription( const OUString& rDescription);
 
-    DECL_LINK_TYPED(selectionHandler, SvTreeListBox*, void);
-    DECL_LINK_TYPED(allHandler, CheckBox&, void);
-    DECL_LINK_TYPED(okHandler, Button*, void);
-    DECL_LINK_TYPED(closeHandler, Button*, void);
-    DECL_LINK_TYPED(hyperlink_clicked, FixedHyperlink&, void);
+    DECL_LINK(selectionHandler, SvTreeListBox*, void);
+    DECL_LINK(allHandler, CheckBox&, void);
+    DECL_LINK(okHandler, Button*, void);
+    DECL_LINK(closeHandler, Button*, void);
+    DECL_LINK(hyperlink_clicked, FixedHyperlink&, void);
 
     css::uno::Reference< css::uno::XComponentContext >  m_context;
     VclPtr<FixedText> m_pchecking;

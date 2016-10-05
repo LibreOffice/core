@@ -78,10 +78,10 @@ private:
     OUString                aLastFile;
     ::std::vector< long >   aVerbVector;
 
-    DECL_LINK_TYPED( ClickSearchHdl, Button*, void );
-    DECL_LINK_TYPED( ClickActionHdl, ListBox&, void );
-    DECL_LINK_TYPED( SelectTreeHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( CheckFileHdl, Control&, void );
+    DECL_LINK( ClickSearchHdl, Button*, void );
+    DECL_LINK( ClickActionHdl, ListBox&, void );
+    DECL_LINK( SelectTreeHdl, SvTreeListBox*, void );
+    DECL_LINK( CheckFileHdl, Control&, void );
 
     void                    UpdateTree();
     void                    OpenFileDialog();

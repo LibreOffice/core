@@ -234,7 +234,7 @@ void OFormattedControl::keyReleased(const css::awt::KeyEvent& /*e*/) throw ( css
 {
 }
 
-IMPL_LINK_NOARG_TYPED(OFormattedControl, OnKeyPressed, void*, void)
+IMPL_LINK_NOARG(OFormattedControl, OnKeyPressed, void*, void)
 {
     m_nKeyEvent = nullptr;
     Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);

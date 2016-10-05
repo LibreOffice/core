@@ -154,7 +154,7 @@ void DlgQryJoin::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED( DlgQryJoin, LBChangeHdl, ListBox&, void )
+IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, ListBox&, void )
 {
     if (m_pLB_JoinType->GetSelectEntryPos() == m_pLB_JoinType->GetSavedValue() )
         return;
@@ -240,7 +240,7 @@ IMPL_LINK_NOARG_TYPED( DlgQryJoin, LBChangeHdl, ListBox&, void )
     m_pML_HelpText->SetText( sHelpText );
 }
 
-IMPL_LINK_NOARG_TYPED( DlgQryJoin, OKClickHdl, Button*, void )
+IMPL_LINK_NOARG( DlgQryJoin, OKClickHdl, Button*, void )
 {
     m_pConnData->Update();
     m_pOrigConnData->CopyFrom( *m_pConnData );
@@ -248,7 +248,7 @@ IMPL_LINK_NOARG_TYPED( DlgQryJoin, OKClickHdl, Button*, void )
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED( DlgQryJoin, NaturalToggleHdl, CheckBox&, void )
+IMPL_LINK_NOARG( DlgQryJoin, NaturalToggleHdl, CheckBox&, void )
 {
     bool bChecked = m_pCBNatural->IsChecked();
     static_cast<OQueryTableConnectionData*>(m_pConnData.get())->setNatural(bChecked);

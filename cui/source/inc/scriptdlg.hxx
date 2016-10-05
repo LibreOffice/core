@@ -152,8 +152,8 @@ protected:
     const OUString m_renameErrStr;
     const OUString m_renameErrTitleStr;
 
-    DECL_LINK_TYPED( ScriptSelectHdl, SvTreeListBox *, void );
-    DECL_LINK_TYPED( ButtonHdl, Button *, void );
+    DECL_LINK( ScriptSelectHdl, SvTreeListBox *, void );
+    DECL_LINK( ButtonHdl, Button *, void );
     static bool         getBoolProperty( css::uno::Reference< css::beans::XPropertySet >& xProps, OUString& propName );
     void                CheckButtons(  css::uno::Reference< css::script::browse::XBrowseNode >& node );
 
@@ -185,7 +185,7 @@ private:
 
     OUString m_sMessage;
 
-    DECL_STATIC_LINK_TYPED( SvxScriptErrorDialog, ShowDialog, void*, void );
+    DECL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, void );
 
 public:
 

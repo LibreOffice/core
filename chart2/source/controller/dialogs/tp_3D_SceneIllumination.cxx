@@ -308,7 +308,7 @@ void ThreeD_SceneIllumination_TabPage::dispose()
     TabPage::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(ThreeD_SceneIllumination_TabPage, fillControlsFromModel, void*, void)
+IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel, void*, void)
 {
     if( m_bInCommitToModel )//don't read own changes
         return;
@@ -342,7 +342,7 @@ void ThreeD_SceneIllumination_TabPage::applyLightSourcesToModel()
     m_aTimerTriggeredControllerLock.startTimer();
 }
 
-IMPL_LINK_NOARG_TYPED(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, SvxLightCtl3D*, void)
+IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, SvxLightCtl3D*, void)
 {
     m_aTimerTriggeredControllerLock.startTimer();
 
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG_TYPED(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, SvxLig
     applyLightSourcesToModel();
 }
 
-IMPL_LINK_NOARG_TYPED(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, SvxLightCtl3D*, void)
+IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, SvxLightCtl3D*, void)
 {
     sal_uInt32 nLightNumber = m_pCtl_Preview->GetSvx3DLightControl().GetSelectedLight();
     if(nLightNumber<8)
@@ -405,7 +405,7 @@ IMPL_LINK_NOARG_TYPED(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, SvxLig
     }
 }
 
-IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton, void )
+IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton, void )
 {
     bool bIsAmbientLight = (pButton==m_pBtn_AmbientLight_Color);
     ColorLB* pListBox = ( bIsAmbientLight ? m_pLB_AmbientLight : m_pLB_LightSource);
@@ -441,7 +441,7 @@ IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pBut
     }
 }
 
-IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ListBox&, rBox, void )
+IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ListBox&, rBox, void )
 {
     ColorLB* pListBox = static_cast<ColorLB*>(&rBox);
     if(pListBox==m_pLB_AmbientLight)
@@ -471,7 +471,7 @@ IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ListBox&, rBo
     this->updatePreview();
 }
 
-IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, Button*, pBtn, void )
+IMPL_LINK( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, Button*, pBtn, void )
 {
     LightButton* pButton = static_cast<LightButton*>(pBtn);
     if( !pButton )

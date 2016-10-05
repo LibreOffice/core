@@ -327,7 +327,7 @@ void SfxNotebookBar::RemoveListeners(SystemWindow* pSysWindow)
     }
 }
 
-IMPL_STATIC_LINK_TYPED(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, pNotebookbar, void)
+IMPL_STATIC_LINK(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, pNotebookbar, void)
 {
     if (pNotebookbar)
     {

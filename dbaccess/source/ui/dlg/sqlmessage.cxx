@@ -295,7 +295,7 @@ public:
     }
 
 protected:
-    DECL_LINK_TYPED(OnExceptionSelected, SvTreeListBox*, void);
+    DECL_LINK(OnExceptionSelected, SvTreeListBox*, void);
 };
 
 OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const ExceptionDisplayChain& _rExceptions)
@@ -350,7 +350,7 @@ OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const Excepti
     }
 }
 
-IMPL_LINK_NOARG_TYPED(OExceptionChainDialog, OnExceptionSelected, SvTreeListBox*, void)
+IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected, SvTreeListBox*, void)
 {
     SvTreeListEntry* pSelected = m_pExceptionList->FirstSelected();
     OSL_ENSURE(!pSelected || !m_pExceptionList->NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
@@ -685,7 +685,7 @@ void OSQLMessageBox::dispose()
     ButtonDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED( OSQLMessageBox, ButtonClickHdl, Button *, void )
+IMPL_LINK_NOARG( OSQLMessageBox, ButtonClickHdl, Button *, void )
 {
     ScopedVclPtrInstance< OExceptionChainDialog > aDlg( this, m_pImpl->aDisplayInfo );
     aDlg->Execute();

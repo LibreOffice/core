@@ -66,15 +66,15 @@ friend class InputEdit;
     void CleanupUglyHackWithUndo();
 
     void DelBoxContent();
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
+    DECL_LINK( ModifyHdl, Edit&, void );
 
     using Window::IsActive;
 
 protected:
     virtual void    Resize() override;
     virtual void    Click() override;
-    DECL_LINK_TYPED( MenuHdl, Menu *, bool );
-    DECL_LINK_TYPED( DropdownClickHdl, ToolBox*, void );
+    DECL_LINK( MenuHdl, Menu *, bool );
+    DECL_LINK( DropdownClickHdl, ToolBox*, void );
     void            ApplyFormula();
     void            CancelFormula();
 
@@ -87,7 +87,7 @@ public:
 
     void            ShowWin();
 
-    DECL_LINK_TYPED( SelTableCellsNotify, SwWrtShell&, void );
+    DECL_LINK( SelTableCellsNotify, SwWrtShell&, void );
 
     void            SetFormula( const OUString& rFormula );
     const SwView*   GetView() const{return pView;}

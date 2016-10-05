@@ -133,7 +133,7 @@ void SdSnapLineDlg::dispose()
 /**
  * fills provided item sets with dialog box attributes
  */
-IMPL_LINK_TYPED( SdSnapLineDlg, ClickHdl, Button *, pBtn, void )
+IMPL_LINK( SdSnapLineDlg, ClickHdl, Button *, pBtn, void )
 {
     if ( pBtn == m_pRbPoint )        SetInputFields(true, true);
     else if ( pBtn == m_pRbHorz )    SetInputFields(false, true);

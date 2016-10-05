@@ -278,14 +278,14 @@ bool XMLFilterTabDialog::onOk()
 }
 
 
-IMPL_LINK_NOARG_TYPED(XMLFilterTabDialog, OkHdl, Button*, void)
+IMPL_LINK_NOARG(XMLFilterTabDialog, OkHdl, Button*, void)
 {
     if( onOk() )
         EndDialog(1);
 }
 
 
-IMPL_STATIC_LINK_TYPED( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
+IMPL_STATIC_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 {
     const sal_uInt16 nId = pTabCtrl->GetCurPageId();
     TabPage* pTabPage = pTabCtrl->GetTabPage( nId );

@@ -1483,7 +1483,7 @@ bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 
 // Also on double click will be initially opened only.
 
-IMPL_LINK_NOARG_TYPED(SwContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
 {
     SvTreeListEntry* pEntry = GetCurEntry();
     // Is it a content type?
@@ -2387,7 +2387,7 @@ void SwContentTree::HideTree()
 }
 
 /** No idle with focus or while dragging */
-IMPL_LINK_NOARG_TYPED(SwContentTree, TimerUpdate, Timer *, void)
+IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
 {
     if (IsDisposed())
         return;

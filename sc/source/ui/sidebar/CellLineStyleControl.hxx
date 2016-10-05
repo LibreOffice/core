@@ -41,8 +41,8 @@ private:
     void Initialize();
     void SetAllNoSel();
 
-    DECL_LINK_TYPED(VSSelectHdl, ValueSet*, void);
-    DECL_LINK_TYPED(PBClickHdl, Button*, void);
+    DECL_LINK(VSSelectHdl, ValueSet*, void);
+    DECL_LINK(PBClickHdl, Button*, void);
 
 public:
     CellLineStyleControl(FloatingWindow* pParent, SfxDispatcher* pDispatcher);

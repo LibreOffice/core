@@ -61,7 +61,7 @@ private:
         css::uno::Any                              aData;
     };
 
-    DECL_STATIC_LINK_TYPED( AsyncCallback, Notify_Impl, void*, void );
+    DECL_STATIC_LINK( AsyncCallback, Notify_Impl, void*, void );
 
     virtual ~AsyncCallback() override {}
 };
@@ -96,7 +96,7 @@ void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XC
 }
 
 // private asynchronous link to call reference to the callback object
-IMPL_STATIC_LINK_TYPED( AsyncCallback, Notify_Impl, void*, p, void )
+IMPL_STATIC_LINK( AsyncCallback, Notify_Impl, void*, p, void )
 {
     CallbackData* pCallbackData = static_cast<CallbackData*>(p);
     try

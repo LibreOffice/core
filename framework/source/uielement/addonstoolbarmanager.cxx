@@ -384,7 +384,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     AddFrameActionListener();
 }
 
-IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Click, ToolBox *, void)
+IMPL_LINK_NOARG(AddonsToolBarManager, Click, ToolBox *, void)
 {
     if ( m_bDisposed )
         return;
@@ -400,7 +400,7 @@ IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Click, ToolBox *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, DoubleClick, ToolBox *, void)
+IMPL_LINK_NOARG(AddonsToolBarManager, DoubleClick, ToolBox *, void)
 {
     if ( m_bDisposed )
         return;
@@ -416,7 +416,7 @@ IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, DoubleClick, ToolBox *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Select, ToolBox *, void)
+IMPL_LINK_NOARG(AddonsToolBarManager, Select, ToolBox *, void)
 {
     if ( m_bDisposed )
         return;
@@ -433,7 +433,7 @@ IMPL_LINK_NOARG_TYPED(AddonsToolBarManager, Select, ToolBox *, void)
     }
 }
 
-IMPL_LINK_TYPED( AddonsToolBarManager, StateChanged, StateChangedType const *, pStateChangedType, void )
+IMPL_LINK( AddonsToolBarManager, StateChanged, StateChangedType const *, pStateChangedType, void )
 {
     if ( *pStateChangedType == StateChangedType::ControlBackground )
     {
@@ -441,7 +441,7 @@ IMPL_LINK_TYPED( AddonsToolBarManager, StateChanged, StateChangedType const *, p
     }
 }
 
-IMPL_LINK_TYPED( AddonsToolBarManager, DataChanged, DataChangedEvent const *, pDataChangedEvent, void )
+IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent const *, pDataChangedEvent, void )
 {
     if ((( pDataChangedEvent->GetType() == DataChangedEventType::SETTINGS )   ||
         (  pDataChangedEvent->GetType() == DataChangedEventType::DISPLAY  ))  &&

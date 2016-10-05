@@ -187,7 +187,7 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
         mxUndoManager->leaveUndoContext();
 }
 
-IMPL_LINK_TYPED(PageOrientationControl, ImplOrientationHdl, Button*, pControl, void)
+IMPL_LINK(PageOrientationControl, ImplOrientationHdl, Button*, pControl, void)
 {
     if ( pControl == m_pPortrait.get() )
         ExecuteOrientationChange( false );

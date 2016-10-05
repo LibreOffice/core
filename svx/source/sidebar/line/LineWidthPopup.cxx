@@ -111,7 +111,7 @@ LineWidthPopup::~LineWidthPopup()
     disposeOnce();
 }
 
-IMPL_LINK_TYPED(LineWidthPopup, VSSelectHdl, ValueSet*, /*pControl*/, void)
+IMPL_LINK(LineWidthPopup, VSSelectHdl, ValueSet*, /*pControl*/, void)
 {
     sal_uInt16 iPos = m_xVSWidth->GetSelectItemId();
     if (iPos >= 1 && iPos <= 8)
@@ -154,7 +154,7 @@ IMPL_LINK_TYPED(LineWidthPopup, VSSelectHdl, ValueSet*, /*pControl*/, void)
     }
 }
 
-IMPL_LINK_TYPED(LineWidthPopup, MFModifyHdl, Edit&, /*rControl*/, void)
+IMPL_LINK(LineWidthPopup, MFModifyHdl, Edit&, /*rControl*/, void)
 {
     if (m_xVSWidth->GetSelItem())
     {

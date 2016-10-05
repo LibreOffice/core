@@ -361,7 +361,7 @@ Reference< css::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const c
     return FmXGridPeer::queryDispatch(aURL, aTargetFrameName, nSearchFlags);
 }
 
-IMPL_LINK_NOARG_TYPED( SbaXGridPeer, OnDispatchEvent, void*, void )
+IMPL_LINK_NOARG( SbaXGridPeer, OnDispatchEvent, void*, void )
 {
     VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if ( pGrid )    // if this fails, we were disposing before arriving here
@@ -1438,7 +1438,7 @@ Reference< XPropertySet >  SbaGridControl::getDataSource() const
     return xReturn;
 }
 
-IMPL_LINK_NOARG_TYPED(SbaGridControl, AsynchDropEvent, void*, void)
+IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent, void*, void)
 {
     m_nAsyncDropEvent = nullptr;
 

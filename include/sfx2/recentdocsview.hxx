@@ -58,7 +58,7 @@ public:
     /// Update the information in the view.
     virtual void Reload() override;
 
-    DECL_STATIC_LINK_TYPED( RecentDocsView, ExecuteHdl_Impl, void*, void );
+    DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, void*, void );
 
 protected:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;

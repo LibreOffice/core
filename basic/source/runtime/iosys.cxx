@@ -66,8 +66,8 @@ class SbiInputDialog : public ModalDialog {
     VclPtr<OKButton> aOk;
     VclPtr<CancelButton> aCancel;
     OUString aText;
-    DECL_LINK_TYPED( Ok, Button *, void );
-    DECL_LINK_TYPED( Cancel, Button *, void );
+    DECL_LINK( Ok, Button *, void );
+    DECL_LINK( Cancel, Button *, void );
 public:
     SbiInputDialog( vcl::Window*, const OUString& );
     virtual ~SbiInputDialog() override { disposeOnce(); }
@@ -111,13 +111,13 @@ void SbiInputDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED( SbiInputDialog, Ok, Button *, void )
+IMPL_LINK_NOARG( SbiInputDialog, Ok, Button *, void )
 {
     aText = aInput->GetText();
     EndDialog( 1 );
 }
 
-IMPL_LINK_NOARG_TYPED( SbiInputDialog, Cancel, Button *, void )
+IMPL_LINK_NOARG( SbiInputDialog, Cancel, Button *, void )
 {
     EndDialog();
 }

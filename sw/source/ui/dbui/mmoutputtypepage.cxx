@@ -77,7 +77,7 @@ void SwMailMergeOutputTypePage::dispose()
 }
 
 
-IMPL_LINK_NOARG_TYPED(SwMailMergeOutputTypePage, TypeHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl, Button*, void)
 {
     bool bLetter = m_pLetterRB->IsChecked();
     m_pLetterHint->Show(bLetter);
@@ -363,7 +363,7 @@ void SwSendMailDialog::SetDocumentCount( sal_Int32 nAllDocuments )
     UpdateTransferStatus();
 }
 
-IMPL_LINK_TYPED( SwSendMailDialog, StopHdl_Impl, Button*, pButton, void )
+IMPL_LINK( SwSendMailDialog, StopHdl_Impl, Button*, pButton, void )
 {
     m_bCancel = true;
     if(m_pImpl->xMailDispatcher.is())
@@ -383,17 +383,17 @@ IMPL_LINK_TYPED( SwSendMailDialog, StopHdl_Impl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwSendMailDialog, CloseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwSendMailDialog, CloseHdl_Impl, Button*, void)
 {
     ModelessDialog::Show( false );
 }
 
-IMPL_STATIC_LINK_TYPED( SwSendMailDialog, StartSendMails, void*, pDialog, void )
+IMPL_STATIC_LINK( SwSendMailDialog, StartSendMails, void*, pDialog, void )
 {
     static_cast<SwSendMailDialog*>(pDialog)->SendMails();
 }
 
-IMPL_LINK_TYPED( SwSendMailDialog, RemoveThis, Idle*, pTimer, void )
+IMPL_LINK( SwSendMailDialog, RemoveThis, Idle*, pTimer, void )
 {
     if( m_pImpl->xMailDispatcher.is() )
     {
@@ -415,7 +415,7 @@ IMPL_LINK_TYPED( SwSendMailDialog, RemoveThis, Idle*, pTimer, void )
     }
 }
 
-IMPL_STATIC_LINK_TYPED( SwSendMailDialog, StopSendMails, void*, p, void )
+IMPL_STATIC_LINK( SwSendMailDialog, StopSendMails, void*, p, void )
 {
     SwSendMailDialog* pDialog = static_cast<SwSendMailDialog*>(p);
     if(pDialog->m_pImpl->xMailDispatcher.is() &&

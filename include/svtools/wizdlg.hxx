@@ -166,14 +166,14 @@ void MyWizardDlg::ActivatePage()
 MyWizardDlg-Prev/Next-Handler
 -----------------------------
 
-IMPL_LINK_TYPED( MyWizardDlg, ImplPrevHdl, PushButton*, pBtn, void )
+IMPL_LINK( MyWizardDlg, ImplPrevHdl, PushButton*, pBtn, void )
 {
     ShowPrevPage();
     if ( !GetCurLevel() )
         pBtn->Disable();
 }
 
-IMPL_LINK_TYPED( MyWizardDlg, ImplNextHdl, PushButton*, pBtn, void )
+IMPL_LINK( MyWizardDlg, ImplNextHdl, PushButton*, pBtn, void )
 {
     ShowNextPage();
     if ( GetCurLevel() < 3 )
@@ -203,7 +203,7 @@ private:
     sal_Int16               mnLeftAlignCount;
     bool                    mbEmptyViewMargin;
 
-    DECL_DLLPRIVATE_LINK_TYPED( ImplHandleWizardLayoutTimerHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK( ImplHandleWizardLayoutTimerHdl, Idle*, void );
     bool hasWizardPendingLayout() const;
 
 protected:

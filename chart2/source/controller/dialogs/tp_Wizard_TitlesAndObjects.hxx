@@ -51,9 +51,9 @@ public:
 
 protected:
     void commitToModel();
-    DECL_LINK_TYPED( ChangeHdl, LinkParamNone*, void );
-    DECL_LINK_TYPED( ChangeEditHdl, Edit&, void );
-    DECL_LINK_TYPED( ChangeCheckBoxHdl, CheckBox&, void );
+    DECL_LINK( ChangeHdl, LinkParamNone*, void );
+    DECL_LINK( ChangeEditHdl, Edit&, void );
+    DECL_LINK( ChangeCheckBoxHdl, CheckBox&, void );
 
 protected:
     std::unique_ptr< TitleResources >            m_xTitleResources;

@@ -57,11 +57,11 @@ class AddonsToolBarManager : public ToolBarManager
         void FillToolbar( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rAddonToolbar );
 
     protected:
-        DECL_LINK_TYPED(Click, ToolBox *, void);
-        DECL_LINK_TYPED(DoubleClick, ToolBox *, void);
-        DECL_LINK_TYPED(Select, ToolBox *, void);
-        DECL_LINK_TYPED(StateChanged, StateChangedType const *, void );
-        DECL_LINK_TYPED(DataChanged, DataChangedEvent const *, void );
+        DECL_LINK(Click, ToolBox *, void);
+        DECL_LINK(DoubleClick, ToolBox *, void);
+        DECL_LINK(Select, ToolBox *, void);
+        DECL_LINK(StateChanged, StateChangedType const *, void );
+        DECL_LINK(DataChanged, DataChangedEvent const *, void );
 
         virtual bool MenuItemAllowed( sal_uInt16 ) const override;
 };

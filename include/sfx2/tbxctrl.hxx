@@ -154,8 +154,8 @@ friend struct SfxTbxCtrlFactory;
     std::unique_ptr< SfxToolBoxControl_Impl>    pImpl;
 
 protected:
-    DECL_LINK_TYPED( PopupModeEndHdl, FloatingWindow*, void );
-    DECL_LINK_TYPED( ClosePopupWindow, SfxPopupWindow *, void );
+    DECL_LINK( PopupModeEndHdl, FloatingWindow*, void );
+    DECL_LINK( ClosePopupWindow, SfxPopupWindow *, void );
 
     // old SfxToolBoxControl methods
     virtual void               StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );

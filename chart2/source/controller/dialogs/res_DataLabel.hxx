@@ -83,8 +83,8 @@ private:
     VclPtr<vcl::Window>             m_pWindow;
     SfxItemPool*        m_pPool;
 
-    DECL_LINK_TYPED(NumberFormatDialogHdl, Button *, void );
-    DECL_LINK_TYPED(CheckHdl, Button*, void );
+    DECL_LINK(NumberFormatDialogHdl, Button *, void );
+    DECL_LINK(CheckHdl, Button*, void );
     void EnableControls();
 };
 

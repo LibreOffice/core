@@ -94,10 +94,10 @@ namespace dbp
         virtual bool        canAdvance() const override;
 
     protected:
-        DECL_LINK_TYPED(OnMoveOneEntry, Button*, void);
-        DECL_LINK_TYPED(OnMoveAllEntries, Button*, void);
-        DECL_LINK_TYPED(OnEntrySelected, ListBox&, void);
-        DECL_LINK_TYPED(OnEntryDoubleClicked, ListBox&, void);
+        DECL_LINK(OnMoveOneEntry, Button*, void);
+        DECL_LINK(OnMoveAllEntries, Button*, void);
+        DECL_LINK(OnEntrySelected, ListBox&, void);
+        DECL_LINK(OnEntryDoubleClicked, ListBox&, void);
 
         void implCheckButtons();
     };

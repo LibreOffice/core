@@ -155,7 +155,7 @@ bool ToolTip::Hide()
         return false;
 }
 
-IMPL_LINK_NOARG_TYPED(ToolTip, DelayTrigger, Timer *, void)
+IMPL_LINK_NOARG(ToolTip, DelayTrigger, Timer *, void)
 {
     DoShow();
 }

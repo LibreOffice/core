@@ -613,7 +613,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
     }
 }
 
-IMPL_LINK_TYPED( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox, void )
+IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox, void )
 {
     if ( !pBox->IsSelected( pBox->GetHdlEntry() ) )
     {
@@ -637,7 +637,7 @@ IMPL_LINK_TYPED( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox, voi
     }
 }
 
-IMPL_LINK_TYPED( SvxScriptOrgDialog, ButtonHdl, Button *, pButton, void )
+IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton, void )
 {
     if ( pButton == m_pCloseButton )
     {
@@ -1456,7 +1456,7 @@ short SvxScriptErrorDialog::Execute()
     return 0;
 }
 
-IMPL_STATIC_LINK_TYPED( SvxScriptErrorDialog, ShowDialog, void*, p, void )
+IMPL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, p, void )
 {
     OUString* pMessage = static_cast<OUString*>(p);
     OUString message;

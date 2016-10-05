@@ -72,12 +72,12 @@ private:
     ScRange PerformRandomSampling(ScDocShell* pDocShell);
     ScRange PerformPeriodicSampling(ScDocShell* pDocShell);
 
-    DECL_LINK_TYPED( OkClicked, Button*, void );
-    DECL_LINK_TYPED( GetFocusHandler, Control&, void );
-    DECL_LINK_TYPED( LoseFocusHandler, Control&, void );
-    DECL_LINK_TYPED( SamplingSizeValueModified, Edit&, void );
-    DECL_LINK_TYPED( ToggleSamplingMethod, RadioButton&, void );
-    DECL_LINK_TYPED( RefInputModifyHandler, Edit&, void );
+    DECL_LINK( OkClicked, Button*, void );
+    DECL_LINK( GetFocusHandler, Control&, void );
+    DECL_LINK( LoseFocusHandler, Control&, void );
+    DECL_LINK( SamplingSizeValueModified, Edit&, void );
+    DECL_LINK( ToggleSamplingMethod, RadioButton&, void );
+    DECL_LINK( RefInputModifyHandler, Edit&, void );
     void ToggleSamplingMethod();
 };
 

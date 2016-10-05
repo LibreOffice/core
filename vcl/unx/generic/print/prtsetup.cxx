@@ -107,7 +107,7 @@ void RTSDialog::dispose()
     TabDialog::dispose();
 }
 
-IMPL_LINK_TYPED( RTSDialog, ActivatePage, TabControl*, pTabCtrl, void )
+IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl, void )
 {
     if( pTabCtrl != m_pTabControl )
         return;
@@ -131,7 +131,7 @@ IMPL_LINK_TYPED( RTSDialog, ActivatePage, TabControl*, pTabCtrl, void )
     }
 }
 
-IMPL_LINK_TYPED( RTSDialog, ClickButton, Button*, pButton, void )
+IMPL_LINK( RTSDialog, ClickButton, Button*, pButton, void )
 {
     if( pButton == m_pOKButton )
     {
@@ -262,7 +262,7 @@ void RTSPaperPage::update()
     }
 }
 
-IMPL_LINK_TYPED( RTSPaperPage, SelectHdl, ListBox&, rBox, void )
+IMPL_LINK( RTSPaperPage, SelectHdl, ListBox&, rBox, void )
 {
     const PPDKey* pKey = nullptr;
     if( &rBox == m_pPaperBox )
@@ -448,7 +448,7 @@ sal_uLong RTSDevicePage::getPDFDevice()
     return -1;      //explicitly PS
 }
 
-IMPL_LINK_TYPED(RTSDevicePage, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK(RTSDevicePage, ModifyHdl, Edit&, rEdit, void)
 {
     if (m_pCustomValue)
     {
@@ -456,7 +456,7 @@ IMPL_LINK_TYPED(RTSDevicePage, ModifyHdl, Edit&, rEdit, void)
     }
 }
 
-IMPL_LINK_TYPED( RTSDevicePage, SelectHdl, ListBox&, rBox, void )
+IMPL_LINK( RTSDevicePage, SelectHdl, ListBox&, rBox, void )
 {
     if( &rBox == m_pPPDKeyBox )
     {

@@ -43,9 +43,9 @@ class DropDownFieldDialog : public SvxStandardDialog
     SwWrtShell          &rSh;
     SwDropDownField*    pDropField;
 
-    DECL_LINK_TYPED(ButtonHdl, Button*, void);
+    DECL_LINK(ButtonHdl, Button*, void);
     virtual void    Apply() override;
-    DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
+    DECL_LINK(DoubleClickHdl, ListBox&, void);
 public:
     DropDownFieldDialog(   vcl::Window *pParent, SwWrtShell &rSh,
                                 SwField* pField, bool bNextButton );

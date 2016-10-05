@@ -168,7 +168,7 @@ void SdPresLayoutDlg::FillValueSet()
 /**
  * DoubleClick handler
  */
-IMPL_LINK_NOARG_TYPED(SdPresLayoutDlg, ClickLayoutHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl, ValueSet*, void)
 {
     EndDialog(RET_OK);
 }
@@ -176,7 +176,7 @@ IMPL_LINK_NOARG_TYPED(SdPresLayoutDlg, ClickLayoutHdl, ValueSet*, void)
 /**
  * Click handler for load button
  */
-IMPL_LINK_NOARG_TYPED(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
+IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
 {
     VclPtrInstance< SfxNewFileDialog > pDlg(this, SFXWB_PREVIEW);
     pDlg->SetText(SD_RESSTR(STR_LOAD_PRESENTATION_LAYOUT));

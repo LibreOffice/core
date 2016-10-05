@@ -358,7 +358,7 @@ uno::Sequence< OUString > SAL_CALL OGLPlayer::getSupportedServiceNames()
     return { "com.sun.star.media.Player_OpenGL" };
 }
 
-IMPL_LINK_TYPED(OGLPlayer,TimerHandler,Timer*,pTimer,void)
+IMPL_LINK(OGLPlayer,TimerHandler,Timer*,pTimer,void)
 {
     if (pTimer == &m_aTimer)
     {

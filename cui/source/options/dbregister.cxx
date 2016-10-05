@@ -269,7 +269,7 @@ void DbRegistrationOptionsPage::FillUserData()
     SetUserData( aUserData );
 }
 
-IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, DeleteHdl, Button*, void)
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl, Button*, void)
 {
     SvTreeListEntry* pEntry = m_pPathBox->FirstSelected();
     if ( pEntry )
@@ -280,20 +280,20 @@ IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, DeleteHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, NewHdl, Button*, void)
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl, Button*, void)
 {
     OUString sNewName,sNewLocation;
     openLinkDialog(sNewName,sNewLocation);
 }
 
-IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, PathBoxDoubleClickHdl, SvTreeListBox*, bool)
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathBoxDoubleClickHdl, SvTreeListBox*, bool)
 {
     EditHdl(nullptr);
     return false;
 }
 
 
-IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, EditHdl, Button*, void)
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl, Button*, void)
 {
     SvTreeListEntry* pEntry = m_pPathBox->GetCurEntry();
     if ( !pEntry )
@@ -310,7 +310,7 @@ IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, EditHdl, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar, void )
+IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar, void )
 {
     assert(pBar);
 
@@ -339,7 +339,7 @@ IMPL_LINK_TYPED( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar,
 }
 
 
-IMPL_LINK_TYPED( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
+IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
     assert(pBar);
 
@@ -370,7 +370,7 @@ IMPL_LINK_TYPED( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar
 }
 
 
-IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, PathSelect_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pEntry = m_pPathBox->FirstSelected();
 
@@ -428,7 +428,7 @@ void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const O
     }
 }
 
-IMPL_LINK_TYPED( DbRegistrationOptionsPage, NameValidator, const OUString&, _rName, bool )
+IMPL_LINK( DbRegistrationOptionsPage, NameValidator, const OUString&, _rName, bool )
 {
     sal_uLong nCount = m_pPathBox->GetEntryCount();
     for ( sal_uLong i = 0; i < nCount; ++i )

@@ -147,14 +147,14 @@ private:
 
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
-    DECL_LINK_TYPED( ChangePosXHdl, Edit&, void );
-    DECL_LINK_TYPED( ChangePosYHdl, Edit&, void );
-    DECL_LINK_TYPED( ChangeWidthHdl, Edit&, void );
-    DECL_LINK_TYPED( ChangeHeightHdl, Edit&, void );
-    DECL_LINK_TYPED( ClickAutoHdl, Button*, void );
-    DECL_LINK_TYPED( AngleModifiedHdl, Edit&, void );
-    DECL_LINK_TYPED( RotationHdl, svx::DialControl*, void );
-    DECL_LINK_TYPED( FlipHdl, ToolBox *, void );
+    DECL_LINK( ChangePosXHdl, Edit&, void );
+    DECL_LINK( ChangePosYHdl, Edit&, void );
+    DECL_LINK( ChangeWidthHdl, Edit&, void );
+    DECL_LINK( ChangeHeightHdl, Edit&, void );
+    DECL_LINK( ClickAutoHdl, Button*, void );
+    DECL_LINK( AngleModifiedHdl, Edit&, void );
+    DECL_LINK( RotationHdl, svx::DialControl*, void );
+    DECL_LINK( FlipHdl, ToolBox *, void );
 
     void Initialize();
     void executePosX();

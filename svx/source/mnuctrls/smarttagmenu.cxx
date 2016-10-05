@@ -39,7 +39,7 @@ public:
 
 private:
     void FillMenu();
-    DECL_LINK_TYPED( MenuSelect, Menu*, bool );
+    DECL_LINK( MenuSelect, Menu*, bool );
     struct InvokeAction
     {
         css::uno::Reference< css::smarttags::XSmartTagAction > m_xAction;
@@ -196,7 +196,7 @@ void SmartTagMenuController::FillMenu()
     }
 }
 
-IMPL_LINK_TYPED( SmartTagMenuController, MenuSelect, Menu*, pMenu, bool )
+IMPL_LINK( SmartTagMenuController, MenuSelect, Menu*, pMenu, bool )
 {
     if ( !m_pSmartTagItem )
         return false;

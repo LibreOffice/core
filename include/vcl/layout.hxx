@@ -391,7 +391,7 @@ private:
 private:
     friend class VclBuilder;
     void designate_label(vcl::Window *pWindow);
-    DECL_LINK_TYPED(WindowEventListener, VclWindowEvent&, void);
+    DECL_LINK(WindowEventListener, VclWindowEvent&, void);
 public:
     VclFrame(vcl::Window *pParent)
         : VclBin(pParent)
@@ -479,7 +479,7 @@ private:
     bool m_bResizeTopLevel;
     VclPtr<DisclosureButton> m_pDisclosureButton;
     Link<VclExpander&,void> maExpandedHdl;
-    DECL_DLLPRIVATE_LINK_TYPED(ClickHdl, CheckBox&, void);
+    DECL_DLLPRIVATE_LINK(ClickHdl, CheckBox&, void);
 };
 
 class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
@@ -500,7 +500,7 @@ public:
 protected:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
-    DECL_LINK_TYPED(ScrollBarHdl, ScrollBar*, void);
+    DECL_LINK(ScrollBarHdl, ScrollBar*, void);
     void InitScrollBars(const Size &rRequest);
     virtual bool Notify(NotifyEvent& rNEvt) override;
 private:
@@ -652,7 +652,7 @@ private:
     std::map< VclPtr<const vcl::Window>, short> m_aResponses;
     OUString m_sPrimaryString;
     OUString m_sSecondaryString;
-    DECL_DLLPRIVATE_LINK_TYPED(ButtonHdl, Button *, void);
+    DECL_DLLPRIVATE_LINK(ButtonHdl, Button *, void);
     void setButtonHandlers(VclButtonBox *pButtonBox);
     short get_response(const vcl::Window *pWindow) const;
     void create_owned_areas();

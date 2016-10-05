@@ -287,7 +287,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     return bRet;
 }
 
-IMPL_LINK_TYPED(SwContentOptPage, VertRulerHdl, Button*, pBox, void)
+IMPL_LINK(SwContentOptPage, VertRulerHdl, Button*, pBox, void)
 {
     m_pVRulerRightCBox->Enable(pBox->IsEnabled() && static_cast<CheckBox*>(pBox)->IsChecked());
 }
@@ -485,7 +485,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
         m_pProspectCB_RTL->Enable( false );
 }
 
-IMPL_LINK_NOARG_TYPED(SwAddPrinterTabPage, AutoClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwAddPrinterTabPage, AutoClickHdl, Button*, void)
 {
     bAttrModified = true;
     bool bIsProspect = m_pProspectCB->IsChecked();
@@ -509,7 +509,7 @@ void  SwAddPrinterTabPage::SetFax( const std::vector<OUString>& rFaxLst )
     m_pFaxLB->SelectEntryPos(0);
 }
 
-IMPL_LINK_NOARG_TYPED(SwAddPrinterTabPage, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwAddPrinterTabPage, SelectHdl, ListBox&, void)
 {
     bAttrModified=true;
 }
@@ -968,7 +968,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     m_pIndexHeightLB->SaveValue();
 }
 
-IMPL_LINK_NOARG_TYPED(SwStdFontTabPage, StandardHdl, Button*, void)
+IMPL_LINK_NOARG(SwStdFontTabPage, StandardHdl, Button*, void)
 {
     sal_uInt8 nFontOffset = m_nFontGroup * FONT_PER_GROUP;
     m_pStandardBox->SetText(SwStdFontConfig::GetDefaultFor(FONT_STANDARD + nFontOffset, m_eLanguage));
@@ -1000,7 +1000,7 @@ IMPL_LINK_NOARG_TYPED(SwStdFontTabPage, StandardHdl, Button*, void)
             MAP_TWIP, 10 ));
 }
 
-IMPL_LINK_TYPED( SwStdFontTabPage, ModifyHdl, Edit&, rBox, void )
+IMPL_LINK( SwStdFontTabPage, ModifyHdl, Edit&, rBox, void )
 {
     if(&rBox == m_pStandardBox)
     {
@@ -1026,7 +1026,7 @@ IMPL_LINK_TYPED( SwStdFontTabPage, ModifyHdl, Edit&, rBox, void )
     }
 }
 
-IMPL_LINK_TYPED( SwStdFontTabPage, ModifyHeightHdl, Edit&, rBox, void )
+IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, Edit&, rBox, void )
 {
     if(&rBox == m_pStandardHeightLB)
     {
@@ -1052,7 +1052,7 @@ IMPL_LINK_TYPED( SwStdFontTabPage, ModifyHeightHdl, Edit&, rBox, void )
     }
 }
 
-IMPL_LINK_TYPED( SwStdFontTabPage, LoseFocusHdl, Control&, rControl, void )
+IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, Control&, rControl, void )
 {
     ComboBox* pBox = static_cast<ComboBox*>(&rControl);
     FontSizeBox* pHeightLB = nullptr;
@@ -1291,7 +1291,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     CheckBoxHdl(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED(SwTableOptionsTabPage, CheckBoxHdl, Button*, void)
+IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl, Button*, void)
 {
     m_pNumFormatFormattingCB->Enable(m_pNumFormattingCB->IsChecked());
     m_pNumAlignmentCB->Enable(m_pNumFormattingCB->IsChecked());
@@ -2061,7 +2061,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
     ChangedMaskPrevHdl(*pMarkPosLB);
 }
 
-IMPL_LINK_TYPED( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
+IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
 {
     SvxFontPrevWindow *pPrev = nullptr;
     ColorListBox *pColorLB;
@@ -2166,7 +2166,7 @@ IMPL_LINK_TYPED( SwRedlineOptionsTabPage, AttribHdl, ListBox&, rLB, void )
     pPrev->Invalidate();
 }
 
-IMPL_LINK_TYPED( SwRedlineOptionsTabPage, ColorHdl, ListBox&, rListBox, void )
+IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, ListBox&, rListBox, void )
 {
     ColorListBox* pColorLB = static_cast<ColorListBox*>(&rListBox);
     SvxFontPrevWindow *pPrev = nullptr;
@@ -2231,7 +2231,7 @@ IMPL_LINK_TYPED( SwRedlineOptionsTabPage, ColorHdl, ListBox&, rListBox, void )
     pPrev->Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED(SwRedlineOptionsTabPage, ChangedMaskPrevHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwRedlineOptionsTabPage, ChangedMaskPrevHdl, ListBox&, void)
 {
     pMarkPreviewWN->SetMarkPos(pMarkPosLB->GetSelectEntryPos());
     pMarkPreviewWN->SetColor(pMarkColorLB->GetSelectEntryColor().GetColor());
@@ -2417,7 +2417,7 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
     m_pStoreRsidCB->SaveValue();
 }
 
-IMPL_LINK_NOARG_TYPED(SwCompareOptionsTabPage, ComparisonHdl, Button*, void)
+IMPL_LINK_NOARG(SwCompareOptionsTabPage, ComparisonHdl, Button*, void)
 {
     bool bChecked = !m_pAutoRB->IsChecked();
     m_pRsidCB->Enable( bChecked );
@@ -2425,7 +2425,7 @@ IMPL_LINK_NOARG_TYPED(SwCompareOptionsTabPage, ComparisonHdl, Button*, void)
     m_pLenNF->Enable( bChecked && m_pIgnoreCB->IsChecked() );
 }
 
-IMPL_LINK_NOARG_TYPED(SwCompareOptionsTabPage, IgnoreHdl, Button*, void)
+IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl, Button*, void)
 {
     m_pLenNF->Enable( m_pIgnoreCB->IsChecked() );
 }
@@ -2535,7 +2535,7 @@ void SwTestTabPage::Init()
     m_pTest10CBox->SetClickHdl( aLk );
 }
 
-IMPL_LINK_NOARG_TYPED(SwTestTabPage, AutoClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwTestTabPage, AutoClickHdl, Button*, void)
 {
     bAttrModified = true;
 }

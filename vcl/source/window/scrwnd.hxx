@@ -62,7 +62,7 @@ private:
     void                ImplDrawWheel(vcl::RenderContext& rRenderContext);
     void                ImplRecalcScrollValues();
 
-                        DECL_LINK_TYPED(ImplScrollHdl, Timer *, void);
+                        DECL_LINK(ImplScrollHdl, Timer *, void);
 
 protected:
 

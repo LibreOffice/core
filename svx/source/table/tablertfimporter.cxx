@@ -90,7 +90,7 @@ public:
 
     void FillTable();
 
-    DECL_LINK_TYPED( RTFImportHdl, ImportInfo&, void );
+    DECL_LINK( RTFImportHdl, ImportInfo&, void );
 
 private:
     SdrTableObj&    mrTableObj;
@@ -160,7 +160,7 @@ void SdrTableRTFParser::Read( SvStream& rStream )
     FillTable();
 }
 
-IMPL_LINK_TYPED( SdrTableRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
+IMPL_LINK( SdrTableRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
 {
     switch ( rInfo.eState )
     {

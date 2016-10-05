@@ -217,14 +217,14 @@ class SvxIconChoiceCtrl_Impl
     void                ResetVirtSize();
     void                CheckScrollBars();
 
-                        DECL_LINK_TYPED( ScrollUpDownHdl, ScrollBar*, void );
-                        DECL_LINK_TYPED( ScrollLeftRightHdl, ScrollBar*, void );
-                        DECL_LINK_TYPED( EditTimeoutHdl, Idle *, void);
-                        DECL_LINK_TYPED( UserEventHdl, void*, void );
-                        DECL_LINK_TYPED( AutoArrangeHdl, Idle*, void );
-                        DECL_LINK_TYPED( DocRectChangedHdl, Idle*, void );
-                        DECL_LINK_TYPED( VisRectChangedHdl, Idle*, void );
-                        DECL_LINK_TYPED( CallSelectHdlHdl, Idle*, void );
+                        DECL_LINK( ScrollUpDownHdl, ScrollBar*, void );
+                        DECL_LINK( ScrollLeftRightHdl, ScrollBar*, void );
+                        DECL_LINK( EditTimeoutHdl, Idle *, void);
+                        DECL_LINK( UserEventHdl, void*, void );
+                        DECL_LINK( AutoArrangeHdl, Idle*, void );
+                        DECL_LINK( DocRectChangedHdl, Idle*, void );
+                        DECL_LINK( VisRectChangedHdl, Idle*, void );
+                        DECL_LINK( CallSelectHdlHdl, Idle*, void );
 
     void                AdjustScrollBars();
     void                PositionScrollBars( long nRealWidth, long nRealHeight );
@@ -302,7 +302,7 @@ class SvxIconChoiceCtrl_Impl
     void                VisRectChanged() { aVisRectChangedIdle.Start(); }
     void                SetOrigin( const Point& );
 
-                        DECL_LINK_TYPED(TextEditEndedHdl, LinkParamNone*, void);
+                        DECL_LINK(TextEditEndedHdl, LinkParamNone*, void);
 
     void                ShowFocus ( Rectangle& rRect );
     void                DrawFocusRect(vcl::RenderContext& rRenderContext);

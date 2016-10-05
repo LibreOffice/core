@@ -105,8 +105,8 @@ class ImpTwain : public ::cppu::WeakImplHelper< util::XCloseListener >
     uno::Reference< frame::XFrame >             ImplGetActiveFrame();
     uno::Reference< util::XCloseBroadcaster >   ImplGetActiveFrameCloseBroadcaster();
 
-                                                DECL_LINK_TYPED( ImplFallbackHdl, void*, void );
-                                                DECL_LINK_TYPED( ImplDestroyHdl, void*, void );
+                                                DECL_LINK( ImplFallbackHdl, void*, void );
+                                                DECL_LINK( ImplDestroyHdl, void*, void );
 
     // from util::XCloseListener
     virtual void SAL_CALL queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException);
@@ -425,7 +425,7 @@ void ImpTwain::ImplFallback( ULONG_PTR nEvent )
     Application::PostUserEvent( LINK( this, ImpTwain, ImplFallbackHdl ), (void*) nEvent );
 }
 
-IMPL_LINK_TYPED( ImpTwain, ImplFallbackHdl, void*, pData, void )
+IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData, void )
 {
     const sal_uIntPtr nEvent = (sal_uIntPtr) pData;
     bool        bFallback = true;
@@ -495,7 +495,7 @@ IMPL_LINK_TYPED( ImpTwain, ImplFallbackHdl, void*, pData, void )
         ImplFallback( nEvent );
 }
 
-IMPL_LINK_NOARG_TYPED( ImpTwain, ImplDestroyHdl, void*, void )
+IMPL_LINK_NOARG( ImpTwain, ImplDestroyHdl, void*, void )
 {
     if( hTwainWnd )
         DestroyWindow( hTwainWnd );
@@ -641,7 +641,7 @@ class Twain
     ImpTwain*                                   mpImpTwain;
     TwainState                                  meState;
 
-    DECL_LINK_TYPED( ImpNotifyHdl, unsigned long, void );
+    DECL_LINK( ImpNotifyHdl, unsigned long, void );
 
 public:
 
@@ -708,7 +708,7 @@ bool Twain::PerformTransfer( ScannerManager& rMgr, const uno::Reference< lang::X
     return bRet;
 }
 
-IMPL_LINK_TYPED( Twain, ImpNotifyHdl, unsigned long, nEvent, void )
+IMPL_LINK( Twain, ImpNotifyHdl, unsigned long, nEvent, void )
 {
     switch( nEvent )
     {

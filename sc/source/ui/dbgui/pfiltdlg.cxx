@@ -429,7 +429,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 
 // Handler:
 
-IMPL_LINK_TYPED( ScPivotFilterDlg, LbSelectHdl, ListBox&, rLb, void )
+IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox&, rLb, void )
 {
 
     /*
@@ -518,7 +518,7 @@ IMPL_LINK_TYPED( ScPivotFilterDlg, LbSelectHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK_TYPED( ScPivotFilterDlg, CheckBoxHdl, Button*, pBox, void )
+IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, Button*, pBox, void )
 {
     // update the value lists when dealing with uppercase/lowercase
 
@@ -539,7 +539,7 @@ IMPL_LINK_TYPED( ScPivotFilterDlg, CheckBoxHdl, Button*, pBox, void )
     }
 }
 
-IMPL_LINK_TYPED( ScPivotFilterDlg, ValModifyHdl, Edit&, rEd, void )
+IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, Edit&, rEd, void )
 {
     OUString aStrVal = rEd.GetText();
     ListBox* pLb = m_pLbCond1;

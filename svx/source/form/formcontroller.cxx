@@ -493,7 +493,7 @@ void FmXAutoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& 
 }
 
 
-IMPL_LINK_NOARG_TYPED( FormController, OnActivateTabOrder, Idle*, void )
+IMPL_LINK_NOARG( FormController, OnActivateTabOrder, Idle*, void )
 {
     activateTabOrder();
 }
@@ -509,7 +509,7 @@ struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >
     }
 };
 
-IMPL_LINK_NOARG_TYPED( FormController, OnInvalidateFeatures, Timer*, void )
+IMPL_LINK_NOARG( FormController, OnInvalidateFeatures, Timer*, void )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     for ( ::std::set< sal_Int16 >::const_iterator aLoop = m_aInvalidFeatures.begin();
@@ -1432,7 +1432,7 @@ void FormController::toggleAutoFields(bool bAutoFields)
 }
 
 
-IMPL_LINK_NOARG_TYPED(FormController, OnToggleAutoFields, void*, void)
+IMPL_LINK_NOARG(FormController, OnToggleAutoFields, void*, void)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
 
@@ -1753,7 +1753,7 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException, s
 }
 
 
-IMPL_LINK_NOARG_TYPED( FormController, OnActivated, void*, void )
+IMPL_LINK_NOARG( FormController, OnActivated, void*, void )
 {
     EventObject aEvent;
     aEvent.Source = *this;
@@ -1761,7 +1761,7 @@ IMPL_LINK_NOARG_TYPED( FormController, OnActivated, void*, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( FormController, OnDeactivated, void*, void )
+IMPL_LINK_NOARG( FormController, OnDeactivated, void*, void )
 {
     EventObject aEvent;
     aEvent.Source = *this;
@@ -2604,7 +2604,7 @@ void FormController::updateAllDispatchers() const
 }
 
 
-IMPL_LINK_NOARG_TYPED(FormController, OnLoad, void*, void)
+IMPL_LINK_NOARG(FormController, OnLoad, void*, void)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     m_bLocked = determineLockState();

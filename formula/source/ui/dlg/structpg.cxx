@@ -170,7 +170,7 @@ IFormulaToken* StructPage::GetFunctionEntry(SvTreeListEntry* pEntry)
     return nullptr;
 }
 
-IMPL_LINK_TYPED( StructPage, SelectHdl, SvTreeListBox*, pTlb, void )
+IMPL_LINK( StructPage, SelectHdl, SvTreeListBox*, pTlb, void )
 {
     if(m_pTlbStruct->GetActiveFlag())
     {

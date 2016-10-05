@@ -280,7 +280,7 @@ public:
     virtual void    setTemplateProperties( const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const throw (css::uno::RuntimeException) override;
 
 private:
-    DECL_LINK_TYPED( ChangeLineCountHdl, Edit&, void );
+    DECL_LINK( ChangeLineCountHdl, Edit&, void );
 
 private:
     VclPtr<FixedText>    m_pFT_NumberOfLines;

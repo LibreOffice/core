@@ -57,9 +57,9 @@ private:
 
     VclPtr<CheckBox>     m_pCollectUsageInfo;
 
-    DECL_LINK_TYPED( TwoFigureHdl, Edit&, void );
-    DECL_LINK_TYPED( TwoFigureConfigHdl, SpinField&, void );
-    DECL_LINK_TYPED( TwoFigureConfigFocusHdl, Control&, void );
+    DECL_LINK( TwoFigureHdl, Edit&, void );
+    DECL_LINK( TwoFigureConfigHdl, SpinField&, void );
+    DECL_LINK( TwoFigureConfigFocusHdl, Control&, void );
 protected:
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
 
@@ -117,7 +117,7 @@ private:
     std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
 
 #if defined( UNX )
-    DECL_LINK_TYPED( OnAntialiasingToggled, CheckBox&, void );
+    DECL_LINK( OnAntialiasingToggled, CheckBox&, void );
 #endif
     void UpdateOGLStatus();
 
@@ -163,9 +163,9 @@ class OfaLanguagesTabPage : public SfxTabPage
 
     bool            m_bDatePatternsValid;
 
-    DECL_LINK_TYPED(  SupportHdl, Button*, void ) ;
-    DECL_LINK_TYPED(  LocaleSettingHdl, ListBox&, void ) ;
-    DECL_LINK_TYPED(  DatePatternsHdl, Edit&, void ) ;
+    DECL_LINK(  SupportHdl, Button*, void ) ;
+    DECL_LINK(  LocaleSettingHdl, ListBox&, void ) ;
+    DECL_LINK(  DatePatternsHdl, Edit&, void ) ;
 
 public:
     OfaLanguagesTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

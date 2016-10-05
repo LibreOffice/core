@@ -123,7 +123,7 @@ void ScSortKeyCtrl::setScrollRange()
     checkAutoVScroll();
 }
 
-IMPL_LINK_TYPED( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar, void )
+IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar, void )
 {
     sal_Int32 nOffset = m_aSortWin.GetItemHeight();
     nOffset *= pScrollBar->GetThumbPos();

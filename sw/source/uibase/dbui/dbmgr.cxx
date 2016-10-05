@@ -1631,7 +1631,7 @@ void SwDBManager::MergeCancel()
         m_aMergeStatus = MergeStatus::CANCEL;
 }
 
-IMPL_LINK_TYPED( SwDBManager, PrtCancelHdl, Button *, pButton, void )
+IMPL_LINK( SwDBManager, PrtCancelHdl, Button *, pButton, void )
 {
     pButton->GetParent()->Hide();
     MergeCancel();

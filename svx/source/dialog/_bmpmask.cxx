@@ -169,11 +169,11 @@ public:
     void        SetExecState( bool bState ) { bExecState = bState; }
     bool        IsExecReady() const { return bExecState; }
 
-                DECL_LINK_TYPED( PipetteHdl, ToolBox*, void );
-                DECL_LINK_TYPED( CbxHdl, Button*, void);
-                DECL_LINK_TYPED( CbxTransHdl, Button*, void );
-                DECL_LINK_TYPED( FocusLbHdl, Control&, void );
-                DECL_LINK_TYPED(ExecHdl, Button*, void);
+                DECL_LINK( PipetteHdl, ToolBox*, void );
+                DECL_LINK( CbxHdl, Button*, void);
+                DECL_LINK( CbxTransHdl, Button*, void );
+                DECL_LINK( FocusLbHdl, Control&, void );
+                DECL_LINK(ExecHdl, Button*, void);
 };
 
 
@@ -187,7 +187,7 @@ MaskData::MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind ) :
 {
 }
 
-IMPL_LINK_TYPED( MaskData, PipetteHdl, ToolBox*, pTbx, void )
+IMPL_LINK( MaskData, PipetteHdl, ToolBox*, pTbx, void )
 {
     SfxBoolItem aBItem( SID_BMPMASK_PIPETTE,
                         pTbx->IsItemChecked( pTbx->GetItemId(0) ) );
@@ -196,7 +196,7 @@ IMPL_LINK_TYPED( MaskData, PipetteHdl, ToolBox*, pTbx, void )
             { &aBItem });
 }
 
-IMPL_LINK_TYPED( MaskData, CbxHdl, Button*, pButton, void )
+IMPL_LINK( MaskData, CbxHdl, Button*, pButton, void )
 {
     CheckBox* pCbx = static_cast<CheckBox*>(pButton);
     bIsReady =  pMask->m_pCbx1->IsChecked() || pMask->m_pCbx2->IsChecked() ||
@@ -230,7 +230,7 @@ IMPL_LINK_TYPED( MaskData, CbxHdl, Button*, pButton, void )
 }
 
 
-IMPL_LINK_TYPED( MaskData, CbxTransHdl, Button*, pButton, void )
+IMPL_LINK( MaskData, CbxTransHdl, Button*, pButton, void )
 {
     CheckBox* pCbx = static_cast<CheckBox*>(pButton);
     bIsReady = pCbx->IsChecked();
@@ -291,7 +291,7 @@ IMPL_LINK_TYPED( MaskData, CbxTransHdl, Button*, pButton, void )
 }
 
 
-IMPL_LINK_TYPED( MaskData, FocusLbHdl, Control&, rControl, void )
+IMPL_LINK( MaskData, FocusLbHdl, Control&, rControl, void )
 {
     ColorLB* pLb = static_cast<ColorLB*>(&rControl);
     // MT: bFireFox as API parameter is ugly, find better solution????
@@ -302,7 +302,7 @@ IMPL_LINK_TYPED( MaskData, FocusLbHdl, Control&, rControl, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED(MaskData, ExecHdl, Button*, void)
+IMPL_LINK_NOARG(MaskData, ExecHdl, Button*, void)
 {
     SfxBoolItem aBItem( SID_BMPMASK_EXEC, true );
     rBindings.GetDispatcher()->ExecuteList(SID_BMPMASK_EXEC, OWN_CALLMODE,

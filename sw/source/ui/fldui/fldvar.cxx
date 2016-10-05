@@ -207,7 +207,7 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldVarPage, TypeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwFieldVarPage, TypeHdl, ListBox&, void)
 {
     // save old ListBoxPos
     const sal_Int32 nOld = GetTypeSel();
@@ -237,7 +237,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldVarPage, TypeHdl, ListBox&, void)
     bInit = false;
 }
 
-IMPL_LINK_TYPED( SwFieldVarPage, SubTypeListBoxHdl, ListBox&, rBox, void )
+IMPL_LINK( SwFieldVarPage, SubTypeListBoxHdl, ListBox&, rBox, void )
 {
     SubTypeHdl(&rBox);
 }
@@ -829,7 +829,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 }
 
 // Modify
-IMPL_LINK_NOARG_TYPED(SwFieldVarPage, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwFieldVarPage, ModifyHdl, Edit&, void)
 {
     OUString sValue(m_pValueED->GetText());
     bool bHasValue = !sValue.isEmpty();
@@ -952,7 +952,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldVarPage, ModifyHdl, Edit&, void)
     EnableInsert(bInsert);
 }
 
-IMPL_LINK_TYPED( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
+IMPL_LINK( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
 {
     const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
@@ -1096,7 +1096,7 @@ IMPL_LINK_TYPED( SwFieldVarPage, TBClickHdl, ToolBox *, pBox, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldVarPage, ChapterHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwFieldVarPage, ChapterHdl, ListBox&, void)
 {
     bool bEnable = m_pChapterLevelLB->GetSelectEntryPos() != 0;
 
@@ -1105,7 +1105,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldVarPage, ChapterHdl, ListBox&, void)
     SeparatorHdl(*m_pSeparatorED);
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldVarPage, SeparatorHdl, Edit&, void)
+IMPL_LINK_NOARG(SwFieldVarPage, SeparatorHdl, Edit&, void)
 {
     bool bEnable = !m_pSeparatorED->GetText().isEmpty() ||
                     m_pChapterLevelLB->GetSelectEntryPos() == 0;

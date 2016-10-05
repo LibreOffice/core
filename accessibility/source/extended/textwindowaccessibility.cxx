@@ -1625,7 +1625,7 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
     }
 }
 
-IMPL_LINK_TYPED(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
+IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {

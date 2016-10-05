@@ -72,16 +72,16 @@ private:
     SdDrawDocument* pDoc;
     GraphicFilter* mpGraphicFilter;
 
-    DECL_LINK_TYPED(CancelHdl, Button*, void);
-    DECL_LINK_TYPED(CreateHdl, Button*, void);
+    DECL_LINK(CancelHdl, Button*, void);
+    DECL_LINK(CreateHdl, Button*, void);
 
-    DECL_LINK_TYPED(FileHdl, Button*, void);
-    DECL_LINK_TYPED(UpHdl, Button*, void);
-    DECL_LINK_TYPED(DownHdl, Button*, void);
-    DECL_LINK_TYPED(RemoveHdl, Button*, void);
+    DECL_LINK(FileHdl, Button*, void);
+    DECL_LINK(UpHdl, Button*, void);
+    DECL_LINK(DownHdl, Button*, void);
+    DECL_LINK(RemoveHdl, Button*, void);
 
-    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
-    DECL_LINK_TYPED(TypeSelectHdl, ListBox&, void);
+    DECL_LINK(SelectHdl, ListBox&, void);
+    DECL_LINK(TypeSelectHdl, ListBox&, void);
 
     Reference< drawing::XDrawPage > appendNewSlide(AutoLayout aLayout,
         const Reference< drawing::XDrawPages >& xDrawPages);

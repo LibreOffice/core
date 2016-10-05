@@ -69,12 +69,12 @@ class SfxManageStyleSheetPage : public SfxTabPage
 private:
 friend class SfxStyleDialog;
 
-    DECL_LINK_TYPED( GetFocusHdl, Control&, void );
-    DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
-    DECL_LINK_TYPED( EditStyleSelectHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( EditStyleHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( EditLinkStyleSelectHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( EditLinkStyleHdl_Impl, Button*, void );
+    DECL_LINK( GetFocusHdl, Control&, void );
+    DECL_LINK( LoseFocusHdl, Control&, void );
+    DECL_LINK( EditStyleSelectHdl_Impl, ListBox&, void );
+    DECL_LINK( EditStyleHdl_Impl, Button*, void );
+    DECL_LINK( EditLinkStyleSelectHdl_Impl, ListBox&, void );
+    DECL_LINK( EditLinkStyleHdl_Impl, Button*, void );
 
     void    UpdateName_Impl(ListBox *, const OUString &rNew);
     void    SetDescriptionText_Impl();

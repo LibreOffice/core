@@ -1028,7 +1028,7 @@ void SlideShow::StartInPlacePresentationConfigurationCallback()
     mnInPlaceConfigEvent = Application::PostUserEvent( LINK( this, SlideShow, StartInPlacePresentationConfigurationHdl ) );
 }
 
-IMPL_LINK_NOARG_TYPED(SlideShow, StartInPlacePresentationConfigurationHdl, void*, void)
+IMPL_LINK_NOARG(SlideShow, StartInPlacePresentationConfigurationHdl, void*, void)
 {
     mnInPlaceConfigEvent = nullptr;
     StartInPlacePresentation();

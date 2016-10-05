@@ -79,7 +79,7 @@ namespace sfx2
         OUString  impl_getTitle() const;
 
     private:
-        DECL_LINK_TYPED( OnToolboxItemSelected, ToolBox*, void );
+        DECL_LINK( OnToolboxItemSelected, ToolBox*, void );
 
         void    impl_construct();
         void    impl_layout();

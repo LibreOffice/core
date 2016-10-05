@@ -149,17 +149,17 @@ private:
     void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect);
     bool    Click_Impl(PushButton* pIB);
     // Handler
-    DECL_LINK_TYPED( LostFocusHdl_Impl, Control&, void );
-    DECL_LINK_TYPED( DoubleClickHdl_Impl, SvTreeListBox*, bool );
-    DECL_LINK_TYPED( SelFormatListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( SelFormatTreeListBoxHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( SelFormatClickHdl_Impl, Button*, void );
+    DECL_LINK( LostFocusHdl_Impl, Control&, void );
+    DECL_LINK( DoubleClickHdl_Impl, SvTreeListBox*, bool );
+    DECL_LINK( SelFormatListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK( SelFormatTreeListBoxHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK( SelFormatClickHdl_Impl, Button*, void );
     void SelFormatHdl_Impl(void*);
-    DECL_LINK_TYPED( ClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( EditModifyHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( OptEditHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( OptClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( TimeHdl_Impl, Timer *, void);
+    DECL_LINK( ClickHdl_Impl, Button*, void );
+    DECL_LINK( EditModifyHdl_Impl, Edit&, void );
+    DECL_LINK( OptEditHdl_Impl, Edit&, void );
+    DECL_LINK( OptClickHdl_Impl, Button*, void );
+    DECL_LINK( TimeHdl_Impl, Timer *, void);
     void EditHdl_Impl(Edit*);
     void OptHdl_Impl(void*);
 };

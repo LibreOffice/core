@@ -97,7 +97,7 @@ namespace
         VclPtr<Edit>        m_pEdit;
         OUString&           m_rReturnValue;
 
-        DECL_LINK_TYPED( ClickBtnHdl, Button*, void );
+        DECL_LINK( ClickBtnHdl, Button*, void );
 
     public:
         // parent window, Query text, initial value
@@ -130,7 +130,7 @@ namespace
         SetText(rQuery);
     }
 
-    IMPL_LINK_TYPED( QueryString, ClickBtnHdl, Button*, pButton, void )
+    IMPL_LINK( QueryString, ClickBtnHdl, Button*, pButton, void )
     {
         if (pButton == m_pOKButton)
         {
@@ -1283,7 +1283,7 @@ class PrinterUpdate
     static int    nActiveJobs;
 
     static void doUpdate();
-    DECL_STATIC_LINK_TYPED( PrinterUpdate, UpdateTimerHdl, Idle*, void );
+    DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, Idle*, void );
 public:
     static void update(SalGenericInstance &rInstance);
     static void jobStarted() { nActiveJobs++; }
@@ -1301,7 +1301,7 @@ void PrinterUpdate::doUpdate()
         pInst->PostPrintersChanged();
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED( PrinterUpdate, UpdateTimerHdl, Idle*, void )
+IMPL_STATIC_LINK_NOARG( PrinterUpdate, UpdateTimerHdl, Idle*, void )
 {
     if( nActiveJobs < 1 )
     {

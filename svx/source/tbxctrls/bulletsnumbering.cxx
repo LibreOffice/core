@@ -28,8 +28,8 @@ class NumberingPopup : public svtools::ToolbarMenu
     NumberingPageType mePageType;
     NumberingToolBoxControl& mrController;
     VclPtr<SvxNumValueSet> mpValueSet;
-    DECL_LINK_TYPED( VSSelectToolbarMenuHdl, ToolbarMenu*, void );
-    DECL_LINK_TYPED( VSSelectValueSetHdl, ValueSet*, void );
+    DECL_LINK( VSSelectToolbarMenuHdl, ToolbarMenu*, void );
+    DECL_LINK( VSSelectValueSetHdl, ValueSet*, void );
     void VSSelectHdl(void *);
 public:
     NumberingPopup( NumberingToolBoxControl& rController,
@@ -156,11 +156,11 @@ void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent 
         mpValueSet->SelectItem( nSelItem );
 }
 
-IMPL_LINK_TYPED( NumberingPopup, VSSelectValueSetHdl, ValueSet*, pControl, void )
+IMPL_LINK( NumberingPopup, VSSelectValueSetHdl, ValueSet*, pControl, void )
 {
     VSSelectHdl(pControl);
 }
-IMPL_LINK_TYPED( NumberingPopup, VSSelectToolbarMenuHdl, ToolbarMenu*, pControl, void )
+IMPL_LINK( NumberingPopup, VSSelectToolbarMenuHdl, ToolbarMenu*, pControl, void )
 {
     VSSelectHdl(pControl);
 }

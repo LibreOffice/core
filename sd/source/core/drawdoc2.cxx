@@ -882,7 +882,7 @@ LanguageType SdDrawDocument::GetLanguage( const sal_uInt16 nId ) const
 }
 
 // Initiate WorkStartup
-IMPL_LINK_NOARG_TYPED(SdDrawDocument, WorkStartupHdl, Timer *, void)
+IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl, Timer *, void)
 {
     if (IsTransportContainer())
         return;

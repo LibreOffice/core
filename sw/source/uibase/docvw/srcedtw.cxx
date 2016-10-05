@@ -573,7 +573,7 @@ void SwSrcEditWindow::InitScrollBars()
 
 }
 
-IMPL_LINK_TYPED(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll, void)
+IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll, void)
 {
     if(pScroll == m_pVScrollbar)
     {
@@ -592,7 +592,7 @@ IMPL_LINK_TYPED(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll, void)
     GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
 }
 
-IMPL_LINK_TYPED( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle, void )
+IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle, void )
 {
     tools::Time aSyntaxCheckStart( tools::Time::SYSTEM );
     SAL_WARN_IF(m_pTextView == nullptr, "sw", "No View yet, but syntax highlighting?!");

@@ -280,7 +280,7 @@ bool ScSpecialFilterDlg::IsRefInputMode() const
 
 // Handler:
 
-IMPL_LINK_TYPED( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
+IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
 {
     OSL_ENSURE( pDoc && pViewData, "Document or ViewData not found. :-/" );
 
@@ -396,7 +396,7 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_TYPED( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle, void )
+IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle, void )
 {
     // every 50ms check whether RefInputMode is still true
 
@@ -422,7 +422,7 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle, void )
     pIdle->Start();
 }
 
-IMPL_LINK_TYPED( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox&, rLb, void )
+IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox&, rLb, void )
 {
     if ( &rLb == pLbFilterArea )
     {
@@ -436,7 +436,7 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK_TYPED( ScSpecialFilterDlg, FilterAreaModHdl, Edit&, rEd, void )
+IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, Edit&, rEd, void )
 {
     if ( &rEd == pEdFilterArea )
     {

@@ -71,7 +71,7 @@ private:
         function is called the next time.  This pointer may be NULL.
     */
     ::std::unique_ptr<AsynchronousFunction> mpFunction;
-    DECL_LINK_TYPED(TimerCallback,Timer*,void);
+    DECL_LINK(TimerCallback,Timer*,void);
 };
 
 } } // end of namespace ::sd::tools

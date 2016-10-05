@@ -199,7 +199,7 @@ void SAL_CALL OGLWindow::removePaintListener( const uno::Reference< awt::XPaintL
 {
 }
 
-IMPL_LINK_TYPED(OGLWindow, FocusGrabber, VclWindowEvent&, rEvent, void)
+IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent&, rEvent, void)
 {
     if( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
     {
@@ -225,7 +225,7 @@ IMPL_LINK_TYPED(OGLWindow, FocusGrabber, VclWindowEvent&, rEvent, void)
     }
 }
 
-IMPL_LINK_TYPED(OGLWindow, CameraHandler, VclWindowEvent&, rEvent, void)
+IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent&, rEvent, void)
 {
     if( rEvent.GetId() == VCLEVENT_WINDOW_KEYINPUT )
     {

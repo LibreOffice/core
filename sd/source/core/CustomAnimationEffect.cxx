@@ -3408,7 +3408,7 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const cs
 
 }
 
-IMPL_LINK_NOARG_TYPED(MainSequence, onTimerHdl, Timer *, void)
+IMPL_LINK_NOARG(MainSequence, onTimerHdl, Timer *, void)
 {
     if( mbTimerMode )
     {

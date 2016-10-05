@@ -92,7 +92,7 @@ void ScDPGroupEditHelper::SetValue( bool bAuto, double fValue )
     ImplSetValue( fValue );
 }
 
-IMPL_LINK_TYPED( ScDPGroupEditHelper, ClickHdl, Button*, pButton, void )
+IMPL_LINK( ScDPGroupEditHelper, ClickHdl, Button*, pButton, void )
 {
     if( pButton == mpRbAuto )
     {
@@ -331,7 +331,7 @@ sal_Int32 ScDPDateGroupDlg::GetDatePart() const
     return nDatePart;
 }
 
-IMPL_LINK_TYPED( ScDPDateGroupDlg, ClickHdl, Button*, pButton, void )
+IMPL_LINK( ScDPDateGroupDlg, ClickHdl, Button*, pButton, void )
 {
     if( pButton == mpRbNumDays )
     {
@@ -352,7 +352,7 @@ IMPL_LINK_TYPED( ScDPDateGroupDlg, ClickHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK_TYPED( ScDPDateGroupDlg, CheckHdl, SvTreeListBox*, pListBox, void )
+IMPL_LINK( ScDPDateGroupDlg, CheckHdl, SvTreeListBox*, pListBox, void )
 {
     // enable/disable OK button on modifying check list box
     if( pListBox == mpLbUnits )

@@ -971,7 +971,7 @@ void SlideTransitionPane::removeListener()
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-IMPL_LINK_TYPED(SlideTransitionPane,EventMultiplexerListener,
+IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
     tools::EventMultiplexerEvent&, rEvent, void)
 {
     switch (rEvent.meEventId)
@@ -1022,7 +1022,7 @@ IMPL_LINK_TYPED(SlideTransitionPane,EventMultiplexerListener,
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, ApplyToAllButtonClicked, Button*, void)
+IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked, Button*, void)
 {
     DBG_ASSERT( mpDrawDoc, "Invalid Draw Document!" );
     if( !mpDrawDoc )
@@ -1047,12 +1047,12 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, ApplyToAllButtonClicked, Button*, voi
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, PlayButtonClicked, Button*, void)
+IMPL_LINK_NOARG(SlideTransitionPane, PlayButtonClicked, Button*, void)
 {
     playCurrentEffect();
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, TransitionSelected, ValueSet *, void)
+IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected, ValueSet *, void)
 {
     updateVariants( mpVS_TRANSITION_ICONS->GetSelectItemId() - 1 );
     applyToSelectedPages();
@@ -1102,23 +1102,23 @@ void SlideTransitionPane::updateVariants( size_t nPresetOffset )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AdvanceSlideRadioButtonToggled, RadioButton&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, AdvanceSlideRadioButtonToggled, RadioButton&, void)
 {
     updateControlState();
     applyToSelectedPages(false);
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AdvanceTimeModified, Edit&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, AdvanceTimeModified, Edit&, void)
 {
     applyToSelectedPages(false);
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, VariantListBoxSelected, ListBox&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, VariantListBoxSelected, ListBox&, void)
 {
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, DurationModifiedHdl, Edit&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, DurationModifiedHdl, Edit&, void)
 {
     double duration_value = static_cast<double>(mpCBX_duration->GetValue());
     if(duration_value <= 0.0)
@@ -1127,12 +1127,12 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, DurationModifiedHdl, Edit&, void)
         mpCBX_duration->SetValue(duration_value);
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, DurationLoseFocusHdl, Control&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, DurationLoseFocusHdl, Control&, void)
 {
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, SoundListBoxSelected, ListBox&, void)
+IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected, ListBox&, void)
 {
     if( mpLB_SOUND->GetSelectEntryCount() )
     {
@@ -1147,18 +1147,18 @@ IMPL_LINK_NOARG_TYPED(SlideTransitionPane, SoundListBoxSelected, ListBox&, void)
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LoopSoundBoxChecked, Button*, void)
+IMPL_LINK_NOARG(SlideTransitionPane, LoopSoundBoxChecked, Button*, void)
 {
     applyToSelectedPages();
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AutoPreviewClicked, Button*, void)
+IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked, Button*, void)
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     pOptions->SetPreviewTransitions( mpCB_AUTO_PREVIEW->IsChecked() );
 }
 
-IMPL_LINK_NOARG_TYPED(SlideTransitionPane, LateInitCallback, Timer *, void)
+IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback, Timer *, void)
 {
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
 

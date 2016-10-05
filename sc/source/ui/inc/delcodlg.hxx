@@ -43,7 +43,7 @@ private:
     static InsertDeleteFlags nPreviousChecks;
 
     void DisableChecks( bool bDelAllChecked );
-    DECL_LINK_TYPED( DelAllHdl, Button*, void );
+    DECL_LINK( DelAllHdl, Button*, void );
 
 public:
             ScDeleteContentsDlg( vcl::Window* pParent,

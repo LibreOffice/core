@@ -529,7 +529,7 @@ private:
 
     void    impl_construct();
 
-    DECL_LINK_TYPED( OnTimeout, Timer*, void );
+    DECL_LINK( OnTimeout, Timer*, void );
 protected:
     using OPropertySetHelper::getPropertyValues;
 };

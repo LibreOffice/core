@@ -1129,7 +1129,7 @@ bool ValueSet::ImplHasAccessibleListeners()
     return( pAcc && pAcc->HasAccessibleListeners() );
 }
 
-IMPL_LINK_TYPED( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar, void )
+IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar, void )
 {
     sal_uInt16 nNewFirstLine = (sal_uInt16)pScrollBar->GetThumbPos();
     if ( nNewFirstLine != mnFirstLine )
@@ -1140,7 +1140,7 @@ IMPL_LINK_TYPED( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ValueSet, ImplTimerHdl, Timer *, void)
+IMPL_LINK_NOARG(ValueSet, ImplTimerHdl, Timer *, void)
 {
     ImplTracking( GetPointerPosPixel(), true );
 }

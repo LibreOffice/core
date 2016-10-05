@@ -51,7 +51,7 @@ private:
 
     FontLineStyle getLineStyle(Button* pButton);
 
-    DECL_LINK_TYPED(PBClickHdl, Button*, void);
+    DECL_LINK(PBClickHdl, Button*, void);
 };
 }
 

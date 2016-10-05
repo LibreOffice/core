@@ -64,12 +64,12 @@ protected:
 
 private:
 
-                        DECL_LINK_TYPED( implTimeHdl, Slider*, void );
-                        DECL_LINK_TYPED( implTimeEndHdl, Slider*, void );
-                        DECL_LINK_TYPED( implVolumeHdl, Slider*, void );
-                        DECL_LINK_TYPED( implSelectHdl, ToolBox*, void );
-                        DECL_LINK_TYPED( implZoomSelectHdl, ListBox&, void );
-                        DECL_LINK_TYPED(implTimeoutHdl, Idle *, void);
+                        DECL_LINK( implTimeHdl, Slider*, void );
+                        DECL_LINK( implTimeEndHdl, Slider*, void );
+                        DECL_LINK( implVolumeHdl, Slider*, void );
+                        DECL_LINK( implSelectHdl, ToolBox*, void );
+                        DECL_LINK( implZoomSelectHdl, ListBox&, void );
+                        DECL_LINK(implTimeoutHdl, Idle *, void);
 
     Idle                maIdle;
     MediaItem           maItem;

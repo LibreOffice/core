@@ -167,19 +167,19 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
      * The selection is regularly increased towards the mouse
      * position.
      */
-    DECL_LINK_TYPED( TimerHandler, Timer *, void );
+    DECL_LINK( TimerHandler, Timer *, void );
     void            StartDDTimer();
     void            StopDDTimer(SwWrtShell *, const Point &);
-    DECL_LINK_TYPED( DDHandler, Timer *, void );
+    DECL_LINK( DDHandler, Timer *, void );
 
     // timer for ANY-KeyInut question without a following KeyInputEvent
-    DECL_LINK_TYPED( KeyInputFlushHandler, Timer *, void );
+    DECL_LINK( KeyInputFlushHandler, Timer *, void );
 
     // timer for overlapping KeyInputs (e.g. for tables)
-    DECL_LINK_TYPED( KeyInputTimerHandler, Timer *, void );
+    DECL_LINK( KeyInputTimerHandler, Timer *, void );
 
     // timer for ApplyTemplates via mouse (in disguise Drag&Drop)
-    DECL_LINK_TYPED( TemplateTimerHdl, Idle *, void );
+    DECL_LINK( TemplateTimerHdl, Idle *, void );
 
     void            MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
                                 const bool bOnlyText, bool bLockView );

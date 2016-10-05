@@ -163,7 +163,7 @@ void TextCharacterSpacingControl::ExecuteCharacterSpacing(long nValue, bool bClo
         EndPopupMode();
 }
 
-IMPL_LINK_TYPED(TextCharacterSpacingControl, PredefinedValuesHdl, Button*, pControl, void)
+IMPL_LINK(TextCharacterSpacingControl, PredefinedValuesHdl, Button*, pControl, void)
 {
     mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
 
@@ -193,7 +193,7 @@ IMPL_LINK_TYPED(TextCharacterSpacingControl, PredefinedValuesHdl, Button*, pCont
     }
 }
 
-IMPL_LINK_NOARG_TYPED(TextCharacterSpacingControl, KerningModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(TextCharacterSpacingControl, KerningModifyHdl, Edit&, void)
 {
     mnLastCus = SPACING_CLOSE_BY_CUS_EDIT;
     mnCustomKern = static_cast<long>(maEditKerning->GetValue());

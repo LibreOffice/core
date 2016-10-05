@@ -438,7 +438,7 @@ void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
 
 // Handler:
 
-IMPL_LINK_TYPED( ScTabPageSortFields, SelectHdl, ListBox&, rLb, void )
+IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox&, rLb, void )
 {
     OUString aSelEntry = rLb.GetSelectEntry();
     ScSortKeyItems::iterator pIter;
@@ -841,7 +841,7 @@ void ScTabPageSortOptions::FillUserSortListBox()
 
 // Handler:
 
-IMPL_LINK_TYPED( ScTabPageSortOptions, EnableHdl, Button*, pButton, void )
+IMPL_LINK( ScTabPageSortOptions, EnableHdl, Button*, pButton, void )
 {
     CheckBox* pBox = static_cast<CheckBox*>(pButton);
     if (pBox == m_pBtnCopyResult)
@@ -870,7 +870,7 @@ IMPL_LINK_TYPED( ScTabPageSortOptions, EnableHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK_TYPED( ScTabPageSortOptions, SelOutPosHdl, ListBox&, rLb, void )
+IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox&, rLb, void )
 {
     if (&rLb == m_pLbOutPos)
     {
@@ -884,7 +884,7 @@ IMPL_LINK_TYPED( ScTabPageSortOptions, SelOutPosHdl, ListBox&, rLb, void )
     }
 }
 
-IMPL_LINK_TYPED( ScTabPageSortOptions, SortDirHdl, Button *, pBtn, void )
+IMPL_LINK( ScTabPageSortOptions, SortDirHdl, Button *, pBtn, void )
 {
     if (pBtn == m_pBtnTopDown)
     {
@@ -923,7 +923,7 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScTabPageSortOptions, FillAlgorHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl, ListBox&, void)
 {
     m_pLbAlgorithm->SetUpdateMode( false );
     m_pLbAlgorithm->Clear();

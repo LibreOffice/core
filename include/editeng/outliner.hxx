@@ -627,12 +627,12 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     bool                bStrippingPortions;
     bool                bPasting;
 
-    DECL_LINK_TYPED(    ParaVisibleStateChangedHdl, Paragraph&, void );
-    DECL_LINK_TYPED(    BeginMovingParagraphsHdl, MoveParagraphsInfo&, void );
-    DECL_LINK_TYPED(    EndMovingParagraphsHdl, MoveParagraphsInfo&, void );
-    DECL_LINK_TYPED(    BeginPasteOrDropHdl, PasteOrDropInfos&, void );
-    DECL_LINK_TYPED(    EndPasteOrDropHdl, PasteOrDropInfos&, void );
-    DECL_LINK_TYPED(    EditEngineNotifyHdl, EENotify&, void );
+    DECL_LINK(    ParaVisibleStateChangedHdl, Paragraph&, void );
+    DECL_LINK(    BeginMovingParagraphsHdl, MoveParagraphsInfo&, void );
+    DECL_LINK(    EndMovingParagraphsHdl, MoveParagraphsInfo&, void );
+    DECL_LINK(    BeginPasteOrDropHdl, PasteOrDropInfos&, void );
+    DECL_LINK(    EndPasteOrDropHdl, PasteOrDropInfos&, void );
+    DECL_LINK(    EditEngineNotifyHdl, EENotify&, void );
     void                ImplCheckParagraphs( sal_Int32 nStart, sal_Int32 nEnd );
     bool                ImplHasNumberFormat( sal_Int32 nPara ) const;
     Size                ImplGetBulletSize( sal_Int32 nPara );

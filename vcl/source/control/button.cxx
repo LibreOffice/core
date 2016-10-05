@@ -626,7 +626,7 @@ FactoryFunction Button::GetUITestFactory() const
     return ButtonUIObject::create;
 }
 
-IMPL_STATIC_LINK_TYPED( Button, dispatchCommandHandler, Button*, pButton, void )
+IMPL_STATIC_LINK( Button, dispatchCommandHandler, Button*, pButton, void )
 {
     if (pButton == nullptr)
         return;

@@ -43,10 +43,10 @@ private:
     VclPtr<PushButton>                 m_pAddBtn;
     VclPtr<PushButton>                 m_pDelBtn;
 
-    DECL_LINK_TYPED(AddHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(DelHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(SelectHdl_Impl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(CheckHdl_Impl, SvTreeListBox*, void);
+    DECL_LINK(AddHdl_Impl, Button*, void);
+    DECL_LINK(DelHdl_Impl, Button*, void);
+    DECL_LINK(SelectHdl_Impl, SvTreeListBox*, void);
+    DECL_LINK(CheckHdl_Impl, SvTreeListBox*, void);
 
 public:
     SvxMultiPathDialog(vcl::Window* pParent);
@@ -64,9 +64,9 @@ private:
     VclPtr<PushButton>                 m_pAddBtn;
     VclPtr<PushButton>                 m_pDelBtn;
 
-    DECL_LINK_TYPED(AddHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(DelHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(SelectHdl_Impl, ListBox&, void);
+    DECL_LINK(AddHdl_Impl, Button*, void);
+    DECL_LINK(DelHdl_Impl, Button*, void);
+    DECL_LINK(SelectHdl_Impl, ListBox&, void);
 
 public:
     SvxPathSelectDialog(vcl::Window* pParent);

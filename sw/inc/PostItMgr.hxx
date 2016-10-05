@@ -182,7 +182,7 @@ class SwPostItMgr: public SfxListener
         sal_Int32       GetScrollSize() const;
         sal_Int32       GetSpaceBetween() const;
         void            SetReadOnlyState();
-        DECL_LINK_TYPED( CalcHdl, void*, void);
+        DECL_LINK( CalcHdl, void*, void);
 
         sw::sidebarwindows::SwSidebarWin* GetSidebarWin(const SfxBroadcaster* pBroadcaster) const;
 

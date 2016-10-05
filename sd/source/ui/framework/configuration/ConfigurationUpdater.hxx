@@ -197,7 +197,7 @@ private:
     */
     void UnlockUpdates();
 
-    DECL_LINK_TYPED(TimeoutHandler, Timer *, void);
+    DECL_LINK(TimeoutHandler, Timer *, void);
 };
 
 } } // end of namespace sd::framework

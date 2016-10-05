@@ -162,7 +162,7 @@ void MyWin::Resize()
 }
 
 
-IMPL_LINK_TYPED( MyWin, Test, PushButton*, pBtn, void )
+IMPL_LINK( MyWin, Test, PushButton*, pBtn, void )
 {
 printf("Test\n");
     if ( pBtn == &aOKBtn )

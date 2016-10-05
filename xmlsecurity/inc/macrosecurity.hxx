@@ -61,7 +61,7 @@ private:
     VclPtr<MacroSecurityTP>    mpLevelTP;
     VclPtr<MacroSecurityTP>    mpTrustSrcTP;
 
-    DECL_LINK_TYPED(          OkBtnHdl, Button*, void );
+    DECL_LINK(          OkBtnHdl, Button*, void );
 public:
     MacroSecurity(vcl::Window* pParent,
         const css::uno::Reference< css::uno::XComponentContext>& rxCtx,
@@ -99,7 +99,7 @@ private:
     sal_uInt16   mnCurLevel;
 
 protected:
-    DECL_LINK_TYPED(RadioButtonHdl, Button*, void);
+    DECL_LINK(RadioButtonHdl, Button*, void);
 
 public:
                         MacroSecurityLevelTP( vcl::Window* pParent, MacroSecurity* _pDlg );
@@ -127,12 +127,12 @@ private:
     bool                mbAuthorsReadonly;
     bool                mbURLsReadonly;
 
-    DECL_LINK_TYPED(    ViewCertPBHdl, Button*, void );
-    DECL_LINK_TYPED(    RemoveCertPBHdl, Button*, void );
-    DECL_LINK_TYPED(    AddLocPBHdl, Button*, void );
-    DECL_LINK_TYPED(    RemoveLocPBHdl, Button*, void );
-    DECL_LINK_TYPED(    TrustCertLBSelectHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED(    TrustFileLocLBSelectHdl, ListBox&, void );
+    DECL_LINK(    ViewCertPBHdl, Button*, void );
+    DECL_LINK(    RemoveCertPBHdl, Button*, void );
+    DECL_LINK(    AddLocPBHdl, Button*, void );
+    DECL_LINK(    RemoveLocPBHdl, Button*, void );
+    DECL_LINK(    TrustCertLBSelectHdl, SvTreeListBox*, void );
+    DECL_LINK(    TrustFileLocLBSelectHdl, ListBox&, void );
 
     void                FillCertLB();
     void                ImplCheckButtons();

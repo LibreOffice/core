@@ -218,7 +218,7 @@ void SidebarToolBox::RegisterHandlers()
     }
 }
 
-IMPL_LINK_TYPED(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox, void)
+IMPL_LINK(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox, void)
 {
     if (pToolBox != nullptr)
     {
@@ -232,7 +232,7 @@ IMPL_LINK_TYPED(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox, void)
     }
 }
 
-IMPL_LINK_TYPED(SidebarToolBox, ClickHandler, ToolBox*, pToolBox, void)
+IMPL_LINK(SidebarToolBox, ClickHandler, ToolBox*, pToolBox, void)
 {
     if (pToolBox == nullptr)
         return;
@@ -242,7 +242,7 @@ IMPL_LINK_TYPED(SidebarToolBox, ClickHandler, ToolBox*, pToolBox, void)
         xController->click();
 }
 
-IMPL_LINK_TYPED(SidebarToolBox, DoubleClickHandler, ToolBox*, pToolBox, void)
+IMPL_LINK(SidebarToolBox, DoubleClickHandler, ToolBox*, pToolBox, void)
 {
     if (pToolBox == nullptr)
         return;
@@ -252,7 +252,7 @@ IMPL_LINK_TYPED(SidebarToolBox, DoubleClickHandler, ToolBox*, pToolBox, void)
         xController->doubleClick();
 }
 
-IMPL_LINK_TYPED(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
+IMPL_LINK(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
 {
     if (pToolBox == nullptr)
         return;
@@ -262,7 +262,7 @@ IMPL_LINK_TYPED(SidebarToolBox, SelectHandler, ToolBox*, pToolBox, void)
         xController->execute((sal_Int16)pToolBox->GetModifier());
 }
 
-IMPL_LINK_NOARG_TYPED(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
+IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
 {
     SolarMutexGuard g;
 

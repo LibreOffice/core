@@ -179,7 +179,7 @@ SfxItemSet* SwFieldDlg::CreateInputItemSet( sal_uInt16 nID  )
 }
 
 // kick off inserting of new fields
-IMPL_LINK_NOARG_TYPED(SwFieldDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SwFieldDlg, OKHdl, Button*, void)
 {
     if (GetOKButton().IsEnabled())
     {
@@ -190,7 +190,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldDlg, OKHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldDlg, CancelHdl, Button*, void)
+IMPL_LINK_NOARG(SwFieldDlg, CancelHdl, Button*, void)
 {
     Close();
 }

@@ -50,8 +50,8 @@ public:
     SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent);
     virtual ~SwFieldDlg() override;
 
-    DECL_LINK_TYPED(OKHdl, Button*, void);
-    DECL_LINK_TYPED(CancelHdl, Button*, void);
+    DECL_LINK(OKHdl, Button*, void);
+    DECL_LINK(CancelHdl, Button*, void);
 
     void                Initialize(SfxChildWinInfo *pInfo);
     void                ReInitDlg();

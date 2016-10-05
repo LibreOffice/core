@@ -49,7 +49,7 @@ void OSplitterView::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED( OSplitterView, SplitHdl, Splitter*, void )
+IMPL_LINK_NOARG( OSplitterView, SplitHdl, Splitter*, void )
 {
     OSL_ENSURE(m_pSplitter, "Splitter is NULL!");
     m_pSplitter->SetPosPixel( Point( m_pSplitter->GetPosPixel().X(),m_pSplitter->GetSplitPosPixel() ) );

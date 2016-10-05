@@ -91,13 +91,13 @@ private:
     void    FillTables_Impl( ScDocument* pSrcDoc );
     void    DoEnable_Impl();
 
-    DECL_LINK_TYPED( BrowseHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( ChoiceHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( SelectHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( CountHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( DoEnterHdl, Button*, void );
-    DECL_LINK_TYPED( BrowseTimeoutHdl, Timer *, void );
-    DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
+    DECL_LINK( BrowseHdl_Impl, Button*, void );
+    DECL_LINK( ChoiceHdl_Impl, Button*, void );
+    DECL_LINK( SelectHdl_Impl, ListBox&, void );
+    DECL_LINK( CountHdl_Impl, Edit&, void );
+    DECL_LINK( DoEnterHdl, Button*, void );
+    DECL_LINK( BrowseTimeoutHdl, Timer *, void );
+    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_INSTBDLG_HXX

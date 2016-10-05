@@ -58,16 +58,16 @@ public:
     virtual void dispose() override;
 
 private:
-    DECL_LINK_TYPED( ClickLightSourceButtonHdl, Button*, void );
-    DECL_LINK_TYPED( SelectColorHdl, ListBox&, void );
-    DECL_LINK_TYPED( ColorDialogHdl, Button*, void );
-    DECL_LINK_TYPED( PreviewChangeHdl, SvxLightCtl3D*, void );
-    DECL_LINK_TYPED( PreviewSelectHdl, SvxLightCtl3D*, void );
+    DECL_LINK( ClickLightSourceButtonHdl, Button*, void );
+    DECL_LINK( SelectColorHdl, ListBox&, void );
+    DECL_LINK( ColorDialogHdl, Button*, void );
+    DECL_LINK( PreviewChangeHdl, SvxLightCtl3D*, void );
+    DECL_LINK( PreviewSelectHdl, SvxLightCtl3D*, void );
 
     void updatePreview();
 
 private:
-    DECL_LINK_TYPED(fillControlsFromModel, void *, void);
+    DECL_LINK(fillControlsFromModel, void *, void);
 
     void applyLightSourceToModel( sal_uInt32 nLightNumber );
     void applyLightSourcesToModel();

@@ -55,7 +55,7 @@ private:
 
     CacheConfiguration();
 
-    DECL_STATIC_LINK_TYPED(CacheConfiguration, TimerCallback, Timer *, void);
+    DECL_STATIC_LINK(CacheConfiguration, TimerCallback, Timer *, void);
 };
 
 } } } // end of namespace ::sd::slidesorter::cache

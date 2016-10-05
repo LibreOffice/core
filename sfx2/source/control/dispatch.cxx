@@ -611,7 +611,7 @@ void SfxDispatcher::Pop(SfxShell& rShell, SfxDispatcherPopFlags nMode)
     It flushes the Stack, if it is dirty, thus it actually executes the
     pending Push and Pop commands.
 */
-IMPL_LINK_NOARG_TYPED( SfxDispatcher, EventHdl_Impl, Idle *, void )
+IMPL_LINK_NOARG( SfxDispatcher, EventHdl_Impl, Idle *, void )
 {
     Flush();
     Update_Impl();
@@ -1174,7 +1174,7 @@ const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCal
 
 /** Helper method to receive the asynchronously executed <SfxRequest>s.
 */
-IMPL_LINK_TYPED(SfxDispatcher, PostMsgHandler, SfxRequest*, pReq, void)
+IMPL_LINK(SfxDispatcher, PostMsgHandler, SfxRequest*, pReq, void)
 {
     DBG_ASSERT( !xImp->bFlushing, "recursive call to dispatcher" );
     SFX_STACK(SfxDispatcher::PostMsgHandler);

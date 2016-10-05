@@ -437,7 +437,7 @@ void Shell::OuterResizePixel( const Point &rPos, const Size &rSize )
 }
 
 
-IMPL_LINK_TYPED( Shell, TabBarHdl, ::TabBar *, pCurTabBar, void )
+IMPL_LINK( Shell, TabBarHdl, ::TabBar *, pCurTabBar, void )
 {
     sal_uInt16 nCurId = pCurTabBar->GetCurPageId();
     BaseWindow* pWin = aWindowTable[ nCurId ];

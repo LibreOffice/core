@@ -58,7 +58,7 @@ class FormulaDialog : public formula::FormulaModalDialog,
 
     svl::SharedStringPool&             mrStringPool;
 
-    DECL_LINK_TYPED( OnClickHdl, OAddFieldWindow&, void );
+    DECL_LINK( OnClickHdl, OAddFieldWindow&, void );
 public:
     FormulaDialog( vcl::Window* pParent
         , const css::uno::Reference< css::lang::XMultiServiceFactory>& _xServiceFactory

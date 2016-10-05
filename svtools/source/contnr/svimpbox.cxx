@@ -298,7 +298,7 @@ void SvImpLBox::Clear()
 // Paint, navigate, scroll
 // *********************************************************************
 
-IMPL_LINK_NOARG_TYPED(SvImpLBox, EndScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(SvImpLBox, EndScrollHdl, ScrollBar*, void)
 {
     if( nFlags & LBoxFlags::EndScrollSetVisSize )
     {
@@ -310,7 +310,7 @@ IMPL_LINK_NOARG_TYPED(SvImpLBox, EndScrollHdl, ScrollBar*, void)
 
 // handler for vertical scrollbar
 
-IMPL_LINK_TYPED( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar, void )
+IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar, void )
 {
     DBG_ASSERT(!bInVScrollHdl,"Scroll handler out-paces itself!");
     long nDelta = pScrollBar->GetDelta();
@@ -710,7 +710,7 @@ void SvImpLBox::UpdateAll( bool bInvalidateCompleteView )
         pView->Invalidate( GetVisibleArea() );
 }
 
-IMPL_LINK_TYPED( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar, void )
+IMPL_LINK( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar, void )
 {
     long nDelta = pScrollBar->GetDelta();
     if( nDelta )
@@ -2888,7 +2888,7 @@ void SvImpLBox::BeginDrag()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvImpLBox, BeginDragHdl, Idle *, void)
+IMPL_LINK_NOARG(SvImpLBox, BeginDragHdl, Idle *, void)
 {
     pView->StartDrag( 0, aAsyncBeginDragPos );
 }
@@ -3100,7 +3100,7 @@ void SvImpLBox::SetCurEntry( SvTreeListEntry* pEntry )
         pView->Select( pEntry );
 }
 
-IMPL_LINK_NOARG_TYPED(SvImpLBox, EditTimerCall, Idle *, void)
+IMPL_LINK_NOARG(SvImpLBox, EditTimerCall, Idle *, void)
 {
     if( pView->IsInplaceEditingEnabled() )
     {
@@ -3311,7 +3311,7 @@ bool SvImpLBox::IsNowExpandable() const
     return IsExpandable() && !pView->IsExpanded( pCursor );
 }
 
-IMPL_LINK_TYPED(SvImpLBox, MyUserEvent, void*, pArg, void )
+IMPL_LINK(SvImpLBox, MyUserEvent, void*, pArg, void )
 {
     nCurUserEvent = nullptr;
     if( !pArg )

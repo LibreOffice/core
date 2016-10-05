@@ -84,8 +84,8 @@ public:
     bool IsMultiSelection();
     std::vector<ScRangeNameLine> GetSelectedEntries();
 
-    DECL_LINK_TYPED( ScrollHdl, SvTreeListBox*, void);
-    DECL_LINK_TYPED( HeaderEndDragHdl, HeaderBar*, void);
+    DECL_LINK( ScrollHdl, SvTreeListBox*, void);
+    DECL_LINK( HeaderEndDragHdl, HeaderBar*, void);
 };
 
 #endif

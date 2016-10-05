@@ -53,7 +53,7 @@ private:
     VclPtr<NumericField>    m_pNewStartNF;
     bool             mbModified;
 
-    DECL_LINK_TYPED( ImplNewStartHdl, Button*, void );
+    DECL_LINK( ImplNewStartHdl, Button*, void );
 };
 
 SdParagraphNumTabPage::SdParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rAttr )
@@ -155,7 +155,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     mbModified = false;
 }
 
-IMPL_LINK_NOARG_TYPED(SdParagraphNumTabPage, ImplNewStartHdl, Button*, void)
+IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl, Button*, void)
 {
     bool bEnable = m_pNewStartCB->IsChecked();
     m_pNewStartNumberCB->Enable(bEnable);

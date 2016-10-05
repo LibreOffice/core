@@ -48,9 +48,9 @@ private:
     VclPtr<CheckBox> m_pRestartEachPageCB;
     VclPtr<CheckBox> m_pNumberingOnCB;
     VclPtr<CheckBox> m_pNumberingOnFooterHeader;
-    DECL_LINK_TYPED(OKHdl, Button*, void);
-    DECL_LINK_TYPED(LineOnOffHdl, Button* = nullptr, void);
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+    DECL_LINK(OKHdl, Button*, void);
+    DECL_LINK(LineOnOffHdl, Button* = nullptr, void);
+    DECL_LINK(ModifyHdl, Edit&, void);
 
 public:
     SwLineNumberingDlg(SwView *pVw);

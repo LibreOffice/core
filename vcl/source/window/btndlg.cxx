@@ -213,7 +213,7 @@ void ButtonDialog::ImplPosControls()
     mbFormat = false;
 }
 
-IMPL_LINK_TYPED( ButtonDialog, ImplClickHdl, Button*, pBtn, void )
+IMPL_LINK( ButtonDialog, ImplClickHdl, Button*, pBtn, void )
 {
     for (auto & it : m_ItemList)
     {

@@ -579,7 +579,7 @@ private:
     // Assuming that this will only be called with the external (Solar) mutex
     // locked.
     // init will already have been called.
-    DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
+    DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
 
     // Must be called with both the external (Solar) and internal mutex
     // locked.

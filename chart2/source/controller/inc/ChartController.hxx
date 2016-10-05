@@ -376,7 +376,7 @@ public:
     ViewElementListProvider getViewElementListProvider();
     DrawModelWrapper* GetDrawModelWrapper();
 
-    DECL_LINK_TYPED( NotifyUndoActionHdl, SdrUndoAction*, void );
+    DECL_LINK( NotifyUndoActionHdl, SdrUndoAction*, void );
 
     css::uno::Reference<css::uno::XInterface> const & getChartView();
 
@@ -552,7 +552,7 @@ private:
     void impl_ShapeControllerDispatch( const css::util::URL& rURL,
         const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
 
-    DECL_LINK_TYPED( DoubleClickWaitingHdl, Timer*, void );
+    DECL_LINK( DoubleClickWaitingHdl, Timer*, void );
     void execute_DoubleClick( const Point* pMousePixel );
     void startDoubleClickWaiting();
     void stopDoubleClickWaiting();

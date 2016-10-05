@@ -50,8 +50,8 @@ class SvPasteObjectDialog : public ModalDialog
     FixedText&      ObjectSource()  { return *m_pFtObjectSource; }
 
     void            SelectObject();
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( DoubleClickHdl, ListBox&, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK( DoubleClickHdl, ListBox&, void );
 
 public:
                 SvPasteObjectDialog( vcl::Window* pParent );

@@ -44,7 +44,7 @@ namespace abp
         virtual bool        canAdvance() const override;
 
     private:
-        DECL_LINK_TYPED( OnInvokeAdminDialog, Button*, void );
+        DECL_LINK( OnInvokeAdminDialog, Button*, void );
 
         void implTryConnect();
         void implUpdateErrorMessage();

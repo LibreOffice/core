@@ -291,7 +291,7 @@ void ThreeD_SceneAppearance_TabPage::updateScheme()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, ListBox&, void)
+IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, ListBox&, void)
 {
     if( !m_bUpdateOtherControls )
         return;
@@ -316,7 +316,7 @@ IMPL_LINK_NOARG_TYPED(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, ListBox&,
     initControlsFromModel();
 }
 
-IMPL_LINK_NOARG_TYPED(ThreeD_SceneAppearance_TabPage, SelectShading, CheckBox&, void)
+IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectShading, CheckBox&, void)
 {
     if( !m_bUpdateOtherControls )
         return;
@@ -325,7 +325,7 @@ IMPL_LINK_NOARG_TYPED(ThreeD_SceneAppearance_TabPage, SelectShading, CheckBox&, 
     applyShadeModeToModel();
     updateScheme();
 }
-IMPL_LINK_TYPED( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, CheckBox&, rCheckBox, void )
+IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, CheckBox&, rCheckBox, void )
 {
     if( !m_bUpdateOtherControls )
         return;

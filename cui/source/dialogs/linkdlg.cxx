@@ -165,7 +165,7 @@ void SvBaseLinksDlg::dispose()
 /*************************************************************************
 |*    SvBaseLinksDlg::Handler()
 *************************************************************************/
-IMPL_LINK_TYPED( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox, void )
+IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox, void )
 {
     const sal_uLong nSelectionCount = pSvTabListBox ?
         pSvTabListBox->GetSelectionCount() : 0;
@@ -250,13 +250,13 @@ IMPL_LINK_TYPED( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox,
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, LinksDoubleClickHdl, SvTreeListBox *, bool )
+IMPL_LINK_NOARG( SvBaseLinksDlg, LinksDoubleClickHdl, SvTreeListBox *, bool )
 {
     ChangeSourceClickHdl( nullptr );
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, AutomaticClickHdl, Button*, void )
+IMPL_LINK_NOARG( SvBaseLinksDlg, AutomaticClickHdl, Button*, void )
 {
     sal_uLong nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
@@ -265,7 +265,7 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, AutomaticClickHdl, Button*, void )
         SetType( *pLink, nPos, SfxLinkUpdateMode::ALWAYS );
 }
 
-IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, ManualClickHdl, Button*, void )
+IMPL_LINK_NOARG( SvBaseLinksDlg, ManualClickHdl, Button*, void )
 {
     sal_uLong nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
@@ -274,7 +274,7 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, ManualClickHdl, Button*, void )
         SetType( *pLink, nPos, SfxLinkUpdateMode::ONCALL );
 }
 
-IMPL_LINK_NOARG_TYPED(SvBaseLinksDlg, UpdateNowClickHdl, Button*, void)
+IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl, Button*, void)
 {
     SvTabListBox& rListBox = *m_pTbLinks;
 
@@ -345,7 +345,7 @@ IMPL_LINK_NOARG_TYPED(SvBaseLinksDlg, UpdateNowClickHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, ChangeSourceClickHdl, Button *, void )
+IMPL_LINK_NOARG( SvBaseLinksDlg, ChangeSourceClickHdl, Button *, void )
 {
     sal_uLong nSelectionCount = m_pTbLinks->GetSelectionCount();
     if(nSelectionCount > 1)
@@ -414,7 +414,7 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, ChangeSourceClickHdl, Button *, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
+IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
 {
     bool bModified = false;
     if(m_pTbLinks->GetSelectionCount() <= 1)
@@ -501,7 +501,7 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, UpdateWaitingHdl, Idle*, void )
+IMPL_LINK_NOARG( SvBaseLinksDlg, UpdateWaitingHdl, Idle*, void )
 {
     m_pTbLinks->SetUpdateMode(false);
     for( sal_uLong nPos = m_pTbLinks->GetEntryCount(); nPos; )
@@ -519,7 +519,7 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, UpdateWaitingHdl, Idle*, void )
     m_pTbLinks->SetUpdateMode(true);
 }
 
-IMPL_LINK_TYPED( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink&, _rLink, void )
+IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink&, _rLink, void )
 {
     sal_uLong nPos;
     GetSelEntry( &nPos );

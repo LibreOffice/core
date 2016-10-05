@@ -397,15 +397,15 @@ namespace dbaui
 
         return nResult;
     }
-    IMPL_LINK_NOARG_TYPED( OTableSubscriptionPage, OnTreeEntryButtonChecked, SvTreeListBox*, void )
+    IMPL_LINK_NOARG( OTableSubscriptionPage, OnTreeEntryButtonChecked, SvTreeListBox*, void )
     {
         callModifiedHdl();
     }
-    IMPL_LINK_TYPED( OTableSubscriptionPage, OnTreeEntryChecked, void*, _pControl, void )
+    IMPL_LINK( OTableSubscriptionPage, OnTreeEntryChecked, void*, _pControl, void )
     {
         OnControlModified(_pControl);
     }
-    IMPL_LINK_TYPED( OTableSubscriptionPage, OnTreeEntryCompare, const SvSortData&, _rSortData, sal_Int32 )
+    IMPL_LINK( OTableSubscriptionPage, OnTreeEntryCompare, const SvSortData&, _rSortData, sal_Int32 )
     {
         const SvTreeListEntry* pLHS = static_cast<const SvTreeListEntry*>(_rSortData.pLeft);
         const SvTreeListEntry* pRHS = static_cast<const SvTreeListEntry*>(_rSortData.pRight);

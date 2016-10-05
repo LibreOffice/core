@@ -92,7 +92,7 @@ private:
     ::osl::Mutex maMutex;
 
     Timer  maTimer;
-    DECL_LINK_TYPED(ProcessRequestHdl, Timer *, void);
+    DECL_LINK(ProcessRequestHdl, Timer *, void);
     sal_uInt32 mnTimeBetweenHighPriorityRequests;
     sal_uInt32 mnTimeBetweenLowPriorityRequests;
     sal_uInt32 mnTimeBetweenRequestsWhenNotIdle;

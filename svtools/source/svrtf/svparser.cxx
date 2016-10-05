@@ -615,7 +615,7 @@ void SvParser::BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
 }
 
 
-IMPL_LINK_NOARG_TYPED( SvParser, NewDataRead, LinkParamNone*, void )
+IMPL_LINK_NOARG( SvParser, NewDataRead, LinkParamNone*, void )
 {
     switch( eState )
     {

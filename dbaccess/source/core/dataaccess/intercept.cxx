@@ -175,7 +175,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValu
     }
 }
 
-IMPL_LINK_TYPED( OInterceptor, OnDispatch, void*, _pDispatcher, void )
+IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher, void )
 {
     std::unique_ptr<DispatchHelper> pHelper( static_cast< DispatchHelper* >( _pDispatcher ) );
     try

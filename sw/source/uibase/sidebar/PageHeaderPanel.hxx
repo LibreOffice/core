@@ -98,10 +98,10 @@ private:
     ::std::unique_ptr<SvxLongULSpaceItem> mpHeaderSpacingItem;
     ::std::unique_ptr<SfxInt16Item>       mpHeaderLayoutItem;
 
-    DECL_LINK_TYPED( HeaderToggleHdl, Button*, void );
-    DECL_LINK_TYPED( HeaderLRMarginHdl, ListBox&, void);
-    DECL_LINK_TYPED( HeaderSpacingHdl, ListBox&, void);
-    DECL_LINK_TYPED( HeaderLayoutHdl, ListBox&, void);
+    DECL_LINK( HeaderToggleHdl, Button*, void );
+    DECL_LINK( HeaderLRMarginHdl, ListBox&, void);
+    DECL_LINK( HeaderSpacingHdl, ListBox&, void);
+    DECL_LINK( HeaderLayoutHdl, ListBox&, void);
 };
 
 } } //end of namespace sw::sidebar

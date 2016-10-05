@@ -317,7 +317,7 @@ void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
 // ModifyHdl_Impl()
 // This handler updates the initials (short name)
 // when the name field was updated.
-IMPL_LINK_TYPED( SvxGeneralTabPage, ModifyHdl_Impl, Edit&, rEdit, void )
+IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit&, rEdit, void )
 {
     // short name field and row
     Field& rShortName = *vFields[nShortNameField];

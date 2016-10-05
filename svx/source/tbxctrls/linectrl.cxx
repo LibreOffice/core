@@ -301,7 +301,7 @@ void SvxLineEndWindow::dispose()
     SfxPopupWindow::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxLineEndWindow, SelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl, ValueSet*, void)
 {
     std::unique_ptr<XLineEndItem> pLineEndItem;
     std::unique_ptr<XLineStartItem> pLineStartItem;

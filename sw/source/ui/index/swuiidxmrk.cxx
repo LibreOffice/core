@@ -371,7 +371,7 @@ void    SwIndexMarkPane::Activate()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, SyncSelectionHdl, Button*, void)
+IMPL_LINK_NOARG(SwIndexMarkPane, SyncSelectionHdl, Button*, void)
 {
     bSelected = !pSh->HasSelection();
     aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
@@ -575,7 +575,7 @@ class SwNewUserIdxDlg : public ModalDialog
 
     SwIndexMarkPane* m_pDlg;
 
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void);
+    DECL_LINK( ModifyHdl, Edit&, void);
 
     public:
         explicit SwNewUserIdxDlg(SwIndexMarkPane* pPane)
@@ -600,12 +600,12 @@ class SwNewUserIdxDlg : public ModalDialog
     OUString  GetName(){return m_pNameED->GetText();}
 };
 
-IMPL_LINK_TYPED( SwNewUserIdxDlg, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit&, rEdit, void)
 {
     m_pOKPB->Enable(!rEdit.GetText().isEmpty() && !m_pDlg->IsTOXType(rEdit.GetText()));
 }
 
-IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, NewUserIdxHdl, Button*, void)
+IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl, Button*, void)
 {
     ScopedVclPtrInstance< SwNewUserIdxDlg > pDlg(this);
     if(RET_OK == pDlg->Execute())
@@ -616,14 +616,14 @@ IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, NewUserIdxHdl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED( SwIndexMarkPane, SearchTypeHdl, Button*, pBox, void)
+IMPL_LINK( SwIndexMarkPane, SearchTypeHdl, Button*, pBox, void)
 {
     bool bEnable = static_cast<CheckBox*>(pBox)->IsChecked() && pBox->IsEnabled();
     m_pSearchCaseWordOnlyCB->Enable(bEnable);
     m_pSearchCaseSensitiveCB->Enable(bEnable);
 }
 
-IMPL_LINK_TYPED( SwIndexMarkPane, InsertHdl, Button *, pButton, void )
+IMPL_LINK( SwIndexMarkPane, InsertHdl, Button *, pButton, void )
 {
     Apply();
     //close the dialog if only one entry is available
@@ -631,7 +631,7 @@ IMPL_LINK_TYPED( SwIndexMarkPane, InsertHdl, Button *, pButton, void )
         CloseHdl(pButton);
 }
 
-IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, CloseHdl, Button*, void)
+IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl, Button*, void)
 {
     if(bNewMark)
     {
@@ -646,12 +646,12 @@ IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, CloseHdl, Button*, void)
 }
 
 // select index type only when inserting
-IMPL_LINK_TYPED( SwIndexMarkPane, ModifyListBoxHdl, ListBox&, rBox, void )
+IMPL_LINK( SwIndexMarkPane, ModifyListBoxHdl, ListBox&, rBox, void )
 {
     ModifyHdl(&rBox);
 }
 
-IMPL_LINK_TYPED( SwIndexMarkPane, ModifyEditHdl, Edit&, rEdit, void )
+IMPL_LINK( SwIndexMarkPane, ModifyEditHdl, Edit&, rEdit, void )
 {
     ModifyHdl(&rEdit);
 }
@@ -730,35 +730,35 @@ void SwIndexMarkPane::ModifyHdl(Control* pBox)
         (!m_pEntryED->GetText().isEmpty() || pSh->GetCursorCnt(false)));
 }
 
-IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, NextHdl, Button*, void)
+IMPL_LINK_NOARG(SwIndexMarkPane, NextHdl, Button*, void)
 {
     InsertUpdate();
     pTOXMgr->NextTOXMark();
     UpdateDialog();
 }
 
-IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, NextSameHdl, Button*, void)
+IMPL_LINK_NOARG(SwIndexMarkPane, NextSameHdl, Button*, void)
 {
     InsertUpdate();
     pTOXMgr->NextTOXMark(true);
     UpdateDialog();
 }
 
-IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, PrevHdl, Button*, void)
+IMPL_LINK_NOARG(SwIndexMarkPane, PrevHdl, Button*, void)
 {
     InsertUpdate();
     pTOXMgr->PrevTOXMark();
     UpdateDialog();
 }
 
-IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, PrevSameHdl, Button*, void)
+IMPL_LINK_NOARG(SwIndexMarkPane, PrevSameHdl, Button*, void)
 {
     InsertUpdate();
     pTOXMgr->PrevTOXMark(true);
     UpdateDialog();
 }
 
-IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, DelHdl, Button*, void)
+IMPL_LINK_NOARG(SwIndexMarkPane, DelHdl, Button*, void)
 {
     bDel = true;
     InsertUpdate();
@@ -876,7 +876,7 @@ void SwIndexMarkPane::UpdateDialog()
 }
 
 // Remind whether the edit boxes for Phonetic reading are changed manually
-IMPL_LINK_TYPED( SwIndexMarkPane, PhoneticEDModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( SwIndexMarkPane, PhoneticEDModifyHdl, Edit&, rEdit, void )
 {
     if (m_pPhoneticED0 == &rEdit)
     {
@@ -893,7 +893,7 @@ IMPL_LINK_TYPED( SwIndexMarkPane, PhoneticEDModifyHdl, Edit&, rEdit, void )
 }
 
 // Enable Disable of the 2nd key
-IMPL_LINK_TYPED( SwIndexMarkPane, KeyDCBModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, Edit&, rEdit, void )
 {
     ComboBox* pBox = static_cast<ComboBox*>(&rEdit);
     if (m_pKey1DCB == pBox)
@@ -1024,9 +1024,9 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
     bool            m_bNewEntryMode;
     bool            m_bNameAllowed;
 
-    DECL_LINK_TYPED(IdentifierHdl, ComboBox&, void);
-    DECL_LINK_TYPED(ShortNameHdl, Edit&, void);
-    DECL_LINK_TYPED(EnableHdl, ListBox&, void);
+    DECL_LINK(IdentifierHdl, ComboBox&, void);
+    DECL_LINK(ShortNameHdl, Edit&, void);
+    DECL_LINK(EnableHdl, ListBox&, void);
 
 public:
     SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
@@ -1135,7 +1135,7 @@ void    SwAuthorMarkPane::ReInitDlg(SwWrtShell& rWrtShell)
     InitControls();
 }
 
-IMPL_LINK_NOARG_TYPED(SwAuthorMarkPane, CloseHdl, Button*, void)
+IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl, Button*, void)
 {
     if(bNewEntry)
     {
@@ -1163,7 +1163,7 @@ static OUString lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int
     return OUString();
 }
 
-IMPL_LINK_TYPED( SwAuthorMarkPane, CompEntryHdl, ListBox&, rBox, void)
+IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox&, rBox, void)
 {
     const OUString sEntry(rBox.GetSelectEntry());
     if(bIsFromComponent)
@@ -1207,7 +1207,7 @@ IMPL_LINK_TYPED( SwAuthorMarkPane, CompEntryHdl, ListBox&, rBox, void)
     m_pTitleFI->SetText(m_sFields[AUTH_FIELD_TITLE]);
 }
 
-IMPL_LINK_NOARG_TYPED(SwAuthorMarkPane, InsertHdl, Button*, void)
+IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, Button*, void)
 {
     //insert or update the SwAuthorityField...
     if(pSh)
@@ -1260,7 +1260,7 @@ IMPL_LINK_NOARG_TYPED(SwAuthorMarkPane, InsertHdl, Button*, void)
         CloseHdl(nullptr);
 }
 
-IMPL_LINK_TYPED(SwAuthorMarkPane, CreateEntryHdl, Button*, pButton, void)
+IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, Button*, pButton, void)
 {
     bool bCreate = pButton == m_pCreateEntryPB;
     OUString sOldId = m_sCreatedEntry[0];
@@ -1304,7 +1304,7 @@ IMPL_LINK_TYPED(SwAuthorMarkPane, CreateEntryHdl, Button*, pButton, void)
     }
 }
 
-IMPL_LINK_TYPED(SwAuthorMarkPane, ChangeSourceHdl, Button*, pButton, void)
+IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, Button*, pButton, void)
 {
     bool bFromComp = (pButton == m_pFromComponentRB);
     bIsFromComponent = bFromComp;
@@ -1365,7 +1365,7 @@ IMPL_LINK_TYPED(SwAuthorMarkPane, ChangeSourceHdl, Button*, pButton, void)
     CompEntryHdl(*m_pEntryLB);
 }
 
-IMPL_LINK_TYPED(SwAuthorMarkPane, EditModifyHdl, Edit&, rEdit, void)
+IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit&, rEdit, void)
 {
     Link<Edit*,bool> aAllowed = LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl);
     bool bResult = aAllowed.Call(&rEdit);
@@ -1378,7 +1378,7 @@ IMPL_LINK_TYPED(SwAuthorMarkPane, EditModifyHdl, Edit&, rEdit, void)
     }
 };
 
-IMPL_LINK_TYPED(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit, bool)
+IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit, bool)
 {
     OUString sEntry = pEdit->GetText();
     bool bAllowed = false;
@@ -1584,7 +1584,7 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
     return OUString();
 }
 
-IMPL_LINK_TYPED(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox&, rBox, void)
+IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox&, rBox, void)
 {
     const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
                                 rWrtSh.GetFieldType(RES_AUTHORITY, OUString()));
@@ -1610,7 +1610,7 @@ IMPL_LINK_TYPED(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox&, rBox, void)
     }
 }
 
-IMPL_LINK_TYPED(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit&, rEdit, void)
+IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit&, rEdit, void)
 {
     if(aShortNameCheckLink.IsSet())
     {
@@ -1620,7 +1620,7 @@ IMPL_LINK_TYPED(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit&, rEdit, void)
     }
 }
 
-IMPL_LINK_TYPED(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox&, rBox, void)
+IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox&, rBox, void)
 {
     m_pOKBT->Enable(m_bNameAllowed && rBox.GetSelectEntryCount());
 };

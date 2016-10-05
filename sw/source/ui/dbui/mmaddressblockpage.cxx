@@ -159,7 +159,7 @@ bool SwMailMergeAddressBlockPage::commitPage( ::svt::WizardTypes::CommitPageReas
     return true;
 }
 
-IMPL_LINK_NOARG_TYPED(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)
 {
     try
     {
@@ -186,7 +186,7 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*,
     }
 }
 
-IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, SettingsHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, Button*, pButton, void)
 {
     ScopedVclPtr<SwSelectAddressBlockDialog> pDlg(
                 VclPtr<SwSelectAddressBlockDialog>::Create(pButton, m_pWizard->GetConfigItem()));
@@ -212,7 +212,7 @@ IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, SettingsHdl_Impl, Button*, pButton,
     GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
 }
 
-IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, AssignHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMailMergeAddressBlockPage, AssignHdl_Impl, Button*, pButton, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     const sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
@@ -240,7 +240,7 @@ void SwMailMergeAddressBlockPage::EnableAddressBlock(bool bAll, bool bSelective)
     m_pStep4->Enable(bSelective);
 }
 
-IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, Button*, pBox, void)
+IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, Button*, pBox, void)
 {
     EnableAddressBlock(pBox->IsEnabled(), static_cast<CheckBox*>(pBox)->IsChecked());
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -248,7 +248,7 @@ IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, Button*, pBox
     m_pWizard->UpdateRoadmap();
 }
 
-IMPL_LINK_NOARG_TYPED(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, LinkParamNone*, void)
+IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, LinkParamNone*, void)
 {
     const sal_uInt16 nSel = m_pSettingsWIN->GetSelectedAddress();
     const uno::Sequence< OUString> aBlocks =
@@ -260,13 +260,13 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, L
     GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
 }
 
-IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl, Button*, pBox, void)
+IMPL_LINK(SwMailMergeAddressBlockPage, HideParagraphsHdl_Impl, Button*, pBox, void)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     rConfigItem.SetHideEmptyParagraphs( static_cast<CheckBox*>(pBox)->IsChecked() );
 }
 
-IMPL_LINK_TYPED(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, Button*, pButton, void)
 {
     //if no pButton is given, the first set has to be pre-set
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
@@ -419,7 +419,7 @@ OUString     SwSelectAddressBlockDialog::GetCountry() const
     return OUString();
 }
 
-IMPL_LINK_TYPED(SwSelectAddressBlockDialog, DeleteHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwSelectAddressBlockDialog, DeleteHdl_Impl, Button*, pButton, void)
 {
     if(m_aAddressBlocks.getLength())
     {
@@ -439,7 +439,7 @@ IMPL_LINK_TYPED(SwSelectAddressBlockDialog, DeleteHdl_Impl, Button*, pButton, vo
     }
 }
 
-IMPL_LINK_TYPED(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, Button*, pButton, void)
 {
     bool bCustomize = pButton == m_pCustomizePB;
     SwCustomizeAddressBlockDialog::DialogType nType = bCustomize ?
@@ -471,7 +471,7 @@ IMPL_LINK_TYPED(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, Button*, pButt
     }
 }
 
-IMPL_LINK_TYPED(SwSelectAddressBlockDialog, IncludeHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwSelectAddressBlockDialog, IncludeHdl_Impl, Button*, pButton, void)
 {
     m_pCountryED->Enable(m_pDependentRB == pButton);
 }
@@ -585,25 +585,25 @@ void SwCustomizeAddressBlockDialog::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SwCustomizeAddressBlockDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, OKHdl_Impl, Button*, void)
 {
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, SvTreeListBox*, pBox, void)
+IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, SvTreeListBox*, pBox, void)
 {
     sal_Int32 nUserData = (sal_Int32)reinterpret_cast<sal_IntPtr>(pBox->FirstSelected()->GetUserData());
     // Check if the selected entry is already in the address and then forbid inserting
     m_pInsertFieldIB->Enable(nUserData >= 0 || !HasItem_Impl(nUserData));
 }
 
-IMPL_LINK_NOARG_TYPED(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl, Edit&, void)
 {
     m_pPreviewWIN->SetAddress(SwAddressPreview::FillData(GetAddress(), m_rConfigItem));
     UpdateImageButtons_Impl();
 }
 
-IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, Button*, pButton, void)
 {
     if (m_pInsertFieldIB == pButton)
     {
@@ -666,7 +666,7 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
     return m_pDragED->GetText().indexOf("<" + sEntry + ">") >= 0;
 }
 
-IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiLineEdit&, rEdit, void)
+IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiLineEdit&, rEdit, void)
 {
     // called in case the selection of the edit field changes.
     // determine selection - if it's one of the editable fields then
@@ -718,11 +718,11 @@ IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, Address
     bOnEntry = false;
 }
 
-IMPL_LINK_NOARG_TYPED(SwCustomizeAddressBlockDialog, FieldChangeComboBoxHdl_Impl, ComboBox&, void)
+IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeComboBoxHdl_Impl, ComboBox&, void)
 {
     FieldChangeHdl_Impl(*m_pFieldCB);
 }
-IMPL_LINK_NOARG_TYPED(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl, Edit&, void)
 {
     //changing the field content changes the related members, too
     sal_Int32 nSelected = GetSelectedItem_Impl();
@@ -810,9 +810,9 @@ class SwAssignFieldsControl : public Control
     long                        m_nYOffset;
     long                        m_nFirstYPos;
 
-    DECL_LINK_TYPED(ScrollHdl_Impl, ScrollBar*, void);
-    DECL_LINK_TYPED(MatchHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED(GotFocusHdl_Impl, Control&, void);
+    DECL_LINK(ScrollHdl_Impl, ScrollBar*, void);
+    DECL_LINK(MatchHdl_Impl, ListBox&, void);
+    DECL_LINK(GotFocusHdl_Impl, Control&, void);
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
     virtual void        Command( const CommandEvent& rCEvt ) override;
@@ -1080,7 +1080,7 @@ void SwAssignFieldsControl::MakeVisible( sal_Int32 nIndex )
     ScrollHdl_Impl( m_aVScroll.get() );
 }
 
-IMPL_LINK_TYPED(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll, void)
+IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll, void)
 {
     long nThumb = pScroll->GetThumbPos();
     // the scrollbar moves on a per line basis
@@ -1099,7 +1099,7 @@ IMPL_LINK_TYPED(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll, void
     SetUpdateMode(true);
 }
 
-IMPL_LINK_TYPED(SwAssignFieldsControl, MatchHdl_Impl, ListBox&, rBox, void)
+IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox&, rBox, void)
 {
     const OUString sColumn = rBox.GetSelectEntry();
     uno::Reference< XColumnsSupplier > xColsSupp( m_rConfigItem->GetResultSet(), uno::UNO_QUERY);
@@ -1133,7 +1133,7 @@ IMPL_LINK_TYPED(SwAssignFieldsControl, MatchHdl_Impl, ListBox&, rBox, void)
     m_aModifyHdl.Call(nullptr);
 }
 
-IMPL_LINK_TYPED(SwAssignFieldsControl, GotFocusHdl_Impl, Control&, rControl, void)
+IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, Control&, rControl, void)
 {
     ListBox* pBox = static_cast<ListBox*>(&rControl);
     if(GetFocusFlags::Tab & pBox->GetGetFocusFlags())
@@ -1226,7 +1226,7 @@ uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
     return aAssignments;
 }
 
-IMPL_LINK_NOARG_TYPED(SwAssignFieldsDialog, OkHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwAssignFieldsDialog, OkHdl_Impl, Button*, void)
 {
     m_rConfigItem.SetColumnAssignment(
                             m_rConfigItem.GetCurrentDBData(),
@@ -1234,7 +1234,7 @@ IMPL_LINK_NOARG_TYPED(SwAssignFieldsDialog, OkHdl_Impl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, LinkParamNone*, void)
+IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, LinkParamNone*, void)
 {
     uno::Sequence< OUString > aAssignments = CreateAssignments();
     const OUString sPreview = SwAddressPreview::FillData(

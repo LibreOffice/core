@@ -57,8 +57,8 @@ private:
     css::uno::Reference<
         css::linguistic2::XDictionary >    xNewDic;
 
-    DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(ModifyHdl_Impl, Edit&, void);
+    DECL_LINK(OKHdl_Impl, Button*, void);
+    DECL_LINK(ModifyHdl_Impl, Edit&, void);
 
 public:
     SvxNewDictionaryDialog( vcl::Window* pParent );
@@ -120,12 +120,12 @@ private:
     bool            bDoNothing;
     bool                bDicIsReadonly;
 
-    DECL_LINK_TYPED(SelectBookHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED(SelectLangHdl_Impl, ListBox&, void);
-    DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(NewDelButtonHdl, Button*, void);
-    DECL_LINK_TYPED(NewDelActionHdl, SvxDictEdit&, bool);
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+    DECL_LINK(SelectBookHdl_Impl, ListBox&, void);
+    DECL_LINK(SelectLangHdl_Impl, ListBox&, void);
+    DECL_LINK(SelectHdl, SvTreeListBox*, void);
+    DECL_LINK(NewDelButtonHdl, Button*, void);
+    DECL_LINK(NewDelActionHdl, SvxDictEdit&, bool);
+    DECL_LINK(ModifyHdl, Edit&, void);
     bool NewDelHdl(void*);
 
 

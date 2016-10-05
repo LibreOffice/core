@@ -272,18 +272,18 @@ OUString CreateMD5FromString( const OUString& aMsg )
 class ProcessEventsClass_Impl
 {
 public:
-    DECL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, CallEvent, void*, void );
-    DECL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, void );
+    DECL_STATIC_LINK( ProcessEventsClass_Impl, CallEvent, void*, void );
+    DECL_STATIC_LINK( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, void );
 };
 
-IMPL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, CallEvent, void*, pEvent, void )
+IMPL_STATIC_LINK( ProcessEventsClass_Impl, CallEvent, void*, pEvent, void )
 {
     // Application events are processed by the Desktop::HandleAppEvent implementation.
     Desktop::HandleAppEvent( *static_cast<ApplicationEvent*>(pEvent) );
     delete static_cast<ApplicationEvent*>(pEvent);
 }
 
-IMPL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, pEvent, void )
+IMPL_STATIC_LINK( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, pEvent, void )
 {
     // Documents requests are processed by the RequestHandler implementation
     ProcessDocumentsRequest* pDocsRequest = static_cast<ProcessDocumentsRequest*>(pEvent);

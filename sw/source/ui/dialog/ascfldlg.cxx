@@ -318,7 +318,7 @@ LineEnd SwAsciiFilterDlg::GetCRLF() const
     return eEnd;
 }
 
-IMPL_LINK_TYPED( SwAsciiFilterDlg, CharSetSelHdl, ListBox&, rListBox, void )
+IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, ListBox&, rListBox, void )
 {
     SvxTextEncodingBox* pBox = static_cast<SvxTextEncodingBox*>(&rListBox);
     LineEnd eOldEnd = GetCRLF(), eEnd = (LineEnd)-1;
@@ -393,7 +393,7 @@ IMPL_LINK_TYPED( SwAsciiFilterDlg, CharSetSelHdl, ListBox&, rListBox, void )
         m_pLanguageLB->SelectLanguage( nLng );
 }
 
-IMPL_LINK_TYPED( SwAsciiFilterDlg, LineEndHdl, RadioButton&, rBtn, void )
+IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton&, rBtn, void )
 {
     if( m_bSaveLineStatus )
         rBtn.SaveValue();

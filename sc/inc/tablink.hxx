@@ -64,8 +64,8 @@ public:
 
     bool    IsUsed() const;
 
-    DECL_LINK_TYPED( RefreshHdl, Timer*, void );
-    DECL_LINK_TYPED( TableEndEditHdl, ::sfx2::SvBaseLink&, void );
+    DECL_LINK( RefreshHdl, Timer*, void );
+    DECL_LINK( TableEndEditHdl, ::sfx2::SvBaseLink&, void );
 };
 
 class ScDocument;

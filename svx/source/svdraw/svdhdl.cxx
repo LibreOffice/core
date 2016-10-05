@@ -1228,7 +1228,7 @@ void SdrHdlGradient::CreateB2dIAObject()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdrHdlGradient, ColorChangeHdl, SdrHdlColor*, void)
+IMPL_LINK_NOARG(SdrHdlGradient, ColorChangeHdl, SdrHdlColor*, void)
 {
     if(GetObj())
         FromIAOToItem(GetObj(), true, true);

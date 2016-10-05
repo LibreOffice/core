@@ -321,7 +321,7 @@ void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
     pChangeTrack = pTrack;
 }
 
-IMPL_LINK_NOARG_TYPED(ScDocument, TrackTimeHdl, Idle *, void)
+IMPL_LINK_NOARG(ScDocument, TrackTimeHdl, Idle *, void)
 {
     if ( ScDdeLink::IsInUpdate() )      // do not nest
     {

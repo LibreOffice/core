@@ -139,13 +139,13 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper
     sal_uInt16              mnIconID;
 
 private:
-                    DECL_LINK_TYPED(ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
-                    DECL_LINK_TYPED(HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
-                    DECL_LINK_TYPED(WaitTimeOutHdl, Idle *, void);
-                    DECL_LINK_TYPED(TimeOutHdl, Timer *, void);
-                    DECL_LINK_TYPED(UserEventHdl, void *, void);
-                    DECL_LINK_TYPED(WindowEventHdl, VclWindowEvent&, void);
-                    DECL_LINK_TYPED(ApplicationEventHdl, VclSimpleEvent&, void);
+                    DECL_LINK(ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
+                    DECL_LINK(HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
+                    DECL_LINK(WaitTimeOutHdl, Idle *, void);
+                    DECL_LINK(TimeOutHdl, Timer *, void);
+                    DECL_LINK(UserEventHdl, void *, void);
+                    DECL_LINK(WindowEventHdl, VclWindowEvent&, void);
+                    DECL_LINK(ApplicationEventHdl, VclSimpleEvent&, void);
 
     BubbleWindow*   GetBubbleWindow();
     void            RemoveBubbleWindow( bool bRemoveIcon );
@@ -571,7 +571,7 @@ void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 }
 
 
-IMPL_LINK_NOARG_TYPED(UpdateCheckUI, ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool)
+IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool)
 {
     SolarMutexGuard aGuard;
 
@@ -594,7 +594,7 @@ IMPL_LINK_NOARG_TYPED(UpdateCheckUI, ClickHdl, MenuBar::MenuBarButtonCallbackArg
 }
 
 
-IMPL_LINK_TYPED( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, rData, bool )
+IMPL_LINK( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, rData, bool )
 {
     if ( rData.bHighlight )
         maWaitIdle.Start();
@@ -605,7 +605,7 @@ IMPL_LINK_TYPED( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg&
 }
 
 
-IMPL_LINK_NOARG_TYPED(UpdateCheckUI, WaitTimeOutHdl, Idle *, void)
+IMPL_LINK_NOARG(UpdateCheckUI, WaitTimeOutHdl, Idle *, void)
 {
     SolarMutexGuard aGuard;
 
@@ -618,13 +618,13 @@ IMPL_LINK_NOARG_TYPED(UpdateCheckUI, WaitTimeOutHdl, Idle *, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(UpdateCheckUI, TimeOutHdl, Timer *, void)
+IMPL_LINK_NOARG(UpdateCheckUI, TimeOutHdl, Timer *, void)
 {
     RemoveBubbleWindow( false );
 }
 
 
-IMPL_LINK_NOARG_TYPED(UpdateCheckUI, UserEventHdl, void*, void)
+IMPL_LINK_NOARG(UpdateCheckUI, UserEventHdl, void*, void)
 {
     SolarMutexGuard aGuard;
 
@@ -655,7 +655,7 @@ IMPL_LINK_NOARG_TYPED(UpdateCheckUI, UserEventHdl, void*, void)
 }
 
 
-IMPL_LINK_TYPED( UpdateCheckUI, WindowEventHdl, VclWindowEvent&, rEvent, void )
+IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent&, rEvent, void )
 {
     sal_uLong nEventID = rEvent.GetId();
 
@@ -705,7 +705,7 @@ IMPL_LINK_TYPED( UpdateCheckUI, WindowEventHdl, VclWindowEvent&, rEvent, void )
 }
 
 
-IMPL_LINK_TYPED( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent&, rEvent, void)
+IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent&, rEvent, void)
 {
     switch (rEvent.GetId())
     {

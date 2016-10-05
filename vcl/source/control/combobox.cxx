@@ -77,15 +77,15 @@ struct ComboBox::Impl
     ComboBoxBounds calcComboBoxDropDownComponentBounds(
         const Size &rOutSize, const Size &rBorderOutSize) const;
 
-    DECL_DLLPRIVATE_LINK_TYPED( ImplSelectHdl, LinkParamNone*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplCancelHdl, LinkParamNone*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplDoubleClickHdl, ImplListBoxWindow*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplClickBtnHdl, void*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplPopupModeEndHdl, FloatingWindow*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplSelectionChangedHdl, sal_Int32, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplUserDrawHdl, UserDrawEvent*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplAutocompleteHdl, Edit&, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplListItemSelectHdl , LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK( ImplSelectHdl, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK( ImplCancelHdl, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK( ImplDoubleClickHdl, ImplListBoxWindow*, void );
+    DECL_DLLPRIVATE_LINK( ImplClickBtnHdl, void*, void );
+    DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, FloatingWindow*, void );
+    DECL_DLLPRIVATE_LINK( ImplSelectionChangedHdl, sal_Int32, void );
+    DECL_DLLPRIVATE_LINK( ImplUserDrawHdl, UserDrawEvent*, void );
+    DECL_DLLPRIVATE_LINK( ImplAutocompleteHdl, Edit&, void );
+    DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl , LinkParamNone*, void );
 };
 
 
@@ -298,7 +298,7 @@ bool ComboBox::IsAutocompleteEnabled() const
     return m_pImpl->m_pSubEdit->GetAutocompleteHdl().IsSet();
 }
 
-IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplClickBtnHdl, void*, void)
+IMPL_LINK_NOARG(ComboBox::Impl, ImplClickBtnHdl, void*, void)
 {
     m_rThis.CallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
     m_pSubEdit->GrabFocus();
@@ -316,7 +316,7 @@ IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplClickBtnHdl, void*, void)
         m_pImplLB->GetMainWindow()->ImplClearLayoutData();
 }
 
-IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplPopupModeEndHdl, FloatingWindow*, void)
+IMPL_LINK_NOARG(ComboBox::Impl, ImplPopupModeEndHdl, FloatingWindow*, void)
 {
     if (m_pFloatWin->IsPopupModeCanceled())
     {
@@ -339,7 +339,7 @@ IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplPopupModeEndHdl, FloatingWindow*, void
     m_rThis.CallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
 }
 
-IMPL_LINK_TYPED(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
+IMPL_LINK(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
 {
     Selection           aSel = rEdit.GetSelection();
 
@@ -377,7 +377,7 @@ IMPL_LINK_TYPED(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
 {
     bool bPopup = m_rThis.IsInDropDown();
     bool bCallSelect = false;
@@ -465,18 +465,18 @@ IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED( ComboBox::Impl, ImplListItemSelectHdl, LinkParamNone*, void )
+IMPL_LINK_NOARG( ComboBox::Impl, ImplListItemSelectHdl, LinkParamNone*, void )
 {
     m_rThis.CallEventListeners( VCLEVENT_DROPDOWN_SELECT );
 }
 
-IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplCancelHdl, LinkParamNone*, void)
+IMPL_LINK_NOARG(ComboBox::Impl, ImplCancelHdl, LinkParamNone*, void)
 {
     if (m_rThis.IsInDropDown())
         m_pFloatWin->EndPopupMode();
 }
 
-IMPL_LINK_TYPED( ComboBox::Impl, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
+IMPL_LINK( ComboBox::Impl, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
 {
     if (!m_pImplLB->IsTrackingSelect())
     {
@@ -485,7 +485,7 @@ IMPL_LINK_TYPED( ComboBox::Impl, ImplSelectionChangedHdl, sal_Int32, nChanged, v
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplDoubleClickHdl, ImplListBoxWindow*, void)
+IMPL_LINK_NOARG(ComboBox::Impl, ImplDoubleClickHdl, ImplListBoxWindow*, void)
 {
     m_rThis.DoubleClick();
 }
@@ -1282,7 +1282,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, D
 
 }
 
-IMPL_LINK_TYPED(ComboBox::Impl, ImplUserDrawHdl, UserDrawEvent*, pEvent, void)
+IMPL_LINK(ComboBox::Impl, ImplUserDrawHdl, UserDrawEvent*, pEvent, void)
 {
     m_rThis.UserDraw(*pEvent);
 }

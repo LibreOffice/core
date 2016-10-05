@@ -189,10 +189,10 @@ struct SfxToolBoxControl_Impl
     sal_uInt16              nSlotId;
     VclPtr<SfxPopupWindow>  mpFloatingWindow;
     VclPtr<SfxPopupWindow>  mpPopupWindow;
-    DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
+    DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 };
 
-IMPL_LINK_TYPED( SfxToolBoxControl_Impl, WindowEventListener, VclWindowEvent&, rEvent, void )
+IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     if ( ( rEvent.GetId() == VCLEVENT_WINDOW_MOVE ) ||
          ( rEvent.GetId() == VCLEVENT_WINDOW_ACTIVATE ))
@@ -608,7 +608,7 @@ void SfxToolBoxControl::SetPopupWindow( SfxPopupWindow* pWindow )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxToolBoxControl, PopupModeEndHdl, FloatingWindow*, void)
+IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl, FloatingWindow*, void)
 {
     if ( pImpl->mpPopupWindow->IsVisible() )
     {
@@ -630,7 +630,7 @@ IMPL_LINK_NOARG_TYPED(SfxToolBoxControl, PopupModeEndHdl, FloatingWindow*, void)
 }
 
 
-IMPL_LINK_TYPED( SfxToolBoxControl, ClosePopupWindow, SfxPopupWindow *, pWindow, void )
+IMPL_LINK( SfxToolBoxControl, ClosePopupWindow, SfxPopupWindow *, pWindow, void )
 {
     if ( pWindow == pImpl->mpFloatingWindow )
         pImpl->mpFloatingWindow = nullptr;

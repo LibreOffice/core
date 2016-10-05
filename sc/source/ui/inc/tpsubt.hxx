@@ -70,9 +70,9 @@ private:
     sal_uInt16          GetFieldSelPos  ( SCCOL nField );
 
     // Handler ------------------------
-    DECL_LINK_TYPED( SelectListBoxHdl, ListBox&, void );
-    DECL_LINK_TYPED( SelectTreeListBoxHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( CheckHdl, SvTreeListBox*, void );
+    DECL_LINK( SelectListBoxHdl, ListBox&, void );
+    DECL_LINK( SelectTreeListBoxHdl, SvTreeListBox*, void );
+    DECL_LINK( CheckHdl, SvTreeListBox*, void );
     void SelectHdl(void *);
 };
 
@@ -160,7 +160,7 @@ private:
     void FillUserSortListBox    ();
 
     // Handler ------------------------
-    DECL_LINK_TYPED( CheckHdl, Button*, void );
+    DECL_LINK( CheckHdl, Button*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPSUBT_HXX

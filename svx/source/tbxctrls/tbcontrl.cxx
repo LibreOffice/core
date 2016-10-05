@@ -145,7 +145,7 @@ public:
 
 protected:
     /// Calculate the optimal width of the dropdown.  Very expensive operation, triggers lots of font measurement.
-    DECL_LINK_TYPED(CalcOptimalExtraUserWidth, VclWindowEvent&, void);
+    DECL_LINK(CalcOptimalExtraUserWidth, VclWindowEvent&, void);
 
     virtual void    Select() override;
 
@@ -172,7 +172,7 @@ private:
     void            SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_Int32 nItem, const Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected);
     static bool     AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight);
     void            SetOptimalSize();
-    DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );
+    DECL_LINK( MenuSelectHdl, Menu *, bool );
 };
 
 class SvxFontNameBox_Impl : public FontNameBox
@@ -200,7 +200,7 @@ private:
                                          ".uno:CharEndPreviewFontName",
                                          aArgs );
     }
-    DECL_LINK_TYPED( CheckAndMarkUnknownFont, VclWindowEvent&, void );
+    DECL_LINK( CheckAndMarkUnknownFont, VclWindowEvent&, void );
 
     void            SetOptimalSize();
 
@@ -256,7 +256,7 @@ private:
     ImageList                   aImgList;
     bool                        bParagraphMode;
 
-    DECL_LINK_TYPED( SelectHdl, ValueSet*, void );
+    DECL_LINK( SelectHdl, ValueSet*, void );
 
 protected:
     virtual void    Resize() override;
@@ -280,7 +280,7 @@ private:
     VclPtr<LineListBox> m_aLineStyleLb;
     bool                m_bIsWriter;
 
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
 
 protected:
     virtual void    Resize() override;
@@ -302,7 +302,7 @@ private:
 
     std::vector<OUString> m_aFormatEntries;
     LanguageType          m_eFormatLanguage;
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
 
 public:
     SvxCurrencyList_Impl( sal_uInt16 nId, const Reference< XFrame >& rxFrame,
@@ -396,7 +396,7 @@ void SvxStyleBox_Impl::ReleaseFocus()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-IMPL_LINK_TYPED( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu, bool)
+IMPL_LINK( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu, bool)
 {
     OUString sEntry = GetSelectEntry();
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
@@ -820,7 +820,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     DrawEntry( rUDEvt, false, false );
 }
 
-IMPL_LINK_TYPED(SvxStyleBox_Impl, CalcOptimalExtraUserWidth, VclWindowEvent&, event, void)
+IMPL_LINK(SvxStyleBox_Impl, CalcOptimalExtraUserWidth, VclWindowEvent&, event, void)
 {
     // perform the calculation only when we are opening the dropdown
     if (event.GetId() != VCLEVENT_DROPDOWN_PRE_OPEN)
@@ -994,7 +994,7 @@ void SvxFontNameBox_Impl::FillList()
     SetSelection( aOldSel );
 }
 
-IMPL_LINK_TYPED( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent&, event, void )
+IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent&, event, void )
 {
     if( event.GetId() != VCLEVENT_EDIT_MODIFY )
         return;
@@ -1384,7 +1384,7 @@ void SvxColorWindow_Impl::KeyInput( const KeyEvent& rKEvt )
     mpColorSet->KeyInput(rKEvt);
 }
 
-IMPL_LINK_TYPED(SvxColorWindow_Impl, SelectHdl, ValueSet*, pColorSet, void)
+IMPL_LINK(SvxColorWindow_Impl, SelectHdl, ValueSet*, pColorSet, void)
 {
     VclPtr<SvxColorWindow_Impl> xThis(this);
 
@@ -1409,7 +1409,7 @@ IMPL_LINK_TYPED(SvxColorWindow_Impl, SelectHdl, ValueSet*, pColorSet, void)
     maColorSelectFunction(maCommand, aColor);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, SelectPaletteHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectPaletteHdl, ListBox&, void)
 {
     sal_Int32 nPos = mpPaletteListBox->GetSelectEntryPos();
     mrPaletteManager.SetPalette( nPos );
@@ -1417,7 +1417,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, SelectPaletteHdl, ListBox&, void)
     mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
 }
 
-IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, AutoColorClickHdl, Button*, void)
+IMPL_LINK_NOARG(SvxColorWindow_Impl, AutoColorClickHdl, Button*, void)
 {
     VclPtr<SvxColorWindow_Impl> xThis(this);
 
@@ -1450,7 +1450,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, AutoColorClickHdl, Button*, void)
     maColorSelectFunction(maCommand, aColor);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, OpenPickerClickHdl, Button*, void)
+IMPL_LINK_NOARG(SvxColorWindow_Impl, OpenPickerClickHdl, Button*, void)
 {
     VclPtr<SvxColorWindow_Impl> xThis(this);
 
@@ -1694,7 +1694,7 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 // By default unset lines remain unchanged.
 // Via Shift unset lines are reset
 
-IMPL_LINK_NOARG_TYPED(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
 {
     VclPtr<SvxFrameWindow_Impl> xThis(this);
 
@@ -1987,7 +1987,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     m_aLineStyleLb->Show();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxCurrencyList_Impl, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxCurrencyList_Impl, SelectHdl, ListBox&, void)
 {
     VclPtr<SvxCurrencyList_Impl> xThis(this);
 
@@ -2003,7 +2003,7 @@ IMPL_LINK_NOARG_TYPED(SvxCurrencyList_Impl, SelectHdl, ListBox&, void)
     m_xControl->Select( m_pCurrencyLb->GetSelectEntryPos() + 1 );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
 {
     VclPtr<SvxLineWindow_Impl> xThis(this);
 
@@ -2484,7 +2484,7 @@ void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
     Update();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxStyleToolBoxControl, VisibilityNotification, SvxStyleBox_Impl&, void)
+IMPL_LINK_NOARG(SvxStyleToolBoxControl, VisibilityNotification, SvxStyleBox_Impl&, void)
 {
     // Call ReBind() && UnBind() according to visibility
     SvxStyleBox_Impl* pBox = static_cast<SvxStyleBox_Impl*>( GetToolBox().GetItemWindow( GetId() ));
@@ -2755,7 +2755,7 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
     return pColorWin;
 }
 
-IMPL_LINK_TYPED(SvxColorToolBoxControl, SelectedHdl, const Color&, rColor, void)
+IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const Color&, rColor, void)
 {
     m_xBtnUpdater->Update( rColor );
     mPaletteManager.SetLastColor( rColor );

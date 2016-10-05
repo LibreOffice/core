@@ -110,7 +110,7 @@ void ChangeRequestQueueProcessor::StartProcessing()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ChangeRequestQueueProcessor, ProcessEvent, void*, void)
+IMPL_LINK_NOARG(ChangeRequestQueueProcessor, ProcessEvent, void*, void)
 {
     ::osl::MutexGuard aGuard (maMutex);
 

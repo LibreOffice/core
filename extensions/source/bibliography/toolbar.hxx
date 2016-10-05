@@ -135,11 +135,11 @@ class BibToolBar:   public ToolBox
         sal_uInt16              nTBC_BT_REMOVEFILTER;
 
         BibDataManager*         pDatMan;
-        DECL_LINK_TYPED( SelHdl, ListBox&, void );
-        DECL_LINK_TYPED( SendSelHdl, Idle*, void );
-        DECL_LINK_TYPED( MenuHdl, ToolBox*, void );
-        DECL_LINK_TYPED( OptionsChanged_Impl, LinkParamNone*, void );
-        DECL_LINK_TYPED( SettingsChanged_Impl, VclSimpleEvent&, void );
+        DECL_LINK( SelHdl, ListBox&, void );
+        DECL_LINK( SendSelHdl, Idle*, void );
+        DECL_LINK( MenuHdl, ToolBox*, void );
+        DECL_LINK( OptionsChanged_Impl, LinkParamNone*, void );
+        DECL_LINK( SettingsChanged_Impl, VclSimpleEvent&, void );
 
         void                    ApplyImageList();
         void                    RebuildToolbar();

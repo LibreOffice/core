@@ -92,16 +92,16 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     Image                   m_aTableChgd;
     Image                   m_aFormatCollSet;
 
-    DECL_DLLPRIVATE_LINK_TYPED( AcceptHdl,     SvxTPView*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( AcceptAllHdl,  SvxTPView*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( RejectHdl,     SvxTPView*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( RejectAllHdl,  SvxTPView*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( UndoHdl,       SvxTPView*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( DeselectHdl, SvTreeListBox*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( SelectHdl,   SvTreeListBox*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( SelectTimerHdl, Timer*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( GotoHdl, Timer*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( CommandHdl, SvSimpleTable*, void );
+    DECL_DLLPRIVATE_LINK( AcceptHdl,     SvxTPView*, void );
+    DECL_DLLPRIVATE_LINK( AcceptAllHdl,  SvxTPView*, void );
+    DECL_DLLPRIVATE_LINK( RejectHdl,     SvxTPView*, void );
+    DECL_DLLPRIVATE_LINK( RejectAllHdl,  SvxTPView*, void );
+    DECL_DLLPRIVATE_LINK( UndoHdl,       SvxTPView*, void );
+    DECL_DLLPRIVATE_LINK( DeselectHdl, SvTreeListBox*, void );
+    DECL_DLLPRIVATE_LINK( SelectHdl,   SvTreeListBox*, void );
+    DECL_DLLPRIVATE_LINK( SelectTimerHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( GotoHdl, Timer*, void );
+    DECL_DLLPRIVATE_LINK( CommandHdl, SvSimpleTable*, void );
 
     SAL_DLLPRIVATE sal_uInt16    CalcDiff(sal_uInt16 nStart, bool bChild);
     SAL_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFormat);
@@ -121,7 +121,7 @@ public:
     SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder, vcl::Window *pContentArea, bool bAutoFormat = false);
     virtual ~SwRedlineAcceptDlg();
 
-    DECL_LINK_TYPED( FilterChangedHdl, SvxTPFilter*, void );
+    DECL_LINK( FilterChangedHdl, SvxTPFilter*, void );
 
     inline SvxAcceptChgCtr& GetChgCtrl()        { return *m_aTabPagesCTRL.get(); }
     inline bool     HasRedlineAutoFormat() const   { return m_bRedlnAutoFormat; }

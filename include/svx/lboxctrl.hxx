@@ -37,8 +37,8 @@ protected:
 
     void    Impl_SetInfo( sal_Int32 nCount );
 
-    DECL_LINK_TYPED( PopupModeEndHdl, FloatingWindow*, void );
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
+    DECL_LINK( PopupModeEndHdl, FloatingWindow*, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
 
 public:
     SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );

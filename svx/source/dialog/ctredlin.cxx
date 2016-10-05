@@ -501,7 +501,7 @@ void SvxTPView::EnableUndo(bool bFlag)
 }
 
 
-IMPL_LINK_TYPED( SvxTPView, PbClickHdl, Button*, pButton, void )
+IMPL_LINK( SvxTPView, PbClickHdl, Button*, pButton, void )
 {
     PushButton* pPushB = static_cast<PushButton*>(pButton);
     if (pPushB == m_pAccept)
@@ -896,13 +896,13 @@ void SvxTPFilter::ShowAction(bool bShow)
 }
 
 
-IMPL_LINK_NOARG_TYPED( SvxTPFilter, SelDateHdl, ListBox&, void )
+IMPL_LINK_NOARG( SvxTPFilter, SelDateHdl, ListBox&, void )
 {
     ShowDateFields(static_cast<SvxRedlinDateMode>(m_pLbDate->GetSelectEntryPos()));
     bModified=true;
 }
 
-IMPL_LINK_TYPED( SvxTPFilter, RowEnableHdl, Button*, pButton, void )
+IMPL_LINK( SvxTPFilter, RowEnableHdl, Button*, pButton, void )
 {
     CheckBox* pCB = static_cast<CheckBox*>(pButton);
     if (pCB == m_pCbDate)
@@ -938,7 +938,7 @@ IMPL_LINK_TYPED( SvxTPFilter, RowEnableHdl, Button*, pButton, void )
         bModified=true;
 }
 
-IMPL_LINK_TYPED( SvxTPFilter, TimeHdl, Button*, pButton, void )
+IMPL_LINK( SvxTPFilter, TimeHdl, Button*, pButton, void )
 {
     ImageButton* pIB = static_cast<ImageButton*>(pButton);
     Date aDate( Date::SYSTEM );
@@ -955,11 +955,11 @@ IMPL_LINK_TYPED( SvxTPFilter, TimeHdl, Button*, pButton, void )
     }
     bModified=true;
 }
-IMPL_LINK_NOARG_TYPED( SvxTPFilter, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG( SvxTPFilter, ModifyHdl, Edit&, void)
 {
     bModified=true;
 }
-IMPL_LINK_NOARG_TYPED( SvxTPFilter, ModifyListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG( SvxTPFilter, ModifyListBoxHdl, ListBox&, void)
 {
     bModified=true;
 }
@@ -1010,7 +1010,7 @@ void SvxTPFilter::Disable()
     Enable( false );
 }
 
-IMPL_LINK_TYPED( SvxTPFilter, ModifyDate, Edit&, rTF, void)
+IMPL_LINK( SvxTPFilter, ModifyDate, Edit&, rTF, void)
 {
     Date aDate( Date::SYSTEM );
     tools::Time aTime(0);
@@ -1050,7 +1050,7 @@ IMPL_LINK_TYPED( SvxTPFilter, ModifyDate, Edit&, rTF, void)
     ModifyHdl(*m_pDfDate);
 }
 
-IMPL_LINK_TYPED( SvxTPFilter, RefHandle, Button*, pRef, void )
+IMPL_LINK( SvxTPFilter, RefHandle, Button*, pRef, void )
 {
     if(pRef!=nullptr)
     {

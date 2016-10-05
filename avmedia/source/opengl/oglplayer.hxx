@@ -61,7 +61,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    DECL_LINK_TYPED( TimerHandler, Timer*, void );
+    DECL_LINK( TimerHandler, Timer*, void );
 
     OUString m_sURL;
 

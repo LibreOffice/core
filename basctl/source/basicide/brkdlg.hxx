@@ -43,10 +43,10 @@ private:
 
 protected:
     void            CheckButtons();
-    DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
-    DECL_LINK_TYPED( ComboBoxHighlightHdl, ComboBox&, void );
-    DECL_LINK_TYPED( EditModifyHdl, Edit&, void );
-    DECL_LINK_TYPED( ButtonHdl, Button*, void );
+    DECL_LINK( CheckBoxHdl, Button*, void );
+    DECL_LINK( ComboBoxHighlightHdl, ComboBox&, void );
+    DECL_LINK( EditModifyHdl, Edit&, void );
+    DECL_LINK( ButtonHdl, Button*, void );
     void            UpdateFields( BreakPoint* pBrk );
     BreakPoint*     GetSelectedBreakPoint();
 

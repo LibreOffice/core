@@ -122,7 +122,7 @@ OUString SelectPersonaDialog::GetSelectedPersona() const
     return OUString();
 }
 
-IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
+IMPL_LINK( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
 {
     /*
      * English category names should be used for search.
@@ -171,7 +171,7 @@ IMPL_LINK_TYPED( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
     m_pSearchThread->launch();
 }
 
-IMPL_LINK_NOARG_TYPED( SelectPersonaDialog, ActionOK, Button*, void )
+IMPL_LINK_NOARG( SelectPersonaDialog, ActionOK, Button*, void )
 {
     OUString aSelectedPersona = GetSelectedPersona();
 
@@ -189,7 +189,7 @@ IMPL_LINK_NOARG_TYPED( SelectPersonaDialog, ActionOK, Button*, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SelectPersonaDialog, ActionCancel, Button*, void )
+IMPL_LINK_NOARG( SelectPersonaDialog, ActionCancel, Button*, void )
 {
     if( m_pSearchThread.is() )
         m_pSearchThread->StopExecution();
@@ -197,7 +197,7 @@ IMPL_LINK_NOARG_TYPED( SelectPersonaDialog, ActionCancel, Button*, void )
     EndDialog();
 }
 
-IMPL_LINK_TYPED( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
+IMPL_LINK( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
 {
     if( m_pSearchThread.is() )
         m_pSearchThread->StopExecution();
@@ -486,7 +486,7 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxPersonalizationTabPage, SelectPersona, Button*, void )
+IMPL_LINK_NOARG( SvxPersonalizationTabPage, SelectPersona, Button*, void )
 {
     ScopedVclPtrInstance< SelectPersonaDialog > aDialog(nullptr);
 
@@ -500,13 +500,13 @@ IMPL_LINK_NOARG_TYPED( SvxPersonalizationTabPage, SelectPersona, Button*, void )
     }
 }
 
-IMPL_LINK_TYPED( SvxPersonalizationTabPage, ForceSelect, Button*, pButton, void )
+IMPL_LINK( SvxPersonalizationTabPage, ForceSelect, Button*, pButton, void )
 {
     if ( pButton == m_pOwnPersona && m_aPersonaSettings.isEmpty() )
         SelectPersona( m_pSelectPersona );
 }
 
-IMPL_LINK_TYPED( SvxPersonalizationTabPage, DefaultPersona, Button*, pButton, void )
+IMPL_LINK( SvxPersonalizationTabPage, DefaultPersona, Button*, pButton, void )
 {
     m_pDefaultPersona->Check();
     for( sal_Int32 nIndex = 0; nIndex < 3; nIndex++ )
@@ -516,7 +516,7 @@ IMPL_LINK_TYPED( SvxPersonalizationTabPage, DefaultPersona, Button*, pButton, vo
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvxPersonalizationTabPage, SelectInstalledPersona, ListBox&, void)
+IMPL_LINK_NOARG( SvxPersonalizationTabPage, SelectInstalledPersona, ListBox&, void)
 {
     m_pOwnPersona->Check();
 

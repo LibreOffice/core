@@ -36,13 +36,13 @@ class CandidateMgr
 {
     std::vector<VclPtr<vcl::Window> > m_aCandidates;
     std::set<VclPtr<vcl::Window> > m_aDeletedCandidates;
-    DECL_LINK_TYPED(WindowEventListener, VclWindowEvent&, void);
+    DECL_LINK(WindowEventListener, VclWindowEvent&, void);
 public:
     void PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect);
     ~CandidateMgr();
 };
 
-IMPL_LINK_TYPED(CandidateMgr, WindowEventListener, VclWindowEvent&, rEvent, void)
+IMPL_LINK(CandidateMgr, WindowEventListener, VclWindowEvent&, rEvent, void)
 {
     vcl::Window* pWindow = rEvent.GetWindow();
     if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)

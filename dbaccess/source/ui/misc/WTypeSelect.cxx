@@ -281,7 +281,7 @@ OUString OWizTypeSelect::GetTitle() const
     return ModuleRes(STR_WIZ_TYPE_SELECT_TITEL);
 }
 
-IMPL_LINK_NOARG_TYPED( OWizTypeSelect, ColumnSelectHdl, ListBox&, void )
+IMPL_LINK_NOARG( OWizTypeSelect, ColumnSelectHdl, ListBox&, void )
 {
     OUString aColumnName( m_pColumnNames->GetSelectEntry() );
 
@@ -348,7 +348,7 @@ void OWizTypeSelect::EnableAuto(bool bEnable)
     m_pAutoType->Show(bEnable);
 }
 
-IMPL_LINK_NOARG_TYPED( OWizTypeSelect, ButtonClickHdl, Button *, void )
+IMPL_LINK_NOARG( OWizTypeSelect, ButtonClickHdl, Button *, void )
 {
     sal_Int32 nBreakPos;
     m_pParent->CheckColumns(nBreakPos);

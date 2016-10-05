@@ -193,11 +193,11 @@ void ExtrusionDirectionWindow::statusChanged(
 }
 
 
-IMPL_LINK_TYPED( ExtrusionDirectionWindow, SelectValueSetHdl, ValueSet*, pControl, void )
+IMPL_LINK( ExtrusionDirectionWindow, SelectValueSetHdl, ValueSet*, pControl, void )
 {
     SelectHdl(pControl);
 }
-IMPL_LINK_TYPED( ExtrusionDirectionWindow, SelectToolbarMenuHdl, ToolbarMenu*, pControl, void )
+IMPL_LINK( ExtrusionDirectionWindow, SelectToolbarMenuHdl, ToolbarMenu*, pControl, void )
 {
     SelectHdl(pControl);
 }
@@ -415,7 +415,7 @@ void ExtrusionDepthWindow::statusChanged(
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ExtrusionDepthWindow, SelectHdl, ToolbarMenu*, void)
+IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl, ToolbarMenu*, void)
 {
     int nSelected = getSelectedEntryId();
     if( nSelected != -1 )
@@ -681,11 +681,11 @@ void ExtrusionLightingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-IMPL_LINK_TYPED( ExtrusionLightingWindow, SelectValueSetHdl, ValueSet*, pControl, void )
+IMPL_LINK( ExtrusionLightingWindow, SelectValueSetHdl, ValueSet*, pControl, void )
 {
     SelectHdl(pControl);
 }
-IMPL_LINK_TYPED( ExtrusionLightingWindow, SelectToolbarMenuHdl, ToolbarMenu*, pControl, void )
+IMPL_LINK( ExtrusionLightingWindow, SelectToolbarMenuHdl, ToolbarMenu*, pControl, void )
 {
     SelectHdl(pControl);
 }
@@ -848,7 +848,7 @@ void ExtrusionSurfaceWindow::statusChanged(
 }
 
 
-IMPL_LINK_NOARG_TYPED(ExtrusionSurfaceWindow, SelectHdl, ToolbarMenu*, void)
+IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl, ToolbarMenu*, void)
 {
     if ( IsInPopupMode() )
         EndPopupMode();

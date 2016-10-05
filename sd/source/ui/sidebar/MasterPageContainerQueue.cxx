@@ -176,7 +176,7 @@ sal_Int32 MasterPageContainerQueue::CalculatePriority (
     return nPriority;
 }
 
-IMPL_LINK_TYPED(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer, void)
+IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer, void)
 {
     bool bIsShowingFullScreenShow (false);
     bool bWaitForMoreRequests (false);

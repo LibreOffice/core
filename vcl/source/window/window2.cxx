@@ -277,7 +277,7 @@ void Window::InvertTracking( const tools::Polygon& rPoly, ShowTrackFlags nFlags 
     pGraphics->Invert( nPoints, pPtAry, SalInvert::TrackFrame, this );
 }
 
-IMPL_LINK_TYPED( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
+IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
 {
     ImplSVData* pSVData = ImplGetSVData();
 

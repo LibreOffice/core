@@ -66,7 +66,7 @@ ConditionField::ConditionField(Condition* pParent, Edit* pSubEdit, PushButton *p
     m_pFormula->SetClickHdl( LINK( this, ConditionField, OnFormula ) );
 }
 
-IMPL_LINK_TYPED( ConditionField, OnFormula, Button*, _pClickedButton, void )
+IMPL_LINK( ConditionField, OnFormula, Button*, _pClickedButton, void )
 {
     OUString sFormula(m_pSubEdit->GetText());
     const sal_Int32 nLen = sFormula.getLength();
@@ -94,7 +94,7 @@ IMPL_LINK_TYPED( ConditionField, OnFormula, Button*, _pClickedButton, void )
 #define PALETTE_SIZE (PALETTE_X * PALETTE_Y)
 class OColorPopup : public FloatingWindow
 {
-    DECL_LINK_TYPED( SelectHdl, ValueSet*, void );
+    DECL_LINK( SelectHdl, ValueSet*, void );
     VclPtr<Condition>      m_pCondition;
     sal_uInt16             m_nSlotId;
 public:
@@ -193,7 +193,7 @@ void OColorPopup::SetSlotId(sal_uInt16 _nSlotId)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(OColorPopup, SelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(OColorPopup, SelectHdl, ValueSet*, void)
 {
     sal_uInt16 nItemId = m_aColorSet->GetSelectItemId();
     Color aColor( nItemId == 0 ? Color( COL_TRANSPARENT ) : m_aColorSet->GetItemColor( nItemId ) );
@@ -332,7 +332,7 @@ void Condition::dispose()
     VclHBox::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED( Condition, DropdownClick, ToolBox*, void )
+IMPL_LINK_NOARG( Condition, DropdownClick, ToolBox*, void )
 {
     sal_uInt16 nId( m_pActions->GetCurItemId() );
     if ( !m_pColorFloat )
@@ -355,13 +355,13 @@ IMPL_LINK_NOARG_TYPED( Condition, DropdownClick, ToolBox*, void )
     m_pColorFloat->StartSelection();
 }
 
-IMPL_LINK_NOARG_TYPED( Condition, OnFormatAction, ToolBox*, void )
+IMPL_LINK_NOARG( Condition, OnFormatAction, ToolBox*, void )
 {
     Color aCol(COL_AUTO);
     ApplyCommand(mapToolbarItemToSlotId(m_pActions->GetCurItemId()),aCol);
 }
 
-IMPL_LINK_TYPED( Condition, OnConditionAction, Button*, _pClickedButton, void )
+IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton, void )
 {
     if ( _pClickedButton == m_pMoveUp )
         m_rAction.moveConditionUp( getConditionIndex() );
@@ -398,13 +398,13 @@ void Condition::GetFocus()
         m_pCondLHS->GrabFocus();
 }
 
-IMPL_LINK_NOARG_TYPED( Condition, OnTypeSelected, ListBox&, void )
+IMPL_LINK_NOARG( Condition, OnTypeSelected, ListBox&, void )
 {
     impl_layoutOperands();
 }
 
 
-IMPL_LINK_NOARG_TYPED( Condition, OnOperationSelected, ListBox&, void )
+IMPL_LINK_NOARG( Condition, OnOperationSelected, ListBox&, void )
 {
     impl_layoutOperands();
 }

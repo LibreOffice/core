@@ -175,8 +175,8 @@ private:
     OUString GetColString( sal_Int32 nColumnId ) const;
     static OUString GetRowString( sal_Int32 nRow );
 
-    DECL_LINK_TYPED( SeriesHeaderGotFocus, Control&, void );
-    DECL_LINK_TYPED( SeriesHeaderChanged,  impl::SeriesHeaderEdit*, void );
+    DECL_LINK( SeriesHeaderGotFocus, Control&, void );
+    DECL_LINK( SeriesHeaderChanged,  impl::SeriesHeaderEdit*, void );
 
     DataBrowser( const DataBrowser & ) = delete;
 };

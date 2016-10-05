@@ -36,7 +36,7 @@ private:
 
     Link<SvxNameDialog&,bool> aCheckNameHdl;
 
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+    DECL_LINK(ModifyHdl, Edit&, void);
 
 public:
     SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const OUString& rDesc );
@@ -49,7 +49,7 @@ public:
         field is changed.  The Link result determines whether the OK
         Button is enabled (> 0) or disabled (== 0).
 
-        @param rLink a Callback declared with DECL_LINK_TYPED and implemented with
+        @param rLink a Callback declared with DECL_LINK and implemented with
                IMPL_LINK, that is executed on modification.
 
         @param bCheckImmediately If true, the Link is called directly after
@@ -85,7 +85,7 @@ private:
     // callback link for name uniqueness
     Link<SvxObjectNameDialog&,bool> aCheckNameHdl;
 
-    DECL_LINK_TYPED(ModifyHdl, Edit&, void);
+    DECL_LINK(ModifyHdl, Edit&, void);
 
 public:
     // constructor
@@ -138,8 +138,8 @@ private:
     VclPtr<FixedImage>     pFtImage;
     Image*          pImage;
 
-    DECL_LINK_TYPED(Button1Hdl, Button*, void);
-    DECL_LINK_TYPED(Button2Hdl, Button*, void);
+    DECL_LINK(Button1Hdl, Button*, void);
+    DECL_LINK(Button2Hdl, Button*, void);
 
 public:
     SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg = nullptr );

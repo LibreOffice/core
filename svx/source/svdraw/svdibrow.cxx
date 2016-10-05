@@ -1127,12 +1127,12 @@ void SdrItemBrowser::Undirty()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdrItemBrowser, IdleHdl, Idle *, void)
+IMPL_LINK_NOARG(SdrItemBrowser, IdleHdl, Idle *, void)
 {
     Undirty();
 }
 
-IMPL_LINK_TYPED(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
+IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
 {
     const ImpItemListRow* pEntry = rBrowse.GetAktChangeEntry();
     if (pEntry!=nullptr)
@@ -1246,7 +1246,7 @@ IMPL_LINK_TYPED(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, voi
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdrItemBrowser, SetDirtyHdl, SdrItemBrowserControl&, void)
+IMPL_LINK_NOARG(SdrItemBrowser, SetDirtyHdl, SdrItemBrowserControl&, void)
 {
     SetDirty();
 }

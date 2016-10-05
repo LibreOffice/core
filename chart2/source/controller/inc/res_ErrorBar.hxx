@@ -121,13 +121,13 @@ private:
     bool                 m_bHasInternalDataProvider;
     bool                 m_bEnableDataTableDialog;
 
-    DECL_LINK_TYPED( CategoryChosen, Button*, void );
-    DECL_LINK_TYPED( CategoryChosen2, ListBox&, void );
-    DECL_LINK_TYPED( SynchronizePosAndNeg, CheckBox&, void );
-    DECL_LINK_TYPED( PosValueChanged, Edit&, void );
-    DECL_LINK_TYPED( IndicatorChanged, Button *, void );
-    DECL_LINK_TYPED( ChooseRange, Button *, void );
-    DECL_LINK_TYPED( RangeChanged, Edit&, void );
+    DECL_LINK( CategoryChosen, Button*, void );
+    DECL_LINK( CategoryChosen2, ListBox&, void );
+    DECL_LINK( SynchronizePosAndNeg, CheckBox&, void );
+    DECL_LINK( PosValueChanged, Edit&, void );
+    DECL_LINK( IndicatorChanged, Button *, void );
+    DECL_LINK( ChooseRange, Button *, void );
+    DECL_LINK( RangeChanged, Edit&, void );
 
     void UpdateControlStates();
     void isRangeFieldContentValid( Edit & rEdit );

@@ -455,7 +455,7 @@ void SvFileObject::Edit( vcl::Window* /*pParent*/, sfx2::SvBaseLink* pLink, cons
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvFileObject, LoadGrfReady_Impl, void*, void )
+IMPL_LINK_NOARG( SvFileObject, LoadGrfReady_Impl, void*, void )
 {
     // When we come form here there it can not be an error no more.
     bLoadError = false;
@@ -486,13 +486,13 @@ IMPL_LINK_NOARG_TYPED( SvFileObject, LoadGrfReady_Impl, void*, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvFileObject, DelMedium_Impl, void*, void )
+IMPL_LINK_NOARG( SvFileObject, DelMedium_Impl, void*, void )
 {
     nPostUserEventId = nullptr;
     mxDelMed.Clear();
 }
 
-IMPL_LINK_TYPED( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
+IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
     OUString sFile;
 

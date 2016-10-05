@@ -1272,7 +1272,7 @@ void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(EditorWindow, SyntaxTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl, Idle *, void)
 {
     DBG_ASSERT( pEditView, "Noch keine View, aber Syntax-Highlight ?!" );
 
@@ -1762,21 +1762,21 @@ void WatchWindow::RemoveSelectedWatch()
 }
 
 
-IMPL_LINK_TYPED( WatchWindow, ButtonHdl, Button *, pButton, void )
+IMPL_LINK( WatchWindow, ButtonHdl, Button *, pButton, void )
 {
     if (pButton == aRemoveWatchButton.get())
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute(SID_BASICIDE_REMOVEWATCH);
 }
 
-IMPL_LINK_NOARG_TYPED(WatchWindow, TreeListHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(WatchWindow, TreeListHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pCurEntry = aTreeListBox->GetCurEntry();
     if ( pCurEntry && pCurEntry->GetUserData() )
         aXEdit->SetText( static_cast<WatchItem*>(pCurEntry->GetUserData())->maName );
 }
 
-IMPL_LINK_NOARG_TYPED( WatchWindow, implEndDragHdl, HeaderBar *, void )
+IMPL_LINK_NOARG( WatchWindow, implEndDragHdl, HeaderBar *, void )
 {
     const sal_Int32 TAB_WIDTH_MIN = 10;
     sal_Int32 nMaxWidth =
@@ -1806,7 +1806,7 @@ IMPL_LINK_NOARG_TYPED( WatchWindow, implEndDragHdl, HeaderBar *, void )
     }
 }
 
-IMPL_LINK_TYPED( WatchWindow, EditAccHdl, Accelerator&, rAcc, void )
+IMPL_LINK( WatchWindow, EditAccHdl, Accelerator&, rAcc, void )
 {
     switch ( rAcc.GetCurKeyCode().GetCode() )
     {
@@ -2028,7 +2028,7 @@ void ComplexEditorWindow::Resize()
     aEWVScrollBar->SetPosSizePixel( Point( aOutSz.Width() - DWBORDER - nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
 }
 
-IMPL_LINK_TYPED(ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void )
+IMPL_LINK(ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void )
 {
     if (aEdtWindow->GetEditView())
     {
@@ -2616,12 +2616,12 @@ void CodeCompleteListBox::dispose()
     ListBox::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(CodeCompleteListBox, ImplDoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl, ListBox&, void)
 {
     InsertSelectedEntry();
 }
 
-IMPL_LINK_NOARG_TYPED(CodeCompleteListBox, ImplSelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(CodeCompleteListBox, ImplSelectHdl, ListBox&, void)
 {//give back the focus to the parent
     pCodeCompleteWindow->pParent->GrabFocus();
 }

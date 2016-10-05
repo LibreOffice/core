@@ -147,8 +147,8 @@ struct SfxSecurityPage_Impl
     OUString            m_aEndRedliningWarning;
     bool                m_bEndRedliningWarningDone;
 
-    DECL_LINK_TYPED( RecordChangesCBToggleHdl, CheckBox&, void );
-    DECL_LINK_TYPED( ChangeProtectionPBHdl, Button*, void );
+    DECL_LINK( RecordChangesCBToggleHdl, CheckBox&, void );
+    DECL_LINK( ChangeProtectionPBHdl, Button*, void );
 
     SfxSecurityPage_Impl( SfxSecurityPage &rDlg, const SfxItemSet &rItemSet );
     ~SfxSecurityPage_Impl();
@@ -325,7 +325,7 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, CheckBox&, void)
+IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, CheckBox&, void)
 {
     // when change recording gets disabled protection must be disabled as well
     if (!m_pRecordChangesCB->IsChecked())    // the new check state is already present, thus the '!'
@@ -373,7 +373,7 @@ IMPL_LINK_NOARG_TYPED(SfxSecurityPage_Impl, RecordChangesCBToggleHdl, CheckBox&,
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxSecurityPage_Impl, ChangeProtectionPBHdl, Button*, void)
+IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl, Button*, void)
 {
     if (m_eRedlingMode == RL_NONE)
         return;

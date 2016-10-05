@@ -166,7 +166,7 @@ void SvxColorValueSet_docking::DoDrag()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxColorValueSet_docking, ExecDragHdl, void*, void)
+IMPL_LINK_NOARG(SvxColorValueSet_docking, ExecDragHdl, void*, void)
 {
     // Als Link, damit asynchron ohne ImpMouseMoveMsg auf dem Stack auch die
     // Farbleiste geloescht werden darf
@@ -339,7 +339,7 @@ bool SvxColorDockingWindow::Close()
     return true;
 }
 
-IMPL_LINK_NOARG_TYPED(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
+IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
 {
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
     sal_uInt16 nPos = aColorSet->GetSelectItemId();

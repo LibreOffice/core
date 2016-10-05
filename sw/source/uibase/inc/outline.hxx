@@ -59,9 +59,9 @@ class SwOutlineTabDialog : public SfxTabDialog
     bool                bModified : 1;
 
 protected:
-    DECL_LINK_TYPED(CancelHdl, Button*, void);
-    DECL_LINK_TYPED( FormHdl, Button *, void );
-    DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );
+    DECL_LINK(CancelHdl, Button*, void);
+    DECL_LINK( FormHdl, Button *, void );
+    DECL_LINK( MenuSelectHdl, Menu *, bool );
 
         virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) override;
         virtual short   Ok() override;
@@ -102,14 +102,14 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     OUString*           pCollNames;
     sal_uInt16              nActLevel;
 
-    DECL_LINK_TYPED( LevelHdl, ListBox&, void );
-    DECL_LINK_TYPED( ToggleComplete, Edit&, void );
-    DECL_LINK_TYPED( CollSelect, ListBox&, void );
-    DECL_LINK_TYPED( CollSelectGetFocus, Control&, void );
-    DECL_LINK_TYPED( NumberSelect, ListBox&, void );
-    DECL_LINK_TYPED( DelimModify, Edit&, void );
-    DECL_LINK_TYPED( StartModified, Edit&, void );
-    DECL_LINK_TYPED( CharFormatHdl, ListBox&, void );
+    DECL_LINK( LevelHdl, ListBox&, void );
+    DECL_LINK( ToggleComplete, Edit&, void );
+    DECL_LINK( CollSelect, ListBox&, void );
+    DECL_LINK( CollSelectGetFocus, Control&, void );
+    DECL_LINK( NumberSelect, ListBox&, void );
+    DECL_LINK( DelimModify, Edit&, void );
+    DECL_LINK( StartModified, Edit&, void );
+    DECL_LINK( CharFormatHdl, ListBox&, void );
 
     void    Update();
 

@@ -98,10 +98,10 @@ private:
     ::std::unique_ptr<SvxLongULSpaceItem> mpFooterSpacingItem;
     ::std::unique_ptr<SfxInt16Item>       mpFooterLayoutItem;
 
-    DECL_LINK_TYPED( FooterToggleHdl, Button*, void );
-    DECL_LINK_TYPED( FooterLRMarginHdl, ListBox&, void);
-    DECL_LINK_TYPED( FooterSpacingHdl, ListBox&, void);
-    DECL_LINK_TYPED( FooterLayoutHdl, ListBox&, void);
+    DECL_LINK( FooterToggleHdl, Button*, void );
+    DECL_LINK( FooterLRMarginHdl, ListBox&, void);
+    DECL_LINK( FooterSpacingHdl, ListBox&, void);
+    DECL_LINK( FooterLayoutHdl, ListBox&, void);
 };
 
 } } //end of namespace sw::sidebar

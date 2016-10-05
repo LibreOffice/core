@@ -105,13 +105,13 @@ private:
     // SfxListener
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-                            DECL_LINK_TYPED( ClickNewThemeHdl, Button*, void );
-                            DECL_LINK_TYPED( SelectThemeHdl, ListBox&, void );
-                            DECL_LINK_TYPED( ShowContextMenuHdl, void*, void );
-                            DECL_LINK_TYPED( PopupMenuHdl, Menu*, bool );
-                            DECL_LINK_TYPED( EndNewThemePropertiesDlgHdl, Dialog&, void );
-                            DECL_LINK_TYPED( EndThemePropertiesDlgHdl, Dialog&, void );
-                            DECL_LINK_TYPED( DestroyThemePropertiesDlgHdl, void*, void );
+                            DECL_LINK( ClickNewThemeHdl, Button*, void );
+                            DECL_LINK( SelectThemeHdl, ListBox&, void );
+                            DECL_LINK( ShowContextMenuHdl, void*, void );
+                            DECL_LINK( PopupMenuHdl, Menu*, bool );
+                            DECL_LINK( EndNewThemePropertiesDlgHdl, Dialog&, void );
+                            DECL_LINK( EndThemePropertiesDlgHdl, Dialog&, void );
+                            DECL_LINK( DestroyThemePropertiesDlgHdl, void*, void );
 
 public:
 

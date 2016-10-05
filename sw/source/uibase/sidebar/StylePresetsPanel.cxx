@@ -202,7 +202,7 @@ void StylePresetsPanel::dispose()
     PanelLayout::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)
+IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)
 {
     sal_Int32 nItemId = mpValueSet->GetSelectItemId();
     TemplateEntry* pEntry = static_cast<TemplateEntry*>(mpValueSet->GetItemData(nItemId));

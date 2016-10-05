@@ -294,7 +294,7 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
     rFilter.ExportGraphic( aScaledGraphic, "none", aStream, nFilterFormat, &aFilterData );
 }
 
-IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewWidthModifiedHdl, Edit&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, NewWidthModifiedHdl, Edit&, void )
 {
     fprintf(stderr, "NewWidthModifiedHdl\n");
 
@@ -305,29 +305,29 @@ IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewWidthModifiedHdl, Edit&, void 
     Update();
 }
 
-IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, EndSlideHdl, Slider*, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, EndSlideHdl, Slider*, void )
 {
     Update();
 }
 
-IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewInterpolationModifiedHdl, ListBox&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, NewInterpolationModifiedHdl, ListBox&, void )
 {
     Update();
 }
 
-IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewQualityModifiedHdl, Edit&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, NewQualityModifiedHdl, Edit&, void )
 {
     m_pQualitySlider->SetThumbPos(m_pQualityMF->GetValue());
     Update();
 }
 
-IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewCompressionModifiedHdl, Edit&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, NewCompressionModifiedHdl, Edit&, void )
 {
     m_pCompressionSlider->SetThumbPos(m_pCompressionMF->GetValue());
     Update();
 }
 
-IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewHeightModifiedHdl, Edit&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, NewHeightModifiedHdl, Edit&, void )
 {
     m_dResolution =  m_pMFNewHeight->GetValue() / GetViewHeightInch();
 
@@ -336,7 +336,7 @@ IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, NewHeightModifiedHdl, Edit&, void
     Update();
 }
 
-IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ResolutionModifiedHdl, Edit&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, ResolutionModifiedHdl, Edit&, void )
 {
     m_dResolution = (double) m_pResolutionLB->GetText().toInt32();
 
@@ -345,7 +345,7 @@ IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ResolutionModifiedHdl, Edit&, voi
     Update();
 }
 
-IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ToggleCompressionRB, RadioButton&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleCompressionRB, RadioButton&, void )
 {
     bool choice = m_pLosslessRB->IsChecked();
     m_pCompressionMF->Enable(choice);
@@ -355,7 +355,7 @@ IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ToggleCompressionRB, RadioButton&
     Update();
 }
 
-IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ToggleReduceResolutionRB, CheckBox&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleReduceResolutionRB, CheckBox&, void )
 {
     bool choice = m_pReduceResolutionCB->IsChecked();
     m_pMFNewWidth->Enable(choice);
@@ -365,7 +365,7 @@ IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ToggleReduceResolutionRB, CheckBo
     Update();
 }
 
-IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, CalculateClickHdl, Button*, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl, Button*, void )
 {
     sal_Int32 aSize = 0;
 

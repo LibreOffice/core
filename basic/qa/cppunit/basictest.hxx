@@ -43,7 +43,7 @@ public:
 
     bool Compile();
 
-    DECL_LINK_TYPED( BasicErrorHdl, StarBASIC *, bool );
+    DECL_LINK( BasicErrorHdl, StarBASIC *, bool );
 
     bool HasError();
 };

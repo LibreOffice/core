@@ -349,7 +349,7 @@ VclPtr<SfxTabPage> SvxLineDefTabPage::Create( vcl::Window* pWindow, const SfxIte
 }
 
 
-IMPL_LINK_TYPED( SvxLineDefTabPage, SelectLinestyleListBoxHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxLineDefTabPage, SelectLinestyleListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     SelectLinestyleHdl_Impl(&rListBox);
 }
@@ -386,13 +386,13 @@ void SvxLineDefTabPage::SelectLinestyleHdl_Impl(ListBox* p)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ChangePreviewHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxLineDefTabPage, ChangePreviewHdl_Impl, Edit&, void)
 {
     FillDash_Impl();
     m_pCtlPreview->Invalidate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ChangeNumber1Hdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl, Edit&, void)
 {
     if( m_pNumFldNumber1->GetValue() == 0L )
     {
@@ -409,7 +409,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ChangeNumber1Hdl_Impl, Edit&, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ChangeNumber2Hdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl, Edit&, void)
 {
     if( m_pNumFldNumber2->GetValue() == 0L )
     {
@@ -426,7 +426,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ChangeNumber2Hdl_Impl, Edit&, void)
 }
 
 
-IMPL_LINK_TYPED( SvxLineDefTabPage, ChangeMetricHdl_Impl, Button*, p, void )
+IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, Button*, p, void )
 {
     if( !m_pCbxSynchronize->IsChecked() && m_pMtrLength1->GetUnit() != eFUnit )
     {
@@ -493,7 +493,7 @@ IMPL_LINK_TYPED( SvxLineDefTabPage, ChangeMetricHdl_Impl, Button*, p, void )
 }
 
 
-IMPL_LINK_TYPED( SvxLineDefTabPage, SelectTypeListBoxHdl_Impl, ListBox&, rListBox, void )
+IMPL_LINK( SvxLineDefTabPage, SelectTypeListBoxHdl_Impl, ListBox&, rListBox, void )
 {
     SelectTypeHdl_Impl(&rListBox);
 }
@@ -531,7 +531,7 @@ void  SvxLineDefTabPage::SelectTypeHdl_Impl(ListBox* p)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
 {
     ResMgr& rMgr = CUI_MGR();
     OUString aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
@@ -613,7 +613,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbLineStyles->GetSelectEntryPos();
 
@@ -679,7 +679,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickDeleteHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nPos = m_pLbLineStyles->GetSelectEntryPos();
 
@@ -714,7 +714,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
 {
     sal_uInt16 nReturn = RET_YES;
 
@@ -794,7 +794,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickLoadHdl_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxLineDefTabPage, ClickSaveHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl, Button*, void)
 {
     ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE );
     OUString aStrFilterType( "*.sod" );

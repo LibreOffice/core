@@ -218,7 +218,7 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 /**
  * enables and selects end color LB
  */
-IMPL_LINK_NOARG_TYPED(CopyDlg, SelectColorHdl, ListBox&, void)
+IMPL_LINK_NOARG(CopyDlg, SelectColorHdl, ListBox&, void)
 {
     sal_Int32 nPos = m_pLbStartColor->GetSelectEntryPos();
 
@@ -234,7 +234,7 @@ IMPL_LINK_NOARG_TYPED(CopyDlg, SelectColorHdl, ListBox&, void)
 /**
  * sets values of selection
  */
-IMPL_LINK_NOARG_TYPED(CopyDlg, SetViewData, Button*, void)
+IMPL_LINK_NOARG(CopyDlg, SetViewData, Button*, void)
 {
     Rectangle aRect = mpView->GetAllMarkedRect();
 
@@ -255,7 +255,7 @@ IMPL_LINK_NOARG_TYPED(CopyDlg, SetViewData, Button*, void)
 /**
  * resets values to default
  */
-IMPL_LINK_NOARG_TYPED(CopyDlg, SetDefault, Button*, void)
+IMPL_LINK_NOARG(CopyDlg, SetDefault, Button*, void)
 {
     m_pNumFldCopies->SetValue( 1L );
 

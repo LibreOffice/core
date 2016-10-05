@@ -80,9 +80,9 @@ private:
     bool    CheckTargetValue( const OUString& rStrVal );
     void    RaiseError( ScSolverErr eError );
 
-    DECL_LINK_TYPED( BtnHdl, Button*, void );
-    DECL_LINK_TYPED( GetFocusHdl, Control&, void );
-    DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
+    DECL_LINK( BtnHdl, Button*, void );
+    DECL_LINK( GetFocusHdl, Control&, void );
+    DECL_LINK( LoseFocusHdl, Control&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX

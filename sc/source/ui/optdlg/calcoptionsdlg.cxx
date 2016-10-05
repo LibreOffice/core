@@ -139,23 +139,23 @@ void ScCalcOptionsDialog::CoupleEmptyAsZeroToStringConversion()
     }
 }
 
-IMPL_LINK_TYPED(ScCalcOptionsDialog, AsZeroModifiedHdl, Button*, pCheckBox, void )
+IMPL_LINK(ScCalcOptionsDialog, AsZeroModifiedHdl, Button*, pCheckBox, void )
 {
     maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero = static_cast<CheckBox*>(pCheckBox)->IsChecked();
 }
 
-IMPL_LINK_TYPED(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox&, rConv, void )
+IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox&, rConv, void )
 {
     maConfig.meStringConversion = (ScCalcConfig::StringConversion)rConv.GetSelectEntryPos();
     CoupleEmptyAsZeroToStringConversion();
 }
 
-IMPL_LINK_TYPED(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox&, rSyntax, void)
+IMPL_LINK(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox&, rSyntax, void)
 {
     maConfig.SetStringRefSyntax(toAddressConvention(rSyntax.GetSelectEntryPos()));
 }
 
-IMPL_LINK_TYPED(ScCalcOptionsDialog, CurrentDocOnlyHdl, Button*, pCheckBox, void)
+IMPL_LINK(ScCalcOptionsDialog, CurrentDocOnlyHdl, Button*, pCheckBox, void)
 {
     mbWriteConfig = !(static_cast<CheckBox*>(pCheckBox)->IsChecked());
 }

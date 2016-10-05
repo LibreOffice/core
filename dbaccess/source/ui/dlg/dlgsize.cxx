@@ -76,7 +76,7 @@ sal_Int32 DlgSize::GetValue()
     return (sal_Int32)m_pMF_VALUE->GetValue( FUNIT_CM );
 }
 
-IMPL_LINK_TYPED( DlgSize, CbClickHdl, Button *, pButton, void )
+IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton, void )
 {
     if( pButton == m_pCB_STANDARD )
     {

@@ -65,7 +65,7 @@ void ChartUIObject::execute(const OUString& rAction,
     }
 }
 
-IMPL_LINK_TYPED(ChartUIObject, PostCommand, void*, pCommand, void)
+IMPL_LINK(ChartUIObject, PostCommand, void*, pCommand, void)
 {
         css::util::URL aURL;
         aURL.Path = *static_cast<OUString*>(pCommand);

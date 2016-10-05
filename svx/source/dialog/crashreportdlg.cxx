@@ -53,7 +53,7 @@ void CrashReportDialog::dispose()
     Dialog::dispose();
 }
 
-IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
+IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnSend.get())
     {

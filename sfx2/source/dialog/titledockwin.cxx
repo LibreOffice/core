@@ -225,7 +225,7 @@ namespace sfx2
     }
 
 
-    IMPL_LINK_TYPED( TitledDockingWindow, OnToolboxItemSelected, ToolBox*, pToolBox, void )
+    IMPL_LINK( TitledDockingWindow, OnToolboxItemSelected, ToolBox*, pToolBox, void )
     {
         const sal_uInt16 nId = pToolBox->GetCurItemId();
 

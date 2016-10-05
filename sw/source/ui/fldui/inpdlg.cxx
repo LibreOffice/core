@@ -164,7 +164,7 @@ void SwFieldInputDlg::Apply()
     rSh.EndAllAction();
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldInputDlg, NextHdl, Button*, void)
+IMPL_LINK_NOARG(SwFieldInputDlg, NextHdl, Button*, void)
 {
     EndDialog(RET_OK);
 }

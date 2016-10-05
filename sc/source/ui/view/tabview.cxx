@@ -266,7 +266,7 @@ void ScTabView::ResetTimer()
     pTimerWindow = nullptr;
 }
 
-IMPL_LINK_NOARG_TYPED(ScTabView, TimerHdl, Timer *, void)
+IMPL_LINK_NOARG(ScTabView, TimerHdl, Timer *, void)
 {
     if (pTimerWindow)
         pTimerWindow->MouseMove( aTimerMEvt );
@@ -837,7 +837,7 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& /* rSize */ )
         ::std::swap( rBorder.Left(), rBorder.Right() );
 }
 
-IMPL_LINK_NOARG_TYPED(ScTabView, TabBarResize, TabBar*, void)
+IMPL_LINK_NOARG(ScTabView, TabBarResize, TabBar*, void)
 {
     if (aViewData.IsHScrollMode())
     {
@@ -1014,7 +1014,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     return bDone;
 }
 
-IMPL_LINK_NOARG_TYPED(ScTabView, EndScrollHdl, ScrollBar*, void)
+IMPL_LINK_NOARG(ScTabView, EndScrollHdl, ScrollBar*, void)
 {
     if ( bDragging )
     {
@@ -1023,7 +1023,7 @@ IMPL_LINK_NOARG_TYPED(ScTabView, EndScrollHdl, ScrollBar*, void)
     }
 }
 
-IMPL_LINK_TYPED( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
+IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
 {
     bool bHoriz = ( pScroll == aHScrollLeft.get() || pScroll == aHScrollRight.get() );
     long nViewPos;
@@ -1527,7 +1527,7 @@ bool ScTabView::UpdateVisibleRange()
 
 // ---  Splitter  --------------------------------------------------------
 
-IMPL_LINK_TYPED( ScTabView, SplitHdl, Splitter*, pSplitter, void )
+IMPL_LINK( ScTabView, SplitHdl, Splitter*, pSplitter, void )
 {
     if ( pSplitter == pHSplitter )
         DoHSplit( pHSplitter->GetSplitPosPixel() );

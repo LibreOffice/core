@@ -454,7 +454,7 @@ void SwInsertDBColAutoPilot::dispose()
     SfxModalDialog::dispose();
 }
 
-IMPL_LINK_TYPED( SwInsertDBColAutoPilot, PageHdl, Button*, pButton, void )
+IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton, void )
 {
     bool bShowTable = pButton == m_pRbAsTable;
 
@@ -485,7 +485,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, PageHdl, Button*, pButton, void )
     SelectHdl( bShowTable ? *m_pLbTableDbColumn : *m_pLbTextDbColumn );
 }
 
-IMPL_LINK_TYPED( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton, void )
+IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton, void )
 {
     ListBox& rBox = m_pRbAsTable->IsChecked()
                         ? ( nullptr == m_pLbTableCol->GetEntryData( 0 )
@@ -501,7 +501,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton, void )
     m_pLbDbFormatFromUsr->Enable( !bFromDB );
 }
 
-IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void )
+IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void )
 {
     bool bChgEnable = true, bEnableTo = true, bEnableFrom = true;
     m_pLbTableDbColumn->SetUpdateMode( false );
@@ -644,7 +644,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void 
     m_pLbTableCol->SetUpdateMode( true );
 }
 
-IMPL_LINK_TYPED( SwInsertDBColAutoPilot, DblClickHdl, ListBox&, rBox, void )
+IMPL_LINK( SwInsertDBColAutoPilot, DblClickHdl, ListBox&, rBox, void )
 {
     Button* pButton = nullptr;
     if( &rBox == m_pLbTextDbColumn )
@@ -658,7 +658,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, DblClickHdl, ListBox&, rBox, void )
         TableToFromHdl( pButton );
 }
 
-IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )
+IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )
 {
     SwWrtShell& rSh = pView->GetWrtShell();
     bool bNewSet = false;
@@ -780,7 +780,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void 
     }
 }
 
-IMPL_LINK_TYPED( SwInsertDBColAutoPilot, AutoFormatHdl, Button*, pButton, void )
+IMPL_LINK( SwInsertDBColAutoPilot, AutoFormatHdl, Button*, pButton, void )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -791,7 +791,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, AutoFormatHdl, Button*, pButton, void )
         pDlg->FillAutoFormatOfIndex( pTAutoFormat );
 }
 
-IMPL_LINK_TYPED( SwInsertDBColAutoPilot, SelectHdl, ListBox&, rBox, void )
+IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox&, rBox, void )
 {
     ListBox* pGetBox = &rBox == m_pLbDbFormatFromUsr
                             ? ( m_pRbAsTable->IsChecked()
@@ -851,7 +851,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, SelectHdl, ListBox&, rBox, void )
     }
 }
 
-IMPL_LINK_TYPED( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton, void )
+IMPL_LINK( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton, void )
 {
     if( pButton == m_pCbTableHeadon )
     {

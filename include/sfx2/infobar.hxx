@@ -70,7 +70,7 @@ class SfxInfoBarWindow : public vcl::Window
         void addButton(PushButton* pButton);
 
     private:
-        DECL_LINK_TYPED( CloseHandler, Button*, void );
+        DECL_LINK( CloseHandler, Button*, void );
 };
 
 class SfxInfoBarContainerWindow : public vcl::Window

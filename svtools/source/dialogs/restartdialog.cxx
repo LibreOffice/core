@@ -80,20 +80,20 @@ public:
         ModalDialog::dispose();
     }
 private:
-    DECL_LINK_TYPED(hdlYes, Button*, void);
-    DECL_LINK_TYPED(hdlNo, Button*, void);
+    DECL_LINK(hdlYes, Button*, void);
+    DECL_LINK(hdlNo, Button*, void);
 
     VclPtr<vcl::Window> reason_;
     VclPtr<PushButton> btnYes_;
     VclPtr<PushButton> btnNo_;
 };
 
-IMPL_LINK_NOARG_TYPED(RestartDialog, hdlYes, Button*, void)
+IMPL_LINK_NOARG(RestartDialog, hdlYes, Button*, void)
 {
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED(RestartDialog, hdlNo, Button*, void)
+IMPL_LINK_NOARG(RestartDialog, hdlNo, Button*, void)
 {
     EndDialog();
 }

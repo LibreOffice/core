@@ -130,7 +130,7 @@ void SearchDialog::SaveConfig()
     aViewOpt.SetUserItem( "UserItem", aUserItem );
 }
 
-IMPL_LINK_NOARG_TYPED(SearchDialog, FindHdl, Button*, void)
+IMPL_LINK_NOARG(SearchDialog, FindHdl, Button*, void)
 {
     OUString sSrchTxt = m_pSearchEdit->GetText();
     sal_Int32 nPos = m_pSearchEdit->GetEntryPos( sSrchTxt );

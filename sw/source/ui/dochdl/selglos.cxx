@@ -46,7 +46,7 @@ void SwSelGlossaryDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SwSelGlossaryDlg, DoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwSelGlossaryDlg, DoubleClickHdl, ListBox&, void)
 {
     EndDialog(RET_OK);
 }

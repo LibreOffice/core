@@ -387,7 +387,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG_TYPED(OCommonPicker, OnCancelPicker, void*, void)
+    IMPL_LINK_NOARG(OCommonPicker, OnCancelPicker, void*, void)
     {
         // By definition, the solar mutex is locked when we arrive here. Note that this
         // is important, as for instance the consistency of m_pDlg depends on this mutex.

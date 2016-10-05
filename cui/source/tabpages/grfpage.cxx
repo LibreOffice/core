@@ -414,7 +414,7 @@ DeactivateRC SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
     description: scale changed, adjust size
  --------------------------------------------------------------------*/
 
-IMPL_LINK_TYPED( SvxGrfCropPage, ZoomHdl, Edit&, rField, void )
+IMPL_LINK( SvxGrfCropPage, ZoomHdl, Edit&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -443,7 +443,7 @@ IMPL_LINK_TYPED( SvxGrfCropPage, ZoomHdl, Edit&, rField, void )
     description: change size, adjust scale
  --------------------------------------------------------------------*/
 
-IMPL_LINK_TYPED( SvxGrfCropPage, SizeHdl, Edit&, rField, void )
+IMPL_LINK( SvxGrfCropPage, SizeHdl, Edit&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -479,7 +479,7 @@ IMPL_LINK_TYPED( SvxGrfCropPage, SizeHdl, Edit&, rField, void )
     description: evaluate border
  --------------------------------------------------------------------*/
 
-IMPL_LINK_TYPED( SvxGrfCropPage, CropHdl, SpinField&, rField, void )
+IMPL_LINK( SvxGrfCropPage, CropHdl, SpinField&, rField, void )
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -563,7 +563,7 @@ IMPL_LINK_TYPED( SvxGrfCropPage, CropHdl, SpinField&, rField, void )
     description: set original size
  --------------------------------------------------------------------*/
 
-IMPL_LINK_NOARG_TYPED(SvxGrfCropPage, OrigSizeHdl, Button*, void)
+IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl, Button*, void)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -724,7 +724,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
     m_pZoomConstRB->Enable(bFound);
 }
 
-IMPL_LINK_NOARG_TYPED(SvxGrfCropPage, Timeout, Timer *, void)
+IMPL_LINK_NOARG(SvxGrfCropPage, Timeout, Timer *, void)
 {
     DBG_ASSERT(pLastCropField,"Timeout ohne Feld?");
     CropHdl(*pLastCropField);
@@ -732,7 +732,7 @@ IMPL_LINK_NOARG_TYPED(SvxGrfCropPage, Timeout, Timer *, void)
 }
 
 
-IMPL_LINK_TYPED( SvxGrfCropPage, CropLoseFocusHdl, Control&, rControl, void )
+IMPL_LINK( SvxGrfCropPage, CropLoseFocusHdl, Control&, rControl, void )
 {
     MetricField* pField = static_cast<MetricField*>(&rControl);
     aTimer.Stop();
@@ -741,7 +741,7 @@ IMPL_LINK_TYPED( SvxGrfCropPage, CropLoseFocusHdl, Control&, rControl, void )
 }
 
 
-IMPL_LINK_TYPED( SvxGrfCropPage, CropModifyHdl, Edit&, rField, void )
+IMPL_LINK( SvxGrfCropPage, CropModifyHdl, Edit&, rField, void )
 {
     aTimer.Start();
     pLastCropField = static_cast<MetricField*>(&rField);

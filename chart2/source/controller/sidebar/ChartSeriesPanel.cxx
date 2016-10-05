@@ -456,7 +456,7 @@ void ChartSeriesPanel::SelectionInvalid()
 {
 }
 
-IMPL_LINK_TYPED(ChartSeriesPanel, CheckBoxHdl, Button*, pButton, void)
+IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, Button*, pButton, void)
 {
     CheckBox* pCheckBox = static_cast<CheckBox*>(pButton);
     bool bChecked = pCheckBox->IsChecked();
@@ -471,7 +471,7 @@ IMPL_LINK_TYPED(ChartSeriesPanel, CheckBoxHdl, Button*, pButton, void)
         setErrorBarVisible(mxModel, aCID, true, bChecked);
 }
 
-IMPL_LINK_NOARG_TYPED(ChartSeriesPanel, RadioBtnHdl, RadioButton&, void)
+IMPL_LINK_NOARG(ChartSeriesPanel, RadioBtnHdl, RadioButton&, void)
 {
     OUString aCID = getCID(mxModel);
     bool bChecked = mpRBPrimaryAxis->IsChecked();
@@ -479,7 +479,7 @@ IMPL_LINK_NOARG_TYPED(ChartSeriesPanel, RadioBtnHdl, RadioButton&, void)
     setAttachedAxisType(mxModel, aCID, bChecked);
 }
 
-IMPL_LINK_NOARG_TYPED(ChartSeriesPanel, ListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(ChartSeriesPanel, ListBoxHdl, ListBox&, void)
 {
     OUString aCID = getCID(mxModel);
 

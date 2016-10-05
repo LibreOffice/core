@@ -302,7 +302,7 @@ void SwInputWindow::ShowWin()
     ToolBox::Show();
 }
 
-IMPL_LINK_TYPED( SwInputWindow, MenuHdl, Menu *, pMenu, bool )
+IMPL_LINK( SwInputWindow, MenuHdl, Menu *, pMenu, bool )
 {
 static const char * const aStrArr[] = {
     sCalc_Phd,
@@ -342,7 +342,7 @@ static const char * const aStrArr[] = {
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(SwInputWindow, DropdownClickHdl, ToolBox *, void)
+IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl, ToolBox *, void)
 {
     sal_uInt16 nCurID = GetCurItemId();
     EndSelection(); // reset back CurItemId !
@@ -421,7 +421,7 @@ void  SwInputWindow::CancelFormula()
 const sal_Unicode CH_LRE = 0x202a;
 const sal_Unicode CH_PDF = 0x202c;
 
-IMPL_LINK_TYPED( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void )
+IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void )
 {
     if(bIsTable)
     {
@@ -475,7 +475,7 @@ void SwInputWindow::SetFormula( const OUString& rFormula )
     bDelSel = true;
 }
 
-IMPL_LINK_NOARG_TYPED(SwInputWindow, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwInputWindow, ModifyHdl, Edit&, void)
 {
     if (bIsTable && m_bResetUndo)
     {

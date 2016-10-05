@@ -114,7 +114,7 @@ namespace svt
         void    impl_updateAll( const VclWindowEvent& _rTriggerEvent );
         void    impl_update( const VclWindowEvent& _rTriggerEvent, vcl::Window& _rWindow );
 
-        DECL_LINK_TYPED( OnWindowEvent, VclWindowEvent&, void );
+        DECL_LINK( OnWindowEvent, VclWindowEvent&, void );
 
     private:
         DialogController( const DialogController& ) = delete;

@@ -522,7 +522,7 @@ void BackingWindow::Resize()
         Invalidate();
 }
 
-IMPL_LINK_TYPED(BackingWindow, ExtLinkClickHdl, Button*, pButton, void)
+IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton, void)
 {
     OUString aNode;
 
@@ -561,7 +561,7 @@ IMPL_LINK_TYPED(BackingWindow, ExtLinkClickHdl, Button*, pButton, void)
     }
 }
 
-IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
+IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton, void )
 {
     // dispatch the appropriate URL and end the dialog
     if( pButton == mpWriterAllButton )
@@ -618,7 +618,7 @@ IMPL_LINK_TYPED( BackingWindow, ClickHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
+IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
 {
     if(pButton == mpRecentButton)
     {
@@ -663,7 +663,7 @@ IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
     }
 }
 
-IMPL_LINK_TYPED(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
 {
     const TemplateViewItem *pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
 
@@ -671,7 +671,7 @@ IMPL_LINK_TYPED(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, 
         mpLocalView->createContextMenu();
 }
 
-IMPL_LINK_TYPED(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     uno::Sequence< PropertyValue > aArgs(4);
     aArgs[0].Name = "AsTemplate";
@@ -696,7 +696,7 @@ IMPL_LINK_TYPED(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
     }
 }
 
-IMPL_LINK_TYPED(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     uno::Sequence< PropertyValue > aArgs(3);
     aArgs[0].Name = "AsTemplate";

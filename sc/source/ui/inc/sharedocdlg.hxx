@@ -44,7 +44,7 @@ private:
     ScViewData*         mpViewData;
     ScDocShell*         mpDocShell;
 
-    DECL_LINK_TYPED( ToggleHandle, CheckBox&, void );
+    DECL_LINK( ToggleHandle, CheckBox&, void );
 
 public:
            SC_DLLPUBLIC ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewData );

@@ -289,7 +289,7 @@ bool FmSearchDialog::Close()
     return ModalDialog::Close();
 }
 
-IMPL_LINK_TYPED(FmSearchDialog, OnClickedFieldRadios, Button*, pButton, void)
+IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton, void)
 {
     if ((pButton == m_prbSearchForText) || (pButton == m_prbSearchForNull) || (pButton == m_prbSearchForNotNull))
     {
@@ -309,7 +309,7 @@ IMPL_LINK_TYPED(FmSearchDialog, OnClickedFieldRadios, Button*, pButton, void)
         }
 }
 
-IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnClickedSearchAgain, Button*, void)
+IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain, Button*, void)
 {
     if (m_pbClose->IsEnabled())
     {   // the button has the function 'search'
@@ -352,7 +352,7 @@ IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnClickedSearchAgain, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void )
+IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void )
 {
     if (m_ppbApproxSettings == pButton)
     {
@@ -394,7 +394,7 @@ IMPL_LINK_TYPED(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void
     }
 }
 
-IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnSearchTextModified, Edit&, void)
+IMPL_LINK_NOARG(FmSearchDialog, OnSearchTextModified, Edit&, void)
 {
     if ((!m_pcmbSearchText->GetText().isEmpty()) || !m_prbSearchForText->IsChecked())
         m_pbSearchAgain->Enable();
@@ -404,19 +404,19 @@ IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnSearchTextModified, Edit&, void)
     m_pSearchEngine->InvalidatePreviousLoc();
 }
 
-IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnFocusGrabbed, Control&, void)
+IMPL_LINK_NOARG(FmSearchDialog, OnFocusGrabbed, Control&, void)
 {
     m_pcmbSearchText->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 }
 
-IMPL_LINK_TYPED(FmSearchDialog, OnPositionSelected, ListBox&, rBox, void)
+IMPL_LINK(FmSearchDialog, OnPositionSelected, ListBox&, rBox, void)
 {
     DBG_ASSERT(rBox.GetSelectEntryCount() == 1, "FmSearchDialog::OnMethodSelected : unerwartet : nicht genau ein Eintrag selektiert !");
 
     m_pSearchEngine->SetPosition(m_plbPosition->GetSelectEntryPos());
 }
 
-IMPL_LINK_TYPED(FmSearchDialog, OnFieldSelected, ListBox&, rBox, void)
+IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox&, rBox, void)
 {
     DBG_ASSERT(rBox.GetSelectEntryCount() == 1, "FmSearchDialog::OnFieldSelected : unerwartet : nicht genau ein Eintrag selektiert !");
 
@@ -428,7 +428,7 @@ IMPL_LINK_TYPED(FmSearchDialog, OnFieldSelected, ListBox&, rBox, void)
         m_arrContextFields[nCurrentContext] = m_plbField->GetSelectEntry();
 }
 
-IMPL_LINK_TYPED(FmSearchDialog, OnCheckBoxToggled, CheckBox&, rBox, void)
+IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox&, rBox, void)
 {
     bool bChecked = rBox.IsChecked();
 
@@ -553,7 +553,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     m_pftRecord->SetText(OUString::number(fmscContext.xCursor->getRow()));
 }
 
-IMPL_LINK_TYPED( FmSearchDialog, OnContextSelection, ListBox&, rBox, void)
+IMPL_LINK( FmSearchDialog, OnContextSelection, ListBox&, rBox, void)
 {
     InitContext(rBox.GetSelectEntryPos());
 }
@@ -670,7 +670,7 @@ void FmSearchDialog::EnableControlPaint(bool bEnable)
         }
 }
 
-IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnDelayedPaint, Timer *, void)
+IMPL_LINK_NOARG(FmSearchDialog, OnDelayedPaint, Timer *, void)
 {
     EnableControlPaint(true);
 }
@@ -693,7 +693,7 @@ void FmSearchDialog::OnFound(const css::uno::Any& aCursorPos, sal_Int16 nFieldPo
     m_pcmbSearchText->GrabFocus();
 }
 
-IMPL_LINK_TYPED(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, void)
+IMPL_LINK(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, void)
 {
     SolarMutexGuard aGuard;
         // make this single method thread-safe (it's an overkill to block the whole application for this,

@@ -125,7 +125,7 @@ public:
     /** Define callback for listening to window child events of VCL.
         Listen for creation or destruction of OLE objects.
     */
-    DECL_LINK_TYPED( WindowChildEventListener, VclWindowEvent&, void );
+    DECL_LINK( WindowChildEventListener, VclWindowEvent&, void );
 
     //=====  IAccessibleViewForwarderListener  ================================
 

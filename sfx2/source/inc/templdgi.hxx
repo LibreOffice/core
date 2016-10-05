@@ -55,7 +55,7 @@ namespace com { namespace sun { namespace star { namespace frame {
 class DropListBox_Impl : public SvTreeListBox
 {
 private:
-    DECL_LINK_TYPED(OnAsyncExecuteDrop, void *, void);
+    DECL_LINK(OnAsyncExecuteDrop, void *, void);
 
 protected:
     SfxCommonTemplateDialog_Impl* pDialog;
@@ -209,13 +209,13 @@ protected:
     bool m_bWantHierarchical :1;
     bool bBindingUpdate :1;
 
-    DECL_LINK_TYPED( FilterSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( FmtSelectHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( ApplyHdl, LinkParamNone*, void );
-    DECL_LINK_TYPED( TreeListApplyHdl, SvTreeListBox*, bool );
-    DECL_LINK_TYPED( DropHdl, StyleTreeListBox_Impl&, bool );
-    DECL_LINK_TYPED( TimeOut, Idle*, void );
-    DECL_LINK_TYPED( PreviewHdl, Button*, void);
+    DECL_LINK( FilterSelectHdl, ListBox&, void );
+    DECL_LINK( FmtSelectHdl, SvTreeListBox*, void );
+    DECL_LINK( ApplyHdl, LinkParamNone*, void );
+    DECL_LINK( TreeListApplyHdl, SvTreeListBox*, bool );
+    DECL_LINK( DropHdl, StyleTreeListBox_Impl&, bool );
+    DECL_LINK( TimeOut, Idle*, void );
+    DECL_LINK( PreviewHdl, Button*, void);
 
     virtual void EnableItem(sal_uInt16 /*nMesId*/, bool /*bCheck*/ = true)
     {}
@@ -286,8 +286,8 @@ public:
     SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window* );
     virtual ~SfxCommonTemplateDialog_Impl() override;
 
-    DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
-    DECL_LINK_TYPED( MenuSelectAsyncHdl, void*, void );
+    DECL_LINK( MenuSelectHdl, Menu*, bool );
+    DECL_LINK( MenuSelectAsyncHdl, void*, void );
 
     virtual void EnableEdit( bool b )
     {
@@ -350,10 +350,10 @@ private:
     VclPtr<DropToolBox_Impl>    m_aActionTbL;
     VclPtr<ToolBox>             m_aActionTbR;
 
-    DECL_LINK_TYPED( ToolBoxLSelect, ToolBox*, void );
-    DECL_LINK_TYPED( ToolBoxRSelect, ToolBox*, void );
-    DECL_LINK_TYPED( ToolBoxRClick, ToolBox*, void );
-    DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
+    DECL_LINK( ToolBoxLSelect, ToolBox*, void );
+    DECL_LINK( ToolBoxRSelect, ToolBox*, void );
+    DECL_LINK( ToolBoxRClick, ToolBox*, void );
+    DECL_LINK( MenuSelectHdl, Menu*, bool );
 
 protected:
     virtual void EnableEdit( bool ) override;

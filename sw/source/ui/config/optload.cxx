@@ -155,7 +155,7 @@ VclPtr<SfxTabPage> SwLoadOptPage::Create( vcl::Window* pParent,
     return VclPtr<SwLoadOptPage>::Create(pParent, *rAttrSet );
 }
 
-IMPL_LINK_NOARG_TYPED(SwLoadOptPage, StandardizedPageCountCheckHdl, Button*, void)
+IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl, Button*, void)
 {
     m_pStandardizedPageSizeNF->Enable(m_pShowStandardizedPageCount->IsChecked());
 }
@@ -356,7 +356,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     m_pStandardizedPageSizeNF->Enable(m_pShowStandardizedPageCount->IsChecked());
 }
 
-IMPL_LINK_NOARG_TYPED(SwLoadOptPage, MetricHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl, ListBox&, void)
 {
     const sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
     if(nMPos != LISTBOX_ENTRY_NOTFOUND)
@@ -682,7 +682,7 @@ void SwCaptionOptPage::DelUserData()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pSelEntry = m_pCheckLB->FirstSelected();
 
@@ -789,7 +789,7 @@ IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
     ModifyHdl(*m_pCategoryBox);
 }
 
-IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, SaveEntryHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwCaptionOptPage, SaveEntryHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pEntry = m_pCheckLB->GetHdlEntry();
 
@@ -825,7 +825,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl, Edit&, void)
 {
     const OUString sFieldTypeName = m_pCategoryBox->GetText();
 
@@ -843,17 +843,17 @@ IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, ModifyHdl, Edit&, void)
     InvalidatePreview();
 }
 
-IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, SelectHdl, ComboBox&, void)
+IMPL_LINK_NOARG(SwCaptionOptPage, SelectHdl, ComboBox&, void)
 {
     InvalidatePreview();
 }
 
-IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, SelectListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwCaptionOptPage, SelectListBoxHdl, ListBox&, void)
 {
     InvalidatePreview();
 }
 
-IMPL_LINK_TYPED( SwCaptionOptPage, OrderHdl, ListBox&, rBox, void )
+IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox&, rBox, void )
 {
     InvalidatePreview();
 

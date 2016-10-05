@@ -51,7 +51,7 @@ private:
     VclPtr<Edit>           m_pEdit;
     VclPtr<OKButton>       m_pOKButton;
 
-    DECL_LINK_TYPED(OkButtonHandler, Button*, void);
+    DECL_LINK(OkButtonHandler, Button*, void);
 public:
     NewObjectDialog (vcl::Window* pParent, ObjectMode::Mode, bool bCheckName = false);
     virtual ~NewObjectDialog() override;
@@ -68,7 +68,7 @@ class GotoLineDialog : public ModalDialog
 {
     VclPtr<Edit>           m_pEdit;
     VclPtr<OKButton>       m_pOKButton;
-    DECL_LINK_TYPED(OkButtonHandler, Button*, void);
+    DECL_LINK(OkButtonHandler, Button*, void);
 public:
     explicit GotoLineDialog(vcl::Window * pParent);
     virtual ~GotoLineDialog() override;
@@ -84,7 +84,7 @@ private:
 
     bool            mbExportAsPackage;
 
-    DECL_LINK_TYPED(OkButtonHandler, Button*, void);
+    DECL_LINK(OkButtonHandler, Button*, void);
 
 public:
     explicit ExportDialog( vcl::Window * pParent );
@@ -178,7 +178,7 @@ public:
 
     virtual short   Execute() override;
 
-    DECL_LINK_TYPED( ActivatePageHdl, TabControl*, void );
+    DECL_LINK( ActivatePageHdl, TabControl*, void );
 };
 
 class ObjectPage: public TabPage
@@ -190,8 +190,8 @@ protected:
     VclPtr<PushButton>         m_pNewDlgButton;
     VclPtr<PushButton>         m_pDelButton;
 
-    DECL_LINK_TYPED( BasicBoxHighlightHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( ButtonHdl, Button *, void );
+    DECL_LINK( BasicBoxHighlightHdl, SvTreeListBox*, void );
+    DECL_LINK( ButtonHdl, Button *, void );
     void                CheckButtons();
     bool                GetSelection( ScriptDocument& rDocument, OUString& rLibName );
     void                DeleteCurrent();
@@ -229,10 +229,10 @@ protected:
     ScriptDocument      m_aCurDocument;
     LibraryLocation     m_eCurLocation;
 
-    DECL_LINK_TYPED( TreeListHighlightHdl, SvTreeListBox *, void );
-    DECL_LINK_TYPED( BasicSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( ButtonHdl, Button *, void );
-    DECL_LINK_TYPED( CheckPasswordHdl, SvxPasswordDialog *, bool );
+    DECL_LINK( TreeListHighlightHdl, SvTreeListBox *, void );
+    DECL_LINK( BasicSelectHdl, ListBox&, void );
+    DECL_LINK( ButtonHdl, Button *, void );
+    DECL_LINK( CheckPasswordHdl, SvxPasswordDialog *, bool );
     void                CheckButtons();
     void                DeleteCurrent();
     void                NewLib();

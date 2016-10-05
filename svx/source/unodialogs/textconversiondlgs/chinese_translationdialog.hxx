@@ -44,8 +44,8 @@ public:
                     , bool& rbTranslateCommonTerms ) const;
 
 private:
-    DECL_LINK_TYPED( DictionaryHdl, Button*, void );
-    DECL_LINK_TYPED( OkHdl, Button*, void );
+    DECL_LINK( DictionaryHdl, Button*, void );
+    DECL_LINK( OkHdl, Button*, void );
 
 private:
     VclPtr<RadioButton> m_pRB_To_Simplified;

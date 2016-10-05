@@ -91,7 +91,7 @@ protected:
     void    Select();
 
 private:
-    DECL_LINK_TYPED(ImplClickHdl, HyperLabel*, void);
+    DECL_LINK(ImplClickHdl, HyperLabel*, void);
 
     RoadmapItem*         GetByIndex( ItemIndex _nItemIndex );
     const RoadmapItem*   GetByIndex( ItemIndex _nItemIndex ) const;

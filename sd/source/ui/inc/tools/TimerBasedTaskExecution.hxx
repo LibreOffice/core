@@ -83,7 +83,7 @@ private:
     class Deleter;
     friend class Deleter;
 
-    DECL_LINK_TYPED(TimerCallback, Timer *, void);
+    DECL_LINK(TimerCallback, Timer *, void);
 };
 
 } } // end of namespace ::sd::tools

@@ -349,30 +349,30 @@ bool RangeChooserTabPage::isValid()
     return bIsValid;
 }
 
-IMPL_LINK_NOARG_TYPED(RangeChooserTabPage, ControlEditedHdl, Edit&, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlEditedHdl, Edit&, void)
 {
     setDirty();
     isValid();
 }
 
-IMPL_LINK_NOARG_TYPED(RangeChooserTabPage, ControlChangedRadioHdl, RadioButton&, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedRadioHdl, RadioButton&, void)
 {
     ControlChangedHdl(*m_pED_Range);
 }
 
-IMPL_LINK_NOARG_TYPED(RangeChooserTabPage, ControlChangedCheckBoxHdl, CheckBox&, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedCheckBoxHdl, CheckBox&, void)
 {
     ControlChangedHdl(*m_pED_Range);
 }
 
-IMPL_LINK_NOARG_TYPED(RangeChooserTabPage, ControlChangedHdl, Edit&, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedHdl, Edit&, void)
 {
     setDirty();
     if( isValid())
         changeDialogModelAccordingToControls();
 }
 
-IMPL_LINK_NOARG_TYPED(RangeChooserTabPage, ChooseRangeHdl, Button*, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl, Button*, void)
 {
     OUString aRange = m_pED_Range->GetText();
     OUString aTitle = m_pFTTitle->GetText();

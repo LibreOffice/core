@@ -484,7 +484,7 @@ SwHTMLParser::~SwHTMLParser()
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SwHTMLParser, AsyncCallback, void*, void )
+IMPL_LINK_NOARG( SwHTMLParser, AsyncCallback, void*, void )
 {
     m_nEventId=nullptr;
 

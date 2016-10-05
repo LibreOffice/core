@@ -83,7 +83,7 @@ namespace dbaui
         // <method>OGenericAdministrationPage::fillWindows</method>
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
     private:
-        DECL_LINK_TYPED(CharsetSelectHdl, ListBox&, void);
+        DECL_LINK(CharsetSelectHdl, ListBox&, void);
     };
 
     // ODbaseDetailsPage
@@ -106,7 +106,7 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
     private:
-        DECL_LINK_TYPED( OnButtonClicked, Button *, void );
+        DECL_LINK( OnButtonClicked, Button *, void );
     };
 
     // OAdoDetailsPage
@@ -177,7 +177,7 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
         virtual void callModifiedHdl(void* pControl = nullptr) override;
 
-        DECL_LINK_TYPED(OnTestJavaClickHdl, Button*, void);
+        DECL_LINK(OnTestJavaClickHdl, Button*, void);
 
         VclPtr<Edit>               m_pEDHostname;
         VclPtr<NumericField>       m_pNFPortNumber;
@@ -237,7 +237,7 @@ namespace dbaui
 
         sal_Int32           m_iSSLPort;
         sal_Int32           m_iNormalPort;
-        DECL_LINK_TYPED( OnCheckBoxClick, Button*, void );
+        DECL_LINK( OnCheckBoxClick, Button*, void );
     };
 
     // OTextDetailsPage

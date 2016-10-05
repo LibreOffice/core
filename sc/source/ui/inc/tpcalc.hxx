@@ -77,8 +77,8 @@ private:
     void            Init();
 
     // Handler:
-    DECL_LINK_TYPED( RadioClickHdl, Button*, void );
-    DECL_LINK_TYPED( CheckClickHdl, Button*, void );
+    DECL_LINK( RadioClickHdl, Button*, void );
+    DECL_LINK( CheckClickHdl, Button*, void );
 };
 
 #endif

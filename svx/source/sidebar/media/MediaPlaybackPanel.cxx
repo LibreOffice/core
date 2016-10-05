@@ -124,14 +124,14 @@ void MediaPlaybackPanel::Update()
     UpdateTimeField( *mpMediaItem, mpMediaItem->getTime() );
 }
 
-IMPL_LINK_NOARG_TYPED( MediaPlaybackPanel, VolumeSlideHdl, Slider*, void)
+IMPL_LINK_NOARG( MediaPlaybackPanel, VolumeSlideHdl, Slider*, void)
 {
     MediaItem aItem(SID_AVMEDIA_TOOLBOX);
     aItem.setVolumeDB( static_cast< sal_Int16 > (mpVolumeSlider->GetThumbPos()));
     mpBindings->GetDispatcher()->ExecuteList(SID_AVMEDIA_TOOLBOX, SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG_TYPED( MediaPlaybackPanel, SeekHdl, Slider*, void)
+IMPL_LINK_NOARG( MediaPlaybackPanel, SeekHdl, Slider*, void)
 {
     MediaItem aItem(SID_AVMEDIA_TOOLBOX);
     aItem.setState( MediaState::Pause );
@@ -140,12 +140,12 @@ IMPL_LINK_NOARG_TYPED( MediaPlaybackPanel, SeekHdl, Slider*, void)
     mpBindings->Invalidate(SID_AVMEDIA_TOOLBOX);
 }
 
-IMPL_LINK_NOARG_TYPED( MediaPlaybackPanel, TimeoutHdl, Idle*, void)
+IMPL_LINK_NOARG( MediaPlaybackPanel, TimeoutHdl, Idle*, void)
 {
     mpBindings->Invalidate(SID_AVMEDIA_TOOLBOX);
 }
 
-IMPL_LINK_TYPED( MediaPlaybackPanel, PlayToolBoxSelectHdl, ToolBox*, pControl, void)
+IMPL_LINK( MediaPlaybackPanel, PlayToolBoxSelectHdl, ToolBox*, pControl, void)
 {
     MediaItem aItem(SID_AVMEDIA_TOOLBOX);
     switch(pControl->GetCurItemId())

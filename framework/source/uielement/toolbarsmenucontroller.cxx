@@ -805,7 +805,7 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
     }
 }
 
-IMPL_STATIC_LINK_TYPED( ToolbarsMenuController, ExecuteHdl_Impl, void*, p, void )
+IMPL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, void*, p, void )
 {
     ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
     try

@@ -57,9 +57,9 @@ class SfxVersionDialog : public SfxModalDialog
     SfxVersionTableDtor*        m_pTable;
     bool                        m_bIsSaveVersionOnClose;
 
-    DECL_LINK_TYPED(            DClickHdl_Impl, SvTreeListBox*, bool);
-    DECL_LINK_TYPED(            SelectHdl_Impl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(            ButtonHdl_Impl, Button*, void );
+    DECL_LINK(            DClickHdl_Impl, SvTreeListBox*, bool);
+    DECL_LINK(            SelectHdl_Impl, SvTreeListBox*, void);
+    DECL_LINK(            ButtonHdl_Impl, Button*, void );
     void                        Init_Impl();
     void                        Open_Impl();
 
@@ -80,7 +80,7 @@ class SfxViewVersionDialog_Impl : public SfxModalDialog
     VclPtr<CloseButton>      m_pCloseButton;
     SfxVersionInfo&   m_rInfo;
 
-    DECL_LINK_TYPED(ButtonHdl, Button*, void);
+    DECL_LINK(ButtonHdl, Button*, void);
 
 public:
     SfxViewVersionDialog_Impl(vcl::Window *pParent, SfxVersionInfo& rInfo, bool bEdit);

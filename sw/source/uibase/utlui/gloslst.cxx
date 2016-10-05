@@ -54,8 +54,8 @@ class SwGlossDecideDlg : public ModalDialog
     VclPtr<OKButton> m_pOk;
     VclPtr<ListBox>  m_pListLB;
 
-    DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
-    DECL_LINK_TYPED(SelectHdl, ListBox&, void);
+    DECL_LINK(DoubleClickHdl, ListBox&, void);
+    DECL_LINK(SelectHdl, ListBox&, void);
 
 public:
     explicit SwGlossDecideDlg(vcl::Window* pParent);
@@ -88,12 +88,12 @@ void SwGlossDecideDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SwGlossDecideDlg, DoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwGlossDecideDlg, DoubleClickHdl, ListBox&, void)
 {
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED(SwGlossDecideDlg, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl, ListBox&, void)
 {
     m_pOk->Enable(LISTBOX_ENTRY_NOTFOUND != m_pListLB->GetSelectEntryPos());
 }

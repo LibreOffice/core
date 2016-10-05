@@ -27,14 +27,14 @@
 namespace {
 
 struct Hook { // LINK only works as a member of a class...
-    DECL_STATIC_LINK_TYPED(Hook, deinitHook, LinkParamNone *, void);
+    DECL_STATIC_LINK(Hook, deinitHook, LinkParamNone *, void);
 };
 
 // HACK so that defaultBootstrap_InitialComponentContext (in
 // unobootstrapprotector) is called before InitVCL (below), but component
 // context is disposed (redundantly again in unobootstrapprotector) from within
 // DeInitVCL (cf. Desktop::DeInit, desktop/source/app/app.cxx):
-IMPL_STATIC_LINK_NOARG_TYPED(Hook, deinitHook, LinkParamNone *, void) {
+IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
     css::uno::Reference<css::uno::XComponentContext> context;
     try {
         context = comphelper::getProcessComponentContext();

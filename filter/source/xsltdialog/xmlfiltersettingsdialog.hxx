@@ -62,8 +62,8 @@ class XMLFilterListBox : public SvTabListBox
 private:
     VclPtr<HeaderBar>  m_pHeaderBar;
 
-    DECL_LINK_TYPED( TabBoxScrollHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( HeaderEndDrag_Impl, HeaderBar*, void );
+    DECL_LINK( TabBoxScrollHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK( HeaderEndDrag_Impl, HeaderBar*, void );
 
     static OUString getEntryString( const filter_info_impl* pInfo );
 
@@ -90,9 +90,9 @@ public:
     virtual ~XMLFilterSettingsDialog() override;
     virtual void dispose() override;
 
-    DECL_LINK_TYPED(ClickHdl_Impl, Button *, void );
-    DECL_LINK_TYPED(SelectionChangedHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK_TYPED(DoubleClickHdl_Impl, SvTreeListBox*, bool );
+    DECL_LINK(ClickHdl_Impl, Button *, void );
+    DECL_LINK(SelectionChangedHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK(DoubleClickHdl_Impl, SvTreeListBox*, bool );
 
     virtual short Execute() override;
 

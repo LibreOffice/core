@@ -2794,7 +2794,7 @@ void FmXGridPeer::DisConnectFromDispatcher()
 }
 
 
-IMPL_LINK_TYPED(FmXGridPeer, OnQueryGridSlotState, DbGridControlNavigationBarState, nSlot, int)
+IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, DbGridControlNavigationBarState, nSlot, int)
 {
     if (!m_pStateCache)
         return -1;  // unspecified
@@ -2816,7 +2816,7 @@ IMPL_LINK_TYPED(FmXGridPeer, OnQueryGridSlotState, DbGridControlNavigationBarSta
 }
 
 
-IMPL_LINK_TYPED(FmXGridPeer, OnExecuteGridSlot, DbGridControlNavigationBarState, nSlot, bool)
+IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, DbGridControlNavigationBarState, nSlot, bool)
 {
     if (!m_pDispatchers)
         return false;   // not handled

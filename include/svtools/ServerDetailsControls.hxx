@@ -61,7 +61,7 @@ class DetailsContainer
 
     protected:
         void notifyChange( );
-        DECL_LINK_TYPED ( ValueChangeHdl, Edit&, void );
+        DECL_LINK ( ValueChangeHdl, Edit&, void );
 };
 
 class HostDetailsContainer : public DetailsContainer
@@ -104,7 +104,7 @@ class DavDetailsContainer : public HostDetailsContainer
         virtual bool verifyScheme( const OUString& rScheme ) override;
 
     private:
-        DECL_LINK_TYPED( ToggledDavsHdl, CheckBox&, void );
+        DECL_LINK( ToggledDavsHdl, CheckBox&, void );
 };
 
 class SmbDetailsContainer : public DetailsContainer
@@ -150,8 +150,8 @@ class CmisDetailsContainer : public DetailsContainer
 
     private:
         void selectRepository( );
-        DECL_LINK_TYPED ( RefreshReposHdl, Button*, void );
-        DECL_LINK_TYPED ( SelectRepoHdl, ListBox&, void );
+        DECL_LINK ( RefreshReposHdl, Button*, void );
+        DECL_LINK ( SelectRepoHdl, ListBox&, void );
 };
 
 #endif

@@ -838,7 +838,7 @@ void ScAcceptChgDlg::UpdateView()
         pTheView->Select(pEntry);
 }
 
-IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, RefHandle, SvxTPFilter*, void)
+IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle, SvxTPFilter*, void)
 {
     sal_uInt16 nId  =ScSimpleRefDlgWrapper::GetChildWindowId();
 
@@ -864,7 +864,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, RefHandle, SvxTPFilter*, void)
     }
 }
 
-IMPL_LINK_TYPED( ScAcceptChgDlg, RefInfoHandle, const OUString*, pResult, void)
+IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, const OUString*, pResult, void)
 {
     sal_uInt16 nId;
 
@@ -897,7 +897,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, RefInfoHandle, const OUString*, pResult, void)
     }
 }
 
-IMPL_LINK_TYPED( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef, void )
+IMPL_LINK( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef, void )
 {
     if(pRef!=nullptr)
     {
@@ -908,7 +908,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef, void )
     }
 }
 
-IMPL_LINK_TYPED( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef, void )
+IMPL_LINK( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef, void )
 {
     SetPointer(Pointer(PointerStyle::Wait));
 
@@ -945,7 +945,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef, void )
 
     bIgnoreMsg=false;
 }
-IMPL_LINK_TYPED( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
+IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
 {
     SetPointer(Pointer(PointerStyle::Wait));
 
@@ -1022,7 +1022,7 @@ void ScAcceptChgDlg::AcceptFiltered()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, RejectAllHandle, SvxTPView*, void)
+IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle, SvxTPView*, void)
 {
     SetPointer(Pointer(PointerStyle::Wait));
     bIgnoreMsg=true;
@@ -1049,7 +1049,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, RejectAllHandle, SvxTPView*, void)
     bIgnoreMsg=false;
 }
 
-IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, void)
+IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, void)
 {
     SetPointer(Pointer(PointerStyle::Wait));
 
@@ -1073,7 +1073,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, void)
     SetPointer(Pointer(PointerStyle::Arrow));
 }
 
-IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, SelectHandle, SvTreeListBox*, void)
+IMPL_LINK_NOARG(ScAcceptChgDlg, SelectHandle, SvTreeListBox*, void)
 {
     if(!bNoSelection)
         aSelectionIdle.Start();
@@ -1310,7 +1310,7 @@ bool ScAcceptChgDlg::Expand(
     return bTheTestFlag;
 }
 
-IMPL_LINK_TYPED( ScAcceptChgDlg, ExpandingHandle, SvTreeListBox*, pTable, bool )
+IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvTreeListBox*, pTable, bool )
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     SetPointer(Pointer(PointerStyle::Wait));
@@ -1555,7 +1555,7 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
 
 }
 
-IMPL_LINK_TYPED( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack&, rChgTrack, void)
+IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack&, rChgTrack, void)
 {
     ScChangeTrackMsgQueue::iterator iter;
     ScChangeTrackMsgQueue& aMsgQueue= rChgTrack.GetMsgQueue();
@@ -1593,14 +1593,14 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack&, rChgTrack, void
 
     aMsgQueue.clear();
 }
-IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, ReOpenTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(ScAcceptChgDlg, ReOpenTimerHdl, Idle *, void)
 {
     ScSimpleRefDlgWrapper::SetAutoReOpen(true);
     m_pAcceptChgCtr->ShowFilterPage();
     RefHandle(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, UpdateSelectionHdl, Idle *, void)
+IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl, Idle *, void)
 {
     ScTabView* pTabView = pViewData->GetView();
 
@@ -1648,7 +1648,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, UpdateSelectionHdl, Idle *, void)
     pTPView->EnableReject( bRejectFlag && bEnable );
 }
 
-IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
+IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
 {
 
     const CommandEvent aCEvt(pTheView->GetCommandEvent());
@@ -1822,7 +1822,7 @@ void ScAcceptChgDlg::InitFilter()
 #define CALC_DATE       3
 #define CALC_POS        1
 
-IMPL_LINK_TYPED( ScAcceptChgDlg, ColCompareHdl, const SvSortData*, pSortData, sal_Int32 )
+IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, const SvSortData*, pSortData, sal_Int32 )
 {
     sal_Int32 nCompare = 0;
     SCCOL nSortCol= static_cast<SCCOL>(pTheView->GetSortedCol());

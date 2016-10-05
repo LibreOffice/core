@@ -91,8 +91,8 @@ namespace dbaui
         friend class OWizTypeSelectControl;
         friend class OWizTypeSelectList;
 
-        DECL_LINK_TYPED( ColumnSelectHdl, ListBox&, void );
-        DECL_LINK_TYPED( ButtonClickHdl, Button *, void );
+        DECL_LINK( ColumnSelectHdl, ListBox&, void );
+        DECL_LINK( ButtonClickHdl, Button *, void );
     protected:
         VclPtr<OWizTypeSelectList>      m_pColumnNames;
         VclPtr<FixedText>               m_pColumns;

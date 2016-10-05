@@ -734,7 +734,7 @@ private:
 
 }
 
-IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
+IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
 {
     if ( pMenu == m_pVCLMenu )
     {
@@ -932,7 +932,7 @@ IMPL_LINK_TYPED( MenuBarManager, Activate, Menu *, pMenu, bool )
     return true;
 }
 
-IMPL_LINK_TYPED( MenuBarManager, Deactivate, Menu *, pMenu, bool )
+IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu, bool )
 {
     if ( pMenu == m_pVCLMenu )
     {
@@ -951,7 +951,7 @@ IMPL_LINK_TYPED( MenuBarManager, Deactivate, Menu *, pMenu, bool )
     return true;
 }
 
-IMPL_LINK_NOARG_TYPED( MenuBarManager, AsyncSettingsHdl, Timer*, void)
+IMPL_LINK_NOARG( MenuBarManager, AsyncSettingsHdl, Timer*, void)
 {
     SolarMutexGuard g;
     Reference< XInterface > xSelfHold(
@@ -965,7 +965,7 @@ IMPL_LINK_NOARG_TYPED( MenuBarManager, AsyncSettingsHdl, Timer*, void)
     }
 }
 
-IMPL_LINK_TYPED( MenuBarManager, Select, Menu *, pMenu, bool )
+IMPL_LINK( MenuBarManager, Select, Menu *, pMenu, bool )
 {
     URL                     aTargetURL;
     Sequence<PropertyValue> aArgs;

@@ -468,12 +468,12 @@ bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
     return bResult;
 }
 
-IMPL_LINK_NOARG_TYPED( BibToolBar, SelHdl, ListBox&, void )
+IMPL_LINK_NOARG( BibToolBar, SelHdl, ListBox&, void )
 {
     aIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED( BibToolBar, SendSelHdl, Idle*, void )
+IMPL_LINK_NOARG( BibToolBar, SendSelHdl, Idle*, void )
 {
     Sequence<PropertyValue> aPropVal(1);
     PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
@@ -483,7 +483,7 @@ IMPL_LINK_NOARG_TYPED( BibToolBar, SendSelHdl, Idle*, void )
     SendDispatch(nTBC_LB_SOURCE, aPropVal);
 }
 
-IMPL_LINK_NOARG_TYPED( BibToolBar, MenuHdl, ToolBox*, void)
+IMPL_LINK_NOARG( BibToolBar, MenuHdl, ToolBox*, void)
 {
     sal_uInt16  nId=GetCurItemId();
     if (nId == nTBC_BT_AUTOFILTER)
@@ -536,7 +536,7 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
     ToolBox::DataChanged( rDCEvt );
 }
 
-IMPL_LINK_NOARG_TYPED( BibToolBar, OptionsChanged_Impl, LinkParamNone*, void )
+IMPL_LINK_NOARG( BibToolBar, OptionsChanged_Impl, LinkParamNone*, void )
 {
     bool bRebuildToolBar = false;
     sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
@@ -557,7 +557,7 @@ IMPL_LINK_NOARG_TYPED( BibToolBar, OptionsChanged_Impl, LinkParamNone*, void )
 }
 
 
-IMPL_LINK_NOARG_TYPED( BibToolBar, SettingsChanged_Impl, VclSimpleEvent&, void )
+IMPL_LINK_NOARG( BibToolBar, SettingsChanged_Impl, VclSimpleEvent&, void )
 {
     // Check if toolbar button size have changed and we have to use system settings
     sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();

@@ -52,7 +52,7 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(TSAURLsDialog, OKHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(TSAURLsDialog, OKHdl_Impl, Button*, void)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
@@ -92,7 +92,7 @@ void TSAURLsDialog::AddTSAURL(const OUString& rURL)
     m_pURLListBox->SetUpdateMode(true);
 }
 
-IMPL_LINK_NOARG_TYPED(TSAURLsDialog, AddHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl, Button*, void)
 {
     OUString aURL;
     OUString aDesc( get<FixedText>("enteraurl")->GetText() );
@@ -109,7 +109,7 @@ IMPL_LINK_NOARG_TYPED(TSAURLsDialog, AddHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(TSAURLsDialog, DeleteHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(TSAURLsDialog, DeleteHdl_Impl, Button*, void)
 {
     sal_Int32 nSel = m_pURLListBox->GetSelectEntryPos();
 

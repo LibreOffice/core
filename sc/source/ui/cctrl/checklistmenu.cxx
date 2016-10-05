@@ -64,7 +64,7 @@ void ScMenuFloatingWindow::SubMenuItemData::reset()
     maTimer.Stop();
 }
 
-IMPL_LINK_NOARG_TYPED(ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl, Timer *, void)
+IMPL_LINK_NOARG(ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl, Timer *, void)
 {
     mpParent->handleMenuTimeout(this);
 }
@@ -1175,7 +1175,7 @@ void ScCheckListMenuWindow::selectCurrentMemberOnly(bool bSet)
     maChecks->CheckEntry(pEntry, bSet );
 }
 
-IMPL_LINK_TYPED( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn, void )
+IMPL_LINK( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn, void )
 {
     if (pBtn == maBtnOk.get())
         close(true);
@@ -1191,7 +1191,7 @@ IMPL_LINK_TYPED( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, TriStateHdl, Button*, void)
+IMPL_LINK_NOARG(ScCheckListMenuWindow, TriStateHdl, Button*, void)
 {
     switch (mePrevToggleAllState)
     {
@@ -1213,7 +1213,7 @@ IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, TriStateHdl, Button*, void)
     mePrevToggleAllState = maChkToggleAll->GetState();
 }
 
-IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
 {
     OUString aSearchText = maEdSearch->GetText();
     aSearchText = aSearchText.toAsciiLowerCase();
@@ -1289,7 +1289,7 @@ IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
         maBtnOk->Enable( nSelCount != 0);
 }
 
-IMPL_LINK_TYPED( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks, void )
+IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks, void )
 {
     if (pChecks != maChecks.get())
         return;

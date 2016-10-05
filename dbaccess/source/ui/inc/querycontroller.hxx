@@ -224,7 +224,7 @@ namespace dbaui
         virtual bool allowQueries() const override;
 
     private:
-        DECL_LINK_TYPED( OnExecuteAddTable, void*, void );
+        DECL_LINK( OnExecuteAddTable, void*, void );
 
     private:
         using OQueryController_PBase::getFastPropertyValue;

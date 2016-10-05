@@ -117,11 +117,11 @@ void SdCustomShowDlg::CheckState()
         pCustomShowList->Seek( nPos );
 }
 
-IMPL_LINK_TYPED( SdCustomShowDlg, ClickButtonHdl, Button *, p, void )
+IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, Button *, p, void )
 {
     SelectHdl(p);
 }
-IMPL_LINK_TYPED( SdCustomShowDlg, SelectListBoxHdl, ListBox&, rListBox, void )
+IMPL_LINK( SdCustomShowDlg, SelectListBoxHdl, ListBox&, rListBox, void )
 {
     SelectHdl(&rListBox);
 }
@@ -266,7 +266,7 @@ void SdCustomShowDlg::SelectHdl(void *p)
 }
 
 // StartShow-Hdl
-IMPL_LINK_NOARG_TYPED(SdCustomShowDlg, StartShowHdl, Button*, void)
+IMPL_LINK_NOARG(SdCustomShowDlg, StartShowHdl, Button*, void)
 {
     EndDialog( RET_YES );
 }
@@ -382,19 +382,19 @@ void SdDefineCustomShowDlg::CheckState()
     m_pBtnRemove->Enable( bCSPages );
 }
 
-IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonHdl, Button*, p, void )
+IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, Button*, p, void )
 {
     ClickButtonHdl2(p);
 }
-IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonHdl3, SvTreeListBox*, p, void )
+IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl3, SvTreeListBox*, p, void )
 {
     ClickButtonHdl2(p);
 }
-IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonHdl4, ListBox&, rListBox, void )
+IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl4, ListBox&, rListBox, void )
 {
     ClickButtonHdl2(&rListBox);
 }
-IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonEditHdl, Edit&, rEdit, void )
+IMPL_LINK( SdDefineCustomShowDlg, ClickButtonEditHdl, Edit&, rEdit, void )
 {
     ClickButtonHdl2(&rEdit);
 }
@@ -502,7 +502,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
 }
 
 // OK-Hdl
-IMPL_LINK_NOARG_TYPED(SdDefineCustomShowDlg, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl, Button*, void)
 {
     // check name...
     bool bDifferent = true;

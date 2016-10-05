@@ -51,7 +51,7 @@ namespace vcl
             aSearchTimeout.Stop();
         }
 
-        DECL_LINK_TYPED( SearchStringTimeout, Timer*, void );
+        DECL_LINK( SearchStringTimeout, Timer*, void );
     };
 
     namespace
@@ -64,7 +64,7 @@ namespace vcl
         }
     }
 
-    IMPL_LINK_NOARG_TYPED( QuickSelectionEngine_Data, SearchStringTimeout, Timer*, void )
+    IMPL_LINK_NOARG( QuickSelectionEngine_Data, SearchStringTimeout, Timer*, void )
     {
         lcl_reset( *this );
     }

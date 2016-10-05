@@ -82,11 +82,11 @@ private:
     void Init();
     void GetRangeFromSelection();
 
-    DECL_LINK_TYPED( GroupByChanged, RadioButton&, void );
-    DECL_LINK_TYPED( OkClicked, Button*, void );
-    DECL_LINK_TYPED( GetFocusHandler, Control&, void );
-    DECL_LINK_TYPED( LoseFocusHandler, Control&, void );
-    DECL_LINK_TYPED( RefInputModifyHandler, Edit&, void );
+    DECL_LINK( GroupByChanged, RadioButton&, void );
+    DECL_LINK( OkClicked, Button*, void );
+    DECL_LINK( GetFocusHandler, Control&, void );
+    DECL_LINK( LoseFocusHandler, Control&, void );
+    DECL_LINK( RefInputModifyHandler, Edit&, void );
 };
 
 #endif

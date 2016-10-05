@@ -87,7 +87,7 @@ void SchOptionTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SchOptionTabPage, EnableHdl, Button*, void)
+IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl, Button*, void)
 {
     if( m_nAllSeriesAxisIndex == 0 )
         m_pCBAxisSideBySide->Enable( m_pRbtAxis2->IsChecked());

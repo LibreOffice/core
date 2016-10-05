@@ -54,10 +54,10 @@ namespace dbaui
         }
 
     private:
-        DECL_LINK_TYPED( onExecute, void*, void );
+        DECL_LINK( onExecute, void*, void );
     };
 
-    IMPL_LINK_NOARG_TYPED( DialogExecutor_Impl, onExecute, void*, void )
+    IMPL_LINK_NOARG( DialogExecutor_Impl, onExecute, void*, void )
     {
         try
         {

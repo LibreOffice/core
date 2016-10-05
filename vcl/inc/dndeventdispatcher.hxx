@@ -36,7 +36,7 @@ class DNDEventDispatcher: public ::cppu::WeakImplHelper<
 
     VclPtr<vcl::Window> m_pCurrentWindow;
     void designate_currentwindow(vcl::Window *pWindow);
-    DECL_LINK_TYPED(WindowEventListener, VclWindowEvent&, void);
+    DECL_LINK(WindowEventListener, VclWindowEvent&, void);
 
     ::osl::Mutex m_aMutex;
     css::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavorList;

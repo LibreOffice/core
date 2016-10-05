@@ -63,7 +63,7 @@ namespace bib
         BibViewFormControlContainer                       m_aFormControlContainer;
 
     private:
-        DECL_LINK_TYPED(CallMappingHdl, void*, void);
+        DECL_LINK(CallMappingHdl, void*, void);
 
     public:
         // Window overridables

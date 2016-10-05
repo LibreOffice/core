@@ -1939,7 +1939,7 @@ void OQueryController::setEscapeProcessing_fireEvent( const bool _bEscapeProcess
     fire( &nHandle, &aNewValue, &aOldValue, 1, false );
 }
 
-IMPL_LINK_NOARG_TYPED( OQueryController, OnExecuteAddTable, void*, void )
+IMPL_LINK_NOARG( OQueryController, OnExecuteAddTable, void*, void )
 {
     Execute( ID_BROWSER_ADDTABLE,Sequence<PropertyValue>() );
 }

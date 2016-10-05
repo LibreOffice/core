@@ -202,7 +202,7 @@ void AreaPropertyPanelBase::SetTransparency(sal_uInt16 nVal)
     mpMTRTransparent->SetValue(nVal);
 }
 
-IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void)
+IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void)
 {
     SvxOpenGraphicDialog aDlg( "Import" );
     aDlg.EnableLink(false);
@@ -244,7 +244,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void
     }
 }
 
-IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
+IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
 {
     sal_Int32 nPos = (eFillStyle)mpLbFillType->GetSelectEntryPos();
     mpLbFillAttr->Clear();
@@ -484,12 +484,12 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
     mpSidebarController->NotifyResize();
 }
 
-IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillAttrHdl, ListBox&, void)
+IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillAttrHdl, ListBox&, void)
 {
     SelectFillAttrHdl_Impl();
 }
 
-IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ChangeGradientAngle, Edit&, void)
+IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeGradientAngle, Edit&, void)
 {
     SelectFillAttrHdl_Impl();
 }
@@ -1311,7 +1311,7 @@ void AreaPropertyPanelBase::Update()
         mpSidebarController->NotifyResize();
 }
 
-IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ModifyTransSliderHdl, Slider*, void)
+IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransSliderHdl, Slider*, void)
 {
     const sal_uInt16 nVal = mpSldTransparent->GetThumbPos();
     SetTransparency(nVal);
@@ -1319,7 +1319,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ModifyTransSliderHdl, Slider*, void
     setFillTransparence(aLinearItem);
 }
 
-IMPL_LINK_TYPED( AreaPropertyPanelBase, ClickTrGrHdl_Impl, ToolBox*, pToolBox, void )
+IMPL_LINK( AreaPropertyPanelBase, ClickTrGrHdl_Impl, ToolBox*, pToolBox, void )
 {
     if (!mxTrGrPopup)
         mxTrGrPopup = VclPtr<AreaTransparencyGradientPopup>::Create(pToolBox, *this);
@@ -1329,7 +1329,7 @@ IMPL_LINK_TYPED( AreaPropertyPanelBase, ClickTrGrHdl_Impl, ToolBox*, pToolBox, v
                                           FloatWinPopupFlags::NoAppFocusClose);
 }
 
-IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, void)
 {
     sal_Int32 nSelectType = mpLBTransType->GetSelectEntryPos();
     bool bGradient = false;
@@ -1427,7 +1427,7 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, v
     setFillFloatTransparence(aGradientItem);
 }
 
-IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ModifyTransparentHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransparentHdl_Impl, Edit&, void)
 {
     const sal_uInt16 nTrans = (sal_uInt16)mpMTRTransparent->GetValue();
     mnLastTransSolid = nTrans;

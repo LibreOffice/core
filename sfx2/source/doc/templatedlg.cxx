@@ -447,7 +447,7 @@ void SfxTemplateManagerDlg::writeSettings ()
     aViewSettings.SetUserData(aSettings);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, void)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, void)
 {
     if(mpLocalView->IsVisible())
     {
@@ -461,7 +461,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, voi
         SearchUpdateHdl(*mpSearchFilter);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
 {
     const OUString sSelectedRegion = mpCBFolder->GetSelectEntry();
 
@@ -480,7 +480,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
         SearchUpdateHdl(*mpSearchFilter);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, void)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, void)
 {
     const sal_uInt16 nCurItemId = mpActionBar->GetCurItemId();
     mpActionBar->SetItemDown( nCurItemId, true );
@@ -493,7 +493,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, void)
     mpActionBar->Invalidate();
 }
 
-IMPL_LINK_TYPED(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem, void)
 {
     const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
 
@@ -501,7 +501,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*,
         OnTemplateState(pItem);
 }
 
-IMPL_LINK_TYPED(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu, bool)
+IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu, bool)
 {
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
 
@@ -526,7 +526,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu, bool)
     return false;
 }
 
-IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateMenuSelectHdl, Menu*, pMenu, bool)
+IMPL_LINK(SfxTemplateManagerDlg, DefaultTemplateMenuSelectHdl, Menu*, pMenu, bool)
 {
     sal_uInt16 nId = pMenu->GetCurItemId();
 
@@ -543,13 +543,13 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateMenuSelectHdl, Menu*, pMen
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OkClickHdl, Button*, void)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, OkClickHdl, Button*, void)
 {
    OnTemplateOpen();
    EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, MoveClickHdl, Button*, void)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, MoveClickHdl, Button*, void)
 {
     // modal dialog to select templates category
     ScopedVclPtrInstance<SfxTemplateCategoryDialog> aDlg;
@@ -585,12 +585,12 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, MoveClickHdl, Button*, void)
     mpLocalView->reload();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ExportClickHdl, Button*, void)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, ExportClickHdl, Button*, void)
 {
     OnTemplateExport();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
 {
     //Modal Dialog to select Category
     ScopedVclPtrInstance<SfxTemplateCategoryDialog> aDlg;
@@ -625,19 +625,19 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
     mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
 }
 
-IMPL_STATIC_LINK_NOARG_TYPED(SfxTemplateManagerDlg, LinkClickHdl, Button*, void)
+IMPL_STATIC_LINK_NOARG(SfxTemplateManagerDlg, LinkClickHdl, Button*, void)
 {
     OnTemplateLink();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
 {
     maSelTemplates.clear();
     mpOKButton->Disable();
     mpActionBar->Show();
 }
 
-IMPL_LINK_TYPED(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
 {
     const TemplateViewItem *pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
 
@@ -651,7 +651,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*,
 }
 
 
-IMPL_LINK_TYPED(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     uno::Sequence< PropertyValue > aArgs(4);
     aArgs[0].Name = "AsTemplate";
@@ -676,7 +676,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pIte
     Close();
 }
 
-IMPL_LINK_TYPED(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     uno::Sequence< PropertyValue > aArgs(3);
     aArgs[0].Name = "AsTemplate";
@@ -701,7 +701,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pIte
     Close();
 }
 
-IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     OUString aDeletedTemplate;
 
@@ -732,7 +732,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pI
     }
 }
 
-IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateManagerDlg, DefaultTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
     OUString aServiceName;
@@ -761,7 +761,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateHdl, ThumbnailViewItem*, p
     createDefaultTemplateMenu();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
 {
     OUString aKeyword = mpSearchFilter->GetText();
 
@@ -809,7 +809,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, GetFocusHdl, Control&, void)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, GetFocusHdl, Control&, void)
 {
     mpLocalView->deselectItems();
     mpSearchView->deselectItems();
@@ -1322,7 +1322,7 @@ void SfxTemplateCategoryDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateCategoryDialog, NewCategoryEditHdl, Edit&, void)
+IMPL_LINK_NOARG(SfxTemplateCategoryDialog, NewCategoryEditHdl, Edit&, void)
 {
     OUString sParam = comphelper::string::strip(mpNewCategoryEdit->GetText(), ' ');
     mpLBCategory->Enable(sParam.isEmpty());
@@ -1339,7 +1339,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateCategoryDialog, NewCategoryEditHdl, Edit&, void
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateCategoryDialog, SelectCategoryHdl, ListBox&, void)
+IMPL_LINK_NOARG(SfxTemplateCategoryDialog, SelectCategoryHdl, ListBox&, void)
 {
     if(mpLBCategory->GetSelectEntryPos() == 0)
     {
@@ -1421,7 +1421,7 @@ short SfxTemplateSelectionDlg::Execute()
     return ModalDialog::Execute();
 }
 
-IMPL_LINK_TYPED(SfxTemplateSelectionDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK(SfxTemplateSelectionDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
     msTemplatePath = pViewItem->getPath();
@@ -1429,7 +1429,7 @@ IMPL_LINK_TYPED(SfxTemplateSelectionDlg, OpenTemplateHdl, ThumbnailViewItem*, pI
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED(SfxTemplateSelectionDlg, OkClickHdl, Button*, void)
+IMPL_LINK_NOARG(SfxTemplateSelectionDlg, OkClickHdl, Button*, void)
 {
    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(const_cast<ThumbnailViewItem*>(*maSelTemplates.begin()));
    msTemplatePath = pViewItem->getPath();

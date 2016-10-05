@@ -51,7 +51,7 @@ namespace dbaui
         mutable VclPtr<SbaGridControl> m_pVclControl;  // our grid's VCL representation
         VclPtr<vcl::Window>            m_pStatus;
 
-        DECL_LINK_TYPED( SplitHdl, Splitter*, void );
+        DECL_LINK( SplitHdl, Splitter*, void );
     // attribute access
     public:
         const css::uno::Reference< css::awt::XControl >&  getGridControl() const  { return m_xGrid; }

@@ -164,7 +164,7 @@ void Window::ImplGenerateMouseMove()
         mpWindowImpl->mpFrameData->mnMouseMoveId = Application::PostUserEvent( LINK( mpWindowImpl->mpFrameWindow, Window, ImplGenerateMouseMoveHdl ), nullptr, true );
 }
 
-IMPL_LINK_NOARG_TYPED(Window, ImplGenerateMouseMoveHdl, void*, void)
+IMPL_LINK_NOARG(Window, ImplGenerateMouseMoveHdl, void*, void)
 {
     mpWindowImpl->mpFrameData->mnMouseMoveId = nullptr;
     vcl::Window* pCaptureWin = ImplGetSVData()->maWinData.mpCaptureWin;

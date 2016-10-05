@@ -188,7 +188,7 @@ private:
     bool                    bGotDataChangedHint;
     XModifyListenerArr_Impl aValueListeners;
 
-    DECL_LINK_TYPED( ValueListenerHdl, const SfxHint&, void );
+    DECL_LINK( ValueListenerHdl, const SfxHint&, void );
 
 private:
     void            PaintGridRanges_Impl();

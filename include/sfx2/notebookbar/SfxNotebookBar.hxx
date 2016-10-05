@@ -45,7 +45,7 @@ public:
 private:
     static bool m_bLock;
 
-    DECL_STATIC_LINK_TYPED(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, void);
+    DECL_STATIC_LINK(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, void);
 };
 
 } // namespace sfx2

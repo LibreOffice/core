@@ -52,19 +52,19 @@ const sal_uInt16 SwFootNotePage::aPageRg[] = {
 
 // handler to switch between the different possibilities how the footnote
 // region's height can be set.
-IMPL_LINK_NOARG_TYPED(SwFootNotePage, HeightPage, Button*, void)
+IMPL_LINK_NOARG(SwFootNotePage, HeightPage, Button*, void)
 {
     m_pMaxHeightEdit->Enable(false);
 }
 
-IMPL_LINK_NOARG_TYPED(SwFootNotePage, HeightMetric, Button*, void)
+IMPL_LINK_NOARG(SwFootNotePage, HeightMetric, Button*, void)
 {
     m_pMaxHeightEdit->Enable();
     m_pMaxHeightEdit->GrabFocus();
 }
 
 // handler limit values
-IMPL_LINK_NOARG_TYPED(SwFootNotePage, HeightModify, Control&, void)
+IMPL_LINK_NOARG(SwFootNotePage, HeightModify, Control&, void)
 {
     m_pMaxHeightEdit->SetMax(m_pMaxHeightEdit->Normalize(lMaxHeight -
             (m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP)) +
@@ -84,7 +84,7 @@ IMPL_LINK_NOARG_TYPED(SwFootNotePage, HeightModify, Control&, void)
             FUNIT_TWIP);
 }
 
-IMPL_LINK_NOARG_TYPED(SwFootNotePage, LineWidthChanged_Impl, Edit&, void)
+IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl, Edit&, void)
 {
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 m_pLineWidthEdit->GetValue( ),
@@ -93,7 +93,7 @@ IMPL_LINK_NOARG_TYPED(SwFootNotePage, LineWidthChanged_Impl, Edit&, void)
     m_pLineTypeBox->SetWidth( nVal );
 }
 
-IMPL_LINK_NOARG_TYPED(SwFootNotePage, LineColorSelected_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SwFootNotePage, LineColorSelected_Impl, ListBox&, void)
 {
     m_pLineTypeBox->SetColor( m_pLineColorBox->GetSelectEntryColor() );
 }

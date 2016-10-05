@@ -1137,7 +1137,7 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, 
 }
 
 
-IMPL_LINK_NOARG_TYPED(UpdateDialog, selectionHandler, SvTreeListBox*, void)
+IMPL_LINK_NOARG(UpdateDialog, selectionHandler, SvTreeListBox*, void)
 {
     OUStringBuffer b;
     UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(
@@ -1235,7 +1235,7 @@ IMPL_LINK_NOARG_TYPED(UpdateDialog, selectionHandler, SvTreeListBox*, void)
     showDescription( b.makeStringAndClear() );
 }
 
-IMPL_LINK_NOARG_TYPED(UpdateDialog, allHandler, CheckBox&, void)
+IMPL_LINK_NOARG(UpdateDialog, allHandler, CheckBox&, void)
 {
     if (m_pAll->IsChecked())
     {
@@ -1277,7 +1277,7 @@ IMPL_LINK_NOARG_TYPED(UpdateDialog, allHandler, CheckBox&, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(UpdateDialog, okHandler, Button*, void)
+IMPL_LINK_NOARG(UpdateDialog, okHandler, Button*, void)
 {
     //If users are going to update a shared extension then we need
     //to warn them
@@ -1302,13 +1302,13 @@ IMPL_LINK_NOARG_TYPED(UpdateDialog, okHandler, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED(UpdateDialog, closeHandler, Button*, void)
+IMPL_LINK_NOARG(UpdateDialog, closeHandler, Button*, void)
 {
     m_thread->stop();
     EndDialog();
 }
 
-IMPL_LINK_TYPED( UpdateDialog, hyperlink_clicked, FixedHyperlink&, rHyperlink, void )
+IMPL_LINK( UpdateDialog, hyperlink_clicked, FixedHyperlink&, rHyperlink, void )
 {
     OUString sURL = rHyperlink.GetURL();
     if ( sURL.isEmpty() )

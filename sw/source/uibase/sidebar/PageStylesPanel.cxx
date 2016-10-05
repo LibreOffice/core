@@ -444,7 +444,7 @@ void PageStylesPanel::NotifyItemUpdate(
     }
 }
 
-IMPL_LINK_NOARG_TYPED( PageStylesPanel, ModifyColumnCountHdl, ListBox&, void )
+IMPL_LINK_NOARG( PageStylesPanel, ModifyColumnCountHdl, ListBox&, void )
 {
     sal_uInt16 nColumnType = mpColumnCount->GetSelectEntryPos() + 1;
     mpPageColumnItem->SetValue( nColumnType );
@@ -452,21 +452,21 @@ IMPL_LINK_NOARG_TYPED( PageStylesPanel, ModifyColumnCountHdl, ListBox&, void )
             SfxCallMode::RECORD, { mpPageColumnItem.get() });
 }
 
-IMPL_LINK_NOARG_TYPED( PageStylesPanel, ModifyNumberingHdl, ListBox&, void )
+IMPL_LINK_NOARG( PageStylesPanel, ModifyNumberingHdl, ListBox&, void )
 {
     SvxNumType nEntryData = static_cast<SvxNumType>(reinterpret_cast<sal_uLong>(mpNumberSelectLB->GetEntryData(mpNumberSelectLB->GetSelectEntryPos())));
     mpPageItem->SetNumType(nEntryData);
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD, { mpPageItem.get() });
 }
 
-IMPL_LINK_NOARG_TYPED( PageStylesPanel, ModifyLayoutHdl, ListBox&, void )
+IMPL_LINK_NOARG( PageStylesPanel, ModifyLayoutHdl, ListBox&, void )
 {
     sal_uInt16 nUse = mpLayoutSelectLB->GetSelectEntryPos();
     mpPageItem->SetPageUsage(PosToPageUsage_Impl(nUse));
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD, { mpPageItem.get() });
 }
 
-IMPL_LINK_NOARG_TYPED(PageStylesPanel, ModifyFillStyleHdl, ListBox&, void)
+IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, ListBox&, void)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpBgFillType->GetSelectEntryPos();
     const XFillStyleItem aXFillStyleItem(eXFS);
@@ -514,7 +514,7 @@ IMPL_LINK_NOARG_TYPED(PageStylesPanel, ModifyFillStyleHdl, ListBox&, void)
     mpBgFillType->Selected();
 }
 
-IMPL_LINK_NOARG_TYPED(PageStylesPanel, ModifyFillColorHdl, ListBox&, void)
+IMPL_LINK_NOARG(PageStylesPanel, ModifyFillColorHdl, ListBox&, void)
 {
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpBgFillType->GetSelectEntryPos();
     SfxObjectShell* pSh = SfxObjectShell::Current();

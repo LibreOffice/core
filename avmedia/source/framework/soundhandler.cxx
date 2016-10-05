@@ -298,7 +298,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
     @return     0 every time... it doesn't matter for us.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-IMPL_LINK_NOARG_TYPED(SoundHandler, implts_PlayerNotify, Idle *, void)
+IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify, Idle *, void)
 {
     // SAFE {
     ::osl::ClearableMutexGuard aLock( m_aLock );

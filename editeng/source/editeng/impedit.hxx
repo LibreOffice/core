@@ -668,10 +668,10 @@ private:
     inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, DrawModeFlags nDrawMode );
     inline void             EraseVirtualDevice() { pVirtDev.disposeAndClear(); }
 
-    DECL_LINK_TYPED( StatusTimerHdl, Timer *, void);
-    DECL_LINK_TYPED( IdleFormatHdl, Idle *, void);
-    DECL_LINK_TYPED( OnlineSpellHdl, Timer *, void);
-    DECL_LINK_TYPED( DocModified, LinkParamNone*, void );
+    DECL_LINK( StatusTimerHdl, Timer *, void);
+    DECL_LINK( IdleFormatHdl, Idle *, void);
+    DECL_LINK( OnlineSpellHdl, Timer *, void);
+    DECL_LINK( DocModified, LinkParamNone*, void );
 
     void                CheckIdleFormatter();
 

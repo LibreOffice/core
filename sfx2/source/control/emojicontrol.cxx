@@ -148,12 +148,12 @@ FILTER_CATEGORY SfxEmojiControl::getCurrentFilter()
     return FILTER_CATEGORY::PEOPLE;
 }
 
-IMPL_LINK_NOARG_TYPED(SfxEmojiControl, ActivatePageHdl, TabControl*, void)
+IMPL_LINK_NOARG(SfxEmojiControl, ActivatePageHdl, TabControl*, void)
 {
     mpEmojiView->filterItems(ViewFilter_Category(getCurrentFilter()));
 }
 
-IMPL_STATIC_LINK_TYPED(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
+IMPL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
 {
     OUStringBuffer sHexText = "";
     sHexText.appendUtf32(OUString(pItem->getTitle()).toUInt32(16));

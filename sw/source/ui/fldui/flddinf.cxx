@@ -221,7 +221,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldDokInfPage, TypeHdl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(SwFieldDokInfPage, TypeHdl, SvTreeListBox*, void)
 {
     // save old ListBoxPos
     SvTreeListEntry* pOldEntry = pSelEntry;
@@ -240,7 +240,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldDokInfPage, TypeHdl, SvTreeListBox*, void)
     SubTypeHdl(*m_pSelectionLB);
 }
 
-IMPL_LINK_NOARG_TYPED(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
 {
     sal_uInt16 nSubType = (sal_uInt16)reinterpret_cast<sal_uLong>(pSelEntry->GetUserData());
     sal_Int32 nPos = m_pSelectionLB->GetSelectEntryPos();

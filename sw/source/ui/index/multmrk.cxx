@@ -45,7 +45,7 @@ SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr& rTOXMgr)
     m_pTextFT->SetText(rMgr.GetTOXMark(0)->GetTOXType()->GetTypeName());
 }
 
-IMPL_LINK_TYPED( SwMultiTOXMarkDlg, SelectHdl, ListBox&, rBox, void )
+IMPL_LINK( SwMultiTOXMarkDlg, SelectHdl, ListBox&, rBox, void )
 {
     if(rBox.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
     {   SwTOXMark* pMark = rMgr.GetTOXMark(rBox.GetSelectEntryPos());

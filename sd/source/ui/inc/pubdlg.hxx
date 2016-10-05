@@ -177,21 +177,21 @@ private:
 
     void    LoadPreviewButtons();
 
-    DECL_LINK_TYPED( FinishHdl, Button*, void );
-    DECL_LINK_TYPED( NextPageHdl, Button*, void );
-    DECL_LINK_TYPED( LastPageHdl, Button*, void );
+    DECL_LINK( FinishHdl, Button*, void );
+    DECL_LINK( NextPageHdl, Button*, void );
+    DECL_LINK( LastPageHdl, Button*, void );
 
-    DECL_LINK_TYPED( DesignHdl, Button*, void );
-    DECL_LINK_TYPED( DesignSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( DesignDeleteHdl, Button*, void );
-    DECL_LINK_TYPED( BaseHdl, Button*, void );
-    DECL_LINK_TYPED( ContentHdl, Button*, void );
-    DECL_LINK_TYPED( GfxFormatHdl, Button *, void );
-    DECL_LINK_TYPED( ResolutionHdl, Button*, void );
-    DECL_LINK_TYPED( ButtonsHdl, ValueSet*, void );
-    DECL_LINK_TYPED( ColorHdl, Button*, void );
-    DECL_LINK_TYPED( WebServerHdl, Button *, void );
-    DECL_LINK_TYPED( SlideChgHdl, Button*, void );
+    DECL_LINK( DesignHdl, Button*, void );
+    DECL_LINK( DesignSelectHdl, ListBox&, void );
+    DECL_LINK( DesignDeleteHdl, Button*, void );
+    DECL_LINK( BaseHdl, Button*, void );
+    DECL_LINK( ContentHdl, Button*, void );
+    DECL_LINK( GfxFormatHdl, Button *, void );
+    DECL_LINK( ResolutionHdl, Button*, void );
+    DECL_LINK( ButtonsHdl, ValueSet*, void );
+    DECL_LINK( ColorHdl, Button*, void );
+    DECL_LINK( WebServerHdl, Button *, void );
+    DECL_LINK( SlideChgHdl, Button*, void );
 
 public:
 

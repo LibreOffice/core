@@ -548,7 +548,7 @@ void ShowWindow::DrawEndScene()
     SetFont( aOldFont );
 }
 
-IMPL_LINK_TYPED( ShowWindow, PauseTimeoutHdl, Timer*, pTimer, void )
+IMPL_LINK( ShowWindow, PauseTimeoutHdl, Timer*, pTimer, void )
 {
     if( !( --mnPauseTimeout ) )
         RestartShow();
@@ -559,7 +559,7 @@ IMPL_LINK_TYPED( ShowWindow, PauseTimeoutHdl, Timer*, pTimer, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ShowWindow, MouseTimeoutHdl, Timer *, void)
+IMPL_LINK_NOARG(ShowWindow, MouseTimeoutHdl, Timer *, void)
 {
     if( mbMouseCursorHidden )
     {
@@ -575,7 +575,7 @@ IMPL_LINK_NOARG_TYPED(ShowWindow, MouseTimeoutHdl, Timer *, void)
     }
 }
 
-IMPL_LINK_TYPED( ShowWindow, EventHdl, VclWindowEvent&, rEvent, void )
+IMPL_LINK( ShowWindow, EventHdl, VclWindowEvent&, rEvent, void )
 {
     if( mbMouseAutoHide )
     {

@@ -114,16 +114,16 @@ private:
     void                        UpdateVertical();
     inline bool                 Seek( sal_uLong nPos ); // synced to and from mnStreamPos
 
-                                DECL_LINK_TYPED( CharSetHdl, ListBox&, void );
-                                DECL_LINK_TYPED( FirstRowHdl, Edit&, void );
-                                DECL_LINK_TYPED( RbSepFixHdl, Button*, void );
-                                DECL_LINK_TYPED( SeparatorEditHdl, Edit&, void );
-                                DECL_LINK_TYPED( SeparatorClickHdl, Button*, void );
-                                DECL_LINK_TYPED( SeparatorComboBoxHdl, ComboBox&, void );
+                                DECL_LINK( CharSetHdl, ListBox&, void );
+                                DECL_LINK( FirstRowHdl, Edit&, void );
+                                DECL_LINK( RbSepFixHdl, Button*, void );
+                                DECL_LINK( SeparatorEditHdl, Edit&, void );
+                                DECL_LINK( SeparatorClickHdl, Button*, void );
+                                DECL_LINK( SeparatorComboBoxHdl, ComboBox&, void );
                                 void SeparatorHdl(Control*);
-                                DECL_LINK_TYPED( LbColTypeHdl, ListBox&, void );
-                                DECL_LINK_TYPED( UpdateTextHdl, ScCsvTableBox&, void );
-                                DECL_LINK_TYPED( ColTypeHdl, ScCsvTableBox&, void );
+                                DECL_LINK( LbColTypeHdl, ListBox&, void );
+                                DECL_LINK( UpdateTextHdl, ScCsvTableBox&, void );
+                                DECL_LINK( ColTypeHdl, ScCsvTableBox&, void );
 };
 
 inline bool ScImportAsciiDlg::Seek(sal_uLong nPos)

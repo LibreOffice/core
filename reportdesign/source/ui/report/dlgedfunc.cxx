@@ -60,7 +60,7 @@ namespace rptui
 using namespace ::com::sun::star;
 
 
-IMPL_LINK_NOARG_TYPED( DlgEdFunc, ScrollTimeout, Timer *, void )
+IMPL_LINK_NOARG( DlgEdFunc, ScrollTimeout, Timer *, void )
 {
     ForceScroll( m_pParent->PixelToLogic( m_pParent->GetPointerPosPixel() ) );
 }

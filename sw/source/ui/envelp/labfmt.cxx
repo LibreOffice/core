@@ -383,14 +383,14 @@ void SwLabFormatPage::dispose()
 
 
 // Modify-handler of MetricFields. start preview timer
-IMPL_LINK_NOARG_TYPED(SwLabFormatPage, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwLabFormatPage, ModifyHdl, Edit&, void)
 {
     bModified = true;
     aPreviewIdle.Start();
 }
 
 // Invalidate preview
-IMPL_LINK_NOARG_TYPED(SwLabFormatPage, PreviewHdl, Idle *, void)
+IMPL_LINK_NOARG(SwLabFormatPage, PreviewHdl, Idle *, void)
 {
     aPreviewIdle.Stop();
     ChangeMinMax();
@@ -399,7 +399,7 @@ IMPL_LINK_NOARG_TYPED(SwLabFormatPage, PreviewHdl, Idle *, void)
 }
 
 // LoseFocus-Handler: Update on change
-IMPL_LINK_TYPED( SwLabFormatPage, LoseFocusHdl, Control&, rControl, void )
+IMPL_LINK( SwLabFormatPage, LoseFocusHdl, Control&, rControl, void )
 {
     if (static_cast<Edit*>( &rControl)->IsModified())
         PreviewHdl(nullptr);
@@ -564,7 +564,7 @@ void SwLabFormatPage::Reset(const SfxItemSet* )
     PreviewHdl(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED(SwLabFormatPage, SaveHdl, Button*, void)
+IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, Button*, void)
 {
     SwLabRec aRec;
     aRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField));
@@ -633,7 +633,7 @@ void SwSaveLabelDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SwSaveLabelDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl, Button*, void)
 {
     SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
     OUString sMake(m_pMakeCB->GetText());
@@ -664,7 +664,7 @@ IMPL_LINK_NOARG_TYPED(SwSaveLabelDlg, OkHdl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG_TYPED(SwSaveLabelDlg, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyHdl, Edit&, void)
 {
     m_pOKPB->Enable(!m_pMakeCB->GetText().isEmpty() && !m_pTypeED->GetText().isEmpty());
 }

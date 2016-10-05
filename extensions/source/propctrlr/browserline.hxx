@@ -113,8 +113,8 @@ namespace pcr
         void                IndentTitle( bool _bIndent );
 
     private:
-        DECL_LINK_TYPED( OnButtonClicked, Button*, void );
-        DECL_LINK_TYPED( OnButtonFocus, Control&, void );
+        DECL_LINK( OnButtonClicked, Button*, void );
+        DECL_LINK( OnButtonFocus, Control&, void );
 
         void    implHideBrowseButton( bool _bPrimary, bool _bReLayout );
         void    implUpdateEnabledDisabled();

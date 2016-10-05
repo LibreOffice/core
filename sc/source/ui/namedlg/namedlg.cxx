@@ -483,47 +483,47 @@ void ScNameDlg::GetRangeNames(std::map<OUString, std::unique_ptr<ScRangeName>>& 
     m_RangeMap.swap(rRangeMap);
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDlg, OkBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScNameDlg, OkBtnHdl, Button*, void)
 {
     Close();
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDlg, CancelBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScNameDlg, CancelBtnHdl, Button*, void)
 {
     CancelPushed();
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDlg, AddBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScNameDlg, AddBtnHdl, Button*, void)
 {
     AddPushed();
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDlg, RemoveBtnHdl, Button*, void)
+IMPL_LINK_NOARG(ScNameDlg, RemoveBtnHdl, Button*, void)
 {
     RemovePushed();
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDlg, EdModifyCheckBoxHdl, CheckBox&, void)
+IMPL_LINK_NOARG(ScNameDlg, EdModifyCheckBoxHdl, CheckBox&, void)
 {
     NameModified();
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDlg, EdModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(ScNameDlg, EdModifyHdl, Edit&, void)
 {
     NameModified();
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDlg, AssignGetFocusHdl, Control&, void)
+IMPL_LINK_NOARG(ScNameDlg, AssignGetFocusHdl, Control&, void)
 {
     EdModifyHdl(*m_pEdAssign);
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDlg, SelectionChangedHdl_Impl, SvTreeListBox*, void)
+IMPL_LINK_NOARG(ScNameDlg, SelectionChangedHdl_Impl, SvTreeListBox*, void)
 {
     SelectionChanged();
 }
 
-IMPL_LINK_NOARG_TYPED(ScNameDlg, ScopeChangedHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScNameDlg, ScopeChangedHdl, ListBox&, void)
 {
     ScopeChanged();
 }

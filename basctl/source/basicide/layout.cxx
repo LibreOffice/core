@@ -362,7 +362,7 @@ void Layout::SplittedSide::ArrangeIn (Rectangle const& rRect)
     }
 }
 
-IMPL_LINK_TYPED(Layout::SplittedSide, SplitHdl, Splitter*, pSplitter, void)
+IMPL_LINK(Layout::SplittedSide, SplitHdl, Splitter*, pSplitter, void)
 {
     // checking margins
     CheckMarginsFor(pSplitter);

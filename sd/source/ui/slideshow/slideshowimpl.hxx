@@ -273,13 +273,13 @@ private:
 
     void setActiveXToolbarsVisible( bool bVisible );
 
-    DECL_LINK_TYPED( updateHdl, Timer *, void );
-    DECL_LINK_TYPED( ReadyForNextInputHdl, Timer *, void );
-    DECL_LINK_TYPED( endPresentationHdl, void*, void );
-    DECL_LINK_TYPED( ContextMenuSelectHdl, Menu *, bool );
-    DECL_LINK_TYPED( ContextMenuHdl, void*, void );
-    DECL_LINK_TYPED( deactivateHdl, Timer *, void );
-    DECL_LINK_TYPED( EventListenerHdl, VclSimpleEvent&, void );
+    DECL_LINK( updateHdl, Timer *, void );
+    DECL_LINK( ReadyForNextInputHdl, Timer *, void );
+    DECL_LINK( endPresentationHdl, void*, void );
+    DECL_LINK( ContextMenuSelectHdl, Menu *, bool );
+    DECL_LINK( ContextMenuHdl, void*, void );
+    DECL_LINK( deactivateHdl, Timer *, void );
+    DECL_LINK( EventListenerHdl, VclSimpleEvent&, void );
 
     /** called only by the slideshow view when the first paint event occurs.
         This actually starts the slideshow. */

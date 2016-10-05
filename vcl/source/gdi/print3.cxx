@@ -266,10 +266,10 @@ struct PrintJobAsync
     : mxController( i_xController ), maInitSetup( i_rInitSetup )
     {}
 
-    DECL_LINK_TYPED( ExecJob, void*, void );
+    DECL_LINK( ExecJob, void*, void );
 };
 
-IMPL_LINK_NOARG_TYPED(PrintJobAsync, ExecJob, void*, void)
+IMPL_LINK_NOARG(PrintJobAsync, ExecJob, void*, void)
 {
     Printer::ImplPrintJob(mxController, maInitSetup);
 

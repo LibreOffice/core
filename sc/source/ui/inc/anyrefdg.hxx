@@ -69,7 +69,7 @@ class ScFormulaReferenceHelper
     bool                bHighlightRef;
     bool                bAccInserted;
 
-    DECL_LINK_TYPED( AccelSelectHdl, Accelerator&, void );
+    DECL_LINK( AccelSelectHdl, Accelerator&, void );
 
 public:
     ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindings* _pBindings);
@@ -121,7 +121,7 @@ private:
     Idle                aIdle;
     OUString            aDocName;               // document on which the dialog was opened
 
-    DECL_LINK_TYPED( UpdateFocusHdl, Idle*, void );
+    DECL_LINK( UpdateFocusHdl, Idle*, void );
 
 protected:
     void                disposeRefHandler();

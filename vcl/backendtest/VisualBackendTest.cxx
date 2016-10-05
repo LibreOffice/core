@@ -132,7 +132,7 @@ public:
         disposeOnce();
     }
 
-    DECL_LINK_TYPED(updateHdl, Timer*, void);
+    DECL_LINK(updateHdl, Timer*, void);
 
     virtual void dispose() override
     {
@@ -504,7 +504,7 @@ public:
     }
 };
 
-IMPL_LINK_NOARG_TYPED(VisualBackendTestWindow, updateHdl, Timer *, void)
+IMPL_LINK_NOARG(VisualBackendTestWindow, updateHdl, Timer *, void)
 {
     if (mbAnimate)
     {

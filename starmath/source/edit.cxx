@@ -251,13 +251,13 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
     Resize();
 }
 
-IMPL_LINK_NOARG_TYPED( SmEditWindow, ModifyTimerHdl, Idle *, void )
+IMPL_LINK_NOARG( SmEditWindow, ModifyTimerHdl, Idle *, void )
 {
     UpdateStatus(false);
     aModifyIdle.Stop();
 }
 
-IMPL_LINK_NOARG_TYPED(SmEditWindow, CursorMoveTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(SmEditWindow, CursorMoveTimerHdl, Idle *, void)
     // every once in a while check cursor position (selection) of edit
     // window and if it has changed (try to) set the formula-cursor
     // according to that.
@@ -403,7 +403,7 @@ bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
 }
 
 
-IMPL_LINK_TYPED( SmEditWindow, MenuSelectHdl, Menu *, pMenu, bool )
+IMPL_LINK( SmEditWindow, MenuSelectHdl, Menu *, pMenu, bool )
 {
     SmViewShell *pViewSh = rCmdBox.GetView();
     if (pViewSh)
@@ -579,13 +579,13 @@ void SmEditWindow::CreateEditView()
 }
 
 
-IMPL_LINK_NOARG_TYPED( SmEditWindow, EditStatusHdl, EditStatus&, void )
+IMPL_LINK_NOARG( SmEditWindow, EditStatusHdl, EditStatus&, void )
 {
     if (pEditView)
         Resize();
 }
 
-IMPL_LINK_TYPED( SmEditWindow, ScrollHdl, ScrollBar *, /*pScrollBar*/, void )
+IMPL_LINK( SmEditWindow, ScrollHdl, ScrollBar *, /*pScrollBar*/, void )
 {
     OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)

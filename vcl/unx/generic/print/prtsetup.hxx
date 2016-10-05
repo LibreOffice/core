@@ -58,8 +58,8 @@ class RTSDialog : public TabDialog
 
     bool mbDataModified;
 
-    DECL_LINK_TYPED( ActivatePage, TabControl*, void );
-    DECL_LINK_TYPED( ClickButton, Button*, void );
+    DECL_LINK( ActivatePage, TabControl*, void );
+    DECL_LINK( ClickButton, Button*, void );
 
     // helper functions
     void insertAllPPDValues( ListBox&, const psp::PPDParser*, const psp::PPDKey* );
@@ -89,7 +89,7 @@ class RTSPaperPage : public TabPage
     VclPtr<FixedText>          m_pSlotText;
     VclPtr<ListBox>            m_pSlotBox;
 
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
 public:
     explicit RTSPaperPage( RTSDialog* );
     virtual ~RTSPaperPage() override;
@@ -115,8 +115,8 @@ class RTSDevicePage : public TabPage
 
     void FillValueBox( const ::psp::PPDKey* );
 
-    DECL_LINK_TYPED( SelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyHdl, Edit&, void );
+    DECL_LINK( SelectHdl, ListBox&, void );
+    DECL_LINK( ModifyHdl, Edit&, void );
 public:
     explicit RTSDevicePage( RTSDialog* );
     virtual ~RTSDevicePage() override;

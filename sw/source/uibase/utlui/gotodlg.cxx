@@ -63,7 +63,7 @@ void SwGotoPageDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(SwGotoPageDlg, PageModifiedHdl, Edit&, void)
+IMPL_LINK_NOARG(SwGotoPageDlg, PageModifiedHdl, Edit&, void)
 {
     if(!(mpMtrPageCtrl->GetText()).isEmpty() )
     {

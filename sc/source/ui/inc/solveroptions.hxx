@@ -45,10 +45,10 @@ class ScSolverOptionsDialog : public ModalDialog
     OUString        maEngine;
     css::uno::Sequence<css::beans::PropertyValue> maProperties;
 
-    DECL_LINK_TYPED( EngineSelectHdl, ListBox&, void );
-    DECL_LINK_TYPED( SettingsSelHdl, SvTreeListBox*, void );
-    DECL_LINK_TYPED( SettingsDoubleClickHdl, SvTreeListBox*, bool );
-    DECL_LINK_TYPED( ButtonHdl, Button*, void );
+    DECL_LINK( EngineSelectHdl, ListBox&, void );
+    DECL_LINK( SettingsSelHdl, SvTreeListBox*, void );
+    DECL_LINK( SettingsDoubleClickHdl, SvTreeListBox*, bool );
+    DECL_LINK( ButtonHdl, Button*, void );
 
     void    ReadFromComponent();
     void    FillListBox();

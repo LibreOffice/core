@@ -34,7 +34,7 @@ private:
     Selection              aOldSel;
     bool                   bMouseFlag;
 
-    DECL_LINK_TYPED(ChangedHdl, void *, void);
+    DECL_LINK(ChangedHdl, void *, void);
 
 protected:
 
@@ -96,10 +96,10 @@ private:
     VclPtr<ArgEdit>        pEdArg;
     VclPtr<RefButton>      pRefBtn;
 
-    DECL_LINK_TYPED( FxBtnClickHdl, Button*, void );
-    DECL_LINK_TYPED( FxBtnFocusHdl, Control&, void );
-    DECL_LINK_TYPED( EdFocusHdl, Control&, void );
-    DECL_LINK_TYPED( EdModifyHdl, Edit&, void );
+    DECL_LINK( FxBtnClickHdl, Button*, void );
+    DECL_LINK( FxBtnFocusHdl, Control&, void );
+    DECL_LINK( EdFocusHdl, Control&, void );
+    DECL_LINK( EdModifyHdl, Edit&, void );
 
 protected:
 

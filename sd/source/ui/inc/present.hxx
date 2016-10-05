@@ -68,9 +68,9 @@ private:
     VclPtr<FixedText>          msMonitorExternal;
     VclPtr<FixedText>          msExternal;
 
-                        DECL_LINK_TYPED( ChangeRangeHdl, Button*, void );
-                        DECL_LINK_TYPED( ClickWindowPresentationHdl, Button*, void );
-                        DECL_LINK_TYPED( ChangePauseHdl, Edit&, void );
+                        DECL_LINK( ChangeRangeHdl, Button*, void );
+                        DECL_LINK( ClickWindowPresentationHdl, Button*, void );
+                        DECL_LINK( ChangePauseHdl, Edit&, void );
 
     void                InitMonitorSettings();
     enum DisplayType {

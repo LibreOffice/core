@@ -161,7 +161,7 @@ private:
     /** Posts a Workbook_WindowResize user event. */
     void postWindowResizeEvent( vcl::Window* pWindow );
     /** Callback link for Application::PostUserEvent(). */
-    DECL_LINK_TYPED( processWindowResizeEvent, void*, void );
+    DECL_LINK( processWindowResizeEvent, void*, void );
 
 private:
     typedef ::std::map< VclPtr<vcl::Window>, uno::Reference< frame::XController > > WindowControllerMap;
@@ -478,7 +478,7 @@ void ScVbaEventListener::postWindowResizeEvent( vcl::Window* pWindow )
     }
 }
 
-IMPL_LINK_TYPED( ScVbaEventListener, processWindowResizeEvent, void*, p, void )
+IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, void*, p, void )
 {
     vcl::Window* pWindow = static_cast<vcl::Window*>(p);
     ::osl::MutexGuard aGuard( maMutex );

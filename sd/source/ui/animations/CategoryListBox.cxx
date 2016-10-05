@@ -73,7 +73,7 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(CategoryListBox, implDoubleClickHdl, ListBox&, void)
+IMPL_LINK_NOARG(CategoryListBox, implDoubleClickHdl, ListBox&, void)
 {
     CaptureMouse();
 }

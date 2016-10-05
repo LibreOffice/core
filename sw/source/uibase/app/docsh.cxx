@@ -1087,7 +1087,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
 }
 
 // OLE-Hdls
-IMPL_LINK_TYPED( SwDocShell, Ole2ModifiedHdl, bool, bNewStatus, void )
+IMPL_LINK( SwDocShell, Ole2ModifiedHdl, bool, bNewStatus, void )
 {
     if( IsEnableSetModified() )
         SetModified( bNewStatus );

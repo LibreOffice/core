@@ -184,7 +184,7 @@ void SwGlossaryGroupDlg::Apply()
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SwGlossaryGroupDlg, SelectHdl, SvTreeListBox*, void )
+IMPL_LINK_NOARG( SwGlossaryGroupDlg, SelectHdl, SvTreeListBox*, void )
 {
     m_pNewPB->Enable(false);
     SvTreeListEntry* pFirstEntry = m_pGroupTLB->FirstSelected();
@@ -207,7 +207,7 @@ IMPL_LINK_NOARG_TYPED( SwGlossaryGroupDlg, SelectHdl, SvTreeListBox*, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, NewHdl, Button*, void)
+IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl, Button*, void)
 {
     OUString sGroup = m_pNameED->GetText()
         + OUStringLiteral1(GLOS_DELIM)
@@ -226,7 +226,7 @@ IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, NewHdl, Button*, void)
     m_pGroupTLB->GetModel()->Resort();
 }
 
-IMPL_LINK_TYPED( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton, void )
+IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton, void )
 {
     SvTreeListEntry* pEntry = m_pGroupTLB->FirstSelected();
     if(!pEntry)
@@ -275,7 +275,7 @@ IMPL_LINK_TYPED( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton, void )
     m_pNameED->SetText(aEmptyOUStr);
 }
 
-IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, RenameHdl, Button*, void)
+IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl, Button*, void)
 {
     SvTreeListEntry* pEntry = m_pGroupTLB->FirstSelected();
     GlosBibUserData* pUserData = static_cast<GlosBibUserData*>(pEntry->GetUserData());
@@ -320,11 +320,11 @@ IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, RenameHdl, Button*, void)
     m_pGroupTLB->GetModel()->Resort();
 }
 
-IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, ModifyListBoxHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyListBoxHdl, ListBox&, void)
 {
     ModifyHdl(*m_pNameED);
 }
-IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, ModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl, Edit&, void)
 {
     OUString sEntry(m_pNameED->GetText());
     bool bEnableNew = true;

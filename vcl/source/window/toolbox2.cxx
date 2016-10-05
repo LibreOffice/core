@@ -1787,7 +1787,7 @@ void ToolBox::UpdateCustomMenu()
     }
 }
 
-IMPL_LINK_TYPED( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
+IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
 {
     if( rEvent.GetMenu() == GetMenu() && rEvent.GetId() == VCLEVENT_MENU_SELECT )
     {
@@ -1797,7 +1797,7 @@ IMPL_LINK_TYPED( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBox, ImplCallExecuteCustomMenu, void*, void)
+IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
 {
     mpData->mnEventId = nullptr;
     ImplExecuteCustomMenu();

@@ -23,7 +23,7 @@ public:
 
     void setOpenTemplateHdl (const Link<ThumbnailViewItem*, void> &rLink);
 
-    DECL_LINK_TYPED(ContextMenuSelectHdl, Menu*, bool);
+    DECL_LINK(ContextMenuSelectHdl, Menu*, bool);
 
     void setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink);
 

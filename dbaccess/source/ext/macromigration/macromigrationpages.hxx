@@ -94,7 +94,7 @@ namespace dbmm
         virtual bool        canAdvance() const override;
 
     private:
-        DECL_LINK_TYPED( OnLocationModified, Edit&, void );
+        DECL_LINK( OnLocationModified, Edit&, void );
         void impl_updateLocationDependentItems();
     };
 

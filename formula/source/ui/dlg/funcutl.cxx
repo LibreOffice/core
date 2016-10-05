@@ -280,25 +280,25 @@ void ArgInput::EdModify()
     aEdModifyLink.Call(*this);
 }
 
-IMPL_LINK_TYPED( ArgInput, FxBtnClickHdl, Button*, pBtn, void )
+IMPL_LINK( ArgInput, FxBtnClickHdl, Button*, pBtn, void )
 {
     if(pBtn == pBtnFx)
         FxClick();
 }
 
-IMPL_LINK_TYPED( ArgInput, FxBtnFocusHdl, Control&, rControl, void )
+IMPL_LINK( ArgInput, FxBtnFocusHdl, Control&, rControl, void )
 {
     if(&rControl == pBtnFx)
         FxFocus();
 }
 
-IMPL_LINK_TYPED( ArgInput, EdFocusHdl, Control&, rControl, void )
+IMPL_LINK( ArgInput, EdFocusHdl, Control&, rControl, void )
 {
     if(&rControl == pEdArg)
         EdFocus();
 }
 
-IMPL_LINK_TYPED( ArgInput, EdModifyHdl, Edit&, rEdit, void )
+IMPL_LINK( ArgInput, EdModifyHdl, Edit&, rEdit, void )
 {
     if(&rEdit == pEdArg)
         EdModify();
@@ -403,7 +403,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
 
 //When an Event cleared wurde, this routine is
 //first called.
-IMPL_LINK_NOARG_TYPED(EditBox, ChangedHdl, void*, void)
+IMPL_LINK_NOARG(EditBox, ChangedHdl, void*, void)
 {
     if(pMEdit!=nullptr)
     {
@@ -553,7 +553,7 @@ void RefEdit::LoseFocus()
         pAnyRefDlg->HideReference();
 }
 
-IMPL_LINK_NOARG_TYPED(RefEdit, UpdateHdl, Idle *, void)
+IMPL_LINK_NOARG(RefEdit, UpdateHdl, Idle *, void)
 {
     if( pAnyRefDlg )
         pAnyRefDlg->ShowReference( GetText() );
