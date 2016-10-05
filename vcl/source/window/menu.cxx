@@ -446,22 +446,9 @@ void Menu::InsertItem( const ResId& rResId )
         aText = ReadStringRes();
 
     // create item
-    if ( nObjMask & RscMenuItem::Bitmap )
-    {
-        if ( !bSep )
-        {
-            Bitmap aBmp( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
-            Image const aImg(aBmp);
-            if ( !aText.isEmpty() )
-                InsertItem( nItemId, aText, aImg, nStatus );
-            else
-                InsertItem( nItemId, aImg, nStatus );
-        }
-        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
-    }
-    else if ( !bSep )
+    if (!bSep)
         InsertItem(nItemId, aText, nStatus);
-    if ( bSep )
+    else
         InsertSeparator();
 
     OUString aHelpText;

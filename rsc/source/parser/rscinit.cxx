@@ -353,7 +353,7 @@ void RscTypCont::Init()
 
 }
 {
-    RscTop* pClassMenuItem = InitClassMenuItem( pClassMgr, pClassBitmap);
+    RscTop* pClassMenuItem = InitClassMenuItem(pClassMgr);
     pRoot->Insert( pClassMenuItem );
 
     RscTop* pClassMenu = InitClassMenu( pClassMgr, pClassMenuItem );
@@ -410,7 +410,7 @@ void RscTypCont::Init()
     RscTop* pClassDockingWindow = InitClassDockingWindow( pClassWindow, pMapUnit );
     pRoot->Insert( pClassDockingWindow );
 
-    RscTop* pClassToolBoxItem = InitClassToolBoxItem( pClassMgr, pClassBitmap );
+    RscTop* pClassToolBoxItem = InitClassToolBoxItem(pClassMgr);
     pRoot->Insert( pClassToolBoxItem );
 
     RscTop* pClassToolBox = InitClassToolBox( pClassDockingWindow, pClassToolBoxItem );

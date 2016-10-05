@@ -67,7 +67,6 @@ enum class RscMenuItem {
     Id                 = 0x002,
     Status             = 0x004,
     Text               = 0x008,
-    Bitmap             = 0x010,
     HelpText           = 0x020,
     HelpId             = 0x040,
     Menu               = 0x100,
@@ -75,7 +74,7 @@ enum class RscMenuItem {
     Command            = 0x800
 };
 namespace o3tl {
-    template<> struct typed_flags<RscMenuItem> : is_typed_flags<RscMenuItem, 0xd7f> {};
+    template<> struct typed_flags<RscMenuItem> : is_typed_flags<RscMenuItem, 0xd6f> {};
 }
 
 // For "Field" resources:
@@ -119,13 +118,12 @@ enum class RscToolboxItemFlags {
     Status          = 0x0004,
     HelpId          = 0x0008,
     Text            = 0x0010,
-    Bitmap          = 0x0040,
     Disable         = 0x0100,
     Hide            = 0x0400,
     Command         = 0x0800
 };
 namespace o3tl {
-    template<> struct typed_flags<RscToolboxItemFlags> : is_typed_flags<RscToolboxItemFlags, 0xd5f> {};
+    template<> struct typed_flags<RscToolboxItemFlags> : is_typed_flags<RscToolboxItemFlags, 0xd1f> {};
 }
 
 // For "ToolBox" resources:

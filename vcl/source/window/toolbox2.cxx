@@ -377,7 +377,6 @@ void ToolBox::Select()
 void ToolBox::InsertItem( const ResId& rResId )
 {
     RscToolboxItemFlags nObjMask;
-    bool      bImage = false;     // has image
 
     // create item
     ImplToolItem aItem;
@@ -405,14 +404,6 @@ void ToolBox::InsertItem( const ResId& rResId )
         aItem.maText = MnemonicGenerator::EraseAllMnemonicChars(aItem.maText);
     }
 
-    if ( nObjMask & RscToolboxItemFlags::Bitmap )
-    {
-        Bitmap aBmp = Bitmap( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *rResId.GetResMgr() ) );
-        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
-        aItem.maImage = Image( aBmp, IMAGE_STDBTN_COLOR );
-        aItem.maImageOriginal = aItem.maImage;
-        bImage = true;
-    }
     if ( nObjMask & RscToolboxItemFlags::Disable )
         aItem.mbEnabled = ReadShortRes() == 0;
 
@@ -422,8 +413,8 @@ void ToolBox::InsertItem( const ResId& rResId )
     if ( nObjMask & RscToolboxItemFlags::Command )
         aItem.maCommandStr = ReadStringRes();
 
-    // if no image is loaded, try to load one from the image list
-    if ( !bImage && aItem.mnId )
+    // Try to load an image from the image list
+    if (aItem.mnId)
     {
         aItem.maImage = maImageList.GetImage( aItem.mnId );
         aItem.maImageOriginal = aItem.maImage;

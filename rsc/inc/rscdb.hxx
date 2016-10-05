@@ -195,7 +195,7 @@ class RscTypCont
     RscTop *    InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage );
     RscTop *    InitClassRadioButton( RscTop * pSuper );
     RscTop *    InitClassKeyCode( RscTop * pSuper, RscEnum * pKey );
-    RscTop *    InitClassMenuItem( RscTop * pSuper, RscTop * pClassBitmap );
+    RscTop *    InitClassMenuItem( RscTop * pSuper );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
 
     RscTop *    InitClassNumericFormatter( RscTop * pSuper );
@@ -208,7 +208,7 @@ class RscTypCont
 
     RscTop *    InitClassDockingWindow( RscTop * pSuper,
                                         RscEnum * pMapUnit );
-    RscTop *    InitClassToolBoxItem( RscTop * pSuper, RscTop * pClassBitmap );
+    RscTop *    InitClassToolBoxItem(RscTop * pSuper);
     RscTop *    InitClassToolBox( RscTop * pSuper, RscTop * pClassToolBoxItem );
     RscTop *    InitClassSfxStyleFamilyItem( RscTop * pSuper,
                                              RscTop * pClassBitmap,

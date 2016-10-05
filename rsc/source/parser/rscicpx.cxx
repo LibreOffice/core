@@ -641,8 +641,7 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
     return pClassKeyCode;
 }
 
-RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
-                                        RscTop * pClassBitmap )
+RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper )
 {
     Atom        nId;
     RscTop *    pClassMenuItem;
@@ -725,9 +724,6 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
     nId = aNmTb.Put( "Text", VARNAME );
     pClassMenuItem->SetVariable( nId, &aLangString, nullptr, 0,
                                  (sal_uInt32)RscMenuItem::Text );
-    nId = aNmTb.Put( "ItemBitmap", VARNAME );
-    pClassMenuItem->SetVariable( nId, pClassBitmap, nullptr, 0,
-                                 (sal_uInt32)RscMenuItem::Bitmap );
     nId = aNmTb.Put( "HelpText", VARNAME );
     pClassMenuItem->SetVariable( nId, &aLangString, nullptr, 0,
                                  (sal_uInt32)RscMenuItem::HelpText );
@@ -932,8 +928,7 @@ RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,
     return pClassDockWindow;
 }
 
-RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
-                                           RscTop * pClassBitmap )
+RscTop * RscTypCont::InitClassToolBoxItem(RscTop * pSuper)
 {
     Atom        nId;
     RscTop *    pClassToolBoxItem;
@@ -1031,9 +1026,6 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
     nId = aNmTb.Put( "Text", VARNAME );
     pClassToolBoxItem->SetVariable( nId, &aLangString, nullptr, 0,
                                     (sal_uInt32)RscToolboxItemFlags::Text );
-    nId = aNmTb.Put( "ItemBitmap", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, pClassBitmap, nullptr, 0,
-                                    (sal_uInt32)RscToolboxItemFlags::Bitmap );
     nId = aNmTb.Put( "Disable", VARNAME );
     pClassToolBoxItem->SetVariable( nId, &aBool, nullptr, 0,
                                     (sal_uInt32)RscToolboxItemFlags::Disable );
