@@ -207,7 +207,7 @@ public:
     void RegisterToFormat( SwFormat& );
 };
 
-class SwFormatCollConditions : public std::vector<std::unique_ptr<SwCollCondition>> {};
+using SwFormatCollConditions = std::vector<std::unique_ptr<SwCollCondition>>;
 
 class SW_DLLPUBLIC SwConditionTextFormatColl : public SwTextFormatColl
 {

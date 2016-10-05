@@ -110,7 +110,6 @@ class SwNumRule;
 class SwNumRuleTable;
 class SwPagePreviewPrtData;
 class SwRootFrame;
-class SwRubyList;
 class SwRubyListEntry;
 class SwSectionFormat;
 class SwSectionFormats;
@@ -227,6 +226,8 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 
 // global function to start grammar checking in the document
 void StartGrammarChecking( SwDoc &rDoc );
+
+using SwRubyList = std::vector<std::unique_ptr<SwRubyListEntry>>;
 
 // Represents the model of a Writer document.
 class SW_DLLPUBLIC SwDoc :
