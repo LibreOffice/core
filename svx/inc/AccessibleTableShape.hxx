@@ -64,13 +64,9 @@ public:
     virtual void SAL_CALL acquire(  ) throw () override;
     virtual void SAL_CALL release(  ) throw () override;
 
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext( ) throw(css::uno::RuntimeException, std::exception) override;
-
     // XAccessibleContext
     virtual sal_Int32 SAL_CALL getAccessibleChildCount( ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw(css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Int16 SAL_CALL getAccessibleRole() throw (css::uno::RuntimeException, std::exception) override;
 
     // XAccessibleTable

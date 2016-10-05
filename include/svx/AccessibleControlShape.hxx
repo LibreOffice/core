@@ -62,8 +62,6 @@ public:
     const css::uno::Reference< css::beans::XPropertySet >& SAL_CALL  GetControlModel( ) { return m_xControlModel;} ;
     AccessibleControlShape* SAL_CALL GetLabeledByControlShape();
 protected:
-    //---  XAccessible  ----------------------------------------
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext( ) throw(css::uno::RuntimeException, std::exception) override;
 
     //---  XAccessibleComponent  -------------------------------
     /// forward the focus to the contained control(in alive mode)

@@ -194,16 +194,6 @@ SdrUnoObj::~SdrUnoObj()
     }
 }
 
-void SdrUnoObj::SetModel(SdrModel* pNewModel)
-{
-    SdrRectObj::SetModel(pNewModel);
-}
-
-void SdrUnoObj::SetPage(SdrPage* pNewPage)
-{
-    SdrRectObj::SetPage(pNewPage);
-}
-
 void SdrUnoObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     rInfo.bRotateFreeAllowed        =   false;

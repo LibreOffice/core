@@ -66,9 +66,6 @@ public:
         const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac);
     virtual ~SdrUnoObj() override;
 
-    virtual void SetPage(SdrPage* pNewPage) override;
-    virtual void SetModel(SdrModel* pModel) override;
-
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual sal_uInt16 GetObjIdentifier() const override;
 

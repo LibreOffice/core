@@ -627,23 +627,6 @@ Point SdrCaptionObj::GetRelativePos() const
     return aTailPoly.GetPoint(0)-aAnchor;
 }
 
-void SdrCaptionObj::NbcSetAnchorPos(const Point& rPnt)
-{
-    SdrRectObj::NbcSetAnchorPos(rPnt);
-    // TODO: Implementation missing.
-}
-
-const Point& SdrCaptionObj::GetAnchorPos() const
-{
-    // TODO: Implementation missing.
-    return SdrRectObj::GetAnchorPos();
-}
-
-const Rectangle& SdrCaptionObj::GetSnapRect() const
-{
-    return SdrRectObj::GetSnapRect();
-}
-
 const Rectangle& SdrCaptionObj::GetLogicRect() const
 {
     return maRect;

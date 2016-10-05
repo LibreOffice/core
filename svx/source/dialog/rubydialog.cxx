@@ -399,11 +399,6 @@ void SvxRubyDialog::Activate()
     }
 }
 
-void SvxRubyDialog::Deactivate()
-{
-    SfxModelessDialog::Deactivate();
-}
-
 void SvxRubyDialog::SetRubyText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
 {
     OUString sLeft, sRight;

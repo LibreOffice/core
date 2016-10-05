@@ -517,16 +517,6 @@ void SdrRectObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetXPolyDirty();
 }
 
-bool SdrRectObj::DoMacro(const SdrObjMacroHitRec& rRec)
-{
-    return SdrTextObj::DoMacro(rRec);
-}
-
-OUString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
-{
-    return SdrTextObj::GetMacroPopupComment(rRec);
-}
-
 SdrGluePoint SdrRectObj::GetVertexGluePoint(sal_uInt16 nPosNum) const
 {
     sal_Int32 nWdt = ImpGetLineWdt(); // #i25616#

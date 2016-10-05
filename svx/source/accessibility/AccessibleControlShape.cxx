@@ -278,11 +278,6 @@ void AccessibleControlShape::Init()
     }
 }
 
-Reference< XAccessibleContext > SAL_CALL AccessibleControlShape::getAccessibleContext() throw (RuntimeException, std::exception)
-{
-    return AccessibleShape::getAccessibleContext ();
-}
-
 void SAL_CALL AccessibleControlShape::grabFocus()  throw (RuntimeException, std::exception)
 {
     if ( !m_xUnoControl.is() || !isAliveMode( m_xUnoControl ) )

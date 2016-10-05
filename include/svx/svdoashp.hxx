@@ -188,12 +188,7 @@ public:
 
     virtual void SetModel(SdrModel* pNewModel) override;
 
-    virtual const Rectangle& GetSnapRect()  const override;
-    virtual const Rectangle& GetCurrentBoundRect() const override;
-    virtual const Rectangle& GetLogicRect() const override;
-
     virtual void Move(const Size& rSiz) override;
-    virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true) override;
     virtual void Shear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
     virtual void SetSnapRect(const Rectangle& rRect) override;
     virtual void SetLogicRect(const Rectangle& rRect) override;

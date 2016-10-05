@@ -176,9 +176,7 @@ public:
     virtual SdrHdl*         GetHdl(sal_uInt32 nHdlNum) const override;
 
     virtual void            NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
-    virtual void            NbcRotate(const Point& rRef, long nAngle, double sn, double cs) override;
     virtual void            NbcMirror(const Point& rRef1, const Point& rRef2) override;
-    virtual void            NbcShear (const Point& rRef, long nAngle, double tn, bool bVShear) override;
     virtual SdrObjGeoData*  NewGeoData() const override;
     virtual void            SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void            RestGeoData(const SdrObjGeoData& rGeo) override;

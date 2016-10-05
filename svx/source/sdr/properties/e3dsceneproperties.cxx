@@ -49,12 +49,6 @@ namespace sdr
             return *(new E3dSceneProperties(*this, rObj));
         }
 
-        const SfxItemSet& E3dSceneProperties::GetObjectItemSet() const
-        {
-            //DBG_ASSERT(sal_False, "E3dSceneProperties::GetObjectItemSet() maybe the wrong call (!)");
-            return E3dProperties::GetObjectItemSet();
-        }
-
         const SfxItemSet& E3dSceneProperties::GetMergedItemSet() const
         {
             // prepare ItemSet

@@ -79,11 +79,6 @@ SvxOle2Shape::~SvxOle2Shape() throw()
 {
 }
 
-css::uno::Any SAL_CALL SvxOle2Shape::queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
-{
-    return SvxShapeText::queryAggregation( rType );
-}
-
 //XPropertySet
 bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {

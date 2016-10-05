@@ -171,8 +171,6 @@ namespace sdr
 
             void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
-            void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) override;
-
             sdr::table::CellRef mxCell;
 
         private:
@@ -334,10 +332,6 @@ namespace sdr
             AttributeProperties::ItemChange( nWhich, pNewItem );
         }
 
-        void CellProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
-        {
-            TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
-        }
     } // end of namespace properties
 } // end of namespace sdr
 
@@ -1605,18 +1599,6 @@ void SAL_CALL Cell::removeTextContent( const Reference< XTextContent >& xContent
 // XSimpleText
 
 
-Reference< XTextCursor > SAL_CALL Cell::createTextCursor(  ) throw (RuntimeException, std::exception)
-{
-    return SvxUnoTextBase::createTextCursor();
-}
-
-
-Reference< XTextCursor > SAL_CALL Cell::createTextCursorByRange( const Reference< XTextRange >& aTextPosition ) throw (RuntimeException, std::exception)
-{
-    return SvxUnoTextBase::createTextCursorByRange( aTextPosition );
-}
-
-
 void SAL_CALL Cell::insertString( const Reference< XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb ) throw (RuntimeException, std::exception)
 {
     SvxUnoTextBase::insertString( xRange, aString, bAbsorb );
@@ -1632,24 +1614,6 @@ void SAL_CALL Cell::insertControlCharacter( const Reference< XTextRange >& xRang
 
 
 // XTextRange
-
-
-Reference< XText > SAL_CALL Cell::getText(  ) throw (RuntimeException, std::exception)
-{
-    return SvxUnoTextBase::getText();
-}
-
-
-Reference< XTextRange > SAL_CALL Cell::getStart(  ) throw (RuntimeException, std::exception)
-{
-    return SvxUnoTextBase::getStart();
-}
-
-
-Reference< XTextRange > SAL_CALL Cell::getEnd(  ) throw (RuntimeException, std::exception)
-{
-    return SvxUnoTextBase::getEnd();
-}
 
 
 OUString SAL_CALL Cell::getString(  ) throw (RuntimeException, std::exception)

@@ -363,11 +363,6 @@ void FmFormView::HideSdrPage()
 }
 
 
-SdrModel* FmFormView::GetMarkedObjModel() const
-{
-    return E3dView::GetMarkedObjModel();
-}
-
 void FmFormView::ActivateControls(SdrPageView* pPageView)
 {
     if (!pPageView)

@@ -106,9 +106,6 @@ public:
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
     virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
 
-    virtual bool DoMacro(const SdrObjMacroHitRec& rRec) override;
-    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const override;
-
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const override;
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const override;
 

@@ -88,13 +88,6 @@ public:
         disposeOnce();
     }
     virtual void dispose() override;
-    void MouseMove( const MouseEvent& rMEvt ) override;
-    void MouseButtonDown( const MouseEvent& rMEvt ) override;
-    void MouseButtonUp( const MouseEvent& rMEvt ) override;
-    void KeyInput( const KeyEvent& rKEvt ) override;
-    void KeyUp( const KeyEvent& rKEvt ) override;
-    void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
-    void Resize() override;
     bool Close() override;
 };
 
@@ -128,41 +121,6 @@ bool MyWin::Close()
     if( bRet )
         Application::Quit();
     return bRet;
-}
-
-void MyWin::MouseMove( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseMove( rMEvt );
-}
-
-void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseButtonDown( rMEvt );
-}
-
-void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseButtonUp( rMEvt );
-}
-
-void MyWin::KeyInput( const KeyEvent& rKEvt )
-{
-    WorkWindow::KeyInput( rKEvt );
-}
-
-void MyWin::KeyUp( const KeyEvent& rKEvt )
-{
-    WorkWindow::KeyUp( rKEvt );
-}
-
-void MyWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
-{
-    WorkWindow::Paint(rRenderContext, rRect);
-}
-
-void MyWin::Resize()
-{
-    WorkWindow::Resize();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

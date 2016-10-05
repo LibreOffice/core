@@ -99,9 +99,6 @@ protected:
     SAL_DLLPRIVATE virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd ) override;
     SAL_DLLPRIVATE virtual void        BrkCreate( SdrDragStat& rStat ) override;
 
-    // #i70852# override Layer interface to force to FormControl layer
-    SAL_DLLPRIVATE virtual SdrLayerID GetLayer() const override;
-
 private:
     /** isolates the control model from its form component hierarchy, i.e. removes it from
         its parent.

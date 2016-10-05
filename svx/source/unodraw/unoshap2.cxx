@@ -1601,12 +1601,6 @@ SvxCustomShape::~SvxCustomShape() throw()
 }
 
 
-void SvxCustomShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
-{
-    SvxShapeText::Create( pNewObj, pNewPage );
-}
-
-
 uno::Any SAL_CALL SvxCustomShape::queryInterface( const uno::Type & rType )
     throw(uno::RuntimeException, std::exception)
 {
@@ -1647,12 +1641,6 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxCustomShape::getImplementationId()
 
 // css::drawing::XShape
 
-
-OUString SAL_CALL SvxCustomShape::getShapeType()
-    throw( uno::RuntimeException, std::exception )
-{
-    return SvxShape::getShapeType();
-}
 
 awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, std::exception)
 {
@@ -1733,25 +1721,6 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
     }
     else
         return SvxShape::getPosition();
-}
-
-
-void SAL_CALL SvxCustomShape::setPosition( const awt::Point& Position ) throw(uno::RuntimeException, std::exception)
-{
-    SvxShapeText::setPosition(Position);
-}
-
-
-awt::Size SAL_CALL SvxCustomShape::getSize() throw(uno::RuntimeException, std::exception)
-{
-    return SvxShapeText::getSize();
-}
-
-
-void SAL_CALL SvxCustomShape::setSize( const awt::Size& rSize )
-    throw(beans::PropertyVetoException, uno::RuntimeException, std::exception)
-{
-    SvxShapeText::setSize( rSize );
 }
 
 

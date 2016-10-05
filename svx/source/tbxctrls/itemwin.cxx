@@ -517,12 +517,6 @@ bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
 }
 
 
-void SvxFillAttrBox::Select()
-{
-    FillAttrLB::Select();
-}
-
-
 void SvxFillAttrBox::ReleaseFocus_Impl()
 {
     if( SfxViewShell::Current() )

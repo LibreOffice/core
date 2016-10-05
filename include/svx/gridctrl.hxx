@@ -308,7 +308,6 @@ protected:
 protected:
     virtual bool SeekRow(long nRow) override;
     virtual void VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows) override;
-    virtual void PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const override;
     virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const override;
     virtual RowStatus GetRowStatus(long nRow) const override;
     virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) override;

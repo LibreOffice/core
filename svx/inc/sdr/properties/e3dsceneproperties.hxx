@@ -46,9 +46,6 @@ namespace sdr
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const override;
 
-            // get itemset
-            virtual const SfxItemSet& GetObjectItemSet() const override;
-
             // get merged ItemSet. Normally, this maps directly to GetObjectItemSet(), but may
             // be overridden e.g for group objects to return a merged ItemSet of the object.
             // When using this method the returned ItemSet may contain items in the state

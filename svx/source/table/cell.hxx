@@ -166,15 +166,10 @@ public:
     SVX_DLLPRIVATE virtual void SAL_CALL removeTextContent( const css::uno::Reference< css::text::XTextContent >& xContent ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
 
     // XSimpleText
-    SVX_DLLPRIVATE virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL createTextCursor(  ) throw (css::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL createTextCursorByRange( const css::uno::Reference< css::text::XTextRange >& aTextPosition ) throw (css::uno::RuntimeException, std::exception) override;
     SVX_DLLPRIVATE virtual void SAL_CALL insertString( const css::uno::Reference< css::text::XTextRange >& xRange, const OUString& aString, sal_Bool bAbsorb ) throw (css::uno::RuntimeException, std::exception) override;
     SVX_DLLPRIVATE virtual void SAL_CALL insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange, ::sal_Int16 nControlCharacter, sal_Bool bAbsorb ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // XTextRange
-    SVX_DLLPRIVATE virtual css::uno::Reference< css::text::XText > SAL_CALL getText(  ) throw (css::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart(  ) throw (css::uno::RuntimeException, std::exception) override;
-    SVX_DLLPRIVATE virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getEnd(  ) throw (css::uno::RuntimeException, std::exception) override;
     SVX_DLLPRIVATE virtual OUString SAL_CALL getString(  ) throw (css::uno::RuntimeException, std::exception) override;
     SVX_DLLPRIVATE virtual void SAL_CALL setString( const OUString& aString ) throw (css::uno::RuntimeException, std::exception) override;
 

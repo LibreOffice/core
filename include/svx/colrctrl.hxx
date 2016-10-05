@@ -51,7 +51,6 @@ protected:
     // ValueSet
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    Command(const CommandEvent& rCEvt ) override;
 
     // DragSourceHelper
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPtPixel ) override;

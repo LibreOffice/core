@@ -1362,12 +1362,6 @@ sal_uInt16 SdrTableObj::GetObjIdentifier() const
 }
 
 
-void SdrTableObj::SetPage(SdrPage* pNewPage)
-{
-    SdrTextObj::SetPage(pNewPage);
-}
-
-
 void SdrTableObj::SetModel(SdrModel* pNewModel)
 {
     SdrModel* pOldModel = GetModel();
@@ -1657,11 +1651,6 @@ sal_uInt16 SdrTableObj::GetOutlinerViewAnchorMode() const
 }
 
 
-OutlinerParaObject* SdrTableObj::GetEditOutlinerParaObject() const
-{
-    return SdrTextObj::GetEditOutlinerParaObject();
-}
-
 OUString SdrTableObj::TakeObjNameSingul() const
 {
     OUStringBuffer sName(ImpGetResStr(STR_ObjNameSingulTable));
@@ -1715,18 +1704,6 @@ SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)
 }
 
 
-basegfx::B2DPolyPolygon SdrTableObj::TakeXorPoly() const
-{
-    return SdrTextObj::TakeXorPoly();
-}
-
-
-basegfx::B2DPolyPolygon SdrTableObj::TakeContour() const
-{
-    return SdrTextObj::TakeContour();
-}
-
-
 const Rectangle& SdrTableObj::GetSnapRect() const
 {
     return maRect;
@@ -1747,18 +1724,6 @@ const Rectangle& SdrTableObj::GetLogicRect() const
 
 void SdrTableObj::RecalcSnapRect()
 {
-}
-
-
-sal_uInt32 SdrTableObj::GetSnapPointCount() const
-{
-    return SdrTextObj::GetSnapPointCount();
-}
-
-
-Point SdrTableObj::GetSnapPoint(sal_uInt32 i) const
-{
-    return SdrTextObj::GetSnapPoint(i);
 }
 
 
@@ -2026,13 +1991,6 @@ void SdrTableObj::SetSkipChangeLayout(bool bSkipChangeLayout)
     mpImpl->mbSkipChangeLayout = bSkipChangeLayout;
 }
 
-// gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
-// with the base geometry and returns TRUE. Otherwise it returns FALSE.
-bool SdrTableObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon ) const
-{
-    return SdrTextObj::TRGetBaseGeometry( rMatrix, rPolyPolygon );
-}
-
 bool SdrTableObj::IsReallyEdited() const
 {
     return pEdtOutl && pEdtOutl->IsModified();
@@ -2275,11 +2233,6 @@ bool SdrTableObj::applySpecialDrag(SdrDragStat& rDrag)
     }
 
     return bRet;
-}
-
-OUString SdrTableObj::getSpecialDragComment(const SdrDragStat& rDrag) const
-{
-    return SdrTextObj::getSpecialDragComment( rDrag );
 }
 
 basegfx::B2DPolyPolygon SdrTableObj::getSpecialDragPoly(const SdrDragStat& rDrag) const

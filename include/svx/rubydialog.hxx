@@ -157,7 +157,6 @@ public:
     virtual void        dispose() override;
 
     virtual void        Activate() override;
-    virtual void        Deactivate() override;
 
 private:
     rtl::Reference<SvxRubyData_Impl> m_pImpl;

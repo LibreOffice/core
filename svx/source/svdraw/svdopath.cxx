@@ -2822,12 +2822,6 @@ void SdrPathObj::ToggleClosed()
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
 
-// for friend class SdrPolyEditView in some compilers:
-void SdrPathObj::SetRectsDirty(bool bNotMyself)
-{
-    SdrTextObj::SetRectsDirty(bNotMyself);
-}
-
 ImpPathForDragAndCreate& SdrPathObj::impGetDAC() const
 {
     if(!mpDAC)

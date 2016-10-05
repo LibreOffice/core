@@ -79,9 +79,6 @@ namespace svxform
             DispatchInterceptor* _pMaster
         );
 
-        // UNO
-        DECLARE_UNO3_DEFAULTS(DispatchInterceptionMultiplexer, DispatchInterceptionMultiplexer_BASE)
-
         // css::frame::XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) throw(css::uno::RuntimeException, std::exception) override;

@@ -120,7 +120,6 @@ public:
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    Notify( NotifyEvent& rNEvt ) override;
-    virtual void    Select() override;
 
 private:
     sal_uInt16      nCurPos;

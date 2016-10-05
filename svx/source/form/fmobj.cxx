@@ -686,18 +686,4 @@ void FmFormObj::BrkCreate( SdrDragStat& rStat )
 }
 
 
-// #i70852# override Layer interface to force to FormControl layer
-
-SdrLayerID FmFormObj::GetLayer() const
-{
-    // #i72535#
-    // i70852 was too radical, in SW obects (and thus, FormControls, too)
-    // get moved to invisible layers to hide them (e.g. in hidden sections).
-    // This means that form controls ARE allowed to be on other layers than
-    // the form control layer ATM and that being member of form control layer
-    // is no criteria to find all FormControls of a document.
-    // To fix, use parent functionality
-    return SdrUnoObj::GetLayer();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

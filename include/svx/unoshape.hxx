@@ -565,9 +565,6 @@ public:
     bool createObject( const SvGlobalName &aClassName );
 
     void createLink( const OUString& aLinkURL );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
 };
 
 
@@ -808,22 +805,14 @@ public:
 
     virtual ~SvxCustomShape() throw () override;
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
-
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
 
-    // XShapeDescriptor
-    virtual OUString SAL_CALL getShapeType() throw(css::uno::RuntimeException, std::exception) override;
-
     // XShape
     virtual css::awt::Point SAL_CALL getPosition() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Size SAL_CALL getSize() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSize( const css::awt::Size& aSize ) throw(css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception) override;
 
     // XPropertySet
     void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw( css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, std::exception) override;

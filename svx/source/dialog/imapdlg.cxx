@@ -336,11 +336,6 @@ void SvxIMapDlg::UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
 }
 
 
-void SvxIMapDlg::KeyInput( const KeyEvent& rKEvt )
-{
-        SfxModelessDialog::KeyInput( rKEvt );
-}
-
 // Click-handler for ToolBox
 
 IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )

@@ -2179,12 +2179,6 @@ namespace svxform
     }
 
 
-    void DataNavigator::GetFocus()
-    {
-        SfxDockingWindow::GetFocus();
-    }
-
-
     Size DataNavigator::CalcDockingSize( SfxChildAlignment eAlign )
     {
         if ( ( eAlign == SfxChildAlignment::TOP ) || ( eAlign == SfxChildAlignment::BOTTOM ) )

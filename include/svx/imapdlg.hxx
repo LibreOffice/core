@@ -154,8 +154,6 @@ public:
 
     void                UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
                                 const TargetList* pTargetList = nullptr, void* pEditingObj = nullptr );
-
-    virtual void        KeyInput( const KeyEvent& rKEvt ) override;
 };
 
 SVX_DLLPUBLIC SvxIMapDlg* GetIMapDlg();

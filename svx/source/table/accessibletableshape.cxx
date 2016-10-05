@@ -393,12 +393,6 @@ void SAL_CALL AccessibleTableShape::release(  ) throw ()
 // XAccessible
 
 
-Reference< XAccessibleContext > SAL_CALL AccessibleTableShape::getAccessibleContext() throw (RuntimeException, std::exception)
-{
-    return AccessibleShape::getAccessibleContext ();
-}
-
-
 OUString SAL_CALL AccessibleTableShape::getImplementationName() throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.accessibility.AccessibleTableShape" );
@@ -424,12 +418,6 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleChild( sal_
     ThrowIfDisposed();
 
     return mxImpl->getAccessibleChild( i );
-}
-
-
-Reference< XAccessibleRelationSet > SAL_CALL AccessibleTableShape::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
-{
-    return AccessibleShape::getAccessibleRelationSet( );
 }
 
 

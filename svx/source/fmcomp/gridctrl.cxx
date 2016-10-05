@@ -2034,11 +2034,6 @@ DbGridControl_Base::RowStatus DbGridControl::GetRowStatus(long nRow) const
         return DbGridControl_Base::CLEAN;
 }
 
-void DbGridControl::PaintStatusCell(OutputDevice& rDev, const Rectangle& rRect) const
-{
-    DbGridControl_Base::PaintStatusCell(rDev, rRect);
-}
-
 void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
     if (!IsValid(m_xPaintRow))

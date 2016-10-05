@@ -136,12 +136,6 @@ void SvxColorValueSet_docking::MouseButtonUp( const MouseEvent& rMEvt )
     SetNoSelection();
 }
 
-void SvxColorValueSet_docking::Command(const CommandEvent& rCEvt)
-{
-    // Basisklasse
-    SvxColorValueSet::Command(rCEvt);
-}
-
 void SvxColorValueSet_docking::StartDrag( sal_Int8 , const Point&  )
 {
     Application::PostUserEvent(LINK(this, SvxColorValueSet_docking, ExecDragHdl), nullptr, true);

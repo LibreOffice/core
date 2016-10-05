@@ -3514,13 +3514,6 @@ SfxPoolItem* XLineAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*
     return new XLineAttrSetItem( pSet2 );
 }
 
-/// save a set item in a stream
-SvStream& XLineAttrSetItem::Store( SvStream& rStream, sal_uInt16 nItemVersion ) const
-{
-    return SfxSetItem::Store( rStream, nItemVersion );
-}
-
-
 /// fill attribute set item
 XFillAttrSetItem::XFillAttrSetItem( SfxItemSet* pItemSet ) :
     SfxSetItem( XATTRSET_FILL, pItemSet)
@@ -3556,12 +3549,6 @@ SfxPoolItem* XFillAttrSetItem::Create( SvStream& rStream, sal_uInt16 /*nVersion*
                                     XATTR_FILL_FIRST, XATTR_FILL_LAST);
     pSet2->Load( rStream );
     return new XFillAttrSetItem( pSet2 );
-}
-
-/// save a set item in a stream
-SvStream& XFillAttrSetItem::Store( SvStream& rStream, sal_uInt16 nItemVersion ) const
-{
-    return SfxSetItem::Store( rStream, nItemVersion );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -66,7 +66,6 @@ protected:
     void impDeleteDAC() const;
 
 public:
-    virtual void SetRectsDirty(bool bNotMyself = false) override;
     double GetBrightness() { return mdBrightness; }
 
     SdrPathObj(SdrObjKind eNewKind);

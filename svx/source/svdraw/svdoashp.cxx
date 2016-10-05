@@ -1409,19 +1409,6 @@ sal_uInt16 SdrObjCustomShape::GetObjIdentifier() const
 }
 
 
-const Rectangle& SdrObjCustomShape::GetSnapRect() const
-{
-    return SdrTextObj::GetSnapRect();
-}
-const Rectangle& SdrObjCustomShape::GetCurrentBoundRect() const
-{
-    return SdrTextObj::GetCurrentBoundRect();
-}
-const Rectangle& SdrObjCustomShape::GetLogicRect() const
-{
-    return SdrTextObj::GetLogicRect();
-}
-
 // #115391# This implementation is based on the TextFrame size of the CustomShape and the
 // state of the ResizeShapeToFitText flag to correctly set TextMinFrameWidth/Height
 void SdrObjCustomShape::AdaptTextMinSize()
@@ -1545,10 +1532,6 @@ void SdrObjCustomShape::NbcMove( const Size& rSiz )
     {
         mpLastShadowGeometry->NbcMove( rSiz );
     }
-}
-void SdrObjCustomShape::Resize( const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative )
-{
-    SdrTextObj::Resize( rRef, xFact, yFact, bUnsetRelative );
 }
 
 void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, const Fraction& ryFact )
