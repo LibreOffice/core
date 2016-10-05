@@ -107,7 +107,6 @@ protected:
 
 public:
     explicit        FixedLine( vcl::Window* pParent, WinBits nStyle = WB_HORZ );
-    explicit        FixedLine( vcl::Window* pParent, const ResId& );
 
     virtual void    ApplySettings(vcl::RenderContext&) override;
 

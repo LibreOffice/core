@@ -588,18 +588,6 @@ FixedLine::FixedLine( vcl::Window* pParent, WinBits nStyle ) :
     SetSizePixel( Size( 2, 2 ) );
 }
 
-FixedLine::FixedLine( vcl::Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_FIXEDLINE )
-{
-    rResId.SetRT( RSC_FIXEDLINE );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 void FixedLine::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();

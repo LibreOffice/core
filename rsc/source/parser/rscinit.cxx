@@ -38,9 +38,6 @@
 #include <rsclex.hxx>
 #include <rscyacc.hxx>
 
-#define INS_WINBIT( pClass, WinBit )        \
-    InsWinBit( pClass, #WinBit, n##WinBit##Id );
-
 void RscTypCont::Init()
 {
     RscEnum *   pFieldUnits;
@@ -418,16 +415,6 @@ void RscTypCont::Init()
 
     RscTop* pClassToolBox = InitClassToolBox( pClassDockingWindow, pClassToolBoxItem );
     pRoot->Insert( pClassToolBox );
-
-    // initialize class
-    nId = pHS->getID( "FixedLine" );
-    RscTop* pClassFixedLine = new RscClass( nId, RSC_FIXEDLINE, pClassControl );
-    pClassFixedLine->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    INS_WINBIT(pClassFixedLine,Vert)
-
-    aNmTb.Put( nId, CLASSNAME, pClassFixedLine );
-    pRoot->Insert( pClassFixedLine );
 
     RscTop* pClassSfxStyleFamilyItem = InitClassSfxStyleFamilyItem( pClassMgr,
                                                    pClassBitmap,

@@ -62,7 +62,6 @@
 #define RSC_LISTBOX             (RSC_NOTYPE + 0x55)
 
 #define RSC_TEXT                (RSC_NOTYPE + 0x57)
-#define RSC_FIXEDLINE           (RSC_NOTYPE + 0x58)
 
 #define RSC_FIXEDIMAGE          (RSC_NOTYPE + 0x5a)
 
