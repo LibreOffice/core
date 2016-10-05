@@ -59,11 +59,6 @@ void ScreenshotTest::setUp()
     }
 }
 
-void ScreenshotTest::tearDown()
-{
-    test::BootstrapFixture::tearDown();
-}
-
 void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString& rScreenshotId)
 {
     OUString aDirname, aBasename;

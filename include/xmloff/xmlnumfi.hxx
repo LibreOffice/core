@@ -174,7 +174,6 @@ public:
                                     const OUString& rLocalName,
                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void CreateAndInsert(bool bOverwrite) override;
-    virtual void Finish(bool bOverwrite) override;
 
     SvXMLNumImpData* GetData() const                { return pData; }
     sal_Int32 GetKey();

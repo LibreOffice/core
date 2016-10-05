@@ -67,8 +67,6 @@ public:
             basegfx::B2DHomMatrix& aTransformation,
             ::oox::drawingml::ShapeIdMap* pShapeMap = nullptr );
 
-    virtual void applyShapeReference( const oox::drawingml::Shape& rReferencedShape, bool bUseText = true ) override;
-
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
     void setReferenced( bool bReferenced ){ mbReferenced = bReferenced; };
     void setPlaceholder( oox::drawingml::ShapePtr pPlaceholder ) { mpPlaceholder = pPlaceholder; }

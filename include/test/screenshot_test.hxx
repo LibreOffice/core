@@ -49,7 +49,6 @@ public:
     virtual ~ScreenshotTest() override;
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     /// Dialog creation for known dialogs by Name (path and UIXMLDescription, *.ui file).
     /// This uses maKnownDialogs to check if known, and if so, calls createDialogByID

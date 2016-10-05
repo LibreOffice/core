@@ -183,11 +183,6 @@ namespace drawinglayer
         {
         }
 
-        bool SdrCubePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
-        {
-            return SdrPrimitive3D::operator==(rPrimitive);
-        }
-
         basegfx::B3DRange SdrCubePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             // use default from sdrPrimitive3D which uses transformation expanded by line width/2.

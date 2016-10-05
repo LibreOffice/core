@@ -173,23 +173,6 @@ ScVbaShapes::getShapesByArrayIndices( const uno::Any& Index  ) throw (uno::Runti
     return xIndexAccess;
 }
 
-uno::Any SAL_CALL
-ScVbaShapes::Item(const uno::Any& Index, const uno::Any& Index2)
-    throw (lang::IndexOutOfBoundsException, script::BasicErrorException, uno::RuntimeException)
-{
-    // I don't think we need to support Array of indices for shapes
-/*
-    if ( Index.getValueTypeClass() == uno::TypeClass_SEQUENCE )
-    {
-        uno::Reference< container::XIndexAccess > xIndexAccess( getShapesByArrayIndices( Index ) );
-        // return new collection instance
-        uno::Reference< XCollection > xShapesCollection(  new ScVbaShapes( this->getParent(), mxContext, xIndexAccess ) );
-        return uno::makeAny( xShapesCollection );
-    }
-*/
-    return  ScVbaShapes_BASE::Item( Index, Index2 );
-}
-
 uno::Reference< msforms::XShapeRange > SAL_CALL
 ScVbaShapes::Range( const uno::Any& shapes ) throw (css::uno::RuntimeException, std::exception)
 {

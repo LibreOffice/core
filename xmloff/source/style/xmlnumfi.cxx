@@ -1829,11 +1829,6 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     return nKey;
 }
 
-void SvXMLNumFormatContext::Finish( bool bOverwrite )
-{
-    SvXMLStyleContext::Finish( bOverwrite );
-}
-
 const LocaleDataWrapper& SvXMLNumFormatContext::GetLocaleData() const
 {
     return pData->GetLocaleData( nFormatLang );
