@@ -299,10 +299,6 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual void NbcSetLayer(SdrLayerID nLayer) override;
         virtual void SetLayer(SdrLayerID nLayer) override;
 
-        /// FullDrag support
-        virtual bool supportsFullDrag() const override;
-        virtual SdrObject* getFullDragClone() const override;
-
         virtual void SetBoundRectDirty() override;
         virtual const Rectangle& GetCurrentBoundRect() const override;
         virtual const Rectangle& GetLastBoundRect() const override;

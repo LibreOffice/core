@@ -54,7 +54,6 @@ namespace sw { namespace sidebar {
             SfxBindings* pBindings );
     private:
         virtual ~PagePropertyPanel() override;
-        virtual void dispose() override;
     };
 
 } } // end of namespace ::sw::sidebar

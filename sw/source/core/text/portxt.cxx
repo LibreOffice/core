@@ -697,11 +697,6 @@ SwPosSize SwTextInputFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) con
     return rInf.GetTextSize();
 }
 
-sal_uInt16 SwTextInputFieldPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const
-{
-    return SwTextPortion::GetViewWidth( rInf );
-}
-
 SwHolePortion::SwHolePortion( const SwTextPortion &rPor )
     : nBlankWidth( 0 )
 {

@@ -57,10 +57,6 @@ PagePropertyPanel::~PagePropertyPanel()
     disposeOnce();
 }
 
-void PagePropertyPanel::dispose()
-{
-    PanelLayout::dispose();
-}
 
 } } // end of namespace ::sw::sidebar
 

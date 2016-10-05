@@ -246,9 +246,4 @@ short SwMailMergeWizard::Execute()
     return RET_CANCEL;
 }
 
-void SwMailMergeWizard::StartExecuteModal( const Link<Dialog&, void>& rEndDialogHdl )
-{
-    ::svt::RoadmapWizard::StartExecuteModal( rEndDialogHdl );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

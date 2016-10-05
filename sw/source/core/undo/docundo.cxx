@@ -493,13 +493,6 @@ SwUndo * UndoManager::RemoveLastUndo()
 
 // svl::IUndoManager
 
-void UndoManager::EnableUndo(bool bEnable)
-{
-    // SdrUndoManager does not have a counter anymore, but reverted to the old behavior of
-    // having a simple boolean flag for locking. So, simply forward.
-    SdrUndoManager::EnableUndo(bEnable);
-}
-
 void UndoManager::AddUndoAction(SfxUndoAction *pAction, bool bTryMerge)
 {
     SwUndo *const pUndo( dynamic_cast<SwUndo *>(pAction) );

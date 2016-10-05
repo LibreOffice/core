@@ -49,7 +49,6 @@ class SwFlyCntPortion : public SwLinePortion
     bool bDraw : 1;  // DrawContact?
     bool bMax : 1;   // Line adjustment and height == line height
     sal_uInt8 nAlign : 3; // Line adjustment? No, above, middle, bottom
-    virtual sal_Int32 GetCursorOfst( const sal_uInt16 nOfst ) const override;
 
 public:
     // Use new datatype for parameter <nFlags>

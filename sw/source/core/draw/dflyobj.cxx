@@ -999,18 +999,4 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
     return SdrObject::CheckMacroHit( rRec );
 }
 
-// Dragging
-
-bool SwVirtFlyDrawObj::supportsFullDrag() const
-{
-    // call parent
-    return SdrVirtObj::supportsFullDrag();
-}
-
-SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
-{
-    // call parent
-    return SdrVirtObj::getFullDragClone();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

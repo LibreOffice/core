@@ -86,7 +86,6 @@ public:
                                    bool bTryMerg = false) override;
     virtual bool Undo() override;
     virtual bool Redo() override;
-    virtual void EnableUndo(bool bEnable) override;
 
     SwUndo * RemoveLastUndo();
     SwUndo * GetLastUndo();

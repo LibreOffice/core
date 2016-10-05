@@ -83,7 +83,6 @@ public:
     void                    updateRoadmapItemLabel( WizardState _nState );
 
     virtual short           Execute() override;
-    virtual void            StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl ) override;
 };
 #endif
 

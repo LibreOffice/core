@@ -721,11 +721,6 @@ sal_uInt16 SwFormat::ResetAllFormatAttr()
     return aNew.Count();
 }
 
-bool SwFormat::GetInfo( SfxPoolItem& rInfo ) const
-{
-    return SwModify::GetInfo( rInfo );
-}
-
 void SwFormat::DelDiffs( const SfxItemSet& rSet )
 {
     if( !m_aSet.Count() )

@@ -2517,16 +2517,4 @@ void SwDrawVirtObj::SetLayer(SdrLayerID nLayer)
     SdrVirtObj::NbcSetLayer( ReferencedObj().GetLayer() );
 }
 
-bool SwDrawVirtObj::supportsFullDrag() const
-{
-    // call parent
-    return SdrVirtObj::supportsFullDrag();
-}
-
-SdrObject* SwDrawVirtObj::getFullDragClone() const
-{
-    // call parent
-    return SdrVirtObj::getFullDragClone();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

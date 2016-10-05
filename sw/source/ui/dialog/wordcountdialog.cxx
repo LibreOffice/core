@@ -157,11 +157,6 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
     m_pClosePB->GrabFocus();
 }
 
-void SwWordCountFloatDlg::Activate()
-{
-    SfxModelessDialog::Activate();
-}
-
 void SwWordCountFloatDlg::UpdateCounts()
 {
     SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();

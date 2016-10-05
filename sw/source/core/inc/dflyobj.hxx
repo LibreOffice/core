@@ -119,10 +119,6 @@ public:
     virtual bool       HasMacro() const override;
     virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const override;
     virtual Pointer    GetMacroPointer     (const SdrObjMacroHitRec& rRec) const override;
-
-    // FullDrag support
-    virtual bool supportsFullDrag() const override;
-    virtual SdrObject* getFullDragClone() const override;
 };
 
 #endif

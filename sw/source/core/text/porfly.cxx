@@ -419,10 +419,4 @@ void SwFlyCntPortion::GetFlyCursorOfst(Point &rPoint, SwPosition &rPos, SwCursor
     GetFlyFrame()->GetCursorOfst(&rPos, rPoint, pCMS);
 }
 
-sal_Int32 SwFlyCntPortion::GetCursorOfst( const sal_uInt16 nOfst ) const
-{
-    // OSL_FAIL("SwFlyCntPortion::GetCursorOfst: use GetFlyCursorOfst()");
-    return SwLinePortion::GetCursorOfst( nOfst );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

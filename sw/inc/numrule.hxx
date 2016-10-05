@@ -84,8 +84,6 @@ public:
 
     virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = nullptr, const sal_Int16* pOrient = nullptr) override;
 
-    virtual void                SetVertOrient(sal_Int16 eSet) override;
-    virtual sal_Int16   GetVertOrient() const override;
     const SwFormatVertOrient*      GetGraphicOrientation() const;
 
     bool IsEnumeration() const; // #i22362#

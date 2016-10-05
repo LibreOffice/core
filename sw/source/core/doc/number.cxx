@@ -322,16 +322,6 @@ void    SwNumFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size
     SvxNumberFormat::SetGraphicBrush( pBrushItem, pSize, pOrient);
 }
 
-void    SwNumFormat::SetVertOrient(sal_Int16 eSet)
-{
-    SvxNumberFormat::SetVertOrient(eSet);
-}
-
-sal_Int16   SwNumFormat::GetVertOrient() const
-{
-    return SvxNumberFormat::GetVertOrient();
-}
-
 void SwNumFormat::UpdateNumNodes( SwDoc* pDoc )
 {
     bool bDocIsModified = pDoc->getIDocumentState().IsModified();

@@ -79,9 +79,6 @@ public:
     /// for Querying of Writer-functions.
     sal_uInt16 Which() const { return m_nWhichId; }
 
-    /// Query format information.
-    virtual bool GetInfo( SfxPoolItem& ) const override;
-
     /// Copy attributes even among documents.
     void CopyAttrs( const SwFormat& );
 
