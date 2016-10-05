@@ -30,6 +30,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 
+#include <svtools/framestatuslistener.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include "toolbarmenuimp.hxx"
@@ -181,9 +182,8 @@ Reference< XAccessible > ToolbarMenuEntry::getAccessibleChild( sal_Int32 index )
 }
 
 
-ToolbarMenu_Impl::ToolbarMenu_Impl( ToolbarMenu& rMenu, const css::uno::Reference< css::frame::XFrame >& xFrame )
+ToolbarMenu_Impl::ToolbarMenu_Impl( ToolbarMenu& rMenu )
 : mrMenu( rMenu )
-, mxFrame( xFrame )
 , mnCheckPos(0)
 , mnImagePos(0)
 , mnTextPos(0)
@@ -403,24 +403,15 @@ IMPL_LINK_NOARG( ToolbarMenu, HighlightHdl, ValueSet*, void )
     mpImpl->notifyHighlightedEntry();
 }
 
-ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, WinBits nBits )
-    : DockingWindow(pParentWindow, nBits)
+ToolbarMenu::ToolbarMenu( const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParentWindow, WinBits nBits )
+    : ToolbarPopup(rFrame, pParentWindow, nBits)
 {
-    implInit(rFrame);
-}
-
-void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
-{
-    mpImpl.reset( new ToolbarMenu_Impl( *this, rFrame ) );
+    mpImpl.reset( new ToolbarMenu_Impl( *this ) );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetControlBackground( rStyleSettings.GetMenuColor() );
 
     initWindow();
-
-    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
-    if ( pWindow )
-        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->AddWindow( this );
 }
 
 
@@ -431,16 +422,6 @@ ToolbarMenu::~ToolbarMenu()
 
 void ToolbarMenu::dispose()
 {
-    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
-    if ( pWindow )
-        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->RemoveWindow( this );
-
-    if ( mpImpl->mxStatusListener.is() )
-    {
-        mpImpl->mxStatusListener->dispose();
-        mpImpl->mxStatusListener.clear();
-    }
-
     mpImpl->mxAccessible.clear();
 
     std::unique_ptr<ToolbarMenu_Impl> pImpl = std::move(mpImpl);
@@ -448,7 +429,7 @@ void ToolbarMenu::dispose()
 
     pImpl->maEntryVector.clear();
 
-    DockingWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 
@@ -704,7 +685,7 @@ void ToolbarMenu::GetFocus()
     if( mpImpl && mpImpl->mnHighlightedEntry == -1 )
         implChangeHighlightEntry( 0 );
 
-    DockingWindow::GetFocus();
+    ToolbarPopup::GetFocus();
 }
 
 
@@ -713,7 +694,7 @@ void ToolbarMenu::LoseFocus()
     if( mpImpl && mpImpl->mnHighlightedEntry != -1 )
         implChangeHighlightEntry( -1 );
 
-    DockingWindow::LoseFocus();
+    ToolbarPopup::LoseFocus();
 }
 
 
@@ -1377,13 +1358,13 @@ void ToolbarMenu::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
 void ToolbarMenu::RequestHelp( const HelpEvent& rHEvt )
 {
-    DockingWindow::RequestHelp( rHEvt );
+    ToolbarPopup::RequestHelp( rHEvt );
 }
 
 
 void ToolbarMenu::StateChanged( StateChangedType nType )
 {
-    DockingWindow::StateChanged( nType );
+    ToolbarPopup::StateChanged( nType );
 
     if ( ( nType == StateChangedType::ControlForeground ) || ( nType == StateChangedType::ControlBackground ) )
     {
@@ -1395,7 +1376,7 @@ void ToolbarMenu::StateChanged( StateChangedType nType )
 
 void ToolbarMenu::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    DockingWindow::DataChanged( rDCEvt );
+    ToolbarPopup::DataChanged( rDCEvt );
 
     if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
@@ -1428,69 +1409,89 @@ Reference< css::accessibility::XAccessible > ToolbarMenu::CreateAccessible()
 }
 
 
-// todo: move to new base class that will replace SfxPopupWindo
-void ToolbarMenu::AddStatusListener( const OUString& rCommandURL )
-{
-    initStatusListener();
-    mpImpl->mxStatusListener->addStatusListener( rCommandURL );
-}
-
-
-void ToolbarMenu::statusChanged( const css::frame::FeatureStateEvent& /*Event*/ ) throw ( css::uno::RuntimeException, std::exception )
-{
-}
-
-
-class ToolbarMenuStatusListener : public svt::FrameStatusListener
+class ToolbarPopupStatusListener : public svt::FrameStatusListener
 {
 public:
-    ToolbarMenuStatusListener( const css::uno::Reference< css::frame::XFrame >& xFrame,
-                               ToolbarMenu& rToolbarMenu );
+    ToolbarPopupStatusListener( const css::uno::Reference< css::frame::XFrame >& xFrame,
+                                ToolbarPopup& rToolbarPopup );
 
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 
-    VclPtr<ToolbarMenu> mpMenu;
+    VclPtr<ToolbarPopup> mpPopup;
 };
 
 
-ToolbarMenuStatusListener::ToolbarMenuStatusListener(
+ToolbarPopupStatusListener::ToolbarPopupStatusListener(
     const css::uno::Reference< css::frame::XFrame >& xFrame,
-    ToolbarMenu& rToolbarMenu )
+    ToolbarPopup& rToolbarPopup )
 : svt::FrameStatusListener( ::comphelper::getProcessComponentContext(), xFrame )
-, mpMenu( &rToolbarMenu )
+, mpPopup( &rToolbarPopup )
 {
 }
 
 
-void SAL_CALL ToolbarMenuStatusListener::dispose() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL ToolbarPopupStatusListener::dispose() throw (css::uno::RuntimeException, std::exception)
 {
-    mpMenu.clear();
+    mpPopup.clear();
     svt::FrameStatusListener::dispose();
 }
 
 
-void SAL_CALL ToolbarMenuStatusListener::statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception )
+void SAL_CALL ToolbarPopupStatusListener::statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception )
 {
-    if( mpMenu )
-        mpMenu->statusChanged( Event );
+    if( mpPopup )
+        mpPopup->statusChanged( Event );
 }
 
-
-void ToolbarMenu::initStatusListener()
+ToolbarPopup::ToolbarPopup( const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParentWindow, WinBits nBits )
+    : DockingWindow(pParentWindow, nBits)
+    , mxFrame( rFrame )
 {
-    if( !mpImpl->mxStatusListener.is() )
-        mpImpl->mxStatusListener.set( new ToolbarMenuStatusListener( mpImpl->mxFrame, *this ) );
+    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
+    if ( pWindow )
+        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->AddWindow( this );
 }
 
+ToolbarPopup::~ToolbarPopup()
+{
+    disposeOnce();
+}
 
-bool ToolbarMenu::IsInPopupMode()
+void ToolbarPopup::dispose()
+{
+    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
+    if ( pWindow )
+        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->RemoveWindow( this );
+
+    if ( mxStatusListener.is() )
+    {
+        mxStatusListener->dispose();
+        mxStatusListener.clear();
+    }
+
+    mxFrame.clear();
+    DockingWindow::dispose();
+}
+
+void ToolbarPopup::AddStatusListener( const OUString& rCommandURL )
+{
+    if( !mxStatusListener.is() )
+        mxStatusListener.set( new ToolbarPopupStatusListener( mxFrame, *this ) );
+
+    mxStatusListener->addStatusListener( rCommandURL );
+}
+
+void ToolbarPopup::statusChanged( const css::frame::FeatureStateEvent& /*Event*/ ) throw ( css::uno::RuntimeException, std::exception )
+{
+}
+
+bool ToolbarPopup::IsInPopupMode()
 {
     return GetDockingManager()->IsInPopupMode(this);
 }
 
-
-void ToolbarMenu::EndPopupMode()
+void ToolbarPopup::EndPopupMode()
 {
     GetDockingManager()->EndPopupMode(this);
 }

@@ -36,15 +36,39 @@
 #include <vcl/dockwin.hxx>
 
 class ValueSet;
+namespace svt { class FrameStatusListener; }
 
 namespace svtools {
 
 class ToolbarMenuEntry;
 struct ToolbarMenu_Impl;
 
-class SVT_DLLPUBLIC ToolbarMenu : public DockingWindow
+class SVT_DLLPUBLIC ToolbarPopup : public DockingWindow
 {
-    friend class ToolbarMenuStatusListener;
+    friend class ToolbarPopupStatusListener;
+public:
+    ToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
+                 vcl::Window* pParentWindow,
+                 WinBits nBits );
+    virtual ~ToolbarPopup() override;
+    virtual void dispose() override;
+
+protected:
+    void AddStatusListener( const OUString& rCommandURL );
+
+    bool IsInPopupMode();
+    void EndPopupMode();
+
+    // Forwarded from XStatusListener (subclasses must override this one to get the status updates):
+    virtual void statusChanged(const css::frame::FeatureStateEvent& Event ) throw (css::uno::RuntimeException, std::exception);
+
+private:
+    css::uno::Reference< css::frame::XFrame >  mxFrame;
+    rtl::Reference< svt::FrameStatusListener > mxStatusListener;
+};
+
+class SVT_DLLPUBLIC ToolbarMenu : public ToolbarPopup
+{
     friend struct ToolbarMenu_Impl;
 public:
     ToolbarMenu(const css::uno::Reference<css::frame::XFrame>& rFrame,
@@ -92,25 +116,12 @@ public:
 protected:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
-    // todo: move to new base class that will replace SfxPopupWindow
-    void AddStatusListener( const OUString& rCommandURL );
-
-    bool IsInPopupMode();
-    void EndPopupMode();
-
-    // Forwarded from XStatusListener (subclasses must override this one to get
-    // the status updates):
-    virtual void statusChanged(const css::frame::FeatureStateEvent& Event ) throw (css::uno::RuntimeException, std::exception);
-
     void            StateChanged( StateChangedType nType ) override;
     void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
     DECL_LINK( HighlightHdl, ValueSet*, void );
 
-    void initStatusListener();
-
-    void            implInit(const css::uno::Reference<css::frame::XFrame>& rFrame);
     void            initWindow();
 
     Size            implCalcSize();
