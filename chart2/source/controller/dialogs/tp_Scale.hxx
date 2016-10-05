@@ -47,8 +47,6 @@ public:
 
     void ShowAxisOrigin( bool bShowOrigin );
 
-    virtual void StateChanged( StateChangedType nType ) override;
-
 private:
     VclPtr<CheckBox>            m_pCbxReverse;
     VclPtr<CheckBox>            m_pCbxLogarithm;

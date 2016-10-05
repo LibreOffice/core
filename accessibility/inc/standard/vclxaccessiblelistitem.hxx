@@ -104,9 +104,6 @@ public:
     void                    SetSelected( bool _bSelected );
     void                    SetVisible( bool _bVisible );
 
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException, std::exception) override;
-
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) override;
 

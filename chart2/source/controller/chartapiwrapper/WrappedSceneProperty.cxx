@@ -101,12 +101,6 @@ Any WrappedD3DTransformMatrixProperty::getPropertyValue( const Reference< beans:
     return WrappedProperty::getPropertyValue( xInnerPropertySet );
 }
 
-Any WrappedD3DTransformMatrixProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    return WrappedProperty::getPropertyDefault( xInnerPropertyState );
-}
-
 } //namespace wrapper
 } //namespace chart
 

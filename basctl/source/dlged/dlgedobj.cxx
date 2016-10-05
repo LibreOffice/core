@@ -82,12 +82,6 @@ DlgEdObj::~DlgEdObj()
         EndListening(true);
 }
 
-void DlgEdObj::SetPage(SdrPage* _pNewPage)
-{
-    // now set the page
-    SdrUnoObj::SetPage(_pNewPage);
-}
-
 namespace
 {
     /* returns the DlgEdForm which the given DlgEdObj belongs to

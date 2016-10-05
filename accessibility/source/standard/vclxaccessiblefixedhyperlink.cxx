@@ -36,19 +36,6 @@ VCLXAccessibleFixedHyperlink::~VCLXAccessibleFixedHyperlink()
 }
 
 
-void VCLXAccessibleFixedHyperlink::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
-{
-    VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
-}
-
-
-void VCLXAccessibleFixedHyperlink::implGetLineBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
-{
-    // TODO
-    OCommonAccessibleText::implGetLineBoundary( rBoundary, nIndex );
-}
-
-
 // XServiceInfo
 
 

@@ -53,13 +53,6 @@ void VCLXAccessibleFixedText::FillAccessibleStateSet( utl::AccessibleStateSetHel
 }
 
 
-void VCLXAccessibleFixedText::implGetLineBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
-{
-    // TODO
-    OCommonAccessibleText::implGetLineBoundary( rBoundary, nIndex );
-}
-
-
 // XServiceInfo
 
 

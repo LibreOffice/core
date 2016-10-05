@@ -164,11 +164,6 @@ IMPL_STATIC_LINK(
     rFmtField.SetDefaultValue( rFmtField.GetValue() );
 }
 
-void ScaleTabPage::StateChanged( StateChangedType nType )
-{
-    TabPage::StateChanged( nType );
-}
-
 void ScaleTabPage::EnableControls()
 {
     bool bValueAxis = chart2::AxisType::REALNUMBER == m_nAxisType

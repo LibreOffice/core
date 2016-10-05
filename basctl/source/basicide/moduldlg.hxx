@@ -176,8 +176,6 @@ public:
     virtual ~OrganizeDialog() override;
     virtual void    dispose() override;
 
-    virtual short   Execute() override;
-
     DECL_LINK( ActivatePageHdl, TabControl*, void );
 };
 

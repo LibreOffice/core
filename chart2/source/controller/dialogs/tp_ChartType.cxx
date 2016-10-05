@@ -316,8 +316,6 @@ public:
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines );
 
-    virtual void StateChanged( StateChangedType nType ) override;
-
 private:
     DECL_LINK( SplineTypeListBoxHdl, ListBox&, void );
 
@@ -352,11 +350,6 @@ void SplinePropertiesDialog::dispose()
     m_pFT_SplineOrder.clear();
     m_pMF_SplineOrder.clear();
     ModalDialog::dispose();
-}
-
-void SplinePropertiesDialog::StateChanged( StateChangedType nType )
-{
-    Dialog::StateChanged( nType );
 }
 
 void SplinePropertiesDialog::fillControls( const ChartTypeParameter& rParameter )
@@ -408,10 +401,6 @@ public:
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSteppedLines );
 
-    virtual void StateChanged( StateChangedType nType ) override;
-
-private:
-
 private:
     VclPtr<RadioButton> m_pRB_Start;
     VclPtr<RadioButton> m_pRB_End;
@@ -437,11 +426,6 @@ void SteppedPropertiesDialog::dispose()
     m_pRB_CenterX.clear();
     m_pRB_CenterY.clear();
     ModalDialog::dispose();
-}
-
-void SteppedPropertiesDialog::StateChanged( StateChangedType nType )
-{
-    Dialog::StateChanged( nType );
 }
 
 void SteppedPropertiesDialog::fillControls( const ChartTypeParameter& rParameter )

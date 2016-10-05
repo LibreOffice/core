@@ -37,8 +37,6 @@ public:
 
     virtual void createShapes() override;
 
-    virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) override;
-
     virtual css::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
 
     // MinimumAndMaximumSupplier

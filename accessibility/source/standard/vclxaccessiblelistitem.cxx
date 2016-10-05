@@ -144,13 +144,6 @@ void VCLXAccessibleListItem::implGetSelection( sal_Int32& nStartIndex, sal_Int32
     nEndIndex = 0;
 }
 
-// XInterface
-
-Any SAL_CALL VCLXAccessibleListItem::queryInterface( Type const & rType ) throw (RuntimeException, std::exception)
-{
-    return VCLXAccessibleListItem_BASE::queryInterface( rType );
-}
-
 // XTypeProvider
 
 Sequence< sal_Int8 > VCLXAccessibleListItem::getImplementationId() throw (RuntimeException, std::exception)

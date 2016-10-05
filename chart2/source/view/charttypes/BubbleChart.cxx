@@ -159,11 +159,6 @@ drawing::Direction3D BubbleChart::getPreferredDiagramAspectRatio() const
     return drawing::Direction3D(-1,-1,-1);
 }
 
-void BubbleChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
-{
-    VSeriesPlotter::addSeries( pSeries, zSlot, xSlot, ySlot );
-}
-
 //better performance for big data
 struct FormerPoint
 {

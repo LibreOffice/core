@@ -501,11 +501,6 @@ void OrganizeDialog::dispose()
     TabDialog::dispose();
 };
 
-short OrganizeDialog::Execute()
-{
-    return TabDialog::Execute();
-}
-
 IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 {
     sal_uInt16 nId = pTabCtrl->GetCurPageId();
