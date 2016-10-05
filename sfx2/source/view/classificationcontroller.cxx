@@ -44,7 +44,7 @@ class ClassificationPropertyListener : public ClassificationPropertyListenerBase
 
 public:
     ClassificationPropertyListener(const rtl::Reference<comphelper::ConfigurationListener>& xListener, ClassificationCategoriesController& rController);
-    virtual void setProperty(const uno::Any& rProperty) override;
+    void setProperty(const uno::Any& rProperty) override;
 };
 
 using ClassificationCategoriesControllerBase = cppu::ImplInheritanceHelper<svt::ToolboxController, lang::XServiceInfo>;
@@ -62,21 +62,21 @@ class ClassificationCategoriesController : public ClassificationCategoriesContro
 
 public:
     explicit ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
-    virtual ~ClassificationCategoriesController() override;
+    ~ClassificationCategoriesController() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception) override;
-    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception) override;
+    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (uno::RuntimeException, std::exception) override;
+    void SAL_CALL dispose() throw (uno::RuntimeException, std::exception) override;
 
     // XToolbarController
-    virtual uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception) override;
+    uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception) override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
+    void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
 
     void removeEntries();
 };
@@ -87,13 +87,13 @@ class SAL_WARN_UNUSED ClassificationControl : public vcl::Window
     std::map<SfxClassificationPolicyType, VclPtr<FixedText>> m_pLabels;
     std::map<SfxClassificationPolicyType, VclPtr<ListBox>> m_pCategories;
     void SetOptimalSize();
-    virtual void DataChanged(const DataChangedEvent& rEvent) override;
+    void DataChanged(const DataChangedEvent& rEvent) override;
 
 public:
     explicit ClassificationControl(vcl::Window* pParent);
-    virtual ~ClassificationControl() override;
-    virtual void dispose() override;
-    virtual void Resize() override;
+    ~ClassificationControl() override;
+    void dispose() override;
+    void Resize() override;
     const VclPtr<ListBox>& getCategories(SfxClassificationPolicyType eType);
     std::size_t getLabelsSize();
     OUString getCategoryType(ListBox& rCategory);
@@ -120,9 +120,7 @@ ClassificationCategoriesController::ClassificationCategoriesController(const uno
 
 }
 
-ClassificationCategoriesController::~ClassificationCategoriesController()
-{
-}
+ClassificationCategoriesController::~ClassificationCategoriesController() = default;
 
 OUString ClassificationCategoriesController::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
