@@ -38,6 +38,11 @@
 static sal_uInt16 ImplGetModifierMask( unsigned int nMask )
 {
     sal_uInt16 nRet = 0;
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
     if( (nMask & NSShiftKeyMask) != 0 )
         nRet |= KEY_SHIFT;
     if( (nMask & NSControlKeyMask) != 0 )
@@ -46,6 +51,7 @@ static sal_uInt16 ImplGetModifierMask( unsigned int nMask )
         nRet |= KEY_MOD2;
     if( (nMask & NSCommandKeyMask) != 0 )
         nRet |= KEY_MOD1;
+SAL_WNODEPRECATED_DECLARATIONS_POP
     return nRet;
 }
 
@@ -152,8 +158,14 @@ static const struct ExceptionalKey
     const unsigned int  nModifierMask;
 } aExceptionalKeys[] =
 {
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
     { KEY_D, NSControlKeyMask | NSShiftKeyMask | NSAlternateKeyMask },
     { KEY_D, NSCommandKeyMask | NSShiftKeyMask | NSAlternateKeyMask }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 };
 
 static AquaSalFrame* getMouseContainerFrame()
@@ -827,7 +839,10 @@ private:
         {
             dX += [pEvent deltaX];
             dY += [pEvent deltaY];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    // 'NSScrollWheelMask' is deprecated: first deprecated in macOS 10.12
             NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSScrollWheelMask
+SAL_WNODEPRECATED_DECLARATIONS_POP
             untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
             if( !pNextEvent )
                 break;
@@ -887,7 +902,10 @@ private:
         {
             dX += [pEvent deltaX];
             dY += [pEvent deltaY];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    // 'NSScrollWheelMask' is deprecated: first deprecated in macOS 10.12
             NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSScrollWheelMask
+SAL_WNODEPRECATED_DECLARATIONS_POP
                 untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
             if( !pNextEvent )
                 break;
@@ -973,8 +991,12 @@ private:
            interpretKeyEvents (why?). Try to dispatch them here first,
            if not successful continue normally
         */
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
+    // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
         if( (mpFrame->mnLastModifierFlags & (NSAlternateKeyMask | NSCommandKeyMask))
                     == (NSAlternateKeyMask | NSCommandKeyMask) )
+SAL_WNODEPRECATED_DECLARATIONS_POP
         {
             if( [self sendSingleCharacter: mpLastEvent] )
                 return YES;
@@ -1044,6 +1066,12 @@ private:
                 // #i99567#
                 // find out the unmodified key code
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
+    // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
+    // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
+    // 'NSKeyDown' is deprecated: first deprecated in macOS 10.12
+    // 'NSKeyUp' is deprecated: first deprecated in macOS 10.12
                 // sanity check
                 if( mpLastEvent && ( [mpLastEvent type] == NSKeyDown || [mpLastEvent type] == NSKeyUp ) )
                 {
@@ -1067,6 +1095,7 @@ private:
                 {
                     nLastModifiers = 0;
                 }
+SAL_WNODEPRECATED_DECLARATIONS_POP
                 [self sendKeyInputAndReleaseToFrame: nKeyCode character: aCharCode modifiers: nLastModifiers];
             }
             else
@@ -1119,7 +1148,10 @@ private:
 -(void)moveLeftAndModifySelection: (id)aSender
 {
     (void)aSender;
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
     [self sendKeyInputAndReleaseToFrame: KEY_LEFT character: 0 modifiers: NSShiftKeyMask];
+SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 -(void)moveBackwardAndModifySelection: (id)aSender
@@ -1137,7 +1169,10 @@ private:
 -(void)moveRightAndModifySelection: (id)aSender
 {
     (void)aSender;
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
     [self sendKeyInputAndReleaseToFrame: KEY_RIGHT character: 0 modifiers: NSShiftKeyMask];
+SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 -(void)moveForwardAndModifySelection: (id)aSender

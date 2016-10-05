@@ -373,6 +373,8 @@ void AquaSalInstance::wakeupYield()
     if( mbWaitingYield )
     {
         SalData::ensureThreadAutoreleasePool();
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    // 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
         NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
                                    location: NSZeroPoint
                                    modifierFlags: 0
@@ -382,6 +384,7 @@ void AquaSalInstance::wakeupYield()
                                    subtype: AquaSalInstance::YieldWakeupEvent
                                    data1: 0
                                    data2: 0 ];
+SAL_WNODEPRECATED_DECLARATIONS_POP
         if( pEvent )
             [NSApp postEvent: pEvent atStart: NO];
     }
@@ -620,7 +623,10 @@ SalYieldResult AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents
         {
             sal_uLong nCount = ReleaseYieldMutex();
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    // 'NSAnyEventMask' is deprecated: first deprecated in macOS 10.12
             pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask untilDate: nil
+SAL_WNODEPRECATED_DECLARATIONS_POP
                             inMode: NSDefaultRunLoopMode dequeue: YES];
             if( pEvent )
             {
@@ -638,7 +644,10 @@ SalYieldResult AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents
             sal_uLong nCount = ReleaseYieldMutex();
 
             NSDate* pDt = AquaSalTimer::pRunningTimer ? [AquaSalTimer::pRunningTimer fireDate] : [NSDate distantFuture];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    // 'NSAnyEventMask' is deprecated: first deprecated in macOS 10.12
             pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask untilDate: pDt
+SAL_WNODEPRECATED_DECLARATIONS_POP
                             inMode: NSDefaultRunLoopMode dequeue: YES];
             if( pEvent )
                 [NSApp sendEvent: pEvent];
@@ -740,6 +749,23 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
         return false;
 
     unsigned/*NSUInteger*/ nEventMask = 0;
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // 'NSFlagsChangedMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSKeyDownMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSKeyUpMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSLeftMouseDownMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSLeftMouseDraggedMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSLeftMouseUpMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSMouseEnteredMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSMouseExitedMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSOtherMouseDownMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSOtherMouseDraggedMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSOtherMouseUpMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSRightMouseDownMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSRightMouseDraggedMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSRightMouseUpMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSScrollWheelMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSTabletPoint' is deprecated: first deprecated in macOS 10.12
     if( nType & VclInputFlags::MOUSE)
         nEventMask |=
             NSLeftMouseDownMask    | NSRightMouseDownMask    | NSOtherMouseDownMask |
@@ -752,6 +778,7 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
         nEventMask |= NSKeyDownMask | NSKeyUpMask | NSFlagsChangedMask;
     if( nType & VclInputFlags::OTHER)
         nEventMask |= NSTabletPoint;
+SAL_WNODEPRECATED_DECLARATIONS_POP
     // TODO: VclInputFlags::PAINT / more VclInputFlags::OTHER
     if( !bool(nType) )
         return false;

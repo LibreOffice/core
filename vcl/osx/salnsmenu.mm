@@ -99,6 +99,12 @@
     // must still end up in the view. This is necessary to handle common edit actions in docked
     // windows (e.g. in toolbar fields).
     NSEvent* pEvent = [NSApp currentEvent];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
+        // 'NSKeyDown' is deprecated: first deprecated in macOS 10.12
+        // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
     if( pEvent && [pEvent type] == NSKeyDown )
     {
         unsigned int nModMask = ([pEvent modifierFlags] & (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask));
@@ -114,6 +120,7 @@
             return;
         }
     }
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
     const AquaSalFrame* pFrame = mpMenuItem->mpParentMenu ? mpMenuItem->mpParentMenu->getFrame() : nullptr;
     if( pFrame && AquaSalFrame::isAlive( pFrame ) && ! pFrame->GetWindow()->IsInModalMode() )
@@ -173,7 +180,10 @@
             aImgRect.origin.y = floor((aFrame.size.height - aFromRect.size.height)/2);
             aImgRect.size = aFromRect.size;
             if( rButtons[i].mpNSImage )
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    // 'NSCompositeSourceOver' is deprecated: first deprecated in macOS 10.12
                 [rButtons[i].mpNSImage drawInRect: aImgRect fromRect: aFromRect operation: NSCompositeSourceOver fraction: 1.0];
+SAL_WNODEPRECATED_DECLARATIONS_POP
             aImgRect.origin.x += aFromRect.size.width + 2;
         }
     }
