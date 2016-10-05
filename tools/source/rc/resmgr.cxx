@@ -923,7 +923,7 @@ bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
     if( pMgr->pFallbackResMgr )
     {
         ResId aId( rId );
-        aId.SetResMgr( nullptr );
+        aId.ClearResMgr();
         return pMgr->pFallbackResMgr->IsAvailable( aId, pResObj );
     }
 
@@ -961,7 +961,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
     if( pFallbackResMgr )
     {
         ResId aId( rId );
-        aId.SetResMgr( nullptr );
+        aId.ClearResMgr();
         return pFallbackResMgr->GetResource( aId, pResObj );
     }
 
@@ -1094,7 +1094,7 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
     if( pFallbackResMgr )
     {
         ResId aId( rId );
-        aId.SetResMgr( nullptr );
+        aId.ClearResMgr();
         return pFallbackResMgr->CreateBlock( aId );
     }
 

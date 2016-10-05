@@ -35,15 +35,16 @@ class ResMgr;
 class ResId
 {
     /*
-    consider two cases: either m_pResource is valid and points
-    two a resource data buffer; then m_nResId and m_pResMgr are
-    not used and may be 0 resp. NULL
-    or m_pResource is NULL, the m_nResId and m_pResMgr must be valid.
-    In this case the highest bit if set decides whether to
-    not to release the Resource context after loading this id
+    Consider two cases:
+    either
+    (a) m_pResource is valid and points to a resource data buffer;
+        then m_nResId and m_pResMgr are not used and may be 0 and nullptr respectively
+    or
+    (b) m_pResource is NULL, then m_nResId and m_pResMgr must be valid.
+        In this case the highest bit, if set, decides whether or not to
+        release the Resource context after loading this id.
     */
     RSHEADER_TYPE*          m_pResource;
-
     mutable sal_uInt32      m_nResId;      // Resource Identifier
     mutable RESOURCE_TYPE   m_nRT;         // type for loading (mutable to be set later)
     mutable ResMgr *        m_pResMgr;     // load from this ResMgr (mutable for setting on demand)
@@ -85,11 +86,7 @@ public:
      }
 
     ResMgr *        GetResMgr() const { return m_pResMgr; }
-    void            SetResMgr( ResMgr * pMgr ) const
-    {
-        m_pResMgr = pMgr;
-        OSL_ENSURE( m_pResMgr != nullptr, "invalid ResMgr set on ResId" );
-    }
+    void            ClearResMgr() const { m_pResMgr = nullptr; }
 
     const ResId &  SetAutoRelease(bool bRelease) const
     {
