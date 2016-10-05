@@ -24,11 +24,13 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/simplefileaccessinteraction.hxx>
 #include <sot/storinfo.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <svl/urihelper.hxx>
@@ -37,6 +39,7 @@
 #include <sfx2/linkmgr.hxx>
 
 #include <ucbhelper/content.hxx>
+#include <ucbhelper/commandenvironment.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <hintids.hxx>
@@ -2313,9 +2316,18 @@ bool CanUseRemoteLink(const OUString &rGrfName)
     bool bUseRemote = false;
     try
     {
+        // Related: tdf#102499, add a default css::ucb::XCommandEnvironment
+        // in order to have https protocol manage certificates correctly
+        uno::Reference< task::XInteractionHandler > xIH(
+            task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr));
+
+        uno::Reference< ucb::XProgressHandler > xProgress;
+        ::ucbhelper::CommandEnvironment* pCommandEnv =
+              new ::ucbhelper::CommandEnvironment(new comphelper::SimpleFileAccessInteraction( xIH ), xProgress);
+
         ::ucbhelper::Content aCnt(rGrfName,
-            uno::Reference< ucb::XCommandEnvironment >(),
-            comphelper::getProcessComponentContext() );
+                                  static_cast< ucb::XCommandEnvironment* >(pCommandEnv),
+                                  comphelper::getProcessComponentContext());
         OUString   aTitle;
 
         aCnt.getPropertyValue("Title") >>= aTitle;
