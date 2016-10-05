@@ -462,7 +462,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         SbiCloseRecord( r, nPos );
     }
     // User defined types
-    if (rTypes)
+    if ( rTypes.Is() )
     {
         sal_uInt16 nTypes = rTypes->Count();
         if (nTypes > 0 )

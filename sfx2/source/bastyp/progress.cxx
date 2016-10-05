@@ -74,7 +74,7 @@ struct SfxProgress_Impl
 
 void SfxProgress_Impl::Enable_Impl()
 {
-    SfxObjectShell* pDoc = static_cast<SfxObjectShell*>(xObjSh);
+    SfxObjectShell* pDoc = xObjSh.get();
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pDoc);
     while ( pFrame )
     {
@@ -249,7 +249,7 @@ void SfxProgress::SetState
     {
         // get the active ViewFrame of the document this progress is working on
         // if it doesn't work on a document, take the current ViewFrame
-        SfxObjectShell* pObjSh = pImpl->xObjSh;
+        SfxObjectShell* pObjSh = pImpl->xObjSh.get();
         pImpl->pView = SfxViewFrame::Current();
         DBG_ASSERT( pImpl->pView || pObjSh, "Can't make progress bar!");
         if ( pObjSh && ( !pImpl->pView || pObjSh != pImpl->pView->GetObjectShell() ) )
@@ -321,16 +321,16 @@ void SfxProgress::Resume()
         {
             if ( pImpl->xObjSh.Is() )
             {
-                for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImpl->xObjSh);
+                for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImpl->xObjSh.get() );
                         pFrame;
-                        pFrame = SfxViewFrame::GetNext( *pFrame, pImpl->xObjSh ) )
+                        pFrame = SfxViewFrame::GetNext( *pFrame, pImpl->xObjSh.get() ) )
                     pFrame->GetWindow().EnterWait();
             }
         }
 
-        if ( pImpl->xObjSh )
+        if ( pImpl->xObjSh.Is() )
         {
-            SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImpl->xObjSh);
+            SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImpl->xObjSh.get());
             if ( pFrame )
                 pFrame->GetBindings().ENTERREGISTRATIONS();
         }
@@ -366,14 +366,14 @@ void SfxProgress::Suspend()
         if ( pImpl->xObjSh.Is() )
         {
             for ( SfxViewFrame *pFrame =
-                    SfxViewFrame::GetFirst(pImpl->xObjSh);
+                    SfxViewFrame::GetFirst(pImpl->xObjSh.get());
                     pFrame;
-                    pFrame = SfxViewFrame::GetNext( *pFrame, pImpl->xObjSh ) )
+                    pFrame = SfxViewFrame::GetNext( *pFrame, pImpl->xObjSh.get() ) )
                 pFrame->GetWindow().LeaveWait();
         }
         if ( pImpl->xObjSh.Is() )
         {
-            SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImpl->xObjSh);
+            SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pImpl->xObjSh.get() );
             if ( pFrame )
                 pFrame->GetBindings().LEAVEREGISTRATIONS();
         }

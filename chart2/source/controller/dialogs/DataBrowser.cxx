@@ -1032,10 +1032,10 @@ bool DataBrowser::IsTabAllowed( bool bForward ) const
     {
         m_aNumberEditField->UseInputStringForFormatting();
         m_aNumberEditField->SetFormatKey( GetNumberFormatKey( nRow, nCol ));
-        return m_rNumberEditController;
+        return m_rNumberEditController.get();
     }
 
-    return m_rTextEditController;
+    return m_rTextEditController.get();
 }
 
 void DataBrowser::InitController(

@@ -311,7 +311,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                             pModule = pBasic->FindModule( aModName );
                     }
                     else
-                        pModule = pBasic->GetModules().front();
+                        pModule = pBasic->GetModules().front().get();
                 }
                 DBG_ASSERT( pModule, "Kein Modul!" );
                 if ( pModule && !pModule->GetMethods()->Find( rInfo.GetMethod(), SbxClassType::Method ) )

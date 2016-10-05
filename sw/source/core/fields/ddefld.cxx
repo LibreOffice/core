@@ -243,7 +243,7 @@ SwDDEFieldType::SwDDEFieldType(const OUString& rName,
 SwDDEFieldType::~SwDDEFieldType()
 {
     if( pDoc && !pDoc->IsInDtor() )
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
     refLink->Disconnect();
 }
 
@@ -286,14 +286,14 @@ void SwDDEFieldType::SetDoc( SwDoc* pNewDoc )
     if( pDoc && refLink.Is() )
     {
         OSL_ENSURE( !nRefCnt, "How do we get the references?" );
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
     }
 
     pDoc = pNewDoc;
     if( pDoc && nRefCnt )
     {
         refLink->SetVisible( pDoc->getIDocumentLinksAdministration().IsVisibleLinks() );
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( refLink );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( refLink.get() );
     }
 }
 
@@ -302,14 +302,14 @@ void SwDDEFieldType::RefCntChgd()
     if( nRefCnt )
     {
         refLink->SetVisible( pDoc->getIDocumentLinksAdministration().IsVisibleLinks() );
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( refLink );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( refLink.get() );
         if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
             UpdateNow();
     }
     else
     {
         Disconnect();
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
     }
 }
 

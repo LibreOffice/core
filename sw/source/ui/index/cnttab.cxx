@@ -3986,7 +3986,7 @@ void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
 
 ::svt::CellController* SwEntryBrowseBox::GetController(long /*nRow*/, sal_uInt16 nCol)
 {
-    return nCol < ITEM_CASE ? m_xController : m_xCheckController;
+    return nCol < ITEM_CASE ? m_xController.get() : m_xCheckController.get();
 }
 
 bool SwEntryBrowseBox::SaveModified()
@@ -4000,12 +4000,12 @@ bool SwEntryBrowseBox::SaveModified()
     ::svt::CellController* pController = nullptr;
     if(nCol < ITEM_CASE)
     {
-        pController = m_xController;
+        pController = m_xController.get();
         sNew = static_cast< ::svt::EditCellController*>(pController)->GetEditImplementation()->GetText( LINEEND_LF );
     }
     else
     {
-        pController = m_xCheckController;
+        pController = m_xCheckController.get();
         bVal = static_cast< ::svt::CheckBoxCellController*>(pController)->GetCheckBox().IsChecked();
     }
     AutoMarkEntry* pEntry = (nRow >= m_Entries.size()) ? new AutoMarkEntry
@@ -4040,13 +4040,13 @@ void SwEntryBrowseBox::InitController(
     if(nCol < ITEM_CASE)
     {
         rController = m_xController;
-        ::svt::CellController* pController = m_xController;
+        ::svt::CellController* pController = m_xController.get();
         static_cast< ::svt::EditCellController*>(pController)->GetEditImplementation()->SetText( rText );
     }
     else
     {
         rController = m_xCheckController;
-        ::svt::CellController* pController = m_xCheckController;
+        ::svt::CellController* pController = m_xCheckController.get();
         static_cast< ::svt::CheckBoxCellController*>(pController)->GetCheckBox().Check(
                                                             rText == m_sYes );
      }
@@ -4109,9 +4109,9 @@ void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
     const sal_uInt16 nCol = GetCurColumnId();
     ::svt::CellController* pController;
     if(nCol < ITEM_CASE)
-        pController = m_xController;
+        pController = m_xController.get();
     else
-        pController = m_xCheckController;
+        pController = m_xCheckController.get();
     if(pController ->IsModified())
         GoToColumnId(nCol + (nCol < ITEM_CASE ? 1 : -1 ));
 
@@ -4145,9 +4145,9 @@ bool SwEntryBrowseBox::IsModified()const
     const sal_uInt16 nCol = GetCurColumnId();
     ::svt::CellController* pController;
     if(nCol < ITEM_CASE)
-        pController = m_xController;
+        pController = m_xController.get();
     else
-        pController = m_xCheckController;
+        pController = m_xCheckController.get();
     return pController->IsModified();
 }
 

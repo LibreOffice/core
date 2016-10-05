@@ -242,7 +242,7 @@ bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, bo
         pImport = new ORTFImportExport(_xConnection,getNumberFormatter(_xConnection, m_pController->getORB()),m_pController->getORB());
 
     xEvt = pImport;
-    SvStream* pStream = static_cast<SvStream*>(static_cast<SotStorageStream*>(_rDesc.aHtmlRtfStorage));
+    SvStream* pStream = static_cast<SvStream*>(_rDesc.aHtmlRtfStorage.get());
     if ( _bCheck )
         pImport->enableCheckOnly();
 
@@ -288,7 +288,7 @@ bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
             _rAsyncDrop.aUrl = aTmp.GetURL();
             ::tools::SvRef<SotStorageStream> aNew = new SotStorageStream( aTmp.GetFileName() );
             _rAsyncDrop.aHtmlRtfStorage->Seek(STREAM_SEEK_TO_BEGIN);
-            _rAsyncDrop.aHtmlRtfStorage->CopyTo( aNew );
+            _rAsyncDrop.aHtmlRtfStorage->CopyTo( aNew.get() );
             aNew->Commit();
             _rAsyncDrop.aHtmlRtfStorage = aNew;
         }

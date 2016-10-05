@@ -84,7 +84,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, tools::SvRef<SotStorage>& rSrc1
 
     tools::SvRef<SotStorageStream> xSrc3 = rSrc1->OpenSotStream( "\3PIC",
         StreamMode::STD_READ );
-    SotStorageStream* pS = xSrc3;
+    SotStorageStream* pS = xSrc3.get();
     pS->SetEndian( SvStreamEndian::LITTLE );
     pS->Seek( STREAM_SEEK_TO_END );
 
@@ -129,7 +129,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 {
     tools::SvRef<SotStorageStream> xSrc2 = rSrc1->OpenSotStream( "\3META",
         StreamMode::STD_READ );
-    SotStorageStream* pSt = xSrc2;
+    SotStorageStream* pSt = xSrc2.get();
     pSt->SetEndian( SvStreamEndian::LITTLE );
     size_t const nRead = pSt->ReadBytes(pMfp, sizeof(*pMfp));
                                 // read mini-placable-header
@@ -182,7 +182,7 @@ static bool SwWw6ReadMacPICTStream(Graphic& rGraph, tools::SvRef<SotStorage>& rS
 {
     // 03-META-stream does not exist. Maybe a 03-PICT?
     tools::SvRef<SotStorageStream> xSrc4 = rSrc1->OpenSotStream("\3PICT");
-    SotStorageStream* pStp = xSrc4;
+    SotStorageStream* pStp = xSrc4.get();
     pStp->SetEndian( SvStreamEndian::LITTLE );
     sal_uInt8 aTestA[10];        // Does the 01Ole-stream even exist?
     size_t const nReadTst = pStp->ReadBytes(aTestA, sizeof(aTestA));

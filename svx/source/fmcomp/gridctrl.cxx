@@ -1286,7 +1286,7 @@ void DbGridControl::EnableNavigationBar(bool bEnable)
 
 DbGridControlOptions DbGridControl::SetOptions(DbGridControlOptions nOpt)
 {
-    DBG_ASSERT(!m_xCurrentRow || !m_xCurrentRow->IsModified(),
+    DBG_ASSERT(!m_xCurrentRow.Is() || !m_xCurrentRow->IsModified(),
         "DbGridControl::SetOptions : please do not call when editing a record (things are much easier this way ;) !");
 
     // for the next setDataSource (which is triggered by a refresh, for instance)
@@ -2049,7 +2049,7 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uI
             aArea.Top() += 1;
             aArea.Bottom() -= 1;
         }
-        pColumn->Paint(rDev, aArea, m_xPaintRow, getNumberFormatter());
+        pColumn->Paint(rDev, aArea, m_xPaintRow.get(), getNumberFormatter());
     }
 }
 
@@ -2112,7 +2112,7 @@ bool DbGridControl::SetCurrent(long nNewRow)
                     if ( !m_pSeekCursor->isBeforeFirst() && !m_pSeekCursor->isAfterLast() )
                     {
                         Any aBookmark = m_pSeekCursor->getBookmark();
-                        if (!m_xCurrentRow || m_xCurrentRow->IsNew() || !CompareBookmark(aBookmark, m_pDataCursor->getBookmark()))
+                        if (!m_xCurrentRow.Is() || m_xCurrentRow->IsNew() || !CompareBookmark(aBookmark, m_pDataCursor->getBookmark()))
                         {
                             // adjust the cursor to the new desired row
                             if (!m_pDataCursor->moveToBookmark(aBookmark))
@@ -2247,7 +2247,7 @@ void DbGridControl::AdjustDataSource(bool bFull)
         m_xPaintRow = m_xSeekRow;
 
     // not up-to-date row, thus, adjust completely
-    if (!m_xCurrentRow)
+    if (!m_xCurrentRow.Is())
         AdjustRows();
 
     sal_Int32 nNewPos = AlignSeekCursor();
@@ -2676,7 +2676,7 @@ OUString DbGridControl::GetCurrentRowCellText(DbGridColumn* pColumn,const DbGrid
     // text output for a single row
     OUString aText;
     if ( pColumn && IsValid(_rRow) )
-        aText = pColumn->GetCellText(_rRow, m_xFormatter);
+        aText = pColumn->GetCellText(_rRow.get(), m_xFormatter);
     return aText;
 }
 
@@ -3611,7 +3611,7 @@ void DbGridControl::FieldValueChanged(sal_uInt16 _nId, const PropertyChangeEvent
         }
 
         // and finally do the update ...
-        pColumn->UpdateFromField(m_xCurrentRow, m_xFormatter);
+        pColumn->UpdateFromField(m_xCurrentRow.get(), m_xFormatter);
         RowModified(GetCurRow(), _nId);
     }
 }

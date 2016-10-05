@@ -161,7 +161,7 @@ public:
 void SdOOXMLExportTest2::testTdf93883()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf93883.odp"), ODP);
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
     uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
     uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
@@ -175,7 +175,7 @@ void SdOOXMLExportTest2::testBnc822341()
     // Check import / export of embedded text document
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/bnc822341.odp"), ODP);
     utl::TempFile tempFile1;
-    xDocShRef = saveAndReload( xDocShRef, PPTX, &tempFile1 );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX, &tempFile1 );
 
     // Export an LO specific ole object (imported from an ODP document)
     {
@@ -197,7 +197,7 @@ void SdOOXMLExportTest2::testBnc822341()
             "progId",
             "Word.Document.12");
 
-        const SdrPage *pPage = GetPage( 1, xDocShRef );
+        const SdrPage *pPage = GetPage( 1, xDocShRef.get() );
 
         const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj(0) );
         CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
@@ -205,7 +205,7 @@ void SdOOXMLExportTest2::testBnc822341()
     }
 
     utl::TempFile tempFile2;
-    xDocShRef = saveAndReload( xDocShRef, PPTX, &tempFile2 );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX, &tempFile2 );
 
     // Export an MS specific ole object (imported from a PPTX document)
     {
@@ -246,7 +246,7 @@ void SdOOXMLExportTest2::testMathObject()
     // Check import / export of math object
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/math.odp"), ODP);
     utl::TempFile tempFile1;
-    xDocShRef = saveAndReload(xDocShRef, PPTX, &tempFile1);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile1);
 
     // Export an LO specific ole object (imported from an ODP document)
     {
@@ -266,7 +266,7 @@ void SdOOXMLExportTest2::testMathObject()
     }
 
     utl::TempFile tempFile2;
-    xDocShRef = saveAndReload( xDocShRef, PPTX, &tempFile2 );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX, &tempFile2 );
 
     // Export an MS specific ole object (imported from a PPTX document)
     {
@@ -293,7 +293,7 @@ void SdOOXMLExportTest2::testMathObjectPPT2010()
     // Check import / export of math object
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/Math.pptx"), PPTX);
     utl::TempFile tempFile1;
-    xDocShRef = saveAndReload(xDocShRef, PPTX, &tempFile1);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile1);
 
     // Export an MS specific ole object (imported from a PPTX document)
     {
@@ -318,7 +318,7 @@ void SdOOXMLExportTest2::testMathObjectPPT2010()
 void SdOOXMLExportTest2::testTdf80224()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf80224.odp"), ODP);
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
@@ -345,7 +345,7 @@ void SdOOXMLExportTest2::testTdf91378()
       OUString propValue;
       xUDProps->getPropertyValue("Testing") >>= propValue;
       CPPUNIT_ASSERT(propValue.isEmpty());
-      xDocShRef = saveAndReload( xDocShRef, PPTX );
+      xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
     }
     xDocShRef->DoClose();
 }
@@ -394,7 +394,7 @@ bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> const & x
 void SdOOXMLExportTest2::testExportTransitionsPPTX()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/AllTransitions.odp"), ODP);
-    xDocShRef = saveAndReload(xDocShRef, PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
 
     // WIPE TRANSITIONS
@@ -499,7 +499,7 @@ void SdOOXMLExportTest2::testPresetShapesExport()
     };
 
     utl::TempFile tempFile;
-    xDocShRef = saveAndReload( xDocShRef, PPTX, &tempFile );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX, &tempFile );
 
     xmlDocPtr pXmlDocCT = parseExport(tempFile, "ppt/slides/slide1.xml");
     const OString sPattern( "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom[@prst='_T_']/a:avLst/a:gd[_N_]" );
@@ -539,7 +539,7 @@ void SdOOXMLExportTest2::testTdf92527()
     uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
     xPropertySet1->setPropertyValue("CustomShapeGeometry", uno::makeAny(aShapeGeometry));
 
-    xDocShRef = saveAndReload(xDocShRef, PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc2(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPage> xPage2(xDoc2->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -605,7 +605,7 @@ void SdOOXMLExportTest2::testDatetimeFieldNumberFormat()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/numfmt.odp"), ODP);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     for(sal_uInt16 i = 0; i <= 6; ++i)
     {
@@ -619,7 +619,7 @@ void SdOOXMLExportTest2::testDatetimeFieldNumberFormatPPTX()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/numfmt.pptx"), PPTX);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     for(sal_uInt16 i = 0; i <= 6; ++i)
     {
@@ -633,7 +633,7 @@ void SdOOXMLExportTest2::testSlideNumberField()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/slidenum_field.odp"), ODP);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
@@ -645,7 +645,7 @@ void SdOOXMLExportTest2::testSlideNumberFieldPPTX()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/slidenum_field.pptx"), PPTX);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
@@ -657,7 +657,7 @@ void SdOOXMLExportTest2::testSlideCountField()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/slidecount_field.odp"), ODP);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
@@ -669,7 +669,7 @@ void SdOOXMLExportTest2::testSlideNameField()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/slidename_field.odp"), ODP);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
@@ -681,7 +681,7 @@ void SdOOXMLExportTest2::testExtFileField()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/extfile_field.odp"), ODP);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     for(sal_uInt16 i = 0; i <= 3; ++i)
     {
@@ -714,7 +714,7 @@ void SdOOXMLExportTest2::testAuthorField()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/author_field.odp"), ODP);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     uno::Reference< text::XTextField > xField = getTextFieldFromPage(0, 0, 0, 0, xDocShRef);
     CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
@@ -725,7 +725,7 @@ void SdOOXMLExportTest2::testAuthorField()
 void SdOOXMLExportTest2::testTdf99224()
 {
     sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf99224.odp"), ODP);
-    xShell = saveAndReload(xShell, PPTX);
+    xShell = saveAndReload(xShell.get(), PPTX);
     uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
     // This was 0: the image with text was lost on export.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());

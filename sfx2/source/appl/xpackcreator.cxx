@@ -85,7 +85,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
                 {
                     pTempStream = new SvFileStream( aTempURL, StreamMode::STD_READWRITE );
                     tools::SvRef<SotStorage> aTargetStorage = new SotStorage( true, *pTempStream );
-                    aStorage->CopyTo( aTargetStorage );
+                    aStorage->CopyTo( aTargetStorage.get() );
                     aTargetStorage->Commit();
 
                     if ( aStorage->GetError() || aTargetStorage->GetError() || pTempStream->GetError() )

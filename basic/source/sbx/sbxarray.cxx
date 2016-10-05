@@ -61,7 +61,7 @@ SbxArray& SbxArray::operator=( const SbxArray& rArray )
         for( const auto& rpSrcRef : rArray.mVarEntries )
         {
             SbxVariableRef pSrc_ = rpSrcRef.mpVar;
-            if( !pSrc_ )
+            if( !pSrc_.Is() )
                 continue;
 
             if( eType != SbxVARIANT )
@@ -153,7 +153,7 @@ SbxVariable* SbxArray::Get32( sal_uInt32 nIdx )
     if ( !rRef.Is() )
         rRef = new SbxVariable( eType );
 
-    return rRef;
+    return rRef.get();
 }
 
 SbxVariable* SbxArray::Get( sal_uInt16 nIdx )
@@ -168,7 +168,7 @@ SbxVariable* SbxArray::Get( sal_uInt16 nIdx )
     if ( !rRef.Is() )
         rRef = new SbxVariable( eType );
 
-    return rRef;
+    return rRef.get();
 }
 
 void SbxArray::Put32( SbxVariable* pVar, sal_uInt32 nIdx )
@@ -183,7 +183,7 @@ void SbxArray::Put32( SbxVariable* pVar, sal_uInt32 nIdx )
                 if( eType != SbxOBJECT || pVar->GetClass() != SbxClassType::Object )
                     pVar->Convert( eType );
         SbxVariableRef& rRef = GetRef32( nIdx );
-        if( static_cast<SbxVariable*>(rRef) != pVar )
+        if( rRef.get() != pVar )
         {
             rRef = pVar;
             SetFlag( SbxFlagBits::Modified );
@@ -311,7 +311,7 @@ void SbxArray::Merge( SbxArray* p )
 
     for (auto& rEntry1: p->mVarEntries)
     {
-        if (!rEntry1.mpVar)
+        if (!rEntry1.mpVar.Is())
             continue;
 
         OUString aName = rEntry1.mpVar->GetName();
@@ -321,7 +321,7 @@ void SbxArray::Merge( SbxArray* p )
         // Then overwrite!
         for (auto& rEntry2: mVarEntries)
         {
-            if (!rEntry2.mpVar)
+            if (!rEntry2.mpVar.Is())
                 continue;
 
             if (rEntry2.mpVar->GetHashCode() == nHash &&
@@ -334,7 +334,7 @@ void SbxArray::Merge( SbxArray* p )
             }
         }
 
-        if (rEntry1.mpVar)
+        if (rEntry1.mpVar.Is())
         {
             // We don't have element with the same name.  Add a new entry.
             SbxVarEntry aNewEntry;
@@ -354,7 +354,7 @@ SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
     SbxVariable* p = nullptr;
     for (auto& rEntry : mVarEntries)
     {
-        if (!rEntry.mpVar)
+        if (!rEntry.mpVar.Is())
             continue;
 
         if (rEntry.mpVar->IsVisible() && rEntry.mpVar->GetUserData() == nData)
@@ -408,7 +408,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
     sal_uInt16 nHash = SbxVariable::MakeHashCode( rName );
     for (auto& rEntry : mVarEntries)
     {
-        if (!rEntry.mpVar || !rEntry.mpVar->IsVisible())
+        if (!rEntry.mpVar.Is() || !rEntry.mpVar->IsVisible())
             continue;
 
         // The very secure search works as well, if there is no hashcode!
@@ -489,14 +489,14 @@ bool SbxArray::StoreData( SvStream& rStrm ) const
     // Which elements are even defined?
     for( auto& rEntry: mVarEntries )
     {
-        if (rEntry.mpVar && !(rEntry.mpVar->GetFlags() & SbxFlagBits::DontStore))
+        if (rEntry.mpVar.Is() && !(rEntry.mpVar->GetFlags() & SbxFlagBits::DontStore))
             nElem++;
     }
     rStrm.WriteUInt16( nElem );
     for( size_t n = 0; n < mVarEntries.size(); n++ )
     {
         const SbxVarEntry& rEntry = mVarEntries[n];
-        if (rEntry.mpVar && !(rEntry.mpVar->GetFlags() & SbxFlagBits::DontStore))
+        if (rEntry.mpVar.Is() && !(rEntry.mpVar->GetFlags() & SbxFlagBits::DontStore))
         {
             rStrm.WriteUInt16( n );
             if (!rEntry.mpVar->Store(rStrm))

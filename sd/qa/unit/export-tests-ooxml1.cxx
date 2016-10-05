@@ -187,7 +187,7 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal)
 void SdOOXMLExportTest1::testBnc870233_1()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/bnc870233_1.pptx"), PPTX);
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
@@ -213,7 +213,7 @@ void SdOOXMLExportTest1::testBnc870233_1()
 void SdOOXMLExportTest1::testBnc870233_2()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/bnc870233_2.pptx"), PPTX);
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
@@ -245,7 +245,7 @@ void SdOOXMLExportTest1::testN828390_4()
     bool bPassed = false;
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/n828390_4.odp"), ODP );
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
     {
@@ -280,7 +280,7 @@ void SdOOXMLExportTest1::testN828390_5()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/n828390_5.odp"), ODP );
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
     {
@@ -300,7 +300,7 @@ void SdOOXMLExportTest1::testFdo71961()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/fdo71961.odp"), ODP);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
     // Export to .pptx changes all text frames to custom shape objects, which obey TextWordWrap property
@@ -328,7 +328,7 @@ void SdOOXMLExportTest1::testN828390()
     bool bPassed = false;
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/n828390.pptx"), PPTX );
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
     {
@@ -360,7 +360,7 @@ void SdOOXMLExportTest1::testN828390()
 void SdOOXMLExportTest1::testBnc880763()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/bnc880763.pptx"), PPTX);
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
@@ -381,7 +381,7 @@ void SdOOXMLExportTest1::testBnc880763()
 void SdOOXMLExportTest1::testBnc862510_5()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_5.pptx"), PPTX);
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
@@ -402,7 +402,7 @@ void SdOOXMLExportTest1::testBnc862510_5()
 void SdOOXMLExportTest1::testBnc822347_EmptyBullet()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/bnc822347_EmptyBullet.odp"), ODP);
-    xDocShRef = saveAndReload(xDocShRef, PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX);
 
     SdDrawDocument* pDoc = xDocShRef->GetDoc();
     SdrOutliner* pOutliner = pDoc->GetInternalOutliner();
@@ -431,7 +431,7 @@ void SdOOXMLExportTest1::testBnc822347_EmptyBullet()
 void SdOOXMLExportTest1::testFdo90607()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/fdo90607.pptx"), PPTX);
-    xDocShRef = saveAndReload(xDocShRef, PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(1) );
@@ -445,7 +445,7 @@ void SdOOXMLExportTest1::testFdo90607()
 void SdOOXMLExportTest1::testFdo83751()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/fdo83751.pptx"), PPTX);
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != nullptr );
@@ -462,7 +462,7 @@ void SdOOXMLExportTest1::testFdo83751()
 void SdOOXMLExportTest1::testFdo79731()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/fdo79731.odp"), ODP);
-    xDocShRef = saveAndReload(xDocShRef, PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT(pDoc);
     xDocShRef->DoClose();
@@ -520,7 +520,7 @@ void SdOOXMLExportTest1::testTableCellFillProperties()
 void SdOOXMLExportTest1::testBulletStartNumber()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/n90255.pptx"), PPTX );
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(0) );
@@ -535,7 +535,7 @@ void SdOOXMLExportTest1::testBulletStartNumber()
 void SdOOXMLExportTest1::testLineStyle()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/lineStyle.pptx"), PPTX);
-     xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
     SdrObject const* pShape = pPage->GetObj(0);
@@ -552,7 +552,7 @@ void SdOOXMLExportTest1::testRightToLeftParaghraph()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/rightToLeftParagraph.pptx"), PPTX);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     // Get first paragraph
@@ -570,7 +570,7 @@ void SdOOXMLExportTest1::testTextboxWithHyperlink()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/hyperlinktest.pptx"), PPTX);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     // Get first paragraph
@@ -596,7 +596,7 @@ void SdOOXMLExportTest1::testBulletColor()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/bulletColor.pptx"), PPTX );
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
@@ -614,7 +614,7 @@ void SdOOXMLExportTest1::testBulletColor()
 void SdOOXMLExportTest1::testBulletCharAndFont()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/odp/bulletCharAndFont.odp"), ODP);
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
     uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
@@ -642,7 +642,7 @@ void SdOOXMLExportTest1::testBulletCharAndFont()
 void SdOOXMLExportTest1::testBulletMarginAndIndentation()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/bulletMarginAndIndent.pptx"), PPTX );
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
@@ -663,7 +663,7 @@ void SdOOXMLExportTest1::testParaMarginAndindentation()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/paraMarginAndIndentation.pptx"), PPTX);
 
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
     uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
 
     // Get first paragraph
@@ -684,7 +684,7 @@ void SdOOXMLExportTest1::testParaMarginAndindentation()
 void SdOOXMLExportTest1::testCellLeftAndRightMargin()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/n90223.pptx"), PPTX);
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
     sal_Int32 nLeftMargin, nRightMargin;
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
@@ -715,7 +715,7 @@ void SdOOXMLExportTest1::testCellLeftAndRightMargin()
 void SdOOXMLExportTest1::testMergedCells()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/cellspan.odp"), ODP);
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 
     sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
@@ -732,7 +732,7 @@ void SdOOXMLExportTest1::testMergedCells()
 void SdOOXMLExportTest1::testTableCellBorder()
 {
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/n90190.pptx"), PPTX);
-    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
     const SdrPage *pPage = GetPage( 1, xDocShRef );
 

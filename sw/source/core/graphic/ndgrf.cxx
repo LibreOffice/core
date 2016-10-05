@@ -180,7 +180,7 @@ bool SwGrfNode::ReRead(
         }
         else // no name anymore, so remove link
         {
-            GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
+            GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
             refLink.Clear();
         }
 
@@ -301,7 +301,7 @@ SwGrfNode::~SwGrfNode()
     if( refLink.Is() )
     {
         OSL_ENSURE( !bInSwapIn, "DTOR: I am still in SwapIn" );
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
         refLink->Disconnect();
     }
     else
@@ -522,7 +522,7 @@ bool SwGrfNode::SwapIn( bool bWaitForData )
 
     bool bRet = false;
     bInSwapIn = true;
-    SwBaseLink* pLink = static_cast<SwBaseLink*>(static_cast<sfx2::SvBaseLink*>(refLink));
+    SwBaseLink* pLink = static_cast<SwBaseLink*>( refLink.get() );
 
     if( pLink )
     {
@@ -632,14 +632,14 @@ bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
         sal_uInt16 nType = refLink->GetObjType();
         if( OBJECT_CLIENT_GRF == nType )
             bRet = sfx2::LinkManager::GetDisplayNames(
-                    refLink, nullptr, pFileNm, nullptr, pFilterNm );
+                    refLink.get(), nullptr, pFileNm, nullptr, pFilterNm );
         else if( OBJECT_CLIENT_DDE == nType && pFileNm && pFilterNm )
         {
             OUString sApp;
             OUString sTopic;
             OUString sItem;
             if( sfx2::LinkManager::GetDisplayNames(
-                    refLink, &sApp, &sTopic, &sItem ) )
+                    refLink.get(), &sApp, &sTopic, &sItem ) )
             {
                 *pFileNm = sApp + OUStringLiteral1(sfx2::cTokenSeparator)
                          + sTopic + OUStringLiteral1(sfx2::cTokenSeparator)
@@ -661,7 +661,7 @@ bool SwGrfNode::SavePersistentData()
     if( refLink.Is() )
     {
         OSL_ENSURE( !bInSwapIn, "SavePersistentData: I am still in SwapIn" );
-        GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
+        GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
         return true;
     }
 
@@ -690,7 +690,7 @@ bool SwGrfNode::RestorePersistentData()
     {
         IDocumentLinksAdministration& rIDLA = getIDocumentLinksAdministration();
         refLink->SetVisible( rIDLA.IsVisibleLinks() );
-        rIDLA.GetLinkManager().InsertDDELink( refLink );
+        rIDLA.GetLinkManager().InsertDDELink( refLink.get() );
         if( getIDocumentLayoutAccess().GetCurrentLayout() )
             refLink->Update();
     }
@@ -712,7 +712,7 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
             sApp = rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp );
             sTopic = rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp );
             sItem = rGrfName.copy( nTmp );
-            rIDLA.GetLinkManager().InsertDDELink( refLink,
+            rIDLA.GetLinkManager().InsertDDELink( refLink.get(),
                                             sApp, sTopic, sItem );
         }
         else
@@ -739,12 +739,12 @@ void SwGrfNode::ReleaseLink()
 
         {
             bInSwapIn = true;
-            SwBaseLink* pLink = static_cast<SwBaseLink*>(static_cast<sfx2::SvBaseLink*>(refLink));
+            SwBaseLink* pLink = static_cast<SwBaseLink*>( refLink.get() );
             pLink->SwapIn( true, true );
             bInSwapIn = false;
         }
 
-        getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
+        getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
         refLink.Clear();
         maGrfObj.SetLink();
 
@@ -937,11 +937,11 @@ SwContentNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     OUString sFile, sFilter;
     if( IsLinkedFile() )
-        sfx2::LinkManager::GetDisplayNames( refLink, nullptr, &sFile, nullptr, &sFilter );
+        sfx2::LinkManager::GetDisplayNames( refLink.get(), nullptr, &sFile, nullptr, &sFilter );
     else if( IsLinkedDDE() )
     {
         OUString sTmp1, sTmp2;
-        sfx2::LinkManager::GetDisplayNames( refLink, &sTmp1, &sTmp2, &sFilter );
+        sfx2::LinkManager::GetDisplayNames( refLink.get(), &sTmp1, &sTmp2, &sFilter );
         sfx2::MakeLnkName( sFile, &sTmp1, sTmp2, sFilter );
         sFilter = "DDE";
     }
@@ -1097,7 +1097,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
         mpThreadConsumer.reset( new SwAsyncRetrieveInputStreamThreadConsumer( *this ) );
 
         OUString sGrfNm;
-        sfx2::LinkManager::GetDisplayNames( refLink, nullptr, &sGrfNm );
+        sfx2::LinkManager::GetDisplayNames( refLink.get(), nullptr, &sGrfNm );
         OUString sReferer;
         SfxObjectShell * sh = GetDoc()->GetPersist();
         if (sh != nullptr && sh->HasName())
@@ -1152,7 +1152,7 @@ bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
     if ( IsLinkedFile() )
     {
         OUString sGrfNm;
-        sfx2::LinkManager::GetDisplayNames( refLink, nullptr, &sGrfNm );
+        sfx2::LinkManager::GetDisplayNames( refLink.get(), nullptr, &sGrfNm );
         if ( !sGrfNm.startsWith( "vnd.sun.star.pkg:" ) )
         {
             bRet = true;

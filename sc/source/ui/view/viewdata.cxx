@@ -822,7 +822,7 @@ void ScViewData::GetMultiArea( ScRangeListRef& rRange ) const
     if (bMulti)
     {
         rRange = new ScRangeList;
-        aNewMark.FillRangeListWithMarks( rRange, false );
+        aNewMark.FillRangeListWithMarks( rRange.get(), false );
     }
     else
     {

@@ -1027,7 +1027,7 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
     if( pWrtShell ) *pWrtShell = pWorkWrtShell;
     if( pDoc )      *pDoc      = pWorkDoc;
 
-    return xWorkObjectShell;
+    return xWorkObjectShell.get();
 }
 
 uno::Reference< mail::XMailMessage > lcl_CreateMailFromDoc(
@@ -1240,7 +1240,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             *pSourceShell, bMT_SHELL ? pSourceWindow : nullptr,
             nullptr, &pTargetView, &pTargetShell, &pTargetDoc );
         if (nMaxDumpDocs)
-            lcl_SaveDebugDoc( xTargetDocShell, "MergeDoc" );
+            lcl_SaveDebugDoc( xTargetDocShell.get(), "MergeDoc" );
     }
     else if( pTargetView )
     {
@@ -1444,7 +1444,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 targetDocPageCount += pWorkShell->GetPageCnt();
 
                 if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
-                    lcl_SaveDebugDoc( xTargetDocShell, "MergeDoc" );
+                    lcl_SaveDebugDoc( xTargetDocShell.get(), "MergeDoc" );
 
                 if (bMT_SHELL)
                 {
@@ -1577,7 +1577,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             }
             if( !lcl_SaveDoc( &aTempFileURL, pStoreToFilter,
                     pStoreToFilterOptions, &rMergeDescriptor.aSaveToFilterData,
-                    bIsPDFexport, xTargetDocShell, *pTargetShell ) )
+                    bIsPDFexport, xTargetDocShell.get(), *pTargetShell ) )
             {
                 m_aMergeStatus = MergeStatus::ERROR;
             }
@@ -1595,7 +1595,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     if( !IsMergeError() && bMT_SHELL )
         // leave docshell available for caller (e.g. MM wizard)
         rMergeDescriptor.pMailMergeConfigItem->SetTargetView( pTargetView );
-    else if( xTargetDocShell )
+    else if( xTargetDocShell.Is() )
         xTargetDocShell->DoClose();
 
     rescheduleGui();
@@ -2865,7 +2865,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
         // SfxObjectShellRef is ok, since there should be no control over the document lifetime here
         SfxObjectShellRef xDocShell = rSh.GetView().GetViewFrame()->GetObjectShell();
 
-        EMIT_SW_EVENT(MAIL_MERGE, xDocShell);
+        EMIT_SW_EVENT(MAIL_MERGE, xDocShell.get());
 
         // prepare mail merge descriptor
         SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), rSh, aDescriptor );
@@ -2879,7 +2879,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
 
         Merge( aMergeDesc );
 
-        EMIT_SW_EVENT(MAIL_MERGE_END, xDocShell);
+        EMIT_SW_EVENT(MAIL_MERGE_END, xDocShell.get());
 
         // reset the cursor inside
         xResSet = nullptr;
