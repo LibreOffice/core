@@ -75,7 +75,7 @@ namespace
                     tools::SvRef<sfx2::SvBaseLink> xLink = pLnk;
 
                     OUString sFName;
-                    sfx2::LinkManager::GetDisplayNames( xLink, nullptr, &sFName );
+                    sfx2::LinkManager::GetDisplayNames( xLink.get(), nullptr, &sFName );
 
                     INetURLObject aURL( sFName );
                     if( INetProtocol::File == aURL.GetProtocol() ||
@@ -417,7 +417,7 @@ bool DocumentLinksAdministrationManager::EmbedAllLinks()
 
             // if one forgot to remove itself
             if( xLink.Is() )
-                rLnkMgr.Remove( xLink );
+                rLnkMgr.Remove( xLink.get() );
 
             bRet = true;
         }

@@ -228,7 +228,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
     if ( m_xAggInv.is() &&  m_xAggInv->hasMethod( aFunctionName ) )
             return m_xAggInv->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
     SbMethodRef pMethod = getMethod( aFunctionName );
-    if ( !pMethod )
+    if ( !pMethod.Is() )
         throw RuntimeException();
     // check number of parameters
     sal_Int32 nParamsCount = aParams.getLength();
@@ -259,8 +259,8 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
         for ( sal_Int32 i = 0; i < nParamsCount; ++i )
         {
             SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
-            unoToSbxValue( static_cast< SbxVariable* >( xSbxVar ), pParams[i] );
-            xSbxParams->Put( xSbxVar, static_cast< sal_uInt16 >( i ) + 1 );
+            unoToSbxValue( xSbxVar.get(), pParams[i] );
+            xSbxParams->Put( xSbxVar.get(), static_cast< sal_uInt16 >( i ) + 1 );
 
             // Enable passing by ref
             if ( xSbxVar->GetType() != SbxVARIANT )
@@ -268,12 +268,12 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
         }
     }
     if ( xSbxParams.Is() )
-        pMethod->SetParameters( xSbxParams );
+        pMethod->SetParameters( xSbxParams.get() );
 
     // call method
     SbxVariableRef xReturn = new SbxVariable;
 
-    pMethod->Call( xReturn );
+    pMethod->Call( xReturn.get() );
     Any aReturn;
     // get output parameters
     if ( xSbxParams.Is() )
@@ -291,7 +291,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
                     if ( pVar )
                     {
                         SbxVariableRef xVar = pVar;
-                        aOutParamMap.insert( OutParamMap::value_type( n - 1, sbxToUnoValue( xVar ) ) );
+                        aOutParamMap.insert( OutParamMap::value_type( n - 1, sbxToUnoValue( xVar.get() ) ) );
                     }
                 }
             }
@@ -309,7 +309,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
     }
 
     // get return value
-    aReturn = sbxToUnoValue( xReturn );
+    aReturn = sbxToUnoValue( xReturn.get() );
 
     pMethod->SetParameters( nullptr );
 
@@ -325,7 +325,7 @@ DocObjectWrapper::setValue( const OUString& aPropertyName, const Any& aValue ) t
     SbPropertyRef pProperty = getProperty( aPropertyName );
     if ( !pProperty.Is() )
        throw UnknownPropertyException();
-    unoToSbxValue( static_cast<SbxVariable*>(pProperty), aValue );
+    unoToSbxValue( pProperty.get(), aValue );
 }
 
 Any SAL_CALL
@@ -338,7 +338,7 @@ DocObjectWrapper::getValue( const OUString& aPropertyName ) throw (UnknownProper
     if ( !pProperty.Is() )
        throw UnknownPropertyException();
 
-    SbxVariable* pProp = static_cast<SbxVariable*>(pProperty);
+    SbxVariable* pProp = pProperty.get();
     if ( pProp->GetType() == SbxEMPTY )
         pProperty->Broadcast( SBX_HINT_DATAWANTED );
 
@@ -763,7 +763,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             xMethParameters->Put( pPar, i );
                         }
 
-                        pMethVar->SetParameters( xMethParameters );
+                        pMethVar->SetParameters( xMethParameters.get() );
                         pMethVar->Get( aVals );
                         pMethVar->SetParameters( nullptr );
                     }
@@ -801,7 +801,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     SbxArrayRef xArray = new SbxArray;
                     xArray->Put( pMethVar, 0 ); // Method as parameter 0
                     xArray->Put( pVar, 1 );
-                    pMethVar->SetParameters( xArray );
+                    pMethVar->SetParameters( xArray.get() );
 
                     SbxValues aVals;
                     pMethVar->Get( aVals );
@@ -1197,7 +1197,7 @@ void SbModule::Run( SbMethod* pMeth )
             {
                 // #57841 Clear Uno-Objects, which were helt in RTL functions,
                 // at the end of the program, so that nothing were helt.
-                ClearUnoObjectsInRTL_Impl( xBasic );
+                ClearUnoObjectsInRTL_Impl( xBasic.get() );
 
                 clearNativeObjectWrapperVector();
 
@@ -1242,7 +1242,7 @@ void SbModule::Run( SbMethod* pMeth )
     {
        // #57841 Clear Uno-Objects, which were helt in RTL functions,
        // the end of the program, so that nothing were helt.
-        ClearUnoObjectsInRTL_Impl( xBasic );
+        ClearUnoObjectsInRTL_Impl( xBasic.get() );
 
         delete GetSbData()->pInst;
         GetSbData()->pInst = nullptr;
@@ -1309,7 +1309,7 @@ void SbModule::RemoveVars()
     // which would cause basic to be re-run in the middle of the init ( and remember RemoveVars is called from compile and we don't want code to run as part of the compile )
     SbxVariableRef p = SbModule::Find( rModuleVariableName, SbxClassType::Property );
     if( p.Is() )
-        Remove (p);
+        Remove( p.get() );
     }
 }
 
@@ -1838,7 +1838,7 @@ void SbModule::LoadBinaryData( SvStream& rStrm )
 
 bool SbModule::LoadCompleted()
 {
-    SbxArray* p = GetMethods();
+    SbxArray* p = GetMethods().get();
     sal_uInt16 i;
     for( i = 0; i < p->Count(); i++ )
     {
@@ -1892,7 +1892,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
                             xMethParameters->Put( pPar, i );
                         }
 
-                        pMeth->SetParameters( xMethParameters );
+                        pMeth->SetParameters( xMethParameters.get() );
                         pMeth->Get( aVals );
                         pMeth->SetParameters( nullptr );
                     }
@@ -1930,7 +1930,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
                     SbxArrayRef xArray = new SbxArray;
                     xArray->Put( pMeth, 0 );    // Method as parameter 0
                     xArray->Put( pVar, 1 );
-                    pMeth->SetParameters( xArray );
+                    pMeth->SetParameters( xArray.get() );
 
                     SbxValues aVals;
                     pMeth->Get( aVals );
@@ -2015,7 +2015,7 @@ void SbMethod::ClearStatics()
 }
 SbxArray* SbMethod::GetStatics()
 {
-    return refStatics;
+    return refStatics.get();
 }
 
 bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
@@ -2083,7 +2083,7 @@ void SbMethod::GetLineRange( sal_uInt16& l1, sal_uInt16& l2 )
 
 SbxInfo* SbMethod::GetInfo()
 {
-    return pInfo;
+    return pInfo.get();
 }
 
 // Interface to execute a method of the applications
@@ -2198,7 +2198,7 @@ SbObjModule::~SbObjModule()
 void
 SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException, std::exception )
 {
-    SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( static_cast<SbxVariable*>(pDocObject) );
+    SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( pDocObject.get() );
     if ( pUnoObj && pUnoObj->getUnoAny() == aObj ) // object is equal, nothing to do
         return;
     pDocObject = new SbUnoObject( GetName(), aObj );
@@ -2217,13 +2217,13 @@ SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException,
 SbxVariable*
 SbObjModule::GetObject()
 {
-    return pDocObject;
+    return pDocObject.get();
 }
 SbxVariable*
 SbObjModule::Find( const OUString& rName, SbxClassType t )
 {
     SbxVariable* pVar = nullptr;
-    if ( pDocObject)
+    if ( pDocObject.get() )
         pVar = pDocObject->Find( rName, t );
     if ( !pVar )
         pVar = SbModule::Find( rName, t );
@@ -2489,14 +2489,14 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
             for ( sal_Int32 i = 0; i < aArguments.getLength(); ++i )
             {
                 auto xSbxVar = tools::make_ref<SbxVariable>( SbxVARIANT );
-                unoToSbxValue( static_cast< SbxVariable* >( xSbxVar ), aArguments[i] );
-                xArray->Put( xSbxVar, static_cast< sal_uInt16 >( i ) + 1 );
+                unoToSbxValue( xSbxVar.get(), aArguments[i] );
+                xArray->Put( xSbxVar.get(), static_cast< sal_uInt16 >( i ) + 1 );
 
                 // Enable passing by ref
                 if ( xSbxVar->GetType() != SbxVARIANT )
                     xSbxVar->SetFlag( SbxFlagBits::Fixed );
             }
-            pMeth->SetParameters( xArray );
+            pMeth->SetParameters( xArray.get() );
 
             SbxValues aVals;
             pMeth->Get( aVals );
@@ -2585,7 +2585,7 @@ void SbUserFormModule::Load()
 {
     SAL_INFO("basic", "** load() ");
     // forces a load
-    if ( !pDocObject )
+    if ( !pDocObject.Is() )
         InitObject();
 }
 
@@ -2711,7 +2711,7 @@ void SbUserFormModule::InitObject()
 SbxVariable*
 SbUserFormModule::Find( const OUString& rName, SbxClassType t )
 {
-    if ( !pDocObject && !GetSbData()->bRunInit && GetSbData()->pInst )
+    if ( !pDocObject.Is() && !GetSbData()->bRunInit && GetSbData()->pInst )
         InitObject();
     return SbObjModule::Find( rName, t );
 }

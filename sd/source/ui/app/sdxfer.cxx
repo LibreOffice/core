@@ -127,7 +127,7 @@ SdTransferable::~SdTransferable()
 
     if( maDocShellRef.Is() )
     {
-        SfxObjectShell* pObj = maDocShellRef;
+        SfxObjectShell* pObj = maDocShellRef.get();
         ::sd::DrawDocShell* pDocSh = static_cast< ::sd::DrawDocShell*>(pObj);
         pDocSh->DoClose();
     }

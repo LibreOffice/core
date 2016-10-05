@@ -91,7 +91,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                 aI.SetValue( rBase.GetUniqueId() );
                 xAttr->SetSlotId( aI );
             }
-            aAttrList.push_back( xAttr );
+            aAttrList.push_back( xAttr.get() );
             return;
         }
     }
@@ -129,7 +129,7 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
              }
         }
     }
-    SvMetaClass * pSC = aSuperClass;
+    SvMetaClass * pSC = aSuperClass.get();
     if( pSC )
         return pSC->TestAttribute( rBase, rInStm, rAttr );
     return true;

@@ -2640,7 +2640,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
         aDragShellRef->DoInitNew();
     }
-    ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
+    ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
 
     ScClipParam aClipParam(ScRange(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nStartTab), bCut);
     rDoc.CopyToClip(aClipParam, pClipDoc, &aSourceMark, bScenariosAdded, true);

@@ -3112,8 +3112,8 @@ static bool lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPa
         if ( xVBARange.is() )
         {
             SbxObjectRef aObj = GetSbUnoObject( "A-Range", uno::Any( xVBARange ) );
-            SetSbUnoObjectDfltPropName( aObj );
-            bOk = pPar->PutObject( aObj );
+            SetSbUnoObjectDfltPropName( aObj.get() );
+            bOk = pPar->PutObject( aObj.get() );
         }
     }
     catch( uno::Exception& )
@@ -3278,7 +3278,7 @@ void ScInterpreter::ScMacro()
                                 bOk = SetSbxVariable( p, aAdr );
                             }
                         }
-                        pPar->PutObject( refArray );
+                        pPar->PutObject( refArray.get() );
                     }
                 }
             }
@@ -3312,7 +3312,7 @@ void ScInterpreter::ScMacro()
                             }
                         }
                     }
-                    pPar->PutObject( refArray );
+                    pPar->PutObject( refArray.get() );
                 }
                 else
                 {
@@ -3330,7 +3330,7 @@ void ScInterpreter::ScMacro()
         pDok->LockTable( aPos.Tab() );
         SbxVariableRef refRes = new SbxVariable;
         pDok->IncMacroInterpretLevel();
-        ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, refPar, refRes );
+        ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, refPar.get(), refRes.get() );
         pDok->DecMacroInterpretLevel();
         pDok->UnlockTable( aPos.Tab() );
 

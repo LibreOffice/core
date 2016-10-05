@@ -57,7 +57,7 @@ SvLockBytesRef MakeLockBytes_Impl( const OUString & rName, StreamMode nMode )
 }
 
 SotStorageStream::SotStorageStream( const OUString & rName, StreamMode nMode )
-    : SvStream( MakeLockBytes_Impl( rName, nMode ) )
+    : SvStream( MakeLockBytes_Impl( rName, nMode ).get() )
     , pOwnStm( nullptr )
 {
     if( nMode & StreamMode::WRITE )
@@ -466,7 +466,7 @@ SvMemoryStream * SotStorage::CreateMemoryStream()
     SvMemoryStream * pStm = nullptr;
     pStm = new SvMemoryStream( 0x8000, 0x8000 );
     tools::SvRef<SotStorage> aStg = new SotStorage( *pStm );
-    if( CopyTo( aStg ) )
+    if( CopyTo( aStg.get() ) )
     {
         aStg->Commit();
     }

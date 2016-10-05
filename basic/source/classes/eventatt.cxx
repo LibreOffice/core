@@ -208,7 +208,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             aMacro = aMacro.copy( nLast );
         }
 
-        SbxObject* p = maBasicRef;
+        SbxObject* p = maBasicRef.get();
         SbxObject* pParent = p->GetParent();
         SbxObject* pParentParent = pParent ? pParent->GetParent() : nullptr;
 
@@ -253,14 +253,13 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         // Be still tolerant and make default search if no search basic exists
         if( bSearchLib && xLibSearchBasic.Is() )
         {
-            StarBASICRef xLibBasic;
             sal_Int16 nCount = xLibSearchBasic->GetObjects()->Count();
             for( sal_Int16 nObj = -1; nObj < nCount ; nObj++ )
             {
                 StarBASIC* pBasic;
                 if( nObj == -1 )
                 {
-                    pBasic = static_cast<StarBASIC*>(xLibSearchBasic);
+                    pBasic = xLibSearchBasic.get();
                 }
                 else
                 {
@@ -303,8 +302,8 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             for( sal_Int32 i = 0; i < nCnt; i++ )
             {
                 SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
-                unoToSbxValue( static_cast<SbxVariable*>(xVar), pArgs[i] );
-                xArray->Put( xVar, sal::static_int_cast< sal_uInt16 >(i+1) );
+                unoToSbxValue( xVar.get(), pArgs[i] );
+                xArray->Put( xVar.get(), sal::static_int_cast< sal_uInt16 >(i+1) );
             }
         }
 
@@ -312,12 +311,12 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         SbxVariableRef xValue = pRet ? new SbxVariable : nullptr;
         if( xArray.Is() )
         {
-            pMeth->SetParameters( xArray );
+            pMeth->SetParameters( xArray.get() );
         }
-        pMeth->Call( xValue );
+        pMeth->Call( xValue.get() );
         if( pRet )
         {
-            *pRet = sbxToUnoValue( xValue );
+            *pRet = sbxToUnoValue( xValue.get() );
         }
         pMeth->SetParameters( nullptr );
     }
@@ -432,12 +431,12 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 
     // Get dialog
     SbxBaseRef pObj = rPar.Get( 1 )->GetObject();
-    if( !(pObj && nullptr != dynamic_cast<const SbUnoObject*>( &pObj )) )
+    if( !(pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( &pObj )) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    SbUnoObject* pUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pObj));
+    SbUnoObject* pUnoObj = static_cast<SbUnoObject*>(pObj.get());
     Any aAnyISP = pUnoObj->getUnoAny();
     TypeClass eType = aAnyISP.getValueType().getTypeClass();
 
@@ -556,7 +555,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     Any aRetVal;
     aRetVal <<= xCntrl;
     SbxVariableRef refVar = rPar.Get(0);
-    unoToSbxValue( static_cast<SbxVariable*>(refVar), aRetVal );
+    unoToSbxValue( refVar.get(), aRetVal );
 }
 
 

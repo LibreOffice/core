@@ -253,7 +253,7 @@ namespace sw { namespace mark
     void DdeBookmark::DeregisterFromDoc(SwDoc* const pDoc)
     {
         if(m_aRefObj.Is())
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer(m_aRefObj);
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer(m_aRefObj.get());
     }
 
     DdeBookmark::~DdeBookmark()

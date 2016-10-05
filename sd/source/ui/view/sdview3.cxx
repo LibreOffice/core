@@ -363,7 +363,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         // Paste only if SfxClassificationHelper recommends so.
         const SfxObjectShellRef& pSource = pOwnData->GetDocShell();
         SfxObjectShell* pDestination = mrDoc.GetDocSh();
-        if (pSource && pDestination)
+        if (pSource.Is() && pDestination)
         {
             SfxClassificationCheckPasteResult eResult = SfxClassificationHelper::CheckPaste(pSource->getDocProperties(), pDestination->getDocProperties());
             if (!SfxClassificationHelper::ShowPasteInfo(eResult))
@@ -375,7 +375,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     {
         const View* pSourceView = pOwnData->GetView();
 
-        if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() )
+        if( pOwnData->GetDocShell().Is() && pOwnData->IsPageTransferable() )
         {
             mpClipboard->HandlePageDrop (*pOwnData);
             bReturn = true;

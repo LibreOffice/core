@@ -361,7 +361,7 @@ SbMethod* MacroChooser::CreateMacro()
             pModule = pBasic->FindModule( aModName );
         }
         else if ( !pBasic->GetModules().empty() )
-            pModule = pBasic->GetModules().front();
+            pModule = pBasic->GetModules().front().get();
 
         if ( !pModule )
         {

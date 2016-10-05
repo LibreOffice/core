@@ -227,7 +227,7 @@ namespace
         if ( pData->aDocument.isDocument() )
             pUndoGuard.reset( new ::framework::DocumentUndoGuard( pData->aDocument.getDocument() ) );
 
-        RunMethod(pData->xMethod);
+        RunMethod( pData->xMethod.get() );
     }
 }
 
@@ -374,7 +374,7 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
         {
             xModule = new SbModule( rModName );
             xModule->SetSource32( aOUSource );
-            pMod = xModule;
+            pMod = xModule.get();
         }
 
         sal_uInt16 nCount = pMod->GetMethods()->Count();
@@ -424,9 +424,9 @@ bool HasMethod (
         {
             xModule = new SbModule( rModName );
             xModule->SetSource32( aOUSource );
-            pMod = xModule;
+            pMod = xModule.get();
         }
-        SbxArray* pMethods = pMod->GetMethods();
+        SbxArray* pMethods = pMod->GetMethods().get();
         if ( pMethods )
         {
             SbMethod* pMethod = static_cast<SbMethod*>(pMethods->Find( rMethName, SbxClassType::Method ));

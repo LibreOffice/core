@@ -425,7 +425,7 @@ void ScExportTest::testColorScaleExportODS()
     ScDocShellRef xShell = loadDoc("colorscale.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_ODS);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -441,7 +441,7 @@ void ScExportTest::testColorScaleExportXLSX()
     ScDocShellRef xShell = loadDoc("colorscale.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_XLSX);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -457,7 +457,7 @@ void ScExportTest::testDataBarExportODS()
     ScDocShellRef xShell = loadDoc("databar.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_ODS);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -472,7 +472,7 @@ void ScExportTest::testFormatExportODS()
     ScDocShellRef xShell = loadDoc("formats.", FORMAT_ODS);
     CPPUNIT_ASSERT(xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_ODS);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -790,7 +790,7 @@ void ScExportTest::testDataBarExportXLSX()
     ScDocShellRef xShell = loadDoc("databar.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_XLSX);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -932,7 +932,7 @@ void ScExportTest::testNamedRangeBugfdo62729()
     rDoc.DeleteTab(0);
     //should be still a single named range
     CPPUNIT_ASSERT_EQUAL(size_t(1), pNames->size());
-    ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_ODS);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_ODS);
     xShell->DoClose();
 
     CPPUNIT_ASSERT(xDocSh.Is());
@@ -1326,7 +1326,7 @@ void ScExportTest::testRichTextExportODS()
     }
 
     // Now, save and reload this document.
-    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, FORMAT_ODS);
+    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh.get(), FORMAT_ODS);
     {
         xOrigDocSh->DoClose();
         CPPUNIT_ASSERT(xNewDocSh.Is());
@@ -1346,7 +1346,7 @@ void ScExportTest::testRichTextExportODS()
     }
 
     // Reload the doc again, and check the content of B2 and B4.
-    ScDocShellRef xNewDocSh2 = saveAndReload(xNewDocSh, FORMAT_ODS);
+    ScDocShellRef xNewDocSh2 = saveAndReload(xNewDocSh.get(), FORMAT_ODS);
     {
         ScDocument& rDoc3 = xNewDocSh2->GetDocument();
         ScFieldEditEngine* pEE = &rDoc3.GetEditEngine();
@@ -1402,7 +1402,7 @@ void ScExportTest::testRichTextExportODS()
     }
 
     // Reload the doc again, and check the content of B2, B4, B6 and B7.
-    ScDocShellRef xNewDocSh3 = saveAndReload(xNewDocSh2, FORMAT_ODS);
+    ScDocShellRef xNewDocSh3 = saveAndReload(xNewDocSh2.get(), FORMAT_ODS);
     ScDocument& rDoc4 = xNewDocSh3->GetDocument();
     xNewDocSh2->DoClose();
 
@@ -1468,7 +1468,7 @@ void ScExportTest::testFormulaRefSheetNameODS()
             CPPUNIT_FAIL("Wrong formula");
     }
     // Now, save and reload this document.
-    ScDocShellRef xNewDocSh = saveAndReload(xDocSh, FORMAT_ODS);
+    ScDocShellRef xNewDocSh = saveAndReload(xDocSh.get(), FORMAT_ODS);
     xDocSh->DoClose();
 
     ScDocument& rDoc = xNewDocSh->GetDocument();
@@ -1511,7 +1511,7 @@ void ScExportTest::testCellValuesExportODS()
         rDoc.SetString(ScAddress(0,7,0), "=$A$6"); //A8
     }
     // save and reload
-    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, FORMAT_ODS);
+    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh.get(), FORMAT_ODS);
     xOrigDocSh->DoClose();
     CPPUNIT_ASSERT(xNewDocSh.Is());
     ScDocument& rDoc = xNewDocSh->GetDocument();
@@ -1570,7 +1570,7 @@ void ScExportTest::testCellNoteExportODS()
         CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", rDoc.HasNote(aPos));
     }
     // save and reload
-    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, FORMAT_ODS);
+    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh.get(), FORMAT_ODS);
     xOrigDocSh->DoClose();
     CPPUNIT_ASSERT(xNewDocSh.Is());
     ScDocument& rDoc = xNewDocSh->GetDocument();
@@ -1605,7 +1605,7 @@ void ScExportTest::testCellNoteExportXLS()
         CPPUNIT_ASSERT( rDoc.HasNote(ScAddress(0,2,2)));
     }
     // save and reload as XLS.
-    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, FORMAT_XLS);
+    ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh.get(), FORMAT_XLS);
     {
         xOrigDocSh->DoClose();
         CPPUNIT_ASSERT(xNewDocSh.Is());
@@ -1660,7 +1660,7 @@ void ScExportTest::testInlineArrayXLS()
     ScDocShellRef xShell = loadDoc("inline-array.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_XLS);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLS);
     xShell->DoClose();
     CPPUNIT_ASSERT(xDocSh.Is());
 
@@ -1683,7 +1683,7 @@ void ScExportTest::testEmbeddedChartXLS()
     ScDocShellRef xShell = loadDoc("embedded-chart.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_XLS);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLS);
     xShell->DoClose();
     CPPUNIT_ASSERT(xDocSh.Is());
 
@@ -1737,7 +1737,7 @@ void ScExportTest::testFormulaReferenceXLS()
     ScDocShellRef xShell = loadDoc("formula-reference.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_XLS);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLS);
     xShell->DoClose();
     CPPUNIT_ASSERT(xDocSh.Is());
 
@@ -1775,7 +1775,7 @@ void ScExportTest::testSheetProtectionXLSX()
     ScDocShellRef xShell = loadDoc("ProtecteSheet1234Pass.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_XLSX);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -1857,7 +1857,7 @@ void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
         }
     }
 
-    ScDocShellRef xNewDocSh = saveAndReload(xDocSh, nFormatType);
+    ScDocShellRef xNewDocSh = saveAndReload(xDocSh.get(), nFormatType);
     xDocSh->DoClose();
     ScDocument& rDoc = xNewDocSh->GetDocument();
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -2178,7 +2178,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
     bool bGood = aTest.check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Initial check failed (xls).", bGood);
 
-    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, FORMAT_XLS);
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLS);
     xDocSh->DoClose();
     pDoc = &xDocSh2->GetDocument();
     bGood = aTest.check(*pDoc);
@@ -2206,7 +2206,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
     aTest.check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Initial check failed (xlsx).", bGood);
 
-    xDocSh2 = saveAndReload(xDocSh, FORMAT_XLSX);
+    xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLSX);
     xDocSh->DoClose();
     pDoc = &xDocSh2->GetDocument();
     bGood = aTest.check(*pDoc);
@@ -2275,7 +2275,7 @@ void ScExportTest::testSheetTabColorsXLSX()
         CPPUNIT_ASSERT_MESSAGE("Failed on the initial content check.", bRes);
     }
 
-    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, FORMAT_XLSX);
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to reload file.", xDocSh2.Is());
     xDocSh->DoClose();
     ScDocument& rDoc = xDocSh2->GetDocument();
@@ -2364,7 +2364,7 @@ void ScExportTest::testSharedFormulaExportXLS()
         CPPUNIT_ASSERT_MESSAGE("Content check on the original document failed.", bRes);
     }
 
-    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, FORMAT_XLS);
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLS);
     xDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("Failed to reload file.", xDocSh2.Is());
 
@@ -2459,7 +2459,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
     }
 
     // Save and reload, and check the content again.
-    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, FORMAT_XLSX);
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLSX);
     xDocSh->DoClose();
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh2.Is());
@@ -2530,7 +2530,7 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
         CPPUNIT_ASSERT_MESSAGE("Content check on the initial recalculated document failed.", bRes);
     }
     // Reload and check again.
-    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, FORMAT_XLSX);
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLSX);
     xDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("Failed to re-load file.", xDocSh2.Is());
     ScDocument& rDoc = xDocSh2->GetDocument();
@@ -2546,7 +2546,7 @@ void ScExportTest::testFunctionsExcel2010( sal_uLong nFormatType )
     ScDocShellRef xShell = loadDoc("functions-excel-2010.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, nFormatType);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), nFormatType);
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll(); // perform hard re-calculation.
 
@@ -2570,7 +2570,7 @@ void ScExportTest::testCeilingFloor( sal_uLong nFormatType )
     ScDocShellRef xShell = loadDoc("ceiling-floor.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, nFormatType);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), nFormatType);
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll(); // perform hard re-calculation.
 
@@ -2630,7 +2630,7 @@ void ScExportTest::testSheetProtection()
         testSheetProtection_Impl(rDoc);
     }
 
-    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, FORMAT_ODS);
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_ODS);
     {
         ScDocument& rDoc = xDocSh2->GetDocument();
         testSheetProtection_Impl(rDoc);
@@ -2765,7 +2765,7 @@ void ScExportTest::testPivotTableXLSX()
     bool bCheck = aTest.check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Initial check failed.", bCheck);
 
-    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, FORMAT_XLSX);
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLSX);
     xDocSh->DoClose();
     CPPUNIT_ASSERT(xDocSh2.Is());
     pDoc = &xDocSh2->GetDocument();
@@ -2885,7 +2885,7 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
     bool bCheck = aTest.check(*pDoc);
     CPPUNIT_ASSERT_MESSAGE("Initial check failed.", bCheck);
 
-    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, FORMAT_XLSX);
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLSX);
     xDocSh->DoClose();
     CPPUNIT_ASSERT(xDocSh2.Is());
     pDoc = &xDocSh2->GetDocument();
@@ -2925,7 +2925,7 @@ void ScExportTest::testSwappedOutImageExport()
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDocSh.Is());
 
         // Export the document and import again for a check
-        ScDocShellRef xDocSh2 = saveAndReload(xDocSh, nFilter);
+        ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), nFilter);
         xDocSh->DoClose();
 
         // Check whether graphic exported well after it was swapped out
@@ -3002,7 +3002,7 @@ void ScExportTest::testSupBookVirtualPath()
     ScDocShellRef xShell = loadDoc("external-ref.", FORMAT_XLS);
     CPPUNIT_ASSERT(xShell.Is());
 
-    ScDocShellRef xDocSh = saveAndReload(xShell, FORMAT_XLS);
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLS);
     xShell->DoClose();
     CPPUNIT_ASSERT(xDocSh.Is());
 
@@ -3031,7 +3031,7 @@ void ScExportTest::testLinkedGraphicRT()
         const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
 
         // Export the document and import again for a check
-        ScDocShellRef xDocSh2 = saveAndReload(xDocSh, nFilter);
+        ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), nFilter);
         xDocSh->DoClose();
 
         // Check whether graphic imported well after export
@@ -3075,7 +3075,7 @@ void ScExportTest::testImageWithSpecialID()
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDocSh.Is());
 
         // Export the document and import again for a check
-        ScDocShellRef xDocSh2 = saveAndReload(xDocSh, nFilter);
+        ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), nFilter);
         xDocSh->DoClose();
 
         // Check whether graphic was exported well
@@ -3129,7 +3129,7 @@ void ScExportTest::testSheetLocalRangeNameXLS()
 {
     ScDocShellRef xDocSh = loadDoc("named-ranges-local.", FORMAT_XLS);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, FORMAT_XLS);
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLS);
     xDocSh->DoClose();
     xDocSh2->DoHardRecalc(true);
 

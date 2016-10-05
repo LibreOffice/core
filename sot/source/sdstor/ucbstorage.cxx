@@ -1816,7 +1816,7 @@ void UCBStorage_Impl::ReadContent()
                     {
                         // older files didn't have that special content type, so they must be detected
                         OpenStream( pElement, StreamMode::STD_READ, m_bDirect );
-                        if ( Storage::IsStorageFile( pElement->m_xStream ) )
+                        if ( Storage::IsStorageFile( pElement->m_xStream.get() ) )
                             pElement->m_bIsStorage = true;
                         else
                             pElement->m_xStream->Free();
@@ -2666,7 +2666,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
                 {
                     pElement->m_xStream->PrepareCachedForReopen( nMode );
 
-                    return new UCBStorageStream( pElement->m_xStream );
+                    return new UCBStorageStream( pElement->m_xStream.get() );
                 }
             }
         }
@@ -2676,7 +2676,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
 
         // if name has been changed before creating the stream: set name!
         pElement->m_xStream->m_aName = rEleName;
-        return new UCBStorageStream( pElement->m_xStream );
+        return new UCBStorageStream( pElement->m_xStream.get() );
     }
 
     return nullptr;
@@ -2795,7 +2795,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
             }
             else
             {
-                return new UCBStorage( pElement->m_xStorage );
+                return new UCBStorage( pElement->m_xStorage.get() );
             }
         }
     }

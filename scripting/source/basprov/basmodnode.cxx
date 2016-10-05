@@ -79,7 +79,7 @@ namespace basprov
 
         if ( m_pModule )
         {
-            SbxArray* pMethods = m_pModule->GetMethods();
+            SbxArray* pMethods = m_pModule->GetMethods().get();
             if ( pMethods )
             {
                 sal_Int32 nCount = pMethods->Count();
@@ -114,7 +114,7 @@ namespace basprov
         bool bReturn = false;
         if ( m_pModule )
         {
-            SbxArray* pMethods = m_pModule->GetMethods();
+            SbxArray* pMethods = m_pModule->GetMethods().get();
             if ( pMethods && pMethods->Count() > 0 )
                 bReturn = true;
         }

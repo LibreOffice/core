@@ -864,7 +864,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     sal_uLong nError = 0;
     if( pMedium )
         nError = rxWriter->Write( *pPam, *pMedium, pRealFileName );
-    else if( pStg )
+    else if( pStg.Is() )
         nError = rxWriter->Write( *pPam, *pStg, pRealFileName );
     else if( pStrm )
         nError = rxWriter->Write( *pPam, *pStrm, pRealFileName );

@@ -260,12 +260,12 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
 
     // search for any view of this document that is currently printing
     const Printer *pPrinter = nullptr;
-    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : nullptr;
+    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell.get(), false ) : nullptr;
     SfxViewFrame* pFirst = pViewFrm;
     while ( pViewFrm && !pPrinter )
     {
         pPrinter = pViewFrm->GetViewShell()->GetActivePrinter();
-        pViewFrm = SfxViewFrame::GetNext( *pViewFrm, m_pData->m_pObjectShell, false );
+        pViewFrm = SfxViewFrame::GetNext( *pViewFrm, m_pData->m_pObjectShell.get(), false );
     }
 
     // if no view is printing currently, use the permanent SfxPrinter instance
@@ -320,7 +320,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
 {
     // Get old Printer
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : nullptr;
+                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell.get(), false ) : nullptr;
     if ( !pViewFrm )
         return;
 
@@ -595,7 +595,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
     // get view for sfx printing capabilities
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, false ) : nullptr;
+                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell.get(), false ) : nullptr;
     if ( !pViewFrm )
         return;
     SfxViewShell* pView = pViewFrm->GetViewShell();
@@ -796,7 +796,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SfxPrintingHint* pPrintHint = dynamic_cast<const SfxPrintingHint*>(&rHint);
-    if ( &rBC != m_pObjectShell
+    if ( &rBC != m_pObjectShell.get()
         || !pPrintHint
         || pPrintHint->GetWhich() == SFX_PRINTABLESTATE_CANCELJOB )
         return;

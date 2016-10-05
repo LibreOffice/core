@@ -483,7 +483,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
             mpCreatingTransferable->SetDocShell( new ::sd::GraphicDocShell(
                 SfxObjectCreateMode::EMBEDDED, true, meDocType ) );
 
-        pNewDocSh = static_cast< ::sd::DrawDocShell*>( pObj = mpCreatingTransferable->GetDocShell() );
+        pNewDocSh = static_cast< ::sd::DrawDocShell*>( pObj = mpCreatingTransferable->GetDocShell().get() );
         pNewDocSh->DoInitNew();
         pNewModel = pNewDocSh->GetDoc();
 

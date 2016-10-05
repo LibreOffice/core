@@ -80,7 +80,7 @@ void Test::setUp()
 
 void Test::tearDown()
 {
-    if (mxDocShell) mxDocShell->DoClose();
+    if (mxDocShell.Is()) mxDocShell->DoClose();
     BootstrapFixture::tearDown();
 }
 

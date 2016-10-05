@@ -364,7 +364,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             // created.
             InitDocShell(false);
 
-            SfxObjectShell* pEmbObj = aDocShellRef;
+            SfxObjectShell* pEmbObj = aDocShellRef.get();
 
             // like SvEmbeddedTransfer::GetData:
             GDIMetaFile     aMtf;
@@ -391,7 +391,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             // #i123405# Do limit visual size calculation to PageSize
             InitDocShell(true);         // set aDocShellRef
 
-            SfxObjectShell* pEmbObj = aDocShellRef;
+            SfxObjectShell* pEmbObj = aDocShellRef.get();
             bOK = SetObject( pEmbObj, SCTRANS_TYPE_EMBOBJ, rFlavor );
         }
     }

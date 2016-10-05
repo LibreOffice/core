@@ -137,7 +137,7 @@ public:
         }
     }
 
-    SvLockBytes* GetDocumentLB() const { return m_xDocLB; }
+    SvLockBytes* GetDocumentLB() const { return m_xDocLB.get(); }
     void         SetDocumentLB (SvLockBytes *pDocLB) { m_xDocLB = pDocLB; }
 
     static bool ParseDateField (

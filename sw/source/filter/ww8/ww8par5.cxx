@@ -641,7 +641,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
 
                                 if ( xObjDst.Is() )
                                 {
-                                    xSrc1->CopyTo( xObjDst );
+                                    xSrc1->CopyTo( xObjDst.get() );
 
                                     if ( !xObjDst->GetError() )
                                         xObjDst->Commit();

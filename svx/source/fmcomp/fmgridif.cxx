@@ -1332,7 +1332,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
                 // Strings are dealt with directly by the GetFieldText
                 case TypeClass_STRING           :
                 {
-                    OUString sText = aColumns[ nModelPos ]->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
+                    OUString sText = aColumns[ nModelPos ]->GetCellText( xPaintRow.get(), pGrid->getNumberFormatter() );
                     pReturnArray[i] <<= sText;
                 }
                 break;

@@ -463,7 +463,7 @@ void ImportExcel8::LoadDocumentProperties()
         {
             uno::Reference< document::XDocumentPropertiesSupplier > xDPS( pShell->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< document::XDocumentProperties > xDocProps( xDPS->getDocumentProperties(), uno::UNO_SET_THROW );
-            sfx2::LoadOlePropertySet( xDocProps, xRootStrg );
+            sfx2::LoadOlePropertySet( xDocProps, xRootStrg.get() );
         }
         catch( uno::Exception& )
         {

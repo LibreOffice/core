@@ -39,7 +39,7 @@ SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
     rStream.Seek( 0L );
     _xVal = new SvLockBytes( new SvMemoryStream(), true );
 
-    SvStream aLockBytesStream( _xVal );
+    SvStream aLockBytesStream( _xVal.get() );
     rStream.ReadStream( aLockBytesStream );
 }
 
@@ -94,7 +94,7 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
 
 SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
-    SvStream aLockBytesStream( _xVal );
+    SvStream aLockBytesStream( _xVal.get() );
     sal_uInt32 nSize = aLockBytesStream.Seek( STREAM_SEEK_TO_END );
     aLockBytesStream.Seek( 0L );
 

@@ -71,7 +71,7 @@ void Test::testCopyPaste()
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
-    SmCursor aCursor(xTree.get(), xDocShRef);
+    SmCursor aCursor(xTree.get(), xDocShRef.get());
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
     // go to the position at "*"
@@ -94,7 +94,7 @@ void Test::testCopySelectPaste()
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
-    SmCursor aCursor(xTree.get(), xDocShRef);
+    SmCursor aCursor(xTree.get(), xDocShRef.get());
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
     // go to the right end
@@ -121,7 +121,7 @@ void Test::testCutPaste()
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
-    SmCursor aCursor(xTree.get(), xDocShRef);
+    SmCursor aCursor(xTree.get(), xDocShRef.get());
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
     // go to the position at "*"
@@ -144,7 +144,7 @@ void Test::testCutSelectPaste()
     std::unique_ptr<SmNode> xTree(SmParser().Parse(sInput));
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
-    SmCursor aCursor(xTree.get(), xDocShRef);
+    SmCursor aCursor(xTree.get(), xDocShRef.get());
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
     // go to the right end

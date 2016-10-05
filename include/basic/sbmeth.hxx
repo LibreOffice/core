@@ -80,7 +80,7 @@ public:
     {}
     virtual ~SbIfaceMapperMethod() override;
     SbMethod* getImplMethod()
-        { return mxImplMeth; }
+        { return mxImplMeth.get(); }
 };
 
 #endif

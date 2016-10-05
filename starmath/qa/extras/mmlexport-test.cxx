@@ -63,7 +63,7 @@ void MathMLExportTest::setUp()
 
 void MathMLExportTest::tearDown()
 {
-    if (mxDocShell)
+    if (mxDocShell.Is())
         mxDocShell->DoClose();
     BootstrapFixture::tearDown();
 }

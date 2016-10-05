@@ -94,7 +94,7 @@ static SbxVariableRef QualifiedName
         {
             // It follows still an objectelement. The current element
             // had to be a SBX-Object or had to deliver such an object!
-            pObj = dynamic_cast<SbxObject*>( static_cast<SbxVariable*>(refVar) );
+            pObj = dynamic_cast<SbxObject*>( refVar.get() );
             if( !pObj )
                 // Then it had to deliver an object
                 pObj = dynamic_cast<SbxObject*>( refVar->GetObject() );
@@ -183,7 +183,7 @@ static SbxVariableRef MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicod
         if( refVar2.Is() )
         {
             // temporary variable!
-            SbxVariable* pVar = refVar;
+            SbxVariable* pVar = refVar.get();
             pVar = new SbxVariable( *pVar );
             refVar = pVar;
             if( cOp == '*' )
@@ -213,7 +213,7 @@ static SbxVariableRef PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Uni
         if( refVar2.Is() )
         {
             // temporaere Variable!
-            SbxVariable* pVar = refVar;
+            SbxVariable* pVar = refVar.get();
             pVar = new SbxVariable( *pVar );
             refVar = pVar;
             if( cOp == '+' )
@@ -252,8 +252,8 @@ static SbxVariableRef Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicod
                 SbxVariableRef refVar2( PlusMinus( pObj, pGbl, &p ) );
                 if( refVar2.Is() )
                 {
-                    SbxVariable* pVar = refVar;
-                    SbxVariable* pVar2 = refVar2;
+                    SbxVariable* pVar = refVar.get();
+                    SbxVariable* pVar2 = refVar2.get();
                     *pVar = *pVar2;
                     pVar->SetParameters( nullptr );
                 }
@@ -303,7 +303,7 @@ static SbxVariableRef Element
                 while( *p && *p != ')' && *p != ']' )
                 {
                     SbxVariableRef refArg = PlusMinus( pGbl, pGbl, &p );
-                    if( !refArg )
+                    if( !refArg.Is() )
                     {
                         // Error during the parsing
                         refVar.Clear(); break;
@@ -322,7 +322,7 @@ static SbxVariableRef Element
                 if( *p == ')' )
                     p++;
                 if( refVar.Is() )
-                    refVar->SetParameters( refPar );
+                    refVar->SetParameters( refPar.get() );
             }
         }
         else
@@ -336,7 +336,7 @@ static SbxVariableRef Element
 
 SbxVariable* SbxObject::Execute( const OUString& rTxt )
 {
-    SbxVariable* pVar = nullptr;
+    SbxVariableRef pVar = nullptr;
     const sal_Unicode* p = rTxt.getStr();
     for( ;; )
     {
@@ -350,7 +350,7 @@ SbxVariable* SbxObject::Execute( const OUString& rTxt )
             SetError( ERRCODE_SBX_SYNTAX ); break;
         }
         pVar = Assign( this, this, &p );
-        if( !pVar )
+        if( !pVar.Is() )
         {
             break;
         }
@@ -360,12 +360,12 @@ SbxVariable* SbxObject::Execute( const OUString& rTxt )
             SetError( ERRCODE_SBX_SYNTAX ); break;
         }
     }
-    return pVar;
+    return pVar.get();
 }
 
 SbxVariable* SbxObject::FindQualified( const OUString& rName, SbxClassType t )
 {
-    SbxVariable* pVar = nullptr;
+    SbxVariableRef pVar = nullptr;
     const sal_Unicode* p = rName.getStr();
     p = SkipWhitespace( p );
     if( !*p )
@@ -378,7 +378,7 @@ SbxVariable* SbxObject::FindQualified( const OUString& rName, SbxClassType t )
     {
         SetError( ERRCODE_SBX_SYNTAX );
     }
-    return pVar;
+    return pVar.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
