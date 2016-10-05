@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_7cbb110f",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-05T12:43:44Z",
+      "side": 1,
+      "message": "In the meantime the error constants were changed to scoped enums, so errNoConvergence is now FormulaError::NoConvergence.\n\nI\u0027ll push an amended commit to resolve the conflict.",
+      "range": {
+        "startLine": 2272,
+        "startChar": 19,
+        "endLine": 2272,
+        "endChar": 35
+      },
+      "revId": "54b9f03c4be2206d65283112020bf21adedec3be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
