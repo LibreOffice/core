@@ -24,10 +24,10 @@
 #include <svx/svxids.hrc>
 #include <svl/itemset.hxx>
 
-XOutdevItemPool::XOutdevItemPool(
-    SfxItemPool* _pMaster,
-    bool bLoadRefCounts)
-:   SfxItemPool("XOutdevItemPool", SDRATTR_START, SDRATTR_END, nullptr, nullptr, bLoadRefCounts)
+XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster, bool bLoadRefCounts)
+    : SfxItemPool("XOutdevItemPool", SDRATTR_START, SDRATTR_END, nullptr, nullptr, bLoadRefCounts)
+    , mppLocalPoolDefaults(new SfxPoolItem*[SDRATTR_END - SDRATTR_START + 1])
+    , mpLocalItemInfos(new SfxItemInfo[SDRATTR_END - SDRATTR_START + 1])
 {
     // prepare some defaults
     const OUString aNullStr;
@@ -58,8 +58,6 @@ XOutdevItemPool::XOutdevItemPool(
     }
 
     // prepare PoolDefaults
-    mppLocalPoolDefaults = new SfxPoolItem*[GetLastWhich() - GetFirstWhich() + 1];
-
     mppLocalPoolDefaults[XATTR_LINESTYLE          -XATTR_START] = new XLineStyleItem;
     mppLocalPoolDefaults[XATTR_LINEDASH           -XATTR_START] = new XLineDashItem(this,aNullDash);
     mppLocalPoolDefaults[XATTR_LINEWIDTH          -XATTR_START] = new XLineWidthItem;
@@ -113,7 +111,6 @@ XOutdevItemPool::XOutdevItemPool(
     mppLocalPoolDefaults[XATTRSET_FILL - XATTR_START] = new XFillAttrSetItem(pSet);
 
     // create ItemInfos
-    mpLocalItemInfos = new SfxItemInfo[GetLastWhich() - GetFirstWhich() + 1];
     for(sal_uInt16 i(GetFirstWhich()); i <= GetLastWhich(); i++)
     {
         mpLocalItemInfos[i - XATTR_START]._nSID = 0;

@@ -37,13 +37,13 @@ namespace chart
 {
 
 ChartItemPool::ChartItemPool():
-        SfxItemPool( "ChartItemPool" , SCHATTR_START, SCHATTR_END, nullptr, nullptr )
+        SfxItemPool( "ChartItemPool" , SCHATTR_START, SCHATTR_END, nullptr, nullptr ),
+        pItemInfos(new SfxItemInfo[SCHATTR_END - SCHATTR_START + 1])
 {
     /**************************************************************************
     * PoolDefaults
     **************************************************************************/
     SfxPoolItem** ppPoolDefaults = new SfxPoolItem*[SCHATTR_END - SCHATTR_START + 1];
-
     ppPoolDefaults[SCHATTR_DATADESCR_SHOW_NUMBER    - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_SHOW_NUMBER);
     ppPoolDefaults[SCHATTR_DATADESCR_SHOW_PERCENTAGE- SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_SHOW_PERCENTAGE);
     ppPoolDefaults[SCHATTR_DATADESCR_SHOW_CATEGORY  - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_SHOW_CATEGORY);
@@ -164,8 +164,6 @@ ChartItemPool::ChartItemPool():
     /**************************************************************************
     * ItemInfos
     **************************************************************************/
-    pItemInfos = new SfxItemInfo[SCHATTR_END - SCHATTR_START + 1];
-
     const sal_uInt16 nMax = SCHATTR_END - SCHATTR_START + 1;
     for( sal_uInt16 i = 0; i < nMax; i++ )
     {
