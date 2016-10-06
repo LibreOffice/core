@@ -1226,7 +1226,10 @@ namespace cairocanvas
                     break;
             }
 
-            if (strokeAttributes.DashArray.getLength() > 0)
+            //tdf#103026 If the w scaling is 0, then all dashes become zero so
+            //cairo will set the cairo_t status to CAIRO_STATUS_INVALID_DASH
+            //and no further drawing will occur
+            if (strokeAttributes.DashArray.getLength() > 0 && w > 0.0)
             {
                 auto aDashArray(comphelper::sequenceToContainer<std::vector<double>>(strokeAttributes.DashArray));
                 for (auto& rDash : aDashArray)
