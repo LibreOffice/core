@@ -47,11 +47,6 @@ public:
         TextText
     };
 
-    ValueSetWithTextControl(
-        const ControlType eControlType,
-        vcl::Window* pParent,
-        const ResId& rResId);
-
     ValueSetWithTextControl(Window* pParent, WinBits nBits);
 
     // add item for control type IMAGE_TEXT

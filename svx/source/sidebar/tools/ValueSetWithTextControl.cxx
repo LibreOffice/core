@@ -30,25 +30,12 @@
 
 namespace svx { namespace sidebar {
 
-ValueSetWithTextControl::ValueSetWithTextControl(
-    const ControlType eControlType,
-    vcl::Window* pParent,
-    const ResId& rResId)
-    : ValueSet( pParent, rResId )
-    , meControlType( eControlType )
-    , maItems()
+ValueSetWithTextControl::ValueSetWithTextControl(Window* pParent, WinBits nBits)
+    : ValueSet( pParent, nBits )
+    , meControlType( svx::sidebar::ValueSetWithTextControl::ControlType::TextText )
 {
     SetColCount();
 }
-
-ValueSetWithTextControl::ValueSetWithTextControl(
-    Window* pParent,
-    WinBits nBits)
-    : ValueSet( pParent, nBits )
-    , meControlType( svx::sidebar::ValueSetWithTextControl::ControlType::TextText )
-    {
-        SetColCount();
-    }
 
 void ValueSetWithTextControl::AddItem(
     const Image& rItemImage,
@@ -80,7 +67,6 @@ void ValueSetWithTextControl::AddItem(
                     (pItemHelpText != nullptr) ? *pItemHelpText : rItemText );
 }
 
-
 void ValueSetWithTextControl::AddItem(
     const OUString& rItemText,
     const OUString& rItemText2 )
@@ -99,7 +85,6 @@ void ValueSetWithTextControl::AddItem(
     InsertItem( maItems.size() );
     SetItemText( maItems.size(), rItemText );
 }
-
 
 void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
