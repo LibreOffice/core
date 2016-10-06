@@ -112,6 +112,8 @@ if __name__ == "__main__":
             uifile = "sfx2" + uifile[3:]
         elif uifile.startswith("svt"):
             uifile = "svtools" + uifile[3:]
+        elif uifile.startswith("fps"):
+            uifile = "fpicker" + uifile[3:]
         components = uifile.split('/',1);
         uifile = components[0] + '/uiconfig/' + components[1]
         targets[uifile].add(compname.split(':')[0])
