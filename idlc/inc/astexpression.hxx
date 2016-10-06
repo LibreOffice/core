@@ -114,8 +114,8 @@ public:
     // Evaluate then store value inside this AstExpression
     void evaluate();
 
-    // Compare to AstExpressions
-    bool compare(AstExpression *pExpr);
+    // Compare LONG AstExpression values
+    bool compareLong(AstExpression *pExpr);
 
     OString toString();
 private:

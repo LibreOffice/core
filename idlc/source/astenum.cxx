@@ -43,7 +43,7 @@ AstConstant* AstEnum::checkValue(AstExpression* pExpr)
         AstDeclaration* pDecl = *iter;
         AstConstant* pConst = static_cast<AstConstant*>(pDecl);
 
-        if (pConst->getConstValue()->compare(pExpr))
+        if (pConst->getConstValue()->compareLong(pExpr))
             return pConst;
 
         ++iter;
