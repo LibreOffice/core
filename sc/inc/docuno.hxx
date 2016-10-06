@@ -423,6 +423,9 @@ public:
 
     /// @see vcl::ITiledRenderable::getTrackedChanges().
     OUString getTrackedChanges() override;
+
+    /// @see vcl::ITiledRenderable::setClientVisibleArea().
+    virtual void setClientVisibleArea(const Rectangle& rRectangle) override;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper<
