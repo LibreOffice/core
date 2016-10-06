@@ -250,7 +250,7 @@ class SvxFrameWindow_Impl : public svtools::ToolbarPopup
 {
 private:
     VclPtr<SvxFrmValueSet_Impl> aFrameSet;
-    rtl::Reference< svt::ToolboxController > mpController;
+    svt::ToolboxController&     mrController;
     ImageList                   aImgList;
     bool                        bParagraphMode;
 
@@ -262,7 +262,7 @@ protected:
     virtual void    GetFocus() override;
 
 public:
-    SvxFrameWindow_Impl( const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, svt::ToolboxController* pController );
+    SvxFrameWindow_Impl( const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, svt::ToolboxController& rController );
     virtual ~SvxFrameWindow_Impl() override;
     virtual void dispose() override;
 
@@ -1595,10 +1595,10 @@ Color BorderColorStatus::GetColor()
 }
 
 
-SvxFrameWindow_Impl::SvxFrameWindow_Impl (const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, svt::ToolboxController* pController ) :
+SvxFrameWindow_Impl::SvxFrameWindow_Impl (const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, svt::ToolboxController& rController ) :
     ToolbarPopup( rFrame, pParentWindow, WB_STDPOPUP | WB_MOVEABLE | WB_CLOSEABLE ),
     aFrameSet   ( VclPtr<SvxFrmValueSet_Impl>::Create(this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
-    mpController( pController ),
+    mrController( rController ),
     bParagraphMode(false)
 {
     AddStatusListener(".uno:BorderReducedMode");
@@ -1640,7 +1640,6 @@ SvxFrameWindow_Impl::~SvxFrameWindow_Impl()
 
 void SvxFrameWindow_Impl::dispose()
 {
-    mpController.clear();
     aFrameSet.disposeAndClear();
     ToolbarPopup::dispose();
 }
@@ -1792,7 +1791,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         aFrameSet->SetNoSelection();
     }
 
-    mpController->dispatchCommand( ".uno:SetBorderStyle", aArgs );
+    mrController.dispatchCommand( ".uno:SetBorderStyle", aArgs );
 }
 
 void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -2930,7 +2929,7 @@ void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any
 
 VclPtr<vcl::Window> SvxFrameToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<SvxFrameWindow_Impl>::Create( m_xFrame, pParent, this );
+    return VclPtr<SvxFrameWindow_Impl>::Create( m_xFrame, pParent, *this );
 }
 
 OUString SvxFrameToolBoxControl::getImplementationName()
