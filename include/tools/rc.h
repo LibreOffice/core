@@ -147,12 +147,11 @@ namespace o3tl {
 
 // For "ImageList":
 enum class RscImageListFlags {
-    MaskColor         = 0x04,
     IdList            = 0x08,
     IdCount           = 0x10
 };
 namespace o3tl {
-    template<> struct typed_flags<RscImageListFlags> : is_typed_flags<RscImageListFlags, 0x1c> {};
+    template<> struct typed_flags<RscImageListFlags> : is_typed_flags<RscImageListFlags, 0x18> {};
 }
 
 // FIXME obsolete, should be removed by MM

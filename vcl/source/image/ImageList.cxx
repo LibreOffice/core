@@ -58,8 +58,6 @@ ImageList::ImageList( const ResId& rResId ) :
         RscImageListFlags nObjMask = (RscImageListFlags)pResMgr->ReadLong();
         pResMgr->ReadString(); //skip string
 
-        pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
-
         if( nObjMask & RscImageListFlags::IdList )
         {
             for( sal_Int32 i = 0, nCount = pResMgr->ReadLong(); i < nCount; ++i )
