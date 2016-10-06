@@ -655,7 +655,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     }
 
                     if (maBlipProps.moAlphaModFix.has())
-                        rPropMap.setProperty(ShapeProperty::FillTransparency, static_cast<sal_Int16>(maBlipProps.moAlphaModFix.get() / PER_PERCENT));
+                        rPropMap.setProperty(ShapeProperty::FillTransparency, static_cast<sal_Int16>(100 - (maBlipProps.moAlphaModFix.get() / PER_PERCENT)));
                 }
             break;
 
