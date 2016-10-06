@@ -77,6 +77,63 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
+class ScExtraEditViewManager
+{
+public:
+    ScExtraEditViewManager(ScTabViewShell* pThisViewShell, VclPtr<ScGridWindow>* pGridWin)
+        : mpThisViewShell(pThisViewShell)
+        , mpGridWin(pGridWin)
+        , mpOtherEditView(nullptr)
+        , mpOtherEngine(nullptr)
+        , maSameEditViewChecker()
+        , nTotalActiveEditViews(0)
+    {}
+
+    ~ScExtraEditViewManager();
+
+    void Add(SfxViewShell* pViewShell, ScSplitPos eWhich)
+    {
+        Apply(pViewShell, eWhich, &ScExtraEditViewManager::Adder);
+    }
+
+    void Remove(SfxViewShell* pViewShell, ScSplitPos eWhich)
+    {
+        Apply(pViewShell, eWhich, &ScExtraEditViewManager::Remover);
+    }
+
+private:
+    class SameEditViewChecker
+    {
+    public:
+        SameEditViewChecker()
+            : mpOtherEditView(nullptr)
+            , mpWindow(nullptr)
+        {}
+        void SetEditView(EditView* pOtherEditView) { mpOtherEditView = pOtherEditView; }
+        void SetWindow(ScGridWindow* pWindow) { mpWindow = pWindow; }
+        bool operator() (const EditView* pView) const;
+
+    private:
+        EditView* mpOtherEditView;
+        ScGridWindow* mpWindow;
+    };
+
+private:
+    typedef void (ScExtraEditViewManager::* FuncType)(ScGridWindow* );
+
+    void Apply(SfxViewShell* pViewShell, ScSplitPos eWhich, FuncType fHandler);
+    void Adder(ScGridWindow* pWin);
+    void Remover(ScGridWindow* pWin);
+
+private:
+    ScTabViewShell* mpThisViewShell;
+    VclPtr<ScGridWindow>* mpGridWin;
+    EditView* mpOtherEditView;
+    EditEngine* mpOtherEngine;
+    SameEditViewChecker maSameEditViewChecker;
+    int nTotalActiveEditViews;
+};
+
 class ScTabView
 {
 private:
@@ -126,6 +183,8 @@ private:
     Timer               aScrollTimer;
     VclPtr<ScGridWindow>       pTimerWindow;
     MouseEvent          aTimerMEvt;
+
+    ScExtraEditViewManager aExtraEditViewManager;
 
     sal_uLong               nTipVisible;
 

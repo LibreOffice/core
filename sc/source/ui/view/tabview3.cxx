@@ -98,6 +98,83 @@ ScRange lcl_getSubRangeByIndex( const ScRange& rRange, sal_Int32 nIndex )
 
 using namespace com::sun::star;
 
+ScExtraEditViewManager::~ScExtraEditViewManager()
+{
+    assert(nTotalActiveEditViews == 0);
+}
+
+void ScExtraEditViewManager::Apply(SfxViewShell* pViewShell, ScSplitPos eWhich, FuncType fHandler)
+{
+    ScTabViewShell* pOtherViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+    if (pOtherViewShell != nullptr && pOtherViewShell != mpThisViewShell)
+    {
+        mpOtherEditView = pOtherViewShell->GetViewData().GetEditView(eWhich);
+        if (mpOtherEditView != nullptr)
+        {
+            mpOtherEngine = mpOtherEditView->GetEditEngine();
+            if (mpOtherEngine != nullptr)
+            {
+                maSameEditViewChecker.SetEditView(mpOtherEditView);
+                for (int i = 0; i < 4; ++i)
+                {
+                    (this->*fHandler)(mpGridWin[i].get());
+                }
+            }
+        }
+    }
+}
+
+void ScExtraEditViewManager::Adder(ScGridWindow* pWin)
+{
+    if (pWin != nullptr)
+    {
+        EditEngine::ViewsType& rEditViews = mpOtherEngine->GetEditViews();
+        maSameEditViewChecker.SetWindow(pWin);
+        auto found = std::find_if(rEditViews.begin(), rEditViews.end(), maSameEditViewChecker);
+        if (found == rEditViews.end())
+        {
+            EditView* pThisEditView = new EditView( mpOtherEngine, pWin );
+            if (pThisEditView != nullptr)
+            {
+                pThisEditView->SetOutputArea(mpOtherEditView->GetOutputArea());
+                pThisEditView->SetVisArea(mpOtherEditView->GetVisArea());
+                mpOtherEngine->InsertView(pThisEditView);
+                ++nTotalActiveEditViews;
+            }
+        }
+    }
+}
+
+void ScExtraEditViewManager::Remover(ScGridWindow* pWin)
+{
+    if (pWin != nullptr)
+    {
+        EditEngine::ViewsType& rEditViews = mpOtherEngine->GetEditViews();
+        maSameEditViewChecker.SetWindow(pWin);
+        auto found = std::find_if(rEditViews.begin(), rEditViews.end(), maSameEditViewChecker);
+        if (found != rEditViews.end())
+        {
+            EditView* pView = *found;
+            if (pView)
+            {
+                mpOtherEngine->RemoveView(pView);
+                delete pView;
+                pView = nullptr;
+                --nTotalActiveEditViews;
+            }
+        }
+    }
+}
+
+bool ScExtraEditViewManager::SameEditViewChecker::operator() (const EditView* pView) const
+{
+    return ( pView != nullptr
+          && pView->GetWindow() == mpWindow
+          && pView->GetEditEngine() == mpOtherEditView->GetEditEngine()
+          && pView->GetOutputArea() == mpOtherEditView->GetOutputArea()
+          && pView->GetVisArea() == mpOtherEditView->GetVisArea() );
+}
+
 // ---  public functions
 
 void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl )
@@ -1894,132 +1971,13 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     }
 }
 
-class ExtraEditViewManager
-{
-public:
-    ExtraEditViewManager(ScTabViewShell* pThisViewShell, VclPtr<ScGridWindow>* pGridWin)
-        : mpThisViewShell(pThisViewShell)
-        , mpGridWin(pGridWin)
-        , mpOtherEditView(nullptr)
-        , mpOtherEngine(nullptr)
-        , mpEditViews(nullptr)
-        , maSameEditViewChecker()
-    {}
-
-    void Add(SfxViewShell* pViewShell, ScSplitPos eWhich)
-    {
-        Apply(pViewShell, eWhich, &ExtraEditViewManager::Adder);
-    }
-
-    void Remove(SfxViewShell* pViewShell, ScSplitPos eWhich)
-    {
-        Apply(pViewShell, eWhich, &ExtraEditViewManager::Remover);
-    }
-
-private:
-    class SameEditViewChecker
-    {
-    public:
-        SameEditViewChecker()
-            : mpOtherEditView(nullptr)
-        {}
-        void SetEditView(EditView* pOtherEditView) { mpOtherEditView = pOtherEditView; }
-        void SetWindow(ScGridWindow* pWindow) { mpWindow = pWindow; }
-        bool operator() (const EditView* pView) const
-        {
-            return ( pView != nullptr
-                  && pView->GetWindow() == mpWindow
-                  && pView->GetEditEngine() == mpOtherEditView->GetEditEngine()
-                  && pView->GetOutputArea() == mpOtherEditView->GetOutputArea()
-                  && pView->GetVisArea() == mpOtherEditView->GetVisArea() );
-        }
-
-    private:
-        EditView* mpOtherEditView;
-        VclPtr<ScGridWindow> mpWindow;
-    };
-
-private:
-    typedef void (ExtraEditViewManager::* FuncType)(ScGridWindow* );
-
-    void Apply(SfxViewShell* pViewShell, ScSplitPos eWhich, FuncType fHandler)
-    {
-        ScTabViewShell* pOtherViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-        if (pOtherViewShell != nullptr && pOtherViewShell != mpThisViewShell)
-        {
-            mpOtherEditView = pOtherViewShell->GetViewData().GetEditView(eWhich);
-            if (mpOtherEditView != nullptr)
-            {
-                mpOtherEngine = mpOtherEditView->GetEditEngine();
-                if (mpOtherEngine != nullptr)
-                {
-                    mpEditViews = &(mpOtherEngine->GetEditViews());
-                    maSameEditViewChecker.SetEditView(mpOtherEditView);
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        (this->*fHandler)(mpGridWin[i].get());
-                    }
-                }
-            }
-        }
-    }
-
-    void Adder(ScGridWindow* pWin)
-    {
-        if (pWin != nullptr)
-        {
-            maSameEditViewChecker.SetWindow(pWin);
-            auto found = std::find_if(mpEditViews->begin(), mpEditViews->end(), maSameEditViewChecker);
-            if (found == mpEditViews->end())
-            {
-                EditView* pThisEditView = new EditView( mpOtherEngine, pWin );
-                if (pThisEditView != nullptr)
-                {
-                    pThisEditView->SetOutputArea(mpOtherEditView->GetOutputArea());
-                    pThisEditView->SetVisArea(mpOtherEditView->GetVisArea());
-                    mpOtherEngine->InsertView(pThisEditView);
-                }
-            }
-        }
-    }
-
-    void Remover(ScGridWindow* pWin)
-    {
-        if (pWin != nullptr)
-        {
-            maSameEditViewChecker.SetWindow(pWin);
-            auto found = std::find_if(mpEditViews->begin(), mpEditViews->end(), maSameEditViewChecker);
-            if (found != mpEditViews->end())
-            {
-                EditView* pView = *found;
-                if (pView)
-                {
-                    mpOtherEngine->RemoveView(pView);
-                    delete pView;
-                    pView = nullptr;
-                }
-            }
-        }
-    }
-
-private:
-    ScTabViewShell* mpThisViewShell;
-    VclPtr<ScGridWindow>* mpGridWin;
-    EditView* mpOtherEditView;
-    EditEngine* mpOtherEngine;
-    EditEngine::ViewsType* mpEditViews;
-    SameEditViewChecker maSameEditViewChecker;
-};
-
 void ScTabView::AddEditViewToOtherView(SfxViewShell* pViewShell, ScSplitPos eWhich)
 {
-    ExtraEditViewManager aExtraEditViewManager(aViewData.GetViewShell(), pGridWin);
     aExtraEditViewManager.Add(pViewShell, eWhich);
 }
 
 void ScTabView::RemoveEditViewFromOtherView(SfxViewShell* pViewShell, ScSplitPos eWhich)
 {
-    ExtraEditViewManager aExtraEditViewManager(aViewData.GetViewShell(), pGridWin);
     aExtraEditViewManager.Remove(pViewShell, eWhich);
 }
 
