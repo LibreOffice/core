@@ -443,11 +443,6 @@ are on page 2 and page 3
     CPPUNIT_ASSERT_EQUAL( OUString("two"), parseDump("/root/page[3]/body/txt/text()") );
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf95367_inheritFollowStyle, "tdf95367_inheritFollowStyle.docx")
-{
-    CPPUNIT_ASSERT_EQUAL(OUString("header"),  parseDump("/root/page[2]/header/txt/text()"));
-}
-
 DECLARE_OOXMLIMPORT_TEST(testN652364, "n652364.docx")
 {
 /*
@@ -991,29 +986,6 @@ DECLARE_OOXMLIMPORT_TEST(testN780843b, "n780843b.docx")
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(aStyleName), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xFooterText = getProperty< uno::Reference<text::XTextRange> >(xPageStyle, "FooterText");
     CPPUNIT_ASSERT_EQUAL( OUString("hidden footer"), xFooterText->getString() );
-}
-
-DECLARE_OOXMLIMPORT_TEST(testInheritFirstHeader,"inheritFirstHeader.docx")
-{
-// First page headers always link to last used first header, never to a follow header
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-
-    xCursor->jumpToLastPage();
-    OUString sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
-    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
-    CPPUNIT_ASSERT_EQUAL( OUString("Last Header"), xHeaderText->getString() );
-
-    xCursor->jumpToPreviousPage();
-    sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
-    xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
-    CPPUNIT_ASSERT_EQUAL( OUString("First Header"), xHeaderText->getString() );
-
-    xCursor->jumpToPreviousPage();
-    sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
-    xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
-    CPPUNIT_ASSERT_EQUAL( OUString("Follow Header"), xHeaderText->getString() );
 }
 
 DECLARE_OOXMLIMPORT_TEST(testShadow, "imgshadow.docx")

@@ -821,13 +821,13 @@ void DocxAttributeOutput::SectionBreaks(const SwNode& rNode)
     }
     else if (rNode.IsEndNode())
     {
-        // End of something: make sure that it's the end of a table.
-        assert(rNode.StartOfSectionNode()->IsTableNode());
         if (aNextIndex.GetNode().IsTextNode())
         {
             // Handle section break between a table and a text node following it.
+            // Also handle section endings
             const SwTextNode* pTextNode = aNextIndex.GetNode().GetTextNode();
-            m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen, pTextNode->GetText().isEmpty());
+            if (rNode.StartOfSectionNode()->IsTableNode() || rNode.StartOfSectionNode()->IsSectionNode())
+                m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen, pTextNode->GetText().isEmpty());
         }
     }
 }
