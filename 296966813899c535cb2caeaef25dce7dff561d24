@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_5ce575a6",
+        "filename": "sc/qa/unit/data/functions/fods/binom.inv.fods",
+        "patchSetId": 6
+      },
+      "lineNbr": 3144,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-10-06T11:14:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a77a97e_bc9f69b3",
+      "range": {
+        "startLine": 3144,
+        "startChar": 14,
+        "endLine": 3144,
+        "endChar": 18
+      },
+      "revId": "296966813899c535cb2caeaef25dce7dff561d24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_dca4250a",
         "filename": "sc/source/core/tool/interpr3.cxx",
         "patchSetId": 6
@@ -36,6 +60,24 @@
       "writtenOn": "2016-10-05T11:50:06Z",
       "side": 1,
       "message": "Just widening the constraint isn\u0027t enough, Alpha 0 and 1 also need some special handling which is not covered by the current algorithm, see https://lists.oasis-open.org/archives/office-comment/201608/msg00003.html\n\nFor example, \u003dCRITBINOM(111, 0.5, 0) should return 0 but currently returns 16, \u003dCRITBINOM(111, 0.5, 1) should return 111 but returns 97,",
+      "revId": "296966813899c535cb2caeaef25dce7dff561d24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_7c4b11b1",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2016-10-06T11:14:03Z",
+      "side": 1,
+      "message": "I should have checked and tested the cases of Aplha being 0 or 1  better than I did.\n\nAdded these cases to ScCritBinom() and to the test document.",
+      "parentUuid": "7a77a97e_dca4250a",
       "revId": "296966813899c535cb2caeaef25dce7dff561d24",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
