@@ -1120,7 +1120,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
             }
             break;
         case SC_COND_DIRECT:
-            bValid = !::rtl::math::approxEqual( nComp1, 0.0 );
+            bValid = nComp1 != 0.0;
             break;
         case SC_COND_TOP10:
             bValid = IsTopNElement( nArg );
@@ -1203,7 +1203,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
     bool bValid = false;
     // Interpret must already have been called
     if ( eOp == SC_COND_DIRECT ) // Formula is independent from the content
-        return !::rtl::math::approxEqual( nVal1, 0.0 );
+        return nVal1 != 0.0;
 
     if ( eOp == SC_COND_DUPLICATE || eOp == SC_COND_NOTDUPLICATE )
     {

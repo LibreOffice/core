@@ -2004,7 +2004,7 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
             double fPowN, fPowNminus1;  // for (1.0+fX)^Nper and (1.0+fX)^(Nper-1)
             fPowNminus1 = pow( 1.0+fX, fNper-1.0);
             fPowN = fPowNminus1 * (1.0+fX);
-            if (rtl::math::approxEqual( fabs(fX), 0.0))
+            if (fX == 0.0)
             {
                 fGeoSeries = fNper;
                 fGeoSeriesDerivation = fNper * (fNper-1.0)/2.0;
@@ -2020,7 +2020,7 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
                 bFound = true;  // will catch root which is at an extreme
             else
             {
-                if (rtl::math::approxEqual( fabs(fTermDerivation), 0.0))
+                if (fTermDerivation == 0.0)
                     fXnew = fX + 1.1 * SCdEpsilon;  // move away from zero slope
                 else
                     fXnew = fX - fTerm / fTermDerivation;
@@ -2043,7 +2043,7 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
         fX = (fGuess < -1.0) ? -1.0 : fGuess;   // start with a valid fX
         while (bValid && !bFound && nCount < nIterationsMax)
         {
-            if (rtl::math::approxEqual( fabs(fX), 0.0))
+            if (fX == 0.0)
             {
                 fGeoSeries = fNper;
                 fGeoSeriesDerivation = fNper * (fNper-1.0)/2.0;
@@ -2059,7 +2059,7 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
                 bFound = true;  // will catch root which is at an extreme
             else
             {
-                if (rtl::math::approxEqual( fabs(fTermDerivation), 0.0))
+                if (fTermDerivation == 0.0)
                     fXnew = fX + 1.1 * SCdEpsilon;  // move away from zero slope
                 else
                     fXnew = fX - fTerm / fTermDerivation;
