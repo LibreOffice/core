@@ -255,7 +255,7 @@ void BubbleChart::createShapes()
                     if( !m_bShowNegativeValues && fBubbleSize<0.0 )
                         continue;
 
-                    if( ::rtl::math::approxEqual( fBubbleSize, 0.0 ) || ::rtl::math::isNan(fBubbleSize) )
+                    if( fBubbleSize == 0.0 || ::rtl::math::isNan(fBubbleSize) )
                         continue;
 
                     if(    ::rtl::math::isNan(fLogicX) || ::rtl::math::isInf(fLogicX)

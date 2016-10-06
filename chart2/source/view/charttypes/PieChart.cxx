@@ -230,7 +230,7 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
 {
     //transform position:
     drawing::Direction3D aOffset;
-    if (!::rtl::math::approxEqual(rParam.mfExplodePercentage, 0.0))
+    if (rParam.mfExplodePercentage != 0.0)
     {
         double fAngle  = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree/2.0;
         double fRadius = (rParam.mfUnitCircleOuterRadius-rParam.mfUnitCircleInnerRadius)*rParam.mfExplodePercentage;
@@ -272,7 +272,7 @@ void PieChart::createTextLabelShape(
     ///to both normalized radii. (See notes for
     ///`PolarPlottingPositionHelper::transformToRadius`, especially example 3,
     ///and related comments).
-    if (!rtl::math::approxEqual(rParam.mfExplodePercentage, 0.0))
+    if (rParam.mfExplodePercentage != 0.0)
     {
         double fExplodeOffset = (rParam.mfUnitCircleOuterRadius-rParam.mfUnitCircleInnerRadius)*rParam.mfExplodePercentage;
         rParam.mfUnitCircleInnerRadius += fExplodeOffset;
@@ -1123,7 +1123,7 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
         return;
 
     double fPageDiagonaleLength = sqrt( double( rPageSize.Width*rPageSize.Width + rPageSize.Height*rPageSize.Height) );
-    if( ::rtl::math::approxEqual( fPageDiagonaleLength, 0.0 ) )
+    if( fPageDiagonaleLength == 0.0 )
         return;
 
     ///initialize next and previous member of `PieLabelInfo` objects
@@ -1325,7 +1325,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
               "      old anchor point = " << rPieLabelInfo.aFirstPosition );
 
 
-    if( ::rtl::math::approxEqual( fPieRadius, 0.0 ) )
+    if( fPieRadius == 0.0 )
         return false;
 
     // get label b.b. width and height
@@ -1417,7 +1417,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // note that in the former case 0 <= f(alpha, beta) <= 180,
     // whilst in the latter case 180 <= f(alpha, beta) <= 360;
     double fAlphaMod90 = fmod( fAlphaDeg + 45, 90.0 ) - 45;
-    double fSign = ::rtl::math::approxEqual( fAlphaMod90, 0.0 )
+    double fSign = fAlphaMod90 == 0.0
                        ? 0.0
                        : ( fAlphaMod90 < 0 ) ? -1.0 : 1.0;
     double fThetaRad = fSign * fAlphaRad + M_PI_2 * (1 - fSign * nNearestEdgeIndex) + fBetaRad;
@@ -1430,7 +1430,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // that is the distance between C and P
     double fDistanceCP;
     // when the bisector ray intersects the b.b. in F we have theta mod 180 == 0
-    if( ::rtl::math::approxEqual( fmod(fThetaRad, M_PI), 0.0 ))
+    if( fmod(fThetaRad, M_PI) == 0.0 )
     {
         fDistanceCP = fPieRadius - fDistancePF;
     }

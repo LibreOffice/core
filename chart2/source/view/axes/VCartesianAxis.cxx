@@ -492,7 +492,7 @@ bool VCartesianAxis::isBreakOfLabelsAllowed(
     //no break for value axis
     if( !m_bUseTextLabels )
         return false;
-    if( !::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 ) )
+    if( rAxisLabelProperties.fRotationAngleDegree != 0.0 )
         return false;
     //break only for horizontal axis
     return bIsHorizontalAxis;
@@ -507,7 +507,7 @@ bool canAutoAdjustLabelPlacement(
         return false;
     if( rAxisLabelProperties.bLineBreakAllowed ) // auto line break may conflict with...
         return false;
-    if( !::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 ) )
+    if( rAxisLabelProperties.fRotationAngleDegree != 0.0 )
         return false;
     // automatic adjusting labels only works for
     // horizontal axis with horizontal text
@@ -813,7 +813,7 @@ bool VCartesianAxis::createTextShapes(
         recordMaximumTextSize( pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree );
 
         if( nLimitedSpaceForText>0 && !rAxisLabelProperties.bOverlapAllowed
-                && ::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 )
+                && rAxisLabelProperties.fRotationAngleDegree == 0.0
                 && m_aAxisProperties.m_bComplexCategories
                 && lcl_hasWordBreak( pTickInfo->xTextShape ) )
         {
@@ -1340,7 +1340,7 @@ void VCartesianAxis::get2DAxisMainLine(
                 ScreenPosAndLogicPos aNotSoGoodPos( aPosList[1] );
 
                 //choose most bottom positions
-                if( !::rtl::math::approxEqual( fDeltaX, 0.0 ) ) // prefer left-right alignments
+                if( fDeltaX != 0.0 ) // prefer left-right alignments
                 {
                     if( aBestPos.aScreenPos.getX() > aNotSoGoodPos.aScreenPos.getX() )
                         rAlignment.meAlignment = LABEL_ALIGN_RIGHT;
@@ -1596,7 +1596,7 @@ void VCartesianAxis::createLabels()
             if( m_aAxisProperties.m_bComplexCategories )
             {
                 aComplexProps.bLineBreakAllowed = true;
-                aComplexProps.bOverlapAllowed = !::rtl::math::approxEqual( aComplexProps.fRotationAngleDegree, 0.0 );
+                aComplexProps.bOverlapAllowed = aComplexProps.fRotationAngleDegree != 0.0;
 
             }
             AxisLabelProperties& rAxisLabelProperties =  m_aAxisProperties.m_bComplexCategories ? aComplexProps : m_aAxisLabelProperties;

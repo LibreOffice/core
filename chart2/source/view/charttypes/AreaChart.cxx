@@ -766,7 +766,7 @@ void AreaChart::createShapes()
                         fLogicY = fabs( fLogicY );
 
                     std::map< sal_Int32, double >& rLogicYSumMap = aLogicYSumMapByX[nIndex];
-                    if( pPosHelper->isPercentY() && !::rtl::math::approxEqual( rLogicYSumMap[nAttachedAxisIndex], 0.0 ) )
+                    if( pPosHelper->isPercentY() && rLogicYSumMap[nAttachedAxisIndex] != 0.0 )
                     {
                         fLogicY = fabs( fLogicY )/rLogicYSumMap[nAttachedAxisIndex];
                     }

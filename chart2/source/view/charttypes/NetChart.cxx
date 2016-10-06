@@ -475,7 +475,7 @@ void NetChart::createShapes()
                         }
                     }
 
-                    if( pPosHelper->isPercentY() && !::rtl::math::approxEqual( aLogicYSumMap[nAttachedAxisIndex], 0.0 ) )
+                    if( pPosHelper->isPercentY() && aLogicYSumMap[nAttachedAxisIndex] != 0.0 )
                     {
                         fLogicY = fabs( fLogicY )/aLogicYSumMap[nAttachedAxisIndex];
                     }

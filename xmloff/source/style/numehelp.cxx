@@ -185,7 +185,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
                 }
                 else
                 {
-                    if (::rtl::math::approxEqual( rValue, 0.0 ))
+                    if (rValue == 0.0)
                     {
                         rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE, XML_FALSE);
                     }
@@ -454,7 +454,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                 }
                 else
                 {
-                    if (::rtl::math::approxEqual( rValue, 0.0 ))
+                    if (rValue == 0.0)
                     {
                         pExport->AddAttribute(sAttrBooleanValue, XML_FALSE);
                     }
