@@ -4067,9 +4067,9 @@ void OpTbillprice::GenSlidingWindowFunction(
  void RATE::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
-    decls.insert(approxEqualDecl);decls.insert(nKorrValDecl);
+    decls.insert(nKorrValDecl);
     decls.insert(SCdEpsilonDecl);decls.insert(RoundDecl);
-    funs.insert(approxEqual);funs.insert(Round);
+    funs.insert(Round);
 }
 
 void RATE::GenSlidingWindowFunction(
@@ -4127,7 +4127,7 @@ void RATE::GenSlidingWindowFunction(
     ss << "        {\n";
     ss << "            fPowNminus1 = pow( 1.0+fX, arg0-1.0);\n";
     ss << "            fPowN = fPowNminus1 * (1.0+fX);\n";
-    ss << "            if (approxEqual( fabs(fX), 0.0))\n";
+    ss << "            if (fX == 0.0)\n";
     ss << "            {\n";
     ss << "                fGeoSeries = arg0;\n";
     ss << "                fGeoSeriesDerivation = arg0 * (arg0-1.0)";
@@ -4146,7 +4146,7 @@ void RATE::GenSlidingWindowFunction(
     ss << "                bFound = true;\n";
     ss << "            else\n";
     ss << "            {\n";
-    ss << "                if (approxEqual(fabs(fTermDerivation), 0.0))\n";
+    ss << "                if (fTermDerivation == 0.0)\n";
     ss << "                    fXnew = fX + 1.1 * SCdEpsilon;\n";
     ss << "                else\n";
     ss << "                    fXnew = fX - fTerm ";
@@ -4162,7 +4162,7 @@ void RATE::GenSlidingWindowFunction(
     ss << "        fX = (arg5 < -1.0) ? -1.0 : arg5;\n";
     ss << "        while (bValid && !bFound && nCount < nIterationsMax)\n";
     ss << "        {\n";
-    ss << "            if (approxEqual(fabs(fX), 0.0)){\n";
+    ss << "            if (fX == 0.0){\n";
     ss << "                fGeoSeries = arg0;\n";
     ss << "                fGeoSeriesDerivation = arg0 * ";
     ss << "(arg0-1.0)* pow(2.0,-1);\n";
@@ -4181,7 +4181,7 @@ void RATE::GenSlidingWindowFunction(
     ss << "            if (fabs(fTerm) < fEpsilonSmall)\n";
     ss << "                bFound = true;\n";
     ss << "            else{\n";
-    ss << "                if (approxEqual(fabs(fTermDerivation), 0.0))\n";
+    ss << "                if (fTermDerivation == 0.0)\n";
     ss << "                    fXnew = fX + 1.1 * SCdEpsilon;\n";
     ss << "                else\n";
     ss << "                    fXnew = fX - fTerm ";
