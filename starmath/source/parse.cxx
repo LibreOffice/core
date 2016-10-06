@@ -1935,9 +1935,7 @@ void SmParser::DoBrace()
     assert(m_aCurToken.eType == TLEFT  ||  TokenInGroup(TG::LBrace));
 
     std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(m_aCurToken));
-    SmNode *pBody   = nullptr,
-           *pLeft   = nullptr,
-           *pRight  = nullptr;
+    std::unique_ptr<SmNode> pBody, pLeft, pRight;
     SmScaleMode   eScaleMode = SCALE_NONE;
     SmParseError  eError     = PE_NONE;
 
@@ -1949,11 +1947,11 @@ void SmParser::DoBrace()
         // check for left bracket
         if (TokenInGroup(TG::LBrace) || TokenInGroup(TG::RBrace))
         {
-            pLeft = new SmMathSymbolNode(m_aCurToken);
+            pLeft.reset(new SmMathSymbolNode(m_aCurToken));
 
             NextToken();
             DoBracebody(true);
-            pBody = popOrZero(m_aNodeStack);
+            pBody.reset(popOrZero(m_aNodeStack));
 
             if (m_aCurToken.eType == TRIGHT)
             {   NextToken();
@@ -1961,7 +1959,7 @@ void SmParser::DoBrace()
                 // check for right bracket
                 if (TokenInGroup(TG::LBrace) || TokenInGroup(TG::RBrace))
                 {
-                    pRight = new SmMathSymbolNode(m_aCurToken);
+                    pRight.reset(new SmMathSymbolNode(m_aCurToken));
                     NextToken();
                 }
                 else
@@ -1977,11 +1975,11 @@ void SmParser::DoBrace()
     {
         assert(TokenInGroup(TG::LBrace));
 
-        pLeft = new SmMathSymbolNode(m_aCurToken);
+        pLeft.reset(new SmMathSymbolNode(m_aCurToken));
 
         NextToken();
         DoBracebody(false);
-        pBody = popOrZero(m_aNodeStack);
+        pBody.reset(popOrZero(m_aNodeStack));
 
         SmTokenType  eExpectedType = TUNKNOWN;
         switch (pLeft->GetToken().eType)
@@ -2000,29 +1998,23 @@ void SmParser::DoBrace()
 
         if (m_aCurToken.eType == eExpectedType)
         {
-                pRight = new SmMathSymbolNode(m_aCurToken);
-                NextToken();
+            pRight.reset(new SmMathSymbolNode(m_aCurToken));
+            NextToken();
         }
         else
             eError = PE_PARENT_MISMATCH;
     }
 
     if (eError == PE_NONE)
-    {   OSL_ENSURE(pLeft,  "Sm: NULL pointer");
-        OSL_ENSURE(pRight, "Sm: NULL pointer");
-        pSNode->SetSubNodes(pLeft, pBody, pRight);
+    {
+        assert(pLeft);
+        assert(pRight);
+        pSNode->SetSubNodes(pLeft.release(), pBody.release(), pRight.release());
         pSNode->SetScaleMode(eScaleMode);
         m_aNodeStack.push_front(std::move(pSNode));
     }
     else
-    {
-        pSNode.reset();
-        delete pBody;
-        delete pLeft;
-        delete pRight;
-
         Error(eError);
-    }
 }
 
 void SmParser::DoBracebody(bool bIsLeftRight)
