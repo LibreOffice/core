@@ -460,7 +460,7 @@ OUString Edit::ImplGetText() const
         if ( mcEchoChar )
             cEchoChar = mcEchoChar;
         else
-            cEchoChar = L'\u2022';
+            cEchoChar = sal_Unicode(0x2022);
         OUStringBuffer aText;
         comphelper::string::padToLength(aText, maText.getLength(), cEchoChar);
         return aText.makeStringAndClear();
