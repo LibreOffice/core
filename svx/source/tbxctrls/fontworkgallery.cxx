@@ -268,7 +268,7 @@ private:
 
 FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rController,
     const Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow)
-    : ToolbarMenu(rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
+    : ToolbarMenu(rFrame, pParentWindow, WB_STDPOPUP)
     , mrController(rController)
     , maImgAlgin1(SVX_RES(RID_SVXIMG_FONTWORK_ALIGN_LEFT))
     , maImgAlgin2(SVX_RES(RID_SVXIMG_FONTWORK_ALIGN_CENTER))
@@ -431,7 +431,7 @@ private:
 
 FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::ToolboxController& rController,
     const Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow)
-    : ToolbarMenu(rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
+    : ToolbarMenu(rFrame, pParentWindow, WB_STDPOPUP)
     , mrController(rController)
     , msFontworkCharacterSpacing(".uno:FontworkCharacterSpacing")
     , msFontworkKernCharacterPairs(".uno:FontworkKernCharacterPairs")
