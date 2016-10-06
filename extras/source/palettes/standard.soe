@@ -20,4 +20,13 @@
   <draw:marker draw:name="Square 45 unfilled" svg:viewBox="0 0 3000 3000" svg:d="M1500 3000l-1500-1500 1500-1500 1500 1500zM1500 2715l-1215-1215 1215-1215 1215 1215z"></draw:marker>
   <draw:marker draw:name="Square unfilled" svg:viewBox="0 0 300 300" svg:d="M0 0h300v300h-300zM20 20h260v260h-260z"></draw:marker>
   <draw:marker draw:name="Half Circle unfilled" svg:viewBox="0 0 15000 8746" svg:d="M14971 0c21 229 29 423 29 653 0 690-79 1328-244 1943-165 614-416 1206-761 1804-345 597-733 1110-1183 1560-451 450-964 837-1562 1182s-1190 596-1806 760c-600 161-1223 240-1894 244v600h-100v-600c-671-4-1294-83-1894-244-616-164-1208-415-1806-760s-1111-732-1562-1182c-450-450-838-963-1183-1560-345-598-596-1190-761-1804-165-615-244-1253-244-1943 0-230 8-424 29-653l298 26 299 26c-18 211-26 390-26 601 0 635 72 1222 224 1787 151 566 383 1110 700 1659 318 550 674 1022 1088 1437 415 414 888 769 1438 1087 550 317 1095 548 1661 700 566 151 1154 223 1789 223s1223-72 1789-223c566-152 1111-383 1661-700 550-318 1023-673 1438-1087 414-415 770-887 1088-1437 317-549 549-1093 700-1659 152-565 224-1152 224-1787 0-211-8-390-26-601l299-26z" />
+  <draw:marker draw:name="Half Arrow Left" svg:viewBox="0 0 10 10" svg:d="M0 0m-5 0 l-5 15h5z" />
+  <draw:marker draw:name="Half Arrow Right" svg:viewBox="0 0 10 10" svg:d="M0 0m5 0 l5 15h-5z" />
+  <draw:marker draw:name="CF One" svg:viewBox="0 0 10 10" svg:d="M0 0 h1 v-40 h-2 v40 h1  M1 0 h-20 v-2 h20 v2   M-1 0 h20 v-2 h-20 v2z" />
+  <draw:marker draw:name="CF Only One" svg:viewBox="0 0 10 10" svg:d="M0 0 h1 v-40 h-2 v40 h1  M1 0 h-20 v-2 h20 v2   M-1 0 h20 v-2 h-20 v2   M1 -18 h-20 v-2 h20 v2   M-1 -18 h20 v-2 h-20 v2z" />
+  <draw:marker draw:name="CF Many" svg:viewBox="0 0 10 10" svg:d="M1500 0l1500 -2789v-211h-114l-1286 2392v-2392h-200v2392l-1286 -2392h-114v211z" />
+  <draw:marker draw:name="CF Many One" svg:viewBox="0 0 10 10" svg:d="M1500 0 h1500 v-200 h-3000 v200   M1500 -200l1500 -2789v-211h-114l-1286 2392v-2392h-200v2392l-1286 -2392h-114v211z" /> 
+  <draw:marker draw:name="CF Zero One" svg:viewBox="0 0 10 10" svg:d="M-1500 0 A1500,1500 0 1 1 -1500,1   M-1350 0 A1350,1350 0 1 1 -1350,1    M0 -1500 h100 v-2800 h-200 v2800 h100    M100 -2900 v100 h1500 v-200 h-1500 v100z     M-100 -2900 v100 h-1500 v-200 h1500 v100z" />
+  <draw:marker draw:name="CF Zero Many" svg:viewBox="0 0 10 10" svg:d="M-1500 0 A1500,1500 0 1 1 -1500,1   M-1350 0 A1350,1350 0 1 1 -1350,1    M0 -1500l1500 -2789v-211h-114l-1286 2392v-2392h-200v2392l-1286 -2392h-114v211z" />
+  <draw:marker draw:name="Reversed Arrow" svg:viewBox="0 0 20 30" svg:d="M10 30l-10 -30h20z" /><draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="m10 0-10 30h20z" />
 </office:marker-table>
