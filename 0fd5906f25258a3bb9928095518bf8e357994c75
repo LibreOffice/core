@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7a77a97e_9fcfffb2",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-06T18:45:33Z",
+      "side": 1,
+      "message": "Is this ctor actually used anymore? I guess not.. If not, then the discussion about whether to pre-allocate or not is moot ;-)",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_1c3a1dce",
         "filename": "sc/source/core/data/compressedarray.cxx",
         "patchSetId": 1
@@ -54,6 +71,23 @@
     },
     {
       "key": {
+        "uuid": "7a77a97e_5fe72740",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-06T18:45:33Z",
+      "side": 1,
+      "message": "Using operator!\u003d here is not the same as a negated operator\u003d\u003d, see description comment of ScCompressedArray, as a prerequisite type D needs to implement operator\u003d\u003d, having operator!\u003d implemented is not a prerequisite.",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a77a97e_3c37d9e4",
         "filename": "sc/source/core/data/compressedarray.cxx",
         "patchSetId": 1
@@ -100,6 +134,144 @@
       "side": 1,
       "message": "If I understand it correctly, vector.reserve() never changes it\u0027s data, so trimming is not possible.",
       "parentUuid": "7a77a97e_5c3495dd",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_ff455317",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-06T18:45:33Z",
+      "side": 1,
+      "message": "The old Resize() was called in the ctor taking the const D* array, for the case nNewLimit\u003d\u003dnCount the actual data array was shrunk to nCount elements (as it was allocated with nDataCount elements in the ctor of which not all may have been used). Otherwise Resize() reserved elements.\n\nIf that ctor is moot then probably we can also remove Resize(), I presume it\u0027s not used elsewhere.\n\nIt\u0027s correct that vector::reserve() never shrinks below current capacity.",
+      "parentUuid": "7a77a97e_dc56e505",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_bfd4bb47",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-06T18:45:33Z",
+      "side": 1,
+      "message": "D::operator\u003d\u003d is a prerequisite, D::operator!\u003d is not.",
+      "range": {
+        "startLine": 114,
+        "startChar": 39,
+        "endLine": 114,
+        "endChar": 41
+      },
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_dfc977ae",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-06T18:45:33Z",
+      "side": 1,
+      "message": "Size of vector does not change, so remember m_data.size() in a variable instead of evaluating it for each iteration.",
+      "range": {
+        "startLine": 136,
+        "startChar": 25,
+        "endLine": 136,
+        "endChar": 38
+      },
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_1fc4cf90",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-06T18:45:33Z",
+      "side": 1,
+      "message": "Keep the check if (ni \u003c nj) so the erase call and calculating the positions from the iterators is not unnecessarily done. Also, keeping the if clarifies the algorithm a little.",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_5fbe4700",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-06T18:45:33Z",
+      "side": 1,
+      "message": "This is less efficient than the original code. If bSplit\u003d\u003dtrue now two insertions are needed, possibly reallocating each and each moving the trailing elements by one position.",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_bf3bdb9b",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-06T18:45:33Z",
+      "side": 1,
+      "message": "Rather keep the old code, just with nCount\u003dm_data.size(), and after the loop if (nCount \u003c m_data.size()) m_data.resize(nCount); spares mutiple calls to m_data.size()",
+      "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_7fbb030f",
+        "filename": "sc/source/core/data/compressedarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-10-06T18:45:33Z",
+      "side": 1,
+      "message": "Remember m_data.size() in a variable for the loop.",
+      "range": {
+        "startLine": 251,
+        "startChar": 24,
+        "endLine": 251,
+        "endChar": 37
+      },
       "revId": "0fd5906f25258a3bb9928095518bf8e357994c75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
