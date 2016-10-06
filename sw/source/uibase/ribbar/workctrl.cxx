@@ -386,13 +386,13 @@ protected:
 
 };
 
-SwZoomBox_Impl::SwZoomBox_Impl(
-    vcl::Window* pParent,
-    sal_uInt16 nSlot ):
-    ComboBox( pParent, SW_RES(RID_PVIEW_ZOOM_LB)),
-    nSlotId(nSlot),
-    bRelease(true)
+SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
+    : ComboBox(pParent, WB_HIDE | WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL)
+    , nSlotId(nSlot)
+    , bRelease(true)
 {
+    SetHelpId(HID_PVIEW_ZOOM_LB);
+    SetSizePixel(LogicToPixel(Size(30, 86), MapUnit::MapAppFont));
     EnableAutocomplete( false );
     sal_uInt16 aZoomValues[] =
     { RID_SVXSTR_ZOOM_25 , RID_SVXSTR_ZOOM_50 ,
@@ -536,28 +536,22 @@ VclPtr<vcl::Window> SwPreviewZoomControl::CreateItemWindow( vcl::Window *pParent
 
 class SwJumpToSpecificBox_Impl : public NumericField
 {
-    sal_uInt16          nSlotId;
+    sal_uInt16      nSlotId;
 
 public:
-    SwJumpToSpecificBox_Impl(
-        vcl::Window* pParent,
-        sal_uInt16 nSlot );
-    virtual ~SwJumpToSpecificBox_Impl() override;
+    SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot);
 
 protected:
     void            Select();
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 
-SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(
-    vcl::Window* pParent,
-    sal_uInt16 nSlot ):
-    NumericField( pParent, SW_RES(RID_JUMP_TO_SPEC_PAGE)),
-    nSlotId(nSlot)
-{}
-
-SwJumpToSpecificBox_Impl::~SwJumpToSpecificBox_Impl()
-{}
+SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
+    : NumericField(pParent, WB_HIDE | WB_BORDER)
+    , nSlotId(nSlot)
+{
+    SetSizePixel(LogicToPixel(Size(16, 12), MapUnit::MapAppFont));
+}
 
 void SwJumpToSpecificBox_Impl::Select()
 {

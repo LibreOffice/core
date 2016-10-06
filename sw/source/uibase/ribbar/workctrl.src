@@ -286,21 +286,4 @@ String STR_IMGBTN_TBLFML_ERR_DOWN
 {
     Text [ en-US ] = "Next faulty table formula";
 };
-ComboBox RID_PVIEW_ZOOM_LB
-{
-    HelpId = HID_PVIEW_ZOOM_LB;
-    Size = MAP_APPFONT ( 30 , 86 ) ;
-    DropDown = TRUE ;
-    AutoHScroll = TRUE ;
-    DDExtraWidth = TRUE ;
-    Border = TRUE ;
-    Hide = TRUE ;
-};
-NumericField RID_JUMP_TO_SPEC_PAGE
-{
-    Size = MAP_APPFONT ( 16 , 12) ;
-    Border = TRUE ;
-    Hide = TRUE ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
