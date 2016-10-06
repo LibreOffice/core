@@ -24,7 +24,6 @@
 ImageList DLG_STYLE_DESIGNER
 {
     Prefix = "sc";
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
     IdList =
     {
         SID_STYLE_WATERCAN ;

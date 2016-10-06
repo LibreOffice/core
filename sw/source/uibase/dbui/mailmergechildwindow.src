@@ -33,7 +33,6 @@ String     ST_CONTINUE
 ImageList ILIST
 {
     Prefix = "sc";
-    MaskColor = IMAGE_MASK_COLOR;
     IdList =
     {
         FN_FORMULA_CANCEL ;

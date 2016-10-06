@@ -57,10 +57,6 @@ ImageList::ImageList( const ResId& rResId ) :
 
         RscImageListFlags nObjMask = (RscImageListFlags)pResMgr->ReadLong();
         pResMgr->ReadString(); //skip string
-        std::unique_ptr< Color >        xMaskColor;
-
-        if( nObjMask & RscImageListFlags::MaskColor )
-            xMaskColor.reset( new Color( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) ) );
 
         pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
 

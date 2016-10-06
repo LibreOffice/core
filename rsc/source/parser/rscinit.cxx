@@ -293,8 +293,7 @@ void RscTypCont::Init()
     pClassImage = InitClassImage( pClassMgr, pClassBitmap, pClassColor );
     pRoot->Insert( pClassImage );
 
-     pClassImageList = InitClassImageList( pClassMgr,
-                                          pClassColor, pStringLongTupelList );
+    pClassImageList = InitClassImageList( pClassMgr, pStringLongTupelList );
     pRoot->Insert( pClassImageList );
 
     pClassWindow = InitClassWindow( pClassMgr, pMapUnit,

@@ -58,25 +58,14 @@ String STR_PAGE_COUNT_MACRO
 ImageList RID_DEFAULTIMAGELIST_SC
 {
     Prefix = "sc";
-    MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
 
 ImageList RID_DEFAULTIMAGELIST_LC
 {
     Prefix = "lc";
-    MaskColor = IMAGE_MASK_COLOR ;
     IMAGELIST_AND_COUNT
 };
-
-// Templates
-#define STYLE_IMAGE_LISTEF \
-    MaskColor = IMAGE_MASK_COLOR ; \
-    IdList = \
-    { \
-        1; 2; 3; 4; 5; 6;\
-    }; \
-    IdCount = 6;
 
 SfxStyleFamilies DLG_STYLE_DESIGNER
 {
@@ -167,7 +156,11 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     ImageList 1 // == BMP_COLOR_NORMAL + 1
     {
         Prefix = "sf";
-        STYLE_IMAGE_LISTEF
+        IdList =
+        {
+            1; 2; 3; 4; 5; 6;
+        };
+        IdCount = 6;
     };
 };
 

@@ -25,7 +25,6 @@
 ImageList IL_SECTION_BITMAPS
 {
     Prefix = "re";
-    MaskColor = IMAGE_MASK_COLOR ;
     IdList =
     {
         BMP_HIDE           /*1*/ ;

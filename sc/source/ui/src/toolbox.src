@@ -84,14 +84,12 @@ String SCSTR_QHELP_COLLAPSE_FORMULA
 ImageList RID_DEFAULTIMAGELIST_SC
 {
     Prefix = "sc";
-    MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_LC
 {
     Prefix = "lc";
-    MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
 };
 

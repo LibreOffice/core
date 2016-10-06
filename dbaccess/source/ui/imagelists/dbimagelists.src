@@ -37,14 +37,12 @@
 
 ImageList IMG_INDEX_DLG_SC
 {
-    MASKCOLOR;
     prefix = "sc";
     IL_TOOL_2 ;
 };
 
 ImageList IMG_INDEX_DLG_LC
 {
-    MASKCOLOR;
     prefix = "lc";
     IL_TOOL_2 ;
 };

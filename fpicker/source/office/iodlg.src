@@ -22,14 +22,11 @@
 #include "iodlg.hrc"
 #include "OfficeFilePicker.hrc"
 
-#define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
-
- // image lists ***************************************************************
+// image lists ***************************************************************
 
 ImageList RID_FILEPICKER_IMAGES
 {
     Prefix = "fp";
-    MASKCOLOR
     IdList =
     {
         IMG_FILEDLG_BTN_UP;

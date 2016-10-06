@@ -41,7 +41,6 @@ Window DLG_NAVIGATION_PI
     ImageList IL_CONTENT
     {
         Prefix = "sc";
-        MaskColor = IMAGE_MASK_COLOR ;
         IdList =
         {
             FN_UP ;
@@ -314,7 +313,6 @@ Window DLG_NAVIGATION_PI
 ImageList IMG_NAVI_ENTRYBMP
 {
     Prefix = "nc";
-    MaskColor = IMAGE_MASK_COLOR ;
     IdList =
     {
         20000 ;

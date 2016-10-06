@@ -119,7 +119,6 @@ Window FLT_NAVIGATOR
     ImageList IL_NAVIGATR
     {
         Prefix = "nv";
-        MaskColor = IMAGE_STDBTN_COLOR ;
         NAVIGATR_IDLIST
     };
 };

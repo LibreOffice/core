@@ -80,7 +80,6 @@ Menu RID_QUERYCOLPOPUPMENU
 ImageList IMG_JOINS
 {
     Prefix = "jo";
-    MaskColor   = Color { Red   = 0xffff; Green = 0x0000; Blue  = 0xffff; };
     IdList = {
         IMG_PRIMARY_KEY; IMG_FOREIGN_KEY;
     };

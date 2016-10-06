@@ -23,11 +23,6 @@
 ImageList RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX
 {
     Prefix = "ed";
-    MaskColor   = Color {
-            Red   = 0xFFFF;
-            Green = 0x0000;
-            Blue  = 0xFFFF;
-    };
     IdList = {
         IMG_EBB_CURRENT;
         IMG_EBB_MODIFIED;

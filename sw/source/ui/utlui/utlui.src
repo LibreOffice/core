@@ -327,7 +327,6 @@ String STR_HYPH_TITLE
 ImageList ILIST_DB_DLG
 {
     Prefix = "sx";
-    MaskColor = IMAGE_MASK_COLOR;
     IdList =
     {
         IMG_COLLAPSE;

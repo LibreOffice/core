@@ -26,7 +26,6 @@
 ImageList IL_VALUES
 {
     Prefix = "sr";
-    MaskColor = IMAGE_MASK_COLOR ;
     IdList =
     {
         NID_NEXT ;

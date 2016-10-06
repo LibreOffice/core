@@ -317,7 +317,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     ImageList 1 // == BMP_COLOR_NORMAL + 1
     {
         Prefix = "sf";
-        MaskColor = IMAGE_MASK_STDCOLOR;
         STYLE_IMAGE_LISTEF
     };
     #undef STYLE_IMAGE_LISTEF

@@ -88,7 +88,6 @@
 ImageList RID_SVTOOLS_IMAGELIST_BIG
 {
     Prefix = "lx";
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
     IdList =
     {
         X_IMAGE_LIST
@@ -102,7 +101,6 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG
 ImageList RID_SVTOOLS_IMAGELIST_SMALL
 {
     Prefix = "sx";
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
     IdList =
     {
         X_IMAGE_LIST

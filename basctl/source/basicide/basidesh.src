@@ -447,7 +447,6 @@ Menu RID_POPUP_TABBAR
 ImageList RID_IMGLST_LAYOUT
 {
     Prefix = "im";
-    MASKCOLOR
     IdList =
     {
         IMGID_BRKENABLED ;

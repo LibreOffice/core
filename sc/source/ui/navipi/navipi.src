@@ -89,7 +89,6 @@ Window RID_SCDLG_NAVIGATOR
     ImageList IL_CMD
     {
         Prefix = "na";
-        MaskColor = STD_MASKCOLOR ;
         IdList =
         {
             IID_DATA ;
@@ -164,7 +163,6 @@ Window RID_SCDLG_NAVIGATOR
 ImageList RID_IMAGELIST_NAVCONT
 {
     Prefix = "nc";
-    MaskColor = STD_MASKCOLOR ;
     // SC_CONTENT_...
     IdList =
     {

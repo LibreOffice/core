@@ -22,8 +22,6 @@
 #include "svx/fmresids.hrc"
 #include "fmhelp.hrc"
 
-#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-
 #define IMG_LST                 \
 IdList =                        \
 {                               \
@@ -38,7 +36,6 @@ IdCount = { 5 ; } ;
 ImageList RID_SVXIMGLIST_XFORMS_TBX
 {
     Prefix = "tb";
-    MASKCOLOR
     IMG_LST
 };
 #undef IMG_LST
@@ -46,7 +43,6 @@ ImageList RID_SVXIMGLIST_XFORMS_TBX
 ImageList RID_SVXIL_DATANAVI
 {
     Prefix = "da";
-    MASKCOLOR
     IdList =
     {
         IID_GROUP_CLOSED ;

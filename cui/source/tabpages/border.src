@@ -27,7 +27,6 @@
 ImageList IL_PRE_BITMAPS
 {
     Prefix = "pr";
-    MaskColor = STD_MASKCOLOR ;
     IdList =
     {
         IID_PRE_CELL_NONE ;
@@ -58,7 +57,6 @@ ImageList IL_PRE_BITMAPS
 ImageList IL_SDW_BITMAPS
 {
     Prefix = "sh";
-    MaskColor = STD_MASKCOLOR ;
     IdList =
     {
         IID_SHADOWNONE ;

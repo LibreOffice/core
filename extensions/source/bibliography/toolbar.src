@@ -21,8 +21,6 @@
 #include "svx/svxcommands.h"
 #include "bib.hrc"
 
-#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
-
 #define BIB_IMAGES \
     IdList =                                \
     {                                       \
@@ -35,14 +33,12 @@
 ImageList RID_TOOLBAR_IMGLIST
 {
     Prefix = "sc";
-    MASKCOLOR
     BIB_IMAGES
 };
 
 ImageList RID_TOOLBAR_BIGIMGLIST
 {
     Prefix = "lc";
-    MASKCOLOR
     BIB_IMAGES
 };
 

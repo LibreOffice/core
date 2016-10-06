@@ -23,7 +23,6 @@
 ImageList IL_IMAPDLG
 {
     Prefix = "id";
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
     IdList =
     {
         TBI_APPLY ;
