@@ -10,6 +10,12 @@
 #ifndef SC_OPENCL_OPINLINFUN_finacial
 #define SC_OPENCL_OPINLINFUN_finacial
 std::string approxEqualDecl="bool approxEqual(double a, double b);\n";
+
+// FIXME: this approxEqual() is identical to what the C++ rtl_math_approxEqual() used to be, but
+// that has been improved in the meantime, so probably this should be, too? OTOH, this is used only
+// to compare against 0.0, so could be made much simpler, and actually questionable whether it works
+// as intended anyway.
+
 std::string approxEqual =
 "bool approxEqual(double a, double b)\n"
 "{\n"
