@@ -306,7 +306,7 @@ awt::Size AbstractShapeFactory::getSizeAfterRotation(
     {
         const awt::Size aSize( xShape->getSize() );
 
-        if( ::rtl::math::approxEqual( fRotationAngleDegree, 0.0 ) )
+        if( fRotationAngleDegree == 0.0 )
             aRet = aSize;
         else
         {

@@ -167,7 +167,7 @@ void DiagramHelper::setVertical(
 
                     double fAngleDegree = 0.0;
                     xTitleProps->getPropertyValue("TextRotation") >>= fAngleDegree;
-                    if (!rtl::math::approxEqual(fAngleDegree, 0.0) &&
+                    if (fAngleDegree != 0.0 &&
                         !rtl::math::approxEqual(fAngleDegree, 90.0))
                         continue;
 

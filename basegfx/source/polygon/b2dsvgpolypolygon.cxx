@@ -473,7 +473,7 @@ namespace basegfx
                             if( rtl::math::approxEqual(nX, nLastX) && rtl::math::approxEqual(nY, nLastY) )
                                 continue; // start==end -> skip according to SVG spec
 
-                            if( rtl::math::approxEqual(fRX, 0.0) || rtl::math::approxEqual(fRY, 0.0) )
+                            if( fRX == 0.0 || fRY == 0.0 )
                             {
                                 // straight line segment according to SVG spec
                                 aCurrPoly.append(B2DPoint(nX, nY));

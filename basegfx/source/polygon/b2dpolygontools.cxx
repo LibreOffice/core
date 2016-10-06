@@ -200,7 +200,7 @@ namespace basegfx
                             // add curved edge and generate DistanceBound
                             double fBound(0.0);
 
-                            if(rtl::math::approxEqual(0.0, fDistanceBound))
+                            if(0.0 == fDistanceBound)
                             {
                                 // If not set, use B2DCubicBezier functionality to guess a rough value
                                 const double fRoughLength((aBezier.getEdgeLength() + aBezier.getControlPolygonLength()) / 2.0);
@@ -270,7 +270,7 @@ namespace basegfx
                     aRetval.append(aBezier.getStartPoint());
 
                     // #i37443# prepare convenient AngleBound if none was given
-                    if(rtl::math::approxEqual(0.0, fAngleBound))
+                    if(0.0 == fAngleBound)
                     {
 #ifdef DBG_UTIL
                         fAngleBound = fAngleBoundStartValue;
@@ -2187,7 +2187,7 @@ namespace basegfx
 
             // tdf#88352 increase numerical correctness and use rtl::math::approxEqual
             // instead of fTools::equalZero which compares with a fixed small value
-            if(rtl::math::approxEqual(fCrossA, 0.0))
+            if(fCrossA == 0.0)
             {
                 // one point on the line
                 return bWithLine;
@@ -2197,7 +2197,7 @@ namespace basegfx
             const double fCrossB(aLineVector.cross(aVectorToB));
 
             // increase numerical correctness
-            if(rtl::math::approxEqual(fCrossB, 0.0))
+            if(fCrossB == 0.0)
             {
                 // one point on the line
                 return bWithLine;
@@ -2234,7 +2234,7 @@ namespace basegfx
             /// return 0 for input of 0, -1 for negative and 1 for positive input
             inline int lcl_sgn( const double n )
             {
-                return rtl::math::approxEqual(n, 0.0) ? 0 : 1 - 2*int(rtl::math::isSignBitSet(n));
+                return n == 0.0 ? 0 : 1 - 2*int(rtl::math::isSignBitSet(n));
             }
         }
 
@@ -2530,7 +2530,7 @@ namespace basegfx
         {
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if(nPointCount && !rtl::math::approxEqual(0.0, rOriginal.getWidth()) && !rtl::math::approxEqual(0.0, rOriginal.getHeight()))
+            if(nPointCount && 0.0 != rOriginal.getWidth() && 0.0 != rOriginal.getHeight())
             {
                 B2DPolygon aRetval;
 
@@ -2769,7 +2769,7 @@ namespace basegfx
 
         B2DPolygon growInNormalDirection(const B2DPolygon& rCandidate, double fValue)
         {
-            if(!rtl::math::approxEqual(0.0, fValue))
+            if(0.0 != fValue)
             {
                 if(rCandidate.areControlPointsUsed())
                 {

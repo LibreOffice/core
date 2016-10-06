@@ -1218,7 +1218,7 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
             // Still too thick? Decrease the line widths.
             if( GetWidth() > nMaxWidth )
             {
-                if (!rtl::math::approxEqual(mfPrim, 0.0) && rtl::math::approxEqual(mfPrim, mfSecn))
+                if (mfPrim != 0.0 && rtl::math::approxEqual(mfPrim, mfSecn))
                 {
                     // Both lines equal - decrease both to keep symmetry.
                     --mfPrim;
@@ -1229,7 +1229,7 @@ void Style::Set( const SvxBorderLine& rBorder, double fScale, sal_uInt16 nMaxWid
                     // Decrease each line for itself
                     if (mfPrim)
                         --mfPrim;
-                    if ((GetWidth() > nMaxWidth) && !rtl::math::approxEqual(mfSecn, 0.0))
+                    if ((GetWidth() > nMaxWidth) && mfSecn != 0.0)
                         --mfSecn;
                 }
             }
