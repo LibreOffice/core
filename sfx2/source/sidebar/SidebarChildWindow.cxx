@@ -24,7 +24,6 @@
 #include <sfx2/sfxsids.hrc>
 #include "helpid.hrc"
 #include <sfx2/dockwin.hxx>
-#include <sfx2/sidebar/ResourceDefinitions.hrc>
 
 namespace sfx2 { namespace sidebar {
 

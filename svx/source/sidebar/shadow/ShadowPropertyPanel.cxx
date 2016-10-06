@@ -6,10 +6,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 #include <ShadowPropertyPanel.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <sfx2/objsh.hxx>

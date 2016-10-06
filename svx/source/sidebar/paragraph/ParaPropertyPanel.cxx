@@ -18,7 +18,6 @@
  */
 #include "ParaPropertyPanel.hxx"
 #include <svx/dialogs.hrc>
-#include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/lrspitem.hxx>
@@ -129,17 +128,6 @@ void ParaPropertyPanel::HandleContextChange (
         case CombinedEnumContext(Application_Calc, Context_Pivot):
         case CombinedEnumContext(Application_DrawImpress, Context_Text):
         case CombinedEnumContext(Application_DrawImpress, Context_OutlineText):
-        /*{
-            mpToolBoxScriptSw->Hide();
-            mpToolBoxScript->Show();
-            mpToolBoxSpacing->Show();
-            mpToolBoxHighlight->Hide();
-
-            Size aSize(PROPERTYPAGE_WIDTH,TEXT_SECTIONPAGE_HEIGHT);
-            aSize = LogicToPixel( aSize,MapMode(MapUnit::MapAppFont) );
-            aSize.setWidth(GetOutputSizePixel().Width());
-            SetSizePixel(aSize);
-        }*/
             break;
 
         default:
