@@ -491,7 +491,7 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* p
 void ScTransferObj::ObjectReleased()
 {
     ScModule* pScMod = SC_MOD();
-    if ( pScMod->GetClipData().pCellClipboard == this )
+    if ( pScMod && pScMod->GetClipData().pCellClipboard == this )
         pScMod->SetClipObject( nullptr, nullptr );
 
     TransferableHelper::ObjectReleased();
