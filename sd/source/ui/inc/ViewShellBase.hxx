@@ -243,9 +243,6 @@ private:
     OUString GetInitialViewShellType();
 };
 
-OUString ImplRetrieveLabelFromCommand( const css::uno::Reference< css::frame::XFrame >& xFrame, const OUString& aCmdURL );
-
-
 } // end of namespace sd
 
 #endif

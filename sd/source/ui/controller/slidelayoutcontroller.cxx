@@ -26,6 +26,7 @@
 
 #include <osl/mutex.hxx>
 
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 
@@ -38,8 +39,6 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
-
-#include <sfx2/imagemgr.hxx>
 
 #include "app.hrc"
 #include "facreg.hxx"
@@ -240,11 +239,11 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
                 sSlotStr = ".uno:DuplicatePage";
             else
                 sSlotStr = ".uno:Undo";
-            aSlotImage = ::GetImage( xFrame, sSlotStr, false );
+            aSlotImage = vcl::CommandInfoProvider::Instance().GetImageForCommand( sSlotStr, false, xFrame );
 
             OUString sSlotTitle;
             if( bInsertPage )
-                sSlotTitle = ImplRetrieveLabelFromCommand( xFrame, sSlotStr );
+                sSlotTitle = vcl::CommandInfoProvider::Instance().GetLabelForCommand( sSlotStr, xFrame );
             else
                 sSlotTitle = SD_RESSTR( STR_RESET_LAYOUT );
             appendEntry( 2, sSlotTitle, aSlotImage);

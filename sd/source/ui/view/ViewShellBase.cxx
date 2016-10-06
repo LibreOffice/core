@@ -79,6 +79,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
@@ -977,48 +978,10 @@ vcl::Window* ViewShellBase::GetViewWindow()
     return mpImpl->mpViewWindow.get();
 }
 
-OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL )
-{
-    OUString aLabel;
-
-    if ( !aCmdURL.isEmpty() ) try
-    {
-        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_QUERY_THROW );
-
-        Reference< XModuleManager2 > xModuleManager( ModuleManager::create(xContext) );
-
-        OUString aModuleIdentifier( xModuleManager->identify( Reference<XInterface>( xFrame, UNO_QUERY_THROW ) ) );
-
-        if( !aModuleIdentifier.isEmpty() )
-        {
-            Reference< XNameAccess > const xNameAccess(
-                    frame::theUICommandDescription::get(xContext) );
-            Reference< css::container::XNameAccess > xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
-            Sequence< PropertyValue > aPropSeq;
-            if( xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
-            {
-                for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
-                {
-                    if ( aPropSeq[i].Name == "Name" )
-                    {
-                        aPropSeq[i].Value >>= aLabel;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    catch (const Exception&)
-    {
-    }
-
-    return aLabel;
-}
-
 OUString ViewShellBase::RetrieveLabelFromCommand( const OUString& aCmdURL ) const
 {
     Reference< XFrame > xFrame( GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
-    return ImplRetrieveLabelFromCommand( xFrame, aCmdURL );
+    return vcl::CommandInfoProvider::Instance().GetLabelForCommand( aCmdURL, xFrame );
 }
 
 int ViewShellBase::getPart() const
