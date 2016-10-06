@@ -48,7 +48,7 @@ int DdeString::operator==( HSZ h )
     return( !DdeCmpStringHandles( hString, h ) );
 }
 
-DdeString::operator HSZ()
+HSZ DdeString::getHSZ()
 {
     return hString;
 }

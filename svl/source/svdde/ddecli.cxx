@@ -172,7 +172,7 @@ DdeConnection::DdeConnection( const OUString& rService, const OUString& rTopic )
 
     if ( pImp->nStatus == DMLERR_NO_ERROR )
     {
-        pImp->hConv = DdeConnect( pInst->hDdeInstCli,*pService,*pTopic, NULL);
+        pImp->hConv = DdeConnect( pInst->hDdeInstCli,pService->getHSZ(),pTopic->getHSZ(), NULL);
         if( !pImp->hConv )
             pImp->nStatus = DdeGetLastError( pInst->hDdeInstCli );
     }
@@ -277,7 +277,7 @@ DdeTransaction::~DdeTransaction()
 
 void DdeTransaction::Execute()
 {
-    HSZ     hItem = *pName;
+    HSZ     hItem = pName->getHSZ();
     void*   pData = (void*)aDdeData.getData();
     DWORD   nData = (DWORD)aDdeData.getSize();
     SotClipboardFormatId nIntFmt = aDdeData.pImp->nFmt;

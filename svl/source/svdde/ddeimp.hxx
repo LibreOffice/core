@@ -66,7 +66,7 @@ public:
                 ~DdeString();
 
     int         operator==( HSZ );
-                operator HSZ();
+    HSZ getHSZ();
     OUString toOUString() const { return m_aString; }
 };
 

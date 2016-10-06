@@ -129,11 +129,11 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
                         if( !hText1 || s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
                         {
                             DdeString aDStr( pInst->hDdeInstSvr, s );
-                            pTopic = FindTopic( *pService, (HSZ)aDStr );
+                            pTopic = FindTopic( *pService, aDStr.getHSZ() );
                             if( pTopic )
                             {
-                                q->hszSvc   = *pService->pName;
-                                q->hszTopic = *pTopic->pName;
+                                q->hszSvc   = pService->pName->getHSZ();
+                                q->hszTopic = pTopic->pName->getHSZ();
                                 q++;
                             }
                         }
@@ -467,7 +467,7 @@ DdeService::DdeService( const OUString& rService )
     pName = new DdeString( pInst->hDdeInstSvr, rService );
     if ( nStatus == DMLERR_NO_ERROR )
     {
-        if ( !DdeNameService( pInst->hDdeInstSvr, *pName, NULL,
+        if ( !DdeNameService( pInst->hDdeInstSvr, pName->getHSZ(), NULL,
                               DNS_REGISTER | DNS_FILTEROFF ) )
         {
             nStatus = DMLERR_SYS_ERROR;
@@ -532,7 +532,7 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
     std::vector<DdeTopic*>::iterator iter;
     for ( iter = aTopics.begin(); iter != aTopics.end(); ++iter )
     {
-        if ( !DdeCmpStringHandles (*(*iter)->pName, *rTopic.pName ) )
+        if ( !DdeCmpStringHandles ((*iter)->pName->getHSZ(), rTopic.pName->getHSZ() ) )
         {
             aTopics.erase(iter);
             // Delete all conversions!
@@ -647,7 +647,7 @@ void DdeTopic::RemoveItem( const DdeItem& r )
     std::vector<DdeItem*>::iterator iter;
     for (iter = aItems.begin(); iter != aItems.end(); ++iter)
     {
-        if ( !DdeCmpStringHandles (*(*iter)->pName, *r.pName ) )
+        if ( !DdeCmpStringHandles ((*iter)->pName->getHSZ(), r.pName->getHSZ() ) )
             break;
     }
 
@@ -668,7 +668,7 @@ void DdeTopic::NotifyClient( const OUString& rItem )
     {
         if ( (*iter)->GetName().equals(rItem) && (*iter)->pImpData)
         {
-            DdePostAdvise( pInst->hDdeInstSvr, *pName, *(*iter)->pName );
+            DdePostAdvise( pInst->hDdeInstSvr, pName->getHSZ(), (*iter)->pName->getHSZ() );
             break;
         }
     }
@@ -758,7 +758,7 @@ void DdeItem::NotifyClient()
     {
         DdeInstData* pInst = ImpGetInstData();
         DBG_ASSERT(pInst,"SVDDE:No instance data");
-        DdePostAdvise( pInst->hDdeInstSvr, *pMyTopic->pName, *pName );
+        DdePostAdvise( pInst->hDdeInstSvr, pMyTopic->pName->getHSZ(), pName->getHSZ() );
     }
 }
 
