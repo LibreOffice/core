@@ -210,7 +210,6 @@ protected:
 protected:
                             MetricFormatter();
 
-    SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE bool     ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr );
 
 public:
@@ -475,12 +474,8 @@ public:
 
 class VCL_DLLPUBLIC MetricField : public SpinField, public MetricFormatter
 {
-protected:
-    SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-
 public:
     explicit                MetricField( vcl::Window* pParent, WinBits nWinStyle );
-    explicit                MetricField( vcl::Window* pParent, const ResId& );
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool            Notify( NotifyEvent& rNEvt ) override;

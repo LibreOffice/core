@@ -1431,7 +1431,6 @@ OString ResMgr::GetAutoHelpId()
                     case RSC_PUSHBUTTON:        aHID.append( "PushButton" );       break;
                     case RSC_SPINFIELD:         aHID.append( "SpinField" );        break;
                     case RSC_NUMERICFIELD:      aHID.append( "NumericField" );     break;
-                    case RSC_METRICFIELD:       aHID.append( "MetricField" );      break;
                     case RSC_IMAGEBUTTON:       aHID.append( "ImageButton" );      break;
                     default:
                         // no type, no auto HID

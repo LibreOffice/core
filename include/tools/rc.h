@@ -90,26 +90,9 @@ namespace o3tl {
     template<> struct typed_flags<RscNumFormatterFlags> : is_typed_flags<RscNumFormatterFlags, 0x37> {};
 }
 
-enum class RscMetricFormatterFlags {
-    Unit            = 0x01,
-    CustomUnitText  = 0x02
-};
-namespace o3tl {
-    template<> struct typed_flags<RscMetricFormatterFlags> : is_typed_flags<RscMetricFormatterFlags, 0x03> {};
-}
-
 #define NUMERICFIELD_FIRST              0x01
 #define NUMERICFIELD_LAST               0x02
 #define NUMERICFIELD_SPINSIZE           0x04
-
-enum class RscMetricFieldFlags {
-    First               = 0x01,
-    Last                = 0x02,
-    SpinSize            = 0x04
-};
-namespace o3tl {
-    template<> struct typed_flags<RscMetricFieldFlags> : is_typed_flags<RscMetricFieldFlags, 0x07> {};
-}
 
 // For "ToolBoxItem" resources:
 enum class RscToolboxItemFlags {

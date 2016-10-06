@@ -1407,28 +1407,6 @@ MetricFormatter::MetricFormatter()
     ImplInit();
 }
 
-void MetricFormatter::ImplLoadRes( const ResId& rResId )
-{
-    NumericFormatter::ImplLoadRes( rResId );
-
-    ResMgr*     pMgr = rResId.GetResMgr();
-    if( pMgr )
-    {
-        RscMetricFormatterFlags nMask = (RscMetricFormatterFlags)pMgr->ReadLong();
-
-        if ( RscMetricFormatterFlags::Unit & nMask )
-        {
-            sal_uLong nUnit = pMgr->ReadLong();
-            assert(nUnit <= FUNIT_MILLISECOND && "out of FieldUnit bounds");
-            if (nUnit <= FUNIT_MILLISECOND)
-                meUnit = (FieldUnit)nUnit;
-        }
-
-        if ( RscMetricFormatterFlags::CustomUnitText & nMask )
-            maCustomUnitText = pMgr->ReadString();
-    }
-}
-
 MetricFormatter::~MetricFormatter()
 {
 }
@@ -1605,19 +1583,6 @@ MetricField::MetricField( vcl::Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-MetricField::MetricField( vcl::Window* pParent, const ResId& rResId ) :
-    SpinField( WINDOW_METRICFIELD )
-{
-    rResId.SetRT( RSC_METRICFIELD );
-    WinBits nStyle = ImplInitRes( rResId ) ;
-    SpinField::ImplInit( pParent, nStyle );
-    SetField( this );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-}
-
 void MetricField::dispose()
 {
     MetricFormatter::SetField( nullptr );
@@ -1638,25 +1603,6 @@ bool MetricField::set_property(const OString &rKey, const OString &rValue)
     else
         return SpinField::set_property(rKey, rValue);
     return true;
-}
-
-void MetricField::ImplLoadRes( const ResId& rResId )
-{
-    SpinField::ImplLoadRes( rResId );
-    MetricFormatter::ImplLoadRes( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *rResId.GetResMgr() ) );
-
-    RscMetricFieldFlags      nMask = (RscMetricFieldFlags)ReadLongRes();
-
-    if ( RscMetricFieldFlags::First & nMask )
-        mnFirst = ReadLongRes();
-
-    if ( RscMetricFieldFlags::Last & nMask )
-        mnLast = ReadLongRes();
-
-    if ( RscMetricFieldFlags::SpinSize & nMask )
-        mnSpinSize = ReadLongRes();
-
-    Reformat();
 }
 
 void MetricField::SetUnit( FieldUnit nNewUnit )

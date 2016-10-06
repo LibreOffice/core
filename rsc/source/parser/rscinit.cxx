@@ -396,15 +396,6 @@ void RscTypCont::Init()
         RscTop* pClassNumericField = InitClassNumericField( pClassTmp );
         pRoot->Insert( pClassNumericField );
     }
-    { // hand-made multiple inheritance
-        RscTop* pClassTmp = InitClassNumericFormatter( pClassSpinField );
-        aBaseLst.push_back( pClassTmp );
-        pClassTmp = InitClassMetricFormatter( pClassTmp, pFieldUnits );
-        aBaseLst.push_back( pClassTmp );
-
-        RscTop* pClassMetricField = InitClassMetricField( pClassTmp );
-        pRoot->Insert( pClassMetricField );
-    }
 }
 {
     RscTop* pClassDockingWindow = InitClassDockingWindow( pClassWindow, pMapUnit );

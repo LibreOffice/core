@@ -800,28 +800,6 @@ RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper )
     return pClassNumeric;
 }
 
-RscTop * RscTypCont::InitClassMetricFormatter( RscTop * pSuper,
-                                                                                        RscEnum * pFieldUnits )
-{
-    Atom        nId;
-    RscTop *    pClassMetric;
-
-    // initialize class
-    nId = pHS->getID( "MetricFormatter" );
-    pClassMetric = new RscClass( nId, RSC_NOTYPE, pSuper );
-    pClassMetric->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-
-    // initialize variables
-    nId = aNmTb.Put( "Unit", VARNAME );
-    pClassMetric->SetVariable( nId, pFieldUnits, nullptr,
-                               0, (sal_uInt32)RscMetricFormatterFlags::Unit );
-    nId = aNmTb.Put( "CustomUnitText", VARNAME );
-    pClassMetric->SetVariable( nId, &aLangString, nullptr,
-                               0, (sal_uInt32)RscMetricFormatterFlags::CustomUnitText );
-
-    return pClassMetric;
-}
-
 RscTop * RscTypCont::InitClassSpinField( RscTop * pSuper )
 {
     Atom        nId;
@@ -863,32 +841,6 @@ RscTop * RscTypCont::InitClassNumericField( RscTop * pSuper )
     pClassNumericField->SetVariable( nId, &aIdLong, nullptr,
                                                                         0, NUMERICFIELD_SPINSIZE  );
     return pClassNumericField;
-}
-
-RscTop * RscTypCont::InitClassMetricField( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassMetricField;
-
-    // initialize class
-    nId = pHS->getID( "MetricField" );
-    pClassMetricField = new RscClass( nId, RSC_METRICFIELD, pSuper );
-    pClassMetricField->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassMetricField );
-
-    // initialize variables
-    nId = aNmTb.Put( "First", VARNAME );
-    pClassMetricField->SetVariable( nId, &aIdLong, nullptr,
-                                    0, (sal_uInt32)RscMetricFieldFlags::First );
-    nId = aNmTb.Put( "Last", VARNAME );
-    pClassMetricField->SetVariable( nId, &aIdLong, nullptr,
-                                    0, (sal_uInt32)RscMetricFieldFlags::Last );
-    nId = aNmTb.Put( "SpinSize", VARNAME );
-    pClassMetricField->SetVariable( nId, &aIdLong, nullptr,
-                                    0, (sal_uInt32)RscMetricFieldFlags::SpinSize  );
-
-    return pClassMetricField;
 }
 
 RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,
