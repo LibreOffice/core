@@ -62,8 +62,6 @@ struct SfxViewShell_Impl
     void* m_pLibreOfficeKitViewData;
     /// Set if we are in the middle of a tiled search.
     bool m_bTiledSearching;
-    /// Set if we are in the middle of a tiled paint.
-    bool m_bTiledPainting;
     static sal_uInt32 m_nLastViewShellId;
     const sal_uInt32 m_nViewShellId;
 
