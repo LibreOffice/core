@@ -53,8 +53,6 @@ class XFillBitmapItem;
 
 namespace svx { namespace sidebar {
 
-class AreaTransparencyGradientControl;
-
 class SVX_DLLPUBLIC AreaPropertyPanelBase
 :   public PanelLayout,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface

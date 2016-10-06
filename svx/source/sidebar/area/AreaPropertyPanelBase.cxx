@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "AreaTransparencyGradientControl.hxx"
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/SidebarController.hxx>
@@ -1322,10 +1321,10 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransSliderHdl, Slider*, void)
 IMPL_LINK( AreaPropertyPanelBase, ClickTrGrHdl_Impl, ToolBox*, pToolBox, void )
 {
     if (!mxTrGrPopup)
-        mxTrGrPopup = VclPtr<AreaTransparencyGradientPopup>::Create(pToolBox, *this);
+        mxTrGrPopup = VclPtr<AreaTransparencyGradientPopup>::Create(*this);
     mxTrGrPopup->Rearrange(mpFloatTransparenceItem.get());
     OSL_ASSERT( pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SIDEBARGRADIENT);
-    mxTrGrPopup->StartPopupMode(pToolBox, FloatWinPopupFlags::Down);
+    mxTrGrPopup->StartPopupMode(pToolBox, FloatWinPopupFlags::GrabFocus);
 }
 
 IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, void)

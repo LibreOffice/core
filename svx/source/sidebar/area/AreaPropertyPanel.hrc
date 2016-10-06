@@ -34,8 +34,6 @@
 #define MTR_TRGR_END_VALUE  18
 #define FT_TRGR_BORDER      19
 #define MTR_TRGR_BORDER     20
-#define STR_HELP_LEFT       24
-#define STR_HELP_RIGHT      25
 
 #define BTN_LEFT_SECOND         22
 #define BTN_RIGHT_FIRST         23
