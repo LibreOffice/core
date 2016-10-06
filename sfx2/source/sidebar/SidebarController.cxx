@@ -21,7 +21,6 @@
 #include <sfx2/sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/PanelTitleBar.hxx>
-#include <sfx2/sidebar/SidebarResource.hxx>
 #include <sfx2/sidebar/TabBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
@@ -34,6 +33,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/titledockwin.hxx>
+#include "Sidebar.hrc"
 #include "sfxlocal.hrc"
 #include <framework/ContextChangeEventMultiplexerTunnel.hxx>
 #include <vcl/floatwin.hxx>
@@ -943,8 +943,6 @@ VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
     // Create sub menu for customization (hiding of deck tabs.)
     VclPtr<PopupMenu> pCustomizationMenu = VclPtr<PopupMenu>::Create();
 
-    SidebarResource aLocalResource;
-
     // Add one entry for every tool panel element to individually make
     // them visible or hide them.
     sal_Int32 nIndex (0);
@@ -981,11 +979,11 @@ VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
     else
         pMenu->InsertItem(MID_UNLOCK_TASK_PANEL, SFX2_RESSTR(STR_SFX_UNDOCK));
 
-    pMenu->InsertItem(MID_HIDE_SIDEBAR, SFX2_RESSTR(STRING_HIDE_SIDEBAR));
+    pMenu->InsertItem(MID_HIDE_SIDEBAR, SFX2_RESSTR(SFX_STR_SIDEBAR_HIDE_SIDEBAR));
     pCustomizationMenu->InsertSeparator();
-    pCustomizationMenu->InsertItem(MID_RESTORE_DEFAULT, SFX2_RESSTR(STRING_RESTORE));
+    pCustomizationMenu->InsertItem(MID_RESTORE_DEFAULT, SFX2_RESSTR(SFX_STR_SIDEBAR_RESTORE));
 
-    pMenu->InsertItem(MID_CUSTOMIZATION, SFX2_RESSTR(STRING_CUSTOMIZATION));
+    pMenu->InsertItem(MID_CUSTOMIZATION, SFX2_RESSTR(SFX_STR_SIDEBAR_CUSTOMIZATION));
     pMenu->SetPopupMenu(MID_CUSTOMIZATION, pCustomizationMenu);
 
     pMenu->RemoveDisabledEntries(false);
