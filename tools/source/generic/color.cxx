@@ -26,37 +26,8 @@
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <tools/rc.hxx>
-#include <tools/rcid.h>
-#include <tools/resid.hxx>
-#include <tools/rc.h>
 #include <tools/helpers.hxx>
 #include <basegfx/color/bcolortools.hxx>
-
-Color::Color( const ResId& rResId )
-{
-    rResId.SetRT( RSC_COLOR );
-    ResMgr* pResMgr = rResId.GetResMgr();
-    if ( pResMgr && pResMgr->GetResource( rResId ) )
-    {
-        // Header ueberspringen
-        pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
-
-        // Daten laden
-        sal_uInt16 nRed     = pResMgr->ReadShort();
-        sal_uInt16 nGreen   = pResMgr->ReadShort();
-        sal_uInt16 nBlue    = pResMgr->ReadShort();
-        // one more historical sal_uIntPtr
-        pResMgr->ReadLong();
-
-        // RGB-Farbe
-        mnColor = RGB_COLORDATA( nRed>>8, nGreen>>8, nBlue>>8 );
-    }
-    else
-    {
-        mnColor = RGB_COLORDATA( 0, 0, 0 );
-    }
-}
 
 sal_uInt8 Color::GetColorError( const Color& rCompareColor ) const
 {

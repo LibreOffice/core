@@ -153,9 +153,6 @@ namespace o3tl {
     template<> struct typed_flags<RscImageListFlags> : is_typed_flags<RscImageListFlags, 0x18> {};
 }
 
-// FIXME obsolete, should be removed by MM
-#define RSC_COLOR                       (RSC_NOTYPE + 0x16)
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

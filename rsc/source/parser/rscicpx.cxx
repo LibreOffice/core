@@ -114,30 +114,6 @@ RscTop * RscTypCont::InitClassBitmap( RscTop * pSuper )
     return pClassBitmap;
 }
 
-RscTop * RscTypCont::InitClassColor( RscTop * pSuper, RscEnum * pColor )
-{
-    Atom        nId;
-    RscTop *    pClassColor;
-
-    // initialize class
-    nId = pHS->getID( "Color" );
-    pClassColor = new RscClass( nId, RSC_COLOR, pSuper );
-    pClassColor->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-    aNmTb.Put( nId, CLASSNAME, pClassColor );
-
-    // initialize variables
-    nId = aNmTb.Put( "Red", VARNAME );
-    pClassColor->SetVariable( nId, &aUShort );
-    nId = aNmTb.Put( "Green", VARNAME );
-    pClassColor->SetVariable( nId, &aUShort );
-    nId = aNmTb.Put( "Blue", VARNAME );
-    pClassColor->SetVariable( nId, &aUShort );
-    nId = aNmTb.Put( "Predefine", VARNAME );
-    pClassColor->SetVariable( nId, pColor );
-
-    return pClassColor;
-}
-
 RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap )
 {
     Atom        nId;

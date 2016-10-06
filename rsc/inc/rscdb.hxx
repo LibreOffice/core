@@ -176,7 +176,6 @@ class RscTypCont
     RscTop *    InitClassMgr();
     RscTop *    InitClassString( RscTop * pSuper );
     RscTop *    InitClassBitmap( RscTop * pSuper );
-    RscTop *    InitClassColor( RscTop * pSuper, RscEnum * pColor );
     RscTop *    InitClassImage( RscTop * pSuper, RscTop *pClassBitmap );
     RscTop *    InitClassImageList( RscTop * pSuper, RscCont * pStrLst );
     RscTop *    InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,

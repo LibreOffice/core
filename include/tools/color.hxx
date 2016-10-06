@@ -23,7 +23,6 @@
 #include <tools/colordata.hxx>
 
 class SvStream;
-class ResId;
 
 #include <basegfx/color/bcolor.hxx>
 
@@ -47,8 +46,6 @@ public:
     Color(sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
         : mnColor(TRGB_COLORDATA(nTransparency, nRed, nGreen, nBlue))
     {}
-    // This ctor is defined in svtools, not tools!
-    Color(const ResId& rResId);
 
     // constructor to create a tools-Color from ::basegfx::BColor
     explicit Color(const basegfx::BColor& rBColor)
