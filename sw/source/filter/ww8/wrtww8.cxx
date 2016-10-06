@@ -2735,6 +2735,10 @@ void MSWordExportBase::WriteText()
 
                     AppendSection( m_pAktPageDesc, pParentFormat, nRstLnNum );
                 }
+                else
+                {
+                    OutputEndNode( *rNd.GetEndNode() );
+                }
             }
         }
         else if ( rNd.IsStartNode() )
