@@ -966,6 +966,17 @@ OUString ScModelObj::getTrackedChanges()
     return aRet;
 }
 
+void ScModelObj::setClientVisibleArea(const Rectangle& rRectangle)
+{
+    ScViewData* pViewData = pDocShell->GetViewData();
+    if (!pViewData)
+        return;
+
+    // set the PgUp/PgDown offset
+    pViewData->ForcePageUpDownOffset(rRectangle.GetHeight());
+}
+
+
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
 {
     SolarMutexGuard aGuard;

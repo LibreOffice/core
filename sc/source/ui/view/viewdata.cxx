@@ -356,7 +356,8 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         bIsRefMode  ( false ),
         bDelMarkValid( false ),
         bPagebreak  ( false ),
-        bSelCtrlMouseClick( false )
+        bSelCtrlMouseClick( false ),
+        m_nLOKPageUpDownOffset( 0 )
 {
     mpMarkData->SelectOneTable(0); // Sync with nTabNo
 
@@ -444,7 +445,8 @@ ScViewData::ScViewData( const ScViewData& rViewData ) :
         bIsRefMode  ( false ),
         bDelMarkValid( false ),
         bPagebreak  ( rViewData.bPagebreak ),
-        bSelCtrlMouseClick( rViewData.bSelCtrlMouseClick )
+        bSelCtrlMouseClick( rViewData.bSelCtrlMouseClick ),
+        m_nLOKPageUpDownOffset( rViewData.m_nLOKPageUpDownOffset )
 {
 
     SetGridMode     ( rViewData.IsGridMode() );
@@ -1730,6 +1732,11 @@ SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_
         const_cast<ScViewData*>(this)->aScrSize.Height() = pView->GetGridHeight(eWhichY);
 
     if (nScrSizeY == SC_SIZE_NONE) nScrSizeY = (sal_uInt16) aScrSize.Height();
+
+    if (comphelper::LibreOfficeKit::isActive() && m_nLOKPageUpDownOffset > 0)
+    {
+        nScrSizeY = ToPixel( m_nLOKPageUpDownOffset, nPPTY );
+    }
 
     SCROW nY;
 
