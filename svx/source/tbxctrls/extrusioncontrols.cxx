@@ -62,8 +62,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     vcl::Window* pParentWindow
 )
-    : ToolbarMenu(rFrame, pParentWindow,
-                  WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
+    : ToolbarMenu(rFrame, pParentWindow, WB_STDPOPUP)
     , mrController(rController)
     , maImgPerspective(SVX_RES(RID_SVXIMG_PERSPECTIVE))
     , maImgParallel(SVX_RES(RID_SVXIMG_PARALLEL))
@@ -323,7 +322,7 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     svt::ToolboxController& rController,
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     vcl::Window* pParentWindow
-)   : ToolbarMenu( rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
+)   : ToolbarMenu( rFrame, pParentWindow, WB_STDPOPUP )
     , mrController( rController )
     , maImgDepth0(SVX_RES(RID_SVXIMG_DEPTH_0))
     , maImgDepth1(SVX_RES(RID_SVXIMG_DEPTH_1))
@@ -530,7 +529,7 @@ static const char g_sExtrusionLightingIntensity[] = ".uno:ExtrusionLightingInten
 ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rController,
                                                  const css::uno::Reference<css::frame::XFrame >& rFrame,
                                                  vcl::Window* pParentWindow)
-    : ToolbarMenu(rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
+    : ToolbarMenu(rFrame, pParentWindow, WB_STDPOPUP)
     , mrController(rController)
     , maImgBright(SVX_RES(RID_SVXIMG_LIGHTING_BRIGHT))
     , maImgNormal(SVX_RES(RID_SVXIMG_LIGHTING_NORMAL))
@@ -800,7 +799,7 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     svt::ToolboxController& rController,
     const css::uno::Reference< css::frame::XFrame >& rFrame,
     vcl::Window* pParentWindow)
-    : ToolbarMenu(rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
+    : ToolbarMenu(rFrame, pParentWindow, WB_STDPOPUP)
     , mrController(rController)
     , maImgSurface1(SVX_RES(RID_SVXIMG_WIRE_FRAME))
     , maImgSurface2(SVX_RES(RID_SVXIMG_MATTE))
