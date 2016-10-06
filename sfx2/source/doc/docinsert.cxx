@@ -79,7 +79,7 @@ void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,voi
     m_pFileDlg->StartExecuteModal( LINK( this, DocumentInserter, DialogClosedHdl ) );
 }
 
-SfxMedium* DocumentInserter::CreateMedium()
+SfxMedium* DocumentInserter::CreateMedium(char const*const pFallbackHack)
 {
     std::unique_ptr<SfxMedium> pMedium;
     if (!m_nError && m_pItemSet && !m_pURLList.empty())
@@ -90,14 +90,20 @@ SfxMedium* DocumentInserter::CreateMedium()
                 sURL, SFX_STREAM_READONLY,
                 SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( m_sFilter ), m_pItemSet ));
         pMedium->UseInteractionHandler( true );
-        SfxFilterMatcher* pMatcher = nullptr;
+        std::unique_ptr<SfxFilterMatcher> pMatcher;
         if ( !m_sDocFactory.isEmpty() )
-            pMatcher = new SfxFilterMatcher( m_sDocFactory );
+            pMatcher.reset(new SfxFilterMatcher(m_sDocFactory));
         else
-            pMatcher = new SfxFilterMatcher();
+            pMatcher.reset(new SfxFilterMatcher());
 
         std::shared_ptr<const SfxFilter> pFilter;
         sal_uInt32 nError = pMatcher->DetectFilter( *pMedium, pFilter );
+        // tdf#101813 hack: check again if it's a global document
+        if (ERRCODE_NONE != nError && pFallbackHack)
+        {
+            pMatcher.reset(new SfxFilterMatcher(OUString::createFromAscii(pFallbackHack)));
+            nError = pMatcher->DetectFilter( *pMedium, pFilter );
+        }
         if ( nError == ERRCODE_NONE && pFilter )
             pMedium->SetFilter( pFilter );
         else
@@ -105,8 +111,6 @@ SfxMedium* DocumentInserter::CreateMedium()
 
         if ( pMedium && CheckPasswd_Impl( nullptr, SfxGetpApp()->GetPool(), pMedium.get() ) == ERRCODE_ABORT )
             pMedium.reset();
-
-        DELETEZ( pMatcher );
     }
 
     return pMedium.release();

@@ -1574,7 +1574,9 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
     std::shared_ptr<const SfxFilter> pSfxFlt;
     if (!xMed->GetError())
     {
-        SfxFilterMatcher aMatcher( OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
+        SfxFilterMatcher aMatcher( rFilter == "writerglobal8"
+            ? OUString::createFromAscii(SwGlobalDocShell::Factory().GetShortName())
+            : OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
 
         // No Filter, so search for it. Else test if the one passed is a valid one
         if( !rFilter.isEmpty() )

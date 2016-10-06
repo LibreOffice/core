@@ -1316,7 +1316,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, v
     OUString sFileName, sFilterName, sPassword;
     if ( _pFileDlg->GetError() == ERRCODE_NONE )
     {
-        std::unique_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium());
+        std::unique_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium("sglobal"));
         if ( pMedium )
         {
             sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
@@ -1783,7 +1783,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
 {
     if ( _pFileDlg->GetError() == ERRCODE_NONE )
     {
-        std::unique_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium());
+        std::unique_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium("sglobal"));
         if ( pMedium )
         {
             m_sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
