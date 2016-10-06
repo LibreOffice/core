@@ -449,6 +449,10 @@ SvXMLImport::~SvXMLImport() throw ()
 {
     if (mxEventListener.is() && mxModel.is())
         mxModel->removeEventListener(mxEventListener);
+    // clear context stacks first in case of parse error because the context
+    // class dtors are full of application logic
+    while (!maFastContexts.empty()) { maFastContexts.pop(); }
+    while (!maContexts.empty()) { maContexts.pop(); }
 }
 
 namespace
