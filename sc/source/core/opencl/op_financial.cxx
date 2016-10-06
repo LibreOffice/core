@@ -1066,6 +1066,9 @@ void IRR::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "        if (fEps < Epsilon)\n";
     ss << "            return x;\n";
     ss << "        else\n";
+    // FIXME: This is of course horribly wrong. 523 is the error code NoConvergence, and this should
+    // be CreateDoubleError(523). Ditto for the other occurrences of 523 in the OpenCL code
+    // generated in this file.
     ss << "            return (double)523;\n";
     ss << "}";
 }
