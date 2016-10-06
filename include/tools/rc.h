@@ -139,10 +139,9 @@ namespace o3tl {
 // For "Image":
 enum class RscImageFlags {
     ImageBitmap       = 0x01,
-    MaskColor         = 0x04
 };
 namespace o3tl {
-    template<> struct typed_flags<RscImageFlags> : is_typed_flags<RscImageFlags, 0x05> {};
+    template<> struct typed_flags<RscImageFlags> : is_typed_flags<RscImageFlags, 0x01> {};
 }
 
 // For "ImageList":

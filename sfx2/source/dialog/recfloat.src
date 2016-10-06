@@ -20,8 +20,6 @@
 #include "helpid.hrc"
 #include "dialog.hrc"
 
-#define STD_MASKCOLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
-
 String STR_MACRO_LOSS
 {
     Text [ en-US ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";

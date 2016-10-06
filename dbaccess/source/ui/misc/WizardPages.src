@@ -77,12 +77,6 @@ Image IMG_UP
     {
         File = "sortup.png" ;
     };
-    MaskColor = Color
-    {
-        Red = 0xFFFF ;
-        Green = 0x0000 ;
-        Blue = 0xFFFF ;
-    };
 };
 
 Image IMG_DOWN
@@ -90,12 +84,6 @@ Image IMG_DOWN
     ImageBitmap = Bitmap
     {
         File = "sortdown.png" ;
-    };
-    MaskColor = Color
-    {
-        Red = 0xFFFF ;
-        Green = 0x0000 ;
-        Blue = 0xFFFF ;
     };
 };
 

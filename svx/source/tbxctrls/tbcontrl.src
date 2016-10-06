@@ -24,18 +24,14 @@
  * Bitmaps for SvxFrameWindow
  */
 
-#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-
 Image RID_SVX_RELOAD_NORMAL
 {
-    ImageBitmap = Bitmap { File = "reload.bmp" ; };
-    MASKCOLOR
+    ImageBitmap = Bitmap { File = "reload.png" ; };
 };
 
 Image RID_SVX_RELOAD_SPECIAL
 {
-    ImageBitmap = Bitmap { File = "reloads.bmp" ; };
-    MASKCOLOR
+    ImageBitmap = Bitmap { File = "reloads.png" ; };
 };
 
 ImageList RID_SVXIL_FRAME
@@ -158,38 +154,31 @@ String RID_SVXSTR_PAGES
 
 Image RID_SVXIMG_GRAF_RED
 {
-    ImageBitmap = Bitmap { File = "sc10865.bmp" ; };
-    MASKCOLOR
+    ImageBitmap = Bitmap { File = "sc10865.png" ; };
 };
 Image RID_SVXIMG_GRAF_GREEN
 {
-    ImageBitmap = Bitmap { File = "sc10866.bmp" ; };
-    MASKCOLOR
+    ImageBitmap = Bitmap { File = "sc10866.png" ; };
 };
 Image RID_SVXIMG_GRAF_BLUE
 {
-    ImageBitmap = Bitmap { File = "sc10867.bmp" ; };
-    MASKCOLOR
+    ImageBitmap = Bitmap { File = "sc10867.png" ; };
 };
 Image RID_SVXIMG_GRAF_LUMINANCE
 {
-    ImageBitmap = Bitmap { File = "sc10863.bmp" ; };
-    MASKCOLOR
+    ImageBitmap = Bitmap { File = "sc10863.png" ; };
 };
 Image RID_SVXIMG_GRAF_CONTRAST
 {
-    ImageBitmap = Bitmap { File = "sc10864.bmp" ; };
-    MASKCOLOR
+    ImageBitmap = Bitmap { File = "sc10864.png" ; };
 };
 Image RID_SVXIMG_GRAF_GAMMA
 {
-    ImageBitmap = Bitmap { File = "sc10868.bmp" ; };
-    MASKCOLOR
+    ImageBitmap = Bitmap { File = "sc10868.png" ; };
 };
 Image RID_SVXIMG_GRAF_TRANSPARENCE
 {
-    ImageBitmap = Bitmap { File = "sc10869.bmp" ; };
-    MASKCOLOR
+    ImageBitmap = Bitmap { File = "sc10869.png" ; };
 };
 
 String RID_SVXSTR_CLEARFORM

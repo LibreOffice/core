@@ -65,16 +65,6 @@ Image::Image( const ResId& rResId ) :
             pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
         }
 
-        if( nObjMask & RscImageFlags::MaskColor )
-        {
-            if( !aBmpEx.IsEmpty() && aBmpEx.GetTransparentType() == TransparentType::NONE )
-            {
-                const Color aMaskColor( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) );
-                aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskColor );
-            }
-
-            pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
-        }
         if( ! aBmpEx.IsEmpty() )
             ImplInit( aBmpEx );
     }

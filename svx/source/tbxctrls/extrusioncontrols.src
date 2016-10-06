@@ -20,72 +20,59 @@
 #include <svx/dialogs.hrc>
 #include "extrusioncontrols.hrc"
 
-#define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
-
 Image RID_SVXIMG_DIRECTION + DIRECTION_NW
 {
     ImageBitmap = Bitmap { File = "directionnorthwest_22.bmp" ; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DIRECTION + DIRECTION_N
 {
     ImageBitmap = Bitmap { File = "directionnorth_22.bmp" ; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DIRECTION + DIRECTION_NE
 {
     ImageBitmap = Bitmap { File = "directionnortheast_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DIRECTION + DIRECTION_W
 {
     ImageBitmap = Bitmap { File = "directionwest_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DIRECTION + DIRECTION_NONE
 {
     ImageBitmap = Bitmap { File = "directionstraight_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DIRECTION + DIRECTION_E
 {
     ImageBitmap = Bitmap { File = "directioneast_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DIRECTION + DIRECTION_SW
 {
     ImageBitmap = Bitmap { File = "directionsouthwest_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DIRECTION + DIRECTION_S
 {
     ImageBitmap = Bitmap { File = "directionsouth_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DIRECTION + DIRECTION_SE
 {
     ImageBitmap = Bitmap { File = "directionsoutheast_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_PERSPECTIVE
 {
     ImageBitmap = Bitmap { File = "perspective_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_PARALLEL
 {
     ImageBitmap = Bitmap { File = "parallel_16.bmp"; };
-    MASKCOLOR
 };
 
 String RID_SVXSTR_PERSPECTIVE
@@ -146,169 +133,141 @@ String RID_SVXSTR_DIRECTION + DIRECTION_SE
 Image RID_SVXIMG_LIGHT_OFF + FROM_TOP_LEFT
 {
     ImageBitmap = Bitmap { File = "lightofffromtopleft_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_OFF + FROM_TOP
 {
     ImageBitmap = Bitmap { File = "lightofffromtop_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_OFF + FROM_TOP_RIGHT
 {
     ImageBitmap = Bitmap { File = "lightofffromtopright_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_OFF + FROM_LEFT
 {
     ImageBitmap = Bitmap { File = "lightofffromleft_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_OFF + FROM_RIGHT
 {
     ImageBitmap = Bitmap { File = "lightofffromright_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_OFF + FROM_BOTTOM_LEFT
 {
     ImageBitmap = Bitmap { File = "lightofffrombottomleft_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_OFF + FROM_BOTTOM
 {
     ImageBitmap = Bitmap { File = "lightofffrombottom_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_OFF + FROM_BOTTOM_RIGHT
 {
     ImageBitmap = Bitmap { File = "lightofffrombottomright_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_ON + FROM_TOP_LEFT
 {
     ImageBitmap = Bitmap { File = "lightonfromtopleft_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_ON + FROM_TOP
 {
     ImageBitmap = Bitmap { File = "lightonfromtop_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_ON + FROM_TOP_RIGHT
 {
     ImageBitmap = Bitmap { File = "lightonfromtopright_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_ON + FROM_LEFT
 {
     ImageBitmap = Bitmap { File = "lightonfromleft_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_ON + FROM_RIGHT
 {
     ImageBitmap = Bitmap { File = "lightonfromright_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_ON + FROM_BOTTOM_LEFT
 {
     ImageBitmap = Bitmap { File = "lightonfrombottomleft_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_ON + FROM_BOTTOM
 {
     ImageBitmap = Bitmap { File = "lightonfrombottom_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_ON + FROM_BOTTOM_RIGHT
 {
     ImageBitmap = Bitmap { File = "lightonfrombottomright_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_PREVIEW + FROM_TOP_LEFT
 {
     ImageBitmap = Bitmap { File = "lightfromtopleft_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_PREVIEW + FROM_TOP
 {
     ImageBitmap = Bitmap { File = "lightfromtop_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_PREVIEW + FROM_TOP_RIGHT
 {
     ImageBitmap = Bitmap { File = "lightfromtopright_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_PREVIEW + FROM_LEFT
 {
     ImageBitmap = Bitmap { File = "lightfromleft_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_PREVIEW + FROM_RIGHT
 {
     ImageBitmap = Bitmap { File = "lightfromright_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_PREVIEW + FROM_FRONT
 {
     ImageBitmap = Bitmap { File = "lightfromfront_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_PREVIEW + FROM_BOTTOM_LEFT
 {
     ImageBitmap = Bitmap { File = "lightfrombottomleft_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_PREVIEW + FROM_BOTTOM
 {
     ImageBitmap = Bitmap { File = "lightfrombottom_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHT_PREVIEW + FROM_BOTTOM_RIGHT
 {
     ImageBitmap = Bitmap { File = "lightfrombottomright_22.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHTING_BRIGHT
 {
     ImageBitmap = Bitmap { File = "brightlit_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHTING_NORMAL
 {
     ImageBitmap = Bitmap { File = "normallit_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_LIGHTING_DIM
 {
     ImageBitmap = Bitmap { File = "dimlit_16.bmp"; };
-    MASKCOLOR
 };
 
 String RID_SVXSTR_BRIGHT
@@ -349,61 +308,51 @@ String RID_SVXSTR_METAL
 Image RID_SVXIMG_WIRE_FRAME
 {
     ImageBitmap = Bitmap { File = "wireframe_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_MATTE
 {
     ImageBitmap = Bitmap { File = "matte_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_PLASTIC
 {
     ImageBitmap = Bitmap { File = "plastic_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_METAL
 {
     ImageBitmap = Bitmap { File = "metal_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DEPTH_0
 {
     ImageBitmap = Bitmap { File = "extrusion0inch_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DEPTH_1
 {
     ImageBitmap = Bitmap { File = "extrusion05inch_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DEPTH_2
 {
     ImageBitmap = Bitmap { File = "extrusion1inch_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DEPTH_3
 {
     ImageBitmap = Bitmap { File = "extrusion2inch_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DEPTH_4
 {
     ImageBitmap = Bitmap { File = "extrusion4inch_16.bmp"; };
-    MASKCOLOR
 };
 
 Image RID_SVXIMG_DEPTH_INFINITY
 {
     ImageBitmap = Bitmap { File = "extrusioninfinity_16.bmp"; };
-    MASKCOLOR
 };
 
 String RID_SVXSTR_EXTRUSION_COLOR

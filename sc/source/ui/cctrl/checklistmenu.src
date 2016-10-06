@@ -63,7 +63,6 @@ Image RID_IMG_SELECT_CURRENT
     {
         File = "popup_select_current.png";
     };
-    MaskColor = STD_MASKCOLOR;
 };
 
 Image RID_IMG_UNSELECT_CURRENT
@@ -72,7 +71,6 @@ Image RID_IMG_UNSELECT_CURRENT
     {
         File = "popup_unselect_current.png";
     };
-    MaskColor = STD_MASKCOLOR;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

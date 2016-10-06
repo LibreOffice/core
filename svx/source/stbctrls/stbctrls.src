@@ -306,23 +306,19 @@ Menu RID_SVXMNU_XMLSECSTATBAR
 
 // Images ----------------------------------------------------------------
 
-#define STD_MASKCOLOR   Color{Red=0xffff;Green=0x0000;Blue=0xffff;}
-
 Image RID_SVXBMP_POSITION
 {
     ImageBitmap = Bitmap
     {
-        File = "sc10223.bmp" ;
+        File = "sc10223.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIZE
 {
     ImageBitmap = Bitmap
     {
-        File = "sc10224.bmp" ;
+        File = "sc10224.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIGNET
 {
@@ -330,7 +326,6 @@ Image RID_SVXBMP_SIGNET
     {
         File = "signet_11x16.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIGNET_BROKEN
 {
@@ -338,7 +333,6 @@ Image RID_SVXBMP_SIGNET_BROKEN
     {
         File = "caution_11x16.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIGNET_NOTVALIDATED
 {
@@ -346,7 +340,6 @@ Image RID_SVXBMP_SIGNET_NOTVALIDATED
     {
         File = "notcertificate_16.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 
 Image RID_SVXBMP_SLIDERBUTTON
@@ -355,7 +348,6 @@ Image RID_SVXBMP_SLIDERBUTTON
     {
         File = "slidezoombutton_10.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SLIDERDECREASE
 {
@@ -363,7 +355,6 @@ Image RID_SVXBMP_SLIDERDECREASE
     {
         File = "slidezoomout_10.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SLIDERINCREASE
 {
@@ -371,7 +362,6 @@ Image RID_SVXBMP_SLIDERINCREASE
     {
         File = "slidezoomin_10.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_DOC_MODIFIED_YES
 {
@@ -379,7 +369,6 @@ Image RID_SVXBMP_DOC_MODIFIED_YES
     {
         File = "doc_modified_yes_14.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_DOC_MODIFIED_NO
 {
@@ -387,7 +376,6 @@ Image RID_SVXBMP_DOC_MODIFIED_NO
     {
         File = "doc_modified_no_14.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_DOC_MODIFIED_FEEDBACK
 {
@@ -395,7 +383,6 @@ Image RID_SVXBMP_DOC_MODIFIED_FEEDBACK
     {
         File = "doc_modified_feedback.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_ZOOM_PAGE
 {
@@ -403,7 +390,6 @@ Image RID_SVXBMP_ZOOM_PAGE
     {
         File = "zoom_page_statusbar.png" ;
     };
-    MaskColor = STD_MASKCOLOR;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

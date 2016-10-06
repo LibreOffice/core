@@ -23,8 +23,6 @@
 #include <sfx2/sfxcommands.h>
 #include <svx/svxcommands.h>
 
-#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
-
 String RID_STR_FILTER_ALLFILES
 {
     Text [ en-US ] = "<All>" ;
@@ -300,8 +298,7 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     SmallStyle = TRUE ;
     ButtonImage = Image
     {
-        ImageBitmap = Bitmap { File = "baswatr.bmp" ; };
-        MASKCOLOR
+        ImageBitmap = Bitmap { File = "baswatr.png" ; };
     };
     QuickHelpText [ en-US ] = "Remove Watch" ;
 };
@@ -458,53 +455,43 @@ ImageList RID_IMGLST_LAYOUT
 Image RID_IMG_LOCKED
 {
     ImageBitmap = Bitmap { File = "lock.png" ; };
-    MASKCOLOR
 };
 
 Image RID_IMG_INSTALLATION
 {
     ImageBitmap = Bitmap { File = "harddisk_16.png"; };
-    MASKCOLOR
 };
 Image RID_IMG_DOCUMENT
 {
     ImageBitmap = Bitmap { File = "im30826.png"; };
-    MASKCOLOR
 };
 Image RID_IMG_MODLIB
 {
     ImageBitmap = Bitmap { File = "im30820.png"; };
-    MASKCOLOR
 };
 Image RID_IMG_MODLIBNOTLOADED
 {
     ImageBitmap = Bitmap { File = "im30827.png"; };
-    MASKCOLOR
 };
 Image RID_IMG_MODULE
 {
     ImageBitmap = Bitmap { File = "im30821.png"; };
-    MASKCOLOR
 };
 Image RID_IMG_MACRO
 {
     ImageBitmap = Bitmap { File = "im30822.png"; };
-    MASKCOLOR
 };
 Image RID_IMG_DLGLIB
 {
     ImageBitmap = Bitmap { File = "dialogfolder_16.png"; };
-    MASKCOLOR
 };
 Image RID_IMG_DLGLIBNOTLOADED
 {
     ImageBitmap = Bitmap { File = "dialogfoldernot_16.png"; };
-    MASKCOLOR
 };
 Image RID_IMG_DIALOG
 {
     ImageBitmap = Bitmap { File = "im30823.png"; };
-    MASKCOLOR
 };
 String RID_STR_QUERYREPLACEMACRO
 {

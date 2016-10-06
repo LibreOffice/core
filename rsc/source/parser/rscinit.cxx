@@ -59,7 +59,6 @@ void RscTypCont::Init()
     RscTop   *  pClassString;
     RscTop   *  pClassStringArray;
     RscTop   *  pClassBitmap;
-    RscTop   *  pClassColor;
     RscTop   *  pClassImage;
     RscTop   *  pClassImageList;
     RscTop   *  pClassWindow;
@@ -287,10 +286,7 @@ void RscTypCont::Init()
 
 }
 {
-    pClassColor = InitClassColor( pClassMgr, pColor );
-    pRoot->Insert( pClassColor );
-
-    pClassImage = InitClassImage( pClassMgr, pClassBitmap, pClassColor );
+    pClassImage = InitClassImage( pClassMgr, pClassBitmap );
     pRoot->Insert( pClassImage );
 
     pClassImageList = InitClassImageList( pClassMgr, pStringLongTupelList );

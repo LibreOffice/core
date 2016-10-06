@@ -22,7 +22,6 @@
 #include "cmdid.h"
 #include "helpid.h"
 
-#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 #define SEPARATOR   MenuItem { Separator = TRUE; };
 
 Menu MN_SPELL_POPUP
@@ -152,7 +151,6 @@ String STR_EXPLANATION_LINK
 Image IMG_INFO_16
 {
     ImageBitmap = Bitmap { File = "info_16.png" ; };
-    MASKCOLOR
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

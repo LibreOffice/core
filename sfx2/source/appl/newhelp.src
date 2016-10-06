@@ -21,79 +21,64 @@
 #include "newhelp.hrc"
 #include "helpid.hrc"
 
-#define MASKCOLOR_MAGENTA \
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-
 Image IMG_HELP_TOOLBOX_INDEX_ON
 {
-    ImageBitmap = Bitmap { File = "indexon_small.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "indexon_small.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_INDEX_OFF
 {
-    ImageBitmap = Bitmap { File = "indexoff_small.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "indexoff_small.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_START
 {
-    ImageBitmap = Bitmap { File = "sc06303.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "sc06303.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_PREV
 {
-    ImageBitmap = Bitmap { File = "sc06301.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "sc06301.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_NEXT
 {
-    ImageBitmap = Bitmap { File = "sc06300.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "sc06300.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_PRINT
 {
-    ImageBitmap = Bitmap { File = "sc05504.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "sc05504.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_BOOKMARKS
 {
-    ImageBitmap = Bitmap { File = "favourite.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "favourite.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_SEARCHDIALOG
 {
-    ImageBitmap = Bitmap { File = "sc05961.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "sc05961.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_COPY
 {
-    ImageBitmap = Bitmap { File = "sc05711.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "sc05711.png" ; };
 };
 
 Image IMG_HELP_CONTENT_BOOK_OPEN
 {
-    ImageBitmap = Bitmap { File = "hlpbookopen.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "hlpbookopen.png" ; };
 };
 
 Image IMG_HELP_CONTENT_BOOK_CLOSED
 {
-    ImageBitmap = Bitmap { File = "hlpbookclosed.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "hlpbookclosed.png" ; };
 };
 
 Image IMG_HELP_CONTENT_DOC
 {
-    ImageBitmap = Bitmap { File = "hlpdoc.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "hlpdoc.png" ; };
 };
 
 String STR_HELP_WINDOW_TITLE
@@ -207,56 +192,47 @@ String STR_INFO_NOSEARCHTEXTFOUND
 
 Image IMG_HELP_TOOLBOX_L_INDEX_ON
 {
-    ImageBitmap = Bitmap { File = "indexon_big.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "indexon_big.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_L_INDEX_OFF
 {
-    ImageBitmap = Bitmap { File = "indexoff_big.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "indexoff_big.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_L_START
 {
-    ImageBitmap = Bitmap { File = "lc06303.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "lc06303.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_L_PREV
 {
-    ImageBitmap = Bitmap { File = "lc06301.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "lc06301.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_L_NEXT
 {
-    ImageBitmap = Bitmap { File = "lc06300.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "lc06300.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_L_PRINT
 {
-    ImageBitmap = Bitmap { File = "lc05504.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "lc05504.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_L_BOOKMARKS
 {
-    ImageBitmap = Bitmap { File = "favourite_big.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "favourite_big.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_L_SEARCHDIALOG
 {
-    ImageBitmap = Bitmap { File = "lc05961.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "lc05961.png" ; };
 };
 
 Image IMG_HELP_TOOLBOX_L_COPY
 {
-    ImageBitmap = Bitmap { File = "lc05711.bmp" ; };
-    MASKCOLOR_MAGENTA
+    ImageBitmap = Bitmap { File = "lc05711.png" ; };
 };
 
 CheckBox RID_HELP_ONSTARTUP_BOX

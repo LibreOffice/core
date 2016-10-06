@@ -22,14 +22,12 @@
 
 Image IMG_TABLE
 {
-    ImageBitmap = Bitmap { File = "sx03188.bmp"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+    ImageBitmap = Bitmap { File = "sx03188.png"; };
 };
 
 Image IMG_QUERY
 {
-    ImageBitmap = Bitmap { File = "sx03202.bmp"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+    ImageBitmap = Bitmap { File = "sx03202.png"; };
 };
 
 String RID_STR_OPTION_DB_FIELD_TITLE

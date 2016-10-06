@@ -98,7 +98,6 @@ Window FID_FUNCTION_BOX
             {
                 File = "fx.png";
             };
-            MaskColor = STD_MASKCOLOR;
         };
         DefButton = TRUE ;
         QuickHelpText [ en-US ] = "Insert Function into calculation sheet" ;

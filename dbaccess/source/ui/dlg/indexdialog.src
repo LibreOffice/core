@@ -55,7 +55,6 @@ String STR_LOGICAL_INDEX_NAME
 Image IMG_PKEYICON
 {
     ImageBitmap = Bitmap { File = "pkey.png"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
 String STR_NEED_INDEX_FIELDS

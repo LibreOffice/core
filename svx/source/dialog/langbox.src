@@ -21,14 +21,12 @@
 
 Image RID_SVXIMG_NOTCHECKED
 {
-    ImageBitmap = Bitmap { File = "notcheck.bmp" ; } ;
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    ImageBitmap = Bitmap { File = "notcheck.png" ; } ;
 };
 
 Image RID_SVXIMG_CHECKED
 {
-    ImageBitmap = Bitmap { File = "lngcheck.bmp" ; } ;
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    ImageBitmap = Bitmap { File = "lngcheck.png" ; } ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -27,7 +27,6 @@ String STR_CERTIFICATE_NOT_VALIDATED
 Image IMG_STATE_NOT_VALIDATED
 {
     ImageBitmap = Bitmap { File = "notcertificate_40x56.png"; };
-        MaskColor = STD_MASKCOLOR;
 };
 
 String STR_HEADERBAR

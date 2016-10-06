@@ -343,7 +343,6 @@ Image IMG_VIEWLAYOUT_AUTOMATIC
     {
         File = "twopages_10x24.png" ;
     };
-    MaskColor = IMAGE_MASK_COLOR;
 };
 Image IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE
 {
@@ -351,7 +350,6 @@ Image IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE
     {
         File = "twopages_a_10x24.png" ;
     };
-    MaskColor = IMAGE_MASK_COLOR;
 };
 
 Image IMG_VIEWLAYOUT_BOOKMODE
@@ -360,7 +358,6 @@ Image IMG_VIEWLAYOUT_BOOKMODE
     {
         File = "doublepage_10x22.png" ;
     };
-    MaskColor = IMAGE_MASK_COLOR;
 };
 Image IMG_VIEWLAYOUT_BOOKMODE_ACTIVE
 {
@@ -368,7 +365,6 @@ Image IMG_VIEWLAYOUT_BOOKMODE_ACTIVE
     {
         File = "doublepage_a_10x22.png" ;
     };
-    MaskColor = IMAGE_MASK_COLOR;
 };
 
 Image IMG_VIEWLAYOUT_SINGLECOLUMN
@@ -377,7 +373,6 @@ Image IMG_VIEWLAYOUT_SINGLECOLUMN
     {
         File = "emptypage_10x14.png" ;
     };
-    MaskColor = IMAGE_MASK_COLOR;
 };
 Image IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE
 {
@@ -385,7 +380,6 @@ Image IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE
     {
         File = "emptypage_a_10x14.png" ;
     };
-    MaskColor = IMAGE_MASK_COLOR;
 };
 Image IMG_PAGE_BREAK
 {
@@ -393,7 +387,6 @@ Image IMG_PAGE_BREAK
     {
         File = "page_break.png" ;
     };
-    MaskColor = IMAGE_MASK_COLOR;
 };
 
 String STR_HYPERCTRL_SEL

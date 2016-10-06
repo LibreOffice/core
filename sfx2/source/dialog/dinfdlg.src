@@ -132,7 +132,6 @@ String STR_SFX_REMOVE_PROPERTY
 Image SFX_IMG_PROPERTY_REMOVE
 {
     ImageBitmap = Bitmap { File = "deleterow.bmp" ; };
-    MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
 };
 
 String STR_SFX_QUERY_WRONG_TYPE

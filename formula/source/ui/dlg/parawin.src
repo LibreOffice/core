@@ -19,22 +19,19 @@
 
 #include "ForResId.hrc"
 
-#define STD_MASKCOLOR Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
-
 Image BMP_FX
 {
-    ImageBitmap = Bitmap { File = "fx.bmp" ; };
-    MaskColor = STD_MASKCOLOR;
+    ImageBitmap = Bitmap { File = "fx.png" ; };
 };
 
 String STR_OPTIONAL
 {
     Text [ en-US ] = "(optional)" ;
 };
+
 String STR_REQUIRED
 {
     Text [ en-US ] = "(required)" ;
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

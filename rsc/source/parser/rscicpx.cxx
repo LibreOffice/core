@@ -138,8 +138,7 @@ RscTop * RscTypCont::InitClassColor( RscTop * pSuper, RscEnum * pColor )
     return pClassColor;
 }
 
-RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap,
-                                     RscTop * pClassColor )
+RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap )
 {
     Atom        nId;
     RscTop *    pClassImage;
@@ -153,9 +152,6 @@ RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap,
     // initialize variables
     nId = aNmTb.Put( "ImageBitmap", VARNAME );
     pClassImage->SetVariable( nId, pClassBitmap, nullptr, 0, (sal_uInt32)RscImageFlags::ImageBitmap );
-    nId = aNmTb.Put( "MaskColor", VARNAME );
-    pClassImage->SetVariable( nId, pClassColor, nullptr,
-                              VAR_SVDYNAMIC, (sal_uInt32)RscImageFlags::MaskColor );
 
     return pClassImage;
 }

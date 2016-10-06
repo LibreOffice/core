@@ -19,17 +19,14 @@
 
 #include "updatecheckui.hrc"
 
-#define STD_MASK_COLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
+Image RID_UPDATE_AVAILABLE_16
+{
+    ImageBitmap = Bitmap{ file = "onlineupdate_16.png"; };
+};
 
-    Image RID_UPDATE_AVAILABLE_16
-    {
-        ImageBitmap = Bitmap{ file = "onlineupdate_16.png"; };
-        STD_MASK_COLOR
-    };
-    Image RID_UPDATE_AVAILABLE_26
-    {
-        ImageBitmap = Bitmap{ file = "onlineupdate_26.png"; };
-        STD_MASK_COLOR
-    };
+Image RID_UPDATE_AVAILABLE_26
+{
+    ImageBitmap = Bitmap{ file = "onlineupdate_26.png"; };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
