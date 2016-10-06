@@ -298,7 +298,6 @@ ComboBox RID_PVIEW_ZOOM_LB
 };
 NumericField RID_JUMP_TO_SPEC_PAGE
 {
-    HelpId = HID_JUMP_TO_SPEC_PAGE;
     Size = MAP_APPFONT ( 16 , 12) ;
     Border = TRUE ;
     Hide = TRUE ;
