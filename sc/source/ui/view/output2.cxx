@@ -505,7 +505,7 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
                                      pOutput->mpDoc,
                                      pOutput->mbShowNullValues,
                                      pOutput->mbShowFormulas,
-                                     ftCheck, true );
+                                     true );
             if ( nFormat )
             {
                 nRepeatPos = aString.indexOf( 0x1B );
@@ -2394,8 +2394,7 @@ bool ScOutputData::DrawEditParam::readCellContent(
                                  *pDoc->GetFormatTable(),
                                  pDoc,
                                  bShowNullValues,
-                                 bShowFormulas,
-                                 ftCheck );
+                                 bShowFormulas);
 
         mpEngine->SetText(aString);
         if ( pColor && !bSyntaxMode && !( bUseStyleColor && bForceAutoColor ) )
@@ -4922,8 +4921,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                                          *mpDoc->GetFormatTable(),
                                                          mpDoc,
                                                          mbShowNullValues,
-                                                         mbShowFormulas,
-                                                         ftCheck );
+                                                         mbShowFormulas);
 
                                 pEngine->SetText(aString);
                                 if ( pColor && !mbSyntaxMode && !( mbUseStyleColor && mbForceAutoColor ) )

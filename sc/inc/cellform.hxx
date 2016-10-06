@@ -30,12 +30,6 @@ class ScDocument;
 class ScAddress;
 struct ScRefCellValue;
 
-enum ScForceTextFmt {
-    ftDontForce,            ///< numbers as numbers
-    ftForce,                ///< numbers as text
-    ftCheck                 ///< is the numberformat a textformat?
-};
-
 class SC_DLLPUBLIC ScCellFormat
 {
 public:
@@ -43,13 +37,12 @@ public:
     static void GetString(
         ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString,
         Color** ppColor, SvNumberFormatter& rFormatter, const ScDocument* pDoc, bool bNullVals = true,
-        bool bFormula  = false, ScForceTextFmt eForceTextFmt = ftDontForce,
-        bool bUseStarFormat = false );
+        bool bFormula  = false, bool bUseStarFormat = false );
 
     static OUString GetString(
         ScDocument& rDoc, const ScAddress& rPos, sal_uLong nFormat,
         Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
-        bool bFormula  = false, ScForceTextFmt eForceTextFmt = ftDontForce );
+        bool bFormula  = false );
 
     static void GetInputString(
         ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString, SvNumberFormatter& rFormatter,
