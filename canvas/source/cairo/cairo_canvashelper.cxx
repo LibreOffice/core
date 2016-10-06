@@ -1226,13 +1226,12 @@ namespace cairocanvas
                     break;
             }
 
-            if( strokeAttributes.DashArray.getLength() > 0 )
+            if (strokeAttributes.DashArray.getLength() > 0)
             {
-                double* pDashArray = new double[ strokeAttributes.DashArray.getLength() ];
-                for( sal_Int32 i=0; i<strokeAttributes.DashArray.getLength(); i++ )
-                    pDashArray[i] = strokeAttributes.DashArray[i] * w;
-                cairo_set_dash( mpCairo.get(), pDashArray, strokeAttributes.DashArray.getLength(), 0 );
-                delete[] pDashArray;
+                auto aDashArray(comphelper::sequenceToContainer<std::vector<double>>(strokeAttributes.DashArray));
+                for (auto& rDash : aDashArray)
+                    rDash *= w;
+                cairo_set_dash(mpCairo.get(), aDashArray.data(), aDashArray.size(), 0);
             }
 
             // TODO(rodo) use LineArray of strokeAttributes
