@@ -353,29 +353,49 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
     {
         m_bLock = true;
 
-        if (SfxViewFrame::Current())
+        Reference<frame::XFrame> xFrame;
+        vcl::EnumContext::Application eCurrentApp = vcl::EnumContext::Application::Application_None;
+        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create( xContext );
+
+        if ( SfxViewFrame::Current() )
         {
-            const Reference<frame::XFrame>& xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-            if (xFrame.is())
+            xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
+            eCurrentApp = vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
+        }
+
+        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
+        while( pViewFrame )
+        {
+            xFrame = pViewFrame->GetFrame().GetFrameInterface();
+            if ( xFrame.is() )
             {
-                const Reference<frame::XLayoutManager>& xLayoutManager =
-                                                        lcl_getLayoutManager(xFrame);
+                vcl::EnumContext::Application eApp =
+                        vcl::EnumContext::GetApplicationEnum( xModuleManager->identify( xFrame ) );
 
-                if (xLayoutManager.is())
+                if ( eApp == eCurrentApp )
                 {
-                    xLayoutManager->lock();
+                    const Reference<frame::XLayoutManager>& xLayoutManager =
+                                                            lcl_getLayoutManager( xFrame );
 
-                    if (xLayoutManager->getElement(MENUBAR_STR).is())
+                    if (xLayoutManager.is())
                     {
-                        if (xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
-                            xLayoutManager->hideElement(MENUBAR_STR);
-                        else if(!xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
-                            xLayoutManager->showElement(MENUBAR_STR);
-                    }
+                        xLayoutManager->lock();
 
-                    xLayoutManager->unlock();
+                        if (xLayoutManager->getElement(MENUBAR_STR).is())
+                        {
+                            if (xLayoutManager->isElementVisible(MENUBAR_STR) && !bShow)
+                                xLayoutManager->hideElement(MENUBAR_STR);
+                            else if(!xLayoutManager->isElementVisible(MENUBAR_STR) && bShow)
+                                xLayoutManager->showElement(MENUBAR_STR);
+                        }
+
+                        xLayoutManager->unlock();
+                    }
                 }
             }
+
+            pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
         }
         m_bLock = false;
     }
