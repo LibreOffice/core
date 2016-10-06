@@ -1082,9 +1082,20 @@
           <value>com.sun.star.comp.sfx2.ClassificationCategoriesController</value>
         </prop>
       </node>
-      <node oor:name="com.sun.star.comp.svx.FrameToolBoxControl" oor:op="replace">
+      <node oor:name="BorderStyleToolBoxControl" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:SetBorderStyle</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.FrameToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="BorderLineStyleToolBoxControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:LineStyle</value>
         </prop>
         <prop oor:name="Module">
           <value/>

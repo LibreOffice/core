@@ -167,7 +167,6 @@ void ScDLL::Init()
     SvxColorToolBoxControl          ::RegisterControl(SID_ATTR_CHAR_COLOR,      pMod);
     SvxColorToolBoxControl          ::RegisterControl(SID_BACKGROUND_COLOR,     pMod);
     SvxColorToolBoxControl          ::RegisterControl(SID_ATTR_CHAR_BACK_COLOR, pMod);
-    SvxFrameLineStyleToolBoxControl ::RegisterControl(SID_FRAME_LINESTYLE,      pMod);
     SvxColorToolBoxControl          ::RegisterControl(SID_FRAME_LINECOLOR,      pMod);
     SvxClipBoardControl             ::RegisterControl(SID_PASTE,                pMod );
     SvxUndoRedoControl              ::RegisterControl(SID_UNDO,                 pMod );

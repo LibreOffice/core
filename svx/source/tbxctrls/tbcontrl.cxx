@@ -115,7 +115,6 @@ using namespace ::com::sun::star::lang;
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxStyleToolBoxControl, SfxTemplateItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontNameToolBoxControl, SvxFontItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxCurrencyToolBoxControl, SfxBoolItem );
 
@@ -270,10 +269,11 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
-class SvxLineWindow_Impl : public SfxPopupWindow
+class SvxLineWindow_Impl : public svtools::ToolbarPopup
 {
 private:
     VclPtr<LineListBox> m_aLineStyleLb;
+    svt::ToolboxController& m_rController;
     bool                m_bIsWriter;
 
     DECL_LINK( SelectHdl, ListBox&, void );
@@ -282,9 +282,9 @@ protected:
     virtual void    Resize() override;
     virtual void    GetFocus() override;
 public:
-    SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
+    SvxLineWindow_Impl( svt::ToolboxController& rController, vcl::Window* pParentWindow );
     virtual ~SvxLineWindow_Impl() override { disposeOnce(); }
-    virtual void dispose() override { m_aLineStyleLb.disposeAndClear(); SfxPopupWindow::dispose(); }
+    virtual void dispose() override { m_aLineStyleLb.disposeAndClear(); ToolbarPopup::dispose(); }
 };
 
 class SvxCurrencyToolBoxControl;
@@ -1928,14 +1928,14 @@ void SvxCurrencyList_Impl::dispose()
     SfxPopupWindow::dispose();
 }
 
-SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
-
-    SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION | WB_AUTOSIZE ) ),
-    m_aLineStyleLb( VclPtr<LineListBox>::Create(this) )
+SvxLineWindow_Impl::SvxLineWindow_Impl( svt::ToolboxController& rController, vcl::Window* pParentWindow ) :
+    ToolbarPopup( rController.getFrameInterface(), pParentWindow, WB_STDPOPUP | WB_MOVEABLE | WB_CLOSEABLE ),
+    m_aLineStyleLb( VclPtr<LineListBox>::Create(this) ),
+    m_rController( rController )
 {
     try
     {
-        Reference< lang::XServiceInfo > xServices( rFrame->getController()->getModel(), UNO_QUERY_THROW );
+        Reference< lang::XServiceInfo > xServices( rController.getFrameInterface()->getController()->getModel(), UNO_QUERY_THROW );
         m_bIsWriter = xServices->supportsService("com.sun.star.text.TextDocument");
     }
     catch(const uno::Exception& )
@@ -2026,9 +2026,7 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
     aLineItem.QueryValue( a, m_bIsWriter ? CONVERT_TWIPS : 0 );
     aArgs[0].Value = a;
 
-    SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                 ".uno:LineStyle",
-                                 aArgs );
+    m_rController.dispatchCommand( ".uno:LineStyle", aArgs );
 }
 
 void SvxLineWindow_Impl::Resize()
@@ -2929,6 +2927,9 @@ void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any
 
 VclPtr<vcl::Window> SvxFrameToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
+    if ( m_aCommandURL == ".uno:LineStyle" )
+        return VclPtr<SvxLineWindow_Impl>::Create( *this, pParent );
+
     return VclPtr<SvxFrameWindow_Impl>::Create( *this, pParent );
 }
 
@@ -2950,40 +2951,6 @@ com_sun_star_comp_svx_FrameToolBoxControl_get_implementation(
     css::uno::Sequence<css::uno::Any> const & )
 {
     return cppu::acquire( new SvxFrameToolBoxControl( rContext ) );
-}
-
-SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(
-    sal_uInt16          nSlotId,
-    sal_uInt16          nId,
-    ToolBox&        rTbx )
-
-    :    SfxToolBoxControl( nSlotId, nId, rTbx )
-{
-    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-}
-
-VclPtr<SfxPopupWindow> SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
-{
-    VclPtr<SvxLineWindow_Impl> pLineWin = VclPtr<SvxLineWindow_Impl>::Create( GetSlotId(), m_xFrame, &GetToolBox() );
-    pLineWin->StartPopupMode( &GetToolBox(),
-                              FloatWinPopupFlags::GrabFocus |
-                              FloatWinPopupFlags::AllowTearOff |
-                              FloatWinPopupFlags::NoAppFocusClose );
-    SetPopupWindow( pLineWin );
-
-    return pLineWin;
-}
-
-void SvxFrameLineStyleToolBoxControl::StateChanged(
-    sal_uInt16 , SfxItemState eState, const SfxPoolItem*  )
-{
-    sal_uInt16       nId    = GetId();
-    ToolBox&     rTbx   = GetToolBox();
-
-    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
-    rTbx.SetItemState( nId, (SfxItemState::DONTCARE == eState)
-                                ? TRISTATE_INDET
-                                : TRISTATE_FALSE );
 }
 
 SvxSimpleUndoRedoController::SvxSimpleUndoRedoController( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx  )
