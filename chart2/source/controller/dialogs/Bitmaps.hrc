@@ -21,10 +21,6 @@
 
 #include <svl/solar.hrc>
 
-#ifndef STD_MASKCOLOR
-#define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
-#endif
-
 // chart types
 // Images:
 

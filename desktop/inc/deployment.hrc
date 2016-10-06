@@ -20,9 +20,6 @@
 #ifndef INCLUDED_DEPLOYMENT_HRC
 #define INCLUDED_DEPLOYMENT_HRC
 
-#define MASKCOLOR MaskColor = \
-    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-
 #define RID_DEPLOYMENT_START                 2000
 
 #define RID_DEPLOYMENT_GUI_START             RID_DEPLOYMENT_START

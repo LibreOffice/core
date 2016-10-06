@@ -23,8 +23,6 @@
 #include <svtools/controldims.hrc>
 #include <global.hrc>
 
-#define STD_MASKCOLOR                   Color{Red=0xffff;Green=0x0000;Blue=0xffff;}
-
 #define STR_HEADERBAR                   256
 #define STR_VERSION                     257
 #define STR_SERIALNUM                   258
