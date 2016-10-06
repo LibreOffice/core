@@ -1031,6 +1031,34 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90697_continuousBreaksComplex2,"tdf92724_continu
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf95367_inheritFollowStyle, "tdf95367_inheritFollowStyle.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("header"),  parseDump("/root/page[2]/header/txt/text()"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testInheritFirstHeader,"inheritFirstHeader.docx")
+{
+// First page headers always link to last used first header, never to a follow header
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+
+    xCursor->jumpToLastPage();
+    OUString sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
+    CPPUNIT_ASSERT_EQUAL( OUString("Last Header"), xHeaderText->getString() );
+
+    xCursor->jumpToPreviousPage();
+    sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
+    xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
+    CPPUNIT_ASSERT_EQUAL( OUString("First Header"), xHeaderText->getString() );
+
+    xCursor->jumpToPreviousPage();
+    sPageStyleName = getProperty<OUString>( xCursor, "PageStyleName" );
+    xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
+    CPPUNIT_ASSERT_EQUAL( OUString("Follow Header"), xHeaderText->getString() );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original,"tdf81345.docx")
 {
     //Header wasn't replaced  and columns were missing because no new style was created.

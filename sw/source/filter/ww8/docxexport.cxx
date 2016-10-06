@@ -479,6 +479,9 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
 {
     MSWordExportBase::OutputEndNode( rEndNode );
 
+    if ( rEndNode.GetIndex() == m_pDoc->GetNodes().GetEndOfContent().GetIndex() )
+        return;
+
     if ( TXT_MAINTEXT == m_nTextTyp && rEndNode.StartOfSectionNode()->IsSectionNode() )
     {
         // this originally comes from WW8Export::WriteText(), and looks like it
@@ -508,6 +511,10 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
 
             AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo( ) );
             m_pSections->AppendSection( m_pAktPageDesc, pParentFormat, nRstLnNum );
+        }
+        else
+        {
+            AttrOutput().SectionBreaks( rEndNode );
         }
     }
     else if (TXT_MAINTEXT == m_nTextTyp && rEndNode.StartOfSectionNode()->IsTableNode())
