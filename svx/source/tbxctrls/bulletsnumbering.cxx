@@ -33,7 +33,6 @@ class NumberingPopup : public svtools::ToolbarMenu
     void VSSelectHdl(void *);
 public:
     NumberingPopup( NumberingToolBoxControl& rController,
-                    const css::uno::Reference< css::frame::XFrame >& rFrame,
                     vcl::Window* pParent, NumberingPageType ePageType );
     virtual ~NumberingPopup() override;
     virtual void dispose() override;
@@ -70,9 +69,8 @@ public:
 
 //class NumberingPopup
 NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
-                                const css::uno::Reference< css::frame::XFrame >& rFrame,
                                 vcl::Window* pParent, NumberingPageType ePageType ) :
-    ToolbarMenu( rFrame, pParent, WB_STDPOPUP ),
+    ToolbarMenu( rController.getFrameInterface(), pParent, WB_STDPOPUP ),
     mePageType( ePageType ),
     mrController( rController )
 {
@@ -128,7 +126,7 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
         AddStatusListener( ".uno:CurrentOutlineType" );
     }
 
-    appendEntry( 1, aMoreItemText, ::GetImage( rFrame, ".uno:OutlineBullet", false ) );
+    appendEntry( 1, aMoreItemText, ::GetImage( mrController.getFrameInterface(), ".uno:OutlineBullet", false ) );
 
     SetOutputSizePixel( getMenuSize() );
     mpValueSet->SetSelectHdl( LINK( this, NumberingPopup, VSSelectValueSetHdl ) );
@@ -213,7 +211,7 @@ NumberingToolBoxControl::NumberingToolBoxControl( const css::uno::Reference< css
 
 VclPtr<vcl::Window> NumberingToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<NumberingPopup>::Create( *this, m_xFrame, pParent, mePageType );
+    return VclPtr<NumberingPopup>::Create( *this, pParent, mePageType );
 }
 
 bool NumberingToolBoxControl::IsInImpressDraw()

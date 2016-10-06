@@ -39,7 +39,7 @@ namespace svx
 class ExtrusionDirectionWindow : public svtools::ToolbarMenu
 {
 public:
-    ExtrusionDirectionWindow( svt::ToolboxController& rController, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
+    ExtrusionDirectionWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
     virtual ~ExtrusionDirectionWindow() override;
     virtual void dispose() override;
 
@@ -106,7 +106,7 @@ private:
     void    implSetDepth( double fDepth );
 
 public:
-    ExtrusionDepthWindow( svt::ToolboxController& rController, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
+    ExtrusionDepthWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
 };
@@ -156,7 +156,7 @@ private:
     DECL_LINK( SelectValueSetHdl, ValueSet*, void );
     void SelectHdl(void*);
 public:
-    ExtrusionLightingWindow( svt::ToolboxController& rController, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
+    ExtrusionLightingWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
     virtual ~ExtrusionLightingWindow() override;
     virtual void dispose() override;
 
@@ -199,7 +199,7 @@ private:
     void    implSetSurface( int nSurface, bool bEnabled );
 
 public:
-    ExtrusionSurfaceWindow( svt::ToolboxController& rController, const css::uno::Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
+    ExtrusionSurfaceWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException ) override;
 };

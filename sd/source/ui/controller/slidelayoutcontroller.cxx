@@ -65,7 +65,7 @@ namespace sd
 class LayoutToolbarMenu : public svtools::ToolbarMenu
 {
 public:
-    LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, vcl::Window* pParent, const bool bInsertPage );
+    LayoutToolbarMenu( SlideLayoutController& rController, vcl::Window* pParent, const bool bInsertPage );
     virtual ~LayoutToolbarMenu() override;
     virtual void dispose() override;
 
@@ -75,7 +75,6 @@ protected:
     void SelectHdl(void*);
 private:
     SlideLayoutController& mrController;
-    Reference< XFrame > mxFrame;
     bool mbInsertPage;
     VclPtr<ValueSet> mpLayoutSet1;
     VclPtr<ValueSet> mpLayoutSet2;
@@ -151,15 +150,15 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info_layo
     pValue->SetSizePixel( pValue->CalcWindowSizePixel( aLayoutItemSize ) );
 }
 
-LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, vcl::Window* pParent, const bool bInsertPage )
-: svtools::ToolbarMenu(xFrame, pParent, WB_CLIPCHILDREN )
+LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::Window* pParent, const bool bInsertPage )
+: svtools::ToolbarMenu( rController.getFrameInterface(), pParent, WB_CLIPCHILDREN )
 , mrController( rController )
-, mxFrame(xFrame)
 , mbInsertPage( bInsertPage )
 , mpLayoutSet1( nullptr )
 , mpLayoutSet2( nullptr )
 {
     DrawViewMode eMode = DrawViewMode_DRAW;
+    Reference< XFrame > xFrame( rController.getFrameInterface() );
 
     // find out which view is running
     if( xFrame.is() ) try
@@ -235,17 +234,17 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
         OUString sSlotStr;
         Image aSlotImage;
-        if( mxFrame.is() )
+        if( xFrame.is() )
         {
             if( bInsertPage )
                 sSlotStr = ".uno:DuplicatePage";
             else
                 sSlotStr = ".uno:Undo";
-            aSlotImage = ::GetImage( mxFrame, sSlotStr, false );
+            aSlotImage = ::GetImage( xFrame, sSlotStr, false );
 
             OUString sSlotTitle;
             if( bInsertPage )
-                sSlotTitle = ImplRetrieveLabelFromCommand( mxFrame, sSlotStr );
+                sSlotTitle = ImplRetrieveLabelFromCommand( xFrame, sSlotStr );
             else
                 sSlotTitle = SD_RESSTR( STR_RESET_LAYOUT );
             appendEntry( 2, sSlotTitle, aSlotImage);
@@ -358,7 +357,7 @@ void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< css::
 
 VclPtr<vcl::Window> SlideLayoutController::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<sd::LayoutToolbarMenu>::Create( *this, m_xFrame, pParent, mbInsertPage );
+    return VclPtr<sd::LayoutToolbarMenu>::Create( *this, pParent, mbInsertPage );
 }
 
 // XServiceInfo

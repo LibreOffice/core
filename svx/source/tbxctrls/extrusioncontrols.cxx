@@ -59,10 +59,9 @@ static const char g_sExtrusionProjection[] = ".uno:ExtrusionProjection";
 
 ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     svt::ToolboxController& rController,
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
     vcl::Window* pParentWindow
 )
-    : ToolbarMenu(rFrame, pParentWindow, WB_STDPOPUP)
+    : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
     , maImgPerspective(SVX_RES(RID_SVXIMG_PERSPECTIVE))
     , maImgParallel(SVX_RES(RID_SVXIMG_PARALLEL))
@@ -241,7 +240,7 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
 
 VclPtr<vcl::Window> ExtrusionDirectionControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<ExtrusionDirectionWindow>::Create( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionDirectionWindow>::Create( *this, pParent );
 }
 
 // XInitialization
@@ -320,9 +319,8 @@ double aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
 
 ExtrusionDepthWindow::ExtrusionDepthWindow(
     svt::ToolboxController& rController,
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
     vcl::Window* pParentWindow
-)   : ToolbarMenu( rFrame, pParentWindow, WB_STDPOPUP )
+)   : ToolbarMenu( rController.getFrameInterface(), pParentWindow, WB_STDPOPUP )
     , mrController( rController )
     , maImgDepth0(SVX_RES(RID_SVXIMG_DEPTH_0))
     , maImgDepth1(SVX_RES(RID_SVXIMG_DEPTH_1))
@@ -477,7 +475,7 @@ ExtrusionDepthController::ExtrusionDepthController(
 
 VclPtr<vcl::Window> ExtrusionDepthController::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<ExtrusionDepthWindow>::Create( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionDepthWindow>::Create( *this, pParent );
 }
 
 // XInitialization
@@ -527,9 +525,8 @@ static const char g_sExtrusionLightingDirection[] = ".uno:ExtrusionLightingDirec
 static const char g_sExtrusionLightingIntensity[] = ".uno:ExtrusionLightingIntensity";
 
 ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rController,
-                                                 const css::uno::Reference<css::frame::XFrame >& rFrame,
                                                  vcl::Window* pParentWindow)
-    : ToolbarMenu(rFrame, pParentWindow, WB_STDPOPUP)
+    : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
     , maImgBright(SVX_RES(RID_SVXIMG_LIGHTING_BRIGHT))
     , maImgNormal(SVX_RES(RID_SVXIMG_LIGHTING_NORMAL))
@@ -743,7 +740,7 @@ ExtrusionLightingControl::ExtrusionLightingControl(
 
 VclPtr<vcl::Window> ExtrusionLightingControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<ExtrusionLightingWindow>::Create( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionLightingWindow>::Create( *this, pParent );
 }
 
 // XInitialization
@@ -797,9 +794,8 @@ static const char g_sExtrusionSurface[] = ".uno:ExtrusionSurface";
 
 ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     svt::ToolboxController& rController,
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
     vcl::Window* pParentWindow)
-    : ToolbarMenu(rFrame, pParentWindow, WB_STDPOPUP)
+    : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
     , maImgSurface1(SVX_RES(RID_SVXIMG_WIRE_FRAME))
     , maImgSurface2(SVX_RES(RID_SVXIMG_MATTE))
@@ -880,7 +876,7 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 
 VclPtr<vcl::Window> ExtrusionSurfaceControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<ExtrusionSurfaceWindow>::Create( *this, m_xFrame, pParent );
+    return VclPtr<ExtrusionSurfaceWindow>::Create( *this, pParent );
 }
 
 // XInitialization

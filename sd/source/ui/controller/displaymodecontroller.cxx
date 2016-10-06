@@ -52,8 +52,7 @@ public:
 class DisplayModeToolbarMenu : public svtools::ToolbarMenu
 {
 public:
-    DisplayModeToolbarMenu( DisplayModeController& rController,
-        const Reference< XFrame >& xFrame, vcl::Window* pParent );
+    DisplayModeToolbarMenu( DisplayModeController& rController, vcl::Window* pParent );
     virtual ~DisplayModeToolbarMenu() override;
     virtual void dispose() override;
 
@@ -133,9 +132,8 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pIn
     pValue->SetSizePixel( pValue->CalcWindowSizePixel( aLayoutItemSize ) );
 }
 
-DisplayModeToolbarMenu::DisplayModeToolbarMenu( DisplayModeController& rController,
-    const Reference< XFrame >& xFrame, vcl::Window* pParent )
-: svtools::ToolbarMenu(xFrame, pParent, WB_CLIPCHILDREN )
+DisplayModeToolbarMenu::DisplayModeToolbarMenu( DisplayModeController& rController, vcl::Window* pParent )
+: svtools::ToolbarMenu( rController.getFrameInterface(), pParent, WB_CLIPCHILDREN )
 , mrController( rController )
 , mpDisplayModeSet1( nullptr )
 , mpDisplayModeSet2( nullptr )
@@ -242,7 +240,7 @@ void SAL_CALL DisplayModeController::initialize( const css::uno::Sequence< css::
 
 VclPtr<vcl::Window> DisplayModeController::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<sd::DisplayModeToolbarMenu>::Create( *this, m_xFrame, pParent );
+    return VclPtr<sd::DisplayModeToolbarMenu>::Create( *this, pParent );
 }
 
 void DisplayModeController::setToolboxItemImage( sal_uInt16 nImage )

@@ -262,7 +262,7 @@ protected:
     virtual void    GetFocus() override;
 
 public:
-    SvxFrameWindow_Impl( const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, svt::ToolboxController& rController );
+    SvxFrameWindow_Impl( svt::ToolboxController& rController, vcl::Window* pParentWindow );
     virtual ~SvxFrameWindow_Impl() override;
     virtual void dispose() override;
 
@@ -1595,8 +1595,8 @@ Color BorderColorStatus::GetColor()
 }
 
 
-SvxFrameWindow_Impl::SvxFrameWindow_Impl (const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, svt::ToolboxController& rController ) :
-    ToolbarPopup( rFrame, pParentWindow, WB_STDPOPUP | WB_MOVEABLE | WB_CLOSEABLE ),
+SvxFrameWindow_Impl::SvxFrameWindow_Impl ( svt::ToolboxController& rController, vcl::Window* pParentWindow ) :
+    ToolbarPopup( rController.getFrameInterface(), pParentWindow, WB_STDPOPUP | WB_MOVEABLE | WB_CLOSEABLE ),
     aFrameSet   ( VclPtr<SvxFrmValueSet_Impl>::Create(this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
     mrController( rController ),
     bParagraphMode(false)
@@ -2929,7 +2929,7 @@ void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any
 
 VclPtr<vcl::Window> SvxFrameToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<SvxFrameWindow_Impl>::Create( m_xFrame, pParent, *this );
+    return VclPtr<SvxFrameWindow_Impl>::Create( *this, pParent );
 }
 
 OUString SvxFrameToolBoxControl::getImplementationName()

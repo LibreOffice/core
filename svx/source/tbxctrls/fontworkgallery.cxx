@@ -246,7 +246,7 @@ IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl, ValueSet*, void)
 class FontworkAlignmentWindow : public ToolbarMenu
 {
 public:
-    FontworkAlignmentWindow( svt::ToolboxController& rController, const Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
+    FontworkAlignmentWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( RuntimeException ) override;
 
@@ -266,9 +266,8 @@ private:
     void    implSetAlignment( int nAlignmentMode, bool bEnabled );
 };
 
-FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rController,
-    const Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow)
-    : ToolbarMenu(rFrame, pParentWindow, WB_STDPOPUP)
+FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rController, vcl::Window* pParentWindow)
+    : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
     , maImgAlgin1(SVX_RES(RID_SVXIMG_FONTWORK_ALIGN_LEFT))
     , maImgAlgin2(SVX_RES(RID_SVXIMG_FONTWORK_ALIGN_CENTER))
@@ -362,7 +361,7 @@ FontworkAlignmentControl::FontworkAlignmentControl( const Reference< XComponentC
 
 VclPtr<vcl::Window> FontworkAlignmentControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<FontworkAlignmentWindow>::Create( *this, m_xFrame, pParent );
+    return VclPtr<FontworkAlignmentWindow>::Create( *this, pParent );
 }
 
 // XInitialization
@@ -413,7 +412,7 @@ Sequence< OUString > SAL_CALL FontworkAlignmentControl::getSupportedServiceNames
 class FontworkCharacterSpacingWindow : public ToolbarMenu
 {
 public:
-    FontworkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
+    FontworkCharacterSpacingWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException ) override;
 private:
@@ -429,9 +428,8 @@ private:
 
 };
 
-FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::ToolboxController& rController,
-    const Reference< css::frame::XFrame >& rFrame, vcl::Window* pParentWindow)
-    : ToolbarMenu(rFrame, pParentWindow, WB_STDPOPUP)
+FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::ToolboxController& rController, vcl::Window* pParentWindow)
+    : ToolbarMenu(rController.getFrameInterface(), pParentWindow, WB_STDPOPUP)
     , mrController(rController)
     , msFontworkCharacterSpacing(".uno:FontworkCharacterSpacing")
     , msFontworkKernCharacterPairs(".uno:FontworkKernCharacterPairs")
@@ -589,7 +587,7 @@ FontworkCharacterSpacingControl::FontworkCharacterSpacingControl( const Referenc
 
 VclPtr<vcl::Window> FontworkCharacterSpacingControl::createPopupWindow( vcl::Window* pParent )
 {
-    return VclPtr<FontworkCharacterSpacingWindow>::Create( *this, m_xFrame, pParent );
+    return VclPtr<FontworkCharacterSpacingWindow>::Create( *this, pParent );
 }
 
 // XInitialization
