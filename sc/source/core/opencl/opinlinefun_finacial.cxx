@@ -9,22 +9,6 @@
 
 #ifndef SC_OPENCL_OPINLINFUN_finacial
 #define SC_OPENCL_OPINLINFUN_finacial
-std::string approxEqualDecl="bool approxEqual(double a, double b);\n";
-
-// FIXME: this approxEqual() is identical to what the C++ rtl_math_approxEqual() used to be, but
-// that has been improved in the meantime, so probably this should be, too? OTOH, this is used only
-// to compare against 0.0, so could be made much simpler, and actually questionable whether it works
-// as intended anyway.
-
-std::string approxEqual =
-"bool approxEqual(double a, double b)\n"
-"{\n"
-"     if (a == b)\n"
-"        return true;\n"
-"     double x = a - b;\n"
-"     return (x < 0.0 ? -x : x) < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 *"
-"16777216.0)));\n"
-"}\n";
 
 std::string nKorrValDecl ="double constant nKorrVal[]"
 "= {0, 9e-1, 9e-2, 9e-3, 9e-4, 9e-5, 9e-6, 9e-7, "
