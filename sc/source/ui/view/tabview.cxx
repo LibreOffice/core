@@ -208,6 +208,7 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     pBrushDocument( nullptr ),
     pDrawBrushSet( nullptr ),
     pTimerWindow( nullptr ),
+    aExtraEditViewManager( pViewShell, pGridWin ),
     nTipVisible( 0 ),
     nPrevDragPos( 0 ),
     meBlockMode(None),

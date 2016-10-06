@@ -98,20 +98,13 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <sfx2/lokhelper.hxx>
+#include <comphelper/flagguard.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 
 extern SfxViewShell* pScActiveViewShell;            // global.cxx
 
 using namespace com::sun::star;
-
-struct BoolLock
-{
-    bool& mflag;
-    explicit BoolLock( bool& flag ) : mflag(flag)
-    { mflag = true; }
-    ~BoolLock() { mflag = false; }
-};
 
 void ScTabViewShell::Activate(bool bMDI)
 {
@@ -284,7 +277,8 @@ void ScTabViewShell::SetActive()
 
 bool ScTabViewShell::PrepareClose(bool bUI)
 {
-    BoolLock aBoolLock(bInPrepareClose);
+    comphelper::FlagRestorationGuard aFlagGuard(bInPrepareClose, true);
+
     // Call EnterHandler even in formula mode here,
     // so a formula change in an embedded object isn't lost
     // (ScDocShell::PrepareClose isn't called then).
