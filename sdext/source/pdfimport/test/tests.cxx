@@ -239,12 +239,11 @@ namespace
             }
             else
             {
-                CPPUNIT_ASSERT_MESSAGE( "Dash array consists of four entries",
-                                        rContext.DashArray.size() == 4 &&
-                                        rtl::math::approxEqual(rContext.DashArray[0],14.3764) &&
-                                        rContext.DashArray[0] == rContext.DashArray[1] &&
-                                        rContext.DashArray[1] == rContext.DashArray[2] &&
-                                        rContext.DashArray[2] == rContext.DashArray[3] );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "Dash array consists of four entries", std::vector<double>::size_type(4), rContext.DashArray.size());
+                CPPUNIT_ASSERT_DOUBLES_EQUAL( 14.3764, rContext.DashArray[0], 1E-12 );
+                CPPUNIT_ASSERT_DOUBLES_EQUAL( rContext.DashArray[0], rContext.DashArray[1], 1E-12 );
+                CPPUNIT_ASSERT_DOUBLES_EQUAL( rContext.DashArray[1], rContext.DashArray[2], 1E-12 );
+                CPPUNIT_ASSERT_DOUBLES_EQUAL( rContext.DashArray[2], rContext.DashArray[3], 1E-12 );
 
                 CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 1.0, rContext.LineColor.Alpha, 0.00000001);
                 CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Line color is black", 0.0, rContext.LineColor.Blue, 0.00000001);

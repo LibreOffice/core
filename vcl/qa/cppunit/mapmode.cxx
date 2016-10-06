@@ -45,17 +45,17 @@ void VclMapModeTest::testMultiplier()
     aMapMode.SetMapUnit( MapUnit::MapCM );
     CPPUNIT_ASSERT_MESSAGE( "Map mode is MapUnit::MapCM, multiplier should be 1000", aMapMode.GetUnitMultiplier() == 1000 );
     aMapMode.SetMapUnit( MapUnit::Map1000thInch );
-    CPPUNIT_ASSERT_MESSAGE( "Map mode is MapUnit::Map1000thInch, multiplier should be 2.54", aMapMode.GetUnitMultiplier() == 2.54 );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Map mode is MapUnit::Map1000thInch, multiplier should be 2.54", 2.54, aMapMode.GetUnitMultiplier(), 1E-12 );
     aMapMode.SetMapUnit( MapUnit::Map100thInch );
-    CPPUNIT_ASSERT_MESSAGE( "Map mode is MapUnit::Map100thInch, multiplier should be 2.54", aMapMode.GetUnitMultiplier() == 25.4 );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Map mode is MapUnit::Map100thInch, multiplier should be 2.54", 25.4, aMapMode.GetUnitMultiplier(), 1E-12 );
     aMapMode.SetMapUnit( MapUnit::Map10thInch );
     CPPUNIT_ASSERT_MESSAGE( "Map mode is MapUnit::Map10thInch, multiplier should be 254", aMapMode.GetUnitMultiplier() == 254 );
     aMapMode.SetMapUnit( MapUnit::MapInch );
     CPPUNIT_ASSERT_MESSAGE( "Map mode is MapUnit::MapInch, multiplier should be 2540", aMapMode.GetUnitMultiplier() == 2540 );
     aMapMode.SetMapUnit( MapUnit::MapTwip );
-    CPPUNIT_ASSERT_MESSAGE( "Map mode is MapUnit::MapTwip, multiplier should be 1.76388889", aMapMode.GetUnitMultiplier() == 1.76388889 );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Map mode is MapUnit::MapTwip, multiplier should be 1.76388889", 1.76388889, aMapMode.GetUnitMultiplier(), 1E-12 );
     aMapMode.SetMapUnit( MapUnit::MapPoint );
-    CPPUNIT_ASSERT_MESSAGE( "Map mode is MapUnit::MapPoint, multiplier should be 35.27777778", aMapMode.GetUnitMultiplier() == 35.27777778 );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Map mode is MapUnit::MapPoint, multiplier should be 35.27777778", 35.27777778, aMapMode.GetUnitMultiplier(), 1E-12 );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclMapModeTest);

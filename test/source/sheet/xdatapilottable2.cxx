@@ -88,8 +88,7 @@ void XDataPilotTable2::testGetDrillDownData()
             }
         }
 
-        std::cout << "Sum: " << sum << "; nVal: " << nVal << std::endl;
-        CPPUNIT_ASSERT(sum == nVal);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(nVal, sum, 1E-12);
     }
 
 
