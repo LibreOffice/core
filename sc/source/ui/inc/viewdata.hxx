@@ -214,6 +214,8 @@ private:
     bool                bPagebreak:1;               // Page break preview mode
     bool                bSelCtrlMouseClick:1;       // special selection handling for ctrl-mouse-click
 
+    long                m_nLOKPageUpDownOffset;
+
     DECL_DLLPRIVATE_LINK_TYPED( EditEngineHdl, EditStatus&, void );
 
     SAL_DLLPRIVATE void          CalcPPT();
@@ -403,6 +405,9 @@ public:
     void    SetHScrollMode  ( bool bNewMode )   { pOptions->SetOption( VOPT_HSCROLL, bNewMode ); }
     bool    IsOutlineMode   () const            { return pOptions->GetOption( VOPT_OUTLINER ); }
     void    SetOutlineMode  ( bool bNewMode )   { pOptions->SetOption( VOPT_OUTLINER, bNewMode ); }
+
+    /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
+    void ForcePageUpDownOffset(long nTwips) { m_nLOKPageUpDownOffset = nTwips; }
 
     void            KillEditView();
     void            ResetEditView();
