@@ -105,11 +105,7 @@
 
 using namespace vcl;
 
-#if (OSL_DEBUG_LEVEL < 3)
-#define COMPRESS_PAGES
-#else
-#define DEBUG_DISABLE_PDFCOMPRESSION // also do not compress streams
-#endif
+static bool g_bDebugDisableCompression = getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSION");
 
 #if !defined(ANDROID) && !defined(IOS)
 // Is this length truly the maximum possible, or just a number that
@@ -1161,9 +1157,8 @@ void PDFWriterImpl::PDFPage::beginStream()
     aLine.append( " 0 obj\n<</Length " );
     aLine.append( m_nStreamLengthObject );
     aLine.append( " 0 R" );
-#if defined ( COMPRESS_PAGES ) && !defined ( DEBUG_DISABLE_PDFCOMPRESSION )
-    aLine.append( "/Filter/FlateDecode" );
-#endif
+    if (!g_bDebugDisableCompression)
+        aLine.append( "/Filter/FlateDecode" );
     aLine.append( ">>\nstream\n" );
     if( ! m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() ) )
         return;
@@ -1172,17 +1167,15 @@ void PDFWriterImpl::PDFPage::beginStream()
         m_pWriter->m_aFile.close();
         m_pWriter->m_bOpen = false;
     }
-#if defined ( COMPRESS_PAGES ) && !defined ( DEBUG_DISABLE_PDFCOMPRESSION )
-    m_pWriter->beginCompression();
-#endif
+    if (!g_bDebugDisableCompression)
+        m_pWriter->beginCompression();
     m_pWriter->checkAndEnableStreamEncryption( m_aStreamObjects.back() );
 }
 
 void PDFWriterImpl::PDFPage::endStream()
 {
-#if defined ( COMPRESS_PAGES ) && !defined ( DEBUG_DISABLE_PDFCOMPRESSION )
-    m_pWriter->endCompression();
-#endif
+    if (!g_bDebugDisableCompression)
+        m_pWriter->endCompression();
     sal_uInt64 nEndStreamPos;
     if (osl::File::E_None != m_pWriter->m_aFile.getPos(nEndStreamPos))
     {
@@ -2094,40 +2087,40 @@ void PDFWriterImpl::emitComment( const char* pComment )
 
 bool PDFWriterImpl::compressStream( SvMemoryStream* pStream )
 {
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    pStream->Seek( STREAM_SEEK_TO_END );
-    sal_uLong nEndPos = pStream->Tell();
-    pStream->Seek( STREAM_SEEK_TO_BEGIN );
-    ZCodec aCodec( 0x4000, 0x4000 );
-    SvMemoryStream aStream;
-    aCodec.BeginCompression();
-    aCodec.Write( aStream, static_cast<const sal_uInt8*>(pStream->GetData()), nEndPos );
-    aCodec.EndCompression();
-    nEndPos = aStream.Tell();
-    pStream->Seek( STREAM_SEEK_TO_BEGIN );
-    aStream.Seek( STREAM_SEEK_TO_BEGIN );
-    pStream->SetStreamSize( nEndPos );
-    pStream->WriteBytes( aStream.GetData(), nEndPos );
-    return true;
-#else
-    (void)pStream;
-    return false;
-#endif
+    if (!g_bDebugDisableCompression)
+    {
+        pStream->Seek( STREAM_SEEK_TO_END );
+        sal_uLong nEndPos = pStream->Tell();
+        pStream->Seek( STREAM_SEEK_TO_BEGIN );
+        ZCodec aCodec( 0x4000, 0x4000 );
+        SvMemoryStream aStream;
+        aCodec.BeginCompression();
+        aCodec.Write( aStream, static_cast<const sal_uInt8*>(pStream->GetData()), nEndPos );
+        aCodec.EndCompression();
+        nEndPos = aStream.Tell();
+        pStream->Seek( STREAM_SEEK_TO_BEGIN );
+        aStream.Seek( STREAM_SEEK_TO_BEGIN );
+        pStream->SetStreamSize( nEndPos );
+        pStream->WriteBytes( aStream.GetData(), nEndPos );
+        return true;
+    }
+    else
+        return false;
 }
 
 void PDFWriterImpl::beginCompression()
 {
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    m_pCodec = new ZCodec( 0x4000, 0x4000 );
-    m_pMemStream = new SvMemoryStream();
-    m_pCodec->BeginCompression();
-#endif
+    if (!g_bDebugDisableCompression)
+    {
+        m_pCodec = new ZCodec( 0x4000, 0x4000 );
+        m_pMemStream = new SvMemoryStream();
+        m_pCodec->BeginCompression();
+    }
 }
 
 void PDFWriterImpl::endCompression()
 {
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    if( m_pCodec )
+    if (!g_bDebugDisableCompression && m_pCodec)
     {
         m_pCodec->EndCompression();
         delete m_pCodec;
@@ -2138,7 +2131,6 @@ void PDFWriterImpl::endCompression()
         delete m_pMemStream;
         m_pMemStream = nullptr;
     }
-#endif
 }
 
 bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
@@ -3338,11 +3330,13 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                     aLine.append( " 0 obj\n"
                         "<</Length " );
                     aLine.append( nStreamLengthObject );
-                    aLine.append( " 0 R"
-                        #ifndef DEBUG_DISABLE_PDFCOMPRESSION
-                        "/Filter/FlateDecode"
-                        #endif
-                        "/Length1 " );
+                    if (!g_bDebugDisableCompression)
+                        aLine.append( " 0 R"
+                            "/Filter/FlateDecode"
+                            "/Length1 " );
+                    else
+                        aLine.append( " 0 R"
+                            "/Length1 " );
                     aLine.append( nLength1 );
                     aLine.append( " /Length2 " );
                     aLine.append( nLength2 );
@@ -3743,13 +3737,14 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
                       "CMapName currentdict /CMap define resource pop\n"
                       "end\n"
                       "end\n" );
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    ZCodec aCodec( 0x4000, 0x4000 );
     SvMemoryStream aStream;
-    aCodec.BeginCompression();
-    aCodec.Write( aStream, reinterpret_cast<const sal_uInt8*>(aContents.getStr()), aContents.getLength() );
-    aCodec.EndCompression();
-#endif
+    if (!g_bDebugDisableCompression)
+    {
+        ZCodec aCodec( 0x4000, 0x4000 );
+        aCodec.BeginCompression();
+        aCodec.Write( aStream, reinterpret_cast<const sal_uInt8*>(aContents.getStr()), aContents.getLength() );
+        aCodec.EndCompression();
+    }
 
     #if OSL_DEBUG_LEVEL > 1
     emitComment( "PDFWriterImpl::createToUnicodeCMap" );
@@ -3758,22 +3753,27 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
 
     aLine.append( nStream );
     aLine.append( " 0 obj\n<</Length " );
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    sal_Int32 nLen = (sal_Int32)aStream.Tell();
-    aStream.Seek( 0 );
-    aLine.append( nLen );
-    aLine.append( "/Filter/FlateDecode" );
-#else
-    aLine.append( aContents.getLength() );
-#endif
+    sal_Int32 nLen = 0;
+    if (!g_bDebugDisableCompression)
+    {
+        nLen = (sal_Int32)aStream.Tell();
+        aStream.Seek( 0 );
+        aLine.append( nLen );
+        aLine.append( "/Filter/FlateDecode" );
+    }
+    else
+        aLine.append( aContents.getLength() );
     aLine.append( ">>\nstream\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     checkAndEnableStreamEncryption( nStream );
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    CHECK_RETURN( writeBuffer( aStream.GetData(), nLen ) );
-#else
-    CHECK_RETURN( writeBuffer( aContents.getStr(), aContents.getLength() ) );
-#endif
+    if (!g_bDebugDisableCompression)
+    {
+        CHECK_RETURN( writeBuffer( aStream.GetData(), nLen ) );
+    }
+    else
+    {
+        CHECK_RETURN( writeBuffer( aContents.getStr(), aContents.getLength() ) );
+    }
     disableStreamEncryption();
     aLine.setLength( 0 );
     aLine.append( "\nendstream\n"
@@ -3952,11 +3952,13 @@ bool PDFWriterImpl::emitFonts()
                 aLine.append( " 0 obj\n"
                              "<</Length " );
                 aLine.append( (sal_Int32)nStreamLengthObject );
-                aLine.append( " 0 R"
-                             #ifndef DEBUG_DISABLE_PDFCOMPRESSION
-                             "/Filter/FlateDecode"
-                             #endif
-                             "/Length1 " );
+                if (!g_bDebugDisableCompression)
+                    aLine.append( " 0 R"
+                                 "/Filter/FlateDecode"
+                                 "/Length1 " );
+                else
+                    aLine.append( " 0 R"
+                                 "/Length1 " );
 
                 sal_uInt64 nStartPos = 0;
                 if( aSubsetInfo.m_nFontType == FontSubsetInfo::SFNT_TTF )
@@ -7628,9 +7630,8 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append( " 0 obj\n<</N 3/Length " );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 R" );
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    aLine.append( "/Filter/FlateDecode" );
-#endif
+    if (!g_bDebugDisableCompression)
+        aLine.append( "/Filter/FlateDecode" );
     aLine.append( ">>\nstream\n" );
     if ( !updateObject( nICCObject ) ) return 0;
     if ( !writeBuffer( aLine.getStr(), aLine.getLength() ) ) return 0;
@@ -10841,12 +10842,15 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
                   "/Order 3\n"
                   "/Length " );
     aLine.append( nStreamLengthObject );
-    aLine.append( " 0 R\n"
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-                  "/Filter/FlateDecode"
-#endif
-                  ">>\n"
-                  "stream\n" );
+    if (!g_bDebugDisableCompression)
+        aLine.append( " 0 R\n"
+                      "/Filter/FlateDecode"
+                      ">>\n"
+                      "stream\n" );
+    else
+        aLine.append( " 0 R\n"
+                      ">>\n"
+                      "stream\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     sal_uInt64 nStartStreamPos = 0;
@@ -11146,18 +11150,19 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     aLine.append( "/Length " );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 R\n" );
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    if( nBitsPerComponent != 1 )
+    if (!g_bDebugDisableCompression)
     {
-        aLine.append( "/Filter/FlateDecode" );
+        if( nBitsPerComponent != 1 )
+        {
+            aLine.append( "/Filter/FlateDecode" );
+        }
+        else
+        {
+            aLine.append( "/Filter/CCITTFaxDecode/DecodeParms<</K -1/BlackIs1 true/Columns " );
+            aLine.append( (sal_Int32)aBitmap.GetSizePixel().Width() );
+            aLine.append( ">>\n" );
+        }
     }
-    else
-    {
-        aLine.append( "/Filter/CCITTFaxDecode/DecodeParms<</K -1/BlackIs1 true/Columns " );
-        aLine.append( (sal_Int32)aBitmap.GetSizePixel().Width() );
-        aLine.append( ">>\n" );
-    }
-#endif
     if( ! bMask )
     {
         aLine.append( "/ColorSpace" );
@@ -11286,13 +11291,11 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     CHECK_RETURN( (osl::File::E_None == m_aFile.getPos(nStartPos)) );
 
     checkAndEnableStreamEncryption( rObject.m_nObject );
-#ifndef DEBUG_DISABLE_PDFCOMPRESSION
-    if( nBitsPerComponent == 1 )
+    if (!g_bDebugDisableCompression && nBitsPerComponent == 1)
     {
         writeG4Stream(pAccess.get());
     }
     else
-#endif
     {
         beginCompression();
         if( ! bTrueColor || pAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb )
