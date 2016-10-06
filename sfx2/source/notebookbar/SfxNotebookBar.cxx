@@ -258,8 +258,9 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         OUString sFile = lcl_getNotebookbarFileName( eApp );
         OUString sNewFile = rUIFile + sFile;
         OUString sCurrentFile;
-        if ( pSysWindow->GetNotebookBar() )
-            sCurrentFile = OStringToOUString( pSysWindow->GetNotebookBar()->getUIFile(), RTL_TEXTENCODING_ASCII_US );
+        NotebookBar* pNotebookBar = pSysWindow->GetNotebookBar();
+        if ( pNotebookBar )
+            sCurrentFile = OStringToOUString( pNotebookBar->getUIFile(), RTL_TEXTENCODING_ASCII_US );
 
         bool bChangedFile = true;
         if ( sCurrentFile.getLength() && sNewFile.getLength() )
@@ -272,7 +273,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             bChangedFile = ( sNewFile.compareTo( sCurrentFile ) != 0 );
         }
 
-        if ( ( !sFile.isEmpty() && bChangedFile ) || !pSysWindow->GetNotebookBar()->IsVisible() )
+        if ( ( !sFile.isEmpty() && bChangedFile ) || !pNotebookBar || !pNotebookBar->IsVisible() )
         {
             RemoveListeners(pSysWindow);
 
@@ -281,8 +282,10 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
             // setup if necessary
             pSysWindow->SetNotebookBar(aBuf.makeStringAndClear(), xFrame);
-            pSysWindow->GetNotebookBar()->Show();
-            pSysWindow->GetNotebookBar()->SetIconClickHdl(LINK(nullptr, SfxNotebookBar, OpenNotebookbarPopupMenu));
+            pNotebookBar = pSysWindow->GetNotebookBar();
+            pNotebookBar->Show();
+            pNotebookBar->GetParent()->Resize();
+            pNotebookBar->SetIconClickHdl( LINK( nullptr, SfxNotebookBar, OpenNotebookbarPopupMenu ) );
 
             utl::OConfigurationTreeRoot aRoot;
             const utl::OConfigurationNode aModeNode( lcl_getCurrentImplConfigNode( xFrame, aRoot ) );
@@ -299,7 +302,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 if(xFrame.is() && xMultiplexer.is())
                 {
                     xMultiplexer->addContextChangeEventListener(
-                                        pSysWindow->GetNotebookBar()->getContextChangeEventListener(),
+                                        pNotebookBar->getContextChangeEventListener(),
                                         xFrame->getController());
                 }
             }
@@ -310,6 +313,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     else if (auto pNotebookBar = pSysWindow->GetNotebookBar())
     {
         pNotebookBar->Hide();
+        pNotebookBar->GetParent()->Resize();
         SfxNotebookBar::ShowMenubar(true);
     }
 
