@@ -364,7 +364,8 @@ void TestBreakIterator::testWordBoundaries()
             {
                 CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aSinglePositions));
                 nPos = m_xBreak->nextWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
-                CPPUNIT_ASSERT_EQUAL(aSinglePositions[i++], nPos);
+                CPPUNIT_ASSERT_EQUAL(aSinglePositions[i], nPos);
+                ++i;
             }
             while (nPos < aTest.getLength());
             nPos = aTest.getLength();
@@ -372,7 +373,8 @@ void TestBreakIterator::testWordBoundaries()
             do
             {
                 nPos = m_xBreak->previousWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
-                CPPUNIT_ASSERT_EQUAL(aSinglePositions[--i], nPos);
+                --i;
+                CPPUNIT_ASSERT_EQUAL(aSinglePositions[i], nPos);
             }
             while (nPos > 0);
         }
@@ -387,7 +389,8 @@ void TestBreakIterator::testWordBoundaries()
             {
                 CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aSingleQuotePositions));
                 nPos = m_xBreak->nextWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
-                CPPUNIT_ASSERT_EQUAL(aSingleQuotePositions[i++], nPos);
+                CPPUNIT_ASSERT_EQUAL(aSingleQuotePositions[i], nPos);
+                ++i;
             }
             while (nPos < aTest.getLength());
             nPos = aTest.getLength();
@@ -395,7 +398,8 @@ void TestBreakIterator::testWordBoundaries()
             do
             {
                 nPos = m_xBreak->previousWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
-                CPPUNIT_ASSERT_EQUAL(aSingleQuotePositions[--i], nPos);
+                --i;
+                CPPUNIT_ASSERT_EQUAL(aSingleQuotePositions[i], nPos);
             }
             while (nPos > 0);
         }
@@ -416,7 +420,8 @@ void TestBreakIterator::testWordBoundaries()
             CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
             nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
                 i18n::WordType::DICTIONARY_WORD, true).endPos;
-            CPPUNIT_ASSERT_EQUAL(aExpected[i++], nPos);
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], nPos);
+            ++i;
         }
         while (nPos++ < aTest.getLength());
         CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(aExpected), i);
@@ -458,7 +463,8 @@ void TestBreakIterator::testWordBoundaries()
             CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
             nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
                 i18n::WordType::DICTIONARY_WORD, true).endPos;
-            CPPUNIT_ASSERT_EQUAL(aExpected[i++], nPos);
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], nPos);
+            ++i;
         }
         while (nPos++ < aTest.getLength());
         CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(aExpected), i);
@@ -499,7 +505,8 @@ void TestBreakIterator::testWordBoundaries()
             CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
             nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
                 i18n::WordType::DICTIONARY_WORD, true).endPos;
-            CPPUNIT_ASSERT_EQUAL(aExpected[i++], nPos);
+            CPPUNIT_ASSERT_EQUAL(aExpected[i], nPos);
+            ++i;
         }
         while (nPos++ < aTest.getLength());
         CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(aExpected), i);
@@ -522,7 +529,8 @@ void TestBreakIterator::testWordBoundaries()
                 CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
                 nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
                     i18n::WordType::WORD_COUNT, true).endPos;
-                CPPUNIT_ASSERT_EQUAL(aExpected[i++], nPos);
+                CPPUNIT_ASSERT_EQUAL(aExpected[i], nPos);
+                ++i;
             }
             while (nPos++ < aTest.getLength());
             CPPUNIT_ASSERT_EQUAL(SAL_N_ELEMENTS(aExpected), i);
@@ -538,8 +546,10 @@ void TestBreakIterator::testWordBoundaries()
                 CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
                 aBounds = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
                     i18n::WordType::DICTIONARY_WORD, true);
-                CPPUNIT_ASSERT_EQUAL(aExpected[i++], aBounds.startPos);
-                CPPUNIT_ASSERT_EQUAL(aExpected[i++], aBounds.endPos);
+                CPPUNIT_ASSERT_EQUAL(aExpected[i], aBounds.startPos);
+                ++i;
+                CPPUNIT_ASSERT_EQUAL(aExpected[i], aBounds.endPos);
+                ++i;
                 nPos = aBounds.endPos;
             }
             while (nPos++ < aTest.getLength());
