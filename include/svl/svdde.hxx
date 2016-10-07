@@ -20,11 +20,17 @@
 #ifndef INCLUDED_SVL_SVDDE_HXX
 #define INCLUDED_SVL_SVDDE_HXX
 
+#include <sal/config.h>
+
 #include <svl/svldllapi.h>
 #include <sot/exchange.hxx>
 #include <tools/solar.h>
 #include <tools/link.hxx>
 #include <vector>
+
+#if defined _WIN32
+#include <ddeml.h>
+#endif
 
 class DdeString;
 class DdeData;
@@ -182,7 +188,6 @@ public:
                     ~DdeConnection();
 
     long            GetError();
-    sal_IntPtr      GetConvId();
 
     static const std::vector<DdeConnection*>& GetConnections();
 
@@ -205,8 +210,10 @@ class SVL_DLLPUBLIC DdeItem
     DdeTopic*       pMyTopic;
     DdeItemImp*     pImpData;
 
-    void            IncMonitor( sal_uLong );
-    void            DecMonitor( sal_uLong );
+#if defined _WIN32
+    void            IncMonitor( HCONV );
+    void            DecMonitor( HCONV );
+#endif
 
 protected:
     sal_uInt8            nType;
@@ -238,7 +245,9 @@ public:
 
 class SVL_DLLPUBLIC DdeTopic
 {
-    SVL_DLLPRIVATE void Disconnect( sal_IntPtr );
+#if defined _WIN32
+    SVL_DLLPRIVATE void Disconnect( HCONV );
+#endif
 
 public:
     virtual DdeData* Get(SotClipboardFormatId);
@@ -265,7 +274,6 @@ public:
     virtual        ~DdeTopic();
 
     const OUString  GetName() const;
-    long            GetConvId();
 
     void            NotifyClient( const OUString& );
     bool            IsSystemTopic();

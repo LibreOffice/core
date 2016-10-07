@@ -36,10 +36,10 @@ enum DdeItemType
 
 struct DdeItemImpData
 {
-    sal_uLong nHCnv;
+    HCONV nHCnv;
     sal_uInt16 nCnt;
 
-    explicit DdeItemImpData( sal_uLong nH ) : nHCnv( nH ), nCnt( 1 ) {}
+    explicit DdeItemImpData( HCONV nH ) : nHCnv( nH ), nCnt( 1 ) {}
 };
 
 class DdeItemImp {
@@ -194,7 +194,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
 found:
     if ( nCode == XTYP_DISCONNECT)
     {
-        pC->pTopic->Disconnect( (sal_IntPtr) hConv );
+        pC->pTopic->Disconnect( hConv );
         for ( ConvList::iterator it = pService->pConv->begin();
               it != pService->pConv->end();
               ++it
@@ -226,7 +226,6 @@ found:
         (pTopic->aItem).clear();
 
     bool bRes = false;
-    pInst->hCurConvSvr = (sal_IntPtr)hConv;
     switch( nCode )
     {
     case XTYP_REQUEST:
@@ -287,7 +286,6 @@ found:
             else
                 bRes = pTopic->Put( &d );
         }
-        pInst->hCurConvSvr = 0;
         if ( bRes )
             return (HDDEDATA)DDE_FACK;
         else
@@ -328,15 +326,13 @@ found:
 
             if (pItem)
             {
-                pItem->IncMonitor( (sal_IntPtr)hConv );
-                pInst->hCurConvSvr = 0;
+                pItem->IncMonitor( hConv );
             }
         }
         return (HDDEDATA)sal_True;
 
     case XTYP_ADVSTOP:
-        pItem->DecMonitor( (sal_IntPtr)hConv );
-        pInst->hCurConvSvr = 0;
+        pItem->DecMonitor( hConv );
         return (HDDEDATA)sal_True;
 
     case XTYP_EXECUTE:
@@ -354,7 +350,6 @@ found:
             else
                 bRes = pTopic->Execute( &aName );
         }
-        pInst->hCurConvSvr = 0;
         if ( bRes )
             return (HDDEDATA)DDE_FACK;
         else
@@ -674,7 +669,7 @@ void DdeTopic::NotifyClient( const OUString& rItem )
     }
 }
 
-void DdeTopic::Disconnect( sal_IntPtr nId )
+void DdeTopic::Disconnect( HCONV nId )
 {
     std::vector<DdeItem*>::iterator iter;
     for (iter = aItems.begin(); iter != aItems.end(); ++iter)
@@ -694,13 +689,6 @@ bool DdeTopic::Put( const DdeData* )
 bool DdeTopic::Execute( const OUString* )
 {
     return false;
-}
-
-long DdeTopic::GetConvId()
-{
-    DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
-    return pInst->hCurConvSvr;
 }
 
 bool DdeTopic::StartAdviseLoop()
@@ -762,7 +750,7 @@ void DdeItem::NotifyClient()
     }
 }
 
-void DdeItem::IncMonitor( sal_uLong nHCnv )
+void DdeItem::IncMonitor( HCONV nHCnv )
 {
     if( !pImpData )
     {
@@ -783,7 +771,7 @@ void DdeItem::IncMonitor( sal_uLong nHCnv )
     pImpData->push_back( DdeItemImpData( nHCnv ) );
 }
 
-void DdeItem::DecMonitor( sal_uLong nHCnv )
+void DdeItem::DecMonitor( HCONV nHCnv )
 {
     if( pImpData )
     {

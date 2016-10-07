@@ -87,7 +87,6 @@ public:
     sal_uInt16          nRefCount;
     std::vector<DdeConnection*> aConnections;
     // Server
-    sal_IntPtr      hCurConvSvr;
     DWORD           hDdeInstSvr;
     short           nInstanceSvr;
     DdeServices*    pServicesSvr;
@@ -97,7 +96,6 @@ public:
 
     DdeInstData()
         : nRefCount(0)
-        , hCurConvSvr(0)
         , hDdeInstSvr(0)
         , nInstanceSvr(0)
         , pServicesSvr(NULL)

@@ -236,11 +236,6 @@ const OUString DdeConnection::GetTopicName()
     return pTopic->toOUString();
 }
 
-sal_IntPtr DdeConnection::GetConvId()
-{
-    return (sal_IntPtr)pImp->hConv;
-}
-
 const std::vector<DdeConnection*>& DdeConnection::GetConnections()
 {
     DdeInstData* pInst = ImpGetInstData();
