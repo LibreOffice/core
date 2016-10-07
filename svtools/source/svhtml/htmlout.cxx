@@ -482,10 +482,12 @@ static OString lcl_ConvertCharToHTML( sal_uInt32 c,
             aDest.append('&').append('#').append(static_cast<sal_Int32>(c))
                     // Unicode code points guaranteed to fit into sal_Int32
                  .append(';');
-            OUString cs(&c, 1);
-            if( pNonConvertableChars &&
-                -1 == pNonConvertableChars->indexOf( cs ) )
-                (*pNonConvertableChars) += cs;
+            if( pNonConvertableChars )
+            {
+                OUString cs(&c, 1);
+                if( -1 == pNonConvertableChars->indexOf( cs ) )
+                    (*pNonConvertableChars) += cs;
+            }
         }
     }
     return aDest.makeStringAndClear();
