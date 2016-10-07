@@ -35,7 +35,7 @@ ScSortParam::ScSortParam()
 ScSortParam::ScSortParam( const ScSortParam& r ) :
         nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nUserIndex(r.nUserIndex),
         bHasHeader(r.bHasHeader),bByRow(r.bByRow),bCaseSens(r.bCaseSens),
-        bNaturalSort(r.bNaturalSort),bUserDef(r.bUserDef),
+        bNaturalSort(r.bNaturalSort),bIncludeComments(r.bIncludeComments),bUserDef(r.bUserDef),
         bIncludePattern(r.bIncludePattern),bInplace(r.bInplace),
         nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
         maKeyState( r.maKeyState ),
@@ -56,6 +56,7 @@ void ScSortParam::Clear()
     nDestTab = 0;
     nUserIndex = 0;
     bHasHeader=bCaseSens=bUserDef=bNaturalSort = false;
+    bIncludeComments = false;
     bByRow=bIncludePattern=bInplace = true;
     aCollatorLocale = css::lang::Locale();
     aCollatorAlgorithm.clear();
@@ -79,6 +80,7 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     bByRow          = r.bByRow;
     bCaseSens       = r.bCaseSens;
     bNaturalSort    = r.bNaturalSort;
+    bIncludeComments= r.bIncludeComments;
     bUserDef        = r.bUserDef;
     bIncludePattern = r.bIncludePattern;
     bInplace        = r.bInplace;
@@ -122,6 +124,7 @@ bool ScSortParam::operator==( const ScSortParam& rOther ) const
         && (bByRow          == rOther.bByRow)
         && (bCaseSens       == rOther.bCaseSens)
         && (bNaturalSort    == rOther.bNaturalSort)
+        && (bIncludeComments== rOther.bIncludeComments)
         && (bUserDef        == rOther.bUserDef)
         && (nUserIndex      == rOther.nUserIndex)
         && (bIncludePattern == rOther.bIncludePattern)
@@ -150,7 +153,7 @@ bool ScSortParam::operator==( const ScSortParam& rOther ) const
 ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld ) :
         nCol1(rSub.nCol1),nRow1(rSub.nRow1),nCol2(rSub.nCol2),nRow2(rSub.nRow2),nUserIndex(rSub.nUserIndex),
         bHasHeader(true),bByRow(true),bCaseSens(rSub.bCaseSens),bNaturalSort(rOld.bNaturalSort),
-        bUserDef(rSub.bUserDef),bIncludePattern(rSub.bIncludePattern),
+        bIncludeComments(rOld.bIncludeComments),bUserDef(rSub.bUserDef),bIncludePattern(rSub.bIncludePattern),
         bInplace(true),
         nDestTab(0),nDestCol(0),nDestRow(0),
         aCollatorLocale( rOld.aCollatorLocale ), aCollatorAlgorithm( rOld.aCollatorAlgorithm ),
@@ -193,7 +196,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
 ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         nCol1(nCol),nRow1(rParam.nRow1),nCol2(nCol),nRow2(rParam.nRow2),nUserIndex(0),
         bHasHeader(rParam.bHasHeader),bByRow(true),bCaseSens(rParam.bCaseSens),
-        bNaturalSort(false),
+        bNaturalSort(false),bIncludeComments(false),
 //TODO: what about Locale and Algorithm?
         bUserDef(false),bIncludePattern(false),
         bInplace(true),

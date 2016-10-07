@@ -924,7 +924,8 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
 }
 
 bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
-        SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly, bool bStickyTopRow, bool bStickyLeftCol ) const
+        SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly, bool bStickyTopRow, bool bStickyLeftCol,
+        bool bConsiderCellNotes ) const
 {
     o_bShrunk = false;
 
@@ -955,6 +956,8 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
     {
         if (aCol[rEndCol].IsEmptyBlock( rStartRow, rEndRow))
         {
+            if (bConsiderCellNotes && !aCol[rEndCol].IsNotesEmptyBlock( rStartRow, rEndRow ))
+                break;
             --rEndCol;
             o_bShrunk = true;
         }
@@ -968,6 +971,9 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
         {
             if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
             {
+                if (bConsiderCellNotes && !aCol[rStartCol].IsNotesEmptyBlock( rStartRow, rEndRow ))
+                    break;
+
                 ++rStartCol;
                 o_bShrunk = true;
             }

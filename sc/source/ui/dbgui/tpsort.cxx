@@ -513,6 +513,7 @@ ScTabPageSortOptions::ScTabPageSortOptions( vcl::Window*             pParent,
     get(m_pBtnTopDown, "topdown");
     get(m_pBtnLeftRight, "leftright");
     get(m_pLbLanguage, "language");
+    get(m_pBtnIncComments, "includenotes");
     Init();
     SetExchangeSupport();
 }
@@ -545,6 +546,7 @@ void ScTabPageSortOptions::dispose()
     m_pLbAlgorithm.clear();
     m_pBtnTopDown.clear();
     m_pBtnLeftRight.clear();
+    m_pBtnIncComments.clear();
     pDlg.clear();
     SfxTabPage::dispose();
 }
@@ -656,6 +658,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
     m_pBtnFormats->Check       ( aSortData.bIncludePattern );
     m_pBtnHeader->Check        ( aSortData.bHasHeader );
     m_pBtnNaturalSort->Check   ( aSortData.bNaturalSort );
+    m_pBtnIncComments->Check   ( aSortData.bIncludeComments );
 
     if ( aSortData.bByRow )
     {
@@ -720,6 +723,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     aNewSortData.bHasHeader      = m_pBtnHeader->IsChecked();
     aNewSortData.bCaseSens       = m_pBtnCase->IsChecked();
     aNewSortData.bNaturalSort    = m_pBtnNaturalSort->IsChecked();
+    aNewSortData.bIncludeComments= m_pBtnIncComments->IsChecked();
     aNewSortData.bIncludePattern = m_pBtnFormats->IsChecked();
     aNewSortData.bInplace        = !m_pBtnCopyResult->IsChecked();
     aNewSortData.nDestCol        = theOutPos.Col();
