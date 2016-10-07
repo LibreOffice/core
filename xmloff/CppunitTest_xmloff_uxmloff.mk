@@ -11,14 +11,18 @@ $(eval $(call gb_CppunitTest_CppunitTest,xmloff_uxmloff))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,xmloff_uxmloff, \
     xmloff/qa/unit/uxmloff \
+	xmloff/qa/unit/tokenmap-test \
 ))
-
 
 $(eval $(call gb_CppunitTest_set_include,xmloff_uxmloff,\
     -I$(SRCDIR)/xmloff/inc \
     -I$(SRCDIR)/xmloff/source/style \
     -I$(SRCDIR)/xmloff/source/chart \
     $$(INCLUDE) \
+))
+
+$(eval $(call gb_CppunitTest_use_custom_headers,xmloff_uxmloff, \
+	xmloff/generated \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,xmloff_uxmloff))

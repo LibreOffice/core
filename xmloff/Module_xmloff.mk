@@ -29,7 +29,6 @@ $(eval $(call gb_Module_add_targets,xmloff,\
 $(eval $(call gb_Module_add_check_targets,xmloff,\
 	$(if $(MERGELIBS),, \
 		CppunitTest_xmloff_uxmloff) \
-	CppunitTest_xmloff_tokenmap \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,xmloff,\
