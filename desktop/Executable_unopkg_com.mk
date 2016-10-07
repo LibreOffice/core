@@ -11,10 +11,6 @@ $(eval $(call gb_Executable_Executable,unopkg_com))
 
 $(eval $(call gb_Executable_set_targettype_gui,unopkg_com,NO))
 
-$(eval $(call gb_Executable_add_defs,unopkg_com,\
-    $(LFS_CFLAGS) \
-))
-
 $(eval $(call gb_Executable_add_exception_objects,unopkg_com,\
     desktop/win32/source/guistdio/unopkgio \
 ))

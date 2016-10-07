@@ -27,7 +27,6 @@ $(eval $(call gb_Library_add_defs,clucene,\
     -Dclucene_shared_EXPORTS \
     -Dclucene_core_EXPORTS \
     -Dclucene_contribs_lib_EXPORTS \
-    $(LFS_CFLAGS) \
 ))
 
 # clucene is riddled with warnings... let's spare use

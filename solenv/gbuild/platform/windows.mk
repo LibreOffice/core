@@ -34,6 +34,7 @@ gb_OSDEFS := \
 	-DWIN32 \
 	-DWNT \
 	-DNOMINMAX \
+	$(LFS_CFLAGS) \
 
 
 gb_UWINAPI :=

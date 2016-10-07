@@ -26,7 +26,6 @@ $(eval $(call gb_Library_add_defs,sal,\
 	$(if $(filter $(OS),IOS), \
 		-DNO_CHILD_PROCESSES \
 	) \
-	$(LFS_CFLAGS) \
 	-DSAL_DLLIMPLEMENTATION \
 	-DRTL_OS="\"$(RTL_OS)\"" \
 	-DRTL_ARCH="\"$(RTL_ARCH)\"" \

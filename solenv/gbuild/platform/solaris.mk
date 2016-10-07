@@ -36,6 +36,7 @@ gb_OSDEFS := \
 	-DUNIX \
 	-DUNX \
 	$(PTHREAD_CFLAGS) \
+	$(LFS_CFLAGS) \
 
 gb_CFLAGS := \
 	$(gb_CFLAGS_COMMON) \
