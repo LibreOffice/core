@@ -73,7 +73,7 @@ public:
     {
         const Bitmap aRetval(createHistorical8x8FromArray(pBmpArray, aPixelColor, aBackgroundColor));
 
-        return BitmapEx(aRetval);
+        return (pBmpArray != nullptr) ? BitmapEx(aRetval) : BitmapEx();
     }
 
     void SetBmpArray( const sal_uInt16* pPixel ) { pBmpArray = pPixel; }
@@ -201,7 +201,6 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
                 m_pLbBackgroundColor->SelectEntryPos( 0 );
             else
                 m_pLbBackgroundColor->SelectEntryPos( nPos );
-            ChangeColor_Impl();
         }
 
         // determining (possibly cutting) the name and
@@ -226,8 +225,6 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
             sal_uInt16 nId = m_pPatternLB->GetItemId( static_cast<size_t>( *m_pPos ) );
             m_pPatternLB->SelectItem( nId );
         }
-        // colors could have been deleted
-        ChangePatternHdl_Impl( m_pPatternLB );
 
         *m_pPos = LISTBOX_ENTRY_NOTFOUND;
     }
