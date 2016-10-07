@@ -25,7 +25,6 @@
 #include <svl/svdde.hxx>
 
 #include <osl/thread.h>
-#include <tools/debug.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <osl/mutex.hxx>
 
@@ -68,7 +67,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback( WORD nCode, WORD nCbType,
     DdeConnection*      self = 0;
 
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
 
     for ( size_t i = 0; i < rAll.size(); ++i)
     {
@@ -189,7 +188,7 @@ DdeConnection::~DdeConnection()
     delete pTopic;
 
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
 
     std::vector<DdeConnection*>::iterator it(std::find(pInst->aConnections.begin(),
                                                         pInst->aConnections.end(),
@@ -239,7 +238,7 @@ const OUString DdeConnection::GetTopicName()
 const std::vector<DdeConnection*>& DdeConnection::GetConnections()
 {
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
     return pInst->aConnections;
 }
 

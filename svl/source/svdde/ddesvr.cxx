@@ -24,7 +24,6 @@
 #include <comphelper/string.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/svdde.hxx>
-#include <tools/debug.hxx>
 #include <osl/thread.h>
 #include <o3tl/sorted_vector.hxx>
 
@@ -72,7 +71,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
     Conversation*   pC;
 
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
 
     switch( nCode )
     {
@@ -378,7 +377,7 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
     std::vector<DdeTopic*> &rTopics = rService.aTopics;
     bool bContinue = false;
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
 
     do
     {   // middle check loop
@@ -408,7 +407,7 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
     std::vector<DdeItem*>::iterator iter;
     std::vector<DdeItem*> &rItems = rTopic.aItems;
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
     bool bContinue = false;
 
     do
@@ -481,7 +480,7 @@ DdeService::DdeService( const OUString& rService )
 DdeService::~DdeService()
 {
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
     if ( pInst->pServicesSvr )
         pInst->pServicesSvr->erase(std::remove(pInst->pServicesSvr->begin(), pInst->pServicesSvr->end(), this), pInst->pServicesSvr->end());
 
@@ -512,7 +511,7 @@ const OUString DdeService::GetName() const
 DdeServices& DdeService::GetServices()
 {
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
     return *(pInst->pServicesSvr);
 }
 
@@ -586,7 +585,7 @@ void DdeService::RemoveFormat(SotClipboardFormatId nFmt)
 DdeTopic::DdeTopic( const OUString& rName )
 {
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
     pName = new DdeString( pInst->hDdeInstSvr, rName );
 }
 
@@ -658,7 +657,7 @@ void DdeTopic::NotifyClient( const OUString& rItem )
 {
     std::vector<DdeItem*>::iterator iter;
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
     for ( iter = aItems.begin(); iter != aItems.end(); ++iter)
     {
         if ( (*iter)->GetName().equals(rItem) && (*iter)->pImpData)
@@ -701,7 +700,7 @@ bool DdeTopic::StartAdviseLoop()
 DdeItem::DdeItem( const sal_Unicode* p )
 {
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
     pName = new DdeString( pInst->hDdeInstSvr, p );
     nType = DDEITEM;
     pMyTopic = 0;
@@ -711,7 +710,7 @@ DdeItem::DdeItem( const sal_Unicode* p )
 DdeItem::DdeItem( const OUString& r)
 {
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
     pName = new DdeString( pInst->hDdeInstSvr, r );
     nType = DDEITEM;
     pMyTopic = 0;
@@ -721,7 +720,7 @@ DdeItem::DdeItem( const OUString& r)
 DdeItem::DdeItem( const DdeItem& r)
 {
     DdeInstData* pInst = ImpGetInstData();
-    DBG_ASSERT(pInst,"SVDDE:No instance data");
+    assert(pInst);
     pName = new DdeString( pInst->hDdeInstSvr, r.pName->toOUString() );
     nType = DDEITEM;
     pMyTopic = 0;
@@ -747,7 +746,7 @@ void DdeItem::NotifyClient()
     if( pMyTopic && pImpData )
     {
         DdeInstData* pInst = ImpGetInstData();
-        DBG_ASSERT(pInst,"SVDDE:No instance data");
+        assert(pInst);
         DdePostAdvise( pInst->hDdeInstSvr, pMyTopic->pName->getHSZ(), pName->getHSZ() );
     }
 }
