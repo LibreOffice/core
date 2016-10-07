@@ -84,6 +84,23 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
 
+enum class CellPosFlag  // signals the relative position of a cell to a selection
+{
+    NONE   = 0x0000, // not set or inside
+    // row
+    Before = 0x0001,
+    Left   = 0x0002,
+    Right  = 0x0004,
+    After  = 0x0008,
+    // column
+    Upper  = 0x0010,
+    Top    = 0x0020,
+    Bottom = 0x0040,
+    Lower  = 0x0080
+};
+namespace o3tl
+{ template<> struct typed_flags<CellPosFlag> : is_typed_flags<CellPosFlag, 0xff> {}; }
+
 namespace sdr { namespace table {
 
 class SvxTableControllerModifyListener : public ::cppu::WeakImplHelper< css::util::XModifyListener >
@@ -2196,17 +2213,6 @@ void SvxTableController::MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnl
 }
 
 
-const sal_uInt16 CELL_BEFORE = 0x0001;
-const sal_uInt16 CELL_LEFT   = 0x0002;
-const sal_uInt16 CELL_RIGHT  = 0x0004;
-const sal_uInt16 CELL_AFTER  = 0x0008;
-
-const sal_uInt16 CELL_UPPER  = 0x0010;
-const sal_uInt16 CELL_TOP    = 0x0020;
-const sal_uInt16 CELL_BOTTOM = 0x0040;
-const sal_uInt16 CELL_LOWER  = 0x0080;
-
-
 static void ImplSetLinePreserveColor( SvxBoxItem& rNewFrame, const SvxBorderLine* pNew, SvxBoxItemLine nLine )
 {
     if( pNew )
@@ -2224,33 +2230,33 @@ static void ImplSetLinePreserveColor( SvxBoxItem& rNewFrame, const SvxBorderLine
 }
 
 
-static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem, const SvxBoxInfoItem* pBoxInfoItem, SvxBoxItem& rNewFrame )
+void ImplApplyBoxItem( CellPosFlag nCellPosFlags, const SvxBoxItem* pBoxItem, const SvxBoxInfoItem* pBoxInfoItem, SvxBoxItem& rNewFrame )
 {
-    if( (nCellFlags & (CELL_BEFORE|CELL_AFTER|CELL_UPPER|CELL_LOWER)) != 0 )
+    if (nCellPosFlags & (CellPosFlag::Before|CellPosFlag::After|CellPosFlag::Upper|CellPosFlag::Lower))
     {
         // current cell is outside the selection
 
-        if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER)) == 0 ) // check if it's not nw or ne corner
+        if (!(nCellPosFlags & (CellPosFlag::Before|CellPosFlag::After))) // check if its not any corner
         {
-            if( nCellFlags & CELL_UPPER )
+            if (nCellPosFlags & CellPosFlag::Upper)
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::TOP) )
                     rNewFrame.SetLine(nullptr, SvxBoxItemLine::BOTTOM );
             }
-            else if( nCellFlags & CELL_LOWER )
+            else if (nCellPosFlags & CellPosFlag::Lower)
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::BOTTOM) )
                     rNewFrame.SetLine( nullptr, SvxBoxItemLine::TOP );
             }
         }
-        else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if it's not sw or se corner
+        else if (!(nCellPosFlags & (CellPosFlag::Upper|CellPosFlag::Lower))) // check if its not any corner
         {
-            if( nCellFlags & CELL_BEFORE )
+            if (nCellPosFlags & CellPosFlag::Before)
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT) )
                     rNewFrame.SetLine( nullptr, SvxBoxItemLine::RIGHT );
             }
-            else if( nCellFlags & CELL_AFTER )
+            else if (nCellPosFlags & CellPosFlag::After)
             {
                 if( pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) )
                     rNewFrame.SetLine( nullptr, SvxBoxItemLine::LEFT );
@@ -2261,17 +2267,18 @@ static void ImplApplyBoxItem( sal_uInt16 nCellFlags, const SvxBoxItem* pBoxItem,
     {
         // current cell is inside the selection
 
-        if( (nCellFlags & CELL_LEFT) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
-            rNewFrame.SetLine( (nCellFlags & CELL_LEFT) ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(), SvxBoxItemLine::LEFT );
+        if ((nCellPosFlags & CellPosFlag::Left) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::LEFT)
+                                          : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT))
+            rNewFrame.SetLine( (nCellPosFlags & CellPosFlag::Left) ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(), SvxBoxItemLine::LEFT );
 
-        if( (nCellFlags & CELL_RIGHT) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
-            rNewFrame.SetLine( (nCellFlags & CELL_RIGHT) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(), SvxBoxItemLine::RIGHT );
+        if( (nCellPosFlags & CellPosFlag::Right) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::RIGHT) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::VERT) )
+            rNewFrame.SetLine( (nCellPosFlags & CellPosFlag::Right) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(), SvxBoxItemLine::RIGHT );
 
-        if( (nCellFlags & CELL_TOP) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::TOP) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::HORI) )
-            rNewFrame.SetLine( (nCellFlags & CELL_TOP) ? pBoxItem->GetTop() : pBoxInfoItem->GetHori(), SvxBoxItemLine::TOP );
+        if( (nCellPosFlags & CellPosFlag::Top) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::TOP) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::HORI) )
+            rNewFrame.SetLine( (nCellPosFlags & CellPosFlag::Top) ? pBoxItem->GetTop() : pBoxInfoItem->GetHori(), SvxBoxItemLine::TOP );
 
-        if( (nCellFlags & CELL_BOTTOM) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::BOTTOM) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::HORI) )
-            rNewFrame.SetLine( (nCellFlags & CELL_BOTTOM) ? pBoxItem->GetBottom() : pBoxInfoItem->GetHori(), SvxBoxItemLine::BOTTOM );
+        if( (nCellPosFlags & CellPosFlag::Bottom) ? pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::BOTTOM) : pBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::HORI) )
+            rNewFrame.SetLine( (nCellPosFlags & CellPosFlag::Bottom) ? pBoxItem->GetBottom() : pBoxInfoItem->GetHori(), SvxBoxItemLine::BOTTOM );
 
         // apply distance to borders
         if( pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::DISTANCE ) )
@@ -2293,49 +2300,49 @@ static void ImplSetLineColor( SvxBoxItem& rNewFrame, SvxBoxItemLine nLine, const
 }
 
 
-static void ImplApplyLineColorItem( sal_uInt16 nCellFlags, const SvxColorItem* pLineColorItem, SvxBoxItem& rNewFrame )
+static void ImplApplyLineColorItem( CellPosFlag nCellPosFlags, const SvxColorItem* pLineColorItem, SvxBoxItem& rNewFrame )
 {
     const Color aColor( pLineColorItem->GetValue() );
 
-    if( (nCellFlags & (CELL_LOWER|CELL_BEFORE|CELL_AFTER)) == 0 )
+    if (!(nCellPosFlags & (CellPosFlag::Lower|CellPosFlag::Before|CellPosFlag::After)))
         ImplSetLineColor( rNewFrame, SvxBoxItemLine::BOTTOM, aColor );
 
-    if( (nCellFlags & (CELL_UPPER|CELL_BEFORE|CELL_AFTER)) == 0 )
+    if (!(nCellPosFlags & (CellPosFlag::Upper|CellPosFlag::Before|CellPosFlag::After)))
         ImplSetLineColor( rNewFrame, SvxBoxItemLine::TOP, aColor );
 
-    if( (nCellFlags & (CELL_UPPER|CELL_LOWER|CELL_AFTER)) == 0 )
+    if (!(nCellPosFlags & (CellPosFlag::Upper|CellPosFlag::Lower|CellPosFlag::After)))
         ImplSetLineColor( rNewFrame, SvxBoxItemLine::RIGHT, aColor );
 
-    if( (nCellFlags & (CELL_UPPER|CELL_LOWER|CELL_BEFORE)) == 0 )
+    if (!(nCellPosFlags & (CellPosFlag::Upper|CellPosFlag::Lower|CellPosFlag::Before)))
         ImplSetLineColor( rNewFrame, SvxBoxItemLine::LEFT, aColor );
 }
 
 
-static void ImplApplyBorderLineItem( sal_uInt16 nCellFlags, const SvxBorderLine* pBorderLineItem, SvxBoxItem& rNewFrame )
+static void ImplApplyBorderLineItem( CellPosFlag nCellPosFlags, const SvxBorderLine* pBorderLineItem, SvxBoxItem& rNewFrame )
 {
-    if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER|CELL_UPPER|CELL_LOWER)) != 0 )
+    if (nCellPosFlags & (CellPosFlag::Before|CellPosFlag::After|CellPosFlag::Upper|CellPosFlag::Lower))
     {
-        if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER)) == 0 ) // check if it's not nw or ne corner
+        if (!(nCellPosFlags & (CellPosFlag::Before|CellPosFlag::After))) // check if its not any corner
         {
-            if( nCellFlags & CELL_UPPER )
+            if (nCellPosFlags & CellPosFlag::Upper)
             {
                 if( rNewFrame.GetBottom() )
                     ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::BOTTOM );
             }
-            else if( nCellFlags & CELL_LOWER )
+            else if (nCellPosFlags & CellPosFlag::Lower)
             {
                 if( rNewFrame.GetTop() )
                     ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::TOP );
             }
         }
-        else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if it's not sw or se corner
+        else if (!(nCellPosFlags & (CellPosFlag::Upper|CellPosFlag::Lower))) // check if its not any corner
         {
-            if( nCellFlags & CELL_BEFORE )
+            if (nCellPosFlags & CellPosFlag::Before)
             {
                 if( rNewFrame.GetRight() )
                     ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::RIGHT );
             }
-            else if( nCellFlags & CELL_AFTER )
+            else if (nCellPosFlags & CellPosFlag::After)
             {
                 if( rNewFrame.GetLeft() )
                     ImplSetLinePreserveColor( rNewFrame, pBorderLineItem, SvxBoxItemLine::LEFT );
@@ -2399,11 +2406,11 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
 
             for( sal_Int32 nRow = std::max( aStart.mnRow - 1, (sal_Int32)0 ); nRow < nLastRow; nRow++ )
             {
-                sal_uInt16 nRowFlags = 0;
-                nRowFlags |= (nRow == aStart.mnRow) ? CELL_TOP : 0;
-                nRowFlags |= (nRow == aEnd.mnRow)   ? CELL_BOTTOM : 0;
-                nRowFlags |= (nRow < aStart.mnRow)  ? CELL_UPPER : 0;
-                nRowFlags |= (nRow > aEnd.mnRow)    ? CELL_LOWER : 0;
+                CellPosFlag nRowFlags = CellPosFlag::NONE;
+                nRowFlags |= (nRow == aStart.mnRow) ? CellPosFlag::Top : CellPosFlag::NONE;
+                nRowFlags |= (nRow == aEnd.mnRow)   ? CellPosFlag::Bottom : CellPosFlag::NONE;
+                nRowFlags |= (nRow < aStart.mnRow)  ? CellPosFlag::Upper : CellPosFlag::NONE;
+                nRowFlags |= (nRow > aEnd.mnRow)    ? CellPosFlag::Lower : CellPosFlag::NONE;
 
                 for( sal_Int32 nCol = std::max( aStart.mnCol - 1, (sal_Int32)0 ); nCol < nLastCol; nCol++ )
                 {
@@ -2416,20 +2423,20 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
 
                     SvxBoxItem aNewFrame( *pOldOuter );
 
-                    sal_uInt16 nCellFlags = nRowFlags;
-                    nCellFlags |= (nCol == aStart.mnCol) ? CELL_LEFT : 0;
-                    nCellFlags |= (nCol == aEnd.mnCol)   ? CELL_RIGHT : 0;
-                    nCellFlags |= (nCol < aStart.mnCol)  ? CELL_BEFORE : 0;
-                    nCellFlags |= (nCol > aEnd.mnCol)    ? CELL_AFTER : 0;
+                    CellPosFlag nCellPosFlags = nRowFlags;
+                    nCellPosFlags |= (nCol == aStart.mnCol) ? CellPosFlag::Left : CellPosFlag::NONE;
+                    nCellPosFlags |= (nCol == aEnd.mnCol)   ? CellPosFlag::Right : CellPosFlag::NONE;
+                    nCellPosFlags |= (nCol < aStart.mnCol)  ? CellPosFlag::Before : CellPosFlag::NONE;
+                    nCellPosFlags |= (nCol > aEnd.mnCol)    ? CellPosFlag::After : CellPosFlag::NONE;
 
                     if( pBoxItem && pBoxInfoItem )
-                        ImplApplyBoxItem( nCellFlags, pBoxItem, pBoxInfoItem, aNewFrame );
+                        ImplApplyBoxItem( nCellPosFlags, pBoxItem, pBoxInfoItem, aNewFrame );
 
                     if( pLineColorItem )
-                        ImplApplyLineColorItem( nCellFlags, pLineColorItem, aNewFrame );
+                        ImplApplyLineColorItem( nCellPosFlags, pLineColorItem, aNewFrame );
 
                     if( pBorderLineItem )
-                        ImplApplyBorderLineItem( nCellFlags, pBorderLineItem, aNewFrame );
+                        ImplApplyBorderLineItem( nCellPosFlags, pBorderLineItem, aNewFrame );
 
                     if (aNewFrame != *pOldOuter)
                     {
@@ -2876,24 +2883,24 @@ void lcl_MergeDistance(
     }
 }
 
-void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellBoxItem, const sal_Int32 nCellFlags)
+void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellBoxItem, const CellPosFlag nCellPosFlags)
 {
-    if( (nCellFlags & (CELL_BEFORE|CELL_AFTER|CELL_UPPER|CELL_LOWER)) != 0 )
+    if (nCellPosFlags & (CellPosFlag::Before|CellPosFlag::After|CellPosFlag::Upper|CellPosFlag::Lower))
     {
         // current cell is outside the selection
 
-        if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER)) == 0 ) // check if it's not nw or ne corner
+        if (!(nCellPosFlags & (CellPosFlag::Before|CellPosFlag::After))) // check if its not any corner
         {
-            if( nCellFlags & CELL_UPPER )
+            if (nCellPosFlags & CellPosFlag::Upper)
                 lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetBottom(), SvxBoxItemLine::TOP, SvxBoxInfoItemValidFlags::TOP);
-            else if( nCellFlags & CELL_LOWER )
+            else if (nCellPosFlags & CellPosFlag::Lower)
                 lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetTop(), SvxBoxItemLine::BOTTOM, SvxBoxInfoItemValidFlags::BOTTOM);
         }
-        else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if it's not sw or se corner
+        else if (!(nCellPosFlags & (CellPosFlag::Upper|CellPosFlag::Lower))) // check if its not any corner
         {
-            if( nCellFlags & CELL_BEFORE )
+            if (nCellPosFlags & CellPosFlag::Before)
                 lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetRight(), SvxBoxItemLine::LEFT, SvxBoxInfoItemValidFlags::LEFT);
-            else if( nCellFlags & CELL_AFTER )
+            else if (nCellPosFlags & CellPosFlag::After)
                 lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetLeft(), SvxBoxItemLine::RIGHT, SvxBoxInfoItemValidFlags::RIGHT);
         }
 
@@ -2904,10 +2911,10 @@ void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellB
     {
         // current cell is inside the selection
 
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetTop(), SvxBoxItemLine::TOP, SvxBoxInfoItemValidFlags::TOP, (nCellFlags & CELL_TOP) != 0);
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetBottom(), SvxBoxItemLine::BOTTOM, SvxBoxInfoItemValidFlags::BOTTOM, (nCellFlags & CELL_BOTTOM) != 0);
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetLeft(), SvxBoxItemLine::LEFT, SvxBoxInfoItemValidFlags::LEFT, (nCellFlags & CELL_LEFT) != 0);
-        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetRight(), SvxBoxItemLine::RIGHT, SvxBoxInfoItemValidFlags::RIGHT, (nCellFlags & CELL_RIGHT) != 0);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetTop(), SvxBoxItemLine::TOP, SvxBoxInfoItemValidFlags::TOP, (bool)(nCellPosFlags & CellPosFlag::Top));
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetBottom(), SvxBoxItemLine::BOTTOM, SvxBoxInfoItemValidFlags::BOTTOM, (bool)(nCellPosFlags & CellPosFlag::Bottom));
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetLeft(), SvxBoxItemLine::LEFT, SvxBoxInfoItemValidFlags::LEFT, (bool)(nCellPosFlags & CellPosFlag::Left));
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetRight(), SvxBoxItemLine::RIGHT, SvxBoxInfoItemValidFlags::RIGHT, (bool)(nCellPosFlags & CellPosFlag::Right));
 
         lcl_MergeDistance(rLinesState, SvxBoxItemLine::TOP, rCellBoxItem.GetDistance(SvxBoxItemLine::TOP));
         lcl_MergeDistance(rLinesState, SvxBoxItemLine::BOTTOM, rCellBoxItem.GetDistance(SvxBoxItemLine::BOTTOM));
@@ -2948,11 +2955,11 @@ void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBox
              */
             for( sal_Int32 nRow = std::max( aStart.mnRow - 1, (sal_Int32)0 ); nRow < nLastRow; nRow++ )
             {
-                sal_uInt16 nRowFlags = 0;
-                nRowFlags |= (nRow == aStart.mnRow) ? CELL_TOP : 0;
-                nRowFlags |= (nRow == aEnd.mnRow)   ? CELL_BOTTOM : 0;
-                nRowFlags |= (nRow < aStart.mnRow)  ? CELL_UPPER : 0;
-                nRowFlags |= (nRow > aEnd.mnRow)    ? CELL_LOWER : 0;
+                CellPosFlag nRowFlags = CellPosFlag::NONE;
+                nRowFlags |= (nRow == aStart.mnRow) ? CellPosFlag::Top : CellPosFlag::NONE;
+                nRowFlags |= (nRow == aEnd.mnRow)   ? CellPosFlag::Bottom : CellPosFlag::NONE;
+                nRowFlags |= (nRow < aStart.mnRow)  ? CellPosFlag::Upper : CellPosFlag::NONE;
+                nRowFlags |= (nRow > aEnd.mnRow)    ? CellPosFlag::Lower : CellPosFlag::NONE;
 
                 for( sal_Int32 nCol = std::max( aStart.mnCol - 1, (sal_Int32)0 ); nCol < nLastCol; nCol++ )
                 {
@@ -2960,15 +2967,15 @@ void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBox
                     if( !xCell.is() )
                         continue;
 
-                    sal_uInt16 nCellFlags = nRowFlags;
-                    nCellFlags |= (nCol == aStart.mnCol) ? CELL_LEFT : 0;
-                    nCellFlags |= (nCol == aEnd.mnCol)   ? CELL_RIGHT : 0;
-                    nCellFlags |= (nCol < aStart.mnCol)  ? CELL_BEFORE : 0;
-                    nCellFlags |= (nCol > aEnd.mnCol)    ? CELL_AFTER : 0;
+                    CellPosFlag nCellPosFlags = nRowFlags;
+                    nCellPosFlags |= (nCol == aStart.mnCol) ? CellPosFlag::Left : CellPosFlag::NONE;
+                    nCellPosFlags |= (nCol == aEnd.mnCol)   ? CellPosFlag::Right : CellPosFlag::NONE;
+                    nCellPosFlags |= (nCol < aStart.mnCol)  ? CellPosFlag::Before : CellPosFlag::NONE;
+                    nCellPosFlags |= (nCol > aEnd.mnCol)    ? CellPosFlag::After : CellPosFlag::NONE;
 
                     const SfxItemSet& rSet = xCell->GetItemSet();
                     SvxBoxItem aCellBoxItem(mergeDrawinglayerTextDistancesAndSvxBoxItem(rSet));
-                    lcl_MergeCommonBorderAttr( aLinesState, aCellBoxItem, nCellFlags );
+                    lcl_MergeCommonBorderAttr( aLinesState, aCellBoxItem, nCellPosFlags );
                 }
             }
 
