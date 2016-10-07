@@ -2438,16 +2438,13 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
             if( bOutChar )
             {
-                // #i120442#: get the UTF-32 codepoint by converting an eventual UTF-16 unicode surrogate pair
-                sal_uInt64 c = rStr[nStrPos];
-                if( nStrPos < nEnd - 1 )
+                sal_uInt32 c = rStr[nStrPos];
+                if( rtl::isHighSurrogate(c) && nStrPos < nEnd - 1 )
                 {
                     const sal_Unicode d = rStr[nStrPos + 1];
-                    if( (c >= 0xd800 && c <= 0xdbff) && (d >= 0xdc00 && d <= 0xdfff) )
+                    if( rtl::isLowSurrogate(d) )
                     {
-                        sal_uInt64 templow = d&0x03ff;
-                        sal_uInt64 temphi = ((c&0x03ff) + 0x0040)<<10;
-                        c = temphi|templow;
+                        c = rtl::combineSurrogates(c, d);
                         nStrPos++;
                     }
                 }
@@ -2486,14 +2483,6 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         HtmlWriter aHtml(rWrt.Strm());
                         aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
                     }
-                    // #i120442#: if c is outside the unicode base plane output it as "&#******;"
-                    else if( c > 0xffff)
-                    {
-                        OString sOut("&#");
-                        sOut += OString::number( (sal_uInt64)c );
-                        sOut += ";";
-                        rWrt.Strm().WriteCharPtr( sOut.getStr() );
-                    }
                     else if (c == CH_TXT_ATR_FORMELEMENT)
                     {
                         // Placeholder for a single-point fieldmark.
@@ -2503,7 +2492,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         rHTMLWrt.OutPointFieldmarks(aMarkPos);
                     }
                     else
-                        HTMLOutFuncs::Out_Char( rWrt.Strm(), (sal_Unicode)c, aContext, &rHTMLWrt.m_aNonConvertableCharacters );
+                        HTMLOutFuncs::Out_Char( rWrt.Strm(), c, aContext, &rHTMLWrt.m_aNonConvertableCharacters );
 
                     // if a paragraph's last character is a hard line break
                     // then we need to add an extra <br>
