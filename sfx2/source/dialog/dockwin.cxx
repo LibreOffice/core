@@ -1657,14 +1657,14 @@ bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
     {
         pBindings->SetActiveFrame( nullptr );
         if (pMgr != nullptr)
-            pMgr->Deactivate_Impl();
+            SfxChildWindow::Deactivate_Impl();
     }
 
     return DockingWindow::Notify( rEvt );
 }
 
 
-SplitWindowItemFlags SfxDockingWindow::GetWinBits_Impl() const
+SplitWindowItemFlags SfxDockingWindow::GetWinBits_Impl()
 {
     return SplitWindowItemFlags::NONE;
 }

@@ -658,7 +658,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 OUString SfxHelp::CreateHelpURL(const OUString& aCommandURL, const OUString& rModuleName)
 {
     SfxHelp* pHelp = static_cast< SfxHelp* >(Application::GetHelp());
-    return pHelp ? pHelp->CreateHelpURL_Impl( aCommandURL, rModuleName ) : OUString();
+    return pHelp ? SfxHelp::CreateHelpURL_Impl( aCommandURL, rModuleName ) : OUString();
 }
 
 OUString SfxHelp::GetDefaultHelpModule()

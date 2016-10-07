@@ -102,7 +102,7 @@ public:
     DECL_LINK(TimerHdl, Idle *, void);
 
     SAL_DLLPRIVATE void Initialize_Impl();
-    SAL_DLLPRIVATE SplitWindowItemFlags GetWinBits_Impl() const;
+    SAL_DLLPRIVATE static SplitWindowItemFlags GetWinBits_Impl();
     SAL_DLLPRIVATE void SetItemSize_Impl( const Size& rSize );
     SAL_DLLPRIVATE void Disappear_Impl();
     SAL_DLLPRIVATE void Reappear_Impl();

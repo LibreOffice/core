@@ -118,7 +118,7 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
 {
     std::unique_ptr<SfxAppData_Impl>            pImpl;
 
-    DECL_DLLPRIVATE_LINK( GlobalBasicErrorHdl_Impl, StarBASIC*, bool );
+    DECL_DLLPRIVATE_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, bool );
 
     void                        Deinitialize();
 
@@ -215,23 +215,23 @@ public:
     SAL_DLLPRIVATE void         OpenRemoteExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         MiscExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         MiscState_Impl(SfxItemSet &);
-    SAL_DLLPRIVATE void         PropExec_Impl(SfxRequest &);
-    SAL_DLLPRIVATE void         PropState_Impl(SfxItemSet &);
+    SAL_DLLPRIVATE static void  PropExec_Impl(SfxRequest &);
+    SAL_DLLPRIVATE static void  PropState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void         OfaExec_Impl(SfxRequest &);
-    SAL_DLLPRIVATE void         OfaState_Impl(SfxItemSet &);
+    SAL_DLLPRIVATE static void  OfaState_Impl(SfxItemSet &);
 
     SAL_DLLPRIVATE void         SetProgress_Impl(SfxProgress *);
     SAL_DLLPRIVATE const OUString& GetLastDir_Impl() const;
     SAL_DLLPRIVATE void         SetLastDir_Impl( const OUString & );
 
-    SAL_DLLPRIVATE void         Registrations_Impl();
+    SAL_DLLPRIVATE static void  Registrations_Impl();
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl(const SfxViewFrame *pFrame=nullptr) const;
 
     // TODO/CLEANUP: still needed? -- unclear whether this comment
     // refers to the GetDisabledSlotList_Impl() method which was
     // already removed, or the below methods?
     SAL_DLLPRIVATE SfxSlotPool& GetAppSlotPool_Impl() const;
-    SAL_DLLPRIVATE SfxModule*   GetModule_Impl();
+    SAL_DLLPRIVATE static SfxModule* GetModule_Impl();
 
     static void                 SetModule(SfxToolsModule nSharedLib, std::unique_ptr<SfxModule> pModule);
     static SfxModule*           GetModule(SfxToolsModule nSharedLib);
