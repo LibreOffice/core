@@ -427,7 +427,7 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
     if( pStr )
     {
         sal_Size nLen = rtl_convertUnicodeToText(
-                            rContext.m_hConv, rContext.m_hContext, &c, 0,
+                            rContext.m_hConv, rContext.m_hContext, nullptr, 0,
                             cBuffer, TXTCONV_BUFFER_SIZE,
                             nFlags|RTL_UNICODETOTEXT_FLAGS_FLUSH,
                             &nInfo, &nSrcChars );
@@ -457,7 +457,7 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
             // entity.
             // coverity[callee_ptr_arith]
             nLen = rtl_convertUnicodeToText(
-                                rContext.m_hConv, rContext.m_hContext, &c, 0,
+                                rContext.m_hConv, rContext.m_hContext, nullptr, 0,
                                 cBuffer, TXTCONV_BUFFER_SIZE,
                                 nFlags|RTL_UNICODETOTEXT_FLAGS_FLUSH,
                                 &nInfo, &nSrcChars );
@@ -480,7 +480,6 @@ static OString lcl_FlushToAscii( HTMLOutContext& rContext )
 {
     OStringBuffer aDest;
 
-    sal_Unicode c = 0;
     sal_Char cBuffer[TXTCONV_BUFFER_SIZE];
     sal_uInt32 nInfo = 0;
     sal_Size nSrcChars;
@@ -490,7 +489,7 @@ static OString lcl_FlushToAscii( HTMLOutContext& rContext )
                         RTL_UNICODETOTEXT_FLAGS_FLUSH|
                         RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
     sal_Size nLen = rtl_convertUnicodeToText(
-                        rContext.m_hConv, rContext.m_hContext, &c, 0,
+                        rContext.m_hConv, rContext.m_hContext, nullptr, 0,
                         cBuffer, TXTCONV_BUFFER_SIZE, nFlags,
                         &nInfo, &nSrcChars );
     DBG_ASSERT( (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0, "HTMLOut: error while flushing" );
