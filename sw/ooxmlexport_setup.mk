@@ -20,6 +20,7 @@ define sw_ooxmlexport_libraries
 	unotest \
 	utl \
 	vcl \
+	svxcore \
 	$(gb_UWINAPI)
 endef
 
