@@ -61,8 +61,6 @@
 {
     (void)pNotification;
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
     NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
                                location: NSZeroPoint
                                modifierFlags: 0
@@ -72,7 +70,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                                subtype: AquaSalInstance::AppExecuteSVMain
                                data1: 0
                                data2: 0 ];
-SAL_WNODEPRECATED_DECLARATIONS_POP
     if( pEvent )
         [NSApp postEvent: pEvent atStart: NO];
 }
@@ -80,15 +77,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 -(void)sendEvent:(NSEvent*)pEvent
 {
     NSEventType eType = [pEvent type];
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
-        // 'NSClosableWindowMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSKeyDown' is deprecated: first deprecated in macOS 10.12
-        // 'NSMiniaturizableWindowMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
     if( eType == NSApplicationDefined )
     {
         AquaSalInstance::handleAppDefinedEvent( pEvent );
@@ -236,7 +224,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             }
         }
     }
-SAL_WNODEPRECATED_DECLARATIONS_POP
     [super sendEvent: pEvent];
 }
 

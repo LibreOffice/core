@@ -85,8 +85,6 @@
 
 - (void) postTheEvent: (short int)buttonIdentifier modifierFlags:(int)modifierFlags
 {
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
     [NSApp postEvent:
     [NSEvent    otherEventWithType:NSApplicationDefined
                 location:NSZeroPoint
@@ -98,7 +96,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 data1: buttonIdentifier
                 data2: 0]
     atStart: NO];
-SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 

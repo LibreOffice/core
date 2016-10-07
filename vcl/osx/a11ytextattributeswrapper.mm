@@ -272,11 +272,6 @@ using namespace ::com::sun::star::uno;
                 sal_Int32 alignment;
                 property.Value >>= alignment;
                 NSNumber *textAlignment = nil;
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    // 'NSCenterTextAlignment' is deprecated: first deprecated in macOS 10.12
-    // 'NSJustifiedTextAlignment' is deprecated: first deprecated in macOS 10.12
-    // 'NSLeftTextAlignment' is deprecated: first deprecated in macOS 10.12
-    // 'NSRightTextAlignment' is deprecated: first deprecated in macOS 10.12
                 switch(alignment) {
                     case css::style::ParagraphAdjust_RIGHT : textAlignment = [NSNumber numberWithInteger:NSRightTextAlignment]    ; break;
                     case css::style::ParagraphAdjust_CENTER: textAlignment = [NSNumber numberWithInteger:NSCenterTextAlignment]   ; break;
@@ -284,7 +279,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     case css::style::ParagraphAdjust_LEFT  :
                     default                                             : textAlignment = [NSNumber numberWithInteger:NSLeftTextAlignment]     ; break;
                 }
-SAL_WNODEPRECATED_DECLARATIONS_POP
                 NSDictionary *paragraphStyle = [NSDictionary dictionaryWithObjectsAndKeys:textAlignment, @"AXTextAlignment", textAlignment, @"AXVisualTextAlignment", nil];
                 [string addAttribute:@"AXParagraphStyle" value:paragraphStyle range:range];
             }

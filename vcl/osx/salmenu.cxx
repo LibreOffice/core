@@ -157,10 +157,7 @@ static void initAppMenu()
                         [pString release];
                     if( pNewItem )
                     {
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
                         [pNewItem setKeyEquivalentModifierMask: NSCommandKeyMask];
-SAL_WNODEPRECATED_DECLARATIONS_POP
                         [pNewItem setTarget: pMainMenuSelector];
                         [pAppMenu insertItem: [NSMenuItem separatorItem] atIndex: 3];
                     }
@@ -758,11 +755,6 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
     // should always use the command key
     int nItemModifier = 0;
 
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
     if (nModifier & KEY_SHIFT)
     {
         nItemModifier |= NSShiftKeyMask;   // actually useful only for function keys
@@ -778,7 +770,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 
     if(nModifier & KEY_MOD3)
         nItemModifier |= NSControlKeyMask;
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
     AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem *>(pSalMenuItem);
     NSString* pString = CreateNSString( OUString( &nCommandKey, 1 ) );

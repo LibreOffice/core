@@ -156,12 +156,6 @@ void AquaSalFrame::initWindowAndView()
     maGeometry.nHeight = static_cast<unsigned int>(aVisibleRect.size.height * 0.8);
 
     // calculate style mask
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSBorderlessWindowMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSClosableWindowMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSMiniaturizableWindowMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSResizableWindowMask' is deprecated: first deprecated in macOS 10.12
-        // 'NSTitledWindowMask' is deprecated: first deprecated in macOS 10.12
     if( (mnStyle & SalFrameStyleFlags::FLOAT) ||
         (mnStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) )
         mnStyleMask = NSBorderlessWindowMask;
@@ -195,7 +189,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         if( mnStyleMask != 0 )
             mnStyleMask |= NSTitledWindowMask;
     }
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // #i91990# support GUI-less (daemon) execution
     @try
@@ -1413,17 +1406,6 @@ SalPointerState AquaSalFrame::GetPointerState()
     if( pCur )
     {
         bMouseEvent = true;
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    // 'NSLeftMouseDown' is deprecated: first deprecated in macOS 10.12
-    // 'NSLeftMouseDragged' is deprecated: first deprecated in macOS 10.12
-    // 'NSLeftMouseUp' is deprecated: first deprecated in macOS 10.12
-    // 'NSMouseMoved' is deprecated: first deprecated in macOS 10.12
-    // 'NSOtherMouseDown' is deprecated: first deprecated in macOS 10.12
-    // 'NSOtherMouseDragged' is deprecated: first deprecated in macOS 10.12
-    // 'NSOtherMouseUp' is deprecated: first deprecated in macOS 10.12
-    // 'NSRightMouseDown' is deprecated: first deprecated in macOS 10.12
-    // 'NSRightMouseDragged' is deprecated: first deprecated in macOS 10.12
-    // 'NSRightMouseUp' is deprecated: first deprecated in macOS 10.12
         switch( [pCur type] )
         {
         case NSLeftMouseDown:       state.mnState |= MOUSE_LEFT; break;
@@ -1441,16 +1423,10 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             bMouseEvent = false;
             break;
         }
-SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     if( bMouseEvent )
     {
         unsigned int nMask = (unsigned int)[pCur modifierFlags];
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    // 'NSAlternateKeyMask' is deprecated: first deprecated in macOS 10.12
-    // 'NSCommandKeyMask' is deprecated: first deprecated in macOS 10.12
-    // 'NSControlKeyMask' is deprecated: first deprecated in macOS 10.12
-    // 'NSShiftKeyMask' is deprecated: first deprecated in macOS 10.12
         if( (nMask & NSShiftKeyMask) != 0 )
             state.mnState |= KEY_SHIFT;
         if( (nMask & NSControlKeyMask) != 0 )
@@ -1459,7 +1435,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
             state.mnState |= KEY_MOD2;
         if( (nMask & NSCommandKeyMask) != 0 )
             state.mnState |= KEY_MOD1;
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
     }
     else

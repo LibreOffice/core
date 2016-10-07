@@ -68,8 +68,6 @@ void ImplSalStartTimer( sal_uLong nMS )
     {
         SalData::ensureThreadAutoreleasePool();
         // post an event so we can get into the main thread
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    // 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
         NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
                                    location: NSZeroPoint
                                    modifierFlags: 0
@@ -79,7 +77,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                                    subtype: AquaSalInstance::AppStartTimerEvent
                                    data1: (int)nMS
                                    data2: 0 ];
-SAL_WNODEPRECATED_DECLARATIONS_POP
         if( pEvent )
             [NSApp postEvent: pEvent atStart: YES];
     }
