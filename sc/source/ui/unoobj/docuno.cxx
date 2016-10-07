@@ -984,6 +984,7 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     // show us the text exactly
     ScInputOptions aInputOptions(SC_MOD()->GetInputOptions());
     aInputOptions.SetTextWysiwyg(true);
+    aInputOptions.SetReplaceCellsWarn(false);
     SC_MOD()->SetInputOptions(aInputOptions);
     pDocShell->CalcOutputFactor();
 
