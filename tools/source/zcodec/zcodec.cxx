@@ -336,7 +336,6 @@ void ZCodec::InitCompress()
 void ZCodec::InitDecompress(SvStream & inStream)
 {
     assert(meState == STATE_INIT);
-    meState = STATE_DECOMPRESS;
     if ( mbStatus &&  mbGzLib )
     {
         sal_uInt8 n1, n2, j, nMethod, nFlags;
@@ -388,6 +387,8 @@ void ZCodec::InitDecompress(SvStream & inStream)
     {
         mbStatus = ( inflateInit( PZSTREAM ) >= 0 );
     }
+    if ( mbStatus )
+        meState = STATE_DECOMPRESS;
     mpInBuf = new sal_uInt8[ mnInBufSize ];
 }
 
