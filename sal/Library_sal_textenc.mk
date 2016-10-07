@@ -17,10 +17,6 @@ $(eval $(call gb_Library_use_libraries,sal_textenc,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_add_defs,sal_textenc,\
-	$(LFS_CFLAGS) \
-))
-
 $(eval $(call gb_Library_add_exception_objects,sal_textenc,\
 	sal/textenc/context \
 	sal/textenc/convertbig5hkscs \

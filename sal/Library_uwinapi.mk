@@ -23,7 +23,6 @@ $(eval $(call gb_Library_use_system_win32_libs,uwinapi,\
 $(eval $(call gb_Library_add_defs,uwinapi,\
 	$(if $(filter $(COM),GCC), \
 		-Wno-unused-parameter -Wno-return-type) \
-	$(LFS_CFLAGS) \
 ))
 
 $(eval $(call gb_Library_add_cobjects,uwinapi,\
