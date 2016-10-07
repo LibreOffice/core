@@ -581,7 +581,7 @@ class MaxStrLenFinder
         Color* pColor;
         OUString aValStr;
         ScCellFormat::GetString(
-            rCell, mnFormat, aValStr, &pColor, *mrDoc.GetFormatTable(), &mrDoc, true, false);
+            rCell, mnFormat, aValStr, &pColor, *mrDoc.GetFormatTable(), &mrDoc);
 
         if (aValStr.getLength() > mnMaxLen)
         {
@@ -668,7 +668,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         {
             ScRefCellValue aCell = GetCellValue(pParam->mnMaxTextRow);
             ScCellFormat::GetString(
-                aCell, nFormat, aLongStr, &pColor, *pFormatter, pDocument, true, false);
+                aCell, nFormat, aLongStr, &pColor, *pFormatter, pDocument);
         }
         else
         {
