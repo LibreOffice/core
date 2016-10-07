@@ -968,7 +968,7 @@ OUString ScModelObj::getTrackedChanges()
 
 void ScModelObj::setClientVisibleArea(const Rectangle& rRectangle)
 {
-    ScViewData* pViewData = pDocShell->GetViewData();
+    ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
         return;
 
