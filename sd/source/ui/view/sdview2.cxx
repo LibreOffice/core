@@ -726,7 +726,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                         {
                             // insert as clip action => jump
                             OUString       aBookmark( aINetBookmark.GetURL() );
-                            SdAnimationInfo*    pInfo = mrDoc.GetAnimationInfo( pPickObj );
+                            SdAnimationInfo*    pInfo = SdDrawDocument::GetAnimationInfo( pPickObj );
 
                             if( !aBookmark.isEmpty() )
                             {

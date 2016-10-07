@@ -945,7 +945,7 @@ void SdDrawDocument::StopWorkStartupDelay()
 // When the WorkStartupTimer has been created (this only happens in
 // SdDrawViewShell::Construct() ), the timer may be stopped and the WorkStartup
 // may be initiated.
-SdAnimationInfo* SdDrawDocument::GetAnimationInfo(SdrObject* pObject) const
+SdAnimationInfo* SdDrawDocument::GetAnimationInfo(SdrObject* pObject)
 {
     DBG_ASSERT(pObject, "sd::SdDrawDocument::GetAnimationInfo(), invalid argument!");
     if( pObject )
@@ -980,7 +980,7 @@ SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCrea
     return pRet;
 }
 
-SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject ) const
+SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject )
 {
     DBG_ASSERT(pObject, "Without an object there is no IMapInfo");
 

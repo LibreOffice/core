@@ -433,12 +433,12 @@ public:
         return nPos < maFrameViewList.size() ? maFrameViewList[nPos] : nullptr; }
 
     /** deprecated*/
-    SAL_DLLPRIVATE SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
+    SAL_DLLPRIVATE static SdAnimationInfo* GetAnimationInfo(SdrObject* pObject);
 
     static     SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
 
-    SAL_DLLPRIVATE SdIMapInfo*         GetIMapInfo( SdrObject* pObject ) const;
-    SAL_DLLPRIVATE IMapObject*         GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const vcl::Window& rCmpWnd );
+    SAL_DLLPRIVATE static SdIMapInfo*  GetIMapInfo( SdrObject* pObject );
+    SAL_DLLPRIVATE static IMapObject*  GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const vcl::Window& rCmpWnd );
 
     SAL_DLLPRIVATE CharClass*          GetCharClass() const { return mpCharClass; }
 
@@ -578,7 +578,7 @@ public:
 
     SAL_DLLPRIVATE void UpdatePageRelativeURLs(const OUString& rOldName, const OUString& rNewName);
 
-    SAL_DLLPRIVATE void SetCalcFieldValueHdl( ::Outliner* pOutliner);
+    SAL_DLLPRIVATE static void SetCalcFieldValueHdl( ::Outliner* pOutliner);
 
     SAL_DLLPRIVATE sal_uInt16 GetAnnotationAuthorIndex( const OUString& rAuthor );
 

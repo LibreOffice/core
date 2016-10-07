@@ -1566,8 +1566,8 @@ bool HtmlExport::CreateHtmlForPresPages()
             SdrObject* pObject = aIter.Next();
             while (pObject)
             {
-                SdAnimationInfo* pInfo     = mpDoc->GetAnimationInfo(pObject);
-                SdIMapInfo*      pIMapInfo = mpDoc->GetIMapInfo(pObject);
+                SdAnimationInfo* pInfo     = SdDrawDocument::GetAnimationInfo(pObject);
+                SdIMapInfo*      pIMapInfo = SdDrawDocument::GetIMapInfo(pObject);
 
                 if ((pInfo &&
                      (pInfo->meClickAction == presentation::ClickAction_BOOKMARK  ||
@@ -1682,8 +1682,8 @@ bool HtmlExport::CreateHtmlForPresPages()
 
             for (SdrObject* pObject : aClickableObjects)
             {
-                SdAnimationInfo* pInfo     = mpDoc->GetAnimationInfo(pObject);
-                SdIMapInfo*      pIMapInfo = mpDoc->GetIMapInfo(pObject);
+                SdAnimationInfo* pInfo     = SdDrawDocument::GetAnimationInfo(pObject);
+                SdIMapInfo*      pIMapInfo = SdDrawDocument::GetIMapInfo(pObject);
 
                 Rectangle aRect(pObject->GetCurrentBoundRect());
                 Point     aLogPos(aRect.TopLeft());
