@@ -50,7 +50,7 @@ private:
         ~StaticFormatter();
 
         operator SvNumberFormatter* () { return GetFormatter(); }
-        SVT_DLLPUBLIC SvNumberFormatter* GetFormatter();
+        SVT_DLLPUBLIC static SvNumberFormatter* GetFormatter();
     };
 
 protected:

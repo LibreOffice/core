@@ -218,7 +218,7 @@ private:
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-    SVT_DLLPRIVATE void         ImplGetWeekFont( vcl::Font& rFont ) const;
+    SVT_DLLPRIVATE static void  ImplGetWeekFont( vcl::Font& rFont );
     SVT_DLLPRIVATE void         ImplFormat();
     using Window::ImplHitTest;
     SVT_DLLPRIVATE sal_uInt16   ImplHitTest( const Point& rPos, Date& rDate ) const;

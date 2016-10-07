@@ -249,7 +249,7 @@ struct ErrorResource_Impl : private Resource
 };
 
 
-void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
+void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
 
 /*  [Description]
 

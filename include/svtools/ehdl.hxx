@@ -64,7 +64,7 @@ private:
     ResMgr              *pMgr;
     ResMgr              *pFreeMgr;
 
-    SVT_DLLPRIVATE void   GetClassString(sal_uLong lErrId, OUString &) const;
+    SVT_DLLPRIVATE static void GetClassString(sal_uLong lErrId, OUString &);
     virtual bool          CreateString( const ErrorInfo *, OUString &, sal_uInt16 &) const override;
 };
 
