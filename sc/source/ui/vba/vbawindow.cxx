@@ -862,7 +862,7 @@ double SAL_CALL ScVbaWindow::getTabRatio() throw (css::uno::RuntimeException, st
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     if ( pViewShell && pViewShell->GetViewData().GetView() )
     {
-        double fRatio = pViewShell->GetViewData().GetView()->GetRelTabBarWidth();
+        double fRatio = ScTabView::GetRelTabBarWidth();
         if ( fRatio >= 0.0 && fRatio <= 1.0 )
             return fRatio;
     }
