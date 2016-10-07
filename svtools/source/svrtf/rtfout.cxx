@@ -24,7 +24,29 @@
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>
 
-SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
+namespace {
+
+SvStream& Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
+{
+    sal_Char aNToABuf[] = "0000000000000000";
+
+    DBG_ASSERT( nLen < sizeof(aNToABuf), "zu viele Stellen" );
+    if( nLen >= sizeof(aNToABuf) )
+        nLen = (sizeof(aNToABuf)-1);
+
+    // set pointer to end of buffer
+    sal_Char* pStr = aNToABuf + (sizeof(aNToABuf)-1);
+    for( sal_uInt8 n = 0; n < nLen; ++n )
+    {
+        *(--pStr) = (sal_Char)(nHex & 0xf ) + 48;
+        if( *pStr > '9' )
+            *pStr += 39;
+        nHex >>= 4;
+    }
+    return rStream.WriteCharPtr( pStr );
+}
+
+SvStream& Out_Char(SvStream& rStream, sal_Unicode c,
     int *pUCMode, rtl_TextEncoding eDestEnc, bool bWriteHelpFile)
 {
     const sal_Char* pStr = nullptr;
@@ -147,6 +169,8 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
     return rStream;
 }
 
+}
+
 SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const OUString& rStr,
     rtl_TextEncoding eDestEnc, bool bWriteHelpFile)
 {
@@ -157,26 +181,5 @@ SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const OUString& rStr,
       rStream.WriteCharPtr( "\\uc1" ).WriteCharPtr( " " ); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
     return rStream;
 }
-
-SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLen )
-{
-    sal_Char aNToABuf[] = "0000000000000000";
-
-    DBG_ASSERT( nLen < sizeof(aNToABuf), "zu viele Stellen" );
-    if( nLen >= sizeof(aNToABuf) )
-        nLen = (sizeof(aNToABuf)-1);
-
-    // set pointer to end of buffer
-    sal_Char* pStr = aNToABuf + (sizeof(aNToABuf)-1);
-    for( sal_uInt8 n = 0; n < nLen; ++n )
-    {
-        *(--pStr) = (sal_Char)(nHex & 0xf ) + 48;
-        if( *pStr > '9' )
-            *pStr += 39;
-        nHex >>= 4;
-    }
-    return rStream.WriteCharPtr( pStr );
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

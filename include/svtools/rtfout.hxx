@@ -30,20 +30,14 @@ namespace rtl {
 };
 class SvStream;
 
-class SVT_DLLPUBLIC RTFOutFuncs
-{
-public:
-    static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
-                    int *pUCMode,
-                    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                    bool bWriteHelpFile = false );
-    static SvStream& Out_String( SvStream&, const rtl::OUString&,
-                    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                    bool bWriteHelpFile = false );
+namespace RTFOutFuncs {
 
-    static SvStream& Out_Hex( SvStream&, sal_uLong nHex, sal_uInt8 nLen );
-};
+SVT_DLLPUBLIC SvStream& Out_String(
+    SvStream&, const rtl::OUString&,
+    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
+    bool bWriteHelpFile = false );
 
+}
 
 #endif
 
