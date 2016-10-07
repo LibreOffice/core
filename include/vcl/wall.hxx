@@ -59,7 +59,7 @@ public:
 private:
     ImplType  mpImplWallpaper;
 
-    SAL_DLLPRIVATE Gradient       ImplGetApplicationGradient() const;
+    SAL_DLLPRIVATE static Gradient  ImplGetApplicationGradient();
 
 public:
                     Wallpaper();

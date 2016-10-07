@@ -768,7 +768,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
     mbInternModified = true;
 }
 
-OUString Edit::ImplGetValidString( const OUString& rString ) const
+OUString Edit::ImplGetValidString( const OUString& rString )
 {
     OUString aValidString( rString );
     aValidString = aValidString.replaceAll("\n", "").replaceAll("\r", "");
@@ -776,7 +776,7 @@ OUString Edit::ImplGetValidString( const OUString& rString ) const
     return aValidString;
 }
 
-uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
+uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator()
 {
     //!! since we don't want to become incompatible in the next minor update
     //!! where this code will get integrated into, xISC will be a local

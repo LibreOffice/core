@@ -85,13 +85,13 @@ private:
     SAL_DLLPRIVATE void                 ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pColParam,
                                                             BmpExchangeFnc pFncBmp, const void* pBmpParam );
 
-    SAL_DLLPRIVATE Point                ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt,
+    SAL_DLLPRIVATE static Point         ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt,
                                                              const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE tools::Polygon       ImplGetRotatedPolygon( const tools::Polygon& rPoly, const Point& rRotatePt,
+    SAL_DLLPRIVATE static tools::Polygon ImplGetRotatedPolygon( const tools::Polygon& rPoly, const Point& rRotatePt,
                                                                const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE tools::PolyPolygon   ImplGetRotatedPolyPolygon( const tools::PolyPolygon& rPoly, const Point& rRotatePt,
+    SAL_DLLPRIVATE static tools::PolyPolygon ImplGetRotatedPolyPolygon( const tools::PolyPolygon& rPoly, const Point& rRotatePt,
                                                                    const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE void                 ImplAddGradientEx( GDIMetaFile& rMtf,
+    SAL_DLLPRIVATE static void          ImplAddGradientEx( GDIMetaFile& rMtf,
                                                            const OutputDevice& rMapDev,
                                                            const tools::PolyPolygon& rPolyPoly,
                                                            const Gradient& rGrad );

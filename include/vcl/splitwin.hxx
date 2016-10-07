@@ -110,7 +110,7 @@ private:
     static SAL_DLLPRIVATE void ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool bHide,
                                              bool bRows, bool bDown = true );
     SAL_DLLPRIVATE void ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet );
-    SAL_DLLPRIVATE void ImplDrawBack(vcl::RenderContext& rRenderContext, const Rectangle& rRect,
+    SAL_DLLPRIVATE static void ImplDrawBack(vcl::RenderContext& rRenderContext, const Rectangle& rRect,
                                              const Wallpaper* pWall, const Bitmap* pBitmap );
     static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
                                                 long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos,
