@@ -29,6 +29,7 @@
 #include <vector>
 
 #if defined _WIN32
+#include <windows.h>
 #include <ddeml.h>
 #endif
 
