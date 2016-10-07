@@ -96,7 +96,7 @@ public:
     void SAL_CALL addAuthorToTrustedSources( const css::uno::Reference< css::security::XCertificate >& Author ) throw (css::uno::RuntimeException, std::exception) override;
     void SAL_CALL addLocationToTrustedSources( const OUString& Location ) throw (css::uno::RuntimeException, std::exception) override;
 
-    css::uno::Reference< css::security::XCertificate > SAL_CALL chooseCertificate( ) throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::security::XCertificate > SAL_CALL chooseCertificate(OUString& rDescription) throw (css::uno::RuntimeException, std::exception) override;
 };
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL DocumentDigitalSignatures_CreateInstance(

@@ -1758,7 +1758,9 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, void )
         security::DocumentDigitalSignatures::createWithVersion(
             comphelper::getProcessComponentContext(), "1.2" ) );
 
-    maSignCertificate = xSigner->chooseCertificate();
+    // The use may provide a description while choosing a certificate.
+    OUString aDescription;
+    maSignCertificate = xSigner->chooseCertificate(aDescription);
 
     if (maSignCertificate.is())
     {
@@ -1768,6 +1770,7 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, void )
         mpEdSignPassword->Enable();
         mpEdSignContactInfo->Enable();
         mpEdSignReason->Enable();
+        mpEdSignReason->SetText(aDescription);
 
         try
         {
