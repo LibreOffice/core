@@ -598,13 +598,7 @@ void SAL_CALL rtl_uString_newFromCodePoints(
     }
     p = (*newString)->buffer;
     for (i = 0; i < codePointCount; ++i) {
-        sal_uInt32 c = codePoints[i];
-        if (c < 0x10000) {
-            *p++ = (sal_Unicode) c;
-        } else {
-            *p++ = rtl::getHighSurrogate(c);
-            *p++ = rtl::getLowSurrogate(c);
-        }
+        p += rtl::splitSurrogates(codePoints[i], p);
     }
     RTL_LOG_STRING_NEW( *newString );
 }

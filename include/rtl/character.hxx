@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstddef>
 
 #include <sal/types.h>
 
@@ -306,6 +307,31 @@ inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low) {
     assert(isLowSurrogate(low));
     return ((high - detail::surrogatesHighFirst) << 10)
         + (low - detail::surrogatesLowFirst) + 0x10000;
+}
+
+/** Split a Unicode code point into UTF-16 code units.
+
+    @param code  A Unicode code point.
+
+    @param output  A non-null pointer to an array with space for at least two
+    sal_Unicode UTF-16 code units.
+
+    @return  The number of UTF-16 code units placed into the output (either one
+    or two).
+
+    @since LibreOffice 5.3
+*/
+inline std::size_t splitSurrogates(sal_uInt32 code, sal_Unicode * output) {
+    assert(isUnicodeCodePoint(code));
+    assert(output != NULL);
+    if (code < 0x10000) {
+        output[0] = code;
+        return 1;
+    } else {
+        output[0] = getHighSurrogate(code);
+        output[1] = getLowSurrogate(code);
+        return 2;
+    }
 }
 
 }

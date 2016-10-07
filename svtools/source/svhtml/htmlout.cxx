@@ -449,15 +449,7 @@ static OString lcl_ConvertCharToHTML( sal_uInt32 c,
         sal_Size nSrcChars;
 
         sal_Unicode utf16[2];
-        sal_Size n;
-        if (c < 0x10000) {
-            utf16[0] = c;
-            n = 1;
-        } else {
-            utf16[0] = rtl::getHighSurrogate(c);
-            utf16[1] = rtl::getLowSurrogate(c);
-            n = 2;
-        }
+        auto n = rtl::splitSurrogates(c, utf16);
         sal_Size nLen = rtl_convertUnicodeToText(rContext.m_hConv,
                                                  rContext.m_hContext, utf16, n,
                                                  cBuffer, TXTCONV_BUFFER_SIZE,
