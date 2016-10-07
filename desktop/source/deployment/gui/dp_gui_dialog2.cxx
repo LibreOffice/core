@@ -225,8 +225,11 @@ void ExtBoxWithBtns_Impl::RecalcAll()
     }
     else
     {
+        m_pOptionsBtn->Disable();
         m_pOptionsBtn->Hide();
+        m_pEnableBtn->Disable();
         m_pEnableBtn->Hide();
+        m_pRemoveBtn->Disable();
         m_pRemoveBtn->Hide();
     }
 
@@ -280,7 +283,10 @@ void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
 
     if ( ( !rEntry->m_bUser || ( rEntry->m_eState == NOT_AVAILABLE ) || rEntry->m_bMissingDeps )
          && !rEntry->m_bMissingLic )
+    {
+        m_pEnableBtn->Disable();
         m_pEnableBtn->Hide();
+    }
     else
     {
         m_pEnableBtn->Enable( !rEntry->m_bLocked );
@@ -290,12 +296,15 @@ void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
 
     if ( rEntry->m_bHasOptions && bShowOptionBtn )
     {
-        m_pOptionsBtn->Enable( rEntry->m_bHasOptions );
+        m_pOptionsBtn->Enable();
         m_pOptionsBtn->Show();
         rEntry->m_bHasButtons = true;
     }
     else
+    {
+        m_pOptionsBtn->Disable();
         m_pOptionsBtn->Hide();
+    }
 
     if ( rEntry->m_bUser || rEntry->m_bShared )
     {
@@ -304,7 +313,10 @@ void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
         rEntry->m_bHasButtons = true;
     }
     else
+    {
+        m_pRemoveBtn->Disable();
         m_pRemoveBtn->Hide();
+    }
 }
 
 
