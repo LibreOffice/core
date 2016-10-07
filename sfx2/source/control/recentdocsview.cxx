@@ -52,9 +52,12 @@ void SetMessageFont(vcl::RenderContext& rRenderContext)
 
 }
 
+namespace sfx2
+{
+
 RecentDocsView::RecentDocsView( vcl::Window* pParent )
     : ThumbnailView(pParent)
-    , mnFileTypes(TYPE_NONE)
+    , mnFileTypes(ApplicationType::TYPE_NONE)
     , mnTextHeight(30)
     , mnItemPadding(5)
     , mnItemMaxTextLength(30)
@@ -86,32 +89,32 @@ bool RecentDocsView::typeMatchesExtension(ApplicationType type, const OUString &
     if (rExt == "odt" || rExt == "doc" || rExt == "docx" ||
         rExt == "rtf" || rExt == "txt" || rExt == "odm" || rExt == "otm")
     {
-        bRet = type & TYPE_WRITER;
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_WRITER);
     }
     else if (rExt == "ods" || rExt == "xls" || rExt == "xlsx")
     {
-        bRet = type & TYPE_CALC;
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_CALC);
     }
     else if (rExt == "odp" || rExt == "pps" || rExt == "ppt" ||
             rExt == "pptx")
     {
-        bRet = type & TYPE_IMPRESS;
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_IMPRESS);
     }
     else if (rExt == "odg")
     {
-        bRet = type & TYPE_DRAW;
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_DRAW);
     }
     else if (rExt == "odb")
     {
-        bRet = type & TYPE_DATABASE;
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_DATABASE);
     }
     else if (rExt == "odf")
     {
-        bRet = type & TYPE_MATH;
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_MATH);
     }
     else
     {
-        bRet = type & TYPE_OTHER;
+        bRet = static_cast<bool>(type & ApplicationType::TYPE_OTHER);
     }
 
     return bRet;
@@ -121,13 +124,13 @@ bool RecentDocsView::isAcceptedFile(const OUString &rURL) const
 {
     INetURLObject aUrl(rURL);
     OUString aExt = aUrl.getExtension();
-    return (mnFileTypes & TYPE_WRITER   && typeMatchesExtension(TYPE_WRITER,  aExt)) ||
-           (mnFileTypes & TYPE_CALC     && typeMatchesExtension(TYPE_CALC,    aExt)) ||
-           (mnFileTypes & TYPE_IMPRESS  && typeMatchesExtension(TYPE_IMPRESS, aExt)) ||
-           (mnFileTypes & TYPE_DRAW     && typeMatchesExtension(TYPE_DRAW,    aExt)) ||
-           (mnFileTypes & TYPE_DATABASE && typeMatchesExtension(TYPE_DATABASE,aExt)) ||
-           (mnFileTypes & TYPE_MATH     && typeMatchesExtension(TYPE_MATH,    aExt)) ||
-           (mnFileTypes & TYPE_OTHER    && typeMatchesExtension(TYPE_OTHER,   aExt));
+    return (mnFileTypes & ApplicationType::TYPE_WRITER   && typeMatchesExtension(ApplicationType::TYPE_WRITER,  aExt)) ||
+           (mnFileTypes & ApplicationType::TYPE_CALC     && typeMatchesExtension(ApplicationType::TYPE_CALC,    aExt)) ||
+           (mnFileTypes & ApplicationType::TYPE_IMPRESS  && typeMatchesExtension(ApplicationType::TYPE_IMPRESS, aExt)) ||
+           (mnFileTypes & ApplicationType::TYPE_DRAW     && typeMatchesExtension(ApplicationType::TYPE_DRAW,    aExt)) ||
+           (mnFileTypes & ApplicationType::TYPE_DATABASE && typeMatchesExtension(ApplicationType::TYPE_DATABASE,aExt)) ||
+           (mnFileTypes & ApplicationType::TYPE_MATH     && typeMatchesExtension(ApplicationType::TYPE_MATH,    aExt)) ||
+           (mnFileTypes & ApplicationType::TYPE_OTHER    && typeMatchesExtension(ApplicationType::TYPE_OTHER,   aExt));
 }
 
 BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
@@ -136,17 +139,17 @@ BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
     INetURLObject aUrl(rURL);
     OUString aExt = aUrl.getExtension();
 
-    if ( typeMatchesExtension( TYPE_WRITER, aExt) )
+    if (typeMatchesExtension(ApplicationType::TYPE_WRITER, aExt))
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_TEXT ) );
-    else if ( typeMatchesExtension( TYPE_CALC, aExt) )
+    else if (typeMatchesExtension(ApplicationType::TYPE_CALC, aExt))
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_SHEET ) );
-    else if ( typeMatchesExtension( TYPE_IMPRESS, aExt) )
+    else if (typeMatchesExtension(ApplicationType::TYPE_IMPRESS, aExt))
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_PRESENTATION ) );
-    else if ( typeMatchesExtension( TYPE_DRAW, aExt) )
+    else if (typeMatchesExtension(ApplicationType::TYPE_DRAW, aExt))
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DRAWING ) );
-    else if ( typeMatchesExtension( TYPE_DATABASE, aExt) )
+    else if (typeMatchesExtension(ApplicationType::TYPE_DATABASE, aExt))
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DATABASE ) );
-    else if ( typeMatchesExtension( TYPE_MATH, aExt) )
+    else if (typeMatchesExtension(ApplicationType::TYPE_MATH, aExt))
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_MATH ) );
     else
         aImg = BitmapEx ( SfxResId( SFX_FILE_THUMBNAIL_DEFAULT ) );
@@ -343,5 +346,7 @@ IMPL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, void*, p, void )
 
     delete pLoadRecentFile;
 }
+
+} // namespace sfx2
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

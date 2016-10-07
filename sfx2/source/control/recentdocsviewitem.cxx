@@ -59,13 +59,14 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     if (aThumbnail.IsEmpty())
     {
         // Use the default thumbnail if we have nothing else
-        BitmapEx aExt(RecentDocsView::getDefaultThumbnail(rURL));
+        BitmapEx aExt(sfx2::RecentDocsView::getDefaultThumbnail(rURL));
         Size aExtSize(aExt.GetSizePixel());
 
         // attempt to make it appear as if it is on a piece of paper
         long nPaperHeight;
         long nPaperWidth;
-        if( RecentDocsView::typeMatchesExtension(TYPE_IMPRESS, aURLObj.getExtension()) )
+        if (sfx2::RecentDocsView::typeMatchesExtension(
+                sfx2::ApplicationType::TYPE_IMPRESS, aURLObj.getExtension()))
         {
             // Swap width and height (PAPER_SCREEN_4_3 definition make it needed)
             PaperInfo aInfo(PAPER_SCREEN_4_3);
@@ -210,13 +211,13 @@ void RecentDocsViewItem::OpenDocument()
         // Call dispatch asynchronously as we can be destroyed while dispatch is
         // executed. VCL is not able to survive this as it wants to call listeners
         // after select!!!
-        LoadRecentFile* pLoadRecentFile = new LoadRecentFile;
+        sfx2::LoadRecentFile *const pLoadRecentFile = new sfx2::LoadRecentFile;
         pLoadRecentFile->xDispatch = xDispatch;
         pLoadRecentFile->aTargetURL = aTargetURL;
         pLoadRecentFile->aArgSeq = aArgsList;
         pLoadRecentFile->pView.set(&mrParent);
 
-        Application::PostUserEvent(LINK(nullptr, RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile, true);
+        Application::PostUserEvent(LINK(nullptr, sfx2::RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile, true);
     }
 }
 

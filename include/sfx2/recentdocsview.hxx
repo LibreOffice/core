@@ -14,9 +14,14 @@
 #include <sfx2/recentdocsviewitem.hxx>
 #include <vcl/image.hxx>
 
+#include <o3tl/typed_flags_set.hxx>
+
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+
+namespace sfx2
+{
 
 struct LoadRecentFile
 {
@@ -26,7 +31,7 @@ struct LoadRecentFile
     VclPtr< ThumbnailView >                           pView;
 };
 
-enum ApplicationType
+enum class ApplicationType
 {
     TYPE_NONE     =      0,
     TYPE_WRITER   = 1 << 0,
@@ -38,6 +43,16 @@ enum ApplicationType
     TYPE_OTHER    = 1 << 6
 };
 
+} // namespace sfx2
+
+namespace o3tl {
+
+template<> struct typed_flags<sfx2::ApplicationType> : is_typed_flags<sfx2::ApplicationType, 0x7f> {};
+
+} // namespace o3tl
+
+namespace sfx2
+{
 
 class SFX2_DLLPUBLIC RecentDocsView : public ThumbnailView
 {
@@ -51,7 +66,7 @@ public:
     static bool typeMatchesExtension(ApplicationType type, const OUString &rExt);
     static BitmapEx getDefaultThumbnail(const OUString &rURL);
 
-    int     mnFileTypes;
+    ApplicationType mnFileTypes;
 
     virtual void Clear() override;
 
@@ -84,6 +99,8 @@ protected:
     OUString maWelcomeLine1;
     OUString maWelcomeLine2;
 };
+
+} // namespace sfx2
 
 #endif // INCLUDED_SFX2_RECENTDOCSVIEW_HXX
 

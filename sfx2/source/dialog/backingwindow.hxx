@@ -79,7 +79,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     VclPtr<VclBox> mpButtonsBox;
     VclPtr<VclBox> mpSmallButtonsBox;
 
-    VclPtr<RecentDocsView> mpAllRecentThumbnails;
+    VclPtr<sfx2::RecentDocsView> mpAllRecentThumbnails;
     VclPtr<TemplateDefaultView> mpLocalView;
     bool mbLocalViewInitialized;
 

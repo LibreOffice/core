@@ -236,24 +236,24 @@ void BackingWindow::initControls()
     }
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
-        mpAllRecentThumbnails->mnFileTypes |= TYPE_WRITER;
+        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_WRITER;
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::CALC))
-        mpAllRecentThumbnails->mnFileTypes |= TYPE_CALC;
+        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_CALC;
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::IMPRESS))
-        mpAllRecentThumbnails->mnFileTypes |= TYPE_IMPRESS;
+        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_IMPRESS;
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
-        mpAllRecentThumbnails->mnFileTypes |= TYPE_DRAW;
+        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_DRAW;
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::DATABASE))
-        mpAllRecentThumbnails->mnFileTypes |= TYPE_DATABASE;
+        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_DATABASE;
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::MATH))
-        mpAllRecentThumbnails->mnFileTypes |= TYPE_MATH;
+        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_MATH;
 
-    mpAllRecentThumbnails->mnFileTypes |= TYPE_OTHER;
+    mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_OTHER;
     mpAllRecentThumbnails->Reload();
     mpAllRecentThumbnails->ShowTooltips( true );
     mpRecentButton->SetActive(true);
