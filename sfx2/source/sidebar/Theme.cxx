@@ -18,7 +18,6 @@
  */
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/Paint.hxx>
-#include <sfx2/sidebar/SidebarResource.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/app.hxx>
 
@@ -144,8 +143,6 @@ void Theme::InitializeTheme()
 
 void Theme::UpdateTheme()
 {
-    SidebarResource aLocalResource;
-
     try
     {
         const StyleSettings& rStyle (Application::GetSettings().GetStyleSettings());
