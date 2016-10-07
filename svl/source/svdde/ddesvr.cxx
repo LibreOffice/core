@@ -194,7 +194,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
 found:
     if ( nCode == XTYP_DISCONNECT)
     {
-        pC->pTopic->Disconnect( hConv );
+        DisconnectTopic(*pC->pTopic, hConv);
         for ( ConvList::iterator it = pService->pConv->begin();
               it != pService->pConv->end();
               ++it
@@ -326,13 +326,13 @@ found:
 
             if (pItem)
             {
-                pItem->IncMonitor( hConv );
+                IncMonitor(pItem, hConv);
             }
         }
         return (HDDEDATA)sal_True;
 
     case XTYP_ADVSTOP:
-        pItem->DecMonitor( hConv );
+        DecMonitor(pItem, hConv);
         return (HDDEDATA)sal_True;
 
     case XTYP_EXECUTE:
@@ -669,11 +669,13 @@ void DdeTopic::NotifyClient( const OUString& rItem )
     }
 }
 
-void DdeTopic::Disconnect( HCONV nId )
+void DdeInternal::DisconnectTopic(DdeTopic & rTopic, HCONV nId)
 {
     std::vector<DdeItem*>::iterator iter;
-    for (iter = aItems.begin(); iter != aItems.end(); ++iter)
-        (*iter)->DecMonitor( nId );
+    for (iter = rTopic.aItems.begin(); iter != rTopic.aItems.end(); ++iter)
+    {
+        DecMonitor(*iter, nId);
+    }
 }
 
 DdeData* DdeTopic::Get(SotClipboardFormatId /*nFmt*/)
@@ -750,47 +752,53 @@ void DdeItem::NotifyClient()
     }
 }
 
-void DdeItem::IncMonitor( HCONV nHCnv )
+void DdeInternal::IncMonitor(DdeItem *const pItem, HCONV nHCnv)
 {
-    if( !pImpData )
+    if (!pItem->pImpData)
     {
-        pImpData = new DdeItemImp;
-        if( DDEGETPUTITEM == nType )
-            ((DdeGetPutItem*)this)->AdviseLoop( true );
+        pItem->pImpData = new DdeItemImp;
+        if (DDEGETPUTITEM == pItem->nType)
+        {
+            static_cast<DdeGetPutItem*>(pItem)->AdviseLoop( true );
+        }
     }
     else
     {
-        for( sal_uInt16 n = pImpData->size(); n; )
-            if( (*pImpData)[ --n ].nHCnv == nHCnv )
+        for (size_t n = pItem->pImpData->size(); n; )
+        {
+            if ((*pItem->pImpData)[ --n ].nHCnv == nHCnv)
             {
-                ++(*pImpData)[ n ].nHCnv;
+                ++(*pItem->pImpData)[ n ].nHCnv;
                 return ;
             }
+        }
     }
 
-    pImpData->push_back( DdeItemImpData( nHCnv ) );
+    pItem->pImpData->push_back( DdeItemImpData( nHCnv ) );
 }
 
-void DdeItem::DecMonitor( HCONV nHCnv )
+void DdeInternal::DecMonitor(DdeItem *const pItem, HCONV nHCnv)
 {
-    if( pImpData )
+    if (pItem->pImpData)
     {
-        for( sal_uInt16 n = 0; n < pImpData->size(); ++n )
+        for( sal_uInt16 n = 0; n < pItem->pImpData->size(); ++n )
         {
-            DdeItemImpData* pData = &(*pImpData)[n];
+            DdeItemImpData* pData = &(*pItem->pImpData)[n];
             if( pData->nHCnv == nHCnv )
             {
                 if( !pData->nCnt || !--pData->nCnt )
                 {
-                    if( 1 < pImpData->size() )
+                    if (1 < pItem->pImpData->size())
                     {
-                        pImpData->erase(pImpData->begin() + n);
+                        pItem->pImpData->erase(pItem->pImpData->begin() + n);
                     }
                     else
                     {
-                        delete pImpData, pImpData = 0;
-                        if( DDEGETPUTITEM == nType )
-                            ((DdeGetPutItem*)this)->AdviseLoop( false );
+                        delete pItem->pImpData, pItem->pImpData = 0;
+                        if (DDEGETPUTITEM == pItem->nType)
+                        {
+                            static_cast<DdeGetPutItem*>(pItem)->AdviseLoop(false);
+                        }
                     }
                 }
                 return ;

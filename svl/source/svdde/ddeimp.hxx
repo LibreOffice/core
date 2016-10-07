@@ -49,6 +49,9 @@ public:
     static DdeService*      FindService( HSZ );
     static DdeTopic*        FindTopic( DdeService&, HSZ );
     static DdeItem*         FindItem( DdeTopic&, HSZ );
+    static void DisconnectTopic(DdeTopic &, HCONV);
+    static void IncMonitor(DdeItem *pItem, HCONV);
+    static void DecMonitor(DdeItem *pItem, HCONV);
 };
 
 

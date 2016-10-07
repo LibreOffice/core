@@ -28,13 +28,6 @@
 #include <tools/link.hxx>
 #include <vector>
 
-#if defined _WIN32
-#include <prewin.h>
-#include <windows.h>
-#include <postwin.h>
-#include <ddeml.h>
-#endif
-
 class DdeString;
 class DdeData;
 class DdeConnection;
@@ -213,11 +206,6 @@ class SVL_DLLPUBLIC DdeItem
     DdeTopic*       pMyTopic;
     DdeItemImp*     pImpData;
 
-#if defined _WIN32
-    void            IncMonitor( HCONV );
-    void            DecMonitor( HCONV );
-#endif
-
 protected:
     sal_uInt8            nType;
 
@@ -248,9 +236,6 @@ public:
 
 class SVL_DLLPUBLIC DdeTopic
 {
-#if defined _WIN32
-    SVL_DLLPRIVATE void Disconnect( HCONV );
-#endif
 
 public:
     virtual DdeData* Get(SotClipboardFormatId);
