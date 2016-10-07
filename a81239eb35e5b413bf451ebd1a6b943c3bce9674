@@ -34,6 +34,24 @@
       "revId": "a81239eb35e5b413bf451ebd1a6b943c3bce9674",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_dfd097cc",
+        "filename": "basctl/source/basicide/macrodlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2016-10-07T15:14:35Z",
+      "side": 1,
+      "message": "The line is moved from 372 to 366, and the variable is not used in between (only used in the DBG_ASSERT, yes this need a good explanation.",
+      "parentUuid": "7a77a97e_1f54cf52",
+      "revId": "a81239eb35e5b413bf451ebd1a6b943c3bce9674",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
