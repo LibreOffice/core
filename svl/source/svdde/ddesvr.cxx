@@ -669,7 +669,7 @@ void DdeTopic::NotifyClient( const OUString& rItem )
     }
 }
 
-void DdeTopic::Disconnect( HCONV nId )
+void DdeTopic::Disconnect( svl_dde::HCONV nId )
 {
     std::vector<DdeItem*>::iterator iter;
     for (iter = aItems.begin(); iter != aItems.end(); ++iter)
@@ -750,7 +750,7 @@ void DdeItem::NotifyClient()
     }
 }
 
-void DdeItem::IncMonitor( HCONV nHCnv )
+void DdeItem::IncMonitor( svl_dde::HCONV nHCnv )
 {
     if( !pImpData )
     {
@@ -768,10 +768,10 @@ void DdeItem::IncMonitor( HCONV nHCnv )
             }
     }
 
-    pImpData->push_back( DdeItemImpData( nHCnv ) );
+    pImpData->push_back( DdeItemImpData( static_cast<HCONV>(nHCnv) ) );
 }
 
-void DdeItem::DecMonitor( HCONV nHCnv )
+void DdeItem::DecMonitor( svl_dde::HCONV nHCnv )
 {
     if( pImpData )
     {
