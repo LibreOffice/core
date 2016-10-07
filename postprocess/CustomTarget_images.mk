@@ -27,6 +27,7 @@ $(packimages_DIR)/images%.zip : INDUSTRIAL_FALLBACK :=
 $(packimages_DIR)/%.zip : \
 		$(packimages_DIR)/sorted.lst \
 		$(packimages_DIR)/commandimagelist.ilst \
+		$(SRCDIR)/sfx2/source/sidebar/sidebar.ilst \
 		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
 		$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(ENABLE_JAVA),$(SRCDIR)/connectivity/source/drivers/hsqldb/hsqlui.ilst)) \
 		$(call gb_Helper_get_imagelists)

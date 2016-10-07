@@ -250,7 +250,6 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Color_TabItemBorder],
             Any(sal_Int32(rStyle.GetActiveBorderColor().GetRGBColor())));
-        //                    mbIsHighContrastMode ? 0x00ff00 : 0xbfbfbf)));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_DropDownBackground],
@@ -272,12 +271,11 @@ void Theme::UpdateTheme()
         setPropertyValue(
             maPropertyIdToNameMap[Paint_TabItemBackgroundHighlight],
             Any(sal_Int32(rStyle.GetActiveTabColor().GetRGBColor())));
-        //                    mbIsHighContrastMode ? 0x000000 : 0x00ffffff)));
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_HorizontalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
-        //                    mbIsHighContrastMode ? 0x00ff00 :  0xe4e4e4)));
+
         setPropertyValue(
             maPropertyIdToNameMap[Paint_VerticalBorder],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
@@ -303,29 +301,6 @@ void Theme::UpdateTheme()
             maPropertyIdToNameMap[Image_CloseIndicator],
             Any(OUString("private:graphicrepository/cmd/lc_decrementlevel.png")));
 
-        // ToolBox
-
-        /*
-        // Separator style
-        setPropertyValue(
-            maPropertyIdToNameMap[Paint_ToolBoxBackground],
-            Any(sal_Int32(rStyle.GetMenuColor().GetRGBColor())));
-        setPropertyValue(
-            maPropertyIdToNameMap[Paint_ToolBoxBorderTopLeft],
-            Any());
-        setPropertyValue(
-            maPropertyIdToNameMap[Paint_ToolBoxBorderCenterCorners],
-            Any());
-        setPropertyValue(
-            maPropertyIdToNameMap[Paint_ToolBoxBorderBottomRight],
-            Any());
-        setPropertyValue(
-            maPropertyIdToNameMap[Rect_ToolBoxPadding],
-            Any(awt::Rectangle(2,2,2,2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Rect_ToolBoxBorder],
-            Any(awt::Rectangle(0,0,0,0)));
-        */
         // Gradient style
         Color aGradientStop2 (aBaseBackgroundColor);
         aGradientStop2.IncreaseLuminance(17);
