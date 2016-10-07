@@ -379,6 +379,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     aSortParam.bByRow           = true;
                     aSortParam.bCaseSens        = false;
                     aSortParam.bNaturalSort     = false;
+                    aSortParam.bIncludeComments = false;
                     aSortParam.bIncludePattern  = true;
                     aSortParam.bInplace         = true;
                     aSortParam.maKeyState[0].bDoSort = true;
@@ -432,6 +433,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aSortParam.bCaseSens = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_NATURALSORT, true, &pItem ) == SfxItemState::SET )
                             aSortParam.bNaturalSort = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                        if ( pArgs->GetItemState( SID_SORT_INCCOMMENTS, true, &pItem ) == SfxItemState::SET )
+                            aSortParam.bIncludeComments = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_ATTRIBS, true, &pItem ) == SfxItemState::SET )
                             aSortParam.bIncludePattern = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         if ( pArgs->GetItemState( SID_SORT_USERDEF, true, &pItem ) == SfxItemState::SET )
@@ -516,6 +519,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                     rOutParam.bCaseSens ) );
                                 rReq.AppendItem( SfxBoolItem( SID_SORT_NATURALSORT,
                                             rOutParam.bNaturalSort ) );
+                                rReq.AppendItem( SfxBoolItem( SID_SORT_INCCOMMENTS,
+                                            rOutParam.bIncludeComments ) );
                                 rReq.AppendItem( SfxBoolItem( SID_SORT_ATTRIBS,
                                     rOutParam.bIncludePattern ) );
                                 sal_uInt16 nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;
