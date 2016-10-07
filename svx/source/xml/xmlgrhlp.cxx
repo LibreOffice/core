@@ -458,7 +458,7 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
     return aRet;
 }
 
-OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName ) const
+OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName )
 {
     struct XMLGraphicMimeTypeMapper
     {

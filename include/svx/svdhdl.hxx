@@ -260,7 +260,7 @@ private:
 
     // help functions
     SVX_DLLPRIVATE Bitmap CreateColorDropper(Color aCol);
-    SVX_DLLPRIVATE Color GetLuminance(const Color& rCol);
+    SVX_DLLPRIVATE static Color GetLuminance(const Color& rCol);
     SVX_DLLPRIVATE void CallColorChangeLink();
 
 public:

@@ -40,7 +40,7 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
 
     DECL_DLLPRIVATE_LINK( SelectHdl, ListBox&, void );
 
-    SAL_DLLPRIVATE double          GetDefValue(const short nFormatType) const;
+    SAL_DLLPRIVATE static double   GetDefValue(const short nFormatType);
     SAL_DLLPRIVATE void            Init();
     SAL_DLLPRIVATE SwView*         GetView();
 

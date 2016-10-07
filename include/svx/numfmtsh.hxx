@@ -215,8 +215,8 @@ private:
 
     SVX_DLLPRIVATE void  GetPreviewString_Impl( OUString& rString,
                                                 Color*& rpColor );
-    SVX_DLLPRIVATE void  PosToCategory_Impl(sal_uInt16 nPos, short& rCategory) const;
-    SVX_DLLPRIVATE void  CategoryToPos_Impl(short nCategory, sal_uInt16& rPos) const;
+    SVX_DLLPRIVATE static void PosToCategory_Impl(sal_uInt16 nPos, short& rCategory);
+    SVX_DLLPRIVATE static void CategoryToPos_Impl(short nCategory, sal_uInt16& rPos);
 };
 
 #endif

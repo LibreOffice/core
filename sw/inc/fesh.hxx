@@ -223,15 +223,15 @@ private:
     SAL_DLLPRIVATE const SwFrame *GetBox( const Point &rPt, bool* pbRow = nullptr, bool* pbCol = nullptr ) const;
 
     // 0 == not in any column.
-    SAL_DLLPRIVATE sal_uInt16 GetCurColNum_( const SwFrame *pFrame,
-                          SwGetCurColNumPara* pPara ) const;
+    SAL_DLLPRIVATE static sal_uInt16 GetCurColNum_( const SwFrame *pFrame,
+                          SwGetCurColNumPara* pPara );
 
-    SAL_DLLPRIVATE void GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox ) const;
-    SAL_DLLPRIVATE void GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox ) const;
+    SAL_DLLPRIVATE static void GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox );
+    SAL_DLLPRIVATE static void GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox );
 
     SAL_DLLPRIVATE bool ImpEndCreate();
 
-    SAL_DLLPRIVATE ObjCntType GetObjCntType( const SdrObject& rObj ) const;
+    SAL_DLLPRIVATE static ObjCntType GetObjCntType( const SdrObject& rObj );
 
     /// Methods for copying of draw objects.
     SAL_DLLPRIVATE bool CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,

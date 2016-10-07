@@ -650,7 +650,7 @@ private:
 
     SAL_DLLPRIVATE SalGraphics*         ImplGetFrameGraphics() const;
 
-    SAL_DLLPRIVATE void                 ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow, vcl::Window* pOldOverlapWindow );
+    SAL_DLLPRIVATE static void          ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow, vcl::Window* pOldOverlapWindow );
     SAL_DLLPRIVATE vcl::Window*         ImplGetFirstOverlapWindow();
     SAL_DLLPRIVATE const vcl::Window*   ImplGetFirstOverlapWindow() const;
 
@@ -738,7 +738,7 @@ private:
     SAL_DLLPRIVATE void                 ImplCallActivateListeners(vcl::Window*);
     SAL_DLLPRIVATE void                 ImplCallDeactivateListeners(vcl::Window*);
 
-    SAL_DLLPRIVATE void                 ImplHandleScroll( ScrollBar* pHScrl, long nX, ScrollBar* pVScrl, long nY );
+    SAL_DLLPRIVATE static void          ImplHandleScroll( ScrollBar* pHScrl, long nX, ScrollBar* pVScrl, long nY );
 
     SAL_DLLPRIVATE Rectangle            ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle& rRect ) const;
     SAL_DLLPRIVATE long                 ImplGetUnmirroredOutOffX();

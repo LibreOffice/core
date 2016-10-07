@@ -671,7 +671,7 @@ private:
                                       long nMin, long nMax, long nStart, long nVirTop, long nVirBottom);
     SVT_DLLPRIVATE void ImplDrawBorders(vcl::RenderContext& rRenderContext,
                                         long nMin, long nMax, long nVirTop, long nVirBottom);
-    SVT_DLLPRIVATE void ImplDrawIndent(vcl::RenderContext& rRenderContext,
+    SVT_DLLPRIVATE static void ImplDrawIndent(vcl::RenderContext& rRenderContext,
                                        const tools::Polygon& rPoly, bool bIsHit);
     SVT_DLLPRIVATE void ImplDrawIndents(vcl::RenderContext& rRenderContext,
                                         long nMin, long nMax, long nVirTop, long nVirBottom);

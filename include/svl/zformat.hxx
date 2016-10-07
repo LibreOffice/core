@@ -470,7 +470,7 @@ private:
         @returns one of css::i18n::CalendarDisplayCode values
             according to eCodeType and the check executed (or passed).
      */
-    SVL_DLLPRIVATE sal_Int32 ImpUseMonthCase( int & io_nState, const ImpSvNumFor& rNumFor, NfKeywordIndex eCodeType ) const;
+    SVL_DLLPRIVATE static sal_Int32 ImpUseMonthCase( int & io_nState, const ImpSvNumFor& rNumFor, NfKeywordIndex eCodeType );
 
     /// Whether it's a (YY)YY-M(M)-D(D) format.
     SVL_DLLPRIVATE bool ImpIsIso8601( const ImpSvNumFor& rNumFor );
@@ -542,7 +542,7 @@ private:
     // check subcondition
     // OP undefined => -1
     // else 0 or 1
-    SVL_DLLPRIVATE short ImpCheckCondition(double& fNumber,
+    SVL_DLLPRIVATE static short ImpCheckCondition(double& fNumber,
                          double& fLimit,
                          SvNumberformatLimitOps eOp);
 

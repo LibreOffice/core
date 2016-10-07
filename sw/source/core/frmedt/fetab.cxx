@@ -518,7 +518,7 @@ bool SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
     return bRet;
 }
 
-void SwFEShell::GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox ) const
+void SwFEShell::GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox )
 {
     const SwTabFrame *pTab = pBox->FindTabFrame();
     if ( pLastCols )
@@ -582,7 +582,7 @@ void SwFEShell::GetTabCols_( SwTabCols &rToFill, const SwFrame *pBox ) const
     }
 }
 
-void SwFEShell::GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox ) const
+void SwFEShell::GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox )
 {
     const SwTabFrame *pTab = pBox->FindTabFrame();
     if ( pLastRows )

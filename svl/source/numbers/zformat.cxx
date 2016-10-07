@@ -2893,7 +2893,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
 // inspection of month name around that one, that would enable different month
 // cases in one format. Though probably the most rare use case ever..
 
-sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& rNumFor, NfKeywordIndex eCodeType ) const
+sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& rNumFor, NfKeywordIndex eCodeType )
 {
     using namespace ::com::sun::star::i18n;
     if (!io_nState)

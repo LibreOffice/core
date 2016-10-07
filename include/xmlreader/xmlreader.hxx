@@ -168,7 +168,7 @@ private:
 
     SAL_DLLPRIVATE Result handleNormalizedText(Span * text);
 
-    SAL_DLLPRIVATE int toNamespaceId(NamespaceIris::size_type pos);
+    SAL_DLLPRIVATE static int toNamespaceId(NamespaceIris::size_type pos);
 
     OUString fileUrl_;
     oslFileHandle fileHandle_;

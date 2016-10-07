@@ -196,7 +196,7 @@ protected:
 
     // returns native submenu arrow size and spacing from right border
     // return value is whether it's supported natively
-    SAL_DLLPRIVATE bool ImplGetNativeSubmenuArrowSize(vcl::RenderContext& rRenderContext, Size& rArrowSize, long& rArrowSpacing) const;
+    SAL_DLLPRIVATE static bool ImplGetNativeSubmenuArrowSize(vcl::RenderContext& rRenderContext, Size& rArrowSize, long& rArrowSpacing);
 
     SAL_DLLPRIVATE void ImplAddDel( ImplMenuDelData &rDel );
     SAL_DLLPRIVATE void ImplRemoveDel( ImplMenuDelData &rDel );

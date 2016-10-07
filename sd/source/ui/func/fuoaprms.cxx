@@ -123,7 +123,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     // inspect first object
     pMark = rMarkList.GetMark(0);
-    pInfo = mpDoc->GetAnimationInfo(pMark->GetMarkedSdrObj());
+    pInfo = SdDrawDocument::GetAnimationInfo(pMark->GetMarkedSdrObj());
     if( pInfo )
     {
         bActive             = pInfo->mbActive;
@@ -180,7 +180,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     {
         pMark = rMarkList.GetMark( nObject );
         SdrObject* pObject = pMark->GetMarkedSdrObj();
-        pInfo = mpDoc->GetAnimationInfo(pObject);
+        pInfo = SdDrawDocument::GetAnimationInfo(pObject);
         if( pInfo )
         {
             if( bActive != pInfo->mbActive )
@@ -291,8 +291,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         SdrObject* pObject2 = rMarkList.GetMark(1)->GetMarkedSdrObj();
         SdrObjKind eKind1   = (SdrObjKind)pObject1->GetObjIdentifier();
         SdrObjKind eKind2   = (SdrObjKind)pObject2->GetObjIdentifier();
-        SdAnimationInfo* pInfo1 = mpDoc->GetAnimationInfo(pObject1);
-        SdAnimationInfo* pInfo2 = mpDoc->GetAnimationInfo(pObject2);
+        SdAnimationInfo* pInfo1 = SdDrawDocument::GetAnimationInfo(pObject1);
+        SdAnimationInfo* pInfo2 = SdDrawDocument::GetAnimationInfo(pObject2);
         pInfo  = nullptr;
 
         if (pObject1->GetObjInventor() == SdrInventor &&
@@ -679,7 +679,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         {
             SdrObject* pObject = rMarkList.GetMark(nObject)->GetMarkedSdrObj();
 
-            pInfo = mpDoc->GetAnimationInfo(pObject);
+            pInfo = SdDrawDocument::GetAnimationInfo(pObject);
 
             bool bCreated = false;
             if( !pInfo )

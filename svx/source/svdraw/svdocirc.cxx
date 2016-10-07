@@ -663,7 +663,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
     } else aP2=aCenter;
 }
 
-void SdrCircObj::ImpSetCreateParams(SdrDragStat& rStat) const
+void SdrCircObj::ImpSetCreateParams(SdrDragStat& rStat)
 {
     ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     if (pU==nullptr) {

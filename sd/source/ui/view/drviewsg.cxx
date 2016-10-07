@@ -59,7 +59,7 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
             if ( pDlg->GetEditingObject() == static_cast<void*>(pSdrObj) )
             {
                 const ImageMap& rImageMap = pDlg->GetImageMap();
-                SdIMapInfo*     pIMapInfo = GetDoc()->GetIMapInfo( pSdrObj );
+                SdIMapInfo*     pIMapInfo = SdDrawDocument::GetIMapInfo( pSdrObj );
 
                 if ( !pIMapInfo )
                     pSdrObj->AppendUserData( new SdIMapInfo( rImageMap ) );

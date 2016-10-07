@@ -181,7 +181,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
             catch( uno::Exception& )
             {}
         }
-        else if( dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && (mpSourceDoc && !mpSourceDoc->GetAnimationInfo( pObj )) )
+        else if( dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && (mpSourceDoc && !SdDrawDocument::GetAnimationInfo( pObj )) )
         {
             mpGraphic = new Graphic( static_cast< SdrGrafObj* >( pObj )->GetTransformedGraphic() );
         }
@@ -246,7 +246,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
             }
         }
 
-        SdIMapInfo* pInfo = static_cast< SdDrawDocument* >( pObj->GetModel() )->GetIMapInfo( pObj );
+        SdIMapInfo* pInfo = SdDrawDocument::GetIMapInfo( pObj );
 
         if( pInfo )
             mpImageMap = new ImageMap( pInfo->GetImageMap() );

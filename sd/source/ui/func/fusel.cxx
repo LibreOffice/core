@@ -1220,9 +1220,9 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
           SdrObjectPrimitiveHit(*pObj, aHitPosT, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
           SdrObjectPrimitiveHit(*pObj, aHitPosB, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) ) )
     {
-        if ( mpDoc->GetIMapInfo( pObj ) )
+        if ( SdDrawDocument::GetIMapInfo( pObj ) )
         {
-            const IMapObject* pIMapObj = mpDoc->GetHitIMapObject( pObj, rPos, *mpWindow );
+            const IMapObject* pIMapObj = SdDrawDocument::GetHitIMapObject( pObj, rPos, *mpWindow );
 
             if ( pIMapObj && !pIMapObj->GetURL().isEmpty() )
             {
@@ -1243,12 +1243,12 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
         }
         else if( dynamic_cast< const GraphicDocShell *>( mpDocSh ) ==  nullptr        &&
                  dynamic_cast< const DrawView *>( mpView ) !=  nullptr                 &&
-                 mpDoc->GetAnimationInfo(pObj))
+                 SdDrawDocument::GetAnimationInfo(pObj))
         {
             /**********************************************************
             * Animation-object hit in the middle -> interaction
             **********************************************************/
-            SdAnimationInfo* pInfo = mpDoc->GetAnimationInfo(pObj);
+            SdAnimationInfo* pInfo = SdDrawDocument::GetAnimationInfo(pObj);
             DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(mpViewShell);
             mpWindow->ReleaseMouse();
 
@@ -1438,12 +1438,12 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
             dynamic_cast< const DrawView *>( mpView ) !=  nullptr                 &&
             dynamic_cast< const GraphicDocShell *>( mpDocSh ) ==  nullptr        &&
             SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) &&
-            mpDoc->GetAnimationInfo(pObj))
+            SdDrawDocument::GetAnimationInfo(pObj))
         {
             /**********************************************************
             * Effect-Object hit in the middle -> Play effect
             **********************************************************/
-            SdAnimationInfo* pInfo = mpDoc->GetAnimationInfo(pObj);
+            SdAnimationInfo* pInfo = SdDrawDocument::GetAnimationInfo(pObj);
 
             switch (pInfo->meClickAction)
             {

@@ -199,7 +199,7 @@ private:
     SVX_DLLPRIVATE void         Construct();
     SVX_DLLPRIVATE void         Reset();
 
-    SVX_DLLPRIVATE bool         LBSelectColor( ColorLB* pLb, const Color& rColor );
+    SVX_DLLPRIVATE static bool  LBSelectColor( ColorLB* pLb, const Color& rColor );
     SVX_DLLPRIVATE sal_uInt16   GetLightSource( const PushButton* pBtn );
     SVX_DLLPRIVATE ColorLB*     GetLbByButton( const PushButton* pBtn = nullptr );
 

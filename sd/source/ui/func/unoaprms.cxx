@@ -30,7 +30,7 @@ void SdAnimationPrmsUndoAction::Undo()
         SdDrawDocument* pDoc   = static_cast<SdDrawDocument*>(pObject->GetModel());
         if( pDoc )
         {
-            SdAnimationInfo* pInfo = pDoc->GetAnimationInfo( pObject );
+            SdAnimationInfo* pInfo = SdDrawDocument::GetAnimationInfo( pObject );
 
             pInfo->mbActive     = bOldActive;
             pInfo->meEffect      = eOldEffect;

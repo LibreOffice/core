@@ -1386,7 +1386,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, lo
     return Size(std::max(nCheckWidth, nRadioWidth), std::max(rCheckHeight, rRadioHeight));
 }
 
-bool Menu::ImplGetNativeSubmenuArrowSize(vcl::RenderContext& rRenderContext, Size& rArrowSize, long& rArrowSpacing) const
+bool Menu::ImplGetNativeSubmenuArrowSize(vcl::RenderContext& rRenderContext, Size& rArrowSize, long& rArrowSpacing)
 {
     ImplControlValue aVal;
     Rectangle aNativeBounds;

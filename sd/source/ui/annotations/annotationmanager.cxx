@@ -430,7 +430,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     {
         std::unique_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OutlinerMode::TextObject) );
 
-        mpDoc->SetCalcFieldValueHdl( pOutliner.get() );
+        SdDrawDocument::SetCalcFieldValueHdl( pOutliner.get() );
         pOutliner->SetUpdateMode( true );
 
         OUString aStr(SD_RESSTR(STR_ANNOTATION_REPLY));

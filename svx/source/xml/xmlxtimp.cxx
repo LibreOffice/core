@@ -301,7 +301,7 @@ void SvxXMLTableImportContext::importBitmap( sal_uInt16 nPrfx, const OUString& r
     try
     {
         XMLImageStyle aImageStyle;
-        aImageStyle.importXML( xAttrList, rAny, rName, GetImport() );
+        XMLImageStyle::importXML( xAttrList, rAny, rName, GetImport() );
     }
     catch (const Exception&)
     {

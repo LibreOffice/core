@@ -56,7 +56,7 @@ protected:
     long                        nEndAngle;
 private:
      SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const Rectangle& rRect1, long nStart, long nEnd) const;
-    SVX_DLLPRIVATE void ImpSetCreateParams(SdrDragStat& rStat) const;
+    SVX_DLLPRIVATE static void ImpSetCreateParams(SdrDragStat& rStat);
     SVX_DLLPRIVATE void ImpSetAttrToCircInfo(); // copy values from pool
     SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // copy values into pool
 

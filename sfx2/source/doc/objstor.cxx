@@ -981,7 +981,7 @@ bool SfxObjectShell::IsOwnStorageFormat(const SfxMedium &rMedium)
 }
 
 
-bool SfxObjectShell::IsPackageStorageFormat_Impl(const SfxMedium &rMedium) const
+bool SfxObjectShell::IsPackageStorageFormat_Impl(const SfxMedium &rMedium)
 {
     return !rMedium.GetFilter() || // Embedded
            ( rMedium.GetFilter()->UsesStorage() &&

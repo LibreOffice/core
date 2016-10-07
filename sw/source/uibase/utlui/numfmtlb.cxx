@@ -436,7 +436,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
     }
 }
 
-double NumFormatListBox::GetDefValue(const short nFormatType) const
+double NumFormatListBox::GetDefValue(const short nFormatType)
 {
     SvxNumValCategory nDefValue = SvxNumValCategory::Standard;
 

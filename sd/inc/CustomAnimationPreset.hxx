@@ -117,7 +117,7 @@ private:
 
     SAL_DLLPRIVATE void importPresets( const css::uno::Reference< css::lang::XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, PresetCategoryList& rPresetMap  );
 
-    SAL_DLLPRIVATE const OUString& translateName( const OUString& rId, const UStringMap& rNameMap ) const;
+    SAL_DLLPRIVATE static const OUString& translateName( const OUString& rId, const UStringMap& rNameMap );
 
 private:
     css::uno::Reference< css::animations::XAnimationNode > mxRootNode;

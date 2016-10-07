@@ -59,7 +59,7 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
         Graphic     aGraphic;
         ImageMap*   pIMap = nullptr;
         TargetList* pTargetList = nullptr;
-        SdIMapInfo* pIMapInfo = GetDoc()->GetIMapInfo( pObj );
+        SdIMapInfo* pIMapInfo = SdDrawDocument::GetIMapInfo( pObj );
 
         // get graphic from shape
         SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >( pObj );
