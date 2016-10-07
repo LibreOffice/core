@@ -32,27 +32,6 @@
 #define HID_SC_WIN_GRIDWIN                                      "SC_HID_SC_WIN_GRIDWIN"
 #define HID_SC_WIN_PREVIEW                                      "SC_HID_SC_WIN_PREVIEW"
 
-// Hilfe IDs fuer einzelne Controls (max.30) ---------------------------------
-//  Eintraege im Navigator
-#define HID_SC_NAVIPI_ENTRIES                                   "SC_HID_SC_NAVIPI_ENTRIES"
-#define HID_SC_NAVIPI_ROW                                       "SC_HID_SC_NAVIPI_ROW"
-#define HID_SC_NAVIPI_COL                                       "SC_HID_SC_NAVIPI_COL"
-#define HID_SC_NAVIPI_DOC                                       "SC_HID_SC_NAVIPI_DOC"
-#define HID_SC_NAVIPI_DATA                                      "SC_HID_SC_NAVIPI_DATA"
-#define HID_SC_NAVIPI_UP                                        "SC_HID_SC_NAVIPI_UP"
-#define HID_SC_NAVIPI_DOWN                                      "SC_HID_SC_NAVIPI_DOWN"
-#define HID_SC_NAVIPI_ZOOM                                      "SC_HID_SC_NAVIPI_ZOOM"
-#define HID_SC_NAVIPI_ROOT                                      "SC_HID_SC_NAVIPI_ROOT"
-#define HID_SC_NAVIPI_SCEN                                      "SC_HID_SC_NAVIPI_SCEN"
-#define HID_SC_NAVIPI_DROP                                      "SC_HID_SC_NAVIPI_DROP"
-
-#define HID_SC_NAVIPI_TOOLBOX                                   "SC_HID_SC_NAVIPI_TOOLBOX"
-//  Bereich ist voll!
-
-// Hilfe IDs fuer Dialoge / Pages (max.70) -----------------------------------
-#define HID_SC_NAVIGATOR                                        "SC_HID_SC_NAVIGATOR"
-
-
 #define HID_SC_HEADER_EDIT                                      "SC_HID_SC_HEADER_EDIT"
 #define HID_SC_FOOTER_EDIT                                      "SC_HID_SC_FOOTER_EDIT"
 

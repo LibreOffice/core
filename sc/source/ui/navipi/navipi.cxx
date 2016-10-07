@@ -26,6 +26,7 @@
 #include <sfx2/navigat.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urlbmk.hxx>
+#include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
@@ -38,19 +39,16 @@
 #include "rangenam.hxx"
 #include "rangeutl.hxx"
 #include "popmenu.hxx"
+#include "sc.hrc"
 #include "scresid.hxx"
 #include "scmod.hxx"
 #include "navicfg.hxx"
 #include "navcitem.hxx"
-#include "navipi.hrc"
 #include "navipi.hxx"
 #include "navsett.hxx"
 #include "markdata.hxx"
 
 #include <algorithm>
-
-//  tolerance, how much spac above the folded size is still small
-#define SCNAV_MINTOL        5
 
 //  maximum values for UI
 #define SCNAV_MAXCOL        (MAXCOLCOUNT)
@@ -73,18 +71,17 @@ void ScNavigatorDlg::ReleaseFocus()
     }
 }
 
-//  class ColumnEdit
-
-ColumnEdit::ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId )
-    :   SpinField   ( pParent, rResId ),
-        rDlg        ( *pParent ),
-        nCol        ( 0 )
+ColumnEdit::ColumnEdit(Window* pParent, WinBits nWinBits)
+    : SpinField(pParent, nWinBits)
+    , nCol(0)
 {
-    SetMaxTextLen( SCNAV_COLDIGITS );   // 1...256...18278 or A...IV...ZZZ
+    SetMaxTextLen(SCNAV_COLDIGITS);   // 1...256...18278 or A...IV...ZZZ
 }
 
-ColumnEdit::~ColumnEdit()
+VCL_BUILDER_DECL_FACTORY(ColumnEdit)
 {
+    (void)rMap;
+    rRet = VclPtr<ColumnEdit>::Create(pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_RIGHT);
 }
 
 bool ColumnEdit::Notify( NotifyEvent& rNEvt )
@@ -120,6 +117,12 @@ bool ColumnEdit::Notify( NotifyEvent& rNEvt )
 void ColumnEdit::LoseFocus()
 {
     EvalText();
+}
+
+void ColumnEdit::dispose()
+{
+    xDlg.clear();
+    SpinField::dispose();
 }
 
 void ColumnEdit::Up()
@@ -172,12 +175,12 @@ void ColumnEdit::EvalText()
 
 void ColumnEdit::ExecuteCol()
 {
-    SCROW nRow = rDlg.aEdRow->GetRow();
+    SCROW nRow = xDlg->aEdRow->GetRow();
 
     EvalText(); // setzt nCol
 
     if ( (nCol > 0) && (nRow > 0) )
-        rDlg.SetCurrentCell( nCol-1, nRow-1 );
+        xDlg->SetCurrentCell(nCol - 1, nRow - 1);
 }
 
 void ColumnEdit::SetCol( SCCOL nColNo )
@@ -244,18 +247,17 @@ SCCOL ColumnEdit::NumToAlpha( SCCOL nColNo, OUString& rStr )
     return nColNo;
 }
 
-//  class RowEdit
-
-RowEdit::RowEdit( ScNavigatorDlg* pParent, const ResId& rResId )
-    :   NumericField( pParent, rResId ),
-        rDlg        ( *pParent )
+RowEdit::RowEdit(Window* pParent, WinBits nWinBits)
+    : NumericField(pParent, nWinBits)
 {
-    SetMax( SCNAV_MAXROW);
-    SetLast( SCNAV_MAXROW);
+    SetMax(SCNAV_MAXROW);
+    SetLast(SCNAV_MAXROW);
 }
 
-RowEdit::~RowEdit()
+VCL_BUILDER_DECL_FACTORY(RowEdit)
 {
+    (void)rMap;
+    rRet = VclPtr<RowEdit>::Create(pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_RIGHT);
 }
 
 bool RowEdit::Notify( NotifyEvent& rNEvt )
@@ -281,13 +283,25 @@ void RowEdit::LoseFocus()
 {
 }
 
+void RowEdit::dispose()
+{
+    xDlg.clear();
+    NumericField::dispose();
+}
+
+Size RowEdit::GetOptimalSize() const
+{
+    //max rows is 1,000,000, which is too long for typical use
+    return CalcMinimumSizeForText("1,000");
+}
+
 void RowEdit::ExecuteRow()
 {
-    SCCOL nCol = rDlg.aEdCol->GetCol();
+    SCCOL nCol = xDlg->aEdCol->GetCol();
     SCROW nRow = (SCROW)GetValue();
 
     if ( (nCol > 0) && (nRow > 0) )
-        rDlg.SetCurrentCell( nCol-1, nRow-1 );
+        xDlg->SetCurrentCell(nCol - 1, nRow - 1);
 }
 
 IMPL_LINK(ScNavigatorDlg, DocumentSelectHdl, ListBox&, rListBox, void)
@@ -298,156 +312,100 @@ IMPL_LINK(ScNavigatorDlg, DocumentSelectHdl, ListBox&, rListBox, void)
     aLbEntries->SelectDoc(aDocName);
 }
 
-//  class CommandToolBox
-
-CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
-    :   ToolBox ( pParent, rResId ),
-        rDlg    ( *pParent )
+IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, ToolBox*, pToolBox, void)
 {
-    InitImageList();    // ImageList members of ScNavigatorDlg must be initialized before!
-
-    SetSizePixel( CalcWindowSizePixel() );
-    SetDropdownClickHdl( LINK(this, CommandToolBox, ToolBoxDropdownClickHdl) );
-    SetItemBits( IID_DROPMODE, GetItemBits( IID_DROPMODE ) | ToolBoxItemBits::DROPDOWNONLY );
-}
-
-CommandToolBox::~CommandToolBox()
-{
-}
-
-void CommandToolBox::Select( sal_uInt16 nSelId )
-{
+    sal_uInt16 nSelId = pToolBox->GetCurItemId();
     //  Modus umschalten ?
-
-    if ( nSelId == IID_ZOOMOUT || nSelId == IID_SCENARIOS )
+    if (nSelId == nZoomId || nSelId == nScenarioId)
     {
-        NavListMode eOldMode = rDlg.eListMode;
+        NavListMode eOldMode = eListMode;
         NavListMode eNewMode;
 
-        if ( nSelId == IID_SCENARIOS )
+        if (nSelId == nScenarioId)
         {
-            if ( eOldMode == NAV_LMODE_SCENARIOS )
+            if (eOldMode == NAV_LMODE_SCENARIOS)
                 eNewMode = NAV_LMODE_AREAS;
             else
                 eNewMode = NAV_LMODE_SCENARIOS;
         }
         else                                            // on/off
         {
-            if ( eOldMode == NAV_LMODE_NONE )
+            if (eOldMode == NAV_LMODE_NONE)
                 eNewMode = NAV_LMODE_AREAS;
             else
                 eNewMode = NAV_LMODE_NONE;
         }
-        rDlg.SetListMode( eNewMode, true );
+        SetListMode(eNewMode);
         UpdateButtons();
     }
     else
-        switch ( nSelId )
+    {
+        if (nSelId == nDataId)
+            MarkDataArea();
+        else if (nSelId == nUpId)
+            StartOfDataArea();
+        else if (nSelId == nDownId)
+            EndOfDataArea();
+        else if (nSelId == nChangeRootId)
         {
-            case IID_DATA:
-                rDlg.MarkDataArea();
-                break;
-            case IID_UP:
-                rDlg.StartOfDataArea();
-                break;
-            case IID_DOWN:
-                rDlg.EndOfDataArea();
-                break;
-            case IID_CHANGEROOT:
-                rDlg.aLbEntries->ToggleRoot();
-                UpdateButtons();
-                break;
+            aLbEntries->ToggleRoot();
+            UpdateButtons();
         }
+    }
 }
 
-void CommandToolBox::Select()
-{
-    Select( GetCurItemId() );
-}
-
-void CommandToolBox::Click()
-{
-}
-
-IMPL_LINK_NOARG(CommandToolBox, ToolBoxDropdownClickHdl, ToolBox *, void)
+IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, ToolBox *, pToolBox, void)
 {
     // the popup menue of the drop modus has to be called in the
     // click (button down) and not in the select (button up)
-
-    if ( GetCurItemId() == IID_DROPMODE )
+    if (pToolBox->GetCurItemId() == nDragModeId)
     {
-        ScopedVclPtrInstance<ScPopupMenu> aPop( ScResId( RID_POPUP_DROPMODE ) );
-        aPop->CheckItem( RID_DROPMODE_URL + rDlg.GetDropMode() );
-        aPop->Execute( this, GetItemRect(IID_DROPMODE), PopupMenuFlags::ExecuteDown );
+        ScopedVclPtrInstance<ScPopupMenu> aPop(ScResId(RID_POPUP_DROPMODE));
+        aPop->CheckItem(RID_DROPMODE_URL + GetDropMode());
+        aPop->Execute(pToolBox, pToolBox->GetItemRect(nDragModeId), PopupMenuFlags::ExecuteDown);
         sal_uInt16 nId = aPop->GetSelected();
 
-        EndSelection();     // bevore SetDropMode (SetDropMode calls SetItemImage)
+        pToolBox->EndSelection();     // before SetDropMode (SetDropMode calls SetItemImage)
 
-        if ( nId >= RID_DROPMODE_URL && nId <= RID_DROPMODE_COPY )
-            rDlg.SetDropMode( nId - RID_DROPMODE_URL );
-
-        //  reset the highlighted button
-        Point aPoint;
-        MouseEvent aLeave( aPoint, 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
-        MouseMove( aLeave );
+        if (nId >= RID_DROPMODE_URL && nId <= RID_DROPMODE_COPY)
+            SetDropMode(nId - RID_DROPMODE_URL);
     }
 }
 
-void CommandToolBox::UpdateButtons()
+void ScNavigatorDlg::UpdateButtons()
 {
-    NavListMode eMode = rDlg.eListMode;
-    CheckItem( IID_SCENARIOS,   eMode == NAV_LMODE_SCENARIOS );
-    CheckItem( IID_ZOOMOUT,     eMode != NAV_LMODE_NONE );
+    NavListMode eMode = eListMode;
+    aTbxCmd->CheckItem(nScenarioId, eMode == NAV_LMODE_SCENARIOS);
+    aTbxCmd->CheckItem(nZoomId, eMode != NAV_LMODE_NONE);
 
     //  Umschalten-Button:
-    if ( eMode == NAV_LMODE_SCENARIOS || eMode == NAV_LMODE_NONE )
+    if (eMode == NAV_LMODE_SCENARIOS || eMode == NAV_LMODE_NONE)
     {
-        EnableItem( IID_CHANGEROOT, false );
-        CheckItem( IID_CHANGEROOT, false );
+        aTbxCmd->EnableItem(nChangeRootId, false);
+        aTbxCmd->CheckItem(nChangeRootId, false);
     }
     else
     {
-        EnableItem( IID_CHANGEROOT );
-        bool bRootSet = rDlg.aLbEntries->GetRootType() != ScContentId::ROOT;
-        CheckItem( IID_CHANGEROOT, bRootSet );
+        aTbxCmd->EnableItem(nChangeRootId);
+        bool bRootSet = aLbEntries->GetRootType() != ScContentId::ROOT;
+        aTbxCmd->CheckItem(nChangeRootId, bRootSet);
     }
 
     sal_uInt16 nImageId = 0;
-    switch ( rDlg.nDropMode )
+    switch (nDropMode)
     {
-        case SC_DROPMODE_URL:   nImageId = RID_IMG_DROP_URL;  break;
-        case SC_DROPMODE_LINK:  nImageId = RID_IMG_DROP_LINK; break;
-        case SC_DROPMODE_COPY:  nImageId = RID_IMG_DROP_COPY; break;
+        case SC_DROPMODE_URL:
+            nImageId = RID_IMG_DROP_URL;
+            break;
+        case SC_DROPMODE_LINK:
+            nImageId = RID_IMG_DROP_LINK;
+            break;
+        case SC_DROPMODE_COPY:
+            nImageId = RID_IMG_DROP_COPY;
+            break;
     }
-    SetItemImage( IID_DROPMODE, Image(ScResId(nImageId)) );
+    aTbxCmd->SetItemImage(nDragModeId, Image(ScResId(nImageId)));
 }
-
-void CommandToolBox::InitImageList()
-{
-    ImageList& rImgLst = rDlg.aCmdImageList;
-
-    sal_uInt16 nCount = GetItemCount();
-    for (sal_uInt16 i = 0; i < nCount; i++)
-    {
-        sal_uInt16 nId = GetItemId(i);
-        SetItemImage( nId, rImgLst.GetImage( nId ) );
-    }
-}
-
-void CommandToolBox::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        //  update item images
-
-        InitImageList();
-        UpdateButtons();    // drop mode
-    }
-
-    ToolBox::DataChanged( rDCEvt );
-}
-
-//  class ScNavigatorSettings
 
 ScNavigatorSettings::ScNavigatorSettings() :
     mnRootSelected( ScContentId::ROOT ),
@@ -455,148 +413,78 @@ ScNavigatorSettings::ScNavigatorSettings() :
 {
 }
 
-//  class ScNavigatorDlgWrapper
-
 SFX_IMPL_CHILDWINDOWCONTEXT( ScNavigatorDialogWrapper, SID_NAVIGATOR )
 
-ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
-                                    vcl::Window*          pParent,
-                                    sal_uInt16           nId,
-                                    SfxBindings*     pBind,
-                                    SfxChildWinInfo* /* pInfo */ ) :
-        SfxChildWindowContext( nId )
+ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(vcl::Window* pParent,
+                                                   sal_uInt16 nId,
+                                                   SfxBindings* pBind,
+                                                   SfxChildWinInfo* /* pInfo */)
+    : SfxChildWindowContext(nId)
 {
-    pNavigator = VclPtr<ScNavigatorDlg>::Create( pBind, this, pParent, true );
-    SetWindow( pNavigator );
-
-    //  handle configurations elsewhere,
-    //  only size of pInfo matters now
-
-    Size aInfoSize = pParent->GetOutputSizePixel();     // outside defined size
-    Size aNavSize = pNavigator->GetOutputSizePixel();   // Default-Size
-
-    aNavSize.Width()  = std::max( aInfoSize.Width(),  aNavSize.Width() );
-    aNavSize.Height() = std::max( aInfoSize.Height(), aNavSize.Height() );
-    pNavigator->nListModeHeight = std::max( aNavSize.Height(), pNavigator->nListModeHeight );
-
-    //  The size could be changed in another module,
-    //  therefore we have to or have not to display the content
-    //  in dependence of the current size
-
-    bool bSmall = ( aInfoSize.Height() <= pNavigator->aInitSize.Height() + SCNAV_MINTOL );
-    NavListMode eNavMode = NAV_LMODE_NONE;
-    if (!bSmall)
-    {
-        //  if scenario was active, switch on
-
-        ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
-        NavListMode eLastMode = (NavListMode) rCfg.GetListMode();
-        if ( eLastMode == NAV_LMODE_SCENARIOS )
-            eNavMode = NAV_LMODE_SCENARIOS;
-        else
-            eNavMode = NAV_LMODE_AREAS;
-    }
-
-    // Do not set the size of the float again (sal_False at SetListMode), so that the
-    // navigator is not expanded, if it was minimized (#38872#).
-
-    pNavigator->SetListMode( eNavMode, false );     // FALSE: do not set the Float size
-
-    sal_uInt16 nCmdId;
-    switch (eNavMode)
-    {
-        case NAV_LMODE_SCENARIOS:   nCmdId = IID_SCENARIOS; break;
-        case NAV_LMODE_AREAS:       nCmdId = IID_AREAS;     break;
-// The following case can never be reach due to how eNavMode is set-up
-//        case NAV_LMODE_DOCS:        nCmdId = IID_DOCS;      break;
-//        case NAV_LMODE_DBAREAS:     nCmdId = IID_DBAREAS;   break;
-        default:                    nCmdId = 0;
-    }
-    if (nCmdId)
-    {
-        pNavigator->aTbxCmd->CheckItem( nCmdId );
-        pNavigator->DoResize();
-    }
-
-    pNavigator->bFirstBig = ( nCmdId == 0 );    // later
+    pNavigator = VclPtr<ScNavigatorDlg>::Create(pBind, false, pParent);
+    if (SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(pParent))
+        pNav->SetMinOutputSizePixel(pNavigator->GetOptimalSize());
+    SetWindow(pNavigator);
 }
-
-void ScNavigatorDialogWrapper::Resizing( Size& rSize )
-{
-    static_cast<ScNavigatorDlg*>(GetWindow())->Resizing(rSize);
-}
-
-// class ScNavigatorPI
 
 #define CTRL_ITEMS 4
 
 #define REGISTER_SLOT(i,id) \
     ppBoundItems[i]=new ScNavigatorControllerItem(id,*this,rBindings);
 
-ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl::Window* pParent,
-    const bool bUseStyleSettingsBackground) :
-        Window( pParent, ScResId(RID_SCDLG_NAVIGATOR) ),
-        rBindings   ( *pB ),                                // is used in CommandToolBox ctor
-        aCmdImageList( ScResId( IL_CMD ) ),
-        aFtCol      ( VclPtr<FixedText>::Create( this, ScResId( FT_COL ) ) ),
-        aEdCol      ( VclPtr<ColumnEdit>::Create( this, ScResId( ED_COL ) ) ),
-        aFtRow      ( VclPtr<FixedText>::Create( this, ScResId( FT_ROW ) ) ),
-        aEdRow      ( VclPtr<RowEdit>::Create( this, ScResId( ED_ROW ) ) ),
-        aTbxCmd     ( VclPtr<CommandToolBox>::Create( this, ScResId( TBX_CMD ) ) ),
-        aLbEntries  ( VclPtr<ScContentTree>::Create( this, ScResId( LB_ENTRIES ) ) ),
-        aWndScenarios( VclPtr<ScScenarioWindow>::Create( this,ScResId( SCSTR_QHLP_SCEN_LISTBOX), ScResId(SCSTR_QHLP_SCEN_COMMENT)) ),
-        aLbDocuments( VclPtr<ListBox>::Create( this, ScResId( LB_DOCUMENTS ) ) ),
-        aStrDragMode ( ScResId( SCSTR_DRAGMODE ) ),
-        aStrDisplay  ( ScResId( SCSTR_DISPLAY ) ),
-        aStrActiveWin( ScResId( SCSTR_ACTIVEWIN ) ),
-        pContextWin ( pCW ),
-        pMarkArea   ( nullptr ),
-        pViewData   ( nullptr ),
-        nListModeHeight( 0 ),
-        nInitListHeight( 0 ),
-        eListMode   ( NAV_LMODE_NONE ),
-        nDropMode   ( SC_DROPMODE_URL ),
-        nCurCol     ( 0 ),
-        nCurRow     ( 0 ),
-        nCurTab     ( 0 ),
-        bFirstBig   ( false ),
-        mbUseStyleSettingsBackground(bUseStyleSettingsBackground)
+ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, bool bSidebar, vcl::Window* pParent)
+    : PanelLayout(pParent, "NavigatorPanel", "modules/scalc/ui/navigatorpanel.ui", nullptr)
+    , rBindings(*pB)
+    , aStrDragMode(ScResId(SCSTR_DRAGMODE))
+    , aStrDisplay(ScResId(SCSTR_DISPLAY))
+    , aStrActiveWin(ScResId(SCSTR_ACTIVEWIN))
+    , bInSidebar(bSidebar)
+    , pMarkArea(nullptr)
+    , pViewData(nullptr )
+    , eListMode(NAV_LMODE_NONE)
+    , nDropMode(SC_DROPMODE_URL)
+    , nCurCol(0)
+    , nCurRow(0)
+    , nCurTab(0)
 {
+    get(aLbDocuments, "documents");
+    get(aEdCol, "column");
+    get(aEdRow, "row");
+    get(aTbxCmd, "toolbox");
+    aTbxCmd->SetSelectHdl(LINK(this, ScNavigatorDlg, ToolBoxSelectHdl));
+    aTbxCmd->SetDropdownClickHdl(LINK(this, ScNavigatorDlg, ToolBoxDropdownClickHdl));
+    nZoomId = aTbxCmd->GetItemId("contents");
+    nChangeRootId = aTbxCmd->GetItemId("toggle");
+    nDragModeId = aTbxCmd->GetItemId("dragmode");
+    aTbxCmd->SetItemBits(nDragModeId, aTbxCmd->GetItemBits(nDragModeId) | ToolBoxItemBits::DROPDOWNONLY);
+    nScenarioId = aTbxCmd->GetItemId("scenarios");
+    nDownId = aTbxCmd->GetItemId("end");
+    nUpId = aTbxCmd->GetItemId("start");
+    nAreaId = aTbxCmd->GetItemId("datarange");
+    get(aContentBox, "contentbox");
+    aLbEntries = VclPtr<ScContentTree>::Create(aContentBox, this);
+    aLbEntries->set_hexpand(true);
+    aLbEntries->set_vexpand(true);
+    aLbEntries->Show();
+    get(aScenarioBox, "scenariobox");
+    aWndScenarios = VclPtr<ScScenarioWindow>::Create(aScenarioBox,
+        ScResId(SCSTR_QHLP_SCEN_LISTBOX), ScResId(SCSTR_QHLP_SCEN_COMMENT));
+    aWndScenarios->set_hexpand(true);
+    aWndScenarios->set_vexpand(true);
+    aWndScenarios->Show();
+
     ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
     nDropMode = rCfg.GetDragMode();
-    //  eListMode is set from outside, Root further below
 
+    aTbxCmd->InsertBreak(3);
+    aTbxCmd->SetLineCount(2);
     aLbDocuments->SetDropDownLineCount(9);
     aLbDocuments->SetSelectHdl(LINK(this, ScNavigatorDlg, DocumentSelectHdl));
-    aStrActive    = " ("
-                  + OUString( ScResId( SCSTR_ACTIVE ) )
-                  + ")";                                      // " (active)"
-    aStrNotActive = " ("
-                  + OUString( ScResId( SCSTR_NOTACTIVE ) )
-                  + ")";                                   // " (not active)"
-    aStrHidden    = " ("
-                  + OUString( ScResId( SCSTR_HIDDEN ) )
-                  + ")";                                      // " (hidden)"
+    aStrActive    = " (" + OUString(ScResId(SCSTR_ACTIVE)) + ")";     // " (active)"
+    aStrNotActive = " (" + OUString(ScResId(SCSTR_NOTACTIVE)) + ")";  // " (not active)"
+    aStrHidden    = " (" + OUString(ScResId(SCSTR_HIDDEN)) + ")";     // " (hidden)"
 
     aTitleBase = GetText();
-
-    const long nListboxYPos =
-        ::std::max(
-            (aTbxCmd->GetPosPixel().Y() + aTbxCmd->GetSizePixel().Height()),
-            (aEdRow->GetPosPixel().Y() + aEdRow->GetSizePixel().Height()) )
-        + 4;
-    aLbEntries->setPosSizePixel( 0, nListboxYPos, 0, 0, PosSizeFlags::Y);
-
-    nBorderOffset = aLbEntries->GetPosPixel().X();
-
-    aInitSize.Width()  =  aTbxCmd->GetPosPixel().X()
-                        + aTbxCmd->GetSizePixel().Width()
-                        + nBorderOffset;
-    aInitSize.Height() = aLbEntries->GetPosPixel().Y();
-
-    nInitListHeight = aLbEntries->GetSizePixel().Height();
-    nListModeHeight =  aInitSize.Height()
-                     + nInitListHeight;
 
     ppBoundItems = new ScNavigatorControllerItem* [CTRL_ITEMS];
 
@@ -611,8 +499,6 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
 
     StartListening( *(SfxGetpApp()) );
     StartListening( rBindings );
-
-    aLbDocuments->Hide();        // does not exist at NAV_LMODE_NONE
 
     aLbEntries->InitWindowBits(true);
 
@@ -630,34 +516,35 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
     aLbEntries->Refresh();
     GetDocNames(nullptr);
 
-    aTbxCmd->UpdateButtons();
+    UpdateButtons();
 
     UpdateColumn();
     UpdateRow();
     UpdateTable(nullptr);
-    aLbEntries->Hide();
-    aWndScenarios->Hide();
-    aWndScenarios->SetPosPixel( aLbEntries->GetPosPixel() );
+    aContentBox->Hide();
+    aScenarioBox->Hide();
 
     aContentIdle.SetIdleHdl( LINK( this, ScNavigatorDlg, TimeHdl ) );
     aContentIdle.SetPriority( SchedulerPriority::LOWEST );
 
-    FreeResource();
-
-    aLbEntries->SetAccessibleRelationLabeledBy(aLbEntries.get());
-    aTbxCmd->SetAccessibleRelationLabeledBy(aTbxCmd.get());
-    aLbDocuments->SetAccessibleName(aStrActiveWin);
-
-    if (pContextWin == nullptr)
+    if (bInSidebar)
     {
-        // When the context window is missing then the navigator is
-        // displayed in the sidebar and has the whole deck to fill.
-        // Therefore hide the button that hides all controls below the
-        // top two rows of buttons.
-        aTbxCmd->Select(IID_ZOOMOUT);
-        aTbxCmd->RemoveItem(aTbxCmd->GetItemPos(IID_ZOOMOUT));
+        // When the navigator is displayed in the sidebar it has the whole deck
+        // to fill. Therefore hide the button that hides all controls below
+        // the top two rows of buttons.
+        aTbxCmd->RemoveItem(aTbxCmd->GetItemPos(nZoomId));
     }
     aLbEntries->SetNavigatorDlgFlag(true);
+
+    // if scenario was active, switch on
+    NavListMode eNavMode = (NavListMode) rCfg.GetListMode();
+    if (eNavMode == NAV_LMODE_SCENARIOS)
+        aTbxCmd->CheckItem(nScenarioId);
+    else
+        eNavMode = NAV_LMODE_AREAS;
+    SetListMode(eNavMode);
+
+    aExpandedSize = GetOptimalSize();
 }
 
 ScNavigatorDlg::~ScNavigatorDlg()
@@ -669,8 +556,7 @@ void ScNavigatorDlg::dispose()
 {
     aContentIdle.Stop();
 
-    sal_uInt16 i;
-    for ( i=0; i<CTRL_ITEMS; i++ )
+    for (sal_uInt16 i = 0; i < CTRL_ITEMS; ++i)
         delete ppBoundItems[i];
 
     delete [] ppBoundItems;
@@ -679,137 +565,23 @@ void ScNavigatorDlg::dispose()
     EndListening( *(SfxGetpApp()) );
     EndListening( rBindings );
 
-    aFtCol.disposeAndClear();
-    aEdCol.disposeAndClear();
-    aFtRow.disposeAndClear();
-    aEdRow.disposeAndClear();
-    aTbxCmd.disposeAndClear();
+    aEdCol.clear();
+    aEdRow.clear();
+    aTbxCmd.clear();
     aLbEntries.disposeAndClear();
+    aContentBox.clear();
     aWndScenarios.disposeAndClear();
-    aLbDocuments.disposeAndClear();
-    vcl::Window::dispose();
-}
-
-void ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
-{
-    FloatingWindow* pFloat = pContextWin!=nullptr ? pContextWin->GetFloatingWindow() : nullptr;
-    if ( pFloat )
-    {
-        Size aMinOut = pFloat->GetMinOutputSizePixel();
-
-        if ( rNewSize.Width() < aMinOut.Width() )
-            rNewSize.Width() = aMinOut.Width();
-
-        if ( eListMode == NAV_LMODE_NONE )
-            rNewSize.Height() = aInitSize.Height();
-        else
-        {
-            if ( rNewSize.Height() < aMinOut.Height() )
-                rNewSize.Height() = aMinOut.Height();
-        }
-    }
-}
-
-void ScNavigatorDlg::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect )
-{
-    if (mbUseStyleSettingsBackground)
-    {
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        Color aBgColor = rStyleSettings.GetFaceColor();
-        Wallpaper aBack( aBgColor );
-
-        SetBackground( aBack );
-        aFtCol->SetBackground( aBack );
-        aFtRow->SetBackground( aBack );
-    }
-    else
-    {
-        aFtCol->SetBackground(Wallpaper());
-        aFtRow->SetBackground(Wallpaper());
-    }
-
-    Window::Paint(rRenderContext, rRect);
-}
-
-void ScNavigatorDlg::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        //  toolbox images are exchanged in CommandToolBox::DataChanged
-        Invalidate();
-    }
-
-    Window::DataChanged( rDCEvt );
-}
-
-void ScNavigatorDlg::Resize()
-{
-    DoResize();
-}
-
-void ScNavigatorDlg::DoResize()
-{
-    Size aNewSize = GetOutputSizePixel();
-    long nTotalHeight = aNewSize.Height();
-
-    //  if the navigator is docked, the window is probably at first small generated,
-    //  then there is a resize to the actual size -> switch on content
-
-    bool bSmall = ( nTotalHeight <= aInitSize.Height() + SCNAV_MINTOL );
-    if ( !bSmall && bFirstBig )
-    {
-        //  Switch on content again as described in the config
-
-        bFirstBig = false;
-        NavListMode eNavMode = NAV_LMODE_AREAS;
-        ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
-        NavListMode eLastMode = (NavListMode) rCfg.GetListMode();
-        if ( eLastMode == NAV_LMODE_SCENARIOS )
-            eNavMode = NAV_LMODE_SCENARIOS;
-        SetListMode( eNavMode, false );         // FALSE: do not set the Float size
-    }
-
-    //  even if the content is not visible, adapt the size,
-    //  so the width fit
-
-    Point aEntryPos = aLbEntries->GetPosPixel();
-    Point aListPos = aLbDocuments->GetPosPixel();
-    aNewSize.Width() -= 2*nBorderOffset;
-    Size aDocSize = aLbDocuments->GetSizePixel();
-    aDocSize.Width() = aNewSize.Width();
-
-    if(!bSmall)
-    {
-
-        long nListHeight = aLbDocuments->GetSizePixel().Height();
-        aNewSize.Height() -= ( aEntryPos.Y() + nListHeight + 2*nBorderOffset );
-        if(aNewSize.Height()<0) aNewSize.Height()=0;
-
-        aListPos.Y() = aEntryPos.Y() + aNewSize.Height() + nBorderOffset;
-
-        if(aListPos.Y() > aLbEntries->GetPosPixel().Y())
-                            aLbDocuments->SetPosPixel( aListPos );
-
-    }
-    aLbEntries->SetSizePixel( aNewSize );
-    aWndScenarios->SetSizePixel( aNewSize );
-    aLbDocuments->SetSizePixel( aDocSize );
-
-    bool bListMode = (eListMode != NAV_LMODE_NONE);
-    if (pContextWin != nullptr)
-    {
-        FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
-        if ( pFloat && bListMode )
-            nListModeHeight = nTotalHeight;
-    }
+    aScenarioBox.clear();
+    aLbDocuments.clear();
+    PanelLayout::dispose();
 }
 
 void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const SfxEventHint*>(&rHint) )
+    if (const SfxEventHint* pHint = dynamic_cast<const SfxEventHint*>(&rHint))
     {
-        sal_uLong nEventId = static_cast<const SfxEventHint&>(rHint).GetEventId();
-        if ( nEventId == SFX_EVENT_ACTIVATEDOC )
+        sal_uLong nEventId = pHint->GetEventId();
+        if (nEventId == SFX_EVENT_ACTIVATEDOC)
         {
             aLbEntries->ActiveDocChanged();
             UpdateAll();
@@ -819,11 +591,11 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         const sal_uInt32 nHintId = rHint.GetId();
 
-        if ( nHintId == SC_HINT_DOCNAME_CHANGED )
+        if (nHintId == SC_HINT_DOCNAME_CHANGED)
         {
             aLbEntries->ActiveDocChanged();
         }
-        else if ( NAV_LMODE_NONE == eListMode )
+        else if (NAV_LMODE_NONE == eListMode)
         {
             //  Table not any more
         }
@@ -886,8 +658,7 @@ IMPL_LINK( ScNavigatorDlg, TimeHdl, Idle*, pIdle, void )
 void ScNavigatorDlg::SetDropMode(sal_uInt16 nNew)
 {
     nDropMode = nNew;
-    aTbxCmd->UpdateButtons();
-
+    UpdateButtons();
     ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
     rCfg.SetDragMode(nDropMode);
 }
@@ -1047,18 +818,14 @@ void ScNavigatorDlg::UpdateTable( const SCTAB* pTab )
 
 void ScNavigatorDlg::UpdateAll()
 {
-    switch ( eListMode )
+    switch (eListMode)
     {
-        case NAV_LMODE_DOCS:
-        case NAV_LMODE_DBAREAS:
         case NAV_LMODE_AREAS:
             aLbEntries->Refresh();
             break;
-
         case NAV_LMODE_NONE:
             //! ???
             break;
-
         default:
             break;
     }
@@ -1066,122 +833,76 @@ void ScNavigatorDlg::UpdateAll()
     aContentIdle.Stop();       // not again
 }
 
-void ScNavigatorDlg::SetListMode( NavListMode eMode, bool bSetSize )
+void ScNavigatorDlg::SetListMode(NavListMode eMode)
 {
-    if ( eMode != eListMode )
+    if (eMode != eListMode)
     {
-        if ( eMode != NAV_LMODE_NONE )
-            bFirstBig = false;              // do not switch automatically any more
+        bool bForceParentResize = (eMode == NAV_LMODE_NONE || eListMode == NAV_LMODE_NONE);
+        SfxNavigator* pNav = bForceParentResize ? dynamic_cast<SfxNavigator*>(GetParent()) : nullptr;
+        if (pNav && eMode == NAV_LMODE_NONE) //save last normal size on minimizing
+            aExpandedSize = GetSizePixel();
 
         eListMode = eMode;
 
-        switch ( eMode )
+        switch (eMode)
         {
             case NAV_LMODE_NONE:
-                ShowList( false, bSetSize );
+                ShowList(false);
                 break;
-
             case NAV_LMODE_AREAS:
-            case NAV_LMODE_DBAREAS:
-            case NAV_LMODE_DOCS:
                 aLbEntries->Refresh();
-                ShowList( true, bSetSize );
+                ShowList(true);
                 break;
-
             case NAV_LMODE_SCENARIOS:
-                ShowScenarios( bSetSize );
+                ShowScenarios();
                 break;
         }
 
-        aTbxCmd->UpdateButtons();
+        UpdateButtons();
 
-        if ( eMode != NAV_LMODE_NONE )
+        if (eMode != NAV_LMODE_NONE)
         {
             ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
             rCfg.SetListMode( (sal_uInt16) eMode );
         }
+
+        if (pNav)
+        {
+            Size aOptimalSize(GetOptimalSize());
+            Size aNewSize(pNav->GetOutputSizePixel());
+            aNewSize.Height() = eMode == NAV_LMODE_NONE ? aOptimalSize.Height() : aExpandedSize.Height();
+            pNav->SetMinOutputSizePixel(aOptimalSize);
+            pNav->SetOutputSizePixel(aNewSize);
+        }
     }
 
-    if ( pMarkArea )
+    if (pMarkArea)
         UnmarkDataArea();
 }
 
-void ScNavigatorDlg::ShowList( bool bShow, bool bSetSize )
+void ScNavigatorDlg::ShowList(bool bShow)
 {
-    FloatingWindow* pFloat = pContextWin!=nullptr ? pContextWin->GetFloatingWindow() : nullptr;
-    Size aSize = GetParent()->GetOutputSizePixel();
-
-    if ( bShow )
+    if (bShow)
     {
-        Size aMinSize = aInitSize;
-
-        aMinSize.Height() += nInitListHeight;
-        if ( pFloat )
-            pFloat->SetMinOutputSizePixel( aMinSize );
-        aSize.Height() = nListModeHeight;
-        aLbEntries->Show();
+        aContentBox->Show();
         aLbDocuments->Show();
     }
     else
     {
-        if ( pFloat )
-        {
-            pFloat->SetMinOutputSizePixel( aInitSize );
-            nListModeHeight = aSize.Height();
-        }
-        aSize.Height() = aInitSize.Height();
-        aLbEntries->Hide();
+        aContentBox->Hide();
         aLbDocuments->Hide();
     }
-    aWndScenarios->Hide();
-
-    if ( pFloat )
-    {
-        if ( bSetSize )
-            pFloat->SetOutputSizePixel( aSize );
-    }
-    else
-    {
-        SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(GetParent());
-        if (pNav != nullptr)
-        {
-            Size aFloating = pNav->GetFloatingSize();
-            aFloating.Height() = aSize.Height();
-            pNav->SetFloatingSize( aFloating );
-        }
-    }
+    aScenarioBox->Hide();
 }
 
-void ScNavigatorDlg::ShowScenarios( bool bSetSize )
+void ScNavigatorDlg::ShowScenarios()
 {
-    FloatingWindow* pFloat = pContextWin!=nullptr ? pContextWin->GetFloatingWindow() : nullptr;
-    Size aSize = GetParent()->GetOutputSizePixel();
-
-    Size aMinSize = aInitSize;
-    aMinSize.Height() += nInitListHeight;
-    if ( pFloat )
-        pFloat->SetMinOutputSizePixel( aMinSize );
-    aSize.Height() = nListModeHeight;
-
     rBindings.Invalidate( SID_SELECT_SCENARIO );
     rBindings.Update( SID_SELECT_SCENARIO );
 
-    aWndScenarios->Show();
+    aScenarioBox->Show();
     aLbDocuments->Show();
-    aLbEntries->Hide();
-
-    if ( pFloat )
-    {
-        if ( bSetSize )
-            pFloat->SetOutputSizePixel( aSize );
-    }
-    else
-    {
-        SfxNavigator* pNav = static_cast<SfxNavigator*>(GetParent());
-        Size aFloating = pNav->GetFloatingSize();
-        aFloating.Height() = aSize.Height();
-        pNav->SetFloatingSize( aFloating );
-    }
+    aContentBox->Hide();
 }
 
 //      documents for Dropdown-Listbox
@@ -1266,7 +987,7 @@ void ScNavigatorDlg::UnmarkDataArea()
 
 void ScNavigatorDlg::CheckDataArea()
 {
-    if ( aTbxCmd->IsItemChecked( IID_DATA ) && pMarkArea )
+    if (aTbxCmd->IsItemChecked(nDataId) && pMarkArea)
     {
         if (   nCurTab   != pMarkArea->nTab
             || nCurCol <  pMarkArea->nColStart+1
@@ -1274,8 +995,8 @@ void ScNavigatorDlg::CheckDataArea()
             || nCurRow <  pMarkArea->nRowStart+1
             || nCurRow >  pMarkArea->nRowEnd+1 )
         {
-            aTbxCmd->SetItemState( IID_DATA, TriState(TRISTATE_TRUE) );
-            aTbxCmd->Select( IID_DATA );
+            aTbxCmd->SetItemState(nDataId, TriState(TRISTATE_TRUE));
+            aTbxCmd->TriggerItem(nDataId);
         }
     }
 }
