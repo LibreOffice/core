@@ -196,7 +196,6 @@ public:
     SAL_DLLPRIVATE void StateView_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE void ExecHistory_Impl( SfxRequest &rReq );
     SAL_DLLPRIVATE void StateHistory_Impl( SfxItemSet &rSet );
-    SAL_DLLPRIVATE static SfxViewFrame* GetParentViewFrame_Impl();
     SAL_DLLPRIVATE void ForceOuterResize_Impl();
     SAL_DLLPRIVATE bool IsResizeInToOut_Impl() const;
     SAL_DLLPRIVATE void UpdateDocument_Impl();

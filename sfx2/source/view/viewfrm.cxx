@@ -1550,16 +1550,6 @@ void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
         m_pImpl->bResizeInToOut = false;
 }
 
-/*  [Description]
-
-    The ParentViewFrame of the Containers ViewFrame in the internal InPlace
-*/
-//TODO/LATER: is it still necessary? is there a replacement for GetParentViewFrame_Impl?
-SfxViewFrame* SfxViewFrame::GetParentViewFrame_Impl()
-{
-    return nullptr;
-}
-
 void SfxViewFrame::ForceOuterResize_Impl()
 {
     m_pImpl->bResizeInToOut = true;
@@ -1583,20 +1573,11 @@ void SfxViewFrame::Enable( bool bEnable )
     {
         m_pImpl->bEnabled = bEnable;
 
-        // e.g. InPlace-Frames have a parent...
-        SfxViewFrame *pParent = GetParentViewFrame_Impl();
-        if ( pParent )
-        {
-            pParent->Enable( bEnable );
-        }
-        else
-        {
-            vcl::Window *pWindow = &GetFrame().GetTopFrame().GetWindow();
-            if ( !bEnable )
-                m_pImpl->bWindowWasEnabled = pWindow->IsInputEnabled();
-            if ( !bEnable || m_pImpl->bWindowWasEnabled )
-                pWindow->EnableInput( bEnable );
-        }
+        vcl::Window *pWindow = &GetFrame().GetTopFrame().GetWindow();
+        if ( !bEnable )
+            m_pImpl->bWindowWasEnabled = pWindow->IsInputEnabled();
+        if ( !bEnable || m_pImpl->bWindowWasEnabled )
+            pWindow->EnableInput( bEnable );
 
         // cursor and focus
         SfxViewShell* pViewSh = GetViewShell();
@@ -1684,7 +1665,6 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
                         pParent->SetActiveChildFrame_Impl( this );
                 }
 
-                SfxViewFrame* pCurrent = SfxViewFrame::Current();
                 css::uno::Reference< css::frame::XFrame > xFrame = GetFrame().GetFrameInterface();
                 if ( !bPreview )
                 {
@@ -1699,8 +1679,7 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
                     if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
                     {
                         SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();
-                        if ( ( !pCli || !pCli->IsObjectUIActive() ) &&
-                            ( !pCurrent || SfxViewFrame::GetParentViewFrame_Impl() != this ) )
+                        if ( !pCli || !pCli->IsObjectUIActive() )
                                 GetFrame().GrabFocusOnComponent_Impl();
                     }
                 }
@@ -2810,11 +2789,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
             {
                 case SID_CURRENT_URL:
                 {
-                    // Get the ContainerFrame, when internal InPlace.
-                    SfxViewFrame *pFrame = this;
-                    if ( SfxViewFrame::GetParentViewFrame_Impl() )
-                        pFrame = SfxViewFrame::GetParentViewFrame_Impl();
-                    rSet.Put( SfxStringItem( nWhich, pFrame->GetActualPresentationURL_Impl() ) );
+                    rSet.Put( SfxStringItem( nWhich, GetActualPresentationURL_Impl() ) );
                     break;
                 }
 

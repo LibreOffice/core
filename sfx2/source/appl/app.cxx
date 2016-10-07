@@ -312,41 +312,35 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 {
     if ( pFrame != pImpl->pViewFrame )
     {
-        // get the containerframes ( if one of the frames is an InPlaceFrame )
-        SfxViewFrame *pOldContainerFrame = pImpl->pViewFrame;
-        while ( pOldContainerFrame && SfxViewFrame::GetParentViewFrame_Impl() )
-            pOldContainerFrame = SfxViewFrame::GetParentViewFrame_Impl();
-        SfxViewFrame *pNewContainerFrame = pFrame;
-        while ( pNewContainerFrame && SfxViewFrame::GetParentViewFrame_Impl() )
-            pNewContainerFrame = SfxViewFrame::GetParentViewFrame_Impl();
+        SfxViewFrame *pOldFrame = pImpl->pViewFrame;
 
         // DocWinActivate : both frames belong to the same TopWindow
         // TopWinActivate : both frames belong to different TopWindows
 
-        bool bTaskActivate = pOldContainerFrame != pNewContainerFrame;
+        bool bTaskActivate = pOldFrame != pFrame;
 
-        if ( pOldContainerFrame )
+        if ( pOldFrame )
         {
             if ( bTaskActivate )
-                NotifyEvent( SfxViewEventHint( SFX_EVENT_DEACTIVATEDOC, GlobalEventConfig::GetEventName(GlobalEventId::DEACTIVATEDOC), pOldContainerFrame->GetObjectShell(), pOldContainerFrame->GetFrame().GetController() ) );
-            pOldContainerFrame->DoDeactivate( bTaskActivate, pFrame );
+                NotifyEvent( SfxViewEventHint( SFX_EVENT_DEACTIVATEDOC, GlobalEventConfig::GetEventName(GlobalEventId::DEACTIVATEDOC), pOldFrame->GetObjectShell(), pOldFrame->GetFrame().GetController() ) );
+            pOldFrame->DoDeactivate( bTaskActivate, pFrame );
 
-            if( pOldContainerFrame->GetProgress() )
-                pOldContainerFrame->GetProgress()->Suspend();
+            if( pOldFrame->GetProgress() )
+                pOldFrame->GetProgress()->Suspend();
         }
 
         pImpl->pViewFrame = pFrame;
 
-        if( pNewContainerFrame )
+        if( pFrame )
         {
-            pNewContainerFrame->DoActivate( bTaskActivate );
-            if ( bTaskActivate && pNewContainerFrame->GetObjectShell() )
+            pFrame->DoActivate( bTaskActivate );
+            if ( bTaskActivate && pFrame->GetObjectShell() )
             {
-                pNewContainerFrame->GetObjectShell()->PostActivateEvent_Impl( pNewContainerFrame );
-                NotifyEvent(SfxViewEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName(GlobalEventId::ACTIVATEDOC), pNewContainerFrame->GetObjectShell(), pNewContainerFrame->GetFrame().GetController() ) );
+                pFrame->GetObjectShell()->PostActivateEvent_Impl( pFrame );
+                NotifyEvent(SfxViewEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName(GlobalEventId::ACTIVATEDOC), pFrame->GetObjectShell(), pFrame->GetFrame().GetController() ) );
             }
 
-            SfxProgress *pProgress = pNewContainerFrame->GetProgress();
+            SfxProgress *pProgress = pFrame->GetProgress();
             if ( pProgress )
             {
                 if( pProgress->IsSuspended() )
