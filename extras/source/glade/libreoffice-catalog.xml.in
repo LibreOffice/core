@@ -605,6 +605,13 @@
                         generic-name="Relative Numeric Field" parent="GtkSpinButton"
                         icon-name="widget-gtk-spinbutton"/>
 
+    <glade-widget-class title="Calc Row SpinButton" name="sclo-RowEdit"
+                        generic-name="Calc Row SpinButton" parent="GtkSpinButton"
+                        icon-name="widget-gtk-spinbutton"/>
+    <glade-widget-class title="Calc Column SpinButton" name="sclo-ColumnEdit"
+                        generic-name="Calc Column SpinButton" parent="GtkSpinButton"
+                        icon-name="widget-gtk-spinbutton"/>
+
     <glade-widget-class title="SvtURLBox" name="svtlo-SvtURLBox"
                         generic-name="URLBox" parent="VclComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
