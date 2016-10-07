@@ -40,7 +40,7 @@ private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
+    SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                               const Point& rPos, const Size& rSize, bool bFillLayout = false ) const;
 public:
@@ -95,7 +95,7 @@ private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
+    SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplDraw(vcl::RenderContext& rRenderContext);
 
 protected:
@@ -127,7 +127,7 @@ private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
+    SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                               const Point& rPos, const Size& rSize );
 
@@ -156,7 +156,7 @@ private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
+    SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
 
 protected:
     SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,

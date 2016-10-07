@@ -296,7 +296,7 @@ DayOfWeek Calendar::ImplGetWeekStart() const
     return eDay;
 }
 
-void Calendar::ImplGetWeekFont( vcl::Font& rFont ) const
+void Calendar::ImplGetWeekFont( vcl::Font& rFont )
 {
     // weeknumber is displayed in WEEKNUMBER_HEIGHT%-Fontheight
     Size aFontSize = rFont.GetFontSize();

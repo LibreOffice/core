@@ -122,7 +122,7 @@ protected:
     bool            mbIsActive;
 
     SAL_DLLPRIVATE void            ImplInitPushButtonData();
-    SAL_DLLPRIVATE WinBits         ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
+    SAL_DLLPRIVATE static WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void            ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFlags,
                                                              const Rectangle& rRect, bool bMenuBtnSep);
@@ -407,7 +407,7 @@ private:
     // to the left or right ( depending on RTL or LTR settings )
     bool            mbLegacyNoTextAlign;
     SAL_DLLPRIVATE void         ImplInitCheckBoxData();
-    SAL_DLLPRIVATE WinBits      ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
+    SAL_DLLPRIVATE static WinBits ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE void         ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                                     const Point& rPos, const Size& rSize,

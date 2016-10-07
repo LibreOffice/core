@@ -317,7 +317,7 @@ void AnnotationWindow::InitControls()
     mpMeta->SetSettings(aSettings);
 
     mpOutliner = new ::Outliner(GetAnnotationPool(),OutlinerMode::TextObject);
-    Doc()->SetCalcFieldValueHdl( mpOutliner );
+    SdDrawDocument::SetCalcFieldValueHdl( mpOutliner );
     mpOutliner->SetUpdateMode( true );
     Rescale();
 

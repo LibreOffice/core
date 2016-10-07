@@ -126,7 +126,7 @@ XMLBitmapStyleContext::XMLBitmapStyleContext( SvXMLImport& rImport, sal_uInt16 n
 {
     // start import
     XMLImageStyle aBitmapStyle;
-    aBitmapStyle.importXML( xAttrList, maAny, maStrName, rImport );
+    XMLImageStyle::importXML( xAttrList, maAny, maStrName, rImport );
 }
 
 XMLBitmapStyleContext::~XMLBitmapStyleContext()

@@ -1641,7 +1641,7 @@ void SvXMLExport::ExportStyles_( bool )
                         {
                             uno::Any aValue = xBitmap->getByName( rStrName );
 
-                            aImageStyle.exportXML( rStrName, aValue, *this );
+                            XMLImageStyle::exportXML( rStrName, aValue, *this );
                         }
                         catch(const container::NoSuchElementException&)
                         {

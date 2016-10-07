@@ -593,12 +593,12 @@ bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
     bool bSet = false;
 
     bool bAnimationInfo = dynamic_cast< const GraphicDocShell *>( mpDocSh ) ==  nullptr &&
-                          mpDoc->GetAnimationInfo(pObj);
+                          SdDrawDocument::GetAnimationInfo(pObj);
 
     bool bImageMapInfo = false;
 
     if (!bAnimationInfo)
-        bImageMapInfo = mpDoc->GetIMapInfo(pObj) != nullptr;
+        bImageMapInfo = SdDrawDocument::GetIMapInfo(pObj) != nullptr;
 
     if (bAnimationInfo || bImageMapInfo)
     {
@@ -630,7 +630,7 @@ bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                 /******************************************************
                 * Click-Action
                 ******************************************************/
-                SdAnimationInfo* pInfo = mpDoc->GetAnimationInfo(pObj);
+                SdAnimationInfo* pInfo = SdDrawDocument::GetAnimationInfo(pObj);
 
                 if(( dynamic_cast< const DrawView *>( mpView ) !=  nullptr &&
                       (pInfo->meClickAction == presentation::ClickAction_BOOKMARK  ||
@@ -659,7 +659,7 @@ bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                     }
             }
             else if (bImageMapInfo &&
-                     mpDoc->GetHitIMapObject(pObj, rPos, *mpWindow))
+                     SdDrawDocument::GetHitIMapObject(pObj, rPos, *mpWindow))
             {
                 /******************************************************
                 * ImageMap
@@ -781,9 +781,9 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
     Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(rPosPixel)));
 
     // URL for IMapObject underneath pointer is help text
-    if ( mpDoc->GetIMapInfo(pObj) )
+    if ( SdDrawDocument::GetIMapInfo(pObj) )
     {
-        IMapObject* pIMapObj = mpDoc->GetHitIMapObject(pObj, aPos, *mpWindow );
+        IMapObject* pIMapObj = SdDrawDocument::GetHitIMapObject(pObj, aPos, *mpWindow );
 
         if ( pIMapObj )
         {
@@ -797,9 +797,9 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
             }
         }
     }
-    else if (dynamic_cast< GraphicDocShell *>( mpDocSh ) ==  nullptr && mpDoc->GetAnimationInfo(pObj))
+    else if (dynamic_cast< GraphicDocShell *>( mpDocSh ) ==  nullptr && SdDrawDocument::GetAnimationInfo(pObj))
     {
-        SdAnimationInfo* pInfo = mpDoc->GetAnimationInfo(pObj);
+        SdAnimationInfo* pInfo = SdDrawDocument::GetAnimationInfo(pObj);
 
         switch (pInfo->meClickAction)
         {

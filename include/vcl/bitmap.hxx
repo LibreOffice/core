@@ -730,7 +730,7 @@ public:
     SAL_DLLPRIVATE bool     ImplSeparableBlurFilter( const double aRadius );
     SAL_DLLPRIVATE bool     ImplSeparableUnsharpenFilter( const double aRadius );
     SAL_DLLPRIVATE bool     ImplDuotoneFilter( const sal_uLong nColorOne,  sal_uLong nColorTwo );
-    SAL_DLLPRIVATE void     ImplBlurContributions(
+    SAL_DLLPRIVATE static void ImplBlurContributions(
                                 const int aSize,
                                 const int aNumberOfContributions,
                                 double* pBlurVector,

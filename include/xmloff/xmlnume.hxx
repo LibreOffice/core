@@ -57,7 +57,7 @@ class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport
 protected:
 
     /// Override this to add attributes to the <list-style> element.
-    SAL_DLLPRIVATE void AddListStyleAttributes();
+    SAL_DLLPRIVATE static void AddListStyleAttributes();
 
     SAL_DLLPRIVATE void exportStyle( const css::uno::Reference< css::style::XStyle >& rStyle );
     SAL_DLLPRIVATE void exportOutline();

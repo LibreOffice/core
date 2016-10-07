@@ -513,7 +513,7 @@ const OUString& CustomAnimationPresets::getUINameForProperty( const OUString& rP
     return translateName( rPresetId, maPropertyNameMap );
 }
 
-const OUString& CustomAnimationPresets::translateName( const OUString& rId, const UStringMap& rNameMap ) const
+const OUString& CustomAnimationPresets::translateName( const OUString& rId, const UStringMap& rNameMap )
 {
     UStringMap::const_iterator aIter( rNameMap.find( rId ) );
 

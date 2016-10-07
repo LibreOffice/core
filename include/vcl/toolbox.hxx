@@ -227,7 +227,7 @@ public:
     SAL_DLLPRIVATE void ImplDrawGradientBackground(vcl::RenderContext& rRenderContext, ImplDockingWindowWrapper *pWrapper);
     SAL_DLLPRIVATE bool ImplDrawNativeBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion);
     SAL_DLLPRIVATE void ImplDrawTransparentBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion);
-    SAL_DLLPRIVATE void ImplDrawConstantBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode);
+    SAL_DLLPRIVATE static void ImplDrawConstantBackground(vcl::RenderContext& rRenderContext, const vcl::Region &rRegion, bool bIsInPopupMode);
     SAL_DLLPRIVATE void ImplDrawBackground(vcl::RenderContext& rRenderContext, const Rectangle &rRect);
 
     SAL_DLLPRIVATE void ImplErase(vcl::RenderContext& rRenderContext, const Rectangle &rRect, bool bHighlight, bool bHasOpenPopup = false );

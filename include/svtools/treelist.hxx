@@ -115,7 +115,7 @@ class SVT_DLLPUBLIC SvTreeList
      * Invalidate the cached position data to have them re-generated before
      * the next access.
      */
-    SVT_DLLPRIVATE void SetListPositions( SvTreeListEntries& rEntries );
+    SVT_DLLPRIVATE static void SetListPositions( SvTreeListEntries& rEntries );
 
     // rPos is not changed for SortModeNone
     SVT_DLLPRIVATE void GetInsertionPos(

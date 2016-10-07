@@ -314,11 +314,11 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
     {
         // get the containerframes ( if one of the frames is an InPlaceFrame )
         SfxViewFrame *pOldContainerFrame = pImpl->pViewFrame;
-        while ( pOldContainerFrame && pOldContainerFrame->GetParentViewFrame_Impl() )
-            pOldContainerFrame = pOldContainerFrame->GetParentViewFrame_Impl();
+        while ( pOldContainerFrame && SfxViewFrame::GetParentViewFrame_Impl() )
+            pOldContainerFrame = SfxViewFrame::GetParentViewFrame_Impl();
         SfxViewFrame *pNewContainerFrame = pFrame;
-        while ( pNewContainerFrame && pNewContainerFrame->GetParentViewFrame_Impl() )
-            pNewContainerFrame = pNewContainerFrame->GetParentViewFrame_Impl();
+        while ( pNewContainerFrame && SfxViewFrame::GetParentViewFrame_Impl() )
+            pNewContainerFrame = SfxViewFrame::GetParentViewFrame_Impl();
 
         // DocWinActivate : both frames belong to the same TopWindow
         // TopWinActivate : both frames belong to different TopWindows
@@ -467,7 +467,7 @@ extern "C" void basicide_macro_organizer(sal_Int16);
 
 #endif
 
-IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic, bool )
+IMPL_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic, bool )
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) pStarBasic;

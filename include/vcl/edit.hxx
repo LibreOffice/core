@@ -108,7 +108,7 @@ private:
     SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode );
     SAL_DLLPRIVATE void        ImplSetText( const OUString& rStr, const Selection* pNewSelection );
     SAL_DLLPRIVATE void        ImplInsertText( const OUString& rStr, const Selection* pNewSelection = nullptr, bool bIsUserInput = false );
-    SAL_DLLPRIVATE OUString    ImplGetValidString( const OUString& rString ) const;
+    SAL_DLLPRIVATE static OUString ImplGetValidString( const OUString& rString );
     SAL_DLLPRIVATE void        ImplClearBackground(vcl::RenderContext& rRenderContext, const Rectangle& rRectangle, long nXStart, long nXEnd);
     SAL_DLLPRIVATE void        ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd);
     SAL_DLLPRIVATE void        ImplShowCursor( bool bOnlyIfVisible = true );
@@ -124,14 +124,14 @@ private:
     SAL_DLLPRIVATE void        ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboard>& rxClipboard);
     SAL_DLLPRIVATE long        ImplGetTextYPosition() const;
     SAL_DLLPRIVATE css::uno::Reference<css::i18n::XExtendedInputSequenceChecker > const & ImplGetInputSequenceChecker();
-    SAL_DLLPRIVATE css::uno::Reference<css::i18n::XBreakIterator > ImplGetBreakIterator() const;
+    SAL_DLLPRIVATE static css::uno::Reference<css::i18n::XBreakIterator > ImplGetBreakIterator();
     SAL_DLLPRIVATE void        filterText();
 
 protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void        ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE WinBits     ImplInitStyle( WinBits nStyle );
+    SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, bool bPaint = true );
     SAL_DLLPRIVATE ControlType ImplGetNativeControlType() const;

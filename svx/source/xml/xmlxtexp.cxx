@@ -521,7 +521,7 @@ SvxXMLBitmapEntryExporter::~SvxXMLBitmapEntryExporter()
 
 void SvxXMLBitmapEntryExporter::exportEntry( const OUString& rStrName, const Any& rValue )
 {
-    maImageStyle.exportXML( rStrName, rValue, mrExport );
+    XMLImageStyle::exportXML( rStrName, rValue, mrExport );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2454,7 +2454,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
     // width of the tabbar, relative to frame window width
     rDocSett.mfTabBarWidth = pView->GetPendingRelTabBarWidth();
     if( rDocSett.mfTabBarWidth < 0.0 )
-        rDocSett.mfTabBarWidth = pView->GetRelTabBarWidth();
+        rDocSett.mfTabBarWidth = ScTabView::GetRelTabBarWidth();
 
     // sheet settings
     for( SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabData.size()); ++nTab )

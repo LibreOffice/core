@@ -860,7 +860,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             }
             else
             {
-                rRes = rAppData.pBasicFormater->BasicFormatNull( *pFmt );
+                rRes = SbxBasicFormater::BasicFormatNull( *pFmt );
             }
 
         }

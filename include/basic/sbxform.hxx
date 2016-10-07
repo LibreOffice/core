@@ -103,17 +103,17 @@ class BASIC_DLLPUBLIC SbxBasicFormater {
         String containing the formatted output
     */
     OUString  BasicFormat( double dNumber, const OUString& sFormatStrg );
-    OUString  BasicFormatNull( const OUString& sFormatStrg );
+    static OUString BasicFormatNull( const OUString& sFormatStrg );
 
     static  bool isBasicFormat( const OUString& sFormatStrg );
 
   private:
-    BASIC_DLLPRIVATE inline void ShiftString( OUStringBuffer& sStrg, sal_uInt16 nStartPos );
-    BASIC_DLLPRIVATE void   AppendDigit( OUStringBuffer& sStrg, short nDigit );
+    BASIC_DLLPRIVATE static inline void ShiftString( OUStringBuffer& sStrg, sal_uInt16 nStartPos );
+    BASIC_DLLPRIVATE static void AppendDigit( OUStringBuffer& sStrg, short nDigit );
     BASIC_DLLPRIVATE void   LeftShiftDecimalPoint( OUStringBuffer& sStrg );
     BASIC_DLLPRIVATE void   StrRoundDigit( OUStringBuffer& sStrg, short nPos, bool& bOverflow );
     BASIC_DLLPRIVATE void   StrRoundDigit( OUStringBuffer& sStrg, short nPos );
-    BASIC_DLLPRIVATE void   ParseBack( OUStringBuffer& sStrg, const OUString& sFormatStrg,
+    BASIC_DLLPRIVATE static void ParseBack( OUStringBuffer& sStrg, const OUString& sFormatStrg,
                                        short nFormatPos );
 #ifdef with_sprintf_
     // Methods for string conversion with sprintf():
@@ -129,11 +129,11 @@ class BASIC_DLLPUBLIC SbxBasicFormater {
                                            bool& bFoundFirstDigit );
     BASIC_DLLPRIVATE short  RoundDigit( double dNumber );
 #endif
-    BASIC_DLLPRIVATE OUString GetPosFormatString( const OUString& sFormatStrg, bool & bFound );
-    BASIC_DLLPRIVATE OUString GetNegFormatString( const OUString& sFormatStrg, bool & bFound );
-    BASIC_DLLPRIVATE OUString Get0FormatString( const OUString& sFormatStrg, bool & bFound );
-    BASIC_DLLPRIVATE OUString GetNullFormatString( const OUString& sFormatStrg, bool & bFound );
-    BASIC_DLLPRIVATE void     AnalyseFormatString( const OUString& sFormatStrg,
+    BASIC_DLLPRIVATE static OUString GetPosFormatString( const OUString& sFormatStrg, bool & bFound );
+    BASIC_DLLPRIVATE static OUString GetNegFormatString( const OUString& sFormatStrg, bool & bFound );
+    BASIC_DLLPRIVATE static OUString Get0FormatString( const OUString& sFormatStrg, bool & bFound );
+    BASIC_DLLPRIVATE static OUString GetNullFormatString( const OUString& sFormatStrg, bool & bFound );
+    BASIC_DLLPRIVATE static void AnalyseFormatString( const OUString& sFormatStrg,
                                                  short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                                                  short& nNoOfOptionalDigitsLeft,
                                                  short& nNoOfExponentDigits,

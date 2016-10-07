@@ -252,7 +252,7 @@ public:
     /** Returns the current tab bar width in pixels. */
     long            GetTabBarWidth() const;
     /** Returns the current tab bar width relative to the frame window width (0.0 ... 1.0). */
-    SC_DLLPUBLIC double          GetRelTabBarWidth() const;
+    SC_DLLPUBLIC static double   GetRelTabBarWidth();
     /** Returns the pending tab bar width relative to the frame window width (0.0 ... 1.0). */
     double          GetPendingRelTabBarWidth() const { return mfPendingTabBarWidth;}
 

@@ -646,7 +646,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
                         if( !xImageMap.is() || !SvUnoImageMap_fillImageMap( xImageMap, aImageMap ) )
                             throw lang::IllegalArgumentException();
 
-                        SdIMapInfo* pIMapInfo = pDoc->GetIMapInfo(pObj);
+                        SdIMapInfo* pIMapInfo = SdDrawDocument::GetIMapInfo(pObj);
                         if( pIMapInfo )
                         {
                             // replace existing image map
@@ -805,7 +805,7 @@ css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
                 if( pDoc )
                 {
 
-                    SdIMapInfo* pIMapInfo = pDoc->GetIMapInfo(mpShape->GetSdrObject());
+                    SdIMapInfo* pIMapInfo = SdDrawDocument::GetIMapInfo(mpShape->GetSdrObject());
                     if( pIMapInfo )
                     {
                         const ImageMap& rIMap = pIMapInfo->GetImageMap();

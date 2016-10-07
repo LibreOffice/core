@@ -41,8 +41,8 @@ private:
     SVX_DLLPRIVATE void ResetSettings(bool bForeground, bool bBackground);
     SVX_DLLPRIVATE void ApplySettings(vcl::RenderContext& rRenderContext) override;
     SVX_DLLPRIVATE void Init ();
-    SVX_DLLPRIVATE void SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
-    SVX_DLLPRIVATE void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
+    SVX_DLLPRIVATE static void SetFontSize(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
+    SVX_DLLPRIVATE static void SetFontLang(const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont);
 
 public:
                         SvxFontPrevWindow(vcl::Window* pParent, const ResId& rId);

@@ -228,7 +228,7 @@ SvxTextForwarder* TextAPIEditSource::GetTextForwarder()
     {
         //init draw model first
         m_xImpl->mpOutliner = new Outliner(m_xImpl->mpDoc, OutlinerMode::TextObject);
-        m_xImpl->mpDoc->SetCalcFieldValueHdl(m_xImpl->mpOutliner);
+        SdDrawDocument::SetCalcFieldValueHdl(m_xImpl->mpOutliner);
     }
 
     if (!m_xImpl->mpTextForwarder)
@@ -245,7 +245,7 @@ void TextAPIEditSource::SetText( OutlinerParaObject& rText )
         {
             //init draw model first
             m_xImpl->mpOutliner = new Outliner(m_xImpl->mpDoc, OutlinerMode::TextObject);
-            m_xImpl->mpDoc->SetCalcFieldValueHdl(m_xImpl->mpOutliner);
+            SdDrawDocument::SetCalcFieldValueHdl(m_xImpl->mpOutliner);
         }
 
         m_xImpl->mpOutliner->SetText( rText );

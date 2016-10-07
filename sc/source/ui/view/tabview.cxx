@@ -891,7 +891,7 @@ long ScTabView::GetTabBarWidth() const
     return pTabControl->GetSizePixel().Width();
 }
 
-double ScTabView::GetRelTabBarWidth() const
+double ScTabView::GetRelTabBarWidth()
 {
     return 0.5;
 }

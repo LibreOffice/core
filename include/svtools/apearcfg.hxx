@@ -54,7 +54,7 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 
     static bool  bInitialized ;
 
-    SVT_DLLPRIVATE const css::uno::Sequence<OUString>& GetPropertyNames();
+    SVT_DLLPRIVATE static const css::uno::Sequence<OUString>& GetPropertyNames();
     virtual void    ImplCommit() override;
 
 public:

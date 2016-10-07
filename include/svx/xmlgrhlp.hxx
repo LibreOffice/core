@@ -63,7 +63,7 @@ private:
     SvXMLGraphicHelperMode      meCreateMode;
     bool                        mbDirect;
 
-    SVX_DLLPRIVATE bool                 ImplGetStreamNames( const OUString& rURLStr,
+    SVX_DLLPRIVATE static bool          ImplGetStreamNames( const OUString& rURLStr,
                                                     OUString& rPictureStorageName,
                                                     OUString& rPictureStreamName );
     SVX_DLLPRIVATE css::uno::Reference < css::embed::XStorage >
@@ -71,7 +71,7 @@ private:
     SVX_DLLPRIVATE SvxGraphicHelperStream_Impl
                                             ImplGetGraphicStream( const OUString& rPictureStorageName,
                                                       const OUString& rPictureStreamName );
-    SVX_DLLPRIVATE OUString                 ImplGetGraphicMimeType( const OUString& rFileName ) const;
+    SVX_DLLPRIVATE static OUString      ImplGetGraphicMimeType( const OUString& rFileName );
     SVX_DLLPRIVATE Graphic                  ImplReadGraphic( const OUString& rPictureStorageName,
                                                  const OUString& rPictureStreamName );
     SVX_DLLPRIVATE bool                 ImplWriteGraphic( const OUString& rPictureStorageName,

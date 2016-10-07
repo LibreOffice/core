@@ -77,7 +77,7 @@ namespace svxform
     }
 
 
-    OUString FormToolboxes::getToolboxResourceName( sal_uInt16 _nSlotId ) const
+    OUString FormToolboxes::getToolboxResourceName( sal_uInt16 _nSlotId )
     {
         OSL_ENSURE( ( _nSlotId == SID_FM_MORE_CONTROLS ) || ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS ) || ( _nSlotId == SID_FM_CONFIG ),
             "FormToolboxes::getToolboxResourceName: unsupported slot!" );

@@ -40,7 +40,7 @@ class SW_DLLPUBLIC PercentField
     bool bLockAutoCalculation; //prevent recalcution of percent values when the
                                //reference value is changed
 
-    SAL_DLLPRIVATE sal_Int64      ImpPower10(sal_uInt16 n);
+    SAL_DLLPRIVATE static sal_Int64 ImpPower10(sal_uInt16 n);
 
 public:
 

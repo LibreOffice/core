@@ -5703,6 +5703,8 @@ void ToolBox::ImplDisableFlatButtons()
     }
     if( bValue )
         mnOutStyle &= ~TOOLBOX_STYLE_FLAT;
+#else
+    (void) this; // loplugin:staticmethods
 #endif
 }
 

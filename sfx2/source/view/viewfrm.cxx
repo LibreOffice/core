@@ -1082,7 +1082,7 @@ void SfxViewFrame::DoActivate( bool bUI )
         SfxViewFrame *pFrame = GetParentViewFrame();
         while ( pFrame )
         {
-            pFrame->m_pDispatcher->DoParentActivate_Impl();
+            SfxDispatcher::DoParentActivate_Impl();
             pFrame = pFrame->GetParentViewFrame();
         }
     }
@@ -1101,7 +1101,7 @@ void SfxViewFrame::DoDeactivate(bool bUI, SfxViewFrame* pNewFrame )
         while ( pFrame )
         {
             if ( !pNewFrame || !pNewFrame->GetFrame().IsParent( &pFrame->GetFrame() ) )
-                pFrame->m_pDispatcher->DoParentDeactivate_Impl();
+                SfxDispatcher::DoParentDeactivate_Impl();
             pFrame = pFrame->GetParentViewFrame();
         }
     }
@@ -1555,7 +1555,7 @@ void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
     The ParentViewFrame of the Containers ViewFrame in the internal InPlace
 */
 //TODO/LATER: is it still necessary? is there a replacement for GetParentViewFrame_Impl?
-SfxViewFrame* SfxViewFrame::GetParentViewFrame_Impl() const
+SfxViewFrame* SfxViewFrame::GetParentViewFrame_Impl()
 {
     return nullptr;
 }
@@ -1700,7 +1700,7 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
                     {
                         SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();
                         if ( ( !pCli || !pCli->IsObjectUIActive() ) &&
-                            ( !pCurrent || pCurrent->GetParentViewFrame_Impl() != this ) )
+                            ( !pCurrent || SfxViewFrame::GetParentViewFrame_Impl() != this ) )
                                 GetFrame().GrabFocusOnComponent_Impl();
                     }
                 }
@@ -2812,8 +2812,8 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 {
                     // Get the ContainerFrame, when internal InPlace.
                     SfxViewFrame *pFrame = this;
-                    if ( pFrame->GetParentViewFrame_Impl() )
-                        pFrame = pFrame->GetParentViewFrame_Impl();
+                    if ( SfxViewFrame::GetParentViewFrame_Impl() )
+                        pFrame = SfxViewFrame::GetParentViewFrame_Impl();
                     rSet.Put( SfxStringItem( nWhich, pFrame->GetActualPresentationURL_Impl() ) );
                     break;
                 }

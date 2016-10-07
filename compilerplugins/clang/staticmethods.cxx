@@ -87,7 +87,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (isa<CXXConstructorDecl>(pCXXMethodDecl) || isa<CXXDestructorDecl>(pCXXMethodDecl) || isa<CXXConversionDecl>(pCXXMethodDecl)) {
         return true;
     }
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(pCXXMethodDecl->getCanonicalDecl()->getLocStart()))) {
+    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(pCXXMethodDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
         return true;
     }
     if ( pCXXMethodDecl != pCXXMethodDecl->getCanonicalDecl() ) {
@@ -195,7 +195,8 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         || (fdc.Function("Read_F_Shape").Class("SwWW8ImplReader")
             .GlobalNamespace())
         || (fdc.Function("Read_Majority").Class("SwWW8ImplReader")
-            .GlobalNamespace()))
+            .GlobalNamespace())
+        || fdc.Function("Ignore").Class("SwWrtShell").GlobalNamespace())
     {
         return true;
     }

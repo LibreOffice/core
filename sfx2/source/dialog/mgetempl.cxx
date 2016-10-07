@@ -95,7 +95,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     else
         m_pEditLinkStyleBtn->Enable();
 
-    ResMgr* pResMgr = SfxGetpApp()->GetModule_Impl()->GetResMgr();
+    ResMgr* pResMgr = SfxApplication::GetModule_Impl()->GetResMgr();
     OSL_ENSURE( pResMgr, "No ResMgr in Module" );
     pFamilies = new SfxStyleFamilies( ResId( DLG_STYLE_DESIGNER, *pResMgr ) );
 

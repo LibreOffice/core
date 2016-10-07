@@ -226,7 +226,7 @@ const GalleryObject* GalleryTheme::ImplGetGalleryObject( const INetURLObject& rU
     return nullptr;
 }
 
-INetURLObject GalleryTheme::ImplGetURL( const GalleryObject* pObject ) const
+INetURLObject GalleryTheme::ImplGetURL( const GalleryObject* pObject )
 {
     INetURLObject aURL;
 

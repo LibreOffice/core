@@ -602,7 +602,7 @@ bool SwFEShell::IsColRightToLeft() const
 }
 
 sal_uInt16 SwFEShell::GetCurColNum_( const SwFrame *pFrame,
-                                SwGetCurColNumPara* pPara ) const
+                                SwGetCurColNumPara* pPara )
 {
     sal_uInt16 nRet = 0;
     while ( pFrame )

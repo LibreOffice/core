@@ -720,7 +720,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
         {
             SdrMark*            pMark = rMarkList.GetMark(0);
             SdrObject*          pObject = pMark->GetMarkedSdrObj();
-            SdAnimationInfo*    pAnimInfo = rView.GetDoc().GetAnimationInfo( pObject );
+            SdAnimationInfo*    pAnimInfo = SdDrawDocument::GetAnimationInfo( pObject );
             sal_uInt32              nInv = pObject->GetObjInventor();
             sal_uInt16              nId = pObject->GetObjIdentifier();
 

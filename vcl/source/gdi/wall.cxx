@@ -325,7 +325,7 @@ bool Wallpaper::IsGradient() const
     return (mpImplWallpaper->mpGradient != nullptr);
 }
 
-Gradient Wallpaper::ImplGetApplicationGradient() const
+Gradient Wallpaper::ImplGetApplicationGradient()
 {
     Gradient g;
     g.SetAngle( 900 );

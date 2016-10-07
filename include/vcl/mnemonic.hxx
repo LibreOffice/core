@@ -57,8 +57,8 @@ private:
     css::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
 
 protected:
-    SAL_DLLPRIVATE sal_uInt16       ImplGetMnemonicIndex( sal_Unicode c );
-    SAL_DLLPRIVATE sal_Unicode  ImplFindMnemonic( const OUString& rKey );
+    SAL_DLLPRIVATE static sal_uInt16 ImplGetMnemonicIndex( sal_Unicode c );
+    SAL_DLLPRIVATE static sal_Unicode ImplFindMnemonic( const OUString& rKey );
 
 public:
                         MnemonicGenerator();

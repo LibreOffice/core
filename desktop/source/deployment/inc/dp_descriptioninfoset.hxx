@@ -260,9 +260,9 @@ private:
 
     /** Helper method to compare the versions with the current version
      */
-    SAL_DLLPRIVATE bool
+    SAL_DLLPRIVATE static bool
         checkBlacklistVersion(const OUString& currentversion,
-                              css::uno::Sequence< OUString > const & versions) const;
+                              css::uno::Sequence< OUString > const & versions);
 
     css::uno::Reference< css::uno::XComponentContext > m_context;
     css::uno::Reference< css::xml::dom::XNode >        m_element;

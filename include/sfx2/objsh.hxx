@@ -625,7 +625,7 @@ public:
 
     SAL_DLLPRIVATE std::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl(bool bFullContent) const;
 
-    SAL_DLLPRIVATE bool IsPackageStorageFormat_Impl(const SfxMedium &) const;
+    SAL_DLLPRIVATE static bool IsPackageStorageFormat_Impl(const SfxMedium &);
 
     SAL_DLLPRIVATE bool ConnectTmpStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage, SfxMedium* pMedium );
     SAL_DLLPRIVATE bool DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium );
@@ -642,7 +642,7 @@ public:
     SAL_DLLPRIVATE void BreakMacroSign_Impl( bool bBreakMacroSing );
     SAL_DLLPRIVATE void CheckSecurityOnLoading_Impl();
     SAL_DLLPRIVATE void CheckForBrokenDocSignatures_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
-    SAL_DLLPRIVATE SignatureState ImplCheckSignaturesInformation(
+    SAL_DLLPRIVATE static SignatureState ImplCheckSignaturesInformation(
                 const css::uno::Sequence< css::security::DocumentSignatureInformation >& aInfos );
     SAL_DLLPRIVATE void CheckEncryption_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
     SAL_DLLPRIVATE void SetModifyPasswordEntered( bool bEntered = true );
@@ -673,7 +673,7 @@ public:
     SAL_DLLPRIVATE void ExecProps_Impl(SfxRequest &);
     SAL_DLLPRIVATE void StateProps_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void ExecView_Impl(SfxRequest &);
-    SAL_DLLPRIVATE void StateView_Impl(SfxItemSet &);
+    SAL_DLLPRIVATE static void StateView_Impl(SfxItemSet &);
 
     // Load/Save public internals
     SAL_DLLPRIVATE bool ImportFromGeneratedStream_Impl(

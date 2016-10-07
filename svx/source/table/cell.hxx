@@ -195,7 +195,7 @@ protected:
     SVX_DLLPRIVATE virtual const SfxItemSet& GetObjectItemSet() override;
     SVX_DLLPRIVATE virtual void SetObjectItem(const SfxPoolItem& rItem) override;
 
-    SVX_DLLPRIVATE css::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap );
+    SVX_DLLPRIVATE static css::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap );
 
 private:
     SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw(css::uno::RuntimeException);
