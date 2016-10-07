@@ -34,11 +34,6 @@
 #define STR_CLOSELINKMSG        (RC_DIALOG_BEGIN +  3)
 #define STR_PATH_NOT_FOUND      (RC_DIALOG_BEGIN +  4)
 
-// Controls *****************************************************************
-
-#define CB_USE_PASSWD           (RC_DIALOG_BEGIN     )
-#define CB_READ_ONLY            (RC_DIALOG_BEGIN +  1)
-
 // Bereiche *****************************************************************
 
 #define RC_REGIONSW_BEGIN       (RC_DIALOG_BEGIN + 60)

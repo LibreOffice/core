@@ -18,14 +18,6 @@
  */
 #include "dialog.hrc"
 
-CheckBox CB_USE_PASSWD
-{
-    Text [ en-US ] = "~Password" ;
-};
-CheckBox CB_READ_ONLY
-{
-    Text [ en-US ] = "~Read-only" ;
-};
 String STR_LINKEDIT_TEXT
 {
     Text [ en-US ] = "Edit links" ;
