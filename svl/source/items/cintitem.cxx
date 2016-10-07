@@ -26,8 +26,7 @@
 // virtual
 bool CntByteItem::operator ==(const SfxPoolItem & rItem) const
 {
-    DBG_ASSERT(dynamic_cast<const CntByteItem*>( &rItem ) !=  nullptr,
-               "CntByteItem::operator ==(): Bad type");
+    assert(dynamic_cast<const CntByteItem*>(&rItem) != nullptr);
     return m_nValue == (static_cast< const CntByteItem * >(&rItem))->m_nValue;
 }
 
@@ -95,10 +94,8 @@ CntUInt16Item::CntUInt16Item(sal_uInt16 which, SvStream & rStream) :
 // virtual
 bool CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
-    DBG_ASSERT(dynamic_cast< const CntUInt16Item* >(&rItem) !=  nullptr,
-               "CntUInt16Item::operator ==(): Bad type");
-    return m_nValue == (static_cast< const CntUInt16Item * >(&rItem))->
-                        m_nValue;
+    assert(dynamic_cast<const CntUInt16Item*>(&rItem) != nullptr);
+    return m_nValue == static_cast<const CntUInt16Item *>(&rItem)->m_nValue;
 }
 
 // virtual
@@ -165,10 +162,8 @@ CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream)
 // virtual
 bool CntInt32Item::operator ==(const SfxPoolItem & rItem) const
 {
-    DBG_ASSERT(dynamic_cast< const CntInt32Item*>(&rItem) !=  nullptr,
-               "CntInt32Item::operator ==(): Bad type");
-    return m_nValue == (static_cast< const CntInt32Item * >(&rItem))->
-                        m_nValue;
+    assert(dynamic_cast<const CntInt32Item*>(&rItem) != nullptr);
+    return m_nValue == static_cast<const CntInt32Item *>(&rItem)->m_nValue;
 }
 
 // virtual
@@ -234,10 +229,8 @@ CntUInt32Item::CntUInt32Item(sal_uInt16 which, SvStream & rStream) :
 // virtual
 bool CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
 {
-    DBG_ASSERT(dynamic_cast< const CntUInt32Item* >(&rItem) !=  nullptr,
-               "CntUInt32Item::operator ==(): Bad type");
-    return m_nValue == (static_cast< const CntUInt32Item * >(&rItem))->
-                        m_nValue;
+    assert(dynamic_cast<const CntUInt32Item*>(&rItem) != nullptr);
+    return m_nValue == static_cast<const CntUInt32Item *>(&rItem)->m_nValue;
 }
 
 // virtual
