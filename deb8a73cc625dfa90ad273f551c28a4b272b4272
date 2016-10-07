@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_7fc5c359",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-10-07T07:01:22Z",
+      "side": 1,
+      "message": "You don\u0027t need to mention this in the commit message. We see the files that have been modified :)",
+      "revId": "deb8a73cc625dfa90ad273f551c28a4b272b4272",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
