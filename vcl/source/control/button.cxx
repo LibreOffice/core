@@ -3237,19 +3237,6 @@ CheckBox::CheckBox( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-CheckBox::CheckBox( vcl::Window* pParent, const ResId& rResId ) :
-    Button( WINDOW_CHECKBOX ), mbLegacyNoTextAlign( false )
-{
-    rResId.SetRT( RSC_CHECKBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInitCheckBoxData();
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 void CheckBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() && maMouseRect.IsInside( rMEvt.GetPosPixel() ) )

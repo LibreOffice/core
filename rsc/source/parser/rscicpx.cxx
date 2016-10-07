@@ -262,29 +262,6 @@ RscTop * RscTypCont::InitClassControl( RscTop * pSuper )
     return pClassControl;
 }
 
-RscTop * RscTypCont::InitClassCheckBox( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassCheckBox;
-
-    // initialize class
-    nId = pHS->getID( "CheckBox" );
-    pClassCheckBox = new RscClass( nId, RSC_CHECKBOX, pSuper );
-    pClassCheckBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassCheckBox );
-
-    // initialize variables
-    INS_WINBIT( pClassCheckBox, WordBreak )
-    INS_WINBIT( pClassCheckBox, Top )
-    INS_WINBIT( pClassCheckBox, VCenter )
-    INS_WINBIT( pClassCheckBox, Bottom )
-
-    nId = aNmTb.Put( "Check", VARNAME );
-    pClassCheckBox->SetVariable( nId, &aBool );
-
-    return pClassCheckBox;
-}
-
 RscTop * RscTypCont::InitClassPushButton( RscTop * pSuper )
 {
     Atom        nId;

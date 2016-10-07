@@ -64,7 +64,6 @@ void RscTypCont::Init()
     RscTop   *  pClassWindow;
     RscTop   *  pClassControl;
     RscTop   *  pClassButton;
-    RscTop   *  pClassCheckBox;
     RscTop   *  pClassPushButton;
     RscTop   *  pClassRadioButton;
     RscTop   *  pClassImageButton;
@@ -306,9 +305,6 @@ void RscTypCont::Init()
     pClassButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassButton );
     pRoot->Insert( pClassButton );
-
-    pClassCheckBox = InitClassCheckBox( pClassButton );
-    pRoot->Insert( pClassCheckBox );
 
     // initialize class
     pClassPushButton = InitClassPushButton( pClassButton );

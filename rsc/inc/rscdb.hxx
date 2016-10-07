@@ -181,7 +181,6 @@ class RscTypCont
     RscTop *    InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
                                  RscArray * pLangGeo );
     RscTop *    InitClassControl( RscTop * pSuper );
-    RscTop *    InitClassCheckBox( RscTop * pSuper );
     RscTop *    InitClassPushButton( RscTop * pSuper );
     RscTop *    InitClassImageButton( RscTop * pSuper, RscTop * pClassImage,
                                     RscEnum * pTriState );

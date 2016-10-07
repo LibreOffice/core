@@ -438,7 +438,6 @@ public:
     SAL_DLLPRIVATE void         ImplSetMinimumNWFSize();
 public:
     explicit        CheckBox( vcl::Window* pParent, WinBits nStyle = 0 );
-    explicit        CheckBox( vcl::Window* pParent, const ResId& );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
     virtual void    Tracking( const TrackingEvent& rTEvt ) override;
