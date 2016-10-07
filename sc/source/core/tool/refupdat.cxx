@@ -235,6 +235,8 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
             {
                 // End was sticky, but start may have been moved. Only on range.
                 theCol2 = oldCol2;
+                if (eRet == UR_NOTHING)
+                    eRet = UR_STICKY;
             }
             // Else, if (bCut2 && theCol2 == MAXCOL) then end becomes sticky,
             // but currently there's nothing to do.
@@ -267,6 +269,8 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
             {
                 // End was sticky, but start may have been moved. Only on range.
                 theRow2 = oldRow2;
+                if (eRet == UR_NOTHING)
+                    eRet = UR_STICKY;
             }
             // Else, if (bCut2 && theRow2 == MAXROW) then end becomes sticky,
             // but currently there's nothing to do.
