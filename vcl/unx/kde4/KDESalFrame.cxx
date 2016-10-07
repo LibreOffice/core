@@ -334,6 +334,10 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetScrollBarSize( QApplication::style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
     style.SetMinThumbSize( QApplication::style()->pixelMetric( QStyle::PM_ScrollBarSliderMin ));
 
+    // These colors are used for the ruler text and marks
+    style.SetShadowColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
+    style.SetDarkShadowColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
+
     rSettings.SetStyleSettings( style );
 }
 
