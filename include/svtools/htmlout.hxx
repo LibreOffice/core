@@ -60,7 +60,7 @@ struct HTMLOutFuncs
     SVT_DLLPUBLIC static SvStream& Out_AsciiTag( SvStream&, const sal_Char* pStr,
                                    bool bOn = true,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252);
-    SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
+    SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_uInt32 cChar,
                         HTMLOutContext& rContext,
                         OUString *pNonConvertableChars );
     SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, const OUString&,

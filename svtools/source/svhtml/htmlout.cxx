@@ -55,7 +55,7 @@ HTMLOutContext::~HTMLOutContext()
     rtl_destroyUnicodeToTextConverter( m_hConv );
 }
 
-static const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
+static const sal_Char *lcl_svhtml_GetEntityForChar( sal_uInt32 c,
                                              rtl_TextEncoding eDestEnc )
 {
     const sal_Char* pStr = nullptr;
@@ -399,10 +399,12 @@ static sal_Size lcl_FlushContext(HTMLOutContext& rContext, sal_Char* pBuffer, sa
     return nLen;
 }
 
-static OString lcl_ConvertCharToHTML( sal_Unicode c,
+static OString lcl_ConvertCharToHTML( sal_uInt32 c,
                             HTMLOutContext& rContext,
                             OUString *pNonConvertableChars )
 {
+    assert(rtl::isUnicodeCodePoint(c));
+
     OStringBuffer aDest;
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW != rContext.m_eDestEnc,
                     "wrong destination encoding" );
@@ -446,8 +448,18 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
         sal_uInt32 nInfo = 0;
         sal_Size nSrcChars;
 
+        sal_Unicode utf16[2];
+        sal_Size n;
+        if (c < 0x10000) {
+            utf16[0] = c;
+            n = 1;
+        } else {
+            utf16[0] = rtl::getHighSurrogate(c);
+            utf16[1] = rtl::getLowSurrogate(c);
+            n = 2;
+        }
         sal_Size nLen = rtl_convertUnicodeToText(rContext.m_hConv,
-                                                 rContext.m_hContext, &c, 1,
+                                                 rContext.m_hContext, utf16, n,
                                                  cBuffer, TXTCONV_BUFFER_SIZE,
                                                  nFlags, &nInfo, &nSrcChars);
         if( nLen > 0 && (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0 )
@@ -467,11 +479,13 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
             while( nLen-- )
                 aDest.append(*pBuffer++);
 
-            aDest.append('&').append('#').append(static_cast<sal_Int64>(c))
+            aDest.append('&').append('#').append(static_cast<sal_Int32>(c))
+                    // Unicode code points guaranteed to fit into sal_Int32
                  .append(';');
+            OUString cs(&c, 1);
             if( pNonConvertableChars &&
-                -1 == pNonConvertableChars->indexOf( c ) )
-                (*pNonConvertableChars) += OUStringLiteral1(c);
+                -1 == pNonConvertableChars->indexOf( cs ) )
+                (*pNonConvertableChars) += cs;
         }
     }
     return aDest.makeStringAndClear();
@@ -498,9 +512,9 @@ OString HTMLOutFuncs::ConvertStringToHTML( const OUString& rSrc,
 {
     HTMLOutContext aContext( eDestEnc );
     OStringBuffer aDest;
-    for( sal_Int32 i=0, nLen = rSrc.getLength(); i < nLen; i++ )
+    for( sal_Int32 i=0, nLen = rSrc.getLength(); i < nLen; )
         aDest.append(lcl_ConvertCharToHTML(
-            rSrc[i], aContext, pNonConvertableChars));
+            rSrc.iterateCodePoints(&i), aContext, pNonConvertableChars));
     aDest.append(lcl_FlushToAscii(aContext));
     return aDest.makeStringAndClear();
 }
@@ -518,7 +532,7 @@ SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
     return rStream;
 }
 
-SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
+SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_uInt32 c,
                                   HTMLOutContext& rContext,
                                   OUString *pNonConvertableChars )
 {
@@ -533,8 +547,8 @@ SvStream& HTMLOutFuncs::Out_String( SvStream& rStream, const OUString& rOUStr,
 {
     HTMLOutContext aContext( eDestEnc );
     sal_Int32 nLen = rOUStr.getLength();
-    for( sal_Int32 n = 0; n < nLen; n++ )
-        HTMLOutFuncs::Out_Char( rStream, rOUStr[n],
+    for( sal_Int32 n = 0; n < nLen; )
+        HTMLOutFuncs::Out_Char( rStream, rOUStr.iterateCodePoints(&n),
                                 aContext, pNonConvertableChars );
     HTMLOutFuncs::FlushToAscii( rStream, aContext );
     return rStream;
