@@ -28,6 +28,13 @@
 #include <tools/link.hxx>
 #include <vector>
 
+#if defined _WIN32
+#include <prewin.h>
+#include <windows.h>
+#include <postwin.h>
+#include <ddeml.h>
+#endif
+
 class DdeString;
 class DdeData;
 class DdeConnection;
@@ -49,13 +56,6 @@ typedef ::std::vector< DdeService* > DdeServices;
 typedef ::std::vector< long > DdeFormats;
 typedef ::std::vector< Conversation* > ConvList;
 
-#if defined _WIN32
-namespace svl_dde {
-
-using HCONV = void *; // avoid including windows.h/ddeml.h
-
-}
-#endif
 
 class SVL_DLLPUBLIC DdeData
 {
@@ -214,8 +214,8 @@ class SVL_DLLPUBLIC DdeItem
     DdeItemImp*     pImpData;
 
 #if defined _WIN32
-    void            IncMonitor( svl_dde::HCONV );
-    void            DecMonitor( svl_dde::HCONV );
+    void            IncMonitor( HCONV );
+    void            DecMonitor( HCONV );
 #endif
 
 protected:
@@ -249,7 +249,7 @@ public:
 class SVL_DLLPUBLIC DdeTopic
 {
 #if defined _WIN32
-    SVL_DLLPRIVATE void Disconnect( svl_dde::HCONV );
+    SVL_DLLPRIVATE void Disconnect( HCONV );
 #endif
 
 public:
