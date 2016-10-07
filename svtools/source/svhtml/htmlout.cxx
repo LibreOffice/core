@@ -486,11 +486,11 @@ static OString lcl_FlushToAscii( HTMLOutContext& rContext )
     const sal_uInt32 nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE|
                         RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE|
                         RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|
-                        RTL_UNICODETOTEXT_FLAGS_FLUSH|
                         RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
     sal_Size nLen = rtl_convertUnicodeToText(
                         rContext.m_hConv, rContext.m_hContext, nullptr, 0,
-                        cBuffer, TXTCONV_BUFFER_SIZE, nFlags,
+                        cBuffer, TXTCONV_BUFFER_SIZE,
+                        nFlags|RTL_UNICODETOTEXT_FLAGS_FLUSH,
                         &nInfo, &nSrcChars );
     DBG_ASSERT( (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0, "HTMLOut: error while flushing" );
     sal_Char *pBuffer = cBuffer;
