@@ -195,7 +195,8 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         || (fdc.Function("Read_F_Shape").Class("SwWW8ImplReader")
             .GlobalNamespace())
         || (fdc.Function("Read_Majority").Class("SwWW8ImplReader")
-            .GlobalNamespace()))
+            .GlobalNamespace())
+        || fdc.Function("Ignore").Class("SwWrtShell").GlobalNamespace())
     {
         return true;
     }

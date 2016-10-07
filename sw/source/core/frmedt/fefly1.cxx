@@ -1611,7 +1611,7 @@ const SwFrameFormat* SwFEShell::GetFormatFromAnyObj( const Point& rPt ) const
     return pRet;
 }
 
-ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
+ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj )
 {
     ObjCntType eType = OBJCNT_NONE;
 
