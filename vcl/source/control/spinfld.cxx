@@ -351,19 +351,6 @@ SpinField::SpinField(vcl::Window* pParent, WinBits nWinStyle) :
     ImplInit(pParent, nWinStyle);
 }
 
-SpinField::SpinField(vcl::Window* pParent, const ResId& rResId) :
-    Edit(WINDOW_SPINFIELD)
-{
-    ImplInitSpinFieldData();
-    rResId.SetRT(RSC_SPINFIELD);
-    WinBits nStyle = ImplInitRes(rResId);
-    ImplInit(pParent, nStyle);
-    ImplLoadRes(rResId);
-
-    if (!(nStyle & WB_HIDE))
-        Show();
-}
-
 SpinField::~SpinField()
 {
     disposeOnce();

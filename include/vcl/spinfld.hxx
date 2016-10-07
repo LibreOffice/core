@@ -67,7 +67,6 @@ protected:
 
 public:
     explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle );
-    explicit        SpinField( vcl::Window* pParent, const ResId& );
     virtual         ~SpinField() override;
     virtual void    dispose() override;
 
