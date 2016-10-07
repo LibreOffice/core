@@ -86,18 +86,6 @@ String RID_SVXSTR_MOREBULLETS
     Text [ en-US ] = "More Bullets..." ;
 };
 
-ComboBox RID_SVXTBX_STYLE
-{
-    HelpId = HID_STYLE_LISTBOX ;
-    Size = MAP_APPFONT ( 60 , 86 ) ;
-    DropDown = TRUE ;
-    Sort = TRUE ;
-    AutoHScroll = TRUE ;
-    DDExtraWidth = TRUE ;
-    Border = TRUE ;
-    Hide = TRUE ;
-};
-
 Menu RID_SVX_STYLE_MENU
 {
     ItemList =

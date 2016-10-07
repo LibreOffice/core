@@ -177,7 +177,6 @@
 #define RID_SVXMN_RULER                     (RID_SVX_START +  92)
 
 // for Toolbox-Control style
-#define RID_SVXTBX_STYLE                    (RID_SVX_START + 120)
 #define RID_SVX_STYLE_MENU                  (RID_SVX_START + 121)
 #define RID_SVX_UPDATE_STYLE                (RID_SVX_START + 122)
 #define RID_SVX_MODIFY_STYLE                (RID_SVX_START + 123)

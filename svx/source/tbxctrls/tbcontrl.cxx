@@ -340,7 +340,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
                                    const OUString& rClearFormatKey,
                                    const OUString& rMoreKey,
                                    bool bInSpec)
-    : ComboBox( pParent, SVX_RES( RID_SVXTBX_STYLE ) )
+    : ComboBox(pParent, WB_SORT | WB_BORDER | WB_HIDE | WB_DROPDOWN | WB_AUTOHSCROLL)
     , eStyleFamily( eFamily )
     , nCurSel(0)
     , bRelease( true )
@@ -353,10 +353,11 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     , bInSpecialMode( bInSpec )
     , m_pMenu( VclPtr<PopupMenu>::Create(SVX_RES( RID_SVX_STYLE_MENU )) )
 {
+    SetHelpId(HID_STYLE_LISTBOX);
     m_pMenu->SetSelectHdl( LINK( this, SvxStyleBox_Impl, MenuSelectHdl ) );
     for(VclPtr<MenuButton> & rpButton : m_pButtons)
         rpButton = nullptr;
-    aLogicalSize = PixelToLogic( GetSizePixel(), MapUnit::MapAppFont );
+    aLogicalSize = PixelToLogic(Size(60, 86), MapUnit::MapAppFont);
     SetOptimalSize();
     EnableAutocomplete( true );
     EnableUserDraw( true );
