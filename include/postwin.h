@@ -23,6 +23,7 @@
 #undef CompareString
 #undef CopyFile
 #undef DELETE
+#undef DocumentProperties
 #undef DrawText
 #undef FindWindow
 #undef Folder
