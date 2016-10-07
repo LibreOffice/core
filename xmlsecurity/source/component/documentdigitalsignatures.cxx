@@ -440,7 +440,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     return bFound;
 }
 
-Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate() throw (RuntimeException, std::exception)
+Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate(OUString& rDescription) throw (RuntimeException, std::exception)
 {
     Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv;
 
@@ -454,6 +454,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
         return Reference< css::security::XCertificate >(nullptr);
 
     Reference< css::security::XCertificate > xCert = aChooser->GetSelectedCertificate();
+    rDescription = aChooser->GetDescription();
 
     if ( !xCert.is() )
         return Reference< css::security::XCertificate >(nullptr);

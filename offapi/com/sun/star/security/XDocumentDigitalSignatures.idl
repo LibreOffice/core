@@ -131,8 +131,10 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     void    addLocationToTrustedSources( [in] string Location );
 
     /**  This method shows CertificateChooser dialog, used by document and PDF signing
+
+         @since LibreOffice 5.3
      */
-    com::sun::star::security::XCertificate chooseCertificate();
+    com::sun::star::security::XCertificate chooseCertificate( [out] string Description );
 
 } ;
 
