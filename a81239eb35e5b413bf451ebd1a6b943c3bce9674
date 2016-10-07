@@ -16,6 +16,24 @@
       "revId": "a81239eb35e5b413bf451ebd1a6b943c3bce9674",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_1f54cf52",
+        "filename": "basctl/source/basicide/macrodlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-10-07T14:36:13Z",
+      "side": 1,
+      "message": "it is indeed non-obvious why this fixes the bug, please add a short one-line comment about m_pMacroNameEdit being cleared, as you described in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d96717#c5",
+      "parentUuid": "7a77a97e_d90ef7e4",
+      "revId": "a81239eb35e5b413bf451ebd1a6b943c3bce9674",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
