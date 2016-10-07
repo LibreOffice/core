@@ -2976,10 +2976,23 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 
                         if (rCxt.maRange.In(aAbs))
                         {
-                            ScRange aErrorRange( ScAddress::UNINITIALIZED );
-                            if (!aAbs.MoveSticky(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
-                                aAbs = aErrorRange;
-                            aRes.mbReferenceModified = true;
+                            // We shift either by column or by row, not both,
+                            // so moving the reference has only to be done in
+                            // the non-sticky case.
+                            if ((rCxt.mnRowDelta && rRef.IsEntireCol()) || (rCxt.mnColDelta && rRef.IsEntireRow()))
+                            {
+                                // In entire col/row, values are shifted within
+                                // the reference, which affects all positional
+                                // results like in MATCH or matrix positions.
+                                aRes.mbValueChanged = true;
+                            }
+                            else
+                            {
+                                ScRange aErrorRange( ScAddress::UNINITIALIZED );
+                                if (!aAbs.MoveSticky(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorRange))
+                                    aAbs = aErrorRange;
+                                aRes.mbReferenceModified = true;
+                            }
                         }
                         else if (rCxt.maRange.Intersects(aAbs))
                         {
