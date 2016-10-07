@@ -55,6 +55,7 @@ namespace desktop
         "--invisible    \n"\
         "--norestore    \n"\
         "--quickstart   \n"\
+        "--safe-mode    \n"\
         "--nologo       \n"\
         "--nolockcheck  \n"\
         "--nodefault    \n"\
@@ -76,6 +77,7 @@ namespace desktop
         "no startup screen, no default document and no UI.\n"\
         "suppress restart/restore after fatal errors.\n"\
         "starts the quickstart service\n"\
+        "starts the safe mode\n"\
         "don't show startup screen.\n"\
         "don't check for remote instances using the installation\n"\
         "don't start with an empty document\n"\
