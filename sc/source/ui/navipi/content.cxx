@@ -49,9 +49,9 @@
 #include "lnktrans.hxx"
 #include "formulacell.hxx"
 #include "dociter.hxx"
+#include "sc.hrc"
 #include "scresid.hxx"
 #include "globstr.hrc"
-#include "navipi.hrc"
 #include "arealink.hxx"
 #include "navicfg.hxx"
 #include "navsett.hxx"
@@ -111,22 +111,20 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
 
 //          ScContentTree
 
-ScContentTree::ScContentTree( vcl::Window* pParent, const ResId& rResId ) :
-    SvTreeListBox   ( pParent, rResId ),
-    aEntryImages    ( ScResId( RID_IMAGELIST_NAVCONT ) ),
-    nRootType       ( ScContentId::ROOT ),
-    bHiddenDoc      ( false ),
-    pHiddenDocument ( nullptr ),
-    bisInNavigatoeDlg  ( false )
+ScContentTree::ScContentTree(vcl::Window* pParent, ScNavigatorDlg* pNavigatorDlg)
+    : SvTreeListBox(pParent, WB_BORDER | WB_QUICK_SEARCH)
+    , pParentWindow(pNavigatorDlg)
+    , aEntryImages(ScResId(RID_IMAGELIST_NAVCONT))
+    , nRootType(ScContentId::ROOT)
+    , bHiddenDoc(false)
+    , pHiddenDocument(nullptr)
+    , bisInNavigatoeDlg(false)
 {
-    sal_uInt16 i;
-    for (i=0; i<=(int)ScContentId::LAST; i++)
+    for (sal_uInt16 i = 0; i <= (int)ScContentId::LAST; ++i)
         pPosList[pTypeList[i]] = i;         // invers zum suchen
 
-    pParentWindow = static_cast<ScNavigatorDlg*>(pParent);
-
     pRootNodes[ScContentId::ROOT] = nullptr;
-    for (i=1; i<(int)ScContentId::LAST; i++)
+    for (sal_uInt16 i = 1; i < (int)ScContentId::LAST; ++i)
         InitRoot((ScContentId)i);
 
     SetNodeDefaultImages();
@@ -134,8 +132,6 @@ ScContentTree::ScContentTree( vcl::Window* pParent, const ResId& rResId ) :
     SetDoubleClickHdl( LINK( this, ScContentTree, ContentDoubleClickHdl ) );
 
     pTmpEntry= nullptr;
-
-    SetStyle( GetStyle() | WB_QUICK_SEARCH );
 }
 
 ScContentTree::~ScContentTree()
