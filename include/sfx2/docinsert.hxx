@@ -57,7 +57,7 @@ public:
     ~DocumentInserter();
 
     void                    StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink );
-    SfxMedium*              CreateMedium(char const* pFallbackHack = 0);
+    SfxMedium*              CreateMedium(char const* pFallbackHack = nullptr);
     SfxMediumList*          CreateMediumList();
 };
 
