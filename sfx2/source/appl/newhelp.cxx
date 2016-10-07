@@ -1853,7 +1853,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     Window( pParent, WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL ),
 
     aToolBox            ( VclPtr<ToolBox>::Create(this, 0) ),
-    aOnStartupCB        ( VclPtr<CheckBox>::Create(this, SfxResId( RID_HELP_ONSTARTUP_BOX )) ),
+    aOnStartupCB        ( VclPtr<CheckBox>::Create(this, WB_HIDE | WB_TABSTOP) ),
     aSelectIdle         ( "sfx2 appl SfxHelpTextWindow_Impl Select" ),
     aIndexOnImage       ( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
     aIndexOffImage      ( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) ),
@@ -1869,6 +1869,8 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     bIsInClose          ( false ),
     bIsFullWordSearch   ( false )
 {
+    aOnStartupCB->SetSizePixel(aOnStartupCB->PixelToLogic(Size(200, 10), MapUnit::MapAppFont));
+
     sfx2::AddToTaskPaneList( aToolBox.get() );
 
     xFrame = Frame::create( ::comphelper::getProcessComponentContext() );

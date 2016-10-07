@@ -235,13 +235,6 @@ Image IMG_HELP_TOOLBOX_L_COPY
     ImageBitmap = Bitmap { File = "lc05711.png" ; };
 };
 
-CheckBox RID_HELP_ONSTARTUP_BOX
-{
-    Hide = TRUE;
-    TabStop = TRUE;
-    Size = MAP_APPFONT ( 200 , 10 ) ;
-};
-
 String RID_HELP_ONSTARTUP_TEXT
 {
     Text [ en-US ] = "~Display %PRODUCTNAME %MODULENAME Help at Startup";
