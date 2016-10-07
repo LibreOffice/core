@@ -20,7 +20,7 @@
 #include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sfxresid.hxx>
 
-#include "Sidebar.hrc"
+#include <sfx2/sidebar/Sidebar.hrc>
 
 #include <sfx2/sidebar/Paint.hxx>
 #include <sfx2/sidebar/Panel.hxx>

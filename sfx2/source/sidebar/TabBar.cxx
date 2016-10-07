@@ -28,7 +28,7 @@
 #include <sfx2/sidebar/SidebarController.hxx>
 
 #include <sfx2/sfxresid.hxx>
-#include "Sidebar.hrc"
+#include <sfx2/sidebar/Sidebar.hrc>
 
 #include <vcl/gradient.hxx>
 #include <vcl/image.hxx>

@@ -21,7 +21,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sfxresid.hxx>
 
-#include "Sidebar.hrc"
+#include <sfx2/sidebar/Sidebar.hrc>
 
 #include <vcl/image.hxx>
 

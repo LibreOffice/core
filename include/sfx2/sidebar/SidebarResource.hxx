@@ -16,13 +16,20 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <sfx2/sfx.hrc>
+#ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARRESOURCE_HXX
+#define INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARRESOURCE_HXX
 
-#define SFX_STR_SIDEBAR_MORE_OPTIONS                (RID_SFX_SIDEBAR_START + 1)
-#define SFX_STR_SIDEBAR_CLOSE_DECK                  (RID_SFX_SIDEBAR_START + 2)
-#define SFX_STR_SIDEBAR_SETTINGS                    (RID_SFX_SIDEBAR_START + 3)
-#define SFX_STR_SIDEBAR_CUSTOMIZATION               (RID_SFX_SIDEBAR_START + 4)
-#define SFX_STR_SIDEBAR_RESTORE                     (RID_SFX_SIDEBAR_START + 5)
-#define SFX_STR_SIDEBAR_HIDE_SIDEBAR                (RID_SFX_SIDEBAR_START + 6)
+#include <sfx2/sidebar/Sidebar.hrc>
+#include <sfx2/sfxresid.hxx>
+#include <tools/rc.hxx>
+
+class SidebarResource : public Resource
+{
+public:
+    SidebarResource() : Resource(SfxResId(RID_SIDEBAR_RESOURCE)){}
+    ~SidebarResource() { FreeResource(); }
+};
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
