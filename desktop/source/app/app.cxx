@@ -1056,6 +1056,22 @@ void handleCrashReport()
 }
 #endif
 
+void handleSafeMode()
+{
+    static const char SERVICENAME_SAFEMODE[] = "com.sun.star.comp.svx.SafeModeUI";
+
+    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+
+    Reference< css::frame::XSynchronousDispatch > xSafeModeUI(
+        xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_SAFEMODE, xContext),
+        css::uno::UNO_QUERY_THROW);
+
+    css::util::URL aURL;
+    css::uno::Any aRet = xSafeModeUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
+    bool bRet = false;
+    aRet >>= bRet;
+}
+
 /** @short  check if recovery must be started or not.
 
     @param  bCrashed [boolean ... out!]
@@ -2028,6 +2044,11 @@ void Desktop::OpenClients()
     // Further it's not acceptable to recover such documents without any UI. It can
     // need some time, where the user won't see any results and wait for finishing the office startup...
     bool bAllowRecoveryAndSessionManagement = ( !rArgs.IsNoRestore() ) && ( !rArgs.IsHeadless()  );
+
+    // Enter safe mode if requested
+    if (rArgs.IsSafeMode())
+        handleSafeMode();
+
 
 #if HAVE_FEATURE_BREAKPAD
     if (crashReportInfoExists())
