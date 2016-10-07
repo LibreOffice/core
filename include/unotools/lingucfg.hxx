@@ -140,9 +140,7 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguConfigDictionaryEntry
 class UNOTOOLS_DLLPUBLIC SvtLinguConfig: public utl::detail::Options
 {
     // returns static object
-    UNOTOOLS_DLLPRIVATE SvtLinguConfigItem &   GetConfigItem();
-
-    SvtLinguConfigItem &   GetConfigItem() const    { return const_cast< SvtLinguConfig * >( this )->GetConfigItem(); }
+    UNOTOOLS_DLLPRIVATE static SvtLinguConfigItem & GetConfigItem();
 
     // configuration update access for the 'Linguistic' main node
     mutable css::uno::Reference< css::util::XChangesBatch > m_xMainUpdateAccess;
