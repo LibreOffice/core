@@ -39,6 +39,16 @@ bool isAnyKindOfPointerType(QualType type) {
         || type->isMemberPointerType();
 }
 
+bool isNullPointerCast(CastExpr const * expr) {
+    switch (expr->getCastKind()) {
+    case CK_NullToPointer:
+    case CK_NullToMemberPointer:
+        return true;
+    default:
+        return false;
+    }
+}
+
 class Nullptr:
     public RecursiveASTVisitor<Nullptr>, public loplugin::RewritePlugin
 {
@@ -92,11 +102,7 @@ bool Nullptr::VisitImplicitCastExpr(CastExpr const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    switch (expr->getCastKind()) {
-    case CK_NullToPointer:
-    case CK_NullToMemberPointer:
-        break;
-    default:
+    if (!isNullPointerCast(expr)) {
         return true;
     }
     Expr::NullPointerConstantKind k = expr->isNullPointerConstant(
@@ -268,6 +274,13 @@ void Nullptr::visitCXXCtorInitializer(CXXCtorInitializer const * init) {
 
 void Nullptr::handleZero(Expr const * expr) {
     //TODO: detect NPCK_ZeroExpression where appropriate
+    // Filter out ImplicitCastExpr that will be handled by
+    // VisitImplicitCastExpr:
+    if (auto ice = dyn_cast<ImplicitCastExpr>(expr)) {
+        if (isNullPointerCast(ice)) {
+            return;
+        }
+    }
     auto const lit = dyn_cast<IntegerLiteral>(expr->IgnoreParenImpCasts());
     if (lit != nullptr && !lit->getValue().getBoolValue()) {
         handleNull(expr, nullptr, Expr::NPCK_ZeroLiteral);
