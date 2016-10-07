@@ -237,7 +237,6 @@ Image IMG_HELP_TOOLBOX_L_COPY
 
 CheckBox RID_HELP_ONSTARTUP_BOX
 {
-    HelpId = HID_HELP_ONSTARTUP_BOX;
     Hide = TRUE;
     TabStop = TRUE;
     Size = MAP_APPFONT ( 200 , 10 ) ;

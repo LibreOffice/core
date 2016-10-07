@@ -1868,7 +1868,6 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     bIsIndexOn          ( false ),
     bIsInClose          ( false ),
     bIsFullWordSearch   ( false )
-
 {
     sfx2::AddToTaskPaneList( aToolBox.get() );
 
@@ -1909,11 +1908,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
         bIsDebug = true;
 
     SvtMiscOptions().AddListenerLink( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
-
-    if ( !aOnStartupCB->GetHelpId().getLength() )
-        aOnStartupCB->SetHelpId( HID_HELP_ONSTARTUP_BOX );
 }
-
 
 SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 {
