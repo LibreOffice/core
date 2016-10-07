@@ -1222,7 +1222,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
     {
         if ( SdDrawDocument::GetIMapInfo( pObj ) )
         {
-            const IMapObject* pIMapObj = SdDrawDocument::GetHitIMapObject( pObj, rPos, *mpWindow );
+            const IMapObject* pIMapObj = SdDrawDocument::GetHitIMapObject( pObj, rPos );
 
             if ( pIMapObj && !pIMapObj->GetURL().isEmpty() )
             {

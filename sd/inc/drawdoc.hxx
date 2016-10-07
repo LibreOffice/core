@@ -438,7 +438,7 @@ public:
     static     SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
 
     SAL_DLLPRIVATE static SdIMapInfo*  GetIMapInfo( SdrObject* pObject );
-    SAL_DLLPRIVATE static IMapObject*  GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const vcl::Window& rCmpWnd );
+    SAL_DLLPRIVATE static IMapObject*  GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint );
 
     SAL_DLLPRIVATE CharClass*          GetCharClass() const { return mpCharClass; }
 

@@ -659,7 +659,7 @@ bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                     }
             }
             else if (bImageMapInfo &&
-                     SdDrawDocument::GetHitIMapObject(pObj, rPos, *mpWindow))
+                     SdDrawDocument::GetHitIMapObject(pObj, rPos))
             {
                 /******************************************************
                 * ImageMap
@@ -783,7 +783,7 @@ bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
     // URL for IMapObject underneath pointer is help text
     if ( SdDrawDocument::GetIMapInfo(pObj) )
     {
-        IMapObject* pIMapObj = SdDrawDocument::GetHitIMapObject(pObj, aPos, *mpWindow );
+        IMapObject* pIMapObj = SdDrawDocument::GetHitIMapObject(pObj, aPos);
 
         if ( pIMapObj )
         {
