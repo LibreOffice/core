@@ -248,9 +248,7 @@ SvxMetricField::SvxMetricField(
     , ePoolUnit(MapUnit::MapCM)
     , mxFrame(rFrame)
 {
-    Size aSize(GetTextWidth( "99,99mm" ),GetTextHeight());
-    aSize.Width() += 20;
-    aSize.Height() += 6;
+    Size aSize( CalcMinimumSize() );
     SetSizePixel( aSize );
     aLogicalSize = PixelToLogic(aSize, MapUnit::MapAppFont);
     SetUnit( FUNIT_MM );
