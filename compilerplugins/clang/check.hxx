@@ -78,6 +78,9 @@ public:
 
     ContextCheck Operator(clang::OverloadedOperatorKind op) const;
 
+    template<std::size_t N> inline ContextCheck Var(char const (& id)[N])
+        const;
+
     ContextCheck MemberFunction() const;
 
 private:
@@ -189,6 +192,19 @@ template<std::size_t N> ContextCheck DeclCheck::Function(char const (& id)[N])
     const
 {
     auto f = llvm::dyn_cast_or_null<clang::FunctionDecl>(decl_);
+    if (f != nullptr) {
+        auto const i = f->getIdentifier();
+        if (i != nullptr && i->isStr(id)) {
+            return ContextCheck(f->getDeclContext());
+        }
+    }
+    return ContextCheck();
+}
+
+template<std::size_t N> ContextCheck DeclCheck::Var(char const (& id)[N])
+    const
+{
+    auto f = llvm::dyn_cast_or_null<clang::VarDecl>(decl_);
     if (f != nullptr) {
         auto const i = f->getIdentifier();
         if (i != nullptr && i->isStr(id)) {

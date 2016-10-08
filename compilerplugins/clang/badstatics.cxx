@@ -150,6 +150,8 @@ public:
                     // ScAddInAsync* keys if that set is not empty at exit
                 || name == "g_aWindowList"
                     //vcl/unx/gtk/a11y/atkutil.cxx, asserted empty at exit
+                || (loplugin::DeclCheck(pVarDecl).Var("aAllListeners")
+                    .Class("ScAddInListener").GlobalNamespace()) // not owning
                ) // these variables appear unproblematic
             {
                 return true;
