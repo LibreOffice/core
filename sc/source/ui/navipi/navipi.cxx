@@ -78,6 +78,11 @@ ColumnEdit::ColumnEdit(Window* pParent, WinBits nWinBits)
     SetMaxTextLen(SCNAV_COLDIGITS);   // 1...256...18278 or A...IV...ZZZ
 }
 
+ColumnEdit::~ColumnEdit()
+{
+    disposeOnce();
+}
+
 VCL_BUILDER_DECL_FACTORY(ColumnEdit)
 {
     (void)rMap;
@@ -252,6 +257,11 @@ RowEdit::RowEdit(Window* pParent, WinBits nWinBits)
 {
     SetMax(SCNAV_MAXROW);
     SetLast(SCNAV_MAXROW);
+}
+
+RowEdit::~RowEdit()
+{
+    disposeOnce();
 }
 
 VCL_BUILDER_DECL_FACTORY(RowEdit)

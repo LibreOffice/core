@@ -111,6 +111,7 @@ class ColumnEdit : public SpinField
 {
 public:
     ColumnEdit(Window* pParent, WinBits nWinBits);
+    ~ColumnEdit() override;
     void SetNavigatorDlg(ScNavigatorDlg *pNaviDlg)
     {
         xDlg = pNaviDlg;
@@ -142,6 +143,7 @@ class RowEdit : public NumericField
 {
 public:
     RowEdit(Window* pParent, WinBits nWinBits);
+    ~RowEdit() override;
     void SetNavigatorDlg(ScNavigatorDlg *pNaviDlg)
     {
         xDlg = pNaviDlg;
