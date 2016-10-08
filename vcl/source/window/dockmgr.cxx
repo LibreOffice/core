@@ -462,7 +462,6 @@ private:
     bool                        mbMoving;
     bool                        mbTrackingEnabled;
     Point                       maDelta;
-    bool                        mbGripAtBottom;
     bool                        mbHasGrip;
     void                        ImplSetBorder();
 
@@ -480,7 +479,6 @@ public:
     virtual void        Resize() override;
 
     Rectangle           GetDragRect() const;
-    Point               GetToolboxPosition() const;
     void                DrawGrip(vcl::RenderContext& rRenderContext);
     void                DrawBorder(vcl::RenderContext& rRenderContext);
 
@@ -496,7 +494,6 @@ ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWra
     mbHighlight = false;
     mbMoving = false;
     mbTrackingEnabled = false;
-    mbGripAtBottom = true;
     mbHasGrip = bHasGrip;
 
     ImplSetBorder();
@@ -546,26 +543,11 @@ void ImplPopupFloatWin::Resize()
 
 Rectangle ImplPopupFloatWin::GetDragRect() const
 {
-    Rectangle aRect;
-    if( hasGrip() )
-    {
-        aRect = Rectangle( 1,1, GetOutputSizePixel().Width()-1, 2+POPUP_DRAGHEIGHT );
-        if( mbGripAtBottom )
-        {
-            int height = GetOutputSizePixel().Height();
-            aRect.Top() = height - 3 - POPUP_DRAGHEIGHT;
-            aRect.Bottom() = aRect.Top() + 1 + POPUP_DRAGHEIGHT;
-        }
-    }
-    return aRect;
-}
+    if( !hasGrip() )
+        return Rectangle();
 
-Point ImplPopupFloatWin::GetToolboxPosition() const
-{
-    // return inner position where a toolbox could be placed
-    Point aPt( 1, 1 + ((mbGripAtBottom || !hasGrip()) ? 0 : GetDragRect().getHeight()) );    // grip + border
-
-    return aPt;
+    return Rectangle( 1, GetOutputSizePixel().Height() - 3 - POPUP_DRAGHEIGHT,
+                      GetOutputSizePixel().Width() - 1, GetOutputSizePixel().Height() - 1 );
 }
 
 void ImplPopupFloatWin::DrawBorder(vcl::RenderContext& rRenderContext)
@@ -1087,8 +1069,8 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     GetWindow()->mpWindowImpl->mnRightBorder   = 0;
     GetWindow()->mpWindowImpl->mnBottomBorder  = 0;
 
-    // position toolbox below DragRect
-    GetWindow()->SetPosPixel( pWin->GetToolboxPosition() );
+    // position toolbox above DragRect
+    GetWindow()->SetPosPixel( Point( 1, 1 ) );
 
     // reparent borderwindow and window
     if ( mpOldBorderWin )
