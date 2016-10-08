@@ -3673,9 +3673,13 @@ sal_uLong ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
 
 SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
 {
-    sal_uInt32 nSum = 0;
+    sal_uLong nSum = 0;
 
     ScFlatBoolRowSegments::RangeData aData;
+
+    ScFlatUInt16RowSegments::RangeData aRowHeightRange;
+    aRowHeightRange.mnRow2 = -1;
+
     for (SCROW nRow = 0; nRow <= MAXROW; ++nRow)
     {
         if (!mpHiddenRows->getRangeData(nRow, aData))
@@ -3689,8 +3693,15 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
             continue;
         }
 
-        sal_uInt32 nNew = mpRowHeights->getValue(nRow);
-        nSum += nNew;
+        if (aRowHeightRange.mnRow2 < nRow)
+        {
+            if (!mpRowHeights->getRangeData(nRow, aRowHeightRange))
+                // Failed to fetch the range data for whatever reason.
+                break;
+        }
+
+        nSum += aRowHeightRange.mnValue;
+
         if (nSum > nHeight)
         {
             if (nRow >= MAXROW)
