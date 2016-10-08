@@ -309,7 +309,7 @@ OUString ChartController::GetContextName()
 
     ObjectType eObjectID = ObjectIdentifier::getObjectType(aCID);
 
-    css::uno::Reference<css::chart2::XChartType> xChartType = getChartType(css::uno::Reference<css::chart2::XChartDocument>(getModel(), uno::UNO_QUERY_THROW));
+    css::uno::Reference<css::chart2::XChartType> xChartType = getChartType(css::uno::Reference<css::chart2::XChartDocument>(getModel(), uno::UNO_QUERY));
     switch (eObjectID)
     {
         case OBJECTTYPE_DATA_SERIES:
@@ -324,7 +324,7 @@ OUString ChartController::GetContextName()
         case OBJECTTYPE_GRID:
             return OUString("Grid");
         case OBJECTTYPE_DIAGRAM:
-            if (xChartType->getChartType() == "com.sun.star.chart2.PieChartType")
+            if (xChartType.is() && xChartType->getChartType() == "com.sun.star.chart2.PieChartType")
                 return OUString("ChartElements");
             break;
         case OBJECTTYPE_DATA_CURVE:
