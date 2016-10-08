@@ -189,7 +189,6 @@ class RscTypCont
     RscTop *    InitClassComboBox( RscTop * pSuper, RscArray * pStrLst );
     RscTop *    InitClassFixedText( RscTop * pSuper );
     RscTop *    InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage );
-    RscTop *    InitClassRadioButton( RscTop * pSuper );
     RscTop *    InitClassKeyCode( RscTop * pSuper, RscEnum * pKey );
     RscTop *    InitClassMenuItem( RscTop * pSuper );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );

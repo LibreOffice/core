@@ -472,29 +472,6 @@ RscTop * RscTypCont::InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage 
     return pClassFixedImage;
 }
 
-RscTop * RscTypCont::InitClassRadioButton( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassRadioButton;
-
-    // initialize class
-    nId = pHS->getID( "RadioButton" );
-    pClassRadioButton = new RscClass( nId, RSC_RADIOBUTTON, pSuper );
-    pClassRadioButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassRadioButton );
-
-    // initialize variables
-    INS_WINBIT( pClassRadioButton, WordBreak )
-    INS_WINBIT( pClassRadioButton, Top )
-    INS_WINBIT( pClassRadioButton, VCenter )
-    INS_WINBIT( pClassRadioButton, Bottom )
-
-    nId = aNmTb.Put( "Check", VARNAME );
-    pClassRadioButton->SetVariable( nId, &aBool );
-
-    return pClassRadioButton;
-}
-
 RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
 {
     Atom        nId;

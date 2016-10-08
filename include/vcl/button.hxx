@@ -302,7 +302,6 @@ protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void     ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
     SAL_DLLPRIVATE void     ImplCallClick( bool bGrabFocus = false, GetFocusFlags nFocusFlags = GetFocusFlags::NONE );
@@ -324,7 +323,6 @@ protected:
 
 public:
     explicit        RadioButton( vcl::Window* pParent, WinBits nWinStyle = 0 );
-    explicit        RadioButton( vcl::Window* pParent, const ResId& );
     virtual         ~RadioButton() override;
     virtual void    dispose() override;
 
@@ -424,7 +422,6 @@ protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
     virtual void                FillLayoutData() const override;
     virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const override;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const override;

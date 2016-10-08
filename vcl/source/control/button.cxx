@@ -2322,29 +2322,6 @@ RadioButton::RadioButton( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-RadioButton::RadioButton( vcl::Window* pParent, const ResId& rResId ) :
-    Button( WINDOW_RADIOBUTTON ), mbLegacyNoTextAlign( false )
-{
-    rResId.SetRT( RSC_RADIOBUTTON );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInitRadioButtonData();
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
-void RadioButton::ImplLoadRes( const ResId& rResId )
-{
-    Button::ImplLoadRes( rResId );
-
-    //anderer Wert als Default ?
-    sal_uInt16 nChecked = ReadShortRes();
-    if ( nChecked )
-        SetState( true );
-}
-
 RadioButton::~RadioButton()
 {
     disposeOnce();
@@ -3027,16 +3004,6 @@ void CheckBox::ImplInitSettings( bool bFont,
                 SetBackground( pParent->GetBackground() );
         }
     }
-}
-
-void CheckBox::ImplLoadRes( const ResId& rResId )
-{
-    Button::ImplLoadRes( rResId );
-
-    sal_uInt16 nChecked = ReadShortRes();
-    //anderer Wert als Default ?
-    if( nChecked )
-        Check();
 }
 
 void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)

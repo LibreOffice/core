@@ -52,7 +52,6 @@
 #define RSC_IMAGEBUTTON         (RSC_NOTYPE + 0x4a)
 
 #define RSC_SPINBUTTON          (RSC_NOTYPE + 0x4d)
-#define RSC_RADIOBUTTON         (RSC_NOTYPE + 0x4e)
 
 #define RSC_EDIT                (RSC_NOTYPE + 0x52)
 

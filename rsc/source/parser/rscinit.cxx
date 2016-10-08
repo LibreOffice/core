@@ -65,7 +65,6 @@ void RscTypCont::Init()
     RscTop   *  pClassControl;
     RscTop   *  pClassButton;
     RscTop   *  pClassPushButton;
-    RscTop   *  pClassRadioButton;
     RscTop   *  pClassImageButton;
     RscTop   *  pClassEdit;
     RscTop   *  pClassListBox;
@@ -311,9 +310,6 @@ void RscTypCont::Init()
     pRoot->Insert( pClassPushButton );
 }
 {
-    pClassRadioButton = InitClassRadioButton( pClassButton );
-    pRoot->Insert( pClassRadioButton );
-
     pClassImageButton = InitClassImageButton( pClassPushButton,
                                               pClassImage, pTriState );
     pRoot->Insert( pClassImageButton );
