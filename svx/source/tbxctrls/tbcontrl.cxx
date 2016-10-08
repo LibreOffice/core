@@ -344,6 +344,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     , eStyleFamily( eFamily )
     , nCurSel(0)
     , bRelease( true )
+    , aLogicalSize(60, 86)
     , bVisible(false)
     , m_xDispatchProvider( rDispatchProvider )
     , m_xFrame(_xFrame)
@@ -357,7 +358,6 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
     m_pMenu->SetSelectHdl( LINK( this, SvxStyleBox_Impl, MenuSelectHdl ) );
     for(VclPtr<MenuButton> & rpButton : m_pButtons)
         rpButton = nullptr;
-    aLogicalSize = PixelToLogic(Size(60, 86), MapUnit::MapAppFont);
     SetOptimalSize();
     EnableAutocomplete( true );
     EnableUserDraw( true );
