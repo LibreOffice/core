@@ -79,16 +79,6 @@ SalSystem* ImplGetSalSystem()
     return pSVData->mpSalSystem;
 }
 
-ImplSVData::ImplSVData()
-{
-    // init global instance data
-    memset( this, 0, sizeof( ImplSVData ) );
-    maHelpData.mbAutoHelpId = true;
-    maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
-    maNWFData.mbEnableAccel = true;
-    maNWFData.mbAutoAccel = false;
-}
-
 ImplSVGDIData::~ImplSVGDIData()
 {
     // FIXME: deliberately leak any remaining OutputDevice
