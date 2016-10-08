@@ -626,6 +626,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexbina
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activex, \
 	$(if $(DISABLE_ACTIVEX),,\
 		so_activex \
+		spsupp \
 	) \
 ))
 
@@ -633,6 +634,7 @@ ifneq ($(BUILD_X64),)
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexwin64, \
 	$(if $(DISABLE_ACTIVEX),,\
 		so_activex_x64 \
+		spsupp_x64 \
 	) \
 ))
 endif
