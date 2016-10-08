@@ -25,19 +25,9 @@
 #include <tools/contnr.hxx>
 #include <rtl/instance.hxx>
 #include <comphelper/string.hxx>
+#include <rtl/character.hxx>
 
-#include <stdio.h>
 #include <map>
-
-inline bool ascii_isDigit( sal_Unicode ch )
-{
-    return ((ch >= 0x0030) && (ch <= 0x0039));
-}
-
-inline bool ascii_isLetter( sal_Unicode ch )
-{
-    return (( (ch >= 0x0041) && (ch <= 0x005A)) || ((ch >= 0x0061) && (ch <= 0x007A)));
-}
 
 void INetMIMEMessage::SetHeaderField_Impl (
     const OString &rName,
@@ -72,7 +62,7 @@ static const sal_Char *months[12] =
 static sal_uInt16 ParseNumber(const OString& rStr, sal_uInt16& nIndex)
 {
     sal_uInt16 n = nIndex;
-    while ((n < rStr.getLength()) && ascii_isDigit(rStr[n])) n++;
+    while ((n < rStr.getLength()) && rtl::isAsciiDigit(rStr[n])) n++;
 
     OString aNum(rStr.copy(nIndex, (n - nIndex)));
     nIndex = n;
@@ -83,7 +73,7 @@ static sal_uInt16 ParseNumber(const OString& rStr, sal_uInt16& nIndex)
 static sal_uInt16 ParseMonth(const OString& rStr, sal_uInt16& nIndex)
 {
     sal_uInt16 n = nIndex;
-    while ((n < rStr.getLength()) && ascii_isLetter(rStr[n])) n++;
+    while ((n < rStr.getLength()) && rtl::isAsciiAlpha(rStr[n])) n++;
 
     OString aMonth(rStr.copy(nIndex, 3));
     nIndex = n;
@@ -114,7 +104,7 @@ bool INetMIMEMessage::ParseDateField (
 
         while (
             (nIndex < aDateField.getLength()) &&
-            (ascii_isLetter (aDateField[nIndex]) ||
+            (rtl::isAsciiAlpha (aDateField[nIndex]) ||
              (aDateField[nIndex] == ',')     ))
             nIndex++;
 
@@ -122,7 +112,7 @@ bool INetMIMEMessage::ParseDateField (
                (aDateField[nIndex] == ' '))
             nIndex++;
 
-        if (ascii_isLetter (aDateField[nIndex]))
+        if (rtl::isAsciiAlpha (aDateField[nIndex]))
         {
             // Format: ctime().
             if ((aDateField.getLength() - nIndex) < 20) return false;
