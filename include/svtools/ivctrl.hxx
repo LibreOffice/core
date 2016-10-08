@@ -28,7 +28,6 @@
 #include <vcl/seleng.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-class ResId;
 class Point;
 class SvxIconChoiceCtrl_Impl;
 class Image;
