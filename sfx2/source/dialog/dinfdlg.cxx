@@ -17,17 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svl/eitem.hxx>
+#include <svl/urihelper.hxx>
+#include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
-#include <svl/eitem.hxx>
+#include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svl/urihelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <svtools/imagemgr.hxx>
-#include <tools/datetime.hxx>
 
 #include <memory>
 
@@ -1230,12 +1231,16 @@ void SfxDocumentInfoDialog::AddFontTabPage()
 
 // class CustomPropertiesYesNoButton -------------------------------------
 
-CustomPropertiesYesNoButton::CustomPropertiesYesNoButton( vcl::Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId ),
-    m_aYesButton( VclPtr<RadioButton>::Create(this, ResId( RB_PROPERTY_YES, *rResId.GetResMgr() )) ),
-    m_aNoButton ( VclPtr<RadioButton>::Create(this, ResId( RB_PROPERTY_NO, *rResId.GetResMgr() )) )
+CustomPropertiesYesNoButton::CustomPropertiesYesNoButton(vcl::Window* pParent, const ResId& rResId)
+    : Control(pParent, rResId)
+    , m_aYesButton(VclPtr<RadioButton>::Create(this, WB_TABSTOP))
+    , m_aNoButton(VclPtr<RadioButton>::Create(this, WB_TABSTOP))
 {
     FreeResource();
+    m_aYesButton->SetText(MnemonicGenerator::EraseAllMnemonicChars(Button::GetStandardText(StandardButtonType::Yes)));
+    m_aYesButton->Show();
+    m_aNoButton->SetText(MnemonicGenerator::EraseAllMnemonicChars(Button::GetStandardText(StandardButtonType::No)));
+    m_aNoButton->Show();
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
     SetBorderStyle( WindowBorderStyle::MONO  );
     CheckNo();
@@ -1243,7 +1248,6 @@ CustomPropertiesYesNoButton::CustomPropertiesYesNoButton( vcl::Window* pParent, 
     m_aYesButton->SetBackground( aWall );
     m_aNoButton->SetBackground( aWall );
 }
-
 
 CustomPropertiesYesNoButton::~CustomPropertiesYesNoButton()
 {
@@ -1386,16 +1390,16 @@ IMPL_LINK_NOARG(CustomPropertiesEditButton, ClickHdl, Button*, void)
 
 void CustomPropertiesYesNoButton::Resize()
 {
-    const long nWidth = GetSizePixel().Width();
-    const long n3Width = LogicToPixel( Size( 3, 3 ), MapUnit::MapAppFont ).Width();
-    const long nNewWidth = ( nWidth / 2 ) - n3Width - 2;
-    Size aSize = m_aYesButton->GetSizePixel();
-    const long nDelta = aSize.Width() - nNewWidth;
-    aSize.Width() = nNewWidth;
-    m_aYesButton->SetSizePixel( aSize );
-    Point aPos = m_aNoButton->GetPosPixel();
-    aPos.X() -= nDelta;
-    m_aNoButton->SetPosSizePixel( aPos, aSize );
+    Size aParentSize(GetSizePixel());
+    const long nWidth = aParentSize.Width();
+    Size a1Size = LogicToPixel(Size(1, 1), MapUnit::MapAppFont);
+    const long n3Width = LogicToPixel(Size(3, 3), MapUnit::MapAppFont).Width();
+    const long nNewWidth = (nWidth / 2) - n3Width - 2;
+    Size aSize(nNewWidth, aParentSize.Height() - 2 * a1Size.Height());
+    Point aPos(a1Size.Width(), a1Size.Height());
+    m_aYesButton->SetPosSizePixel(aPos, aSize);
+    aPos.X() += aSize.Width() + n3Width;
+    m_aNoButton->SetPosSizePixel(aPos, aSize);
 }
 
 // struct CustomPropertyLine ---------------------------------------------

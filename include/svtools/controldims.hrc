@@ -37,8 +37,6 @@
 
 #define RSC_CD_TEXTBOX_HEIGHT               12      // also numeric fields etc.
 
-#define RSC_CD_RADIOBUTTON_HEIGHT           10
-
 // spacings
 #define RSC_SP_CTRL_X                       6       // controls that are unrelated
 #define RSC_SP_CTRL_Y                       7
