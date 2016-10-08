@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cassert>
+
 #include "check.hxx"
 #include "plugin.hxx"
 
@@ -30,20 +32,27 @@ public:
             QualType const& rpType, std::vector<FieldDecl const*> & chain,
             std::vector<QualType> const& rParents)
     {
-        QualType const pCanonical(rpType.getUnqualifiedType().getCanonicalType());
-        if (pCanonical->isPointerType() || pCanonical->isReferenceType()) {
-            QualType const pPointee(pCanonical->getPointeeType().getUnqualifiedType().getCanonicalType());
+        QualType pt;
+        if (rpType->isAnyPointerType()) {
+            pt = rpType->getPointeeType();
+        } else if (auto at = rpType->getAsArrayTypeUnsafe()) {
+            pt = at->getElementType();
+        } else if (auto rt = rpType->getAs<ReferenceType>()) {
+            pt = rt->getPointeeType();
+        }
+        if (!pt.isNull()) {
+            QualType const pPointee(pt.getUnqualifiedType().getCanonicalType());
             auto const iter(std::find(rParents.begin(), rParents.end(), pPointee));
             if (iter == rParents.end())
             {
                 std::vector<QualType> copy(rParents);
-                copy.push_back(pCanonical);
-                return isBadStaticType(pPointee, chain, copy);
+                copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
+                return isBadStaticType(pt, chain, copy);
             } else {
                 return std::make_pair(false, std::vector<FieldDecl const*>());
             }
         }
-        RecordType const*const pRecordType(pCanonical->getAs<RecordType>());
+        RecordType const*const pRecordType(rpType->getAs<RecordType>());
         if (!pRecordType) {
             return std::make_pair(false, std::vector<FieldDecl const*>());
         }
@@ -55,6 +64,44 @@ public:
            )
         {
             return std::make_pair(true, chain);
+        }
+        if (type.Class("array").StdNamespace()
+            || type.Class("deque").StdNamespace()
+            || type.Class("forward_list").StdNamespace()
+            || type.Class("initializer_list").StdNamespace()
+            || type.Class("list").StdNamespace()
+            || type.Class("multiset").StdNamespace()
+            || type.Class("set").StdNamespace()
+            || type.Class("unordered_multiset").StdNamespace()
+            || type.Class("unordered_set").StdNamespace()
+            || type.Class("vector").StdNamespace())
+        {
+            std::vector<QualType> copy(rParents);
+            copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
+            auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(
+                pRecordType->getDecl());
+            assert(ctsd != nullptr);
+            auto const & args = ctsd->getTemplateArgs();
+            assert(args.size() >= 1);
+            return isBadStaticType(args.get(0).getAsType(), chain, copy);
+        }
+        if (type.Class("map").StdNamespace()
+            || type.Class("multimap").StdNamespace()
+            || type.Class("unordered_map").StdNamespace()
+            || type.Class("unordered_multimap").StdNamespace())
+        {
+            std::vector<QualType> copy(rParents);
+            copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
+            auto ctsd = dyn_cast<ClassTemplateSpecializationDecl>(
+                pRecordType->getDecl());
+            assert(ctsd != nullptr);
+            auto const & args = ctsd->getTemplateArgs();
+            assert(args.size() >= 2);
+            auto ret = isBadStaticType(args.get(0).getAsType(), chain, copy);
+            if (ret.first) {
+                return ret;
+            }
+            return isBadStaticType(args.get(1).getAsType(), chain, copy);
         }
         RecordDecl const*const pDefinition(pRecordType->getDecl()->getDefinition());
         if (!pDefinition) { // maybe no definition if it's a pointer/reference
@@ -70,7 +117,7 @@ public:
             return std::make_pair(false, std::vector<FieldDecl const*>());
         }
         std::vector<QualType> copy(rParents);
-        copy.push_back(pCanonical);
+        copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
         CXXRecordDecl const*const pDecl(dyn_cast<CXXRecordDecl>(pDefinition));
         assert(pDecl);
         for (auto it = pDecl->field_begin(); it != pDecl->field_end(); ++it) {
