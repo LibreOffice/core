@@ -192,10 +192,6 @@ struct ImplPostEventData
     ~ImplPostEventData() {}
 };
 
-typedef ::std::pair< VclPtr<vcl::Window>, ImplPostEventData* > ImplPostEventPair;
-
-static ::std::list< ImplPostEventPair > aPostedEventList;
-
 Application* GetpApp()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -927,7 +923,7 @@ ImplSVEvent * Application::PostKeyEvent( sal_uLong nEvent, vcl::Window *pWin, Ke
         if( nEventId )
         {
             pPostEventData->mnEventId = nEventId;
-            aPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
+            ImplGetSVData()->maAppData.maPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
         }
         else
             delete pPostEventData;
@@ -960,7 +956,7 @@ ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, 
         if( nEventId )
         {
             pPostEventData->mnEventId = nEventId;
-            aPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
+            ImplGetSVData()->maAppData.maPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
         }
         else
             delete pPostEventData;
@@ -1025,14 +1021,15 @@ IMPL_STATIC_LINK_TYPED( Application, PostEventHandler, void*, pCallData, void )
         ImplWindowFrameProc( pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get(), nEvent, pEventData );
 
     // remove this event from list of posted events, watch for destruction of internal data
-    ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
+    auto svdata = ImplGetSVData();
+    ::std::list< ImplPostEventPair >::iterator aIter( svdata->maAppData.maPostedEventList.begin() );
 
-    while( aIter != aPostedEventList.end() )
+    while( aIter != svdata->maAppData.maPostedEventList.end() )
     {
         if( nEventId == (*aIter).second->mnEventId )
         {
             delete (*aIter).second;
-            aIter = aPostedEventList.erase( aIter );
+            aIter = svdata->maAppData.maPostedEventList.erase( aIter );
         }
         else
             ++aIter;
@@ -1044,9 +1041,10 @@ void Application::RemoveMouseAndKeyEvents( vcl::Window* pWin )
     const SolarMutexGuard aGuard;
 
     // remove all events for specific window, watch for destruction of internal data
-    ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
+    auto svdata = ImplGetSVData();
+    ::std::list< ImplPostEventPair >::iterator aIter( svdata->maAppData.maPostedEventList.begin() );
 
-    while( aIter != aPostedEventList.end() )
+    while( aIter != svdata->maAppData.maPostedEventList.end() )
     {
         if( pWin == (*aIter).first )
         {
@@ -1054,7 +1052,7 @@ void Application::RemoveMouseAndKeyEvents( vcl::Window* pWin )
                 RemoveUserEvent( (*aIter).second->mnEventId );
 
             delete (*aIter).second;
-            aIter = aPostedEventList.erase( aIter );
+            aIter = svdata->maAppData.maPostedEventList.erase( aIter );
         }
         else
             ++aIter;
