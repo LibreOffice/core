@@ -61,6 +61,9 @@ $(eval $(call gb_Module_add_targets,shell,\
 	StaticLibrary_shlxthandler_common \
 	StaticLibrary_xmlparser \
 	WinResTarget_shlxthdl \
+	CustomTarget_spsupp_idl \
+	Library_spsupp \
+	WinResTarget_spsupp \
 ))
 
 $(eval $(call gb_Module_add_check_targets,shell,\
@@ -76,6 +79,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Library_shlxthdl_x64 \
 	StaticLibrary_shlxthandler_common_x64 \
 	StaticLibrary_xmlparser_x64 \
+	Library_spsupp_x64 \
 ))
 endif
 
