@@ -107,6 +107,7 @@ public:
     void testMarkData();
     void testInput();
     void testDocStatistics();
+    void testRowForHeight();
 
     /**
      * The 'data entries' data is a list of strings used for suggestions as
@@ -492,6 +493,7 @@ public:
     CPPUNIT_TEST(testMarkData);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testDocStatistics);
+    CPPUNIT_TEST(testRowForHeight);
     CPPUNIT_TEST(testDataEntries);
     CPPUNIT_TEST(testSelectionFunction);
     CPPUNIT_TEST(testFormulaCreateStringFromTokens);

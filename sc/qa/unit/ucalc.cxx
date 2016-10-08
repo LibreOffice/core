@@ -465,6 +465,41 @@ void Test::testDocStatistics()
     m_pDoc->DeleteTab(0); // This may fail in case there is only one sheet in the document.
 }
 
+void Test::testRowForHeight()
+{
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->SetRowHeightRange( 0,  9, 0, 100);
+    m_pDoc->SetRowHeightRange(10, 19, 0, 200);
+    m_pDoc->SetRowHeightRange(20, 29, 0, 300);
+
+    // Hide some rows.
+    m_pDoc->SetRowHidden(3,  5, 0, true);
+    m_pDoc->SetRowHidden(8, 12, 0, true);
+
+    struct Check
+    {
+        sal_uLong nHeight;
+        SCROW nRow;
+    };
+
+    std::vector<Check> aChecks = {
+        {   1, 1 },
+        {  99, 1 },
+        { 120, 2 },
+        { 330, 7 },
+        { 420, 13 },
+        { 780, 15 },
+        { 1860, 20 },
+        { 4020, 28 },
+    };
+
+    for (const Check& rCheck : aChecks)
+    {
+        SCROW nRow = m_pDoc->GetRowForHeight(0, rCheck.nHeight);
+        CPPUNIT_ASSERT_EQUAL(rCheck.nRow, nRow);
+    }
+}
+
 void Test::testDataEntries()
 {
     m_pDoc->InsertTab(0, "Test");
