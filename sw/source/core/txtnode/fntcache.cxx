@@ -1245,8 +1245,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         long nSpaceSum = nSpaceAdd;
                         for ( sal_Int32 nI = 0; nI < rInf.GetLen(); ++nI )
                         {
+                            bool bAdd = ( nI + 1 == rInf.GetLen() || pKernArray[ nI + 1 ] > pKernArray[ nI ] ) ;
                             pKernArray[ nI ] += nSpaceSum;
-                            nSpaceSum += nSpaceAdd;
+                            if ( bAdd )
+                                nSpaceSum += nSpaceAdd;
                         }
 
                         bSpecialJust = true;
@@ -1457,9 +1459,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     long nSpaceSum = nSpaceAdd;
                     for ( sal_Int32 nI = 0; nI < rInf.GetLen(); ++nI )
                     {
+                        bool bAdd = ( nI + 1 == rInf.GetLen() || pKernArray[ nI + 1 ] > pKernArray[ nI ] ) ;
                         pKernArray[ nI ] += nSpaceSum;
                         pScrArray[ nI ] += nSpaceSum;
-                        nSpaceSum += nSpaceAdd;
+                        if ( bAdd )
+                            nSpaceSum += nSpaceAdd;
                     }
 
                     nSpaceAdd = 0;
@@ -2070,8 +2074,10 @@ sal_Int32 SwFntObj::GetCursorOfst( SwDrawTextInfo &rInf )
                 long nSpaceSum = nSpaceAdd;
                 for ( sal_Int32 nI = 0; nI < rInf.GetLen(); ++nI )
                 {
+                    bool bAdd = ( nI + 1 == rInf.GetLen() || pKernArray[ nI + 1 ] > pKernArray[ nI ] ) ;
                     pKernArray[ nI ] += nSpaceSum;
-                    nSpaceSum += nSpaceAdd;
+                    if ( bAdd )
+                        nSpaceSum += nSpaceAdd;
                 }
 
                 nSpaceAdd = 0;
