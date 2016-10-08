@@ -1056,7 +1056,12 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
         mpOldBorderWin = nullptr;  // no border window found
 
     // the new parent for popup mode
-    VclPtrInstance<ImplPopupFloatWin> pWin( mpParent, this, bool(nFlags & FloatWinPopupFlags::AllowTearOff) );
+    VclPtr<FloatingWindow> pWin;
+    bool bAllowTearOff = bool( nFlags & FloatWinPopupFlags::AllowTearOff );
+    if ( bAllowTearOff && !dynamic_cast< ToolBox* >( GetWindow() ) )
+        pWin = VclPtr<FloatingWindow>::Create( mpParent, WB_STDPOPUP );
+    else
+        pWin = VclPtr<ImplPopupFloatWin>::Create( mpParent, this, bAllowTearOff );
 
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
     pWin->SetText( GetWindow()->GetText() );
