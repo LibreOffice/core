@@ -1689,6 +1689,12 @@ public:
     SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow ) const;
     SC_DLLPUBLIC sal_uLong          GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
+
+    /**
+     * Given the height i.e. total vertical distance from the top of the sheet
+     * grid, return the first visible row whose top position is below the
+     * specified height.
+     */
     SCROW                       GetRowForHeight( SCTAB nTab, sal_uLong nHeight ) const;
     sal_uLong                       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale ) const;
     SC_DLLPUBLIC sal_uLong          GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;

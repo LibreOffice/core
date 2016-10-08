@@ -3679,10 +3679,12 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
     for (SCROW nRow = 0; nRow <= MAXROW; ++nRow)
     {
         if (!mpHiddenRows->getRangeData(nRow, aData))
+            // Failed to fetch the range data for whatever reason.
             break;
 
         if (aData.mbValue)
         {
+            // This row is hidden.  Skip ahead all hidden rows.
             nRow = aData.mnRow2;
             continue;
         }
@@ -3691,7 +3693,21 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
         nSum += nNew;
         if (nSum > nHeight)
         {
-            return nRow < MAXROW ? nRow + 1 : MAXROW;
+            if (nRow >= MAXROW)
+                return MAXROW;
+
+            // Find the next visible row.
+            ++nRow;
+
+            if (!mpHiddenRows->getRangeData(nRow, aData))
+                // Failed to fetch the range data for whatever reason.
+                break;
+
+            if (aData.mbValue)
+                // These rows are hidden.
+                nRow = aData.mnRow2 + 1;
+
+            return nRow <= MAXROW ? nRow : MAXROW;
         }
     }
     return -1;
