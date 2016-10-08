@@ -1233,17 +1233,40 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
         // disable CTL for non-CTL text
         const sal_Unicode* pStr = rStr.getStr() + nMinIndex;
         const sal_Unicode* pEnd = rStr.getStr() + nEndIndex;
+        bool bIsCJKIdeograph = false;
         for( ; pStr < pEnd; ++pStr )
+        {
+            if (pStr + 1 < pEnd && rtl::isHighSurrogate( *pStr ) )
+            {
+                sal_uInt32 nCode = rtl::combineSurrogates( pStr[0] , pStr[1] );
+                if ( !bIsCJKIdeograph && nCode >= 0xE0100 && nCode < 0xE01F0 ) // Variation Selector Supplements
+                    break;
+
+                if ( nCode >= 0x20000 && nCode <= 0x2CEB0 )// CJK Unified Ideographs Extension B-E
+                    bIsCJKIdeograph = true;
+                ++pStr;
+                continue;
+            }
+
+            if ( ((*pStr >= 0xF900) && (*pStr < 0xFB00))  // CJK Compatibility Ideographs
+            ||   ((*pStr >= 0x3400) && (*pStr < 0xA000))  // CJK Unified Ideographs and Extension A
+            )
+            {
+                bIsCJKIdeograph = true;
+                continue;
+            }
+
             if( ((*pStr >= 0x0300) && (*pStr < 0x0370))   // diacritical marks
             ||  ((*pStr >= 0x0590) && (*pStr < 0x10A0))   // many CTL scripts
             ||  ((*pStr >= 0x1100) && (*pStr < 0x1200))   // hangul jamo
             ||  ((*pStr >= 0x1700) && (*pStr < 0x1900))   // many CTL scripts
             ||  ((*pStr >= 0xFB1D) && (*pStr < 0xFE00))   // middle east presentation
             ||  ((*pStr >= 0xFE70) && (*pStr < 0xFEFF))   // arabic presentation B
-            ||  ((*pStr >= 0xFE00) && (*pStr < 0xFE10))   // variation selectors in BMP
-            ||  ((pStr + 1 < pEnd) && (pStr[0] == 0xDB40) && (0xDD00 <= pStr[1]) && (pStr[1] < 0xDEF0)) // variation selector supplement
+            ||  (!bIsCJKIdeograph && (*pStr >= 0xFE00) && (*pStr < 0xFE10))   // variation selectors in BMP
             )
                 break;
+            bIsCJKIdeograph = false;
+        }
         if( pStr >= pEnd )
             nLayoutFlags |= SalLayoutFlags::ComplexDisabled;
     }
