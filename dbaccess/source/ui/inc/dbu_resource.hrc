@@ -216,10 +216,6 @@
 
 #define RSC_QUERY_OBJECT_TYPE           RID_UNTYPED_START +  4
 
-// various
-
-#define PB_FORMAT                       RID_MISC_START +  0
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

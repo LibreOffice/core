@@ -296,9 +296,8 @@ String STR_HELP_AUTOINCREMENT
     Text [ en-US ] = "Choose if this field should contain AutoIncrement values.\n\nYou can not enter data in fields of this type. An intrinsic value will be assigned to each new record automatically (resulting from the increment of the previous record)." ;
 };
 
-PushButton PB_FORMAT
+String STR_BUTTON_FORMAT
 {
-    TabStop = TRUE ;
     Text [ en-US ] = "~...";
 };
 

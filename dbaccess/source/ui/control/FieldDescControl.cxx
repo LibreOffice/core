@@ -868,10 +868,12 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             pFormatSample->Enable(false);
             InitializeControl(pFormatSample,HID_TAB_ENT_FORMAT_SAMPLE,false);
 
-            pFormat = VclPtr<PushButton>::Create( this, ModuleRes(PB_FORMAT) );
+            pFormat = VclPtr<PushButton>::Create(this, WB_TABSTOP);
+            pFormat->SetText(ModuleRes(STR_BUTTON_FORMAT));
             const sal_Int32 nControlHeight = GetMaxControlHeight();
             pFormat->SetSizePixel(Size(nControlHeight, nControlHeight));
             pFormat->SetClickHdl( LINK( this, OFieldDescControl, FormatClickHdl ) );
+            pFormat->Show();
             InitializeControl(pFormat,HID_TAB_ENT_FORMAT,false);
         }
 

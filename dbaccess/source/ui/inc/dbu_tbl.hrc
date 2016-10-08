@@ -77,10 +77,11 @@
 #define STR_TABLEDESIGN_SAVE_ERROR          RID_STR_TBL_START + 53
 #define STR_TABLEDESIGN_COULD_NOT_DROP_COL  RID_STR_TBL_START + 54
 #define STR_COLUMN_DESCRIPTION              RID_STR_TBL_START + 55
+#define STR_BUTTON_FORMAT                   RID_STR_TBL_START + 56
 
 // please adjust checking before insert new strings
 
-#if STR_NO_TYPE_INFO_AVAILABLE > RID_STR_TBL_END
+#if STR_BUTTON_FORMAT > RID_STR_TBL_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
