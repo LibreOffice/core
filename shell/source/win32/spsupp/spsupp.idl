@@ -1,0 +1,147 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+* This file is part of the LibreOffice project.
+*
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*/
+
+[
+  uuid(580411ED-80EC-4834-BA1F-2EB07A49C80B),
+  version(0.1),
+  helpstring("LibreOffice SharePoint Client Support Type Library v.0.1")
+]
+library spsupp
+{
+    // TLib : OLE Automation : {00020430-0000-0000-C000-000000000046}
+    importlib("stdole2.tlb");
+
+    // Forward declare all types defined in this typelib
+    interface IOWSNewDocument;
+    interface IOWSNewDocument2;
+    interface IOWSNewDocument3;
+
+    [
+      odl,
+      uuid(7B678CDE-D71C-4954-ACC7-A92A96BF70DB),
+      helpstring("IOWSNewDocument Interface"),
+      dual,
+      oleautomation
+    ]
+    interface IOWSNewDocument : IDispatch {
+        [id(0x60020000)]
+        HRESULT CreateNewDocument(
+                        [in] BSTR bstrTemplateLocation,
+                        [in] BSTR bstrDefaultSaveLocation,
+                        [out, retval] VARIANT_BOOL* pbResult);
+        [id(0x60020001)]
+        HRESULT EditDocument(
+                        [in] BSTR bstrDocumentLocation,
+                        [in, optional] VARIANT varProgID,
+                        [out, retval] VARIANT_BOOL* pbResult);
+    };
+
+    [
+      odl,
+      uuid(470D72F8-C6E2-40D1-B844-4FF73DB69EC5),
+      helpstring("IOWSNewDocument2 Interface"),
+      dual,
+      oleautomation
+    ]
+    interface IOWSNewDocument2 : IOWSNewDocument {
+        [id(0x60030000)]
+        HRESULT ViewDocument(
+                        [in] BSTR bstrDocumentLocation,
+                        [in, optional] VARIANT varProgID,
+                        [out, retval] VARIANT_BOOL* pbResult);
+        [id(0x60030001)]
+        HRESULT ViewDocument2(
+                        [in] IDispatch* pdisp,
+                        [in] BSTR bstrDocumentLocation,
+                        [in, optional] VARIANT varProgID,
+                        [out, retval] VARIANT_BOOL* pbResult);
+        [id(0x60030002)]
+        HRESULT EditDocument2(
+                        [in] IDispatch* pdisp,
+                        [in] BSTR bstrDocumentLocation,
+                        [in, optional] VARIANT varProgID,
+                        [out, retval] VARIANT_BOOL* pbResult);
+        [id(0x60030003)]
+        HRESULT CreateNewDocument2(
+                        [in] IDispatch* pdisp,
+                        [in] BSTR bstrTemplateLocation,
+                        [in] BSTR bstrDefaultSaveLocation,
+                        [out, retval] VARIANT_BOOL* pbResult);
+        [id(0x60030004)]
+        HRESULT PromptedOnLastOpen([out, retval] VARIANT_BOOL* pbResult);
+    };
+
+    [
+      odl,
+      uuid(4D144CA3-2336-4E15-A7D1-A4B151D07CC7),
+      helpstring("IOWSNewDocument3 Interface"),
+      dual,
+      oleautomation
+    ]
+    interface IOWSNewDocument3 : IOWSNewDocument2 {
+        [id(0x60040000)]
+        HRESULT ViewDocument3(
+                        [in] IDispatch* pdisp,
+                        [in] BSTR bstrDocumentLocation,
+                        [in] int OpenType,
+                        [in, optional] VARIANT varProgID,
+                        [out, retval] VARIANT_BOOL* pbResult);
+        [id(0x60040001)]
+        HRESULT CheckinDocument(
+                        [in] BSTR bstrDocumentLocation,
+                        [in] int CheckinType,
+                        [in] BSTR CheckinComment,
+                        [in, defaultvalue(FALSE)] VARIANT_BOOL bKeepCheckout,
+                        [out, retval] VARIANT_BOOL* pbResult);
+        [id(0x60040002)]
+        HRESULT DiscardLocalCheckout(
+                        [in] BSTR bstrDocumentLocationRaw,
+                        [out, retval] VARIANT_BOOL* pbResult);
+        [id(0x60040003)]
+        HRESULT ViewInExcel(
+                        [in] BSTR SiteUrl,
+                        [in] BSTR FileName,
+                        [in] BSTR SessionId,
+                        [in] BSTR Cmd,
+                        [in] BSTR Sheet,
+                        [in] int Row,
+                        [in] int Column,
+                        [in, optional] VARIANT varProgID);
+        [id(0x60040004)]
+        HRESULT CheckoutDocumentPrompt(
+                        [in] BSTR bstrDocumentLocationRaw,
+                        [in] VARIANT_BOOL fEditAfterCheckout,
+                        [in, optional] VARIANT varProgID,
+                        [out, retval] VARIANT_BOOL* pbResult);
+        [id(0x60040005)]
+        HRESULT EditDocument3(
+                        [in] IDispatch* pdisp,
+                        [in] BSTR bstrDocumentLocation,
+                        [in] VARIANT_BOOL fUseLocalCopy,
+                        [in, optional] VARIANT varProgID,
+                        [out, retval] VARIANT_BOOL* pbResult);
+        [id(0x60040006)]
+        HRESULT NewBlogPost(
+                        [in] BSTR bstrProviderId,
+                        [in] BSTR bstrBlogUrl,
+                        [in] BSTR bstrBlogName);
+    };
+
+    [
+      uuid(4AD14812-2807-48B1-A27F-BA836D874E45),
+      helpstring("COMOpenDocuments Class")
+    ]
+    coclass COMOpenDocuments {
+        [default] interface IOWSNewDocument;
+        interface IOWSNewDocument2;
+        interface IOWSNewDocument3;
+    };
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
