@@ -49,6 +49,8 @@ void KDEData::initNWF()
     // Qt theme engines may support a rollover menubar
     pSVData->maNWFData.mbRolloverMenubar = true;
 
+    pSVData->maNWFData.mbNoFocusRects = true;
+
     // Styled menus need additional space
     QStyle *style = QApplication::style();
     pSVData->maNWFData.mnMenuFormatBorderX =

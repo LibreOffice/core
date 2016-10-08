@@ -87,6 +87,7 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
         case ControlType::Menubar:
         case ControlType::MenuPopup:
         case ControlType::Editbox:
+        case ControlType::MultilineEditbox:
         case ControlType::Combobox:
         case ControlType::Toolbar:
         case ControlType::Frame:
@@ -406,20 +407,15 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         draw( QStyle::PE_IndicatorToolBarHandle, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value), rect );
     }
-    else if (type == ControlType::Editbox)
+    else if (type == ControlType::Editbox || type == ControlType::MultilineEditbox)
     {
-        QStyleOptionFrameV2 option;
-        draw( QStyle::PE_PanelLineEdit, &option, m_image.get(),
-              vclStateValue2StateFlag(nControlState, value), m_image->rect().adjusted( 2, 2, -2, -2 ));
-
-        draw( QStyle::PE_FrameLineEdit, &option, m_image.get(),
-              vclStateValue2StateFlag(nControlState, value));
+        lcl_drawFrame( QStyle::PE_FrameLineEdit, m_image.get(),
+                       vclStateValue2StateFlag(nControlState, value));
     }
     else if (type == ControlType::Combobox)
     {
         QStyleOptionComboBox option;
         option.editable = true;
-
         draw( QStyle::CC_ComboBox, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
     }
@@ -678,32 +674,33 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                 {
                     int size = QApplication::style()->pixelMetric(
                         QStyle::PM_ButtonDefaultIndicator, &styleOption );
-
                     boundingRect.adjust( -size, -size, size, size );
-
                     retVal = true;
                 }
             }
             break;
         case ControlType::Editbox:
+        case ControlType::MultilineEditbox:
         {
-            int nFontHeight    = QApplication::fontMetrics().height();
-            //int nFrameSize     = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-            int nLayoutTop     = QApplication::style()->pixelMetric(QStyle::PM_LayoutTopMargin);
-            int nLayoutBottom  = QApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin);
-            int nLayoutLeft    = QApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
-            int nLayoutRight   = QApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin);
-
-            int nMinHeight = (nFontHeight + nLayoutTop + nLayoutBottom);
-            if( boundingRect.height() < nMinHeight )
+            QStyleOptionFrameV3 fo;
+            fo.frameShape = QFrame::StyledPanel;
+            fo.state = QStyle::State_Sunken;
+            fo.lineWidth = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+            QSize aMinSize = QApplication::style()->
+                sizeFromContents( QStyle::CT_LineEdit, &fo, contentRect.size() );
+            if( aMinSize.height() > boundingRect.height() )
             {
-                int delta = nMinHeight - boundingRect.height();
-                boundingRect.adjust( 0, 0, 0, delta );
+                int nHeight = (aMinSize.height() - boundingRect.height()) / 2;
+                assert( 0 == (aMinSize.height() - boundingRect.height()) % 2 );
+                boundingRect.adjust( 0, -nHeight, 0, nHeight );
             }
-            contentRect = boundingRect;
-            contentRect.adjust( -nLayoutLeft+1, -nLayoutTop+1, nLayoutRight-1, nLayoutBottom-1 );
+            if( aMinSize.width() > boundingRect.width() )
+            {
+                int nWidth = (aMinSize.width() - boundingRect.width()) / 2;
+                assert( 0 == (aMinSize.width() - boundingRect.width()) % 2 );
+                boundingRect.adjust( -nWidth, 0, nWidth, 0 );
+            }
             retVal = true;
-
             break;
         }
         case ControlType::Checkbox:
