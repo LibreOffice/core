@@ -462,7 +462,6 @@ private:
     bool                        mbMoving;
     bool                        mbTrackingEnabled;
     Point                       maDelta;
-    Point                       maTearOffPosition;
     bool                        mbGripAtBottom;
     bool                        mbHasGrip;
     void                        ImplSetBorder();
@@ -482,7 +481,6 @@ public:
 
     Rectangle           GetDragRect() const;
     Point               GetToolboxPosition() const;
-    Point               GetTearOffPosition() const;
     void                DrawGrip(vcl::RenderContext& rRenderContext);
     void                DrawBorder(vcl::RenderContext& rRenderContext);
 
@@ -567,13 +565,6 @@ Point ImplPopupFloatWin::GetToolboxPosition() const
     // return inner position where a toolbox could be placed
     Point aPt( 1, 1 + ((mbGripAtBottom || !hasGrip()) ? 0 : GetDragRect().getHeight()) );    // grip + border
 
-    return aPt;
-}
-
-Point ImplPopupFloatWin::GetTearOffPosition() const
-{
-    Point aPt( maTearOffPosition );
-    //aPt += GetToolboxPosition();    // remove 'decoration'
     return aPt;
 }
 
@@ -741,8 +732,7 @@ void ImplPopupFloatWin::MouseButtonDown( const MouseEvent& rMEvt )
         PointerState aState = GetParent()->GetPointerState();
         if (HasMirroredGraphics() && IsRTLEnabled())
             ImplMirrorFramePos(aState.maPos);
-        maTearOffPosition = GetWindow( GetWindowType::Border )->GetPosPixel();
-        maDelta = aState.maPos - maTearOffPosition;
+        maDelta = aState.maPos - GetWindow( GetWindowType::Border )->GetPosPixel();
         mbTrackingEnabled = true;
     }
     else
@@ -767,8 +757,7 @@ void ImplPopupFloatWin::Tracking( const TrackingEvent& rTEvt )
             const OutputDevice *pOutDev = GetOutDev();
             if (pOutDev->HasMirroredGraphics() && IsRTLEnabled())
                 ImplMirrorFramePos(aState.maPos);
-            maTearOffPosition = aState.maPos - maDelta;
-            GetWindow( GetWindowType::Border )->SetPosPixel( maTearOffPosition );
+            GetWindow( GetWindowType::Border )->SetPosPixel( aState.maPos - maDelta );
         }
     }
 }
@@ -1136,8 +1125,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
     GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
     // set parameter for handler before destroying floating window
-    ImplPopupFloatWin *pPopupFloatWin = static_cast<ImplPopupFloatWin*>(mpFloatWin.get());
-    EndPopupModeData aData( pPopupFloatWin->GetTearOffPosition(), mpFloatWin->IsPopupModeTearOff() );
+    EndPopupModeData aData( mpFloatWin->GetWindow( GetWindowType::Border )->GetPosPixel(), mpFloatWin->IsPopupModeTearOff() );
 
     // before deleting change parent back, so we can delete the floating window alone
     vcl::Window* pRealParent = GetWindow()->GetWindow( GetWindowType::Parent );
