@@ -37,6 +37,7 @@
 #include <set>
 #include <vector>
 #include <string.h>
+#include <stdlib.h>
 
 #include <lingutil.hxx>
 
@@ -53,64 +54,17 @@ OString Win_AddLongPathPrefix( const OString &rPathName )
 }
 #endif //defined(WNT)
 
-// build list of old style dictionaries (not as extensions) to use.
-// User installed dictionaries (the ones residing in the user paths)
-// will get precedence over system installed ones for the same language.
-std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicType )
+#ifdef SYSTEM_DICTS
+// find old style dictionaries in system directories
+void GetOldStyleDicsInDir(
+    OUString& aSystemDir, OUString& aFormatName,
+    OUString& aSystemSuffix, OUString& aSystemPrefix,
+    std::set< OUString >& aDicLangInUse,
+    std::vector< SvtLinguConfigDictionaryEntry >& aRes )
 {
-    std::vector< SvtLinguConfigDictionaryEntry > aRes;
-
-    if (!pDicType)
-        return aRes;
-
-    OUString aFormatName;
-    OUString aDicExtension;
-#ifdef SYSTEM_DICTS
-    OUString aSystemDir;
-    OUString aSystemPrefix;
-    OUString aSystemSuffix;
-#endif
-    if (strcmp( pDicType, "DICT" ) == 0)
-    {
-        aFormatName     = "DICT_SPELL";
-        aDicExtension   = ".dic";
-#ifdef SYSTEM_DICTS
-        aSystemDir      = DICT_SYSTEM_DIR;
-        aSystemSuffix   = aDicExtension;
-#endif
-    }
-    else if (strcmp( pDicType, "HYPH" ) == 0)
-    {
-        aFormatName     = "DICT_HYPH";
-        aDicExtension   = ".dic";
-#ifdef SYSTEM_DICTS
-        aSystemDir      = HYPH_SYSTEM_DIR;
-        aSystemPrefix   = "hyph_";
-        aSystemSuffix   = aDicExtension;
-#endif
-    }
-    else if (strcmp( pDicType, "THES" ) == 0)
-    {
-        aFormatName     = "DICT_THES";
-        aDicExtension   = ".dat";
-#ifdef SYSTEM_DICTS
-        aSystemDir      = THES_SYSTEM_DIR;
-        aSystemPrefix   = "th_";
-        aSystemSuffix   = "_v2.dat";
-#endif
-    }
-
-    if (aFormatName.isEmpty() || aDicExtension.isEmpty())
-        return aRes;
-
-#ifdef SYSTEM_DICTS
     osl::Directory aSystemDicts(aSystemDir);
     if (aSystemDicts.open() == osl::FileBase::E_None)
     {
-        // set of languages to remember the language where it is already
-        // decided to make use of the dictionary.
-        std::set< OUString > aDicLangInUse;
-
         osl::DirectoryItem aItem;
         osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL);
         while (aSystemDicts.getNextItem(aItem) == osl::FileBase::E_None)
@@ -170,6 +124,86 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
             }
         }
     }
+}
+#endif
+
+// build list of old style dictionaries (not as extensions) to use.
+// User installed dictionaries (the ones residing in the user paths)
+// will get precedence over system installed ones for the same language.
+std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicType )
+{
+    std::vector< SvtLinguConfigDictionaryEntry > aRes;
+
+    if (!pDicType)
+        return aRes;
+
+    OUString aFormatName;
+    OUString aDicExtension;
+#ifdef SYSTEM_DICTS
+    OUString aSystemDir;
+    OUString aSystemPrefix;
+    OUString aSystemSuffix;
+#endif
+    if (strcmp( pDicType, "DICT" ) == 0)
+    {
+        aFormatName     = "DICT_SPELL";
+        aDicExtension   = ".dic";
+#ifdef SYSTEM_DICTS
+        aSystemDir      = DICT_SYSTEM_DIR;
+        aSystemSuffix   = aDicExtension;
+#endif
+    }
+    else if (strcmp( pDicType, "HYPH" ) == 0)
+    {
+        aFormatName     = "DICT_HYPH";
+        aDicExtension   = ".dic";
+#ifdef SYSTEM_DICTS
+        aSystemDir      = HYPH_SYSTEM_DIR;
+        aSystemPrefix   = "hyph_";
+        aSystemSuffix   = aDicExtension;
+#endif
+    }
+    else if (strcmp( pDicType, "THES" ) == 0)
+    {
+        aFormatName     = "DICT_THES";
+        aDicExtension   = ".dat";
+#ifdef SYSTEM_DICTS
+        aSystemDir      = THES_SYSTEM_DIR;
+        aSystemPrefix   = "th_";
+        aSystemSuffix   = "_v2.dat";
+#endif
+    }
+
+    if (aFormatName.isEmpty() || aDicExtension.isEmpty())
+        return aRes;
+
+#ifdef SYSTEM_DICTS
+    // set of languages to remember the language where it is already
+    // decided to make use of the dictionary.
+    std::set< OUString > aDicLangInUse;
+
+    // follow the hunspell tool's example and check DICPATH for preferred dictionaries
+    char* pDicPath = getenv("DICPATH");
+    if (pDicPath)
+    {
+        for ( char* pDir = strtok(pDicPath, ":"); pDir; pDir = strtok(nullptr, ":") )
+        {
+            // assume DICPATH is encodable and decodable as the locale's text encoding
+            // if this breaks on someone's machine, they should fix their system
+            OUString aPath(pDir, strlen(pDir), osl_getThreadTextEncoding());
+            OUString aURI = "file://" + aPath;
+
+            // GetOldStyleDicsInDir will make sure the dictionary is the right
+            // type based on its prefix, that way hyphen, mythes and regular
+            // dictionaries can live in one directory
+            GetOldStyleDicsInDir(aURI, aFormatName, aSystemSuffix, aSystemPrefix,
+                aDicLangInUse, aRes);
+        }
+    }
+
+    // load system directories last so that DICPATH prevails
+    GetOldStyleDicsInDir(aSystemDir, aFormatName, aSystemSuffix, aSystemPrefix,
+        aDicLangInUse, aRes);
 #endif
 
     return aRes;
