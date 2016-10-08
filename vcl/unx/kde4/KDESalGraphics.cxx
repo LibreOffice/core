@@ -757,45 +757,20 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     if( aMinSize.height() > contentRect.height() )
                         contentRect.adjust( 0, 0, 0, aMinSize.height() - contentRect.height() );
                     boundingRect = contentRect;
-                    // FIXME: why this difference between comboboxes and listboxes ?
-                    // because a combobox has a sub edit and that is positioned
-                    // inside the outer bordered control ?
-                    if( type == ControlType::Combobox ) {
-                        int size = QApplication::style()->pixelMetric(QStyle::PM_ComboBoxFrameWidth) - 2;
-                        contentRect.adjust(-size,-size,size,size);
-                    }
-                    else {
-                        int hmargin = QApplication::style()->pixelMetric(
-                                QStyle::PM_FocusFrameHMargin, &styleOption);
-                        int vmargin = QApplication::style()->pixelMetric(
-                                QStyle::PM_FocusFrameVMargin, &styleOption);
-                        boundingRect.translate( -hmargin, -vmargin );
-                        boundingRect.adjust( -hmargin, -vmargin, 2 * hmargin, 2 * vmargin );
-                    }
                     retVal = true;
                     break;
                 }
                 case ControlPart::ButtonDown:
                     contentRect = QApplication::style()->subControlRect(
                         QStyle::CC_ComboBox, &cbo, QStyle::SC_ComboBoxArrow );
-
                     contentRect.translate( boundingRect.left(), boundingRect.top() );
-
                     retVal = true;
                     break;
                 case ControlPart::SubEdit:
                 {
                     contentRect = QApplication::style()->subControlRect(
                         QStyle::CC_ComboBox, &cbo, QStyle::SC_ComboBoxEditField );
-
-                    int hmargin = QApplication::style()->pixelMetric(
-                            QStyle::PM_FocusFrameHMargin, &styleOption);
-                    int vmargin = QApplication::style()->pixelMetric(
-                            QStyle::PM_FocusFrameVMargin, &styleOption);
-
-                    contentRect.translate( boundingRect.left() + hmargin, boundingRect.top() + vmargin );
-                    contentRect.adjust( 0, 0, -2 * hmargin, -2 * vmargin );
-
+                    contentRect.translate( boundingRect.left(), boundingRect.top() );
                     retVal = true;
                     break;
                 }
