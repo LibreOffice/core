@@ -579,6 +579,7 @@ void CallbackFlushHandler::callback(const int type, const char* payload, void* d
 void CallbackFlushHandler::queue(const int type, const char* data)
 {
     std::string payload(data ? data : "(nil)");
+    //SAL_WARN("lok", "Queue: " << type << " : " << payload);
     if (m_bPartTilePainting)
     {
         // We drop notifications when this is set, except for important ones.
@@ -740,9 +741,9 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                             const RectangleAndPart rcOld = RectangleAndPart::Create(elem.second);
                             if (rcOld.m_nPart != rcNew.m_nPart)
                                 return false;
-                            //SAL_WARN("lok", "#" << i << " Old: " << rcOld.toString());
+                            //SAL_WARN("lok", "Old: " << rcOld.toString());
                             const Rectangle rcOverlap = rcNew.m_aRectangle.GetIntersection(rcOld.m_aRectangle);
-                            //SAL_WARN("lok", "#" << i << " Overlap: " << rcOverlap.toString());
+                            //SAL_WARN("lok", "Overlap: " << rcOverlap.toString());
                             bool bOverlap = (rcOverlap.GetWidth() > 0 && rcOverlap.GetHeight() > 0);
                             if (bOverlap)
                             {
@@ -768,6 +769,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         }
     }
 
+    //SAL_WARN("lok", ">> Queueing: " << type << " : " << payload);
     m_queue.emplace_back(type, payload);
 
     lock.unlock();
@@ -783,6 +785,7 @@ void CallbackFlushHandler::flush()
     {
         std::unique_lock<std::mutex> lock(m_mutex);
 
+        //SAL_WARN("lok", "Flushing " << m_queue.size() << " elements.");
         for (auto& pair : m_queue)
         {
             const int type = pair.first;
@@ -797,7 +800,7 @@ void CallbackFlushHandler::flush()
                     // If the state didn't change, it's safe to ignore.
                     if (stateIt->second == payload)
                     {
-                        //SAL_WARN("lok", "Skipping duplicate [" + std::to_string(type) + "]: [" + payload + "].");
+                        //SAL_WARN("lok", "Skipping duplicate [" << type << "]: [" << payload << "].");
                         continue;
                     }
 
@@ -816,24 +819,26 @@ void CallbackFlushHandler::flush()
                         // If the state didn't change, it's safe to ignore.
                         if (stateIt->second == payload)
                         {
-                            //SAL_WARN("lok", "Skipping view duplicate [" + std::to_string(type) + "," + std::to_string(viewId) + "]: [" + payload + "].");
+                            //SAL_WARN("lok", "Skipping view duplicate [" << type << ',' << viewId << "]: [" << payload << "].");
                             continue;
                         }
 
                         stateIt->second = payload;
-                        //SAL_WARN("lok", "Replacing an element in view states [" + std::to_string(type) + "," + std::to_string(viewId) + "]: [" + payload + "].");
+                        //SAL_WARN("lok", "Replacing an element in view states [" << type << ',' << viewId << "]: [" << payload << "].");
                     }
                     else
                     {
                         states.emplace(type, payload);
-                        //SAL_WARN("lok", "Inserted a new element in view states: [" + std::to_string(type) + "," + std::to_string(viewId) + "]: [" + payload + "]");
+                        //SAL_WARN("lok", "Inserted a new element in view states: [" << type << ',' << viewId << "]: [" << payload << "]");
                     }
                 }
             }
 
+            //SAL_WARN("lok", "<< Callback: " << type << " : " << payload);
             m_pCallback(type, payload.c_str(), m_pData);
         }
 
+        //SAL_WARN("lok", "Done flushing.");
         m_queue.clear();
     }
 }
