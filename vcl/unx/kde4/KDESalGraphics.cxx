@@ -504,6 +504,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     else if (type == ControlType::Spinbox)
     {
         QStyleOptionSpinBox option;
+        option.frame = true;
 
         // determine active control
         if( value.getType() == ControlType::SpinButtons )
@@ -513,6 +514,14 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                 option.activeSubControls |= QStyle::SC_SpinBoxUp;
             if( (pSpinVal->mnLowerState & ControlState::PRESSED) )
                 option.activeSubControls |= QStyle::SC_SpinBoxDown;
+            if( (pSpinVal->mnUpperState & ControlState::ENABLED) )
+                option.stepEnabled |= QAbstractSpinBox::StepUpEnabled;
+            if( (pSpinVal->mnLowerState & ControlState::ENABLED) )
+                option.stepEnabled |= QAbstractSpinBox::StepDownEnabled;
+            if( (pSpinVal->mnUpperState & ControlState::ROLLOVER) )
+                option.state = QStyle::State_MouseOver;
+            if( (pSpinVal->mnLowerState & ControlState::ROLLOVER) )
+                option.state = QStyle::State_MouseOver;
         }
 
         draw( QStyle::CC_SpinBox, &option, m_image.get(),
@@ -801,12 +810,25 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         case ControlType::Spinbox:
         {
             QStyleOptionSpinBox sbo;
+            sbo.frame = true;
 
             sbo.rect = QRect(0, 0, contentRect.width(), contentRect.height());
             sbo.state = vclStateValue2StateFlag(controlState, val);
 
             switch ( part )
             {
+                case ControlPart::Entire:
+                {
+                    int nHeight = QApplication::fontMetrics().height();
+                    QSize aContentSize( contentRect.width(), nHeight );
+                    QSize aMinSize = QApplication::style()->
+                        sizeFromContents( QStyle::CT_SpinBox, &sbo, aContentSize );
+                    if( aMinSize.height() > contentRect.height() )
+                        contentRect.adjust( 0, 0, 0, aMinSize.height() - contentRect.height() );
+                    boundingRect = contentRect;
+                    retVal = true;
+                    break;
+                }
                 case ControlPart::ButtonUp:
                     contentRect = QApplication::style()->subControlRect(
                         QStyle::CC_SpinBox, &sbo, QStyle::SC_SpinBoxUp );
@@ -830,7 +852,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     contentRect.translate( boundingRect.left(), boundingRect.top() );
                     break;
                 default:
-                    retVal = true;
+                    break;
             }
             break;
         }
