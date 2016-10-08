@@ -226,16 +226,16 @@ struct ImplSVCtrlData
 
 struct ImplSVHelpData
 {
-    bool                    mbContextHelp       : 1;        // is ContextHelp enabled
-    bool                    mbExtHelp           : 1;        // is ExtendedHelp enabled
-    bool                    mbExtHelpMode       : 1;        // is in ExtendedHelp Mode
-    bool                    mbOldBalloonMode    : 1;        // BalloonMode, before ExtHelpMode started
-    bool                    mbBalloonHelp       : 1;        // is BalloonHelp enabled
-    bool                    mbQuickHelp         : 1;        // is QuickHelp enabled
-    bool                    mbSetKeyboardHelp   : 1;        // tiphelp was activated by keyboard
-    bool                    mbKeyboardHelp      : 1;        // tiphelp was activated by keyboard
-    bool                    mbAutoHelpId        : 1;        // generate HelpIds
-    bool                    mbRequestingHelp    : 1;        // In Window::RequestHelp
+    bool                    mbContextHelp;                  // is ContextHelp enabled
+    bool                    mbExtHelp;                      // is ExtendedHelp enabled
+    bool                    mbExtHelpMode;                  // is in ExtendedHelp Mode
+    bool                    mbOldBalloonMode;               // BalloonMode, before ExtHelpMode started
+    bool                    mbBalloonHelp;                  // is BalloonHelp enabled
+    bool                    mbQuickHelp;                    // is QuickHelp enabled
+    bool                    mbSetKeyboardHelp;              // tiphelp was activated by keyboard
+    bool                    mbKeyboardHelp;                 // tiphelp was activated by keyboard
+    bool                    mbAutoHelpId;                   // generate HelpIds
+    bool                    mbRequestingHelp;               // In Window::RequestHelp
     VclPtr<HelpTextWindow>  mpHelpWin;                      // HelpWindow
     sal_uInt64              mnLastHelpHideTime;             // ticks of last show
 };
@@ -253,32 +253,32 @@ struct ImplSVNWFData
     int                     mnMenuSeparatorBorderX;         // gap at each side of separator
     ::Color                 maMenuBarHighlightTextColor;    // override higlight text color
                                                             // in menubar if not transparent
-    bool                    mbMenuBarDockingAreaCommonBG:1; // e.g. WinXP default theme
-    bool                    mbDockingAreaSeparateTB:1;      // individual toolbar backgrounds
+    bool                    mbMenuBarDockingAreaCommonBG;   // e.g. WinXP default theme
+    bool                    mbDockingAreaSeparateTB;        // individual toolbar backgrounds
                                                             // instead of one for docking area
-    bool                    mbDockingAreaAvoidTBFrames:1;   ///< don't draw frames around the individual toolbars if mbDockingAreaSeparateTB is false
-    bool                    mbToolboxDropDownSeparate:1;    // two adjacent buttons for
+    bool                    mbDockingAreaAvoidTBFrames;     ///< don't draw frames around the individual toolbars if mbDockingAreaSeparateTB is false
+    bool                    mbToolboxDropDownSeparate;      // two adjacent buttons for
                                                             // toolbox dropdown buttons
-    bool                    mbFlatMenu:1;                   // no popup 3D border
-    bool                    mbOpenMenuOnF10:1;              // on gnome the first menu opens on F10
-    bool                    mbNoFocusRects:1;               // on Aqua/Gtk3 use native focus rendering, except for flat buttons
-    bool                    mbNoFocusRectsForFlatButtons:1; // on Gtk3 native focusing is also preferred for flat buttons
-    bool                    mbCenteredTabs:1;               // on Aqua, tabs are centered
-    bool                    mbNoActiveTabTextRaise:1;       // on Aqua the text for the selected tab
+    bool                    mbFlatMenu;                     // no popup 3D border
+    bool                    mbOpenMenuOnF10;                // on gnome the first menu opens on F10
+    bool                    mbNoFocusRects;                 // on Aqua/Gtk3 use native focus rendering, except for flat buttons
+    bool                    mbNoFocusRectsForFlatButtons;   // on Gtk3 native focusing is also preferred for flat buttons
+    bool                    mbCenteredTabs;                 // on Aqua, tabs are centered
+    bool                    mbNoActiveTabTextRaise;         // on Aqua the text for the selected tab
                                                             // should not "jump up" a pixel
-    bool                    mbProgressNeedsErase:1;         // set true for platforms that should draw the
+    bool                    mbProgressNeedsErase;           // set true for platforms that should draw the
                                                             // window background before drawing the native
                                                             // progress bar
-    bool                    mbCheckBoxNeedsErase:1;         // set true for platforms that should draw the
+    bool                    mbCheckBoxNeedsErase;           // set true for platforms that should draw the
                                                             // window background before drawing the native
                                                             // checkbox
-    bool                    mbCanDrawWidgetAnySize:1;       // set to true currently on gtk
+    bool                    mbCanDrawWidgetAnySize;         // set to true currently on gtk
 
     /// entire drop down listbox resembles a button, no textarea/button parts (as currently on Windows)
-    bool                    mbDDListBoxNoTextArea:1;
-    bool                    mbEnableAccel:1;                // whether or not accelerators are shown
-    bool                    mbAutoAccel:1;                  // whether accelerators are only shown when Alt is held down
-    bool                    mbRolloverMenubar:1;            // theming engine supports rollover in menubar
+    bool                    mbDDListBoxNoTextArea;
+    bool                    mbEnableAccel;                  // whether or not accelerators are shown
+    bool                    mbAutoAccel;                    // whether accelerators are only shown when Alt is held down
+    bool                    mbRolloverMenubar;              // theming engine supports rollover in menubar
 };
 
 struct BlendFrameCache
