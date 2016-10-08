@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#define BTN_ALL_TEMPLATES                256
-#define FT_NAME                          258
 #define STR_WELCOME_LINE1                259
 #define STR_WELCOME_LINE2                260
 #define IMG_WELCOME                      261

@@ -9,20 +9,6 @@
 
 #include "templateview.hrc"
 
-PushButton BTN_ALL_TEMPLATES
-{
-    Pos = MAP_APPFONT( 1, 1 );
-    Size = MAP_APPFONT( 50, 14 );
-    Text [ en-US ] = "All Templates";
-    TabStop = True;
-};
-
-FixedText FT_NAME
-{
-    Pos = MAP_APPFONT( 52, 4 );
-    Size = MAP_APPFONT( 238, 12 );
-};
-
 String STR_WELCOME_LINE1
 {
     Text [ en-US ] = "Welcome to %PRODUCTNAME.";
