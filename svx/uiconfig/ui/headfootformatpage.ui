@@ -110,7 +110,7 @@
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="checkSameLR">
-                            <property name="label" translatable="yes">Same _content left/right</property>
+                            <property name="label" translatable="yes">Same _content on left and right pages</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
