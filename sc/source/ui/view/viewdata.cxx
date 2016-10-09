@@ -74,9 +74,6 @@ using namespace com::sun::star;
 
 #define TAG_TABBARWIDTH "tw:"
 
-static bool bMoveArea = false;                  // Member?
-sal_uInt16 nEditAdjust = SVX_ADJUST_LEFT;       // Member!
-
 namespace {
 
 void lcl_LOKRemoveEditView(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
@@ -352,11 +349,13 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         nPasteFlags ( SC_PASTE_NONE ),
         eEditActivePart( SC_SPLIT_BOTTOMLEFT ),
         nFillMode   ( ScFillMode::NONE ),
+        eEditAdjust ( SVX_ADJUST_LEFT ),
         bActive     ( true ),                   // how to initialize?
         bIsRefMode  ( false ),
         bDelMarkValid( false ),
         bPagebreak  ( false ),
         bSelCtrlMouseClick( false ),
+        bMoveArea ( false ),
         m_nLOKPageUpDownOffset( 0 )
 {
     mpMarkData->SelectOneTable(0); // Sync with nTabNo
@@ -441,11 +440,13 @@ ScViewData::ScViewData( const ScViewData& rViewData ) :
         nPasteFlags ( SC_PASTE_NONE ),
         eEditActivePart( rViewData.eEditActivePart ),
         nFillMode   ( ScFillMode::NONE ),
+        eEditAdjust ( rViewData.eEditAdjust ),
         bActive     ( true ),                               // how to initialize?
         bIsRefMode  ( false ),
         bDelMarkValid( false ),
         bPagebreak  ( rViewData.bPagebreak ),
         bSelCtrlMouseClick( rViewData.bSelCtrlMouseClick ),
+        bMoveArea ( rViewData.bMoveArea ),
         m_nLOKPageUpDownOffset( rViewData.m_nLOKPageUpDownOffset )
 {
 
@@ -1028,7 +1029,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     //  when right-aligned, leave space for the cursor
     //  in vertical mode, editing is always right-aligned
-    if ( nEditAdjust == SVX_ADJUST_RIGHT || bAsianVertical )
+    if ( GetEditAdjust() == SVX_ADJUST_RIGHT || bAsianVertical )
         aPixRect.Right() += 1;
 
     Rectangle aOutputArea = pWin->PixelToLogic( aPixRect, GetLogicMode() );
@@ -1104,12 +1105,12 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         Size aPaper = pNewEngine->GetPaperSize();
         Rectangle aVis = pEditView[eWhich]->GetVisArea();
         long nDiff = aVis.Right() - aVis.Left();
-        if ( nEditAdjust == SVX_ADJUST_RIGHT )
+        if ( GetEditAdjust() == SVX_ADJUST_RIGHT )
         {
             aVis.Right() = aPaper.Width() - 1;
             bMoveArea = !bLayoutRTL;
         }
-        else if ( nEditAdjust == SVX_ADJUST_CENTER )
+        else if ( GetEditAdjust() == SVX_ADJUST_CENTER )
         {
             aVis.Right() = ( aPaper.Width() - 1 + nDiff ) / 2;
             bMoveArea = true;   // always
