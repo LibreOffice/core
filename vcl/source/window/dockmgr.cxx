@@ -1043,10 +1043,12 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     if( mpOldBorderWin.get() == GetWindow() )
         mpOldBorderWin = nullptr;  // no border window found
 
+    bool bAllowTearOff = bool( nFlags & FloatWinPopupFlags::AllowTearOff );
+    bool bIsToolBox = GetWindow()->GetType() == WINDOW_TOOLBOX;
+
     // the new parent for popup mode
     VclPtr<FloatingWindow> pWin;
-    bool bAllowTearOff = bool( nFlags & FloatWinPopupFlags::AllowTearOff );
-    if ( bAllowTearOff && !dynamic_cast< ToolBox* >( GetWindow() ) )
+    if ( bAllowTearOff && !bIsToolBox )
         pWin = VclPtr<FloatingWindow>::Create( mpParent, WB_STDPOPUP );
     else
         pWin = VclPtr<ImplPopupFloatWin>::Create( mpParent, this, bAllowTearOff );
@@ -1087,7 +1089,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     mpFloatWin->StartPopupMode( pParentToolBox, nFlags );
     GetWindow()->Show();
 
-    if( pParentToolBox->IsKeyEvent() )
+    if( bIsToolBox && pParentToolBox->IsKeyEvent() )
     {
         // send HOME key to subtoolbar in order to select first item
         KeyEvent aEvent( 0, vcl::KeyCode( KEY_HOME ) );
