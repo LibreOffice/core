@@ -218,12 +218,14 @@ private:
 
     ScSplitPos          eEditActivePart;            // the part that was active when edit mode was started
     ScFillMode          nFillMode;
+    SvxAdjust           eEditAdjust;
     bool                bEditActive[4];             // Active?
     bool                bActive:1;                  // Active Window ?
     bool                bIsRefMode:1;               // Reference input
     bool                bDelMarkValid:1;            // Only valid at SC_REFTYPE_FILL
     bool                bPagebreak:1;               // Page break preview mode
     bool                bSelCtrlMouseClick:1;       // special selection handling for ctrl-mouse-click
+    bool                bMoveArea:1;
 
     long                m_nLOKPageUpDownOffset;
     
@@ -374,6 +376,9 @@ public:
     bool            IsAnyFillMode()             { return nFillMode != ScFillMode::NONE; }
     bool            IsFillMode()                { return nFillMode == ScFillMode::FILL; }
     ScFillMode      GetFillMode()               { return nFillMode; }
+
+    SvxAdjust       GetEditAdjust() const {return eEditAdjust; }
+    void            SetEditAdjust( SvxAdjust eNewEditAdjust ) { eEditAdjust = eNewEditAdjust; }
 
                     // TRUE: Cell is merged
     bool            GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const;
