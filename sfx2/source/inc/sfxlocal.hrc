@@ -37,7 +37,6 @@
 #define STR_SFX_QUERY_WRONG_TYPE            (RID_SFX_SFXLOCAL_START + 11)
 
 // Controls --------------------------------------------------------------
-#define SFX_CB_PROPERTY_NAME                (RID_SFX_SFXLOCAL_START +  0)
 #define SFX_LB_PROPERTY_TYPE                (RID_SFX_SFXLOCAL_START +  4)
 #define SFX_WIN_PROPERTY_YESNO              (RID_SFX_SFXLOCAL_START +  6)
 #define SFX_ST_DURATION_FORMAT              (RID_SFX_SFXLOCAL_START +  13)
@@ -47,6 +46,7 @@
 #define SFX_IMG_PROPERTY_REMOVE             (RID_SFX_SFXLOCAL_START +  0)
 #define SFX_IMG_CLOSE_DOC                   (RID_SFX_SFXLOCAL_START +  2)
 
+#define RID_STR_TYPE_CONST                  (RID_SFX_SFXLOCAL_START + 9)
 #define RID_MENU_NOTEBOOKBAR                (RID_SFX_SFXLOCAL_START + 10)
 
 #endif

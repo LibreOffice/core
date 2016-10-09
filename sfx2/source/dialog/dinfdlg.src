@@ -28,50 +28,130 @@ String STR_SFX_NEWOFFICEDOC
     Text [ en-US ] = "%PRODUCTNAME document" ;
 };
 
-ComboBox SFX_CB_PROPERTY_NAME
+Resource RID_STR_TYPE_CONST
 {
-    Pos = MAP_APPFONT ( 0 , 2 ) ;
-    Size = MAP_APPFONT ( 60 , 72 ) ;
-    TabStop = TRUE ;
-    DropDown = TRUE ;
-    AutoSize = TRUE ;
-    AutoHScroll = TRUE ;
-    DDExtraWidth = TRUE ;
-    QuickHelpText [ en-US ] = "Property Name" ;
-    StringList [ en-US ] =
+    String 1
     {
-        "Checked by";
-        "Client";
-        "Date completed";
-        "Department";
-        "Destinations";
-        "Disposition";
-        "Division";
-        "Document number";
-        "Editor";
-        "E-Mail";
-        "Forward to";
-        "Group";
-        "Info";
-        "Language";
-        "Mailstop";
-        "Matter";
-        "Office";
-        "Owner";
-        "Project";
-        "Publisher";
-        "Purpose";
-        "Received from";
-        "Recorded by";
-        "Recorded date";
-        "Reference";
-        "Source";
-        "Status";
-        "Telephone number";
-        "Typist";
-        "URL";
+        Text [ en-US ] = "Checked by";
+    };
+    String 2
+    {
+        Text [ en-US ] = "Client";
+    };
+    String 3
+    {
+        Text [ en-US ] = "Date completed";
+    };
+    String 4
+    {
+        Text [ en-US ] = "Department";
+    };
+    String 5
+    {
+        Text [ en-US ] = "Destinations";
+    };
+    String 6
+    {
+        Text [ en-US ] = "Disposition";
+    };
+    String 7
+    {
+        Text [ en-US ] = "Division";
+    };
+    String 8
+    {
+        Text [ en-US ] = "Document number";
+    };
+    String 9
+    {
+        Text [ en-US ] = "Editor";
+    };
+    String 10
+    {
+        Text [ en-US ] = "E-Mail";
+    };
+    String 11
+    {
+        Text [ en-US ] = "Forward to";
+    };
+    String 12
+    {
+        Text [ en-US ] = "Group";
+    };
+    String 13
+    {
+        Text [ en-US ] = "Info";
+    };
+    String 14
+    {
+        Text [ en-US ] = "Language";
+    };
+    String 15
+    {
+        Text [ en-US ] = "Mailstop";
+    };
+    String 16
+    {
+        Text [ en-US ] = "Matter";
+    };
+    String 17
+    {
+        Text [ en-US ] = "Office";
+    };
+    String 18
+    {
+        Text [ en-US ] = "Owner";
+    };
+    String 19
+    {
+        Text [ en-US ] = "Project";
+    };
+    String 20
+    {
+        Text [ en-US ] = "Publisher";
+    };
+    String 21
+    {
+        Text [ en-US ] = "Purpose";
+    };
+    String 22
+    {
+        Text [ en-US ] = "Received from";
+    };
+    String 23
+    {
+        Text [ en-US ] = "Recorded by";
+    };
+    String 24
+    {
+        Text [ en-US ] = "Recorded date";
+    };
+    String 25
+    {
+        Text [ en-US ] = "Reference";
+    };
+    String 26
+    {
+        Text [ en-US ] = "Source";
+    };
+    String 27
+    {
+        Text [ en-US ] = "Status";
+    };
+    String 28
+    {
+        Text [ en-US ] = "Telephone number";
+    };
+    String 29
+    {
+        Text [ en-US ] = "Typist";
+    };
+    String 30
+    {
+        Text [ en-US ] = "URL";
     };
 };
+
 ListBox SFX_LB_PROPERTY_TYPE
 {
     Pos = MAP_APPFONT ( 63 , 2 ) ;

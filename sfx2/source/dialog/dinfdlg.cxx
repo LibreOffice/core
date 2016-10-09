@@ -21,6 +21,7 @@
 #include <svl/urihelper.hxx>
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/StringListResource.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
@@ -1402,9 +1403,26 @@ void CustomPropertiesYesNoButton::Resize()
     m_aNoButton->SetPosSizePixel(aPos, aSize);
 }
 
+namespace
+{
+    VclPtr<ComboBox> makeComboBox(vcl::Window *pParent)
+    {
+        VclPtr<ComboBox> aNameBox(VclPtr<ComboBox>::Create(pParent, WB_TABSTOP|WB_DROPDOWN|
+                                                                    WB_AUTOSIZE|WB_AUTOHSCROLL));
+        Point aPos(aNameBox->LogicToPixel(Point(0, 2), MapUnit::MapAppFont));
+        Size aSize(aNameBox->LogicToPixel(Size(60, 72), MapUnit::MapAppFont));
+        aNameBox->SetPosSizePixel(aPos, aSize);
+        std::vector<OUString> aList;
+        tools::StringListResource aRes(SfxResId(RID_STR_TYPE_CONST), aList);
+        for (const auto& rName : aList)
+            aNameBox->InsertEntry(rName);
+        return aNameBox;
+    }
+}
+
 // struct CustomPropertyLine ---------------------------------------------
 CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
-    m_aNameBox      ( VclPtr<ComboBox>::Create(pParent, SfxResId( SFX_CB_PROPERTY_NAME )) ),
+    m_aNameBox      ( makeComboBox(pParent) ),
     m_aTypeBox      ( VclPtr<CustomPropertiesTypeBox>::Create(pParent, SfxResId( SFX_LB_PROPERTY_TYPE ), this) ),
     m_aValueEdit    ( VclPtr<CustomPropertiesEdit>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_LEFT, this ) ),
     m_aDateField    ( VclPtr<CustomPropertiesDateField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
@@ -1451,7 +1469,7 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_pHeaderAccName(pHeaderAccName),
     m_pHeaderAccType(pHeaderAccType),
     m_pHeaderAccValue(pHeaderAccValue),
-    m_aNameBox      ( VclPtr<ComboBox>::Create( this, SfxResId( SFX_CB_PROPERTY_NAME ) ) ),
+    m_aNameBox      ( makeComboBox(this) ),
     m_aTypeBox      ( VclPtr<ListBox>::Create( this, SfxResId( SFX_LB_PROPERTY_TYPE ) ) ),
     m_aValueEdit    ( VclPtr<Edit>::Create( this, WB_BORDER|WB_TABSTOP|WB_LEFT ) ),
     m_aDateField    ( VclPtr<DateField>::Create( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
