@@ -902,76 +902,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
-    // In-place editing - when the user is typing, we need to paint the text
-    // using the editeng.
-    // It's being done after EndDrawLayers() to get it outside the overlay
-    // buffer and on top of everything.
-    if ( bEditMode && (pViewData->GetRefTabNo() == pViewData->GetTabNo()) )
-    {
-        // get the coordinates of the area we need to clear (overpaint by
-        // the background)
-        SCCOL nCol1 = pViewData->GetEditStartCol();
-        SCROW nRow1 = pViewData->GetEditStartRow();
-        SCCOL nCol2 = pViewData->GetEditEndCol();
-        SCROW nRow2 = pViewData->GetEditEndRow();
-        rDevice.SetLineColor();
-        rDevice.SetFillColor(pEditView->GetBackgroundColor());
-        Point aStart = pViewData->GetScrPos( nCol1, nRow1, eWhich );
-        Point aEnd = pViewData->GetScrPos( nCol2+1, nRow2+1, eWhich );
-
-        // don't overwrite grid
-        long nLayoutSign = bLayoutRTL ? -1 : 1;
-        aEnd.X() -= 2 * nLayoutSign;
-        aEnd.Y() -= 2;
-
-        // toggle the cursor off if its on to ensure the cursor invert
-        // background logic remains valid after the background is cleared on
-        // the next cursor flash
-        vcl::Cursor* pCrsr = pEditView->GetCursor();
-        const bool bVisCursor = pCrsr && pCrsr->IsVisible();
-        if (bVisCursor)
-            pCrsr->Hide();
-
-        // set the correct mapmode
-        Rectangle aBackground(aStart, aEnd);
-        if (bIsTiledRendering)
-        {
-            // Need to draw the background in absolute coords.
-            auto aOrigin = aOriginalMode.GetOrigin();
-            aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
-            aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
-            aBackground += aOrigin;
-            rDevice.SetMapMode(aDrawMode);
-        }
-        else
-            rDevice.SetMapMode(pViewData->GetLogicMode());
-
-        if (bIsTiledRendering)
-        {
-            auto aOrigin = aOriginalMode.GetOrigin();
-            aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
-            aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
-            static const double twipFactor = 15 * 1.76388889; // 26.45833335
-            aOrigin = Point(aOrigin.getX() * twipFactor,
-                            aOrigin.getY() * twipFactor);
-            MapMode aNew = rDevice.GetMapMode();
-            aNew.SetOrigin(aOrigin);
-            rDevice.SetMapMode(aNew);
-        }
-
-        // paint the background
-        rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
-
-        // paint the editeng text
-        Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
-        pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
-        rDevice.SetMapMode(MapUnit::MapPixel);
-
-        // restore the cursor it was originally visible
-        if (bVisCursor)
-            pCrsr->Show();
-    }
-
     // paint in-place editing on other views
     if (bIsTiledRendering)
     {
@@ -1045,6 +975,76 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             pViewShell = SfxViewShell::GetNext(*pViewShell);
         }
 
+    }
+
+    // In-place editing - when the user is typing, we need to paint the text
+    // using the editeng.
+    // It's being done after EndDrawLayers() to get it outside the overlay
+    // buffer and on top of everything.
+    if ( bEditMode && (pViewData->GetRefTabNo() == pViewData->GetTabNo()) )
+    {
+        // get the coordinates of the area we need to clear (overpaint by
+        // the background)
+        SCCOL nCol1 = pViewData->GetEditStartCol();
+        SCROW nRow1 = pViewData->GetEditStartRow();
+        SCCOL nCol2 = pViewData->GetEditEndCol();
+        SCROW nRow2 = pViewData->GetEditEndRow();
+        rDevice.SetLineColor();
+        rDevice.SetFillColor(pEditView->GetBackgroundColor());
+        Point aStart = pViewData->GetScrPos( nCol1, nRow1, eWhich );
+        Point aEnd = pViewData->GetScrPos( nCol2+1, nRow2+1, eWhich );
+
+        // don't overwrite grid
+        long nLayoutSign = bLayoutRTL ? -1 : 1;
+        aEnd.X() -= 2 * nLayoutSign;
+        aEnd.Y() -= 2;
+
+        // toggle the cursor off if its on to ensure the cursor invert
+        // background logic remains valid after the background is cleared on
+        // the next cursor flash
+        vcl::Cursor* pCrsr = pEditView->GetCursor();
+        const bool bVisCursor = pCrsr && pCrsr->IsVisible();
+        if (bVisCursor)
+            pCrsr->Hide();
+
+        // set the correct mapmode
+        Rectangle aBackground(aStart, aEnd);
+        if (bIsTiledRendering)
+        {
+            // Need to draw the background in absolute coords.
+            auto aOrigin = aOriginalMode.GetOrigin();
+            aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
+            aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
+            aBackground += aOrigin;
+            rDevice.SetMapMode(aDrawMode);
+        }
+        else
+            rDevice.SetMapMode(pViewData->GetLogicMode());
+
+        if (bIsTiledRendering)
+        {
+            auto aOrigin = aOriginalMode.GetOrigin();
+            aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
+            aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
+            static const double twipFactor = 15 * 1.76388889; // 26.45833335
+            aOrigin = Point(aOrigin.getX() * twipFactor,
+                            aOrigin.getY() * twipFactor);
+            MapMode aNew = rDevice.GetMapMode();
+            aNew.SetOrigin(aOrigin);
+            rDevice.SetMapMode(aNew);
+        }
+
+        // paint the background
+        rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
+
+        // paint the editeng text
+        Rectangle aEditRect(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
+        pEditView->Paint(rDevice.PixelToLogic(aEditRect), &rDevice);
+        rDevice.SetMapMode(MapUnit::MapPixel);
+
+        // restore the cursor it was originally visible
+        if (bVisCursor)
+            pCrsr->Show();
     }
 
     if (pViewData->HasEditView(eWhich))
