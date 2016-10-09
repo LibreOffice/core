@@ -99,7 +99,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
                            pPor->IsPostItsPortion() ) )
                 pPor = pPor->GetPortion();
 
-            nCnt += nEnd - nPos;
+            nCnt += SwScriptInfo::CountCJKCharacters( *pStr, nPos, nEnd, aLang );
 
             if ( !pPor || pPor->IsHolePortion() || pPor->InFixMargGrp() ||
                   pPor->IsBreakPortion() )

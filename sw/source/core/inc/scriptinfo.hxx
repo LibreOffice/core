@@ -352,6 +352,7 @@ public:
                                   sal_Int32 nLen, sal_Int32 nNumberOfBlanks = 0,
                                   long nSpaceAdd = 0 );
 
+    static sal_Int32 CountCJKCharacters( const OUString &rText, sal_Int32 nPos, sal_Int32 nEnd, LanguageType aLang);
     static SwScriptInfo* GetScriptInfo( const SwTextNode& rNode,
                                         bool bAllowInvalid = false );
 
