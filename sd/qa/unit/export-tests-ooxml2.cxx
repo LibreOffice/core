@@ -496,6 +496,10 @@ void SdOOXMLExportTest2::testPresetShapesExport()
         "adj4","val -81930",
         "adj5","val -22375",
         "adj6","val -134550",
+        "blockArc",
+        "adj1","val 13020000",
+        "adj2","val 19380000",
+        "adj3","val 3773",
     };
 
     utl::TempFile tempFile;
