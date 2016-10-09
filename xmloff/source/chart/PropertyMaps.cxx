@@ -360,8 +360,15 @@ OUString convertRange( const OUString & rRange, const uno::Reference< chart2::XC
         return aResult;
     uno::Reference< chart2::data::XRangeXMLConversion > xConversion(
         xDoc->getDataProvider(), uno::UNO_QUERY );
-    if( xConversion.is())
-        aResult = xConversion->convertRangeToXML( rRange );
+    try
+    {
+        if( xConversion.is())
+            aResult = xConversion->convertRangeToXML( rRange );
+    }
+    catch (css::lang::IllegalArgumentException&)
+    {
+    }
+
     return aResult;
 }
 
