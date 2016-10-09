@@ -453,7 +453,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     PointerStyle eStyle = PointerStyle::Text;
     if ( !pSdrView )
         bCntAtPos = true;
-    else if ( (bHitHandle = pSdrView->PickHandle( rLPt ) != nullptr) )
+    else if ( (bHitHandle = (pSdrView->PickHandle(rLPt) != nullptr)) )
     {
         m_aActHitType = SdrHitKind::Object;
         bPrefSdrPointer = true;
