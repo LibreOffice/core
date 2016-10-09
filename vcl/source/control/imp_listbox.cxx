@@ -2647,13 +2647,9 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             Rectangle aCtrlRegion( aPoint - GetPosPixel(), pWin->GetSizePixel() );
 
             bool bMouseOver = false;
-            if( GetParent() )
-            {
-                vcl::Window *pChild = GetParent()->GetWindow( GetWindowType::FirstChild );
-                while( pChild && !(bMouseOver = pChild->IsMouseOver()) )
-                    pChild = pChild->GetWindow( GetWindowType::Next );
-            }
-
+            vcl::Window *pChild = pWin->GetWindow( GetWindowType::FirstChild );
+            while( pChild && !(bMouseOver = pChild->IsMouseOver()) )
+                pChild = pChild->GetWindow( GetWindowType::Next );
             if( bMouseOver )
                 nState |= ControlState::ROLLOVER;
 
