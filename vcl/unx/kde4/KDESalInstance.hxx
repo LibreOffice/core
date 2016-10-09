@@ -39,7 +39,6 @@ class KDESalInstance : public X11SalInstance
         virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 >
             createFilePicker( const css::uno::Reference<
                                   css::uno::XComponentContext >& ) override;
-        int getFrameWidth();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
