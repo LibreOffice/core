@@ -536,6 +536,7 @@ static bool lcl_IsOnBlacklist(OUString& rShapeType)
     static
 #endif
     const std::initializer_list<OUStringLiteral> vBlacklist = {
+        OUStringLiteral("block-arc"),
         OUStringLiteral("rectangle"),
         OUStringLiteral("ellipse"),
         OUStringLiteral("ring"),
@@ -656,8 +657,6 @@ void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHandles,
     {
         const OUString sSwitched( "Switched"  );
         const OUString sPosition( "Position"  );
-        sal_Int32 nXPosition = 0;
-        sal_Int32 nYPosition = 0;
         bool bSwitched = false;
         bool bPosition = false;
         EnhancedCustomShapeParameterPair aPosition;
@@ -678,6 +677,9 @@ void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHandles,
         }
         if ( bPosition )
         {
+            sal_Int32 nXPosition = 0;
+            sal_Int32 nYPosition = 0;
+            // For polar handles, nXPosition is radius and nYPosition is angle
             lcl_GetHandlePosition( nXPosition, aPosition.First , rSeq );
             lcl_GetHandlePosition( nYPosition, aPosition.Second, rSeq );
             rHandlePositionList.push_back( std::pair<sal_Int32, sal_Int32> ( nXPosition, nYPosition ) );
@@ -688,6 +690,12 @@ void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHandles,
 void lcl_AppendAdjustmentValue( std::vector< std::pair< sal_Int32, sal_Int32> > &rAvList, sal_Int32 nAdjIdx, sal_Int32 nValue )
 {
     rAvList.push_back( std::pair<sal_Int32, sal_Int32> ( nAdjIdx , nValue ) );
+}
+
+sal_Int32 lcl_NormalizeAngle( sal_Int32 nAngle )
+{
+    nAngle = nAngle % 360;
+    return nAngle < 0 ? ( nAngle + 360 ) : nAngle ;
 }
 
 ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
@@ -940,6 +948,16 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             {
                 sal_Int32 adj =  double( nYPosition )/aViewBox.Height *100000 - 76458.0;
                 lcl_AppendAdjustmentValue( aAvList, 0, adj );
+                break;
+            }
+            case mso_sptBlockArc:
+            {
+                sal_Int32 nRadius = 50000 * ( 1 - double(nXPosition) / 10800);
+                sal_Int32 nAngleStart = lcl_NormalizeAngle( nYPosition );
+                sal_Int32 nAngleEnd = lcl_NormalizeAngle( 180 - nAngleStart );
+                lcl_AppendAdjustmentValue( aAvList, 1, 21600000 / 360 * nAngleStart );
+                lcl_AppendAdjustmentValue( aAvList, 2, 21600000 / 360 * nAngleEnd );
+                lcl_AppendAdjustmentValue( aAvList, 3, nRadius );
                 break;
             }
             // case mso_sptNil:
