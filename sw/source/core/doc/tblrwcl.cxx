@@ -2384,8 +2384,11 @@ static bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                     return false;
 
             // Collect all "ContentBoxes"
-            if( (bGreaterBox = TBLFIX_CHGABS != rParam.nMode && ( nDist + ( rParam.bLeft ? 0 : nWidth ) ) >= rParam.nSide) ||
-                ( !rParam.bBigger && ( std::abs( nDist + (( rParam.nMode && rParam.bLeft ) ? 0 : nWidth ) - rParam.nSide ) < COLFUZZY ) ) )
+            bGreaterBox = (TBLFIX_CHGABS != rParam.nMode)
+                       && ((nDist + (rParam.bLeft ? 0 : nWidth)) >= rParam.nSide);
+            if (bGreaterBox
+                || (!rParam.bBigger
+                    && (std::abs(nDist + ((rParam.nMode && rParam.bLeft) ? 0 : nWidth) - rParam.nSide) < COLFUZZY)))
             {
                 rParam.bAnyBoxFnd = true;
                 SwTwips nLowerDiff;
