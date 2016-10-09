@@ -53,11 +53,6 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
         return X11SalInstance::createFilePicker( xMSF );
 }
 
-int KDESalInstance::getFrameWidth()
-{
-    return static_cast<KDEXLib*>( mpXLib )->getFrameWidth();
-}
-
 SalX11Display* KDESalInstance::CreateDisplay() const
 {
     return new SalKDEDisplay( QX11Info::display() );

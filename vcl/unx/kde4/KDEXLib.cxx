@@ -50,7 +50,7 @@
 KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false),
     m_pFreeCmdLineArgs(nullptr), m_pAppCmdLineArgs(nullptr), m_nFakeCmdLineArgs( 0 ),
-    m_frameWidth( -1 ), m_isGlibEventLoopType(false),
+    m_isGlibEventLoopType(false),
     m_allowKdeDialogs(false), m_blockIdleTimeout(false)
 {
     // the timers created here means they belong to the main thread.
@@ -76,9 +76,6 @@ KDEXLib::KDEXLib() :
     connect( this, SIGNAL( createFilePickerSignal( const css::uno::Reference< css::uno::XComponentContext >&) ),
              this, SLOT( createFilePicker( const css::uno::Reference< css::uno::XComponentContext >&) ),
              Qt::BlockingQueuedConnection );
-
-    connect( this, SIGNAL( getFrameWidthSignal() ),
-             this, SLOT( getFrameWidth() ), Qt::BlockingQueuedConnection );
 }
 
 KDEXLib::~KDEXLib()
@@ -421,23 +418,6 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
 #else
     return NULL;
 #endif
-}
-
-int KDEXLib::getFrameWidth()
-{
-    if( m_frameWidth >= 0 )
-        return m_frameWidth;
-    if( qApp->thread() != QThread::currentThread()) {
-        SalYieldMutexReleaser aReleaser;
-        return Q_EMIT getFrameWidthSignal();
-    }
-
-    // fill in a default
-    QFrame aFrame( nullptr );
-    aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-    aFrame.ensurePolished();
-    m_frameWidth = aFrame.frameWidth();
-    return m_frameWidth;
 }
 
 #include "KDEXLib.moc"
