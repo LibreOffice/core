@@ -3554,6 +3554,9 @@ bool ScDPCollection::GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDime
     {
         const ScDPObject& rRefObj = *aTable.get();
 
+        if (&rRefObj == &rDPObj)
+            continue;
+
         if (rDPObj.IsSheetData()){
             if(!rRefObj.IsSheetData())
                 continue;

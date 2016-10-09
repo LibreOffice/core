@@ -149,6 +149,8 @@ public:
                             const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames );
+    void                finalizeImportBasedOnCache(
+                            const css::uno::Reference< css::sheet::XDataPilotDescriptor >& rxDPDesc);
 
     /** Returns the name of the DataPilot field in the fields collection. */
     inline const OUString& getDPFieldName() const { return maDPFieldName; }
@@ -317,6 +319,8 @@ public:
     PivotTableFilter&   createTableFilter();
     /** Inserts the pivot table into the sheet. */
     void                finalizeImport();
+    /** Creates all group fields for the table after import. */
+    void                finalizeFieldsImport();
     /** Creates all date group fields for the specified cache field after import. */
     void                finalizeDateGroupingImport(
                             const css::uno::Reference< css::sheet::XDataPilotField >& rxBaseDPField,
@@ -377,6 +381,7 @@ private:
     PivotCache*           mpPivotCache;       /// The pivot cache this table is based on.
     css::uno::Reference< css::sheet::XDataPilotDescriptor >
                           mxDPDescriptor;     /// Descriptor of the DataPilot object.
+
 };
 
 class PivotTableBuffer : public WorkbookHelper
