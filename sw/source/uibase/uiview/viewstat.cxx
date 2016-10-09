@@ -502,6 +502,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
         case SID_LINE_CIRCLE_ARROW:
         case SID_LINE_SQUARE_ARROW:
         case SID_LINE_ARROWS:
+        case SID_DRAW_MEASURELINE:
         case SID_DRAW_RECT:
         case SID_DRAW_ELLIPSE:
         case SID_DRAW_XPOLYGON_NOFILL:

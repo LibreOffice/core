@@ -170,6 +170,10 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
         m_pWin->SetSdrDrawMode(OBJ_LINE);
         break;
 
+    case SID_DRAW_MEASURELINE:
+        m_pWin->SetSdrDrawMode(OBJ_MEASURE);
+        break;
+
     case SID_DRAW_RECT:
         m_pWin->SetSdrDrawMode(OBJ_RECT);
         break;

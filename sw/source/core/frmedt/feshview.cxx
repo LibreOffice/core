@@ -36,6 +36,7 @@
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnstit.hxx>
+#include <svx/svdomeas.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/opaqitem.hxx>
@@ -2918,6 +2919,9 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
         }
         pObj->SetLogicRect(aRect);
 
+        Point aStart = aRect.TopLeft();
+        Point aEnd = aRect.BottomRight();
+
         if(dynamic_cast<const SdrCircObj*>( pObj) !=  nullptr)
         {
             SfxItemSet aAttr(pDrawModel->GetItemPool());
@@ -3020,6 +3024,12 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
             }
 
             static_cast<SdrPathObj*>(pObj)->SetPathPoly(aPoly);
+        }
+        else if(dynamic_cast<const SdrMeasureObj*>( pObj) !=  nullptr)
+        {
+                sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
+                static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
+                static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aEnd.X(), nYMiddle), 1);
         }
         else if(dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
         {
