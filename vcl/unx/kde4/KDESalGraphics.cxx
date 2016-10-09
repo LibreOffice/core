@@ -734,10 +734,8 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                 boundingRect = contentRect;
 
                 retVal = true;
-
-                break;
             }
-            SAL_FALLTHROUGH;
+            break;
         case ControlType::Combobox:
         case ControlType::Listbox:
         {
