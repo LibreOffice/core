@@ -226,12 +226,6 @@ static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
     return hTheme;
 }
 
-/*
- * IsNativeControlSupported()
- *
- *  Returns TRUE if the platform supports native
- *  drawing of the control defined by nPart
- */
 bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     HTHEME hTheme = nullptr;
@@ -339,13 +333,6 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     return (hTheme != nullptr);
 }
 
-/*
- * HitTestNativeScrollbar()
- *
- *  If the return value is TRUE, bIsInside contains information whether
- *  aPos was or was not inside the native widget specified by the
- *  nType/nPart combination.
- */
 bool WinSalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
                               const Rectangle&,
@@ -1147,15 +1134,6 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     return false;
 }
 
-/*
- * DrawNativeControl()
- *
- *  Draws the requested control described by nPart/nState.
- *
- *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
- *  aValue:         An optional value (tristate/numerical/string)
- *  aCaption:   A caption or title string (like button text etc)
- */
 bool WinSalGraphics::drawNativeControl( ControlType nType,
                                         ControlPart nPart,
                                         const Rectangle& rControlRegion,
@@ -1316,19 +1294,6 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     return bOk;
 }
 
-/*
- * GetNativeControlRegion()
- *
- *  If the return value is TRUE, rNativeBoundingRegion
- *  contains the true bounding region covered by the control
- *  including any adornment, while rNativeContentRegion contains the area
- *  within the control that can be safely drawn into without drawing over
- *  the borders of the control.
- *
- *  rControlRegion: The bounding region of the control in VCL frame coordinates.
- *  aValue:     An optional value (tristate/numerical/string)
- *  aCaption:       A caption or title string (like button text etc)
- */
 bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
                                 const Rectangle& rControlRegion,

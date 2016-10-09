@@ -1254,17 +1254,6 @@ class KDESalGraphics : public X11SalGraphics
                                          Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) override;
 };
 
-/** What widgets can be drawn the native way.
-
-    @param nType
-    Type of the widget.
-
-    @param nPart
-    Specification of the widget's part if it consists of more than one.
-
-    @return true if the platform supports native drawing of the widget nType
-    defined by nPart.
-*/
 bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     return
@@ -1292,12 +1281,6 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         ;
 }
 
-/** Test whether the position is in the native widget.
-
-    If the return value is true, bIsInside contains information whether
-    aPos was or was not inside the native widget specified by the
-    nType/nPart combination.
-*/
 bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
                                            const Rectangle& rControlRegion, const Point& rPos,
                                            bool& rIsInside )
@@ -1393,17 +1376,6 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
     return false;
 }
 
-/** Draw the requested control described by nPart/nState.
-
-    @param rControlRegion
-    The bounding region of the complete control in VCL frame coordinates.
-
-    @param aValue
-    An optional value (tristate/numerical/string).
-
-    @param aCaption
-    A caption or title string (like button text etc.)
-*/
 bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
                                         const Rectangle& rControlRegion, ControlState nState,
                                         const ImplControlValue& aValue,
@@ -1511,23 +1483,6 @@ bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
     return bReturn;
 }
 
-/** Check if the bounding regions match.
-
-    If the return value is true, rNativeBoundingRegion
-    contains the true bounding region covered by the control
-    including any adornment, while rNativeContentRegion contains the area
-    within the control that can be safely drawn into without drawing over
-    the borders of the control.
-
-    @param rControlRegion
-    The bounding region of the control in VCL frame coordinates.
-
-    @param aValue
-    An optional value (tristate/numerical/string)
-
-    @param aCaption
-    A caption or title string (like button text etc.)
-*/
 bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart,
                                              const Rectangle& rControlRegion, ControlState nState,
                                              const ImplControlValue&,
