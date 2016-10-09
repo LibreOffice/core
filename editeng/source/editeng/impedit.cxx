@@ -79,13 +79,13 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pOutWin             = pWindow;
     pPointer            = nullptr;
     pBackgroundColor    = nullptr;
-    mpViewShell = nullptr;
-    mpOtherShell = nullptr;
+    mpViewShell         = nullptr;
+    mpOtherShell        = nullptr;
     nScrollDiffX        = 0;
     nExtraCursorFlags   = 0;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
     pCursor             = nullptr;
-       pDragAndDropInfo = nullptr;
+    pDragAndDropInfo    = nullptr;
     bReadOnly           = false;
     bClickedInSelection = false;
     eSelectionMode      = EE_SELMODE_TXTONLY;
