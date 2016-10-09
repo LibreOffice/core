@@ -286,27 +286,18 @@ void CommonSalLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos,
 
 void CommonSalLayout::AdjustLayout(ImplLayoutArgs& rArgs)
 {
-    GenericSalLayout::AdjustLayout(rArgs);
+    SalLayout::AdjustLayout(rArgs);
+
+    if (rArgs.mpDXArray)
+        ApplyDXArray(rArgs);
+    else if (rArgs.mnLayoutWidth)
+        Justify(rArgs.mnLayoutWidth);
 
     // apply asian kerning if the glyphs are not already formatted
     if ((rArgs.mnFlags & SalLayoutFlags::KerningAsian)
     && !(rArgs.mnFlags & SalLayoutFlags::Vertical))
         if ((rArgs.mpDXArray != nullptr) || (rArgs.mnLayoutWidth != 0))
             ApplyAsianKerning(rArgs.mrStr);
-
-    if ((rArgs.mnFlags & SalLayoutFlags::KashidaJustification) && rArgs.mpDXArray)
-    {
-        hb_codepoint_t nKashidaCodePoint = 0x0640;
-        hb_codepoint_t nKashidaGlyphIndex;
-
-        if (hb_font_get_glyph(mpHbFont, nKashidaCodePoint, 0, &nKashidaGlyphIndex))
-        {
-            if (nKashidaGlyphIndex)
-            {
-                KashidaJustify(nKashidaGlyphIndex, hb_font_get_glyph_h_advance(mpHbFont, nKashidaGlyphIndex) >> 6);
-            }
-        }
-    }
 }
 
 void CommonSalLayout::DrawText(SalGraphics& rSalGraphics) const
@@ -522,6 +513,16 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
             pNewCharWidths[i] = rArgs.mpDXArray[i] - rArgs.mpDXArray[i - 1];
     }
 
+    DeviceCoordinate nKashidaWidth = 0;
+    hb_codepoint_t nKashidaIndex;
+    if (rArgs.mnFlags & SalLayoutFlags::KashidaJustification)
+    {
+        if (hb_font_get_glyph(mpHbFont, 0x0640, 0, &nKashidaIndex))
+            nKashidaWidth = hb_font_get_glyph_h_advance(mpHbFont, nKashidaIndex) / 64;
+    }
+
+    std::map<size_t, DeviceCoordinate> pKashidas;
+
     DeviceCoordinate nDelta = 0;
     size_t i = 0;
     while (i < m_GlyphItems.size())
@@ -529,16 +530,61 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         int nCharPos = m_GlyphItems[i].mnCharPos - mnMinCharPos;
         DeviceCoordinate nDiff = pNewCharWidths[nCharPos] - pOldCharWidths[nCharPos];
 
-        m_GlyphItems[i].maLinearPos.X() += nDelta;
+        if (nKashidaWidth && nDiff)
+            pKashidas[i] = nDiff;
+
         size_t j = i;
-        while (++j < m_GlyphItems.size())
+        while (j < m_GlyphItems.size())
         {
             if (m_GlyphItems[j].mnCharPos != m_GlyphItems[i].mnCharPos)
                 break;
             m_GlyphItems[j].maLinearPos.X() += nDelta;
+            // For RTL, put all justification space to the left of the glyph.
+            if (m_GlyphItems[i].IsRTLGlyph())
+                m_GlyphItems[j].maLinearPos.X() += nDiff;
+            ++j;
         }
 
         nDelta += nDiff;
         i = j;
+    }
+
+    if (!pKashidas.empty())
+    {
+        size_t nInserted = 0;
+        for (auto const& pKashida : pKashidas)
+        {
+            auto pGlyphIter = m_GlyphItems.begin() + nInserted + pKashida.first;
+
+            if (!pGlyphIter->IsRTLGlyph())
+                continue;
+
+            sal_Int32 indexUtf16 = pGlyphIter->mnCharPos;
+            sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
+            static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
+            if (hb_unicode_general_category (pHbUnicodeFuncs, aChar) == HB_UNICODE_GENERAL_CATEGORY_SPACE_SEPARATOR)
+                continue;
+
+            DeviceCoordinate nGapWidth = pKashida.second;
+            int nKashidaCount = ceil(nGapWidth / nKashidaWidth);
+            DeviceCoordinate nInsertedKashidaWidth;
+            if (nGapWidth < nKashidaWidth)
+                nInsertedKashidaWidth = nGapWidth;
+            else
+                nInsertedKashidaWidth = nGapWidth / nKashidaCount;
+
+            Point aPos(pGlyphIter->maLinearPos.X() - nGapWidth, 0);
+            int nCharPos = pGlyphIter->mnCharPos;
+            int nFlags = GlyphItem::IS_IN_CLUSTER | GlyphItem::IS_RTL_GLYPH;
+            while (nKashidaCount)
+            {
+                GlyphItem aKashida(nCharPos, nKashidaIndex, aPos, nFlags, nInsertedKashidaWidth);
+                pGlyphIter = m_GlyphItems.insert(pGlyphIter, aKashida);
+                aPos.X() += nInsertedKashidaWidth;
+                ++pGlyphIter;
+                ++nInserted;
+                --nKashidaCount;
+            }
+        }
     }
 }
