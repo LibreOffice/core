@@ -85,6 +85,9 @@ class EDITENG_DLLPUBLIC EditView
     friend class ImpEditEngine;
     friend class EditSelFunctionSet;
 
+public:
+    typedef std::vector<VclPtr<vcl::Window>> OutWindowSet;
+
 public: // Needed for Undo
     ImpEditView*    GetImpEditView() const      { return pImpEditView; }
     ImpEditEngine*  GetImpEditEngine() const;
@@ -104,7 +107,12 @@ public:
     EditEngine*     GetEditEngine() const;
 
     void            SetWindow( vcl::Window* pWin );
-    vcl::Window*         GetWindow() const;
+    vcl::Window*    GetWindow() const;
+
+    OutWindowSet&   GetOtherViewWindows();
+    bool            HasOtherViewWindow( vcl::Window* pWin );
+    bool            AddOtherViewWindow( vcl::Window* pWin );
+    bool            RemoveOtherViewWindow( vcl::Window* pWin );
 
     void            Paint( const Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
     void            Invalidate();
