@@ -25,6 +25,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <limits>
 #include <salgdi.hxx>
+#include <unicode/uchar.h>
 
 #if defined(_WIN32)
 struct WinSalGraphicsWithIDFace
@@ -116,14 +117,14 @@ static void scaleHbFont(hb_font_t* pHbFont, const FontSelectPattern& aFontSelDat
     hb_font_set_scale(pHbFont, nXScale, nYScale);
 }
 
+#if !HB_VERSION_ATLEAST(1, 1, 0)
 static hb_unicode_funcs_t* getUnicodeFuncs()
 {
     static hb_unicode_funcs_t* ufuncs = hb_unicode_funcs_create(hb_icu_get_unicode_funcs());
-#if !HB_VERSION_ATLEAST(1, 1, 0)
     hb_unicode_funcs_set_decompose_compatibility_func(ufuncs, unicodeDecomposeCompatibility, nullptr, nullptr);
-#endif
     return ufuncs;
 }
+#endif
 
 #if defined(_WIN32)
 CommonSalLayout::CommonSalLayout(WinSalGraphics* WSL, WinFontInstance& rWinFontInstance, const WinFontFace& rWinFontFace)
@@ -382,8 +383,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 nHbFlags |= HB_BUFFER_FLAG_EOT; /* End-of-text */
 
             hb_buffer_t *pHbBuffer = hb_buffer_create();
-            static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
 #if !HB_VERSION_ATLEAST(1, 1, 0)
+            static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
             hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
 #endif
             hb_buffer_set_direction(pHbBuffer, bRightToLeft ? HB_DIRECTION_RTL: HB_DIRECTION_LTR);
@@ -439,7 +440,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 else
                 {
 #if HB_VERSION_ATLEAST(0, 9, 42)
-                    if (hb_unicode_general_category (pHbUnicodeFuncs, aChar) == HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK)
+                    if (u_getIntPropertyValue(aChar, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
                         bDiacritic = true;
 #else
                     // the font lacks GDEF table
@@ -599,8 +600,7 @@ void CommonSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
             // Don’t insert Kashida after space.
             sal_Int32 indexUtf16 = pGlyphIter->mnCharPos;
             sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&indexUtf16, 0);
-            static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
-            if (hb_unicode_general_category (pHbUnicodeFuncs, aChar) == HB_UNICODE_GENERAL_CATEGORY_SPACE_SEPARATOR)
+            if (u_isUWhiteSpace(aChar))
                 continue;
 
             // The total Kashida width.
