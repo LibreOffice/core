@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a77a97e_6af25f9c",
+        "filename": "basic/source/sbx/sbxexec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1001419
+      },
+      "writtenOn": "2016-10-09T13:37:57Z",
+      "side": 1,
+      "message": "I\u0027ve changed this to SbxVariableRef because Assign() returns SbxVariableRef.\n\nI can simply add .get() to Assign( this, this, \u0026p ) to keep the SbvVariable pointer instead.",
+      "range": {
+        "startLine": 339,
+        "startChar": 4,
+        "endLine": 339,
+        "endChar": 34
+      },
+      "revId": "ea132d7d679b6cba10af6eae0045dd7be82c0f08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a77a97e_8aefbbaf",
+        "filename": "basic/source/sbx/sbxexec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1001419
+      },
+      "writtenOn": "2016-10-09T13:37:57Z",
+      "side": 1,
+      "message": "I\u0027ve changed this to SbxVariableRef because QalifiedName() returns SbxVariableRef.\n\nI can add .get() to QualifiedName( this, this, \u0026p, t ) instead.",
+      "range": {
+        "startLine": 368,
+        "startChar": 4,
+        "endLine": 368,
+        "endChar": 33
+      },
+      "revId": "ea132d7d679b6cba10af6eae0045dd7be82c0f08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
