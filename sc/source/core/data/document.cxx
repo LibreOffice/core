@@ -3446,7 +3446,7 @@ void ScDocument::SetValue( const ScAddress& rPos, double fVal )
 
 OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    if (TableExists(nTab))
     {
         OUString aStr;
         maTabs[nTab]->GetString(nCol, nRow, aStr);
