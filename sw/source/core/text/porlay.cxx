@@ -30,6 +30,7 @@
 #include <breakit.hxx>
 #include <unicode/uchar.h>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/CTLScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <paratr.hxx>
@@ -2142,4 +2143,24 @@ void SwScriptInfo::CalcHiddenRanges( const SwTextNode& rNode, MultiSelection& rH
     rNode.SetHiddenCharAttribute( bNewHiddenCharsHidePara, bNewContainsHiddenChars );
 }
 
+sal_Int32 SwScriptInfo::CountCJKCharacters( const OUString &rText, sal_Int32 nPos, sal_Int32 nEnd, LanguageType aLang)
+{
+    sal_Int32 nCount = 0;
+    if ( nEnd > nPos && g_pBreakIt->GetBreakIter().is() )
+    {
+        sal_Int32 nDone = 0;
+        const lang::Locale &rLocale = g_pBreakIt->GetLocale( aLang );
+        while ( nPos < nEnd )
+        {
+            nPos = g_pBreakIt->GetBreakIter()->nextCharacters( rText, nPos,
+                    rLocale,
+                    i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
+            nCount++;
+        }
+    }
+    else
+        nCount = nEnd - nPos ;
+
+    return nCount;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
