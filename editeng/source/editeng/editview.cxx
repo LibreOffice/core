@@ -294,6 +294,36 @@ vcl::Window* EditView::GetWindow() const
     return pImpEditView->pOutWin;
 }
 
+EditView::OutWindowSet&  EditView::GetOtherViewWindows()
+{
+    return pImpEditView->aOutWindowSet;
+}
+
+bool EditView::HasOtherViewWindow( vcl::Window* pWin )
+{
+    OutWindowSet& rOutWindowSet = pImpEditView->aOutWindowSet;
+    auto found = std::find(rOutWindowSet.begin(), rOutWindowSet.end(), pWin);
+    return (found != rOutWindowSet.end());
+}
+
+bool EditView::AddOtherViewWindow( vcl::Window* pWin )
+{
+    if (HasOtherViewWindow(pWin))
+        return false;
+    pImpEditView->aOutWindowSet.emplace_back(pWin);
+    return true;
+}
+
+bool EditView::RemoveOtherViewWindow( vcl::Window* pWin )
+{
+    OutWindowSet& rOutWindowSet = pImpEditView->aOutWindowSet;
+    auto found = std::find(rOutWindowSet.begin(), rOutWindowSet.end(), pWin);
+    if (found == rOutWindowSet.end())
+        return false;
+    rOutWindowSet.erase(found);
+    return true;
+}
+
 void EditView::SetVisArea( const Rectangle& rRect )
 {
     pImpEditView->SetVisDocStartPos( rRect.TopLeft() );

@@ -218,17 +218,18 @@ class ImpEditView : public vcl::unohelper::DragAndDropClient
     using vcl::unohelper::DragAndDropClient::dragOver;
 
 private:
-    EditView*           pEditView;
-    vcl::Cursor*        pCursor;
-    Color*              pBackgroundColor;
+    EditView*                 pEditView;
+    vcl::Cursor*              pCursor;
+    Color*                    pBackgroundColor;
     /// Containing view shell, if any.
-    OutlinerViewShell* mpViewShell;
+    OutlinerViewShell*        mpViewShell;
     /// An other shell, just listening to our state, if any.
-    OutlinerViewShell* mpOtherShell;
-    EditEngine*         pEditEngine;
-    VclPtr<vcl::Window> pOutWin;
-    Pointer*            pPointer;
-    DragAndDropInfo*    pDragAndDropInfo;
+    OutlinerViewShell*        mpOtherShell;
+    EditEngine*               pEditEngine;
+    VclPtr<vcl::Window>       pOutWin;
+    EditView::OutWindowSet    aOutWindowSet;
+    Pointer*                  pPointer;
+    DragAndDropInfo*          pDragAndDropInfo;
 
     css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
