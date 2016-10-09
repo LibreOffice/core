@@ -308,7 +308,6 @@ void CommonSalLayout::DrawText(SalGraphics& rSalGraphics) const
 
 bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 {
-    hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
     hb_script_t aHbScript = HB_SCRIPT_INVALID;
 
     int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos);
@@ -397,13 +396,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 #if HB_VERSION_ATLEAST(0, 9, 42)
             hb_buffer_set_cluster_level(pHbBuffer, HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS);
 #endif
-            const char *pHbShapers[5] = { "coretext_aat", "graphite2", "ot", "fallback", nullptr };
-            hb_segment_properties_t aHbProps;
-            hb_buffer_get_segment_properties(pHbBuffer, &aHbProps);
-            hb_shape_plan_t *pHbPlan = hb_shape_plan_create_cached(pHbFace, &aHbProps, nullptr, 0, pHbShapers);
-            assert(hb_shape_plan_execute(pHbPlan, mpHbFont, pHbBuffer, nullptr, 0));
-            hb_buffer_set_content_type(pHbBuffer, HB_BUFFER_CONTENT_TYPE_GLYPHS);
-            SAL_INFO("vcl.harfbuzz", hb_shape_plan_get_shaper(pHbPlan) << " shaper used for " << rArgs);
+            hb_shape(mpHbFont, pHbBuffer, nullptr, 0);
 
             int nRunGlyphCount = hb_buffer_get_length(pHbBuffer);
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
@@ -436,6 +429,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                     nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
 
                 bool bDiacritic = false;
+                hb_face_t* pHbFace = hb_font_get_face(mpHbFont);
                 if (hb_ot_layout_has_glyph_classes(pHbFace))
                 {
                     // the font has GDEF table
