@@ -55,7 +55,6 @@
 
 #define RSC_EDIT                (RSC_NOTYPE + 0x52)
 
-#define RSC_COMBOBOX            (RSC_NOTYPE + 0x54)
 #define RSC_LISTBOX             (RSC_NOTYPE + 0x55)
 
 #define RSC_TEXT                (RSC_NOTYPE + 0x57)

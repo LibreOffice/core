@@ -110,21 +110,6 @@ ComboBox::ComboBox(vcl::Window *const pParent, WinBits const nStyle)
     SetWidthInChars(-1);
 }
 
-ComboBox::ComboBox(vcl::Window *const pParent, const ResId& rResId)
-    : Edit( WINDOW_COMBOBOX )
-    , m_pImpl(new Impl(*this))
-{
-    m_pImpl->ImplInitComboBoxData();
-    rResId.SetRT( RSC_COMBOBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    SetWidthInChars(-1);
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-}
-
 ComboBox::~ComboBox()
 {
     disposeOnce();
@@ -266,21 +251,6 @@ WinBits ComboBox::ImplInitStyle( WinBits nStyle )
     if ( !(nStyle & WB_NOGROUP) )
         nStyle |= WB_GROUP;
     return nStyle;
-}
-
-void ComboBox::ImplLoadRes( const ResId& rResId )
-{
-    Edit::ImplLoadRes( rResId );
-
-    sal_Int32 nNumber = ReadLongRes();
-
-    if( nNumber )
-    {
-        for( sal_Int32 i = 0; i < nNumber; i++ )
-        {
-            InsertEntry( ReadStringRes() );
-        }
-    }
 }
 
 void ComboBox::EnableAutocomplete( bool bEnable, bool bMatchCase )

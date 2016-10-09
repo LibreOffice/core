@@ -403,32 +403,6 @@ RscTop * RscTypCont::InitClassListBox( RscTop * pSuper, RscArray * pStrLst )
     return pClassListBox;
 }
 
-RscTop * RscTypCont::InitClassComboBox( RscTop * pSuper, RscArray * pStrLst )
-{
-    Atom        nId;
-    RscTop *    pClassComboBox;
-
-    // initialize class
-    nId = pHS->getID( "ComboBox" );
-    pClassComboBox = new RscClass( nId, RSC_COMBOBOX, pSuper );
-    pClassComboBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassComboBox );
-
-    // initialize variables
-    INS_WINBIT(pClassComboBox,DropDown)
-    INS_WINBIT(pClassComboBox,Sort)
-    INS_WINBIT(pClassComboBox,HScroll);
-    INS_WINBIT(pClassComboBox,VScroll);
-    INS_WINBIT(pClassComboBox,AutoSize)
-    INS_WINBIT(pClassComboBox,AutoHScroll)
-    INS_WINBIT(pClassComboBox,DDExtraWidth)
-
-    nId = aNmTb.Put( "StringList", VARNAME );
-    pClassComboBox->SetVariable( nId, pStrLst );
-
-    return pClassComboBox;
-}
-
 RscTop * RscTypCont::InitClassFixedText( RscTop * pSuper )
 {
     Atom        nId;

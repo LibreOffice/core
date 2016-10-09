@@ -43,7 +43,6 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void     ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void     ImplCalcEditHeight();
     SAL_DLLPRIVATE long     getMaxWidthScrollBarAndDownButton() const;
 
@@ -54,7 +53,6 @@ protected:
 
 public:
     explicit        ComboBox( vcl::Window* pParent, WinBits nStyle = 0 );
-    explicit        ComboBox( vcl::Window* pParent, const ResId& );
     virtual         ~ComboBox() override;
     virtual void    dispose() override;
 

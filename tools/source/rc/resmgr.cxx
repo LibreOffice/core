@@ -1425,7 +1425,6 @@ OString ResMgr::GetAutoHelpId()
                 switch( pRC->pResource->GetRT() ) {
                     case RSC_EDIT:              aHID.append( "Edit" );             break;
                     case RSC_LISTBOX:           aHID.append( "ListBox" );          break;
-                    case RSC_COMBOBOX:          aHID.append( "ComboBox" );         break;
                     case RSC_PUSHBUTTON:        aHID.append( "PushButton" );       break;
                     case RSC_SPINFIELD:         aHID.append( "SpinField" );        break;
                     case RSC_NUMERICFIELD:      aHID.append( "NumericField" );     break;
