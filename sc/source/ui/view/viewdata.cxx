@@ -970,6 +970,10 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                                 ScEditEngineDefaulter* pNewEngine,
                                 vcl::Window* pWin, SCCOL nNewX, SCROW nNewY )
 {
+    if (comphelper::LibreOfficeKit::isActive()
+        && GetViewShell() != SfxViewShell::Current())
+        return;
+
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTabNo );
     ScHSplitPos eHWhich = WhichH(eWhich);
 
