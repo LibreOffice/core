@@ -45,6 +45,22 @@ using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
 
+// Returns the number of glyphs of a string by considering surrogate
+// pairs and Unicode viaration sequences
+static sal_Int32 lcl_CountGlyphs( const OUString &rText, sal_Int32 nPos, sal_Int32 nEnd)
+{
+    sal_Int32 nCount = 0;
+    while( nPos < nEnd )
+    {
+        sal_uInt32 nCode = rText.iterateCodePoints( &nPos );
+        if ((nCode >= 0xFE00 && nCode <= 0xFE0F)        // Unicode Variation Selectors VS1 - VS16
+            ||(nCode >= 0xE0100 && nCode <= 0xE01EF))   // Unicode Variation Selectors Supplement VS17-VS256
+            continue;
+        nCount++;
+    }
+    return nCount;
+}
+
 // Returns for how many characters an extra space has to be added
 // (for justified alignment).
 static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
@@ -99,7 +115,7 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
                            pPor->IsPostItsPortion() ) )
                 pPor = pPor->GetPortion();
 
-            nCnt += nEnd - nPos;
+            nCnt += lcl_CountGlyphs( *pStr, nPos, nEnd);
 
             if ( !pPor || pPor->IsHolePortion() || pPor->InFixMargGrp() ||
                   pPor->IsBreakPortion() )
