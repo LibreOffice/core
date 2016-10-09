@@ -319,7 +319,7 @@ public:
     PivotTableFilter&   createTableFilter();
     /** Inserts the pivot table into the sheet. */
     void                finalizeImport();
-    /** Creates all group fields for the table after import. */
+    /** Finalizes all fields, finds field names and creates grouping fields. */
     void                finalizeFieldsImport();
     /** Creates all date group fields for the specified cache field after import. */
     void                finalizeDateGroupingImport(
