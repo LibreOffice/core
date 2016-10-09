@@ -91,8 +91,6 @@ using namespace formula;
 bool ScInputHandler::bOptLoaded = false;            // Evaluate App options
 bool ScInputHandler::bAutoComplete = false;         // Is set in KeyInput
 
-extern sal_uInt16 nEditAdjust;      //! Member of ViewData
-
 namespace {
 
 // Formula data replacement character for a pair of parentheses at end of
@@ -1972,8 +1970,10 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
     pEditDefaults->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
     pEngine->SetDefaults( *pEditDefaults );
 
-    nEditAdjust = sal::static_int_cast<sal_uInt16>(eSvxAdjust); //! set at ViewData or with PostEditView
-
+    if ( pActiveViewSh )
+    {
+        pActiveViewSh->GetViewData().SetEditAdjust( eSvxAdjust );
+    }
     pEngine->SetVertical( bAsianVertical );
 }
 
@@ -2317,7 +2317,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
     {
         ScViewData& rViewData = pActiveViewSh->GetViewData();
 
-        bool bNeedGrow = ( nEditAdjust != SVX_ADJUST_LEFT ); // Always right-aligned
+        bool bNeedGrow = ( rViewData.GetEditAdjust() != SVX_ADJUST_LEFT ); // Always right-aligned
         if (!bNeedGrow)
         {
             // Cursor before the end?
