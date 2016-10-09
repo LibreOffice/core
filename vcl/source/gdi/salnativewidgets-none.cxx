@@ -23,73 +23,28 @@
  *  Placeholder for no native widgets
  ***************************************************************/
 
-/*
- * IsNativeControlSupported()
- *
- *  Returns true if the platform supports native
- *  drawing of the control defined by nPart
- */
 bool SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
 {
     return false;
 }
 
-/*
- * HitTestNativeScrollbar()
- *
- *  If the return value is true, bIsInside contains information whether
- *  aPos was or was not inside the native widget specified by the
- *  nType/nPart combination.
- */
-bool SalGraphics::hitTestNativeControl( ControlType,
-                              ControlPart,
-                              const Rectangle&,
-                              const Point&,
-                              bool& )
+bool SalGraphics::hitTestNativeControl( ControlType, ControlPart,
+                                        const Rectangle&, const Point&, bool& )
 {
     return false;
 }
 
-/*
- * DrawNativeControl()
- *
- *  Draws the requested control described by nPart/nState.
- *
- *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
- *  aValue:         An optional value (tristate/numerical/string)
- *  aCaption:   A caption or title string (like button text etc)
- */
-bool SalGraphics::drawNativeControl(    ControlType,
-                            ControlPart,
-                            const Rectangle&,
-                            ControlState,
-                            const ImplControlValue&,
-                            const OUString& )
+bool SalGraphics::drawNativeControl( ControlType, ControlPart,
+                                     const Rectangle&, ControlState,
+                                     const ImplControlValue&, const OUString& )
 {
     return false;
 }
 
-/*
- * GetNativeControlRegion()
- *
- *  If the return value is true, rNativeBoundingRegion
- *  contains the true bounding region covered by the control
- *  including any adornment, while rNativeContentRegion contains the area
- *  within the control that can be safely drawn into without drawing over
- *  the borders of the control.
- *
- *  rControlRegion: The bounding region of the control in VCL frame coordinates.
- *  aValue:     An optional value (tristate/numerical/string)
- *  aCaption:       A caption or title string (like button text etc)
- */
-bool SalGraphics::getNativeControlRegion(  ControlType,
-                                ControlPart,
-                                const Rectangle&,
-                                ControlState,
-                                const ImplControlValue&,
-                                const OUString&,
-                                Rectangle &,
-                                Rectangle & )
+bool SalGraphics::getNativeControlRegion( ControlType, ControlPart,
+                                          const Rectangle&, ControlState,
+                                          const ImplControlValue&,
+                                          const OUString&, Rectangle&, Rectangle& )
 {
     return false;
 }

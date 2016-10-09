@@ -632,12 +632,6 @@ void GtkSalGraphics::copyBits( const SalTwoRect& rPosAry,
     X11SalGraphics::copyBits( rPosAry, pSrcGraphics );
 }
 
-/*
- * IsNativeControlSupported()
- *
- *  Returns true if the platform supports native
- *  drawing of the control defined by nPart
- */
 bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     switch(nType)
@@ -741,15 +735,6 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     return false;
 }
 
-/*
- * HitTestNativeScrollbar()
- *
- *  bIsInside is set to true if aPos is contained within the
- *  given part of the control, whose bounding region is
- *  given by rControlRegion (in VCL frame coordinates).
- *
- *  returns whether bIsInside was really set.
- */
 bool GtkSalGraphics::hitTestNativeControl( ControlType        nType,
                                 ControlPart        nPart,
                                 const Rectangle&        rControlRegion,
@@ -852,15 +837,6 @@ bool GtkSalGraphics::hitTestNativeControl( ControlType        nType,
     }
 }
 
-/*
- * DrawNativeControl()
- *
- *  Draws the requested control described by nPart/nState.
- *
- *  rControlRegion:    The bounding region of the complete control in VCL frame coordinates.
- *  aValue:          An optional value (tristate/numerical/string)
- *  rCaption:      A caption or title string (like button text etc)
- */
 bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
         const Rectangle& rControlRegion, ControlState nState,
         const ImplControlValue& aValue, const OUString& rCaption)
@@ -1098,19 +1074,6 @@ bool GtkSalGraphics::DoDrawNativeControl(
     return false;
 }
 
-/*
- * GetNativeControlRegion()
- *
- *  If the return value is true, rNativeBoundingRegion
- *  contains the true bounding region covered by the control
- *  including any adornment, while rNativeContentRegion contains the area
- *  within the control that can be safely drawn into without drawing over
- *  the borders of the control.
- *
- *  rControlRegion:    The bounding region of the control in VCL frame coordinates.
- *  aValue:        An optional value (tristate/numerical/string)
- *  rCaption:        A caption or title string (like button text etc)
- */
 bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
                                 const Rectangle& rControlRegion,
