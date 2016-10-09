@@ -157,13 +157,6 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
     return bRetVal;
 }
 
-/*
- * IsNativeControlSupported()
- * --------------------------
- * Returns true if the platform supports native
- * drawing of the control defined by nPart.
- *
- */
 bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     bool bOk = false;
@@ -292,13 +285,6 @@ bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
     return bOk;
 }
 
-/*
- * HitTestNativeScrollbar()
- *
- *  If the return value is true, bIsInside contains information whether
- *  aPos was or was not inside the native widget specified by the
- *  nType/nPart combination.
- */
 bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                         const Point& rPos, bool& rIsInside )
 {
@@ -346,15 +332,6 @@ UInt32 AquaSalGraphics::getTrackState( ControlState nState )
     return kThemeTrackActive;
 }
 
-/*
- * DrawNativeControl()
- *
- *  Draws the requested control described by nPart/nState.
- *
- *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
- *  aValue:     An optional value (tristate/numerical/string)
- *  aCaption:   A caption or title string (like button text etc)
- */
 bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     ControlPart nPart,
                     const Rectangle& rControlRegion,
@@ -1068,19 +1045,6 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
     return bOK;
 }
 
-/*
- * GetNativeControlRegion()
- *
- *  If the return value is true, rNativeBoundingRegion
- *  contains the true bounding region covered by the control
- *  including any adornment, while rNativeContentRegion contains the area
- *  within the control that can be safely drawn into without drawing over
- *  the borders of the control.
- *
- *  rControlRegion: The bounding region of the control in VCL frame coordinates.
- *  aValue:     An optional value (tristate/numerical/string)
- *  aCaption:       A caption or title string (like button text etc)
- */
 bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState /*nState*/,
                                                const ImplControlValue& aValue, const OUString&,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )

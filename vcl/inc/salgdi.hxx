@@ -337,10 +337,22 @@ public:
 
     //  native widget rendering functions
 
-    // Query the platform layer for control support
-    virtual bool                IsNativeControlSupported( ControlType nType, ControlPart nPart );
+    /**
+     * Query the platform layer for native control support.
+     *
+     * @param [in] eType The widget type.
+     * @param [in] ePart The part of the widget.
+     * @return true if the platform supports native drawing of the widget type defined by part.
+     */
+    virtual bool                IsNativeControlSupported(
+                                    ControlType eType, ControlPart ePart );
 
-    // Query the native control to determine if it was acted upon
+
+    /**
+     * Query the native control to determine if it was acted upon
+     *
+     * @see hitTestNativeControl
+     */
     bool                        HitTestNativeScrollbar(
                                     ControlPart nPart,
                                     const Rectangle& rControlRegion,
@@ -348,7 +360,11 @@ public:
                                     bool& rIsInside,
                                     const OutputDevice *pOutDev );
 
-    // Request rendering of a particular control and/or part
+    /**
+     * Request rendering of a particular control and/or part
+     *
+     * @see drawNativeControl
+     */
     bool                        DrawNativeControl(
                                     ControlType nType,
                                     ControlPart nPart,
@@ -358,7 +374,11 @@ public:
                                     const OUString& aCaption,
                                     const OutputDevice *pOutDev );
 
-    // Query the native control's actual drawing region (including adornment)
+    /**
+     * Query the native control's actual drawing region (including adornment)
+     *
+     * @see getNativeControlRegion
+     */
     bool                        GetNativeControlRegion(
                                     ControlType nType,
                                     ControlPart nPart,
@@ -462,7 +482,6 @@ protected:
                                     const SalPoint* const* pPtAry,
                                     const PolyFlags* const* pFlgAry ) = 0;
 
-
     virtual bool                drawGradient(
                                     const tools::PolyPolygon& rPolyPoly,
                                     const Gradient& rGradient ) = 0;
@@ -508,24 +527,66 @@ protected:
                                     void* pPtr,
                                     sal_uLong nSize ) = 0;
 
-    // native widget rendering methods that require mirroring
+    /**
+     * Query if a position is inside the native widget part.
+     *
+     * Mainly used for scrollbars.
+     *
+     * @param [in] eType The widget type.
+     * @param [in] ePart The part of the widget.
+     * @param [in] rBoundingControlRegion The bounding Rectangle of
+                   the complete control in VCL frame coordinates.
+     * @param [in] aPos The position to check the hit.
+     * @param [out] rIsInside true, if \a aPos was inside the native widget.
+     * @return true, if the query was successful.
+     */
     virtual bool                hitTestNativeControl(
-                                    ControlType nType, ControlPart nPart,
-                                    const Rectangle& rControlRegion,
-                                    const Point& aPos,
-                                    bool& rIsInside );
+                                    ControlType eType, ControlPart ePart,
+                                    const Rectangle& rBoundingControlRegion,
+                                    const Point& aPos, bool& rIsInside );
 
+    /**
+     * Draw the requested control.
+     *
+     * @param [in] eType The widget type.
+     * @param [in] ePart The part of the widget.
+     * @param [in] rBoundingControlRegion The bounding rectangle of
+     *             the complete control in VCL frame coordinates.
+     * @param [in] eState The general state of the control (enabled, focused, etc.).
+     * @param [in] aValue Addition control specific information.
+     * @param [in] aCaption  A caption or title string (like button text etc.).
+     * @return true, if the control could be drawn.
+     */
     virtual bool                drawNativeControl(
-                                    ControlType nType, ControlPart nPart,
-                                    const Rectangle& rControlRegion,
-                                    ControlState nState,
+                                    ControlType eType, ControlPart ePart,
+                                    const Rectangle& rBoundingControlRegion,
+                                    ControlState eState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption );
 
+    /**
+     * Get the native control regions for the control part.
+     *
+     * If the return value is true, \a rNativeBoundingRegion contains
+     * the true bounding region covered by the control including any
+     * adornment, while \a rNativeContentRegion contains the area
+     * within the control that can be safely drawn into without drawing over
+     * the borders of the control.
+     *
+     * @param [in] eType Type of the widget.
+     * @param [in] ePart Specification of the widget's part if it consists of more than one.
+     * @param [in] rBoundingControlRegion The bounding region of the control in VCL frame coordinates.
+     * @param [in] eState The general state of the control (enabled, focused, etc.).
+     * @param [in] aValue Addition control specific information.
+     * @param [in] aCaption A caption or title string (like button text etc.).
+     * @param [out] rNativeBoundingRegion The region covered by the control including any adornment.
+     * @param [out] rNativeContentRegion The region within the control that can be safely drawn into.
+     * @return true, if the regions are filled.
+     */
     virtual bool                getNativeControlRegion(
-                                    ControlType nType, ControlPart nPart,
-                                    const Rectangle& rControlRegion,
-                                    ControlState nState,
+                                    ControlType eType, ControlPart ePart,
+                                    const Rectangle& rBoundingControlRegion,
+                                    ControlState eState,
                                     const ImplControlValue& aValue,
                                     const OUString& aCaption,
                                     Rectangle &rNativeBoundingRegion,
@@ -569,19 +630,14 @@ protected:
                                     const SalBitmap* pAlphaBitmap) = 0;
 
     /** Render solid rectangle with given transparency
-
-      @param nX             Top left coordinate of rectangle
-
-      @param nY             Bottom right coordinate of rectangle
-
-      @param nWidth         Width of rectangle
-
-      @param nHeight        Height of rectangle
-
-      @param nTransparency  Transparency value (0-255) to use. 0 blits and opaque, 255 a
-                            fully transparent rectangle
-
-      @returns true if successfully drawn, false if not able to draw rectangle
+     *
+     * @param nX             Top left coordinate of rectangle
+     * @param nY             Bottom right coordinate of rectangle
+     * @param nWidth         Width of rectangle
+     * @param nHeight        Height of rectangle
+     * @param nTransparency  Transparency value (0-255) to use. 0 blits and opaque, 255 a
+     *                       fully transparent rectangle
+     * @returns true if successfully drawn, false if not able to draw rectangle
      */
     virtual bool                drawAlphaRect(
                                     long nX, long nY,
