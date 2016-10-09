@@ -2081,6 +2081,7 @@ void ScFiltersTest::testPivotTableSharedGroupXLSX()
 
     // Check whether right group names are imported for both tables
     // First table
+    CPPUNIT_ASSERT_EQUAL(OUString("a2"), rDoc.GetString(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Csoport1"), rDoc.GetString(ScAddress(0,2,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Csoport2"), rDoc.GetString(ScAddress(0,3,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Csoport3"), rDoc.GetString(ScAddress(0,4,0)));
@@ -2089,6 +2090,7 @@ void ScFiltersTest::testPivotTableSharedGroupXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("18"), rDoc.GetString(ScAddress(0,7,0)));
 
     // Second table
+    CPPUNIT_ASSERT_EQUAL(OUString("a2"), rDoc.GetString(ScAddress(0,11,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Csoport1"), rDoc.GetString(ScAddress(0,12,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Csoport2"), rDoc.GetString(ScAddress(0,13,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Csoport3"), rDoc.GetString(ScAddress(0,14,0)));
@@ -2119,6 +2121,7 @@ void ScFiltersTest::testPivotTableSharedDateGroupXLSX()
 
     // Check whether right date labels are imported for both tables
     // First table
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(0,3,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(0,4,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(0,5,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(0,6,1)));
@@ -2127,6 +2130,7 @@ void ScFiltersTest::testPivotTableSharedDateGroupXLSX()
     // CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,8,1)));
 
     // Second table
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(5,3,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("1965"), rDoc.GetString(ScAddress(5,4,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("1989"), rDoc.GetString(ScAddress(5,5,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("2000"), rDoc.GetString(ScAddress(5,6,1)));
@@ -2164,6 +2168,7 @@ void ScFiltersTest::testPivotTableSharedNestedDateGroupXLSX()
     // TODO: check why this fails with the empty string
     //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(0,32,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("Quarters"), rDoc.GetString(ScAddress(1,3,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(2,3,1)));
 
     // Second table
     CPPUNIT_ASSERT_EQUAL(OUString("Years"), rDoc.GetString(ScAddress(6,3,1)));
@@ -2174,6 +2179,7 @@ void ScFiltersTest::testPivotTableSharedNestedDateGroupXLSX()
     // TODO: check why this fails with the empty string
     //CPPUNIT_ASSERT_EQUAL(OUString("2007"), rDoc.GetString(ScAddress(6,31,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("Quarters"), rDoc.GetString(ScAddress(7,3,1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), rDoc.GetString(ScAddress(8,3,1)));
 
     // There should be exactly 2 pivot tables and 1 cache.
     ScDPCollection* pDPs = rDoc.GetDPCollection();
@@ -2199,6 +2205,7 @@ void ScFiltersTest::testPivotTableSharedNumGroupXLSX()
 
     // Check whether right number groups are imported for both tables
     // First table
+    CPPUNIT_ASSERT_EQUAL(OUString("f"), rDoc.GetString(ScAddress(0,3,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("32674-47673"), rDoc.GetString(ScAddress(0,4,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("47674-62673"), rDoc.GetString(ScAddress(0,5,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("62674-77673"), rDoc.GetString(ScAddress(0,6,1)));
@@ -2206,6 +2213,7 @@ void ScFiltersTest::testPivotTableSharedNumGroupXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("92674-107673"), rDoc.GetString(ScAddress(0,8,1)));
 
     // Second table
+    CPPUNIT_ASSERT_EQUAL(OUString("f"), rDoc.GetString(ScAddress(5,3,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("32674-47673"), rDoc.GetString(ScAddress(5,4,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("47674-62673"), rDoc.GetString(ScAddress(5,5,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("62674-77673"), rDoc.GetString(ScAddress(5,6,1)));
